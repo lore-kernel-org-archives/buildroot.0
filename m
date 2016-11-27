@@ -1,43 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 22:31:20 +0100
+Date: Sun, 27 Nov 2016 22:33:22 +0100
 Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xdriver_xf86-input-synaptics: bump version to 1.9.0
-Message-ID: <20161127213919.344BC81908@busybox.osuosl.org>
+	package/x11r7/xdriver_xf86-video-sis: Add patch for ABI 23
+	support (xserver_xorg-server 1.19+)
+Message-ID: <20161127213919.7B25981908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7e5e0f406fb40aa7f9426166c7041556e8b2b39
+commit: https://git.buildroot.net/buildroot/commit/?id=c2a79469b28f77d65bf44ca180493f26497f0bf5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Re-numbered patches as well.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash    | 4 ++--
- .../xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk      | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../x11r7/xdriver_xf86-video-sis/0002-abi23.patch  | 33 ++++++++++++++++++++++
+ .../{0007-xi.patch => 0003-xi.patch}               |  0
+ 2 files changed, 33 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
-index 3cb0758..2c31600 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-November/002652.html
--sha256	d39f100c74f3673778b53f17bab7690161925e25dd998a15dd8cc69b52e83f01	xf86-input-synaptics-1.8.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-November/002744.html
-+sha256 afba3289d7a40217a19d90db98ce181772f9ca6d77e1898727b0afcf02073b5a  xf86-input-synaptics-1.9.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-index d6164d0..6bd9cc4 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.8.3
-+XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.9.0
- XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
+new file mode 100644
+index 0000000..109f745
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
+@@ -0,0 +1,33 @@
++From 96fee560cd8bf7bf27048ce5fe67b7af6838c8d0 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Tue, 19 Jul 2016 10:03:56 -0400
++Subject: Adapt Block/WakeupHandler signature for ABI 23
++
++Signed-off-by: Adam Jackson <ajax@redhat.com>
++---
++Downloaded from
++https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=96fee560cd8bf7bf27048ce5fe67b7af6838c8d0
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff --git a/src/compat-api.h b/src/compat-api.h
++index 6bc946f..89976e4 100644
++--- a/src/compat-api.h
+++++ b/src/compat-api.h
++@@ -75,8 +75,13 @@
++ 
++ #define SCREEN_INIT_ARGS_DECL ScreenPtr pScreen, int argc, char **argv
++ 
+++#if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(23, 0)
+++#define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout
+++#define BLOCKHANDLER_ARGS arg, pTimeout
+++#else
++ #define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout, pointer pReadmask
++ #define BLOCKHANDLER_ARGS arg, pTimeout, pReadmask
+++#endif
++ 
++ #define CLOSE_SCREEN_ARGS_DECL ScreenPtr pScreen
++ #define CLOSE_SCREEN_ARGS pScreen
++-- 
++cgit v0.10.2
++
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0007-xi.patch b/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
+similarity index 100%
+rename from package/x11r7/xdriver_xf86-video-sis/0007-xi.patch
+rename to package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
