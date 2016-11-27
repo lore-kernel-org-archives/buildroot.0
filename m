@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Nov 2016 15:01:16 +0100
-Subject: [Buildroot] [git commit] package/efl: bump to 1.18.3
-Message-ID: <20161201222140.0C26C7FB56@busybox.osuosl.org>
+Date: Sun, 27 Nov 2016 22:24:12 +0100
+Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 3.2.1
+Message-ID: <20161201222140.4C5FA8026C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cf9f1e3495463e46937f4f7ccc45a541cda5eca
+commit: https://git.buildroot.net/buildroot/commit/?id=6ce49353422b76f28d6e0c7166e3b98b8c089434
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bug fixes release:
-https://www.enlightenment.org/news/efl-1.18.3
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/efl.hash | 4 ++--
- package/efl/efl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 18393a4..4077ddd 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 541f421..aa9f0f7 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
 @@ -1,2 +1,2 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.2.tar.xz.sha256
--sha256	292faf76557fe56a6bc15b48b5ea3eb1f0790e2ed7f2ade4ae79ef7973d67bed	efl-1.18.2.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.3.tar.xz.sha256
-+sha256	0748ec0847f543d96b149cb3a84e6438724e827a38d530922ecb4bd59d3e64c0	efl-1.18.3.tar.xz
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 777ef3c..17d3163 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
+ # Locally calculated
+-sha256 88f70c1b8cab108f494ecbab5ba302cdb35d59a84cea88008b5fe49be068d5da  ffmpeg-3.2.tar.xz
++sha256 1ecf93da5d601e6fb3096c65cbe33fdaf042d690a3c50c4efadb0a9b74f2badf  ffmpeg-3.2.1.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index de6d841..699de2a 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EFL_VERSION = 1.18.2
-+EFL_VERSION = 1.18.3
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
+-FFMPEG_VERSION = 3.2
++FFMPEG_VERSION = 3.2.1
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
