@@ -1,61 +1,37 @@
-From: Damjan Marion <damjan.marion@gmail.com>
-Date: Mon, 28 Nov 2016 22:49:49 +0100
-Subject: [Buildroot] [PATCH] package/tvheadend: bump version to
- v4.1-2345 and fix version reporting
-In-Reply-To: <20161128224326.4199d3f3@free-electrons.com>
-References: <20161128103231.21626-1-damjan.marion@gmail.com>
- <20161128220315.1924903c@free-electrons.com>
- <8D43E2E0-8E99-4D96-8323-E1F360077FD4@gmail.com>
- <20161128221339.564e219f@free-electrons.com>
- <B12CF9A8-74C8-438D-8DB3-9AB9E45F91FD@gmail.com>
- <20161128224326.4199d3f3@free-electrons.com>
-Message-ID: <7A45F2BD-3582-465E-B2D5-5E6BCBD5A6A8@gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 28 Nov 2016 13:54:30 -0800
+Subject: [Buildroot] [PATCH] Revert "jasper: Disable debugging when building
+	for xtensa"
+Message-ID: <1480370070-21452-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This reverts commit 71d9b0c1f06896f113b09e941aa84d979bff5710.
+Now that -mauto-litpools is in TARGET_ABI when building for xtensa, -O0
+builds succeed, so this workaround is no longer needed.
 
-> On 28 Nov 2016, at 22:43, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> Hello,
-> 
-> On Mon, 28 Nov 2016 22:24:20 +0100, Damjan Marion wrote:
-> 
->>> Because we're using a full hash in every other package fetched from Git
->>> in Buildroot, and we like consistency :)  
->> 
->> Unfortunately that was only meaningful way (I?m aware of) to provide some
->> human-readable version information out from their repo.
-> 
-> Well, the full hash is by far the most precise and exact information.
-> Anyone having the Git repository can do "git checkout <hash>" and get
-> straight to the exact same commit.
-> 
->> I don't see how is this improvement compared to ?0.0.0~unknown?. I really doubt
->> that it is worth time to submit that as a patch?.
-> 
-> Well, 0.0.0~unknown doesn't say anything about the version. The full
-> hash says it all.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/jasper/jasper.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Yeah, assuming that end user understands that this string of ?random? characters 
-is really a version.
-
-> 
->> What about something like:
->> 
->> TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
->> TVHEADEND_PRETTY_VERSION = v4.1-2345-g50a3707  
-> 
-> Which have to be maintained separately :/
-
-ok, anyway, let?s forget about this thread?. I can maintain it in my external tree.
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/pkcs7-signature
-Size: 1600 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161128/00f8c6ae/attachment.p7s>
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index bacb1a6..ebd7750 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -12,10 +12,4 @@ JASPER_LICENSE = JasPer License Version 2.0
+ JASPER_LICENSE_FILES = LICENSE
+ JASPER_CONF_OPTS = --disable-strict
+ 
+-# Xtensa gcc is unable to generate correct code with -O0 enabled by
+-# --enable-debug. Allow package build but disable debug.
+-ifeq ($(BR2_xtensa)$(BR2_ENABLE_DEBUG),yy)
+-JASPER_CONF_OPTS += --disable-debug
+-endif
+-
+ $(eval $(autotools-package))
+-- 
+2.1.4
