@@ -1,70 +1,72 @@
-From: Damjan Marion <damjan.marion@gmail.com>
-Date: Mon, 28 Nov 2016 10:45:12 +0100
-Subject: [Buildroot] [PATCH] package/tvheadend: change configuration
-	directory
-Message-ID: <20161128094512.27804-1-damjan.marion@gmail.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Mon, 28 Nov 2016 10:03:59 +0000
+Subject: [Buildroot] [PATCH v2] trousers: Pass "-mno-compact-casesi"
+ when building for ARCv1
+In-Reply-To: <20161125221357.0ab65b14@free-electrons.com>
+References: <1479811345-23400-1-git-send-email-vzakhar@synopsys.com>
+ <20161125221357.0ab65b14@free-electrons.com>
+Message-ID: <1480327439.13520.22.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently tvheadend configuration is stored in
-/home/tvheadend/.hts/tvheadend. This patch changes this location
-to /etc/tvheadend which seems to be more appropriate place.
+Hi Thomas,
 
-Signed-off-by: Damjan Marion <damjan.marion@gmail.com>
----
- package/tvheadend/S99tvheadend | 4 ++--
- package/tvheadend/tvheadend.mk | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+On Fri, 2016-11-25 at 22:13 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 22 Nov 2016 13:42:25 +0300, Vlad Zakharov wrote:
+> > 
+> > Compact casesi patterns don't have a reload version. This causes build
+> > failures of "trousers" package for ARC.
+> > 
+> > Current patch disables compact casesi patterns for ARCv1 (750D and 770D)
+> > via passing "-mno-compact-casesi" option when compiling "trousers".
+> > 
+> > This change is a temporary workaround and the feature is going to be
+> > fixed in the next ARC toolchain release version.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.org/results/d2c/d2c16d8ba022b070c4dbeba5e7ea41f14d706691//
+> > 
+> > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> 
+> We still have a build failure of the trousers package on ARC, see:
+> 
+> ? http://autobuild.buildroot.net/results/1e7/1e730465c79f50143b0ca2366a3c07ea5e8648b1/build-end.log
+> 
+> The failure is:
+> 
+> (jump_insn 34 262 35 5 (parallel [
+> ????????????(set (pc)
+> ????????????????(unspec:SI [
+> ????????????????????????(reg:SI 14 r14 [165])
+> ????????????????????] UNSPEC_ARC_CASESI))
+> ????????????(use (label_ref 35))
+> ????????????(clobber (scratch:SI))
+> ????????]) tspi_context.c:145 130 {casesi_compact_jump}
+> ?????(expr_list:REG_DEAD (reg:SI 14 r14 [165])
+> ????????(nil))
+> ?-> 35)
+> tspi_context.c:325:1: internal compiler error: in find_reloads, at reload.c:3830
+> Please submit a full bug report,
+> with preprocessed source if appropriate.
+> 
+> Best regards,
+> 
+> Thomas
 
-diff --git a/package/tvheadend/S99tvheadend b/package/tvheadend/S99tvheadend
-index 65669ce..98167bf 100644
---- a/package/tvheadend/S99tvheadend
-+++ b/package/tvheadend/S99tvheadend
-@@ -13,7 +13,7 @@ PIDFILE=/var/run/$NAME.pid
- # Read configuration variable file if it is present
- [ -r "/etc/default/${NAME}" ] && . "/etc/default/${NAME}"
- 
--ARGS="-f"
-+ARGS="-f -c /etc/tvheadend"
- [ -z "${TVH_USER}"      ] || ARGS="${ARGS} -u ${TVH_USER}"
- [ -z "${TVH_GROUP}"     ] || ARGS="${ARGS} -g ${TVH_GROUP}"
- [ -z "${TVH_ADAPTERS}"  ] || ARGS="${ARGS} -a ${TVH_ADAPTERS}"
-@@ -22,7 +22,7 @@ ARGS="-f"
- [ "${TVH_DEBUG}" = "1"  ] && ARGS="${ARGS} -s"
- 
- # If first run, start in wizard mode
--if [ -z "$(ls -1 /home/tvheadend/.hts/tvheadend/accesscontrol/ 2>/dev/null)" ]; then
-+if [ -z "$(ls -1 /etc/tvheadend/accesscontrol/ 2>/dev/null)" ]; then
-     ARGS="${ARGS} -C"
- fi
- 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index a3afec8..11e56b6 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -93,6 +93,7 @@ endef
- 
- define TVHEADEND_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+	mkdir -p $(TARGET_DIR)/etc/tvheadend
- endef
- 
- # Remove documentation and source files that are not needed because we
-@@ -116,10 +117,10 @@ define TVHEADEND_INSTALL_INIT_SYSV
- endef
- 
- define TVHEADEND_USERS
--	tvheadend -1 tvheadend -1 * /home/tvheadend - video TVHeadend daemon
-+	tvheadend -1 tvheadend -1 * - - video TVHeadend daemon
- endef
- define TVHEADEND_PERMISSIONS
--	/home/tvheadend r 0700 tvheadend tvheadend - - - - -
-+	/etc/tvheadend r 0700 tvheadend tvheadend - - - - -
- endef
- 
- $(eval $(generic-package))
+Thank you for sending us this observation.
+I mentioned this SNAFU too and have already investigated the situation a bit.
+
+This happens because either "-Os" overrides "-mno-compact-casesi" option or the latter option doesn't work at all.?
+In any case we are working at the issue and will soon either provide some fix or send another workaround for "trousers"
+package.?
+
+Thanks.
+
 -- 
-2.9.3
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
