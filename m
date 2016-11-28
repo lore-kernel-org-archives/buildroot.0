@@ -1,317 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Nov 2016 23:09:23 +0100
-Subject: [Buildroot] [git commit] roseapplepi: add kernel patches to fix
-	linux build issues with gcc 5
-Message-ID: <20161128225014.0EE7E81D68@busybox.osuosl.org>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Tue, 29 Nov 2016 09:57:29 +1100
+Subject: [Buildroot] [PATCH v2 1/1] package/libdvbcsa: fix altivec problems
+	on powerpc64
+Message-ID: <519f9bc4a4a939e271938a2f974ce4b464187a1f.1480373845.git.sam.bobroff@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e920e521ac012e5f40720290341d8abceb41a6a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.net/results/e6d22f5e0258c7ebb8a3ed39c11e014c721cd219
 
-Backport 2 patches from upstream (from 3.18-rc1) for gcc 5.x support and a
-patch from Marco Franceschetti (https://github.com/vonfritz/kernel/) to fix
-gcc 5.x compat issues in the bsp wifi drivers.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 ---
- .../linux/0002-kernel-add-support-for-gcc-5.patch  |  99 +++++++++++++++++
- ...LLVMLinux-use-static-inline-in-ARM-ftrace.patch |  54 +++++++++
- .../linux/0004-Fix-compile-errors-with-gcc5.patch  | 121 +++++++++++++++++++++
- 3 files changed, 274 insertions(+)
+Notes:
 
-diff --git a/board/roseapplepi/patches/linux/0002-kernel-add-support-for-gcc-5.patch b/board/roseapplepi/patches/linux/0002-kernel-add-support-for-gcc-5.patch
+I'm not an expert on Altivec, but the fix seems reasonable and the
+package's test programs succeed.
+
+ package/libdvbcsa/0001-altivec-powerpc64.patch | 33 ++++++++++++++++++++++++++
+ package/libdvbcsa/libdvbcsa.mk                 |  1 +
+ 2 files changed, 34 insertions(+)
+ create mode 100644 package/libdvbcsa/0001-altivec-powerpc64.patch
+
+diff --git a/package/libdvbcsa/0001-altivec-powerpc64.patch b/package/libdvbcsa/0001-altivec-powerpc64.patch
 new file mode 100644
-index 0000000..8d3c703
+index 0000000..3605c14
 --- /dev/null
-+++ b/board/roseapplepi/patches/linux/0002-kernel-add-support-for-gcc-5.patch
-@@ -0,0 +1,99 @@
-+From 96b4fb75d15be65edc5494579e4a944534042f99 Mon Sep 17 00:00:00 2001
-+From: Sasha Levin <sasha.levin@oracle.com>
-+Date: Mon, 13 Oct 2014 15:51:05 -0700
-+Subject: [PATCH] kernel: add support for gcc 5
++++ b/package/libdvbcsa/0001-altivec-powerpc64.patch
+@@ -0,0 +1,33 @@
++Fix compile on powerpc64/powerpc64le w/ altivec
 +
-+We're missing include/linux/compiler-gcc5.h which is required now
-+because gcc branched off to v5 in trunk.
++Correct the type of some vectors passed to vec_slo() or vec_sro(), which only
++takes a char vector.
 +
-+Just copy the relevant bits out of include/linux/compiler-gcc4.h,
-+no new code is added as of now.
++Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 +
-+This fixes a build error when using gcc 5.
-+
-+Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
-+Cc: <stable@vger.kernel.org>
-+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-+(cherry picked from commit 71458cfc782eafe4b27656e078d379a34e472adf)
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ include/linux/compiler-gcc5.h | 66 +++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 66 insertions(+)
-+ create mode 100644 include/linux/compiler-gcc5.h
-+
-+diff --git a/include/linux/compiler-gcc5.h b/include/linux/compiler-gcc5.h
-+new file mode 100644
-+index 0000000..cdd1cc2
-+--- /dev/null
-++++ b/include/linux/compiler-gcc5.h
-+@@ -0,0 +1,66 @@
-++#ifndef __LINUX_COMPILER_H
-++#error "Please don't include <linux/compiler-gcc5.h> directly, include <linux/compiler.h> instead."
-++#endif
-++
-++#define __used				__attribute__((__used__))
-++#define __must_check			__attribute__((warn_unused_result))
-++#define __compiler_offsetof(a, b)	__builtin_offsetof(a, b)
-++
-++/* Mark functions as cold. gcc will assume any path leading to a call
-++   to them will be unlikely.  This means a lot of manual unlikely()s
-++   are unnecessary now for any paths leading to the usual suspects
-++   like BUG(), printk(), panic() etc. [but let's keep them for now for
-++   older compilers]
-++
-++   Early snapshots of gcc 4.3 don't support this and we can't detect this
-++   in the preprocessor, but we can live with this because they're unreleased.
-++   Maketime probing would be overkill here.
-++
-++   gcc also has a __attribute__((__hot__)) to move hot functions into
-++   a special section, but I don't see any sense in this right now in
-++   the kernel context */
-++#define __cold			__attribute__((__cold__))
-++
-++#define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-++
-++#ifndef __CHECKER__
-++# define __compiletime_warning(message) __attribute__((warning(message)))
-++# define __compiletime_error(message) __attribute__((error(message)))
-++#endif /* __CHECKER__ */
-++
-++/*
-++ * Mark a position in code as unreachable.  This can be used to
-++ * suppress control flow warnings after asm blocks that transfer
-++ * control elsewhere.
-++ *
-++ * Early snapshots of gcc 4.5 don't support this and we can't detect
-++ * this in the preprocessor, but we can live with this because they're
-++ * unreleased.  Really, we need to have autoconf for the kernel.
-++ */
-++#define unreachable() __builtin_unreachable()
-++
-++/* Mark a function definition as prohibited from being cloned. */
-++#define __noclone	__attribute__((__noclone__))
-++
-++/*
-++ * Tell the optimizer that something else uses this function or variable.
-++ */
-++#define __visible __attribute__((externally_visible))
-++
-++/*
-++ * GCC 'asm goto' miscompiles certain code sequences:
-++ *
-++ *   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58670
-++ *
-++ * Work it around via a compiler barrier quirk suggested by Jakub Jelinek.
-++ * Fixed in GCC 4.8.2 and later versions.
-++ *
-++ * (asm goto is automatically volatile - the naming reflects this.)
-++ */
-++#define asm_volatile_goto(x...)	do { asm goto(x); asm (""); } while (0)
-++
-++#ifdef CONFIG_ARCH_USE_BUILTIN_BSWAP
-++#define __HAVE_BUILTIN_BSWAP32__
-++#define __HAVE_BUILTIN_BSWAP64__
-++#define __HAVE_BUILTIN_BSWAP16__
-++#endif /* CONFIG_ARCH_USE_BUILTIN_BSWAP */
-+-- 
-+2.10.2
-+
-diff --git a/board/roseapplepi/patches/linux/0003-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch b/board/roseapplepi/patches/linux/0003-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch
-new file mode 100644
-index 0000000..da38f26
---- /dev/null
-+++ b/board/roseapplepi/patches/linux/0003-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch
-@@ -0,0 +1,54 @@
-+From 8ac9a3f6dbf00d861134bea3f2c930defed6311a Mon Sep 17 00:00:00 2001
-+From: Behan Webster <behanw@converseincode.com>
-+Date: Wed, 24 Sep 2014 01:06:46 +0100
-+Subject: [PATCH] ARM: 8158/1: LLVMLinux: use static inline in ARM ftrace.h
-+
-+With compilers which follow the C99 standard (like modern versions of gcc and
-+clang), "extern inline" does the wrong thing (emits code for an externally
-+linkable version of the inline function). In this case using static inline
-+and removing the NULL version of return_address in return_address.c does
-+the right thing.
-+
-+Signed-off-by: Behan Webster <behanw@converseincode.com>
-+Reviewed-by: Mark Charlebois <charlebm@gmail.com>
-+Acked-by: Steven Rostedt <rostedt@goodmis.org>
-+Signed-off-by: Russell King <rmk+kernel@arm.linux.org.uk>
-+(cherry picked from commit aeea3592a13bf12861943e44fc48f1f270941f8d)
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ arch/arm/include/asm/ftrace.h    | 2 +-
-+ arch/arm/kernel/return_address.c | 5 -----
-+ 2 files changed, 1 insertion(+), 6 deletions(-)
-+
-+diff --git a/arch/arm/include/asm/ftrace.h b/arch/arm/include/asm/ftrace.h
-+index f89515a..2bb8cac 100644
-+--- a/arch/arm/include/asm/ftrace.h
-++++ b/arch/arm/include/asm/ftrace.h
-+@@ -45,7 +45,7 @@ void *return_address(unsigned int);
++--- a/src/dvbcsa_bs_altivec.h	2016-11-28 14:33:34.410021500 +1100
+++++ b/src/dvbcsa_bs_altivec.h	2016-11-28 14:34:25.442238715 +1100
++@@ -64,7 +64,7 @@
++ 	}
++ 	case 0x29: {
++ 		dvbcsa_bs_word_t x = vec_splat_u8(10);
++-		return (dvbcsa_bs_word_t)vec_add(vec_splat_u8(0x1),vec_rl(x,x));
+++		return (dvbcsa_bs_word_t)vec_add((dvbcsa_bs_word_t)vec_splat_u8(0x1),vec_rl(x,x));
++ 	}
++ 	case 0x40: {
++ 		dvbcsa_bs_word_t x = vec_splat_u8(4);
++@@ -99,10 +99,10 @@
++ #define SHVAL_14 BS_VAL8(0e)
++ #define SHVAL_7 BS_VAL8(07)
 + 
-+ #else
++-#define BS_SHL(a, n)	({ dvbcsa_bs_word_t x = SHVAL_##n; vec_sll(vec_slo((a), x), x); })
++-#define BS_SHR(a, n)	({ dvbcsa_bs_word_t x = SHVAL_##n; vec_srl(vec_sro((a), x), x); })
++-#define BS_SHL8(a, n)	({ dvbcsa_bs_word_t x = vec_splat_u8(n*2); x = vec_add(x,x); x = vec_add(x,x); vec_slo((a), x); })
++-#define BS_SHR8(a, n)	({ dvbcsa_bs_word_t x = vec_splat_u8(n*2); x = vec_add(x,x); x = vec_add(x,x); vec_sro((a), x); })
+++#define BS_SHL(a, n)	({ vector unsigned char x = SHVAL_##n; vec_sll(vec_slo((a), x), x); })
+++#define BS_SHR(a, n)	({ vector unsigned char x = SHVAL_##n; vec_srl(vec_sro((a), x), x); })
+++#define BS_SHL8(a, n)	({ vector unsigned char x = vec_splat_u8(n*2); x = vec_add(x,x); x = vec_add(x,x); vec_slo((a), x); })
+++#define BS_SHR8(a, n)	({ vector unsigned char x = vec_splat_u8(n*2); x = vec_add(x,x); x = vec_add(x,x); vec_sro((a), x); })
 + 
-+-extern inline void *return_address(unsigned int level)
-++static inline void *return_address(unsigned int level)
-+ {
-+ 	return NULL;
-+ }
-+diff --git a/arch/arm/kernel/return_address.c b/arch/arm/kernel/return_address.c
-+index 2f8f523..a3b587f 100755
-+--- a/arch/arm/kernel/return_address.c
-++++ b/arch/arm/kernel/return_address.c
-+@@ -63,11 +63,6 @@ void *return_address(unsigned int level)
-+ //#warning "TODO: return_address should use unwind tables"
-+ //#endif
++ #define BS_EXTRACT8(a, n) ((uint8_t*)&(a))[15 - (n)]
 + 
-+-void *return_address(unsigned int level)
-+-{
-+-	return NULL;
-+-}
-+-
-+ #endif /* if defined(CONFIG_FRAME_POINTER) && !defined(CONFIG_ARM_UNWIND) / else */
-+ 
-+ EXPORT_SYMBOL_GPL(return_address);
-+-- 
-+2.10.2
-+
-diff --git a/board/roseapplepi/patches/linux/0004-Fix-compile-errors-with-gcc5.patch b/board/roseapplepi/patches/linux/0004-Fix-compile-errors-with-gcc5.patch
-new file mode 100644
-index 0000000..d76e285
---- /dev/null
-+++ b/board/roseapplepi/patches/linux/0004-Fix-compile-errors-with-gcc5.patch
-@@ -0,0 +1,121 @@
-+From ef34609395c72a1e777ef9c3fb6ce60aa92976bb Mon Sep 17 00:00:00 2001
-+From: Marco Franceschetti <vonfritz1@gmail.com>
-+Date: Sun, 13 Mar 2016 09:44:54 +0100
-+Subject: [PATCH] Fix compile errors with gcc5
-+
-+(cherry picked from commit e824d45043efd49607f66c89c921b07c1523bf9e)
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ drivers/net/wireless/actions/rtl8188etv/include/ieee80211.h    | 6 +++---
-+ drivers/net/wireless/actions/rtl8723bs/include/ieee80211.h     | 6 +++---
-+ drivers/net/wireless/actions/rtl8723bs_vq0/include/ieee80211.h | 6 +++---
-+ drivers/net/wireless/actions/rtl8723bu/include/ieee80211.h     | 6 +++---
-+ 4 files changed, 12 insertions(+), 12 deletions(-)
-+
-+diff --git a/drivers/net/wireless/actions/rtl8188etv/include/ieee80211.h b/drivers/net/wireless/actions/rtl8188etv/include/ieee80211.h
-+index fc293c4..0898cd4 100755
-+--- a/drivers/net/wireless/actions/rtl8188etv/include/ieee80211.h
-++++ b/drivers/net/wireless/actions/rtl8188etv/include/ieee80211.h
-+@@ -1314,18 +1314,18 @@ enum ieee80211_state {
-+ (((Addr[2]) & 0xff) == 0xff) && (((Addr[3]) & 0xff) == 0xff) && (((Addr[4]) & 0xff) == 0xff) && \
-+ (((Addr[5]) & 0xff) == 0xff))
-+ #else
-+-extern __inline int is_multicast_mac_addr(const u8 *addr)
-++static __inline int is_multicast_mac_addr(const u8 *addr)
-+ {
-+         return ((addr[0] != 0xff) && (0x01 & addr[0]));
-+ }
-+ 
-+-extern __inline int is_broadcast_mac_addr(const u8 *addr)
-++static __inline int is_broadcast_mac_addr(const u8 *addr)
-+ {
-+ 	return ((addr[0] == 0xff) && (addr[1] == 0xff) && (addr[2] == 0xff) &&   \
-+ 		(addr[3] == 0xff) && (addr[4] == 0xff) && (addr[5] == 0xff));
-+ }
-+ 
-+-extern __inline int is_zero_mac_addr(const u8 *addr)
-++static __inline int is_zero_mac_addr(const u8 *addr)
-+ {
-+ 	return ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) &&   \
-+ 		(addr[3] == 0x00) && (addr[4] == 0x00) && (addr[5] == 0x00));
-+diff --git a/drivers/net/wireless/actions/rtl8723bs/include/ieee80211.h b/drivers/net/wireless/actions/rtl8723bs/include/ieee80211.h
-+index 09475ef..56e0f5a 100755
-+--- a/drivers/net/wireless/actions/rtl8723bs/include/ieee80211.h
-++++ b/drivers/net/wireless/actions/rtl8723bs/include/ieee80211.h
-+@@ -1318,18 +1318,18 @@ enum ieee80211_state {
-+ (((Addr[2]) & 0xff) == 0xff) && (((Addr[3]) & 0xff) == 0xff) && (((Addr[4]) & 0xff) == 0xff) && \
-+ (((Addr[5]) & 0xff) == 0xff))
-+ #else
-+-extern __inline int is_multicast_mac_addr(const u8 *addr)
-++static __inline int is_multicast_mac_addr(const u8 *addr)
-+ {
-+         return ((addr[0] != 0xff) && (0x01 & addr[0]));
-+ }
-+ 
-+-extern __inline int is_broadcast_mac_addr(const u8 *addr)
-++static __inline int is_broadcast_mac_addr(const u8 *addr)
-+ {
-+ 	return ((addr[0] == 0xff) && (addr[1] == 0xff) && (addr[2] == 0xff) &&   \
-+ 		(addr[3] == 0xff) && (addr[4] == 0xff) && (addr[5] == 0xff));
-+ }
-+ 
-+-extern __inline int is_zero_mac_addr(const u8 *addr)
-++static __inline int is_zero_mac_addr(const u8 *addr)
-+ {
-+ 	return ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) &&   \
-+ 		(addr[3] == 0x00) && (addr[4] == 0x00) && (addr[5] == 0x00));
-+diff --git a/drivers/net/wireless/actions/rtl8723bs_vq0/include/ieee80211.h b/drivers/net/wireless/actions/rtl8723bs_vq0/include/ieee80211.h
-+index 5dfc421..95144b6 100755
-+--- a/drivers/net/wireless/actions/rtl8723bs_vq0/include/ieee80211.h
-++++ b/drivers/net/wireless/actions/rtl8723bs_vq0/include/ieee80211.h
-+@@ -1314,18 +1314,18 @@ enum ieee80211_state {
-+ (((Addr[2]) & 0xff) == 0xff) && (((Addr[3]) & 0xff) == 0xff) && (((Addr[4]) & 0xff) == 0xff) && \
-+ (((Addr[5]) & 0xff) == 0xff))
-+ #else
-+-extern __inline int is_multicast_mac_addr(const u8 *addr)
-++static __inline int is_multicast_mac_addr(const u8 *addr)
-+ {
-+         return ((addr[0] != 0xff) && (0x01 & addr[0]));
-+ }
-+ 
-+-extern __inline int is_broadcast_mac_addr(const u8 *addr)
-++static __inline int is_broadcast_mac_addr(const u8 *addr)
-+ {
-+ 	return ((addr[0] == 0xff) && (addr[1] == 0xff) && (addr[2] == 0xff) &&   \
-+ 		(addr[3] == 0xff) && (addr[4] == 0xff) && (addr[5] == 0xff));
-+ }
-+ 
-+-extern __inline int is_zero_mac_addr(const u8 *addr)
-++static __inline int is_zero_mac_addr(const u8 *addr)
-+ {
-+ 	return ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) &&   \
-+ 		(addr[3] == 0x00) && (addr[4] == 0x00) && (addr[5] == 0x00));
-+diff --git a/drivers/net/wireless/actions/rtl8723bu/include/ieee80211.h b/drivers/net/wireless/actions/rtl8723bu/include/ieee80211.h
-+index 09475ef..56e0f5a 100755
-+--- a/drivers/net/wireless/actions/rtl8723bu/include/ieee80211.h
-++++ b/drivers/net/wireless/actions/rtl8723bu/include/ieee80211.h
-+@@ -1318,18 +1318,18 @@ enum ieee80211_state {
-+ (((Addr[2]) & 0xff) == 0xff) && (((Addr[3]) & 0xff) == 0xff) && (((Addr[4]) & 0xff) == 0xff) && \
-+ (((Addr[5]) & 0xff) == 0xff))
-+ #else
-+-extern __inline int is_multicast_mac_addr(const u8 *addr)
-++static __inline int is_multicast_mac_addr(const u8 *addr)
-+ {
-+         return ((addr[0] != 0xff) && (0x01 & addr[0]));
-+ }
-+ 
-+-extern __inline int is_broadcast_mac_addr(const u8 *addr)
-++static __inline int is_broadcast_mac_addr(const u8 *addr)
-+ {
-+ 	return ((addr[0] == 0xff) && (addr[1] == 0xff) && (addr[2] == 0xff) &&   \
-+ 		(addr[3] == 0xff) && (addr[4] == 0xff) && (addr[5] == 0xff));
-+ }
-+ 
-+-extern __inline int is_zero_mac_addr(const u8 *addr)
-++static __inline int is_zero_mac_addr(const u8 *addr)
-+ {
-+ 	return ((addr[0] == 0x00) && (addr[1] == 0x00) && (addr[2] == 0x00) &&   \
-+ 		(addr[3] == 0x00) && (addr[4] == 0x00) && (addr[5] == 0x00));
-+-- 
-+2.10.2
-+
+diff --git a/package/libdvbcsa/libdvbcsa.mk b/package/libdvbcsa/libdvbcsa.mk
+index 1472537..dfbb4c2 100644
+--- a/package/libdvbcsa/libdvbcsa.mk
++++ b/package/libdvbcsa/libdvbcsa.mk
+@@ -24,6 +24,7 @@ endif
+ 
+ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+ LIBDVBCSA_CONF_OPTS += --enable-altivec
++LIBDVBCSA_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -flax-vector-conversions"
+ else
+ LIBDVBCSA_CONF_OPTS += --disable-altivec
+ endif
+-- 
+2.10.0.297.gf6727b0
