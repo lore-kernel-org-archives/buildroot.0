@@ -1,64 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Nov 2016 15:29:23 +0100
-Subject: [Buildroot] makedevs: make device node creation idempotent
-In-Reply-To: <4EF02AFE-964D-482A-9214-8C1280FDBBDA@abelbeck.com>
-References: <4EF02AFE-964D-482A-9214-8C1280FDBBDA@abelbeck.com>
-Message-ID: <8b4ddea9-a7b8-63db-9b4b-74fbaad5d7f6@mind.be>
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 28 Nov 2016 09:42:22 -0500
+Subject: [Buildroot] [PATCH 1/1] documentation: hash source control archives
+Message-ID: <1480344142-6382-1-git-send-email-ash.charles@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[I hope you don't mind I add the mailing list in Cc]
+Archives created from source control systems should still use a hash
+file with a locally-computed e.g. sha256 hash. As discussed [1], using
+the 'none' type is no longer a best practice so update the
+documentation to clarify this.
 
-On 28-11-16 14:23, Lonnie Abelbeck wrote:
-> Peter,
-> 
-> I see you reverted this makedevs "fix" required by the now reverted pseudo ...
-> 
-> makedevs: make device node creation idempotent
-> https://git.buildroot.net/buildroot/commit/package?id=c85cd189dc1ded92b78c5968860ff447ec9815ad
-> 
-> Isn't this makedevs "fix" still a good thing to have under fakeroot ?  Isn't it better not to count on a special behavior of mknod() under fakeroot ?
+[1] http://lists.busybox.net/pipermail/buildroot/2016-November/178165.html
 
- With this fix, under fakeroot, makedevs will fail when you run it a second time
-because the file exists already and is NOT a device node. That's because with
-fakeroot we don't save the database with the faked information. So a second run
-of fakeroot will just see an empty file and doesn't know that it was supposed to
-be a device node. pseudo always saves the database so it doesn't have this
-problem (except that in some cases it *does* have this problem because the
-daemon gets killed before the database is saved - solved by [1] ).
+Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
+---
+ docs/manual/adding-packages-directory.txt | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- So, although the fix would be good in theory, it breaks operation in practice.
-It breaks when you have to rootfses, or when you rebuild without cleaning.
-
- Note that in a first version of this patch [2], I simply unlinked the files
-before doing mknod. This will also work under fakeroot. However, Yann didn't
-like that:
-> NAK: we really do not want that files exist in the target in case they
-> are configured as device nodes in a dev-table. This should not happen.
-
-
- Note also that upstream busybox implemented an even simpler version of this
-patch [3]+[4]. If/when we return to pseudo, we should apply that version instead.
-
- Regards,
- Arnout
-
-
-[1] http://patchwork.ozlabs.org/patch/699575/
-[2] http://patchwork.ozlabs.org/patch/691496/
-[3]
-https://git.busybox.net/busybox/commit/?id=2c769c69b269f43d8c9ecf4a7f5ce5cce290750a
-[4]
-https://git.busybox.net/busybox/diff/miscutils/makedevs.c?id=1d3a04a3a4be8682d4317251fc14e81ad655d58a
-
-
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index a74761c..96948f8 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -480,8 +480,7 @@ this in a comment line above the hashes.
+ The number of spaces does not matter, so one can use spaces (or tabs) to
+ properly align the different fields.
+ 
+-The +none+ hash type is reserved to those archives downloaded from a
+-repository, like a 'git clone', a 'subversion checkout'...
++For archives downloaded from a repository e.g. from a 'git clone', a 'subversion checkout', using a locally-calculated sha256 hash is recommended although the +none+ type has also been used.
+ 
+ The example below defines a +sha1+ and a +sha256+ published by upstream for
+ the main +libfoo-1.2.3.tar.bz2+ tarball, an +md5+ from upstream and a
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
