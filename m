@@ -1,49 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Nov 2016 22:43:26 +0100
-Subject: [Buildroot] [PATCH] package/tvheadend: bump version to
- v4.1-2345 and fix version reporting
-In-Reply-To: <B12CF9A8-74C8-438D-8DB3-9AB9E45F91FD@gmail.com>
-References: <20161128103231.21626-1-damjan.marion@gmail.com>
- <20161128220315.1924903c@free-electrons.com>
- <8D43E2E0-8E99-4D96-8323-E1F360077FD4@gmail.com>
- <20161128221339.564e219f@free-electrons.com>
- <B12CF9A8-74C8-438D-8DB3-9AB9E45F91FD@gmail.com>
-Message-ID: <20161128224326.4199d3f3@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Nov 2016 22:45:57 +0100
+Subject: [Buildroot] [PATCH v2] jasper: bump version to 2.0.0 (security)
+In-Reply-To: <20161128215347.0686379f@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 28 Nov 2016 21:53:47 +0100")
+References: <20161128134134.18599-1-Vincent.Riera@imgtec.com>
+ <20161128215347.0686379f@free-electrons.com>
+Message-ID: <87bmwze0ru.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 28 Nov 2016 22:24:20 +0100, Damjan Marion wrote:
+ > Hello,
+ > On Mon, 28 Nov 2016 13:41:34 +0000, Vicente Olivert Riera wrote:
+ >> Fixed CVEs:
+ >> - CVE-2016-9387
+ >> - CVE-2016-9388
+ >> - CVE-2016-9389
+ >> - CVE-2016-9390
+ >> - CVE-2016-9391
+ >> - CVE-2016-9392
+ >> - CVE-2016-9393
+ >> - CVE-2016-9394
+ >> - CVE-2016-9395
+ >> - CVE-2016-9396
+ >> - CVE-2016-9397
+ >> - CVE-2016-9398
+ >> - CVE-2016-9399
+ >> - CVE-2016-9557
+ >> - CVE-2016-9560
+ >> 
+ >> Changes to jasper.mk:
+ >> - Switched to CMake package infrastructure.
 
-> > Because we're using a full hash in every other package fetched from Git
-> > in Buildroot, and we like consistency :)  
-> 
-> Unfortunately that was only meaningful way (I?m aware of) to provide some
-> human-readable version information out from their repo.
+ > Do we really need to bump to 2.0.0 to get those security fixes?
+ > Changing the package to CMake is a big change, which I'm not sure I
+ > want to merge that close to the final release.
 
-Well, the full hash is by far the most precise and exact information.
-Anyone having the Git repository can do "git checkout <hash>" and get
-straight to the exact same commit.
+ > I see we have 1.900.22 currently, while there is also a 1.900.29
+ > version released upstream. Does this version also includes the security
+ > fixes perhaps?
 
-> I don't see how is this improvement compared to ?0.0.0~unknown?. I really doubt
-> that it is worth time to submit that as a patch?.
+Indeed. There is also a .30 and .31, and as far as I can see the only
+difference between 1.900.31 and 2.0 is cmake and some travis
+stuff. Looking at the CVE numbers on the Debian security tracker they
+all seem to refer to earlier commits - E.G.:
 
-Well, 0.0.0~unknown doesn't say anything about the version. The full
-hash says it all.
+https://security-tracker.debian.org/tracker/CVE-2016-9560
 
-> What about something like:
-> 
-> TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
-> TVHEADEND_PRETTY_VERSION = v4.1-2345-g50a3707  
+Vicente, can you send a minimal patch updating to 1.900.31 for 2016.11
+and then a followup patch once 2016.11 is out to bump to 2.0?
 
-Which have to be maintained separately :/
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
