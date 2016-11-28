@@ -1,42 +1,33 @@
-From: Damjan Marion <damjan.marion@gmail.com>
-Date: Mon, 28 Nov 2016 11:50:22 +0100
-Subject: [Buildroot] [PATCH] package/tvheadend: bump version to
- v4.1-2345 and fix version reporting
-In-Reply-To: <20161128104420.kzbhlqvqcsjn2222@tarshish>
-References: <20161128103231.21626-1-damjan.marion@gmail.com>
- <20161128104420.kzbhlqvqcsjn2222@tarshish>
-Message-ID: <33EE2147-6A28-40BA-AFE1-3CD726389925@gmail.com>
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 28 Nov 2016 06:34:41 -0500
+Subject: [Buildroot] [PATCH v2 3/3] pru-sample: add sample PRU
+	application
+In-Reply-To: <20161127144731.18bd30cb@free-electrons.com>
+References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
+ <1480096200-20475-3-git-send-email-ash.charles@savoirfairelinux.com>
+ <1a270629-34f9-06f6-fb58-25455e61900d@mind.be>
+ <CAK8F28mHwYonzL1Wx052TXCzd3U4TjvfQiMPuqxuQmRBLv-2zg@mail.gmail.com>
+ <20161127144731.18bd30cb@free-electrons.com>
+Message-ID: <CAK8F28mp6tU3oncTK5FpNqUU9o-z0fUOMOxoGYEw7yeRd9uJ5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-> On 28 Nov 2016, at 11:44, Baruch Siach <baruch@tkos.co.il> wrote:
-> 
-> Hi Damjan,
-> 
-> On Mon, Nov 28, 2016 at 11:32:31AM +0100, Damjan Marion wrote:
->> tvheadedend tracks version information based on git version
->> numbers. As tvheadend is downloaded as tarball form github
->> it was reporting version 0.0.0~unknown.
-> 
-> Having the version reported as v4.1-2345-g04ff649 is not all that helpful 
-> either, since commit 04ff649 is quite far from v4.1 in terms of both commits 
-> count and time. Broken version report should be fixed upstream, IMO.
-
-Well, at least you know that it is 2345th commit after release 4.1 and that 
-its commit id is 04ff649. This is much more information than ?0.0.0~unknown?
-which buildroot compiled binary was reporting so far.
-
-Damjan
-
-
+On Sun, Nov 27, 2016 at 8:47 AM, Thomas Petazzoni <thomas.petazzoni@free-
+electrons.com> wrote:
+>
+> Why is pru-software-support a host package? It really builds/installs
+> things for the target, even if the target is the PRU and not the ARM.
+>
+> Was it made a host tool after a discussion with Arnout?
+It is really best described as a staging package for the PRU. There are
+only headers and a library used for static linking. IIRC, Arnout suggested
+that putting this as staging was confusing---these aren't for the target
+e.g. ARM---and suggested instead that we treat them as host tools along
+with the rest of the tool chain.
+Ash
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/pkcs7-signature
-Size: 1600 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161128/4834a63e/attachment.p7s>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161128/2de3709a/attachment.html>
