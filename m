@@ -1,37 +1,169 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Sun, 27 Nov 2016 17:58:37 -0500
-Subject: [Buildroot] [PATCH v2] package/pseudo: update version
-In-Reply-To: <20161127231918.6a07ab13@free-electrons.com>
-References: <20161127011202.6938-1-gael.portay@savoirfairelinux.com>
- <20161127231918.6a07ab13@free-electrons.com>
-Message-ID: <20161127225837.k6ciykf7zie7pdql@gportay>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Mon, 28 Nov 2016 14:42:09 +1100
+Subject: [Buildroot] [PATCH v2 1/1] pkg-autotools: generic configure fix
+ for powerpc64
+In-Reply-To: <0e8c323b-46fa-dbc2-3c0f-daa11a1a8c38@mind.be>
+References: <d005920f1b9f8acd1d32da2c68281020f6d28c2c.1479698374.git.sam.bobroff@au1.ibm.com>
+ <0e8c323b-46fa-dbc2-3c0f-daa11a1a8c38@mind.be>
+Message-ID: <20161128034208.GA2401@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Sun, Nov 27, 2016 at 11:19:18PM +0100, Thomas Petazzoni wrote:
-> Now that we no longer use pseudo, and have gotten back to fakeroot
-> instead, we don't need to apply this patch to the master branch. But of
-> course, it doesn't apply to the next branch, because this branch
-> doesn't have all the previous updates to the pseudo package.
+On Sat, Nov 26, 2016 at 02:04:08PM +0100, Arnout Vandecappelle wrote:
 > 
+> 
+> On 21-11-16 04:19, Sam Bobroff wrote:
+> > Many (100+) packages supported by buildroot contain old configure
+> > scripts (or build them from old versions of autotools) that are unable
+> > to determine how to link shared libraries on powerpc64 and
+> > powerpc64le. This causes that test to erroneously fail on toolchains
+> > that are not "bi-endian" (which is the case for toolchains built by
+> > buildroot), which causes configure to build static libraries instead
+> > of dynamic ones. Although these builds succeed, they tend to cause
+> > linker failures in binaries later linked against them.
+> > 
+> > Because affected configure files can be discovered automatically, this
+> > patch introduces a hook (enabled only when building for powerpc64 and
+> > powerpc64le) that uses a script to scan and fix each package.
+> > 
+> > Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> > ---
+> > 
+> > v2:
+> > 
+> > * Patch host packages as well as target ones. (Feedback on the GNU Make code to
+> >   detect this is welcome.)
+> > * Folded long line in script.
+> > * Removed patch backup files.
+> > * Updated diff to unified format.
+> > * Changed $pkg variable to $srcdir.
+> > 
+> >  package/pkg-autotools.mk                   | 19 ++++++++++++
+> >  support/scripts/fix-configure-powerpc64.sh | 47 ++++++++++++++++++++++++++++++
+> >  2 files changed, 66 insertions(+)
+> >  create mode 100755 support/scripts/fix-configure-powerpc64.sh
+> > 
+> > diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> > index d1cdb89..ada72c8 100644
+> > --- a/package/pkg-autotools.mk
+> > +++ b/package/pkg-autotools.mk
+> > @@ -79,6 +79,15 @@ define LIBTOOL_PATCH_HOOK
+> >  endef
+> >  
+> >  #
+> > +# Hook to patch common issue with configure on powerpc64{,le} failing
+> > +# to detect shared library support:
+> > +#
+> > +define CONFIGURE_FIX_POWERPC64_HOOK
+> > +	@$(call MESSAGE,"Checking configure (powerpc64/powerpc64le)")
+> > +	support/scripts/fix-configure-powerpc64.sh $($(PKG)_DIR)
+> > +endef
+> > +
+> > +#
+> >  # Hook to gettextize the package if needed
+> >  #
+> >  define GETTEXTIZE_HOOK
+> > @@ -255,6 +264,16 @@ endif
+> >  
+> >  endif
+> >  
+> > +# Append a configure hook if:
+> > +# * this is a target package and the target architecture is powerpc64 or powerpc64le,
+> > +# * or this is a host package and the host architecture is powerpc64 or powerpc64le.
+> > +# Must be added after other pre-configure hooks that might regenerate the
+> > +# configure script and overwrite the changes made here.
+> > +ifneq ($(or $(and $(filter target,$(4)), $(filter powerpc64 powerpc64le,$(ARCH))),
+> > +	$(and $(filter host,$(4)), $(filter powerpc64 powerpc64le,$(HOSTARCH)))),)
+> 
+>  We try to consistently double-dollar everything except $(1), $(2) etc. in the
+> inner- macros.
 
-Okay. It seems my patch came too late... Too bad, I would like this patch merged
-before the revert.
+OK.
 
-> Generally speaking, pseudo is now an "orphan" host package, which we
-> generally don't like in Buildroot, since it means it is never tested.
-> What should we do about it? Remove it until it gets used again in the
-> future?
+>  This condition would IMHO be easier to read as (untested):
+> ifneq ($$(filter powerpc64%,$$(if $$(filter target,$(4)),$$(ARCH),$$(HOSTARCH))),)
 
-The main point of this patch is to add the -S argument to tell the server to
-shutdown (and wait for its completion (bump)). But this part no longer applies
-because the wrapper script has gone (master, next). So we should drop this patch
-and the package as well.
+Nice, looks good to me. I'll test it and send a new version with these changes.
 
-(In case of we decide latter to come back to pseudo, we should remember to add
-the -S argument to the wrapper script.)
+>  But I'm OK with the version you had as well.
+> 
+>  So
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  Regards,
+>  Arnout
+
+And thanks for the review :-)
+
+> 
+> > +$(2)_PRE_CONFIGURE_HOOKS += CONFIGURE_FIX_POWERPC64_HOOK
+> > +endif
+> > +
+> >  #
+> >  # Build step. Only define it if not already defined by the package .mk
+> >  # file.
+> > diff --git a/support/scripts/fix-configure-powerpc64.sh b/support/scripts/fix-configure-powerpc64.sh
+> > new file mode 100755
+> > index 0000000..ad71042
+> > --- /dev/null
+> > +++ b/support/scripts/fix-configure-powerpc64.sh
+> > @@ -0,0 +1,47 @@
+> > +#!/bin/bash
+> > +
+> > +# This is a script to find, and correct, a problem with old versions of
+> > +# configure that affect powerpc64 and powerpc64le.
+> > +
+> > +# The issue causes configure to incorrectly determine that shared library
+> > +# support is not present in the linker. This causes the package to build a
+> > +# static library rather than a dynamic one and although the build will succeed,
+> > +# it may cause packages that link with the static library it to fail due to
+> > +# undefined symbols.
+> > +
+> > +# This script searches for files named 'configure' that appear to have this
+> > +# issue (by searching for a known bad pattern) and patching them.
+> > +
+> > +set -e
+> > +
+> > +if [ $# -ne 1 ]; then
+> > +	echo "Usage: $0 <package build directory>"
+> > +	exit 2
+> > +fi
+> > +
+> > +srcdir="$1"
+> > +files=$(cd "$srcdir" && find . -name configure \
+> > +-exec grep -qF 'Generated by GNU Autoconf' {} \; \
+> > +-exec grep -qF 'ppc*-*linux*|powerpc*-*linux*)' {} \; -print)
+> > +
+> > +# --ignore-whitespace is needed because some packages have included
+> > +# copies of configure scripts where tabs have been replaced with spaces.
+> > +for c in $files; do
+> > +	patch --ignore-whitespace "$srcdir"/"$c" <<'EOF'
+> > +--- a/configure	2016-11-16 15:31:46.097447271 +1100
+> > ++++ b/configure	2008-07-21 12:17:23.000000000 +1000
+> > +@@ -4433,7 +4433,10 @@
+> > +         x86_64-*linux*)
+> > +           LD="${LD-ld} -m elf_x86_64"
+> > +           ;;
+> > +-        ppc*-*linux*|powerpc*-*linux*)
+> > ++	  powerpcle-*linux*)
+> > ++	    LD="${LD-ld} -m elf64lppc"
+> > ++	    ;;
+> > ++	  powerpc-*linux*)
+> > +           LD="${LD-ld} -m elf64ppc"
+> > +           ;;
+> > +         s390*-*linux*)
+> > +EOF
+> > +done
+> > +
+> > 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
