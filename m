@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Nov 2016 21:40:39 +0100
-Subject: [Buildroot] [PATCH v1] postgresql: fix
- pgac_cv_snprintf_long_long_int_modifier
-In-Reply-To: <1480359231-29949-1-git-send-email-ps.report@gmx.net>
-References: <1480359231-29949-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20161128214039.2b3be6a8@free-electrons.com>
+Date: Mon, 28 Nov 2016 21:43:17 +0100
+Subject: [Buildroot] [PATCH 1/1] documentation: hash source control
+ archives
+In-Reply-To: <1480344142-6382-1-git-send-email-ash.charles@savoirfairelinux.com>
+References: <1480344142-6382-1-git-send-email-ash.charles@savoirfairelinux.com>
+Message-ID: <20161128214317.5cbbc846@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 28 Nov 2016 19:53:51 +0100, Peter Seiderer wrote:
-> Supplementary change the pgac_cv_snprintf_long_long_int_modifier from
-> complete format '%lld' to modifier 'll' version only (forgotten in commit
-> 02c43157ab09f6fe4078fd1145fc9d403d66c089 ([1])).
-> 
-> Fixes Bug 9451 ([2]).
-> 
-> [1] https://git.buildroot.net/buildroot/commit/?id=02c43157ab09f6fe4078fd1145fc9d403d66c089
-> [2] https://bugs.busybox.net/show_bug.cgi?id=9451
-> 
-> Reported-by: Daniel <dde@innovaphone.com>
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/postgresql/postgresql.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 28 Nov 2016 09:42:22 -0500, Ash Charles wrote:
 
-Applied to master, thanks.
+> -The +none+ hash type is reserved to those archives downloaded from a
+> -repository, like a 'git clone', a 'subversion checkout'...
+> +For archives downloaded from a repository e.g. from a 'git clone', a 'subversion checkout', using a locally-calculated sha256 hash is recommended although the +none+ type has also been used.
+
+The line needs to be wrapped to 72 characters.
+
+Also, I am not sure that the archives we produce from all version
+control systems are reproducible. I'm sure it's the case for Git, but
+I'm not sure for Subversion, so it might be that your statement is
+actually wrong.
+
+In addition, I think the last part "although the +none+ type has also
+been used" is a bit confusing.
+
+I think we should rather:
+
+ 1. Look again closely at which version control systems currently
+    produce reproducible archives in Buildroot.
+
+ 2. Make Buildroot actually check the hashes for the downloads made
+    through those version control systems.
+
+ 3. Update the documentation accordingly, with a clear statement of
+    which packages should have hashes, which packages should not.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
