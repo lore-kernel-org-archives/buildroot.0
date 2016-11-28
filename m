@@ -1,58 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Nov 2016 22:45:57 +0100
-Subject: [Buildroot] [PATCH v2] jasper: bump version to 2.0.0 (security)
-In-Reply-To: <20161128215347.0686379f@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 28 Nov 2016 21:53:47 +0100")
-References: <20161128134134.18599-1-Vincent.Riera@imgtec.com>
- <20161128215347.0686379f@free-electrons.com>
-Message-ID: <87bmwze0ru.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Nov 2016 22:45:35 +0100
+Subject: [Buildroot] [git commit] ntp: fix missing optional dependencies
+Message-ID: <20161128214557.C1E6581D5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=008ab8d590e59b34bb5d0eebd48bd97e1a553dd0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > On Mon, 28 Nov 2016 13:41:34 +0000, Vicente Olivert Riera wrote:
- >> Fixed CVEs:
- >> - CVE-2016-9387
- >> - CVE-2016-9388
- >> - CVE-2016-9389
- >> - CVE-2016-9390
- >> - CVE-2016-9391
- >> - CVE-2016-9392
- >> - CVE-2016-9393
- >> - CVE-2016-9394
- >> - CVE-2016-9395
- >> - CVE-2016-9396
- >> - CVE-2016-9397
- >> - CVE-2016-9398
- >> - CVE-2016-9399
- >> - CVE-2016-9557
- >> - CVE-2016-9560
- >> 
- >> Changes to jasper.mk:
- >> - Switched to CMake package infrastructure.
+ntpq and ntpdc may depends on libedit and libcap.
 
- > Do we really need to bump to 2.0.0 to get those security fixes?
- > Changing the package to CMake is a big change, which I'm not sure I
- > want to merge that close to the final release.
+$ arm-linux-readelf -d ./usr/bin/ntpdc | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libcap.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libedit.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libncursesw.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
 
- > I see we have 1.900.22 currently, while there is also a 1.900.29
- > version released upstream. Does this version also includes the security
- > fixes perhaps?
+However, build order with these libraries is not defined.
 
-Indeed. There is also a .30 and .31, and as far as I can see the only
-difference between 1.900.31 and 2.0 is cmake and some travis
-stuff. Looking at the CVE numbers on the Debian security tracker they
-all seem to refer to earlier commits - E.G.:
+In order to keep things simple, we enforce build order even if ntpq/ntpdc are
+not selected.
 
-https://security-tracker.debian.org/tracker/CVE-2016-9560
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+[Thomas: use --without-lineeditlibs.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ntp/ntp.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-Vicente, can you send a minimal patch updating to 1.900.31 for 2016.11
-and then a followup patch once 2016.11 is out to bump to 2.0?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 0b6304b..7f9e0d6 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -28,6 +28,20 @@ else
+ NTP_CONF_OPTS += --without-crypto --disable-openssl-random
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++NTP_CONF_OPTS += --enable-linuxcaps
++NTP_DEPENDENCIES += libcap
++else
++NTP_CONF_OPTS += --disable-linuxcaps
++endif
++
++ifeq ($(BR2_PACKAGE_LIBEDIT),y)
++NTP_CONF_OPTS += --with-lineeditlibs=edit
++NTP_DEPENDENCIES += libedit
++else
++NTP_CONF_OPTS += --without-lineeditlibs
++endif
++
+ ifeq ($(BR2_PACKAGE_NTP_NTPSNMPD),y)
+ NTP_CONF_OPTS += \
+ 	--with-net-snmp-config=$(STAGING_DIR)/usr/bin/net-snmp-config
