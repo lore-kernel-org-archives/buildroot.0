@@ -1,65 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 28 Nov 2016 12:44:20 +0200
+From: Damjan Marion <damjan.marion@gmail.com>
+Date: Mon, 28 Nov 2016 11:50:22 +0100
 Subject: [Buildroot] [PATCH] package/tvheadend: bump version to
  v4.1-2345 and fix version reporting
-In-Reply-To: <20161128103231.21626-1-damjan.marion@gmail.com>
+In-Reply-To: <20161128104420.kzbhlqvqcsjn2222@tarshish>
 References: <20161128103231.21626-1-damjan.marion@gmail.com>
-Message-ID: <20161128104420.kzbhlqvqcsjn2222@tarshish>
+ <20161128104420.kzbhlqvqcsjn2222@tarshish>
+Message-ID: <33EE2147-6A28-40BA-AFE1-3CD726389925@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Damjan,
 
-On Mon, Nov 28, 2016 at 11:32:31AM +0100, Damjan Marion wrote:
-> tvheadedend tracks version information based on git version
-> numbers. As tvheadend is downloaded as tarball form github
-> it was reporting version 0.0.0~unknown.
-
-Having the version reported as v4.1-2345-g04ff649 is not all that helpful 
-either, since commit 04ff649 is quite far from v4.1 in terms of both commits 
-count and time. Broken version report should be fixed upstream, IMO.
-
-baruch
-
-> Signed-off-by: Damjan Marion <damjan.marion@gmail.com>
-> ---
->  package/tvheadend/tvheadend.hash | 2 +-
->  package/tvheadend/tvheadend.mk   | 3 ++-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+> On 28 Nov 2016, at 11:44, Baruch Siach <baruch@tkos.co.il> wrote:
 > 
-> diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-> index ca10dc3..53cbccc 100644
-> --- a/package/tvheadend/tvheadend.hash
-> +++ b/package/tvheadend/tvheadend.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed
-> -sha256 71dd3d8efa32d592342ff6955cc2cd317f07e74d2d546977eb9bc45136dd5de6  tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657.tar.gz
-> +sha256 9af13b3e0381fa1f229eaf06acd8ad0d92013c2004a8005f1c66e56cd6d3a4d1  tvheadend-v4.1-2345-g04ff649.tar.gz
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index a3afec8..ad5d72d 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
-> +TVHEADEND_VERSION = v4.1-2345-g04ff649
->  TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
->  TVHEADEND_LICENSE = GPLv3+
->  TVHEADEND_LICENSE_FILES = LICENSE.md
-> @@ -88,6 +88,7 @@ define TVHEADEND_CONFIGURE_CMDS
->  endef
->  
->  define TVHEADEND_BUILD_CMDS
-> +	@echo $(TVHEADEND_VERSION) > $(@D)/rpm/version
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
->  endef
+> Hi Damjan,
+> 
+> On Mon, Nov 28, 2016 at 11:32:31AM +0100, Damjan Marion wrote:
+>> tvheadedend tracks version information based on git version
+>> numbers. As tvheadend is downloaded as tarball form github
+>> it was reporting version 0.0.0~unknown.
+> 
+> Having the version reported as v4.1-2345-g04ff649 is not all that helpful 
+> either, since commit 04ff649 is quite far from v4.1 in terms of both commits 
+> count and time. Broken version report should be fixed upstream, IMO.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Well, at least you know that it is 2345th commit after release 4.1 and that 
+its commit id is 04ff649. This is much more information than ?0.0.0~unknown?
+which buildroot compiled binary was reporting so far.
+
+Damjan
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/pkcs7-signature
+Size: 1600 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161128/4834a63e/attachment.p7s>
