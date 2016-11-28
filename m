@@ -1,72 +1,52 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Mon, 28 Nov 2016 10:03:59 +0000
-Subject: [Buildroot] [PATCH v2] trousers: Pass "-mno-compact-casesi"
- when building for ARCv1
-In-Reply-To: <20161125221357.0ab65b14@free-electrons.com>
-References: <1479811345-23400-1-git-send-email-vzakhar@synopsys.com>
- <20161125221357.0ab65b14@free-electrons.com>
-Message-ID: <1480327439.13520.22.camel@synopsys.com>
+From: Damjan Marion <damjan.marion@gmail.com>
+Date: Mon, 28 Nov 2016 11:32:31 +0100
+Subject: [Buildroot] [PATCH] package/tvheadend: bump version to v4.1-2345
+	and fix version reporting
+Message-ID: <20161128103231.21626-1-damjan.marion@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+tvheadedend tracks version information based on git version
+numbers. As tvheadend is downloaded as tarball form github
+it was reporting version 0.0.0~unknown.
 
-On Fri, 2016-11-25 at 22:13 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 22 Nov 2016 13:42:25 +0300, Vlad Zakharov wrote:
-> > 
-> > Compact casesi patterns don't have a reload version. This causes build
-> > failures of "trousers" package for ARC.
-> > 
-> > Current patch disables compact casesi patterns for ARCv1 (750D and 770D)
-> > via passing "-mno-compact-casesi" option when compiling "trousers".
-> > 
-> > This change is a temporary workaround and the feature is going to be
-> > fixed in the next ARC toolchain release version.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.org/results/d2c/d2c16d8ba022b070c4dbeba5e7ea41f14d706691//
-> > 
-> > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-> 
-> We still have a build failure of the trousers package on ARC, see:
-> 
-> ? http://autobuild.buildroot.net/results/1e7/1e730465c79f50143b0ca2366a3c07ea5e8648b1/build-end.log
-> 
-> The failure is:
-> 
-> (jump_insn 34 262 35 5 (parallel [
-> ????????????(set (pc)
-> ????????????????(unspec:SI [
-> ????????????????????????(reg:SI 14 r14 [165])
-> ????????????????????] UNSPEC_ARC_CASESI))
-> ????????????(use (label_ref 35))
-> ????????????(clobber (scratch:SI))
-> ????????]) tspi_context.c:145 130 {casesi_compact_jump}
-> ?????(expr_list:REG_DEAD (reg:SI 14 r14 [165])
-> ????????(nil))
-> ?-> 35)
-> tspi_context.c:325:1: internal compiler error: in find_reloads, at reload.c:3830
-> Please submit a full bug report,
-> with preprocessed source if appropriate.
-> 
-> Best regards,
-> 
-> Thomas
+Signed-off-by: Damjan Marion <damjan.marion@gmail.com>
+---
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Thank you for sending us this observation.
-I mentioned this SNAFU too and have already investigated the situation a bit.
-
-This happens because either "-Os" overrides "-mno-compact-casesi" option or the latter option doesn't work at all.?
-In any case we are working at the issue and will soon either provide some fix or send another workaround for "trousers"
-package.?
-
-Thanks.
-
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index ca10dc3..53cbccc 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 71dd3d8efa32d592342ff6955cc2cd317f07e74d2d546977eb9bc45136dd5de6  tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657.tar.gz
++sha256 9af13b3e0381fa1f229eaf06acd8ad0d92013c2004a8005f1c66e56cd6d3a4d1  tvheadend-v4.1-2345-g04ff649.tar.gz
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index a3afec8..ad5d72d 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
++TVHEADEND_VERSION = v4.1-2345-g04ff649
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+@@ -88,6 +88,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ endef
+ 
+ define TVHEADEND_BUILD_CMDS
++	@echo $(TVHEADEND_VERSION) > $(@D)/rpm/version
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
+ 
 -- 
-Best regards,
-Vlad Zakharov <vzakhar@synopsys.com>
+2.9.3
