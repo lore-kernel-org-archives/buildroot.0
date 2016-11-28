@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 28 Nov 2016 13:37:00 +0000
-Subject: [Buildroot] [PATCH] jasper: bump version to 2.0.0 (security)
-Message-ID: <20161128133700.17042-1-Vincent.Riera@imgtec.com>
+Date: Mon, 28 Nov 2016 13:41:34 +0000
+Subject: [Buildroot] [PATCH v2] jasper: bump version to 2.0.0 (security)
+Message-ID: <20161128134134.18599-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,6 @@ Fixed CVEs:
  - CVE-2016-9560
 
 Changes to jasper.mk:
-  - Switched to the official download site.
   - Switched to CMake package infrastructure.
     - --disable-strict hack adapted to CMake infra. Also a comment has
       been added.
@@ -48,12 +47,19 @@ Changes to Config.in:
  - Website URL changed to the real official one. Avoids one redirection.
 
 Changes to patches:
-  - Upstream patches removed.
   - Added patch to fix RPATH issue when building for static.
     - This patch has been sent as a pull request:
       https://github.com/mdadams/jasper/pull/95
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+ - Commit message amended:
+   - This patch doesn't change the download site.
+   - This patch doesn't remove any upstreamed patches.
+
+   These errors in the commit message happened because I cherry-picked
+   my patch from the next branch.
 ---
  ...nly-change-RPATH-when-building-for-shared.patch | 57 ++++++++++++++++++++++
  package/jasper/Config.in                           |  2 +-
