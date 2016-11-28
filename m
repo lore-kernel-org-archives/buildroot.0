@@ -1,76 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Nov 2016 11:40:57 +0100
-Subject: [Buildroot] [PATCH v2] package/pseudo: update version
-In-Reply-To: <20161127231918.6a07ab13@free-electrons.com>
-References: <20161127011202.6938-1-gael.portay@savoirfairelinux.com>
- <20161127231918.6a07ab13@free-electrons.com>
-Message-ID: <cd4dd4c7-f08b-2256-37ae-916c405938d2@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 28 Nov 2016 12:44:20 +0200
+Subject: [Buildroot] [PATCH] package/tvheadend: bump version to
+ v4.1-2345 and fix version reporting
+In-Reply-To: <20161128103231.21626-1-damjan.marion@gmail.com>
+References: <20161128103231.21626-1-damjan.marion@gmail.com>
+Message-ID: <20161128104420.kzbhlqvqcsjn2222@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Damjan,
 
+On Mon, Nov 28, 2016 at 11:32:31AM +0100, Damjan Marion wrote:
+> tvheadedend tracks version information based on git version
+> numbers. As tvheadend is downloaded as tarball form github
+> it was reporting version 0.0.0~unknown.
 
-On 27-11-16 23:19, Thomas Petazzoni wrote:
-> Hello,
+Having the version reported as v4.1-2345-g04ff649 is not all that helpful 
+either, since commit 04ff649 is quite far from v4.1 in terms of both commits 
+count and time. Broken version report should be fixed upstream, IMO.
+
+baruch
+
+> Signed-off-by: Damjan Marion <damjan.marion@gmail.com>
+> ---
+>  package/tvheadend/tvheadend.hash | 2 +-
+>  package/tvheadend/tvheadend.mk   | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> On Sat, 26 Nov 2016 20:12:02 -0500, Ga?l PORTAY wrote:
->> Brings in fix about shutdown synchronization with the server.
->>
->> See commit message:
->>     If you're running pseudo in docker, a script that creates a pseudo
->>     daemon can exit, causing docker to kill pseudo before it's done writing
->>     the database.
->>
->>     Since the client sending the shutdown request doesn't have its socket
->>     closed explicitly by the server, we can just read from the socket in
->>     the client to create a delay until the actual exit, which can take
->>     a while if there's an in-memory DB.
->>
->> Furthermore, the patch add the -S argument that tells the server to
->> shutdown and waits for its completion.
->>
->> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> 
-> Now that we no longer use pseudo, and have gotten back to fakeroot
-> instead, we don't need to apply this patch to the master branch. But of
-> course, it doesn't apply to the next branch, because this branch
-> doesn't have all the previous updates to the pseudo package.
-
- It also doesn't apply to the master branch anymore because the wrapper has been
-removed there. I think that's unfortunate, but understandable because Peter just
-did reverts rather than cooking up an entirely new patch to switch back from
-pseudo to fakeroot.
-
-
-> Generally speaking, pseudo is now an "orphan" host package, which we
-> generally don't like in Buildroot, since it means it is never tested.
-> What should we do about it? Remove it until it gets used again in the
-> future?
-> 
-> I've added Arnout, Yann and Peter in Cc so we can have a discussion
-> about this.
-
- I think that to re-add pseudo, it doesn't make sense to revert the reverts,
-because that gives us some intermediate states that are known to be broken. So
-it makes more sense to me to remove the pseudo package as well now in master,
-and re-introduce a completely working pseudo package later.
-
- Therefore, this patch should become Changes Requested or Rejected.
-
- Gael, Yann, can you summarize (in a new thread) the reasons to switch to
-pseudo? What possibilities does it give either to the user or to the BR
-developers, which aren't possible now?
-
- Regards,
- Arnout
+> diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+> index ca10dc3..53cbccc 100644
+> --- a/package/tvheadend/tvheadend.hash
+> +++ b/package/tvheadend/tvheadend.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 71dd3d8efa32d592342ff6955cc2cd317f07e74d2d546977eb9bc45136dd5de6  tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657.tar.gz
+> +sha256 9af13b3e0381fa1f229eaf06acd8ad0d92013c2004a8005f1c66e56cd6d3a4d1  tvheadend-v4.1-2345-g04ff649.tar.gz
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index a3afec8..ad5d72d 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
+> +TVHEADEND_VERSION = v4.1-2345-g04ff649
+>  TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+>  TVHEADEND_LICENSE = GPLv3+
+>  TVHEADEND_LICENSE_FILES = LICENSE.md
+> @@ -88,6 +88,7 @@ define TVHEADEND_CONFIGURE_CMDS
+>  endef
+>  
+>  define TVHEADEND_BUILD_CMDS
+> +	@echo $(TVHEADEND_VERSION) > $(@D)/rpm/version
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
