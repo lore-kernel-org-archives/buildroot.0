@@ -1,87 +1,79 @@
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 28 Nov 2016 18:35:52 +0200
-Subject: [Buildroot] [PATCH v1 2/3] efivar: allow build with uClibc
+Date: Mon, 28 Nov 2016 18:35:51 +0200
+Subject: [Buildroot] [PATCH v1 1/3] efivar: bump to version 30
 In-Reply-To: <20161128163553.173811-1-andriy.shevchenko@linux.intel.com>
 References: <20161128163553.173811-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <20161128163553.173811-3-andriy.shevchenko@linux.intel.com>
+Message-ID: <20161128163553.173811-2-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Details at https://github.com/rhinstaller/efivar/issues/76.
+Use newest release.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- package/efivar/0002-Allow-build-with-uClibc.patch | 38 +++++++++++++++++++++++
- package/efivar/Config.in                          |  2 --
- 2 files changed, 38 insertions(+), 2 deletions(-)
- create mode 100644 package/efivar/0002-Allow-build-with-uClibc.patch
+ ...fs-to-avoid-the-multiple-definitions-bug-.patch | 28 ++++++++++++++++++++++
+ package/efivar/efivar.hash                         |  2 +-
+ package/efivar/efivar.mk                           |  2 +-
+ 3 files changed, 30 insertions(+), 2 deletions(-)
+ create mode 100644 package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
 
-diff --git a/package/efivar/0002-Allow-build-with-uClibc.patch b/package/efivar/0002-Allow-build-with-uClibc.patch
+diff --git a/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch b/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
 new file mode 100644
-index 0000000..7b62714
+index 0000000..2caed5e
 --- /dev/null
-+++ b/package/efivar/0002-Allow-build-with-uClibc.patch
-@@ -0,0 +1,38 @@
-+From 2255601757a8a58baddad2d37d0bcc6b003a3732 Mon Sep 17 00:00:00 2001
-+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+Date: Fri, 25 Nov 2016 19:42:27 +0200
-+Subject: [PATCH 2/2] Allow build with uClibc
++++ b/package/efivar/0001-Use-z-muldefs-to-avoid-the-multiple-definitions-bug-.patch
+@@ -0,0 +1,28 @@
++From 314eb67b239e60c2ed3700e2baf9cd0e590465f3 Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Thu, 27 Oct 2016 09:19:18 -0400
++Subject: [PATCH 1/2] Use -z muldefs to avoid the multiple definitions bug
++ without -flto
 +
-+Basically this replaces type definitions in <uchar.h>.
++This fixes github issue #64
 +
-+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
++Signed-off-by: Peter Jones <pjones@redhat.com>
 +---
-+ src/export.c | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
++ Make.defaults | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/src/export.c b/src/export.c
-+index 7f2d4dd..72c02d1 100644
-+--- a/src/export.c
-++++ b/src/export.c
-+@@ -21,11 +21,17 @@
-+ #include <inttypes.h>
-+ #include <stdint.h>
-+ #include <stdlib.h>
-+-#include <uchar.h>
-+ 
-+ #include <efivar.h>
-+ #include "lib.h"
-+ 
-++#ifdef __UCLIBC__
-++typedef int_least16_t char16_t;
-++typedef int_least32_t char32_t;
-++#else
-++#include <uchar.h>
-++#endif
-++
-+ #define EFIVAR_MAGIC 0xf3df1597
-+ 
-+ #define ATTRS_UNSET 0xa5a5a5a5a5a5a5a5
++diff --git a/Make.defaults b/Make.defaults
++index aa974d9..c9d599f 100644
++--- a/Make.defaults
+++++ b/Make.defaults
++@@ -32,6 +32,7 @@ cflags	= $(CFLAGS) -I${TOPDIR}/src/include/efivar/ \
++ clang_ccldflags =
++ gcc_ccldflags =
++ ccldflags = $(cflags) -L. $(CCLDFLAGS) $(LDFLAGS) \
+++	-Wl,-z,muldefs \
++ 	$(if $(findstring clang,$(CCLD)),$(clang_ccldflags),) \
++ 	$(if $(findstring gcc,$(CCLD)),$(gcc_ccldflags),) \
++ 	$(call pkg-config-ccldflags)
 +-- 
 +2.10.2
 +
-diff --git a/package/efivar/Config.in b/package/efivar/Config.in
-index 466a30a..5fd3360 100644
---- a/package/efivar/Config.in
-+++ b/package/efivar/Config.in
-@@ -11,7 +11,6 @@ config BR2_PACKAGE_EFIVAR
- 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
- 	# doesn't build with uclibc due to lack of uchar.h
- 	# doesn't build with musl due to lack of __bswap_constant_16
--	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	select BR2_PACKAGE_POPT
- 	help
-@@ -21,7 +20,6 @@ config BR2_PACKAGE_EFIVAR
+diff --git a/package/efivar/efivar.hash b/package/efivar/efivar.hash
+index 3671bbc..e337b96 100644
+--- a/package/efivar/efivar.hash
++++ b/package/efivar/efivar.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 7fed0b31fe796d7dfef40cccb97b8bb0b806f16e568074ad2d456be30e195f5e efivar-28.tar.gz
++sha256 20709c76311f8eb8be92977b7ac008ce62501fa9f7fe885a784321540fc352f9 efivar-30.tar.gz
+diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
+index cff3ac1..913322e 100644
+--- a/package/efivar/efivar.mk
++++ b/package/efivar/efivar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "efivar requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.9"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		!BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
- 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+-EFIVAR_VERSION = 28
++EFIVAR_VERSION = 30
+ EFIVAR_SITE = $(call github,rhinstaller,efivar,$(EFIVAR_VERSION))
+ EFIVAR_LICENSE = LGPLv2.1
+ EFIVAR_LICENSE_FILES = COPYING
 -- 
 2.10.2
