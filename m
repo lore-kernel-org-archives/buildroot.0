@@ -1,37 +1,51 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Mon, 28 Nov 2016 16:12:45 -0500
-Subject: [Buildroot] [PATCH v2] package/pseudo: update version
-In-Reply-To: <cd4dd4c7-f08b-2256-37ae-916c405938d2@mind.be>
-References: <20161127011202.6938-1-gael.portay@savoirfairelinux.com>
- <20161127231918.6a07ab13@free-electrons.com>
- <cd4dd4c7-f08b-2256-37ae-916c405938d2@mind.be>
-Message-ID: <20161128211245.vqow7rjd5aadn73h@gportay>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Nov 2016 22:13:39 +0100
+Subject: [Buildroot] [PATCH] package/tvheadend: bump version to
+ v4.1-2345 and fix version reporting
+In-Reply-To: <8D43E2E0-8E99-4D96-8323-E1F360077FD4@gmail.com>
+References: <20161128103231.21626-1-damjan.marion@gmail.com>
+ <20161128220315.1924903c@free-electrons.com>
+ <8D43E2E0-8E99-4D96-8323-E1F360077FD4@gmail.com>
+Message-ID: <20161128221339.564e219f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hello,
 
-On Mon, Nov 28, 2016 at 11:40:57AM +0100, Arnout Vandecappelle wrote:
->  Gael, Yann, can you summarize (in a new thread) the reasons to switch to
-> pseudo? What possibilities does it give either to the user or to the BR
-> developers, which aren't possible now?
+On Mon, 28 Nov 2016 22:08:04 +0100, Damjan Marion wrote:
+
+> > Could you split the bump and the version fix reporting in two separate
+> > patches?  
 > 
+> ack
 
-I am not sure I am the one who can tell why we should move to pseudo. I was just
-helping because pseudo breaks my build (and of course, because I like to bring
-by contributions).
+Thanks!
 
-BTW, if think Yann has already sent a mail why he think BR should move to
-pseudo.
+> >> -TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
+> >> +TVHEADEND_VERSION = v4.1-2345-g04ff649  
+> > 
+> > Please keep this as a full hash, like it used to be. It should still  
+> 
+> May I ask for reason? Just for my curiosity...
 
-If I remember well the main two reasons are:
- * fakeroot looks like it is not supported anymore (no release since two years)
- * pseudo `works' with SELinux (*)
+Because we're using a full hash in every other package fetched from Git
+in Buildroot, and we like consistency :)
 
-(Maybe I am wrong.)
+> > work fine with the version reporting, if you write this version to
+> > $(@D)/rpm/version, like you're doing below.  
+> 
+> Are you suggesting here that tvheadend about page should just report 
+> ?50a370707aedf5c127e92bb517c378aa8ac04657? as a version?
 
-*: fakeroot is now working with SELinux since the workaround
-http://lists.busybox.net/pipermail/buildroot/2016-November/178238.html
+Yes, exactly.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
