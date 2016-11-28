@@ -1,55 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Nov 2016 23:24:53 +0100
-Subject: [Buildroot] [PATCH 4/6] ntp: fix missing optional dependencies
-In-Reply-To: <20161114132238.6569-5-jezz@sysmic.org>
-References: <20161114132238.6569-1-jezz@sysmic.org>
- <20161114132238.6569-5-jezz@sysmic.org>
-Message-ID: <20161128232453.6f8d3f36@free-electrons.com>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Tue, 29 Nov 2016 09:39:40 +1100
+Subject: [Buildroot] [PATCH 1/1] package/libdvbcsa: fix altivec problems
+ on powerpc64
+In-Reply-To: <20161128092148.28b85791@free-electrons.com>
+References: <cc3828a9d6d9dd16bd129e033e2463de8afcac04.1480311945.git.sam.bobroff@au1.ibm.com>
+ <20161128092148.28b85791@free-electrons.com>
+Message-ID: <20161128223940.GA2603@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Mon, 14 Nov 2016 14:22:36 +0100, J?r?me Pouiller wrote:
-> ntpq and ntpdc may depends on libedit and libcap.
+On Mon, Nov 28, 2016 at 09:21:48AM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> $ arm-linux-readelf -d ./usr/bin/ntpdc | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libcap.so.2]
->  0x00000001 (NEEDED)                     Shared library: [libm.so.6]
->  0x00000001 (NEEDED)                     Shared library: [libedit.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libncursesw.so.6]
->  0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
->  0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]
->  0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+> On Mon, 28 Nov 2016 16:45:52 +1100, Sam Bobroff wrote:
+> > Fixes:
+> > http://autobuild.buildroot.net/results/e6d22f5e0258c7ebb8a3ed39c11e014c721cd219
+> > 
+> > Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> > ---
+> > Notes:
+> > 
+> > I'm not an expert on Altivec, but the fix seems reasonable and the
+> > package's test programs succeed.
+> > 
+> >  package/libdvbcsa/0001-altivec-powerpc64.patch | 26 ++++++++++++++++++++++++++
+> >  package/libdvbcsa/libdvbcsa.mk                 |  1 +
+> >  2 files changed, 27 insertions(+)
+> >  create mode 100644 package/libdvbcsa/0001-altivec-powerpc64.patch
+> > 
+> > diff --git a/package/libdvbcsa/0001-altivec-powerpc64.patch b/package/libdvbcsa/0001-altivec-powerpc64.patch
+> > new file mode 100644
+> > index 0000000..9a3c91a
+> > --- /dev/null
+> > +++ b/package/libdvbcsa/0001-altivec-powerpc64.patch
 > 
-> However, build order with these libraries is not defined.
+> Patches should have a description + Signed-off-by. Also, please make
+> sure to submit this patch upstream. Thanks!
 > 
-> In order to keep things simple, we enforce build order even if ntpq/ntpdc are
-> not selected.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> Thomas
 
-I've applied your patch, after doing one small change, see below.
+Sorry, I knew that. Will fix in v2.
 
-> +ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-> +NTP_CONF_OPTS += --with-lineeditlibs=edit
-> +NTP_DEPENDENCIES += libedit
-> +else
-> +NTP_CONF_OPTS += --with-lineeditlibs=""
+I had a look for an upstream, but I can't find one. It's presumably part
+of (or related to) videolan but it doesn't seem to have a mailing list
+or anything...
 
-I've replaced this by --without-lineeditlibs, which has the same
-effect but is more commonly used in Buildroot. I did check that with
-the libedit package installed, but forcing --without-lineeditlibs
-really causes ntp to ignore libedit, which proves that it does work.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Cheers,
+Sam.
