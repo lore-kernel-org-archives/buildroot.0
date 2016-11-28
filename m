@@ -1,37 +1,83 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 28 Nov 2016 13:54:30 -0800
-Subject: [Buildroot] [PATCH] Revert "jasper: Disable debugging when building
-	for xtensa"
-Message-ID: <1480370070-21452-1-git-send-email-jcmvbkbc@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Nov 2016 22:55:38 +0100
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: add upstream patch to fix
+	security issue in vmnc decoder
+Message-ID: <20161128215538.9863-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 71d9b0c1f06896f113b09e941aa84d979bff5710.
-Now that -mauto-litpools is in TARGET_ABI when building for xtensa, -O0
-builds succeed, so this workaround is no longer needed.
+As detailed by Chris Evans, the vmnc decoder contains an integer overflow which
+can be exploited:
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+https://scarybeastsecurity.blogspot.be/2016/11/0day-poc-risky-design-decisions-in.html
+
+Fixes CVE-2016-9445 and CVE-2016-9446.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jasper/jasper.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ ...Sanity-check-width-height-before-using-it.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-plugins-bad/0001-vmncdec-Sanity-check-width-height-before-using-it.patch
 
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index bacb1a6..ebd7750 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -12,10 +12,4 @@ JASPER_LICENSE = JasPer License Version 2.0
- JASPER_LICENSE_FILES = LICENSE
- JASPER_CONF_OPTS = --disable-strict
- 
--# Xtensa gcc is unable to generate correct code with -O0 enabled by
--# --enable-debug. Allow package build but disable debug.
--ifeq ($(BR2_xtensa)$(BR2_ENABLE_DEBUG),yy)
--JASPER_CONF_OPTS += --disable-debug
--endif
--
- $(eval $(autotools-package))
+diff --git a/package/gstreamer1/gst1-plugins-bad/0001-vmncdec-Sanity-check-width-height-before-using-it.patch b/package/gstreamer1/gst1-plugins-bad/0001-vmncdec-Sanity-check-width-height-before-using-it.patch
+new file mode 100644
+index 0000000..ebc87bb
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-bad/0001-vmncdec-Sanity-check-width-height-before-using-it.patch
+@@ -0,0 +1,51 @@
++From 465091253bb3c3198d055b2e9f02d95237204663 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian@centricular.com>
++Date: Wed, 16 Nov 2016 20:41:39 +0200
++Subject: [PATCH] vmncdec: Sanity-check width/height before using it
++
++We will allocate a screen area of width*height*bpp bytes, however this
++calculation can easily overflow if too high width or height are given
++inside the stream. Nonetheless we would just assume that enough memory
++was allocated, try to fill it and overwrite as much memory as wanted.
++
++Also allocate the screen area filled with zeroes to ensure that we start
++with full-black and not any random (or not so random) data.
++
++https://scarybeastsecurity.blogspot.gr/2016/11/0day-poc-risky-design-decisions-in.html
++
++Ideally we should just remove this plugin in favour of the one in
++gst-libav, which generally seems to be of better code quality.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=774533
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ gst/vmnc/vmncdec.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/gst/vmnc/vmncdec.c b/gst/vmnc/vmncdec.c
++index 5504302..a843136 100644
++--- a/gst/vmnc/vmncdec.c
+++++ b/gst/vmnc/vmncdec.c
++@@ -261,7 +261,7 @@ vmnc_handle_wmvi_rectangle (GstVMncDec * dec, struct RfbRectangle *rect,
++   gst_video_codec_state_unref (state);
++ 
++   g_free (dec->imagedata);
++-  dec->imagedata = g_malloc (dec->format.width * dec->format.height *
+++  dec->imagedata = g_malloc0 (dec->format.width * dec->format.height *
++       dec->format.bytes_per_pixel);
++   GST_DEBUG_OBJECT (dec, "Allocated image data at %p", dec->imagedata);
++ 
++@@ -791,6 +791,10 @@ vmnc_handle_packet (GstVMncDec * dec, const guint8 * data, int len,
++             GST_WARNING_OBJECT (dec, "Rectangle out of range, type %d", r.type);
++             return ERROR_INVALID;
++           }
+++        } else if (r.width > 16384 || r.height > 16384) {
+++          GST_WARNING_OBJECT (dec, "Width or height too high: %ux%u", r.width,
+++              r.height);
+++          return ERROR_INVALID;
++         }
++ 
++         switch (r.type) {
++-- 
++2.10.2
++
 -- 
-2.1.4
+2.10.2
