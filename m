@@ -1,85 +1,64 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Nov 2016 14:23:30 +0000
-Subject: [Buildroot] [PATCH next 1/2] readline: bump version to 7.0
-In-Reply-To: <ad5265b4-b952-7fd3-fd40-fe562ce2150f@imgtec.com>
-References: <20161129122404.59676-1-Vincent.Riera@imgtec.com>
- <20161129133705.1ead6568@free-electrons.com>
- <ad5265b4-b952-7fd3-fd40-fe562ce2150f@imgtec.com>
-Message-ID: <e1d91981-404b-45c5-baae-c56b9064260b@imgtec.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Tue, 29 Nov 2016 09:35:55 -0500
+Subject: [Buildroot] [PATCH 1/1] sane-backends: disable static configuration
+Message-ID: <1480430155-25182-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+While sane-backends can be compiled statically, it requires
+selection of a subset of scanner backends. Without this, all backends
+are compiled and link errors such as the following are generated:
 
-On 29/11/16 12:56, Vicente Olivert Riera wrote:
-> Hi Thomas,
-> 
-> On 29/11/16 12:37, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Tue, 29 Nov 2016 12:24:03 +0000, Vicente Olivert Riera wrote:
->>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>
->> Did you do a bit of build testing of the readline reverse dependencies,
->> just to check there is no obvious regression caused by possible API
->> changes?
-> 
-> no, just bash-4.4.
+../backend/.libs/libsane.a(libepsonds_la-epsonds.o):(.bss+0xc): multiple definition of `source_list'
+../backend/.libs/libsane.a(libepson2_la-epson2.o):(.data+0x40): first defined here
+../backend/.libs/libsane.a(libepsonds_la-epsonds.o):(.data+0x10): multiple definition of `mode_params'
+../backend/.libs/libsane.a(libepson2_la-epson2.o):(.data+0x0): first defined here
+collect2: error: ld returned 1 exit status
 
-I have tested the new version of readline with this reverse dependencies:
+Buildroot currently doesn't allow fine grained selection of backends, so
+this disables static builds.
 
-gnuchess
-python-readline
-php-ext-readline
-sqlite
-chrony
-socat
-connman-client
-xorriso
-quagga-vtysh
-wpa_supplicant
-gawk
-gnupg2
-dropwatch
-atftp
-nftables
-postgresql
-lftp
-softether
-neardal
-libnfc-examples
-ipmitool-ipmishell
-gnuplot
-lvm2
-lua-readline
-bind
-ruby
-mysql
-bash
-slang
-util-linux
-parted
-unixodbc
-jack2
+Fixes:
 
-All of them built fine.
+http://autobuild.buildroot.net/results/89c/89c6e4ec1596def74e72eb071ef4bf0f1a7cc9f8/
+http://autobuild.buildroot.net/results/92a/92a54c99a9ba918ece4c56d7beb985729bee700b/
+http://autobuild.buildroot.net/results/1b9/1b9eac5303dfed638063f3b18dfff5571a2c4231/
+http://autobuild.buildroot.net/results/366/366979d0bd21dc2bf7f0336b9653ef3fd4e11123/
 
-Regards,
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
 
-Vincent
+N.B. Admittedly, this is a weak fix since one could add fine grained
+configuration of scanner backends to the Config.in and have some logic
+to be smart about which backends are chosen to allow a static build.
+Since I've only used the dynamic case in production and it has been
+a while, this seemed like the safer fix until someone wants to put
+in the time to add static support.
 
-> 
-> Vincent
-> 
->> Thanks,
->>
->> Thomas
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+ package/sane-backends/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/sane-backends/Config.in b/package/sane-backends/Config.in
+index 8156e85..b1771e7 100644
+--- a/package/sane-backends/Config.in
++++ b/package/sane-backends/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SANE_BACKENDS
+ 	bool "sane-backends"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  SANE - Scanner Access Now Easy
+ 
+@@ -9,3 +10,6 @@ config BR2_PACKAGE_SANE_BACKENDS
+ 	  Backends are included automatically based on the libraries that have
+ 	  been selected: libusb, jpeg, tiff, avahi (with dbus and libglib2),
+ 	  and netsnmp.
++
++comment "sane-backends needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+-- 
+2.7.4
