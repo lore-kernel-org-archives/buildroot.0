@@ -1,128 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Nov 2016 16:43:27 +0100
-Subject: [Buildroot] [git commit] efibootmrg: Allow build with uClibc
-Message-ID: <20161201222140.42F337FD88@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Nov 2016 23:42:40 +0100
+Subject: [Buildroot] [git commit] sqlite: bump version to 3150200 (3.15.2)
+Message-ID: <20161201222140.DB6108026C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ae07b4746fcf7457a6ab3bd990df97fdd9e1fbe
+commit: https://git.buildroot.net/buildroot/commit/?id=8af8c9d15fc4b8861e14b118b14339d0bb62f03d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Details at https://github.com/rhinstaller/efibootmgr/issues/61.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-[Thomas: efivar still doesn't build on musl, so same for efibootmgr.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../efibootmgr/0001-Allow-build-with-uClibc.patch  | 40 ++++++++++++++++++++++
- package/efibootmgr/Config.in                       |  7 ++--
- package/efibootmgr/efibootmgr.mk                   |  8 +++--
- 3 files changed, 49 insertions(+), 6 deletions(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/efibootmgr/0001-Allow-build-with-uClibc.patch b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
-new file mode 100644
-index 0000000..fd29233
---- /dev/null
-+++ b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
-@@ -0,0 +1,40 @@
-+From bbfcc60497c326576bb23cb01d90115ef3cf6947 Mon Sep 17 00:00:00 2001
-+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+Date: Fri, 25 Nov 2016 20:26:52 +0200
-+Subject: [PATCH] Remove unneeded <uchar.h> include
-+
-+This fixes the build with uClibc.
-+
-+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-+---
-+ src/efibootdump.c | 1 -
-+ src/eficonman.c   | 1 -
-+ 2 files changed, 2 deletions(-)
-+
-+diff --git a/src/efibootdump.c b/src/efibootdump.c
-+index 6ff8360..7c5a1c5 100644
-+--- a/src/efibootdump.c
-++++ b/src/efibootdump.c
-+@@ -19,7 +19,6 @@
-+ #include <stdint.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+-#include <uchar.h>
-+ #include <unistd.h>
-+ 
-+ #include "error.h"
-+diff --git a/src/eficonman.c b/src/eficonman.c
-+index 2c2be38..9bfae79 100644
-+--- a/src/eficonman.c
-++++ b/src/eficonman.c
-+@@ -17,7 +17,6 @@
-+ #include <stdint.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+-#include <uchar.h>
-+ #include <unistd.h>
-+ 
-+ #define  _(String) gettext (String)
-+-- 
-+2.10.2
-+
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-index 988bf6d..8b29938 100644
---- a/package/efibootmgr/Config.in
-+++ b/package/efibootmgr/Config.in
-@@ -1,10 +1,11 @@
- config BR2_PACKAGE_EFIBOOTMGR
- 	bool "efibootmgr"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
--	depends on BR2_TOOLCHAIN_USES_GLIBC # efivar
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # efivar
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
- 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII # efivar
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_EFIVAR
- 	help
- 	  A Linux user-space application to modify the Intel Extensible
-@@ -14,9 +15,9 @@ config BR2_PACKAGE_EFIBOOTMGR
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index bb24f94..7839dc9 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 47404fe5c43936160ad0e90bddedc99367da7a9b  sqlite-autoconf-3150100.tar.gz
++sha1 31f52169bcfeef9efb61480d0950e928ad059552  sqlite-autoconf-3150200.tar.gz
+ # Calculated based on the hash above
+-sha256 5dfa89b7697ee3c2ac7b44e8e157e7f204bf999c866afcaa8bb1c7ff656ae2c5  sqlite-autoconf-3150100.tar.gz
++sha256 07b35063b9386865b78226cdaca9a299d938a87aaa8fdc4d73edb0cef30f3149  sqlite-autoconf-3150200.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 3f44f82..cb03249 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/rhinstaller/efibootmgr
- 
--comment "efibootmgr requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.9"
-+comment "efibootmgr requires a glibc or uClibc toolchain w/ headers >= 3.12, gcc >= 4.9"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		!BR2_TOOLCHAIN_USES_GLIBC || \\
-+		BR2_TOOLCHAIN_USES_MUSL || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
- 		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index 731d6e9..487c8ca 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -8,7 +8,8 @@ EFIBOOTMGR_VERSION = 14
- EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
- EFIBOOTMGR_LICENSE = GPLv2+
- EFIBOOTMGR_LICENSE_FILES = COPYING
--EFIBOOTMGR_DEPENDENCIES = efivar
-+EFIBOOTMGR_DEPENDENCIES = efivar $(if $(BR2_NEEDS_GETTEXT),gettext)
-+EFIBOOTMGR_LDFLAGS = $(TARGET_LDFLAGS) $(if $(BR2_NEEDS_GETTEXT),-lintl)
- 
- define EFIBOOTMSR_PATCH_HEADER_PATH
- 	$(SED) 's,-I/,-I$(STAGING_DIR)/,' $(@D)/Makefile
-@@ -17,11 +18,12 @@ endef
- EFIBOOTMGR_POST_PATCH_HOOKS += EFIBOOTMSR_PATCH_HEADER_PATH
- 
- define EFIBOOTMGR_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)			\
-+		LDFLAGS="$(EFIBOOTMGR_LDFLAGS)" $(MAKE1) -C $(@D)
- endef
- 
- define EFIBOOTMGR_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)	\
- 		DESTDIR=$(TARGET_DIR) install
- endef
- 
+-SQLITE_VERSION = 3150100
++SQLITE_VERSION = 3150200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
