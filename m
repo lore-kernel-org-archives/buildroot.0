@@ -1,64 +1,72 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Nov 2016 10:50:24 +0000
-Subject: [Buildroot] [PATCH v2] jasper: bump version to 2.0.0 (security)
-In-Reply-To: <87bmwze0ru.fsf@dell.be.48ers.dk>
-References: <20161128134134.18599-1-Vincent.Riera@imgtec.com>
- <20161128215347.0686379f@free-electrons.com>
- <87bmwze0ru.fsf@dell.be.48ers.dk>
-Message-ID: <616b5055-6929-ff78-ea62-5dacf4469c5f@imgtec.com>
+Date: Tue, 29 Nov 2016 11:23:03 +0000
+Subject: [Buildroot] [PATCH] jasper: bump version to 1.900.31 (security)
+Message-ID: <20161129112303.37568-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Fixed CVEs:
+ - CVE-2016-9387
+ - CVE-2016-9388
+ - CVE-2016-9389
+ - CVE-2016-9390
+ - CVE-2016-9391
+ - CVE-2016-9392
+ - CVE-2016-9393
+ - CVE-2016-9394
+ - CVE-2016-9395
+ - CVE-2016-9396
+ - CVE-2016-9397
+ - CVE-2016-9398
+ - CVE-2016-9399
+ - CVE-2016-9557
+ - CVE-2016-9560
 
-On 28/11/16 21:45, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  > Hello,
->  > On Mon, 28 Nov 2016 13:41:34 +0000, Vicente Olivert Riera wrote:
->  >> Fixed CVEs:
->  >> - CVE-2016-9387
->  >> - CVE-2016-9388
->  >> - CVE-2016-9389
->  >> - CVE-2016-9390
->  >> - CVE-2016-9391
->  >> - CVE-2016-9392
->  >> - CVE-2016-9393
->  >> - CVE-2016-9394
->  >> - CVE-2016-9395
->  >> - CVE-2016-9396
->  >> - CVE-2016-9397
->  >> - CVE-2016-9398
->  >> - CVE-2016-9399
->  >> - CVE-2016-9557
->  >> - CVE-2016-9560
->  >> 
->  >> Changes to jasper.mk:
->  >> - Switched to CMake package infrastructure.
-> 
->  > Do we really need to bump to 2.0.0 to get those security fixes?
->  > Changing the package to CMake is a big change, which I'm not sure I
->  > want to merge that close to the final release.
-> 
->  > I see we have 1.900.22 currently, while there is also a 1.900.29
->  > version released upstream. Does this version also includes the security
->  > fixes perhaps?
-> 
-> Indeed. There is also a .30 and .31, and as far as I can see the only
-> difference between 1.900.31 and 2.0 is cmake and some travis
-> stuff. Looking at the CVE numbers on the Debian security tracker they
-> all seem to refer to earlier commits - E.G.:
-> 
-> https://security-tracker.debian.org/tracker/CVE-2016-9560
-> 
-> Vicente, can you send a minimal patch updating to 1.900.31 for 2016.11
-> and then a followup patch once 2016.11 is out to bump to 2.0?
+Changes to jasper.mk:
+ - Switched site method to GitHub. 1.900.31 is not released as a tarball
+   in the official website.
+ - Autoreconf necessary since there isn't any configure script. We need
+   to generate it.
 
-Yes, no problem.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/jasper/jasper.hash | 2 +-
+ package/jasper/jasper.mk   | 8 ++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-Vincent
-
-> 
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index fdadbb2..64ddfa4 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	6c942ae79108cd6a359e5bc34ea03565bd33ac20f6814cb09c4f92298b6b1cb8	jasper-1.900.22.tar.gz
++sha256 0099084dce9fa0a318b48a5ed2a12ac7cff3324f3fd4459833e6fe2ff583fb2c  jasper-version-1.900.31.tar.gz
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index bacb1a6..e8b8aaa 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -4,12 +4,16 @@
+ #
+ ################################################################################
+ 
+-JASPER_VERSION = 1.900.22
+-JASPER_SITE = http://www.ece.uvic.ca/~frodo/jasper/software
++JASPER_VERSION = version-1.900.31
++JASPER_SITE = $(call github,mdadams,jasper,$(JASPER_VERSION))
+ JASPER_INSTALL_STAGING = YES
+ JASPER_DEPENDENCIES = jpeg
+ JASPER_LICENSE = JasPer License Version 2.0
+ JASPER_LICENSE_FILES = LICENSE
++
++# No configure script included. We need to generate it.
++JASPER_AUTORECONF = YES
++
+ JASPER_CONF_OPTS = --disable-strict
+ 
+ # Xtensa gcc is unable to generate correct code with -O0 enabled by
+-- 
+2.10.1
