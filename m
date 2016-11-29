@@ -1,33 +1,169 @@
-From: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
-Date: Tue, 29 Nov 2016 16:53:32 -0200
-Subject: [Buildroot] [PATCH 1/1] uboot: support -b option for mkenvimage
-Message-ID: <1480445612-6188-1-git-send-email-tiago.brusamarello@datacom.ind.br>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 29 Nov 2016 20:31:48 +0100
+Subject: [Buildroot] [PATCH v3,1/1] cjson: bump to version v1.0.2
+Message-ID: <1480447908-67837-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When generating the environment image the target endianess should
-be taken in account for CRC calculation purposes. For big endian
-targets the -b flag should be passed to the mkenvimage tool.
+This is a major update in cjson:
+ - project site moved from sourceforge to github
+ - project recommends to use the new cmake buildsystem instead of the
+   legacy make
+ - BR2_STATIC_LIBS is now OK (README does not mention issue anymore)
+ - As include path and library name have changed, tinycbor has to be
+   updated
 
-Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
- boot/uboot/uboot.mk | 1 +
- 1 file changed, 1 insertion(+)
+Changes v2 -> v3 (after review of Thomas Petazzoni):
+ - Update commit message
+ - Merge tinycbor patch inside cjson patch
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 3e347c1..17b80cc 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -223,6 +223,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
- 			$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
- 			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-+			$(if $(findstring "BIG", $(BR2_ENDIAN)),-b) \
- 			-o $(BINARIES_DIR)/uboot-env.bin -)
- endef
+Changes v1 -> v2 (after review of Danomi Manchego):
+ - Retrieve cjson version v1.0.1 instead of v1.0.0
+
+ package/cjson/Config.in                            |  4 +-
+ package/cjson/cjson.hash                           |  2 +
+ package/cjson/cjson.mk                             | 22 +------
+ .../tinycbor/0001-Update-cjson-include-path.patch  | 69 ++++++++++++++++++++++
+ 4 files changed, 75 insertions(+), 22 deletions(-)
+ create mode 100644 package/cjson/cjson.hash
+ create mode 100644 package/tinycbor/0001-Update-cjson-include-path.patch
+
+diff --git a/package/cjson/Config.in b/package/cjson/Config.in
+index bbe4c4a..04eff4c 100644
+--- a/package/cjson/Config.in
++++ b/package/cjson/Config.in
+@@ -1,9 +1,7 @@
+ config BR2_PACKAGE_CJSON
+ 	bool "cJSON"
+-	# For static build with cJSON.c directly see README
+-	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  An ultra-lightweight, portable, single-file, simple-as-can-be ANSI-C
+ 	  compliant JSON parser, under MIT license.
  
+-	  http://cjson.sourceforge.net/
++	  https://github.com/DaveGamble/cJSON
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+new file mode 100644
+index 0000000..27f1d46
+--- /dev/null
++++ b/package/cjson/cjson.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	5c3a4a77796b230efbd74369b0974d14ac0408f2677bd116d4a4b5894b9be372	cjson-v1.0.2.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 8f21ef8..c544a77 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,26 +4,10 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = 58
+-CJSON_SITE_METHOD = svn
+-CJSON_SITE = http://svn.code.sf.net/p/cjson/code
++CJSON_VERSION = v1.0.2
++CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
+ CJSON_LICENSE_FILES = LICENSE
+ 
+-define CJSON_BUILD_CMDS
+-	cd $(@D) && $(TARGET_CC) $(TARGET_CFLAGS) -shared -fPIC -lm \
+-		cJSON.c -o libcJSON.so
+-endef
+-
+-define CJSON_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D $(@D)/cJSON.h $(STAGING_DIR)/usr/include/cJSON.h
+-	$(INSTALL) -D $(@D)/libcJSON.so $(STAGING_DIR)/usr/lib/libcJSON.so
+-endef
+-
+-define CJSON_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/cJSON.h $(TARGET_DIR)/usr/include/cJSON.h
+-	$(INSTALL) -D $(@D)/libcJSON.so $(TARGET_DIR)/usr/lib/libcJSON.so
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(cmake-package))
+diff --git a/package/tinycbor/0001-Update-cjson-include-path.patch b/package/tinycbor/0001-Update-cjson-include-path.patch
+new file mode 100644
+index 0000000..5eea937
+--- /dev/null
++++ b/package/tinycbor/0001-Update-cjson-include-path.patch
+@@ -0,0 +1,69 @@
++From 9aa79d8e9e38b31b34d9933a266c698e79808a79 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fabrice.fontaine@orange.com>
++Date: Sun, 13 Nov 2016 15:43:40 +0100
++Subject: [PATCH] Update cjson include path
++
++Since cjson-v1.0.0 (https://github.com/DaveGamble/cJSON/releases),
++cJSON.h is installed into cjson/cJSON.h and library has been renamed
++from cJSON to cjson
++
++Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
++---
++ Makefile                    | 4 ++--
++ Makefile.configure          | 4 ++--
++ tools/json2cbor/json2cbor.c | 2 +-
++ 3 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index acd52eb..905fbdf 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -82,12 +82,12 @@ ifeq ($(open_memstream-pass),)
++   endif
++ endif
++ 
++-# json2cbor depends on an external library (cJSON)
+++# json2cbor depends on an external library (cjson)
++ ifneq ($(cjson-pass)$(system-cjson-pass),)
++   JSON2CBOR_SOURCES = tools/json2cbor/json2cbor.c
++   INSTALL_TARGETS += $(bindir)/json2cbor
++   ifeq ($(system-cjson-pass),1)
++-    LDFLAGS_CJSON = -lcJSON
+++    LDFLAGS_CJSON = -lcjson
++   else
++     JSON2CBOR_SOURCES += src/cjson/cJSON.c
++     json2cbor_CCFLAGS = -I$(SRCDIR)src/cjson
++diff --git a/Makefile.configure b/Makefile.configure
++index 28f4c92..424efb3 100644
++--- a/Makefile.configure
+++++ b/Makefile.configure
++@@ -10,11 +10,11 @@ PROGRAM-gc_sections = int main() {}
++ CCFLAGS-gc_sections = -Wl,--gc-sections
++ 
++ PROGRAM-cjson  = \#include <stdlib.h>\n
++-PROGRAM-cjson += \#include <cJSON.h>\n
+++PROGRAM-cjson += \#include <cjson/cJSON.h>\n
++ PROGRAM-cjson += int main() { return cJSON_False; }
++ CCFLAGS-cjson = -I$(dir $(MAKEFILE))src/cjson
++ PROGRAM-system-cjson = $(PROGRAM-cjson)
++-CCFLAGS-system-cjson = -lcJSON
+++CCFLAGS-system-cjson = -lcjson
++ 
++ sink:
++ 	@echo >&2 Please run from the top-level Makefile.
++diff --git a/tools/json2cbor/json2cbor.c b/tools/json2cbor/json2cbor.c
++index 96d3ed1..e194299 100644
++--- a/tools/json2cbor/json2cbor.c
+++++ b/tools/json2cbor/json2cbor.c
++@@ -27,7 +27,7 @@
++ #include "cbor.h"
++ #include "compilersupport_p.h"
++ 
++-#include <cJSON.h>
+++#include <cjson/cJSON.h>
++ 
++ #include <errno.h>
++ #include <math.h>
++-- 
++2.5.0
++
 -- 
-1.9.1
+2.5.0
