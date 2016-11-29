@@ -1,118 +1,66 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 29 Nov 2016 15:37:49 -0800
-Subject: [Buildroot] [PATCH] package/gcc: fix ICE on xtensa, 5.x and 6.x,
-	PR target/78603
-Message-ID: <1480462669-19677-1-git-send-email-jcmvbkbc@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Nov 2016 00:41:22 +0100
+Subject: [Buildroot] [PATCH v2 3/3] pru-sample: add sample PRU
+	application
+In-Reply-To: <CAK8F28mp6tU3oncTK5FpNqUU9o-z0fUOMOxoGYEw7yeRd9uJ5A@mail.gmail.com>
+References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
+ <1480096200-20475-3-git-send-email-ash.charles@savoirfairelinux.com>
+ <1a270629-34f9-06f6-fb58-25455e61900d@mind.be>
+ <CAK8F28mHwYonzL1Wx052TXCzd3U4TjvfQiMPuqxuQmRBLv-2zg@mail.gmail.com>
+ <20161127144731.18bd30cb@free-electrons.com>
+ <CAK8F28mp6tU3oncTK5FpNqUU9o-z0fUOMOxoGYEw7yeRd9uJ5A@mail.gmail.com>
+Message-ID: <698688f1-7d97-fe08-0a47-ebd6e2c68761@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zero overhead loop optimization pass may incorrectly put start of the
-loop between a call and its CALL_ARG_LOCATION note, resulting in the
-following build error:
 
-  ../src/pjlib-test/thread.c: In function 'thread_test':
-  ../src/pjlib-test/thread.c:328:1: internal compiler error: in
-    dwarf2out_var_location, at dwarf2out.c:21846
 
-Fixes:
-  http://autobuild.buildroot.net/results/d919e1276ce1d39b4b3eb09937927d5959cd69a3/
+On 28-11-16 12:34, Ash Charles wrote:
+> 
+> On Sun, Nov 27, 2016 at 8:47 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com
+> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
+>>
+>> Why is pru-software-support a host package? It really builds/installs
+>> things for the target, even if the target is the PRU and not the ARM.
+>>
+>> Was it made a host tool after a discussion with Arnout?
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- .../gcc/5.4.0/876-xtensa-Fix-PR-target-78603.patch | 37 ++++++++++++++++++++++
- .../gcc/6.2.0/871-xtensa-Fix-PR-target-78603.patch | 37 ++++++++++++++++++++++
- 2 files changed, 74 insertions(+)
- create mode 100644 package/gcc/5.4.0/876-xtensa-Fix-PR-target-78603.patch
- create mode 100644 package/gcc/6.2.0/871-xtensa-Fix-PR-target-78603.patch
+> It is really best described as a staging package for the PRU. There are only
+> headers and a library used for static linking. IIRC, Arnout suggested that
+> putting this as staging was confusing---these aren't for the target e.g.
+> ARM---and suggested instead that we treat them as host tools along with the rest
+> of the tool chain.
 
-diff --git a/package/gcc/5.4.0/876-xtensa-Fix-PR-target-78603.patch b/package/gcc/5.4.0/876-xtensa-Fix-PR-target-78603.patch
-new file mode 100644
-index 0000000..628268a
---- /dev/null
-+++ b/package/gcc/5.4.0/876-xtensa-Fix-PR-target-78603.patch
-@@ -0,0 +1,37 @@
-+From e178289a12a829ec47dc5038d91401f65381e71d Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 29 Nov 2016 13:09:17 -0800
-+Subject: [PATCH 8/8] xtensa: Fix PR target/78603
-+
-+2016-11-29  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	* config/xtensa/xtensa.c (hwloop_optimize): Don't emit zero
-+	overhead loop start between a call and its CALL_ARG_LOCATION
-+	note.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: r242979
-+
-+ gcc/config/xtensa/xtensa.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 206ff80..36ab1e3 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -4182,7 +4182,10 @@ hwloop_optimize (hwloop_info loop)
-+       entry_after = BB_END (entry_bb);
-+       while (DEBUG_INSN_P (entry_after)
-+              || (NOTE_P (entry_after)
-+-                 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
-++                 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK
-++		 /* Make sure we don't split a call and its corresponding
-++		    CALL_ARG_LOCATION note.  */
-++                 && NOTE_KIND (entry_after) != NOTE_INSN_CALL_ARG_LOCATION))
-+         entry_after = PREV_INSN (entry_after);
-+ 
-+       emit_insn_after (seq, entry_after);
-+-- 
-+2.1.4
-+
-diff --git a/package/gcc/6.2.0/871-xtensa-Fix-PR-target-78603.patch b/package/gcc/6.2.0/871-xtensa-Fix-PR-target-78603.patch
-new file mode 100644
-index 0000000..0331814
---- /dev/null
-+++ b/package/gcc/6.2.0/871-xtensa-Fix-PR-target-78603.patch
-@@ -0,0 +1,37 @@
-+From 59cce7b304a8cbbb508ba21ab2f9052d3ee9a9e3 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 29 Nov 2016 13:09:17 -0800
-+Subject: [PATCH 2/2] xtensa: Fix PR target/78603
-+
-+2016-11-29  Max Filippov  <jcmvbkbc@gmail.com>
-+gcc/
-+	* config/xtensa/xtensa.c (hwloop_optimize): Don't emit zero
-+	overhead loop start between a call and its CALL_ARG_LOCATION
-+	note.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: r242979
-+
-+ gcc/config/xtensa/xtensa.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index e49f784..70f698a 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -4158,7 +4158,10 @@ hwloop_optimize (hwloop_info loop)
-+       entry_after = BB_END (entry_bb);
-+       while (DEBUG_INSN_P (entry_after)
-+              || (NOTE_P (entry_after)
-+-                 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
-++                 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK
-++		 /* Make sure we don't split a call and its corresponding
-++		    CALL_ARG_LOCATION note.  */
-++                 && NOTE_KIND (entry_after) != NOTE_INSN_CALL_ARG_LOCATION))
-+         entry_after = PREV_INSN (entry_after);
-+ 
-+       emit_insn_after (seq, entry_after);
-+-- 
-+2.1.4
-+
+ Yeah, but now I'm not so sure anymore.
+
+ Clearly, TI_CGT_PRU_INSTALLDIR is the equivalent of STAGING_DIR for the PRU. In
+that sense, it makes sense to have TI_CGT_PRU_INSTALLDIR as a subdirectory of
+HOST_DIR (just like STAGING_DIR is a subdirectory of HOST_DIR). And it anyway
+has to be a subdirectory of HOST_DIR because the compiler executables are
+installed there as well. For me, that was the reason to say that it should be a
+host package.
+
+ However, we are indeed building for the target (kind of). and we are installing
+into a staging directory (though it is not in STAGING_DIR). So it makes sense to
+make it a target package, with INSTALL_STAGING = YES, but where the
+INSTALL_STAGING step doesn't actually install in staging but in the 'PRU
+staging' i.e. TI_CGT_PRU_INSTALLDIR.
+
+ Thomas, do you agree?
+
+
+ Regards,
+ Arnout
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
