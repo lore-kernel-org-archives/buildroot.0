@@ -1,15 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Nov 2016 00:41:22 +0100
-Subject: [Buildroot] [PATCH v2 3/3] pru-sample: add sample PRU
-	application
-In-Reply-To: <CAK8F28mp6tU3oncTK5FpNqUU9o-z0fUOMOxoGYEw7yeRd9uJ5A@mail.gmail.com>
-References: <1479324273-13589-1-git-send-email-ash.charles@savoirfairelinux.com>
- <1480096200-20475-3-git-send-email-ash.charles@savoirfairelinux.com>
- <1a270629-34f9-06f6-fb58-25455e61900d@mind.be>
- <CAK8F28mHwYonzL1Wx052TXCzd3U4TjvfQiMPuqxuQmRBLv-2zg@mail.gmail.com>
- <20161127144731.18bd30cb@free-electrons.com>
- <CAK8F28mp6tU3oncTK5FpNqUU9o-z0fUOMOxoGYEw7yeRd9uJ5A@mail.gmail.com>
-Message-ID: <698688f1-7d97-fe08-0a47-ebd6e2c68761@mind.be>
+Date: Wed, 30 Nov 2016 00:50:50 +0100
+Subject: [Buildroot] [PATCH v3 1/1] pkg-autotools: generic configure fix
+	for powerpc64
+In-Reply-To: <1d653a47bcc91167e4ff1782e889a8229119fc3b.1480309892.git.sam.bobroff@au1.ibm.com>
+References: <1d653a47bcc91167e4ff1782e889a8229119fc3b.1480309892.git.sam.bobroff@au1.ibm.com>
+Message-ID: <531b89ca-72d1-12cf-40c7-daff5cba42cf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,44 +13,142 @@ To: buildroot@busybox.net
 
 
 
-On 28-11-16 12:34, Ash Charles wrote:
+On 28-11-16 06:11, Sam Bobroff wrote:
+> Many (100+) packages supported by buildroot contain old configure
+> scripts (or build them from old versions of autotools) that are unable
+> to determine how to link shared libraries on powerpc64 and
+> powerpc64le. This causes that test to erroneously fail on toolchains
+> that are not "bi-endian" (which is the case for toolchains built by
+> buildroot), which causes configure to build static libraries instead
+> of dynamic ones. Although these builds succeed, they tend to cause
+> linker failures in binaries later linked against them.
 > 
-> On Sun, Nov 27, 2016 at 8:47 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com
-> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
->>
->> Why is pru-software-support a host package? It really builds/installs
->> things for the target, even if the target is the PRU and not the ARM.
->>
->> Was it made a host tool after a discussion with Arnout?
+> Because affected configure files can be discovered automatically, this
+> patch introduces a hook (enabled only when building for powerpc64 and
+> powerpc64le) that uses a script to scan and fix each package.
+> 
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
 
-> It is really best described as a staging package for the PRU. There are only
-> headers and a library used for static linking. IIRC, Arnout suggested that
-> putting this as staging was confusing---these aren't for the target e.g.
-> ARM---and suggested instead that we treat them as host tools along with the rest
-> of the tool chain.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Yeah, but now I'm not so sure anymore.
-
- Clearly, TI_CGT_PRU_INSTALLDIR is the equivalent of STAGING_DIR for the PRU. In
-that sense, it makes sense to have TI_CGT_PRU_INSTALLDIR as a subdirectory of
-HOST_DIR (just like STAGING_DIR is a subdirectory of HOST_DIR). And it anyway
-has to be a subdirectory of HOST_DIR because the compiler executables are
-installed there as well. For me, that was the reason to say that it should be a
-host package.
-
- However, we are indeed building for the target (kind of). and we are installing
-into a staging directory (though it is not in STAGING_DIR). So it makes sense to
-make it a target package, with INSTALL_STAGING = YES, but where the
-INSTALL_STAGING step doesn't actually install in staging but in the 'PRU
-staging' i.e. TI_CGT_PRU_INSTALLDIR.
-
- Thomas, do you agree?
+ However, this may be a little risky to still include in the release. I guess
+all these packages already have been broken for a long time, no? So not really a
+regression.
 
 
  Regards,
  Arnout
 
+> ---
+> 
+> v3:
+> 
+> Followed suggestions from Arnout Vandecappelle:
+> * simplify test.
+> * double-$ variables.
+> 
+> v2:
+> 
+> * Patch host packages as well as target ones. (Feedback on the GNU Make code to
+>   detect this is welcome.)
+> * Folded long line in script.
+> * Removed patch backup files.
+> * Updated diff to unified format.
+> * Changed $pkg variable to $srcdir.
+> 
+>  package/pkg-autotools.mk                   | 16 ++++++++++
+>  support/scripts/fix-configure-powerpc64.sh | 47 ++++++++++++++++++++++++++++++
+>  2 files changed, 63 insertions(+)
+>  create mode 100755 support/scripts/fix-configure-powerpc64.sh
+> 
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index d1cdb89..00822e2 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -79,6 +79,15 @@ define LIBTOOL_PATCH_HOOK
+>  endef
+>  
+>  #
+> +# Hook to patch common issue with configure on powerpc64{,le} failing
+> +# to detect shared library support:
+> +#
+> +define CONFIGURE_FIX_POWERPC64_HOOK
+> +	@$(call MESSAGE,"Checking configure (powerpc64/powerpc64le)")
+> +	support/scripts/fix-configure-powerpc64.sh $($(PKG)_DIR)
+> +endef
+> +
+> +#
+>  # Hook to gettextize the package if needed
+>  #
+>  define GETTEXTIZE_HOOK
+> @@ -255,6 +264,13 @@ endif
+>  
+>  endif
+>  
+> +# Append a configure hook if building for a powerpc64 (or powerpc64le) arch.
+> +# Must be added after other pre-configure hooks that might regenerate the
+> +# configure script and overwrite the changes made here.
+> +ifneq ($$(filter powerpc64%,$$(if $$(filter target,$(4)),$$(ARCH),$$(HOSTARCH))),)
+> +$(2)_PRE_CONFIGURE_HOOKS += CONFIGURE_FIX_POWERPC64_HOOK
+> +endif
+> +
+>  #
+>  # Build step. Only define it if not already defined by the package .mk
+>  # file.
+> diff --git a/support/scripts/fix-configure-powerpc64.sh b/support/scripts/fix-configure-powerpc64.sh
+> new file mode 100755
+> index 0000000..ad71042
+> --- /dev/null
+> +++ b/support/scripts/fix-configure-powerpc64.sh
+> @@ -0,0 +1,47 @@
+> +#!/bin/bash
+> +
+> +# This is a script to find, and correct, a problem with old versions of
+> +# configure that affect powerpc64 and powerpc64le.
+> +
+> +# The issue causes configure to incorrectly determine that shared library
+> +# support is not present in the linker. This causes the package to build a
+> +# static library rather than a dynamic one and although the build will succeed,
+> +# it may cause packages that link with the static library it to fail due to
+> +# undefined symbols.
+> +
+> +# This script searches for files named 'configure' that appear to have this
+> +# issue (by searching for a known bad pattern) and patching them.
+> +
+> +set -e
+> +
+> +if [ $# -ne 1 ]; then
+> +	echo "Usage: $0 <package build directory>"
+> +	exit 2
+> +fi
+> +
+> +srcdir="$1"
+> +files=$(cd "$srcdir" && find . -name configure \
+> +-exec grep -qF 'Generated by GNU Autoconf' {} \; \
+> +-exec grep -qF 'ppc*-*linux*|powerpc*-*linux*)' {} \; -print)
+> +
+> +# --ignore-whitespace is needed because some packages have included
+> +# copies of configure scripts where tabs have been replaced with spaces.
+> +for c in $files; do
+> +	patch --ignore-whitespace "$srcdir"/"$c" <<'EOF'
+> +--- a/configure	2016-11-16 15:31:46.097447271 +1100
+> ++++ b/configure	2008-07-21 12:17:23.000000000 +1000
+> +@@ -4433,7 +4433,10 @@
+> +         x86_64-*linux*)
+> +           LD="${LD-ld} -m elf_x86_64"
+> +           ;;
+> +-        ppc*-*linux*|powerpc*-*linux*)
+> ++	  powerpcle-*linux*)
+> ++	    LD="${LD-ld} -m elf64lppc"
+> ++	    ;;
+> ++	  powerpc-*linux*)
+> +           LD="${LD-ld} -m elf64ppc"
+> +           ;;
+> +         s390*-*linux*)
+> +EOF
+> +done
+> +
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
