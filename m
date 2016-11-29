@@ -1,39 +1,85 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 29 Nov 2016 22:04:15 +0100
-Subject: [Buildroot] [PATCH/next] package/bluez5_utils: bump version to 5.43
-Message-ID: <20161129210415.2444-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 29 Nov 2016 22:42:59 +0100
+Subject: [Buildroot] [PATCH for-next 1/3] toolchain-external: bump Linaro
+	ARM toolchain to 2016.11
+Message-ID: <1480455781-28100-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/bluez5_utils/bluez5_utils.hash | 2 +-
- package/bluez5_utils/bluez5_utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Tested with qemu-2.4.1-11.fc23 and the qemu_arm_vexpress_defconfig
 
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index cbb3aa3..b030f1a 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  21d1bc9150d3576296595217efb98a746b592389d25d5637e8bee5da7272593b    bluez-5.39.tar.xz
-+sha256 16c9c05d2a1da644ce3570d975ada3643d2e60c007a955bac09c0a0efeb58d15  bluez-5.43.tar.xz
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 49cc7c2..66c3eab 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -4,7 +4,7 @@
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ .../toolchain-external/toolchain-external-linaro-arm/Config.in | 10 +++++-----
+ .../toolchain-external-linaro-arm.hash                         |  4 ++--
+ .../toolchain-external-linaro-arm.mk                           |  8 ++++----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+index bf8649a..cef42e7 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+@@ -4,7 +4,7 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on !BR2_STATIC_LIBS
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+-	bool "Linaro ARM 2016.05"
++	bool "Linaro ARM 2016.11"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -14,13 +14,13 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2016.05 (based on gcc 5.3.1), Linaro GDB 2016.05 (based on
+-	  GDB 7.11.1), glibc 2.21, Binutils 2016.05 (based on 2.25). It
++	  GCC 2016.11 (based on gcc 6.2.1), Linaro GDB 2016.11 (based on
++	  GDB 7.12), glibc 2.23, Binutils 2016.11 (based on 2.27). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+ 	  with the hard floating point calling convention, and uses
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+index 8106426..d4452c3 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 f1421c580ce977226f4fefc9c409b3b423260cc65a6e9dc6da88bb3478a521a0  gcc-linaro-5.3.1-2016.05-i686_arm-linux-gnueabihf.tar.xz
+-sha256 987941c9fffdf56ffcbe90e8984673c16648c477b537fcf43add22fa62f161cd  gcc-linaro-5.3.1-2016.05-x86_64_arm-linux-gnueabihf.tar.xz
++sha256 a2a4968bfb8537c1b3280b4f475d90d53a1a0f05f7afc7b43efed266cc4de446  gcc-linaro-6.2.1-2016.11-i686_arm-linux-gnueabihf.tar.xz
++sha256 5eb7ab2f8a0b4b960900321505cd6923a072cb3e2412102f5f72a6e74c2f0a55  gcc-linaro-6.2.1-2016.11-x86_64_arm-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+index 64918ca..e098f47 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--BLUEZ5_UTILS_VERSION = 5.39
-+BLUEZ5_UTILS_VERSION = 5.43
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2016.05
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
++TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2016.11
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.2-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
+ 
+ ifeq ($(HOSTARCH),x86)
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.2.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
+ else
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-5.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.2.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
+ endif
+ 
+ $(eval $(toolchain-external-package))
 -- 
-2.10.2
+2.5.5
