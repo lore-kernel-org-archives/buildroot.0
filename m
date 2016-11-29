@@ -1,49 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Nov 2016 09:55:16 +0100
-Subject: [Buildroot] Investigating a parallel installation failure
-In-Reply-To: <20161129023613.GB4657@tungsten.ozlabs.ibm.com>
-References: <20161128234621.0e512742@free-electrons.com>
- <20161129023613.GB4657@tungsten.ozlabs.ibm.com>
-Message-ID: <20161129095516.4d54e2c1@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 29 Nov 2016 10:34:11 +0000
+Subject: [Buildroot] [PATCH next] vala: bump version to 0.34.3
+Message-ID: <20161129103411.50443-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Build tested with all reverse dependencies:
+ - granite
+ - gmpc
+ - libgee
+ - midori
+---
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Tue, 29 Nov 2016 13:36:13 +1100, Sam Bobroff wrote:
-
-> I couldn't replicate this, but I tried hacking strace into the process
-> so I could see if usb_modeswitch_dispatcher was being deleted during the
-> build. It looks like it is, by the C compiler -- presumably removing the
-> existing output file before it writes a new one.
-
-And then that makes sense, indeed.
-
-> So you could see an interleaving where Make has seen the file but it's
-> deleted either just before, or during, /usr/bin/install. And this can
-> happen as long as Make thinks its OK to run those two rules in parallel.
-> 
-> If that's correct, you could try converting the dependency on
-> usb_modeswitch_dispatcher (which, as you point out, isn't really working
-> anyway) into an order only dependency (or you could even just delete it
-> -- it doesn't seem to do anything necessary unless you're running a
-> "make install-static" without having first done a "make static" but
-> buildroot does that). This really isn't fixing the whole problem (IMHO
-> the makefile is quite broken) but it might hack around it by not forcing
-> the unnecessary recompilation thus avoiding the racy delete.
-
-Or we simply use $(MAKE1) to build/install this package, which is
-anyway quite small, and avoid the problem altogether. I also agree that
-the Makefile is quite broken, and I'm not sure we want to fix it (it
-would require a complete rewrite).
-
-Best regards,
-
-Thomas
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 95566d1..b5abcc3 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,2 +1,2 @@
+-# From https://download.gnome.org/sources/vala/0.34/vala-0.34.2.sha256sum
+-sha256	765e9c2b429a66db93247940f8588319b43f35c173d057bcae5717a97d765c41	vala-0.34.2.tar.xz
++# From https://download.gnome.org/sources/vala/0.34/vala-0.34.3.sha256sum
++sha256 f0fad71aca03cdeadf749ca47f56296a4ddd1a25f4e2f09f0ff9e1e3afbcac3f  vala-0.34.3.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index a208bdc..6eaa7c4 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ VALA_VERSION_MAJOR = 0.34
+-VALA_VERSION = $(VALA_VERSION_MAJOR).2
++VALA_VERSION = $(VALA_VERSION_MAJOR).3
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.1
