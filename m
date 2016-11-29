@@ -1,69 +1,347 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Nov 2016 00:28:39 +0100
-Subject: [Buildroot] [PATCH] package/tvheadend: bump version to
- v4.1-2345 and fix version reporting
-In-Reply-To: <20161128220315.1924903c@free-electrons.com>
-References: <20161128103231.21626-1-damjan.marion@gmail.com>
- <20161128220315.1924903c@free-electrons.com>
-Message-ID: <43658324-6d70-5223-0d86-fb85c5a2d822@mind.be>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 29 Nov 2016 15:36:51 -0800
+Subject: [Buildroot] [PATCH] package/gcc: fix ICE on xtensa, 6.2,
+	PR target/78118
+Message-ID: <1480462611-19531-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This fixes gcc build for xtensa configurations with call0 ABI.
 
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ .../gcc/6.2.0/870-xtensa-Fix-PR-target-78118.patch | 320 +++++++++++++++++++++
+ 1 file changed, 320 insertions(+)
+ create mode 100644 package/gcc/6.2.0/870-xtensa-Fix-PR-target-78118.patch
 
-On 28-11-16 22:03, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 28 Nov 2016 11:32:31 +0100, Damjan Marion wrote:
->> tvheadedend tracks version information based on git version
->> numbers. As tvheadend is downloaded as tarball form github
->> it was reporting version 0.0.0~unknown.
->>
->> Signed-off-by: Damjan Marion <damjan.marion@gmail.com>
-> 
-> Could you split the bump and the version fix reporting in two separate
-> patches?
-> 
->> -TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
->> +TVHEADEND_VERSION = v4.1-2345-g04ff649
-> 
-> Please keep this as a full hash, like it used to be. It should still
-> work fine with the version reporting, if you write this version to
-> $(@D)/rpm/version, like you're doing below.
-
- I'd like to challenge this. We prefer hashes instead of tags because tags may
-still be changed while a hash is guaranteed stable. However, the same can be
-said of tarballs. For tarballs we have the hashes to detect such a situation,
-for VCS downloads we can do the same (if we check hashes).
-
- In this particular case, however, it's a github-helper URL so it is a stable
-tarball with a hash, so there is no reason not to use a tag.
-
- Here, it's not actually a tag, but rather than a 'describe' on top of a tag.
-Still, it uniquely identifies a commit, and it's more descriptive than just the
-sha1. For example, with the describe, you can immediately see between two
-versions which one is the most recent one[1]. So I do think there is value in
-providing a 'describe' version rather than just a sha1.
-
- There's one issue, however. v4.1-2345-g04ff649 works now because 04ff649 is a
-unique abbreviation. But when later another commit is generated that starts with
-04ff649, you need to use v4.1-2345-g04ff649a. So I guess it should be
-v4.1-2345-g04ff649a4c13229ebcaa9828fa04339a49842dd5.
-
- Regards,
- Arnout
-
-
-[1] Well, not entirely, because v4.1.10 may be more recent than 4.2.6, but still
-it's more descriptive.
-
+diff --git a/package/gcc/6.2.0/870-xtensa-Fix-PR-target-78118.patch b/package/gcc/6.2.0/870-xtensa-Fix-PR-target-78118.patch
+new file mode 100644
+index 0000000..0598c76
+--- /dev/null
++++ b/package/gcc/6.2.0/870-xtensa-Fix-PR-target-78118.patch
+@@ -0,0 +1,320 @@
++From 0d2556fa652cc85b3d042e862a38dd07d454175a Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 26 Oct 2016 08:02:51 +0000
++Subject: [PATCH 1/2] xtensa: Fix PR target/78118
++
++It started failing after the following commit: 32e90dc6a0cda45 ("PR
++rtl-optimization/61047").
++
++The change that made xtensa backend go ICE looks completely unrelated,
++and indeed, the issue is caused by the side effect of
++compute_frame_size() function call hidden in the
++INITIAL_ELIMINATION_OFFSET macro. This call updates the value of the
++xtensa_current_frame_size static variable, used in "return" instruction
++predicate. Prior to the change the value of xtensa_current_frame_size was
++set to 0 after the end of epilogue generation, which enabled the "return"
++instruction for the CALL0 ABI, but after the change the additional
++INITIAL_ELIMINATION_OFFSET calls make xtensa_current_frame_size non-zero
++and "return" pattern unavailable.
++
++Get rid of the global xtensa_current_frame_size and
++xtensa_callee_save_size variables by moving them into the
++machine_function structure. Implement predicate for the "return" pattern
++as a function. Don't communicate completion of epilogue generation
++through zeroing of xtensa_current_frame_size, add explicit epilogue_done
++variable to the machine_function structure. Don't update stack frame
++layout after the completion of reload.
++
++2016-10-26  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa-protos.h
++	(xtensa_use_return_instruction_p): New prototype.
++	* config/xtensa/xtensa.c (xtensa_current_frame_size,
++	xtensa_callee_save_size): Remove.
++	(struct machine_function): Add new fields: current_frame_size,
++	callee_save_size, frame_laid_out and epilogue_done.
++	(compute_frame_size, xtensa_expand_prologue,
++	xtensa_expand_epilogue): Replace xtensa_callee_save_size with
++	cfun->machine->callee_save_size and xtensa_current_frame_size
++	with cfun->machine->current_frame_size.
++	(compute_frame_size): Update cfun->machine->frame_laid_out and
++	don't update frame layout after reload completion.
++	(xtensa_expand_epilogue): Set cfun->machine->epilogue_done
++	instead of zeroing xtensa_current_frame_size.
++	(xtensa_use_return_instruction_p): New function.
++	* config/xtensa/xtensa.h (xtensa_current_frame_size): Remove
++	declaration.
++	(INITIAL_ELIMINATION_OFFSET): Use return value of
++	compute_frame_size instead of xtensa_current_frame_size value.
++	* config/xtensa/xtensa.md ("return" pattern): Use new predicate
++	function xtensa_use_return_instruction_p instead of inline code.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r241748
++
++ gcc/config/xtensa/xtensa-protos.h |  1 +
++ gcc/config/xtensa/xtensa.c        | 82 ++++++++++++++++++++++++---------------
++ gcc/config/xtensa/xtensa.h        |  6 +--
++ gcc/config/xtensa/xtensa.md       |  2 +-
++ 4 files changed, 55 insertions(+), 36 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa-protos.h b/gcc/config/xtensa/xtensa-protos.h
++index f2ca526..873557f 100644
++--- a/gcc/config/xtensa/xtensa-protos.h
+++++ b/gcc/config/xtensa/xtensa-protos.h
++@@ -68,6 +68,7 @@ extern rtx xtensa_return_addr (int, rtx);
++ extern void xtensa_setup_frame_addresses (void);
++ extern int xtensa_dbx_register_number (int);
++ extern long compute_frame_size (int);
+++extern bool xtensa_use_return_instruction_p (void);
++ extern void xtensa_expand_prologue (void);
++ extern void xtensa_expand_epilogue (void);
++ extern void order_regs_for_local_alloc (void);
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index 64d089b..e49f784 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -78,11 +78,6 @@ enum internal_test
++    can support a given mode.  */
++ char xtensa_hard_regno_mode_ok[(int) MAX_MACHINE_MODE][FIRST_PSEUDO_REGISTER];
++ 
++-/* Current frame size calculated by compute_frame_size.  */
++-unsigned xtensa_current_frame_size;
++-/* Callee-save area size in the current frame calculated by compute_frame_size. */
++-int xtensa_callee_save_size;
++-
++ /* Largest block move to handle in-line.  */
++ #define LARGEST_MOVE_RATIO 15
++ 
++@@ -94,6 +89,13 @@ struct GTY(()) machine_function
++   bool vararg_a7;
++   rtx vararg_a7_copy;
++   rtx_insn *set_frame_ptr_insn;
+++  /* Current frame size calculated by compute_frame_size.  */
+++  unsigned current_frame_size;
+++  /* Callee-save area size in the current frame calculated by
+++     compute_frame_size.  */
+++  int callee_save_size;
+++  bool frame_laid_out;
+++  bool epilogue_done;
++ };
++ 
++ /* Vector, indexed by hard register number, which contains 1 for a
++@@ -2628,24 +2630,29 @@ compute_frame_size (int size)
++ {
++   int regno;
++ 
+++  if (reload_completed && cfun->machine->frame_laid_out)
+++    return cfun->machine->current_frame_size;
+++
++   /* Add space for the incoming static chain value.  */
++   if (cfun->static_chain_decl != NULL)
++     size += (1 * UNITS_PER_WORD);
++ 
++-  xtensa_callee_save_size = 0;
+++  cfun->machine->callee_save_size = 0;
++   for (regno = 0; regno < FIRST_PSEUDO_REGISTER; ++regno)
++     {
++       if (xtensa_call_save_reg(regno))
++-	xtensa_callee_save_size += UNITS_PER_WORD;
+++	cfun->machine->callee_save_size += UNITS_PER_WORD;
++     }
++ 
++-  xtensa_current_frame_size =
+++  cfun->machine->current_frame_size =
++     XTENSA_STACK_ALIGN (size
++-			+ xtensa_callee_save_size
+++			+ cfun->machine->callee_save_size
++ 			+ crtl->outgoing_args_size
++ 			+ (WINDOW_SIZE * UNITS_PER_WORD));
++-  xtensa_callee_save_size = XTENSA_STACK_ALIGN (xtensa_callee_save_size);
++-  return xtensa_current_frame_size;
+++  cfun->machine->callee_save_size =
+++    XTENSA_STACK_ALIGN (cfun->machine->callee_save_size);
+++  cfun->machine->frame_laid_out = true;
+++  return cfun->machine->current_frame_size;
++ }
++ 
++ 
++@@ -2696,6 +2703,7 @@ xtensa_expand_prologue (void)
++     {
++       int regno;
++       HOST_WIDE_INT offset = 0;
+++      int callee_save_size = cfun->machine->callee_save_size;
++ 
++       /* -128 is a limit of single addi instruction. */
++       if (total_size > 0 && total_size <= 128)
++@@ -2709,7 +2717,7 @@ xtensa_expand_prologue (void)
++ 	  add_reg_note (insn, REG_FRAME_RELATED_EXPR, note_rtx);
++ 	  offset = total_size - UNITS_PER_WORD;
++ 	}
++-      else if (xtensa_callee_save_size)
+++      else if (callee_save_size)
++ 	{
++ 	  /* 1020 is maximal s32i offset, if the frame is bigger than that
++ 	   * we move sp to the end of callee-saved save area, save and then
++@@ -2717,13 +2725,13 @@ xtensa_expand_prologue (void)
++ 	  if (total_size > 1024)
++ 	    {
++ 	      insn = emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx,
++-					    GEN_INT (-xtensa_callee_save_size)));
+++					    GEN_INT (-callee_save_size)));
++ 	      RTX_FRAME_RELATED_P (insn) = 1;
++ 	      note_rtx = gen_rtx_SET (stack_pointer_rtx,
++ 				      plus_constant (Pmode, stack_pointer_rtx,
++-						     -xtensa_callee_save_size));
+++						     -callee_save_size));
++ 	      add_reg_note (insn, REG_FRAME_RELATED_EXPR, note_rtx);
++-	      offset = xtensa_callee_save_size - UNITS_PER_WORD;
+++	      offset = callee_save_size - UNITS_PER_WORD;
++ 	    }
++ 	  else
++ 	    {
++@@ -2759,13 +2767,13 @@ xtensa_expand_prologue (void)
++ 	{
++ 	  rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
++ 	  emit_move_insn (tmp_reg, GEN_INT (total_size -
++-					    xtensa_callee_save_size));
+++					    callee_save_size));
++ 	  insn = emit_insn (gen_subsi3 (stack_pointer_rtx,
++ 					stack_pointer_rtx, tmp_reg));
++ 	  RTX_FRAME_RELATED_P (insn) = 1;
++ 	  note_rtx = gen_rtx_SET (stack_pointer_rtx,
++ 				  plus_constant (Pmode, stack_pointer_rtx,
++-						 xtensa_callee_save_size -
+++						 callee_save_size -
++ 						 total_size));
++ 	  add_reg_note (insn, REG_FRAME_RELATED_EXPR, note_rtx);
++ 	}
++@@ -2833,21 +2841,21 @@ xtensa_expand_epilogue (void)
++       int regno;
++       HOST_WIDE_INT offset;
++ 
++-      if (xtensa_current_frame_size > (frame_pointer_needed ? 127 : 1024))
+++      if (cfun->machine->current_frame_size > (frame_pointer_needed ? 127 : 1024))
++ 	{
++ 	  rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
++-	  emit_move_insn (tmp_reg, GEN_INT (xtensa_current_frame_size -
++-					    xtensa_callee_save_size));
+++	  emit_move_insn (tmp_reg, GEN_INT (cfun->machine->current_frame_size -
+++					    cfun->machine->callee_save_size));
++ 	  emit_insn (gen_addsi3 (stack_pointer_rtx, frame_pointer_needed ?
++ 				 hard_frame_pointer_rtx : stack_pointer_rtx,
++ 				 tmp_reg));
++-	  offset = xtensa_callee_save_size - UNITS_PER_WORD;
+++	  offset = cfun->machine->callee_save_size - UNITS_PER_WORD;
++ 	}
++       else
++ 	{
++ 	  if (frame_pointer_needed)
++ 	    emit_move_insn (stack_pointer_rtx, hard_frame_pointer_rtx);
++-	  offset = xtensa_current_frame_size - UNITS_PER_WORD;
+++	  offset = cfun->machine->current_frame_size - UNITS_PER_WORD;
++ 	}
++ 
++       /* Prevent reordering of saved a0 update and loading it back from
++@@ -2867,16 +2875,16 @@ xtensa_expand_epilogue (void)
++ 	    }
++ 	}
++ 
++-      if (xtensa_current_frame_size > 0)
+++      if (cfun->machine->current_frame_size > 0)
++ 	{
++ 	  if (frame_pointer_needed || /* always reachable with addi */
++-	      xtensa_current_frame_size > 1024 ||
++-	      xtensa_current_frame_size <= 127)
+++	      cfun->machine->current_frame_size > 1024 ||
+++	      cfun->machine->current_frame_size <= 127)
++ 	    {
++-	      if (xtensa_current_frame_size <= 127)
++-		offset = xtensa_current_frame_size;
+++	      if (cfun->machine->current_frame_size <= 127)
+++		offset = cfun->machine->current_frame_size;
++ 	      else
++-		offset = xtensa_callee_save_size;
+++		offset = cfun->machine->callee_save_size;
++ 
++ 	      emit_insn (gen_addsi3 (stack_pointer_rtx,
++ 				     stack_pointer_rtx,
++@@ -2885,7 +2893,8 @@ xtensa_expand_epilogue (void)
++ 	  else
++ 	    {
++ 	      rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
++-	      emit_move_insn (tmp_reg, GEN_INT (xtensa_current_frame_size));
+++	      emit_move_insn (tmp_reg,
+++			      GEN_INT (cfun->machine->current_frame_size));
++ 	      emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx,
++ 				     tmp_reg));
++ 	    }
++@@ -2896,11 +2905,22 @@ xtensa_expand_epilogue (void)
++ 				  stack_pointer_rtx,
++ 				  EH_RETURN_STACKADJ_RTX));
++     }
++-  xtensa_current_frame_size = 0;
++-  xtensa_callee_save_size = 0;
+++  cfun->machine->epilogue_done = true;
++   emit_jump_insn (gen_return ());
++ }
++ 
+++bool
+++xtensa_use_return_instruction_p (void)
+++{
+++  if (!reload_completed)
+++    return false;
+++  if (TARGET_WINDOWED_ABI)
+++    return true;
+++  if (compute_frame_size (get_frame_size ()) == 0)
+++    return true;
+++  return cfun->machine->epilogue_done;
+++}
+++
++ void
++ xtensa_set_return_address (rtx address, rtx scratch)
++ {
++diff --git a/gcc/config/xtensa/xtensa.h b/gcc/config/xtensa/xtensa.h
++index 82e9900..58eb1b2 100644
++--- a/gcc/config/xtensa/xtensa.h
+++++ b/gcc/config/xtensa/xtensa.h
++@@ -23,8 +23,6 @@ along with GCC; see the file COPYING3.  If not see
++ 
++ /* External variables defined in xtensa.c.  */
++ 
++-extern unsigned xtensa_current_frame_size;
++-
++ /* Macros used in the machine description to select various Xtensa
++    configuration options.  */
++ #ifndef XCHAL_HAVE_MUL32_HIGH
++@@ -477,14 +475,14 @@ enum reg_class
++ /* Specify the initial difference between the specified pair of registers.  */
++ #define INITIAL_ELIMINATION_OFFSET(FROM, TO, OFFSET)			\
++   do {									\
++-    compute_frame_size (get_frame_size ());				\
+++    long frame_size = compute_frame_size (get_frame_size ());		\
++     switch (FROM)							\
++       {									\
++       case FRAME_POINTER_REGNUM:					\
++         (OFFSET) = 0;							\
++ 	break;								\
++       case ARG_POINTER_REGNUM:						\
++-        (OFFSET) = xtensa_current_frame_size;				\
+++        (OFFSET) = frame_size;						\
++ 	break;								\
++       default:								\
++ 	gcc_unreachable ();						\
++diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
++index db54a12..fcdb6c8 100644
++--- a/gcc/config/xtensa/xtensa.md
+++++ b/gcc/config/xtensa/xtensa.md
++@@ -1663,7 +1663,7 @@
++ (define_insn "return"
++   [(return)
++    (use (reg:SI A0_REG))]
++-  "(TARGET_WINDOWED_ABI || !xtensa_current_frame_size) && reload_completed"
+++  "xtensa_use_return_instruction_p ()"
++ {
++   return TARGET_WINDOWED_ABI ?
++       (TARGET_DENSITY ? "retw.n" : "retw") :
++-- 
++2.1.4
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
