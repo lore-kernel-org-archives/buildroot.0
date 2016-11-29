@@ -1,42 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Nov 2016 23:26:09 +0100
-Subject: [Buildroot] [PATCH] jasper: bump version to 1.900.31 (security)
-In-Reply-To: <20161129112303.37568-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Tue, 29 Nov 2016 11:23:03 +0000")
-References: <20161129112303.37568-1-Vincent.Riera@imgtec.com>
-Message-ID: <87lgw1dita.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Nov 2016 23:28:19 +0100
+Subject: [Buildroot] [PATCH 1/1] docs/manual: fix typo
+In-Reply-To: <1480439823-15458-1-git-send-email-lucile.quirion@savoirfairelinux.com>
+ (Lucile Quirion's message of "Tue, 29 Nov 2016 12:17:03 -0500")
+References: <1480439823-15458-1-git-send-email-lucile.quirion@savoirfairelinux.com>
+Message-ID: <87h96pdipo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Lucile" == Lucile Quirion <lucile.quirion@savoirfairelinux.com> writes:
 
- > Fixed CVEs:
- >  - CVE-2016-9387
- >  - CVE-2016-9388
- >  - CVE-2016-9389
- >  - CVE-2016-9390
- >  - CVE-2016-9391
- >  - CVE-2016-9392
- >  - CVE-2016-9393
- >  - CVE-2016-9394
- >  - CVE-2016-9395
- >  - CVE-2016-9396
- >  - CVE-2016-9397
- >  - CVE-2016-9398
- >  - CVE-2016-9399
- >  - CVE-2016-9557
- >  - CVE-2016-9560
+ > Also remove dangling reference to virtual package lists.
+ > Change-Id: Ibd95fbf1a3983ad9f53aea7a24d160414091e10b
 
- > Changes to jasper.mk:
- >  - Switched site method to GitHub. 1.900.31 is not released as a tarball
- >    in the official website.
- >  - Autoreconf necessary since there isn't any configure script. We need
- >    to generate it.
+What is this for?
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Signed-off-by: Lucile Quirion <lucile.quirion@savoirfairelinux.com>
 
 Committed, thanks.
 
