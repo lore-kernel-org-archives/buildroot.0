@@ -1,57 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Nov 2016 23:43:24 +0100
-Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
-	mesa3d-headers}: bump version to 13.0.2
-Message-ID: <20161129224400.E8C358041E@busybox.osuosl.org>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 29 Nov 2016 14:50:21 -0800
+Subject: [Buildroot] [PATCH] autossh: honour LDFLAGS
+In-Reply-To: <20161129094321.656d1cb4@free-electrons.com>
+References: <20161125180016.GA360@waldemar-brodkorb.de>
+ <20161128222834.37958cd9@free-electrons.com>
+ <20161129041655.GK14207@waldemar-brodkorb.de>
+ <20161129094321.656d1cb4@free-electrons.com>
+Message-ID: <CAMo8BfJAGT8cdvQ2xMx33HKDwW34XP6wVxHd1yn-UxAyQEYpRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7746a37856a9ac0138a5a4e94a829e0f08b3bbcc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, Nov 29, 2016 at 12:43 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Tue, 29 Nov 2016 05:16:55 +0100, Waldemar Brodkorb wrote:
+>> > The --start-group/--end-group ask the linker to loop between -lgcc and
+>> > -lc until all unresolved symbols have been resolved. So
+>> > dl_iterate_phdr() being defined in the C library, but used in libgcc, I
+>> > guess the dynamic way (-lgcc -lc -lgcc) doesn't work.
+>>
+>> But why gcc behaves different?
+>> BR+gcc5+uClibc-ng-1.0.17 - no extra -static in LDFLAGS required
+>> BR+gcc5+musl+static - no extra -static in LDFLAGS required
+>> BR+gcc5+uClibc-ng-1.0.19 - extra -static required!
+>
+> I would suspect it's a fallout of the "merge everything in libc"
+> change, but I really can't figure out why that would make a difference.
+>
+> Could it be that with older uClibc versions, gcc was not finding the
+> dl_iterate_phdr symbol in uClibc, and therefore disabling the unwind
+> code, and now, due to a change in uClibc, gcc sees the dl_iterate_phdr
+> symbol, enables unwinding support, which cause this extra reference
+> from libgcc to libc?
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+No. The difference is in the __pthread_initialize_minimal function.
+Prior to uclibc-1.0.18 release it used to work because a call to
+__pthread_initialize_minimal from __uClibc_init was resolved to
+a function defined in libpthread/nptl/sysdeps/generic/libc-tls.c
+which didn't reference pthread_unwind.
+Now it is resolved to a function from
+libpthread/linuxthreads/pthread.c, and that file pulls in other
+unused functions, which reference __GI___pthread_unwind,
+and all the way down to the dl_iterate_phdr.
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 523d10b..3cb0d27 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 13.0.1
-+MESA3D_HEADERS_VERSION = 13.0.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 0fab1de..dfab5e2 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000270.html
--sha256 71962fb2bf77d33b0ad4a565b490dbbeaf4619099c6d9722f04a73187957a731  mesa-13.0.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000274.html
-+sha256 a6ed622645f4ed61da418bf65adde5bcc4bb79023c36ba7d6b45b389da4416d5  mesa-13.0.2.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 031ce88..a018658 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 13.0.1
-+MESA3D_VERSION = 13.0.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+More details:
+ http://lists.busybox.net/pipermail/buildroot/2016-November/177477.html
+
+-- 
+Thanks.
+-- Max
