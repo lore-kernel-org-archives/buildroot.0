@@ -1,53 +1,59 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 29 Nov 2016 14:50:21 -0800
-Subject: [Buildroot] [PATCH] autossh: honour LDFLAGS
-In-Reply-To: <20161129094321.656d1cb4@free-electrons.com>
-References: <20161125180016.GA360@waldemar-brodkorb.de>
- <20161128222834.37958cd9@free-electrons.com>
- <20161129041655.GK14207@waldemar-brodkorb.de>
- <20161129094321.656d1cb4@free-electrons.com>
-Message-ID: <CAMo8BfJAGT8cdvQ2xMx33HKDwW34XP6wVxHd1yn-UxAyQEYpRA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 Nov 2016 23:52:22 +0100
+Subject: [Buildroot] Investigating a parallel installation failure
+In-Reply-To: <20161129095516.4d54e2c1@free-electrons.com>
+References: <20161128234621.0e512742@free-electrons.com>
+ <20161129023613.GB4657@tungsten.ozlabs.ibm.com>
+ <20161129095516.4d54e2c1@free-electrons.com>
+Message-ID: <7fee932e-5a07-2262-aa5c-d7457c0d5dd1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 29, 2016 at 12:43 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Tue, 29 Nov 2016 05:16:55 +0100, Waldemar Brodkorb wrote:
->> > The --start-group/--end-group ask the linker to loop between -lgcc and
->> > -lc until all unresolved symbols have been resolved. So
->> > dl_iterate_phdr() being defined in the C library, but used in libgcc, I
->> > guess the dynamic way (-lgcc -lc -lgcc) doesn't work.
+
+
+On 29-11-16 09:55, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 29 Nov 2016 13:36:13 +1100, Sam Bobroff wrote:
+> 
+>> I couldn't replicate this, but I tried hacking strace into the process
+>> so I could see if usb_modeswitch_dispatcher was being deleted during the
+>> build. It looks like it is, by the C compiler -- presumably removing the
+>> existing output file before it writes a new one.
+> 
+> And then that makes sense, indeed.
+> 
+>> So you could see an interleaving where Make has seen the file but it's
+>> deleted either just before, or during, /usr/bin/install. And this can
+>> happen as long as Make thinks its OK to run those two rules in parallel.
 >>
->> But why gcc behaves different?
->> BR+gcc5+uClibc-ng-1.0.17 - no extra -static in LDFLAGS required
->> BR+gcc5+musl+static - no extra -static in LDFLAGS required
->> BR+gcc5+uClibc-ng-1.0.19 - extra -static required!
->
-> I would suspect it's a fallout of the "merge everything in libc"
-> change, but I really can't figure out why that would make a difference.
->
-> Could it be that with older uClibc versions, gcc was not finding the
-> dl_iterate_phdr symbol in uClibc, and therefore disabling the unwind
-> code, and now, due to a change in uClibc, gcc sees the dl_iterate_phdr
-> symbol, enables unwinding support, which cause this extra reference
-> from libgcc to libc?
+>> If that's correct, you could try converting the dependency on
+>> usb_modeswitch_dispatcher (which, as you point out, isn't really working
+>> anyway) into an order only dependency (or you could even just delete it
+>> -- it doesn't seem to do anything necessary unless you're running a
+>> "make install-static" without having first done a "make static" but
+>> buildroot does that). This really isn't fixing the whole problem (IMHO
+>> the makefile is quite broken) but it might hack around it by not forcing
+>> the unnecessary recompilation thus avoiding the racy delete.
+> 
+> Or we simply use $(MAKE1) to build/install this package, which is
+> anyway quite small, and avoid the problem altogether. I also agree that
+> the Makefile is quite broken, and I'm not sure we want to fix it (it
+> would require a complete rewrite).
 
-No. The difference is in the __pthread_initialize_minimal function.
-Prior to uclibc-1.0.18 release it used to work because a call to
-__pthread_initialize_minimal from __uClibc_init was resolved to
-a function defined in libpthread/nptl/sysdeps/generic/libc-tls.c
-which didn't reference pthread_unwind.
-Now it is resolved to a function from
-libpthread/linuxthreads/pthread.c, and that file pulls in other
-unused functions, which reference __GI___pthread_unwind,
-and all the way down to the dl_iterate_phdr.
+ Still, it's unfortunate that we're doing build during the installation step. Oh
+well. Upstream doesn't even have a publicly accessible VCS...
 
-More details:
- http://lists.busybox.net/pipermail/buildroot/2016-November/177477.html
+ Regards,
+ Arnout
 
 -- 
-Thanks.
--- Max
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
