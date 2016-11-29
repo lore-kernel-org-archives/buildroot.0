@@ -1,39 +1,28 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Nov 2016 11:41:05 +0000
-Subject: [Buildroot] [PATCH next] btrfs-progs: bump version to 4.8.4
-Message-ID: <20161129114105.48516-1-Vincent.Riera@imgtec.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 29 Nov 2016 12:13:53 +0000
+Subject: [Buildroot] [Bug 9456] mkusers script bash errors
+In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
+References: <bug-9456-163@https.bugs.busybox.net/>
+Message-ID: <bug-9456-163-7dHYDANV9W@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=9456
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 83a9624..6d262a1 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256 c1a60c317d2fcaf8420779d2d0717ae53882c2bc22bc44e3bdcd5efb7ca68ef2  btrfs-progs-v4.8.3.tar.xz
-+sha256 bf26ead666c337a62a74bc9ec7f8dd9ee200e60e5fe5289967d53328eff261c5  btrfs-progs-v4.8.4.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index e2deb57..e780903 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BTRFS_PROGS_VERSION = 4.8.3
-+BTRFS_PROGS_VERSION = 4.8.4
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+--- Comment #2 from George Y. <georgebrmz@oss3d.com> ---
+Created attachment 6811
+  --> https://bugs.busybox.net/attachment.cgi?id=6811&action=edit
+Buildroot config
+
+The config is attached. Nothing specifically different.
+
+By the way, the build process does not stop. It continues and ignores those
+errors, so if it happens for you as well, you'll only see it from the messages,
+but the building will continue and will give an impression of success.
+
 -- 
-2.10.1
+You are receiving this mail because:
+You are on the CC list for the bug.
