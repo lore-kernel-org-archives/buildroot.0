@@ -1,72 +1,42 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Nov 2016 11:23:03 +0000
-Subject: [Buildroot] [PATCH] jasper: bump version to 1.900.31 (security)
-Message-ID: <20161129112303.37568-1-Vincent.Riera@imgtec.com>
+Date: Tue, 29 Nov 2016 11:29:19 +0000
+Subject: [Buildroot] [PATCH next] sqlite: bump version to 3150200 (3.15.2)
+Message-ID: <20161129112919.51786-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixed CVEs:
- - CVE-2016-9387
- - CVE-2016-9388
- - CVE-2016-9389
- - CVE-2016-9390
- - CVE-2016-9391
- - CVE-2016-9392
- - CVE-2016-9393
- - CVE-2016-9394
- - CVE-2016-9395
- - CVE-2016-9396
- - CVE-2016-9397
- - CVE-2016-9398
- - CVE-2016-9399
- - CVE-2016-9557
- - CVE-2016-9560
-
-Changes to jasper.mk:
- - Switched site method to GitHub. 1.900.31 is not released as a tarball
-   in the official website.
- - Autoreconf necessary since there isn't any configure script. We need
-   to generate it.
-
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 8 ++++++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index fdadbb2..64ddfa4 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	6c942ae79108cd6a359e5bc34ea03565bd33ac20f6814cb09c4f92298b6b1cb8	jasper-1.900.22.tar.gz
-+sha256 0099084dce9fa0a318b48a5ed2a12ac7cff3324f3fd4459833e6fe2ff583fb2c  jasper-version-1.900.31.tar.gz
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index bacb1a6..e8b8aaa 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,12 +4,16 @@
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index bb24f94..7839dc9 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 47404fe5c43936160ad0e90bddedc99367da7a9b  sqlite-autoconf-3150100.tar.gz
++sha1 31f52169bcfeef9efb61480d0950e928ad059552  sqlite-autoconf-3150200.tar.gz
+ # Calculated based on the hash above
+-sha256 5dfa89b7697ee3c2ac7b44e8e157e7f204bf999c866afcaa8bb1c7ff656ae2c5  sqlite-autoconf-3150100.tar.gz
++sha256 07b35063b9386865b78226cdaca9a299d938a87aaa8fdc4d73edb0cef30f3149  sqlite-autoconf-3150200.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 3f44f82..cb03249 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JASPER_VERSION = 1.900.22
--JASPER_SITE = http://www.ece.uvic.ca/~frodo/jasper/software
-+JASPER_VERSION = version-1.900.31
-+JASPER_SITE = $(call github,mdadams,jasper,$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_DEPENDENCIES = jpeg
- JASPER_LICENSE = JasPer License Version 2.0
- JASPER_LICENSE_FILES = LICENSE
-+
-+# No configure script included. We need to generate it.
-+JASPER_AUTORECONF = YES
-+
- JASPER_CONF_OPTS = --disable-strict
- 
- # Xtensa gcc is unable to generate correct code with -O0 enabled by
+-SQLITE_VERSION = 3150100
++SQLITE_VERSION = 3150200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
 -- 
 2.10.1
