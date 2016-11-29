@@ -1,7 +1,8 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Nov 2016 11:29:19 +0000
-Subject: [Buildroot] [PATCH next] sqlite: bump version to 3150200 (3.15.2)
-Message-ID: <20161129112919.51786-1-Vincent.Riera@imgtec.com>
+Date: Tue, 29 Nov 2016 11:38:13 +0000
+Subject: [Buildroot] [PATCH next] package/{mesa3d,
+	mesa3d-headers}: bump version to 13.0.2
+Message-ID: <20161129113813.9031-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +11,45 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index bb24f94..7839dc9 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 47404fe5c43936160ad0e90bddedc99367da7a9b  sqlite-autoconf-3150100.tar.gz
-+sha1 31f52169bcfeef9efb61480d0950e928ad059552  sqlite-autoconf-3150200.tar.gz
- # Calculated based on the hash above
--sha256 5dfa89b7697ee3c2ac7b44e8e157e7f204bf999c866afcaa8bb1c7ff656ae2c5  sqlite-autoconf-3150100.tar.gz
-+sha256 07b35063b9386865b78226cdaca9a299d938a87aaa8fdc4d73edb0cef30f3149  sqlite-autoconf-3150200.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 3f44f82..cb03249 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 523d10b..3cb0d27 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 13.0.1
++MESA3D_HEADERS_VERSION = 13.0.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 0fab1de..dfab5e2 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000270.html
+-sha256 71962fb2bf77d33b0ad4a565b490dbbeaf4619099c6d9722f04a73187957a731  mesa-13.0.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000274.html
++sha256 a6ed622645f4ed61da418bf65adde5bcc4bb79023c36ba7d6b45b389da4416d5  mesa-13.0.2.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 031ce88..a018658 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SQLITE_VERSION = 3150100
-+SQLITE_VERSION = 3150200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2016
- SQLITE_LICENSE = Public domain
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 13.0.1
++MESA3D_VERSION = 13.0.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.10.1
