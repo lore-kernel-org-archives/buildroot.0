@@ -1,46 +1,64 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Nov 2016 10:34:11 +0000
-Subject: [Buildroot] [PATCH next] vala: bump version to 0.34.3
-Message-ID: <20161129103411.50443-1-Vincent.Riera@imgtec.com>
+Date: Tue, 29 Nov 2016 10:50:24 +0000
+Subject: [Buildroot] [PATCH v2] jasper: bump version to 2.0.0 (security)
+In-Reply-To: <87bmwze0ru.fsf@dell.be.48ers.dk>
+References: <20161128134134.18599-1-Vincent.Riera@imgtec.com>
+ <20161128215347.0686379f@free-electrons.com>
+ <87bmwze0ru.fsf@dell.be.48ers.dk>
+Message-ID: <616b5055-6929-ff78-ea62-5dacf4469c5f@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Build tested with all reverse dependencies:
- - granite
- - gmpc
- - libgee
- - midori
----
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Peter,
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index 95566d1..b5abcc3 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.34/vala-0.34.2.sha256sum
--sha256	765e9c2b429a66db93247940f8588319b43f35c173d057bcae5717a97d765c41	vala-0.34.2.tar.xz
-+# From https://download.gnome.org/sources/vala/0.34/vala-0.34.3.sha256sum
-+sha256 f0fad71aca03cdeadf749ca47f56296a4ddd1a25f4e2f09f0ff9e1e3afbcac3f  vala-0.34.3.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index a208bdc..6eaa7c4 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- VALA_VERSION_MAJOR = 0.34
--VALA_VERSION = $(VALA_VERSION_MAJOR).2
-+VALA_VERSION = $(VALA_VERSION_MAJOR).3
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
--- 
-2.10.1
+On 28/11/16 21:45, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+>  > Hello,
+>  > On Mon, 28 Nov 2016 13:41:34 +0000, Vicente Olivert Riera wrote:
+>  >> Fixed CVEs:
+>  >> - CVE-2016-9387
+>  >> - CVE-2016-9388
+>  >> - CVE-2016-9389
+>  >> - CVE-2016-9390
+>  >> - CVE-2016-9391
+>  >> - CVE-2016-9392
+>  >> - CVE-2016-9393
+>  >> - CVE-2016-9394
+>  >> - CVE-2016-9395
+>  >> - CVE-2016-9396
+>  >> - CVE-2016-9397
+>  >> - CVE-2016-9398
+>  >> - CVE-2016-9399
+>  >> - CVE-2016-9557
+>  >> - CVE-2016-9560
+>  >> 
+>  >> Changes to jasper.mk:
+>  >> - Switched to CMake package infrastructure.
+> 
+>  > Do we really need to bump to 2.0.0 to get those security fixes?
+>  > Changing the package to CMake is a big change, which I'm not sure I
+>  > want to merge that close to the final release.
+> 
+>  > I see we have 1.900.22 currently, while there is also a 1.900.29
+>  > version released upstream. Does this version also includes the security
+>  > fixes perhaps?
+> 
+> Indeed. There is also a .30 and .31, and as far as I can see the only
+> difference between 1.900.31 and 2.0 is cmake and some travis
+> stuff. Looking at the CVE numbers on the Debian security tracker they
+> all seem to refer to earlier commits - E.G.:
+> 
+> https://security-tracker.debian.org/tracker/CVE-2016-9560
+> 
+> Vicente, can you send a minimal patch updating to 1.900.31 for 2016.11
+> and then a followup patch once 2016.11 is out to bump to 2.0?
+
+Yes, no problem.
+
+Vincent
+
+> 
