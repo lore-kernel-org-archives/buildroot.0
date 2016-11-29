@@ -1,22 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Nov 2016 08:28:41 +0100
-Subject: [Buildroot] [PATCH] bzip2: update homepage link
-In-Reply-To: <d277112c54174c44b5bae3adefebec4bdf00b255.1480394462.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 29 Nov 2016 06:41:02 +0200")
-References: <d277112c54174c44b5bae3adefebec4bdf00b255.1480394462.git.baruch@tkos.co.il>
-Message-ID: <87twaqd9sm.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Nov 2016 08:28:01 +0100
+Subject: [Buildroot] [git commit] bzip2: update homepage link
+Message-ID: <20161129072857.05D507FCAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=737c804f1ca870c9a126443d47b3ce5021b974f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Avoid a redirect.
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Avoid a redirect.
 
-Committed, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bzip2/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bzip2/Config.in b/package/bzip2/Config.in
+index e8e03cf..dbc8249 100644
+--- a/package/bzip2/Config.in
++++ b/package/bzip2/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_BZIP2
+ 	  available techniques, while being around twice as fast at
+ 	  compression and six times faster at decompression.
+ 
+-	  http://sources.redhat.com/bzip2/
++	  http://www.bzip.org
