@@ -1,112 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Nov 2016 22:06:45 +0100
-Subject: [Buildroot] [git commit] lttng-libust: bump version to 2.9.0
-Message-ID: <20161202080021.6BF9781E42@busybox.osuosl.org>
+Date: Wed, 30 Nov 2016 23:40:51 +0100
+Subject: [Buildroot] [git commit] xterm: depend on libXinerama if appropriate
+Message-ID: <20161202080021.F12F381E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf865e061e38f1a32ae5c2d47e10c00441f33c4e
+commit: https://git.buildroot.net/buildroot/commit/?id=6013266e58fccb59a406d45648985e307111445a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop sha256 hash. The combination of md5 and sha1 hashes is enough.
+xterm may depends on libXinerama.so:
 
-Add a patch that fixes a build failure due to using the compiler of the
-host machine. The patch has been submitted as a pull request:
-  https://github.com/lttng/lttng-ust/pull/41
+$ arm-linux-readelf -d ./usr/bin/xterm | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libXft.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libfontconfig.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libXmu.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libXaw.so.7]
+ 0x00000001 (NEEDED)                     Shared library: [libXt.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libX11.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libXinerama.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libXpm.so.4]
+ 0x00000001 (NEEDED)                     Shared library: [libICE.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libncursesw.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
 
-Release notes:
-  https://lists.lttng.org/pipermail/lttng-dev/2016-November/026761.html
+However, build order with libXinerama is not defined.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...s-Makefile.am-define-C-and-C-compilers-fo.patch | 49 ++++++++++++++++++++++
- package/lttng-libust/lttng-libust.hash             |  9 ++--
- package/lttng-libust/lttng-libust.mk               |  2 +-
- 3 files changed, 53 insertions(+), 7 deletions(-)
+ package/xterm/xterm.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/lttng-libust/0002-doc-examples-Makefile.am-define-C-and-C-compilers-fo.patch b/package/lttng-libust/0002-doc-examples-Makefile.am-define-C-and-C-compilers-fo.patch
-new file mode 100644
-index 0000000..5172dbb
---- /dev/null
-+++ b/package/lttng-libust/0002-doc-examples-Makefile.am-define-C-and-C-compilers-fo.patch
-@@ -0,0 +1,49 @@
-+From f54894580da85e33f934c5c9bf5ab32d3fcce18b Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Wed, 30 Nov 2016 16:52:51 +0000
-+Subject: [PATCH] doc/examples/Makefile.am: define C and C++ compilers for
-+ CMake
-+
-+This prevents build failures when cross-compiling.
-+
-+If we don't define the compiler, it will use the one from the host
-+machine. For instance "/usr/bin/c++", which is incorrect.
-+
-+The failure looks like this:
-+
-+.............................................................
-+[ 10%] Building CXX object CMakeFiles/tracepoint-provider.dir/tracepoint-provider.cpp.o
-+/usr/bin/c++   -Dtracepoint_provider_EXPORTS -I/br/output/build/lttng-libust-2.9.0/doc/examples/cmake-multiple-shared-libraries/. -isystem /br/output/build/lttng-libust-2.9.0/include  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fPIC   -o CMakeFiles/tracepoint-provider.dir/tracepoint-provider.cpp.o -c /br/output/build/lttng-libust-2.9.0/doc/examples/cmake-multiple-shared-libraries/tracepoint-provider.cpp
-+In file included from /br/output/build/lttng-libust-2.9.0/include/lttng/tracepoint.h:29:0,
-+                 from /br/output/build/lttng-libust-2.9.0/doc/examples/cmake-multiple-shared-libraries/tracepoint-provider.h:32,
-+                 from /br/output/build/lttng-libust-2.9.0/doc/examples/cmake-multiple-shared-libraries/tracepoint-provider.cpp:26:
-+/br/output/build/lttng-libust-2.9.0/include/lttng/tracepoint-rcu.h:26:27: fatal error: urcu/compiler.h: No such file or directory
-+ #include <urcu/compiler.h>
-+                           ^
-+compilation terminated.
-+.............................................................
-+
-+Pull request URL: https://github.com/lttng/lttng-ust/pull/41
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ doc/examples/Makefile.am | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/doc/examples/Makefile.am b/doc/examples/Makefile.am
-+index 424b844..5bc1f4c 100644
-+--- a/doc/examples/Makefile.am
-++++ b/doc/examples/Makefile.am
-+@@ -152,7 +152,9 @@ all-local:
-+ 				cmake \
-+ 				-DCMAKE_INCLUDE_PATH="$(abs_top_srcdir)/include;$(abs_top_builddir)/include" \
-+ 				-DCMAKE_LIBRARY_PATH="$(abs_top_builddir)/liblttng-ust/.libs" \
-++				-DCMAKE_C_COMPILER="$(CC)" \
-+ 				-DCMAKE_C_FLAGS="$(CFLAGS) $(CPPFLAGS)" \
-++				-DCMAKE_CXX_COMPILER="$(CXX)" \
-+ 				-DCMAKE_CXX_FLAGS="$(CXXFLAGS) $(CPPFLAGS)" \
-+ 				-DCMAKE_EXE_LINKER_FLAGS="$(LDFLAGS)" \
-+ 				.. && \
-+-- 
-+2.10.1
-+
-diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
-index a4a2907..e080361 100644
---- a/package/lttng-libust/lttng-libust.hash
-+++ b/package/lttng-libust/lttng-libust.hash
-@@ -1,6 +1,3 @@
--# From http://lttng.org/files/lttng-ust/lttng-ust-2.8.1.tar.bz2.{md5,sha1}
--md5     be505077245dc05f93370a565eec15f4  lttng-ust-2.8.1.tar.bz2
--sha1    8bebdcbcb453d2643fb226dbe92de61764f1ee3b  lttng-ust-2.8.1.tar.bz2
--
--# Locally generated
--sha256  6e41349107e83e7b43c69ed358e48788ca2fd095bad61737b850e3f3d2c0508a  lttng-ust-2.8.1.tar.bz2
-+# From http://lttng.org/files/lttng-ust/lttng-ust-2.9.0.tar.bz2.{md5,sha1}
-+md5 77f3378ba37a36801420bce87b702e9c  lttng-ust-2.9.0.tar.bz2
-+sha1 9937eae64540821b8597cce081e92be76e6b5568  lttng-ust-2.9.0.tar.bz2
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index 7a83f46..23cc745 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index eba781f..645de92 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -22,4 +22,11 @@ else
+ XTERM_CONF_OPTS += --disable-freetype
+ endif
  
- LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
--LTTNG_LIBUST_VERSION = 2.8.1
-+LTTNG_LIBUST_VERSION = 2.9.0
- LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
- LTTNG_LIBUST_LICENSE = LGPLv2.1, MIT (system headers), GPLv2 (liblttng-ust-ctl/ustctl.c used by lttng-sessiond)
- LTTNG_LIBUST_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
++XTERM_DEPENDENCIES += xlib_libXinerama
++XTERM_CONF_OPTS += --with-xinerama
++else
++XTERM_CONF_OPTS += --without-xinerama
++endif
++
+ $(eval $(autotools-package))
