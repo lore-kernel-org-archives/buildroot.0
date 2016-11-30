@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Nov 2016 22:16:00 +0100
-Subject: [Buildroot] [git commit branch/next] libgtk3: bump version to 3.22.4
-Message-ID: <20161130211644.B60AC81946@busybox.osuosl.org>
+Date: Wed, 30 Nov 2016 22:16:06 +0100
+Subject: [Buildroot] [git commit branch/next] ncftp: bump version to 3.2.6
+Message-ID: <20161130211644.BF10A7FA1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8fa916ffcc491c1ab0a7fc728d642ac34cc0abb
+commit: https://git.buildroot.net/buildroot/commit/?id=b7d89940a28777dc4226b421bc6498774c2446d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-  http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.4.news
+Upstream provides xz tarballs instead of bz2, so make the switch.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
+ package/ncftp/ncftp.hash | 2 +-
+ package/ncftp/ncftp.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 1c58efc..e1d93b3 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
+diff --git a/package/ncftp/ncftp.hash b/package/ncftp/ncftp.hash
+index 1169589..0a7c26c 100644
+--- a/package/ncftp/ncftp.hash
++++ b/package/ncftp/ncftp.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.3.sha256sum
--sha256 e190ab1a9a893861b8e8be341aa57bce8b7146d6445ebfe5a8ab64236fe82ed3  gtk+-3.22.3.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.4.sha256sum
-+sha256 7094a6fcfe133d01c578358bd5d3e499715f1a0206e87bd5cf6c834e301f387f  gtk+-3.22.4.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 0b9a999..4a686e0 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
+ # Locally computed:
+-sha256  b4ebe2415761a5137cd1d313c8fc1352f26d8963cc9e9e354e29720aa2089d42  ncftp-3.2.5-src.tar.bz2
++sha256 7abd3e8f848f0efb4bb6a4bc5da58a59524d4378fc8d70a52adb0fe1fd00b89d  ncftp-3.2.6-src.tar.xz
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index 28b03b8..5c88556 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).3
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).4
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
+-NCFTP_VERSION = 3.2.5
+-NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.bz2
++NCFTP_VERSION = 3.2.6
++NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.xz
+ NCFTP_SITE = ftp://ftp.ncftp.com/ncftp
+ NCFTP_TARGET_BINS = ncftp
+ NCFTP_LICENSE = Clarified Artistic License
