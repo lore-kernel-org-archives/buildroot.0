@@ -1,47 +1,52 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 30 Nov 2016 17:04:43 +0000
-Subject: [Buildroot] [PATCH next 2/4] lttng-modules: bump version to 2.9.0
+Date: Wed, 30 Nov 2016 17:04:44 +0000
+Subject: [Buildroot] [PATCH next 3/4] lttng-babeltrace: bump version to 1.5.0
 In-Reply-To: <20161130170445.55222-1-Vincent.Riera@imgtec.com>
 References: <20161130170445.55222-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161130170445.55222-2-Vincent.Riera@imgtec.com>
+Message-ID: <20161130170445.55222-3-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop sha256 hash. The combination of md5 and sha1 hashes is enough.
+
 Release notes:
-  https://lists.lttng.org/pipermail/lttng-dev/2016-November/026760.html
+  https://lists.lttng.org/pipermail/lttng-dev/2016-November/026762.html
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lttng-modules/lttng-modules.hash | 6 +++---
- package/lttng-modules/lttng-modules.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/lttng-babeltrace/lttng-babeltrace.hash | 9 +++------
+ package/lttng-babeltrace/lttng-babeltrace.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index ce725ec..d8314f6 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
-@@ -1,3 +1,3 @@
--# From http://lttng.org/files/lttng-modules/lttng-modules-2.8.3.tar.bz2.{md5,sha1}
--md5   424354c4834d20235dacd9a1fd7653b6  lttng-modules-2.8.3.tar.bz2
--sha1  862705784a54962f70226004f1fd0bf77f73f10f  lttng-modules-2.8.3.tar.bz2
-+# From http://lttng.org/files/lttng-modules/lttng-modules-2.9.0.tar.bz2.{md5,sha1}
-+md5 717df375ccb6f32bb297cc2f2e692bbf  lttng-modules-2.9.0.tar.bz2
-+sha1 819ee1c2a5a821b7fdc1c2fc102ef3079c32aad7  lttng-modules-2.9.0.tar.bz2
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index 9ecf572..aa0ac30 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.hash b/package/lttng-babeltrace/lttng-babeltrace.hash
+index bca0bdb..7f91b8b 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.hash
++++ b/package/lttng-babeltrace/lttng-babeltrace.hash
+@@ -1,6 +1,3 @@
+-# From http://www.efficios.com/files/babeltrace/babeltrace-1.4.0.tar.bz2.{md5,sha1}
+-md5     fa99064048af5c9c6ff00e489ac809c2  babeltrace-1.4.0.tar.bz2
+-sha1    3b162480ee883625e8581bf163817f78a4b6487b  babeltrace-1.4.0.tar.bz2
+-
+-# Locally generated
+-sha256  9469eeb22617cd12668683b04c27003e5337e9ac66ade914988df3642fc0d0e4  babeltrace-1.4.0.tar.bz2
++# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.0.tar.bz2.{md5,sha1}
++md5 43696383e44d1b85173db7cbd0335f06  babeltrace-1.5.0.tar.bz2
++sha1 13f106951c418632a2155ebe3cea51fa4929e748  babeltrace-1.5.0.tar.bz2
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index 59327db..7d4b520 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LTTNG_MODULES_VERSION = 2.8.3
-+LTTNG_MODULES_VERSION = 2.9.0
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
+ LTTNG_BABELTRACE_SITE = http://www.efficios.com/files/babeltrace
+-LTTNG_BABELTRACE_VERSION = 1.4.0
++LTTNG_BABELTRACE_VERSION = 1.5.0
+ LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+ LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
+ LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
 -- 
 2.10.1
