@@ -1,28 +1,29 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 30 Nov 2016 19:53:52 +0200
-Subject: [Buildroot] [PATCH next 1/4] lttng-tools: bump version to 2.9.0
-In-Reply-To: <20161130170445.55222-1-Vincent.Riera@imgtec.com>
-References: <20161130170445.55222-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161130175352.uqsmg6hb3hmlbgem@tarshish>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Nov 2016 19:28:23 +0000
+Subject: [Buildroot] [Bug 9451] packatges/postgresql/postgresql.mk contains
+ wrong POSTGRESQL_CONF_ENV
+In-Reply-To: <bug-9451-163@https.bugs.busybox.net/>
+References: <bug-9451-163@https.bugs.busybox.net/>
+Message-ID: <bug-9451-163-m2zzpxGLHq@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente,
+https://bugs.busybox.net/show_bug.cgi?id=9451
 
-On Wed, Nov 30, 2016 at 05:04:42PM +0000, Vicente Olivert Riera wrote:
-> Drop sha256 hash. The combination of md5 and sha1 hashes is enough.
+Peter Seiderer <ps.report@gmx.net> changed:
 
-I don't think so. Neither md5 nor sha1 is considered cryptographically secure. 
-Their combination is probably better than either alone. But sha256 is even 
-better. Not only because of its larger hash value, but also because the 
-algorithm itself. Why drop it?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-baruch
+--- Comment #2 from Peter Seiderer <ps.report@gmx.net> ---
+Fixed with
+https://git.buildroot.net/buildroot/commit/?id=e64ee501a0c8a8700c9a5f0e03e2f6979a0f810d
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+You are receiving this mail because:
+You are on the CC list for the bug.
