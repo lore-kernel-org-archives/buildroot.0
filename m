@@ -1,83 +1,128 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Nov 2016 22:12:06 +0100
-Subject: [Buildroot] [PATCH 0/8] arch/arm: allow selecting AArch64 cores
-Message-ID: <cover.1480540299.git.yann.morin.1998@free.fr>
+Date: Wed, 30 Nov 2016 22:12:04 +0100
+Subject: [Buildroot] [PATCH 1/8] arch: merge Config.in.aarch64 into
+	Config.in.arm
+In-Reply-To: <cover.1480540299.git.yann.morin.1998@free.fr>
+References: <cover.1480540299.git.yann.morin.1998@free.fr>
+Message-ID: <c2ae1730763487e551810a1d3f3e8fd5f8123e60.1480540299.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-This series, originally written by Thomas, allows selecting a specific
-AArch64 core anong the few currently existing cores. It also allows
-selecting those cores in 32-bit mode.
+The 64 bits ARM processors are capable of running 32 bits ARM code, and
+some platforms are indeed using this capability. Due to this, if we were
+to keep the separation between Config.in.aarch64 and Config.in.arm, we
+would have to duplicate the definition of all 64-bits capable ARM cores
+into both files.
 
-The series now handles arm (aka AArch32) and AArch64 as a single
-architecture, not unlike what we do for the i386 and x86-64.
+Instead of going down this route, let's take the same route as the x86
+one: a single Config.in.x86 file, used for both x86 32 bits and x86 64
+bits, with the appropriate logic to only show the relevant cores
+depending on which architecture is selected.
 
-We so far had no way to optimise for a specific AArch64 core, and would
-just let gcc decide based on its default settings. Having a selection,
-like we have for all architectures, allows to optimise the generated
-code for the actual core on the target.
+In order to do this, we:
 
-Furthermore, AArch64 cores are totally capable of running 32-bit code,
-in 32-bit mode, like x86_64 cores do in 32-bit mode.
+ - Make the "ARM instruction set" choice only visible on ARM 32 bits,
+   since we currently don't support ARM vs. Thumb on AArch64.
 
-Then, we also allow to select the floating point strategy for those
-cores. Unlike 32-bit cores, all current AArch64 core have a VFP unit
-with NEON extensions; yet, we still allow selecting soft-float (e.g.
-when in 32-bit mode, to keep compatibility with soft-float binary
-blobs).
+ - Add the relevant values for the BR2_ARCH option.
 
-Finally, we add an entry for each of the three currently existing
-AArch64 cores, Cortex-A53, A57 and A72.
+ - Add the relevant values for the BR2_ENDIAN option.
 
+ - Make the "aapcs-linux" BR2_GCC_TARGET_ABI value only used on ARM 32
+   bits, since this ABI doesn't mean anything on AArch64.
 
-Regards,
-Yann E. MORIN.
+ - Make the BR2_GCC_TARGET_FPU option depends on ARM 32 bits, since
+   there is no -mfpu option on AArch64.
 
-
-The following changes since commit 0689e77eecb88dc204688e9db670d56e4366f83f
-
-  uclibc: disable posix_madvise for noMMU (2016-11-30 16:14:47 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 7cdaae6e62c3a98dceecd5b195ef16f425621cee
-
-  arch/Config.in.arm: add Cortex-A57 and Cortex-A72 (2016-11-30 18:57:14 +0100)
-
-
-----------------------------------------------------------------
-Matt Flax (1):
-      arch/Config.in.arm: Add Cortex-A53 CPU
-
-Thomas Petazzoni (6):
-      arch: merge Config.in.aarch64 into Config.in.arm
-      arch/Config.in.arm: prepare addition of 64 bits cores
-      arch/Config.in.arm: add BR2_ARM_CPU_ARMV8
-      arch/Config.in.arm: add FPU related options for ARMv8 cores
-      arch/Config.in.arm: specify ABI for ARM64
-      arch/Config.in.arm: add Cortex-A57 and Cortex-A72
-
-Yann E. MORIN (1):
-      arch/arm: drop legacy dependency for floating point strategy
-
- arch/Config.in         |  6 +---
- arch/Config.in.aarch64 |  7 ----
- arch/Config.in.arm     | 93 ++++++++++++++++++++++++++++++++++++++++++++++----
- 3 files changed, 87 insertions(+), 19 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ arch/Config.in         |  6 +-----
+ arch/Config.in.aarch64 |  7 -------
+ arch/Config.in.arm     | 14 +++++++++-----
+ 3 files changed, 10 insertions(+), 17 deletions(-)
  delete mode 100644 arch/Config.in.aarch64
 
+diff --git a/arch/Config.in b/arch/Config.in
+index df4db0b..d59cbd7 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -354,14 +354,10 @@ if BR2_arcle || BR2_arceb
+ source "arch/Config.in.arc"
+ endif
+ 
+-if BR2_arm || BR2_armeb
++if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
+ source "arch/Config.in.arm"
+ endif
+ 
+-if BR2_aarch64 || BR2_aarch64_be
+-source "arch/Config.in.aarch64"
+-endif
+-
+ if BR2_bfin
+ source "arch/Config.in.bfin"
+ endif
+diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
+deleted file mode 100644
+index 34cd409..0000000
+--- a/arch/Config.in.aarch64
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_ARCH
+-	default "aarch64"	if BR2_aarch64
+-	default "aarch64_be"	if BR2_aarch64_be
+-
+-config BR2_ENDIAN
+-	default "LITTLE" if BR2_aarch64
+-	default "BIG"	 if BR2_aarch64_be
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index ee612f5..002ed04 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -399,6 +399,7 @@ endchoice
+ 
+ choice
+ 	prompt "ARM instruction set"
++	depends on BR2_arm || BR2_armeb
+ 
+ config BR2_ARM_INSTRUCTIONS_ARM
+ 	bool "ARM"
+@@ -434,12 +435,14 @@ config BR2_ARM_INSTRUCTIONS_THUMB2
+ endchoice
+ 
+ config BR2_ARCH
+-	default "arm"	if BR2_arm
+-	default "armeb"	if BR2_armeb
++	default "arm"		if BR2_arm
++	default "armeb"		if BR2_armeb
++	default "aarch64"	if BR2_aarch64
++	default "aarch64_be"	if BR2_aarch64_be
+ 
+ config BR2_ENDIAN
+-	default "LITTLE" if BR2_arm
+-	default "BIG"	 if BR2_armeb
++	default "LITTLE" if (BR2_arm || BR2_aarch64)
++	default "BIG"	 if (BR2_armeb || BR2_aarch64_be)
+ 
+ config BR2_GCC_TARGET_CPU
+ 	default "arm920t"	if BR2_arm920t
+@@ -467,9 +470,10 @@ config BR2_GCC_TARGET_CPU
+ 	default "iwmmxt"	if BR2_iwmmxt
+ 
+ config BR2_GCC_TARGET_ABI
+-	default "aapcs-linux"
++	default "aapcs-linux"	if BR2_arm || BR2_armeb
+ 
+ config BR2_GCC_TARGET_FPU
++	depends on BR2_arm || BR2_armeb
+ 	default "vfp"		if BR2_ARM_FPU_VFPV2
+ 	default "vfpv3"		if BR2_ARM_FPU_VFPV3
+ 	default "vfpv3-d16" 	if BR2_ARM_FPU_VFPV3D16
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
