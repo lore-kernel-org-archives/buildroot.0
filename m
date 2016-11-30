@@ -1,55 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Nov 2016 22:09:38 +0100
-Subject: [Buildroot] [PATCH next 1/4] lttng-tools: bump version to 2.9.0
-In-Reply-To: <20161130170445.55222-1-Vincent.Riera@imgtec.com>
-References: <20161130170445.55222-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161130220938.246d5b98@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Nov 2016 22:12:06 +0100
+Subject: [Buildroot] [PATCH 0/8] arch/arm: allow selecting AArch64 cores
+Message-ID: <cover.1480540299.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello All!
 
-On Wed, 30 Nov 2016 17:04:42 +0000, Vicente Olivert Riera wrote:
-> Drop sha256 hash. The combination of md5 and sha1 hashes is enough.
-> 
-> Remove upstream patches:
-> 
->  - 0001-Fix-snapshot-del-output-with-name-on-musl.patch
->    https://github.com/lttng/lttng-tools/commit/07f5023712313d73ab3feac62390a2d50457b7aa
-> 
->  - 0002-Fix-strerror_r-behavior-is-glibc-specific.patch
->    https://github.com/lttng/lttng-tools/commit/b6dacfe27a91af50a1f81a2a7eadf4f34ca75769
-> 
->  - 0003-Set-thread-stack-size-to-ulimit-soft-value.patch
->    https://github.com/lttng/lttng-tools/commit/1a1a34b40ab10a195633b1ed5e2e9b42fdae0a78
-> 
-> Release notes:
->   https://lists.lttng.org/pipermail/lttng-dev/2016-November/026763.html
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  ...Fix-snapshot-del-output-with-name-on-musl.patch |  32 --
->  ...Fix-strerror_r-behavior-is-glibc-specific.patch |  30 --
->  ...et-thread-stack-size-to-ulimit-soft-value.patch | 431 ---------------------
->  package/lttng-tools/lttng-tools.hash               |   9 +-
->  package/lttng-tools/lttng-tools.mk                 |   2 +-
->  5 files changed, 4 insertions(+), 500 deletions(-)
->  delete mode 100644 package/lttng-tools/0001-Fix-snapshot-del-output-with-name-on-musl.patch
->  delete mode 100644 package/lttng-tools/0002-Fix-strerror_r-behavior-is-glibc-specific.patch
->  delete mode 100644 package/lttng-tools/0003-Set-thread-stack-size-to-ulimit-soft-value.patch
+This series, originally written by Thomas, allows selecting a specific
+AArch64 core anong the few currently existing cores. It also allows
+selecting those cores in 32-bit mode.
 
-All four applied to next. For the last patch, I was worried that CMake
-might have been mandatory. But the configure script properly checks if
-cmake is available or not, and apparently acts properly if it's not
-available, so it looks good.
+The series now handles arm (aka AArch32) and AArch64 as a single
+architecture, not unlike what we do for the i386 and x86-64.
 
-Thanks!
+We so far had no way to optimise for a specific AArch64 core, and would
+just let gcc decide based on its default settings. Having a selection,
+like we have for all architectures, allows to optimise the generated
+code for the actual core on the target.
 
-Thomas
+Furthermore, AArch64 cores are totally capable of running 32-bit code,
+in 32-bit mode, like x86_64 cores do in 32-bit mode.
+
+Then, we also allow to select the floating point strategy for those
+cores. Unlike 32-bit cores, all current AArch64 core have a VFP unit
+with NEON extensions; yet, we still allow selecting soft-float (e.g.
+when in 32-bit mode, to keep compatibility with soft-float binary
+blobs).
+
+Finally, we add an entry for each of the three currently existing
+AArch64 cores, Cortex-A53, A57 and A72.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 0689e77eecb88dc204688e9db670d56e4366f83f
+
+  uclibc: disable posix_madvise for noMMU (2016-11-30 16:14:47 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 7cdaae6e62c3a98dceecd5b195ef16f425621cee
+
+  arch/Config.in.arm: add Cortex-A57 and Cortex-A72 (2016-11-30 18:57:14 +0100)
+
+
+----------------------------------------------------------------
+Matt Flax (1):
+      arch/Config.in.arm: Add Cortex-A53 CPU
+
+Thomas Petazzoni (6):
+      arch: merge Config.in.aarch64 into Config.in.arm
+      arch/Config.in.arm: prepare addition of 64 bits cores
+      arch/Config.in.arm: add BR2_ARM_CPU_ARMV8
+      arch/Config.in.arm: add FPU related options for ARMv8 cores
+      arch/Config.in.arm: specify ABI for ARM64
+      arch/Config.in.arm: add Cortex-A57 and Cortex-A72
+
+Yann E. MORIN (1):
+      arch/arm: drop legacy dependency for floating point strategy
+
+ arch/Config.in         |  6 +---
+ arch/Config.in.aarch64 |  7 ----
+ arch/Config.in.arm     | 93 ++++++++++++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 87 insertions(+), 19 deletions(-)
+ delete mode 100644 arch/Config.in.aarch64
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
