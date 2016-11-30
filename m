@@ -1,7 +1,7 @@
 From: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
-Date: Wed, 30 Nov 2016 08:29:57 -0200
-Subject: [Buildroot] [-v2] uboot: support -b option for mkenvimage
-Message-ID: <1480501797-31170-1-git-send-email-tiago.brusamarello@datacom.ind.br>
+Date: Wed, 30 Nov 2016 08:32:33 -0200
+Subject: [Buildroot] [PATCH v2] uboot: support -b option for mkenvimage
+Message-ID: <1480501953-31316-1-git-send-email-tiago.brusamarello@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
