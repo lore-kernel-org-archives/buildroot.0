@@ -1,523 +1,1391 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Nov 2016 12:00:46 +0100
-Subject: [Buildroot] [git commit branch/next] readline: bump version to 7.0
-Message-ID: <20161130110234.CF4907FB79@busybox.osuosl.org>
+Date: Wed, 30 Nov 2016 12:02:19 +0100
+Subject: [Buildroot] [git commit branch/next] bash: bump version to 4.4
+Message-ID: <20161130110234.DEF9981E18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fecb71847415677dcfe7001eb4bd6b1d43d117b
+commit: https://git.buildroot.net/buildroot/commit/?id=cde22e1fd340492f6f017c9f9a2d749391961887
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/readline/0001-patchlevel-1.patch | 47 ----------------------
- package/readline/0002-patchlevel-2.patch | 48 -----------------------
- package/readline/0003-patchlevel-3.patch | 51 ------------------------
- package/readline/0004-patchlevel-4.patch | 49 -----------------------
- package/readline/0005-patchlevel-5.patch | 62 -----------------------------
- package/readline/0006-patchlevel-6.patch | 67 --------------------------------
- package/readline/0007-patchlevel-7.patch | 51 ------------------------
- package/readline/0008-patchlevel-8.patch | 51 ------------------------
- package/readline/readline.hash           |  2 +-
- package/readline/readline.mk             |  2 +-
- 10 files changed, 2 insertions(+), 428 deletions(-)
+ package/bash/0031-patchlevel-31.patch | 116 -----------------
+ package/bash/0032-patchlevel-32.patch |  55 --------
+ package/bash/0033-patchlevel-33.patch | 229 ----------------------------------
+ package/bash/0034-patchlevel-34.patch |  94 --------------
+ package/bash/0035-patchlevel-35.patch |  67 ----------
+ package/bash/0036-patchlevel-36.patch |  61 ---------
+ package/bash/0037-patchlevel-37.patch |  47 -------
+ package/bash/0038-patchlevel-38.patch |  92 --------------
+ package/bash/0039-patchlevel-39.patch |  61 ---------
+ package/bash/0040-patchlevel-40.patch |  51 --------
+ package/bash/0041-patchlevel-41.patch |  76 -----------
+ package/bash/0042-patchlevel-42.patch |  59 ---------
+ package/bash/0043-patchlevel-43.patch |  63 ----------
+ package/bash/0044-patchlevel-44.patch |  52 --------
+ package/bash/0045-patchlevel-45.patch |  56 ---------
+ package/bash/0046-patchlevel-46.patch |  59 ---------
+ package/bash/bash.hash                |   2 +-
+ package/bash/bash.mk                  |   2 +-
+ 18 files changed, 2 insertions(+), 1240 deletions(-)
 
-diff --git a/package/readline/0001-patchlevel-1.patch b/package/readline/0001-patchlevel-1.patch
+diff --git a/package/bash/0031-patchlevel-31.patch b/package/bash/0031-patchlevel-31.patch
 deleted file mode 100644
-index 8593073..0000000
---- a/package/readline/0001-patchlevel-1.patch
+index d285a1f..0000000
+--- a/package/bash/0031-patchlevel-31.patch
 +++ /dev/null
-@@ -1,47 +0,0 @@
--From http://ftp.gnu.org/pub/gnu/readline/readline-6.3-patches/readline63-001
+@@ -1,116 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-031
 -
 -Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--			   READLINE PATCH REPORT
--			   =====================
+-			     BASH PATCH REPORT
+-			     =================
 -
--Readline-Release: 6.3
--Patch-ID: readline63-001
+-Bash-Release:	4.3
+-Patch-ID:	bash43-031
 -
--Bug-Reported-by:	Daan van Rossum <daan@flash.uchicago.edu>
--Bug-Reference-ID:	<20140307072523.GA14250@flash.uchicago.edu>
--Bug-Reference-URL:	
--
--Bug-Description:
--
--The `.' command in vi mode cannot undo multi-key commands beginning with
--`c', `d', and `y' (command plus motion specifier).
--
--Patch (apply with `patch -p0'):
--
--*** a/readline-6.3/readline.c	2013-10-28 14:58:06.000000000 -0400
----- b/readline.c	2014-03-07 15:20:33.000000000 -0500
--***************
--*** 965,969 ****
--    if (rl_editing_mode == vi_mode && _rl_keymap == vi_movement_keymap &&
--        key != ANYOTHERKEY &&
--!       rl_key_sequence_length == 1 &&	/* XXX */
--        _rl_vi_textmod_command (key))
--      _rl_vi_set_last (key, rl_numeric_arg, rl_arg_sign);
----- 965,969 ----
--    if (rl_editing_mode == vi_mode && _rl_keymap == vi_movement_keymap &&
--        key != ANYOTHERKEY &&
--!       _rl_dispatching_keymap == vi_movement_keymap &&
--        _rl_vi_textmod_command (key))
--      _rl_vi_set_last (key, rl_numeric_arg, rl_arg_sign);
--*** a/readline-6.3/patchlevel	2013-11-15 08:11:11.000000000 -0500
----- b/patchlevel	2014-03-21 08:28:40.000000000 -0400
--***************
--*** 1,3 ****
--  # Do not edit -- exists only for use by patch
--  
--! 5
----- 1,3 ----
--  # Do not edit -- exists only for use by patch
--  
--! 1
-diff --git a/package/readline/0002-patchlevel-2.patch b/package/readline/0002-patchlevel-2.patch
-deleted file mode 100644
-index a8a94e0..0000000
---- a/package/readline/0002-patchlevel-2.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From http://ftp.gnu.org/pub/gnu/readline/readline-6.3-patches/readline63-002
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--			   READLINE PATCH REPORT
--			   =====================
--
--Readline-Release: 6.3
--Patch-ID: readline63-002
--
--Bug-Reported-by:	Anatol Pomozov <anatol.pomozov@gmail.com>
--Bug-Reference-ID:	<CAOMFOmXy3mT2So5GQ5F-smCVArQuAeBwZ2QKzgCtMeXJoDeYOQ@mail.gmail.com>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-readline/2014-03/msg00010.html
+-Bug-Reported-by:	lolilolicon <lolilolicon@gmail.com>
+-Bug-Reference-ID:	<CAMtVo_Nz=32Oq=zWTb6=+8gUNXOo2rRvud1W4oPnA-cgVk_ZqQ@mail.gmail.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-08/msg00139.html
 -
 -Bug-Description:
 -
--When in callback mode, some readline commands can cause readline to seg
--fault by passing invalid contexts to callback functions.
+-The new nameref assignment functionality introduced in bash-4.3 did not perform
+-enough validation on the variable value and would create variables with
+-invalid names.
 -
 -Patch (apply with `patch -p0'):
 -
--*** a/readline-6.3/readline.c	2013-10-28 14:58:06.000000000 -0400
----- b/readline.c	2014-03-10 14:15:02.000000000 -0400
+-*** a/bash-4.3-patched/subst.h	2014-01-11 21:02:27.000000000 -0500
+---- b/subst.h	2014-09-01 12:16:56.000000000 -0400
 -***************
--*** 745,749 ****
+-*** 48,51 ****
+---- 48,52 ----
+-  #define ASS_MKGLOBAL	0x0008	/* force global assignment */
+-  #define ASS_NAMEREF	0x0010	/* assigning to nameref variable */
+-+ #define ASS_FROMREF	0x0020	/* assigning from value of nameref variable */
 -  
--    RL_CHECK_SIGNALS ();
--!   if (r == 0)			/* success! */
--      {
--        _rl_keyseq_chain_dispose ();
----- 745,750 ----
--  
--    RL_CHECK_SIGNALS ();
--!   /* We only treat values < 0 specially to simulate recursion. */
--!   if (r >= 0 || (r == -1 && (cxt->flags & KSEQ_SUBSEQ) == 0))	/* success! or failure! */
--      {
--        _rl_keyseq_chain_dispose ();
--*** a/readline-6.3/patchlevel	2013-11-15 08:11:11.000000000 -0500
----- b/patchlevel	2014-03-21 08:28:40.000000000 -0400
+-  /* Flags for the string extraction functions. */
+-*** a/bash-4.3-patched/variables.c	2014-05-15 08:26:50.000000000 -0400
+---- b/variables.c	2014-09-01 14:37:44.000000000 -0400
 -***************
--*** 1,3 ****
--  # Do not edit -- exists only for use by patch
+-*** 2504,2511 ****
+-       int hflags, aflags;
+-  {
+-!   char *newval;
+-    SHELL_VAR *entry;
 -  
--! 1
----- 1,3 ----
--  # Do not edit -- exists only for use by patch
--  
--! 2
-diff --git a/package/readline/0003-patchlevel-3.patch b/package/readline/0003-patchlevel-3.patch
-deleted file mode 100644
-index 195ed55..0000000
---- a/package/readline/0003-patchlevel-3.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From http://ftp.gnu.org/pub/gnu/readline/readline-6.3-patches/readline63-003
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--			   READLINE PATCH REPORT
--			   =====================
--
--Readline-Release: 6.3
--Patch-ID: readline63-003
--
--Bug-Reported-by:
--Bug-Reference-ID:
--Bug-Reference-URL:
--
--Bug-Description:
--
--There are debugging functions in the readline release that are theoretically
--exploitable as security problems.  They are not public functions, but have
--global linkage.
--
--Patch (apply with `patch -p0'):
--
--*** a/readline-6.3/util.c	2013-09-02 13:36:12.000000000 -0400
----- b/util.c	2014-03-20 10:25:53.000000000 -0400
--***************
--*** 477,480 ****
----- 479,483 ----
--  }
--  
--+ #if defined (DEBUG)
--  #if defined (USE_VARARGS)
--  static FILE *_rl_tracefp;
--***************
--*** 539,542 ****
----- 542,546 ----
--  }
--  #endif
--+ #endif /* DEBUG */
--  
--  
--*** a/readline-6.3/patchlevel	2013-11-15 08:11:11.000000000 -0500
----- b/patchlevel	2014-03-21 08:28:40.000000000 -0400
--***************
--*** 1,3 ****
--  # Do not edit -- exists only for use by patch
--  
--! 2
----- 1,3 ----
--  # Do not edit -- exists only for use by patch
--  
--! 3
-diff --git a/package/readline/0004-patchlevel-4.patch b/package/readline/0004-patchlevel-4.patch
-deleted file mode 100644
-index 86ab3d5..0000000
---- a/package/readline/0004-patchlevel-4.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From http://ftp.gnu.org/pub/gnu/readline/readline-6.3-patches/readline63-004
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--			   READLINE PATCH REPORT
--			   =====================
--
--Readline-Release: 6.3
--Patch-ID: readline63-004
--
--Bug-Reported-by:	Egmont Koblinger <egmont@gmail.com>
--Bug-Reference-ID:	<CAGWcZk+bU5Jo1M+tutGvL-250UBE9DXjpeJVofYJSFcqFEVfMg@mail.gmail.com>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-03/msg00153.html
--
--Bug-Description:
--
--The signal handling changes to bash and readline (to avoid running any code
--in a signal handler context) cause the cursor to be placed on the wrong
--line of a multi-line command after a ^C interrupts editing.
--
--Patch (apply with `patch -p0'):
--
--*** a/readline-6.3-patched/display.c	2013-12-27 13:10:56.000000000 -0500
----- b/display.c	2014-03-27 11:52:45.000000000 -0400
--***************
--*** 2678,2682 ****
--    if (_rl_echoing_p)
--      {
--!       _rl_move_vert (_rl_vis_botlin);
--        _rl_vis_botlin = 0;
--        fflush (rl_outstream);
----- 2678,2683 ----
--    if (_rl_echoing_p)
--      {
--!       if (_rl_vis_botlin > 0)	/* minor optimization plus bug fix */
--! 	_rl_move_vert (_rl_vis_botlin);
--        _rl_vis_botlin = 0;
--        fflush (rl_outstream);
--*** a/readline-6.3/patchlevel	2013-11-15 08:11:11.000000000 -0500
----- b/patchlevel	2014-03-21 08:28:40.000000000 -0400
--***************
--*** 1,3 ****
--  # Do not edit -- exists only for use by patch
--  
--! 3
----- 1,3 ----
--  # Do not edit -- exists only for use by patch
--  
--! 4
-diff --git a/package/readline/0005-patchlevel-5.patch b/package/readline/0005-patchlevel-5.patch
-deleted file mode 100644
-index 6e73c7f..0000000
---- a/package/readline/0005-patchlevel-5.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From http://ftp.gnu.org/pub/gnu/readline/readline-6.3-patches/readline63-005
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--			   READLINE PATCH REPORT
--			   =====================
--
--Readline-Release: 6.3
--Patch-ID: readline63-005
--
--Bug-Reported-by:	Juergen Daubert <jue@jue.li>
--Bug-Reference-ID:	<20140303180430.GA7346@jue.netz>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-readline/2014-03/msg00002.html
--
--Bug-Description:
--
--There are still applications using the deprecated Function/VFunction/etc.
--typedefs in rltypedefs.h.  This patch restores the typedefs, but attempts
--to mark them as deprecated using gcc/clang attributes.  Thanks to Max Horn
--for the suggestion.
--
--Patch (apply with `patch -p0'):
--
--*** a/readline-6.3-patched/rltypedefs.h	2011-03-26 14:53:31.000000000 -0400
----- b/rltypedefs.h	2014-04-10 11:30:45.000000000 -0400
--***************
--*** 27,30 ****
----- 27,49 ----
--  #endif
--  
--+ /* Old-style, attempt to mark as deprecated in some way people will notice. */
--+ 
--+ #if !defined (_FUNCTION_DEF)
--+ #  define _FUNCTION_DEF
--+ 
--+ #if defined(__GNUC__) || defined(__clang__)
--+ typedef int Function () __attribute__ ((deprecated));
--+ typedef void VFunction () __attribute__ ((deprecated));
--+ typedef char *CPFunction () __attribute__ ((deprecated));
--+ typedef char **CPPFunction () __attribute__ ((deprecated));
--+ #else
--+ typedef int Function ();
--+ typedef void VFunction ();
--+ typedef char *CPFunction ();
--+ typedef char **CPPFunction ();
+-    entry = (hflags & HASH_NOSRCH) ? (SHELL_VAR *)NULL : hash_lookup (name, table);
+-    /* Follow the nameref chain here if this is the global variables table */
+-    if (entry && nameref_p (entry) && (invisible_p (entry) == 0) && table == global_variables->table)
+---- 2566,2590 ----
+-       int hflags, aflags;
+-  {
+-!   char *newname, *newval;
+-    SHELL_VAR *entry;
+-+ #if defined (ARRAY_VARS)
+-+   arrayind_t ind;
+-+   char *subp;
+-+   int sublen;
 -+ #endif
--+ 
--+ #endif /* _FUNCTION_DEF */
--+ 
--  /* New style. */
 -  
--*** a/readline-6.3/patchlevel	2013-11-15 08:11:11.000000000 -0500
----- b/patchlevel	2014-03-21 08:28:40.000000000 -0400
+-+   newname = 0;
+-+ #if defined (ARRAY_VARS)
+-+   if ((aflags & ASS_FROMREF) && (hflags & HASH_NOSRCH) == 0 && valid_array_reference (name))
+-+     {
+-+       newname = array_variable_name (name, &subp, &sublen);
+-+       if (newname == 0)
+-+ 	return (SHELL_VAR *)NULL;	/* XXX */
+-+       entry = hash_lookup (newname, table);
+-+     }
+-+   else
+-+ #endif
+-    entry = (hflags & HASH_NOSRCH) ? (SHELL_VAR *)NULL : hash_lookup (name, table);
+-+ 
+-    /* Follow the nameref chain here if this is the global variables table */
+-    if (entry && nameref_p (entry) && (invisible_p (entry) == 0) && table == global_variables->table)
 -***************
--*** 1,3 ****
--  # Do not edit -- exists only for use by patch
+-*** 2538,2541 ****
+---- 2617,2630 ----
+-        }
+-      }
+-+ #if defined (ARRAY_VARS)
+-+   else if (entry == 0 && newname)
+-+     {
+-+       entry = make_new_array_variable (newname);	/* indexed array by default */
+-+       if (entry == 0)
+-+ 	return entry;
+-+       ind = array_expand_index (name, subp, sublen);
+-+       bind_array_element (entry, ind, value, aflags);
+-+     }
+-+ #endif
+-    else if (entry == 0)
+-      {
+-***************
+-*** 2658,2662 ****
+-  		      if (nameref_cell (nv) == 0)
+-  			return (bind_variable_internal (nv->name, value, nvc->table, 0, flags));
+-! 		      return (bind_variable_internal (nameref_cell (nv), value, nvc->table, 0, flags));
+-  		    }
+-  		  else
+---- 2747,2752 ----
+-  		      if (nameref_cell (nv) == 0)
+-  			return (bind_variable_internal (nv->name, value, nvc->table, 0, flags));
+-! 		      /* XXX - bug here with ref=array[index] */
+-! 		      return (bind_variable_internal (nameref_cell (nv), value, nvc->table, 0, flags|ASS_FROMREF));
+-  		    }
+-  		  else
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
 -  
--! 4
----- 1,3 ----
--  # Do not edit -- exists only for use by patch
+-! #define PATCHLEVEL 30
 -  
--! 5
-diff --git a/package/readline/0006-patchlevel-6.patch b/package/readline/0006-patchlevel-6.patch
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 31
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0032-patchlevel-32.patch b/package/bash/0032-patchlevel-32.patch
 deleted file mode 100644
-index b28b53c..0000000
---- a/package/readline/0006-patchlevel-6.patch
+index 6cdc0f1..0000000
+--- a/package/bash/0032-patchlevel-32.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-032
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-032
+-
+-Bug-Reported-by:	crispusfairbairn at gmail.com
+-Bug-Reference-ID:	<b5e499f7-3b98-408d-9f94-c0387580e73a@googlegroups.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-09/msg00013.html
+-
+-Bug-Description:
+-
+-When bash is running in Posix mode, it allows signals -- including SIGCHLD --
+-to interrupt the `wait' builtin, as Posix requires.  However, the interrupt
+-causes bash to not run a SIGCHLD trap for all exited children.  This patch
+-fixes the issue and restores the documented behavior in Posix mode.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/bash-4.3-patched/jobs.c	2014-05-14 09:20:15.000000000 -0400
+---- b/jobs.c	2014-09-09 11:50:38.000000000 -0400
+-***************
+-*** 3340,3344 ****
+-  	{
+-  	  interrupt_immediately = 0;
+-! 	  trap_handler (SIGCHLD);	/* set pending_traps[SIGCHLD] */
+-  	  wait_signal_received = SIGCHLD;
+-  	  /* If we're in a signal handler, let CHECK_WAIT_INTR pick it up;
+---- 3346,3352 ----
+-  	{
+-  	  interrupt_immediately = 0;
+-! 	  /* This was trap_handler (SIGCHLD) but that can lose traps if
+-! 	     children_exited > 1 */
+-! 	  queue_sigchld_trap (children_exited);
+-  	  wait_signal_received = SIGCHLD;
+-  	  /* If we're in a signal handler, let CHECK_WAIT_INTR pick it up;
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 31
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 32
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0033-patchlevel-33.patch b/package/bash/0033-patchlevel-33.patch
+deleted file mode 100644
+index 45fb686..0000000
+--- a/package/bash/0033-patchlevel-33.patch
++++ /dev/null
+@@ -1,229 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-033
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-033
+-
+-Bug-Reported-by:	mickael9 at gmail.com, Jan Rome <jan.rome@gmail.com>
+-Bug-Reference-ID:	<20140907224046.382ED3610CC@mickael-laptop.localdomain>,
+-			<540D661D.50908@gmail.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-09/msg00029.html
+-			http://lists.gnu.org/archive/html/bug-bash/2014-09/msg00030.html
+-
+-Bug-Description:
+-
+-Bash does not clean up the terminal state in all cases where bash or
+-readline  modifies it and bash is subsequently terminated by a fatal signal.
+-This happens when the `read' builtin modifies the terminal settings, both
+-when readline is active and when it is not.  It occurs most often when a script
+-installs a trap that exits on a signal without re-sending the signal to itself.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/bash-4.3-patched/shell.c	2014-01-14 08:04:32.000000000 -0500
+---- b/shell.c	2014-12-22 10:27:50.000000000 -0500
+-***************
+-*** 74,77 ****
+---- 74,78 ----
+-  
+-  #if defined (READLINE)
+-+ #  include <readline/readline.h>
+-  #  include "bashline.h"
+-  #endif
+-***************
+-*** 910,913 ****
+---- 912,923 ----
+-    fflush (stderr);
+-  
+-+   /* Clean up the terminal if we are in a state where it's been modified. */
+-+ #if defined (READLINE)
+-+   if (RL_ISSTATE (RL_STATE_TERMPREPPED) && rl_deprep_term_function)
+-+     (*rl_deprep_term_function) ();
+-+ #endif
+-+   if (read_tty_modified ())
+-+     read_tty_cleanup ();
+-+ 
+-    /* Do trap[0] if defined.  Allow it to override the exit status
+-       passed to us. */
+-*** a/bash-4.3-patched/builtins/read.def	2014-10-01 12:57:38.000000000 -0400
+---- b/builtins/read.def	2014-12-22 10:48:54.000000000 -0500
+-***************
+-*** 141,148 ****
+-  int sigalrm_seen;
+-  
+-! static int reading;
+-  static SigHandler *old_alrm;
+-  static unsigned char delim;
+-  
+-  /* In all cases, SIGALRM just sets a flag that we check periodically.  This
+-     avoids problems with the semi-tricky stuff we do with the xfree of
+---- 141,150 ----
+-  int sigalrm_seen;
+-  
+-! static int reading, tty_modified;
+-  static SigHandler *old_alrm;
+-  static unsigned char delim;
+-  
+-+ static struct ttsave termsave;
+-+ 
+-  /* In all cases, SIGALRM just sets a flag that we check periodically.  This
+-     avoids problems with the semi-tricky stuff we do with the xfree of
+-***************
+-*** 189,193 ****
+-    SHELL_VAR *var;
+-    TTYSTRUCT ttattrs, ttset;
+--   struct ttsave termsave;
+-  #if defined (ARRAY_VARS)
+-    WORD_LIST *alist;
+---- 191,194 ----
+-***************
+-*** 222,226 ****
+-    USE_VAR(lastsig);
+-  
+-!   sigalrm_seen = reading = 0;
+-  
+-    i = 0;		/* Index into the string that we are reading. */
+---- 223,227 ----
+-    USE_VAR(lastsig);
+-  
+-!   sigalrm_seen = reading = tty_modified = 0;
+-  
+-    i = 0;		/* Index into the string that we are reading. */
+-***************
+-*** 439,442 ****
+---- 440,445 ----
+-  	  goto assign_vars;
+-  	}
+-+       if (interactive_shell == 0)
+-+ 	initialize_terminating_signals ();
+-        old_alrm = set_signal_handler (SIGALRM, sigalrm);
+-        add_unwind_protect (reset_alarm, (char *)NULL);
+-***************
+-*** 483,487 ****
+---- 486,493 ----
+-  	  if (i < 0)
+-  	    sh_ttyerror (1);
+-+ 	  tty_modified = 1;
+-  	  add_unwind_protect ((Function *)ttyrestore, (char *)&termsave);
+-+ 	  if (interactive_shell == 0)
+-+ 	    initialize_terminating_signals ();
+-  	}
+-      }
+-***************
+-*** 498,502 ****
+---- 504,511 ----
+-  	sh_ttyerror (1);
+-  
+-+       tty_modified = 1;
+-        add_unwind_protect ((Function *)ttyrestore, (char *)&termsave);
+-+       if (interactive_shell == 0)
+-+ 	initialize_terminating_signals ();
+-      }
+-  
+-***************
+-*** 589,592 ****
+---- 598,603 ----
+-  	  else
+-  	    lastsig = 0;
+-+ 	  if (terminating_signal && tty_modified)
+-+ 	    ttyrestore (&termsave);	/* fix terminal before exiting */
+-  	  CHECK_TERMSIG;
+-  	  eof = 1;
+-***************
+-*** 979,982 ****
+---- 990,1007 ----
+-  {
+-    ttsetattr (ttp->fd, ttp->attrs);
+-+   tty_modified = 0;
+-+ }
+-+ 
+-+ void
+-+ read_tty_cleanup ()
+-+ {
+-+   if (tty_modified)
+-+     ttyrestore (&termsave);
+-+ }
+-+ 
+-+ int
+-+ read_tty_modified ()
+-+ {
+-+   return (tty_modified);
+-  }
+-  
+-*** ./bash-4.3-patched/builtins/common.h	2014-10-01 12:57:47.000000000 -0400
+---- b/builtins/common.h	2014-12-22 10:10:14.000000000 -0500
+-***************
+-*** 123,126 ****
+---- 141,148 ----
+-  extern void getopts_reset __P((int));
+-  
+-+ /* Functions from read.def */
+-+ extern void read_tty_cleanup __P((void));
+-+ extern int read_tty_modified __P((void));
+-+ 
+-  /* Functions from set.def */
+-  extern int minus_o_option_value __P((char *));
+-*** a/bash-4.3-patched/bashline.c	2014-05-14 09:22:39.000000000 -0400
+---- b/bashline.c	2014-09-08 11:28:56.000000000 -0400
+-***************
+-*** 203,206 ****
+---- 203,207 ----
+-  extern int array_needs_making;
+-  extern int posixly_correct, no_symbolic_links;
+-+ extern int sigalrm_seen;
+-  extern char *current_prompt_string, *ps1_prompt;
+-  extern STRING_INT_ALIST word_token_alist[];
+-***************
+-*** 4209,4214 ****
+-    /* If we're going to longjmp to top_level, make sure we clean up readline.
+-       check_signals will call QUIT, which will eventually longjmp to top_level,
+-!      calling run_interrupt_trap along the way. */
+-!   if (interrupt_state)
+-      rl_cleanup_after_signal ();
+-    bashline_reset_event_hook ();
+---- 4262,4268 ----
+-    /* If we're going to longjmp to top_level, make sure we clean up readline.
+-       check_signals will call QUIT, which will eventually longjmp to top_level,
+-!      calling run_interrupt_trap along the way.  The check for sigalrm_seen is
+-!      to clean up the read builtin's state. */
+-!   if (terminating_signal || interrupt_state || sigalrm_seen)
+-      rl_cleanup_after_signal ();
+-    bashline_reset_event_hook ();
+-*** a/bash-4.3-patched/sig.c	2014-01-10 15:06:06.000000000 -0500
+---- b/sig.c	2014-09-08 11:26:33.000000000 -0400
+-***************
+-*** 533,538 ****
+-    /* Set the event hook so readline will call it after the signal handlers
+-       finish executing, so if this interrupted character input we can get
+-!      quick response. */
+-!   if (interactive_shell && interactive && no_line_editing == 0)
+-      bashline_set_event_hook ();
+-  #endif
+---- 533,540 ----
+-    /* Set the event hook so readline will call it after the signal handlers
+-       finish executing, so if this interrupted character input we can get
+-!      quick response.  If readline is active or has modified the terminal we
+-!      need to set this no matter what the signal is, though the check for
+-!      RL_STATE_TERMPREPPED is possibly redundant. */
+-!   if (RL_ISSTATE (RL_STATE_SIGHANDLER) || RL_ISSTATE (RL_STATE_TERMPREPPED))
+-      bashline_set_event_hook ();
+-  #endif
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 32
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 33
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0034-patchlevel-34.patch b/package/bash/0034-patchlevel-34.patch
+deleted file mode 100644
+index 79c8945..0000000
+--- a/package/bash/0034-patchlevel-34.patch
++++ /dev/null
+@@ -1,94 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-034
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-034
+-
+-Bug-Reported-by:	Dreamcat4 <dreamcat4@gmail.com>
+-Bug-Reference-ID:	<CAN39uTpAEs2GFu4ebC_SfSVMRTh-DJ9YanrY4BZZ3OO+CCHjng@mail.gmail.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2015-05/msg00001.html
+-
+-Bug-Description:
+-
+-If neither the -f nor -v options is supplied to unset, and a name argument is
+-found to be a function and unset, subsequent name arguments are not treated as
+-variables before attempting to unset a function by that name.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/bash-4.3-patched/builtins/set.def	2013-04-19 07:20:34.000000000 -0400
+---- b/builtins/set.def	2015-05-05 13:25:36.000000000 -0400
+-***************
+-*** 752,758 ****
+---- 797,805 ----
+-  {
+-    int unset_function, unset_variable, unset_array, opt, nameref, any_failed;
+-+   int global_unset_func, global_unset_var;
+-    char *name;
+-  
+-    unset_function = unset_variable = unset_array = nameref = any_failed = 0;
+-+   global_unset_func = global_unset_var = 0;
+-  
+-    reset_internal_getopt ();
+-***************
+-*** 762,769 ****
+-  	{
+-  	case 'f':
+-! 	  unset_function = 1;
+-  	  break;
+-  	case 'v':
+-! 	  unset_variable = 1;
+-  	  break;
+-  	case 'n':
+---- 809,816 ----
+-  	{
+-  	case 'f':
+-! 	  global_unset_func = 1;
+-  	  break;
+-  	case 'v':
+-! 	  global_unset_var = 1;
+-  	  break;
+-  	case 'n':
+-***************
+-*** 778,782 ****
+-    list = loptend;
+-  
+-!   if (unset_function && unset_variable)
+-      {
+-        builtin_error (_("cannot simultaneously unset a function and a variable"));
+---- 825,829 ----
+-    list = loptend;
+-  
+-!   if (global_unset_func && global_unset_var)
+-      {
+-        builtin_error (_("cannot simultaneously unset a function and a variable"));
+-***************
+-*** 796,799 ****
+---- 843,849 ----
+-        name = list->word->word;
+-  
+-+       unset_function = global_unset_func;
+-+       unset_variable = global_unset_var;
+-+ 
+-  #if defined (ARRAY_VARS)
+-        unset_array = 0;
+-
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 33
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 34
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0035-patchlevel-35.patch b/package/bash/0035-patchlevel-35.patch
+deleted file mode 100644
+index c18b60d..0000000
+--- a/package/bash/0035-patchlevel-35.patch
 +++ /dev/null
 @@ -1,67 +0,0 @@
--From http://ftp.gnu.org/pub/gnu/readline/readline-6.3-patches/readline63-006
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-035
 -
 -Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--			   READLINE PATCH REPORT
--			   =====================
+-			     BASH PATCH REPORT
+-			     =================
 -
--Readline-Release: 6.3
--Patch-ID: readline63-006
+-Bash-Release:	4.3
+-Patch-ID:	bash43-035
 -
--Bug-Reported-by:	<Trond.Endrestol@ximalas.info>
--Bug-Reference-ID:	<alpine.BSF.2.03.1404192114310.1973@enterprise.ximalas.info>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-04/msg00069.html
+-Bug-Reported-by:	<romerox.adrian@gmail.com>
+-Bug-Reference-ID:	<CABV5r3zhPXmSKUe9uedeGc5YFBM2njJ1iVmY2h5neWdQpDBQug@mail.gmail.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-08/msg00045.html
 -
 -Bug-Description:
 -
--Using reverse-i-search when horizontal scrolling is enabled does not redisplay
--the entire line containing the successful search results.
+-A locale with a long name can trigger a buffer overflow and core dump.  This
+-applies on systems that do not have locale_charset in libc, are not using
+-GNU libiconv, and are not using the libintl that ships with bash in lib/intl.
 -
 -Patch (apply with `patch -p0'):
 -
--*** a/readline-6.3-patched/display.c	2014-04-08 18:19:36.000000000 -0400
----- b/display.c	2014-04-20 18:32:52.000000000 -0400
+-*** a/bash-4.3-patched/lib/sh/unicode.c	2014-01-30 16:47:19.000000000 -0500
+---- b/lib/sh/unicode.c	2015-05-01 08:58:30.000000000 -0400
 -***************
--*** 1638,1642 ****
--       the spot of first difference is before the end of the invisible chars,
--       lendiff needs to be adjusted. */
--!   if (current_line == 0 && !_rl_horizontal_scroll_mode &&
--        current_invis_chars != visible_wrap_offset)
+-*** 79,83 ****
+-    if (s)
 -      {
----- 1638,1642 ----
--       the spot of first difference is before the end of the invisible chars,
--       lendiff needs to be adjusted. */
--!   if (current_line == 0 && /* !_rl_horizontal_scroll_mode && */
--        current_invis_chars != visible_wrap_offset)
+-!       strcpy (charsetbuf, s+1);
+-        t = strchr (charsetbuf, '@');
+-        if (t)
+---- 79,84 ----
+-    if (s)
 -      {
+-!       strncpy (charsetbuf, s+1, sizeof (charsetbuf) - 1);
+-!       charsetbuf[sizeof (charsetbuf) - 1] = '\0';
+-        t = strchr (charsetbuf, '@');
+-        if (t)
 -***************
--*** 1826,1831 ****
--  		_rl_last_c_pos += bytes_to_insert;
--  
--  	      if (_rl_horizontal_scroll_mode && ((oe-old) > (ne-new)))
--! 		goto clear_rest_of_line;
--  	    }
--  	}
----- 1826,1836 ----
--  		_rl_last_c_pos += bytes_to_insert;
--  
--+ 	      /* XXX - we only want to do this if we are at the end of the line
--+ 		 so we move there with _rl_move_cursor_relative */
--  	      if (_rl_horizontal_scroll_mode && ((oe-old) > (ne-new)))
--! 		{
--! 		  _rl_move_cursor_relative (ne-new, new);
--! 		  goto clear_rest_of_line;
--! 		}
--  	    }
--  	}
--*** a/readline-6.3/patchlevel	2013-11-15 08:11:11.000000000 -0500
----- b/patchlevel	2014-03-21 08:28:40.000000000 -0400
+-*** 85,89 ****
+-        return charsetbuf;
+-      }
+-!   strcpy (charsetbuf, locale);
+-    return charsetbuf;
+-  }
+---- 86,91 ----
+-        return charsetbuf;
+-      }
+-!   strncpy (charsetbuf, locale, sizeof (charsetbuf) - 1);
+-!   charsetbuf[sizeof (charsetbuf) - 1] = '\0';
+-    return charsetbuf;
+-  }
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
 -***************
--*** 1,3 ****
--  # Do not edit -- exists only for use by patch
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
 -  
--! 5
----- 1,3 ----
--  # Do not edit -- exists only for use by patch
+-! #define PATCHLEVEL 34
 -  
--! 6
-diff --git a/package/readline/0007-patchlevel-7.patch b/package/readline/0007-patchlevel-7.patch
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 35
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0036-patchlevel-36.patch b/package/bash/0036-patchlevel-36.patch
 deleted file mode 100644
-index 4c6f59c..0000000
---- a/package/readline/0007-patchlevel-7.patch
+index f35b29b..0000000
+--- a/package/bash/0036-patchlevel-36.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-036
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-036
+-
+-Bug-Reported-by:	emanuelczirai at cryptolab.net
+-Bug-Reference-ID:	<f962e4f556da5ebfadaf7afe9c78a8cb@cryptolab.net>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2015-02/msg00071.html
+-
+-Bug-Description:
+-
+-When evaluating and setting integer variables, and the assignment fails to
+-create a variable (for example, when performing an operation on an array
+-variable with an invalid subscript), bash attempts to dereference a null
+-pointer, causing a segmentation violation.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/bash-20150206/variables.c	2015-01-23 20:39:27.000000000 -0500
+---- b/variables.c	2015-02-19 13:56:12.000000000 -0500
+-***************
+-*** 2834,2841 ****
+-      v = bind_variable (lhs, rhs, 0);
+-  
+-!   if (v && isint)
+-!     VSETATTR (v, att_integer);
+-! 
+-!   VUNSETATTR (v, att_invisible);
+-  
+-    return (v);
+---- 2834,2843 ----
+-      v = bind_variable (lhs, rhs, 0);
+-  
+-!   if (v)
+-!     {
+-!       if (isint)
+-! 	VSETATTR (v, att_integer);
+-!       VUNSETATTR (v, att_invisible);
+-!     }
+-  
+-    return (v);
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 35
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 36
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0037-patchlevel-37.patch b/package/bash/0037-patchlevel-37.patch
+deleted file mode 100644
+index 5f8aff3..0000000
+--- a/package/bash/0037-patchlevel-37.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-037
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-037
+-
+-Bug-Reported-by:	Greg Wooledge <wooledg@eeg.ccf.org>
+-Bug-Reference-ID:	<20150204144240.GN13956@eeg.ccf.org>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2015-02/msg00007.html
+-
+-Bug-Description:
+-
+-If an associative array uses `@' or `*' as a subscript, `declare -p' produces
+-output that cannot be reused as input.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/bash-4.3-patched/assoc.c	2011-11-05 16:39:05.000000000 -0400
+---- b/assoc.c	2015-02-04 15:28:25.000000000 -0500
+-***************
+-*** 437,440 ****
+---- 440,445 ----
+-  	if (sh_contains_shell_metas (tlist->key))
+-  	  istr = sh_double_quote (tlist->key);
+-+ 	else if (ALL_ELEMENT_SUB (tlist->key[0]) && tlist->key[1] == '\0')
+-+ 	  istr = sh_double_quote (tlist->key);	
+-  	else
+-  	  istr = tlist->key;	
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 36
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 37
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0038-patchlevel-38.patch b/package/bash/0038-patchlevel-38.patch
+deleted file mode 100644
+index 09fd9c2..0000000
+--- a/package/bash/0038-patchlevel-38.patch
++++ /dev/null
+@@ -1,92 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-038
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-038
+-
+-Bug-Reported-by:	worley at alum.mit.edu (Dale R. Worley)
+-Bug-Reference-ID:	<201406100051.s5A0pCeB014978@hobgoblin.ariadne.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-06/msg00028.html
+-
+-Bug-Description:
+-
+-There are a number of instances where `time' is not recognized as a reserved
+-word when the shell grammar says it should be.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/bash-4.3-patched/parse.y	2014-04-07 11:56:12.000000000 -0400
+---- b/parse.y	2014-06-11 10:25:53.000000000 -0400
+-***************
+-*** 2819,2827 ****
+-      case OR_OR:
+-      case '&':
+-      case DO:
+-      case THEN:
+-      case ELSE:
+-      case '{':		/* } */
+-!     case '(':		/* ) */
+-      case BANG:		/* ! time pipeline */
+-      case TIME:		/* time time pipeline */
+---- 2819,2832 ----
+-      case OR_OR:
+-      case '&':
+-+     case WHILE:
+-      case DO:
+-+     case UNTIL:
+-+     case IF:
+-      case THEN:
+-+     case ELIF:
+-      case ELSE:
+-      case '{':		/* } */
+-!     case '(':		/* )( */
+-!     case ')':		/* only valid in case statement */
+-      case BANG:		/* ! time pipeline */
+-      case TIME:		/* time time pipeline */
+-*** a/bash-4.3-patched/y.tab.c	2014-10-05 13:52:50.000000000 -0400
+---- b/y.tab.c	2015-05-19 15:08:43.000000000 -0400
+-***************
+-*** 5131,5139 ****
+-      case OR_OR:
+-      case '&':
+-      case DO:
+-      case THEN:
+-      case ELSE:
+-      case '{':		/* } */
+-!     case '(':		/* ) */
+-      case BANG:		/* ! time pipeline */
+-      case TIME:		/* time time pipeline */
+---- 5131,5144 ----
+-      case OR_OR:
+-      case '&':
+-+     case WHILE:
+-      case DO:
+-+     case UNTIL:
+-+     case IF:
+-      case THEN:
+-+     case ELIF:
+-      case ELSE:
+-      case '{':		/* } */
+-!     case '(':		/* )( */
+-!     case ')':		/* only valid in case statement */
+-      case BANG:		/* ! time pipeline */
+-      case TIME:		/* time time pipeline */
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 37
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 38
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0039-patchlevel-39.patch b/package/bash/0039-patchlevel-39.patch
+deleted file mode 100644
+index 2a555b9..0000000
+--- a/package/bash/0039-patchlevel-39.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-039
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-039
+-
+-Bug-Reported-by:	SN <poczta-sn@gazeta.pl>
+-Bug-Reference-ID:	<54E2554C.205@gazeta.pl>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2015-02/msg00060.html
+-
+-Bug-Description:
+-
+-Using the output of `declare -p' when run in a function can result in variables
+-that are invisible to `declare -p'.  This problem occurs when an assignment
+-builtin such as `declare' receives a quoted compound array assignment as one of
+-its arguments.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/bash-4.3-patched/arrayfunc.c	2014-10-01 13:08:48.000000000 -0400
+---- b/arrayfunc.c	2015-02-19 14:33:05.000000000 -0500
+-***************
+-*** 405,408 ****
+---- 405,411 ----
+-      else
+-        array_insert (a, i, l->word->word);
+-+ 
+-+   VUNSETATTR (var, att_invisible);	/* no longer invisible */
+-+ 
+-    return var;
+-  }
+-***************
+-*** 635,638 ****
+---- 638,645 ----
+-    if (nlist)
+-      dispose_words (nlist);
+-+ 
+-+   if (var)
+-+     VUNSETATTR (var, att_invisible);	/* no longer invisible */
+-+ 
+-    return (var);
+-  }
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 38
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 39
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0040-patchlevel-40.patch b/package/bash/0040-patchlevel-40.patch
+deleted file mode 100644
+index 2a03c45..0000000
+--- a/package/bash/0040-patchlevel-40.patch
 +++ /dev/null
 @@ -1,51 +0,0 @@
--From http://ftp.gnu.org/pub/gnu/readline/readline-6.3-patches/readline63-007
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-040
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacrias.com.ar>
 -
--			   READLINE PATCH REPORT
--			   =====================
+-			     BASH PATCH REPORT
+-			     =================
 -
--Readline-Release: 6.3
--Patch-ID: readline63-007
+-Bash-Release:	4.3
+-Patch-ID:	bash43-040
 -
--Bug-Reported-by:	John Lenton
--Bug-Reference-ID:
--Bug-Reference-URL:	https://bugs.launchpad.net/ubuntu/+source/bash/+bug/1317476
+-Bug-Reported-by:	Jean Delvare <jdelvare@suse.de>
+-Bug-Reference-ID:	<20150609180231.5f463695@endymion.delvare>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2015-06/msg00033.html
 -
 -Bug-Description:
 -
--Readline should allow SIGALRM and SIGVTALRM (if available) to `interrupt'
--rl_getc and cause the handler to run when not in a signal handling context.
+-There is a memory leak that occurs when bash expands an array reference on
+-the rhs of an assignment statement.
 -
 -Patch (apply with `patch -p0'):
 -
--*** a/readline-6.3-patched/input.c	2014-01-10 15:07:08.000000000 -0500
----- b/input.c	2014-05-30 16:20:56.000000000 -0400
+-*** a/bash-4.3-patched/subst.c	2014-10-01 12:57:47.000000000 -0400
+---- b/subst.c	2015-06-22 09:16:53.000000000 -0400
 -***************
--*** 535,540 ****
----- 538,551 ----
--        else if (_rl_caught_signal == SIGHUP || _rl_caught_signal == SIGTERM)
--  	return (RL_ISSTATE (RL_STATE_READCMD) ? READERR : EOF);
--+       /* keyboard-generated signals of interest */
--        else if (_rl_caught_signal == SIGINT || _rl_caught_signal == SIGQUIT)
--          RL_CHECK_SIGNALS ();
--+       /* non-keyboard-generated signals of interest */
--+       else if (_rl_caught_signal == SIGALRM
--+ #if defined (SIGVTALRM)
--+ 		|| _rl_caught_signal == SIGVTALRM
+-*** 5783,5787 ****
+-        if (pflags & PF_ASSIGNRHS)
+-          {
+-!           temp = array_variable_name (name, &tt, (int *)0);
+-            if (ALL_ELEMENT_SUB (tt[0]) && tt[1] == ']')
+-  	    temp = array_value (name, quoted|Q_DOUBLE_QUOTES, 0, &atype, &ind);
+---- 5783,5787 ----
+-        if (pflags & PF_ASSIGNRHS)
+-          {
+-!           var = array_variable_part (name, &tt, (int *)0);
+-            if (ALL_ELEMENT_SUB (tt[0]) && tt[1] == ']')
+-  	    temp = array_value (name, quoted|Q_DOUBLE_QUOTES, 0, &atype, &ind);
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 39
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 40
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0041-patchlevel-41.patch b/package/bash/0041-patchlevel-41.patch
+deleted file mode 100644
+index c8ba4b1..0000000
+--- a/package/bash/0041-patchlevel-41.patch
++++ /dev/null
+@@ -1,76 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-041
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-041
+-
+-Bug-Reported-by:	Hanno B??ck <hanno@hboeck.de>
+-Bug-Reference-ID:	<20150623131106.6f111da9@pc1>, <20150707004640.0e61d2f9@pc1>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2015-06/msg00089.html,
+-			http://lists.gnu.org/archive/html/bug-bash/2015-07/msg00018.html
+-
+-Bug-Description:
+-
+-There are several out-of-bounds read errors that occur when completing command
+-lines where assignment statements appear before the command name.  The first
+-two appear only when programmable completion is enabled; the last one only
+-happens when listing possible completions.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/bash-4.3.40/bashline.c	2014-12-29 14:39:43.000000000 -0500
+---- b/bashline.c	2015-08-12 10:21:58.000000000 -0400
+-***************
+-*** 1469,1476 ****
+---- 1469,1489 ----
+-        os = start;
+-        n = 0;
+-+       was_assignment = 0;
+-        s = find_cmd_start (os);
+-        e = find_cmd_end (end);
+-        do
+-  	{
+-+ 	  /* Don't read past the end of rl_line_buffer */
+-+ 	  if (s > rl_end)
+-+ 	    {
+-+ 	      s1 = s = e1;
+-+ 	      break;
+-+ 	    }
+-+ 	  /* Or past point if point is within an assignment statement */
+-+ 	  else if (was_assignment && s > rl_point)
+-+ 	    {
+-+ 	      s1 = s = e1;
+-+ 	      break;
+-+ 	    }
+-  	  /* Skip over assignment statements preceding a command name.  If we
+-  	     don't find a command name at all, we can perform command name
+-*** a/bash-4.3.40/lib/readline/complete.c	2013-10-14 09:27:10.000000000 -0400
+---- b/lib/readline/complete.c	2015-07-31 09:34:39.000000000 -0400
+-***************
+-*** 690,693 ****
+---- 690,695 ----
+-    if (temp == 0 || *temp == '\0')
+-      return (pathname);
+-+   else if (temp[1] == 0 && temp == pathname)
+-+     return (pathname);
+-    /* If the basename is NULL, we might have a pathname like '/usr/src/'.
+-       Look for a previous slash and, if one is found, return the portion
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 40
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 41
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0042-patchlevel-42.patch b/package/bash/0042-patchlevel-42.patch
+deleted file mode 100644
+index bb3471c..0000000
+--- a/package/bash/0042-patchlevel-42.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-042
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-042
+-
+-Bug-Reported-by:	Nathan Neulinger <nneul@neulinger.org>
+-Bug-Reference-ID:	<558EFDF2.7060402@neulinger.org>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2015-06/msg00096.html
+-
+-Bug-Description:
+-
+-There is a problem when parsing command substitutions containing `case'
+-commands within pipelines that causes the parser to not correctly identify
+-the end of the command substitution.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/bash-4.3-patched/parse.y	2015-05-18 19:27:05.000000000 -0400
+---- b/parse.y	2015-06-29 10:59:27.000000000 -0400
+-***************
+-*** 3709,3712 ****
+---- 3709,3714 ----
+-  	      tflags |= LEX_INWORD;
+-  	      lex_wlen = 0;
+-+ 	      if (tflags & LEX_RESWDOK)
+-+ 		lex_rwlen = 0;
+-  	    }
+-  	}
+-*** a/bash-4.3-patched/y.tab.c	2015-05-18 19:27:05.000000000 -0400
+---- b/y.tab.c	2015-06-29 10:59:27.000000000 -0400
+-***************
+-*** 6021,6024 ****
+---- 6021,6026 ----
+-  	      tflags |= LEX_INWORD;
+-  	      lex_wlen = 0;
+-+ 	      if (tflags & LEX_RESWDOK)
+-+ 		lex_rwlen = 0;
+-  	    }
+-  	}
+-*** a/bash-4.3/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 41
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 42
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0043-patchlevel-43.patch b/package/bash/0043-patchlevel-43.patch
+deleted file mode 100644
+index a30a981..0000000
+--- a/package/bash/0043-patchlevel-43.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-043
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-043
+-
+-Bug-Reported-by:	lolilolicon <lolilolicon@gmail.com>
+-Bug-Reference-ID:	<CAMtVo_MF16KWanCB4C8WxA88Qt26zWsvV6V7+_U2fM0E6tCDxw@mail.gmail.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-08/msg00040.html
+-
+-Bug-Description:
+-
+-When the lastpipe option is enabled, the last component can contain nested
+-pipelines and cause a segmentation fault under certain circumestances.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/execute_cmd.c	2014-07-30 10:26:52.000000000 -0400
+---- b/execute_cmd.c	2014-08-15 08:55:24.000000000 -0400
+-***************
+-*** 2406,2412 ****
+-      {
+-  #if defined (JOB_CONTROL)
+-!       append_process (savestring (the_printed_command), dollar_dollar_pid, exec_result, lastpipe_jid);
+-! #endif
+-        lstdin = wait_for (lastpid);
+-  #if defined (JOB_CONTROL)
+-        /* If wait_for removes the job from the jobs table, use result of last
+---- 2433,2447 ----
+-      {
+-  #if defined (JOB_CONTROL)
+-!       if (INVALID_JOB (lastpipe_jid) == 0)
+-!         {
+-!           append_process (savestring (the_printed_command_except_trap), dollar_dollar_pid, exec_result, lastpipe_jid);
+-!           lstdin = wait_for (lastpid);
+-!         }
+-!       else
+-!         lstdin = wait_for_single_pid (lastpid);		/* checks bgpids list */
+-! #else
+-        lstdin = wait_for (lastpid);
 -+ #endif
--+ 	      )
--+         RL_CHECK_SIGNALS ();
--  
--        if (rl_signal_event_hook)
--*** a/readline-6.3/patchlevel	2013-11-15 08:11:11.000000000 -0500
----- b/patchlevel	2014-03-21 08:28:40.000000000 -0400
+-+ 
+-  #if defined (JOB_CONTROL)
+-        /* If wait_for removes the job from the jobs table, use result of last
+-*** a/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
 -***************
--*** 1,3 ****
--  # Do not edit -- exists only for use by patch
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
 -  
--! 6
----- 1,3 ----
--  # Do not edit -- exists only for use by patch
+-! #define PATCHLEVEL 42
 -  
--! 7
-diff --git a/package/readline/0008-patchlevel-8.patch b/package/readline/0008-patchlevel-8.patch
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 43
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0044-patchlevel-44.patch b/package/bash/0044-patchlevel-44.patch
 deleted file mode 100644
-index 412ba35..0000000
---- a/package/readline/0008-patchlevel-8.patch
+index 62d5412..0000000
+--- a/package/bash/0044-patchlevel-44.patch
 +++ /dev/null
-@@ -1,51 +0,0 @@
--From http://ftp.gnu.org/pub/gnu/readline/readline-6.3-patches/readline63-008
+@@ -1,52 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-044
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
--			   READLINE PATCH REPORT
--			   =====================
+-			     BASH PATCH REPORT
+-			     =================
 -
--Readline-Release: 6.3
--Patch-ID: readline63-008
+-Bash-Release:	4.3
+-Patch-ID:	bash43-044
 -
--Bug-Reported-by:	Jared Yanovich <slovichon@gmail.com>
--Bug-Reference-ID:	<20140625225019.GJ17044@nightderanger.psc.edu>
--Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-06/msg00070.html
+-Bug-Reported-by:	Ondrej Oprala <ooprala@redhat.com>
+-Bug-Reference-ID:	<539ED55B.2080103@redhat.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2014-06/msg00046.html
 -
 -Bug-Description:
 -
--When the readline `revert-all-at-newline' option is set, pressing newline
--when the current line is one retrieved from history results in a double free
--and a segmentation fault.
+-A typo prevents the `compat42' shopt option from working as intended.
 -
 -Patch (apply with `patch -p0'):
 -
--*** a/readline-6.3-patched/misc.c	2012-09-01 18:03:11.000000000 -0400
----- b/misc.c	2014-06-30 13:41:19.000000000 -0400
+-diff -rC 2 bash-4.3.42/builtins/shopt.def bash-4.3.43/builtins/shopt.def
+-*** a/builtins/shopt.def	2013-02-27 09:43:20.000000000 -0500
+---- b/builtins/shopt.def	2015-10-16 11:25:28.000000000 -0400
 -***************
--*** 462,465 ****
----- 462,466 ----
--  	  /* Set up rl_line_buffer and other variables from history entry */
--  	  rl_replace_from_history (entry, 0);	/* entry->line is now current */
--+ 	  entry->data = 0;			/* entry->data is now current undo list */
--  	  /* Undo all changes to this history entry */
--  	  while (rl_undo_list)
+-*** 161,165 ****
+-    { "compat40", &shopt_compat40, set_compatibility_level },
+-    { "compat41", &shopt_compat41, set_compatibility_level },
+-!   { "compat42", &shopt_compat41, set_compatibility_level },
+-  #if defined (READLINE)
+-    { "complete_fullquote", &complete_fullquote, (shopt_set_func_t *)NULL},
+---- 161,165 ----
+-    { "compat40", &shopt_compat40, set_compatibility_level },
+-    { "compat41", &shopt_compat41, set_compatibility_level },
+-!   { "compat42", &shopt_compat42, set_compatibility_level },
+-  #if defined (READLINE)
+-    { "complete_fullquote", &complete_fullquote, (shopt_set_func_t *)NULL},
+-
+-*** a/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
 -***************
--*** 469,473 ****
--  	  FREE (entry->line);
--  	  entry->line = savestring (rl_line_buffer);
--- 	  entry->data = 0;
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 43
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 44
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0045-patchlevel-45.patch b/package/bash/0045-patchlevel-45.patch
+deleted file mode 100644
+index bb11b1a..0000000
+--- a/package/bash/0045-patchlevel-45.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-045
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-045
+-
+-Bug-Reported-by:	Basin Ilya <basinilya@gmail.com>
+-Bug-Reference-ID:	<5624C0AC.8070802@gmail.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2015-10/msg00141.html
+-
+-Bug-Description:
+-
+-If a file open attempted as part of a redirection fails because it is interrupted
+-by a signal, the shell needs to process any pending traps to allow the redirection
+-to be canceled.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/redir.c	2014-12-03 10:47:38.000000000 -0500
+---- b/redir.c	2015-01-16 10:15:47.000000000 -0500
+-***************
+-*** 672,676 ****
+-  	  e = errno;
+-  	  if (fd < 0 && e == EINTR)
+-! 	    QUIT;
+-  	  errno = e;
 -  	}
--        entry = previous_history ();
----- 470,473 ----
--*** a/readline-6.3/patchlevel	2013-11-15 08:11:11.000000000 -0500
----- b/patchlevel	2014-03-21 08:28:40.000000000 -0400
+---- 672,679 ----
+-  	  e = errno;
+-  	  if (fd < 0 && e == EINTR)
+-! 	    {
+-! 	      QUIT;
+-! 	      run_pending_traps ();
+-! 	    }
+-  	  errno = e;
+-  	}
+-
+-*** a/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
 -***************
--*** 1,3 ****
--  # Do not edit -- exists only for use by patch
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
 -  
--! 7
----- 1,3 ----
--  # Do not edit -- exists only for use by patch
+-! #define PATCHLEVEL 44
 -  
--! 8
-diff --git a/package/readline/readline.hash b/package/readline/readline.hash
-index d8833e9..43f8c64 100644
---- a/package/readline/readline.hash
-+++ b/package/readline/readline.hash
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 45
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0046-patchlevel-46.patch b/package/bash/0046-patchlevel-46.patch
+deleted file mode 100644
+index bc3798a..0000000
+--- a/package/bash/0046-patchlevel-46.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From http://ftp.gnu.org/pub/gnu/bash/bash-4.3-patches/bash43-046
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-			     BASH PATCH REPORT
+-			     =================
+-
+-Bash-Release:	4.3
+-Patch-ID:	bash43-046
+-
+-Bug-Reported-by:	Sergey Tselikh <stselikh@gmail.com>
+-Bug-Reference-ID:	<20150816110235.91f3e12e3f20d20cdaad963e@gmail.com>
+-Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2015-08/msg00080.html
+-
+-Bug-Description:
+-
+-An incorrect conversion from an indexed to associative array can result in a
+-core dump.
+-
+-Patch (apply with `patch -p0'):
+-
+-*** a/subst.c	2015-08-13 11:32:54.000000000 -0400
+---- b/subst.c	2015-08-18 10:13:59.000000000 -0400
+-***************
+-*** 9562,9566 ****
+-  	  opts[opti] = '\0';
+-  	  if (opti > 0)
+-! 	    make_internal_declare (tlist->word->word, opts);
+-  
+-  	  t = do_word_assignment (tlist->word, 0);
+---- 9562,9573 ----
+-  	  opts[opti] = '\0';
+-  	  if (opti > 0)
+-! 	    {
+-! 	      t = make_internal_declare (tlist->word->word, opts);
+-! 	      if (t != EXECUTION_SUCCESS)
+-! 		{
+-! 		  last_command_exit_value = t;
+-! 		  exp_jump_to_top_level (DISCARD);
+-! 		}
+-! 	    }
+-  
+-  	  t = do_word_assignment (tlist->word, 0);
+-
+-*** a/patchlevel.h	2012-12-29 10:47:57.000000000 -0500
+---- b/patchlevel.h	2014-03-20 20:01:28.000000000 -0400
+-***************
+-*** 26,30 ****
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 45
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+---- 26,30 ----
+-     looks for to find the patch level (for the sccs version string). */
+-  
+-! #define PATCHLEVEL 46
+-  
+-  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/bash.hash b/package/bash/bash.hash
+index faf2364..adbd608 100644
+--- a/package/bash/bash.hash
++++ b/package/bash/bash.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	56ba6071b9462f980c5a72ab0023893b65ba6debb4eeb475d7a563dc65cafd43	readline-6.3.tar.gz
-+sha256 750d437185286f40a369e1e4f4764eda932b9459b5ec9a731628393dd3d32334  readline-7.0.tar.gz
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index 7631970..ed4e144 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
+-sha256	317881019bbf2262fb814b7dd8e40632d13c3608d2f237800a8828fbb8a640dd	bash-4.3.30.tar.gz
++sha256 d86b3392c1202e8ff5a423b302e6284db7f8f435ea9f39b5b1b20fd3ac36dfcb  bash-4.4.tar.gz
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 3cd8d82..090cf52 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--READLINE_VERSION = 6.3
-+READLINE_VERSION = 7.0
- READLINE_SITE = $(BR2_GNU_MIRROR)/readline
- READLINE_INSTALL_STAGING = YES
- READLINE_DEPENDENCIES = ncurses
+-BASH_VERSION = 4.3.30
++BASH_VERSION = 4.4
+ BASH_SITE = $(BR2_GNU_MIRROR)/bash
+ # Build after since bash is better than busybox shells
+ BASH_DEPENDENCIES = ncurses readline host-bison \
