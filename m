@@ -1,288 +1,155 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Nov 2016 23:36:48 +0100
-Subject: [Buildroot] Buildroot 2016.11 released
-Message-ID: <87lgw0a933.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Nov 2016 23:40:02 +0100
+Subject: [Buildroot] [PATCH v3 2/2] pru-software-support: add library
+ for PRU firmware
+In-Reply-To: <1480346294-22771-2-git-send-email-ash.charles@savoirfairelinux.com>
+References: <1480346294-22771-1-git-send-email-ash.charles@savoirfairelinux.com>
+ <1480346294-22771-2-git-send-email-ash.charles@savoirfairelinux.com>
+Message-ID: <20161130234002.0aa1f6dc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Buildroot 2016.11 is released - Go download it at:
+On Mon, 28 Nov 2016 10:18:14 -0500, Ash Charles wrote:
+> TI provides a set of headers files and libraries useful in developing
+> firmware for real-time (PRU) cores embedded in some processors e.g.
+> AM3358.  This package stages these files for any packages creating
+> PRU firmware.
+> 
+> Note: As per [1], use commit v4.0.2 to sync with common TI Linux
+>       versions.
+> 
+> [1] http://e2e.ti.com/support/arm/sitara_arm/f/791/p/552190/2018113#2018113
+> 
+> Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
 
-http://buildroot.net/downloads/buildroot-2016.11.tar.gz
+Thanks again for this new iteration. I think we're really close to
+having something that we can merge.
 
-or
+> diff --git a/package/pru-software-support/Config.in b/package/pru-software-support/Config.in
+> new file mode 100644
+> index 0000000..94981db
+> --- /dev/null
+> +++ b/package/pru-software-support/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PRU_EXAMPLES
+> +     bool "PRU sample firmware"
 
-http://buildroot.net/downloads/buildroot-2016.11.tar.bz2
+Indentation is wrong throughout this file: it should use one tab for
+indentation.
 
-Or get it from Git:
+The prompt should be just:
 
-git://git.buildroot.net/buildroot
+	pru-software-support
 
-Please give it a spin and report any problems to the mailing list or
-bug tracker.
+just like the package name.
 
-This was another fairly big development cycle with more than 1400 changes
-all over the tree and more than 100 unique contributors! I'm very happy
-to see so many "new" people next to the "oldtimers".
+> +     depends on BR2_PACKAGE_HOST_PRU_SOFTWARE_SUPPORT
 
-Of noteworthy new features/changes we have:
+This should be a select.
 
- - It is now possible to specify multiple BR2_EXTERNAL directories. The
-   required files in a BR2_EXTERNAL directory have changed to accomodate
-   this feature. Refer to the documentation for details of how to update
-   them. External trees now have a name and a description. Also, it is
-   possible to override a defconfig in the external tree.
+> +     help
+> +       PRU firmware examples extracted for TI's PRU software support
 
- - The default skeleton now uses UID 65534 for the "nobody" user instead
-   of UID 99, like most distros do. See https://lwn.net/Articles/695478/
-   for a complete discussion. Programs and configuration files that
-   explicitly refer to UID 99 will have to be updated.
+for -> from
 
- - When the build environment already has a suitable cmake version (3.1
-   or later), that one will be used instead of building host-cmake. This
-   can speed up the build significantly.
+> +       package. See readme.txt for installation details.
+> diff --git a/package/pru-software-support/Config.in.host b/package/pru-software-support/Config.in.host
+> new file mode 100644
+> index 0000000..aeb9efe
+> --- /dev/null
+> +++ b/package/pru-software-support/Config.in.host
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_HOST_PRU_SOFTWARE_SUPPORT
+> +	bool "host PRU software support"
 
+	bool "host pru-software-support"
 
- - The ExtUtils::MakeMaker perl module is now required in the build
-   environment.
+> +	depends on BR2_PACKAGE_HOST_TI_CGT_PRU
 
- - An additional check is done during the build that files are not
-   installed in the output directory within the output directory. This
-   happens e.g. when the target directory is contained both in --prefix
-   and in DESTDIR. The build will terminate with an error message that
-   specifies which package and which file caused the failure.
+This should be a select
 
- - The concept of "deprecated packages" and the BR2_DEPRECATEDoption
-   have been removed. Instead, packages are removed immediately.
-   Packages are only removed when they don't work for some reason. If
-   you still need a removed package and you have a solution for the
-   problem(s) that caused the removal, please contribute it.
+> +	help
+> +	  This package provides useful headers and libraries for the
+> +	  PRU unit found on some TI processors e.g. AM3358.  This
+> +	  package provides staging only; the included labs and
+> +	  examples aren't built.
 
+I think "provides staging only" is a bit misleading, especially when
+this package doesn't install anything in staging in fact.
 
- - Architecture: support for sh64 removed, improved support for MIPS
-   core selection.
+Also: "the included labs and examples aren't built, they can be built
+using the corresponding target package."
 
- - Toolchain: support for musl powerpc64le, mips64 and mipsr6
-   toolchains, ARC toolchain components updates, gcc 6.x series bumped
-   to 6.2.0, default binutils version switched to 2.26, default gcc
-   version switched to gcc 5.x, Linaro toolchains updated, uclibc-ng
-   bumped to 1.0.19. GCC is now always built with TLS support. Checking
-   of unsafe compiler options (that point to host directories) has been
-   extended with -isystem, -idirafter and -iquote.
+> +	  https://git.ti.com/pru-software-support-package/pru-software-support-package
+> diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
+> new file mode 100644
+> index 0000000..bc90086
+> --- /dev/null
+> +++ b/package/pru-software-support/pru-software-support.hash
+> @@ -0,0 +1,2 @@
+> +# Locally-calculated hash for git checkout
 
- - Package infrastructure: new variable $(PKG)_DL_OPTS, addition of
-   <pkg>-show-rdepends to list reverse dependencies, and
-   <pkg>-graph-rdepends to graph reverse dependencies. Linux tools are
-   now in a separate linux-tools package instead of in the kernel build.
+Just "Locally calculated hash".
 
- - CMake support: the toolchainfile.cmake file now provides a definition
-   of the CMAKE_BUILD_TYPE variable. The toolchainfile.cmake also no
-   longer forces the compiler/linker flags defined by Buildroot.
+> +sha256	b257535ca9b1641d1a238795f3c7004064c573a91cf4a1fa566e3f7c2360c38f	pru-software-support-804b548e69ef9fdf44445f6d0968d81cb8a1e7b4.tar.gz
+> diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+> new file mode 100644
+> index 0000000..7705fe0
+> --- /dev/null
+> +++ b/package/pru-software-support/pru-software-support.mk
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# pru-software-support
+> +#
+> +################################################################################
+> +
+> +PRU_SOFTWARE_SUPPORT_VERSION = 804b548e69ef9fdf44445f6d0968d81cb8a1e7b4
+> +PRU_SOFTWARE_SUPPORT_SITE = git://git.ti.com/pru-software-support-package/pru-software-support-package.git
+> +PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3c
+> +PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU_Package-v5.0-Manifest.html
+> +PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
 
- - New defconfigs: WaRP7, Solidrun's MX6 Cubox/Hummingboard, TS-4900,
-   Grinn's liteBoard, Udoo MX6Q/DL, Qemu ARM noMMU, BeagleBone Qt5 demo,
-   Digilent Zybo, FriendlyARM Nanopi NEO.
+Doesn't the target of pru-software-support depends on the host variant
+being built/installed?
 
- - A fair amount (38) of new packages, mainly related to
-   firmware/hardware, multimedia, networking and python.
+> +
+> +define HOST_PRU_SOFTWARE_SUPPORT_BUILD_CMDS
+> +	$(MAKE) PRU_CGT=$(TI_CGT_PRU_INSTALLDIR) -C $(@D)/lib/src
+> +endef
+> +
+> +# install this library support alongside PRU toolchain i.e.
+> +# everything in TI_CGT_PRU_INSTALLDIR as PRU_CGT
+> +define HOST_PRU_SOFTWARE_SUPPORT_INSTALL_CMDS
+> +	mkdir -p $(TI_CGT_PRU_INSTALLDIR)/usr/include
+> +	cp -dpfr $(@D)/include/* $(TI_CGT_PRU_INSTALLDIR)/usr/include
+> +	mkdir -p $(TI_CGT_PRU_INSTALLDIR)/usr/lib
+> +	cp -dpfr $(@D)/lib/src/*/gen/*.lib $(TI_CGT_PRU_INSTALLDIR)/usr/lib/
+> +endef
+> +
+> +define PRU_SOFTWARE_SUPPORT_BUILD_CMDS
+> +	$(MAKE) PRU_CGT=$(TI_CGT_PRU_INSTALLDIR) -C $(@D)/examples
+> +endef
+> +
+> +define PRU_SOFTWARE_SUPPORT_INSTALL_TARGET_CMDS
+> +	mkdir -p $(TARGET_DIR)/usr/share/pru-software-support
+> +	cp -dpfr $(@D)/examples/* $(TARGET_DIR)/usr/share/pru-software-support/
+> +endef
+> +
+> +$(eval $(generic-package))
+> +$(eval $(host-generic-package))
 
-And the usual package version updates and bug fixes. See the CHANGES
-file for details:
+Otherwise, looks good.
 
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.11
+Thanks!
 
-
-Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2016.08..
-
-   330	Gustavo Zacarias
-   137	Bernd Kuhls
-   104	Thomas Petazzoni
-    89	Yann E. MORIN
-    82	Vicente Olivert Riera
-    45	Fabio Estevam
-    43	Romain Naour
-    41	Peter Korsgaard
-    39	Arnout Vandecappelle
-    35	Baruch Siach
-    30	Rahul Bedarkar
-    30	Waldemar Brodkorb
-    27	J?rg Krause
-    25	Peter Seiderer
-    22	Samuel Martin
-    20	Gary Bisson
-    19	Fabrice Fontaine
-    15	Yegor Yefremov
-    12	Erico Nunes
-    12	Jerzy Grzegorek
-    10	Ludovic Desroches
-    10	Philippe Proulx
-     9	Christian Stewart
-     9	Frank Hunleth
-     9	Zakharov Vlad
-     8	Chris Packham
-     8	Francois Perrad
-     8	J?r?me Pouiller
-     7	Romain Perier
-     6	Andr? Hentschel
-     6	Carlos Santos
-     6	Danomi Manchego
-     6	Matt Kraai
-     6	Petr Vorel
-     6	Thomas De Schampheleire
-     5	Cyril Bur
-     5	David Lechner
-     5	Georges Savoundararadj
-     5	Julien BOIBESSOT
-     5	Luca Ceresoli
-     5	Max Filippov
-     5	Ryan Coe
-     4	Alexey Brodkin
-     4	Angelo Compagnucci
-     4	Biagio Montaruli
-     4	Floris Bos
-     4	Joao Pinto
-     4	Manuel V?gele
-     4	Sam bobroff
-     3	Christophe Vu-Brugier
-     3	Eric Le Bihan
-     3	Ga?l PORTAY
-     3	Jordan Yelloz
-     3	Lothar Felten
-     3	Marcin Niestroj
-     3	Maxime Hadjinlian
-     3	Stefan Nickl
-     3	Theo Debrouwere
-     2	Alistair Francis
-     2	Chris Frederick
-     2	Dagg Stompler
-     2	Ezequiel Garcia
-     2	James Knight
-     2	Jeroen Roovers
-     2	Joel Stanley
-     2	Judd Meinders
-     2	Julien Floret
-     2	Marcin Nowakowski
-     2	Martin Bark
-     2	Masahiro Yamada
-     2	Mathieu Audat
-     2	Padraig James Connolly
-     2	Pranit Sirsat
-     2	Rahul Jain
-     2	Ricardo Martincoski
-     2	Rodrigo Rebello
-     2	Vincent Stehl?
-     1	Charles Hardin
-     1	Eloi BAIL
-     1	Gwenhael Goavec-Merou
-     1	Hollis Blanchard
-     1	Jan Heylen
-     1	Jan Viktorin
-     1	Jerry Evans
-     1	Johan Derycke
-     1	Lucile Quirion
-     1	Nicolas Cavallari
-     1	Olivier Matz
-     1	Petr Kulhavy
-     1	Petri Gynther
-     1	Pieterjan Camerlynck
-     1	Piotr Nakraszewicz
-     1	Rapha?l Poggi
-     1	Sebastien Van Cauwenberghe
-     1	Tatsuyuki Ishi
-     1	Thomas Claveirole
-     1	Vivien Didelot
-     1	Volkov Viacheslav
-     1	Zoltan Gyarmati
-     1	daggs
-     1	tiago.brusamarello
-
-And a special thanks to our patch reviewers:
-
-git log 2016.08.. | grep -Ei '(reviewed|acked)-by:' | \
-    sed 's/.*by: //' | sort | uniq -c | sort -n -r
-
-    183 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-     29 "Yann E. MORIN" <yann.morin.1998@free.fr>
-     11 Romain Naour <romain.naour@gmail.com>
-      6 Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-      4 Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-      3 Yegor Yefremov <yegorslists@googlemail.com>
-      3 Samuel Martin <s.martin49@gmail.com>
-      3 Luca Ceresoli <luca@lucaceresoli.net>
-      3 Fabio Estevam <festevam@gmail.com>
-      2 Peter Seiderer <ps.report@gmx.net>
-      2 Angelo Compagnucci <angelo.compagnucci@gmail.com>
-      2 Alistair Francis <alistair.francis@xilinx.com>
-      1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-      1 Frank Hunleth <fhunleth@troodon-software.com>
-      1 Francois Perrad <francois.perrad@gadz.org>
-
-Once again our autobuilders have helped us fix a huge amount of build
-issues. Thanks to all the people reviewing failures and fixing issues:
-
-for i in $(git log --format=%H 2016.08..); do \
-    git show --quiet $i | grep -q http://autobuild && \
-    git show --quiet --format="%an" $i ; done | sort | uniq -c | \
-        sort -rn -k1
-
-     31 Thomas Petazzoni
-     19 Bernd Kuhls
-     18 Romain Naour
-     10 Rahul Bedarkar
-      9 Baruch Siach
-      9 Arnout Vandecappelle
-      7 Yann E. MORIN
-      7 Waldemar Brodkorb
-      7 Peter Seiderer
-      7 J?rg Krause
-      7 Gustavo Zacarias
-      6 Samuel Martin
-      5 Peter Korsgaard
-      5 Fabrice Fontaine
-      4 Zakharov Vlad
-      4 Sam bobroff
-      4 Chris Packham
-      3 Max Filippov
-      2 Yegor Yefremov
-      2 Vicente Olivert Riera
-      2 Frank Hunleth
-      2 Erico Nunes
-      2 Carlos Santos
-      2 Andr? Hentschel
-      2 Alexey Brodkin
-      1 Volkov Viacheslav
-      1 J?r?me Pouiller
-      1 Gary Bisson
-      1 Ezequiel Garcia
-      1 Eric Le Bihan
-      1 Danomi Manchego
-
-The next release will be 2017.02. Expect the first release candidate
-shortly after the developers meeting, and the final release at the end
-of February.
-
-The next developers meeting will take place just after FOSDEM in
-Brussels, Belgium:
-
-http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017
-
-Many thanks to Google for sponsoring the meeting location! We are still
-looking for a sponsor for the dinner Monday evening. Contact us if you
-are interested.
-
-During the 2016.11 cycle we had a very nice developers meeting in
-Berlin, Germany. Many thanks to Mind/Essenssium and Free Electrons for
-sponsoring the event and for all the participants for joining!
-
-A report of the event is available here:
-
-http://lists.busybox.net/pipermail/buildroot/2016-October/175088.html
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
