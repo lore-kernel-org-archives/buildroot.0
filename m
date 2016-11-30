@@ -1,43 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Nov 2016 13:53:24 +0100
-Subject: [Buildroot] [git commit branch/next] gstreamer1/gst-omx: bump
-	version to 1.10.2
-Message-ID: <20161130125525.52CF081E42@busybox.osuosl.org>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 30 Nov 2016 08:50:19 -0500
+Subject: [Buildroot] [PATCH v2 1/1] sane-backends: disable static
+	configuration
+Message-ID: <1480513819-10094-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae36ee017402e4eeba381366524dae26baa65bc3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+While sane-backends can be compiled statically, it requires
+selection of a subset of scanner backends. Without this, all backends
+are compiled and link errors such as the following are generated:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+../backend/.libs/libsane.a(libepsonds_la-epsonds.o):(.bss+0xc): multiple definition of `source_list'
+../backend/.libs/libsane.a(libepson2_la-epson2.o):(.data+0x40): first defined here
+../backend/.libs/libsane.a(libepsonds_la-epsonds.o):(.data+0x10): multiple definition of `mode_params'
+../backend/.libs/libsane.a(libepson2_la-epson2.o):(.data+0x0): first defined here
+collect2: error: ld returned 1 exit status
+
+Buildroot currently doesn't allow fine grained selection of backends, so
+this disables static builds.
+
+Fixes:
+
+http://autobuild.buildroot.net/results/89c/89c6e4ec1596def74e72eb071ef4bf0f1a7cc9f8/
+http://autobuild.buildroot.net/results/92a/92a54c99a9ba918ece4c56d7beb985729bee700b/
+http://autobuild.buildroot.net/results/1b9/1b9eac5303dfed638063f3b18dfff5571a2c4231/
+http://autobuild.buildroot.net/results/366/366979d0bd21dc2bf7f0336b9653ef3fd4e11123/
+
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
- package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+  - Fixed missing "depends BR2_USE_MMU" for comment. Thanks to Baruch
+    Siach for catching it.
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index bf10f0a..d52b61f 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
-@@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.1.tar.xz.sha256sum
--sha256 1b07b9ceb4552c0911af1e3b97987e3314c601eacfbc09f1cca8632e98581231  gst-omx-1.10.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.2.tar.xz.sha256sum
-+sha256 c069a9cf775c92f889ca8f3b2fc718e428cd0579b7b805851a960c850a7aa497  gst-omx-1.10.2.tar.xz
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index c934317..fcc7058 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST_OMX_VERSION = 1.10.1
-+GST_OMX_VERSION = 1.10.2
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- 
+ package/sane-backends/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/sane-backends/Config.in b/package/sane-backends/Config.in
+index 8156e85..3e5a27f 100644
+--- a/package/sane-backends/Config.in
++++ b/package/sane-backends/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SANE_BACKENDS
+ 	bool "sane-backends"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  SANE - Scanner Access Now Easy
+
+@@ -9,3 +10,7 @@ config BR2_PACKAGE_SANE_BACKENDS
+ 	  Backends are included automatically based on the libraries that have
+ 	  been selected: libusb, jpeg, tiff, avahi (with dbus and libglib2),
+ 	  and netsnmp.
++
++comment "sane-backends needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
+--
+2.7.4
