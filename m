@@ -1,10 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 30 Nov 2016 11:25:16 +0000
-Subject: [Buildroot] [PATCH next 08/10] gstreamer1/gst1-validate: bump
-	version to 1.10.2
+Date: Wed, 30 Nov 2016 11:25:17 +0000
+Subject: [Buildroot] [PATCH next 09/10] gstreamer1/gst-omx: bump version to
+	1.10.2
 In-Reply-To: <20161130112518.36300-1-Vincent.Riera@imgtec.com>
 References: <20161130112518.36300-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161130112518.36300-8-Vincent.Riera@imgtec.com>
+Message-ID: <20161130112518.36300-9-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/gstreamer1/gst1-validate/gst1-validate.hash | 4 ++--
- package/gstreamer1/gst1-validate/gst1-validate.mk   | 2 +-
+ package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
-index adfb2fa..70b868f 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.hash
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+index bf10f0a..d52b61f 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
++++ b/package/gstreamer1/gst-omx/gst-omx.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.10.1.tar.xz.sha256sum
--sha256 07ae671a3e77c5480d2c1732175dd3b3255b6937ac55d4b3e69a90f8e3043f75  gst-validate-1.10.1.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.10.2.tar.xz.sha256sum
-+sha256 be274418d78694cecb1be6c860f3f499baa4313eece60a654507ab14d6989ed7  gst-validate-1.10.2.tar.xz
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index cb857d0..69a78bd 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.1.tar.xz.sha256sum
+-sha256 1b07b9ceb4552c0911af1e3b97987e3314c601eacfbc09f1cca8632e98581231  gst-omx-1.10.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.2.tar.xz.sha256sum
++sha256 c069a9cf775c92f889ca8f3b2fc718e428cd0579b7b805851a960c850a7aa497  gst-omx-1.10.2.tar.xz
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index c934317..fcc7058 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_VALIDATE_VERSION = 1.10.1
-+GST1_VALIDATE_VERSION = 1.10.2
- GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
- GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
- GST1_VALIDATE_LICENSE = LGPLv2.1+
+-GST_OMX_VERSION = 1.10.1
++GST_OMX_VERSION = 1.10.2
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ 
 -- 
 2.10.1
