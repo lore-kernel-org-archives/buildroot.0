@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Nov 2016 23:30:52 +0100
-Subject: [Buildroot] [PATCH v7 1/1] rpm: switch to version 4.13.0
-In-Reply-To: <20161118185053.11976-1-james.knight@rockwellcollins.com>
-References: <20161118185053.11976-1-james.knight@rockwellcollins.com>
-Message-ID: <20161130233052.6d72115b@free-electrons.com>
+Date: Wed, 30 Nov 2016 23:35:37 +0100
+Subject: [Buildroot] [PATCH v3 1/2] ti-cgt-pru: add package for PRU Host
+ toolchain
+In-Reply-To: <1480346294-22771-1-git-send-email-ash.charles@savoirfairelinux.com>
+References: <1480346294-22771-1-git-send-email-ash.charles@savoirfairelinux.com>
+Message-ID: <20161130233537.66609af5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 18 Nov 2016 13:50:53 -0500, James Knight wrote:
+On Mon, 28 Nov 2016 10:18:13 -0500, Ash Charles wrote:
 
-> -RPM_VERSION_MAJOR = 5.2
-> -RPM_VERSION = $(RPM_VERSION_MAJOR).0
-> -RPM_SITE = http://rpm5.org/files/rpm/rpm-$(RPM_VERSION_MAJOR)
-> -RPM_DEPENDENCIES = host-pkgconf zlib beecrypt neon popt openssl
-> -RPM_LICENSE = LGPLv2.1
-> -RPM_LICENSE_FILES = COPYING.LIB
-> +RPM_VERSION = 4.13.0
-> +RPM_SOURCE = rpm-$(RPM_VERSION).tar.bz2
-> +RPM_SITE = https://github.com/rpm-software-management/rpm/releases/download/rpm-$(RPM_VERSION)-release
-> +RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
-> +RPM_LICENSE = GPLv2
+> +# Since this is largely prebuilt toolchain and likes to live in its own
+> +# directory, put is in $(HOST_DIR)/ti-cgt-pru
+> +# Packages wanting to use this toolchain need to use this path as TI's
+> +# standard PRU_CGT path e.g. make PRU_CGT=$(TI_CGT_PRU_INSTALLDIR)...
+> +
+> +TI_CGT_PRU_INSTALLDIR = $(HOST_DIR)/ti-cgt-pru
 
-If you read the COPYING file, it's in fact GPLv2, or LGPLv2 but for the
-library only. So I've adjusted the license information here.
+I think I suggested in a previous iteration that this should be changed
+to $(HOST_DIR)/usr/share/ti-cgt-pru, or possibly some other location,
+but at least not have this right under $(HOST_DIR).
 
-I've applied to next, the rest of the patch seemed reasonable.
-
-Thanks!
+Is there any reason why this hasn't been taken into account? Maybe
+Arnout objected with some good argument?
 
 Thomas
 -- 
