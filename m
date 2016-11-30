@@ -1,36 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Nov 2016 16:10:30 +0100
-Subject: [Buildroot] [git commit] uboot: support -b option for mkenvimage
-Message-ID: <20161130151601.8559580E31@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 30 Nov 2016 15:57:42 +0000
+Subject: [Buildroot] [PATCH next] libgtk3: bump version to 3.22.4
+Message-ID: <20161130155742.25688-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf5487e21e539e474062ee3ace1ac8fb844e38a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+  http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.4.news
 
-When generating the environment image the target endianess should
-be taken in account for CRC calculation purposes. For big endian
-targets the -b flag should be passed to the mkenvimage tool.
-
-Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- boot/uboot/uboot.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 3e347c1..6b9d544 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -223,6 +223,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
- 			$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
- 			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-+			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
- 			-o $(BINARIES_DIR)/uboot-env.bin -)
- endef
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 1c58efc..e1d93b3 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.3.sha256sum
+-sha256 e190ab1a9a893861b8e8be341aa57bce8b7146d6445ebfe5a8ab64236fe82ed3  gtk+-3.22.3.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.4.sha256sum
++sha256 7094a6fcfe133d01c578358bd5d3e499715f1a0206e87bd5cf6c834e301f387f  gtk+-3.22.4.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 0b9a999..4a686e0 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
+ LIBGTK3_VERSION_MAJOR = 3.22
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).3
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).4
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
+-- 
+2.10.1
