@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Nov 2016 22:16:51 +0100
-Subject: [Buildroot] [PATCH next] libgtk3: bump version to 3.22.4
-In-Reply-To: <20161130155742.25688-1-Vincent.Riera@imgtec.com>
-References: <20161130155742.25688-1-Vincent.Riera@imgtec.com>
-Message-ID: <20161130221651.518aeb4f@free-electrons.com>
+Date: Wed, 30 Nov 2016 22:16:48 +0100
+Subject: [Buildroot] [PATCH next] ncftp: bump version to 3.2.6
+In-Reply-To: <20161130172152.35197-1-Vincent.Riera@imgtec.com>
+References: <20161130172152.35197-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161130221648.0de5e933@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 30 Nov 2016 15:57:42 +0000, Vicente Olivert Riera wrote:
-> Release notes:
->   http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.4.news
+On Wed, 30 Nov 2016 17:21:52 +0000, Vicente Olivert Riera wrote:
+> Upstream provides xz tarballs instead of bz2, so make the switch.
 > 
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/libgtk3/libgtk3.hash | 4 ++--
->  package/libgtk3/libgtk3.mk   | 2 +-
+>  package/ncftp/ncftp.hash | 2 +-
+>  package/ncftp/ncftp.mk   | 4 ++--
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to next, thanks.
