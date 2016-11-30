@@ -1,50 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Nov 2016 22:53:38 +0100
-Subject: [Buildroot] [PATCH v2 1/1] sane-backends: disable static
- configuration
-In-Reply-To: <1480513819-10094-1-git-send-email-fhunleth@troodon-software.com>
-References: <1480513819-10094-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20161130225338.7632d98a@free-electrons.com>
+Date: Wed, 30 Nov 2016 22:57:30 +0100
+Subject: [Buildroot] [git commit branch/next] Revert "jasper: Disable
+	debugging when building for xtensa"
+Message-ID: <20161130215745.26A8281861@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c43b09a99fca22cd2e03e9d8370a23aaf4066a19
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 30 Nov 2016 08:50:19 -0500, Frank Hunleth wrote:
-> While sane-backends can be compiled statically, it requires
-> selection of a subset of scanner backends. Without this, all backends
-> are compiled and link errors such as the following are generated:
-> 
-> ../backend/.libs/libsane.a(libepsonds_la-epsonds.o):(.bss+0xc): multiple definition of `source_list'
-> ../backend/.libs/libsane.a(libepson2_la-epson2.o):(.data+0x40): first defined here
-> ../backend/.libs/libsane.a(libepsonds_la-epsonds.o):(.data+0x10): multiple definition of `mode_params'
-> ../backend/.libs/libsane.a(libepson2_la-epson2.o):(.data+0x0): first defined here
-> collect2: error: ld returned 1 exit status
-> 
-> Buildroot currently doesn't allow fine grained selection of backends, so
-> this disables static builds.
-> 
-> Fixes:
-> 
-> http://autobuild.buildroot.net/results/89c/89c6e4ec1596def74e72eb071ef4bf0f1a7cc9f8/
-> http://autobuild.buildroot.net/results/92a/92a54c99a9ba918ece4c56d7beb985729bee700b/
-> http://autobuild.buildroot.net/results/1b9/1b9eac5303dfed638063f3b18dfff5571a2c4231/
-> http://autobuild.buildroot.net/results/366/366979d0bd21dc2bf7f0336b9653ef3fd4e11123/
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
-> Changes v1 -> v2:
->   - Fixed missing "depends BR2_USE_MMU" for comment. Thanks to Baruch
->     Siach for catching it.
+This reverts commit 71d9b0c1f06896f113b09e941aa84d979bff5710.
+Now that -mauto-litpools is in TARGET_ABI when building for xtensa, -O0
+builds succeed, so this workaround is no longer needed.
 
-I also agree that sane-backends in statically linked configurations is
-not very useful, so I've applied to master. Thanks!
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jasper/jasper.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index db86ae8..b2da07d 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -14,10 +14,4 @@ JASPER_LICENSE_FILES = LICENSE
+ # needed to fix rpath issue (http://autobuild.buildroot.net/results/307/307cac65287420252a5bb64715d9a1edd90e72fa/)
+ JASPER_AUTORECONF = YES
+ 
+-# Xtensa gcc is unable to generate correct code with -O0 enabled by
+-# --enable-debug. Allow package build but disable debug.
+-ifeq ($(BR2_xtensa)$(BR2_ENABLE_DEBUG),yy)
+-JASPER_CONF_OPTS += --disable-debug
+-endif
+-
+ $(eval $(autotools-package))
