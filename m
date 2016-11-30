@@ -1,197 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2016 22:19:19 +0100
-Subject: [Buildroot] [git commit] toolchain-external-codesourcery-amd64: new
-	package
-Message-ID: <20161201222138.C70507FB56@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Nov 2016 11:59:27 +0100
+Subject: [Buildroot] [git commit] git: bump version to 2.11.0
+Message-ID: <20161201222141.023A48026C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a66b8191f4c57b11874bb29c5d49e244f727d21a
+commit: https://git.buildroot.net/buildroot/commit/?id=a8ab83fada243a14bb0e0c3966b69900f264996b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a new package for the Sourcery CodeBench external
-toolchain for the AMD-64 architecture.
-
-The legacy implementation is removed.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/Config.in             | 32 ++++------------------
- .../Config.in                                      | 24 ++++++++++++++++
- .../Config.in.options                              |  9 ++++++
- .../toolchain-external-codesourcery-amd64.hash     |  3 ++
- .../toolchain-external-codesourcery-amd64.mk       | 12 ++++++++
- .../toolchain-external/toolchain-external.hash     |  3 --
- toolchain/toolchain-external/toolchain-external.mk |  3 --
- 7 files changed, 54 insertions(+), 32 deletions(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 8e06b05..2689c91 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -36,6 +36,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Conf
- # SH4a
- source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in"
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 0815641..ee76157 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 94802903dd707d85ca3b9a2be35e936a54ce86375f52c6a789efe7ce7e238671  git-2.10.2.tar.xz
++sha256 7e7e8d69d494892373b87007674be5820a4bc1ef596a0117d03ea3169119fd0b  git-2.11.0.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index a7768ac..7d4d363 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# x86/x86_64 (use amd64 toolchain by default for AMD64)
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in"
-+
- config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	bool "Arago ARMv7 2011.09"
- 	depends on BR2_arm
-@@ -81,31 +84,6 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
- 
- 	  This toolchain uses software-floating point.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
--	bool "Sourcery CodeBench AMD64 2015.11"
--	depends on BR2_x86_64
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_x86_jaguar || BR2_x86_steamroller
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
--	help
--	  Sourcery CodeBench toolchain for the amd64 (x86_64)
--	  architectures, from Mentor Graphics. It uses gcc 5.2,
--	  binutils 2.25.51, glibc 2.22, gdb 7.10.50 and kernel headers
--	  4.2. It has support for the following variants:
--	    - AMD Puma/Jaguar (family 16h), glibc
--	    Default for x86_64, nothing special to do.
--	    - AMD Steamroller (family 15h), glibc
--	    Select a steamroller core.
--	  No other architecture variants are supported since glibc
--	  is optimized for one of these two baselines.
--
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
- 	bool "Sourcery CodeBench x86/x86_64 2012.09"
- 	depends on BR2_i386 || BR2_x86_64
-@@ -243,7 +221,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
- 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
--	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABI
- 	default "arm-linux-musleabihf"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm && BR2_ARM_EABIHF
- 	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
-@@ -309,6 +286,9 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Conf
- # SH4a
- source "toolchain/toolchain-external/toolchain-external-codesourcery-sh/Config.in.options"
- 
-+# x86/x86_64
-+source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options"
-+
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
- choice
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-new file mode 100644
-index 0000000..86486c8
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
-+	bool "Sourcery CodeBench AMD64 2015.11"
-+	depends on BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_x86_jaguar || BR2_x86_steamroller
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+	help
-+	  Sourcery CodeBench toolchain for the amd64 (x86_64)
-+	  architectures, from Mentor Graphics. It uses gcc 5.2,
-+	  binutils 2.25.51, glibc 2.22, gdb 7.10.50 and kernel headers
-+	  4.2. It has support for the following variants:
-+	    - AMD Puma/Jaguar (family 16h), glibc
-+	    Default for x86_64, nothing special to do.
-+	    - AMD Steamroller (family 15h), glibc
-+	    Select a steamroller core.
-+	  No other architecture variants are supported since glibc
-+	  is optimized for one of these two baselines.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options
-new file mode 100644
-index 0000000..2ab2302
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in.options
-@@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
-+
-+config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	default "x86_64-amd-linux-gnu"
-+
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-codesourcery-amd64"
-+
-+endif
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash
-new file mode 100644
-index 0000000..ea5f300
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 3c31206c8b9277f409ee00e4777ba82dfa6da2a4ca0926501cd5fb6bbd1b407e  amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 0b673f5035f97d5d03c31272cddab0f117d39ad76a5ad2a3bc98c156571527de  amd-2015.11-139-x86_64-amd-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk
-new file mode 100644
-index 0000000..4b8e31c
---- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# toolchain-external-codesourcery-amd64
-+#
-+################################################################################
-+
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION = 2015.11-139
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_SOURCE = amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_ACTUAL_SOURCE_TARBALL = amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
-+
-+$(eval $(toolchain-external-package))
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 18b3e1a..b873abe 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -5,9 +5,6 @@
- # x86
- sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
- sha256 1a9519e415a1e6892c760bf21f7e98f3a633a9d1c5bb8781a96d338e4dd62717  ia32-2012.09-62-i686-pc-linux-gnu.src.tar.bz2
--# AMD64
--sha256 3c31206c8b9277f409ee00e4777ba82dfa6da2a4ca0926501cd5fb6bbd1b407e  amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
--sha256 0b673f5035f97d5d03c31272cddab0f117d39ad76a5ad2a3bc98c156571527de  amd-2015.11-139-x86_64-amd-linux-gnu.src.tar.bz2
- 
- # ARM toolchains from Texas Instrument's Arago project
- # There is one source file that covers both binary distributions.
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 9aabab6..3cb9024 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -59,9 +59,6 @@ TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86),y)
- TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64),y)
--TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/x86_64-amd-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
- TOOLCHAIN_EXTERNAL_VERSION = 1.1.12
- TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)
+-GIT_VERSION = 2.10.2
++GIT_VERSION = 2.11.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
