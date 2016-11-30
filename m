@@ -1,160 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Nov 2016 23:16:22 +0100
-Subject: [Buildroot] [git commit] Update for 2016.11
-Message-ID: <20161130221649.8104E81847@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Nov 2016 23:27:12 +0100
+Subject: [Buildroot] [PATCH] package/tvheadend: change configuration
+ directory
+In-Reply-To: <20161130221053.GA3619@free.fr>
+References: <20161128094512.27804-1-damjan.marion@gmail.com>
+ <20161130221053.GA3619@free.fr>
+Message-ID: <20161130232712.636daccd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7eb052ff8ba9234b3f8dafc8cf3986f5b39428e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 11 +++++++++++
- Makefile                   |  2 +-
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 18 ++++++++++++++++++
- support/misc/Vagrantfile   |  2 +-
- 5 files changed, 42 insertions(+), 13 deletions(-)
+On Wed, 30 Nov 2016 23:10:53 +0100, Yann E. MORIN wrote:
 
-diff --git a/CHANGES b/CHANGES
-index 8807709..d52bcdd 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,14 @@
-+2016.11, Released November 30th, 2016
-+
-+	Minor fixes.
-+
-+	Updated/fixed packages: bzip2, gcc, jasper, sane-backends,
-+	uboot, uclibc
-+
-+	Issues resolved (http://bugs.buildroot.org):
-+
-+	#9451: packages/postgresql/postgresql.mk contains wrong POST...
-+
- 2016.11-rc3, Released November 28th, 2016
- 
- 	Fixes all over the tree, including a number of security fixes.
-diff --git a/Makefile b/Makefile
-index 1ce5f5b..fbf217a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -83,7 +83,7 @@ else # umask / $(CURDIR) / $(O)
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2016.11-rc3
-+export BR2_VERSION := 2016.11
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 51899ff..d7eef3b 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,40 +8,40 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2016.08.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2016.11</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2016.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2016.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2016.08.1.tar.gz">buildroot-2016.08.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2016.08.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2016.11.tar.gz">buildroot-2016.11.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2016.11.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2016.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2016.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2016.08.1.tar.bz2">buildroot-2016.08.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2016.08.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2016.11.tar.bz2">buildroot-2016.11.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2016.11.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+<!--
-       <h3 style="text-align: center;">Latest release candidate: <b>2016.11-rc3</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
-@@ -75,7 +75,7 @@
- 	  <p><a href="/downloads/buildroot-2016.11-rc3.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+-->
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 11fd18a..f12dfc6 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,24 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2016.11 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>30 November 2016</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The stable 2016.11 release is out - Thanks to everyone
-+	  contributing and testing the release candidates. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.11">CHANGES</a>
-+	  file for more details
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2016.11.tar.bz2">2016.11 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 5e56d5d..66d9505 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2016.08'
-+RELEASE='2016.11'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+> On 2016-11-28 10:45 +0100, Damjan Marion spake thusly:
+> > Currently tvheadend configuration is stored in
+> > /home/tvheadend/.hts/tvheadend. This patch changes this location
+> > to /etc/tvheadend which seems to be more appropriate place.  
+> 
+> I disagree. This location is not only about "configuration" but also
+> about "state". It contains user-specified settings, recordings, DVB scan
+> status...
+> 
+> For example, accesscontrol can be updated from the WebUI to add/remopve
+> users or change their rights. I don't remember the full set of stuff
+> that gets in there, but there's almost no "configuration", but mostly
+> "settings" than can be updated a lot; the most ovious being records (not
+> the media streams, but the settings like channel, start and end times...)
+> 
+> Besides, /etc can be read-only, and we need a writable location. And
+> /etc is not a correct location to expect to be writable. /home is most
+> probably writable by users (although we do not provide that guarantee in
+> Buildroot, it is still much better than /etc).
+> 
+> So, it does not belong to /etc.
+> 
+> What was your rationale for moving it, besides "it seems more appropriate" ?
+
+Could we have the configuration in /etc and the state in /var, like most
+sane Linux daemons do?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
