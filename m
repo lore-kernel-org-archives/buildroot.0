@@ -1,52 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Nov 2016 18:02:29 +0100
-Subject: [Buildroot] preparing for release
-In-Reply-To: <e7ecce02-d228-f356-f47b-5de95d8261d4@synopsys.com>
-References: <20161130053136.GU14207@waldemar-brodkorb.de>
- <e7ecce02-d228-f356-f47b-5de95d8261d4@synopsys.com>
-Message-ID: <20161130180229.448a0160@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 30 Nov 2016 17:04:43 +0000
+Subject: [Buildroot] [PATCH next 2/4] lttng-modules: bump version to 2.9.0
+In-Reply-To: <20161130170445.55222-1-Vincent.Riera@imgtec.com>
+References: <20161130170445.55222-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161130170445.55222-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Release notes:
+  https://lists.lttng.org/pipermail/lttng-dev/2016-November/026760.html
 
-On Tue, 29 Nov 2016 21:43:20 -0800, Vineet Gupta wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/lttng-modules/lttng-modules.hash | 6 +++---
+ package/lttng-modules/lttng-modules.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> On 11/29/2016 09:31 PM, Waldemar Brodkorb wrote:
-> > Hi,
-> >
-> > I am preparing a release and would like to remove UCLIBC_HAS_LFS
-> > before doing it.
-> >
-> > I believe UCLIBC_HAS_LFS does make the code more complex and
-> > the benefit to disable it to save some bytes is not high enough.
-> >
-> > Most users have UCLIBC_HAS_LFS enabled and it is enabled by default.
-> >
-> > Attached is a patch.
-> >
-> > Any comments?
-> >
-> > best regards
-> >  Waldemar  
-> 
-> I welcome this change - is there going to be impact on downstream projects like
-> busybox. What if it some disables CONFIG_LFS inside busybox ?
-
-In Buildroot, we have dropped the ability to disable LFS since March
-2015. It was really too annoying to maintain the !LFS case, for no real
-benefit.
-
-So I'm completely fine with uClibc-ng dropping !LFS support upstream,
-since Buildroot no longer cares about this possibility.
-
-Best regards,
-
-Thomas
+diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+index ce725ec..d8314f6 100644
+--- a/package/lttng-modules/lttng-modules.hash
++++ b/package/lttng-modules/lttng-modules.hash
+@@ -1,3 +1,3 @@
+-# From http://lttng.org/files/lttng-modules/lttng-modules-2.8.3.tar.bz2.{md5,sha1}
+-md5   424354c4834d20235dacd9a1fd7653b6  lttng-modules-2.8.3.tar.bz2
+-sha1  862705784a54962f70226004f1fd0bf77f73f10f  lttng-modules-2.8.3.tar.bz2
++# From http://lttng.org/files/lttng-modules/lttng-modules-2.9.0.tar.bz2.{md5,sha1}
++md5 717df375ccb6f32bb297cc2f2e692bbf  lttng-modules-2.9.0.tar.bz2
++sha1 819ee1c2a5a821b7fdc1c2fc102ef3079c32aad7  lttng-modules-2.9.0.tar.bz2
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 9ecf572..aa0ac30 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTTNG_MODULES_VERSION = 2.8.3
++LTTNG_MODULES_VERSION = 2.9.0
+ LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.1
