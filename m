@@ -1,39 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Nov 2016 22:12:06 +0100
-Subject: [Buildroot] [PATCH 3/8] arch/Config.in.arm: add BR2_ARM_CPU_ARMV8
+Date: Wed, 30 Nov 2016 22:12:07 +0100
+Subject: [Buildroot] [PATCH 4/8] arch/arm: drop legacy dependency for
+	floating point strategy
 In-Reply-To: <cover.1480540299.git.yann.morin.1998@free.fr>
 References: <cover.1480540299.git.yann.morin.1998@free.fr>
-Message-ID: <be4e9f78b8b674069e3ac4d85b212aead568f94f.1480540299.git.yann.morin.1998@free.fr>
+Message-ID: <0f6751e4659ce029f1a3a148fc199e3cb08e56f4.1480540299.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+The floating point strategy currently depends on EABI || EABIHF. The
+reason was that, wayback when we also supported OABI, we only exposed FP
+for EABI or EABIHF, and hide it for OABI, which did not support FP.
 
-In order to prepare the addition of ARM64 cores, add the blind
-BR2_ARM_CPU_ARMV8 option.
+It's been a while now that we do not support OABI, but the dependency
+stuck all along.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Remove it as it is no longer needed, and is always true.
+
+However, the choice is empty for AArch64, as we still have no entry for
+their floating point strategy yet.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.arm | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/Config.in.arm | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 0ca6a14..9e5accc 100644
+index 9e5accc..fa999d5 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -55,6 +55,9 @@ config BR2_ARM_CPU_ARMV7A
- config BR2_ARM_CPU_ARMV7M
- 	bool
+@@ -308,7 +308,6 @@ endchoice
  
-+config BR2_ARM_CPU_ARMV8
-+	bool
-+
  choice
- 	prompt "Target Architecture Variant"
- 	default BR2_arm926t
+ 	prompt "Floating point strategy"
+-	depends on BR2_ARM_EABI || BR2_ARM_EABIHF
+ 	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
+ 	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
+ 	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
 -- 
 2.7.4
