@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Nov 2016 13:53:01 +0100
-Subject: [Buildroot] [git commit branch/next] gstreamer1/gst1-libav: bump
+Date: Wed, 30 Nov 2016 13:53:24 +0100
+Subject: [Buildroot] [git commit branch/next] gstreamer1/gst-omx: bump
 	version to 1.10.2
-Message-ID: <20161130125525.3CD28802AE@busybox.osuosl.org>
+Message-ID: <20161130125525.52CF081E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c4f58edfb28cba186da55ac24069d9ef2b4a336
+commit: https://git.buildroot.net/buildroot/commit/?id=ae36ee017402e4eeba381366524dae26baa65bc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+ package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 1bb714f..8cda287 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+index bf10f0a..d52b61f 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
++++ b/package/gstreamer1/gst-omx/gst-omx.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.10.1.tar.xz.sha256sum
--sha256 27b28b8de0e6dff1e3952428e8ed8ba4a12f452f789ac0ae9bbe50f00a5c72c7  gst-libav-1.10.1.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.10.2.tar.xz.sha256sum
-+sha256 a3dd7036211f061e1eda04f985b7a9dd1a91b754f767ff2587eb6ec28f44e73c  gst-libav-1.10.2.tar.xz
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index eec6303..8687ac6 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.1.tar.xz.sha256sum
+-sha256 1b07b9ceb4552c0911af1e3b97987e3314c601eacfbc09f1cca8632e98581231  gst-omx-1.10.1.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.2.tar.xz.sha256sum
++sha256 c069a9cf775c92f889ca8f3b2fc718e428cd0579b7b805851a960c850a7aa497  gst-omx-1.10.2.tar.xz
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index c934317..fcc7058 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_LIBAV_VERSION = 1.10.1
-+GST1_LIBAV_VERSION = 1.10.2
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_CONF_OPTS = --with-system-libav
+-GST_OMX_VERSION = 1.10.1
++GST_OMX_VERSION = 1.10.2
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ 
