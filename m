@@ -1,41 +1,52 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 30 Nov 2016 17:10:41 +0100
-Subject: [Buildroot] [PATCH 3/3] luarocks: bump to version 2.4.2
-In-Reply-To: <20161130161041.22566-1-francois.perrad@gadz.org>
-References: <20161130161041.22566-1-francois.perrad@gadz.org>
-Message-ID: <20161130161041.22566-3-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Nov 2016 18:02:29 +0100
+Subject: [Buildroot] preparing for release
+In-Reply-To: <e7ecce02-d228-f356-f47b-5de95d8261d4@synopsys.com>
+References: <20161130053136.GU14207@waldemar-brodkorb.de>
+ <e7ecce02-d228-f356-f47b-5de95d8261d4@synopsys.com>
+Message-ID: <20161130180229.448a0160@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index c35383a..fb01993 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	e429e0af9764bfd5cb640cac40f9d4ed1023fa17c052dff82ed0a41c05f3dcf9  luarocks-2.4.1.tar.gz
-+sha256	0e1ec34583e1b265e0fbafb64c8bd348705ad403fe85967fd05d3a659f74d2e5  luarocks-2.4.2.tar.gz
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 64c8d5b..4e0d537 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 2.4.1
-+LUAROCKS_VERSION = 2.4.2
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+On Tue, 29 Nov 2016 21:43:20 -0800, Vineet Gupta wrote:
+
+> On 11/29/2016 09:31 PM, Waldemar Brodkorb wrote:
+> > Hi,
+> >
+> > I am preparing a release and would like to remove UCLIBC_HAS_LFS
+> > before doing it.
+> >
+> > I believe UCLIBC_HAS_LFS does make the code more complex and
+> > the benefit to disable it to save some bytes is not high enough.
+> >
+> > Most users have UCLIBC_HAS_LFS enabled and it is enabled by default.
+> >
+> > Attached is a patch.
+> >
+> > Any comments?
+> >
+> > best regards
+> >  Waldemar  
+> 
+> I welcome this change - is there going to be impact on downstream projects like
+> busybox. What if it some disables CONFIG_LFS inside busybox ?
+
+In Buildroot, we have dropped the ability to disable LFS since March
+2015. It was really too annoying to maintain the !LFS case, for no real
+benefit.
+
+So I'm completely fine with uClibc-ng dropping !LFS support upstream,
+since Buildroot no longer cares about this possibility.
+
+Best regards,
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
