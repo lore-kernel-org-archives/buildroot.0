@@ -1,39 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 30 Nov 2016 11:17:04 +0200
-Subject: [Buildroot] [PATCH] odroid-scripts: add support for auto resize
- on first boot for SYSV
-In-Reply-To: <trinity-98d65c2c-3870-44c4-bb2a-2a6c5d8ab78a-1480496386225@3capp-mailcom-bs02>
-References: <20161127212449.14159-1-daggs@gmx.com>
- <20161127222742.5a58f49c@free-electrons.com>
- <trinity-2fcdc0f4-9fb1-4f65-8c09-14877a9c5f63-1480282606427@3capp-mailcom-bs07>
- <20161127225136.37b20b37@free-electrons.com>
- <trinity-98d65c2c-3870-44c4-bb2a-2a6c5d8ab78a-1480496386225@3capp-mailcom-bs02>
-Message-ID: <20161130091704.eerbj7gwpslfoynp@tarshish>
+From: Nielsen, David Marqvar <david.nielsen@cobham.com>
+Date: Wed, 30 Nov 2016 09:23:19 +0000
+Subject: [Buildroot] [PATCH 1/1] tftpd: make installation of tftp client
+	optional
+Message-ID: <6A3F8AF4AF06764EBB67BDF72AE0FB4701F8E8F554@ly-ex-02.thrane.tt.ad>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dagg,
+Signed-off-by: David Marqvar <david.nielsen@cobham.com>
+---
+ package/tftpd/Config.in |  8 ++++++++
+ package/tftpd/tftpd.mk  | 11 ++++++++---
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
-On Wed, Nov 30, 2016 at 09:59:46AM +0100, daggs wrote:
-> > Well, we certainly don't want to have it unconditionally installed, so
-> > it would have to be optional. And a package is nice to isolate this
-> > feature and the related init script in a clean way.
-> 
-> two questions:
-> 1. how to define a pkg that has no download url?
-
-See the makedevs package as an example.
-
-> 2. pkg name?
-
-part-resize-full maybe?
-
-baruch
-
+diff --git a/package/tftpd/Config.in b/package/tftpd/Config.in
+index ea5cb30..9d6addd 100644
+--- a/package/tftpd/Config.in
++++ b/package/tftpd/Config.in
+@@ -6,3 +6,11 @@ config BR2_PACKAGE_TFTPD
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+ 	  HPA's Trivial File Transfer Protocol (tftp) server.
++
++config BR2_PACKAGE_TFTPD_OVERRIDE_BUSYBOX_TFTP
++	bool "install tftp"
++	default y
++	depends on BR2_PACKAGE_TFTPD
++	depends on BR2_PACKAGE_BUSYBOX
++	help
++	  This will also override tftp from Busybox
+diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
+index 78df835..8080f97 100644
+--- a/package/tftpd/tftpd.mk
++++ b/package/tftpd/tftpd.mk
+@@ -9,13 +9,18 @@ TFTPD_SOURCE = tftp-hpa-$(TFTPD_VERSION).tar.xz
+ TFTPD_SITE = $(BR2_KERNEL_MIRROR)/software/network/tftp/tftp-hpa
+ TFTPD_CONF_OPTS = --without-tcpwrappers
+ 
+-# Override BusyBox implementations if BusyBox is enabled.
+-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++
++ifeq ($(BR2_PACKAGE_TFTPD_OVERRIDE_BUSYBOX_TFTP),y)
++# override BusyBox - install after busybox
+ TFTPD_DEPENDENCIES += busybox
++define TFTPD_INSTALL_TARGET_TFTP
++	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
++endef
+ endif
+ 
++
+ define TFTPD_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
++	$(TFTPD_INSTALL_TARGET_TFTP)
+ 	$(INSTALL) -D $(@D)/tftpd/tftpd $(TARGET_DIR)/usr/sbin/tftpd
+ endef
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+1.8.3.4
