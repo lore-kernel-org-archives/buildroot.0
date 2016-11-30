@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Nov 2016 22:12:04 +0100
-Subject: [Buildroot] [PATCH 1/8] arch: merge Config.in.aarch64 into
-	Config.in.arm
+Date: Wed, 30 Nov 2016 22:12:05 +0100
+Subject: [Buildroot] [PATCH 2/8] arch/Config.in.arm: prepare addition of 64
+	bits cores
 In-Reply-To: <cover.1480540299.git.yann.morin.1998@free.fr>
 References: <cover.1480540299.git.yann.morin.1998@free.fr>
-Message-ID: <c2ae1730763487e551810a1d3f3e8fd5f8123e60.1480540299.git.yann.morin.1998@free.fr>
+Message-ID: <62e0b2a33749d5cc4196fc7c63d8791aab6235a6.1480540299.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,116 +13,190 @@ To: buildroot@busybox.net
 
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-The 64 bits ARM processors are capable of running 32 bits ARM code, and
-some platforms are indeed using this capability. Due to this, if we were
-to keep the separation between Config.in.aarch64 and Config.in.arm, we
-would have to duplicate the definition of all 64-bits capable ARM cores
-into both files.
+Until now the "Target Architecture Variant" choice was not visible on
+AArch64. In order to prepare the addition of the 64 bits core to this
+choice, this commit adds a "depends on !BR2_ARCH_IS_64" dependency to
+all currently supported cores (that are 32 bits only).
 
-Instead of going down this route, let's take the same route as the x86
-one: a single Config.in.x86 file, used for both x86 32 bits and x86 64
-bits, with the appropriate logic to only show the relevant cores
-depending on which architecture is selected.
-
-In order to do this, we:
-
- - Make the "ARM instruction set" choice only visible on ARM 32 bits,
-   since we currently don't support ARM vs. Thumb on AArch64.
-
- - Add the relevant values for the BR2_ARCH option.
-
- - Add the relevant values for the BR2_ENDIAN option.
-
- - Make the "aapcs-linux" BR2_GCC_TARGET_ABI value only used on ARM 32
-   bits, since this ABI doesn't mean anything on AArch64.
-
- - Make the BR2_GCC_TARGET_FPU option depends on ARM 32 bits, since
-   there is no -mfpu option on AArch64.
+Following this commit, the "Target Architecture Variant" choice appears
+on AArch64, but is for now empty.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- arch/Config.in         |  6 +-----
- arch/Config.in.aarch64 |  7 -------
- arch/Config.in.arm     | 14 +++++++++-----
- 3 files changed, 10 insertions(+), 17 deletions(-)
- delete mode 100644 arch/Config.in.aarch64
+ arch/Config.in.arm | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index df4db0b..d59cbd7 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -354,14 +354,10 @@ if BR2_arcle || BR2_arceb
- source "arch/Config.in.arc"
- endif
- 
--if BR2_arm || BR2_armeb
-+if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
- source "arch/Config.in.arm"
- endif
- 
--if BR2_aarch64 || BR2_aarch64_be
--source "arch/Config.in.aarch64"
--endif
--
- if BR2_bfin
- source "arch/Config.in.bfin"
- endif
-diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
-deleted file mode 100644
-index 34cd409..0000000
---- a/arch/Config.in.aarch64
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_ARCH
--	default "aarch64"	if BR2_aarch64
--	default "aarch64_be"	if BR2_aarch64_be
--
--config BR2_ENDIAN
--	default "LITTLE" if BR2_aarch64
--	default "BIG"	 if BR2_aarch64_be
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index ee612f5..002ed04 100644
+index 002ed04..0ca6a14 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -399,6 +399,7 @@ endchoice
+@@ -57,7 +57,6 @@ config BR2_ARM_CPU_ARMV7M
  
  choice
- 	prompt "ARM instruction set"
-+	depends on BR2_arm || BR2_armeb
- 
- config BR2_ARM_INSTRUCTIONS_ARM
- 	bool "ARM"
-@@ -434,12 +435,14 @@ config BR2_ARM_INSTRUCTIONS_THUMB2
+ 	prompt "Target Architecture Variant"
+-	depends on BR2_arm || BR2_armeb
+ 	default BR2_arm926t
+ 	help
+ 	  Specific CPU variant to use
+@@ -68,12 +67,14 @@ config BR2_arm920t
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV4
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm922t
+ 	bool "arm922t"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV4
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm926t
+ 	bool "arm926t"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -81,12 +82,14 @@ config BR2_arm926t
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV5
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm1136j_s
+ 	bool "arm1136j-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm1136jf_s
+ 	bool "arm1136jf-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -94,12 +97,14 @@ config BR2_arm1136jf_s
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm1176jz_s
+ 	bool "arm1176jz-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm1176jzf_s
+ 	bool "arm1176jzf-s"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -107,6 +112,7 @@ config BR2_arm1176jzf_s
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_arm11mpcore
+ 	bool "mpcore"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -114,6 +120,7 @@ config BR2_arm11mpcore
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV6
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a5
+ 	bool "cortex-A5"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -122,6 +129,7 @@ config BR2_cortex_a5
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a7
+ 	bool "cortex-A7"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -130,6 +138,7 @@ config BR2_cortex_a7
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a8
+ 	bool "cortex-A8"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -138,6 +147,7 @@ config BR2_cortex_a8
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a9
+ 	bool "cortex-A9"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -146,6 +156,7 @@ config BR2_cortex_a9
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a12
+ 	bool "cortex-A12"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -154,6 +165,7 @@ config BR2_cortex_a12
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a15
+ 	bool "cortex-A15"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -162,6 +174,7 @@ config BR2_cortex_a15
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a17
+ 	bool "cortex-A17"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -170,41 +183,49 @@ config BR2_cortex_a17
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_m3
+ 	bool "cortex-M3"
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7M
++	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_m4
+ 	bool "cortex-M4"
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7M
++	depends on !BR2_ARCH_IS_64
+ config BR2_fa526
+ 	bool "fa526/626"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV4
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_pj4
+ 	bool "pj4"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_VFPV3
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_strongarm
+ 	bool "strongarm sa110/sa1100"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV4
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_xscale
+ 	bool "xscale"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV5
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
+ config BR2_iwmmxt
+ 	bool "iwmmxt"
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV5
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++	depends on !BR2_ARCH_IS_64
  endchoice
  
- config BR2_ARCH
--	default "arm"	if BR2_arm
--	default "armeb"	if BR2_armeb
-+	default "arm"		if BR2_arm
-+	default "armeb"		if BR2_armeb
-+	default "aarch64"	if BR2_aarch64
-+	default "aarch64_be"	if BR2_aarch64_be
- 
- config BR2_ENDIAN
--	default "LITTLE" if BR2_arm
--	default "BIG"	 if BR2_armeb
-+	default "LITTLE" if (BR2_arm || BR2_aarch64)
-+	default "BIG"	 if (BR2_armeb || BR2_aarch64_be)
- 
- config BR2_GCC_TARGET_CPU
- 	default "arm920t"	if BR2_arm920t
-@@ -467,9 +470,10 @@ config BR2_GCC_TARGET_CPU
- 	default "iwmmxt"	if BR2_iwmmxt
- 
- config BR2_GCC_TARGET_ABI
--	default "aapcs-linux"
-+	default "aapcs-linux"	if BR2_arm || BR2_armeb
- 
- config BR2_GCC_TARGET_FPU
-+	depends on BR2_arm || BR2_armeb
- 	default "vfp"		if BR2_ARM_FPU_VFPV2
- 	default "vfpv3"		if BR2_ARM_FPU_VFPV3
- 	default "vfpv3-d16" 	if BR2_ARM_FPU_VFPV3D16
+ config BR2_ARM_ENABLE_NEON
 -- 
 2.7.4
