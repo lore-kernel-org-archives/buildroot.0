@@ -1,39 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 30 Nov 2016 09:45:05 +0000
-Subject: [Buildroot] [PATCH next] git: bump version to 2.11.0
-Message-ID: <20161130094505.11546-1-Vincent.Riera@imgtec.com>
+From: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+Date: Wed, 30 Nov 2016 08:29:57 -0200
+Subject: [Buildroot] [-v2] uboot: support -b option for mkenvimage
+Message-ID: <1480501797-31170-1-git-send-email-tiago.brusamarello@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+When generating the environment image the target endianess should
+be taken in account for CRC calculation purposes. For big endian
+targets the -b flag should be passed to the mkenvimage tool.
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 0815641..ee76157 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 94802903dd707d85ca3b9a2be35e936a54ce86375f52c6a789efe7ce7e238671  git-2.10.2.tar.xz
-+sha256 7e7e8d69d494892373b87007674be5820a4bc1ef596a0117d03ea3169119fd0b  git-2.11.0.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index a7768ac..7d4d363 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+
+---
+Changes v1 -> v2:
+  - removed unwanted space inside macro call
+  - changed 'findstring' to 'filter'
+
+Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+---
+ boot/uboot/uboot.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 3e347c1..6b9d544 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -223,6 +223,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+ 			$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+ 			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
++			$(if $(filter BIG,$(BR2_ENDIAN)),-b) \
+ 			-o $(BINARIES_DIR)/uboot-env.bin -)
+ endef
  
--GIT_VERSION = 2.10.2
-+GIT_VERSION = 2.11.0
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
 -- 
-2.10.1
+1.9.1
