@@ -1,42 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:36 -0000
-Subject: [Buildroot] [git commit] gst1-plugins-ugly: bump to version 1.10.0
-Message-ID: <20161201222134.35FD47FD88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gst1-plugins-bad: enable webrtc plugin
+Message-ID: <20161201222134.1E7B481E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=593446f3f436f3a27fd22251c38b97710edd8b7c
+commit: https://git.buildroot.net/buildroot/commit/?id=ee267886bc090335dd94c97dca1c294addccc090
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+It's new for 1.10.0, add an explicit option for the webrtc plugin.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 17 +++++++++++++++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  7 +++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index 1c6aa7d..5784525 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.8.3.tar.xz.sha256sum
--sha256	6fa2599fdd072d31fbaf50c34af406e2be944a010b1f4eab67a5fe32a0310693  gst-plugins-ugly-1.8.3.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.10.0.tar.xz.sha256sum
-+sha256	97de8d1903abb54305732e6b8781c8c42f5cc5a2a548a8f31b38c189e81a55e0  gst-plugins-ugly-1.10.0.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 4a67a73..40234a1 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 8af35cc..1e251af 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -682,6 +682,23 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
+ 	help
+ 	  Webp image format plugin
  
--GST1_PLUGINS_UGLY_VERSION = 1.8.3
-+GST1_PLUGINS_UGLY_VERSION = 1.10.0
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
++	bool "webrtc"
++	# All depends from webrtc-audio-processing
++	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
++	select BR2_PACKAGE_WEBRTC
++	help
++	  WebRTC echo-cancellation, gain control and noise suppression
++
++comment "webrtc needs a toolchain w/ C++, NPTL, gcc >= 4.8"
++	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
+ 	bool "x265"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index cd9da7c..ba9f8ff 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -794,6 +794,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
++GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-x265
+ GST1_PLUGINS_BAD_DEPENDENCIES += x265
