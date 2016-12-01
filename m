@@ -1,265 +1,250 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 01 Dec 2016 22:21:36 -0000
-Subject: [Buildroot] [git commit] systemd: bump version to 232
-Message-ID: <20161201222133.56F1D800B0@busybox.osuosl.org>
+Date: Thu, 01 Dec 2016 22:21:37 -0000
+Subject: [Buildroot] [git commit] olimex_imx233_olinuxino: bump version
+Message-ID: <20161201222134.E7A9581E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f9381fa55f9de08e4810417094679fb3662149a
+commit: https://git.buildroot.net/buildroot/commit/?id=a2ec1d26f850a2d2b800c79adeb421a40ffd4973
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- 0002 patch tweaked. There is a hunk that has been removed upstream by
-  this commit:
-  https://github.com/systemd/systemd/commit/082210c7a837063fd8b520b18c221b42059d7eff
-- Patches 0004, 0005 and 0006 were backported from upstream and now they
-  are included in this release, so drop them.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...uild-sys-revert-use-of-ln-relative-option.patch | 18 +++---
- ...-export-raw-needs-missing.h-for-O_TMPFILE.patch | 31 -----------
- ...h-add-missing-definitions-for-__O_TMPFILE.patch | 63 ---------------------
- ...basic-fileio-we-always-have-O_TMPFILE-now.patch | 65 ----------------------
- package/systemd/systemd.hash                       |  2 +-
- package/systemd/systemd.mk                         |  2 +-
- 6 files changed, 9 insertions(+), 172 deletions(-)
+ .../imx233_olinuxino/genimage-imx233_olinuxino.cfg |   1 +
+ board/olimex/imx233_olinuxino/linux-3.18.config    | 152 ---------------------
+ board/olimex/imx233_olinuxino/post-image.sh        |   3 -
+ configs/olimex_imx233_olinuxino_defconfig          |  16 ++-
+ 4 files changed, 10 insertions(+), 162 deletions(-)
 
-diff --git a/package/systemd/0002-build-sys-revert-use-of-ln-relative-option.patch b/package/systemd/0002-build-sys-revert-use-of-ln-relative-option.patch
-index 18dc987..2c1d929 100644
---- a/package/systemd/0002-build-sys-revert-use-of-ln-relative-option.patch
-+++ b/package/systemd/0002-build-sys-revert-use-of-ln-relative-option.patch
-@@ -11,25 +11,21 @@ for example).
- 
- Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
- [Maxime: refresh the patch]
-+[Vincent:
-+  refresh the patch, move-to-rootlibdir removed by:
-+  https://github.com/systemd/systemd/commit/082210c7a837063fd8b520b18c221b42059d7eff
-+]
- Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- ---
-- Makefile.am  | 15 +++------------
-+ Makefile.am  | 11 ++---------
-  configure.ac |  2 --
-- 2 files changed, 3 insertions(+), 14 deletions(-)
-+ 2 files changed, 2 insertions(+), 11 deletions(-)
- 
- diff --git a/Makefile.am b/Makefile.am
- index 0c27f81..4de1595 100644
- --- a/Makefile.am
- +++ b/Makefile.am
--@@ -255,7 +255,7 @@ define move-to-rootlibdir
-- 		$(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
-- 		so_img_name=$$(readlink $(DESTDIR)$(libdir)/$$libname) && \
-- 		rm -f $(DESTDIR)$(libdir)/$$libname && \
---		$(LN_S) --relative -f $(DESTDIR)$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/$$libname && \
--+		$(LN_S) -f $(DESTDIR)$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/$$libname && \
-- 		mv $(DESTDIR)$(libdir)/$$libname.* $(DESTDIR)$(rootlibdir); \
-- 	fi
-- endef
- @@ -312,9 +312,9 @@ install-aliases-hook:
-  	set -- $(SYSTEM_UNIT_ALIASES) && \
-  		dir=$(systemunitdir) && $(install-aliases)
-diff --git a/package/systemd/0004-importd-export-raw-needs-missing.h-for-O_TMPFILE.patch b/package/systemd/0004-importd-export-raw-needs-missing.h-for-O_TMPFILE.patch
+diff --git a/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg b/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
+index 78979dc..751fe86 100644
+--- a/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
++++ b/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
+@@ -1,6 +1,7 @@
+ image kernel.vfat {
+   vfat {
+     files = {
++      "imx23-olinuxino.dtb",
+       "uImage"
+     }
+   }
+diff --git a/board/olimex/imx233_olinuxino/linux-3.18.config b/board/olimex/imx233_olinuxino/linux-3.18.config
 deleted file mode 100644
-index bded6bc..0000000
---- a/package/systemd/0004-importd-export-raw-needs-missing.h-for-O_TMPFILE.patch
+index d46d4d5..0000000
+--- a/board/olimex/imx233_olinuxino/linux-3.18.config
 +++ /dev/null
-@@ -1,31 +0,0 @@
--From 4a6d35237f96d07f3a783c874933f87bf14f93e0 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 28 Aug 2016 16:26:04 +0200
--Subject: [PATCH] importd/export-raw: needs missing.h for O_TMPFILE
--
--O_TMPFILE may be missing from the system headers, so use our fallback
--definition.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
--Backported from upstream:
--    https://github.com/systemd/systemd/commit/4a6d35237f96d07f3a783c874933f87bf14f93e0
-----
-- src/import/export-raw.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/import/export-raw.c b/src/import/export-raw.c
--index db06e11..6136b67 100644
----- a/src/import/export-raw.c
--+++ b/src/import/export-raw.c
--@@ -34,6 +34,7 @@
-- #include "fd-util.h"
-- #include "fileio.h"
-- #include "import-common.h"
--+#include "missing.h"
-- #include "ratelimit.h"
-- #include "string-util.h"
-- #include "util.h"
---- 
--2.7.4
--
-diff --git a/package/systemd/0005-missing.h-add-missing-definitions-for-__O_TMPFILE.patch b/package/systemd/0005-missing.h-add-missing-definitions-for-__O_TMPFILE.patch
-deleted file mode 100644
-index 1c5ca05..0000000
---- a/package/systemd/0005-missing.h-add-missing-definitions-for-__O_TMPFILE.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From daad709a7c13c0fac73e407528f96cc876c09629 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 28 Aug 2016 17:26:42 +0200
--Subject: [PATCH] missing.h: add missing definitions for __O_TMPFILE
--
--Currently, a missing __O_TMPFILE was only defined for i386 and x86_64,
--leaving any other architectures with an "old" toolchain fail miserably
--at build time:
--    src/import/export-raw.c: In function 'reflink_snapshot':
--    src/import/export-raw.c:271:26: error: 'O_TMPFILE' undeclared (first use in this function)
--             new_fd = open(d, O_TMPFILE|O_CLOEXEC|O_NOCTTY|O_RDWR, 0600);
--                              ^
--
--__O_TMPFILE (and O_TMPFILE) are available since glibc 2.19. However, a
--lot of existing toolchains are still using glibc-2.18, and some even
--before that, and it is not really possible to update those toolchains.
--
--Instead of defining it only for i386 and x86_64, define __O_TMPFILE
--with the specific values for those archs where it is different from the
--generic value. Use the values as found in the Linux kernel (v4.8-rc3,
--current as of time of commit).
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
--Backported from upstream:
--    https://github.com/systemd/systemd/commit/daad709a7c13c0fac73e407528f96cc876c09629
-----
-- src/basic/missing.h | 17 +++++++++++++----
-- 1 file changed, 13 insertions(+), 4 deletions(-)
--
--diff --git a/src/basic/missing.h b/src/basic/missing.h
--index f8e0966..13ff51c 100644
----- a/src/basic/missing.h
--+++ b/src/basic/missing.h
--@@ -537,12 +537,21 @@ struct btrfs_ioctl_quota_ctl_args {
-- #  define DRM_IOCTL_DROP_MASTER _IO('d', 0x1f)
-- #endif
-- 
---#if defined(__i386__) || defined(__x86_64__)
---
---/* The precise definition of __O_TMPFILE is arch specific, so let's
--- * just define this on x86 where we know the value. */
--+/* The precise definition of __O_TMPFILE is arch specific; use the
--+ * values defined by the kernel (note: some are hexa, some are octal,
--+ * duplicated as-is from the kernel definitions):
--+ * - alpha, parisc, sparc: each has a specific value;
--+ * - others: they use the "generic" value.
--+ */
-- 
-- #ifndef __O_TMPFILE
--+#if defined(__alpha__)
--+#define __O_TMPFILE     0100000000
--+#elif defined(__parisc__) || defined(__hppa__)
--+#define __O_TMPFILE     0400000000
--+#elif defined(__sparc__) || defined(__sparc64__)
--+#define __O_TMPFILE     0x2000000
--+#else
-- #define __O_TMPFILE     020000000
-- #endif
-- 
---- 
--2.7.4
--
-diff --git a/package/systemd/0006-basic-fileio-we-always-have-O_TMPFILE-now.patch b/package/systemd/0006-basic-fileio-we-always-have-O_TMPFILE-now.patch
-deleted file mode 100644
-index e0e7209..0000000
---- a/package/systemd/0006-basic-fileio-we-always-have-O_TMPFILE-now.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From 1d9ed171788821c21ca900a921833a8e41bf22f3 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Mon, 29 Aug 2016 12:34:50 +0200
--Subject: [PATCH] basic/fileio: we always have O_TMPFILE now
--
--fileio makes use of O_TMPFILE when it is available.
--
--We now always have O_TMPFILE, defined in missing.h if missing
--from the toolchain headers.
--
--Have fileio include missing.h and drop the guards around the
--use of O_TMPFILE.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
--Backported from upstream:
--    https://github.com/systemd/systemd/commit/1d9ed171788821c21ca900a921833a8e41bf22f3
-----
-- src/basic/fileio.c | 5 +----
-- 1 file changed, 1 insertion(+), 4 deletions(-)
--
--diff --git a/src/basic/fileio.c b/src/basic/fileio.c
--index d642f3d..a5920e7 100644
----- a/src/basic/fileio.c
--+++ b/src/basic/fileio.c
--@@ -37,6 +37,7 @@
-- #include "hexdecoct.h"
-- #include "log.h"
-- #include "macro.h"
--+#include "missing.h"
-- #include "parse-util.h"
-- #include "path-util.h"
-- #include "random-util.h"
--@@ -1280,12 +1281,10 @@ int open_tmpfile_unlinkable(const char *directory, int flags) {
-- 
--         /* Returns an unlinked temporary file that cannot be linked into the file system anymore */
-- 
---#ifdef O_TMPFILE
--         /* Try O_TMPFILE first, if it is supported */
--         fd = open(directory, flags|O_TMPFILE|O_EXCL, S_IRUSR|S_IWUSR);
--         if (fd >= 0)
--                 return fd;
---#endif
-- 
--         /* Fall back to unguessable name + unlinking */
--         p = strjoina(directory, "/systemd-tmp-XXXXXX");
--@@ -1313,7 +1312,6 @@ int open_tmpfile_linkable(const char *target, int flags, char **ret_path) {
--          * which case "ret_path" will be returned as NULL. If not possible a the tempoary path name used is returned in
--          * "ret_path". Use link_tmpfile() below to rename the result after writing the file in full. */
-- 
---#ifdef O_TMPFILE
--         {
--                 _cleanup_free_ char *dn = NULL;
-- 
--@@ -1329,7 +1327,6 @@ int open_tmpfile_linkable(const char *target, int flags, char **ret_path) {
-- 
--                 log_debug_errno(errno, "Failed to use O_TMPFILE on %s: %m", dn);
--         }
---#endif
-- 
--         r = tempfn_random(target, NULL, &tmp);
--         if (r < 0)
---- 
--2.7.4
--
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 30e9ef6..0acaa3c 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 899733ad6c157cedbb89aec4efe3bc824dcfd65a1d6f6bebc7b043f7924e39b4 systemd-231.tar.gz
-+sha256 1172c7c7d5d72fbded53186e7599d5272231f04cc8b72f9a0fb2c5c20dfc4880  systemd-232.tar.gz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index fb07819..fa07bd0 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -1,152 +0,0 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_PERF_EVENTS=y
+-# CONFIG_COMPAT_BRK is not set
+-CONFIG_MODULES=y
+-CONFIG_MODULE_FORCE_LOAD=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODULE_FORCE_UNLOAD=y
+-CONFIG_MODVERSIONS=y
+-CONFIG_BLK_DEV_INTEGRITY=y
+-# CONFIG_ARCH_MULTI_V7 is not set
+-CONFIG_ARCH_MXS=y
+-# CONFIG_ARM_THUMB is not set
+-CONFIG_PREEMPT_VOLUNTARY=y
+-CONFIG_AEABI=y
+-CONFIG_ARM_APPENDED_DTB=y
+-CONFIG_ARM_ATAG_DTB_COMPAT=y
+-CONFIG_CMDLINE="console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw rootwait"
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-CONFIG_SYN_COOKIES=y
+-CONFIG_CFG80211=y
+-CONFIG_CFG80211_WEXT=y
+-CONFIG_MAC80211=y
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-# CONFIG_FIRMWARE_IN_KERNEL is not set
+-CONFIG_MTD=y
+-CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_DATAFLASH=y
+-CONFIG_MTD_SST25L=y
+-CONFIG_MTD_NAND=y
+-CONFIG_MTD_NAND_GPMI_NAND=y
+-CONFIG_MTD_UBI=y
+-# CONFIG_BLK_DEV is not set
+-CONFIG_EEPROM_AT24=y
+-CONFIG_EEPROM_93CX6=y
+-CONFIG_SCSI=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_NETDEVICES=y
+-# CONFIG_ETHERNET is not set
+-CONFIG_USB_USBNET=y
+-CONFIG_USB_NET_SMSC95XX=y
+-CONFIG_RTL8187=m
+-CONFIG_ATH_CARDS=m
+-CONFIG_ATH9K_HTC=m
+-CONFIG_RT2X00=m
+-CONFIG_RT73USB=m
+-CONFIG_RT2800USB=m
+-CONFIG_RT2800USB_RT53XX=y
+-CONFIG_RT2800USB_RT55XX=y
+-CONFIG_RT2800USB_UNKNOWN=y
+-CONFIG_RTL_CARDS=m
+-CONFIG_RTL8192CU=m
+-# CONFIG_RTLWIFI_DEBUG is not set
+-CONFIG_ZD1211RW=m
+-# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
+-CONFIG_INPUT_EVDEV=y
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
+-# CONFIG_LEGACY_PTYS is not set
+-# CONFIG_DEVKMEM is not set
+-CONFIG_SERIAL_AMBA_PL011=y
+-CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+-CONFIG_SERIAL_MXS_AUART=y
+-# CONFIG_HW_RANDOM is not set
+-CONFIG_I2C=y
+-# CONFIG_I2C_COMPAT is not set
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_MXS=y
+-CONFIG_SPI=y
+-CONFIG_SPI_GPIO=m
+-CONFIG_SPI_MXS=y
+-CONFIG_PTP_1588_CLOCK=y
+-CONFIG_GPIO_SYSFS=y
+-# CONFIG_HWMON is not set
+-CONFIG_WATCHDOG=y
+-CONFIG_STMP3XXX_RTC_WATCHDOG=y
+-CONFIG_REGULATOR=y
+-CONFIG_REGULATOR_FIXED_VOLTAGE=y
+-CONFIG_FB=y
+-CONFIG_FB_MXS=y
+-CONFIG_BACKLIGHT_LCD_SUPPORT=y
+-CONFIG_LCD_CLASS_DEVICE=y
+-CONFIG_BACKLIGHT_CLASS_DEVICE=y
+-CONFIG_BACKLIGHT_PWM=y
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_LOGO=y
+-CONFIG_SOUND=y
+-CONFIG_SND=y
+-CONFIG_SND_HRTIMER=y
+-# CONFIG_SND_SUPPORT_OLD_API is not set
+-# CONFIG_SND_VERBOSE_PROCFS is not set
+-# CONFIG_SND_DRIVERS is not set
+-# CONFIG_SND_ARM is not set
+-# CONFIG_SND_SPI is not set
+-# CONFIG_SND_USB is not set
+-CONFIG_SND_SOC=y
+-CONFIG_USB=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_USB_CHIPIDEA=y
+-CONFIG_USB_CHIPIDEA_HOST=y
+-CONFIG_USB_MXS_PHY=y
+-CONFIG_MMC=y
+-CONFIG_MMC_MXS=y
+-CONFIG_LEDS_CLASS=y
+-CONFIG_LEDS_GPIO=y
+-CONFIG_LEDS_TRIGGER_TIMER=y
+-CONFIG_LEDS_TRIGGER_ONESHOT=y
+-CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+-CONFIG_LEDS_TRIGGER_BACKLIGHT=y
+-CONFIG_LEDS_TRIGGER_GPIO=y
+-CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_STMP=y
+-CONFIG_DMADEVICES=y
+-CONFIG_MXS_DMA=y
+-CONFIG_STAGING=y
+-CONFIG_MXS_LRADC=y
+-CONFIG_IIO=y
+-CONFIG_IIO_SYSFS_TRIGGER=y
+-CONFIG_PWM=y
+-CONFIG_PWM_MXS=y
+-CONFIG_EXT4_FS=y
+-CONFIG_TMPFS=y
+-CONFIG_TMPFS_POSIX_ACL=y
+-# CONFIG_MISC_FILESYSTEMS is not set
+-# CONFIG_NETWORK_FILESYSTEMS is not set
+-CONFIG_PRINTK_TIME=y
+-CONFIG_FRAME_WARN=2048
+-CONFIG_UNUSED_SYMBOLS=y
+-CONFIG_DEBUG_FS=y
+-CONFIG_STRICT_DEVMEM=y
+-CONFIG_DEBUG_USER=y
+-CONFIG_KEYS=y
+-CONFIG_CRYPTO_DEFLATE=y
+-CONFIG_CRYPTO_LZO=y
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-CONFIG_CRYPTO_DEV_MXS_DCP=y
+-CONFIG_CRC_CCITT=y
+-CONFIG_CRC_ITU_T=y
+-CONFIG_CRC7=m
+-CONFIG_FONTS=y
+diff --git a/board/olimex/imx233_olinuxino/post-image.sh b/board/olimex/imx233_olinuxino/post-image.sh
+index 703cbe7..948d770 100755
+--- a/board/olimex/imx233_olinuxino/post-image.sh
++++ b/board/olimex/imx233_olinuxino/post-image.sh
+@@ -5,9 +5,6 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
+ GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
+ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
  
--SYSTEMD_VERSION = 231
-+SYSTEMD_VERSION = 232
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+-# Create symlink to "rename" kernel image
+-ln -sf uImage.imx23-olinuxino ${BINARIES_DIR}/uImage
+-
+ rm -rf "${GENIMAGE_TMP}"
+ 
+ genimage                           \
+diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+index f74f422..e0a7b08 100644
+--- a/configs/olimex_imx233_olinuxino_defconfig
++++ b/configs/olimex_imx233_olinuxino_defconfig
+@@ -2,6 +2,9 @@
+ BR2_arm=y
+ BR2_arm926t=y
+ 
++# Linux headers same as kernel, a 4.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ 
+@@ -9,15 +12,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ 
+ # Kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.2"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.18.config"
+-BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x42000000"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
++BR2_LINUX_KERNEL_DEFCONFIG="mxs"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-olinuxino"
++BR2_LINUX_KERNEL_UIMAGE=y
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x42000000"
+ 
+ # Firmware for WiFi
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+@@ -36,7 +38,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
+ BR2_TARGET_UBOOT_FORMAT_SD=y
+  
