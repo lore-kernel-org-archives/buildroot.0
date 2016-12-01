@@ -1,133 +1,40 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Thu, 1 Dec 2016 11:34:47 +0100
-Subject: [Buildroot] [PATCH 1/1] nginx-dav-ext: New package
-In-Reply-To: <1480438071-11906-1-git-send-email-johan.oudinet@gmail.com>
-References: <1480438071-11906-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <CAJtjsKYs=z99t632ZM7peRW9juRDUuqag52trehU5fGuUN04sw@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 1 Dec 2016 11:17:04 +0000
+Subject: [Buildroot] [PATCH next] cmake: bump version to 3.7.1
+Message-ID: <20161201111704.32302-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I forgot to use the new get-developers script when sending this patch.
-According to it, I should have put in CC Samuel Martin. I also see
-you're in the middle of a new release. Should I rebase this patch in
-next and re-send it?
-
-On Tue, Nov 29, 2016 at 5:47 PM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
-> Nginx built-in support for webdav is missing support for two commands:
-> PROPFIND and OPTIONS. Add an external module and an option in the nginx
-> package to provide full webdav support.
->
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-> ---
->  package/Config.in                        |  1 +
->  package/nginx-dav-ext/Config.in          |  7 +++++++
->  package/nginx-dav-ext/nginx-dav-ext.hash |  2 ++
->  package/nginx-dav-ext/nginx-dav-ext.mk   | 12 ++++++++++++
->  package/nginx/Config.in                  | 10 ++++++++++
->  package/nginx/nginx.mk                   |  5 +++++
->  6 files changed, 37 insertions(+)
->  create mode 100644 package/nginx-dav-ext/Config.in
->  create mode 100644 package/nginx-dav-ext/nginx-dav-ext.hash
->  create mode 100644 package/nginx-dav-ext/nginx-dav-ext.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 9ed296f..687c600 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1544,6 +1544,7 @@ menu "Networking applications"
->         source "package/nginx/Config.in"
->  if BR2_PACKAGE_NGINX
->  menu "External nginx modules"
-> +       source "package/nginx-dav-ext/Config.in"
->         source "package/nginx-naxsi/Config.in"
->         source "package/nginx-upload/Config.in"
->  endmenu
-> diff --git a/package/nginx-dav-ext/Config.in b/package/nginx-dav-ext/Config.in
-> new file mode 100644
-> index 0000000..bf197dc
-> --- /dev/null
-> +++ b/package/nginx-dav-ext/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_NGINX_DAV_EXT
-> +       bool "nginx-dav-ext"
-> +       select BR2_PACKAGE_EXPAT
-> +       help
-> +         NGINX WebDAV missing commands support (PROPFIND & OPTIONS).
-> +
-> +         https://github.com/arut/nginx-dav-ext-module
-> diff --git a/package/nginx-dav-ext/nginx-dav-ext.hash b/package/nginx-dav-ext/nginx-dav-ext.hash
-> new file mode 100644
-> index 0000000..ea7eb86
-> --- /dev/null
-> +++ b/package/nginx-dav-ext/nginx-dav-ext.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 d428a0236c933779cb40ac8c91afb19d5c25a376dc3caab825bfd543e1ee530d  nginx-dav-ext-v0.0.3.tar.gz
-> diff --git a/package/nginx-dav-ext/nginx-dav-ext.mk b/package/nginx-dav-ext/nginx-dav-ext.mk
-> new file mode 100644
-> index 0000000..6c2b3a2
-> --- /dev/null
-> +++ b/package/nginx-dav-ext/nginx-dav-ext.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# nginx-dav-ext
-> +#
-> +################################################################################
-> +
-> +NGINX_DAV_EXT_VERSION = v0.0.3
-> +NGINX_DAV_EXT_SITE = $(call github,arut,nginx-dav-ext-module,$(NGINX_DAV_EXT_VERSION))
-> +
-> +NGINX_DAV_EXT_DEPENDENCIES = expat
-> +
-> +$(eval $(generic-package))
-> diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-> index e6f2d96..6f339c7 100644
-> --- a/package/nginx/Config.in
-> +++ b/package/nginx/Config.in
-> @@ -85,6 +85,16 @@ config BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
->         help
->           Enable ngx_http_dav_module
->
-> +if BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
-> +
-> +config BR2_PACKAGE_NGINX_HTTP_DAV_EXT_MODULE
-> +       bool "ngx_http_dav_ext_module"
-> +       select BR2_PACKAGE_NGINX_DAV_EXT
-> +       help
-> +         Enable ngx_http_dav_ext_module
-> +
-> +endif # BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
-> +
->  config BR2_PACKAGE_NGINX_HTTP_FLV_MODULE
->         bool "ngx_http_flv_module"
->         help
-> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-> index 6563627..c99139b 100644
-> --- a/package/nginx/nginx.mk
-> +++ b/package/nginx/nginx.mk
-> @@ -167,6 +167,11 @@ else
->  NGINX_CONF_OPTS += --without-http_rewrite_module
->  endif
->
-> +ifeq ($(BR2_PACKAGE_NGINX_HTTP_DAV_EXT_MODULE)$(BR2_PACKAGE_NGINX_DAV_EXT),yy)
-> +NGINX_DEPENDENCIES += nginx-dav-ext
-> +NGINX_CONF_OPTS += --add-module=$(NGINX_DAV_EXT_DIR)
-> +endif
-> +
->  NGINX_CONF_OPTS += \
->         $(if $(BR2_PACKAGE_NGINX_HTTP_REALIP_MODULE),--with-http_realip_module) \
->         $(if $(BR2_PACKAGE_NGINX_HTTP_ADDITION_MODULE),--with-http_addition_module) \
-> --
-> 2.7.4
->
-
-
-
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 687e5a4..7a22f21 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.7/cmake-3.7.0-SHA-256.txt
+-sha256 ed63e05c41aeb6c036e503114ab15847f29c312f9f21f5f1a7060a4b4ec2fb31  cmake-3.7.0.tar.gz
++# From http://www.cmake.org/files/v3.7/cmake-3.7.1-SHA-256.txt
++sha256 449a5bce64dbd4d5b9517ebd1a1248ed197add6ad27934478976fd5f1f9330e1  cmake-3.7.1.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 522d7fe..f4c61aa 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CMAKE_VERSION_MAJOR = 3.7
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
 -- 
-Johan
+2.10.1
