@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:39 -0000
-Subject: [Buildroot] [git commit] uboot-tools: bump to version 2016.11
-Message-ID: <20161201222136.6EE147FCD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gst1-libav: bump to version 1.10.0
+Message-ID: <20161201222134.41B32800B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99fd3bae35f9971544990c1869933b8ae22832ec
+commit: https://git.buildroot.net/buildroot/commit/?id=5ffd5bf1cd84a8d78827976f9cd277da2a02ed0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uboot-tools/uboot-tools.hash | 2 +-
- package/uboot-tools/uboot-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index db60dab..5b2c3bf 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
+index 46d48a9..329d1d6 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  95728e89dd476d17428f94080752ab48884be477b6a678941582aeef618b70bb  u-boot-2016.09.01.tar.bz2
-+sha256  45813e6565dcc0436abe6752624324cdbf5f3ac106570d76d32b46ec529bcdc8  u-boot-2016.11.tar.bz2
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index a3335a5..bb0cba8 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
+-# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.8.3.tar.xz.sha256sum
+-sha256	9006a05990089f7155ee0e848042f6bb24e52ab1d0a59ff8d1b5d7e33001a495  gst-libav-1.8.3.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.10.0.tar.xz.sha256sum
++sha256	af98204411c78abb98233c1858f2886be6401304d24be218752bbbcede9bd85b  gst-libav-1.10.0.tar.xz
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 5706c64..718ebdb 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UBOOT_TOOLS_VERSION = 2016.09.01
-+UBOOT_TOOLS_VERSION = 2016.11
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
+-GST1_LIBAV_VERSION = 1.8.3
++GST1_LIBAV_VERSION = 1.10.0
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
+ GST1_LIBAV_CONF_OPTS = --with-system-libav
