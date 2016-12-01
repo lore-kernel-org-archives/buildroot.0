@@ -1,35 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 01 Dec 2016 22:21:39 -0000
-Subject: [Buildroot] [git commit] configs/olimex_imx233_olinuxino: Add EXT4
-	support
-Message-ID: <20161201222135.D66607FA6F@busybox.osuosl.org>
+Date: Thu, 01 Dec 2016 22:21:40 -0000
+Subject: [Buildroot] [git commit] gst1-validate: bump to version 1.10.0
+Message-ID: <20161201222134.586F8800B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12b7cf60606e4e82acf9f29454bab6ba40457777
+commit: https://git.buildroot.net/buildroot/commit/?id=32e0d57a0fed932fcfc4745afda4d65aeb71c39f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Select BR2_TARGET_ROOTFS_EXT4 so that an EXT4 rootfs can be generated.
+It now requires json-glib as dependency so adjust.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/olimex_imx233_olinuxino_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/gstreamer1/gst1-validate/Config.in          | 1 +
+ package/gstreamer1/gst1-validate/gst1-validate.hash | 4 ++--
+ package/gstreamer1/gst1-validate/gst1-validate.mk   | 3 ++-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index 1040e5e..70e8b5d 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -32,6 +32,7 @@ BR2_PACKAGE_ZD1211_FIRMWARE=y
+diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
+index a9bb2aa..2022d38 100644
+--- a/package/gstreamer1/gst1-validate/Config.in
++++ b/package/gstreamer1/gst1-validate/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GST1_VALIDATE
+ 	bool "gst1-validate"
+ 	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_JSON_GLIB
+ 	select BR2_PACKAGE_PYTHON_PYEXPAT
+ 	# cairo is autodetected but needs PNG support
+ 	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
+index 09061f4..f08e1b7 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.hash
++++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.8.3.tar.xz.sha256sum
+-sha256 4525a4fb5b85b8a49674e00d652bee9ac62c56241c148abbff23efa50a224e34  gst-validate-1.8.3.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.10.0.tar.xz.sha256sum
++sha256 a99a5cd1dfa5d021dd0197b32b04a20348479c097ebeb1f4c36161d70048a176  gst-validate-1.10.0.tar.xz
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index 372e5d6..94595a6 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
- # U-Boot
+-GST1_VALIDATE_VERSION = 1.8.3
++GST1_VALIDATE_VERSION = 1.10.0
+ GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
+ GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
+ GST1_VALIDATE_LICENSE = LGPLv2.1+
+@@ -15,6 +15,7 @@ GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
+ GST1_VALIDATE_DEPENDENCIES = \
+ 	gstreamer1 \
+ 	gst1-plugins-base \
++	json-glib \
+ 	host-python \
+ 	python \
+ 	$(if $(BR2_PACKAGE_CAIRO),cairo)
