@@ -1,43 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 01 Dec 2016 22:21:41 -0000
-Subject: [Buildroot] [git commit] patchelf: bump version to 0.9
-Message-ID: <20161201222135.1D4DA81E74@busybox.osuosl.org>
+Date: Thu, 01 Dec 2016 22:21:42 -0000
+Subject: [Buildroot] [git commit] swupdate: bump to version 2016.10
+Message-ID: <20161201222135.564E281E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2163fb8d4cc6ca925464b60b517e8953038559d
+commit: https://git.buildroot.net/buildroot/commit/?id=8f4c905adf76d49c33ba29f090a149a6128b64cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+A short list of new features:
+
+- progress interface as general way to signalize the update
+  status outside of the process.
+
+- support encrypted artifacts (encryption via simmetric keys)
+
+- host verification for swu images (-c option)
+
+- configuration file to configure the update process
+
+- HAwkbit backend: API extended, support for configData messages
+
+- Hawkbit backend: supports SSL certificates
+
+- remote handler : general interface to connect external
+  installers.
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/patchelf/patchelf.hash | 2 +-
- package/patchelf/patchelf.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/swupdate/swupdate.hash | 2 +-
+ package/swupdate/swupdate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/patchelf/patchelf.hash b/package/patchelf/patchelf.hash
-index 0da413e..14154a3 100644
---- a/package/patchelf/patchelf.hash
-+++ b/package/patchelf/patchelf.hash
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index 918ca2f..1ba10f6 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	14af06a2da688d577d64ff8dac065bb8903bbffbe01d30c62df7af9bf4ce72fe	patchelf-0.8.tar.gz
-+sha256	f2aa40a6148cb3b0ca807a1bf836b081793e55ec9e5540a5356d800132be7e0a	patchelf-0.9.tar.gz
-diff --git a/package/patchelf/patchelf.mk b/package/patchelf/patchelf.mk
-index 043224d..5222e57 100644
---- a/package/patchelf/patchelf.mk
-+++ b/package/patchelf/patchelf.mk
-@@ -4,8 +4,8 @@
+-sha256  c21d2fd52eb7ed9c304a7a996d230a8f1b47b9879a8c9fa50c80b41e117d1e60  swupdate-2016.07.tar.gz
++sha256  840d6287a41f7a42e08a74045ee40b7c2f82c1ecfedf8c915e3935d4f0084376  swupdate-2016.10.tar.gz
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index d442810..c905c1d 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PATCHELF_VERSION = 0.8
--PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-0.8
-+PATCHELF_VERSION = 0.9
-+PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-0.9
- PATCHELF_LICENSE = GPLv3+
- PATCHELF_LICENSE_FILES = COPYING
- 
+-SWUPDATE_VERSION = 2016.07
++SWUPDATE_VERSION = 2016.10
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPLv2+, MIT, Public Domain
+ SWUPDATE_LICENSE_FILES = COPYING
