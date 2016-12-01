@@ -1,58 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:38 -0000
-Subject: [Buildroot] [git commit] Use already qstripped
-	BR2_TOOLCHAIN_EXTERNAL_PREFIX everywhere
-Message-ID: <20161201222135.7670581E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/olimex_imx233_olinuxino: remove
+	useless section from readme.txt
+Message-ID: <20161201222136.05FCE7FCC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4e2cc4d4b0cc4ad1fafa208e1c6887452727a4e
+commit: https://git.buildroot.net/buildroot/commit/?id=7ce31b3e5592ee70ab4f1911caf8cef2e597946c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The BR2_TOOLCHAIN_EXTERNAL_PREFIX variable is already qstripped and
-stored in the TOOLCHAIN_EXTERNAL_PREFIX variable in
-toolchain-external.mk, so use this variable everywhere.
+After the conversion to the common genimage scripts, the uImage.imx23-olinuxino
+file no longer exists.
 
-This will be useful for a later patch that makes the derivation of
-TOOLCHAIN_EXTERNAL_PREFIX a little more complex.
+Instead of updating the section, let's simply remove it as the more
+standard method of using sdcard.img is already explained.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[Arnout: split off into separate patch]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+This also makes the readme more consistent with the other i.MX readme files.
+
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in  | 2 +-
- package/wine/wine.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/olimex/imx233_olinuxino/readme.txt | 70 --------------------------------
+ 1 file changed, 70 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 5d591e9..bd73219 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -184,7 +184,7 @@ endif
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_CROSS = $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
- else
--TARGET_CROSS = $(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
-+TARGET_CROSS = $(HOST_DIR)/usr/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- endif
+diff --git a/board/olimex/imx233_olinuxino/readme.txt b/board/olimex/imx233_olinuxino/readme.txt
+index 2722c3a..1e676c4 100644
+--- a/board/olimex/imx233_olinuxino/readme.txt
++++ b/board/olimex/imx233_olinuxino/readme.txt
+@@ -27,73 +27,3 @@ Then, run the following command as root:
+ *** WARNING! The command will destroy all the card content. Use with care! ***
  
- # Define TARGET_xx variables for all common binutils/gcc
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index d9a0ecf..47ba90a 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -34,7 +34,7 @@ WINE_CONF_OPTS = \
- # wrapper believes what the real gcc is named, and force the tuple of
- # the external toolchain, not the one we compute in GNU_TARGET_NAME.
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
--WINE_CONF_OPTS += TARGETFLAGS="-b $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))"
-+WINE_CONF_OPTS += TARGETFLAGS="-b $(TOOLCHAIN_EXTERNAL_PREFIX)"
- endif
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_SEQ)$(BR2_PACKAGE_ALSA_LIB_RAWMIDI),yyy)
+  sudo dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
+-
+-=== Manual creation of SD card image =========================================
+-
+-You'll need a spare MicroSD card with Freescale's special partition layout.
+-This is basically three partitions:
+-
+-1) Type 53, the U-Boot partition, should be 16MB.
+-2) VFAT, place the kernel uImage there
+-3) Anything you like, for this example an ext2 partition, type 83 (linux).
+-
+-Assuming you see your MicroSD card as /dev/sdc you'd need to do, as root
+-and from the buildroot project top level directory:
+-(remember to replace /dev/sdc* with the appropiate device name!)
+-
+-***** WARNING: Double check that /dev/sdc is your MicroSD card *****
+-*****      It might be /dev/sdb or some other device name      *****
+-***** Failure to do so may result in you wiping your hard disk *****
+-
+-1. Unmount the filesystem(s) if they're already mounted, usually...
+-
+-   # for fs in `grep /dev/sdc /proc/mounts|cut -d ' ' -f 1`;do umount $fs;done
+-
+-   ...should work
+-
+-2. Blank the partition table out
+-
+-   # dd if=/dev/zero of=/dev/sdc bs=1024 count=1024
+-
+-3. Set up the partitions
+-
+-   # fdisk /dev/sdc
+-   n
+-   p
+-   1
+-   <ENTER>
+-   +16MB
+-   t
+-   53
+-   n
+-   p
+-   2
+-   <ENTER>
+-   +5M
+-   t
+-   2
+-   4
+-   n
+-   p
+-   3
+-   <ENTER>
+-   <ENTER>
+-   w
+-
+-4. Fill up the first (U-Boot) partition
+-   # dd if=output/images/u-boot.sd bs=512 of=/dev/sdc1
+-
+-5. Create VFAT Filesystem
+-   # mkfs.vfat /dev/sdc2
+-
+-6. Mount and copy output/images/uImage.imx23-olinuxino to the VFAT partition, rename to uImage
+-   # mount /dev/sdc2 /mnt
+-   # cp output/images/uImages/uImage.imx23-olinuxino /mnt/uImage
+-   # umount /mnt
+-
+-7. Fill up the third (filesystem) partition
+-   # dd if=output/images/rootfs.ext2 of=/dev/sdc3 bs=512
+-
+-8. Remove the MicroSD card from your linux PC and put it into your olinuxino.
+-
+-9. Boot! You're done!
