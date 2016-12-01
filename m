@@ -1,55 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:36 -0000
-Subject: [Buildroot] [git commit] wpa_supplicant: add mesh support (IEEE
-	80211s)
-Message-ID: <20161201222134.91BD781E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gst1-plugins-ugly: bump to version 1.10.0
+Message-ID: <20161201222134.35FD47FD88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=100ed2c05a47b239b383a2f83f1ffc8bb70b86f9
+commit: https://git.buildroot.net/buildroot/commit/?id=593446f3f436f3a27fd22251c38b97710edd8b7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wpa_supplicant/Config.in         | 7 +++++++
- package/wpa_supplicant/wpa_supplicant.mk | 5 +++++
- 2 files changed, 12 insertions(+)
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 454541f..9250a3b 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -45,6 +45,13 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
- 	help
- 	  Enable support for Wi-Fi Display
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index 1c6aa7d..5784525 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.8.3.tar.xz.sha256sum
+-sha256	6fa2599fdd072d31fbaf50c34af406e2be944a010b1f4eab67a5fe32a0310693  gst-plugins-ugly-1.8.3.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.10.0.tar.xz.sha256sum
++sha256	97de8d1903abb54305732e6b8781c8c42f5cc5a2a548a8f31b38c189e81a55e0  gst-plugins-ugly-1.10.0.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 4a67a73..40234a1 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING
-+	bool "Enable mesh networking"
-+	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
-+	help
-+	  Enable support for open and secured mesh networking
-+	  (IEEE 802.11s)
-+
- config BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN
- 	bool "Enable autoscan"
- 	help
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 3c3317b..9c8414b 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -73,6 +73,11 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY),y)
- WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WIFI_DISPLAY
- endif
- 
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)
-+WPA_SUPPLICANT_CONFIG_SET += CONFIG_MESH
-+WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_IEEE80211W
-+endif
-+
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN),y)
- WPA_SUPPLICANT_CONFIG_ENABLE += \
- 	CONFIG_AUTOSCAN_EXPONENTIAL \
+-GST1_PLUGINS_UGLY_VERSION = 1.8.3
++GST1_PLUGINS_UGLY_VERSION = 1.10.0
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
