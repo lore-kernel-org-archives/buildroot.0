@@ -1,103 +1,86 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  1 Dec 2016 19:30:51 +0100
-Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.5.5
-Message-ID: <20161201183051.31900-1-ps.report@gmx.net>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Thu,  1 Dec 2016 16:33:24 -0200
+Subject: [Buildroot] [PATCH v2] stella: fix bug when compiling with PPC
+	altivec vectorization
+Message-ID: <1480617204-25349-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And update 0001-configure-add-disable-runtime-tests-option.patch.
+PPC altivec vectorization triggers a bug when compiling with -std=c++11
+because "bool" is redefined in altivec.h.
 
-For details see [1].
+src/emucore/Event.hxx:112:23: error: cannot convert ?bool? to ?__vector(4) __bool int? in assignment
+         myKeyTable[i] = false;
+                       ^
 
-[1] https://lists.freedesktop.org/archives/input-tools/2016-November/001375.html
+Acording to a bug report in GCC [1], "You need to use -std=g++11 or
+undefine bool after the include of altivec.h as context sensitive
+keywords is not part of the C++11 standard".
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+So let's compile with -std=gnu++11 by default.
+
+Tested on ARM, x86 and PPC.
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58241#c3
+
+Fixes:
+http://autobuild.buildroot.net/results/0970d2c8e1787ceffc46b589522e53d52675e03c
+http://autobuild.buildroot.net/results/ec1bc57675b6e53af0cd33d7b99cd2e3bf5d9d7e
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- ...onfigure-add-disable-runtime-tests-option.patch | 23 +++++++++++++++-------
- package/libevdev/libevdev.hash                     |  4 ++--
- package/libevdev/libevdev.mk                       |  2 +-
- 3 files changed, 19 insertions(+), 10 deletions(-)
 
-diff --git a/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch b/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch
-index 405dff0e5..6a829175c 100644
---- a/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch
-+++ b/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch
-@@ -1,18 +1,18 @@
--From 95527e43845a5063a6125d7779a30d44c3b437ac Mon Sep 17 00:00:00 2001
-+From fe965061b4306e3ca811ff86dc1ca29f7db9af18 Mon Sep 17 00:00:00 2001
- From: Peter Seiderer <ps.report@gmx.net>
- Date: Sun, 11 Oct 2015 13:33:19 +0200
- Subject: [PATCH] configure: add '--disable-runtime-tests' option
- 
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-- configure.ac | 11 +++++++++--
-- 1 file changed, 9 insertions(+), 2 deletions(-)
-+ configure.ac | 15 +++++++++++----
-+ 1 file changed, 11 insertions(+), 4 deletions(-)
- 
- diff --git a/configure.ac b/configure.ac
--index 54a2510..286737b 100644
-+index c1a9111..8fe7b8b 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -74,7 +74,14 @@ else
-+@@ -76,13 +76,20 @@ else
-  	AC_MSG_WARN([check not found - skipping building unit tests])
-  fi
-  AM_CONDITIONAL(HAVE_VALGRIND, [test "x$VALGRIND" != "x"])
-@@ -27,16 +27,25 @@ index 54a2510..286737b 100644
- +AM_CONDITIONAL(ENABLE_RUNTIME_TESTS, [test "x${enable_runtime_tests}x$HAVE_CHECK" = "xyesxyes"])
-  AM_CONDITIONAL(ENABLE_STATIC_LINK_TEST, [test "x$enable_static" = "xyes"])
-  
-+ AC_ARG_ENABLE([test-run],
-+ 	       AS_HELP_STRING([--enable-test-run], [For internal use only]),
-+ 	       [run_tests="$enableval"], [run_tests="yes"])
-+-AM_CONDITIONAL(RUN_TESTS, [test "x$run_tests" = "xyes"])
-++AM_CONDITIONAL(RUN_TESTS, [test "x${enable_runtime_tests}x$run_tests" = "xyesxyes"])
+Changes v1 -> v2:
+  - compile with gnu++11 on all archs (suggested by Sam Bobroff)
+
+---
+ ...-gnu-11-standard-to-prevent-errors-on-PPC.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/stella/0004-Use-gnu-11-standard-to-prevent-errors-on-PPC.patch
+
+diff --git a/package/stella/0004-Use-gnu-11-standard-to-prevent-errors-on-PPC.patch b/package/stella/0004-Use-gnu-11-standard-to-prevent-errors-on-PPC.patch
+new file mode 100644
+index 000000000000..76d12a2cdd93
+--- /dev/null
++++ b/package/stella/0004-Use-gnu-11-standard-to-prevent-errors-on-PPC.patch
+@@ -0,0 +1,35 @@
++From 6946a491cae42b971aad3bc5d822e0e549eca8bd Mon Sep 17 00:00:00 2001
++From: Sergio Prado <sergio.prado@e-labworks.com>
++Date: Thu, 1 Dec 2016 15:20:33 -0200
++Subject: [PATCH] Use gnu++11 standard to prevent errors on PPC.
++
++PPC altivec vectorization triggers a bug when compiling with -std=c++11
++because "bool" is redefined in altivec.h.
++
++Acording to a bug report in GCC, "You need to use -std=g++11 or
++undefine bool after the include of altivec.h as context sensitive
++keywords is not part of the C++11 standard".
++
++So let's use gnu++11 standard.
++
++Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 6dd0129587b3..6ed50ea4c335 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -51,7 +51,7 @@ else
++ endif
++ CXXFLAGS+= -Wall -Wextra -Wno-unused-parameter -Wno-ignored-qualifiers
++ ifdef HAVE_GCC
++-  CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual -Wnon-virtual-dtor -std=c++11
+++  CXXFLAGS+= -Wno-multichar -Wunused -fno-rtti -Woverloaded-virtual -Wnon-virtual-dtor -std=gnu++11
++ endif
 + 
-  with_cflags=""
--@@ -159,7 +166,7 @@ AC_MSG_RESULT([
-+ if test "x$GCC" = "xyes"; then
-+@@ -167,8 +174,8 @@ AC_MSG_RESULT([
-  	       Libdir				${libdir}
-  
-  	       Build documentation		${have_doxygen}
- -	       Enable unit-tests		${HAVE_CHECK}
-+-	       Run unit-tests			${run_tests}
- +	       Enable unit-tests		${HAVE_CHECK} (runtime-tests: ${enable_runtime_tests})
-++	       Run unit-tests			${run_tests} (runtime-tests: ${enable_runtime_tests})
-  	       Enable profiling			${enable_gcov}
-  	       Static library symbol check	${static_symbol_leaks_test}
-  	       ])
- -- 
--2.1.4
-+2.11.0
- 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index a2a5cd8ac..1dbdfdba7 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,2 +1,2 @@
--# Hash from https://lists.freedesktop.org/archives/input-tools/2016-August/001327.html
--sha256 11fe76d62cc76fbc9dbf8e94696a80eee63780139161e5cf54c55ec21a8173a4 libevdev-1.5.4.tar.xz
-+# Hash from https://lists.freedesktop.org/archives/input-tools/2016-November/001375.html
-+sha256 320120782018b992956b3fa29495c323832860807ac8ea74537e636a0e0280b1 libevdev-1.5.5.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index ef660c77b..fca362ff6 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.5.4
-+LIBEVDEV_VERSION = 1.5.5
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
++ ifdef PROFILE
++-- 
++1.9.1
++
 -- 
-2.11.0
+1.9.1
