@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:46 -0000
-Subject: [Buildroot] [git commit] htop: enable unicode if possible
-Message-ID: <20161201222136.B9D9B7FB56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cryptsetup: bump version to 1.7.3
+Message-ID: <20161201222136.EFB937FB56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a75a1d36d235b8552e3f6989681d0a4f17acef64
+commit: https://git.buildroot.net/buildroot/commit/?id=10189569cae26bdd2bb40c586590b0975940249f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-[Thomas:
- - use positive logic
- - use += instead of = in conditions.]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/htop/htop.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 7409a78..adc5090 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -7,10 +7,15 @@
- HTOP_VERSION = 2.0.2
- HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
- HTOP_DEPENDENCIES = ncurses
--HTOP_CONF_OPTS = --disable-unicode
- # Prevent htop build system from searching the host paths
- HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/ncurses5-config
- HTOP_LICENSE = GPLv2
- HTOP_LICENSE_FILES = COPYING
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 5972bf8..b8c0d2b 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/sha256sums.asc
+-sha256	dbb35dbf5f0c1749168c86c913fe98e872247bfc8425314b494c2423e7e43342	cryptsetup-1.7.2.tar.xz
++sha256 af2b04e8475cf40b8d9ffd97a1acfa73aa787c890430afd89804fb544d6adc02  cryptsetup-1.7.3.tar.xz
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index d7bd251..50bf5f2 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+HTOP_CONF_OPTS += --enable-unicode
-+else
-+HTOP_CONF_OPTS += --disable-unicode
-+endif
-+
- $(eval $(autotools-package))
+ CRYPTSETUP_VERSION_MAJOR = 1.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
