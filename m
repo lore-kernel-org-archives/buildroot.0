@@ -1,250 +1,324 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:37 -0000
-Subject: [Buildroot] [git commit] olimex_imx233_olinuxino: bump version
-Message-ID: <20161201222134.E7A9581E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] freescale: Create the
+	board/freescale/common/imx/ directory
+Message-ID: <20161201222134.D0F1F81E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2ec1d26f850a2d2b800c79adeb421a40ffd4973
+commit: https://git.buildroot.net/buildroot/commit/?id=e3f6475801067c8d0ef0c90a56a357105c5faa34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+In order to have a better hierarchy for the genimage scripts used by
+NXP mx25, mx51, mx53, mx6, mx7 SoCs, let's place them inside the
+board/freescale/common/imx/ directory.
+
+This helps in creating a more natural separation between the mxs scripts
+that are placed inside the board/freescale/common/mxs/ directory.
+
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../imx233_olinuxino/genimage-imx233_olinuxino.cfg |   1 +
- board/olimex/imx233_olinuxino/linux-3.18.config    | 152 ---------------------
- board/olimex/imx233_olinuxino/post-image.sh        |   3 -
- configs/olimex_imx233_olinuxino_defconfig          |  16 ++-
- 4 files changed, 10 insertions(+), 162 deletions(-)
+ board/freescale/common/{ => imx}/genimage.cfg.template | 0
+ board/freescale/common/{ => imx}/post-image.sh         | 2 +-
+ board/freescale/imx25pdk/readme.txt                    | 2 +-
+ board/freescale/imx51evk/readme.txt                    | 2 +-
+ board/freescale/imx6sabre/readme.txt                   | 2 +-
+ board/freescale/imx6ulevk/readme.txt                   | 2 +-
+ board/freescale/imx7dsdb/readme.txt                    | 2 +-
+ board/technexion/imx6ulpico/readme.txt                 | 2 +-
+ configs/freescale_imx6dlsabreauto_defconfig            | 2 +-
+ configs/freescale_imx6dlsabresd_defconfig              | 2 +-
+ configs/freescale_imx6qsabreauto_defconfig             | 2 +-
+ configs/freescale_imx6qsabresd_defconfig               | 2 +-
+ configs/freescale_imx6sololiteevk_defconfig            | 2 +-
+ configs/freescale_imx6sxsabresd_defconfig              | 2 +-
+ configs/freescale_imx6ulevk_defconfig                  | 2 +-
+ configs/freescale_imx7dsabresd_defconfig               | 2 +-
+ configs/imx6ulpico_defconfig                           | 2 +-
+ configs/mx25pdk_defconfig                              | 2 +-
+ configs/mx51evk_defconfig                              | 2 +-
+ configs/mx53loco_defconfig                             | 2 +-
+ configs/warp7_defconfig                                | 2 +-
+ configs/warpboard_defconfig                            | 2 +-
+ 22 files changed, 21 insertions(+), 21 deletions(-)
 
-diff --git a/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg b/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
-index 78979dc..751fe86 100644
---- a/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
-+++ b/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
-@@ -1,6 +1,7 @@
- image kernel.vfat {
-   vfat {
-     files = {
-+      "imx23-olinuxino.dtb",
-       "uImage"
-     }
-   }
-diff --git a/board/olimex/imx233_olinuxino/linux-3.18.config b/board/olimex/imx233_olinuxino/linux-3.18.config
-deleted file mode 100644
-index d46d4d5..0000000
---- a/board/olimex/imx233_olinuxino/linux-3.18.config
-+++ /dev/null
-@@ -1,152 +0,0 @@
--CONFIG_SYSVIPC=y
--CONFIG_NO_HZ=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_PERF_EVENTS=y
--# CONFIG_COMPAT_BRK is not set
--CONFIG_MODULES=y
--CONFIG_MODULE_FORCE_LOAD=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODULE_FORCE_UNLOAD=y
--CONFIG_MODVERSIONS=y
--CONFIG_BLK_DEV_INTEGRITY=y
--# CONFIG_ARCH_MULTI_V7 is not set
--CONFIG_ARCH_MXS=y
--# CONFIG_ARM_THUMB is not set
--CONFIG_PREEMPT_VOLUNTARY=y
--CONFIG_AEABI=y
--CONFIG_ARM_APPENDED_DTB=y
--CONFIG_ARM_ATAG_DTB_COMPAT=y
--CONFIG_CMDLINE="console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw rootwait"
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--CONFIG_SYN_COOKIES=y
--CONFIG_CFG80211=y
--CONFIG_CFG80211_WEXT=y
--CONFIG_MAC80211=y
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--# CONFIG_FIRMWARE_IN_KERNEL is not set
--CONFIG_MTD=y
--CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_BLOCK=y
--CONFIG_MTD_DATAFLASH=y
--CONFIG_MTD_SST25L=y
--CONFIG_MTD_NAND=y
--CONFIG_MTD_NAND_GPMI_NAND=y
--CONFIG_MTD_UBI=y
--# CONFIG_BLK_DEV is not set
--CONFIG_EEPROM_AT24=y
--CONFIG_EEPROM_93CX6=y
--CONFIG_SCSI=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_NETDEVICES=y
--# CONFIG_ETHERNET is not set
--CONFIG_USB_USBNET=y
--CONFIG_USB_NET_SMSC95XX=y
--CONFIG_RTL8187=m
--CONFIG_ATH_CARDS=m
--CONFIG_ATH9K_HTC=m
--CONFIG_RT2X00=m
--CONFIG_RT73USB=m
--CONFIG_RT2800USB=m
--CONFIG_RT2800USB_RT53XX=y
--CONFIG_RT2800USB_RT55XX=y
--CONFIG_RT2800USB_UNKNOWN=y
--CONFIG_RTL_CARDS=m
--CONFIG_RTL8192CU=m
--# CONFIG_RTLWIFI_DEBUG is not set
--CONFIG_ZD1211RW=m
--# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
--CONFIG_INPUT_EVDEV=y
--# CONFIG_INPUT_KEYBOARD is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO is not set
--CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_DEVKMEM is not set
--CONFIG_SERIAL_AMBA_PL011=y
--CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
--CONFIG_SERIAL_MXS_AUART=y
--# CONFIG_HW_RANDOM is not set
--CONFIG_I2C=y
--# CONFIG_I2C_COMPAT is not set
--CONFIG_I2C_CHARDEV=y
--CONFIG_I2C_MXS=y
--CONFIG_SPI=y
--CONFIG_SPI_GPIO=m
--CONFIG_SPI_MXS=y
--CONFIG_PTP_1588_CLOCK=y
--CONFIG_GPIO_SYSFS=y
--# CONFIG_HWMON is not set
--CONFIG_WATCHDOG=y
--CONFIG_STMP3XXX_RTC_WATCHDOG=y
--CONFIG_REGULATOR=y
--CONFIG_REGULATOR_FIXED_VOLTAGE=y
--CONFIG_FB=y
--CONFIG_FB_MXS=y
--CONFIG_BACKLIGHT_LCD_SUPPORT=y
--CONFIG_LCD_CLASS_DEVICE=y
--CONFIG_BACKLIGHT_CLASS_DEVICE=y
--CONFIG_BACKLIGHT_PWM=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_LOGO=y
--CONFIG_SOUND=y
--CONFIG_SND=y
--CONFIG_SND_HRTIMER=y
--# CONFIG_SND_SUPPORT_OLD_API is not set
--# CONFIG_SND_VERBOSE_PROCFS is not set
--# CONFIG_SND_DRIVERS is not set
--# CONFIG_SND_ARM is not set
--# CONFIG_SND_SPI is not set
--# CONFIG_SND_USB is not set
--CONFIG_SND_SOC=y
--CONFIG_USB=y
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_CHIPIDEA=y
--CONFIG_USB_CHIPIDEA_HOST=y
--CONFIG_USB_MXS_PHY=y
--CONFIG_MMC=y
--CONFIG_MMC_MXS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_GPIO=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_ONESHOT=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_LEDS_TRIGGER_BACKLIGHT=y
--CONFIG_LEDS_TRIGGER_GPIO=y
--CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_STMP=y
--CONFIG_DMADEVICES=y
--CONFIG_MXS_DMA=y
--CONFIG_STAGING=y
--CONFIG_MXS_LRADC=y
--CONFIG_IIO=y
--CONFIG_IIO_SYSFS_TRIGGER=y
--CONFIG_PWM=y
--CONFIG_PWM_MXS=y
--CONFIG_EXT4_FS=y
--CONFIG_TMPFS=y
--CONFIG_TMPFS_POSIX_ACL=y
--# CONFIG_MISC_FILESYSTEMS is not set
--# CONFIG_NETWORK_FILESYSTEMS is not set
--CONFIG_PRINTK_TIME=y
--CONFIG_FRAME_WARN=2048
--CONFIG_UNUSED_SYMBOLS=y
--CONFIG_DEBUG_FS=y
--CONFIG_STRICT_DEVMEM=y
--CONFIG_DEBUG_USER=y
--CONFIG_KEYS=y
--CONFIG_CRYPTO_DEFLATE=y
--CONFIG_CRYPTO_LZO=y
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRYPTO_DEV_MXS_DCP=y
--CONFIG_CRC_CCITT=y
--CONFIG_CRC_ITU_T=y
--CONFIG_CRC7=m
--CONFIG_FONTS=y
-diff --git a/board/olimex/imx233_olinuxino/post-image.sh b/board/olimex/imx233_olinuxino/post-image.sh
-index 703cbe7..948d770 100755
---- a/board/olimex/imx233_olinuxino/post-image.sh
-+++ b/board/olimex/imx233_olinuxino/post-image.sh
-@@ -5,9 +5,6 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
- GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
- GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+diff --git a/board/freescale/common/genimage.cfg.template b/board/freescale/common/imx/genimage.cfg.template
+similarity index 100%
+rename from board/freescale/common/genimage.cfg.template
+rename to board/freescale/common/imx/genimage.cfg.template
+diff --git a/board/freescale/common/post-image.sh b/board/freescale/common/imx/post-image.sh
+similarity index 94%
+rename from board/freescale/common/post-image.sh
+rename to board/freescale/common/imx/post-image.sh
+index 7d48550..9e4da82 100755
+--- a/board/freescale/common/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -35,7 +35,7 @@ main()
+ 	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
  
--# Create symlink to "rename" kernel image
--ln -sf uImage.imx23-olinuxino ${BINARIES_DIR}/uImage
--
- rm -rf "${GENIMAGE_TMP}"
+ 	sed -e "s/%FILES%/${FILES}/" \
+-		board/freescale/common/genimage.cfg.template > ${GENIMAGE_CFG}
++		board/freescale/common/imx/genimage.cfg.template > ${GENIMAGE_CFG}
  
- genimage                           \
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index f74f422..e0a7b08 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -2,6 +2,9 @@
- BR2_arm=y
- BR2_arm926t=y
+ 	rm -rf "${GENIMAGE_TMP}"
  
-+# Linux headers same as kernel, a 4.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
-+
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+diff --git a/board/freescale/imx25pdk/readme.txt b/board/freescale/imx25pdk/readme.txt
+index df7c617..1aece6c 100644
+--- a/board/freescale/imx25pdk/readme.txt
++++ b/board/freescale/imx25pdk/readme.txt
+@@ -40,7 +40,7 @@ command as root:
+ *** WARNING! This will destroy all the card content. Use with care! ***
  
-@@ -9,15 +12,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ For details about the medium image layout, see the definition in
+-board/freescale/common/genimage.cfg.template.
++board/freescale/common/imx/genimage.cfg.template.
  
- # Kernel
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.2"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.18.config"
--BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x42000000"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
-+BR2_LINUX_KERNEL_DEFCONFIG="mxs"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-olinuxino"
-+BR2_LINUX_KERNEL_UIMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x42000000"
+ Boot the i.MX25 PDK board
+ =========================
+diff --git a/board/freescale/imx51evk/readme.txt b/board/freescale/imx51evk/readme.txt
+index bf739fd..d67a3fd 100644
+--- a/board/freescale/imx51evk/readme.txt
++++ b/board/freescale/imx51evk/readme.txt
+@@ -40,7 +40,7 @@ command as root:
+ *** WARNING! This will destroy all the card content. Use with care! ***
  
- # Firmware for WiFi
- BR2_PACKAGE_LINUX_FIRMWARE=y
-@@ -36,7 +38,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
- BR2_TARGET_UBOOT_FORMAT_SD=y
-  
+ For details about the medium image layout, see the definition in
+-board/freescale/common/genimage.cfg.template.
++board/freescale/common/imx/genimage.cfg.template.
+ 
+ Boot the i.MX51 EVK board
+ =========================
+diff --git a/board/freescale/imx6sabre/readme.txt b/board/freescale/imx6sabre/readme.txt
+index e409d8f..a1bd82f 100644
+--- a/board/freescale/imx6sabre/readme.txt
++++ b/board/freescale/imx6sabre/readme.txt
+@@ -71,7 +71,7 @@ command as root:
+ *** WARNING! The script will destroy all the card content. Use with care! ***
+ 
+ For details about the medium image layout, see the definition in
+-board/freescale/common/genimage.cfg.template.
++board/freescale/common/imx/genimage.cfg.template.
+ 
+ Boot the SABRE board
+ ====================
+diff --git a/board/freescale/imx6ulevk/readme.txt b/board/freescale/imx6ulevk/readme.txt
+index 98de277..25b95fe 100644
+--- a/board/freescale/imx6ulevk/readme.txt
++++ b/board/freescale/imx6ulevk/readme.txt
+@@ -43,7 +43,7 @@ command as root:
+ *** WARNING! This will destroy all the card content. Use with care! ***
+ 
+ For details about the medium image layout, see the definition in
+-board/freescale/common/genimage.cfg.template.
++board/freescale/common/imx/genimage.cfg.template.
+ 
+ Boot the i.MX6UL EVK board
+ =========================
+diff --git a/board/freescale/imx7dsdb/readme.txt b/board/freescale/imx7dsdb/readme.txt
+index 9aeeb16..c6030f6 100644
+--- a/board/freescale/imx7dsdb/readme.txt
++++ b/board/freescale/imx7dsdb/readme.txt
+@@ -40,7 +40,7 @@ command as root:
+ *** WARNING! This will destroy all the card content. Use with care! ***
+ 
+ For details about the medium image layout, see the definition in
+-board/freescale/common/genimage.cfg.template.
++board/freescale/common/imx/genimage.cfg.template.
+ 
+ Boot the i.MX7D SDB board
+ =========================
+diff --git a/board/technexion/imx6ulpico/readme.txt b/board/technexion/imx6ulpico/readme.txt
+index a7c3a44..7eab3f6 100644
+--- a/board/technexion/imx6ulpico/readme.txt
++++ b/board/technexion/imx6ulpico/readme.txt
+@@ -46,7 +46,7 @@ command as root:
+ *** WARNING! This will destroy all the card content. Use with care! ***
+ 
+ For details about the medium image layout, see the definition in
+-board/freescale/common/genimage.cfg.template.
++board/freescale/common/imx/genimage.cfg.template.
+ 
+ Boot the i.MX6UL Pico board
+ =========================
+diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
+index ed5f67c..1cf5fee 100644
+--- a/configs/freescale_imx6dlsabreauto_defconfig
++++ b/configs/freescale_imx6dlsabreauto_defconfig
+@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabreauto"
+ 
+ # filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index 0cbe974..904f0a2 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabresd"
+ 
+ # filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # required tools to create the microSD image
+diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
+index 9ae2f81..64efd42 100644
+--- a/configs/freescale_imx6qsabreauto_defconfig
++++ b/configs/freescale_imx6qsabreauto_defconfig
+@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto"
+ 
+ # filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index 913a724..962c274 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
+ 
+ # filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
+index 79ebcb8..bf0b9e5 100644
+--- a/configs/freescale_imx6sololiteevk_defconfig
++++ b/configs/freescale_imx6sololiteevk_defconfig
+@@ -18,7 +18,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-evk"
+ 
+ # filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # required tools to create the microSD image
+diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
+index fed1a3e..9b5cdb8 100644
+--- a/configs/freescale_imx6sxsabresd_defconfig
++++ b/configs/freescale_imx6sxsabresd_defconfig
+@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-sdb"
+ 
+ # filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # required tools to create the microSD image
+diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
+index d033b99..3c5a909 100644
+--- a/configs/freescale_imx6ulevk_defconfig
++++ b/configs/freescale_imx6ulevk_defconfig
+@@ -31,6 +31,6 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ 
+ # filesystem / image
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+diff --git a/configs/freescale_imx7dsabresd_defconfig b/configs/freescale_imx7dsabresd_defconfig
+index 4bedef1..97d3cde 100644
+--- a/configs/freescale_imx7dsabresd_defconfig
++++ b/configs/freescale_imx7dsabresd_defconfig
+@@ -33,4 +33,4 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
+index 71277d9..88604a6 100644
+--- a/configs/imx6ulpico_defconfig
++++ b/configs/imx6ulpico_defconfig
+@@ -45,6 +45,6 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ 
+ # filesystem / image
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
+index 645fe8a..65a6d12 100644
+--- a/configs/mx25pdk_defconfig
++++ b/configs/mx25pdk_defconfig
+@@ -14,7 +14,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ 
+ # Filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+diff --git a/configs/mx51evk_defconfig b/configs/mx51evk_defconfig
+index 1fca282..db82a36 100644
+--- a/configs/mx51evk_defconfig
++++ b/configs/mx51evk_defconfig
+@@ -14,7 +14,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ 
+ # Filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 94ac818..7597ae9 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -14,7 +14,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ 
+ # Filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 31251f4..a55a504 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -38,7 +38,7 @@ BR2_PACKAGE_WPA_SUPPLICANT=y
+ BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+ 
+ # Filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
+index 5e9c051..531a878 100644
+--- a/configs/warpboard_defconfig
++++ b/configs/warpboard_defconfig
+@@ -42,7 +42,7 @@ BR2_PACKAGE_HOST_DFU_UTIL=y
+ BR2_PACKAGE_HOST_IMX_USB_LOADER=y
+ 
+ # Filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
