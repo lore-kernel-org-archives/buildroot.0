@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:35 -0000
-Subject: [Buildroot] [git commit] gst1-rtsp-server: bump to version 1.10.0
-Message-ID: <20161201222134.4C9AA800B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.167
+Message-ID: <20161201222134.85D0A800B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ea04475a6d6fc472b5da3584702ee848596dc7b
+commit: https://git.buildroot.net/buildroot/commit/?id=24fa2acca61ec9d82eebcb2e538cc98b05ebe260
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index a30afbc..597f0b2 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index a269eb6..edc9360 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
 @@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.8.3.tar.xz.sha256sum
--sha256 010f06800c1c957851d1352e5ec7a8ba3ce6a857fec1b8afc7d1a9e5f53288bf  gst-rtsp-server-1.8.3.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.10.0.tar.xz.sha256sum
-+sha256 aa72a94cccdd2387ad25dc65c5c0b1f76269c3997cbde348232eec2a1565b3cd  gst-rtsp-server-1.10.0.tar.xz
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 458e3af..4ff44c9 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 8bebe9b474f791b5edf5366b0bd24861fbbaf8a83afa2a9e2a8e3917e05e4ecbf6877f018be03ffb4e9b4c8832208264165b85182bf79a07661adf35128b4a21  LVM2.2.02.166.tgz
++sha512 492b2f5ca462dbbb8e182befdb6ca60c7a31b16a39f59a38cabdcd0996d9e2c49ae56a2289def80b89da738176ac55cf13cbefd401feb7a1e3a6ef9a4c267f2b  LVM2.2.02.167.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index d76cdd2..dd57421 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_RTSP_SERVER_VERSION = 1.8.3
-+GST1_RTSP_SERVER_VERSION = 1.10.0
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPLv2+
+-LVM2_VERSION = 2.02.166
++LVM2_VERSION = 2.02.167
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
