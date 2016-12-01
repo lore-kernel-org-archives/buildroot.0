@@ -1,77 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Oct 2016 01:08:32 +0200
-Subject: [Buildroot] Interfaces not coming up on DSA
-In-Reply-To: <5C6DB3AE-3775-4761-BF1A-9C4B101A7F37@bluecordial.com>
-References: <5C6DB3AE-3775-4761-BF1A-9C4B101A7F37@bluecordial.com>
-Message-ID: <9f3b6959-c313-836e-ab07-a0ad8831e64c@mind.be>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Wed, 30 Nov 2016 16:22:42 -0800
+Subject: [Buildroot] [PATCH] package/xen: fix build failure on x86 after
+ bump to 4.7
+In-Reply-To: <20161101145415.6f9dbad5@free-electrons.com>
+References: <1477989452-26462-1-git-send-email-yann.morin.1998@free.fr>
+ <20161101145415.6f9dbad5@free-electrons.com>
+Message-ID: <CAKmqyKOzeQUtaGGVWUokwJ1koim=HhrOm_+21P893oiH5XJ=Mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Nov 1, 2016 at 6:54 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue,  1 Nov 2016 09:37:32 +0100, Yann E. MORIN wrote:
+>> Since the bump to 4.7, Xen fails to build because of a double definition
+>> of __OBJECT_FILE__. This is due to (who would have guessed) the weirdness
+>> of their buildsystem.
+>>
+>> Fix that with a dirty hack: undefine the macro before defining it.
+>>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> Cc: Alistair Francis <alistair.francis@xilinx.com>
+>> [Alistair: Tested on ARMv7 (little endian) boot.]
+>> Tested-by: Alistair Francis <alistair.francis@xilinx.com>
+>> Reviewed-by: Alistair Francis <alistair.francis@xilinx.com>
+>> ---
+>>  ...mk-fix-build-with-CFLAGS-from-environment.patch | 36 ++++++++++++++++++++++
+>>  1 file changed, 36 insertions(+)
+>>  create mode 100644 package/xen/0002-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+>
+> This is indeed not the prettiest solution, but it's good enough. Has
+> one of you reported the problem upstream to the Xen people?
 
+Sorry about the radio silence here, I was away for a bit and then super busy.
 
-On 29-09-16 17:03, Paul wrote:
-> After upgrading to buildroot 2016.08.1 our dsa interfaces do not automatically
-> come up, using an existing 4.5.4 kernel. 
+If it's ok with you Yann I was planning on sending the two Xen patches
+we have to mainline Xen and at least see what they think about this
+issue. I don't have a huge amount of experience with them so I'm not
+sure if they are interested in this, but I figured it is worth a try
+anyway.
 
- Do you use a custom skeleton? The system menu entries that manipulate files in
-the skeleton (e.g. password, network, getty settings) are no longer available
-for a custom skeleton, only for the default skeleton. The idea is that with a
-custom skeleton, buildroot has no idea what is there so its manipulations may fail.
+Thanks,
 
+Alistair
 
-> Ifconfig lan1 up brings up the
-> interface however not able to route, says destination unreachable. 
-
- ifconfig only sets the IP address, it doesn't add a default route.
-
-> If we run an
-> ifup ?a everything works as normal.
-
- Hm, so you do have a valid /etc/network/interfaces file. Buildroot installs
-/etc/init.d/S40network which will call ifup -a. Perhaps your lan1 interface
-doesn't exist yet by the time that script is called?
-
- Regards,
- Arnout
-
-
-
-> This was not the case using a previous
-> version of buildroot.
-> 
->  
-> 
-> Kind regards
-> 
-> Paul Ashford
-> 
->  
-> 
-> *Contact Information: *
-> 
-> m: +44 (0)7885 469812
-> 
-> e: paul at bluecordial.com
-> 
-> skype: paulashford1975
-> 
-> twitter: @pdashford
-> 
-> 
-> 
+>
+> I've applied Yann's patch anyway.
+>
+> Thanks a lot for the investigation and workaround!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
