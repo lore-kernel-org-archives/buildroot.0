@@ -1,34 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:37 -0000
-Subject: [Buildroot] [git commit] screen: enable support for 256 colors
-Message-ID: <20161201222135.353CE81E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/olimex_imx233_olinuxino: readme:
+	Improve SD card flashing procedure
+Message-ID: <20161201222135.E79277FA6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbfc24a3c04d9311d6f959dece7c42b059e256f2
+commit: https://git.buildroot.net/buildroot/commit/?id=d5ad41a723f1e7d61cce61ac8e8a19314baf1883
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support for 256 colors is enabled in xterm and ncurses, but it was
-forgotten for screen.
+Make the SD card flashing procedure text consistent with the other i.MX
+boards.
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/screen/screen.mk | 1 +
- 1 file changed, 1 insertion(+)
+ board/olimex/imx233_olinuxino/readme.txt | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-index 84c3d75..16a97cc 100644
---- a/package/screen/screen.mk
-+++ b/package/screen/screen.mk
-@@ -11,6 +11,7 @@ SCREEN_LICENSE_FILES = COPYING
- SCREEN_DEPENDENCIES = ncurses
- SCREEN_AUTORECONF = YES
- SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
-+SCREEN_CONF_OPTS = --enable-colors256
- SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
+diff --git a/board/olimex/imx233_olinuxino/readme.txt b/board/olimex/imx233_olinuxino/readme.txt
+index d6a7377..2722c3a 100644
+--- a/board/olimex/imx233_olinuxino/readme.txt
++++ b/board/olimex/imx233_olinuxino/readme.txt
+@@ -17,13 +17,16 @@ output/images
  
- define SCREEN_INSTALL_SCREENRC
+ === Use of generated SD card image ===========================================
+ 
+-Just write sdcard.img directly to the SD card
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
+ 
+-***** WARNING: Double check that /dev/sdc is your MicroSD card *****
+-*****      It might be /dev/sdb or some other device name      *****
+-***** Failure to do so may result in you wiping your hard disk *****
++  cat /proc/partitions
++
++Then, run the following command as root:
++
++*** WARNING! The command will destroy all the card content. Use with care! ***
+ 
+-   # dd if=output/images/sdcard.img of=/dev/sdc bs=512
++ sudo dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
+ 
+ === Manual creation of SD card image =========================================
+ 
