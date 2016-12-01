@@ -1,58 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:39 -0000
-Subject: [Buildroot] [git commit] Makefile: add missing targets to
-	noconfig_targets and nobuild_targets
-Message-ID: <20161201222136.CF06C7FB56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] netsniff-ng: bump to version 0.6.2
+Message-ID: <20161201222136.1FBDC7FCD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=472f0ae2dff7a912bebdb025f7dca0541ebc9769
+commit: https://git.buildroot.net/buildroot/commit/?id=f7afd935422ffd511a0e31827d56c6cb60aee23c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-currently some buildroot targets fails (list-defconfigs,
-graph-build, etc), if there is an issue with configuration.
-For example, enabling uboot package without providing custom
-version name results in failing of various targets.
+We recently released netsniff-ng 0.6.2 [1], bumpd the version accordingly.
 
-Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: as suggested by Arnout, added printvars and savedefconfig to
-nobuild_targets.]
+[1] https://github.com/netsniff-ng/netsniff-ng/releases/tag/v0.6.2
+
+Cc: Joris Lijssens <joris.lijssens@gmail.com>
+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ package/netsniff-ng/netsniff-ng.hash | 2 +-
+ package/netsniff-ng/netsniff-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6cf5f1c..eff814b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -126,7 +126,8 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	print-version olddefconfig distclean
-+	print-version olddefconfig distclean manual manual-html manual-split-html \
-+	manual-pdf manual-text manual-epub
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index 5212497..67b3331 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 902661bcdbc129c6a6c1f69a72f921fffc9e765d005568dc153f09ca0097c180 netsniff-ng-v0.6.1.tar.gz
++sha256 62e8aa970a4f46cdaddf54daf8ea26e7ae9f9f358efaf0651799c8c4e937c286 netsniff-ng-v0.6.2.tar.gz
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index ad97a88..4ec7e74 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Some global targets do not trigger a build, but are used to collect
- # metadata, or do various checks. When such targets are triggered,
-@@ -137,9 +138,12 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- # We're building in two situations: when MAKECMDGOALS is empty
- # (default target is to build), or when MAKECMDGOALS contains
- # something else than one of the nobuild_targets.
--nobuild_targets := source source-check \
--	legal-info external-deps _external-deps \
--	clean distclean help
-+nobuild_targets := source %-source source-check \
-+	legal-info %-legal-info external-deps _external-deps \
-+	clean distclean help show-targets graph-depends \
-+	%-graph-depends %-show-depends %-show-version \
-+	graph-build graph-size list-defconfigs \
-+	savedefconfig printvars
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+-NETSNIFF_NG_VERSION = v0.6.1
++NETSNIFF_NG_VERSION = v0.6.2
+ NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
+ NETSNIFF_NG_LICENSE = GPLv2
+ NETSNIFF_NG_LICENSE_FILES = README COPYING
