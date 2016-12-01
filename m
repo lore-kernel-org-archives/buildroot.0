@@ -1,59 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 01 Dec 2016 22:21:42 -0000
-Subject: [Buildroot] [git commit] swupdate: bump to version 2016.10
-Message-ID: <20161201222135.564E281E74@busybox.osuosl.org>
+Date: Thu, 01 Dec 2016 22:21:43 -0000
+Subject: [Buildroot] [git commit] sunxi-tools: fix license file
+Message-ID: <20161201222135.BA46A81E7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f4c905adf76d49c33ba29f090a149a6128b64cb
+commit: https://git.buildroot.net/buildroot/commit/?id=80e59b9de2e8a4296322ee998e5e99d8a72f6ee4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A short list of new features:
-
-- progress interface as general way to signalize the update
-  status outside of the process.
-
-- support encrypted artifacts (encryption via simmetric keys)
-
-- host verification for swu images (-c option)
-
-- configuration file to configure the update process
-
-- HAwkbit backend: API extended, support for configData messages
-
-- Hawkbit backend: supports SSL certificates
-
-- remote handler : general interface to connect external
-  installers.
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/swupdate/swupdate.hash | 2 +-
- package/swupdate/swupdate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sunxi-tools/sunxi-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 918ca2f..1ba10f6 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c21d2fd52eb7ed9c304a7a996d230a8f1b47b9879a8c9fa50c80b41e117d1e60  swupdate-2016.07.tar.gz
-+sha256  840d6287a41f7a42e08a74045ee40b7c2f82c1ecfedf8c915e3935d4f0084376  swupdate-2016.10.tar.gz
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index d442810..c905c1d 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+index c554a5f..1a58aff 100644
+--- a/package/sunxi-tools/sunxi-tools.mk
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -7,7 +7,7 @@
+ SUNXI_TOOLS_VERSION = v1.4.1
+ SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
+ SUNXI_TOOLS_LICENSE = GPLv2+
+-SUNXI_TOOLS_LICENSE_FILES = COPYING
++SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
+ HOST_SUNXI_TOOLS_DEPENDENCIES = host-libusb host-pkgconf
+ FEX2BIN = $(HOST_DIR)/usr/bin/fex2bin
  
--SWUPDATE_VERSION = 2016.07
-+SWUPDATE_VERSION = 2016.10
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPLv2+, MIT, Public Domain
- SWUPDATE_LICENSE_FILES = COPYING
