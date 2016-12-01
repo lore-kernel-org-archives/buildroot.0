@@ -1,68 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:36 -0000
-Subject: [Buildroot] [git commit] gst1-plugins-bad: enable webrtc plugin
-Message-ID: <20161201222134.1E7B481E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] sqlite: bump version to 3150100 (3.15.1)
+Message-ID: <20161201222134.7AF20800B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee267886bc090335dd94c97dca1c294addccc090
+commit: https://git.buildroot.net/buildroot/commit/?id=701f0e15ea8d10113fa6ddfd7bcfc0cfe9fd8520
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's new for 1.10.0, add an explicit option for the webrtc plugin.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in           | 17 +++++++++++++++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  7 +++++++
- 2 files changed, 24 insertions(+)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 8af35cc..1e251af 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -682,6 +682,23 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
- 	help
- 	  Webp image format plugin
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index b0418af..bb24f94 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 b34cb4ee9710368598c62df0222f5c24dfc9c860  sqlite-autoconf-3150000.tar.gz
++sha1 47404fe5c43936160ad0e90bddedc99367da7a9b  sqlite-autoconf-3150100.tar.gz
+ # Calculated based on the hash above
+-sha256 77162da9b4a0336d7e77d5252b690662850f62b47c12d9125f74ab9de78ded27  sqlite-autoconf-3150000.tar.gz
++sha256 5dfa89b7697ee3c2ac7b44e8e157e7f204bf999c866afcaa8bb1c7ff656ae2c5  sqlite-autoconf-3150100.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 0a5c1bb..3f44f82 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
-+	bool "webrtc"
-+	# All depends from webrtc-audio-processing
-+	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
-+	select BR2_PACKAGE_WEBRTC
-+	help
-+	  WebRTC echo-cancellation, gain control and noise suppression
-+
-+comment "webrtc needs a toolchain w/ C++, NPTL, gcc >= 4.8"
-+	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
- 	bool "x265"
- 	depends on BR2_INSTALL_LIBSTDCPP
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index cd9da7c..ba9f8ff 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -794,6 +794,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-webp
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
-+GST1_PLUGINS_BAD_DEPENDENCIES += webrtc-audio-processing
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-x265
- GST1_PLUGINS_BAD_DEPENDENCIES += x265
+-SQLITE_VERSION = 3150000
++SQLITE_VERSION = 3150100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
