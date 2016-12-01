@@ -1,41 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:39 -0000
-Subject: [Buildroot] [git commit] sunxi-tools: bump to version 1.4.1
-Message-ID: <20161201222135.ABFFE81E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/olimex_imx233_olinuxino: Add EXT4
+	support
+Message-ID: <20161201222135.D66607FA6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6be40345af9c08b795573a4c922ccba1049cb47d
+commit: https://git.buildroot.net/buildroot/commit/?id=12b7cf60606e4e82acf9f29454bab6ba40457777
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Select BR2_TARGET_ROOTFS_EXT4 so that an EXT4 rootfs can be generated.
+
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sunxi-tools/sunxi-tools.hash | 2 +-
- package/sunxi-tools/sunxi-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/olimex_imx233_olinuxino_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
-index 90991a3..efb2b54 100644
---- a/package/sunxi-tools/sunxi-tools.hash
-+++ b/package/sunxi-tools/sunxi-tools.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	8b5defeaabec99b6c759ed1d99d91e4d23188431868d17cf6ed144f37e42bee5  sunxi-tools-89dac0f7eaaedd0d8afa9d5a3c713c7c1ccb9cf6.tar.gz
-+sha256	da5d762608517b4b2e9bd392bd9a63afae3973d9c8264cbcfb757ddac8120d1b  sunxi-tools-v1.4.1.tar.gz
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-index 23e3135..c554a5f 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+index 1040e5e..70e8b5d 100644
+--- a/configs/olimex_imx233_olinuxino_defconfig
++++ b/configs/olimex_imx233_olinuxino_defconfig
+@@ -32,6 +32,7 @@ BR2_PACKAGE_ZD1211_FIRMWARE=y
  
--SUNXI_TOOLS_VERSION = 89dac0f7eaaedd0d8afa9d5a3c713c7c1ccb9cf6
-+SUNXI_TOOLS_VERSION = v1.4.1
- SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
- SUNXI_TOOLS_LICENSE = GPLv2+
- SUNXI_TOOLS_LICENSE_FILES = COPYING
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+ # U-Boot
