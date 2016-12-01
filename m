@@ -1,95 +1,170 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 01 Dec 2016 22:21:48 -0000
-Subject: [Buildroot] [git commit] qt5webkit: get source code from Qt5
-	unofficial builds
-Message-ID: <20161201222136.E57F57FB56@busybox.osuosl.org>
+Date: Thu, 01 Dec 2016 22:21:49 -0000
+Subject: [Buildroot] [git commit] Revert "bridge-utils: fix build with musl"
+Message-ID: <20161201222137.3D5087FB56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d5ac9698bd5fd7dfb60447b8f9734f23bf78773
+commit: https://git.buildroot.net/buildroot/commit/?id=c0b756cac41219ad558105304d33d113e2ee4d75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of messing with git we can get tarballs of obsolete but still
-existing Qt5 submodules as we used to but from a bit different
-location.
+This reverts commit a167081c5d5a5aee95b642a14200d18d8a84dbcc.
 
-It turned out Qt people still create packages for obsolete submodules
-for so-called "unofficial builds", see [1].
+With the applied musl/kernel headers conflict workaround this upstream nacked
+patch is no longer necessary.
 
-[1] https://wiki.qt.io/Qt-5-unofficial-builds
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-Cc: J??r??me Pouiller <jezz@sysmic.org>
-Reviewed-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5.mk                   |  1 +
- package/qt5/qt5webkit/qt5webkit.hash |  4 ++--
- package/qt5/qt5webkit/qt5webkit.mk   | 14 +++-----------
- 3 files changed, 6 insertions(+), 13 deletions(-)
+ ...ridge-fix-headers-conflict-with-musl-libc.patch | 140 ---------------------
+ 1 file changed, 140 deletions(-)
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index d25f663..e937e23 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -1,6 +1,7 @@
- QT5_VERSION_MAJOR = 5.6
- QT5_VERSION = $(QT5_VERSION_MAJOR).2
- QT5_SITE = http://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
-+QT5_SNAPSHOTS_SITE = http://download.qt.io/snapshots/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/latest_src/submodules
- include $(sort $(wildcard package/qt5/*/*.mk))
- 
- define QT5_LA_PRL_FILES_FIXUP
-diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
-index 96b8bdd..309f776 100644
---- a/package/qt5/qt5webkit/qt5webkit.hash
-+++ b/package/qt5/qt5webkit/qt5webkit.hash
-@@ -1,2 +1,2 @@
--# locally computed
--sha256 bdd659573e7e75cd4ad57b7160a7353d98d21a6fef06e4fb9e114a5b1f1e9dab qt5webkit-b35917bcb44d7f200af0f4ac68a126fa0aa8d93d.tar.gz
-+# Hash from: http://download.qt.io/snapshots/qt/5.6/5.6.2/latest_src/submodules/qtwebkit-opensource-src-5.6.2.tar.xz.mirrorlist
-+sha256 528a6b8b1c5095367b26e8ce4f3a46bb739e2e9913ff4dfc6ef58a04fcd73966 qtwebkit-opensource-src-5.6.2.tar.xz
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index 378cdf7..980d2af 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -4,10 +4,9 @@
- #
- ################################################################################
- 
--QT5WEBKIT_VERSION = b35917bcb44d7f200af0f4ac68a126fa0aa8d93d
--# Using GitHub since it supports downloading tarballs from random commits.
--# The http://code.qt.io/cgit/qt/qtwebkit.git/ repo doesn't allow to do so.
--QT5WEBKIT_SITE = $(call github,qtproject,qtwebkit,$(QT5WEBKIT_VERSION))
-+QT5WEBKIT_VERSION = $(QT5_VERSION)
-+QT5WEBKIT_SITE = $(QT5_SNAPSHOTS_SITE)
-+QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
- QT5WEBKIT_DEPENDENCIES = \
- 	host-bison host-flex host-gperf host-python host-ruby \
- 	qt5base sqlite
-@@ -43,14 +42,7 @@ define QT5WEBKIT_PYTHON2_SYMLINK
- endef
- QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
- 
--# Since we get the source from git, generated header files are not included.
--# qmake detects that header file generation (using the syncqt tool) must be
--# done based on the existence of a .git directory (cfr. the git_build config
--# option which is set in qt_build_paths.prf).
--# So, to make sure that qmake detects that header files must be generated,
--# create an empty .git directory.
- define QT5WEBKIT_CONFIGURE_CMDS
--	mkdir -p $(@D)/.git
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
+diff --git a/package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch b/package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch
+deleted file mode 100644
+index fd7f45e..0000000
+--- a/package/bridge-utils/0002-libbridge-fix-headers-conflict-with-musl-libc.patch
++++ /dev/null
+@@ -1,140 +0,0 @@
+-From 24e5409190820a14e4d097924b1acaab62bb3b99 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Sun, 30 Oct 2016 18:12:00 +0200
+-Subject: [PATCH] libbridge: fix headers conflict with musl libc
+-
+-Don't including kernel headers directly to avoid headers conflict like:
+-
+-In file included from .../sysroot/usr/include/linux/if_bridge.h:18:0,
+-                 from libbridge.h:26,
+-                 from libbridge_if.c:26:
+-.../sysroot/usr/include/linux/in6.h:32:8: error: redefinition of ???struct in6_addr???
+- struct in6_addr {
+-        ^
+-In file included from libbridge.h:24:0,
+-                 from libbridge_if.c:26:
+-.../sysroot/usr/include/netinet/in.h:23:8: note: originally defined here
+- struct in6_addr {
+-        ^
+-
+-Instead copy the required linux/if_bridge.h definitions into
+-libbridge_private.h.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: Nacked
+-(https://lists.linuxfoundation.org/pipermail/bridge/2016-November/010107.html)
+----
+- libbridge/libbridge.h         |  1 -
+- libbridge/libbridge_private.h | 83 ++++++++++++++++++++++++++++++++++++++++++-
+- 2 files changed, 82 insertions(+), 2 deletions(-)
+-
+-diff --git a/libbridge/libbridge.h b/libbridge/libbridge.h
+-index ff047f933cd6..18b40cd90413 100644
+---- a/libbridge/libbridge.h
+-+++ b/libbridge/libbridge.h
+-@@ -23,7 +23,6 @@
+- #include <sys/socket.h>
+- #include <netinet/in.h>
+- #include <linux/if.h>
+--#include <linux/if_bridge.h>
+- 
+- /* defined in net/if.h but that conflicts with linux/if.h... */
+- extern unsigned int if_nametoindex (const char *__ifname);
+-diff --git a/libbridge/libbridge_private.h b/libbridge/libbridge_private.h
+-index 99a511dae00a..565025b7bccb 100644
+---- a/libbridge/libbridge_private.h
+-+++ b/libbridge/libbridge_private.h
+-@@ -24,7 +24,88 @@
+- #include <linux/sockios.h>
+- #include <sys/time.h>
+- #include <sys/ioctl.h>
+--#include <linux/if_bridge.h>
+-+
+-+/* From linux/if_ether.h */
+-+#ifndef ETH_ALEN
+-+#define ETH_ALEN	6
+-+#endif
+-+
+-+/* From linux/if_bridge.h */
+-+#ifndef BRCTL_GET_VERSION
+-+#define BRCTL_GET_VERSION 0
+-+#define BRCTL_GET_BRIDGES 1
+-+#define BRCTL_ADD_BRIDGE 2
+-+#define BRCTL_DEL_BRIDGE 3
+-+#define BRCTL_ADD_IF 4
+-+#define BRCTL_DEL_IF 5
+-+#define BRCTL_GET_BRIDGE_INFO 6
+-+#define BRCTL_GET_PORT_LIST 7
+-+#define BRCTL_SET_BRIDGE_FORWARD_DELAY 8
+-+#define BRCTL_SET_BRIDGE_HELLO_TIME 9
+-+#define BRCTL_SET_BRIDGE_MAX_AGE 10
+-+#define BRCTL_SET_AGEING_TIME 11
+-+#define BRCTL_SET_GC_INTERVAL 12
+-+#define BRCTL_GET_PORT_INFO 13
+-+#define BRCTL_SET_BRIDGE_STP_STATE 14
+-+#define BRCTL_SET_BRIDGE_PRIORITY 15
+-+#define BRCTL_SET_PORT_PRIORITY 16
+-+#define BRCTL_SET_PATH_COST 17
+-+#define BRCTL_GET_FDB_ENTRIES 18
+-+
+-+#define BR_STATE_DISABLED 0
+-+#define BR_STATE_LISTENING 1
+-+#define BR_STATE_LEARNING 2
+-+#define BR_STATE_FORWARDING 3
+-+#define BR_STATE_BLOCKING 4
+-+
+-+struct __bridge_info {
+-+	__u64 designated_root;
+-+	__u64 bridge_id;
+-+	__u32 root_path_cost;
+-+	__u32 max_age;
+-+	__u32 hello_time;
+-+	__u32 forward_delay;
+-+	__u32 bridge_max_age;
+-+	__u32 bridge_hello_time;
+-+	__u32 bridge_forward_delay;
+-+	__u8 topology_change;
+-+	__u8 topology_change_detected;
+-+	__u8 root_port;
+-+	__u8 stp_enabled;
+-+	__u32 ageing_time;
+-+	__u32 gc_interval;
+-+	__u32 hello_timer_value;
+-+	__u32 tcn_timer_value;
+-+	__u32 topology_change_timer_value;
+-+	__u32 gc_timer_value;
+-+};
+-+
+-+struct __port_info {
+-+	__u64 designated_root;
+-+	__u64 designated_bridge;
+-+	__u16 port_id;
+-+	__u16 designated_port;
+-+	__u32 path_cost;
+-+	__u32 designated_cost;
+-+	__u8 state;
+-+	__u8 top_change_ack;
+-+	__u8 config_pending;
+-+	__u8 unused0;
+-+	__u32 message_age_timer_value;
+-+	__u32 forward_delay_timer_value;
+-+	__u32 hold_timer_value;
+-+};
+-+
+-+struct __fdb_entry {
+-+	__u8 mac_addr[ETH_ALEN];
+-+	__u8 port_no;
+-+	__u8 is_local;
+-+	__u32 ageing_timer_value;
+-+	__u8 port_hi;
+-+	__u8 pad0;
+-+	__u16 unused;
+-+};
+-+#endif /* BRCTL_GET_VERSION */
+- 
+- #define MAX_BRIDGES	1024
+- #define MAX_PORTS	1024
+--- 
+-2.10.1
+-
