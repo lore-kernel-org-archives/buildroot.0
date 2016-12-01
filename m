@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 1 Dec 2016 11:17:04 +0000
-Subject: [Buildroot] [PATCH next] cmake: bump version to 3.7.1
-Message-ID: <20161201111704.32302-1-Vincent.Riera@imgtec.com>
+Date: Thu, 1 Dec 2016 11:17:44 +0000
+Subject: [Buildroot] [PATCH next] lvm2: bump version to 2.02.168
+Message-ID: <20161201111744.32599-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 687e5a4..7a22f21 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index edc9360..3619af8 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
 @@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.7/cmake-3.7.0-SHA-256.txt
--sha256 ed63e05c41aeb6c036e503114ab15847f29c312f9f21f5f1a7060a4b4ec2fb31  cmake-3.7.0.tar.gz
-+# From http://www.cmake.org/files/v3.7/cmake-3.7.1-SHA-256.txt
-+sha256 449a5bce64dbd4d5b9517ebd1a1248ed197add6ad27934478976fd5f1f9330e1  cmake-3.7.1.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 522d7fe..f4c61aa 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -5,7 +5,7 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 492b2f5ca462dbbb8e182befdb6ca60c7a31b16a39f59a38cabdcd0996d9e2c49ae56a2289def80b89da738176ac55cf13cbefd401feb7a1e3a6ef9a4c267f2b  LVM2.2.02.167.tgz
++sha512 ebff909e1c81919967373c55c7a95ba13ef4e0536b8ef1c28ed7e1c1eb9b9fd406a649d93b141822b24675ebece5a722247737c4e869fb7fb5eeb881a7f9102d  LVM2.2.02.168.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index dd57421..ae9581c 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CMAKE_VERSION_MAJOR = 3.7
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+-LVM2_VERSION = 2.02.167
++LVM2_VERSION = 2.02.168
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
 2.10.1
