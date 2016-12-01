@@ -1,119 +1,103 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 1 Dec 2016 19:20:44 +0100
-Subject: [Buildroot] [PATCH] autossh: honour LDFLAGS
-In-Reply-To: <20161130050003.GS14207@waldemar-brodkorb.de>
-References: <20161125180016.GA360@waldemar-brodkorb.de>
- <20161128222834.37958cd9@free-electrons.com>
- <20161129041655.GK14207@waldemar-brodkorb.de>
- <20161129094321.656d1cb4@free-electrons.com>
- <CAMo8BfJAGT8cdvQ2xMx33HKDwW34XP6wVxHd1yn-UxAyQEYpRA@mail.gmail.com>
- <20161130050003.GS14207@waldemar-brodkorb.de>
-Message-ID: <20161201182044.GX14207@waldemar-brodkorb.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  1 Dec 2016 19:30:51 +0100
+Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.5.5
+Message-ID: <20161201183051.31900-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Waldemar Brodkorb wrote,
+And update 0001-configure-add-disable-runtime-tests-option.patch.
 
-> Hi Max,
-> Max Filippov wrote,
-> 
-> > On Tue, Nov 29, 2016 at 12:43 AM, Thomas Petazzoni
-> > <thomas.petazzoni@free-electrons.com> wrote:
-> > > On Tue, 29 Nov 2016 05:16:55 +0100, Waldemar Brodkorb wrote:
-> > >> > The --start-group/--end-group ask the linker to loop between -lgcc and
-> > >> > -lc until all unresolved symbols have been resolved. So
-> > >> > dl_iterate_phdr() being defined in the C library, but used in libgcc, I
-> > >> > guess the dynamic way (-lgcc -lc -lgcc) doesn't work.
-> > >>
-> > >> But why gcc behaves different?
-> > >> BR+gcc5+uClibc-ng-1.0.17 - no extra -static in LDFLAGS required
-> > >> BR+gcc5+musl+static - no extra -static in LDFLAGS required
-> > >> BR+gcc5+uClibc-ng-1.0.19 - extra -static required!
-> > >
-> > > I would suspect it's a fallout of the "merge everything in libc"
-> > > change, but I really can't figure out why that would make a difference.
-> > >
-> > > Could it be that with older uClibc versions, gcc was not finding the
-> > > dl_iterate_phdr symbol in uClibc, and therefore disabling the unwind
-> > > code, and now, due to a change in uClibc, gcc sees the dl_iterate_phdr
-> > > symbol, enables unwinding support, which cause this extra reference
-> > > from libgcc to libc?
-> > 
-> > No. The difference is in the __pthread_initialize_minimal function.
-> > Prior to uclibc-1.0.18 release it used to work because a call to
-> > __pthread_initialize_minimal from __uClibc_init was resolved to
-> > a function defined in libpthread/nptl/sysdeps/generic/libc-tls.c
-> > which didn't reference pthread_unwind.
-> > Now it is resolved to a function from
-> > libpthread/linuxthreads/pthread.c, and that file pulls in other
-> > unused functions, which reference __GI___pthread_unwind,
-> > and all the way down to the dl_iterate_phdr.
-> > 
-> > More details:
-> >  http://lists.busybox.net/pipermail/buildroot/2016-November/177477.html
-> 
-> Sorry that I didn't looked into your report in more detail last time.
-> May be I was too confused ;)
-> 
-> I really can't imagine that any code from libpthread/linuxthreads
-> can be involved when we compile Xtensa with NPTL support.
-> 
-> I believe there is a bug or a change in behavior regarding static
-> linking prior to 1.0.18.
-> 
-> See:
-> wbx at helium:~/buildroot/output/build/uclibc-1.0.19 $ grep -r __pthread_initialize_minimal *                                                                          
-> Binary file lib/libc.a matches
-> Binary file libc/misc/internals/__uClibc_main.os matches
-> libc/misc/internals/__uClibc_main.c:extern void weak_function __pthread_initialize_minimal(void);
-> libc/misc/internals/__uClibc_main.c:extern void __pthread_initialize_minimal(void);
-> libc/misc/internals/__uClibc_main.c:     * __pthread_initialize_minimal so we can use pthread_locks
-> libc/misc/internals/__uClibc_main.c:    if (likely(__pthread_initialize_minimal!=NULL))
-> libc/misc/internals/__uClibc_main.c: __pthread_initialize_minimal();
-> libpthread/nptl_db/td_ta_thr_iter.c:      /* __pthread_initialize_minimal has not run.  There is just the main
-> libpthread/nptl_db/td_ta_map_lwp2thr.c:     before __pthread_initialize_minimal has gotten far enough.  They
-> libpthread/nptl_db/td_thr_validate.c:   /* __pthread_initialize_minimal has not run yet.
-> libpthread/linuxthreads/internals.h:void __pthread_initialize_minimal (void);
-> libpthread/linuxthreads/pthread.c:void __pthread_initialize_minimal(void)
-> libpthread/nptl/init.c:void __pthread_initialize_minimal_internal (void) attribute_hidden;
-> libpthread/nptl/init.c:__pthread_initialize_minimal_internal (void) 
-> libpthread/nptl/init.c:strong_alias (__pthread_initialize_minimal_internal, 
-> libpthread/nptl/init.c:       __pthread_initialize_minimal)
-> libpthread/nptl/allocatestack.c:   initialize this, since it's done in __pthread_initialize_minimal.  */
-> libpthread/nptl/sysdeps/generic/libc-tls.c:extern void __pthread_initialize_minimal(void) __attribute__((weak));
-> libpthread/nptl/sysdeps/generic/libc-tls.c:__pthread_initialize_minimal (void)
-> libpthread/nptl/sysdeps/generic/libc-tls.c:__pthread_initialize_minimal (void)
-> libpthread/nptl/sysdeps/alpha/elf/pt-initfini.c:        bsr     $26, __pthread_initialize_minimal_internal !samegp \n\
-> Binary file libpthread/nptl/sysdeps/xtensa/libc-tls.os matches
-> Binary file libpthread/nptl/init.os matches
-> Binary file utils/getconf matches
-> 
-> libpthread/nptl/sysdeps/xtensa/libc-tls.c includes
-> libpthread/nptl/sysdeps/generic/libc-tls.c.
-> 
-> Prior to 1.0.18 libpthread.so was linked with special LDFLAGS:
-> LDFLAGS-libpthread.so +=
-> $(top_builddir)lib/$(UCLIBC_LDSO_NAME)-$(VERSION).so
-> $(top_builddir)lib/libdl-$(VERSION).so \
->        -Wl,-z,nodelete,-z,initfirst,-init=$(SYMBOL_PREFIX)__pthread_initialize_minimal_internal
-> 
-> May be this might be a reason we see different behavior.
+For details see [1].
 
-I think it is not the reason. I think it is just how pthread_cancel
-and some other code in NPTL is implemented. There is some circular
-dependency we can't change after we have integrated all the code in
-libc.a. Musl does not use any functionality from libgcc, so it has
-not the problem with the static linking issues we are seeing.
+[1] https://lists.freedesktop.org/archives/input-tools/2016-November/001375.html
 
-So as long as we have the pthread_cancel code which use libgcc
-internally, we can't avoid any breakage from packages not correctly
-passing -static while linking.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...onfigure-add-disable-runtime-tests-option.patch | 23 +++++++++++++++-------
+ package/libevdev/libevdev.hash                     |  4 ++--
+ package/libevdev/libevdev.mk                       |  2 +-
+ 3 files changed, 19 insertions(+), 10 deletions(-)
 
-If anyone thinks the analysis is wrong, please speak up.
-
-best regards
- Waldemar
+diff --git a/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch b/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch
+index 405dff0e5..6a829175c 100644
+--- a/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch
++++ b/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch
+@@ -1,18 +1,18 @@
+-From 95527e43845a5063a6125d7779a30d44c3b437ac Mon Sep 17 00:00:00 2001
++From fe965061b4306e3ca811ff86dc1ca29f7db9af18 Mon Sep 17 00:00:00 2001
+ From: Peter Seiderer <ps.report@gmx.net>
+ Date: Sun, 11 Oct 2015 13:33:19 +0200
+ Subject: [PATCH] configure: add '--disable-runtime-tests' option
+ 
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+- configure.ac | 11 +++++++++--
+- 1 file changed, 9 insertions(+), 2 deletions(-)
++ configure.ac | 15 +++++++++++----
++ 1 file changed, 11 insertions(+), 4 deletions(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 54a2510..286737b 100644
++index c1a9111..8fe7b8b 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -74,7 +74,14 @@ else
++@@ -76,13 +76,20 @@ else
+  	AC_MSG_WARN([check not found - skipping building unit tests])
+  fi
+  AM_CONDITIONAL(HAVE_VALGRIND, [test "x$VALGRIND" != "x"])
+@@ -27,16 +27,25 @@ index 54a2510..286737b 100644
+ +AM_CONDITIONAL(ENABLE_RUNTIME_TESTS, [test "x${enable_runtime_tests}x$HAVE_CHECK" = "xyesxyes"])
+  AM_CONDITIONAL(ENABLE_STATIC_LINK_TEST, [test "x$enable_static" = "xyes"])
+  
++ AC_ARG_ENABLE([test-run],
++ 	       AS_HELP_STRING([--enable-test-run], [For internal use only]),
++ 	       [run_tests="$enableval"], [run_tests="yes"])
++-AM_CONDITIONAL(RUN_TESTS, [test "x$run_tests" = "xyes"])
+++AM_CONDITIONAL(RUN_TESTS, [test "x${enable_runtime_tests}x$run_tests" = "xyesxyes"])
++ 
+  with_cflags=""
+-@@ -159,7 +166,7 @@ AC_MSG_RESULT([
++ if test "x$GCC" = "xyes"; then
++@@ -167,8 +174,8 @@ AC_MSG_RESULT([
+  	       Libdir				${libdir}
+  
+  	       Build documentation		${have_doxygen}
+ -	       Enable unit-tests		${HAVE_CHECK}
++-	       Run unit-tests			${run_tests}
+ +	       Enable unit-tests		${HAVE_CHECK} (runtime-tests: ${enable_runtime_tests})
+++	       Run unit-tests			${run_tests} (runtime-tests: ${enable_runtime_tests})
+  	       Enable profiling			${enable_gcov}
+  	       Static library symbol check	${static_symbol_leaks_test}
+  	       ])
+ -- 
+-2.1.4
++2.11.0
+ 
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index a2a5cd8ac..1dbdfdba7 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from https://lists.freedesktop.org/archives/input-tools/2016-August/001327.html
+-sha256 11fe76d62cc76fbc9dbf8e94696a80eee63780139161e5cf54c55ec21a8173a4 libevdev-1.5.4.tar.xz
++# Hash from https://lists.freedesktop.org/archives/input-tools/2016-November/001375.html
++sha256 320120782018b992956b3fa29495c323832860807ac8ea74537e636a0e0280b1 libevdev-1.5.5.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index ef660c77b..fca362ff6 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.5.4
++LIBEVDEV_VERSION = 1.5.5
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
+-- 
+2.11.0
