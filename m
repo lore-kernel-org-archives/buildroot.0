@@ -1,106 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:38 -0000
-Subject: [Buildroot] [git commit] configs/olimex_imx233_olinuxino: remove
-	useless section from readme.txt
-Message-ID: <20161201222136.05FCE7FCC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libva-intel-driver: bump version
+	to 1.7.3
+Message-ID: <20161201222136.3F37F7FCD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ce31b3e5592ee70ab4f1911caf8cef2e597946c
+commit: https://git.buildroot.net/buildroot/commit/?id=2ef6f37000dfcc1aedc501238d42cd0b22f24236
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After the conversion to the common genimage scripts, the uImage.imx23-olinuxino
-file no longer exists.
-
-Instead of updating the section, let's simply remove it as the more
-standard method of using sdcard.img is already explained.
-
-This also makes the readme more consistent with the other i.MX readme files.
-
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/olimex/imx233_olinuxino/readme.txt | 70 --------------------------------
- 1 file changed, 70 deletions(-)
+ package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
+ package/libva-intel-driver/libva-intel-driver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/olimex/imx233_olinuxino/readme.txt b/board/olimex/imx233_olinuxino/readme.txt
-index 2722c3a..1e676c4 100644
---- a/board/olimex/imx233_olinuxino/readme.txt
-+++ b/board/olimex/imx233_olinuxino/readme.txt
-@@ -27,73 +27,3 @@ Then, run the following command as root:
- *** WARNING! The command will destroy all the card content. Use with care! ***
+diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
+index 24c2170..10664d0 100644
+--- a/package/libva-intel-driver/libva-intel-driver.hash
++++ b/package/libva-intel-driver/libva-intel-driver.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/libva/2016-September/004380.html
+-sha1 9373afadd6ec0d6d983cf5bb2001d91c22b39719  libva-intel-driver-1.7.2.tar.bz2
++# From https://lists.freedesktop.org/archives/libva/2016-November/004731.html
++sha1 5100f187afc4e39fce5664b96fe11a38faa9afaa  libva-intel-driver-1.7.3.tar.bz2
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+index c388de1..86f6eaa 100644
+--- a/package/libva-intel-driver/libva-intel-driver.mk
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-  sudo dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
--
--=== Manual creation of SD card image =========================================
--
--You'll need a spare MicroSD card with Freescale's special partition layout.
--This is basically three partitions:
--
--1) Type 53, the U-Boot partition, should be 16MB.
--2) VFAT, place the kernel uImage there
--3) Anything you like, for this example an ext2 partition, type 83 (linux).
--
--Assuming you see your MicroSD card as /dev/sdc you'd need to do, as root
--and from the buildroot project top level directory:
--(remember to replace /dev/sdc* with the appropiate device name!)
--
--***** WARNING: Double check that /dev/sdc is your MicroSD card *****
--*****      It might be /dev/sdb or some other device name      *****
--***** Failure to do so may result in you wiping your hard disk *****
--
--1. Unmount the filesystem(s) if they're already mounted, usually...
--
--   # for fs in `grep /dev/sdc /proc/mounts|cut -d ' ' -f 1`;do umount $fs;done
--
--   ...should work
--
--2. Blank the partition table out
--
--   # dd if=/dev/zero of=/dev/sdc bs=1024 count=1024
--
--3. Set up the partitions
--
--   # fdisk /dev/sdc
--   n
--   p
--   1
--   <ENTER>
--   +16MB
--   t
--   53
--   n
--   p
--   2
--   <ENTER>
--   +5M
--   t
--   2
--   4
--   n
--   p
--   3
--   <ENTER>
--   <ENTER>
--   w
--
--4. Fill up the first (U-Boot) partition
--   # dd if=output/images/u-boot.sd bs=512 of=/dev/sdc1
--
--5. Create VFAT Filesystem
--   # mkfs.vfat /dev/sdc2
--
--6. Mount and copy output/images/uImage.imx23-olinuxino to the VFAT partition, rename to uImage
--   # mount /dev/sdc2 /mnt
--   # cp output/images/uImages/uImage.imx23-olinuxino /mnt/uImage
--   # umount /mnt
--
--7. Fill up the third (filesystem) partition
--   # dd if=output/images/rootfs.ext2 of=/dev/sdc3 bs=512
--
--8. Remove the MicroSD card from your linux PC and put it into your olinuxino.
--
--9. Boot! You're done!
+-LIBVA_INTEL_DRIVER_VERSION = 1.7.2
++LIBVA_INTEL_DRIVER_VERSION = 1.7.3
+ LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
+ LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
+ LIBVA_INTEL_DRIVER_LICENSE = MIT
