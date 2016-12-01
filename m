@@ -1,59 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 01 Dec 2016 22:21:38 -0000
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 6.9.1
-Message-ID: <20161201222136.8BF607FCD4@busybox.osuosl.org>
+Date: Thu, 01 Dec 2016 22:21:39 -0000
+Subject: [Buildroot] [git commit] uboot-tools: bump to version 2016.11
+Message-ID: <20161201222136.6EE147FCD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f899d7f1cd807ff7a92b2facfd4718dad139724
+commit: https://git.buildroot.net/buildroot/commit/?id=99fd3bae35f9971544990c1869933b8ae22832ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://nodejs.org/en/blog/release/v6.9.1/
-
-The patches from 6.7.0 have been copied to 6.9.1.
-
-Signed-off-by: Patrick Devlin <cloudyparts@icloud.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../{6.7.0 => 6.9.1}/0001-gyp-force-link-command-to-use-CXX.patch     | 0
- .../0002-inspector-don-t-build-when-ssl-support-is-disabled.patch     | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 4 files changed, 3 insertions(+), 3 deletions(-)
+ package/uboot-tools/uboot-tools.hash | 2 +-
+ package/uboot-tools/uboot-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/6.7.0/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.9.1/0001-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/6.7.0/0001-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/6.9.1/0001-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/6.7.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.9.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-similarity index 100%
-rename from package/nodejs/6.7.0/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-rename to package/nodejs/6.9.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 976be50..a47ba37 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+index db60dab..5b2c3bf 100644
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  95728e89dd476d17428f94080752ab48884be477b6a678941582aeef618b70bb  u-boot-2016.09.01.tar.bz2
++sha256  45813e6565dcc0436abe6752624324cdbf5f3ac106570d76d32b46ec529bcdc8  u-boot-2016.11.tar.bz2
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index a3335a5..bb0cba8 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "6.7.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "6.9.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.47"
- 
- config BR2_PACKAGE_NODEJS_NPM
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index f334a47..5df79af 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.47/SHASUMS256.txt
- sha256  335bdf4db702885a8acaf2c9f241c70cabd62497361da81aca65c8e8a8e7ff09  node-v0.10.47.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v6.7.0/SHASUMS256.txt
--sha256  ceb028324aab1ee8c7ea6a62026f036f3ea71f5ef5212593d0f833f999dd3be5  node-v6.7.0.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v6.9.1/SHASUMS256.txt
-+sha256  0bdd8d1305777cc8cd206129ea494d6c6ce56001868dd80147aff531d6df0729  node-v6.9.1.tar.xz
+-UBOOT_TOOLS_VERSION = 2016.09.01
++UBOOT_TOOLS_VERSION = 2016.11
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPLv2+
