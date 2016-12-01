@@ -1,34 +1,83 @@
-From: Phil Eichinger <phil.eichinger@gmail.com>
-Date: Thu,  1 Dec 2016 15:45:33 +0100
-Subject: [Buildroot] [PATCH 1/1] e2fsprogs: findfs is available in
-	BR2_PACKAGE_UTIL_LINUX_BINARIES
-Message-ID: <1480603533-34023-1-git-send-email-phil@zankapfel.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 Dec 2016 16:26:03 +0100
+Subject: [Buildroot] Package not building automatically.
+In-Reply-To: <be469460-df73-df24-c85b-614e8b2d572c@rd.bbc.co.uk>
+References: <be469460-df73-df24-c85b-614e8b2d572c@rd.bbc.co.uk>
+Message-ID: <20161201162603.1747cb41@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-031659024b3cf27bb68dc58d07519b563ef472a1 removed the option
-BR2_PACKAGE_UTIL_LINUX_FINDFS as it is always built by default.
+Hello,
 
-Signed-off-by: Phil Eichinger <phil@zankapfel.net>
----
- Config.in.legacy | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 1 Dec 2016 14:39:52 +0000, Samuel Hurst wrote:
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 8c41b05..c2998d4 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -615,7 +615,7 @@ config BR2_PACKAGE_E2FSPROGS_FINDFS
- 	  This option attempted to enable findfs capabilities from
- 	  e2fsprogs but has not worked since July 2015 (due to
- 	  packaging changes). One can use BusyBox's findfs support or
--	  enable the BR2_PACKAGE_UTIL_LINUX_FINDFS option.
-+	  enable the BR2_PACKAGE_UTIL_LINUX_BINARIES option.
- 
- config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
- 	bool "openpowerlink debug option has been removed"
+> Apologies if this isn't the right place to ask this question.
+> 
+> I'm currently using Buildroot to build some images for Raspberry Pis to
+> be used as demonstrators. However, I've been hitting an issue where
+> Buildroot is not building certain packages unless I force them to build
+> manually (i.e. make <package-name>, instead of just running make).
+> 
+> In this case, I'm trying to get a Google QUIC library to build from
+> github. I'm wondering if it's something wrong with my Config.in and .mk
+> files that I've created:
+> 
+> == package/libquic/Config.in ===========================================
+> config BR2_PACKAGE_LIBQUIC
+>     bool "libquic"
+>     depends on BR2_TOOLCHAIN_HAS_THREADS
+>     select BR2_PACKAGE_ICU
+>     select BR2_PACKAGE_LIBEVENT
+>     help
+>         QUIC, a multiplexed stream transport over UDP
+> 
+> ========================================================================
+> 
+> == package/libquic/libquic.mk ==========================================
+> #############################################################################
+> #
+> # QUIC Library
+> #
+> #############################################################################
+> 
+> LIBQUIC_VERSION = 8954789a056d8e7d5fcb6452fd1572ca57eb5c4e
+> LIBQUIC_SITE_METHOD = git
+> LIBQUIC_SITE = https://github.com/devsisters/libquic.git
+> LIBQUIC_SOURCE = libquic-$(LIBQUIC_VERSION).tar.gz
+> LIBQUIC_DEPENDENCIES = icu libevent
+> LIBQUIC_INSTALL_STAGING = YES
+> 
+> $(eval $(cmake-package))
+> ========================================================================
+> 
+> The package shows up in the menuconfig interface and it is selected
+> (indeed, it is depended on by another package which does build as it
+> should). Can anyone cast some light onto what I might be doing wrong?
+
+Nothing looks wrong here. Are you sure that grep
+BR2_PACKAGE_LIBQUIC .config shows that this package is enabled?
+
+For a package to build, there's a few rules to respect:
+
+ - the option must be named BR2_PACKAGE_<FOO>
+
+ - the package must be in package/<foo>/<foo>.mk
+
+ - the variables in foo.mk must be prefixed by <FOO>
+
+All three conditions seem to be respected on what you're showing.
+
+Unrelated, but the LIBQUIC_SOURCE variable is useless, since you have
+specified LIBQUIC_SITE_METHOD = git. But that's definitely not the
+reason why this package doesn't build.
+
+Best regards,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
