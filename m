@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:35 -0000
-Subject: [Buildroot] [git commit] DEVELOPERS: add entry for uhttpd and
-	ustream-ssl
-Message-ID: <20161201222133.7EA1281E77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sudo: add optional support for zlib
+Message-ID: <20161201222133.8714E81E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bda3c5222a17762e8a7265c88eafe1a060c7714
+commit: https://git.buildroot.net/buildroot/commit/?id=0bd23d2dc23add4db2c4321c3da096cc916fb999
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/sudo/sudo.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3a9c00d..77e71b0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1229,6 +1229,10 @@ F:	package/gssdp/
- F:	package/gupnp/
- F:	package/gupnp-av/
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index f28312a..89859dd 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -30,6 +30,13 @@ else
+ SUDO_CONF_OPTS += --without-pam
+ endif
  
-+N:	Rahul Jain <rahul.jain@imgtec.com>
-+F:	package/uhttpd/
-+F:	package/ustream-ssl/
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++SUDO_CONF_OPTS += --enable-zlib
++SUDO_DEPENDENCIES += zlib
++else
++SUDO_CONF_OPTS += --disable-zlib
++endif
 +
- N:	Renaud Aubin <root@renaud.io>
- F:	package/libhttpparser/
- 
+ # mksigname/mksiglist needs to run on build host to generate source files
+ define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+ 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
