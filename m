@@ -1,42 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:38 -0000
-Subject: [Buildroot] [git commit] busybox: allow the user to set the telnetd
-	options
-Message-ID: <20161201222134.A844681E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/uboot: bump to version 2016.11
+Message-ID: <20161201222136.654CB7FCD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4cbf58f836c8e46f8cdbc9e1eabe1d0b606ce6a
+commit: https://git.buildroot.net/buildroot/commit/?id=ce7b0b8dfba9832169d80916b9adf83ef27dbb04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Source /etc/default/telnet to make it possible to override the telnetd
-arguments. For example a user may want to set an alternative port.
-
-Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/S50telnet | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/S50telnet b/package/busybox/S50telnet
-index 47e2b63..82952b8 100755
---- a/package/busybox/S50telnet
-+++ b/package/busybox/S50telnet
-@@ -3,10 +3,13 @@
- # Start telnet....
- #
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index fabf27d..3b4bfac 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -38,7 +38,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
-+TELNETD_ARGS=-F
-+[ -r /etc/default/telnet ] && . /etc/default/telnet
-+
- start() {
-       printf "Starting telnetd: "
-       start-stop-daemon -S -q -m -b -p /var/run/telnetd.pid \
--			-x /usr/sbin/telnetd -- -F
-+			-x /usr/sbin/telnetd -- $TELNETD_ARGS
-       [ $? = 0 ] && echo "OK" || echo "FAIL"
- }
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2016.09.01"
++	bool "2016.11"
  
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -86,7 +86,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2016.09.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2016.11"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index db60dab..5b2c3bf 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  95728e89dd476d17428f94080752ab48884be477b6a678941582aeef618b70bb  u-boot-2016.09.01.tar.bz2
++sha256  45813e6565dcc0436abe6752624324cdbf5f3ac106570d76d32b46ec529bcdc8  u-boot-2016.11.tar.bz2
