@@ -1,40 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:35 -0000
-Subject: [Buildroot] [git commit] Makefile: delete default rules
-Message-ID: <20161201222133.9837E81E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gst1-plugins-good: bump to version 1.10.0
+Message-ID: <20161201222133.DD57B81E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bb7430a20871ad4e3ccbc8c1992d60117214be2
+commit: https://git.buildroot.net/buildroot/commit/?id=e6a58ad7d326d3dcc564e36e2dc157d5a3532d7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We don't use the default implicit rules that are added by make, so
-they just slow down the Makefile processing. The default implicit
-rules can be removed by defining an empty .SUFFIXES: target.
-
-This speeds up the start of the build on my machine from 5.6s to
-4.9s.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 4ea64b3..6cf5f1c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,6 +24,9 @@
- # You shouldn't need to mess with anything beyond this point...
- #--------------------------------------------------------------
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 2e3db3d..a00db6c 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.8.3.tar.xz.sha256sum
+-sha256	a1d6579ba203a7734927c24b90bf6590d846c5a5fcec01a48201018c8ad2827a  gst-plugins-good-1.8.3.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.10.0.tar.xz.sha256sum
++sha256	7a03559763f5634ab1b4b2edd3e9f7442bdd4657187e20ea5e1887ae46371de2  gst-plugins-good-1.10.0.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index b4bc2e4..ca3bfaa 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Delete default rules. We don't use them. This saves a bit of time.
-+.SUFFIXES:
-+
- # we want bash as shell
- SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
- 	 else if [ -x /bin/bash ]; then echo /bin/bash; \
+-GST1_PLUGINS_GOOD_VERSION = 1.8.3
++GST1_PLUGINS_GOOD_VERSION = 1.10.0
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
