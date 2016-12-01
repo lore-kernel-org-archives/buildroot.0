@@ -1,83 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:36 -0000
-Subject: [Buildroot] [git commit] ustream-ssl: new package
-Message-ID: <20161201222133.6BD8C81E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx23evk: Add support for imx23evk
+Message-ID: <20161201222134.BD09081E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdb8f8231b0418c91bb800b59afa89f182a36081
+commit: https://git.buildroot.net/buildroot/commit/?id=177bbf65669cff25eaff5e0dfbf87ae161ab8803
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ustream-ssl has support for polarssl and cyassl
-but since polarssl is made obsolete by mbedtls and cyassl
-is not present in buildroot, we have not added support for it.
+Add support for imx23evk board.
 
-Signed-off-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
+For more information about this board, please check:
+http://www.nxp.com/products/software-and-tools/software-development-tools/i.mx-software-and-tools/i.mx23-evaluation-kit:IMX23EVK
+
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                  |  1 +
- package/ustream-ssl/Config.in      | 12 ++++++++++++
- package/ustream-ssl/ustream-ssl.mk | 21 +++++++++++++++++++++
- 3 files changed, 34 insertions(+)
+ board/freescale/imx23evk/readme.txt | 48 +++++++++++++++++++++++++++++++++++++
+ configs/imx23evk_defconfig          | 34 ++++++++++++++++++++++++++
+ 2 files changed, 82 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9ed296f..a24110e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -912,6 +912,7 @@ menu "Crypto"
- 	source "package/polarssl/Config.in"
- 	source "package/tinydtls/Config.in"
- 	source "package/trousers/Config.in"
-+	source "package/ustream-ssl/Config.in"
- endmenu
- 
- menu "Database"
-diff --git a/package/ustream-ssl/Config.in b/package/ustream-ssl/Config.in
+diff --git a/board/freescale/imx23evk/readme.txt b/board/freescale/imx23evk/readme.txt
 new file mode 100644
-index 0000000..540e436
+index 0000000..6574577
 --- /dev/null
-+++ b/package/ustream-ssl/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_USTREAM_SSL
-+	bool "ustream-ssl"
-+	depends on !BR2_STATIC_LIBS #libubox
-+	select BR2_PACKAGE_LIBUBOX
-+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
-+	help
-+	  ustream SSL wrapper
++++ b/board/freescale/imx23evk/readme.txt
+@@ -0,0 +1,48 @@
++**************************
++Freescale i.MX23 EVK board
++**************************
 +
-+	  https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary
++This file documents the Buildroot support for the Freescale i.MX23 EVK board.
 +
-+comment "ustream-ssl needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/ustream-ssl/ustream-ssl.mk b/package/ustream-ssl/ustream-ssl.mk
++Build
++=====
++
++First, configure Buildroot for your i.MX23 EVK board:
++
++  make imx23evk_defconfig
++
++Build all components:
++
++  make
++
++You will find in output/images/ directory the following files:
++  - imx23-evk.dtb
++  - rootfs.tar
++  - u-boot.sd
++  - zImage
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Then, run the following command:
++
++*** WARNING! The command will destroy all the card content. Use with care! ***
++
++ sudo dd if=output/images/sdcard.img of=/dev/<your-microsd-device>
++
++Boot the i.MX23 EVK board
++=========================
++
++- Put the Boot Mode Select jumper as 1 0 0 1 so that it can boot
++  from the SD card
++- Insert the SD card in the SD Card slot of the board;
++- Connect an RS232 UART cable to the Debug UART Port and connect using a
++  terminal emulator at 115200 bps, 8n1;
++- power on the board.
++
++Enjoy!
+diff --git a/configs/imx23evk_defconfig b/configs/imx23evk_defconfig
 new file mode 100644
-index 0000000..b83d129
+index 0000000..fe07440
 --- /dev/null
-+++ b/package/ustream-ssl/ustream-ssl.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# ustream-ssl
-+#
-+################################################################################
++++ b/configs/imx23evk_defconfig
+@@ -0,0 +1,34 @@
++# architecture
++BR2_arm=y
++BR2_arm926t=y
 +
-+USTREAM_SSL_VERSION = ec80adaa1b47f28d426fa19c692011ce60b992d6
-+USTREAM_SSL_SITE = git://git.openwrt.org/project/ustream-ssl.git
-+USTREAM_SSL_LICENSE = ISC
-+USTREAM_SSL_LICENSE_FILES = ustream-ssl.h
-+USTREAM_SSL_INSTALL_STAGING = YES
-+USTREAM_SSL_DEPENDENCIES = libubox
++# Linux headers same as kernel, a 4.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
 +
-+ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+USTREAM_SSL_DEPENDENCIES += mbedtls
-+USTREAM_SSL_CONF_OPTS += -DMBEDTLS=ON
-+else
-+USTREAM_SSL_DEPENDENCIES += openssl
-+endif
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
 +
-+$(eval $(cmake-package))
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
++BR2_LINUX_KERNEL_DEFCONFIG="mxs"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-evk"
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx23evk"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_FORMAT_SD=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT4=y
++
++# To generate SD card image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/mxs/post-image.sh"
