@@ -1,42 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:35 -0000
-Subject: [Buildroot] [git commit] gst1-plugins-good: bump to version 1.10.0
-Message-ID: <20161201222133.DD57B81E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fdk-aac: refactor architecture dependency
+	as a blind option
+Message-ID: <20161201222133.F0D82800B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6a58ad7d326d3dcc564e36e2dc157d5a3532d7c
+commit: https://git.buildroot.net/buildroot/commit/?id=b60aca590b6ea9b1ef4400b986631548195e6d19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+In preparation to the addition of a fdk-aac GStreamer plugin that will
+have to select the fdk-aac package (and therefore inherits its
+dependencies), this commits adds a BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+blind option to avoid duplicating the architecture dependencies of
+this package.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fdk-aac/Config.in | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-index 2e3db3d..a00db6c 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.8.3.tar.xz.sha256sum
--sha256	a1d6579ba203a7734927c24b90bf6590d846c5a5fcec01a48201018c8ad2827a  gst-plugins-good-1.8.3.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.10.0.tar.xz.sha256sum
-+sha256	7a03559763f5634ab1b4b2edd3e9f7442bdd4657187e20ea5e1887ae46371de2  gst-plugins-good-1.10.0.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index b4bc2e4..ca3bfaa 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
+index 9e18d22..f51c5ab 100644
+--- a/package/fdk-aac/Config.in
++++ b/package/fdk-aac/Config.in
+@@ -1,11 +1,14 @@
++# These are the architectures supported by FDK AAC
++config BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
++	bool
++	default y if BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
++		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		BR2_powerpc || BR2_sh
++
+ config BR2_PACKAGE_FDK_AAC
+ 	bool "fdk-aac"
++	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	# These are the architectures supported by FDK AAC
+-	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+-		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_powerpc || BR2_sh
+-
+ 	help
+ 	  The Fraunhofer FDK AAC Codec Library for Android ("FDK AAC Codec")
+ 	  is software that implements the MPEG Advanced Audio Coding ("AAC")
+@@ -14,7 +17,5 @@ config BR2_PACKAGE_FDK_AAC
+ 	  http://sourceforge.net/projects/opencore-amr/files/fdk-aac/
  
--GST1_PLUGINS_GOOD_VERSION = 1.8.3
-+GST1_PLUGINS_GOOD_VERSION = 1.10.0
- GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+ comment "fdk-aac needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+-		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_powerpc || BR2_sh
