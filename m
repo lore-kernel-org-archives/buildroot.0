@@ -1,64 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:35 -0000
-Subject: [Buildroot] [git commit] gst1-plugins-bad: add srtp support
-Message-ID: <20161201222134.6FBEB800B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gst1-plugins-bad: enable fdkaac plugin
+Message-ID: <20161201222134.09BF081E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3295a5ef4d41f91fbe9d8d2e690768c8056f3fd4
+commit: https://git.buildroot.net/buildroot/commit/?id=0d45e57a1292a803fe3d118c580243d2e8bd41c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's not new for 1.10.0 but hasn't been enabled when libsrtp was added
-to buildroot.
+It's new for 1.10.0, add an explicit option for the fdkaac plugin.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: add missing dependencies for the fdk-aac select, as noticed
+by Baruch Siach.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 12 ++++++++++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  8 ++++++++
+ 2 files changed, 20 insertions(+)
 
 diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 40bb283..16c0b7e 100644
+index 2f288ca..8af35cc 100644
 --- a/package/gstreamer1/gst1-plugins-bad/Config.in
 +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -665,6 +665,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SNDFILE
- 	bool "sndfile"
- 	select BR2_PACKAGE_LIBSNDFILE
+@@ -520,6 +520,18 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FBDEV
+ 	help
+ 	  Linux framebuffer video sink
  
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SRTP
-+	bool "srtp"
-+	select BR2_PACKAGE_LIBSRTP
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FDK_AAC
++	bool "fdk-aac"
++	select BR2_PACKAGE_FDK_AAC
++	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  MPEG AAC encoder/decoder
 +
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD
- 	bool "vcd"
- 
++comment "fdk-aac needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_FDK_AAC_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+ 	bool "gl"
+ 	default y
 diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 012b948..098cf2b 100644
+index ac99fcd..cd9da7c 100644
 --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
 +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -44,7 +44,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	--disable-ladspa \
- 	--disable-lv2 \
- 	--disable-libde265 \
--	--disable-srtp \
- 	--disable-linsys \
- 	--disable-modplug \
- 	--disable-mimic \
-@@ -780,6 +779,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-sndfile
+@@ -642,6 +642,14 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-fbdev
  endif
  
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SRTP),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-srtp
-+GST1_PLUGINS_BAD_DEPENDENCIES += libsrtp
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_FDK_AAC),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-fdk_aac
++GST1_PLUGINS_BAD_DEPENDENCIES += fdk-aac
++GST1_PLUGINS_BAD_HAS_UNKNOWN_LICENSE = y
 +else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-srtp
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-fdk_aac
 +endif
 +
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-vcd
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-gl
  else
