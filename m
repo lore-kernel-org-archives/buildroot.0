@@ -1,49 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:41 -0000
-Subject: [Buildroot] [git commit] package/netsniff-ng: allow to build with
-	musl
-Message-ID: <20161201222136.AEF137FB56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] patchelf: bump version to 0.9
+Message-ID: <20161201222135.1D4DA81E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f148d55980bbc2943706670df638b0f70d8de81e
+commit: https://git.buildroot.net/buildroot/commit/?id=b2163fb8d4cc6ca925464b60b517e8953038559d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-netsniff-ng allows build with musl since version 0.5.8. With libnet
-now being able to build with musl, let's enable musl for netsniff-ng
-as well.
-
-Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-[Thomas: update Config.in comment.]
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netsniff-ng/Config.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/patchelf/patchelf.hash | 2 +-
+ package/patchelf/patchelf.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-index e52bb25..00617e3 100644
---- a/package/netsniff-ng/Config.in
-+++ b/package/netsniff-ng/Config.in
-@@ -7,8 +7,7 @@ config BR2_PACKAGE_NETSNIFF_NG
- 	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_LIBNET
- 	# Build with uClibc fails due to missing ceill()
--	# Build with musl fails due to various header issues
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
-@@ -17,7 +16,7 @@ config BR2_PACKAGE_NETSNIFF_NG
- 	  networking toolkit. If you will, the Swiss army knife for
- 	  network packets.
+diff --git a/package/patchelf/patchelf.hash b/package/patchelf/patchelf.hash
+index 0da413e..14154a3 100644
+--- a/package/patchelf/patchelf.hash
++++ b/package/patchelf/patchelf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	14af06a2da688d577d64ff8dac065bb8903bbffbe01d30c62df7af9bf4ce72fe	patchelf-0.8.tar.gz
++sha256	f2aa40a6148cb3b0ca807a1bf836b081793e55ec9e5540a5356d800132be7e0a	patchelf-0.9.tar.gz
+diff --git a/package/patchelf/patchelf.mk b/package/patchelf/patchelf.mk
+index 043224d..5222e57 100644
+--- a/package/patchelf/patchelf.mk
++++ b/package/patchelf/patchelf.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--comment "netsniff-ng needs a glibc toolchain w/ threads, headers >= 3.0"
-+comment "netsniff-ng needs a glibc or musl toolchain w/ threads, headers >= 3.0"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+-PATCHELF_VERSION = 0.8
+-PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-0.8
++PATCHELF_VERSION = 0.9
++PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-0.9
+ PATCHELF_LICENSE = GPLv3+
+ PATCHELF_LICENSE_FILES = COPYING
+ 
