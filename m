@@ -1,58 +1,135 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:34 -0000
-Subject: [Buildroot] [git commit] tinycbor: bump to version v0.4
-Message-ID: <20161201222133.60B7D800B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] freescale: Add a standard genimage script
+	for MX23/MX28
+Message-ID: <20161201222133.AB64F81E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=944805f012f4f1f8e77aba0bbc5edc7e786999a2
+commit: https://git.buildroot.net/buildroot/commit/?id=61331ac08e688ba5cf2913a09cbb3c54892cd54a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Add a standard genimage script for the MXS processors (MX23 and MX28).
+
+Based on the common scripts for the other imx devices:
+board/freescale/common/genimage.cfg.template
+board/freescale/common/post-image.sh
+
+This makes it easier to add new MX23/MX28 boards configurations into
+Buildroot.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tinycbor/tinycbor.hash |  4 +---
- package/tinycbor/tinycbor.mk   | 13 +------------
- 2 files changed, 2 insertions(+), 15 deletions(-)
+ board/freescale/common/mxs/genimage.cfg.template | 39 +++++++++++++++++
+ board/freescale/common/mxs/post-image.sh         | 54 ++++++++++++++++++++++++
+ 2 files changed, 93 insertions(+)
 
-diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
-index f07fc17..88300e8 100644
---- a/package/tinycbor/tinycbor.hash
-+++ b/package/tinycbor/tinycbor.hash
-@@ -1,4 +1,2 @@
- # Locally computed:
--sha256	f70de1e6b7e3750abb4ceacf0059e47b47c769f113434de10293b33867ce54c2	tinycbor-v0.3.2.tar.gz
--sha256	7d3aa839ae246e9e14fc73e67869d88c684802c1578fb75503f3fdde1482dcf6	ede7f1431ae06c9086f2a83a57bd7832d99280e3.patch
--sha256	42054074478d074d0320e0c64e8d44f60081b6f0d8dc0e3607e0fb7f4dad96a4	ad09b6af11fc8b6391041973783785cfe1559d63.patch	
-+sha256	302ac9de66f1048725040ccc9a99e03c20529ac2b150ccf35cfd1e2dafa81c4b	tinycbor-v0.4.tar.gz
-diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
-index 8ce9a76..2691e5b 100644
---- a/package/tinycbor/tinycbor.mk
-+++ b/package/tinycbor/tinycbor.mk
-@@ -4,22 +4,11 @@
- #
- ################################################################################
- 
--TINYCBOR_VERSION = v0.3.2
-+TINYCBOR_VERSION = v0.4
- TINYCBOR_SITE = $(call github,01org,tinycbor,$(TINYCBOR_VERSION))
- TINYCBOR_LICENSE = MIT
- TINYCBOR_LICENSE_FILES = LICENSE
- 
--# This patch fixes the issue on unnamed union which are not supported by some
--# targets like blackfin
--# This patch is currently in dev branch and will be a part of v0.4
--TINYCBOR_PATCH = \
--	https://github.com/01org/tinycbor/commit/ede7f1431ae06c9086f2a83a57bd7832d99280e3.patch
--
--# This patch fixes the issue on cjson detection
--# This patch is currently in dev branch and will be a part of v0.4
--TINYCBOR_PATCH += \
--	https://github.com/01org/tinycbor/commit/ad09b6af11fc8b6391041973783785cfe1559d63.patch
--
- TINYCBOR_DEPENDENCIES = host-pkgconf
- TINYCBOR_INSTALL_STAGING = YES
- 
+diff --git a/board/freescale/common/mxs/genimage.cfg.template b/board/freescale/common/mxs/genimage.cfg.template
+new file mode 100644
+index 0000000..e094fb7
+--- /dev/null
++++ b/board/freescale/common/mxs/genimage.cfg.template
+@@ -0,0 +1,39 @@
++# Minimal SD card image for the Freescale MX23/MX28 Template
++#
++# We mimic the .sdcard Freescale's MX23/MX28 image format:
++# * u-boot.sb is placed at offset 1M,
++# * a FAT partition at offset 16 MB is containing zImage/uImage and DTB files
++# * a single root filesystem partition is required (ext2, ext3 or ext4)
++#
++
++image boot.vfat {
++	vfat {
++		files = {
++			%FILES%
++		}
++	}
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		partition-type = 0x53
++		image = "u-boot.sd"
++		offset = 1M
++		size = 16M
++	}
++
++	partition kernel {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++	}
++}
+diff --git a/board/freescale/common/mxs/post-image.sh b/board/freescale/common/mxs/post-image.sh
+new file mode 100755
+index 0000000..0bfb835
+--- /dev/null
++++ b/board/freescale/common/mxs/post-image.sh
+@@ -0,0 +1,54 @@
++#!/usr/bin/env bash
++
++#
++# dtb_list extracts the list of DTB files from BR2_LINUX_KERNEL_INTREE_DTS_NAME
++# in ${BR_CONFIG}, then prints the corresponding list of file names for the
++# genimage configuration file
++#
++dtb_list()
++{
++	local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
++
++	for dt in $DTB_LIST; do
++		echo -n "\"$dt.dtb\", "
++	done
++}
++
++#
++# linux_image extracts the Linux image format from BR2_LINUX_KERNEL_UIMAGE in
++# ${BR_CONFIG}, then prints the corresponding file name for the genimage
++# configuration file
++#
++linux_image()
++{
++	if grep -Eq "^BR2_LINUX_KERNEL_UIMAGE=y$" ${BR2_CONFIG}; then
++		echo "\"uImage\""
++	else
++		echo "\"zImage\""
++	fi
++}
++
++main()
++{
++	local FILES="$(dtb_list) $(linux_image)"
++	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
++	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++	sed -e "s/%FILES%/${FILES}/" \
++		board/freescale/common/mxs/genimage.cfg.template > ${GENIMAGE_CFG}
++
++	rm -rf "${GENIMAGE_TMP}"
++
++	genimage \
++		--rootpath "${TARGET_DIR}" \
++		--tmppath "${GENIMAGE_TMP}" \
++		--inputpath "${BINARIES_DIR}" \
++		--outputpath "${BINARIES_DIR}" \
++		--config "${GENIMAGE_CFG}"
++
++	rm -f ${GENIMAGE_CFG}
++
++	exit $?
++}
++
++main $@
