@@ -1,45 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:37 -0000
-Subject: [Buildroot] [git commit] libgtk3: bump version to 3.22.3
-Message-ID: <20161201222135.463B181E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] screen: enable support for 256 colors
+Message-ID: <20161201222135.353CE81E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58aefb2a5d034a5b16800dc935f376c83a815efd
+commit: https://git.buildroot.net/buildroot/commit/?id=dbfc24a3c04d9311d6f959dece7c42b059e256f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Overview of Changes in GTK+ 3.22.3:
-http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.3.news
+Support for 256 colors is enabled in xterm and ncurses, but it was
+forgotten for screen.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/screen/screen.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index b606717..1c58efc 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.2.sha256sum
--sha256	2343dcaed2fc237ef718136ff4110fef7eb1ebfe178a9b064aa21cd74ecb6946	gtk+-3.22.2.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.3.sha256sum
-+sha256 e190ab1a9a893861b8e8be341aa57bce8b7146d6445ebfe5a8ab64236fe82ed3  gtk+-3.22.3.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index b7cea7d..0b9a999 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index 84c3d75..16a97cc 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
+@@ -11,6 +11,7 @@ SCREEN_LICENSE_FILES = COPYING
+ SCREEN_DEPENDENCIES = ncurses
+ SCREEN_AUTORECONF = YES
+ SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
++SCREEN_CONF_OPTS = --enable-colors256
+ SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
  
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).2
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).3
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
+ define SCREEN_INSTALL_SCREENRC
