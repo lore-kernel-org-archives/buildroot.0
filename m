@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:36 -0000
-Subject: [Buildroot] [git commit] gst1-plugins-base: bump to version 1.10.0
-Message-ID: <20161201222133.D344B81E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] webrtc-audio-processing: refactor
+	architecture dependency as a blind option
+Message-ID: <20161201222134.138BF81E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b08e5ec871b031147595ab1189cdb3bb5aa0df5
+commit: https://git.buildroot.net/buildroot/commit/?id=8ea3a3b9c32f88871a1c3090a2a0dd5097061928
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+In preparation to the addition of a webrtc GStreamer plugin that will
+have to select the webrtc-audio-processing package (and therefore
+inherits its dependencies), this commits adds a
+BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS blind option to avoid
+duplicating the architecture dependencies of this package.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 4 ++--
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/webrtc-audio-processing/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index 83f0e83..f4a43ca 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-@@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.8.3.tar.xz.sha256sum
--sha256	114871d4d63606b4af424a8433cd923e4ff66896b244bb7ac97b9da47f71e79e  gst-plugins-base-1.8.3.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.10.0.tar.xz.sha256sum
-+sha256	bfcdef97dfc69a0bbdb4403c47aae4e53def176bf0b781c5d818550536cfe94a  gst-plugins-base-1.10.0.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 5a35897..c5686b3 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/webrtc-audio-processing/Config.in b/package/webrtc-audio-processing/Config.in
+index 79a06d8..02715b0 100644
+--- a/package/webrtc-audio-processing/Config.in
++++ b/package/webrtc-audio-processing/Config.in
+@@ -1,6 +1,10 @@
++config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_i386 || BR2_x86_64
++
+ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
+ 	bool "webrtc-audio-processing"
+-	depends on BR2_arm || BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	# pthread_condattr_setclock
+@@ -12,6 +16,6 @@ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
+ 	  http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
  
--GST1_PLUGINS_BASE_VERSION = 1.8.3
-+GST1_PLUGINS_BASE_VERSION = 1.10.0
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+ comment "webrtc-audio-processing needs a toolchain w/ C++, NPTL, gcc >= 4.8"
+-	depends on BR2_arm || BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
