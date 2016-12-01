@@ -1,43 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:44 -0000
-Subject: [Buildroot] [git commit] php: bump version to 7.0.13
-Message-ID: <20161201222136.2975B7FCD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/warp7: Bump to U-Boot 2016.11
+Message-ID: <20161201222136.7BB3B7FCD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd59cb6b388d00865d0084e6a25eb306c0b5fdd3
+commit: https://git.buildroot.net/buildroot/commit/?id=87f1bdda38b43192908dab585dc6b4fc3e39ffe5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: http://php.net/ChangeLog-7.php#7.0.13
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/warp7_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index dde6a64..f1cd346 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256 f3d6c49e1c242e5995dec15e503fde996c327eb86cd7ec45c690e93c971b83ff  php-7.0.12.tar.xz
-+sha256 357ba7f93975d7d836abed0852dc3ed96a988af539e87750613294cbee82f1bf  php-7.0.13.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index f85cb37..c8abe66 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index a55a504..fca7a1d 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7_secure"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
--PHP_VERSION = 7.0.12
-+PHP_VERSION = 7.0.13
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ # wifi firmware for brcm43430
