@@ -1,49 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:36 -0000
-Subject: [Buildroot] [git commit] webrtc-audio-processing: refactor
-	architecture dependency as a blind option
-Message-ID: <20161201222134.138BF81E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] wpa_supplicant: add mesh support (IEEE
+	80211s)
+Message-ID: <20161201222134.91BD781E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ea3a3b9c32f88871a1c3090a2a0dd5097061928
+commit: https://git.buildroot.net/buildroot/commit/?id=100ed2c05a47b239b383a2f83f1ffc8bb70b86f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation to the addition of a webrtc GStreamer plugin that will
-have to select the webrtc-audio-processing package (and therefore
-inherits its dependencies), this commits adds a
-BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS blind option to avoid
-duplicating the architecture dependencies of this package.
-
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webrtc-audio-processing/Config.in | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/wpa_supplicant/Config.in         | 7 +++++++
+ package/wpa_supplicant/wpa_supplicant.mk | 5 +++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/webrtc-audio-processing/Config.in b/package/webrtc-audio-processing/Config.in
-index 79a06d8..02715b0 100644
---- a/package/webrtc-audio-processing/Config.in
-+++ b/package/webrtc-audio-processing/Config.in
-@@ -1,6 +1,10 @@
-+config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_arm || BR2_i386 || BR2_x86_64
-+
- config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
- 	bool "webrtc-audio-processing"
--	depends on BR2_arm || BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	# pthread_condattr_setclock
-@@ -12,6 +16,6 @@ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
- 	  http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 454541f..9250a3b 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -45,6 +45,13 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
+ 	help
+ 	  Enable support for Wi-Fi Display
  
- comment "webrtc-audio-processing needs a toolchain w/ C++, NPTL, gcc >= 4.8"
--	depends on BR2_arm || BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++config BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING
++	bool "Enable mesh networking"
++	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
++	help
++	  Enable support for open and secured mesh networking
++	  (IEEE 802.11s)
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN
+ 	bool "Enable autoscan"
+ 	help
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 3c3317b..9c8414b 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -73,6 +73,11 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WIFI_DISPLAY
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)
++WPA_SUPPLICANT_CONFIG_SET += CONFIG_MESH
++WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_IEEE80211W
++endif
++
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += \
+ 	CONFIG_AUTOSCAN_EXPONENTIAL \
