@@ -1,39 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:35 -0000
-Subject: [Buildroot] [git commit] gstreamer1: add explicit libunwind support
-Message-ID: <20161201222133.C87D881E74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gst1-plugins-bad: add srtp support
+Message-ID: <20161201222134.6FBEB800B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bef9a1fbeb45c3c30d9e00de7ea1742012e538b3
+commit: https://git.buildroot.net/buildroot/commit/?id=3295a5ef4d41f91fbe9d8d2e690768c8056f3fd4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's a new feature for 1.10.0+, however it doesn't have an
-enable/disable configure switch so just handle the dependency.
+It's not new for 1.10.0 but hasn't been enabled when libsrtp was added
+to buildroot.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index f0afdd9..cb111f2 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -34,6 +34,11 @@ GSTREAMER1_CONF_OPTS = \
- 	$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),,--disable-registry) \
- 	$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),,--disable-tools)
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 40bb283..16c0b7e 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -665,6 +665,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SNDFILE
+ 	bool "sndfile"
+ 	select BR2_PACKAGE_LIBSNDFILE
  
--GSTREAMER1_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
-+GSTREAMER1_DEPENDENCIES = \
-+	host-bison \
-+	host-flex \
-+	host-pkgconf \
-+	libglib2 \
-+	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind)
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SRTP
++	bool "srtp"
++	select BR2_PACKAGE_LIBSRTP
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD
+ 	bool "vcd"
  
- $(eval $(autotools-package))
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 012b948..098cf2b 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -44,7 +44,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	--disable-ladspa \
+ 	--disable-lv2 \
+ 	--disable-libde265 \
+-	--disable-srtp \
+ 	--disable-linsys \
+ 	--disable-modplug \
+ 	--disable-mimic \
+@@ -780,6 +779,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-sndfile
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SRTP),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-srtp
++GST1_PLUGINS_BAD_DEPENDENCIES += libsrtp
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-srtp
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-vcd
+ else
