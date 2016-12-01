@@ -1,65 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 01 Dec 2016 22:21:40 -0000
-Subject: [Buildroot] [git commit] gst1-validate: bump to version 1.10.0
-Message-ID: <20161201222134.586F8800B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] ruby: bump version to 2.3.2
+Message-ID: <20161201222136.DAC687FB56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32e0d57a0fed932fcfc4745afda4d65aeb71c39f
+commit: https://git.buildroot.net/buildroot/commit/?id=cbe981184cc1b4909b3f18d653109075d21458cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It now requires json-glib as dependency so adjust.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-validate/Config.in          | 1 +
- package/gstreamer1/gst1-validate/gst1-validate.hash | 4 ++--
- package/gstreamer1/gst1-validate/gst1-validate.mk   | 3 ++-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-validate/Config.in b/package/gstreamer1/gst1-validate/Config.in
-index a9bb2aa..2022d38 100644
---- a/package/gstreamer1/gst1-validate/Config.in
-+++ b/package/gstreamer1/gst1-validate/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_GST1_VALIDATE
- 	bool "gst1-validate"
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_JSON_GLIB
- 	select BR2_PACKAGE_PYTHON_PYEXPAT
- 	# cairo is autodetected but needs PNG support
- 	select BR2_PACKAGE_CAIRO_PNG if BR2_PACKAGE_CAIRO
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
-index 09061f4..f08e1b7 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.hash
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 7e62744..d480f07 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.8.3.tar.xz.sha256sum
--sha256 4525a4fb5b85b8a49674e00d652bee9ac62c56241c148abbff23efa50a224e34  gst-validate-1.8.3.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.10.0.tar.xz.sha256sum
-+sha256 a99a5cd1dfa5d021dd0197b32b04a20348479c097ebeb1f4c36161d70048a176  gst-validate-1.10.0.tar.xz
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index 372e5d6..94595a6 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://www.ruby-lang.org/en/news/2016/04/26/ruby-2-3-1-released/
+-sha256	6725b5534d5a3a21ec4f14d6d7b9921a0d00d08acb88fd04cd50b47b70496338	ruby-2.3.1.tar.xz
++# From https://www.ruby-lang.org/en/news/2016/11/15/ruby-2-3-2-released/
++sha256 5c78f311045ce48160092160444dec2744941a5e37d7865032978bd5bf392f0c  ruby-2.3.2.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index f3f8047..631f270 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GST1_VALIDATE_VERSION = 1.8.3
-+GST1_VALIDATE_VERSION = 1.10.0
- GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
- GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
- GST1_VALIDATE_LICENSE = LGPLv2.1+
-@@ -15,6 +15,7 @@ GST1_VALIDATE_CONF_OPTS = --disable-sphinx-doc
- GST1_VALIDATE_DEPENDENCIES = \
- 	gstreamer1 \
- 	gst1-plugins-base \
-+	json-glib \
- 	host-python \
- 	python \
- 	$(if $(BR2_PACKAGE_CAIRO),cairo)
+ RUBY_VERSION_MAJOR = 2.3
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
+ RUBY_VERSION_EXT = 2.3.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
