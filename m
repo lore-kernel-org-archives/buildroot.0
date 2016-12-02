@@ -1,32 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Dec 2016 22:37:08 +0100
-Subject: [Buildroot] [git commit] developpers: add myself as pkg-waf devel
-Message-ID: <20161202225223.21C25800FF@busybox.osuosl.org>
+Date: Fri, 2 Dec 2016 22:37:54 +0100
+Subject: [Buildroot] [git commit] package/jack2: make it a waf-package
+Message-ID: <20161202225223.4490281E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d8cdf14926778445148e4ad9374feb9ebc78738
+commit: https://git.buildroot.net/buildroot/commit/?id=32470605a976278946ab3134947bb0e35940a32f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Romain Naour <romain.naour@gmail.com>
+Cc: Wojciech M. Zabolotny <wzab01@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/jack2/jack2.mk | 34 +++-------------------------------
+ 1 file changed, 3 insertions(+), 31 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 684be48..12445d4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1602,6 +1602,7 @@ F:	package/nvidia-driver/
- F:	package/omxplayer/
- F:	package/python-pyparsing/
- F:	package/pkg-download.mk
-+F:	package/pkg-waf.mk
- F:	package/slirp/
- F:	package/snappy/
- F:	package/spice/
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index fa9e451..23c9723 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -11,6 +11,8 @@ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+ JACK2_INSTALL_STAGING = YES
+ JACK2_PATCH = https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645.patch
+ 
++JACK2_CONF_OPTS = --alsa
++
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ JACK2_DEPENDENCIES += opus
+ endif
+@@ -42,34 +44,4 @@ endif
+ # gtkiostream, which we do not have, so we don't need to depend on
+ # eigen.
+ 
+-define JACK2_CONFIGURE_CMDS
+-	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS)	\
+-		$(HOST_DIR)/usr/bin/python2 ./waf configure \
+-		--prefix=/usr			\
+-		--alsa				\
+-		$(JACK2_CONF_OPTS)		\
+-	)
+-endef
+-
+-define JACK2_BUILD_CMDS
+-	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS))
+-endef
+-
+-define JACK2_INSTALL_TARGET_CMDS
+-	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) \
+-		install)
+-endef
+-
+-define JACK2_INSTALL_STAGING_CMDS
+-	(cd $(@D); \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(STAGING_DIR) \
+-		install)
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(waf-package))
