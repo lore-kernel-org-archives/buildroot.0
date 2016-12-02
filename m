@@ -1,24 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Dec 2016 09:29:23 +0100
-Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.5.5
-In-Reply-To: <20161201183051.31900-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Thu, 1 Dec 2016 19:30:51 +0100")
-References: <20161201183051.31900-1-ps.report@gmx.net>
-Message-ID: <87r35q91jw.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Dec 2016 09:30:38 +0100
+Subject: [Buildroot] [PATCH] package/upmpdcli: bump version to 1.2.10
+In-Reply-To: <20161202073459.8001-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Fri, 2 Dec 2016 08:34:59 +0100")
+References: <20161202073459.8001-1-joerg.krause@embedded.rocks>
+Message-ID: <87mvge91ht.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > And update 0001-configure-add-disable-runtime-tests-option.patch.
- > For details see [1].
-
- > [1] https://lists.freedesktop.org/archives/input-tools/2016-November/001375.html
-
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Committed, thanks.
 
