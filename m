@@ -1,20 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Dec 2016 08:53:56 +0100
-Subject: [Buildroot] [git commit] Merge branch 'next'
-Message-ID: <20161202080023.B9F3181E42@busybox.osuosl.org>
+Date: Fri, 02 Dec 2016 09:16:24 +0100
+Subject: [Buildroot] [PATCH next] lvm2: bump version to 2.02.168
+In-Reply-To: <20161201111744.32599-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Thu, 1 Dec 2016 11:17:44 +0000")
+References: <20161201111744.32599-1-Vincent.Riera@imgtec.com>
+Message-ID: <878tryagpz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44d2cc99a47fd2a3201785bc558716c162b081ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-My local 'next' branch was not uptodate, so the previous merge was missing
-the most recent changes.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Thanks to Fran??ois Perrad for noticing.
+Committed, thanks.
 
-Patch is too large, so refusing to show it
-Patch is too large, so refusing to show it
+-- 
+Bye, Peter Korsgaard
