@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  2 Dec 2016 11:02:24 -0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.8.5
-Message-ID: <1480687344-15930-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  2 Dec 2016 11:23:19 -0300
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.14
+Message-ID: <1480688599-4193-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ package/dbus/dbus.hash | 2 +-
+ package/dbus/dbus.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 6d262a1..8cc3769 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 27d38ea..14bee20 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256 bf26ead666c337a62a74bc9ec7f8dd9ee200e60e5fe5289967d53328eff261c5  btrfs-progs-v4.8.4.tar.xz
-+sha256 d247b1c022aca5def3415bfa51e00c566cce36660a3ee517d4b6a1af911a08ef  btrfs-progs-v4.8.5.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index e780903..bf37d57 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
+ # Locally calculated after checking pgp signature
+-sha256	210a79430b276eafc6406c71705e9140d25b9956d18068df98a70156dc0e475d  dbus-1.10.12.tar.gz
++sha256	23238f70353e38ce5ca183ebc9525c0d97ac00ef640ad29cf794782af6e6a083  dbus-1.10.14.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 8657128..c765e0a 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BTRFS_PROGS_VERSION = 4.8.4
-+BTRFS_PROGS_VERSION = 4.8.5
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+-DBUS_VERSION = 1.10.12
++DBUS_VERSION = 1.10.14
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
+ DBUS_LICENSE_FILES = COPYING
 -- 
 2.7.3
