@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Dec 2016 00:00:18 +0100
-Subject: [Buildroot] [git commit] acpica: bump to version 20161117
-Message-ID: <20161202230047.2D0BD81E4E@busybox.osuosl.org>
+Date: Sat, 3 Dec 2016 00:00:24 +0100
+Subject: [Buildroot] [git commit] fwts: bump to version V16.11.00
+Message-ID: <20161202230047.3C24881E4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c21c005d53c4697e64a7284fa34b061ac198178b
+commit: https://git.buildroot.net/buildroot/commit/?id=b04a707e7e36c9784d5a53a4087e8ad3f609c937
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Build- and run-tested on x86_64 and aarch64.
@@ -16,29 +16,28 @@ Build- and run-tested on x86_64 and aarch64.
 Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/acpica/acpica.hash | 3 ++-
- package/acpica/acpica.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/fwts/fwts.hash | 2 +-
+ package/fwts/fwts.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index ca6dd92..8f1c08a 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
--sha256 fea808449aac29442c22419ad9e3eaa6b1a35f02e0db2b2f8802dc3af69e4965 acpica-unix2-20160831.tar.gz
-+sha256 dfb33db5599bd48134dbd6e50c8804099be0cf1c35d98975a6cb84dabca78b67 acpica-unix2-20161117.tar.gz
-+
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index a42eb72..f76c948 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
+diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
+index a3e5758..e23386e 100644
+--- a/package/fwts/fwts.hash
++++ b/package/fwts/fwts.hash
+@@ -1,2 +1,2 @@
+ # Hash from: http://fwts.ubuntu.com/release/SHA256SUMS
+-sha256 4bab7a9daa6def8951b160e9f2c14b203459881d0a1279cb19329bec727c9f2d fwts-V16.09.00.tar.gz
++sha256 077b57864515ffdd6d655201da750829f9ccffb8f280eb86d01c2ef184cdcb16 fwts-V16.11.00.tar.gz
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index 7ec1d5e..984e368 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ACPICA_VERSION = 20160831
-+ACPICA_VERSION = 20161117
- ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
- ACPICA_SITE = https://acpica.org/sites/acpica/files
- ACPICA_LICENSE = BSD-3c or GPLv2
+-FWTS_VERSION = V16.09.00
++FWTS_VERSION = V16.11.00
+ FWTS_SITE = http://fwts.ubuntu.com/release
+ FWTS_STRIP_COMPONENTS = 0
+ FWTS_LICENSE = GPLv2, LGPLv2.1, Custom
