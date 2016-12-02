@@ -1,7 +1,7 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri,  2 Dec 2016 08:42:14 +0100
-Subject: [Buildroot] [PATCH] package/libuv: bump version to v1.10.1
-Message-ID: <20161202074214.8897-1-joerg.krause@embedded.rocks>
+Date: Fri,  2 Dec 2016 08:56:59 +0100
+Subject: [Buildroot] [PATCH] package/libxml-parser-perl: bump version to 2.44
+Message-ID: <20161202075659.19245-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
+ package/libxml-parser-perl/libxml-parser-perl.hash | 2 +-
+ package/libxml-parser-perl/libxml-parser-perl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 75c7ffe..412479f 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.hash b/package/libxml-parser-perl/libxml-parser-perl.hash
+index 4a8c0d3..d8e0df5 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.hash
++++ b/package/libxml-parser-perl/libxml-parser-perl.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256  a6ca9f0648973d1463f46b495ce546ddcbe7cce2f04b32e802a15539e46c57ad  libuv-v1.9.1.tar.gz
-+sha256  4b5f71939dd4272ebcfb8e04833e9a273a08b1bf1277d37d14085d7b04b19832  libuv-v1.10.1.tar.gz
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 11d51dd..745c077 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
+ # locally computed hash
+-sha256 b48197cd2265a26c5f016489f11a7b450d8833cb8b3d6a46ee15975740894de9 XML-Parser-2.41.tar.gz
++sha256 1ae9d07ee9c35326b3d9aad56eae71a6730a73a116b9fe9e8a4758b7cc033216 XML-Parser-2.44.tar.gz
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 9e5325c..e512815 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUV_VERSION = v1.9.1
-+LIBUV_VERSION = v1.10.1
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-LIBXML_PARSER_PERL_VERSION = 2.41
++LIBXML_PARSER_PERL_VERSION = 2.44
+ LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+ LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+ HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
 -- 
 2.10.2
