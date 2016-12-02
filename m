@@ -1,41 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Dec 2016 17:17:30 +0100
-Subject: [Buildroot] [git commit] btrfs-progs: bump to version 4.8.5
-Message-ID: <20161202161747.38B5A802F0@busybox.osuosl.org>
+Date: Fri, 2 Dec 2016 17:12:27 +0100
+Subject: [Buildroot] [git commit] kexec: fix build when BR2_STRIP_none=y
+Message-ID: <20161202161747.249B981E76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2332aa1f0f4316fff7343d6976c656763c834eb8
+commit: https://git.buildroot.net/buildroot/commit/?id=ba19cb915ac3475487d4a1b46d014fcabeb71fdb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+When BR2_STRIP is set to none, a dummy 'true' app is used instead of
+strip utility. However, kexec package always requires a real strip
+executable as it is used to generate intermediate files during the build
+process.
+
+If 'true' is used the build system runs the following command:
+
+true --strip-debug -o purgatory/purgatory.ro purgatory/purgatory.ro.sym
+
+which obviously doesn't do anything useful and the build later fails
+with:
+
+bin/bin-to-hex purgatory < purgatory/purgatory.ro > kexec/purgatory.c
+/bin/sh: purgatory/purgatory.ro: No such file or directory
+kexec/Makefile:7: recipe for target 'kexec/purgatory.c' failed
+make[2]: *** [kexec/purgatory.c] Error 1
+
+To resolve it always specify STRIP=$(CROSS_COMPILE)strip, regardless of
+buildroot configuration.
+
+[Peter: add a comment explaining why this is done]
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kexec/kexec.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 6d262a1..8cc3769 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256 bf26ead666c337a62a74bc9ec7f8dd9ee200e60e5fe5289967d53328eff261c5  btrfs-progs-v4.8.4.tar.xz
-+sha256 d247b1c022aca5def3415bfa51e00c566cce36660a3ee517d4b6a1af911a08ef  btrfs-progs-v4.8.5.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index e780903..bf37d57 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 4ca55e5..0a74369 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -10,6 +10,9 @@ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPLv2
+ KEXEC_LICENSE_FILES = COPYING
  
--BTRFS_PROGS_VERSION = 4.8.4
-+BTRFS_PROGS_VERSION = 4.8.5
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
++# Makefile expects $STRIP -o to work, so needed for BR2_STRIP_none
++KEXEC_MAKE_OPTS = STRIP="$(TARGET_CROSS)strip"
++
+ ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
+ KEXEC_CONF_OPTS += --with-zlib
+ KEXEC_DEPENDENCIES = zlib
