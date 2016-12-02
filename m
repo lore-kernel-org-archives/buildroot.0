@@ -1,54 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Dec 2016 17:12:27 +0100
-Subject: [Buildroot] [git commit] kexec: fix build when BR2_STRIP_none=y
-Message-ID: <20161202161747.249B981E76@busybox.osuosl.org>
+Date: Fri, 2 Dec 2016 17:01:17 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 8}.x series
+Message-ID: <20161202161746.F2ED081E0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba19cb915ac3475487d4a1b46d014fcabeb71fdb
+commit: https://git.buildroot.net/buildroot/commit/?id=ae7ae2de0d1b65a152417ba869d2c1fcdfd910ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When BR2_STRIP is set to none, a dummy 'true' app is used instead of
-strip utility. However, kexec package always requires a real strip
-executable as it is used to generate intermediate files during the build
-process.
-
-If 'true' is used the build system runs the following command:
-
-true --strip-debug -o purgatory/purgatory.ro purgatory/purgatory.ro.sym
-
-which obviously doesn't do anything useful and the build later fails
-with:
-
-bin/bin-to-hex purgatory < purgatory/purgatory.ro > kexec/purgatory.c
-/bin/sh: purgatory/purgatory.ro: No such file or directory
-kexec/Makefile:7: recipe for target 'kexec/purgatory.c' failed
-make[2]: *** [kexec/purgatory.c] Error 1
-
-To resolve it always specify STRIP=$(CROSS_COMPILE)strip, regardless of
-buildroot configuration.
-
-[Peter: add a comment explaining why this is done]
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kexec/kexec.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 4ca55e5..0a74369 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -10,6 +10,9 @@ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPLv2
- KEXEC_LICENSE_FILES = COPYING
- 
-+# Makefile expects $STRIP -o to work, so needed for BR2_STRIP_none
-+KEXEC_MAKE_OPTS = STRIP="$(TARGET_CROSS)strip"
-+
- ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
- KEXEC_CONF_OPTS += --with-zlib
- KEXEC_DEPENDENCIES = zlib
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6d616c3..9cdd5fa 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -232,9 +232,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.35"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.35"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.36"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+ 	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
+-	default "4.8.11"	if BR2_KERNEL_HEADERS_4_8
++	default "4.8.12"	if BR2_KERNEL_HEADERS_4_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
