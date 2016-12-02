@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Dec 2016 17:02:46 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.8.12
-Message-ID: <20161202161747.0F5E5802F0@busybox.osuosl.org>
+Date: Fri, 2 Dec 2016 17:17:09 +0100
+Subject: [Buildroot] [git commit] dbus: bump to version 1.10.14
+Message-ID: <20161202161747.2B5EB81E7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c76560600089b98019642d6ec59bbd477b5f0e1
+commit: https://git.buildroot.net/buildroot/commit/?id=3229c7c12d6edee36c9fe0c8755d8bbdfc092a52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dbus/dbus.hash | 2 +-
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 6a7838d..9ca9939 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 27d38ea..14bee20 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	210a79430b276eafc6406c71705e9140d25b9956d18068df98a70156dc0e475d  dbus-1.10.12.tar.gz
++sha256	23238f70353e38ce5ca183ebc9525c0d97ac00ef640ad29cf794782af6e6a083  dbus-1.10.14.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 8657128..c765e0a 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.8.11)"
-+	bool "Latest version (4.8.12)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.8.11" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.8.12" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-DBUS_VERSION = 1.10.12
++DBUS_VERSION = 1.10.14
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
+ DBUS_LICENSE_FILES = COPYING
