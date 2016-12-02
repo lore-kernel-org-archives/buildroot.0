@@ -1,37 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Dec 2016 22:34:27 +0100
-Subject: [Buildroot] [PATCH] kexec: fix build when BR2_STRIP_none=y
-In-Reply-To: <877f7i6nry.fsf@dell.be.48ers.dk>
-References: <1480679517-551-1-git-send-email-marcin.nowakowski@imgtec.com>
- <87a8ce8g6c.fsf@dell.be.48ers.dk>
- <20161202213857.673e4b97@free-electrons.com>
- <877f7i6nry.fsf@dell.be.48ers.dk>
-Message-ID: <20161202223427.7b411a05@free-electrons.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Fri,  2 Dec 2016 23:21:19 +0100
+Subject: [Buildroot] [PATCH v2] package/crudini: upgrade to 0.8
+Message-ID: <1480717279-2974-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ package/crudini/crudini.hash | 6 +++---
+ package/crudini/crudini.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-On Fri, 02 Dec 2016 22:09:53 +0100, Peter Korsgaard wrote:
-
-> Hi,
-> 
->  > My other thought is that I believe it's not the first time (see commit
->  > fc174b7057495ebb31393ae27f3ceeefdc490022), so perhaps our idea of
->  > having STRIP=true when BR2_STRIP_none=y is a bad idea, and we should
->  > handle this in a different way.  
-> 
-> The question is how? Create a dummy shell script to better emulate the
-> command line options / behaviour of strip?
-
-I'm not sure. Yet another wrapper kind of sucks. Is it possible to pass
-enough options to strip to have it not strip anything? :-)
-
-Thomas
+diff --git a/package/crudini/crudini.hash b/package/crudini/crudini.hash
+index b9aaecf..2796e7a 100644
+--- a/package/crudini/crudini.hash
++++ b/package/crudini/crudini.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=7d1313f1bb9800db9cbceaa518bcf212, sha256 locally computed
+-md5    7d1313f1bb9800db9cbceaa518bcf212 crudini-0.7.tar.gz
+-sha256 5d493ae6600e54f9e0296b12d3adba99b88a439d8c4b2ebf9bc6f9c0613a03d7  crudini-0.7.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0664fa2f9d36e411e839b5394d8c2951, sha256 locally computed
++md5    0664fa2f9d36e411e839b5394d8c2951 crudini-0.8.tar.gz
++sha256 effdf8feb7efe252af87143c8756bbc69e2679afb6173083d38be02284385e5f  crudini-0.8.tar.gz
+diff --git a/package/crudini/crudini.mk b/package/crudini/crudini.mk
+index d797efc..9dfd174 100644
+--- a/package/crudini/crudini.mk
++++ b/package/crudini/crudini.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-CRUDINI_VERSION = 0.7
++CRUDINI_VERSION = 0.8
+ CRUDINI_SOURCE = crudini-$(CRUDINI_VERSION).tar.gz
+-CRUDINI_SITE = https://pypi.python.org/packages/source/c/crudini
++CRUDINI_SITE = https://pypi.python.org/packages/23/4a/934b05bbe5af4fd390207c5e935efbae6439809aad65ab0702e236c1b5f5
+ CRUDINI_SETUP_TYPE = setuptools
+ CRUDINI_LICENSE = GPLv2
+ CRUDINI_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
