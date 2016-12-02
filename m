@@ -1,21 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Dec 2016 20:40:35 +0100
-Subject: [Buildroot] [PATCH] libxkbcommon: bump to version 0.7.0
-In-Reply-To: <1480700524-1220-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 2 Dec 2016 14:42:04 -0300")
-References: <1480700524-1220-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k2bi6rws.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Dec 2016 20:43:53 +0100
+Subject: [Buildroot] [PATCH] package/crudini: upgrade to 0.8
+In-Reply-To: <1480703370-18251-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ (Zoltan Gyarmati's message of "Fri, 2 Dec 2016 19:29:30 +0100")
+References: <1480703370-18251-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <87fum66rra.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Zoltan" == Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/crudini/crudini.hash | 6 +++---
+ >  package/crudini/crudini.mk   | 4 ++--
+ >  2 files changed, 5 insertions(+), 5 deletions(-)
 
-Committed, thanks.
+Thanks, it looks good - But can you please resend it with your
+signed-off-by added?
+
+https://buildroot.org/downloads/manual/manual.html#submitting-patches
 
 -- 
 Bye, Peter Korsgaard
