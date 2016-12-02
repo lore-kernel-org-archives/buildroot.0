@@ -1,36 +1,22 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu,  1 Dec 2016 21:41:52 -0500
-Subject: [Buildroot] [PATCH 1/1] docs/manual: fix FOO_PKGDIR name and
-	definition
-Message-ID: <1480646512-2465-1-git-send-email-danomimanchego123@gmail.com>
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 1 Dec 2016 22:09:11 -0500
+Subject: [Buildroot] [PATCH v3 1/2] ti-cgt-pru: add package for PRU Host
+	toolchain
+In-Reply-To: <20161130233537.66609af5@free-electrons.com>
+References: <1480346294-22771-1-git-send-email-ash.charles@savoirfairelinux.com>
+ <20161130233537.66609af5@free-electrons.com>
+Message-ID: <CAK8F28nLOjhaSj1pgEHwro-FVuy2=QjuNhS6+fOfpc9xnWdVVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change "foo" references to "libfoo" in section that defines variables
-explicitly stated to relate to a "libfoo" package.
+On Wed, Nov 30, 2016 at 5:35 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Is there any reason why this hasn't been taken into account? Maybe
+> Arnout objected with some good argument?
+No good reason---my error.  Thanks for catching this and I'll respin a
+corrected version.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- docs/manual/adding-packages-generic.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 51408e8..0e111e1 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -528,8 +528,8 @@ endef
- 
- In the action definitions, you can use the following variables:
- 
--* +$(FOO_PKGDIR)+ contains the path to the directory containing the
--  +foo.mk+ and +Config.in+ files. This variable is useful when it is
-+* +$(LIBFOO_PKGDIR)+ contains the path to the directory containing the
-+  +libfoo.mk+ and +Config.in+ files. This variable is useful when it is
-   necessary to install a file bundled in Buildroot, like a runtime
-   configuration file, a splashscreen image...
- 
--- 
-1.9.1
+--Ash
