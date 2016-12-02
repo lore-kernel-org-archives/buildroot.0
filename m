@@ -1,48 +1,55 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Fri,  2 Dec 2016 12:10:28 +0200
-Subject: [Buildroot] [PATCH 2/2] odroidc2: use first boot fs resize pkg.
-In-Reply-To: <20161202101028.26736-1-daggs@gmx.com>
-References: <20161202101028.26736-1-daggs@gmx.com>
-Message-ID: <20161202101028.26736-2-daggs@gmx.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 2 Dec 2016 11:31:59 +0000
+Subject: [Buildroot] [PATCH next 10/10] gstreamer1/gst1-imx: bump
+	version to 0.12.3
+In-Reply-To: <87h96n9tqv.fsf@dell.be.48ers.dk>
+References: <20161130112518.36300-1-Vincent.Riera@imgtec.com>
+ <20161130112518.36300-10-Vincent.Riera@imgtec.com>
+ <87h96n9tqv.fsf@dell.be.48ers.dk>
+Message-ID: <95d31271-4b58-df75-89cd-9a7e95204f52@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-remove the hardcode limitation of the created rootfs parition size and
-use the newly added first boot fs resize pkg to extend the fs to the max
-possible.
+Hi Peter,
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
- board/hardkernel/odroidc2/genimage.cfg | 1 -
- configs/odroidc2_defconfig             | 2 ++
- 2 files changed, 2 insertions(+), 1 deletion(-)
+On 01/12/16 22:20, Peter Korsgaard wrote:
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+> 
+>  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>  > ---
+>  >  package/gstreamer1/gst1-imx/gst1-imx.hash | 2 +-
+>  >  package/gstreamer1/gst1-imx/gst1-imx.mk   | 2 +-
+>  >  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+>  > diff --git a/package/gstreamer1/gst1-imx/gst1-imx.hash b/package/gstreamer1/gst1-imx/gst1-imx.hash
+>  > index d345deb..b0124aa 100644
+>  > --- a/package/gstreamer1/gst1-imx/gst1-imx.hash
+>  > +++ b/package/gstreamer1/gst1-imx/gst1-imx.hash
+>  > @@ -1,2 +1,2 @@
+>  >  # locally computed hash
+>  > -sha256 a75f8bc3219fa3c62637f443cef0196c9eafb90aaa5af094847d007124895822  gst1-imx-0.12.2.tar.gz
+>  > +sha256 a75f8bc3219fa3c62637f443cef0196c9eafb90aaa5af094847d007124895822  gst1-imx-0.12.3.tar.gz
+> 
+> Ehh, did you even test this?
 
-diff --git a/board/hardkernel/odroidc2/genimage.cfg b/board/hardkernel/odroidc2/genimage.cfg
-index 15f97d445..16d2786b1 100644
---- a/board/hardkernel/odroidc2/genimage.cfg
-+++ b/board/hardkernel/odroidc2/genimage.cfg
-@@ -22,6 +22,5 @@ image sdcard.img {
- 	partition rootfs {
- 		partition-type = 0x83
- 		image = "rootfs.ext4"
--		size = 512M
- 	}
- }
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-index 95a916944..6e006a9dc 100644
---- a/configs/odroidc2_defconfig
-+++ b/configs/odroidc2_defconfig
-@@ -7,6 +7,8 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
- BR2_PACKAGE_ODROID_SCRIPTS=y
-+BR2_PACKAGE_FIRST_BOOT_ROOTFS_RESIZER=y
-+BR2_PACKAGE_FIRST_BOOT_ROOTFS_RESIZER_SYSV_PRIORITY=3
- BR2_GCC_VERSION_4_9_X=y
- 
- # Kernel
--- 
-2.11.0
+yes, I did a build test for the complete gstreamer1 (selecting all
+packages).
+
+> You didn't update the hash to match the new tarball, and you also didn't
+> remove the now upstreamed patch.
+> 
+> I've pushed a fix for both issues, but please test your changes better
+> in the future.
+
+I probably made a mistake when creating the patches, but I did build
+tested it.
+
+I'll be more careful in the future. Sorry about that.
+
+Vincent
+
+
+> 
