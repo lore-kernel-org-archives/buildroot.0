@@ -1,83 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Dec 2016 22:38:22 +0100
-Subject: [Buildroot] [git commit] package/mpv: make it a waf-package
-Message-ID: <20161202225223.5BBDF81E52@busybox.osuosl.org>
+Date: Fri, 2 Dec 2016 22:36:49 +0100
+Subject: [Buildroot] [git commit] docs/manual: document the waf-package infra
+Message-ID: <20161202225223.1815A81E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c06e102a64a11b15a8cdcc89d2c4a1a2368defd
+commit: https://git.buildroot.net/buildroot/commit/?id=d64735fca0aef75d656892acdee4d0fcfb722750
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Romain Naour <romain.naour@openwide.fr>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: adjust to the changes in the infra, fix typos.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpv/mpv.hash |  1 -
- package/mpv/mpv.mk   | 30 +++---------------------------
- 2 files changed, 3 insertions(+), 28 deletions(-)
+ docs/manual/adding-packages-waf.txt | 67 +++++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt     |  2 ++
+ 2 files changed, 69 insertions(+)
 
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index eea0db0..fb287ef 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
- sha256	fe6ec9d2ded5ce84b963f54b812d579d04f944f4a737f3ae639c4d5d9e842b56	v0.20.0.tar.gz
--sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 4f04fdf..0dd488d 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -5,16 +5,16 @@
- ################################################################################
- 
- MPV_VERSION = 0.20.0
--MPV_WAF_VERSION = 1.8.12
- MPV_SITE = https://github.com/mpv-player/mpv/archive
- MPV_SOURCE = v$(MPV_VERSION).tar.gz
--MPV_EXTRA_DOWNLOADS = https://waf.io/waf-$(MPV_WAF_VERSION)
- MPV_DEPENDENCIES = \
- 	host-pkgconf ffmpeg zlib \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- MPV_LICENSE = GPLv2+
- MPV_LICENSE_FILES = LICENSE
- 
-+MPV_NEEDS_EXTERNAL_WAF = YES
+diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
+new file mode 100644
+index 0000000..3c0dbe4
+--- /dev/null
++++ b/docs/manual/adding-packages-waf.txt
+@@ -0,0 +1,67 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
- # Some of these options need testing and/or tweaks
- MPV_CONF_OPTS = \
- 	--prefix=/usr \
-@@ -235,28 +235,4 @@ else
- MPV_CONF_OPTS += --disable-x11
- endif
++=== Infrastructure for Waf-based packages
++
++[[waf-package-tutorial]]
++
++==== +waf-package+ tutorial
++
++First, let's see how to write a +.mk+ file for a Waf-based package, with
++an example :
++
++------------------------
++01: ################################################################################
++02: #
++03: # libfoo
++04: #
++05: ################################################################################
++06:
++07: LIBFOO_VERSION = 1.0
++08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
++09: LIBFOO_SITE = http://www.foosoftware.org/download
++10: LIBFOO_CONF_OPTS = --enable-bar --disable-baz
++11: LIBFOO_DEPENDENCIES = bar
++12:
++13: $(eval $(waf-package))
++------------------------
++
++On line 7, we declare the version of the package.
++
++On line 8 and 9, we declare the name of the tarball (xz-ed tarball
++recommended) and the location of the tarball on the Web. Buildroot
++will automatically download the tarball from this location.
++
++On line 10, we tell Buildroot what options to enable for libfoo.
++
++On line 11, we tell Buildroot the depednencies of libfoo.
++
++Finally, on line line 13, we invoke the +waf-package+
++macro that generates all the Makefile rules that actually allows the
++package to be built.
++
++[[waf-package-reference]]
++
++==== +waf-package+ reference
++
++The main macro of the Waf package infrastructure is +waf-package+.
++It is similar to the +generic-package+ macro.
++
++Just like the generic infrastructure, the Waf infrastructure works
++by defining a number of variables before calling the +waf-package+
++macro.
++
++First, all the package metadata information variables that exist in
++the generic infrastructure also exist in the Waf infrastructure:
+++LIBFOO_VERSION+, +LIBFOO_SOURCE+, +LIBFOO_PATCH+, +LIBFOO_SITE+,
+++LIBFOO_SUBDIR+, +LIBFOO_DEPENDENCIES+, +LIBFOO_INSTALL_STAGING+,
+++LIBFOO_INSTALL_TARGET+.
++
++An additional variable, specific to the Waf infrastructure, can
++also be defined.
++
++* +LIBFOO_NEEDS_EXTERNAL_WAF+ can be set to +YES+ or +NO+ to tell
++  Buildroot to use the bundled +waf+ executable. If set to +NO+, the
++  default, then Buildroot will use the waf executable provided in the
++  package source tree; if set to +YES+, then Buidlroot will download,
++  install waf as a host tool and use it to build the package.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 76f90c9..4595991 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
  
--define MPV_COPY_WAF
--	$(INSTALL) -m 0755 $(DL_DIR)/waf-$(MPV_WAF_VERSION) $(@D)/waf
--endef
--MPV_POST_EXTRACT_HOOKS += MPV_COPY_WAF
--
--define MPV_CONFIGURE_CMDS
--	cd $(@D); \
--		$(TARGET_CONFIGURE_OPTS) \
--		./waf configure $(MPV_CONF_OPTS)
--endef
--
--define MPV_BUILD_CMDS
--	cd $(@D); \
--		$(TARGET_MAKE_ENV) \
--		./waf build
--endef
--
--define MPV_INSTALL_TARGET_CMDS
--	cd $(@D); \
--		$(TARGET_MAKE_ENV) \
--		DESTDIR=$(TARGET_DIR) \
--		./waf install
--endef
--
--$(eval $(generic-package))
-+$(eval $(waf-package))
+ include::adding-packages-rebar.txt[]
+ 
++include::adding-packages-waf.txt[]
++
+ include::adding-packages-kernel-module.txt[]
+ 
+ include::adding-packages-asciidoc.txt[]
