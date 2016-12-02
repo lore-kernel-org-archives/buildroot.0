@@ -1,39 +1,42 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Fri,  2 Dec 2016 23:34:00 +0100
-Subject: [Buildroot] [PATCH] package/tinc: upgrade to upstream version 1.0.30
-Message-ID: <1480718040-23917-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Fri,  2 Dec 2016 23:40:16 +0100
+Subject: [Buildroot] [PATCH 1/1] acpica: bump to version 20161117
+Message-ID: <1480718417-21000-1-git-send-email-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
- package/tinc/tinc.hash | 2 +-
- package/tinc/tinc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Build- and run-tested on x86_64 and aarch64.
 
-diff --git a/package/tinc/tinc.hash b/package/tinc/tinc.hash
-index 0cccbbf..135a4f3 100644
---- a/package/tinc/tinc.hash
-+++ b/package/tinc/tinc.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	0b502699360f09ce2128a39cf02abca07bfc699fc02ce829b3a90cf5e1e8b344	tinc-1.0.28.tar.gz
-+sha256	abc17e25afc1b9e74423c78fef586b11d503cbbbe5e4a2ed323870f4a82faa73 tinc-1.0.30.tar.gz
-diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
-index fb15c34..6d87cbf 100644
---- a/package/tinc/tinc.mk
-+++ b/package/tinc/tinc.mk
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+---
+ package/acpica/acpica.hash | 3 ++-
+ package/acpica/acpica.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index ca6dd92..8f1c08a 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
+@@ -1,2 +1,3 @@
+ # locally computed hash
+-sha256 fea808449aac29442c22419ad9e3eaa6b1a35f02e0db2b2f8802dc3af69e4965 acpica-unix2-20160831.tar.gz
++sha256 dfb33db5599bd48134dbd6e50c8804099be0cf1c35d98975a6cb84dabca78b67 acpica-unix2-20161117.tar.gz
++
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index a42eb72..f76c948 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TINC_VERSION = 1.0.28
-+TINC_VERSION = 1.0.30
- TINC_SITE = http://www.tinc-vpn.org/packages
- TINC_DEPENDENCIES = lzo openssl zlib
- TINC_LICENSE = GPLv2+ with OpenSSL exception
+-ACPICA_VERSION = 20160831
++ACPICA_VERSION = 20161117
+ ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+ ACPICA_SITE = https://acpica.org/sites/acpica/files
+ ACPICA_LICENSE = BSD-3c or GPLv2
 -- 
 2.7.4
