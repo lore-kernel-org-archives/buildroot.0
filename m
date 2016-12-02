@@ -1,43 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Dec 2016 22:11:13 +0100
-Subject: [Buildroot] [PATCH] nodejs: security bump 0.10.x series to
-	0.10.48
-In-Reply-To: <20161202213645.3f866305@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 2 Dec 2016 21:36:45 +0100")
-References: <20161202201652.17515-1-peter@korsgaard.com>
- <20161202213645.3f866305@free-electrons.com>
-Message-ID: <8737i66npq.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Dec 2016 22:34:27 +0100
+Subject: [Buildroot] [PATCH] kexec: fix build when BR2_STRIP_none=y
+In-Reply-To: <877f7i6nry.fsf@dell.be.48ers.dk>
+References: <1480679517-551-1-git-send-email-marcin.nowakowski@imgtec.com>
+ <87a8ce8g6c.fsf@dell.be.48ers.dk>
+ <20161202213857.673e4b97@free-electrons.com>
+ <877f7i6nry.fsf@dell.be.48ers.dk>
+Message-ID: <20161202223427.7b411a05@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > Hello,
- > On Fri,  2 Dec 2016 21:16:52 +0100, Peter Korsgaard wrote:
- >> c-ares: fix for single-byte buffer overwrite, CVE-2016-5180, more
- >> information at https://c-ares.haxx.se/adv_20160929.html
+On Fri, 02 Dec 2016 22:09:53 +0100, Peter Korsgaard wrote:
 
- > Thanks. What about our c-ares package itself?
+> Hi,
+> 
+>  > My other thought is that I believe it's not the first time (see commit
+>  > fc174b7057495ebb31393ae27f3ceeefdc490022), so perhaps our idea of
+>  > having STRIP=true when BR2_STRIP_none=y is a bad idea, and we should
+>  > handle this in a different way.  
+> 
+> The question is how? Create a dummy shell script to better emulate the
+> command line options / behaviour of strip?
 
-That one was fixed quite some time ago:
+I'm not sure. Yet another wrapper kind of sucks. Is it possible to pass
+enough options to strip to have it not strip anything? :-)
 
-commit 2d199dcff054d22a1ccc730fadfc7543b8c6e8f3
-Author: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date:   Wed Oct 12 20:17:17 2016 -0300
-
-    c-ares: security bump to version 1.12.0
-
-    Fixes:
-    CVE-2016-5180 - ares_create_query single byte out of buffer write
-
-    Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-I don't know enough about node to know if it can be convinced to use a
-system c-ares instead of the embedded copy. Anyone?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
