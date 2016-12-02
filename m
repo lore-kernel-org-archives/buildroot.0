@@ -1,39 +1,46 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri,  2 Dec 2016 08:56:59 +0100
-Subject: [Buildroot] [PATCH] package/libxml-parser-perl: bump version to 2.44
-Message-ID: <20161202075659.19245-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 02 Dec 2016 09:00:59 +0100
+Subject: [Buildroot] [git commit] Merge branch 'next'
+In-Reply-To: <CAB0FRsuawkVvNXQeRcyRVfBNh2gMQqKi3b0-T+Bhu35+FkX+dw@mail.gmail.com>
+ (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Fri, 2 Dec 2016
+ 00:08:10 +0100")
+References: <20161201222141.CB2398026C@busybox.osuosl.org>
+ <CAB0FRsuawkVvNXQeRcyRVfBNh2gMQqKi3b0-T+Bhu35+FkX+dw@mail.gmail.com>
+Message-ID: <87d1haahfo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/libxml-parser-perl/libxml-parser-perl.hash | 2 +-
- package/libxml-parser-perl/libxml-parser-perl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
 
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.hash b/package/libxml-parser-perl/libxml-parser-perl.hash
-index 4a8c0d3..d8e0df5 100644
---- a/package/libxml-parser-perl/libxml-parser-perl.hash
-+++ b/package/libxml-parser-perl/libxml-parser-perl.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 b48197cd2265a26c5f016489f11a7b450d8833cb8b3d6a46ee15975740894de9 XML-Parser-2.41.tar.gz
-+sha256 1ae9d07ee9c35326b3d9aad56eae71a6730a73a116b9fe9e8a4758b7cc033216 XML-Parser-2.44.tar.gz
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-index 9e5325c..e512815 100644
---- a/package/libxml-parser-perl/libxml-parser-perl.mk
-+++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXML_PARSER_PERL_VERSION = 2.41
-+LIBXML_PARSER_PERL_VERSION = 2.44
- LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
- LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
- HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
+Hi,
+
+ > With this merge, the following commits are missing :
+ > *     xterm: depend on libXinerama if appropriatenext    J?r?me Pouiller
+ > *     rpm: switch to version 4.13.0    James Knight
+ > *     package/libdvbcsa: fix altivec problems on powerpc64    Sam bobroff
+ > *     Revert "jasper: Disable debugging when building for xtensa"
+ > Max Filippov
+ > *     ncftp: bump version to 3.2.6    Vicente Olivert Riera
+ > *     libgtk3: bump version to 3.22.4    Vicente Olivert Riera
+ > *     luarocks: bump to version 2.4.2    Francois Perrad
+ > *     lua-messagepack: bump to version 0.3.6    Francois Perrad
+ > *     lsqlite3: bump to version 0.9.4    Francois Perrad
+ > *     lttng-libust: bump version to 2.9.0    Vicente Olivert Riera
+ > *     lttng-babeltrace: bump version to 1.5.0    Vicente Olivert Riera
+ > *     lttng-modules: bump version to 2.9.0    Vicente Olivert Riera
+ > *     lttng-tools: bump version to 2.9.0    Vicente Olivert Riera
+ > *     toolchain-external: bump Linaro AArch64 toolchain to 2016.11
+ > Romain Naour
+ > *     toolchain-external: bump Linaro ARMeb toolchain to 2016.11    Romain Naour
+ > *     toolchain-external: bump Linaro ARM toolchain to 2016.11    Romain Naour
+
+Argh, indeed. My local next branch was not uptodate. I've merged the
+remaining commits now.
+
+Thanks!
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
