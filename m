@@ -1,40 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  2 Dec 2016 14:42:34 -0300
-Subject: [Buildroot] [PATCH] libinput: bump to version 1.5.2
-Message-ID: <1480700554-1264-1-git-send-email-gustavo@zacarias.com.ar>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Fri,  2 Dec 2016 19:29:30 +0100
+Subject: [Buildroot] [PATCH] package/crudini: upgrade to 0.8
+Message-ID: <1480703370-18251-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/crudini/crudini.hash | 6 +++---
+ package/crudini/crudini.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 10c5e9d..ea7bdf7 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-September/031054.html
--sha256	5a96559385ecfaa30f9e72ea89eb8ebbc97caf68e458f451f4ed62315311081c	libinput-1.5.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-November/031926.html
-+sha256	ba26e2bc64ed551eaef193178ed06b07b97a09ac6f4e442f5f15bbc3f3174682	libinput-1.5.2.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 2005c47..765a3cb 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/crudini/crudini.hash b/package/crudini/crudini.hash
+index b9aaecf..2796e7a 100644
+--- a/package/crudini/crudini.hash
++++ b/package/crudini/crudini.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=7d1313f1bb9800db9cbceaa518bcf212, sha256 locally computed
+-md5    7d1313f1bb9800db9cbceaa518bcf212 crudini-0.7.tar.gz
+-sha256 5d493ae6600e54f9e0296b12d3adba99b88a439d8c4b2ebf9bc6f9c0613a03d7  crudini-0.7.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0664fa2f9d36e411e839b5394d8c2951, sha256 locally computed
++md5    0664fa2f9d36e411e839b5394d8c2951 crudini-0.8.tar.gz
++sha256 effdf8feb7efe252af87143c8756bbc69e2679afb6173083d38be02284385e5f  crudini-0.8.tar.gz
+diff --git a/package/crudini/crudini.mk b/package/crudini/crudini.mk
+index d797efc..9dfd174 100644
+--- a/package/crudini/crudini.mk
++++ b/package/crudini/crudini.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.5.0
-+LIBINPUT_VERSION = 1.5.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-CRUDINI_VERSION = 0.7
++CRUDINI_VERSION = 0.8
+ CRUDINI_SOURCE = crudini-$(CRUDINI_VERSION).tar.gz
+-CRUDINI_SITE = https://pypi.python.org/packages/source/c/crudini
++CRUDINI_SITE = https://pypi.python.org/packages/23/4a/934b05bbe5af4fd390207c5e935efbae6439809aad65ab0702e236c1b5f5
+ CRUDINI_SETUP_TYPE = setuptools
+ CRUDINI_LICENSE = GPLv2
+ CRUDINI_LICENSE_FILES = COPYING
 -- 
-2.7.3
+2.7.4
