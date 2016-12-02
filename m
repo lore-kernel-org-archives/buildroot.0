@@ -1,50 +1,60 @@
-From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Date: Fri, 2 Dec 2016 12:51:57 +0100
-Subject: [Buildroot] [PATCH] kexec: fix build when BR2_STRIP_none=y
-Message-ID: <1480679517-551-1-git-send-email-marcin.nowakowski@imgtec.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Fri, 02 Dec 2016 14:52:50 +0200
+Subject: [Buildroot] [PATCH] package/busybox: support automatic module
+ loading with mdev
+In-Reply-To: <87egbjxq27.fsf@dell.be.48ers.dk>
+References: <1457478205-18515-1-git-send-email-peter@korsgaard.com>
+ <87egbjxq27.fsf@dell.be.48ers.dk>
+Message-ID: <1480683170.21899.70.camel@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When BR2_STRIP is set to none, a dummy 'true' app is used instead of
-strip utility. However, kexec package always requires a real strip
-executable as it is used to generate intermediate files during the build
-process.
+On Wed, 2016-03-09 at 23:08 +0100, Peter Korsgaard wrote:
+> > > > > > "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+> 
+> ?> A recently discussed on the mailing list:
+> ?> http://lists.busybox.net/pipermail/buildroot/2016-February/154189.h
+> tml
+> 
+> ?> Our mdev configuration currently doesn't handle module loading. Fix
+> that by:
+> 
+> ?> - Telling mdev to run modprobe on hotplug events providing MODALIAS
+> 
+> ?> - Adjust the init script to handle coldplug modalias events (E.G.
+> modules
+> ?>???for which the devices were already present before mdev was added
+> as the
+> ?>???hotplug handler). mdev -s should arguable handle this, but it
+> doesn't.
+> 
+> ?> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ?> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> 
+> Committed, thanks.
+> 
 
-If 'true' is used the build system runs the following command:
+Sorry for bring this topic back, but this script still doesn't work
+properly.
 
-true --strip-debug -o purgatory/purgatory.ro purgatory/purgatory.ro.sym
+Among modaliases I have the following:
+?of:Neep0TCatmel,at25
 
-which obviously doesn't do anything useful and the build later fails
-with:
+And with the script:
+# find /sys/ -name modalias -print0 | xargs -0 sort -u -z | xargs -0
+modprobe -abq
+#?
 
-bin/bin-to-hex purgatory < purgatory/purgatory.ro > kexec/purgatory.c
-/bin/sh: purgatory/purgatory.ro: No such file or directory
-kexec/Makefile:7: recipe for target 'kexec/purgatory.c' failed
-make[2]: *** [kexec/purgatory.c] Error 1
+Manually:
+# modprobe -abq of:Neep0TCatmel,at25
+[??988.523305] at25 spi-PRP0001:00: 1 KByte at25 eeprom, pagesize 32
 
-To resolve it always specify STRIP=$(CROSS_COMPILE)strip, regardless of
-buildroot configuration.
+I'm afraid my (or similar) solution would do job better, i.e. serialize
+probing one-by-one.
 
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
----
- package/kexec/kexec.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 4ca55e5..08c5424 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -10,6 +10,8 @@ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPLv2
- KEXEC_LICENSE_FILES = COPYING
- 
-+KEXEC_MAKE_OPTS = STRIP="$(TARGET_CROSS)strip"
-+
- ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
- KEXEC_CONF_OPTS += --with-zlib
- KEXEC_DEPENDENCIES = zlib
 -- 
-2.7.4
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Intel Finland Oy
