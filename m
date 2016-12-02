@@ -1,130 +1,203 @@
-From: Ash Charles <ashcharles@gmail.com>
-Date: Thu,  1 Dec 2016 23:22:40 -0500
-Subject: [Buildroot] [PATCH v4 1/2] ti-cgt-pru: add package for PRU Host
-	toolchain
-Message-ID: <1480652561-8491-1-git-send-email-ash.charles@savoirfairelinux.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 1 Dec 2016 21:12:34 -0800
+Subject: [Buildroot] [PATCH] autossh: honour LDFLAGS
+In-Reply-To: <20161130050003.GS14207@waldemar-brodkorb.de>
+References: <20161125180016.GA360@waldemar-brodkorb.de>
+ <20161128222834.37958cd9@free-electrons.com>
+ <20161129041655.GK14207@waldemar-brodkorb.de>
+ <20161129094321.656d1cb4@free-electrons.com>
+ <CAMo8BfJAGT8cdvQ2xMx33HKDwW34XP6wVxHd1yn-UxAyQEYpRA@mail.gmail.com>
+ <20161130050003.GS14207@waldemar-brodkorb.de>
+Message-ID: <CAMo8Bf+tDete50wsasrj=L1G=7XCJ9=dZBav4azY_PN1HTzrqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TI provides a binary code generation toolchain to develop firmware for
-the programmable real-time unit/co-processor found in some SOCs such as
-some models in the AM335x line. This toolchain includes C/C++ support
-(clpru) rather than just assembler (pasm) supported by the pre-existing
-am335x-pru-package [1].  Following the lead of the Yocto meta-ti
-layer [2], this package provides a host toolchain suitable for an x86
-(or x86_64) Linux targeting an ARM-based PRU core.
+Hello,
 
-[1] http://processors.wiki.ti.com/index.php/PRU_Assembly_Instructions#pasm_vs._clpru
-[2] http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/tree/recipes-ti/devtools/ti-cgt-pru_2.1.1.bb
+TL;DR: -static is good, order of objects in libc.a is important.
 
-Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
----
-Changes v1 --> v2
- * extract source to $(@D) cleanly (suggested by Thomas)
- * be more explicit about licensing (suggested by Arnout)
- * switch to buildroot-suitable name: PRU_CGT --> TI_CGT_PRU_DIR
- * sundry clarifications
+On Tue, Nov 29, 2016 at 9:00 PM, Waldemar Brodkorb <wbx@openadk.org> wrote:
+>> On Tue, Nov 29, 2016 at 12:43 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> > On Tue, 29 Nov 2016 05:16:55 +0100, Waldemar Brodkorb wrote:
+>> >> > The --start-group/--end-group ask the linker to loop between -lgcc and
+>> >> > -lc until all unresolved symbols have been resolved. So
+>> >> > dl_iterate_phdr() being defined in the C library, but used in libgcc, I
+>> >> > guess the dynamic way (-lgcc -lc -lgcc) doesn't work.
+>> >>
+>> >> But why gcc behaves different?
+>> >> BR+gcc5+uClibc-ng-1.0.17 - no extra -static in LDFLAGS required
+>> >> BR+gcc5+musl+static - no extra -static in LDFLAGS required
+>> >> BR+gcc5+uClibc-ng-1.0.19 - extra -static required!
+>> >
+>> > I would suspect it's a fallout of the "merge everything in libc"
+>> > change, but I really can't figure out why that would make a difference.
+>> >
+>> > Could it be that with older uClibc versions, gcc was not finding the
+>> > dl_iterate_phdr symbol in uClibc, and therefore disabling the unwind
+>> > code, and now, due to a change in uClibc, gcc sees the dl_iterate_phdr
+>> > symbol, enables unwinding support, which cause this extra reference
+>> > from libgcc to libc?
+>>
+>> No. The difference is in the __pthread_initialize_minimal function.
+>> Prior to uclibc-1.0.18 release it used to work because a call to
+>> __pthread_initialize_minimal from __uClibc_init was resolved to
+>> a function defined in libpthread/nptl/sysdeps/generic/libc-tls.c
+>> which didn't reference pthread_unwind.
+>> Now it is resolved to a function from
+>> libpthread/linuxthreads/pthread.c, and that file pulls in other
+>> unused functions, which reference __GI___pthread_unwind,
+>> and all the way down to the dl_iterate_phdr.
+>>
+>> More details:
+>>  http://lists.busybox.net/pipermail/buildroot/2016-November/177477.html
+>
+> Sorry that I didn't looked into your report in more detail last time.
+> May be I was too confused ;)
+>
+> I really can't imagine that any code from libpthread/linuxthreads
+> can be involved when we compile Xtensa with NPTL support.
 
-Changes v2 --> v3
- * avoid re-use TI_CGT_PRU_DIR --> TI_CGT_PRU_INSTALLDIR
- * don't install to a version-specific path
- * typo fixes
- (all suggested courtesy of Arnout)
+Oops, wrong path, wrong searching tool. But the idea:
+in the failing case __pthread_initialize_minimal is taken from
+libpthread/nptl/init.c and it's way bigger than
+__pthread_initialize_minimal used for linking with the uClibc-ng-1.0.17.
 
-Changes v3 --> v4
- * don't put TI_CGT_PRU_INSTALLDIR right under HOST_DIR (Thomas/ Arnout)
+Now, I believe that adding the missing -static is the right
+solution, because even with uClibc-ng-1.0.17 the linking fails
+for a simple application that uses pthread:
 
-Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
----
- package/Config.in.host             |  1 +
- package/ti-cgt-pru/Config.in.host  | 12 ++++++++++++
- package/ti-cgt-pru/ti-cgt-pru.hash |  2 ++
- package/ti-cgt-pru/ti-cgt-pru.mk   | 34 ++++++++++++++++++++++++++++++++++
- 4 files changed, 49 insertions(+)
- create mode 100644 package/ti-cgt-pru/Config.in.host
- create mode 100644 package/ti-cgt-pru/ti-cgt-pru.hash
- create mode 100644 package/ti-cgt-pru/ti-cgt-pru.mk
+$ cat hello.c
+#include <pthread.h>
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 3b115c5..e244694 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -39,6 +39,7 @@ menu "Host utilities"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/tegrarcm/Config.in.host"
-+	source "package/ti-cgt-pru/Config.in.host"
- 	source "package/uboot-tools/Config.in.host"
- 	source "package/util-linux/Config.in.host"
- 	source "package/vboot-utils/Config.in.host"
-diff --git a/package/ti-cgt-pru/Config.in.host b/package/ti-cgt-pru/Config.in.host
-new file mode 100644
-index 0000000..3797cda
---- /dev/null
-+++ b/package/ti-cgt-pru/Config.in.host
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_HOST_TI_CGT_PRU
-+	bool "host ti-cgt-pru"
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_arm
-+	help
-+	  This package provides the Code Generation Tools for the PRU
-+	  unit found on some TI processors e.g. AM3358.
-+
-+	  Note: this is a binary cross toolchain that runs on x86 hosts
-+	  targeting PRU cores found alongside some ARM processors.
-+
-+	  http://processors.wiki.ti.com/index.php/Programmable_Realtime_Unit_Software_Development
-diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
-new file mode 100644
-index 0000000..1c19b33
---- /dev/null
-+++ b/package/ti-cgt-pru/ti-cgt-pru.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	df85cd1ed3aea12d577854ece11bf5f2af6ace8c39959eea4cf2fa5973924e0e	ti_cgt_pru_2.1.3_linux_installer_x86.bin
-diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
-new file mode 100644
-index 0000000..81bde54
---- /dev/null
-+++ b/package/ti-cgt-pru/ti-cgt-pru.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# ti-cgt-pru
-+#
-+################################################################################
-+
-+TI_CGT_PRU_VERSION = 2.1.3
-+TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
-+TI_CGT_PRU_SITE = http://software-dl.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
-+TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
-+	Boost Software License 1.0 (compiler), \
-+	BSD-2c, BSD-3c, MIT, Academic Free License 3.0, Hewlett-Packard (PRU library)
-+TI_CGT_PRU_LICENSE_FILES = PRU_Code_Generation_Tools_2.1.x_manifest.html \
-+	PRU_CodeGen_Library_2.1_0222433C-30C1-442d-B5C6-2073BD97F80F.spdx.tag
-+
-+define HOST_TI_CGT_PRU_EXTRACT_CMDS
-+	chmod +x $(DL_DIR)/$(TI_CGT_PRU_SOURCE)
-+	$(DL_DIR)/$(TI_CGT_PRU_SOURCE) --prefix $(@D) --mode unattended
-+	mv $(@D)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)/* $(@D)
-+	rmdir $(@D)/ti-cgt-pru_$(TI_CGT_PRU_VERSION)/
-+endef
-+
-+# Since this is largely prebuilt toolchain and likes to live in its own
-+# directory, put is in $(HOST_DIR)/ti-cgt-pru
-+# Packages wanting to use this toolchain need to use this path as TI's
-+# standard PRU_CGT path e.g. make PRU_CGT=$(TI_CGT_PRU_INSTALLDIR)...
-+
-+TI_CGT_PRU_INSTALLDIR = $(HOST_DIR)/usr/share/ti-cgt-pru
-+define HOST_TI_CGT_PRU_INSTALL_CMDS
-+	mkdir -p $(TI_CGT_PRU_INSTALLDIR)
-+	cp -dpfr $(@D)/* $(TI_CGT_PRU_INSTALLDIR)
-+endef
-+
-+$(eval $(host-generic-package))
+int main()
+{
+        pthread_create(NULL, NULL, NULL, NULL);
+        return 0;
+}
+
+$ xtensa-buildroot-linux-uclibc-gcc -pthread hello.c -o hello
+.../libgcc.a(unwind-dw2-fde-dip.o): In function `__gthread_mutex_lock':
+.../gthr-default.h:748: undefined reference to `dl_iterate_phdr'
+collect2: error: ld returned 1 exit status
+
+The only thing that worries me at this point is that now we have
+a lot of pthread internals linked into the program image even when
+the program doesn't use them.
+
+E.g. autossh built with uClibc-ng-1.0.17:
+
+$ size -A autossh
+autossh:
+section            size      addr
+.text             63771   4194484
+.rodata           28112   4258256
+.eh_frame           792   4286368
+.tbss                 8   4291256
+.ctors                8   4291256
+.dtors                8   4291264
+.jcr                  4   4291272
+.data.rel.ro        160   4291276
+.data               692   4291440
+.bss              15524   4292136
+.comment             31         0
+.xtensa.info         56         0
+.debug_aranges      288         0
+.debug_info        2195         0
+.debug_abbrev       398         0
+.debug_line        6327         0
+.debug_frame         40         0
+.debug_str          468         0
+.debug_loc           40         0
+.xt.lit            3752         0
+.xt.prop          58596         0
+Total            181270
+
+$ nm autossh  | grep pthread | wc -l
+10
+
+vs. autossh built with uClibc-ng-1.0.19:
+
+$ size -A autossh
+autossh:
+section            size      addr
+.text             83955   4194484
+.rodata           28564   4278440
+.eh_frame          1628   4307004
+.tdata                4   4312728
+.tbss                 8   4312732
+.ctors                8   4312732
+.dtors                8   4312740
+.jcr                  4   4312748
+.data.rel.ro        160   4312752
+.data               736   4312912
+.bss              24516   4313648
+.comment             35         0
+.xtensa.info         56         0
+.debug_aranges      384         0
+.debug_info       20096         0
+.debug_abbrev      2925         0
+.debug_line       14492         0
+.debug_frame       1432         0
+.debug_str         4789         0
+.debug_loc        11212         0
+.debug_ranges       608         0
+.xt.lit            4384         0
+.xt.prop          77364         0
+Total            277368
+
+$ nm autossh | grep pthread | wc -l
+77
+
+That makes me wonder, how pthread initialization is done
+in uClibc-ng-1.0.17 for applications that use pthread and that
+don't. So what I see is the following:
+
+- an application that uses pthread_create references
+  libpthread/nptl/init.c (because pthread_create.c includes
+  allocatestack.c, which references __xidcmd defined in init.c
+  from its __nptl_setxid) and thus gets __pthread_initialize_minimal
+  from it.
+
+- an application that doesn't use pthread_create gets its weakly
+  defined __pthread_initialize_minimal from the
+  libpthread/nptl/sysdeps/generic/libc-tls.c, which provides
+  __libc_setup_tls referenced from the __uClibc_init.
+
+So we're interested in the following three files:
+- init.os (built from libpthread/nptl/init.c, with strong
+   __pthread_initialize_minimal)
+- libc-tls.os (built from libpthread/nptl/sysdeps/xtensa/libc-tls.c,
+   with weak __pthread_initialize_minimal)
+- __uClibc_main.os (built from libc/misc/internal/__uClibc_main.c
+   with undefined reference to __pthread_initialize_minimal).
+
+Comparing uClibc-ng-1.0.17 with uClibc-ng-1.0.19 I see the following:
+1.0.17 had libc.a with libc-tls.os and __uClibc_main.os and
+libpthread.a with init.os.
+1.0.19 has libc.a with libc-tls.os, __uClibc_main.os and init.os in it
+in that order.
+
+I haven't found any related documentation, but apparently with 1.0.19
+when a definition of __pthread_initialize_minimal is searched for the
+undefined symbol in __uClibc_main.os, the init.os is considered
+first. Manually removing and re-adding libc-tls.os and init.os so
+that the final order is __uClibc_main.os, libc-tls.os and init.os
+restores the 1.0.17 behavior.
+
+> Prior to 1.0.18 libpthread.so was linked with special LDFLAGS:
+> LDFLAGS-libpthread.so +=
+> $(top_builddir)lib/$(UCLIBC_LDSO_NAME)-$(VERSION).so
+> $(top_builddir)lib/libdl-$(VERSION).so \
+>        -Wl,-z,nodelete,-z,initfirst,-init=$(SYMBOL_PREFIX)__pthread_initialize_minimal_internal
+>
+> May be this might be a reason we see different behavior.
+
+AFAICS it only affects shared library, i.e. not related to static linking case.
+
 -- 
-2.7.4
+Thanks.
+-- Max
