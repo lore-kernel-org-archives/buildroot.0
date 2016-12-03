@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Dec 2016 16:34:24 +0100
-Subject: [Buildroot] [PATCH v1 1/3] efivar: bump to version 30
-In-Reply-To: <CAK4VdL2kw5N2R1GukCnRLLe7brJEB9gO1XcOWpn9sgxjw6J3qg@mail.gmail.com>
-References: <20161128163553.173811-1-andriy.shevchenko@linux.intel.com>
- <20161128163553.173811-2-andriy.shevchenko@linux.intel.com>
- <20161203143405.0e4a8a54@free-electrons.com>
- <CAK4VdL2kw5N2R1GukCnRLLe7brJEB9gO1XcOWpn9sgxjw6J3qg@mail.gmail.com>
-Message-ID: <20161203163424.515d4605@free-electrons.com>
+Date: Sat, 3 Dec 2016 16:35:10 +0100
+Subject: [Buildroot] [PATCH 2/3] package/zic: bump version to 2016j
+In-Reply-To: <CAFGQKxef_8MHWq5LWHxmxyaVu03YV2xuOq0Bge1KjV_F_9f_zA@mail.gmail.com>
+References: <1480775787-28111-1-git-send-email-martin@barkynet.com>
+ <1480775787-28111-2-git-send-email-martin@barkynet.com>
+ <20161203160256.60230c0f@free-electrons.com>
+ <CAFGQKxef_8MHWq5LWHxmxyaVu03YV2xuOq0Bge1KjV_F_9f_zA@mail.gmail.com>
+Message-ID: <20161203163510.4b861211@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,51 +15,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 3 Dec 2016 16:18:00 +0100, Erico Nunes wrote:
+On Sat, 3 Dec 2016 15:16:10 +0000, Martin Bark wrote:
 
-> I took a look at them and it seems that there are two kinds of
-> failures. The first is that efivar uses dynamic linking as it uses
-> dlfcn.h and this has been exposed now that we no longer restrict to
-> glibc, so we should probably restrict it in Config.in for non-static
-> builds.
-
-ACK.
-
-> The other failures related to blackfin are weirder, I don't fully
-> understand what is going on there yet, but I wonder if it makes sense
-> to invest more effort in debugging that.
-> I think we could consider limiting efivar/efibootmgr to architectures
-> that can actually run EFI. That is, x86_64, aarch64, x86, arm,
-> possibly allow in a few other experimental ones (there is a summary at
-> https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface#Processor_compatibility
-> ), and only allow little-endian variations as well. I would prefer if
-> we didn't have to add architecture restrictions for building, however
-> with this we are already maintaining a number of hacks in efivar for
-> architectures that will probably never use it anytime soon.
+> The release of the timezone database is split into 2 files. One is tzcode
+> that we use to build zic for the host, the other is tzdata which contains
+> the the actual timezone data needed for the target.  When be extract tzcode
+> to build zic we have not extracted tzdata (there is no need to), however,
+> recent changes to tzcode means VERSION_DEPS in Makefile depends on files
+> that are only in tzdata.  This breaks building zic when only using tzcode
+> as we do.
 > 
-> By the way, there is a mention to "since we depend on glibc" in
-> efivar.mk which was not removed when the uclibc compatibility patch
-> was introduced, so we should update that as well.
+> The patch removes the dependency on VERSION_DEPS because it's not necessary
+> for us.  We are building released code so there is no need for dependencies
+> to check if the version number needs updating which is clearly only needed
+> for development.
 
-OK.
+So it really is an upstream bug? Did you try to send the patch to the
+upstream developers?
 
-> If you agree with solving that by limiting architectures, I can submit
-> these fixes.
+> Hope that makes sense.  Sorry for the typos,  I'll resubmit with them
+> corrected
 
-Limiting architectures is normally OK when there is a fundamental
-reason why it cannot be built/used on a given architecture, so I'm
-generally not too happy when we limit architectures just because we
-want to avoid build failures and not investigate the real reason.
+No need to resend just to fix the typos, I can fix them while applying.
 
-But since I agree that EFI is very architecture specific, and most
-likely never used on Blackin/m68k/etc., I'm fine with a patch limiting
-the architectures.
-
-Please introduce a BR2_PACKAGE_EFIVAR_ARCH_SUPPORTS hidden boolean, and
-use it in BR2_PACKAGE_EFIVAR, in the comment, in
-BR2_PACKAGE_EFIBOOTMGR and its comment.
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
