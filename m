@@ -1,32 +1,48 @@
-From: John Gulbrandsen <John.Gulbrandsen@wdc.com>
-Date: Sat, 3 Dec 2016 00:30:07 +0000
-Subject: [Buildroot]
- =?windows-1252?q?SH4A_target=3A_error=3A_command_line?=
- =?windows-1252?q?_option_=91-m4-nofpu=92_is_not_supported_by_this_configu?=
- =?windows-1252?q?ration?=
-In-Reply-To: <20161202213122.57dffb8d@free-electrons.com>
-References: <DM5PR04MB0635AD43067B754A23B8BAEE958F0@DM5PR04MB0635.namprd04.prod.outlook.com>
- <20161202095821.0b9fc50c@free-electrons.com>
- <DM5PR04MB0635485E4E8675471039DD12958E0@DM5PR04MB0635.namprd04.prod.outlook.com>
- <20161202213122.57dffb8d@free-electrons.com>
-Message-ID: <DM5PR04MB0635D71BBC53598FA771815995810@DM5PR04MB0635.namprd04.prod.outlook.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 2 Dec 2016 18:12:32 -0800
+Subject: [Buildroot] [PATCH] autossh: honour LDFLAGS
+In-Reply-To: <20161202052526.GB14207@waldemar-brodkorb.de>
+References: <20161125180016.GA360@waldemar-brodkorb.de>
+ <20161128222834.37958cd9@free-electrons.com>
+ <20161129041655.GK14207@waldemar-brodkorb.de>
+ <20161129094321.656d1cb4@free-electrons.com>
+ <CAMo8BfJAGT8cdvQ2xMx33HKDwW34XP6wVxHd1yn-UxAyQEYpRA@mail.gmail.com>
+ <20161130050003.GS14207@waldemar-brodkorb.de>
+ <CAMo8Bf+tDete50wsasrj=L1G=7XCJ9=dZBav4azY_PN1HTzrqw@mail.gmail.com>
+ <20161202052526.GB14207@waldemar-brodkorb.de>
+Message-ID: <CAMo8BfLxFxaRGAsgAX+xqorPfJAH0ZTAVmpUfFb3mC_wHbKPMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Thu, Dec 1, 2016 at 9:25 PM, Waldemar Brodkorb <wbx@openadk.org> wrote:
+>> Hello,
+>>
+>> TL;DR: -static is good, order of objects in libc.a is important.
+>
+> Thanks for the very detailed analysis.
+> Do you have any idea how we could restore the old order and keep
+> the binaries smaller?
 
-> gcc-final.mk
-> HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4,m4-nofpu,m4a,m4a-nofpu"
+One ugly solution could be putting __uClibc-main.os before both libc-tls.os
+and init.os, something like the following:
 
-This change works and I now get a complete build. I will next try to verify good build with QEMU.
+diff --git a/libc/misc/internals/Makefile.in b/libc/misc/internals/Makefile.in
+index ae094ee..d2400d2 100644
+--- a/libc/misc/internals/Makefile.in
++++ b/libc/misc/internals/Makefile.in
+@@ -25,7 +25,7 @@ libc-shared-y += $(MISC_INTERNALS_OUT)/__uClibc_main.oS
+ else
+ libc-shared-y += $(MISC_INTERNALS_OUT)/__uClibc_main.os
+ endif
+-libc-static-y += $(MISC_INTERNALS_OUT)/__uClibc_main.o
++libc-static-y := $(MISC_INTERNALS_OUT)/__uClibc_main.o $(libc-static-y)
+ libc-static-$(UCLIBC_FORMAT_FLAT_SEP_DATA) += \
+   $(MISC_INTERNALS_OUT)/shared_flat_initfini.o \
+   $(MISC_INTERNALS_OUT)/shared_flat_add_library.o
 
-Thanks for the help.
-/John.
-
-John Gulbrandsen
-Western Digital Corporation (and its subsidiaries) E-mail Confidentiality Notice & Disclaimer:
-
-This e-mail and any files transmitted with it may contain confidential or legally privileged information of WDC and/or its affiliates, and are intended solely for the use of the individual or entity to which they are addressed. If you are not the intended recipient, any disclosure, copying, distribution or any action taken or omitted to be taken in reliance on it, is prohibited. If you have received this e-mail in error, please notify the sender immediately and delete the e-mail in its entirety from your system.
+-- 
+Thanks.
+-- Max
