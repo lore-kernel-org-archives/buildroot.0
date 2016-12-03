@@ -1,27 +1,40 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  3 Dec 2016 10:25:13 +0100
-Subject: [Buildroot] [PATCH] lsqlite3: fix hash
-Message-ID: <20161203092513.29056-1-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  3 Dec 2016 11:42:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.74
+Message-ID: <20161203104208.26813-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-see http://autobuild.buildroot.net/results/9c8973271591dbcd4e7ba397961cd8209cf4d2f6
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/lsqlite3/lsqlite3.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libdrm/libdrm.hash | 4 ++--
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lsqlite3/lsqlite3.hash b/package/lsqlite3/lsqlite3.hash
-index e7d3ce0..7cf0358 100644
---- a/package/lsqlite3/lsqlite3.hash
-+++ b/package/lsqlite3/lsqlite3.hash
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 3131705..96bd985 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	090282f9b8df614d70d07442ba82de3cc02a2f44cb1059fda648155d4d7e52ef  lsqlite3-0.9.4-2.src.rock
-+sha256	e6eb64a7ca3727c3093f3c37341d8ecadf9eac913e468eae413828476b19c225  lsqlite3-0.9.4-2.src.rock
+-# From https://lists.freedesktop.org/archives/dri-devel/2016-November/123704.html
+-sha256 96bfd39242fe168017d95f22e141645a35591f5902a7d98c2fa4ca8c31df5e4d  libdrm-2.4.73.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2016-November/125379.html
++sha256 d80dd5a76c401f4c8756dcccd999c63d7e0a3bad258d96a829055cfd86ef840b  libdrm-2.4.74.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index b4e1aad..511f803 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.73
++LIBDRM_VERSION = 2.4.74
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
-2.9.3
+2.10.2
