@@ -1,136 +1,137 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Dec 2016 12:58:07 +0100
-Subject: [Buildroot] [PATCH v2 3/5] package/x11r7/xdriver_xf86-video-qxl:
-	add support for xlib_libXfont2
+Date: Sat,  3 Dec 2016 12:58:09 +0100
+Subject: [Buildroot] [PATCH v2 5/5] package/x11r7/xserver_xorg-server: bump
+	version to 1.19.0
 In-Reply-To: <20161203115809.25297-1-bernd.kuhls@t-online.de>
 References: <20161203115809.25297-1-bernd.kuhls@t-online.de>
-Message-ID: <20161203115809.25297-3-bernd.kuhls@t-online.de>
+Message-ID: <20161203115809.25297-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This release bumped video ABI to version 23
+https://cgit.freedesktop.org/xorg/xserver/commit/hw/xfree86/common/xf86Module.h?id=8d3f0e964e399dcfa8eb5e85d405217fdc5dbcd4
+https://cgit.freedesktop.org/xorg/xserver/commit/hw/xfree86/common/xf86Module.h?id=c07b796b47ae7f5a616d5e8e02ab0f84dc438a93
+https://cgit.freedesktop.org/xorg/xserver/commit/hw/xfree86/common/xf86Module.h?id=4af00242ef1e39499b932d12423fdf449296090a
+
+and depends on xlib_libXfont2
+https://cgit.freedesktop.org/xorg/xserver/commit/?id=05a793f5b3c40747d5a92a076def7f4fb673c7e7
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: initial version
+v2: instead of adding 1.19 as additional choice this patch contains a
+    version bump (Thomas)
 
- .../x11r7/xdriver_xf86-video-qxl/0003-xfont2.patch | 69 ++++++++++++++++++++++
- package/x11r7/xdriver_xf86-video-qxl/Config.in     |  2 +-
- .../xdriver_xf86-video-qxl.mk                      |  7 ++-
- 3 files changed, 76 insertions(+), 2 deletions(-)
- create mode 100644 package/x11r7/xdriver_xf86-video-qxl/0003-xfont2.patch
+ .../0001-modesettings-needs-dri2.patch                   |  0
+ package/x11r7/xserver_xorg-server/Config.in              | 16 +++++++++-------
+ .../x11r7/xserver_xorg-server/xserver_xorg-server.hash   |  4 ++--
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |  9 ++++++++-
+ 4 files changed, 19 insertions(+), 10 deletions(-)
+ rename package/x11r7/xserver_xorg-server/{1.18.4 => 1.19.0}/0001-modesettings-needs-dri2.patch (100%)
 
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/0003-xfont2.patch b/package/x11r7/xdriver_xf86-video-qxl/0003-xfont2.patch
-new file mode 100644
-index 0000000..e93b746
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-qxl/0003-xfont2.patch
-@@ -0,0 +1,69 @@
-+From e13d28ee5d8724fc4b22f26bce01a7d36355f272 Mon Sep 17 00:00:00 2001
-+From: "Owen W. Taylor" <otaylor@fishsoup.net>
-+Date: Fri, 26 Aug 2016 11:44:55 -0400
-+Subject: Check for either xfont.pc or xfont2.pc
-+
-+More recent versions of Xfont have a different API (with namespacing
-+for libXfont functions.) Check for xfont2.pc and if found, use that, and
-+use the new API. The rational for preferring libXfont2 is that as a recent
-+change the xserver module looks for and requires libXfont2, and it's better
-+not to have both versions of the library in process.
-+---
-+Downloaded from
-+https://cgit.freedesktop.org/xorg/driver/xf86-video-qxl/commit/?id=e13d28ee5d8724fc4b22f26bce01a7d36355f272
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff --git a/configure.ac b/configure.ac
-+index 7e95b01..451d42a 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -60,8 +60,14 @@ XORG_DRIVER_CHECK_EXT(RENDER, renderproto)
-+ XORG_DRIVER_CHECK_EXT(XV, videoproto)
-+ XORG_DRIVER_CHECK_EXT(XFreeXDGA, xf86dgaproto)
-+ 
-++# We can use either version 1 or version 2 of libXfont
-++PKG_CHECK_EXISTS(xfont2,
-++                 [xfont_pc=xfont2
-++                  AC_DEFINE(HAVE_XFONT2,1,[Version 2 of the libXfont library])],
-++                 [xfont_pc=xfont])
-++
-+ # Obtain compiler/linker options for the driver dependencies
-+-PKG_CHECK_MODULES(XORG, [xorg-server >= 1.0.99.901] xproto fontsproto xfont $REQUIRED_MODULES)
-++PKG_CHECK_MODULES(XORG, [xorg-server >= 1.0.99.901] xproto fontsproto $xfont_pc $REQUIRED_MODULES)
-+ 
-+ 
-+ save_CFLAGS="$CFLAGS"
-+diff --git a/src/uxa/uxa-damage.c b/src/uxa/uxa-damage.c
-+index a6d1ee3..6afb346 100644
-+--- a/src/uxa/uxa-damage.c
-++++ b/src/uxa/uxa-damage.c
-+@@ -35,7 +35,11 @@
-+ #include    <X11/X.h>
-+ #include    <X11/fonts/font.h>
-+ #include    <X11/fonts/fontstruct.h>
-++#ifdef HAVE_XFONT2
-++#include    <X11/fonts/libxfont2.h>
-++#else
-+ #include    <X11/fonts/fontutil.h>
-++#endif
-+ 
-+ #include    "uxa-damage.h"
-+ 
-+@@ -947,8 +951,12 @@ uxa_damage_chars (RegionPtr	region,
-+ {
-+     ExtentInfoRec   extents;
-+     BoxRec	    box;
-+-    
-++
-++#ifdef HAVE_XFONT2
-++    xfont2_query_glyph_extents(font, charinfo, n, &extents);
-++#else
-+     QueryGlyphExtents(font, charinfo, n, &extents);
-++#endif
-+     if (imageblt)
-+     {
-+ 	if (extents.overallWidth > extents.overallRight)
-+-- 
-+cgit v0.10.2
-+
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/Config.in b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-index 04bde0f..967ecaf 100644
---- a/package/x11r7/xdriver_xf86-video-qxl/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_QXL
- 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_UDEV # for KMS
- 	select BR2_PACKAGE_LIBPCIACCESS
- 	select BR2_PACKAGE_SPICE_PROTOCOL
+diff --git a/package/x11r7/xserver_xorg-server/1.18.4/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.0/0001-modesettings-needs-dri2.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.18.4/0001-modesettings-needs-dri2.patch
+rename to package/x11r7/xserver_xorg-server/1.19.0/0001-modesettings-needs-dri2.patch
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index df3801c..1d4a1fb 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -17,7 +17,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XLIB_LIBXDMCP
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
 -	select BR2_PACKAGE_XLIB_LIBXFONT
-+	select BR2_PACKAGE_XLIB_LIBXFONT2 if !BR2_PACKAGE_XLIB_LIBXFONT
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	help
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-index 30cd7a2..ac43b95 100644
---- a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-+++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-@@ -18,7 +18,6 @@ XDRIVER_XF86_VIDEO_QXL_CONF_OPTS = \
- XDRIVER_XF86_VIDEO_QXL_DEPENDENCIES = \
- 	libpciaccess \
- 	spice-protocol \
--	xlib_libXfont \
- 	xproto_fontsproto \
- 	xproto_xproto \
- 	xserver_xorg-server
-@@ -32,4 +31,10 @@ else
- XDRIVER_XF86_VIDEO_QXL_CONF_OPTS += --disable-kms
+ 	select BR2_PACKAGE_XLIB_LIBXFT
+ 	select BR2_PACKAGE_XLIB_LIBXI
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+@@ -61,37 +60,40 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+ 	bool
+ 
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
++config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
+ 	bool
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI
+ 	int
+ 	default 14 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
+ 	default 19 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+-	default 20 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
++	default 23 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
+ 
+ choice
+ 	bool "X Window System server version"
+ 
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
+-	bool "1.18.4"
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
++config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
++	bool "1.19.0"
++	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
++	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	bool "1.17.4"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
++	select BR2_PACKAGE_XLIB_LIBXFONT
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 	bool "1.14.7"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
++	select BR2_PACKAGE_XLIB_LIBXFONT
+ 
+ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.18.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
++	default "1.19.0" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index ab7ba7e..54ae0ec 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,5 +3,5 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2016-July/002699.html
+-sha256 278459b2c31d61a15655d95a72fb79930c480a6bb8cf9226e48a07df8b1d31c8        xorg-server-1.18.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-November/002737.html
++sha256 149a708b50befc2d5a40b98d45ddd2ebe0beec018e6d0c663c43bad6210e4da3        xorg-server-1.19.0.tar.bz2
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 51c3efc..48cd2a7 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -15,7 +15,6 @@ XSERVER_XORG_SERVER_AUTORECONF = YES
+ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xfont_font-util			\
+ 	xutil_util-macros 		\
+-	xlib_libXfont 			\
+ 	xlib_libX11 			\
+ 	xlib_libXau 			\
+ 	xlib_libXdmcp 			\
+@@ -194,6 +193,14 @@ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-record
  endif
  
 +ifeq ($(BR2_PACKAGE_XLIB_LIBXFONT2),y)
-+XDRIVER_XF86_VIDEO_QXL_DEPENDENCIES += xlib_libXfont2
-+else
-+XDRIVER_XF86_VIDEO_QXL_DEPENDENCIES += xlib_libXfont
++XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXfont2
 +endif
 +
- $(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFONT),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXfont
++endif
++
+ ifneq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-xvmc
+ endif
 -- 
 2.10.2
