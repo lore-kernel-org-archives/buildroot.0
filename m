@@ -1,11 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Dec 2016 14:35:04 +0100
-Subject: [Buildroot] [PATCH next 3/4] lttng-babeltrace: bump version to
- 1.5.0
-In-Reply-To: <20161130170445.55222-3-Vincent.Riera@imgtec.com>
-References: <20161130170445.55222-1-Vincent.Riera@imgtec.com>
- <20161130170445.55222-3-Vincent.Riera@imgtec.com>
-Message-ID: <20161203143504.5a31e6ab@free-electrons.com>
+Date: Sat, 3 Dec 2016 15:41:28 +0100
+Subject: [Buildroot] New autobuild.b.o feature: build duration
+Message-ID: <20161203154128.35314298@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +10,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 30 Nov 2016 17:04:44 +0000, Vicente Olivert Riera wrote:
-> Drop sha256 hash. The combination of md5 and sha1 hashes is enough.
-> 
-> Release notes:
->   https://lists.lttng.org/pipermail/lttng-dev/2016-November/026762.html
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/lttng-babeltrace/lttng-babeltrace.hash | 9 +++------
->  package/lttng-babeltrace/lttng-babeltrace.mk   | 2 +-
->  2 files changed, 4 insertions(+), 7 deletions(-)
+After having recently added the C library, sub-architecture and static
+vs. dynamic information to autobuild.b.o, I've added today yet another
+column: the build duration.
 
-This was apparently not tested at all: one of the patches fails to
-apply, see
-http://autobuild.buildroot.net/results/98a/98a42516fa7e2c79e5529d1b5a8d44fcd60934c7/build-end.log.
+For me, the key advantage of this column is to be able to more easily
+identify one of the shortest build (in duration) that allows to
+reproduce a given autobuilder failure.
 
-Could you have a look?
+Of course, the duration information is a bit relative, as it depends on
+the speed of the autobuilder machine on which the build took place. But
+it should give some rough idea of whether a very long build was needed
+before reaching the failure or not.
 
-Thanks!
+Hopefully this will be useful for others as well.
+
+Best regards,
 
 Thomas
 -- 
