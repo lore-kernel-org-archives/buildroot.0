@@ -1,49 +1,59 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sat, 3 Dec 2016 16:18:00 +0100
-Subject: [Buildroot] [PATCH v1 1/3] efivar: bump to version 30
-In-Reply-To: <20161203143405.0e4a8a54@free-electrons.com>
-References: <20161128163553.173811-1-andriy.shevchenko@linux.intel.com>
- <20161128163553.173811-2-andriy.shevchenko@linux.intel.com>
- <20161203143405.0e4a8a54@free-electrons.com>
-Message-ID: <CAK4VdL2kw5N2R1GukCnRLLe7brJEB9gO1XcOWpn9sgxjw6J3qg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 3 Dec 2016 16:24:23 +0100
+Subject: [Buildroot] [git commit] cmake: pass HOST_CONFIGURE_OPTS at
+	configure time
+Message-ID: <20161203152853.C2D0481933@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+commit: https://git.buildroot.net/buildroot/commit/?id=0904b80b47245cf85d414f78c381b9cf61c6ef4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Dec 3, 2016 at 2:34 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> This update is causing a large number of build failures, see:
->
->    http://autobuild.buildroot.net/?reason=efivar-30
->
-> Could you have a look?
+Since we bumped CMake from 3.5.2 to 3.6.3 in commit
+99ed85d74081a8611a6f6d1f3d745a5c40aef975, CMake uses pkg-config during
+its configure step to find available libraries on the host.
 
-I took a look at them and it seems that there are two kinds of
-failures. The first is that efivar uses dynamic linking as it uses
-dlfcn.h and this has been exposed now that we no longer restrict to
-glibc, so we should probably restrict it in Config.in for non-static
-builds.
-The other failures related to blackfin are weirder, I don't fully
-understand what is going on there yet, but I wonder if it makes sense
-to invest more effort in debugging that.
-I think we could consider limiting efivar/efibootmgr to architectures
-that can actually run EFI. That is, x86_64, aarch64, x86, arm,
-possibly allow in a few other experimental ones (there is a summary at
-https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface#Processor_compatibility
-), and only allow little-endian variations as well. I would prefer if
-we didn't have to add architecture restrictions for building, however
-with this we are already maintaining a number of hacks in efivar for
-architectures that will probably never use it anytime soon.
+If host-pkgconf was not built before host-cmake, everything was working
+fine. However, if host-pkgconf was built before, the configure step of
+host-cmake was finding pkg-config and used it to find
+libraries. Unfortunately, since we were not passing
+PKG_CONFIG_PATH/PKG_CONFIG_SYSROOT_DIR, pkg-config was behaving in its
+"default" mode, i.e returning results valid when building things for the
+target, not for the host. This lead to header paths pointing to the
+staging directory being used when building native binary objects,
+causing all sort of build failures.
 
-By the way, there is a mention to "since we depend on glibc" in
-efivar.mk which was not removed when the uclibc compatibility patch
-was introduced, so we should update that as well.
+This commit fixes that by passing $(HOST_CONFIGURE_OPTS) to the
+environment of host-cmake configure step. This variable contains
+HOST_MAKE_ENV, which itself contains the appropriate
+PKG_CONFIG_PATH/PKG_CONFIG_SYSROOT_DIR definitions.
 
-If you agree with solving that by limiting architectures, I can submit
-these fixes.
+At the same time, we drop LDFLAGS="$(HOST_LDFLAGS)" because this
+definition is already in $(HOST_CONFIGURE_OPTS).
 
-Erico
+Fixes:
+
+  http://autobuild.buildroot.net/results/4e703ed8c2eb0f914794038b0ef7bd73a67f38ce/
+  (and 424 similar build failures)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cmake/cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index f4c61aa..107715c 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -39,7 +39,7 @@ HOST_CMAKE_CXXFLAGS = $(shell echo $(HOST_CXXFLAGS) | sed -r "s%$(HOST_CPPFLAGS)
+ 
+ define HOST_CMAKE_CONFIGURE_CMDS
+ 	(cd $(@D); \
+-		LDFLAGS="$(HOST_LDFLAGS)" \
++		$(HOST_CONFIGURE_OPTS) \
+ 		CFLAGS="$(HOST_CMAKE_CFLAGS)" \
+ 		./bootstrap --prefix=$(HOST_DIR)/usr \
+ 			--parallel=$(PARALLEL_JOBS) -- \
