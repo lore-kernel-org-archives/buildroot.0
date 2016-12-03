@@ -1,33 +1,38 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun,  4 Dec 2016 00:11:35 +0100
-Subject: [Buildroot] [PATCH v1 4/6] raspberrypi3_defconfig: bump kernel
-	version to 4.4.36
-In-Reply-To: <20161203231137.32221-1-ps.report@gmx.net>
-References: <20161203231137.32221-1-ps.report@gmx.net>
-Message-ID: <20161203231137.32221-5-ps.report@gmx.net>
+Date: Sun,  4 Dec 2016 00:11:31 +0100
+Subject: [Buildroot] [PATCH v1 0/6] Raspberry PI update
+Message-ID: <20161203231137.32221-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- configs/raspberrypi3_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Update rpi-firmware/rpi-userland and all raspberrypiX_defconfigs to
+kernel version 4.4.36.
 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 433c0d773..4cd046d55 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -13,7 +13,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9669a50a3a8e4f33b4fe138277bc4407e1eab9b2"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="c6d86f7aa554854b04614ebb4d394766081fb41f"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
+Tested on Raspberry Pi 3 Model B v1.2 hardware:
+- raspberrypi3_defconfig
+- raspberrypi3_defconfig updated to glibc, systemd, gcc-6.x and
+  qt5 (linuxfb, eglfs)
+
+Peter Seiderer (6):
+  raspberrypi0_defconfig: bump kernel version to 4.4.36
+  raspberrypi_defconfig: bump kernel version to 4.4.36
+  raspberrypi2_defconfig: bump kernel version to 4.4.36
+  raspberrypi3_defconfig: bump kernel version to 4.4.36
+  rpi-firmware: bump version
+  rpi-userland: bump version
+
+ configs/raspberrypi0_defconfig         | 2 +-
+ configs/raspberrypi2_defconfig         | 2 +-
+ configs/raspberrypi3_defconfig         | 2 +-
+ configs/raspberrypi_defconfig          | 2 +-
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ package/rpi-userland/rpi-userland.hash | 2 +-
+ package/rpi-userland/rpi-userland.mk   | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
+
 -- 
 2.11.0
