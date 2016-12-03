@@ -1,59 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Dec 2016 16:24:23 +0100
-Subject: [Buildroot] [git commit] cmake: pass HOST_CONFIGURE_OPTS at
-	configure time
-Message-ID: <20161203152853.C2D0481933@busybox.osuosl.org>
+From: Martin Bark <martin@barkynet.com>
+Date: Sat, 3 Dec 2016 15:16:10 +0000
+Subject: [Buildroot] [PATCH 2/3] package/zic: bump version to 2016j
+In-Reply-To: <20161203160256.60230c0f@free-electrons.com>
+References: <1480775787-28111-1-git-send-email-martin@barkynet.com>
+ <1480775787-28111-2-git-send-email-martin@barkynet.com>
+ <20161203160256.60230c0f@free-electrons.com>
+Message-ID: <CAFGQKxef_8MHWq5LWHxmxyaVu03YV2xuOq0Bge1KjV_F_9f_zA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0904b80b47245cf85d414f78c381b9cf61c6ef4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas,
 
-Since we bumped CMake from 3.5.2 to 3.6.3 in commit
-99ed85d74081a8611a6f6d1f3d745a5c40aef975, CMake uses pkg-config during
-its configure step to find available libraries on the host.
+The release of the timezone database is split into 2 files. One is tzcode
+that we use to build zic for the host, the other is tzdata which contains
+the the actual timezone data needed for the target.  When be extract tzcode
+to build zic we have not extracted tzdata (there is no need to), however,
+recent changes to tzcode means VERSION_DEPS in Makefile depends on files
+that are only in tzdata.  This breaks building zic when only using tzcode
+as we do.
 
-If host-pkgconf was not built before host-cmake, everything was working
-fine. However, if host-pkgconf was built before, the configure step of
-host-cmake was finding pkg-config and used it to find
-libraries. Unfortunately, since we were not passing
-PKG_CONFIG_PATH/PKG_CONFIG_SYSROOT_DIR, pkg-config was behaving in its
-"default" mode, i.e returning results valid when building things for the
-target, not for the host. This lead to header paths pointing to the
-staging directory being used when building native binary objects,
-causing all sort of build failures.
+The patch removes the dependency on VERSION_DEPS because it's not necessary
+for us.  We are building released code so there is no need for dependencies
+to check if the version number needs updating which is clearly only needed
+for development.
 
-This commit fixes that by passing $(HOST_CONFIGURE_OPTS) to the
-environment of host-cmake configure step. This variable contains
-HOST_MAKE_ENV, which itself contains the appropriate
-PKG_CONFIG_PATH/PKG_CONFIG_SYSROOT_DIR definitions.
+Hope that makes sense.  Sorry for the typos,  I'll resubmit with them
+corrected
 
-At the same time, we drop LDFLAGS="$(HOST_LDFLAGS)" because this
-definition is already in $(HOST_CONFIGURE_OPTS).
+Thanks
 
-Fixes:
+Martin
 
-  http://autobuild.buildroot.net/results/4e703ed8c2eb0f914794038b0ef7bd73a67f38ce/
-  (and 424 similar build failures)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cmake/cmake.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 3 December 2016 at 15:02, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index f4c61aa..107715c 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -39,7 +39,7 @@ HOST_CMAKE_CXXFLAGS = $(shell echo $(HOST_CXXFLAGS) | sed -r "s%$(HOST_CPPFLAGS)
- 
- define HOST_CMAKE_CONFIGURE_CMDS
- 	(cd $(@D); \
--		LDFLAGS="$(HOST_LDFLAGS)" \
-+		$(HOST_CONFIGURE_OPTS) \
- 		CFLAGS="$(HOST_CMAKE_CFLAGS)" \
- 		./bootstrap --prefix=$(HOST_DIR)/usr \
- 			--parallel=$(PARALLEL_JOBS) -- \
+> Hello,
+>
+> On Sat,  3 Dec 2016 14:36:26 +0000, Martin Bark wrote:
+>
+> > +$(VERISON_DEPS) includes dependencies from tzdata meaning applications
+> > +such as zic can't build from tzcode on their own.  Remove the dependency
+> > +to $(VERISON_DEPS) since it is not necessary to check for version
+> updates
+> > +in released code.  This solves building zic from tzcode without needing
+> > +tzdata.
+>
+> Not clear what you mean here. Is this a new problem introduced by
+> version 2016j ? Could you explain a bit more what's happening ?
+>
+> Also, there's two times the same typo: VERISON_DEPS -> VERSION_DEPS.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161203/6c58218d/attachment.html>
