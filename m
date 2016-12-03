@@ -1,8 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 03 Dec 2016 16:17:38 +0000
-Subject: [Buildroot] [Bug 9461] New: toolchain Linaro AArch64 2016.11
-	compile error
-Message-ID: <bug-9461-163@https.bugs.busybox.net/>
+Date: Sat, 03 Dec 2016 16:47:42 +0000
+Subject: [Buildroot] [Bug 9461] toolchain Linaro AArch64 2016.11 compile
+	error
+In-Reply-To: <bug-9461-163@https.bugs.busybox.net/>
+References: <bug-9461-163@https.bugs.busybox.net/>
+Message-ID: <bug-9461-163-68q7n8fX2m@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,31 +13,20 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=9461
 
-            Bug ID: 9461
-           Summary: toolchain Linaro AArch64 2016.11 compile error
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: gmg.kostik at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+--- Comment #1 from romain.naour at openwide.fr ---
+Hi,
 
-I try build odroidc2_defconfig.
-Select external toolchain Linaro AArch64 2016.11.
+The odroidc2 kernel doesn't support gcc6 yet.
+Can you look if there is a newer odroidc2 kernel or try to backport this patch
+[1].
 
-Bug out when compiling uboot:
+Thank for your report!
 
-../include/linux/compiler-gcc.h:114:30: fatal error: linux/compiler-gcc6.h: No
-such file or directory
+Best regards,
+Romain Naour
 
-
-Then i use toolchain Linaro AArch64 2016.05 all ok.
+[1]
+http://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit/?id=677fa15cd6d5b0843e7b9c58409f67d656b1ec2f
 
 -- 
 You are receiving this mail because:
