@@ -1,50 +1,33 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  3 Dec 2016 13:17:39 +0100
-Subject: [Buildroot] [PATCH 6/6] package/aubio: add ffmpeg libav optional
-	dependency
-In-Reply-To: <1480767459-17230-1-git-send-email-romain.naour@gmail.com>
-References: <1480767459-17230-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1480767459-17230-6-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 3 Dec 2016 14:34:05 +0100
+Subject: [Buildroot] [PATCH v1 1/3] efivar: bump to version 30
+In-Reply-To: <20161128163553.173811-2-andriy.shevchenko@linux.intel.com>
+References: <20161128163553.173811-1-andriy.shevchenko@linux.intel.com>
+ <20161128163553.173811-2-andriy.shevchenko@linux.intel.com>
+Message-ID: <20161203143405.0e4a8a54@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Aubio libav support require libavcodec, libavformat, libavutil and
-libavresample. Enable libav support only when
-BR2_PACKAGE_FFMPEG_AVRESAMPLE is set.
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/aubio/aubio.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+On Mon, 28 Nov 2016 18:35:51 +0200, Andy Shevchenko wrote:
+> Use newest release.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
-index 9339f44..cfa233f 100644
---- a/package/aubio/aubio.mk
-+++ b/package/aubio/aubio.mk
-@@ -13,8 +13,7 @@ AUBIO_INSTALL_STAGING = YES
- 
- AUBIO_CONF_OPTS = \
- 	--disable-docs \
--	--disable-atlas \
--	--disable-avcodec
-+	--disable-atlas
- 
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- AUBIO_DEPENDENCIES += libsndfile
-@@ -49,4 +48,11 @@ else  # !BR2_PACKAGE_FFTW
- AUBIO_CONF_OPTS += --disable-fftw3
- endif
- 
-+ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE),y)
-+AUBIO_DEPENDENCIES += ffmpeg
-+AUBIO_CONF_OPTS += --enable-avcodec
-+else
-+AUBIO_CONF_OPTS += --disable-avcodec
-+endif
-+
- $(eval $(waf-package))
+This update is causing a large number of build failures, see:
+
+   http://autobuild.buildroot.net/?reason=efivar-30
+
+Could you have a look?
+
+Thanks a lot,
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
