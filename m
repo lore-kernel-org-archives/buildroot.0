@@ -1,88 +1,66 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 4 Dec 2016 19:08:45 +0100
-Subject: [Buildroot] [PATCH 1/9] skalibs: new package
-In-Reply-To: <20160809221532.3f36d369@itchy>
-References: <1470690140-18803-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1470690140-18803-2-git-send-email-eric.le.bihan.dev@free.fr>
- <20160809100622.4b18f1c7@free-electrons.com>
- <20160809221532.3f36d369@itchy>
-Message-ID: <20161204180845.GA19204@itchy>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 4 Dec 2016 19:15:13 +0100
+Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime_mali:
+ bump kernel version
+In-Reply-To: <CAB0FRsvXTowx6+e3Zx1RYCkRANSgyE-VDZReuqzSY6X4+2CHLA@mail.gmail.com>
+References: <1480869026-6208-1-git-send-email-romain.naour@gmail.com>
+ <CAB0FRsvXTowx6+e3Zx1RYCkRANSgyE-VDZReuqzSY6X4+2CHLA@mail.gmail.com>
+Message-ID: <42695aa7-5087-d53b-3b35-4500673746b8@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16-08-09 22:15:32, Eric Le Bihan wrote:
-> Hi!
->
-> Le Tue, 9 Aug 2016 10:06:22 +0200,
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
->
-> > On Mon,  8 Aug 2016 23:02:12 +0200, Eric Le Bihan wrote:
+Hi Fran?ois,
 
-[...]
+Le 04/12/2016 ? 18:12, Fran?ois Perrad a ?crit :
+> 2016-12-04 17:30 GMT+01:00 Romain Naour <romain.naour@gmail.com>:
+>> Bump the kernel to the next commit which fix the build with gcc6.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Francois Perrad <francois.perrad@gadz.org>
+>> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+>> ---
+>> Build tested only.
+>> For the same reason, the kernel used by
+>> olimex_a20_olinuxino_lime2_defconfig needs to bumped
+>> to 4.1.43 (at least). But since it's a big change, it
+>> require a runtime test on the board.
+> 
+> At this time, the latest 4.1.x is 4.1.36 (not 4.1.43).
+> 
+> Currently, olimex_a20_olinuxino_lime_defconfig uses a 4.4 kernel.
+> With BR2017.02, I plan a bump to the upcoming 4.9 which will be also a
+> LTS (like 4.1 & 4.4).
+> 
+> On my desk, I have only a LIME board, but no LIME2.
 
-> > > + trytypesize() {
-> > > +   echo "Checking size of $3..."
-> > > +-  $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o
-> > > trysizeof$1 src/sysdeps/trysizeof$1.c +-
-> > > type_size=$(./trysizeof$1) || fail "$0: unable to determine size of
-> > > $3" ++  r=false ++  type_size=0
-> > > ++  while true; do
-> > > ++    cat<<EOF>trysizeof$1.c
-> > > ++#include <sys/types.h>
-> > > ++
-> > > ++int main(void)
-> > > ++{
-> > > ++  static int v = 1 / !!((sizeof($3) == $type_size));
-> > > ++  return 0;
-> > > ++}
-> > > ++EOF
-> > > ++    if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o
-> > > trysizeof$1 trysizeof$1.c 2>/dev/null; then ++        r=true
-> > > ++        break
-> > > ++    fi
-> > > ++    type_size=$(expr $type_size + 1)
-> > > ++    test $type_size -le 16 || break
-> > > ++  done
-> > > ++  test $r = true || fail "$0: unable to determine size of $3"
-> > > +   type_bits=$(expr 8 \* $type_size)
-> > > +-  rm -f trysizeof$1
-> > > ++  rm -f trysizeof$1 trysizeof$1.c
-> > > +   echo "sizeof$1: $type_size" >> $sysdeps/sysdeps
-> > > +   echo "#define ${package_macro_name}_SIZEOF$2 $type_size" >>
-> > > $sysdeps/sysdeps.h
-> > > +   echo "#define ${package_macro_name}_$2_BITS $type_bits" >>
-> > > $sysdeps/sysdeps.h
-> >
-> > Instead of doing this loop to find the size of the different types,
-> > what about using the following compiler pre-built defines (like you're
-> > doing for little endian vs. big endian detection below) :
-> >
-> > $ sparc-linux-gcc -dM -E - </dev/null | grep SIZEOF
-> > #define __SIZEOF_INT__ 4
-> > #define __SIZEOF_POINTER__ 4
-> > #define __SIZEOF_LONG__ 4
-> > #define __SIZEOF_LONG_DOUBLE__ 16
-> > #define __SIZEOF_SIZE_T__ 4
-> > #define __SIZEOF_WINT_T__ 4
-> > #define __SIZEOF_PTRDIFF_T__ 4
-> > #define __SIZEOF_FLOAT__ 4
-> > #define __SIZEOF_SHORT__ 2
-> > #define __SIZEOF_WCHAR_T__ 4
-> > #define __SIZEOF_DOUBLE__ 8
-> > #define __SIZEOF_LONG_LONG__ 8
->
-> I did not know about this. Thanks for the suggestion. I'll rework the
-> patch.
-
-I've done some tests: the preprocessor solution is OK for C types like
-'unsigned short' and co, but it does not work for some system types like
-gid_t and time_t. So I'll keep the loop based solution in my upcoming
-respin of this series.
+Ok, maybe we can just wait for your patches.
 
 Best regards,
+Romain
 
---
-ELB
+> 
+> Fran?ois
+> 
+>> ---
+>>  configs/olimex_a20_olinuxino_lime_mali_defconfig | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+>> index 35af5f9..4930660 100644
+>> --- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
+>> +++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+>> @@ -20,7 +20,7 @@ BR2_LINUX_KERNEL=y
+>>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/dan-and/linux-sunxi.git"
+>>  # based on Linux version 3.4.113
+>> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dbabbacbbf8984dea0a8c893b38b376a6ecbb3c1"
+>> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fc385cc6dfa350382ecc94a520a716b57e654410"
+>>  BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+>>  BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
+>>  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>> --
+>> 2.5.5
+>>
