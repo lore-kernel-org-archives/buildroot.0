@@ -1,56 +1,40 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 4 Dec 2016 13:06:37 +0100
-Subject: [Buildroot] [PATCH] autossh: honour LDFLAGS
-In-Reply-To: <CAMo8BfLxFxaRGAsgAX+xqorPfJAH0ZTAVmpUfFb3mC_wHbKPMg@mail.gmail.com>
-References: <20161125180016.GA360@waldemar-brodkorb.de>
- <20161128222834.37958cd9@free-electrons.com>
- <20161129041655.GK14207@waldemar-brodkorb.de>
- <20161129094321.656d1cb4@free-electrons.com>
- <CAMo8BfJAGT8cdvQ2xMx33HKDwW34XP6wVxHd1yn-UxAyQEYpRA@mail.gmail.com>
- <20161130050003.GS14207@waldemar-brodkorb.de>
- <CAMo8Bf+tDete50wsasrj=L1G=7XCJ9=dZBav4azY_PN1HTzrqw@mail.gmail.com>
- <20161202052526.GB14207@waldemar-brodkorb.de>
- <CAMo8BfLxFxaRGAsgAX+xqorPfJAH0ZTAVmpUfFb3mC_wHbKPMg@mail.gmail.com>
-Message-ID: <20161204120637.GE14207@waldemar-brodkorb.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  4 Dec 2016 13:22:04 +0100
+Subject: [Buildroot] [PATCH] package/enlightenment: bump to version 0.21.4
+Message-ID: <1480854125-27023-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Max,
-Max Filippov wrote,
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/enlightenment/enlightenment.hash | 4 ++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> On Thu, Dec 1, 2016 at 9:25 PM, Waldemar Brodkorb <wbx@openadk.org> wrote:
-> >> Hello,
-> >>
-> >> TL;DR: -static is good, order of objects in libc.a is important.
-> >
-> > Thanks for the very detailed analysis.
-> > Do you have any idea how we could restore the old order and keep
-> > the binaries smaller?
-> 
-> One ugly solution could be putting __uClibc-main.os before both libc-tls.os
-> and init.os, something like the following:
-> 
-> diff --git a/libc/misc/internals/Makefile.in b/libc/misc/internals/Makefile.in
-> index ae094ee..d2400d2 100644
-> --- a/libc/misc/internals/Makefile.in
-> +++ b/libc/misc/internals/Makefile.in
-> @@ -25,7 +25,7 @@ libc-shared-y += $(MISC_INTERNALS_OUT)/__uClibc_main.oS
->  else
->  libc-shared-y += $(MISC_INTERNALS_OUT)/__uClibc_main.os
->  endif
-> -libc-static-y += $(MISC_INTERNALS_OUT)/__uClibc_main.o
-> +libc-static-y := $(MISC_INTERNALS_OUT)/__uClibc_main.o $(libc-static-y)
->  libc-static-$(UCLIBC_FORMAT_FLAT_SEP_DATA) += \
->    $(MISC_INTERNALS_OUT)/shared_flat_initfini.o \
->    $(MISC_INTERNALS_OUT)/shared_flat_add_library.o
-> 
-
-Thanks for the patch, I tried it.
-But unforunately it breaks other applications as busybox init.
-Not startup possible in Qemu to test the smaller autossh.
-
-best regards
- Waldemar
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index 6c82bdc..ba66918 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
+@@ -1,2 +1,2 @@
+-# From https://www.enlightenment.org/news/e-0.21.3-release
+-sha256	b90517d3de780023043b6e3ade30f686bd2cdcf5b66d24155b50da720e665fd2 	enlightenment-0.21.3.tar.xz
++# From https://www.enlightenment.org/news/e-0.21.4-release
++sha256	0ed1a7c768017b2afa02cf94d9c532e9f960b6a4a7e79954770424dfb6b1bf20 	enlightenment-0.21.4.tar.xz
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 98f537d..1cbf598 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ENLIGHTENMENT_VERSION = 0.21.3
++ENLIGHTENMENT_VERSION = 0.21.4
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2c
+-- 
+2.5.5
