@@ -1,61 +1,33 @@
-From: Alvaro G. M <alvaro.gamez@hazent.com>
-Date: Sun,  4 Dec 2016 16:55:40 +0100
-Subject: [Buildroot] [PATCH 1/1] libxmlrpc: fix build without C++ compiler
+From: Alvaro G. M. <alvaro.gamez@hazent.com>
+Date: Sun, 4 Dec 2016 17:18:48 +0100
+Subject: [Buildroot] [PATCH v3 1/1] libxmlrpc: bump to 1.39.11
 In-Reply-To: <20161204163745.459990e3@free-electrons.com>
-References: <20161204163745.459990e3@free-electrons.com>
-Message-ID: <1480866940-967-1-git-send-email-alvaro.gamez@hazent.com>
+References: <CAM+bi4vAks48DSkjARGDsoMiG7p+X=+frremEZbjaQnG5GQHYw@mail.gmail.com>
+ <1479207044-12290-1-git-send-email-alvaro.gamez@hazent.com>
+ <20161204150600.0bfe0ead@free-electrons.com>
+ <20161204153328.GA27936@collins.gmr.ssr.upm.es>
+ <20161204163745.459990e3@free-electrons.com>
+Message-ID: <20161204161848.GA1126@collins.gmr.ssr.upm.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+On Sun, Dec 04, 2016 at 04:37:45PM +0100, Thomas Petazzoni wrote:
+> Modifying the existing 0002-fix-non-cplusplus-build.patch is indeed the
+> right thing to do here.
+> 
+> Also, since you're interested in libxmlrpc, could you send the
+> different patches we have for this package to the upstream developers?
 
-Conditionally deactivate compilation of optional C++ module.
+Sure, I've just done both things: I've sent a patch with this fix to the
+mail list and I've just sent an email to the author to see if he's willing
+to include the set of patches we have right now.  I know he's a bit reticent
+to modify superstable release of xmlrpc, but I hope these patches are small
+enough to make him happy.
 
-Fixes:
-http://autobuild.buildroot.net/results/cbf/cbff6c816606a515467d467677763533a41fc276/
-Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
----
- package/libxmlrpc/0002-fix-non-cplusplus-build.patch | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+Best regards!
 
-diff --git a/package/libxmlrpc/0002-fix-non-cplusplus-build.patch b/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
-index efeb9cc..2d5bfcc 100644
---- a/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
-+++ b/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
-@@ -1,9 +1,10 @@
- Handle builds without C++
- 
- libxmlrpc nicely handles the fact of being built without C++ support,
--except for one location, fixed by this patch.
-+except for two locations, fixed by this patch.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
- 
- Index: b/lib/util/Makefile
- ===================================================================
-@@ -25,3 +26,19 @@ Index: b/lib/util/Makefile
-  .PHONY: all
-  all: $(LIBOBJS)
-  
-+Index: b/lib/Makefile
-+===================================================================
-+--- a/lib/Makefile
-++++ b/lib/Makefile
-+@@ -9,7 +9,10 @@
-+ 
-+ # Build up SUBDIRS:
-+ SUBDIRS = 
-+-SUBDIRS += util libutil libutil++
-++SUBDIRS += util libutil
-++ifeq ($(ENABLE_CPLUSPLUS),yes)
-++  SUBDIRS += libutil++
-++endif
-+ ifeq ($(ENABLE_ABYSS_SERVER),yes)
-+   SUBDIRS += abyss
-+   ifeq ($(ENABLE_CPLUSPLUS),yes)
 -- 
-2.7.0
+Alvaro G. M.
