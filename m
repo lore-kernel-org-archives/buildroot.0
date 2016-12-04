@@ -1,36 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 04 Dec 2016 13:39:16 +0000
-Subject: [Buildroot] [Bug 9461] toolchain Linaro AArch64 2016.11 compile
-	error
-In-Reply-To: <bug-9461-163@https.bugs.busybox.net/>
-References: <bug-9461-163@https.bugs.busybox.net/>
-Message-ID: <bug-9461-163-Kcwvyo8UqP@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Dec 2016 15:03:10 +0100
+Subject: [Buildroot] [git commit] lttng-libust: needs autoreconf
+Message-ID: <20161204140356.A389F80DA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9461
+commit: https://git.buildroot.net/buildroot/commit/?id=715498b1ee5072fda8a8f132bb80895d817f2bad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #5 from romain.naour at gmail.com ---
-Hi,
+The recently introduced
+0002-doc-examples-Makefile.am-define-C-and-C-compilers-fo.patch touches
+Makefile.am, so lttng-libust needs to be autoreconfed.
 
-The odroidc2-3.14.y branch on github [1] is still maintained and you have just
-to update the git hash to the latest version to fix your build issue.
+Fixes:
 
-Also it seems that the Amlogic S905 SoC used in your board [2] is now available
-with the latest kernel version (v4.8) [3].
+  http://autobuild.buildroot.net/results/e917552ea1069da74c4e392556914d05c010a250/
 
-I don't have this board, can you test with the new 3.14 hardkernel or 4.8
-kernel version and summit a patch bumping the version ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lttng-libust/lttng-libust.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[1]
-https://github.com/hardkernel/linux/commits/odroidc2-3.14.y/include/linux/compiler-gcc.h
-[2] http://www.hardkernel.com/main/products/prdt_info.php
-[3]
-http://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/tree/arch/arm64/Kconfig.platforms?h=linux-4.8.y#n81
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index 23cc745..5667abb 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -12,6 +12,8 @@ LTTNG_LIBUST_LICENSE_FILES = COPYING
+ LTTNG_LIBUST_INSTALL_STAGING = YES
+ LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
+ LTTNG_LIBUST_CONF_OPTS += --disable-man-pages
++# 0002-doc-examples-Makefile.am-define-C-and-C-compilers-fo.patch
++LTTNG_LIBUST_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ LTTNG_LIBUST_DEPENDENCIES += python
