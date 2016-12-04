@@ -1,374 +1,247 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Dec 2016 11:59:37 +0100
-Subject: [Buildroot] [PATCH] build/advanced: add option to check for use of
-	cdefs.h
-Message-ID: <1480849177-16847-1-git-send-email-yann.morin.1998@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 4 Dec 2016 12:20:27 +0100
+Subject: [Buildroot] [PATCH] uclibc: update to 1.0.20
+Message-ID: <20161204112026.GA30258@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We want to catch programs that directly include sys/cdefs.h so that
-we can fix them not to. So, we want to instrument sys/cdefs.h to emit
-a warning when it is included.
+The test suite is removed from the package and is already a separate
+package in buildroot. All patches are upstream, so remove them.
+The UCLIBC_HAS_LFS option is removed upstream.
 
-However, there are two cases: musl and the other C libraries.
-
-For musl, it is pretty trivial to do so, because we install our own
-sys/cdefs.h header, so we are free to instrument it at will. Not content
-to emit a warning when it is included, we can also instrument each macro
-to emit its own warning on being used, so we can easily pinpoint what
-macro is used and why cdefs.h is used at all.
-
-This is made even easier because musl does not include sys/cdefs.h from
-its own headers, so any inclusion of sys/cdefs.h is entirely due to an
-explicit include by a package.
-
-But for glibc and uClibc, the matter is a little bit different: there
-are two problems we have to solve:
-
-  - both glibc and uClibc install their own sys/cdefs.h, so we are not
-    free to instrument it at will;
-
-  - both include it from their own headers, so that the inclusion of it
-    is not necessarily an explicit include by a package.
-
-We solve these two problems in two ways:
-
-  - the first point is solved by renaming the existing header, adding
-    our own header that acts as a trampoline to the original one, after
-    adding a #warning to warn about inclusion of sys/cdefs.h;
-
-  - the second point is solved by changing all the headers installed by
-    the toolchain to directly include the original, renamed header
-    instead of our trampoline.
-
-This way, we can catch direct inclusion of sys/cdefs.h and ignore
-indirect inclusions that are internal to the C library headers.
-
-This also means that we are limited in what we can catch. We can not
-instrument each macro individually, so all we know is that sys/cdefs.h
-was included; we don't know what is being used from it.
-
-Because instrumenting sys/cdefs.h to emit even just a warning has the
-potential to break packages the hard way (e.g. those using -Werror that
-would normally not have any warning), we make that an advanced build
-option that defaults to not instrumenting sys/cdefs.h.
-
-When we are confident that the instrumentation of sys/cdefs.h has no
-harmful side effects, we can change the default to emit the warning.
-
-Beside no instrumentation and adding a warning, we add a third option,
-to treat use of sys/cdefs.h as an error. This does break a lot of
-things, so this is only available to actively track down the use of
-sys/cdefs.h with the aim of removing its use from a pacakge.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- Config.in                                          | 52 ++++++++++++
- package/musl-compat-headers/cdefs.h                | 51 ------------
- package/musl-compat-headers/cdefs.h.in             | 94 ++++++++++++++++++++++
- package/musl-compat-headers/musl-compat-headers.mk |  8 +-
- toolchain/cdefs.h.in                               |  8 ++
- toolchain/toolchain.mk                             | 30 +++++++
- 6 files changed, 191 insertions(+), 52 deletions(-)
- delete mode 100644 package/musl-compat-headers/cdefs.h
- create mode 100644 package/musl-compat-headers/cdefs.h.in
- create mode 100644 toolchain/cdefs.h.in
+ .../0001-linuxthreads-add-back-signal.h.patch      | 28 ---------
+ ...ne-madvise-related-macros-for-noMMU-targe.patch | 66 ----------------------
+ ...003-posix_madvise-not-available-for-noMMU.patch | 30 ----------
+ package/uclibc/uclibc.hash                         |  2 +-
+ package/uclibc/uclibc.mk                           | 30 +---------
+ 5 files changed, 2 insertions(+), 154 deletions(-)
+ delete mode 100644 package/uclibc/0001-linuxthreads-add-back-signal.h.patch
+ delete mode 100644 package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
+ delete mode 100644 package/uclibc/0003-posix_madvise-not-available-for-noMMU.patch
 
-diff --git a/Config.in b/Config.in
-index 98096df..c68b8b1 100644
---- a/Config.in
-+++ b/Config.in
-@@ -699,6 +699,58 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
- 	  toolchain (through the toolchain wrapper and binutils patches)
- 	  and external toolchain backends (through the toolchain wrapper).
- 
-+choice
-+	bool "paranoid check for use of cdefs.h"
-+	default BR2_LEGACY_CDEFS_H_NO_CHECK
-+	help
-+	  sys/cdefs.h is a non-standard header, originating from glibc,
-+	  that defines non-standard and legacy macros. This header is not
-+	  always available (e.g. musl does not provide it, but Buildroot
-+	  installs a surrogate, minimalist one in this case).
-+
-+	  Some packages use this header, which is wrong, as that makes
-+	  then non-portable.
-+
-+	  By default, Buildroot does not detect the use of that header.
-+	  In the future, this default may change to warning, or even to
-+	  erroring out.
-+
-+config BR2_LEGACY_CDEFS_H_NO_CHECK
-+	bool "don't check"
-+	help
-+	  Do not detect any use of sys/cdefs.h.
-+
-+config BR2_LEGACY_CDEFS_H_WARN
-+	bool "check and emit warnings"
-+	help
-+	  Detect and warn about the use of sys/cdefs.h.
-+
-+	  When using the musl C library, this also warns for each of the
-+	  legacy macros being used:
-+		__P()
-+		__BEGIN_DECLS
-+		__END_DECLS
-+		__THROW
-+		__NTH()
-+
-+config BR2_LEGACY_CDEFS_H_ERROR
-+	bool "check and exit in error"
-+	help
-+	  Same as BR2_LEGACY_CDEFS_H_WARN, above, but treated as
-+	  an error.
-+
-+endchoice
-+
-+config BR2_LEGACY_CDEFS_H_PRAGMA_COND
-+	int
-+	default 0 if BR2_LEGACY_CDEFS_H_NO_CHECK
-+	default 1
-+
-+config BR2_LEGACY_CDEFS_H_PRAGMA
-+	string
-+	default "warning" if BR2_LEGACY_CDEFS_H_WARN
-+	default "error"   if BR2_LEGACY_CDEFS_H_ERROR
-+
- config BR2_REPRODUCIBLE
- 	bool "Make the build reproducible (experimental)"
- 	help
-diff --git a/package/musl-compat-headers/cdefs.h b/package/musl-compat-headers/cdefs.h
+diff --git a/package/uclibc/0001-linuxthreads-add-back-signal.h.patch b/package/uclibc/0001-linuxthreads-add-back-signal.h.patch
 deleted file mode 100644
-index 6fe7aa4..0000000
---- a/package/musl-compat-headers/cdefs.h
+index 1a957c5..0000000
+--- a/package/uclibc/0001-linuxthreads-add-back-signal.h.patch
 +++ /dev/null
-@@ -1,51 +0,0 @@
--/* Copyright (C) 2016 Yann E. MORIN <yann.morin.1998@free.fr>
-- *
-- * This file is in the Public Domain.
-- *
-- * For jurisdictions in which the Public Domain does not exist
-- * or it is not otherwise applicable, this file is licensed CC0
-- * (Creative Commons Zero).
-- */
+@@ -1,28 +0,0 @@
+-From 543308f6c46cf2edf8a524bc9c631e472570fe72 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-Date: Mon, 24 Oct 2016 05:15:07 +0200
+-Subject: [PATCH] linuxthreads: add back signal.h
 -
--/* This file contains definitions for non-standard macros defined by
-- * glibc, but quite commonly used in packages.
-- *
-- * Because they are non-standard, musl does not define those macros.
-- * It does not provide cdefs.h either.
-- *
-- * This file is a compatibility header written from scratch, to be
-- * installed when the C library is musl.
-- *
-- * Not all macros from the glibc's cdefs.h are available, only the
-- * most commonly used ones.
-- *
-- * Please refer to the glibc documentation and source code for
-- * explanations about those macros.
-- */
+-Somehow this got removed with f1d7505e40654a185843bdc8f1cf1fd00ab55c04.
 -
--#ifndef BUILDROOT_SYS_CDEFS_H
--#define BUILDROOT_SYS_CDEFS_H
+-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+----
+- libpthread/linuxthreads/sysdeps/pthread/pthread.h | 1 +
+- 1 file changed, 1 insertion(+)
 -
--/* Function prototypes. */
--#undef __P
--#define __P(arg) arg
+-diff --git a/libpthread/linuxthreads/sysdeps/pthread/pthread.h b/libpthread/linuxthreads/sysdeps/pthread/pthread.h
+-index cf043b5..cc13a52 100644
+---- a/libpthread/linuxthreads/sysdeps/pthread/pthread.h
+-+++ b/libpthread/linuxthreads/sysdeps/pthread/pthread.h
+-@@ -20,6 +20,7 @@
+- #include <sched.h>
+- #include <time.h>
+- 
+-+#include <signal.h>
+- #include <bits/pthreadtypes.h>
+- #include <bits/initspin.h>
+- 
+--- 
+-2.1.4
 -
--/* C declarations in C++ mode. */
--#ifdef __cplusplus
--# define __BEGIN_DECLS extern "C" {
--# define __END_DECLS   }
--#else
--# define __BEGIN_DECLS
--# define __END_DECLS
--#endif
+diff --git a/package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch b/package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
+deleted file mode 100644
+index 31e763a..0000000
+--- a/package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
++++ /dev/null
+@@ -1,66 +0,0 @@
+-From 2ca4e8dcbd35e5c6da41a195550d741ccb2f7978 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-Date: Sat, 26 Nov 2016 19:47:41 +0100
+-Subject: [PATCH] do not define madvise related macros for noMMU targets
 -
--/* Don't throw exceptions in C functions. */
--#ifndef __cplusplus
--# define __THROW  __attribute__ ((__nothrow__))
--# define __NTH(f) __attribute__ ((__nothrow__)) f
--#else
--# define __THROW
--# define __NTH(f) f
--#endif
+-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+----
+- libc/sysdeps/linux/common/bits/mman-common.h | 41 +++++++++++++++-------------
+- 1 file changed, 22 insertions(+), 19 deletions(-)
 -
--#endif /* ifndef BUILDROOT_SYS_CDEFS_H */
-diff --git a/package/musl-compat-headers/cdefs.h.in b/package/musl-compat-headers/cdefs.h.in
-new file mode 100644
-index 0000000..91b6a1c
---- /dev/null
-+++ b/package/musl-compat-headers/cdefs.h.in
-@@ -0,0 +1,94 @@
-+/* Copyright (C) 2016 Yann E. MORIN <yann.morin.1998@free.fr>
-+ *
-+ * This file is in the Public Domain.
-+ *
-+ * For jurisdictions in which the Public Domain does not exist
-+ * or it is not otherwise applicable, this file is licensed CC0
-+ * (Creative Commons Zero).
-+ */
-+
-+/* This file contains definitions for non-standard macros defined by
-+ * glibc, but quite commonly used in packages.
-+ *
-+ * Because they are non-standard, musl does not define those macros.
-+ * It does not provide cdefs.h either.
-+ *
-+ * This file is a compatibility header written from scratch, to be
-+ * installed when the C library is musl.
-+ *
-+ * Not all macros from the glibc's cdefs.h are available, only the
-+ * most commonly used ones.
-+ *
-+ * Please refer to the glibc documentation and source code for
-+ * explanations about those macros.
-+ */
-+
-+#ifndef BUILDROOT_SYS_CDEFS_H
-+#define BUILDROOT_SYS_CDEFS_H
-+
-+/* _Pragma() is a standard POSIX macro that allows one to embed pragmas
-+ * in macro definitions (#pragma can't be used in a macro definition,
-+ * because it contains a #).
-+ *
-+ * However, the gcc manual states (quoting):
-+ *
-+ *   The standard is unclear on where a _Pragma operator can appear. The
-+ *   preprocessor does not accept it within a preprocessing conditional
-+ *   directive like ?#if?. To be safe, you are probably best keeping it
-+ *   out of directives other than ?#define?, and putting it on a line of
-+ *   its own.
-+ *
-+ * https://gcc.gnu.org/onlinedocs/cpp/Pragmas.html
-+ *
-+ * So we abide by this suggestion.
-+ *
-+ * _Pragma expects a single quoted string, so we use an intermediate
-+ * macro to simplify calls and stringification.
-+ */
-+
-+#if @pragma_cond@
-+#@pragma@ Use of deprecated <sys/cdefs.h> header.
-+#define BR_PRAGMA_(x) _Pragma(#x)
-+#define BR_PRAGMA(x) BR_PRAGMA_(GCC @pragma@ x)
-+#else
-+#define BR_PRAGMA(x)
-+#endif
-+
-+/* Function prototypes. */
-+#undef __P
-+#define __P(arg) \
-+            BR_PRAGMA("Use of deprecated macro __P().") \
-+            arg
-+
-+/* C declarations in C++ mode. */
-+#ifdef __cplusplus
-+# define __BEGIN_DECLS \
-+            BR_PRAGMA("Use of deprecated macro __BEGIN_DECLS.") \
-+            extern "C" {
-+# define __END_DECLS \
-+            BR_PRAGMA("Use of deprecated macro __END_DECLS.") \
-+            }
-+#else
-+# define __BEGIN_DECLS \
-+            BR_PRAGMA("Use of deprecated macro __BEGIN_DECLS.")
-+# define __END_DECLS \
-+            BR_PRAGMA("Use of deprecated macro __END_DECLS.")
-+#endif
-+
-+/* Don't throw exceptions in C functions. */
-+#ifndef __cplusplus
-+# define __THROW \
-+            BR_PRAGMA("Use of deprecated macro __THROW.") \
-+            __attribute__ ((__nothrow__))
-+# define __NTH(f) \
-+            BR_PRAGMA("Use of deprecated macro __NTH().") \
-+            __attribute__ ((__nothrow__)) f
-+#else
-+# define __THROW \
-+            BR_PRAGMA("Use of deprecated macro __THROW.")
-+# define __NTH(f) \
-+            BR_PRAGMA("Use of deprecated macro __NTH().") \
-+            f
-+#endif
-+
-+#endif /* ifndef BUILDROOT_SYS_CDEFS_H */
-diff --git a/package/musl-compat-headers/musl-compat-headers.mk b/package/musl-compat-headers/musl-compat-headers.mk
-index 25e032c..7879123 100644
---- a/package/musl-compat-headers/musl-compat-headers.mk
-+++ b/package/musl-compat-headers/musl-compat-headers.mk
-@@ -21,7 +21,13 @@ MUSL_COMPAT_HEADERS_INSTALL_STAGING = YES
- # Copying both headers so legal-info finds them (they are _LICENSE_FILES)
- define MUSL_COMPAT_HEADERS_EXTRACT_CMDS
- 	$(INSTALL) -m 0644 -D $(DL_DIR)/$(notdir $(MUSL_COMPAT_HEADERS_QUEUE_H)) $(@D)/queue.h
--	$(INSTALL) -m 0644 -D $(MUSL_COMPAT_HEADERS_PKGDIR)/cdefs.h $(@D)/cdefs.h
-+	$(INSTALL) -m 0644 -D $(MUSL_COMPAT_HEADERS_PKGDIR)/cdefs.h.in $(@D)/cdefs.h.in
-+endef
-+
-+define MUSL_COMPAT_HEADERS_BUILD_CMDS
-+	sed -r -e 's/@pragma_cond@/$(BR2_LEGACY_CDEFS_H_PRAGMA_COND)/' \
-+	       -e 's/@pragma@/$(call qstrip,$(BR2_LEGACY_CDEFS_H_PRAGMA))/' \
-+	       $(@D)/cdefs.h.in >$(@D)/cdefs.h
+-diff --git a/libc/sysdeps/linux/common/bits/mman-common.h b/libc/sysdeps/linux/common/bits/mman-common.h
+-index 6cde5da..5b20da4 100644
+---- a/libc/sysdeps/linux/common/bits/mman-common.h
+-+++ b/libc/sysdeps/linux/common/bits/mman-common.h
+-@@ -83,26 +83,29 @@
+- # define MREMAP_FIXED	2
+- #endif
+- 
+-+/* only define for MMU targets, no-MMU does not support madvise.  */
+-+#ifdef __ARCH_USE_MMU__
+- /* Advice to `madvise'.  */
+--#ifdef __USE_BSD
+--# define MADV_NORMAL	  0	/* No further special treatment.  */
+--# define MADV_RANDOM	  1	/* Expect random page references.  */
+--# define MADV_SEQUENTIAL  2	/* Expect sequential page references.  */
+--# define MADV_WILLNEED	  3	/* Will need these pages.  */
+--# define MADV_DONTNEED	  4	/* Don't need these pages.  */
+--# define MADV_REMOVE	  9	/* Remove these pages and resources.  */
+--# define MADV_DONTFORK	  10	/* Do not inherit across fork.  */
+--# define MADV_DOFORK	  11	/* Do inherit across fork.  */
+--# define MADV_MERGEABLE	  12	/* KSM may merge identical pages.  */
+--# define MADV_UNMERGEABLE 13	/* KSM may not merge identical pages.  */
+--# define MADV_HWPOISON	  100	/* Poison a page for testing.  */
+--#endif
+-+# ifdef __USE_BSD
+-+#  define MADV_NORMAL	  0	/* No further special treatment.  */
+-+#  define MADV_RANDOM	  1	/* Expect random page references.  */
+-+#  define MADV_SEQUENTIAL 2	/* Expect sequential page references.  */
+-+#  define MADV_WILLNEED	  3	/* Will need these pages.  */
+-+#  define MADV_DONTNEED	  4	/* Don't need these pages.  */
+-+#  define MADV_REMOVE	  9	/* Remove these pages and resources.  */
+-+#  define MADV_DONTFORK	  10	/* Do not inherit across fork.  */
+-+#  define MADV_DOFORK	  11	/* Do inherit across fork.  */
+-+#  define MADV_MERGEABLE  12	/* KSM may merge identical pages.  */
+-+#  define MADV_UNMERGEABLE 13	/* KSM may not merge identical pages.  */
+-+#  define MADV_HWPOISON	  100	/* Poison a page for testing.  */
+-+# endif
+- 
+- /* The POSIX people had to invent similar names for the same things.  */
+--#ifdef __USE_XOPEN2K
+--# define POSIX_MADV_NORMAL	0 /* No further special treatment.  */
+--# define POSIX_MADV_RANDOM	1 /* Expect random page references.  */
+--# define POSIX_MADV_SEQUENTIAL	2 /* Expect sequential page references.  */
+--# define POSIX_MADV_WILLNEED	3 /* Will need these pages.  */
+--# define POSIX_MADV_DONTNEED	4 /* Don't need these pages.  */
+-+# ifdef __USE_XOPEN2K
+-+#  define POSIX_MADV_NORMAL	0 /* No further special treatment.  */
+-+#  define POSIX_MADV_RANDOM	1 /* Expect random page references.  */
+-+#  define POSIX_MADV_SEQUENTIAL	2 /* Expect sequential page references.  */
+-+#  define POSIX_MADV_WILLNEED	3 /* Will need these pages.  */
+-+#  define POSIX_MADV_DONTNEED	4 /* Don't need these pages.  */
+-+# endif
+- #endif
+--- 
+-2.1.4
+-
+diff --git a/package/uclibc/0003-posix_madvise-not-available-for-noMMU.patch b/package/uclibc/0003-posix_madvise-not-available-for-noMMU.patch
+deleted file mode 100644
+index 008aac7..0000000
+--- a/package/uclibc/0003-posix_madvise-not-available-for-noMMU.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 9945c6d21797553e78cbef8034f6dd16b3824df5 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Mon, 28 Nov 2016 07:31:00 +0100
+-Subject: [PATCH] posix_madvise not available for noMMU
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- libc/sysdeps/linux/common/posix_madvise.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/libc/sysdeps/linux/common/posix_madvise.c b/libc/sysdeps/linux/common/posix_madvise.c
+-index 2f95bcb..541dabe 100644
+---- a/libc/sysdeps/linux/common/posix_madvise.c
+-+++ b/libc/sysdeps/linux/common/posix_madvise.c
+-@@ -4,6 +4,7 @@
+- #include <sys/mman.h>
+- #include <sys/syscall.h>
+- 
+-+#ifdef __ARCH_USE_MMU__
+- #if defined __NR_madvise && defined __USE_XOPEN2K && defined __UCLIBC_HAS_ADVANCED_REALTIME__
+- int posix_madvise(void *addr, size_t len, int advice)
+- {
+-@@ -23,3 +24,4 @@ int posix_madvise(void *addr, size_t len, int advice)
+- 	return INTERNAL_SYSCALL_ERRNO (result, err);
+- }
+- #endif
+-+#endif
+--- 
+-2.1.4
+-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 227c783..9d2a5ec 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,2 +1,2 @@
+ # From http://www.uclibc-ng.org/
+-sha256  b3f94d67e9afcefb158a37011584e0d41ef3bd55ad72255a26abb25ad49b77a1        uClibc-ng-1.0.19.tar.xz
++sha256  1c817672a65cf9132c98f84e1b8445650de1c18eca258f49c0050b420a25e946        uClibc-ng-1.0.20.tar.xz
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 3f383a8..aa67a1e 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.19
++UCLIBC_VERSION = 1.0.20
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPLv2.1+
+@@ -248,14 +248,6 @@ endef
+ endif
+ 
+ #
+-# Largefile
+-#
+-
+-define UCLIBC_LARGEFILE_CONFIG
+-	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_LFS,$(@D)/.config)
+-endef
+-
+-#
+ # MMU
+ #
+ 
+@@ -445,16 +437,6 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_SHARED_LIBS_CONFIG)
  endef
  
- define MUSL_COMPAT_HEADERS_INSTALL_STAGING_CMDS
-diff --git a/toolchain/cdefs.h.in b/toolchain/cdefs.h.in
-new file mode 100644
-index 0000000..23bd3e8
---- /dev/null
-+++ b/toolchain/cdefs.h.in
-@@ -0,0 +1,8 @@
-+#ifndef BUILDROOT_SYS_CDEFS_H_WRAPPER
-+#define BUILDROOT_SYS_CDEFS_H_WRAPPER
-+
-+#@pragma@ Use of deprecated <sys/cdefs.h> header.
-+
-+#include <sys/cdefs.h.wrapped>
-+
-+#endif /* BUILDROOT_SYS_CDEFS_H_WRAPPER */
-diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-index 59fc905..13109a9 100644
---- a/toolchain/toolchain.mk
-+++ b/toolchain/toolchain.mk
-@@ -54,3 +54,33 @@ define COPY_GCONV_LIBS
+-ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
+-define UCLIBC_BUILD_TEST_SUITE
+-	$(MAKE) -C $(@D) \
+-		$(UCLIBC_MAKE_FLAGS) \
+-		TEST_INSTALLED_UCLIBC=1 \
+-		UCLIBC_ONLY=1 \
+-		test_compile test_gen
+-endef
+-endif
+-
+ define UCLIBC_BUILD_CMDS
+ 	$(MAKE) -C $(@D) $(UCLIBC_MAKE_FLAGS) headers
+ 	$(MAKE) -C $(@D) $(UCLIBC_MAKE_FLAGS)
+@@ -463,14 +445,6 @@ define UCLIBC_BUILD_CMDS
+ 		HOSTCC="$(HOSTCC)" hostutils
  endef
- TOOLCHAIN_TARGET_FINALIZE_HOOKS += COPY_GCONV_LIBS
- endif
-+
-+# For non-musl toolchain, install our wrapper to sys/cdefs.h and
-+# set the proper checking level. Also `fix' toolchain headers to
-+# directly include the real sys/cdefs.h instead of our wrapper.
-+#
-+# This is a target post install hook, because the virtual package
-+# "toolchain" is not `installed' to staging.
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),)
-+ifneq ($(BR2_LEGACY_CDEFS_H_NO_CHECK),y)
-+define TOOLCHAIN_WRAP_CDEFS_H
-+	cdefs_h=$(STAGING_DIR)/usr/include/sys/cdefs.h; \
-+	if [ ! -f $${cdefs_h} ]; then \
-+		echo "*** Error: toolchain does not have <sys/cdefs.h>" >&2; \
-+		exit 1; \
-+	fi; \
-+	if [ ! -f $${cdefs_h}.wrapped ]; then \
-+		mv $${cdefs_h} $${cdefs_h}.wrapped || exit 1; \
-+		$(INSTALL) -m 0644 -D toolchain/cdefs.h.in \
-+			$${cdefs_h} || exit 1; \
-+		$(SED) 's/@pragma_cond@/$(BR2_LEGACY_CDEFS_H_PRAGMA_COND)/' \
-+			-e 's/@pragma@/$(call qstrip,$(BR2_LEGACY_CDEFS_H_PRAGMA))/' \
-+			$${cdefs_h} || exit 1; \
-+		find $(STAGING_DIR)/usr/include/ -type f -name '*.h' -exec \
-+			sed -r -i -e 's:^(#[[:space:]]*include[[:space:]]+<sys/cdefs\.h)(>)$$:\1.wrapped\2 /* Redirected by Buildroot */:' \
-+				{} + || exit 1; \
-+	fi
-+endef
-+TOOLCHAIN_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_WRAP_CDEFS_H
-+endif # CDEFS_H_NONE
-+endif # USES_MUSL
+ 
+-ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
+-define UCLIBC_INSTALL_TEST_SUITE
+-	mkdir -p $(TARGET_DIR)/root/uClibc
+-	cp -rdpf $(@D)/test $(TARGET_DIR)/root/uClibc
+-	find $(TARGET_DIR)/root/uClibc -name \*.o -exec rm {} \;
+-endef
+-endif
+-
+ ifeq ($(BR2_UCLIBC_INSTALL_UTILS),y)
+ define UCLIBC_INSTALL_UTILS_TARGET
+ 	$(MAKE1) -C $(@D) \
+@@ -489,8 +463,6 @@ define UCLIBC_INSTALL_TARGET_CMDS
+ 		RUNTIME_PREFIX=/ \
+ 		install_runtime
+ 	$(UCLIBC_INSTALL_UTILS_TARGET)
+-	$(UCLIBC_BUILD_TEST_SUITE)
+-	$(UCLIBC_INSTALL_TEST_SUITE)
+ 	$(UCLIBC_INSTALL_LDSO_SYMLINKS)
+ endef
+ 
 -- 
-2.7.4
+2.1.4
