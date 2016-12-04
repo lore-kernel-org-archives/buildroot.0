@@ -1,44 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Dec 2016 10:43:06 +0100
-Subject: [Buildroot] [PATCH 3/3] support/dependencies: use the new kconfig
-	option to check UTF8 locale
-In-Reply-To: <cover.1480844552.git.yann.morin.1998@free.fr>
-References: <cover.1480844552.git.yann.morin.1998@free.fr>
-Message-ID: <8b7030696b25d8b072124ac60530bd98eca8f3f6.1480844552.git.yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  4 Dec 2016 11:37:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: add optional support for libcap
+Message-ID: <20161204103722.29834-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we require a host with an UTF-8 locale as soone as we build a
-Buildroot toolchain with support for locales. This means that we do
-erquire such a locale when building a toolchain with either uClibc,
-glibc or musl.
+- without libcap
+$ host/usr/bin/x86_64-linux-readelf -a target/usr/bin/tor | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libevent-2.0.so.5]
+ 0x0000000000000001 (NEEDED)             Shared library: [libssl.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
-However, glibc and musl do not require such a locale to be present.
+- with libcap
+$ host/usr/bin/x86_64-linux-readelf -a target/usr/bin/tor | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libevent-2.0.so.5]
+ 0x0000000000000001 (NEEDED)             Shared library: [libssl.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
-Use the new option to check if an UTF8 locale is needed on the host,
-rather than deriving that from toolchain settings.
+The tor configure script has no option to en-/disable libcap support.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- support/dependencies/dependencies.sh | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/tor/tor.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index e632a14..bfd6596 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -178,8 +178,7 @@ if test "${missing_progs}" = "yes" ; then
- 	exit 1
- fi
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 06d05c8..4f33522 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -26,6 +26,10 @@ TOR_CONF_OPTS += \
+ 	--enable-static-zlib
+ endif
  
--if grep ^BR2_TOOLCHAIN_BUILDROOT=y $BR2_CONFIG > /dev/null && \
--	grep ^BR2_ENABLE_LOCALE=y       $BR2_CONFIG > /dev/null ; then
-+if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
- 	if ! which locale > /dev/null ; then
- 		echo
- 		echo "You need locale support on your build machine to build a toolchain supporting locales"
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++TOR_DEPENDENCIES += libcap
++endif
++
+ ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_i386)$(BR2_x86_64)$(BR2_PACKAGE_LIBSECCOMP),yy)
+ TOR_CONF_OPTS += --enable-seccomp
+ TOR_DEPENDENCIES += libseccomp
 -- 
-2.7.4
+2.10.2
