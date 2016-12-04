@@ -1,64 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  4 Dec 2016 22:37:24 +0100
-Subject: [Buildroot] [PATCH] Makefile: move SED definition into the main
-	Makefile
-Message-ID: <1480887444-19245-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Dec 2016 22:41:00 +0100
+Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
+ additional variables for each build step
+In-Reply-To: <20161204212433.GC3433@free.fr>
+References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
+ <1480885126-517-2-git-send-email-romain.naour@gmail.com>
+ <20161204212433.GC3433@free.fr>
+Message-ID: <20161204224100.26768191@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit f71a621d91ec27f175fc84012962f88b1107305f, we are using the
-SED variable in the main Makefile. However, this variable is only
-defined in package/Makefile.in, which gets included only when a
-configuration is defined.
+Hello,
 
-This means that, if you do:
+On Sun, 4 Dec 2016 22:24:34 +0100, Yann E. MORIN wrote:
+> Romain, All,
 
- $ make menuconfig savedefconfig
+> > -     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) build -j $$(PARALLEL_JOBS)
+> > +     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+> > +             build -j $$(PARALLEL_JOBS) $$($(2)_MAKE_OPTS)  
+> 
+> I'm not against having variables named the same across packages, but
+> here I think $(2)_BUILD_OPTS would be more appropriate.
 
-without a configuration defined, it fails with:
+ACK.
 
-/bin/bash: /BR2_DEFCONFIG=/d: No such file or directory
-Makefile:898: recipe for target 'savedefconfig' failed
-make[1]: *** [savedefconfig] Error 127
+> > @@ -84,7 +85,8 @@ ifndef $(2)_INSTALL_STAGING_CMDS
+> >  define $(2)_INSTALL_STAGING_CMDS
+> >       cd $$(@D) && \
+> >       $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+> > -             install --destdir=$$(STAGING_DIR)
+> > +             install --destdir=$$(STAGING_DIR) \
+> > +             $$($(2)_INSTALL_STAGING_OPTS)  
+> 
+> Usually, those options entirely override the default ones. For example,
+> if you provide FOO_INSTALL_STAGING_OPTS for an autotools package, then
+> the default (just 'install') is lost:
+> 
+>     package/pkg-autotools.mk:
+>     159 $(2)_INSTALL_STAGING_OPTS?  ?= DESTDIR=$$(STAGING_DIR) install
+> 
+> OTOH, I find this to be counter-intuitive for a user, and I would prefer
+> the options to add rather than replace.
 
-This issue affects users of the "buildroot-submodule" project, which
-does menuconfig+savedefconfig automatically. They worked around this
-issue in commit
-https://github.com/Openwide-Ingenierie/buildroot-submodule/commit/d12676b608a58529c6b551aa176464166a200428,
-but really "make menuconfig savedefconfig" should work out of the box.
+Agreed. I also find it super annoying that we have to replicate
+DESTDIR=$$(STAGING_DIR) install. But in some cases, we *do* need to
+override it.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile            | 1 +
- package/Makefile.in | 1 -
- 2 files changed, 1 insertion(+), 1 deletion(-)
+Another thing that I dislike is that we have no way to pass an option
+to all of the build and install steps.
 
-diff --git a/Makefile b/Makefile
-index 00bcd0f..b80b9e1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -322,6 +322,7 @@ HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
- HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
- HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
-+SED := $(shell which sed || type -p sed) -i -e
- 
- export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 4b3368f..688d5b1 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -213,7 +213,6 @@ endif
- INSTALL := $(shell which install || type -p install)
- FLEX := $(shell which flex || type -p flex)
- BISON := $(shell which bison || type -p bison)
--SED := $(shell which sed || type -p sed) -i -e
- UNZIP := $(shell which unzip || type -p unzip) -q
- 
- APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(QUIET),-s)
+> But consistency trumps it all, so we should do the same for waf
+> packages:
+> 
+>     $(2)_INSTALL_STAGING_OPTS ?= install --destdir=$$(STAGING_DIR)
+
+I agree. Even if the current situation is not 100% nice, I think a
+rework of this current situation is a much broader effort. So let's
+make the waf-package infrastructure be as similar as possible to the
+other ones.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
