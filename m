@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 23:59:28 +0100
-Subject: [Buildroot] [PATCH 1/2] package/openpowerlink: bump to v2.5.0
-In-Reply-To: <1478207123-27787-1-git-send-email-romain.naour@gmail.com>
+Date: Sun, 4 Dec 2016 23:59:30 +0100
+Subject: [Buildroot] [PATCH 2/2] package/openpowerlink: fix build with
+ Linux kernel 4.7+
+In-Reply-To: <1478207123-27787-2-git-send-email-romain.naour@gmail.com>
 References: <1478207123-27787-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161204235928.5ba9426f@free-electrons.com>
+ <1478207123-27787-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <20161204235930.6cb8da3c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +14,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  3 Nov 2016 22:05:22 +0100, Romain Naour wrote:
-> From: Romain Naour <romain.naour@smile.fr>
+On Thu,  3 Nov 2016 22:05:23 +0100, Romain Naour wrote:
+> dev->trans_start was replaced by netif_trans_update helper in kernel
+> 4.7 by commit 860e9538a9482bb84589f7d0718a7e6d0a944d58.
 > 
->  - Rebase existing patches
->  - Use a "menu" instead of "choice" to select Ethernet Powerlink
->    Drivers since we can now build several kernel modules at once.
->  - Select the Intel 82573 driver by default.
->  - Disable library with simulation interface.
->  - Disable zynq/FPGA (PCIe) interface otherwise the kernelpcp library
->    is always build.
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  ...Veth-Fix-compilation-on-Linux-kernels-4.7.patch | 35 ++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>  create mode 100644 package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
 
-I've applied, after doing one small change, see below.
-
-
-> -choice
-> -	prompt "select Ethernet Powerlink Driver"
-> +menu "select Ethernet Powerlink Driver"
-
-Just "Ethernet drivers" was enough.
-
- - "select" is useless, options are obviously meant to be selected
-
- - powerlink is already the name of the package (or close to)
-
- - driver should be drivers, since we can now select more than one
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
