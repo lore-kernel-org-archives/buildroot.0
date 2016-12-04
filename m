@@ -1,33 +1,133 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 16:10:43 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-intel:
-	bump version to fix crash with xserver_xorg-server 1.19.x
-Message-ID: <20161204151119.BE09481D2A@busybox.osuosl.org>
+Date: Sun, 4 Dec 2016 16:11:09 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
+	version to 1.19.0
+Message-ID: <20161204151119.CA7DC81D2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad916feecbac191b22e9766875691d88e9d9100e
+commit: https://git.buildroot.net/buildroot/commit/?id=0f31a0eeb224dd0dd77de5bbd15145d406f93be4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This release bumped video ABI to version 23
+https://cgit.freedesktop.org/xorg/xserver/commit/hw/xfree86/common/xf86Module.h?id=8d3f0e964e399dcfa8eb5e85d405217fdc5dbcd4
+https://cgit.freedesktop.org/xorg/xserver/commit/hw/xfree86/common/xf86Module.h?id=c07b796b47ae7f5a616d5e8e02ab0f84dc438a93
+https://cgit.freedesktop.org/xorg/xserver/commit/hw/xfree86/common/xf86Module.h?id=4af00242ef1e39499b932d12423fdf449296090a
+
+and depends on xlib_libXfont2
+https://cgit.freedesktop.org/xorg/xserver/commit/?id=05a793f5b3c40747d5a92a076def7f4fb673c7e7
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../0001-modesettings-needs-dri2.patch                   |  0
+ package/x11r7/xserver_xorg-server/Config.in              | 16 +++++++++-------
+ .../x11r7/xserver_xorg-server/xserver_xorg-server.hash   |  4 ++--
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |  9 ++++++++-
+ 4 files changed, 19 insertions(+), 10 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index bfe0527..29228bb 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xserver_xorg-server/1.18.4/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.0/0001-modesettings-needs-dri2.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.18.4/0001-modesettings-needs-dri2.patch
+rename to package/x11r7/xserver_xorg-server/1.19.0/0001-modesettings-needs-dri2.patch
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index df3801c..1d4a1fb 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -17,7 +17,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XLIB_LIBXDMCP
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
+-	select BR2_PACKAGE_XLIB_LIBXFONT
+ 	select BR2_PACKAGE_XLIB_LIBXFT
+ 	select BR2_PACKAGE_XLIB_LIBXI
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+@@ -61,37 +60,40 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+ 	bool
  
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 6988b873b041130d88dd0aae70c10f86550ee2b3
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 9ac7a3370ab265d4cbdbbf3dc588af88c37048e1
- XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
++config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
+ 	bool
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI
+ 	int
+ 	default 14 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
+ 	default 19 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+-	default 20 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
++	default 23 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
+ 
+ choice
+ 	bool "X Window System server version"
+ 
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
+-	bool "1.18.4"
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
++config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
++	bool "1.19.0"
++	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
++	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	bool "1.17.4"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
++	select BR2_PACKAGE_XLIB_LIBXFONT
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 	bool "1.14.7"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
++	select BR2_PACKAGE_XLIB_LIBXFONT
+ 
+ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.18.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
++	default "1.19.0" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index ab7ba7e..54ae0ec 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,5 +3,5 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2016-July/002699.html
+-sha256 278459b2c31d61a15655d95a72fb79930c480a6bb8cf9226e48a07df8b1d31c8        xorg-server-1.18.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-November/002737.html
++sha256 149a708b50befc2d5a40b98d45ddd2ebe0beec018e6d0c663c43bad6210e4da3        xorg-server-1.19.0.tar.bz2
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 51c3efc..48cd2a7 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -15,7 +15,6 @@ XSERVER_XORG_SERVER_AUTORECONF = YES
+ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xfont_font-util			\
+ 	xutil_util-macros 		\
+-	xlib_libXfont 			\
+ 	xlib_libX11 			\
+ 	xlib_libXau 			\
+ 	xlib_libXdmcp 			\
+@@ -194,6 +193,14 @@ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-record
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFONT2),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXfont2
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFONT),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXfont
++endif
++
+ ifneq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-xvmc
+ endif
