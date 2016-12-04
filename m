@@ -1,33 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 21:56:05 +0100
-Subject: [Buildroot] [PATCH] berkeleydb: fix static linking issues
-In-Reply-To: <20161204173924.GA1647@waldemar-brodkorb.de>
-References: <20161204173924.GA1647@waldemar-brodkorb.de>
-Message-ID: <20161204215605.680c9070@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  4 Dec 2016 21:58:45 +0100
+Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
+	additional variables for each build step
+In-Reply-To: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
+References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <1480885126-517-2-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Some waf packages may want to pass additional variables to waf script
+in each build step. Add the possibility to do so by defining the
+following variables:
+  <pkg>_MAKE_OPTS for the build step
+  <pkg>_INSTALL_STAGING_OPTS for the install to staging directory
+  <pkg>_INSTALL_TARGET_OPTS for the install to target directory
 
-On Sun, 4 Dec 2016 18:39:24 +0100, Waldemar Brodkorb wrote:
-> Libtool by default drops -static, so force libtool with -all-static
-> to do static linking.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/pkg-waf.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-This needs a little bit more details, because libtool is used by a
-large fraction of our packages, we pass -static only, and it just works.
-
-Why do we have a different situation here? I thought this undefined
-reference to `dl_iterate_phdr' issue was more a toolchain problem.
-It's affecting a number of different packages, and is apparently a new
-problem, so a fix at the package level looks a bit odd.
-
-Thanks,
-
-Thomas
+diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+index 908ac03..97e2e6a 100644
+--- a/package/pkg-waf.mk
++++ b/package/pkg-waf.mk
+@@ -72,7 +72,8 @@ endif
+ ifndef $(2)_BUILD_CMDS
+ define $(2)_BUILD_CMDS
+ 	cd $$(@D) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) build -j $$(PARALLEL_JOBS)
++	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
++		build -j $$(PARALLEL_JOBS) $$($(2)_MAKE_OPTS)
+ endef
+ endif
+ 
+@@ -84,7 +85,8 @@ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	cd $$(@D) && \
+ 	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+-		install --destdir=$$(STAGING_DIR)
++		install --destdir=$$(STAGING_DIR) \
++		$$($(2)_INSTALL_STAGING_OPTS)
+ endef
+ endif
+ 
+@@ -96,7 +98,8 @@ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	cd $$(@D) && \
+ 	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+-		install --destdir=$$(TARGET_DIR)
++		install --destdir=$$(TARGET_DIR) \
++		$$($(2)_INSTALL_TARGET_OPTS)
+ endef
+ endif
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.5.5
