@@ -1,45 +1,41 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 4 Dec 2016 22:44:16 +0100
-Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
- additional variables for each build step
-In-Reply-To: <20161204222243.7431c24c@free-electrons.com>
-References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
- <1480885126-517-2-git-send-email-romain.naour@gmail.com>
- <20161204220409.45688c5a@free-electrons.com>
- <986ec82d-e29b-0a1f-c894-f82415cc6d53@gmail.com>
- <20161204222243.7431c24c@free-electrons.com>
-Message-ID: <6ba5ccc4-1fdf-41fe-6fcb-0b8d0ec0978c@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Dec 2016 22:49:15 +0100
+Subject: [Buildroot] [git commit] erlang: odbc support requires thread
+	support
+Message-ID: <20161204214928.09EDE817CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 04/12/2016 ? 22:22, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Sun, 4 Dec 2016 22:20:25 +0100, Romain Naour wrote:
-> 
->>> Isn't it a bug of the upstream package that we need to pass --no-tests
->>> at every step?  
->>
->> humm, maybe...
->> At first, I used --no-tests with AUBIO_CONF_OPTS but it's not enough.
->> All other options are saved in aubio-0.4.3/build/c4che/_cache.py
->> but not this one.
-> 
-> It would be good to understand why.
+commit: https://git.buildroot.net/buildroot/commit/?id=1120fdc379440b23063b0d083b1d3592e6a086a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---notests doesn't seems to be an waf option but an option used in
-waflib/Tools/waf_unit_test.py. That's why it's not cached.
+Fixes:
 
-I'll report this issue upstream.
+  http://autobuild.buildroot.net/results/cba60679fa916128796a7b4131ed50403bc74798/
 
-Best regards,
-Romain
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang/erlang.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> 
-> Thanks,
-> 
-> Thomas
-> 
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index c9d7b22..3200c38 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -55,8 +55,12 @@ else
+ ERLANG_CONF_OPTS += --without-ssl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_UNIXODBC),y)
++# ODBC support in erlang requires threads
++ifeq ($(BR2_PACKAGE_UNIXODBC)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ ERLANG_DEPENDENCIES += unixodbc
++ERLANG_CONF_OPTS += --with-odbc
++else
++ERLANG_CONF_OPTS += --without-odbc
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
