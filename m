@@ -1,40 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 21:49:49 +0100
-Subject: [Buildroot] [PATCH 1/1] libxmlrpc: fix build without C++
- compiler
-In-Reply-To: <1480866940-967-1-git-send-email-alvaro.gamez@hazent.com>
-References: <20161204163745.459990e3@free-electrons.com>
- <1480866940-967-1-git-send-email-alvaro.gamez@hazent.com>
-Message-ID: <20161204214949.7773eb07@free-electrons.com>
+Date: Sun, 4 Dec 2016 21:50:00 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add entry for aubio
+Message-ID: <20161204205008.EEB5581963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=67792251a841a3b0ff23422cc4f2e0cf7e61da43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  4 Dec 2016 16:55:40 +0100, Alvaro G. M wrote:
-> From: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-> 
-> Conditionally deactivate compilation of optional C++ module.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/cbf/cbff6c816606a515467d467677763533a41fc276/
-> Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-> ---
->  package/libxmlrpc/0002-fix-non-cplusplus-build.patch | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-BTW, you shouldn't send such new patches as a reply to the older ones.
-Just send normally, with no "In-Reply-To" reference.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f84eb5d..e9cfec0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1251,6 +1251,7 @@ F:	package/irssi/
+ F:	package/vnstat/
+ 
+ N:	Romain Naour <romain.naour@gmail.com>
++F:	package/aubio/
+ F:	package/bullet/
+ F:	package/efl/
+ F:	package/enlightenment/
