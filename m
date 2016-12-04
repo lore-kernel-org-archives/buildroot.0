@@ -1,141 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 10:10:28 +0100
-Subject: [Buildroot] [git commit] lttng-babeltrace: remove patch applied
-	upstream
-Message-ID: <20161204091134.219727FA46@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  4 Dec 2016 10:21:53 +0100
+Subject: [Buildroot] [PATCH 0/2] toolchain/wrapper: some cleanups
+Message-ID: <cover.1480843290.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7db6d46b165035a725911711e32f041fd1e6155c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-In commit 5b0dac7ef5d8106ec77d128c53f480fd8721c05c, when bumping to
-lttng-babeltrace, one patch was kept while it had been applied in the
-upstream babeltrace project, causing a build failure.
+This small series brings a little bit of cleanups in the toolchain
+wrapper, with no functional change.
 
-The patch 0003-fix-uuid-support-detection-on-static-build.patch has been
-applied upstream as 2741f55be80ae8af169ae795ea28d2a39c18fa60 in the
-master branch, and as d94e7873e9080e820e7742e468736b1317a88de1 in the
-maintenance branch that was used to tag 1.5.0.
 
-Fixes:
+Regards,
+Yann E. MORIN.
 
-  http://autobuild.buildroot.net/results/585f960eb81b0e15858aadc4aca516af23012b61/
-  (and about a hundred of similar build failures)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...ix-uuid-support-detection-on-static-build.patch | 86 ----------------------
- package/lttng-babeltrace/lttng-babeltrace.mk       |  4 +-
- 2 files changed, 1 insertion(+), 89 deletions(-)
+The following changes since commit 0904b80b47245cf85d414f78c381b9cf61c6ef4b
 
-diff --git a/package/lttng-babeltrace/0003-fix-uuid-support-detection-on-static-build.patch b/package/lttng-babeltrace/0003-fix-uuid-support-detection-on-static-build.patch
-deleted file mode 100644
-index 875aa88..0000000
---- a/package/lttng-babeltrace/0003-fix-uuid-support-detection-on-static-build.patch
-+++ /dev/null
-@@ -1,86 +0,0 @@
--From 2741f55be80ae8af169ae795ea28d2a39c18fa60 Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Wed, 1 Jun 2016 21:56:32 +0200
--Subject: [PATCH] configure: fix uuid support detection on static build
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--This change adds uuid detection using pkg-config helper before falling
--back on the standard AC_CHECK_LIB detection for platforms missing
--pkg-config.
--
--AC_CHECK_LIB function achieves its test by trying to link against the
--requested library, without taking care of its dependency
--requirements/flags that may differ between different targets.
--Therefore, in case of static build, it can fail on the uuid detection
--like [1], because the uuid's dependency flags (regarding gettext) are
--missing.
--
--Instead, using pkg-config to do the check will take care of getting and
--setting all required flags.
--
--This issue [1] has been triggered on Buildroot farms.
--
--[1] http://autobuild.buildroot.net/results/43b/43b98ddf9eb44152ed9ac4a98d887af14831d8da/build-end.log
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
--Signed-off-by: J??r??mie Galarneau <jeremie.galarneau@efficios.com>
--[Philippe: grabbed from this upstream patch:
--    https://github.com/efficios/babeltrace/commit/2741f55be80ae8af169ae795ea28d2a39c18fa60.patch
--]
--Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-----
-- configure.ac | 31 +++++++++++++++++++++----------
-- 1 file changed, 21 insertions(+), 10 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 84f9000..2f5e3f8 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -163,24 +163,35 @@ AC_CHECK_FUNCS([uuid_generate],
--   link_with_libuuid=no
-- ],
-- [
---  # Check for libuuid
---  AC_CHECK_LIB([uuid], [uuid_generate],
--+  # First, check the pkg-config module is available, otherwise explicitly check
--+  # for libuuid, or uuid support in the C-library.
--+  PKG_CHECK_MODULES([UUID], [uuid],
--   [
--+    LIBS="${UUID_LIBS} ${LIBS}"
--+    CFLAGS="${CFLAGS} ${UUID_CFLAGS}"
--     AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBUUID], 1, [Has libuuid support.])
--     link_with_libuuid=yes
--   ],
--   [
---    # libuuid not found, check for uuid_create in libc.
---    AC_CHECK_LIB([c], [uuid_create],
--+    # Check for libuuid
--+    AC_CHECK_LIB([uuid], [uuid_generate],
--     [
---      AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBC_UUID], 1, [Has libc uuid support.])
---      link_with_libc_uuid=yes
--+      AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBUUID], 1, [Has libuuid support.])
--+      link_with_libuuid=yes
--     ],
--     [
---      # for MinGW32 we have our own internal implemenation of uuid using Windows functions.
---      if test "x$MINGW32" = xno; then
---        AC_MSG_ERROR([Cannot find libuuid uuid_generate nor libc uuid_create. Use [LDFLAGS]=-Ldir to specify their location.])
---      fi
--+      # libuuid not found, check for uuid_create in libc.
--+      AC_CHECK_LIB([c], [uuid_create],
--+      [
--+        AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBC_UUID], 1, [Has libc uuid support.])
--+        link_with_libc_uuid=yes
--+      ],
--+      [
--+        # for MinGW32 we have our own internal implemenation of uuid using Windows functions.
--+        if test "x$MINGW32" = xno; then
--+          AC_MSG_ERROR([Cannot find libuuid uuid_generate nor libc uuid_create. Use [LDFLAGS]=-Ldir to specify their location.])
--+        fi
--+      ])
--     ])
--   ])
-- ])
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index 10f96ab..2633991 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -14,9 +14,7 @@ HOST_LTTNG_BABELTRACE_DEPENDENCIES = \
- 	host-popt host-util-linux host-libglib2 host-pkgconf
- HOST_LTTNG_BABELTRACE_CONF_OPTS += --disable-debug-info
- 
--# For:
--#   0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
--#   0003-fix-uuid-support-detection-on-static-build.patch
-+# For: 0002-m4-ax_lib_elfutils.m4-add-cache-variable.patch
- LTTNG_BABELTRACE_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+  cmake: pass HOST_CONFIGURE_OPTS at configure time (2016-12-03 16:24:23 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to fdbfb69d6d7d7ee1b1473ac2562fbf69df49dbb8
+
+  toolchain/wrapper: use the {str,len} tuples for the unsafe paths (2016-12-04 10:08:04 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      toolchain/wrapper: make the {str,len} tuple more generic, add comments
+      toolchain/wrapper: use the {str,len} tuples for the unsafe paths
+
+ toolchain/toolchain-wrapper.c | 58 ++++++++++++++++++++++++++++---------------
+ 1 file changed, 38 insertions(+), 20 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
