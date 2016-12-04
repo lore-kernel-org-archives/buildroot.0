@@ -1,42 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 16:30:24 +0100
-Subject: [Buildroot] [git commit] package/tzdata: bump version to 2016j
-Message-ID: <20161204153131.4CF607FEBB@busybox.osuosl.org>
+Date: Sun, 4 Dec 2016 16:22:41 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add tzdata and zic to my list
+Message-ID: <20161204153130.8A84681D3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de90d77dc1164a0f933cd5aac9f43ac9278b7172
+commit: https://git.buildroot.net/buildroot/commit/?id=f5bc472b8b78529f3a81a14c2596a0a448ee961f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index 1d7fbcd..b98e579 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,2 +1,2 @@
--# From http://mm.icann.org/pipermail/tz-announce/2016-July/000040.html
--sha512 0472f9516b6c3d83c0a5d0953a5535f4c48d9b9171e125f528188dac512f3556bc1805b7029c4f467a122cbce1beb4e804dd4ae63b259952de3bb217f8e8941d	tzdata2016f.tar.gz
-+# From http://mm.icann.org/pipermail/tz-announce/2016-November/000044.html
-+sha512 ce0b9958b764479fac7df6b5ba0933fc4c6d815ebccc2537c75c4be105691cd58054704eebfb50ca755d7d48504480d4925ce8836eb499ae4798e3d5503d7e0e	tzdata2016j.tar.gz
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index de7d1be..d628514 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 12445d4..f84eb5d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -967,6 +967,8 @@ F:	package/libsecret/
  
--TZDATA_VERSION = 2016f
-+TZDATA_VERSION = 2016j
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
- TZDATA_STRIP_COMPONENTS = 0
+ N:	Martin Bark <martin@barkynet.com>
+ F:	package/ca-certificates/
++F:	package/tzdata/
++F:	package/zic/
+ 
+ N:	Martin Hicks <mort@bork.org>
+ F:	package/cryptsetup/
