@@ -1,57 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 4 Dec 2016 21:33:10 +0100
-Subject: [Buildroot] [PATCH] build/advanced: add option to check for use
-	of cdefs.h
-In-Reply-To: <20161204135202.109c6480@free-electrons.com>
-References: <1480849177-16847-1-git-send-email-yann.morin.1998@free.fr>
- <20161204135202.109c6480@free-electrons.com>
-Message-ID: <8bab492f-08f7-45aa-5dad-8460a3252ffc@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Dec 2016 21:48:40 +0100
+Subject: [Buildroot] [git commit] libxmlrpc: fix build without C++ compiler
+Message-ID: <20161204204855.DCB7B80E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=413605e036c332f25392e1a16aa007fbd0cbba11
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Conditionally disable compilation of optional C++ module.
 
-On 04-12-16 13:52, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun,  4 Dec 2016 11:59:37 +0100, Yann E. MORIN wrote:
->> We want to catch programs that directly include sys/cdefs.h so that
->> we can fix them not to. So, we want to instrument sys/cdefs.h to emit
->> a warning when it is included.
-> 
-> Thanks for working on this. However, I am still not convinced that we
-> want to merge such an additional complexity (one new Config.in choice
-> with three sub-options, two additional Config.in options), a cdefs.h
-> wrapper for glibc/uclibc, etc.
-> 
-> Do we really care about upstream packages using sys/cdefs.h? Is it
-> really the most important battle to fight against upstream projects
-> using sys/cdefs.h?
-> 
-> If we start having instrumentation in Buildroot to detect such very
-> specific "standard violation", then where do we stop? There's plenty of
-> upstream projects doing bogus things all over the place.
-> 
-> I believe the paranoid checks for bogus -I/-L flags are fine because
-> they really potentially break cross-compilation. But this cdefs.h
-> mis-use doesn't break anything, now that we have the cdefs.h
-> replacement for musl.
-> 
-> Peter, Arnout, what do you think?
+Fixes:
 
- I agree with Thomas. It's not our responsibility to fix packages, just to
-cross-compile them.
+  http://autobuild.buildroot.net/results/cbff6c816606a515467d467677763533a41fc276/
 
- Regards,
- Arnout
+Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libxmlrpc/0002-fix-non-cplusplus-build.patch | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/libxmlrpc/0002-fix-non-cplusplus-build.patch b/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
+index efeb9cc..2d5bfcc 100644
+--- a/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
++++ b/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
+@@ -1,9 +1,10 @@
+ Handle builds without C++
+ 
+ libxmlrpc nicely handles the fact of being built without C++ support,
+-except for one location, fixed by this patch.
++except for two locations, fixed by this patch.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+ 
+ Index: b/lib/util/Makefile
+ ===================================================================
+@@ -25,3 +26,19 @@ Index: b/lib/util/Makefile
+  .PHONY: all
+  all: $(LIBOBJS)
+  
++Index: b/lib/Makefile
++===================================================================
++--- a/lib/Makefile
+++++ b/lib/Makefile
++@@ -9,7 +9,10 @@
++ 
++ # Build up SUBDIRS:
++ SUBDIRS = 
++-SUBDIRS += util libutil libutil++
+++SUBDIRS += util libutil
+++ifeq ($(ENABLE_CPLUSPLUS),yes)
+++  SUBDIRS += libutil++
+++endif
++ ifeq ($(ENABLE_ABYSS_SERVER),yes)
++   SUBDIRS += abyss
++   ifeq ($(ENABLE_CPLUSPLUS),yes)
