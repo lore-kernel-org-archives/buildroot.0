@@ -1,13 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 22:22:43 +0100
-Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
- additional variables for each build step
-In-Reply-To: <986ec82d-e29b-0a1f-c894-f82415cc6d53@gmail.com>
-References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
- <1480885126-517-2-git-send-email-romain.naour@gmail.com>
- <20161204220409.45688c5a@free-electrons.com>
- <986ec82d-e29b-0a1f-c894-f82415cc6d53@gmail.com>
-Message-ID: <20161204222243.7431c24c@free-electrons.com>
+Date: Sun, 4 Dec 2016 22:23:56 +0100
+Subject: [Buildroot] [PATCH v4 1/2] ti-cgt-pru: add package for PRU Host
+ toolchain
+In-Reply-To: <1480652561-8491-1-git-send-email-ash.charles@savoirfairelinux.com>
+References: <1480652561-8491-1-git-send-email-ash.charles@savoirfairelinux.com>
+Message-ID: <20161204222356.61a62a14@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,22 +13,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 4 Dec 2016 22:20:25 +0100, Romain Naour wrote:
-
-> > Isn't it a bug of the upstream package that we need to pass --no-tests
-> > at every step?  
+On Thu,  1 Dec 2016 23:22:40 -0500, Ash Charles wrote:
+> TI provides a binary code generation toolchain to develop firmware for
+> the programmable real-time unit/co-processor found in some SOCs such as
+> some models in the AM335x line. This toolchain includes C/C++ support
+> (clpru) rather than just assembler (pasm) supported by the pre-existing
+> am335x-pru-package [1].  Following the lead of the Yocto meta-ti
+> layer [2], this package provides a host toolchain suitable for an x86
+> (or x86_64) Linux targeting an ARM-based PRU core.
 > 
-> humm, maybe...
-> At first, I used --no-tests with AUBIO_CONF_OPTS but it's not enough.
-> All other options are saved in aubio-0.4.3/build/c4che/_cache.py
-> but not this one.
+> [1] http://processors.wiki.ti.com/index.php/PRU_Assembly_Instructions#pasm_vs._clpru
+> [2] http://git.yoctoproject.org/cgit/cgit.cgi/meta-ti/tree/recipes-ti/devtools/ti-cgt-pru_2.1.1.bb
+> 
+> Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
+> ---
+> Changes v1 --> v2
+>  * extract source to $(@D) cleanly (suggested by Thomas)
+>  * be more explicit about licensing (suggested by Arnout)
+>  * switch to buildroot-suitable name: PRU_CGT --> TI_CGT_PRU_DIR
+>  * sundry clarifications
 
-It would be good to understand why.
+Applied to master, after doing the following change:
 
-Thanks,
+    [Thomas: add BR2_PACKAGE_HOST_TI_CGT_PRU_ARCH_SUPPORTS boolean option,
+    so that packages selecting host-ti-cgt-pru can easily inherit its
+    architecture dependencies.]
+
+Also, could you send a patch that adds yourself to the DEVELOPERS file
+for both the ti-cgt-pru and the pru-software-support packages?
+
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
