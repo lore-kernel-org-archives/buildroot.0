@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 15:11:45 +0100
+Date: Sun, 4 Dec 2016 15:20:31 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-12-02
-In-Reply-To: <20161203233249.08ff4c7b@gmx.net>
-References: <20161203073024.3586721D20@mail.free-electrons.com>
- <20161203233249.08ff4c7b@gmx.net>
-Message-ID: <20161204151145.0a309442@free-electrons.com>
+ 2016-12-03
+In-Reply-To: <20161204072959.746C421D18@mail.free-electrons.com>
+References: <20161204072959.746C421D18@mail.free-electrons.com>
+Message-ID: <20161204152031.5a7490cc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +13,125 @@ To: buildroot@busybox.net
 
 Hello,
 
-Adding in Cc: Waldemar for Microblaze, and Max for Xtensa.
+OK, there are so many failures that I will look at the classification
+by reason only and not the full list.
 
-On Sat, 3 Dec 2016 23:32:49 +0100, Peter Seiderer wrote:
+On Sun,  4 Dec 2016 08:29:59 +0100 (CET), Thomas Petazzoni wrote:
 
-> +#if defined(__alpha__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__mips__) || defined(__sh__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64)
-> +#  define GST_HAVE_UNALIGNED_ACCESS 0
-> +#elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64)
-> +#  define GST_HAVE_UNALIGNED_ACCESS 1
-> +#else
-> +#  error "Could not detect architecture; don't know whether it supports unaligned access! Please file a bug."
-> +#endif
-> 
-> Time to add defines for microblazeel and xtensa, any hint which defines and at
-> unaligned acess yes/no?
+>               host-cmake-3.7.1 | 190
 
-Do you think there would be a problem to simply assume by default that
-the architecture doesn't support unaligned accesses? I mean, if a new
-architecture by chance supports unaligned accesses, but we tell
-GStreamer that we don't support such unaligned accesses, what can go
-wrong? Possibly the code is slightly less efficient, but there should
-be no runtime issue.
+Solved by:
 
-So what about instead doing:
+  https://git.buildroot.org/buildroot/commit/?id=0904b80b47245cf85d414f78c381b9cf61c6ef4b
 
-#if defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64)
-#  define GST_HAVE_UNALIGNED_ACCESS 1
-#else
-#  define GST_HAVE_UNALIGNED_ACCESS 0
-#endif
+>                        unknown | 36
 
-and be done with it?
+These are all:
 
-Best regards,
+make: Entering directory `/home/peko/autobuild/instance-2/buildroot'
+package/qemu/qemu.mk:108: *** "Refusing to build qemu-user: target Linux version newer than host's.".  Stop.
+make: Leaving directory `/home/peko/autobuild/instance-2/buildroot'
+
+I need to have a look into this. Maybe something to adjust in the
+autobuilder script itself.
+
+>    host-lttng-babeltrace-1.5.0 | 26
+
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=7db6d46b165035a725911711e32f041fd1e6155c.
+
+>                      efivar-30 | 18
+
+I've asked Erico Nunes to have a look.
+
+>         lttng-babeltrace-1.5.0 | 17
+
+Also fixed by:
+https://git.buildroot.org/buildroot/commit/?id=7db6d46b165035a725911711e32f041fd1e6155c.
+
+>              gstreamer1-1.10.2 | 7 
+
+Under discussion with Peter Seiderer.
+
+>             lttng-libust-2.9.0 | 6 
+
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=715498b1ee5072fda8a8f132bb80895d817f2bad.
+
+>      toolchain-external-custom | 6 
+
+Fallout from the Blackfin toolchain removal, but was not yet removed in
+the autobuilder list of toolchain configurations. This is not fixed.
+
+>                    cmake-3.7.1 | 3 
+
+/home/peko/autobuild/instance-1/output/host/usr/m68k-buildroot-linux-uclibc/sysroot/usr/lib32/libuv.so: undefined reference to `pthread_condattr_setclock'
+/home/peko/autobuild/instance-1/output/host/usr/m68k-buildroot-linux-uclibc/sysroot/usr/lib32/libuv.so: undefined reference to `pthread_barrier_wait'
+/home/peko/autobuild/instance-1/output/host/usr/m68k-buildroot-linux-uclibc/sysroot/usr/lib32/libuv.so: undefined reference to `pthread_barrier_destroy'
+/home/peko/autobuild/instance-1/output/host/usr/m68k-buildroot-linux-uclibc/sysroot/usr/lib32/libuv.so: undefined reference to `pthread_barrier_init'
+
+We need NPTL for target cmake.
+
+>                     rpm-4.13.0 | 3 
+
+tools/sepdebugcrcfix.c:31:17: fatal error: bfd.h: No such file or directory
+
+>              berkeleydb-5.3.28 | 2 
+
+On m68k:
+
+   aborting at dw2gencfi.c:214 in emit_expr_encoded
+
+Waldemar, I guess this would be fixed by
+https://patchwork.ozlabs.org/patch/699474/, but this depends on Arnout
+patch for the toolchain wrapper.
+
+On Xtensa/PowerPC:
+
+  undefined reference to `dl_iterate_phdr'
+
+Max, Waldemar, is this fixed?
+
+> kvmtool-bed2bd9e1fbef581909... | 2 
+
+make[1]: *** [guest/init] Segmentation fault
+make[1]: *** Deleting file `guest/init'
+
+Hm, I think someone submitted a patch or talked about it on the list,
+but can't remember.
+
+>                trousers-0.3.13 | 2 
+
+Toolchain issue on ARC. I've rebuilt the toolchain with the latest ARC
+updates, we'll see if it improves the stuff.
+
+>                   apitrace-7.0 | 1 
+>                 bind-9.11.0-P1 | 1 
+>                   cppcms-1.0.5 | 1 
+>                  jack2-v1.9.10 | 1 
+> kvm-unit-tests-5731572b2ac2... | 1 
+>                   lcdapi-v0.10 | 1 
+>               lsqlite3-0.9.4-2 | 1 
+>              lttng-tools-2.9.0 | 1 
+>                  mesa3d-13.0.2 | 1 
+>                     mosh-1.2.6 | 1 
+>                openldap-2.4.44 | 1 
+>                  openssh-7.3p1 | 1 
+> phidgetwebservice-2.1.8.201... | 1 
+>              qt5location-5.6.2 | 1 
+>                   sispmctl-3.1 | 1 
+>                   squid-3.5.22 | 1 
+> uhttpd-59e0c739634f46a164d9... | 1 
+>                upmpdcli-1.2.10 | 1 
+> ustream-ssl-ec80adaa1b47f28... | 1 
+>                      vlc-2.2.4 | 1 
+> x264-72d53ab2ac7af24597a824... | 1 
+>                 xfsprogs-4.7.0 | 1 
+
+And lots and lots of other build failures. Since they occurred only
+once, I skipped for now. Anyone interested in doing a detailed analysis?
+
+Thanks!
 
 Thomas
 -- 
