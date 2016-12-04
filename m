@@ -1,31 +1,101 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 04 Dec 2016 23:01:41 +0000
-Subject: [Buildroot] [Bug 9461] odroidc2 - toolchain Linaro AArch64 2016.11
-	compile error
-In-Reply-To: <bug-9461-163@https.bugs.busybox.net/>
-References: <bug-9461-163@https.bugs.busybox.net/>
-Message-ID: <bug-9461-163-a9ZmtXDnoM@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 5 Dec 2016 00:32:24 +0100
+Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
+ additional variables for each build step
+In-Reply-To: <20161204224100.26768191@free-electrons.com>
+References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
+ <1480885126-517-2-git-send-email-romain.naour@gmail.com>
+ <20161204212433.GC3433@free.fr> <20161204224100.26768191@free-electrons.com>
+Message-ID: <43f11483-2fa1-3191-b5b0-4ccbaad28903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9461
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WONTFIX
+On 04-12-16 22:41, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 4 Dec 2016 22:24:34 +0100, Yann E. MORIN wrote:
+>> Romain, All,
+> 
+>>> -     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) build -j $$(PARALLEL_JOBS)
+>>> +     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+>>> +             build -j $$(PARALLEL_JOBS) $$($(2)_MAKE_OPTS)  
+>>
+>> I'm not against having variables named the same across packages, but
+>> here I think $(2)_BUILD_OPTS would be more appropriate.
+> 
+> ACK.
+> 
+>>> @@ -84,7 +85,8 @@ ifndef $(2)_INSTALL_STAGING_CMDS
+>>>  define $(2)_INSTALL_STAGING_CMDS
+>>>       cd $$(@D) && \
+>>>       $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+>>> -             install --destdir=$$(STAGING_DIR)
+>>> +             install --destdir=$$(STAGING_DIR) \
+>>> +             $$($(2)_INSTALL_STAGING_OPTS)  
+>>
+>> Usually, those options entirely override the default ones. For example,
+>> if you provide FOO_INSTALL_STAGING_OPTS for an autotools package, then
+>> the default (just 'install') is lost:
+>>
+>>     package/pkg-autotools.mk:
+>>     159 $(2)_INSTALL_STAGING_OPTS?  ?= DESTDIR=$$(STAGING_DIR) install>>
 
---- Comment #8 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Using a gcc 6.x toolchain with a kernel version too old to support gcc 6.x is
-not a Buildroot problem, but a configuration issue. One should either select a
-toolchain that uses an older gcc version, or a kernel version that is recent
-enough to build properly with gcc 6.x.
+
+ That's autotools, but if you look at cmake, python, and perl, they're basically
+doing it all differently. For example, cmake has a _MAKE_OPTS that is passed for
+all steps; python and perl hardcode the 'install' command.
+
+ I think we can conclude that consistency is not going to happen, so instead we
+should look for the "best" option. Which means:
+
+>> OTOH, I find this to be counter-intuitive for a user, and I would prefer
+>> the options to add rather than replace.
+> 
+> Agreed. I also find it super annoying that we have to replicate
+> DESTDIR=$$(STAGING_DIR) install. But in some cases, we *do* need to
+> override it.
+
+ In case of waf, I'm not so sure we're ever going to need to override this.
+autotools has more freedom to shoot yourself in the foot, but waf (like cmake)
+is pretty much fixed.
+
+> 
+> Another thing that I dislike is that we have no way to pass an option
+> to all of the build and install steps.
+
+ Yep, and for cmake this is possible. So it would be better to have such an
+option. What I'm not sure of, however, is how this option should be called, and
+also if it should be passed in the configure step or not. Ideally we should have
+more examples.
+
+ Regards,
+ Arnout
+
+
+>> But consistency trumps it all, so we should do the same for waf
+>> packages:
+>>
+>>     $(2)_INSTALL_STAGING_OPTS ?= install --destdir=$$(STAGING_DIR)
+> 
+> I agree. Even if the current situation is not 100% nice, I think a
+> rework of this current situation is a much broader effort. So let's
+> make the waf-package infrastructure be as similar as possible to the
+> other ones.
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
