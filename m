@@ -1,42 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 15:36:21 +0100
-Subject: [Buildroot] [PATCH] uclibc: update to 1.0.20
-In-Reply-To: <20161204112026.GA30258@waldemar-brodkorb.de>
-References: <20161204112026.GA30258@waldemar-brodkorb.de>
-Message-ID: <20161204153621.5d66d8a6@free-electrons.com>
+Date: Sun, 4 Dec 2016 15:36:36 +0100
+Subject: [Buildroot] [git commit] package/tor: add optional support for
+	libcap
+Message-ID: <20161204143649.1FAD781D2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cbc75196db0eeee0ac01080bf2ad2cc66ad44473
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 4 Dec 2016 12:20:27 +0100, Waldemar Brodkorb wrote:
-> The test suite is removed from the package and is already a separate
-> package in buildroot. All patches are upstream, so remove them.
-> The UCLIBC_HAS_LFS option is removed upstream.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  .../0001-linuxthreads-add-back-signal.h.patch      | 28 ---------
->  ...ne-madvise-related-macros-for-noMMU-targe.patch | 66 ----------------------
->  ...003-posix_madvise-not-available-for-noMMU.patch | 30 ----------
->  package/uclibc/uclibc.hash                         |  2 +-
->  package/uclibc/uclibc.mk                           | 30 +---------
->  5 files changed, 2 insertions(+), 154 deletions(-)
->  delete mode 100644 package/uclibc/0001-linuxthreads-add-back-signal.h.patch
->  delete mode 100644 package/uclibc/0002-do-not-define-madvise-related-macros-for-noMMU-targe.patch
->  delete mode 100644 package/uclibc/0003-posix_madvise-not-available-for-noMMU.patch
+- without libcap
+$ host/usr/bin/x86_64-linux-readelf -a target/usr/bin/tor | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libevent-2.0.so.5]
+ 0x0000000000000001 (NEEDED)             Shared library: [libssl.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
-You forgot to remove the BR2_UCLIBC_INSTALL_TEST_SUITE from the
-Config.in. So I've done that, and added the necessary logic in
-Config.in.legacy.
+- with libcap
+$ host/usr/bin/x86_64-linux-readelf -a target/usr/bin/tor | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libevent-2.0.so.5]
+ 0x0000000000000001 (NEEDED)             Shared library: [libssl.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
-Thanks,
+The tor configure script has no option to en-/disable libcap support.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tor/tor.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 6a622cf..a324909 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -26,6 +26,10 @@ TOR_CONF_OPTS += \
+ 	--enable-static-zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++TOR_DEPENDENCIES += libcap
++endif
++
+ ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_i386)$(BR2_x86_64)$(BR2_PACKAGE_LIBSECCOMP),yy)
+ TOR_CONF_OPTS += --enable-seccomp
+ TOR_DEPENDENCIES += libseccomp
