@@ -1,53 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 22:24:14 +0100
-Subject: [Buildroot] [PATCH v4 2/2] pru-software-support: add library
- for PRU firmware
-In-Reply-To: <1480652561-8491-2-git-send-email-ash.charles@savoirfairelinux.com>
-References: <1480652561-8491-1-git-send-email-ash.charles@savoirfairelinux.com>
- <1480652561-8491-2-git-send-email-ash.charles@savoirfairelinux.com>
-Message-ID: <20161204222414.42e8c081@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 4 Dec 2016 22:24:34 +0100
+Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
+ additional variables for each build step
+In-Reply-To: <1480885126-517-2-git-send-email-romain.naour@gmail.com>
+References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
+ <1480885126-517-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <20161204212433.GC3433@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Romain, All,
 
-On Thu,  1 Dec 2016 23:22:41 -0500, Ash Charles wrote:
-> TI provides a set of headers files and libraries useful in developing
-> firmware for real-time (PRU) cores embedded in some processors e.g.
-> AM3358.  This package stages these files for any packages creating
-> PRU firmware.
-> 
-> Note: As per [1], use commit v4.0.2 to sync with common TI Linux
->       versions.
-> 
-> [1] http://e2e.ti.com/support/arm/sitara_arm/f/791/p/552190/2018113#2018113
-> 
-> Signed-off-by: Ash Charles <ash.charles@savoirfairelinux.com>
+On 2016-12-04 21:58 +0100, Romain Naour spake thusly:
+> Some waf packages may want to pass additional variables to waf script
+> in each build step. Add the possibility to do so by defining the
+> following variables:
+>   <pkg>_MAKE_OPTS for the build step
+>   <pkg>_INSTALL_STAGING_OPTS for the install to staging directory
+>   <pkg>_INSTALL_TARGET_OPTS for the install to target directory
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
-> Changes v1 --> v2
->  * change from staging to host package (thanks Arnout & Thomas)
->  * match upstream name of pru-software-support (thanks Arnout)
->  * ensured config dependencies are propagated (thanks Arnout)
->  * added a hash file (thanks Arnout)
->  * various little clean-ups
+>  package/pkg-waf.mk | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+> index 908ac03..97e2e6a 100644
+> --- a/package/pkg-waf.mk
+> +++ b/package/pkg-waf.mk
+> @@ -72,7 +72,8 @@ endif
+>  ifndef $(2)_BUILD_CMDS
+>  define $(2)_BUILD_CMDS
+>       cd $$(@D) && \
+> -     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) build -j $$(PARALLEL_JOBS)
+> +     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+> +             build -j $$(PARALLEL_JOBS) $$($(2)_MAKE_OPTS)
 
-Applied to master, with the following changes:
+I'm not against having variables named the same across packages, but
+here I think $(2)_BUILD_OPTS would be more appropriate.
 
-    [Thomas:
-     - rename BR2_PACKAGE_PRU_EXAMPLES to
-    BR2_PACKAGE_PRU_SOFTWARE_SUPPORT, since the package directory name
-    should match the Config.in option for this package
-     - use select for BR2_PACKAGE_HOST_TI_CGT_PRU, and therefore add the
-       appropriate "depends on
-    BR2_PACKAGE_HOST_TI_CGT_PRU_ARCH_SUPPORTS".]
+>  endef
+>  endif
+>
+> @@ -84,7 +85,8 @@ ifndef $(2)_INSTALL_STAGING_CMDS
+>  define $(2)_INSTALL_STAGING_CMDS
+>       cd $$(@D) && \
+>       $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+> -             install --destdir=$$(STAGING_DIR)
+> +             install --destdir=$$(STAGING_DIR) \
+> +             $$($(2)_INSTALL_STAGING_OPTS)
 
-Thanks!
+Usually, those options entirely override the default ones. For example,
+if you provide FOO_INSTALL_STAGING_OPTS for an autotools package, then
+the default (just 'install') is lost:
 
-Thomas
+    package/pkg-autotools.mk:
+    159 $(2)_INSTALL_STAGING_OPTS?  ?= DESTDIR=$$(STAGING_DIR) install
+
+OTOH, I find this to be counter-intuitive for a user, and I would prefer
+the options to add rather than replace.
+
+But consistency trumps it all, so we should do the same for waf
+packages:
+
+    $(2)_INSTALL_STAGING_OPTS ?= install --destdir=$$(STAGING_DIR)
+
+>  endef
+>  endif
+>
+> @@ -96,7 +98,8 @@ ifndef $(2)_INSTALL_TARGET_CMDS
+>  define $(2)_INSTALL_TARGET_CMDS
+>       cd $$(@D) && \
+>       $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+> -             install --destdir=$$(TARGET_DIR)
+> +             install --destdir=$$(TARGET_DIR) \
+> +             $$($(2)_INSTALL_TARGET_OPTS)
+
+Ditto.
+
+Regards,
+Yann E. MORIN.
+
+>  endef
+>  endif
+>
+> --
+> 2.5.5
+>
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
