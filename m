@@ -1,64 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  4 Dec 2016 13:22:05 +0100
-Subject: [Buildroot] [PATCH] package/efl: use liblz4 from lz4 package
-In-Reply-To: <1480854125-27023-1-git-send-email-romain.naour@gmail.com>
-References: <1480854125-27023-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1480854125-27023-2-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Dec 2016 13:52:02 +0100
+Subject: [Buildroot] [PATCH] build/advanced: add option to check for use
+	of cdefs.h
+In-Reply-To: <1480849177-16847-1-git-send-email-yann.morin.1998@free.fr>
+References: <1480849177-16847-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20161204135202.109c6480@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Efl libraries bundle a copy of liblz4 which is also provided by
-lz4 Buildroot package. Switch to liblz4 from lz4 package.
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/efl/Config.in | 1 +
- package/efl/efl.mk    | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+On Sun,  4 Dec 2016 11:59:37 +0100, Yann E. MORIN wrote:
+> We want to catch programs that directly include sys/cdefs.h so that
+> we can fix them not to. So, we want to instrument sys/cdefs.h to emit
+> a warning when it is included.
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 7ae8c05..c51fc56 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_EFL
- 	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
- 	# https://phab.enlightenment.org/T2728
- 	select BR2_PACKAGE_LUAJIT # Lua support broken
-+	select BR2_PACKAGE_LZ4
- 	select BR2_PACKAGE_UTIL_LINUX
- 	# libblkid is part of required tools, see EFL's README.
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index a4a5c71..5db57f6 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -20,7 +20,7 @@ EFL_LICENSE_FILES = \
- EFL_INSTALL_STAGING = YES
- 
- EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
--	jpeg luajit udev util-linux zlib
-+	jpeg luajit lz4 udev util-linux zlib
- 
- # Configure options:
- # --disable-lua-old: build elua for the target.
-@@ -28,6 +28,7 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
- # --disable-sdl: disable sdl2 support.
- # --disable-spectre: disable spectre image loader.
- # --disable-xinput22: disable X11 XInput v2.2+ support.
-+# --enable-liblz4: use liblz4 from lz4 package.
- # --with-doxygen: disable doxygen documentation
- EFL_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-@@ -43,6 +44,7 @@ EFL_CONF_OPTS = \
- 	--disable-spectre \
- 	--disable-xinput22 \
- 	--disable-wayland \
-+	--enable-liblz4 \
- 	--with-doxygen=no
- 
- # Disable untested configuration warning.
+Thanks for working on this. However, I am still not convinced that we
+want to merge such an additional complexity (one new Config.in choice
+with three sub-options, two additional Config.in options), a cdefs.h
+wrapper for glibc/uclibc, etc.
+
+Do we really care about upstream packages using sys/cdefs.h? Is it
+really the most important battle to fight against upstream projects
+using sys/cdefs.h?
+
+If we start having instrumentation in Buildroot to detect such very
+specific "standard violation", then where do we stop? There's plenty of
+upstream projects doing bogus things all over the place.
+
+I believe the paranoid checks for bogus -I/-L flags are fine because
+they really potentially break cross-compilation. But this cdefs.h
+mis-use doesn't break anything, now that we have the cdefs.h
+replacement for musl.
+
+Peter, Arnout, what do you think?
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
