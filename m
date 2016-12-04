@@ -1,56 +1,47 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 4 Dec 2016 18:12:14 +0100
-Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime_mali:
-	bump kernel version
-In-Reply-To: <1480869026-6208-1-git-send-email-romain.naour@gmail.com>
-References: <1480869026-6208-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <CAB0FRsvXTowx6+e3Zx1RYCkRANSgyE-VDZReuqzSY6X4+2CHLA@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 4 Dec 2016 18:39:24 +0100
+Subject: [Buildroot] [PATCH] berkeleydb: fix static linking issues
+Message-ID: <20161204173924.GA1647@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-12-04 17:30 GMT+01:00 Romain Naour <romain.naour@gmail.com>:
-> Bump the kernel to the next commit which fix the build with gcc6.
->
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
-> Build tested only.
-> For the same reason, the kernel used by
-> olimex_a20_olinuxino_lime2_defconfig needs to bumped
-> to 4.1.43 (at least). But since it's a big change, it
-> require a runtime test on the board.
+Libtool by default drops -static, so force libtool with -all-static
+to do static linking.
 
-At this time, the latest 4.1.x is 4.1.36 (not 4.1.43).
+Fixes:
+ http://autobuild.buildroot.net/results/f0a96f671644d9f9efcf245b354affdc84f7d7da
 
-Currently, olimex_a20_olinuxino_lime_defconfig uses a 4.4 kernel.
-With BR2017.02, I plan a bump to the upcoming 4.9 which will be also a
-LTS (like 4.1 & 4.4).
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/berkeleydb/berkeleydb.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-On my desk, I have only a LIME board, but no LIME2.
-
-Fran?ois
-
-> ---
->  configs/olimex_a20_olinuxino_lime_mali_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-> index 35af5f9..4930660 100644
-> --- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
-> +++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-> @@ -20,7 +20,7 @@ BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/dan-and/linux-sunxi.git"
->  # based on Linux version 3.4.113
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="dbabbacbbf8984dea0a8c893b38b376a6ecbb3c1"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fc385cc6dfa350382ecc94a520a716b57e654410"
->  BR2_LINUX_KERNEL_USE_DEFCONFIG=y
->  BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
->  BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> --
-> 2.5.5
->
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index e5c11bd..d09bece 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -44,6 +44,10 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 	)
+ endef
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++BERKELEYDB_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -all-static"
++endif
++
+ ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
+ 
+ define BERKELEYDB_REMOVE_TOOLS
+@@ -60,4 +64,8 @@ endef
+ 
+ BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
+ 
++define BERKELEYDB_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_ARGS) $(MAKE) $(BERKELEYDB_CONF_ENV) -C $(@D)/build_unix
++endef
++
+ $(eval $(autotools-package))
+-- 
+2.1.4
