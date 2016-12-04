@@ -1,33 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 23:59:30 +0100
-Subject: [Buildroot] [PATCH 2/2] package/openpowerlink: fix build with
- Linux kernel 4.7+
-In-Reply-To: <1478207123-27787-2-git-send-email-romain.naour@gmail.com>
-References: <1478207123-27787-1-git-send-email-romain.naour@gmail.com>
- <1478207123-27787-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161204235930.6cb8da3c@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 04 Dec 2016 23:01:41 +0000
+Subject: [Buildroot] [Bug 9461] odroidc2 - toolchain Linaro AArch64 2016.11
+	compile error
+In-Reply-To: <bug-9461-163@https.bugs.busybox.net/>
+References: <bug-9461-163@https.bugs.busybox.net/>
+Message-ID: <bug-9461-163-a9ZmtXDnoM@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9461
 
-On Thu,  3 Nov 2016 22:05:23 +0100, Romain Naour wrote:
-> dev->trans_start was replaced by netif_trans_update helper in kernel
-> 4.7 by commit 860e9538a9482bb84589f7d0718a7e6d0a944d58.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...Veth-Fix-compilation-on-Linux-kernels-4.7.patch | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/openpowerlink/0004-FIX-Veth-Fix-compilation-on-Linux-kernels-4.7.patch
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WONTFIX
 
-Thomas
+--- Comment #8 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Using a gcc 6.x toolchain with a kernel version too old to support gcc 6.x is
+not a Buildroot problem, but a configuration issue. One should either select a
+toolchain that uses an older gcc version, or a kernel version that is recent
+enough to build properly with gcc 6.x.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
