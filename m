@@ -1,47 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 15:36:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: add optional support for
- libcap
-In-Reply-To: <20161204103722.29834-1-bernd.kuhls@t-online.de>
-References: <20161204103722.29834-1-bernd.kuhls@t-online.de>
-Message-ID: <20161204153654.789631e3@free-electrons.com>
+Date: Sun, 4 Dec 2016 15:38:06 +0100
+Subject: [Buildroot] [git commit] core: add a kconfig option to require an
+	UTF8 locale on the host
+Message-ID: <20161204143830.B5886817E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=de0df997068ee56c4f37fdfaefc92c6c2a6a4c6a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  4 Dec 2016 11:37:22 +0100, Bernd Kuhls wrote:
-> - without libcap
-> $ host/usr/bin/x86_64-linux-readelf -a target/usr/bin/tor | grep NEEDED
->  0x0000000000000001 (NEEDED)             Shared library: [libevent-2.0.so.5]
->  0x0000000000000001 (NEEDED)             Shared library: [libssl.so.1.0.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
-> 
-> - with libcap
-> $ host/usr/bin/x86_64-linux-readelf -a target/usr/bin/tor | grep NEEDED
->  0x0000000000000001 (NEEDED)             Shared library: [libevent-2.0.so.5]
->  0x0000000000000001 (NEEDED)             Shared library: [libssl.so.1.0.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
-> 
-> The tor configure script has no option to en-/disable libcap support.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/tor/tor.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+This can be selected when we need the host to have an UTF-8 locale
+(e.g. to build uClibc with support for locales).
 
-Applied to master, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Config.in b/Config.in
+index 98096df..495b71c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -84,6 +84,11 @@ config BR2_HOSTARCH_NEEDS_IA32_LIBS
+ config BR2_HOSTARCH_NEEDS_IA32_COMPILER
+ 	bool
+ 
++# Hidden boolean selected by packages that need the host to have an
++# UTF8 locale.
++config BR2_NEEDS_HOST_UTF8_LOCALE
++	bool
++
+ source "arch/Config.in"
+ 
+ menu "Build options"
