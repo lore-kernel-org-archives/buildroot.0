@@ -1,47 +1,42 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 4 Dec 2016 18:39:24 +0100
-Subject: [Buildroot] [PATCH] berkeleydb: fix static linking issues
-Message-ID: <20161204173924.GA1647@waldemar-brodkorb.de>
+Date: Sun, 4 Dec 2016 19:08:40 +0100
+Subject: [Buildroot] [PATCH] mksh: update to R54
+Message-ID: <20161204180840.GA19216@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libtool by default drops -static, so force libtool with -all-static
-to do static linking.
-
-Fixes:
- http://autobuild.buildroot.net/results/f0a96f671644d9f9efcf245b354affdc84f7d7da
-
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/berkeleydb/berkeleydb.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/mksh/mksh.hash | 4 ++--
+ package/mksh/mksh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index e5c11bd..d09bece 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -44,6 +44,10 @@ define BERKELEYDB_CONFIGURE_CMDS
- 	)
- endef
+diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
+index d95001c..e92acd9 100644
+--- a/package/mksh/mksh.hash
++++ b/package/mksh/mksh.hash
+@@ -1,4 +1,4 @@
+ # From http://www.mirbsd.org/mksh.htm#build
+-md5	43fc3e32963cc1795a299bcec531d770	mksh-R53a.tgz
++md5	be0a6fb93b4a5f927bcc1893bb6692f8	mksh-R54.tgz
+ # Calculated based on the hash above
+-sha256	3bb2453c8cb65abbda24f9bdd8b8371e30a6e1c2f7a0d5474a3efae438639635	mksh-R53a.tgz
++sha256	8bce3837c386684aa7780f085f1a4dbd5e3e26fb5c528ee0d41ae29af7f39013	mksh-R54.tgz
+diff --git a/package/mksh/mksh.mk b/package/mksh/mksh.mk
+index 248b43f..4d91bfc 100644
+--- a/package/mksh/mksh.mk
++++ b/package/mksh/mksh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+BERKELEYDB_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -all-static"
-+endif
-+
- ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
- 
- define BERKELEYDB_REMOVE_TOOLS
-@@ -60,4 +64,8 @@ endef
- 
- BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
- 
-+define BERKELEYDB_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_ARGS) $(MAKE) $(BERKELEYDB_CONF_ENV) -C $(@D)/build_unix
-+endef
-+
- $(eval $(autotools-package))
+-MKSH_VERSION = R53a
++MKSH_VERSION = R54
+ MKSH_SOURCE = mksh-$(MKSH_VERSION).tgz
+ MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
+ # For MirOS License see https://www.mirbsd.org/TaC-mksh.txt
 -- 
 2.1.4
