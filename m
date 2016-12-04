@@ -1,45 +1,117 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  4 Dec 2016 23:18:57 +0100
-Subject: [Buildroot] [PATCH v2 2/3] core: waf-package infra: add missing
-	additional variables for build step
+Date: Sun,  4 Dec 2016 23:18:58 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/aubio: disable unit tests with
+	--notests
 In-Reply-To: <1480889938-11075-1-git-send-email-romain.naour@gmail.com>
 References: <1480889938-11075-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1480889938-11075-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <1480889938-11075-3-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some waf packages may want to pass additional variables to waf script
-in build step. Add the possibility to do so by defining <pkg>_BUILD_OPTS.
+For each build/install step, --notests needs to be passed to waf script
+to avoid runing the unit tests.
+This allow to remove the patch removing the unit tests from wscript.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/pkg-waf.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+v2: rebase after pkg-waf rework (Yann)
+---
+ package/aubio/0001-remove-unit-test.patch | 63 -------------------------------
+ package/aubio/aubio.mk                    |  9 ++++-
+ 2 files changed, 8 insertions(+), 64 deletions(-)
+ delete mode 100644 package/aubio/0001-remove-unit-test.patch
 
-diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
-index 74f70b6..9754d10 100644
---- a/package/pkg-waf.mk
-+++ b/package/pkg-waf.mk
-@@ -49,6 +49,7 @@ else
- $(2)_WAF = ./waf
- endif
+diff --git a/package/aubio/0001-remove-unit-test.patch b/package/aubio/0001-remove-unit-test.patch
+deleted file mode 100644
+index 947fc8e..0000000
+--- a/package/aubio/0001-remove-unit-test.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From c71d72262568907ae8c3b988d42e575a8bd3a207 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sat, 29 Oct 2016 20:14:02 +0200
+-Subject: [PATCH] remove unit test
+-
+-Unit tests fail to build on some system.
+-
+-Waf: Entering directory `output/build/aubio-0.4.3/build'
+-[170/217] Processing build/tests/test-sink
+-[170/217] Processing build/tests/test-sink_apple_audio-multi
+-[172/217] Processing build/tests/test-sink_sndfile-multi
+-[172/217] Processing build/tests/test-source_apple_audio
+-[174/217] Processing build/tests/test-source_avcodec
+-[174/217] Processing build/tests/test-source_multi
+-[174/217] Processing build/tests/test-source_seek
+-[176/217] Processing build/tests/test-source_sndfile
+-Waf: Leaving directory `output/build/aubio-0.4.3/build'
+-Build failed
+-Traceback (most recent call last):
+-  File "output/build/aubio-0.4.3/waflib/Task.py", line 110, in process
+-    ret=self.run()
+-  File "output/build/aubio-0.4.3/waflib/Tools/waf_unit_test.py", line 66, in run
+-    proc=Utils.subprocess.Popen(self.ut_exec,cwd=cwd,env=self.get_test_env(),stderr=Utils.subprocess.PIPE,stdout=Utils.subprocess.PIPE)
+-  File "/usr/lib64/python2.7/subprocess.py", line 710, in __init__
+-    errread, errwrite)
+-  File "/usr/lib64/python2.7/subprocess.py", line 1335, in _execute_child
+-    raise child_exception
+-OSError: [Errno 2] No such file or directory
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- wscript | 3 ---
+- 1 file changed, 3 deletions(-)
+-
+-diff --git a/wscript b/wscript
+-index c665ff5..c8fae6c 100644
+---- a/wscript
+-+++ b/wscript
+-@@ -95,13 +95,11 @@ def options(ctx):
+-             help='set target platform for cross-compilation', dest='target_platform')
+- 
+-     ctx.load('compiler_c')
+--    ctx.load('waf_unit_test')
+-     ctx.load('gnu_dirs')
+- 
+- def configure(ctx):
+-     from waflib import Options
+-     ctx.load('compiler_c')
+--    ctx.load('waf_unit_test')
+-     ctx.load('gnu_dirs')
+- 
+-     # check for common headers
+-@@ -334,7 +332,6 @@ def build(bld):
+-     bld.recurse('src')
+-     if bld.env['DEST_OS'] not in ['ios', 'iosimulator', 'android']:
+-         bld.recurse('examples')
+--        bld.recurse('tests')
+- 
+-     bld( source = 'aubio.pc.in' )
+- 
+--- 
+-2.5.5
+-
+diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
+index cfa233f..631c333 100644
+--- a/package/aubio/aubio.mk
++++ b/package/aubio/aubio.mk
+@@ -13,7 +13,14 @@ AUBIO_INSTALL_STAGING = YES
  
-+$(2)_BUILD_OPTS 			?=
- $(2)_INSTALL_STAGING_OPTS 		?= install --destdir=$$(STAGING_DIR)
- $(2)_INSTALL_TARGET_OPTS 		?= install --destdir=$$(TARGET_DIR)
+ AUBIO_CONF_OPTS = \
+ 	--disable-docs \
+-	--disable-atlas
++	--disable-atlas \
++	--notests
++
++# Add --notests for each build step to avoid runing unit tests on the
++# build machine.
++AUBIO_BUILD_OPTS = --notests
++AUBIO_INSTALL_STAGING_OPTS = install --destdir=$(STAGING_DIR) --notests
++AUBIO_INSTALL_TARGET_OPTS = install --destdir=$(TARGET_DIR) --notests
  
-@@ -75,7 +76,8 @@ endif
- ifndef $(2)_BUILD_CMDS
- define $(2)_BUILD_CMDS
- 	cd $$(@D) && \
--	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) build -j $$(PARALLEL_JOBS)
-+	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
-+		build -j $$(PARALLEL_JOBS) $$($(2)_BUILD_OPTS)
- endef
- endif
- 
+ ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+ AUBIO_DEPENDENCIES += libsndfile
 -- 
 2.5.5
