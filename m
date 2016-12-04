@@ -1,109 +1,64 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 4 Dec 2016 22:35:43 +0100
-Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
- additional variables for each build step
-In-Reply-To: <20161204212433.GC3433@free.fr>
-References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
- <1480885126-517-2-git-send-email-romain.naour@gmail.com>
- <20161204212433.GC3433@free.fr>
-Message-ID: <5e188279-00ea-a4c9-3595-2abecc700b07@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  4 Dec 2016 22:37:24 +0100
+Subject: [Buildroot] [PATCH] Makefile: move SED definition into the main
+	Makefile
+Message-ID: <1480887444-19245-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Since commit f71a621d91ec27f175fc84012962f88b1107305f, we are using the
+SED variable in the main Makefile. However, this variable is only
+defined in package/Makefile.in, which gets included only when a
+configuration is defined.
 
-Le 04/12/2016 ? 22:24, Yann E. MORIN a ?crit :
-> Romain, All,
-> 
-> On 2016-12-04 21:58 +0100, Romain Naour spake thusly:
->> Some waf packages may want to pass additional variables to waf script
->> in each build step. Add the possibility to do so by defining the
->> following variables:
->>   <pkg>_MAKE_OPTS for the build step
->>   <pkg>_INSTALL_STAGING_OPTS for the install to staging directory
->>   <pkg>_INSTALL_TARGET_OPTS for the install to target directory
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> ---
->>  package/pkg-waf.mk | 9 ++++++---
->>  1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
->> index 908ac03..97e2e6a 100644
->> --- a/package/pkg-waf.mk
->> +++ b/package/pkg-waf.mk
->> @@ -72,7 +72,8 @@ endif
->>  ifndef $(2)_BUILD_CMDS
->>  define $(2)_BUILD_CMDS
->>       cd $$(@D) && \
->> -     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) build -j $$(PARALLEL_JOBS)
->> +     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
->> +             build -j $$(PARALLEL_JOBS) $$($(2)_MAKE_OPTS)
-> 
-> I'm not against having variables named the same across packages, but
-> here I think $(2)_BUILD_OPTS would be more appropriate.
+This means that, if you do:
 
-I hesitated on the name of this option with WAF_OPTS but it wasn't great
-ether... Ok for $(2)_BUILD_OPTS.
+ $ make menuconfig savedefconfig
 
-> 
->>  endef
->>  endif
->>
->> @@ -84,7 +85,8 @@ ifndef $(2)_INSTALL_STAGING_CMDS
->>  define $(2)_INSTALL_STAGING_CMDS
->>       cd $$(@D) && \
->>       $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
->> -             install --destdir=$$(STAGING_DIR)
->> +             install --destdir=$$(STAGING_DIR) \
->> +             $$($(2)_INSTALL_STAGING_OPTS)
-> 
-> Usually, those options entirely override the default ones. For example,
-> if you provide FOO_INSTALL_STAGING_OPTS for an autotools package, then
-> the default (just 'install') is lost:
-> 
->     package/pkg-autotools.mk:
->     159 $(2)_INSTALL_STAGING_OPTS?  ?= DESTDIR=$$(STAGING_DIR) install
-> 
-> OTOH, I find this to be counter-intuitive for a user, and I would prefer
-> the options to add rather than replace.
-> 
-> But consistency trumps it all, so we should do the same for waf
-> packages:
-> 
->     $(2)_INSTALL_STAGING_OPTS ?= install --destdir=$$(STAGING_DIR)
+without a configuration defined, it fails with:
 
-Ok, so I must use AUBIO_INSTALL_STAGING_OPTS = install --destdir=$$(STAGING_DIR)
---notests with your proposal.
+/bin/bash: /BR2_DEFCONFIG=/d: No such file or directory
+Makefile:898: recipe for target 'savedefconfig' failed
+make[1]: *** [savedefconfig] Error 127
 
-Best regards,
-Romain
+This issue affects users of the "buildroot-submodule" project, which
+does menuconfig+savedefconfig automatically. They worked around this
+issue in commit
+https://github.com/Openwide-Ingenierie/buildroot-submodule/commit/d12676b608a58529c6b551aa176464166a200428,
+but really "make menuconfig savedefconfig" should work out of the box.
 
-> 
->>  endef
->>  endif
->>
->> @@ -96,7 +98,8 @@ ifndef $(2)_INSTALL_TARGET_CMDS
->>  define $(2)_INSTALL_TARGET_CMDS
->>       cd $$(@D) && \
->>       $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
->> -             install --destdir=$$(TARGET_DIR)
->> +             install --destdir=$$(TARGET_DIR) \
->> +             $$($(2)_INSTALL_TARGET_OPTS)
-> 
-> Ditto.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>  endef
->>  endif
->>
->> --
->> 2.5.5
->>
-> 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile            | 1 +
+ package/Makefile.in | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 00bcd0f..b80b9e1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -322,6 +322,7 @@ HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
+ HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
+ HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
+ HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
++SED := $(shell which sed || type -p sed) -i -e
+ 
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
+ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 4b3368f..688d5b1 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -213,7 +213,6 @@ endif
+ INSTALL := $(shell which install || type -p install)
+ FLEX := $(shell which flex || type -p flex)
+ BISON := $(shell which bison || type -p bison)
+-SED := $(shell which sed || type -p sed) -i -e
+ UNZIP := $(shell which unzip || type -p unzip) -q
+ 
+ APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(QUIET),-s)
+-- 
+2.7.4
