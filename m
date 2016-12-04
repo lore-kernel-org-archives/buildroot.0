@@ -1,66 +1,61 @@
-From: Alvaro G. M. <alvaro.gamez@hazent.com>
-Date: Sun, 4 Dec 2016 16:33:28 +0100
-Subject: [Buildroot] [PATCH v3 1/1] libxmlrpc: bump to 1.39.11
-In-Reply-To: <20161204150600.0bfe0ead@free-electrons.com>
-References: <CAM+bi4vAks48DSkjARGDsoMiG7p+X=+frremEZbjaQnG5GQHYw@mail.gmail.com>
- <1479207044-12290-1-git-send-email-alvaro.gamez@hazent.com>
- <20161204150600.0bfe0ead@free-electrons.com>
-Message-ID: <20161204153328.GA27936@collins.gmr.ssr.upm.es>
+From: Alvaro G. M <alvaro.gamez@hazent.com>
+Date: Sun,  4 Dec 2016 16:55:40 +0100
+Subject: [Buildroot] [PATCH 1/1] libxmlrpc: fix build without C++ compiler
+In-Reply-To: <20161204163745.459990e3@free-electrons.com>
+References: <20161204163745.459990e3@free-electrons.com>
+Message-ID: <1480866940-967-1-git-send-email-alvaro.gamez@hazent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 04, 2016 at 03:06:00PM +0100, Thomas Petazzoni wrote:
-> All of them look like this:
-> 
-> make[3]: Entering directory `/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11/lib/libutil++'
-> /accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11/lib/libutil++/Makefile:109: depend.mk: No such file or directory
-> cat /dev/null >depend.mk
-> ln -s /accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11 srcdir
-> ln -s /accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11 blddir
-> make[3]: Leaving directory `/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11/lib/libutil++'
-> 
-> Could you have a look and provide a patch to fix this?
+From: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
 
-Hi, Thomas
+Conditionally deactivate compilation of optional C++ module.
 
-I already know the cause for this and the patch is simple.  However, before
-sending the proposed patch as a git am commitable email, I'd like to query
-about which shall be the best way to provide it.
+Fixes:
+http://autobuild.buildroot.net/results/cbf/cbff6c816606a515467d467677763533a41fc276/
+Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+---
+ package/libxmlrpc/0002-fix-non-cplusplus-build.patch | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-The issue is that this version of libxmlrpc includes new subdir libutils++,
-which requires c++ but without which the library can perform its function
-perfectly. The way to solve this then is to patch lib/Makefile as inlined
-below, making this directory compilable only if there's c++ support.
-
-The question is: given that there is already a patch in buildroot called
-0002-fix-non-cplusplus-build.patch which does exactly the same on a
-different file (lib/util/Makefile), should I modify this patch to include
-both changes, as the name and description of the patch is basically the
-same, or should I provide another .patch file for this to include under
-package/libxmlrpc?
-
-These are the contents of proposed patch:
-
---- lib/Makefile	2015-12-30 05:22:14.000000000 +0100
-+++ /tmp/Makefile	2016-12-04 16:26:05.006320880 +0100
-@@ -9,7 +9,10 @@
+diff --git a/package/libxmlrpc/0002-fix-non-cplusplus-build.patch b/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
+index efeb9cc..2d5bfcc 100644
+--- a/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
++++ b/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
+@@ -1,9 +1,10 @@
+ Handle builds without C++
  
- # Build up SUBDIRS:
- SUBDIRS = 
--SUBDIRS += util libutil libutil++
-+SUBDIRS += util libutil
-+ifeq ($(ENABLE_CPLUSPLUS),yes)
-+  SUBDIRS += libutil++
-+endif
- ifeq ($(ENABLE_ABYSS_SERVER),yes)
-   SUBDIRS += abyss
-   ifeq ($(ENABLE_CPLUSPLUS),yes)
-
-
-Thank you!
-
+ libxmlrpc nicely handles the fact of being built without C++ support,
+-except for one location, fixed by this patch.
++except for two locations, fixed by this patch.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+ 
+ Index: b/lib/util/Makefile
+ ===================================================================
+@@ -25,3 +26,19 @@ Index: b/lib/util/Makefile
+  .PHONY: all
+  all: $(LIBOBJS)
+  
++Index: b/lib/Makefile
++===================================================================
++--- a/lib/Makefile
+++++ b/lib/Makefile
++@@ -9,7 +9,10 @@
++ 
++ # Build up SUBDIRS:
++ SUBDIRS = 
++-SUBDIRS += util libutil libutil++
+++SUBDIRS += util libutil
+++ifeq ($(ENABLE_CPLUSPLUS),yes)
+++  SUBDIRS += libutil++
+++endif
++ ifeq ($(ENABLE_ABYSS_SERVER),yes)
++   SUBDIRS += abyss
++   ifeq ($(ENABLE_CPLUSPLUS),yes)
 -- 
-Alvaro G. M.
+2.7.0
