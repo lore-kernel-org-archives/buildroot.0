@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 15:06:00 +0100
-Subject: [Buildroot] [PATCH v3 1/1] libxmlrpc: bump to 1.39.11
-In-Reply-To: <1479207044-12290-1-git-send-email-alvaro.gamez@hazent.com>
-References: <CAM+bi4vAks48DSkjARGDsoMiG7p+X=+frremEZbjaQnG5GQHYw@mail.gmail.com>
- <1479207044-12290-1-git-send-email-alvaro.gamez@hazent.com>
-Message-ID: <20161204150600.0bfe0ead@free-electrons.com>
+Date: Sun, 4 Dec 2016 15:07:12 +0100
+Subject: [Buildroot] [PATCH v4 1/3] ustream-ssl: new package
+In-Reply-To: <1476702145-25280-1-git-send-email-Rahul.Jain@imgtec.com>
+References: <1476702145-25280-1-git-send-email-Rahul.Jain@imgtec.com>
+Message-ID: <20161204150712.1ab60e17@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 15 Nov 2016 11:50:44 +0100, Alvaro G. M wrote:
-> Previous version patches are still needed, but they have been
-> upgraded to apply cleanly.
+On Mon, 17 Oct 2016 16:32:23 +0530, Rahul Jain wrote:
+> ustream-ssl has support for polarssl and cyassl
+> but since polarssl is made obsolete by mbedtls and cyassl
+> is not present in buildroot, we have not added support for it.
 > 
-> This also reverts aa9fde1c459dbc20b268694eafd7a1d3341dbf76, as that
-> patch is already on upstream.
-> 
-> Signed-off-by: Alvaro Gamez <alvaro.gamez@hazent.com>
-> ---
->  package/libxmlrpc/0001-fix-gennmtab-build.patch    |  2 +-
->  .../libxmlrpc/0004-use-correct-curl-config.patch   | 36 +++-------------------
->  package/libxmlrpc/0006-narrowing.patch             | 20 ------------
->  package/libxmlrpc/libxmlrpc.hash                   |  2 +-
->  package/libxmlrpc/libxmlrpc.mk                     |  4 +--
->  5 files changed, 9 insertions(+), 55 deletions(-)
->  delete mode 100644 package/libxmlrpc/0006-narrowing.patch
+> Signed-off-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+> Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
 
-This update is causing a bunch of build failures:
+This new package is causing a bunch of build failures:
 
-  http://autobuild.buildroot.net/?reason=libxmlrpc-1.39.11
+   http://autobuild.buildroot.net/?reason=ustream-ssl-ec80adaa1b47f28d426fa19c692011ce60b992d6
 
-All of them look like this:
+They all look like this:
 
-make[3]: Entering directory `/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11/lib/libutil++'
-/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11/lib/libutil++/Makefile:109: depend.mk: No such file or directory
-cat /dev/null >depend.mk
-ln -s /accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11 srcdir
-ln -s /accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11 blddir
-make[3]: Leaving directory `/accts/mlweber1/rc-buildroot-test/scripts/instance-1/output/build/libxmlrpc-1.39.11/lib/libutil++'
+In file included from /home/test/autobuild/run/instance-0/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/mbedtls/net.h:32:0,
+                 from /home/test/autobuild/run/instance-0/output/build/ustream-ssl-ec80adaa1b47f28d426fa19c692011ce60b992d6/ustream-mbedtls.h:22,
+                 from /home/test/autobuild/run/instance-0/output/build/ustream-ssl-ec80adaa1b47f28d426fa19c692011ce60b992d6/ustream-internal.h:25,
+                 from /home/test/autobuild/run/instance-0/output/build/ustream-ssl-ec80adaa1b47f28d426fa19c692011ce60b992d6/ustream-ssl.c:25:
+/home/test/autobuild/run/instance-0/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/mbedtls/ssl.h:545:5: error: unknown type name 'mbedtls_time_t'
+     mbedtls_time_t start;       /*!< starting time      */
 
-Could you have a look and provide a patch to fix this?
+Could you have a look and submit a patch to fix this issue?
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
