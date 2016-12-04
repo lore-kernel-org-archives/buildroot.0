@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 16:11:38 +0100
-Subject: [Buildroot] [PATCH v2 1/5] package/nvidia-driver: bump version
- to 375.20
-In-Reply-To: <20161203115809.25297-1-bernd.kuhls@t-online.de>
-References: <20161203115809.25297-1-bernd.kuhls@t-online.de>
-Message-ID: <20161204161138.2b02a667@free-electrons.com>
+Date: Sun, 4 Dec 2016 16:11:59 +0100
+Subject: [Buildroot] [git commit] lsqlite3: fix hash
+Message-ID: <20161204151202.B16FF81D2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=687ad7bf4a88bb979b6871868bd63f3f75d48a7e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Dec 2016 12:58:05 +0100, Bernd Kuhls wrote:
-> http://www.nvidia.com/download/driverResults.aspx/111596/en-us
-> "Added support for X.Org xserver ABI 23 (xorg-server 1.19)"
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: initial version
+see http://autobuild.buildroot.net/results/9c8973271591dbcd4e7ba397961cd8209cf4d2f6
 
-All 5 patches applied to master. Thanks!
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lsqlite3/lsqlite3.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lsqlite3/lsqlite3.hash b/package/lsqlite3/lsqlite3.hash
+index e7d3ce0..7cf0358 100644
+--- a/package/lsqlite3/lsqlite3.hash
++++ b/package/lsqlite3/lsqlite3.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	090282f9b8df614d70d07442ba82de3cc02a2f44cb1059fda648155d4d7e52ef  lsqlite3-0.9.4-2.src.rock
++sha256	e6eb64a7ca3727c3093f3c37341d8ecadf9eac913e468eae413828476b19c225  lsqlite3-0.9.4-2.src.rock
