@@ -1,85 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 23:52:30 +0100
-Subject: [Buildroot] [PATCH 1/1] nginx-dav-ext: New package
-In-Reply-To: <1480438071-11906-1-git-send-email-johan.oudinet@gmail.com>
-References: <1480438071-11906-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20161204235230.4be68e7c@free-electrons.com>
+Date: Sun, 4 Dec 2016 23:52:39 +0100
+Subject: [Buildroot] [git commit] qextserialport: remove redundant patch
+	0001-gui
+Message-ID: <20161204225256.86071817A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d50a127127a2e93caab994d4f9ae2d884640e1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've applied to master, but after doing a number of changes. See below.
+The same thing was done in upstream commit 220d7a2f "QtGui module only
+needed by Windows", though it was done differently upstream.
 
-On Tue, 29 Nov 2016 17:47:51 +0100, Johan Oudinet wrote:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...0001-Create-a-main-include-file-QExtSerialPort.patch} |  0
+ package/qextserialport/0001-gui.patch                    | 16 ----------------
+ ...make-to-add-a-pkgconfig-file-to-ease-usage-wit.patch} |  0
+ 3 files changed, 16 deletions(-)
 
-> diff --git a/package/nginx-dav-ext/nginx-dav-ext.mk b/package/nginx-dav-ext/nginx-dav-ext.mk
-> new file mode 100644
-> index 0000000..6c2b3a2
-> --- /dev/null
-> +++ b/package/nginx-dav-ext/nginx-dav-ext.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# nginx-dav-ext
-> +#
-> +################################################################################
-> +
-> +NGINX_DAV_EXT_VERSION = v0.0.3
-> +NGINX_DAV_EXT_SITE = $(call github,arut,nginx-dav-ext-module,$(NGINX_DAV_EXT_VERSION))
-> +
-
-LICENSE and LICENSE_FILES were missing here, so I've added them.
-
-> +NGINX_DAV_EXT_DEPENDENCIES = expat
-
-> diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-> index e6f2d96..6f339c7 100644
-> --- a/package/nginx/Config.in
-> +++ b/package/nginx/Config.in
-> @@ -85,6 +85,16 @@ config BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
->  	help
->  	  Enable ngx_http_dav_module
->  
-> +if BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
-> +
-> +config BR2_PACKAGE_NGINX_HTTP_DAV_EXT_MODULE
-> +	bool "ngx_http_dav_ext_module"
-> +	select BR2_PACKAGE_NGINX_DAV_EXT
-> +	help
-> +	  Enable ngx_http_dav_ext_module
-> +
-> +endif # BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
-
-This was not really needed, and we don't do that for other external
-nginx modules, so I've dropped this change. Enabling
-BR2_PACKAGE_NGINX_DAV_EXT is enough to get this module enabled.
-
-> +ifeq ($(BR2_PACKAGE_NGINX_HTTP_DAV_EXT_MODULE)$(BR2_PACKAGE_NGINX_DAV_EXT),yy)
-
-So I've changed this to just:
-
-ifeq ($(BR2_PACKAGE_NGINX_DAV_EXT),y)
-
-> +NGINX_DEPENDENCIES += nginx-dav-ext
-> +NGINX_CONF_OPTS += --add-module=$(NGINX_DAV_EXT_DIR)
-> +endif
-
-and moved the whole chunk next to the "upload" external module
-handling, so that all external modules are handled in the same place in
-nginx.mk.
-
-I've also added a separate patch to add you in the DEVELOPERS file for
-nginx-dav-ext (even though you will never receive a build failure about
-it, since the build really takes place inside the nginx package).
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch b/package/qextserialport/0001-Create-a-main-include-file-QExtSerialPort.patch
+similarity index 100%
+rename from package/qextserialport/0002-Create-a-main-include-file-QExtSerialPort.patch
+rename to package/qextserialport/0001-Create-a-main-include-file-QExtSerialPort.patch
+diff --git a/package/qextserialport/0001-gui.patch b/package/qextserialport/0001-gui.patch
+deleted file mode 100644
+index d3dedae..0000000
+--- a/package/qextserialport/0001-gui.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-Don't require Qt GUI module
+-
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+-diff -Nrup qextserialport-f83b4e7ca922e53.orig/qextserialport.pro qextserialport-f83b4e7ca922e53/qextserialport.pro
+---- qextserialport-f83b4e7ca922e53.orig/qextserialport.pro	2012-10-17 09:13:53.000000000 +0200
+-+++ qextserialport-f83b4e7ca922e53/qextserialport.pro	2012-11-13 22:48:29.249431510 +0100
+-@@ -41,6 +41,8 @@ macx:qesp_mac_framework {
+- 
+- win32|mac:!wince*:!win32-msvc:!macx-xcode:CONFIG += debug_and_release build_all
+- 
+-+!win32*:!wince*:QT -= gui
+-+
+- #generate proper library name
+- greaterThan(QT_MAJOR_VERSION, 4) {
+-     QESP_LIB_BASENAME = QtExtSerialPort
+diff --git a/package/qextserialport/0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch b/package/qextserialport/0002-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch
+similarity index 100%
+rename from package/qextserialport/0003-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch
+rename to package/qextserialport/0002-Tell-qmake-to-add-a-pkgconfig-file-to-ease-usage-wit.patch
