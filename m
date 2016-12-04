@@ -1,32 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Dec 2016 10:43:05 +0100
-Subject: [Buildroot] [PATCH 2/3] package/uclibc: needs a host with an UTF8
-	locale to build locales
+Date: Sun,  4 Dec 2016 10:43:06 +0100
+Subject: [Buildroot] [PATCH 3/3] support/dependencies: use the new kconfig
+	option to check UTF8 locale
 In-Reply-To: <cover.1480844552.git.yann.morin.1998@free.fr>
 References: <cover.1480844552.git.yann.morin.1998@free.fr>
-Message-ID: <64d34d91f3e1e5a207fb9d7184b29c521cf46f18.1480844552.git.yann.morin.1998@free.fr>
+Message-ID: <8b7030696b25d8b072124ac60530bd98eca8f3f6.1480844552.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Currently, we require a host with an UTF-8 locale as soone as we build a
+Buildroot toolchain with support for locales. This means that we do
+erquire such a locale when building a toolchain with either uClibc,
+glibc or musl.
+
+However, glibc and musl do not require such a locale to be present.
+
+Use the new option to check if an UTF8 locale is needed on the host,
+rather than deriving that from toolchain settings.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/uclibc/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ support/dependencies/dependencies.sh | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index fdf007e..88b9947 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -41,6 +41,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
- 	bool "Enable toolchain locale/i18n support"
- 	select BR2_TOOLCHAIN_BUILDROOT_WCHAR
- 	select BR2_ENABLE_LOCALE
-+	select BR2_NEEDS_HOST_UTF8_LOCALE
- 	help
- 	  Enable this option if you want your toolchain to support
- 	  localization and internationalization.
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index e632a14..bfd6596 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -178,8 +178,7 @@ if test "${missing_progs}" = "yes" ; then
+ 	exit 1
+ fi
+ 
+-if grep ^BR2_TOOLCHAIN_BUILDROOT=y $BR2_CONFIG > /dev/null && \
+-	grep ^BR2_ENABLE_LOCALE=y       $BR2_CONFIG > /dev/null ; then
++if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+ 	if ! which locale > /dev/null ; then
+ 		echo
+ 		echo "You need locale support on your build machine to build a toolchain supporting locales"
 -- 
 2.7.4
