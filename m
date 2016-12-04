@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2016 15:07:12 +0100
-Subject: [Buildroot] [PATCH v4 1/3] ustream-ssl: new package
-In-Reply-To: <1476702145-25280-1-git-send-email-Rahul.Jain@imgtec.com>
-References: <1476702145-25280-1-git-send-email-Rahul.Jain@imgtec.com>
-Message-ID: <20161204150712.1ab60e17@free-electrons.com>
+Date: Sun, 4 Dec 2016 15:11:45 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-12-02
+In-Reply-To: <20161203233249.08ff4c7b@gmx.net>
+References: <20161203073024.3586721D20@mail.free-electrons.com>
+ <20161203233249.08ff4c7b@gmx.net>
+Message-ID: <20161204151145.0a309442@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +14,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 17 Oct 2016 16:32:23 +0530, Rahul Jain wrote:
-> ustream-ssl has support for polarssl and cyassl
-> but since polarssl is made obsolete by mbedtls and cyassl
-> is not present in buildroot, we have not added support for it.
+Adding in Cc: Waldemar for Microblaze, and Max for Xtensa.
+
+On Sat, 3 Dec 2016 23:32:49 +0100, Peter Seiderer wrote:
+
+> +#if defined(__alpha__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__mips__) || defined(__sh__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64)
+> +#  define GST_HAVE_UNALIGNED_ACCESS 0
+> +#elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64)
+> +#  define GST_HAVE_UNALIGNED_ACCESS 1
+> +#else
+> +#  error "Could not detect architecture; don't know whether it supports unaligned access! Please file a bug."
+> +#endif
 > 
-> Signed-off-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-> Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
+> Time to add defines for microblazeel and xtensa, any hint which defines and at
+> unaligned acess yes/no?
 
-This new package is causing a bunch of build failures:
+Do you think there would be a problem to simply assume by default that
+the architecture doesn't support unaligned accesses? I mean, if a new
+architecture by chance supports unaligned accesses, but we tell
+GStreamer that we don't support such unaligned accesses, what can go
+wrong? Possibly the code is slightly less efficient, but there should
+be no runtime issue.
 
-   http://autobuild.buildroot.net/?reason=ustream-ssl-ec80adaa1b47f28d426fa19c692011ce60b992d6
+So what about instead doing:
 
-They all look like this:
+#if defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64)
+#  define GST_HAVE_UNALIGNED_ACCESS 1
+#else
+#  define GST_HAVE_UNALIGNED_ACCESS 0
+#endif
 
-In file included from /home/test/autobuild/run/instance-0/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/mbedtls/net.h:32:0,
-                 from /home/test/autobuild/run/instance-0/output/build/ustream-ssl-ec80adaa1b47f28d426fa19c692011ce60b992d6/ustream-mbedtls.h:22,
-                 from /home/test/autobuild/run/instance-0/output/build/ustream-ssl-ec80adaa1b47f28d426fa19c692011ce60b992d6/ustream-internal.h:25,
-                 from /home/test/autobuild/run/instance-0/output/build/ustream-ssl-ec80adaa1b47f28d426fa19c692011ce60b992d6/ustream-ssl.c:25:
-/home/test/autobuild/run/instance-0/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/mbedtls/ssl.h:545:5: error: unknown type name 'mbedtls_time_t'
-     mbedtls_time_t start;       /*!< starting time      */
+and be done with it?
 
-Could you have a look and submit a patch to fix this issue?
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
