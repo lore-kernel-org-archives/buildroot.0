@@ -1,73 +1,109 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 5 Dec 2016 22:16:03 +0100
-Subject: [Buildroot] [PATCH] bluez5_utils: add autoreconf back
-In-Reply-To: <20161205213207.42e356af@free-electrons.com>
-References: <20161205131504.28872-1-gary.bisson@boundarydevices.com>
- <20161205213207.42e356af@free-electrons.com>
-Message-ID: <d6c03c59-32b7-3749-80a7-ba4c812b3f87@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 5 Dec 2016 22:18:37 +0100
+Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
+ additional variables for each build step
+In-Reply-To: <43f11483-2fa1-3191-b5b0-4ccbaad28903@mind.be>
+References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
+ <1480885126-517-2-git-send-email-romain.naour@gmail.com>
+ <20161204212433.GC3433@free.fr> <20161204224100.26768191@free-electrons.com>
+ <43f11483-2fa1-3191-b5b0-4ccbaad28903@mind.be>
+Message-ID: <f68f3eba-28f0-a3eb-23bc-4954fc05cbd0@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout, All,
 
-
-On 05-12-16 21:32, Thomas Petazzoni wrote:
-> Hello,
+Le 05/12/2016 ? 00:32, Arnout Vandecappelle a ?crit :
 > 
-> On Mon,  5 Dec 2016 14:15:04 +0100, Gary Bisson wrote:
->> Not necessary for an unmodified package. However if your external
->> layer includes BlueZ5 patches which brings new files (such as a
->> new hciattach protocol), it will not be built since the Makefile.in
->> is already there.
->>
->> Forcing an autoreconf fixes such issue.
->>
->> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
->> ---
->> Hi all,
->>
->> I know this is a corner case which isn't a problem for 99% of users
->> so I won't be surprised if it is rejected.
 > 
-> Indeed :)
+> On 04-12-16 22:41, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Sun, 4 Dec 2016 22:24:34 +0100, Yann E. MORIN wrote:
+>>> Romain, All,
+>>
+>>>> -     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) build -j $$(PARALLEL_JOBS)
+>>>> +     $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+>>>> +             build -j $$(PARALLEL_JOBS) $$($(2)_MAKE_OPTS)  
+>>>
+>>> I'm not against having variables named the same across packages, but
+>>> here I think $(2)_BUILD_OPTS would be more appropriate.
+>>
+>> ACK.
+>>
+>>>> @@ -84,7 +85,8 @@ ifndef $(2)_INSTALL_STAGING_CMDS
+>>>>  define $(2)_INSTALL_STAGING_CMDS
+>>>>       cd $$(@D) && \
+>>>>       $$(TARGET_MAKE_ENV) $$(HOST_DIR)/usr/bin/python2 $$($(2)_WAF) \
+>>>> -             install --destdir=$$(STAGING_DIR)
+>>>> +             install --destdir=$$(STAGING_DIR) \
+>>>> +             $$($(2)_INSTALL_STAGING_OPTS)  
+>>>
+>>> Usually, those options entirely override the default ones. For example,
+>>> if you provide FOO_INSTALL_STAGING_OPTS for an autotools package, then
+>>> the default (just 'install') is lost:
+>>>
+>>>     package/pkg-autotools.mk:
+>>>     159 $(2)_INSTALL_STAGING_OPTS?  ?= DESTDIR=$$(STAGING_DIR) install>>
 > 
->> The use case here is that we provide a WiFi/BT combo from Qualcomm
->> (QCA9377) which isn't supported in upstream BlueZ5.
->> https://boundarydevices.com/product/bd_sdmac_wifi/
->>
->> Qualcomm said there was no plan to upstream the support, but provides
->> their own (outdated) tree in codeaurora:
->> https://source.codeaurora.org/quic/la/platform/external/bluetooth/bluez/
->>
->> We generated a patch out of that repo that allows to add support for
->> this chip in Yocto (with a simple bbappend):
->> https://github.com/boundarydevices/meta-boundary/tree/krogoth/recipes-connectivity/bluez5/bluez5
->>
->> Now the idea is to provide a Boundary external layer that adds support
->> for this chip in Buildroot.
->>
->> When adding this patch, the builds fails since hciattach_rome.c isn't
->> specified in the Makefile.in already present in the archive.
->>
->> Let me know if there's another opion in your opinion.
 > 
-> Have you tried adding BLUEZ5_AUTORECONF = YES to your external.mk file?
+>  That's autotools, but if you look at cmake, python, and perl, they're basically
+> doing it all differently. For example, cmake has a _MAKE_OPTS that is passed for
+> all steps; python and perl hardcode the 'install' command.
+> 
+>  I think we can conclude that consistency is not going to happen, so instead we
+> should look for the "best" option. Which means:
+> 
+>>> OTOH, I find this to be counter-intuitive for a user, and I would prefer
+>>> the options to add rather than replace.
+>>
+>> Agreed. I also find it super annoying that we have to replicate
+>> DESTDIR=$$(STAGING_DIR) install. But in some cases, we *do* need to
+>> override it.
+> 
+>  In case of waf, I'm not so sure we're ever going to need to override this.
+> autotools has more freedom to shoot yourself in the foot, but waf (like cmake)
+> is pretty much fixed.
 
- That won't work, because it's used in an ifeq in the autotools-package
-expansion, and external.mk is included after the packages.
+So basically, you prefer this version than v2 of the series.
 
- It does work if you put it in override.mk, but that's not convenient in an
-external.
+> 
+>>
+>> Another thing that I dislike is that we have no way to pass an option
+>> to all of the build and install steps.
+> 
+>  Yep, and for cmake this is possible. So it would be better to have such an
+> option. What I'm not sure of, however, is how this option should be called, and
+> also if it should be passed in the configure step or not. Ideally we should have
+> more examples.
 
- Regards,
- Arnout
+What's about <pkg>_WAF_OPTS ?
+In case of aubio we don't really need to pass --notests for the configure step,
+only for build and staging/target install step.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Best regards,
+Romain
+
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+>>> But consistency trumps it all, so we should do the same for waf
+>>> packages:
+>>>
+>>>     $(2)_INSTALL_STAGING_OPTS ?= install --destdir=$$(STAGING_DIR)
+>>
+>> I agree. Even if the current situation is not 100% nice, I think a
+>> rework of this current situation is a much broader effort. So let's
+>> make the waf-package infrastructure be as similar as possible to the
+>> other ones.
+>>
+>> Best regards,
+>>
+>> Thomas
+>>
+> 
