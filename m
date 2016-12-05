@@ -1,60 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 21:32:07 +0100
-Subject: [Buildroot] [PATCH] bluez5_utils: add autoreconf back
-In-Reply-To: <20161205131504.28872-1-gary.bisson@boundarydevices.com>
-References: <20161205131504.28872-1-gary.bisson@boundarydevices.com>
-Message-ID: <20161205213207.42e356af@free-electrons.com>
+Date: Mon, 5 Dec 2016 21:33:43 +0100
+Subject: [Buildroot] [git commit] nginx-dav-ext: depends on
+	BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
+Message-ID: <20161205203358.D09A5800E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1547eea294058a6e5f2ed06df590b43ac601ff71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Dec 2016 14:15:04 +0100, Gary Bisson wrote:
-> Not necessary for an unmodified package. However if your external
-> layer includes BlueZ5 patches which brings new files (such as a
-> new hciattach protocol), it will not be built since the Makefile.in
-> is already there.
-> 
-> Forcing an autoreconf fixes such issue.
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
-> Hi all,
-> 
-> I know this is a corner case which isn't a problem for 99% of users
-> so I won't be surprised if it is rejected.
+This package adds missing WebDAB commands to NGINX. So, it makes sense
+iff Nginx is compiled with the WebDAV support.
 
-Indeed :)
+Fixes:
 
-> The use case here is that we provide a WiFi/BT combo from Qualcomm
-> (QCA9377) which isn't supported in upstream BlueZ5.
-> https://boundarydevices.com/product/bd_sdmac_wifi/
-> 
-> Qualcomm said there was no plan to upstream the support, but provides
-> their own (outdated) tree in codeaurora:
-> https://source.codeaurora.org/quic/la/platform/external/bluetooth/bluez/
-> 
-> We generated a patch out of that repo that allows to add support for
-> this chip in Yocto (with a simple bbappend):
-> https://github.com/boundarydevices/meta-boundary/tree/krogoth/recipes-connectivity/bluez5/bluez5
-> 
-> Now the idea is to provide a Boundary external layer that adds support
-> for this chip in Buildroot.
-> 
-> When adding this patch, the builds fails since hciattach_rome.c isn't
-> specified in the Makefile.in already present in the archive.
-> 
-> Let me know if there's another opion in your opinion.
+  http://autobuild.buildroot.net/results/6e997faf553dc70d0aa1ee811fd669650349cba2/
 
-Have you tried adding BLUEZ5_AUTORECONF = YES to your external.mk file?
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+[Thomas: fix indentation, add autobuilder reference.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nginx-dav-ext/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/nginx-dav-ext/Config.in b/package/nginx-dav-ext/Config.in
+index bf197dc..1e60321 100644
+--- a/package/nginx-dav-ext/Config.in
++++ b/package/nginx-dav-ext/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NGINX_DAV_EXT
+ 	bool "nginx-dav-ext"
++	depends on BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
+ 	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  NGINX WebDAV missing commands support (PROPFIND & OPTIONS).
