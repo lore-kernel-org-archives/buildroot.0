@@ -1,122 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 22:51:17 +0100
-Subject: [Buildroot] [git commit] pkg-autotools: generic configure fix for
-	powerpc64
-Message-ID: <20161205215451.3988B81776@busybox.osuosl.org>
+Date: Mon, 5 Dec 2016 22:55:13 +0100
+Subject: [Buildroot] [PATCH v3 1/1] pkg-autotools: generic configure fix
+ for powerpc64
+In-Reply-To: <1d653a47bcc91167e4ff1782e889a8229119fc3b.1480309892.git.sam.bobroff@au1.ibm.com>
+References: <1d653a47bcc91167e4ff1782e889a8229119fc3b.1480309892.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20161205225513.5c2bf373@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41444d7f892b44c87d3b08e7ba1824b9cb9ee9a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Many (100+) packages supported by buildroot contain old configure
-scripts (or build them from old versions of autotools) that are unable
-to determine how to link shared libraries on powerpc64 and
-powerpc64le. This causes that test to erroneously fail on toolchains
-that are not "bi-endian" (which is the case for toolchains built by
-buildroot), which causes configure to build static libraries instead
-of dynamic ones. Although these builds succeed, they tend to cause
-linker failures in binaries later linked against them.
+On Mon, 28 Nov 2016 16:11:39 +1100, Sam Bobroff wrote:
+> Many (100+) packages supported by buildroot contain old configure
+> scripts (or build them from old versions of autotools) that are unable
+> to determine how to link shared libraries on powerpc64 and
+> powerpc64le. This causes that test to erroneously fail on toolchains
+> that are not "bi-endian" (which is the case for toolchains built by
+> buildroot), which causes configure to build static libraries instead
+> of dynamic ones. Although these builds succeed, they tend to cause
+> linker failures in binaries later linked against them.
+> 
+> Because affected configure files can be discovered automatically, this
+> patch introduces a hook (enabled only when building for powerpc64 and
+> powerpc64le) that uses a script to scan and fix each package.
+> 
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> ---
 
-Because affected configure files can be discovered automatically, this
-patch introduces a hook (enabled only when building for powerpc64 and
-powerpc64le) that uses a script to scan and fix each package.
+Applied to master, thanks.
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-autotools.mk                   | 16 ++++++++++
- support/scripts/fix-configure-powerpc64.sh | 47 ++++++++++++++++++++++++++++++
- 2 files changed, 63 insertions(+)
-
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index d1cdb89..00822e2 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -79,6 +79,15 @@ define LIBTOOL_PATCH_HOOK
- endef
- 
- #
-+# Hook to patch common issue with configure on powerpc64{,le} failing
-+# to detect shared library support:
-+#
-+define CONFIGURE_FIX_POWERPC64_HOOK
-+	@$(call MESSAGE,"Checking configure (powerpc64/powerpc64le)")
-+	support/scripts/fix-configure-powerpc64.sh $($(PKG)_DIR)
-+endef
-+
-+#
- # Hook to gettextize the package if needed
- #
- define GETTEXTIZE_HOOK
-@@ -255,6 +264,13 @@ endif
- 
- endif
- 
-+# Append a configure hook if building for a powerpc64 (or powerpc64le) arch.
-+# Must be added after other pre-configure hooks that might regenerate the
-+# configure script and overwrite the changes made here.
-+ifneq ($$(filter powerpc64%,$$(if $$(filter target,$(4)),$$(ARCH),$$(HOSTARCH))),)
-+$(2)_PRE_CONFIGURE_HOOKS += CONFIGURE_FIX_POWERPC64_HOOK
-+endif
-+
- #
- # Build step. Only define it if not already defined by the package .mk
- # file.
-diff --git a/support/scripts/fix-configure-powerpc64.sh b/support/scripts/fix-configure-powerpc64.sh
-new file mode 100755
-index 0000000..ad71042
---- /dev/null
-+++ b/support/scripts/fix-configure-powerpc64.sh
-@@ -0,0 +1,47 @@
-+#!/bin/bash
-+
-+# This is a script to find, and correct, a problem with old versions of
-+# configure that affect powerpc64 and powerpc64le.
-+
-+# The issue causes configure to incorrectly determine that shared library
-+# support is not present in the linker. This causes the package to build a
-+# static library rather than a dynamic one and although the build will succeed,
-+# it may cause packages that link with the static library it to fail due to
-+# undefined symbols.
-+
-+# This script searches for files named 'configure' that appear to have this
-+# issue (by searching for a known bad pattern) and patching them.
-+
-+set -e
-+
-+if [ $# -ne 1 ]; then
-+	echo "Usage: $0 <package build directory>"
-+	exit 2
-+fi
-+
-+srcdir="$1"
-+files=$(cd "$srcdir" && find . -name configure \
-+-exec grep -qF 'Generated by GNU Autoconf' {} \; \
-+-exec grep -qF 'ppc*-*linux*|powerpc*-*linux*)' {} \; -print)
-+
-+# --ignore-whitespace is needed because some packages have included
-+# copies of configure scripts where tabs have been replaced with spaces.
-+for c in $files; do
-+	patch --ignore-whitespace "$srcdir"/"$c" <<'EOF'
-+--- a/configure	2016-11-16 15:31:46.097447271 +1100
-++++ b/configure	2008-07-21 12:17:23.000000000 +1000
-+@@ -4433,7 +4433,10 @@
-+         x86_64-*linux*)
-+           LD="${LD-ld} -m elf_x86_64"
-+           ;;
-+-        ppc*-*linux*|powerpc*-*linux*)
-++	  powerpcle-*linux*)
-++	    LD="${LD-ld} -m elf64lppc"
-++	    ;;
-++	  powerpc-*linux*)
-+           LD="${LD-ld} -m elf64ppc"
-+           ;;
-+         s390*-*linux*)
-+EOF
-+done
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
