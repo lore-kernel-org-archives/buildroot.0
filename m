@@ -1,114 +1,57 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 4 Dec 2016 19:24:17 -0800
-Subject: [Buildroot] [PATCH] autossh: honour LDFLAGS
-In-Reply-To: <20161204120637.GE14207@waldemar-brodkorb.de>
-References: <20161125180016.GA360@waldemar-brodkorb.de>
- <20161128222834.37958cd9@free-electrons.com>
- <20161129041655.GK14207@waldemar-brodkorb.de>
- <20161129094321.656d1cb4@free-electrons.com>
- <CAMo8BfJAGT8cdvQ2xMx33HKDwW34XP6wVxHd1yn-UxAyQEYpRA@mail.gmail.com>
- <20161130050003.GS14207@waldemar-brodkorb.de>
- <CAMo8Bf+tDete50wsasrj=L1G=7XCJ9=dZBav4azY_PN1HTzrqw@mail.gmail.com>
- <20161202052526.GB14207@waldemar-brodkorb.de>
- <CAMo8BfLxFxaRGAsgAX+xqorPfJAH0ZTAVmpUfFb3mC_wHbKPMg@mail.gmail.com>
- <20161204120637.GE14207@waldemar-brodkorb.de>
-Message-ID: <CAMo8Bf+Ny2X82BY__feRXp6poYsvppujHwvWCRx7K7nRzT4kOQ@mail.gmail.com>
+Date: Sun, 4 Dec 2016 19:29:44 -0800
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2016-12-02
+In-Reply-To: <20161204151145.0a309442@free-electrons.com>
+References: <20161203073024.3586721D20@mail.free-electrons.com>
+ <20161203233249.08ff4c7b@gmx.net> <20161204151145.0a309442@free-electrons.com>
+Message-ID: <CAMo8BfLA_AhbWe7dkGXCAUompw4aJyCpPBDjFGgw1GfW+DNB7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 4, 2016 at 4:06 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
->> On Thu, Dec 1, 2016 at 9:25 PM, Waldemar Brodkorb <wbx@openadk.org> wrote:
->> >> Hello,
->> >>
->> >> TL;DR: -static is good, order of objects in libc.a is important.
->> >
->> > Thanks for the very detailed analysis.
->> > Do you have any idea how we could restore the old order and keep
->> > the binaries smaller?
->>
->> One ugly solution could be putting __uClibc-main.os before both libc-tls.os
->> and init.os, something like the following:
->>
->> diff --git a/libc/misc/internals/Makefile.in b/libc/misc/internals/Makefile.in
->> index ae094ee..d2400d2 100644
->> --- a/libc/misc/internals/Makefile.in
->> +++ b/libc/misc/internals/Makefile.in
->> @@ -25,7 +25,7 @@ libc-shared-y += $(MISC_INTERNALS_OUT)/__uClibc_main.oS
->>  else
->>  libc-shared-y += $(MISC_INTERNALS_OUT)/__uClibc_main.os
->>  endif
->> -libc-static-y += $(MISC_INTERNALS_OUT)/__uClibc_main.o
->> +libc-static-y := $(MISC_INTERNALS_OUT)/__uClibc_main.o $(libc-static-y)
->>  libc-static-$(UCLIBC_FORMAT_FLAT_SEP_DATA) += \
->>    $(MISC_INTERNALS_OUT)/shared_flat_initfini.o \
->>    $(MISC_INTERNALS_OUT)/shared_flat_add_library.o
+On Sun, Dec 4, 2016 at 6:11 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 >
-> Thanks for the patch, I tried it.
-> But unforunately it breaks other applications as busybox init.
+> Adding in Cc: Waldemar for Microblaze, and Max for Xtensa.
+>
+> On Sat, 3 Dec 2016 23:32:49 +0100, Peter Seiderer wrote:
+>
+>> +#if defined(__alpha__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__mips__) || defined(__sh__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64)
+>> +#  define GST_HAVE_UNALIGNED_ACCESS 0
+>> +#elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64)
+>> +#  define GST_HAVE_UNALIGNED_ACCESS 1
+>> +#else
+>> +#  error "Could not detect architecture; don't know whether it supports unaligned access! Please file a bug."
+>> +#endif
+>>
+>> Time to add defines for microblazeel and xtensa, any hint which defines and at
+>> unaligned acess yes/no?
 
-Well, it shows that the current uClibc-ng is broken without pthread
-code. The root cause of the init breakage is a call to
-_pthread_cleanup_push_defer from mallopt, which currently points
-to NULL, because _pthread_cleanup_push_defer is weak and its
-definition was removed from __uClibc_main.c in the unification
-patch. Restoring it fixes init for me.
-I tried to follow the story of these definitions, but it seems to be a
-chain of failures and attempted fixes. So I'm not sure this fixes
-everything and doesn't break something else ): It sure needs testing.
+For xtensa it would be __xtensa__, but there's currently no easy way to tell
+if the core supports unaligned access or not, so should default to "no".
 
-diff --git a/libc/misc/internals/__uClibc_main.c
-b/libc/misc/internals/__uClibc_main.c
-index 46e24d8..0446b08 100644
---- a/libc/misc/internals/__uClibc_main.c
-+++ b/libc/misc/internals/__uClibc_main.c
-@@ -68,6 +68,42 @@ uintptr_t __stack_chk_guard attribute_relro;
+> Do you think there would be a problem to simply assume by default that
+> the architecture doesn't support unaligned accesses? I mean, if a new
+> architecture by chance supports unaligned accesses, but we tell
+> GStreamer that we don't support such unaligned accesses, what can go
+> wrong? Possibly the code is slightly less efficient, but there should
+> be no runtime issue.
+>
+> So what about instead doing:
+>
+> #if defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64)
+> #  define GST_HAVE_UNALIGNED_ACCESS 1
+> #else
+> #  define GST_HAVE_UNALIGNED_ACCESS 0
+> #endif
+>
+> and be done with it?
 
- void internal_function _dl_aux_init (ElfW(auxv_t) *av);
-
-+#ifdef __UCLIBC_HAS_THREADS__
-+/*
-+ * uClibc internal locking requires that we have weak aliases
-+ * for dummy functions in case libpthread.a is not linked in.
-+ * This needs to be in compilation unit that is pulled always
-+ * in or linker will disregard these weaks.
-+ */
-+
-+static int __pthread_return_0 (pthread_mutex_t *unused) { return 0; }
-+weak_alias (__pthread_return_0, __pthread_mutex_lock)
-+weak_alias (__pthread_return_0, __pthread_mutex_trylock)
-+weak_alias (__pthread_return_0, __pthread_mutex_unlock)
-+
-+int weak_function
-+__pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr)
-+{
-+        return 0;
-+}
-+
-+void weak_function
-+_pthread_cleanup_push_defer(struct _pthread_cleanup_buffer *__buffer,
-+                            void (*__routine) (void *), void *__arg)
-+{
-+        __buffer->__routine = __routine;
-+        __buffer->__arg = __arg;
-+}
-+
-+void weak_function
-+_pthread_cleanup_pop_restore(struct _pthread_cleanup_buffer *__buffer,
-+                             int __execute)
-+{
-+        if (__execute)
-+                __buffer->__routine(__buffer->__arg);
-+}
-+#endif /* __UCLIBC_HAS_THREADS__ */
-+
- #endif /* !SHARED */
-
- /* Defeat compiler optimization which assumes function addresses are
-never NULL */
-
++1 to this.
 
 -- 
 Thanks.
