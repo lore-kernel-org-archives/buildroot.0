@@ -1,26 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Dec 2016 08:31:49 +0100
-Subject: [Buildroot] Fwd: IVSHMEM send interrupts from the kernel
-In-Reply-To: <CAK7rcp_VG-VGbJW89jH2QN9QcPqJ5_TWFifmK19sU88wxW2kPA@mail.gmail.com>
- (Kenneth Adam Miller's message of "Sat, 3 Dec 2016 13:55:56 -0500")
-References: <CAK7rcp8xjm3cuVLeLFFKRQ8sqXNV2S=v2VChSfAWo37RejmF1Q@mail.gmail.com>
- <CAK7rcp_VG-VGbJW89jH2QN9QcPqJ5_TWFifmK19sU88wxW2kPA@mail.gmail.com>
-Message-ID: <87y3zu6dcq.fsf@dell.be.48ers.dk>
+Date: Mon, 5 Dec 2016 08:54:51 +0100
+Subject: [Buildroot] [git commit] ti-cgt-pru: fix typo in comment
+Message-ID: <20161205075509.11FC181946@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Kenneth" == Kenneth Adam Miller <kennethadammiller@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=55fba24d346a0f937d84e8461a71730281be879c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > I am following the blogs about ivshmem at nairobi-embedded.org,
- > I am interested for help on how I can send interrupts from one
- > QEMU guest directly through to another guest.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ti-cgt-pru/ti-cgt-pru.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ehh, did you send this mail to the Buildroot list on purpose or was this
-meant for the QEMU list?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+index 7c89444..d94f091 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.mk
++++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+@@ -21,7 +21,7 @@ define HOST_TI_CGT_PRU_EXTRACT_CMDS
+ endef
+ 
+ # Since this is largely prebuilt toolchain and likes to live in its
+-# own directory, put is in $(HOST_DIR)/usr/share/ti-cgt-pru/.
++# own directory, put it in $(HOST_DIR)/usr/share/ti-cgt-pru/.
+ # Packages wanting to use this toolchain need to use this path as TI's
+ # standard PRU_CGT path e.g. make PRU_CGT=$(TI_CGT_PRU_INSTALLDIR)...
+ TI_CGT_PRU_INSTALLDIR = $(HOST_DIR)/usr/share/ti-cgt-pru
