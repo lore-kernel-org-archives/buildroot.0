@@ -1,73 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 21:31:08 +0100
-Subject: [Buildroot] [git commit] efivar: not available for static builds
-Message-ID: <20161205203120.716C27FD3D@busybox.osuosl.org>
+Date: Mon, 5 Dec 2016 21:32:07 +0100
+Subject: [Buildroot] [PATCH] bluez5_utils: add autoreconf back
+In-Reply-To: <20161205131504.28872-1-gary.bisson@boundarydevices.com>
+References: <20161205131504.28872-1-gary.bisson@boundarydevices.com>
+Message-ID: <20161205213207.42e356af@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb0d4b557565c4742c0300a72fcb5baf2c26674d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-efivar uses dlfcn.h which is not available in static builds
-configuration. Also propagate dependency to efibootmgr. This commit
-also does s/requires/needs/ in comment while at it.
+On Mon,  5 Dec 2016 14:15:04 +0100, Gary Bisson wrote:
+> Not necessary for an unmodified package. However if your external
+> layer includes BlueZ5 patches which brings new files (such as a
+> new hciattach protocol), it will not be built since the Makefile.in
+> is already there.
+> 
+> Forcing an autoreconf fixes such issue.
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+> Hi all,
+> 
+> I know this is a corner case which isn't a problem for 99% of users
+> so I won't be surprised if it is rejected.
 
-Fixes:
-  http://autobuild.buildroot.net/results/ab3/ab32ccacfac2e65e1fcb307058d06c3d0122979d/
+Indeed :)
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/efibootmgr/Config.in | 6 ++++--
- package/efivar/Config.in     | 6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+> The use case here is that we provide a WiFi/BT combo from Qualcomm
+> (QCA9377) which isn't supported in upstream BlueZ5.
+> https://boundarydevices.com/product/bd_sdmac_wifi/
+> 
+> Qualcomm said there was no plan to upstream the support, but provides
+> their own (outdated) tree in codeaurora:
+> https://source.codeaurora.org/quic/la/platform/external/bluetooth/bluez/
+> 
+> We generated a patch out of that repo that allows to add support for
+> this chip in Yocto (with a simple bbappend):
+> https://github.com/boundarydevices/meta-boundary/tree/krogoth/recipes-connectivity/bluez5/bluez5
+> 
+> Now the idea is to provide a Boundary external layer that adds support
+> for this chip in Buildroot.
+> 
+> When adding this patch, the builds fails since hciattach_rome.c isn't
+> specified in the Makefile.in already present in the archive.
+> 
+> Let me know if there's another opion in your opinion.
 
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-index 8b29938..cd4bda1 100644
---- a/package/efibootmgr/Config.in
-+++ b/package/efibootmgr/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_EFIBOOTMGR
- 	bool "efibootmgr"
-+	depends on !BR2_STATIC_LIBS # efivar
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # efivar
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
-@@ -15,8 +16,9 @@ config BR2_PACKAGE_EFIBOOTMGR
- 
- 	  https://github.com/rhinstaller/efibootmgr
- 
--comment "efibootmgr requires a glibc or uClibc toolchain w/ headers >= 3.12, gcc >= 4.9"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
-+comment "efibootmgr needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
-+	depends on BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
- 		BR2_TOOLCHAIN_USES_MUSL || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
-diff --git a/package/efivar/Config.in b/package/efivar/Config.in
-index 1bdb6ca..a97c766 100644
---- a/package/efivar/Config.in
-+++ b/package/efivar/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_EFIVAR
- 	bool "efivar"
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # linux/nvme.h
- 	# linux/nvme.h has been renamed to linux/nvme_ioctl.h since 4.4,
- 	# and the efivar source handles that situation. However, some
-@@ -18,8 +19,9 @@ config BR2_PACKAGE_EFIVAR
- 
- 	  https://github.com/rhinstaller/efivar
- 
--comment "efivar requires a glibc or uClibc toolchain w/ headers >= 3.12, gcc >= 4.9"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
-+comment "efivar needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
-+	depends on BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
- 		BR2_TOOLCHAIN_USES_MUSL || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
+Have you tried adding BLUEZ5_AUTORECONF = YES to your external.mk file?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
