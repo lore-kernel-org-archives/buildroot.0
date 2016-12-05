@@ -1,89 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 23:07:10 +0100
-Subject: [Buildroot] [git commit] arch/Config.in.arm: add FPU related
-	options for ARMv8 cores
-Message-ID: <20161205221749.92F277FF69@busybox.osuosl.org>
+Date: Mon, 5 Dec 2016 23:07:13 +0100
+Subject: [Buildroot] [git commit] arch/Config.in.arm: Add Cortex-A53 CPU
+Message-ID: <20161205221749.A89387FEC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d690b7444a819a53a756cd3b6047584802d55d92
+commit: https://git.buildroot.net/buildroot/commit/?id=785a73fb8f64d14c68b0c035aa40b203a2a17378
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ARMv8 cores have a mandatory FPU unit called FP-ARMv8, so we:
+Adds the Cortex-A53 CPU to the target architecture variant choice. This
+sets the toolchain to use Cortex-A53 as the target. The effect is that
+various Cortex-A53 tunings are enabled for the compilation of packages.
 
- - add a new hidden Config.in option for the availability of this
-   unit (BR2_ARM_CPU_HAS_FP_ARMV8)
-
- - allow the selection of a possible choice in the "Floating point
-   strategy", and add two new choices: BR2_ARM_FPU_FP_ARMV8 and
-   BR2_ARM_FPU_NEON_FP_ARMV8.
-
- - specify the -mfpu values for BR2_ARM_FPU_FP_ARMV8 and
-   BR2_ARM_FPU_NEON_FP_ARMV8 cases, when used on ARM 32 bits (-mfpu
-   doesn't exist on ARM64, instead -mcpu modifiers are used, so they
-   will be added on a per-core basis).
-
+Signed-off-by: Matt Flax <flatmax@flatmax.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[yann.morin.1998 at free.fr: drop the FP strategy dependency]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.arm | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ arch/Config.in.arm | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index fa999d5..1a3c36d 100644
+index c98efcd..592b097 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -31,6 +31,10 @@ config BR2_ARM_CPU_HAS_VFPV4
- 	bool
- 	select BR2_ARM_CPU_HAS_VFPV3
+@@ -191,6 +191,13 @@ config BR2_cortex_a17
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	depends on !BR2_ARCH_IS_64
++config BR2_cortex_a53
++	bool "cortex-A53"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_NEON
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_m3
+ 	bool "cortex-M3"
+ 	select BR2_ARM_CPU_HAS_THUMB2
+@@ -510,6 +517,9 @@ config BR2_GCC_TARGET_CPU
+ 	default "strongarm"	if BR2_strongarm
+ 	default "xscale"	if BR2_xscale
+ 	default "iwmmxt"	if BR2_iwmmxt
++	default "cortex-a53"		if (BR2_cortex_a53 && !BR2_ARCH_IS_64)
++	default "cortex-a53+fp"		if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_FP_ARMV8)
++	default "cortex-a53+fp+simd" 	if (BR2_cortex_a53 && BR2_ARCH_IS_64 && BR2_ARM_FPU_NEON_FP_ARMV8)
  
-+config BR2_ARM_CPU_HAS_FP_ARMV8
-+	bool
-+	select BR2_ARM_CPU_HAS_VFPV4
-+
- config BR2_ARM_CPU_HAS_ARM
- 	bool
- 
-@@ -308,6 +312,7 @@ endchoice
- 
- choice
- 	prompt "Floating point strategy"
-+	default BR2_ARM_FPU_FP_ARMV8 if BR2_ARM_CPU_HAS_FP_ARMV8
- 	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
- 	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
- 	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
-@@ -418,6 +423,20 @@ config BR2_ARM_FPU_NEON_VFPV4
- 	  example on Cortex-A5 and Cortex-A7, support for VFPv4 and
- 	  NEON is optional.
- 
-+config BR2_ARM_FPU_FP_ARMV8
-+	bool "FP-ARMv8"
-+	depends on BR2_ARM_CPU_HAS_FP_ARMV8
-+	help
-+	  This option allows to use the ARMv8 floating point unit.
-+
-+config BR2_ARM_FPU_NEON_FP_ARMV8
-+	bool "NEON/FP-ARMv8"
-+	depends on BR2_ARM_CPU_HAS_FP_ARMV8
-+	depends on BR2_ARM_CPU_HAS_NEON
-+	help
-+	  This option allows to use both the ARMv8 floating point unit
-+	  and the NEON SIMD unit for floating point operations.
-+
- endchoice
- 
- choice
-@@ -504,6 +523,8 @@ config BR2_GCC_TARGET_FPU
- 	default "vfpv4-d16" 	if BR2_ARM_FPU_VFPV4D16
- 	default "neon" 		if BR2_ARM_FPU_NEON
- 	default "neon-vfpv4" 	if BR2_ARM_FPU_NEON_VFPV4
-+	default "fp-armv8"	if BR2_ARM_FPU_FP_ARMV8
-+	default "neon-fp-armv8"	if BR2_ARM_FPU_NEON_FP_ARMV8
- 
- config BR2_GCC_TARGET_FLOAT_ABI
- 	default "soft"		if BR2_ARM_SOFT_FLOAT
+ config BR2_GCC_TARGET_ABI
+ 	default "aapcs-linux"	if BR2_arm || BR2_armeb
