@@ -1,76 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 21:29:59 +0100
-Subject: [Buildroot] [git commit] gstreamer1: fix compile for microblaze and
-	xtensa architectures
-Message-ID: <20161205203120.67E6481D34@busybox.osuosl.org>
+Date: Mon, 5 Dec 2016 21:31:08 +0100
+Subject: [Buildroot] [git commit] efivar: not available for static builds
+Message-ID: <20161205203120.716C27FD3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dc988c682e3cece90e277ff12d07aebe6188771
+commit: https://git.buildroot.net/buildroot/commit/?id=fb0d4b557565c4742c0300a72fcb5baf2c26674d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix unaligned access support detection introduced to gstreamer
-by commit 'gstconfig.h: Detect unaligned access support at compile-time' ([1])
-by assuming no unaligned support for unknown architectures.
+efivar uses dlfcn.h which is not available in static builds
+configuration. Also propagate dependency to efibootmgr. This commit
+also does s/requires/needs/ in comment while at it.
 
-Fixes [2], [3]:
+Fixes:
+  http://autobuild.buildroot.net/results/ab3/ab32ccacfac2e65e1fcb307058d06c3d0122979d/
 
-  ../gst/gstconfig.h:112:4: error: #error "Could not detect architecture; don't know whether it supports unaligned access! Please file a bug."
-  #  error "Could not detect architecture; don't know whether it supports unaligned access! Please file a bug."
-
-[1] https://cgit.freedesktop.org/gstreamer/gstreamer/commit/?h=1.10&id=6ef601367e0f5adb7a8b02cec94dec04fccf701a
-[2] http://autobuild.buildroot.net/results/c1cd60d3f44f2938e5f42453d034ea070898f837
-[3] http://autobuild.buildroot.net/results/c3a6662f0acfda179a58cdad9165f36826229826
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ed-access-support-for-unknown-architectur.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/efibootmgr/Config.in | 6 ++++--
+ package/efivar/Config.in     | 6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch b/package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch
-new file mode 100644
-index 0000000..06897fb
---- /dev/null
-+++ b/package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch
-@@ -0,0 +1,37 @@
-+From 20bbce5758abf3493f3d7dc10edd335701c3a02c Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 5 Dec 2016 20:54:55 +0100
-+Subject: [PATCH] Fix unaligned access support for unknown architectures.
-+
-+Better be safe (assume no unaligned access) than sorry (bail out
-+with error message at compile time).
-+
-+Fixes compile for xtensa and microblaze architectures.
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ gst/gstconfig.h.in | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/gst/gstconfig.h.in b/gst/gstconfig.h.in
-+index c2e8361..3a17398 100644
-+--- a/gst/gstconfig.h.in
-++++ b/gst/gstconfig.h.in
-+@@ -104,12 +104,10 @@
-+  * http://docs.oracle.com/cd/E19205-01/820-4155/c++_faq.html#Vers6
-+  * https://software.intel.com/en-us/node/583402
-+  */
-+-#if defined(__alpha__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__mips__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64)
-+-#  define GST_HAVE_UNALIGNED_ACCESS 0
-+-#elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
-++#if defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
-+ #  define GST_HAVE_UNALIGNED_ACCESS 1
-+ #else
-+-#  error "Could not detect architecture; don't know whether it supports unaligned access! Please file a bug."
-++#  define GST_HAVE_UNALIGNED_ACCESS 0
-+ #endif
-+ 
-+ /**
-+-- 
-+2.11.0
-+
+diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
+index 8b29938..cd4bda1 100644
+--- a/package/efibootmgr/Config.in
++++ b/package/efibootmgr/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_EFIBOOTMGR
+ 	bool "efibootmgr"
++	depends on !BR2_STATIC_LIBS # efivar
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # efivar
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # efivar
+@@ -15,8 +16,9 @@ config BR2_PACKAGE_EFIBOOTMGR
+ 
+ 	  https://github.com/rhinstaller/efibootmgr
+ 
+-comment "efibootmgr requires a glibc or uClibc toolchain w/ headers >= 3.12, gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
++comment "efibootmgr needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
++	depends on BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+ 		BR2_TOOLCHAIN_USES_MUSL || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
+diff --git a/package/efivar/Config.in b/package/efivar/Config.in
+index 1bdb6ca..a97c766 100644
+--- a/package/efivar/Config.in
++++ b/package/efivar/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_EFIVAR
+ 	bool "efivar"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # linux/nvme.h
+ 	# linux/nvme.h has been renamed to linux/nvme_ioctl.h since 4.4,
+ 	# and the efivar source handles that situation. However, some
+@@ -18,8 +19,9 @@ config BR2_PACKAGE_EFIVAR
+ 
+ 	  https://github.com/rhinstaller/efivar
+ 
+-comment "efivar requires a glibc or uClibc toolchain w/ headers >= 3.12, gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
++comment "efivar needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.12, gcc >= 4.9"
++	depends on BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+ 		BR2_TOOLCHAIN_USES_MUSL || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS && \
