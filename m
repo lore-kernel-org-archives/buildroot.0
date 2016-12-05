@@ -1,34 +1,36 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon,  5 Dec 2016 15:28:25 +0100
-Subject: [Buildroot] [PATCH 2/2] nginx-dav-ext: depends on
-	BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
-In-Reply-To: <1480948105-26691-1-git-send-email-johan.oudinet@gmail.com>
-References: <1480948105-26691-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1480948105-26691-2-git-send-email-johan.oudinet@gmail.com>
+Date: Mon, 5 Dec 2016 15:31:04 +0100
+Subject: [Buildroot] [PATCH 1/1] nginx-dav-ext: New package
+In-Reply-To: <20161205145353.40c00fc3@free-electrons.com>
+References: <1480438071-11906-1-git-send-email-johan.oudinet@gmail.com>
+ <20161204235230.4be68e7c@free-electrons.com>
+ <CAJtjsKY2yT_EekNg2F_-K-PyLN5Zp47ykhRwVK4Kg3PixY4K9A@mail.gmail.com>
+ <20161205121442.51bb6c46@free-electrons.com>
+ <CAJtjsKayVVJBRf+v1PYnL1hb6D5FqfqC1Y3pb9fGnkybf3bpAA@mail.gmail.com>
+ <20161205143322.227297e2@free-electrons.com>
+ <CAJtjsKa_vUgVKHsDajes2ihFZMmj4U-5cwLgwHjEKspf7BrgAg@mail.gmail.com>
+ <20161205145353.40c00fc3@free-electrons.com>
+Message-ID: <CAJtjsKZdhYNDeCnNR6gaiCCj31c5cWwratqkDJ6C+ieAgcqWrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package adds missing WebDAB commands to NGINX. So, it makes sense
-iff Nginx is compiled with the WebDAV support.
+On Mon, Dec 5, 2016 at 2:53 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Mon, 5 Dec 2016 14:41:29 +0100, Johan Oudinet wrote:
+>
+>> Good point. Do you want me to submit a patch series for that, or do
+>> you take care of it?
+>
+> If you can submit a patch series, it would be good :)
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
- package/nginx-dav-ext/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Done.
+Finally, I make BR2_PACKAGE_NGINX_DAV_EXT depends on
+BR2_PACKAGE_NGINX_HTTP_DAV_MODULE as it does not make sense if this
+nginx's module is not enabled.
 
-diff --git a/package/nginx-dav-ext/Config.in b/package/nginx-dav-ext/Config.in
-index bf197dc..8761e2f 100644
---- a/package/nginx-dav-ext/Config.in
-+++ b/package/nginx-dav-ext/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NGINX_DAV_EXT
- 	bool "nginx-dav-ext"
-+        depends on BR2_PACKAGE_NGINX_HTTP_DAV_MODULE
- 	select BR2_PACKAGE_EXPAT
- 	help
- 	  NGINX WebDAV missing commands support (PROPFIND & OPTIONS).
+Best regards,
 -- 
-2.7.4
+Johan
