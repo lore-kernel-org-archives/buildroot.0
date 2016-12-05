@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 12:14:42 +0100
-Subject: [Buildroot] [PATCH 1/1] nginx-dav-ext: New package
-In-Reply-To: <CAJtjsKY2yT_EekNg2F_-K-PyLN5Zp47ykhRwVK4Kg3PixY4K9A@mail.gmail.com>
-References: <1480438071-11906-1-git-send-email-johan.oudinet@gmail.com>
- <20161204235230.4be68e7c@free-electrons.com>
- <CAJtjsKY2yT_EekNg2F_-K-PyLN5Zp47ykhRwVK4Kg3PixY4K9A@mail.gmail.com>
-Message-ID: <20161205121442.51bb6c46@free-electrons.com>
+Date: Mon,  5 Dec 2016 12:16:00 +0100
+Subject: [Buildroot] [PATCH] vim: be more careful when removing the
+	documentation
+Message-ID: <1480936560-26702-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The current VIM_REMOVE_DOCS hook removes all .txt files from
+/usr/share/vim. Unfortunately, this also removes the rgb.txt file,
+which is needed at runtime for vim, as reported in bug #9466.
 
-On Mon, 5 Dec 2016 11:58:33 +0100, Johan Oudinet wrote:
+This commit changes VIM_REMOVE_DOCS to remove only
+/usr/share/vim/vim80/doc/. Size-wise, it's equivalent because:
 
-> > I've applied to master, but after doing a number of changes. See below.  
-> 
-> Thanks Thomas.
-> 
-> > I've also added a separate patch to add you in the DEVELOPERS file for
-> > nginx-dav-ext (even though you will never receive a build failure about
-> > it, since the build really takes place inside the nginx package).
-> 
-> Oops, so many changes since I've sent a patch to BR. I should have
-> read the documentation more carefully. Thanks.
+ - We are no longer removing a few README.txt in other directories,
+   taking more space.
 
-Seems like my changes broke the build:
+ - We are now removing the /usr/share/vim/vim80/doc/ folder entirely,
+   which contained a few files not named *.txt
 
-   http://autobuild.buildroot.net/?reason=nginx-1.10.2
+So overall, the size of /usr/share/vim/ before and after this patch is
+still 11MB.
 
-So, it might be that the location in which modules are added in
-nginx.mk might be important. Weird, because I did a number of test
-builds before pushing and never got a failure.
+Fixes bug #9466.
 
-Do you have the time to investigate? One of the failure,
-http://autobuild.buildroot.net/results/3c8/3c8798f122a421e8fae741de76b2504c20e2da91/build-end.log,
-is related to dav-ext.
+Reported-by: sir.ferdek+buildroot at gmail.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vim/vim.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-
-Thomas
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index d4a1f82..ee216c7 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -61,7 +61,7 @@ define VIM_INSTALL_RUNTIME_CMDS
+ endef
+ 
+ define VIM_REMOVE_DOCS
+-	find $(TARGET_DIR)/usr/share/vim -type f -name "*.txt" -delete
++	$(RM) -rf $(TARGET_DIR)/usr/share/vim/vim80/doc/
+ endef
+ 
+ # Avoid oopses with vipw/vigr, lack of $EDITOR and 'vi' command expectation
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
