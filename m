@@ -1,57 +1,39 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 5 Dec 2016 23:52:55 +0100
-Subject: [Buildroot] [PATCH] bluez5_utils: add autoreconf back
-In-Reply-To: <87eg1m57c6.fsf@dell.be.48ers.dk>
-References: <20161205131504.28872-1-gary.bisson@boundarydevices.com>
- <20161205213207.42e356af@free-electrons.com>
- <d6c03c59-32b7-3749-80a7-ba4c812b3f87@mind.be>
- <20161205221922.13838a32@free-electrons.com>
- <d545c88d-8eae-ed7a-23ab-781924c58571@mind.be>
- <87eg1m57c6.fsf@dell.be.48ers.dk>
-Message-ID: <CAAMH-yujuB83B922OgCMj6V83hmTLO-7kpQdKWHWJ5xGcmeydQ@mail.gmail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Tue,  6 Dec 2016 00:07:15 +0100
+Subject: [Buildroot] [PATCH 1/3] efivar: fix comment after uClibc
+	compatibility patch
+Message-ID: <1480979238-18273-1-git-send-email-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+uClibc support was recently added to efivar through a small
+compatibility patch.
+This commit updates a comment in the efivar recipe to reflect this, as
+we no longer have glibc as the only supported C library.
 
-On Mon, Dec 5, 2016 at 11:39 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->
-> Hi,
->
->  >> So, we've got two options here:
->  >>
->  >> 1. Say that having to change the original .mk file of a package in
->  >> Buildroot is a fact of life if you add custom patches for this
->  >> package.
->
->  >  Actually, for this particular case, it would be sufficient to patch Makefile in
->  > addition to Makefile.in. Which is a fact of life I'd say. We also sometimes have
->  > to do that when autoreconf doesn't work.
->
->  >> 2. Imagine a mechanism that allows the "external" stuff to set
->  >> autoreconf on a per-package basis.
->
->  >  Eek please no.
->
->  >  One thing I can imagine is that the expansion of the package infras is done
->  > later (after inclusion of external.mk). The first pass would just set variables,
->  > not define rules and definitely not use any ifdefs. The rules etc. would then
->  > have to avoid using $(1) $(2) etc, and just rely on $($(PKG)_NAME) and friends.
->
-> Lets not complicate things too much. Just patching Makefile as well
-> and/or modifying the package is imho good enough.
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/efivar/efivar.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Sure it's a solution but it's a shame I can't use the Yocto patch
-as-is. BTW, is Yocto always performing an autoreconf for autotools
-packages?
-
-The external.mk solution sounds interesting.
-
-Thanks for your interest in this case anyway.
-
-Regards,
-Gary
+diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
+index 913322e..84735b8 100644
+--- a/package/efivar/efivar.mk
++++ b/package/efivar/efivar.mk
+@@ -12,8 +12,8 @@ EFIVAR_DEPENDENCIES = popt
+ EFIVAR_INSTALL_STAGING = YES
+ 
+ # BINTARGETS is set to skip efivar-static which requires static popt,
+-# and since we depend on glibc, we will never be built in a
+-# static-only environment.
++# and since we depend on dynamic libraries, efivar will never be built
++# in a static-only environment.
+ # -fPIC is needed at least on MIPS, otherwise fails to build shared
+ # -library.
+ EFIVAR_MAKE_OPTS = \
+-- 
+2.7.4
