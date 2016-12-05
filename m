@@ -1,21 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 05 Dec 2016 09:31:42 +0000
-Subject: [Buildroot] [Bug 9466] VIM_REMOVE_DOCS removes rgb.txt
-In-Reply-To: <bug-9466-163@https.bugs.busybox.net/>
-References: <bug-9466-163@https.bugs.busybox.net/>
-Message-ID: <bug-9466-163-xuc9wFbQHj@https.bugs.busybox.net/>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 5 Dec 2016 11:58:33 +0100
+Subject: [Buildroot] [PATCH 1/1] nginx-dav-ext: New package
+In-Reply-To: <20161204235230.4be68e7c@free-electrons.com>
+References: <1480438071-11906-1-git-send-email-johan.oudinet@gmail.com>
+ <20161204235230.4be68e7c@free-electrons.com>
+Message-ID: <CAJtjsKY2yT_EekNg2F_-K-PyLN5Zp47ykhRwVK4Kg3PixY4K9A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9466
+On Sun, Dec 4, 2016 at 11:52 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> I've applied to master, but after doing a number of changes. See below.
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks for the bug report. I propose to remove /usr/share/vim/vim80/doc/
-instead, and keep all the rest.
+Thanks Thomas.
+
+
+> I've also added a separate patch to add you in the DEVELOPERS file for
+> nginx-dav-ext (even though you will never receive a build failure about
+> it, since the build really takes place inside the nginx package).
+>
+
+Oops, so many changes since I've sent a patch to BR. I should have
+read the documentation more carefully. Thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Johan
