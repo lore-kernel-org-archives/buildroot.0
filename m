@@ -1,39 +1,75 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Mon,  5 Dec 2016 14:30:57 +1100
-Subject: [Buildroot] [PATCH 1/1] package/liquid-dsp: fix build failure on
-	powerpc64le
-Message-ID: <43a99fffd93addae12dc5d31342896ebe09a613e.1480908655.git.sam.bobroff@au1.ibm.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 5 Dec 2016 04:46:15 +0100
+Subject: [Buildroot] [PATCH] berkeleydb: fix static linking issues
+In-Reply-To: <20161204215605.680c9070@free-electrons.com>
+References: <20161204173924.GA1647@waldemar-brodkorb.de>
+ <20161204215605.680c9070@free-electrons.com>
+Message-ID: <20161205034615.GA8584@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 7d435d8510db69ed2f9108abaa52479bce127b72 fixed building on
-powerpc and powerpc64. This extends that fix to cover powerpc64le,
-which suffers from the same problem.
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Fixes:
-http://autobuild.buildroot.net/results/45c4651a833e4667d4ef68e619cf4b5749a288da
+> Hello,
+> 
+> On Sun, 4 Dec 2016 18:39:24 +0100, Waldemar Brodkorb wrote:
+> > Libtool by default drops -static, so force libtool with -all-static
+> > to do static linking.
+> 
+> This needs a little bit more details, because libtool is used by a
+> large fraction of our packages, we pass -static only, and it just works.
+> 
+> Why do we have a different situation here? I thought this undefined
+> reference to `dl_iterate_phdr' issue was more a toolchain problem.
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
----
+It is not a toolchain problem, it is more likely a change in
+toolchain behaviour with uClibc-ng >= 1.0.18.
+We can not avoid the circular dependency between libc and libgcc, so
+every static compiled package must use -static while linking.
 
- package/liquid-dsp/liquid-dsp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> It's affecting a number of different packages, and is apparently a new
+> problem, so a fix at the package level looks a bit odd.
 
-diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
-index b5fb44cf9..35994137e 100644
---- a/package/liquid-dsp/liquid-dsp.mk
-+++ b/package/liquid-dsp/liquid-dsp.mk
-@@ -35,7 +35,7 @@ LIQUID_DSP_LDFLAGS += -lfftw3f
- endif
- 
- # disable altivec, it has build issues
--ifeq ($(BR2_powerpc)$(BR2_powerpc64),y)
-+ifeq ($(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),y)
- LIQUID_DSP_CONF_OPTS += --enable-simdoverride
- endif
- 
--- 
-2.11.0
+In this case it is similar to autossh a package level problem.
+
+All the libtool packages are working out-of-the box in buildroot with
+-static, because LIBTOOL_PATCH_HOOK patches libtool to behave like
+-all-static.
+
+In this case the hook isn't working correctly, because ltmain.sh
+isn't found:
+
+ESC[3m>>> berkeleydb 5.3.28 Patching libtoolESC[23m
+for i in `find /home/wbx/buildroot/output/build/berkeleydb-5.3.28/build_unix -name
+ltmain.sh`; do ltmain_version=`sed -n '/^[ \t]*VERSION=/{s/^[
+\t]*VERSION=//;p;q;}' $i | sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e
+'s/\"//'`; ltmain_patchlevel=`sed -n '/^[ \t]*VERSION=/{s/^[
+\t]*VERSION=//;p;q;}' $i | sed -e
+'s/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; if test
+${ltmain_version} = '1.5'; then patch -i
+support/libtool/buildroot-libtool-v1.5.patch ${i}; elif test
+${ltmain_version} = "2.2"; then patch -i
+support/libtool/buildroot-libtool-v2.2.patch ${i}; elif test
+${ltmain_version} = "2.4"; then if test ${ltmain_patchlevel:-0} -gt
+2; then patch -i support/libtool/buildroot-libtool-v2.4.4.patch
+${i}; else patch -i support/libtool/buildroot-libtool-v2.4.patch
+${i}; fi fi done
+touch
+
+wbx at helium:~/buildroot $ find /home/wbx/buildroot/output/build/berkeleydb-5.3.28/ -name ltmain.sh                             
+/home/wbx/buildroot/output/build/berkeleydb-5.3.28/dist/ltmain.sh
+/home/wbx/buildroot/output/build/berkeleydb-5.3.28/lang/sql/jdbc/ltmain.sh
+/home/wbx/buildroot/output/build/berkeleydb-5.3.28/lang/sql/odbc/ltmain.sh
+/home/wbx/buildroot/output/build/berkeleydb-5.3.28/lang/sql/sqlite/ltmain.sh
+
+The hook searches in
+/home/wbx/buildroot/output/build/berkeleydb-5.3.28/build_unix, but
+it seems berkeley db provides ltmain.sh in
+/home/wbx/buildroot/output/build/berkeleydb-5.3.28/dist/.
+
+best regards
+ Waldemar
