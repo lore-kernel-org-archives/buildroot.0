@@ -1,39 +1,53 @@
 From: Erico Nunes <nunes.erico@gmail.com>
-Date: Tue,  6 Dec 2016 00:07:15 +0100
-Subject: [Buildroot] [PATCH 1/3] efivar: fix comment after uClibc
-	compatibility patch
-Message-ID: <1480979238-18273-1-git-send-email-nunes.erico@gmail.com>
+Date: Tue,  6 Dec 2016 00:07:16 +0100
+Subject: [Buildroot] [PATCH 1/1] gcc: fix powerpc64le arch config name
+In-Reply-To: <1480979238-18273-1-git-send-email-nunes.erico@gmail.com>
+References: <1480979238-18273-1-git-send-email-nunes.erico@gmail.com>
+Message-ID: <1480979238-18273-2-git-send-email-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc support was recently added to efivar through a small
-compatibility patch.
-This commit updates a comment in the efivar recipe to reflect this, as
-we no longer have glibc as the only supported C library.
+Buildroot references powerpc64 little endian as BR2_powerpc64le and not
+BR2_powerpc64el.
 
 Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efivar/efivar.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
-index 913322e..84735b8 100644
---- a/package/efivar/efivar.mk
-+++ b/package/efivar/efivar.mk
-@@ -12,8 +12,8 @@ EFIVAR_DEPENDENCIES = popt
- EFIVAR_INSTALL_STAGING = YES
- 
- # BINTARGETS is set to skip efivar-static which requires static popt,
--# and since we depend on glibc, we will never be built in a
--# static-only environment.
-+# and since we depend on dynamic libraries, efivar will never be built
-+# in a static-only environment.
- # -fPIC is needed at least on MIPS, otherwise fails to build shared
- # -library.
- EFIVAR_MAKE_OPTS = \
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 0fc1ec4..582f115 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -25,7 +25,7 @@ choice
+ 		# Unsupported for MIPS R6
+ 		depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+ 		# musl ppc64 unsupported
+-		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
+ 		# musl mips64 unsupported
+ 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+@@ -51,7 +51,7 @@ choice
+ 		# musl microblaze unsupported
+ 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_microblazeel || BR2_microblazebe))
+ 		# musl ppc64 unsupported
+-		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
+ 		# musl mips64 unsupported
+ 		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_mips64 || BR2_mips64el))
+ 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+@@ -62,7 +62,7 @@ choice
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_arc && !BR2_bfin
+ 		# musl ppc64 unsupported
+-		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64el))
++		depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
+ 		# Unsupported MIPS cores
+ 		depends on !BR2_mips_interaptiv && !BR2_mips_m5150 && \
+ 			!BR2_mips_m6250 && !BR2_mips_i6400 && !BR2_mips_p6600
 -- 
 2.7.4
