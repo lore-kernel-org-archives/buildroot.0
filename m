@@ -1,38 +1,39 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 5 Dec 2016 23:33:00 +0100
-Subject: [Buildroot] LibreSSL support?
-Message-ID: <20161205223300.GA5002@itchy>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 05 Dec 2016 23:34:41 +0100
+Subject: [Buildroot] [PATCH] kexec: fix build when BR2_STRIP_none=y
+In-Reply-To: <20161202223427.7b411a05@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 2 Dec 2016 22:34:27 +0100")
+References: <1480679517-551-1-git-send-email-marcin.nowakowski@imgtec.com>
+ <87a8ce8g6c.fsf@dell.be.48ers.dk>
+ <20161202213857.673e4b97@free-electrons.com>
+ <877f7i6nry.fsf@dell.be.48ers.dk>
+ <20161202223427.7b411a05@free-electrons.com>
+Message-ID: <87inqy57jy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all!
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Are there any plans for adding support for LibreSSL?
+ > Hello,
+ > On Fri, 02 Dec 2016 22:09:53 +0100, Peter Korsgaard wrote:
 
-I've found a patch [1] in patchwork, from M. Hadjinlian, posted two
-years ago. The review concludes with the need for the introduction of a
-virtual package, as LibreSSL uses the same names for its binaries and
-libraries as OpenSSL (openssl, libcrypto, libssl and libtls).
+ >> Hi,
+ >> 
+ >> > My other thought is that I believe it's not the first time (see commit
+ >> > fc174b7057495ebb31393ae27f3ceeefdc490022), so perhaps our idea of
+ >> > having STRIP=true when BR2_STRIP_none=y is a bad idea, and we should
+ >> > handle this in a different way.  
+ >> 
+ >> The question is how? Create a dummy shell script to better emulate the
+ >> command line options / behaviour of strip?
 
-So, what would be the best solution:
+ > I'm not sure. Yet another wrapper kind of sucks. Is it possible to pass
+ > enough options to strip to have it not strip anything? :-)
 
-a)
-  1. introduce the virtual package openssl-compat.
-  2. make libressl and openssl provide openssl-compat.
-  3. update all packages depending on/selecting openssl to depend on/select
-     openssl-compat.
+Not that I'm aware of at least. Anyone?
 
-b)
-  1. rename openssl to openssl-genuine.
-  2. introduce virtual package openssl.
-  3. make openssl-genuine and libressl provide openssl.
-
-Comments and suggestions welcome.
-
-[1] https://patchwork.ozlabs.org/patch/398963/
-
---
-ELB
+-- 
+Bye, Peter Korsgaard
