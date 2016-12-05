@@ -1,34 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 14:53:53 +0100
-Subject: [Buildroot] [PATCH 1/1] nginx-dav-ext: New package
-In-Reply-To: <CAJtjsKa_vUgVKHsDajes2ihFZMmj4U-5cwLgwHjEKspf7BrgAg@mail.gmail.com>
-References: <1480438071-11906-1-git-send-email-johan.oudinet@gmail.com>
- <20161204235230.4be68e7c@free-electrons.com>
- <CAJtjsKY2yT_EekNg2F_-K-PyLN5Zp47ykhRwVK4Kg3PixY4K9A@mail.gmail.com>
- <20161205121442.51bb6c46@free-electrons.com>
- <CAJtjsKayVVJBRf+v1PYnL1hb6D5FqfqC1Y3pb9fGnkybf3bpAA@mail.gmail.com>
- <20161205143322.227297e2@free-electrons.com>
- <CAJtjsKa_vUgVKHsDajes2ihFZMmj4U-5cwLgwHjEKspf7BrgAg@mail.gmail.com>
-Message-ID: <20161205145353.40c00fc3@free-electrons.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon,  5 Dec 2016 15:28:24 +0100
+Subject: [Buildroot] [PATCH 1/2] nginx-naxsi: depends on
+	BR2_PACKAGE_NGINX_HTTP
+Message-ID: <1480948105-26691-1-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This package adds XSS and SQLi protection to Nginx HTTP server.
+So, it makes sense iff the HTTP part of nginx is enabled.
 
-On Mon, 5 Dec 2016 14:41:29 +0100, Johan Oudinet wrote:
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+ package/nginx-naxsi/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Good point. Do you want me to submit a patch series for that, or do
-> you take care of it?
-
-If you can submit a patch series, it would be good :)
-
-Thanks!
-
-Thomas
+diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
+index 5ae5497..e9907aa 100644
+--- a/package/nginx-naxsi/Config.in
++++ b/package/nginx-naxsi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NGINX_NAXSI
+ 	bool "nginx-naxsi"
++        depends on BR2_PACKAGE_NGINX_HTTP
+ 	# uses pcre, so nginx needs to be built with pcre support
+ 	select BR2_PACKAGE_PCRE
+ 	help
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
