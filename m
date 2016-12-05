@@ -1,39 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 21:32:29 +0100
-Subject: [Buildroot] [git commit] nginx-naxsi: depends on
-	BR2_PACKAGE_NGINX_HTTP
-Message-ID: <20161205203358.BC82F81D56@busybox.osuosl.org>
+Date: Mon, 5 Dec 2016 21:34:42 +0100
+Subject: [Buildroot] [PATCH 1/2] nginx-naxsi: depends on
+ BR2_PACKAGE_NGINX_HTTP
+In-Reply-To: <1480948105-26691-1-git-send-email-johan.oudinet@gmail.com>
+References: <1480948105-26691-1-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20161205213442.63256c49@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dc77b605874a016afb219f0bdcf1578c2826d53
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This package adds XSS and SQLi protection to Nginx HTTP server.
-So, it makes sense iff the HTTP part of nginx is enabled.
+On Mon,  5 Dec 2016 15:28:24 +0100, Johan Oudinet wrote:
+> This package adds XSS and SQLi protection to Nginx HTTP server.
+> So, it makes sense iff the HTTP part of nginx is enabled.
+> 
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> ---
+>  package/nginx-naxsi/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Fixes:
+Thanks, I've applied both patches. However, I had to fix two things:
 
-  http://autobuild.buildroot.net/results/1df67325f11a6f1c88d0c9cc5f4feab0b57bc2a6/
+ - The indentation was wrong: you used spaces while Config.in entries
+   are indented with one tab.
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-[Thomas: fix indentation, add autobuilder reference.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nginx-naxsi/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ - You forgot to add references to the autobuilder issues being fixed
+   by those patches.
 
-diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
-index 5ae5497..fc2ba9b 100644
---- a/package/nginx-naxsi/Config.in
-+++ b/package/nginx-naxsi/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NGINX_NAXSI
- 	bool "nginx-naxsi"
-+	depends on BR2_PACKAGE_NGINX_HTTP
- 	# uses pcre, so nginx needs to be built with pcre support
- 	select BR2_PACKAGE_PCRE
- 	help
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
