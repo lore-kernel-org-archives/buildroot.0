@@ -1,53 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 22:55:36 +0100
-Subject: [Buildroot] [git commit] vim: be more careful when removing the
-	documentation
-Message-ID: <20161205215548.C139080127@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 05 Dec 2016 21:56:13 +0000
+Subject: [Buildroot] [Bug 9466] VIM_REMOVE_DOCS removes rgb.txt
+In-Reply-To: <bug-9466-163@https.bugs.busybox.net/>
+References: <bug-9466-163@https.bugs.busybox.net/>
+Message-ID: <bug-9466-163-yLywBRYhe0@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7a07f42f70a73806fd2f6bf3662fc6907845fe9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=9466
 
-The current VIM_REMOVE_DOCS hook removes all .txt files from
-/usr/share/vim. Unfortunately, this also removes the rgb.txt file,
-which is needed at runtime for vim, as reported in bug #9466.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-This commit changes VIM_REMOVE_DOCS to remove only
-/usr/share/vim/vim*/doc/. Size-wise, it's equivalent because:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
- - We are no longer removing a few README.txt in other directories,
-   taking more space.
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed in
+https://git.buildroot.org/buildroot/commit/?id=f7a07f42f70a73806fd2f6bf3662fc6907845fe9.
+Thanks for having reported the issue!
 
- - We are now removing the /usr/share/vim/vim*/doc/ folder entirely,
-   which contained a few files not named *.txt
-
-So overall, the size of /usr/share/vim/ before and after this patch is
-still 11MB.
-
-Fixes bug #9466.
-
-Reported-by: Mateusz Furdyna <sir.ferdek@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vim/vim.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index d4a1f82..308855e 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -61,7 +61,7 @@ define VIM_INSTALL_RUNTIME_CMDS
- endef
- 
- define VIM_REMOVE_DOCS
--	find $(TARGET_DIR)/usr/share/vim -type f -name "*.txt" -delete
-+	$(RM) -rf $(TARGET_DIR)/usr/share/vim/vim*/doc/
- endef
- 
- # Avoid oopses with vipw/vigr, lack of $EDITOR and 'vi' command expectation
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
