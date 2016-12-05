@@ -1,12 +1,15 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 5 Dec 2016 23:00:39 +0100
-Subject: [Buildroot] [PATCH] bluez5_utils: add autoreconf back
-In-Reply-To: <20161205221922.13838a32@free-electrons.com>
-References: <20161205131504.28872-1-gary.bisson@boundarydevices.com>
- <20161205213207.42e356af@free-electrons.com>
- <d6c03c59-32b7-3749-80a7-ba4c812b3f87@mind.be>
- <20161205221922.13838a32@free-electrons.com>
-Message-ID: <d545c88d-8eae-ed7a-23ab-781924c58571@mind.be>
+Date: Mon, 5 Dec 2016 23:03:10 +0100
+Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
+ additional variables for each build step
+In-Reply-To: <20161205222454.137bc43e@free-electrons.com>
+References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
+ <1480885126-517-2-git-send-email-romain.naour@gmail.com>
+ <20161204212433.GC3433@free.fr> <20161204224100.26768191@free-electrons.com>
+ <43f11483-2fa1-3191-b5b0-4ccbaad28903@mind.be>
+ <f68f3eba-28f0-a3eb-23bc-4954fc05cbd0@gmail.com>
+ <20161205222454.137bc43e@free-electrons.com>
+Message-ID: <71688f2e-ccf0-216d-87a0-f808cd8eceea@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +18,21 @@ To: buildroot@busybox.net
 
 
 
-On 05-12-16 22:19, Thomas Petazzoni wrote:
+On 05-12-16 22:24, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Mon, 5 Dec 2016 22:16:03 +0100, Arnout Vandecappelle wrote:
+> On Mon, 5 Dec 2016 22:18:37 +0100, Romain Naour wrote:
 > 
->>> Have you tried adding BLUEZ5_AUTORECONF = YES to your external.mk file?  
->>
->>  That won't work, because it's used in an ifeq in the autotools-package
->> expansion, and external.mk is included after the packages.
+>> What's about <pkg>_WAF_OPTS ?
+>> In case of aubio we don't really need to pass --notests for the configure step,
+>> only for build and staging/target install step.
 > 
-> Gah.
-> 
->>  It does work if you put it in override.mk, but that's not convenient in an
->> external.
-> 
-> I guess you wanted to say "local.mk" and not "override.mk", right?
-> 
-> But in any case, I don't think we want to have a <pkg>_AUTORECONF = YES
-> in a package "just in case" someone has patches against this package in
-> his external tree. Otherwise, all autoconf packages should be
-> <pkg>_AUTORECONF = YES.
-> 
-> So, we've got two options here:
-> 
->  1. Say that having to change the original .mk file of a package in
->     Buildroot is a fact of life if you add custom patches for this
->     package.
+> waf is used for all of the configure, build and install steps. So I
+> would expect something called WAF_OPTS to be passed at all of these
+> steps, not only at build/install time.
 
- Actually, for this particular case, it would be sufficient to patch Makefile in
-addition to Makefile.in. Which is a fact of life I'd say. We also sometimes have
-to do that when autoreconf doesn't work.
-
-
->  2. Imagine a mechanism that allows the "external" stuff to set
->     autoreconf on a per-package basis.
-
- Eek please no.
-
- One thing I can imagine is that the expansion of the package infras is done
-later (after inclusion of external.mk). The first pass would just set variables,
-not define rules and definitely not use any ifdefs. The rules etc. would then
-have to avoid using $(1) $(2) etc, and just rely on $($(PKG)_NAME) and friends.
+ Yeah, sounds the most consistent to me as well. Note that it means that it is
+really different for all infras...
 
  Regards,
  Arnout
