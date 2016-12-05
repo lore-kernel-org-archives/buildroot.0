@@ -1,60 +1,64 @@
-From: Mateusz Furdyna <sir.ferdek@gmail.com>
-Date: Mon, 05 Dec 2016 12:14:37 +0000
-Subject: [Buildroot] [PATCH] vim: be more careful when removing the
-	documentation
-In-Reply-To: <20161205130930.62ccc373@free-electrons.com>
-References: <1480936560-26702-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAEGTJuPZKHuu5qd9gK-GyhPkxXdV+X0+V6RAvdX_rmJ5h4vPMg@mail.gmail.com>
- <20161205130930.62ccc373@free-electrons.com>
-Message-ID: <CAEGTJuP+cd4D3YqDV+A_NT2QjxKqXu3dsRC9x3yQQq1iq6rXRA@mail.gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon,  5 Dec 2016 14:15:04 +0100
+Subject: [Buildroot] [PATCH] bluez5_utils: add autoreconf back
+Message-ID: <20161205131504.28872-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sounds good to me.
+Not necessary for an unmodified package. However if your external
+layer includes BlueZ5 patches which brings new files (such as a
+new hciattach protocol), it will not be built since the Makefile.in
+is already there.
 
-pon., 5.12.2016 o 13:09 u?ytkownik Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> napisa?:
+Forcing an autoreconf fixes such issue.
 
-> Hello,
->
-> On Mon, 05 Dec 2016 12:03:45 +0000, Mateusz Furdyna wrote:
-> > How about we are even more careful, for instance when vim version changes
-> > and also the directory name changes to sth like vim81?
-> >
-> > like so:
-> >
-> >  define VIM_REMOVE_DOCS
-> > -       find $(TARGET_DIR)/usr/share/vim -type f -name "*.txt" -delete
-> > +       $(RM) -rf $(find $(TARGET_DIR)/usr/share/vim -type d -name "doc")
-> >  endef
-> >
-> > Rationale:
-> > * we cannot use find -delete because it doesn't work on empty directories
-> > * we cannot use find -exec rm... because it then tries to traverse
-> > directories it has just removed
-> > * we probably cannot use rm -rf /usr/share/vim/vim80/doc, because then we
-> > have vim version hardcoded into the path
-> > * we must use -f flag in case find returns nothing OR we try to delete
-> doc
-> > directory nested in another doc directory that we've just deleted...
-> >
-> > What do you think?
->
-> What about just:
->
->         $(RM) -rf $(TARGET_DIR)/usr/share/vim/vim*/doc
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161205/e35b2c3d/attachment.html>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+Hi all,
+
+I know this is a corner case which isn't a problem for 99% of users
+so I won't be surprised if it is rejected.
+
+The use case here is that we provide a WiFi/BT combo from Qualcomm
+(QCA9377) which isn't supported in upstream BlueZ5.
+https://boundarydevices.com/product/bd_sdmac_wifi/
+
+Qualcomm said there was no plan to upstream the support, but provides
+their own (outdated) tree in codeaurora:
+https://source.codeaurora.org/quic/la/platform/external/bluetooth/bluez/
+
+We generated a patch out of that repo that allows to add support for
+this chip in Yocto (with a simple bbappend):
+https://github.com/boundarydevices/meta-boundary/tree/krogoth/recipes-connectivity/bluez5/bluez5
+
+Now the idea is to provide a Boundary external layer that adds support
+for this chip in Buildroot.
+
+When adding this patch, the builds fails since hciattach_rome.c isn't
+specified in the Makefile.in already present in the archive.
+
+Let me know if there's another opion in your opinion.
+
+Regards,
+Gary
+---
+ package/bluez5_utils/bluez5_utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 49cc7c2..af92926 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -11,6 +11,7 @@ BLUEZ5_UTILS_INSTALL_STAGING = YES
+ BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2
+ BLUEZ5_UTILS_LICENSE = GPLv2+, LGPLv2.1+
+ BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
++BLUEZ5_UTILS_AUTORECONF = YES
+ 
+ BLUEZ5_UTILS_CONF_OPTS = 	\
+ 	--enable-tools 		\
+-- 
+2.10.2
