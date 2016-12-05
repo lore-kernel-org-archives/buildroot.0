@@ -1,40 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 23:18:43 +0100
-Subject: [Buildroot] [PATCH 0/8] arch/arm: allow selecting AArch64 cores
-In-Reply-To: <cover.1480540299.git.yann.morin.1998@free.fr>
-References: <cover.1480540299.git.yann.morin.1998@free.fr>
-Message-ID: <20161205231843.45b80465@free-electrons.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 5 Dec 2016 23:33:00 +0100
+Subject: [Buildroot] LibreSSL support?
+Message-ID: <20161205223300.GA5002@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all!
 
-On Wed, 30 Nov 2016 22:12:06 +0100, Yann E. MORIN wrote:
+Are there any plans for adding support for LibreSSL?
 
-> Matt Flax (1):
->       arch/Config.in.arm: Add Cortex-A53 CPU
-> 
-> Thomas Petazzoni (6):
->       arch: merge Config.in.aarch64 into Config.in.arm
->       arch/Config.in.arm: prepare addition of 64 bits cores
->       arch/Config.in.arm: add BR2_ARM_CPU_ARMV8
->       arch/Config.in.arm: add FPU related options for ARMv8 cores
->       arch/Config.in.arm: specify ABI for ARM64
->       arch/Config.in.arm: add Cortex-A57 and Cortex-A72
-> 
-> Yann E. MORIN (1):
->       arch/arm: drop legacy dependency for floating point strategy
+I've found a patch [1] in patchwork, from M. Hadjinlian, posted two
+years ago. The review concludes with the need for the introduction of a
+virtual package, as LibreSSL uses the same names for its binaries and
+libraries as OpenSSL (openssl, libcrypto, libssl and libtls).
 
-Thanks, I've applied all 8 patches. I've added another patch that
-allows selecting the Linaro ARM and ARMeb toolchains on ARMv8.
+So, what would be the best solution:
 
-Thanks!
+a)
+  1. introduce the virtual package openssl-compat.
+  2. make libressl and openssl provide openssl-compat.
+  3. update all packages depending on/selecting openssl to depend on/select
+     openssl-compat.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+b)
+  1. rename openssl to openssl-genuine.
+  2. introduce virtual package openssl.
+  3. make openssl-genuine and libressl provide openssl.
+
+Comments and suggestions welcome.
+
+[1] https://patchwork.ozlabs.org/patch/398963/
+
+--
+ELB
