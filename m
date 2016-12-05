@@ -1,15 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2016 22:24:54 +0100
-Subject: [Buildroot] [PATCH 2/3] core: waf-package infra: add missing
- additional variables for each build step
-In-Reply-To: <f68f3eba-28f0-a3eb-23bc-4954fc05cbd0@gmail.com>
-References: <1480885126-517-1-git-send-email-romain.naour@gmail.com>
- <1480885126-517-2-git-send-email-romain.naour@gmail.com>
- <20161204212433.GC3433@free.fr>
- <20161204224100.26768191@free-electrons.com>
- <43f11483-2fa1-3191-b5b0-4ccbaad28903@mind.be>
- <f68f3eba-28f0-a3eb-23bc-4954fc05cbd0@gmail.com>
-Message-ID: <20161205222454.137bc43e@free-electrons.com>
+Date: Mon, 5 Dec 2016 22:29:52 +0100
+Subject: [Buildroot] [PATCH 1/1] tftpd: make installation of tftp client
+ optional
+In-Reply-To: <6A3F8AF4AF06764EBB67BDF72AE0FB4701F8E8F554@ly-ex-02.thrane.tt.ad>
+References: <6A3F8AF4AF06764EBB67BDF72AE0FB4701F8E8F554@ly-ex-02.thrane.tt.ad>
+Message-ID: <20161205222952.1ae0c4ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,15 +13,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 5 Dec 2016 22:18:37 +0100, Romain Naour wrote:
+On Wed, 30 Nov 2016 09:23:19 +0000, Nielsen, David Marqvar wrote:
+> Signed-off-by: David Marqvar <david.nielsen@cobham.com>
+> ---
+>  package/tftpd/Config.in |  8 ++++++++
+>  package/tftpd/tftpd.mk  | 11 ++++++++---
+>  2 files changed, 16 insertions(+), 3 deletions(-)
 
-> What's about <pkg>_WAF_OPTS ?
-> In case of aubio we don't really need to pass --notests for the configure step,
-> only for build and staging/target install step.
+Your commit log is empty, so I'm not sure what you're trying to do
+here. If I understand correctly, you want a sub-option to
+enable/disable the installation of the "tftp" binary, so that you can
+have a configuration where:
 
-waf is used for all of the configure, build and install steps. So I
-would expect something called WAF_OPTS to be passed at all of these
-steps, not only at build/install time.
+ - tftpd is the one coming from the tftpd package
+
+ - tftp remains the one provided by Busybox
+
+However, in Buildroot, we try to avoid having one sub-option per binary
+program. We do have that in a few packages, and it's often very painful
+and annoying to maintain. If you really, really don't like the tftp
+program from the tftpd package, you can also add in your post-build
+script:
+
+	rm /usr/bin/tftp
+	ln -s /bin/busybox /usr/bin/tftp
+
+But I just checked and the tftp program installed by the tftp package
+is only 22 KB in size:
+
+thomas at skate:~/projets/buildroot (master)$ ls -l output/target/usr/bin/tftp 
+-rwxr-xr-x 1 thomas thomas 22252 d?c.   5 22:24 output/target/usr/bin/tftp
+
+So I really don't think it's worth the effort having yet another
+sub-option for 22 KB, especially when you can handle such tweaking in
+your post-build script if you really really want to.
+
+Thanks!
 
 Thomas
 -- 
