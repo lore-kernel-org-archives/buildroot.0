@@ -1,42 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Dec 2016 19:40:07 +0100
-Subject: [Buildroot] [git commit] package/shairport-sync: bump version to
-	2.8.6
-Message-ID: <20161206185828.28CD480DB6@busybox.osuosl.org>
+Date: Tue, 6 Dec 2016 19:56:40 +0100
+Subject: [Buildroot] [git commit] ffmpeg: fix build for ffplay
+Message-ID: <20161206185828.33DA37F9E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dd5b1aafbf1f52a3cfe7ecb7804c3280b61ad11
+commit: https://git.buildroot.net/buildroot/commit/?id=d767ff85f2bf9b5e1fbcbad22f0cab6a6a606e6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Upstream has dropped SDL support for ffplay in favor of SDL2.
+This results in silently not building ffplay even if it is selected
+in Buildroot config.
+
+[Peter: propagate !static dependency from sdl2]
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ffmpeg/Config.in | 6 +++++-
+ package/ffmpeg/ffmpeg.mk | 4 ++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index dfe0d05..45bce10 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  d19f6cd3d53f5010abcf24cc20a301934372b41efc3ff2a2e4e7d8fa49200cdc  shairport-sync-2.8.5.tar.gz
-+sha256  2e73416ac8fdda1657034afaa143f1710852ebed06e0aa43dafc2b7dc5eb653d  shairport-sync-2.8.6.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 7af030b..00d6a69 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index e813595..b5850db 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -41,12 +41,16 @@ config BR2_PACKAGE_FFMPEG_FFMPEG
+ config BR2_PACKAGE_FFMPEG_FFPLAY
+ 	bool "Build ffplay"
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+-	select BR2_PACKAGE_SDL
++	select BR2_PACKAGE_SDL2
++	depends on !BR2_STATIC_LIBS # sdl2
+ 	help
+ 	  FFplay is a very simple and portable media player using the
+ 	  FFmpeg libraries and the SDL library.
+ 	  It is mostly used as a testbed for the various FFmpeg APIs.
  
--SHAIRPORT_SYNC_VERSION = 2.8.5
-+SHAIRPORT_SYNC_VERSION = 2.8.6
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
++comment "ffplay needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_FFMPEG_FFSERVER
+ 	bool "Build ffserver"
+ 	depends on BR2_USE_MMU # fork()
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 699de2a..a681192 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -80,9 +80,9 @@ FFMPEG_CONF_OPTS += --disable-ffmpeg
+ endif
  
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+ ifeq ($(BR2_PACKAGE_FFMPEG_FFPLAY),y)
+-FFMPEG_DEPENDENCIES += sdl
++FFMPEG_DEPENDENCIES += sdl2
+ FFMPEG_CONF_OPTS += --enable-ffplay
+-FFMPEG_CONF_ENV += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
++FFMPEG_CONF_ENV += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl2-config
+ else
+ FFMPEG_CONF_OPTS += --disable-ffplay
+ endif
