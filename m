@@ -1,35 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 6 Dec 2016 07:18:47 +0200
-Subject: [Buildroot] [PATCH v2] raspberrypi-usbboot: new package
-In-Reply-To: <1480971546-6460-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1480971546-6460-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20161206051847.x3g3revi2oaqdkpj@tarshish>
+From: Nielsen, David Marqvar <david.nielsen@cobham.com>
+Date: Tue, 6 Dec 2016 07:07:36 +0000
+Subject: [Buildroot] [PATCH 1/1] tftpd: make installation of tftp client
+ optional
+In-Reply-To: <20161205222952.1ae0c4ea@free-electrons.com>
+References: <6A3F8AF4AF06764EBB67BDF72AE0FB4701F8E8F554@ly-ex-02.thrane.tt.ad>
+ <20161205222952.1ae0c4ea@free-electrons.com>
+Message-ID: <6A3F8AF4AF06764EBB67BDF72AE0FB4701F8EA38FE@ly-ex-02.thrane.tt.ad>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Thomas Petazzoni,
 
-On Mon, Dec 05, 2016 at 09:59:06PM +0100, Thomas Petazzoni wrote:
-> This new package currently installs the "rpiboot" utility, which is
-> needed to access via USB mass storage the built-in eMMC of Raspberry Pi
-> compute modules.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Changes since v1:
->  - Use the separate https://github.com/raspberrypi/usbboot repository,
->    which contains just the rpiboot tool, and which according to
->    https://github.com/raspberrypi/tools/issues/71 is not the official
->    upstream.
+> Your commit log is empty, so I'm not sure what you're trying to do
+> here. If I understand correctly, you want a sub-option to
+> enable/disable the installation of the "tftp" binary, so that you can
+> have a configuration where:
+> - tftpd is the one coming from the tftpd package
+> - tftp remains the one provided by Busybox
 
-s/not/now/?
+Exactly.
+The (rather unusual) situation is that the Busybox implementation has
+features that the "full" tftpd package does not support - features that
+we have come to rely on (set block size).
 
-baruch
+> However, in Buildroot, we try to avoid having one sub-option per binary
+> program. We do have that in a few packages, and it's often very painful
+> and annoying to maintain.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Ok.
+
+> If you really, really don't like the tftp
+> program from the tftpd package, you can also add in your post-build
+> script:
+> rm /usr/bin/tftp
+> ln -s /bin/busybox /usr/bin/tftp
+
+Thank you for this idea.
+
+> But I just checked and the tftp program installed by the tftp package
+> is only 22 KB in size:
+> So I really don't think it's worth the effort having yet another
+> sub-option for 22 KB, especially when you can handle such tweaking in
+> your post-build script if you really really want to.
+
+I agree.
+Thank you very much for your response.
+
+/David
