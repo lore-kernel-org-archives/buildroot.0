@@ -1,38 +1,35 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 05 Dec 2016 23:35:58 -0200
-Subject: [Buildroot] [PATCH 2/3] test/support/download/git: new test
-References: <8f2315e4-1622-ce45-991d-81382ffd503f@mind.be>
-Message-ID: <584615fea516e_10933fd1ee91d674668d5@ultri3.mail>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 6 Dec 2016 07:18:47 +0200
+Subject: [Buildroot] [PATCH v2] raspberrypi-usbboot: new package
+In-Reply-To: <1480971546-6460-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1480971546-6460-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20161206051847.x3g3revi2oaqdkpj@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Hi Thomas,
 
-On Mon, Dec 05, 2016 at 03:26 PM, Arnout Vandecappelle wrote:
-
-> On 02-12-16 03:34, Ricardo Martincoski wrote:
-> [snip]
->>>> +    def check_tarball_exists(self, expected_download):
->>>> +        if self.verbose:
->>>> +            os.system('echo -n "dl: " ; ls package/package/dl/')
->>>> +        return os.path.isfile('package/package/dl/package-' + expected_download + '.tar.gz')
->>>  It would be good to also check the contents of the tarball. That way the
->>> submodule stuff is immediately covered as well.
->> Indeed. This is the only one I am not sure how I will do in the test infra, but
->> should not be too hard. I will keep this suggestion in mind when rewriting the
->> tests.
+On Mon, Dec 05, 2016 at 09:59:06PM +0100, Thomas Petazzoni wrote:
+> This new package currently installs the "rpiboot" utility, which is
+> needed to access via USB mass storage the built-in eMMC of Raspberry Pi
+> compute modules.
 > 
->  Here's a hint:
-> 
-> 	import tarfile
-> 	with tarfile.open(expected_download) as tf:
-> 		files = tf.getnames()
-> 		...
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> Changes since v1:
+>  - Use the separate https://github.com/raspberrypi/usbboot repository,
+>    which contains just the rpiboot tool, and which according to
+>    https://github.com/raspberrypi/tools/issues/71 is not the official
+>    upstream.
 
-Thank you very much.
+s/not/now/?
 
-Regards,
-Ricardo
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
