@@ -1,63 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Dec 2016 19:56:40 +0100
-Subject: [Buildroot] [git commit] ffmpeg: fix build for ffplay
-Message-ID: <20161206185828.33DA37F9E8@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue,  6 Dec 2016 20:08:15 +0100
+Subject: [Buildroot] [PATCH] linux: Adding customizable linux logo
+Message-ID: <1481051295-1190-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d767ff85f2bf9b5e1fbcbad22f0cab6a6a606e6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch adds a custom linux logo to the generated kernel image.
 
-Upstream has dropped SDL support for ffplay in favor of SDL2.
-This results in silently not building ffplay even if it is selected
-in Buildroot config.
-
-[Peter: propagate !static dependency from sdl2]
-Signed-off-by: Phil Eichinger <phil@zankapfel.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/ffmpeg/Config.in | 6 +++++-
- package/ffmpeg/ffmpeg.mk | 4 ++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ linux/Config.ext.in           | 26 ++++++++++++++++++++++++++
+ linux/linux-ext-customlogo.mk | 19 +++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+ create mode 100644 linux/linux-ext-customlogo.mk
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index e813595..b5850db 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -41,12 +41,16 @@ config BR2_PACKAGE_FFMPEG_FFMPEG
- config BR2_PACKAGE_FFMPEG_FFPLAY
- 	bool "Build ffplay"
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
--	select BR2_PACKAGE_SDL
-+	select BR2_PACKAGE_SDL2
-+	depends on !BR2_STATIC_LIBS # sdl2
- 	help
- 	  FFplay is a very simple and portable media player using the
- 	  FFmpeg libraries and the SDL library.
- 	  It is mostly used as a testbed for the various FFmpeg APIs.
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 011dffb..da63109 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -1,5 +1,31 @@
+ menu "Linux Kernel Extensions"
  
-+comment "ffplay needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
++# Custom logo
++config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
++	bool "Custom logo"
++	select BR2_PACKAGE_CUSTOMLOGO
++	help
++	  Change linux boot logo with your own graphics. 
++	  Can be used as an early bootsplash.
++	  The file should be in kernel ppm format if the
++	  option BR2_PACKAGE_CUSTOMLOGO_CONVERT is not
++	  selected.
 +
- config BR2_PACKAGE_FFMPEG_FFSERVER
- 	bool "Build ffserver"
- 	depends on BR2_USE_MMU # fork()
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 699de2a..a681192 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -80,9 +80,9 @@ FFMPEG_CONF_OPTS += --disable-ffmpeg
- endif
- 
- ifeq ($(BR2_PACKAGE_FFMPEG_FFPLAY),y)
--FFMPEG_DEPENDENCIES += sdl
-+FFMPEG_DEPENDENCIES += sdl2
- FFMPEG_CONF_OPTS += --enable-ffplay
--FFMPEG_CONF_ENV += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
-+FFMPEG_CONF_ENV += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl2-config
- else
- FFMPEG_CONF_OPTS += --disable-ffplay
- endif
++config BR2_PACKAGE_CUSTOMLOGO_PATH
++	string "Image file path"
++	depends on BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
++	help
++	  This image will be used as custom logo.
++
++config BR2_PACKAGE_CUSTOMLOGO_CONVERT
++	bool "Convert custom logo to kernel format"
++	depends on BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
++	help
++	  If checked, the convert command will be run on the source
++	  image file to obtain a kernel compatible ppm image file.
++	  *REQUIRES* a pre installed imagemagick on the host system
++	  to convert the image.
++
+ #-------------------------------------------------------------------------------
+ # Xenomai
+ config BR2_LINUX_KERNEL_EXT_XENOMAI
+diff --git a/linux/linux-ext-customlogo.mk b/linux/linux-ext-customlogo.mk
+new file mode 100644
+index 0000000..99e3ab1
+--- /dev/null
++++ b/linux/linux-ext-customlogo.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# Custom logo
++#
++################################################################################
++
++LINUX_EXTENSIONS += customlogo
++
++ifeq ($(BR2_PACKAGE_CUSTOMLOGO_CONVERT),)
++define CUSTOMLOGO_PREPARE_KERNEL
++	cp $(BR2_PACKAGE_CUSTOMLOGO_PATH) $(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
++endef
++else
++define CUSTOMLOGO_PREPARE_KERNEL
++	convert $(BR2_PACKAGE_CUSTOMLOGO_PATH) \
++			-dither None -colors 224 -compress none \
++			$(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
++endef
++endif
+-- 
+2.7.4
