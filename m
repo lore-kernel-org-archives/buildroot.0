@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Dec 2016 21:13:09 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: disallow sourcery
- codebench ARM toolchain for ARMv8 cores
-In-Reply-To: <20161206164218.4488-1-peter@korsgaard.com>
-References: <20161206164218.4488-1-peter@korsgaard.com>
-Message-ID: <20161206211309.65d8249b@free-electrons.com>
+Date: Tue, 6 Dec 2016 21:13:47 +0100
+Subject: [Buildroot] [PATCH 1/2] gcc: disallow 4.8.x for ARMv8 cores
+In-Reply-To: <20161206163618.1758-1-peter@korsgaard.com>
+References: <20161206163618.1758-1-peter@korsgaard.com>
+Message-ID: <20161206211347.69a9f64b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  6 Dec 2016 17:42:18 +0100, Peter Korsgaard wrote:
-> This toolchain uses GCC 4.8.x, which doesn't support the ARMv8 cores.
+On Tue,  6 Dec 2016 17:36:17 +0100, Peter Korsgaard wrote:
+> Notice: A53/A57 were in fact supported in aarch64 mode in 4.8 (in aarch32
+> mode only from 4.9), but it doesn't handle --with-abi, and as there is
+> unlikely to be any aarch64 based legacy projects unwilling to use a newer
+> GCC version it is simpler to disallow it for all modes.
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../toolchain-external/toolchain-external-codesourcery-arm/Config.in    | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
