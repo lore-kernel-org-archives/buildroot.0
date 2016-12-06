@@ -1,39 +1,55 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue,  6 Dec 2016 11:56:42 +0100
-Subject: [Buildroot] [PATCH] package/shairport-sync: bump version to 2.8.6
-Message-ID: <20161206105642.29309-1-joerg.krause@embedded.rocks>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Tue, 06 Dec 2016 14:02:45 +0100
+Subject: [Buildroot] [PATCH] Makefile: generate KBUILD_BUILD_TIMESTAMP
+	date whith LANG=C
+In-Reply-To: <1481019001-11035-1-git-send-email-jean-baptiste.tredez@basystemes.fr>
+References: <1481019001-11035-1-git-send-email-jean-baptiste.tredez@basystemes.fr>
+Message-ID: <4282667.A5TpXGPufD@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Jean-Baptiste,
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index dfe0d05..45bce10 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  d19f6cd3d53f5010abcf24cc20a301934372b41efc3ff2a2e4e7d8fa49200cdc  shairport-sync-2.8.5.tar.gz
-+sha256  2e73416ac8fdda1657034afaa143f1710852ebed06e0aa43dafc2b7dc5eb653d  shairport-sync-2.8.6.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 7af030b..00d6a69 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 2.8.5
-+SHAIRPORT_SYNC_VERSION = 2.8.6
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+On Tuesday 06 December 2016 11:10:01 Jean-Baptiste Tr?dez wrote:
+> Fix kernel reproducible build if LANG=fr_FR.UTF-8 in host system.
+> 
+> when building linux kernel, scripts/gen_initramfs_list.sh do 'date -d"$KBUILD_BUILD_TIMESTAMP" +%s'
+> In buildroot makefile, KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
+> if LANG=fr_FR.UTF-8 in host system, it does not work :
+> - LANG=C date -d"$(LANG=C date)" : ok
+> - LANG=C date -d"$(LANG=fr_FR.UTF-8 date)" : error
+
+Good catch.
+
+> ---
+>  linux/linux.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index a63d1f3..554c5f1 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -99,7 +99,7 @@ LINUX_MAKE_ENV += \
+>  	KBUILD_BUILD_VERSION=1 \
+>  	KBUILD_BUILD_USER=buildroot \
+>  	KBUILD_BUILD_HOST=buildroot \
+> -	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
+> +	KBUILD_BUILD_TIMESTAMP="$(shell LANG=C date -d @$(SOURCE_DATE_EPOCH))"
+
+It should also possible to fix problem using backquotes:
+
+  KBUILD_BUILD_TIMESTAMP="`date -d @$(SOURCE_DATE_EPOCH)`"
+
+I find it lighter.
+
+
+
+BR,
+
 -- 
-2.10.2
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
