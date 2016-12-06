@@ -1,56 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  6 Dec 2016 21:27:03 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-pam: adjust login pam file for SELinux
-In-Reply-To: <1477423570-15694-3-git-send-email-bryce.ferguson@rockwellcollins.com>
+Date: Tue,  6 Dec 2016 21:27:04 +0100
+Subject: [Buildroot] [PATCH 2/2] util-linux: add selinux support
+In-Reply-To: <1481056025-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1477423570-15694-3-git-send-email-bryce.ferguson@rockwellcollins.com>
-Message-ID: <1481056025-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1481056025-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1481056025-28891-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When SELinux support is enabled, the login pam file installed by
-linux-pam should be adjusted to use the pam_selinux.so module.
+From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-To achieve this in a reasonably simple manner, we introduce the SELinux
-related lines in login.pam as comments, and if SELinux support is
-enabled, turn those commented lines into real lines.
+This patch adds optional libselinux support to the util-linux package,
+and also tweaks the PAM files instealled by util-linux to work properly
+in an SELinux context.
 
+Like was done for linux-pam, the tweak is done by having the SELinux
+related lines commented out in the original PAM file, and uncommented
+when SELinux support is enabled.
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-pam/linux-pam.mk | 5 +++++
- package/linux-pam/login.pam    | 2 ++
- 2 files changed, 7 insertions(+)
+ package/util-linux/su.pam        |  2 ++
+ package/util-linux/util-linux.mk | 14 ++++++++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 6ce3839..c8ba30f 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -29,6 +29,10 @@ endif
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- LINUX_PAM_CONF_OPTS += --enable-selinux
- LINUX_PAM_DEPENDENCIES += libselinux
-+define LINUX_PAM_SELINUX_PAMFILE_TWEAK
-+	$(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
-+		$(TARGET_DIR)/etc/pam.d/login
-+endef
- else
- LINUX_PAM_CONF_OPTS += --disable-selinux
- endif
-@@ -46,6 +50,7 @@ define LINUX_PAM_INSTALL_CONFIG
- 		$(TARGET_DIR)/etc/pam.d/login
- 	$(INSTALL) -m 0644 -D package/linux-pam/other.pam \
- 		$(TARGET_DIR)/etc/pam.d/other
-+	$(LINUX_PAM_SELINUX_PAMFILE_TWEAK)
- endef
- 
- LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_INSTALL_CONFIG
-diff --git a/package/linux-pam/login.pam b/package/linux-pam/login.pam
-index 01f5632..5df7db6 100644
---- a/package/linux-pam/login.pam
-+++ b/package/linux-pam/login.pam
-@@ -4,7 +4,9 @@ account		required	pam_unix.so
+diff --git a/package/util-linux/su.pam b/package/util-linux/su.pam
+index f000c39..84b1860 100644
+--- a/package/util-linux/su.pam
++++ b/package/util-linux/su.pam
+@@ -7,7 +7,9 @@ account		required	pam_unix.so
  
  password	required	pam_unix.so nullok
  
@@ -60,5 +45,37 @@ index 01f5632..5df7db6 100644
  session		required	pam_unix.so
  session		optional	pam_lastlog.so
 +# session	required	pam_selinux.so open
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index cf03fd4..7140554 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -63,6 +63,19 @@ endif
+ UTIL_LINUX_CONF_ENV += LIBS="$(UTIL_LINUX_LIBS)"
+ UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS)"
+ 
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++UTIL_LINUX_DEPENDENCIES += libselinux
++UTIL_LINUX_CONF_OPTS += --with-selinux
++define UTIL_LINUX_SELINUX_PAMFILES_TWEAK
++	$(foreach f,su su-l,
++		$(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
++			$(TARGET_DIR)/etc/pam.d/$(f)
++	)
++endef
++else
++UTIL_LINUX_CONF_OPTS += --without-selinux
++endif
++
+ # Used by cramfs utils
+ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+ 
+@@ -179,6 +192,7 @@ define UTIL_LINUX_INSTALL_PAMFILES
+ 		$(TARGET_DIR)/etc/pam.d/su
+ 	$(INSTALL) -m 0644 package/util-linux/su.pam \
+ 		$(TARGET_DIR)/etc/pam.d/su-l
++	$(UTIL_LINUX_SELINUX_PAMFILES_TWEAK)
+ endef
+ endif
+ 
 -- 
 2.7.4
