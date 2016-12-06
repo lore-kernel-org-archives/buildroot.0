@@ -1,56 +1,43 @@
-From: Jean-Baptiste Tredez <jean-baptiste.tredez@basystemes.fr>
-Date: Tue, 6 Dec 2016 17:41:13 +0100
-Subject: [Buildroot] [PATCH] Makefile: generate KBUILD_BUILD_TIMESTAMP
- date whith LANG=C
-In-Reply-To: <4282667.A5TpXGPufD@sagittea>
-References: <1481019001-11035-1-git-send-email-jean-baptiste.tredez@basystemes.fr>
- <4282667.A5TpXGPufD@sagittea>
-Message-ID: <92139c7e-33b7-eb0c-c6ff-3ab97c43d5f2@basystemes.fr>
+From: Brandon Maier <brandon.maier@rockwellcollins.com>
+Date: Tue, 6 Dec 2016 11:13:08 -0600
+Subject: [Buildroot] [RFC v2 4/4] support/download/git: shallow fetch of
+ all branches
+In-Reply-To: <20161202152123.20399-5-ricardo.martincoski@datacom.ind.br>
+References: <20161202152123.20399-1-ricardo.martincoski@datacom.ind.br>
+ <20161202152123.20399-5-ricardo.martincoski@datacom.ind.br>
+Message-ID: <CA+fik51+qcpnLCT9RuEvyGKf5Yf5-XNz5KLv3G-vfnE485unEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, Dec 2, 2016 at 9:21 AM, Ricardo Martincoski <
+ricardo.martincoski@datacom.ind.br> wrote:
+>
+>
+> As a middle ground between a --depth 1 fetch and a full clone, fetch all
+> branches with depth of 100. We have a good change to catch the desired
+>
 
-Le 06/12/2016 ? 14:02, J?r?me Pouiller a ?crit :
-> Hello Jean-Baptiste,
->
-> On Tuesday 06 December 2016 11:10:01 Jean-Baptiste Tr?dez wrote:
->> Fix kernel reproducible build if LANG=fr_FR.UTF-8 in host system.
->>
->> when building linux kernel, scripts/gen_initramfs_list.sh do 'date -d"$KBUILD_BUILD_TIMESTAMP" +%s'
->> In buildroot makefile, KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
->> if LANG=fr_FR.UTF-8 in host system, it does not work :
->> - LANG=C date -d"$(LANG=C date)" : ok
->> - LANG=C date -d"$(LANG=fr_FR.UTF-8 date)" : error
-> Good catch.
->
->> ---
->>   linux/linux.mk | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/linux/linux.mk b/linux/linux.mk
->> index a63d1f3..554c5f1 100644
->> --- a/linux/linux.mk
->> +++ b/linux/linux.mk
->> @@ -99,7 +99,7 @@ LINUX_MAKE_ENV += \
->>   	KBUILD_BUILD_VERSION=1 \
->>   	KBUILD_BUILD_USER=buildroot \
->>   	KBUILD_BUILD_HOST=buildroot \
->> -	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
->> +	KBUILD_BUILD_TIMESTAMP="$(shell LANG=C date -d @$(SOURCE_DATE_EPOCH))"
-> It should also possible to fix problem using backquotes:
->
->    KBUILD_BUILD_TIMESTAMP="`date -d @$(SOURCE_DATE_EPOCH)`"
->
-> I find it lighter.
-It should work but may require a comment. One may not see the importance 
-of the backquotes and it is hard to track (since the compilation do not 
-fail in case of error only a binary compare on vmlinux will show the issue).
+Should this be "good chance"?
 
->
->
-> BR,
->
+Also, is there any particular reason for depth 100?
+
+
+> ...
+
++    # As a middle ground between a --depth 1 fetch and a full fetch, fetch
+> all
+> +    # branches with depth of 100. We have a good change to catch the
+> desired
+
+
+Again, "good chance"?
+
+
+Altogether good idea Ricardio, I like the "--depth 100" feature. This will
+be helpful for our team as well.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161206/3247e261/attachment.html>
