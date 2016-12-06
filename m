@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Dec 2016 11:29:07 +0100
-Subject: [Buildroot] [PATCH] sysklogd: fix build on musl
-In-Reply-To: <1480371658-31317-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 28 Nov 2016 23:20:58 +0100")
-References: <1480371658-31317-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8760mx5p1o.fsf@dell.be.48ers.dk>
+Date: Tue, 06 Dec 2016 11:32:02 +0100
+Subject: [Buildroot] [PATCH] tslib: bump version to 1.2
+In-Reply-To: <20161119104918.1e0dbf1d@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 19 Nov 2016 10:49:18 +0100")
+References: <1479486965-23362-1-git-send-email-martink@posteo.de>
+ <20161119104918.1e0dbf1d@free-electrons.com>
+Message-ID: <871sxl5owt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +14,23 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > This commit add a stack of small patches that make sysklogd build fine
- > with the musl C library. Build with uClibc and glibc has been tested
- > with those patches applied as well.
+Hi,
 
- > The first patch is slightly rework (better description and capital
- > letter to the title) in preparation for upstream submission.
+ >> Alternatively, I could come up with a new version of this patch, including
+ >> only inputattach here again. (at least an updated version of it. that project
+ >> is actively maintained.)
 
- > Fixes:
+ > We normally don't include in Buildroot patches that add new features to
+ > packages, so in fact this patch adding ts_finddev and inputattach
+ > (which had been there for a very long time) was not even complying with
+ > this rule.
 
- >   http://autobuild.buildroot.net/results/8fa2bf73f983330884bce2e5ac31e01dee112ba9/
+ > It would however be good to have the "Linux console" project packaged,
+ > so that if people were using the inputattach program from tslib, we can
+ > tell them to enable the linuxconsole package.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+We already have it in the input-tools package. That (old) package is
+currently using Debian as upstream though.
 
 -- 
 Bye, Peter Korsgaard
