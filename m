@@ -1,42 +1,65 @@
-From: Rahul Jain <Rahul.Jain@imgtec.com>
-Date: Tue, 6 Dec 2016 16:12:28 +0530
-Subject: [Buildroot] [PATCH v1] mbedtls: bump to version 2.4.0
-Message-ID: <1481020948-2910-1-git-send-email-Rahul.Jain@imgtec.com>
+From: Jean-Baptiste Tredez <jean-baptiste.tredez@basystemes.fr>
+Date: Tue, 6 Dec 2016 11:48:02 +0100
+Subject: [Buildroot] [PATCH] Makefile: generate KBUILD_BUILD_TIMESTAMP
+ date whith LANG=C
+In-Reply-To: <20161206113310.2f9ebef4@free-electrons.com>
+References: <1481019001-11035-1-git-send-email-jean-baptiste.tredez@basystemes.fr>
+ <20161206113310.2f9ebef4@free-electrons.com>
+Message-ID: <966ebe9c-730b-bff6-94ae-9b1e6faf906f@basystemes.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change also fixes
-http://autobuild.buildroot.net/results/27b/27b35d03b576392955e21498ac1e62590ef5f5db/build-end.log
+Le 06/12/2016 ? 11:33, Thomas Petazzoni a ?crit :
+> Hello,
+>
+> On Tue,  6 Dec 2016 11:10:01 +0100, Jean-Baptiste Tr?dez wrote:
+>> Fix kernel reproducible build if LANG=fr_FR.UTF-8 in host system.
+>>
+>> when building linux kernel, scripts/gen_initramfs_list.sh do 'date -d"$KBUILD_BUILD_TIMESTAMP" +%s'
+>> In buildroot makefile, KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
+>> if LANG=fr_FR.UTF-8 in host system, it does not work :
+>> - LANG=C date -d"$(LANG=C date)" : ok
+>> - LANG=C date -d"$(LANG=fr_FR.UTF-8 date)" : error
+>>
+>> Signed-off-by: Jean-Baptiste Tr?dez <jean-baptiste.tredez@basystemes.fr>
+> Indeed, seems like the LANG/LC_ALL variables exported in the main
+> Makefile are not used in the $(shell ...) sub-shells.
+>
+> However, are you sure it works with LANG=C ? It seems like LC_ALL=C is
+> needed instead:
+>
+> thomas at skate:/tmp$ LANG=C date
+> mardi 6 d?cembre 2016, 11:31:52 (UTC+0100)
+> thomas at skate:/tmp$ LC_ALL=C date
+> Tue Dec  6 11:31:59 CET 2016
+$ date
+mardi 6 d?cembre 2016, 11:36:21 (UTC+0100)
+$ LANG=C date
+Tue Dec  6 11:36:49 CET 2016
+$ LC_ALL=C date
+Tue Dec  6 11:36:57 CET 2016
 
-Signed-off-by: Rahul Jain <Rahul.Jain@imgtec.com>
----
- package/mbedtls/mbedtls.hash | 2 +-
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 2d0fa11..5f9786c 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,2 +1,2 @@
- # From https://tls.mbed.org/tech-updates/releases/mbedtls-2.3.0-2.1.5-and-1.3.17-released
--sha256	590734c8bc8b3ac48e9123d44bf03562e91f8dce0d1ac2615c318c077f3215b2	mbedtls-2.3.0-apache.tgz
-+sha256	c1c3559ed39f7a1b1550c4cf4ccb918bf239301a3311d98dda92bed8a25b7f0d	mbedtls-2.4.0-apache.tgz
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index d55e16b..a8bd61f 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.3.0
-+MBEDTLS_VERSION = 2.4.0
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
--- 
-2.6.2
+It works fine on my machine with LANG=C. I will change to LC_ALL=C.
+>
+> I also tested with the following test makefile:
+>
+> ====
+>
+> export LC_ALL=C
+>
+> foo = $(shell LC_ALL=C date)
+>
+> all:
+> 	date
+> 	echo "$(foo)"
+>
+> ====
+>
+> And indeed, the "export LC_ALL" is enough for the direct "date" call to
+> work. But for the date call whose output is stored in the "foo"
+> variable, passing again LC_ALL in the sub-shell is necessary.
+>
+> Thomas
