@@ -1,43 +1,23 @@
 From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Tue, 6 Dec 2016 11:13:08 -0600
-Subject: [Buildroot] [RFC v2 4/4] support/download/git: shallow fetch of
- all branches
-In-Reply-To: <20161202152123.20399-5-ricardo.martincoski@datacom.ind.br>
+Date: Tue, 6 Dec 2016 11:22:07 -0600
+Subject: [Buildroot] [PATCH v2 0/4] support/download/git using git fetch
+In-Reply-To: <20161202152123.20399-1-ricardo.martincoski@datacom.ind.br>
 References: <20161202152123.20399-1-ricardo.martincoski@datacom.ind.br>
- <20161202152123.20399-5-ricardo.martincoski@datacom.ind.br>
-Message-ID: <CA+fik51+qcpnLCT9RuEvyGKf5Yf5-XNz5KLv3G-vfnE485unEg@mail.gmail.com>
+Message-ID: <CA+fik513NUzKJXGfD_NA+Vvh-2vLBZDJoZ1O4EC-xBnAj4B95Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 2, 2016 at 9:21 AM, Ricardo Martincoski <
-ricardo.martincoski@datacom.ind.br> wrote:
->
->
-> As a middle ground between a --depth 1 fetch and a full clone, fetch all
-> branches with depth of 100. We have a good change to catch the desired
->
+Thanks for incorporating the shallow fetch into your patch. The full
+rewrite to git init/fetch ended up with a much cleaner implementation then
+trying to hack my stuff onto git clone.
 
-Should this be "good chance"?
+I tested these 4 patches on some of our internal projects and it brought a
+fresh "make source" from 9.1m down to 1.8m.
 
-Also, is there any particular reason for depth 100?
-
-
-> ...
-
-+    # As a middle ground between a --depth 1 fetch and a full fetch, fetch
-> all
-> +    # branches with depth of 100. We have a good change to catch the
-> desired
-
-
-Again, "good chance"?
-
-
-Altogether good idea Ricardio, I like the "--depth 100" feature. This will
-be helpful for our team as well.
+Tested-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161206/3247e261/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161206/68d2773f/attachment.html>
