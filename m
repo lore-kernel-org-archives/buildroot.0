@@ -1,14 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Dec 2016 00:48:48 +0100
-Subject: [Buildroot] [PATCH] kexec: fix build when BR2_STRIP_none=y
-In-Reply-To: <87inqy57jy.fsf@dell.be.48ers.dk>
-References: <1480679517-551-1-git-send-email-marcin.nowakowski@imgtec.com>
- <87a8ce8g6c.fsf@dell.be.48ers.dk>
- <20161202213857.673e4b97@free-electrons.com>
- <877f7i6nry.fsf@dell.be.48ers.dk>
- <20161202223427.7b411a05@free-electrons.com>
- <87inqy57jy.fsf@dell.be.48ers.dk>
-Message-ID: <789c403c-6dd0-4b7a-e718-9ccfac82be66@mind.be>
+Date: Wed, 7 Dec 2016 00:51:30 +0100
+Subject: [Buildroot] [PATCH] linux: Adding customizable linux logo
+In-Reply-To: <1481051295-1190-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1481051295-1190-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <ce43ed01-ac0d-32e6-64af-c2d35a6f719b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,34 +12,88 @@ To: buildroot@busybox.net
 
 
 
-On 05-12-16 23:34, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 06-12-16 20:08, Angelo Compagnucci wrote:
+> This patch adds a custom linux logo to the generated kernel image.
 > 
->  > Hello,
->  > On Fri, 02 Dec 2016 22:09:53 +0100, Peter Korsgaard wrote:
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  linux/Config.ext.in           | 26 ++++++++++++++++++++++++++
+>  linux/linux-ext-customlogo.mk | 19 +++++++++++++++++++
+>  2 files changed, 45 insertions(+)
+>  create mode 100644 linux/linux-ext-customlogo.mk
 > 
->  >> Hi,
->  >> 
->  >> > My other thought is that I believe it's not the first time (see commit
->  >> > fc174b7057495ebb31393ae27f3ceeefdc490022), so perhaps our idea of
->  >> > having STRIP=true when BR2_STRIP_none=y is a bad idea, and we should
->  >> > handle this in a different way.  
->  >> 
->  >> The question is how? Create a dummy shell script to better emulate the
->  >> command line options / behaviour of strip?
-> 
->  > I'm not sure. Yet another wrapper kind of sucks. Is it possible to pass
->  > enough options to strip to have it not strip anything? :-)
-> 
-> Not that I'm aware of at least. Anyone?
+> diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+> index 011dffb..da63109 100644
+> --- a/linux/Config.ext.in
+> +++ b/linux/Config.ext.in
+> @@ -1,5 +1,31 @@
+>  menu "Linux Kernel Extensions"
+>  
+> +# Custom logo
+> +config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
+> +	bool "Custom logo"
+> +	select BR2_PACKAGE_CUSTOMLOGO
+> +	help
+> +	  Change linux boot logo with your own graphics. 
+> +	  Can be used as an early bootsplash.
+> +	  The file should be in kernel ppm format if the
+> +	  option BR2_PACKAGE_CUSTOMLOGO_CONVERT is not
+> +	  selected.
 
- Why do we have to set TARGET_STRIP to something different when
-BR2_STRIP_none=y? BR2_STRIP_none is supposed to mean that we don't strip all
-binaries, it doesn't mean that an individual package isn't allowed to strip its
-binaries...
+ You should wrap at 72 colums (where tab counts as 8, so 62 effective characters).
+
+> +
+> +config BR2_PACKAGE_CUSTOMLOGO_PATH
+> +	string "Image file path"
+> +	depends on BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
+> +	help
+> +	  This image will be used as custom logo.
+> +
+> +config BR2_PACKAGE_CUSTOMLOGO_CONVERT
+
+ The feedback in your RFC patch was to remove the convert option.
+
 
  Regards,
  Arnout
+
+> +	bool "Convert custom logo to kernel format"
+> +	depends on BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
+> +	help
+> +	  If checked, the convert command will be run on the source
+> +	  image file to obtain a kernel compatible ppm image file.
+> +	  *REQUIRES* a pre installed imagemagick on the host system
+> +	  to convert the image.
+> +
+>  #-------------------------------------------------------------------------------
+>  # Xenomai
+>  config BR2_LINUX_KERNEL_EXT_XENOMAI
+> diff --git a/linux/linux-ext-customlogo.mk b/linux/linux-ext-customlogo.mk
+> new file mode 100644
+> index 0000000..99e3ab1
+> --- /dev/null
+> +++ b/linux/linux-ext-customlogo.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# Custom logo
+> +#
+> +################################################################################
+> +
+> +LINUX_EXTENSIONS += customlogo
+> +
+> +ifeq ($(BR2_PACKAGE_CUSTOMLOGO_CONVERT),)
+> +define CUSTOMLOGO_PREPARE_KERNEL
+> +	cp $(BR2_PACKAGE_CUSTOMLOGO_PATH) $(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
+> +endef
+> +else
+> +define CUSTOMLOGO_PREPARE_KERNEL
+> +	convert $(BR2_PACKAGE_CUSTOMLOGO_PATH) \
+> +			-dither None -colors 224 -compress none \
+> +			$(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
+> +endef
+> +endif
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
