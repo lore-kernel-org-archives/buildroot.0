@@ -1,55 +1,35 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 06 Dec 2016 14:02:45 +0100
-Subject: [Buildroot] [PATCH] Makefile: generate KBUILD_BUILD_TIMESTAMP
-	date whith LANG=C
-In-Reply-To: <1481019001-11035-1-git-send-email-jean-baptiste.tredez@basystemes.fr>
-References: <1481019001-11035-1-git-send-email-jean-baptiste.tredez@basystemes.fr>
-Message-ID: <4282667.A5TpXGPufD@sagittea>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 06 Dec 2016 14:20:29 +0100
+Subject: [Buildroot] [git commit] arch/Config.in.arm: add Cortex-A57 and
+	Cortex-A72
+In-Reply-To: <20161205221749.B2CD87FEC4@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Mon, 5 Dec 2016 23:07:14 +0100")
+References: <20161205221749.B2CD87FEC4@busybox.osuosl.org>
+Message-ID: <87pol5jisi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jean-Baptiste,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tuesday 06 December 2016 11:10:01 Jean-Baptiste Tr?dez wrote:
-> Fix kernel reproducible build if LANG=fr_FR.UTF-8 in host system.
-> 
-> when building linux kernel, scripts/gen_initramfs_list.sh do 'date -d"$KBUILD_BUILD_TIMESTAMP" +%s'
-> In buildroot makefile, KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
-> if LANG=fr_FR.UTF-8 in host system, it does not work :
-> - LANG=C date -d"$(LANG=C date)" : ok
-> - LANG=C date -d"$(LANG=fr_FR.UTF-8 date)" : error
+ > commit: https://git.buildroot.net/buildroot/commit/?id=2131f1b3817d594ce24ac9ba263f104077cf7c49
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Good catch.
+ > Add two popular ARM64 cores to the list of supported cores: Cortex-A57
+ > and Cortex-A72.
 
-> ---
->  linux/linux.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index a63d1f3..554c5f1 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -99,7 +99,7 @@ LINUX_MAKE_ENV += \
->  	KBUILD_BUILD_VERSION=1 \
->  	KBUILD_BUILD_USER=buildroot \
->  	KBUILD_BUILD_HOST=buildroot \
-> -	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
-> +	KBUILD_BUILD_TIMESTAMP="$(shell LANG=C date -d @$(SOURCE_DATE_EPOCH))"
+Hmm, do old toolchains know about these cores?
 
-It should also possible to fix problem using backquotes:
+Looking around in gcc.git, it seems like they were added:
 
-  KBUILD_BUILD_TIMESTAMP="`date -d @$(SOURCE_DATE_EPOCH)`"
+a53/a57 in 4.8 for aarch64 / 4.9 for arm
+a72 in 5.1 for aarch64/arm
 
-I find it lighter.
-
-
-
-BR,
+So we need to ensure the older gcc versions cannot be selected when
+these variants are selected. We possibly also need to do something for
+external toolchains.
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Bye, Peter Korsgaard
