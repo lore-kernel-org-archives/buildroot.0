@@ -1,316 +1,382 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Dec 2016 11:24:14 +0100
-Subject: [Buildroot] [git commit] raspberrypi-usbboot: new package
-Message-ID: <20161206103227.3A84880292@busybox.osuosl.org>
+Date: Tue, 6 Dec 2016 11:28:43 +0100
+Subject: [Buildroot] [git commit] sysklogd: fix build on musl
+Message-ID: <20161206103227.51C207FB7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c4756be6b34ccb20c4b879efddda5c291da52ca
+commit: https://git.buildroot.net/buildroot/commit/?id=55b1114f7202ff09a1d060a112760b1e2efa477c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new package currently installs the "rpiboot" utility, which is
-needed to access via USB mass storage the built-in eMMC of Raspberry Pi
-compute modules.
+This commit add a stack of small patches that make sysklogd build fine
+with the musl C library. Build with uClibc and glibc has been tested
+with those patches applied as well.
+
+The first patch is slightly rework (better description and capital
+letter to the title) in preparation for upstream submission.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/8fa2bf73f983330884bce2e5ac31e01dee112ba9/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in.host                             |   1 +
- ...001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch |  28 +++++
- .../0002-Makefile-add-DESTDIR-support.patch        |  49 ++++++++
- ...rk-logic-to-find-def1-def2-and-def3-files.patch | 127 +++++++++++++++++++++
- package/raspberrypi-usbboot/Config.in.host         |  12 ++
- .../raspberrypi-usbboot/raspberrypi-usbboot.hash   |   2 +
- package/raspberrypi-usbboot/raspberrypi-usbboot.mk |  21 ++++
- 7 files changed, 240 insertions(+)
+ ...01-Replace-deprecated-union-wait-with-int.patch | 28 ++++++++
+ ...01-replace-deprecated-union-wait-with-int.patch | 25 -------
+ .../0002-Fix-improper-header-includes.patch        | 78 ++++++++++++++++++++++
+ .../0003-Remove-include-of-linux-time.h.patch      | 50 ++++++++++++++
+ ...s-hand-written-klogctl-syscall-implementa.patch | 38 +++++++++++
+ .../0005-Add-missing-headers-for-open-flags.patch  | 46 +++++++++++++
+ ...006-syslogd.c-rename-dprintf-to-mydprintf.patch | 39 +++++++++++
+ 7 files changed, 279 insertions(+), 25 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 840313a..2482641 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -36,6 +36,7 @@ menu "Host utilities"
- 	source "package/pru-software-support/Config.in.host"
- 	source "package/pwgen/Config.in.host"
- 	source "package/qemu/Config.in.host"
-+	source "package/raspberrypi-usbboot/Config.in.host"
- 	source "package/sam-ba/Config.in.host"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
-diff --git a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
+diff --git a/package/sysklogd/0001-Replace-deprecated-union-wait-with-int.patch b/package/sysklogd/0001-Replace-deprecated-union-wait-with-int.patch
 new file mode 100644
-index 0000000..cdab607
+index 0000000..d3fc0dc
 --- /dev/null
-+++ b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
++++ b/package/sysklogd/0001-Replace-deprecated-union-wait-with-int.patch
 @@ -0,0 +1,28 @@
-+From 5b015e67af27679f4ca8f7f5f2f71020ec054b0c Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 2 Dec 2016 23:09:44 +0100
-+Subject: [PATCH] Makefile: allow passing CFLAGS/LDFLAGS
++From 76685540a7882926c54bc0d1a8945b7a6abffe40 Mon Sep 17 00:00:00 2001
++From: Ryan Coe <bluemrp9@gmail.com>
++Date: Fri, 7 Oct 2016 19:42:40 -0700
++Subject: [PATCH] Replace deprecated union wait with int
 +
-+This might be needed to pass some custom CFLAGS/LDFLAGS when building
-+rpiboot.
++This is needed for compatibility with glibc >= 2.24.
 +
-+Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 +---
-+ Makefile | 2 +-
++ syslogd.c | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/Makefile b/Makefile
-+index 3e7d1e4..d9a7220 100755
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,5 +1,5 @@
-+ rpiboot: main.c
-+-	$(CC) -g -o $@ $< -lusb-1.0
-++	$(CC) -g $(CFLAGS) -o $@ $< -lusb-1.0 $(LDFLAGS)
++diff --git a/syslogd.c b/syslogd.c
++index ea73ea5..ace96c8 100644
++--- a/syslogd.c
+++++ b/syslogd.c
++@@ -2094,7 +2094,7 @@ void reapchild()
++ 	(void) signal(SIGCHLD, reapchild);	/* reset signal handler -ASP */
++ 	wait ((int *)0);
++ #else
++-	union wait status;
+++	int status;
 + 
-+ install: rpiboot
-+ 	cp rpiboot /usr/bin
++ 	while (wait3(&status, WNOHANG, (struct rusage *) NULL) > 0)
++ 		;
 +-- 
 +2.7.4
 +
-diff --git a/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch b/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch
+diff --git a/package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch b/package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch
+deleted file mode 100644
+index c9a30e9..0000000
+--- a/package/sysklogd/0001-replace-deprecated-union-wait-with-int.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From 86fe87cdf097e6286e76eadcc9c11c79be6258f2 Mon Sep 17 00:00:00 2001
+-From: Ryan Coe <bluemrp9@gmail.com>
+-Date: Fri, 7 Oct 2016 19:42:40 -0700
+-Subject: [PATCH 1/1] replace deprecated union wait with int
+-
+-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+----
+- syslogd.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/syslogd.c b/syslogd.c
+-index ea73ea5da5e935bb8cab328559f950cd3afc2d20..ace96c8be40f50d123120c0586a384a298212245 100644
+---- a/syslogd.c
+-+++ b/syslogd.c
+-@@ -2094,7 +2094,7 @@ void reapchild()
+-	(void) signal(SIGCHLD, reapchild);	/* reset signal handler -ASP */
+-	wait ((int *)0);
+- #else
+--	union wait status;
+-+	int status;
+-
+-	while (wait3(&status, WNOHANG, (struct rusage *) NULL) > 0)
+-		;
+---
+-2.9.3
+diff --git a/package/sysklogd/0002-Fix-improper-header-includes.patch b/package/sysklogd/0002-Fix-improper-header-includes.patch
 new file mode 100644
-index 0000000..c37d5a1
+index 0000000..3518ef0
 --- /dev/null
-+++ b/package/raspberrypi-usbboot/0002-Makefile-add-DESTDIR-support.patch
-@@ -0,0 +1,49 @@
-+From 905bc741b189d67160b27551b8ad01459c2707a0 Mon Sep 17 00:00:00 2001
++++ b/package/sysklogd/0002-Fix-improper-header-includes.patch
+@@ -0,0 +1,78 @@
++From 7a043f619a91fbb998863c08e3e5e94a4747b11d Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 2 Dec 2016 23:10:37 +0100
-+Subject: [PATCH] Makefile: add DESTDIR support
++Date: Mon, 28 Nov 2016 23:07:36 +0100
++Subject: [PATCH] Fix improper header includes
 +
-+This allows installing rpiboot outside of /usr if needed.
++When building with the musl C library, a number of warnings indicate
++that sysklogd is directly including headers that are considered internal
++to the C library:
 +
-+Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
++ - Instead of including <sys/fcntl.h>, <fcntl.h> should be included.
++
++ - Instead of including <sys/signal.h>, <signal.h> should be included.
++
++ - Instead of includeing <sys/errno.h>, <errno.h> should be included.
++
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ Makefile | 20 ++++++++++----------
-+ 1 file changed, 10 insertions(+), 10 deletions(-)
++ klogd.c    | 2 +-
++ ksym_mod.c | 2 +-
++ syslog.c   | 2 +-
++ syslogd.c  | 2 +-
++ 4 files changed, 4 insertions(+), 4 deletions(-)
 +
-+diff --git a/Makefile b/Makefile
-+index d9a7220..7835b7f 100755
-+--- a/Makefile
-++++ b/Makefile
-+@@ -2,18 +2,18 @@ rpiboot: main.c
-+ 	$(CC) -g $(CFLAGS) -o $@ $< -lusb-1.0 $(LDFLAGS)
-+ 
-+ install: rpiboot
-+-	cp rpiboot /usr/bin
-+-	mkdir -p /usr/share/rpiboot
-+-	cp usbbootcode.bin /usr/share/rpiboot
-+-	cp msd.elf /usr/share/rpiboot
-+-	cp buildroot.elf /usr/share/rpiboot
-++	cp rpiboot $(DESTDIR)/usr/bin
-++	mkdir -p $(DESTDIR)//usr/share/rpiboot
-++	cp usbbootcode.bin $(DESTDIR)/usr/share/rpiboot
-++	cp msd.elf $(DESTDIR)/usr/share/rpiboot
-++	cp buildroot.elf $(DESTDIR)/usr/share/rpiboot
-+ 
-+ uninstall:
-+-	rm -f /usr/bin/rpiboot
-+-	rm -f /usr/share/rpiboot/usbbootcode.bin
-+-	rm -f /usr/share/rpiboot/msd.elf
-+-	rm -f /usr/share/rpiboot/buildroot.elf
-+-	rmdir --ignore-fail-on-non-empty /usr/share/rpiboot/
-++	rm -f $(DESTDIR)/usr/bin/rpiboot
-++	rm -f $(DESTDIR)/usr/share/rpiboot/usbbootcode.bin
-++	rm -f $(DESTDIR)/usr/share/rpiboot/msd.elf
-++	rm -f $(DESTDIR)/usr/share/rpiboot/buildroot.elf
-++	rmdir --ignore-fail-on-non-empty $(DESTDIR)/usr/share/rpiboot/
-+ 
-+ clean: 
-+ 	rm rpiboot
-+-- 
-+2.7.4
-+
-diff --git a/package/raspberrypi-usbboot/0003-main.c-rework-logic-to-find-def1-def2-and-def3-files.patch b/package/raspberrypi-usbboot/0003-main.c-rework-logic-to-find-def1-def2-and-def3-files.patch
-new file mode 100644
-index 0000000..30cde49
---- /dev/null
-+++ b/package/raspberrypi-usbboot/0003-main.c-rework-logic-to-find-def1-def2-and-def3-files.patch
-@@ -0,0 +1,127 @@
-+From 935894908dc24acda0acea7d211a9d80e55ecadb Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 2 Dec 2016 23:43:23 +0100
-+Subject: [PATCH] main.c: rework logic to find def1, def2 and def3 files
-+
-+The current logic to find def1, def2 and def3 first tries to find them
-+in the local directory, and if they are not available, find them in
-+/usr/share.
-+
-+However, this doesn't work if rpiboot and its related files are
-+installed, but not in /usr. In order to address this use-case, this
-+commit reworks the logic to find the file path.
-+
-+A new function, getfilepath() is created. If the requested file is
-+available in the current directory, it is used. If not, then the path to
-+the file is inferred from the location of the currently running
-+program. I.e if we run /home/foo/sys/bin/rpiboot, then we will search
-+def1 in usbbootcode.bin in
-+/home/foo/sys/bin/../share/rpiboot/usbbootcode.bin.
-+
-+This continues to address the case of an installation in /usr, while
-+allowing installation in other locations as well.
-+
-+Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ main.c | 61 ++++++++++++++++++++++++++++++++++++++++++++++++-------------
-+ 1 file changed, 48 insertions(+), 13 deletions(-)
-+
-+diff --git a/main.c b/main.c
-+index 1b4e042..7c571d6 100755
-+--- a/main.c
-++++ b/main.c
-+@@ -1,10 +1,12 @@
-+-#include "libusb-1.0/libusb.h"
-++#define _GNU_SOURCE
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-
-++#include <libgen.h>
++diff --git a/klogd.c b/klogd.c
++index 6cc80ed..a173353 100644
++--- a/klogd.c
+++++ b/klogd.c
++@@ -260,7 +260,7 @@
 + #include <unistd.h>
-+ 
-++#include "libusb-1.0/libusb.h"
-++
-+ int verbose = 0;
-+ int out_ep = 1;
-+ int in_ep = 2;
-+@@ -146,6 +148,37 @@ int ep_read(unsigned char *buf, int len, libusb_device_handle * usb_device)
-+ 	return len;
-+ }
-+ 
-++char *getfilepath(char *filename)
-++{
-++	char *progpath, *filepath, *progdir;
-++	ssize_t len;
-++
-++	/* If file is available locally, use it */
-++	if (access(filename, F_OK) != -1)
-++		return filename;
-++
-++	/* Otherwise, use the installed version */
-++	progpath = malloc(PATH_MAX);
-++	len = readlink("/proc/self/exe", progpath, PATH_MAX - 1);
-++	if (len == -1)
-++	{
-++		free(progpath);
-++		return NULL;
-++	}
-++
-++	progpath[len] = '\0';
-++	progdir = dirname(progpath);
-++	if (asprintf(&filepath, "%s/../share/rpiboot/%s", progdir, filename) < 0)
-++	{
-++		free(progpath);
-++		return NULL;
-++	}
-++
-++	free(progpath);
-++
-++	return filepath;
-++}
-++
-+ int main(int argc, char *argv[])
-+ {
-+ 	int result;
-+@@ -157,13 +190,9 @@ int main(int argc, char *argv[])
-+ 	int last_serial = -1;
-+ 	FILE *fp1, *fp2, *fp;
-+ 
-+-	char def1_inst[] = "/usr/share/rpiboot/usbbootcode.bin";
-+-	char def2_inst[] = "/usr/share/rpiboot/msd.elf";
-+-	char def3_inst[] = "/usr/share/rpiboot/buildroot.elf";
-+-
-+-	char def1_loc[] = "./usbbootcode.bin";
-+-	char def2_loc[] = "./msd.elf";
-+-	char def3_loc[] = "./buildroot.elf";
-++	char def1_name[] = "usbbootcode.bin";
-++	char def2_name[] = "msd.elf";
-++	char def3_name[] = "buildroot.elf";
-+ 
-+ 	char *def1, *def2, *def3;
-+ 
-+@@ -171,10 +200,16 @@ int main(int argc, char *argv[])
-+ 	char *fatimage = NULL, *executable = NULL;
-+ 	int loop       = 0;
-+ 
-+-// if local file version exists use it else use installed
-+-	if( access( def1_loc, F_OK ) != -1 ) { def1 = def1_loc; } else { def1 = def1_inst; }
-+-	if( access( def2_loc, F_OK ) != -1 ) { def2 = def2_loc; } else { def2 = def2_inst; }
-+-	if( access( def3_loc, F_OK ) != -1 ) { def3 = def3_loc; } else { def3 = def3_inst; }
-++	def1 = getfilepath(def1_name);
-++	def2 = getfilepath(def2_name);
-++	def3 = getfilepath(def3_name);
-++
-++	if (!def1 || !def2 || !def3)
-++	{
-++		fprintf(stderr, "One of %s, %s or %s cannot be found\n",
-++			def1_name, def2_name, def3_name);
-++		exit(1);
-++	}
-+ 
-+ 	stage1   = def1;
-+ 	stage2   = def2;
++ #include <signal.h>
++ #include <errno.h>
++-#include <sys/fcntl.h>
+++#include <fcntl.h>
++ #include <sys/stat.h>
++ #if !defined(__GLIBC__)
++ #include <linux/time.h>
++diff --git a/ksym_mod.c b/ksym_mod.c
++index 68cd6b6..2e69d65 100644
++--- a/ksym_mod.c
+++++ b/ksym_mod.c
++@@ -113,7 +113,7 @@
++ #include <unistd.h>
++ #include <signal.h>
++ #include <errno.h>
++-#include <sys/fcntl.h>
+++#include <fcntl.h>
++ #include <sys/stat.h>
++ #include "module.h"
++ #if !defined(__GLIBC__)
++diff --git a/syslog.c b/syslog.c
++index bdb3ff2..f96b43c 100644
++--- a/syslog.c
+++++ b/syslog.c
++@@ -55,7 +55,7 @@ static char sccsid[] = "@(#)syslog.c	5.28 (Berkeley) 6/27/90";
++ #include <sys/types.h>
++ #include <sys/socket.h>
++ #include <sys/file.h>
++-#include <sys/signal.h>
+++#include <signal.h>
++ #include <sys/syslog.h>
++ #if 0
++ #include "syslog.h"
++diff --git a/syslogd.c b/syslogd.c
++index ace96c8..b5e8054 100644
++--- a/syslogd.c
+++++ b/syslogd.c
++@@ -521,7 +521,7 @@ static char sccsid[] = "@(#)syslogd.c	5.27 (Berkeley) 10/10/88";
++ #define SYSLOG_NAMES
++ #include <sys/syslog.h>
++ #include <sys/param.h>
++-#include <sys/errno.h>
+++#include <errno.h>
++ #include <sys/ioctl.h>
++ #include <sys/stat.h>
++ #include <sys/wait.h>
 +-- 
 +2.7.4
 +
-diff --git a/package/raspberrypi-usbboot/Config.in.host b/package/raspberrypi-usbboot/Config.in.host
+diff --git a/package/sysklogd/0003-Remove-include-of-linux-time.h.patch b/package/sysklogd/0003-Remove-include-of-linux-time.h.patch
 new file mode 100644
-index 0000000..dce2fcc
+index 0000000..374d89b
 --- /dev/null
-+++ b/package/raspberrypi-usbboot/Config.in.host
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_HOST_RASPBERRYPI_USBBOOT
-+	bool "host raspberrypi-usbboot"
-+	depends on BR2_arm
-+	help
-+	  This package builds and install the "rpiboot" tool for the
-+	  host machine. This tool allows to boot the Broadcom BCM
-+	  processor used in the RaspberryPi to boot over USB, and have
-+	  it expose a USB mass storage device in order to reflash the
-+	  built-in storage of the RaspberryPi (useful for the eMMC
-+	  built into the Compute module).
++++ b/package/sysklogd/0003-Remove-include-of-linux-time.h.patch
+@@ -0,0 +1,50 @@
++From f4926a61ba2d3766255dd996bf0315bc8fa0c528 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 28 Nov 2016 23:09:03 +0100
++Subject: [PATCH] Remove include of <linux/time.h>
 +
-+	  https://github.com/raspberrypi/usbboot
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
++klogd.c and ksym_mod.c currently include <linux/time.h> if GLIBC is not
++defined. Unfortunately, this breaks badly with the musl C library: this
++C library is not glibc so it doesn't define GLIBC, but it does have a
++definition of "struct timespec" in its header file, which conflict with
++the one provided by the Linux kernel headers.
++
++So, this commit simply gets rid of this header inclusion.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ klogd.c    | 3 ---
++ ksym_mod.c | 3 ---
++ 2 files changed, 6 deletions(-)
++
++diff --git a/klogd.c b/klogd.c
++index a173353..6505d96 100644
++--- a/klogd.c
+++++ b/klogd.c
++@@ -262,9 +262,6 @@
++ #include <errno.h>
++ #include <fcntl.h>
++ #include <sys/stat.h>
++-#if !defined(__GLIBC__)
++-#include <linux/time.h>
++-#endif /* __GLIBC__ */
++ #include <stdarg.h>
++ #include <paths.h>
++ #include <stdlib.h>
++diff --git a/ksym_mod.c b/ksym_mod.c
++index 2e69d65..6e26da1 100644
++--- a/ksym_mod.c
+++++ b/ksym_mod.c
++@@ -116,9 +116,6 @@
++ #include <fcntl.h>
++ #include <sys/stat.h>
++ #include "module.h"
++-#if !defined(__GLIBC__)
++-#include <linux/time.h>
++-#endif /* __GLIBC__ */
++ #include <stdarg.h>
++ #include <paths.h>
++ #include <linux/version.h>
++-- 
++2.7.4
++
+diff --git a/package/sysklogd/0004-Remove-bogus-hand-written-klogctl-syscall-implementa.patch b/package/sysklogd/0004-Remove-bogus-hand-written-klogctl-syscall-implementa.patch
 new file mode 100644
-index 0000000..94860a9
+index 0000000..548f160
 --- /dev/null
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 a8893f8a10522bd58866eb34e7f0d7731c43200d585f122681f428cdef76e676 raspberrypi-usbboot-f4e3f0f9a3c64d846ba53ec3367e33a4f9a7d051.tar.gz
-diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
++++ b/package/sysklogd/0004-Remove-bogus-hand-written-klogctl-syscall-implementa.patch
+@@ -0,0 +1,38 @@
++From fe92a7a8197241f7d6b28ea3c8214bb6d2c7fda4 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 28 Nov 2016 23:10:55 +0100
++Subject: [PATCH] Remove bogus hand-written klogctl() syscall implementation
++
++The way the hand-written klogctl() syscall is written cannot compile, as
++_syscall3() is just a function provided by the C library, so calling it
++outside of a function doesn't build.
++
++Since the musl C library provides a klogctl() function, we don't need
++this hand-written system call anyway.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ klogd.c | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/klogd.c b/klogd.c
++index 6505d96..9219671 100644
++--- a/klogd.c
+++++ b/klogd.c
++@@ -274,13 +274,8 @@
++ 
++ #define __LIBRARY__
++ #include <linux/unistd.h>
++-#if !defined(__GLIBC__)
++-# define __NR_ksyslog __NR_syslog
++-_syscall3(int,ksyslog,int, type, char *, buf, int, len);
++-#else
++ #include <sys/klog.h>
++ #define ksyslog klogctl
++-#endif
++ 
++ #define LOG_BUFFER_SIZE 4096
++ #define LOG_LINE_LENGTH 1000
++-- 
++2.7.4
++
+diff --git a/package/sysklogd/0005-Add-missing-headers-for-open-flags.patch b/package/sysklogd/0005-Add-missing-headers-for-open-flags.patch
 new file mode 100644
-index 0000000..7018617
+index 0000000..1a7ad84
 --- /dev/null
-+++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# raspberrypi-usbboot
-+#
-+################################################################################
++++ b/package/sysklogd/0005-Add-missing-headers-for-open-flags.patch
+@@ -0,0 +1,46 @@
++From 0dff338a704f4ad11a2b78871e1f2a0b8030b4d2 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 28 Nov 2016 23:12:37 +0100
++Subject: [PATCH] Add missing headers for open() flags
 +
-+RASPBERRYPI_USBBOOT_VERSION = f4e3f0f9a3c64d846ba53ec3367e33a4f9a7d051
-+RASPBERRYPI_USBBOOT_SITE = $(call github,raspberrypi,usbboot,$(RASPBERRYPI_USBBOOT_VERSION))
++Both pidfile.c and syslog.c use open() and its flags, but forgets to
++include all relevant headers, causing build failures with the musl C
++library.
 +
-+HOST_RASPBERRYPI_USBBOOT_DEPENDENCIES = host-libusb
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ pidfile.c | 2 ++
++ syslog.c  | 2 ++
++ 2 files changed, 4 insertions(+)
 +
-+define HOST_RASPBERRYPI_USBBOOT_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
-+endef
++diff --git a/pidfile.c b/pidfile.c
++index e0959a0..14de56f 100644
++--- a/pidfile.c
+++++ b/pidfile.c
++@@ -26,8 +26,10 @@
++ 
++ #include <stdio.h>
++ #include <unistd.h>
+++#include <sys/types.h>
++ #include <sys/stat.h>
++ #include <sys/file.h>
+++#include <fcntl.h>
++ #include <string.h>
++ #include <errno.h>
++ #include <signal.h>
++diff --git a/syslog.c b/syslog.c
++index f96b43c..d09e7aa 100644
++--- a/syslog.c
+++++ b/syslog.c
++@@ -57,6 +57,8 @@ static char sccsid[] = "@(#)syslog.c	5.28 (Berkeley) 6/27/90";
++ #include <sys/file.h>
++ #include <signal.h>
++ #include <sys/syslog.h>
+++#include <sys/stat.h>
+++#include <fcntl.h>
++ #if 0
++ #include "syslog.h"
++ #include "pathnames.h"
++-- 
++2.7.4
 +
-+define HOST_RASPBERRYPI_USBBOOT_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) \
-+		DESTDIR=$(HOST_DIR) install
-+endef
+diff --git a/package/sysklogd/0006-syslogd.c-rename-dprintf-to-mydprintf.patch b/package/sysklogd/0006-syslogd.c-rename-dprintf-to-mydprintf.patch
+new file mode 100644
+index 0000000..a1fb533
+--- /dev/null
++++ b/package/sysklogd/0006-syslogd.c-rename-dprintf-to-mydprintf.patch
+@@ -0,0 +1,39 @@
++From 68213f6902d291d2ba1626fd950fd7d4a1329d33 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 28 Nov 2016 23:13:08 +0100
++Subject: [PATCH] syslogd.c: rename dprintf() to mydprintf()
 +
-+$(eval $(host-generic-package))
++There is an existing kludge in syslogd.c to rename all dprintf()
++function calls and its definition to mydprintf(). This kludge is only
++applied when the glibc C library is used (i.e when GLIBC is defined),
++because glibc also provides a dprintf() function, with a different
++signature and behavior.
++
++However, the musl C library also provides the dprintf() function (with
++the same signature as the one in glibc, obviously), but does not define
++the GLIBC macro, causing a conflicting definition of dprintf.
++
++This commit fixes that by having the rename kludge used unconditionally.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ syslogd.c | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/syslogd.c b/syslogd.c
++index b5e8054..22a9ed5 100644
++--- a/syslogd.c
+++++ b/syslogd.c
++@@ -818,9 +818,7 @@ void doexit(int sig);
++ void init();
++ void cfline(char *line, register struct filed *f);
++ int decode(char *name, struct code *codetab);
++-#if defined(__GLIBC__)
++ #define dprintf mydprintf
++-#endif /* __GLIBC__ */
++ static void dprintf(char *, ...);
++ static void allocate_log(void);
++ void sighup_handler();
++-- 
++2.7.4
++
