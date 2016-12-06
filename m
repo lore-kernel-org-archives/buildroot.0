@@ -1,24 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Dec 2016 22:58:53 +0100
-Subject: [Buildroot] [PATCH 1/1] gcc: fix powerpc64le arch config name
-In-Reply-To: <1480979238-18273-2-git-send-email-nunes.erico@gmail.com>
-References: <1480979238-18273-1-git-send-email-nunes.erico@gmail.com>
- <1480979238-18273-2-git-send-email-nunes.erico@gmail.com>
-Message-ID: <CACXmViZOEfLuAn3Q+7MaidGEayb4qSZmCgvXajOD3dXjFbYfmg@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 6 Dec 2016 23:26:23 +0100
+Subject: [Buildroot] LibreSSL support?
+In-Reply-To: <CAGduivzjh5WNn_0do-A5L0FvoNh7hDEOxN1SiXH0HZya12YYAA@mail.gmail.com>
+References: <20161205223300.GA5002@itchy>
+ <CAGduivzjh5WNn_0do-A5L0FvoNh7hDEOxN1SiXH0HZya12YYAA@mail.gmail.com>
+Message-ID: <20161206222623.GA21878@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 6, 2016 at 12:07 AM, Erico Nunes <nunes.erico@gmail.com> wrote:
-> Buildroot references powerpc64 little endian as BR2_powerpc64le and not
-> BR2_powerpc64el.
+On 16-12-05 23:36:51, Maxime Hadjinlian wrote:
+> Hi Eric, all
 >
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> On Mon, Dec 5, 2016 at 11:33 PM, Eric Le Bihan
+> <eric.le.bihan.dev@free.fr> wrote:
 
-Committed, thanks.
+> > Are there any plans for adding support for LibreSSL?
+> >
+> > I've found a patch [1] in patchwork, from M. Hadjinlian, posted two
+> > years ago. The review concludes with the need for the introduction of a
+> > virtual package, as LibreSSL uses the same names for its binaries and
+> > libraries as OpenSSL (openssl, libcrypto, libssl and libtls).
+> Well the problem is that LibreSSL is *NOT* a real drop in replacement
+> of OpenSSL, so you would need to add a new package and we need to
+> figure a way to have a generic way to say that a package provide SSL,
+> like we have for GLES or others, and change/replace everything in the
+> package that needs ssl *but* since LibreSSL is not a perfect drop-in,
+> some package won't build with it. So it's on a case by case.
 
+Thanks for pointing this compatibility issue out. The Alpine project
+made the switch from OpenSSL to LibreSSL [1], so this can be used to get
+a list of packages which are compatible with either LibreSSL, OpenSSL or
+both.
+
+[1] http://lists.alpinelinux.org/alpine-devel/5463.html
+
+Best regards,
 
 --
-Bye, Peter Korsgaard
+ELB
