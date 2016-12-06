@@ -1,36 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Dec 2016 21:38:24 +0100
-Subject: [Buildroot] [git commit] toolchain-external: disallow sourcery
-	codebench ARM toolchain for ARMv8 cores
-Message-ID: <20161206204147.0623781E3E@busybox.osuosl.org>
+Date: Tue, 06 Dec 2016 21:45:59 +0100
+Subject: [Buildroot] How to log /dev/console directly on the device
+In-Reply-To: <2251bf95-8406-dd6e-6728-ad43f49a6d0b@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 20 Nov 2016 12:22:49 +0100")
+References: <CAGm1_ksb_gKjVwQ6S1AsnuREk439QTP9nbjRzhc7BMv7YY+y2Q@mail.gmail.com>
+ <2251bf95-8406-dd6e-6728-ad43f49a6d0b@mind.be>
+Message-ID: <87mvg8iy60.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36e2a2c0009e0e7d978101fd66680ebb7d4fcea2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-This toolchain uses GCC 4.8.x, which doesn't support the ARMv8 cores.
+ > On 20-11-16 08:36, Yegor Yefremov wrote:
+ >> I need to log the output from /dev/console to a file. The purpose is
+ >> to find an application crash in a field. It is important to have all
+ >> possible messages i.e. kernel messages and application messages.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../toolchain-external/toolchain-external-codesourcery-arm/Config.in    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >  This is exactly what syslogd (or journald) is supposed to do. Both the kernel
+ > and the applications send their messages to syslogd, and syslogd sends it to the
+ > console and/or to a file.
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
-index 3cdfc86..6331873 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-arm/Config.in
-@@ -4,7 +4,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
- 	# Unsupported ARM cores
--	depends on !BR2_cortex_a12 && !BR2_cortex_a17
-+	depends on !BR2_cortex_a12 && !BR2_cortex_a17 && !BR2_ARM_CPU_ARMV8
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
+ >  If you have your applications directly writing to /dev/console, there is really
+ > nothing you can do short of hacking the kernel to do something with it. You
+ > could take a look at netconsole, but IIRC that just sends printks to the
+ > network, it doesn't actually redirect /dev/console.
+
+That is not true. You can use ttyprintk (CONFIG_TTY_PRINTK in the
+kernel) to get a tty device that outputs to the printk buffer
+(E.G. dmesg) and then configure that as the console, either on the
+kernel command line or at runtime with something like:
+
+setconsole /dev/ttyprintk < /dev/console
+
+-- 
+Bye, Peter Korsgaard
