@@ -1,39 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Dec 2016 08:58:44 +0100
-Subject: [Buildroot] [PATCH v2] raspberrypi-usbboot: new package
-In-Reply-To: <20161206051847.x3g3revi2oaqdkpj@tarshish>
-References: <1480971546-6460-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20161206051847.x3g3revi2oaqdkpj@tarshish>
-Message-ID: <20161206085844.31e43b1d@free-electrons.com>
+From: Christian Kellermann <christian.kellermann@solectrix.de>
+Date: Tue,  6 Dec 2016 09:13:22 +0100
+Subject: [Buildroot] [PATCH 1/1] linux: Setting a repo_version is mandatory
+	for custom repositories
+Message-ID: <1481012002-30425-1-git-send-email-christian.kellermann@solectrix.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+If not set the system will use an empty string which will result in
+download errors for 'linux-.tar.gz' packages.
 
-On Tue, 6 Dec 2016 07:18:47 +0200, Baruch Siach wrote:
+This patch makes it obvious to the user that the variable needs to be
+set.
 
-> On Mon, Dec 05, 2016 at 09:59:06PM +0100, Thomas Petazzoni wrote:
-> > This new package currently installs the "rpiboot" utility, which is
-> > needed to access via USB mass storage the built-in eMMC of Raspberry Pi
-> > compute modules.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> > Changes since v1:
-> >  - Use the separate https://github.com/raspberrypi/usbboot repository,
-> >    which contains just the rpiboot tool, and which according to
-> >    https://github.com/raspberrypi/tools/issues/71 is not the official
-> >    upstream.  
-> 
-> s/not/now/?
+Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
+---
+ linux/linux.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Yes, indeed.
-
-Thomas
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7e826cc..f8a2cd9 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -35,6 +35,14 @@ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
+ BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+ endif
++
++# When a custom repository has been set, check for the repository version
++ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN)$(BR2_LINUX_KERNEL_CUSTOM_GIT)$(BR2_LINUX_KERNEL_CUSTOM_HG),y)
++ifeq ($(BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION),)
++$(error No custom repository version set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION setting)
++endif
++endif
++
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+ # to use the $(word) function. We support versions such as 4.0, 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
