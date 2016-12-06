@@ -1,113 +1,76 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  6 Dec 2016 20:49:09 +0100
-Subject: [Buildroot] [PATCH v3 4/4] package/aubio: disable unit tests with
-	--notests
-In-Reply-To: <1481053749-9315-1-git-send-email-romain.naour@gmail.com>
-References: <1481053749-9315-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1481053749-9315-4-git-send-email-romain.naour@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 6 Dec 2016 21:06:26 +0100
+Subject: [Buildroot] [RFC v2 4/4] support/download/git: shallow fetch of
+ all branches
+In-Reply-To: <1029334462.1039759.1481052606310.JavaMail.zimbra@datacom.ind.br>
+References: <20161202152123.20399-1-ricardo.martincoski@datacom.ind.br>
+ <20161202152123.20399-5-ricardo.martincoski@datacom.ind.br>
+ <CA+fik51+qcpnLCT9RuEvyGKf5Yf5-XNz5KLv3G-vfnE485unEg@mail.gmail.com>
+ <1029334462.1039759.1481052606310.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <c0839dc0-aa61-6ddb-dfaa-fdc6cc169f7c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For each build step, --notests needs to be passed to waf script
-to avoid runing the unit tests.
-This allow to remove the patch removing the unit tests from wscript.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v3: use AUBIO_WAF_OPTS
-v2: rebase after pkg-waf rework (Yann)
----
- package/aubio/0001-remove-unit-test.patch | 63 -------------------------------
- package/aubio/aubio.mk                    |  4 ++
- 2 files changed, 4 insertions(+), 63 deletions(-)
- delete mode 100644 package/aubio/0001-remove-unit-test.patch
 
-diff --git a/package/aubio/0001-remove-unit-test.patch b/package/aubio/0001-remove-unit-test.patch
-deleted file mode 100644
-index 947fc8e..0000000
---- a/package/aubio/0001-remove-unit-test.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From c71d72262568907ae8c3b988d42e575a8bd3a207 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sat, 29 Oct 2016 20:14:02 +0200
--Subject: [PATCH] remove unit test
--
--Unit tests fail to build on some system.
--
--Waf: Entering directory `output/build/aubio-0.4.3/build'
--[170/217] Processing build/tests/test-sink
--[170/217] Processing build/tests/test-sink_apple_audio-multi
--[172/217] Processing build/tests/test-sink_sndfile-multi
--[172/217] Processing build/tests/test-source_apple_audio
--[174/217] Processing build/tests/test-source_avcodec
--[174/217] Processing build/tests/test-source_multi
--[174/217] Processing build/tests/test-source_seek
--[176/217] Processing build/tests/test-source_sndfile
--Waf: Leaving directory `output/build/aubio-0.4.3/build'
--Build failed
--Traceback (most recent call last):
--  File "output/build/aubio-0.4.3/waflib/Task.py", line 110, in process
--    ret=self.run()
--  File "output/build/aubio-0.4.3/waflib/Tools/waf_unit_test.py", line 66, in run
--    proc=Utils.subprocess.Popen(self.ut_exec,cwd=cwd,env=self.get_test_env(),stderr=Utils.subprocess.PIPE,stdout=Utils.subprocess.PIPE)
--  File "/usr/lib64/python2.7/subprocess.py", line 710, in __init__
--    errread, errwrite)
--  File "/usr/lib64/python2.7/subprocess.py", line 1335, in _execute_child
--    raise child_exception
--OSError: [Errno 2] No such file or directory
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- wscript | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/wscript b/wscript
--index c665ff5..c8fae6c 100644
----- a/wscript
--+++ b/wscript
--@@ -95,13 +95,11 @@ def options(ctx):
--             help='set target platform for cross-compilation', dest='target_platform')
-- 
--     ctx.load('compiler_c')
---    ctx.load('waf_unit_test')
--     ctx.load('gnu_dirs')
-- 
-- def configure(ctx):
--     from waflib import Options
--     ctx.load('compiler_c')
---    ctx.load('waf_unit_test')
--     ctx.load('gnu_dirs')
-- 
--     # check for common headers
--@@ -334,7 +332,6 @@ def build(bld):
--     bld.recurse('src')
--     if bld.env['DEST_OS'] not in ['ios', 'iosimulator', 'android']:
--         bld.recurse('examples')
---        bld.recurse('tests')
-- 
--     bld( source = 'aubio.pc.in' )
-- 
---- 
--2.5.5
--
-diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
-index cfa233f..cb38d5a 100644
---- a/package/aubio/aubio.mk
-+++ b/package/aubio/aubio.mk
-@@ -15,6 +15,10 @@ AUBIO_CONF_OPTS = \
- 	--disable-docs \
- 	--disable-atlas
- 
-+# Add --notests for each build step to avoid runing unit tests on the
-+# build machine.
-+AUBIO_WAF_OPTS = --notests
-+
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- AUBIO_DEPENDENCIES += libsndfile
- AUBIO_CONF_OPTS += --enable-sndfile
+On 06-12-16 20:30, Ricardo Martincoski wrote:
+> Brandon,
+> 
+> Thank you for your tests.
+> 
+> On December 6, 2016 3:13:08 PM, Brandon Maier wrote:
+>>> As a middle ground between a --depth 1 fetch and a full clone, fetch all 
+>>> branches with depth of 100. We have a good change to catch the desired 
+>>
+>> Should this be "good chance"? 
+> 
+> Yes.
+> 
+> 
+>> Also, is there any particular reason for depth 100? 
+> 
+> No particular reason. It was only a guess.
+
+ The reasoning is mainly that the difference between depth 1 and depth 100 is
+usually negligible. This may however not be true, particularly for repos with
+large binaries.
+
+ Even better would be to do an incremental search, start at 1, multiply by 10
+every iteration until you find the wanted commit. But I'm not sure that the
+savings warrant the additional complexity, and also the additional overhead of
+reconnecting a few times.
+
+
+ Regards,
+ Arnout
+
+
+>>> ... 
+>>> + # As a middle ground between a --depth 1 fetch and a full fetch, fetch all 
+>>> + # branches with depth of 100. We have a good change to catch the desired 
+>>
+>> Again, "good chance"? 
+> 
+> Yes.
+> 
+> 
+>> Altogether good idea Ricardio, I like the "--depth 100" feature. This will be helpful for our team as well.
+> 
+> Actually it was not my idea, Arnout suggested the feature at
+> http://patchwork.ozlabs.org/patch/690098/
+> 
+> 
+> Regards,
+> Ricardo Martincoski
+> 
+
 -- 
-2.5.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
