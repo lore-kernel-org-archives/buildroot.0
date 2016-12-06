@@ -1,65 +1,39 @@
-From: Jean-Baptiste Tredez <jean-baptiste.tredez@basystemes.fr>
-Date: Tue, 6 Dec 2016 11:48:02 +0100
-Subject: [Buildroot] [PATCH] Makefile: generate KBUILD_BUILD_TIMESTAMP
- date whith LANG=C
-In-Reply-To: <20161206113310.2f9ebef4@free-electrons.com>
-References: <1481019001-11035-1-git-send-email-jean-baptiste.tredez@basystemes.fr>
- <20161206113310.2f9ebef4@free-electrons.com>
-Message-ID: <966ebe9c-730b-bff6-94ae-9b1e6faf906f@basystemes.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue,  6 Dec 2016 11:56:42 +0100
+Subject: [Buildroot] [PATCH] package/shairport-sync: bump version to 2.8.6
+Message-ID: <20161206105642.29309-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 06/12/2016 ? 11:33, Thomas Petazzoni a ?crit :
-> Hello,
->
-> On Tue,  6 Dec 2016 11:10:01 +0100, Jean-Baptiste Tr?dez wrote:
->> Fix kernel reproducible build if LANG=fr_FR.UTF-8 in host system.
->>
->> when building linux kernel, scripts/gen_initramfs_list.sh do 'date -d"$KBUILD_BUILD_TIMESTAMP" +%s'
->> In buildroot makefile, KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
->> if LANG=fr_FR.UTF-8 in host system, it does not work :
->> - LANG=C date -d"$(LANG=C date)" : ok
->> - LANG=C date -d"$(LANG=fr_FR.UTF-8 date)" : error
->>
->> Signed-off-by: Jean-Baptiste Tr?dez <jean-baptiste.tredez@basystemes.fr>
-> Indeed, seems like the LANG/LC_ALL variables exported in the main
-> Makefile are not used in the $(shell ...) sub-shells.
->
-> However, are you sure it works with LANG=C ? It seems like LC_ALL=C is
-> needed instead:
->
-> thomas at skate:/tmp$ LANG=C date
-> mardi 6 d?cembre 2016, 11:31:52 (UTC+0100)
-> thomas at skate:/tmp$ LC_ALL=C date
-> Tue Dec  6 11:31:59 CET 2016
-$ date
-mardi 6 d?cembre 2016, 11:36:21 (UTC+0100)
-$ LANG=C date
-Tue Dec  6 11:36:49 CET 2016
-$ LC_ALL=C date
-Tue Dec  6 11:36:57 CET 2016
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It works fine on my machine with LANG=C. I will change to LC_ALL=C.
->
-> I also tested with the following test makefile:
->
-> ====
->
-> export LC_ALL=C
->
-> foo = $(shell LC_ALL=C date)
->
-> all:
-> 	date
-> 	echo "$(foo)"
->
-> ====
->
-> And indeed, the "export LC_ALL" is enough for the direct "date" call to
-> work. But for the date call whose output is stored in the "foo"
-> variable, passing again LC_ALL in the sub-shell is necessary.
->
-> Thomas
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index dfe0d05..45bce10 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  d19f6cd3d53f5010abcf24cc20a301934372b41efc3ff2a2e4e7d8fa49200cdc  shairport-sync-2.8.5.tar.gz
++sha256  2e73416ac8fdda1657034afaa143f1710852ebed06e0aa43dafc2b7dc5eb653d  shairport-sync-2.8.6.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 7af030b..00d6a69 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.8.5
++SHAIRPORT_SYNC_VERSION = 2.8.6
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+-- 
+2.10.2
