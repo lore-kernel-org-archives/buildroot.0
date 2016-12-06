@@ -1,88 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Dec 2016 21:25:08 +0100
-Subject: [Buildroot] [PATCH v13 4/8] util-linux: selinux, audit,
- and pam support
-In-Reply-To: <1477423570-15694-4-git-send-email-bryce.ferguson@rockwellcollins.com>
-References: <1477423570-15694-1-git-send-email-bryce.ferguson@rockwellcollins.com>
- <1477423570-15694-4-git-send-email-bryce.ferguson@rockwellcollins.com>
-Message-ID: <20161206212508.44fc1232@free-electrons.com>
+Date: Tue,  6 Dec 2016 21:27:03 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-pam: adjust login pam file for SELinux
+In-Reply-To: <1477423570-15694-3-git-send-email-bryce.ferguson@rockwellcollins.com>
+References: <1477423570-15694-3-git-send-email-bryce.ferguson@rockwellcollins.com>
+Message-ID: <1481056025-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When SELinux support is enabled, the login pam file installed by
+linux-pam should be adjusted to use the pam_selinux.so module.
 
-On Tue, 25 Oct 2016 14:26:06 -0500, Bryce Ferguson wrote:
-> From: Matt Weber <matthew.weber@rockwellcollins.com>
-> 
-> This patch adds optional libselinux ,audit and pam support to linux utilities.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-> Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+To achieve this in a reasonably simple manner, we introduce the SELinux
+related lines in login.pam as comments, and if SELinux support is
+enabled, turn those commented lines into real lines.
 
-There are a few things I don't like in this patch. I'm going to submit
-two alternative patches as a replacement. I'm interested in your
-feedback about those replacement patches (especially if they work fine
-for you).
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-pam/linux-pam.mk | 5 +++++
+ package/linux-pam/login.pam    | 2 ++
+ 2 files changed, 7 insertions(+)
 
-
-> +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> +UTIL_LINUX_DEPENDENCIES += libselinux
-> +UTIL_LINUX_CONF_OPTS += --with-selinux
-> +else
-> +UTIL_LINUX_CONF_OPTS += --without-selinux
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_AUDIT),y)
-> +UTIL_LINUX_DEPENDENCIES += audit
-> +UTIL_LINUX_CONF_OPTS += --with-audit
-> +else
-> +UTIL_LINUX_CONF_OPTS += --without-audit
-> +endif
-
-As was already stated, optional audit support is already in
-util-linux.mk.
-
-> +
->  # Used by cramfs utils
->  UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
->  
-> @@ -179,9 +193,25 @@ define UTIL_LINUX_INSTALL_PAMFILES
->  	$(INSTALL) -m 0644 package/util-linux/su.pam \
->  		$(TARGET_DIR)/etc/pam.d/su-l
->  endef
-> +
-> +# Add the required hooks to the pam files if SELinux is enabled
-> +# SED expression adds these lines to /etc/pam.d/login,/etc/pam.d/su-l and /etc/pam.d/su files
-> +#   session		required	pam_selinux.so close
-> +#   session		required	pam_selinux.so open
-> +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> +define UTIL_LINUX_FIXUP_PAMFILES
-> +	for file in login su su-l ; do \
-> +		$(SED) '/selinux/d' $(TARGET_DIR)/etc/pam.d/$${file}; \
-> +		$(SED) '0,/session/s/session/session		required	pam_selinux.so close\nsession/' $(TARGET_DIR)/etc/pam.d/$${file}; \
-> +		echo "session		required	pam_selinux.so open" >> $(TARGET_DIR)/etc/pam.d/$${file}; \
-> +	done
-> +endef
-> +endif
-
-I don't like this, for two reasons:
-
- - The SED expressions are really really complicated.
-
- - You're tweaking /etc/pam.d/login, which has not been installed by
-   this package, but by the linux-pam package.
-
-See my alternate proposal, which I'll send in a few minutes.
-
-Thanks!
-
-Thomas
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index 6ce3839..c8ba30f 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -29,6 +29,10 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ LINUX_PAM_CONF_OPTS += --enable-selinux
+ LINUX_PAM_DEPENDENCIES += libselinux
++define LINUX_PAM_SELINUX_PAMFILE_TWEAK
++	$(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
++		$(TARGET_DIR)/etc/pam.d/login
++endef
+ else
+ LINUX_PAM_CONF_OPTS += --disable-selinux
+ endif
+@@ -46,6 +50,7 @@ define LINUX_PAM_INSTALL_CONFIG
+ 		$(TARGET_DIR)/etc/pam.d/login
+ 	$(INSTALL) -m 0644 -D package/linux-pam/other.pam \
+ 		$(TARGET_DIR)/etc/pam.d/other
++	$(LINUX_PAM_SELINUX_PAMFILE_TWEAK)
+ endef
+ 
+ LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_INSTALL_CONFIG
+diff --git a/package/linux-pam/login.pam b/package/linux-pam/login.pam
+index 01f5632..5df7db6 100644
+--- a/package/linux-pam/login.pam
++++ b/package/linux-pam/login.pam
+@@ -4,7 +4,9 @@ account		required	pam_unix.so
+ 
+ password	required	pam_unix.so nullok
+ 
++# session	required	pam_selinux.so close
+ session		required	pam_limits.so
+ session		required	pam_env.so
+ session		required	pam_unix.so
+ session		optional	pam_lastlog.so
++# session	required	pam_selinux.so open
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
