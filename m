@@ -1,82 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Dec 2016 18:16:42 +0100
-Subject: [Buildroot] [git commit] package/easydbus: new package
-Message-ID: <20161207182849.3962181E50@busybox.osuosl.org>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed,  7 Dec 2016 12:34:44 -0600
+Subject: [Buildroot] [PATCH] angular-websocket: new package
+Message-ID: <1481135684-62954-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04f3ec69319f02281ec0b379c9fae9f3ef3ea7e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Bimal Jacob <Bimal.Jacob@rockwellcollins.com>
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bimal Jacob <bimal.jacob@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/Config.in              |  1 +
- package/easydbus/Config.in     | 14 ++++++++++++++
- package/easydbus/easydbus.hash |  2 ++
- package/easydbus/easydbus.mk   | 13 +++++++++++++
- 4 files changed, 30 insertions(+)
+ package/Config.in                              |  1 +
+ package/angular-websocket/Config.in            |  8 ++++++++
+ package/angular-websocket/angular-websocket.mk | 18 ++++++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/angular-websocket/Config.in
+ create mode 100644 package/angular-websocket/angular-websocket.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 664d0d9..c14575c 100644
+index 664d0d9..27bc6be 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -521,6 +521,7 @@ menu "Lua libraries/modules"
- 	source "package/cosmo/Config.in"
- 	source "package/coxpcall/Config.in"
- 	source "package/dado/Config.in"
-+	source "package/easydbus/Config.in"
- 	source "package/lbase64/Config.in"
- 	source "package/ljlinenoise/Config.in"
- 	source "package/ljsyscall/Config.in"
-diff --git a/package/easydbus/Config.in b/package/easydbus/Config.in
+@@ -1172,6 +1172,7 @@ menu "Networking"
+ 	source "package/alljoyn-base/Config.in"
+ 	source "package/alljoyn-tcl/Config.in"
+ 	source "package/alljoyn-tcl-base/Config.in"
++	source "package/angular-websocket/Config.in"
+ 	source "package/batman-adv/Config.in"
+ 	source "package/c-ares/Config.in"
+ 	source "package/canfestival/Config.in"
+diff --git a/package/angular-websocket/Config.in b/package/angular-websocket/Config.in
 new file mode 100644
-index 0000000..51519d6
+index 0000000..5878e84
 --- /dev/null
-+++ b/package/easydbus/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_EASYDBUS
-+	bool "easydbus"
-+	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
++++ b/package/angular-websocket/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_ANGULAR_WEBSOCKET
++	bool "angular-websocket"
++	select BR2_PACKAGE_ANGULARJS
 +	help
-+	  Easy to use DBus library for Lua.
++	  An AngularJS WebSocket service for connecting client
++	  applications to servers.
 +
-+	  https://github.com/mniestroj/easydbus
-+
-+comment "easydbus needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/easydbus/easydbus.hash b/package/easydbus/easydbus.hash
++	  https://github.com/AngularClass/angular-websocket
+diff --git a/package/angular-websocket/angular-websocket.mk b/package/angular-websocket/angular-websocket.mk
 new file mode 100644
-index 0000000..0ef73f2
+index 0000000..b422847
 --- /dev/null
-+++ b/package/easydbus/easydbus.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 3e5907664f5dfebbc0e652faf87564fd58dbd639742f442c100ef2db8be46e52 easydbus-59c340f2cd2c92ded82f9d4436866847f295faab.tar.gz
-diff --git a/package/easydbus/easydbus.mk b/package/easydbus/easydbus.mk
-new file mode 100644
-index 0000000..376b09b
---- /dev/null
-+++ b/package/easydbus/easydbus.mk
-@@ -0,0 +1,13 @@
++++ b/package/angular-websocket/angular-websocket.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# easydbus
++# angular-websocket
 +#
 +################################################################################
 +
-+EASYDBUS_VERSION = 59c340f2cd2c92ded82f9d4436866847f295faab
-+EASYDBUS_SITE = $(call github,mniestroj,easydbus,$(EASYDBUS_VERSION))
-+EASYDBUS_DEPENDENCIES = luainterpreter libglib2
-+EASYDBUS_LICENSE = MIT
-+EASYDBUS_LICENSE_FILES = LICENSE
++ANGULAR_WEBSOCKET_VERSION = v2.0.0
++ANGULAR_WEBSOCKET_SITE = $(call github,AngularClass,angular-websocket,$(ANGULAR_WEBSOCKET_VERSION))
++ANGULAR_WEBSOCKET_LICENSE = MIT
++ANGULAR_WEBSOCKET_LICENSE_FILES = LICENSE
 +
-+$(eval $(cmake-package))
++# install .min.js as .js
++define ANGULAR_WEBSOCKET_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/dist/angular-websocket.min.js \
++		$(TARGET_DIR)/var/www/angular-websocket.js
++endef
++
++$(eval $(generic-package))
+-- 
+1.9.1
