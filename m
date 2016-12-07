@@ -1,25 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Dec 2016 19:26:28 +0100
-Subject: [Buildroot] [PATCH v2] package/easydbus: new package
-In-Reply-To: <20161207144905.25650-1-m.niestroj@grinn-global.com> (Marcin
- Niestroj's message of "Wed, 7 Dec 2016 15:49:05 +0100")
-References: <20161207144905.25650-1-m.niestroj@grinn-global.com>
-Message-ID: <87vauvh9yj.fsf@dell.be.48ers.dk>
+Date: Wed, 7 Dec 2016 18:16:42 +0100
+Subject: [Buildroot] [git commit] package/easydbus: new package
+Message-ID: <20161207182849.3962181E50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=04f3ec69319f02281ec0b379c9fae9f3ef3ea7e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
- > ---
- > Changes v1 -> v2:
- >  * Replicate libglib2 dependencies and add corresponding comment
- >    (suggested by Thomas)
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in              |  1 +
+ package/easydbus/Config.in     | 14 ++++++++++++++
+ package/easydbus/easydbus.hash |  2 ++
+ package/easydbus/easydbus.mk   | 13 +++++++++++++
+ 4 files changed, 30 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 664d0d9..c14575c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -521,6 +521,7 @@ menu "Lua libraries/modules"
+ 	source "package/cosmo/Config.in"
+ 	source "package/coxpcall/Config.in"
+ 	source "package/dado/Config.in"
++	source "package/easydbus/Config.in"
+ 	source "package/lbase64/Config.in"
+ 	source "package/ljlinenoise/Config.in"
+ 	source "package/ljsyscall/Config.in"
+diff --git a/package/easydbus/Config.in b/package/easydbus/Config.in
+new file mode 100644
+index 0000000..51519d6
+--- /dev/null
++++ b/package/easydbus/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_EASYDBUS
++	bool "easydbus"
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	help
++	  Easy to use DBus library for Lua.
++
++	  https://github.com/mniestroj/easydbus
++
++comment "easydbus needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/easydbus/easydbus.hash b/package/easydbus/easydbus.hash
+new file mode 100644
+index 0000000..0ef73f2
+--- /dev/null
++++ b/package/easydbus/easydbus.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 3e5907664f5dfebbc0e652faf87564fd58dbd639742f442c100ef2db8be46e52 easydbus-59c340f2cd2c92ded82f9d4436866847f295faab.tar.gz
+diff --git a/package/easydbus/easydbus.mk b/package/easydbus/easydbus.mk
+new file mode 100644
+index 0000000..376b09b
+--- /dev/null
++++ b/package/easydbus/easydbus.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# easydbus
++#
++################################################################################
++
++EASYDBUS_VERSION = 59c340f2cd2c92ded82f9d4436866847f295faab
++EASYDBUS_SITE = $(call github,mniestroj,easydbus,$(EASYDBUS_VERSION))
++EASYDBUS_DEPENDENCIES = luainterpreter libglib2
++EASYDBUS_LICENSE = MIT
++EASYDBUS_LICENSE_FILES = LICENSE
++
++$(eval $(cmake-package))
