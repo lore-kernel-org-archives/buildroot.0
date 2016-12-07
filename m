@@ -1,50 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Dec 2016 23:24:07 +0100
-Subject: [Buildroot] [git commit] madplay: fix build on noMMU platforms
-Message-ID: <20161207222539.5004F81E48@busybox.osuosl.org>
+Date: Wed, 7 Dec 2016 23:27:00 +0100
+Subject: [Buildroot] [PATCH v2 next] uclibc-ng-test: new package
+In-Reply-To: <20161118060348.GA11282@waldemar-brodkorb.de>
+References: <20161118060348.GA11282@waldemar-brodkorb.de>
+Message-ID: <20161207232700.189ff80e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb4a41c62e45c1942a603ec176ba7d6d9ee18b95
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-A recent change in uClibc-ng removed the MADV_* definitions for
-madvise(), but kept the madvise() function itself. This defeats the
-logic used in madplay: it checks if madvise() is available, and if it
-is, uses it and assumes the MADV_* definitions exist.
+On Fri, 18 Nov 2016 07:03:48 +0100, Waldemar Brodkorb wrote:
+> The next release of uClibc-ng (1.0.20) will remove the test suite.
+> Add a separate package before the next release.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-This inconsistency has been reported to upstream uClibc-ng, but in the
-mean time, we can simply tell madplay to not use madvise(), which is
-anyway useless on noMMU platforms.
+This new package causes quite a few build failures:
 
-Fixes:
+  http://autobuild.buildroot.net/?reason=uclibc-ng-test-4ad1c23ae2eb30888cda520c739cc26150512487
 
-  http://autobuild.buildroot.net/results/3291554ea013e5f4a8f3447e10e664dffa8b131b/
+Could you have a look?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/madplay/madplay.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Thanks!
 
-diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
-index 2606ac8..6b13819 100644
---- a/package/madplay/madplay.mk
-+++ b/package/madplay/madplay.mk
-@@ -11,6 +11,14 @@ MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
- MADPLAY_LIBTOOL_PATCH = NO
- MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
- 
-+# Workaround a bug in uClibc-ng, which exposes madvise() but doesn't
-+# provide the corresponding MADV_* definitions. Bug reported at
-+# http://mailman.uclibc-ng.org/pipermail/devel/2016-December/001306.html. madvise()
-+# is anyway useless on noMMU.
-+ifeq ($(BR2_USE_MMU),)
-+MADPLAY_CONF_ENV += ac_cv_func_madvise=no
-+endif
-+
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
- ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
