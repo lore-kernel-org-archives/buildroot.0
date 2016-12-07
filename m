@@ -1,40 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Dec 2016 22:25:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.6.13
-Message-ID: <20161207212535.6479-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 7 Dec 2016 22:37:19 +0100
+Subject: [Buildroot] [git commit] lttng-tools: fix build on musl
+Message-ID: <20161207213811.3188F80D9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=041c717ec8c251b7bca675086510840f02274967
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 5b888f5..76966cf 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,2 +1,2 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.12.tar.xz.sha256
--sha256 ae072ca2d96fd9ef59ca6f589f932048b088c7b469d46e468bb917371de24ff9  freeswitch-1.6.12.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.13.tar.xz.sha256
-+sha256 64a8a14fc5df92893d956868f144042891cc3e2d096bbf56241fec706635a8b7  freeswitch-1.6.13.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 12b0913..ee3ff4f 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREESWITCH_VERSION = 1.6.12
-+FREESWITCH_VERSION = 1.6.13
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPLv1.1, \
--- 
-2.10.2
+Add patch to add a missing <pthread.h> include to fix the build on musl.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ce0b438ca4dcf7ccef95c7050305d8cd58fbb24a/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-Fix-Add-missing-pthread.h-include.patch   | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/package/lttng-tools/0001-Fix-Add-missing-pthread.h-include.patch b/package/lttng-tools/0001-Fix-Add-missing-pthread.h-include.patch
+new file mode 100644
+index 0000000..29706af
+--- /dev/null
++++ b/package/lttng-tools/0001-Fix-Add-missing-pthread.h-include.patch
+@@ -0,0 +1,29 @@
++From c948391121f2eb411bc7d2049d96f267bfa643d8 Mon Sep 17 00:00:00 2001
++From: Michael Jeanson <mjeanson@efficios.com>
++Date: Mon, 5 Dec 2016 15:39:26 -0500
++Subject: [PATCH] Fix: Add missing pthread.h include
++
++Some libc like musl and uClibc requires explicit includes of pthread.h
++
++Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
++[Thomas: taken from lttng mailing list.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/common/defaults.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/common/defaults.h b/src/common/defaults.h
++index 27f1ddc..37d222a 100644
++--- a/src/common/defaults.h
+++++ b/src/common/defaults.h
++@@ -20,6 +20,7 @@
++ #ifndef _DEFAULTS_H
++ #define _DEFAULTS_H
++ 
+++#include <pthread.h>
++ #include <src/common/macros.h>
++ 
++ /* Default unix group name for tracing. */
++-- 
++2.7.4
++
