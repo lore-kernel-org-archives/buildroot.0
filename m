@@ -1,41 +1,61 @@
 From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Wed, 7 Dec 2016 11:48:16 -0800
-Subject: [Buildroot] [PATCH 1/2] package/xen: Bump Xen to 4.7.1
-In-Reply-To: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
+Date: Wed, 7 Dec 2016 15:39:26 -0800
+Subject: [Buildroot] [PATCH 2/2] package/xen: Disable strict
+	unused-const-variable checking
+In-Reply-To: <20161207215039.1accb7ba@free-electrons.com>
 References: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
-Message-ID: <1481140097-32096-2-git-send-email-alistair.francis@xilinx.com>
+ <1481140097-32096-3-git-send-email-alistair.francis@xilinx.com>
+ <20161207215039.1accb7ba@free-electrons.com>
+Message-ID: <CAKmqyKM0RTciLxjAkJ5DnZsq9yON3Er9XdwXMpd9E-CpQqsAYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
----
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, Dec 7, 2016 at 12:50 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Wed, 7 Dec 2016 11:48:17 -0800, Alistair Francis wrote:
+>> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+>
+> What is this patch fixing? The commit log shouldn't be empty.
+>
+> Is this fixing an autobuilder issue? If so, there should be a reference
+> to it.
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 602e6c7..c3df243 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 be5876144d49729572ae06142e0bb93f1c1f2695578141eff2931995add24623 xen-4.7.0.tar.gz
-+sha256 e87f4b0575e78657ee23d31470a15ecf1ce8c3a92a771cda46bbcd4d0d671ffe xen-4.7.1.tar.gz
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index e2c797f..7d32e52 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XEN_VERSION = 4.7.0
-+XEN_VERSION = 4.7.1
- XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
- XEN_LICENSE = GPLv2
- XEN_LICENSE_FILES = COPYING
--- 
-2.7.4
+It is fixing an autobuilder issue, I have added a commit message with
+more details.
+
+>
+>> ---
+>>  ...-Disable-strtict-unused-const-variable-ch.patch | 27 ++++++++++++++++++++++
+>>  1 file changed, 27 insertions(+)
+>>  create mode 100644 package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch
+>>
+>> diff --git a/package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch b/package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch
+>> new file mode 100644
+>> index 0000000..2bca456
+>> --- /dev/null
+>> +++ b/package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch
+>> @@ -0,0 +1,27 @@
+>> +From 3215099e9db9716dfade78880adb169bd7866192 Mon Sep 17 00:00:00 2001
+>> +From: Alistair Francis <alistair.francis@xilinx.com>
+>> +Date: Wed, 7 Dec 2016 11:35:10 -0800
+>> +Subject: [PATCH] tools/libxl: Disable strtict unused-const-variable checking
+>
+> Typo in the tittle: strtict -> strict.
+
+Good catch, fixed in v2.
+
+Thanks,
+
+Alistair
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
