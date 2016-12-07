@@ -1,44 +1,53 @@
-From: =?UTF-8?q?Jean-Baptiste=20Tr=C3=A9dez?= <jean-baptiste.tredez@basystemes.fr>
-Date: Wed,  7 Dec 2016 16:20:42 +0100
-Subject: [Buildroot] [PATCH v2] Makefile: generate KBUILD_BUILD_TIMESTAMP
-	date whith LC_ALL=C
-Message-ID: <1481124042-25089-1-git-send-email-jean-baptiste.tredez@basystemes.fr>
+From: Matt Kraai <kraai@ftbfs.org>
+Date: Wed,  7 Dec 2016 07:11:30 -0800
+Subject: [Buildroot] [PATCH] qt5connectivity: install examples
+Message-ID: <20161207151130.6836-1-kraai@ftbfs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix kernel reproducible build if LANG=fr_FR.UTF-8 or LC_ALL=fr_FR.UTF-8 in host system.
-
-when building linux kernel, scripts/gen_initramfs_list.sh do 'date -d"$KBUILD_BUILD_TIMESTAMP" +%s'
-In buildroot makefile, KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
-if LANG=fr_FR.UTF-8 in host system, it does not work :
-- LC_ALL=C date -d"$(LC_ALL=C date)" : ok
-- LC_ALL=C date -d"$(LC_ALL=fr_FR.UTF-8 date)" : error
-
-LANG/LC_ALL variables exported in the main Makefiles are not used in the $(shell ...) sub-shells.
-
-Signed-off-by: Jean-Baptiste Tr?dez <jean-baptiste.tredez@basystemes.fr>
+Signed-off-by: Matt Kraai <kraai@ftbfs.org>
 ---
-Changes in v2:
-	- use LC_ALL=C instead of LANG=C
+ package/qt5/qt5connectivity/qt5connectivity.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index a63d1f3..2b776a9 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -99,7 +99,7 @@ LINUX_MAKE_ENV += \
- 	KBUILD_BUILD_VERSION=1 \
- 	KBUILD_BUILD_USER=buildroot \
- 	KBUILD_BUILD_HOST=buildroot \
--	KBUILD_BUILD_TIMESTAMP="$(shell date -d @$(SOURCE_DATE_EPOCH))"
-+	KBUILD_BUILD_TIMESTAMP="$(shell LC_ALL=C date -d @$(SOURCE_DATE_EPOCH))"
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
+index 0f7257d..bcbdd2e 100644
+--- a/package/qt5/qt5connectivity/qt5connectivity.mk
++++ b/package/qt5/qt5connectivity/qt5connectivity.mk
+@@ -54,12 +54,22 @@ define QT5CONNECTIVITY_INSTALL_TARGET_BLUETOOTH
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Bluetooth.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpf $(STAGING_DIR)/usr/bin/sdpscanner $(TARGET_DIR)/usr/bin
+ endef
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5CONNECTIVITY_INSTALL_TARGET_BLUETOOTH_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/bluetooth $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
  endif
  
- # Get the real Linux version, which tells us where kernel modules are
+ ifeq ($(BR2_PACKAGE_NEARD),y)
+ define QT5CONNECTIVITY_INSTALL_TARGET_NFC
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Nfc.so.* $(TARGET_DIR)/usr/lib
+ endef
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5CONNECTIVITY_INSTALL_TARGET_NFC_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/nfc $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
+ endif
+ 
+ define QT5CONNECTIVITY_INSTALL_TARGET_CMDS
+@@ -67,6 +77,8 @@ define QT5CONNECTIVITY_INSTALL_TARGET_CMDS
+ 	$(QT5CONNECTIVITY_INSTALL_TARGET_NFC)
+ 	$(QT5CONNECTIVITY_INSTALL_TARGET_BLUETOOTH_QMLS)
+ 	$(QT5CONNECTIVITY_INSTALL_TARGET_NFC_QMLS)
++	$(QT5CONNECTIVITY_INSTALL_TARGET_BLUETOOTH_EXAMPLES)
++	$(QT5CONNECTIVITY_INSTALL_TARGET_NFC_EXAMPLES)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-1.9.1
+2.10.2
