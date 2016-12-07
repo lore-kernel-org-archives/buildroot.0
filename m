@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Dec 2016 23:38:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to
- 1.6.13
-In-Reply-To: <20161207212535.6479-1-bernd.kuhls@t-online.de>
-References: <20161207212535.6479-1-bernd.kuhls@t-online.de>
-Message-ID: <20161207233821.167dec56@free-electrons.com>
+Date: Wed, 7 Dec 2016 23:40:17 +0100
+Subject: [Buildroot] [PATCH] sdl_mixer: fix static linking issue
+In-Reply-To: <20161207190900.GA18119@waldemar-brodkorb.de>
+References: <20161207190900.GA18119@waldemar-brodkorb.de>
+Message-ID: <20161207234017.053799e0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  7 Dec 2016 22:25:35 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Wed, 7 Dec 2016 20:09:00 +0100, Waldemar Brodkorb wrote:
+> LDFLAGS must be passed when creating binaries.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  package/freeswitch/freeswitch.hash | 4 ++--
->  package/freeswitch/freeswitch.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> while testing the berkeley db fix, this error occured afterwards, so
+> no autobuilder reference.
 
-Applied to master, thanks.
+Sounds good...
+
+> ---
+>  .../sdl_mixer/0002-add-LDFLAGS-while-linking.patch   | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>  create mode 100644 package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
+> 
+> diff --git a/package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch b/package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
+> new file mode 100644
+> index 0000000..5c55a48
+> --- /dev/null
+> +++ b/package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
+> @@ -0,0 +1,20 @@
+> +Pass LDFLAGS while creating binaries.
+
+... but please add more details here about *why* we're doing this.
+
+> +
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
