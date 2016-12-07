@@ -1,59 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Dec 2016 22:37:19 +0100
-Subject: [Buildroot] [git commit] lttng-tools: fix build on musl
-Message-ID: <20161207213811.3188F80D9B@busybox.osuosl.org>
+Date: Wed, 7 Dec 2016 22:50:14 +0100
+Subject: [Buildroot] [git commit] uhttpd: add patch to remove -Werror
+Message-ID: <20161207215028.5357681D55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=041c717ec8c251b7bca675086510840f02274967
+commit: https://git.buildroot.net/buildroot/commit/?id=5382bac7c6e8dc94aa8cc42191815baeec1db911
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add patch to add a missing <pthread.h> include to fix the build on musl.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/ce0b438ca4dcf7ccef95c7050305d8cd58fbb24a/
+  http://autobuild.buildroot.net/results/febbd094090e14fe7a79e6f691c290075da4fd59/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Fix-Add-missing-pthread.h-include.patch   | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/uhttpd/0001-Remove-Werror.patch | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/lttng-tools/0001-Fix-Add-missing-pthread.h-include.patch b/package/lttng-tools/0001-Fix-Add-missing-pthread.h-include.patch
+diff --git a/package/uhttpd/0001-Remove-Werror.patch b/package/uhttpd/0001-Remove-Werror.patch
 new file mode 100644
-index 0000000..29706af
+index 0000000..67028cf
 --- /dev/null
-+++ b/package/lttng-tools/0001-Fix-Add-missing-pthread.h-include.patch
-@@ -0,0 +1,29 @@
-+From c948391121f2eb411bc7d2049d96f267bfa643d8 Mon Sep 17 00:00:00 2001
-+From: Michael Jeanson <mjeanson@efficios.com>
-+Date: Mon, 5 Dec 2016 15:39:26 -0500
-+Subject: [PATCH] Fix: Add missing pthread.h include
++++ b/package/uhttpd/0001-Remove-Werror.patch
+@@ -0,0 +1,33 @@
++From ac52380eeca27e1e2e7eb5fb9d39059dbe58b919 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Wed, 7 Dec 2016 22:48:27 +0100
++Subject: [PATCH] Remove -Werror
 +
-+Some libc like musl and uClibc requires explicit includes of pthread.h
++-Werror might cause build failures with newer versions of gcc or C
++ libraries, not tested by upstream, for example:
 +
-+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-+[Thomas: taken from lttng mailing list.]
++ # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
++   ^
++cc1: all warnings being treated as errors
++
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ src/common/defaults.h | 1 +
-+ 1 file changed, 1 insertion(+)
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/common/defaults.h b/src/common/defaults.h
-+index 27f1ddc..37d222a 100644
-+--- a/src/common/defaults.h
-++++ b/src/common/defaults.h
-+@@ -20,6 +20,7 @@
-+ #ifndef _DEFAULTS_H
-+ #define _DEFAULTS_H
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 7ae8ba4..825342f 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -5,7 +5,7 @@ PROJECT(uhttpd C)
++ INCLUDE (CheckFunctionExists)
 + 
-++#include <pthread.h>
-+ #include <src/common/macros.h>
++ SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
++-ADD_DEFINITIONS(-D_FILE_OFFSET_BITS=64 -Os -Wall -Werror -Wmissing-declarations --std=gnu99 -g3)
+++ADD_DEFINITIONS(-D_FILE_OFFSET_BITS=64 -Os -Wall -Wmissing-declarations --std=gnu99 -g3)
 + 
-+ /* Default unix group name for tracing. */
++ OPTION(TLS_SUPPORT "TLS support" ON)
++ OPTION(LUA_SUPPORT "Lua support" ON)
 +-- 
 +2.7.4
 +
