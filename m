@@ -1,74 +1,42 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  7 Dec 2016 12:34:44 -0600
-Subject: [Buildroot] [PATCH] angular-websocket: new package
-Message-ID: <1481135684-62954-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 7 Dec 2016 19:41:20 +0100
+Subject: [Buildroot] [PATCH] pkg-autotools: search in the source directory
+	for ltmain.sh
+Message-ID: <20161207184120.GA12225@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bimal Jacob <Bimal.Jacob@rockwellcollins.com>
+Fixes static linking of berkeleydb package, where ltmain.sh
+is not in the sub-directory that contains configure.
+Always search the complete source directory.
 
-Signed-off-by: Bimal Jacob <bimal.jacob@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Fixes:
+ http://autobuild.buildroot.net/results/f0a96f671644d9f9efcf245b354affdc84f7d7da
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/Config.in                              |  1 +
- package/angular-websocket/Config.in            |  8 ++++++++
- package/angular-websocket/angular-websocket.mk | 18 ++++++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/angular-websocket/Config.in
- create mode 100644 package/angular-websocket/angular-websocket.mk
+Solution found after discussion and suggestions with Arnout and
+Thomas P.
+thx
+---
+ package/pkg-autotools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 664d0d9..27bc6be 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1172,6 +1172,7 @@ menu "Networking"
- 	source "package/alljoyn-base/Config.in"
- 	source "package/alljoyn-tcl/Config.in"
- 	source "package/alljoyn-tcl-base/Config.in"
-+	source "package/angular-websocket/Config.in"
- 	source "package/batman-adv/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/canfestival/Config.in"
-diff --git a/package/angular-websocket/Config.in b/package/angular-websocket/Config.in
-new file mode 100644
-index 0000000..5878e84
---- /dev/null
-+++ b/package/angular-websocket/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_ANGULAR_WEBSOCKET
-+	bool "angular-websocket"
-+	select BR2_PACKAGE_ANGULARJS
-+	help
-+	  An AngularJS WebSocket service for connecting client
-+	  applications to servers.
-+
-+	  https://github.com/AngularClass/angular-websocket
-diff --git a/package/angular-websocket/angular-websocket.mk b/package/angular-websocket/angular-websocket.mk
-new file mode 100644
-index 0000000..b422847
---- /dev/null
-+++ b/package/angular-websocket/angular-websocket.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# angular-websocket
-+#
-+################################################################################
-+
-+ANGULAR_WEBSOCKET_VERSION = v2.0.0
-+ANGULAR_WEBSOCKET_SITE = $(call github,AngularClass,angular-websocket,$(ANGULAR_WEBSOCKET_VERSION))
-+ANGULAR_WEBSOCKET_LICENSE = MIT
-+ANGULAR_WEBSOCKET_LICENSE_FILES = LICENSE
-+
-+# install .min.js as .js
-+define ANGULAR_WEBSOCKET_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0644 -D $(@D)/dist/angular-websocket.min.js \
-+		$(TARGET_DIR)/var/www/angular-websocket.js
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 00822e2..f7b8488 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -59,7 +59,7 @@ endef
+ #
+ define LIBTOOL_PATCH_HOOK
+ 	@$(call MESSAGE,"Patching libtool")
+-	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
++	$(Q)for i in `find $($(PKG)_DIR) -name ltmain.sh`; do \
+ 		ltmain_version=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
+ 		sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'`; \
+ 		ltmain_patchlevel=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
 -- 
-1.9.1
+2.1.4
