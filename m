@@ -1,58 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Dec 2016 14:40:29 +0100
-Subject: [Buildroot] [git commit] cmake: adjust dependencies added for libuv
-Message-ID: <20161207134049.423B48023B@busybox.osuosl.org>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Wed,  7 Dec 2016 15:49:05 +0100
+Subject: [Buildroot] [PATCH v2] package/easydbus: new package
+Message-ID: <20161207144905.25650-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b754237520a4795eadc0edec768b267dd598ab0e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit 1ffcf364b6e9894a876dc581a090f87685945412 updated cmake to 3.7.0,
-which requires selecting the libuv package. At the time, the libuv
-package only depended on BR2_TOOLCHAIN_HAS_THREADS. However, later on,
-it was changed in master to depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL, a
-change which was not taken into account in the cmake 3.7.0 bump that was
-merged in the next branch.
-
-Due to this, builds of cmake is attempted on architectures that don't
-provide NPTL thread support, causing a build failure. This commit fixes
-that by adjusting the dependency.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/16a5e1cbb57c0124537c4f3dc0807ba1eaa975ec/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/cmake/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+ * Replicate libglib2 dependencies and add corresponding comment
+   (suggested by Thomas)
 
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-index 716d80e..2706db5 100644
---- a/package/cmake/Config.in
-+++ b/package/cmake/Config.in
-@@ -26,7 +26,7 @@ config BR2_PACKAGE_CMAKE_CTEST
- 	depends on BR2_USE_WCHAR # libarchive
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on BR2_USE_MMU # libuv
- 	help
- 	  CTest is a testing tool distributed as a part of CMake. It
-@@ -37,9 +37,9 @@ config BR2_PACKAGE_CMAKE_CTEST
- 
- 	  http://www.cmake.org/
- 
--comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, threads"
-+comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, NPTL"
- 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ package/Config.in              |  1 +
+ package/easydbus/Config.in     | 14 ++++++++++++++
+ package/easydbus/easydbus.hash |  2 ++
+ package/easydbus/easydbus.mk   | 13 +++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/easydbus/Config.in
+ create mode 100644 package/easydbus/easydbus.hash
+ create mode 100644 package/easydbus/easydbus.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 664d0d9..c14575c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -521,6 +521,7 @@ menu "Lua libraries/modules"
+ 	source "package/cosmo/Config.in"
+ 	source "package/coxpcall/Config.in"
+ 	source "package/dado/Config.in"
++	source "package/easydbus/Config.in"
+ 	source "package/lbase64/Config.in"
+ 	source "package/ljlinenoise/Config.in"
+ 	source "package/ljsyscall/Config.in"
+diff --git a/package/easydbus/Config.in b/package/easydbus/Config.in
+new file mode 100644
+index 0000000..51519d6
+--- /dev/null
++++ b/package/easydbus/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_EASYDBUS
++	bool "easydbus"
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	help
++	  Easy to use DBus library for Lua.
++
++	  https://github.com/mniestroj/easydbus
++
++comment "easydbus needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/easydbus/easydbus.hash b/package/easydbus/easydbus.hash
+new file mode 100644
+index 0000000..0ef73f2
+--- /dev/null
++++ b/package/easydbus/easydbus.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 3e5907664f5dfebbc0e652faf87564fd58dbd639742f442c100ef2db8be46e52 easydbus-59c340f2cd2c92ded82f9d4436866847f295faab.tar.gz
+diff --git a/package/easydbus/easydbus.mk b/package/easydbus/easydbus.mk
+new file mode 100644
+index 0000000..376b09b
+--- /dev/null
++++ b/package/easydbus/easydbus.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# easydbus
++#
++################################################################################
++
++EASYDBUS_VERSION = 59c340f2cd2c92ded82f9d4436866847f295faab
++EASYDBUS_SITE = $(call github,mniestroj,easydbus,$(EASYDBUS_VERSION))
++EASYDBUS_DEPENDENCIES = luainterpreter libglib2
++EASYDBUS_LICENSE = MIT
++EASYDBUS_LICENSE_FILES = LICENSE
++
++$(eval $(cmake-package))
+-- 
+2.10.2
