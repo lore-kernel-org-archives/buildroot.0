@@ -1,52 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Dec 2016 11:24:26 +0100
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Wed, 7 Dec 2016 11:55:03 +0100
 Subject: [Buildroot] [PATCH] package/reactcpp: new package
-In-Reply-To: <74b2df33-0865-c6b6-d731-f0e9191223b9@grinn-global.com>
+In-Reply-To: <20161206163136.23d44f9f@free-electrons.com>
 References: <20161206132643.27141-1-m.niestroj@grinn-global.com>
  <20161206163136.23d44f9f@free-electrons.com>
- <74b2df33-0865-c6b6-d731-f0e9191223b9@grinn-global.com>
-Message-ID: <20161207112426.5b40788d@free-electrons.com>
+Message-ID: <6ac12a67-ac26-9f93-d458-747e95e866ca@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed, 7 Dec 2016 10:59:09 +0100, Marcin Niestroj wrote:
+On 06.12.2016 16:31, Thomas Petazzoni wrote:
+> Hello,
+>
+> Thanks for this contribution! See some comments below.
+>
 
-> > Just define the version as v$(REACTCPP_VERSION_MAJOR).3  
-> 
-> I am using $(REACTCPP_VERSION_RAW) below to define $(REACTCPP_SO).
+<snip>
 
-Yes, but REACTCPP_SO is useless, see below.
+>> diff --git a/package/reactcpp/reactcpp.mk b/package/reactcpp/reactcpp.mk
+>> new file mode 100644
+>> index 0000000..e198c3d
+>> --- /dev/null
+>> +++ b/package/reactcpp/reactcpp.mk
+>> @@ -0,0 +1,34 @@
+>> +################################################################################
+>> +#
+>> +# reactcpp
+>> +#
+>> +################################################################################
+>> +
+>> +REACTCPP_VERSION_MAJOR = 1.0
+>> +REACTCPP_VERSION_RAW = $(REACTCPP_VERSION_MAJOR).3
+>> +REACTCPP_VERSION = v$(REACTCPP_VERSION_RAW)
+>
+> Just define the version as v$(REACTCPP_VERSION_MAJOR).3
+>
+>> +REACTCPP_SITE = $(call github,CopernicaMarketingSoftware,REACT-CPP,$(REACTCPP_VERSION))
+>> +REACTCPP_LICENSE = Apache-2.0
+>> +REACTCPP_LICENSE_FILES = LICENSE
+>> +REACTCPP_DEPENDENCIES = c-ares libev
+>> +REACTCPP_INSTALL_STAGING = YES
+>> +
+>> +define REACTCPP_BUILD_CMDS
+>> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+>
+> Please pass $(TARGET_MAKE_ENV) in the environment.
 
-> >> +ifeq ($(BR2_STATIC_LIBS),)
-> >> +define REACTCPP_INSTALL_TARGET_CMDS
-> >> +	$(INSTALL) -D -m 0755 $(@D)/src/$(REACTCPP_SO) $(TARGET_DIR)/usr/lib/$(REACTCPP_SO)
-> >> +	ln -sf $(REACTCPP_SO) $(TARGET_DIR)/usr/lib/libreactcpp.so.$(REACTCPP_VERSION_MAJOR)
-> >> +	ln -sf $(REACTCPP_SO) $(TARGET_DIR)/usr/lib/libreactcpp.so
-> >> +endef
-> >> +endif  
-> >
-> > Why are you doing this instead of calling "make install" for
-> > $(TARGET_DIR) ?  
-> 
-> Because make install also copies header files and static library.
+Should I simply add $(TARGET_MAKE_ENV) before $(MAKE)?
 
-And that's perfectly fine. Just let "make install" install header files
-and static library. Buildroot will clean them up at the end of the
-build, in the "target-finalize" step.
+Can you explain a little when I should use $(TARGET_MAKE_ENV), when
+$(TARGET_CONFIGURE_OPTS) and when both? In Buildroot manual examples
+they never exist together. And what I see in package/Makefile.in
+$(TARGET_CONFIGURE_OPTS) contains $(TARGET_MAKE_ENV).
 
-It's much, much better (and future proof) to use the build system of the
-package itself when possible, and rely on target-finalize to clean
-things up at the end of the build.
+>
+>> +endef
+>> +
+>> +define REACTCPP_INSTALL_STAGING_CMDS
+>> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) PREFIX=$(STAGING_DIR)/usr -C $(@D) install
+>
+> Ditto.
+>
+>> +endef
+>> +
+>> +REACTCPP_SO = libreactcpp.so.$(REACTCPP_VERSION_RAW)
+>> +
+>> +ifeq ($(BR2_STATIC_LIBS),)
+>> +define REACTCPP_INSTALL_TARGET_CMDS
+>> +	$(INSTALL) -D -m 0755 $(@D)/src/$(REACTCPP_SO) $(TARGET_DIR)/usr/lib/$(REACTCPP_SO)
+>> +	ln -sf $(REACTCPP_SO) $(TARGET_DIR)/usr/lib/libreactcpp.so.$(REACTCPP_VERSION_MAJOR)
+>> +	ln -sf $(REACTCPP_SO) $(TARGET_DIR)/usr/lib/libreactcpp.so
+>> +endef
+>> +endif
+>
+> Why are you doing this instead of calling "make install" for
+> $(TARGET_DIR) ?
+>
+> Thanks,
+>
+> Thomas
+>
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Marcin Niestroj
