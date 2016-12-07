@@ -1,49 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Dec 2016 09:34:15 +0100
-Subject: [Buildroot] [PATCH] pkg-autotools: search in the source
- directory for ltmain.sh
-In-Reply-To: <20161207082743.GE8584@waldemar-brodkorb.de>
-References: <20161207070853.GA31889@waldemar-brodkorb.de>
- <20161207092228.1eb337c0@free-electrons.com>
- <20161207082743.GE8584@waldemar-brodkorb.de>
-Message-ID: <20161207093415.1170a5e0@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Dec 2016 10:07:28 +0100
+Subject: [Buildroot] [git commit] arch/Config.in.arm: Add Cortex-A53 CPU
+In-Reply-To: <20161205221749.A89387FEC4@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Mon, 5 Dec 2016 23:07:13 +0100")
+References: <20161205221749.A89387FEC4@busybox.osuosl.org>
+Message-ID: <87zik8gl9r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 7 Dec 2016 09:27:43 +0100, Waldemar Brodkorb wrote:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=785a73fb8f64d14c68b0c035aa40b203a2a17378
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > On Wed, 7 Dec 2016 08:08:54 +0100, Waldemar Brodkorb wrote:  
-> > > Fixes static linking of berkeleydb package, where ltmain.sh
-> > > is not in the sub-directory that contains configure.
-> > > Always search the complete source directory.
-> > > 
-> > > Fixes:
-> > >  http://autobuild.buildroot.net/results/f0a96f671644d9f9efcf245b354affdc84f7d7da
-> > > 
-> > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
-> > 
-> > It should be your SoB here, since you appear as the author of this
-> > patch, unless you "git format --amend --author=...".  
-> 
-> So should I resend with my SoB and mention you in the log or
-> what is the correct way in this case, because the analysis was made
-> by me and the patch by you. I really don't care ;)
+ > Adds the Cortex-A53 CPU to the target architecture variant choice. This
+ > sets the toolchain to use Cortex-A53 as the target. The effect is that
+ > various Cortex-A53 tunings are enabled for the compilation of packages.
 
-Actually, the change itself was proposed by Arnout, and I just tested
-it quickly.
+ > Signed-off-by: Matt Flax <flatmax@flatmax.org>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  arch/Config.in.arm | 10 ++++++++++
+ >  1 file changed, 10 insertions(+)
 
-Just put you as the author, I really don't care for such a simple
-change.
+ > diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+ > index c98efcd..592b097 100644
+ > --- a/arch/Config.in.arm
+ > +++ b/arch/Config.in.arm
+ > @@ -191,6 +191,13 @@ config BR2_cortex_a17
+ >  	select BR2_ARM_CPU_ARMV7A
+ >  	select BR2_ARCH_HAS_MMU_OPTIONAL
+ >  	depends on !BR2_ARCH_IS_64
+ > +config BR2_cortex_a53
+ > +	bool "cortex-A53"
+ > +	select BR2_ARM_CPU_HAS_ARM
+ > +	select BR2_ARM_CPU_HAS_NEON
+ > +	select BR2_ARM_CPU_HAS_FP_ARMV8
+ > +	select BR2_ARM_CPU_ARMV8
+ > +	select BR2_ARCH_HAS_MMU_OPTIONAL
 
-Thanks!
+This unfortunately breaks a bunch of packages that use
+BR2_ARM_CPU_HAS_ARM to know if the target supports classic ARM
+instructions. This breaks as the aarch64 compiler doesn't understand
+them:
 
-Thomas
+http://autobuild.buildroot.net/results/5e6/5e67cc067a06f7364cde1a8393ea72608fe7fef1/
+
+I think the best solution is to do something like:
+
+select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+
+I will send a patch shortly.
+
+We might also need to review use of BR2_ARM_CPU_HAS_NEON and possibly
+add a BR2_AARCH64_HAS_NEON.
+
+I also see we don't select BR2_ARM_CPU_HAS_THUMB2, which we probably
+should.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
