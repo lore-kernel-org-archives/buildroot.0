@@ -1,40 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Dec 2016 20:03:48 +0100
-Subject: [Buildroot] [git commit] pkg-autotools: search in the entire source
-	directory for ltmain.sh
-Message-ID: <20161207190428.B3ACE81810@busybox.osuosl.org>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 7 Dec 2016 20:09:00 +0100
+Subject: [Buildroot] [PATCH] sdl_mixer: fix static linking issue
+Message-ID: <20161207190900.GA18119@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7485ff4607063faa825ede80d81452fa974ed873
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes static linking of berkeleydb package, where ltmain.sh
-is not in the sub-directory that contains configure.
-Always search the complete source directory.
-
-Fixes:
- http://autobuild.buildroot.net/results/f0a96f671644d9f9efcf245b354affdc84f7d7da
+LDFLAGS must be passed when creating binaries.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-autotools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+while testing the berkeley db fix, this error occured afterwards, so
+no autobuilder reference.
+---
+ .../sdl_mixer/0002-add-LDFLAGS-while-linking.patch   | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 00822e2..f7b8488 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -59,7 +59,7 @@ endef
- #
- define LIBTOOL_PATCH_HOOK
- 	@$(call MESSAGE,"Patching libtool")
--	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
-+	$(Q)for i in `find $($(PKG)_DIR) -name ltmain.sh`; do \
- 		ltmain_version=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
- 		sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'`; \
- 		ltmain_patchlevel=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
+diff --git a/package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch b/package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
+new file mode 100644
+index 0000000..5c55a48
+--- /dev/null
++++ b/package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
+@@ -0,0 +1,20 @@
++Pass LDFLAGS while creating binaries.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur SDL_mixer-1.2.12.orig/Makefile.in SDL_mixer-1.2.12/Makefile.in
++--- SDL_mixer-1.2.12.orig/Makefile.in	2012-01-15 23:01:04.000000000 +0100
+++++ SDL_mixer-1.2.12/Makefile.in	2016-12-07 08:29:22.479786596 +0100
++@@ -66,10 +66,10 @@
++ 	$(LIBTOOL) --mode=link $(CC) -o $@ $(OBJECTS) $(VERSION_OBJECTS) $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS)
++ 
++ $(objects)/playwave$(EXE): $(objects)/playwave.lo $(objects)/$(TARGET)
++-	$(LIBTOOL) --mode=link $(CC) -o $@ $(objects)/playwave.lo $(SDL_CFLAGS) $(SDL_LIBS) $(objects)/$(TARGET)
+++	$(LIBTOOL) --mode=link $(CC) -o $@ $(objects)/playwave.lo $(SDL_CFLAGS) $(SDL_LIBS) $(LDFLAGS) $(objects)/$(TARGET)
++ 
++ $(objects)/playmus$(EXE): $(objects)/playmus.lo $(objects)/$(TARGET)
++-	$(LIBTOOL) --mode=link $(CC) -o $@ $(objects)/playmus.lo $(SDL_CFLAGS) $(SDL_LIBS) $(objects)/$(TARGET)
+++	$(LIBTOOL) --mode=link $(CC) -o $@ $(objects)/playmus.lo $(SDL_CFLAGS) $(SDL_LIBS) $(LDFLAGS) $(objects)/$(TARGET)
++ 
++ install: all install-hdrs install-lib #install-bin
++ install-hdrs:
+-- 
+2.1.4
