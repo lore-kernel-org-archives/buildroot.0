@@ -1,38 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Dec 2016 22:12:00 +0100
-Subject: [Buildroot] [git commit] php: disable FPM interface on Sparc
-Message-ID: <20161207212310.4692A81E4B@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  7 Dec 2016 22:25:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.6.13
+Message-ID: <20161207212535.6479-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5d23d4059cdc85956658ca6fca1dc86aa170029
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Building fails with "Sparc v8 and predecessors are not and will not be
-supported (see bug report 53310)", so we disable FPM on Sparc.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/6a86f6cf07f6b6dccd7bfaab6d7682f9faf3527b/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 3020bcc..57dabc4 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -29,6 +29,8 @@ config BR2_PACKAGE_PHP_SAPI_CLI
- config BR2_PACKAGE_PHP_SAPI_FPM
- 	bool "FPM interface"
- 	depends on BR2_USE_MMU
-+	# "Sparc v8 and predecessors are not and will not be supported"
-+	depends on !BR2_sparc
- 	help
- 	  PHP-FPM (FastCGI Process Manager)
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 5b888f5..76966cf 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,2 +1,2 @@
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.12.tar.xz.sha256
+-sha256 ae072ca2d96fd9ef59ca6f589f932048b088c7b469d46e468bb917371de24ff9  freeswitch-1.6.12.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.13.tar.xz.sha256
++sha256 64a8a14fc5df92893d956868f144042891cc3e2d096bbf56241fec706635a8b7  freeswitch-1.6.13.tar.xz
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 12b0913..ee3ff4f 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-FREESWITCH_VERSION = 1.6.12
++FREESWITCH_VERSION = 1.6.13
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ FREESWITCH_LICENSE = MPLv1.1, \
+-- 
+2.10.2
