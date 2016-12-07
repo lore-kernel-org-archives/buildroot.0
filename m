@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Dec 2016 21:50:39 +0100
-Subject: [Buildroot] [PATCH 2/2] package/xen: Disable strict
- unused-const-variable checking
-In-Reply-To: <1481140097-32096-3-git-send-email-alistair.francis@xilinx.com>
-References: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
- <1481140097-32096-3-git-send-email-alistair.francis@xilinx.com>
-Message-ID: <20161207215039.1accb7ba@free-electrons.com>
+Date: Wed, 7 Dec 2016 21:52:26 +0100
+Subject: [Buildroot] [PATCH v2] package/easydbus: new package
+In-Reply-To: <20161207144905.25650-1-m.niestroj@grinn-global.com>
+References: <20161207144905.25650-1-m.niestroj@grinn-global.com>
+Message-ID: <20161207215226.050024cc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 7 Dec 2016 11:48:17 -0800, Alistair Francis wrote:
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-
-What is this patch fixing? The commit log shouldn't be empty.
-
-Is this fixing an autobuilder issue? If so, there should be a reference
-to it.
-
+On Wed,  7 Dec 2016 15:49:05 +0100, Marcin Niestroj wrote:
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  ...-Disable-strtict-unused-const-variable-ch.patch | 27 ++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch
-> 
-> diff --git a/package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch b/package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch
-> new file mode 100644
-> index 0000000..2bca456
-> --- /dev/null
-> +++ b/package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch
-> @@ -0,0 +1,27 @@
-> +From 3215099e9db9716dfade78880adb169bd7866192 Mon Sep 17 00:00:00 2001
-> +From: Alistair Francis <alistair.francis@xilinx.com>
-> +Date: Wed, 7 Dec 2016 11:35:10 -0800
-> +Subject: [PATCH] tools/libxl: Disable strtict unused-const-variable checking
+> Changes v1 -> v2:
+>  * Replicate libglib2 dependencies and add corresponding comment
+>    (suggested by Thomas)
 
-Typo in the tittle: strtict -> strict.
+Could you please send an additional patch that adds you in the
+DEVELOPERS file for this package?
+
+Thanks!
 
 Thomas
 -- 
