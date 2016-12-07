@@ -1,27 +1,54 @@
 From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Wed, 7 Dec 2016 11:48:15 -0800
-Subject: [Buildroot] [PATCH 0/2] Update Xen and fix build issue
-Message-ID: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
+Date: Wed, 7 Dec 2016 11:48:17 -0800
+Subject: [Buildroot] [PATCH 2/2] package/xen: Disable strict
+	unused-const-variable checking
+In-Reply-To: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
+References: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
+Message-ID: <1481140097-32096-3-git-send-email-alistair.francis@xilinx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series updates Xen to 4.7.1 and fixes a build issue that previously existed.
-
-NOTE: Xen 4.8.0 was released today, but that failed to compile so it will be more work.
-At the moment Xen doesn't build so fix that first.
-
-Alistair Francis (2):
-  package/xen: Bump Xen to 4.7.1
-  package/xen: Disable strict unused-const-variable checking
-
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+---
  ...-Disable-strtict-unused-const-variable-ch.patch | 27 ++++++++++++++++++++++
- package/xen/xen.hash                               |  2 +-
- package/xen/xen.mk                                 |  2 +-
- 3 files changed, 29 insertions(+), 2 deletions(-)
+ 1 file changed, 27 insertions(+)
  create mode 100644 package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch
 
+diff --git a/package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch b/package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch
+new file mode 100644
+index 0000000..2bca456
+--- /dev/null
++++ b/package/xen/0003-tools-libxl-Disable-strtict-unused-const-variable-ch.patch
+@@ -0,0 +1,27 @@
++From 3215099e9db9716dfade78880adb169bd7866192 Mon Sep 17 00:00:00 2001
++From: Alistair Francis <alistair.francis@xilinx.com>
++Date: Wed, 7 Dec 2016 11:35:10 -0800
++Subject: [PATCH] tools/libxl: Disable strtict unused-const-variable checking
++
++Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
++---
++ tools/libxl/Makefile | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/tools/libxl/Makefile b/tools/libxl/Makefile
++index defeb40..9d320d1 100644
++--- a/tools/libxl/Makefile
+++++ b/tools/libxl/Makefile
++@@ -12,7 +12,8 @@ XLUMAJOR = 4.7
++ XLUMINOR = 0
++ 
++ CFLAGS += -Werror -Wno-format-zero-length -Wmissing-declarations \
++-	-Wno-declaration-after-statement -Wformat-nonliteral
+++	-Wno-declaration-after-statement -Wformat-nonliteral \
+++	-Werror=unused-const-variable=0
++ CFLAGS += -I. -fPIC
++ 
++ ifeq ($(CONFIG_Linux),y)
++-- 
++2.7.4
++
 -- 
 2.7.4
