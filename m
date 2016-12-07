@@ -1,31 +1,41 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Wed, 7 Dec 2016 18:01:35 -0500
-Subject: [Buildroot] [PATCH v7 1/1] rpm: switch to version 4.13.0
-In-Reply-To: <20161207235825.16edfc29@free-electrons.com>
-References: <20161118185053.11976-1-james.knight@rockwellcollins.com>
- <20161130233052.6d72115b@free-electrons.com>
- <20161207235705.258ff2b2@free-electrons.com>
- <20161207235825.16edfc29@free-electrons.com>
-Message-ID: <CALe+oY8UfsyvNV1bZP3a+xBjEEcasQrs198uyeS1y2fLTOnJwQ@mail.gmail.com>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Wed, 7 Dec 2016 11:48:16 -0800
+Subject: [Buildroot] [PATCH 1/2] package/xen: Bump Xen to 4.7.1
+In-Reply-To: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
+References: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
+Message-ID: <1481140097-32096-2-git-send-email-alistair.francis@xilinx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+---
+ package/xen/xen.hash | 2 +-
+ package/xen/xen.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, Dec 7, 2016 at 5:58 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> This new rpm package causes lots of build failures:
->
->   http://autobuild.buildroot.net/?reason=rpm-4.13.0
->
-> Could you have a look and provide patches to fix those issues?
->
-
-Will do; literally running br-reproduce-build now.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161207/415bffed/attachment.html>
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 602e6c7..c3df243 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 be5876144d49729572ae06142e0bb93f1c1f2695578141eff2931995add24623 xen-4.7.0.tar.gz
++sha256 e87f4b0575e78657ee23d31470a15ecf1ce8c3a92a771cda46bbcd4d0d671ffe xen-4.7.1.tar.gz
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index e2c797f..7d32e52 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XEN_VERSION = 4.7.0
++XEN_VERSION = 4.7.1
+ XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
+ XEN_LICENSE = GPLv2
+ XEN_LICENSE_FILES = COPYING
+-- 
+2.7.4
