@@ -1,45 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Dec 2016 14:02:00 +0100
-Subject: [Buildroot] [PATCH] package/reactcpp: new package
-In-Reply-To: <29623960-22c5-ee30-a5fd-69692019e56c@grinn-global.com>
-References: <20161206132643.27141-1-m.niestroj@grinn-global.com>
- <20161206163136.23d44f9f@free-electrons.com>
- <74b2df33-0865-c6b6-d731-f0e9191223b9@grinn-global.com>
- <20161207112426.5b40788d@free-electrons.com>
- <29623960-22c5-ee30-a5fd-69692019e56c@grinn-global.com>
-Message-ID: <20161207140200.3873c08e@free-electrons.com>
+Date: Wed, 7 Dec 2016 14:40:29 +0100
+Subject: [Buildroot] [git commit] cmake: adjust dependencies added for libuv
+Message-ID: <20161207134049.423B48023B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b754237520a4795eadc0edec768b267dd598ab0e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 7 Dec 2016 12:51:24 +0100, Marcin Niestroj wrote:
+Commit 1ffcf364b6e9894a876dc581a090f87685945412 updated cmake to 3.7.0,
+which requires selecting the libuv package. At the time, the libuv
+package only depended on BR2_TOOLCHAIN_HAS_THREADS. However, later on,
+it was changed in master to depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL, a
+change which was not taken into account in the cmake 3.7.0 bump that was
+merged in the next branch.
 
-> > And that's perfectly fine. Just let "make install" install header files
-> > and static library. Buildroot will clean them up at the end of the
-> > build, in the "target-finalize" step.  
-> 
-> Ok, I was not aware cleaning header and *.a files in target-finalize.
-> 
-> I have used 'make install' and checked the target directory before and
-> after target-finalize. There was *.a symlink pointing to *.a.1.0.3.
-> After target-finalize only the symlink was removed. How should we fix
-> that?
+Due to this, builds of cmake is attempted on architectures that don't
+provide NPTL thread support, causing a build failure. This commit fixes
+that by adjusting the dependency.
 
-Then you can do a POST_INSTALL_TARGET_HOOKS to remove this additional
-file.
+Fixes:
 
-It is very weird to create a static library file name with a version
-number. Normally, static libraries are directly installed as
-lib<foo>.a.
+  http://autobuild.buildroot.net/results/16a5e1cbb57c0124537c4f3dc0807ba1eaa975ec/
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cmake/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index 716d80e..2706db5 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -26,7 +26,7 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 	depends on BR2_USE_WCHAR # libarchive
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_USE_MMU # libuv
+ 	help
+ 	  CTest is a testing tool distributed as a part of CMake. It
+@@ -37,9 +37,9 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 
+ 	  http://www.cmake.org/
+ 
+-comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, threads"
++comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, NPTL"
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
