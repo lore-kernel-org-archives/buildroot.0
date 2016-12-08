@@ -1,41 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Dec 2016 09:31:48 +0100
-Subject: [Buildroot] [PATCH 2/2] package/xen: Disable strict
- unused-const-variable checking
-In-Reply-To: <CAKmqyKM0RTciLxjAkJ5DnZsq9yON3Er9XdwXMpd9E-CpQqsAYQ@mail.gmail.com>
-References: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
- <1481140097-32096-3-git-send-email-alistair.francis@xilinx.com>
- <20161207215039.1accb7ba@free-electrons.com>
- <CAKmqyKM0RTciLxjAkJ5DnZsq9yON3Er9XdwXMpd9E-CpQqsAYQ@mail.gmail.com>
-Message-ID: <20161208093148.78bcb271@free-electrons.com>
+From: Matt Kraai <kraai@ftbfs.org>
+Date: Thu,  8 Dec 2016 06:38:50 -0800
+Subject: [Buildroot] [PATCH] qt5xmlpatterns: install examples
+Message-ID: <20161208143850.17718-1-kraai@ftbfs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Matt Kraai <kraai@ftbfs.org>
+---
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-On Wed, 7 Dec 2016 15:39:26 -0800, Alistair Francis wrote:
-
-> >
-> > What is this patch fixing? The commit log shouldn't be empty.
-> >
-> > Is this fixing an autobuilder issue? If so, there should be a reference
-> > to it.  
-> 
-> It is fixing an autobuilder issue, I have added a commit message with
-> more details.
-
-Good, but you still forgot (in your v2) a link to the autobuilder issue
-being fixed. See
-https://git.buildroot.org/buildroot/commit/?id=041c717ec8c251b7bca675086510840f02274967
-for an example of how we reference autobuilder issues.
-
-Thanks!
-
-Thomas
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+index 31477a7c0..0b518b052 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+@@ -32,9 +32,20 @@ define QT5XMLPATTERNS_INSTALL_STAGING_CMDS
+ endef
+ 
+ ifeq ($(BR2_STATIC_LIBS),)
+-define QT5XMLPATTERNS_INSTALL_TARGET_CMDS
++define QT5XMLPATTERNS_INSTALL_TARGET_LIBS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5XmlPatterns*.so.* $(TARGET_DIR)/usr/lib
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/xmlpatterns $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
++
++define QT5XMLPATTERNS_INSTALL_TARGET_CMDS
++	$(QT5XMLPATTERNS_INSTALL_TARGET_LIBS)
++	$(QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES)
++endef
++
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
