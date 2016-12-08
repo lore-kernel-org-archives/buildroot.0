@@ -1,43 +1,52 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  8 Dec 2016 22:55:24 +0100
-Subject: [Buildroot] [PATCH] package/efl: bump to version 1.18.4
-Message-ID: <1481234124-19562-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Dec 2016 23:06:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: new package
+In-Reply-To: <20160912232623.1fc706be@free-electrons.com>
+References: <20160906203620.4685-1-bernd.kuhls@t-online.de>
+ <20160912232623.1fc706be@free-electrons.com>
+Message-ID: <20161208230606.64ce147c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bug fix release:
-https://www.enlightenment.org/news/efl-1.18.4
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/efl/efl.hash | 4 ++--
- package/efl/efl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Mon, 12 Sep 2016 23:26:23 +0200, Thomas Petazzoni wrote:
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
-index 4077ddd..5d7a90d 100644
---- a/package/efl/efl.hash
-+++ b/package/efl/efl.hash
-@@ -1,2 +1,2 @@
--# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.3.tar.xz.sha256
--sha256	0748ec0847f543d96b149cb3a84e6438724e827a38d530922ecb4bd59d3e64c0	efl-1.18.3.tar.xz
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.4.tar.xz.sha256
-+sha256	39ebc07e37437d6ecdeb0f645783484e28a882b38f7e619ad12c2bf9b5548025	efl-1.18.4.tar.xz
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 5db57f6..7a8e47f 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EFL_VERSION = 1.18.3
-+EFL_VERSION = 1.18.4
- EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
- EFL_SITE = http://download.enlightenment.org/rel/libs/efl
- EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
+> Since this mess of pre-defined per-architecture header files is really
+> nasty, could you instead try to package the latest git version of
+> ghostscript ?
+> 
+> Indeed, since early July, the Git repository includes numerous
+> cross-compilation fixes, and especially
+> http://git.ghostscript.com/?p=user/chrisl/ghostpdl.git;a=commitdiff;h=0a44ce497dbf6064981d88953df63bfdfce0a984
+> which generates the arch.h header using regular configure.ac tests.
+> 
+> This should hopefully greatly simplify the whole problem.
+> 
+> The libtiff directory problem has also been fixed by
+> http://git.ghostscript.com/?p=user/chrisl/ghostpdl.git;a=commitdiff;h=3d3982f844fed6d6cb092055980900289fb6a402.
+> 
+> But it's not clear which of these have landed in the main Ghostscript
+> Git repository at http://git.ghostscript.com/?p=ghostpdl.git;a=summary,
+> unfortunately.
+> 
+> Could you have a look into this?
+
+Could you please rework your patch to use the latest Git version of
+ghostscript? It has commit
+http://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=c3c4bf022a631be939ebb4bf6f59e41514cb1e48
+which simplifies things a lot:
+
+ - No need to build host-ghostscript
+ - No need for hardcoded architecture headers
+
+Thanks!
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
