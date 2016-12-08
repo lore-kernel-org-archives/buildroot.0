@@ -1,40 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Dec 2016 22:47:44 +0100
-Subject: [Buildroot] [PATCH 1/1] systemd: don't build systemd-firstboot
- by default
-In-Reply-To: <1477502284-6023-1-git-send-email-fhunleth@troodon-software.com>
-References: <1477502284-6023-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20161208224744.2968e095@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu,  8 Dec 2016 22:55:24 +0100
+Subject: [Buildroot] [PATCH] package/efl: bump to version 1.18.4
+Message-ID: <1481234124-19562-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Bug fix release:
+https://www.enlightenment.org/news/efl-1.18.4
 
-On Wed, 26 Oct 2016 13:18:04 -0400, Frank Hunleth wrote:
-> systemd-firstboot is never invoked since systemd's first boot detection
-> logic checks whether /etc/machine-id exists. Since the file is created
-> automatically by systemd.mk, systemd will never detect first boot and
-> therefore the systemd-firstboot.service unit file will never get run.
-> 
-> Additionally, if /etc/machine-id is removed to allow systemd-firstboot
-> to run, it interactively prompts for the system locale. This makes it
-> seem unlikely that an embedded system would want to use it.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  package/systemd/Config.in | 1 -
->  1 file changed, 1 deletion(-)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Since none of the people interested in systemd have replied to your
-patch, and your commit log looked sensible, I applied it to master.
-
-Thanks!
-
-Thomas
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index 4077ddd..5d7a90d 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,2 +1,2 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.3.tar.xz.sha256
+-sha256	0748ec0847f543d96b149cb3a84e6438724e827a38d530922ecb4bd59d3e64c0	efl-1.18.3.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.18.4.tar.xz.sha256
++sha256	39ebc07e37437d6ecdeb0f645783484e28a882b38f7e619ad12c2bf9b5548025	efl-1.18.4.tar.xz
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 5db57f6..7a8e47f 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EFL_VERSION = 1.18.3
++EFL_VERSION = 1.18.4
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
