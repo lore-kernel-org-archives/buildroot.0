@@ -1,34 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Dec 2016 22:26:05 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: update my entry list
-Message-ID: <20161208212608.AC96881D5F@busybox.osuosl.org>
+Date: Thu, 8 Dec 2016 22:26:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.3.14
+In-Reply-To: <20161208184042.4933-1-bernd.kuhls@t-online.de>
+References: <20161208184042.4933-1-bernd.kuhls@t-online.de>
+Message-ID: <20161208222612.4276b730@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6965f35a7f4693fd6abcae99224b74c38beaeb6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
+On Thu,  8 Dec 2016 19:40:42 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/openvpn/openvpn.hash | 2 +-
+>  package/openvpn/openvpn.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e411b42..33ab31c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -952,7 +952,10 @@ F:	package/cc-tool/
- F:	package/ecryptfs-utils/
- 
- N:	Marcin Niestroj <m.niestroj@grinn-global.com>
-+F:	board/grinn/liteboard/
-+F:	configs/grinn_liteboard_defconfig
- F:	package/argparse/
-+F:	package/easydbus/
- F:	package/rs485conf/
- F:	package/turbolua/
- 
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
