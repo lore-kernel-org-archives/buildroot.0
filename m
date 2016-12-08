@@ -1,55 +1,41 @@
 From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Thu, 8 Dec 2016 12:11:39 -0800
-Subject: [Buildroot] [PATCH 2/2] package/xen: Disable strict
- unused-const-variable checking
-In-Reply-To: <20161208093148.78bcb271@free-electrons.com>
-References: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
- <1481140097-32096-3-git-send-email-alistair.francis@xilinx.com>
- <20161207215039.1accb7ba@free-electrons.com>
- <CAKmqyKM0RTciLxjAkJ5DnZsq9yON3Er9XdwXMpd9E-CpQqsAYQ@mail.gmail.com>
- <20161208093148.78bcb271@free-electrons.com>
-Message-ID: <CAKmqyKP0ZXtVjXtNYRfvdd24ZO4d0wsRgXOCFf9--O=01kQyTw@mail.gmail.com>
+Date: Thu, 8 Dec 2016 12:11:11 -0800
+Subject: [Buildroot] [PATXH v3 1/2] package/xen: Bump Xen to 4.7.1
+In-Reply-To: <1481227872-31723-1-git-send-email-alistair.francis@xilinx.com>
+References: <1481227872-31723-1-git-send-email-alistair.francis@xilinx.com>
+Message-ID: <1481227872-31723-2-git-send-email-alistair.francis@xilinx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 8, 2016 at 12:31 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed, 7 Dec 2016 15:39:26 -0800, Alistair Francis wrote:
->
->> >
->> > What is this patch fixing? The commit log shouldn't be empty.
->> >
->> > Is this fixing an autobuilder issue? If so, there should be a reference
->> > to it.
->>
->> It is fixing an autobuilder issue, I have added a commit message with
->> more details.
->
-> Good, but you still forgot (in your v2) a link to the autobuilder issue
-> being fixed. See
-> https://git.buildroot.org/buildroot/commit/?id=041c717ec8c251b7bca675086510840f02274967
-> for an example of how we reference autobuilder issues.
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+---
+ package/xen/xen.hash | 2 +-
+ package/xen/xen.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the example. I am sending a V3 with the autobuilder issue referenced.
-
-Thanks,
-
-Alistair
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 602e6c7..c3df243 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 be5876144d49729572ae06142e0bb93f1c1f2695578141eff2931995add24623 xen-4.7.0.tar.gz
++sha256 e87f4b0575e78657ee23d31470a15ecf1ce8c3a92a771cda46bbcd4d0d671ffe xen-4.7.1.tar.gz
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index e2c797f..7d32e52 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XEN_VERSION = 4.7.0
++XEN_VERSION = 4.7.1
+ XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
+ XEN_LICENSE = GPLv2
+ XEN_LICENSE_FILES = COPYING
+-- 
+2.7.4
