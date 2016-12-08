@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Dec 2016 22:06:02 +0100
-Subject: [Buildroot] [PATCH v2] sdl_mixer: fix static linking issue
-In-Reply-To: <20161208172331.GA13013@waldemar-brodkorb.de>
-References: <20161208172331.GA13013@waldemar-brodkorb.de>
-Message-ID: <20161208220602.37cfb553@free-electrons.com>
+Date: Thu, 8 Dec 2016 22:06:48 +0100
+Subject: [Buildroot] [PATXH v3 2/2] package/xen: Disable strict
+ unused-const-variable checking
+In-Reply-To: <1481227872-31723-3-git-send-email-alistair.francis@xilinx.com>
+References: <1481227872-31723-1-git-send-email-alistair.francis@xilinx.com>
+ <1481227872-31723-3-git-send-email-alistair.francis@xilinx.com>
+Message-ID: <20161208220648.3361d86d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +14,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 8 Dec 2016 18:23:31 +0100, Waldemar Brodkorb wrote:
+On Thu, 8 Dec 2016 12:11:12 -0800, Alistair Francis wrote:
 
-> +Pass LDFLAGS while creating binaries.
-> +
-> +Fixes following linking error with uClibc-ng:
-> +br/output/host/usr/lib/gcc/powerpc-buildroot-linux-uclibc/5.4.0/libgcc.a(unwind-dw2-fde-dip.o): In function `_Unwind_Find_FDE':
-> +br/output/build/host-gcc-final-5.4.0/build/powerpc-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde-dip.c:465: undefined reference to `dl_iterate_phdr'
-> +collect2: error: ld returned 1 exit status
-> +
-> +Since uClibc-ng 1.0.18 a circular dependency between libc and libgcc
-> +exist, when static linking is used. It can be resolved by the compiler
-> +when -static is correctly passed in the linking step.
+> + CFLAGS += -Werror -Wno-format-zero-length -Wmissing-declarations \
+> +-	-Wno-declaration-after-statement -Wformat-nonliteral
+> ++	-Wno-declaration-after-statement -Wformat-nonliteral \
+> ++	-Werror=unused-const-variable=0
 
-musl is also using a "everything in libc" policy. Does this problem
-also occurs with musl? If not, why?
+Sorry for not catching this earlier, but what we want instead is to
+completely remove -Werror. It's pointless for releases, and is causing
+to cause other build failures.
 
 Thanks,
 
