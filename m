@@ -1,80 +1,67 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  8 Dec 2016 23:24:17 +0100
-Subject: [Buildroot] [PATCH v4 2/2] package/efl: add Wayland support
-In-Reply-To: <1481235857-23293-1-git-send-email-romain.naour@gmail.com>
-References: <1481235857-23293-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1481235857-23293-2-git-send-email-romain.naour@gmail.com>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Thu, 8 Dec 2016 14:46:59 -0800
+Subject: [Buildroot] [PATCH v4] package/xen: Disable Werror checking
+Message-ID: <1481237219-8699-1-git-send-email-alistair.francis@xilinx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The EFL Wayland support was removed with commit [1] since the dependecy
-on libdrm was missing. Also it requires OpenGL ES with EGL, Evas DRM
-and Evas GLES DRM support [2].
+The strict unused-const-variable checking was causing autobuilder errors
+when trying to build Xen tools/libxl as the migrate_*[] arrays are not
+always accessed.
 
-As stated in configure, Evas GLES DRM engine support (gl_drm) depends
-on wayland-client to build (wayland-client >= 1.8.0).
+To avoid the error edit the Makefile to stop all general warnings being treated
+as errors, by removing the -Werror flag.
 
-So, enable gl_drm only when wayland support is selected.
+Fixes:
+  http://autobuild.buildroot.net/results/0e0/0e0d4aa4a05da5804821951289c0a4049b009c61/
 
-[1] 4f04be1659f186765f506c68f5bfbf6845fc40dc
-[2] https://www.enlightenment.org/about-wayland
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Pierre Floury <devpfl@gmail.com>
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
 ---
-v4: new patch
-    merge Evas GL DRM Engine support and with Wayland support
----
- package/efl/Config.in | 12 ++++++++++++
- package/efl/efl.mk    | 10 ++++++++++
- 2 files changed, 22 insertions(+)
+V4:
+ - Just remove -Werror flag
+V3:
+ - Add a link to an autobuilder issue
+V2:
+ - Fix typo and add commit message to patch 2
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 0692d80..c51fc56 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -155,6 +155,18 @@ config BR2_PACKAGE_EFL_X_XLIB
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XPROTO_GLPROTO
- 
-+config BR2_PACKAGE_EFL_WAYLAND
-+	bool "Wayland support"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # Evas DRM Engine -> libdrm
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
-+	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
-+	select BR2_PACKAGE_EFL_DRM
-+	select BR2_PACKAGE_WAYLAND
+ ...ools-libxl-Disable-strict-Werror-checking.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/xen/0003-tools-libxl-Disable-strict-Werror-checking.patch
+
+diff --git a/package/xen/0003-tools-libxl-Disable-strict-Werror-checking.patch b/package/xen/0003-tools-libxl-Disable-strict-Werror-checking.patch
+new file mode 100644
+index 0000000..80c0b32
+--- /dev/null
++++ b/package/xen/0003-tools-libxl-Disable-strict-Werror-checking.patch
+@@ -0,0 +1,26 @@
++From 19f1e70041044fde1542109a0525424cc6d5d053 Mon Sep 17 00:00:00 2001
++From: Alistair Francis <alistair.francis@xilinx.com>
++Date: Wed, 7 Dec 2016 11:35:10 -0800
++Subject: [PATCH] tools/libxl: Disable strict Werror checking
 +
-+comment "Wayland support needs OpenGL ES w/ EGL, threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
-+		|| !BR2_PACKAGE_EFL_OPENGLES
++Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
++---
++ tools/libxl/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
- choice
- 	bool "OpenGL support"
- 	help
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index d823af2..7a8e47f 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -201,6 +201,16 @@ else
- EFL_CONF_OPTS += --disable-drm
- endif
- 
-+# The EFL Wayland support requires Evas GLES DRM engine support
-+# which depends on wayland-client to build.
-+# So enable gl_drm only when wayland support is selected.
-+ifeq ($(BR2_PACKAGE_EFL_WAYLAND),y)
-+EFL_DEPENDENCIES += wayland
-+EFL_CONF_OPTS += --enable-wayland --enable-gl-drm
-+else
-+EFL_CONF_OPTS += --disable-wayland --disable-gl-drm
-+endif
++diff --git a/tools/libxl/Makefile b/tools/libxl/Makefile
++index defeb40..239faf3 100644
++--- a/tools/libxl/Makefile
+++++ b/tools/libxl/Makefile
++@@ -11,7 +11,7 @@ MINOR = 0
++ XLUMAJOR = 4.7
++ XLUMINOR = 0
++ 
++-CFLAGS += -Werror -Wno-format-zero-length -Wmissing-declarations \
+++CFLAGS += -Wno-format-zero-length -Wmissing-declarations \
++ 	-Wno-declaration-after-statement -Wformat-nonliteral
++ CFLAGS += -I. -fPIC
++ 
++-- 
++2.7.4
 +
- EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
- 
- # Loaders that need external dependencies needs to be --enable-XXX=yes
 -- 
-2.5.5
+2.7.4
