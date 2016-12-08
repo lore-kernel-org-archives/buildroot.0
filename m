@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Dec 2016 22:26:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.3.14
-In-Reply-To: <20161208184042.4933-1-bernd.kuhls@t-online.de>
-References: <20161208184042.4933-1-bernd.kuhls@t-online.de>
-Message-ID: <20161208222612.4276b730@free-electrons.com>
+Date: Thu, 8 Dec 2016 22:26:24 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: update my entry list
+In-Reply-To: <20161208145149.28826-1-m.niestroj@grinn-global.com>
+References: <20161208145149.28826-1-m.niestroj@grinn-global.com>
+Message-ID: <20161208222624.280c0338@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  8 Dec 2016 19:40:42 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Thu,  8 Dec 2016 15:51:49 +0100, Marcin Niestroj wrote:
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  package/openvpn/openvpn.hash | 2 +-
->  package/openvpn/openvpn.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  DEVELOPERS | 3 +++
+>  1 file changed, 3 insertions(+)
 
 Applied to master, thanks.
 
