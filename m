@@ -1,39 +1,55 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  8 Dec 2016 19:40:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.3.14
-Message-ID: <20161208184042.4933-1-bernd.kuhls@t-online.de>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Thu, 8 Dec 2016 12:11:39 -0800
+Subject: [Buildroot] [PATCH 2/2] package/xen: Disable strict
+ unused-const-variable checking
+In-Reply-To: <20161208093148.78bcb271@free-electrons.com>
+References: <1481140097-32096-1-git-send-email-alistair.francis@xilinx.com>
+ <1481140097-32096-3-git-send-email-alistair.francis@xilinx.com>
+ <20161207215039.1accb7ba@free-electrons.com>
+ <CAKmqyKM0RTciLxjAkJ5DnZsq9yON3Er9XdwXMpd9E-CpQqsAYQ@mail.gmail.com>
+ <20161208093148.78bcb271@free-electrons.com>
+Message-ID: <CAKmqyKP0ZXtVjXtNYRfvdd24ZO4d0wsRgXOCFf9--O=01kQyTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, Dec 8, 2016 at 12:31 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Wed, 7 Dec 2016 15:39:26 -0800, Alistair Francis wrote:
+>
+>> >
+>> > What is this patch fixing? The commit log shouldn't be empty.
+>> >
+>> > Is this fixing an autobuilder issue? If so, there should be a reference
+>> > to it.
+>>
+>> It is fixing an autobuilder issue, I have added a commit message with
+>> more details.
+>
+> Good, but you still forgot (in your v2) a link to the autobuilder issue
+> being fixed. See
+> https://git.buildroot.org/buildroot/commit/?id=041c717ec8c251b7bca675086510840f02274967
+> for an example of how we reference autobuilder issues.
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 0c5cb09..a21608a 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 9cde0c8000fd32d5275adb55f8bb1d8ba429ff3de35f60a36e81f3859b7537e0  openvpn-2.3.13.tar.xz
-+sha256 f3a0d0eaf8d544409f76a9f2a238a0cd3dde9e1a9c1f98ac732a8b572bcdee98  openvpn-2.3.14.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index cd0a2d1..1765fb4 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVPN_VERSION = 2.3.13
-+OPENVPN_VERSION = 2.3.14
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
--- 
-2.10.2
+Thanks for the example. I am sending a V3 with the autobuilder issue referenced.
+
+Thanks,
+
+Alistair
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
