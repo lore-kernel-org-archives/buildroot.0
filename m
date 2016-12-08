@@ -1,38 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Dec 2016 22:30:56 +0100
-Subject: [Buildroot] [PATCH] uclibc-ng-test: disable some parts of
- test-suite
-In-Reply-To: <20161208023417.GA5366@waldemar-brodkorb.de>
-References: <20161208023417.GA5366@waldemar-brodkorb.de>
-Message-ID: <20161208223056.2c40f40e@free-electrons.com>
+Date: Thu, 8 Dec 2016 22:32:14 +0100
+Subject: [Buildroot] [git commit] arch/Config.in.arm: only enable
+	BR2_ARM_CPU_HAS_ARM for ARMv8 in 32bit mode
+Message-ID: <20161208213308.AA54A81E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d97af8763a10180ff935a3dff90b217d79246e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 8 Dec 2016 03:34:17 +0100, Waldemar Brodkorb wrote:
-> The math tests are experimental at the moment and require more
-> adaptions before they can be enabled again.
-> The locale tests are not compatible with musl toolchains,
-> so disable them.
-> 
-> Use latest git version from upstream for other bugfixes.
-> 
-> Fixes:
->  http://autobuild.buildroot.net/results/74e/74e7add310797772bc51f9ea9847408a8b05d643/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/uclibc-ng-test/uclibc-ng-test.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+Fixes:
+http://autobuild.buildroot.net/results/5e6/5e67cc067a06f7364cde1a8393ea72608fe7fef1/
 
-Applied to master, thanks.
+A number of packages use BR2_ARM_CPU_HAS_ARM to know if the target handles
+classic A32 instructions, which is only true for ARMv8 cores when they are
+running in 32bit mode.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.arm | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 743f6ca..3c47bd7 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -193,21 +193,21 @@ config BR2_cortex_a17
+ 	depends on !BR2_ARCH_IS_64
+ config BR2_cortex_a53
+ 	bool "cortex-A53"
+-	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_NEON
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a57
+ 	bool "cortex-A57"
+-	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_NEON
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_a72
+ 	bool "cortex-A72"
+-	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_NEON
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8
