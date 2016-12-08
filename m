@@ -1,43 +1,32 @@
-From: Matt Kraai <kraai@ftbfs.org>
-Date: Thu,  8 Dec 2016 06:38:50 -0800
-Subject: [Buildroot] [PATCH] qt5xmlpatterns: install examples
-Message-ID: <20161208143850.17718-1-kraai@ftbfs.org>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Thu,  8 Dec 2016 15:51:49 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: update my entry list
+Message-ID: <20161208145149.28826-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matt Kraai <kraai@ftbfs.org>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-index 31477a7c0..0b518b052 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-@@ -32,9 +32,20 @@ define QT5XMLPATTERNS_INSTALL_STAGING_CMDS
- endef
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e411b42..33ab31c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -952,7 +952,10 @@ F:	package/cc-tool/
+ F:	package/ecryptfs-utils/
  
- ifeq ($(BR2_STATIC_LIBS),)
--define QT5XMLPATTERNS_INSTALL_TARGET_CMDS
-+define QT5XMLPATTERNS_INSTALL_TARGET_LIBS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5XmlPatterns*.so.* $(TARGET_DIR)/usr/lib
- endef
- endif
+ N:	Marcin Niestroj <m.niestroj@grinn-global.com>
++F:	board/grinn/liteboard/
++F:	configs/grinn_liteboard_defconfig
+ F:	package/argparse/
++F:	package/easydbus/
+ F:	package/rs485conf/
+ F:	package/turbolua/
  
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/xmlpatterns $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
-+endif
-+
-+define QT5XMLPATTERNS_INSTALL_TARGET_CMDS
-+	$(QT5XMLPATTERNS_INSTALL_TARGET_LIBS)
-+	$(QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES)
-+endef
-+
- $(eval $(generic-package))
 -- 
-2.11.0
+2.10.2
