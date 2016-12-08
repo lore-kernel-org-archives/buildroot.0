@@ -1,55 +1,39 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 8 Dec 2016 18:23:31 +0100
-Subject: [Buildroot] [PATCH v2] sdl_mixer: fix static linking issue
-Message-ID: <20161208172331.GA13013@waldemar-brodkorb.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  8 Dec 2016 19:40:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.3.14
+Message-ID: <20161208184042.4933-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LDFLAGS must be passed when creating binaries.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../sdl_mixer/0002-add-LDFLAGS-while-linking.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch b/package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
-new file mode 100644
-index 0000000..4144660
---- /dev/null
-+++ b/package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
-@@ -0,0 +1,29 @@
-+Pass LDFLAGS while creating binaries.
-+
-+Fixes following linking error with uClibc-ng:
-+br/output/host/usr/lib/gcc/powerpc-buildroot-linux-uclibc/5.4.0/libgcc.a(unwind-dw2-fde-dip.o): In function `_Unwind_Find_FDE':
-+br/output/build/host-gcc-final-5.4.0/build/powerpc-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde-dip.c:465: undefined reference to `dl_iterate_phdr'
-+collect2: error: ld returned 1 exit status
-+
-+Since uClibc-ng 1.0.18 a circular dependency between libc and libgcc
-+exist, when static linking is used. It can be resolved by the compiler
-+when -static is correctly passed in the linking step.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur SDL_mixer-1.2.12.orig/Makefile.in SDL_mixer-1.2.12/Makefile.in
-+--- SDL_mixer-1.2.12.orig/Makefile.in	2012-01-15 23:01:04.000000000 +0100
-++++ SDL_mixer-1.2.12/Makefile.in	2016-12-07 08:29:22.479786596 +0100
-+@@ -66,10 +66,10 @@
-+ 	$(LIBTOOL) --mode=link $(CC) -o $@ $(OBJECTS) $(VERSION_OBJECTS) $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS)
-+ 
-+ $(objects)/playwave$(EXE): $(objects)/playwave.lo $(objects)/$(TARGET)
-+-	$(LIBTOOL) --mode=link $(CC) -o $@ $(objects)/playwave.lo $(SDL_CFLAGS) $(SDL_LIBS) $(objects)/$(TARGET)
-++	$(LIBTOOL) --mode=link $(CC) -o $@ $(objects)/playwave.lo $(SDL_CFLAGS) $(SDL_LIBS) $(LDFLAGS) $(objects)/$(TARGET)
-+ 
-+ $(objects)/playmus$(EXE): $(objects)/playmus.lo $(objects)/$(TARGET)
-+-	$(LIBTOOL) --mode=link $(CC) -o $@ $(objects)/playmus.lo $(SDL_CFLAGS) $(SDL_LIBS) $(objects)/$(TARGET)
-++	$(LIBTOOL) --mode=link $(CC) -o $@ $(objects)/playmus.lo $(SDL_CFLAGS) $(SDL_LIBS) $(LDFLAGS) $(objects)/$(TARGET)
-+ 
-+ install: all install-hdrs install-lib #install-bin
-+ install-hdrs:
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 0c5cb09..a21608a 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 9cde0c8000fd32d5275adb55f8bb1d8ba429ff3de35f60a36e81f3859b7537e0  openvpn-2.3.13.tar.xz
++sha256 f3a0d0eaf8d544409f76a9f2a238a0cd3dde9e1a9c1f98ac732a8b572bcdee98  openvpn-2.3.14.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index cd0a2d1..1765fb4 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENVPN_VERSION = 2.3.13
++OPENVPN_VERSION = 2.3.14
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf openssl
 -- 
-2.1.4
+2.10.2
