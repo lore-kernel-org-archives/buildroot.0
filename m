@@ -1,37 +1,41 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Thu, 8 Dec 2016 13:46:23 -0800
-Subject: [Buildroot] [PATXH v3 1/2] package/xen: Bump Xen to 4.7.1
-In-Reply-To: <20161208224207.3e19760f@free-electrons.com>
-References: <1481227872-31723-1-git-send-email-alistair.francis@xilinx.com>
- <1481227872-31723-2-git-send-email-alistair.francis@xilinx.com>
- <20161208224207.3e19760f@free-electrons.com>
-Message-ID: <CAKmqyKObfnHZ9fETAfXspTfSfNVG8yAxFUB=Mfh1YyZ_fczTCw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Dec 2016 22:46:42 +0100
+Subject: [Buildroot] [git commit] systemd: don't build systemd-firstboot by
+	default
+Message-ID: <20161208214651.E639881DEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 8, 2016 at 1:42 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 8 Dec 2016 12:11:11 -0800, Alistair Francis wrote:
->> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
->> ---
->>  package/xen/xen.hash | 2 +-
->>  package/xen/xen.mk   | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> Applied to master, thanks.
+commit: https://git.buildroot.net/buildroot/commit/?id=447d364144cad9e02f01d8cfefe3e0bc43cbf2bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks,
+systemd-firstboot is never invoked since systemd's first boot detection
+logic checks whether /etc/machine-id exists. Since the file is created
+automatically by systemd.mk, systemd will never detect first boot and
+therefore the systemd-firstboot.service unit file will never get run.
 
-Alistair
+Additionally, if /etc/machine-id is removed to allow systemd-firstboot
+to run, it interactively prompts for the system locale. This makes it
+seem unlikely that an embedded system would want to use it.
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index ddaf3e2..1aedb7b 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -106,7 +106,6 @@ config BR2_PACKAGE_SYSTEMD_COREDUMP
+ 
+ config BR2_PACKAGE_SYSTEMD_FIRSTBOOT
+ 	bool "enable firstboot support"
+-	default y
+ 	help
+ 	  systemd-firstboot initializes the most basic system settings
+ 	  interactively on the first boot.
