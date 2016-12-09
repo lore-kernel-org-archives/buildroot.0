@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 09:48:56 -0300
-Subject: [Buildroot] [PATCH] grep: bump to version 2.27
-Message-ID: <1481287736-27307-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 09:49:57 -0300
+Subject: [Buildroot] [PATCH] libglib2: bump to version 2.50.2
+Message-ID: <1481287797-27353-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/grep/grep.hash | 2 +-
- package/grep/grep.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-index 789ceea..326737a 100644
---- a/package/grep/grep.hash
-+++ b/package/grep/grep.hash
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 02c38ad..94bf870 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking signature
--sha256 246a8fb37e82aa33d495b07c22fdab994c039ab0f818538eac81b01e78636870  grep-2.26.tar.xz
-+sha256 ad4cc44d23074a1c3a8baae8fbafff2a8c60f38a9a6108f985eef6fbee6dcaeb  grep-2.27.tar.xz
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index a8e124e..7615f30 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -4,7 +4,7 @@
- #
+-# https://download.gnome.org/sources/glib/2.50/glib-2.50.1.sha256sum
+-sha256  2ef87a78f37c1eb5b95f4cc95efd5b66f69afad9c9c0899918d04659cf6df7dd  glib-2.50.1.tar.xz
++# https://download.gnome.org/sources/glib/2.50/glib-2.50.2.sha256sum
++sha256  be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5  glib-2.50.2.tar.xz
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index a9b93c6..ddd1f39 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GREP_VERSION = 2.26
-+GREP_VERSION = 2.27
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPLv3+
+ LIBGLIB2_VERSION_MAJOR = 2.50
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPLv2+
 -- 
 2.7.3
