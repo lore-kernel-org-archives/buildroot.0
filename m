@@ -1,40 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 12:00:49 -0300
-Subject: [Buildroot] [PATCH] libinput: bump to version 1.5.3
-Message-ID: <1481295649-1368-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 9 Dec 2016 15:10:03 +0000
+Subject: [Buildroot] [PATCH 2/2] dovecot-pigeonhole: bump version to 0.4.16
+In-Reply-To: <20161209151003.49165-1-Vincent.Riera@imgtec.com>
+References: <20161209151003.49165-1-Vincent.Riera@imgtec.com>
+Message-ID: <20161209151003.49165-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Release notes:
+  http://www.dovecot.org/list/dovecot-news/2016-October/000330.html
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 4 ++--
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index ea7bdf7..0345c13 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index f598825..95325a9 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-November/031926.html
--sha256	ba26e2bc64ed551eaef193178ed06b07b97a09ac6f4e442f5f15bbc3f3174682	libinput-1.5.2.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-December/032110.html
-+sha256	91206c523b4e7aeecf296d0b94276c61bea90b9260d198c8ee3a91eced10a6e3	libinput-1.5.3.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 765a3cb..b079305 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+-# Locally computed
+-sha256	c99ace6ead310c6c3b639922da618f90d846307da4fe252d994e5e51bf8a3de3	dovecot-2.2-pigeonhole-0.4.15.tar.gz
++# Locally computed after checking signature
++sha256 8f0b98f18062d6e241eef74ebe16cc167cd246361cbe6657d94f0ecc5d7d3234  dovecot-2.2-pigeonhole-0.4.16.tar.gz
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 7c0a14c..846e7f9 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.5.2
-+LIBINPUT_VERSION = 1.5.3
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-DOVECOT_PIGEONHOLE_VERSION = 0.4.15
++DOVECOT_PIGEONHOLE_VERSION = 0.4.16
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
+ DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
 -- 
-2.7.3
+2.10.1
