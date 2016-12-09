@@ -1,47 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 10:51:24 -0300
-Subject: [Buildroot] [PATCH] libunistring: bump to version 0.9.7
-Message-ID: <1481291484-26775-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 10:51:40 -0300
+Subject: [Buildroot] [PATCH] gtksourceview: bump to version 3.22.2
+Message-ID: <1481291500-15323-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new GPLv2 license option.
-Unfortunately COPYING is GPLv3, so avoid it.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libunistring/libunistring.hash | 2 +-
- package/libunistring/libunistring.mk   | 4 ++--
+ package/gtksourceview/gtksourceview.hash | 4 ++--
+ package/gtksourceview/gtksourceview.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
-index ba4b642..15e35cb 100644
---- a/package/libunistring/libunistring.hash
-+++ b/package/libunistring/libunistring.hash
+diff --git a/package/gtksourceview/gtksourceview.hash b/package/gtksourceview/gtksourceview.hash
+index 7a00cd1..f57fadc 100644
+--- a/package/gtksourceview/gtksourceview.hash
++++ b/package/gtksourceview/gtksourceview.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	2df42eae46743e3f91201bf5c100041540a7704e8b9abfd57c972b2d544de41b	libunistring-0.9.6.tar.xz
-+sha256	2e3764512aaf2ce598af5a38818c0ea23dedf1ff5460070d1b6cee5c3336e797	libunistring-0.9.7.tar.xz
-diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index bb1641e..ce58b47 100644
---- a/package/libunistring/libunistring.mk
-+++ b/package/libunistring/libunistring.mk
-@@ -4,11 +4,11 @@
- #
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.22/gtksourceview-3.22.0.sha256sum:
+-sha256	70657f48732427984dce6cc812bdd3f2b701c0a49e0a0a08889705b3dadcf8e5	gtksourceview-3.22.0.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gtksourceview/3.22/gtksourceview-3.22.2.sha256sum:
++sha256	6ce84231dd0931cc747708434ca2f344c65a092dd6e1a800283fe0748773af5e	gtksourceview-3.22.2.tar.xz
+diff --git a/package/gtksourceview/gtksourceview.mk b/package/gtksourceview/gtksourceview.mk
+index 9ddce5a..5e4ca0d 100644
+--- a/package/gtksourceview/gtksourceview.mk
++++ b/package/gtksourceview/gtksourceview.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBUNISTRING_VERSION = 0.9.6
-+LIBUNISTRING_VERSION = 0.9.7
- LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
- LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
- LIBUNISTRING_INSTALL_STAGING = YES
--LIBUNISTRING_LICENSE = LGPLv3+
-+LIBUNISTRING_LICENSE = LGPLv3+ or GPLv2
- LIBUNISTRING_LICENSE_FILES = COPYING.LIB
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ GTKSOURCEVIEW_VERSION_MAJOR = 3.22
+-GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).0
++GTKSOURCEVIEW_VERSION = $(GTKSOURCEVIEW_VERSION_MAJOR).2
+ GTKSOURCEVIEW_SOURCE = gtksourceview-$(GTKSOURCEVIEW_VERSION).tar.xz
+ GTKSOURCEVIEW_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/gtksourceview/$(GTKSOURCEVIEW_VERSION_MAJOR)
 -- 
 2.7.3
