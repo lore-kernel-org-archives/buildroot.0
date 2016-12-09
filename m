@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 09:49:57 -0300
-Subject: [Buildroot] [PATCH] libglib2: bump to version 2.50.2
-Message-ID: <1481287797-27353-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 09:50:34 -0300
+Subject: [Buildroot] [PATCH] vala: bump to version 0.34.4
+Message-ID: <1481287834-27414-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 02c38ad..94bf870 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index b5abcc3..ca5873c 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
 @@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.50/glib-2.50.1.sha256sum
--sha256  2ef87a78f37c1eb5b95f4cc95efd5b66f69afad9c9c0899918d04659cf6df7dd  glib-2.50.1.tar.xz
-+# https://download.gnome.org/sources/glib/2.50/glib-2.50.2.sha256sum
-+sha256  be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5  glib-2.50.2.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index a9b93c6..ddd1f39 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
+-# From https://download.gnome.org/sources/vala/0.34/vala-0.34.3.sha256sum
+-sha256 f0fad71aca03cdeadf749ca47f56296a4ddd1a25f4e2f09f0ff9e1e3afbcac3f  vala-0.34.3.tar.xz
++# From https://download.gnome.org/sources/vala/0.34/vala-0.34.4.sha256sum
++sha256 6b17bd339414563ebc51f64b0b837919ea7552d8a8ffa71cdc837d25c9696b83  vala-0.34.4.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 6eaa7c4..dadfdfc 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- LIBGLIB2_VERSION_MAJOR = 2.50
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPLv2+
+ VALA_VERSION_MAJOR = 0.34
+-VALA_VERSION = $(VALA_VERSION_MAJOR).3
++VALA_VERSION = $(VALA_VERSION_MAJOR).4
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
 -- 
 2.7.3
