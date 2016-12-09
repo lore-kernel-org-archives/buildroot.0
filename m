@@ -1,51 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 9 Dec 2016 15:00:38 +0000
-Subject: [Buildroot] [PATCH] sysstat: bump to version 11.4.2
-In-Reply-To: <1481295149-1317-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1481295149-1317-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <415ec025-b430-5f63-bc8c-a599a09aecab@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 12:00:49 -0300
+Subject: [Buildroot] [PATCH] libinput: bump to version 1.5.3
+Message-ID: <1481295649-1368-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 09/12/16 14:52, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/sysstat/sysstat.hash | 2 +-
->  package/sysstat/sysstat.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-> index 3170fc9..e6e0c53 100644
-> --- a/package/sysstat/sysstat.hash
-> +++ b/package/sysstat/sysstat.hash
-> @@ -1,2 +1,2 @@
->  # From: http://sebastien.godard.pagesperso-orange.fr/download.html
-> -sha1	59769deddef02acd60db3a42d772e57bd0978efb	sysstat-11.4.0.tar.xz
-> +sha1	84ac7feba76049f201e203c7ce0cc750479a9d43	sysstat-11.4.2.tar.xz
-
-it would probably be a good idea to include a calculated sha256 hash
-since upstream only provides one weak hash (sha1).
-
-Regards,
-
-Vincent.
-
-> diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-> index de6cd9f..1a86fa0 100644
-> --- a/package/sysstat/sysstat.mk
-> +++ b/package/sysstat/sysstat.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SYSSTAT_VERSION = 11.4.0
-> +SYSSTAT_VERSION = 11.4.2
->  SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
->  SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
->  SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
-> 
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index ea7bdf7..0345c13 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-November/031926.html
+-sha256	ba26e2bc64ed551eaef193178ed06b07b97a09ac6f4e442f5f15bbc3f3174682	libinput-1.5.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-December/032110.html
++sha256	91206c523b4e7aeecf296d0b94276c61bea90b9260d198c8ee3a91eced10a6e3	libinput-1.5.3.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 765a3cb..b079305 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.5.2
++LIBINPUT_VERSION = 1.5.3
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-- 
+2.7.3
