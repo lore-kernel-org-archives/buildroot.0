@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Dec 2016 17:55:06 +0100
-Subject: [Buildroot] [PATCH] libinput: bump to version 1.5.3
-In-Reply-To: <1481295649-1368-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 9 Dec 2016 12:00:49 -0300")
-References: <1481295649-1368-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87inqthwk5.fsf@dell.be.48ers.dk>
+Date: Fri, 09 Dec 2016 17:55:11 +0100
+Subject: [Buildroot] [PATCH] gtksourceview: bump to version 3.22.2
+In-Reply-To: <1481291500-15323-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 9 Dec 2016 10:51:40 -0300")
+References: <1481291500-15323-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87eg1hhwk0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
