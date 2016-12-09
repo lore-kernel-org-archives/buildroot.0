@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 09:50:34 -0300
-Subject: [Buildroot] [PATCH] vala: bump to version 0.34.4
-Message-ID: <1481287834-27414-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 09:51:36 -0300
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.17
+Message-ID: <1481287896-27461-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index b5abcc3..ca5873c 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index f9725df..897562b 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
 @@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.34/vala-0.34.3.sha256sum
--sha256 f0fad71aca03cdeadf749ca47f56296a4ddd1a25f4e2f09f0ff9e1e3afbcac3f  vala-0.34.3.tar.xz
-+# From https://download.gnome.org/sources/vala/0.34/vala-0.34.4.sha256sum
-+sha256 6b17bd339414563ebc51f64b0b837919ea7552d8a8ffa71cdc837d25c9696b83  vala-0.34.4.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 6eaa7c4..dadfdfc 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
+ # Locally calculated after checking pgp signature
+-sha256	d99abb1b320771b58c949bab85e4b654dd1e3e9d92e2572204b7dc479d923927	gnutls-3.4.16.tar.xz
++sha256	9b50e8a670d5e950425d96935c7ddd415eb6f8079615a36df425f09a3143172e	gnutls-3.4.17.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index d359a61..af7621c 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- VALA_VERSION_MAJOR = 0.34
--VALA_VERSION = $(VALA_VERSION_MAJOR).3
-+VALA_VERSION = $(VALA_VERSION_MAJOR).4
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+ GNUTLS_VERSION_MAJOR = 3.4
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ # README says that the core library is under LGPLv2.1+, but a few
 -- 
 2.7.3
