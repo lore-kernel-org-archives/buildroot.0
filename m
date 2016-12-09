@@ -1,45 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  9 Dec 2016 11:26:03 +0100
-Subject: [Buildroot] [PATCH] ezxml: disable mmap code for nommu
-Message-ID: <20161209102603.16303-1-peter@korsgaard.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 09:45:12 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{8, 4, 1}.x and 3.{18,
+	12}.x series
+Message-ID: <1481287513-25960-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/8e1/8e10052a0d0ad4f47622925349ec5fddb7b672f0/
-http://autobuild.buildroot.net/results/2f1/2f15b81beadd2d902c73d6d8bd7fb06b03f62ef5/
-
-The mmap support uses madvise which isn't available on nommu uClibc, so disable it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ezxml/ezxml.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/ezxml/ezxml.mk b/package/ezxml/ezxml.mk
-index a806e56..f1e18aa 100644
---- a/package/ezxml/ezxml.mk
-+++ b/package/ezxml/ezxml.mk
-@@ -10,9 +10,16 @@ EZXML_INSTALL_STAGING = YES
- EZXML_LICENSE = MIT
- EZXML_LICENSE_FILES = license.txt
- 
-+EZXML_CFLAGS = $(TARGET_CFLAGS)
-+
-+# mmap code uses madvise which isn't available on nommu uClibc
-+ifeq ($(BR2_USE_MMU),)
-+EZXML_CFLAGS += -D EZXML_NOMMAP
-+endif
-+
- define EZXML_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -f GNUmakefile \
--		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" AR=$(TARGET_AR)
-+		CC="$(TARGET_CC)" CFLAGS="$(EZXML_CFLAGS)" AR=$(TARGET_AR)
- endef
- 
- define EZXML_INSTALL_STAGING_CMDS
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9cdd5fa..da17068 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -226,15 +226,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.84"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.67"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.68"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.44"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.45"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.35"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.36"	if BR2_KERNEL_HEADERS_4_4
++	default "4.1.36"	if BR2_KERNEL_HEADERS_4_1
++	default "4.4.37"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+ 	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
+-	default "4.8.12"	if BR2_KERNEL_HEADERS_4_8
++	default "4.8.13"	if BR2_KERNEL_HEADERS_4_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.10.2
+2.7.3
