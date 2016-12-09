@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 09:51:36 -0300
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.17
-Message-ID: <1481287896-27461-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 09:52:00 -0300
+Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.3.4
+Message-ID: <1481287920-27504-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index f9725df..897562b 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index aa864c6..b38b049 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	d99abb1b320771b58c949bab85e4b654dd1e3e9d92e2572204b7dc479d923927	gnutls-3.4.16.tar.xz
-+sha256	9b50e8a670d5e950425d96935c7ddd415eb6f8079615a36df425f09a3143172e	gnutls-3.4.17.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index d359a61..af7621c 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.3.tar.bz2.sha256
+-sha256	2620987115a4122b47321610dccbcc18f7f121115fd7b88dc8a695c8b66cb3c9	harfbuzz-1.3.3.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.4.tar.bz2.sha256
++sha256	718aa6fcadef1a6548315b8cfe42cc27e926256302c337f42df3a443843f6a2b	harfbuzz-1.3.4.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 2290eeb..eafe939 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.4
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- # README says that the core library is under LGPLv2.1+, but a few
+-HARFBUZZ_VERSION = 1.3.3
++HARFBUZZ_VERSION = 1.3.4
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
 2.7.3
