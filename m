@@ -1,43 +1,54 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 10:40:49 -0300
-Subject: [Buildroot] [PATCH] cairo: bump to version 1.14.8
-Message-ID: <1481290849-24333-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 10:43:09 -0300
+Subject: [Buildroot] [PATCH] coreutils: bump to version 8.26
+Message-ID: <1481290989-12966-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Pass on INSTALL_PROGRAM to configure since starting with version 8.26
+when building natively it tries to use the self-built install to
+install, and when cross-compiling it expects INSTALL_PROGRAM to point to
+a real install, or otherwise fails when recursively trying to expand it.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/cairo/cairo.hash | 6 +++---
- package/cairo/cairo.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/coreutils/coreutils.hash | 2 +-
+ package/coreutils/coreutils.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
-index 225850f..dd5365b 100644
---- a/package/cairo/cairo.hash
-+++ b/package/cairo/cairo.hash
-@@ -1,4 +1,4 @@
--# From http://cairographics.org/releases/cairo-1.14.6.tar.xz.sha1
--sha1	0a59324e6cbe031b5b898ff8b9e2ffceb9d114f5	cairo-1.14.6.tar.xz
-+# From http://cairographics.org/releases/cairo-1.14.8.tar.xz.sha1
-+sha1	c6f7b99986f93c9df78653c3e6a3b5043f65145e	cairo-1.14.8.tar.xz
- # Calculated based on the hash above
--sha256	613cb38447b76a93ff7235e17acd55a78b52ea84a9df128c3f2257f8eaa7b252	cairo-1.14.6.tar.xz
-+sha256	d1f2d98ae9a4111564f6de4e013d639cf77155baf2556582295a0f00a9bc5e20	cairo-1.14.8.tar.xz
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index d7e370a..761c6f4 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
+diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
+index 38d3bb1..37d630b 100644
+--- a/package/coreutils/coreutils.hash
++++ b/package/coreutils/coreutils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	31e67c057a5b32a582f26408c789e11c2e8d676593324849dcf5779296cdce87	coreutils-8.25.tar.xz
++sha256	155e94d748f8e2bc327c66e0cbebdb8d6ab265d2f37c3c928f7bf6c3beba9a8e	coreutils-8.26.tar.xz
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 0d7b782..409089c 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CAIRO_VERSION = 1.14.6
-+CAIRO_VERSION = 1.14.8
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
- CAIRO_LICENSE = LGPLv2.1+
- CAIRO_LICENSE_FILES = COPYING
+-COREUTILS_VERSION = 8.25
++COREUTILS_VERSION = 8.26
+ COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
+ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ COREUTILS_LICENSE = GPLv3+
+@@ -52,7 +52,8 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+ 	gl_cv_have_proc_uptime=yes \
+ 	utils_cv_localtime_cache=no \
+ 	PERL=missing \
+-	MAKEINFO=true
++	MAKEINFO=true \
++	INSTALL_PROGRAM=$(INSTALL)
+ 
+ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
+ 	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
 -- 
 2.7.3
