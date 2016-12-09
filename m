@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 09:56:46 -0300
-Subject: [Buildroot] [PATCH] mpv: bump to version 0.22.0
-Message-ID: <1481288206-27613-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 10:40:49 -0300
+Subject: [Buildroot] [PATCH] cairo: bump to version 1.14.8
+Message-ID: <1481290849-24333-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mpv/mpv.hash | 2 +-
- package/mpv/mpv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cairo/cairo.hash | 6 +++---
+ package/cairo/cairo.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index fb287ef..be6b559 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	fe6ec9d2ded5ce84b963f54b812d579d04f944f4a737f3ae639c4d5d9e842b56	v0.20.0.tar.gz
-+sha256	c0f9ac8f0e37a391d19007b333ef8787c2f45d75a0d4401c0098cde52c5082f6	v0.22.0.tar.gz
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 0dd488d..1eb83e9 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
+diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
+index 225850f..dd5365b 100644
+--- a/package/cairo/cairo.hash
++++ b/package/cairo/cairo.hash
+@@ -1,4 +1,4 @@
+-# From http://cairographics.org/releases/cairo-1.14.6.tar.xz.sha1
+-sha1	0a59324e6cbe031b5b898ff8b9e2ffceb9d114f5	cairo-1.14.6.tar.xz
++# From http://cairographics.org/releases/cairo-1.14.8.tar.xz.sha1
++sha1	c6f7b99986f93c9df78653c3e6a3b5043f65145e	cairo-1.14.8.tar.xz
+ # Calculated based on the hash above
+-sha256	613cb38447b76a93ff7235e17acd55a78b52ea84a9df128c3f2257f8eaa7b252	cairo-1.14.6.tar.xz
++sha256	d1f2d98ae9a4111564f6de4e013d639cf77155baf2556582295a0f00a9bc5e20	cairo-1.14.8.tar.xz
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index d7e370a..761c6f4 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPV_VERSION = 0.20.0
-+MPV_VERSION = 0.22.0
- MPV_SITE = https://github.com/mpv-player/mpv/archive
- MPV_SOURCE = v$(MPV_VERSION).tar.gz
- MPV_DEPENDENCIES = \
+-CAIRO_VERSION = 1.14.6
++CAIRO_VERSION = 1.14.8
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+ CAIRO_LICENSE = LGPLv2.1+
+ CAIRO_LICENSE_FILES = COPYING
 -- 
 2.7.3
