@@ -1,61 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Dec 2016 20:08:29 +0100
-Subject: [Buildroot] [git commit] package/xen: Disable Werror checking
-Message-ID: <20161209190842.DFABF81D77@busybox.osuosl.org>
+Date: Fri, 09 Dec 2016 20:14:02 +0100
+Subject: [Buildroot] [PATCH v4 1/2] package/efl: enable libdrm support
+In-Reply-To: <1481235857-23293-1-git-send-email-romain.naour@gmail.com>
+ (Romain Naour's message of "Thu, 8 Dec 2016 23:24:16 +0100")
+References: <1481235857-23293-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <874m2cgbk5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7bfb682081bfaf90dfc451baa1e9a4bb129cd4f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-The strict unused-const-variable checking was causing autobuilder errors
-when trying to build Xen tools/libxl as the migrate_*[] arrays are not
-always accessed.
+ > drm can be used without compositor, just like it was with
+ > the framebuffer for standalone applications
 
-To avoid the error edit the Makefile to stop all general warnings being treated
-as errors, by removing the -Werror flag.
+ > As stated in configure.ac, libdrm support needs libdrm, elput,
+ > libxkbcommon and libgbm.
 
-Fixes:
-  http://autobuild.buildroot.net/results/0e0/0e0d4aa4a05da5804821951289c0a4049b009c61/
+ > libgbm is only provided by mesa3d package when OpenGL EGL support is
+ > enabled, so add a direct dependency on mesa3d.
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ools-libxl-Disable-strict-Werror-checking.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ > Rework the libxkbcommon dependency since it's now required for
+ > elput and libdrm support.
 
-diff --git a/package/xen/0003-tools-libxl-Disable-strict-Werror-checking.patch b/package/xen/0003-tools-libxl-Disable-strict-Werror-checking.patch
-new file mode 100644
-index 0000000..80c0b32
---- /dev/null
-+++ b/package/xen/0003-tools-libxl-Disable-strict-Werror-checking.patch
-@@ -0,0 +1,26 @@
-+From 19f1e70041044fde1542109a0525424cc6d5d053 Mon Sep 17 00:00:00 2001
-+From: Alistair Francis <alistair.francis@xilinx.com>
-+Date: Wed, 7 Dec 2016 11:35:10 -0800
-+Subject: [PATCH] tools/libxl: Disable strict Werror checking
-+
-+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-+---
-+ tools/libxl/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/libxl/Makefile b/tools/libxl/Makefile
-+index defeb40..239faf3 100644
-+--- a/tools/libxl/Makefile
-++++ b/tools/libxl/Makefile
-+@@ -11,7 +11,7 @@ MINOR = 0
-+ XLUMAJOR = 4.7
-+ XLUMINOR = 0
-+ 
-+-CFLAGS += -Werror -Wno-format-zero-length -Wmissing-declarations \
-++CFLAGS += -Wno-format-zero-length -Wmissing-declarations \
-+ 	-Wno-declaration-after-statement -Wformat-nonliteral
-+ CFLAGS += -I. -fPIC
-+ 
-+-- 
-+2.7.4
-+
+ > [1] https://www.enlightenment.org/about-wayland
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Signed-off-by: Pierre Floury <devpfl@gmail.com>
+ > ---
+ > libgdm can be found as a standalone library on github [2] but it seems
+ > not very active. I prefer to rely on Mesa3d version.
+ > [2] https://github.com/robclark/libgbm
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
