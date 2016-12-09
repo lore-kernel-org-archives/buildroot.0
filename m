@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Dec 2016 17:54:40 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.8.13
-In-Reply-To: <1481287513-25960-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 9 Dec 2016 09:45:13 -0300")
-References: <1481287513-25960-1-git-send-email-gustavo@zacarias.com.ar>
- <1481287513-25960-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mvg5hwkv.fsf@dell.be.48ers.dk>
+Date: Fri, 09 Dec 2016 17:55:06 +0100
+Subject: [Buildroot] [PATCH] libinput: bump to version 1.5.3
+In-Reply-To: <1481295649-1368-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 9 Dec 2016 12:00:49 -0300")
+References: <1481295649-1368-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87inqthwk5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
