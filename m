@@ -1,88 +1,22 @@
-From: Anand Sivaram <aspnair@gmail.com>
-Date: Fri, 9 Dec 2016 22:16:46 +0530
-Subject: [Buildroot] Compilation error in version: 2016.11,
-	package util-linux
-In-Reply-To: <20161209155918.7b95b069@free-electrons.com>
-References: <CAHBw83cw_XOYRvXjFdox5XE0TJAxGUXhyQxegWZnW4aSi=9qWg@mail.gmail.com>
- <20161209155918.7b95b069@free-electrons.com>
-Message-ID: <CAHBw83fwM0KT5w2FtS0vm002uhJOAS0ETjJ=6b6o7ecbZaFQjA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 09 Dec 2016 17:54:34 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{8, 4,
+	1}.x and 3.{18, 12}.x series
+In-Reply-To: <1481287513-25960-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 9 Dec 2016 09:45:12 -0300")
+References: <1481287513-25960-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r35hhwl1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas for the clarification.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Anand
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
+Committed, thanks.
 
-On 9 December 2016 at 20:29, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello,
->
-> On Fri, 9 Dec 2016 20:10:30 +0530, Anand Sivaram wrote:
->
-> > I tried to upgrade my buildroot to 2016.11 from 2016.05.  Now I am
-> getting
-> > a compilation error in util-linux because BR2_PACKAGE_UTIL_LINUX_
-> LIBMOUNT
-> > is enabled and it got enabled automatically because of the newer version
-> of
-> > libglib2. (For me libglib2 has to be enabled in my system).
-> >
-> > In 2016.05 version, neither I enabled libmount directly not it got
-> enabled
-> > as a dependency of glib2.0
-> >
-> > Target Details:
-> > Toolchain: External gcc-4.7.3, uClibc-0.9.33.2 on MIPS 24Kc.
-> > Build Machine: Debian Testing/Stretch
-> >
-> > Compilation Error: Because of have_scanf_alloc_modifier
-> >
-> > checking for tgetent in -ltinfo... no
-> > configure: error: libmount selected, but required scanf string alloc
-> > modifier not available
-> > package/pkg-generic.mk:206: recipe for target
-> > '/media/build/buildroot/output/build/util-linux-2.28.
-> 2/.stamp_configured'
-> > failed
-> > make[1]: ***
-> > [/media/build/buildroot/output/build/util-linux-2.28.
-> 2/.stamp_configured]
-> > Error 1
-> > make[1]: Leaving directory '/media/build/buildroot'
-> > Makefile:292: recipe for target 'buildroot' failed
-> > make: *** [buildroot] Error 2
-> >
-> > While searching I found the following patch, but for an older version of
-> > util-linux.
-> > http://repository.timesys.com/buildsources/u/util-linux/
-> util-linux-2.27.1/util-linux-2.27.1-sscanf-no-ms-as.patch
-> >
-> > I do not require libmount directly. I could remove dependency of libmount
-> > and disable it from glib2.0 and try to disable the LIBMOUNT flag
-> > altogether.  But, that is a workaround.
-> >
-> > Any help would be really appreciated.
->
-> We used to have 0001-build-sys-fix-uClibc-ng-scanf-check.patch, which
-> we dropped when bumping to util-linux 2.28.1.
->
-> But uClibc 0.9.33.2 is very old, and Buildroot no longer support or
-> tests such old C library. You should really upgrade your toolchain to
-> have a more recent uClibc version (using uClibc-ng).
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161209/9e40fc13/attachment.html>
+-- 
+Bye, Peter Korsgaard
