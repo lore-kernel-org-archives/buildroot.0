@@ -1,54 +1,47 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 10:43:09 -0300
-Subject: [Buildroot] [PATCH] coreutils: bump to version 8.26
-Message-ID: <1481290989-12966-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 10:51:24 -0300
+Subject: [Buildroot] [PATCH] libunistring: bump to version 0.9.7
+Message-ID: <1481291484-26775-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pass on INSTALL_PROGRAM to configure since starting with version 8.26
-when building natively it tries to use the self-built install to
-install, and when cross-compiling it expects INSTALL_PROGRAM to point to
-a real install, or otherwise fails when recursively trying to expand it.
+Add new GPLv2 license option.
+Unfortunately COPYING is GPLv3, so avoid it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/coreutils/coreutils.hash | 2 +-
- package/coreutils/coreutils.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/libunistring/libunistring.hash | 2 +-
+ package/libunistring/libunistring.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
-index 38d3bb1..37d630b 100644
---- a/package/coreutils/coreutils.hash
-+++ b/package/coreutils/coreutils.hash
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index ba4b642..15e35cb 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	31e67c057a5b32a582f26408c789e11c2e8d676593324849dcf5779296cdce87	coreutils-8.25.tar.xz
-+sha256	155e94d748f8e2bc327c66e0cbebdb8d6ab265d2f37c3c928f7bf6c3beba9a8e	coreutils-8.26.tar.xz
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 0d7b782..409089c 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -4,7 +4,7 @@
+-sha256	2df42eae46743e3f91201bf5c100041540a7704e8b9abfd57c972b2d544de41b	libunistring-0.9.6.tar.xz
++sha256	2e3764512aaf2ce598af5a38818c0ea23dedf1ff5460070d1b6cee5c3336e797	libunistring-0.9.7.tar.xz
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index bb1641e..ce58b47 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--COREUTILS_VERSION = 8.25
-+COREUTILS_VERSION = 8.26
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
- COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- COREUTILS_LICENSE = GPLv3+
-@@ -52,7 +52,8 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 	gl_cv_have_proc_uptime=yes \
- 	utils_cv_localtime_cache=no \
- 	PERL=missing \
--	MAKEINFO=true
-+	MAKEINFO=true \
-+	INSTALL_PROGRAM=$(INSTALL)
+-LIBUNISTRING_VERSION = 0.9.6
++LIBUNISTRING_VERSION = 0.9.7
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
+-LIBUNISTRING_LICENSE = LGPLv3+
++LIBUNISTRING_LICENSE = LGPLv3+ or GPLv2
+ LIBUNISTRING_LICENSE_FILES = COPYING.LIB
  
- COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
- 	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 -- 
 2.7.3
