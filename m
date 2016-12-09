@@ -1,77 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Dec 2016 20:12:06 +0100
-Subject: [Buildroot] [git commit] package/efl: add Wayland support
-Message-ID: <20161209191439.813CB802B5@busybox.osuosl.org>
+Date: Fri, 9 Dec 2016 20:10:38 +0100
+Subject: [Buildroot] [git commit] package/efl: enable libdrm support
+Message-ID: <20161209191439.756A2802B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f30eec41f95ed99909eb2c7590d83c12b9142df2
+commit: https://git.buildroot.net/buildroot/commit/?id=d654c3979145c26fddd3f51475b8fe0e4c16bb95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The EFL Wayland support was removed with commit [1] since the dependecy
-on libdrm was missing. Also it requires OpenGL ES with EGL, Evas DRM
-and Evas GLES DRM support [2].
+drm can be used without compositor, just like it was with
+the framebuffer for standalone applications
 
-As stated in configure, Evas GLES DRM engine support (gl_drm) depends
-on wayland-client to build (wayland-client >= 1.8.0).
+As stated in configure.ac, libdrm support needs libdrm, elput,
+libxkbcommon and libgbm.
 
-So, enable gl_drm only when wayland support is selected.
+libgbm is only provided by mesa3d package when OpenGL EGL support is
+enabled, so add a direct dependency on mesa3d.
 
-[1] 4f04be1659f186765f506c68f5bfbf6845fc40dc
-[2] https://www.enlightenment.org/about-wayland
+Rework the libxkbcommon dependency since it's now required for
+elput and libdrm support.
+
+[1] https://www.enlightenment.org/about-wayland
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Pierre Floury <devpfl@gmail.com>
+Signed-off-by: Pierre Floury <devpfl@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/Config.in | 12 ++++++++++++
- package/efl/efl.mk    | 10 ++++++++++
- 2 files changed, 22 insertions(+)
+ package/efl/Config.in | 13 +++++++++++++
+ package/efl/efl.mk    | 11 ++++++++++-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 0692d80..c51fc56 100644
+index 5d687e8..0692d80 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -155,6 +155,18 @@ config BR2_PACKAGE_EFL_X_XLIB
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XPROTO_GLPROTO
+@@ -193,6 +193,19 @@ config BR2_PACKAGE_EFL_ELPUT
+ 	  ecore_drm, etc) to handle interfacing with libinput without
+ 	  having to duplicate the code in each subsystem.
  
-+config BR2_PACKAGE_EFL_WAYLAND
-+	bool "Wayland support"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # Evas DRM Engine -> libdrm
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
-+	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
-+	select BR2_PACKAGE_EFL_DRM
-+	select BR2_PACKAGE_WAYLAND
++config BR2_PACKAGE_EFL_DRM
++	bool "Evas DRM Engine"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
++	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
++	select BR2_PACKAGE_EFL_ELPUT
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  This option enable building support for the Evas DRM Engine.
 +
-+comment "Wayland support needs OpenGL ES w/ EGL, threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
-+		|| !BR2_PACKAGE_EFL_OPENGLES
++comment "Evas DRM Engine needs mesa3d w/ EGL support, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL
 +
- choice
- 	bool "OpenGL support"
- 	help
+ comment "libevas loaders"
+ 
+ config BR2_PACKAGE_EFL_PNG
 diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index d823af2..7a8e47f 100644
+index e08f252..d823af2 100644
 --- a/package/efl/efl.mk
 +++ b/package/efl/efl.mk
-@@ -201,6 +201,16 @@ else
- EFL_CONF_OPTS += --disable-drm
+@@ -150,7 +150,7 @@ endif # BR2_PACKAGE_OPENSSL
+ 
+ ifeq ($(BR2_PACKAGE_EFL_ELPUT),y)
+ EFL_CONF_OPTS += --enable-elput
+-EFL_DEPENDENCIES += libinput libxkbcommon
++EFL_DEPENDENCIES += libinput
+ else
+ EFL_CONF_OPTS += --disable-elput
+ endif
+@@ -194,6 +194,15 @@ else ifeq ($(BR2_PACKAGE_EFL_OPENGL_NONE),y)
+ EFL_CONF_OPTS += --with-opengl=none
  endif
  
-+# The EFL Wayland support requires Evas GLES DRM engine support
-+# which depends on wayland-client to build.
-+# So enable gl_drm only when wayland support is selected.
-+ifeq ($(BR2_PACKAGE_EFL_WAYLAND),y)
-+EFL_DEPENDENCIES += wayland
-+EFL_CONF_OPTS += --enable-wayland --enable-gl-drm
++ifeq ($(BR2_PACKAGE_EFL_DRM),y)
++EFL_CONF_OPTS += --enable-drm
++EFL_DEPENDENCIES += libdrm libegl mesa3d
 +else
-+EFL_CONF_OPTS += --disable-wayland --disable-gl-drm
++EFL_CONF_OPTS += --disable-drm
 +endif
 +
- EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
- 
++EFL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBXKBCOMMON),libxkbcommon)
++
  # Loaders that need external dependencies needs to be --enable-XXX=yes
+ # otherwise the default is '=static'.
+ # All other loaders are statically built-in
