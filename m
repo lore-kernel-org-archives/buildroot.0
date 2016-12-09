@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Dec 2016 18:12:37 +0100
-Subject: [Buildroot] [git commit] php: security bump to version 7.0.14
-Message-ID: <20161209171846.6B32180102@busybox.osuosl.org>
+Date: Fri, 9 Dec 2016 18:10:37 +0100
+Subject: [Buildroot] [git commit] mpv: bump to version 0.22.0
+Message-ID: <20161209171846.1038580102@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2483170d3258ee3e805ead6f0ebafe9fc6765c19
+commit: https://git.buildroot.net/buildroot/commit/?id=64fd5763894872a53cf1b0298d89d32c751a1d38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/mpv/mpv.hash | 2 +-
+ package/mpv/mpv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index f1cd346..0424e46 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index fb287ef..be6b559 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
 @@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256 357ba7f93975d7d836abed0852dc3ed96a988af539e87750613294cbee82f1bf  php-7.0.13.tar.xz
-+sha256 0f1dff6392a1cc2ed126b9695f580a2ed77eb09d2c23b41cabfb41e6f27a8c89  php-7.0.14.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index c8abe66..8c1ccef 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+ # Locally calculated
+-sha256	fe6ec9d2ded5ce84b963f54b812d579d04f944f4a737f3ae639c4d5d9e842b56	v0.20.0.tar.gz
++sha256	c0f9ac8f0e37a391d19007b333ef8787c2f45d75a0d4401c0098cde52c5082f6	v0.22.0.tar.gz
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 0dd488d..1eb83e9 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.0.13
-+PHP_VERSION = 7.0.14
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-MPV_VERSION = 0.20.0
++MPV_VERSION = 0.22.0
+ MPV_SITE = https://github.com/mpv-player/mpv/archive
+ MPV_SOURCE = v$(MPV_VERSION).tar.gz
+ MPV_DEPENDENCIES = \
