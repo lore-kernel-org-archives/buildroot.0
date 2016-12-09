@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 09:48:37 -0300
-Subject: [Buildroot] [PATCH] gvfs: bump to version 1.30.2
-Message-ID: <1481287717-27257-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Dec 2016 09:48:56 -0300
+Subject: [Buildroot] [PATCH] grep: bump to version 2.27
+Message-ID: <1481287736-27307-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gvfs/gvfs.hash | 4 ++--
- package/gvfs/gvfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/grep/grep.hash | 2 +-
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index f54d239..82e29b9 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index 789ceea..326737a 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.1.1.sha256sum
--sha256	585b5de66eb99a09c020f34955db31e4764c8260a8afbb761ae264a958152ecc	gvfs-1.30.1.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.2.sha256sum
-+sha256	dd897a13af0728765baead44426e2cf968cd2c9caad3bee4d589970f7612c5d7	gvfs-1.30.2.tar.xz
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 60bfb59..ae2709c 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated after checking signature
+-sha256 246a8fb37e82aa33d495b07c22fdab994c039ab0f818538eac81b01e78636870  grep-2.26.tar.xz
++sha256 ad4cc44d23074a1c3a8baae8fbafff2a8c60f38a9a6108f985eef6fbee6dcaeb  grep-2.27.tar.xz
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index a8e124e..7615f30 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GVFS_VERSION_MAJOR = 1.30
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).1.1
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
+-GREP_VERSION = 2.26
++GREP_VERSION = 2.27
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPLv3+
 -- 
 2.7.3
