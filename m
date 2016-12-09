@@ -1,39 +1,88 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2016 12:44:01 -0300
-Subject: [Buildroot] [PATCH] links: security bump to version 2.14
-Message-ID: <1481298241-5638-1-git-send-email-gustavo@zacarias.com.ar>
+From: Anand Sivaram <aspnair@gmail.com>
+Date: Fri, 9 Dec 2016 22:16:46 +0530
+Subject: [Buildroot] Compilation error in version: 2016.11,
+	package util-linux
+In-Reply-To: <20161209155918.7b95b069@free-electrons.com>
+References: <CAHBw83cw_XOYRvXjFdox5XE0TJAxGUXhyQxegWZnW4aSi=9qWg@mail.gmail.com>
+ <20161209155918.7b95b069@free-electrons.com>
+Message-ID: <CAHBw83fwM0KT5w2FtS0vm002uhJOAS0ETjJ=6b6o7ecbZaFQjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/links/links.hash | 2 +-
- package/links/links.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks Thomas for the clarification.
 
-diff --git a/package/links/links.hash b/package/links/links.hash
-index 2d9a7b3..a63af4c 100644
---- a/package/links/links.hash
-+++ b/package/links/links.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 98411811ded1e8028f5aed708dd7d8ec0ae63ce24c2991a0241a989b7d09d84e  links-2.12.tar.bz2
-+sha256 f70d0678ef1c5550953bdc27b12e72d5de86e53b05dd59b0fc7f07c507f244b8  links-2.14.tar.bz2
-diff --git a/package/links/links.mk b/package/links/links.mk
-index ab2b583..ce0e638 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINKS_VERSION = 2.12
-+LINKS_VERSION = 2.14
- LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
--- 
-2.7.3
+Anand
+
+
+On 9 December 2016 at 20:29, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
+>
+> On Fri, 9 Dec 2016 20:10:30 +0530, Anand Sivaram wrote:
+>
+> > I tried to upgrade my buildroot to 2016.11 from 2016.05.  Now I am
+> getting
+> > a compilation error in util-linux because BR2_PACKAGE_UTIL_LINUX_
+> LIBMOUNT
+> > is enabled and it got enabled automatically because of the newer version
+> of
+> > libglib2. (For me libglib2 has to be enabled in my system).
+> >
+> > In 2016.05 version, neither I enabled libmount directly not it got
+> enabled
+> > as a dependency of glib2.0
+> >
+> > Target Details:
+> > Toolchain: External gcc-4.7.3, uClibc-0.9.33.2 on MIPS 24Kc.
+> > Build Machine: Debian Testing/Stretch
+> >
+> > Compilation Error: Because of have_scanf_alloc_modifier
+> >
+> > checking for tgetent in -ltinfo... no
+> > configure: error: libmount selected, but required scanf string alloc
+> > modifier not available
+> > package/pkg-generic.mk:206: recipe for target
+> > '/media/build/buildroot/output/build/util-linux-2.28.
+> 2/.stamp_configured'
+> > failed
+> > make[1]: ***
+> > [/media/build/buildroot/output/build/util-linux-2.28.
+> 2/.stamp_configured]
+> > Error 1
+> > make[1]: Leaving directory '/media/build/buildroot'
+> > Makefile:292: recipe for target 'buildroot' failed
+> > make: *** [buildroot] Error 2
+> >
+> > While searching I found the following patch, but for an older version of
+> > util-linux.
+> > http://repository.timesys.com/buildsources/u/util-linux/
+> util-linux-2.27.1/util-linux-2.27.1-sscanf-no-ms-as.patch
+> >
+> > I do not require libmount directly. I could remove dependency of libmount
+> > and disable it from glib2.0 and try to disable the LIBMOUNT flag
+> > altogether.  But, that is a workaround.
+> >
+> > Any help would be really appreciated.
+>
+> We used to have 0001-build-sys-fix-uClibc-ng-scanf-check.patch, which
+> we dropped when bumping to util-linux 2.28.1.
+>
+> But uClibc 0.9.33.2 is very old, and Buildroot no longer support or
+> tests such old C library. You should really upgrade your toolchain to
+> have a more recent uClibc version (using uClibc-ng).
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161209/9e40fc13/attachment.html>
