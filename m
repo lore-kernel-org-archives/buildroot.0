@@ -1,45 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Dec 2016 17:54:12 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{8, 4, 1}.x and 3.{18,
-	12}.x series
-Message-ID: <20161209171845.9787181E8C@busybox.osuosl.org>
+Date: Fri, 9 Dec 2016 17:55:04 +0100
+Subject: [Buildroot] [git commit] libinput: bump to version 1.5.3
+Message-ID: <20161209171845.B31A67FF29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=397fba1c05f3d44db624e7a2793efe1d94530af3
+commit: https://git.buildroot.net/buildroot/commit/?id=309126dd607a1e024ab2831cffa8902f9365c5e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9cdd5fa..da17068 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -226,15 +226,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.84"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.67"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.68"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.44"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.45"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.35"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.36"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.1.36"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.37"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
- 	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
--	default "4.8.12"	if BR2_KERNEL_HEADERS_4_8
-+	default "4.8.13"	if BR2_KERNEL_HEADERS_4_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index ea7bdf7..0345c13 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-November/031926.html
+-sha256	ba26e2bc64ed551eaef193178ed06b07b97a09ac6f4e442f5f15bbc3f3174682	libinput-1.5.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-December/032110.html
++sha256	91206c523b4e7aeecf296d0b94276c61bea90b9260d198c8ee3a91eced10a6e3	libinput-1.5.3.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 765a3cb..b079305 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.5.2
++LIBINPUT_VERSION = 1.5.3
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
