@@ -1,37 +1,34 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 10 Dec 2016 16:50:46 +0100
-Subject: [Buildroot] [PATCH] package/enlightenment: remove uClibc (legacy)
-	workaround
-Message-ID: <1481385046-5643-1-git-send-email-romain.naour@gmail.com>
+Date: Sat, 10 Dec 2016 16:57:13 +0100
+Subject: [Buildroot] [PATCH] package/matchbox-lib: fix xlib libcomposite and
+	libxpm symbols
+Message-ID: <1481385433-6610-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot doesn't support uClibc (legacy) since 2016.02 release, so
-this workaround is not needed anymore.
-
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/enlightenment/enlightenment.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/matchbox-lib/matchbox-lib.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 01448ee..7037afe 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -30,11 +30,6 @@ else
- ENLIGHTENMENT_CONF_OPTS += --disable-systemd
- endif
+diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
+index d43e2b8..451279e 100644
+--- a/package/matchbox-lib/matchbox-lib.mk
++++ b/package/matchbox-lib/matchbox-lib.mk
+@@ -21,8 +21,8 @@ endef
  
--# uClibc has an old incomplete sys/ptrace.h for powerpc & sparc
--ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
--ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
--endif
--
- # alsa backend needs mixer support
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
- ENLIGHTENMENT_DEPENDENCIES += alsa-lib
+ MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_POST_INSTALL_FIXES
+ 
+-ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
+-ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
++ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
+ MATCHBOX_LIB_DEPENDENCIES += xlib_libXpm
+ endif
+ endif
 -- 
 2.5.5
