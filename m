@@ -1,114 +1,290 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 10 Dec 2016 20:20:41 +0100
-Subject: [Buildroot] [Patch v2 0/9] Introducing service
-	supervision/management with s6
-Message-ID: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Sat, 10 Dec 2016 20:20:42 +0100
+Subject: [Buildroot] [Patch v2 1/9] skalibs: new package
+In-Reply-To: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1481397650-14664-2-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+This new package provides skalibs, a collection of free software / open
+source C development files used for building all software from
+skarnet.org.
 
-This series provides all the packages for programs and libraries to build an
-embedded system with service supervision and management using s6 from
-http://skarnet.org.
-
-Note that these packages only provide the mechanism for supervising/managing
-services using s6, not the policy. Packages to provide a policy suitable for
-Buildroot-based embedded systems, using s6 as init (instead of SysV or
-systemd), may be provided later. An example is available in the
-buildroot-demo-s6 project [1].
-
-[1] https://github.com/elebihan/buildroot-demo-s6/
-
-Best regards,
-
-ELB
-
-v1 -> v2:
-
- - bump all packages to skarnet.org fall release versions.
- - add dependency on BR2_USE_MMU.
- - remove limitation to glibc.
- - split skalibs endianness and type sizes patches.
-
-Eric Le Bihan (9):
-  skalibs: new package
-  execline: new package
-  s6: new package
-  s6-dns: new package
-  s6-networking: new package
-  s6-rc: new package
-  s6-portable-utils: new package
-  s6-linux-utils: new package
-  s6-linux-init: new package
-
- package/Config.in                                  |  9 +++
- package/execline/Config.in                         | 12 +++
- package/execline/Config.in.host                    |  7 ++
- package/execline/execline.hash                     |  2 +
- package/execline/execline.mk                       | 69 ++++++++++++++++
- package/s6-dns/Config.in                           |  9 +++
- package/s6-dns/s6-dns.hash                         |  2 +
- package/s6-dns/s6-dns.mk                           | 45 +++++++++++
- package/s6-linux-init/Config.in                    | 11 +++
- package/s6-linux-init/s6-linux-init.hash           |  2 +
- package/s6-linux-init/s6-linux-init.mk             | 36 +++++++++
- package/s6-linux-utils/Config.in                   |  9 +++
- package/s6-linux-utils/s6-linux-utils.hash         |  2 +
- package/s6-linux-utils/s6-linux-utils.mk           | 34 ++++++++
- package/s6-networking/Config.in                    | 12 +++
- package/s6-networking/s6-networking.hash           |  2 +
- package/s6-networking/s6-networking.mk             | 48 +++++++++++
- package/s6-portable-utils/Config.in                | 11 +++
- package/s6-portable-utils/s6-portable-utils.hash   |  2 +
- package/s6-portable-utils/s6-portable-utils.mk     | 34 ++++++++
- package/s6-rc/Config.in                            | 11 +++
- package/s6-rc/Config.in.host                       |  6 ++
- package/s6-rc/s6-rc.hash                           |  2 +
- package/s6-rc/s6-rc.mk                             | 74 +++++++++++++++++
- package/s6/Config.in                               | 10 +++
- package/s6/s6.hash                                 |  2 +
- package/s6/s6.mk                                   | 72 +++++++++++++++++
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/Config.in                                  |  1 +
  .../0001-No-runtime-tests-for-endianness.patch     | 93 ++++++++++++++++++++++
  .../0002-No-runtime-tests-for-type-sizes.patch     | 52 ++++++++++++
  package/skalibs/Config.in                          |  9 +++
  package/skalibs/skalibs.hash                       |  2 +
  package/skalibs/skalibs.mk                         | 59 ++++++++++++++
- 32 files changed, 750 insertions(+)
- create mode 100644 package/execline/Config.in
- create mode 100644 package/execline/Config.in.host
- create mode 100644 package/execline/execline.hash
- create mode 100644 package/execline/execline.mk
- create mode 100644 package/s6-dns/Config.in
- create mode 100644 package/s6-dns/s6-dns.hash
- create mode 100644 package/s6-dns/s6-dns.mk
- create mode 100644 package/s6-linux-init/Config.in
- create mode 100644 package/s6-linux-init/s6-linux-init.hash
- create mode 100644 package/s6-linux-init/s6-linux-init.mk
- create mode 100644 package/s6-linux-utils/Config.in
- create mode 100644 package/s6-linux-utils/s6-linux-utils.hash
- create mode 100644 package/s6-linux-utils/s6-linux-utils.mk
- create mode 100644 package/s6-networking/Config.in
- create mode 100644 package/s6-networking/s6-networking.hash
- create mode 100644 package/s6-networking/s6-networking.mk
- create mode 100644 package/s6-portable-utils/Config.in
- create mode 100644 package/s6-portable-utils/s6-portable-utils.hash
- create mode 100644 package/s6-portable-utils/s6-portable-utils.mk
- create mode 100644 package/s6-rc/Config.in
- create mode 100644 package/s6-rc/Config.in.host
- create mode 100644 package/s6-rc/s6-rc.hash
- create mode 100644 package/s6-rc/s6-rc.mk
- create mode 100644 package/s6/Config.in
- create mode 100644 package/s6/s6.hash
- create mode 100644 package/s6/s6.mk
+ 6 files changed, 216 insertions(+)
  create mode 100644 package/skalibs/0001-No-runtime-tests-for-endianness.patch
  create mode 100644 package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
  create mode 100644 package/skalibs/Config.in
  create mode 100644 package/skalibs/skalibs.hash
  create mode 100644 package/skalibs/skalibs.mk
 
---
+diff --git a/package/Config.in b/package/Config.in
+index a58147a..d640035 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1358,6 +1358,7 @@ endif
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
+ 	source "package/shapelib/Config.in"
++	source "package/skalibs/Config.in"
+ 	source "package/sphinxbase/Config.in"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tinycbor/Config.in"
+diff --git a/package/skalibs/0001-No-runtime-tests-for-endianness.patch b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
+new file mode 100644
+index 0000000..7a711d5
+--- /dev/null
++++ b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
+@@ -0,0 +1,93 @@
++From 1e6f0b094c6ce6454be572704b866d2ce0962e59 Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Sun, 4 Dec 2016 19:10:40 +0100
++Subject: [PATCH 1/2] No runtime tests for endianness
++
++Replace build and execution of runtime test programs for determining
++the endianness of the target with compile time test programs.
++
++This improves support for cross-compilation.
++---
++ configure                     | 15 +++++++++++----
++ src/sysdeps/trybigendian.c    | 16 ++++++++++++++++
++ src/sysdeps/trylittleendian.c | 16 ++++++++++++++++
++ 3 files changed, 43 insertions(+), 4 deletions(-)
++ create mode 100644 src/sysdeps/trybigendian.c
++ create mode 100644 src/sysdeps/trylittleendian.c
++
++diff --git a/configure b/configure
++index 1579025..4da9c5e 100755
++--- a/configure
+++++ b/configure
++@@ -463,13 +463,20 @@ EOF
++   fi
++   exec 3>&-
++ 
++-  echo "Checking system endianness..."
++-  $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO -o tryendianness src/sysdeps/tryendianness.c
++-  endianness=$(./tryendianness) || fail "$0: unable to determine endianness"
+++    echo "Checking system endianness..."
+++  if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO -o trybigendian src/sysdeps/trybigendian.c 2>/dev/null; then
+++      endianness=big
+++  else
+++      if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO -o trylittleendian src/sysdeps/trylittleendian.c 2>/dev/null; then
+++          endianness=little
+++      else
+++          fail "$0: unable to determine endianness"
+++      fi
+++  fi
++   echo "endianness: $endianness" >> $sysdeps/sysdeps
++   echo "#define ${package_macro_name}_ENDIANNESS \"$endianness\"" >> $sysdeps/sysdeps.h
++   echo "  ... $endianness"
++-  rm -f tryendianness
+++  rm -f trybigendian trylittleendian
++ 
++   trytypesize ushort USHORT "unsigned short"
++   trytypesize uint UINT "unsigned int"
++diff --git a/src/sysdeps/trybigendian.c b/src/sysdeps/trybigendian.c
++new file mode 100644
++index 0000000..d857572
++--- /dev/null
+++++ b/src/sysdeps/trybigendian.c
++@@ -0,0 +1,16 @@
+++#if defined(__BYTE_ORDER) && (__BYTE_ORDER == __BIG_ENDIAN) ||	       \
+++	defined(__BYTE_ORDER__) && (__BYTE_ORDER__  == __ORDER_BIG_ENDIAN__) || \
+++	defined(__BIG_ENDIAN) ||				       \
+++	defined(__ARMEB__) ||					       \
+++	defined(__THUMBEB__) ||				       \
+++	defined(__AARCH64EB__) ||				       \
+++	defined(_MIPSEB) || defined(__MIPSEB) || defined(__MIPSEB__)
+++#define YEAH
+++#else
+++#error "not big endian"
+++#endif
+++
+++int main(void)
+++{
+++	return 0;
+++}
++diff --git a/src/sysdeps/trylittleendian.c b/src/sysdeps/trylittleendian.c
++new file mode 100644
++index 0000000..eba065a
++--- /dev/null
+++++ b/src/sysdeps/trylittleendian.c
++@@ -0,0 +1,16 @@
+++#if defined(__BYTE_ORDER) && (__BYTE_ORDER == __LITTLE_ENDIAN) ||	\
+++	defined(__BYTE_ORDER__) && (__BYTE_ORDER__  == __ORDER_LITTLE_ENDIAN__) || \
+++	defined(__LITTLE_ENDIAN) ||					\
+++	defined(__ARMEL__) ||						\
+++	defined(__THUMBEL__) ||					\
+++	defined(__AARCH64EL__) ||					\
+++	defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__)
+++#define YEAH
+++#else
+++#error "not little endian"
+++#endif
+++
+++int main(void)
+++{
+++	return 0;
+++}
++-- 
++2.5.5
++
+diff --git a/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch b/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
+new file mode 100644
+index 0000000..c58af33
+--- /dev/null
++++ b/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
+@@ -0,0 +1,52 @@
++From d868600a3f437750bc44a783d677a25a48100096 Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Sun, 4 Dec 2016 19:11:25 +0100
++Subject: [PATCH 2/2] No runtime tests for type sizes
++
++Replace build and execution of runtime test programs for determining
++some type sizes of the target with compile time test programs.
++
++This improves support for cross-compilation.
++---
++ configure | 24 +++++++++++++++++++++---
++ 1 file changed, 21 insertions(+), 3 deletions(-)
++
++diff --git a/configure b/configure
++index 4da9c5e..b5926ca 100755
++--- a/configure
+++++ b/configure
++@@ -157,10 +157,28 @@ choose () {
++ 
++ trytypesize () {
++   echo "Checking size of $3..."
++-  $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o trysizeof$1 src/sysdeps/trysizeof$1.c
++-  type_size=$(./trysizeof$1) || fail "$0: unable to determine size of $3"
+++  r=false
+++  type_size=0
+++  while true; do
+++    cat<<EOF>trysizeof$1.c
+++#include <sys/types.h>
+++
+++int main(void)
+++{
+++  static int v = 1 / !!((sizeof($3) == $type_size));
+++  return 0;
+++}
+++EOF
+++    if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o trysizeof$1 trysizeof$1.c 2>/dev/null; then
+++        r=true
+++        break
+++    fi
+++    type_size=$(expr $type_size + 1)
+++    test $type_size -le 16 || break
+++  done
+++  test $r = true || fail "$0: unable to determine size of $3"
++   type_bits=$(expr 8 \* $type_size)
++-  rm -f trysizeof$1
+++  rm -f trysizeof$1 trysizeof$1.c
++   echo "sizeof$1: $type_size" >> $sysdeps/sysdeps
++   echo "#define ${package_macro_name}_SIZEOF$2 $type_size" >> $sysdeps/sysdeps.h
++   echo "#define ${package_macro_name}_$2_BITS $type_bits" >> $sysdeps/sysdeps.h
++-- 
++2.5.5
++
+diff --git a/package/skalibs/Config.in b/package/skalibs/Config.in
+new file mode 100644
+index 0000000..307b016
+--- /dev/null
++++ b/package/skalibs/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_SKALIBS
++	bool "skalibs"
++	depends on BR2_USE_MMU # fork()
++	help
++	  skalibs is a package centralizing the free software / open source C
++	  development files used for building all software at skarnet.org:
++	  it contains essentially general-purpose libraries.
++
++	  http://skarnet.org/software/skalibs/
+diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
+new file mode 100644
+index 0000000..195ac47
+--- /dev/null
++++ b/package/skalibs/skalibs.hash
+@@ -0,0 +1,2 @@
++# Locally generated
++sha256 0708172bc2ec9825f8a4f312d35f8dcd94da5f291425a598c33c873b3de77df8 skalibs-2.4.0.2.tar.gz
+diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
+new file mode 100644
+index 0000000..be02c7e
+--- /dev/null
++++ b/package/skalibs/skalibs.mk
+@@ -0,0 +1,59 @@
++################################################################################
++#
++# skalibs
++#
++################################################################################
++
++SKALIBS_VERSION = 2.4.0.2
++SKALIBS_SITE = http://skarnet.org/software/skalibs
++SKALIBS_LICENSE = ISC
++SKALIBS_LICENSE_FILES = COPYING
++SKALIBS_INSTALL_STAGING = YES
++
++SKALIBS_CONF_OPTS = \
++	--prefix=/usr \
++	--with-default-path=/sbin:/usr/sbin:/bin:/usr/bin \
++	$(SHARED_STATIC_LIBS_OPTS)
++
++define SKALIBS_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(SKALIBS_CONF_OPTS))
++endef
++
++define SKALIBS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define SKALIBS_REMOVE_STATIC_LIB_DIR
++	rm -rf $(TARGET_DIR)/usr/lib/skalibs
++endef
++
++SKALIBS_POST_INSTALL_TARGET_HOOKS += SKALIBS_REMOVE_STATIC_LIB_DIR
++
++define SKALIBS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define SKALIBS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++HOST_SKALIBS_CONF_OPTS = \
++	--prefix=/usr \
++	--disable-static \
++	--enable-shared \
++	--disable-allstatic
++
++define HOST_SKALIBS_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_SKALIBS_CONF_OPTS))
++endef
++
++define HOST_SKALIBS_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR)
++endef
++
++define HOST_SKALIBS_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+-- 
 2.5.5
