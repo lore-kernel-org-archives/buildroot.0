@@ -1,135 +1,120 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 10 Dec 2016 20:20:43 +0100
-Subject: [Buildroot] [Patch v2 2/9] execline: new package
+Date: Sat, 10 Dec 2016 20:20:44 +0100
+Subject: [Buildroot] [Patch v2 3/9] s6: new package
 In-Reply-To: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1481397650-14664-3-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1481397650-14664-4-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package provides execline, a (non-interactive) scripting language,
-like sh, used in the s6 supervision system.
+This new package provides s6, a small suite of programs for UNIX,
+designed to allow process supervision (a.k.a service supervision), in
+the line of daemontools and runit.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/Config.in               |  1 +
- package/execline/Config.in      | 12 +++++++
- package/execline/Config.in.host |  7 +++++
- package/execline/execline.hash  |  2 ++
- package/execline/execline.mk    | 69 +++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 91 insertions(+)
- create mode 100644 package/execline/Config.in
- create mode 100644 package/execline/Config.in.host
- create mode 100644 package/execline/execline.hash
- create mode 100644 package/execline/execline.mk
+ package/Config.in    |  1 +
+ package/s6/Config.in | 10 ++++++++
+ package/s6/s6.hash   |  2 ++
+ package/s6/s6.mk     | 72 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 85 insertions(+)
+ create mode 100644 package/s6/Config.in
+ create mode 100644 package/s6/s6.hash
+ create mode 100644 package/s6/s6.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d640035..ec90202 100644
+index ec90202..fdd5a63 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -504,6 +504,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-p1-zlib/Config.in"
- endmenu
- endif
-+	source "package/execline/Config.in"
- 	source "package/ficl/Config.in"
- 	source "package/gauche/Config.in"
- 	source "package/guile/Config.in"
-diff --git a/package/execline/Config.in b/package/execline/Config.in
+@@ -1748,6 +1748,7 @@ menu "System tools"
+ 	source "package/quota/Config.in"
+ 	source "package/rsyslog/Config.in"
+ 	source "package/runc/Config.in"
++	source "package/s6/Config.in"
+ 	source "package/scrub/Config.in"
+ 	source "package/scrypt/Config.in"
+ 	source "package/smack/Config.in"
+diff --git a/package/s6/Config.in b/package/s6/Config.in
 new file mode 100644
-index 0000000..8e2e6dc
+index 0000000..7b6b86b
 --- /dev/null
-+++ b/package/execline/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_EXECLINE
-+	bool "execline"
-+	select BR2_PACKAGE_SKALIBS
-+	depends on BR2_USE_MMU # skalibs
++++ b/package/s6/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_S6
++	bool "s6"
++	select BR2_PACKAGE_EXECLINE
++	depends on BR2_USE_MMU # execline
 +	help
-+	  execline is a (non-interactive) scripting language, like sh ; but its
-+	  syntax is quite different from a traditional shell syntax.
-+	  The execlineb program is meant to be used as an interpreter for a text
-+	  file; the other commands are essentially useful inside an execlineb
-+	  script.
++	  s6 is a small suite of programs for UNIX, designed to allow process
++	  supervision (a.k.a service supervision), in the line of daemontools
++	  and runit, as well as various operations on processes and daemons.
 +
-+	  http://skarnet.org/software/execline/
-diff --git a/package/execline/Config.in.host b/package/execline/Config.in.host
++	  http://skarnet.org/software/s6/
+diff --git a/package/s6/s6.hash b/package/s6/s6.hash
 new file mode 100644
-index 0000000..4e188e1
+index 0000000..36526de
 --- /dev/null
-+++ b/package/execline/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_EXECLINE
-+	bool "host execline"
-+	help
-+	  Host version of execline, a (non-interactive) scripting language,
-+	  like sh.
-+
-+	  http://skarnet.org/software/execline/
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-new file mode 100644
-index 0000000..61fc99c
---- /dev/null
-+++ b/package/execline/execline.hash
++++ b/package/s6/s6.hash
 @@ -0,0 +1,2 @@
 +# Locally generated
-+sha256 93bd744f2e3ad204cb89f147efdc6ca4e622f9c6bfc9895e0b2cb8b0480029de execline-2.2.0.0.tar.gz
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
++sha256 5e788d5935dbcce76ac9a99cfcf6ee46a2ffb84220c84225df7589e9a3585560 s6-2.4.0.0.tar.gz
+diff --git a/package/s6/s6.mk b/package/s6/s6.mk
 new file mode 100644
-index 0000000..5f17eea
+index 0000000..17ea9d3
 --- /dev/null
-+++ b/package/execline/execline.mk
-@@ -0,0 +1,69 @@
++++ b/package/s6/s6.mk
+@@ -0,0 +1,72 @@
 +################################################################################
 +#
-+# execline
++# s6
 +#
 +################################################################################
 +
-+EXECLINE_VERSION = 2.2.0.0
-+EXECLINE_SITE = http://skarnet.org/software/execline
-+EXECLINE_LICENSE = ISC
-+EXECLINE_LICENSE_FILES = COPYING
-+EXECLINE_INSTALL_STAGING = YES
-+EXECLINE_DEPENDENCIES = skalibs
++S6_VERSION = 2.4.0.0
++S6_SITE = http://skarnet.org/software/s6
++S6_LICENSE = ISC
++S6_LICENSE_FILES = COPYING
++S6_INSTALL_STAGING = YES
++S6_DEPENDENCIES = execline
 +
-+EXECLINE_CONF_OPTS = \
++S6_CONF_OPTS = \
 +	--prefix=/usr \
 +	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
 +	--with-include=$(STAGING_DIR)/usr/include \
 +	--with-dynlib=$(STAGING_DIR)/usr/lib \
++	--with-lib=$(STAGING_DIR)/usr/lib/execline \
 +	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
 +	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
 +	$(SHARED_STATIC_LIBS_OPTS)
 +
-+define EXECLINE_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(EXECLINE_CONF_OPTS))
++define S6_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_CONF_OPTS))
 +endef
 +
-+define EXECLINE_BUILD_CMDS
++define S6_BUILD_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+define EXECLINE_REMOVE_STATIC_LIB_DIR
-+	rm -rf $(TARGET_DIR)/usr/lib/execline
-+endef
-+
-+EXECLINE_POST_INSTALL_TARGET_HOOKS += EXECLINE_REMOVE_STATIC_LIB_DIR
-+
-+define EXECLINE_INSTALL_TARGET_CMDS
++define S6_INSTALL_TARGET_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
 +endef
 +
-+define EXECLINE_INSTALL_STAGING_CMDS
++define S6_REMOVE_STATIC_LIB_DIR
++	rm -rf $(TARGET_DIR)/usr/lib/s6
++endef
++
++S6_POST_INSTALL_TARGET_HOOKS += S6_REMOVE_STATIC_LIB_DIR
++
++define S6_INSTALL_STAGING_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
 +endef
 +
-+HOST_EXECLINE_DEPENDENCIES = host-skalibs
++HOST_S6_DEPENDENCIES = host-execline
 +
-+HOST_EXECLINE_CONF_OPTS = \
++HOST_S6_CONF_OPTS = \
 +	--prefix=/usr \
 +	--with-sysdeps=$(HOST_DIR)/usr/lib/skalibs/sysdeps \
 +	--with-include=$(HOST_DIR)/usr/include \
@@ -138,16 +123,18 @@ index 0000000..5f17eea
 +	--enable-shared \
 +	--disable-allstatic
 +
-+define HOST_EXECLINE_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_EXECLINE_CONF_OPTS))
++define HOST_S6_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_S6_CONF_OPTS))
 +endef
 +
-+define HOST_EXECLINE_BUILD_CMDS
++define HOST_S6_BUILD_CMDS
 +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR)
 +endef
 +
-+define HOST_EXECLINE_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
++define HOST_S6_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) \
++		install-dynlib \
++		install-include
 +endef
 +
 +$(eval $(generic-package))
