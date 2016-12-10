@@ -1,286 +1,152 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 10 Dec 2016 20:20:42 +0100
-Subject: [Buildroot] [Patch v2 1/9] skalibs: new package
+Date: Sat, 10 Dec 2016 20:20:43 +0100
+Subject: [Buildroot] [Patch v2 2/9] execline: new package
 In-Reply-To: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1481397650-14664-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1481397650-14664-3-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides skalibs, a collection of free software / open
-source C development files used for building all software from
-skarnet.org.
+This package provides execline, a (non-interactive) scripting language,
+like sh, used in the s6 supervision system.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/Config.in                                  |  1 +
- .../0001-No-runtime-tests-for-endianness.patch     | 93 ++++++++++++++++++++++
- .../0002-No-runtime-tests-for-type-sizes.patch     | 52 ++++++++++++
- package/skalibs/Config.in                          |  9 +++
- package/skalibs/skalibs.hash                       |  2 +
- package/skalibs/skalibs.mk                         | 59 ++++++++++++++
- 6 files changed, 216 insertions(+)
- create mode 100644 package/skalibs/0001-No-runtime-tests-for-endianness.patch
- create mode 100644 package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
- create mode 100644 package/skalibs/Config.in
- create mode 100644 package/skalibs/skalibs.hash
- create mode 100644 package/skalibs/skalibs.mk
+ package/Config.in               |  1 +
+ package/execline/Config.in      | 12 +++++++
+ package/execline/Config.in.host |  7 +++++
+ package/execline/execline.hash  |  2 ++
+ package/execline/execline.mk    | 69 +++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 91 insertions(+)
+ create mode 100644 package/execline/Config.in
+ create mode 100644 package/execline/Config.in.host
+ create mode 100644 package/execline/execline.hash
+ create mode 100644 package/execline/execline.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a58147a..d640035 100644
+index d640035..ec90202 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1358,6 +1358,7 @@ endif
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
- 	source "package/shapelib/Config.in"
-+	source "package/skalibs/Config.in"
- 	source "package/sphinxbase/Config.in"
- 	source "package/startup-notification/Config.in"
- 	source "package/tinycbor/Config.in"
-diff --git a/package/skalibs/0001-No-runtime-tests-for-endianness.patch b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
+@@ -504,6 +504,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
++	source "package/execline/Config.in"
+ 	source "package/ficl/Config.in"
+ 	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+diff --git a/package/execline/Config.in b/package/execline/Config.in
 new file mode 100644
-index 0000000..7a711d5
+index 0000000..8e2e6dc
 --- /dev/null
-+++ b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
-@@ -0,0 +1,93 @@
-+From 1e6f0b094c6ce6454be572704b866d2ce0962e59 Mon Sep 17 00:00:00 2001
-+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Date: Sun, 4 Dec 2016 19:10:40 +0100
-+Subject: [PATCH 1/2] No runtime tests for endianness
-+
-+Replace build and execution of runtime test programs for determining
-+the endianness of the target with compile time test programs.
-+
-+This improves support for cross-compilation.
-+---
-+ configure                     | 15 +++++++++++----
-+ src/sysdeps/trybigendian.c    | 16 ++++++++++++++++
-+ src/sysdeps/trylittleendian.c | 16 ++++++++++++++++
-+ 3 files changed, 43 insertions(+), 4 deletions(-)
-+ create mode 100644 src/sysdeps/trybigendian.c
-+ create mode 100644 src/sysdeps/trylittleendian.c
-+
-+diff --git a/configure b/configure
-+index 1579025..4da9c5e 100755
-+--- a/configure
-++++ b/configure
-+@@ -463,13 +463,20 @@ EOF
-+   fi
-+   exec 3>&-
-+ 
-+-  echo "Checking system endianness..."
-+-  $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO -o tryendianness src/sysdeps/tryendianness.c
-+-  endianness=$(./tryendianness) || fail "$0: unable to determine endianness"
-++    echo "Checking system endianness..."
-++  if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO -o trybigendian src/sysdeps/trybigendian.c 2>/dev/null; then
-++      endianness=big
-++  else
-++      if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO -o trylittleendian src/sysdeps/trylittleendian.c 2>/dev/null; then
-++          endianness=little
-++      else
-++          fail "$0: unable to determine endianness"
-++      fi
-++  fi
-+   echo "endianness: $endianness" >> $sysdeps/sysdeps
-+   echo "#define ${package_macro_name}_ENDIANNESS \"$endianness\"" >> $sysdeps/sysdeps.h
-+   echo "  ... $endianness"
-+-  rm -f tryendianness
-++  rm -f trybigendian trylittleendian
-+ 
-+   trytypesize ushort USHORT "unsigned short"
-+   trytypesize uint UINT "unsigned int"
-+diff --git a/src/sysdeps/trybigendian.c b/src/sysdeps/trybigendian.c
-+new file mode 100644
-+index 0000000..d857572
-+--- /dev/null
-++++ b/src/sysdeps/trybigendian.c
-+@@ -0,0 +1,16 @@
-++#if defined(__BYTE_ORDER) && (__BYTE_ORDER == __BIG_ENDIAN) ||	       \
-++	defined(__BYTE_ORDER__) && (__BYTE_ORDER__  == __ORDER_BIG_ENDIAN__) || \
-++	defined(__BIG_ENDIAN) ||				       \
-++	defined(__ARMEB__) ||					       \
-++	defined(__THUMBEB__) ||				       \
-++	defined(__AARCH64EB__) ||				       \
-++	defined(_MIPSEB) || defined(__MIPSEB) || defined(__MIPSEB__)
-++#define YEAH
-++#else
-++#error "not big endian"
-++#endif
-++
-++int main(void)
-++{
-++	return 0;
-++}
-+diff --git a/src/sysdeps/trylittleendian.c b/src/sysdeps/trylittleendian.c
-+new file mode 100644
-+index 0000000..eba065a
-+--- /dev/null
-++++ b/src/sysdeps/trylittleendian.c
-+@@ -0,0 +1,16 @@
-++#if defined(__BYTE_ORDER) && (__BYTE_ORDER == __LITTLE_ENDIAN) ||	\
-++	defined(__BYTE_ORDER__) && (__BYTE_ORDER__  == __ORDER_LITTLE_ENDIAN__) || \
-++	defined(__LITTLE_ENDIAN) ||					\
-++	defined(__ARMEL__) ||						\
-++	defined(__THUMBEL__) ||					\
-++	defined(__AARCH64EL__) ||					\
-++	defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__)
-++#define YEAH
-++#else
-++#error "not little endian"
-++#endif
-++
-++int main(void)
-++{
-++	return 0;
-++}
-+-- 
-+2.5.5
-+
-diff --git a/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch b/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
-new file mode 100644
-index 0000000..c58af33
---- /dev/null
-+++ b/package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
-@@ -0,0 +1,52 @@
-+From d868600a3f437750bc44a783d677a25a48100096 Mon Sep 17 00:00:00 2001
-+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Date: Sun, 4 Dec 2016 19:11:25 +0100
-+Subject: [PATCH 2/2] No runtime tests for type sizes
-+
-+Replace build and execution of runtime test programs for determining
-+some type sizes of the target with compile time test programs.
-+
-+This improves support for cross-compilation.
-+---
-+ configure | 24 +++++++++++++++++++++---
-+ 1 file changed, 21 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 4da9c5e..b5926ca 100755
-+--- a/configure
-++++ b/configure
-+@@ -157,10 +157,28 @@ choose () {
-+ 
-+ trytypesize () {
-+   echo "Checking size of $3..."
-+-  $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o trysizeof$1 src/sysdeps/trysizeof$1.c
-+-  type_size=$(./trysizeof$1) || fail "$0: unable to determine size of $3"
-++  r=false
-++  type_size=0
-++  while true; do
-++    cat<<EOF>trysizeof$1.c
-++#include <sys/types.h>
-++
-++int main(void)
-++{
-++  static int v = 1 / !!((sizeof($3) == $type_size));
-++  return 0;
-++}
-++EOF
-++    if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o trysizeof$1 trysizeof$1.c 2>/dev/null; then
-++        r=true
-++        break
-++    fi
-++    type_size=$(expr $type_size + 1)
-++    test $type_size -le 16 || break
-++  done
-++  test $r = true || fail "$0: unable to determine size of $3"
-+   type_bits=$(expr 8 \* $type_size)
-+-  rm -f trysizeof$1
-++  rm -f trysizeof$1 trysizeof$1.c
-+   echo "sizeof$1: $type_size" >> $sysdeps/sysdeps
-+   echo "#define ${package_macro_name}_SIZEOF$2 $type_size" >> $sysdeps/sysdeps.h
-+   echo "#define ${package_macro_name}_$2_BITS $type_bits" >> $sysdeps/sysdeps.h
-+-- 
-+2.5.5
-+
-diff --git a/package/skalibs/Config.in b/package/skalibs/Config.in
-new file mode 100644
-index 0000000..307b016
---- /dev/null
-+++ b/package/skalibs/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SKALIBS
-+	bool "skalibs"
-+	depends on BR2_USE_MMU # fork()
++++ b/package/execline/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_EXECLINE
++	bool "execline"
++	select BR2_PACKAGE_SKALIBS
++	depends on BR2_USE_MMU # skalibs
 +	help
-+	  skalibs is a package centralizing the free software / open source C
-+	  development files used for building all software at skarnet.org:
-+	  it contains essentially general-purpose libraries.
++	  execline is a (non-interactive) scripting language, like sh ; but its
++	  syntax is quite different from a traditional shell syntax.
++	  The execlineb program is meant to be used as an interpreter for a text
++	  file; the other commands are essentially useful inside an execlineb
++	  script.
 +
-+	  http://skarnet.org/software/skalibs/
-diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
++	  http://skarnet.org/software/execline/
+diff --git a/package/execline/Config.in.host b/package/execline/Config.in.host
 new file mode 100644
-index 0000000..195ac47
+index 0000000..4e188e1
 --- /dev/null
-+++ b/package/skalibs/skalibs.hash
++++ b/package/execline/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_EXECLINE
++	bool "host execline"
++	help
++	  Host version of execline, a (non-interactive) scripting language,
++	  like sh.
++
++	  http://skarnet.org/software/execline/
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+new file mode 100644
+index 0000000..61fc99c
+--- /dev/null
++++ b/package/execline/execline.hash
 @@ -0,0 +1,2 @@
 +# Locally generated
-+sha256 0708172bc2ec9825f8a4f312d35f8dcd94da5f291425a598c33c873b3de77df8 skalibs-2.4.0.2.tar.gz
-diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
++sha256 93bd744f2e3ad204cb89f147efdc6ca4e622f9c6bfc9895e0b2cb8b0480029de execline-2.2.0.0.tar.gz
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
 new file mode 100644
-index 0000000..be02c7e
+index 0000000..5f17eea
 --- /dev/null
-+++ b/package/skalibs/skalibs.mk
-@@ -0,0 +1,59 @@
++++ b/package/execline/execline.mk
+@@ -0,0 +1,69 @@
 +################################################################################
 +#
-+# skalibs
++# execline
 +#
 +################################################################################
 +
-+SKALIBS_VERSION = 2.4.0.2
-+SKALIBS_SITE = http://skarnet.org/software/skalibs
-+SKALIBS_LICENSE = ISC
-+SKALIBS_LICENSE_FILES = COPYING
-+SKALIBS_INSTALL_STAGING = YES
++EXECLINE_VERSION = 2.2.0.0
++EXECLINE_SITE = http://skarnet.org/software/execline
++EXECLINE_LICENSE = ISC
++EXECLINE_LICENSE_FILES = COPYING
++EXECLINE_INSTALL_STAGING = YES
++EXECLINE_DEPENDENCIES = skalibs
 +
-+SKALIBS_CONF_OPTS = \
++EXECLINE_CONF_OPTS = \
 +	--prefix=/usr \
-+	--with-default-path=/sbin:/usr/sbin:/bin:/usr/bin \
++	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
++	--with-include=$(STAGING_DIR)/usr/include \
++	--with-dynlib=$(STAGING_DIR)/usr/lib \
++	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
++	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
 +	$(SHARED_STATIC_LIBS_OPTS)
 +
-+define SKALIBS_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(SKALIBS_CONF_OPTS))
++define EXECLINE_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(EXECLINE_CONF_OPTS))
 +endef
 +
-+define SKALIBS_BUILD_CMDS
++define EXECLINE_BUILD_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+define SKALIBS_REMOVE_STATIC_LIB_DIR
-+	rm -rf $(TARGET_DIR)/usr/lib/skalibs
++define EXECLINE_REMOVE_STATIC_LIB_DIR
++	rm -rf $(TARGET_DIR)/usr/lib/execline
 +endef
 +
-+SKALIBS_POST_INSTALL_TARGET_HOOKS += SKALIBS_REMOVE_STATIC_LIB_DIR
++EXECLINE_POST_INSTALL_TARGET_HOOKS += EXECLINE_REMOVE_STATIC_LIB_DIR
 +
-+define SKALIBS_INSTALL_TARGET_CMDS
++define EXECLINE_INSTALL_TARGET_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
 +endef
 +
-+define SKALIBS_INSTALL_STAGING_CMDS
++define EXECLINE_INSTALL_STAGING_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
 +endef
 +
-+HOST_SKALIBS_CONF_OPTS = \
++HOST_EXECLINE_DEPENDENCIES = host-skalibs
++
++HOST_EXECLINE_CONF_OPTS = \
 +	--prefix=/usr \
++	--with-sysdeps=$(HOST_DIR)/usr/lib/skalibs/sysdeps \
++	--with-include=$(HOST_DIR)/usr/include \
++	--with-dynlib=$(HOST_DIR)/usr/lib \
 +	--disable-static \
 +	--enable-shared \
 +	--disable-allstatic
 +
-+define HOST_SKALIBS_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_SKALIBS_CONF_OPTS))
++define HOST_EXECLINE_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_EXECLINE_CONF_OPTS))
 +endef
 +
-+define HOST_SKALIBS_BUILD_CMDS
++define HOST_EXECLINE_BUILD_CMDS
 +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR)
 +endef
 +
-+define HOST_SKALIBS_INSTALL_CMDS
++define HOST_EXECLINE_INSTALL_CMDS
 +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
 +endef
 +
