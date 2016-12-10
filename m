@@ -1,31 +1,37 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Fri,  9 Dec 2016 21:23:00 -0500
-Subject: [Buildroot] [PATCH 1/1] swupdate: replace BR2_PREFER_STATIC_LIB
-	with BR2_STATIC_LIBS
-Message-ID: <1481336580-8387-1-git-send-email-danomimanchego123@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 10 Dec 2016 04:19:01 +0000
+Subject: [Buildroot] [Bug 8946] Valgrind fails to build with stack
+	protection turned on
+In-Reply-To: <bug-8946-163@https.bugs.busybox.net/>
+References: <bug-8946-163@https.bugs.busybox.net/>
+Message-ID: <bug-8946-163-dTGd2UDJJY@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/swupdate/swupdate.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://bugs.busybox.net/show_bug.cgi?id=8946
 
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index c905c1d..688f4ee 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -83,7 +83,7 @@ SWUPDATE_BUILD_CONFIG = $(@D)/.config
- SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
- SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- 
--ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+ifeq ($(BR2_STATIC_LIBS),y)
- define SWUPDATE_PREFER_STATIC
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(SWUPDATE_BUILD_CONFIG))
- endef
+Brandon Maier <brandon.maier@rockwellcollins.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|WORKSFORME                  |---
+             Status|RESOLVED                    |REOPENED
+
+--- Comment #8 from Brandon Maier <brandon.maier@rockwellcollins.com> ---
+We just ran into this same build error on one of our boards.
+
+I was able to recreate the error on master
+(f30eec41f95ed99909eb2c7590d83c12b9142df2) by building the beaglebone_defconfig
+with BR2_TOOLCHAIN_BUILDROOT_USE_SSP=y and BR2_SSP_ALL=y. Then doing "make
+valgrind".
+
+The cause is Valgrind requires -fno-stack-protector to build correctly. I fixed
+the error by appending -fno-stack-protector to the CFLAGS passed to Valgrind,
+so that it overrides the ones in TARGET_CFLAGS.
+
 -- 
-1.9.1
+You are receiving this mail because:
+You are on the CC list for the bug.
