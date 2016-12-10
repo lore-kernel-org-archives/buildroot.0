@@ -1,30 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Dec 2016 16:00:29 +0100
-Subject: [Buildroot] [PATCH v2] sdl_mixer: fix static linking issue
-In-Reply-To: <20161208172331.GA13013@waldemar-brodkorb.de>
-References: <20161208172331.GA13013@waldemar-brodkorb.de>
-Message-ID: <20161210160029.03a9865f@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 10 Dec 2016 16:50:46 +0100
+Subject: [Buildroot] [PATCH] package/enlightenment: remove uClibc (legacy)
+	workaround
+Message-ID: <1481385046-5643-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Buildroot doesn't support uClibc (legacy) since 2016.02 release, so
+this workaround is not needed anymore.
 
-On Thu, 8 Dec 2016 18:23:31 +0100, Waldemar Brodkorb wrote:
-> LDFLAGS must be passed when creating binaries.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  .../sdl_mixer/0002-add-LDFLAGS-while-linking.patch | 29 ++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/sdl_mixer/0002-add-LDFLAGS-while-linking.patch
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/enlightenment/enlightenment.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Applied to master, thanks. Please submit the patch upstream. Thanks!
-
-Thomas
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 01448ee..7037afe 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -30,11 +30,6 @@ else
+ ENLIGHTENMENT_CONF_OPTS += --disable-systemd
+ endif
+ 
+-# uClibc has an old incomplete sys/ptrace.h for powerpc & sparc
+-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
+-ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
+-endif
+-
+ # alsa backend needs mixer support
+ ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+ ENLIGHTENMENT_DEPENDENCIES += alsa-lib
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
