@@ -1,23 +1,31 @@
-From: Pierre FICHEUX <pierre.ficheux@smile.fr>
-Date: Sat, 10 Dec 2016 15:52:01 +0100
-Subject: [Buildroot] BBB + 4.3" touchscreen
-Message-ID: <23a67b838296c9ef17bc3a35681f407e@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 10 Dec 2016 15:55:31 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add Clayton Shotwell for
+	policycoreutils
+Message-ID: <20161210145603.CAFF5818FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+commit: https://git.buildroot.net/buildroot/commit/?id=0c99704adf7e6990d10aa4df72f23d97cff78caf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Does anyboby have any experience in using a 4DCAPE-43T LCD touchscreen 
-with a BeableBone Black (recent kernel and current BR 2016.11)?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-thx
-
--- 
-Pierre FICHEUX -/- Smile/OWI, France -\- pierre.ficheux at smile.fr
-                                          http://ingenierie.openwide.fr
-                                          http://www.linuxembedded.fr
-I would love to change the world, but they won't give me the source 
-code
+diff --git a/DEVELOPERS b/DEVELOPERS
+index de63040..94cfe6c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -333,6 +333,7 @@ F:	package/liblogging/
+ F:	package/libselinux/
+ F:	package/libsemanage/
+ F:	package/libsepol/
++F:	package/policycoreutils/
+ F:	package/sepolgen/
+ F:	package/ustr/
+ 
