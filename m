@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Dec 2016 15:38:17 +0100
-Subject: [Buildroot] [PATCH 1/3] python-protobuf: Allow host building
-In-Reply-To: <20161209011313.9549-2-wak@google.com>
+Date: Sat, 10 Dec 2016 15:41:20 +0100
+Subject: [Buildroot] [PATCH 3/3] pblog: Init at
+ e2e17544950eedac4f3bc59926aed8604d755072
+In-Reply-To: <20161209011313.9549-4-wak@google.com>
 References: <20161209011313.9549-1-wak@google.com>
- <20161209011313.9549-2-wak@google.com>
-Message-ID: <20161210153817.485b25d3@free-electrons.com>
+ <20161209011313.9549-4-wak@google.com>
+Message-ID: <20161210154120.5650d0a0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +14,96 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  8 Dec 2016 17:13:11 -0800, William A. Kennington III wrote:
-> Currently python-protobuf does not allow the building as a host package
-> during a cross compile. We would like to be able to build nanopb as a
-> host package but can't without host-python-protobuf.
+Like the other patches, this patch is badly wrapped and therefore does
+not apply. Its title should be just:
 
-This patch looks good, but also doesn't apply:
+	pblog: new package
 
-thomas at skate:~/projets/buildroot (master)$ git pwam 704278
-Applying patch #704278 using 'git am -s -3'
-Description: [1/3] python-protobuf: Allow host building
-Applying: python-protobuf: Allow host building
-fatal: sha1 information is lacking or useless (package/python-protobuf/python-protobuf.mk).
-error: could not build fake ancestor
-Patch failed at 0001 python-protobuf: Allow host building
-The copy of the patch that failed is found in: .git/rebase-apply/patch
-When you have resolved this problem, run "git am --continue".
-If you prefer to skip this patch, run "git am --skip" instead.
+On Thu,  8 Dec 2016 17:13:13 -0800, William A. Kennington III wrote:
 
-> Google-Bug-Id: 33072942
-> Change-Id: Id09f461bda3f9c7a0bd6b5c36a6a8fa92e4adb27
+> diff --git a/package/pblog/Config.in b/package/pblog/Config.in
+> new file mode 100644
+> index 0000000..2ef77a8
+> --- /dev/null
+> +++ b/package/pblog/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PBLOG
+> +	bool "pblog"
+> +	depends BR2_PACKAGE_HOST_NANOPB
+> +	select BR2_PACKAGE_HOST_NANOPB
 
-Please remove those two lines.
+There is no BR2_PACKAGE_HOST_NANOPB symbol. Also, "depends" doesn't
+exist, only "depends on" does. And doing a "depends on" and a "select"
+on the same symbol doesn't make any sense.
 
-> Signed-off-by: William A. Kennington III <wak@google.com>
-> ---
->   package/python-protobuf/python-protobuf.mk | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/python-protobuf/python-protobuf.mk  
-> b/package/python-protobuf/python-protobuf.mk
-> index d8be76d..d46bda2 100644
-> --- a/package/python-protobuf/python-protobuf.mk
-> +++ b/package/python-protobuf/python-protobuf.mk
-> @@ -13,4 +13,5 @@ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
->   PYTHON_PROTOBUF_SETUP_TYPE = setuptools
->   PYTHON_PROTOBUF_SUBDIR = python
-> 
-> +$(eval $(host-python-package))
->   $(eval $(python-package))
+> diff --git a/package/pblog/pblog.hash b/package/pblog/pblog.hash
+> new file mode 100644
+> index 0000000..e7f8dc5
+> --- /dev/null
+> +++ b/package/pblog/pblog.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 f5908706afe15041983f163da735db751dda82f20c84e60c0c59584d609f10eb  
+> pblog-e2e17544950eedac4f3bc59926aed8604d755072.tar.gz
 
-The way the added line is indented compared to the context lines make
-it look weird. It's probably why it doesn't apply.
+Badly wrapped.
+
+> diff --git a/package/pblog/pblog.mk b/package/pblog/pblog.mk
+> new file mode 100644
+> index 0000000..e5a2cd1
+> --- /dev/null
+> +++ b/package/pblog/pblog.mk
+> @@ -0,0 +1,27 @@
+> +################################################################################
+> +#
+> +# pblog
+> +#
+> +################################################################################
+> +
+> +PBLOG_VERSION = e2e17544950eedac4f3bc59926aed8604d755072
+> +PBLOG_SITE = $(call github,google,pblog,$(PBLOG_VERSION))
+> +PBLOG_LICENSE = Apache-2.0
+> +PBLOG_LICENSE_FILES = LICENSE.txt
+> +# no configure script
+
+Comment unneeded.
+
+> +PBLOG_DEPENDENCIES = host-nanopb
+
+So, the target nanopb package is useless?
+
+> +
+> +define PBLOG_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS)  
+> NANOPB_DIR=$(HOST_NANOPB_DIR) -C $(@D) all
+
+Please install nanopb to $(HOST_DIR) and use it from there.
+
+> +endef
+> +
+> +define PBLOG_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS)  
+> NANOPB_DIR=$(HOST_NANOPB_DIR) DESTDIR=$(STAGING_DIR) -C $(@D) install
+> +endef
+
+If you specific some staging installation commands, you must have a
+PBLOG_INSTALL_STAGING = YES otherwise those commands are completely
+ignored.
+
+> +
+> +define PBLOG_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS)  
+> NANOPB_DIR=$(HOST_NANOPB_DIR) DESTDIR=$(TARGET_DIR) -C $(@D) install
+> +endef
+
+More global commands: please split long lines, like this:
+
+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+		NANOPB_DIR=... \
+		DESTDIR=... \
+		-C $(@D) install
+
+Thanks!
 
 Thomas
 -- 
