@@ -1,36 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Dec 2016 21:41:28 +0100
-Subject: [Buildroot] [git commit] package/matchbox-lib: fix xlib
-	libcomposite and libxpm symbols
-Message-ID: <20161210204132.B9ADC8172A@busybox.osuosl.org>
+Date: Sat, 10 Dec 2016 21:41:36 +0100
+Subject: [Buildroot] [PATCH] package/matchbox-lib: fix xlib libcomposite
+ and libxpm symbols
+In-Reply-To: <1481385433-6610-1-git-send-email-romain.naour@gmail.com>
+References: <1481385433-6610-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20161210214136.5999f370@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9365007e19f1cdd272b6d4b74c1f4fee81bda777
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/matchbox-lib/matchbox-lib.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sat, 10 Dec 2016 16:57:13 +0100, Romain Naour wrote:
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  package/matchbox-lib/matchbox-lib.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-index d43e2b8..451279e 100644
---- a/package/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox-lib/matchbox-lib.mk
-@@ -21,8 +21,8 @@ endef
- 
- MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_POST_INSTALL_FIXES
- 
--ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
--ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
- MATCHBOX_LIB_DEPENDENCIES += xlib_libXpm
- endif
- endif
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
