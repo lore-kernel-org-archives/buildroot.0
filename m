@@ -1,47 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Dec 2016 21:52:22 +0100
-Subject: [Buildroot] [Patch v2 3/9] s6: new package
-In-Reply-To: <1481397650-14664-4-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1481397650-14664-4-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20161210215222.6989afd3@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 10 Dec 2016 22:11:35 +0100
+Subject: [Buildroot] [PATCH] package/enlightenment: remove uClibc
+ (legacy) workaround
+In-Reply-To: <20161210213129.701fdacf@free-electrons.com>
+References: <1481385046-5643-1-git-send-email-romain.naour@gmail.com>
+ <20161210213129.701fdacf@free-electrons.com>
+Message-ID: <24ae3f96-a7b7-9a66-dba5-5f512b8736ad@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sat, 10 Dec 2016 20:20:44 +0100, Eric Le Bihan wrote:
-> This new package provides s6, a small suite of programs for UNIX,
-> designed to allow process supervision (a.k.a service supervision), in
-> the line of daemontools and runit.
+Le 10/12/2016 ? 21:31, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> On Sat, 10 Dec 2016 16:50:46 +0100, Romain Naour wrote:
+>> Buildroot doesn't support uClibc (legacy) since 2016.02 release, so
+>> this workaround is not needed anymore.
+> 
+> BR2_TOOLCHAIN_USES_UCLIBC=y when uClibc-ng is used, I'm sure you now
+> that. Is this problem fixed in uClibc-ng? If so, it would be good to
+> mention that in the commit log, because right now, the wording of the
+> commit log is somewhat confusing in that regard.
 
-Same comments as the previous patches: please fix the --prefix=/usr to
---prefix=$(HOST_DIR)/usr for the host variant. And there is the same
-issue in the following patches as well.
+This workaround was added for uClibc <= 0.9.33.2 by commit [1].
+This issue has been fixed long time ago in uClibc-ng for powerpc, sparc and
+xtensa [2].
 
-> +define S6_INSTALL_STAGING_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-> +endef
+Nowadays, enlightenment can't be selected for xtensa ans sparc due to luajit
+dependency from the efl stack. So this part of enlightenment.mk is outdated.
 
-You're doing a plain "make install" here.
+Also, I think that the alsa-lib dependency could be reworked since there is a
+--enable/disable-mixer option for alsa E module.
 
-> +define HOST_S6_INSTALL_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) \
-> +		install-dynlib \
-> +		install-include
-> +endef
+Ok, let me improve the commit log with these explanations :)
 
-but not here. Why?
+Best regards,
+Romain
 
-Thanks!
+[1]
+https://git.buildroot.net/buildroot/commit/?id=37acd25ee1376de5734415ac60be16991ee6d150
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+[2]
+https://git.buildroot.net/buildroot/commit/?id=0b056944f5878304f51af3e9edb6d596f24fc370
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
