@@ -1,108 +1,45 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 10 Dec 2016 20:20:50 +0100
-Subject: [Buildroot] [Patch v2 9/9] s6-linux-init: new package
-In-Reply-To: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1481397650-14664-10-git-send-email-eric.le.bihan.dev@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 10 Dec 2016 20:21:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jpeg-turbo: bump version to 1.5.1
+Message-ID: <20161210192144.15926-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides s6-linux-init, a set of minimalistic tools to
-create a s6-based init system, including a /sbin/init program, on a
-machine running a Linux kernel.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                        |  1 +
- package/s6-linux-init/Config.in          | 11 ++++++++++
- package/s6-linux-init/s6-linux-init.hash |  2 ++
- package/s6-linux-init/s6-linux-init.mk   | 36 ++++++++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+)
- create mode 100644 package/s6-linux-init/Config.in
- create mode 100644 package/s6-linux-init/s6-linux-init.hash
- create mode 100644 package/s6-linux-init/s6-linux-init.mk
+ package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
+ package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index e7035b0..725d0aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1751,6 +1751,7 @@ menu "System tools"
- 	source "package/rsyslog/Config.in"
- 	source "package/runc/Config.in"
- 	source "package/s6/Config.in"
-+	source "package/s6-linux-init/Config.in"
- 	source "package/s6-linux-utils/Config.in"
- 	source "package/s6-portable-utils/Config.in"
- 	source "package/s6-rc/Config.in"
-diff --git a/package/s6-linux-init/Config.in b/package/s6-linux-init/Config.in
-new file mode 100644
-index 0000000..db07e69
---- /dev/null
-+++ b/package/s6-linux-init/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_S6_LINUX_INIT
-+	bool "s6-linux-init"
-+	select BR2_PACKAGE_S6
-+	select BR2_PACKAGE_S6_LINUX_UTILS
-+	select BR2_PACKAGE_S6_PORTABLE_UTILS
-+	depends on BR2_USE_MMU # s6
-+	help
-+	  s6-linux-init is a set of minimalistic tools to create a s6-based
-+	  init system, including a /sbin/init binary, on a Linux kernel.
-+
-+	  http://skarnet.org/software/s6-linux-init/
-diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
-new file mode 100644
-index 0000000..e02e391
---- /dev/null
-+++ b/package/s6-linux-init/s6-linux-init.hash
-@@ -0,0 +1,2 @@
-+# Locally generated
-+sha256 131484e61eff0e671e112f0436b13e8e7d08752f810d8bec4924a68383eee2b9 s6-linux-init-0.2.0.0.tar.gz
-diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
-new file mode 100644
-index 0000000..112e176
---- /dev/null
-+++ b/package/s6-linux-init/s6-linux-init.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# s6-linux-init
-+#
-+################################################################################
-+
-+S6_LINUX_INIT_VERSION = 0.2.0.0
-+S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
-+S6_LINUX_INIT_LICENSE = ISC
-+S6_LINUX_INIT_LICENSE_FILES = COPYING
-+S6_LINUX_INIT_DEPENDENCIES = s6 s6-linux-utils s6-portable-utils
-+
-+S6_LINUX_INIT_CONF_OPTS = \
-+	--prefix=/usr \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
-+	--with-include=$(STAGING_DIR)/usr/include \
-+	--with-dynlib=$(STAGING_DIR)/usr/lib \
-+	--with-lib=$(STAGING_DIR)/usr/lib/execline \
-+	--with-lib=$(STAGING_DIR)/usr/lib/s6 \
-+	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
-+	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
-+	$(SHARED_STATIC_LIBS_OPTS)
-+
-+define S6_LINUX_INIT_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_LINUX_INIT_CONF_OPTS))
-+endef
-+
-+define S6_LINUX_INIT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define S6_LINUX_INIT_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index a38a5af..93b245e 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.2/
+-sha1	2666158ccd5318513f875867bbc4af52f6eb9f0b	libjpeg-turbo-1.4.2.tar.gz
+-md5	86b0d5f7507c2e6c21c00219162c3c44	libjpeg-turbo-1.4.2.tar.gz
++# From http://sourceforge.net/projects/libjpeg-turbo/files/1.5.1/
++sha1	ebb3f9e94044c77831a3e8c809c7ea7506944622	libjpeg-turbo-1.5.1.tar.gz
++md5	55deb139b0cac3c8200b75d485fc13f3	libjpeg-turbo-1.5.1.tar.gz
+ # Locally computed
+-sha256	521bb5d3043e7ac063ce3026d9a59cc2ab2e9636c655a2515af5f4706122233e	libjpeg-turbo-1.4.2.tar.gz
++sha256 41429d3d253017433f66e3d472b8c7d998491d2f41caa7306b8d9a6f2a2c666c  libjpeg-turbo-1.5.1.tar.gz
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 454b648..c0a430c 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JPEG_TURBO_VERSION = 1.4.2
++JPEG_TURBO_VERSION = 1.5.1
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
 -- 
-2.5.5
+2.10.2
