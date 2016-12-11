@@ -1,50 +1,48 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 11 Dec 2016 16:10:15 +0100
-Subject: [Buildroot] [PATCH] doc/manual: document the new waf-package infra
-	variables
-Message-ID: <1481469015-31089-1-git-send-email-romain.naour@gmail.com>
+Date: Sun, 11 Dec 2016 16:15:55 +0100
+Subject: [Buildroot] [PATCH v2 1/3] core: waf-package infra: allow to
+ override <pkg>_INSTALL_*_OPTS
+In-Reply-To: <20161211153203.0cbe8092@free-electrons.com>
+References: <1480889938-11075-1-git-send-email-romain.naour@gmail.com>
+ <20161211153203.0cbe8092@free-electrons.com>
+Message-ID: <940e8d4e-936d-d873-dd18-2f79669e2b3a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Document LIBFOO_WAF_OPTS, LIBFOO_BUILD_OPTS,
-LIBFOO_INSTALL_STAGING_OPTS and LIBFOO_INSTALL_TARGET_OPTS.
+Hi Thomas,
 
-Also document LIBFOO_CONF_OPTS which was missing in waf-package
-reference.
+Le 11/12/2016 ? 15:32, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Sun,  4 Dec 2016 23:18:56 +0100, Romain Naour wrote:
+>> Some waf packages may want to pass additional variables to waf script
+>> in install step.
+>> Allow to override <pkg>_INSTALL_*_OPTS like it's done in other package
+>> infra.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> ---
+>> v2: override <pkg>_INSTALL_*_OPTS (Yann)
+>> ---
+>>  package/pkg-waf.mk | 7 +++++--
+>>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> I've applied the entire series to master, after doing some minor tweaks
+> here and there. Please send a follow-up patch that updates the
+> Buildroot manual section for the waf package infrastructure.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- docs/manual/adding-packages-waf.txt | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Done:
+http://patchwork.ozlabs.org/patch/704842/
 
-diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
-index 3c0dbe4..67c6eff 100644
---- a/docs/manual/adding-packages-waf.txt
-+++ b/docs/manual/adding-packages-waf.txt
-@@ -65,3 +65,20 @@ also be defined.
-   default, then Buildroot will use the waf executable provided in the
-   package source tree; if set to +YES+, then Buidlroot will download,
-   install waf as a host tool and use it to build the package.
-+
-+* +LIBFOO_WAF_OPTS+, to specify additional options to pass to the waf
-+  script each time it is called. By default, empty.
-+
-+* +LIBFOO_CONF_OPTS+, to specify additional options to pass to the
-+  waf script for the configuration step. By default, empty.
-+
-+* +LIBFOO_BUILD_OPTS+, to specify additional options to pass to the
-+  waf script for the build step. By default, empty.
-+
-+* +LIBFOO_INSTALL_STAGING_OPTS+, to specify additional options used
-+  by the waf script to install the package to the staging directory.
-+  By default, empty.
-+
-+* +LIBFOO_INSTALL_TARGET_OPTS+, to specify additional options used
-+  by the waf script to install the package to the target directory.
-+  By default, empty.
--- 
-2.5.5
+Thanks,
+Romain
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
