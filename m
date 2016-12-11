@@ -1,45 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Dec 2016 18:34:36 +0100
-Subject: [Buildroot] [PATCH 1/4] jpeg-turbo: now checks for pkg-config
-In-Reply-To: <20161211155219.22814-1-peter@korsgaard.com>
-References: <20161211155219.22814-1-peter@korsgaard.com>
-Message-ID: <20161211183436.6726b2c7@free-electrons.com>
+Date: Sun, 11 Dec 2016 18:36:03 +0100
+Subject: [Buildroot] [git commit] jpeg: fix typo introduced when fixing the
+	indentation
+Message-ID: <20161211173622.880F881831@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=09d48dce0a75e93d560d129ca5f3883650ee63bf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 11 Dec 2016 16:52:16 +0100, Peter Korsgaard wrote:
-> The jpeg-turbo configure script now contains PKG_PROG_PKG_CONFIG, even
-> though it doesn't so far use pkg-config to detect any dependencies (it does
-> install a .pc file now though):
-> 
-> checking pkg-config is at least version 0.9.0... ./configure: line 13540: \
->   /home/peko/source/buildroot/output/host/usr/bin/pkg-config: No such file or directory
-> 
-> Depend on host-pkgconf for consistency.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/jpeg-turbo/jpeg-turbo.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jpeg/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All four patches applied, thanks. Notice that on PATCH 3/4, you had a
-mix of tabs and spaces for the indentation of the PowerPC Altivec
-dependency.
-
-Also, since you are interested about jpeg-turbo, what about adding
-yourself for this package in DEVELOPERS? We already have another
-developer, but who isn't really active, so having someone else would be
-good.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
+index 2bcf405..8de45a3 100644
+--- a/package/jpeg/Config.in
++++ b/package/jpeg/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_JPEG
+ config BR2_PACKAGE_JPEG_SIMD_SUPPORT
+        bool
+        default y if BR2_X86_CPU_HAS_MMX || BR2_ARM_CPU_HAS_NEON || \
+-		 BR2_POWERPC_CPU_HAS_ALTIVEC
++		 BR2_POWERPC_CPU_HAS_ALTIVEC || \
+ 		 BR2_aarch64 || BR2_aarch64_be
+ 
+ if BR2_PACKAGE_JPEG
