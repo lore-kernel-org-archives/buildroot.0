@@ -1,38 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Dec 2016 16:52:16 +0100
-Subject: [Buildroot] [PATCH 1/4] jpeg-turbo: now checks for pkg-config
-Message-ID: <20161211155219.22814-1-peter@korsgaard.com>
+Date: Sun, 11 Dec 2016 16:52:17 +0100
+Subject: [Buildroot] [PATCH 2/4] jpeg: rework jpeg-turbo simd support
+	handling
+In-Reply-To: <20161211155219.22814-1-peter@korsgaard.com>
+References: <20161211155219.22814-1-peter@korsgaard.com>
+Message-ID: <20161211155219.22814-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The jpeg-turbo configure script now contains PKG_PROG_PKG_CONFIG, even
-though it doesn't so far use pkg-config to detect any dependencies (it does
-install a .pc file now though):
+In preperation for adding more architectures to the jpeg-turbo simd
+handling, introduce a hidden BR2_PACKAGE_JPEG_SIMDS_SUPPORT symbol and use
+that to enable simd support and default to jpeg-turbo, instead of open
+coding it in both places.
 
-checking pkg-config is at least version 0.9.0... ./configure: line 13540: \
-  /home/peko/source/buildroot/output/host/usr/bin/pkg-config: No such file or directory
-
-Depend on host-pkgconf for consistency.
+While we are at it, reword the help text to be more useful.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jpeg-turbo/jpeg-turbo.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/jpeg-turbo/jpeg-turbo.mk | 2 +-
+ package/jpeg/Config.in           | 9 +++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 91d6b4e..c3de04a 100644
+index c3de04a..e2b7e63 100644
 --- a/package/jpeg-turbo/jpeg-turbo.mk
 +++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -11,6 +11,7 @@ JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
- JPEG_TURBO_LICENSE_FILES = LICENSE.md
- JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_PROVIDES = jpeg
-+JPEG_TURBO_DEPENDENCIES = host-pkgconf
+@@ -15,7 +15,7 @@ JPEG_TURBO_DEPENDENCIES = host-pkgconf
  
  JPEG_TURBO_CONF_OPTS = --with-jpeg8
  
+-ifeq ($(BR2_X86_CPU_HAS_MMX)$(BR2_ARM_CPU_HAS_NEON),y)
++ifeq ($(BR2_PACKAGE_JPEG_SIMD_SUPPORT),y)
+ JPEG_TURBO_CONF_OPTS += --with-simd
+ # x86 simd support needs nasm
+ JPEG_TURBO_DEPENDENCIES += $(if $(BR2_X86_CPU_HAS_MMX),host-nasm)
+diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
+index f337aeb..170e58c 100644
+--- a/package/jpeg/Config.in
++++ b/package/jpeg/Config.in
+@@ -3,13 +3,18 @@ config BR2_PACKAGE_JPEG
+ 	help
+ 	  Select the desired JPEG library provider.
+ 
++# jpeg-turbo has simd support for some architectures
++config BR2_PACKAGE_JPEG_SIMD_SUPPORT
++       bool
++       default y if BR2_X86_CPU_HAS_MMX || BR2_ARM_CPU_HAS_NEON
++
+ if BR2_PACKAGE_JPEG
+ 
+ choice
+ 	prompt "jpeg variant"
+-	default BR2_PACKAGE_JPEG_TURBO if (BR2_X86_CPU_HAS_MMX || BR2_ARM_CPU_HAS_NEON)
++	default BR2_PACKAGE_JPEG_TURBO if BR2_PACKAGE_JPEG_SIMD_SUPPORT
+ 	help
+-	  Select the older stable version, or the newer developer version
++	  Select the normal libjpeg or libjpeg-turbo.
+ 
+ config BR2_PACKAGE_LIBJPEG
+ 	bool "jpeg"
 -- 
 2.10.2
