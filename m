@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Dec 2016 15:51:54 +0100
-Subject: [Buildroot] [PATCH] m68k: add special gcc flag to avoid ICE for
- coldfire
-In-Reply-To: <c7f2be5d-3849-d30b-bf39-731477bc1927@mind.be>
-References: <20161126085144.GA23223@waldemar-brodkorb.de>
- <20161126145224.2aa5ef33@free-electrons.com>
- <c7f2be5d-3849-d30b-bf39-731477bc1927@mind.be>
-Message-ID: <20161211155154.55553108@free-electrons.com>
+Date: Sun, 11 Dec 2016 15:54:35 +0100
+Subject: [Buildroot] [git commit] e2fsprogs: pass LDCONFIG=true also at
+	install time
+Message-ID: <20161211150151.9D9C981814@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=64544178f180f03cedd8fe403d3718406d909c88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 26 Nov 2016 14:59:34 +0100, Arnout Vandecappelle wrote:
+We correctly set LDCONFIG=true for MAKE_OPTS, but not for the other
+steps which don't inherit it, and therefore e2fsprogs tries to use the
+host ldconfig during staging and target installation, which causes some
+weird error messages at build time (even if they don't abort the build).
 
->  Begging to differ: doing the same without patch 683830 would be a much bigger
-> patch (adding yet another -D option to the wrapper, updating the wrapper
-> itself). But OK, it's getting a bit later to still take _any_ risk, so probably
-> the bigger patch is better.
+Fix that by passing LDCONFIG=true at install time.
 
-Have you had the chance to work on your toolchain wrapper patches, at
-least enough to be able to merge this m68k change?
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/e2fsprogs/e2fsprogs.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index b6e79d2..48bb9ec 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -63,8 +63,9 @@ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ E2FSPROGS_CONF_ENV += LIBS=-lintl
+ endif
+ 
+-E2FSPROGS_MAKE_OPTS = \
+-	LDCONFIG=true
++E2FSPROGS_MAKE_OPTS = LDCONFIG=true
++E2FSPROGS_INSTALL_STAGING_OPTS = LDCONFIG=true
++E2FSPROGS_INSTALL_TARGET_OPTS = LDCONFIG=true
+ 
+ define HOST_E2FSPROGS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
