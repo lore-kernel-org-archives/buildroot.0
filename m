@@ -1,118 +1,121 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 11 Dec 2016 21:42:07 +0100
-Subject: [Buildroot] [PATCH v6,1/1] php: add apache support
-Message-ID: <1481488927-99573-1-git-send-email-fabrice.fontaine@orange.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 11 Dec 2016 22:40:43 +0100
+Subject: [Buildroot] [PATCH] usbip: add a new package
+In-Reply-To: <3fae2ec3-3be6-e839-f854-210b223b65af@mind.be>
+References: <1481272671-6491-1-git-send-email-tal.shorer@gmail.com>
+ <20161211135617.GB3599@free.fr>
+ <CAFDyS3ON-Wc-wzKZ4Le81Ak7z0wOpxYbH0hURobu38S87gXUcg@mail.gmail.com>
+ <3fae2ec3-3be6-e839-f854-210b223b65af@mind.be>
+Message-ID: <20161211214043.GG3599@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Continue work started by Bernd Kuhls in
-https://patchwork.ozlabs.org/patch/437544/
+Arnout, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
-Changes v5 -> v6 (after review of Thomas Petazzoni):
- - Remove BR2_PACKAGE_PHP_HAS_SAPI as this option no longer exists
- - Remove hooks on apxs configuration file as this solution was ugly
- - Clearly state in comment that apxs is an apache script
- - Update configure script to pass down -S PREFIX='$(INSTALL_ROOT)/usr'
-   to apxs
+On 2016-12-11 20:59 +0100, Arnout Vandecappelle spake thusly:
+> On 11-12-16 18:39, Tal Shorer wrote:
+> > On Sun, Dec 11, 2016 at 3:56 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >> Tal, Thomas, All,
+> >>
+> >> On 2016-12-09 10:37 +0200, Tal Shorer spake thusly:
+> [snip]
+> >>> diff --git a/package/usbip/usbip.mk b/package/usbip/usbip.mk
+> >>> new file mode 100644
+> >>> index 0000000..e6bd7f7
+> >>> --- /dev/null
+> >>> +++ b/package/usbip/usbip.mk
+> >>> @@ -0,0 +1,18 @@
+> >>> +################################################################################
+> >>> +#
+> >>> +# usbib
+> >>> +#
+> >>> +################################################################################
+> >>> +
+> >>> +USBIP_SITE = $(LINUX_DIR)/tools/usb/usbip
+> 
+>  There's one little problem with this approach: it breaks 'make source-check' on
+> a clean tree. 'make source-check' doesn't extract the source, so "test -d
+> $$($(2)_OVERRIDE_SRCDIR)" will fail.
 
-Changes v4 -> v5 (after review of Arnout Vandecappelle):
- - Patch on pthread detection has been merged upstream and is available
-   in php 7.0.14 so https://patchwork.ozlabs.org/patch/670567/
-   has been set as "Not Applicable"
- - Remove hook added in v4 and let php updates the apache configuration
-   file
- - Patch apxs configuration file to update httpd.conf in the target
-   directory with the correct relative path. Without these hooks, apxs
-   will only update correctly the httpd.conf in the staging directory
+Hmm... Bad... :-(
 
-Changes v3 -> v4 (after review of Yann Morin):
- - Do not select apache but depends on it
- - Move pthread detection fix in a separate patch
- - Remove unneeded configuration options such as --with-config-file-path
- - Do not allow php to update apache configuration file by removing -a
-   argument from apxs call
+But see below...
 
-Changes v2 -> v3 (after review of Thomas Petazzoni):
- - Remove unneeded php-04-apache.patch
- - Fix pthread detection if Apache MPM is event or worker
- - Update pthread detection mechanism (--enable-pthreads does not exist
-   anymore)
- - Remove unneeded --oldincludedir
- - Fix php module path
+> >> This location is only valid since linux-3.17. Before that, it was in
+> >> drivers/staging/usbip/userspace/ so maybe you want to allow for the two
+> >> cases.
+> >> In Config.in:
+> >>
+> >>     if BR2_PACKAGE_USBIP
+> >>
+> >>     config BR2_PACKAGE_USBIP_3_17_OR_LATER
+> >>         bool "Linux kernel >= 3.17"
+> > I did this, but the other way around. The option is whether or not to
+> > use the _old_ path, so the unsuspecting user will get the new path for
+> > compatibility. Is this ok?
+> >>
+> >>     endif
+> >>
+> >> And then in usb.mk:
+> >>
+> >>     ifeq ($(BR2_PACKAGE_USBIP_3_17_OR_LATER),y)
+> >>     USBIP_BASE_DIR = tools/usb/usbip
+> >>     else
+> >>     USBIP_BASE_DIR = drivers/staging/usbip/userspace/
+> >>     endif
+> >>     USBIP_SITE = $(LINUX_DIR)/$(USBIP_BASE_DIR)
+> >>
+> >>     define USBIP_CHECK_SRC
+> >>         if [ ! -d $(USBIP_SITE) ]; then \
+> >>             echo "Your kernel does not have usbip in $(USBIP_BASE_DIR)" >&2; \
+> >>             exit 1; \
+> >>         fi
+> >>     endef
+> >>     USBIP_PRE_EXTRACT_HOOKS += USBIP_CHECK_SRC
+> 
+>  I really don't like this approach where the user has to specify it is Linux >=
+> 3.17. If we start introducing version symbols, we should do it for all possible
+> versions and at the level of the BR2_KERNEL_LINUX symbol itself, similar like
+> for the external toolchain kernel headers symbol.
 
- package/php/Config.in |  7 +++++++
- package/php/php.mk    | 28 ++++++++++++++++++++++++++++
- 2 files changed, 35 insertions(+)
+That's quite a bit of an overhead...
 
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 57dabc4..0fb8006 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PHP
- 	bool "php"
- 	select BR2_PACKAGE_PHP_SAPI_CGI if \
-+	       !BR2_PACKAGE_PHP_SAPI_APACHE && \
- 	       !BR2_PACKAGE_PHP_SAPI_CLI && \
- 	       !BR2_PACKAGE_PHP_SAPI_FPM &&  \
- 	       BR2_USE_MMU
-@@ -14,6 +15,12 @@ config BR2_PACKAGE_PHP
- 
- if BR2_PACKAGE_PHP
- 
-+config BR2_PACKAGE_PHP_SAPI_APACHE
-+	bool "Apache interface"
-+	depends on BR2_PACKAGE_APACHE
-+	help
-+	  Apache module
-+
- config BR2_PACKAGE_PHP_SAPI_CGI
- 	bool "CGI interface"
- 	# CGI uses fork()
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 8c1ccef..9c9d3bb 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -81,6 +81,34 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CLI),--enable-cli,--disable-cli)
- PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CGI),--enable-cgi,--disable-cgi)
- PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_FPM),--enable-fpm,--disable-fpm)
- 
-+ifeq ($(BR2_PACKAGE_PHP_SAPI_APACHE),y)
-+PHP_DEPENDENCIES += apache
-+PHP_CONF_OPTS += --with-apxs2=$(STAGING_DIR)/usr/bin/apxs
-+
-+# Enable thread safety option if Apache MPM is event or worker
-+ifeq ($(BR2_PACKAGE_APACHE_MPM_EVENT)$(BR2_PACKAGE_APACHE_MPM_WORKER),y)
-+PHP_CONF_OPTS += --enable-maintainer-zts
-+endif
-+
-+# php uses apache's apxs script from staging directory to install libphp
-+# dynamic library and update /etc/apache2/httpd.conf in the staging and target
-+# directories. Here is the full command line:
-+# "apxs -S LIBEXECDIR='$(INSTALL_ROOT)/usr/modules'
-+# -S SYSCONFDIR='$(INSTALL_ROOT)/etc/apache2' -i -a -n php7"
-+# This does not work for target directory as apxs sets the full path of the
-+# library and not the relative one. Indeed, apxs is smart enough to substitute
-+# away the prefix specified in $(STAGING_DIR)/usr/build/config_vars.mk so
-+# httpd.conf will only be correct in the staging directory.
-+# To fix this, add -S PREFIX='$(INSTALL_ROOT)/usr' to apxs call in configure
-+define PHP_FIX_APXS_CALL
-+	$(SED) "s,  APXS_LIBEXECDIR=,  APXS_PREFIX='\$$(INSTALL_ROOT)/usr' APXS_LIBEXECDIR=, \
-+		;s,-i -a -n php,-i -a -S PREFIX='\$$APXS_PREFIX' -n php," \
-+		$(@D)/configure
-+endef
-+
-+PHP_PRE_CONFIGURE_HOOKS += PHP_FIX_APXS_CALL
-+endif
-+
- ### Extensions
- PHP_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
+>  However, doesn't something like this work? Or is it considered too much of a hack?
+> 
+> # Before v3.17 it was in staging.
+> # USBIP_SITE is only used inside rules, after linux has already been extracted.
+> USBIP_SITE = $(wildcard \
+> 	$(LINUX_DIR)/tools/usb/usbip \
+> 	$(LINUX_DIR)/drivers/staging/usbip/userspace)
+
+I like this approach as well; it is better than mine.
+
+However, it does not really solve the source-check issue, does it?
+
+Hmm... It probably does, because:
+
+  - in an empty build tree, the linux source are not extracted, so there
+    would be nothing to $(wildcard), so USBIP_SITE would be empty, so
+    the download infra would not try to download anything (fortunately,
+    we do not enforce an empty _SITE_METHOD when _SITE is empty; we only
+    enforce an empty _VERSION);
+
+  - in an already-extracted tree, $(wildcard would return an existign
+    directory, so the source-check test would be happy.
+
+So yes, this is a hack. A tricky one, for sure, but it looks like it
+would work.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.5.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
