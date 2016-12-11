@@ -1,37 +1,35 @@
 From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Sun, 11 Dec 2016 13:30:29 +0530
-Subject: [Buildroot] [PATCH 2/2] jpeg-turbo: fix legal info
-In-Reply-To: <1481443229-18342-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1481443229-18342-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1481443229-18342-2-git-send-email-rahul.bedarkar@imgtec.com>
+Date: Sun, 11 Dec 2016 13:30:28 +0530
+Subject: [Buildroot] [PATCH 1/2] mimic: fix legal info
+Message-ID: <1481443229-18342-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update name of license file
+Name of license file is 'COPYING'.
 
 Fixes:
-  http://autobuild.buildroot.net/results/e97/e97edb7dc573912fd140ac681952634584e9ab32
+  http://autobuild.buildroot.net/results/846/846b42d484e8d3e261eb3699a485d589f6bbab62
 
 Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
- package/jpeg-turbo/jpeg-turbo.mk | 2 +-
+ package/mimic/mimic.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index c0a430c..91d6b4e 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -8,7 +8,7 @@ JPEG_TURBO_VERSION = 1.5.1
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
--JPEG_TURBO_LICENSE_FILES = README README-turbo.txt
-+JPEG_TURBO_LICENSE_FILES = LICENSE.md
- JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_PROVIDES = jpeg
+diff --git a/package/mimic/mimic.mk b/package/mimic/mimic.mk
+index 66fe9a9..2d24656 100644
+--- a/package/mimic/mimic.mk
++++ b/package/mimic/mimic.mk
+@@ -7,7 +7,7 @@
+ MIMIC_VERSION = 1.1.0
+ MIMIC_SITE = $(call github,MycroftAI,mimic,$(MIMIC_VERSION))
+ MIMIC_LICENSE = MIT
+-MIMIC_LICENSE_FILES = LICENSE
++MIMIC_LICENSE_FILES = COPYING
+ 
+ MIMIC_DEPENDENCIES = host-pkgconf
  
 -- 
 2.6.2
