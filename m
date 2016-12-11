@@ -1,66 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Dec 2016 16:52:17 +0100
-Subject: [Buildroot] [PATCH 2/4] jpeg: rework jpeg-turbo simd support
-	handling
-In-Reply-To: <20161211155219.22814-1-peter@korsgaard.com>
-References: <20161211155219.22814-1-peter@korsgaard.com>
-Message-ID: <20161211155219.22814-2-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Dec 2016 18:03:59 +0100
+Subject: [Buildroot] [git commit] doc/manual: document the new waf-package
+	infra variables
+Message-ID: <20161211170411.E884A819A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preperation for adding more architectures to the jpeg-turbo simd
-handling, introduce a hidden BR2_PACKAGE_JPEG_SIMDS_SUPPORT symbol and use
-that to enable simd support and default to jpeg-turbo, instead of open
-coding it in both places.
+commit: https://git.buildroot.net/buildroot/commit/?id=65395920b51a5c2c9775f6b23212b765ca9a991c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While we are at it, reword the help text to be more useful.
+Document LIBFOO_WAF_OPTS, LIBFOO_BUILD_OPTS, LIBFOO_INSTALL_STAGING_OPTS
+and LIBFOO_INSTALL_TARGET_OPTS.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Also document LIBFOO_CONF_OPTS which was missing in waf-package
+reference.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jpeg-turbo/jpeg-turbo.mk | 2 +-
- package/jpeg/Config.in           | 9 +++++++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ docs/manual/adding-packages-waf.txt | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index c3de04a..e2b7e63 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -15,7 +15,7 @@ JPEG_TURBO_DEPENDENCIES = host-pkgconf
- 
- JPEG_TURBO_CONF_OPTS = --with-jpeg8
- 
--ifeq ($(BR2_X86_CPU_HAS_MMX)$(BR2_ARM_CPU_HAS_NEON),y)
-+ifeq ($(BR2_PACKAGE_JPEG_SIMD_SUPPORT),y)
- JPEG_TURBO_CONF_OPTS += --with-simd
- # x86 simd support needs nasm
- JPEG_TURBO_DEPENDENCIES += $(if $(BR2_X86_CPU_HAS_MMX),host-nasm)
-diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-index f337aeb..170e58c 100644
---- a/package/jpeg/Config.in
-+++ b/package/jpeg/Config.in
-@@ -3,13 +3,18 @@ config BR2_PACKAGE_JPEG
- 	help
- 	  Select the desired JPEG library provider.
- 
-+# jpeg-turbo has simd support for some architectures
-+config BR2_PACKAGE_JPEG_SIMD_SUPPORT
-+       bool
-+       default y if BR2_X86_CPU_HAS_MMX || BR2_ARM_CPU_HAS_NEON
+diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
+index 3c0dbe4..43b557c 100644
+--- a/docs/manual/adding-packages-waf.txt
++++ b/docs/manual/adding-packages-waf.txt
+@@ -65,3 +65,21 @@ also be defined.
+   default, then Buildroot will use the waf executable provided in the
+   package source tree; if set to +YES+, then Buidlroot will download,
+   install waf as a host tool and use it to build the package.
 +
- if BR2_PACKAGE_JPEG
- 
- choice
- 	prompt "jpeg variant"
--	default BR2_PACKAGE_JPEG_TURBO if (BR2_X86_CPU_HAS_MMX || BR2_ARM_CPU_HAS_NEON)
-+	default BR2_PACKAGE_JPEG_TURBO if BR2_PACKAGE_JPEG_SIMD_SUPPORT
- 	help
--	  Select the older stable version, or the newer developer version
-+	  Select the normal libjpeg or libjpeg-turbo.
- 
- config BR2_PACKAGE_LIBJPEG
- 	bool "jpeg"
--- 
-2.10.2
++* +LIBFOO_WAF_OPTS+, to specify additional options to pass to the
++  +waf+ script at every step of the package build process: configure,
++  build and installation. By default, empty.
++
++* +LIBFOO_CONF_OPTS+, to specify additional options to pass to the
++  +waf+ script for the configuration step. By default, empty.
++
++* +LIBFOO_BUILD_OPTS+, to specify additional options to pass to the
++  +waf+ script during the build step. By default, empty.
++
++* +LIBFOO_INSTALL_STAGING_OPTS+, to specify additional options to pass
++  to the +waf+ script during the staging installation step.  By default,
++  empty.
++
++* +LIBFOO_INSTALL_TARGET_OPTS+, to specify additional options to pass
++  to the +waf+ script during the target installation step.  By default,
++  empty.
