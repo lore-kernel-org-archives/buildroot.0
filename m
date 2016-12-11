@@ -1,24 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Dec 2016 21:08:10 +0100
-Subject: [Buildroot] [PATCH] package/jpeg: better indentation
-In-Reply-To: <1481480063-1189-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 11 Dec 2016 19:14:23 +0100")
-References: <1481480063-1189-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87bmwirzyt.fsf@dell.be.48ers.dk>
+Date: Sun, 11 Dec 2016 21:07:52 +0100
+Subject: [Buildroot] [git commit] package/jpeg: better indentation
+Message-ID: <20161211200847.D43318199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4ab4df632a4f258cdd249527c324652c558cbdcd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Use easier-to-read layout; fix leading spaces.
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
+Use easier-to-read layout; fix leading spaces.
 
-Committed, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jpeg/Config.in | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
+index 8de45a3..a4a63cc 100644
+--- a/package/jpeg/Config.in
++++ b/package/jpeg/Config.in
+@@ -5,10 +5,11 @@ config BR2_PACKAGE_JPEG
+ 
+ # jpeg-turbo has simd support for some architectures
+ config BR2_PACKAGE_JPEG_SIMD_SUPPORT
+-       bool
+-       default y if BR2_X86_CPU_HAS_MMX || BR2_ARM_CPU_HAS_NEON || \
+-		 BR2_POWERPC_CPU_HAS_ALTIVEC || \
+-		 BR2_aarch64 || BR2_aarch64_be
++	bool
++	default y if BR2_X86_CPU_HAS_MMX
++	default y if BR2_ARM_CPU_HAS_NEON
++	default y if BR2_POWERPC_CPU_HAS_ALTIVEC
++	default y if BR2_aarch64 || BR2_aarch64_be
+ 
+ if BR2_PACKAGE_JPEG
+ 
