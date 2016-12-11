@@ -1,11 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 Dec 2016 20:19:54 +0100
-Subject: [Buildroot] [PATCH] pkg-generic: run $(PKG)_PRE_RSYNC_HOOKS
- before checking for the existence of $(SRCDIR)
-In-Reply-To: <1481479965-26226-1-git-send-email-tal.shorer@gmail.com>
-References: <20161211174528.GD3599@free.fr>
- <1481479965-26226-1-git-send-email-tal.shorer@gmail.com>
-Message-ID: <20161211191954.GE3599@free.fr>
+Date: Sun, 11 Dec 2016 20:24:56 +0100
+Subject: [Buildroot] [PATCH] usbip: add a new package
+In-Reply-To: <CAFDyS3OkzvjXUkcOVd1FWy4Q4tWy+gOe=1DA5aJZk=0oCex+fQ@mail.gmail.com>
+References: <1481272671-6491-1-git-send-email-tal.shorer@gmail.com>
+ <20161211135617.GB3599@free.fr>
+ <CAFDyS3ON-Wc-wzKZ4Le81Ak7z0wOpxYbH0hURobu38S87gXUcg@mail.gmail.com>
+ <20161211174528.GD3599@free.fr>
+ <CAFDyS3OkzvjXUkcOVd1FWy4Q4tWy+gOe=1DA5aJZk=0oCex+fQ@mail.gmail.com>
+Message-ID: <20161211192456.GF3599@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +16,58 @@ To: buildroot@busybox.net
 
 Tal, All,
 
-On 2016-12-11 20:12 +0200, Tal Shorer spake thusly:
-> This will allow packages to define their pre-rsync hooks which will be
-> guaranteed to run even if the source is missing.
-> 
-> Signed-off-by: Tal Shorer <tal.shorer@gmail.com>
+On 2016-12-11 20:31 +0200, Tal Shorer spake thusly:
+> On Sun, Dec 11, 2016 at 7:45 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> [--SNIP--]
+> >> I tried getting this hook to run, but since the site method is "local",
+> >> the package just gets rsynced. However, trying to add this to
+> >> USBIP_PRE_RSYNC_HOOKS doesn't help either because the rsync rule checks
+> >> for the source directory before calling the PRE_RSYNC_HOOKS.
+> >
+> > Damn it...
+> >
+> > I think this is a shortcoming in the rsync method: the hooks should be
+> > called even before we try to run-or-test anything. I.e. the hooks should
+> > be called before we do the test.
+> >
+> > Care to send a patch for that?
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> done.
 
-Before this goes in, we have to notice that packages (most probably,
-out-of-tree packages in a br2-external tree) that defined hooks that
-relied on the check to be done before the hooks are called, may now
-break with this change.
+Thanks! :-)
 
-However, I still believe this change is good, because it ensures the
-hooks are called before the infra does anything, which is what we do in
-all the other similar commands; also, there are valid cases where we
-want the hooks to run first.
+> Should I wait for that patch to get noticed or should I just
+> send what I have with PRE_RSYNC_HOOKS and expect that the error will
+> "fix itself" when the other patch gets in?
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+You can just send the patch now, and add in a post-commit log that the
+other patch is required first, i.e. in your commit log, add a three-dash
+line and the message after it, like so:
+
+    package/usbip: new package
+
+    usbip is part of the linus tree, so it should be part of the
+    linux-tools infra. However, it uses autotools, which are rather
+    difficult to use in the linux-tools infra.
+
+    So we make it a proper, separate autotools package. We only rely omn
+    the kernel to be extracted and use that as the source.
+
+    Signed-off-by: You
+
+    ---
+    Note: this requires that the patch to fix the hook order in the
+    rsync command (https://patchwork.ozlabs.org/patch/704859/) goes
+    in first.
+
+And cherry-on-the-cake, make it a reply to that patch, with --in-reply-to
+when sending the patch.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/pkg-generic.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 827de62..3ca71b0 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -161,8 +161,8 @@ $(BUILD_DIR)/%/.stamp_extracted:
->  # used.
->  $(BUILD_DIR)/%/.stamp_rsynced:
->  	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
-> -	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
->  	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
-> +	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
->  	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
->  	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
->  	$(Q)touch $@
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
