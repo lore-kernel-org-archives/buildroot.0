@@ -1,61 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 Dec 2016 18:40:21 +0100
-Subject: [Buildroot] [git commit] jpeg: fix typo introduced when fixing
- the indentation
-In-Reply-To: <20161211173622.880F881831@busybox.osuosl.org>
-References: <20161211173622.880F881831@busybox.osuosl.org>
-Message-ID: <20161211174021.GC3599@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Dec 2016 18:40:40 +0100
+Subject: [Buildroot] [PATCH 1/4] jpeg-turbo: now checks for pkg-config
+In-Reply-To: <87k2b6s6yn.fsf@dell.be.48ers.dk>
+References: <20161211155219.22814-1-peter@korsgaard.com>
+ <20161211183436.6726b2c7@free-electrons.com>
+ <87k2b6s6yn.fsf@dell.be.48ers.dk>
+Message-ID: <20161211184040.009230d6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2016-12-11 18:36 +0100, Thomas Petazzoni spake thusly:
-> commit: https://git.buildroot.net/buildroot/commit/?id=09d48dce0a75e93d560d129ca5f3883650ee63bf
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 11 Dec 2016 18:37:04 +0100, Peter Korsgaard wrote:
+
+>  > All four patches applied, thanks. Notice that on PATCH 3/4, you had a
+>  > mix of tabs and spaces for the indentation of the PowerPC Altivec
+>  > dependency.  
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/jpeg/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-> index 2bcf405..8de45a3 100644
-> --- a/package/jpeg/Config.in
-> +++ b/package/jpeg/Config.in
-> @@ -7,7 +7,7 @@ config BR2_PACKAGE_JPEG
->  config BR2_PACKAGE_JPEG_SIMD_SUPPORT
->         bool
->         default y if BR2_X86_CPU_HAS_MMX || BR2_ARM_CPU_HAS_NEON || \
-> -		 BR2_POWERPC_CPU_HAS_ALTIVEC
-> +		 BR2_POWERPC_CPU_HAS_ALTIVEC || \
->  		 BR2_aarch64 || BR2_aarch64_be
+> Ups, thanks for fixing.
 
-Alternatively, I think it is easier to read if it is written like that:
+And I somehow screw things up when fixing your typo, so I had to make a
+follow-up commit :-/
 
-    config BR2_PACKAGE_JPEG_SIMD_SUPPORT
-        bool
-        default y if BR2_X86_CPU_HAS_MMX
-        default y if BR2_ARM_CPU_HAS_NEON
-        default y if BR2_POWERPC_CPU_HAS_ALTIVEC
-        default y if BR2_aarch64 || BR2_aarch64_be
-
-Regards,
-Yann E. MORIN.
-
->  if BR2_PACKAGE_JPEG
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
