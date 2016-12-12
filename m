@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Dec 2016 21:18:26 +0100
-Subject: [Buildroot] [git commit] usb_modeswitch: bump to version 2.4.0
-Message-ID: <20161212202944.237267FA8C@busybox.osuosl.org>
+Date: Mon, 12 Dec 2016 21:17:42 +0100
+Subject: [Buildroot] [git commit] nano: bump to version 2.7.2
+Message-ID: <20161212202944.184E4817F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=808183a5016dcf8fcacfc7ae2a88609bda4fd895
+commit: https://git.buildroot.net/buildroot/commit/?id=a39b269ea20f48ad6536ab969a9889907cd8ce43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usb_modeswitch/usb_modeswitch.hash | 2 +-
- package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
-index 075ef63..807b63f 100644
---- a/package/usb_modeswitch/usb_modeswitch.hash
-+++ b/package/usb_modeswitch/usb_modeswitch.hash
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index cb411b7..d1814ae 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	f93e940c2eb0c585a5d2210177338e68a9b24f409e351e4a854132453246b894	usb-modeswitch-2.3.0.tar.bz2
-+sha256	17dc32bf10df8e370f2369b5137d34dfd8f2347faaa51524c5f21c922f42e212	usb-modeswitch-2.4.0.tar.bz2
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index ac41a80..e196db5 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256 df5cbe69831d7394c0a32fb27373ab313335ea4dc586d6f4be4081eb1de857cd  nano-2.7.1.tar.xz
++sha256 77016f73c686857ce8a3ec217832febb6e636122762d47ce3c6cbef6f7e390c2  nano-2.7.2.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 88e3cdb..7f80554 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--USB_MODESWITCH_VERSION = 2.3.0
-+USB_MODESWITCH_VERSION = 2.4.0
- USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
- USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DEPENDENCIES = libusb
+ NANO_VERSION_MAJOR = 2.7
+-NANO_VERSION = $(NANO_VERSION_MAJOR).1
++NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPLv3+
