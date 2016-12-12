@@ -1,84 +1,39 @@
-From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Date: Mon, 12 Dec 2016 13:28:04 -0600
-Subject: [Buildroot] [PATCH v13 1/8] policycoreutils: new package
-In-Reply-To: <20161210155912.2fb05507@free-electrons.com>
-References: <1477423570-15694-1-git-send-email-bryce.ferguson@rockwellcollins.com>
- <20161210155912.2fb05507@free-electrons.com>
-Message-ID: <CAKGmAFpnpdg4OiAzQXZyx1KSf5Kn6s-6JmPwJyExxRVRY+Kz5Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 12 Dec 2016 17:05:00 -0300
+Subject: [Buildroot] [PATCH] nano: bump to version 2.7.2
+Message-ID: <20161212200500.18391-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, Dec 10, 2016 at 8:59 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue, 25 Oct 2016 14:26:03 -0500, Bryce Ferguson wrote:
->> From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
->>
->> This package contains the core policy utilities that are required
->> for basic operation of an SELinux system.
->>
->> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
->> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
->> Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
->> Tested-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
->> Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
->
-> I've applied your patch to master, with the following changes:
->
->     [Thomas:
->      - Move the Config.in comment at the top of the Config.in file rather
->        than between the main option and its sub-options, as this breaks
->        menuconfig indentation.
->      - Fix the propagation of the libsemanage dependencies. libsemanage
->        depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS and
->        BR2_TOOLCHAIN_USES_GLIBC which were not accounted for. Since it
->        depends on BR2_TOOLCHAIN_USES_GLIBC, then all the gettext related
->        handling becomes useless and has been removed.
->      - Rename the prompt of the restorecond sub-option to just
->        "restorecond".
->      - Use TARGET_CONFIGURE_OPTS and HOST_CONFIGURE_OPTS instead of
->        passing LDFLAGS, CC, etc. manually.
->      - Use make "foreach" function for loops instead of shell "for" loops.
->      - Rework the explanation of why we're passing DESTDIR at build time.
->      - Minor formatting tweaks here and there.]
->
-> I've also added Clayton as the contact in the DEVELOPERS file for this
-> package. If this is not correct, please send another patch to fix that
-> up. We really want your help to fix build issues that may arise from
-> this package.
->
-> Also, could you please have a look at what I answered to:
->
->   [PATCH v13 4/8] util-linux: selinux, audit, and pam support
->
-> and look at the alternative proposals I made:
->
->   https://patchwork.ozlabs.org/patch/703332/
->   https://patchwork.ozlabs.org/patch/703333/
-
-I will perform a test build with these patches and provide tested-by
-feedback.  I think we will want to use these patches instead of [PATCH v13
-4/8].  So, to confirm, I will remove that patch completely as yours will
-supersede it, correct?
-
-Thanks
-
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index cb411b7..d1814ae 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 df5cbe69831d7394c0a32fb27373ab313335ea4dc586d6f4be4081eb1de857cd  nano-2.7.1.tar.xz
++sha256 77016f73c686857ce8a3ec217832febb6e636122762d47ce3c6cbef6f7e390c2  nano-2.7.2.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 88e3cdb..7f80554 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 2.7
+-NANO_VERSION = $(NANO_VERSION_MAJOR).1
++NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPLv3+
 -- 
-
-
-Bryce Ferguson
-Software Engineer
-Airborne Information Solutions \ Secure Platforms
-
-400 Collins Rd NE Cedar Rapids, Iowa 52498
-
-Bryce.Ferguson at rockwellcollins.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161212/f4273781/attachment.html>
+2.10.2
