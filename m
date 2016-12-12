@@ -1,48 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Dec 2016 18:52:11 +0100
-Subject: [Buildroot] [PATCH RFC] Revert "Added local directory as source
- of kernel code"
-In-Reply-To: <20161212173527.GC3509@free.fr>
-References: <1467066844-28355-1-git-send-email-yann.morin.1998@free.fr>
- <20160827222353.02bc0df2@free-electrons.com>
- <87twe4aav2.fsf@dell.be.48ers.dk> <20160828214805.GE5758@free.fr>
- <20160829091638.1236158a@free-electrons.com>
- <CALAjcgVnSzgNmmue22YdgSyd1b2-ZywEZZYmJm+U04HF4_DwVQ@mail.gmail.com>
- <20161212173527.GC3509@free.fr>
-Message-ID: <20161212185211.41d61776@free-electrons.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Mon, 12 Dec 2016 23:31:56 +0530
+Subject: [Buildroot] [PATCH 1/2] usb_modeswitch: bump to version 2.4.0
+Message-ID: <1481565717-13394-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ package/usb_modeswitch/usb_modeswitch.hash | 2 +-
+ package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, 12 Dec 2016 18:35:27 +0100, Yann E. MORIN wrote:
-
-> But what I want is to be able to use local sources fior Qt5 that I
-> prepare for my board; so I'll want to add the same feature for Qt5.
-> Then Thomas will want to use local sources for barebox; so he'll want to
-> add the same feature for barebox. Then Peter will need it for whatever,
-> so he'll want to add it for that as well...
-
-One could however say (with good reason) that the Linux kernel, and a
-few other HW-related packages (bootloaders) are special.
-
-And indeed, for those packages (Linux, U-Boot, Barebox, etc.), we do
-support fetching from custom Git/Mercurial/etc. repositories. But we
-would never do that for *all* packages.
-
-So Linux is already special compared to other packages in that respect,
-and this argument could be used (and in fact was used) to add a feature
-like BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH.
-
-But as I said, I don't really feel very strongly about this.
-
-Best regards,
-
-Thomas
+diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
+index 075ef63..807b63f 100644
+--- a/package/usb_modeswitch/usb_modeswitch.hash
++++ b/package/usb_modeswitch/usb_modeswitch.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	f93e940c2eb0c585a5d2210177338e68a9b24f409e351e4a854132453246b894	usb-modeswitch-2.3.0.tar.bz2
++sha256	17dc32bf10df8e370f2369b5137d34dfd8f2347faaa51524c5f21c922f42e212	usb-modeswitch-2.4.0.tar.bz2
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index ac41a80..e196db5 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_VERSION = 2.3.0
++USB_MODESWITCH_VERSION = 2.4.0
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.6.2
