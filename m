@@ -1,92 +1,94 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Dec 2016 17:16:34 +0100
-Subject: [Buildroot] [git commit] zsh: bump to version 5.3
-Message-ID: <20161212162254.8ABAA817B3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Dec 2016 17:27:15 +0100
+Subject: [Buildroot] [PATCH RFC] Revert "Added local directory as source
+ of kernel code"
+In-Reply-To: <CALAjcgVnSzgNmmue22YdgSyd1b2-ZywEZZYmJm+U04HF4_DwVQ@mail.gmail.com>
+References: <1467066844-28355-1-git-send-email-yann.morin.1998@free.fr>
+ <20160827222353.02bc0df2@free-electrons.com>
+ <87twe4aav2.fsf@dell.be.48ers.dk> <20160828214805.GE5758@free.fr>
+ <20160829091638.1236158a@free-electrons.com>
+ <CALAjcgVnSzgNmmue22YdgSyd1b2-ZywEZZYmJm+U04HF4_DwVQ@mail.gmail.com>
+Message-ID: <20161212172715.4a8ab39f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e7e76ac201184a65210b5d6e013d745fa51889c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-And drop upstream patch.
+On Sun, 11 Dec 2016 22:06:44 -0500, James Knight wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-configure-use-user-set-pcre-config.patch  | 33 ----------------------
- package/zsh/zsh.hash                               |  4 +--
- package/zsh/zsh.mk                                 |  4 +--
- 3 files changed, 3 insertions(+), 38 deletions(-)
+> > But nothing prevents people from having a version-controlled local.mk,
+> > which makes it not-local anymore.  
+> 
+> This.
+> 
+> (sorry for the delay. was trying trying to upgrade from a
+> 2015.11.x-based series to a 2016.11.x-based series and just found out
+> that BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH is gone; original comments
+> here [1], if your email is past retention)
+> 
+> For my build environment, I prepare a series of sources before
+> invoking a Buildroot make. This includes preparing BR2_EXTERNAL
+> modules, cache content (dl) and my target kernel sources. The
+> initialization phase allows me to adjust source locations for a
+> specific build, for example, targeting a local Git repository for
+> kernel sources instead of a specific tarball. I was able to easily
+> achieve this by defining a custom local path in my Buildroot
+> configuration as follows:
+> 
+>     BR2_LINUX_KERNEL_CUSTOM_LOCAL=y
+>     BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH="$(MYCUSTOM_LINUX_DIR)"
+> 
+> With the revert of this patch, it seems the best "correct" approach is
+> to use the override-srcdir mechanism. As Thomas mentions though,
+> modifying my `local.mk` file to be under version control makes it no
+> longer local anymore. While I would love to have the feature back, if
+> this is a rare/odd usage, I don't mind modifying my repository to
+> support custom kernel local paths (rather than customizing a local.mk
+> file). Thoughts?
+> 
+> I don't believe BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH hurts
+> reproducibility in all cases. If a build environment ensures the
+> kernel custom path's content is managed properly for a build invoke,
+> would there be a reproducibility issue (unless I'm overlooking
+> something)?
 
-diff --git a/package/zsh/0001-configure-use-user-set-pcre-config.patch b/package/zsh/0001-configure-use-user-set-pcre-config.patch
-deleted file mode 100644
-index d4cf59b..0000000
---- a/package/zsh/0001-configure-use-user-set-pcre-config.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Thu, 3 Mar 2016 23:14:39 +0200
--Subject: [PATCH] configure: use user set pcre-config
--
--Setting a non default configuration script location is common practice when
--cross compiling, since the target library might need different flags. zsh
--configure scripts allows the user to set pcre-config location but doesn't
--actually use it. Fix this.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: sent upstream
--(http://www.zsh.org/mla/workers/2016/msg00619.html)
--
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index c3bd713c126a..9947b16066b6 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -925,7 +925,7 @@ fi
-- if test x$enable_pcre = xyes; then
-- dnl pcre-config should probably be employed here
-- dnl AC_SEARCH_LIBS(pcre_compile, pcre)
---  LIBS="`pcre-config --libs` $LIBS"
--+  LIBS="`$ac_cv_prog_PCRECONF --libs` $LIBS"
-- fi
-- 
-- dnl ---------------------
---- 
--2.7.0
--
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 6793162..0eeebd4 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,4 +1,4 @@
- # From http://www.zsh.org/pub/MD5SUM
--md5	afe96fde08b70e23c1cab1ca7a68fb34	zsh-5.2.tar.xz
-+md5	c5ba34e68fcf62a2e78adc56bf3d328a	zsh-5.3.tar.xz
- # Calculated based on the hash above
--sha256	f17916320ffaa844bbd7ce48ceeb5945fc5f3eff64b149b4229bbfbdf3795a9d	zsh-5.2.tar.xz
-+sha256	76f82cfd5ce373cf799a03b6f395283f128430db49202e3e3f512fb5a19d6f8a	zsh-5.3.tar.xz
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index aa4029f..9d11b97 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
- 
--ZSH_VERSION = 5.2
-+ZSH_VERSION = 5.3
- ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
- ZSH_CONF_OPTS = --bindir=/bin
--# Patching configure.ac
--ZSH_AUTORECONF = YES
- ZSH_LICENSE = MIT-like
- ZSH_LICENSE_FILES = LICENCE
- 
+I don't really feel very strongly about this.
+
+However, what was odd with BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH is that
+we were providing this for the Linux kernel package, but not for any
+other package. I think the reason we removed it is because someone
+wanted to add the same feature to U-Boot or some other package, and we
+said we didn't want to add this possibility to each and every package
+in Buildroot.
+
+I am however surprised that you need something like this for a build
+that will be done by others. Why is it that you need to "prepare your
+kernel sources" before starting the build? Why aren't you referencing a
+given commit in some Git repository?
+
+In the worst case, adding local.mk (which you can rename, it's
+configurable in BR2_PACKAGE_OVERRIDE_FILE) to your version control
+system will do the trick. But I'm still interested in understanding
+your more global use case for this functionality.
+
+> On a related note, if the intent is to still leave this reverted,
+> BR2_LINUX_KERNEL_CUSTOM_LOCAL is still being reference in the
+> `linux-header` package [2] and `linux/Config.in` [3] (just dead code).
+> I can whip up a patch if no one wants to take a stab at it?
+> 
+> [1]: https://patchwork.ozlabs.org/patch/641254/
+> [2]: https://git.buildroot.net/buildroot/tree/package/linux-headers/linux-headers.mk?id=0d7383a0a7f5c69cb0e4a4eb0d32d2536cd7e0e8#n20
+> [3]: https://git.buildroot.net/buildroot/tree/linux/Config.in#n113
+
+Please submit a patch :-)
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
