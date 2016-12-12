@@ -1,39 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Dec 2016 12:13:59 +0100
-Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime: bump kernel to
-	4.9
-In-Reply-To: <1481540569-20867-1-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Mon, 12 Dec 2016 12:02:49 +0100")
-References: <1481540569-20867-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87d1gxqu14.fsf@dell.be.48ers.dk>
+From: Christian Kellermann <christian.kellermann@solectrix.de>
+Date: Mon, 12 Dec 2016 12:27:36 +0100
+Subject: [Buildroot] [PATCH 1/1] linux: Setting a repo_version is
+	mandatory for custom repositories
+In-Reply-To: <58df8b4b-2d61-b93d-c96b-69ac9a4c084c@mind.be>
+References: <58df8b4b-2d61-b93d-c96b-69ac9a4c084c@mind.be>
+Message-ID: <1481542057-19945-1-git-send-email-christian.kellermann@solectrix.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- > ---
- >  configs/olimex_a20_olinuxino_lime_defconfig | 6 +++---
- >  1 file changed, 3 insertions(+), 3 deletions(-)
 
- > diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
- > index 8d63606..b7cb0dd 100644
- > --- a/configs/olimex_a20_olinuxino_lime_defconfig
- > +++ b/configs/olimex_a20_olinuxino_lime_defconfig
- > @@ -5,8 +5,8 @@ BR2_ARM_EABIHF=y
- 
- >  BR2_TOOLCHAIN_EXTERNAL=y
- 
- > -# Linux headers same as kernel, a 4.4 series
- > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- > +# Linux headers same as kernel, a 4.9 series
- > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+>   Unless I'm very mistaken, this will never trigger, because the
+>  option will be "" instead of empty when it has not been set by the
+>  user. So it should be qstrip'ped.
 
-Ehh, what is this against? We don't have BR2_TOOLCHAIN_EXTERNAL=y
-enabled in the lime (or any other) defconfigs.
+I have added the qstrip and also added the warning for the linux-header package.
 
--- 
-Bye, Peter Korsgaard
+>   I think it is more convenient to check $(LINUX_VERSION).
+
+I don't understand what you mean by this.
+
+>   You can also drop the outer condition, so that it also checked for
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION. But then of course it should still
+>  be in an ifeq ($(BR2_LINUX_KERNEL),y) condition. And you should
+>  check if the CUSTOM_LOCAL and OVERRIDE_SRCDIR options still work
+>  correctly.
+
+I don't think this will be easier to read though. But if you think
+it's an improvement I will change the patches accordingly.
+
+CUSTOM_LOCAL works for me, how do I test OVERRIDE_SRCDIR?
+
+>   And while you're at it, perhaps you can do the same for LINUX_SITE.
+
+Did this.
+
+Thanks,
+
+Christian
