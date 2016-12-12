@@ -1,46 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Dec 2016 21:14:47 +0100
-Subject: [Buildroot] [PATCH v13 1/8] policycoreutils: new package
-In-Reply-To: <CAKGmAFpnpdg4OiAzQXZyx1KSf5Kn6s-6JmPwJyExxRVRY+Kz5Q@mail.gmail.com>
-References: <1477423570-15694-1-git-send-email-bryce.ferguson@rockwellcollins.com>
- <20161210155912.2fb05507@free-electrons.com>
- <CAKGmAFpnpdg4OiAzQXZyx1KSf5Kn6s-6JmPwJyExxRVRY+Kz5Q@mail.gmail.com>
-Message-ID: <20161212211447.1a67143d@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 12 Dec 2016 21:18:40 +0100
+Subject: [Buildroot] [PATCH 1/2] usb_modeswitch: bump to version 2.4.0
+In-Reply-To: <1481565717-13394-1-git-send-email-rahul.bedarkar@imgtec.com>
+ (Rahul Bedarkar's message of "Mon, 12 Dec 2016 23:31:56 +0530")
+References: <1481565717-13394-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <87oa0g52an.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Rahul" == Rahul Bedarkar <rahul.bedarkar@imgtec.com> writes:
 
-On Mon, 12 Dec 2016 13:28:04 -0600, Bryce Ferguson wrote:
+ > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 
-> > Also, could you please have a look at what I answered to:
-> >
-> >   [PATCH v13 4/8] util-linux: selinux, audit, and pam support
-> >
-> > and look at the alternative proposals I made:
-> >
-> >   https://patchwork.ozlabs.org/patch/703332/
-> >   https://patchwork.ozlabs.org/patch/703333/  
-> 
-> I will perform a test build with these patches and provide tested-by
-> feedback.  I think we will want to use these patches instead of [PATCH v13
-> 4/8].  So, to confirm, I will remove that patch completely as yours will
-> supersede it, correct?
+Committed, thanks. Was there supposed to have been a patch 2/2 as well?
 
-Yes, that's the idea. Thanks for the feedback.
-
-Also, I'm on IRC #buildroot, usually starting from 9/9:30 PM CET, which
-should conveniently fall into the afternoon for you. It would be great
-if a few folks interested in SELinux in Buildroot on your side could be
-on IRC so we can quickly exchange on how to move forward with this.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
