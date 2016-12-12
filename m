@@ -1,45 +1,62 @@
-From: Mathijs Jonker <mathijsjonker@msn.com>
-Date: Mon, 12 Dec 2016 08:33:44 +0000
-Subject: [Buildroot] wvdial fails reading contents of wvdial.conf
-Message-ID: <AM5P195MB0049E089BF7AC66DD623F208B2980@AM5P195MB0049.EURP195.PROD.OUTLOOK.COM>
+From: jerry at chordia.co.uk <jerry@chordia.co.uk>
+Date: Mon, 12 Dec 2016 08:50:20 -0000
+Subject: [Buildroot] Using 2016.11-rc2: external packages and BR2_EXTERNAL ?
+Message-ID: <23ce01d25454$c528d7e0$4f7a87a0$@chordia.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Greetings. Any thoughts on this one?  
 
+ 
 
-I'm having an issue with wvdial being unable to read the config. It's finding the correct file and has found all the needed libraries.
+This post (
+<http://buildroot.uclibc.narkive.com/wXlmUu43/patch-br2-external-make-it-ava
+ilable-to-post-build-image-scripts>
+http://buildroot.uclibc.narkive.com/wXlmUu43/patch-br2-external-make-it-avai
+lable-to-post-build-image-scripts) suggests BR2_EXTERNAL is exported to all
+configure/make/shell stages.
 
-Platform is CM-FX6 (iMX6) using a custom kernel 3.0.35, buildroot version 2016.08.1.
+ 
 
+Given the following external config.in
 
-I've attached the wvdial config and strace.
+ 
 
+#---------------snip---------------------
 
-Any leads on where to look would be appreciated.
+source "$BR2_EXTERNAL_TARGET1_PATH/package/libxyz/Config.in"
 
+source "$BR2_EXTERNAL/package/appxyz/Config.in"
 
-Cheers!
+#---------------snip---------------------
 
+ 
 
-Mathijs Jonker
+Any attempt to configure fails with
+
+ 
+
+/home/user/br/external/target1/Config.in:2: can't open file
+"/package/appxyz/Config.in"
+
+ 
+
+What is the best way to ensure $BR2_EXTERNAL is available at the configure
+stage?
+
+ 
+
+TAIA and BR
+
+ 
+
+Jerry.
+
+ 
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161212/98e4d14b/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: wvdial.conf
-Type: application/octet-stream
-Size: 445 bytes
-Desc: wvdial.conf
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161212/98e4d14b/attachment.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: strace
-Type: application/octet-stream
-Size: 19927 bytes
-Desc: strace
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161212/98e4d14b/attachment-0001.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161212/374bc3ca/attachment.html>
