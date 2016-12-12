@@ -1,117 +1,113 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 12 Dec 2016 06:39:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/eudev: bump version to 3.2.1
-Message-ID: <20161212053924.19349-1-bernd.kuhls@t-online.de>
+Date: Mon, 12 Dec 2016 07:15:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dovecot: needs OpenSSL
+Message-ID: <20161212061543.9629-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch 0002 applied upstream:
-https://github.com/gentoo/eudev/commit/4f3b8298fb55a7a591831cf71067bc160cd60599
+The latest version bump to 2.27 introduced a bug in the configure
+script which occurs when OpenSSL support is missing:
+http://lists.busybox.net/pipermail/buildroot/2016-December/179397.html
+
+This patch makes OpenSSL mandatory following the upstream advice:
+http://www.dovecot.org/list/dovecot/2016-December/106346.html
+"Nobody really should be building without OpenSSL nowadays anyway"
+
+Fixes
+http://autobuild.buildroot.net/results/85f/85f2f176c108ab36520f02d975f27c27cddce84b/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...missing.h-fix-getrandom-system-call-numbe.patch | 64 ----------------------
- package/eudev/eudev.hash                           |  4 +-
- package/eudev/eudev.mk                             |  2 +-
- 3 files changed, 3 insertions(+), 67 deletions(-)
- delete mode 100644 package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch
+ Config.in.legacy           |  6 ++++++
+ package/dovecot/Config.in  |  9 ++-------
+ package/dovecot/dovecot.mk | 14 +++++---------
+ 3 files changed, 13 insertions(+), 16 deletions(-)
 
-diff --git a/package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch b/package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch
-deleted file mode 100644
-index 5637933..0000000
---- a/package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From f80fe0e68686060e861338cf7b3b32e0637b3e0b Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 4 Aug 2016 10:13:09 +0200
--Subject: [PATCH] src/shared/missing.h: fix getrandom system call number on
-- ARM64
--
--The getrandom() system call number is indeed 384 on ARM, but it is not
--the same on ARM64. ARM64 uses the asm-generic headers, including for
--system call numbers, so the getrandom() system call number on ARM64 is
--278. This fixes runtime issues of eudev on ARM64, such as:
--
--Populating /dev using udev: [    6.186817] udevd[1204]: starting version 3.1.5
--[    6.191662] udevd[1204]: syscall 384
--[    6.195217] Code: aa0503e4 aa0603e5 aa0703e6 d4000001 (b13ffc1f)
--[    6.201291] CPU: 4 PID: 1204 Comm: udevd Not tainted 4.7.0+ #1
--[    6.207079] Hardware name: ARM Juno development board (r2) (DT)
--[    6.212954] task: ffff800976421900 task.stack: ffff800975610000
--[    6.218825] PC is at 0xffff97f12234
--[    6.222281] LR is at 0x41b15c
--[    6.225214] pc : [<0000ffff97f12234>] lr : [<000000000041b15c>] pstate: 80000000
--[    6.232544] sp : 0000ffffcf9b3870
--[    6.235828] x29: 0000ffffcf9b3870 x28: 0000000000428218
--[    6.241110] x27: 0000000000000000 x26: 000000000042a7e3
--[    6.246395] x25: 0000ffffcf9b39c8 x24: 0000000000428000
--[    6.251670] x23: 0000000000449000 x22: 0000000000449678
--[    6.256946] x21: 0000000000000010 x20: 0000000000449000
--[    6.262233] x19: 0000000000449678 x18: 0000000000000000
--[    6.267507] x17: 0000ffff97f12210 x16: 0000000000449440
--[    6.272779] x15: 0000ffff97e4f730 x14: 0000ffff98050cb8
--[    6.278060] x13: 000000000000033c x12: 00000000000004b4
--[    6.283331] x11: 0000000000000000 x10: 0101010101010101
--[    6.288604] x9 : 0000000000001010 x8 : 0000000000000180
--[    6.293882] x7 : ffffffffffffffff x6 : ffffffffffffffff
--[    6.299154] x5 : 00000000271e36c0 x4 : 0007061c00190d07
--[    6.304426] x3 : 00000000271e36d0 x2 : 0000000000000001
--[    6.309705] x1 : 0000000000000010 x0 : 0000000000449678
--[    6.314976]
--[    6.398734] sky2 0000:08:00.0 enp8s0: renamed from eth0
--
--Reported-by: Kevin Hilman <khilman@baylibre.com>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- src/shared/missing.h | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/src/shared/missing.h b/src/shared/missing.h
--index 9031119..5ad5997 100644
----- a/src/shared/missing.h
--+++ b/src/shared/missing.h
--@@ -47,8 +47,10 @@
-- #    define __NR_getrandom 318
-- #  elif defined(__i386__)
-- #    define __NR_getrandom 355
---#  elif defined(__arm__) || defined(__aarch64__)
--+#  elif defined(__arm__)
-- #    define __NR_getrandom 384
--+#  elif defined(__aarch64__)
--+#    define __NR_getrandom 278
-- #  elif defined(__ia64__)
-- #    define __NR_getrandom 1339
-- #  elif defined(__m68k__)
---- 
--2.7.4
--
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index 44ed169..108b0c6 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,4 +1,4 @@
- # From http://dev.gentoo.org/~blueness/eudev/
--md5	7e42d9b9ed8162021665139520676367	eudev-3.2.tar.gz
-+md5 49f71f6c271ffa95b3c20d757d45c2e5  eudev-3.2.1.tar.gz
- # Locally calculated
--sha256	d84a5f7942393a009afc6af0bf31e98841147a0521b91ffbed161dccac303c25	eudev-3.2.tar.gz
-+sha256 57e3d9e51cfefbdad431848ea0ad8ae1cde04928da42474f44bd200b12f5fe19  eudev-3.2.1.tar.gz
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 27d88f8..622a08f 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index b42eb41..461afeb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,12 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.02"
  
--EUDEV_VERSION = 3.2
-+EUDEV_VERSION = 3.2.1
- EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
++config BR2_PACKAGE_DOVECOT_OPENSSL
++	bool "OpenSSL is mandatory for Dovecot now"
++	select BR2_LEGACY
++	help
++	  With Dovecot 2.27, OpenSSL support is now mandatory.
++
+ config BR2_UCLIBC_INSTALL_TEST_SUITE
+ 	bool "uClibc tests now in uclibc-ng-test"
+ 	select BR2_LEGACY
+diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
+index 194efb6..d1ff7bc 100644
+--- a/package/dovecot/Config.in
++++ b/package/dovecot/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_DOVECOT
+ 	bool "dovecot"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Dovecot is an open source IMAP and POP3 email server for Linux/UNIX-
+ 	  like systems, written with security primarily in mind. Dovecot is an
+@@ -24,13 +26,6 @@ config BR2_PACKAGE_DOVECOT_MYSQL
+ comment "mysql support needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+-config BR2_PACKAGE_DOVECOT_OPENSSL
+-	bool "openssl support"
+-	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_ZLIB
+-	help
+-	  Enable OpenSSL support.
+-
+ config BR2_PACKAGE_DOVECOT_SQLITE
+ 	bool "sqlite support"
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 3dd231a..fe0afa5 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -10,7 +10,10 @@ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPLv2.1
+ DOVECOT_LICENSE_FILES = COPYING COPYING.LGPL COPYING.MIT
+-DOVECOT_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_LIBICONV),libiconv)
++DOVECOT_DEPENDENCIES = \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
++	openssl
+ 
+ DOVECOT_CONF_ENV = \
+ 	RPCGEN=__disable_RPCGEN_rquota \
+@@ -27,7 +30,7 @@ DOVECOT_CONF_ENV = \
+ 	lib_cv___va_copy=yes \
+ 	lib_cv_va_val_copy=yes
+ 
+-DOVECOT_CONF_OPTS = --without-docs
++DOVECOT_CONF_OPTS = --without-docs --with-ssl=openssl
+ 
+ ifeq ($(BR2_PACKAGE_DOVECOT_MYSQL)$(BR2_PACKAGE_DOVECOT_SQLITE),)
+ DOVECOT_CONF_OPTS += --without-sql
+@@ -62,13 +65,6 @@ else
+ DOVECOT_CONF_OPTS += --without-mysql
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DOVECOT_OPENSSL),y)
+-DOVECOT_CONF_OPTS += --with-ssl=openssl
+-DOVECOT_DEPENDENCIES += openssl
+-else
+-DOVECOT_CONF_OPTS += --with-ssl=no
+-endif
+-
+ ifeq ($(BR2_PACKAGE_DOVECOT_SQLITE),y)
+ DOVECOT_CONF_OPTS += --with-sqlite
+ DOVECOT_DEPENDENCIES += sqlite
 -- 
 2.10.2
