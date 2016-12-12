@@ -1,43 +1,66 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 12 Dec 2016 22:00:16 +0100
-Subject: [Buildroot] [PATCH] package/enlightenment: bump to version 0.21.5
-Message-ID: <1481576416-11145-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Dec 2016 22:26:05 +0100
+Subject: [Buildroot] [PATCH] netsnmp: fix libnl include path in
+ configure script
+In-Reply-To: <1481544668-900-1-git-send-email-julien.floret@6wind.com>
+References: <1481544668-900-1-git-send-email-julien.floret@6wind.com>
+Message-ID: <20161212222605.7906c427@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bug fix release:
-https://www.enlightenment.org/news/e-0.21.5-release
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Mon, 12 Dec 2016 13:11:08 +0100, Julien Floret wrote:
+> Search for libnl headers in staging directory, not in the host machine
+> /usr/include/libnl3 folder.
+> 
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index ba66918..1548f20 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
-@@ -1,2 +1,2 @@
--# From https://www.enlightenment.org/news/e-0.21.4-release
--sha256	0ed1a7c768017b2afa02cf94d9c532e9f960b6a4a7e79954770424dfb6b1bf20 	enlightenment-0.21.4.tar.xz
-+# From https://www.enlightenment.org/news/e-0.21.5-release
-+sha256	f0745a660f70851c4ada9866b2a525185bfc5cd1685aa86e4cdb68f2c1c154bb 	enlightenment-0.21.5.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index c936140..7037afe 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ENLIGHTENMENT_VERSION = 0.21.4
-+ENLIGHTENMENT_VERSION = 0.21.5
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
+Thanks for the patch. However, it's not the right way of fixing the
+issue, I'm afraid.
+
+> +define NETSNMP_FIX_LIBNL_INCLUDE_PATH
+> +	$(SED) "s,-I/usr/include/libnl3,-I$(STAGING_DIR)/usr/include/libnl3,g" \
+> +		$(@D)/configure
+> +endef
+> +
+> +NETSNMP_PRE_CONFIGURE_HOOKS += NETSNMP_FIX_LIBNL_INCLUDE_PATH
+
+The right fix is to modify configure.d/config_os_libs2 to avoid passing
+-I/usr/include/libnl3, and then autoreconf the package. To do this, you
+have a few options:
+
+ - Remove -I/usr/include/libnl3 entirely, and assume the user will pass
+   the appropriate options in CPPFLAGS.
+
+ - Use -I=/usr/include/libnl3, gcc will automatically replace = by the
+   compiler sysroot. However, I have no idea whether this also works
+   with non-gcc compilers.
+
+ - Change the --with-nl option so that it takes a path to the nl
+   library.
+
+Also, if netsnmp optionally uses libnl, then it should optionally
+depend on it. Something like:
+
+ifeq ($(BR2_PACKAGE_LIBNL),y)
+NETSNMP_DEPENDENCIES += libnl
+NETSNMP_CONF_OPTS += --with-nl
+else
+NETSNMP_CONF_OPTS += --without-nl
+endif
+
+Or, if you don't care about libnl support in netsnmp and don't want to
+spend time fixing the problem, just add --without-nl to netsnmp
+configuration options.
+
+Thanks!
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
