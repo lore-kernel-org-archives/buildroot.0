@@ -1,73 +1,54 @@
-From: Christian Kellermann <christian.kellermann@solectrix.de>
-Date: Mon, 12 Dec 2016 12:27:37 +0100
-Subject: [Buildroot] [PATCH] linux: Setting a repo_version is mandatory for
-	custom repositories
-In-Reply-To: <1481542057-19945-1-git-send-email-christian.kellermann@solectrix.de>
-References: <58df8b4b-2d61-b93d-c96b-69ac9a4c084c@mind.be>
- <1481542057-19945-1-git-send-email-christian.kellermann@solectrix.de>
-Message-ID: <1481542057-19945-2-git-send-email-christian.kellermann@solectrix.de>
+From: jerry at chordia.co.uk <jerry@chordia.co.uk>
+Date: Mon, 12 Dec 2016 11:43:21 -0000
+Subject: [Buildroot] Using 2016.11-rc2: external packages and
+	BR2_EXTERNAL ?
+In-Reply-To: <20161212120602.3f16376b@free-electrons.com>
+References: <23ce01d25454$c528d7e0$4f7a87a0$@chordia.co.uk>
+ <20161212120602.3f16376b@free-electrons.com>
+Message-ID: <249201d2546c$f090ac60$d1b20520$@chordia.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If not set the system will use an empty string which will result in
-download errors for 'linux-.tar.gz' packages.
+Hello Thomas
 
-This patch makes it obvious to the user that the variable needs to be
-set.
+> With the support for multi-br2-external in 2016.11, things have changed a
+bit,
+> and BR2_EXTERNAL no longer exists. It's name
+> BR2_EXTERNAL_<name_of_your_external>.
 
-Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
----
- linux/linux.mk                         | 12 ++++++++++++
- package/linux-headers/linux-headers.mk | 11 +++++++++++
- 2 files changed, 23 insertions(+)
+Thanks. I'm aware of the multi change. 
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e826cc..2460ebd 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -35,6 +35,18 @@ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
- BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
- endif
+One problem is that this now makes it difficult to share packages. I'm
+currently building for 3 different targets that share a common set of
+packages. I think it would make sense to keep BR2_EXTERNAL as _well_ as the
+'external' version to handle this case?
+
+I did try modifying support/scripts/br_external as below but it does not
+have the expected effect.
+
+Or is there another/better way to do this? Any suggestions?
+
+MTIA
+
+Jerry.
+
+---------------------------------snip-------------------------------
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index 055dc08..ea23399 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -147,6 +147,9 @@ do_mk() {
+         printf 'export BR2_EXTERNAL_%s_PATH = %s\n' "${br2_name}"
+"${br2_ext}"
+         printf 'export BR2_EXTERNAL_%s_DESC = %s\n' "${br2_name}"
+"${br2_desc}"
+     done
 +
-+# When a custom repository has been set, check for the repository version
-+ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN)$(BR2_LINUX_KERNEL_CUSTOM_GIT)$(BR2_LINUX_KERNEL_CUSTOM_HG),y)
-+ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION)),)
-+$(error No custom repository version set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION setting)
-+endif
-+ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL)),)
-+$(error No custom repo URL set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_URL setting)
-+endif
-+
-+endif
-+
- # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
- # to use the $(word) function. We support versions such as 4.0, 3.1,
- # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 0900778..b79ae29 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -51,6 +51,17 @@ LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)/testing
- endif # -rc
- endif
++       # keep so we know the name of 'this' external
++       printf 'export BR2_EXTERNAL = %s\n' "${BR2_EXTERNAL}"
+ }
  
-+# When a custom repository has been set, check for the repository version
-+ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN)$(BR2_LINUX_KERNEL_CUSTOM_GIT)$(BR2_LINUX_KERNEL_CUSTOM_HG),y)
-+ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION)),)
-+$(error No custom repository version set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION setting)
-+endif
-+ifeq ($(call qstrip,$(LINUX_HEADERS_SITE)),)
-+$(error No header site URL set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_URL setting)
-+endif
-+endif
-+
-+
- LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
- # We rely on the generic package infrastructure to download and apply
--- 
-2.1.4
+ # Generate the kconfig snippet for the br2-external tree.
