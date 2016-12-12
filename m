@@ -1,34 +1,33 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 12 Dec 2016 13:11:18 -0600
+From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Date: Mon, 12 Dec 2016 13:28:04 -0600
 Subject: [Buildroot] [PATCH v13 1/8] policycoreutils: new package
 In-Reply-To: <20161210155912.2fb05507@free-electrons.com>
 References: <1477423570-15694-1-git-send-email-bryce.ferguson@rockwellcollins.com>
  <20161210155912.2fb05507@free-electrons.com>
-Message-ID: <CANQCQpYjc_dwWpA53Xg=y6qkKLiMpLDfyt-CdJ8EhrV_tuUEMw@mail.gmail.com>
+Message-ID: <CAKGmAFpnpdg4OiAzQXZyx1KSf5Kn6s-6JmPwJyExxRVRY+Kz5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-On Sat, Dec 10, 2016 at 8:59 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
+On Sat, Dec 10, 2016 at 8:59 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
 > On Tue, 25 Oct 2016 14:26:03 -0500, Bryce Ferguson wrote:
-> > From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> >
-> > This package contains the core policy utilities that are required
-> > for basic operation of an SELinux system.
-> >
-> > Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> > Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-> > Tested-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-> > Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+>> From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>>
+>> This package contains the core policy utilities that are required
+>> for basic operation of an SELinux system.
+>>
+>> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>> Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+>> Tested-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+>> Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
 >
 > I've applied your patch to master, with the following changes:
 >
@@ -53,13 +52,6 @@ On Sat, Dec 10, 2016 at 8:59 AM, Thomas Petazzoni
 > package. If this is not correct, please send another patch to fix that
 > up. We really want your help to fix build issues that may arise from
 > this package.
-
-Clayton is still a good contact and if not we'll update.
-
-Definitely will be watching the autobuilder.  I'm currently looking at
-a issue with "-D_FILE_OFFSET_BITS==64"
-
->
 >
 > Also, could you please have a look at what I answered to:
 >
@@ -70,16 +62,23 @@ a issue with "-D_FILE_OFFSET_BITS==64"
 >   https://patchwork.ozlabs.org/patch/703332/
 >   https://patchwork.ozlabs.org/patch/703333/
 
-I'll let Bryce follow up on these.
+I will perform a test build with these patches and provide tested-by
+feedback.  I think we will want to use these patches instead of [PATCH v13
+4/8].  So, to confirm, I will remove that patch completely as yours will
+supersede it, correct?
 
-Thanks!
+Thanks
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
 
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+
+Bryce Ferguson
+Software Engineer
+Airborne Information Solutions \ Secure Platforms
+
+400 Collins Rd NE Cedar Rapids, Iowa 52498
+
+Bryce.Ferguson at rockwellcollins.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161212/f4273781/attachment.html>
