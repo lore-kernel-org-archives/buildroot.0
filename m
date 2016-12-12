@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Dec 2016 12:06:02 +0100
-Subject: [Buildroot] Using 2016.11-rc2: external packages and
- BR2_EXTERNAL ?
-In-Reply-To: <23ce01d25454$c528d7e0$4f7a87a0$@chordia.co.uk>
-References: <23ce01d25454$c528d7e0$4f7a87a0$@chordia.co.uk>
-Message-ID: <20161212120602.3f16376b@free-electrons.com>
+Date: Mon, 12 Dec 2016 12:08:00 +0100
+Subject: [Buildroot] wvdial fails reading contents of wvdial.conf
+In-Reply-To: <AM5P195MB0049E089BF7AC66DD623F208B2980@AM5P195MB0049.EURP195.PROD.OUTLOOK.COM>
+References: <AM5P195MB0049E089BF7AC66DD623F208B2980@AM5P195MB0049.EURP195.PROD.OUTLOOK.COM>
+Message-ID: <20161212120800.4768c191@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 12 Dec 2016 08:50:20 -0000, jerry at chordia.co.uk wrote:
+On Mon, 12 Dec 2016 08:33:44 +0000, Mathijs Jonker wrote:
 
-> What is the best way to ensure $BR2_EXTERNAL is available at the configure
-> stage?
+> I'm having an issue with wvdial being unable to read the config. It's finding the correct file and has found all the needed libraries.
+> 
+> Platform is CM-FX6 (iMX6) using a custom kernel 3.0.35, buildroot version 2016.08.1.
 
-With the support for multi-br2-external in 2016.11, things have changed
-a bit, and BR2_EXTERNAL no longer exists. It's name
-BR2_EXTERNAL_<name_of_your_external>.
-
-See the CHANGES file in Buildroot:
-
-        It is now possible to specify multiple BR2_EXTERNAL
-        directories. The required files in a BR2_EXTERNAL directory
-        have changed to accomodate this feature. Refer to the
-        documentation for details of how to update them. External
-        trees now have a name and a description. Also, it is possible
-        to override a defconfig in the external tree.
+The wvdial package has been removed as of Buildroot 2016.11. See commit
+521cf82ad842e019c07e3a0d1c0c29c09ae00776 that explains why we removed
+it.
 
 Best regards,
 
