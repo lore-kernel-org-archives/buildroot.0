@@ -1,43 +1,73 @@
 From: Christian Kellermann <christian.kellermann@solectrix.de>
-Date: Mon, 12 Dec 2016 12:27:36 +0100
-Subject: [Buildroot] [PATCH 1/1] linux: Setting a repo_version is
-	mandatory for custom repositories
-In-Reply-To: <58df8b4b-2d61-b93d-c96b-69ac9a4c084c@mind.be>
+Date: Mon, 12 Dec 2016 12:27:37 +0100
+Subject: [Buildroot] [PATCH] linux: Setting a repo_version is mandatory for
+	custom repositories
+In-Reply-To: <1481542057-19945-1-git-send-email-christian.kellermann@solectrix.de>
 References: <58df8b4b-2d61-b93d-c96b-69ac9a4c084c@mind.be>
-Message-ID: <1481542057-19945-1-git-send-email-christian.kellermann@solectrix.de>
+ <1481542057-19945-1-git-send-email-christian.kellermann@solectrix.de>
+Message-ID: <1481542057-19945-2-git-send-email-christian.kellermann@solectrix.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+If not set the system will use an empty string which will result in
+download errors for 'linux-.tar.gz' packages.
 
+This patch makes it obvious to the user that the variable needs to be
+set.
 
->   Unless I'm very mistaken, this will never trigger, because the
->  option will be "" instead of empty when it has not been set by the
->  user. So it should be qstrip'ped.
+Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
+---
+ linux/linux.mk                         | 12 ++++++++++++
+ package/linux-headers/linux-headers.mk | 11 +++++++++++
+ 2 files changed, 23 insertions(+)
 
-I have added the qstrip and also added the warning for the linux-header package.
-
->   I think it is more convenient to check $(LINUX_VERSION).
-
-I don't understand what you mean by this.
-
->   You can also drop the outer condition, so that it also checked for
->  BR2_LINUX_KERNEL_CUSTOM_VERSION. But then of course it should still
->  be in an ifeq ($(BR2_LINUX_KERNEL),y) condition. And you should
->  check if the CUSTOM_LOCAL and OVERRIDE_SRCDIR options still work
->  correctly.
-
-I don't think this will be easier to read though. But if you think
-it's an improvement I will change the patches accordingly.
-
-CUSTOM_LOCAL works for me, how do I test OVERRIDE_SRCDIR?
-
->   And while you're at it, perhaps you can do the same for LINUX_SITE.
-
-Did this.
-
-Thanks,
-
-Christian
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7e826cc..2460ebd 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -35,6 +35,18 @@ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
+ BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+ endif
++
++# When a custom repository has been set, check for the repository version
++ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN)$(BR2_LINUX_KERNEL_CUSTOM_GIT)$(BR2_LINUX_KERNEL_CUSTOM_HG),y)
++ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION)),)
++$(error No custom repository version set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION setting)
++endif
++ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL)),)
++$(error No custom repo URL set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_URL setting)
++endif
++
++endif
++
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+ # to use the $(word) function. We support versions such as 4.0, 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 0900778..b79ae29 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -51,6 +51,17 @@ LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)/testing
+ endif # -rc
+ endif
+ 
++# When a custom repository has been set, check for the repository version
++ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN)$(BR2_LINUX_KERNEL_CUSTOM_GIT)$(BR2_LINUX_KERNEL_CUSTOM_HG),y)
++ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION)),)
++$(error No custom repository version set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION setting)
++endif
++ifeq ($(call qstrip,$(LINUX_HEADERS_SITE)),)
++$(error No header site URL set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_URL setting)
++endif
++endif
++
++
+ LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ 
+ # We rely on the generic package infrastructure to download and apply
+-- 
+2.1.4
