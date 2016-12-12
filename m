@@ -1,66 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Dec 2016 22:26:05 +0100
-Subject: [Buildroot] [PATCH] netsnmp: fix libnl include path in
- configure script
-In-Reply-To: <1481544668-900-1-git-send-email-julien.floret@6wind.com>
-References: <1481544668-900-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <20161212222605.7906c427@free-electrons.com>
+Date: Mon, 12 Dec 2016 22:27:10 +0100
+Subject: [Buildroot] [git commit] icu: fix build failure for musl
+Message-ID: <20161212212714.3589980AEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=93aaf48d29f315caf6ba9254559ad119ca0d5cb9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 12 Dec 2016 13:11:08 +0100, Julien Floret wrote:
-> Search for libnl headers in staging directory, not in the host machine
-> /usr/include/libnl3 folder.
-> 
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+musl doesn't have xlocale.h, and stdtod_l is crippled, so disable it.
+See thread from OE:
+http://lists.openembedded.org/pipermail/openembedded-core/2016-November/128527.html
+Fixes:
+http://autobuild.buildroot.net/results/6ca/6caebf0f6c4adf66e67bedd0f04155413a9aa7bd/
 
-Thanks for the patch. However, it's not the right way of fixing the
-issue, I'm afraid.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/icu/icu.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> +define NETSNMP_FIX_LIBNL_INCLUDE_PATH
-> +	$(SED) "s,-I/usr/include/libnl3,-I$(STAGING_DIR)/usr/include/libnl3,g" \
-> +		$(@D)/configure
-> +endef
-> +
-> +NETSNMP_PRE_CONFIGURE_HOOKS += NETSNMP_FIX_LIBNL_INCLUDE_PATH
-
-The right fix is to modify configure.d/config_os_libs2 to avoid passing
--I/usr/include/libnl3, and then autoreconf the package. To do this, you
-have a few options:
-
- - Remove -I/usr/include/libnl3 entirely, and assume the user will pass
-   the appropriate options in CPPFLAGS.
-
- - Use -I=/usr/include/libnl3, gcc will automatically replace = by the
-   compiler sysroot. However, I have no idea whether this also works
-   with non-gcc compilers.
-
- - Change the --with-nl option so that it takes a path to the nl
-   library.
-
-Also, if netsnmp optionally uses libnl, then it should optionally
-depend on it. Something like:
-
-ifeq ($(BR2_PACKAGE_LIBNL),y)
-NETSNMP_DEPENDENCIES += libnl
-NETSNMP_CONF_OPTS += --with-nl
-else
-NETSNMP_CONF_OPTS += --without-nl
-endif
-
-Or, if you don't care about libnl support in netsnmp and don't want to
-spend time fixing the problem, just add --without-nl to netsnmp
-configuration options.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 12406d7..b9e42de 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -25,6 +25,11 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ ICU_CONF_ENV += LIBS="-latomic"
+ endif
+ 
++# strtod_l() is not supported by musl; also xlocale.h is missing
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++ICU_CONF_ENV += ac_cv_func_strtod_l=no
++endif
++
+ HOST_ICU_CONF_OPTS = \
+ 	--disable-samples \
+ 	--disable-tests \
