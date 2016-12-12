@@ -1,70 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Dec 2016 22:50:23 +0100
-Subject: [Buildroot] [PATCH v7,1/1] php: add apache support
-In-Reply-To: <1481495356-24462-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1481495356-24462-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20161212225023.03d99bc2@free-electrons.com>
+From: Tal Shorer <tal.shorer@gmail.com>
+Date: Tue, 13 Dec 2016 00:17:54 +0200
+Subject: [Buildroot] [PATCH] usbip: add a new package
+In-Reply-To: <20161212172501.GA3509@free.fr>
+References: <1481272671-6491-1-git-send-email-tal.shorer@gmail.com>
+ <20161211135617.GB3599@free.fr>
+ <CAFDyS3ON-Wc-wzKZ4Le81Ak7z0wOpxYbH0hURobu38S87gXUcg@mail.gmail.com>
+ <3fae2ec3-3be6-e839-f854-210b223b65af@mind.be>
+ <CAFDyS3OMjwAEh7g80FTH3P3H=zb6sw6=oU7+L27PQcZC5bmmVg@mail.gmail.com>
+ <20161211220520.GH3599@free.fr>
+ <CAFDyS3OZzOuh=wpnUSBZp7f-31jGVOiN7GH8n+JG9gTynMNKKA@mail.gmail.com>
+ <20161211222056.GI3599@free.fr>
+ <CAFDyS3PkxwNSVxDRoK5Fe7fU+RxMrc126rUYYY9cGQXPrKSzBg@mail.gmail.com>
+ <401bd78e-f466-95f7-6cc8-caa5b15af34f@mind.be> <20161212172501.GA3509@free.fr>
+Message-ID: <CAFDyS3P=SMKSnoBi5QFR=PrTTsNiOK05yeAEdw7OHVW-D5Z1qA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Sun, 11 Dec 2016 23:29:16 +0100, Fabrice Fontaine wrote:
-
-> diff --git a/package/php/0008-Call-apxs-with-correct-prefix.patch b/package/php/0008-Call-apxs-with-correct-prefix.patch
-> new file mode 100644
-> index 0000000..b850ab7
-> --- /dev/null
-> +++ b/package/php/0008-Call-apxs-with-correct-prefix.patch
-> @@ -0,0 +1,49 @@
-> +From 4342bdea7a1a21430ce0d051fa4387441166c473 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> +Date: Sun, 11 Dec 2016 23:12:46 +0100
-> +Subject: [PATCH] Call apxs with correct prefix
-> +
-> +php uses apache's apxs script from staging directory to install libphp
-> +dynamic library and update /etc/apache2/httpd.conf in the staging and target
-> +directories. Here is the full command line:
-> +"apxs -S LIBEXECDIR='$(INSTALL_ROOT)/usr/modules'
-> + -S SYSCONFDIR='$(INSTALL_ROOT)/etc/apache2' -i -a -n php7"
-> +This does not work for target directory as apxs sets the full path of the
-> +library and not the relative one. Indeed, apxs is smart enough to substitute
-> +away the prefix specified in $(STAGING_DIR)/usr/build/config_vars.mk so
-> +httpd.conf will only be correct in the staging directory.
-> +To fix this, add -S PREFIX='$(INSTALL_ROOT)/usr' to apxs call in configure
-> +
-> +Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-
-Thanks, this approach is better I believe.
-
-> +diff --git a/sapi/apache2handler/config.m4 b/sapi/apache2handler/config.m4
-> +index 2e64b21..f5bf002 100644
-> +--- a/sapi/apache2handler/config.m4
-> ++++ b/sapi/apache2handler/config.m4
-> +@@ -66,10 +66,12 @@ if test "$PHP_APXS2" != "no"; then
-> +     AC_MSG_ERROR([Please note that Apache version >= 2.0.44 is required])
-> +   fi
-> + 
-> ++  APXS_PREFIX='$(INSTALL_ROOT)'/usr
-
-This is still wrong, because the prefix could be something else
-than /usr. However, if you query APXS -q PREFIX, it returns
-$(STAGING_DIR)/usr, which is not what you want.
-
-In fact, this is all messed up by the fact that we want APXS to
-automagically return results prefixed by $(STAGING_DIR), in order for
-the build to work fine, but in your case, you want some of the things
-to take place on $(TARGET_DIR) as well at installation time. Somewhat
-conflicting needs, not easy to handle with the current situation.
-
-Bottom line: I've applied your patch as-is, since I don't see really
-how to do things better for the moment.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+On Mon, Dec 12, 2016 at 7:25 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Tal, Arnout, All,
+>
+> On 2016-12-12 10:40 +0100, Arnout Vandecappelle spake thusly:
+>> On 11-12-16 23:30, Tal Shorer wrote:
+>> > Both don't deal with source-check, though. I think we should consider
+>> > linux-tools again at this point, since it doesn't have any of these
+>> > problems (it has its own problems, but I'm beginning to think I'd
+>> > rather deal with those). If nobody objects to this approach I'll
+>>
+>>  +1 to that approach.
+>
+> Still, I don't like the custom autotools commands we'll have to have.
+> What about (mock-up, just for the sake of the example):
+>
+>     ###############
+>     # usbip
+>     ###############
+>
+>     # No USBIP_SITE, no USB_VERSION, we vampirise the code from the
+>     # linux kernel
+>     USBIP_PATCH_DEPENDENCIES = linux
+>
+>     USBIP_SRC_DIR = $)(wildcard \
+>         $(LINUX_DIR)/tools/usb/usbip \
+>         $(LINUX_DIR)/drivers/staging/blabla)
+>
+>     define USBIP_EXTRACT_CMDS
+>         if [ -z "$(USB_SRC_DIR)" ]; then \
+>             echo "No usbip source in your kernel tree" 2>&1; \
+>             exit 1; \
+>         fi
+>         rsync $(USB_SRC_DIR) $(@D)
+>     endef
+>
+>     $(eval $(autotools-package))
+>
+> This way, we still have a proper autotools package, we don;t fail on
+> source-check, and we re-use the kernel sources.
+This works after some modifications. We end up duplicating the rsync
+command from pkg-generic, but the argument that this is better than
+duplicating the configure command is easily made.
+I'll send a new patch
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
