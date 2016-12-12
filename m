@@ -1,41 +1,40 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 12 Dec 2016 15:35:06 +0100
-Subject: [Buildroot] [V2] olimex_a20_olinuxino_lime: bump kernel to 4.9
-Message-ID: <1481553306-2870-1-git-send-email-francois.perrad@gadz.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 12 Dec 2016 12:23:33 -0300
+Subject: [Buildroot] [PATCH] libgtk3: bump to version 3.22.5
+Message-ID: <1481556213-11732-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- configs/olimex_a20_olinuxino_lime_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 5941550..45a2117 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index e1d93b3..d589b40 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.4.sha256sum
+-sha256 7094a6fcfe133d01c578358bd5d3e499715f1a0206e87bd5cf6c834e301f387f  gtk+-3.22.4.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.5.sha256sum
++sha256 693fa0ac643c59ccd51db99cabe476b4e0a41fd4f0c3c8b3e3ef38f94b2e7334  gtk+-3.22.5.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 4a686e0..5380111 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/b
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ LIBGTK3_VERSION_MAJOR = 3.22
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).4
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).5
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
 -- 
-2.7.4
+2.7.3
