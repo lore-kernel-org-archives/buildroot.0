@@ -1,28 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Dec 2016 13:13:38 +0100
-Subject: [Buildroot] Using 2016.11-rc2: external packages and
- BR2_EXTERNAL ?
-In-Reply-To: <249201d2546c$f090ac60$d1b20520$@chordia.co.uk>
-References: <23ce01d25454$c528d7e0$4f7a87a0$@chordia.co.uk>
- <20161212120602.3f16376b@free-electrons.com>
- <249201d2546c$f090ac60$d1b20520$@chordia.co.uk>
-Message-ID: <20161212131338.68968e2e@free-electrons.com>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Mon, 12 Dec 2016 13:11:08 +0100
+Subject: [Buildroot] [PATCH] netsnmp: fix libnl include path in configure
+	script
+Message-ID: <1481544668-900-1-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Search for libnl headers in staging directory, not in the host machine
+/usr/include/libnl3 folder.
 
-On Mon, 12 Dec 2016 11:43:21 -0000, jerry at chordia.co.uk wrote:
+Signed-off-by: Julien Floret <julien.floret@6wind.com>
+---
+ package/netsnmp/netsnmp.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> One problem is that this now makes it difficult to share packages. I'm
-
-What do you mean by "share packages" ?
-
-Thomas
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 48273b51bcc1..c893ea6189d6 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -93,6 +93,13 @@ else
+ NETSNMP_CONF_OPTS += --disable-applications
+ endif
+ 
++define NETSNMP_FIX_LIBNL_INCLUDE_PATH
++	$(SED) "s,-I/usr/include/libnl3,-I$(STAGING_DIR)/usr/include/libnl3,g" \
++		$(@D)/configure
++endef
++
++NETSNMP_PRE_CONFIGURE_HOOKS += NETSNMP_FIX_LIBNL_INCLUDE_PATH
++
+ define NETSNMP_REMOVE_BLOAT_MIBS
+ 	for mib in $(NETSNMP_BLOAT_MIBS); do \
+ 		rm -f $(TARGET_DIR)/usr/share/snmp/mibs/$$mib-MIB.txt; \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.0
