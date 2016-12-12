@@ -1,28 +1,41 @@
-From: jerry at chordia.co.uk <jerry@chordia.co.uk>
-Date: Mon, 12 Dec 2016 14:15:46 -0000
-Subject: [Buildroot] Using 2016.11-rc2: external packages and
-	BR2_EXTERNAL ?
-In-Reply-To: <20161212131338.68968e2e@free-electrons.com>
-References: <23ce01d25454$c528d7e0$4f7a87a0$@chordia.co.uk>
- <20161212120602.3f16376b@free-electrons.com>
- <249201d2546c$f090ac60$d1b20520$@chordia.co.uk>
- <20161212131338.68968e2e@free-electrons.com>
-Message-ID: <24f501d25482$3b63e5d0$b22bb170$@chordia.co.uk>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 12 Dec 2016 15:35:06 +0100
+Subject: [Buildroot] [V2] olimex_a20_olinuxino_lime: bump kernel to 4.9
+Message-ID: <1481553306-2870-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ configs/olimex_a20_olinuxino_lime_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> What do you mean by "share packages" ?
-
-Code common to all targets but stored outside of the buildroot installation.
-
-
-The issue is moot. The new mechanism will work as it stands.
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 5941550..45a2117 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
  
-Thanks again.
-
-Jerry
+-# Linux headers same as kernel, a 4.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/b
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-- 
+2.7.4
