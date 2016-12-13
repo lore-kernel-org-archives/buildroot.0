@@ -1,42 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Dec 2016 16:27:34 +0100
-Subject: [Buildroot] [git commit] zlib: use $(HOST_MAKE_ENV) when calling
-	$(MAKE1)
-Message-ID: <20161213152759.6D93380D9B@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 13 Dec 2016 12:47:40 -0300
+Subject: [Buildroot] [PATCH] python-pyicu: bump to version 1.9.5
+Message-ID: <20161213154740.475-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa9a838364c7d60fd32eb265a88dea17a2be8324
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.net/results/48c/48cfb0fe00fdd52af502f9570d291125fb57b9f0/
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/zlib/zlib.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python-pyicu/python-pyicu.hash | 4 ++--
+ package/python-pyicu/python-pyicu.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index d00ca75..53eb84e 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -48,7 +48,7 @@ define ZLIB_BUILD_CMDS
- endef
+diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
+index a05a30e..69edba8 100644
+--- a/package/python-pyicu/python-pyicu.hash
++++ b/package/python-pyicu/python-pyicu.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/PyICU/json, sha256 locally computed
+-md5	fadaf9f85830632f915cb85875ae9a39  PyICU-1.9.3.tar.gz
+-sha256	1a7a96212cb3e42e8df85b9062f1f1d6e207474d44f087218fad1d4ec210fa42  PyICU-1.9.3.tar.gz
++md5	30f85b7272f15b26c110c9f3e3a9e7a0  PyICU-1.9.5.tar.gz
++sha256	73b052b800861fae3281dbaf9c92d12a81cabf3d31912d94c51862e093ef359b  PyICU-1.9.5.tar.gz
+diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
+index fa3a7f4..5c01421 100644
+--- a/package/python-pyicu/python-pyicu.mk
++++ b/package/python-pyicu/python-pyicu.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- define HOST_ZLIB_BUILD_CMDS
--	$(MAKE1) -C $(@D)
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)
- endef
- 
- define ZLIB_INSTALL_STAGING_CMDS
-@@ -70,7 +70,7 @@ ZLIB_POST_INSTALL_STAGING_HOOKS += ZLIB_RM_STATIC_STAGING
- endif
- 
- define HOST_ZLIB_INSTALL_CMDS
--	$(MAKE1) -C $(@D) LDCONFIG=true install
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) LDCONFIG=true install
- endef
- 
- $(eval $(generic-package))
+-PYTHON_PYICU_VERSION = 1.9.3
++PYTHON_PYICU_VERSION = 1.9.5
+ PYTHON_PYICU_SOURCE = PyICU-$(PYTHON_PYICU_VERSION).tar.gz
+-PYTHON_PYICU_SITE = https://pypi.python.org/packages/bf/1f/cea237f542e3bb592980008a734850e8cbbc25c19c72c98767c71c1bd9c2
++PYTHON_PYICU_SITE = https://pypi.python.org/packages/a2/9f/1947f288143191b903e58633ee597cb98bc284de28dafb1231b6f8b67b99
+ PYTHON_PYICU_LICENSE = MIT
+ PYTHON_PYICU_LICENSE_FILES = LICENSE
+ PYTHON_PYICU_DEPENDENCIES = icu
+-- 
+2.10.2
