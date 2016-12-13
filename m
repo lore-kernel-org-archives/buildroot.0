@@ -1,44 +1,58 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Tue, 13 Dec 2016 11:50:45 -0300
-Subject: [Buildroot] [PATCH 2/2] zlib: use $(HOST_MAKE_ENV) when calling
-	$(MAKE1)
-In-Reply-To: <20161213145045.22768-1-gustavo.zacarias@free-electrons.com>
-References: <20161213145045.22768-1-gustavo.zacarias@free-electrons.com>
-Message-ID: <20161213145045.22768-2-gustavo.zacarias@free-electrons.com>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Tue, 13 Dec 2016 15:54:59 +0100
+Subject: [Buildroot] [PATCH] netsnmp: fix libnl include path in
+	configure script
+In-Reply-To: <20161212222605.7906c427@free-electrons.com>
+References: <1481544668-900-1-git-send-email-julien.floret@6wind.com>
+ <20161212222605.7906c427@free-electrons.com>
+Message-ID: <CAHfJR7hhiYEKd7c9du61-ave1Gi-rES-L49dGgbfz6e_gL0U=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Hello Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- package/zlib/zlib.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> The right fix is to modify configure.d/config_os_libs2 to avoid passing
+> -I/usr/include/libnl3, and then autoreconf the package. To do this, you
+> have a few options:
+>
+>  - Remove -I/usr/include/libnl3 entirely, and assume the user will pass
+>    the appropriate options in CPPFLAGS.
+>
+>  - Use -I=/usr/include/libnl3, gcc will automatically replace = by the
+>    compiler sysroot. However, I have no idea whether this also works
+>    with non-gcc compilers.
+>
+>  - Change the --with-nl option so that it takes a path to the nl
+>    library.
 
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index d00ca75..53eb84e 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -48,7 +48,7 @@ define ZLIB_BUILD_CMDS
- endef
- 
- define HOST_ZLIB_BUILD_CMDS
--	$(MAKE1) -C $(@D)
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)
- endef
- 
- define ZLIB_INSTALL_STAGING_CMDS
-@@ -70,7 +70,7 @@ ZLIB_POST_INSTALL_STAGING_HOOKS += ZLIB_RM_STATIC_STAGING
- endif
- 
- define HOST_ZLIB_INSTALL_CMDS
--	$(MAKE1) -C $(@D) LDCONFIG=true install
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) LDCONFIG=true install
- endef
- 
- $(eval $(generic-package))
--- 
-2.10.2
+Thanks for your analysis. Indeed, your proposals are much better than
+patching the configure script on the fly ;)
+
+In fact, I just saw that the issue has been addressed upstream:
+libnl include paths & libs can now be overriden with configure environment
+variables:
+https://sourceforge.net/p/net-snmp/code/ci/852dcd644cfe4cfc7177649eaec163d6221f2be1/
+
+So if you're ok with this, I suggest to:
+- embed the upstream patch in package/netsnmp/
+- trigger an autoreconf
+- pass the right LIBNL3_{CFLAGS,LIBS} variables in NETSNMP_CONF_ENV.
+
+> Also, if netsnmp optionally uses libnl, then it should optionally
+> depend on it. Something like:
+>
+> ifeq ($(BR2_PACKAGE_LIBNL),y)
+> NETSNMP_DEPENDENCIES += libnl
+> NETSNMP_CONF_OPTS += --with-nl
+> else
+> NETSNMP_CONF_OPTS += --without-nl
+> endif
+
+OK, I will add this as well.
+
+> Or, if you don't care about libnl support in netsnmp and don't want to
+> spend time fixing the problem, just add --without-nl to netsnmp
+> configuration options.
