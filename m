@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Dec 2016 22:55:23 +0100
-Subject: [Buildroot] [Patch v2 3/9] s6: new package
-In-Reply-To: <20161211183826.GC23661@itchy>
-References: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1481397650-14664-4-git-send-email-eric.le.bihan.dev@free.fr>
- <20161210215222.6989afd3@free-electrons.com>
- <20161211183826.GC23661@itchy>
-Message-ID: <20161213225523.0099848d@free-electrons.com>
+Date: Tue, 13 Dec 2016 23:08:40 +0100
+Subject: [Buildroot] [PATCH v13 2/8] refpolicy: new package
+In-Reply-To: <20161212232121.01e9059e@free-electrons.com>
+References: <1477423570-15694-1-git-send-email-bryce.ferguson@rockwellcollins.com>
+ <1477423570-15694-2-git-send-email-bryce.ferguson@rockwellcollins.com>
+ <20161212232121.01e9059e@free-electrons.com>
+Message-ID: <20161213230840.46d5abff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 11 Dec 2016 19:38:26 +0100, Eric Le Bihan wrote:
+On Mon, 12 Dec 2016 23:21:21 +0100, Thomas Petazzoni wrote:
 
-> > > +define S6_INSTALL_STAGING_CMDS
-> > > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-> > > +endef  
-> >
-> > You're doing a plain "make install" here.
-> >  
-> > > +define HOST_S6_INSTALL_CMDS
-> > > +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) \
-> > > +		install-dynlib \
-> > > +		install-include
-> > > +endef  
-> >
-> > but not here. Why?  
+> > +REFPOLICY_DEPENDENCIES += host-m4 host-checkpolicy host-policycoreutils \
+> > +	host-setools host-gawk host-python policycoreutils  
 > 
-> The host variant of s6 builds some process supervision programs that I
-> deemed unuseful for the user, and only the libraries and headers are
-> needed to build the host variants of execline and s6-rc. But it is true
-> that this also applies to the staging directory. So, I'll use
-> "install-dynlib install-include" in this case too.
+> It's not clear to me why we need to have a build dependency on
+> policycoreutils. Could you explain?
 
-Or just use plain "make install" everywhere. We really don't care about
-disk space in HOST_DIR or STAGING_DIR, so simplicity should win.
+I checked by doing a build test: the target policycoreutils dependency
+is not needed for build time, and it seems like the host-setools
+dependency is also not needed.
 
-Thanks,
+Could you double check this, by doing a build which has *only*
+refpolicy enabled and nothing else, and verify that the dependencies
+are really necessary?
+
+Thanks a lot,
 
 Thomas
 -- 
