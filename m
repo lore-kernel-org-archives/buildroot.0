@@ -1,31 +1,41 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Tue, 13 Dec 2016 13:00:28 +0530
-Subject: [Buildroot] [PATCH 1/2] usb_modeswitch: bump to version 2.4.0
-In-Reply-To: <87oa0g52an.fsf@dell.be.48ers.dk>
-References: <1481565717-13394-1-git-send-email-rahul.bedarkar@imgtec.com>
- <87oa0g52an.fsf@dell.be.48ers.dk>
-Message-ID: <fdf39249-b042-9434-2e06-c11b31be652a@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 Dec 2016 09:18:27 +0100
+Subject: [Buildroot] [PATCH] fs/ext2: default to ext2 rev1
+Message-ID: <20161213081827.28081-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Rev0 is very old (E.G. from before Linux was maintained in git), the kernel
+prints a scary warning when used:
 
-On Tuesday 13 December 2016 01:48 AM, Peter Korsgaard wrote:
->>>>>> "Rahul" == Rahul Bedarkar <rahul.bedarkar@imgtec.com> writes:
->
->  > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
->
-> Committed, thanks. Was there supposed to have been a patch 2/2 as well?
->
+EXT4-fs warning (device sda): ext4_update_dynamic_rev:746: updating to rev 1
+because of new feature flag, running e2fsck is recommended
 
-Yes, I had sent both patches together but 2/2 patch didn't appear until 
-now. I tried sending it again but it still doesn't appear.
+And rev0 support is broken in u-boot 2016.11:
+http://lists.denx.de/pipermail/u-boot/2016-December/275916.html
 
-I will try to check if there is issue from my side. And once resolved, I 
-will send it again.
+So default to rev1 instead.
 
-Thanks,
-Rahul
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ fs/ext2/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 1e7f719..b8eeed2 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -11,7 +11,7 @@ config BR2_TARGET_ROOTFS_EXT2_2
+ 
+ choice
+ 	bool "ext2/3/4 variant"
+-	default BR2_TARGET_ROOTFS_EXT2_2r0
++	default BR2_TARGET_ROOTFS_EXT2_2r1
+ 
+ config BR2_TARGET_ROOTFS_EXT2_2r0
+ 	bool "ext2 (rev0)"
+-- 
+2.10.2
