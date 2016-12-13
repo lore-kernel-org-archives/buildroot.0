@@ -1,68 +1,87 @@
-From: Leonardo Giordano <lgiordano@controlnet.com.ar>
-Date: Tue, 13 Dec 2016 16:11:27 -0300
-Subject: [Buildroot] ADP5588 - Platform data
-In-Reply-To: <874m273bdv.fsf@dell.be.48ers.dk>
-References: <CAFMv-czcQedXA8nPsJgrEaZYJYg8UqW8ePO4NWB64=1BGwC=7A@mail.gmail.com>
- <874m273bdv.fsf@dell.be.48ers.dk>
-Message-ID: <CAFMv-cyTxKvcy60pHj5u2osEY-JOUuwGwnyYuXS+Y3LVjapBFg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 13 Dec 2016 21:03:23 +0100
+Subject: [Buildroot] [PATCH 1/1] tinycbor: try to fix unreproducible errors
+Message-ID: <1481659403-7923-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-Thanks for replying.
+There is a lot of unreproducible issues with tinycbor, latest is:
+http://autobuild.buildroot.net/results/8e8fd1e19d6d07212f29e19a305712e715fe781b
 
-It seems I'm "extending" the driver, as I want to use device tree.
-Sorry for sending to this list, I agree it should be sent to kernel list,
-but I'm not part of it yet.
+All build failures ends with:
+.config:8: *** missing separator.  Stop.
 
-Regards,
-Leonardo
+I'm not 100% sure but perhaps these issues could be the result of using
+echo without double quotes to print Makefile variables inside .config.
+For example, tinycbor calls: echo system-cjson-pass := 1 >&9;
+instead of: echo "system-cjson-pass := 1" >&9;
+As a result, echo will not print a single string but three independent
+parameters, this could lead in a format error when using make with
+parallel tasks through make -j.
 
-2016-12-13 15:57 GMT-03:00 Peter Korsgaard <peter@korsgaard.com>:
+Even if there is no issue, there is no good reason of not using double
+quotes with echo
 
-> >>>>> "Leonardo" == Leonardo Giordano <lgiordano@controlnet.com.ar>
-> writes:
->
->  > Hi,
->  > My board has and ADP5588 IC (it is an I2C matrix keyboard scanner).
->
-> This kind of kernel questions are really more suited for one of the
-> kernel lists, E.G. the input or i2c lists.
->
->  > I enabled the ADP5588 at kernel configuration.
->  > Then I added the following section to i2c at dts file:
->
->  > adp5588: keyboard at 1b {
->  > compatible = "adp5588-keys";
->  > reg = <0x1b>;
->  > interrupt-parent = <&pioC>;
->  > interrupts = <1 0x0>;
->  > pinctrl-names = "default";
->  > pinctrl-0 = <&pinctrl_adp5588_irq>;
->  > wakeup-source;
->  > };
->
-> Where did you get this from? As far as I can see there isn't any
-> devicetree support in that driver of any bindings documented.
->
->  > However, at adp5588_probe() function (drivers/input/keyboard/adp5588.c),
-> it
->  > fails when trying to get platform data:
->
->  > const struct adp5588_kpad_platform_data *pdata =
->  >  dev_get_platdata(&client->dev);
->
->  > pdata points to null.
->
-> The driver has to be extended with devicetree bindings to get the
-> information that used to be encoded in the platform data from the DT.
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161213/616bfb61/attachment.html>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ ...le-quotes-with-echo-in-Makefile.configure.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/tinycbor/0003-Use-double-quotes-with-echo-in-Makefile.configure.patch
+
+diff --git a/package/tinycbor/0003-Use-double-quotes-with-echo-in-Makefile.configure.patch b/package/tinycbor/0003-Use-double-quotes-with-echo-in-Makefile.configure.patch
+new file mode 100644
+index 0000000..d66c5d3
+--- /dev/null
++++ b/package/tinycbor/0003-Use-double-quotes-with-echo-in-Makefile.configure.patch
+@@ -0,0 +1,46 @@
++From 738f0347535a807a3b898018cc5d0afe6649d34c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fabrice.fontaine@orange.com>
++Date: Tue, 13 Dec 2016 20:15:20 +0100
++Subject: [PATCH] Use double quotes with echo in Makefile.configure
++
++There is a lot of unreproducible issues with tinycbor, latest is:
++http://autobuild.buildroot.net/results/8e8fd1e19d6d07212f29e19a305712e715fe781b
++
++All build failures ends with:
++.config:8: *** missing separator.  Stop.
++
++I'm not 100% sure but perhaps these issues could be the result of using
++echo without double quotes to print Makefile variables inside .config.
++For example, tinycbor calls: echo system-cjson-pass := 1 >&9;
++instead of: echo "system-cjson-pass := 1" >&9;
++As a result, echo will not print a single string but three independent
++parameters, this could lead in a format error when using make with
++parallel tasks through make -j.
++
++Even if there is no issue, there is no good reason of not using double
++quotes with echo
++
++Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
++---
++ Makefile.configure | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.configure b/Makefile.configure
++index 424efb3..ce81560 100644
++--- a/Makefile.configure
+++++ b/Makefile.configure
++@@ -22,9 +22,9 @@ sink:
++ configure: $(foreach it,$(ALLTESTS),check-$(it))
++ 
++ check-%:
++-	@echo $(subst check-,,$@)-tested := 1 $(OUT)
+++	@echo "$(subst check-,,$@)-tested := 1" $(OUT)
++ 	$(if $(V),,@)if printf "$($(subst check-,PROGRAM-,$@))" | \
++ 	    $(CC) -xc $($(subst check-,CCFLAGS-,$@)) -o /dev/null - $(if $(V),,>/dev/null 2>&1); \
++ 	then \
++-	    echo $(subst check-,,$@)-pass := 1 $(OUT); \
+++	    echo "$(subst check-,,$@)-pass := 1" $(OUT); \
++ 	fi
++-- 
++2.5.0
++
+-- 
+2.5.0
