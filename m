@@ -1,67 +1,120 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 13 Dec 2016 22:37:45 +0100
-Subject: [Buildroot] [PATCH 1/3] core: allow packages to declare a
-	permission file
-In-Reply-To: <cover.1481665059.git.yann.morin.1998@free.fr>
-References: <cover.1481665059.git.yann.morin.1998@free.fr>
-Message-ID: <548994759a3a6202962c0479c6602363d8814c2b.1481665059.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Dec 2016 22:54:02 +0100
+Subject: [Buildroot] [Patch v2 1/9] skalibs: new package
+In-Reply-To: <20161211181827.GA23661@itchy>
+References: <1481397650-14664-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1481397650-14664-2-git-send-email-eric.le.bihan.dev@free.fr>
+ <20161210214641.05e6af92@free-electrons.com>
+ <20161211181827.GA23661@itchy>
+Message-ID: <20161213225402.37334028@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, packages can define a variable that holds all the permissions
-to set on the files it installs. This can be used to set various
-permissions, like ownership, mode, suid/sgid/sticky bits to individual
-files.
+Hello,
 
-However, this variable has to contain entries that are known the moment
-we scan the .mk file; it is not possible to conditionally add permisions
-for files which presence depend on post-parse conditions.
+On Sun, 11 Dec 2016 19:18:27 +0100, Eric Le Bihan wrote:
 
-This is the case for example for Busybox, for which we don't know whether
-a specific applet will be enabled or not until after the configure
-command has run.
+> > Have you submitted those patches upstream?  
+> 
+> I'll re-check with the maintainer: skarnet software is made to be very
+> portable, so it should build with *ANY* C compiler. My patches may work
+> with GCC/Clang, but not with other compilers.
 
-Introduce a new variable that packages can set to point to a file that
-contains a permission table. That filewill only be used when a filesystem
-image is asembled, so the file can be generated, either at configure or
-build time, with no problem.
+Maybe they can accept that as an option, like if you're cross-compiling
+you can pass an option to tell skalibs to use those tests that may work
+only with gcc ?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > What is this static lib dir thing? If skalibs installs its static
+> > libraries in $(STAGING_DIR)/usr/lib/skalibs/ instead of the default
+> > $(STAGING_DIR)/usr/lib, then the linker will not find them.  
+> 
+> The skarnet libraries are installed in a subdirectory of /usr/lib and
+> the skarnet build system is able to find them properly. But they won't
+> be found when cleaning up the target file system, hence the custom hook.
 
----
-Note: this will be usefull for Busybox, to properly handle the SELinux
-contexts of the individual applets.
----
- fs/common.mk           | 1 +
- package/pkg-generic.mk | 1 +
- 2 files changed, 2 insertions(+)
+OK (it would be good to mention that in the commit log perhaps).
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 7515fdc..843f7ca 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -90,6 +90,7 @@ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
- 	$$(call PRINTF,$$(PACKAGES_DEVICES_TABLE)) >> $$(FULL_DEVICE_TABLE)
- endif
- 	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
-+	cat $$(PACKAGES_PERMISSIONS_TABLE_FILES) >> $$(FULL_DEVICE_TABLE)
- 	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
- endif
- 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 827de62..0f88786 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -904,6 +904,7 @@ PACKAGES += $(1)
- ifneq ($$($(2)_PERMISSIONS),)
- PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
- endif
-+PACKAGES_PERMISSIONS_FILES += $$($(2)_PERMISSIONS_FILE)
- ifneq ($$($(2)_DEVICES),)
- PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
- endif
+And so it's really only the static library that needs to be removed:
+the shared library is really not built/installed when shared libraries
+are not enabled in the Buildroot configuration?
+
+> > > +define HOST_SKALIBS_BUILD_CMDS
+> > > +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR)  
+> >
+> > Why do you have DESTDIR set at build time? You're not passing DESTDIR
+> > when building the target variant.
+
+I don't think you replied to this specific question. Did I miss
+something?
+
+> > > +endef
+> > > +
+> > > +define HOST_SKALIBS_INSTALL_CMDS
+> > > +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install  
+> >
+> > If you pass --prefix=$(HOST_DIR)/usr as suggested above, then passing
+> > DESTDIR here should no longer be needed.  
+> 
+> The use of --prefix=/usr and DESTDIR=$(HOST_DIR) was intentional. The
+> host variant of s6-rc provides s6-rc-compile, a tool to build the
+> service database for the target offline, as well as some execline
+> scripts, where the she-bang contains an absolute path to the execlineb
+> program.
+
+Which should be fixed afterwards.
+
+> If --prefix=$(HOST_DIR)/usr were to be used, the execline scripts on the
+> target file system would refer to the execline program installed on the
+> host. This is not what we want.
+
+Indeed, but it should be fixed afterwards. Using --prefix=/usr
+DESTDIR=$(HOST_DIR) is really wrong, as it means that those host tools
+will be tempted to open things in for example /usr/share/skalibs/,
+while they should open in $(HOST_DIR)/usr/share/skalibs/.
+
+So installing host tools with --prefix=$(HOST_DIR)/usr is really
+important, even if it means that we have to fix up a few things like
+shebangs in generated scripts.
+
+Or better, the process to generate those scripts gets an additional
+argument, which is the path of the execline program on the target.
+
+> Besides, some execline helpers use hardcoded paths containing the
+> prefix.
+> 
+> Hence the trick to use --prefix=/usr and DESTDIR at installation time,
+> which would lead s6-rc-compile to generate proper scripts and avoid
+> helpers location problems (though that would lead to other host variants
+> of skarnet programs not working, but we are not interesting in those).
+> 
+> Anyway, it looks like --prefix=$(HOST_DIR)/usr can be used, as I've
+> noticed a very interesting --shebangdir= option in the ./configure
+> script of execline. So, I'll rework this part.
+
+Ah, exactly what I was proposing earlier :-)
+
+> > In the commit log, it would be good to mention why a host variant of
+> > the package is introduced.  
+> 
+> Will do!
+
+Thanks!
+
+Do you think you can respin soon those patches? Your previous iteration
+was from August this year. I know we are also not very fast at applying
+patches, so it's hard to criticize anything here. But when there are
+5-6 months between two iterations of a series, we completely lose the
+context, and it's almost as-if the review restart from scratch. So if
+you can post the new iterations a bit faster, the context is still
+fresh, and there's a higher chance that it will get merged soon.
+
+Thanks a lot!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
