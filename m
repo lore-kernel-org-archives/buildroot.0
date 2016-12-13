@@ -1,62 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 13 Dec 2016 22:37:44 +0100
-Subject: [Buildroot] [PATCH 0/3] core/pkg-infra: allow packages to provide
-	permisions in a file
-Message-ID: <cover.1481665059.git.yann.morin.1998@free.fr>
+Date: Tue, 13 Dec 2016 22:37:46 +0100
+Subject: [Buildroot] [PATCH 2/3] docs/manual: document FOO_PERMISSIONS_FILE
+In-Reply-To: <cover.1481665059.git.yann.morin.1998@free.fr>
+References: <cover.1481665059.git.yann.morin.1998@free.fr>
+Message-ID: <bbdb59746f6dcd237ae1995854a1ff3aff3c7645.1481665059.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ docs/manual/adding-packages-generic.txt | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-This series is a quick proof-of-concpet to allow packages to provide a
-permission table in a file rather than in-line in the .mk fiile.
-
-That permission file can be generated. It is usefull for the SELinux
-stuff and busybox, where individual applets should have a suid bit, but
-we only know what applets exist at configure time, not when parsing the
-.mk file.
-
-This is RFC material, jsut for quick review of the concept, not the
-actual code. This is not meant to be applied now.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit aa9a838364c7d60fd32eb265a88dea17a2be8324
-
-  zlib: use $(HOST_MAKE_ENV) when calling $(MAKE1) (2016-12-13 16:27:34 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 6d7c0fcf8647fa6e554e32e0370baec848b9ddef
-
-  [RFC] package/busybox: gneerate permissions for enabeld applets (2016-12-13 22:34:36 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      core: allow packages to declare a permission file
-      docs/manual: document FOO_PERMISSIONS_FILE
-      [RFC] package/busybox: gneerate permissions for enabeld applets
-
- docs/manual/adding-packages-generic.txt |  8 +++++++-
- fs/common.mk                            |  1 +
- package/busybox/busybox.mk              | 15 +++++++++++++++
- package/pkg-generic.mk                  |  1 +
- 4 files changed, 24 insertions(+), 1 deletion(-)
-
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 0e111e1..f23b405 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -385,7 +385,13 @@ information is (assuming the package name is +libfoo+) :
+ * +LIBFOO_PERMISSIONS+ lists the changes of permissions to be done at
+   the end of the build process. The syntax is once again the makedevs one.
+   You can find some documentation for this syntax in the xref:makedev-syntax[].
+-  This variable is optional.
++  This variable is optional; and its value must be known when the .mk
++  file is parsed.
++
++* +LIBFOO_PERMISSIONS_FILE+, like +LIBFOO_PERMISSIONS+ but points to a
++  file that contains the list of permissions. Unless +LIBFOO_PERMISSIONS+,
++  its content need not be known when the .mk file is parsed, so it can be
++  generated. This variable is optional, and you should seldom need it.
+ 
+ * +LIBFOO_USERS+ lists the users to create for this package, if it installs
+   a program you want to run as a specific user (e.g. as a daemon, or as a
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
