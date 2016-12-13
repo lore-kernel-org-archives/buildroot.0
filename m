@@ -1,46 +1,44 @@
-From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Tue, 13 Dec 2016 15:59:29 +0100
-Subject: [Buildroot] [PATCH v3 5/7] Revert "qt5base: install bundled fonts
-	to target"
-In-Reply-To: <1481641171-10407-1-git-send-email-anaumann@ultratronik.de>
-References: <1481641171-10407-1-git-send-email-anaumann@ultratronik.de>
-Message-ID: <1481641171-10407-6-git-send-email-anaumann@ultratronik.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 Dec 2016 16:26:44 +0100
+Subject: [Buildroot] [PATCH] netsnmp: fix libnl include path in
+	configure script
+In-Reply-To: <CAHfJR7hhiYEKd7c9du61-ave1Gi-rES-L49dGgbfz6e_gL0U=g@mail.gmail.com>
+ (Julien Floret's message of "Tue, 13 Dec 2016 15:54:59 +0100")
+References: <1481544668-900-1-git-send-email-julien.floret@6wind.com>
+ <20161212222605.7906c427@free-electrons.com>
+ <CAHfJR7hhiYEKd7c9du61-ave1Gi-rES-L49dGgbfz6e_gL0U=g@mail.gmail.com>
+Message-ID: <87bmwf4zpn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Corjon <corjon.j@ecagroup.com>
+>>>>> "Julien" == Julien Floret <julien.floret@6wind.com> writes:
 
-qtbase carries nor more fonts since c5ceabb9a1caf6b9b7615a28c3097f221772f645
+Hi,
 
-This reverts commit cdfa21b06041eb601e0bea79f2c8f50e9d637384.
+ >> - Change the --with-nl option so that it takes a path to the nl
+ >> library.
 
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
----
- package/qt5/qt5base/qt5base.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ > Thanks for your analysis. Indeed, your proposals are much better than
+ > patching the configure script on the fly ;)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 79ad868..fffadad 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -230,14 +230,6 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
- 	done
- endef
- 
--define QT5BASE_INSTALL_TARGET_FONTS
--	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
--		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
--		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
--	fi
--endef
--
--
- define QT5BASE_INSTALL_TARGET_EXAMPLES
- 	example_dirs=$$(cd $(@D)/examples; find . -mindepth 1 -maxdepth 1 -type d); \
- 	for example in $${example_dirs}; do \
+ > In fact, I just saw that the issue has been addressed upstream:
+ > libnl include paths & libs can now be overriden with configure environment
+ > variables:
+ > https://sourceforge.net/p/net-snmp/code/ci/852dcd644cfe4cfc7177649eaec163d6221f2be1/
+
+ > So if you're ok with this, I suggest to:
+ > - embed the upstream patch in package/netsnmp/
+ > - trigger an autoreconf
+ > - pass the right LIBNL3_{CFLAGS,LIBS} variables in NETSNMP_CONF_ENV.
+
+Yes, sounds good, except that the last step shouldn't be needed as
+pkg-config (once you add host-pkgconf to NETSNMP_DEPENDENCIES) should
+return the correct values.
+
+Thanks!
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
