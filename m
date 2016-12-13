@@ -1,47 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 13 Dec 2016 12:47:40 -0300
-Subject: [Buildroot] [PATCH] python-pyicu: bump to version 1.9.5
-Message-ID: <20161213154740.475-1-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Dec 2016 16:49:33 +0100
+Subject: [Buildroot] [PATCH v3 0/7] qt5 bump to 5.8.0-rc
+In-Reply-To: <1481641171-10407-1-git-send-email-anaumann@ultratronik.de>
+References: <1481641171-10407-1-git-send-email-anaumann@ultratronik.de>
+Message-ID: <20161213164933.6ffc2b51@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/48c/48cfb0fe00fdd52af502f9570d291125fb57b9f0/
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/python-pyicu/python-pyicu.hash | 4 ++--
- package/python-pyicu/python-pyicu.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Tue, 13 Dec 2016 15:59:24 +0100, Andreas Naumann wrote:
+> This is a rework of Julien and my previous work with the -rc version, which
+> now is available as a snapshot.
+> 
+> I have tried to adress the comments given by Julien and Arnout. In addition I
+> updated the license stuff, hope that this is correct.
+> 
+> As a result of https://bugreports.qt.io/browse/QTBUG-57039, I could make the
+> patch for directfb slightly smaller. However for non GL platforms there is
+> still an issue (QTBUG-57176).
+> 
+> A new change is the removal of gstreamer config-options in qt5base since this
+> is now completely done in qtmultimedia.
 
-diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
-index a05a30e..69edba8 100644
---- a/package/python-pyicu/python-pyicu.hash
-+++ b/package/python-pyicu/python-pyicu.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/PyICU/json, sha256 locally computed
--md5	fadaf9f85830632f915cb85875ae9a39  PyICU-1.9.3.tar.gz
--sha256	1a7a96212cb3e42e8df85b9062f1f1d6e207474d44f087218fad1d4ec210fa42  PyICU-1.9.3.tar.gz
-+md5	30f85b7272f15b26c110c9f3e3a9e7a0  PyICU-1.9.5.tar.gz
-+sha256	73b052b800861fae3281dbaf9c92d12a81cabf3d31912d94c51862e093ef359b  PyICU-1.9.5.tar.gz
-diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
-index fa3a7f4..5c01421 100644
---- a/package/python-pyicu/python-pyicu.mk
-+++ b/package/python-pyicu/python-pyicu.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYICU_VERSION = 1.9.3
-+PYTHON_PYICU_VERSION = 1.9.5
- PYTHON_PYICU_SOURCE = PyICU-$(PYTHON_PYICU_VERSION).tar.gz
--PYTHON_PYICU_SITE = https://pypi.python.org/packages/bf/1f/cea237f542e3bb592980008a734850e8cbbc25c19c72c98767c71c1bd9c2
-+PYTHON_PYICU_SITE = https://pypi.python.org/packages/a2/9f/1947f288143191b903e58633ee597cb98bc284de28dafb1231b6f8b67b99
- PYTHON_PYICU_LICENSE = MIT
- PYTHON_PYICU_LICENSE_FILES = LICENSE
- PYTHON_PYICU_DEPENDENCIES = icu
+Thanks for working on Qt packaging, definitely very important for
+Buildroot.
+
+Do you know when the final 5.8 is supposed to be released? If it's
+released before Buildroot 2017.02, then we could take your patches
+right now, and update them to the final release when it comes out. This
+way, they would get some exposure (both in terms of Buildroot users
+exposure, and in terms of autobuilder testing).
+
+Thanks,
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
