@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Dec 2016 23:32:19 +0100
-Subject: [Buildroot] [PATCH 3/3] [RFC] package/busybox: gneerate
-	permissions for enabeld applets
-In-Reply-To: <6d7c0fcf8647fa6e554e32e0370baec848b9ddef.1481665059.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 13 Dec 2016 22:37:47 +0100")
+Date: Tue, 13 Dec 2016 23:34:39 +0100
+Subject: [Buildroot] [PATCH 0/3] core/pkg-infra: allow packages to
+	provide permisions in a file
+In-Reply-To: <cover.1481665059.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Tue, 13 Dec 2016 22:37:44 +0100")
 References: <cover.1481665059.git.yann.morin.1998@free.fr>
- <6d7c0fcf8647fa6e554e32e0370baec848b9ddef.1481665059.git.yann.morin.1998@free.fr>
-Message-ID: <87vaun1mvg.fsf@dell.be.48ers.dk>
+Message-ID: <87r35b1mrk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,42 +14,31 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > DO NOT COMMIT THIS.
- > This is jsut an example how to use FOO_PERMISSIONS_FILE.
+ > Hello All!
+ > This series is a quick proof-of-concpet to allow packages to provide a
+ > permission table in a file rather than in-line in the .mk fiile.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- >  package/busybox/busybox.mk | 15 +++++++++++++++
- >  1 file changed, 15 insertions(+)
+ > That permission file can be generated. It is usefull for the SELinux
+ > stuff and busybox, where individual applets should have a suid bit, but
+ > we only know what applets exist at configure time, not when parsing the
+ > .mk file.
 
- > diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
- > index f4a241d..9c1f2e8 100644
- > --- a/package/busybox/busybox.mk
- > +++ b/package/busybox/busybox.mk
- > @@ -60,9 +60,24 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
- >  BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
- >  BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
- 
- > +ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
- > +BUSYBOX_PERMISSIONS_FILE = $(@D)/busybox.permissions
+ > This is RFC material, jsut for quick review of the concept, not the
+ > actual code. This is not meant to be applied now.
 
-Careful, what does $(@D) refer to here? When it is used here in the file
-it is output/build/busybox-*, but when it is expanded in fs/common.mk it
-refers to output/images:
+I'm not really happy with having 2 ways of specifying per-package
+permissions, but OK - perhaps it is the best way of handling this.
 
-cat    /home/peko/source/buildroot/output-test/images/busybox.permissions   >> /home/peko/source/buildroot/output-test/build/_device_table.txt
-cat: /home/peko/source/buildroot/output-test/images/busybox.permissions: No such file or directory
+Alternatively we could drop the check-for-empty <pkg>_PERMISSIONS in
+pkg-generic.mk, so PACKAGES_PERMISSIONS only get expanded at filesystem
+creation time and then do something like:
 
+BUSYBOX_PERMISSIONS = \
+        $(if $(shell grep 'CONFIG_PING=y' $(BUSYBOX_BUILD_CONFIG)),/bin/ping f 4755 0  0 - - - - -$(sep)) \
+        $(if $(shell grep 'CONFIG_PING6=y' $(BUSYBOX_BUILD_CONFIG)),/bin/ping6 f 4755 0  0 - - - - -$(sep))
+        ...
 
-> +define BUSYBOX_GEN_PERMISSIONS
- > +	for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" $(@D)/include/applets.h \
- > +		| sed -e 's/,.*//' -e 's/.*(//'`; \
- > +	do \
- > +		temp=`grep -w $${app} $(@D)/busybox.links`; \
- > +		if [ -n "$${temp}" ]; then \
- > +			echo "$${temp} f 4755 0  0 - - - - -"
-
-You forgot to append ; \ so it doesn't actually work.
+But that also isn't very pretty.
 
 -- 
 Bye, Peter Korsgaard
