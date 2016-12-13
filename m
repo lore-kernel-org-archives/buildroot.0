@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Dec 2016 23:28:40 +0100
-Subject: [Buildroot] [PATCH 1/3] core: allow packages to declare a
-	permission file
-In-Reply-To: <548994759a3a6202962c0479c6602363d8814c2b.1481665059.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 13 Dec 2016 22:37:45 +0100")
+Date: Tue, 13 Dec 2016 23:32:19 +0100
+Subject: [Buildroot] [PATCH 3/3] [RFC] package/busybox: gneerate
+	permissions for enabeld applets
+In-Reply-To: <6d7c0fcf8647fa6e554e32e0370baec848b9ddef.1481665059.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Tue, 13 Dec 2016 22:37:47 +0100")
 References: <cover.1481665059.git.yann.morin.1998@free.fr>
- <548994759a3a6202962c0479c6602363d8814c2b.1481665059.git.yann.morin.1998@free.fr>
-Message-ID: <87zijz1n1j.fsf@dell.be.48ers.dk>
+ <6d7c0fcf8647fa6e554e32e0370baec848b9ddef.1481665059.git.yann.morin.1998@free.fr>
+Message-ID: <87vaun1mvg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,49 +15,42 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Currently, packages can define a variable that holds all the permissions
- > to set on the files it installs. This can be used to set various
- > permissions, like ownership, mode, suid/sgid/sticky bits to individual
- > files.
-
- > However, this variable has to contain entries that are known the moment
- > we scan the .mk file; it is not possible to conditionally add permisions
- > for files which presence depend on post-parse conditions.
-
- > This is the case for example for Busybox, for which we don't know whether
- > a specific applet will be enabled or not until after the configure
- > command has run.
-
- > Introduce a new variable that packages can set to point to a file that
- > contains a permission table. That filewill only be used when a filesystem
- > image is asembled, so the file can be generated, either at configure or
- > build time, with no problem.
+ > DO NOT COMMIT THIS.
+ > This is jsut an example how to use FOO_PERMISSIONS_FILE.
 
  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
  > ---
- > Note: this will be usefull for Busybox, to properly handle the SELinux
- > contexts of the individual applets.
- > ---
- >  fs/common.mk           | 1 +
- >  package/pkg-generic.mk | 1 +
- >  2 files changed, 2 insertions(+)
+ >  package/busybox/busybox.mk | 15 +++++++++++++++
+ >  1 file changed, 15 insertions(+)
 
- > diff --git a/fs/common.mk b/fs/common.mk
- > index 7515fdc..843f7ca 100644
- > --- a/fs/common.mk
- > +++ b/fs/common.mk
- > @@ -90,6 +90,7 @@ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
- >  	$$(call PRINTF,$$(PACKAGES_DEVICES_TABLE)) >> $$(FULL_DEVICE_TABLE)
- >  endif
- >  	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
- > +	cat $$(PACKAGES_PERMISSIONS_TABLE_FILES) >> $$(FULL_DEVICE_TABLE)
+ > diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+ > index f4a241d..9c1f2e8 100644
+ > --- a/package/busybox/busybox.mk
+ > +++ b/package/busybox/busybox.mk
+ > @@ -60,9 +60,24 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
+ >  BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ >  BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+ 
+ > +ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
+ > +BUSYBOX_PERMISSIONS_FILE = $(@D)/busybox.permissions
 
-We need to protect against the case where this is empty, similar to how
-we do it for the rootfs table files.
+Careful, what does $(@D) refer to here? When it is used here in the file
+it is output/build/busybox-*, but when it is expanded in fs/common.mk it
+refers to output/images:
 
-Notice that you called it PACKAGES_PERMISSIONS_TABLE_FILES here and
-PACKAGES_PERMISSIONS_FILES elsewhere.
+cat    /home/peko/source/buildroot/output-test/images/busybox.permissions   >> /home/peko/source/buildroot/output-test/build/_device_table.txt
+cat: /home/peko/source/buildroot/output-test/images/busybox.permissions: No such file or directory
+
+
+> +define BUSYBOX_GEN_PERMISSIONS
+ > +	for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" $(@D)/include/applets.h \
+ > +		| sed -e 's/,.*//' -e 's/.*(//'`; \
+ > +	do \
+ > +		temp=`grep -w $${app} $(@D)/busybox.links`; \
+ > +		if [ -n "$${temp}" ]; then \
+ > +			echo "$${temp} f 4755 0  0 - - - - -"
+
+You forgot to append ; \ so it doesn't actually work.
 
 -- 
 Bye, Peter Korsgaard
