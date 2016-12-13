@@ -1,58 +1,112 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Tue, 13 Dec 2016 15:54:59 +0100
-Subject: [Buildroot] [PATCH] netsnmp: fix libnl include path in
-	configure script
-In-Reply-To: <20161212222605.7906c427@free-electrons.com>
-References: <1481544668-900-1-git-send-email-julien.floret@6wind.com>
- <20161212222605.7906c427@free-electrons.com>
-Message-ID: <CAHfJR7hhiYEKd7c9du61-ave1Gi-rES-L49dGgbfz6e_gL0U=g@mail.gmail.com>
+From: Andreas Naumann <anaumann@ultratronik.de>
+Date: Tue, 13 Dec 2016 15:59:24 +0100
+Subject: [Buildroot] [PATCH v3 0/7] qt5 bump to 5.8.0-rc
+Message-ID: <1481641171-10407-1-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+This is a rework of Julien and my previous work with the -rc version, which
+now is available as a snapshot.
 
-> The right fix is to modify configure.d/config_os_libs2 to avoid passing
-> -I/usr/include/libnl3, and then autoreconf the package. To do this, you
-> have a few options:
->
->  - Remove -I/usr/include/libnl3 entirely, and assume the user will pass
->    the appropriate options in CPPFLAGS.
->
->  - Use -I=/usr/include/libnl3, gcc will automatically replace = by the
->    compiler sysroot. However, I have no idea whether this also works
->    with non-gcc compilers.
->
->  - Change the --with-nl option so that it takes a path to the nl
->    library.
+I have tried to adress the comments given by Julien and Arnout. In addition I
+updated the license stuff, hope that this is correct.
 
-Thanks for your analysis. Indeed, your proposals are much better than
-patching the configure script on the fly ;)
+As a result of https://bugreports.qt.io/browse/QTBUG-57039, I could make the
+patch for directfb slightly smaller. However for non GL platforms there is
+still an issue (QTBUG-57176).
 
-In fact, I just saw that the issue has been addressed upstream:
-libnl include paths & libs can now be overriden with configure environment
-variables:
-https://sourceforge.net/p/net-snmp/code/ci/852dcd644cfe4cfc7177649eaec163d6221f2be1/
+A new change is the removal of gstreamer config-options in qt5base since this
+is now completely done in qtmultimedia.
 
-So if you're ok with this, I suggest to:
-- embed the upstream patch in package/netsnmp/
-- trigger an autoreconf
-- pass the right LIBNL3_{CFLAGS,LIBS} variables in NETSNMP_CONF_ENV.
+Andreas Naumann (4):
+  qt5: Remove all hashes
+  qt5: bump to 5.8.0-rc
+  qt5declarative: enable Quick for non-GL platforms
+  qt5quickcontrols1/2: enable for software renderer
 
-> Also, if netsnmp optionally uses libnl, then it should optionally
-> depend on it. Something like:
->
-> ifeq ($(BR2_PACKAGE_LIBNL),y)
-> NETSNMP_DEPENDENCIES += libnl
-> NETSNMP_CONF_OPTS += --with-nl
-> else
-> NETSNMP_CONF_OPTS += --without-nl
-> endif
+Julien Corjon (3):
+  qt5enginio : move into legacy compatibility
+  qt53d/qt5quickcontrols2/qt5serialbus : move out of tech preview
+  Revert "qt5base: install bundled fonts to target"
 
-OK, I will add this as well.
+ package/qt5/Config.in                              | 14 +++----
+ package/qt5/qt5.mk                                 |  6 +--
+ package/qt5/qt53d/qt53d.hash                       |  2 -
+ .../0001-directfb-Fix-for-non-GL-platform.patch    | 39 +++++++++++++++++++
+ .../0006-eglfs-rasp-pi-header-inclusion.patch      | 45 ----------------------
+ package/qt5/qt5base/qt5base.hash                   |  2 -
+ package/qt5/qt5base/qt5base.mk                     | 24 ++----------
+ package/qt5/qt5canvas3d/qt5canvas3d.hash           |  2 -
+ package/qt5/qt5connectivity/qt5connectivity.hash   |  2 -
+ package/qt5/qt5connectivity/qt5connectivity.mk     |  4 +-
+ package/qt5/qt5declarative/Config.in               |  6 +--
+ package/qt5/qt5declarative/qt5declarative.hash     |  2 -
+ package/qt5/qt5declarative/qt5declarative.mk       |  4 +-
+ package/qt5/qt5enginio/qt5enginio.hash             |  2 -
+ .../qt5graphicaleffects/qt5graphicaleffects.hash   |  2 -
+ .../qt5/qt5graphicaleffects/qt5graphicaleffects.mk |  4 +-
+ package/qt5/qt5imageformats/qt5imageformats.hash   |  2 -
+ package/qt5/qt5imageformats/qt5imageformats.mk     |  4 +-
+ package/qt5/qt5location/qt5location.hash           |  2 -
+ package/qt5/qt5location/qt5location.mk             |  4 +-
+ package/qt5/qt5multimedia/qt5multimedia.hash       |  2 -
+ package/qt5/qt5multimedia/qt5multimedia.mk         |  7 +++-
+ package/qt5/qt5quickcontrols/Config.in             |  4 --
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  2 -
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk   |  5 ++-
+ package/qt5/qt5quickcontrols2/Config.in            |  4 --
+ .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  2 -
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk |  8 ++--
+ package/qt5/qt5script/qt5script.hash               |  2 -
+ package/qt5/qt5sensors/qt5sensors.hash             |  2 -
+ package/qt5/qt5sensors/qt5sensors.mk               |  4 +-
+ package/qt5/qt5serialbus/qt5serialbus.hash         |  2 -
+ package/qt5/qt5serialport/qt5serialport.hash       |  2 -
+ package/qt5/qt5serialport/qt5serialport.mk         |  4 +-
+ package/qt5/qt5svg/qt5svg.hash                     |  2 -
+ package/qt5/qt5svg/qt5svg.mk                       |  4 +-
+ package/qt5/qt5tools/qt5tools.hash                 |  2 -
+ package/qt5/qt5tools/qt5tools.mk                   |  4 +-
+ package/qt5/qt5webchannel/qt5webchannel.hash       |  2 -
+ package/qt5/qt5webchannel/qt5webchannel.mk         |  4 +-
+ ...004-Remove-unused-check-for-private_tests.patch | 40 +++++++++++++++++++
+ package/qt5/qt5webkit/qt5webkit.hash               |  2 -
+ package/qt5/qt5websockets/qt5websockets.hash       |  2 -
+ package/qt5/qt5websockets/qt5websockets.mk         |  4 +-
+ package/qt5/qt5x11extras/qt5x11extras.hash         |  2 -
+ package/qt5/qt5x11extras/qt5x11extras.mk           |  4 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  2 -
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |  4 +-
+ 48 files changed, 133 insertions(+), 167 deletions(-)
+ delete mode 100644 package/qt5/qt53d/qt53d.hash
+ create mode 100644 package/qt5/qt5base/0001-directfb-Fix-for-non-GL-platform.patch
+ delete mode 100644 package/qt5/qt5base/0006-eglfs-rasp-pi-header-inclusion.patch
+ delete mode 100644 package/qt5/qt5base/qt5base.hash
+ delete mode 100644 package/qt5/qt5canvas3d/qt5canvas3d.hash
+ delete mode 100644 package/qt5/qt5connectivity/qt5connectivity.hash
+ delete mode 100644 package/qt5/qt5declarative/qt5declarative.hash
+ delete mode 100644 package/qt5/qt5enginio/qt5enginio.hash
+ delete mode 100644 package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
+ delete mode 100644 package/qt5/qt5imageformats/qt5imageformats.hash
+ delete mode 100644 package/qt5/qt5location/qt5location.hash
+ delete mode 100644 package/qt5/qt5multimedia/qt5multimedia.hash
+ delete mode 100644 package/qt5/qt5quickcontrols/qt5quickcontrols.hash
+ delete mode 100644 package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
+ delete mode 100644 package/qt5/qt5script/qt5script.hash
+ delete mode 100644 package/qt5/qt5sensors/qt5sensors.hash
+ delete mode 100644 package/qt5/qt5serialbus/qt5serialbus.hash
+ delete mode 100644 package/qt5/qt5serialport/qt5serialport.hash
+ delete mode 100644 package/qt5/qt5svg/qt5svg.hash
+ delete mode 100644 package/qt5/qt5tools/qt5tools.hash
+ delete mode 100644 package/qt5/qt5webchannel/qt5webchannel.hash
+ create mode 100644 package/qt5/qt5webkit/0004-Remove-unused-check-for-private_tests.patch
+ delete mode 100644 package/qt5/qt5webkit/qt5webkit.hash
+ delete mode 100644 package/qt5/qt5websockets/qt5websockets.hash
+ delete mode 100644 package/qt5/qt5x11extras/qt5x11extras.hash
+ delete mode 100644 package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
 
-> Or, if you don't care about libnl support in netsnmp and don't want to
-> spend time fixing the problem, just add --without-nl to netsnmp
-> configuration options.
+-- 
+1.9.1
