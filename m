@@ -1,125 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 Dec 2016 19:37:39 +0100
-Subject: [Buildroot] [git commit] configs/imx6ulpico: Bump to kernel 4.9
-Message-ID: <20161213184951.460618186B@busybox.osuosl.org>
+Date: Tue, 13 Dec 2016 19:36:11 +0100
+Subject: [Buildroot] [git commit] python-pyicu: bump to version 1.9.5
+Message-ID: <20161213184951.27CD881DD3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2b8dad0d0883338783314b276f912deaff3c882
+commit: https://git.buildroot.net/buildroot/commit/?id=a32ad113db1011bacc6dca3725117a66bbd7a465
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to kernel 4.9 and remove the wifi dts patch as it is already
-part of 4.9.
+Fixes:
+http://autobuild.buildroot.net/results/48c/48cfb0fe00fdd52af502f9570d291125fb57b9f0/
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../imx6ulpico/patches/linux/0001-picowifi.patch   | 66 ----------------------
- configs/imx6ulpico_defconfig                       |  9 +--
- 2 files changed, 3 insertions(+), 72 deletions(-)
+ package/python-pyicu/python-pyicu.hash | 4 ++--
+ package/python-pyicu/python-pyicu.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/technexion/imx6ulpico/patches/linux/0001-picowifi.patch b/board/technexion/imx6ulpico/patches/linux/0001-picowifi.patch
-deleted file mode 100644
-index c657491..0000000
---- a/board/technexion/imx6ulpico/patches/linux/0001-picowifi.patch
-+++ /dev/null
-@@ -1,66 +0,0 @@
--From 5a9a0986ab0041b53f55e2f4eaedabecb2ea1760 Mon Sep 17 00:00:00 2001
--From: Vanessa Maegima <vanessa.maegima@nxp.com>
--Date: Mon, 1 Aug 2016 09:33:00 -0300
--Subject: [PATCH v2] ARM: dts: imx6ul-pico-hobbit: Add Wifi support
--
--imx6ul-pico-hobbit has a bcm4339 wifi chip connected to usdhc2 port.
--
--Add support for the WL_REG_ON regulator, so that Wifi can be
--functional on this board.
--
--Signed-off-by: Vanessa Maegima <vanessa.maegima@nxp.com>
--Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-----
--Changes since v1:
--- Improve commit log
--- Remove WL_HOST_WAKE
--
-- arch/arm/boot/dts/imx6ul-pico-hobbit.dts | 20 ++++++++++++++++++++
-- 1 file changed, 20 insertions(+)
--
--diff --git a/arch/arm/boot/dts/imx6ul-pico-hobbit.dts b/arch/arm/boot/dts/imx6ul-pico-hobbit.dts
--index 8ce1fec..af2e06b 100644
----- a/arch/arm/boot/dts/imx6ul-pico-hobbit.dts
--+++ b/arch/arm/boot/dts/imx6ul-pico-hobbit.dts
--@@ -100,6 +100,18 @@
--		gpio = <&gpio1 6 0>;
--	};
--
--+	reg_brcm: brcm-reg {
--+		compatible = "regulator-fixed";
--+		enable-active-high;
--+		gpio = <&gpio4 8 GPIO_ACTIVE_HIGH>;
--+		pinctrl-names = "default";
--+		pinctrl-0 = <&pinctrl_brcm_reg>;
--+		regulator-name = "brcm_reg";
--+		regulator-min-microvolt = <3300000>;
--+		regulator-max-microvolt = <3300000>;
--+		startup-delay-us = <200000>;
--+	};
--+
--	sound {
--		compatible = "fsl,imx-audio-sgtl5000";
--		model = "imx6ul-sgtl5000";
--@@ -325,12 +337,20 @@
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_usdhc2>;
--	no-1-8-v;
--+	non-removable;
--	keep-power-in-suspend;
--	wakeup-source;
--+	vmmc-supply = <&reg_brcm>;
--	status = "okay";
-- };
--
-- &iomuxc {
--+	pinctrl_brcm_reg: brcmreggrp {
--+		fsl,pins = <
--+			MX6UL_PAD_NAND_DATA06__GPIO4_IO08	0x10b0	/* WL_REG_ON */
--+		>;
--+	};
--+
--	pinctrl_enet2: enet2grp {
--		fsl,pins = <
--			MX6UL_PAD_ENET1_TX_DATA1__ENET2_MDIO	0x1b0b0
----
--1.9.1
-diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
-index 7b99654..662b9ab 100644
---- a/configs/imx6ulpico_defconfig
-+++ b/configs/imx6ulpico_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
+diff --git a/package/python-pyicu/python-pyicu.hash b/package/python-pyicu/python-pyicu.hash
+index a05a30e..69edba8 100644
+--- a/package/python-pyicu/python-pyicu.hash
++++ b/package/python-pyicu/python-pyicu.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/PyICU/json, sha256 locally computed
+-md5	fadaf9f85830632f915cb85875ae9a39  PyICU-1.9.3.tar.gz
+-sha256	1a7a96212cb3e42e8df85b9062f1f1d6e207474d44f087218fad1d4ec210fa42  PyICU-1.9.3.tar.gz
++md5	30f85b7272f15b26c110c9f3e3a9e7a0  PyICU-1.9.5.tar.gz
++sha256	73b052b800861fae3281dbaf9c92d12a81cabf3d31912d94c51862e093ef359b  PyICU-1.9.5.tar.gz
+diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
+index fa3a7f4..5c01421 100644
+--- a/package/python-pyicu/python-pyicu.mk
++++ b/package/python-pyicu/python-pyicu.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.8 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc5"
-@@ -11,13 +11,10 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc5"
- # rootfs overlay
- BR2_ROOTFS_OVERLAY="board/technexion/imx6ulpico/rootfs_overlay"
- 
--# patches
--BR2_GLOBAL_PATCH_DIR="board/technexion/imx6ulpico/patches"
--
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/technexion/imx6ulpico/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-PYTHON_PYICU_VERSION = 1.9.3
++PYTHON_PYICU_VERSION = 1.9.5
+ PYTHON_PYICU_SOURCE = PyICU-$(PYTHON_PYICU_VERSION).tar.gz
+-PYTHON_PYICU_SITE = https://pypi.python.org/packages/bf/1f/cea237f542e3bb592980008a734850e8cbbc25c19c72c98767c71c1bd9c2
++PYTHON_PYICU_SITE = https://pypi.python.org/packages/a2/9f/1947f288143191b903e58633ee597cb98bc284de28dafb1231b6f8b67b99
+ PYTHON_PYICU_LICENSE = MIT
+ PYTHON_PYICU_LICENSE_FILES = LICENSE
+ PYTHON_PYICU_DEPENDENCIES = icu
