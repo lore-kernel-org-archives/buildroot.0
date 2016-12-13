@@ -1,38 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 13 Dec 2016 22:37:46 +0100
-Subject: [Buildroot] [PATCH 2/3] docs/manual: document FOO_PERMISSIONS_FILE
+Date: Tue, 13 Dec 2016 22:37:47 +0100
+Subject: [Buildroot] [PATCH 3/3] [RFC] package/busybox: gneerate permissions
+	for enabeld applets
 In-Reply-To: <cover.1481665059.git.yann.morin.1998@free.fr>
 References: <cover.1481665059.git.yann.morin.1998@free.fr>
-Message-ID: <bbdb59746f6dcd237ae1995854a1ff3aff3c7645.1481665059.git.yann.morin.1998@free.fr>
+Message-ID: <6d7c0fcf8647fa6e554e32e0370baec848b9ddef.1481665059.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+DO NOT COMMIT THIS.
+
+This is jsut an example how to use FOO_PERMISSIONS_FILE.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- docs/manual/adding-packages-generic.txt | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/busybox/busybox.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 0e111e1..f23b405 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -385,7 +385,13 @@ information is (assuming the package name is +libfoo+) :
- * +LIBFOO_PERMISSIONS+ lists the changes of permissions to be done at
-   the end of the build process. The syntax is once again the makedevs one.
-   You can find some documentation for this syntax in the xref:makedev-syntax[].
--  This variable is optional.
-+  This variable is optional; and its value must be known when the .mk
-+  file is parsed.
-+
-+* +LIBFOO_PERMISSIONS_FILE+, like +LIBFOO_PERMISSIONS+ but points to a
-+  file that contains the list of permissions. Unless +LIBFOO_PERMISSIONS+,
-+  its content need not be known when the .mk file is parsed, so it can be
-+  generated. This variable is optional, and you should seldom need it.
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index f4a241d..9c1f2e8 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -60,9 +60,24 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
+ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
  
- * +LIBFOO_USERS+ lists the users to create for this package, if it installs
-   a program you want to run as a specific user (e.g. as a daemon, or as a
++ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
++BUSYBOX_PERMISSIONS_FILE = $(@D)/busybox.permissions
++define BUSYBOX_GEN_PERMISSIONS
++	for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" $(@D)/include/applets.h \
++		| sed -e 's/,.*//' -e 's/.*(//'`; \
++	do \
++		temp=`grep -w $${app} $(@D)/busybox.links`; \
++		if [ -n "$${temp}" ]; then \
++			echo "$${temp} f 4755 0  0 - - - - -"
++		fi; \
++	done >$(BUSYBOX_PERMISSIONS_FILE)
++endef
++BUSYBOX_POST_INSTALL_TARGET_HOOKS += BUSYBOX_GEN_PERMISSIONS
++else
+ define BUSYBOX_PERMISSIONS
+ 	/bin/busybox                     f 4755 0  0 - - - - -
+ endef
++endif
+ 
+ # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+ ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
 -- 
 2.7.4
