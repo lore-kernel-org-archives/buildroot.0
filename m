@@ -1,41 +1,47 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Tue, 13 Dec 2016 13:37:17 +0200
-Subject: [Buildroot] [PATCH v1 0/3] efibootmgr: build with uClibc
-In-Reply-To: <20161128211411.28555fc5@free-electrons.com>
-References: <20161128163553.173811-1-andriy.shevchenko@linux.intel.com>
- <20161128211411.28555fc5@free-electrons.com>
-Message-ID: <1481629037.7188.65.camel@linux.intel.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Tue, 13 Dec 2016 11:50:44 -0300
+Subject: [Buildroot] [PATCH 1/2] zlib: use $(TARGET_MAKE_ENV) when calling
+	$(MAKE1)
+Message-ID: <20161213145045.22768-1-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2016-11-28 at 21:14 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 28 Nov 2016 18:35:50 +0200, Andy Shevchenko wrote:
-> > These patches make possible to use efibootmgr with uClibc. All
-> > patches had been
-> > sent to upstream.
-> > 
-> > I have tested in my environment that doesn't use unicode characters.
-> > So, any
-> > additional tests are appreciated.
-> > 
-> > Andy Shevchenko (3):
-> > ? efivar: bump to version 30
-> > ? efivar: allow build with uClibc
-> > ? efibootmrg: Allow build with uClibc
-> 
-> Why did you resend those patches? You already sent them yesterday, and
-> I already applied them to our next branch. I even made some comments,
-> which are anyway not taken into account in this new iteration.
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-Sorry for a noise, I just now realized that mail infra on my side moved
-your messages to junk. That's why I resend since I didn't hear from
-anyone anything. Now I know the root cause.
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/zlib/zlib.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index aec9daf..d00ca75 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -44,7 +44,7 @@ define HOST_ZLIB_CONFIGURE_CMDS
+ endef
+ 
+ define ZLIB_BUILD_CMDS
+-	$(MAKE1) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
+ endef
+ 
+ define HOST_ZLIB_BUILD_CMDS
+@@ -52,11 +52,11 @@ define HOST_ZLIB_BUILD_CMDS
+ endef
+ 
+ define ZLIB_INSTALL_STAGING_CMDS
+-	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) LDCONFIG=true install
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) LDCONFIG=true install
+ endef
+ 
+ define ZLIB_INSTALL_TARGET_CMDS
+-	$(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) LDCONFIG=true install
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) LDCONFIG=true install
+ endef
+ 
+ # We don't care removing the .a from target, since it not used at link
 -- 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+2.10.2
