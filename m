@@ -1,37 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Dec 2016 17:44:24 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 Dec 2016 17:46:42 +0100
 Subject: [Buildroot] [PATCH v3 0/7] qt5 bump to 5.8.0-rc
-In-Reply-To: <eb25c05c-1027-7c58-92ab-dc513e412907@andin.de>
+In-Reply-To: <CAB0FRsttHoYOhkbJHxKJTjjakT90zEBaJW34zLFaGiNd5pHipQ@mail.gmail.com>
+ (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Tue, 13 Dec 2016
+ 17:34:42 +0100")
 References: <1481641171-10407-1-git-send-email-anaumann@ultratronik.de>
  <20161213164933.6ffc2b51@free-electrons.com>
- <eb25c05c-1027-7c58-92ab-dc513e412907@andin.de>
-Message-ID: <20161213174424.0d31bd86@free-electrons.com>
+ <8737hr4xg6.fsf@dell.be.48ers.dk>
+ <20161213172254.750ab43b@free-electrons.com>
+ <CAB0FRsttHoYOhkbJHxKJTjjakT90zEBaJW34zLFaGiNd5pHipQ@mail.gmail.com>
+Message-ID: <87twa73hfx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
 
-On Tue, 13 Dec 2016 17:24:44 +0100, Andreas Naumann wrote:
+Hi,
 
-> > Do you know when the final 5.8 is supposed to be released? If it's
-> > released before Buildroot 2017.02, then we could take your patches
-> > right now, and update them to the final release when it comes out. This
-> > way, they would get some exposure (both in terms of Buildroot users
-> > exposure, and in terms of autobuilder testing).  
-> 
-> According to https://wiki.qt.io/Qt_5.8_Release the final release is 
-> expected January 5th. So it should easily make it into our 2017.02 
-> release. Of course the early exposure would be highly beneficial.
+ > The main point from my point of view:
+ > Qt 5.6 has a Long Term Support (like Qt 4.8), see
+ > https://blog.qt.io/blog/2015/12/18/introducing-long-term-support/
 
-OK, so we definitely want to merge your patches soon.
+ > So many people/companies will stay with Qt 5.6
 
-Thanks!
+Ok, so perhaps we should drop Qt 4.x and have separate packages for 5.6
+and 5.x (with .x >= 8)?
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
