@@ -1,41 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Dec 2016 15:52:26 +0100
-Subject: [Buildroot] [PATCH 1/3] package/gdb: add support for gdb 7.12
-In-Reply-To: <1481726889.3994.6.camel@embedded.rocks>
-References: <20161214134058.29826-1-joerg.krause@embedded.rocks>
- <20161214152028.4b2caf8f@free-electrons.com>
- <1481726889.3994.6.camel@embedded.rocks>
-Message-ID: <20161214155226.0dc7204e@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 14 Dec 2016 15:57:57 +0100
+Subject: [Buildroot] [PATCH] configs/mx6sx_udoo_neo: Remove
+	BR2_TARGET_GENERIC_GETTY_PORT
+In-Reply-To: <1481725372-22010-1-git-send-email-fabio.estevam@nxp.com> (Fabio
+ Estevam's message of "Wed, 14 Dec 2016 12:22:52 -0200")
+References: <1481725372-22010-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <87eg1a1rt6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
 
-On Wed, 14 Dec 2016 15:48:09 +0100, J?rg Krause wrote:
+ > As console=ttymxc0 is passed in U-Boot we can use /dev/console to
+ > access the serial console and then BR2_TARGET_GENERIC_GETTY_PORT
+ > can be removed.
 
-> The issue address by the patch 'Revert "sim: unify SIM_CPU definition"'
-> should be fixed by this commit [1].
+ > Suggested-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
-Indeed, seems related.
+Committed, thanks.
 
-> I double checked by building gdb 7.12?without the mentioned patch for
-> the target bf512 with this [2] Buildroot toolchain configuration
-> successfully.
-
-OK. Note that just building gdb was not sufficient to trigger the
-problem, you had to enable the GDB simulator (in host gdb), if I
-remember correctly.
-
-But that's fine, the patch you point at is clearly addressing the
-original problem, so we're good.
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
