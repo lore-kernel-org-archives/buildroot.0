@@ -1,43 +1,41 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 14 Dec 2016 15:48:09 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Dec 2016 15:52:26 +0100
 Subject: [Buildroot] [PATCH 1/3] package/gdb: add support for gdb 7.12
-In-Reply-To: <20161214152028.4b2caf8f@free-electrons.com>
+In-Reply-To: <1481726889.3994.6.camel@embedded.rocks>
 References: <20161214134058.29826-1-joerg.krause@embedded.rocks>
  <20161214152028.4b2caf8f@free-electrons.com>
-Message-ID: <1481726889.3994.6.camel@embedded.rocks>
+ <1481726889.3994.6.camel@embedded.rocks>
+Message-ID: <20161214155226.0dc7204e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Wed, 2016-12-14 at 15:20 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 14 Dec 2016 14:40:56 +0100, J?rg Krause wrote:
-> > gdb 7.12 was released on October 2016, it's time to include it in
-> > Buildroot, which this commit does.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> We have one patch on gdb 7.11.1. Is it still needed? I know I
-> reported
-> the problem to Mike Frysinger, so he might have fixed it upstream,
-> but
-> I haven't followed. It's worth double checing.
+On Wed, 14 Dec 2016 15:48:09 +0100, J?rg Krause wrote:
 
-The issue address by the patch 'Revert "sim: unify SIM_CPU definition"'
-should be fixed by this commit [1].
+> The issue address by the patch 'Revert "sim: unify SIM_CPU definition"'
+> should be fixed by this commit [1].
 
-I double checked by building gdb 7.12?without the mentioned patch for
-the target bf512 with this [2] Buildroot toolchain configuration
-successfully.
+Indeed, seems related.
 
-[1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdi
-ff;h=474a2d9f5f8a080e30812525729c3a8b7baa61d6
-[2] http://autobuild.buildroot.org/toolchains/configs/br-bfin-full.conf
-ig
+> I double checked by building gdb 7.12?without the mentioned patch for
+> the target bf512 with this [2] Buildroot toolchain configuration
+> successfully.
 
-J?rg
+OK. Note that just building gdb was not sufficient to trigger the
+problem, you had to enable the GDB simulator (in host gdb), if I
+remember correctly.
+
+But that's fine, the patch you point at is clearly addressing the
+original problem, so we're good.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
