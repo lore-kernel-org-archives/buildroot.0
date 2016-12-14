@@ -1,32 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Dec 2016 00:03:12 +0100
-Subject: [Buildroot] [PATCH 2/2] package/babeltrace: enable debug info
- support for the host variant
-In-Reply-To: <1477918137-25258-2-git-send-email-yann.morin.1998@free.fr>
-References: <20161031074624.7576-10-eeppeliteloop@gmail.com>
- <1477918137-25258-2-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20161214000312.2aee7ce4@free-electrons.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Wed, 14 Dec 2016 08:24:04 +0300
+Subject: [Buildroot] [PATCH 1/1] configs/linksprite_pcduino: bump kernel and
+	u-boot versions
+Message-ID: <20161214052404.7701-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Update kernel to 4.9 and U-Boot to 2016.09.01.
 
-On Mon, 31 Oct 2016 13:48:57 +0100, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Philippe Proulx <eeppeliteloop@gmail.com>
-> ---
->  package/babeltrace/babeltrace.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ configs/linksprite_pcduino_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master after rebasing on top of master, and fixing the typo.
-
-Thanks!
-
-Thomas
+diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
+index 45de3c1..a440d8a 100644
+--- a/configs/linksprite_pcduino_defconfig
++++ b/configs/linksprite_pcduino_defconfig
+@@ -17,13 +17,13 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/linksprite/pcduino/post-image.sh"
+ # For kernel modules autoloading
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ 
+-# Linux headers same as kernel, a 4.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
+@@ -37,7 +37,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
+ BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.10.2
