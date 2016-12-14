@@ -1,46 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 14 Dec 2016 23:28:10 +0100
-Subject: [Buildroot] [PATCH] fs: set packages permissions even with no
-	system device tables
-Message-ID: <1481754490-12801-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 14 Dec 2016 23:39:43 +0100
+Subject: [Buildroot] [PATCH] docker-engine: needs pkg-config
+Message-ID: <20161214223943.16676-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, when there is no sytem device table (permissions or static
-devices) defined, then package permissions are not applied, because they
-are guarded by the check on the system device tables being non empty.
+Fixes:
+http://autobuild.buildroot.org/results/fcc/fcc32f6cdc46f354a016a9b137d4f51d4054cdb6/
+http://autobuild.buildroot.org/results/083/0832b7be86c525522e2caed66246d5aeb365afb2/
+http://autobuild.buildroot.org/results/ede/ede0ddf0c5685ece8443a9b1bbd5c63b4d98af33/
 
-Fix that by narrowing the guarding condition.
+pkg-config is used for some of the docker-engine dependencies (at least
+libseccomp and libsystemd), so make sure it is available.
 
-Note that the dependency on host-makedevs was not conditional; we always
-build it even if we don;t need it. Making it conditional is not
-possible, because we don't know all the packages permissions by the time
-the fs infra is parsed (packages from br2-external are parsed after it).
+The make.sh script used to configure docker-engine uses the PKG_CONFIG
+variable, but the libseccomp-golang go module simply uses whatever
+pkg-config binary it finds in the path at build time, so also pass
+TARGET_MAKE_ENV to ensure our cross-pkg-config is used.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+For consistency and robustness against future changes, use both approaches
+for the configure and build steps.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/docker-engine/docker-engine.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 7515fdc..396b1c2 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -89,9 +89,9 @@ ifneq ($$(ROOTFS_DEVICE_TABLES),)
- ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
- 	$$(call PRINTF,$$(PACKAGES_DEVICES_TABLE)) >> $$(FULL_DEVICE_TABLE)
- endif
-+endif
- 	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
- 	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
--endif
- 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
- 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
- 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index f895dcc..7b5a8a4 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -10,14 +10,16 @@ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+ DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE_FILES = LICENSE
+ 
+-DOCKER_ENGINE_DEPENDENCIES = host-go
++DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
+ 
+ DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
+ DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+ 	CGO_ENABLED=1 \
+ 	CGO_NO_EMULATION=1 \
+ 	GOBIN="$(@D)/bin" \
+-	GOPATH="$(DOCKER_ENGINE_GOPATH)"
++	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
++	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	$(TARGET_MAKE_ENV)
+ 
+ DOCKER_ENGINE_GLDFLAGS = \
+ 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
+@@ -66,6 +68,7 @@ define DOCKER_ENGINE_CONFIGURE_CMDS
+ 	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
+ 	cd $(@D) && \
+ 		GITCOMMIT="unknown" BUILDTIME="$$(date)" VERSION="$(DOCKER_ENGINE_VERSION)" \
++		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
+ 		bash ./hack/make/.go-autogen
+ endef
+ 
 -- 
-2.7.4
+2.10.2
