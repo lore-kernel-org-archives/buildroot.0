@@ -1,203 +1,144 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Wed, 14 Dec 2016 12:54:59 -0800
-Subject: [Buildroot] [RFC v3 2/3] mariadb: new package
-In-Reply-To: <CA+-urNR3_MEEbP9cPUj+FBJQ0MDA-w2wuN5XKi=s69Dy+nHmng@mail.gmail.com>
-References: <20160927015304.5937-1-bluemrp9@gmail.com>
- <20160927015304.5937-3-bluemrp9@gmail.com>
- <CA+-urNR3_MEEbP9cPUj+FBJQ0MDA-w2wuN5XKi=s69Dy+nHmng@mail.gmail.com>
-Message-ID: <9fcd433a-af8f-b3cf-2daa-1e6b5f83a275@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Dec 2016 22:43:42 +0100
+Subject: [Buildroot] Script to build-test your packages
+Message-ID: <20161214224342.1d79cb05@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, All,
+Hello,
 
-I've been away for awhile and I am finally getting ready to send a new 
-version.
+This has been often asked, and yesterday I needed it, so I did a quick
+and dirty hack. The following script takes as argument a defconfig
+fragment that defines a bunch of Buildroot configuration options, and
+will built this fragment against all the toolchain configurations
+tested in the autobuilders.
 
-On 10/26/2016 9:06 PM, Frank Hunleth wrote:
-> Hi Ryan,
->
-> On Mon, Sep 26, 2016 at 9:53 PM, Ryan Coe <bluemrp9@gmail.com> wrote:
->> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
->> new file mode 100644
->> index 0000000..bac38c2
->> --- /dev/null
->> +++ b/package/mariadb/mariadb.mk
->> @@ -0,0 +1,113 @@
->> +################################################################################
->> +#
->> +# mariadb
->> +#
->> +################################################################################
->> +
->> +MARIADB_VERSION = 10.1.17
->> +MARIADB_SOURCE = mariadb-$(MARIADB_VERSION).tar.gz
->> +MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
->> +MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
->> +MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
->> +MARIADB_INSTALL_STAGING = YES
->> +
->> +MARIADB_DEPENDENCIES = \
->> +       host-mariadb \
->> +       ncurses \
->> +       openssl \
->> +       zlib \
->> +       libaio \
->> +       libxml2 \
->> +       readline
->> +
->> +# We won't need unit tests
->> +MARIADB_CONF_OPTS += -DWITH_UNIT_TESTS=0
->> +
->> +# Mroonga needs libstemmer. Some work still needs to be done before it can be
->> +# included in buildroot. Disable it for now.
->> +MARIADB_CONF_OPTS += -DWITHOUT_MROONGA=1
->> +
->> +# This value is determined automatically during straight compile by compiling
->> +# and running a test code. You cannot do that during cross-compile. However the
->> +# stack grows downward in most if not all modern systems. The only exception I
->> +# am aware of is PA-RISC which is not supported by buildroot. Therefore it makes
->> +# sense to hardcode the value. If an arch is added the stack of which grows up
->> +# one should expect unpredictable behavior at run time.
->> +MARIADB_CONF_OPTS += -DSTACK_DIRECTION=-1
->> +
->> +# Jemalloc was added for TokuDB. Since its configure script seems somewhat broken
->> +# when it comes to cross-compilation we shall disable it and also disable TokuDB.
->> +MARIADB_CONF_OPTS += -DWITH_JEMALLOC=no -DWITHOUT_TOKUDB=1
->> +
->> +# Make it explicit that we are cross-compiling
->> +MARIADB_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
->> +
-> The next time you re-spin your patch, could you add the following lines to it?
->
-> # Explicitly disable dtrace to avoid detection of a host version
-> MARIADB_CONF_OPTS += -DENABLE_DTRACE=0
->
-> With this change, mariadb appears to build and run fine for me.
->
-> Also, fwiw, I didn't apply the other patches in the series since it
-> didn't look like BR2_PACKAGE_HAS_MYSQL was propagated to all of the
-> packages that depended on mysql. I just deleted the mysql package
-> completely and changed all references to mariadb.
->
-> Thanks,
-> Frank
-I added the "-DENABLE_DTRACE" above.  I am, however, confused about your 
-comment about BR2_PACKAGE_HAS_MYSQL.  I am probably missing something, 
-but doesn't the dependency to still exist on all of the packages that 
-depend on mysql?  Either of the oracle-mysql or mariadb virtual packages 
-provides mysql.
->> +ifeq ($(BR2_PACKAGE_MARIADB_SERVER),y)
->> +MARIADB_CONF_OPTS += -DWITH_EMBEDDED_SERVER=ON
->> +else
->> +MARIADB_CONF_OPTS += -DWITHOUT_SERVER=ON
->> +endif
->> +
->> +MARIADB_CONF_OPTS += \
->> +       -DINSTALL_DOCDIR=share/doc/mariadb-$(MARIADB_VERSION) \
->> +       -DINSTALL_DOCREADMEDIR=share/doc/mariadb-$(MARIADB_VERSION) \
->> +       -DINSTALL_MANDIR=share/man \
->> +       -DINSTALL_MYSQLSHAREDIR=share/mysql \
->> +       -DINSTALL_MYSQLTESTDIR=share/mysql/test \
->> +       -DINSTALL_PLUGINDIR=lib/mysql/plugin \
->> +       -DINSTALL_SBINDIR=sbin \
->> +       -DINSTALL_SCRIPTDIR=bin \
->> +       -DINSTALL_SQLBENCHDIR=share/mysql/bench \
->> +       -DINSTALL_SUPPORTFILESDIR=share/mysql \
->> +       -DMYSQL_DATADIR=/var/lib/mysql \
->> +       -DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
->> +
->> +# Some helpers must be compiled for host in order to crosscompile mariadb for
->> +# the target. They are then included by import_executables.cmake which is
->> +# generated during the build of the host helpers. It is not necessary to build
->> +# the whole host package, only the "import_executables" target.
->> +# -DIMPORT_EXECUTABLES=$(HOST_MARIADB_BUILDDIR)/import_executables.cmake
->> +# must then be passed to cmake during target build.
->> +# see also https://mariadb.com/kb/en/mariadb/cross-compiling-mariadb/
->> +HOST_MARIADB_MAKE_OPTS = import_executables
->> +
->> +MARIADB_CONF_OPTS += \
->> +       -DIMPORT_EXECUTABLES=$(HOST_MARIADB_BUILDDIR)/import_executables.cmake
->> +
->> +# Don't install host-mariadb. We just need to build import_executable
->> +# Therefore only run 'true' and do nothing, not even the default action.
->> +HOST_MARIADB_INSTALL_CMDS = true
->> +
->> +ifeq ($(BR2_PACKAGE_MARIADB_SERVER),y)
->> +define MARIADB_USERS
->> +       mysql -1 mysql -1 * /var/lib/mysql - - MySQL Server
->> +endef
->> +
->> +define MARIADB_INSTALL_INIT_SYSV
->> +       $(INSTALL) -D -m 0755 package/mariadb/S97mysqld \
->> +               $(TARGET_DIR)/etc/init.d/S97mysqld
->> +endef
->> +
->> +define MARIADB_INSTALL_INIT_SYSTEMD
->> +       $(INSTALL) -D -m 644 package/mariadb/mysqld.service \
->> +               $(TARGET_DIR)/usr/lib/systemd/system/mysqld.service
->> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->> +       ln -sf ../../../../usr/lib/systemd/system/mysqld.service \
->> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mysqld.service
->> +endef
->> +endif
->> +
->> +define MARIADB_POST_INSTALL
->> +       mkdir -p $(TARGET_DIR)/var/lib/mysql
->> +       $(INSTALL) -D -m 644 $(TARGET_DIR)/usr/share/mysql/my-small.cnf \
->> +               $(TARGET_DIR)/etc/mysql/my.cnf
->> +       # We don't need this on the target as it's only useful in staging
->> +       $(RM) $(TARGET_DIR)/usr/bin/mysql_config
->> +       # Remove test suite
->> +       $(RM) -r $(TARGET_DIR)/usr/share/mysql/test
->> +endef
->> +
->> +MARIADB_POST_INSTALL_TARGET_HOOKS += MARIADB_POST_INSTALL
->> +
->> +$(eval $(cmake-package))
->> +$(eval $(host-cmake-package))
->> diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
->> new file mode 100644
->> index 0000000..cd30831
->> --- /dev/null
->> +++ b/package/mariadb/mysqld.service
->> @@ -0,0 +1,13 @@
->> +[Unit]
->> +Description=MySQL database server
->> +
->> +[Service]
->> +ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
->> +ExecStart=/usr/bin/mysqld_safe
->> +Restart=always
->> +User=mysql
->> +RuntimeDirectory=mysql
->> +RuntimeDirectoryMode=0755
->> +
->> +[Install]
->> +WantedBy=multi-user.target
->> diff --git a/package/oracle-mysql/Config.in b/package/oracle-mysql/Config.in
->> index 0622a13..1c2d33b 100644
->> --- a/package/oracle-mysql/Config.in
->> +++ b/package/oracle-mysql/Config.in
->> @@ -3,6 +3,7 @@ config BR2_PACKAGE_ORACLE_MYSQL
->>          depends on BR2_INSTALL_LIBSTDCPP
->>          depends on BR2_USE_MMU # fork()
->>          depends on BR2_TOOLCHAIN_HAS_THREADS
->> +       depends on !BR2_PACKAGE_MARIADB
->>          select BR2_PACKAGE_NCURSES
->>          select BR2_PACKAGE_READLINE
->>          help
->> --
->> 2.9.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-Thanks,
-Ryan
+Example:
+
+~/buildroot$ cat template
+BR2_PACKAGE_JACK2=y
+BR2_PACKAGE_JACK2_LEGACY=y
+BR2_PACKAGE_JACK2_DBUS=y
+~/buildroot$ ~/test-all.sh template
+                 armv5-ctng-linux-gnueabi : OK
+               armv7-ctng-linux-gnueabihf : OK
+                         br-aarch64-glibc : OK
+                            br-arcle-hs38 : OK
+                             br-arm-basic : SKIP
+                   br-arm-cortex-a9-glibc : OK
+                    br-arm-cortex-a9-musl : OK
+                    br-arm-cortex-m4-full : SKIP
+                              br-arm-full : OK
+                     br-arm-full-nothread : SKIP
+                       br-arm-full-static : SKIP
+                             br-bfin-full : SKIP
+                    br-i386-pentium4-full : OK
+                 br-i386-pentium-mmx-musl : OK
+                        br-m68k-5208-full : SKIP
+                       br-m68k-68040-full : OK
+                     br-microblazeel-full : OK
+                       br-mips64-n64-full : OK
+                  br-mips32r6-el-hf-glibc : OK
+                  br-mips64r6-el-hf-glibc : OK
+                       br-mipsel-o32-full : OK
+                           br-nios2-glibc : OK
+                br-powerpc-603e-basic-cpp : SKIP
+              br-powerpc64le-power8-glibc : OK
+                br-powerpc64-power7-glibc : OK
+                   br-powerpc-e500mc-full : OK
+                              br-sh4-full : OK
+                          br-sparc-uclibc : SKIP
+                         br-sparc64-glibc : OK
+                     br-x86-64-core2-full : OK
+                           br-x86-64-musl : OK
+                           br-xtensa-full : OK
+                      i686-ctng-linux-gnu : OK
+                           linaro-aarch64 : FAIL
+                               linaro-arm : FAIL
+              mips64el-ctng_n32-linux-gnu : OK
+              mips64el-ctng_n64-linux-gnu : FAIL
+         powerpc-ctng_e500v2-linux-gnuspe : OK
+                      sourcery-arm-armv4t : OK
+                             sourcery-arm : OK
+                      sourcery-arm-thumb2 : OK
+                          sourcery-mips64 : OK
+                            sourcery-mips : OK
+                           sourcery-nios2 : OK
+                              sourcery-sh : FAIL
+                          sourcery-x86-64 : OK
+                             sourcery-x86 : OK
+            x86_64-ctng_locales-linux-gnu : OK
+~/buildroot$
+
+So, the jack2 package, with both its "legacy" and "dbus" backends has
+been built in all those configurations.
+
+It says "OK" when the build was successful, "FAIL" when it failed and
+"SKIP" when for some reason the options could not be enabled for the
+current toolchain configuration (for example if this package is
+disabled on this architecture, or if a toolchain feature is missing,
+etc.).
+
+Note that the script excludes the "internal toolchain" configurations,
+because they take too long to build.
+
+The below script is horribly, hardcodes the output directory, assumes
+you run it from the Buildroot source directory, has absolutely no error
+checking whatsoever and needs more love. But I wanted to share it to
+get some feedback, and hopefully improve it up to something that can be
+merged if there's interest.
+
+One nice trick is that you can re-run the script, and it will simply
+restart the build. So after fixing your package, if you want to test it
+again, you don't have to clean everything and restart from scratch:
+just remove the build directory of your package in all output
+directories, and restart the script.
+
+The script itself is really trivial:
+
+#!/bin/bash
+
+OUTPUTS=$HOME/projets/outputs/
+TEMPLATE=$(readlink -f $1)
+
+toolchains=$(curl -s http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv | cut -f1 -d',' | sed 's%.*/\([^.]*\).config%\1%' | grep -v internal)
+
+for toolchain in ${toolchains} ; do
+    output=${OUTPUTS}/${toolchain}
+    mkdir -p ${output}
+    wget -q -O ${output}/.config http://autobuild.buildroot.org/toolchains/configs/${toolchain}.config
+    cat >> ${output}/.config <<EOF
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+EOF
+    cat ${TEMPLATE} >> ${output}/.config
+    make O=${output} olddefconfig >/dev/null 2>&1
+    printf " %40s : " ${toolchain}
+    skip=0
+    while read line ; do
+	if ! grep -q ^${line}$ ${output}/.config ; then
+	    skip=1
+	fi
+    done < <(cat ${TEMPLATE})
+
+    if test ${skip} = 1 ; then
+	echo "SKIP"
+	continue
+    fi
+
+    make O=${output} > ${output}/logfile 2>&1
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+done
+
+Enjoy :)
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
