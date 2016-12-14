@@ -1,23 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Dec 2016 23:42:47 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/linksprite_pcduino: bump u-boot
-	version
-In-Reply-To: <20161214194526.9492-1-geomatsi@gmail.com> (Sergey Matyukevich's
- message of "Wed, 14 Dec 2016 22:45:26 +0300")
-References: <20161214194526.9492-1-geomatsi@gmail.com>
-Message-ID: <87shpqyvx4.fsf@dell.be.48ers.dk>
+Date: Wed, 14 Dec 2016 23:47:00 +0100
+Subject: [Buildroot] [PATCH] fs: set packages permissions even with no
+	system device tables
+In-Reply-To: <1481754490-12801-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 14 Dec 2016 23:28:10 +0100")
+References: <1481754490-12801-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87oa0eyvq3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Update U-Boot to 2016.11.
- > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+ > Currently, when there is no sytem device table (permissions or static
+ > devices) defined, then package permissions are not applied, because they
+ > are guarded by the check on the system device tables being non empty.
+
+ > Fix that by narrowing the guarding condition.
+
+ > Note that the dependency on host-makedevs was not conditional; we always
+ > build it even if we don;t need it. Making it conditional is not
+ > possible, because we don't know all the packages permissions by the time
+ > the fs infra is parsed (packages from br2-external are parsed after it).
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
+
+Out of interest, what is your use case for NOT having any system device
+table?
 
 -- 
 Bye, Peter Korsgaard
