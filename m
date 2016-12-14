@@ -1,35 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Dec 2016 23:42:39 +0100
-Subject: [Buildroot] [git commit] configs/linksprite_pcduino: bump u-boot
-	version
-Message-ID: <20161214224721.9A0ED8186B@busybox.osuosl.org>
+Date: Wed, 14 Dec 2016 23:45:48 +0100
+Subject: [Buildroot] [git commit] fs: set packages permissions even with no
+	system device tables
+Message-ID: <20161214224721.A2E7F7FE1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c583c421c4a76706f9956be01b7f5775999d61d6
+commit: https://git.buildroot.net/buildroot/commit/?id=5b272e3e551e723bae78140f7de4029b9026d961
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update U-Boot to 2016.11.
+Currently, when there is no syztem device table (permissions or static
+devices) defined, then package permissions are not applied, because they
+are guarded by the check on the system device tables being non empty.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Fix that by narrowing the guarding condition.
+
+Note that the dependency on host-makedevs was not conditional; we always
+build it even if we don't need it. Making it conditional is not
+possible, because we don't know all the packages permissions by the time
+the fs infra is parsed (packages from br2-external are parsed after it).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/linksprite_pcduino_defconfig | 2 +-
+ fs/common.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
-index a440d8a..fb82714 100644
---- a/configs/linksprite_pcduino_defconfig
-+++ b/configs/linksprite_pcduino_defconfig
-@@ -37,7 +37,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
- BR2_TARGET_UBOOT_USE_DEFCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/fs/common.mk b/fs/common.mk
+index 7515fdc..396b1c2 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -89,9 +89,9 @@ ifneq ($$(ROOTFS_DEVICE_TABLES),)
+ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+ 	$$(call PRINTF,$$(PACKAGES_DEVICES_TABLE)) >> $$(FULL_DEVICE_TABLE)
+ endif
++endif
+ 	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
+ 	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+-endif
+ 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+ 		echo $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
