@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 14 Dec 2016 17:41:28 +0100
-Subject: [Buildroot] [PATCH 1/3] core: allow packages to declare a
-	permission file
-In-Reply-To: <87zijz1n1j.fsf@dell.be.48ers.dk>
+Date: Wed, 14 Dec 2016 17:42:55 +0100
+Subject: [Buildroot] [PATCH 0/3] core/pkg-infra: allow packages to
+ provide permisions in a file
+In-Reply-To: <87r35b1mrk.fsf@dell.be.48ers.dk>
 References: <cover.1481665059.git.yann.morin.1998@free.fr>
- <548994759a3a6202962c0479c6602363d8814c2b.1481665059.git.yann.morin.1998@free.fr>
- <87zijz1n1j.fsf@dell.be.48ers.dk>
-Message-ID: <20161214164128.GA3617@free.fr>
+ <87r35b1mrk.fsf@dell.be.48ers.dk>
+Message-ID: <20161214164255.GB3617@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,57 +14,40 @@ To: buildroot@busybox.net
 
 Peter, All,
 
-On 2016-12-13 23:28 +0100, Peter Korsgaard spake thusly:
+On 2016-12-13 23:34 +0100, Peter Korsgaard spake thusly:
 > >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 > 
->  > Currently, packages can define a variable that holds all the permissions
->  > to set on the files it installs. This can be used to set various
->  > permissions, like ownership, mode, suid/sgid/sticky bits to individual
->  > files.
+>  > Hello All!
+>  > This series is a quick proof-of-concpet to allow packages to provide a
+>  > permission table in a file rather than in-line in the .mk fiile.
 > 
->  > However, this variable has to contain entries that are known the moment
->  > we scan the .mk file; it is not possible to conditionally add permisions
->  > for files which presence depend on post-parse conditions.
+>  > That permission file can be generated. It is usefull for the SELinux
+>  > stuff and busybox, where individual applets should have a suid bit, but
+>  > we only know what applets exist at configure time, not when parsing the
+>  > .mk file.
 > 
->  > This is the case for example for Busybox, for which we don't know whether
->  > a specific applet will be enabled or not until after the configure
->  > command has run.
+>  > This is RFC material, jsut for quick review of the concept, not the
+>  > actual code. This is not meant to be applied now.
 > 
->  > Introduce a new variable that packages can set to point to a file that
->  > contains a permission table. That filewill only be used when a filesystem
->  > image is asembled, so the file can be generated, either at configure or
->  > build time, with no problem.
+> I'm not really happy with having 2 ways of specifying per-package
+> permissions, but OK - perhaps it is the best way of handling this.
 > 
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Alternatively we could drop the check-for-empty <pkg>_PERMISSIONS in
+> pkg-generic.mk, so PACKAGES_PERMISSIONS only get expanded at filesystem
+> creation time and then do something like:
 > 
->  > ---
->  > Note: this will be usefull for Busybox, to properly handle the SELinux
->  > contexts of the individual applets.
->  > ---
->  >  fs/common.mk           | 1 +
->  >  package/pkg-generic.mk | 1 +
->  >  2 files changed, 2 insertions(+)
-> 
->  > diff --git a/fs/common.mk b/fs/common.mk
->  > index 7515fdc..843f7ca 100644
->  > --- a/fs/common.mk
->  > +++ b/fs/common.mk
->  > @@ -90,6 +90,7 @@ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
->  >  	$$(call PRINTF,$$(PACKAGES_DEVICES_TABLE)) >> $$(FULL_DEVICE_TABLE)
->  >  endif
->  >  	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
->  > +	cat $$(PACKAGES_PERMISSIONS_TABLE_FILES) >> $$(FULL_DEVICE_TABLE)
-> 
-> We need to protect against the case where this is empty, similar to how
-> we do it for the rootfs table files.
+> BUSYBOX_PERMISSIONS = \
+>         $(if $(shell grep 'CONFIG_PING=y' $(BUSYBOX_BUILD_CONFIG)),/bin/ping f 4755 0  0 - - - - -$(sep)) \
+>         $(if $(shell grep 'CONFIG_PING6=y' $(BUSYBOX_BUILD_CONFIG)),/bin/ping6 f 4755 0  0 - - - - -$(sep))
 
-Indeed.
+Which is exactly what I suggested on IRC...
 
-> Notice that you called it PACKAGES_PERMISSIONS_TABLE_FILES here and
-> PACKAGES_PERMISSIONS_FILES elsewhere.
+> But that also isn't very pretty.
 
-Yup, but as I said in the cover-letter, it was just to show how we could
-let packages specify a permissions table rather than a in-line value.
+.. and which I also dismissed becayuse it is not nice either.
+
+I prefer that we have a proper infra in place rather than do tricks like
+that...
 
 Regards,
 Yann E. MORIN.
