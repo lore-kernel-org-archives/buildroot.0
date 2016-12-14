@@ -1,52 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Dec 2016 15:57:12 +0100
-Subject: [Buildroot] [git commit] configs/linksprite_pcduino: bump kernel
-	and u-boot versions
-Message-ID: <20161214150003.626FC801D4@busybox.osuosl.org>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Wed, 14 Dec 2016 13:03:21 -0200
+Subject: [Buildroot] [PATCH] mx6: udoo: Create a mx6qdl directory for
+	consistency
+Message-ID: <1481727801-26457-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bf0c368bbf57514448cdc7136891e273116882d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The udoo neo files are currently placed inside udoo/neo directory.
 
-Update kernel to 4.9 and U-Boot to 2016.09.01.
+Place the mx6qdl udoo related files inside udoo/mx6dl for consistency.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Suggested-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- configs/linksprite_pcduino_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ board/udoo/{ => mx6qdl}/genimage.cfg   | 0
+ board/udoo/{ => mx6qdl}/linux.fragment | 0
+ board/udoo/{ => mx6qdl}/post-image.sh  | 0
+ board/udoo/{ => mx6qdl}/readme.txt     | 0
+ configs/mx6udoo_defconfig              | 4 ++--
+ 5 files changed, 2 insertions(+), 2 deletions(-)
+ rename board/udoo/{ => mx6qdl}/genimage.cfg (100%)
+ rename board/udoo/{ => mx6qdl}/linux.fragment (100%)
+ rename board/udoo/{ => mx6qdl}/post-image.sh (100%)
+ rename board/udoo/{ => mx6qdl}/readme.txt (100%)
 
-diff --git a/configs/linksprite_pcduino_defconfig b/configs/linksprite_pcduino_defconfig
-index 45de3c1..a440d8a 100644
---- a/configs/linksprite_pcduino_defconfig
-+++ b/configs/linksprite_pcduino_defconfig
-@@ -17,13 +17,13 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/linksprite/pcduino/post-image.sh"
- # For kernel modules autoloading
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- 
--# Linux headers same as kernel, a 4.6 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-pcduino"
-@@ -37,7 +37,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+diff --git a/board/udoo/genimage.cfg b/board/udoo/mx6qdl/genimage.cfg
+similarity index 100%
+rename from board/udoo/genimage.cfg
+rename to board/udoo/mx6qdl/genimage.cfg
+diff --git a/board/udoo/linux.fragment b/board/udoo/mx6qdl/linux.fragment
+similarity index 100%
+rename from board/udoo/linux.fragment
+rename to board/udoo/mx6qdl/linux.fragment
+diff --git a/board/udoo/post-image.sh b/board/udoo/mx6qdl/post-image.sh
+similarity index 100%
+rename from board/udoo/post-image.sh
+rename to board/udoo/mx6qdl/post-image.sh
+diff --git a/board/udoo/readme.txt b/board/udoo/mx6qdl/readme.txt
+similarity index 100%
+rename from board/udoo/readme.txt
+rename to board/udoo/mx6qdl/readme.txt
+diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
+index 8c1b28a..394580b 100644
+--- a/configs/mx6udoo_defconfig
++++ b/configs/mx6udoo_defconfig
+@@ -3,7 +3,7 @@ BR2_cortex_a9=y
+ # Linux headers same as kernel, a 4.8 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/mx6qdl/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
- BR2_TARGET_UBOOT_USE_DEFCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Linksprite_pcDuino"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+@@ -17,7 +17,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/udoo/linux.fragment"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/udoo/mx6qdl/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-udoo imx6dl-udoo"
+ # required tools to create the SD card image
+-- 
+2.7.4
