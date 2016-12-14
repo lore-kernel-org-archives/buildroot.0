@@ -1,35 +1,43 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Wed, 14 Dec 2016 12:22:52 -0200
-Subject: [Buildroot] [PATCH] configs/mx6sx_udoo_neo: Remove
-	BR2_TARGET_GENERIC_GETTY_PORT
-Message-ID: <1481725372-22010-1-git-send-email-fabio.estevam@nxp.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Wed, 14 Dec 2016 15:48:09 +0100
+Subject: [Buildroot] [PATCH 1/3] package/gdb: add support for gdb 7.12
+In-Reply-To: <20161214152028.4b2caf8f@free-electrons.com>
+References: <20161214134058.29826-1-joerg.krause@embedded.rocks>
+ <20161214152028.4b2caf8f@free-electrons.com>
+Message-ID: <1481726889.3994.6.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As console=ttymxc0 is passed in U-Boot we can use /dev/console to
-access the serial console and then BR2_TARGET_GENERIC_GETTY_PORT
-can be removed.
+Hi Thomas,
 
-Suggested-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- configs/mx6sx_udoo_neo_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+On Wed, 2016-12-14 at 15:20 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 14 Dec 2016 14:40:56 +0100, J?rg Krause wrote:
+> > gdb 7.12 was released on October 2016, it's time to include it in
+> > Buildroot, which this commit does.
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> 
+> We have one patch on gdb 7.11.1. Is it still needed? I know I
+> reported
+> the problem to Mike Frysinger, so he might have fixed it upstream,
+> but
+> I haven't followed. It's worth double checing.
 
-diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
-index cbea577..aecb520 100644
---- a/configs/mx6sx_udoo_neo_defconfig
-+++ b/configs/mx6sx_udoo_neo_defconfig
-@@ -2,7 +2,6 @@ BR2_arm=y
- BR2_cortex_a9=y
- # Linux headers same as kernel, a 4.9 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/udoo/neo/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/neo/post-image.sh"
- BR2_GLOBAL_PATCH_DIR="board/udoo/neo/patches"
--- 
-2.7.4
+The issue address by the patch 'Revert "sim: unify SIM_CPU definition"'
+should be fixed by this commit [1].
+
+I double checked by building gdb 7.12?without the mentioned patch for
+the target bf512 with this [2] Buildroot toolchain configuration
+successfully.
+
+[1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdi
+ff;h=474a2d9f5f8a080e30812525729c3a8b7baa61d6
+[2] http://autobuild.buildroot.org/toolchains/configs/br-bfin-full.conf
+ig
+
+J?rg
