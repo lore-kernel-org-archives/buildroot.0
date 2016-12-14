@@ -1,27 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Dec 2016 15:57:57 +0100
-Subject: [Buildroot] [PATCH] configs/mx6sx_udoo_neo: Remove
-	BR2_TARGET_GENERIC_GETTY_PORT
-In-Reply-To: <1481725372-22010-1-git-send-email-fabio.estevam@nxp.com> (Fabio
- Estevam's message of "Wed, 14 Dec 2016 12:22:52 -0200")
-References: <1481725372-22010-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <87eg1a1rt6.fsf@dell.be.48ers.dk>
+Date: Wed, 14 Dec 2016 15:58:23 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/linksprite_pcduino: bump kernel
+	and u-boot versions
+In-Reply-To: <20161214052404.7701-1-geomatsi@gmail.com> (Sergey Matyukevich's
+ message of "Wed, 14 Dec 2016 08:24:04 +0300")
+References: <20161214052404.7701-1-geomatsi@gmail.com>
+Message-ID: <87a8by1rsg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
+>>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
 
- > As console=ttymxc0 is passed in U-Boot we can use /dev/console to
- > access the serial console and then BR2_TARGET_GENERIC_GETTY_PORT
- > can be removed.
-
- > Suggested-by: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+ > Update kernel to 4.9 and U-Boot to 2016.09.01.
 
 Committed, thanks.
+
+Is there any specific reason why you are not using u-boot 20116.11?
 
 -- 
 Bye, Peter Korsgaard
