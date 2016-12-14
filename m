@@ -1,74 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 14 Dec 2016 17:44:52 +0100
-Subject: [Buildroot] [PATCH 3/3] [RFC] package/busybox: gneerate
- permissions for enabeld applets
-In-Reply-To: <87vaun1mvg.fsf@dell.be.48ers.dk>
-References: <cover.1481665059.git.yann.morin.1998@free.fr>
- <6d7c0fcf8647fa6e554e32e0370baec848b9ddef.1481665059.git.yann.morin.1998@free.fr>
- <87vaun1mvg.fsf@dell.be.48ers.dk>
-Message-ID: <20161214164452.GC3617@free.fr>
+From: Tal Shorer <tal.shorer@gmail.com>
+Date: Wed, 14 Dec 2016 19:28:24 +0200
+Subject: [Buildroot] [PATCH v4] usbip: new package
+In-Reply-To: <20161213175356.GB3546@free.fr>
+References: <20161213175356.GB3546@free.fr>
+Message-ID: <1481736504-12256-1-git-send-email-tal.shorer@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+add the usbip package from the kernel source, allowing users to share
+usb devices over a network connection
 
-On 2016-12-13 23:32 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > DO NOT COMMIT THIS.
->  > This is jsut an example how to use FOO_PERMISSIONS_FILE.
-> 
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > ---
->  >  package/busybox/busybox.mk | 15 +++++++++++++++
->  >  1 file changed, 15 insertions(+)
-> 
->  > diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
->  > index f4a241d..9c1f2e8 100644
->  > --- a/package/busybox/busybox.mk
->  > +++ b/package/busybox/busybox.mk
->  > @@ -60,9 +60,24 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
->  >  BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
->  >  BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
->  
->  > +ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
->  > +BUSYBOX_PERMISSIONS_FILE = $(@D)/busybox.permissions
-> 
-> Careful, what does $(@D) refer to here? When it is used here in the file
-> it is output/build/busybox-*, but when it is expanded in fs/common.mk it
-> refers to output/images:
-> 
-> cat    /home/peko/source/buildroot/output-test/images/busybox.permissions   >> /home/peko/source/buildroot/output-test/build/_device_table.txt
-> cat: /home/peko/source/buildroot/output-test/images/busybox.permissions: No such file or directory
-> 
-> 
-> > +define BUSYBOX_GEN_PERMISSIONS
->  > +	for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" $(@D)/include/applets.h \
->  > +		| sed -e 's/,.*//' -e 's/.*(//'`; \
->  > +	do \
->  > +		temp=`grep -w $${app} $(@D)/busybox.links`; \
->  > +		if [ -n "$${temp}" ]; then \
->  > +			echo "$${temp} f 4755 0  0 - - - - -"
-> 
-> You forgot to append ; \ so it doesn't actually work.
+Signed-off-by: Tal Shorer <tal.shorer@gmail.com>
+---
+ package/linux-tools/Config.in |  2 ++
+ package/usbip/Config.in       | 14 ++++++++++++++
+ package/usbip/usbip.mk        | 26 ++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
+ create mode 100644 package/usbip/Config.in
+ create mode 100644 package/usbip/usbip.mk
 
-No, it does not. Again, as I said in the cover-letter and in this commit
-log, it is just a very early smnapshot of the directions we'd have to
-follow to allow packages to provide non-constant (i.e. generated)
-permissions, and how relatively easy it would be.
-
-If we ever want to do it, of course.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index db9ed9f..7fceca7 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -83,4 +83,6 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 
++source package/usbip/Config.in
++
+ endmenu
+diff --git a/package/usbip/Config.in b/package/usbip/Config.in
+new file mode 100644
+index 0000000..bb92a05
+--- /dev/null
++++ b/package/usbip/Config.in
+@@ -0,0 +1,14 @@
++# sourced from package/linux-tools/Config.in rather than from package/Config.in
++
++config BR2_PACKAGE_USBIP
++	bool "usbip"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_TOOLCHAIN_HAS_THREADS # usbutils <- libusb
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_USBUTILS
++	help
++	  usbip is a set of tools that allows machines to share their
++	  usb devices over the network, to be driven by a remote client.
++
++comment "usbip needs udev /dev management and toolchain w/ threads"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/usbip/usbip.mk b/package/usbip/usbip.mk
+new file mode 100644
+index 0000000..7c8e244
+--- /dev/null
++++ b/package/usbip/usbip.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# usbip
++#
++################################################################################
++
++# No USBIP_SITE, no USB_VERSION, we vampirise the code from the
++# linux kernel
++USBIP_PATCH_DEPENDENCIES = linux
++USBIP_DEPENDENCIES = udev
++
++USBIP_CONF_OPTS = --without-tcp-wrappers
++
++USBIP_SRC_DIR = $(wildcard \
++  $(LINUX_DIR)/tools/usb/usbip \
++  $(LINUX_DIR)/drivers/staging/usbip/userspace)
++
++define USBIP_EXTRACT_CMDS
++	if [ -z "$(USBIP_SRC_DIR)" ]; then \
++	    echo "No usbip source in your kernel tree" 2>&1; \
++	    exit 1; \
++	fi
++	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(USBIP_SRC_DIR)/ $(@D)
++endef
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
