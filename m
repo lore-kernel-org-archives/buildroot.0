@@ -1,64 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 Dec 2016 23:39:43 +0100
-Subject: [Buildroot] [PATCH] docker-engine: needs pkg-config
-Message-ID: <20161214223943.16676-1-peter@korsgaard.com>
+Date: Wed, 14 Dec 2016 23:42:47 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/linksprite_pcduino: bump u-boot
+	version
+In-Reply-To: <20161214194526.9492-1-geomatsi@gmail.com> (Sergey Matyukevich's
+ message of "Wed, 14 Dec 2016 22:45:26 +0300")
+References: <20161214194526.9492-1-geomatsi@gmail.com>
+Message-ID: <87shpqyvx4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.org/results/fcc/fcc32f6cdc46f354a016a9b137d4f51d4054cdb6/
-http://autobuild.buildroot.org/results/083/0832b7be86c525522e2caed66246d5aeb365afb2/
-http://autobuild.buildroot.org/results/ede/ede0ddf0c5685ece8443a9b1bbd5c63b4d98af33/
+>>>>> "Sergey" == Sergey Matyukevich <geomatsi@gmail.com> writes:
 
-pkg-config is used for some of the docker-engine dependencies (at least
-libseccomp and libsystemd), so make sure it is available.
+ > Update U-Boot to 2016.11.
+ > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 
-The make.sh script used to configure docker-engine uses the PKG_CONFIG
-variable, but the libseccomp-golang go module simply uses whatever
-pkg-config binary it finds in the path at build time, so also pass
-TARGET_MAKE_ENV to ensure our cross-pkg-config is used.
+Committed, thanks.
 
-For consistency and robustness against future changes, use both approaches
-for the configure and build steps.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-engine/docker-engine.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index f895dcc..7b5a8a4 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -10,14 +10,16 @@ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
- DOCKER_ENGINE_LICENSE = Apache-2.0
- DOCKER_ENGINE_LICENSE_FILES = LICENSE
- 
--DOCKER_ENGINE_DEPENDENCIES = host-go
-+DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
- 
- DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
- DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
- 	CGO_ENABLED=1 \
- 	CGO_NO_EMULATION=1 \
- 	GOBIN="$(@D)/bin" \
--	GOPATH="$(DOCKER_ENGINE_GOPATH)"
-+	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
-+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+	$(TARGET_MAKE_ENV)
- 
- DOCKER_ENGINE_GLDFLAGS = \
- 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
-@@ -66,6 +68,7 @@ define DOCKER_ENGINE_CONFIGURE_CMDS
- 	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
- 	cd $(@D) && \
- 		GITCOMMIT="unknown" BUILDTIME="$$(date)" VERSION="$(DOCKER_ENGINE_VERSION)" \
-+		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
- 		bash ./hack/make/.go-autogen
- endef
- 
 -- 
-2.10.2
+Bye, Peter Korsgaard
