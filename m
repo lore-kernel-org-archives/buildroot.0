@@ -1,364 +1,262 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Wed, 14 Dec 2016 09:26:48 +0100
-Subject: [Buildroot] [PATCH] netsnmp: handle libnl dependency properly
-Message-ID: <1481704008-5590-1-git-send-email-julien.floret@6wind.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 14 Dec 2016 09:47:57 +0100
+Subject: [Buildroot] [PATCH] package/ipmitool: bump version to 1.8.18
+Message-ID: <20161214084757.21823-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnl3 include path was hardcoded in the configure script,
-causing the following gcc warning:
+Some patches are not necessary anymore as upstream fixed the issues.
 
-WARNING: unsafe header/library path used in cross-compilation:
-'/usr/include/libnl3'
+As we are not patching configure.ac anymore, there is no need to
+autoreconf the package.
 
-Let's apply an upstream patch that addresses the issue: now
-pkg-config is used to detect libnl include path.
-
-Also:
-- add optional libnl build dependency;
-- enable libnl support only when libnl package is selected.
-
-Signed-off-by: Julien Floret <julien.floret@6wind.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...liminate-the-hard-coded-libnl-3-include-p.patch | 300 +++++++++++++++++++++
- package/netsnmp/netsnmp.mk                         |   8 +
- 2 files changed, 308 insertions(+)
- create mode 100644 package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
+ ...tch => 0001-Fix-missing-stddef.h-include.patch} | 23 +++++----
+ .../0001-Make-the-package-autoreconfigurable.patch | 38 --------------
+ .../ipmitool/0002-Avoid-wchar_t-redefinition.patch | 60 ----------------------
+ ...-Add-missing-linux-param.h-header-include.patch | 39 --------------
+ package/ipmitool/ipmitool.hash                     |  2 +-
+ package/ipmitool/ipmitool.mk                       |  5 +-
+ 6 files changed, 14 insertions(+), 153 deletions(-)
+ rename package/ipmitool/{0004-Fix-missing-stddef.h-include.patch => 0001-Fix-missing-stddef.h-include.patch} (57%)
+ delete mode 100644 package/ipmitool/0001-Make-the-package-autoreconfigurable.patch
+ delete mode 100644 package/ipmitool/0002-Avoid-wchar_t-redefinition.patch
+ delete mode 100644 package/ipmitool/0003-Add-missing-linux-param.h-header-include.patch
 
-diff --git a/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch b/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
-new file mode 100644
-index 000000000000..cf0592233e79
---- /dev/null
-+++ b/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
-@@ -0,0 +1,300 @@
-+From 57d6c3d36045aab8957ffeb7324728bf17faf8bd Mon Sep 17 00:00:00 2001
-+From: Bart Van Assche <bvanassche@acm.org>
-+Date: Mon, 2 Feb 2015 20:31:29 +0100
-+Subject: [PATCH] configure: Eliminate the hard-coded libnl-3 include path
-+
-+See also commit 3dde41998625fe0e24119a2e1f4509ba3ba2fd9a.
-+
-+(cherry picked from commit 852dcd644cfe4cfc7177649eaec163d6221f2be1)
-+
-+Original commit included modifications to configure script.
-+Do not keep these modifications, since they caused lots of conflicts, and
-+configure script is meant to be automatically generated.
-+
-+Signed-off-by: Julien Floret <julien.floret@6wind.com>
-+
-+Conflicts:
-+	configure
-+---
-+ aclocal.m4                  |   1 +
-+ configure.d/config_os_libs2 |  30 ++++++-
-+ m4/pkg.m4                   | 214 ++++++++++++++++++++++++++++++++++++++++++++
-+ 3 files changed, 243 insertions(+), 2 deletions(-)
-+ create mode 100644 m4/pkg.m4
-+
-+diff --git a/aclocal.m4 b/aclocal.m4
-+index cd80c7486f2f..45e3608ed480 100644
-+--- a/aclocal.m4
-++++ b/aclocal.m4
-+@@ -22,3 +22,4 @@ m4_include([m4/ltversion.m4])
-+ m4_include([m4/lt~obsolete.m4])
-+ m4_include([m4/netsnmp_arg.m4])
-+ m4_include([m4/netsnmp_search_libs.m4])
-++m4_include([m4/pkg.m4])
-+diff --git a/configure.d/config_os_libs2 b/configure.d/config_os_libs2
-+index 47491e24ce0a..10bd414b879e 100644
-+--- a/configure.d/config_os_libs2
-++++ b/configure.d/config_os_libs2
-+@@ -225,11 +225,37 @@ fi
-+ if test "x$with_nl" != "xno"; then
-+     case $target_os in
-+     linux*) # Check for libnl (linux)
-++        # The test below verifies whether the libnl-3 package been installed.
-++        # This test works as follows:
-++        # - If pkg-config was not installed at the time autogen.sh was run,
-++        #   the definition of the PKG_CHECK_EXISTS() macro will not be found by
-++        #   autogen.sh. Augogen.sh will generate a configure script that prints
-++        #   a warning about pkg-config and proceeds as if libnl-3 has not been
-++        #   installed.
-++        # - If pkg-config was installed at the time autogen.sh was run,
-++        #   the generated configure script will try to detect the presence of
-++        #   the libnl-3 library by looking up compile and linker flags in the
-++        #   file called libnl-3.pc.
-++        # - pkg-config settings can be overridden via the configure variables
-++        #   LIBNL3_CFLAGS and LIBNL3_LIBS (added by the pkg-config m4 macro's to
-++        #   the configure script -- see also ./configure --help).
-++        # - The LIBNL3_CFLAGS and LIBNL3_LIBS configure variables can be used
-++        #   even if the pkg-config executable is not present on the system on
-++        #   which the configure script is run.
-++        ifdef(
-++          [PKG_CHECK_EXISTS],
-++          [PKG_CHECK_EXISTS([libnl-3.0],
-++            [PKG_CHECK_MODULES([LIBNL3], [libnl-3.0])])
-++          ],
-++          AC_MSG_WARN([pkg-config has not been installed or is too old.])
-++          AC_MSG_WARN([Detection of libnl-3.0 will be skipped.])
-++        )
-++
-+         netsnmp_save_CPPFLAGS="$CPPFLAGS"
-+-        CPPFLAGS="-I/usr/include/libnl3 $CPPFLAGS"
-++        CPPFLAGS="${LIBNL3_CFLAGS} $CPPFLAGS"
-+         NETSNMP_SEARCH_LIBS(nl_connect, nl-3,
-+             [AC_CHECK_HEADERS(netlink/netlink.h)
-+-            EXTERNAL_MIBGROUP_INCLUDES="$EXTERNAL_MIBGROUP_INCLUDES -I/usr/include/libnl3"],
-++            EXTERNAL_MIBGROUP_INCLUDES="$EXTERNAL_MIBGROUP_INCLUDES ${LIBNL3_CFLAGS}"],
-+             [CPPFLAGS="$netsnmp_save_CPPFLAGS"], [], [], [LMIBLIBS])
-+         if test "x$ac_cv_header_netlink_netlink_h" != xyes; then
-+             NETSNMP_SEARCH_LIBS(nl_connect, nl, [
-+diff --git a/m4/pkg.m4 b/m4/pkg.m4
-+new file mode 100644
-+index 000000000000..c5b26b52e6cd
-+--- /dev/null
-++++ b/m4/pkg.m4
-+@@ -0,0 +1,214 @@
-++# pkg.m4 - Macros to locate and utilise pkg-config.            -*- Autoconf -*-
-++# serial 1 (pkg-config-0.24)
-++# 
-++# Copyright ? 2004 Scott James Remnant <scott@netsplit.com>.
-++#
-++# This program is free software; you can redistribute it and/or modify
-++# it under the terms of the GNU General Public License as published by
-++# the Free Software Foundation; either version 2 of the License, or
-++# (at your option) any later version.
-++#
-++# This program is distributed in the hope that it will be useful, but
-++# WITHOUT ANY WARRANTY; without even the implied warranty of
-++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++# General Public License for more details.
-++#
-++# You should have received a copy of the GNU General Public License
-++# along with this program; if not, write to the Free Software
-++# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-++#
-++# As a special exception to the GNU General Public License, if you
-++# distribute this file as part of a program that contains a
-++# configuration script generated by Autoconf, you may include it under
-++# the same distribution terms that you use for the rest of that program.
-++
-++# PKG_PROG_PKG_CONFIG([MIN-VERSION])
-++# ----------------------------------
-++AC_DEFUN([PKG_PROG_PKG_CONFIG],
-++[m4_pattern_forbid([^_?PKG_[A-Z_]+$])
-++m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
-++m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
-++AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])
-++AC_ARG_VAR([PKG_CONFIG_PATH], [directories to add to pkg-config's search path])
-++AC_ARG_VAR([PKG_CONFIG_LIBDIR], [path overriding pkg-config's built-in search path])
-++
-++if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-++	AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
-++fi
-++if test -n "$PKG_CONFIG"; then
-++	_pkg_min_version=m4_default([$1], [0.9.0])
-++	AC_MSG_CHECKING([pkg-config is at least version $_pkg_min_version])
-++	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-++		AC_MSG_RESULT([yes])
-++	else
-++		AC_MSG_RESULT([no])
-++		PKG_CONFIG=""
-++	fi
-++fi[]dnl
-++])# PKG_PROG_PKG_CONFIG
-++
-++# PKG_CHECK_EXISTS(MODULES, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-++#
-++# Check to see whether a particular set of modules exists.  Similar
-++# to PKG_CHECK_MODULES(), but does not set variables or print errors.
-++#
-++# Please remember that m4 expands AC_REQUIRE([PKG_PROG_PKG_CONFIG])
-++# only at the first occurence in configure.ac, so if the first place
-++# it's called might be skipped (such as if it is within an "if", you
-++# have to call PKG_CHECK_EXISTS manually
-++# --------------------------------------------------------------
-++AC_DEFUN([PKG_CHECK_EXISTS],
-++[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
-++if test -n "$PKG_CONFIG" && \
-++    AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
-++  m4_default([$2], [:])
-++m4_ifvaln([$3], [else
-++  $3])dnl
-++fi])
-++
-++# _PKG_CONFIG([VARIABLE], [COMMAND], [MODULES])
-++# ---------------------------------------------
-++m4_define([_PKG_CONFIG],
-++[if test -n "$$1"; then
-++    pkg_cv_[]$1="$$1"
-++ elif test -n "$PKG_CONFIG"; then
-++    PKG_CHECK_EXISTS([$3],
-++                     [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`
-++		      test "x$?" != "x0" && pkg_failed=yes ],
-++		     [pkg_failed=yes])
-++ else
-++    pkg_failed=untried
-++fi[]dnl
-++])# _PKG_CONFIG
-++
-++# _PKG_SHORT_ERRORS_SUPPORTED
-++# -----------------------------
-++AC_DEFUN([_PKG_SHORT_ERRORS_SUPPORTED],
-++[AC_REQUIRE([PKG_PROG_PKG_CONFIG])
-++if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-++        _pkg_short_errors_supported=yes
-++else
-++        _pkg_short_errors_supported=no
-++fi[]dnl
-++])# _PKG_SHORT_ERRORS_SUPPORTED
-++
-++
-++# PKG_CHECK_MODULES(VARIABLE-PREFIX, MODULES, [ACTION-IF-FOUND],
-++# [ACTION-IF-NOT-FOUND])
-++#
-++#
-++# Note that if there is a possibility the first call to
-++# PKG_CHECK_MODULES might not happen, you should be sure to include an
-++# explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
-++#
-++#
-++# --------------------------------------------------------------
-++AC_DEFUN([PKG_CHECK_MODULES],
-++[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
-++AC_ARG_VAR([$1][_CFLAGS], [C compiler flags for $1, overriding pkg-config])dnl
-++AC_ARG_VAR([$1][_LIBS], [linker flags for $1, overriding pkg-config])dnl
-++
-++pkg_failed=no
-++AC_MSG_CHECKING([for $1])
-++
-++_PKG_CONFIG([$1][_CFLAGS], [cflags], [$2])
-++_PKG_CONFIG([$1][_LIBS], [libs], [$2])
-++
-++m4_define([_PKG_TEXT], [Alternatively, you may set the environment variables $1[]_CFLAGS
-++and $1[]_LIBS to avoid the need to call pkg-config.
-++See the pkg-config man page for more details.])
-++
-++if test $pkg_failed = yes; then
-++   	AC_MSG_RESULT([no])
-++        _PKG_SHORT_ERRORS_SUPPORTED
-++        if test $_pkg_short_errors_supported = yes; then
-++	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
-++        else 
-++	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
-++        fi
-++	# Put the nasty error message in config.log where it belongs
-++	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
-++
-++	m4_default([$4], [AC_MSG_ERROR(
-++[Package requirements ($2) were not met:
-++
-++$$1_PKG_ERRORS
-++
-++Consider adjusting the PKG_CONFIG_PATH environment variable if you
-++installed software in a non-standard prefix.
-++
-++_PKG_TEXT])[]dnl
-++        ])
-++elif test $pkg_failed = untried; then
-++     	AC_MSG_RESULT([no])
-++	m4_default([$4], [AC_MSG_FAILURE(
-++[The pkg-config script could not be found or is too old.  Make sure it
-++is in your PATH or set the PKG_CONFIG environment variable to the full
-++path to pkg-config.
-++
-++_PKG_TEXT
-++
-++To get pkg-config, see <http://pkg-config.freedesktop.org/>.])[]dnl
-++        ])
-++else
-++	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
-++	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
-++        AC_MSG_RESULT([yes])
-++	$3
-++fi[]dnl
-++])# PKG_CHECK_MODULES
-++
-++
-++# PKG_INSTALLDIR(DIRECTORY)
-++# -------------------------
-++# Substitutes the variable pkgconfigdir as the location where a module
-++# should install pkg-config .pc files. By default the directory is
-++# $libdir/pkgconfig, but the default can be changed by passing
-++# DIRECTORY. The user can override through the --with-pkgconfigdir
-++# parameter.
-++AC_DEFUN([PKG_INSTALLDIR],
-++[m4_pushdef([pkg_default], [m4_default([$1], ['${libdir}/pkgconfig'])])
-++m4_pushdef([pkg_description],
-++    [pkg-config installation directory @<:@]pkg_default[@:>@])
-++AC_ARG_WITH([pkgconfigdir],
-++    [AS_HELP_STRING([--with-pkgconfigdir], pkg_description)],,
-++    [with_pkgconfigdir=]pkg_default)
-++AC_SUBST([pkgconfigdir], [$with_pkgconfigdir])
-++m4_popdef([pkg_default])
-++m4_popdef([pkg_description])
-++]) dnl PKG_INSTALLDIR
-++
-++
-++# PKG_NOARCH_INSTALLDIR(DIRECTORY)
-++# -------------------------
-++# Substitutes the variable noarch_pkgconfigdir as the location where a
-++# module should install arch-independent pkg-config .pc files. By
-++# default the directory is $datadir/pkgconfig, but the default can be
-++# changed by passing DIRECTORY. The user can override through the
-++# --with-noarch-pkgconfigdir parameter.
-++AC_DEFUN([PKG_NOARCH_INSTALLDIR],
-++[m4_pushdef([pkg_default], [m4_default([$1], ['${datadir}/pkgconfig'])])
-++m4_pushdef([pkg_description],
-++    [pkg-config arch-independent installation directory @<:@]pkg_default[@:>@])
-++AC_ARG_WITH([noarch-pkgconfigdir],
-++    [AS_HELP_STRING([--with-noarch-pkgconfigdir], pkg_description)],,
-++    [with_noarch_pkgconfigdir=]pkg_default)
-++AC_SUBST([noarch_pkgconfigdir], [$with_noarch_pkgconfigdir])
-++m4_popdef([pkg_default])
-++m4_popdef([pkg_description])
-++]) dnl PKG_NOARCH_INSTALLDIR
-++
-++
-++# PKG_CHECK_VAR(VARIABLE, MODULE, CONFIG-VARIABLE,
-++# [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-++# -------------------------------------------
-++# Retrieves the value of the pkg-config variable for the given module.
-++AC_DEFUN([PKG_CHECK_VAR],
-++[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
-++AC_ARG_VAR([$1], [value of $3 for $2, overriding pkg-config])dnl
-++
-++_PKG_CONFIG([$1], [variable="][$3]["], [$2])
-++AS_VAR_COPY([$1], [pkg_cv_][$1])
-++
-++AS_VAR_IF([$1], [""], [$5], [$4])dnl
-++])# PKG_CHECK_VAR
-+-- 
-+2.1.0
-+
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 48273b51bcc1..0f4b7d80bc4f 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -36,6 +36,7 @@ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true inst
- NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
- NETSNMP_MAKE = $(MAKE1)
- NETSNMP_CONFIG_SCRIPTS = net-snmp-config
-+NETSNMP_AUTORECONF = YES
+diff --git a/package/ipmitool/0004-Fix-missing-stddef.h-include.patch b/package/ipmitool/0001-Fix-missing-stddef.h-include.patch
+similarity index 57%
+rename from package/ipmitool/0004-Fix-missing-stddef.h-include.patch
+rename to package/ipmitool/0001-Fix-missing-stddef.h-include.patch
+index e58c8b0..dc3f92e 100644
+--- a/package/ipmitool/0004-Fix-missing-stddef.h-include.patch
++++ b/package/ipmitool/0001-Fix-missing-stddef.h-include.patch
+@@ -1,4 +1,4 @@
+-From 2b149f7723fbd6153e6605ea8efb2c9f2940c8e5 Mon Sep 17 00:00:00 2001
++From 04d489936191e685123978a1ca370f9cc30e6a06 Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+ Date: Mon, 18 Apr 2016 21:17:26 +0200
+ Subject: [PATCH] Fix missing stddef.h include
+@@ -16,22 +16,23 @@ https://sourceforge.net/p/ipmitool/mailman/message/35022779/
  
- NETSNMP_BLOAT_MIBS = BRIDGE DISMAN-EVENT DISMAN-SCHEDULE DISMAN-SCRIPT EtherLike RFC-1215 RFC1155-SMI RFC1213 SCTP SMUX
+ Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ ---
+- src/plugins/imb/imbapi.h | 2 ++
+- 1 file changed, 2 insertions(+)
++ src/plugins/imb/imbapi.h | 3 +++
++ 1 file changed, 3 insertions(+)
  
-@@ -45,6 +46,13 @@ else
- NETSNMP_CONF_OPTS += --with-endianness=little
- endif
+ diff --git a/src/plugins/imb/imbapi.h b/src/plugins/imb/imbapi.h
+-index ead8956..8d0c7ae 100644
++index 6ba4121..6b39b47 100644
+ --- a/src/plugins/imb/imbapi.h
+ +++ b/src/plugins/imb/imbapi.h
+-@@ -40,6 +40,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- # include <config.h>
+- #endif
+- 
++@@ -33,6 +33,9 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
++ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++  *----------------------------------------------------------------------*/
+++
+ +#include <stddef.h>
+ +
++ #ifndef	_WINDEFS_H
++ #define	_WINDEFS_H
+  #ifndef FALSE
+- #define FALSE   0
+- #endif
+ -- 
+-2.8.0
++2.10.2
  
-+ifeq ($(BR2_PACKAGE_LIBNL),y)
-+NETSNMP_DEPENDENCIES += host-pkgconf libnl
-+NETSNMP_CONF_OPTS += --with-nl
-+else
-+NETSNMP_CONF_OPTS += --without-nl
-+endif
-+
- # OpenSSL
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NETSNMP_DEPENDENCIES += openssl
+diff --git a/package/ipmitool/0001-Make-the-package-autoreconfigurable.patch b/package/ipmitool/0001-Make-the-package-autoreconfigurable.patch
+deleted file mode 100644
+index 17b4076..0000000
+--- a/package/ipmitool/0001-Make-the-package-autoreconfigurable.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 0d4b9d5d547b4a6e79108ac8c455e01f72a9aefa Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Sun, 10 Apr 2016 11:47:14 +0200
+-Subject: [PATCH 1/3] Make the package autoreconfigurable
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-ipmitool is not a compliant GNU package as it does not provide some necessary
+-files, like NEWS, AUTHORS, etc.
+-
+-Therefor set the Automake strictness to foreign to make the package
+-autoreconfigurable.
+-
+-Upstream status: Pending
+-https://sourceforge.net/p/ipmitool/mailman/message/35004711/
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 94e267a..9f3f7e1 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -33,7 +33,7 @@ DOCLIST = $(top_srcdir)/README $(top_srcdir)/COPYING $(top_srcdir)/AUTHORS $(top
+- 
+- EXTRA_DIST = $(DOCLIST)
+- 
+--AUTOMAKE_OPTIONS = dist-bzip2
+-+AUTOMAKE_OPTIONS = dist-bzip2 foreign
+- 
+- MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure configure-stamp \
+- 	config.guess config.sub depcomp install-sh ltmain.sh missing \
+--- 
+-2.8.0
+-
+diff --git a/package/ipmitool/0002-Avoid-wchar_t-redefinition.patch b/package/ipmitool/0002-Avoid-wchar_t-redefinition.patch
+deleted file mode 100644
+index 99598e0..0000000
+--- a/package/ipmitool/0002-Avoid-wchar_t-redefinition.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 7d1863b47877129376f37613d29d3a5ba084af66 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Sat, 2 Apr 2016 19:45:14 +0200
+-Subject: [PATCH 2/3] Avoid wchar_t redefinition
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The musl C library does not define _WCHAR_T. Use autoconf to check for wchar_t.
+-
+-Upstream status: Pending
+-https://sourceforge.net/p/ipmitool/mailman/message/35007331/
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- configure.ac             | 2 ++
+- src/plugins/imb/imbapi.h | 7 ++++++-
+- 2 files changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 1d74fcf..c2ba1eb 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -22,6 +22,8 @@ AC_CHECK_HEADERS([stdlib.h string.h sys/ioctl.h sys/stat.h unistd.h paths.h])
+- AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h sys/socket.h])
+- AC_CHECK_HEADERS([sys/byteorder.h byteswap.h])
+- 
+-+AC_CHECK_TYPES([wchar_t])
+-+
+- AC_C_CONST
+- AC_C_INLINE
+- AC_C_BIGENDIAN
+-diff --git a/src/plugins/imb/imbapi.h b/src/plugins/imb/imbapi.h
+-index 74975c6..ead8956 100644
+---- a/src/plugins/imb/imbapi.h
+-+++ b/src/plugins/imb/imbapi.h
+-@@ -35,6 +35,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-  *----------------------------------------------------------------------*/
+- #ifndef	_WINDEFS_H
+- #define	_WINDEFS_H
+-+
+-+#if HAVE_CONFIG_H
+-+# include <config.h>
+-+#endif
+-+
+- #ifndef FALSE
+- #define FALSE   0
+- #endif
+-@@ -46,7 +51,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- #endif
+- #ifndef WIN32   
+- /* WIN32 defines this in stdio.h */
+--#ifndef _WCHAR_T
+-+#if !defined(HAVE_WCHAR_T)
+- #define _WCHAR_T
+- typedef long    wchar_t;
+- #endif
+--- 
+-2.8.0
+-
+diff --git a/package/ipmitool/0003-Add-missing-linux-param.h-header-include.patch b/package/ipmitool/0003-Add-missing-linux-param.h-header-include.patch
+deleted file mode 100644
+index a3bd725..0000000
+--- a/package/ipmitool/0003-Add-missing-linux-param.h-header-include.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 661095378b74df564bc621ced4db72b688d87399 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Sat, 2 Apr 2016 19:47:21 +0200
+-Subject: [PATCH 3/3] Add missing linux/param.h header include
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes the following build failure under musl:
+-
+-imbapi.c: In function 'MapPhysicalMemory':
+-imbapi.c:109:19: error: 'EXEC_PAGESIZE' undeclared (first use in this function)
+- # define PAGESIZE EXEC_PAGESIZE
+-
+-Upstream status: Pending
+-https://sourceforge.net/p/ipmitool/mailman/message/35007330/
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- src/plugins/imb/imbapi.c | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/src/plugins/imb/imbapi.c b/src/plugins/imb/imbapi.c
+-index 899c47a..8a6421d 100644
+---- a/src/plugins/imb/imbapi.c
+-+++ b/src/plugins/imb/imbapi.c
+-@@ -95,6 +95,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- #include <stdlib.h>
+- #include <fcntl.h>
+- #include <string.h>
+-+#ifdef __linux__
+-+#include <linux/param.h>
+-+#endif
+- #endif
+- #include "imbapi.h"
+- #include <asm/socket.h>
+--- 
+-2.8.0
+-
+diff --git a/package/ipmitool/ipmitool.hash b/package/ipmitool/ipmitool.hash
+index 9bb852c..9b16414 100644
+--- a/package/ipmitool/ipmitool.hash
++++ b/package/ipmitool/ipmitool.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  3c5da6b067abf475bc24685120ec79f6e4ef6b3ea606aaa267e462023861223e  ipmitool-1.8.16.tar.bz2
++sha256  0c1ba3b1555edefb7c32ae8cd6a3e04322056bc087918f07189eeedfc8b81e01  ipmitool-1.8.18.tar.bz2
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+index a246584..f4dca73 100644
+--- a/package/ipmitool/ipmitool.mk
++++ b/package/ipmitool/ipmitool.mk
+@@ -4,15 +4,12 @@
+ #
+ ################################################################################
+ 
+-IPMITOOL_VERSION = 1.8.16
++IPMITOOL_VERSION = 1.8.18
+ IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
+ IPMITOOL_SITE = http://downloads.sourceforge.net/project/ipmitool/ipmitool/$(IPMITOOL_VERSION)
+ IPMITOOL_LICENSE = BSD-3c
+ IPMITOOL_LICENSE_FILES = COPYING
+ 
+-# Patching configure.ac
+-IPMITOOL_AUTORECONF = YES
+-
+ ifeq ($(BR2_PACKAGE_IPMITOOL_LANPLUS),y)
+ IPMITOOL_DEPENDENCIES += openssl
+ IPMITOOL_CONF_OPTS += --enable-intf-lanplus
 -- 
-2.1.0
+2.10.2
