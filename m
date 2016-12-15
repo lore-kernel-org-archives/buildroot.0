@@ -1,65 +1,151 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Dec 2016 17:08:52 +0100
-Subject: [Buildroot] [git commit] docker-engine: needs pkg-config
-Message-ID: <20161215163013.3C0D6818C0@busybox.osuosl.org>
+Date: Thu, 15 Dec 2016 17:24:45 +0100
+Subject: [Buildroot] [git commit] board/orangepi: drop redundant files
+Message-ID: <20161215163013.63B09818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4a7d95e1925b1fc68dc1776444944ca906a7fc5
+commit: https://git.buildroot.net/buildroot/commit/?id=c1a9fb9ddbc4e6520b9eeee43d45817f9e4a62aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.org/results/fcc/fcc32f6cdc46f354a016a9b137d4f51d4054cdb6/
-http://autobuild.buildroot.org/results/083/0832b7be86c525522e2caed66246d5aeb365afb2/
-http://autobuild.buildroot.org/results/ede/ede0ddf0c5685ece8443a9b1bbd5c63b4d98af33/
-
-pkg-config is used for some of the docker-engine dependencies (at least
-libseccomp and libsystemd), so make sure it is available.
-
-The make.sh script used to configure docker-engine uses the PKG_CONFIG
-variable, but the libseccomp-golang go module simply uses whatever
-pkg-config binary it finds in the path at build time, so also pass
-TARGET_MAKE_ENV to ensure our cross-pkg-config is used.
-
-For consistency and robustness against future changes, use both approaches
-for the configure and build steps.
+The orangepi board variants use identical post-build and post-image scripts,
+so move them up to board/orangepi and add symlinks in the variant
+subdirectories, similary to how we handle it for the raspberry pi variants.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ board/orangepi/orangepi-one/post-build.sh      | 12 +-----------
+ board/orangepi/orangepi-one/post-image.sh      | 15 +--------------
+ board/orangepi/orangepi-pc/post-build.sh       | 12 +-----------
+ board/orangepi/orangepi-pc/post-image.sh       | 15 +--------------
+ board/orangepi/{orangepi-pc => }/post-build.sh |  2 +-
+ board/orangepi/{orangepi-pc => }/post-image.sh |  0
+ 6 files changed, 5 insertions(+), 51 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index f895dcc..7b5a8a4 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -10,14 +10,16 @@ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
- DOCKER_ENGINE_LICENSE = Apache-2.0
- DOCKER_ENGINE_LICENSE_FILES = LICENSE
+diff --git a/board/orangepi/orangepi-one/post-build.sh b/board/orangepi/orangepi-one/post-build.sh
+deleted file mode 100755
+index 46e8905..0000000
+--- a/board/orangepi/orangepi-one/post-build.sh
++++ /dev/null
+@@ -1,11 +0,0 @@
+-#!/bin/sh
+-# post-build.sh for OrangePi One taken from CubieBoard's post-build.sh
+-# 2013, Carlo Caione <carlo.caione@gmail.com>
+-
+-BOARD_DIR="$(dirname $0)"
+-MKIMAGE=$HOST_DIR/usr/bin/mkimage
+-BOOT_CMD=$BOARD_DIR/boot.cmd
+-BOOT_CMD_H=$BINARIES_DIR/boot.scr
+-
+-# U-Boot script
+-$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
+diff --git a/board/orangepi/orangepi-one/post-build.sh b/board/orangepi/orangepi-one/post-build.sh
+new file mode 120000
+index 0000000..cd7f116
+--- /dev/null
++++ b/board/orangepi/orangepi-one/post-build.sh
+@@ -0,0 +1 @@
++../post-build.sh
+\ No newline at end of file
+diff --git a/board/orangepi/orangepi-one/post-image.sh b/board/orangepi/orangepi-one/post-image.sh
+deleted file mode 100755
+index 359b4c9..0000000
+--- a/board/orangepi/orangepi-one/post-image.sh
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#!/bin/sh
+-
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage                               \
+-	--rootpath "${TARGET_DIR}"     \
+-	--tmppath "${GENIMAGE_TMP}"    \
+-	--inputpath "${BINARIES_DIR}"  \
+-	--outputpath "${BINARIES_DIR}" \
+-	--config "${GENIMAGE_CFG}"
+diff --git a/board/orangepi/orangepi-one/post-image.sh b/board/orangepi/orangepi-one/post-image.sh
+new file mode 120000
+index 0000000..ae6294f
+--- /dev/null
++++ b/board/orangepi/orangepi-one/post-image.sh
+@@ -0,0 +1 @@
++../post-image.sh
+\ No newline at end of file
+diff --git a/board/orangepi/orangepi-pc/post-build.sh b/board/orangepi/orangepi-pc/post-build.sh
+deleted file mode 100755
+index ca7a99f..0000000
+--- a/board/orangepi/orangepi-pc/post-build.sh
++++ /dev/null
+@@ -1,11 +0,0 @@
+-#!/bin/sh
+-# post-build.sh for OrangePi PC taken from CubieBoard's post-build.sh
+-# 2013, Carlo Caione <carlo.caione@gmail.com>
+-
+-BOARD_DIR="$(dirname $0)"
+-MKIMAGE=$HOST_DIR/usr/bin/mkimage
+-BOOT_CMD=$BOARD_DIR/boot.cmd
+-BOOT_CMD_H=$BINARIES_DIR/boot.scr
+-
+-# U-Boot script
+-$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
+diff --git a/board/orangepi/orangepi-pc/post-build.sh b/board/orangepi/orangepi-pc/post-build.sh
+new file mode 120000
+index 0000000..cd7f116
+--- /dev/null
++++ b/board/orangepi/orangepi-pc/post-build.sh
+@@ -0,0 +1 @@
++../post-build.sh
+\ No newline at end of file
+diff --git a/board/orangepi/orangepi-pc/post-image.sh b/board/orangepi/orangepi-pc/post-image.sh
+deleted file mode 100755
+index 359b4c9..0000000
+--- a/board/orangepi/orangepi-pc/post-image.sh
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#!/bin/sh
+-
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage                               \
+-	--rootpath "${TARGET_DIR}"     \
+-	--tmppath "${GENIMAGE_TMP}"    \
+-	--inputpath "${BINARIES_DIR}"  \
+-	--outputpath "${BINARIES_DIR}" \
+-	--config "${GENIMAGE_CFG}"
+diff --git a/board/orangepi/orangepi-pc/post-image.sh b/board/orangepi/orangepi-pc/post-image.sh
+new file mode 120000
+index 0000000..ae6294f
+--- /dev/null
++++ b/board/orangepi/orangepi-pc/post-image.sh
+@@ -0,0 +1 @@
++../post-image.sh
+\ No newline at end of file
+diff --git a/board/orangepi/orangepi-pc/post-build.sh b/board/orangepi/post-build.sh
+similarity index 78%
+copy from board/orangepi/orangepi-pc/post-build.sh
+copy to board/orangepi/post-build.sh
+index ca7a99f..a544a19 100755
+--- a/board/orangepi/orangepi-pc/post-build.sh
++++ b/board/orangepi/post-build.sh
+@@ -1,5 +1,5 @@
+ #!/bin/sh
+-# post-build.sh for OrangePi PC taken from CubieBoard's post-build.sh
++# post-build.sh for OrangePi taken from CubieBoard's post-build.sh
+ # 2013, Carlo Caione <carlo.caione@gmail.com>
  
--DOCKER_ENGINE_DEPENDENCIES = host-go
-+DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
- 
- DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
- DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
- 	CGO_ENABLED=1 \
- 	CGO_NO_EMULATION=1 \
- 	GOBIN="$(@D)/bin" \
--	GOPATH="$(DOCKER_ENGINE_GOPATH)"
-+	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
-+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+	$(TARGET_MAKE_ENV)
- 
- DOCKER_ENGINE_GLDFLAGS = \
- 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
-@@ -66,6 +68,7 @@ define DOCKER_ENGINE_CONFIGURE_CMDS
- 	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
- 	cd $(@D) && \
- 		GITCOMMIT="unknown" BUILDTIME="$$(date)" VERSION="$(DOCKER_ENGINE_VERSION)" \
-+		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
- 		bash ./hack/make/.go-autogen
- endef
- 
+ BOARD_DIR="$(dirname $0)"
+diff --git a/board/orangepi/orangepi-pc/post-image.sh b/board/orangepi/post-image.sh
+similarity index 100%
+copy from board/orangepi/orangepi-pc/post-image.sh
+copy to board/orangepi/post-image.sh
