@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Dec 2016 13:52:41 +0100
-Subject: [Buildroot] [git commit] tcpreplay: bump to version 4.1.2
-Message-ID: <20161215125823.77ED581E41@busybox.osuosl.org>
+Date: Thu, 15 Dec 2016 13:52:52 +0100
+Subject: [Buildroot] [git commit] package/wavpack: bump version to 5.0.0
+Message-ID: <20161215125823.8141180458@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=906c6665ed6453533560f47d27ba9e4c5cbc63d1
+commit: https://git.buildroot.net/buildroot/commit/?id=0dbe92b0d037bdcf40edeb29534e64bfd9a8a98b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpreplay/tcpreplay.hash | 2 +-
- package/tcpreplay/tcpreplay.mk   | 2 +-
+ package/wavpack/wavpack.hash | 2 +-
+ package/wavpack/wavpack.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index 95d6d5d..e7ba440 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
+diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
+index f15afc2..0ec287d 100644
+--- a/package/wavpack/wavpack.hash
++++ b/package/wavpack/wavpack.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	61b916ef91049cad2a9ddc8de6f5e3e3cc5d9998dbb644dc91cf3a798497ffe4	tcpreplay-4.1.1.tar.gz
-+sha256	da483347e83a9b5df0e0dbb0f822a2d37236e79dda35f4bc4e6684fa827f25ea	tcpreplay-4.1.2.tar.gz
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 0723c02..a8bcf1c 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
+ # locally computed hash
+-sha256 7d31b34166c33c3109b45c6e4579b472fd05e3ee8ec6d728352961c5cdd1d6b0  wavpack-4.75.2.tar.bz2
++sha256  918d7e32a19598df543b17fff840b10a0880f87296f9e32af454d256b6a64049  wavpack-5.0.0.tar.bz2
+diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
+index ae16454..8fef548 100644
+--- a/package/wavpack/wavpack.mk
++++ b/package/wavpack/wavpack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TCPREPLAY_VERSION = 4.1.1
-+TCPREPLAY_VERSION = 4.1.2
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPLv3
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
+-WAVPACK_VERSION = 4.75.2
++WAVPACK_VERSION = 5.0.0
+ WAVPACK_SITE = http://www.wavpack.com
+ WAVPACK_SOURCE = wavpack-$(WAVPACK_VERSION).tar.bz2
+ WAVPACK_INSTALL_STAGING = YES
