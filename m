@@ -1,31 +1,39 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Thu, 15 Dec 2016 17:10:41 +0530
-Subject: [Buildroot] [PATCH 2/2] tinyalsa: add license files
-In-Reply-To: <1481802041-2365-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1481802041-2365-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1481802041-2365-2-git-send-email-rahul.bedarkar@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 15 Dec 2016 13:49:04 +0200
+Subject: [Buildroot] [PATCH] tcpreplay: bump to version 4.1.2
+Message-ID: <e8eea2021e52cfa1944bf657acaea55b88d4ba6b.1481802544.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/tinyalsa/tinyalsa.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/tcpreplay/tcpreplay.hash | 2 +-
+ package/tcpreplay/tcpreplay.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tinyalsa/tinyalsa.mk b/package/tinyalsa/tinyalsa.mk
-index 0edb0bc..d44155f 100644
---- a/package/tinyalsa/tinyalsa.mk
-+++ b/package/tinyalsa/tinyalsa.mk
-@@ -7,6 +7,7 @@
- TINYALSA_VERSION = 1.1.0
- TINYALSA_SITE = $(call github,tinyalsa,tinyalsa,$(TINYALSA_VERSION))
- TINYALSA_LICENSE = BSD-3c
-+TINYALSA_LICENSE_FILES = NOTICE
- TINYALSA_INSTALL_STAGING = YES
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index 95d6d5d81876..e7ba4400ec8a 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	61b916ef91049cad2a9ddc8de6f5e3e3cc5d9998dbb644dc91cf3a798497ffe4	tcpreplay-4.1.1.tar.gz
++sha256	da483347e83a9b5df0e0dbb0f822a2d37236e79dda35f4bc4e6684fa827f25ea	tcpreplay-4.1.2.tar.gz
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 0723c02d2836..a8bcf1c5dd99 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define TINYALSA_BUILD_CMDS
+-TCPREPLAY_VERSION = 4.1.1
++TCPREPLAY_VERSION = 4.1.2
+ TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
+ TCPREPLAY_LICENSE = GPLv3
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
 -- 
-2.6.2
+2.10.2
