@@ -1,95 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Dec 2016 17:11:00 +0100
-Subject: [Buildroot] [git commit] orangepipc: rename to orangepi-pc
-Message-ID: <20161215163013.503A4818C0@busybox.osuosl.org>
+Date: Thu, 15 Dec 2016 17:10:15 +0100
+Subject: [Buildroot] [git commit] docker-engine: security bump to 1.12.3
+Message-ID: <20161215163013.4644A8018D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d63e26e5277f3de9bfb729557a29987776064336
+commit: https://git.buildroot.net/buildroot/commit/?id=35e5e7d49956b00ac940b6d336f1ea68f6aebbbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rename orangepipc files, configs, and directories:
-- oragepipc_defconfig -> orangepi_pc_defconfig
-- board/orangepi/orangepipc -> board/orangepi/orangepi-pc
+Fixes CVE-2016-8867: https://forums.docker.com/t/docker-1-12-2-security-advisory/23975
 
-The purpose of the patch is to improve readability before
-adding other boards of orangepi family.
-
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                               | 2 +-
- board/orangepi/{orangepipc => orangepi-pc}/boot.cmd      | 0
- board/orangepi/{orangepipc => orangepi-pc}/genimage.cfg  | 0
- board/orangepi/{orangepipc => orangepi-pc}/post-build.sh | 0
- board/orangepi/{orangepipc => orangepi-pc}/post-image.sh | 0
- board/orangepi/{orangepipc => orangepi-pc}/readme.txt    | 2 +-
- configs/{orangepipc_defconfig => orangepi_pc_defconfig}  | 4 ++--
- 7 files changed, 4 insertions(+), 4 deletions(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 903e9a9..d855d11 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1151,7 +1151,7 @@ F:	package/libunistring/
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 13e28bd..ecc5c66 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 29bc203e483c81c9a337b4a4186e6b0a23984c518b09478d8718c616b5923e88  docker-engine-v1.12.2.tar.gz
++sha256 cf4f876593abde06b4c19f971163a853a21b1992d75bd2fe5d8bea9015b09f87  docker-engine-v1.12.3.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 7b5a8a4..fdb3c07 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Peter Korsgaard <peter@korsgaard.com>
- F:	board/orangepi/
--F:	configs/orangepipc_defconfig
-+F:	configs/orangepi_pc_defconfig
- F:	package/flickcurl/
- F:	package/libfastjson/
- F:	package/lzop/
-diff --git a/board/orangepi/orangepipc/boot.cmd b/board/orangepi/orangepi-pc/boot.cmd
-similarity index 100%
-rename from board/orangepi/orangepipc/boot.cmd
-rename to board/orangepi/orangepi-pc/boot.cmd
-diff --git a/board/orangepi/orangepipc/genimage.cfg b/board/orangepi/orangepi-pc/genimage.cfg
-similarity index 100%
-rename from board/orangepi/orangepipc/genimage.cfg
-rename to board/orangepi/orangepi-pc/genimage.cfg
-diff --git a/board/orangepi/orangepipc/post-build.sh b/board/orangepi/orangepi-pc/post-build.sh
-similarity index 100%
-rename from board/orangepi/orangepipc/post-build.sh
-rename to board/orangepi/orangepi-pc/post-build.sh
-diff --git a/board/orangepi/orangepipc/post-image.sh b/board/orangepi/orangepi-pc/post-image.sh
-similarity index 100%
-rename from board/orangepi/orangepipc/post-image.sh
-rename to board/orangepi/orangepi-pc/post-image.sh
-diff --git a/board/orangepi/orangepipc/readme.txt b/board/orangepi/orangepi-pc/readme.txt
-similarity index 95%
-rename from board/orangepi/orangepipc/readme.txt
-rename to board/orangepi/orangepi-pc/readme.txt
-index f12c867..d316b6f 100644
---- a/board/orangepi/orangepipc/readme.txt
-+++ b/board/orangepi/orangepi-pc/readme.txt
-@@ -12,7 +12,7 @@ How to build it
+-DOCKER_ENGINE_VERSION = v1.12.2
++DOCKER_ENGINE_VERSION = v1.12.3
+ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
  
- Configure Buildroot:
- 
--    $ make orangepipc_defconfig
-+    $ make orangepi_pc_defconfig
- 
- Compile everything and build the SD card image:
- 
-diff --git a/configs/orangepipc_defconfig b/configs/orangepi_pc_defconfig
-similarity index 86%
-rename from configs/orangepipc_defconfig
-rename to configs/orangepi_pc_defconfig
-index 6d3a842..dd21d5f 100644
---- a/configs/orangepipc_defconfig
-+++ b/configs/orangepi_pc_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_FPU_VFPV4=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-pc/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi-pc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.3"
+ DOCKER_ENGINE_LICENSE = Apache-2.0
