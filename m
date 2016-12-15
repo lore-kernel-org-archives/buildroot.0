@@ -1,16 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Dec 2016 21:34:31 +0100
-Subject: [Buildroot] [PATCH 1/1] tinycbor: try to fix unreproducible
- errors
-In-Reply-To: <20161215200537.60123c00@gmx.net>
-References: <1481659403-7923-1-git-send-email-fabrice.fontaine@orange.com>
- <20161213223739.7735f291@free-electrons.com>
- <CAPi7W83Jr9Cj9qZ=RqAwDjbcjPKQa-ioodc_Mf2zH1HXx=oV9A@mail.gmail.com>
- <20161214000233.7a18fe6a@free-electrons.com>
- <CAPi7W83mnepjSMBh_4PchV-Zi1fSmjHMeo6ib1jiPm=vgYn_eA@mail.gmail.com>
- <20161215093101.0b19d425@free-electrons.com>
- <20161215200537.60123c00@gmx.net>
-Message-ID: <20161215213431.46c8497e@free-electrons.com>
+Date: Thu, 15 Dec 2016 21:47:57 +0100
+Subject: [Buildroot] [PATCH 1/1] gst1-vaapi: new package
+In-Reply-To: <1481813631-23515-1-git-send-email-jbb@gamblify.com>
+References: <1481813631-23515-1-git-send-email-jbb@gamblify.com>
+Message-ID: <20161215214757.0eb1f3d8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,13 +12,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 15 Dec 2016 20:05:37 +0100, Peter Seiderer wrote:
+Thanks for this contribution!
 
-> Workaround by disabling parallel build? Or write a pre-generated .config before
-> starting the compile?
+On Thu, 15 Dec 2016 15:53:51 +0100, Jesper B?kdahl wrote:
+> --- /dev/null
+> +++ b/package/gstreamer1/gst1-vaapi/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_GST1_VAAPI
+> +	bool "gst1-vaapi"
+> +	select BR2_PACKAGE_GST1_PLUGINS_BASE
+> +	select BR2_PACKAGE_GST1_PLUGINS_BAD
 
-We can try to disable the parallel build, and see if this makes the
-problem disappear in the autobuilders.
+Are you sure you need those set of plugins to be built to build the
+gst1-vaapi plugin? I'm not too familiar with GStreamer, so maybe this
+is correct, but it looks strange.
+
+> +	select BR2_PACKAGE_GST1_PLUGINS_LIBVA
+> +	select BR2_PACKAGE_GST1_PLUGINS_LIBDRM
+
+These two lines however are clearly wrong: those symbols don't exist in
+Buildroot. And your .mk file has a dependency on libva and libdrm
+instead. So these should be:
+
+	select BR2_PACKAGE_LIBVA
+	select BR2_PACKAGE_LIBDRM
+
+However, you need to inherit the dependencies of those packages:
+
+        depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
+        depends on !BR2_STATIC_LIBS
 
 Thanks,
 
