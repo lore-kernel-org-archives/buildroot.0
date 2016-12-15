@@ -1,44 +1,83 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 15 Dec 2016 19:08:59 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: fix error with sh4a and powerpc
-Message-ID: <1481825339-921-1-git-send-email-fabrice.fontaine@orange.com>
+From: Rob Landley <rob@landley.net>
+Date: Thu, 15 Dec 2016 12:34:00 -0600
+Subject: [Buildroot] [musl] cortex-m support?
+In-Reply-To: <20161208211116.GO1555@brightrain.aerifal.cx>
+References: <04e5a294-719e-8029-704f-a57d1ec935b0@landley.net>
+ <20161208211116.GO1555@brightrain.aerifal.cx>
+Message-ID: <7bfe2625-725d-d1bb-7177-f2d31ce09e9c@landley.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/3d899790acdc5c21733ff6f7f5a1b500e862ea0a
+On 12/08/2016 03:11 PM, Rich Felker wrote:
+> On Tue, Dec 06, 2016 at 11:52:29PM -0600, Rob Landley wrote:
+>> Index: src/setjmp/arm/setjmp.S
+>> ===================================================================
+>> --- src/setjmp/arm/setjmp.S	(revision 0)
+>> +++ src/setjmp/arm/setjmp.S	(revision 4920)
+>> @@ -0,0 +1,45 @@
+>> +.global __setjmp
+>> +.global _setjmp
+>> +.global setjmp
+>> +.type __setjmp,%function
+>> +.type _setjmp,%function
+>> +.type setjmp,%function
+>> +__setjmp:
+>> +_setjmp:
+>> +setjmp:
+>> +	mov ip,r0
+>> +#if defined(__thumb__)
+>> +	stmia ip!,{v1,v2,v3,v4,v5,v6,sl,fp,lr}
+>> +        str sp, [ip], #4
+>> +#else
+>> +	stmia ip!,{v1,v2,v3,v4,v5,v6,sl,fp,sp,lr}
+>> +#endif
+> 
+> My leaning is to just always use the version that works on thumb,
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
- package/cjson/cjson.hash | 1 +
- package/cjson/cjson.mk   | 6 ++++++
- 2 files changed, 7 insertions(+)
+Presumaby there's a longjmp.S bit too because:
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index 4f0723a..fc0ed28 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256	3487795d54440bdbd41b4b8e7688889526f2f9a652639f6036b9965016c800e7	cjson-v1.1.0.tar.gz
-+sha256	8eea780ee5729275a5076002d92a4c7854ecb89968b26a81efeb5bd9828268a0	fcc89c4bb264d665929b00eeebc479a643a90896.patch
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 3dd6ebc..7ac7a71 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -10,4 +10,10 @@ CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
- CJSON_LICENSE_FILES = LICENSE
- 
-+# This patch fixes -Werror=strict-overflow compile errors on sh4a and powerpc
-+# toolchains:
-+# http://autobuild.buildroot.net/results/3d899790acdc5c21733ff6f7f5a1b500e862ea0a
-+CJSON_PATCH = \
-+	https://github.com/DaveGamble/cjson/commit/fcc89c4bb264d665929b00eeebc479a643a90896.patch
-+
- $(eval $(cmake-package))
--- 
-2.5.0
+        ldmia ip!, {v1,v2,v3,v4,v5,v6,sl,fp,sp,lr}
+
+Make sure you're aware of erratum 752419:
+
+  https://sourceware.org/ml/binutils/2011-05/msg00087.html
+
+On a board with a lot of serial traffic, it takes about 3 minutes for
+uClibc (yes, including the current -ng) to crash (by loading the link
+register into the stack pointer and stomping code before the setjmp).
+
+The emcraft guys fixed this in their cortex-m uClibc fork way back when
+(http://www.emcraft.com/som/building-uclibc), and of _course_ never
+bothered to send it upstream. (Or put it on github with their kernel and
+uboot.) But the source is in their distro tarball, and their patch to
+uClibc's __longjmp.S is basically:
+
+--- uclibc-1.0.17/libc/sysdeps/linux/arm/__longjmp.S
++++ emcraft/libc/sysdeps/linux/arm/__longjmp.S
+@@ -56,9 +60,15 @@
+ #if defined(__thumb2__)
+ 	/* Thumb-2 does not allow loading sp with ldm.  */
+ 	ldmia	ip!,	{v1-v6, sl, fp}
++#if 0
+ 	ldr	sp, [ip], #4
+ 	ldr	lr, [ip], #4
+ #else
++	ldr	sp, [ip, #0]
++	ldr	lr, [ip, #4]
++	add	ip, #8
++#endif
++#else
+ 	ldmia	ip!,	{v1-v6, sl, fp, sp, lr}
+ #endif
+
+
+(Dunno why the "add ip, #8" because it's a scratch register and this is
+the last use in the function, but maybe they just made it do exactly
+what the #else case does?)
+
+cc-ing buildroot because this is still broken in their november release.
+
+Rob
