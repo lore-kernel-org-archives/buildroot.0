@@ -1,59 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 15 Dec 2016 21:48:20 +0200
-Subject: [Buildroot] [PATCH] toolchain: extend musl workaround for recent
-	kernels
-Message-ID: <a627480f04fdcc673a915a26eb690d7b854072a2.1481831300.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Dec 2016 21:34:31 +0100
+Subject: [Buildroot] [PATCH 1/1] tinycbor: try to fix unreproducible
+ errors
+In-Reply-To: <20161215200537.60123c00@gmx.net>
+References: <1481659403-7923-1-git-send-email-fabrice.fontaine@orange.com>
+ <20161213223739.7735f291@free-electrons.com>
+ <CAPi7W83Jr9Cj9qZ=RqAwDjbcjPKQa-ioodc_Mf2zH1HXx=oV9A@mail.gmail.com>
+ <20161214000233.7a18fe6a@free-electrons.com>
+ <CAPi7W83mnepjSMBh_4PchV-Zi1fSmjHMeo6ib1jiPm=vgYn_eA@mail.gmail.com>
+ <20161215093101.0b19d425@free-electrons.com>
+ <20161215200537.60123c00@gmx.net>
+Message-ID: <20161215213431.46c8497e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kernels v4.7 and newer[1] require the __USE_MISC macro for libc-compat.h
-suppressions to be effective. musl does not define this macros, so add an
-unconditional definition of __USE_MISC to libc-compat.h.
+Hello,
 
-In addition, since musl define IFF_LOWER_UP and friends as macros (instead of
-enums), define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO to
-suppress the kernel corresponding definitions to avoid conflict.
+On Thu, 15 Dec 2016 20:05:37 +0100, Peter Seiderer wrote:
 
-Fixes (xl2tp):
-http://autobuild.buildroot.net/results/0b9/0b9384c4beaac85f3a17c3245c8a7418c2e2e296/
-http://autobuild.buildroot.net/results/657/657bc5687cf01aee38d32d45ba57fb62b2bd56d0/
-http://autobuild.buildroot.net/results/bcd/bcd81618de2f745a19c923c66d787b5182bb54aa/
+> Workaround by disabling parallel build? Or write a pre-generated .config before
+> starting the compile?
 
-[1] Since commit f0a3fdca79 (uapi glibc compat: fix compilation when
-    !__USE_MISC in glibc)
+We can try to disable the parallel build, and see if this makes the
+problem disappear in the autobuilders.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- toolchain/toolchain/toolchain.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Thanks,
 
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index d317e917d032..b16db0150194 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -16,11 +16,20 @@ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
- # headers and kernel headers. This is a temporary measure until musl finds a
- # better solution.
- #
-+# Augment the original suggestion with __USE_MISC since recent kernels
-+# require this glibc internal macro. Also, as musl defines IFF_LOWER_UP,
-+# IFF_DORMANT and IFF_ECHO, add another macro to suppress them in the
-+# kernel header, and avoid macro/enum conflict.
-+#
- # [1] http://www.openwall.com/lists/musl/2015/10/08/2
- ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
- define TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
- 	$(SED) 's/^#if defined(__GLIBC__)$$/#if 1/' \
- 		$(STAGING_DIR)/usr/include/linux/libc-compat.h
-+	$(SED) '1s/^/#define __USE_MISC\n/' \
-+		$(STAGING_DIR)/usr/include/linux/libc-compat.h
-+	$(SED) '1s/^/#define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO 0\n/' \
-+		$(STAGING_DIR)/usr/include/linux/libc-compat.h
- endef
- TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_MUSL_KERNEL_HEADERS_COMPATIBILITY_HACK
- TOOLCHAIN_INSTALL_STAGING = YES
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
