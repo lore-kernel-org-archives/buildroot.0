@@ -1,151 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Dec 2016 17:24:45 +0100
-Subject: [Buildroot] [git commit] board/orangepi: drop redundant files
-Message-ID: <20161215163013.63B09818C0@busybox.osuosl.org>
+Date: Thu, 15 Dec 2016 17:11:00 +0100
+Subject: [Buildroot] [git commit] orangepipc: rename to orangepi-pc
+Message-ID: <20161215163013.503A4818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1a9fb9ddbc4e6520b9eeee43d45817f9e4a62aa
+commit: https://git.buildroot.net/buildroot/commit/?id=d63e26e5277f3de9bfb729557a29987776064336
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The orangepi board variants use identical post-build and post-image scripts,
-so move them up to board/orangepi and add symlinks in the variant
-subdirectories, similary to how we handle it for the raspberry pi variants.
+Rename orangepipc files, configs, and directories:
+- oragepipc_defconfig -> orangepi_pc_defconfig
+- board/orangepi/orangepipc -> board/orangepi/orangepi-pc
 
+The purpose of the patch is to improve readability before
+adding other boards of orangepi family.
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/orangepi/orangepi-one/post-build.sh      | 12 +-----------
- board/orangepi/orangepi-one/post-image.sh      | 15 +--------------
- board/orangepi/orangepi-pc/post-build.sh       | 12 +-----------
- board/orangepi/orangepi-pc/post-image.sh       | 15 +--------------
- board/orangepi/{orangepi-pc => }/post-build.sh |  2 +-
- board/orangepi/{orangepi-pc => }/post-image.sh |  0
- 6 files changed, 5 insertions(+), 51 deletions(-)
+ DEVELOPERS                                               | 2 +-
+ board/orangepi/{orangepipc => orangepi-pc}/boot.cmd      | 0
+ board/orangepi/{orangepipc => orangepi-pc}/genimage.cfg  | 0
+ board/orangepi/{orangepipc => orangepi-pc}/post-build.sh | 0
+ board/orangepi/{orangepipc => orangepi-pc}/post-image.sh | 0
+ board/orangepi/{orangepipc => orangepi-pc}/readme.txt    | 2 +-
+ configs/{orangepipc_defconfig => orangepi_pc_defconfig}  | 4 ++--
+ 7 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/orangepi/orangepi-one/post-build.sh b/board/orangepi/orangepi-one/post-build.sh
-deleted file mode 100755
-index 46e8905..0000000
---- a/board/orangepi/orangepi-one/post-build.sh
-+++ /dev/null
-@@ -1,11 +0,0 @@
--#!/bin/sh
--# post-build.sh for OrangePi One taken from CubieBoard's post-build.sh
--# 2013, Carlo Caione <carlo.caione@gmail.com>
--
--BOARD_DIR="$(dirname $0)"
--MKIMAGE=$HOST_DIR/usr/bin/mkimage
--BOOT_CMD=$BOARD_DIR/boot.cmd
--BOOT_CMD_H=$BINARIES_DIR/boot.scr
--
--# U-Boot script
--$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
-diff --git a/board/orangepi/orangepi-one/post-build.sh b/board/orangepi/orangepi-one/post-build.sh
-new file mode 120000
-index 0000000..cd7f116
---- /dev/null
-+++ b/board/orangepi/orangepi-one/post-build.sh
-@@ -0,0 +1 @@
-+../post-build.sh
-\ No newline at end of file
-diff --git a/board/orangepi/orangepi-one/post-image.sh b/board/orangepi/orangepi-one/post-image.sh
-deleted file mode 100755
-index 359b4c9..0000000
---- a/board/orangepi/orangepi-one/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                               \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
-diff --git a/board/orangepi/orangepi-one/post-image.sh b/board/orangepi/orangepi-one/post-image.sh
-new file mode 120000
-index 0000000..ae6294f
---- /dev/null
-+++ b/board/orangepi/orangepi-one/post-image.sh
-@@ -0,0 +1 @@
-+../post-image.sh
-\ No newline at end of file
-diff --git a/board/orangepi/orangepi-pc/post-build.sh b/board/orangepi/orangepi-pc/post-build.sh
-deleted file mode 100755
-index ca7a99f..0000000
---- a/board/orangepi/orangepi-pc/post-build.sh
-+++ /dev/null
-@@ -1,11 +0,0 @@
--#!/bin/sh
--# post-build.sh for OrangePi PC taken from CubieBoard's post-build.sh
--# 2013, Carlo Caione <carlo.caione@gmail.com>
--
--BOARD_DIR="$(dirname $0)"
--MKIMAGE=$HOST_DIR/usr/bin/mkimage
--BOOT_CMD=$BOARD_DIR/boot.cmd
--BOOT_CMD_H=$BINARIES_DIR/boot.scr
--
--# U-Boot script
--$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
-diff --git a/board/orangepi/orangepi-pc/post-build.sh b/board/orangepi/orangepi-pc/post-build.sh
-new file mode 120000
-index 0000000..cd7f116
---- /dev/null
-+++ b/board/orangepi/orangepi-pc/post-build.sh
-@@ -0,0 +1 @@
-+../post-build.sh
-\ No newline at end of file
-diff --git a/board/orangepi/orangepi-pc/post-image.sh b/board/orangepi/orangepi-pc/post-image.sh
-deleted file mode 100755
-index 359b4c9..0000000
---- a/board/orangepi/orangepi-pc/post-image.sh
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                               \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
-diff --git a/board/orangepi/orangepi-pc/post-image.sh b/board/orangepi/orangepi-pc/post-image.sh
-new file mode 120000
-index 0000000..ae6294f
---- /dev/null
-+++ b/board/orangepi/orangepi-pc/post-image.sh
-@@ -0,0 +1 @@
-+../post-image.sh
-\ No newline at end of file
-diff --git a/board/orangepi/orangepi-pc/post-build.sh b/board/orangepi/post-build.sh
-similarity index 78%
-copy from board/orangepi/orangepi-pc/post-build.sh
-copy to board/orangepi/post-build.sh
-index ca7a99f..a544a19 100755
---- a/board/orangepi/orangepi-pc/post-build.sh
-+++ b/board/orangepi/post-build.sh
-@@ -1,5 +1,5 @@
- #!/bin/sh
--# post-build.sh for OrangePi PC taken from CubieBoard's post-build.sh
-+# post-build.sh for OrangePi taken from CubieBoard's post-build.sh
- # 2013, Carlo Caione <carlo.caione@gmail.com>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 903e9a9..d855d11 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1151,7 +1151,7 @@ F:	package/libunistring/
  
- BOARD_DIR="$(dirname $0)"
-diff --git a/board/orangepi/orangepi-pc/post-image.sh b/board/orangepi/post-image.sh
+ N:	Peter Korsgaard <peter@korsgaard.com>
+ F:	board/orangepi/
+-F:	configs/orangepipc_defconfig
++F:	configs/orangepi_pc_defconfig
+ F:	package/flickcurl/
+ F:	package/libfastjson/
+ F:	package/lzop/
+diff --git a/board/orangepi/orangepipc/boot.cmd b/board/orangepi/orangepi-pc/boot.cmd
 similarity index 100%
-copy from board/orangepi/orangepi-pc/post-image.sh
-copy to board/orangepi/post-image.sh
+rename from board/orangepi/orangepipc/boot.cmd
+rename to board/orangepi/orangepi-pc/boot.cmd
+diff --git a/board/orangepi/orangepipc/genimage.cfg b/board/orangepi/orangepi-pc/genimage.cfg
+similarity index 100%
+rename from board/orangepi/orangepipc/genimage.cfg
+rename to board/orangepi/orangepi-pc/genimage.cfg
+diff --git a/board/orangepi/orangepipc/post-build.sh b/board/orangepi/orangepi-pc/post-build.sh
+similarity index 100%
+rename from board/orangepi/orangepipc/post-build.sh
+rename to board/orangepi/orangepi-pc/post-build.sh
+diff --git a/board/orangepi/orangepipc/post-image.sh b/board/orangepi/orangepi-pc/post-image.sh
+similarity index 100%
+rename from board/orangepi/orangepipc/post-image.sh
+rename to board/orangepi/orangepi-pc/post-image.sh
+diff --git a/board/orangepi/orangepipc/readme.txt b/board/orangepi/orangepi-pc/readme.txt
+similarity index 95%
+rename from board/orangepi/orangepipc/readme.txt
+rename to board/orangepi/orangepi-pc/readme.txt
+index f12c867..d316b6f 100644
+--- a/board/orangepi/orangepipc/readme.txt
++++ b/board/orangepi/orangepi-pc/readme.txt
+@@ -12,7 +12,7 @@ How to build it
+ 
+ Configure Buildroot:
+ 
+-    $ make orangepipc_defconfig
++    $ make orangepi_pc_defconfig
+ 
+ Compile everything and build the SD card image:
+ 
+diff --git a/configs/orangepipc_defconfig b/configs/orangepi_pc_defconfig
+similarity index 86%
+rename from configs/orangepipc_defconfig
+rename to configs/orangepi_pc_defconfig
+index 6d3a842..dd21d5f 100644
+--- a/configs/orangepipc_defconfig
++++ b/configs/orangepi_pc_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-pc/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi-pc/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7.3"
