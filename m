@@ -1,45 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Dec 2016 14:58:20 +0100
-Subject: [Buildroot] [git commit] package/gdb: switch to 7.11 as the default
-	version
-Message-ID: <20161215135953.283CE8079F@busybox.osuosl.org>
+Date: Thu, 15 Dec 2016 14:55:36 +0100
+Subject: [Buildroot] [git commit] package/mpd: bump version to 0.19.21
+Message-ID: <20161215135953.116B08079F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2a80cbf827affb001bb148953edf253c2f6bc1b
+commit: https://git.buildroot.net/buildroot/commit/?id=1475768616210a5817b70c61f36c9c860346e836
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-7.12 is around, 7.11 has already seen a point release, so it's time to
-make 7.11 the default version for gdb.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 2d4631e..3b2e279 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -35,7 +35,7 @@ choice
- 	prompt "GDB debugger Version"
- 	depends on !BR2_arc
- 	depends on !BR2_microblaze
--	default BR2_GDB_VERSION_7_10
-+	default BR2_GDB_VERSION_7_11
- 	help
- 	  Select the version of gdb you wish to use.
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 4ded85d..daa185e 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  ecf74993085509c82e2bfadce88434b62b7727d844add9c548eb63532a5e3b8a  mpd-0.19.20.tar.xz
++sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index bee7182..eb74f4f 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-@@ -62,6 +62,6 @@ config BR2_GDB_VERSION
- 	default "arc-2016.09-rc2-gdb" if BR2_arc
- 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.9.1"    if BR2_GDB_VERSION_7_9
--	default "7.10.1"   if BR2_GDB_VERSION_7_10 || !BR2_PACKAGE_HOST_GDB
--	default "7.11.1"   if BR2_GDB_VERSION_7_11
-+	default "7.10.1"   if BR2_GDB_VERSION_7_10
-+	default "7.11.1"   if BR2_GDB_VERSION_7_11 || !BR2_PACKAGE_HOST_GDB
- 	default "7.12"     if BR2_GDB_VERSION_7_12
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).20
++MPD_VERSION = $(MPD_VERSION_MAJOR).21
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
