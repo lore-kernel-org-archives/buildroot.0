@@ -1,42 +1,192 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Dec 2016 17:10:15 +0100
-Subject: [Buildroot] [git commit] docker-engine: security bump to 1.12.3
-Message-ID: <20161215163013.4644A8018D@busybox.osuosl.org>
+Date: Thu, 15 Dec 2016 17:11:03 +0100
+Subject: [Buildroot] [git commit] orangepi: add basic support for
+	orangepi-one board
+Message-ID: <20161215163013.59EF6818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35e5e7d49956b00ac940b6d336f1ea68f6aebbbb
+commit: https://git.buildroot.net/buildroot/commit/?id=a1f33e0591354bbe631267ce619678f84b06cab8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2016-8867: https://forums.docker.com/t/docker-1-12-2-security-advisory/23975
+Board support package includes the following components:
+- mainline u-boot 2016.09.01
+- mainline kernel 4.9
 
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/orangepi/orangepi-one/boot.cmd      |  8 +++++++
+ board/orangepi/orangepi-one/genimage.cfg  | 36 +++++++++++++++++++++++++++++++
+ board/orangepi/orangepi-one/post-build.sh | 11 ++++++++++
+ board/orangepi/orangepi-one/post-image.sh | 14 ++++++++++++
+ board/orangepi/orangepi-one/readme.txt    | 29 +++++++++++++++++++++++++
+ configs/orangepi_one_defconfig            | 29 +++++++++++++++++++++++++
+ 6 files changed, 127 insertions(+)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 13e28bd..ecc5c66 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 29bc203e483c81c9a337b4a4186e6b0a23984c518b09478d8718c616b5923e88  docker-engine-v1.12.2.tar.gz
-+sha256 cf4f876593abde06b4c19f971163a853a21b1992d75bd2fe5d8bea9015b09f87  docker-engine-v1.12.3.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 7b5a8a4..fdb3c07 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = v1.12.2
-+DOCKER_ENGINE_VERSION = v1.12.3
- DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+diff --git a/board/orangepi/orangepi-one/boot.cmd b/board/orangepi/orangepi-one/boot.cmd
+new file mode 100644
+index 0000000..ab616e6
+--- /dev/null
++++ b/board/orangepi/orangepi-one/boot.cmd
+@@ -0,0 +1,8 @@
++setenv fdt_high ffffffff
++
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-one.dtb
++
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/orangepi/orangepi-one/genimage.cfg b/board/orangepi/orangepi-one/genimage.cfg
+new file mode 100644
+index 0000000..4640ff2
+--- /dev/null
++++ b/board/orangepi/orangepi-one/genimage.cfg
+@@ -0,0 +1,36 @@
++# Minimal SD card image for the OrangePi PC
++#
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-h3-orangepi-one.dtb",
++			"boot.scr"
++		}
++	}
++	size = 10M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/orangepi/orangepi-one/post-build.sh b/board/orangepi/orangepi-one/post-build.sh
+new file mode 100755
+index 0000000..46e8905
+--- /dev/null
++++ b/board/orangepi/orangepi-one/post-build.sh
+@@ -0,0 +1,11 @@
++#!/bin/sh
++# post-build.sh for OrangePi One taken from CubieBoard's post-build.sh
++# 2013, Carlo Caione <carlo.caione@gmail.com>
++
++BOARD_DIR="$(dirname $0)"
++MKIMAGE=$HOST_DIR/usr/bin/mkimage
++BOOT_CMD=$BOARD_DIR/boot.cmd
++BOOT_CMD_H=$BINARIES_DIR/boot.scr
++
++# U-Boot script
++$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
+diff --git a/board/orangepi/orangepi-one/post-image.sh b/board/orangepi/orangepi-one/post-image.sh
+new file mode 100755
+index 0000000..359b4c9
+--- /dev/null
++++ b/board/orangepi/orangepi-one/post-image.sh
+@@ -0,0 +1,14 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage                               \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
+diff --git a/board/orangepi/orangepi-one/readme.txt b/board/orangepi/orangepi-one/readme.txt
+new file mode 100644
+index 0000000..e650f82
+--- /dev/null
++++ b/board/orangepi/orangepi-one/readme.txt
+@@ -0,0 +1,29 @@
++OrangePi One
++
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the OrangePi One. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make orangepi_one_defconfig
++
++Compile everything and build the SD card image:
++
++    $ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+diff --git a/configs/orangepi_one_defconfig b/configs/orangepi_one_defconfig
+new file mode 100644
+index 0000000..a486d0e
+--- /dev/null
++++ b/configs/orangepi_one_defconfig
+@@ -0,0 +1,29 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++BR2_TARGET_GENERIC_HOSTNAME="OrangePi_One"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi One"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-one/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi-one/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-one"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_one"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
