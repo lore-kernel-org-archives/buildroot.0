@@ -1,239 +1,90 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Fri, 16 Dec 2016 14:26:54 -0800
-Subject: [Buildroot] [RFC v4 4/4] mysql: convert to virtual package
-In-Reply-To: <20161216222654.23747-1-bluemrp9@gmail.com>
-References: <20161216222654.23747-1-bluemrp9@gmail.com>
-Message-ID: <20161216222654.23747-5-bluemrp9@gmail.com>
+From: Theo Debrouwere <theo.debrouwere@skynet.be>
+Date: Fri, 16 Dec 2016 23:27:49 +0100
+Subject: [Buildroot] [PATCH] BeagleBoard X15: new board
+In-Reply-To: <87d1gsasv8.fsf@dell.be.48ers.dk>
+References: <20161215223730.4890-1-theo.debrouwere@skynet.be>
+ <87d1gsasv8.fsf@dell.be.48ers.dk>
+Message-ID: <20161216222749.p2qhprdn3arg2bpc@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- package/Config.in                    |  3 +-
- package/mariadb/Config.in            | 32 --------------
- package/mariadb/mariadb.mk           |  1 +
- package/mysql/Config.in              | 83 ++++++++++++++++++++++++++++++++++++
- package/mysql/mysql.mk               |  7 +++
- package/oracle-mysql/Config.in       | 25 -----------
- package/oracle-mysql/oracle-mysql.mk |  1 +
- 7 files changed, 93 insertions(+), 59 deletions(-)
- delete mode 100644 package/mariadb/Config.in
- create mode 100644 package/mysql/Config.in
- create mode 100644 package/mysql/mysql.mk
- delete mode 100644 package/oracle-mysql/Config.in
+>  > diff --git a/board/beagleboardx15/uEnv.txt b/board/beagleboardx15/uEnv.txt
+>  > new file mode 100644
+>  > index 0000000..0af0eef
+>  > --- /dev/null
+>  > +++ b/board/beagleboardx15/uEnv.txt
+>  > @@ -0,0 +1,9 @@
+>  > +# This uEnv.txt file can contain additional environment settings that you
+>  > +# want to set in U-Boot at boot time.  This can be simple variables such
+>  > +# as the serverip or custom variables.  The format of this file is:
+>  > +#    variable=value
+>  > +# NOTE: This file will be evaluated after the bootcmd is run and the
+>  > +#       bootcmd must be set to load this file if it exists (this is the
+>  > +#       default on all newer U-Boot images.  This also means that some
+>  > +#       variables such as bootdelay cannot be changed by this file since
+>  > +#       it is not evaluated until the bootcmd is run.
+> 
+> Is this file really needed if it only contains comments?
 
-diff --git a/package/Config.in b/package/Config.in
-index dd600bc..f7e8c0a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -925,9 +925,8 @@ menu "Database"
- 	source "package/kompexsqlite/Config.in"
- 	source "package/leveldb/Config.in"
- 	source "package/libpqxx/Config.in"
--	source "package/mariadb/Config.in"
- 	source "package/mongodb/Config.in"
--	source "package/oracle-mysql/Config.in"
-+	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
- 	source "package/redis/Config.in"
- 	source "package/sqlcipher/Config.in"
-diff --git a/package/mariadb/Config.in b/package/mariadb/Config.in
-deleted file mode 100644
-index 9d70b3e..0000000
---- a/package/mariadb/Config.in
-+++ /dev/null
-@@ -1,32 +0,0 @@
--config BR2_PACKAGE_MARIADB
--	bool "mariadb"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
--	depends on !BR2_PACKAGE_ORACLE_MYSQL
--	select BR2_PACKAGE_LIBAIO
--	select BR2_PACKAGE_LIBXML2
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_READLINE
--	help
--	  MariaDB is one of the most popular database servers in the world.
--	  It's made by the original developers of MySQL and guaranteed to
--	  stay open source.
--
--	  http://www.mariadb.org/
--
--if BR2_PACKAGE_MARIADB
--
--config BR2_PACKAGE_MARIADB_SERVER
--	bool "mariadb server"
--	help
--	  Install the mariadb server on the target.
--
--endif
--
--comment "mariadb needs a toolchain w/ C++, threads"
--	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 7b47557..6c609da 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -10,6 +10,7 @@ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERS
- MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
- MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
- MARIADB_INSTALL_STAGING = YES
-+MARIADB_PROVIDES = mysql
- 
- MARIADB_DEPENDENCIES = \
- 	host-mariadb \
-diff --git a/package/mysql/Config.in b/package/mysql/Config.in
-new file mode 100644
-index 0000000..e485d6b
---- /dev/null
-+++ b/package/mysql/Config.in
-@@ -0,0 +1,83 @@
-+config BR2_PACKAGE_MYSQL
-+	bool "mysql support"
-+	help
-+	  Select the desired mysql provider.
-+
-+if BR2_PACKAGE_MYSQL
-+
-+choice
-+	prompt "mysql variant"
-+	default BR2_PACKAGE_ORACLE_MYSQL
-+	help
-+	  Select either the oracle mysql server or the mariadb server
-+
-+config BR2_PACKAGE_MARIADB
-+	bool "mariadb"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	select BR2_PACKAGE_LIBAIO
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_HAS_MYSQL
-+	help
-+	  MariaDB is one of the most popular database servers in the world.
-+	  It's made by the original developers of MySQL and guaranteed to
-+	  stay open source.
-+
-+	  http://www.mariadb.org/
-+
-+config BR2_PACKAGE_ORACLE_MYSQL
-+	bool "oracle mysql"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_HAS_MYSQL
-+	help
-+	  The MySQL Open Source Database System
-+
-+	  http://www.mysql.com/
-+
-+endchoice
-+
-+comment "mariadb needs a toolchain w/ C++, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "oracle mysql needs a toolchain w/ C++, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+if BR2_PACKAGE_MARIADB
-+
-+config BR2_PACKAGE_MARIADB_SERVER
-+	bool "mariadb server"
-+	help
-+	  Install the mariadb server on the target.
-+
-+endif
-+
-+if BR2_PACKAGE_ORACLE_MYSQL
-+
-+config BR2_PACKAGE_ORACLE_MYSQL_SERVER
-+	bool "oracle mysql server"
-+	help
-+	  Install the MySQL server on the target.
-+
-+endif
-+
-+config BR2_PACKAGE_HAS_MYSQL
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_MYSQL
-+	string
-+	default "mariadb"      if BR2_PACKAGE_MARIADB
-+	default "oracle-mysql" if BR2_PACKAGE_ORACLE_MYSQL
-+
-+endif
-diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
-new file mode 100644
-index 0000000..d655625
---- /dev/null
-+++ b/package/mysql/mysql.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# mysql
-+#
-+################################################################################
-+
-+$(eval $(virtual-package))
-diff --git a/package/oracle-mysql/Config.in b/package/oracle-mysql/Config.in
-deleted file mode 100644
-index 1c2d33b..0000000
---- a/package/oracle-mysql/Config.in
-+++ /dev/null
-@@ -1,25 +0,0 @@
--config BR2_PACKAGE_ORACLE_MYSQL
--	bool "oracle mysql"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_PACKAGE_MARIADB
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_READLINE
--	help
--	  The MySQL Open Source Database System
--
--	  http://www.mysql.com/
--
--if BR2_PACKAGE_ORACLE_MYSQL
--
--config BR2_PACKAGE_ORACLE_MYSQL_SERVER
--	bool "oracle mysql server"
--	help
--	  Install the MySQL server on the target.
--
--endif
--
--comment "oracle mysql needs a toolchain w/ C++, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
-index 4ec6f73..ed3c0ea 100644
---- a/package/oracle-mysql/oracle-mysql.mk
-+++ b/package/oracle-mysql/oracle-mysql.mk
-@@ -13,6 +13,7 @@ ORACLE_MYSQL_DEPENDENCIES = readline ncurses
- ORACLE_MYSQL_AUTORECONF = YES
- ORACLE_MYSQL_LICENSE = GPLv2
- ORACLE_MYSQL_LICENSE_FILES = README COPYING
-+ORACLE_MYSQL_PROVIDES = mysql
- 
- # Unix socket. This variable can also be consulted by other buildroot packages
- MYSQL_SOCKET = /run/mysql/mysql.sock
--- 
-2.9.3
+No, it isn't necessary. I just wanted to provide a sample file on the sd-card
+image. Should I remove it?
+
+> 
+> > diff --git a/configs/beagleboardx15_defconfig b/configs/beagleboardx15_defconfig
+>  > new file mode 100644
+>  > index 0000000..17181d9
+>  > --- /dev/null
+>  > +++ b/configs/beagleboardx15_defconfig
+>  > @@ -0,0 +1,33 @@
+>  > +BR2_arm=y
+>  > +BR2_cortex_a15=y
+>  > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+>  > +BR2_TARGET_GENERIC_HOSTNAME="beagleboardx15"
+>  > +BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
+> 
+> Does the kernel not boot with console=ttyS2,.. ? If so, then the default
+> of /dev/console should work as well.
+> 
+
+
+U-boot (both ti's release & mainline) currently contains 'console=ttyO2',
+but the kernel 'changes' it to ttyS2.
+
+*snip*
+[    0.000772] WARNING: Your 'console=ttyO2' has been replaced by 'ttyS2'
+[    0.000779] This ensures that you still see kernel messages. Please
+[    0.000784] update your kernel commandline.
+*snip*
+
+This can be fixed with this config line, although I can also provide a patch.
+Or fix it inside the uEnv.txt
+
+> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beagleboardx15/post-image.sh"
+>  > +BR2_LINUX_KERNEL=y
+>  > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
+>  > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="db0b54cdadef2d754ef7c2d8dd7300ef085985ef"
+>  > +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  > +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beagleboardx15/linux-4.4.config"
+>  > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="am57xx-beagle-x15 am57xx-beagle-x15-revb1 am57xx-evm am57xx-evm-reva3"
+>  > +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>  > +BR2_TARGET_ROOTFS_EXT2=y
+>  > +BR2_TARGET_ROOTFS_EXT2_4=y
+>  > +BR2_TARGET_UBOOT=y
+>  > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  > +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  > +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.ti.com/ti-u-boot/ti-u-boot.git"
+>  > +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2f757e5b2c6b260c647a8a1bb295537f07c3a8b9"
+>  > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am57xx_evm"
+> 
+> Are the custom repos needed? I see that mainline u-boot and Linux
+> atleast has "some" support for this defconfig / dts'es.
+
+I haven't checked if mainline has the same level of board support
+as TI's trees.
+
+Let me check that.
