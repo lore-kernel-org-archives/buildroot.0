@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 16 Dec 2016 16:02:51 +0100
-Subject: [Buildroot] [PATCH 5/6] python-dominate: bump to version 2.3.1
+Date: Fri, 16 Dec 2016 16:02:52 +0100
+Subject: [Buildroot] [PATCH 6/6] python-pytablewriter: bump to version 0.14.1
 In-Reply-To: <1481900572-7854-1-git-send-email-yegorslists@googlemail.com>
 References: <1481900572-7854-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1481900572-7854-5-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1481900572-7854-6-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,37 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Use PyPI as download location.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-dominate/python-dominate.hash | 5 +++--
- package/python-dominate/python-dominate.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
+ package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dominate/python-dominate.hash b/package/python-dominate/python-dominate.hash
-index 1d763ac..2480b00 100644
---- a/package/python-dominate/python-dominate.hash
-+++ b/package/python-dominate/python-dominate.hash
-@@ -1,2 +1,3 @@
--# sha256 locally computed
--sha256 318063a9b600cdc13f84592ad515db0fd3a2816a2433e2a2fad55a5398ae05da  python-dominate-acb02c7c71e353e5dfbc905d506b54908533027e.tar.gz
-+# md5 from https://pypi.python.org/pypi/dominate/json, sha256 locally computed
-+md5     45bd97e6f7888aac24ae86013c57638e  dominate-2.3.1.tar.gz
-+sha256  4b8ce6f33633c9dd9175b228d21c00c801b6bd0327747cd5e17fc2da934c3a69  dominate-2.3.1.tar.gz
-diff --git a/package/python-dominate/python-dominate.mk b/package/python-dominate/python-dominate.mk
-index 170553f..3e264ca 100644
---- a/package/python-dominate/python-dominate.mk
-+++ b/package/python-dominate/python-dominate.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
+index 09fb8ff..097d0ed 100644
+--- a/package/python-pytablewriter/python-pytablewriter.hash
++++ b/package/python-pytablewriter/python-pytablewriter.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/pytablewriter/json, sha256 locally computed
+-md5	1f63f9652c61c0d68f17dac054d2c923  pytablewriter-0.10.2.tar.gz
+-sha256	9a45c632ffd94878153cb989ada412b7291100005ce40baaf33a3d4bd51708cf  pytablewriter-0.10.2.tar.gz
++md5	0c45bc31cec49d462fcae16ac3a494d2  pytablewriter-0.14.1.tar.gz
++sha256	7147f12b58ab6506488fc7cd5719dc73f4c03aafaecd5fe7d378297ea5758eaa  pytablewriter-0.14.1.tar.gz
+diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
+index bf89d0a..f86c51e 100644
+--- a/package/python-pytablewriter/python-pytablewriter.mk
++++ b/package/python-pytablewriter/python-pytablewriter.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DOMINATE_VERSION = acb02c7c71e353e5dfbc905d506b54908533027e
--PYTHON_DOMINATE_SITE = $(call github,Knio,dominate,$(PYTHON_DOMINATE_VERSION))
-+PYTHON_DOMINATE_VERSION = 2.3.1
-+PYTHON_DOMINATE_SOURCE = dominate-$(PYTHON_DOMINATE_VERSION).tar.gz
-+PYTHON_DOMINATE_SITE = https://pypi.python.org/packages/43/b2/3b7d67dd59dab93ae08569384b254323516e8868b453eea5614a53835baf
- PYTHON_DOMINATE_SETUP_TYPE = setuptools
- PYTHON_DOMINATE_LICENSE = LGPLv3+
- PYTHON_DOMINATE_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYTABLEWRITER_VERSION = 0.10.2
++PYTHON_PYTABLEWRITER_VERSION = 0.14.1
+ PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
+-PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/eb/4f/ca66fd21db4d9ef81f8bb2012dece42a1f5239295df149a04d955e492fc5
++PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/cb/f7/5000d900ddc927300cc4d8492e06f87a79f830a463bea459b3e03ad6742b
+ PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
+ PYTHON_PYTABLEWRITER_LICENSE = MIT
+ PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
 -- 
 2.1.4
