@@ -1,64 +1,79 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 16 Dec 2016 12:31:25 +0100
-Subject: [Buildroot] mtd-utils 2.0.0-rc2
-In-Reply-To: <c7590022-cf5a-f785-6a39-1a76a3054bda@sigma-star.at>
-References: <c7590022-cf5a-f785-6a39-1a76a3054bda@sigma-star.at>
-Message-ID: <1481887885.31185.8.camel@embedded.rocks>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 16 Dec 2016 12:40:03 +0100
+Subject: [Buildroot] [PATCH] python-sh: new package
+Message-ID: <1481888403-21794-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi David,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Fri, 2016-12-16 at 09:28 +0100, David Oberhollenzer wrote:
-> Hi,
-> 
-> a new version of mtd-utils is about to be released which, among other
-> things,
-> includes tons of fixes, cleanups and replaces the old, broken
-> Makefile with
-> an autotools based buildsystem.
-> 
-> Due to the many changes, especially regarding the build system we
-> bumped the
-> major version number, did an RC1 release last week and an RC2 release
-> with
-> fixes this week. Assuming all goes well, the final release will be
-> next week.
-> 
-> 
-> Tarball:???????????????ftp://ftp.infradead.org/pub/mtd-utils/mtd-util
-> s-2.0.0-rc2.tar.bz2
-> Tarball gpg signature: ftp://ftp.infradead.org/pub/mtd-utils/mtd-util
-> s-2.0.0-rc2.tar.bz2.asc
-> Signed git tag:????????git://git.infradead.org/mtd-utils.git v2.0.0-
-> rc2
-> 
-> 
-> I am writing this as both announce mails failed to reach the
-> buildroot community
-> (RC1 had a dead address and got bounced. I tried sending RC2 to the
-> list but it
-> was rejected as I wasn't registered yet).
-> 
-> There has been little feedback on the new autotools based build
-> system so far, so
-> it would be great if someone could give it try on the release
-> candidate and give
-> us some feedback _now_, so we don't ship a final version that fails
-> to build on
-> some obscure setup or target I didn't think of.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                |  1 +
+ package/python-sh/Config.in      |  7 +++++++
+ package/python-sh/python-sh.hash |  3 +++
+ package/python-sh/python-sh.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-sh/Config.in
+ create mode 100644 package/python-sh/python-sh.hash
+ create mode 100644 package/python-sh/python-sh.mk
 
-I tested building mtd 2.0.0-rc2 by using the autotools-package
-infrastructure. I have two remarks:
-
-1/ zlib is only required by mkfs.jffs2 and mkfs.ubifs
-2/ Buildroot offers the possibility to install the "integck" tool on
-the target. This is not covered by mtd, yet.
-
-Apart from those, the build works fine.
-
-Best regards,
-J?rg Krause
+diff --git a/package/Config.in b/package/Config.in
+index f7e8c0a..10ccdd6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -781,6 +781,7 @@ menu "External python modules"
+ 	source "package/python-service-identity/Config.in"
+ 	source "package/python-setproctitle/Config.in"
+ 	source "package/python-setuptools/Config.in"
++	source "package/python-sh/Config.in"
+ 	source "package/python-shutilwhich/Config.in"
+ 	source "package/python-simpleaudio/Config.in"
+ 	source "package/python-simplejson/Config.in"
+diff --git a/package/python-sh/Config.in b/package/python-sh/Config.in
+new file mode 100644
+index 0000000..b55ea4a
+--- /dev/null
++++ b/package/python-sh/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SH
++	bool "python-sh"
++	help
++	  Python subprocess replacement that allows you to call any
++	  program as if it were a function.
++
++	  https://github.com/amoffat/sh
+diff --git a/package/python-sh/python-sh.hash b/package/python-sh/python-sh.hash
+new file mode 100644
+index 0000000..0445fa6
+--- /dev/null
++++ b/package/python-sh/python-sh.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/sh/json, sha256 locally computed
++md5	89d46b1dba32713b7df74b1bc59d74a1  sh-1.12.7.tar.gz
++sha256	5a07373657a1a704a34ea1bf73b2e55c42388c5d449634d6d7c96147f5660086  sh-1.12.7.tar.gz
+diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
+new file mode 100644
+index 0000000..1aa6bb9
+--- /dev/null
++++ b/package/python-sh/python-sh.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-sh
++#
++################################################################################
++
++PYTHON_SH_VERSION = 1.12.7
++PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
++PYTHON_SH_SITE = https://pypi.python.org/packages/c2/98/565d9b566b3153607336ae9e91c1c467896f7f786c2d5d8e50fef7d75b08
++PYTHON_SH_SETUP_TYPE = setuptools
++PYTHON_SH_LICENSE = MIT
++PYTHON_SH_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
+-- 
+2.1.4
