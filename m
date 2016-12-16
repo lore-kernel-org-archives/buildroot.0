@@ -1,40 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Dec 2016 15:44:28 +0100
-Subject: [Buildroot] [PATCH 1/1] gst1-vaapi: new package
-In-Reply-To: <CALnvph3Kr5Rtc8W5FD_oJSRm58sU_gmkNGQfy+M11kCz8BG3TA@mail.gmail.com>
-References: <1481813631-23515-1-git-send-email-jbb@gamblify.com>
- <20161215214757.0eb1f3d8@free-electrons.com>
- <CALnvph3Kr5Rtc8W5FD_oJSRm58sU_gmkNGQfy+M11kCz8BG3TA@mail.gmail.com>
-Message-ID: <20161216154428.200e5378@free-electrons.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 16 Dec 2016 16:02:47 +0100
+Subject: [Buildroot] [PATCH 1/6] python-mbstrdecoder: new package
+Message-ID: <1481900572-7854-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                                    |  1 +
+ package/python-mbstrdecoder/Config.in                |  6 ++++++
+ package/python-mbstrdecoder/python-mbstrdecoder.hash |  3 +++
+ package/python-mbstrdecoder/python-mbstrdecoder.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-mbstrdecoder/Config.in
+ create mode 100644 package/python-mbstrdecoder/python-mbstrdecoder.hash
+ create mode 100644 package/python-mbstrdecoder/python-mbstrdecoder.mk
 
-> > Are you sure you need those set of plugins to be built to build the
-> > gst1-vaapi plugin? I'm not too familiar with GStreamer, so maybe this
-> > is correct, but it looks strange.  
-> 
-> I added them based on the requirements section found here:
-> https://github.com/01org/gstreamer-vaapi
-
-OK. The configure.ac script indeed checks for plugins-base, but not for
-plugins-bad.
-
-Could you have a look at the configure.ac script? It seems like it
-supports multiple renderers, not only DRM. If you don't want to support
-all of them because you don't use them, that's fine. But you should
-then use the appropriate --enable/--disable options to enable the right
-renderer, and disable the other ones.
-
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 10ccdd6..6fb1565 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -710,6 +710,7 @@ menu "External python modules"
+ 	source "package/python-mako/Config.in"
+ 	source "package/python-markdown/Config.in"
+ 	source "package/python-markupsafe/Config.in"
++	source "package/python-mbstrdecoder/Config.in"
+ 	source "package/python-meld3/Config.in"
+ 	source "package/python-mistune/Config.in"
+ 	source "package/python-msgpack/Config.in"
+diff --git a/package/python-mbstrdecoder/Config.in b/package/python-mbstrdecoder/Config.in
+new file mode 100644
+index 0000000..017002c
+--- /dev/null
++++ b/package/python-mbstrdecoder/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_MBSTRDECODER
++	bool "python-mbstrdecoder"
++	help
++	  multi-byte character string decoder.
++
++	  https://github.com/thombashi/mbstrdecoder
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+new file mode 100644
+index 0000000..1389ac3
+--- /dev/null
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/mbstrdecoder/json, sha256 locally computed
++md5	5548c4748cf0bc16befcf7ef848f95ff  mbstrdecoder-0.1.0.tar.gz
++sha256	7c65c4ea6681729ddfdb7612ac39f5accb10abb4e838ca810d810931ec023aad  mbstrdecoder-0.1.0.tar.gz
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+new file mode 100644
+index 0000000..f64bde9
+--- /dev/null
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-mbstrdecoder
++#
++################################################################################
++
++PYTHON_MBSTRDECODER_VERSION = 0.1.0
++PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
++PYTHON_MBSTRDECODER_SITE = https://pypi.python.org/packages/e4/10/fa3d8716b28e2b37eba1edab1c6831a56b805032328279c14fc99d37c391
++PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
++PYTHON_MBSTRDECODER_LICENSE = MIT
++PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
