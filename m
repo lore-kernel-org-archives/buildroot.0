@@ -1,107 +1,87 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 16 Dec 2016 23:22:49 +0100
-Subject: [Buildroot] [PATCH] tinycbor: disable parallel build
-Message-ID: <20161216222249.7468-1-ps.report@gmx.net>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Fri, 16 Dec 2016 14:26:50 -0800
+Subject: [Buildroot] [RFC v4 0/4] mariadb: new package
+Message-ID: <20161216222654.23747-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maybe fixes ([1]):
+This patch series represents my attempt to add MariaDB 10.1 to Buildroot.
+Based on feedback, this series does three things.  First, the old mysql package
+is renamed to oracle-mysql.  Second, mariadb is added as a new package.  Third,
+mysql is converted to a virtual package.  I have tested this on arm and x86_64
+with uclibc and glibc.
 
- make[1]: Entering directory `/home/peko/autobuild/instance-1/output/build/tinycbor-v0.4'
- .config:8: *** missing separator.  Stop.
+Based on the work by:
+Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+https://patchwork.ozlabs.org/patch/538045/
 
-[1] http://autobuild.buildroot.net/results/8e8fd1e19d6d07212f29e19a305712e715fe781b
+Changes v4 -> v3
+  - rebased
+  - bump version to 10.1.20
+  - removed second patch as it is now upstream
+  - explicitly disable dtrace to avoid detection of a host version (suggested by Frank Hunleth)
+Changes v3 -> v2
+  - rebased
+  - add mariadb as new package instead of replacing mysql (suggested by Thomas Petazzoni)
+  - added patch to fix uclibc build on arm (suggested by Floris Bos)
+  - changed sysv startup script to use mysqladmin ping (suggested by Floris Bos)
+  - added depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS (suggested by Thomas Petazzoni)
+  - removed dependency on libtool (suggested by Thomas Petazzoni)
+  - fixed license (suggested by Thomas Petazzoni and Arnout Vandecappelle)
+  - formatting cleanups
+Changes v1 -> v2
+  - rebased
+  - added openssl as dependency (suggested by Floris Bos)
+  - bumped to mariadb version 10.1 (suggested by Floris Bos)
+  - replaced custom my.cnf with my-small.cnf provided in the target (suggested by Floris Bos)
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-See [2] for discussion. If disabling parallel build does not work a
-second attempt to fix this problem would be to pre-gnerate a .config
-file before starting the compile.
+Ryan Coe (4):
+  mysql: rename package to oracle-mysql
+  mariadb: new package
+  DEVELOPERS: add entry for mariadb
+  mysql: convert to virtual package
 
-[2] http://lists.busybox.net/pipermail/buildroot/2016-December/179783.html
----
- ...fs-fix-eglfs_mali-compile-for-odroid-mali.patch | 53 ----------------------
- package/tinycbor/tinycbor.mk                       |  4 +-
- 2 files changed, 3 insertions(+), 54 deletions(-)
- delete mode 100644 package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
+ DEVELOPERS                                         |   1 +
+ .../mariadb/0001-add-extra-check-for-librt.patch   |  27 ++++
+ package/mariadb/S97mysqld                          |  77 ++++++++++++
+ package/mariadb/mariadb.hash                       |   2 +
+ package/mariadb/mariadb.mk                         | 114 +++++++++++++++++
+ package/mariadb/mysqld.service                     |  13 ++
+ package/mysql/Config.in                            |  73 +++++++++--
+ package/mysql/mysql.mk                             | 130 +-------------------
+ .../0000-ac_cache_check.patch                      |   0
+ .../0001-configure-ps-cache-check.patch            |   0
+ .../0002-use-new-readline-iface.patch              |   0
+ .../0003-ac_stack_direction-is-unset.patch         |   0
+ .../0004-Fix-gen_lex_hash-execution.patch          |   0
+ .../0005-bison_3_breaks_mysql_server_build.patch   |   0
+ .../0006-no-force-static-build.patch               |   0
+ .../0007-dont-install-in-mysql-directory.patch     |   0
+ package/{mysql => oracle-mysql}/S97mysqld          |   0
+ package/{mysql => oracle-mysql}/mysqld.service     |   0
+ .../mysql.hash => oracle-mysql/oracle-mysql.hash}  |   0
+ package/oracle-mysql/oracle-mysql.mk               | 136 +++++++++++++++++++++
+ 20 files changed, 437 insertions(+), 136 deletions(-)
+ create mode 100644 package/mariadb/0001-add-extra-check-for-librt.patch
+ create mode 100644 package/mariadb/S97mysqld
+ create mode 100644 package/mariadb/mariadb.hash
+ create mode 100644 package/mariadb/mariadb.mk
+ create mode 100644 package/mariadb/mysqld.service
+ rename package/{mysql => oracle-mysql}/0000-ac_cache_check.patch (100%)
+ rename package/{mysql => oracle-mysql}/0001-configure-ps-cache-check.patch (100%)
+ rename package/{mysql => oracle-mysql}/0002-use-new-readline-iface.patch (100%)
+ rename package/{mysql => oracle-mysql}/0003-ac_stack_direction-is-unset.patch (100%)
+ rename package/{mysql => oracle-mysql}/0004-Fix-gen_lex_hash-execution.patch (100%)
+ rename package/{mysql => oracle-mysql}/0005-bison_3_breaks_mysql_server_build.patch (100%)
+ rename package/{mysql => oracle-mysql}/0006-no-force-static-build.patch (100%)
+ rename package/{mysql => oracle-mysql}/0007-dont-install-in-mysql-directory.patch (100%)
+ rename package/{mysql => oracle-mysql}/S97mysqld (100%)
+ rename package/{mysql => oracle-mysql}/mysqld.service (100%)
+ rename package/{mysql/mysql.hash => oracle-mysql/oracle-mysql.hash} (100%)
+ create mode 100644 package/oracle-mysql/oracle-mysql.mk
 
-diff --git a/package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch b/package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
-deleted file mode 100644
-index cbafb397b..000000000
---- a/package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From b6c602e4264021f98ec2c72316e2a2000bf35e82 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Mon, 14 Nov 2016 23:42:25 +0100
--Subject: [PATCH] eglfs: fix eglfs_mali compile for odroid-mali
--
--Avoid duplicated struct fbdev_window definition (introduced by [1]) by
--renaming struct fbdev_window to shadow_fbdev_window.
--
--Fixes the following buildroot compile failure ([2]):
--
--qeglfsmaliintegration.cpp:45:8: error: redefinition of 'struct fbdev_window'
-- struct fbdev_window {
--        ^
--In file included from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:28:0,
--                 from /accts/mlweber1/rc-buildroot-test/scripts/instance-0/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:36,
--                 from ../../../eglfs/qeglfsglobal.h:45,
--                 from ../../../eglfs/qeglfsdeviceintegration.h:48,
--                 from qeglfsmaliintegration.h:37,
--                 from qeglfsmaliintegration.cpp:34:
--
--[1] https://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=58bed4cda98e8e25db8adc61c7db73b6853077dc
--[2] http://autobuild.buildroot.net/results/48c/48c458c035162169e8ca7c34ae65e9064822f25a
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- .../eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp      | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
--index 43decdf..aeba83f 100644
----- a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
--+++ b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
--@@ -42,7 +42,7 @@
-- 
-- QT_BEGIN_NAMESPACE
-- 
---struct fbdev_window {
--+struct shadow_fbdev_window {
--     unsigned short width;
--     unsigned short height;
-- };
--@@ -85,7 +85,7 @@ EGLNativeWindowType QEglFSMaliIntegration::createNativeWindow(QPlatformWindow *w
--     Q_UNUSED(window);
--     Q_UNUSED(format);
-- 
---    fbdev_window *fbwin = reinterpret_cast<fbdev_window *>(malloc(sizeof(fbdev_window)));
--+    shadow_fbdev_window *fbwin = reinterpret_cast<shadow_fbdev_window *>(malloc(sizeof(shadow_fbdev_window)));
--     if (NULL == fbwin)
--         return 0;
-- 
---- 
--2.8.1
--
-diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
-index 2691e5b8d..65deacd22 100644
---- a/package/tinycbor/tinycbor.mk
-+++ b/package/tinycbor/tinycbor.mk
-@@ -18,8 +18,10 @@ endif
- 
- TINYCBOR_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) V=1
- 
-+# disabled parallel build because of build failures while
-+# producing the .config file
- define TINYCBOR_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TINYCBOR_MAKE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(TINYCBOR_MAKE_OPTS) -C $(@D)
- endef
- 
- define TINYCBOR_INSTALL_STAGING_CMDS
 -- 
-2.11.0
+2.9.3
