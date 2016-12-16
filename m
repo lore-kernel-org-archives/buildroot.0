@@ -1,10 +1,9 @@
 From: =?UTF-8?q?Jesper=20B=C3=A6kdahl?= <jbb@gamblify.com>
-Date: Fri, 16 Dec 2016 15:03:36 +0100
-Subject: [Buildroot] [PATCH v2 1/1] gst1-vaapi: new package
-In-Reply-To: <1481897016-29643-1-git-send-email-jbb@gamblify.com>
+Date: Fri, 16 Dec 2016 15:03:35 +0100
+Subject: [Buildroot] [PATCH 1/1] gst1-vaapi: new package
+In-Reply-To: <1481813631-23515-1-git-send-email-jbb@gamblify.com>
 References: <1481813631-23515-1-git-send-email-jbb@gamblify.com>
- <1481897016-29643-1-git-send-email-jbb@gamblify.com>
-Message-ID: <1481897016-29643-2-git-send-email-jbb@gamblify.com>
+Message-ID: <1481897016-29643-1-git-send-email-jbb@gamblify.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
