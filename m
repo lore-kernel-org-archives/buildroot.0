@@ -1,47 +1,41 @@
-From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Date: Fri, 16 Dec 2016 09:28:11 +0100
-Subject: [Buildroot] mtd-utils 2.0.0-rc2
-Message-ID: <c7590022-cf5a-f785-6a39-1a76a3054bda@sigma-star.at>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 16 Dec 2016 12:19:16 +0100
+Subject: [Buildroot] [PATCH] can-utils: bump version
+Message-ID: <1481887156-18543-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-a new version of mtd-utils is about to be released which, among other things,
-includes tons of fixes, cleanups and replaces the old, broken Makefile with
-an autotools based buildsystem.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/can-utils/can-utils.hash | 2 +-
+ package/can-utils/can-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Due to the many changes, especially regarding the build system we bumped the
-major version number, did an RC1 release last week and an RC2 release with
-fixes this week. Assuming all goes well, the final release will be next week.
-
-
-Tarball:               ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.0-rc2.tar.bz2
-Tarball gpg signature: ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.0-rc2.tar.bz2.asc
-Signed git tag:        git://git.infradead.org/mtd-utils.git v2.0.0-rc2
-
-
-I am writing this as both announce mails failed to reach the buildroot community
-(RC1 had a dead address and got bounced. I tried sending RC2 to the list but it
-was rejected as I wasn't registered yet).
-
-There has been little feedback on the new autotools based build system so far, so
-it would be great if someone could give it try on the release candidate and give
-us some feedback _now_, so we don't ship a final version that fails to build on
-some obscure setup or target I didn't think of.
-
-
-Regards,
-
-David
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161216/b3a5bbf6/attachment.asc>
+diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
+index 09e3c4d..5e0bccc 100644
+--- a/package/can-utils/can-utils.hash
++++ b/package/can-utils/can-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 8db112e69fceef16617895fa9d4222221fdf44c19eef64912480336c59904765 can-utils-b70a76670dbe8925c2a7c75f90d36a28a8878d7a.tar.gz
++sha256  9899f8838d52459769b61ba3cb2d1e079a5d28fbef1a23859489753da91fce82  can-utils-64edc021d22441002028bc451548b9e7f1874b91.tar.gz
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index e95cf22..46caf62 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAN_UTILS_VERSION = b70a76670dbe8925c2a7c75f90d36a28a8878d7a
++CAN_UTILS_VERSION = 64edc021d22441002028bc451548b9e7f1874b91
+ CAN_UTILS_SITE = $(call github,linux-can,can-utils,$(CAN_UTILS_VERSION))
+ CAN_UTILS_AUTORECONF = YES
+ 
+-- 
+2.1.4
