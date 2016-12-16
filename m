@@ -1,48 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 16 Dec 2016 18:17:36 +0000
-Subject: [Buildroot] [Bug 9481] New: NetworkManager/Ping unable to resolve
-	domains
-Message-ID: <bug-9481-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 16 Dec 2016 15:35:27 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 4.{4, 8}.x series
+Message-ID: <20161216183527.24672-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9481
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-            Bug ID: 9481
-           Summary: NetworkManager/Ping unable to resolve domains
-           Product: buildroot
-           Version: 2016.11
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: nnabavian at sonendo.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-NetworkManager/Ping fails to resolve domain names, responds with "bad address".
-
-This issue was seen on arm imx6 with ipv6.
-
-By default NetworkManager.conf has set dns=dnsmasq
-Although dnsmasq was not built as a part of the packages.
-
-This issue was fixed by setting dns=none.
-
-Also, the resolve.conf was a broken link.
-This was fixed by reestablishing the symlink to the proper path.
-
-ln -s /run/NetworkManager/resolv.conf /etc/resolv.conf
-
-
-With theses changes NetworkManager was able to ping and resolve domains names.
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7c71a6c..c7a6a61 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -240,10 +240,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.36"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.38"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.39"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+ 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+ 	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
+-	default "4.8.14"	if BR2_KERNEL_HEADERS_4_8
++	default "4.8.15"	if BR2_KERNEL_HEADERS_4_8
+ 	default "4.9"		if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.10.2
