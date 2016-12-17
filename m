@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 15:26:45 +0100
-Subject: [Buildroot] [PATCH] toolchain: extend musl workaround for
- recent kernels
-In-Reply-To: <a627480f04fdcc673a915a26eb690d7b854072a2.1481831300.git.baruch@tkos.co.il>
-References: <a627480f04fdcc673a915a26eb690d7b854072a2.1481831300.git.baruch@tkos.co.il>
-Message-ID: <20161217152645.26b59a2b@free-electrons.com>
+Date: Sat, 17 Dec 2016 15:26:48 +0100
+Subject: [Buildroot] [PATCH] musl: workaround kernel if_ether.h header
+ conflict
+In-Reply-To: <17c4ddc5aab7fdf5461d265a1602a13f6f291708.1481863937.git.baruch@tkos.co.il>
+References: <17c4ddc5aab7fdf5461d265a1602a13f6f291708.1481863937.git.baruch@tkos.co.il>
+Message-ID: <20161217152648.4632f3b5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 15 Dec 2016 21:48:20 +0200, Baruch Siach wrote:
-> Kernels v4.7 and newer[1] require the __USE_MISC macro for libc-compat.h
-> suppressions to be effective. musl does not define this macros, so add an
-> unconditional definition of __USE_MISC to libc-compat.h.
+On Fri, 16 Dec 2016 06:52:17 +0200, Baruch Siach wrote:
+> Add a patch that defines _LINUX_IF_ETHER_H in netinet/if_ether.h to avoid the
+> conflicting kernel if_ether.h.
 > 
-> In addition, since musl define IFF_LOWER_UP and friends as macros (instead of
-> enums), define __UAPI_DEF_IF_NET_DEVICE_FLAGS_LOWER_UP_DORMANT_ECHO to
-> suppress the kernel corresponding definitions to avoid conflict.
+> Other musl distros (Alpine, Sabotage, Gentoo) patch[1] the kernel headers
+> instead. This is not practical in Buildroot, since we allow the user to choose
+> the kernel version.
 > 
-> Fixes (xl2tp):
-> http://autobuild.buildroot.net/results/0b9/0b9384c4beaac85f3a17c3245c8a7418c2e2e296/
-> http://autobuild.buildroot.net/results/657/657bc5687cf01aee38d32d45ba57fb62b2bd56d0/
-> http://autobuild.buildroot.net/results/bcd/bcd81618de2f745a19c923c66d787b5182bb54aa/
+> This only fixes the normal case of including linux/if_ether.h (directly or
+> indirectly) after netinet/if_ether.h.
 > 
-> [1] Since commit f0a3fdca79 (uapi glibc compat: fix compilation when
->     !__USE_MISC in glibc)
+> Fixes (tcpreplay):
+> http://autobuild.buildroot.net/results/a65/a65b27f9e288f94f041ced64313dbf55af47bf36/
 > 
+> [1] https://cgit.gentoo.org/proj/musl.git/diff/sys-kernel/linux-headers/files/libc-compat.h-prevent-redefinition-of-struct-ethhdr.patch?id=8eddda8072add075ebf56cf6d288bc1450d6b5f8
+> 
+> Cc: Rich Felker <dalias@aerifal.cx>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  toolchain/toolchain/toolchain.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> This patch will take effect in the autobuilder after a rebuild of musl
+> toolchains.
+> ---
+>  package/musl/0002-avoid-kernel-if_ether.h.patch | 30 +++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/musl/0002-avoid-kernel-if_ether.h.patch
 
 Applied to master, thanks.
 
