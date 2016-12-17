@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Dec 2016 08:40:56 +0100
-Subject: [Buildroot] [PATCH] gvfs: bump to version 1.30.3
-In-Reply-To: <20161216194829.26786-1-gustavo@zacarias.com.ar> (Gustavo
- Zacarias's message of "Fri, 16 Dec 2016 16:48:29 -0300")
-References: <20161216194829.26786-1-gustavo@zacarias.com.ar>
-Message-ID: <874m23atpz.fsf@dell.be.48ers.dk>
+Date: Sat, 17 Dec 2016 08:41:00 +0100
+Subject: [Buildroot] [PATCH] linux-headers: bump 4.{4, 8}.x series
+In-Reply-To: <20161216183527.24672-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Fri, 16 Dec 2016 15:35:27 -0300")
+References: <20161216183527.24672-1-gustavo@zacarias.com.ar>
+Message-ID: <87zijv9f5f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
