@@ -1,40 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 14:12:18 +0100
-Subject: [Buildroot] [PATCH] BeagleBoard X15: new board
-In-Reply-To: <20161216222749.p2qhprdn3arg2bpc@skynet.be>
-References: <20161215223730.4890-1-theo.debrouwere@skynet.be>
- <87d1gsasv8.fsf@dell.be.48ers.dk>
- <20161216222749.p2qhprdn3arg2bpc@skynet.be>
-Message-ID: <20161217141218.1a10616a@free-electrons.com>
+Date: Sat, 17 Dec 2016 14:13:08 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server:
+	Explicitly disable glamor support when dependencies are not met
+Message-ID: <20161217131708.797CE7FAFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3f1c48afa52bc1bedd575a220a6ddc00259d6907
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 16 Dec 2016 23:27:49 +0100, Theo Debrouwere wrote:
+Fixes
+http://autobuild.buildroot.net/results/b48/b48074089da770463f7ffcc27e385ac59456edc5/
 
-> U-boot (both ti's release & mainline) currently contains 'console=ttyO2',
-> but the kernel 'changes' it to ttyS2.
-> 
-> *snip*
-> [    0.000772] WARNING: Your 'console=ttyO2' has been replaced by 'ttyS2'
-> [    0.000779] This ensures that you still see kernel messages. Please
-> [    0.000784] update your kernel commandline.
-> *snip*
-> 
-> This can be fixed with this config line, although I can also provide a patch.
-> Or fix it inside the uEnv.txt
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Then I think it makes sense to provide your own uEnv.txt to fix this.
-
-It's somewhat odd that the U-Boot defconfig provided by TI doesn't
-match the Linux kernel provided by TI in terms of UART naming.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 48cd2a7..30fb05b 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -224,6 +224,8 @@ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
++else
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-glamor
+ endif
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri3 --disable-glamor
