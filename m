@@ -1,62 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 15:25:27 +0100
-Subject: [Buildroot] [PATCH 1/1] audit: Add systemd service.
-In-Reply-To: <MWHPR19MB144029FE09AB17378DD835C2B99D0@MWHPR19MB1440.namprd19.prod.outlook.com>
-References: <MWHPR19MB144029FE09AB17378DD835C2B99D0@MWHPR19MB1440.namprd19.prod.outlook.com>
-Message-ID: <20161217152527.0a4563f3@free-electrons.com>
+Date: Sat, 17 Dec 2016 15:26:36 +0100
+Subject: [Buildroot] [git commit] musl: workaround kernel if_ether.h header
+	conflict
+Message-ID: <20161217142642.5434D807E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=69ced963555b82f847d03ff3a832e4748ed0e721
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Dec 2016 21:21:20 +0000, Adam Duskett wrote:
+Add a patch that defines _LINUX_IF_ETHER_H in netinet/if_ether.h to avoid the
+conflicting kernel if_ether.h.
 
-> +[Unit]
-> +Description=Security Auditing Service
-> +DefaultDependencies=no
-> +After=local-fs.target systemd-tmpfiles-setup.service
-> +Conflicts=shutdown.target
-> +Before=sysinit.target shutdown.target
-> +RefuseManualStop=yes
-> +ConditionKernelCommandLine=!audit=0
-> +Documentation=man:auditd(8) https://people.redhat.com/sgrubb/audit/
-> +
-> +[Service]
-> +ExecStart=/sbin/auditd -n
-> +## To not use augenrules, copy this file to /etc/systemd/system/auditd.service
-> +## and comment/delete the next line and uncomment the auditctl line.
-> +## NOTE: augenrules expect any rules to be added to /etc/audit/rules.d/
-> +ExecStartPost=-/sbin/augenrules --load
-> +#ExecStartPost=-/sbin/auditctl -R /etc/audit/audit.rules
-> +ExecReload=/bin/kill -HUP $MAINPID
-> +# By default we don't clear the rules on exit. To enable this, uncomment
-> +# the next line after copying the file to /etc/systemd/system/auditd.service
-> +#ExecStopPost=/sbin/auditctl -R /etc/audit/audit-stop.rules
-> +
-> +[Install]
-> +WantedBy=multi-user.target
+Other musl distros (Alpine, Sabotage, Gentoo) patch[1] the kernel headers
+instead. This is not practical in Buildroot, since we allow the user to choose
+the kernel version.
 
-This is apparently a copy/paste from init.d/auditd.service in the audit
-source code. Why duplicate it rather than installing the file available
-in the audit source code?
+This only fixes the normal case of including linux/if_ether.h (directly or
+indirectly) after netinet/if_ether.h.
 
-Also, another thing that bothers me is that this .service file by
-default runs 'augenrules --load', with the 'auditctl -R' solution
-commented out, but our sysv init script S01audit uses 'auditctl -R'.
+Fixes (tcpreplay):
+http://autobuild.buildroot.net/results/a65/a65b27f9e288f94f041ced64313dbf55af47bf36/
 
-Unless there's a good reason, it probably makes sense to have our sysv
-init script and systemd unit file for audit do the same thing.
+[1] https://cgit.gentoo.org/proj/musl.git/diff/sys-kernel/linux-headers/files/libc-compat.h-prevent-redefinition-of-struct-ethhdr.patch?id=8eddda8072add075ebf56cf6d288bc1450d6b5f8
 
-Note: I have absolutely no idea why augenrules is doing compared to
-auditctl -R, and why one would chose the former or latter.
+Cc: Rich Felker <dalias@aerifal.cx>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/musl/0002-avoid-kernel-if_ether.h.patch | 30 +++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/musl/0002-avoid-kernel-if_ether.h.patch b/package/musl/0002-avoid-kernel-if_ether.h.patch
+new file mode 100644
+index 0000000..8efbcc8
+--- /dev/null
++++ b/package/musl/0002-avoid-kernel-if_ether.h.patch
+@@ -0,0 +1,30 @@
++From 3984adc4976de7553f51e0cf4de1e18c373b332b Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Thu, 15 Dec 2016 15:10:19 +0200
++Subject: [PATCH] Avoid redefinition of struct ethhdr
++
++This is a workaround to the if_ether.h conflict between musl and the kernel.
++Both define struct ethhdr.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ include/netinet/if_ether.h | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/include/netinet/if_ether.h b/include/netinet/if_ether.h
++index 11ee65823f93..cfe1949d3371 100644
++--- a/include/netinet/if_ether.h
+++++ b/include/netinet/if_ether.h
++@@ -1,6 +1,9 @@
++ #ifndef _NETINET_IF_ETHER_H
++ #define _NETINET_IF_ETHER_H
++ 
+++/* Suppress kernel if_ether.h header inclusion */
+++#define _LINUX_IF_ETHER_H
+++
++ #include <stdint.h>
++ #include <sys/types.h>
++ 
++-- 
++2.10.2
++
