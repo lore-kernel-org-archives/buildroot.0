@@ -1,50 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Dec 2016 09:19:24 +0100
-Subject: [Buildroot] [git commit] package/aespipe: fix host compile
-Message-ID: <20161217081950.71FC88188E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Dec 2016 13:59:50 +0100
+Subject: [Buildroot] amdgpu graphics
+In-Reply-To: <d3c4788f-438e-5def-28b0-3deff87e4ee6@carallon.com>
+References: <d3c4788f-438e-5def-28b0-3deff87e4ee6@carallon.com>
+Message-ID: <20161217135950.12b9f370@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb33a7d6bd89306635749b497cd004e986bcd7e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Building host-aespipe fails on
+On Fri, 16 Dec 2016 13:43:05 +0000, Will Wagner wrote:
 
-$ cat /etc/debian_version
-stretch/sid
+> Has anyone done any work on packaging this for buildroot?
 
-at linking stage:
+Nope, I haven't heard of any effort in this direction.
 
-/usr/bin/gcc -L/home/buildroot/br6/output/host/lib -L/home/buildroot/br6/output/host/usr/lib -Wl,-rpath,/home/buildroot/br6/output/host/usr/lib -o aespipe aespipe.o aes-amd64.o md5-amd64.o md5-2x-amd64.o aes-intel64.o sha512.o rmd160.o
-/usr/bin/ld: aes-amd64.o: relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
+> I've not seen anything on the mailing list so I'm guessing not.
+> 
+> Complicated by the need for llvm to build mesa with amdgpu. Has there 
+> been any more mention of llvm beyond this post from Paul Cercueil?
+> 
+> http://lists.busybox.net/pipermail/buildroot/2015-February/119564.html
 
-Fix is also used in Debian:
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
+I'm adding Paul in Cc, to see what he intends to do with the llvm
+stuff. But since he hasn't resubmitted those patches since a long long
+time, I guess you can probably take over his patches.
 
-[Peter: add comment explaining why]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/aespipe/aespipe.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thanks!
 
-diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
-index 6a38556..8c7cd21 100644
---- a/package/aespipe/aespipe.mk
-+++ b/package/aespipe/aespipe.mk
-@@ -9,5 +9,12 @@ AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
- AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
- AESPIPE_LICENSE = GPL
- 
-+# Debian enables -fPIE by default, breaking the build:
-+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
-+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=835148
-+HOST_AESPIPE_CONF_ENV = \
-+	CFLAGS="$(HOST_CFLAGS) -no-pie" \
-+	LDFLAGS="$(HOST_LDFLAGS) -no-pie"
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
