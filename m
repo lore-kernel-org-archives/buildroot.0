@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 13:59:50 +0100
-Subject: [Buildroot] amdgpu graphics
-In-Reply-To: <d3c4788f-438e-5def-28b0-3deff87e4ee6@carallon.com>
-References: <d3c4788f-438e-5def-28b0-3deff87e4ee6@carallon.com>
-Message-ID: <20161217135950.12b9f370@free-electrons.com>
+Date: Sat, 17 Dec 2016 14:12:18 +0100
+Subject: [Buildroot] [PATCH] BeagleBoard X15: new board
+In-Reply-To: <20161216222749.p2qhprdn3arg2bpc@skynet.be>
+References: <20161215223730.4890-1-theo.debrouwere@skynet.be>
+ <87d1gsasv8.fsf@dell.be.48ers.dk>
+ <20161216222749.p2qhprdn3arg2bpc@skynet.be>
+Message-ID: <20161217141218.1a10616a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 16 Dec 2016 13:43:05 +0000, Will Wagner wrote:
+On Fri, 16 Dec 2016 23:27:49 +0100, Theo Debrouwere wrote:
 
-> Has anyone done any work on packaging this for buildroot?
-
-Nope, I haven't heard of any effort in this direction.
-
-> I've not seen anything on the mailing list so I'm guessing not.
+> U-boot (both ti's release & mainline) currently contains 'console=ttyO2',
+> but the kernel 'changes' it to ttyS2.
 > 
-> Complicated by the need for llvm to build mesa with amdgpu. Has there 
-> been any more mention of llvm beyond this post from Paul Cercueil?
+> *snip*
+> [    0.000772] WARNING: Your 'console=ttyO2' has been replaced by 'ttyS2'
+> [    0.000779] This ensures that you still see kernel messages. Please
+> [    0.000784] update your kernel commandline.
+> *snip*
 > 
-> http://lists.busybox.net/pipermail/buildroot/2015-February/119564.html
+> This can be fixed with this config line, although I can also provide a patch.
+> Or fix it inside the uEnv.txt
 
-I'm adding Paul in Cc, to see what he intends to do with the llvm
-stuff. But since he hasn't resubmitted those patches since a long long
-time, I guess you can probably take over his patches.
+Then I think it makes sense to provide your own uEnv.txt to fix this.
 
-Thanks!
+It's somewhat odd that the U-Boot defconfig provided by TI doesn't
+match the Linux kernel provided by TI in terms of UART naming.
 
 Thomas
 -- 
