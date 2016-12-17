@@ -1,70 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Dec 2016 08:56:46 +0100
-Subject: [Buildroot] [PATCH 2/2] package/aespipe: fix host compile
-In-Reply-To: <20161217071659.3975-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 17 Dec 2016 08:16:59 +0100")
-References: <20161217071659.3975-1-bernd.kuhls@t-online.de>
- <20161217071659.3975-2-bernd.kuhls@t-online.de>
-Message-ID: <87r3579ef5.fsf@dell.be.48ers.dk>
+Date: Sat, 17 Dec 2016 08:41:24 +0100
+Subject: [Buildroot] [git commit] package/aespipe: bump version to 2.4d
+Message-ID: <20161217081950.637A08188E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c2c31fbeebc53611bf9a975cd9a18659d1236aa2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Building host-aespipe fails on
- > $ cat /etc/debian_version
- > stretch/sid
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/aespipe/aespipe.hash | 2 +-
+ package/aespipe/aespipe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > at linking stage:
-
- > /usr/bin/gcc -L/home/buildroot/br6/output/host/lib
- > -L/home/buildroot/br6/output/host/usr/lib
- > -Wl,-rpath,/home/buildroot/br6/output/host/usr/lib -o aespipe
- > aespipe.o aes-amd64.o md5-amd64.o md5-2x-amd64.o aes-intel64.o
- > sha512.o rmd160.o
- > /usr/bin/ld: aes-amd64.o: relocation R_X86_64_32S against `.rodata'
- > can not be used when making a shared object; recompile with -fPIC
-
- > Fix is also used in Debian:
- > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
-
-Ahh, so we will start to see various fallout of them enabling -fPIE by
-default?
-
-If it happends to a lot of packages, then I think we should do it
-globally in HOST_CFLAGS / HOST_LDFLAGS, but I have committed this for
-now after adding a comment explaining why, thanks.
-
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  package/aespipe/aespipe.mk | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
- > index 6a38556..3a95469 100644
- > --- a/package/aespipe/aespipe.mk
- > +++ b/package/aespipe/aespipe.mk
- > @@ -9,5 +9,9 @@ AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
- >  AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
- >  AESPIPE_LICENSE = GPL
+diff --git a/package/aespipe/aespipe.hash b/package/aespipe/aespipe.hash
+index fa66b97..cc7640a 100644
+--- a/package/aespipe/aespipe.hash
++++ b/package/aespipe/aespipe.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  260190beea911190a839e711f610ec3454a9b13985d35479775b7e26ad4c845e  aespipe-v2.4c.tar.bz2
++sha256 c5ce656e0ade49b93e1163ec7b35450721d5743d8d804ad3a9e39add0389e50f  aespipe-v2.4d.tar.bz2
+diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
+index c567092..6a38556 100644
+--- a/package/aespipe/aespipe.mk
++++ b/package/aespipe/aespipe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- > +HOST_AESPIPE_CONF_ENV = \
- > +	CFLAGS="$(HOST_CFLAGS) -no-pie" \
- > +	LDFLAGS="$(HOST_LDFLAGS) -no-pie"
- > +
- >  $(eval $(autotools-package))
- >  $(eval $(host-autotools-package))
- > -- 
- > 2.10.2
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
+-AESPIPE_VERSION = 2.4c
++AESPIPE_VERSION = 2.4d
+ AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
+ AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
+ AESPIPE_LICENSE = GPL
