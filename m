@@ -1,54 +1,34 @@
-From: Adam Duskett <Adamduskett@outlook.com>
-Date: Sat, 17 Dec 2016 05:29:42 +0000
-Subject: [Buildroot] [v2,
-	1/1] systemd: enable selinux if libselinux is selected.
-Message-ID: <MWHPR19MB14405FD5F80097332112D99DB99F0@MWHPR19MB1440.namprd19.prod.outlook.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 17 Dec 2016 07:34:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
+	Explicitly disable glamor support when dependencies are not met
+Message-ID: <20161217063448.964-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd currently has selinux disabled statically.  This prevents
-/sys/fs/selinux from being mounted automatically at boot which
-causes audit to no longer function.  This patch fixes the problem
-by checking to see if libselinux is selected and enabling support for
-selinux if so.
+Fixes
+http://autobuild.buildroot.net/results/b48/b48074089da770463f7ffcc27e385ac59456edc5/
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 - v2:
- - Added SYSTEMD_DEPENDENCIES += libselinux in the case that
-   libselinux was selected.
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
- package/systemd/systemd.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index fa07bd0..278c8e9 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -30,7 +30,6 @@ SYSTEMD_CONF_OPTS += \
- 	--enable-blkid \
- 	--enable-static=no \
- 	--disable-manpages \
--	--disable-selinux \
- 	--disable-pam \
- 	--disable-ima \
- 	--disable-libcryptsetup \
-@@ -153,6 +152,13 @@ else
- SYSTEMD_CONF_OPTS += --disable-microhttpd --disable-qrencode
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SYSTEMD_DEPENDENCIES += libselinux
-+SYSTEMD_CONF_OPTS += --enable-selinux
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 48cd2a7..30fb05b 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -224,6 +224,8 @@ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yy)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
 +else
-+SYSTEMD_CONF_OPTS += --disable-selinux
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
- SYSTEMD_CONF_OPTS += --enable-hwdb
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-glamor
+ endif
  else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri3 --disable-glamor
 -- 
-2.9.3
+2.10.2
