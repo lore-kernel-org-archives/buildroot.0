@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 15:05:31 +0100
-Subject: [Buildroot] [git commit] python-dateutil: bump to version 2.6.0
-Message-ID: <20161217140816.E53868026C@busybox.osuosl.org>
+Date: Sat, 17 Dec 2016 15:05:34 +0100
+Subject: [Buildroot] [git commit] python-dominate: bump to version 2.3.1
+Message-ID: <20161217140817.0A5E2817BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f9d804d9eb393faa012417d5e5960c8cd128c48
+commit: https://git.buildroot.net/buildroot/commit/?id=c817ee6053e927a301e3604936fc9b22033bccaa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Use PyPI as download location.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-dateutil/python-dateutil.hash | 7 +++----
- package/python-dateutil/python-dateutil.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-dominate/python-dominate.hash | 5 +++--
+ package/python-dominate/python-dominate.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
-index 9eff016..adc24bd 100644
---- a/package/python-dateutil/python-dateutil.hash
-+++ b/package/python-dateutil/python-dateutil.hash
-@@ -1,4 +1,3 @@
--# md5 from https://pypi.python.org/pypi/python-dateutil/json
--md5	05ffc6d2cc85a7fd93bb245807f715ef  python-dateutil-2.5.3.tar.gz
--# sha256 calculated by scanpypi
--sha256	1408fdb07c6a1fa9997567ce3fcee6a337b39a503d80699e0f213de4aa4b32ed  python-dateutil-2.5.3.tar.gz
-+# md5 from https://pypi.python.org/pypi/python-dateutil/json, sha256 locally computed
-+md5	6e38f91e8c94c15a79ce22768dfeca87  python-dateutil-2.6.0.tar.gz
-+sha256	62a2f8df3d66f878373fd0072eacf4ee52194ba302e00082828e0d263b0418d2  python-dateutil-2.6.0.tar.gz
-diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
-index 371788c..8d73d16 100644
---- a/package/python-dateutil/python-dateutil.mk
-+++ b/package/python-dateutil/python-dateutil.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-dominate/python-dominate.hash b/package/python-dominate/python-dominate.hash
+index 1d763ac..2480b00 100644
+--- a/package/python-dominate/python-dominate.hash
++++ b/package/python-dominate/python-dominate.hash
+@@ -1,2 +1,3 @@
+-# sha256 locally computed
+-sha256 318063a9b600cdc13f84592ad515db0fd3a2816a2433e2a2fad55a5398ae05da  python-dominate-acb02c7c71e353e5dfbc905d506b54908533027e.tar.gz
++# md5 from https://pypi.python.org/pypi/dominate/json, sha256 locally computed
++md5     45bd97e6f7888aac24ae86013c57638e  dominate-2.3.1.tar.gz
++sha256  4b8ce6f33633c9dd9175b228d21c00c801b6bd0327747cd5e17fc2da934c3a69  dominate-2.3.1.tar.gz
+diff --git a/package/python-dominate/python-dominate.mk b/package/python-dominate/python-dominate.mk
+index 170553f..3e264ca 100644
+--- a/package/python-dominate/python-dominate.mk
++++ b/package/python-dominate/python-dominate.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DATEUTIL_VERSION = 2.5.3
-+PYTHON_DATEUTIL_VERSION = 2.6.0
- PYTHON_DATEUTIL_SOURCE = python-dateutil-$(PYTHON_DATEUTIL_VERSION).tar.gz
--PYTHON_DATEUTIL_SITE = https://pypi.python.org/packages/3e/f5/aad82824b369332a676a90a8c0d1e608b17e740bbb6aeeebca726f17b902
-+PYTHON_DATEUTIL_SITE = https://pypi.python.org/packages/51/fc/39a3fbde6864942e8bb24c93663734b74e281b984d1b8c4f95d64b0c21f6
- PYTHON_DATEUTIL_SETUP_TYPE = setuptools
- PYTHON_DATEUTIL_LICENSE = BSD-3c
- PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
+-PYTHON_DOMINATE_VERSION = acb02c7c71e353e5dfbc905d506b54908533027e
+-PYTHON_DOMINATE_SITE = $(call github,Knio,dominate,$(PYTHON_DOMINATE_VERSION))
++PYTHON_DOMINATE_VERSION = 2.3.1
++PYTHON_DOMINATE_SOURCE = dominate-$(PYTHON_DOMINATE_VERSION).tar.gz
++PYTHON_DOMINATE_SITE = https://pypi.python.org/packages/43/b2/3b7d67dd59dab93ae08569384b254323516e8868b453eea5614a53835baf
+ PYTHON_DOMINATE_SETUP_TYPE = setuptools
+ PYTHON_DOMINATE_LICENSE = LGPLv3+
+ PYTHON_DOMINATE_LICENSE_FILES = LICENSE.txt
