@@ -1,12 +1,13 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Dec 2016 17:55:02 +0100
-Subject: [Buildroot] [PATCH 2/2] package/aespipe: fix host compile
-In-Reply-To: <20161217155904.4d5b4511@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 17 Dec 2016 15:59:04 +0100")
-References: <20161217071659.3975-1-bernd.kuhls@t-online.de>
- <20161217071659.3975-2-bernd.kuhls@t-online.de>
- <20161217155904.4d5b4511@free-electrons.com>
-Message-ID: <87inqia42h.fsf@dell.be.48ers.dk>
+Date: Sat, 17 Dec 2016 17:48:00 +0100
+Subject: [Buildroot] [PATCH] BeagleBoard X15: new board
+In-Reply-To: <20161217141218.1a10616a@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 17 Dec 2016 14:12:18 +0100")
+References: <20161215223730.4890-1-theo.debrouwere@skynet.be>
+ <87d1gsasv8.fsf@dell.be.48ers.dk>
+ <20161216222749.p2qhprdn3arg2bpc@skynet.be>
+ <20161217141218.1a10616a@free-electrons.com>
+Message-ID: <87mvfua4e7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,32 +17,69 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  > Hello,
- > On Sat, 17 Dec 2016 08:16:59 +0100, Bernd Kuhls wrote:
+ > On Fri, 16 Dec 2016 23:27:49 +0100, Theo Debrouwere wrote:
 
- >> +HOST_AESPIPE_CONF_ENV = \
- >> +	CFLAGS="$(HOST_CFLAGS) -no-pie" \
- >> +	LDFLAGS="$(HOST_LDFLAGS) -no-pie"
+ >> U-boot (both ti's release & mainline) currently contains 'console=ttyO2',
+ >> but the kernel 'changes' it to ttyS2.
+ >> 
+ >> *snip*
+ >> [    0.000772] WARNING: Your 'console=ttyO2' has been replaced by 'ttyS2'
+ >> [    0.000779] This ensures that you still see kernel messages. Please
+ >> [    0.000784] update your kernel commandline.
+ >> *snip*
+ >> 
+ >> This can be fixed with this config line, although I can also provide a patch.
+ >> Or fix it inside the uEnv.txt
 
- > I reverted this patch as it breaks the build on systems where gcc does
- > not understand -no-pie:
+ > Then I think it makes sense to provide your own uEnv.txt to fix this.
 
- >   http://autobuild.buildroot.net/?reason=host-aespipe-2.4d
+I had a look, and it is from:
 
-Crap, so the option is also a Debian specific change? :/
+commit 61929cf0169d91366fd3f30d6ee60681b037bc19
+Author: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Date:   Mon Sep 29 20:06:39 2014 +0200
 
- > A better solution is needed for this problem.
+    tty: serial: Add 8250-core based omap driver
 
-We could do something like the kernel's cc-option to see if HOSTCC
-accepts -no-pie - And if so, unconditionally add it to HOST_CFLAGS /
-HOST_LDFLAGS.
+    This patch provides a 8250-core based UART driver for the internal OMAP
+    UART. The long term goal is to provide the same functionality as the
+    current OMAP uart driver and DMA support.
+    I tried to merge omap-serial code together with the 8250-core code.
+    There should should be hardly a noticable difference. The trigger levels
+    are different compared to omap-serial:
+    - omap serial
+      TX: Interrupt comes after TX FIFO has room for 16 bytes.
+          TX of 4096 bytes in one go results in 256 interrupts
 
-cc-option is defined in scripts/Kbuild.include:
+      RX: Interrupt comes after there is on byte in the FIFO.
+          RX of 4096 bytes results in 4096 interrupts.
 
-# cc-option
-# Usage: cflags-y += $(call cc-option,-march=winchip-c6,-march=i586)
+    - this driver
+      TX: Interrupt comes once the TX FIFO is empty.
+          TX of 4096 bytes results in 65 interrupts. That means there will
+          be gaps on the line while the driver reloads the FIFO.
 
-cc-option = $(call try-run,\
-        $(CC) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+      RX: Interrupt comes once there are 48 bytes in the FIFO or less over
+          "longer" time frame. We have
+              1 / 11520 * 10^3 * 16 => 1.38? ms
+          1.38ms to react and purge the FIFO on 115200,8N1. Since the other
+          driver fired after each byte it had ~5.47ms time to react. This
+          _may_ cause problems if one relies on no missing bytes and has no
+          flow control. On the other hand we get only 85 interrupts for the
+          same amount of data.
+
+    It has been only tested as console UART on am335x-evm, dra7-evm and
+    beagle bone. I also did some longer raw-transfers to meassure the load.
+
+    The device name is ttyS based instead of ttyO. If a ttyO based node name
+    is required please ask udev for it. If both driver are activated (this
+    and omap-serial) then this serial driver will take control over the
+    device due to the link order
+
+
+The old omap-serial driver (which uses ttyOx) is still available, so one
+workaround is simply to disable CONFIG_SERIAL_8250_OMAP (and enable
+CONFIG_SERIAL_OMAP).
 
 -- 
 Bye, Peter Korsgaard
