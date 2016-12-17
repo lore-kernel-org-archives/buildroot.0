@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 16:51:23 +0100
-Subject: [Buildroot] [PATCH 2/2] odroidc2: use first boot fs resize pkg.
-In-Reply-To: <20161202101028.26736-2-daggs@gmx.com>
-References: <20161202101028.26736-1-daggs@gmx.com>
- <20161202101028.26736-2-daggs@gmx.com>
-Message-ID: <20161217165123.1053e588@free-electrons.com>
+Date: Sat, 17 Dec 2016 16:52:46 +0100
+Subject: [Buildroot] [PATCH 6/6] xserver_xorg-server: fix dependency
+ with dbus
+In-Reply-To: <20161114132238.6569-7-jezz@sysmic.org>
+References: <20161114132238.6569-1-jezz@sysmic.org>
+ <20161114132238.6569-7-jezz@sysmic.org>
+Message-ID: <20161217165246.2c0c4ac6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  2 Dec 2016 12:10:28 +0200, Dagg Stompler wrote:
-> remove the hardcode limitation of the created rootfs parition size and
-> use the newly added first boot fs resize pkg to extend the fs to the max
-> possible.
+On Mon, 14 Nov 2016 14:22:38 +0100, J?r?me Pouiller wrote:
+> If dbus and udev are enabled. Xorg link with both:
 > 
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> $ arm-linux-readelf -d usr/bin/X | grep NEEDED
+>  0x00000001 (NEEDED)                     Shared library: [libdbus-1.so.3]
+>  0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+>  0x00000001 (NEEDED)                     Shared library: [libudev.so.1]
+> [...]
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-I think we want to decide if we want to do this globally for all
-defconfig for which it makes sense. Having that just for one defconfig,
-but not all the other is a bit weird. Being consistent is quite
-important.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
