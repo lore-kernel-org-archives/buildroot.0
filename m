@@ -1,62 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 23:52:36 +0100
-Subject: [Buildroot] [PATCH 2/2] soletta: new package
-In-Reply-To: <1477419935-86355-2-git-send-email-fabrice.fontaine@orange.com>
-References: <1477419935-86355-1-git-send-email-fabrice.fontaine@orange.com>
- <1477419935-86355-2-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20161217235236.06cc45a2@free-electrons.com>
+Date: Sat, 17 Dec 2016 23:53:05 +0100
+Subject: [Buildroot] [git commit] lxc: bump to version 2.0.6
+Message-ID: <20161217225322.865D88184B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=be2adc1ab28a9b255068c3786b63406b482ed286
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 25 Oct 2016 20:25:35 +0200, Fabrice Fontaine wrote:
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../lxc/0001-configure-add-disable-werror.patch    | 49 ----------------------
+ package/lxc/lxc.hash                               |  2 +-
+ package/lxc/lxc.mk                                 |  4 +-
+ 3 files changed, 2 insertions(+), 53 deletions(-)
 
->  .../0001-Check-availability-of-RB_SW_SUSPEND.patch |  37 ++++++
->  ...Check-availability-of-nonstandard-locales.patch |  64 ++++++++++
->  .../0003-Use-tinydtls-from-buildsystem.patch       | 102 +++++++++++++++
->  .../0004-Use-tinycbor-from-buildsystem.patch       | 139 +++++++++++++++++++++
->  package/soletta/0005-Fix-tinycbor-API-calls.patch  | 130 +++++++++++++++++++
->  .../0006-Remove-warning-when-building-OIC.patch    |  32 +++++
-
-Have all those patches been submitted upstream?
-
-> diff --git a/package/soletta/Config.in b/package/soletta/Config.in
-> new file mode 100644
-> index 0000000..a9891c0
-> --- /dev/null
-> +++ b/package/soletta/Config.in
-> @@ -0,0 +1,30 @@
-> +config BR2_PACKAGE_SOLETTA
-> +	bool "soletta"
-> +	depends on BR2_USE_MMU # fork
-> +	# python3 is not really needed except for 4 development scripts, however
-> +	# if we don't enable it, host-python-jsonschema will be installed for
-> +	# the default python interpreter which is host-python2. As a result
-> +	# host-python3 will not find the module in its site-packages directory.
-
-If python3 is not really needed, then why don't you use the default
-host-python? You can do this:
-
-SOLETTA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-
-Also, in any case, it fails to build here (even with python3) :
-
-ESC[3m>>> soletta v1 BuildingESC[23m
-PATH="/home/test/buildroot/output/host/bin:/home/test/buildroot/output/host/sbin:/home/test/buildroot/output/host/usr/bin:/home/test/buildroot/output/host/usr/sbin:/usr/local/bin:/usr/bin:/bin:/usr/games" /usr/bin/make -j9 TARGETAR="/home/test/buildroot/output/host/usr/bin/arm-linux-ar" TARGETCC="/home/test/buildroot/output/host/usr/bin/arm-linux-gcc" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os " LDFLAGS="" SOLETTA_CONF="/home/test/buildroot/output/build/soletta-v1/soletta_conf" -C /home/test/buildroot/output/build/soletta-v1 -f Makefile.smallos
-make[1]: Entering directory `/home/test/buildroot/output/build/soletta-v1'
-Makefile.smallos:35: "LDFLAGS not set. This is probably an error"
-Makefile.smallos:55: *** multiple target patterns.  Stop.
-make[1]: Leaving directory `/home/test/buildroot/output/build/soletta-v1'
-make: *** [/home/test/buildroot/output/build/soletta-v1/.stamp_built] Error 2
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/lxc/0001-configure-add-disable-werror.patch b/package/lxc/0001-configure-add-disable-werror.patch
+deleted file mode 100644
+index 7bd9729..0000000
+--- a/package/lxc/0001-configure-add-disable-werror.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From e9f34eb4e25fc18411121c4e55557530ddc1f49c Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+-Date: Sun, 4 Sep 2016 09:35:44 +0200
+-Subject: [PATCH] configure: add --disable-werror
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+--Werror may break builds on some scenarios with trivialities
+-(especially during developments).
+-
+-Upstream status: accepted (https://github.com/lxc/lxc/pull/1168)
+-
+-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+----
+- configure.ac | 10 +++++++++-
+- 1 file changed, 9 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 39e313a..0103579 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -152,6 +152,11 @@ if test "x$with_systemdsystemunitdir" != "xno"; then
+-   AC_SUBST([SYSTEMD_UNIT_DIR], [$with_systemdsystemunitdir])
+- fi
+- 
+-+AC_ARG_ENABLE([werror],
+-+	[AC_HELP_STRING([--disable-werror],
+-+	[do not treat warnings as errors])],
+-+	[], [enable_werror=yes])
+-+
+- # Allow enabling deprecated executables
+- AC_ARG_ENABLE([deprecated],
+- 	[AC_HELP_STRING([--enable-deprecated],
+-@@ -630,7 +635,10 @@ AC_PROG_SED
+- LXC_CHECK_TLS
+- 
+- if test "x$GCC" = "xyes"; then
+--	CFLAGS="$CFLAGS -Wall -Werror"
+-+	CFLAGS="$CFLAGS -Wall"
+-+	if test "x$enable_werror" = "xyes"; then
+-+		CFLAGS="$CFLAGS -Werror"
+-+	fi
+- fi
+- 
+- # Files requiring some variable expansion
+--- 
+-2.8.1
+-
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 3dee7fc..7b34e88 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 82df40a0cdd44639ee677d560be95348de48afa93a10a20e959dadb4431ee8d6 lxc-2.0.3.tar.gz
++sha256	7c292cd0055dac1a0e6fbb6a7740fd12b6ffb204603c198faf37c11c9d6dcd7a	lxc-2.0.6.tar.gz
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 9e21fc0..589930f 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,13 +4,11 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 2.0.3
++LXC_VERSION = 2.0.6
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
+-# we're patching configure.ac
+-LXC_AUTORECONF = YES
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-lua --disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
