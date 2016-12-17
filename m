@@ -1,36 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Dec 2016 08:40:45 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 8}.x series
-Message-ID: <20161217081950.55F818188E@busybox.osuosl.org>
+Date: Sat, 17 Dec 2016 08:40:36 +0100
+Subject: [Buildroot] [git commit] gvfs: bump to version 1.30.3
+Message-ID: <20161217081950.45FD581898@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1791a7659b67d3529ea28474169088dd15f79863
+commit: https://git.buildroot.net/buildroot/commit/?id=e47b26e3c0703ee91719201f2dc3ec1e8b48b589
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gvfs/gvfs.hash | 4 ++--
+ package/gvfs/gvfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7c71a6c..c7a6a61 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -240,10 +240,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.36"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.38"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.39"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
- 	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
--	default "4.8.14"	if BR2_KERNEL_HEADERS_4_8
-+	default "4.8.15"	if BR2_KERNEL_HEADERS_4_8
- 	default "4.9"		if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index 82e29b9..63ad77d 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.2.sha256sum
+-sha256	dd897a13af0728765baead44426e2cf968cd2c9caad3bee4d589970f7612c5d7	gvfs-1.30.2.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.3.sha256sum
++sha256	b824a29489cae7f39e1a0fc0d154ac7b7bf43d8edd98ba83ffcad2f766d0f175	gvfs-1.30.3.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index ae2709c..f3b5fc4 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GVFS_VERSION_MAJOR = 1.30
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
