@@ -1,37 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 16:52:46 +0100
-Subject: [Buildroot] [PATCH 6/6] xserver_xorg-server: fix dependency
- with dbus
-In-Reply-To: <20161114132238.6569-7-jezz@sysmic.org>
-References: <20161114132238.6569-1-jezz@sysmic.org>
- <20161114132238.6569-7-jezz@sysmic.org>
-Message-ID: <20161217165246.2c0c4ac6@free-electrons.com>
+Date: Sat, 17 Dec 2016 16:52:38 +0100
+Subject: [Buildroot] [git commit] xserver_xorg-server: fix dependency with
+	dbus
+Message-ID: <20161217155252.1B595817FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c01efc5ab92f1c5652f4876c09b169db3a741455
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Nov 2016 14:22:38 +0100, J?r?me Pouiller wrote:
-> If dbus and udev are enabled. Xorg link with both:
-> 
-> $ arm-linux-readelf -d usr/bin/X | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libdbus-1.so.3]
->  0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libudev.so.1]
-> [...]
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+If dbus and udev are enabled. Xorg link with both:
 
-Applied to master, thanks.
+$ arm-linux-readelf -d usr/bin/X | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libdbus-1.so.3]
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libudev.so.1]
+[...]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 30fb05b..6519af3 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -168,12 +168,12 @@ XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-config-udev-kms
+ endif
+-else
++endif
++
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += dbus
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-dbus
+ endif
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += freetype
