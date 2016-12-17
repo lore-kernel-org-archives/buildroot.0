@@ -1,76 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 15:09:15 +0100
-Subject: [Buildroot] [git commit] python-sh: new package
-Message-ID: <20161217140950.13E4D80DA1@busybox.osuosl.org>
+Date: Sat, 17 Dec 2016 15:09:42 +0100
+Subject: [Buildroot] [git commit] can-utils: bump version
+Message-ID: <20161217140950.23B4D80DA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01aa66eb83a3df65e0369d6778249fba15bfdd38
+commit: https://git.buildroot.net/buildroot/commit/?id=c02278a426dff5076dcf420c4d699b31a88a30b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                |  1 +
- package/python-sh/Config.in      |  7 +++++++
- package/python-sh/python-sh.hash |  3 +++
- package/python-sh/python-sh.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+ package/can-utils/can-utils.hash | 2 +-
+ package/can-utils/can-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 066759c..6fb1565 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -782,6 +782,7 @@ menu "External python modules"
- 	source "package/python-service-identity/Config.in"
- 	source "package/python-setproctitle/Config.in"
- 	source "package/python-setuptools/Config.in"
-+	source "package/python-sh/Config.in"
- 	source "package/python-shutilwhich/Config.in"
- 	source "package/python-simpleaudio/Config.in"
- 	source "package/python-simplejson/Config.in"
-diff --git a/package/python-sh/Config.in b/package/python-sh/Config.in
-new file mode 100644
-index 0000000..b55ea4a
---- /dev/null
-+++ b/package/python-sh/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_SH
-+	bool "python-sh"
-+	help
-+	  Python subprocess replacement that allows you to call any
-+	  program as if it were a function.
-+
-+	  https://github.com/amoffat/sh
-diff --git a/package/python-sh/python-sh.hash b/package/python-sh/python-sh.hash
-new file mode 100644
-index 0000000..0445fa6
---- /dev/null
-+++ b/package/python-sh/python-sh.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/sh/json, sha256 locally computed
-+md5	89d46b1dba32713b7df74b1bc59d74a1  sh-1.12.7.tar.gz
-+sha256	5a07373657a1a704a34ea1bf73b2e55c42388c5d449634d6d7c96147f5660086  sh-1.12.7.tar.gz
-diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
-new file mode 100644
-index 0000000..1aa6bb9
---- /dev/null
-+++ b/package/python-sh/python-sh.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-sh
-+#
-+################################################################################
-+
-+PYTHON_SH_VERSION = 1.12.7
-+PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
-+PYTHON_SH_SITE = https://pypi.python.org/packages/c2/98/565d9b566b3153607336ae9e91c1c467896f7f786c2d5d8e50fef7d75b08
-+PYTHON_SH_SETUP_TYPE = setuptools
-+PYTHON_SH_LICENSE = MIT
-+PYTHON_SH_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
+diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
+index 09e3c4d..5e0bccc 100644
+--- a/package/can-utils/can-utils.hash
++++ b/package/can-utils/can-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 8db112e69fceef16617895fa9d4222221fdf44c19eef64912480336c59904765 can-utils-b70a76670dbe8925c2a7c75f90d36a28a8878d7a.tar.gz
++sha256  9899f8838d52459769b61ba3cb2d1e079a5d28fbef1a23859489753da91fce82  can-utils-64edc021d22441002028bc451548b9e7f1874b91.tar.gz
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index e95cf22..46caf62 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAN_UTILS_VERSION = b70a76670dbe8925c2a7c75f90d36a28a8878d7a
++CAN_UTILS_VERSION = 64edc021d22441002028bc451548b9e7f1874b91
+ CAN_UTILS_SITE = $(call github,linux-can,can-utils,$(CAN_UTILS_VERSION))
+ CAN_UTILS_AUTORECONF = YES
+ 
