@@ -1,30 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 23:53:24 +0100
-Subject: [Buildroot] [PATCH 1/1] lxc: bump to version 2.0.6
-In-Reply-To: <1482009647-17448-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1482009647-17448-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20161217235324.37d0e27d@free-electrons.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 18 Dec 2016 00:09:49 +0100
+Subject: [Buildroot] [PATCH 1/1] lxc: enable lua if package is selected
+Message-ID: <1482016189-32585-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+lua and python bindings were removed with the same patch:
+https://patchwork.ozlabs.org/patch/367361. There is a real issue with
+python but not with lua so enable it if lua is selected
 
-On Sat, 17 Dec 2016 22:20:47 +0100, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
->  .../lxc/0001-configure-add-disable-werror.patch    | 49 ----------------------
->  package/lxc/lxc.hash                               |  2 +-
->  package/lxc/lxc.mk                                 |  4 +-
->  3 files changed, 2 insertions(+), 53 deletions(-)
->  delete mode 100644 package/lxc/0001-configure-add-disable-werror.patch
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/lxc/lxc.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 589930f..980f1dc 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -10,7 +10,7 @@ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+-	--disable-lua --disable-python --disable-werror \
++	--disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+ 
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+@@ -20,4 +20,11 @@ else
+ LXC_CONF_OPTS += --disable-seccomp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LUA),y)
++LXC_CONF_OPTS += --enable-lua
++LXC_DEPENDENCIES += lua
++else
++LXC_CONF_OPTS += --disable-lua
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
