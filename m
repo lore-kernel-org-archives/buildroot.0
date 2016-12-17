@@ -1,85 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Dec 2016 17:48:00 +0100
-Subject: [Buildroot] [PATCH] BeagleBoard X15: new board
-In-Reply-To: <20161217141218.1a10616a@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 17 Dec 2016 14:12:18 +0100")
-References: <20161215223730.4890-1-theo.debrouwere@skynet.be>
- <87d1gsasv8.fsf@dell.be.48ers.dk>
- <20161216222749.p2qhprdn3arg2bpc@skynet.be>
- <20161217141218.1a10616a@free-electrons.com>
-Message-ID: <87mvfua4e7.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 17 Dec 2016 22:20:47 +0100
+Subject: [Buildroot] [PATCH 1/1] lxc: bump to version 2.0.6
+Message-ID: <1482009647-17448-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ .../lxc/0001-configure-add-disable-werror.patch    | 49 ----------------------
+ package/lxc/lxc.hash                               |  2 +-
+ package/lxc/lxc.mk                                 |  4 +-
+ 3 files changed, 2 insertions(+), 53 deletions(-)
+ delete mode 100644 package/lxc/0001-configure-add-disable-werror.patch
 
- > Hello,
- > On Fri, 16 Dec 2016 23:27:49 +0100, Theo Debrouwere wrote:
-
- >> U-boot (both ti's release & mainline) currently contains 'console=ttyO2',
- >> but the kernel 'changes' it to ttyS2.
- >> 
- >> *snip*
- >> [    0.000772] WARNING: Your 'console=ttyO2' has been replaced by 'ttyS2'
- >> [    0.000779] This ensures that you still see kernel messages. Please
- >> [    0.000784] update your kernel commandline.
- >> *snip*
- >> 
- >> This can be fixed with this config line, although I can also provide a patch.
- >> Or fix it inside the uEnv.txt
-
- > Then I think it makes sense to provide your own uEnv.txt to fix this.
-
-I had a look, and it is from:
-
-commit 61929cf0169d91366fd3f30d6ee60681b037bc19
-Author: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Date:   Mon Sep 29 20:06:39 2014 +0200
-
-    tty: serial: Add 8250-core based omap driver
-
-    This patch provides a 8250-core based UART driver for the internal OMAP
-    UART. The long term goal is to provide the same functionality as the
-    current OMAP uart driver and DMA support.
-    I tried to merge omap-serial code together with the 8250-core code.
-    There should should be hardly a noticable difference. The trigger levels
-    are different compared to omap-serial:
-    - omap serial
-      TX: Interrupt comes after TX FIFO has room for 16 bytes.
-          TX of 4096 bytes in one go results in 256 interrupts
-
-      RX: Interrupt comes after there is on byte in the FIFO.
-          RX of 4096 bytes results in 4096 interrupts.
-
-    - this driver
-      TX: Interrupt comes once the TX FIFO is empty.
-          TX of 4096 bytes results in 65 interrupts. That means there will
-          be gaps on the line while the driver reloads the FIFO.
-
-      RX: Interrupt comes once there are 48 bytes in the FIFO or less over
-          "longer" time frame. We have
-              1 / 11520 * 10^3 * 16 => 1.38? ms
-          1.38ms to react and purge the FIFO on 115200,8N1. Since the other
-          driver fired after each byte it had ~5.47ms time to react. This
-          _may_ cause problems if one relies on no missing bytes and has no
-          flow control. On the other hand we get only 85 interrupts for the
-          same amount of data.
-
-    It has been only tested as console UART on am335x-evm, dra7-evm and
-    beagle bone. I also did some longer raw-transfers to meassure the load.
-
-    The device name is ttyS based instead of ttyO. If a ttyO based node name
-    is required please ask udev for it. If both driver are activated (this
-    and omap-serial) then this serial driver will take control over the
-    device due to the link order
-
-
-The old omap-serial driver (which uses ttyOx) is still available, so one
-workaround is simply to disable CONFIG_SERIAL_8250_OMAP (and enable
-CONFIG_SERIAL_OMAP).
-
+diff --git a/package/lxc/0001-configure-add-disable-werror.patch b/package/lxc/0001-configure-add-disable-werror.patch
+deleted file mode 100644
+index 7bd9729..0000000
+--- a/package/lxc/0001-configure-add-disable-werror.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From e9f34eb4e25fc18411121c4e55557530ddc1f49c Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+-Date: Sun, 4 Sep 2016 09:35:44 +0200
+-Subject: [PATCH] configure: add --disable-werror
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+--Werror may break builds on some scenarios with trivialities
+-(especially during developments).
+-
+-Upstream status: accepted (https://github.com/lxc/lxc/pull/1168)
+-
+-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+----
+- configure.ac | 10 +++++++++-
+- 1 file changed, 9 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 39e313a..0103579 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -152,6 +152,11 @@ if test "x$with_systemdsystemunitdir" != "xno"; then
+-   AC_SUBST([SYSTEMD_UNIT_DIR], [$with_systemdsystemunitdir])
+- fi
+- 
+-+AC_ARG_ENABLE([werror],
+-+	[AC_HELP_STRING([--disable-werror],
+-+	[do not treat warnings as errors])],
+-+	[], [enable_werror=yes])
+-+
+- # Allow enabling deprecated executables
+- AC_ARG_ENABLE([deprecated],
+- 	[AC_HELP_STRING([--enable-deprecated],
+-@@ -630,7 +635,10 @@ AC_PROG_SED
+- LXC_CHECK_TLS
+- 
+- if test "x$GCC" = "xyes"; then
+--	CFLAGS="$CFLAGS -Wall -Werror"
+-+	CFLAGS="$CFLAGS -Wall"
+-+	if test "x$enable_werror" = "xyes"; then
+-+		CFLAGS="$CFLAGS -Werror"
+-+	fi
+- fi
+- 
+- # Files requiring some variable expansion
+--- 
+-2.8.1
+-
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 3dee7fc..7b34e88 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 82df40a0cdd44639ee677d560be95348de48afa93a10a20e959dadb4431ee8d6 lxc-2.0.3.tar.gz
++sha256	7c292cd0055dac1a0e6fbb6a7740fd12b6ffb204603c198faf37c11c9d6dcd7a	lxc-2.0.6.tar.gz
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 9e21fc0..589930f 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,13 +4,11 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 2.0.3
++LXC_VERSION = 2.0.6
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
+-# we're patching configure.ac
+-LXC_AUTORECONF = YES
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-lua --disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
 -- 
-Bye, Peter Korsgaard
+2.5.0
