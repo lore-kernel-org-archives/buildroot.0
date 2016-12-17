@@ -1,42 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 Dec 2016 08:40:36 +0100
-Subject: [Buildroot] [git commit] gvfs: bump to version 1.30.3
-Message-ID: <20161217081950.45FD581898@busybox.osuosl.org>
+Date: Sat, 17 Dec 2016 09:19:24 +0100
+Subject: [Buildroot] [git commit] package/aespipe: fix host compile
+Message-ID: <20161217081950.71FC88188E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e47b26e3c0703ee91719201f2dc3ec1e8b48b589
+commit: https://git.buildroot.net/buildroot/commit/?id=cb33a7d6bd89306635749b497cd004e986bcd7e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Building host-aespipe fails on
+
+$ cat /etc/debian_version
+stretch/sid
+
+at linking stage:
+
+/usr/bin/gcc -L/home/buildroot/br6/output/host/lib -L/home/buildroot/br6/output/host/usr/lib -Wl,-rpath,/home/buildroot/br6/output/host/usr/lib -o aespipe aespipe.o aes-amd64.o md5-amd64.o md5-2x-amd64.o aes-intel64.o sha512.o rmd160.o
+/usr/bin/ld: aes-amd64.o: relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
+
+Fix is also used in Debian:
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
+
+[Peter: add comment explaining why]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gvfs/gvfs.hash | 4 ++--
- package/gvfs/gvfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/aespipe/aespipe.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index 82e29b9..63ad77d 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.2.sha256sum
--sha256	dd897a13af0728765baead44426e2cf968cd2c9caad3bee4d589970f7612c5d7	gvfs-1.30.2.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.30/gvfs-1.30.3.sha256sum
-+sha256	b824a29489cae7f39e1a0fc0d154ac7b7bf43d8edd98ba83ffcad2f766d0f175	gvfs-1.30.3.tar.xz
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index ae2709c..f3b5fc4 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
+index 6a38556..8c7cd21 100644
+--- a/package/aespipe/aespipe.mk
++++ b/package/aespipe/aespipe.mk
+@@ -9,5 +9,12 @@ AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
+ AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
+ AESPIPE_LICENSE = GPL
  
- GVFS_VERSION_MAJOR = 1.30
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
++# Debian enables -fPIE by default, breaking the build:
++# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
++# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=835148
++HOST_AESPIPE_CONF_ENV = \
++	CFLAGS="$(HOST_CFLAGS) -no-pie" \
++	LDFLAGS="$(HOST_LDFLAGS) -no-pie"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
