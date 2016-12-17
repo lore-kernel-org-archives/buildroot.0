@@ -1,50 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 15:04:38 +0100
-Subject: [Buildroot] [RFC v4 0/4] mariadb: new package
-In-Reply-To: <20161216222654.23747-1-bluemrp9@gmail.com>
-References: <20161216222654.23747-1-bluemrp9@gmail.com>
-Message-ID: <20161217150438.0172072e@free-electrons.com>
+Date: Sat, 17 Dec 2016 15:04:57 +0100
+Subject: [Buildroot] [git commit] python-mbstrdecoder: new package
+Message-ID: <20161217140514.9508E81844@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7a26ab2404a0eca68e86c4600e93ab6bfdfcbf1c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 16 Dec 2016 14:26:50 -0800, Ryan Coe wrote:
-> This patch series represents my attempt to add MariaDB 10.1 to Buildroot.
-> Based on feedback, this series does three things.  First, the old mysql package
-> is renamed to oracle-mysql.  Second, mariadb is added as a new package.  Third,
-> mysql is converted to a virtual package.  I have tested this on arm and x86_64
-> with uclibc and glibc.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                    |  1 +
+ package/python-mbstrdecoder/Config.in                |  6 ++++++
+ package/python-mbstrdecoder/python-mbstrdecoder.hash |  3 +++
+ package/python-mbstrdecoder/python-mbstrdecoder.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
 
-Thanks a lot, I've applied your patch series. However, before doing so,
-I did a few changes. Indeed, with your patch series, after PATCH 1, but
-before PATCH 4, all packages in Buildroot that did depend or select
-BR2_PACKAGE_MYSQL would have been broken.
-
-To keep things bisectable, here is what I have done:
-
- - Move the patch introducing mariadb as the first patch. I adjusted
-   the "depends on !BR2_PACKAGE_ORACLE_MYSQL" to "depends
-   on !BR2_PACKAGE_MYSQL".
-
- - Merge the patches renaming mysql to oracle-mysql and moving it to a
-   virtual package (also offering mariadb).
-
-I did some quick built tests, and it also went fine. Let's monitor the
-autobuilders in the next days to see if anything breaks.
-
-However, it is good to remind you that since mariadb is only selected
-through a choice and is not the default, it will never be chosen by the
-autobuilders (due to a Kconfig issue, choices are not randomized in our
-autobuilder testing).
-
-Thanks again!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index f7e8c0a..066759c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -710,6 +710,7 @@ menu "External python modules"
+ 	source "package/python-mako/Config.in"
+ 	source "package/python-markdown/Config.in"
+ 	source "package/python-markupsafe/Config.in"
++	source "package/python-mbstrdecoder/Config.in"
+ 	source "package/python-meld3/Config.in"
+ 	source "package/python-mistune/Config.in"
+ 	source "package/python-msgpack/Config.in"
+diff --git a/package/python-mbstrdecoder/Config.in b/package/python-mbstrdecoder/Config.in
+new file mode 100644
+index 0000000..017002c
+--- /dev/null
++++ b/package/python-mbstrdecoder/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_MBSTRDECODER
++	bool "python-mbstrdecoder"
++	help
++	  multi-byte character string decoder.
++
++	  https://github.com/thombashi/mbstrdecoder
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+new file mode 100644
+index 0000000..1389ac3
+--- /dev/null
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/mbstrdecoder/json, sha256 locally computed
++md5	5548c4748cf0bc16befcf7ef848f95ff  mbstrdecoder-0.1.0.tar.gz
++sha256	7c65c4ea6681729ddfdb7612ac39f5accb10abb4e838ca810d810931ec023aad  mbstrdecoder-0.1.0.tar.gz
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+new file mode 100644
+index 0000000..f64bde9
+--- /dev/null
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-mbstrdecoder
++#
++################################################################################
++
++PYTHON_MBSTRDECODER_VERSION = 0.1.0
++PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
++PYTHON_MBSTRDECODER_SITE = https://pypi.python.org/packages/e4/10/fa3d8716b28e2b37eba1edab1c6831a56b805032328279c14fc99d37c391
++PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
++PYTHON_MBSTRDECODER_LICENSE = MIT
++PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
