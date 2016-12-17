@@ -1,44 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 17:22:37 +0100
-Subject: [Buildroot] [PATCH] jack2: Try better fix for NGREG problem
-In-Reply-To: <1479739795-31046-1-git-send-email-abrodkin@synopsys.com>
-References: <1479739795-31046-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20161217172237.5934f18f@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 17 Dec 2016 17:55:02 +0100
+Subject: [Buildroot] [PATCH 2/2] package/aespipe: fix host compile
+In-Reply-To: <20161217155904.4d5b4511@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 17 Dec 2016 15:59:04 +0100")
+References: <20161217071659.3975-1-bernd.kuhls@t-online.de>
+ <20161217071659.3975-2-bernd.kuhls@t-online.de>
+ <20161217155904.4d5b4511@free-electrons.com>
+Message-ID: <87inqia42h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 21 Nov 2016 17:49:55 +0300, Alexey Brodkin wrote:
-> After quite some time trying this and that we seem to have no
-> better solution than proposed by Thomas back in the day [1].
-> 
-> The solution in question is to check [during jack2 configuration]
-> if NGREG is exposed via ucontext.h and then use its value in
-> source code later on. This replaces long and still growing list
-> of architectures for which we explicitly escape usage of NGREG.
-> 
-> Just for reference [2] is my attempt to fix in in the other
-> supposedly better way but with no luck because of the mess in
-> kernel's UAPI headers.
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2016-May/161785.html
-> [2] http://lists.busybox.net/pipermail/buildroot/2016-June/162461.html
-> 
-> Still not sure if that works for every other architectures, so testing
-> and Acks from all interested parties are much appreciated.
+ > Hello,
+ > On Sat, 17 Dec 2016 08:16:59 +0100, Bernd Kuhls wrote:
 
-I have submitted an improved version of this:
+ >> +HOST_AESPIPE_CONF_ENV = \
+ >> +	CFLAGS="$(HOST_CFLAGS) -no-pie" \
+ >> +	LDFLAGS="$(HOST_LDFLAGS) -no-pie"
 
-  https://patchwork.ozlabs.org/patch/706714/
+ > I reverted this patch as it breaks the build on systems where gcc does
+ > not understand -no-pie:
 
-Best regards,
+ >   http://autobuild.buildroot.net/?reason=host-aespipe-2.4d
 
-Thomas
+Crap, so the option is also a Debian specific change? :/
+
+ > A better solution is needed for this problem.
+
+We could do something like the kernel's cc-option to see if HOSTCC
+accepts -no-pie - And if so, unconditionally add it to HOST_CFLAGS /
+HOST_LDFLAGS.
+
+cc-option is defined in scripts/Kbuild.include:
+
+# cc-option
+# Usage: cflags-y += $(call cc-option,-march=winchip-c6,-march=i586)
+
+cc-option = $(call try-run,\
+        $(CC) $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
