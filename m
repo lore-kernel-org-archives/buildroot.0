@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Dec 2016 15:55:32 +0100
-Subject: [Buildroot] [git commit] linux: check that a repo and version is
-	defined when using a custom repo
-Message-ID: <20161217145601.D8A5581839@busybox.osuosl.org>
+Date: Sat, 17 Dec 2016 15:56:21 +0100
+Subject: [Buildroot] [git commit] Revert "package/aespipe: fix host compile"
+Message-ID: <20161217145658.B580B8167F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93f31b20da05a9d7a99c47a8a3dfe1a6f4ffe203
+commit: https://git.buildroot.net/buildroot/commit/?id=57b628a932b9b4a3c4bf80f4c82a81da5adcb173
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If not set the system will use an empty string which will result in
-download errors for 'linux-.tar.gz' packages.
+This reverts commit cb33a7d6bd89306635749b497cd004e986bcd7e5, as it
+causes build failures on platforms where gcc does not understand the
+"-no-pie" option.
 
-This patch makes it obvious to the user that the variable needs to be
-set.
+Fixes:
 
-Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
+  http://autobuild.buildroot.net/results/51be9526300b3d03e2e304dec9cae953f2f59de4/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/aespipe/aespipe.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index e75dcaa..7f4432e 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -428,6 +428,17 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
- 		$(call UPPERCASE,$(ext))_PREPARE_KERNEL))
+diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
+index 8c7cd21..6a38556 100644
+--- a/package/aespipe/aespipe.mk
++++ b/package/aespipe/aespipe.mk
+@@ -9,12 +9,5 @@ AESPIPE_SOURCE = aespipe-v$(AESPIPE_VERSION).tar.bz2
+ AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
+ AESPIPE_LICENSE = GPL
  
- # Checks to give errors that the user can understand
-+
-+# When a custom repository has been set, check for the repository version
-+ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN)$(BR2_LINUX_KERNEL_CUSTOM_GIT)$(BR2_LINUX_KERNEL_CUSTOM_HG),y)
-+ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION)),)
-+$(error No custom repository version set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION setting)
-+endif
-+ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL)),)
-+$(error No custom repo URL set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_URL setting)
-+endif
-+endif
-+
- ifeq ($(BR_BUILDING),y)
- 
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+-# Debian enables -fPIE by default, breaking the build:
+-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837393
+-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=835148
+-HOST_AESPIPE_CONF_ENV = \
+-	CFLAGS="$(HOST_CFLAGS) -no-pie" \
+-	LDFLAGS="$(HOST_LDFLAGS) -no-pie"
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
