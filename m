@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 18 Dec 2016 10:42:53 -0300
-Subject: [Buildroot] [PATCH] squid: bump to version 3.5.23
-Message-ID: <20161218134253.6594-1-gustavo@zacarias.com.ar>
+Date: Sun, 18 Dec 2016 10:43:05 -0300
+Subject: [Buildroot] [PATCH] strace: bump to version 4.15
+Message-ID: <20161218134305.6639-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/strace/strace.hash | 5 +++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 3b2f2de..c5251fd 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.22.tar.xz.asc
--md5 afb82d2748c06c95815c171463b4aa14  squid-3.5.22.tar.xz
--sha1 73e9199dd9d2a7f107f78d03454830713a4a571d  squid-3.5.22.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.23.tar.xz.asc
-+md5 9b68f689e3d9578932b9c6a4041037c2  squid-3.5.23.tar.xz
-+sha1 33e43869d5eeb0fdfd1d625e6d6edee0617b2b22  squid-3.5.23.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index ddd0b83..e664122 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 383a266..c7695ff 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,2 +1,3 @@
+-# Locally computed
+-sha256	5bed5110b243dce6864bedba269446c18c8c63f553cdd7fd4f808d89a764712f	strace-4.14.tar.xz
++# From https://sourceforge.net/projects/strace/files/strace/4.15/
++md5	1ff96209fec19914c920608ed0791864	strace-4.15.tar.xz
++sha1	18fbaeb07d089023764f618f179091b663a0d21e	strace-4.15.tar.xz
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 59418af..b8de81a 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).22
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).23
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-STRACE_VERSION = 4.14
++STRACE_VERSION = 4.15
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
+ STRACE_LICENSE = BSD-3c
 -- 
 2.10.2
