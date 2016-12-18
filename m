@@ -1,63 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Dec 2016 11:16:37 +0100
-Subject: [Buildroot] [PATCH 2/2] soletta: new package
-In-Reply-To: <CAPi7W81=a+pP_3X3yfg=uZ+65SDpvpVy3M_2wwAFVchfLSFHCA@mail.gmail.com>
-References: <1477419935-86355-1-git-send-email-fabrice.fontaine@orange.com>
- <1477419935-86355-2-git-send-email-fabrice.fontaine@orange.com>
- <20161217235236.06cc45a2@free-electrons.com>
- <CAPi7W81=a+pP_3X3yfg=uZ+65SDpvpVy3M_2wwAFVchfLSFHCA@mail.gmail.com>
-Message-ID: <20161218111637.7f152e12@free-electrons.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 18 Dec 2016 12:04:52 +0100
+Subject: [Buildroot] [PATCH v2,1/1] lxc: enable lua if package is selected
+Message-ID: <1482059092-79108-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+lua and python bindings were removed with the same patch:
+https://patchwork.ozlabs.org/patch/367361. There is a real issue with
+python but not with lua so enable it if lua is selected
 
-Please keep the Buildroot mailing list in Cc when replying.
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Enable also lua binding when luajit is selected
 
-On Sun, 18 Dec 2016 11:07:25 +0100, Fabrice Fontaine wrote:
+ package/lxc/lxc.mk | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-> > Have all those patches been submitted upstream?
-> >  
-> Only the first patch has been accepted upstream, I was working to integrate
-> a second one but the project seems less active (no updates since November
-> 13th) so this is still work in progress.
-
-OK, thanks. At least it's in progress, which is good.
-
-> > SOLETTA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-
-> > python3,host-python)
-> >  
-> My issue is that soletta depends on host-python3, it will not build with
-> host-python. However, if I do not also select python3 (which is not really
-> needed at runtime), then host-python-jsonschema will be compiled for the
-> default host-python interpreter which is host-python2. So, my issue is that
-> I can not add a dependency on host-python*3*-jsonschema as this is not
-> supported by buildroot.
-
-It really depends on python3 ? No way to make it compatible with
-python2 ?
-
-If it really needs host-python3, then yes, we don't have any other
-choice than doing what you did.
-
-> I do not get this error, it seems that it is raised because the Makefile
-> uses multiple targets inside a rule, for example:
-> $(soletta_target) $(soletta_config): private export
-> BOARD_NAME:=$(BOARD_NAME)
-> 
-> I think that multiple targets inside a rule is not supported by old
-> versions of make, so it seems I will have to add another patch ;-)
-
-I was testing on my autobuilder instance, which runs an old Debian. It
-uses make 3.81.
-
-Best regards,
-
-Thomas
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 589930f..b9e3a43 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -10,7 +10,7 @@ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+-	--disable-lua --disable-python --disable-werror \
++	--disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+ 
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+@@ -20,4 +20,15 @@ else
+ LXC_CONF_OPTS += --disable-seccomp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
++LXC_CONF_OPTS += --enable-lua
++LXC_DEPENDENCIES += luainterpreter
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++# By default, lxc will only search for lua.pc
++LXC_CONF_OPTS += --with-lua-pc=$(STAGING_DIR)/usr/lib/pkgconfig/luajit.pc
++endif
++else
++LXC_CONF_OPTS += --disable-lua
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.5.0
