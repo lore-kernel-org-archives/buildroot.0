@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Dec 2016 14:22:30 +0100
-Subject: [Buildroot] [PATCH 1/1] lxc: add dependency on gnutls
-In-Reply-To: <1482062185-97871-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1482062185-97871-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20161218142230.65c0e57d@free-electrons.com>
+Date: Sun, 18 Dec 2016 14:23:05 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.12.x series
+Message-ID: <20161218132312.8BB8B81776@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=613f650d3411bb6ab34db62496c06999ce21cc48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 18 Dec 2016 12:56:25 +0100, Fabrice Fontaine wrote:
-> lxc can use gnutls for various checksumming so add a dependency on it if
-> package is selected (there is no --enable-gnutls in configure)
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I was about to apply this... but in fact I don't see how lxc can use
-gnutls. The configure script indeed has:
-
-AC_CHECK_LIB([gnutls], [gnutls_hash_fast], [enable_gnutls=yes], [enable_gnutls=no])
-
-But ${enable_gnutls} is only used to print a message. In the source
-code, the gnutls related code is surrounded by HAVE_LIBGNUTLS
-conditions, but this is never defined anywhere.
-
-Bottom line, I don't see where gnutls is currently used in lxc in practice.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c7a6a61..a95b41d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -234,7 +234,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.84"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.68"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.69"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.45"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
