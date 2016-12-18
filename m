@@ -1,103 +1,41 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Mon, 19 Dec 2016 10:31:17 +1100
-Subject: [Buildroot] [PATCH 1/1] package/mpv: fixup fix build on powerpc64
-	w/ altivec
-Message-ID: <51f5a34879535401d9769f0aa92fe5b3959784c2.1482103876.git.sam.bobroff@au1.ibm.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Dec 2016 00:32:56 +0100
+Subject: [Buildroot] [git commit] gmp: bump to version 6.1.2
+Message-ID: <20161218233302.25B6680AEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The initial fix for this issue, re-including stdbool.h, is not
-working.
+commit: https://git.buildroot.net/buildroot/commit/?id=584885c8d4ba8e2f824436386d005f1ff75ca1a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead, fix using the method used for other packages with a similar
-problem: add -std=gnu99, which prevents bool from being redefined and
-removes the need for any source code change.
-
-Fixes: 64904f0f6d691cfea5ae1c8f58e2d61aac0684c2
-
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ package/gmp/gmp.hash | 2 +-
+ package/gmp/gmp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- .../mpv/0002-Fix-build-on-powerpc64-altivec.patch  | 28 -------------------
- package/mpv/0002-fix-powerpc64-altivec.patch       | 32 ++++++++++++++++++++++
- 2 files changed, 32 insertions(+), 28 deletions(-)
- delete mode 100644 package/mpv/0002-Fix-build-on-powerpc64-altivec.patch
- create mode 100644 package/mpv/0002-fix-powerpc64-altivec.patch
-
-diff --git a/package/mpv/0002-Fix-build-on-powerpc64-altivec.patch b/package/mpv/0002-Fix-build-on-powerpc64-altivec.patch
-deleted file mode 100644
-index 6db911d7c..000000000
---- a/package/mpv/0002-Fix-build-on-powerpc64-altivec.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Subject: [PATCH] Work around bool type redefinition by altivec
--
--On powerpc64le, the SDL header from SDL2 may include altivec.h and this
--(combined with -std=c99) will cause a compile failure due to bool being
--redefined as a vector type.
--
--Re-include stdbool.h after SDL.h to restore the normal bool type.
--
--Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-----
-- audio/out/ao_sdl.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/audio/out/ao_sdl.c b/audio/out/ao_sdl.c
--index d9d0062..0cb80d6 100644
----- a/audio/out/ao_sdl.c
--+++ b/audio/out/ao_sdl.c
--@@ -29,6 +29,7 @@
-- #include "osdep/timer.h"
-- 
-- #include <SDL.h>
--+#include <stdbool.h>
-- 
-- struct priv
-- {
---- 
--2.10.0.297.gf6727b0
--
-diff --git a/package/mpv/0002-fix-powerpc64-altivec.patch b/package/mpv/0002-fix-powerpc64-altivec.patch
-new file mode 100644
-index 000000000..45983fec8
---- /dev/null
-+++ b/package/mpv/0002-fix-powerpc64-altivec.patch
-@@ -0,0 +1,32 @@
-+Subject: [PATCH] Work around bool type redefinition by altivec
-+
-+On powerpc64le, the SDL header may include altivec.h and this
-+(combined with -std=c99) will cause a compile failure due to bool
-+being redefined as a vector type.
-+
-+Adjust the compiler flags to add -std=gnu99 (which is compatible with
-+altivec) when using gcc. The generic flag '-std=c99' is left in place for other
-+compilers (in the gcc case it is overridden by the (later) gnu flag).
-+
-+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-+---
-+ waftools/detections/compiler.py | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/waftools/detections/compiler.py b/waftools/detections/compiler.py
-+index 5bbba87..50836a2 100644
-+--- a/waftools/detections/compiler.py
-++++ b/waftools/detections/compiler.py
-+@@ -43,7 +43,8 @@ def __add_gcc_flags__(ctx):
-+                        "-Wno-switch", "-Wparentheses", "-Wpointer-arith",
-+                        "-Wno-pointer-sign",
-+                        # GCC bug 66425
-+-                       "-Wno-unused-result"]
-++                       "-Wno-unused-result",
-++                       "-std=gnu99"]
-+ 
-+ def __add_clang_flags__(ctx):
-+     ctx.env.CFLAGS += ["-Wno-logical-op-parentheses", "-fcolor-diagnostics",
-+-- 
-+2.10.0.297.gf6727b0
-+
--- 
-2.11.0
+diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
+index 9ea42e5..f4793cd 100644
+--- a/package/gmp/gmp.hash
++++ b/package/gmp/gmp.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	d36e9c05df488ad630fff17edb50051d6432357f9ce04e34a09b3d818825e831	gmp-6.1.1.tar.xz
++sha256	87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912	gmp-6.1.2.tar.xz
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 843a7a1..33b5d54 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GMP_VERSION = 6.1.1
++GMP_VERSION = 6.1.2
+ GMP_SITE = $(BR2_GNU_MIRROR)/gmp
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
+ GMP_INSTALL_STAGING = YES
