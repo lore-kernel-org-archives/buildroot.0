@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Dec 2016 14:11:00 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add Yegor Yefremov for the
-	can-utils package
-Message-ID: <20161218131105.BA2F28081B@busybox.osuosl.org>
+Date: Sun, 18 Dec 2016 14:11:09 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Yegor Yefremov for the
+ can-utils package
+In-Reply-To: <1482062426-2644-1-git-send-email-yegorslists@googlemail.com>
+References: <1482062426-2644-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20161218141109.61de54c6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af198a2830f73e6b0c549b911568204731a93cd0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+On Sun, 18 Dec 2016 13:00:26 +0100, Yegor Yefremov wrote:
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 49fb352..4f14296 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1634,6 +1634,7 @@ F:	package/bluez_utils/
- F:	package/boost/
- F:	package/bootstrap/
- F:	package/cannelloni/
-+F:	package/can-utils/
- F:	package/circus/
- F:	package/feh/
- F:	package/giblib/
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
