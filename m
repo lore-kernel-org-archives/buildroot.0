@@ -1,41 +1,27 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 18 Dec 2016 14:04:17 +0100
-Subject: [Buildroot] [PATCH 1/4] package/x11r7/xdriver_xf86-input-libinput:
-	bump version to 0.23.0
-Message-ID: <20161218130420.3920-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Dec 2016 14:07:18 +0100
+Subject: [Buildroot] [PATCH 1/1] lxc: install also in staging
+In-Reply-To: <1482061820-96797-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1482061820-96797-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <20161218140718.4a66625d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash      | 4 ++--
- .../x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk  | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index 6edc39114..abc066427 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.x.org/archives/xorg-announce/2016-October/002732.html
--sha256 c762b4072ed448e2ae9f35cebd7fec8df7fd42b3ae61462cc3b2f720a873eae2  xf86-input-libinput-0.22.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-December/002749.html
-+sha256 0b53ebdfe8f8fc7554dd92af1b1c3088a6d3ec4ae1a33fc76f57d635c736a9dc  xf86-input-libinput-0.23.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index 517e5d27e..696a8575c 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.22.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.23.0
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+On Sun, 18 Dec 2016 12:50:20 +0100, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> ---
+>  package/lxc/lxc.mk | 1 +
+>  1 file changed, 1 insertion(+)
+
+Why?
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
