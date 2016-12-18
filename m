@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Dec 2016 12:33:07 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] lxc: enable lua if package is selected
-In-Reply-To: <1482059092-79108-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1482059092-79108-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20161218123307.5e08bec8@free-electrons.com>
+Date: Sun, 18 Dec 2016 12:37:53 +0100
+Subject: [Buildroot] [PATCH v2 2/3] xdriver_xf86-video-odroidc2: new
+ package
+In-Reply-To: <20161025175417.25901-2-daggs@gmx.com>
+References: <20161025175417.25901-1-daggs@gmx.com>
+ <20161025175417.25901-2-daggs@gmx.com>
+Message-ID: <20161218123753.186b7b7c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +14,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 18 Dec 2016 12:04:52 +0100, Fabrice Fontaine wrote:
+On Tue, 25 Oct 2016 20:54:16 +0300, Dagg Stompler wrote:
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> ---
+>  package/x11r7/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+> index 40aa80c..1c5ff7e 100644
+> --- a/package/x11r7/Config.in
+> +++ b/package/x11r7/Config.in
+> @@ -174,6 +174,7 @@ if BR2_PACKAGE_XORG7
+>  		source package/x11r7/xdriver_xf86-video-neomagic/Config.in
+>  		source package/x11r7/xdriver_xf86-video-nouveau/Config.in
+>  		source package/x11r7/xdriver_xf86-video-nv/Config.in
+> +		source package/x11r7/xdriver_xf86-video-odroidc2/Config.in
+>  		source package/x11r7/xdriver_xf86-video-openchrome/Config.in
+>  		source package/x11r7/xdriver_xf86-video-qxl/Config.in
+>  		source package/x11r7/xdriver_xf86-video-r128/Config.in
 
-> +ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
-> +LXC_CONF_OPTS += --enable-lua
-> +LXC_DEPENDENCIES += luainterpreter
-> +ifeq ($(BR2_PACKAGE_LUAJIT),y)
-> +# By default, lxc will only search for lua.pc
-> +LXC_CONF_OPTS += --with-lua-pc=$(STAGING_DIR)/usr/lib/pkgconfig/luajit.pc
+This change should be part of the patch introducing the package, there
+is no reason to have a separate patch for this.
 
-Passing --with-lua-pc=luajit is sufficient, so I've changed it this
-way, and applied. Thanks!
+Also, please add to your patch series a separate patch that adds you in
+the DEVELOPERS file for this package.
+
+Thanks!
 
 Thomas
 -- 
