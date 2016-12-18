@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 18 Dec 2016 09:53:11 +0000
+Date: Sun, 18 Dec 2016 09:55:05 +0000
 Subject: [Buildroot] [Bug 9486] xorg-server 1.19 fails to compile for glibc
  with systemd init (x86_64)
 In-Reply-To: <bug-9486-163@https.bugs.busybox.net/>
 References: <bug-9486-163@https.bugs.busybox.net/>
-Message-ID: <bug-9486-163-veIGGtLn0I@https.bugs.busybox.net/>
+Message-ID: <bug-9486-163-deA9ZM4Id3@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,8 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=9486
 
-Bernd Kuhls <bernd.kuhls@t-online.de> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |bernd.kuhls at t-online.de
-                   |.org                        |
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+I think this would be fixed by https://patchwork.ozlabs.org/patch/700551/.
 
 -- 
 You are receiving this mail because:
