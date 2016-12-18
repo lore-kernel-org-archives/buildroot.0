@@ -1,39 +1,67 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 18 Dec 2016 19:28:30 -0300
-Subject: [Buildroot] [PATCH] gmp: bump to version 6.1.2
-Message-ID: <20161218222830.8935-1-gustavo@zacarias.com.ar>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 18 Dec 2016 23:48:19 +0100
+Subject: [Buildroot] [PATCH v3,2/3] python-jsonschema: new package
+In-Reply-To: <1482101300-9180-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1482101300-9180-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <1482101300-9180-2-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
- package/gmp/gmp.hash | 2 +-
- package/gmp/gmp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v2 -> v3 (after review of Thomas Petazzoni):
+ - Remove Config.in from python-vcversioner as this is not needed for a
+   host-package
+ - Remove target variant of python-jsonschema (including Config.in) as
+   this variant is not needed by soletta
 
-diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
-index 9ea42e5..f4793cd 100644
---- a/package/gmp/gmp.hash
-+++ b/package/gmp/gmp.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	d36e9c05df488ad630fff17edb50051d6432357f9ce04e34a09b3d818825e831	gmp-6.1.1.tar.xz
-+sha256	87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912	gmp-6.1.2.tar.xz
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 843a7a1..33b5d54 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GMP_VERSION = 6.1.1
-+GMP_VERSION = 6.1.2
- GMP_SITE = $(BR2_GNU_MIRROR)/gmp
- GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
- GMP_INSTALL_STAGING = YES
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Add python-vcversioner in host-package version as
+   host-python-jsonschema depends on it
+ - Add python-jsonschema in host-package version
+ - Retrieve first soletta patch from upstream
+ - Add a soletta patch to remove multiple targets in the same rule as
+   this is not supported by old versions of make
+
+ package/python-jsonschema/python-jsonschema.hash |  3 +++
+ package/python-jsonschema/python-jsonschema.mk   | 16 ++++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 package/python-jsonschema/python-jsonschema.hash
+ create mode 100644 package/python-jsonschema/python-jsonschema.mk
+
+diff --git a/package/python-jsonschema/python-jsonschema.hash b/package/python-jsonschema/python-jsonschema.hash
+new file mode 100644
+index 0000000..fc13630
+--- /dev/null
++++ b/package/python-jsonschema/python-jsonschema.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/jsonschema/json, sha256 locally computed
++md5	374e848fdb69a3ce8b7e778b47c30640  jsonschema-2.5.1.tar.gz
++sha256	36673ac378feed3daa5956276a829699056523d7961027911f064b52255ead41  jsonschema-2.5.1.tar.gz
+diff --git a/package/python-jsonschema/python-jsonschema.mk b/package/python-jsonschema/python-jsonschema.mk
+new file mode 100644
+index 0000000..647385e
+--- /dev/null
++++ b/package/python-jsonschema/python-jsonschema.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# python-jsonschema
++#
++################################################################################
++
++PYTHON_JSONSCHEMA_VERSION = 2.5.1
++PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_JSONSCHEMA_VERSION).tar.gz
++PYTHON_JSONSCHEMA_SITE = \
++	https://pypi.python.org/packages/58/0d/c816f5ea5adaf1293a1d81d32e4cdfdaf8496973aa5049786d7fdb14e7e7
++PYTHON_JSONSCHEMA_SETUP_TYPE = setuptools
++PYTHON_JSONSCHEMA_LICENSE = MIT
++PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING
++HOST_PYTHON_JSONSCHEMA_DEPENDENCIES = host-python-vcversioner
++
++$(eval $(host-python-package))
 -- 
-2.10.2
+2.5.0
