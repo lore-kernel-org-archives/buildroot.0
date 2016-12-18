@@ -1,44 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Dec 2016 21:30:29 +0100
-Subject: [Buildroot] [git commit] redis: bump to version 3.2.6
-Message-ID: <20161218203346.82ED98007C@busybox.osuosl.org>
+Date: Sun, 18 Dec 2016 21:24:41 +0100
+Subject: [Buildroot] [git commit] squid: security bump to version 3.5.23
+Message-ID: <20161218203346.5112B8007C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4be266220ad766ef43c811b61344eb7d135af241
+commit: https://git.buildroot.net/buildroot/commit/?id=d9ef4c1f794978928d32304198765026737d810d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
+CVE-2016-10002: http://www.squid-cache.org/Advisories/SQUID-2016_11.txt
+CVE-2016-10003: http://www.squid-cache.org/Advisories/SQUID-2016_10.txt
+
+[Peter: add CVE references]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/redis.hash | 4 ++--
- package/redis/redis.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 7e09db5..b6e8eac 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1	6f6333db6111badaa74519d743589ac4635eba7a 	redis-3.2.5.tar.gz
-+sha1	0c7bc5c751bdbc6fabed178db9cdbdd948915d1b 	redis-3.2.6.tar.gz
- # Calculated based on the hash above
--sha256	8509ceb1efd849d6b2346a72a8e926b5a4f6ed3cc7c3cd8d9f36b2e9ba085315	redis-3.2.5.tar.gz
-+sha256	2e1831c5a315e400d72bda4beaa98c0cfbe3f4eb8b20c269371634390cf729fa	redis-3.2.6.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 3b70991..0b07d18 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 3b2f2de..c5251fd 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.22.tar.xz.asc
+-md5 afb82d2748c06c95815c171463b4aa14  squid-3.5.22.tar.xz
+-sha1 73e9199dd9d2a7f107f78d03454830713a4a571d  squid-3.5.22.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.23.tar.xz.asc
++md5 9b68f689e3d9578932b9c6a4041037c2  squid-3.5.23.tar.xz
++sha1 33e43869d5eeb0fdfd1d625e6d6edee0617b2b22  squid-3.5.23.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index ddd0b83..e664122 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--REDIS_VERSION = 3.2.5
-+REDIS_VERSION = 3.2.6
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).22
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).23
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
