@@ -1,34 +1,29 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 18 Dec 2016 13:05:00 +0100
-Subject: [Buildroot] [PATCH] can-utils: bump version
-In-Reply-To: <20161218105653.6689bfc4@free-electrons.com>
-References: <1481887156-18543-1-git-send-email-yegorslists@googlemail.com>
- <20161218105653.6689bfc4@free-electrons.com>
-Message-ID: <CAGm1_ksFKYyvSdrOvxNf+_Cfg3kMQXmVSM_qd+p4SR8vQLC1+A@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 18 Dec 2016 13:22:01 +0100
+Subject: [Buildroot] [PATCH] xorg-server: add dependency on dri2proto
+ when	systemd is built
+References: <20161129143658.20619-1-fparent@baylibre.com>
+Message-ID: <9kbiidxsat.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 18, 2016 at 10:56 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 16 Dec 2016 12:19:16 +0100, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Seems to cause some build failures:
->
->   http://autobuild.buildroot.net/?reason=can-utils-64edc021d22441002028bc451548b9e7f1874b91
+Am Tue, 29 Nov 2016 15:36:58 +0100 schrieb Fabien Parent:
 
-Looks like this one;
+> When systemd is selected, xorg-server must have config-udev-kms enabled
+> in order to build correctly, but it won't be the case if
+> BR2_PACKAGE_XPROTO_DRI2PROTO is not part of the build.
+> 
+> Add BR2_PACKAGE_XPROTO_DRI2PROTO as a dependency of xorg-xserver only
+> when systemd is part of the build.
+> 
+> Signed-off-by: Fabien Parent
+> <fparent@baylibre.com>
 
-http://autobuild.buildroot.net/results/84f/84f8302ee94e6e6849f6b26cb697c2f9986bafe5/
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+(compile-tested using defconfig from
+ https://bugs.busybox.net/show_bug.cgi?id=9486)
 
-I'll take a look at this next week. So far I've added myself as
-interested in can-utils to DEVELOPERS file.
-
-Yegor
+Fixes https://bugs.busybox.net/show_bug.cgi?id=9486
