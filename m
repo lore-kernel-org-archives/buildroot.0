@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 18 Dec 2016 10:42:38 -0300
-Subject: [Buildroot] [PATCH] bmon: bump to version 4.0
-Message-ID: <20161218134238.6544-1-gustavo@zacarias.com.ar>
+Date: Sun, 18 Dec 2016 10:42:53 -0300
+Subject: [Buildroot] [PATCH] squid: bump to version 3.5.23
+Message-ID: <20161218134253.6594-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/bmon/bmon.hash | 2 +-
- package/bmon/bmon.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
-index 7f28b74..dec0c7d 100644
---- a/package/bmon/bmon.hash
-+++ b/package/bmon/bmon.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  9c08332520497ef1d51a733ca531ffedbb5a30c7c3f55579efe86c36138f93e1  bmon-3.9.tar.gz
-+sha256  02fdc312b8ceeb5786b28bf905f54328f414040ff42f45c83007f24b76cc9f7a  bmon-4.0.tar.gz
-diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
-index 91993b6..32889a6 100644
---- a/package/bmon/bmon.mk
-+++ b/package/bmon/bmon.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 3b2f2de..c5251fd 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.22.tar.xz.asc
+-md5 afb82d2748c06c95815c171463b4aa14  squid-3.5.22.tar.xz
+-sha1 73e9199dd9d2a7f107f78d03454830713a4a571d  squid-3.5.22.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.23.tar.xz.asc
++md5 9b68f689e3d9578932b9c6a4041037c2  squid-3.5.23.tar.xz
++sha1 33e43869d5eeb0fdfd1d625e6d6edee0617b2b22  squid-3.5.23.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index ddd0b83..e664122 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BMON_VERSION = 3.9
-+BMON_VERSION = 4.0
- BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)
- BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
- BMON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).22
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).23
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
 -- 
 2.10.2
