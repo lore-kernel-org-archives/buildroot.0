@@ -1,35 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Dec 2016 12:56:25 +0100
-Subject: [Buildroot] [PATCH 1/1] lxc: add dependency on gnutls
-Message-ID: <1482062185-97871-1-git-send-email-fabrice.fontaine@orange.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 18 Dec 2016 13:00:26 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Yegor Yefremov for the
+	can-utils package
+Message-ID: <1482062426-2644-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lxc can use gnutls for various checksumming so add a dependency on it if
-package is selected (there is no --enable-gnutls in configure)
-
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/lxc/lxc.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 2d04919..b910612 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -14,6 +14,10 @@ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-python --disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
- 
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+LXC_DEPENDENCIES += gnutls
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- LXC_CONF_OPTS += --enable-seccomp
- LXC_DEPENDENCIES += libseccomp
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 49fb352..4f14296 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1634,6 +1634,7 @@ F:	package/bluez_utils/
+ F:	package/boost/
+ F:	package/bootstrap/
+ F:	package/cannelloni/
++F:	package/can-utils/
+ F:	package/circus/
+ F:	package/feh/
+ F:	package/giblib/
 -- 
-2.5.0
+2.7.4
