@@ -1,48 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Dec 2016 14:28:10 +0100
-Subject: [Buildroot] [PATCH] xorg-server: add dependency on dri2proto
- when systemd is built
-In-Reply-To: <20161129143658.20619-1-fparent@baylibre.com>
-References: <20161129143658.20619-1-fparent@baylibre.com>
-Message-ID: <20161218142810.2602f895@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 18 Dec 2016 10:42:38 -0300
+Subject: [Buildroot] [PATCH] bmon: bump to version 4.0
+Message-ID: <20161218134238.6544-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bmon/bmon.hash | 2 +-
+ package/bmon/bmon.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 29 Nov 2016 15:36:58 +0100, Fabien Parent wrote:
-
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index 51c3efc..adad2a7 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -73,7 +73,8 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
->  XSERVER_XORG_SERVER_CONF_OPTS += \
->  	--with-systemd-daemon \
->  	--enable-systemd-logind
-> -XSERVER_XORG_SERVER_DEPENDENCIES += systemd
-> +XSERVER_XORG_SERVER_DEPENDENCIES += systemd		\
-> +				    xproto_dri2proto
-
-Indentation was a bit off here, so I've fixed that and applied.
-
-However, I have to say I'm not really happy with those very
-complicated/nasty dependencies of the X.org server that don't really
-make any sense. Why is dri2proto needed for systemd support?
-
-Also, what bothers me is that such missing dependencies cause some
-build failures, while the configure script should detect those
-dependencies and abort. It would be nice if we could track those issues
-and report them back upstream so that they can fix their configure
-script.
-
-Best regards,
-
-Thomas
+diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
+index 7f28b74..dec0c7d 100644
+--- a/package/bmon/bmon.hash
++++ b/package/bmon/bmon.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  9c08332520497ef1d51a733ca531ffedbb5a30c7c3f55579efe86c36138f93e1  bmon-3.9.tar.gz
++sha256  02fdc312b8ceeb5786b28bf905f54328f414040ff42f45c83007f24b76cc9f7a  bmon-4.0.tar.gz
+diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
+index 91993b6..32889a6 100644
+--- a/package/bmon/bmon.mk
++++ b/package/bmon/bmon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BMON_VERSION = 3.9
++BMON_VERSION = 4.0
+ BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)
+ BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
+ BMON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.2
