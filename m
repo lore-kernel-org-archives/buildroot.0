@@ -1,55 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 18 Dec 2016 13:39:41 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/x11r7/xapp_sessreg: fix musl
-	build
-Message-ID: <20161218123941.22369-1-bernd.kuhls@t-online.de>
+Date: Sun, 18 Dec 2016 14:04:18 +0100
+Subject: [Buildroot] [PATCH 2/4] package/x11r7/xdriver_xf86-video-dummy:
+	bump version to 0.3.8
+In-Reply-To: <20161218130420.3920-1-bernd.kuhls@t-online.de>
+References: <20161218130420.3920-1-bernd.kuhls@t-online.de>
+Message-ID: <20161218130420.3920-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/717/717bd4a2ee4ba62ed9245ec22166a3c63ce1a56d/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: upstream patch was updated for musl-1.1.14
-    https://github.com/gentoo/musl/commit/bcccf08b2d3d202e4b957d05aab847f1c725de68
+ package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash | 4 ++--
+ package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- .../xapp_sessreg/0002-missing_path_wtmpx.patch     | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 package/x11r7/xapp_sessreg/0002-missing_path_wtmpx.patch
-
-diff --git a/package/x11r7/xapp_sessreg/0002-missing_path_wtmpx.patch b/package/x11r7/xapp_sessreg/0002-missing_path_wtmpx.patch
-new file mode 100644
-index 000000000..0be242c0b
---- /dev/null
-+++ b/package/x11r7/xapp_sessreg/0002-missing_path_wtmpx.patch
-@@ -0,0 +1,24 @@
-+Fix missing defines _PATH_WTMPX/_PATH_UTMPX in musl
-+
-+Downloaded from
-+https://cgit.gentoo.org/proj/musl.git/tree/x11-apps/sessreg/files/sessreg-1.1.0-missing_path_wtmpx.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -Naur sessreg-1.1.0.orig/sessreg.h sessreg-1.1.0/sessreg.h
-+--- sessreg-1.1.0.orig/sessreg.h	2015-01-20 05:00:27.000000000 +0000
-++++ sessreg-1.1.0/sessreg.h	2016-02-23 11:54:42.057000000 +0000
-+@@ -103,6 +103,13 @@
-+ # define TTYS_FILE	"/etc/ttys"
-+ #endif
-+ 
-++#ifndef _PATH_WTMPX
-++# define _PATH_WTMPX	"/var/log/wtmp"
-++#endif
-++#ifndef _PATH_UTMPX
-++# define _PATH_UTMPX	"/var/log/utmp"
-++#endif
-++
-+ #ifndef WTMPX_FILE
-+ # define WTMPX_FILE	_PATH_WTMPX
-+ #endif
+diff --git a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash
+index 31cba2cb4..f26ddd4b5 100644
+--- a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash
++++ b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-September/002318.html
+-sha256	56f84fcbc515685529ad8e10bca1072731d9c096b97c5d35ddc95cd589b98680	xf86-video-dummy-0.3.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-December/002751.html
++sha256 3712bb869307233491e4c570732d6073c0dc3d99adfdb9977396a3fdf84e95b9  xf86-video-dummy-0.3.8.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
+index 58d9925f3..fff1495ef 100644
+--- a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
++++ b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_DUMMY_VERSION = 0.3.7
++XDRIVER_XF86_VIDEO_DUMMY_VERSION = 0.3.8
+ XDRIVER_XF86_VIDEO_DUMMY_SOURCE = xf86-video-dummy-$(XDRIVER_XF86_VIDEO_DUMMY_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_DUMMY_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_DUMMY_LICENSE = MIT
 -- 
 2.11.0
