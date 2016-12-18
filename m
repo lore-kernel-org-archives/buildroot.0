@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Dec 2016 14:11:09 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Yegor Yefremov for the
- can-utils package
-In-Reply-To: <1482062426-2644-1-git-send-email-yegorslists@googlemail.com>
-References: <1482062426-2644-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20161218141109.61de54c6@free-electrons.com>
+Date: Sun, 18 Dec 2016 14:22:30 +0100
+Subject: [Buildroot] [PATCH 1/1] lxc: add dependency on gnutls
+In-Reply-To: <1482062185-97871-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1482062185-97871-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <20161218142230.65c0e57d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 18 Dec 2016 13:00:26 +0100, Yegor Yefremov wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+On Sun, 18 Dec 2016 12:56:25 +0100, Fabrice Fontaine wrote:
+> lxc can use gnutls for various checksumming so add a dependency on it if
+> package is selected (there is no --enable-gnutls in configure)
+> 
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 
-Applied to master, thanks.
+I was about to apply this... but in fact I don't see how lxc can use
+gnutls. The configure script indeed has:
 
-Thomas
+AC_CHECK_LIB([gnutls], [gnutls_hash_fast], [enable_gnutls=yes], [enable_gnutls=no])
+
+But ${enable_gnutls} is only used to print a message. In the source
+code, the gnutls related code is surrounded by HAVE_LIBGNUTLS
+conditions, but this is never defined anywhere.
+
+Bottom line, I don't see where gnutls is currently used in lxc in practice.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
