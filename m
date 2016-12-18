@@ -1,69 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Dec 2016 21:32:17 +0100
-Subject: [Buildroot] [git commit] xl2tp: bump to version 1.3.8
-Message-ID: <20161218203346.8FFB6818C0@busybox.osuosl.org>
+Date: Sun, 18 Dec 2016 21:33:02 +0100
+Subject: [Buildroot] [git commit] zlib: update homepage link
+Message-ID: <20161218203346.994B9818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b21bdea1748748bf9c7398775b856613bbab957
+commit: https://git.buildroot.net/buildroot/commit/?id=a0ccec38973f825f18c3600900cc771f7d79ecec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop obsolete patch.
+Avoid redirect.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xl2tp/0002-musl.patch | 19 -------------------
- package/xl2tp/xl2tp.hash      |  2 +-
- package/xl2tp/xl2tp.mk        |  2 +-
- 3 files changed, 2 insertions(+), 21 deletions(-)
+ package/zlib/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xl2tp/0002-musl.patch b/package/xl2tp/0002-musl.patch
-deleted file mode 100644
-index 44238e8..0000000
---- a/package/xl2tp/0002-musl.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Fix musl build
--
--Downloaded from
--http://git.alpinelinux.org/cgit/aports/tree/main/xl2tpd/xl2tpd-compile.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -u --recursive src.orig/xl2tpd-1.3.6/xl2tpd.c src/xl2tpd-1.3.6/xl2tpd.c
----- xl2tpd-1.3.6.orig/xl2tpd.c	2014-01-15 21:58:37.000000000 -0100
--+++ xl2tpd-1.3.6/xl2tpd.c	2014-06-21 07:22:21.195278618 -0200
--@@ -33,8 +33,6 @@
-- #if (__GLIBC__ < 2)
-- # if defined(FREEBSD) || defined(OPENBSD)
-- #  include <sys/signal.h>
---# elif defined(LINUX)
---#  include <bsd/signal.h>
-- # elif defined(SOLARIS)
-- #  include <signal.h>
-- # endif
-diff --git a/package/xl2tp/xl2tp.hash b/package/xl2tp/xl2tp.hash
-index 4b52424..152d615 100644
---- a/package/xl2tp/xl2tp.hash
-+++ b/package/xl2tp/xl2tp.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256  49b069aa8d873e1d8f615ccc4212351e427bf681ba453fdd211256a8345bb7fb  xl2tp-v1.3.6.tar.gz
-+sha256  1164b574e93a44c2a2e76c0c68d8d60437bd884a6c964d9c68be1556278e3d2d  xl2tp-v1.3.8.tar.gz
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index 29e2f28..ff802a4 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/zlib/Config.in b/package/zlib/Config.in
+index f623304..6201aba 100644
+--- a/package/zlib/Config.in
++++ b/package/zlib/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_ZLIB
+ 	  Standard (de)compression library. Used by things like
+ 	  gzip and libpng.
  
--XL2TP_VERSION = v1.3.6
-+XL2TP_VERSION = v1.3.8
- XL2TP_SITE = $(call github,xelerance,xl2tpd,$(XL2TP_VERSION))
- XL2TP_DEPENDENCIES = libpcap openssl
- XL2TP_LICENSE = GPLv2
+-	  http://www.gzip.org/zlib/
++	  http://www.zlib.net
