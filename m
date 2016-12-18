@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Dec 2016 21:21:14 +0100
-Subject: [Buildroot] [git commit] bmon: bump to version 4.0
-Message-ID: <20161218203346.47022818C0@busybox.osuosl.org>
+Date: Sun, 18 Dec 2016 21:30:29 +0100
+Subject: [Buildroot] [git commit] redis: bump to version 3.2.6
+Message-ID: <20161218203346.82ED98007C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d174d2ee3744ad73e6458cf1fa7b21fafb1cac19
+commit: https://git.buildroot.net/buildroot/commit/?id=4be266220ad766ef43c811b61344eb7d135af241
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bmon/bmon.hash | 2 +-
- package/bmon/bmon.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/redis/redis.hash | 4 ++--
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
-index 7f28b74..dec0c7d 100644
---- a/package/bmon/bmon.hash
-+++ b/package/bmon/bmon.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  9c08332520497ef1d51a733ca531ffedbb5a30c7c3f55579efe86c36138f93e1  bmon-3.9.tar.gz
-+sha256  02fdc312b8ceeb5786b28bf905f54328f414040ff42f45c83007f24b76cc9f7a  bmon-4.0.tar.gz
-diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
-index 91993b6..32889a6 100644
---- a/package/bmon/bmon.mk
-+++ b/package/bmon/bmon.mk
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 7e09db5..b6e8eac 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha1	6f6333db6111badaa74519d743589ac4635eba7a 	redis-3.2.5.tar.gz
++sha1	0c7bc5c751bdbc6fabed178db9cdbdd948915d1b 	redis-3.2.6.tar.gz
+ # Calculated based on the hash above
+-sha256	8509ceb1efd849d6b2346a72a8e926b5a4f6ed3cc7c3cd8d9f36b2e9ba085315	redis-3.2.5.tar.gz
++sha256	2e1831c5a315e400d72bda4beaa98c0cfbe3f4eb8b20c269371634390cf729fa	redis-3.2.6.tar.gz
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 3b70991..0b07d18 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BMON_VERSION = 3.9
-+BMON_VERSION = 4.0
- BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)
- BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
- BMON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-REDIS_VERSION = 3.2.5
++REDIS_VERSION = 3.2.6
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
