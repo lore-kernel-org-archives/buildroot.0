@@ -1,45 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Dec 2016 21:30:02 +0100
-Subject: [Buildroot] [git commit] debianutils: bump to version 4.8.1
-Message-ID: <20161218203346.7482181963@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 18 Dec 2016 21:56:28 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/lcms2: add support for host
+	variant
+Message-ID: <20161218205630.17019-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad446bb3774b2474ce215f823308bfa1c16ccaa9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Needed for upcoming ghostscript package.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/debianutils/debianutils.hash | 4 ++--
- package/debianutils/debianutils.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+v2: initial version
 
-diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
-index 212d321..cd54e0b 100644
---- a/package/debianutils/debianutils.hash
-+++ b/package/debianutils/debianutils.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.8.dsc
--sha256	afa95bbe6b6fd3ef3c0c838b2d7232f09fabeff593ca4b5583cffa6748567ee2	debianutils_4.8.tar.xz
-+# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.8.1.dsc
-+sha256	2c395c0bdcfe89de30828b1d25cc5549ded5225a6d3625fbcb2cc0881ef5f026	debianutils_4.8.1.tar.xz
-diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
-index 566d0ad..83cf744 100644
---- a/package/debianutils/debianutils.mk
-+++ b/package/debianutils/debianutils.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ package/lcms2/lcms2.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index 9a4cf5ed2..29f8ac8de 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -31,4 +31,5 @@ else
+ LCMS2_CONF_OPTS += --without-zlib
+ endif
  
--DEBIANUTILS_VERSION = 4.8
-+DEBIANUTILS_VERSION = 4.8.1
- DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
--DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20160629T224408Z/pool/main/d/debianutils
-+DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20161118T033019Z/pool/main/d/debianutils
- DEBIANUTILS_CONF_OPTS = --exec-prefix=/
- # Make sure we override the busybox tools, such as which
- DEBIANUTILS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
++$(eval $(host-autotools-package))
+ $(eval $(autotools-package))
+-- 
+2.11.0
