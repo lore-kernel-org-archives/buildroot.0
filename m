@@ -1,65 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Dec 2016 15:26:59 +0100
-Subject: [Buildroot] [git commit] oprofile: needs libpfm4 on powerpc64(le)
-Message-ID: <20161218143228.3D36381801@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 18 Dec 2016 15:32:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-vmware:
+	fix compilation without udev
+Message-ID: <20161218143246.30156-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cec7adea4f02425943e3544ddd67c685875189c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://cgit.freedesktop.org/xorg/driver/xf86-video-vmware/commit/configure.ac?id=755e38f373a511bd774a61c9420a67f630f71037
+added a check for libudev which fails if the check is not disabled.
 
-oprofile already needed libpfm4 for PowerPC, but in fact it also needs
-it for PowerPC64 and PowerPC64le, so this commit adds a
-BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4 hidden option and uses it to decide
-if libpfm4 is needed or not.
+Fixes
+http://autobuild.buildroot.net/results/7b3/7b38105dd1115ac622964cf243ac137b7624fb43/
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/d19caeb445b7040cbd2e4ff62b7db9986e84b6ab/ (powerpc64le)
-  http://autobuild.buildroot.net/results/66dd4f7ff635915a506f96d1d8115ac48cca0c6c/ (powerpc64)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/oprofile/Config.in | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ .../x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk   | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index c75ccd9..e2adde5 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -8,17 +8,21 @@ config BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
- 		BR2_powerpc64 || BR2_powerpc64le || BR2_sh || \
- 		BR2_sparc || BR2_sparc64 || BR2_x86_64
+diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+index ef262f894..1b2066d27 100644
+--- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
++++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+@@ -11,4 +11,11 @@ XDRIVER_XF86_VIDEO_VMWARE_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_VMWARE_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_VMWARE_DEPENDENCIES = mesa3d xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xineramaproto xproto_xproto
  
-+config BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
-+	bool
-+	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++XDRIVER_XF86_VIDEO_VMWARE_CONF_OPTS += --with-libudev
++XDRIVER_XF86_VIDEO_VMWARE_DEPENDENCIES += udev
++else
++XDRIVER_XF86_VIDEO_VMWARE_CONF_OPTS += --without-libudev
++endif
 +
- config BR2_PACKAGE_OPROFILE
- 	bool "oprofile"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_BINUTILS
--	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
-+	select BR2_PACKAGE_LIBPFM4 if BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # binutils
- 	depends on BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
- 	# libpfm4 is needed on PowerPC, and requires thread support
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_powerpc
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
- 	help
- 	  OProfile is a system-wide profiler for Linux systems,
- 	  capable of profiling all running code at low overhead.
-@@ -40,6 +44,6 @@ comment "oprofile needs a toolchain w/ C++, wchar"
- 	depends on BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 
--comment "oprofile needs a toolchain w/ NPTL on PPC"
--	depends on BR2_USE_MMU && BR2_powerpc
-+comment "oprofile needs a toolchain w/ NPTL on PowerPC(64)"
-+	depends on BR2_USE_MMU && BR2_PACKAGE_OPROFILE_NEEDS_LIBPFM4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ $(eval $(autotools-package))
+-- 
+2.11.0
