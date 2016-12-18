@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Dec 2016 10:56:34 +0100
-Subject: [Buildroot] [PATCH 1/1] lxc: enable lua if package is selected
-In-Reply-To: <1482016189-32585-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1482016189-32585-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20161218105634.1e9ada3e@free-electrons.com>
+Date: Sun, 18 Dec 2016 10:56:53 +0100
+Subject: [Buildroot] [PATCH] can-utils: bump version
+In-Reply-To: <1481887156-18543-1-git-send-email-yegorslists@googlemail.com>
+References: <1481887156-18543-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20161218105653.6689bfc4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 18 Dec 2016 00:09:49 +0100, Fabrice Fontaine wrote:
+On Fri, 16 Dec 2016 12:19:16 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-> +ifeq ($(BR2_PACKAGE_LUA),y)
-> +LXC_CONF_OPTS += --enable-lua
-> +LXC_DEPENDENCIES += lua
-> +else
-> +LXC_CONF_OPTS += --disable-lua
-> +endif
+Seems to cause some build failures:
 
-Does it work only with classic Lua, or also with LuaJIT? If it works
-with LuaJIT, then we should do:
-
-ifeq ($(BR2_PACKAGE_HAS_LUA_INTERPRETER),y)
-LXC_CONF_OPTS += --enable-lua
-LXC_DEPENDENCIES += luainterpreter
-else
-LXC_CONF_OPTS += --disable-lua
-endif
+  http://autobuild.buildroot.net/?reason=can-utils-64edc021d22441002028bc451548b9e7f1874b91
 
 Thanks,
 
