@@ -1,21 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 18 Dec 2016 09:55:05 +0000
-Subject: [Buildroot] [Bug 9486] xorg-server 1.19 fails to compile for glibc
- with systemd init (x86_64)
-In-Reply-To: <bug-9486-163@https.bugs.busybox.net/>
-References: <bug-9486-163@https.bugs.busybox.net/>
-Message-ID: <bug-9486-163-deA9ZM4Id3@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Dec 2016 10:56:34 +0100
+Subject: [Buildroot] [PATCH 1/1] lxc: enable lua if package is selected
+In-Reply-To: <1482016189-32585-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1482016189-32585-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <20161218105634.1e9ada3e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9486
+Hello,
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-I think this would be fixed by https://patchwork.ozlabs.org/patch/700551/.
+On Sun, 18 Dec 2016 00:09:49 +0100, Fabrice Fontaine wrote:
 
+> +ifeq ($(BR2_PACKAGE_LUA),y)
+> +LXC_CONF_OPTS += --enable-lua
+> +LXC_DEPENDENCIES += lua
+> +else
+> +LXC_CONF_OPTS += --disable-lua
+> +endif
+
+Does it work only with classic Lua, or also with LuaJIT? If it works
+with LuaJIT, then we should do:
+
+ifeq ($(BR2_PACKAGE_HAS_LUA_INTERPRETER),y)
+LXC_CONF_OPTS += --enable-lua
+LXC_DEPENDENCIES += luainterpreter
+else
+LXC_CONF_OPTS += --disable-lua
+endif
+
+Thanks,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
