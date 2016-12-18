@@ -1,48 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Dec 2016 12:37:53 +0100
-Subject: [Buildroot] [PATCH v2 2/3] xdriver_xf86-video-odroidc2: new
- package
-In-Reply-To: <20161025175417.25901-2-daggs@gmx.com>
-References: <20161025175417.25901-1-daggs@gmx.com>
- <20161025175417.25901-2-daggs@gmx.com>
-Message-ID: <20161218123753.186b7b7c@free-electrons.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 18 Dec 2016 12:50:20 +0100
+Subject: [Buildroot] [PATCH 1/1] lxc: install also in staging
+Message-ID: <1482061820-96797-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/lxc/lxc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Tue, 25 Oct 2016 20:54:16 +0300, Dagg Stompler wrote:
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  package/x11r7/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-> index 40aa80c..1c5ff7e 100644
-> --- a/package/x11r7/Config.in
-> +++ b/package/x11r7/Config.in
-> @@ -174,6 +174,7 @@ if BR2_PACKAGE_XORG7
->  		source package/x11r7/xdriver_xf86-video-neomagic/Config.in
->  		source package/x11r7/xdriver_xf86-video-nouveau/Config.in
->  		source package/x11r7/xdriver_xf86-video-nv/Config.in
-> +		source package/x11r7/xdriver_xf86-video-odroidc2/Config.in
->  		source package/x11r7/xdriver_xf86-video-openchrome/Config.in
->  		source package/x11r7/xdriver_xf86-video-qxl/Config.in
->  		source package/x11r7/xdriver_xf86-video-r128/Config.in
-
-This change should be part of the patch introducing the package, there
-is no reason to have a separate patch for this.
-
-Also, please add to your patch series a separate patch that adds you in
-the DEVELOPERS file for this package.
-
-Thanks!
-
-Thomas
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index b9e3a43..2d04919 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -9,6 +9,7 @@ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
++LXC_INSTALL_STAGING = YES
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.5.0
