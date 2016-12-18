@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 Dec 2016 21:32:43 +0100
-Subject: [Buildroot] [PATCH] xl2tp: bump to version 1.3.8
-In-Reply-To: <6dfc29f99cf164c784789c53359b7256924b79f8.1482091613.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 18 Dec 2016 22:06:53 +0200")
-References: <6dfc29f99cf164c784789c53359b7256924b79f8.1482091613.git.baruch@tkos.co.il>
-Message-ID: <87mvftf05w.fsf@dell.be.48ers.dk>
+Date: Sun, 18 Dec 2016 21:33:15 +0100
+Subject: [Buildroot] [PATCH] zlib: update homepage link
+In-Reply-To: <9b0c28cf6754c86bdef25c03acc9a6a5944e8f13.1482092158.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 18 Dec 2016 22:15:58 +0200")
+References: <9b0c28cf6754c86bdef25c03acc9a6a5944e8f13.1482092158.git.baruch@tkos.co.il>
+Message-ID: <87inqhf050.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Drop obsolete patch.
+ > Avoid redirect.
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
