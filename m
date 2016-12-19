@@ -1,93 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Dec 2016 21:09:46 +0100
-Subject: [Buildroot] [git commit] package/weston: fix build on ancient glibc
-Message-ID: <20161219201013.F2A0580156@busybox.osuosl.org>
+Date: Mon, 19 Dec 2016 20:55:29 +0100
+Subject: [Buildroot] [git commit] samba4: security bump to version 4.4.8
+Message-ID: <20161219201013.E2361819EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cf7d259a725bf3164716c0d78f7f89c8330e7a1
+commit: https://git.buildroot.net/buildroot/commit/?id=80e0583a7046aa2178928d5481b6a22148a2d5e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build with ancient glibces.
-
 Fixes:
-    http://autobuild.buildroot.net/results/bce/bcecdbbce4a99eb1e9bfbf519857bf94d8952037/
+CVE-2016-2123 - Samba NDR Parsing ndr_pull_dnsp_name Heap-based Buffer
+Overflow Remote Code Execution Vulnerability.
+CVE-2016-2125 - Unconditional privilege delegation to Kerberos servers
+in trusted realms.
+CVE-2016-2126 - Flaws in Kerberos PAC validation can trigger privilege
+elevation.
 
-[Peter: patches configure.ac, so add WESTON_AUTORECONF = YES]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...onfigure-search-for-lib-with-clock_getres.patch | 47 ++++++++++++++++++++++
- package/weston/weston.mk                           |  2 +
- 2 files changed, 49 insertions(+)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/weston/0003-configure-search-for-lib-with-clock_getres.patch b/package/weston/0003-configure-search-for-lib-with-clock_getres.patch
-new file mode 100644
-index 0000000..a8ad9ea
---- /dev/null
-+++ b/package/weston/0003-configure-search-for-lib-with-clock_getres.patch
-@@ -0,0 +1,47 @@
-+From e269012c4b919624ca92d80afd1d6a6f5399e041 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Mon, 19 Dec 2016 18:07:07 +0100
-+Subject: [PATCH] configure: search for lib with clock_getres()
-+
-+Like clock_gettime(), clock_getres() is in -lrt for glibc < 2.17.
-+Add a check for it, like is done for clock_gettime().
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Upstream status: submitted
-+https://lists.freedesktop.org/archives/wayland-devel/2016-December/032354.html
-+---
-+ Makefile.am  | 1 +
-+ configure.ac | 3 ++-
-+ 2 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 2219e3d..53f8f51 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -190,6 +190,7 @@ weston_CFLAGS = $(AM_CFLAGS) $(COMPOSITOR_CFLAGS) $(LIBUNWIND_CFLAGS)
-+ weston_LDADD = libshared.la libweston- at LIBWESTON_MAJOR@.la \
-+ 	$(COMPOSITOR_LIBS) $(LIBUNWIND_LIBS) \
-+ 	$(DLOPEN_LIBS) $(LIBINPUT_BACKEND_LIBS) \
-++	$(CLOCK_GETRES_LIBS) \
-+ 	-lm
-+ 
-+ weston_SOURCES = 					\
-+diff --git a/configure.ac b/configure.ac
-+index 1e251bf..604f51b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -88,8 +88,9 @@ PKG_PROG_PKG_CONFIG()
-+ 
-+ WESTON_SEARCH_LIBS([DLOPEN], [dl], [dlopen])
-+ 
-+-# In old glibc versions (< 2.17) clock_gettime() is in librt
-++# In old glibc versions (< 2.17) clock_gettime() and clock_getres() are in librt
-+ WESTON_SEARCH_LIBS([CLOCK_GETTIME], [rt], [clock_gettime])
-++WESTON_SEARCH_LIBS([CLOCK_GETRES], [rt], [clock_getres])
-+ 
-+ AC_CHECK_DECL(SFD_CLOEXEC,[],
-+ 	      [AC_MSG_ERROR("SFD_CLOEXEC is needed to compile weston")],
-+-- 
-+2.7.4
-+
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 7d348dc..89e16f1 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -9,6 +9,8 @@ WESTON_SITE = http://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
-+# configure.ac patched by 0003-configure-search-for-lib-with-clock_getres.patch
-+WESTON_AUTORECONF = YES
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index d6433f7..1e36d73 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	a69d6612e4a421640242ca66c4dbb0e4c20281e77dc24970a332770814d45c7c	samba-4.4.7.tar.gz
++sha256	0e54de8a22b77f9712578029639331b51f818b70e194766c98475a5b99470fbf	samba-4.4.8.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 71cb426..778902f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
- 	libxkbcommon pixman libpng jpeg mtdev udev cairo libinput \
+-SAMBA4_VERSION = 4.4.7
++SAMBA4_VERSION = 4.4.8
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
