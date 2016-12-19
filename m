@@ -1,77 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Dec 2016 22:26:00 +0100
-Subject: [Buildroot] [git commit] python-constantly: new package
-Message-ID: <20161219212603.08C028194A@busybox.osuosl.org>
+Date: Mon, 19 Dec 2016 22:26:26 +0100
+Subject: [Buildroot] [git commit] python-twisted: bump to version 16.6.0
+Message-ID: <20161219212636.4F3A68013B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f37e027df0887d7153e16f286b317850044d3d1
+commit: https://git.buildroot.net/buildroot/commit/?id=c07ad416b41eab898fc8899f46aed35d5ad923ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add two new dependencies:
+
+python-contstantly: runtime only
+python-incremental: both runtime and build-time dependency
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                |  1 +
- package/python-constantly/Config.in              |  8 ++++++++
- package/python-constantly/python-constantly.hash |  3 +++
- package/python-constantly/python-constantly.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+ package/python-twisted/Config.in           | 2 ++
+ package/python-twisted/python-twisted.hash | 4 ++--
+ package/python-twisted/python-twisted.mk   | 5 +++--
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index be0d150..3a49167 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -660,6 +660,7 @@ menu "External python modules"
- 	source "package/python-coherence/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
-+	source "package/python-constantly/Config.in"
- 	source "package/python-couchdb/Config.in"
- 	source "package/python-crc16/Config.in"
- 	source "package/python-crcmod/Config.in"
-diff --git a/package/python-constantly/Config.in b/package/python-constantly/Config.in
-new file mode 100644
-index 0000000..13bb2e8
---- /dev/null
-+++ b/package/python-constantly/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_CONSTANTLY
-+	bool "python-constantly"
-+	help
-+	  A library that provides symbolic constant support. It
-+	  includes collections and constants with text, numeric,
-+	  and bit flag values.
-+
-+	  https://github.com/twisted/constantly
-diff --git a/package/python-constantly/python-constantly.hash b/package/python-constantly/python-constantly.hash
-new file mode 100644
-index 0000000..fb77877
---- /dev/null
-+++ b/package/python-constantly/python-constantly.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/constantly/json, sha256 locally computed
-+md5	f0762f083d83039758e53f8cf0086eef  constantly-15.1.0.tar.gz
-+sha256	586372eb92059873e29eba4f9dec8381541b4d3834660707faf8ba59146dfc35  constantly-15.1.0.tar.gz
-diff --git a/package/python-constantly/python-constantly.mk b/package/python-constantly/python-constantly.mk
-new file mode 100644
-index 0000000..783d198
---- /dev/null
-+++ b/package/python-constantly/python-constantly.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-constantly
-+#
-+################################################################################
-+
-+PYTHON_CONSTANTLY_VERSION = 15.1.0
-+PYTHON_CONSTANTLY_SOURCE = constantly-$(PYTHON_CONSTANTLY_VERSION).tar.gz
-+PYTHON_CONSTANTLY_SITE = https://pypi.python.org/packages/95/f1/207a0a478c4bb34b1b49d5915e2db574cadc415c9ac3a7ef17e29b2e8951
-+PYTHON_CONSTANTLY_SETUP_TYPE = setuptools
-+PYTHON_CONSTANTLY_LICENSE = MIT
-+PYTHON_CONSTANTLY_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
+index 1221fc2..7fe4289 100644
+--- a/package/python-twisted/Config.in
++++ b/package/python-twisted/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_TWISTED
+ 	bool "python-twisted"
++	select BR2_PACKAGE_PYTHON_INCREMENTAL
++	select BR2_PACKAGE_PYTHON_CONSTANTLY # runtime
+ 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
+ 	help
+ 	  Twisted is an event-driven networking engine written in Python.
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index c3a6e95..cc78a4c 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/twisted/json, sha256 locally computed
+-md5	c6d09bdd681f538369659111f079c29d  Twisted-16.4.1.tar.bz2
+-sha256	1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816  Twisted-16.4.1.tar.bz2
++md5	54a88ffe773d5a83c91fcfe86044b094  Twisted-16.6.0.tar.bz2
++sha256	d0fe115ea7ef8cf632d05103de60356c6e992b2153d6830bdc4476f8accb1fca  Twisted-16.6.0.tar.bz2
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 7e9e496..29fe735 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TWISTED_VERSION = 16.4.1
++PYTHON_TWISTED_VERSION = 16.6.0
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
+-PYTHON_TWISTED_SITE = https://pypi.python.org/packages/6b/23/8dbe86fc83215015e221fbd861a545c6ec5c9e9cd7514af114d1f64084ab
++PYTHON_TWISTED_SITE = https://pypi.python.org/packages/dc/c0/a0114a6d7fa211c0904b0de931e8cafb5210ad824996cc6a9d67f3bae22c
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
++PYTHON_TWISTED_DEPENDENCIES = python-incremental
+ 
+ $(eval $(python-package))
