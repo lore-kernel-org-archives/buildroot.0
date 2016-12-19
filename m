@@ -1,49 +1,54 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 19 Dec 2016 09:52:47 +0100
-Subject: [Buildroot] [PATCH] can-utils: add dependency on NPTL
-Message-ID: <1482137567-19582-1-git-send-email-yegorslists@googlemail.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Mon, 19 Dec 2016 10:13:29 +0100
+Subject: [Buildroot] [PATCH v3 0/7] qt5 bump to 5.8.0-rc
+In-Reply-To: <20161217154629.09d3f0e3@free-electrons.com>
+References: <1481641171-10407-1-git-send-email-anaumann@ultratronik.de>
+ <20161217154629.09d3f0e3@free-electrons.com>
+Message-ID: <3e4baa3d-e4cf-0a3f-6508-f68f87012812@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi,
 
-canfdtest.c assumes that clock_nanosleep() is always available. But it
-is only available with NPTL. Since it unconditionally uses it, we add
-dependency on NPTL.
+Am 17.12.2016 um 15:46 schrieb Thomas Petazzoni:
+> Hello,
+>
+> On Tue, 13 Dec 2016 15:59:24 +0100, Andreas Naumann wrote:
+>
+>> Andreas Naumann (4):
+>>   qt5: Remove all hashes
+>>   qt5: bump to 5.8.0-rc
+>>   qt5declarative: enable Quick for non-GL platforms
+>>   qt5quickcontrols1/2: enable for software renderer
+>>
+>> Julien Corjon (3):
+>>   qt5enginio : move into legacy compatibility
+>>   qt53d/qt5quickcontrols2/qt5serialbus : move out of tech preview
+>>   Revert "qt5base: install bundled fonts to target"
+>
+> I've marked the set of patches as "Changes Requested" in our patch
+> tracking system. Can you resubmit when a "fixed" -rc release of Qt 5.8
+> is published?
+>
+> Also, you had a few comments during the review, if you could take them
+> into account, it would be nice.
 
-Fixes:
-http://autobuild.buildroot.net/results/fd97aa57747a546c799caf094aafe0d1d1225863
-http://autobuild.buildroot.net/results/1313f91df134035159e677c6b4a63838c75d074c
-http://autobuild.buildroot.net/results/a1ac495c5e38e5d0777c431fc6a2e4b5bff7c2ad
-http://autobuild.buildroot.net/results/978bee40049896bd6e093fa31c5eb7673e05a6b8
-http://autobuild.buildroot.net/results/c692e96de1b4fdadf720ead8249a44c21fe945f1
+I'll try to fix yours and Peters issues/comments today. In the meanwhile 
+Qt updated their planned -rc release for tomorrow, 20th December. So I 
+guess I'll wait for that to happen, update the hashes also and provide a 
+v4 wednesday or so.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/can-utils/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+On the question of supporting two versions: For the moment I lack the 
+time and a good idea of how to do it without duplicating lots of code.
 
-diff --git a/package/can-utils/Config.in b/package/can-utils/Config.in
-index 307f069..bfa522d 100644
---- a/package/can-utils/Config.in
-+++ b/package/can-utils/Config.in
-@@ -1,9 +1,14 @@
- config BR2_PACKAGE_CAN_UTILS
- 	bool "can-utils"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
- 	help
- 	  SocketCAN is a set of open source CAN drivers and a
- 	  networking stack.
- 	  This package provides various tools for this stack.
- 
- 	  http://elinux.org/Can-utils
-+
-+comment "can-utils needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_USE_MMU
--- 
-2.1.4
+Regards,
+Andreas
+
+>
+> Thanks a lot!
+>
+> Thomas
+>
