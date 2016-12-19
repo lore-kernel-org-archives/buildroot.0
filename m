@@ -1,61 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 19 Dec 2016 16:26:18 +0100
-Subject: [Buildroot] [PATCH v2,1/1] lxc: add dependency on gnutls
-Message-ID: <1482161178-20667-1-git-send-email-fabrice.fontaine@orange.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 19 Dec 2016 15:57:09 +0000
+Subject: [Buildroot] [PATCH] jack2: Try better fix for NGREG problem
+In-Reply-To: <20161217172237.5934f18f@free-electrons.com>
+References: <1479739795-31046-1-git-send-email-abrodkin@synopsys.com>
+ <20161217172237.5934f18f@free-electrons.com>
+Message-ID: <1482162949.4285.23.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lxc can use gnutls for various checksumming so add a dependency on it if
-package is selected
+Hi Thomas,
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Get upstream patch that add --enable-gnutls option
+On Sat, 2016-12-17 at 17:22 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 21 Nov 2016 17:49:55 +0300, Alexey Brodkin wrote:
+> > 
+> > After quite some time trying this and that we seem to have no
+> > better solution than proposed by Thomas back in the day [1].
+> > 
+> > The solution in question is to check [during jack2 configuration]
+> > if NGREG is exposed via ucontext.h and then use its value in
+> > source code later on. This replaces long and still growing list
+> > of architectures for which we explicitly escape usage of NGREG.
+> > 
+> > Just for reference [2] is my attempt to fix in in the other
+> > supposedly better way but with no luck because of the mess in
+> > kernel's UAPI headers.
+> > 
+> > [1] https://urldefense.proofpoint.com/v2/url?u=http-3A__lists.busybox.net_pipermail_buildroot_2016-2DMay_161785.html
+> > &d=DgICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=lO-
+> > pWm8TsFCI8LpRpFt8VMDAaoxteVHDKeXx2lKUc6M&s=nQ80Ho3tQdAjjk76kuGcuhh_PBE9EAEFNOpYeQIryrk&e=?
+> > [2] https://urldefense.proofpoint.com/v2/url?u=http-3A__lists.busybox.net_pipermail_buildroot_2016-2DJune_162461.htm
+> > l&d=DgICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7breS55ytWkhpk5R81I&m=lO-
+> > pWm8TsFCI8LpRpFt8VMDAaoxteVHDKeXx2lKUc6M&s=37fBEUzi8Cri1lFd5OsOcCvWM_MYPDctH0kR9fYlTRM&e=?
+> > 
+> > Still not sure if that works for every other architectures, so testing
+> > and Acks from all interested parties are much appreciated.
+> 
+> I have submitted an improved version of this:
 
- package/lxc/lxc.hash |  1 +
- package/lxc/lxc.mk   | 14 ++++++++++++++
- 2 files changed, 15 insertions(+)
+Thanks for doing that!
+Let's see if Jack2 appears in Autobuilder failures again now.
 
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 7b34e88..8fb4dc0 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256	7c292cd0055dac1a0e6fbb6a7740fd12b6ffb204603c198faf37c11c9d6dcd7a	lxc-2.0.6.tar.gz
-+sha256	e8ca30fb1e8d6dbafb5cccc04b3fd1784c35bc8ccf79112036e5166924b6b01d	64fa248372c90c9d98fc9d67f80327d865c11a48.patch
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index e9e925f..34a8556 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -9,10 +9,24 @@ LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = LGPLv2.1+
- LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = libcap host-pkgconf
-+# we're patching configure.ac
-+LXC_AUTORECONF = YES
-+
-+# This patch adds --enable-gnutls option
-+LXC_PATCH = \
-+	https://github.com/lxc/lxc/commit/64fa248372c90c9d98fc9d67f80327d865c11a48.patch
-+
- LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-python --disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
- 
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+LXC_CONF_OPTS += --enable-gnutls
-+LXC_DEPENDENCIES += gnutls
-+else
-+LXC_CONF_OPTS += --disable-gnutls
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- LXC_CONF_OPTS += --enable-seccomp
- LXC_DEPENDENCIES += libseccomp
--- 
-2.7.4
+-Alexey
