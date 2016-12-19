@@ -1,45 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Dec 2016 21:10:56 +0100
-Subject: [Buildroot] [PATCH] package/weston: fix build on ancient glibc
-In-Reply-To: <87inqfadi3.fsf@dell.be.48ers.dk>
-References: <1482168120-7386-1-git-send-email-yann.morin.1998@free.fr>
- <87inqfadi3.fsf@dell.be.48ers.dk>
-Message-ID: <20161219201056.GB6153@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 19 Dec 2016 21:25:25 +0100
+Subject: [Buildroot] [PATCH] package/google-breakpad: add C++11 dependency
+	on the host variant
+Message-ID: <1482179125-11704-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+When google-breakpad has been updated to the latest version, the C++11
+dependency has been added for the target variant only.
+The C++11 dependency is also required for the host variant.
 
-On 2016-12-19 21:08 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > Fix build with ancient glibces.
->  > Fixes:
->  >     http://autobuild.buildroot.net/results/bce/bcecdbbce4a99eb1e9bfbf519857bf94d8952037/
-> 
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  > ---
->  >  ...onfigure-search-for-lib-with-clock_getres.patch | 47 ++++++++++++++++++++++
-> 
-> You forgot to add WESTON_AUTORECONF = YES. Committed with that fixed,
-> thanks.
+Fixes:
+http://autobuild.buildroot.org/results/dce/dcecb17116c0cf400c98f0052c9bf71f15d0d398
 
-Grr.. I forgot to git-add it... :-/
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ Config.in                         | 1 +
+ package/google-breakpad/Config.in | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Thanks for fixing.
-
-Regards,
-Yann E. MORIN.
-
-
+diff --git a/Config.in b/Config.in
+index 7ea1e60..d3bb7b8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -529,6 +529,7 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
+ 	bool "Enable google-breakpad support"
+ 	select BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+index 31ca422..c6171af 100644
+--- a/package/google-breakpad/Config.in
++++ b/package/google-breakpad/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ config BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	bool "google-breakpad"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -38,4 +39,4 @@ comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread,
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_HOST_GCC_AT_LEAST_4_7
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.5
