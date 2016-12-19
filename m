@@ -1,100 +1,105 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 19 Dec 2016 22:29:14 +0100
-Subject: [Buildroot] [Patch v3 8/9] s6-linux-utils: new package
+Date: Mon, 19 Dec 2016 22:29:15 +0100
+Subject: [Buildroot] [Patch v3 9/9] s6-linux-init: new package
 In-Reply-To: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1482182955-23916-9-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1482182955-23916-10-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides s6-linux-utils, a set of minimalistic
-Linux-specific system utilities.
+This new package provides s6-linux-init, a set of minimalistic tools to
+create a s6-based init system, including a /sbin/init program, on a
+machine running a Linux kernel.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/Config.in                          |  1 +
- package/s6-linux-utils/Config.in           |  9 ++++++++
- package/s6-linux-utils/s6-linux-utils.hash |  2 ++
- package/s6-linux-utils/s6-linux-utils.mk   | 34 ++++++++++++++++++++++++++++++
- 4 files changed, 46 insertions(+)
- create mode 100644 package/s6-linux-utils/Config.in
- create mode 100644 package/s6-linux-utils/s6-linux-utils.hash
- create mode 100644 package/s6-linux-utils/s6-linux-utils.mk
+ package/Config.in                        |  1 +
+ package/s6-linux-init/Config.in          | 11 ++++++++++
+ package/s6-linux-init/s6-linux-init.hash |  2 ++
+ package/s6-linux-init/s6-linux-init.mk   | 36 ++++++++++++++++++++++++++++++++
+ 4 files changed, 50 insertions(+)
+ create mode 100644 package/s6-linux-init/Config.in
+ create mode 100644 package/s6-linux-init/s6-linux-init.hash
+ create mode 100644 package/s6-linux-init/s6-linux-init.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3cee9ed..29d9121 100644
+index 29d9121..a7d70eb 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -1761,6 +1761,7 @@ menu "System tools"
  	source "package/rsyslog/Config.in"
  	source "package/runc/Config.in"
  	source "package/s6/Config.in"
-+	source "package/s6-linux-utils/Config.in"
++	source "package/s6-linux-init/Config.in"
+ 	source "package/s6-linux-utils/Config.in"
  	source "package/s6-portable-utils/Config.in"
  	source "package/s6-rc/Config.in"
- 	source "package/scrub/Config.in"
-diff --git a/package/s6-linux-utils/Config.in b/package/s6-linux-utils/Config.in
+diff --git a/package/s6-linux-init/Config.in b/package/s6-linux-init/Config.in
 new file mode 100644
-index 0000000..4624b50
+index 0000000..db07e69
 --- /dev/null
-+++ b/package/s6-linux-utils/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_S6_LINUX_UTILS
-+	bool "s6-linux-utils"
-+	select BR2_PACKAGE_SKALIBS
-+	depends on BR2_USE_MMU # skalibs
++++ b/package/s6-linux-init/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_S6_LINUX_INIT
++	bool "s6-linux-init"
++	select BR2_PACKAGE_S6
++	select BR2_PACKAGE_S6_LINUX_UTILS
++	select BR2_PACKAGE_S6_PORTABLE_UTILS
++	depends on BR2_USE_MMU # s6
 +	help
-+	  s6-linux-utils is a set of minimalistic Linux-specific system
-+	  utilities.
++	  s6-linux-init is a set of minimalistic tools to create a s6-based
++	  init system, including a /sbin/init binary, on a Linux kernel.
 +
-+	  http://skarnet.org/software/s6-linux-utils/
-diff --git a/package/s6-linux-utils/s6-linux-utils.hash b/package/s6-linux-utils/s6-linux-utils.hash
++	  http://skarnet.org/software/s6-linux-init/
+diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
 new file mode 100644
-index 0000000..600c5fc
+index 0000000..e02e391
 --- /dev/null
-+++ b/package/s6-linux-utils/s6-linux-utils.hash
++++ b/package/s6-linux-init/s6-linux-init.hash
 @@ -0,0 +1,2 @@
 +# Locally generated
-+sha256 587745abfbf2cc631bb54dd2b3fd29f39b723e3c50e28165138a85c98fda35f9 s6-linux-utils-2.2.0.0.tar.gz
-diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
++sha256 131484e61eff0e671e112f0436b13e8e7d08752f810d8bec4924a68383eee2b9 s6-linux-init-0.2.0.0.tar.gz
+diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
 new file mode 100644
-index 0000000..04ce688
+index 0000000..112e176
 --- /dev/null
-+++ b/package/s6-linux-utils/s6-linux-utils.mk
-@@ -0,0 +1,34 @@
++++ b/package/s6-linux-init/s6-linux-init.mk
+@@ -0,0 +1,36 @@
 +################################################################################
 +#
-+# s6-linux-utils
++# s6-linux-init
 +#
 +################################################################################
 +
-+S6_LINUX_UTILS_VERSION = 2.2.0.0
-+S6_LINUX_UTILS_SITE = http://skarnet.org/software/s6-linux-utils
-+S6_LINUX_UTILS_LICENSE = ISC
-+S6_LINUX_UTILS_LICENSE_FILES = COPYING
-+S6_LINUX_UTILS_DEPENDENCIES = skalibs
++S6_LINUX_INIT_VERSION = 0.2.0.0
++S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
++S6_LINUX_INIT_LICENSE = ISC
++S6_LINUX_INIT_LICENSE_FILES = COPYING
++S6_LINUX_INIT_DEPENDENCIES = s6 s6-linux-utils s6-portable-utils
 +
-+S6_LINUX_UTILS_CONF_OPTS = \
++S6_LINUX_INIT_CONF_OPTS = \
 +	--prefix=/usr \
 +	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
 +	--with-include=$(STAGING_DIR)/usr/include \
 +	--with-dynlib=$(STAGING_DIR)/usr/lib \
++	--with-lib=$(STAGING_DIR)/usr/lib/execline \
++	--with-lib=$(STAGING_DIR)/usr/lib/s6 \
 +	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
 +	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
 +	$(SHARED_STATIC_LIBS_OPTS)
 +
-+define S6_LINUX_UTILS_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_LINUX_UTILS_CONF_OPTS))
++define S6_LINUX_INIT_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_LINUX_INIT_CONF_OPTS))
 +endef
 +
-+define S6_LINUX_UTILS_BUILD_CMDS
++define S6_LINUX_INIT_BUILD_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+define S6_LINUX_UTILS_INSTALL_TARGET_CMDS
++define S6_LINUX_INIT_INSTALL_TARGET_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
 +endef
 +
