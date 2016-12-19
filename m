@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Dec 2016 22:26:56 +0100
-Subject: [Buildroot] [PATCH] package/google-breakpad: add C++11
- dependency on the host variant
-In-Reply-To: <1482179125-11704-1-git-send-email-romain.naour@gmail.com>
-References: <1482179125-11704-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20161219222656.64b1e5f5@free-electrons.com>
+Date: Mon, 19 Dec 2016 22:27:18 +0100
+Subject: [Buildroot] [PATCH 1/3] python-constantly: new package
+In-Reply-To: <1482135756-21472-1-git-send-email-yegorslists@googlemail.com>
+References: <1482135756-21472-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20161219222718.31db72a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 19 Dec 2016 21:25:25 +0100, Romain Naour wrote:
-> When google-breakpad has been updated to the latest version, the C++11
-> dependency has been added for the target variant only.
-> The C++11 dependency is also required for the host variant.
+On Mon, 19 Dec 2016 09:22:34 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Fixes:
-> http://autobuild.buildroot.org/results/dce/dcecb17116c0cf400c98f0052c9bf71f15d0d398
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  Config.in                         | 1 +
->  package/google-breakpad/Config.in | 3 ++-
->  2 files changed, 3 insertions(+), 1 deletion(-)
+>  package/Config.in                                |  1 +
+>  package/python-constantly/Config.in              |  8 ++++++++
+>  package/python-constantly/python-constantly.hash |  3 +++
+>  package/python-constantly/python-constantly.mk   | 14 ++++++++++++++
+>  4 files changed, 26 insertions(+)
+>  create mode 100644 package/python-constantly/Config.in
+>  create mode 100644 package/python-constantly/python-constantly.hash
+>  create mode 100644 package/python-constantly/python-constantly.mk
 
-Applied to master, thanks.
+All three applied to master, thanks!
 
 Thomas
 -- 
