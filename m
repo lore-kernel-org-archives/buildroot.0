@@ -1,34 +1,45 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 19 Dec 2016 21:10:23 +0100
-Subject: [Buildroot] [PATCH v1 3/6] qt5enginio: add examples license
-	information
-In-Reply-To: <20161219201026.13040-1-ps.report@gmx.net>
-References: <20161219201026.13040-1-ps.report@gmx.net>
-Message-ID: <20161219201026.13040-3-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 Dec 2016 21:10:56 +0100
+Subject: [Buildroot] [PATCH] package/weston: fix build on ancient glibc
+In-Reply-To: <87inqfadi3.fsf@dell.be.48ers.dk>
+References: <1482168120-7386-1-git-send-email-yann.morin.1998@free.fr>
+ <87inqfadi3.fsf@dell.be.48ers.dk>
+Message-ID: <20161219201056.GB6153@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/qt5enginio/qt5enginio.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Peter, All,
 
-diff --git a/package/qt5/qt5enginio/qt5enginio.mk b/package/qt5/qt5enginio/qt5enginio.mk
-index ada5fa7df..dad788976 100644
---- a/package/qt5/qt5enginio/qt5enginio.mk
-+++ b/package/qt5/qt5enginio/qt5enginio.mk
-@@ -15,6 +15,9 @@ QT5ENGINIO_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5ENGINIO_LICENSE = GPLv3 or LGPLv2.1 with exception or LGPLv3, GFDLv1.3 (docs)
- QT5ENGINIO_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+QT5ENGINIO_LICENSE := $(QT5ENGINIO_LICENSE), BSD-3c (examples)
-+endif
- else
- QT5ENGINIO_LICENSE = Commercial license
- QT5ENGINIO_REDISTRIBUTE = NO
+On 2016-12-19 21:08 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > Fix build with ancient glibces.
+>  > Fixes:
+>  >     http://autobuild.buildroot.net/results/bce/bcecdbbce4a99eb1e9bfbf519857bf94d8952037/
+> 
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  > ---
+>  >  ...onfigure-search-for-lib-with-clock_getres.patch | 47 ++++++++++++++++++++++
+> 
+> You forgot to add WESTON_AUTORECONF = YES. Committed with that fixed,
+> thanks.
+
+Grr.. I forgot to git-add it... :-/
+
+Thanks for fixing.
+
+Regards,
+Yann E. MORIN.
+
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
