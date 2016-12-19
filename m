@@ -1,46 +1,117 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Dec 2016 13:41:48 +0100
-Subject: [Buildroot] [git commit] python-xlsxwriter: bump to version 0.9.4
-Message-ID: <20161219124307.B4A537FD4F@busybox.osuosl.org>
+Date: Mon, 19 Dec 2016 14:13:23 +0100
+Subject: [Buildroot] [PATCH 1/2] libupnp: add upstream security fix for
+	CVE-2016-6255
+Message-ID: <20161219131324.19811-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a27910ea733746505eb339e4909d48d1f93a875
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+If there's no registered handler for a POST request, the default behaviour
+is to write it to the filesystem. Several million deployed devices appear
+to have this behaviour, making it possible to (at least) store arbitrary
+data on them. Add a configure option that enables this behaviour, and change
+the default to just drop POSTs that aren't directly handled.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-xlsxwriter/python-xlsxwriter.hash | 4 ++--
- package/python-xlsxwriter/python-xlsxwriter.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...-unhandled-POSTs-to-write-to-the-filesyst.patch | 73 ++++++++++++++++++++++
+ package/libupnp/libupnp.mk                         |  2 +
+ 2 files changed, 75 insertions(+)
+ create mode 100644 package/libupnp/0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch
 
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
-index 5f1a942..5d9a5ac 100644
---- a/package/python-xlsxwriter/python-xlsxwriter.hash
-+++ b/package/python-xlsxwriter/python-xlsxwriter.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/xlsxwriter/json, sha256 locally computed
--md5	9035b1e37a579c554e703404ffcebdd4  XlsxWriter-0.9.3.tar.gz
--sha256	19d2b5c0dd4d5fc00e8d7f164795f50e885b20d1cc27a3d04d5c7fec3c4d57f6  XlsxWriter-0.9.3.tar.gz
-+md5	17f48e222aa091b053fa2a14986b21c5  XlsxWriter-0.9.4.tar.gz
-+sha256	1642cf0adc6486dd3b17db9aba72a47fd41b947da6081e97acd6ab9872a22386  XlsxWriter-0.9.4.tar.gz
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
-index a44a99b..bd2ca08 100644
---- a/package/python-xlsxwriter/python-xlsxwriter.mk
-+++ b/package/python-xlsxwriter/python-xlsxwriter.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/libupnp/0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch b/package/libupnp/0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch
+new file mode 100644
+index 0000000..4bf1473
+--- /dev/null
++++ b/package/libupnp/0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch
+@@ -0,0 +1,73 @@
++From c91a8a3903367e1163765b73eb4d43be7d7927fa Mon Sep 17 00:00:00 2001
++From: Matthew Garrett <mjg59@srcf.ucam.org>
++Date: Tue, 23 Feb 2016 13:53:20 -0800
++Subject: [PATCH] Don't allow unhandled POSTs to write to the filesystem by
++ default
++
++Fixes CVE-2016-6255: write files via POST
++
++If there's no registered handler for a POST request, the default behaviour
++is to write it to the filesystem. Several million deployed devices appear
++to have this behaviour, making it possible to (at least) store arbitrary
++data on them. Add a configure option that enables this behaviour, and change
++the default to just drop POSTs that aren't directly handled.
++
++Signed-off-by: Marcelo Roberto Jimenez <mroberto@users.sourceforge.net>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ configure.ac                         | 4 ++++
++ upnp/inc/upnpconfig.h.in             | 5 +++++
++ upnp/src/genlib/net/http/webserver.c | 4 ++++
++ 3 files changed, 13 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index dd88734..ea2bc09 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -482,6 +482,10 @@ if test "x$enable_scriptsupport" = xyes ; then
++         AC_DEFINE(IXML_HAVE_SCRIPTSUPPORT, 1, [see upnpconfig.h])
++ fi
++ 
+++RT_BOOL_ARG_ENABLE([postwrite], [no], [write to the filesystem on otherwise unhandled POST requests])
+++if test "x$enable_postwrite" = xyes ; then
+++        AC_DEFINE(UPNP_ENABLE_POST_WRITE, 1, [see upnpconfig.h])
+++fi
++ 
++ RT_BOOL_ARG_ENABLE([samples], [yes], [compilation of upnp/sample/ code])
++ 
++diff --git a/upnp/inc/upnpconfig.h.in b/upnp/inc/upnpconfig.h.in
++index 46ddc6e..5df8c5a 100644
++--- a/upnp/inc/upnpconfig.h.in
+++++ b/upnp/inc/upnpconfig.h.in
++@@ -135,5 +135,10 @@
++  *  (i.e. configure --enable-open_ssl) */
++ #undef UPNP_ENABLE_OPEN_SSL
++ 
+++/** Defined to 1 if the library has been compiled to support filesystem writes on POST
+++ *  (i.e. configure --enable-postwrite) */
+++#undef UPNP_ENABLE_POST_WRITE
+++
+++
++ #endif /* UPNP_CONFIG_H */
++ 
++diff --git a/upnp/src/genlib/net/http/webserver.c b/upnp/src/genlib/net/http/webserver.c
++index 8991c16..8b2ecf2 100644
++--- a/upnp/src/genlib/net/http/webserver.c
+++++ b/upnp/src/genlib/net/http/webserver.c
++@@ -1369,9 +1369,13 @@ static int http_RecvPostMessage(
++ 		if (Fp == NULL)
++ 			return HTTP_INTERNAL_SERVER_ERROR;
++ 	} else {
+++#ifdef UPNP_ENABLE_POST_WRITE
++ 		Fp = fopen(filename, "wb");
++ 		if (Fp == NULL)
++ 			return HTTP_UNAUTHORIZED;
+++#else
+++		return HTTP_NOT_FOUND;
+++#endif
++ 	}
++ 	parser->position = POS_ENTITY;
++ 	do {
++-- 
++2.10.2
++
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index e12f410..2a4e078 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -11,5 +11,7 @@ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+ LIBUPNP_INSTALL_STAGING = YES
+ LIBUPNP_LICENSE = BSD-3c
+ LIBUPNP_LICENSE_FILES = LICENSE
++# configure.ac patched by 0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch
++LIBUPNP_AUTORECONF = YES
  
--PYTHON_XLSXWRITER_VERSION = 0.9.3
-+PYTHON_XLSXWRITER_VERSION = 0.9.4
- PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
--PYTHON_XLSXWRITER_SITE = https://pypi.python.org/packages/75/46/f1552b4a4d6faa6ec39dc2ddcb56e6b9a2865f07b9e126b2144d9090f056
-+PYTHON_XLSXWRITER_SITE = https://pypi.python.org/packages/52/66/670322b9999b8e47659c8b172a11aa3c0e629a5fc86b5a8fd497b85941c0
- PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
- PYTHON_XLSXWRITER_LICENSE = BSD-2c
- PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
+ $(eval $(autotools-package))
+-- 
+2.10.2
