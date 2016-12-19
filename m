@@ -1,106 +1,118 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 19 Dec 2016 22:29:15 +0100
-Subject: [Buildroot] [Patch v3 9/9] s6-linux-init: new package
+Date: Mon, 19 Dec 2016 22:29:11 +0100
+Subject: [Buildroot] [Patch v3 5/9] s6-networking: new package
 In-Reply-To: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1482182955-23916-10-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1482182955-23916-6-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides s6-linux-init, a set of minimalistic tools to
-create a s6-based init system, including a /sbin/init program, on a
-machine running a Linux kernel.
+This new package provides s6-networking, a suite of small networking
+utilities for Unix systems.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
  package/Config.in                        |  1 +
- package/s6-linux-init/Config.in          | 11 ++++++++++
- package/s6-linux-init/s6-linux-init.hash |  2 ++
- package/s6-linux-init/s6-linux-init.mk   | 36 ++++++++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+)
- create mode 100644 package/s6-linux-init/Config.in
- create mode 100644 package/s6-linux-init/s6-linux-init.hash
- create mode 100644 package/s6-linux-init/s6-linux-init.mk
+ package/s6-networking/Config.in          | 12 ++++++++
+ package/s6-networking/s6-networking.hash |  2 ++
+ package/s6-networking/s6-networking.mk   | 48 ++++++++++++++++++++++++++++++++
+ 4 files changed, 63 insertions(+)
+ create mode 100644 package/s6-networking/Config.in
+ create mode 100644 package/s6-networking/s6-networking.hash
+ create mode 100644 package/s6-networking/s6-networking.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 29d9121..a7d70eb 100644
+index 0984a9b..e4ceaf3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1761,6 +1761,7 @@ menu "System tools"
- 	source "package/rsyslog/Config.in"
- 	source "package/runc/Config.in"
- 	source "package/s6/Config.in"
-+	source "package/s6-linux-init/Config.in"
- 	source "package/s6-linux-utils/Config.in"
- 	source "package/s6-portable-utils/Config.in"
- 	source "package/s6-rc/Config.in"
-diff --git a/package/s6-linux-init/Config.in b/package/s6-linux-init/Config.in
+@@ -1603,6 +1603,7 @@ endif
+ 	source "package/rtorrent/Config.in"
+ 	source "package/rtptools/Config.in"
+ 	source "package/s6-dns/Config.in"
++	source "package/s6-networking/Config.in"
+ 	source "package/samba4/Config.in"
+ 	source "package/sconeserver/Config.in"
+ 	source "package/ser2net/Config.in"
+diff --git a/package/s6-networking/Config.in b/package/s6-networking/Config.in
 new file mode 100644
-index 0000000..db07e69
+index 0000000..a530bd4
 --- /dev/null
-+++ b/package/s6-linux-init/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_S6_LINUX_INIT
-+	bool "s6-linux-init"
++++ b/package/s6-networking/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_S6_NETWORKING
++	bool "s6-networking"
++	select BR2_PACKAGE_S6_DNS
 +	select BR2_PACKAGE_S6
-+	select BR2_PACKAGE_S6_LINUX_UTILS
-+	select BR2_PACKAGE_S6_PORTABLE_UTILS
 +	depends on BR2_USE_MMU # s6
 +	help
-+	  s6-linux-init is a set of minimalistic tools to create a s6-based
-+	  init system, including a /sbin/init binary, on a Linux kernel.
++	  s6-networking is a suite of small networking utilities for Unix
++	  systems. It includes command-line client and server management, TCP
++	  access control, privilege escalation across UNIX domain sockets,
++	  IDENT protocol management and clock synchronization.
 +
-+	  http://skarnet.org/software/s6-linux-init/
-diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
++	  http://skarnet.org/software/s6-networking/
+diff --git a/package/s6-networking/s6-networking.hash b/package/s6-networking/s6-networking.hash
 new file mode 100644
-index 0000000..e02e391
+index 0000000..a15efab
 --- /dev/null
-+++ b/package/s6-linux-init/s6-linux-init.hash
++++ b/package/s6-networking/s6-networking.hash
 @@ -0,0 +1,2 @@
 +# Locally generated
-+sha256 131484e61eff0e671e112f0436b13e8e7d08752f810d8bec4924a68383eee2b9 s6-linux-init-0.2.0.0.tar.gz
-diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
++sha256 5d8150d7413b335693c6e63092381dd0866b1b6f95662a2cbae5ec17ca449ab0 s6-networking-2.2.1.0.tar.gz
+diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
 new file mode 100644
-index 0000000..112e176
+index 0000000..47d4d61
 --- /dev/null
-+++ b/package/s6-linux-init/s6-linux-init.mk
-@@ -0,0 +1,36 @@
++++ b/package/s6-networking/s6-networking.mk
+@@ -0,0 +1,48 @@
 +################################################################################
 +#
-+# s6-linux-init
++# s6-networking
 +#
 +################################################################################
 +
-+S6_LINUX_INIT_VERSION = 0.2.0.0
-+S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
-+S6_LINUX_INIT_LICENSE = ISC
-+S6_LINUX_INIT_LICENSE_FILES = COPYING
-+S6_LINUX_INIT_DEPENDENCIES = s6 s6-linux-utils s6-portable-utils
++S6_NETWORKING_VERSION = 2.2.1.0
++S6_NETWORKING_SITE = http://skarnet.org/software/s6-networking
++S6_NETWORKING_LICENSE = ISC
++S6_NETWORKING_LICENSE_FILES = COPYING
++S6_NETWORKING_INSTALL_STAGING = YES
++S6_NETWORKING_DEPENDENCIES = s6-dns s6
 +
-+S6_LINUX_INIT_CONF_OPTS = \
++S6_NETWORKING_CONF_OPTS = \
 +	--prefix=/usr \
 +	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
 +	--with-include=$(STAGING_DIR)/usr/include \
 +	--with-dynlib=$(STAGING_DIR)/usr/lib \
 +	--with-lib=$(STAGING_DIR)/usr/lib/execline \
 +	--with-lib=$(STAGING_DIR)/usr/lib/s6 \
++	--with-lib=$(STAGING_DIR)/usr/lib/s6-dns \
 +	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
 +	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
 +	$(SHARED_STATIC_LIBS_OPTS)
 +
-+define S6_LINUX_INIT_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_LINUX_INIT_CONF_OPTS))
++define S6_NETWORKING_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_NETWORKING_CONF_OPTS))
 +endef
 +
-+define S6_LINUX_INIT_BUILD_CMDS
++define S6_NETWORKING_BUILD_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+define S6_LINUX_INIT_INSTALL_TARGET_CMDS
++define S6_NETWORKING_REMOVE_STATIC_LIB_DIR
++	rm -rf $(TARGET_DIR)/usr/lib/s6-networking
++endef
++
++S6_NETWORKING_POST_INSTALL_TARGET_HOOKS += S6_NETWORKING_REMOVE_STATIC_LIB_DIR
++
++define S6_NETWORKING_INSTALL_TARGET_CMDS
 +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define S6_NETWORKING_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
 +endef
 +
 +$(eval $(generic-package))
