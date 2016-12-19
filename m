@@ -1,49 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Dec 2016 20:55:29 +0100
-Subject: [Buildroot] [git commit] samba4: security bump to version 4.4.8
-Message-ID: <20161219201013.E2361819EF@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 19 Dec 2016 21:10:21 +0100
+Subject: [Buildroot] [PATCH v1 1/6] qt5base: add examples license information
+Message-ID: <20161219201026.13040-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80e0583a7046aa2178928d5481b6a22148a2d5e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-CVE-2016-2123 - Samba NDR Parsing ndr_pull_dnsp_name Heap-based Buffer
-Overflow Remote Code Execution Vulnerability.
-CVE-2016-2125 - Unconditional privilege delegation to Kerberos servers
-in trusted realms.
-CVE-2016-2126 - Flaws in Kerberos PAC validation can trigger privilege
-elevation.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index d6433f7..1e36d73 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	a69d6612e4a421640242ca66c4dbb0e4c20281e77dc24970a332770814d45c7c	samba-4.4.7.tar.gz
-+sha256	0e54de8a22b77f9712578029639331b51f818b70e194766c98475a5b99470fbf	samba-4.4.8.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 71cb426..778902f 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.4.7
-+SAMBA4_VERSION = 4.4.8
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 23dba2a18..2e56775c9 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -47,6 +47,10 @@ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5BASE_LICENSE = GPLv3 or LGPLv2.1 with exception or LGPLv3, GFDLv1.3 (docs)
+ QT5BASE_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++QT5BASE_LICENSE := $(QT5BASE_LICENSE), BSD-3c (examples)
++QT5BASE_LICENSE_FILES += header.BSD
++endif
+ else
+ QT5BASE_LICENSE = Commercial license
+ QT5BASE_REDISTRIBUTE = NO
+-- 
+2.11.0
