@@ -1,38 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Dec 2016 17:23:18 +0100
-Subject: [Buildroot] [PATCH] jack2: Try better fix for NGREG problem
-In-Reply-To: <1482162949.4285.23.camel@synopsys.com>
-References: <1479739795-31046-1-git-send-email-abrodkin@synopsys.com>
- <20161217172237.5934f18f@free-electrons.com>
- <1482162949.4285.23.camel@synopsys.com>
-Message-ID: <20161219172318.77e65dc4@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 19 Dec 2016 13:27:51 -0300
+Subject: [Buildroot] [PATCH] openssh: bump to version 7.4p1
+Message-ID: <20161219162751.19992-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Drop upstream patch.
 
-On Mon, 19 Dec 2016 15:57:09 +0000, Alexey Brodkin wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openssh/0003-fix-CVE-2016-8858.patch | 31 ----------------------------
+ package/openssh/openssh.hash                 |  4 ++--
+ package/openssh/openssh.mk                   |  2 +-
+ 3 files changed, 3 insertions(+), 34 deletions(-)
+ delete mode 100644 package/openssh/0003-fix-CVE-2016-8858.patch
 
-> > > Still not sure if that works for every other architectures, so testing
-> > > and Acks from all interested parties are much appreciated.  
-> > 
-> > I have submitted an improved version of this:  
-> 
-> Thanks for doing that!
-> Let's see if Jack2 appears in Autobuilder failures again now.
-
-I haven't applied the patch yet, so it's not going to fix autobuilder
-issues for the moment.
-
-I was waiting for some review before applying the patch.
-
-Best regards,
-
-Thomas
+diff --git a/package/openssh/0003-fix-CVE-2016-8858.patch b/package/openssh/0003-fix-CVE-2016-8858.patch
+deleted file mode 100644
+index 4ba1cfd..0000000
+--- a/package/openssh/0003-fix-CVE-2016-8858.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From ec165c392ca54317dbe3064a8c200de6531e89ad Mon Sep 17 00:00:00 2001
+-From: "markus at openbsd.org" <markus@openbsd.org>
+-Date: Mon, 10 Oct 2016 19:28:48 +0000
+-Subject: [PATCH] upstream commit
+-
+-Unregister the KEXINIT handler after message has been
+-received. Otherwise an unauthenticated peer can repeat the KEXINIT and cause
+-allocation of up to 128MB -- until the connection is closed. Reported by
+-shilei-c at 360.cn
+-
+-Upstream-ID: 43649ae12a27ef94290db16d1a98294588b75c05
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream
+-
+- kex.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/kex.c b/kex.c
+-index 3f97f8c..6a94bc5 100644
+---- a/kex.c
+-+++ b/kex.c
+-@@ -481,6 +481,7 @@ kex_input_kexinit(int type, u_int32_t seq, void *ctxt)
+- 	if (kex == NULL)
+- 		return SSH_ERR_INVALID_ARGUMENT;
+- 
+-+	ssh_dispatch_set(ssh, SSH2_MSG_KEXINIT, NULL);
+- 	ptr = sshpkt_ptr(ssh, &dlen);
+- 	if ((r = sshbuf_put(kex->peer, ptr, dlen)) != 0)
+- 		return r;
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 9a5ffd6..09010d3 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-# Also from http://www.openssh.com/txt/release-7.3
+-sha256 3ffb989a6dcaa69594c3b550d4855a5a2e1718ccdde7f5e36387b424220fbecc  openssh-7.3p1.tar.gz
++# Also from http://www.openssh.com/txt/release-7.4
++sha256 1b1fc4a14e2024293181924ed24872e6f2e06293f3e8926a376b8aec481f19d1  openssh-7.4p1.tar.gz
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index ce85513..dd8350b 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION = 7.3p1
++OPENSSH_VERSION = 7.4p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.2
