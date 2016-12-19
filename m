@@ -1,56 +1,69 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 19 Dec 2016 21:25:25 +0100
-Subject: [Buildroot] [PATCH] package/google-breakpad: add C++11 dependency
-	on the host variant
-Message-ID: <1482179125-11704-1-git-send-email-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 19 Dec 2016 21:28:33 +0100
+Subject: [Buildroot] [PATCH 1/1] lxc: add dependency on gnutls
+In-Reply-To: <CAPi7W82wboMBEsBGD==Y+75E17jwC3fD7Sox5F3kqrK5DeERMA@mail.gmail.com>
+References: <1482062185-97871-1-git-send-email-fabrice.fontaine@orange.com>
+ <20161218142230.65c0e57d@free-electrons.com>
+ <CAPi7W82wboMBEsBGD==Y+75E17jwC3fD7Sox5F3kqrK5DeERMA@mail.gmail.com>
+Message-ID: <CAPi7W80+XV16Uy6je4wwzB7BT+kF+-TyLWr177VRztfY-OnUtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When google-breakpad has been updated to the latest version, the C++11
-dependency has been added for the target variant only.
-The C++11 dependency is also required for the host variant.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.org/results/dce/dcecb17116c0cf400c98f0052c9bf71f15d0d398
+2016-12-18 15:17 GMT+01:00 Fabrice Fontaine <fontaine.fabrice@gmail.com>:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- Config.in                         | 1 +
- package/google-breakpad/Config.in | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+> Hello,
+>
+> 2016-12-18 14:22 GMT+01:00 Thomas Petazzoni <thomas.petazzoni@free-electro
+> ns.com>:
+>
+>> Hello,
+>>
+>> On Sun, 18 Dec 2016 12:56:25 +0100, Fabrice Fontaine wrote:
+>> > lxc can use gnutls for various checksumming so add a dependency on it if
+>> > package is selected (there is no --enable-gnutls in configure)
+>> >
+>> > Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+>>
+>> I was about to apply this... but in fact I don't see how lxc can use
+>> gnutls. The configure script indeed has:
+>>
+>> AC_CHECK_LIB([gnutls], [gnutls_hash_fast], [enable_gnutls=yes],
+>> [enable_gnutls=no])
+>>
+>> But ${enable_gnutls} is only used to print a message. In the source
+>> code, the gnutls related code is surrounded by HAVE_LIBGNUTLS
+>> conditions, but this is never defined anywhere.
+>>
+> My bad, you're completely right ... I will ask the status of gnutls to lxc
+> project.
+>
+There was a real issue: https://github.com/lxc/lxc/issues/1359 so I sent a
+patch that was accepted. I also sent a v2 version of the buildroot patch.
 
-diff --git a/Config.in b/Config.in
-index 7ea1e60..d3bb7b8 100644
---- a/Config.in
-+++ b/Config.in
-@@ -529,6 +529,7 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
- 	bool "Enable google-breakpad support"
- 	select BR2_PACKAGE_GOOGLE_BREAKPAD
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-index 31ca422..c6171af 100644
---- a/package/google-breakpad/Config.in
-+++ b/package/google-breakpad/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- config BR2_PACKAGE_GOOGLE_BREAKPAD
- 	bool "google-breakpad"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -38,4 +39,4 @@ comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread,
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_HOST_GCC_AT_LEAST_4_7
--- 
-2.5.5
+>
+>> Bottom line, I don't see where gnutls is currently used in lxc in
+>> practice.
+>>
+>> Best regards,
+>>
+>> Thomas Petazzoni
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
+>>
+>
+> Fabrice
+>
+
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161219/d6c2b962/attachment.html>
