@@ -1,74 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Dec 2016 23:26:31 +0100
-Subject: [Buildroot] [PATCH] uclibc: add patch to fix <stdlib.h>
-Message-ID: <1482186391-28787-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Dec 2016 23:28:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to
+ 1.6.13
+In-Reply-To: <jebjidx41h.ln2@ID-313208.user.individual.net>
+References: <20161207212535.6479-1-bernd.kuhls@t-online.de>
+ <20161207225215.663fca31@free-electrons.com>
+ <jebjidx41h.ln2@ID-313208.user.individual.net>
+Message-ID: <20161219232824.4730592a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to <stdlib.h>, to fix a bug introduced in
-uClibc-ng 1.0.20, and which was causing build failures for at least one
-package in Buildroot: freeswitch.
+Hello,
 
-Fixes:
+On Sun, 18 Dec 2016 22:25:07 +0100, Bernd Kuhls wrote:
 
-  http://autobuild.buildroot.net/results/12c246b058224f68494b84355a29dc4efb85df6d/
+> no, 1.6.13 did not fix the build failures, freeswitch git master is also 
+> affected, tested with http://autobuild.buildroot.net/results/b37/
+> b370813ce8bde65a9208d7678e67a3b2f22ef36c/defconfig and personal patches 
+> containing the version bump to fsw git master.
+> 
+> The build failures started on Dec 5th:
+> http://autobuild.buildroot.net/?reason=freeswitch-1.6.12
+> 
+> only several hours after you updated all pre-built toolchains used on 
+> autobuild.b.o:
+> 
+> http://lists.busybox.net/pipermail/buildroot/2016-December/179017.html
+> 
+> Maybe the failures[1] result from the updated toolchains?
+> They only occur with uclibc and only on arc/arm/powerpc/xtensa.
+> 
+> Regards, Bernd
+> 
+> [1] Quoting http://autobuild.buildroot.net/results/b37/
+> b370813ce8bde65a9208d7678e67a3b2f22ef36c/build-end.log
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...-add-definition-of-__attribute_alloc_size.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/uclibc/0007-sys-cdefs.h-add-definition-of-__attribute_alloc_size.patch
+Thanks for this analysis!
 
-diff --git a/package/uclibc/0007-sys-cdefs.h-add-definition-of-__attribute_alloc_size.patch b/package/uclibc/0007-sys-cdefs.h-add-definition-of-__attribute_alloc_size.patch
-new file mode 100644
-index 0000000..c9421ef
---- /dev/null
-+++ b/package/uclibc/0007-sys-cdefs.h-add-definition-of-__attribute_alloc_size.patch
-@@ -0,0 +1,42 @@
-+From dfcc950af1af003ee9e6fc985b5d6b3eb7d408af Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 19 Dec 2016 22:56:30 +0100
-+Subject: [PATCH] sys/cdefs.h: add definition of __attribute_alloc_size__
-+
-+Commit cee0b058fa0b4501b289a2da365182d60314d746 ("add aligned_alloc
-+required for latest gcc libstdc++") added the prototype of
-+aligned_alloc() to <stdlib.h>. This prototype contains
-+'__attribute_alloc_size__ ((2))', but this is not defined anywhere in
-+uClibc-ng.
-+
-+This commit addresses that by adding the relevant definition in
-+<sys/cdefs.h>, borrowed from glibc.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ include/sys/cdefs.h | 9 +++++++++
-+ 1 file changed, 9 insertions(+)
-+
-+diff --git a/include/sys/cdefs.h b/include/sys/cdefs.h
-+index f725ce9..6cd3811 100644
-+--- a/include/sys/cdefs.h
-++++ b/include/sys/cdefs.h
-+@@ -222,6 +222,15 @@
-+ # define __attribute_malloc__ /* Ignore */
-+ #endif
-+ 
-++/* Tell the compiler which arguments to an allocation function
-++   indicate the size of the allocation.  */
-++#if __GNUC_PREREQ (4, 3)
-++# define __attribute_alloc_size__(params) \
-++  __attribute__ ((__alloc_size__ params))
-++#else
-++# define __attribute_alloc_size__(params) /* Ignore.  */
-++#endif
-++
-+ /* At some point during the gcc 2.96 development the `pure' attribute
-+    for functions was introduced.  We don't want to use it unconditionally
-+    (although this would be possible) since it generates warnings.  */
-+-- 
-+2.7.4
-+
+And indeed, after looking deeply, it's bug that was introduced in
+uclibc between version 1.0.19 and 1.0.20. It was introduced by commit
+cee0b058fa0b4501b289a2da365182d60314d746 in uClibc-ng.
+
+I've now sent a patch to Buildroot
+(https://patchwork.ozlabs.org/patch/707262/), and uClibc-ng upstream to
+fix the problem. I've tested, and freeswitch now builds fine on uClibc.
+
+Thanks again!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
