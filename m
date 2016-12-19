@@ -1,118 +1,145 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 19 Dec 2016 22:29:06 +0100
-Subject: [Buildroot] [Patch v3 0/9] Introducing service
-	supervision/management with s6
-Message-ID: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Mon, 19 Dec 2016 22:29:08 +0100
+Subject: [Buildroot] [Patch v3 2/9] execline: new package
+In-Reply-To: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1482182955-23916-3-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+This package provides execline, a (non-interactive) scripting language,
+like sh, used in the s6 supervision system.
 
-This series provides all the packages for programs and libraries to build an
-embedded system with service supervision and management using s6 from
-http://skarnet.org.
+The host variant is provided as it is required to build and run the host
+variants of s6 and s6-rc.
 
-Note that these packages only provide the mechanism for supervising/managing
-services using s6, not the policy. Packages to provide a policy suitable for
-Buildroot-based embedded systems, using s6 as init (instead of SysV or
-systemd), may be provided later. An example is available in the
-buildroot-demo-s6 project [1].
-
-[1] https://github.com/elebihan/buildroot-demo-s6/
-
-Best regards,
-
-ELB
-
-v2 -> v3:
-
- - use --prefix=$(HOST_DIR)/usr for host variants.
- - add SoB line to patches for skalibs.
- - add comments about skarnet software build system in commit logs.
- - remove user visible configuration entries for host variants of 
-   execline and s6-rc.
-
-v1 -> v2:
-
- - bump all packages to skarnet.org fall release versions.
- - add dependency on BR2_USE_MMU.
- - remove limitation to glibc.
- - split skalibs endianness and type sizes patches.
-
-Eric Le Bihan (9):
-  skalibs: new package
-  execline: new package
-  s6: new package
-  s6-dns: new package
-  s6-networking: new package
-  s6-rc: new package
-  s6-portable-utils: new package
-  s6-linux-utils: new package
-  s6-linux-init: new package
-
- package/Config.in                                  |  9 ++
- package/execline/Config.in                         | 12 +++
- package/execline/execline.hash                     |  2 +
- package/execline/execline.mk                       | 70 ++++++++++++++++
- package/s6-dns/Config.in                           |  9 ++
- package/s6-dns/s6-dns.hash                         |  2 +
- package/s6-dns/s6-dns.mk                           | 45 ++++++++++
- package/s6-linux-init/Config.in                    | 11 +++
- package/s6-linux-init/s6-linux-init.hash           |  2 +
- package/s6-linux-init/s6-linux-init.mk             | 36 ++++++++
- package/s6-linux-utils/Config.in                   |  9 ++
- package/s6-linux-utils/s6-linux-utils.hash         |  2 +
- package/s6-linux-utils/s6-linux-utils.mk           | 34 ++++++++
- package/s6-networking/Config.in                    | 12 +++
- package/s6-networking/s6-networking.hash           |  2 +
- package/s6-networking/s6-networking.mk             | 48 +++++++++++
- package/s6-portable-utils/Config.in                | 11 +++
- package/s6-portable-utils/s6-portable-utils.hash   |  2 +
- package/s6-portable-utils/s6-portable-utils.mk     | 34 ++++++++
- package/s6-rc/Config.in                            | 11 +++
- package/s6-rc/s6-rc.hash                           |  2 +
- package/s6-rc/s6-rc.mk                             | 73 +++++++++++++++++
- package/s6/Config.in                               | 10 +++
- package/s6/s6.hash                                 |  2 +
- package/s6/s6.mk                                   | 70 ++++++++++++++++
- .../0001-No-runtime-tests-for-endianness.patch     | 95 ++++++++++++++++++++++
- .../0002-No-runtime-tests-for-type-sizes.patch     | 54 ++++++++++++
- package/skalibs/Config.in                          |  9 ++
- package/skalibs/skalibs.hash                       |  2 +
- package/skalibs/skalibs.mk                         | 59 ++++++++++++++
- 30 files changed, 739 insertions(+)
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/Config.in              |  1 +
+ package/execline/Config.in     | 12 ++++++++
+ package/execline/execline.hash |  2 ++
+ package/execline/execline.mk   | 70 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 85 insertions(+)
  create mode 100644 package/execline/Config.in
  create mode 100644 package/execline/execline.hash
  create mode 100644 package/execline/execline.mk
- create mode 100644 package/s6-dns/Config.in
- create mode 100644 package/s6-dns/s6-dns.hash
- create mode 100644 package/s6-dns/s6-dns.mk
- create mode 100644 package/s6-linux-init/Config.in
- create mode 100644 package/s6-linux-init/s6-linux-init.hash
- create mode 100644 package/s6-linux-init/s6-linux-init.mk
- create mode 100644 package/s6-linux-utils/Config.in
- create mode 100644 package/s6-linux-utils/s6-linux-utils.hash
- create mode 100644 package/s6-linux-utils/s6-linux-utils.mk
- create mode 100644 package/s6-networking/Config.in
- create mode 100644 package/s6-networking/s6-networking.hash
- create mode 100644 package/s6-networking/s6-networking.mk
- create mode 100644 package/s6-portable-utils/Config.in
- create mode 100644 package/s6-portable-utils/s6-portable-utils.hash
- create mode 100644 package/s6-portable-utils/s6-portable-utils.mk
- create mode 100644 package/s6-rc/Config.in
- create mode 100644 package/s6-rc/s6-rc.hash
- create mode 100644 package/s6-rc/s6-rc.mk
- create mode 100644 package/s6/Config.in
- create mode 100644 package/s6/s6.hash
- create mode 100644 package/s6/s6.mk
- create mode 100644 package/skalibs/0001-No-runtime-tests-for-endianness.patch
- create mode 100644 package/skalibs/0002-No-runtime-tests-for-type-sizes.patch
- create mode 100644 package/skalibs/Config.in
- create mode 100644 package/skalibs/skalibs.hash
- create mode 100644 package/skalibs/skalibs.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 760eaff..7c0e4e1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -504,6 +504,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
++	source "package/execline/Config.in"
+ 	source "package/ficl/Config.in"
+ 	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+diff --git a/package/execline/Config.in b/package/execline/Config.in
+new file mode 100644
+index 0000000..8e2e6dc
+--- /dev/null
++++ b/package/execline/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_EXECLINE
++	bool "execline"
++	select BR2_PACKAGE_SKALIBS
++	depends on BR2_USE_MMU # skalibs
++	help
++	  execline is a (non-interactive) scripting language, like sh ; but its
++	  syntax is quite different from a traditional shell syntax.
++	  The execlineb program is meant to be used as an interpreter for a text
++	  file; the other commands are essentially useful inside an execlineb
++	  script.
++
++	  http://skarnet.org/software/execline/
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+new file mode 100644
+index 0000000..61fc99c
+--- /dev/null
++++ b/package/execline/execline.hash
+@@ -0,0 +1,2 @@
++# Locally generated
++sha256 93bd744f2e3ad204cb89f147efdc6ca4e622f9c6bfc9895e0b2cb8b0480029de execline-2.2.0.0.tar.gz
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+new file mode 100644
+index 0000000..ca7c73e
+--- /dev/null
++++ b/package/execline/execline.mk
+@@ -0,0 +1,70 @@
++################################################################################
++#
++# execline
++#
++################################################################################
++
++EXECLINE_VERSION = 2.2.0.0
++EXECLINE_SITE = http://skarnet.org/software/execline
++EXECLINE_LICENSE = ISC
++EXECLINE_LICENSE_FILES = COPYING
++EXECLINE_INSTALL_STAGING = YES
++EXECLINE_DEPENDENCIES = skalibs
++
++EXECLINE_CONF_OPTS = \
++	--prefix=/usr \
++	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
++	--with-include=$(STAGING_DIR)/usr/include \
++	--with-dynlib=$(STAGING_DIR)/usr/lib \
++	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
++	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
++	$(SHARED_STATIC_LIBS_OPTS)
++
++define EXECLINE_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(EXECLINE_CONF_OPTS))
++endef
++
++define EXECLINE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define EXECLINE_REMOVE_STATIC_LIB_DIR
++	rm -rf $(TARGET_DIR)/usr/lib/execline
++endef
++
++EXECLINE_POST_INSTALL_TARGET_HOOKS += EXECLINE_REMOVE_STATIC_LIB_DIR
++
++define EXECLINE_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define EXECLINE_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++HOST_EXECLINE_DEPENDENCIES = host-skalibs
++
++HOST_EXECLINE_CONF_OPTS = \
++	--prefix=$(HOST_DIR)/usr \
++	--shebangdir=/usr/bin \
++	--with-sysdeps=$(HOST_DIR)/usr/lib/skalibs/sysdeps \
++	--with-include=$(HOST_DIR)/usr/include \
++	--with-dynlib=$(HOST_DIR)/usr/lib \
++	--disable-static \
++	--enable-shared \
++	--disable-allstatic
++
++define HOST_EXECLINE_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_EXECLINE_CONF_OPTS))
++endef
++
++define HOST_EXECLINE_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_EXECLINE_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 2.5.5
