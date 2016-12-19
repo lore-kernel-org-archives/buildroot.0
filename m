@@ -1,53 +1,58 @@
-From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Date: Mon, 19 Dec 2016 15:17:29 -0600
-Subject: [Buildroot] [PATCH 1/1] pure-ftpd: Added pure-ftpwho config option
-Message-ID: <1482182249-40400-1-git-send-email-bryce.ferguson@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Dec 2016 22:21:31 +0100
+Subject: [Buildroot] [git commit] package/google-breakpad: add C++11
+	dependency on the host variant
+Message-ID: <20161219212538.1863C81807@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added the pure-ftpwho config option. When selected, the --with-ftpwho
-compiler option is passed which enabled the pure-ftpwho command.
+commit: https://git.buildroot.net/buildroot/commit/?id=4f08ad87df646ad1df93d749ec32617f1ecf60ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+When google-breakpad has been updated to the latest version, the C++11
+dependency has been added for the target variant only.
+The C++11 dependency is also required for the host variant.
+
+Fixes:
+http://autobuild.buildroot.org/results/dce/dcecb17116c0cf400c98f0052c9bf71f15d0d398
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pure-ftpd/Config.in    | 11 +++++++++++
- package/pure-ftpd/pure-ftpd.mk |  4 ++++
- 2 files changed, 15 insertions(+)
+ Config.in                         | 1 +
+ package/google-breakpad/Config.in | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/pure-ftpd/Config.in b/package/pure-ftpd/Config.in
-index c1b2529..85fdef3 100644
---- a/package/pure-ftpd/Config.in
-+++ b/package/pure-ftpd/Config.in
-@@ -10,3 +10,14 @@ config BR2_PACKAGE_PURE_FTPD
- 	  well as hosting providers.
- 
- 	  http://www.pureftpd.org
-+
-+if BR2_PACKAGE_PURE_FTPD
-+
-+config BR2_PACKAGE_PURE_FTPD_FTPWHO
-+	bool "ftpwho"
-+	help
-+	  Enable the pure-ftpd command.  Pure-ftpwho shows current Pure-ftpd
-+	  client sessions.  Only the system administrator may run this.  Output
-+	  can be text (default), HTML, XML data and parser-optimized.
-+
-+endif
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index ba4096c..80e432a 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -45,4 +45,8 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- PURE_FTPD_CONF_ENV += ax_cv_check_cflags___fPIE=no ax_cv_check_ldflags___fPIE=no
- endif
- 
-+ifeq ($(BR2_PACKAGE_PURE_FTPD_FTPWHO),y)
-+PURE_FTPD_CONF_OPTS += --with-ftpwho
-+endif
-+
- $(eval $(autotools-package))
--- 
-1.9.1
+diff --git a/Config.in b/Config.in
+index 7ea1e60..d3bb7b8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -529,6 +529,7 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
+ 	bool "Enable google-breakpad support"
+ 	select BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+index 31ca422..c6171af 100644
+--- a/package/google-breakpad/Config.in
++++ b/package/google-breakpad/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ config BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	bool "google-breakpad"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -38,4 +39,4 @@ comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread,
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_HOST_GCC_AT_LEAST_4_7
