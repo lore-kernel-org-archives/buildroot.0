@@ -1,97 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Dec 2016 20:53:24 +0100
-Subject: [Buildroot] [git commit] openssh: security bump to version 7.4p1
-Message-ID: <20161219195421.33F8B8180E@busybox.osuosl.org>
+Date: Mon, 19 Dec 2016 21:00:15 +0100
+Subject: [Buildroot] [PATCH] samba4: security bump to version 4.4.8
+In-Reply-To: <20161219195038.19344-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Mon, 19 Dec 2016 16:50:38 -0300")
+References: <20161219195038.19344-1-gustavo@zacarias.com.ar>
+Message-ID: <87mvfradv4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae58da71111c9a9825fa8dab1338831ff38dc320
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Fixes:
-CVE-2016-10009 - ssh-agent(1): Will now refuse to load PKCS#11 modules
-from paths outside a trusted whitelist
-CVE-2016-10010 - sshd(8): When privilege separation is disabled,
-forwarded Unix-domain sockets would be created by sshd(8) with the
-privileges of 'root'
-CVE-2016-10011 - sshd(8): Avoid theoretical leak of host private key
-material to privilege-separated child processes via realloc()
-CVE-2016-10012 - sshd(8): The shared memory manager used by
-pre-authentication compression support had a bounds checks that could be
-elided by some optimising compilers
+ > Fixes:
+ > CVE-2016-2123 - Samba NDR Parsing ndr_pull_dnsp_name Heap-based Buffer
+ > Overflow Remote Code Execution Vulnerability.
+ > CVE-2016-2125 - Unconditional privilege delegation to Kerberos servers
+ > in trusted realms.
+ > CVE-2016-2126 - Flaws in Kerberos PAC validation can trigger privilege
+ > elevation.
 
-http://seclists.org/oss-sec/2016/q4/708
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Drop upstream patch.
+Committed, thanks.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssh/0003-fix-CVE-2016-8858.patch | 31 ----------------------------
- package/openssh/openssh.hash                 |  4 ++--
- package/openssh/openssh.mk                   |  2 +-
- 3 files changed, 3 insertions(+), 34 deletions(-)
-
-diff --git a/package/openssh/0003-fix-CVE-2016-8858.patch b/package/openssh/0003-fix-CVE-2016-8858.patch
-deleted file mode 100644
-index 4ba1cfd..0000000
---- a/package/openssh/0003-fix-CVE-2016-8858.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From ec165c392ca54317dbe3064a8c200de6531e89ad Mon Sep 17 00:00:00 2001
--From: "markus at openbsd.org" <markus@openbsd.org>
--Date: Mon, 10 Oct 2016 19:28:48 +0000
--Subject: [PATCH] upstream commit
--
--Unregister the KEXINIT handler after message has been
--received. Otherwise an unauthenticated peer can repeat the KEXINIT and cause
--allocation of up to 128MB -- until the connection is closed. Reported by
--shilei-c at 360.cn
--
--Upstream-ID: 43649ae12a27ef94290db16d1a98294588b75c05
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream
--
-- kex.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/kex.c b/kex.c
--index 3f97f8c..6a94bc5 100644
----- a/kex.c
--+++ b/kex.c
--@@ -481,6 +481,7 @@ kex_input_kexinit(int type, u_int32_t seq, void *ctxt)
-- 	if (kex == NULL)
-- 		return SSH_ERR_INVALID_ARGUMENT;
-- 
--+	ssh_dispatch_set(ssh, SSH2_MSG_KEXINIT, NULL);
-- 	ptr = sshpkt_ptr(ssh, &dlen);
-- 	if ((r = sshbuf_put(kex->peer, ptr, dlen)) != 0)
-- 		return r;
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 9a5ffd6..09010d3 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--# Also from http://www.openssh.com/txt/release-7.3
--sha256 3ffb989a6dcaa69594c3b550d4855a5a2e1718ccdde7f5e36387b424220fbecc  openssh-7.3p1.tar.gz
-+# Also from http://www.openssh.com/txt/release-7.4
-+sha256 1b1fc4a14e2024293181924ed24872e6f2e06293f3e8926a376b8aec481f19d1  openssh-7.4p1.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index ce85513..dd8350b 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSH_VERSION = 7.3p1
-+OPENSSH_VERSION = 7.4p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-- 
+Bye, Peter Korsgaard
