@@ -1,98 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Dec 2016 14:13:24 +0100
-Subject: [Buildroot] [PATCH 2/2] libupnp: add upstream security fix for
-	CVE-2016-8863
-In-Reply-To: <20161219131324.19811-1-peter@korsgaard.com>
-References: <20161219131324.19811-1-peter@korsgaard.com>
-Message-ID: <20161219131324.19811-2-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 19 Dec 2016 16:26:18 +0100
+Subject: [Buildroot] [PATCH v2,1/1] lxc: add dependency on gnutls
+Message-ID: <1482161178-20667-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix out-of-bound access in create_url_list()
+lxc can use gnutls for various checksumming so add a dependency on it if
+package is selected
 
-If there is an invalid URL in URLS->buf after a valid one, uri_parse is
-called with out pointing after the allocated memory. As uri_parse writes
-to *out before returning an error the loop in create_url_list must be
-stopped early to prevent an out-of-bound access.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
- ...bound-access-in-create_url_list-CVE-2016-.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/libupnp/0002-Fix-out-of-bound-access-in-create_url_list-CVE-2016-.patch
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Get upstream patch that add --enable-gnutls option
 
-diff --git a/package/libupnp/0002-Fix-out-of-bound-access-in-create_url_list-CVE-2016-.patch b/package/libupnp/0002-Fix-out-of-bound-access-in-create_url_list-CVE-2016-.patch
-new file mode 100644
-index 0000000..1b74d3e
---- /dev/null
-+++ b/package/libupnp/0002-Fix-out-of-bound-access-in-create_url_list-CVE-2016-.patch
-@@ -0,0 +1,64 @@
-+From 9c099c2923ab4d98530ab5204af1738be5bddba7 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@debian.org>
-+Date: Thu, 8 Dec 2016 17:11:53 +0100
-+Subject: [PATCH] Fix out-of-bound access in create_url_list() (CVE-2016-8863)
+ package/lxc/lxc.hash |  1 +
+ package/lxc/lxc.mk   | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 7b34e88..8fb4dc0 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	7c292cd0055dac1a0e6fbb6a7740fd12b6ffb204603c198faf37c11c9d6dcd7a	lxc-2.0.6.tar.gz
++sha256	e8ca30fb1e8d6dbafb5cccc04b3fd1784c35bc8ccf79112036e5166924b6b01d	64fa248372c90c9d98fc9d67f80327d865c11a48.patch
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index e9e925f..34a8556 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -9,10 +9,24 @@ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
++# we're patching configure.ac
++LXC_AUTORECONF = YES
 +
-+If there is an invalid URL in URLS->buf after a valid one, uri_parse is
-+called with out pointing after the allocated memory. As uri_parse writes
-+to *out before returning an error the loop in create_url_list must be
-+stopped early to prevent an out-of-bound access
++# This patch adds --enable-gnutls option
++LXC_PATCH = \
++	https://github.com/lxc/lxc/commit/64fa248372c90c9d98fc9d67f80327d865c11a48.patch
 +
-+Bug: https://sourceforge.net/p/pupnp/bugs/133/
-+Bug-CVE: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-8863
-+Bug-Debian: https://bugs.debian.org/842093
-+Bug-Redhat: https://bugzilla.redhat.com/show_bug.cgi?id=1388771
-+(cherry picked from commit a0f6e719bc03c4d2fe6a4a42ef6b8761446f520b)
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ upnp/src/gena/gena_device.c | 17 ++++++++++++-----
-+ 1 file changed, 12 insertions(+), 5 deletions(-)
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-python --disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+ 
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++LXC_CONF_OPTS += --enable-gnutls
++LXC_DEPENDENCIES += gnutls
++else
++LXC_CONF_OPTS += --disable-gnutls
++endif
 +
-+diff --git a/upnp/src/gena/gena_device.c b/upnp/src/gena/gena_device.c
-+index fb04a29..245c56b 100644
-+--- a/upnp/src/gena/gena_device.c
-++++ b/upnp/src/gena/gena_device.c
-+@@ -1113,7 +1113,7 @@ static int create_url_list(
-+ 	/*! [out] . */
-+ 	URL_list *out)
-+ {
-+-    size_t URLcount = 0;
-++    size_t URLcount = 0, URLcount2 = 0;
-+     size_t i;
-+     int return_code = 0;
-+     uri_type temp;
-+@@ -1155,16 +1155,23 @@ static int create_url_list(
-+         }
-+         memcpy( out->URLs, URLS->buff, URLS->size );
-+         out->URLs[URLS->size] = 0;
-+-        URLcount = 0;
-+         for( i = 0; i < URLS->size; i++ ) {
-+             if( ( URLS->buff[i] == '<' ) && ( i + 1 < URLS->size ) ) {
-+                 if( ( ( return_code =
-+                         parse_uri( &out->URLs[i + 1], URLS->size - i + 1,
-+-                                   &out->parsedURLs[URLcount] ) ) ==
-++                                   &out->parsedURLs[URLcount2] ) ) ==
-+                       HTTP_SUCCESS )
-+-                    && ( out->parsedURLs[URLcount].hostport.text.size !=
-++                    && ( out->parsedURLs[URLcount2].hostport.text.size !=
-+                          0 ) ) {
-+-                    URLcount++;
-++                    URLcount2++;
-++                    if (URLcount2 >= URLcount)
-++                        /*
-++                         * break early here in case there is a bogus URL that
-++                         * was skipped above. This prevents to access
-++                         * out->parsedURLs[URLcount] which is beyond the
-++                         * allocation.
-++                         */
-++                        break;
-+                 } else {
-+                     if( return_code == UPNP_E_OUTOF_MEMORY ) {
-+                         free( out->URLs );
-+-- 
-+2.10.2
-+
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ LXC_CONF_OPTS += --enable-seccomp
+ LXC_DEPENDENCIES += libseccomp
 -- 
-2.10.2
+2.7.4
