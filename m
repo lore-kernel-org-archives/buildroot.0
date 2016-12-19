@@ -1,34 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Dec 2016 23:36:02 +0100
-Subject: [Buildroot] [PATCH v3,3/3] soletta: new package
-In-Reply-To: <CAPi7W839KFC4Y1QgGsfH0uCe8PTp-DQzLD2GDLqFO4s-RdoAdg@mail.gmail.com>
-References: <1482101300-9180-1-git-send-email-fabrice.fontaine@orange.com>
- <1482101300-9180-3-git-send-email-fabrice.fontaine@orange.com>
- <20161219231208.46c66492@free-electrons.com>
- <CAPi7W839KFC4Y1QgGsfH0uCe8PTp-DQzLD2GDLqFO4s-RdoAdg@mail.gmail.com>
-Message-ID: <20161219233602.4ecc09a5@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 19 Dec 2016 23:48:12 +0100
+Subject: [Buildroot] [git commit] docs/website/news.html: add 2016.11
+	announcement link
+Message-ID: <20161219224831.A6F2681696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7f0f83296fe3e2434aaba8665a44730d2f0540ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 19 Dec 2016 23:25:41 +0100, Fabrice Fontaine wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/news.html | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> I perfectly understand your point, thanks a lot for the time you passed on
-> testing these patches.
-
-Maybe you could set up an older Linux system to use as a build
-environment to reproduce those failures. If you're using a Debian-based
-system, it's really easy with debootstrap to create a chroot containing
-an older Debian version.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/docs/website/news.html b/docs/website/news.html
+index f12dfc6..1e789ff 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -20,7 +20,8 @@
+ 	<p>The stable 2016.11 release is out - Thanks to everyone
+ 	  contributing and testing the release candidates. See the
+ 	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.11">CHANGES</a>
+-	  file for more details
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2016-November/178514.html">announcement<a>
+ 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
+ 	  <a href="/downloads/buildroot-2016.11.tar.bz2">2016.11 release</a>.</p>
+       </div>
