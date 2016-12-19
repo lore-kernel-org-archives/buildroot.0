@@ -1,46 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Dec 2016 22:45:26 +0100
-Subject: [Buildroot] [PATCH 1/2] libupnp: add upstream security fix for
-	CVE-2016-6255
-In-Reply-To: <20161219223022.489e8546@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 19 Dec 2016 22:30:22 +0100")
-References: <20161219131324.19811-1-peter@korsgaard.com>
- <20161219223022.489e8546@free-electrons.com>
-Message-ID: <87eg13a8zt.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 19 Dec 2016 23:01:17 +0100
+Subject: [Buildroot] [PATCH v1] libv4l: qv4l2 needs c++11 (since Qt5.7)
+Message-ID: <20161219220117.420-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Fixes:
+  .../host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
+   #error This file requires compiler and library support \
+    ^
+  In file included from .../host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/type_traits:35:0,
+                   from .../host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore/qglobal.h:45,
 
- > Hello,
- > On Mon, 19 Dec 2016 14:13:23 +0100, Peter Korsgaard wrote:
- >> If there's no registered handler for a POST request, the default behaviour
- >> is to write it to the filesystem. Several million deployed devices appear
- >> to have this behaviour, making it possible to (at least) store arbitrary
- >> data on them. Add a configure option that enables this behaviour, and change
- >> the default to just drop POSTs that aren't directly handled.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> ...-unhandled-POSTs-to-write-to-the-filesyst.patch | 73 ++++++++++++++++++++++
- >> package/libupnp/libupnp.mk                         |  2 +
- >> 2 files changed, 75 insertions(+)
- >> create mode 100644 package/libupnp/0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Based on the 'qt5 bump to 5.8.0-rc' patch series by Andreas Naumann (see [1])
 
- > I've applied both to master, thanks!
+[1] http://lists.busybox.net/pipermail/buildroot/2016-December/179634.html
+---
+ package/libv4l/libv4l.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > I have to say that these security issues are terrible. The first one
- > because the feature by itself is really silly and one may wonder why
- > someone would implement such a feature in the first place. The second
- > one because when you see what the URL parsing code looks like, no
- > wonder why there are some security bugs in it...
-
-Yeah, libupnp isn't really what I would best of class code :/
-
-Thanks for applying the patches!
-
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index d55741426..f34ed4921 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -66,6 +66,8 @@ LIBV4L_CONF_ENV += \
+ 	ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc \
+ 	ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc \
+ 	ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
++# qt5 needs c++11 (since qt-5.7)
++LIBV4L_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+ else ifeq ($(BR2_PACKAGE_QT_OPENGL_GL_DESKTOP),y)
+ LIBV4L_CONF_OPTS += --enable-qv4l2
+ LIBV4L_DEPENDENCIES += qt
 -- 
-Bye, Peter Korsgaard
+2.11.0
