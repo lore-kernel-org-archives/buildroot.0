@@ -1,117 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 19 Dec 2016 14:13:23 +0100
-Subject: [Buildroot] [PATCH 1/2] libupnp: add upstream security fix for
-	CVE-2016-6255
-Message-ID: <20161219131324.19811-1-peter@korsgaard.com>
+Date: Mon, 19 Dec 2016 14:13:24 +0100
+Subject: [Buildroot] [PATCH 2/2] libupnp: add upstream security fix for
+	CVE-2016-8863
+In-Reply-To: <20161219131324.19811-1-peter@korsgaard.com>
+References: <20161219131324.19811-1-peter@korsgaard.com>
+Message-ID: <20161219131324.19811-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If there's no registered handler for a POST request, the default behaviour
-is to write it to the filesystem. Several million deployed devices appear
-to have this behaviour, making it possible to (at least) store arbitrary
-data on them. Add a configure option that enables this behaviour, and change
-the default to just drop POSTs that aren't directly handled.
+Fix out-of-bound access in create_url_list()
+
+If there is an invalid URL in URLS->buf after a valid one, uri_parse is
+called with out pointing after the allocated memory. As uri_parse writes
+to *out before returning an error the loop in create_url_list must be
+stopped early to prevent an out-of-bound access.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-unhandled-POSTs-to-write-to-the-filesyst.patch | 73 ++++++++++++++++++++++
- package/libupnp/libupnp.mk                         |  2 +
- 2 files changed, 75 insertions(+)
- create mode 100644 package/libupnp/0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch
+ ...bound-access-in-create_url_list-CVE-2016-.patch | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+ create mode 100644 package/libupnp/0002-Fix-out-of-bound-access-in-create_url_list-CVE-2016-.patch
 
-diff --git a/package/libupnp/0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch b/package/libupnp/0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch
+diff --git a/package/libupnp/0002-Fix-out-of-bound-access-in-create_url_list-CVE-2016-.patch b/package/libupnp/0002-Fix-out-of-bound-access-in-create_url_list-CVE-2016-.patch
 new file mode 100644
-index 0000000..4bf1473
+index 0000000..1b74d3e
 --- /dev/null
-+++ b/package/libupnp/0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch
-@@ -0,0 +1,73 @@
-+From c91a8a3903367e1163765b73eb4d43be7d7927fa Mon Sep 17 00:00:00 2001
-+From: Matthew Garrett <mjg59@srcf.ucam.org>
-+Date: Tue, 23 Feb 2016 13:53:20 -0800
-+Subject: [PATCH] Don't allow unhandled POSTs to write to the filesystem by
-+ default
++++ b/package/libupnp/0002-Fix-out-of-bound-access-in-create_url_list-CVE-2016-.patch
+@@ -0,0 +1,64 @@
++From 9c099c2923ab4d98530ab5204af1738be5bddba7 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@debian.org>
++Date: Thu, 8 Dec 2016 17:11:53 +0100
++Subject: [PATCH] Fix out-of-bound access in create_url_list() (CVE-2016-8863)
 +
-+Fixes CVE-2016-6255: write files via POST
++If there is an invalid URL in URLS->buf after a valid one, uri_parse is
++called with out pointing after the allocated memory. As uri_parse writes
++to *out before returning an error the loop in create_url_list must be
++stopped early to prevent an out-of-bound access
 +
-+If there's no registered handler for a POST request, the default behaviour
-+is to write it to the filesystem. Several million deployed devices appear
-+to have this behaviour, making it possible to (at least) store arbitrary
-+data on them. Add a configure option that enables this behaviour, and change
-+the default to just drop POSTs that aren't directly handled.
-+
-+Signed-off-by: Marcelo Roberto Jimenez <mroberto@users.sourceforge.net>
++Bug: https://sourceforge.net/p/pupnp/bugs/133/
++Bug-CVE: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-8863
++Bug-Debian: https://bugs.debian.org/842093
++Bug-Redhat: https://bugzilla.redhat.com/show_bug.cgi?id=1388771
++(cherry picked from commit a0f6e719bc03c4d2fe6a4a42ef6b8761446f520b)
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ configure.ac                         | 4 ++++
-+ upnp/inc/upnpconfig.h.in             | 5 +++++
-+ upnp/src/genlib/net/http/webserver.c | 4 ++++
-+ 3 files changed, 13 insertions(+)
++ upnp/src/gena/gena_device.c | 17 ++++++++++++-----
++ 1 file changed, 12 insertions(+), 5 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index dd88734..ea2bc09 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -482,6 +482,10 @@ if test "x$enable_scriptsupport" = xyes ; then
-+         AC_DEFINE(IXML_HAVE_SCRIPTSUPPORT, 1, [see upnpconfig.h])
-+ fi
-+ 
-++RT_BOOL_ARG_ENABLE([postwrite], [no], [write to the filesystem on otherwise unhandled POST requests])
-++if test "x$enable_postwrite" = xyes ; then
-++        AC_DEFINE(UPNP_ENABLE_POST_WRITE, 1, [see upnpconfig.h])
-++fi
-+ 
-+ RT_BOOL_ARG_ENABLE([samples], [yes], [compilation of upnp/sample/ code])
-+ 
-+diff --git a/upnp/inc/upnpconfig.h.in b/upnp/inc/upnpconfig.h.in
-+index 46ddc6e..5df8c5a 100644
-+--- a/upnp/inc/upnpconfig.h.in
-++++ b/upnp/inc/upnpconfig.h.in
-+@@ -135,5 +135,10 @@
-+  *  (i.e. configure --enable-open_ssl) */
-+ #undef UPNP_ENABLE_OPEN_SSL
-+ 
-++/** Defined to 1 if the library has been compiled to support filesystem writes on POST
-++ *  (i.e. configure --enable-postwrite) */
-++#undef UPNP_ENABLE_POST_WRITE
-++
-++
-+ #endif /* UPNP_CONFIG_H */
-+ 
-+diff --git a/upnp/src/genlib/net/http/webserver.c b/upnp/src/genlib/net/http/webserver.c
-+index 8991c16..8b2ecf2 100644
-+--- a/upnp/src/genlib/net/http/webserver.c
-++++ b/upnp/src/genlib/net/http/webserver.c
-+@@ -1369,9 +1369,13 @@ static int http_RecvPostMessage(
-+ 		if (Fp == NULL)
-+ 			return HTTP_INTERNAL_SERVER_ERROR;
-+ 	} else {
-++#ifdef UPNP_ENABLE_POST_WRITE
-+ 		Fp = fopen(filename, "wb");
-+ 		if (Fp == NULL)
-+ 			return HTTP_UNAUTHORIZED;
-++#else
-++		return HTTP_NOT_FOUND;
-++#endif
-+ 	}
-+ 	parser->position = POS_ENTITY;
-+ 	do {
++diff --git a/upnp/src/gena/gena_device.c b/upnp/src/gena/gena_device.c
++index fb04a29..245c56b 100644
++--- a/upnp/src/gena/gena_device.c
+++++ b/upnp/src/gena/gena_device.c
++@@ -1113,7 +1113,7 @@ static int create_url_list(
++ 	/*! [out] . */
++ 	URL_list *out)
++ {
++-    size_t URLcount = 0;
+++    size_t URLcount = 0, URLcount2 = 0;
++     size_t i;
++     int return_code = 0;
++     uri_type temp;
++@@ -1155,16 +1155,23 @@ static int create_url_list(
++         }
++         memcpy( out->URLs, URLS->buff, URLS->size );
++         out->URLs[URLS->size] = 0;
++-        URLcount = 0;
++         for( i = 0; i < URLS->size; i++ ) {
++             if( ( URLS->buff[i] == '<' ) && ( i + 1 < URLS->size ) ) {
++                 if( ( ( return_code =
++                         parse_uri( &out->URLs[i + 1], URLS->size - i + 1,
++-                                   &out->parsedURLs[URLcount] ) ) ==
+++                                   &out->parsedURLs[URLcount2] ) ) ==
++                       HTTP_SUCCESS )
++-                    && ( out->parsedURLs[URLcount].hostport.text.size !=
+++                    && ( out->parsedURLs[URLcount2].hostport.text.size !=
++                          0 ) ) {
++-                    URLcount++;
+++                    URLcount2++;
+++                    if (URLcount2 >= URLcount)
+++                        /*
+++                         * break early here in case there is a bogus URL that
+++                         * was skipped above. This prevents to access
+++                         * out->parsedURLs[URLcount] which is beyond the
+++                         * allocation.
+++                         */
+++                        break;
++                 } else {
++                     if( return_code == UPNP_E_OUTOF_MEMORY ) {
++                         free( out->URLs );
 +-- 
 +2.10.2
 +
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index e12f410..2a4e078 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -11,5 +11,7 @@ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
- LIBUPNP_INSTALL_STAGING = YES
- LIBUPNP_LICENSE = BSD-3c
- LIBUPNP_LICENSE_FILES = LICENSE
-+# configure.ac patched by 0001-Don-t-allow-unhandled-POSTs-to-write-to-the-filesyst.patch
-+LIBUPNP_AUTORECONF = YES
- 
- $(eval $(autotools-package))
 -- 
 2.10.2
