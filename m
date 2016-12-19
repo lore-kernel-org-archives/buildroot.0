@@ -1,67 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Dec 2016 22:26:26 +0100
-Subject: [Buildroot] [git commit] python-twisted: bump to version 16.6.0
-Message-ID: <20161219212636.4F3A68013B@busybox.osuosl.org>
+Date: Mon, 19 Dec 2016 22:26:16 +0100
+Subject: [Buildroot] [git commit] python-zope-interface: bump to version
+	4.3.3
+Message-ID: <20161219212636.422E58013B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c07ad416b41eab898fc8899f46aed35d5ad923ef
+commit: https://git.buildroot.net/buildroot/commit/?id=20fb68f71a841438d28759cce6b1bd0d6f7103b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add two new dependencies:
-
-python-contstantly: runtime only
-python-incremental: both runtime and build-time dependency
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-twisted/Config.in           | 2 ++
- package/python-twisted/python-twisted.hash | 4 ++--
- package/python-twisted/python-twisted.mk   | 5 +++--
- 3 files changed, 7 insertions(+), 4 deletions(-)
+ package/python-zope-interface/python-zope-interface.hash | 4 ++--
+ package/python-zope-interface/python-zope-interface.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
-index 1221fc2..7fe4289 100644
---- a/package/python-twisted/Config.in
-+++ b/package/python-twisted/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PYTHON_TWISTED
- 	bool "python-twisted"
-+	select BR2_PACKAGE_PYTHON_INCREMENTAL
-+	select BR2_PACKAGE_PYTHON_CONSTANTLY # runtime
- 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
- 	help
- 	  Twisted is an event-driven networking engine written in Python.
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index c3a6e95..cc78a4c 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+index 8558c9a..7a46cd3 100644
+--- a/package/python-zope-interface/python-zope-interface.hash
++++ b/package/python-zope-interface/python-zope-interface.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/twisted/json, sha256 locally computed
--md5	c6d09bdd681f538369659111f079c29d  Twisted-16.4.1.tar.bz2
--sha256	1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816  Twisted-16.4.1.tar.bz2
-+md5	54a88ffe773d5a83c91fcfe86044b094  Twisted-16.6.0.tar.bz2
-+sha256	d0fe115ea7ef8cf632d05103de60356c6e992b2153d6830bdc4476f8accb1fca  Twisted-16.6.0.tar.bz2
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 7e9e496..29fe735 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
-@@ -4,11 +4,12 @@
+ # md5 from https://pypi.python.org/pypi/zope-interface/json, sha256 locally computed
+-md5	5f7e15a5bcdfa3c6c0e93ffe45caf87c  zope.interface-4.3.2.tar.gz
+-sha256	6a0e224a052e3ce27b3a7b1300a24747513f7a507217fcc2a4cb02eb92945cee  zope.interface-4.3.2.tar.gz
++md5	ba3f32eacaea66094b7e2ae2788cec89  zope.interface-4.3.3.tar.gz
++sha256	8780ef68ca8c3fe1abb30c058a59015129d6e04a6b02c2e56b9c7de6078dfa88  zope.interface-4.3.3.tar.gz
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+index 7daf5aa..3e3b464 100644
+--- a/package/python-zope-interface/python-zope-interface.mk
++++ b/package/python-zope-interface/python-zope-interface.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TWISTED_VERSION = 16.4.1
-+PYTHON_TWISTED_VERSION = 16.6.0
- PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
--PYTHON_TWISTED_SITE = https://pypi.python.org/packages/6b/23/8dbe86fc83215015e221fbd861a545c6ec5c9e9cd7514af114d1f64084ab
-+PYTHON_TWISTED_SITE = https://pypi.python.org/packages/dc/c0/a0114a6d7fa211c0904b0de931e8cafb5210ad824996cc6a9d67f3bae22c
- PYTHON_TWISTED_SETUP_TYPE = setuptools
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
-+PYTHON_TWISTED_DEPENDENCIES = python-incremental
- 
- $(eval $(python-package))
+-PYTHON_ZOPE_INTERFACE_VERSION = 4.3.2
++PYTHON_ZOPE_INTERFACE_VERSION = 4.3.3
+ PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
+-PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/38/1b/d55c39f2cf442bd9fb2c59760ed058c84b57d25c680819c25f3aff741e1f
++PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/44/af/cea1e18bc0d3be0e0824762d3236f0e61088eeed75287e7b854d65ec9916
+ PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
+ PYTHON_ZOPE_INTERFACE_LICENSE = ZPLv2.1
+ PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
