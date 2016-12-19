@@ -1,41 +1,58 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 19 Dec 2016 23:01:17 +0100
-Subject: [Buildroot] [PATCH v1] libv4l: qv4l2 needs c++11 (since Qt5.7)
-Message-ID: <20161219220117.420-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Dec 2016 23:12:08 +0100
+Subject: [Buildroot] [PATCH v3,3/3] soletta: new package
+In-Reply-To: <1482101300-9180-3-git-send-email-fabrice.fontaine@orange.com>
+References: <1482101300-9180-1-git-send-email-fabrice.fontaine@orange.com>
+ <1482101300-9180-3-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <20161219231208.46c66492@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  .../host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
-   #error This file requires compiler and library support \
-    ^
-  In file included from .../host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/type_traits:35:0,
-                   from .../host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore/qglobal.h:45,
+Hello,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Based on the 'qt5 bump to 5.8.0-rc' patch series by Andreas Naumann (see [1])
+On Sun, 18 Dec 2016 23:48:20 +0100, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 
-[1] http://lists.busybox.net/pipermail/buildroot/2016-December/179634.html
----
- package/libv4l/libv4l.mk | 2 ++
- 1 file changed, 2 insertions(+)
+I'm sorry, but this still doesn't work with old make versions. I get:
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index d55741426..f34ed4921 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -66,6 +66,8 @@ LIBV4L_CONF_ENV += \
- 	ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc \
- 	ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc \
- 	ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
-+# qt5 needs c++11 (since qt-5.7)
-+LIBV4L_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- else ifeq ($(BR2_PACKAGE_QT_OPENGL_GL_DESKTOP),y)
- LIBV4L_CONF_OPTS += --enable-qv4l2
- LIBV4L_DEPENDENCIES += qt
+make[1]: Entering directory `/home/test/buildroot/output/build/soletta-v1'
+Makefile.smallos:35: "LDFLAGS not set. This is probably an error"
+Makefile.smallos:57: *** multiple target patterns.  Stop.
+make[1]: Leaving directory `/home/test/buildroot/output/build/soletta-v1'
+
+This is due to the := assignments in the target definitions. If I change:
+
+$(soletta_target): private export BOARD_NAME:=$(BOARD_NAME)
+$(soletta_config): private export BOARD_NAME:=$(BOARD_NAME)
+
+to
+
+$(soletta_target): private export BOARD_NAME=$(BOARD_NAME)
+$(soletta_config): private export BOARD_NAME=$(BOARD_NAME)
+
+then a different problem happens: the "private" keyword apparently
+didn't exist in make 3.81, and therefore is interpreted as being a
+target, and therefore:
+
+make[1]: Entering directory `/home/test/buildroot/output/build/soletta-v1'
+Makefile.smallos:35: "LDFLAGS not set. This is probably an error"
+make[1]: *** No rule to make target `private', needed by `/home/test/buildroot/output/build/soletta-v1/.config'.  Stop.
+make[1]: Leaving directory `/home/test/buildroot/output/build/soletta-v1'
+
+So, really, this package that requires a brand new version of make, and
+python3, is a bit annoying in terms of build process... Maybe this is
+something you can work out with upstream?
+
+In the mean time, we cannot apply this, as it will badly fail on our
+autobuilders, and for many of our users who run fairly old systems.
+
+Thanks,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
