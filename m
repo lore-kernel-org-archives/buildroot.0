@@ -1,54 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Dec 2016 09:26:00 +0100
-Subject: [Buildroot] [musl] cortex-m support?
-In-Reply-To: <48fb6c09-9dcb-e563-dc2d-f30062c5fceb@landley.net>
-References: <04e5a294-719e-8029-704f-a57d1ec935b0@landley.net>
- <20161208211116.GO1555@brightrain.aerifal.cx>
- <7bfe2625-725d-d1bb-7177-f2d31ce09e9c@landley.net>
- <20161215185123.GX15584@waldemar-brodkorb.de>
- <48fb6c09-9dcb-e563-dc2d-f30062c5fceb@landley.net>
-Message-ID: <20161220092600.2ca96088@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Dec 2016 09:32:46 +0100
+Subject: [Buildroot] [PATCH 1/1] mkusers: fix spelling in intro comment
+In-Reply-To: <1482203596-5794-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Mon, 19 Dec 2016 22:13:16 -0500")
+References: <1482203596-5794-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <8737hj9f0x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-On Tue, 20 Dec 2016 01:18:40 -0600, Rob Landley wrote:
+ > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-> I cc'd the buildroot list, which only has uClibc-based cortex-m support
-> at the moment. Why do you suppose I did that?
-> 
-> Did you want me to send it to the uclibc.org mailing list which hasn't
-> had a single post this month except your announcement of your fork's
-> release? The list where nobody's noticed the chrome browser can't access
-> https://lists.uclibc.org (archives, subscription page, etc) for weeks
-> now? And yes, I publicized that fact when I noticed it:
+Committed, thanks.
 
-Do you realize that the uclibc-ng project has a mailing list? It is
-active, people post patches, and they get merged.
-
-I posted patches on this list, they were merged by Waldemar within the
-next day or two.
-
-> Your fork clearly hasn't fixed any of the structural issues uClibc
-> developed over the years.
-
-Waldemar has fixed the main problem of uClibc: the lack of regular
-releases, the lack of a responsive maintainer that merges patches.
-
-Then, from a technical point of view, Waldemar has added new features,
-dropped badly supported architectures, cleaned up a lot of things,
-improved the test suite, and more. There are probably a tons of other
-things to improve in uClibc-ng, but it's just a matter of receiving
-contributions: we can no longer blame the lack of maintainership.
-
-[... snip the rest of the text, TLDR ... ]
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
