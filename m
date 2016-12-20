@@ -1,172 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Dec 2016 19:32:00 +0100
-Subject: [Buildroot] [git commit] linux-headers: kill 3.14.x and 4.{5, 6,
-	7}.x series
-Message-ID: <20161220183217.0EBB07FD6E@busybox.osuosl.org>
+Date: Tue, 20 Dec 2016 19:26:29 +0100
+Subject: [Buildroot] [git commit] python-cryptography: bump to version 1.7.1
+Message-ID: <20161220183216.D3CCB81DFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6be22624c883cb036be461e2135c1dcef4086bdd
+commit: https://git.buildroot.net/buildroot/commit/?id=41b16d2aed5c51276db7e6292b3f7ffbe9816f9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These aren't supported upstream any more so remove the options and add
-them to legacy.
-Also switch the older deprecations that used 3.14.x to 3.12.x
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                     | 52 +++++++++++++++++++++++++++++++-----
- package/linux-headers/Config.in.host | 21 ---------------
- 2 files changed, 46 insertions(+), 27 deletions(-)
+ package/python-cryptography/python-cryptography.hash | 4 ++--
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index c8039ba..cdadbd8 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,46 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.02"
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index 60fe3eb..7738d23 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
+-md5	f977a6ddb38b071213c0157fc77c62ab  cryptography-1.5.2.tar.gz
+-sha256	eb8875736734e8e870b09be43b17f40472dc189b1c422a952fa8580768204832  cryptography-1.5.2.tar.gz
++md5	2f63dee6ace602d1d20d1995f8538015  cryptography-1.7.1.tar.gz
++sha256	953fef7d40a49a795f4d955c5ce4338abcec5dea822ed0414ed30348303fdb4c  cryptography-1.7.1.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 75e6bb3..d4e18ec 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+config BR2_KERNEL_HEADERS_4_7
-+	bool "kernel headers version 4.7.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_4
-+	select BR2_LEGACY
-+	help
-+	  Version 4.7.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.4.x of the headers have been automatically
-+	  selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_4_6
-+	bool "kernel headers version 4.6.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_4
-+	select BR2_LEGACY
-+	help
-+	  Version 4.6.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.4.x of the headers have been automatically
-+	  selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_4_5
-+	bool "kernel headers version 4.5.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_4
-+	select BR2_LEGACY
-+	help
-+	  Version 4.5.x of the Linux kernel headers are no longer
-+	   maintained upstream and are now removed. As an alternative,
-+	   version 4.4.x of the headers have been automatically
-+	   selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_3_14
-+	bool "kernel headers version 3.14.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_12
-+	select BR2_LEGACY
-+	  help
-+	  Version 3.14.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 3.12.x of the headers have been automatically
-+	  selected in your configuration.
-+
- config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
- 	bool "musl-cross 1.1.12 toolchain removed"
- 	select BR2_LEGACY
-@@ -589,12 +629,12 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_VOID
- 
- config BR2_KERNEL_HEADERS_3_17
- 	bool "kernel headers version 3.17.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_14
-+	select BR2_KERNEL_HEADERS_3_12
- 	select BR2_LEGACY
- 	help
- 	  Version 3.17.x of the Linux kernel headers have been deprecated
- 	  for more than four buildroot releases and are now removed.
--	  As an alternative, version 3.14.x of the headers have been
-+	  As an alternative, version 3.12.x of the headers have been
- 	  automatically selected in your configuration.
- 
- config BR2_GDB_VERSION_7_7
-@@ -735,12 +775,12 @@ config BR2_PACKAGE_CUPS_PDFTOPS
- 
- config BR2_KERNEL_HEADERS_3_16
- 	bool "kernel headers version 3.16.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_14
-+	select BR2_KERNEL_HEADERS_3_12
- 	select BR2_LEGACY
- 	help
- 	Version 3.16.x of the Linux kernel headers have been deprecated
- 	for more than four buildroot releases and are now removed.
--	As an alternative, version 3.14.x of the headers have been
-+	As an alternative, version 3.12.x of the headers have been
- 	automatically selected in your configuration.
- 
- config BR2_PACKAGE_PYTHON_PYXML
-@@ -971,12 +1011,12 @@ config BR2_KERNEL_HEADERS_3_13
- 
- config BR2_KERNEL_HEADERS_3_15
- 	bool "kernel headers version 3.15.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_14
-+	select BR2_KERNEL_HEADERS_3_12
- 	select BR2_LEGACY
- 	help
- 	  Version 3.15.x of the Linux kernel headers have been deprecated
- 	  for more than four buildroot releases and are now removed.
--	  As an alternative, version 3.14.x of the headers have been
-+	  As an alternative, version 3.12.x of the headers have been
- 	  automatically selected in your configuration.
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a95b41d..4ab562c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -46,11 +46,6 @@ choice
- 		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 
--	config BR2_KERNEL_HEADERS_3_14
--		bool "Linux 3.14.x kernel headers"
--		depends on !BR2_nios2
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
--
- 	config BR2_KERNEL_HEADERS_3_18
- 		bool "Linux 3.18.x kernel headers"
- 		depends on !BR2_nios2
-@@ -64,18 +59,6 @@ choice
- 		bool "Linux 4.4.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
- 
--	config BR2_KERNEL_HEADERS_4_5
--		bool "Linux 4.5.x kernel headers"
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
--
--	config BR2_KERNEL_HEADERS_4_6
--		bool "Linux 4.6.x kernel headers"
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
--
--	config BR2_KERNEL_HEADERS_4_7
--		bool "Linux 4.7.x kernel headers"
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
--
- 	config BR2_KERNEL_HEADERS_4_8
- 		bool "Linux 4.8.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-@@ -235,15 +218,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.69"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.45"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.36"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.39"	if BR2_KERNEL_HEADERS_4_4
--	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
--	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
--	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
- 	default "4.8.15"	if BR2_KERNEL_HEADERS_4_8
- 	default "4.9"		if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-PYTHON_CRYPTOGRAPHY_VERSION = 1.5.2
++PYTHON_CRYPTOGRAPHY_VERSION = 1.7.1
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/03/1a/60984cb85cc38c4ebdfca27b32a6df6f1914959d8790f5a349608c78be61
++PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/82/f7/d6dfd7595910a20a563a83a762bf79a253c4df71759c3b228accb3d7e5e4
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3c
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
