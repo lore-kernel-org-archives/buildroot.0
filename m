@@ -1,48 +1,61 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 20 Dec 2016 14:46:25 +0100
-Subject: [Buildroot] [PATCH v5 08/19] reproducible: try to detect most
-	common errors
+Date: Tue, 20 Dec 2016 14:46:23 +0100
+Subject: [Buildroot] [PATCH v5 06/19] python2: generate reproducible .pyc
 In-Reply-To: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1482241596-31688-9-git-send-email-jezz@sysmic.org>
+Message-ID: <1482241596-31688-7-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some package includes some information from build environment in their results.
-This practice is incompatible with reproducible builds.
+.pyc files contain modification time of .py source. In order to make
+build reproducible, we fix modification time of all .py before compiling .pyc
+files.
 
-This patch scans final target to research most common patterns.
+In add, since pycompile rely on modification times to know if a file need to be
+recompiled, it is safer to force recompilation of all source files.
 
-Since we only search fixed strings (grep is called with -F), this search is
-fast (on my station, 60ms for a target of 40MB).
-
-Note, it could be a good idea to also match current user name. However, build
-path often contains username and, until now, we do not try to avoid build path
-in result.
+This work was sponsored by `BA Robotic Systems'.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index ad7fde5..5b504c1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -708,6 +708,11 @@ endif
- 		$(call MESSAGE,"Executing post-build script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+Notes:
+    v5:
+      - Typo in commit log
+      - Explain why we pass --force to pycompile
+      - Fix indent
+    v3:
+      - Force compilation instead of removing .pyc
+
+ package/python/python.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/package/python/python.mk b/package/python/python.mk
+index cfd5a0a..cbe7c19 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -233,10 +233,18 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
  
 +ifeq ($(BR2_REPRODUCIBLE),y)
-+	grep -raoF -e "`uname -r`" -e "`uname -v`" -e "`uname -n`" $(TARGET_DIR) | \
-+		sed 's/\(.*\):\(.*\)/Warning: \1 may contain unreproducible information: \2/' | uniq
++define PYTHON_FIX_TIME
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
++		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
++endef
++PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_FIX_TIME
 +endif
 +
- target-post-image: $(TARGETS_ROOTFS) target-finalize
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ define PYTHON_CREATE_PYC_FILES
+ 	PYTHONPATH="$(PYTHON_PATH)" \
+ 	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+-		support/scripts/pycompile.py \
++		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+ 		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
+ endef
+ 
 -- 
 1.9.1
