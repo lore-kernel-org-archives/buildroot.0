@@ -1,39 +1,38 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 20 Dec 2016 22:27:51 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: bump CodeSourcery AMD64
- to 2016.11-19
-In-Reply-To: <20161220221836.672e059b@free-electrons.com>
-References: <1482265769-6560-1-git-send-email-romain.naour@gmail.com>
- <20161220215452.447ee8f3@free-electrons.com>
- <9c743fd4-5835-aab9-01e4-17504a409416@gmail.com>
- <20161220221836.672e059b@free-electrons.com>
-Message-ID: <f1436636-46cc-8253-990d-5bb3276b242d@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Dec 2016 22:45:49 +0100
+Subject: [Buildroot] [PATCH 1/1] uboot: fix custom patch dir legacy
+	handling
+In-Reply-To: <CANxTyt52z7zKV59o9Qfs-EGTTHPZBX3w3ddsammdEu20CuotQw@mail.gmail.com>
+ (Danomi Manchego's message of "Tue, 20 Dec 2016 16:22:41 -0500")
+References: <1482203412-5361-1-git-send-email-danomimanchego123@gmail.com>
+ <87tw9z7yw6.fsf@dell.be.48ers.dk>
+ <06d55d32-6d74-0daa-8770-5b7e56deab81@mind.be>
+ <871sx271oc.fsf@dell.be.48ers.dk>
+ <CANxTyt52z7zKV59o9Qfs-EGTTHPZBX3w3ddsammdEu20CuotQw@mail.gmail.com>
+Message-ID: <87wpeu5l6a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 20/12/2016 ? 22:18, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Tue, 20 Dec 2016 22:15:16 +0100, Romain Naour wrote:
-> 
->>> You don't have qemu-system-x86_64, really ? :-)  
->>
->> I can't use it with Qemu even with the current version or this new toolchain.
->> It doesn't boot at all, I don't even see the first kernel line.
->>
->> I'm using a Linux kernel 4.8.13 with qemu-2.4.1-11.fc23 or v2.8.0-rc2-8-gbd8ef50
-> 
-> Odd. What CPU variant are you using?
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-I'm using BR2_x86_steamroller, Qemu doesn't seems support it.
+ >> >  This is 2016.11.x material.
+ >> 
+ >> It has been broken since 2016.05-rc1, but OK - We can indeed add it for
+ >> 2016.11.x
 
-Romain
+ > I noticed it now because we are upgrading from 2014.05 to 2016.11.  We
+ > use both the uboot custom patch dir feature (replaced) and the linux
+ > custom path feature (dropped, frowny face), so I'm hitting those right
+ > now.
 
-> 
-> Maybe Gustavo has a clue?
-> 
-> Thomas
-> 
+Ok. The replacement for both is simply BR2_GLOBAL_PATCH_DIR (with linux
+patches under linux/ and u-boot patches under uboot/).
+
+I've applied the fix to the the 2016.11.x branch and will include it in
+the upcoming 2016.11.1 release.
+
+-- 
+Bye, Peter Korsgaard
