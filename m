@@ -1,156 +1,147 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 20 Dec 2016 14:46:18 +0100
-Subject: [Buildroot] [PATCH v5 01/19] reproducible: fix DATE/TIME macros in
-	toolchain-wrapper
-In-Reply-To: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
-References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1482241596-31688-2-git-send-email-jezz@sysmic.org>
+Date: Tue, 20 Dec 2016 14:46:17 +0100
+Subject: [Buildroot] [PATCH v5 00/19] Reproducible builds
+Message-ID: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The use __DATE__ and __TIME__ are one of most common sources of
-non-reproducible binaries. In order to fix that, gcc begin to support
-SOURCE_DATE_EPOCH variable. This patch take advantage of toolchain-wrapper
-to provide support of SOURCE_DATE_EPOCH to older gcc versions.
+This series try to continue work initiated by Gilles Chanteperdrix:
+  http://lists.busybox.net/pipermail/buildroot/2016-April/thread.html#160064
+  http://lists.busybox.net/pipermail/buildroot/2016-June/thread.html#163905
 
-Function get_source_date_epoch() come directly from gcc git.
+I dropped some patchs from original series because either:
+  - I handled things differently (timestamps in images, support SOURCE_DATE_EPOCH
+    in gcc, ...)
+  - I didn't had time to test them them (sysroot, cpio, cdrkit, iso9660,...)
+  - They doesn't seems necessary anymore (libtool, libgcrypt, libgpg-error, ...)
 
-This work was sponsored by `BA Robotic Systems'.
+There are many changes since previous version. While earlier versions focus on
+timestamps, v5 allows to make reproducible build even using different build
+path. In particular it remove rpaths from ELF generated with libtool.
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
+This series is divided in two parts:
+  - patches 1 to 8 only concern timestamps
+  - patches 9 to 19 only concern build path
 
-Notes:
-    v3:
-      - Handle $SOURCE_DATE_EPOCH at runtime (Thomas)
-    v2:
-      - Overload __TIME__ and __DATE__ instead of patching gcc (Thomas)
+Mainly cosmetics changes has been made on patches imported from v4.  I
+respinned v4 on top of master. Commit log has been improved for patches 5 to 7.
 
- toolchain/toolchain-wrapper.c | 74 ++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 73 insertions(+), 1 deletion(-)
+I added patch 8 where I now detect common patterns that break reproducibility
+(`uname -n`, `uname -r`, etc...).
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index d59629b..6150574 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -22,12 +22,17 @@
- #include <unistd.h>
- #include <stdlib.h>
- #include <errno.h>
-+#include <time.h>
- 
- #ifdef BR_CCACHE
- static char ccache_path[PATH_MAX];
- #endif
- static char path[PATH_MAX];
- static char sysroot[PATH_MAX];
-+// strlen("-D__TIME__=\"HH:MM:SS\"") + 1 = 22
-+static char source_time[22];
-+// strlen("-D__DATE__=\"MMM DD YYYY\"") + 1 = 25
-+static char source_date[25];
- 
- /**
-  * GCC errors out with certain combinations of arguments (examples are
-@@ -39,8 +44,11 @@ static char sysroot[PATH_MAX];
-  * 	-mfloat-abi=
-  * 	-march=
-  * 	-mcpu=
-+ * 	-D__TIME__=
-+ * 	-D__DATE__=
-+ * 	-Wno-builtin-macro-redefined
-  */
--#define EXCLUSIVE_ARGS	3
-+#define EXCLUSIVE_ARGS	6
- 
- static char *predef_args[] = {
- #ifdef BR_CCACHE
-@@ -139,6 +147,47 @@ static void check_unsafe_path(const char *arg,
- 	}
- }
- 
-+/* Read SOURCE_DATE_EPOCH from environment to have a deterministic
-+ * timestamp to replace embedded current dates to get reproducible
-+ * results.  Returns -1 if SOURCE_DATE_EPOCH is not defined.
-+ */
-+time_t get_source_date_epoch()
-+{
-+	char *source_date_epoch;
-+	long long epoch;
-+	char *endptr;
-+
-+	source_date_epoch = getenv("SOURCE_DATE_EPOCH");
-+	if (!source_date_epoch)
-+		return (time_t) -1;
-+
-+	errno = 0;
-+	epoch = strtoll (source_date_epoch, &endptr, 10);
-+	if ((errno == ERANGE && (epoch == LLONG_MAX || epoch == LLONG_MIN))
-+			|| (errno != 0 && epoch == 0)) {
-+		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
-+				"strtoll: %s\n", strerror(errno));
-+		exit(2);
-+	}
-+	if (endptr == source_date_epoch) {
-+		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
-+				"no digits were found: %s\n", endptr);
-+		exit(2);
-+	}
-+	if (*endptr != '\0') {
-+		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
-+				"trailing garbage: %s\n", endptr);
-+		exit(2);
-+	}
-+	if (epoch < 0) {
-+		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
-+				"value must be nonnegative: %lld \n", epoch);
-+		exit(2);
-+	}
-+
-+	return (time_t) epoch;
-+}
-+
- int main(int argc, char **argv)
- {
- 	char **args, **cur, **exec_args;
-@@ -149,6 +198,7 @@ int main(int argc, char **argv)
- 	char *paranoid_wrapper;
- 	int paranoid;
- 	int ret, i, count = 0, debug;
-+	time_t source_date_epoch;
- 
- 	/* Calculate the relative paths */
- 	basename = strrchr(progpath, '/');
-@@ -254,6 +304,28 @@ int main(int argc, char **argv)
- 	}
- #endif /* ARCH || CPU */
- 
-+	source_date_epoch = get_source_date_epoch();
-+	if (source_date_epoch != -1) {
-+		struct tm *tm = localtime(&source_date_epoch);
-+		if (!tm) {
-+			perror("__FILE__: localtime");
-+			return 3;
-+		}
-+		ret = strftime(source_time, sizeof(source_time), "-D__TIME__=\"%T\"", tm);
-+		if (!ret) {
-+			perror("__FILE__: overflow");
-+			return 3;
-+		}
-+		*cur++ = source_time;
-+		ret = strftime(source_date, sizeof(source_date), "-D__DATE__=\"%b %e %Y\"", tm);
-+		if (!ret) {
-+			perror("__FILE__: overflow");
-+			return 3;
-+		}
-+		*cur++ = source_date;
-+		*cur++ = "-Wno-builtin-macro-redefined";
-+	}
-+
- 	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
- 	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
- 		paranoid = 1;
+I temporary dropped patch that disable build-id for kernel. When build paths are
+identical, build-id are also identical. When build paths are different, build-id
+are sometime different, but I did not yet identified exact origin (maybe
+-fdebug-prefix-map= would be sufficient to solve problem).
+
+In add, for other packages I noticed that symbol table contains absolute path
+to some objects:
+
+    $ arm-linux-objdump -t col | grep crt
+    00000000 l    df *ABS*  00000000     /[...]/host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/crti.o
+    00000000 l    df *ABS*  00000000     /[...]/host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/crtn.o
+
+Symbol tables are not a problem them self, but they imply unreproducible
+build-id. I think I could pass "-Wl,-x" to compiler to remove these
+occurrences, but I have not yet evaluated all impacts of this solution. So,
+I just postpone this problem.
+
+
+Patches 11 to 19 are nearly a series in the series. Until now, most of binaries
+installed by libtool was configured with RPATH pointingto their build
+directory. Indeed, libtool add this path during compilation in order to be able
+to execute them directly from build directory. This path should normally
+removed during install, but Buildroot disable this behavior (patch 15). Simply
+re-enabling this behavior does not work. Indeed, during relink, libtool try to
+use .la that are not yet patched and fail to find libraries. On another side,
+libtool support usage of a sysroot since v1.5. To enable this support, we have
+to keep original values from .la file (patch 12 and 13) and inform libtool we
+are using a sysroot (patch 11).
+
+Patch 14 fix a small incompatibility with unsafe path detection.
+
+Since libtool is now correctly used, it is not more necessary to disable
+install directory sanity check (patch 17).
+
+From libtool point of view, sysroot is not reachable from $(TARGET_DIR). So,
+during installation to $(TARGET_DIR), it add an entry in RPATH that point to
+$(STAGING_DIR). To fix this problem, we just have to inform libtool that
+$(STAGING_DIR) is reachable (patch 16).
+
+Finally, I also clean up libtool infra from modification that seems useless now
+(patches 18 and 19).
+
+I tested this series using internal toolchain and Linaro toolchain with these
+packages:
+
+    BR2_INIT_SYSTEMD=y       (install public libraries in /usr/lib/systemd)
+    BR2_PACKAGE_LIBCDAUDIO=y (libtool 1.5)
+    BR2_PACKAGE_LIBLO=y      (libtool 2.2)
+    BR2_PACKAGE_MADPLAY=y    (unpatched libtool)
+    BR2_PACKAGE_ALSA_LIB=y   (optional dependency to Madplay)
+    BR2_PACKAGE_PYTHON=y
+    BR2_PACKAGE_PYTHON_PY_PYC=y
+    BR2_PACKAGE_GNUPG2=y
+
+Except patches 12 and 13, I think whole series is bisectable.
+
+Known issues that break reproducibility:
+  - Use of lzop (it unconditionally include timestamps in result)
+  - Since we build our own toolchain and toolchain include BR2_FULL_VERSION,
+    ccache is incompatible with reproducible
+  - Some external toolchains (Linaro for exemple) enable build-id by default.
+  - Build path appears in symbol tables. So TARGET_DIR must be striped even if
+    it was not built with debug infos.
+  - Linux kernel shouldn't be built with CONFIG_DEBUG_INFO, else build-id will
+    differ.
+  - sysconfigdata.py provided by Python contains build path
+  - Some libraries (libassuan, ksba, libxml2, libxslt, ...) install
+    configurations scripts (that contain build path) on target.
+
+
+J?r?me Pouiller (19):
+  reproducible: fix DATE/TIME macros in toolchain-wrapper
+  fakedate: new package
+  core: do not reset DEPENDENCIES_HOST_PREREQ in dependencies.mk
+  reproducible: enable fakedate
+  pycompile: allow to force compilation
+  python2: generate reproducible .pyc
+  python3: generate reproducible .pyc
+  reproducible: try to detect most common errors
+  python2: remove full path from .pyc
+  python3: remove full path from .pyc
+  infra-libtool: pass sysroot information to libtool
+  infra-libtool: no longer prepend STAGING_DIR to libdir
+  infra-libtool: correctly prefix $libdir with $STAGING_DIR
+  infra-libtool: drop original $libdir (i.e. /usr/lib) from library
+    paths
+  infra-libtool: relink binaries on install
+  infra-libtool: inform libtool that STAGING_DIR is reachable at runtime
+  infra-libtool: no longer disable install directory sanity check
+  infra-libtool: remove workaround for calls without `--tag'
+  infra-libtool: no longer force sys_lib_search_path
+
+ Makefile                                       |  6 ++
+ package/Makefile.in                            |  2 +-
+ package/fakedate/fakedate                      | 59 +++++++++++++++++
+ package/fakedate/fakedate.mk                   | 15 +++++
+ package/pkg-autotools.mk                       |  1 +
+ package/pkg-generic.mk                         | 11 ----
+ package/python/python.mk                       | 15 ++++-
+ package/python3/python3.mk                     | 15 ++++-
+ support/dependencies/dependencies.mk           |  2 -
+ support/libtool/buildroot-libtool-v1.5.patch   | 85 ++++++-------------------
+ support/libtool/buildroot-libtool-v2.2.patch   | 88 +++++++-------------------
+ support/libtool/buildroot-libtool-v2.4.4.patch | 63 ++++--------------
+ support/libtool/buildroot-libtool-v2.4.patch   | 62 ++++--------------
+ support/scripts/pycompile.py                   | 11 +++-
+ toolchain/toolchain-wrapper.c                  | 74 +++++++++++++++++++++-
+ 15 files changed, 255 insertions(+), 254 deletions(-)
+ create mode 100755 package/fakedate/fakedate
+ create mode 100644 package/fakedate/fakedate.mk
+
 -- 
 1.9.1
