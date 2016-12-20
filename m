@@ -1,253 +1,165 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 20 Dec 2016 14:46:34 +0100
-Subject: [Buildroot] [PATCH v5 17/19] infra-libtool: no longer disable
-	install directory sanity check
+Date: Tue, 20 Dec 2016 14:46:30 +0100
+Subject: [Buildroot] [PATCH v5 13/19] infra-libtool: correctly prefix
+	$libdir with $STAGING_DIR
 In-Reply-To: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1482241596-31688-18-git-send-email-jezz@sysmic.org>
+Message-ID: <1482241596-31688-14-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During install, libtool check if $libdir is a subdirectory of $DESTDIR. Until
-now $DESTDIR was $(TARGET_DIR) and $libdir was $(STAGING_DIR)/usr/lib.
-Consequently, this test failed. Since $libdir is now /usr/lib, there is not more
-reason to skipped that test.
+Until now Builroot patched libtool in order to ignore `$libdir' provided by .la
+file. It used the path where it found the .la instead of `$libdir'. However,
+since v1.5 libtool correctly prepend sysroot to `$libdir' as we can see a few
+lines below patched lines:
+
+  func_append newdependency_libs " ${lt_sysroot:+=}$libdir/$name"
+
+(in fact, this line just prepend '=', and '=' is substituted later)
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- support/libtool/buildroot-libtool-v1.5.patch   | 18 ------------------
- support/libtool/buildroot-libtool-v2.2.patch   | 26 ++++++--------------------
- support/libtool/buildroot-libtool-v2.4.4.patch | 25 +++++--------------------
- support/libtool/buildroot-libtool-v2.4.patch   | 24 +++++-------------------
- 4 files changed, 16 insertions(+), 77 deletions(-)
+ support/libtool/buildroot-libtool-v1.5.patch   | 32 ++------------------------
+ support/libtool/buildroot-libtool-v2.2.patch   | 30 +-----------------------
+ support/libtool/buildroot-libtool-v2.4.4.patch | 11 ---------
+ support/libtool/buildroot-libtool-v2.4.patch   | 11 ---------
+ 4 files changed, 3 insertions(+), 81 deletions(-)
 
 diff --git a/support/libtool/buildroot-libtool-v1.5.patch b/support/libtool/buildroot-libtool-v1.5.patch
-index 0429c58..3d78831 100644
+index cdd9c5a..609006a 100644
 --- a/support/libtool/buildroot-libtool-v1.5.patch
 +++ b/support/libtool/buildroot-libtool-v1.5.patch
-@@ -52,21 +52,3 @@
-  		    ;;
-  		esac
-  	      fi
--@@ -5487,10 +5494,13 @@
-- 	  # At present, this check doesn't affect windows .dll's that
-- 	  # are installed into $libdir/../bin (currently, that works fine)
-- 	  # but it's something to keep an eye on.
---	  if test "$inst_prefix_dir" = "$destdir"; then
---	    $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
---	    exit $EXIT_FAILURE
---	  fi
--+	  #
--+	  # This breaks install into our staging area.  -PB
--+	  # 
--+	  # if test "$inst_prefix_dir" = "$destdir"; then
--+	  #   $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
--+	  #   exit $EXIT_FAILURE
--+	  # fi
-- 
-- 	  if test -n "$inst_prefix_dir"; then
-- 	    # Stick the inst_prefix_dir data into the link command.
+@@ -34,24 +34,7 @@
+  	if test -n "$link_static_flag"; then
+  	  compile_command="$compile_command $link_static_flag"
+  	  finalize_command="$finalize_command $link_static_flag"
+-@@ -2146,8 +2153,14 @@
+- 	    absdir="$abs_ladir"
+- 	    libdir="$abs_ladir"
+- 	  else
+--	    dir="$libdir"
+--	    absdir="$libdir"
+-+            # Adding 'libdir' from the .la file to our library search paths
+-+            # breaks crosscompilation horribly.  We cheat here and don't add
+-+            # it, instead adding the path where we found the .la.  -CL
+-+	    dir="$abs_ladir"
+-+	    absdir="$abs_ladir"
+-+	    libdir="$abs_ladir"
+-+	    #dir="$libdir"
+-+	    #absdir="$libdir"
+- 	  fi
+- 	else
+- 	  dir="$ladir/$objdir"
+-@@ -2272,7 +2285,7 @@
++@@ -2272,7 +2279,7 @@
+  	   { test "$prefer_static_libs" = no || test -z "$old_library"; }; then
+  	  if test "$installed" = no; then
+  	    notinst_deplibs="$notinst_deplibs $lib"
+@@ -60,18 +43,7 @@
+  	  fi
+  	  # This is a shared library
+  
+-@@ -5169,6 +5182,10 @@
+- 	    # Replace all uninstalled libtool libraries with the installed ones
+- 	    newdependency_libs=
+- 	    for deplib in $dependency_libs; do
+-+              # Replacing uninstalled with installed can easily break crosscompilation,
+-+              # since the installed path is generally the wrong architecture.  -CL
+-+              newdependency_libs="$newdependency_libs $deplib"
+-+              continue
+- 	      case $deplib in
+- 	      *.la)
+- 		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
+-@@ -5487,10 +5504,13 @@
++@@ -5487,10 +5494,13 @@
+  	  # At present, this check doesn't affect windows .dll's that
+  	  # are installed into $libdir/../bin (currently, that works fine)
+  	  # but it's something to keep an eye on.
 diff --git a/support/libtool/buildroot-libtool-v2.2.patch b/support/libtool/buildroot-libtool-v2.2.patch
-index b2058b4..6d9bac7 100644
+index 8bb7826..3af0604 100644
 --- a/support/libtool/buildroot-libtool-v2.2.patch
 +++ b/support/libtool/buildroot-libtool-v2.2.patch
-@@ -11,21 +11,7 @@
-  #	else
-  #	  func_verbose "using $tagname tagged configuration"
-  	fi
--@@ -2239,8 +2239,11 @@
-- 	  # At present, this check doesn't affect windows .dll's that
-- 	  # are installed into $libdir/../bin (currently, that works fine)
-- 	  # but it's something to keep an eye on.
---	  test "$inst_prefix_dir" = "$destdir" && \
---	    func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
--+	  #
--+	  # This breaks install into our staging area.  -PB
--+	  #
--+	  # test "$inst_prefix_dir" = "$destdir" && \
--+	  #   func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
-- 
-- 	  if test -n "$inst_prefix_dir"; then
-- 	    # Stick the inst_prefix_dir data into the link command.
--@@ -4429,7 +4432,8 @@
-+@@ -4429,7 +4429,8 @@
-  	;;
-        -all-static | -static | -static-libtool-libs)
-  	case $arg in
-@@ -35,7 +21,7 @@
-  	  if test "$build_libtool_libs" = yes && test -z "$link_static_flag"; then
-  	    func_warning "complete static linking is impossible in this configuration"
-  	  fi
--@@ -4438,12 +4442,6 @@
-+@@ -4438,12 +4439,6 @@
-  	  fi
-  	  prefer_static_libs=yes
-  	  ;;
-@@ -48,7 +34,7 @@
-  	-static-libtool-libs)
-  	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
-  	    dlopen_self=$dlopen_self_static
--@@ -4726,7 +4724,8 @@
-+@@ -4726,7 +4721,8 @@
-        prevarg="$arg"
-  
-        case $arg in
-@@ -58,7 +44,7 @@
-  	if test -n "$link_static_flag"; then
-  	  # See comment for -static flag below, for more details.
-  	  func_append compile_command " $link_static_flag"
--@@ -4995,7 +4994,7 @@
-+@@ -4995,7 +4991,7 @@
-  	continue
-  	;;
-  
-@@ -67,7 +53,7 @@
+@@ -67,24 +67,7 @@
   	# The effects of -static are defined in a previous loop.
   	# We used to do the same as -all-static on platforms that
   	# didn't have a PIC flag, but the assumption that the effects
--@@ -6094,7 +6093,7 @@
-+@@ -6094,7 +6090,7 @@
-  		if test -n "$inst_prefix_dir"; then
-  		  case $libdir in
-  		    [\\/]*)
-@@ -76,7 +62,7 @@
-  		      ;;
-  		  esac
-  		fi
--@@ -6167,7 +6166,7 @@
-+@@ -6167,7 +6163,7 @@
-  	      if test -n "$inst_prefix_dir"; then
-  		case $libdir in
-  		  [\\/]*)
+-@@ -5739,8 +5738,14 @@
+- 	    absdir="$abs_ladir"
+- 	    libdir="$abs_ladir"
+- 	  else
+--	    dir="$libdir"
+--	    absdir="$libdir"
+-+            # Adding 'libdir' from the .la file to our library search paths
+-+            # breaks crosscompilation horribly.  We cheat here and don't add
+-+            # it, instead adding the path where we found the .la.  -CL
+-+	    dir="$abs_ladir"
+-+	    absdir="$abs_ladir"
+-+	    libdir="$abs_ladir"
+-+	    #dir="$libdir"
+-+	    #absdir="$libdir"
+- 	  fi
+- 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
+- 	else
+-@@ -5891,7 +5896,7 @@
++@@ -5891,7 +5890,7 @@
+  	  *)
+  	    if test "$installed" = no; then
+  	      notinst_deplibs="$notinst_deplibs $lib"
+@@ -93,14 +76,3 @@
+  	    fi
+  	    ;;
+  	  esac
+-@@ -8373,6 +8378,10 @@
+- 	    # Replace all uninstalled libtool libraries with the installed ones
+- 	    newdependency_libs=
+- 	    for deplib in $dependency_libs; do
+-+              # Replacing uninstalled with installed can easily break crosscompilation,
+-+              # since the installed path is generally the wrong architecture.  -CL
+-+              newdependency_libs="$newdependency_libs $deplib"
+-+              continue
+- 	      case $deplib in
+- 	      *.la)
+- 		func_basename "$deplib"
 diff --git a/support/libtool/buildroot-libtool-v2.4.4.patch b/support/libtool/buildroot-libtool-v2.4.4.patch
-index 8e25d3d..2400aa3 100644
+index bcdf30c..d71669b 100644
 --- a/support/libtool/buildroot-libtool-v2.4.4.patch
 +++ b/support/libtool/buildroot-libtool-v2.4.4.patch
-@@ -16,22 +16,7 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-  #	else
-  #	  func_verbose "using $tagname tagged configuration"
-  	fi
--@@ -4277,8 +4277,12 @@
-- 	  # At present, this check doesn't affect windows .dll's that
-- 	  # are installed into $libdir/../bin (currently, that works fine)
-- 	  # but it's something to keep an eye on.
---	  test "$inst_prefix_dir" = "$destdir" && \
---	    func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
--+
--+	  #
--+	  # This breaks install into our staging area.  -PB
--+	  #
--+	  #test "$inst_prefix_dir" = "$destdir" && \
--+	  #  func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
-- 
-- 	  if test -n "$inst_prefix_dir"; then
-- 	    # Stick the inst_prefix_dir data into the link command.
--@@ -6550,7 +6554,8 @@
-+@@ -6550,7 +6550,8 @@
-  	;;
-        -all-static | -static | -static-libtool-libs)
-  	case $arg in
-@@ -41,7 +26,7 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-  	  if test yes = "$build_libtool_libs" && test -z "$link_static_flag"; then
-  	    func_warning "complete static linking is impossible in this configuration"
-  	  fi
--@@ -6559,12 +6564,6 @@
-+@@ -6559,12 +6560,6 @@
-  	  fi
-  	  prefer_static_libs=yes
-  	  ;;
-@@ -54,7 +39,7 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-  	-static-libtool-libs)
-  	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
-  	    dlopen_self=$dlopen_self_static
--@@ -6858,7 +6857,8 @@
-+@@ -6858,7 +6853,8 @@
-        prevarg=$arg
-  
-        case $arg in
-@@ -64,7 +49,7 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-  	if test -n "$link_static_flag"; then
-  	  # See comment for -static flag below, for more details.
-  	  func_append compile_command " $link_static_flag"
--@@ -7149,7 +7149,7 @@
-+@@ -7149,7 +7145,7 @@
-  	continue
-  	;;
-  
-@@ -73,7 +58,7 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-  	# The effects of -static are defined in a previous loop.
-  	# We used to do the same as -all-static on platforms that
-  	# didn't have a PIC flag, but the assumption that the effects
--@@ -8854,7 +8854,7 @@
-+@@ -8854,7 +8850,7 @@
-  	      if test -n "$inst_prefix_dir"; then
-  		case $libdir in
-  		  [\\/]*)
+@@ -82,14 +82,3 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+  	    fi
+  	    ;;
+  	  esac
+-@@ -10710,6 +10710,10 @@
+- 	    # Replace all uninstalled libtool libraries with the installed ones
+- 	    newdependency_libs=
+- 	    for deplib in $dependency_libs; do
+-+	      # Replacing uninstalled with installed can easily break crosscompilation,
+-+	      # since the installed path is generally the wrong architecture.  -CL
+-+	      newdependency_libs="$newdependency_libs $deplib"
+-+	      continue
+- 	      case $deplib in
+- 	      *.la)
+- 		func_basename "$deplib"
 diff --git a/support/libtool/buildroot-libtool-v2.4.patch b/support/libtool/buildroot-libtool-v2.4.patch
-index c475ec9..7165bea 100644
+index f610b1b..bf40c94 100644
 --- a/support/libtool/buildroot-libtool-v2.4.patch
 +++ b/support/libtool/buildroot-libtool-v2.4.patch
-@@ -11,21 +11,7 @@
-  #	else
-  #	  func_verbose "using $tagname tagged configuration"
-  	fi
--@@ -2963,8 +2963,11 @@
-- 	  # At present, this check doesn't affect windows .dll's that
-- 	  # are installed into $libdir/../bin (currently, that works fine)
-- 	  # but it's something to keep an eye on.
---	  test "$inst_prefix_dir" = "$destdir" && \
---	    func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
--+	  #
--+	  # This breaks install into our staging area.  -PB
--+	  #
--+	  # test "$inst_prefix_dir" = "$destdir" && \
--+	  #   func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
-- 
-- 	  if test -n "$inst_prefix_dir"; then
-- 	    # Stick the inst_prefix_dir data into the link command.
--@@ -5176,7 +5179,8 @@
-+@@ -5176,7 +5176,8 @@
-  	;;
-        -all-static | -static | -static-libtool-libs)
-  	case $arg in
-@@ -35,7 +21,7 @@
-  	  if test "$build_libtool_libs" = yes && test -z "$link_static_flag"; then
-  	    func_warning "complete static linking is impossible in this configuration"
-  	  fi
--@@ -5185,12 +5189,6 @@
-+@@ -5185,12 +5186,6 @@
-  	  fi
-  	  prefer_static_libs=yes
-  	  ;;
-@@ -48,7 +34,7 @@
-  	-static-libtool-libs)
-  	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
-  	    dlopen_self=$dlopen_self_static
--@@ -5473,7 +5471,8 @@
-+@@ -5473,7 +5468,8 @@
-        prevarg="$arg"
-  
-        case $arg in
-@@ -58,7 +44,7 @@
-  	if test -n "$link_static_flag"; then
-  	  # See comment for -static flag below, for more details.
-  	  func_append compile_command " $link_static_flag"
--@@ -5754,7 +5753,7 @@
-+@@ -5754,7 +5750,7 @@
-  	continue
-  	;;
-  
-@@ -67,7 +53,7 @@
-  	# The effects of -static are defined in a previous loop.
-  	# We used to do the same as -all-static on platforms that
-  	# didn't have a PIC flag, but the assumption that the effects
--@@ -8854,7 +8854,7 @@
-+@@ -8854,7 +8851,7 @@
-  	      if test -n "$inst_prefix_dir"; then
-  		case $libdir in
-  		  [\\/]*)
+@@ -76,14 +76,3 @@
+  	    fi
+  	    ;;
+  	  esac
+-@@ -9275,6 +9274,10 @@
+- 	    # Replace all uninstalled libtool libraries with the installed ones
+- 	    newdependency_libs=
+- 	    for deplib in $dependency_libs; do
+-+              # Replacing uninstalled with installed can easily break crosscompilation,
+-+              # since the installed path is generally the wrong architecture.  -CL
+-+              newdependency_libs="$newdependency_libs $deplib"
+-+              continue
+- 	      case $deplib in
+- 	      *.la)
+- 		func_basename "$deplib"
 -- 
 1.9.1
