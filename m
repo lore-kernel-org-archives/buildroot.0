@@ -1,59 +1,39 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 20 Dec 2016 14:46:24 +0100
-Subject: [Buildroot] [PATCH v5 07/19] python3: generate reproducible .pyc
+Date: Tue, 20 Dec 2016 14:46:36 +0100
+Subject: [Buildroot] [PATCH v5 19/19] infra-libtool: no longer force
+	sys_lib_search_path
 In-Reply-To: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1482241596-31688-8-git-send-email-jezz@sysmic.org>
+Message-ID: <1482241596-31688-20-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-.pyc files contain modification time of .py source. In order to make build
-reproducible, we fix modification time of all .py before compiling .pyc files.
+Commit 6246704008 forced $sys_lib_search_path_spec to be empty. Commit log said
+that it was filled with native paths. However, recent tests show that
+$sys_lib_search_path_spec is correctly filled with result of
+`$CC -print-search-dirs' as it should.
 
-In add, since pycompile rely on modification times to know if a file need to be
-recompiled, it is safer to force recompilation of all source files.
-
-This work was sponsored by `BA Robotic Systems'.
+So this patch remove this workaround.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
+ package/Makefile.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Notes:
-    v5:
-      - Typo in commit log
-      - Explain why we pass --force to pycompile
-    v3:
-      - Force compilation instead of removing .pyc
-
- package/python3/python3.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 8bfae79..1817b22 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -227,10 +227,18 @@ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdat
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
- 
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+define PYTHON3_FIX_TIME
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
-+		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
-+endef
-+PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_FIX_TIME
-+endif
-+
- define PYTHON3_CREATE_PYC_FILES
- 	PYTHONPATH="$(PYTHON3_PATH)" \
- 	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
--		support/scripts/pycompile.py \
-+		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
- 		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
- endef
- 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 6a341f2..ee43985 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -354,7 +354,6 @@ TARGET_CONFIGURE_ARGS = \
+ 	ac_cv_func_malloc_0_nonnull=yes \
+ 	ac_cv_func_calloc_0_nonnull=yes \
+ 	ac_cv_func_realloc_0_nonnull=yes \
+-	lt_cv_sys_lib_search_path_spec="" \
+ 	lt_cv_sys_lib_dlsearch_path_spec="/lib /usr/lib $(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
+ 	$(BR2_AC_CV_C_BIGENDIAN) \
+ 	$(BR2_GT_CV_FUNC_GNUGETTEXT_LIBC)
 -- 
 1.9.1
