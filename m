@@ -1,7 +1,10 @@
 From: James Knight <james.knight@rockwellcollins.com>
-Date: Mon, 19 Dec 2016 19:03:50 -0500
-Subject: [Buildroot] [PATCH 1/2] linux: cleanup dead custom-local option
-Message-ID: <20161220000351.8312-1-james.knight@rockwellcollins.com>
+Date: Mon, 19 Dec 2016 19:03:51 -0500
+Subject: [Buildroot] [PATCH 2/2] linux-headers: cleanup dead custom-local
+	option
+In-Reply-To: <20161220000351.8312-1-james.knight@rockwellcollins.com>
+References: <20161220000351.8312-1-james.knight@rockwellcollins.com>
+Message-ID: <20161220000351.8312-2-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +18,22 @@ the mentioned commit.
 
 Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
- linux/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/linux-headers/linux-headers.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e43b88d..f64a8dc 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -110,7 +110,6 @@ config BR2_LINUX_KERNEL_VERSION
- 
- config BR2_LINUX_KERNEL_PATCH
- 	string "Custom kernel patches"
--	depends on !BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 	help
- 	  A space-separated list of patches to apply to the
- 	  kernel. Each patch can be described as an URL, a local file
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 0900778..8f339cf 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -17,9 +17,6 @@ LINUX_HEADERS_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ LINUX_HEADERS_SITE = $(patsubst %/,%,$(dir $(LINUX_HEADERS_TARBALL)))
+ LINUX_HEADERS_SOURCE = $(notdir $(LINUX_HEADERS_TARBALL))
+ BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
+-else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
+-LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
+-LINUX_HEADERS_SITE_METHOD = local
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_HEADERS_SITE_METHOD = git
 -- 
 2.8.4.windows.1
