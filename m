@@ -1,57 +1,40 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 20 Dec 2016 14:46:22 +0100
-Subject: [Buildroot] [PATCH v5 05/19] pycompile: allow to force compilation
+Date: Tue, 20 Dec 2016 14:46:21 +0100
+Subject: [Buildroot] [PATCH v5 04/19] reproducible: enable fakedate
 In-Reply-To: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1482241596-31688-6-git-send-email-jezz@sysmic.org>
+Message-ID: <1482241596-31688-5-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, compile_dir() rely on modification time to know if a python file
-have to be built again. However in some circumstances (when doing reproducible
-builds), modification times are not reliable. Thus, this patch add a way to
-force rebuild of all python sources.
+Enable fakedate for whole build process.
+
+This work was sponsored by `BA Robotic Systems'.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
 
 Notes:
-    v5:
-      - Improve commit log
     v3:
-      - new patch
+      - Build host-fakedate before toolchain (Thomas)
 
- support/scripts/pycompile.py | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-index fde711a..5598f8a 100644
---- a/support/scripts/pycompile.py
-+++ b/support/scripts/pycompile.py
-@@ -10,6 +10,7 @@ from __future__ import print_function
- import sys
- import py_compile
- import compileall
-+import argparse
+diff --git a/Makefile b/Makefile
+index b80b9e1..ad7fde5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -254,6 +254,7 @@ export LC_ALL = C
+ export GZIP = -n
+ BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+ export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
++DEPENDENCIES_HOST_PREREQ += host-fakedate
+ endif
  
- class ReportProblem:
-     def __nonzero__(self):
-@@ -21,4 +22,12 @@ class ReportProblem:
- 
- report_problem = ReportProblem()
- 
--compileall.compile_dir(sys.argv[1], quiet=report_problem)
-+parser = argparse.ArgumentParser(description='Compile Python source files in a directory tree.')
-+parser.add_argument("target", metavar='DIRECTORY',
-+        help='Directory to scan')
-+parser.add_argument("--force", action='store_true',
-+        help="Force compilation even if alread compiled")
-+
-+args = parser.parse_args()
-+
-+compileall.compile_dir(args.target, force=args.force, quiet=report_problem)
+ # To put more focus on warnings, be less verbose as default
 -- 
 1.9.1
