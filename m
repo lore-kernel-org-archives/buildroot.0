@@ -1,38 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Dec 2016 22:45:49 +0100
-Subject: [Buildroot] [PATCH 1/1] uboot: fix custom patch dir legacy
-	handling
-In-Reply-To: <CANxTyt52z7zKV59o9Qfs-EGTTHPZBX3w3ddsammdEu20CuotQw@mail.gmail.com>
- (Danomi Manchego's message of "Tue, 20 Dec 2016 16:22:41 -0500")
-References: <1482203412-5361-1-git-send-email-danomimanchego123@gmail.com>
- <87tw9z7yw6.fsf@dell.be.48ers.dk>
- <06d55d32-6d74-0daa-8770-5b7e56deab81@mind.be>
- <871sx271oc.fsf@dell.be.48ers.dk>
- <CANxTyt52z7zKV59o9Qfs-EGTTHPZBX3w3ddsammdEu20CuotQw@mail.gmail.com>
-Message-ID: <87wpeu5l6a.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Dec 2016 22:46:17 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] uboot: fix custom patch
+	dir legacy handling
+Message-ID: <20161220214627.C3B3081D77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9bff4601468852b7240abcf1e4f4ec2c0d2f6d30
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
- >> >  This is 2016.11.x material.
- >> 
- >> It has been broken since 2016.05-rc1, but OK - We can indeed add it for
- >> 2016.11.x
+Commit 3e3fef39e71ed0426130b36aa00e4630ebb537ae added new and improved
+patch handling, with BR2_TARGET_UBOOT_PATCH.  This was in addition to
+the existing BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR option, that only
+handled directories.
 
- > I noticed it now because we are upgrading from 2014.05 to 2016.11.  We
- > use both the uboot custom patch dir feature (replaced) and the linux
- > custom path feature (dropped, frowny face), so I'm hitting those right
- > now.
+Later, commit 21b25d28fc7af3bb1b2c55e4a46e0d067ebc0081 moved the old
+BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR to legacy options.  But on the way,
+bad things happened:
 
-Ok. The replacement for both is simply BR2_GLOBAL_PATCH_DIR (with linux
-patches under linux/ and u-boot patches under uboot/).
+* The original option was a string, while the one added to Config.in.legacy
+is a bool.  This results in a warning from defconfigs that actually define
+the old BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR (because a string is not a valid
+value for a bool), but it does not result in the legacy option being
+selected.  Consequently, BR2_LEGACY is not selected either.
 
-I've applied the fix to the the 2016.11.x branch and will include it in
-the upcoming 2016.11.1 release.
+* The advice at the top of Config.in.legacy to add a hidden WRAP option
+to select BR2_LEGACY was not heeded.
 
--- 
-Bye, Peter Korsgaard
+* The advice at the top of Config.in.legacy to use the old string
+option as the default for the new string option was not heeded.  In
+this case, the variable was not just renamed, as the old option
+supported directories only, while the new one supports files too.
+But since the old option is a subset of the new option, it can still
+be used to set a useful default.
+
+So, this mod turns the legacy option back to a string, adds a hidden
+bool WRAP option to set BR2_LEGACY when the string is non emoty, and
+uses the legacy option to set the default for the new option.
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f61583fc2eb0ebf1d712581c2dae60e8fb692973)
+---
+ Config.in.legacy     | 11 +++++++++--
+ boot/uboot/Config.in |  1 +
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8c41b05..d6516a5 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -499,12 +499,19 @@ config BR2_PACKAGE_QT5QUICK1
+ 	  from upstream starting from Qt 5.6.
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+-	bool "uboot custom patch dir removed"
+-	select BR2_LEGACY
++	string "uboot custom patch dir has been removed"
+ 	help
+ 	  The uboot custom patch directory option has been removed. Use
+ 	  the improved BR2_TARGET_UBOOT_PATCH option instead.
+ 
++config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR_WRAP
++	bool
++	default y if BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR != ""
++	select BR2_LEGACY
++
++# Note: BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR is still referenced from
++# boot/uboot/Config.in
++
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_VOID
+ 	bool "xf86-input-void removed"
+ 	select BR2_LEGACY
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index fabf27d..54de603 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -95,6 +95,7 @@ config BR2_TARGET_UBOOT_VERSION
+ 
+ config BR2_TARGET_UBOOT_PATCH
+ 	string "Custom U-Boot patches"
++	default BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR if BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR != ""  # legacy
+ 	help
+ 	  A space-separated list of patches to apply to U-Boot.
+ 	  Each patch can be described as an URL, a local file path,
