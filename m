@@ -1,40 +1,46 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 20 Dec 2016 14:46:21 +0100
-Subject: [Buildroot] [PATCH v5 04/19] reproducible: enable fakedate
+Date: Tue, 20 Dec 2016 14:46:29 +0100
+Subject: [Buildroot] [PATCH v5 12/19] infra-libtool: no longer prepend
+	STAGING_DIR to libdir
 In-Reply-To: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1482241596-31688-5-git-send-email-jezz@sysmic.org>
+Message-ID: <1482241596-31688-13-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable fakedate for whole build process.
-
-This work was sponsored by `BA Robotic Systems'.
+Since `$lt_sysroot' is now correctly filled, it is no more necessary to patch
+`.la' files. Indeed, if $libdir point to `/usr/lib', libtool will also search
+in `$(lt_sysroot)/usr/lib'
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
+ package/pkg-generic.mk | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-Notes:
-    v3:
-      - Build host-fakedate before toolchain (Thomas)
-
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Makefile b/Makefile
-index b80b9e1..ad7fde5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -254,6 +254,7 @@ export LC_ALL = C
- export GZIP = -n
- BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
- export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
-+DEPENDENCIES_HOST_PREREQ += host-fakedate
- endif
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 827de62..5d12ac3 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -268,17 +268,6 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
+-	@$(call MESSAGE,"Fixing libtool files")
+-	$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+-		$(SED) "s:$(BASE_DIR):@BASE_DIR@:g" \
+-			-e "s:$(STAGING_DIR):@STAGING_DIR@:g" \
+-			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+-				-e "s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
+-			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+-			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+-				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+-			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
+-			-e "s:@BASE_DIR@:$(BASE_DIR):g"
+ 	@$(call step_end,install-staging)
+ 	$(Q)touch $@
  
- # To put more focus on warnings, be less verbose as default
 -- 
 1.9.1
