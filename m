@@ -1,29 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Dec 2016 22:04:03 +0100
-Subject: [Buildroot] [PATCH 1/1] uboot: fix custom patch dir legacy
-	handling
-In-Reply-To: <06d55d32-6d74-0daa-8770-5b7e56deab81@mind.be> (Arnout
- Vandecappelle's message of "Tue, 20 Dec 2016 21:53:51 +0100")
-References: <1482203412-5361-1-git-send-email-danomimanchego123@gmail.com>
- <87tw9z7yw6.fsf@dell.be.48ers.dk>
- <06d55d32-6d74-0daa-8770-5b7e56deab81@mind.be>
-Message-ID: <871sx271oc.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 20 Dec 2016 22:15:16 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: bump CodeSourcery AMD64
+ to 2016.11-19
+In-Reply-To: <20161220215452.447ee8f3@free-electrons.com>
+References: <1482265769-6560-1-git-send-email-romain.naour@gmail.com>
+ <20161220215452.447ee8f3@free-electrons.com>
+Message-ID: <9c743fd4-5835-aab9-01e4-17504a409416@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hi Thomas,
 
-Hi,
+Le 20/12/2016 ? 21:54, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Tue, 20 Dec 2016 21:29:29 +0100, Romain Naour wrote:
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>> Just build tested only, I don't have this kind of hardware.
+> 
+> You don't have qemu-system-x86_64, really ? :-)
 
- >> Nice detailed description! Committed, thanks.
+I can't use it with Qemu even with the current version or this new toolchain.
+It doesn't boot at all, I don't even see the first kernel line.
 
- >  This is 2016.11.x material.
+I'm using a Linux kernel 4.8.13 with qemu-2.4.1-11.fc23 or v2.8.0-rc2-8-gbd8ef50
 
-It has been broken since 2016.05-rc1, but OK - We can indeed add it for
-2016.11.x
+Best regards,
+Romain
 
--- 
-Bye, Peter Korsgaard
+
+> 
+> Thomas
+> 
