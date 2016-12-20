@@ -1,165 +1,47 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 20 Dec 2016 14:46:30 +0100
-Subject: [Buildroot] [PATCH v5 13/19] infra-libtool: correctly prefix
-	$libdir with $STAGING_DIR
+Date: Tue, 20 Dec 2016 14:46:33 +0100
+Subject: [Buildroot] [PATCH v5 16/19] infra-libtool: inform libtool that
+	STAGING_DIR is reachable at runtime
 In-Reply-To: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1482241596-31688-14-git-send-email-jezz@sysmic.org>
+Message-ID: <1482241596-31688-17-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now Builroot patched libtool in order to ignore `$libdir' provided by .la
-file. It used the path where it found the .la instead of `$libdir'. However,
-since v1.5 libtool correctly prepend sysroot to `$libdir' as we can see a few
-lines below patched lines:
+When installing binaries to $TARGET_DIR, libtool add `$STAGING_DIR{,/usr}/lib'
+to RPATH. This is annoying to create reproducible binaries. This patch just
+inform libtool that these paths are reachable on runtime and it is necessary to
+add then to RPATH.
 
-  func_append newdependency_libs " ${lt_sysroot:+=}$libdir/$name"
+Notice `$lt_cv_sys_lib_dlsearch_path_spec' was introduced in libtool v2.0.
+Packages with libtool v1.5 continue to include `$STAGING_DIR{,/usr}/lib' in
+their RPATH. The few packages that use libtool v1.5 have to be patched
+individually in order to make them reproducible (adding AUTORECONF=YES should
+be sufficient in most cases).
 
-(in fact, this line just prepend '=', and '=' is substituted later)
+Note, instead of providing $lt_cv_sys_lib_dlsearch_path_spec, Yocto patch
+libtool:
+   http://git.yoctoproject.org/cgit.cgi/poky/tree/meta/recipes-devtools/libtool/libtool/fix-final-rpath.patch
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- support/libtool/buildroot-libtool-v1.5.patch   | 32 ++------------------------
- support/libtool/buildroot-libtool-v2.2.patch   | 30 +-----------------------
- support/libtool/buildroot-libtool-v2.4.4.patch | 11 ---------
- support/libtool/buildroot-libtool-v2.4.patch   | 11 ---------
- 4 files changed, 3 insertions(+), 81 deletions(-)
+ package/Makefile.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/libtool/buildroot-libtool-v1.5.patch b/support/libtool/buildroot-libtool-v1.5.patch
-index cdd9c5a..609006a 100644
---- a/support/libtool/buildroot-libtool-v1.5.patch
-+++ b/support/libtool/buildroot-libtool-v1.5.patch
-@@ -34,24 +34,7 @@
-  	if test -n "$link_static_flag"; then
-  	  compile_command="$compile_command $link_static_flag"
-  	  finalize_command="$finalize_command $link_static_flag"
--@@ -2146,8 +2153,14 @@
-- 	    absdir="$abs_ladir"
-- 	    libdir="$abs_ladir"
-- 	  else
---	    dir="$libdir"
---	    absdir="$libdir"
--+            # Adding 'libdir' from the .la file to our library search paths
--+            # breaks crosscompilation horribly.  We cheat here and don't add
--+            # it, instead adding the path where we found the .la.  -CL
--+	    dir="$abs_ladir"
--+	    absdir="$abs_ladir"
--+	    libdir="$abs_ladir"
--+	    #dir="$libdir"
--+	    #absdir="$libdir"
-- 	  fi
-- 	else
-- 	  dir="$ladir/$objdir"
--@@ -2272,7 +2285,7 @@
-+@@ -2272,7 +2279,7 @@
-  	   { test "$prefer_static_libs" = no || test -z "$old_library"; }; then
-  	  if test "$installed" = no; then
-  	    notinst_deplibs="$notinst_deplibs $lib"
-@@ -60,18 +43,7 @@
-  	  fi
-  	  # This is a shared library
-  
--@@ -5169,6 +5182,10 @@
-- 	    # Replace all uninstalled libtool libraries with the installed ones
-- 	    newdependency_libs=
-- 	    for deplib in $dependency_libs; do
--+              # Replacing uninstalled with installed can easily break crosscompilation,
--+              # since the installed path is generally the wrong architecture.  -CL
--+              newdependency_libs="$newdependency_libs $deplib"
--+              continue
-- 	      case $deplib in
-- 	      *.la)
-- 		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
--@@ -5487,10 +5504,13 @@
-+@@ -5487,10 +5494,13 @@
-  	  # At present, this check doesn't affect windows .dll's that
-  	  # are installed into $libdir/../bin (currently, that works fine)
-  	  # but it's something to keep an eye on.
-diff --git a/support/libtool/buildroot-libtool-v2.2.patch b/support/libtool/buildroot-libtool-v2.2.patch
-index 8bb7826..3af0604 100644
---- a/support/libtool/buildroot-libtool-v2.2.patch
-+++ b/support/libtool/buildroot-libtool-v2.2.patch
-@@ -67,24 +67,7 @@
-  	# The effects of -static are defined in a previous loop.
-  	# We used to do the same as -all-static on platforms that
-  	# didn't have a PIC flag, but the assumption that the effects
--@@ -5739,8 +5738,14 @@
-- 	    absdir="$abs_ladir"
-- 	    libdir="$abs_ladir"
-- 	  else
---	    dir="$libdir"
---	    absdir="$libdir"
--+            # Adding 'libdir' from the .la file to our library search paths
--+            # breaks crosscompilation horribly.  We cheat here and don't add
--+            # it, instead adding the path where we found the .la.  -CL
--+	    dir="$abs_ladir"
--+	    absdir="$abs_ladir"
--+	    libdir="$abs_ladir"
--+	    #dir="$libdir"
--+	    #absdir="$libdir"
-- 	  fi
-- 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
-- 	else
--@@ -5891,7 +5896,7 @@
-+@@ -5891,7 +5890,7 @@
-  	  *)
-  	    if test "$installed" = no; then
-  	      notinst_deplibs="$notinst_deplibs $lib"
-@@ -93,14 +76,3 @@
-  	    fi
-  	    ;;
-  	  esac
--@@ -8373,6 +8378,10 @@
-- 	    # Replace all uninstalled libtool libraries with the installed ones
-- 	    newdependency_libs=
-- 	    for deplib in $dependency_libs; do
--+              # Replacing uninstalled with installed can easily break crosscompilation,
--+              # since the installed path is generally the wrong architecture.  -CL
--+              newdependency_libs="$newdependency_libs $deplib"
--+              continue
-- 	      case $deplib in
-- 	      *.la)
-- 		func_basename "$deplib"
-diff --git a/support/libtool/buildroot-libtool-v2.4.4.patch b/support/libtool/buildroot-libtool-v2.4.4.patch
-index bcdf30c..d71669b 100644
---- a/support/libtool/buildroot-libtool-v2.4.4.patch
-+++ b/support/libtool/buildroot-libtool-v2.4.4.patch
-@@ -82,14 +82,3 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-  	    fi
-  	    ;;
-  	  esac
--@@ -10710,6 +10710,10 @@
-- 	    # Replace all uninstalled libtool libraries with the installed ones
-- 	    newdependency_libs=
-- 	    for deplib in $dependency_libs; do
--+	      # Replacing uninstalled with installed can easily break crosscompilation,
--+	      # since the installed path is generally the wrong architecture.  -CL
--+	      newdependency_libs="$newdependency_libs $deplib"
--+	      continue
-- 	      case $deplib in
-- 	      *.la)
-- 		func_basename "$deplib"
-diff --git a/support/libtool/buildroot-libtool-v2.4.patch b/support/libtool/buildroot-libtool-v2.4.patch
-index f610b1b..bf40c94 100644
---- a/support/libtool/buildroot-libtool-v2.4.patch
-+++ b/support/libtool/buildroot-libtool-v2.4.patch
-@@ -76,14 +76,3 @@
-  	    fi
-  	    ;;
-  	  esac
--@@ -9275,6 +9274,10 @@
-- 	    # Replace all uninstalled libtool libraries with the installed ones
-- 	    newdependency_libs=
-- 	    for deplib in $dependency_libs; do
--+              # Replacing uninstalled with installed can easily break crosscompilation,
--+              # since the installed path is generally the wrong architecture.  -CL
--+              newdependency_libs="$newdependency_libs $deplib"
--+              continue
-- 	      case $deplib in
-- 	      *.la)
-- 		func_basename "$deplib"
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 688d5b1..6a341f2 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -355,6 +355,7 @@ TARGET_CONFIGURE_ARGS = \
+ 	ac_cv_func_calloc_0_nonnull=yes \
+ 	ac_cv_func_realloc_0_nonnull=yes \
+ 	lt_cv_sys_lib_search_path_spec="" \
++	lt_cv_sys_lib_dlsearch_path_spec="/lib /usr/lib $(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
+ 	$(BR2_AC_CV_C_BIGENDIAN) \
+ 	$(BR2_GT_CV_FUNC_GNUGETTEXT_LIBC)
+ 
 -- 
 1.9.1
