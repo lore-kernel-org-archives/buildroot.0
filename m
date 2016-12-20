@@ -1,71 +1,172 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Dec 2016 19:26:42 +0100
-Subject: [Buildroot] [git commit] python-paramiko: bump to version 2.1.1
-Message-ID: <20161220183216.E413F81DFF@busybox.osuosl.org>
+Date: Tue, 20 Dec 2016 19:32:00 +0100
+Subject: [Buildroot] [git commit] linux-headers: kill 3.14.x and 4.{5, 6,
+	7}.x series
+Message-ID: <20161220183217.0EBB07FD6E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d7b73cf75daedd4a198a75546308fedae7c9467
+commit: https://git.buildroot.net/buildroot/commit/?id=6be22624c883cb036be461e2135c1dcef4086bdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Replace wrong runtime dependencies with python-pyasn and
-python-cryptography.
+These aren't supported upstream any more so remove the options and add
+them to legacy.
+Also switch the older deprecations that used 3.14.x to 3.12.x
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-paramiko/Config.in            | 8 ++++++--
- package/python-paramiko/python-paramiko.hash | 4 ++--
- package/python-paramiko/python-paramiko.mk   | 4 ++--
- 3 files changed, 10 insertions(+), 6 deletions(-)
+ Config.in.legacy                     | 52 +++++++++++++++++++++++++++++++-----
+ package/linux-headers/Config.in.host | 21 ---------------
+ 2 files changed, 46 insertions(+), 27 deletions(-)
 
-diff --git a/package/python-paramiko/Config.in b/package/python-paramiko/Config.in
-index 4c16a9a..aad85cb 100644
---- a/package/python-paramiko/Config.in
-+++ b/package/python-paramiko/Config.in
-@@ -1,10 +1,14 @@
- config BR2_PACKAGE_PYTHON_PARAMIKO
- 	bool "python-paramiko"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
- 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
--	select BR2_PACKAGE_PYTHON_PYCRYPTO # runtime
--	select BR2_PACKAGE_PYTHON_ECDSA # runtime
-+	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
-+	select BR2_PACKAGE_PYTHON_PYASN # runtime
- 	help
- 	  SSH2 protocol library.
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c8039ba..cdadbd8 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,46 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.02"
  
- 	  https://github.com/paramiko/paramiko/
++config BR2_KERNEL_HEADERS_4_7
++	bool "kernel headers version 4.7.x are no longer supported"
++	select BR2_KERNEL_HEADERS_4_4
++	select BR2_LEGACY
++	help
++	  Version 4.7.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed. As an alternative,
++	  version 4.4.x of the headers have been automatically
++	  selected in your configuration.
 +
-+comment "python-paramiko needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
-index f2aedc7..fca8fd7 100644
---- a/package/python-paramiko/python-paramiko.hash
-+++ b/package/python-paramiko/python-paramiko.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/paramiko/json, sha256 locally computed
--md5	6312aee79892801cf5a624eb4f8fd864  paramiko-2.0.2.tar.gz
--sha256	411bf90fa22b078a923ff19ef9772c1115a0953702db93549a2848acefd141dc  paramiko-2.0.2.tar.gz
-+md5	9e8abe635baa6bb75a4cd55dcb56a264  paramiko-2.1.1.tar.gz
-+sha256	d51dada7ad0736c116f8bfe3263627925947e4a50e61436a83d58bfe7055b575  paramiko-2.1.1.tar.gz
-diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
-index e616049..6c0df4d 100644
---- a/package/python-paramiko/python-paramiko.mk
-+++ b/package/python-paramiko/python-paramiko.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
++config BR2_KERNEL_HEADERS_4_6
++	bool "kernel headers version 4.6.x are no longer supported"
++	select BR2_KERNEL_HEADERS_4_4
++	select BR2_LEGACY
++	help
++	  Version 4.6.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed. As an alternative,
++	  version 4.4.x of the headers have been automatically
++	  selected in your configuration.
++
++config BR2_KERNEL_HEADERS_4_5
++	bool "kernel headers version 4.5.x are no longer supported"
++	select BR2_KERNEL_HEADERS_4_4
++	select BR2_LEGACY
++	help
++	  Version 4.5.x of the Linux kernel headers are no longer
++	   maintained upstream and are now removed. As an alternative,
++	   version 4.4.x of the headers have been automatically
++	   selected in your configuration.
++
++config BR2_KERNEL_HEADERS_3_14
++	bool "kernel headers version 3.14.x are no longer supported"
++	select BR2_KERNEL_HEADERS_3_12
++	select BR2_LEGACY
++	  help
++	  Version 3.14.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed. As an alternative,
++	  version 3.12.x of the headers have been automatically
++	  selected in your configuration.
++
+ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+ 	bool "musl-cross 1.1.12 toolchain removed"
+ 	select BR2_LEGACY
+@@ -589,12 +629,12 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_VOID
  
--PYTHON_PARAMIKO_VERSION = 2.0.2
-+PYTHON_PARAMIKO_VERSION = 2.1.1
- PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
--PYTHON_PARAMIKO_SITE = https://pypi.python.org/packages/6b/4e/971b8c917456a2ec9666311f7e695493002a64022397cd668150b5efd2a8
-+PYTHON_PARAMIKO_SITE = https://pypi.python.org/packages/d1/5a/ebd00d884f30baf208359a027eb7b38372d81d0c004724bb1aa71ae43b37
- PYTHON_PARAMIKO_SETUP_TYPE = setuptools
- PYTHON_PARAMIKO_LICENSE = LGPLv2.1+
- PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
+ config BR2_KERNEL_HEADERS_3_17
+ 	bool "kernel headers version 3.17.x are no longer supported"
+-	select BR2_KERNEL_HEADERS_3_14
++	select BR2_KERNEL_HEADERS_3_12
+ 	select BR2_LEGACY
+ 	help
+ 	  Version 3.17.x of the Linux kernel headers have been deprecated
+ 	  for more than four buildroot releases and are now removed.
+-	  As an alternative, version 3.14.x of the headers have been
++	  As an alternative, version 3.12.x of the headers have been
+ 	  automatically selected in your configuration.
+ 
+ config BR2_GDB_VERSION_7_7
+@@ -735,12 +775,12 @@ config BR2_PACKAGE_CUPS_PDFTOPS
+ 
+ config BR2_KERNEL_HEADERS_3_16
+ 	bool "kernel headers version 3.16.x are no longer supported"
+-	select BR2_KERNEL_HEADERS_3_14
++	select BR2_KERNEL_HEADERS_3_12
+ 	select BR2_LEGACY
+ 	help
+ 	Version 3.16.x of the Linux kernel headers have been deprecated
+ 	for more than four buildroot releases and are now removed.
+-	As an alternative, version 3.14.x of the headers have been
++	As an alternative, version 3.12.x of the headers have been
+ 	automatically selected in your configuration.
+ 
+ config BR2_PACKAGE_PYTHON_PYXML
+@@ -971,12 +1011,12 @@ config BR2_KERNEL_HEADERS_3_13
+ 
+ config BR2_KERNEL_HEADERS_3_15
+ 	bool "kernel headers version 3.15.x are no longer supported"
+-	select BR2_KERNEL_HEADERS_3_14
++	select BR2_KERNEL_HEADERS_3_12
+ 	select BR2_LEGACY
+ 	help
+ 	  Version 3.15.x of the Linux kernel headers have been deprecated
+ 	  for more than four buildroot releases and are now removed.
+-	  As an alternative, version 3.14.x of the headers have been
++	  As an alternative, version 3.12.x of the headers have been
+ 	  automatically selected in your configuration.
+ 
+ config BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index a95b41d..4ab562c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -46,11 +46,6 @@ choice
+ 		depends on !BR2_nios2
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 
+-	config BR2_KERNEL_HEADERS_3_14
+-		bool "Linux 3.14.x kernel headers"
+-		depends on !BR2_nios2
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+-
+ 	config BR2_KERNEL_HEADERS_3_18
+ 		bool "Linux 3.18.x kernel headers"
+ 		depends on !BR2_nios2
+@@ -64,18 +59,6 @@ choice
+ 		bool "Linux 4.4.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+ 
+-	config BR2_KERNEL_HEADERS_4_5
+-		bool "Linux 4.5.x kernel headers"
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+-
+-	config BR2_KERNEL_HEADERS_4_6
+-		bool "Linux 4.6.x kernel headers"
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+-
+-	config BR2_KERNEL_HEADERS_4_7
+-		bool "Linux 4.7.x kernel headers"
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+-
+ 	config BR2_KERNEL_HEADERS_4_8
+ 		bool "Linux 4.8.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+@@ -235,15 +218,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.69"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.79"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.45"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.36"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.39"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+-	default "4.6.7"		if BR2_KERNEL_HEADERS_4_6
+-	default "4.7.10"	if BR2_KERNEL_HEADERS_4_7
+ 	default "4.8.15"	if BR2_KERNEL_HEADERS_4_8
+ 	default "4.9"		if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
