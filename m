@@ -1,49 +1,40 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue, 20 Dec 2016 14:46:27 +0100
-Subject: [Buildroot] [PATCH v5 10/19] python3: remove full path from .pyc
+Date: Tue, 20 Dec 2016 14:46:28 +0100
+Subject: [Buildroot] [PATCH v5 11/19] infra-libtool: pass sysroot
+	information to libtool
 In-Reply-To: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1482241596-31688-11-git-send-email-jezz@sysmic.org>
+Message-ID: <1482241596-31688-12-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-.pyc files include path to source .py file. This patch changes the way
-`pycompile.py' is launched in order to only keep the part relative to
-$TARGET_DIR.
+libtool include support for cross-compilation since v1.5. In order to enable it,
+we have to pass `--with-sysroot' to `configure' script. With this option,
+autoconf fill `$lt_sysroot' and libtool will search libraries in `$lt_sysroot'
+subtree.
 
-This work was sponsored by `BA Robotic Systems'.
+Note Yocto force `$lt_sysroot' even if --with-sysroot is not provided:
+  http://git.yoctoproject.org/cgit.cgi/poky/tree/meta/recipes-devtools/libtool/libtool/fix-resolve-lt-sysroot.patch
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
+ package/pkg-autotools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Notes:
-    v3:
-      - Typo in commit log (Arnout)
-
- package/python3/python3.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 1817b22..2562be7 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -237,9 +237,10 @@ endif
- 
- define PYTHON3_CREATE_PYC_FILES
- 	PYTHONPATH="$(PYTHON3_PATH)" \
--	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
--		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
--		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
-+	cd $(TARGET_DIR) && $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
-+		$(TOPDIR)/support/scripts/pycompile.py \
-+		$(if $(BR2_REPRODUCIBLE),--force) \
-+		usr/lib/python$(PYTHON3_VERSION_MAJOR)
- endef
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index f7b8488..bb20eec 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -192,6 +192,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--sysconfdir=/etc \
+ 		--localstatedir=/var \
+ 		--program-prefix="" \
++		--with-sysroot \
+ 		--disable-gtk-doc \
+ 		--disable-gtk-doc-html \
+ 		--disable-doc \
 -- 
 1.9.1
