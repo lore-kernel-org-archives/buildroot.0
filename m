@@ -1,43 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Dec 2016 10:10:05 +0100
-Subject: [Buildroot] [git commit] rsyslog: enable journal plugins when using
-	systemd
-Message-ID: <20161220091252.3651E80AD5@busybox.osuosl.org>
+Date: Tue, 20 Dec 2016 10:07:09 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add entry for rpm
+Message-ID: <20161220091252.19AC580AD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5ba775ec5c92bd0ac1c2c25e0afad983951cc49
+commit: https://git.buildroot.net/buildroot/commit/?id=aacc224cf81a7638e91ef5835cb1c033de4e1c23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The rsyslog package provides input and output plugins for journald which
-are disabled by default. The following adds the option to include
-`imjournal` and `omjournal` modules when building for a systemd target.
 
 Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsyslog/rsyslog.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 9e74e49..3254d99 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -66,8 +66,14 @@ endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4f14296..a1d8e57 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -764,6 +764,7 @@ F:	package/glibmm/
+ F:	package/gtkmm3/
+ F:	package/libpqxx/
+ F:	package/pangomm/
++F:	package/rpm/
+ F:	package/yad/
  
- ifeq ($(BR2_INIT_SYSTEMD),y)
- RSYSLOG_CONF_OPTS += \
-+	--enable-imjournal \
-+	--enable-omjournal \
- 	--with-systemdsystemunitdir=/usr/lib/systemd/system
- RSYSLOG_DEPENDENCIES += systemd
-+else
-+RSYSLOG_CONF_OPTS += \
-+	--disable-imjournal \
-+	--disable-omjournal
- endif
- 
- define RSYSLOG_INSTALL_INIT_SYSV
+ N:	Jan Pedersen <jp@jp-embedded.com>
