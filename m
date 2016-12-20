@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 20 Dec 2016 15:28:51 +0100
-Subject: [Buildroot] [PATCH 1/2] python-cryptography: bump to version 1.7.1
-Message-ID: <1482244132-9835-1-git-send-email-yegorslists@googlemail.com>
+Date: Tue, 20 Dec 2016 15:28:52 +0100
+Subject: [Buildroot] [PATCH 2/2] python-paramiko: bump to version 2.1.1
+In-Reply-To: <1482244132-9835-1-git-send-email-yegorslists@googlemail.com>
+References: <1482244132-9835-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1482244132-9835-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +12,62 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Replace wrong runtime dependencies with python-pyasn and
+python-cryptography.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-cryptography/python-cryptography.hash | 4 ++--
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-paramiko/Config.in            | 8 ++++++--
+ package/python-paramiko/python-paramiko.hash | 4 ++--
+ package/python-paramiko/python-paramiko.mk   | 4 ++--
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 60fe3eb..7738d23 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
+diff --git a/package/python-paramiko/Config.in b/package/python-paramiko/Config.in
+index 4c16a9a..aad85cb 100644
+--- a/package/python-paramiko/Config.in
++++ b/package/python-paramiko/Config.in
+@@ -1,10 +1,14 @@
+ config BR2_PACKAGE_PYTHON_PARAMIKO
+ 	bool "python-paramiko"
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+-	select BR2_PACKAGE_PYTHON_PYCRYPTO # runtime
+-	select BR2_PACKAGE_PYTHON_ECDSA # runtime
++	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
++	select BR2_PACKAGE_PYTHON_PYASN # runtime
+ 	help
+ 	  SSH2 protocol library.
+ 
+ 	  https://github.com/paramiko/paramiko/
++
++comment "python-paramiko needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
+index f2aedc7..fca8fd7 100644
+--- a/package/python-paramiko/python-paramiko.hash
++++ b/package/python-paramiko/python-paramiko.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
--md5	f977a6ddb38b071213c0157fc77c62ab  cryptography-1.5.2.tar.gz
--sha256	eb8875736734e8e870b09be43b17f40472dc189b1c422a952fa8580768204832  cryptography-1.5.2.tar.gz
-+md5	2f63dee6ace602d1d20d1995f8538015  cryptography-1.7.1.tar.gz
-+sha256	953fef7d40a49a795f4d955c5ce4338abcec5dea822ed0414ed30348303fdb4c  cryptography-1.7.1.tar.gz
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 75e6bb3..d4e18ec 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
+ # md5 from https://pypi.python.org/pypi/paramiko/json, sha256 locally computed
+-md5	6312aee79892801cf5a624eb4f8fd864  paramiko-2.0.2.tar.gz
+-sha256	411bf90fa22b078a923ff19ef9772c1115a0953702db93549a2848acefd141dc  paramiko-2.0.2.tar.gz
++md5	9e8abe635baa6bb75a4cd55dcb56a264  paramiko-2.1.1.tar.gz
++sha256	d51dada7ad0736c116f8bfe3263627925947e4a50e61436a83d58bfe7055b575  paramiko-2.1.1.tar.gz
+diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
+index e616049..6c0df4d 100644
+--- a/package/python-paramiko/python-paramiko.mk
++++ b/package/python-paramiko/python-paramiko.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 1.5.2
-+PYTHON_CRYPTOGRAPHY_VERSION = 1.7.1
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/03/1a/60984cb85cc38c4ebdfca27b32a6df6f1914959d8790f5a349608c78be61
-+PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/82/f7/d6dfd7595910a20a563a83a762bf79a253c4df71759c3b228accb3d7e5e4
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3c
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_PARAMIKO_VERSION = 2.0.2
++PYTHON_PARAMIKO_VERSION = 2.1.1
+ PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
+-PYTHON_PARAMIKO_SITE = https://pypi.python.org/packages/6b/4e/971b8c917456a2ec9666311f7e695493002a64022397cd668150b5efd2a8
++PYTHON_PARAMIKO_SITE = https://pypi.python.org/packages/d1/5a/ebd00d884f30baf208359a027eb7b38372d81d0c004724bb1aa71ae43b37
+ PYTHON_PARAMIKO_SETUP_TYPE = setuptools
+ PYTHON_PARAMIKO_LICENSE = LGPLv2.1+
+ PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
 -- 
 2.1.4
