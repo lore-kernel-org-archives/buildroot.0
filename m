@@ -1,67 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Dec 2016 22:53:47 +0100
-Subject: [Buildroot] [PATCH] busybox: adjust nommu swaponoff handling for
-	busybox 1.26.0+
-Message-ID: <20161220215347.10629-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Dec 2016 23:00:14 +0100
+Subject: [Buildroot] [PATCH 1/1] uboot: fix custom patch dir legacy
+ handling
+In-Reply-To: <87wpeu5l6a.fsf@dell.be.48ers.dk>
+References: <1482203412-5361-1-git-send-email-danomimanchego123@gmail.com>
+ <87tw9z7yw6.fsf@dell.be.48ers.dk>
+ <06d55d32-6d74-0daa-8770-5b7e56deab81@mind.be>
+ <871sx271oc.fsf@dell.be.48ers.dk>
+ <CANxTyt52z7zKV59o9Qfs-EGTTHPZBX3w3ddsammdEu20CuotQw@mail.gmail.com>
+ <87wpeu5l6a.fsf@dell.be.48ers.dk>
+Message-ID: <20161220230014.030d3f0d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/dfe/dfec2c0626ab087325fd869bcbe0b9dc354d788c/
+Hello,
 
-Busybox 1.26.0 gained separate config options for swapon / swapoff:
+On Tue, 20 Dec 2016 22:45:49 +0100, Peter Korsgaard wrote:
 
-commit f417ffd88f194bbfd18605882ee242190c1bab34
-Author: Denys Vlasenko <vda.linux@googlemail.com>
-Date:   Mon Nov 14 17:30:50 2016 +0100
+>  > I noticed it now because we are upgrading from 2014.05 to 2016.11.  We
+>  > use both the uboot custom patch dir feature (replaced) and the linux
+>  > custom path feature (dropped, frowny face), so I'm hitting those right
+>  > now.  
+> 
+> Ok. The replacement for both is simply BR2_GLOBAL_PATCH_DIR (with linux
+> patches under linux/ and u-boot patches under uboot/).
 
-    Make swapon and swapoff individually selectable.
+Not completely true: the "linux custom path" feature is not replaced by
+BR2_GLOBAL_PATCH_DIR. If one wants to get the same functionality, i.e
+telling Buildroot to use the Linux kernel source code from an available
+local directory, then the only solution is to use LINUX_OVERRIDE_SRCDIR.
 
-    For example, without swapoff, code shrinks by 277 bytes.
+Best regards,
 
-    Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-
-So adjust busybox.config and the logic to disable these applets for nommu
-builds for the new names.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/busybox/busybox.config | 3 ++-
- package/busybox/busybox.mk     | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 02b1ee1..3e3b5d4 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -633,9 +633,10 @@ CONFIG_READPROFILE=y
- # CONFIG_RTCWAKE is not set
- # CONFIG_SCRIPT is not set
- # CONFIG_SCRIPTREPLAY is not set
--CONFIG_SWAPONOFF=y
-+CONFIG_SWAPON=y
- # CONFIG_FEATURE_SWAPON_DISCARD is not set
- # CONFIG_FEATURE_SWAPON_PRI is not set
-+CONFIG_SWAPOFF=y
- CONFIG_SWITCH_ROOT=y
- CONFIG_UMOUNT=y
- CONFIG_FEATURE_UMOUNT_ALL=y
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d7751b5..40fb4d9 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -96,7 +96,8 @@ endef
- else
- define BUSYBOX_SET_MMU
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NOMMU,$(BUSYBOX_BUILD_CONFIG))
--	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPON,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPOFF,$(BUSYBOX_BUILD_CONFIG))
- 	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_BASH_COMPAT,$(BUSYBOX_BUILD_CONFIG))
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
