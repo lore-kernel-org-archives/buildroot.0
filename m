@@ -1,42 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Dec 2016 23:00:14 +0100
-Subject: [Buildroot] [PATCH 1/1] uboot: fix custom patch dir legacy
- handling
-In-Reply-To: <87wpeu5l6a.fsf@dell.be.48ers.dk>
-References: <1482203412-5361-1-git-send-email-danomimanchego123@gmail.com>
- <87tw9z7yw6.fsf@dell.be.48ers.dk>
- <06d55d32-6d74-0daa-8770-5b7e56deab81@mind.be>
- <871sx271oc.fsf@dell.be.48ers.dk>
- <CANxTyt52z7zKV59o9Qfs-EGTTHPZBX3w3ddsammdEu20CuotQw@mail.gmail.com>
- <87wpeu5l6a.fsf@dell.be.48ers.dk>
-Message-ID: <20161220230014.030d3f0d@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Dec 2016 23:02:07 +0100
+Subject: [Buildroot] [PATCH] mimic: needs wchar support
+Message-ID: <20161220220207.12933-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+http://autobuild.buildroot.net/results/9f7/9f7c1af4b9fd8331672c9096821db91d5f7f3aa1/
+http://autobuild.buildroot.net/results/47f/47f5ec3fabefd85e62b675142bd6728904acd5d8/
 
-On Tue, 20 Dec 2016 22:45:49 +0100, Peter Korsgaard wrote:
+At the same time fixup space/tabs for 'help' option.
 
->  > I noticed it now because we are upgrading from 2014.05 to 2016.11.  We
->  > use both the uboot custom patch dir feature (replaced) and the linux
->  > custom path feature (dropped, frowny face), so I'm hitting those right
->  > now.  
-> 
-> Ok. The replacement for both is simply BR2_GLOBAL_PATCH_DIR (with linux
-> patches under linux/ and u-boot patches under uboot/).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mimic/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Not completely true: the "linux custom path" feature is not replaced by
-BR2_GLOBAL_PATCH_DIR. If one wants to get the same functionality, i.e
-telling Buildroot to use the Linux kernel source code from an available
-local directory, then the only solution is to use LINUX_OVERRIDE_SRCDIR.
-
-Best regards,
-
-Thomas
+diff --git a/package/mimic/Config.in b/package/mimic/Config.in
+index 6cd4c20..757ac9e 100644
+--- a/package/mimic/Config.in
++++ b/package/mimic/Config.in
+@@ -1,6 +1,10 @@
++comment "mimic needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_MIMIC
+ 	bool "mimic"
+-        help
++	depends on BR2_USE_WCHAR
++	help
+           Mimic is a fast, lightweight Text-to-speech engine developed
+           by Mycroft A.I. and VocaliD, based on Carnegie Mellon
+           University's Flite (Festival-Lite) software. Mimic takes in
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.10.2
