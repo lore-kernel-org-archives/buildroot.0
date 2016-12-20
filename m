@@ -1,41 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Dec 2016 09:32:06 +0100
-Subject: [Buildroot] [git commit] mkusers: fix spelling in intro comment
-Message-ID: <20161220091251.C26EF80AD5@busybox.osuosl.org>
+Date: Tue, 20 Dec 2016 09:33:03 +0100
+Subject: [Buildroot] [git commit] legacy/sqlite: add "sqlite" to legacy
+	option name
+Message-ID: <20161220091251.EC7FF80811@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ac9d83f55f9ec30bd67767fab3c8e09249ae372
+commit: https://git.buildroot.net/buildroot/commit/?id=62da71c980fe2e44059e4d6a7e00cbe279905a26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The "command-line editing support was updated" does not indicate
+the package name, unlike the other legacy options.  This commit
+adds "sqlite", to be nicer.
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/mkusers | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-index e2c24c7..d834578 100755
---- a/support/scripts/mkusers
-+++ b/support/scripts/mkusers
-@@ -35,7 +35,7 @@ PASSWD="${TARGET_DIR}/etc/passwd"
- SHADOW="${TARGET_DIR}/etc/shadow"
- GROUP="${TARGET_DIR}/etc/group"
- # /etc/gshadow is not part of the standard skeleton, so not everybody
--# will have it, but some may hav it, and its content must be in sync
-+# will have it, but some may have it, and its content must be in sync
- # with /etc/group, so any use of gshadow must be conditional.
- GSHADOW="${TARGET_DIR}/etc/gshadow"
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 71faa8d..2811c7b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -649,7 +649,7 @@ config BR2_GCC_VERSION_4_5_X
+ 	  version instead.
  
-@@ -43,7 +43,7 @@ GSHADOW="${TARGET_DIR}/etc/gshadow"
- # such as:
- #    BR2_DEFCONFIG="$(CONFIG_DIR)/defconfig"
- # which when sourced from a shell script will eventually try to execute
--# a command name 'CONFIG_DIR', which is plain wrong for virtually every
-+# a command named 'CONFIG_DIR', which is plain wrong for virtually every
- # systems out there.
- # So, we have to scan that file instead. Sigh... :-(
- PASSWD_METHOD="$( sed -r -e '/^BR2_TARGET_GENERIC_PASSWD_METHOD="(.*)"$/!d;'    \
+ config BR2_PACKAGE_SQLITE_READLINE
+-	bool "command-line editing support was updated"
++	bool "sqlite command-line editing support was updated"
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_LEGACY
