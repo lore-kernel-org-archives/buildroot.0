@@ -1,50 +1,39 @@
-From: Linux User <newhorizons009@gmail.com>
-Date: Wed, 21 Dec 2016 11:59:35 -0500
-Subject: [Buildroot] logrotate error
-In-Reply-To: <20161221174039.788e0aaa@free-electrons.com>
-References: <CA+12NBJSywCO=azSzUtUdSS3irhXTUnhNpcRL6Rr-R=g_9UbHQ@mail.gmail.com>
- <20161221145757.727602a2@free-electrons.com>
- <CA+12NBJ5z0KaFhBWGQ9XARzbuAwKCo5Px7ZZvL-OFxjz=O-pSQ@mail.gmail.com>
- <CA+12NB+qmsHK7oivjdhgg=RccKKgBEUE6dJhMZFg5u9Lbuc2hQ@mail.gmail.com>
- <20161221165333.412a7748@free-electrons.com>
- <CA+12NB+0Q47tpeBc5iYtGTk2JGnTfmasEQGXAmNif1tR9p08FA@mail.gmail.com>
- <20161221174039.788e0aaa@free-electrons.com>
-Message-ID: <CA+12NB+_Duk6EEe0evtwga2Vdbv9N3WZMShAmN2SV2jgs-0YLQ@mail.gmail.com>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Wed, 21 Dec 2016 18:00:39 +0100
+Subject: [Buildroot] [PATCH] wine: Bump to version 1.8.6
+Message-ID: <1482339639-24351-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Can you pls give me some pointers as to where I would look, to fix it ?
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/wine/wine.hash | 2 +-
+ package/wine/wine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I would be willing to give it a go.
-
-On Wed, Dec 21, 2016 at 11:40 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello,
->
-> On Wed, 21 Dec 2016 11:38:50 -0500, Linux User wrote:
->
-> > Buildroot version is  2013.08.1
-> >
-> > Config file is attached.
->
-> Sorry, but we are not going to support a Buildroot version as old as
-> 2013.08. Most likely the problem has already been fixed since then.
->
-> If you really want to have a fix for 2013.08, either you are on your
-> own, or you should seek some commercial support.
->
-> Best regards,
->
-> Thomas Petazzoni
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161221/34d47800/attachment.html>
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 0f6b9d3..a5297f0 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 dee2a4959e5f90a89aaf04566c23f2926e9590f8968ea662afd81947fdb6f6d6 wine-1.8.5.tar.bz2
++sha256 b1797896eb3b63aab8a4753cc756d6211a0e85460146a1b52063ec79c13906d3 wine-1.8.6.tar.bz2
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 47ba90a..1947daa 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 1.8.5
++WINE_VERSION = 1.8.6
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
+ WINE_SITE = https://dl.winehq.org/wine/source/1.8
+ WINE_LICENSE = LGPLv2.1+
+-- 
+2.7.4
