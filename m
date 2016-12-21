@@ -1,38 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Dec 2016 17:40:39 +0100
-Subject: [Buildroot] logrotate error
-In-Reply-To: <CA+12NB+0Q47tpeBc5iYtGTk2JGnTfmasEQGXAmNif1tR9p08FA@mail.gmail.com>
-References: <CA+12NBJSywCO=azSzUtUdSS3irhXTUnhNpcRL6Rr-R=g_9UbHQ@mail.gmail.com>
- <20161221145757.727602a2@free-electrons.com>
- <CA+12NBJ5z0KaFhBWGQ9XARzbuAwKCo5Px7ZZvL-OFxjz=O-pSQ@mail.gmail.com>
- <CA+12NB+qmsHK7oivjdhgg=RccKKgBEUE6dJhMZFg5u9Lbuc2hQ@mail.gmail.com>
- <20161221165333.412a7748@free-electrons.com>
- <CA+12NB+0Q47tpeBc5iYtGTk2JGnTfmasEQGXAmNif1tR9p08FA@mail.gmail.com>
-Message-ID: <20161221174039.788e0aaa@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Dec 2016 17:52:02 +0100
+Subject: [Buildroot] [PATCH] gcc: bump 6.x series to version 6.3.0
+In-Reply-To: <20161221152953.6286-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Wed, 21 Dec 2016 12:29:53 -0300")
+References: <20161221152953.6286-1-gustavo@zacarias.com.ar>
+Message-ID: <87zijp2pjh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Wed, 21 Dec 2016 11:38:50 -0500, Linux User wrote:
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-> Buildroot version is  2013.08.1
-> 
-> Config file is attached.
+Committed, thanks.
 
-Sorry, but we are not going to support a Buildroot version as old as
-2013.08. Most likely the problem has already been fixed since then.
-
-If you really want to have a fix for 2013.08, either you are on your
-own, or you should seek some commercial support.
-
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
