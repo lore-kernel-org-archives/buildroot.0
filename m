@@ -1,35 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Dec 2016 14:57:57 +0100
-Subject: [Buildroot] logrotate error
-In-Reply-To: <CA+12NBJSywCO=azSzUtUdSS3irhXTUnhNpcRL6Rr-R=g_9UbHQ@mail.gmail.com>
-References: <CA+12NBJSywCO=azSzUtUdSS3irhXTUnhNpcRL6Rr-R=g_9UbHQ@mail.gmail.com>
-Message-ID: <20161221145757.727602a2@free-electrons.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 21 Dec 2016 08:09:35 -0600
+Subject: [Buildroot] [PATCH] valgrind: Force -fno-stack-protector in
+	CFLAGS
+In-Reply-To: <20161221100902.4758fe7e@free-electrons.com>
+References: <1482293424-4043-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20161221100902.4758fe7e@free-electrons.com>
+Message-ID: <CANQCQpavHiM_AbdoKwFuVW+z-vHYNK=3WCw5zNNKTKyz98DJXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Wed, 21 Dec 2016 08:22:34 -0500, Linux User wrote:
+On Wed, Dec 21, 2016 at 3:09 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 20 Dec 2016 22:10:24 -0600, Matt Weber wrote:
+>> From: Brandon Maier <brandon.maier@rockwellcollins.com>
+>>
+>> Valgrind must be compiled with no stack protection. Valgrind defaults
+>> CFLAGS to -fno-stack-protector, but Buildroot's CFLAGS overrides it.
+>>
+>> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+>> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>> ---
+>>  package/valgrind/valgrind.mk | 6 +++++-
+>>  1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+>> index 087a381..b9cd947 100644
+>> --- a/package/valgrind/valgrind.mk
+>> +++ b/package/valgrind/valgrind.mk
+>> @@ -27,7 +27,11 @@ VALGRIND_AUTORECONF = YES
+>>  # and pass the right -march option, so they take precedence over
+>>  # Valgrind's wrongfully detected value.
+>>  ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+>> -VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -march=$(BR2_GCC_TARGET_ARCH)"
+>> +VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fno-stack-protector -march=$(BR2_GCC_TARGET_ARCH)"
+>> +else
+>> +# Valgrind must be compiled with no stack protection. Valgrind defaults
+>> +# CFLAGS to -fno-stack-protector, but Buildroot's CFLAGS overrides it.
+>> +VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fno-stack-protector"
+>>  endif
+>
+> I think you should state "Buildroot *may* override it". Indeed, we
+> only pass -fstack-protector if you have
+> BR2_SSP_{REGULAR,STRONG,BR2_SSP_ALL} enabled.
+>
+> Other than that, could you refactor this the following way:
+>
+> # Valgrind must be compiled with no stack protection, so forcefully
+> # pass -fno-stack-protector to override what Buildroot may have in
+> # TARGET_CFLAGS if SSP support is enabled.
+> VALGRIND_CFLAGS = \
+>         $(TARGET_CFLAGS) \
+>         -fno-stack-protector
+>
+> # blblabla mips stuff
+> ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+> VALGRIND_CFLAGS += -march=$(BR2_GCC_TARGET_ARCH)
+> endif
+>
+> VALGRIND_CONF_ENV = CFLAGS="$(VALGRIND_CFLAGS)"
+>
 
-> I enabled the logrotate package through the menuconfig, and my compilation
-> breaks. Can someone pls shed some light.
+Thanks for the review, we'll update the description and these couple changes.
 
-This type of error really smells like you did a first build, then
-changed your Buildroot configuration, and restarted the build, without
-doing a "make clean".
-
-Can you please check if you can reproduce after a "make clean all" ?
-
-In any case, please read
-https://buildroot.org/downloads/manual/manual.html#full-rebuild.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
