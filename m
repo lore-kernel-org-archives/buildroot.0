@@ -1,44 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 21 Dec 2016 21:04:15 +0100
-Subject: [Buildroot] [PATCH 11/11] runc: pass -extldflags '-static' in
-	good variable
-In-Reply-To: <87r3512gqt.fsf@dell.be.48ers.dk>
-References: <1482346246-87491-1-git-send-email-fabrice.fontaine@orange.com>
- <87r3512gqt.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W82sWBat74zrAuGTy0r+0UnS7uYW1dUMyJqKnNRrX4wwjw@mail.gmail.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Wed, 21 Dec 2016 17:22:44 -0300
+Subject: [Buildroot] [PATCH] lzlib: depends on lua
+Message-ID: <20161221202244.7197-1-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-2016-12-21 21:02 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+It's missing the dependency on lua, hence when using the upcoming PPS
+support its staging directory isn't populated with the required
+dependencies resulting in build failure.
 
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
-> Patch 11/11?
->
-Thanks, the patch number was incorrect.
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/lzlib/lzlib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
->  > The modification made in http://patchwork.ozlabs.org/patch/652102
->  > contained a small copy/paste error, FLANNEL_GLDFLAGS was used instead of
->  > RUNC_GLDFLAGS.
->
->  > Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
->
-> Committed, thanks after rewording the commit message to refer to the
-> exact commit.
->
-> --
-> Bye, Peter Korsgaard
->
-
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161221/9c7cce36/attachment.html>
+diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+index 91f380a..f468a1c 100644
+--- a/package/lzlib/lzlib.mk
++++ b/package/lzlib/lzlib.mk
+@@ -6,7 +6,7 @@
+ 
+ LZLIB_VERSION = 0.4.3
+ LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+-LZLIB_DEPENDENCIES = zlib
++LZLIB_DEPENDENCIES = lua zlib
+ LZLIB_LICENSE = MIT
+ LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+ 	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+-- 
+2.10.2
