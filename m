@@ -1,70 +1,93 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 21 Dec 2016 23:07:07 +0100
-Subject: [Buildroot] [PATCH] package/google-breakpad: really fix the C++11
-	dependency
-Message-ID: <1482358027-5386-1-git-send-email-romain.naour@gmail.com>
+From: Tal Shorer <tal.shorer@gmail.com>
+Date: Thu, 22 Dec 2016 00:17:48 +0200
+Subject: [Buildroot] [PATCH v4] usbip: new package
+In-Reply-To: <1481736504-12256-1-git-send-email-tal.shorer@gmail.com>
+References: <20161213175356.GB3546@free.fr>
+ <1481736504-12256-1-git-send-email-tal.shorer@gmail.com>
+Message-ID: <CAFDyS3P1hzTmF7ZsLf08kUFiAHh1=Lxp6JY-px3v4BCTbP5sHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The C++11 build issue is still here since the C++11 is not complete in
-gcc 4.7 [1]. So disable Google-breakpad for toolchains based on
-gcc <= 4.7.
-
-[1] https://gcc.gnu.org/gcc-4.7/cxx0x_status.html
-
-Fixes:
-http://autobuild.buildroot.net/results/c5e/c5e629f26bf6da369dff1e4588c16d2773173e9f
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- Config.in                         | 4 ++--
- package/google-breakpad/Config.in | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/Config.in b/Config.in
-index d3bb7b8..ccd777e 100644
---- a/Config.in
-+++ b/Config.in
-@@ -529,8 +529,8 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
- 	bool "Enable google-breakpad support"
- 	select BR2_PACKAGE_GOOGLE_BREAKPAD
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
-diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-index c6171af..e0e9106 100644
---- a/package/google-breakpad/Config.in
-+++ b/package/google-breakpad/Config.in
-@@ -6,8 +6,8 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- config BR2_PACKAGE_GOOGLE_BREAKPAD
- 	bool "google-breakpad"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
-@@ -34,9 +34,9 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
- 
- 	  https://chromium.googlesource.com/breakpad/breakpad
- 
--comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread, C++, gcc >= 4.7"
-+comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
- 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_HOST_GCC_AT_LEAST_4_7
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_HOST_GCC_AT_LEAST_4_8
--- 
-2.5.5
+On Wed, Dec 14, 2016 at 7:28 PM, Tal Shorer <tal.shorer@gmail.com> wrote:
+> add the usbip package from the kernel source, allowing users to share
+> usb devices over a network connection
+>
+> Signed-off-by: Tal Shorer <tal.shorer@gmail.com>
+> ---
+>  package/linux-tools/Config.in |  2 ++
+>  package/usbip/Config.in       | 14 ++++++++++++++
+>  package/usbip/usbip.mk        | 26 ++++++++++++++++++++++++++
+>  3 files changed, 42 insertions(+)
+>  create mode 100644 package/usbip/Config.in
+>  create mode 100644 package/usbip/usbip.mk
+>
+> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+> index db9ed9f..7fceca7 100644
+> --- a/package/linux-tools/Config.in
+> +++ b/package/linux-tools/Config.in
+> @@ -83,4 +83,6 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
+>         depends on BR2_USE_MMU
+>         depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>
+> +source package/usbip/Config.in
+> +
+>  endmenu
+> diff --git a/package/usbip/Config.in b/package/usbip/Config.in
+> new file mode 100644
+> index 0000000..bb92a05
+> --- /dev/null
+> +++ b/package/usbip/Config.in
+> @@ -0,0 +1,14 @@
+> +# sourced from package/linux-tools/Config.in rather than from package/Config.in
+> +
+> +config BR2_PACKAGE_USBIP
+> +       bool "usbip"
+> +       depends on BR2_PACKAGE_HAS_UDEV
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # usbutils <- libusb
+> +       depends on !BR2_STATIC_LIBS
+> +       select BR2_PACKAGE_USBUTILS
+> +       help
+> +         usbip is a set of tools that allows machines to share their
+> +         usb devices over the network, to be driven by a remote client.
+> +
+> +comment "usbip needs udev /dev management and toolchain w/ threads"
+> +       depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/usbip/usbip.mk b/package/usbip/usbip.mk
+> new file mode 100644
+> index 0000000..7c8e244
+> --- /dev/null
+> +++ b/package/usbip/usbip.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# usbip
+> +#
+> +################################################################################
+> +
+> +# No USBIP_SITE, no USB_VERSION, we vampirise the code from the
+> +# linux kernel
+> +USBIP_PATCH_DEPENDENCIES = linux
+> +USBIP_DEPENDENCIES = udev
+> +
+> +USBIP_CONF_OPTS = --without-tcp-wrappers
+> +
+> +USBIP_SRC_DIR = $(wildcard \
+> +  $(LINUX_DIR)/tools/usb/usbip \
+> +  $(LINUX_DIR)/drivers/staging/usbip/userspace)
+> +
+> +define USBIP_EXTRACT_CMDS
+> +       if [ -z "$(USBIP_SRC_DIR)" ]; then \
+> +           echo "No usbip source in your kernel tree" 2>&1; \
+> +           exit 1; \
+> +       fi
+> +       rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(USBIP_SRC_DIR)/ $(@D)
+> +endef
+> +
+> +$(eval $(autotools-package))
+> --
+> 2.7.4
+>
+ping?
