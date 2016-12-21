@@ -1,29 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 21:02:02 +0100
-Subject: [Buildroot] [PATCH 11/11] runc: pass -extldflags '-static' in
-	good variable
-In-Reply-To: <1482346246-87491-1-git-send-email-fabrice.fontaine@orange.com>
- (Fabrice Fontaine's message of "Wed, 21 Dec 2016 19:50:46 +0100")
-References: <1482346246-87491-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <87r3512gqt.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Dec 2016 21:00:35 +0100
+Subject: [Buildroot] [git commit] runc: pass -extldflags '-static' in
+	correct variable
+Message-ID: <20161221200224.CEF8B81D77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b97e3c94a9798bbd7eb08f5bd1adb0417cde1fd1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch 11/11?
+commit 9101ce5800 (runc: pass -extldflags '-static' on when
+BR2_STATIC_LIBS=y) contained a small copy/paste error, FLANNEL_GLDFLAGS was
+used instead of RUNC_GLDFLAGS.
 
- > The modification made in http://patchwork.ozlabs.org/patch/652102
- > contained a small copy/paste error, FLANNEL_GLDFLAGS was used instead of
- > RUNC_GLDFLAGS.
+[Peter: refer to exact commit]
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/runc/runc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-
-Committed, thanks after rewording the commit message to refer to the
-exact commit.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index ef151ed..661872c 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -22,7 +22,7 @@ RUNC_GLDFLAGS = \
+ 	-X main.gitCommit=$(RUNC_VERSION)
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-FLANNEL_GLDFLAGS += -extldflags '-static'
++RUNC_GLDFLAGS += -extldflags '-static'
+ endif
+ 
+ RUNC_GOTAGS = cgo static_build
