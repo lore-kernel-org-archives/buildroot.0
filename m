@@ -1,40 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 Dec 2016 10:25:27 -0300
-Subject: [Buildroot] [PATCH] nmap: bump to version 7.40
-Message-ID: <20161221132527.15225-1-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Dec 2016 14:57:57 +0100
+Subject: [Buildroot] logrotate error
+In-Reply-To: <CA+12NBJSywCO=azSzUtUdSS3irhXTUnhNpcRL6Rr-R=g_9UbHQ@mail.gmail.com>
+References: <CA+12NBJSywCO=azSzUtUdSS3irhXTUnhNpcRL6Rr-R=g_9UbHQ@mail.gmail.com>
+Message-ID: <20161221145757.727602a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nmap/nmap.hash | 4 ++--
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index 2a26557..239ca13 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
-@@ -1,2 +1,2 @@
--# From https://nmap.org/dist/sigs/nmap-7.31.tar.bz2.digest.txt
--sha256 cb9f4e03c0771c709cd47dc8fc6ac3421eadbdd313f0aae52276829290583842  nmap-7.31.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.40.tar.bz2.digest.txt
-+sha256 9e14665fffd054554d129d62c13ad95a7b5c7a046daa2290501909e65f4d3188  nmap-7.40.tar.bz2
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 3087903..6e178b1 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NMAP_VERSION = 7.31
-+NMAP_VERSION = 7.40
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
+On Wed, 21 Dec 2016 08:22:34 -0500, Linux User wrote:
+
+> I enabled the logrotate package through the menuconfig, and my compilation
+> breaks. Can someone pls shed some light.
+
+This type of error really smells like you did a first build, then
+changed your Buildroot configuration, and restarted the build, without
+doing a "make clean".
+
+Can you please check if you can reproduce after a "make clean all" ?
+
+In any case, please read
+https://buildroot.org/downloads/manual/manual.html#full-rebuild.
+
+Thanks!
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
