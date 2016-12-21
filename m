@@ -1,46 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 23:06:14 +0100
-Subject: [Buildroot] Altera sockit defconfig no longer builds
-Message-ID: <87a8bp2azt.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 21 Dec 2016 23:07:07 +0100
+Subject: [Buildroot] [PATCH] package/google-breakpad: really fix the C++11
+	dependency
+Message-ID: <1482358027-5386-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The C++11 build issue is still here since the C++11 is not complete in
+gcc 4.7 [1]. So disable Google-breakpad for toolchains based on
+gcc <= 4.7.
 
-Back in 2014, you contributed altera_sockit_defconfig to Buildroot.
-Unfortunately, this defconfig no longer builds: the Linux kernel
-version used is too old to build with gcc 5.x.
+[1] https://gcc.gnu.org/gcc-4.7/cxx0x_status.html
 
-Do you still have access to this HW platform? If so, can you contribute
-a patch to update the defconfig? If you're no longer interested by this
-platform, we can also decide to remove its defconfig.
+Fixes:
+http://autobuild.buildroot.net/results/c5e/c5e629f26bf6da369dff1e4588c16d2773173e9f
 
-https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/185616884
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ Config.in                         | 4 ++--
+ package/google-breakpad/Config.in | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-You need to move to kernel 3.18+ for compatibility with gcc5.x or
-alternatively backport this commit (and any dependencies):
-
-commit 71458cfc782eafe4b27656e078d379a34e472adf
-Author: Sasha Levin <sasha.levin@oracle.com>
-Date:   Mon Oct 13 15:51:05 2014 -0700
-
-    kernel: add support for gcc 5
-
-    We're missing include/linux/compiler-gcc5.h which is required now
-    because gcc branched off to v5 in trunk.
-
-    Just copy the relevant bits out of include/linux/compiler-gcc4.h,
-    no new code is added as of now.
-
-    This fixes a build error when using gcc 5.
-
-    Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
-    Cc: <stable@vger.kernel.org>
-    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-
+diff --git a/Config.in b/Config.in
+index d3bb7b8..ccd777e 100644
+--- a/Config.in
++++ b/Config.in
+@@ -529,8 +529,8 @@ config BR2_GOOGLE_BREAKPAD_ENABLE
+ 	bool "Enable google-breakpad support"
+ 	select BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+index c6171af..e0e9106 100644
+--- a/package/google-breakpad/Config.in
++++ b/package/google-breakpad/Config.in
+@@ -6,8 +6,8 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ config BR2_PACKAGE_GOOGLE_BREAKPAD
+ 	bool "google-breakpad"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_HOST_GCC_AT_LEAST_4_7 # C++11
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on (BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC)
+@@ -34,9 +34,9 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
+ 
+ 	  https://chromium.googlesource.com/breakpad/breakpad
+ 
+-comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread, C++, gcc >= 4.7"
++comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread, C++, gcc >= 4.8"
+ 	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_HOST_GCC_AT_LEAST_4_7
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_HOST_GCC_AT_LEAST_4_8
 -- 
-Bye, Peter Korsgaard
+2.5.5
