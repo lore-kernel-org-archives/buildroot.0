@@ -1,44 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 08:48:49 +0100
-Subject: [Buildroot] [PATCH] libcurl: security bump to 7.52.0
-Message-ID: <20161221074849.22907-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Dec 2016 10:03:24 +0100
+Subject: [Buildroot] [PATCH] quagga: Create /var/run/quagga on sysv
+In-Reply-To: <1482293253-61002-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1482293253-61002-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20161221100324.0f4c89e0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2016-9586 - printf floating point buffer overflow
+Hello,
 
-For details, see:
-https://curl.haxx.se/docs/adv_20161221A.html
+Thanks for this patch!
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 20 Dec 2016 22:07:33 -0600, Matt Weber wrote:
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index e128335..2b68c6a 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 7f8240048907e5030f67be0a6129bc4b333783b9cca1391026d700835a788dde  curl-7.51.0.tar.bz2
-+sha256 b9a2e18b4785eb75ad84598720e1559e1c53550ea011c0e00becdb94e2df5cc6  curl-7.52.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 197e0b5..b2a1b24 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.51.0
-+LIBCURL_VERSION = 7.52.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+> diff --git a/package/quagga/S99quagga b/package/quagga/S99quagga
+> new file mode 100644
+> index 0000000..e964387
+> --- /dev/null
+> +++ b/package/quagga/S99quagga
+> @@ -0,0 +1,6 @@
+> +#!/bin/sh
+> +
+> +if [ ! -d /var/run/quagga ]; then
+> +       mkdir -p /var/run/quagga
+> +       chown quagga:quagga /var/run/quagga
+> +fi
+
+I think we would prefer to have a real init script, that not only
+creates /var/run/quagga, but also starts quagga itself. I.e something
+that does the same as the systemd unit file.
+
+Thanks,
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
