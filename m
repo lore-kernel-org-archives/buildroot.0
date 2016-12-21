@@ -1,41 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 22:18:58 +0100
-Subject: [Buildroot] [git commit] wine: Bump to version 1.8.6
-Message-ID: <20161221211911.5BE9A802A9@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 21 Dec 2016 22:42:12 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: bump CodeSourcery AMD64
+ to 2016.11-19
+In-Reply-To: <f1436636-46cc-8253-990d-5bb3276b242d@gmail.com>
+References: <1482265769-6560-1-git-send-email-romain.naour@gmail.com>
+ <20161220215452.447ee8f3@free-electrons.com>
+ <9c743fd4-5835-aab9-01e4-17504a409416@gmail.com>
+ <20161220221836.672e059b@free-electrons.com>
+ <f1436636-46cc-8253-990d-5bb3276b242d@gmail.com>
+Message-ID: <578a9e23-be4c-1f1c-748f-fdb8094289fc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=460cbfe9777673df00221a0b335a5eefd18b2815
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wine/wine.hash | 2 +-
- package/wine/wine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Le 20/12/2016 ? 22:27, Romain Naour a ?crit :
+> Le 20/12/2016 ? 22:18, Thomas Petazzoni a ?crit :
+>> Hello,
+>>
+>> On Tue, 20 Dec 2016 22:15:16 +0100, Romain Naour wrote:
+>>
+>>>> You don't have qemu-system-x86_64, really ? :-)  
+>>>
+>>> I can't use it with Qemu even with the current version or this new toolchain.
+>>> It doesn't boot at all, I don't even see the first kernel line.
+>>>
+>>> I'm using a Linux kernel 4.8.13 with qemu-2.4.1-11.fc23 or v2.8.0-rc2-8-gbd8ef50
+>>
+>> Odd. What CPU variant are you using?
+> 
+> I'm using BR2_x86_steamroller, Qemu doesn't seems support it.
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 0f6b9d3..a5297f0 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 dee2a4959e5f90a89aaf04566c23f2926e9590f8968ea662afd81947fdb6f6d6 wine-1.8.5.tar.bz2
-+sha256 b1797896eb3b63aab8a4753cc756d6211a0e85460146a1b52063ec79c13906d3 wine-1.8.6.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 47ba90a..1947daa 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WINE_VERSION = 1.8.5
-+WINE_VERSION = 1.8.6
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
- WINE_SITE = https://dl.winehq.org/wine/source/1.8
- WINE_LICENSE = LGPLv2.1+
+I switched to BR2_x86_jaguar for testing and it still don't boot with the command line provided in board/qemu/x86_64/readme.txt
+
+So, I tried several Qemu options (-cpu and -M) and some kernel options...
+Qemu 2.8.0 -cpu Opteron_G4 option seems interesting.
+
+Finally, I had to try a strange option combination "-cpu Opteron_G4 -enable-kvm" even if my host is not an AMD64 cpu (it's an Intel(R) Core(TM) i5-4670K CPU).
+
+And it boot completely :)
+
+Here is the command line used:
+~/git/qemu/x86_64-softmmu/qemu-system-x86_64 -M pc  -kernel test/sourcery-x86-64/images/bzImage -drive file=test/sourcery-x86-64/images/rootfs.ext2,if=virtio,format=raw -append root=/dev/vda -net nic,model=virtio -net user -cpu Opteron_G4 -enable-kvm
+
+Note: Qemu complain about some missing feature
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.sse4a [bit 6]
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.misalignsse [bit 7]
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.3dnowprefetch [bit 8]
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.xop [bit 11]
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.fma4 [bit 16]
+
+It's almost the same warning without -enable-kvm option
+warning: TCG doesn't support requested feature: CPUID.01H:ECX.avx [bit 28]
+warning: TCG doesn't support requested feature: CPUID.80000001H:ECX.misalignsse [bit 7]
+warning: TCG doesn't support requested feature: CPUID.80000001H:ECX.3dnowprefetch [bit 8]
+warning: TCG doesn't support requested feature: CPUID.80000001H:ECX.xop [bit 11]
+warning: TCG doesn't support requested feature: CPUID.80000001H:ECX.fma4 [bit 16]
+
+I guess it works with --enable-kvm since my host support CPUID.01H:ECX.avx
+
+It's amazing to see the content of cpuinfo inside Qemu VM: 
+# cat /proc/cpuinfo
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 21
+model		: 1
+model name	: AMD Opteron 62xx class CPU
+
+So, this toolchain seems to work correctly if avx support is present :)
+Tested with Qemu 2.8.0 and kernel 4.9 (using board/qemu/x86_64/linux-4.8.config) with BR2_x86_jaguar.
+
+However, it doesn't boot with BR2_x86_steamroller.
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.sse4a [bit 6]
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.misalignsse [bit 7]
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.3dnowprefetch [bit 8]
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.xop [bit 11]
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.fma4 [bit 16]
+warning: host doesn't support requested feature: CPUID.80000001H:ECX.tbm [bit 21]
+
+missing CPUID.80000001H:ECX.tbm on my host it seems...
+
+Best regards,
+Romain
+
+> 
+> Romain
+> 
+>>
+>> Maybe Gustavo has a clue?
+>>
+>> Thomas
+>>
+> 
