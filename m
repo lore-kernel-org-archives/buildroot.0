@@ -1,31 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 08:09:41 +0100
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2016.09
-	release
-In-Reply-To: <20161219121157.5040-1-vzakhar@synopsys.com> (Vlad Zakharov's
- message of "Mon, 19 Dec 2016 15:11:57 +0300")
-References: <20161219121157.5040-1-vzakhar@synopsys.com>
-Message-ID: <87fulh69my.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Dec 2016 08:10:58 +0100
+Subject: [Buildroot] [PATCH] mimic: needs wchar support
+In-Reply-To: <20161220220207.12933-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 20 Dec 2016 23:02:07 +0100")
+References: <20161220220207.12933-1-peter@korsgaard.com>
+Message-ID: <87bmw569kt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > As described at:
- > 4520524ba055706236db9f00dd79f1b2e2e87fde
- > this commit continues a series of updates of ARC tools.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/9f7/9f7c1af4b9fd8331672c9096821db91d5f7f3aa1/
+ > http://autobuild.buildroot.net/results/47f/47f5ec3fabefd85e62b675142bd6728904acd5d8/
 
- > This time we're updating tools to arc-2016.09 release version.
+ > At the same time fixup space/tabs for 'help' option.
 
-I see that arc-2016.09 still dies with internal compiler errors when
-building trousers:
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-http://autobuild.buildroot.net/?reason=trousers-0.3.13
-
-What should we do about that?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
