@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 15:12:37 +0100
-Subject: [Buildroot] [git commit] sudo: bump to version 1.8.19p1
-Message-ID: <20161221141352.0ECBD80559@busybox.osuosl.org>
+Date: Wed, 21 Dec 2016 15:13:21 +0100
+Subject: [Buildroot] [git commit] nmap: bump to version 7.40
+Message-ID: <20161221141352.21B6A7FB27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=942dad3a531e1a594c4d63fbb714f237d06803ed
+commit: https://git.buildroot.net/buildroot/commit/?id=961132a393dd6feb8820dc08ef6223808b39a780
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sudo/sudo.hash | 2 +-
- package/sudo/sudo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nmap/nmap.hash | 4 ++--
+ package/nmap/nmap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index 5db547f..ef67392 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index 2a26557..239ca13 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
 @@ -1,2 +1,2 @@
- # From: http://www.sudo.ws/download.html
--sha256 1130923534b62c18b40b529c6877d1a020db93f876617b56a569d0a1133d0228  sudo-1.8.19.tar.gz
-+sha256 b8afb1cf8736b6c61f171f2bf4b174818d9e00e92ef73da55fabcd01286ffc92  sudo-1.8.19p1.tar.gz
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index ee245a1..bc2a47b 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
+-# From https://nmap.org/dist/sigs/nmap-7.31.tar.bz2.digest.txt
+-sha256 cb9f4e03c0771c709cd47dc8fc6ac3421eadbdd313f0aae52276829290583842  nmap-7.31.tar.bz2
++# From https://nmap.org/dist/sigs/nmap-7.40.tar.bz2.digest.txt
++sha256 9e14665fffd054554d129d62c13ad95a7b5c7a046daa2290501909e65f4d3188  nmap-7.40.tar.bz2
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 3087903..6e178b1 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUDO_VERSION = 1.8.19
-+SUDO_VERSION = 1.8.19p1
- SUDO_SITE = http://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC BSD-3c
- SUDO_LICENSE_FILES = doc/LICENSE
+-NMAP_VERSION = 7.31
++NMAP_VERSION = 7.40
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
