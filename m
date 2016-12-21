@@ -1,7 +1,8 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 21 Dec 2016 12:55:08 -0600
-Subject: [Buildroot] [PATCH] valgrind: Force -fno-stack-protector in CFLAGS
-Message-ID: <1482346508-28809-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Wed, 21 Dec 2016 13:01:07 -0600
+Subject: [Buildroot] [PATCH v2] valgrind: Force -fno-stack-protector in
+	CFLAGS
+Message-ID: <1482346867-22071-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
