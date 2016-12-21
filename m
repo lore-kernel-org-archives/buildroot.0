@@ -1,51 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 22:02:37 +0100
-Subject: [Buildroot] telit_evk_pro3_defconfig fails to build
-In-Reply-To: <CAHkwnC_jVyVQ27Y6aOr3hLthmUrd70Ep0ufJULB+4jP3zHrYJQ@mail.gmail.com>
-References: <20161105152013.615d71d7@free-electrons.com>
- <CAHkwnC_jVyVQ27Y6aOr3hLthmUrd70Ep0ufJULB+4jP3zHrYJQ@mail.gmail.com>
-Message-ID: <CACXmVia0ArmYy248oVbg5SZ2uvufyAnktK62Zgm48D+_S04qag@mail.gmail.com>
+Date: Wed, 21 Dec 2016 22:16:21 +0100
+Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime2_defconfig: correct
+	u-boot configuration
+Message-ID: <20161221211621.8851-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This defconfig currently doesn't build:
+https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/185616951
 
->> Back in 2013, you contributed telit_evk_pro3_defconfig to Buildroot.
->> Unfortunately, this defconfig no longer builds: the Linux kernel
->> version used is too old to build with gcc 5.x.
->
-> I will  try to make a patch to fix it.
+As u-boot needs dtc, so add that and change to kconfig mode like on our
+other allwinner defconfigs as that is in fact what is used.
 
-Any news on this? You need to update barebox and move to kernel 3.18+
-for compatibility
-with gcc5.x or alternatively backport this commit (and any
-dependencies):
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/olimex_a20_olinuxino_lime2_defconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-
-commit 71458cfc782eafe4b27656e078d379a34e472adf
-Author: Sasha Levin <sasha.levin@oracle.com>
-Date:   Mon Oct 13 15:51:05 2014 -0700
-
-    kernel: add support for gcc 5
-
-    We're missing include/linux/compiler-gcc5.h which is required now
-    because gcc branched off to v5 in trunk.
-
-    Just copy the relevant bits out of include/linux/compiler-gcc4.h,
-    no new code is added as of now.
-
-    This fixes a build error when using gcc 5.
-
-    Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
-    Cc: <stable@vger.kernel.org>
-    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-
-Do you think you will manage to fix the build issue before the end of
-January or should we remove the defconfig?
-
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 87fc674..807f41c 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -23,9 +23,11 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime2"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
-Bye, Peter Korsgaard
+2.10.2
