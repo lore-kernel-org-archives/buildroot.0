@@ -1,37 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 17:19:58 +0100
-Subject: [Buildroot] [git commit] gcc: bump 6.x series to version 6.3.0
-Message-ID: <20161221165223.C14F2803D0@busybox.osuosl.org>
+Date: Wed, 21 Dec 2016 17:14:51 +0100
+Subject: [Buildroot] [git commit] nftables: bump to version 0.7
+Message-ID: <20161221165223.A636081E7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be1a3a3e4610deb9434329da643bf7b896989276
+commit: https://git.buildroot.net/buildroot/commit/?id=56ec68a7ce829b7accf6345709036cdcbd5432b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And fix small CONF_OPTS assignment snafu.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/{6.2.0 => 6.3.0}/100-uclibc-conf.patch                    | 0
- package/gcc/{6.2.0 => 6.3.0}/301-missing-execinfo_h.patch             | 0
- package/gcc/{6.2.0 => 6.3.0}/810-arm-softfloat-libgcc.patch           | 0
- package/gcc/{6.2.0 => 6.3.0}/830-arm_unbreak_armv4t.patch             | 0
- .../831-ARM-PR-target-70473-Reduce-size-of-Cortex-A8-automat.patch    | 0
- package/gcc/{6.2.0 => 6.3.0}/860-cilk-wchar.patch                     | 0
- package/gcc/{6.2.0 => 6.3.0}/870-xtensa-Fix-PR-target-78118.patch     | 0
- package/gcc/{6.2.0 => 6.3.0}/871-xtensa-Fix-PR-target-78603.patch     | 0
- package/gcc/{6.2.0 => 6.3.0}/890-fix-m68k-compile.patch               | 0
- package/gcc/{6.2.0 => 6.3.0}/891-fix-m68k-uclinux.patch               | 0
- .../892-libgcc-mkmap-symver-support-skip_underscore.patch             | 0
- .../893-libgcc-config-bfin-use-the-generic-linker-version-in.patch    | 0
- .../894-libgcc-fix-DWARF-compilation-with-FDPIC-targets.patch         | 0
- package/gcc/{6.2.0 => 6.3.0}/895-bfin-define-REENTRANT.patch          | 0
- package/gcc/{6.2.0 => 6.3.0}/940-uclinux-enable-threads.patch         | 0
- .../gcc/{6.2.0 => 6.3.0}/941-mips-Add-support-for-mips-r6-musl.patch  | 0
- package/gcc/Config.in.host                                            | 2 +-
- package/gcc/gcc.hash                                                  | 4 ++--
- 18 files changed, 3 insertions(+), 3 deletions(-)
+ package/nftables/nftables.hash | 4 ++--
+ package/nftables/nftables.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index 987aae3..a743476 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
+@@ -1,2 +1,2 @@
+-# From http://www.netfilter.org/projects/nftables/downloads.html#nftables-0.6
+-sha1	c0f90a208e0ab5d43d3e638350a4fe58e6f4366f	nftables-0.6.tar.bz2
++# From http://www.netfilter.org/projects/nftables/downloads.html#nftables-0.7
++sha1	c003fa8b63b1b44c52de345a4d84487d81865a98	nftables-0.7.tar.bz2
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 10a1b42..64d6be7 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NFTABLES_VERSION = 0.6
++NFTABLES_VERSION = 0.7
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = http://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
+@@ -16,7 +16,7 @@ ifeq ($(BR2_PACKAGE_READLINE),y)
+ NFTABLES_DEPENDENCIES += readline
+ NFTABLES_LIBS += -lncurses
+ else
+-NFTABLES_CONF_OPTS = --without-cli
++NFTABLES_CONF_OPTS += --without-cli
+ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
