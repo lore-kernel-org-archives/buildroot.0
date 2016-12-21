@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 21:57:33 +0100
-Subject: [Buildroot] via_imx6_vab820_defconfig fails to build
-In-Reply-To: <CAJ3iQcqS2qN9a_hedO-+N+uskH6bOgV2XVWYetD0noG1=s190A@mail.gmail.com>
-References: <20161105152208.70041169@free-electrons.com>
- <CAJ3iQcqS2qN9a_hedO-+N+uskH6bOgV2XVWYetD0noG1=s190A@mail.gmail.com>
-Message-ID: <CACXmVia4bXVT-j-VCYnGDgurx_FZ5ot-zw1wRx_cnDpYVG5Vow@mail.gmail.com>
+Date: Wed, 21 Dec 2016 22:02:37 +0100
+Subject: [Buildroot] telit_evk_pro3_defconfig fails to build
+In-Reply-To: <CAHkwnC_jVyVQ27Y6aOr3hLthmUrd70Ep0ufJULB+4jP3zHrYJQ@mail.gmail.com>
+References: <20161105152013.615d71d7@free-electrons.com>
+ <CAHkwnC_jVyVQ27Y6aOr3hLthmUrd70Ep0ufJULB+4jP3zHrYJQ@mail.gmail.com>
+Message-ID: <CACXmVia0ArmYy248oVbg5SZ2uvufyAnktK62Zgm48D+_S04qag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,14 @@ To: buildroot@busybox.net
 
 Hi,
 
-> Sure thing, I still have some access to the platform. I'll check out the
-> build failure and send a patch when fixed.
+>> Back in 2013, you contributed telit_evk_pro3_defconfig to Buildroot.
+>> Unfortunately, this defconfig no longer builds: the Linux kernel
+>> version used is too old to build with gcc 5.x.
+>
+> I will  try to make a patch to fix it.
 
-Any news on this? You need to move to kernel 3.18+ for compatibility
+Any news on this? You need to update barebox and move to kernel 3.18+
+for compatibility
 with gcc5.x or alternatively backport this commit (and any
 dependencies):
 
