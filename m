@@ -1,97 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 21 Dec 2016 22:42:12 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: bump CodeSourcery AMD64
- to 2016.11-19
-In-Reply-To: <f1436636-46cc-8253-990d-5bb3276b242d@gmail.com>
-References: <1482265769-6560-1-git-send-email-romain.naour@gmail.com>
- <20161220215452.447ee8f3@free-electrons.com>
- <9c743fd4-5835-aab9-01e4-17504a409416@gmail.com>
- <20161220221836.672e059b@free-electrons.com>
- <f1436636-46cc-8253-990d-5bb3276b242d@gmail.com>
-Message-ID: <578a9e23-be4c-1f1c-748f-fdb8094289fc@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Dec 2016 23:04:40 +0100
+Subject: [Buildroot] Altera socdk defconfig no longer builds
+Message-ID: <87eg112b2f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-Le 20/12/2016 ? 22:27, Romain Naour a ?crit :
-> Le 20/12/2016 ? 22:18, Thomas Petazzoni a ?crit :
->> Hello,
->>
->> On Tue, 20 Dec 2016 22:15:16 +0100, Romain Naour wrote:
->>
->>>> You don't have qemu-system-x86_64, really ? :-)  
->>>
->>> I can't use it with Qemu even with the current version or this new toolchain.
->>> It doesn't boot at all, I don't even see the first kernel line.
->>>
->>> I'm using a Linux kernel 4.8.13 with qemu-2.4.1-11.fc23 or v2.8.0-rc2-8-gbd8ef50
->>
->> Odd. What CPU variant are you using?
-> 
-> I'm using BR2_x86_steamroller, Qemu doesn't seems support it.
+Back in 2015, you contributed altera_socdk_defconfig to Buildroot.
+Unfortunately, this defconfig no longer builds: the Linux kernel
+version used is too old to build with gcc 5.x.
 
-I switched to BR2_x86_jaguar for testing and it still don't boot with the command line provided in board/qemu/x86_64/readme.txt
+Do you still have access to this HW platform? If so, can you contribute
+a patch to update the defconfig? If you're no longer interested by this
+platform, we can also decide to remove its defconfig.
 
-So, I tried several Qemu options (-cpu and -M) and some kernel options...
-Qemu 2.8.0 -cpu Opteron_G4 option seems interesting.
+https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/185616883
 
-Finally, I had to try a strange option combination "-cpu Opteron_G4 -enable-kvm" even if my host is not an AMD64 cpu (it's an Intel(R) Core(TM) i5-4670K CPU).
+You need to move to kernel 3.18+ for compatibility with gcc5.x or
+alternatively backport this commit (and any dependencies):
 
-And it boot completely :)
+commit 71458cfc782eafe4b27656e078d379a34e472adf
+Author: Sasha Levin <sasha.levin@oracle.com>
+Date:   Mon Oct 13 15:51:05 2014 -0700
 
-Here is the command line used:
-~/git/qemu/x86_64-softmmu/qemu-system-x86_64 -M pc  -kernel test/sourcery-x86-64/images/bzImage -drive file=test/sourcery-x86-64/images/rootfs.ext2,if=virtio,format=raw -append root=/dev/vda -net nic,model=virtio -net user -cpu Opteron_G4 -enable-kvm
+    kernel: add support for gcc 5
 
-Note: Qemu complain about some missing feature
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.sse4a [bit 6]
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.misalignsse [bit 7]
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.3dnowprefetch [bit 8]
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.xop [bit 11]
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.fma4 [bit 16]
+    We're missing include/linux/compiler-gcc5.h which is required now
+    because gcc branched off to v5 in trunk.
 
-It's almost the same warning without -enable-kvm option
-warning: TCG doesn't support requested feature: CPUID.01H:ECX.avx [bit 28]
-warning: TCG doesn't support requested feature: CPUID.80000001H:ECX.misalignsse [bit 7]
-warning: TCG doesn't support requested feature: CPUID.80000001H:ECX.3dnowprefetch [bit 8]
-warning: TCG doesn't support requested feature: CPUID.80000001H:ECX.xop [bit 11]
-warning: TCG doesn't support requested feature: CPUID.80000001H:ECX.fma4 [bit 16]
+    Just copy the relevant bits out of include/linux/compiler-gcc4.h,
+    no new code is added as of now.
 
-I guess it works with --enable-kvm since my host support CPUID.01H:ECX.avx
+    This fixes a build error when using gcc 5.
 
-It's amazing to see the content of cpuinfo inside Qemu VM: 
-# cat /proc/cpuinfo
-processor	: 0
-vendor_id	: GenuineIntel
-cpu family	: 21
-model		: 1
-model name	: AMD Opteron 62xx class CPU
+    Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
+    Cc: <stable@vger.kernel.org>
+    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 
-So, this toolchain seems to work correctly if avx support is present :)
-Tested with Qemu 2.8.0 and kernel 4.9 (using board/qemu/x86_64/linux-4.8.config) with BR2_x86_jaguar.
-
-However, it doesn't boot with BR2_x86_steamroller.
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.sse4a [bit 6]
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.misalignsse [bit 7]
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.3dnowprefetch [bit 8]
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.xop [bit 11]
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.fma4 [bit 16]
-warning: host doesn't support requested feature: CPUID.80000001H:ECX.tbm [bit 21]
-
-missing CPUID.80000001H:ECX.tbm on my host it seems...
-
-Best regards,
-Romain
-
-> 
-> Romain
-> 
->>
->> Maybe Gustavo has a clue?
->>
->> Thomas
->>
-> 
+-- 
+Bye, Peter Korsgaard
