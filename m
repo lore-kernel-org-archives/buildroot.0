@@ -1,23 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 17:15:20 +0100
-Subject: [Buildroot] [PATCH] libcurl: security bump to 7.52.0
-In-Reply-To: <20161221074849.22907-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 21 Dec 2016 08:48:49 +0100")
-References: <20161221074849.22907-1-peter@korsgaard.com>
-Message-ID: <878tr945t3.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Dec 2016 17:18:38 +0100
+Subject: [Buildroot] [PATCH] package/monit: security bump to version
+	5.20.0
+In-Reply-To: <20161221160134.3858-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Wed, 21 Dec 2016 17:01:34 +0100")
+References: <20161221160134.3858-1-joerg.krause@embedded.rocks>
+Message-ID: <874m1x45nl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > Fixes CVE-2016-9586 - printf floating point buffer overflow
- > For details, see:
- > https://curl.haxx.se/docs/adv_20161221A.html
+ > Fixes CVE-2016-7067.
+ > Note that since version 5.20.0 monit optionally depends on zlib.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Committed, thanks.
 
