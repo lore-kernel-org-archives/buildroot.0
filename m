@@ -1,45 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 19:44:44 +0100
-Subject: [Buildroot] [git commit] libcurl: security bump to 7.52.0
-Message-ID: <20161221184526.7408481E53@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 21 Dec 2016 19:50:46 +0100
+Subject: [Buildroot] [PATCH 11/11] runc: pass -extldflags '-static' in good
+	variable
+Message-ID: <1482346246-87491-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c5beb6501707dd5cb80484562bf2b0cbe2b4423
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The modification made in http://patchwork.ozlabs.org/patch/652102
+contained a small copy/paste error, FLANNEL_GLDFLAGS was used instead of
+RUNC_GLDFLAGS.
 
-Fixes CVE-2016-9586 - printf floating point buffer overflow
-
-For details, see:
-https://curl.haxx.se/docs/adv_20161221A.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/runc/runc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index e128335..2b68c6a 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 7f8240048907e5030f67be0a6129bc4b333783b9cca1391026d700835a788dde  curl-7.51.0.tar.bz2
-+sha256 b9a2e18b4785eb75ad84598720e1559e1c53550ea011c0e00becdb94e2df5cc6  curl-7.52.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 197e0b5..b2a1b24 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index ef151ed..661872c 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -22,7 +22,7 @@ RUNC_GLDFLAGS = \
+ 	-X main.gitCommit=$(RUNC_VERSION)
  
--LIBCURL_VERSION = 7.51.0
-+LIBCURL_VERSION = 7.52.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+ ifeq ($(BR2_STATIC_LIBS),y)
+-FLANNEL_GLDFLAGS += -extldflags '-static'
++RUNC_GLDFLAGS += -extldflags '-static'
+ endif
+ 
+ RUNC_GOTAGS = cgo static_build
+-- 
+2.5.0
