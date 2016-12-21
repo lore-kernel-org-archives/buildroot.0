@@ -1,39 +1,29 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Wed, 21 Dec 2016 10:50:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mimic: indentation cleanup
-Message-ID: <1482313813-16016-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 21 Dec 2016 11:15:00 +0100
+Subject: [Buildroot] [PATCH] uclibc: add patch to fix <stdlib.h>
+In-Reply-To: <1482186391-28787-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 19 Dec 2016 23:26:31 +0100")
+References: <1482186391-28787-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8737hh6123.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/mimic/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/mimic/Config.in b/package/mimic/Config.in
-index 757ac9e..79641d3 100644
---- a/package/mimic/Config.in
-+++ b/package/mimic/Config.in
-@@ -5,12 +5,12 @@ config BR2_PACKAGE_MIMIC
- 	bool "mimic"
- 	depends on BR2_USE_WCHAR
- 	help
--          Mimic is a fast, lightweight Text-to-speech engine developed
--          by Mycroft A.I. and VocaliD, based on Carnegie Mellon
--          University's Flite (Festival-Lite) software. Mimic takes in
--          text and reads it out loud to create a high quality voice.
-+	  Mimic is a fast, lightweight Text-to-speech engine developed
-+	  by Mycroft A.I. and VocaliD, based on Carnegie Mellon
-+	  University's Flite (Festival-Lite) software. Mimic takes in
-+	  text and reads it out loud to create a high quality voice.
- 
--          https://github.com/MycroftAI/mimic
-+	  https://github.com/MycroftAI/mimic
- 
- if BR2_PACKAGE_MIMIC
- 
+ > This commit adds a patch to <stdlib.h>, to fix a bug introduced in
+ > uClibc-ng 1.0.20, and which was causing build failures for at least one
+ > package in Buildroot: freeswitch.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/12c246b058224f68494b84355a29dc4efb85df6d/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
