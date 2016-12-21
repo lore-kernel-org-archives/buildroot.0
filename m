@@ -1,52 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 17:08:06 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] gdk-pixbuf: security bump
-	to version 2.36.2
-Message-ID: <20161221161130.75E2981E79@busybox.osuosl.org>
+From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+Date: Wed, 21 Dec 2016 17:12:23 +0100
+Subject: [Buildroot] mtd-utils 2.0.0-rc2
+In-Reply-To: <1481887885.31185.8.camel@embedded.rocks>
+References: <c7590022-cf5a-f785-6a39-1a76a3054bda@sigma-star.at>
+ <1481887885.31185.8.camel@embedded.rocks>
+Message-ID: <f1c18477-c75b-7a5a-42f9-0ab930c37663@sigma-star.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3df927248e89b8547246341f501365cc22597b2c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+Hi,
 
-Fixes:
-* Fix a NULL pointer dereference (#776026)
-* Fix a memory leak (#776020)
-* Avoid a buffer overrun in the qtif loader ($#775648)
-* Fix a crash in the bmp loader (#775242)
-* Fix crash opening pnm images with large dimensions (#775232)
-* Prevent buffer overflow in the pixdata loader (#775693)
+thanks for the feedback and thanks for testing!
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 75c3c94de92b3c8840306aefbfe8daeb3cb65c2c)
----
- package/gdk-pixbuf/gdk-pixbuf.hash | 4 ++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 12/16/2016 12:31 PM, J?rg Krause wrote:
+> 1/ zlib is only required by mkfs.jffs2 and mkfs.ubifs
+I looked into that and patched the configure script to allow disabling
+those and not require their respective dependencies. The patch has been
+sent to the linux-mtd mailing list a few minutes ago.
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index 5508fd2..fc46b66 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.1.sha256sum
--sha256	9d5ba72070460c1b5b74115d395a3e33daeb7b7b67fb256cdccc9d7187c42a38	gdk-pixbuf-2.36.1.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.2.sha256sum
-+sha256	3a082ad67d68b55970aed0b2034a06618167be98a42d5c70de736756b45d325d	gdk-pixbuf-2.36.2.tar.xz
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 4f1fe59..3954602 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GDK_PIXBUF_VERSION_MAJOR = 2.36
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).1
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).2
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPLv2+
+> 2/ Buildroot offers the possibility to install the "integck" tool on
+> the target. This is not covered by mtd, yet.
+By default, the integck tool, as well as  the other test binaries are
+built along with the other programs, unless explicitly disabled.
+
+If required, the tests can be installed by setting the configure
+option --enable-install-tests.
+
+However, as far as I can tell, the buildroot mtd package allows
+micromanaging what binaries to install. If automake does not
+generate individual install targets per executable, some
+workaround will be required anyway.
+
+
+Regards,
+
+David
