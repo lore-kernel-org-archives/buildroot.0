@@ -1,73 +1,77 @@
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Date: Wed, 21 Dec 2016 19:56:59 -0300
-Subject: [Buildroot] [PATCH] lzlib: depends on lua
-In-Reply-To: <20161221234842.649a8277@free-electrons.com>
-References: <20161221202244.7197-1-gustavo.zacarias@free-electrons.com>
- <20161221234842.649a8277@free-electrons.com>
-Message-ID: <423a657c-f5bb-f7a8-bce5-30af25ed5fe1@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 21 Dec 2016 19:59:12 -0300
+Subject: [Buildroot] [PATCH 1/2] alsa-lib: bump to version 1.1.3
+Message-ID: <20161221225913.25818-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/12/16 19:48, Thomas Petazzoni wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../alsa-lib/0006-ucm-parser-needs-limits.h.patch  | 30 ++++++++++++++++++++++
+ package/alsa-lib/alsa-lib.hash                     |  2 +-
+ package/alsa-lib/alsa-lib.mk                       |  2 +-
+ 3 files changed, 32 insertions(+), 2 deletions(-)
+ create mode 100644 package/alsa-lib/0006-ucm-parser-needs-limits.h.patch
 
-> I'm probably missing something, but even without PPS we should have
-> seen build failures of this package, no?
->
-> Or because lzlib is after lua in alphabetic ordering, and nothing makes
-> lzlib built before lua due to dependencies, we were lucky enough?
->
-> Thanks!
->
-> Thomas
-
-Hi.
-I didn't try to reproduce this outside PPS, but i'm inclined to side 
-with your second theory, the failure looks like:
-
-*****
--- The C compiler identification is GNU 4.8.3
--- Check for working C compiler: 
-/home/gustavoz/b/pps3/output/host/usr/bin/arm-none-linux-gnueabi-gcc
--- Check for working C compiler: 
-/home/gustavoz/b/pps3/output/host/usr/bin/arm-none-linux-gnueabi-gcc -- 
-works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
-DIST_NAME: lzlib
-DIST_VERSION: 0.4.2
-DIST_LICENSE: MIT/X11
-DIST_AUTHOR: Tiago Dionizio
-DIST_MAINTAINER: Peter Draho?
-DIST_URL: http://luaforge.net/projects/lzlib/
-DIST_DESC: Lua bindings to the ZLib compression library
-DIST_DEPENDS:
-CMake Error at 
-/usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:148 (message):
-   Could NOT find Lua (missing: LUA_LIBRARIES LUA_INCLUDE_DIR)
-Call Stack (most recent call first):
-   /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:388 
-(_FPHSA_FAILURE_MESSAGE)
-   cmake/FindLua.cmake:113 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
-   cmake/lua.cmake:116 (find_package)
-   cmake/lua.cmake:163 (_lua_module_helper)
-   CMakeLists.txt:15 (install_lua_module)
-
-
--- Configuring incomplete, errors occurred!
-See also 
-"/home/gustavoz/b/pps3/output/build/lzlib-0.4.3/CMakeFiles/CMakeOutput.log".
-package/pkg-generic.mk:206: recipe for target 
-'/home/gustavoz/b/pps3/output/build/lzlib-0.4.3/.stamp_configured' failed
-make: *** 
-[/home/gustavoz/b/pps3/output/build/lzlib-0.4.3/.stamp_configured] Error 1
-*****
-
-Even if lua was built i can reproduce this after cleaning the lzlib 
-package staging and build directories.
-
-Regards.
+diff --git a/package/alsa-lib/0006-ucm-parser-needs-limits.h.patch b/package/alsa-lib/0006-ucm-parser-needs-limits.h.patch
+new file mode 100644
+index 0000000..b47dedb
+--- /dev/null
++++ b/package/alsa-lib/0006-ucm-parser-needs-limits.h.patch
+@@ -0,0 +1,30 @@
++From 13a796b4bd00defa9f9297fd23d508b430682aed Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Wed, 21 Dec 2016 19:41:26 -0300
++Subject: [PATCH] ucm: parser needs limits.h
++
++It's using PATH_MAX which is defined there, otherwise the build fails on
++musl libc.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: sent to alsa-devel ML.
++
++ src/ucm/parser.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/ucm/parser.c b/src/ucm/parser.c
++index c98373a..f520abc 100644
++--- a/src/ucm/parser.c
+++++ b/src/ucm/parser.c
++@@ -32,6 +32,7 @@
++ 
++ #include "ucm_local.h"
++ #include <dirent.h>
+++#include <limits.h>
++ 
++ /** The name of the environment variable containing the UCM directory */
++ #define ALSA_CONFIG_UCM_VAR "ALSA_CONFIG_UCM"
++-- 
++2.10.2
++
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 47542e5..6f56a76 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 d38dacd9892b06b8bff04923c380b38fb2e379ee5538935ff37e45b395d861d6  alsa-lib-1.1.2.tar.bz2
++sha256 71282502184c592c1a008e256c22ed0ba5728ca65e05273ceb480c70f515969c  alsa-lib-1.1.3.tar.bz2
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index a86d6bb..5957568 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ALSA_LIB_VERSION = 1.1.2
++ALSA_LIB_VERSION = 1.1.3
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_LICENSE = LGPLv2.1+ (library), GPLv2+ (aserver)
+-- 
+2.10.2
