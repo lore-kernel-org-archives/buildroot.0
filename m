@@ -1,22 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 22:19:00 +0100
-Subject: [Buildroot] [PATCH] wine: Bump to version 1.8.6
-In-Reply-To: <1482339639-24351-1-git-send-email-nerv@dawncrow.de>
- (=?utf-8?Q?=22Andr=C3=A9?=
- Hentschel"'s message of "Wed, 21 Dec 2016 18:00:39 +0100")
-References: <1482339639-24351-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <87inqd2d6j.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Dec 2016 22:18:39 +0100
+Subject: [Buildroot] [git commit] lzlib: depends on lua
+Message-ID: <20161221211911.53840818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andr?" == Andr? Hentschel <nerv@dawncrow.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c4cb7a46ac5e4fe4cb88836903f2779fa7dc83d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+It's missing the dependency on lua, hence when using the upcoming PPS
+support its staging directory isn't populated with the required
+dependencies resulting in build failure.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lzlib/lzlib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+index 91f380a..f468a1c 100644
+--- a/package/lzlib/lzlib.mk
++++ b/package/lzlib/lzlib.mk
+@@ -6,7 +6,7 @@
+ 
+ LZLIB_VERSION = 0.4.3
+ LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+-LZLIB_DEPENDENCIES = zlib
++LZLIB_DEPENDENCIES = lua zlib
+ LZLIB_LICENSE = MIT
+ LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+ 	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
