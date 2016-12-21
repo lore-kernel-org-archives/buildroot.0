@@ -1,27 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 11:15:00 +0100
-Subject: [Buildroot] [PATCH] uclibc: add patch to fix <stdlib.h>
-In-Reply-To: <1482186391-28787-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 19 Dec 2016 23:26:31 +0100")
-References: <1482186391-28787-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8737hh6123.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Dec 2016 11:15:10 +0100
+Subject: [Buildroot] [PATCH] python-bottle: security bump to 0.12.11
+In-Reply-To: <20161220210224.20670-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 20 Dec 2016 22:02:24 +0100")
+References: <20161220210224.20670-1-peter@korsgaard.com>
+Message-ID: <87y3z94mhd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > This commit adds a patch to <stdlib.h>, to fix a bug introduced in
- > uClibc-ng 1.0.20, and which was causing build failures for at least one
- > package in Buildroot: freeswitch.
+ > "\r\n" sequences were not properly filtered when handling redirections.
+ > This allowed an attacker to perform CRLF attacks such as HTTP header
+ > injection:
 
- > Fixes:
+ > https://github.com/bottlepy/bottle/issues/913
 
- >   http://autobuild.buildroot.net/results/12c246b058224f68494b84355a29dc4efb85df6d/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Python-bottle now uses setuptools instead of distutils.
 
 Committed, thanks.
 
