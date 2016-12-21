@@ -1,93 +1,41 @@
-From: Tal Shorer <tal.shorer@gmail.com>
-Date: Thu, 22 Dec 2016 00:17:48 +0200
-Subject: [Buildroot] [PATCH v4] usbip: new package
-In-Reply-To: <1481736504-12256-1-git-send-email-tal.shorer@gmail.com>
-References: <20161213175356.GB3546@free.fr>
- <1481736504-12256-1-git-send-email-tal.shorer@gmail.com>
-Message-ID: <CAFDyS3P1hzTmF7ZsLf08kUFiAHh1=Lxp6JY-px3v4BCTbP5sHA@mail.gmail.com>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Thu, 22 Dec 2016 11:23:12 +1300
+Subject: [Buildroot] Altera socdk defconfig no longer builds
+In-Reply-To: <87eg112b2f.fsf@dell.be.48ers.dk>
+References: <87eg112b2f.fsf@dell.be.48ers.dk>
+Message-ID: <CAE21AQrRuDzoZFXgL7WzLiZ3SqM4arzXAy=udNUgSXe4Ko2=AA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 14, 2016 at 7:28 PM, Tal Shorer <tal.shorer@gmail.com> wrote:
-> add the usbip package from the kernel source, allowing users to share
-> usb devices over a network connection
+On Thu, Dec 22, 2016 at 11:04 AM, Peter Korsgaard <peter@korsgaard.com>
+wrote:
+
+> Hi,
 >
-> Signed-off-by: Tal Shorer <tal.shorer@gmail.com>
-> ---
->  package/linux-tools/Config.in |  2 ++
->  package/usbip/Config.in       | 14 ++++++++++++++
->  package/usbip/usbip.mk        | 26 ++++++++++++++++++++++++++
->  3 files changed, 42 insertions(+)
->  create mode 100644 package/usbip/Config.in
->  create mode 100644 package/usbip/usbip.mk
+> Back in 2015, you contributed altera_socdk_defconfig to Buildroot.
+> Unfortunately, this defconfig no longer builds: the Linux kernel
+> version used is too old to build with gcc 5.x.
 >
-> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-> index db9ed9f..7fceca7 100644
-> --- a/package/linux-tools/Config.in
-> +++ b/package/linux-tools/Config.in
-> @@ -83,4 +83,6 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
->         depends on BR2_USE_MMU
->         depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> Do you still have access to this HW platform? If so, can you contribute
+> a patch to update the defconfig? If you're no longer interested by this
+> platform, we can also decide to remove its defconfig.
 >
-> +source package/usbip/Config.in
-> +
->  endmenu
-> diff --git a/package/usbip/Config.in b/package/usbip/Config.in
-> new file mode 100644
-> index 0000000..bb92a05
-> --- /dev/null
-> +++ b/package/usbip/Config.in
-> @@ -0,0 +1,14 @@
-> +# sourced from package/linux-tools/Config.in rather than from package/Config.in
-> +
-> +config BR2_PACKAGE_USBIP
-> +       bool "usbip"
-> +       depends on BR2_PACKAGE_HAS_UDEV
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS # usbutils <- libusb
-> +       depends on !BR2_STATIC_LIBS
-> +       select BR2_PACKAGE_USBUTILS
-> +       help
-> +         usbip is a set of tools that allows machines to share their
-> +         usb devices over the network, to be driven by a remote client.
-> +
-> +comment "usbip needs udev /dev management and toolchain w/ threads"
-> +       depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/usbip/usbip.mk b/package/usbip/usbip.mk
-> new file mode 100644
-> index 0000000..7c8e244
-> --- /dev/null
-> +++ b/package/usbip/usbip.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# usbip
-> +#
-> +################################################################################
-> +
-> +# No USBIP_SITE, no USB_VERSION, we vampirise the code from the
-> +# linux kernel
-> +USBIP_PATCH_DEPENDENCIES = linux
-> +USBIP_DEPENDENCIES = udev
-> +
-> +USBIP_CONF_OPTS = --without-tcp-wrappers
-> +
-> +USBIP_SRC_DIR = $(wildcard \
-> +  $(LINUX_DIR)/tools/usb/usbip \
-> +  $(LINUX_DIR)/drivers/staging/usbip/userspace)
-> +
-> +define USBIP_EXTRACT_CMDS
-> +       if [ -z "$(USBIP_SRC_DIR)" ]; then \
-> +           echo "No usbip source in your kernel tree" 2>&1; \
-> +           exit 1; \
-> +       fi
-> +       rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(USBIP_SRC_DIR)/ $(@D)
-> +endef
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.7.4
+> https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/185616883
 >
-ping?
+> You need to move to kernel 3.18+ for compatibility with gcc5.x or
+> alternatively backport this commit (and any dependencies):
+>
+> Thanks Peter
+
+I still have this device in storage somewhere though I have not used it for
+at least 15 months.
+
+I will try to sort out a patch sometime over the Christmas break.
+
+-- Charles
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20161222/b270cd89/attachment.html>
