@@ -1,64 +1,86 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 21 Dec 2016 13:02:16 -0600
-Subject: [Buildroot] [PATCH v2] valgrind: Force -fno-stack-protector in
-	CFLAGS
-Message-ID: <1482346936-25598-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 21 Dec 2016 20:02:13 +0100
+Subject: [Buildroot] [PATCH 1/3] core: allow packages to declare a
+	permission file
+In-Reply-To: <cover.1482346921.git.yann.morin.1998@free.fr>
+References: <cover.1482346921.git.yann.morin.1998@free.fr>
+Message-ID: <921ee6a25a9a1bb4460a66f1a358e937ebcfd712.1482346921.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
+Currently, packages can define a variable that holds all the permissions
+to set on the files it installs. This can be used to set various
+permissions, like ownership, mode, suid/sgid/sticky bits to individual
+files.
 
-Valgrind must be compiled with no stack protection. Valgrind defaults
-CFLAGS to -fno-stack-protector, but Buildroot's CFLAGS may override
-if SSP is enabled.
+However, this variable has to contain entries that are known the moment
+we scan the .mk file; it is not possible to conditionally add permisions
+for files which presence depend on post-parse conditions.
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+This is the case for example for Busybox, for which we don't know whether
+a specific applet will be enabled or not until after the configure
+command has run.
+
+Introduce a new variable that packages can set to point to a file that
+contains a permission table. That filewill only be used when a filesystem
+image is asembled, so the file can be generated, either at configure or
+build time, with no problem.
+
+Since this variable can be empty (when no package provides such a
+permissions file), we must ensure not to cat anything (or that would
+stale, cat-ing stdin). But since this variable is not fully known by the
+time we parse the fs infra (e.g. packages from a br2-external tree are
+not yet parsed), we can not test it with make syntas (ifneq...endif).
+Teting it with shell syntac is not trivial either, becaue the variable
+would not be mpty (it would be only spaces). sO, we just iterate over
+the the files and cat them one by one with a shell-level for-loop, which
+is happy with nothing to iterate over.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+
 ---
-
-v1 -> v2
-[Thomas P
-  - Update language to state Buildroot may enable SSP
-  - Use a local temp VALGRIND_CFLAGS to build out CFLAGS used
-    in VALGRIND_CONF_ENV
+Changes v1 -> v2;
+  - protect against empty list  (Peter)
+  - fix variable name  (Peter)
 
 ---
- package/valgrind/valgrind.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Note: this will be usefull for Busybox, to properly handle the SELinux
+contexts of the individual applets.
+---
+ fs/common.mk           | 3 +++
+ package/pkg-generic.mk | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 087a381..652432f 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -17,6 +17,13 @@ VALGRIND_INSTALL_STAGING = YES
- # patch 0004-Fixes-for-musl-libc.patch touching configure.ac
- VALGRIND_AUTORECONF = YES
- 
-+# Valgrind must be compiled with no stack protection, so forcefully
-+# pass -fno-stack-protector to override what Buildroot may have in
-+# TARGET_CFLAGS if BR2_SSP_* support is enabled.
-+VALGRIND_CFLAGS = \
-+	$(TARGET_CFLAGS) \
-+	-fno-stack-protector
-+
- # When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
- # -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
- # it forcibly adds -march=mips64. This causes Valgrind to be built
-@@ -27,9 +34,11 @@ VALGRIND_AUTORECONF = YES
- # and pass the right -march option, so they take precedence over
- # Valgrind's wrongfully detected value.
- ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
--VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -march=$(BR2_GCC_TARGET_ARCH)"
-+VALGRIND_CFLAGS += -march=$(BR2_GCC_TARGET_ARCH)
+diff --git a/fs/common.mk b/fs/common.mk
+index 396b1c2..0bbcca4 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -91,6 +91,9 @@ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
  endif
- 
-+VALGRIND_CONF_ENV = CFLAGS="$(VALGRIND_CFLAGS)"
-+
- # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
- # host tuple to determine whether it's being built for ARMv7 or
- # not. Therefore, we adjust the host tuple to specify we're on
+ endif
+ 	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
++	for f in $$(PACKAGES_PERMISSIONS_FILES); do \
++		cat $$$${f} >> $$(FULL_DEVICE_TABLE) || exit 1; \
++	done
+ 	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+ 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3ca71b0..5665005 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -904,6 +904,7 @@ PACKAGES += $(1)
+ ifneq ($$($(2)_PERMISSIONS),)
+ PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
+ endif
++PACKAGES_PERMISSIONS_FILES += $$($(2)_PERMISSIONS_FILE)
+ ifneq ($$($(2)_DEVICES),)
+ PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
+ endif
 -- 
-1.9.1
+2.7.4
