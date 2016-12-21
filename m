@@ -1,7 +1,7 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 Dec 2016 23:04:40 +0100
-Subject: [Buildroot] Altera socdk defconfig no longer builds
-Message-ID: <87eg112b2f.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Dec 2016 23:06:14 +0100
+Subject: [Buildroot] Altera sockit defconfig no longer builds
+Message-ID: <87a8bp2azt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ To: buildroot@busybox.net
 
 Hi,
 
-Back in 2015, you contributed altera_socdk_defconfig to Buildroot.
+Back in 2014, you contributed altera_sockit_defconfig to Buildroot.
 Unfortunately, this defconfig no longer builds: the Linux kernel
 version used is too old to build with gcc 5.x.
 
@@ -18,7 +18,7 @@ Do you still have access to this HW platform? If so, can you contribute
 a patch to update the defconfig? If you're no longer interested by this
 platform, we can also decide to remove its defconfig.
 
-https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/185616883
+https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/185616884
 
 You need to move to kernel 3.18+ for compatibility with gcc5.x or
 alternatively backport this commit (and any dependencies):
