@@ -1,41 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Dec 2016 10:26:20 +0100
-Subject: [Buildroot] [git commit] package/libcdio: bump version to 0.94
-Message-ID: <20161222093427.0D4867FCFB@busybox.osuosl.org>
+Date: Thu, 22 Dec 2016 10:01:22 +0100
+Subject: [Buildroot] [git commit] package/apache: security bump version to
+	2.4.25
+Message-ID: <20161222093426.F113781EA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60ea16416aed4135cd52aad75c9e6bf58e6b019a
+commit: https://git.buildroot.net/buildroot/commit/?id=68af1dc2575888863ae0015b09555a5e42a5d56c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog:
+http://www.apache.org/dist/httpd/CHANGES_2.4.25
+
+Fixes CVE-2016-8740, CVE-2016-5387, CVE-2016-2161, CVE-2016-0736,
+CVE-2016-8743.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcdio/libcdio.hash | 2 +-
- package/libcdio/libcdio.mk   | 2 +-
+ package/apache/apache.hash | 2 +-
+ package/apache/apache.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcdio/libcdio.hash b/package/libcdio/libcdio.hash
-index cc87ffb..35c632a 100644
---- a/package/libcdio/libcdio.hash
-+++ b/package/libcdio/libcdio.hash
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index e4710b0..38fd883 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking signature
--sha256	4972cd22fd8d0e8bff922d35c7a645be0db0ab0e7b3dfaecc9cd8272429d6975	libcdio-0.93.tar.gz
-+sha256 96e2c903f866ae96f9f5b9048fa32db0921464a2286f5b586c0f02699710025a  libcdio-0.94.tar.gz
-diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
-index 03e6002..4a7c674 100644
---- a/package/libcdio/libcdio.mk
-+++ b/package/libcdio/libcdio.mk
+ # From http://www.apache.org/dist/httpd/httpd-2.4.23.tar.bz2.sha1
+-sha1	5101be34ac4a509b245adb70a56690a84fcc4e7f	httpd-2.4.23.tar.bz2
++sha1 bd6d138c31c109297da2346c6e7b93b9283993d2  httpd-2.4.25.tar.bz2
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index e54b736..ae629bd 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCDIO_VERSION = 0.93
-+LIBCDIO_VERSION = 0.94
- LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
- LIBCDIO_INSTALL_STAGING = YES
- LIBCDIO_LICENSE = GPLv3+
+-APACHE_VERSION = 2.4.23
++APACHE_VERSION = 2.4.25
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
