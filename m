@@ -1,93 +1,68 @@
-From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Date: Thu, 22 Dec 2016 10:32:47 -0600
-Subject: [Buildroot] [PATCH 2/2] util-linux: add selinux support
-In-Reply-To: <1481056025-28891-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1477423570-15694-3-git-send-email-bryce.ferguson@rockwellcollins.com>
- <1481056025-28891-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1481056025-28891-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAKGmAFrJ5SS8OL8rfyfebe35VQJX50hv92b79TVQs0kW+YGfbw@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 22 Dec 2016 18:30:56 +0100
+Subject: [Buildroot] telit_evk_pro3_defconfig fails to build
+In-Reply-To: <CACXmVia0ArmYy248oVbg5SZ2uvufyAnktK62Zgm48D+_S04qag@mail.gmail.com>
+References: <20161105152013.615d71d7@free-electrons.com>
+ <CAHkwnC_jVyVQ27Y6aOr3hLthmUrd70Ep0ufJULB+4jP3zHrYJQ@mail.gmail.com>
+ <CACXmVia0ArmYy248oVbg5SZ2uvufyAnktK62Zgm48D+_S04qag@mail.gmail.com>
+Message-ID: <CAHkwnC_QU_F6y-65s9X0+qyJD0epuC58yeXAnyUHLW8gAY28ww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 6, 2016 at 2:27 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> From: Matt Weber <matthew.weber@rockwellcollins.com>
+2016-12-21 22:02 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+> Hi,
 >
-> This patch adds optional libselinux support to the util-linux package,
-> and also tweaks the PAM files instealled by util-linux to work properly
-> in an SELinux context.
+>>> Back in 2013, you contributed telit_evk_pro3_defconfig to Buildroot.
+>>> Unfortunately, this defconfig no longer builds: the Linux kernel
+>>> version used is too old to build with gcc 5.x.
+>>
+>> I will  try to make a patch to fix it.
 >
-> Like was done for linux-pam, the tweak is done by having the SELinux
-> related lines commented out in the original PAM file, and uncommented
-> when SELinux support is enabled.
+> Any news on this? You need to update barebox and move to kernel 3.18+
+> for compatibility
+> with gcc5.x or alternatively backport this commit (and any
+> dependencies):
 >
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-> Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> commit 71458cfc782eafe4b27656e078d379a34e472adf
+> Author: Sasha Levin <sasha.levin@oracle.com>
+> Date:   Mon Oct 13 15:51:05 2014 -0700
+>
+>     kernel: add support for gcc 5
+>
+>     We're missing include/linux/compiler-gcc5.h which is required now
+>     because gcc branched off to v5 in trunk.
+>
+>     Just copy the relevant bits out of include/linux/compiler-gcc4.h,
+>     no new code is added as of now.
+>
+>     This fixes a build error when using gcc 5.
+>
+>     Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
+>     Cc: <stable@vger.kernel.org>
+>     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+>     Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+>
+> Do you think you will manage to fix the build issue before the end of
+> January or should we remove the defconfig?
 
-Performed a build with this package enabled using the qemu selinux
-defconfig which is part of the outstanding v13 patchset found
-here:http://patchwork.ozlabs.org/bundle/UraniumKnight/rc_selinux_v13/.
-For the test, this was applied in the stead of PATCH 4/8
-(http://patchwork.ozlabs.org/patch/686677/)
-Tested-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Hi Peter,
+thanks for those suggestions,
 
-> ---
->  package/util-linux/su.pam        |  2 ++
->  package/util-linux/util-linux.mk | 14 ++++++++++++++
->  2 files changed, 16 insertions(+)
->
-> diff --git a/package/util-linux/su.pam b/package/util-linux/su.pam
-> index f000c39..84b1860 100644
-> --- a/package/util-linux/su.pam
-> +++ b/package/util-linux/su.pam
-> @@ -7,7 +7,9 @@ account         required        pam_unix.so
->
->  password       required        pam_unix.so nullok
->
-> +# session      required        pam_selinux.so close
->  session                required        pam_limits.so
->  session                required        pam_env.so
->  session                required        pam_unix.so
->  session                optional        pam_lastlog.so
-> +# session      required        pam_selinux.so open
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index cf03fd4..7140554 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -63,6 +63,19 @@ endif
->  UTIL_LINUX_CONF_ENV += LIBS="$(UTIL_LINUX_LIBS)"
->  UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS)"
->
-> +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> +UTIL_LINUX_DEPENDENCIES += libselinux
-> +UTIL_LINUX_CONF_OPTS += --with-selinux
-> +define UTIL_LINUX_SELINUX_PAMFILES_TWEAK
-> +       $(foreach f,su su-l,
-> +               $(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
-> +                       $(TARGET_DIR)/etc/pam.d/$(f)
-> +       )
-> +endef
-> +else
-> +UTIL_LINUX_CONF_OPTS += --without-selinux
-> +endif
-> +
->  # Used by cramfs utils
->  UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
->
-> @@ -179,6 +192,7 @@ define UTIL_LINUX_INSTALL_PAMFILES
->                 $(TARGET_DIR)/etc/pam.d/su
->         $(INSTALL) -m 0644 package/util-linux/su.pam \
->                 $(TARGET_DIR)/etc/pam.d/su-l
-> +       $(UTIL_LINUX_SELINUX_PAMFILES_TWEAK)
->  endef
->  endif
->
-> --
-> 2.7.4
->
+I'm working to update the barebox and kernel right now, I should be
+able to send a fixed version before the end of January.
+
+I've already tried some updated kernels that support gcc 5 (3.10*,
+.4.1.*, 4.4.*) but they don't boot anymore, I'm working to fix it.
+
+I've also updated barebox but i've problems with the support for the
+watchdog so i'm working to fix it.
+
+Backporting the support for gcc 5 will be my last resort.
+
+Thanks
+-- 
+Fabio Porcedda
