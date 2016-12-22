@@ -1,42 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Dec 2016 13:36:08 +0100
-Subject: [Buildroot] [git commit] iperf3: bump to version 3.1.4
-Message-ID: <20161222123628.959E681E8C@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 22 Dec 2016 08:21:36 -0600
+Subject: [Buildroot] [PATCH] quagga: Create /var/run/quagga on sysv
+In-Reply-To: <877f6t63vh.fsf@dell.be.48ers.dk>
+References: <1482293253-61002-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20161221100324.0f4c89e0@free-electrons.com> <877f6t63vh.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpZwXqVBo=bGkfHDio23bFYzPDo2_pqzvZAYnQUAs11u2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77c6476feabead9b0bef736e7615514494a7a97c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter//Thomas,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/iperf3/iperf3.hash | 4 ++--
- package/iperf3/iperf3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed, Dec 21, 2016 at 3:14 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>
+>  > Hello,
+>  > Thanks for this patch!
+>
+>  > On Tue, 20 Dec 2016 22:07:33 -0600, Matt Weber wrote:
+>
+>  >> diff --git a/package/quagga/S99quagga b/package/quagga/S99quagga
+>  >> new file mode 100644
+>  >> index 0000000..e964387
+>  >> --- /dev/null
+>  >> +++ b/package/quagga/S99quagga
+>  >> @@ -0,0 +1,6 @@
+>  >> +#!/bin/sh
+>  >> +
+>  >> +if [ ! -d /var/run/quagga ]; then
+>  >> +       mkdir -p /var/run/quagga
+>  >> +       chown quagga:quagga /var/run/quagga
+>  >> +fi
+>
+>  > I think we would prefer to have a real init script, that not only
+>  > creates /var/run/quagga, but also starts quagga itself. I.e something
+>  > that does the same as the systemd unit file.
+>
+> Yes, agreed. Also notice that the explicit /var/run/quagga check isn't
+> needed when you use mkdir -p.
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 1accccd..0cac1e3 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,2 +1,2 @@
--# From http://software.es.net/iperf/news.html#security-issue-iperf-3-1-3-iperf-3-0-12-released
--sha256  60d8db69b1d74a64d78566c2317c373a85fef691b8d277737ee5d29f448595bf  iperf-3.1.3.tar.gz
-+# From http://software.es.net/iperf/news.html
-+sha256  db61d70ac62003ebe0bf15496bd8c4b3c4b728578a44d0a1a88fcf8afc0e8f76  iperf-3.1.4.tar.gz
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 3d2a708..7623786 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPERF3_VERSION = 3.1.3
-+IPERF3_VERSION = 3.1.4
- IPERF3_SITE = http://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
+Thanks for the review, we're working on an update.
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
