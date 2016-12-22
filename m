@@ -1,61 +1,71 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 Dec 2016 22:59:20 -0300
-Subject: [Buildroot] [PATCH 13/14] collectd: add gps plugin support
+Date: Wed, 21 Dec 2016 22:59:21 -0300
+Subject: [Buildroot] [PATCH 14/14] collectd: add write_prometheus plugin
+	support
 In-Reply-To: <20161222015921.6832-1-gustavo@zacarias.com.ar>
 References: <20161222015921.6832-1-gustavo@zacarias.com.ar>
-Message-ID: <20161222015921.6832-13-gustavo@zacarias.com.ar>
+Message-ID: <20161222015921.6832-14-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add explicit support for the gps plugin that uses libgps from the gpsd
-package.
+Add explicit support for the write_prometheus plugin, it requires the
+libmicrohttpd and protobuf-c libraries.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/collectd/Config.in   | 7 +++++++
- package/collectd/collectd.mk | 2 ++
- 2 files changed, 9 insertions(+)
+ package/collectd/Config.in   | 14 ++++++++++++++
+ package/collectd/collectd.mk |  4 +++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 7cd6397..02c02b7 100644
+index 02c02b7..fc60917 100644
 --- a/package/collectd/Config.in
 +++ b/package/collectd/Config.in
-@@ -237,6 +237,13 @@ config BR2_PACKAGE_COLLECTD_FSCACHE
- 	  Collects information about the file-system based caching
- 	  infrastructure for network file-systems and other slow media.
+@@ -572,6 +572,20 @@ config BR2_PACKAGE_COLLECTD_WRITELOG
+ 	help
+ 	  Writes data to the log.
  
-+config BR2_PACKAGE_COLLECTD_GPS
-+	bool "gps"
-+	select BR2_PACKAGE_GPSD
++config BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS
++	bool "write_prometheus"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	select BR2_PACKAGE_LIBMICROHTTPD
++	select BR2_PACKAGE_PROTOBUF_C
 +	help
-+	  Reports the number of sattelites seen by and precision
-+	  of a GPS receiver.
++	  Publishes values using an embedded HTTP server, in a format
++	  compatible with Prometheus' collectd_exporter.
 +
- config BR2_PACKAGE_COLLECTD_HUGEPAGES
- 	bool "hugepages"
++comment "write_prometheus needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++
+ config BR2_PACKAGE_COLLECTD_WRITESENSU
+ 	bool "write_sensu"
  	help
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index b105e90..520ce1c 100644
+index 520ce1c..50a2e53 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -57,6 +57,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_FHCOUNT),--enable-fhcount,--disable-fhcount) \
- 	$(if $(BR2_PACKAGE_COLLECTD_FILECOUNT),--enable-filecount,--disable-filecount) \
- 	$(if $(BR2_PACKAGE_COLLECTD_FSCACHE),--enable-fscache,--disable-fscache) \
-+	$(if $(BR2_PACKAGE_COLLECTD_GPS),--enable-gps,--disable-gps) \
- 	$(if $(BR2_PACKAGE_COLLECTD_GRAPHITE),--enable-write_graphite,--disable-write_graphite) \
- 	$(if $(BR2_PACKAGE_COLLECTD_HASHED),--enable-match_hashed,--disable-match_hashed) \
- 	$(if $(BR2_PACKAGE_COLLECTD_HUGEPAGES),--enable-hugepages,--disable-hugepages) \
-@@ -131,6 +132,7 @@ COLLECTD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
- 	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
-+	$(if $(BR2_PACKAGE_COLLECTD_GPS),gpsd) \
- 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
+@@ -119,6 +119,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_WIRELESS),--enable-wireless,--disable-wireless) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),--enable-write_http,--disable-write_http) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_WRITELOG),--enable-write_log,--disable-write_log) \
++	$(if $(BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS),--enable-write_prometheus,--disable-write_prometheus) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_WRITESENSU),--enable-write_sensu,--disable-write_sensu) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_WRITETSDB),--enable-write_tsdb,--disable-write_tsdb) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_ZOOKEEPER),--enable-zookeeper,--disable-zookeeper)
+@@ -150,7 +151,8 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SENSORS),lm-sensors) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SMART),libatasmart) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SNMP),netsnmp) \
+-	$(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),libcurl)
++	$(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),libcurl) \
++	$(if $(BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS),libmicrohttpd protobuf-c)
+ 
+ # include/library fixups
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
 -- 
 2.10.2
