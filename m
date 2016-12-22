@@ -1,16 +1,16 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 Dec 2016 22:59:13 -0300
-Subject: [Buildroot] [PATCH 06/14] collectd: add chrony plugin support
+Date: Wed, 21 Dec 2016 22:59:14 -0300
+Subject: [Buildroot] [PATCH 07/14] collectd: add cpusleep plugin support
 In-Reply-To: <20161222015921.6832-1-gustavo@zacarias.com.ar>
 References: <20161222015921.6832-1-gustavo@zacarias.com.ar>
-Message-ID: <20161222015921.6832-6-gustavo@zacarias.com.ar>
+Message-ID: <20161222015921.6832-7-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add explicit support for the new chrony dependency-less plugin.
+Add explicit support for the new cpusleep dependency-less plugin.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
@@ -19,32 +19,32 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  2 files changed, 6 insertions(+)
 
 diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 72e5793..5e84aa5 100644
+index 5e84aa5..d1b85aa 100644
 --- a/package/collectd/Config.in
 +++ b/package/collectd/Config.in
-@@ -127,6 +127,11 @@ config BR2_PACKAGE_COLLECTD_CEPH
+@@ -157,6 +157,11 @@ config BR2_PACKAGE_COLLECTD_CPUFREQ
  	help
- 	  Statistics from the Ceph distributed storage system.
+ 	  Collects the current CPU's frequency.
  
-+config BR2_PACKAGE_COLLECTD_CHRONY
-+	bool "chrony"
++config BR2_PACKAGE_COLLECTD_CPUSLEEP
++	bool "cpusleep"
 +	help
-+	  Collects NTP data from the chrony NTP server.
++	  Measures time spent by CPU in deep sleep mode.
 +
- config BR2_PACKAGE_COLLECTD_CGROUPS
- 	bool "cgroups"
- 	help
+ config BR2_PACKAGE_COLLECTD_CURL
+ 	bool "curl"
+ 	select BR2_PACKAGE_LIBCURL
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 11685cd..5018fb0 100644
+index 5018fb0..d8b2576 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -35,6 +35,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
- 	$(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
-+	$(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CGROUPS),--enable-cgroups,--disable-cgroups) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CONNTRACK),--enable-conntrack,--disable-conntrack) \
+@@ -41,6 +41,7 @@ COLLECTD_CONF_OPTS += \
  	$(if $(BR2_PACKAGE_COLLECTD_CONTEXTSWITCH),--enable-contextswitch,--disable-contextswitch) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CPU),--enable-cpu,--disable-cpu) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CPUFREQ),--enable-cpufreq,--disable-cpufreq) \
++	$(if $(BR2_PACKAGE_COLLECTD_CPUSLEEP),--enable-cpusleep,--disable-cpusleep) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CSV),--enable-csv,--disable-csv) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL),--enable-curl,--disable-curl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),--enable-curl_json,--disable-curl_json) \
 -- 
 2.10.2
