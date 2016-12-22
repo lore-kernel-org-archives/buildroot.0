@@ -1,39 +1,86 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 22 Dec 2016 07:07:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcdio: bump version to 0.94
-Message-ID: <20161222060709.30086-1-bernd.kuhls@t-online.de>
+Date: Thu, 22 Dec 2016 07:46:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python: security bump version to
+	2.7.13
+Message-ID: <20161222064600.4604-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Rebased patches 004 & 010.
+
+Changelog:
+https://hg.python.org/cpython/raw-file/v2.7.13/Misc/NEWS
+
+Fixes CVE-2016-2183 & CVE-2016-1000110.
+
+This bump also fixes the host build with openssl 1.1.0,
+http://patchwork.ozlabs.org/patch/696139/ is not needed anymore.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcdio/libcdio.hash | 2 +-
- package/libcdio/libcdio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python/004-sysconfigdata-install-location.patch | 6 +++---
+ package/python/010-fix-python-config.patch              | 2 +-
+ package/python/python.hash                              | 6 +++---
+ package/python/python.mk                                | 2 +-
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/libcdio/libcdio.hash b/package/libcdio/libcdio.hash
-index cc87ffb9c..35c632a90 100644
---- a/package/libcdio/libcdio.hash
-+++ b/package/libcdio/libcdio.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking signature
--sha256	4972cd22fd8d0e8bff922d35c7a645be0db0ab0e7b3dfaecc9cd8272429d6975	libcdio-0.93.tar.gz
-+sha256 96e2c903f866ae96f9f5b9048fa32db0921464a2286f5b586c0f02699710025a  libcdio-0.94.tar.gz
-diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
-index 03e600207..4a7c6745c 100644
---- a/package/libcdio/libcdio.mk
-+++ b/package/libcdio/libcdio.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/python/004-sysconfigdata-install-location.patch b/package/python/004-sysconfigdata-install-location.patch
+index edf7120e1..2998364fb 100644
+--- a/package/python/004-sysconfigdata-install-location.patch
++++ b/package/python/004-sysconfigdata-install-location.patch
+@@ -58,9 +58,9 @@ Index: b/Makefile.pre.in
+  	-rm -f python*-gdb.py
+ -	-rm -f pybuilddir.txt
+ +	-rm -f pybuilddir.txt pysysconfigdatadir.txt
+- 	find $(srcdir)/[a-zA-Z]* '(' -name '*.fdc' -o -name '*~' \
+- 				     -o -name '[@,#]*' -o -name '*.old' \
+- 				     -o -name '*.orig' -o -name '*.rej' \
++ 	# Issue #28258: set LC_ALL to avoid issues with Estonian locale.
++ 	# Expansion is performed here by shell (spawned by make) itself before
++ 	# arguments are passed to find. So LC_ALL=C must be set as a separate
+ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+diff --git a/package/python/010-fix-python-config.patch b/package/python/010-fix-python-config.patch
+index 1266f3d3a..b40339b42 100644
+--- a/package/python/010-fix-python-config.patch
++++ b/package/python/010-fix-python-config.patch
+@@ -61,7 +61,7 @@ Index: b/Makefile.pre.in
+ @@ -410,7 +410,7 @@
+  
+  # Default target
+- all:		build_all
++ all:		@DEF_MAKE_ALL_RULE@
+ -build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks
+ +build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks python-config
+  
+diff --git a/package/python/python.hash b/package/python/python.hash
+index b7d003600..f285e4243 100644
+--- a/package/python/python.hash
++++ b/package/python/python.hash
+@@ -1,4 +1,4 @@
+-# From https://www.python.org/downloads/release/python-2712/
+-md5	57dffcee9cee8bb2ab5f82af1d8e9a69	Python-2.7.12.tar.xz
++# From https://www.python.org/downloads/release/python-2713/
++md5 53b43534153bb2a0363f08bae8b9d990  Python-2.7.13.tar.xz
+ # Locally calculated
+-sha256 d7837121dd5652a05fef807c361909d255d173280c4e1a4ded94d73d80a1f978  Python-2.7.12.tar.xz
++sha256 35d543986882f78261f97787fd3e06274bfa6df29fac9b4a94f73930ff98f731  Python-2.7.13.tar.xz
+diff --git a/package/python/python.mk b/package/python/python.mk
+index cfd5a0af1..7b20434c9 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBCDIO_VERSION = 0.93
-+LIBCDIO_VERSION = 0.94
- LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
- LIBCDIO_INSTALL_STAGING = YES
- LIBCDIO_LICENSE = GPLv3+
+ PYTHON_VERSION_MAJOR = 2.7
+-PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).12
++PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).13
+ PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
+ PYTHON_SITE = http://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_LICENSE = Python software foundation license v2, others
 -- 
 2.11.0
