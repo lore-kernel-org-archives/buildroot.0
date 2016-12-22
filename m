@@ -1,44 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Dec 2016 10:51:20 +0100
-Subject: [Buildroot] [git commit] nodejs: bump to version 6.9.2
-Message-ID: <20161222095141.2FC3081DAB@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 22 Dec 2016 13:32:02 +0200
+Subject: [Buildroot] [PATCH] iperf3: bump to version 3.1.4
+Message-ID: <32a5ed2fdbbae94398d8fa4b5149edc9f2c980ae.1482406322.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fd9c062e7ba5ae82c17df4392c2df9cf126c327
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/nodejs/Config.in   | 2 +-
- package/nodejs/nodejs.hash | 4 ++--
+ package/iperf3/iperf3.hash | 4 ++--
+ package/iperf3/iperf3.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 832152b..5c4ee12 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 1accccd04a21..0cac1e3c5156 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,2 +1,2 @@
+-# From http://software.es.net/iperf/news.html#security-issue-iperf-3-1-3-iperf-3-0-12-released
+-sha256  60d8db69b1d74a64d78566c2317c373a85fef691b8d277737ee5d29f448595bf  iperf-3.1.3.tar.gz
++# From http://software.es.net/iperf/news.html
++sha256  db61d70ac62003ebe0bf15496bd8c4b3c4b728578a44d0a1a88fcf8afc0e8f76  iperf-3.1.4.tar.gz
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 3d2a7086ebd3..7623786ae75e 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "6.9.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "6.9.2"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.48"
- 
- config BR2_PACKAGE_NODEJS_NPM
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index e55bb16..67d0258 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.48/SHASUMS256.txt
- sha256  365a93d9acc076a0d93f087d269f376abeebccad599a9dab72f2f6ed96c8ae6e  node-v0.10.48.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v6.9.1/SHASUMS256.txt
--sha256  0bdd8d1305777cc8cd206129ea494d6c6ce56001868dd80147aff531d6df0729  node-v6.9.1.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v6.9.2/SHASUMS256.txt
-+sha256  f41b320b37ce23a34dbc597040e71535ea4f6baa2342bc526bb45f5f9aa9c9fb  node-v6.9.2.tar.xz
+-IPERF3_VERSION = 3.1.3
++IPERF3_VERSION = 3.1.4
+ IPERF3_SITE = http://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
+-- 
+2.11.0
