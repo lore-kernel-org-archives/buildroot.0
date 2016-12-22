@@ -1,41 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 Dec 2016 19:59:13 -0300
-Subject: [Buildroot] [PATCH 2/2] alsa-utils: bump to version 1.1.3
-In-Reply-To: <20161221225913.25818-1-gustavo@zacarias.com.ar>
-References: <20161221225913.25818-1-gustavo@zacarias.com.ar>
-Message-ID: <20161221225913.25818-2-gustavo@zacarias.com.ar>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Wed, 21 Dec 2016 19:22:27 -0500
+Subject: [Buildroot] Altera sockit defconfig no longer builds
+In-Reply-To: <87a8bp2azt.fsf@dell.be.48ers.dk>
+References: <87a8bp2azt.fsf@dell.be.48ers.dk>
+Message-ID: <9b3e35df-e723-e7bc-3b33-3e5bb591facc@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/alsa-utils/alsa-utils.hash | 2 +-
- package/alsa-utils/alsa-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Peter,
 
-diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
-index c2c089f..1add17e 100644
---- a/package/alsa-utils/alsa-utils.hash
-+++ b/package/alsa-utils/alsa-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 7af603c0877d1251599d65b4fbc372e63a54371b888f5c26c6a86ac1d0519071  alsa-utils-1.1.2.tar.bz2
-+sha256 127217a54eea0f9a49700a2f239a2d4f5384aa094d68df04a8eb80132eb6167c  alsa-utils-1.1.3.tar.bz2
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index fc2ac16..9113b8d 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ALSA_UTILS_VERSION = 1.1.2
-+ALSA_UTILS_VERSION = 1.1.3
- ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
- ALSA_UTILS_LICENSE = GPLv2
--- 
-2.10.2
+Yes i still can have access to this HW platform but not until few weeks
+i guess, santa claus time ;).
+
+I will take a look then, you can also remove the defconfig if it doesn't
+work anymore and me or somebody else can propose an update working version.
+
+Thanks for your message.
+
+Regards,
+Sebastien.
+
+On 12/21/2016 05:06 PM, Peter Korsgaard wrote:
+> Hi,
+> 
+> Back in 2014, you contributed altera_sockit_defconfig to Buildroot.
+> Unfortunately, this defconfig no longer builds: the Linux kernel
+> version used is too old to build with gcc 5.x.
+> 
+> Do you still have access to this HW platform? If so, can you contribute
+> a patch to update the defconfig? If you're no longer interested by this
+> platform, we can also decide to remove its defconfig.
+> 
+> https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/185616884
+> 
+> You need to move to kernel 3.18+ for compatibility with gcc5.x or
+> alternatively backport this commit (and any dependencies):
+> 
+> commit 71458cfc782eafe4b27656e078d379a34e472adf
+> Author: Sasha Levin <sasha.levin@oracle.com>
+> Date:   Mon Oct 13 15:51:05 2014 -0700
+> 
+>     kernel: add support for gcc 5
+> 
+>     We're missing include/linux/compiler-gcc5.h which is required now
+>     because gcc branched off to v5 in trunk.
+> 
+>     Just copy the relevant bits out of include/linux/compiler-gcc4.h,
+>     no new code is added as of now.
+> 
+>     This fixes a build error when using gcc 5.
+> 
+>     Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
+>     Cc: <stable@vger.kernel.org>
+>     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+>     Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> 
