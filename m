@@ -1,54 +1,58 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 22 Dec 2016 08:21:36 -0600
-Subject: [Buildroot] [PATCH] quagga: Create /var/run/quagga on sysv
-In-Reply-To: <877f6t63vh.fsf@dell.be.48ers.dk>
-References: <1482293253-61002-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20161221100324.0f4c89e0@free-electrons.com> <877f6t63vh.fsf@dell.be.48ers.dk>
-Message-ID: <CANQCQpZwXqVBo=bGkfHDio23bFYzPDo2_pqzvZAYnQUAs11u2w@mail.gmail.com>
+From: Andreas Naumann <anaumann@ultratronik.de>
+Date: Thu, 22 Dec 2016 15:21:09 +0100
+Subject: [Buildroot] [PATCH v4 03/10] qt53d/qt5quickcontrols2/qt5serialbus :
+	move out of tech preview
+In-Reply-To: <1482416476-20306-1-git-send-email-anaumann@ultratronik.de>
+References: <1482416476-20306-1-git-send-email-anaumann@ultratronik.de>
+Message-ID: <1482416476-20306-4-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter//Thomas,
+From: Julien Corjon <corjon.j@ecagroup.com>
 
-On Wed, Dec 21, 2016 at 3:14 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->
->  > Hello,
->  > Thanks for this patch!
->
->  > On Tue, 20 Dec 2016 22:07:33 -0600, Matt Weber wrote:
->
->  >> diff --git a/package/quagga/S99quagga b/package/quagga/S99quagga
->  >> new file mode 100644
->  >> index 0000000..e964387
->  >> --- /dev/null
->  >> +++ b/package/quagga/S99quagga
->  >> @@ -0,0 +1,6 @@
->  >> +#!/bin/sh
->  >> +
->  >> +if [ ! -d /var/run/quagga ]; then
->  >> +       mkdir -p /var/run/quagga
->  >> +       chown quagga:quagga /var/run/quagga
->  >> +fi
->
->  > I think we would prefer to have a real init script, that not only
->  > creates /var/run/quagga, but also starts quagga itself. I.e something
->  > that does the same as the systemd unit file.
->
-> Yes, agreed. Also notice that the explicit /var/run/quagga check isn't
-> needed when you use mkdir -p.
+See http://blog.qt.io/blog/2016/06/16/qt-5-7-released/
 
-Thanks for the review, we're working on an update.
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+---
+ package/qt5/Config.in | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 7fe0bfc..18dad52 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -31,6 +31,7 @@ menuconfig BR2_PACKAGE_QT5
+ 	  http://qt.io
+ 
+ if BR2_PACKAGE_QT5
++source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5base/Config.in"
+ source "package/qt5/qt5canvas3d/Config.in"
+ source "package/qt5/qt5connectivity/Config.in"
+@@ -40,7 +41,9 @@ source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5location/Config.in"
+ source "package/qt5/qt5multimedia/Config.in"
+ source "package/qt5/qt5quickcontrols/Config.in"
++source "package/qt5/qt5quickcontrols2/Config.in"
+ source "package/qt5/qt5sensors/Config.in"
++source "package/qt5/qt5serialbus/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
+ source "package/qt5/qt5svg/Config.in"
+ source "package/qt5/qt5tools/Config.in"
+@@ -48,10 +51,6 @@ source "package/qt5/qt5webchannel/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
+-comment "technology preview"
+-source "package/qt5/qt53d/Config.in"
+-source "package/qt5/qt5quickcontrols2/Config.in"
+-source "package/qt5/qt5serialbus/Config.in"
+ comment "legacy compatibility"
+ source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5script/Config.in"
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+1.9.1
