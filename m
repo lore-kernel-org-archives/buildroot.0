@@ -1,44 +1,34 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 22 Dec 2016 15:21:13 +0100
-Subject: [Buildroot] [PATCH v4 07/10] python-pyqt5: Depend directly on Qt5
-	rather than its toolchain requirements
+Date: Thu, 22 Dec 2016 15:21:16 +0100
+Subject: [Buildroot] [PATCH v4 10/10] poppler: Compile with -std=c++11
 In-Reply-To: <1482416476-20306-1-git-send-email-anaumann@ultratronik.de>
 References: <1482416476-20306-1-git-send-email-anaumann@ultratronik.de>
-Message-ID: <1482416476-20306-8-git-send-email-anaumann@ultratronik.de>
+Message-ID: <1482416476-20306-11-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Qt depends on C++11 support since version 5.7
+
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- package/python-pyqt5/Config.in | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ package/poppler/poppler.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
-index 4eca68a..20ac988 100644
---- a/package/python-pyqt5/Config.in
-+++ b/package/python-pyqt5/Config.in
-@@ -1,16 +1,9 @@
--comment "python-pyqt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
--	depends on !BR2_PACKAGE_QT
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "python-pyqt5 needs Qt5"
-+	depends on !BR2_PACKAGE_QT5
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index f042914..dcb6fa1 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -14,6 +14,8 @@ POPPLER_INSTALL_STAGING = YES
+ POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
+ 	--enable-xpdf-headers
  
- config BR2_PACKAGE_PYTHON_PYQT5
- 	bool "python-pyqt5"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_WCHAR # qt5
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
--	depends on !BR2_STATIC_LIBS # qt5
--	depends on !BR2_PACKAGE_QT # qt5
--	select BR2_PACKAGE_QT5
-+	depends on BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_PYTHON_SIP
- 	help
- 	  Python bindings for Qt 5
++POPPLER_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++
+ ifeq ($(BR2_PACKAGE_CAIRO),y)
+ POPPLER_CONF_OPTS += --enable-cairo-output
+ POPPLER_DEPENDENCIES += cairo
 -- 
 1.9.1
