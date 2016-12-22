@@ -1,31 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 22 Dec 2016 08:43:51 +0100
-Subject: [Buildroot] Altera sockit defconfig no longer builds
-In-Reply-To: <9b3e35df-e723-e7bc-3b33-3e5bb591facc@savoirfairelinux.com>
- (Sebastien Bourdelin's message of "Wed, 21 Dec 2016 19:22:27 -0500")
-References: <87a8bp2azt.fsf@dell.be.48ers.dk>
- <9b3e35df-e723-e7bc-3b33-3e5bb591facc@savoirfairelinux.com>
-Message-ID: <871sx02ytk.fsf@dell.be.48ers.dk>
+Date: Thu, 22 Dec 2016 08:44:52 +0100
+Subject: [Buildroot] [PATCH] lzlib: depends on lua
+In-Reply-To: <20161221234842.649a8277@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 21 Dec 2016 23:48:42 +0100")
+References: <20161221202244.7197-1-gustavo.zacarias@free-electrons.com>
+ <20161221234842.649a8277@free-electrons.com>
+Message-ID: <87wpes1k7f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sebastien" == Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Hi Peter,
- > Yes i still can have access to this HW platform but not until few weeks
- > i guess, santa claus time ;).
+ > Hello,
+ > On Wed, 21 Dec 2016 17:22:44 -0300, gustavo.zacarias at free-electrons.com
+ > wrote:
+ >> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+ >> 
+ >> It's missing the dependency on lua, hence when using the upcoming PPS
+ >> support its staging directory isn't populated with the required
+ >> dependencies resulting in build failure.
+ >> 
+ >> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
- > I will take a look then, you can also remove the defconfig if it doesn't
- > work anymore and me or somebody else can propose an update working version.
+ > I'm probably missing something, but even without PPS we should have
+ > seen build failures of this package, no?
 
-Ok, good - Lets say that you (and other interested / with the HW) have
-until end of January when I release -rc1 to get it fixed. If it is still
-broken by then, then I'll simply remove the defconfig instead.
+ > Or because lzlib is after lua in alphabetic ordering, and nothing makes
+ > lzlib built before lua due to dependencies, we were lucky enough?
 
-Enjoy your holidays!
+Yes, I think it purely worked by chance because of the alphabetical
+ordering.
 
 -- 
 Bye, Peter Korsgaard
