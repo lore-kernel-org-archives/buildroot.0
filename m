@@ -1,10 +1,10 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 22 Dec 2016 15:21:09 +0100
-Subject: [Buildroot] [PATCH v4 03/10] qt53d/qt5quickcontrols2/qt5serialbus :
-	move out of tech preview
+Date: Thu, 22 Dec 2016 15:21:10 +0100
+Subject: [Buildroot] [PATCH v4 04/10] Revert "qt5base: install bundled fonts
+	to target"
 In-Reply-To: <1482416476-20306-1-git-send-email-anaumann@ultratronik.de>
 References: <1482416476-20306-1-git-send-email-anaumann@ultratronik.de>
-Message-ID: <1482416476-20306-4-git-send-email-anaumann@ultratronik.de>
+Message-ID: <1482416476-20306-5-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,50 @@ To: buildroot@busybox.net
 
 From: Julien Corjon <corjon.j@ecagroup.com>
 
-See http://blog.qt.io/blog/2016/06/16/qt-5-7-released/
+qtbase carries nor more fonts since c5ceabb9a1caf6b9b7615a28c3097f221772f645
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+This reverts commit cdfa21b06041eb601e0bea79f2c8f50e9d637384
+and part of 186ef9f6f4647ed34b67a3427a5e0e249f0794e7
+
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 ---
- package/qt5/Config.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 7fe0bfc..18dad52 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -31,6 +31,7 @@ menuconfig BR2_PACKAGE_QT5
- 	  http://qt.io
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index a44fbe3..6bca17c 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -230,14 +230,6 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
+ 	done
+ endef
  
- if BR2_PACKAGE_QT5
-+source "package/qt5/qt53d/Config.in"
- source "package/qt5/qt5base/Config.in"
- source "package/qt5/qt5canvas3d/Config.in"
- source "package/qt5/qt5connectivity/Config.in"
-@@ -40,7 +41,9 @@ source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5location/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
-+source "package/qt5/qt5quickcontrols2/Config.in"
- source "package/qt5/qt5sensors/Config.in"
-+source "package/qt5/qt5serialbus/Config.in"
- source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5tools/Config.in"
-@@ -48,10 +51,6 @@ source "package/qt5/qt5webchannel/Config.in"
- source "package/qt5/qt5websockets/Config.in"
- source "package/qt5/qt5x11extras/Config.in"
- source "package/qt5/qt5xmlpatterns/Config.in"
--comment "technology preview"
--source "package/qt5/qt53d/Config.in"
--source "package/qt5/qt5quickcontrols2/Config.in"
--source "package/qt5/qt5serialbus/Config.in"
- comment "legacy compatibility"
- source "package/qt5/qt5enginio/Config.in"
- source "package/qt5/qt5script/Config.in"
+-define QT5BASE_INSTALL_TARGET_FONTS
+-	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
+-		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
+-		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
+-	fi
+-endef
+-
+-
+ define QT5BASE_INSTALL_TARGET_EXAMPLES
+ 	example_dirs=$$(cd $(@D)/examples; find . -mindepth 1 -maxdepth 1 -type d); \
+ 	for example in $${example_dirs}; do \
+@@ -250,14 +242,12 @@ endef
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ define QT5BASE_INSTALL_TARGET_CMDS
+-	$(QT5BASE_INSTALL_TARGET_FONTS)
+ 	$(QT5BASE_INSTALL_TARGET_EXAMPLES)
+ endef
+ else
+ define QT5BASE_INSTALL_TARGET_CMDS
+ 	$(QT5BASE_INSTALL_TARGET_LIBS)
+ 	$(QT5BASE_INSTALL_TARGET_PLUGINS)
+-	$(QT5BASE_INSTALL_TARGET_FONTS)
+ 	$(QT5BASE_INSTALL_TARGET_EXAMPLES)
+ endef
+ endif
 -- 
 1.9.1
