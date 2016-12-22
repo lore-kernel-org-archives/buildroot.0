@@ -1,62 +1,41 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 22 Dec 2016 15:21:10 +0100
-Subject: [Buildroot] [PATCH v4 04/10] Revert "qt5base: install bundled fonts
-	to target"
+Date: Thu, 22 Dec 2016 15:21:14 +0100
+Subject: [Buildroot] [PATCH v4 08/10] python-pyqt: Depend directly on Qt
+	rather than its toolchain requirements
 In-Reply-To: <1482416476-20306-1-git-send-email-anaumann@ultratronik.de>
 References: <1482416476-20306-1-git-send-email-anaumann@ultratronik.de>
-Message-ID: <1482416476-20306-5-git-send-email-anaumann@ultratronik.de>
+Message-ID: <1482416476-20306-9-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Corjon <corjon.j@ecagroup.com>
-
-qtbase carries nor more fonts since c5ceabb9a1caf6b9b7615a28c3097f221772f645
-
-This reverts commit cdfa21b06041eb601e0bea79f2c8f50e9d637384
-and part of 186ef9f6f4647ed34b67a3427a5e0e249f0794e7
-
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 ---
- package/qt5/qt5base/qt5base.mk | 10 ----------
- 1 file changed, 10 deletions(-)
+ package/python-pyqt/Config.in | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index a44fbe3..6bca17c 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -230,14 +230,6 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
- 	done
- endef
+diff --git a/package/python-pyqt/Config.in b/package/python-pyqt/Config.in
+index a50cb74..6934a4c 100644
+--- a/package/python-pyqt/Config.in
++++ b/package/python-pyqt/Config.in
+@@ -1,13 +1,9 @@
+-comment "python-pyqt needs a toolchain w/ C++, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "python-pyqt needs Qt4"
++	depends on !BR2_PACKAGE_QT
  
--define QT5BASE_INSTALL_TARGET_FONTS
--	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
--		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
--		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
--	fi
--endef
--
--
- define QT5BASE_INSTALL_TARGET_EXAMPLES
- 	example_dirs=$$(cd $(@D)/examples; find . -mindepth 1 -maxdepth 1 -type d); \
- 	for example in $${example_dirs}; do \
-@@ -250,14 +242,12 @@ endef
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- define QT5BASE_INSTALL_TARGET_CMDS
--	$(QT5BASE_INSTALL_TARGET_FONTS)
- 	$(QT5BASE_INSTALL_TARGET_EXAMPLES)
- endef
- else
- define QT5BASE_INSTALL_TARGET_CMDS
- 	$(QT5BASE_INSTALL_TARGET_LIBS)
- 	$(QT5BASE_INSTALL_TARGET_PLUGINS)
--	$(QT5BASE_INSTALL_TARGET_FONTS)
- 	$(QT5BASE_INSTALL_TARGET_EXAMPLES)
- endef
- endif
+ config BR2_PACKAGE_PYTHON_PYQT
+ 	bool "python-pyqt"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # qt
+-	depends on BR2_USE_MMU # qt
+-	select BR2_PACKAGE_QT
++	depends on BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_PYTHON_SIP
+ 	help
+ 	  PyQt4 for Qt Embedded 4 bindings.
 -- 
 1.9.1
