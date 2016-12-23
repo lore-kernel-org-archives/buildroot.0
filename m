@@ -1,17 +1,17 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 22:32:58 +0100
-Subject: [Buildroot] [git commit] collectd: explicitly disable zone plugin
-Message-ID: <20161223214639.D546581765@busybox.osuosl.org>
+Date: Fri, 23 Dec 2016 22:41:06 +0100
+Subject: [Buildroot] [git commit] collectd: explicitly disable grpc plugin
+Message-ID: <20161223214640.1492281765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6686a8b2bceb67bf855879f5fba4b2d0f9aa90f3
+commit: https://git.buildroot.net/buildroot/commit/?id=6b2ef2881e65858f75782575ceabd740a379fa13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's intended for solaris so no usage case for buildroot.
+It requires the libgrpc++ library which buildroot doesn't provide yet.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
@@ -20,15 +20,15 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 060fe0a..1fec414 100644
+index 97e2e98..2b57e51 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -20,7 +20,7 @@ COLLECTD_PLUGINS_DISABLE = \
+@@ -15,7 +15,7 @@ COLLECTD_LICENSE_FILES = COPYING
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
+ 	amqp apple_sensors aquaero ascent barometer dbi email \
+-	gmond hddtemp ipmi java libvirt lpar lvm madwifi mbmon \
++	gmond grpc hddtemp ipmi java libvirt lpar lvm madwifi mbmon \
+ 	mic multimeter netapp notify_desktop numa \
  	nut onewire oracle perl pf pinba powerdns python redis routeros \
  	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
- 	tokyotyrant turbostat uuid varnish virt vserver write_kafka \
--	write_mongodb write_redis xmms zfs_arc
-+	write_mongodb write_redis xmms zfs_arc zone
- 
- COLLECTD_CONF_ENV += LIBS="-lm"
- 
