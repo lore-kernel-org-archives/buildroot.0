@@ -1,41 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 22:32:15 +0100
-Subject: [Buildroot] [git commit] collectd: bump to version 5.7.0
-Message-ID: <20161223214639.B693081765@busybox.osuosl.org>
+Date: Fri, 23 Dec 2016 22:32:35 +0100
+Subject: [Buildroot] [git commit] collectd: drop notify_email global disable
+Message-ID: <20161223214639.CA61381765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6f66b0c532e706852b2a0694dab4b6ca3db8402
+commit: https://git.buildroot.net/buildroot/commit/?id=a5829f36b8c5c4525cbfbdf296c719d0a7862d27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+It's a no-op since it's disabled/enabled by the config knob.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/collectd/collectd.hash | 2 +-
- package/collectd/collectd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/collectd/collectd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
-index d385c0d..2accf83 100644
---- a/package/collectd/collectd.hash
-+++ b/package/collectd/collectd.hash
-@@ -1,2 +1,2 @@
- # From https://collectd.org/files/SHA256SUM
--sha256	017f3a4062187e594d8ab6af685655fb82a8a942dc574668e68242bdb8ba820f	collectd-5.5.2.tar.bz2
-+sha256	25a05fbdc6baad571554342bbac6141928bf95a47fc60ee3b32e46d0c89ef2b2	collectd-5.7.0.tar.bz2
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 4846ee4..ccb2f11 100644
+index 942ba38..060fe0a 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COLLECTD_VERSION = 5.5.2
-+COLLECTD_VERSION = 5.7.0
- COLLECTD_SITE = http://collectd.org/files
- COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+@@ -16,7 +16,7 @@ COLLECTD_LICENSE_FILES = COPYING
+ COLLECTD_PLUGINS_DISABLE = \
+ 	amqp apple_sensors aquaero ascent barometer dbi email \
+ 	gmond hddtemp ipmi java libvirt lpar lvm madwifi mbmon \
+-	mic multimeter netapp notify_desktop notify_email numa \
++	mic multimeter netapp notify_desktop numa \
+ 	nut onewire oracle perl pf pinba powerdns python redis routeros \
+ 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
+ 	tokyotyrant turbostat uuid varnish virt vserver write_kafka \
