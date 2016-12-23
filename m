@@ -1,49 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 22:56:37 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] package/apache: security
-	bump version to 2.4.25
-Message-ID: <20161223220932.A363D81EC2@busybox.osuosl.org>
+Date: Fri, 23 Dec 2016 22:57:06 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] libcurl: security bump to
+	7.52.1
+Message-ID: <20161223220932.AFD2181E44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1bd3e4104cddf1940fe5523ffda86e2081e03fe
+commit: https://git.buildroot.net/buildroot/commit/?id=5f691d11d45bbd5340e1c903a7d4184769411347
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Changelog:
-http://www.apache.org/dist/httpd/CHANGES_2.4.25
+Fixes CVE-2016-9594 - Unitilized random
 
-Fixes CVE-2016-8740, CVE-2016-5387, CVE-2016-2161, CVE-2016-0736,
-CVE-2016-8743.
+Libcurl's (new) internal function that returns a good 32bit random value was
+implemented poorly and overwrote the pointer instead of writing the value
+into the buffer the pointer pointed to.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 68af1dc2575888863ae0015b09555a5e42a5d56c)
+(cherry picked from commit 72b6bf8f57569c14238d223bb6cc6fec7fd3af4d)
 ---
- package/apache/apache.hash | 2 +-
- package/apache/apache.mk   | 2 +-
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index e4710b0..38fd883 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 2b68c6a..7a942f2 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
 @@ -1,2 +1,2 @@
- # From http://www.apache.org/dist/httpd/httpd-2.4.23.tar.bz2.sha1
--sha1	5101be34ac4a509b245adb70a56690a84fcc4e7f	httpd-2.4.23.tar.bz2
-+sha1 bd6d138c31c109297da2346c6e7b93b9283993d2  httpd-2.4.25.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index e54b736..ae629bd 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+ # Locally calculated after checking pgp signature
+-sha256 b9a2e18b4785eb75ad84598720e1559e1c53550ea011c0e00becdb94e2df5cc6  curl-7.52.0.tar.bz2
++sha256 d16185a767cb2c1ba3d5b9096ec54e5ec198b213f45864a38b3bda4bbf87389b  curl-7.52.1.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index b2a1b24..ea37309 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.23
-+APACHE_VERSION = 2.4.25
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+-LIBCURL_VERSION = 7.52.0
++LIBCURL_VERSION = 7.52.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
