@@ -1,37 +1,41 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 22 Dec 2016 17:40:48 -0800
-Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add option for
-	static client
-In-Reply-To: <CA+h8R2ridiC-VxhRt2X13cKAebb+pr7cDkFTEkW4nE3kutE0Sw@mail.gmail.com>
-References: <1476850246-12883-1-git-send-email-christian@paral.in>
- <8737jsg4fn.fsf@dell.be.48ers.dk>
- <CA+h8R2ridiC-VxhRt2X13cKAebb+pr7cDkFTEkW4nE3kutE0Sw@mail.gmail.com>
-Message-ID: <CA+h8R2pE5Lhe_9Wni0xnef+ngb3iqJw6TEzbi8hcc9Ndr_GVLQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 23 Dec 2016 07:36:40 +0100
+Subject: [Buildroot] telit_evk_pro3_defconfig fails to build
+In-Reply-To: <CAHkwnC_QU_F6y-65s9X0+qyJD0epuC58yeXAnyUHLW8gAY28ww@mail.gmail.com>
+ (Fabio Porcedda's message of "Thu, 22 Dec 2016 18:30:56 +0100")
+References: <20161105152013.615d71d7@free-electrons.com>
+ <CAHkwnC_jVyVQ27Y6aOr3hLthmUrd70Ep0ufJULB+4jP3zHrYJQ@mail.gmail.com>
+ <CACXmVia0ArmYy248oVbg5SZ2uvufyAnktK62Zgm48D+_S04qag@mail.gmail.com>
+ <CAHkwnC_QU_F6y-65s9X0+qyJD0epuC58yeXAnyUHLW8gAY28ww@mail.gmail.com>
+Message-ID: <87lgv7yww7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas,
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-On Wed, Oct 19, 2016 at 1:28 PM, Christian Stewart <christian@paral.in> wrote:
-> On Wed, Oct 19, 2016 at 3:53 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->> What is the use case for docker-in-docker? Why not bind mount
->> /var/run/docker.sock instead?
->
-> You need the Docker client if you want to call Docker from bash inside
-> a container. This is intended for use along with bind mounting the
-> docker.sock in the container. To guarantee you have the same client
-> version in the host and the docker container, it's then easier to just
-> bind mount both docker.sock and the docker client into the container.
-> You need a static client to make sure this always works. This is why I
-> added this option and have been using it myself for a long time.
+Hi,
 
-I'm revisiting this pending patch as I don't think we came to a
-conclusion on if it would be merged or not. I'm using the option
-extensively in my projects, so I still believe it's worth merging.
-Thoughts on this?
+ >> Do you think you will manage to fix the build issue before the end of
+ >> January or should we remove the defconfig?
 
-Thanks,
-Christian Stewart
+ > Hi Peter,
+ > thanks for those suggestions,
+
+ > I'm working to update the barebox and kernel right now, I should be
+ > able to send a fixed version before the end of January.
+
+ > I've already tried some updated kernels that support gcc 5 (3.10*,
+ > .4.1.*, 4.4.*) but they don't boot anymore, I'm working to fix it.
+
+ > I've also updated barebox but i've problems with the support for the
+ > watchdog so i'm working to fix it.
+
+ > Backporting the support for gcc 5 will be my last resort.
+
+Ok, great - Thanks!
+
+-- 
+Bye, Peter Korsgaard
