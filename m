@@ -1,52 +1,37 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Thu, 22 Dec 2016 17:09:42 -0800
-Subject: [Buildroot] [PATCH v2] package/xen: Update to version 4.8.0
-In-Reply-To: <20161222235936.018f7807@free-electrons.com>
-References: <1482445317-9435-1-git-send-email-alistair.francis@xilinx.com>
- <20161222235936.018f7807@free-electrons.com>
-Message-ID: <CAKmqyKOMOCfa3+BAsdOuAOSy+acQnSTjQOcr9H2XxQbd1e9t4w@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 22 Dec 2016 17:40:48 -0800
+Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add option for
+	static client
+In-Reply-To: <CA+h8R2ridiC-VxhRt2X13cKAebb+pr7cDkFTEkW4nE3kutE0Sw@mail.gmail.com>
+References: <1476850246-12883-1-git-send-email-christian@paral.in>
+ <8737jsg4fn.fsf@dell.be.48ers.dk>
+ <CA+h8R2ridiC-VxhRt2X13cKAebb+pr7cDkFTEkW4nE3kutE0Sw@mail.gmail.com>
+Message-ID: <CA+h8R2pE5Lhe_9Wni0xnef+ngb3iqJw6TEzbi8hcc9Ndr_GVLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 22, 2016 at 2:59 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 22 Dec 2016 14:21:57 -0800, Alistair Francis wrote:
->
->> +TARGET_CONFIGURE_OPTS := $(subst CFLAGS=",APPEND_CFLAGS="-Wno-error ,$(TARGET_CONFIGURE_OPTS))
->
-> You seem to miss the very important fact that the variable namespace in
-> Buildroot is global. So when you change TARGET_CONFIGURE_OPTS here you
-> change it for *all* packages, not just yours.
+Peter, Thomas,
 
-I did miss that. I should have done a clean build and test before I sent this.
-
+On Wed, Oct 19, 2016 at 1:28 PM, Christian Stewart <christian@paral.in> wrote:
+> On Wed, Oct 19, 2016 at 3:53 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>> What is the use case for docker-in-docker? Why not bind mount
+>> /var/run/docker.sock instead?
 >
-> What are you trying to do here? If you want to override the CFLAGS just
-> for Xen, you should do:
->
-> XEN_CONF_ENV = \
->         CFLAGS="$(TARGET_CFLAGS) your custom cflags"
+> You need the Docker client if you want to call Docker from bash inside
+> a container. This is intended for use along with bind mounting the
+> docker.sock in the container. To guarantee you have the same client
+> version in the host and the docker container, it's then easier to just
+> bind mount both docker.sock and the docker client into the container.
+> You need a static client to make sure this always works. This is why I
+> added this option and have been using it myself for a long time.
 
-I need to do that as well as unset the CFLAGS (I need to replace it
-with APPEND_CFLAGS).
-
-If I did the same thing but stored it in a Xen specific variable would
-that be ok?
+I'm revisiting this pending patch as I don't think we came to a
+conclusion on if it would be merged or not. I'm using the option
+extensively in my projects, so I still believe it's worth merging.
+Thoughts on this?
 
 Thanks,
-
-Alistair
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+Christian Stewart
