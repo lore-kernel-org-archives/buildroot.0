@@ -1,58 +1,108 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 22:29:46 +0100
-Subject: [Buildroot] [PATCH] armadeus_apf9328_defconfig: bump kernel to
-	3.18.29
-In-Reply-To: <20161221204611.5889-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 21 Dec 2016 21:46:11 +0100")
-References: <20161221204611.5889-1-peter@korsgaard.com>
-Message-ID: <87eg0yfi5x.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 23 Dec 2016 22:30:30 +0100
+Subject: [Buildroot] [PATCH 1/1] hiredis: new package
+Message-ID: <1482528630-122180-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Minimalistic C client for Redis >= 1.2
 
- > Which includes the gcc5+ fix for ftrace:
- > commit aeea3592a13bf12861943e44fc48f1f270941f8d
- > Author: Behan Webster <behanw@converseincode.com>
- > Date:   Wed Sep 24 01:06:46 2014 +0100
+It is minimalistic because it just adds minimal support for
+the protocol, but at the same time it uses a high level
+printf-alike API in order to make it much higher level than
+otherwise suggested by its minimal code base and the lack of
+explicit bindings for every Redis command.
 
- >     ARM: 8158/1: LLVMLinux: use static inline in ARM ftrace.h
+https://github.com/redis/hiredis
 
- >     With compilers which follow the C99 standard (like modern versions of gcc and
- >     clang), "extern inline" does the wrong thing (emits code for an externally
- >     linkable version of the inline function). In this case using static inline
- >     and removing the NULL version of return_address in return_address.c does
- >     the right thing.
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/Config.in            |  1 +
+ package/hiredis/Config.in    | 12 ++++++++++++
+ package/hiredis/hiredis.hash |  2 ++
+ package/hiredis/hiredis.mk   | 31 +++++++++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+)
+ create mode 100644 package/hiredis/Config.in
+ create mode 100644 package/hiredis/hiredis.hash
+ create mode 100644 package/hiredis/hiredis.mk
 
- >     Signed-off-by: Behan Webster <behanw@converseincode.com>
- >     Reviewed-by: Mark Charlebois <charlebm@gmail.com>
- >     Acked-by: Steven Rostedt <rostedt@goodmis.org>
- >     Signed-off-by: Russell King <rmk+kernel@arm.linux.org.uk>
-
- > Otherwise, the build dies with:
-
- > arch/arm/kernel/return_address.c:66:7: error: redefinition of ?return_address?
- >  void *return_address(unsigned int level)
- >        ^
- > In file included from include/linux/ftrace.h:20:0,
- >                  from arch/arm/kernel/return_address.c:12:
- > ./arch/arm/include/asm/ftrace.h:48:21: note: previous definition of ?return_address? was here
- >  extern inline void *return_address(unsigned int level)
- >                      ^
-
- > For more details, see:
- > https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/185616889
-
- > notice: Only build tested as I don't have the hw, which is also why the
- > kernel is only bumped to 3.18 to make it as safe as possible.
-
- > CC: Julien Boibessot <julien.boibessot@armadeus.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
+diff --git a/package/Config.in b/package/Config.in
+index b6b409c..df17dd6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -925,6 +925,7 @@ menu "Database"
+ 	source "package/berkeleydb/Config.in"
+ 	source "package/cppdb/Config.in"
+ 	source "package/gdbm/Config.in"
++	source "package/hiredis/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
+ 	source "package/libpqxx/Config.in"
+diff --git a/package/hiredis/Config.in b/package/hiredis/Config.in
+new file mode 100644
+index 0000000..1656355
+--- /dev/null
++++ b/package/hiredis/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HIREDIS
++	bool "hiredis"
++	help
++	  Minimalistic C client for Redis >= 1.2
++
++	  It is minimalistic because it just adds minimal support for
++	  the protocol, but at the same time it uses a high level
++	  printf-alike API in order to make it much higher level than
++	  otherwise suggested by its minimal code base and the lack of
++	  explicit bindings for every Redis command.
++
++	  https://github.com/redis/hiredis
+diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+new file mode 100644
+index 0000000..2c788a6
+--- /dev/null
++++ b/package/hiredis/hiredis.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	717e6fc8dc2819bef522deaca516de9e51b9dfa68fe393b7db5c3b6079196f78	hiredis-v0.13.3.tar.gz
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+new file mode 100644
+index 0000000..a747db4
+--- /dev/null
++++ b/package/hiredis/hiredis.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# hiredis
++#
++################################################################################
++
++HIREDIS_VERSION = v0.13.3
++HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
++HIREDIS_LICENSE = BSD-3c
++HIREDIS_LICENSE_FILES = COPYING
++HIREDIS_INSTALL_STAGING = YES
++
++HIREDIS_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	PREFIX=/usr
++
++define HIREDIS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(HIREDIS_MAKE_OPTS) -C $(@D)
++endef
++
++define HIREDIS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(HIREDIS_MAKE_OPTS) -C $(@D) \
++		DESTDIR=$(STAGING_DIR) install
++endef
++
++define HIREDIS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(HIREDIS_MAKE_OPTS) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
-Bye, Peter Korsgaard
+2.5.0
