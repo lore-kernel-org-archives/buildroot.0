@@ -1,50 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 22:33:29 +0100
-Subject: [Buildroot] [git commit] collectd: add chrony plugin support
-Message-ID: <20161223214639.E9C9C7FE8D@busybox.osuosl.org>
+Date: Fri, 23 Dec 2016 22:37:38 +0100
+Subject: [Buildroot] [git commit] collectd: add mqtt plugin support
+Message-ID: <20161223214640.0AA357FE8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81456f1e920076270b0c6aeac99c3e51fe81325d
+commit: https://git.buildroot.net/buildroot/commit/?id=66f64ddfbfd9d1929850141ee9a14407502f7d00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add explicit support for the new chrony dependency-less plugin.
+Add explicit support for the mqtt (mosquitto) plugin.
+Place it under the write category even though it can read as well, since
+it will normally be used to write (publish) rather than read
+(subscribe).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/collectd/Config.in   | 5 +++++
- package/collectd/collectd.mk | 1 +
- 2 files changed, 6 insertions(+)
+ package/collectd/Config.in   | 6 ++++++
+ package/collectd/collectd.mk | 2 ++
+ 2 files changed, 8 insertions(+)
 
 diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 72e5793..5e84aa5 100644
+index d1b85aa..b17abe8 100644
 --- a/package/collectd/Config.in
 +++ b/package/collectd/Config.in
-@@ -127,6 +127,11 @@ config BR2_PACKAGE_COLLECTD_CEPH
- 	help
- 	  Statistics from the Ceph distributed storage system.
+@@ -512,6 +512,12 @@ config BR2_PACKAGE_COLLECTD_GRAPHITE
+ 	  Writes data collected to Carbon (Graphite's) storage API.
+ 	  http://graphite.wikidot.com/start
  
-+config BR2_PACKAGE_COLLECTD_CHRONY
-+	bool "chrony"
++config BR2_PACKAGE_COLLECTD_MQTT
++	bool "mqtt"
++	select BR2_PACKAGE_MOSQUITTO
 +	help
-+	  Collects NTP data from the chrony NTP server.
++	  Sends metrics to and/or receives metrics from an MQTT broker.
 +
- config BR2_PACKAGE_COLLECTD_CGROUPS
- 	bool "cgroups"
+ config BR2_PACKAGE_COLLECTD_NETWORK
+ 	bool "network"
  	help
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 11685cd..5018fb0 100644
+index d8b2576..97e2e98 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -35,6 +35,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
- 	$(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
-+	$(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CGROUPS),--enable-cgroups,--disable-cgroups) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CONNTRACK),--enable-conntrack,--disable-conntrack) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CONTEXTSWITCH),--enable-contextswitch,--disable-contextswitch) \
+@@ -72,6 +72,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHED),--enable-memcached,--disable-memcached) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MEMORY),--enable-memory,--disable-memory) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MODBUS),--enable-modbus,--disable-modbus) \
++	$(if $(BR2_PACKAGE_COLLECTD_MQTT),--enable-mqtt,--disable-mqtt) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MYSQL),--enable-mysql,--disable-mysql) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NETLINK),--enable-netlink,--disable-netlink) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NETWORK),--enable-network,--disable-network) \
+@@ -133,6 +134,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MODBUS),libmodbus) \
++	$(if $(BR2_PACKAGE_COLLECTD_MQTT),mosquitto) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MYSQL),mysql) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NETLINK),libmnl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NGINX),libcurl) \
