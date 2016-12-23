@@ -1,41 +1,130 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 07:36:40 +0100
-Subject: [Buildroot] telit_evk_pro3_defconfig fails to build
-In-Reply-To: <CAHkwnC_QU_F6y-65s9X0+qyJD0epuC58yeXAnyUHLW8gAY28ww@mail.gmail.com>
- (Fabio Porcedda's message of "Thu, 22 Dec 2016 18:30:56 +0100")
-References: <20161105152013.615d71d7@free-electrons.com>
- <CAHkwnC_jVyVQ27Y6aOr3hLthmUrd70Ep0ufJULB+4jP3zHrYJQ@mail.gmail.com>
- <CACXmVia0ArmYy248oVbg5SZ2uvufyAnktK62Zgm48D+_S04qag@mail.gmail.com>
- <CAHkwnC_QU_F6y-65s9X0+qyJD0epuC58yeXAnyUHLW8gAY28ww@mail.gmail.com>
-Message-ID: <87lgv7yww7.fsf@dell.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 23 Dec 2016 08:18:41 +0100
+Subject: [Buildroot] [RFC] Add download helper for PyPi
+Message-ID: <1482477521-12235-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Hi,
+PyPI has changed package download location. The old scheme below is
+working only for the old package versions:
 
- >> Do you think you will manage to fix the build issue before the end of
- >> January or should we remove the defconfig?
+https://pypi.python.org/packages/source/{first pkg name char}/{pkg name}
 
- > Hi Peter,
- > thanks for those suggestions,
+All new packages have following scheme:
 
- > I'm working to update the barebox and kernel right now, I should be
- > able to send a fixed version before the end of January.
+https://pypi.python.org/packages/{hash[:2]}/{hash[2:4]}/{hash[4:]}/{filename}
 
- > I've already tried some updated kernels that support gcc 5 (3.10*,
- > .4.1.*, 4.4.*) but they don't boot anymore, I'm working to fix it.
+This means every time package's version is bumped, one have to change download
+URL as well. So PyPI helper takes care of handling the URL and in the future
+version bumping will only touch package's version variable.
 
- > I've also updated barebox but i've problems with the support for the
- > watchdog so i'm working to fix it.
+pypi-dl-url.py reads package's JSON file and extracts download URL according
+to the given version.
 
- > Backporting the support for gcc 5 will be my last resort.
+Usage example:
 
-Ok, great - Thanks!
+PYTHON_PYTZ_SITE = $(call pypi,pytz,$(PYTHON_PYTZ_VERSION),tar.bz2)
 
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/pkg-download.mk         |  3 ++
+ support/download/pypi-dl-url.py | 69 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+)
+ create mode 100755 support/download/pypi-dl-url.py
+
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index cfc550e..676f8f6 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -55,6 +55,9 @@ domainseparator = $(if $(1),$(1),/)
+ # github(user,package,version): returns site of GitHub repository
+ github = https://github.com/$(1)/$(2)/archive/$(3)
+ 
++# pypi(package, version, packer extention): returns site of PyPi download location
++pypi = $(shell support/download/pypi-dl-url.py $(1) $(2) $(3))
++
+ # Expressly do not check hashes for those files
+ # Exported variables default to immediately expanded in some versions of
+ # make, but we need it to be recursively-epxanded, so explicitly assign it.
+diff --git a/support/download/pypi-dl-url.py b/support/download/pypi-dl-url.py
+new file mode 100755
+index 0000000..e9d36bd
+--- /dev/null
++++ b/support/download/pypi-dl-url.py
+@@ -0,0 +1,69 @@
++#!/usr/bin/python
++
++# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
++
++import sys
++import json
++try:
++    from urllib.request import urlopen
++    from urllib.error import HTTPError, URLError
++except ImportError:
++    from urllib2 import urlopen, HTTPError, URLError
++
++
++def pypi_get_metadata(pkg_name, version):
++    '''Get package release metadata from PyPI'''
++
++    metadata_url = 'https://pypi.python.org/pypi/{pkg}/json'.format(pkg=pkg_name)
++    try:
++        pkg_json = urlopen(metadata_url).read().decode()
++    except HTTPError as error:
++        print('ERROR:', error.getcode(), error.msg)
++        print('ERROR: Could not find package {pkg}.\n'
++              'Check syntax inside the python package index:\n'
++              'https://pypi.python.org/pypi/ '
++              .format(pkg=pkg_name))
++        raise
++    except URLError:
++        print('ERROR: Could not find package {pkg}.\n'
++              'Check syntax inside the python package index:\n'
++              'https://pypi.python.org/pypi/ '
++              .format(pkg=pkg_name))
++        raise
++
++    ver_metadata = None
++    try:
++        ver_metadata = json.loads(pkg_json)['releases'][version]
++    except KeyError:
++        print('ERROR: Could not find release {ver}.\n'
++              .format(ver=version))
++        raise
++
++    return ver_metadata
++
++
++if __name__ == '__main__':
++    if len(sys.argv) != 4:
++        print('Wrong command line arguments number.\n')
++        print('Please supply package name, version and file extention.\n')
++        sys.exit(1)
++
++    metadata = None
++    try:
++        metadata = pypi_get_metadata(sys.argv[1], sys.argv[2])
++    except:
++        sys.exit(1)
++
++    br_pypi_url = ''
++    full_pkg_name = '{name}-{ver}.{ext}'.format(name=sys.argv[1],
++                                                ver=sys.argv[2],
++                                                ext=sys.argv[3])
++    for download_url in metadata:
++        if 'bdist' in download_url['packagetype']:
++            continue
++
++        if download_url['url'].endswith(full_pkg_name):
++            br_pypi_url = download_url['url'][:-(len(full_pkg_name) + 1)]
++            break
++
++    print(br_pypi_url)
 -- 
-Bye, Peter Korsgaard
+2.1.4
