@@ -1,131 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Dec 2016 14:33:30 +0100
-Subject: [Buildroot] [PATCH] util-linux: fix ncurses/wchar handling
-Message-ID: <1482500010-17042-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 Dec 2016 14:36:38 +0100
+Subject: [Buildroot] [git commit] xfsprogs: disable on musl
+Message-ID: <20161223133717.8CCED80AC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 006a328ad6bed214ec3c4d92120510ea37329dd1 ("util-linux: fix
-build with ncurses"), we have a build failure that occurs with musl
-toolchains when wide-char support is not enabled in ncurses.
+commit: https://git.buildroot.net/buildroot/commit/?id=ecc6da3b1ac245f017a7dd5b85cc778af09297dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The problem comes from the fact that musl provides wchar support (so it
-defines wchar_t). But when ncursesw is not available, we currently pass
---disable-widechar which tells util-linux that wchar support is not
-available at all (not only in ncurses). When this gets passed to
-util-linux configure script, then it defines its own wchar_t, which
-conflicts with the musl definition.
-
-So, we should not pass --disable-widechar when BR2_USE_WCHAR=y, which is
-what this commit does: it moves the BR2_USE_WCHAR logic outside of the
-ncurses logic, and passes --enable-widechar/--disable-widechar as
-appropriate.
-
-However, there's a gotcha: util-linux really wants the ncursesw variant
-of ncurses when the system has wchar support enabled. We take this into
-account by:
-
- - Enabling ncursesw when BR2_PACKAGE_NCURSES_WCHAR=y. In this case, we
-   have ncurses and we have BR2_USE_WCHAR=y, so everything is fine.
-
- - Otherwise, enabling ncurses when BR2_PACKAGE_NCURSES=y but
-   BR2_USE_WCHAR is disabled.
-
-To make sure that the existing util-linux programs that need ncurses
-support still build fine, we adjust the Config.in to select
-BR2_PACKAGE_NCURSES_WCHAR on BR2_USE_WCHAR=y configurations.
+Despite a recent bump, xfsprogs still doesn't build on musl. It's been
+failing for a long long time, so let's disable it in this configuration.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/19de2a0b12380ddc86dbba0dae3a3877b25f83ff/
+  http://autobuild.buildroot.net/results/c6cd42da1abe2936872da1f9db093ffc72be3c15/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/util-linux/Config.in     |  5 +++++
- package/util-linux/util-linux.mk | 20 ++++++++++----------
- 2 files changed, 15 insertions(+), 10 deletions(-)
+ package/xfsprogs/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index e957f84..cfb2451 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -207,6 +207,7 @@ config BR2_PACKAGE_UTIL_LINUX_MORE
- 	bool "more"
+diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+index 6e1a935..a82663f 100644
+--- a/package/xfsprogs/Config.in
++++ b/package/xfsprogs/Config.in
+@@ -1,11 +1,12 @@
+-comment "xfsprogs needs a toolchain w/ wchar"
++comment "xfsprogs needs a glibc or uClibc toolchain w/ wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR
++	depends on !BR2_USE_WCHAR || BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_XFSPROGS
+ 	bool "xfsprogs"
  	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  File perusal filter for crt viewing
- 
-@@ -252,6 +253,7 @@ config BR2_PACKAGE_UTIL_LINUX_PG
- 	bool "pg"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Browse pagewise through text files
- 
-@@ -298,6 +300,7 @@ config BR2_PACKAGE_UTIL_LINUX_SETPRIV
- config BR2_PACKAGE_UTIL_LINUX_SETTERM
- 	bool "setterm"
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Set terminal attributes
- 
-@@ -310,12 +313,14 @@ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
- config BR2_PACKAGE_UTIL_LINUX_TUNELP
- 	bool "tunelp"
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Set various parameters for the lp device
- 
- config BR2_PACKAGE_UTIL_LINUX_UL
- 	bool "ul"
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Do underlining
- 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 51ece90..414465c 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -45,21 +45,21 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- UTIL_LINUX_DEPENDENCIES += busybox
- endif
- 
--ifeq ($(BR2_PACKAGE_NCURSES),y)
--UTIL_LINUX_DEPENDENCIES += ncurses
--ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
--UTIL_LINUX_CONF_OPTS += --with-ncursesw
--UTIL_LINUX_CONF_ENV += NCURSESW5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
--else
--UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses --disable-widechar
--UTIL_LINUX_CONF_ENV += NCURSES5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
--endif
--else
- ifeq ($(BR2_USE_WCHAR),y)
- UTIL_LINUX_CONF_OPTS += --enable-widechar
- else
- UTIL_LINUX_CONF_OPTS += --disable-widechar
- endif
-+
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+UTIL_LINUX_DEPENDENCIES += ncurses
-+UTIL_LINUX_CONF_OPTS += --with-ncursesw
-+UTIL_LINUX_CONF_ENV += NCURSESW5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
-+else ifeq ($(BR2_PACKAGE_NCURSES):$(BR2_USE_WCHAR),y:)
-+UTIL_LINUX_DEPENDENCIES += ncurses
-+UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses
-+UTIL_LINUX_CONF_ENV += NCURSES5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
-+else
- UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
- endif
- 
--- 
-2.7.4
+ 	depends on BR2_USE_WCHAR # util-linux
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
