@@ -1,35 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Dec 2016 11:26:05 +0100
-Subject: [Buildroot] [git commit] util-linux: attempt to fix host-util-linux
-	build
-Message-ID: <20161223102626.DB4F481813@busybox.osuosl.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 23 Dec 2016 12:10:06 +0100
+Subject: [Buildroot] [PATCH] python-lxml: bump to version 3.7.0
+Message-ID: <1482491406-22790-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fadda7adc7291eb355382d0f05677a92f9c3d57
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Should fix:
-
-  http://autobuild.buildroot.net/results/65595aa787498087a9a85c9cd19135396b246afb/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/util-linux/util-linux.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index bec6993..51ece90 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -150,6 +150,7 @@ HOST_UTIL_LINUX_CONF_OPTS += \
- 	--enable-libmount \
- 	--enable-libuuid \
- 	--without-ncurses \
-+	--without-ncursesw \
- 	--without-tinfo
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 656c01f..cab3e37 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  61d5d3e00b5821e6cda099b3b4ccfea4527bf7c595e0fb3a7a760490cedd6172  lxml-3.6.4.tgz
++sha256  9c62eb2a1862e1ae285d7e7e3b7dc8772d387b19258086afcec143c6b7b8a5c9  lxml-3.7.0.tgz
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index b117ec8..6495351 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
+-PYTHON_LXML_VERSION = 3.6.4
++PYTHON_LXML_VERSION = 3.7.0
+ PYTHON_LXML_SITE = http://lxml.de/files
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
+ 
+-- 
+2.1.4
