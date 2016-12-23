@@ -1,86 +1,133 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 15:00:04 +0100
-Subject: [Buildroot] [git commit] kexec: bump to 2.0.14
-Message-ID: <20161223142516.363C181EC0@busybox.osuosl.org>
+Date: Fri, 23 Dec 2016 15:01:11 +0100
+Subject: [Buildroot] [git commit] util-linux: fix ncurses/wchar handling
+Message-ID: <20161223142516.3F1947FB32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b2c814aebdb782242ec2bbe20b24c71accd1af5
+commit: https://git.buildroot.net/buildroot/commit/?id=5a18eabdf08564688761a9b2f35892d69d8f9a18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch 0002-arm-add-phys_to_virt.h-and-iomem.patch is now obsolete as
-it's been properly fixed upstream now.
+Since commit 006a328ad6bed214ec3c4d92120510ea37329dd1 ("util-linux: fix
+build with ncurses"), we have a build failure that occurs with musl
+toolchains when wide-char support is not enabled in ncurses.
 
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+The problem comes from the fact that musl provides wchar support (so it
+defines wchar_t). But when ncursesw is not available, we currently pass
+--disable-widechar which tells util-linux that wchar support is not
+available at all (not only in ncurses). When this gets passed to
+util-linux configure script, then it defines its own wchar_t, which
+conflicts with the musl definition.
+
+So, we should not pass --disable-widechar when BR2_USE_WCHAR=y, which is
+what this commit does: it moves the BR2_USE_WCHAR logic outside of the
+ncurses logic, and passes --enable-widechar/--disable-widechar as
+appropriate.
+
+However, there's a gotcha: util-linux really wants the ncursesw variant
+of ncurses when the system has wchar support enabled. We take this into
+account by:
+
+ - Enabling ncursesw when BR2_PACKAGE_NCURSES_WCHAR=y. In this case, we
+   have ncurses and we have BR2_USE_WCHAR=y, so everything is fine.
+
+ - Otherwise, enabling ncurses when BR2_PACKAGE_NCURSES=y but
+   BR2_USE_WCHAR is disabled.
+
+To make sure that the existing util-linux programs that need ncurses
+support still build fine, we adjust the Config.in to select
+BR2_PACKAGE_NCURSES_WCHAR on BR2_USE_WCHAR=y configurations.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/19de2a0b12380ddc86dbba0dae3a3877b25f83ff/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-arm-add-phys_to_virt.h-and-iomem.patch    | 35 ----------------------
- package/kexec/kexec.hash                           |  2 +-
- package/kexec/kexec.mk                             |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
+ package/util-linux/Config.in     |  5 +++++
+ package/util-linux/util-linux.mk | 20 ++++++++++----------
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/package/kexec/0002-arm-add-phys_to_virt.h-and-iomem.patch b/package/kexec/0002-arm-add-phys_to_virt.h-and-iomem.patch
-deleted file mode 100644
-index 748acbd..0000000
---- a/package/kexec/0002-arm-add-phys_to_virt.h-and-iomem.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--arm: add iomem.h and phys_to_virt.h
--
--Fixes build for arm.
--
--This patch is equivalent to upstream commit 1574ff1aae4f3 (arm: include
--phys_to_virt.h and iomem.h in distribution) when applied to the tarball.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--
-----
--diff -Nuar kexec-tools-2.0.13-orig/kexec/arch/arm/iomem.h kexec-tools-2.0.13/kexec/arch/arm/iomem.h
----- kexec-tools-2.0.13-orig/kexec/arch/arm/iomem.h	1970-01-01 02:00:00.000000000 +0200
--+++ kexec-tools-2.0.13/kexec/arch/arm/iomem.h	2016-10-21 09:45:27.495689269 +0300
--@@ -0,0 +1,9 @@
--+#ifndef IOMEM_H
--+#define IOMEM_H
--+
--+#define SYSTEM_RAM		"System RAM\n"
--+#define SYSTEM_RAM_BOOT		"System RAM (boot alias)\n"
--+#define CRASH_KERNEL		"Crash kernel\n"
--+#define CRASH_KERNEL_BOOT	"Crash kernel (boot alias)\n"
--+
--+#endif
--diff -Nuar kexec-tools-2.0.13-orig/kexec/arch/arm/phys_to_virt.h kexec-tools-2.0.13/kexec/arch/arm/phys_to_virt.h
----- kexec-tools-2.0.13-orig/kexec/arch/arm/phys_to_virt.h	1970-01-01 02:00:00.000000000 +0200
--+++ kexec-tools-2.0.13/kexec/arch/arm/phys_to_virt.h	2016-10-21 09:45:27.495689269 +0300
--@@ -0,0 +1,8 @@
--+#ifndef PHYS_TO_VIRT_H
--+#define PHYS_TO_VIRT_H
--+
--+#include <stdint.h>
--+
--+extern uint64_t phys_offset;
--+
--+#endif
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index 90a7ce9..9039dad 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256	874baf421171dbfca0084af2da71ccf5a67749dd2a27c3023da5f72460bae5cc kexec-tools-2.0.13.tar.xz
-+sha256	ffb2e7e99d9d08754c6bc1922aed3c000094f318665d82a72ecc76c4ff1c0dc6 kexec-tools-2.0.14.tar.xz
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 0a74369..0a8e9f0 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index e957f84..cfb2451 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -207,6 +207,7 @@ config BR2_PACKAGE_UTIL_LINUX_MORE
+ 	bool "more"
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  File perusal filter for crt viewing
  
--KEXEC_VERSION = 2.0.13
-+KEXEC_VERSION = 2.0.14
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPLv2
+@@ -252,6 +253,7 @@ config BR2_PACKAGE_UTIL_LINUX_PG
+ 	bool "pg"
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  Browse pagewise through text files
+ 
+@@ -298,6 +300,7 @@ config BR2_PACKAGE_UTIL_LINUX_SETPRIV
+ config BR2_PACKAGE_UTIL_LINUX_SETTERM
+ 	bool "setterm"
+ 	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  Set terminal attributes
+ 
+@@ -310,12 +313,14 @@ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
+ config BR2_PACKAGE_UTIL_LINUX_TUNELP
+ 	bool "tunelp"
+ 	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  Set various parameters for the lp device
+ 
+ config BR2_PACKAGE_UTIL_LINUX_UL
+ 	bool "ul"
+ 	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  Do underlining
+ 
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 51ece90..414465c 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -45,21 +45,21 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ UTIL_LINUX_DEPENDENCIES += busybox
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_NCURSES),y)
+-UTIL_LINUX_DEPENDENCIES += ncurses
+-ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+-UTIL_LINUX_CONF_OPTS += --with-ncursesw
+-UTIL_LINUX_CONF_ENV += NCURSESW5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+-else
+-UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses --disable-widechar
+-UTIL_LINUX_CONF_ENV += NCURSES5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+-endif
+-else
+ ifeq ($(BR2_USE_WCHAR),y)
+ UTIL_LINUX_CONF_OPTS += --enable-widechar
+ else
+ UTIL_LINUX_CONF_OPTS += --disable-widechar
+ endif
++
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++UTIL_LINUX_DEPENDENCIES += ncurses
++UTIL_LINUX_CONF_OPTS += --with-ncursesw
++UTIL_LINUX_CONF_ENV += NCURSESW5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
++else ifeq ($(BR2_PACKAGE_NCURSES):$(BR2_USE_WCHAR),y:)
++UTIL_LINUX_DEPENDENCIES += ncurses
++UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses
++UTIL_LINUX_CONF_ENV += NCURSES5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
++else
+ UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
+ endif
+ 
