@@ -1,62 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 22:37:38 +0100
-Subject: [Buildroot] [git commit] collectd: add mqtt plugin support
-Message-ID: <20161223214640.0AA357FE8D@busybox.osuosl.org>
+Date: Fri, 23 Dec 2016 22:41:47 +0100
+Subject: [Buildroot] [git commit] collectd: explicitly disable dpdkstat
+	plugin
+Message-ID: <20161223214640.2742081765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66f64ddfbfd9d1929850141ee9a14407502f7d00
+commit: https://git.buildroot.net/buildroot/commit/?id=b3d7b588f42e7231ef613f592448b4be22e136c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add explicit support for the mqtt (mosquitto) plugin.
-Place it under the write category even though it can read as well, since
-it will normally be used to write (publish) rather than read
-(subscribe).
+It requires the libdpdk library which buildroot doesn't provide yet.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/collectd/Config.in   | 6 ++++++
- package/collectd/collectd.mk | 2 ++
- 2 files changed, 8 insertions(+)
+ package/collectd/collectd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index d1b85aa..b17abe8 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -512,6 +512,12 @@ config BR2_PACKAGE_COLLECTD_GRAPHITE
- 	  Writes data collected to Carbon (Graphite's) storage API.
- 	  http://graphite.wikidot.com/start
- 
-+config BR2_PACKAGE_COLLECTD_MQTT
-+	bool "mqtt"
-+	select BR2_PACKAGE_MOSQUITTO
-+	help
-+	  Sends metrics to and/or receives metrics from an MQTT broker.
-+
- config BR2_PACKAGE_COLLECTD_NETWORK
- 	bool "network"
- 	help
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index d8b2576..97e2e98 100644
+index 392c76f..f306d16 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -72,6 +72,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHED),--enable-memcached,--disable-memcached) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMORY),--enable-memory,--disable-memory) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MODBUS),--enable-modbus,--disable-modbus) \
-+	$(if $(BR2_PACKAGE_COLLECTD_MQTT),--enable-mqtt,--disable-mqtt) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MYSQL),--enable-mysql,--disable-mysql) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NETLINK),--enable-netlink,--disable-netlink) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NETWORK),--enable-network,--disable-network) \
-@@ -133,6 +134,7 @@ COLLECTD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MODBUS),libmodbus) \
-+	$(if $(BR2_PACKAGE_COLLECTD_MQTT),mosquitto) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MYSQL),mysql) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NETLINK),libmnl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NGINX),libcurl) \
+@@ -14,7 +14,7 @@ COLLECTD_LICENSE_FILES = COPYING
+ 
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
+-	amqp apple_sensors aquaero ascent barometer dbi email \
++	amqp apple_sensors aquaero ascent barometer dbi dpdkstat email \
+ 	gmond grpc hddtemp ipmi java libvirt lpar lvm madwifi mbmon \
+ 	mic multimeter netapp notify_desktop numa \
+ 	nut onewire oracle perl pf pinba powerdns python redis routeros \
