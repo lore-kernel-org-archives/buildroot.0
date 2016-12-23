@@ -1,38 +1,52 @@
-From: Trent Piepho <tpiepho@kymetacorp.com>
-Date: Fri, 23 Dec 2016 00:32:40 +0000
-Subject: [Buildroot] [PATCH] oprofile: Include operf command
-Message-ID: <1482453206.8507.24.camel@kymetacorp.com>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Thu, 22 Dec 2016 17:09:42 -0800
+Subject: [Buildroot] [PATCH v2] package/xen: Update to version 4.8.0
+In-Reply-To: <20161222235936.018f7807@free-electrons.com>
+References: <1482445317-9435-1-git-send-email-alistair.francis@xilinx.com>
+ <20161222235936.018f7807@free-electrons.com>
+Message-ID: <CAKmqyKOMOCfa3+BAsdOuAOSy+acQnSTjQOcr9H2XxQbd1e9t4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the main command to control oprofile.  It was introduced in
-version 0.9.8 from 2012-08-27 and in version 1.0.0 the previous
-control tool, opcontrol, was removed.
+On Thu, Dec 22, 2016 at 2:59 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Thu, 22 Dec 2016 14:21:57 -0800, Alistair Francis wrote:
+>
+>> +TARGET_CONFIGURE_OPTS := $(subst CFLAGS=",APPEND_CFLAGS="-Wno-error ,$(TARGET_CONFIGURE_OPTS))
+>
+> You seem to miss the very important fact that the variable namespace in
+> Buildroot is global. So when you change TARGET_CONFIGURE_OPTS here you
+> change it for *all* packages, not just yours.
 
-In commit 9863553fe8fa16a4d19f652b409a44bb58ef5567, removing avr32
-support, code that added operf for !avr32 was removed rather than
-keeping the code but making it non-conditional.
+I did miss that. I should have done a clean build and test before I sent this.
 
-Signed-off-by: Trent Piepho <tpiepho@kymetacorp.com>
----
- package/oprofile/oprofile.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> What are you trying to do here? If you want to override the CFLAGS just
+> for Xen, you should do:
+>
+> XEN_CONF_ENV = \
+>         CFLAGS="$(TARGET_CFLAGS) your custom cflags"
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index d91ddab..f6c0f13 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -17,7 +17,7 @@ OPROFILE_BINARIES = \
- 	utils/ophelp pp/opannotate pp/oparchive pp/opgprof \
- 	pp/opreport opjitconv/opjitconv \
- 	utils/op-check-perfevents libabi/opimport \
--	pe_counting/ocount
-+	pe_counting/ocount pe_profiling/operf
- 
- ifeq ($(BR2_i386),y)
- OPROFILE_ARCH = i386
--- 
-2.7.0.25.gfc10eb5.dirty
+I need to do that as well as unset the CFLAGS (I need to replace it
+with APPEND_CFLAGS).
+
+If I did the same thing but stored it in a Xen specific variable would
+that be ok?
+
+Thanks,
+
+Alistair
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
