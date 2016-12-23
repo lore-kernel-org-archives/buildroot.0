@@ -1,43 +1,39 @@
-From: daggs <daggs@gmx.com>
-Date: Fri, 23 Dec 2016 14:43:41 +0100
-Subject: [Buildroot] [PATCH 2/2] odroidc2: use first boot fs resize pkg.
-In-Reply-To: <20161217165123.1053e588@free-electrons.com>
-References: <20161202101028.26736-1-daggs@gmx.com>
- <20161202101028.26736-2-daggs@gmx.com>,
- <20161217165123.1053e588@free-electrons.com>
-Message-ID: <trinity-82c86be7-f597-4daf-9eb8-69263b5bb315-1482500621030@3capp-mailcom-bs05>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Fri, 23 Dec 2016 19:21:28 +0530
+Subject: [Buildroot] [RFC PATCH] util-linux: fix build with ncurses
+In-Reply-To: <20161223142725.3f8ddf09@free-electrons.com>
+References: <1482424027-9369-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20161223142725.3f8ddf09@free-electrons.com>
+Message-ID: <ee5cb1c3-c300-0bcf-9a6f-86ee491bc771@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Hi Thomas,
 
+On Friday 23 December 2016 06:57 PM, Thomas Petazzoni wrote:
 > Hello,
-> 
-> On Fri,  2 Dec 2016 12:10:28 +0200, Dagg Stompler wrote:
-> > remove the hardcode limitation of the created rootfs parition size and
-> > use the newly added first boot fs resize pkg to extend the fs to the max
-> > possible.
-> > 
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> 
-> I think we want to decide if we want to do this globally for all
-> defconfig for which it makes sense. Having that just for one defconfig,
-> but not all the other is a bit weird. Being consistent is quite
-> important.
-imho the first stage should be for the original board it was indented to, then extend it.
-as I don't have other measures to test it, I didn't want to set it globally.
+>
+> On Thu, 22 Dec 2016 21:57:07 +0530, Rahul Bedarkar wrote:
+>
+>> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+>> index 9b70f9f..e957f84 100644
+>> --- a/package/util-linux/Config.in
+>> +++ b/package/util-linux/Config.in
+>> @@ -1,6 +1,5 @@
+>>  menuconfig BR2_PACKAGE_UTIL_LINUX
+>>  	bool "util-linux"
+>> -	depends on BR2_USE_WCHAR
+>
+> This part of the patch is very incomplete: if you remove the dependency
+> of util-linux on BR2_USE_WCHAR, then you need to check all the reverse
+> dependencies of util-linux, and see if they still need their
+> BR2_USE_WCHAR dependency. And of course do that recursively for the
+> reverse dependencies of the reverse dependencies.
 
-Dagg.
+Thanks for pointing it out, I will fix it.
 
-> 
-> Thanks,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> 
+Thanks,
+Rahul
