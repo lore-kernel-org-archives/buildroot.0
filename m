@@ -1,46 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 22:29:23 +0100
-Subject: [Buildroot] [git commit] libcurl: security bump to 7.52.1
-Message-ID: <20161223214639.AC1BA81E86@busybox.osuosl.org>
+Date: Fri, 23 Dec 2016 22:42:09 +0100
+Subject: [Buildroot] [git commit] collectd: add gps plugin support
+Message-ID: <20161223214640.3DA3981765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72b6bf8f57569c14238d223bb6cc6fec7fd3af4d
+commit: https://git.buildroot.net/buildroot/commit/?id=b0631a385863217ab9b781183264400e553cb2bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2016-9594 - Unitilized random
+Add explicit support for the gps plugin that uses libgps from the gpsd
+package.
 
-Libcurl's (new) internal function that returns a good 32bit random value was
-implemented poorly and overwrote the pointer instead of writing the value
-into the buffer the pointer pointed to.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/collectd/Config.in   | 7 +++++++
+ package/collectd/collectd.mk | 2 ++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 2b68c6a..7a942f2 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 b9a2e18b4785eb75ad84598720e1559e1c53550ea011c0e00becdb94e2df5cc6  curl-7.52.0.tar.bz2
-+sha256 d16185a767cb2c1ba3d5b9096ec54e5ec198b213f45864a38b3bda4bbf87389b  curl-7.52.1.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index b2a1b24..ea37309 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 7cd6397..02c02b7 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -237,6 +237,13 @@ config BR2_PACKAGE_COLLECTD_FSCACHE
+ 	  Collects information about the file-system based caching
+ 	  infrastructure for network file-systems and other slow media.
  
--LIBCURL_VERSION = 7.52.0
-+LIBCURL_VERSION = 7.52.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
++config BR2_PACKAGE_COLLECTD_GPS
++	bool "gps"
++	select BR2_PACKAGE_GPSD
++	help
++	  Reports the number of sattelites seen by and precision
++	  of a GPS receiver.
++
+ config BR2_PACKAGE_COLLECTD_HUGEPAGES
+ 	bool "hugepages"
+ 	help
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index b105e90..520ce1c 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -57,6 +57,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_FHCOUNT),--enable-fhcount,--disable-fhcount) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_FILECOUNT),--enable-filecount,--disable-filecount) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_FSCACHE),--enable-fscache,--disable-fscache) \
++	$(if $(BR2_PACKAGE_COLLECTD_GPS),--enable-gps,--disable-gps) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GRAPHITE),--enable-write_graphite,--disable-write_graphite) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_HASHED),--enable-match_hashed,--disable-match_hashed) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_HUGEPAGES),--enable-hugepages,--disable-hugepages) \
+@@ -131,6 +132,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
++	$(if $(BR2_PACKAGE_COLLECTD_GPS),gpsd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
