@@ -1,89 +1,129 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Dec 2016 22:56:51 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] package/python: security
-	bump version to 2.7.13
-Message-ID: <20161223220932.A1B9E81E44@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 24 Dec 2016 00:06:05 +0100
+Subject: [Buildroot] [PATCH v2,1/1] hiredis: new package
+Message-ID: <1482534365-79003-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04cc75c6223f45db59777fa8fc929e14b209d995
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+Minimalistic C client for Redis >= 1.2
 
-Rebased patches 004 & 010.
+It is minimalistic because it just adds minimal support for
+the protocol, but at the same time it uses a high level
+printf-alike API in order to make it much higher level than
+otherwise suggested by its minimal code base and the lack of
+explicit bindings for every Redis command.
 
-Changelog:
-https://hg.python.org/cpython/raw-file/v2.7.13/Misc/NEWS
+https://github.com/redis/hiredis
 
-Fixes CVE-2016-2183 & CVE-2016-1000110.
-
-This bump also fixes the host build with openssl 1.1.0,
-http://patchwork.ozlabs.org/patch/696139/ is not needed anymore.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5df0bfa9a0f36c6533e95621363d004bd36785fa)
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
- package/python/004-sysconfigdata-install-location.patch | 6 +++---
- package/python/010-fix-python-config.patch              | 2 +-
- package/python/python.hash                              | 6 +++---
- package/python/python.mk                                | 2 +-
- 4 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/python/004-sysconfigdata-install-location.patch b/package/python/004-sysconfigdata-install-location.patch
-index edf7120..2998364 100644
---- a/package/python/004-sysconfigdata-install-location.patch
-+++ b/package/python/004-sysconfigdata-install-location.patch
-@@ -58,9 +58,9 @@ Index: b/Makefile.pre.in
-  	-rm -f python*-gdb.py
- -	-rm -f pybuilddir.txt
- +	-rm -f pybuilddir.txt pysysconfigdatadir.txt
-- 	find $(srcdir)/[a-zA-Z]* '(' -name '*.fdc' -o -name '*~' \
-- 				     -o -name '[@,#]*' -o -name '*.old' \
-- 				     -o -name '*.orig' -o -name '*.rej' \
-+ 	# Issue #28258: set LC_ALL to avoid issues with Estonian locale.
-+ 	# Expansion is performed here by shell (spawned by make) itself before
-+ 	# arguments are passed to find. So LC_ALL=C must be set as a separate
- Index: b/configure.ac
- ===================================================================
- --- a/configure.ac
-diff --git a/package/python/010-fix-python-config.patch b/package/python/010-fix-python-config.patch
-index 1266f3d..b40339b 100644
---- a/package/python/010-fix-python-config.patch
-+++ b/package/python/010-fix-python-config.patch
-@@ -61,7 +61,7 @@ Index: b/Makefile.pre.in
- @@ -410,7 +410,7 @@
-  
-  # Default target
-- all:		build_all
-+ all:		@DEF_MAKE_ALL_RULE@
- -build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks
- +build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks python-config
-  
-diff --git a/package/python/python.hash b/package/python/python.hash
-index b7d0036..f285e42 100644
---- a/package/python/python.hash
-+++ b/package/python/python.hash
-@@ -1,4 +1,4 @@
--# From https://www.python.org/downloads/release/python-2712/
--md5	57dffcee9cee8bb2ab5f82af1d8e9a69	Python-2.7.12.tar.xz
-+# From https://www.python.org/downloads/release/python-2713/
-+md5 53b43534153bb2a0363f08bae8b9d990  Python-2.7.13.tar.xz
- # Locally calculated
--sha256 d7837121dd5652a05fef807c361909d255d173280c4e1a4ded94d73d80a1f978  Python-2.7.12.tar.xz
-+sha256 35d543986882f78261f97787fd3e06274bfa6df29fac9b4a94f73930ff98f731  Python-2.7.13.tar.xz
-diff --git a/package/python/python.mk b/package/python/python.mk
-index cfd5a0a..7b20434 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON_VERSION_MAJOR = 2.7
--PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).12
-+PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).13
- PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
- PYTHON_SITE = http://python.org/ftp/python/$(PYTHON_VERSION)
- PYTHON_LICENSE = Python software foundation license v2, others
+Changes v1 -> v2:
+ - Do not use make install as it will always build static and shared
+   version of the library (which will fail if BR2_STATIC_LIBS is set)
+
+ package/Config.in            |  1 +
+ package/hiredis/Config.in    | 12 +++++++++++
+ package/hiredis/hiredis.hash |  2 ++
+ package/hiredis/hiredis.mk   | 47 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 62 insertions(+)
+ create mode 100644 package/hiredis/Config.in
+ create mode 100644 package/hiredis/hiredis.hash
+ create mode 100644 package/hiredis/hiredis.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index b6b409c..df17dd6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -925,6 +925,7 @@ menu "Database"
+ 	source "package/berkeleydb/Config.in"
+ 	source "package/cppdb/Config.in"
+ 	source "package/gdbm/Config.in"
++	source "package/hiredis/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
+ 	source "package/libpqxx/Config.in"
+diff --git a/package/hiredis/Config.in b/package/hiredis/Config.in
+new file mode 100644
+index 0000000..1656355
+--- /dev/null
++++ b/package/hiredis/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HIREDIS
++	bool "hiredis"
++	help
++	  Minimalistic C client for Redis >= 1.2
++
++	  It is minimalistic because it just adds minimal support for
++	  the protocol, but at the same time it uses a high level
++	  printf-alike API in order to make it much higher level than
++	  otherwise suggested by its minimal code base and the lack of
++	  explicit bindings for every Redis command.
++
++	  https://github.com/redis/hiredis
+diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+new file mode 100644
+index 0000000..2c788a6
+--- /dev/null
++++ b/package/hiredis/hiredis.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	717e6fc8dc2819bef522deaca516de9e51b9dfa68fe393b7db5c3b6079196f78	hiredis-v0.13.3.tar.gz
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+new file mode 100644
+index 0000000..7360467
+--- /dev/null
++++ b/package/hiredis/hiredis.mk
+@@ -0,0 +1,47 @@
++################################################################################
++#
++# hiredis
++#
++################################################################################
++
++HIREDIS_VERSION = v0.13.3
++HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
++HIREDIS_LICENSE = BSD-3c
++HIREDIS_LICENSE_FILES = COPYING
++HIREDIS_INSTALL_STAGING = YES
++
++HIREDIS_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	PREFIX=/usr
++
++HIREDIS_TARGETS = hiredis.pc
++ifeq ($(BR2_STATIC_LIBS),y)
++HIREDIS_TARGETS += static
++else ifeq ($(BR2_SHARED_LIBS),y)
++HIREDIS_TARGETS += dynamic
++else ifeq $(BR2_SHARED_STATIC_LIBS),y)
++HIREDIS_TARGETS += dynamic static
++endif
++
++define HIREDIS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(HIREDIS_MAKE_OPTS) -C $(@D) \
++		$(HIREDIS_TARGETS)
++endef
++
++HIREDIS_INCLUDE_DIR = $(STAGING_DIR)/usr/include/hiredis
++
++# Do not call make install as this target will build shared and static libraries
++define HIREDIS_INSTALL_STAGING_CMDS
++	mkdir -p $(HIREDIS_INCLUDE_DIR)
++	cp -dpfr $(@D)/hiredis.h $(@D)/async.h $(@D)/read.h $(@D)/sds.h \
++		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
++	$(INSTALL) -m 0644 $(@D)/libhiredis* $(STAGING_DIR)/usr/lib
++	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
++	$(INSTALL) -m 0644 $(@D)/hiredis.pc $(STAGING_DIR)/usr/lib/pkgconfig
++endef
++
++define HIREDIS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 $(@D)/libhiredis* $(TARGET_DIR)/usr/lib
++endef
++
++$(eval $(generic-package))
+-- 
+2.5.0
