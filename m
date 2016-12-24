@@ -1,55 +1,136 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 24 Dec 2016 12:37:39 +0100
-Subject: [Buildroot] [PATCH] package/bullet: bump to version 2.85.1
-Message-ID: <1482579459-3280-1-git-send-email-romain.naour@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 24 Dec 2016 12:22:17 +0000
+Subject: [Buildroot] [Bug 9506] New: Collectd 5.7.0 fails to build with
+	libcrypt
+Message-ID: <bug-9506-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://bulletphysics.org/wordpress/?p=456
+https://bugs.busybox.net/show_bug.cgi?id=9506
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/bullet/bullet.hash |  2 +-
- package/bullet/bullet.mk   | 13 +++++++------
- 2 files changed, 8 insertions(+), 7 deletions(-)
+            Bug ID: 9506
+           Summary: Collectd 5.7.0 fails to build with libcrypt
+           Product: buildroot
+           Version: 2016.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: fli4l at franke-prem.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/bullet/bullet.hash b/package/bullet/bullet.hash
-index 5b5360c..cccc425 100644
---- a/package/bullet/bullet.hash
-+++ b/package/bullet/bullet.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 c26ac96b487d7e44136ff4406dbbfe5a4d7d254ed1a2c09122c464803e7d1314  bullet-19f999ac087e68ffc2551ffb73e35e60271a0d27.tar.gz
-+sha256 6e157c0b50373bc0e860de27f06397827bb28a4205bc568ae79d76a0f919ed62  bullet-2.85.1.tar.gz
-diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
-index 3ec97b4..99ff423 100644
---- a/package/bullet/bullet.mk
-+++ b/package/bullet/bullet.mk
-@@ -4,15 +4,16 @@
- #
- ################################################################################
- 
--# This is the git id of the 2.82 release.
--BULLET_VERSION = 19f999ac087e68ffc2551ffb73e35e60271a0d27
-+BULLET_VERSION = 2.85.1
- BULLET_SITE = $(call github,bulletphysics,bullet3,$(BULLET_VERSION))
- BULLET_INSTALL_STAGING = YES
- BULLET_LICENSE = zlib license
--BULLET_LICENSE_FILES = BulletLicense.txt COPYING
-+BULLET_LICENSE_FILES = LICENSE.txt
- 
--# Disable GLUT support since there is no freeglut or OpenGLUT package and we
--# don't build the demos apps.
--BULLET_CONF_OPTS = -DUSE_GLUT=OFF -DBUILD_DEMOS=OFF
-+# Disable demos apps and unit tests.
-+# Disable Bullet3 library.
-+BULLET_CONF_OPTS = -DBUILD_UNIT_TESTS=OFF \
-+	-DBUILD_BULLET2_DEMOS=OFF \
-+	-DBUILD_BULLET3=OFF
- 
- $(eval $(cmake-package))
+On my build-system without libcrypt on host the building of collectd-5.7.0 fail
+by building. It looks for me, as that collectd will not look during the build
+in the $(STAGING). It will look on the host for the need files. On my host i
+have no libcrypt, but it will be build as packet.
+The error i get will be:
+  CCLD     collectdctl
+  CCLD     collectd-tg
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_close'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_read'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_setkey'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_control'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_setkey'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_randomize'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_write'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_open'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_ctl'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_hash_buffer'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_close'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_encrypt'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_open'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_check_version'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_setiv'
+collect2: error: ld returned 1 exit status
+make[4]: *** [Makefile:4064: collectd-nagios] Error 1
+make[4]: *** Waiting for unfinished jobs....
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_close'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_read'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_setkey'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_control'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_setkey'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_randomize'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_write'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_open'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_ctl'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_hash_buffer'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_close'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_encrypt'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_open'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_check_version'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_setiv'
+collect2: error: ld returned 1 exit status
+make[4]: *** [Makefile:4072: collectdctl] Error 1
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_close'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_read'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_setkey'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_control'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_setkey'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_randomize'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_write'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_open'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_ctl'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_hash_buffer'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_close'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_encrypt'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_md_open'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_check_version'
+libcollectdclient/.libs/libcollectdclient.so: undefined reference to
+`gcry_cipher_setiv'
+collect2: error: ld returned 1 exit status
+make[4]: *** [Makefile:4068: collectd-tg] Error 1
+
 -- 
-2.5.5
+You are receiving this mail because:
+You are on the CC list for the bug.
