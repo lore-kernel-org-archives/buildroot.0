@@ -1,41 +1,72 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 24 Dec 2016 21:10:42 +0200
-Subject: [Buildroot] [PATCH] stunnel: fix static link
-Message-ID: <ca7b0588b4175ace369af46ded807fd088ae310f.1482606642.git.baruch@tkos.co.il>
+Date: Sat, 24 Dec 2016 21:27:13 +0200
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: Add kmssink support
+In-Reply-To: <1482595774-26578-1-git-send-email-festevam@gmail.com>
+References: <1482595774-26578-1-git-send-email-festevam@gmail.com>
+Message-ID: <20161224192713.tuopwc2uwkjcu2ja@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-zlib is a dependency of OpenSSL. Take that into account when linking
-statically.
+Hi Fabio,
 
-Fixes:
-http://autobuild.buildroot.net/results/dfe/dfe7c82c7976912378e33e03ea4c677bee6a778d/
-http://autobuild.buildroot.net/results/48c/48cb55428613e91abfe8e71456182082d9eabb75/
-http://autobuild.buildroot.net/results/810/81029efad8b9e2f48c26a7b20f62c90844fc86df/
+On Sat, Dec 24, 2016 at 02:09:34PM -0200, Fabio Estevam wrote:
+> Add support for the KMS video sink element. From the Gstreamer 1.10
+> release notes:
+> 
+> "New element kmssink to render video using Direct Rendering Manager (DRM)
+> and Kernel Mode Setting (KMS) subsystems in the Linux kernel. It is oriented
+> to be used mostly in embedded systems."
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++++
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 7 +++++++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index 16c0b7e..8587f93 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -549,6 +549,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
+>  	help
+>  	  Fragmented streaming plugins
+>  
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS
+> +	bool "kmssink"
+> +	help
+> +	  KMS video sink
+> +
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS
+>  	bool "libmms"
+>  	depends on BR2_USE_WCHAR # libmms -> libglib2
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> index ba9f305..4d629f5 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -680,6 +680,13 @@ else
+>  GST1_PLUGINS_BAD_CONF_OPTS += --disable-hls
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS),y)
+> +GST1_PLUGINS_BAD_CONF_OPTS += --enable-kms
+> +GST1_PLUGINS_BAD_DEPENDENCIES += libdrm
 
-and many more.
+You need to add 'select BR2_PACKAGE_LIBDRM' (and libdrm dependencies).
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/stunnel/stunnel.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> +else
+> +GST1_PLUGINS_BAD_CONF_OPTS += --disable-kms
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS),y)
+>  GST1_PLUGINS_BAD_CONF_OPTS += --enable-libmms
+>  GST1_PLUGINS_BAD_DEPENDENCIES += libmms
 
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 5e35d672683b..f98e7b59eb2a 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -11,7 +11,8 @@ STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
- 	--disable-libwrap
- STUNNEL_CONF_ENV = \
--	ax_cv_check_cflags___fstack_protector=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
-+	ax_cv_check_cflags___fstack_protector=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no) \
-+	LIBS=$(if $(BR2_STATIC_LIBS),-lz)
- STUNNEL_LICENSE = GPLv2+
- STUNNEL_LICENSE_FILES = COPYING COPYRIGHT.GPL
- 
+baruch
+
 -- 
-2.11.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
