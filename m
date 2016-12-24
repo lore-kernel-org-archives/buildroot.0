@@ -1,42 +1,49 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Fri, 23 Dec 2016 20:50:55 -0500
-Subject: [Buildroot] [PATCH 1/1] luarocks: fix target-finalize hook
-	processing
-Message-ID: <1482544255-4158-1-git-send-email-danomimanchego123@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 23 Dec 2016 22:02:46 -0800
+Subject: [Buildroot] [PATCH 1/1] docker-engine: fix docker version output
+Message-ID: <20161224060246.4288-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The LUAROCKS_TARGET_FINALIZE_HOOKS is not running, so detritus
-it being left in /usr/lib/luarocks.  This is because luarocks is
-built by being a dependency in the luarocks package infrastructure,
-not by being selected by kconfig symbol. This means that the
-$(PKG)_KCONFIG_VAR in pkg-generic.mk is not met, and
-(HOST_)LUAROCKS_TARGET_FINALIZE_HOOKS is not added to the global
-TARGET_FINALIZE_HOOKS.
+At compile-time the docker build scripts generate a version file used
+to build the output of the docker version command. This file is
+generated somewhat properly by the Buildroot build system, however the
+version number and commit ID are incorrectly formatted. This patch fixes
+the output to the correct format.
 
-This mod fixes this issue by adding the host-luarocks hook directly
-to TARGET_FINALIZE_HOOKS when either lua or luajit is enabled.
+This is important as some tools like WeaveWorks won't even start unless
+they can parse the Docker Version output correctly.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/luarocks/luarocks.mk | 5 ++++-
+ package/docker-engine/docker-engine.mk | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 4e0d537..d18056a 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -60,4 +60,7 @@ define LUAROCKS_FINALIZE_TARGET
- 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
- endef
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index ade6fbb..d60ae37 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -5,6 +5,7 @@
+ ################################################################################
  
--LUAROCKS_TARGET_FINALIZE_HOOKS += LUAROCKS_FINALIZE_TARGET
-+# Apply to global variable directly, as pkg-generic does not
-+ifneq ($(BR2_PACKAGE_LUAJIT)$(BR2_PACKAGE_LUA),)
-+TARGET_FINALIZE_HOOKS += LUAROCKS_FINALIZE_TARGET
-+endif
+ DOCKER_ENGINE_VERSION = v1.12.5
++DOCKER_ENGINE_COMMIT = 7392c3b0ce0f9d3e918a321c66668c5d1ef4f689
+ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
+@@ -67,7 +68,9 @@ endif
+ define DOCKER_ENGINE_CONFIGURE_CMDS
+ 	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
+ 	cd $(@D) && \
+-		GITCOMMIT="unknown" BUILDTIME="$$(date)" VERSION="$(DOCKER_ENGINE_VERSION)" \
++		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
++		BUILDTIME="$$(date)" \
++		VERSION="$$(echo $(DOCKER_ENGINE_VERSION) | tail -c +2)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
+ 		bash ./hack/make/.go-autogen
+ endef
 -- 
-2.7.4
+2.10.2
