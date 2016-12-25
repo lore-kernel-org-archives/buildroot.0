@@ -1,91 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Dec 2016 19:49:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: fix build with gcc6
-Message-ID: <20161225184952.21549-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 25 Dec 2016 23:16:36 +0100
+Subject: [Buildroot] [PATCH 1/1] docker-engine: fix docker version output
+In-Reply-To: <20161224060246.4288-1-christian@paral.in> (Christian Stewart's
+ message of "Fri, 23 Dec 2016 22:02:46 -0800")
+References: <20161224060246.4288-1-christian@paral.in>
+Message-ID: <878tr3ejsr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/b99/b997c2b6307deb48a42e9b317715a00b65f90149/
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/sdl2/0002-gcc6.patch | 64 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/sdl2/0002-gcc6.patch
+ > At compile-time the docker build scripts generate a version file used
+ > to build the output of the docker version command. This file is
+ > generated somewhat properly by the Buildroot build system, however the
+ > version number and commit ID are incorrectly formatted. This patch fixes
+ > the output to the correct format.
 
-diff --git a/package/sdl2/0002-gcc6.patch b/package/sdl2/0002-gcc6.patch
-new file mode 100644
-index 000000000..6b5e901df
---- /dev/null
-+++ b/package/sdl2/0002-gcc6.patch
-@@ -0,0 +1,64 @@
-+
-+# HG changeset patch
-+# User Sam Lantinga <slouken@libsdl.org>
-+# Date 1479201270 28800
-+# Node ID ea44906e19b837f4d5b309525ca79ed9d00b1897
-+# Parent  6b2307dbec54f0bf4d5d8abf86241e29f3a03562
-+Fixed bug 3490 - Build failure with --enable-video-directfb
-+
-+felix
-+
-+Building SDL 2.0.5, or even the Mercurial snapshot (r10608) with GCC 6.2.1 and --enable-video-directfb generates a number of compiler diagnostics and fails.
-+
-+Downloaded from upstream repo
-+https://hg.libsdl.org/SDL/rev/ea44906e19b8
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -r 6b2307dbec54 -r ea44906e19b8 src/video/directfb/SDL_DirectFB_render.c
-+--- a/src/video/directfb/SDL_DirectFB_render.c	Tue Nov 15 01:12:27 2016 -0800
-++++ b/src/video/directfb/SDL_DirectFB_render.c	Tue Nov 15 01:14:30 2016 -0800
-+@@ -1273,7 +1273,7 @@
-+                      Uint32 format, void * pixels, int pitch)
-+ {
-+     Uint32 sdl_format;
-+-    void * laypixels;
-++    unsigned char* laypixels;
-+     int laypitch;
-+     DFBSurfacePixelFormat dfb_format;
-+     DirectFB_RenderData *data = (DirectFB_RenderData *) renderer->driverdata;
-+@@ -1303,7 +1303,7 @@
-+     SDL_Window *window = renderer->window;
-+     SDL_DFB_WINDOWDATA(window);
-+     Uint32 sdl_format;
-+-    void * laypixels;
-++    unsigned char* laypixels;
-+     int laypitch;
-+     DFBSurfacePixelFormat dfb_format;
-+ 
-+diff -r 6b2307dbec54 -r ea44906e19b8 src/video/directfb/SDL_DirectFB_shape.c
-+--- a/src/video/directfb/SDL_DirectFB_shape.c	Tue Nov 15 01:12:27 2016 -0800
-++++ b/src/video/directfb/SDL_DirectFB_shape.c	Tue Nov 15 01:14:30 2016 -0800
-+@@ -37,17 +37,19 @@
-+ SDL_WindowShaper*
-+ DirectFB_CreateShaper(SDL_Window* window) {
-+     SDL_WindowShaper* result = NULL;
-++    SDL_ShapeData* data;
-++    int resized_properly;
-+ 
-+     result = malloc(sizeof(SDL_WindowShaper));
-+     result->window = window;
-+     result->mode.mode = ShapeModeDefault;
-+     result->mode.parameters.binarizationCutoff = 1;
-+     result->userx = result->usery = 0;
-+-    SDL_ShapeData* data = SDL_malloc(sizeof(SDL_ShapeData));
-++    data = SDL_malloc(sizeof(SDL_ShapeData));
-+     result->driverdata = data;
-+     data->surface = NULL;
-+     window->shaper = result;
-+-    int resized_properly = DirectFB_ResizeWindowShape(window);
-++    resized_properly = DirectFB_ResizeWindowShape(window);
-+     SDL_assert(resized_properly == 0);
-+ 
-+     return result;
-+
+ > This is important as some tools like WeaveWorks won't even start unless
+ > they can parse the Docker Version output correctly.
+
+ > Signed-off-by: Christian Stewart <christian@paral.in>
+ > ---
+ >  package/docker-engine/docker-engine.mk | 5 ++++-
+ >  1 file changed, 4 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+ > index ade6fbb..d60ae37 100644
+ > --- a/package/docker-engine/docker-engine.mk
+ > +++ b/package/docker-engine/docker-engine.mk
+ > @@ -5,6 +5,7 @@
+ >  ################################################################################
+ 
+ >  DOCKER_ENGINE_VERSION = v1.12.5
+ > +DOCKER_ENGINE_COMMIT = 7392c3b0ce0f9d3e918a321c66668c5d1ef4f689
+ >  DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+ 
+ >  DOCKER_ENGINE_LICENSE = Apache-2.0
+ > @@ -67,7 +68,9 @@ endif
+ >  define DOCKER_ENGINE_CONFIGURE_CMDS
+ >  	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
+ >  	cd $(@D) && \
+ > -		GITCOMMIT="unknown" BUILDTIME="$$(date)" VERSION="$(DOCKER_ENGINE_VERSION)" \
+ > +		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
+ > +		BUILDTIME="$$(date)" \
+ > +		VERSION="$$(echo $(DOCKER_ENGINE_VERSION) | tail -c +2)" \
+
+We prefer to do text processing in make instead of shell where possible
+as that is (a bit) faster, easier to read (E.G. no double $$) and easier
+to debug (E.G. the make output directly shows the result of the
+commands).
+
+There is no simple way of doing head -c7, so I've left that but changed
+the VERSION calculation to use patsubst.
+
+Committed with that fixed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
