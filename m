@@ -1,36 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Dec 2016 23:32:52 +0100
-Subject: [Buildroot] [git commit] putty: don't treat warnings as errors
-Message-ID: <20161225223831.7F6447FA8E@busybox.osuosl.org>
+Date: Sun, 25 Dec 2016 23:13:32 +0100
+Subject: [Buildroot] [git commit] package/bullet: bump to version 2.85.1
+Message-ID: <20161225223831.7071D7FA8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=203813e981ff79c6150bec5adc9d5c5c98c5d6a3
+commit: https://git.buildroot.net/buildroot/commit/?id=10cce5f36256c8722e4208fad90713d7ecffc997
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/652/65246fe6357cd3cd8490bc54baa2394730dcef79/
-http://autobuild.buildroot.net/results/853/85320f3b8e770bbfbec306685ad75b66e91bd6ee/
-http://autobuild.buildroot.net/results/492/492a7055408ed6b388982cece41e98d956ef85f8/
+http://bulletphysics.org/wordpress/?p=456
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/putty/putty.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/bullet/bullet.hash |  2 +-
+ package/bullet/bullet.mk   | 13 +++++++------
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index ca86c47..7603f69 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -11,6 +11,7 @@ PUTTY_SUBDIR = unix
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
- PUTTY_CONF_OPTS = --disable-gtktest
-+PUTTY_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-error"
+diff --git a/package/bullet/bullet.hash b/package/bullet/bullet.hash
+index 5b5360c..cccc425 100644
+--- a/package/bullet/bullet.hash
++++ b/package/bullet/bullet.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 c26ac96b487d7e44136ff4406dbbfe5a4d7d254ed1a2c09122c464803e7d1314  bullet-19f999ac087e68ffc2551ffb73e35e60271a0d27.tar.gz
++sha256 6e157c0b50373bc0e860de27f06397827bb28a4205bc568ae79d76a0f919ed62  bullet-2.85.1.tar.gz
+diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
+index 3ec97b4..99ff423 100644
+--- a/package/bullet/bullet.mk
++++ b/package/bullet/bullet.mk
+@@ -4,15 +4,16 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBGTK2),y)
- PUTTY_CONF_OPTS += --with-gtk=2
+-# This is the git id of the 2.82 release.
+-BULLET_VERSION = 19f999ac087e68ffc2551ffb73e35e60271a0d27
++BULLET_VERSION = 2.85.1
+ BULLET_SITE = $(call github,bulletphysics,bullet3,$(BULLET_VERSION))
+ BULLET_INSTALL_STAGING = YES
+ BULLET_LICENSE = zlib license
+-BULLET_LICENSE_FILES = BulletLicense.txt COPYING
++BULLET_LICENSE_FILES = LICENSE.txt
+ 
+-# Disable GLUT support since there is no freeglut or OpenGLUT package and we
+-# don't build the demos apps.
+-BULLET_CONF_OPTS = -DUSE_GLUT=OFF -DBUILD_DEMOS=OFF
++# Disable demos apps and unit tests.
++# Disable Bullet3 library.
++BULLET_CONF_OPTS = -DBUILD_UNIT_TESTS=OFF \
++	-DBUILD_BULLET2_DEMOS=OFF \
++	-DBUILD_BULLET3=OFF
+ 
+ $(eval $(cmake-package))
