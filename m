@@ -1,41 +1,75 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 25 Dec 2016 20:00:59 +0200
-Subject: [Buildroot] [PATCH] Fix reverse dependencies of util-linux
-In-Reply-To: <1482675981-4575-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1482675981-4575-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20161225180059.jlmzfuuiqumcuf6l@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 25 Dec 2016 19:13:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: fix build error on
+	powerpc/powerpc64
+Message-ID: <20161225181327.18952-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Rahul,
+Fixes
+http://autobuild.buildroot.net/results/ffd/ffd689f1ba34ad43f52c38fe37da393a9d8b9d5e/
 
-On Sun, Dec 25, 2016 at 07:56:21PM +0530, Rahul Bedarkar wrote:
-> Commit 006a328ad6be ("util-linux: fix build with ncurses") removed
-> dependency on BR2_USE_WCHAR, but failed to update the reverse
-> dependencies of util-linux.
-> 
-> This commit fixes all such reverse dependencies by removing dependency
-> on BR2_USE_WCHAR if not required by package itself.
-> 
-> Thanks to comments that we add in Config.in for dependencies which are
-> pulled from selected packages.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/sdl2/0001-ppc.patch | 47 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/sdl2/0001-ppc.patch
 
-Have you verified that these packages actually build without BR2_USE_WCHAR? 
-Some packages might have grown dependent on wchar over time. You may use a 
-basic[1] config to verify that.
-
-[1] http://autobuild.buildroot.net/toolchains/configs/br-arm-basic.config
-
-> Fixes: 006a328ad6be ("util-linux: fix build with ncurses")
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-baruch
-
+diff --git a/package/sdl2/0001-ppc.patch b/package/sdl2/0001-ppc.patch
+new file mode 100644
+index 000000000..016110306
+--- /dev/null
++++ b/package/sdl2/0001-ppc.patch
+@@ -0,0 +1,47 @@
++Fixed bug 3466 - Can't build 2.0.5 on ppc64
++
++/home/fedora/SDL2-2.0.5/src/video/SDL_blit_N.c: In function 'calc_swizzle32':
++/home/fedora/SDL2-2.0.5/src/video/SDL_blit_N.c:127:5: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
++const vector unsigned char plus = VECUINT8_LITERAL(0x00, 0x00, 0x00, 0x00,
++^ 
++
++Downloaded from upstream repo
++https://hg.libsdl.org/SDL/rev/5184186d4366
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -r 71d4148e32de -r 5184186d4366 src/video/SDL_blit_N.c
++--- a/src/video/SDL_blit_N.c	Wed Oct 19 21:22:42 2016 -0700
+++++ b/src/video/SDL_blit_N.c	Sat Oct 22 11:01:55 2016 -0700
++@@ -118,12 +118,6 @@
++         16, 8, 0, 24,
++         0, NULL
++     };
++-    if (!srcfmt) {
++-        srcfmt = &default_pixel_format;
++-    }
++-    if (!dstfmt) {
++-        dstfmt = &default_pixel_format;
++-    }
++     const vector unsigned char plus = VECUINT8_LITERAL(0x00, 0x00, 0x00, 0x00,
++                                                        0x04, 0x04, 0x04, 0x04,
++                                                        0x08, 0x08, 0x08, 0x08,
++@@ -136,6 +130,14 @@
++     Uint32 gmask = RESHIFT(srcfmt->Gshift) << (dstfmt->Gshift);
++     Uint32 bmask = RESHIFT(srcfmt->Bshift) << (dstfmt->Bshift);
++     Uint32 amask;
+++
+++    if (!srcfmt) {
+++        srcfmt = &default_pixel_format;
+++    }
+++    if (!dstfmt) {
+++        dstfmt = &default_pixel_format;
+++    }
+++
++     /* Use zero for alpha if either surface doesn't have alpha */
++     if (dstfmt->Amask) {
++         amask =
++
++
++
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
