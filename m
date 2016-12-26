@@ -1,102 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 26 Dec 2016 16:30:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: fix build with gcc6
-In-Reply-To: <20161225184952.21549-1-bernd.kuhls@t-online.de>
-References: <20161225184952.21549-1-bernd.kuhls@t-online.de>
-Message-ID: <08b29ebf-ca5b-1b32-8262-fba8cb6f90c5@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 26 Dec 2016 13:21:22 -0300
+Subject: [Buildroot] [PATCH] lighttpd: bump to version 1.4.44
+Message-ID: <20161226162122.12917-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/lighttpd/lighttpd.hash | 2 +-
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Le 25/12/2016 ? 19:49, Bernd Kuhls a ?crit :
-> Fixes
-> http://autobuild.buildroot.net/results/b99/b997c2b6307deb48a42e9b317715a00b65f90149/
-
-Tested-by: Romain Naour <romain.naour@gmail.com>
-[Build tested]
-
-Best regards,
-Romain
-
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/sdl2/0002-gcc6.patch | 64 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 package/sdl2/0002-gcc6.patch
-> 
-> diff --git a/package/sdl2/0002-gcc6.patch b/package/sdl2/0002-gcc6.patch
-> new file mode 100644
-> index 000000000..6b5e901df
-> --- /dev/null
-> +++ b/package/sdl2/0002-gcc6.patch
-> @@ -0,0 +1,64 @@
-> +
-> +# HG changeset patch
-> +# User Sam Lantinga <slouken@libsdl.org>
-> +# Date 1479201270 28800
-> +# Node ID ea44906e19b837f4d5b309525ca79ed9d00b1897
-> +# Parent  6b2307dbec54f0bf4d5d8abf86241e29f3a03562
-> +Fixed bug 3490 - Build failure with --enable-video-directfb
-> +
-> +felix
-> +
-> +Building SDL 2.0.5, or even the Mercurial snapshot (r10608) with GCC 6.2.1 and --enable-video-directfb generates a number of compiler diagnostics and fails.
-> +
-> +Downloaded from upstream repo
-> +https://hg.libsdl.org/SDL/rev/ea44906e19b8
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> +diff -r 6b2307dbec54 -r ea44906e19b8 src/video/directfb/SDL_DirectFB_render.c
-> +--- a/src/video/directfb/SDL_DirectFB_render.c	Tue Nov 15 01:12:27 2016 -0800
-> ++++ b/src/video/directfb/SDL_DirectFB_render.c	Tue Nov 15 01:14:30 2016 -0800
-> +@@ -1273,7 +1273,7 @@
-> +                      Uint32 format, void * pixels, int pitch)
-> + {
-> +     Uint32 sdl_format;
-> +-    void * laypixels;
-> ++    unsigned char* laypixels;
-> +     int laypitch;
-> +     DFBSurfacePixelFormat dfb_format;
-> +     DirectFB_RenderData *data = (DirectFB_RenderData *) renderer->driverdata;
-> +@@ -1303,7 +1303,7 @@
-> +     SDL_Window *window = renderer->window;
-> +     SDL_DFB_WINDOWDATA(window);
-> +     Uint32 sdl_format;
-> +-    void * laypixels;
-> ++    unsigned char* laypixels;
-> +     int laypitch;
-> +     DFBSurfacePixelFormat dfb_format;
-> + 
-> +diff -r 6b2307dbec54 -r ea44906e19b8 src/video/directfb/SDL_DirectFB_shape.c
-> +--- a/src/video/directfb/SDL_DirectFB_shape.c	Tue Nov 15 01:12:27 2016 -0800
-> ++++ b/src/video/directfb/SDL_DirectFB_shape.c	Tue Nov 15 01:14:30 2016 -0800
-> +@@ -37,17 +37,19 @@
-> + SDL_WindowShaper*
-> + DirectFB_CreateShaper(SDL_Window* window) {
-> +     SDL_WindowShaper* result = NULL;
-> ++    SDL_ShapeData* data;
-> ++    int resized_properly;
-> + 
-> +     result = malloc(sizeof(SDL_WindowShaper));
-> +     result->window = window;
-> +     result->mode.mode = ShapeModeDefault;
-> +     result->mode.parameters.binarizationCutoff = 1;
-> +     result->userx = result->usery = 0;
-> +-    SDL_ShapeData* data = SDL_malloc(sizeof(SDL_ShapeData));
-> ++    data = SDL_malloc(sizeof(SDL_ShapeData));
-> +     result->driverdata = data;
-> +     data->surface = NULL;
-> +     window->shaper = result;
-> +-    int resized_properly = DirectFB_ResizeWindowShape(window);
-> ++    resized_properly = DirectFB_ResizeWindowShape(window);
-> +     SDL_assert(resized_properly == 0);
-> + 
-> +     return result;
-> +
-> 
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index c00236b..c325fda 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,2 +1,2 @@
+ # From http://www.lighttpd.net/
+-sha256 fe0c4a06dd2408a83ee7a2bfedc45e09597f3313cbda82485507573ae8fa948a  lighttpd-1.4.43.tar.xz
++sha256 adb66ca985651957feb209c91c55ebbf917d23630bfc3a216a2f70043c7b5422  lighttpd-1.4.44.tar.xz
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 9f7599a..c36c3b6 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).43
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).44
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3c
+-- 
+2.10.2
