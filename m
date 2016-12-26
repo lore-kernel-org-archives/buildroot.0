@@ -1,187 +1,86 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Mon, 26 Dec 2016 20:52:35 +0530
-Subject: [Buildroot] [PATCH v2 2/2] Update comments for reverse dependencies
-	of util-linux
-In-Reply-To: <1482765755-29455-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1482765755-29455-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1482765755-29455-2-git-send-email-rahul.bedarkar@imgtec.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 26 Dec 2016 16:30:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: fix build error on
+ powerpc/powerpc64
+In-Reply-To: <20161225181327.18952-1-bernd.kuhls@t-online.de>
+References: <20161225181327.18952-1-bernd.kuhls@t-online.de>
+Message-ID: <59038c51-fd4c-14de-563f-21b39348b68c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 006a328ad6be ("util-linux: fix build with ncurses") removed
-dependency on BR2_USE_WCHAR, but failed to update the reverse
-dependencies of util-linux.
+Hi Bernd,
 
-This commit updates comments in Config.in for BR2_USE_WCHAR for reverse
-dependencies of util-linux which directly uses wchar now or when it is
-pulled from other dependencies.
+Le 25/12/2016 ? 19:13, Bernd Kuhls a ?crit :
+> Fixes
+> http://autobuild.buildroot.net/results/ffd/ffd689f1ba34ad43f52c38fe37da393a9d8b9d5e/
 
-eudev doesn't use wchar directly, but needs C99 compiler. Autotools
-generate code with wchar_t for checking C99 compiler.
+Tested-by: Romain Naour <romain.naour@gmail.com>
+[Build tested]
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
----
-Changes v1 -> v2:
- - not present in v1
+Best regards,
+Romain
 
- package/e2tools/Config.in          | 2 +-
- package/eudev/Config.in            | 2 +-
- package/f2fs-tools/Config.in       | 2 +-
- package/freeswitch/Config.in       | 2 +-
- package/gupnp/Config.in            | 2 +-
- package/lttng-babeltrace/Config.in | 2 +-
- package/lttng-libust/Config.in     | 2 +-
- package/samba4/Config.in           | 2 +-
- package/taskd/Config.in            | 2 +-
- package/xen/Config.in              | 2 +-
- system/Config.in                   | 2 +-
- 11 files changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/package/e2tools/Config.in b/package/e2tools/Config.in
-index 5fc55a6..75029f7 100644
---- a/package/e2tools/Config.in
-+++ b/package/e2tools/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_E2TOOLS
- 	bool "e2tools"
- 	select BR2_PACKAGE_E2FSPROGS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_WCHAR # e2fsprogs
-+	depends on BR2_USE_WCHAR # uses wchar_t
- 	depends on BR2_USE_MMU # e2fsprogs
- 	help
- 	  E2tools is a simple set of GPL'ed utilities to read, write,
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index 6412675..02fcc7e 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_EUDEV
- 	bool "eudev"
- 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	depends on BR2_USE_MMU # uses fork()
--	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_USE_WCHAR # needs C99 compiler
- 	depends on !BR2_STATIC_LIBS # kmod
- 	select BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_UTIL_LINUX
-diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
-index 6a98e79..ab81734 100644
---- a/package/f2fs-tools/Config.in
-+++ b/package/f2fs-tools/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_F2FS_TOOLS
- 	bool "f2fs-tools"
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
--	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_USE_WCHAR # uses wchar_t
- 	help
- 	  Tools for Flash-Friendly File System (F2FS)
- 
-diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-index 0156afd..1f64593 100644
---- a/package/freeswitch/Config.in
-+++ b/package/freeswitch/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_FREESWITCH
- 	depends on !BR2_STATIC_LIBS # apr, included in freeswitch source
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # apr, included in freeswitch source
--	depends on BR2_USE_WCHAR # libuuid
-+	depends on BR2_USE_WCHAR # uses wchar_t
- 	select BR2_PACKAGE_FFMPEG_AVRESAMPLE if BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE if BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_LIBCURL
-diff --git a/package/gupnp/Config.in b/package/gupnp/Config.in
-index a5ecab7..3074a42 100644
---- a/package/gupnp/Config.in
-+++ b/package/gupnp/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_GUPNP
- 	bool "gupnp"
--	depends on BR2_USE_WCHAR # glib2, gssdp, util-linux
-+	depends on BR2_USE_WCHAR # glib2, gssdp
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, gssdp
- 	depends on BR2_USE_MMU # glib2, gssdp
- 	select BR2_PACKAGE_LIBGLIB2
-diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
-index 9634a4d..09fab44 100644
---- a/package/lttng-babeltrace/Config.in
-+++ b/package/lttng-babeltrace/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_POPT
--	depends on BR2_USE_WCHAR # libglib2, util-linux
-+	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	help
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-index ce60599..4aba188 100644
---- a/package/lttng-libust/Config.in
-+++ b/package/lttng-libust/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LTTNG_LIBUST
- 	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
--	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_USE_WCHAR # uses wchar_t
- 	# liburcu only works on some architectures and requires threads support"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 5ae2c36..ce97bea 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -7,7 +7,7 @@ comment "samba4 needs a toolchain w/ RPC, wchar, dynamic library, threads"
- config BR2_PACKAGE_SAMBA4
- 	bool "samba4"
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_USE_WCHAR # e2fsprogs
-+	depends on BR2_USE_WCHAR # python
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # python -> libffi
- 	depends on !BR2_STATIC_LIBS # python
-diff --git a/package/taskd/Config.in b/package/taskd/Config.in
-index 7a9a136..7d26aba 100644
---- a/package/taskd/Config.in
-+++ b/package/taskd/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_TASKD
- 	bool "taskd"
--	depends on BR2_USE_WCHAR # gnutls, util-linux
-+	depends on BR2_USE_WCHAR # gnutls
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_GNUTLS
-diff --git a/package/xen/Config.in b/package/xen/Config.in
-index 7254a07..b5dcbf2 100644
---- a/package/xen/Config.in
-+++ b/package/xen/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_XEN_TOOLS
- 	depends on !BR2_STATIC_LIBS # dtc (libfdt)
- 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
--	depends on BR2_USE_WCHAR # libglib2, util-linux
-+	depends on BR2_USE_WCHAR # libglib2
- 	select BR2_PACKAGE_DTC
- 	select BR2_PACKAGE_LIBAIO
- 	select BR2_PACKAGE_LIBGLIB2
-diff --git a/system/Config.in b/system/Config.in
-index f9a3bda..875ed37 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -158,7 +158,7 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
- 
- config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	bool "Dynamic using devtmpfs + eudev"
--	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_WCHAR # eudev
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # eudev
- 	select BR2_PACKAGE_EUDEV
--- 
-2.6.2
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/sdl2/0001-ppc.patch | 47 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 package/sdl2/0001-ppc.patch
+> 
+> diff --git a/package/sdl2/0001-ppc.patch b/package/sdl2/0001-ppc.patch
+> new file mode 100644
+> index 000000000..016110306
+> --- /dev/null
+> +++ b/package/sdl2/0001-ppc.patch
+> @@ -0,0 +1,47 @@
+> +Fixed bug 3466 - Can't build 2.0.5 on ppc64
+> +
+> +/home/fedora/SDL2-2.0.5/src/video/SDL_blit_N.c: In function 'calc_swizzle32':
+> +/home/fedora/SDL2-2.0.5/src/video/SDL_blit_N.c:127:5: error: ISO C90 forbids mixed declarations and code [-Werror=declaration-after-statement]
+> +const vector unsigned char plus = VECUINT8_LITERAL(0x00, 0x00, 0x00, 0x00,
+> +^ 
+> +
+> +Downloaded from upstream repo
+> +https://hg.libsdl.org/SDL/rev/5184186d4366
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +
+> +diff -r 71d4148e32de -r 5184186d4366 src/video/SDL_blit_N.c
+> +--- a/src/video/SDL_blit_N.c	Wed Oct 19 21:22:42 2016 -0700
+> ++++ b/src/video/SDL_blit_N.c	Sat Oct 22 11:01:55 2016 -0700
+> +@@ -118,12 +118,6 @@
+> +         16, 8, 0, 24,
+> +         0, NULL
+> +     };
+> +-    if (!srcfmt) {
+> +-        srcfmt = &default_pixel_format;
+> +-    }
+> +-    if (!dstfmt) {
+> +-        dstfmt = &default_pixel_format;
+> +-    }
+> +     const vector unsigned char plus = VECUINT8_LITERAL(0x00, 0x00, 0x00, 0x00,
+> +                                                        0x04, 0x04, 0x04, 0x04,
+> +                                                        0x08, 0x08, 0x08, 0x08,
+> +@@ -136,6 +130,14 @@
+> +     Uint32 gmask = RESHIFT(srcfmt->Gshift) << (dstfmt->Gshift);
+> +     Uint32 bmask = RESHIFT(srcfmt->Bshift) << (dstfmt->Bshift);
+> +     Uint32 amask;
+> ++
+> ++    if (!srcfmt) {
+> ++        srcfmt = &default_pixel_format;
+> ++    }
+> ++    if (!dstfmt) {
+> ++        dstfmt = &default_pixel_format;
+> ++    }
+> ++
+> +     /* Use zero for alpha if either surface doesn't have alpha */
+> +     if (dstfmt->Amask) {
+> +         amask =
+> +
+> +
+> +
+> +
+> 
