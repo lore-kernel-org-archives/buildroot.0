@@ -1,63 +1,29 @@
-From: Ashish_Kumar_Mishra <dgashu55@gmail.com>
-Date: Tue, 27 Dec 2016 01:03:11 -0800 (PST)
-Subject: [Buildroot] BB-Black setup fails to boot using Buildroot Training
- Lab Book [December 26, 2016]
-Message-ID: <1482829391152-153506.post@n4.nabble.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Dec 2016 10:34:43 +0100
+Subject: [Buildroot] [PATCH] exim: security bump to 4.87.1
+In-Reply-To: <20161225223815.3970-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 25 Dec 2016 23:38:15 +0100")
+References: <20161225223815.3970-1-peter@korsgaard.com>
+Message-ID: <87vau5d8b0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All ,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-This in my first post here & i am not sure weather such support / problem
-queries are allowed here or not. 
-Would request to please let me know the correct forum so that i can continue
-there. 
+ > No features are added or removed. This release contains
+ > just a fix for CVE-2016-9963
 
-This is my first attempt to learn the Buildroot (and BB Black) . 
+ >     - Fix CVE-2016-9963 - Info leak from DKIM.  When signing DKIM, if
+ >       either LMTP or PRDR was used for delivery, the key could appear in
+ >       logs.  Additionally, if the experimental feature "DSN_INFO" was used,
+ >       it could appear in DSN messages (and be sent offsite).
 
-I am following the procedure mentioned in Buildroot Training Lab Book from
-free electrons dated December 26, 2016. 
-After following all the steps i created an SD card setup but the board
-booting fails with below mentioned log:-
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-U-Boot SPL 2016.03 (Dec 27 2016 - 12:45:34)
-Trying to boot from MMC
-Card doesn't support part_switch
-MMC partition switch failed
-*** Warning - MMC partition switch failed, using default environment
+Committed, thanks.
 
-reading u-boot.img
-reading u-boot.img
-
-
-U-Boot 2016.03 (Dec 27 2016 - 12:45:34 +0530)
-
-       Watchdog enabled
-I2C:   ready
-DRAM:  512 MiB
-MMC:   OMAP SD/MMC: 0, OMAP SD/MMC: 1
-Net:   Could not get PHY for cpsw: addr 0
-cpsw, usb_ether
-Press SPACE to abort autoboot in 1 seconds
-reading uImage-dtb.am335x-boneblack
-** Unable to read file uImage-dtb.am335x-boneblack **
-Wrong Image Format for bootm command
-ERROR: can't get kernel image!
-=> 
-
-
-Could group members please provide few pointers to get the proper board
-booting  .
-
-Thanks 
-Ashish Kumar Mishra.
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/BB-Black-setup-fails-to-boot-using-Buildroot-Training-Lab-Book-December-26-2016-tp153506.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+-- 
+Bye, Peter Korsgaard
