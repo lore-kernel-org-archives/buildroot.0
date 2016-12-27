@@ -1,22 +1,32 @@
-From: daggs <daggs@gmx.com>
-Date: Tue, 27 Dec 2016 19:43:09 +0100
-Subject: [Buildroot] ntp enabled, date stays default.
-Message-ID: <trinity-200ef629-1fe8-452a-a0fb-a50b39ea7d03-1482864189272@3capp-mailcom-bs11>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 27 Dec 2016 21:57:12 +0100
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove perl-db-file
+Message-ID: <20161227205712.8971-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Package perl-db-file was removed today:
+https://git.buildroot.net/buildroot/commit/?id=8546ff31c58b2501a69e49bc0f27a4ffa1d2ae08
 
-I've created a image with ntp and ntpdate, when I boot the system, I see ntp is up but the date is still the default one.
-e.g. "Thu Jan  1 00:05:35 UTC 1970".
-when I try to run ntpdate I get this:
-# ntpdate
- 1 Jan 00:13:05 ntpdate[233]: no servers can be used, exiting
-pinging the addrs in the ntp.conf works.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-any ideas what I'm doing wrong?
-
-Thanks.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index abddf9df4..f3d54ef65 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -212,7 +212,6 @@ F:	package/mjpg-streamer/
+ F:	package/mplayer/
+ F:	package/perl-crypt-openssl-random/
+ F:	package/perl-crypt-openssl-rsa/
+-F:	package/perl-db-file/
+ F:	package/perl-digest-sha1/
+ F:	package/perl-encode-detect/
+ F:	package/perl-encode-locale/
+-- 
+2.11.0
