@@ -1,35 +1,98 @@
-From: Rob Landley <rob@landley.net>
-Date: Tue, 27 Dec 2016 16:03:02 -0600
-Subject: [Buildroot] [musl] Re: [musl] cortex-m support?
-In-Reply-To: <20161221061853.GB2915@waldemar-brodkorb.de>
-References: <04e5a294-719e-8029-704f-a57d1ec935b0@landley.net>
- <20161208211116.GO1555@brightrain.aerifal.cx>
- <7bfe2625-725d-d1bb-7177-f2d31ce09e9c@landley.net>
- <20161215185123.GX15584@waldemar-brodkorb.de>
- <48fb6c09-9dcb-e563-dc2d-f30062c5fceb@landley.net>
- <20161221061853.GB2915@waldemar-brodkorb.de>
-Message-ID: <d8c4a7b4-15d1-6fd9-33a6-fddd078369a8@landley.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Dec 2016 23:07:21 +0100
+Subject: [Buildroot] [PATCH] cryptopp: add upstream security fix for
+	CVE-2016-9939
+Message-ID: <20161227220721.27566-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/21/2016 12:18 AM, Waldemar Brodkorb wrote:
-> Hi Rob,
-> Rob Landley wrote,
+Fixes security issue (DoS) in Crypto++ ASN1 decoder:
 
-I missed this the first time because gmail is crap. (I wash email
-through it for the spam filtering, but there's no way to get it to STOP
-duplicate killing, so a reply like this gets randomly sorted into the
-buildroot folder, the musl folder, or my inbox depending on which copy
-arrvied first. Makes following threads impossible, let alone archiving
-them. Yes I have complained to Google multiple times over the past few
-years, they're too big to hear me.)
+https://github.com/weidai11/cryptopp/issues/346
 
-So I just noticed it in the musl web archive, but I think it's off topic
-here. I assume your list will bounce posts from non-subscribers, so
-lemme send my reply to the old uClibc mailing list instead. (*shrug*
-Still subscribed there, and you're the only one who posts there, so...)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...sible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+ create mode 100644 package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
 
-Rob
+diff --git a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
+new file mode 100644
+index 0000000..2d0f1d9
+--- /dev/null
++++ b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
+@@ -0,0 +1,69 @@
++From 3d9181d7bdd8e491f745dbc9e34bd20b6f6da069 Mon Sep 17 00:00:00 2001
++From: Gergely Nagy <ngg@tresorit.com>
++Date: Wed, 14 Dec 2016 13:19:01 +0100
++Subject: [PATCH] Fix possible DoS in ASN.1 decoders (CVE-2016-9939)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ asn.cpp | 10 ++++++++++
++ asn.h   |  2 ++
++ 2 files changed, 12 insertions(+)
++
++diff --git a/asn.cpp b/asn.cpp
++index 297ff01..2e923ef 100644
++--- a/asn.cpp
+++++ b/asn.cpp
++@@ -123,6 +123,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	str.New(bc);
++ 	if (bc != bt.Get(str, bc))
++@@ -139,6 +141,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, BufferedTransformation &
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	bt.TransferTo(str, bc);
++ 	return bc;
++@@ -161,6 +165,8 @@ size_t BERDecodeTextString(BufferedTransformation &bt, std::string &str, byte as
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	SecByteBlock temp(bc);
++ 	if (bc != bt.Get(temp, bc))
++@@ -188,6 +194,10 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc == 0)
+++		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	byte unused;
++ 	if (!bt.Get(unused))
++diff --git a/asn.h b/asn.h
++index ed9de52..33f0dd0 100644
++--- a/asn.h
+++++ b/asn.h
++@@ -498,6 +498,8 @@ void BERDecodeUnsigned(BufferedTransformation &in, T &w, byte asnTag = INTEGER,
++ 	bool definite = BERLengthDecode(in, bc);
++ 	if (!definite)
++ 		BERDecodeError();
+++	if (bc > in.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	SecByteBlock buf(bc);
++ 
++-- 
++2.10.2
++
+-- 
+2.10.2
