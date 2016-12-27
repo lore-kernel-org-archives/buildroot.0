@@ -1,103 +1,82 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 27 Dec 2016 14:03:00 +0100
-Subject: [Buildroot] [PATCH 2/3] package/x11r7/xserver_xorg-server: Fix
-	build with wayland, part II
+Date: Tue, 27 Dec 2016 14:03:01 +0100
+Subject: [Buildroot] [PATCH 3/3] package/pkgconf: variable pkgdatadir also
+	needs sysroot prefixing, wayland patch III
 In-Reply-To: <20161227130301.22831-1-bernd.kuhls@t-online.de>
 References: <20161227130301.22831-1-bernd.kuhls@t-online.de>
-Message-ID: <20161227130301.22831-2-bernd.kuhls@t-online.de>
+Message-ID: <20161227130301.22831-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The previous patch is not sufficient to fix a build with wayland
-support based on
+Needed when wayland support is enabled in xserver_xorg-server.
+
+This patch fixes the final build error:
+
+Making all in xwayland
+make[3]: Entering directory '/home/buildroot/br5/output/build/xserver_xorg-server-1.19.0/hw/xwayland'
+make[3]: *** No rule to make target '/usr/share/wayland-protocols/unstable/relative-pointer/relative-pointer-unstable-v1.xml', needed by 'relative-pointer-unstable-v1-client-protocol.h'.  Stop.
+
+when trying to build
 http://autobuild.buildroot.net/results/cf0/cf026e9b18e86b9890341612050f4d166a7b822d/
-
-The build still errors out at a later stage during configure:
-
-configure: error: Xwayland requires CLOCK_MONOTONIC support.
-
-Add a patch from OpenEmbedded to fix the problem.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...onfigure.ac-Fix-check-for-CLOCK_MONOTONIC.patch | 66 ++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 package/x11r7/xserver_xorg-server/1.19.0/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
+ ...0001-Fix-all-variables-sysroot-prefix-problem.patch | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.19.0/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.19.0/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-new file mode 100644
-index 000000000..c5f04bf25
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.19.0/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-@@ -0,0 +1,66 @@
-+Discover monotonic clock using compile-time check
+diff --git a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
+index bac9f6208..bc2b5273c 100644
+--- a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
++++ b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
+@@ -14,15 +14,19 @@ the directories may be requested barebones via pkg-config
+ --variable=includedir libfool for example.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+monotonic clock check does not work when cross-compiling.
-+
-+Upstream-Status: Denied [Does not work on OpenBSD]
-+Signed-off-by: Jussi Kukkonen <jussi.kukkonen@intel.com>
-+
-+
-+
-+Original patch follows:
-+
-+When xorg-xserver is being cross-compiled, there is currently no way
-+for us to detect whether the monotonic clock is available on the
-+target system, because we aren't able to run a test program on the host
-+system. Currently, in this situation, we default to not use the
-+monotonic clock. One problem with this situation is that the user will
-+be treated as idle when the date is updated.
-+
-+To fix this situation, we now use a compile-time check to detect whether the
-+monotonic clock is available. This check can run just fine when we are
-+cross-compiling.
-+
-+Signed-off-by: David James <davidjames@google.com>
-+
-+Downloaded from
-+https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-graphics/xorg-xserver/xserver-xorg/0001-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
++Added pkgdatadir to the list of prefixed variables.
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac | 17 +++++++----------
-+ 1 file changed, 7 insertions(+), 10 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f7ab48c..26e85cd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1048,19 +1048,16 @@ if ! test "x$have_clock_gettime" = xno; then
-+         CPPFLAGS="$CPPFLAGS -D_POSIX_C_SOURCE=200112L"
-+     fi
-+ 
-+-    AC_RUN_IFELSE([AC_LANG_SOURCE([
-++    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-+ #include <time.h>
-+-
-+-int main(int argc, char *argv[[]]) {
-+-    struct timespec tp;
-+-
-+-    if (clock_gettime(CLOCK_MONOTONIC, &tp) == 0)
-++#include <unistd.h>
-++int main() {
-++#if !(defined(_POSIX_MONOTONIC_CLOCK) && _POSIX_MONOTONIC_CLOCK >= 0 && defined(CLOCK_MONOTONIC))
-++        #error No monotonic clock
-++#endif
-+         return 0;
-+-    else
-+-        return 1;
-+ }
-+-    ])], [MONOTONIC_CLOCK=yes], [MONOTONIC_CLOCK=no],
-+-       [MONOTONIC_CLOCK="cross compiling"])
-++]])],[MONOTONIC_CLOCK=yes], [MONOTONIC_CLOCK=no])
-+ 
-+     LIBS="$LIBS_SAVE"
-+     CPPFLAGS="$CPPFLAGS_SAVE"
-+-- 
-+2.1.4
-+
+ ---
+- main.c | 17 ++++++++++++-----
+- 1 file changed, 12 insertions(+), 5 deletions(-)
++ main.c | 19 ++++++++++++++-----
++ 1 file changed, 14 insertions(+), 5 deletions(-)
+ 
+ diff --git a/main.c b/main.c
+-index 6947126..52d16c2 100644
++index 6947126..ce5e18f 100644
+ --- a/main.c
+ +++ b/main.c
+-@@ -313,9 +313,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
++@@ -313,9 +313,13 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
+  			memset(req->buf, 0, sizeof(req->buf));
+  
+  			if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
+@@ -33,12 +37,13 @@ index 6947126..52d16c2 100644
+ +			    	(!strcmp(req->variable, "includedir") || \
+ +				    !strcmp(req->variable, "libdir") || \
+ +				    !strcmp(req->variable, "mapdir") || \
+++				    !strcmp(req->variable, "pkgdatadir") || \
+ +				    !strcmp(req->variable, "sdkdir")))
+ +					strlcat(req->buf, sysroot_dir, sizeof(req->buf));
+  			strlcat(req->buf, var, sizeof(req->buf));
+  			return;
+  		}
+-@@ -323,8 +326,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
++@@ -323,8 +327,13 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
+  		strlcat(req->buf, " ", sizeof(req->buf));
+  
+  		if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
+@@ -48,6 +53,7 @@ index 6947126..52d16c2 100644
+ +		    	(!strcmp(req->variable, "includedir") || \
+ +			    !strcmp(req->variable, "libdir") || \
+ +			    !strcmp(req->variable, "mapdir") || \
+++			    !strcmp(req->variable, "pkgdatadir") || \
+ +			    !strcmp(req->variable, "sdkdir")))
+ +				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
+  
 -- 
 2.11.0
