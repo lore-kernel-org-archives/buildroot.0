@@ -1,35 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Dec 2016 10:45:42 +0100
-Subject: [Buildroot] Autobuild reproduction and generation
-In-Reply-To: <CADZ=QZ=5gbMyM0nVCb92+FuZn-WVpJDfMLNpNCm=suC-O8PmPg@mail.gmail.com>
-References: <CADZ=QZ=SU7XthdVfaAQpeY7LKJcsOME1zOusWvZAEjs0OpRfZw@mail.gmail.com>
- <20161226092127.1c4a40d1@free-electrons.com>
- <CADZ=QZnpVmC_hKqSMFehhdO_m9pZsK0OBcfVd4hXsbvjV==A1g@mail.gmail.com>
- <20161226101659.57238bc6@free-electrons.com>
- <CADZ=QZ=uJ-5T+d-f5RJK3uv+paCyCCFA0ihwvSHrhTT45n1Fpw@mail.gmail.com>
- <20161226153935.54390a45@free-electrons.com>
- <CADZ=QZ=5gbMyM0nVCb92+FuZn-WVpJDfMLNpNCm=suC-O8PmPg@mail.gmail.com>
-Message-ID: <20161227104542.4e025096@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 Dec 2016 11:14:40 +0100
+Subject: [Buildroot] [PATCH] stunnel: fix static link
+In-Reply-To: <ca7b0588b4175ace369af46ded807fd088ae310f.1482606642.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 24 Dec 2016 21:10:42 +0200")
+References: <ca7b0588b4175ace369af46ded807fd088ae310f.1482606642.git.baruch@tkos.co.il>
+Message-ID: <87eg0td6gf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Tue, 27 Dec 2016 09:57:03 +0800, Yu-Ting, Kao wrote:
+ > zlib is a dependency of OpenSSL. Take that into account when linking
+ > statically.
 
-> I checked the 99381d37002db28566d1aba257418a38c9edee39 directory is deleted.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/dfe/dfe7c82c7976912378e33e03ea4c677bee6a778d/
+ > http://autobuild.buildroot.net/results/48c/48cb55428613e91abfe8e71456182082d9eabb75/
+ > http://autobuild.buildroot.net/results/810/81029efad8b9e2f48c26a7b20f62c90844fc86df/
 
-Thanks, I have reproduced and fixed the issue. See commit
-https://git.buildroot.org/buildroot-test/commit/?id=1959fb62be4e0f967c47d5afdef8966723e7fd4e
-for all the explanations.
+ > and many more.
 
-Thanks for having reported the problem!
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
