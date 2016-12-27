@@ -1,35 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 27 Dec 2016 19:42:03 +0200
-Subject: [Buildroot] [PATCH] fs/tar: make --no-recursion effective
-Message-ID: <a5d19ac14d835abbc645fef67aad61ce48e247b9.1482860523.git.baruch@tkos.co.il>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 27 Dec 2016 15:18:29 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
+Message-ID: <20161227181829.30274-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tar --no-recursion option is position sensitive. It only affects following
-file listing options. Move --no-recursion before the -T option to make it
-effective. This fixes duplication of entries in the generated rootfs.tar
-archive.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- fs/tar/tar.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
-index b14c977d761c..0e3eacbedf05 100644
---- a/fs/tar/tar.mk
-+++ b/fs/tar/tar.mk
-@@ -8,7 +8,7 @@ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
- 
- define ROOTFS_TAR_CMD
- 	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
--		tar $(TAR_OPTS) -cf $@ --null -T - --no-recursion --numeric-owner)
-+		tar $(TAR_OPTS) -cf $@ --null --no-recursion -T - --numeric-owner)
- endef
- 
- $(eval $(call ROOTFS_TARGET,tar))
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4ab562c..967dfad 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -218,10 +218,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.69"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.18.45"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.46"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.36"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.37"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.39"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.15"	if BR2_KERNEL_HEADERS_4_8
+ 	default "4.9"		if BR2_KERNEL_HEADERS_4_9
 -- 
-2.11.0
+2.10.2
