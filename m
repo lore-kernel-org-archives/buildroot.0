@@ -1,39 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 27 Dec 2016 22:05:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/znc: bump version to 1.6.4
-Message-ID: <20161227210514.1452-1-bernd.kuhls@t-online.de>
+From: Rob Landley <rob@landley.net>
+Date: Tue, 27 Dec 2016 16:03:02 -0600
+Subject: [Buildroot] [musl] Re: [musl] cortex-m support?
+In-Reply-To: <20161221061853.GB2915@waldemar-brodkorb.de>
+References: <04e5a294-719e-8029-704f-a57d1ec935b0@landley.net>
+ <20161208211116.GO1555@brightrain.aerifal.cx>
+ <7bfe2625-725d-d1bb-7177-f2d31ce09e9c@landley.net>
+ <20161215185123.GX15584@waldemar-brodkorb.de>
+ <48fb6c09-9dcb-e563-dc2d-f30062c5fceb@landley.net>
+ <20161221061853.GB2915@waldemar-brodkorb.de>
+Message-ID: <d8c4a7b4-15d1-6fd9-33a6-fddd078369a8@landley.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/znc/znc.hash | 2 +-
- package/znc/znc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 12/21/2016 12:18 AM, Waldemar Brodkorb wrote:
+> Hi Rob,
+> Rob Landley wrote,
 
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-index f243d4ab0..368235141 100644
---- a/package/znc/znc.hash
-+++ b/package/znc/znc.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	631c46de76fe601a41ef7676bc974958e9a302b72b25fc92b4a603a25d89b827	znc-1.6.3.tar.gz
-+sha256 431097eb17860bfc980f3e68fdd75f98af4bdeecd793c84835c6cb11c3320d1c  znc-1.6.4.tar.gz
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 31e1bcf6c..5b96ee529 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZNC_VERSION = 1.6.3
-+ZNC_VERSION = 1.6.4
- ZNC_SITE = http://znc.in/releases
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
--- 
-2.11.0
+I missed this the first time because gmail is crap. (I wash email
+through it for the spam filtering, but there's no way to get it to STOP
+duplicate killing, so a reply like this gets randomly sorted into the
+buildroot folder, the musl folder, or my inbox depending on which copy
+arrvied first. Makes following threads impossible, let alone archiving
+them. Yes I have complained to Google multiple times over the past few
+years, they're too big to hear me.)
+
+So I just noticed it in the musl web archive, but I think it's off topic
+here. I assume your list will bounce posts from non-subscribers, so
+lemme send my reply to the old uClibc mailing list instead. (*shrug*
+Still subscribed there, and you're the only one who posts there, so...)
+
+Rob
