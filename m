@@ -1,34 +1,39 @@
-From: Ashish_Kumar_Mishra <dgashu55@gmail.com>
-Date: Tue, 27 Dec 2016 04:45:16 -0800 (PST)
-Subject: [Buildroot] BB-Black setup fails to boot using Buildroot
- Training Lab Book [December 26, 2016]
-In-Reply-To: <1482832811226-153520.post@n4.nabble.com>
-References: <1482829391152-153506.post@n4.nabble.com>
- <20161227104445.052db2dd@free-electrons.com>
- <1482832811226-153520.post@n4.nabble.com>
-Message-ID: <1482842716570-153522.post@n4.nabble.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 27 Dec 2016 14:02:59 +0100
+Subject: [Buildroot] [PATCH 1/3] package/x11r7/xserver_xorg-server: Fix
+	build with wayland, part I
+Message-ID: <20161227130301.22831-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sir / All , 
+Add missing dependency wayland-protocols.
 
-The created setup *works properly on BeagleBone "A6"* but same sd card fails
-to boot with BeagleBone "A6A" .
-Will check the behaviour on Beaglebone "C" & share . 
+Partly fixes
+http://autobuild.buildroot.net/results/cf0/cf026e9b18e86b9890341612050f4d166a7b822d/
 
-I am not much clear as what effects the same image to behave differently on
-two different version. 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Will update the thread as in case some additional info .
-
-Thanks 
-Ashish Kumar Mishra.
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/BB-Black-setup-fails-to-boot-using-Buildroot-Training-Lab-Book-December-26-2016-tp153506p153522.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 6444a206b..0958031dd 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -82,9 +82,9 @@ XSERVER_XORG_SERVER_CONF_OPTS += \
+ endif
+ 
+ # Xwayland support needs libdrm, libepoxy, wayland and libxcomposite
+-ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_LIBEPOXY)$(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),yyyy)
++ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_LIBEPOXY)$(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_WAYLAND_PROTOCOLS)$(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),yyyy)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-xwayland
+-XSERVER_XORG_SERVER_DEPENDENCIES += libdrm libepoxy wayland xlib_libXcomposite
++XSERVER_XORG_SERVER_DEPENDENCIES += libdrm libepoxy wayland wayland-protocols xlib_libXcomposite
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-xwayland
+ endif
+-- 
+2.11.0
