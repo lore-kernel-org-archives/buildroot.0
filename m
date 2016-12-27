@@ -1,42 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Dec 2016 23:28:18 +0100
-Subject: [Buildroot] [PATCH] libsigrokdecode: bump to version 0.4.1
-Message-ID: <20161227222818.16724-1-peter@korsgaard.com>
+Date: Tue, 27 Dec 2016 23:35:57 +0100
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
+In-Reply-To: <20161227181829.30274-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Tue, 27 Dec 2016 15:18:29 -0300")
+References: <20161227181829.30274-1-gustavo@zacarias.com.ar>
+Message-ID: <87a8bhc84y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details, see:
-https://www.sigrok.org/blog/libsigrokdecode-041-released
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsigrokdecode/libsigrokdecode.hash | 2 +-
- package/libsigrokdecode/libsigrokdecode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/libsigrokdecode/libsigrokdecode.hash b/package/libsigrokdecode/libsigrokdecode.hash
-index 3ac8a76..ccb2016 100644
---- a/package/libsigrokdecode/libsigrokdecode.hash
-+++ b/package/libsigrokdecode/libsigrokdecode.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	fd7e9d1b73245e844ead97a16d5321c766196f946c9b28a8646cab2e98ec3537	libsigrokdecode-0.4.0.tar.gz
-+sha256	065f70c10971173d86e03a8cf5534e600c7a622775113997d8061572135d4a95	libsigrokdecode-0.4.1.tar.gz
-diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
-index b8b3c59..7006b0c 100644
---- a/package/libsigrokdecode/libsigrokdecode.mk
-+++ b/package/libsigrokdecode/libsigrokdecode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSIGROKDECODE_VERSION = 0.4.0
-+LIBSIGROKDECODE_VERSION = 0.4.1
- LIBSIGROKDECODE_SITE = http://sigrok.org/download/source/libsigrokdecode
- LIBSIGROKDECODE_LICENSE = GPLv3+
- LIBSIGROKDECODE_LICENSE_FILES = COPYING
+Committed, thanks.
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
