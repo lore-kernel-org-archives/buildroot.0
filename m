@@ -1,98 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Dec 2016 11:18:09 +0100
-Subject: [Buildroot] [git commit] cryptopp: add upstream security fix for
-	CVE-2016-9939
-Message-ID: <20161228103540.BC5DB81E38@busybox.osuosl.org>
+Date: Wed, 28 Dec 2016 11:18:18 +0100
+Subject: [Buildroot] [git commit] libsigrokdecode: bump to version 0.4.1
+Message-ID: <20161228103540.CAB7F7FDC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=222808a4b678aca0da01cc96f543079f06613554
+commit: https://git.buildroot.net/buildroot/commit/?id=60d86c81ccdffb98ed460cbc728eeee4a9891a0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes security issue (DoS) in Crypto++ ASN1 decoder:
-
-https://github.com/weidai11/cryptopp/issues/346
+For details, see:
+https://www.sigrok.org/blog/libsigrokdecode-041-released
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ package/libsigrokdecode/libsigrokdecode.hash | 2 +-
+ package/libsigrokdecode/libsigrokdecode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
-new file mode 100644
-index 0000000..ea6ba7f
---- /dev/null
-+++ b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
-@@ -0,0 +1,69 @@
-+From 3d9181d7bdd8e491f745dbc9e34bd20b6f6da069 Mon Sep 17 00:00:00 2001
-+From: Gergely Nagy <ngg@tresorit.com>
-+Date: Wed, 14 Dec 2016 13:19:01 +0100
-+Subject: [PATCH] Fix possible DoS in ASN.1 decoders (CVE-2016-9939)
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ asn.cpp | 10 ++++++++++
-+ asn.h   |  2 ++
-+ 2 files changed, 12 insertions(+)
-+
-+diff --git a/asn.cpp b/asn.cpp
-+index 297ff01..2e923ef 100644
-+--- a/asn.cpp
-++++ b/asn.cpp
-+@@ -123,6 +123,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	str.New(bc);
-+ 	if (bc != bt.Get(str, bc))
-+@@ -139,6 +141,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, BufferedTransformation &
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	bt.TransferTo(str, bc);
-+ 	return bc;
-+@@ -161,6 +165,8 @@ size_t BERDecodeTextString(BufferedTransformation &bt, std::string &str, byte as
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	SecByteBlock temp(bc);
-+ 	if (bc != bt.Get(temp, bc))
-+@@ -188,6 +194,10 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc == 0)
-++		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	byte unused;
-+ 	if (!bt.Get(unused))
-+diff --git a/asn.h b/asn.h
-+index ed9de52..33f0dd0 100644
-+--- a/asn.h
-++++ b/asn.h
-+@@ -498,6 +498,8 @@ void BERDecodeUnsigned(BufferedTransformation &in, T &w, byte asnTag = INTEGER,
-+ 	bool definite = BERLengthDecode(in, bc);
-+ 	if (!definite)
-+ 		BERDecodeError();
-++	if (bc > in.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	SecByteBlock buf(bc);
-+ 
-+-- 
-+2.10.2
-+
+diff --git a/package/libsigrokdecode/libsigrokdecode.hash b/package/libsigrokdecode/libsigrokdecode.hash
+index 3ac8a76..ccb2016 100644
+--- a/package/libsigrokdecode/libsigrokdecode.hash
++++ b/package/libsigrokdecode/libsigrokdecode.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	fd7e9d1b73245e844ead97a16d5321c766196f946c9b28a8646cab2e98ec3537	libsigrokdecode-0.4.0.tar.gz
++sha256	065f70c10971173d86e03a8cf5534e600c7a622775113997d8061572135d4a95	libsigrokdecode-0.4.1.tar.gz
+diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
+index b8b3c59..7006b0c 100644
+--- a/package/libsigrokdecode/libsigrokdecode.mk
++++ b/package/libsigrokdecode/libsigrokdecode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSIGROKDECODE_VERSION = 0.4.0
++LIBSIGROKDECODE_VERSION = 0.4.1
+ LIBSIGROKDECODE_SITE = http://sigrok.org/download/source/libsigrokdecode
+ LIBSIGROKDECODE_LICENSE = GPLv3+
+ LIBSIGROKDECODE_LICENSE_FILES = COPYING
