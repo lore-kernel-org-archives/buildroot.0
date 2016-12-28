@@ -1,94 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Dec 2016 23:18:05 +0100
-Subject: [Buildroot] [PATCH 1/2] riemann-c-client: new package
-Message-ID: <20161228221806.32321-1-peter@korsgaard.com>
+Date: Wed, 28 Dec 2016 23:18:06 +0100
+Subject: [Buildroot] [PATCH 2/2] collectd: fix riemann write plugin
+	dependencies
+In-Reply-To: <20161228221806.32321-1-peter@korsgaard.com>
+References: <20161228221806.32321-1-peter@korsgaard.com>
+Message-ID: <20161228221806.32321-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Riemann-c-client is a C client library for the Riemann monitoring system,
-providing a convenient and simple API, high test coverage and a copyleft
-license, along with API and ABI stability.
+Fixes:
+http://autobuild.buildroot.org/results/fe5/fe5b5ed6355a794e84894c4aaf62eda6529ed184/
+http://autobuild.buildroot.org/results/6c3/6c393cffb6ad4e676e311e9fc23ddbb2bcc2cf36/
+
+The plugin uses the riemann-c-client library since commit d55584214206
+(write_riemann: Use riemann-c-client), so adjust the dependencies to match.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                              |  1 +
- package/riemann-c-client/Config.in             | 17 +++++++++++++++++
- package/riemann-c-client/riemann-c-client.hash |  2 ++
- package/riemann-c-client/riemann-c-client.mk   | 18 ++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/riemann-c-client/Config.in
- create mode 100644 package/riemann-c-client/riemann-c-client.hash
- create mode 100644 package/riemann-c-client/riemann-c-client.mk
+ package/collectd/Config.in   | 2 +-
+ package/collectd/collectd.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 18818fa..717b505 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1365,6 +1365,7 @@ endif
- 	source "package/protobuf-c/Config.in"
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
-+	source "package/riemann-c-client/Config.in"
- 	source "package/shapelib/Config.in"
- 	source "package/skalibs/Config.in"
- 	source "package/sphinxbase/Config.in"
-diff --git a/package/riemann-c-client/Config.in b/package/riemann-c-client/Config.in
-new file mode 100644
-index 0000000..e9982b2
---- /dev/null
-+++ b/package/riemann-c-client/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_RIEMANN_C_CLIENT
-+	bool "riemann-c-client"
-+	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf-c
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf-c
-+	select BR2_PACKAGE_PROTOBUF_C
-+	help
-+	  Riemann-c-client is a C client library for the Riemann
-+	  monitoring system, providing a convenient and simple API,
-+	  high test coverage and a copyleft license, along with API
-+	  and ABI stability.
-+
-+	  https://github.com/algernon/riemann-c-client
-+
-+comment "riemann-c-client needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-diff --git a/package/riemann-c-client/riemann-c-client.hash b/package/riemann-c-client/riemann-c-client.hash
-new file mode 100644
-index 0000000..0902881
---- /dev/null
-+++ b/package/riemann-c-client/riemann-c-client.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 4b18804f489834fa953f4af887290173c745b471a5993bb108a9142c867de457 riemann-c-client-1.9.1.tar.xz
-diff --git a/package/riemann-c-client/riemann-c-client.mk b/package/riemann-c-client/riemann-c-client.mk
-new file mode 100644
-index 0000000..027898b
---- /dev/null
-+++ b/package/riemann-c-client/riemann-c-client.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# riemann-c-client
-+#
-+################################################################################
-+
-+RIEMANN_C_CLIENT_VERSION = 1.9.1
-+RIEMANN_C_CLIENT_SOURCE = riemann-c-client-$(RIEMANN_C_CLIENT_VERSION).tar.xz
-+RIEMANN_C_CLIENT_SITE = https://github.com/algernon/riemann-c-client/releases/download/riemann-c-client-$(RIEMANN_C_CLIENT_VERSION)
-+RIEMANN_C_CLIENT_LICENSE = LGPLv3+
-+RIEMANN_C_CLIENT_LICENSE_FILES = LICENSE
-+RIEMANN_C_CLIENT_INSTALL_STAGING = YES
-+RIEMANN_C_CLIENT_DEPENDENCIES = \
-+	host-pkgconf protobuf-c \
-+	$(if $(BR2_PACKAGE_GNUTLS),gnutls) \
-+	$(if $(BR2_PACKAGE_JSON_C),json-c)
-+
-+$(eval $(autotools-package))
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index ab49b71..683141b 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -550,7 +550,7 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	# protobuf-c -> host-protobuf
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_PACKAGE_PROTOBUF_C
++	select BR2_PACKAGE_RIEMANN_C_CLIENT
+ 	select BR2_PACKAGE_LIBTOOL
+ 	help
+ 	  Sends data to Riemann, a stream processing and monitoring system.
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 28c1b31..7ab7dd4 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -146,7 +146,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_OPENLDAP),openldap) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_PING),liboping) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_POSTGRESQL),postgresql) \
+-	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),libtool protobuf-c) \
++	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),libtool riemann-c-client) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_RRDTOOL),rrdtool) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SENSORS),lm-sensors) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SMART),libatasmart) \
 -- 
 2.10.2
