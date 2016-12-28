@@ -1,53 +1,125 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Dec 2016 23:58:58 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] exim: security bump to
-	4.87.1
-Message-ID: <20161228225947.123208081A@busybox.osuosl.org>
+Date: Thu, 29 Dec 2016 00:01:54 +0100
+Subject: [Buildroot] [git commit] cryptopp: fixup DOS newlines in
+	CVE-2016-9939 patch
+Message-ID: <20161228230300.F1B9480450@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03f286cd85f1ad186cc254e63fcaaaf54ddee453
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9f57959147377e5ee13451a9d5fe6ba002aa20a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No features are added or removed. This release contains
-just a fix for CVE-2016-9963
-
-    - Fix CVE-2016-9963 - Info leak from DKIM.  When signing DKIM, if
-      either LMTP or PRDR was used for delivery, the key could appear in
-      logs.  Additionally, if the experimental feature "DSN_INFO" was used,
-      it could appear in DSN messages (and be sent offsite).
+The patch did contain the correct newlines, but they got stripped by
+patchwork so now the patch no longer applies.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 62f0195119187449e6f037b3d0f753de855752ae)
 ---
- package/exim/exim.hash | 2 +-
- package/exim/exim.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...sible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch | 84 +++++++++++-----------
+ 1 file changed, 42 insertions(+), 42 deletions(-)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 83be731..ef2d03b 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	74691e0dff4d1b5d387e9c33c86f96a8f6d2adbc781c0dec9d2061a847b07dc9	exim-4.87.tar.bz2
-+sha256	d4b7994c89240d2f9a9fcd7a2dffa4b72f14379001a24266f4dbb0fbe5131514	exim-4.87.1.tar.bz2
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index ed7d169..a9f4685 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
+index ea6ba7f..2d0f1d9 100644
+--- a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
++++ b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
+@@ -14,56 +14,56 @@ index 297ff01..2e923ef 100644
+ --- a/asn.cpp
+ +++ b/asn.cpp
+ @@ -123,6 +123,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
+- 	size_t bc;
+- 	if (!BERLengthDecode(bt, bc))
+- 		BERDecodeError();
+-+	if (bc > bt.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	str.New(bc);
+- 	if (bc != bt.Get(str, bc))
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	str.New(bc);
++ 	if (bc != bt.Get(str, bc))
+ @@ -139,6 +141,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, BufferedTransformation &
+- 	size_t bc;
+- 	if (!BERLengthDecode(bt, bc))
+- 		BERDecodeError();
+-+	if (bc > bt.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	bt.TransferTo(str, bc);
+- 	return bc;
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	bt.TransferTo(str, bc);
++ 	return bc;
+ @@ -161,6 +165,8 @@ size_t BERDecodeTextString(BufferedTransformation &bt, std::string &str, byte as
+- 	size_t bc;
+- 	if (!BERLengthDecode(bt, bc))
+- 		BERDecodeError();
+-+	if (bc > bt.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	SecByteBlock temp(bc);
+- 	if (bc != bt.Get(temp, bc))
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	SecByteBlock temp(bc);
++ 	if (bc != bt.Get(temp, bc))
+ @@ -188,6 +194,10 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
+- 	size_t bc;
+- 	if (!BERLengthDecode(bt, bc))
+- 		BERDecodeError();
+-+	if (bc == 0)
+-+		BERDecodeError();
+-+	if (bc > bt.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	byte unused;
+- 	if (!bt.Get(unused))
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc == 0)
+++		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	byte unused;
++ 	if (!bt.Get(unused))
+ diff --git a/asn.h b/asn.h
+ index ed9de52..33f0dd0 100644
+ --- a/asn.h
+ +++ b/asn.h
+ @@ -498,6 +498,8 @@ void BERDecodeUnsigned(BufferedTransformation &in, T &w, byte asnTag = INTEGER,
+- 	bool definite = BERLengthDecode(in, bc);
+- 	if (!definite)
+- 		BERDecodeError();
+-+	if (bc > in.MaxRetrievable())
+-+		BERDecodeError();
+- 
+- 	SecByteBlock buf(bc);
+- 
++ 	bool definite = BERLengthDecode(in, bc);
++ 	if (!definite)
++ 		BERDecodeError();
+++	if (bc > in.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	SecByteBlock buf(bc);
++ 
+ -- 
+ 2.10.2
  
--EXIM_VERSION = 4.87
-+EXIM_VERSION = 4.87.1
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
--EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
-+EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4/old
- EXIM_LICENSE = GPLv2+
- EXIM_LICENSE_FILES = LICENCE
- EXIM_DEPENDENCIES = pcre berkeleydb host-pkgconf
