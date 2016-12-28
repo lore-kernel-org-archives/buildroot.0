@@ -1,58 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Dec 2016 15:32:54 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2016-12-24
-In-Reply-To: <eaf4dc60-3bef-18e5-237c-1d31cbfaa912@armadeus.com>
-References: <20161225072953.0D89E20729@mail.free-electrons.com>
- <eaf4dc60-3bef-18e5-237c-1d31cbfaa912@armadeus.com>
-Message-ID: <20161228153254.3f985085@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 28 Dec 2016 18:29:01 +0100
+Subject: [Buildroot] [PATCH] uclibc: add kernel module syscall wrappers
+Message-ID: <20161228172901.GA24328@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Revert the decision to remove the wrappers, but remove the extra
+Config symbol and add it by default. Required for kmod package.
 
-Adding Buildroot mailing list in Cc. You probably intended to do that,
-since you wrote to me in english and not french :)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ ...nit_module-delete_module-syscall-wrappers.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/uclibc/0001-add-init_module-delete_module-syscall-wrappers.patch
 
-On Wed, 28 Dec 2016 15:04:21 +0100, Julien Boibessot wrote:
-
-> On 25/12/2016 08:29, Thomas Petazzoni wrote:
-> > Hello,
-> >
-> > This is the list of Buildroot build failures that occured on
-> > 2016-12-24, and for which you are a registered architecture developer
-> > or package developer. Please help us improving the quality of
-> > Buildroot by investigating those build failures and sending patches to
-> > fix them. Thanks!
-> >
-> > Build failures related to your packages:
-> >
-> >          arm |                   ltris-1.0.19 | http://autobuild.buildroot.net/results/d9ad2d0e91ebc232f42a5bfbfdc271e78c05592d
-> >  
-> 
-> seems like the "well known" (?) problem of DirectFB not linked against
-> libstdc++ in static build, we already discussed previously this year ?
-
-Yes. Someone needs to submit the patch fixing that :)
-
-I was going to propose to remove DirectFB, since the last commit on
-Github dates back from February 2014, and the website
-(directfb.org) which has been dead since at least 2015 is now
-cyber-squatted. However, it seems like a new website is up at
-directfb.net, which a news from November 2016. And it seems like the
-Github repo at https://github.com/deniskropp/DirectFB/commits/master
-contains some newer updates. Not sure why the upstream maintainer
-doesn't use https://github.com/DirectFB/directfb.
-
-But still, I wouldn't call that a really active upstream...
-
-Best regards,
-
-Thomas
+diff --git a/package/uclibc/0001-add-init_module-delete_module-syscall-wrappers.patch b/package/uclibc/0001-add-init_module-delete_module-syscall-wrappers.patch
+new file mode 100644
+index 0000000..4a3e07f
+--- /dev/null
++++ b/package/uclibc/0001-add-init_module-delete_module-syscall-wrappers.patch
+@@ -0,0 +1,59 @@
++From f60f9d6f1f73ab3f77771dafa4f90c2e0de2a7e2 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Tue, 27 Dec 2016 09:24:24 +0100
++Subject: [PATCH] add init_module/delete_module syscall wrappers
++
++Add the wrappers unconditionally, because kmod package
++still uses them.
++
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ libc/sysdeps/linux/common/Makefile.in |  1 +
++ libc/sysdeps/linux/common/module.c    | 23 +++++++++++++++++++++++
++ 2 files changed, 24 insertions(+)
++ create mode 100644 libc/sysdeps/linux/common/module.c
++
++diff --git a/libc/sysdeps/linux/common/Makefile.in b/libc/sysdeps/linux/common/Makefile.in
++index 595074c..faed6fd 100644
++--- a/libc/sysdeps/linux/common/Makefile.in
+++++ b/libc/sysdeps/linux/common/Makefile.in
++@@ -31,6 +31,7 @@ CSRC-$(UCLIBC_LINUX_SPECIFIC) += \
++ 	ioperm.c \
++ 	iopl.c \
++ 	modify_ldt.c \
+++	module.c \
++ 	personality.c \
++ 	pipe2.c \
++ 	ppoll.c \
++diff --git a/libc/sysdeps/linux/common/module.c b/libc/sysdeps/linux/common/module.c
++new file mode 100644
++index 0000000..146a43e
++--- /dev/null
+++++ b/libc/sysdeps/linux/common/module.c
++@@ -0,0 +1,23 @@
+++/*
+++ * init_module()/delete_module() for uClibc
+++ *
+++ * Copyright (C) 2000-2006 Erik Andersen <andersen@uclibc.org>
+++ *
+++ * Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+++ */
+++
+++#include <sys/syscall.h>
+++
+++#ifdef __NR_init_module
+++int init_module(void *first, void *second, void *third, void *fourth, void *fifth);
+++/* This may have 5 arguments (for old 2.0 kernels) or 2 arguments
+++ * (for 2.2 and 2.4 kernels).  Use the greatest common denominator,
+++ * and let the kernel cope with whatever it gets.  It's good at that. */
+++_syscall5(int, init_module, void *, first, void *, second, void *, third,
+++	  void *, fourth, void *, fifth)
+++#endif
+++
+++#ifdef __NR_delete_module
+++int delete_module(const char *name, unsigned int flags);
+++_syscall2(int, delete_module, const char *, name, unsigned int, flags)
+++#endif
++-- 
++2.1.4
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
