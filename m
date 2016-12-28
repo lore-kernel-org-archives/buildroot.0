@@ -1,35 +1,94 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 28 Dec 2016 18:32:14 -0200
-Subject: [Buildroot] [PATCH] configs/warp7: Select
-	BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
-Message-ID: <1482957134-21220-1-git-send-email-festevam@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 Dec 2016 23:18:05 +0100
+Subject: [Buildroot] [PATCH 1/2] riemann-c-client: new package
+Message-ID: <20161228221806.32321-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV allows the Broadcom wireless driver
-to be automatically loaded on boot.
+Riemann-c-client is a C client library for the Riemann monitoring system,
+providing a convenient and simple API, high test coverage and a copyleft
+license, along with API and ABI stability.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/warp7_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ package/Config.in                              |  1 +
+ package/riemann-c-client/Config.in             | 17 +++++++++++++++++
+ package/riemann-c-client/riemann-c-client.hash |  2 ++
+ package/riemann-c-client/riemann-c-client.mk   | 18 ++++++++++++++++++
+ 4 files changed, 38 insertions(+)
+ create mode 100644 package/riemann-c-client/Config.in
+ create mode 100644 package/riemann-c-client/riemann-c-client.hash
+ create mode 100644 package/riemann-c-client/riemann-c-client.mk
 
-diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-index ca7cd00..2d59626 100644
---- a/configs/warp7_defconfig
-+++ b/configs/warp7_defconfig
-@@ -31,6 +31,9 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_LINUX_FIRMWARE=y
- BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
- 
-+# For automatic firmware loading
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+diff --git a/package/Config.in b/package/Config.in
+index 18818fa..717b505 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1365,6 +1365,7 @@ endif
+ 	source "package/protobuf-c/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
++	source "package/riemann-c-client/Config.in"
+ 	source "package/shapelib/Config.in"
+ 	source "package/skalibs/Config.in"
+ 	source "package/sphinxbase/Config.in"
+diff --git a/package/riemann-c-client/Config.in b/package/riemann-c-client/Config.in
+new file mode 100644
+index 0000000..e9982b2
+--- /dev/null
++++ b/package/riemann-c-client/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_RIEMANN_C_CLIENT
++	bool "riemann-c-client"
++	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
++	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf-c
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf-c
++	select BR2_PACKAGE_PROTOBUF_C
++	help
++	  Riemann-c-client is a C client library for the Riemann
++	  monitoring system, providing a convenient and simple API,
++	  high test coverage and a copyleft license, along with API
++	  and ABI stability.
 +
- # wireless packages
- BR2_PACKAGE_WIRELESS_TOOLS=y
- BR2_PACKAGE_WPA_SUPPLICANT=y
++	  https://github.com/algernon/riemann-c-client
++
++comment "riemann-c-client needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+diff --git a/package/riemann-c-client/riemann-c-client.hash b/package/riemann-c-client/riemann-c-client.hash
+new file mode 100644
+index 0000000..0902881
+--- /dev/null
++++ b/package/riemann-c-client/riemann-c-client.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 4b18804f489834fa953f4af887290173c745b471a5993bb108a9142c867de457 riemann-c-client-1.9.1.tar.xz
+diff --git a/package/riemann-c-client/riemann-c-client.mk b/package/riemann-c-client/riemann-c-client.mk
+new file mode 100644
+index 0000000..027898b
+--- /dev/null
++++ b/package/riemann-c-client/riemann-c-client.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# riemann-c-client
++#
++################################################################################
++
++RIEMANN_C_CLIENT_VERSION = 1.9.1
++RIEMANN_C_CLIENT_SOURCE = riemann-c-client-$(RIEMANN_C_CLIENT_VERSION).tar.xz
++RIEMANN_C_CLIENT_SITE = https://github.com/algernon/riemann-c-client/releases/download/riemann-c-client-$(RIEMANN_C_CLIENT_VERSION)
++RIEMANN_C_CLIENT_LICENSE = LGPLv3+
++RIEMANN_C_CLIENT_LICENSE_FILES = LICENSE
++RIEMANN_C_CLIENT_INSTALL_STAGING = YES
++RIEMANN_C_CLIENT_DEPENDENCIES = \
++	host-pkgconf protobuf-c \
++	$(if $(BR2_PACKAGE_GNUTLS),gnutls) \
++	$(if $(BR2_PACKAGE_JSON_C),json-c)
++
++$(eval $(autotools-package))
 -- 
-2.7.4
+2.10.2
