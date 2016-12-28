@@ -1,35 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Dec 2016 11:19:08 +0100
-Subject: [Buildroot] [PATCH] fs/tar: make --no-recursion effective
-In-Reply-To: <20161228093220.kgnkh7r4eogp5wau@tarshish> (Baruch Siach's
- message of "Wed, 28 Dec 2016 11:32:21 +0200")
-References: <a5d19ac14d835abbc645fef67aad61ce48e247b9.1482860523.git.baruch@tkos.co.il>
- <87o9zwbe95.fsf@dell.be.48ers.dk>
- <20161228093220.kgnkh7r4eogp5wau@tarshish>
-Message-ID: <87bmvwbbkz.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Dec 2016 11:18:09 +0100
+Subject: [Buildroot] [git commit] cryptopp: add upstream security fix for
+	CVE-2016-9939
+Message-ID: <20161228103540.BC5DB81E38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=222808a4b678aca0da01cc96f543079f06613554
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes security issue (DoS) in Crypto++ ASN1 decoder:
 
- >> I got a bit confused by this, as the manual explicitly shows the -T -
- >> --no-recursion sequence:
- >> 
- >> https://www.gnu.org/software/tar/manual/html_section/tar_54.html
+https://github.com/weidai11/cryptopp/issues/346
 
- > That part of the tar manual looks wrong. The "Position-Sensitive Options"[1] 
- > section shows this example to illustrate the position sensitivity concept:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...sible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
- >   tar -cf a.tar --recursion /usr --no-recursion /var/*
-
- > [1] https://www.gnu.org/software/tar/manual/html_section/tar_22.html#SEC44
-
-Ahh, ok - Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
+new file mode 100644
+index 0000000..ea6ba7f
+--- /dev/null
++++ b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
+@@ -0,0 +1,69 @@
++From 3d9181d7bdd8e491f745dbc9e34bd20b6f6da069 Mon Sep 17 00:00:00 2001
++From: Gergely Nagy <ngg@tresorit.com>
++Date: Wed, 14 Dec 2016 13:19:01 +0100
++Subject: [PATCH] Fix possible DoS in ASN.1 decoders (CVE-2016-9939)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ asn.cpp | 10 ++++++++++
++ asn.h   |  2 ++
++ 2 files changed, 12 insertions(+)
++
++diff --git a/asn.cpp b/asn.cpp
++index 297ff01..2e923ef 100644
++--- a/asn.cpp
+++++ b/asn.cpp
++@@ -123,6 +123,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	str.New(bc);
++ 	if (bc != bt.Get(str, bc))
++@@ -139,6 +141,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, BufferedTransformation &
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	bt.TransferTo(str, bc);
++ 	return bc;
++@@ -161,6 +165,8 @@ size_t BERDecodeTextString(BufferedTransformation &bt, std::string &str, byte as
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	SecByteBlock temp(bc);
++ 	if (bc != bt.Get(temp, bc))
++@@ -188,6 +194,10 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
++ 	size_t bc;
++ 	if (!BERLengthDecode(bt, bc))
++ 		BERDecodeError();
+++	if (bc == 0)
+++		BERDecodeError();
+++	if (bc > bt.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	byte unused;
++ 	if (!bt.Get(unused))
++diff --git a/asn.h b/asn.h
++index ed9de52..33f0dd0 100644
++--- a/asn.h
+++++ b/asn.h
++@@ -498,6 +498,8 @@ void BERDecodeUnsigned(BufferedTransformation &in, T &w, byte asnTag = INTEGER,
++ 	bool definite = BERLengthDecode(in, bc);
++ 	if (!definite)
++ 		BERDecodeError();
+++	if (bc > in.MaxRetrievable())
+++		BERDecodeError();
++ 
++ 	SecByteBlock buf(bc);
++ 
++-- 
++2.10.2
++
