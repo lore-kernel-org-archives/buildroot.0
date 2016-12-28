@@ -1,43 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Dec 2016 11:18:18 +0100
-Subject: [Buildroot] [git commit] libsigrokdecode: bump to version 0.4.1
-Message-ID: <20161228103540.CAB7F7FDC0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Dec 2016 15:32:54 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-12-24
+In-Reply-To: <eaf4dc60-3bef-18e5-237c-1d31cbfaa912@armadeus.com>
+References: <20161225072953.0D89E20729@mail.free-electrons.com>
+ <eaf4dc60-3bef-18e5-237c-1d31cbfaa912@armadeus.com>
+Message-ID: <20161228153254.3f985085@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60d86c81ccdffb98ed460cbc728eeee4a9891a0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-For details, see:
-https://www.sigrok.org/blog/libsigrokdecode-041-released
+Adding Buildroot mailing list in Cc. You probably intended to do that,
+since you wrote to me in english and not french :)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsigrokdecode/libsigrokdecode.hash | 2 +-
- package/libsigrokdecode/libsigrokdecode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, 28 Dec 2016 15:04:21 +0100, Julien Boibessot wrote:
 
-diff --git a/package/libsigrokdecode/libsigrokdecode.hash b/package/libsigrokdecode/libsigrokdecode.hash
-index 3ac8a76..ccb2016 100644
---- a/package/libsigrokdecode/libsigrokdecode.hash
-+++ b/package/libsigrokdecode/libsigrokdecode.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	fd7e9d1b73245e844ead97a16d5321c766196f946c9b28a8646cab2e98ec3537	libsigrokdecode-0.4.0.tar.gz
-+sha256	065f70c10971173d86e03a8cf5534e600c7a622775113997d8061572135d4a95	libsigrokdecode-0.4.1.tar.gz
-diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
-index b8b3c59..7006b0c 100644
---- a/package/libsigrokdecode/libsigrokdecode.mk
-+++ b/package/libsigrokdecode/libsigrokdecode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSIGROKDECODE_VERSION = 0.4.0
-+LIBSIGROKDECODE_VERSION = 0.4.1
- LIBSIGROKDECODE_SITE = http://sigrok.org/download/source/libsigrokdecode
- LIBSIGROKDECODE_LICENSE = GPLv3+
- LIBSIGROKDECODE_LICENSE_FILES = COPYING
+> On 25/12/2016 08:29, Thomas Petazzoni wrote:
+> > Hello,
+> >
+> > This is the list of Buildroot build failures that occured on
+> > 2016-12-24, and for which you are a registered architecture developer
+> > or package developer. Please help us improving the quality of
+> > Buildroot by investigating those build failures and sending patches to
+> > fix them. Thanks!
+> >
+> > Build failures related to your packages:
+> >
+> >          arm |                   ltris-1.0.19 | http://autobuild.buildroot.net/results/d9ad2d0e91ebc232f42a5bfbfdc271e78c05592d
+> >  
+> 
+> seems like the "well known" (?) problem of DirectFB not linked against
+> libstdc++ in static build, we already discussed previously this year ?
+
+Yes. Someone needs to submit the patch fixing that :)
+
+I was going to propose to remove DirectFB, since the last commit on
+Github dates back from February 2014, and the website
+(directfb.org) which has been dead since at least 2015 is now
+cyber-squatted. However, it seems like a new website is up at
+directfb.net, which a news from November 2016. And it seems like the
+Github repo at https://github.com/deniskropp/DirectFB/commits/master
+contains some newer updates. Not sure why the upstream maintainer
+doesn't use https://github.com/DirectFB/directfb.
+
+But still, I wouldn't call that a really active upstream...
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
