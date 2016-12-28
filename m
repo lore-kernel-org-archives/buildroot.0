@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Dec 2016 09:18:13 +0100
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove perl-db-file
-In-Reply-To: <20161228033542.iwwvqiwmbjfk6hlj@tarshish> (Baruch Siach's
- message of "Wed, 28 Dec 2016 05:35:42 +0200")
-References: <20161227205712.8971-1-bernd.kuhls@t-online.de>
- <871swtc83j.fsf@dell.be.48ers.dk>
- <20161228033542.iwwvqiwmbjfk6hlj@tarshish>
-Message-ID: <87shp8bh6i.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Dec 2016 10:21:26 +0100
+Subject: [Buildroot] [PATCH] fs/tar: make --no-recursion effective
+In-Reply-To: <a5d19ac14d835abbc645fef67aad61ce48e247b9.1482860523.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 27 Dec 2016 19:42:03 +0200")
+References: <a5d19ac14d835abbc645fef67aad61ce48e247b9.1482860523.git.baruch@tkos.co.il>
+Message-ID: <87o9zwbe95.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +13,20 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hi Peter,
- > On Tue, Dec 27, 2016 at 11:36:48PM +0100, Peter Korsgaard wrote:
- >> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> 
- >> > Package perl-db-file was removed today:
- >> > https://git.buildroot.net/buildroot/commit/?id=8546ff31c58b2501a69e49bc0f27a4ffa1d2ae08
- >> 
- >> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- >> 
- >> Committed, thanks.
+ > The tar --no-recursion option is position sensitive. It only affects following
+ > file listing options. Move --no-recursion before the -T option to make it
+ > effective. This fixes duplication of entries in the generated rootfs.tar
+ > archive.
 
- > Not in master as of b3c6181de89ec (toolchain-external: bump CodeSourcery 
- > NIOSII to 2016.11).
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Sorry, I forgot to push. It is there now.
+I got a bit confused by this, as the manual explicitly shows the -T -
+--no-recursion sequence:
+
+https://www.gnu.org/software/tar/manual/html_section/tar_54.html
+
+But indeed, tar -tvf output/images/rootfs.tar | grep '/usr/$' had 2 hits
+before, and not after applying this patch - So committed, thanks!
 
 -- 
 Bye, Peter Korsgaard
