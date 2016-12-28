@@ -1,125 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Dec 2016 00:01:54 +0100
-Subject: [Buildroot] [git commit] cryptopp: fixup DOS newlines in
-	CVE-2016-9939 patch
-Message-ID: <20161228230300.F1B9480450@busybox.osuosl.org>
+Date: Thu, 29 Dec 2016 00:15:07 +0100
+Subject: [Buildroot] [PATCH 2/2] collectd: fix riemann write plugin
+	dependencies
+In-Reply-To: <20161228232135.2946638d@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 28 Dec 2016 23:21:35 +0100")
+References: <20161228221806.32321-1-peter@korsgaard.com>
+ <20161228221806.32321-2-peter@korsgaard.com>
+ <20161228232135.2946638d@free-electrons.com>
+Message-ID: <87lguzabno.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f57959147377e5ee13451a9d5fe6ba002aa20a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The patch did contain the correct newlines, but they got stripped by
-patchwork so now the patch no longer applies.
+ > Hello,
+ > On Wed, 28 Dec 2016 23:18:06 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...sible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch | 84 +++++++++++-----------
- 1 file changed, 42 insertions(+), 42 deletions(-)
+ >> -	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),libtool protobuf-c) \
+ >> +	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),libtool riemann-c-client) \
 
-diff --git a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
-index ea6ba7f..2d0f1d9 100644
---- a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
-+++ b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
-@@ -14,56 +14,56 @@ index 297ff01..2e923ef 100644
- --- a/asn.cpp
- +++ b/asn.cpp
- @@ -123,6 +123,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
-- 	size_t bc;
-- 	if (!BERLengthDecode(bt, bc))
-- 		BERDecodeError();
--+	if (bc > bt.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	str.New(bc);
-- 	if (bc != bt.Get(str, bc))
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	str.New(bc);
-+ 	if (bc != bt.Get(str, bc))
- @@ -139,6 +141,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, BufferedTransformation &
-- 	size_t bc;
-- 	if (!BERLengthDecode(bt, bc))
-- 		BERDecodeError();
--+	if (bc > bt.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	bt.TransferTo(str, bc);
-- 	return bc;
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	bt.TransferTo(str, bc);
-+ 	return bc;
- @@ -161,6 +165,8 @@ size_t BERDecodeTextString(BufferedTransformation &bt, std::string &str, byte as
-- 	size_t bc;
-- 	if (!BERLengthDecode(bt, bc))
-- 		BERDecodeError();
--+	if (bc > bt.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	SecByteBlock temp(bc);
-- 	if (bc != bt.Get(temp, bc))
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	SecByteBlock temp(bc);
-+ 	if (bc != bt.Get(temp, bc))
- @@ -188,6 +194,10 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
-- 	size_t bc;
-- 	if (!BERLengthDecode(bt, bc))
-- 		BERDecodeError();
--+	if (bc == 0)
--+		BERDecodeError();
--+	if (bc > bt.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	byte unused;
-- 	if (!bt.Get(unused))
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc == 0)
-++		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	byte unused;
-+ 	if (!bt.Get(unused))
- diff --git a/asn.h b/asn.h
- index ed9de52..33f0dd0 100644
- --- a/asn.h
- +++ b/asn.h
- @@ -498,6 +498,8 @@ void BERDecodeUnsigned(BufferedTransformation &in, T &w, byte asnTag = INTEGER,
-- 	bool definite = BERLengthDecode(in, bc);
-- 	if (!definite)
-- 		BERDecodeError();
--+	if (bc > in.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	SecByteBlock buf(bc);
-- 
-+ 	bool definite = BERLengthDecode(in, bc);
-+ 	if (!definite)
-+ 		BERDecodeError();
-++	if (bc > in.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	SecByteBlock buf(bc);
-+ 
- -- 
- 2.10.2
- 
+ > libtool is still needed ?
+
+Yes, it still contains an #include <ltdl.h> line at least:
+
+src/write_riemann_threshold.c:#include <ltdl.h>
+
+I haven't looked closer to see if that include is still really needed
+though.
+
+-- 
+Bye, Peter Korsgaard
