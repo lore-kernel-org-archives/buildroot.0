@@ -1,99 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Dec 2016 21:34:46 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] cryptopp: add upstream
-	security fix for CVE-2016-9939
-Message-ID: <20161229203458.7101B818DF@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 29 Dec 2016 21:37:33 +0100
+Subject: [Buildroot] [PATCH] efl: remove 'upower' ecore module.
+In-Reply-To: <76354a97-29d4-9e69-d36f-bc66e79d923c@gmail.com>
+References: <20161229145650.4013-1-barbieri@profusion.mobi>
+ <76354a97-29d4-9e69-d36f-bc66e79d923c@gmail.com>
+Message-ID: <35b6111f-576b-45d1-766c-2b8082306c37@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f8f5a7711a986f5f9c15dbca09c532e4ea10de0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+Le 29/12/2016 ? 17:20, Romain Naour a ?crit :
+> Hi Gustavo,
+> 
+> Le 29/12/2016 ? 15:56, Gustavo Sverzut Barbieri a ?crit :
+>> Ecore will reach 'upower' using D-Bus in order to detect if the system
+>> state changes. This is optional, but done by default and if D-Bus
+>> itself fails, then an error message will be presented.
+> 
+> What's the error message ?
+> I don't see any dbus message related to upower.
 
-Fixes security issue (DoS) in Crypto++ ASN1 decoder:
+Which efl version did you use ?
 
-https://github.com/weidai11/cryptopp/issues/346
+Some warning related to upower has been removed in efl 1.18 [1].
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 222808a4b678aca0da01cc96f543079f06613554)
----
- ...sible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+[1]
+https://git.enlightenment.org/core/efl.git/commit/?id=f54a2eb5703381f9e80604cdca84f91b72ae0090
 
-diff --git a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
-new file mode 100644
-index 0000000..ea6ba7f
---- /dev/null
-+++ b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
-@@ -0,0 +1,69 @@
-+From 3d9181d7bdd8e491f745dbc9e34bd20b6f6da069 Mon Sep 17 00:00:00 2001
-+From: Gergely Nagy <ngg@tresorit.com>
-+Date: Wed, 14 Dec 2016 13:19:01 +0100
-+Subject: [PATCH] Fix possible DoS in ASN.1 decoders (CVE-2016-9939)
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ asn.cpp | 10 ++++++++++
-+ asn.h   |  2 ++
-+ 2 files changed, 12 insertions(+)
-+
-+diff --git a/asn.cpp b/asn.cpp
-+index 297ff01..2e923ef 100644
-+--- a/asn.cpp
-++++ b/asn.cpp
-+@@ -123,6 +123,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	str.New(bc);
-+ 	if (bc != bt.Get(str, bc))
-+@@ -139,6 +141,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, BufferedTransformation &
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	bt.TransferTo(str, bc);
-+ 	return bc;
-+@@ -161,6 +165,8 @@ size_t BERDecodeTextString(BufferedTransformation &bt, std::string &str, byte as
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	SecByteBlock temp(bc);
-+ 	if (bc != bt.Get(temp, bc))
-+@@ -188,6 +194,10 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
-+ 	size_t bc;
-+ 	if (!BERLengthDecode(bt, bc))
-+ 		BERDecodeError();
-++	if (bc == 0)
-++		BERDecodeError();
-++	if (bc > bt.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	byte unused;
-+ 	if (!bt.Get(unused))
-+diff --git a/asn.h b/asn.h
-+index ed9de52..33f0dd0 100644
-+--- a/asn.h
-++++ b/asn.h
-+@@ -498,6 +498,8 @@ void BERDecodeUnsigned(BufferedTransformation &in, T &w, byte asnTag = INTEGER,
-+ 	bool definite = BERLengthDecode(in, bc);
-+ 	if (!definite)
-+ 		BERDecodeError();
-++	if (bc > in.MaxRetrievable())
-++		BERDecodeError();
-+ 
-+ 	SecByteBlock buf(bc);
-+ 
-+-- 
-+2.10.2
-+
+> 
+>>
+>> Since we do not ship upower target package, just remove that from
+>> target. Since it's useless for host, remove it as well.
+> 
+> The efl upower module is used by the enlightenment battery module.
+> It's started here but I'm not sure it's really working (100% Battery).
+> 
+> Also, the efl package install several build tools and files on the target.
+> It would be difficult to update all of these hooks between release.
+> I recommend to use a post-build script in this case.
+> 
+> I admit, I didn't noticed this module until now :p
+> 
+> Maybe it easier to package upower and add it to efl dependencies ?
+
+Can you try upower added with this patch ?
+
+http://patchwork.ozlabs.org/patch/709564/
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> Romain
+> 
