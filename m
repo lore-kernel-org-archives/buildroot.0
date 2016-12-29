@@ -1,42 +1,50 @@
 From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-Date: Thu, 29 Dec 2016 12:46:49 -0200
-Subject: [Buildroot] [PATCH] eudev: build with older kernels.
-Message-ID: <20161229144649.29850-1-barbieri@profusion.mobi>
+Date: Thu, 29 Dec 2016 12:56:50 -0200
+Subject: [Buildroot] [PATCH] efl: remove 'upower' ecore module.
+Message-ID: <20161229145650.4013-1-barbieri@profusion.mobi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add missing defines so eudev builds for older kernels such as 2.6
+Ecore will reach 'upower' using D-Bus in order to detect if the system
+state changes. This is optional, but done by default and if D-Bus
+itself fails, then an error message will be presented.
+
+Since we do not ship upower target package, just remove that from
+target. Since it's useless for host, remove it as well.
 
 Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
 ---
- package/eudev/0002-missing-defines-for-old-kernels.patch | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 package/eudev/0002-missing-defines-for-old-kernels.patch
+ package/efl/efl.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/eudev/0002-missing-defines-for-old-kernels.patch b/package/eudev/0002-missing-defines-for-old-kernels.patch
-new file mode 100644
-index 000000000..d34020f04
---- /dev/null
-+++ b/package/eudev/0002-missing-defines-for-old-kernels.patch
-@@ -0,0 +1,16 @@
-+--- a/src/udev/udev-builtin-input_id.c	2016-12-23 16:43:55.398985478 +0000
-++++ b/src/udev/udev-builtin-input_id.c	2016-12-23 16:48:40.907182701 +0000
-+@@ -33,6 +33,13 @@
-+ #include "udev.h"
-+ #include "util.h"
-+ 
-++#ifndef BTN_TRIGGER_HAPPY
-++#define BTN_TRIGGER_HAPPY 0x2c0
-++#endif
-++#ifndef INPUT_PROP_MAX
-++#define INPUT_PROP_MAX 0x1f
-++#endif
-++
-+ /* we must use this kernel-compatible implementation */
-+ #define BITS_PER_LONG (sizeof(unsigned long) * 8)
-+ #define NBITS(x) ((((x)-1)/BITS_PER_LONG)+1)
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 7a8e47f4c..f7c99a965 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -272,6 +272,11 @@ else
+ EFL_CONF_OPTS += --disable-librsvg
+ endif
+ 
++define EFL_HOOK_REMOVE_UPOWER
++	rm -fr $(TARGET_DIR)/usr/lib/ecore/system/upower
++endef
++EFL_POST_INSTALL_TARGET_HOOKS = EFL_HOOK_REMOVE_UPOWER
++
+ $(eval $(autotools-package))
+ 
+ ################################################################################
+@@ -352,4 +357,9 @@ else
+ HOST_EFL_CONF_OPTS += --disable-cxx-bindings
+ endif
+ 
++define HOST_EFL_HOOK_REMOVE_UPOWER
++	rm -fr $(HOST_DIR)/usr/lib/ecore/system/upower
++endef
++HOST_EFL_POST_INSTALL_HOOKS = HOST_EFL_HOOK_REMOVE_UPOWER
++
+ $(eval $(host-autotools-package))
 -- 
 2.11.0
