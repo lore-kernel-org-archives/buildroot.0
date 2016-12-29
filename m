@@ -1,73 +1,89 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 29 Dec 2016 17:20:10 +0100
-Subject: [Buildroot] [PATCH] efl: remove 'upower' ecore module.
-In-Reply-To: <20161229145650.4013-1-barbieri@profusion.mobi>
-References: <20161229145650.4013-1-barbieri@profusion.mobi>
-Message-ID: <76354a97-29d4-9e69-d36f-bc66e79d923c@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 29 Dec 2016 17:21:40 +0100
+Subject: [Buildroot] [PATCH] uclibc: add locale/iconv related bugfixes
+Message-ID: <20161229162140.GA16893@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+- do not remove iconv.h when UCLIBC_HAS_LOCALE enabled
+- select UCLIBC_HAS_LIBICONV when UCLIBC_HAS_LOCALE enabled
 
-Le 29/12/2016 ? 15:56, Gustavo Sverzut Barbieri a ?crit :
-> Ecore will reach 'upower' using D-Bus in order to detect if the system
-> state changes. This is optional, but done by default and if D-Bus
-> itself fails, then an error message will be presented.
+Fixes:
+   http://autobuild.buildroot.net/?reason=libglib2-2.50.2&step=250
 
-What's the error message ?
-I don't see any dbus message related to upower.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ ...ve-iconv.h-when-UCLIBC_HAS_LOCALE-is-not-.patch | 26 ++++++++++++++++++++++
+ package/uclibc/0003-locale-needs-libiconv.patch    | 25 +++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
+ create mode 100644 package/uclibc/0002-do-not-remove-iconv.h-when-UCLIBC_HAS_LOCALE-is-not-.patch
+ create mode 100644 package/uclibc/0003-locale-needs-libiconv.patch
 
-> 
-> Since we do not ship upower target package, just remove that from
-> target. Since it's useless for host, remove it as well.
-
-The efl upower module is used by the enlightenment battery module.
-It's started here but I'm not sure it's really working (100% Battery).
-
-Also, the efl package install several build tools and files on the target.
-It would be difficult to update all of these hooks between release.
-I recommend to use a post-build script in this case.
-
-I admit, I didn't noticed this module until now :p
-
-Maybe it easier to package upower and add it to efl dependencies ?
-
-Best regards,
-Romain
-
-> 
-> Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-> ---
->  package/efl/efl.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-> index 7a8e47f4c..f7c99a965 100644
-> --- a/package/efl/efl.mk
-> +++ b/package/efl/efl.mk
-> @@ -272,6 +272,11 @@ else
->  EFL_CONF_OPTS += --disable-librsvg
->  endif
->  
-> +define EFL_HOOK_REMOVE_UPOWER
-> +	rm -fr $(TARGET_DIR)/usr/lib/ecore/system/upower
-> +endef
-> +EFL_POST_INSTALL_TARGET_HOOKS = EFL_HOOK_REMOVE_UPOWER
-> +
->  $(eval $(autotools-package))
->  
->  ################################################################################
-> @@ -352,4 +357,9 @@ else
->  HOST_EFL_CONF_OPTS += --disable-cxx-bindings
->  endif
->  
-> +define HOST_EFL_HOOK_REMOVE_UPOWER
-> +	rm -fr $(HOST_DIR)/usr/lib/ecore/system/upower
-> +endef
-> +HOST_EFL_POST_INSTALL_HOOKS = HOST_EFL_HOOK_REMOVE_UPOWER
-> +
->  $(eval $(host-autotools-package))
-> 
+diff --git a/package/uclibc/0002-do-not-remove-iconv.h-when-UCLIBC_HAS_LOCALE-is-not-.patch b/package/uclibc/0002-do-not-remove-iconv.h-when-UCLIBC_HAS_LOCALE-is-not-.patch
+new file mode 100644
+index 0000000..4567720
+--- /dev/null
++++ b/package/uclibc/0002-do-not-remove-iconv.h-when-UCLIBC_HAS_LOCALE-is-not-.patch
+@@ -0,0 +1,26 @@
++From 0d80d5a235af1a12b606dea6380dc91f755546fe Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Wed, 28 Dec 2016 19:08:15 +0100
++Subject: [PATCH] do not remove iconv.h when UCLIBC_HAS_LOCALE is not set
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index 9acf76c..c8afe1c 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -282,7 +282,7 @@ HEADERS_RM-$(UCLIBC_HAS_IPV6)                += netinet/ip6.h netinet/icmp6.h
++ HEADERS_RM-$(UCLIBC_HAS_BACKTRACE)           += execinfo.h
++ HEADERS_RM-$(UCLIBC_HAS_LIBICONV)            += iconv.h
++ HEADERS_RM-$(UCLIBC_HAS_LIBINTL)             += intl.h
++-HEADERS_RM-$(UCLIBC_HAS_LOCALE)              += iconv.h bits/uClibc_ctype.h
+++HEADERS_RM-$(UCLIBC_HAS_LOCALE)              += bits/uClibc_ctype.h
++ HEADERS_RM-$(UCLIBC_HAS_PTY)                 += pty.h
++ HEADERS_RM-$(UCLIBC_HAS_REALTIME)            += mqueue.h bits/mqueue.h sched.h \
++ 	bits/sched.h \
++-- 
++2.1.4
++
+diff --git a/package/uclibc/0003-locale-needs-libiconv.patch b/package/uclibc/0003-locale-needs-libiconv.patch
+new file mode 100644
+index 0000000..e244955
+--- /dev/null
++++ b/package/uclibc/0003-locale-needs-libiconv.patch
+@@ -0,0 +1,25 @@
++From a2c56ee4fbff7af9128d630299d81fb46582673d Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Thu, 29 Dec 2016 13:38:09 +0100
++Subject: [PATCH] locale: needs libiconv
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ extra/Configs/Config.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/extra/Configs/Config.in b/extra/Configs/Config.in
++index 6b0985e..b02054c 100644
++--- a/extra/Configs/Config.in
+++++ b/extra/Configs/Config.in
++@@ -1442,6 +1442,7 @@ config UCLIBC_HAS_LOCALE
++ 	bool "Locale Support"
++ 	select UCLIBC_HAS_WCHAR
++ 	select UCLIBC_HAS_CTYPE_TABLES
+++	select UCLIBC_HAS_LIBICONV
++ 	help
++ 	  uClibc now has full ANSI/ISO C99 locale support (except for
++ 	  wcsftime() and collating items in regex).  Be aware that enabling
++-- 
++2.1.4
++
+-- 
+2.1.4
