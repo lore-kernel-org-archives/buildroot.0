@@ -1,98 +1,80 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 29 Dec 2016 10:50:59 +0000
-Subject: [Buildroot] [Bug 9526] Embedded NPM fails to start with "no such
- file or directory" error
-In-Reply-To: <bug-9526-163@https.bugs.busybox.net/>
-References: <bug-9526-163@https.bugs.busybox.net/>
-Message-ID: <bug-9526-163-i8GsjCFwQv@https.bugs.busybox.net/>
+Date: Thu, 29 Dec 2016 10:59:05 +0000
+Subject: [Buildroot] [Bug 9531] New: NPM fails to build embedded modules
+Message-ID: <bug-9531-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9526
+https://bugs.busybox.net/show_bug.cgi?id=9531
 
---- Comment #1 from bilge at scriptfusion.com ---
-For completeness, here is the relevant portion of the log.
+            Bug ID: 9531
+           Summary: NPM fails to build embedded modules
+           Product: buildroot
+           Version: 2016.11
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: bilge at scriptfusion.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-$ docker run --rm "$PRODUCT" npm
+In this example I try to build ghost at 0.11.3. Its first dependency is
+sqlite3 at 3.1.8, which fails immediately. I was able to build Ghost 0.5.10 two
+years ago, which also had the sqlite dependency, and have run my blog on it
+ever since (https://github.com/Docker-nano/Ghost). It should be possible to
+make it work again.
 
-panic: standard_init_linux.go:175: exec user process caused "no such file or
-directory" [recovered]
+> sqlite3 at 3.1.8 install /root/buildroot-2016.11/output/target/usr/lib/node_modules/ghost/node_modules/sqlite3
+> node-pre-gyp install --fallback-to-build
 
-        panic: standard_init_linux.go:175: exec user process caused "no such
-file or directory"
+sh: 1: node-pre-gyp: Permission denied
+npm info lifecycle sqlite3 at 3.1.8~install: Failed to exec install script
+/root/buildroot-2016.11/output/target/usr/lib
+`-- (empty)
 
-goroutine 1 [running, locked to thread]:
+npm ERR! Linux 3.13.0-68-generic
+npm ERR! argv "/root/buildroot-2016.11/output/host/usr/bin/node"
+"/root/buildroot-2016.11/output/host/usr/bin/npm" "install" "-d" "-g"
+"--build-from-source" "ghost at 0.11.3"
+npm ERR! node v6.7.0
+npm ERR! npm  v3.10.3
+npm ERR! file sh
+npm ERR! code ELIFECYCLE
+npm ERR! errno ENOENT
+npm ERR! syscall spawn
 
-panic(0x7ddea0, 0xc820120b60)
+npm ERR! sqlite3 at 3.1.8 install: `node-pre-gyp install --fallback-to-build`
+npm ERR! spawn ENOENT
+npm ERR!
+npm ERR! Failed at the sqlite3 at 3.1.8 install script 'node-pre-gyp install
+--fallback-to-build'.
+npm ERR! Make sure you have the latest version of node.js and npm installed.
+npm ERR! If you do, this is most likely a problem with the sqlite3 package,
+npm ERR! not with npm itself.
+npm ERR! Tell the author that this fails on your system:
+npm ERR!     node-pre-gyp install --fallback-to-build
+npm ERR! You can get information on how to open an issue for this project with:
+npm ERR!     npm bugs sqlite3
+npm ERR! Or if that isn't available, you can get their info via:
+npm ERR!     npm owner ls sqlite3
+npm ERR! There is likely additional logging output above.
 
-        /usr/local/go/src/runtime/panic.go:481 +0x3e6
-
-github.com/urfave/cli.HandleAction.func1(0xc8200f32e8)
-
-       
-/go/src/github.com/opencontainers/runc/Godeps/_workspace/src/github.com/urfave/cli/app.go:478
-+0x38e
-
-panic(0x7ddea0, 0xc820120b60)
-
-        /usr/local/go/src/runtime/panic.go:443 +0x4e9
-
-github.com/opencontainers/runc/libcontainer.(*LinuxFactory).StartInitialization.func1(0xc8200f2bf8,
-0xc82001a088, 0xc8200f2d08)
-
-       
-/go/src/github.com/opencontainers/runc/Godeps/_workspace/src/github.com/opencontainers/runc/libcontainer/factory_linux.go:259
-+0x136
-
-github.com/opencontainers/runc/libcontainer.(*LinuxFactory).StartInitialization(0xc820058820,
-0x7f969f965470, 0xc820120b60)
-
-       
-/go/src/github.com/opencontainers/runc/Godeps/_workspace/src/github.com/opencontainers/runc/libcontainer/factory_linux.go:277
-+0x5b1
-
-main.glob.func8(0xc820076780, 0x0, 0x0)
-
-        /go/src/github.com/opencontainers/runc/main_unix.go:26 +0x68
-
-reflect.Value.call(0x7448a0, 0x8f0bd0, 0x13, 0x839998, 0x4, 0xc8200f3268, 0x1,
-0x1, 0x0, 0x0, ...)
-
-        /usr/local/go/src/reflect/value.go:435 +0x120d
-
-reflect.Value.Call(0x7448a0, 0x8f0bd0, 0x13, 0xc8200f3268, 0x1, 0x1, 0x0, 0x0,
-0x0)
-
-        /usr/local/go/src/reflect/value.go:303 +0xb1
-
-github.com/urfave/cli.HandleAction(0x7448a0, 0x8f0bd0, 0xc820076780, 0x0, 0x0)
-
-       
-/go/src/github.com/opencontainers/runc/Godeps/_workspace/src/github.com/urfave/cli/app.go:487
-+0x2ee
-
-github.com/urfave/cli.Command.Run(0x83c828, 0x4, 0x0, 0x0, 0x0, 0x0, 0x0,
-0x8d0180, 0x51, 0x0, ...)
-
-       
-/go/src/github.com/opencontainers/runc/Godeps/_workspace/src/github.com/urfave/cli/command.go:191
-+0xfec
-
-github.com/urfave/cli.(*App).Run(0xc820001680, 0xc82000a100, 0x2, 0x2, 0x0,
-0x0)
-
-       
-/go/src/github.com/opencontainers/runc/Godeps/_workspace/src/github.com/urfave/cli/app.go:240
-+0xaa4
-
-main.main()
-
-        /go/src/github.com/opencontainers/runc/main.go:137 +0xe24
-
-The command "docker run --rm "$PRODUCT" npm" exited with 2.
+npm ERR! Please include the following file with any support request:
+npm ERR!     /root/buildroot-2016.11/npm-debug.log
+npm ERR! code 1
+package/pkg-generic.mk:297: recipe for target
+'/root/buildroot-2016.11/output/build/nodejs-6.7.0/.stamp_target_installed'
+failed
+make: ***
+[/root/buildroot-2016.11/output/build/nodejs-6.7.0/.stamp_target_installed]
+Error 1
 
 -- 
 You are receiving this mail because:
