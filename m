@@ -1,31 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Dec 2016 21:54:33 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] Update for 2016.11.1
-Message-ID: <20161229205543.CFC978028C@busybox.osuosl.org>
+Date: Thu, 29 Dec 2016 22:16:03 +0100
+Subject: [Buildroot] Buildroot 2016.11.1 released
+Message-ID: <87h95ma12k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0690cc883c4d4051e8cd18ab14130c0f59740eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.net).
 
-diff --git a/Makefile b/Makefile
-index fbf217a..97f1bdd 100644
---- a/Makefile
-+++ b/Makefile
-@@ -83,7 +83,7 @@ else # umask / $(CURDIR) / $(O)
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2016.11
-+export BR2_VERSION := 2016.11.1
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2016.11.1 is released - Go download it at:
+
+http://buildroot.net/downloads/buildroot-2016.11.1.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2016.11.1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Buildroot 2016.11.1 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2016.11 release.
+
+- Fixes for compilation/runtime issues in docker-engine, dovecot, vim
+  and xorg-server.
+
+- Security fixes for apache, cryptopp, docker-engine, dovecot, exim,
+  gdk-pixbuf, libcurl, libupnp, links, monit, nodejs, openssh, php,
+  python, python-bottle, samba4, squid and wireshark.
+
+- A fix for how the legacy BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR is handled
+  when older defconfig files using this option are used.
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2016.11..
+    12  Peter Korsgaard
+     8  Gustavo Zacarias
+     3  Bernd Kuhls
+     1  Danomi Manchego
+     1  Fabien Parent
+     1  J?rg Krause
+     1  Patrick Devlin
+     1  Thomas Petazzoni
+     1  Vicente Olivert Riera
+
+-- 
+Bye, Peter Korsgaard
