@@ -1,42 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Dec 2016 21:34:53 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] cryptopp: fixup DOS
-	newlines in CVE-2016-9939 patch
-Message-ID: <20161229203458.80BF07FE13@busybox.osuosl.org>
+Date: Thu, 29 Dec 2016 21:34:46 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] cryptopp: add upstream
+	security fix for CVE-2016-9939
+Message-ID: <20161229203458.7101B818DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65d7b45bdd929f118894172b4094d3b53384f549
+commit: https://git.buildroot.net/buildroot/commit/?id=0f8f5a7711a986f5f9c15dbca09c532e4ea10de0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-The patch did contain the correct newlines, but they got stripped by
-patchwork so now the patch no longer applies.
+Fixes security issue (DoS) in Crypto++ ASN1 decoder:
+
+https://github.com/weidai11/cryptopp/issues/346
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9f57959147377e5ee13451a9d5fe6ba002aa20a5)
+(cherry picked from commit 222808a4b678aca0da01cc96f543079f06613554)
 ---
- ...sible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch | 84 +++++++++++-----------
- 1 file changed, 42 insertions(+), 42 deletions(-)
+ ...sible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
 diff --git a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
-index ea6ba7f..2d0f1d9 100644
---- a/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
+new file mode 100644
+index 0000000..ea6ba7f
+--- /dev/null
 +++ b/package/cryptopp/0001-Fix-possible-DoS-in-ASN.1-decoders-CVE-2016-9939.patch
-@@ -14,56 +14,56 @@ index 297ff01..2e923ef 100644
- --- a/asn.cpp
- +++ b/asn.cpp
- @@ -123,6 +123,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
-- 	size_t bc;
-- 	if (!BERLengthDecode(bt, bc))
-- 		BERDecodeError();
--+	if (bc > bt.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	str.New(bc);
-- 	if (bc != bt.Get(str, bc))
+@@ -0,0 +1,69 @@
++From 3d9181d7bdd8e491f745dbc9e34bd20b6f6da069 Mon Sep 17 00:00:00 2001
++From: Gergely Nagy <ngg@tresorit.com>
++Date: Wed, 14 Dec 2016 13:19:01 +0100
++Subject: [PATCH] Fix possible DoS in ASN.1 decoders (CVE-2016-9939)
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ asn.cpp | 10 ++++++++++
++ asn.h   |  2 ++
++ 2 files changed, 12 insertions(+)
++
++diff --git a/asn.cpp b/asn.cpp
++index 297ff01..2e923ef 100644
++--- a/asn.cpp
+++++ b/asn.cpp
++@@ -123,6 +123,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
 + 	size_t bc;
 + 	if (!BERLengthDecode(bt, bc))
 + 		BERDecodeError();
@@ -45,15 +52,7 @@ index ea6ba7f..2d0f1d9 100644
 + 
 + 	str.New(bc);
 + 	if (bc != bt.Get(str, bc))
- @@ -139,6 +141,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, BufferedTransformation &
-- 	size_t bc;
-- 	if (!BERLengthDecode(bt, bc))
-- 		BERDecodeError();
--+	if (bc > bt.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	bt.TransferTo(str, bc);
-- 	return bc;
++@@ -139,6 +141,8 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, BufferedTransformation &
 + 	size_t bc;
 + 	if (!BERLengthDecode(bt, bc))
 + 		BERDecodeError();
@@ -62,15 +61,7 @@ index ea6ba7f..2d0f1d9 100644
 + 
 + 	bt.TransferTo(str, bc);
 + 	return bc;
- @@ -161,6 +165,8 @@ size_t BERDecodeTextString(BufferedTransformation &bt, std::string &str, byte as
-- 	size_t bc;
-- 	if (!BERLengthDecode(bt, bc))
-- 		BERDecodeError();
--+	if (bc > bt.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	SecByteBlock temp(bc);
-- 	if (bc != bt.Get(temp, bc))
++@@ -161,6 +165,8 @@ size_t BERDecodeTextString(BufferedTransformation &bt, std::string &str, byte as
 + 	size_t bc;
 + 	if (!BERLengthDecode(bt, bc))
 + 		BERDecodeError();
@@ -79,17 +70,7 @@ index ea6ba7f..2d0f1d9 100644
 + 
 + 	SecByteBlock temp(bc);
 + 	if (bc != bt.Get(temp, bc))
- @@ -188,6 +194,10 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
-- 	size_t bc;
-- 	if (!BERLengthDecode(bt, bc))
-- 		BERDecodeError();
--+	if (bc == 0)
--+		BERDecodeError();
--+	if (bc > bt.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	byte unused;
-- 	if (!bt.Get(unused))
++@@ -188,6 +194,10 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
 + 	size_t bc;
 + 	if (!BERLengthDecode(bt, bc))
 + 		BERDecodeError();
@@ -100,19 +81,11 @@ index ea6ba7f..2d0f1d9 100644
 + 
 + 	byte unused;
 + 	if (!bt.Get(unused))
- diff --git a/asn.h b/asn.h
- index ed9de52..33f0dd0 100644
- --- a/asn.h
- +++ b/asn.h
- @@ -498,6 +498,8 @@ void BERDecodeUnsigned(BufferedTransformation &in, T &w, byte asnTag = INTEGER,
-- 	bool definite = BERLengthDecode(in, bc);
-- 	if (!definite)
-- 		BERDecodeError();
--+	if (bc > in.MaxRetrievable())
--+		BERDecodeError();
-- 
-- 	SecByteBlock buf(bc);
-- 
++diff --git a/asn.h b/asn.h
++index ed9de52..33f0dd0 100644
++--- a/asn.h
+++++ b/asn.h
++@@ -498,6 +498,8 @@ void BERDecodeUnsigned(BufferedTransformation &in, T &w, byte asnTag = INTEGER,
 + 	bool definite = BERLengthDecode(in, bc);
 + 	if (!definite)
 + 		BERDecodeError();
@@ -121,6 +94,6 @@ index ea6ba7f..2d0f1d9 100644
 + 
 + 	SecByteBlock buf(bc);
 + 
- -- 
- 2.10.2
- 
++-- 
++2.10.2
++
