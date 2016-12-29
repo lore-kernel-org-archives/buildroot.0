@@ -1,64 +1,71 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 29 Dec 2016 21:16:56 +0200
-Subject: [Buildroot] [PATCH] wireshark: fix build with musl
-Message-ID: <05c8bbf9134c0689d002e446c144eaadc99ccfec.1483039016.git.baruch@tkos.co.il>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 29 Dec 2016 21:23:40 +0100
+Subject: [Buildroot] [PATCH 3/3] package/busybox: add patch to fix
+	dependency for IFUPDOWN_UDHCPC_CMD_OPTIONS
+In-Reply-To: <20161229202340.22374-1-joerg.krause@embedded.rocks>
+References: <20161229202340.22374-1-joerg.krause@embedded.rocks>
+Message-ID: <20161229202340.22374-3-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch adding missing sys/time.h header.
+Upstream commit a8c696bf09d8151323f6e99348c4bc8989f829c8 makes ifup and
+ifdown individually selectable, but forgets to update the dependency to
+IFUPDOWN_UDHCPC_CMD_OPTIONS, so it is not selectable anymore.
 
-Fixes:
-http://autobuild.buildroot.net/results/cd8/cd883b40503a6f4d3035e09a383db2d5a21162ad/
-http://autobuild.buildroot.net/results/1ae/1ae34debe7e95eab33a895ecdf04c0ddf96cf4ab/
-http://autobuild.buildroot.net/results/4af/4afe968e698f62c6bdbec35e53d35c361c5e852b/
+Add a patch which fixes the dependency by checking for IFUP or IFDOWN,
+instead of the obsolete IFUPDOWN.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Upstream status: Pending
+http://lists.busybox.net/pipermail/busybox/2016-December/085034.html
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...androiddump-add-missing-sys-time.h-header.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/wireshark/0002-androiddump-add-missing-sys-time.h-header.patch
+ ...ependency-for-IFUPDOWN_UDHCPC_CMD_OPTIONS.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/busybox/0004-Fix-dependency-for-IFUPDOWN_UDHCPC_CMD_OPTIONS.patch
 
-diff --git a/package/wireshark/0002-androiddump-add-missing-sys-time.h-header.patch b/package/wireshark/0002-androiddump-add-missing-sys-time.h-header.patch
+diff --git a/package/busybox/0004-Fix-dependency-for-IFUPDOWN_UDHCPC_CMD_OPTIONS.patch b/package/busybox/0004-Fix-dependency-for-IFUPDOWN_UDHCPC_CMD_OPTIONS.patch
 new file mode 100644
-index 000000000000..ae1198018a72
+index 000000000..35e4e45c6
 --- /dev/null
-+++ b/package/wireshark/0002-androiddump-add-missing-sys-time.h-header.patch
-@@ -0,0 +1,35 @@
-+From 1ab938e762ee6ebd3211c22ef25a7575e37791c4 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 29 Dec 2016 20:16:53 +0200
-+Subject: [PATCH] androiddump: add missing sys/time.h header
++++ b/package/busybox/0004-Fix-dependency-for-IFUPDOWN_UDHCPC_CMD_OPTIONS.patch
+@@ -0,0 +1,36 @@
++From 9c0b06bfbb05c40ba31bad8aa469aa2330620e9e Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Thu, 29 Dec 2016 18:41:21 +0100
++Subject: [PATCH] Fix dependency for IFUPDOWN_UDHCPC_CMD_OPTIONS
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+struct timeval requires sys/time.h. Fixes the following musl libc build error:
++Commit a8c696bf09d8151323f6e99348c4bc8989f829c8 makes ifup and ifdown
++individually selectable, but forgets to update the dependency to
++IFUPDOWN_UDHCPC_CMD_OPTIONS, so it is not selectable anymore.
 +
-+androiddump.c: In function 'useSndTimeout':
-+androiddump.c:262:18: error: variable 'socket_timeout' has initializer but incomplete type
-+     const struct timeval socket_timeout = {
-+                  ^
++This patch fixes the dependency by checking for IFUP or IFDOWN, instead
++of the obsolete IFUPDOWN.
 +
-+Change-Id: I52e204f32a012aabea2e54877e564576c072fe08
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 +---
-+Upstream status: https://code.wireshark.org/review/19460
-+---
-+ extcap/androiddump.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ networking/Config.src | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/extcap/androiddump.c b/extcap/androiddump.c
-+index 8287c4bb1a76..fab7c10e05cc 100644
-+--- a/extcap/androiddump.c
-++++ b/extcap/androiddump.c
-+@@ -30,6 +30,7 @@
-+ #include <string.h>
-+ #include <errno.h>
-+ #include <time.h>
-++#include <sys/time.h>
-+ 
-+ #ifdef HAVE_NETINET_IN_H
-+ #    include <netinet/in.h>
++diff --git a/networking/Config.src b/networking/Config.src
++index 527bdd15d..a3d895b5f 100644
++--- a/networking/Config.src
+++++ b/networking/Config.src
++@@ -53,7 +53,7 @@ source networking/udhcp/Config.in
++ config IFUPDOWN_UDHCPC_CMD_OPTIONS
++ 	string "ifup udhcpc command line options"
++ 	default "-R -n"
++-	depends on IFUPDOWN && UDHCPC
+++	depends on (IFUP || IFDOWN) && UDHCPC
++ 	help
++ 	  Command line options to pass to udhcpc from ifup.
++ 	  Intended to alter options not available in /etc/network/interfaces.
 +-- 
 +2.11.0
 +
