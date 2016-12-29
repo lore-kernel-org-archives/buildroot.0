@@ -1,58 +1,40 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 29 Dec 2016 21:37:33 +0100
-Subject: [Buildroot] [PATCH] efl: remove 'upower' ecore module.
-In-Reply-To: <76354a97-29d4-9e69-d36f-bc66e79d923c@gmail.com>
-References: <20161229145650.4013-1-barbieri@profusion.mobi>
- <76354a97-29d4-9e69-d36f-bc66e79d923c@gmail.com>
-Message-ID: <35b6111f-576b-45d1-766c-2b8082306c37@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 29 Dec 2016 21:41:23 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] CHANGES: update for
+	2016.11.1
+Message-ID: <20161229205543.BCC0481EA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 29/12/2016 ? 17:20, Romain Naour a ?crit :
-> Hi Gustavo,
-> 
-> Le 29/12/2016 ? 15:56, Gustavo Sverzut Barbieri a ?crit :
->> Ecore will reach 'upower' using D-Bus in order to detect if the system
->> state changes. This is optional, but done by default and if D-Bus
->> itself fails, then an error message will be presented.
-> 
-> What's the error message ?
-> I don't see any dbus message related to upower.
+commit: https://git.buildroot.net/buildroot/commit/?id=bf8fdcc2fa06c18cf4c4381a1d80f4b89699ec82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Which efl version did you use ?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Some warning related to upower has been removed in efl 1.18 [1].
-
-[1]
-https://git.enlightenment.org/core/efl.git/commit/?id=f54a2eb5703381f9e80604cdca84f91b72ae0090
-
-> 
->>
->> Since we do not ship upower target package, just remove that from
->> target. Since it's useless for host, remove it as well.
-> 
-> The efl upower module is used by the enlightenment battery module.
-> It's started here but I'm not sure it's really working (100% Battery).
-> 
-> Also, the efl package install several build tools and files on the target.
-> It would be difficult to update all of these hooks between release.
-> I recommend to use a post-build script in this case.
-> 
-> I admit, I didn't noticed this module until now :p
-> 
-> Maybe it easier to package upower and add it to efl dependencies ?
-
-Can you try upower added with this patch ?
-
-http://patchwork.ozlabs.org/patch/709564/
-
-Best regards,
-Romain
-
-> 
-> Best regards,
-> Romain
-> 
+diff --git a/CHANGES b/CHANGES
+index d52bcdd..8dee2f5 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,16 @@
++2016.11.1, Released December 29th, 2016
++
++	Important / security related fixes.
++
++	Updated/fixed packages: apache, cryptopp, docker-engine,
++	dovecot, exim, gdk-pixbuf, libcurl, libupnp, links, monit,
++	nodejs, openssh, php, python, python-bottle, samba4, squid,
++	uboot, vim, wireshark, xorg-server uboot
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9466: VIM_REMOVE_DOCS removes rgb.txt
++
+ 2016.11, Released November 30th, 2016
+ 
+ 	Minor fixes.
