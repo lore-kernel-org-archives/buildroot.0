@@ -1,50 +1,135 @@
-From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-Date: Thu, 29 Dec 2016 12:56:50 -0200
-Subject: [Buildroot] [PATCH] efl: remove 'upower' ecore module.
-Message-ID: <20161229145650.4013-1-barbieri@profusion.mobi>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Thu, 29 Dec 2016 12:44:52 -0300
+Subject: [Buildroot] [PATCH v2] rtl8723bs: new package
+Message-ID: <20161229154452.5815-1-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ecore will reach 'upower' using D-Bus in order to detect if the system
-state changes. This is optional, but done by default and if D-Bus
-itself fails, then an error message will be presented.
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+--
+Changes from v1:
+  * Create the firmware dir
+  * Use $(sep) in the install command
 
-Since we do not ship upower target package, just remove that from
-target. Since it's useless for host, remove it as well.
+ package/Config.in                                  |  1 +
+ .../0001-rtl8723bs-add-debug-level-modparam.patch  | 41 ++++++++++++++++++++++
+ package/rtl8723bs/Config.in                        | 10 ++++++
+ package/rtl8723bs/rtl8723bs.mk                     | 27 ++++++++++++++
+ 4 files changed, 79 insertions(+)
+ create mode 100644 package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch
+ create mode 100644 package/rtl8723bs/Config.in
+ create mode 100644 package/rtl8723bs/rtl8723bs.mk
 
-Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
----
- package/efl/efl.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 7a8e47f4c..f7c99a965 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -272,6 +272,11 @@ else
- EFL_CONF_OPTS += --disable-librsvg
- endif
- 
-+define EFL_HOOK_REMOVE_UPOWER
-+	rm -fr $(TARGET_DIR)/usr/lib/ecore/system/upower
-+endef
-+EFL_POST_INSTALL_TARGET_HOOKS = EFL_HOOK_REMOVE_UPOWER
+diff --git a/package/Config.in b/package/Config.in
+index f2103b5f5142..4ef939327000 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -446,6 +446,7 @@ endmenu
+ 	source "package/rpi-userland/Config.in"
+ 	source "package/rs485conf/Config.in"
+ 	source "package/rtl8188eu/Config.in"
++	source "package/rtl8723bs/Config.in"
+ 	source "package/rtl8821au/Config.in"
+ 	source "package/sane-backends/Config.in"
+ 	source "package/sdparm/Config.in"
+diff --git a/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch b/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch
+new file mode 100644
+index 000000000000..0443c1f99527
+--- /dev/null
++++ b/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch
+@@ -0,0 +1,41 @@
++From 9f70428f506ac9d5af325004c01c59c62669d7eb Mon Sep 17 00:00:00 2001
++From: Jason Abele <jason@jasonabeleconsulting.com>
++Date: Sat, 15 Aug 2015 18:20:54 -0700
++Subject: [PATCH] rtl8723bs: add debug level modparam
 +
- $(eval $(autotools-package))
- 
- ################################################################################
-@@ -352,4 +357,9 @@ else
- HOST_EFL_CONF_OPTS += --disable-cxx-bindings
- endif
- 
-+define HOST_EFL_HOOK_REMOVE_UPOWER
-+	rm -fr $(HOST_DIR)/usr/lib/ecore/system/upower
-+endef
-+HOST_EFL_POST_INSTALL_HOOKS = HOST_EFL_HOOK_REMOVE_UPOWER
++For ease of controlling debug printk verbosity, add a module parameter
++which sets debug level at module load.
 +
- $(eval $(host-autotools-package))
++Signed-off-by: Jason Abele <jason@jasonabeleconsulting.com>
++[Fixed to apply on current version]
++Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
++---
++ os_dep/os_intfs.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/os_dep/os_intfs.c b/os_dep/os_intfs.c
++index b30c2a0..eeb8946 100644
++--- a/os_dep/os_intfs.c
+++++ b/os_dep/os_intfs.c
++@@ -231,6 +231,10 @@ module_param(rtw_decrypt_phy_file, int, 0644);
++ MODULE_PARM_DESC(rtw_decrypt_phy_file,"Enable Decrypt PHY File");
++ #endif
++
+++int rtw_debug_level = _drv_err_;
+++module_param(rtw_debug_level, int, 0644);
+++MODULE_PARM_DESC(rtw_debug_level,"Set Driver Debug Verbosity");
+++
++ int _netdev_open(struct net_device *pnetdev);
++ int netdev_open (struct net_device *pnetdev);
++ static int netdev_close (struct net_device *pnetdev);
++@@ -347,6 +351,7 @@ static uint loadparam(struct adapter *padapter, _nic_hdl pnetdev)
++ 	registry_par->qos_opt_enable = (u8)rtw_qos_opt_enable;
++
++ 	registry_par->hiq_filter = (u8)rtw_hiq_filter;
+++	GlobalDebugLevel = rtw_debug_level;
++ 	return status;
++ }
++
++--
++2.8.3
++
+diff --git a/package/rtl8723bs/Config.in b/package/rtl8723bs/Config.in
+new file mode 100644
+index 000000000000..3d5dea40b586
+--- /dev/null
++++ b/package/rtl8723bs/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_RTL8723BS
++	bool "rtl8723bs"
++	depends on BR2_LINUX_KERNEL
++	help
++	  rtl8723bs wifi driver
++
++	  https://github.com/hadess/rtl8723bs
++
++comment "rtl8723bs needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/rtl8723bs/rtl8723bs.mk b/package/rtl8723bs/rtl8723bs.mk
+new file mode 100644
+index 000000000000..65203f034955
+--- /dev/null
++++ b/package/rtl8723bs/rtl8723bs.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# rtl8723bs
++#
++################################################################################
++
++RTL8723BS_VERSION = 11ab92d8ccd71c80f0102828366b14ef6b676fb2
++RTL8723BS_SITE = $(call github,hadess,rtl8723bs,$(RTL8723BS_VERSION))
++RTL8723BS_LICENSE = GPLv2, proprietary (*.bin firmware blobs)
++
++RTL8723BS_MODULE_MAKE_OPTS = \
++	CONFIG_RTL8723BS=m \
++	KVER=$(LINUX_VERSION_PROBED) \
++	KSRC=$(LINUX_DIR)
++
++RTL8723BS_BINS = rtl8723bs_ap_wowlan.bin rtl8723bs_wowlan.bin \
++		 rtl8723bs_bt.bin rtl8723bs_nic.bin
++
++define RTL8723BS_INSTALL_FIRMWARE
++	mkdir -p $(TARGET_DIR)/lib/firmware/rtlwifi
++	$(foreach bin, $(RTL8723BS_BINS), $(INSTALL) -D -m 644 $(@D)/$(bin) \
++				$(TARGET_DIR)/lib/firmware/rtlwifi/$(bin)$(sep))
++endef
++RTL8723BS_POST_INSTALL_TARGET_HOOKS += RTL8723BS_INSTALL_FIRMWARE
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
 2.11.0
