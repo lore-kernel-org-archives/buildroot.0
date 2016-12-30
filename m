@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Dec 2016 21:13:04 +0100
-Subject: [Buildroot] [PATCH] libgcrypt: bump to version 1.7.5
-In-Reply-To: <20161230132820.8946-1-gustavo@zacarias.com.ar> (Gustavo
- Zacarias's message of "Fri, 30 Dec 2016 10:28:20 -0300")
-References: <20161230132820.8946-1-gustavo@zacarias.com.ar>
-Message-ID: <878tqx9nvz.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Dec 2016 21:13:09 +0100
+Subject: [Buildroot] [PATCH] whois: bump to version 5.2.14
+In-Reply-To: <20161230132724.8899-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Fri, 30 Dec 2016 10:27:24 -0300")
+References: <20161230132724.8899-1-gustavo@zacarias.com.ar>
+Message-ID: <874m1l9nvu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
