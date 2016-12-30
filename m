@@ -1,21 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Dec 2016 22:17:04 +0100
-Subject: [Buildroot] [PATCH] configs/warp7: Add floating point support
-In-Reply-To: <1482973039-13599-1-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Wed, 28 Dec 2016 22:57:19 -0200")
-References: <1482973039-13599-1-git-send-email-festevam@gmail.com>
-Message-ID: <87bmvt86cv.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 30 Dec 2016 21:17:09 +0000
+Subject: [Buildroot] [Bug 9526] Embedded NPM fails to start with "no such
+ file or directory" error
+In-Reply-To: <bug-9526-163@https.bugs.busybox.net/>
+References: <bug-9526-163@https.bugs.busybox.net/>
+Message-ID: <bug-9526-163-YzHCY9w5p0@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=9526
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+--- Comment #16 from bilge at scriptfusion.com ---
+Peter, that's exactly correct. There is nothing on the system other than what
+Buildroot builds, and as you can see from the configuration:
 
-Committed, thanks.
+# BR2_PACKAGE_BUSYBOX is not set
+
+There is no `env` on the target system unless Buildroot builds it, which it
+currently does not.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
