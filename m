@@ -1,24 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 30 Dec 2016 21:13:48 +0000
-Subject: [Buildroot] [Bug 9526] Embedded NPM fails to start with "no such
- file or directory" error
-In-Reply-To: <bug-9526-163@https.bugs.busybox.net/>
-References: <bug-9526-163@https.bugs.busybox.net/>
-Message-ID: <bug-9526-163-o2hnUVNHV5@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Dec 2016 22:16:17 +0100
+Subject: [Buildroot] [PATCH 1/3] configs/imx6ulpico: Bump to U-Boot
+	2016.11
+In-Reply-To: <1483015415-8998-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Thu, 29 Dec 2016 10:43:33 -0200")
+References: <1483015415-8998-1-git-send-email-festevam@gmail.com>
+Message-ID: <87o9zt86e6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9526
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
---- Comment #15 from Peter Korsgaard <jacmet@uclibc.org> ---
-(In reply to bilge from comment #14)
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Ehh, I'm getting confused here. Are you building on a system without
-/usr/bin/env? (E.G. in some kind of minimal container?)
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
