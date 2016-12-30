@@ -1,76 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Dec 2016 22:08:01 +0100
-Subject: [Buildroot] [git commit] eudev: fix build with <2.6.34 kernels
-Message-ID: <20161230210920.05D778186B@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 30 Dec 2016 21:13:06 +0000
+Subject: [Buildroot] [Bug 9551] Coreutils fails to build target
+ src/src_libsinglebin_pinky_a-pinky.o
+In-Reply-To: <bug-9551-163@https.bugs.busybox.net/>
+References: <bug-9551-163@https.bugs.busybox.net/>
+Message-ID: <bug-9551-163-WwtjTgmWwU@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c72dc476e9521fc6791c70cf979d39d983f6afa9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=9551
 
-Add missing defines so eudev builds for older kernels, not having
-BTN_TRIGGER_HAPPY (2.6.34) or INPUT_PROP_MAX (2.6.38).
+--- Comment #2 from bilge at scriptfusion.com ---
+Hi Yann,
 
-Patch submitted upstream: https://github.com/gentoo/eudev/pull/139
+Thanks, I believe your analysis is exactly correct: I am missing utmpx, but not
+because I deliberately disabled it; that feature is disabled by default in
+uClibc 1.0.9. However, I'll be sure to enable it now!
 
-[Peter: clarify versions]
-Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-missing-defines-for-old-kernels.patch     | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+Thanks,
+Bilge.
 
-diff --git a/package/eudev/0002-missing-defines-for-old-kernels.patch b/package/eudev/0002-missing-defines-for-old-kernels.patch
-new file mode 100644
-index 0000000..6966b07
---- /dev/null
-+++ b/package/eudev/0002-missing-defines-for-old-kernels.patch
-@@ -0,0 +1,44 @@
-+From c0f63850ad29ec978d070a08b816dc2bfca337e3 Mon Sep 17 00:00:00 2001
-+From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-+Date: Fri, 30 Dec 2016 11:28:41 -0200
-+Subject: [PATCH] udev-builtin-input_id.c: add missing kernel header defines.
-+
-+Add missing defines so eudev builds for older kernels such as 2.6
-+
-+Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-+---
-+ src/shared/missing.h             | 8 ++++++++
-+ src/udev/udev-builtin-input_id.c | 1 +
-+ 2 files changed, 9 insertions(+)
-+
-+diff --git a/src/shared/missing.h b/src/shared/missing.h
-+index 5ad599795..bebbb42be 100644
-+--- a/src/shared/missing.h
-++++ b/src/shared/missing.h
-+@@ -171,3 +171,11 @@ static inline int name_to_handle_at(int fd, const char *name, struct file_handle
-+     (char *)memcpy(__new, __old, __len); \
-+   })
-+ #endif
-++
-++#ifndef BTN_TRIGGER_HAPPY
-++#define BTN_TRIGGER_HAPPY 0x2c0
-++#endif
-++
-++#ifndef INPUT_PROP_MAX
-++#define INPUT_PROP_MAX 0x1f
-++#endif
-+diff --git a/src/udev/udev-builtin-input_id.c b/src/udev/udev-builtin-input_id.c
-+index b14190e42..ca545be5d 100644
-+--- a/src/udev/udev-builtin-input_id.c
-++++ b/src/udev/udev-builtin-input_id.c
-+@@ -32,6 +32,7 @@
-+ 
-+ #include "udev.h"
-+ #include "util.h"
-++#include "missing.h"
-+ 
-+ /* we must use this kernel-compatible implementation */
-+ #define BITS_PER_LONG (sizeof(unsigned long) * 8)
-+-- 
-+2.11.0
-+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
