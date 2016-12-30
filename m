@@ -1,32 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Dec 2016 22:15:07 +0100
-Subject: [Buildroot] [git commit] configs/imx6ulpico: Bump to U-Boot 2016.11
-Message-ID: <20161230211734.A665D81EC4@busybox.osuosl.org>
+Date: Fri, 30 Dec 2016 22:17:50 +0100
+Subject: [Buildroot] [PATCH] wireshark: fix build with musl
+In-Reply-To: <05c8bbf9134c0689d002e446c144eaadc99ccfec.1483039016.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 29 Dec 2016 21:16:56 +0200")
+References: <05c8bbf9134c0689d002e446c144eaadc99ccfec.1483039016.git.baruch@tkos.co.il>
+Message-ID: <877f6h86bl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=446416d4ab1317feb6968d7152f950027d70959f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/imx6ulpico_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Add a patch adding missing sys/time.h header.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/cd8/cd883b40503a6f4d3035e09a383db2d5a21162ad/
+ > http://autobuild.buildroot.net/results/1ae/1ae34debe7e95eab33a895ecdf04c0ddf96cf4ab/
+ > http://autobuild.buildroot.net/results/4af/4afe968e698f62c6bdbec35e53d35c361c5e852b/
 
-diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
-index 662b9ab..60de7d7 100644
---- a/configs/imx6ulpico_defconfig
-+++ b/configs/imx6ulpico_defconfig
-@@ -33,7 +33,7 @@ BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="pico-imx6ul"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # required tools to create the eMMC image
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
