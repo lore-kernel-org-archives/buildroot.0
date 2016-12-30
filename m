@@ -1,60 +1,160 @@
 From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-Date: Fri, 30 Dec 2016 11:36:55 -0200
-Subject: [Buildroot] [PATCH 1/4] eudev: build with older kernels.
-In-Reply-To: <20161230132108.23805-1-barbieri@profusion.mobi>
-References: <53d19a79-a06e-df52-ae4f-1bc0decb7e0c@gmail.com>
- <20161230132108.23805-1-barbieri@profusion.mobi>
-Message-ID: <CAPdpN3ABJAe1AZH50yt4tMvneJ-tuHxCDfQrE5nr1ewzC0gFuA@mail.gmail.com>
+Date: Fri, 30 Dec 2016 11:40:17 -0200
+Subject: [Buildroot] [PATCH] package/upower: new package
+In-Reply-To: <20161229202907.12217-1-romain.naour@gmail.com>
+References: <20161229202907.12217-1-romain.naour@gmail.com>
+Message-ID: <CAPdpN3C9Pq8uF5GQxshw2xSe0MmZ925OgqCFORF2_D7JJfHFbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-damn, ignore the 1/4 of the subject... I have other 3 pending patches
-and forgot to disable numbers, those others will be submitted later.
-
-On Fri, Dec 30, 2016 at 11:21 AM, Gustavo Sverzut Barbieri
-<barbieri@profusion.mobi> wrote:
-> Add missing defines so eudev builds for older kernels such as 2.6
+On Thu, Dec 29, 2016 at 6:29 PM, Romain Naour <romain.naour@gmail.com> wrote:
+> Backport an upstream patch.
 >
-> Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
 > ---
->  .../0002-missing-defines-for-old-kernels.patch     | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 package/eudev/0002-missing-defines-for-old-kernels.patch
+>  package/Config.in                                  |  1 +
+>  .../0001-daemon-fix-get_critical_action.patch      | 34 ++++++++++++++++++++++
+>  package/upower/Config.in                           | 26 +++++++++++++++++
+>  package/upower/upower.hash                         |  2 ++
+>  package/upower/upower.mk                           | 25 ++++++++++++++++
+>  5 files changed, 88 insertions(+)
+>  create mode 100644 package/upower/0001-daemon-fix-get_critical_action.patch
+>  create mode 100644 package/upower/Config.in
+>  create mode 100644 package/upower/upower.hash
+>  create mode 100644 package/upower/upower.mk
 >
-> diff --git a/package/eudev/0002-missing-defines-for-old-kernels.patch b/package/eudev/0002-missing-defines-for-old-kernels.patch
+> diff --git a/package/Config.in b/package/Config.in
+> index 18818fa..da9715c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -474,6 +474,7 @@ endmenu
+>         source "package/ubus/Config.in"
+>         source "package/udev/Config.in"
+>         source "package/udisks/Config.in"
+> +       source "package/upower/Config.in"
+>         source "package/usb_modeswitch/Config.in"
+>         source "package/usb_modeswitch_data/Config.in"
+>         source "package/usbmount/Config.in"
+> diff --git a/package/upower/0001-daemon-fix-get_critical_action.patch b/package/upower/0001-daemon-fix-get_critical_action.patch
 > new file mode 100644
-> index 000000000..f2a3eff57
+> index 0000000..02fc55c
 > --- /dev/null
-> +++ b/package/eudev/0002-missing-defines-for-old-kernels.patch
-> @@ -0,0 +1,22 @@
-> +build with older kernels.
+> +++ b/package/upower/0001-daemon-fix-get_critical_action.patch
+> @@ -0,0 +1,34 @@
+> +From 28cee8e2845b094488c337c4ecfa84ada0b6be60 Mon Sep 17 00:00:00 2001
+> +From: Martin Pitt <martin.pitt@ubuntu.com>
+> +Date: Tue, 23 Feb 2016 09:51:07 +0100
+> +Subject: [PATCH] daemon: fix get_critical_action()
 > +
-> +Add missing defines so eudev builds for older kernels such as 2.6
+> +Fix copy&paste error from e7e9156f that called the wrong _complete_ function
+> +for up_daemon_get_critical_action().
 > +
-> +Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+> +https://bugs.freedesktop.org/show_bug.cgi?id=94262
 > +
-> +--- a/src/udev/udev-builtin-input_id.c 2016-12-23 16:43:55.398985478 +0000
-> ++++ b/src/udev/udev-builtin-input_id.c 2016-12-23 16:48:40.907182701 +0000
-> +@@ -33,6 +33,13 @@
-> + #include "udev.h"
-> + #include "util.h"
+> +[rebase on 0.99.4]
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Reviewed-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+
+> +---
+> + src/up-daemon.c | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
 > +
-> ++#ifndef BTN_TRIGGER_HAPPY
-> ++#define BTN_TRIGGER_HAPPY 0x2c0
-> ++#endif
-> ++#ifndef INPUT_PROP_MAX
-> ++#define INPUT_PROP_MAX 0x1f
-> ++#endif
-> ++
-> + /* we must use this kernel-compatible implementation */
-> + #define BITS_PER_LONG (sizeof(unsigned long) * 8)
-> + #define NBITS(x) ((((x)-1)/BITS_PER_LONG)+1)
+> +diff --git a/src/up-daemon.c b/src/up-daemon.c
+> +index be14cbe..e95f904 100644
+> +--- a/src/up-daemon.c
+> ++++ b/src/up-daemon.c
+> +@@ -435,8 +435,8 @@ up_daemon_get_critical_action (UpExportedDaemon *skeleton,
+> +                              GDBusMethodInvocation *invocation,
+> +                              UpDaemon *daemon)
+> + {
+> +-      up_exported_daemon_complete_get_display_device (skeleton, invocation,
+> +-                                                      up_backend_get_critical_action (daemon->priv->backend));
+> ++      up_exported_daemon_complete_get_critical_action (skeleton, invocation,
+> ++                                                       up_backend_get_critical_action (daemon->priv->backend));
+> +       return TRUE;
+> + }
+> +
+> +--
+> +2.9.3
+> +
+> diff --git a/package/upower/Config.in b/package/upower/Config.in
+> new file mode 100644
+> index 0000000..8d9e84e
+> --- /dev/null
+> +++ b/package/upower/Config.in
+> @@ -0,0 +1,26 @@
+> +config BR2_PACKAGE_UPOWER
+> +       bool "upower"
+> +       depends on BR2_PACKAGE_HAS_UDEV
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libgudev, libusb
+> +       depends on BR2_USE_MMU # libgudev
+> +       depends on BR2_USE_WCHAR # libgudev
+> +       select BR2_PACKAGE_LIBGUDEV
+> +       select BR2_PACKAGE_LIBUSB
+> +       help
+> +         UPower is an abstraction for enumerating power devices, listening
+> +         to device events and querying history and statistics. Any
+> +         application or service on the system can access the
+> +         org.freedesktop.UPower service via the system message bus.
+> +
+> +         Note: upowerd require CONFIG_TIMER_STATS enabled in the Linux
+> +         kernel.
+> +
+> +         https://upower.freedesktop.org/
+> +
+> +comment "upower needs udev /dev management"
+> +       depends on BR2_USE_MMU
+> +       depends on !BR2_PACKAGE_HAS_UDEV
+> +
+> +comment "upower needs a toolchain w/ threads, wchar"
+> +       depends on BR2_USE_MMU
+> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/upower/upower.hash b/package/upower/upower.hash
+> new file mode 100644
+> index 0000000..0df67b4
+> --- /dev/null
+> +++ b/package/upower/upower.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 9ca325a6ccef505529b268ebbbd9becd0ce65a65f6ac7ee31e2e5b17648037b0  upower-0.99.4.tar.xz
+> diff --git a/package/upower/upower.mk b/package/upower/upower.mk
+> new file mode 100644
+> index 0000000..471eb41
+> --- /dev/null
+> +++ b/package/upower/upower.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# upower
+> +#
+> +################################################################################
+> +
+> +UPOWER_VERSION = 0.99.4
+> +UPOWER_SOURCE = upower-$(UPOWER_VERSION).tar.xz
+> +UPOWER_SITE = https://upower.freedesktop.org/releases
+> +UPOWER_LICENSE = GPLv2+
+> +UPOWER_LICENSE_FILES = COPYING
+> +
+> +# libupower-glib.so
+> +UPOWER_INSTALL_STAGING = YES
+> +
+> +UPOWER_DEPENDENCIES = \
+> +       host-intltool \
+> +       host-pkgconf \
+> +       libgudev \
+> +       libusb \
+> +       udev
+> +
+> +UPOWER_CONF_OPTS = --disable-man-pages --disable-tests
+> +
+> +$(eval $(autotools-package))
 > --
-> 2.11.0
+> 2.9.3
 >
 
 
