@@ -1,51 +1,152 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 30 Dec 2016 14:42:34 +0000
-Subject: [Buildroot] [Bug 9541] New: Platform drivers autoloading from info
- in device tree does not work
-Message-ID: <bug-9541-163@https.bugs.busybox.net/>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Fri, 30 Dec 2016 11:38:01 -0300
+Subject: [Buildroot] [PATCH v3] rtl8723bs: new package
+Message-ID: <20161230143801.3761-1-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9541
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+--
+Changes from v2:
+  * Add package to DEVELOPERS
+  * The firmware dir doesn't need to be created! Drop the mkdir command.
+  * Use a new line instead of $(sep).
+Changes from v1:
+  * Create the firmware dir
+  * Use $(sep) in the install command
 
-            Bug ID: 9541
-           Summary: Platform drivers autoloading from info in device tree
-                    does not work
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: a.synytsyn at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-rtl8723bs-add-debug-level-modparam.patch  | 41 ++++++++++++++++++++++
+ package/rtl8723bs/Config.in                        | 10 ++++++
+ package/rtl8723bs/rtl8723bs.mk                     | 27 ++++++++++++++
+ 5 files changed, 80 insertions(+)
+ create mode 100644 package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch
+ create mode 100644 package/rtl8723bs/Config.in
+ create mode 100644 package/rtl8723bs/rtl8723bs.mk
 
-Hello everyone! What is going on with autoloading modules for platform devices
-from device tree? I've build image for raspberry pi, added device tree overlay
-for enc28j60. I've checked: device tree node with this device exists in
-/proc/device-tree/soc/spi at 7e204000. But lsmod does not shows that enc28j60.ko
-is not loaded. In contrast of, raspbian distro successfully managed with this -
-module loaded successfully.
-Also, I've read this thread:
-http://lists.busybox.net/pipermail/buildroot/2016-December/178779.html. As I
-understand, command
-
-find /sys/ -name modalias -print0 | xargs -0 sort -u -z | xargs -0
-modprobe -abq
-
-does not work.
-
-Regards,
-
-Artem Synytsyn
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index abddf9df4120..3b8ef9ef1a9c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -462,6 +462,7 @@ F:	package/jimtcl/
+ F:	package/mimic/
+ F:	package/nodm/
+ F:	package/openbox/
++F:	package/rtl8723bs/
+ F:	package/supertuxkart/
+ 
+ N:	Fabio Estevam <festevam@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index f2103b5f5142..4ef939327000 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -446,6 +446,7 @@ endmenu
+ 	source "package/rpi-userland/Config.in"
+ 	source "package/rs485conf/Config.in"
+ 	source "package/rtl8188eu/Config.in"
++	source "package/rtl8723bs/Config.in"
+ 	source "package/rtl8821au/Config.in"
+ 	source "package/sane-backends/Config.in"
+ 	source "package/sdparm/Config.in"
+diff --git a/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch b/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch
+new file mode 100644
+index 000000000000..0443c1f99527
+--- /dev/null
++++ b/package/rtl8723bs/0001-rtl8723bs-add-debug-level-modparam.patch
+@@ -0,0 +1,41 @@
++From 9f70428f506ac9d5af325004c01c59c62669d7eb Mon Sep 17 00:00:00 2001
++From: Jason Abele <jason@jasonabeleconsulting.com>
++Date: Sat, 15 Aug 2015 18:20:54 -0700
++Subject: [PATCH] rtl8723bs: add debug level modparam
++
++For ease of controlling debug printk verbosity, add a module parameter
++which sets debug level at module load.
++
++Signed-off-by: Jason Abele <jason@jasonabeleconsulting.com>
++[Fixed to apply on current version]
++Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
++---
++ os_dep/os_intfs.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/os_dep/os_intfs.c b/os_dep/os_intfs.c
++index b30c2a0..eeb8946 100644
++--- a/os_dep/os_intfs.c
+++++ b/os_dep/os_intfs.c
++@@ -231,6 +231,10 @@ module_param(rtw_decrypt_phy_file, int, 0644);
++ MODULE_PARM_DESC(rtw_decrypt_phy_file,"Enable Decrypt PHY File");
++ #endif
++
+++int rtw_debug_level = _drv_err_;
+++module_param(rtw_debug_level, int, 0644);
+++MODULE_PARM_DESC(rtw_debug_level,"Set Driver Debug Verbosity");
+++
++ int _netdev_open(struct net_device *pnetdev);
++ int netdev_open (struct net_device *pnetdev);
++ static int netdev_close (struct net_device *pnetdev);
++@@ -347,6 +351,7 @@ static uint loadparam(struct adapter *padapter, _nic_hdl pnetdev)
++ 	registry_par->qos_opt_enable = (u8)rtw_qos_opt_enable;
++
++ 	registry_par->hiq_filter = (u8)rtw_hiq_filter;
+++	GlobalDebugLevel = rtw_debug_level;
++ 	return status;
++ }
++
++--
++2.8.3
++
+diff --git a/package/rtl8723bs/Config.in b/package/rtl8723bs/Config.in
+new file mode 100644
+index 000000000000..3d5dea40b586
+--- /dev/null
++++ b/package/rtl8723bs/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_RTL8723BS
++	bool "rtl8723bs"
++	depends on BR2_LINUX_KERNEL
++	help
++	  rtl8723bs wifi driver
++
++	  https://github.com/hadess/rtl8723bs
++
++comment "rtl8723bs needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/rtl8723bs/rtl8723bs.mk b/package/rtl8723bs/rtl8723bs.mk
+new file mode 100644
+index 000000000000..00a04226e768
+--- /dev/null
++++ b/package/rtl8723bs/rtl8723bs.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# rtl8723bs
++#
++################################################################################
++
++RTL8723BS_VERSION = 11ab92d8ccd71c80f0102828366b14ef6b676fb2
++RTL8723BS_SITE = $(call github,hadess,rtl8723bs,$(RTL8723BS_VERSION))
++RTL8723BS_LICENSE = GPLv2, proprietary (*.bin firmware blobs)
++
++RTL8723BS_MODULE_MAKE_OPTS = \
++	CONFIG_RTL8723BS=m \
++	KVER=$(LINUX_VERSION_PROBED) \
++	KSRC=$(LINUX_DIR)
++
++RTL8723BS_BINS = rtl8723bs_ap_wowlan.bin rtl8723bs_wowlan.bin \
++		 rtl8723bs_bt.bin rtl8723bs_nic.bin
++
++define RTL8723BS_INSTALL_FIRMWARE
++	$(foreach bin, $(RTL8723BS_BINS), \
++		$(INSTALL) -D -m 644 $(@D)/$(bin) $(TARGET_DIR)/lib/firmware/rtlwifi/$(bin)
++	)
++endef
++RTL8723BS_POST_INSTALL_TARGET_HOOKS += RTL8723BS_INSTALL_FIRMWARE
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
