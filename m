@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Dec 2016 11:29:40 +0100
-Subject: [Buildroot] [PATCH 39/52] package/asterisk: add optional netsnmp
-	dependency
+Date: Fri, 30 Dec 2016 11:29:43 +0100
+Subject: [Buildroot] [PATCH 42/52] package/libpjsip: add option to enable
+	G.722 codec
 In-Reply-To: <cover.1483093662.git.yann.morin.1998@free.fr>
 References: <cover.1483093662.git.yann.morin.1998@free.fr>
-Message-ID: <6d759fe2e669b23a25e873f7aa34f183e08c9a74.1483093662.git.yann.morin.1998@free.fr>
+Message-ID: <940f0b916fdd9a1e590f663fd239d07b7eca9c19.1483093662.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,46 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/asterisk/asterisk.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/libpjsip/Config.in   | 3 +++
+ package/libpjsip/libpjsip.mk | 5 ++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index aff6ffc..a2ca5a8 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -54,7 +54,6 @@ ASTERISK_CONF_OPTS += \
- 	--without-mysqlclient \
- 	--without-nbs \
- 	--without-neon29 \
--	--without-netsnmp \
- 	--without-newt \
- 	--without-openr2 \
- 	--without-osptk \
-@@ -157,6 +156,13 @@ else
- ASTERISK_CONF_OPTS += --without-neon
+diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
+index 1c9d2ce..903dd1d 100644
+--- a/package/libpjsip/Config.in
++++ b/package/libpjsip/Config.in
+@@ -15,6 +15,9 @@ if BR2_PACKAGE_LIBPJSIP
+ config BR2_PACKAGE_LIBPJSIP_CODEC_G711
+ 	bool "G.711 codec"
+ 
++config BR2_PACKAGE_LIBPJSIP_CODEC_G722
++	bool "G.722 codec"
++
+ config BR2_PACKAGE_LIBPJSIP_CODEC_GSM
+     bool "GSM codec"
+     depends on !BR2_STATIC_LIBS # libgsm
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index dd279d3..a7d66f5 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -39,7 +39,6 @@ LIBPJSIP_CONF_OPTS = \
+ 	--disable-small-filter \
+ 	--disable-large-filter \
+ 	--disable-l16-codec \
+-	--disable-g722-codec \
+ 	--disable-libsamplerate \
+ 	--disable-sdl \
+ 	--disable-ffmpeg \
+@@ -72,6 +71,10 @@ ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_G711),y)
+ LIBPJSIP_CONF_OPTS += --disable-g711-codec
  endif
  
-+ifeq ($(BR2_PACKAGE_NETSNMP),y)
-+ASTERISK_DEPENDENCIES += netsnmp
-+ASTERISK_CONF_OPTS += --with-netsnmp
-+else
-+ASTERISK_CONF_OPTS += --without-netsnmp
++ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_G722),y)
++LIBPJSIP_CONF_OPTS += --disable-g722-codec
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBOGG),y)
- ASTERISK_DEPENDENCIES += libogg
- ASTERISK_CONF_OPTS += --with-ogg
+ ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_GSM),y)
+ LIBPJSIP_DEPENDENCIES += libgsm
+ LIBPJSIP_CONF_OPTS += --with-external-gsm
 -- 
 2.7.4
