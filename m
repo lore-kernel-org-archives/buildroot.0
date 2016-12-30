@@ -1,59 +1,68 @@
 From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-Date: Fri, 30 Dec 2016 12:56:13 -0200
-Subject: [Buildroot] [PATCH] eudev: build with older kernels.
-In-Reply-To: <CAPdpN3DNDbmKk2JA98PK42eQ24wxHZgsmkK_NoG=JjsXSYxSWg@mail.gmail.com>
-References: <20161229144649.29850-1-barbieri@profusion.mobi>
- <53d19a79-a06e-df52-ae4f-1bc0decb7e0c@gmail.com>
- <CAPdpN3Bvppz53OvvXygtLC=4amXL7V54WqO0QjCZgbtCj-pa=A@mail.gmail.com>
- <d63de13a-18e1-1f5a-4dba-33e55d879ef3@gmail.com>
- <CAPdpN3DNDbmKk2JA98PK42eQ24wxHZgsmkK_NoG=JjsXSYxSWg@mail.gmail.com>
-Message-ID: <CAPdpN3AqMidYkSkAdjUygBzkXfVMELex3wjtsgyxqwiQdrr3zQ@mail.gmail.com>
+Date: Fri, 30 Dec 2016 12:51:04 -0200
+Subject: [Buildroot] [PATCH] efl: optional 'upower' ecore system module.
+In-Reply-To: <CAPdpN3BnRBvciT2GjvVDWa5gvWXFNyVxkA9b1X1VOrE2-hBPrg@mail.gmail.com>
+References: <CAPdpN3BnRBvciT2GjvVDWa5gvWXFNyVxkA9b1X1VOrE2-hBPrg@mail.gmail.com>
+Message-ID: <20161230145104.20804-1-barbieri@profusion.mobi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-they suggested to add to src/shared/missing.h, that I did and indeed
-looks better.
+Ecore will reach 'upower' using D-Bus system bus in order to detect if
+the system state changes and let applications know about the power
+state such as low battery or AC power in order to optimize their power
+consumption.
 
-I'll send a new patch with that as well.
+For host this is not needed and would not work, since output/host DBus
+declares its own output/host/var/run/dbus/system_bus_socket, which has
+no dbus-daemon and thus no services in it.
 
-On Fri, Dec 30, 2016 at 11:34 AM, Gustavo Sverzut Barbieri
-<barbieri@profusion.mobi> wrote:
-> On Thu, Dec 29, 2016 at 2:04 PM, Romain Naour <romain.naour@gmail.com> wrote:
->> Le 29/12/2016 ? 17:01, Gustavo Sverzut Barbieri a ?crit :
->>> On Thu, Dec 29, 2016 at 1:51 PM, Romain Naour <romain.naour@gmail.com> wrote:
->>>> Hi Gustavo,
->>>>
->>>> Le 29/12/2016 ? 15:46, Gustavo Sverzut Barbieri a ?crit :
->>>>> Add missing defines so eudev builds for older kernels such as 2.6
->>>>
->>>> Can you summit this patch to eudev upstream ?
->>>
->>> I will try, but not sure they bother with ancient 2.6 kernels like the
->>> one I need :-D
->>
->> Well, if it's just two defines...
->
-> done https://github.com/gentoo/eudev/pull/139
->
-> if you want to track
->
-> --
-> Gustavo Sverzut Barbieri
-> http://profusion.mobi embedded systems
-> --------------------------------------
-> MSN, GTalk, FaceTime: barbieri at gmail.com
-> Skype: gsbarbieri
-> Mobile: +55 (16) 99354-9890
+For target it's optional and only installed if BR2_PACKAGE_UPOWER=y,
+otherwise it prints error messages about missing upower service.
 
+Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+---
+ package/efl/efl.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 7a8e47f4c..2fe140a30 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -272,6 +272,18 @@ else
+ EFL_CONF_OPTS += --disable-librsvg
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UPOWER),)
++# upower ecore system module is only useful if upower
++# dbus service is available.
++# It's not essential, only used to notify applications
++# of power state, such as low battery or AC power, so
++# they can adapt their power consumption.
++define EFL_HOOK_REMOVE_UPOWER
++	rm -fr $(TARGET_DIR)/usr/lib/ecore/system/upower
++endef
++EFL_POST_INSTALL_TARGET_HOOKS = EFL_HOOK_REMOVE_UPOWER
++endif
++
+ $(eval $(autotools-package))
+ 
+ ################################################################################
+@@ -352,4 +364,13 @@ else
+ HOST_EFL_CONF_OPTS += --disable-cxx-bindings
+ endif
+ 
++# Always disable upower system module from host as it's
++# not useful and would try to use the output/host/var
++# system bus which is non-existent and does not contain
++# any upower service in it.
++define HOST_EFL_HOOK_REMOVE_UPOWER
++	rm -fr $(HOST_DIR)/usr/lib/ecore/system/upower
++endef
++HOST_EFL_POST_INSTALL_HOOKS = HOST_EFL_HOOK_REMOVE_UPOWER
++
+ $(eval $(host-autotools-package))
 -- 
-Gustavo Sverzut Barbieri
-http://profusion.mobi embedded systems
---------------------------------------
-MSN, GTalk, FaceTime: barbieri at gmail.com
-Skype: gsbarbieri
-Mobile: +55 (16) 99354-9890
+2.11.0
