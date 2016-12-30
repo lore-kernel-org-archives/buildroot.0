@@ -1,19 +1,18 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Dec 2016 11:29:50 +0100
-Subject: [Buildroot] [PATCH 49/52] package/asterisk: add optional iconv
-	support
+Date: Fri, 30 Dec 2016 11:29:51 +0100
+Subject: [Buildroot] [PATCH 50/52] package/asterisk: enable inotify when
+	possible
 In-Reply-To: <cover.1483093662.git.yann.morin.1998@free.fr>
 References: <cover.1483093662.git.yann.morin.1998@free.fr>
-Message-ID: <9e2dc3a55439562ac253227770c587eef4773732.1483093662.git.yann.morin.1998@free.fr>
+Message-ID: <e9d77e5c99f0e43d27ee5dd381fe58fd81b8d3b3.1483093662.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-iconv support is available if iether the toolchain has iconv built-in
-(glibc, musl, or uclibc-with-iconv) or if the libiconv package is
-enabled. Both are exclusive one to the other, so we need only test one.
+As for DBus, we disable support for inotify only for microblaze, because
+the toolchain does not provide a complete inotify.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
@@ -21,30 +20,30 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index dee60c0..d9bdb5b 100644
+index d9bdb5b..1436575 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -36,7 +36,6 @@ ASTERISK_CONF_OPTS += \
- 	--without-gmime \
- 	--without-h323 \
+@@ -38,7 +38,6 @@ ASTERISK_CONF_OPTS += \
  	--without-hoard \
--	--without-iconv \
  	--without-iksemel \
  	--without-imap \
- 	--without-inotify \
-@@ -131,6 +130,13 @@ else
- ASTERISK_CONF_OPTS += --without-ilbc
- endif
+-	--without-inotify \
+ 	--without-iodbc \
+ 	--without-isdnnet \
+ 	--without-jack \
+@@ -82,6 +81,13 @@ ASTERISK_CONF_OPTS += \
+ ASTERISK_CONF_ENV = \
+ 	ac_cv_path_CONFIG_LIBXML2=$(STAGING_DIR)/usr/bin/xml2-config
  
-+ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
-+ASTERISK_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+ASTERISK_CONF_OPTS += --with-iconv
++ifeq ($(BR2_microblaze),y)
++# microblaze toolchain doesn't provide inotify_rm_* but does have sys/inotify.h
++ASTERISK_CONF_OPTS += --without-inotify
 +else
-+ASTERISK_CONF_OPTS += --without-iconv
++ASTERISK_CONF_OPTS += --with-inotify
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENLDAP),y)
- ASTERISK_DEPENDENCIES += openldap
- ASTERISK_CONF_OPTS += --without-ldap
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+ ASTERISK_CONF_OPTS += --with-execinfo
+ else
 -- 
 2.7.4
