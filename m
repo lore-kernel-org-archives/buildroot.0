@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Dec 2016 11:29:16 +0100
-Subject: [Buildroot] [PATCH 15/52] package/asterisk: add optional speex
+Date: Fri, 30 Dec 2016 11:29:11 +0100
+Subject: [Buildroot] [PATCH 10/52] package/asterisk: add optional curl
 	dependency
 In-Reply-To: <cover.1483093662.git.yann.morin.1998@free.fr>
 References: <cover.1483093662.git.yann.morin.1998@free.fr>
-Message-ID: <fcf36535afa4aecf41cbda915e99f7582ea2cc9e.1483093662.git.yann.morin.1998@free.fr>
+Message-ID: <58fdf17c4bc5bbb2b7d141d99eb0b46186a657e1.1483093662.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/asterisk/asterisk.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/asterisk/asterisk.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 58f0ef8..30c75bc 100644
+index 2eb9c7a..4cf980d 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -76,8 +76,6 @@ ASTERISK_CONF_OPTS += \
- 	--without-SDL_image \
- 	--without-spandsp \
- 	--without-ss7 \
--	--without-speex \
--	--without-speexdsp \
- 	--without-sqlite \
- 	--without-srtp \
- 	--without-suppserv \
-@@ -165,6 +163,13 @@ else
- ASTERISK_CONF_OPTS += --without-ssl
+@@ -52,7 +52,6 @@ ASTERISK_CONF_OPTS += \
+ 	--without-uriparser \
+ 	--without-kqueue \
+ 	--without-ldap \
+-	--without-libcurl \
+ 	--without-libedit \
+ 	--without-libxslt \
+ 	--without-ltdl \
+@@ -126,6 +125,13 @@ else
+ ASTERISK_CONF_OPTS += --without-asound
  endif
  
-+ifeq ($(BR2_PACKAGE_SPEEX),y)
-+ASTERISK_DEPENDENCIES += speex
-+ASTERISK_CONF_OPTS += --with-speex --with-speexdsp
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++ASTERISK_DEPENDENCIES += libcurl
++ASTERISK_CONF_OPTS += --with-libcurl
 +else
-+ASTERISK_CONF_OPTS += --without-speex  --without-speexdsp
++ASTERISK_CONF_OPTS += --without-libcurl
 +endif
 +
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- ASTERISK_DEPENDENCIES += zlib
- ASTERISK_CONF_OPTS += --with-z
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ ASTERISK_DEPENDENCIES += openssl
+ ASTERISK_CONF_OPTS += --with-ssl
 -- 
 2.7.4
