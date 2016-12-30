@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Dec 2016 11:29:09 +0100
-Subject: [Buildroot] [PATCH 08/52] package/asterisk: add optional support
-	for SSL
+Date: Fri, 30 Dec 2016 11:29:10 +0100
+Subject: [Buildroot] [PATCH 09/52] package/asterisk: add optional alsa-lib
+	dependency
 In-Reply-To: <cover.1483093662.git.yann.morin.1998@free.fr>
 References: <cover.1483093662.git.yann.morin.1998@free.fr>
-Message-ID: <5dce82451d6b74256b8e5a8bdb1f63b54dc0954d.1483093662.git.yann.morin.1998@free.fr>
+Message-ID: <9fc16423a0b1e040077c6ccab1f488fceff4acf0.1483093662.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index fa4b226..7028012 100644
+index 7028012..2eb9c7a 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -86,7 +86,6 @@ ASTERISK_CONF_OPTS += \
- 	--without-speexdsp \
- 	--without-sqlite \
- 	--without-srtp \
--	--without-ssl \
- 	--without-suppserv \
- 	--without-tds \
- 	--without-termcap \
-@@ -121,6 +120,13 @@ else
+@@ -30,7 +30,6 @@ ASTERISK_CONF_OPTS += \
+ 	--disable-internal-poll \
+ 	--disable-asteriskssl \
+ 	--disable-rpath \
+-	--without-asound \
+ 	--without-bfd \
+ 	--without-bluetooth \
+ 	--without-cap \
+@@ -120,6 +119,13 @@ else
  ASTERISK_CONF_OPTS += --without-gsm
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+ASTERISK_DEPENDENCIES += openssl
-+ASTERISK_CONF_OPTS += --with-ssl
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++ASTERISK_DEPENDENCIES += alsa-lib
++ASTERISK_CONF_OPTS += --with-asound
 +else
-+ASTERISK_CONF_OPTS += --without-ssl
++ASTERISK_CONF_OPTS += --without-asound
 +endif
 +
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- ASTERISK_DEPENDENCIES += zlib
- ASTERISK_CONF_OPTS += --with-z
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ ASTERISK_DEPENDENCIES += openssl
+ ASTERISK_CONF_OPTS += --with-ssl
 -- 
 2.7.4
