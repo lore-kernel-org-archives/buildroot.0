@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Dec 2016 11:29:46 +0100
-Subject: [Buildroot] [PATCH 45/52] package/libpjsip: add option to enable
-	L16 codec
+Date: Fri, 30 Dec 2016 11:29:47 +0100
+Subject: [Buildroot] [PATCH 46/52] package/libpjsip: add optional portaudio
+	support
 In-Reply-To: <cover.1483093662.git.yann.morin.1998@free.fr>
 References: <cover.1483093662.git.yann.morin.1998@free.fr>
-Message-ID: <220797c8c061426f7e2602ee95a67fd09fa4c586.1483093662.git.yann.morin.1998@free.fr>
+Message-ID: <ee7af0523588df90be22fd9ce2d0baf81fc3d542.1483093662.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libpjsip/Config.in   | 3 +++
- package/libpjsip/libpjsip.mk | 5 ++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/libpjsip/libpjsip.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-index c7cdd68..ee09e46 100644
---- a/package/libpjsip/Config.in
-+++ b/package/libpjsip/Config.in
-@@ -32,6 +32,9 @@ comment "GSM codec needs a toolchain w/ shared libraries"
- config BR2_PACKAGE_LIBPJSIP_CODEC_ILBC
- 	bool "iLBC codec"
- 
-+config BR2_PACKAGE_LIBPJSIP_L16_CODEC
-+	bool "L16 codec"
-+
- config BR2_PACKAGE_LIBPJSIP_CODEC_SPEEX
- 	bool "Speex codec"
- 	select BR2_PACKAGE_SPEEX
 diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 67329eb..19f6edb 100644
+index 19f6edb..23041f2 100644
 --- a/package/libpjsip/libpjsip.mk
 +++ b/package/libpjsip/libpjsip.mk
-@@ -36,7 +36,6 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-ext-sound \
- 	--disable-small-filter \
- 	--disable-large-filter \
--	--disable-l16-codec \
- 	--disable-libsamplerate \
- 	--disable-sdl \
- 	--disable-ffmpeg \
-@@ -90,6 +89,10 @@ ifneq ($(BR2_PACKAGE_LIBPJSIP_CODEC_ILBC),y)
- LIBPJSIP_CONF_OPTS += --disable-ilbc-codec
+@@ -58,6 +58,11 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ LIBPJSIP_DEPENDENCIES += util-linux
  endif
  
-+ifneq ($(BR2_PACKAGE_LIBPJSIP_L16_CODEC),y)
-+LIBPJSIP_CONF_OPTS += --disable-l16-codec
++ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++LIBPJSIP_DEPENDENCIES += portaudio
++LIBPJSIP_CONF_OPTS += --with-external-pa
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPJSIP_CODEC_SPEEX),y)
- LIBPJSIP_DEPENDENCIES += speex
- LIBPJSIP_CONF_OPTS += --with-external-speex
+ # Codecs can only be disabled. If explictly enabled, the check is
+ # omitted (but successful), and there is no configure trace "Checking
+ # if [codec] codec is disabled...no". So we only explicitly disable it
 -- 
 2.7.4
