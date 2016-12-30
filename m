@@ -1,37 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Dec 2016 17:50:50 +0100
-Subject: [Buildroot] Aid for buildroot compilation
-In-Reply-To: <CABLXdK8G7SH+Zy88hLguJ0WqEOQE-h9MaG_8rQwzHQNeTyVK9Q@mail.gmail.com>
-References: <CABLXdK8G7SH+Zy88hLguJ0WqEOQE-h9MaG_8rQwzHQNeTyVK9Q@mail.gmail.com>
-Message-ID: <20161230175050.0b3bf0f3@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 30 Dec 2016 16:51:52 +0000
+Subject: [Buildroot] [Bug 9526] Embedded NPM fails to start with "no such
+ file or directory" error
+In-Reply-To: <bug-9526-163@https.bugs.busybox.net/>
+References: <bug-9526-163@https.bugs.busybox.net/>
+Message-ID: <bug-9526-163-20OLtehoMF@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9526
 
-On Fri, 30 Dec 2016 13:00:14 +0100, Ricardo Herrero wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> *In file included from img2srec.c:55:0:*
-> *os_support.h:22:22: fatal error: compiler.h: No such file or directory*
-> * #include "compiler.h"*
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WONTFIX
+             Status|NEW                         |RESOLVED
 
-I suspect you're trying to build a too old version of U-Boot with a too
-recent host gcc version (like 5.x).
+--- Comment #13 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+As Peter explained, we do expect a minimal set of utilities on the target, and
+we're not going to start patching upstream packages because something as basic
+as "env" might be missing. Users interested in such a fine-grained
+customization can do that in a post-build script.
 
-> If you want I can send the .config file
-
-Yes, please. However, make sure that we can actually build it,
-especially make sure that we have access to the U-Boot source code. If
-we can't access it, then there isn't much we can do besides give the
-above potential explanation.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
