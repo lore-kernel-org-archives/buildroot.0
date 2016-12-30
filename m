@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Dec 2016 11:29:32 +0100
-Subject: [Buildroot] [PATCH 31/52] package/spandsp: new package
+Date: Fri, 30 Dec 2016 11:29:35 +0100
+Subject: [Buildroot] [PATCH 34/52] package/corosync: new package
 In-Reply-To: <cover.1483093662.git.yann.morin.1998@free.fr>
 References: <cover.1483093662.git.yann.morin.1998@free.fr>
-Message-ID: <30f8c75fe1db337a7b13149fc3a5295faa4f74a3.1483093662.git.yann.morin.1998@free.fr>
+Message-ID: <eae2afdb963b9fcd93a01aebceee041a25492dad.1483093662.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,81 +12,112 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in            |  1 +
- package/spandsp/Config.in    |  9 +++++++++
- package/spandsp/spandsp.hash |  2 ++
- package/spandsp/spandsp.mk   | 27 +++++++++++++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/spandsp/Config.in
- create mode 100644 package/spandsp/spandsp.hash
- create mode 100644 package/spandsp/spandsp.mk
+ package/Config.in              |  1 +
+ package/corosync/Config.in     | 20 ++++++++++++++++++
+ package/corosync/corosync.hash |  2 ++
+ package/corosync/corosync.mk   | 47 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 70 insertions(+)
+ create mode 100644 package/corosync/Config.in
+ create mode 100644 package/corosync/corosync.hash
+ create mode 100644 package/corosync/corosync.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index b3a9539..dd9f3de 100644
+index 1a754d4..4b7845c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -874,6 +874,7 @@ menu "Audio/Sound"
- 	source "package/opusfile/Config.in"
- 	source "package/portaudio/Config.in"
- 	source "package/sbc/Config.in"
-+	source "package/spandsp/Config.in"
- 	source "package/speex/Config.in"
- 	source "package/taglib/Config.in"
- 	source "package/tinyalsa/Config.in"
-diff --git a/package/spandsp/Config.in b/package/spandsp/Config.in
+@@ -1294,6 +1294,7 @@ menu "Other"
+ 	source "package/boost/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
++	source "package/corosync/Config.in"
+ 	source "package/cppcms/Config.in"
+ 	source "package/dawgdic/Config.in"
+ 	source "package/ding-libs/Config.in"
+diff --git a/package/corosync/Config.in b/package/corosync/Config.in
 new file mode 100644
-index 0000000..a2d5b85
+index 0000000..1dda488
 --- /dev/null
-+++ b/package/spandsp/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SPANDSP
-+	bool "spandsp"
-+	select BR2_PACKAGE_TIFF
++++ b/package/corosync/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_COROSYNC
++	bool "corosync"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnsp
++	depends on !BR2_STATIC_LIBS # libnss
++	select BR2_PACKAGE_LIBNSS
++	select BR2_PACKAGE_LIBQB
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  Spandsp is a library of many DSP functions for telephony.
-+	  These range from simple modules, such as DTMF detection, to
-+	  a complete software FAX machine.
++	  The Corosync Cluster Engine is a Group Communication System
++	  with additional features for implementing high availability
++	  within applications.
 +
-+	  http://www.soft-switch.org/
-diff --git a/package/spandsp/spandsp.hash b/package/spandsp/spandsp.hash
++	  https://corosync.github.io/corosync/
++
++comment "corosync needs a toolchain w/ threads, dunamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/corosync/corosync.hash b/package/corosync/corosync.hash
 new file mode 100644
-index 0000000..29185da
+index 0000000..5c009de
 --- /dev/null
-+++ b/package/spandsp/spandsp.hash
++++ b/package/corosync/corosync.hash
 @@ -0,0 +1,2 @@
 +# sha256 locally computed
-+sha256  cc053ac67e8ac4bb992f258fd94f275a7872df959f6a87763965feabfdcc9465  spandsp-0.0.6.tar.gz
-diff --git a/package/spandsp/spandsp.mk b/package/spandsp/spandsp.mk
++sha256  0dd0ee718253c18c5090e0304eec72a7be8b18b6fe5e03de59ce095fa08c8b63  corosync-v2.4.2.tar.gz
+diff --git a/package/corosync/corosync.mk b/package/corosync/corosync.mk
 new file mode 100644
-index 0000000..661f67e
+index 0000000..865f5e0
 --- /dev/null
-+++ b/package/spandsp/spandsp.mk
-@@ -0,0 +1,27 @@
++++ b/package/corosync/corosync.mk
+@@ -0,0 +1,47 @@
 +################################################################################
 +#
-+# spandsp
++# corosync
 +#
 +################################################################################
 +
-+SPANDSP_VERSION = 0.0.6
-+SPANDSP_SITE = http://www.soft-switch.org/downloads/spandsp
++COROSYNC_VERSION = v2.4.2
++COROSYNC_SITE = $(call github,corosync,corosync,$(COROSYNC_VERSION))
 +
-+SPANDSP_LICENSE = LGPLv2.1 (library), GPLv2 (test suite)
-+SPANDSP_LICENSE_FILES = COPYING
++COROSYNC_LICENSE = BSD-3c
++COROSYNC_LICENSE_FILES = LICENSE
 +
-+SPANDSP_DEPENDENCIES = tiff
-+SPANDSP_INSTALL_STAGING = YES
++COROSYNC_DEPENDENCIES = libnss libqb zlib
++COROSYNC_AUTORECONF = YES
++COROSYNC_INSTALL_STAGING = YES
 +
-+SPANDSP_CONF_OPTS = \
-+	--disable-doc \
-+	--disable-builtin-tiff \
-+	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx) \
-+	$(if $(BR2_X86_CPU_HAS_SSE),--enable-sse,--disable-sse) \
-+	$(if $(BR2_X86_CPU_HAS_SSE2),--enable-sse2,--disable-sse2) \
-+	$(if $(BR2_X86_CPU_HAS_SSE3),--enable-sse3,--disable-sse3) \
-+	$(if $(BR2_X86_CPU_HAS_SSSE3),--enable-ssse3,--disable-ssse3) \
-+	$(if $(BR2_X86_CPU_HAS_SSE4),--enable-sse4-1,--disable-sse4-1) \
-+	$(if $(BR2_X86_CPU_HAS_SSE42),--enable-sse4-2,--disable-sse4-2)
++define COROSYNC_M4
++	$(INSTALL) -d -m 0755 $(@D)/m4
++endef
++COROSYNC_POST_EXTRACT_HOOKS += COROSYNC_M4
++
++# Don't build HTML manpages
++COROSYNC_CONF_ENV = ac_cv_prog_GROFF=
++
++COROSYNC_CONF_OPTS = \
++	--disable-fatal-warnings \
++	$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug) \
++	--enable-secure-build \
++	--disable-user-flags \
++	--disable-coverage \
++	--disable-small-memory-footprint \
++	--disable-dbus \
++	--disable-testagents \
++	--disable-rdma \
++	--disable-monitoring \
++	--disable-watchdog \
++	--disable-augeas \
++	--disable-systemd \
++	--disable-upstart \
++	$(if $(BR2_INIT_SYSTEMD),--enable-systemd,--disable-systemd) \
++	--disable-upstart \
++	--disable-snmp \
++	--disable-xmlconf \
++	--disable-qdevices \
++	--disable-qnet
 +
 +$(eval $(autotools-package))
 -- 
