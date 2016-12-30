@@ -1,37 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Dec 2016 22:15:24 +0100
-Subject: [Buildroot] [git commit] configs/imx6ulpico: Select
-	BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
-Message-ID: <20161230211734.C14C281EC4@busybox.osuosl.org>
+Date: Fri, 30 Dec 2016 22:15:07 +0100
+Subject: [Buildroot] [git commit] configs/imx6ulpico: Bump to U-Boot 2016.11
+Message-ID: <20161230211734.A665D81EC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecb1296717c162211151d65011df529fa5f15667
+commit: https://git.buildroot.net/buildroot/commit/?id=446416d4ab1317feb6968d7152f950027d70959f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV allows the Broadcom wireless driver
-to be automatically loaded on boot.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/imx6ulpico_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ configs/imx6ulpico_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
-index f7f7f20..96ac038 100644
+index 662b9ab..60de7d7 100644
 --- a/configs/imx6ulpico_defconfig
 +++ b/configs/imx6ulpico_defconfig
-@@ -25,6 +25,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-pico-hobbit"
- BR2_PACKAGE_LINUX_FIRMWARE=y
- BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
+@@ -33,7 +33,7 @@ BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="pico-imx6ul"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.09.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
-+# For automatic firmware loading
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+
- # wireless packages
- BR2_PACKAGE_WIRELESS_TOOLS=y
- BR2_PACKAGE_WPA_SUPPLICANT=y
+ # required tools to create the eMMC image
