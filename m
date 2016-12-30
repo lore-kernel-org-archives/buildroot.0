@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Dec 2016 11:29:37 +0100
-Subject: [Buildroot] [PATCH 36/52] package/corosync: add optional snmp
-	support
+Date: Fri, 30 Dec 2016 11:29:38 +0100
+Subject: [Buildroot] [PATCH 37/52] package/asterisk: add optional corosync
+	dependency
 In-Reply-To: <cover.1483093662.git.yann.morin.1998@free.fr>
 References: <cover.1483093662.git.yann.morin.1998@free.fr>
-Message-ID: <e43beaf4583073d0bea112c97e1951d1c452c746.1483093662.git.yann.morin.1998@free.fr>
+Message-ID: <61bf06a295129714bc85cae30c1dbdb4d073dda1.1483093662.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/corosync/corosync.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/asterisk/asterisk.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/corosync/corosync.mk b/package/corosync/corosync.mk
-index a20edd4..ca73043 100644
---- a/package/corosync/corosync.mk
-+++ b/package/corosync/corosync.mk
-@@ -38,7 +38,6 @@ COROSYNC_CONF_OPTS = \
- 	--disable-upstart \
- 	$(if $(BR2_INIT_SYSTEMD),--enable-systemd,--disable-systemd) \
- 	--disable-upstart \
--	--disable-snmp \
- 	--disable-xmlconf \
- 	--disable-qdevices \
- 	--disable-qnet
-@@ -50,4 +49,12 @@ else
- COROSYNC_CONF_OPTS += --disable-dbus
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index e5fd28e..aff6ffc 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -32,7 +32,6 @@ ASTERISK_CONF_OPTS += \
+ 	--disable-rpath \
+ 	--without-bfd \
+ 	--without-cap \
+-	--without-cpg \
+ 	--without-curses \
+ 	--without-gtk2 \
+ 	--without-gmime \
+@@ -114,6 +113,13 @@ else
+ ASTERISK_CONF_OPTS += --without-bluetooth
  endif
  
-+ifeq ($(BR2_PACKAGE_NETSNMP),y)
-+COROSYNC_DEPENDENCIES += netsnmp
-+COROSYNC_CONF_OPTS += --enable-snmp
-+COROSYNC_CONF_ENV += SNMPCONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
++ifeq ($(BR2_PACKAGE_COROSYNC),y)
++ASTERISK_DEPENDENCIES += corosync
++ASTERISK_CONF_OPTS += --with-cpg
 +else
-+COROSYNC_CONF_OPTS += --disable-snmp
++ASTERISK_CONF_OPTS += --without-cpg
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBICAL),y)
+ ASTERISK_DEPENDENCIES += libical
+ ASTERISK_CONF_OPTS += --with-ical
 -- 
 2.7.4
