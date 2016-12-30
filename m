@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Dec 2016 11:29:20 +0100
-Subject: [Buildroot] [PATCH 19/52] package/asterisk: add optional libical
+Date: Fri, 30 Dec 2016 11:29:21 +0100
+Subject: [Buildroot] [PATCH 20/52] package/asterisk: add optional openldap
 	dependency
 In-Reply-To: <cover.1483093662.git.yann.morin.1998@free.fr>
 References: <cover.1483093662.git.yann.morin.1998@free.fr>
-Message-ID: <eddec7fe4d6fdd8ea5a23b3ac0f899ca947f5f29.1483093662.git.yann.morin.1998@free.fr>
+Message-ID: <5a31a7ad8f522c1594857de4316fe6de726ad140.1483093662.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 4994111..70e8a60 100644
+index 70e8a60..8316ac2 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
-@@ -39,7 +39,6 @@ ASTERISK_CONF_OPTS += \
- 	--without-gmime \
- 	--without-h323 \
- 	--without-hoard \
--	--without-ical \
- 	--without-iconv \
- 	--without-iksemel \
- 	--without-imap \
-@@ -123,6 +122,13 @@ else
- ASTERISK_CONF_OPTS += --without-bluetooth
+@@ -48,7 +48,6 @@ ASTERISK_CONF_OPTS += \
+ 	--without-jack \
+ 	--without-uriparser \
+ 	--without-kqueue \
+-	--without-ldap \
+ 	--without-libedit \
+ 	--without-libxslt \
+ 	--without-ltdl \
+@@ -136,6 +135,13 @@ else
+ ASTERISK_CONF_OPTS += --without-ilbc
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBICAL),y)
-+ASTERISK_DEPENDENCIES += libical
-+ASTERISK_CONF_OPTS += --with-ical
++ifeq ($(BR2_PACKAGE_OPENLDAP),y)
++ASTERISK_DEPENDENCIES += openldap
++ASTERISK_CONF_OPTS += --without-ldap
 +else
-+ASTERISK_CONF_OPTS += --without-ical
++ASTERISK_CONF_OPTS += --without-ldap
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBILBC),y)
- ASTERISK_DEPENDENCIES += libilbc
- ASTERISK_CONF_OPTS += --with-ilbc
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ ASTERISK_DEPENDENCIES += libcurl
+ ASTERISK_CONF_OPTS += --with-libcurl
 -- 
 2.7.4
