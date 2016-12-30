@@ -1,50 +1,59 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Fri, 30 Dec 2016 06:54:33 -0800
-Subject: [Buildroot] [PATCH] mysql: don't allow selection when
- dependencies are missing
-In-Reply-To: <3856d587295ee2a012519bbfe782cddf257b2729.1483086547.git.baruch@tkos.co.il>
-References: <3856d587295ee2a012519bbfe782cddf257b2729.1483086547.git.baruch@tkos.co.il>
-Message-ID: <697d2049-8118-b415-9590-ada3c5cbb35d@gmail.com>
+From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+Date: Fri, 30 Dec 2016 12:56:13 -0200
+Subject: [Buildroot] [PATCH] eudev: build with older kernels.
+In-Reply-To: <CAPdpN3DNDbmKk2JA98PK42eQ24wxHZgsmkK_NoG=JjsXSYxSWg@mail.gmail.com>
+References: <20161229144649.29850-1-barbieri@profusion.mobi>
+ <53d19a79-a06e-df52-ae4f-1bc0decb7e0c@gmail.com>
+ <CAPdpN3Bvppz53OvvXygtLC=4amXL7V54WqO0QjCZgbtCj-pa=A@mail.gmail.com>
+ <d63de13a-18e1-1f5a-4dba-33e55d879ef3@gmail.com>
+ <CAPdpN3DNDbmKk2JA98PK42eQ24wxHZgsmkK_NoG=JjsXSYxSWg@mail.gmail.com>
+Message-ID: <CAPdpN3AqMidYkSkAdjUygBzkXfVMELex3wjtsgyxqwiQdrr3zQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/30/2016 12:29 AM, Baruch Siach wrote:
-> Commit 3d707d2b4f (mysql: rename package to oracle-mysql, make a virtual
-> package) removed all dependencies of BR2_PACKAGE_MYSQL. Now BR2_PACKAGE_MYSQL
-> is selectable when no actual implementation is selectable. This confuses
-> packages like open2300 that expect mysql.h when BR2_PACKAGE_MYSQL is enabled.
-> Make BR2_PACKAGE_MYSQL inherit the dependencies of BR2_PACKAGE_ORACLE_MYSQL,
-> since oracle mysql is the default mysql implementation.
+they suggested to add to src/shared/missing.h, that I did and indeed
+looks better.
+
+I'll send a new patch with that as well.
+
+On Fri, Dec 30, 2016 at 11:34 AM, Gustavo Sverzut Barbieri
+<barbieri@profusion.mobi> wrote:
+> On Thu, Dec 29, 2016 at 2:04 PM, Romain Naour <romain.naour@gmail.com> wrote:
+>> Le 29/12/2016 ? 17:01, Gustavo Sverzut Barbieri a ?crit :
+>>> On Thu, Dec 29, 2016 at 1:51 PM, Romain Naour <romain.naour@gmail.com> wrote:
+>>>> Hi Gustavo,
+>>>>
+>>>> Le 29/12/2016 ? 15:46, Gustavo Sverzut Barbieri a ?crit :
+>>>>> Add missing defines so eudev builds for older kernels such as 2.6
+>>>>
+>>>> Can you summit this patch to eudev upstream ?
+>>>
+>>> I will try, but not sure they bother with ancient 2.6 kernels like the
+>>> one I need :-D
+>>
+>> Well, if it's just two defines...
 >
-> Fixes:
-> http://autobuild.buildroot.net/results/c4d/c4d86cad20251a690a1d99af3740f44435f6de13/
-> http://autobuild.buildroot.net/results/919/919ab62cedc25fc7c60864d99c208628edfbe472/
-> http://autobuild.buildroot.net/results/bb7/bb73189b9d0850c9c4ef89c7efab2c1a261700a7/
+> done https://github.com/gentoo/eudev/pull/139
 >
-> Cc: Ryan Coe <bluemrp9@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Ryan Coe <bluemrp9@gmail.com>
-> ---
->   package/mysql/Config.in | 7 +++++++
->   1 file changed, 7 insertions(+)
+> if you want to track
 >
-> diff --git a/package/mysql/Config.in b/package/mysql/Config.in
-> index e485d6b99fbe..899fcfb0d304 100644
-> --- a/package/mysql/Config.in
-> +++ b/package/mysql/Config.in
-> @@ -1,5 +1,12 @@
-> +comment "mysql support needs a toolchain w/ C++, threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> +
->   config BR2_PACKAGE_MYSQL
->   	bool "mysql support"
-> +	depends on BR2_INSTALL_LIBSTDCPP # oracle mysql
-> +	depends on BR2_USE_MMU # oracle mysql
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # oracle mysql
->   	help
->   	  Select the desired mysql provider.
->   
+> --
+> Gustavo Sverzut Barbieri
+> http://profusion.mobi embedded systems
+> --------------------------------------
+> MSN, GTalk, FaceTime: barbieri at gmail.com
+> Skype: gsbarbieri
+> Mobile: +55 (16) 99354-9890
+
+
+
+-- 
+Gustavo Sverzut Barbieri
+http://profusion.mobi embedded systems
+--------------------------------------
+MSN, GTalk, FaceTime: barbieri at gmail.com
+Skype: gsbarbieri
+Mobile: +55 (16) 99354-9890
