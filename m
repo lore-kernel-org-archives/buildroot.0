@@ -1,29 +1,45 @@
-From: Rob Landley <rob@landley.net>
-Date: Fri, 30 Dec 2016 14:14:46 -0600
-Subject: [Buildroot] [PATCH] use nproc
-Message-ID: <6f25e6c1-c176-629f-321c-9b404c5d6de6@landley.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 30 Dec 2016 21:12:36 +0100
+Subject: [Buildroot] [git commit] libgcrypt: bump to version 1.7.5
+Message-ID: <20161230201946.6145281EC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My rule of thumb is that once a change is 7 years old, you can rely on
-the installed base to have it. With that in mind, would you like to use
-nproc to check how many processors are available?
+commit: https://git.buildroot.net/buildroot/commit/?id=fd469943b9fc73d18c80efe8c5805aed93dc327e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=74cf4cb26dcecd36eb45dc00dbd4587d9dc24a2f
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgcrypt/libgcrypt.hash | 6 +++---
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index afd5d3a..5eed804 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -12,7 +12,7 @@ HOSTMAKE := $(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
- # If the number of processors is not available, assume one.
- ifeq ($(BR2_JLEVEL),0)
- PARALLEL_JOBS := $(shell echo \
--	$$((1 + `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
-+	$$((1 + `nproc 2>/dev/null || echo 1`)))
- else
- PARALLEL_JOBS := $(BR2_JLEVEL)
- endif
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 885f831..89c5719 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.gnu.org/archive/html/info-gnu/2016-08/msg00008.html
+-sha1 5a034291e7248592605db448481478e6c963aa9c  libgcrypt-1.7.3.tar.bz2
++# From https://lists.gnu.org/archive/html/info-gnu/2016-12/msg00007.html
++sha1 fa485d854748fc06ea041b3057b2de2f12fbc17f  libgcrypt-1.7.5.tar.bz2
+ # Calculated based on the hash above
+-sha256 ddac6111077d0a1612247587be238c5294dd0ee4d76dc7ba783cc55fb0337071  libgcrypt-1.7.3.tar.bz2
++sha256 d1fea4128beef2bb30a470af6bafabccc503ced350534fb9dd8f5a53ffbae800  libgcrypt-1.7.5.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 31f4d6c..48c62b4 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGCRYPT_VERSION = 1.7.3
++LIBGCRYPT_VERSION = 1.7.5
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPLv2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
