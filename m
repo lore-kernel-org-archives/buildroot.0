@@ -1,55 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Dec 2016 09:17:49 +0100
-Subject: [Buildroot] [git commit] configs/warpboard: Bump kernel and U-Boot
-	versions
-Message-ID: <20161231081908.46C3F803C8@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 31 Dec 2016 08:55:49 +0000
+Subject: [Buildroot] [Bug 9541] Platform drivers autoloading from info in
+ device tree does not work
+In-Reply-To: <bug-9541-163@https.bugs.busybox.net/>
+References: <bug-9541-163@https.bugs.busybox.net/>
+Message-ID: <bug-9541-163-niL8OtJ8Hz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b18ecaf84903fb8c9a622348adace1493af55315
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=9541
 
-Bump kernel to version 4.9 and U-Boot to 2016.11.
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
+I take it that you somewhere in that sequence enabled mdev? (E.G. System
+configuration->/dev management (Dynamic using devtmpfs+mdev)
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/warpboard_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+The module specifies the following aliases:
 
-diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
-index 71d777f..5b0ed2c 100644
---- a/configs/warpboard_defconfig
-+++ b/configs/warpboard_defconfig
-@@ -5,8 +5,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # system
- BR2_TARGET_GENERIC_HOSTNAME="warpboard"
-@@ -18,7 +18,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/warpboard/rootfs_overlay"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.15"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/warpboard/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -37,7 +37,7 @@ BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # host utility
+modinfo
+target/lib/modules/4.4.36-v7/kernel/drivers/net/ethernet/microchip/enc28j60.ko
+| grep alias
+alias:          spi:enc28j60
+alias:          of:N*T*Cmicrochip,enc28j60*
+
+Can you first of all verify that you can load the module with these wildcards?
+
+E.G.
+
+modprobe 'spi:enc28j60'
+lsmod | grep enc28j60
+rmmod enc28j60.ko
+
+modprobe 'of:N*T*Cmicrochip,enc28j60*'
+lsmod | grep enc28j60
+rmmod enc28j60.ko
+
+And check what the modalias is for the /sys/bus/spi/* device?
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
