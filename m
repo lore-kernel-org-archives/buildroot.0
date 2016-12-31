@@ -1,138 +1,238 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 31 Dec 2016 01:21:01 -0200
-Subject: [Buildroot] [PATCH 0/9] A checkpackage script that verifies a
-	package coding style
-Message-ID: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
+Date: Sat, 31 Dec 2016 01:21:02 -0200
+Subject: [Buildroot] [PATCH 1/9] support/scripts/check-package: example
+In-Reply-To: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
+References: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
+Message-ID: <20161231032110.11573-2-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series is only a prototype.
-Please feel free to reject the series if it is too far from what you want.
+Create an example package with many style problems.
 
-I started this patch series out of curiosity.
-Later on, I saw that something similar was in the todo list [1].
+These files can be used to test the check-package script.
+Ideally each new warning added to the check script will have a bad style
+example in these files.
 
-It probably could be achieved using flex + bison, or pyacc, or perl, or
-something else.
-But I implemented using python and non-strict checks, trying to:
-- reduce the chance of problems related to differences between host machines;
-- allow incremental development based on feedback from patch reviews;
-- keep the maintenance easy;
-- generate low number of false warnings.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
 
-The first patch is an example package to be used to test the output of the
-script for all patches in the series.
+Notes:
+    There are also bad styles inside these files that currently do not
+    trigger a warning message from the script in this patch series.
+    They provide an insight of what can be tested in the future.
 
-The second patch includes a txt file with an overall description and some hints,
-the main engine that calls check functions for each type of file, the first
-check function, and also many comments in the library files that reflect what I
-attempted to accomplish. Of course, the comments can be cut if you disagree with
-any of them.
-
-Remaining patches include check functions for each type of file. I put the
-patches that I think are most likely to be rejected in the end.
-
-Also in the series there is a blob for the manual trying to clarify the expected
-format for help text.
-
-I did not include yet:
-- entry to DEVELOPERS (just because it is the first iteration);
-- explicit license entry (I guess this way the script inherits the Buildroot
-  license).
-
-For each patch I include using 'git notes':
-- the time it takes to run for all current packages;
-- for each check function:
-  - the number of warnings it generates for all current packages;
-  - sample output running on the (bad) example package.
-
-Here is the list of check functions implemented in this series:
-
-*.patch:
-- check_apply_order
-- check_newline_at_eof
-- check_numbered_subject
-- check_sob
-
-Config.in.*:
-- check_attributes_order
-- check_consecutive_empty_lines
-- check_empty_last_line
-- check_help_text
-- check_indent
-- check_newline_at_eof
-- check_trailing_space
-
-*.hash:
-- check_consecutive_empty_lines
-- check_empty_last_line
-- check_hash_filename
-- check_hash_number_of_fields
-- check_hash_type
-- check_newline_at_eof
-- check_trailing_space
-
-*.mk:
-- check_consecutive_empty_lines
-- check_empty_last_line
-- check_indent
-- check_newline_at_eof
-- check_package_header
-- check_space_before_backslash
-- check_trailing_backslash
-- check_trailing_space
-- check_typo_in_package_variable
-- check_useless_flag
-
-[1] http://elinux.org/Buildroot#Todo_list
-
-Regards,
-Ricardo
-
-
-Ricardo Martincoski (9):
-  support/scripts/check-package: example
-  support/scripts/check-package: new script
-  check-package: check whitespace and empty lines
-  check-package: check *.hash files
-  check-package: check *.patch files
-  check-package: check *.mk files
-  docs/manual: size of tab in package description
-  check-package: check Config.in.* files
-  check-package: check *.mk for typo in variable
-
- docs/manual/adding-packages-directory.txt          |   8 +-
- docs/manual/writing-rules.txt                      |   6 +-
- support/scripts/check-package                      | 136 ++++++++++++
- .../package/package1/0001-do-something.patch       |  24 +++
- .../package/package1/0002-do-something-else.patch  |  24 +++
- .../package/package1/Config.in                     |  42 ++++
- .../package/package1/package1.hash                 |   8 +
- .../package/package1/package1.mk                   |  48 +++++
- .../package/package1/wrong-name.patch              |  13 ++
- support/scripts/check-package.txt                  |  76 +++++++
- support/scripts/checkpackagelib.py                 |  56 +++++
- support/scripts/checkpackagelib_config.py          | 136 ++++++++++++
- support/scripts/checkpackagelib_hash.py            |  76 +++++++
- support/scripts/checkpackagelib_mk.py              | 229 +++++++++++++++++++++
- support/scripts/checkpackagelib_patch.py           |  50 +++++
- 15 files changed, 927 insertions(+), 5 deletions(-)
- create mode 100755 support/scripts/check-package
+ .../package/package1/0001-do-something.patch       | 24 +++++++++++
+ .../package/package1/0002-do-something-else.patch  | 24 +++++++++++
+ .../package/package1/Config.in                     | 42 +++++++++++++++++++
+ .../package/package1/package1.hash                 |  8 ++++
+ .../package/package1/package1.mk                   | 48 ++++++++++++++++++++++
+ .../package/package1/wrong-name.patch              | 13 ++++++
+ 6 files changed, 159 insertions(+)
  create mode 100644 support/scripts/check-package-example/package/package1/0001-do-something.patch
  create mode 100644 support/scripts/check-package-example/package/package1/0002-do-something-else.patch
  create mode 100644 support/scripts/check-package-example/package/package1/Config.in
  create mode 100644 support/scripts/check-package-example/package/package1/package1.hash
  create mode 100644 support/scripts/check-package-example/package/package1/package1.mk
  create mode 100644 support/scripts/check-package-example/package/package1/wrong-name.patch
- create mode 100644 support/scripts/check-package.txt
- create mode 100644 support/scripts/checkpackagelib.py
- create mode 100644 support/scripts/checkpackagelib_config.py
- create mode 100644 support/scripts/checkpackagelib_hash.py
- create mode 100644 support/scripts/checkpackagelib_mk.py
- create mode 100644 support/scripts/checkpackagelib_patch.py
 
+diff --git a/support/scripts/check-package-example/package/package1/0001-do-something.patch b/support/scripts/check-package-example/package/package1/0001-do-something.patch
+new file mode 100644
+index 000000000..bcd01dc1a
+--- /dev/null
++++ b/support/scripts/check-package-example/package/package1/0001-do-something.patch
+@@ -0,0 +1,24 @@
++From 79752a7ce44e60e276fd22031f88c796eeebf69b Mon Sep 17 00:00:00 2001
++From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
++Date: Mon, 5 Dec 2016 23:03:16 -0200
++Subject: [PATCH 25/39] do something
++
++ Signed-off-bye: Ricardo Martincoski <ricardo.martincoski@gmail.com>
++---
++ file | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/file b/file
++index 8a1218a..8ef9013 100644
++--- a/file
+++++ b/file
++@@ -1,5 +1,5 @@
++ 1
++ 2
++-3
+++33
++ 4
++ 5
++-- 
++2.11.0
++
+diff --git a/support/scripts/check-package-example/package/package1/0002-do-something-else.patch b/support/scripts/check-package-example/package/package1/0002-do-something-else.patch
+new file mode 100644
+index 000000000..d95ec4876
+--- /dev/null
++++ b/support/scripts/check-package-example/package/package1/0002-do-something-else.patch
+@@ -0,0 +1,24 @@
++From 79752a7ce44e60e276fd22031f88c796eeebf69b Mon Sep 17 00:00:00 2001
++From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
++Date: Mon, 5 Dec 2016 23:03:16 -0200
++Subject: [PATCH] do something else
++
++Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
++---
++ file | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/file b/file
++index 8a1218a..8ef9013 100644
++--- a/file
+++++ b/file
++@@ -1,5 +1,5 @@
++ 1
++ 2
++-3
+++33
++ 4
++ 5
++-- 
++2.11.0
++
+diff --git a/support/scripts/check-package-example/package/package1/Config.in b/support/scripts/check-package-example/package/package1/Config.in
+new file mode 100644
+index 000000000..8cc47390f
+--- /dev/null
++++ b/support/scripts/check-package-example/package/package1/Config.in
+@@ -0,0 +1,42 @@
++config BR2_PACKAGE_PACKAGE1
++	select BR2_PACKAGE_LIBEVENT
++	bool "pAcKaGe"
++	depends on BR2_USE_MMU
++	select BR2_PACKAGE_NCURSES
++	depends on BR2_USE_WCHAR
++	help
++	  package1 is a bad stylized package. Its only purpose is to exemplify
++          common style mistakes
++	some more help text but no url
++
++if BR2_PACKAGE_PACKAGE1
++ config BR2_PACKAGE_PACKAGE1_OPTION
++        bool "package1 option"
++        depends on BR2_USE_MMU
++        select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++        help
++	  This paragraph is properly wrapped. Since a tab counts as 8
++	  spaces and the help text must be wrapped at column 72, only 62
++	  characters for the text itself are expect per line.
++
++
++	  Another paragraph. - But this time we cross the column 72 by 1.
++	 wrong_line_with_single_word
++	  http://www.example.com/ urls do not have spaces and this line is too long.
++
++	  http://www.example.com/folder/even_long_url_should_not_be_wrapped
++
++config BR2_PACKAGE_PACKAGE1_OPTION2
++	string "option2"
++	default "aarch64-unknown-linux-gnu" \
++		if BR2_aarch64 || BR2_aarch64_eb
++
++config BR2_PACKAGE_PACKAGE1_OPTION3
++	string "option4"
++	default "value" \
++                if BR2_aarch64
++endif
++
++comment "package1 needs a toolchain w/ locale"
++        depends on BR2_USE_MMU
++	depends on BR2_USE_WCHAR
+diff --git a/support/scripts/check-package-example/package/package1/package1.hash b/support/scripts/check-package-example/package/package1/package1.hash
+new file mode 100644
+index 000000000..78559bd4a
+--- /dev/null
++++ b/support/scripts/check-package-example/package/package1/package1.hash
+@@ -0,0 +1,8 @@
++# some comment:
++sha256 1234567890123456789012345678901234567890123456789012345678901234 package1-1.0.tar.gz 
++sha256 123456789 package1-1.0.tar.gz
++crc16	123456789	package1-1.0.tar.gz
++sha256	12345678901234567890123456789012345678901234567890123456789012345	dl/package1-1.0.tar.gz
++sha256 1234567890123456789012345678901234567890123456789012345678901234
++  
++
+diff --git a/support/scripts/check-package-example/package/package1/package1.mk b/support/scripts/check-package-example/package/package1/package1.mk
+new file mode 100644
+index 000000000..bbeb34b69
+--- /dev/null
++++ b/support/scripts/check-package-example/package/package1/package1.mk
+@@ -0,0 +1,48 @@
++########################################
++#
++# wrong name
++#
++########################################################################################################################
++PACKAGE1_VERSION=1.0
++PACKAGE1_SITE = https://localhost        
++PACKAGE1_LICENSE = GPL
++PACKAGE1_LICENSE_FILE = README
++PACKAGE1_LICENSE_FILES += COPYING
++# now some unneeded flags because they are the default value
++PACKAGE1_INSTALL_STAGING=NO 
++PACKAGE1_INSTALL_TARGET = YES	
++PACKAGE1_INSTALL_IMAGES  =  NO
++ PACKAGE1_INSTALL_REDISTRIBUTE = YES
++PACKAGE1_AUTORECONF = NO
++PACKAGE1_LIBTOOL_PATCH	=	YES
++ # but non-default conditionally overridden by default is allowed
++ifeq ($(BR2_STATIC_LIBS),y)
++	PACKAGE1_INSTALL_STAGING = NO
++endif
++
++
++PACKAGE1_DEPENDENCIES = depend1 depend2  \
++                       depend3
++PACKAGE1_DEPENDENCIES += depend5	\
++	depend4 \
++
++PACKAGE1_DEPENDENCIES = overwriting
++PACKAGE1_DEEEEEEEEEES = typo
++LINUX_DEPENDENCIES = messing with others
++PACKACE1_DEPENDENCIES = typo
++
++define PACKAGE1_INSTALL_SOMETHING
++        mkdir -p $(TARGET_DIR)/var/lib
++	$(INSTALL) -m 0755 -D file1 \
++		$(TARGET_DIR)/var/lib/file
++	$(INSTALL) -m 0755 -D file2 \
++	$(TARGET_DIR)/etc/file
++endef
++
++define PACKAGE1_INSTALL_TARGET_CMDS
++	$(PACKAGE1_INSTALL_SOMETHING)
++        $(PACKAGE1_INSTALL_SOMETHING_ELSE)
++endef
++
++$(eval $(autotools-package))
++	
+diff --git a/support/scripts/check-package-example/package/package1/wrong-name.patch b/support/scripts/check-package-example/package/package1/wrong-name.patch
+new file mode 100644
+index 000000000..d4455338e
+--- /dev/null
++++ b/support/scripts/check-package-example/package/package1/wrong-name.patch
+@@ -0,0 +1,13 @@
++no sob
++---
++diff -purN package.orig/file package/file
++--- package.orig/file	2000-01-01 22:07:43.275324499 -0300
+++++ package/file	2016-01-01 22:08:16.171453283 -0300
++@@ -268,7 +268,6 @@ line
++ #include <errno.h>
++ #include <fcntl.h>
++ #include <string.h>
++-#include <termio.h>
++ #include <unistd.h>
++ #include <stdarg.h>
++ #include <curses.h>
+\ No newline at end of file
 -- 
 2.11.0
