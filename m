@@ -1,60 +1,25 @@
-From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-Date: Fri, 30 Dec 2016 21:22:02 -0200
-Subject: [Buildroot] [PATCH] eudev: build with older kernels.
-In-Reply-To: <CAPdpN3D9yXBcCLrPxbgW-xXfoOrwqXjr1Mx88K7Mk6cpJqkSvw@mail.gmail.com>
-References: <CAPdpN3AqMidYkSkAdjUygBzkXfVMELex3wjtsgyxqwiQdrr3zQ@mail.gmail.com>
- <20161230153238.10458-1-barbieri@profusion.mobi>
- <87vau186qk.fsf@dell.be.48ers.dk>
- <CAPdpN3D9yXBcCLrPxbgW-xXfoOrwqXjr1Mx88K7Mk6cpJqkSvw@mail.gmail.com>
-Message-ID: <CAPdpN3C5s=sd9nvbLab=EkA536vw0EQ30OP+C5iPkFdb3gPFww@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 31 Dec 2016 02:08:27 +0000
+Subject: [Buildroot] [Bug 9526] Embedded NPM fails to start with "no such
+ file or directory" error
+In-Reply-To: <bug-9526-163@https.bugs.busybox.net/>
+References: <bug-9526-163@https.bugs.busybox.net/>
+Message-ID: <bug-9526-163-chqqX0cYDa@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-it's merged upstream, should be in the next release
+https://bugs.busybox.net/show_bug.cgi?id=9526
 
-https://github.com/gentoo/eudev/pull/139
-
-On Fri, Dec 30, 2016 at 8:33 PM, Gustavo Sverzut Barbieri
-<barbieri@profusion.mobi> wrote:
-> thanks!
->
-> whenever upstream https://github.com/gentoo/eudev/pull/139 is merged
-> I'll let you know, but if the patch conflicts then it was already
-> applied upstream and you can drop it.
->
-> On Fri, Dec 30, 2016 at 7:08 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>>> "Gustavo" == Gustavo Sverzut Barbieri <barbieri@profusion.mobi> writes:
->>
->>  > Add missing defines so eudev builds for older kernels such as 2.6
->>  > Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
->>  > Reviewed-by: Romain Naour <romain.naour@gmail.com>
->>
->> Committed after extending the commit message with details about when
->> these symbols were added and the link to the upstream patch submission,
->> thanks.
->>
->> --
->> Bye, Peter Korsgaard
->
->
->
-> --
-> Gustavo Sverzut Barbieri
-> http://profusion.mobi embedded systems
-> --------------------------------------
-> MSN, GTalk, FaceTime: barbieri at gmail.com
-> Skype: gsbarbieri
-> Mobile: +55 (16) 99354-9890
-
-
+--- Comment #19 from bilge at scriptfusion.com ---
+Peter, I think the point is that it does not matter whether `env` exists on the
+host or not; it must exist on the target in order for NPM to function on the
+target. Ergo, BusyBox must be built before NPM, which it is incidentally, but
+this is not guaranteed since there is no dependency constraint between NPM and
+BusyBox (or any other provider of `env`).
 
 -- 
-Gustavo Sverzut Barbieri
-http://profusion.mobi embedded systems
---------------------------------------
-MSN, GTalk, FaceTime: barbieri at gmail.com
-Skype: gsbarbieri
-Mobile: +55 (16) 99354-9890
+You are receiving this mail because:
+You are on the CC list for the bug.
