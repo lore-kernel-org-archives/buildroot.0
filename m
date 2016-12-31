@@ -1,27 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Dec 2016 09:09:27 +0100
-Subject: [Buildroot] [PATCH] eudev: build with older kernels.
-In-Reply-To: <CAPdpN3C5s=sd9nvbLab=EkA536vw0EQ30OP+C5iPkFdb3gPFww@mail.gmail.com>
- (Gustavo Sverzut Barbieri's message of "Fri, 30 Dec 2016 21:22:02
- -0200")
-References: <CAPdpN3AqMidYkSkAdjUygBzkXfVMELex3wjtsgyxqwiQdrr3zQ@mail.gmail.com>
- <20161230153238.10458-1-barbieri@profusion.mobi>
- <87vau186qk.fsf@dell.be.48ers.dk>
- <CAPdpN3D9yXBcCLrPxbgW-xXfoOrwqXjr1Mx88K7Mk6cpJqkSvw@mail.gmail.com>
- <CAPdpN3C5s=sd9nvbLab=EkA536vw0EQ30OP+C5iPkFdb3gPFww@mail.gmail.com>
-Message-ID: <87y3yw7c5k.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 31 Dec 2016 08:15:24 +0000
+Subject: [Buildroot] [Bug 9526] Embedded NPM fails to start with "no such
+ file or directory" error
+In-Reply-To: <bug-9526-163@https.bugs.busybox.net/>
+References: <bug-9526-163@https.bugs.busybox.net/>
+Message-ID: <bug-9526-163-h2QjzeZZnn@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Sverzut Barbieri <barbieri@profusion.mobi> writes:
+https://bugs.busybox.net/show_bug.cgi?id=9526
 
- > it's merged upstream, should be in the next release
- > https://github.com/gentoo/eudev/pull/139
+--- Comment #20 from Peter Korsgaard <jacmet@uclibc.org> ---
+(In reply to bilge from comment #19)
 
-Great, thanks!
+I think we are talking past eachother. Dependencies for on the target (E.G. the
+thing that will finally do something with the rootfs) are all runtime
+dependencies, so the build order doesn't matter.
+
+So yeah, you simply need to enable busybox as well to make sure /usr/bin/env is
+also available in the rootfs when the target needs it at runtime. You can tweak
+the busybox config if you want to save some space, but you need to be careful
+to not remove stuff that is needed elsewhere (E.G. env)
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
