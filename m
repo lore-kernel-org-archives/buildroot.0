@@ -1,34 +1,31 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 31 Dec 2016 17:30:37 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: AIGLX
-	Extension removed in 1.19.0
-Message-ID: <20161231163037.13818-1-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 31 Dec 2016 17:41:02 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2016-12-28
+In-Reply-To: <20161229072956.E036B2076B@mail.free-electrons.com>
+References: <20161229072956.E036B2076B@mail.free-electrons.com>
+Message-ID: <20161231164102.GB3495@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://cgit.freedesktop.org/xorg/xserver/commit/?id=501d8e2beb337e072c93c9310fcd927a099b9c3b
+Thomas, All,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xserver_xorg-server/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+On 2016-12-29 08:29 +0100, Thomas Petazzoni spake thusly:
+> Build failures related to your packages:
+>       x86_64 |                      nut-2.7.2 | http://autobuild.buildroot.net/results/4055d38ec83e17239f7915bd54841d4c8c22ce97
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index b7f2b3e..1ee1f0b 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -132,6 +132,8 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
- 	bool "Enable AIGLX Extension"
-+	# AIGLX Extension removed in 1.19.0
-+	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14 || BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	help
- 	  Enable/Use AIGLX extension.
- 
+Unable to reproduce... :-/
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
