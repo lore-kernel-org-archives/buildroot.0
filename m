@@ -1,116 +1,138 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 31 Dec 2016 02:31:44 +0000
-Subject: [Buildroot] [Bug 9531] NPM fails to build embedded modules
-In-Reply-To: <bug-9531-163@https.bugs.busybox.net/>
-References: <bug-9531-163@https.bugs.busybox.net/>
-Message-ID: <bug-9531-163-yI1GkkGBif@https.bugs.busybox.net/>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 31 Dec 2016 01:21:01 -0200
+Subject: [Buildroot] [PATCH 0/9] A checkpackage script that verifies a
+	package coding style
+Message-ID: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9531
+This patch series is only a prototype.
+Please feel free to reject the series if it is too far from what you want.
 
---- Comment #6 from bilge at scriptfusion.com ---
-Hi Peter, unfortunately I cannot stop producing this error. I do not believe
-this is related to `env` on the target at all because I just spent the entire
-day upgrading my toolchain and rebuilding everything to find exactly the same
-error is produced even when `env` is successfully built and installed to the
-target prior to running the NPM module build process.
+I started this patch series out of curiosity.
+Later on, I saw that something similar was in the todo list [1].
 
-NPM tries to run the following command:
+It probably could be achieved using flex + bison, or pyacc, or perl, or
+something else.
+But I implemented using python and non-strict checks, trying to:
+- reduce the chance of problems related to differences between host machines;
+- allow incremental development based on feedback from patch reviews;
+- keep the maintenance easy;
+- generate low number of false warnings.
 
-PATH="/root/buildroot-2016.11/output/host/bin:/root/buildroot-2016.11/output/host/sbin:/root/buildroot-2016.11/output/host/usr/bin:/root/buildroot-2016.11/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-AR="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-ar"
-AS="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-as"
-LD="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-ld"
-NM="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-nm"
-CC="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-gcc"
-GCC="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-gcc"
-CPP="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-cpp"
-CXX="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-g++"
-FC="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-gfortran"
-F77="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-gfortran"
-RANLIB="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-ranlib"
-READELF="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-readelf"
-STRIP="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-strip"
-OBJCOPY="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-objcopy"
-OBJDUMP="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-objdump"
-AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
-CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc"
-CXX_FOR_BUILD="/usr/bin/g++" LD_FOR_BUILD="/usr/bin/ld"
-CPPFLAGS_FOR_BUILD="-I/root/buildroot-2016.11/output/host/usr/include"
-CFLAGS_FOR_BUILD="-O2 -I/root/buildroot-2016.11/output/host/usr/include"
-CXXFLAGS_FOR_BUILD="-O2 -I/root/buildroot-2016.11/output/host/usr/include"
-LDFLAGS_FOR_BUILD="-L/root/buildroot-2016.11/output/host/lib
--L/root/buildroot-2016.11/output/host/usr/lib
--Wl,-rpath,/root/buildroot-2016.11/output/host/usr/lib" FCFLAGS_FOR_BUILD=""
-DEFAULT_ASSEMBLER="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-as"
-DEFAULT_LINKER="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-ld"
-CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os "
-CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
-" LDFLAGS="" FCFLAGS=" -Os " FFLAGS=" -Os "
-PKG_CONFIG="/root/buildroot-2016.11/output/host/usr/bin/pkg-config"
-STAGING_DIR="/root/buildroot-2016.11/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot"
-INTLTOOL_PERL=/usr/bin/perl
-LD="/root/buildroot-2016.11/output/host/usr/bin/x86_64-nano-linux-uclibc-g++"
-npm_config_arch=x64 npm_config_target_arch=x64
-npm_config_build_from_source=true
-npm_config_nodedir=/root/buildroot-2016.11/output/build/nodejs-6.9.2
-npm_config_prefix=/root/buildroot-2016.11/output/target/usr
-/root/buildroot-2016.11/output/host/usr/bin/npm install -g ghost at 0.11.3
+The first patch is an example package to be used to test the output of the
+script for all patches in the series.
 
-Which spits out the same errors mentioned previously:
+The second patch includes a txt file with an overall description and some hints,
+the main engine that calls check functions for each type of file, the first
+check function, and also many comments in the library files that reflect what I
+attempted to accomplish. Of course, the comments can be cut if you disagree with
+any of them.
 
-npm WARN lifecycle ghost at 0.11.3~preinstall: cannot run in wd %s %s (wd=%s)
-ghost at 0.11.3 node core/server/utils/npm/preinstall.js
-/root/buildroot-2016.11/output/target/usr/lib/node_modules/.staging/ghost-88d37318
+Remaining patches include check functions for each type of file. I put the
+patches that I think are most likely to be rejected in the end.
 
-> sqlite3 at 3.1.8 install /root/buildroot-2016.11/output/target/usr/lib/node_modules/ghost/node_modules/sqlite3
-> node-pre-gyp install --fallback-to-build
+Also in the series there is a blob for the manual trying to clarify the expected
+format for help text.
 
-sh: 1: node-pre-gyp: Permission denied
-/root/buildroot-2016.11/output/target/usr/lib
-`-- (empty)
+I did not include yet:
+- entry to DEVELOPERS (just because it is the first iteration);
+- explicit license entry (I guess this way the script inherits the Buildroot
+  license).
 
-npm ERR! Linux 3.13.0-68-generic
-npm ERR! argv "/root/buildroot-2016.11/output/host/usr/bin/node"
-"/root/buildroot-2016.11/output/host/usr/bin/npm" "install" "-g" "ghost at 0.11.3"
-npm ERR! node v6.9.2
-npm ERR! npm  v3.10.9
-npm ERR! file sh
-npm ERR! code ELIFECYCLE
-npm ERR! errno ENOENT
-npm ERR! syscall spawn
+For each patch I include using 'git notes':
+- the time it takes to run for all current packages;
+- for each check function:
+  - the number of warnings it generates for all current packages;
+  - sample output running on the (bad) example package.
 
-npm ERR! sqlite3 at 3.1.8 install: `node-pre-gyp install --fallback-to-build`
-npm ERR! spawn ENOENT
-npm ERR!
-npm ERR! Failed at the sqlite3 at 3.1.8 install script 'node-pre-gyp install
---fallback-to-build'.
-npm ERR! Make sure you have the latest version of node.js and npm installed.
-npm ERR! If you do, this is most likely a problem with the sqlite3 package,
-npm ERR! not with npm itself.
-npm ERR! Tell the author that this fails on your system:
-npm ERR!     node-pre-gyp install --fallback-to-build
-npm ERR! You can get information on how to open an issue for this project with:
-npm ERR!     npm bugs sqlite3
-npm ERR! Or if that isn't available, you can get their info via:
-npm ERR!     npm owner ls sqlite3
-npm ERR! There is likely additional logging output above.
+Here is the list of check functions implemented in this series:
 
-npm ERR! Please include the following file with any support request:
-npm ERR!     /root/buildroot-2016.11/package/nodejs/npm-debug.log
-npm ERR! code 1
+*.patch:
+- check_apply_order
+- check_newline_at_eof
+- check_numbered_subject
+- check_sob
 
-As before, simply removing the `-g` flag results in a successful build in
-whatever the working directory happens to be. This is true for literally any
-directory because I'm root and I can write everywhere, so I do not understand
-where the "sh: 1: node-pre-gyp: Permission denied" error comes from when the
-`-g` flag is specified.
+Config.in.*:
+- check_attributes_order
+- check_consecutive_empty_lines
+- check_empty_last_line
+- check_help_text
+- check_indent
+- check_newline_at_eof
+- check_trailing_space
+
+*.hash:
+- check_consecutive_empty_lines
+- check_empty_last_line
+- check_hash_filename
+- check_hash_number_of_fields
+- check_hash_type
+- check_newline_at_eof
+- check_trailing_space
+
+*.mk:
+- check_consecutive_empty_lines
+- check_empty_last_line
+- check_indent
+- check_newline_at_eof
+- check_package_header
+- check_space_before_backslash
+- check_trailing_backslash
+- check_trailing_space
+- check_typo_in_package_variable
+- check_useless_flag
+
+[1] http://elinux.org/Buildroot#Todo_list
+
+Regards,
+Ricardo
+
+
+Ricardo Martincoski (9):
+  support/scripts/check-package: example
+  support/scripts/check-package: new script
+  check-package: check whitespace and empty lines
+  check-package: check *.hash files
+  check-package: check *.patch files
+  check-package: check *.mk files
+  docs/manual: size of tab in package description
+  check-package: check Config.in.* files
+  check-package: check *.mk for typo in variable
+
+ docs/manual/adding-packages-directory.txt          |   8 +-
+ docs/manual/writing-rules.txt                      |   6 +-
+ support/scripts/check-package                      | 136 ++++++++++++
+ .../package/package1/0001-do-something.patch       |  24 +++
+ .../package/package1/0002-do-something-else.patch  |  24 +++
+ .../package/package1/Config.in                     |  42 ++++
+ .../package/package1/package1.hash                 |   8 +
+ .../package/package1/package1.mk                   |  48 +++++
+ .../package/package1/wrong-name.patch              |  13 ++
+ support/scripts/check-package.txt                  |  76 +++++++
+ support/scripts/checkpackagelib.py                 |  56 +++++
+ support/scripts/checkpackagelib_config.py          | 136 ++++++++++++
+ support/scripts/checkpackagelib_hash.py            |  76 +++++++
+ support/scripts/checkpackagelib_mk.py              | 229 +++++++++++++++++++++
+ support/scripts/checkpackagelib_patch.py           |  50 +++++
+ 15 files changed, 927 insertions(+), 5 deletions(-)
+ create mode 100755 support/scripts/check-package
+ create mode 100644 support/scripts/check-package-example/package/package1/0001-do-something.patch
+ create mode 100644 support/scripts/check-package-example/package/package1/0002-do-something-else.patch
+ create mode 100644 support/scripts/check-package-example/package/package1/Config.in
+ create mode 100644 support/scripts/check-package-example/package/package1/package1.hash
+ create mode 100644 support/scripts/check-package-example/package/package1/package1.mk
+ create mode 100644 support/scripts/check-package-example/package/package1/wrong-name.patch
+ create mode 100644 support/scripts/check-package.txt
+ create mode 100644 support/scripts/checkpackagelib.py
+ create mode 100644 support/scripts/checkpackagelib_config.py
+ create mode 100644 support/scripts/checkpackagelib_hash.py
+ create mode 100644 support/scripts/checkpackagelib_mk.py
+ create mode 100644 support/scripts/checkpackagelib_patch.py
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
