@@ -1,33 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 01 Jan 2017 13:13:01 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: AIGLX
- Extension removed in 1.19.0
-References: <20161231163037.13818-1-romain.naour@gmail.com>
- <vs2njdxqqd.ln2@ID-313208.user.individual.net>
- <6c8e7e25-e2e1-de2b-22fb-810395b4b470@gmail.com>
-Message-ID: <db8njdxqqd.ln2@ID-313208.user.individual.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  1 Jan 2017 14:34:08 +0200
+Subject: [Buildroot] [PATCH] firmware-imx: remove Makefile from target
+Message-ID: <da4f2968d62c1c828196982058b05fdcb72b7cab.1483274048.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 01 Jan 2017 12:50:45 +0100 schrieb Romain Naour:
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> It seems that this new release of xserver is buggy with DRI2 and freeze
-> some applications (even with my new Fedora 25).
-
-Hi,
-
-my initial patch to add 1.19.0 along with 1.18.4 was rejected:
-http://patchwork.ozlabs.org/patch/699642/
-
-> While testing lugaru package [1] with Enlightenment window manager, the
-> game freeze quickly or even in the game menu.
-
-The only X-based app, Kodi 17, I am building with buildroot works fine in 
-fullscreen mode with xserver 1.19.0 & DRI2. Maybe because I am using the 
-Intel xdriver in sna mode:
-https://bugs.freedesktop.org/show_bug.cgi?id=98030#c9
-
-Regards, Bernd
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 1893929ed1f6..08fb4636a099 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -26,6 +26,7 @@ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
+ 	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
+ 		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
++	rm $(TARGET_DIR)/lib/firmware/imx/epdc/fsl-epdc.mk
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.11.0
