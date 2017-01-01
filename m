@@ -1,63 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 1 Jan 2017 12:50:45 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: AIGLX
- Extension removed in 1.19.0
-In-Reply-To: <vs2njdxqqd.ln2@ID-313208.user.individual.net>
-References: <20161231163037.13818-1-romain.naour@gmail.com>
- <vs2njdxqqd.ln2@ID-313208.user.individual.net>
-Message-ID: <6c8e7e25-e2e1-de2b-22fb-810395b4b470@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  1 Jan 2017 13:02:44 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libasplib: fix build error on m68k
+In-Reply-To: <20170101120244.13383-1-bernd.kuhls@t-online.de>
+References: <20170101120244.13383-1-bernd.kuhls@t-online.de>
+Message-ID: <20170101120244.13383-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Patch written by Waldemar Brodkorb:
+http://lists.busybox.net/pipermail/buildroot/2016-November/177726.html
 
-Le 01/01/2017 ? 11:39, Bernd Kuhls a ?crit :
-> Am Sat, 31 Dec 2016 17:30:37 +0100 schrieb Romain Naour:
-> 
->> https://cgit.freedesktop.org/xorg/xserver/commit/?
-> id=501d8e2beb337e072c93c9310fcd927a099b9c3b
->>
->> Signed-off-by: Romain Naour
->> <romain.naour@gmail.com>
->> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
->> ---
->>  package/x11r7/xserver_xorg-server/Config.in | 2 ++
->>  1 file changed, 2 insertions(+)
-> 
-> Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This patch however did not work: "Unfortunately libasplib cmake
+infrastructure ignores my CMAKE_CXX_FLAGS."
 
-Thanks for the ack :)
+To make this patch work libasplib needed to be bumped because the cmake
+infrastructure was updated back in August 2016 which fixed the problem:
+https://github.com/AchimTuran/asplib/commit/6326d1f5e8dad9fd9947b7f4688ddddda91e9e9e
 
-It seems that this new release of xserver is buggy with DRI2 and freeze some
-applications (even with my new Fedora 25).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libasplib/libasplib.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-While testing lugaru package [1] with Enlightenment window manager, the game
-freeze quickly or even in the game menu.
-
-So I've used elementary_test program to check if the test suite run correctly...
-The same problem appear with "GLView Gears" test [2].
-
-It seems I'm not the only one having issues with this release [3] [4].
-Reverting back to 1.18.4 fixed this freeze.
-
-I need to test with 1.19.0 using DRI3 as suggested in [3].
-
-Thoughts ?
-
-Best regards,
-Romain
-
-[1] http://patchwork.ozlabs.org/patch/706847/
-[2] https://phab.enlightenment.org/T5061
-[3] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=846779#30
-[4] https://bugzilla.redhat.com/show_bug.cgi?id=1399396
-
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/libasplib/libasplib.mk b/package/libasplib/libasplib.mk
+index 038fc389e..b3b1fdb30 100644
+--- a/package/libasplib/libasplib.mk
++++ b/package/libasplib/libasplib.mk
+@@ -18,4 +18,11 @@ LIBASPLIB_CONF_OPTS = \
+ 	-DBUILD_SIGNALS=ON \
+ 	-DBUILD_TIMER=ON
+ 
++# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
++ifeq ($(BR2_m68k_cf),y)
++LIBASPLIB_CXXFLAGS += -fno-dwarf2-cfi-asm
++endif
++
++LIBASPLIB_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(LIBASPLIB_CXXFLAGS)"
++
+ $(eval $(cmake-package))
+-- 
+2.11.0
