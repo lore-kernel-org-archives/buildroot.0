@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jan 2017 09:24:27 +0100
-Subject: [Buildroot] [PATCH] udoo: mx6qdl: Use the preferred form for
- disabling a symbol
-In-Reply-To: <1483210839-23311-1-git-send-email-festevam@gmail.com>
-References: <1483210839-23311-1-git-send-email-festevam@gmail.com>
-Message-ID: <20170101092427.2f0f25b8@free-electrons.com>
+Date: Sun, 1 Jan 2017 09:30:04 +0100
+Subject: [Buildroot] [PATCH] use nproc
+In-Reply-To: <6f25e6c1-c176-629f-321c-9b404c5d6de6@landley.net>
+References: <6f25e6c1-c176-629f-321c-9b404c5d6de6@landley.net>
+Message-ID: <20170101093004.5d487c6b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 31 Dec 2016 17:00:39 -0200, Fabio Estevam wrote:
-> Even though 'CONFIG_USB=n' does the job, let's switch to the more
-> standard way for disabling a Kconfig symbol.
+On Fri, 30 Dec 2016 14:14:46 -0600, Rob Landley wrote:
+> My rule of thumb is that once a change is 7 years old, you can rely on
+> the installed base to have it. With that in mind, would you like to use
+> nproc to check how many processors are available?
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  board/udoo/mx6qdl/linux.fragment | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=74cf4cb26dcecd36eb45dc00dbd4587d9dc24a2f
 
-Applied to master, thanks.
+This patch lacks your Signed-off-by line, so we can't apply it as-is.
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
