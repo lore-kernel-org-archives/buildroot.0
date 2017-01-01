@@ -1,39 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jan 2017 09:32:47 +0100
-Subject: [Buildroot] [PATCH] use nproc
-In-Reply-To: <87zijd87rg.fsf@dell.be.48ers.dk>
-References: <6f25e6c1-c176-629f-321c-9b404c5d6de6@landley.net>
- <87zijd87rg.fsf@dell.be.48ers.dk>
-Message-ID: <20170101093247.1e9cc6b3@free-electrons.com>
+Date: Sun, 1 Jan 2017 09:34:59 +0100
+Subject: [Buildroot] [git commit] skalibs: make ld use dummy file when
+	configuring
+Message-ID: <20170101083515.AEA95807E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=32fe6a540beaf240df0aa5560ab040bef6ed7577
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 30 Dec 2016 21:46:43 +0100, Peter Korsgaard wrote:
+For some architectures, like Xtensa or HPPA, ld from binutils requires
+the output file to be a regular file, as mentioned in a bug report on
+the mailing list [1].
 
->  > My rule of thumb is that once a change is 7 years old, you can rely on
->  > the installed base to have it. With that in mind, would you like to use
->  > nproc to check how many processors are available?  
-> 
->  > http://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commit;h=74cf4cb26dcecd36eb45dc00dbd4587d9dc24a2f  
-> 
-> Why? What is the advantage? Purely cosmetical? Are there any well known
-> distributions providing nproc and not getconf?
+So, use a dummy file as output file for ld, instead of /dev/null, when
+trying to detect some libraries at configuration time.
 
-Well, the simplification provided by Rob looks useful to me. It's
-purely cosmetic, but we also do tons of other cosmetic changes.
+Fixes http://autobuild.buildroot.net/results/288/288fc31cd10ffe3cd93371c7be37d79452a91768/
 
-The big question is whether nconf is available even in the really old
-RHEL distros that some of our users have.
+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=19526
 
-Best regards,
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...e-linker-use-dummy-file-when-testing-libs.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch b/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch
+new file mode 100644
+index 0000000..ef0e173
+--- /dev/null
++++ b/package/skalibs/0003-Make-linker-use-dummy-file-when-testing-libs.patch
+@@ -0,0 +1,44 @@
++From da293110f429e1206728c1551cf0f6b462b3d8c0 Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Thu, 29 Dec 2016 19:36:24 +0100
++Subject: [PATCH] Make linker use dummy file when testing libs
++
++For some architectures, like Xtensa or HPPA, ld from binutils requires
++the output file to be a regular file, as mentioned in a bug report on
++the mailing list [1].
++
++So, use a dummy file as output file for ld in trylibs(), instead of
++/dev/null.
++
++[1] https://sourceware.org/bugzilla/show_bug.cgi?id=19526
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ configure | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure b/configure
++index 1579025..12980fb 100755
++--- a/configure
+++++ b/configure
++@@ -173,7 +173,7 @@ trylibs () {
++   echo "Checking whether system has $2..." >&3
++   shift 2
++   if $CC_AUTO $CPPFLAGS_AUTO $CFLAGS_AUTO -c -o try$name.o src/sysdeps/try$name.c 2>/dev/null ; then
++-    until $CC_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o /dev/null try$name.o $args 2>/dev/null ; do
+++    until $CC_AUTO $CFLAGS_AUTO $LDFLAGS_AUTO -o try$name try$name.o $args 2>/dev/null ; do
++       if test -z "$*" ; then
++         rm -f try$name.o
++         echo
++@@ -189,7 +189,7 @@ trylibs () {
++     else
++       echo "  ... yes, with$args" >&3
++     fi
++-    rm -f try$name.o
+++    rm -f try$name.o try$name
++     return 0
++   else
++     echo
++-- 
++2.4.11
++
