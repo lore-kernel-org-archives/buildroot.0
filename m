@@ -1,7 +1,9 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 11:49:18 +0100
-Subject: [Buildroot] [PATCH 1/1] ifenslave: new package
-Message-ID: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
+Date: Mon,  2 Jan 2017 11:49:22 +0100
+Subject: [Buildroot] [PATCH 1/1] python-chardet: new package
+In-Reply-To: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
+References: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
+Message-ID: <1483354166-8331-5-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,70 +12,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
- package/Config.in                |  1 +
- package/ifenslave/Config.in      |  6 ++++++
- package/ifenslave/ifenslave.hash |  4 ++++
- package/ifenslave/ifenslave.mk   | 16 ++++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/ifenslave/Config.in
- create mode 100644 package/ifenslave/ifenslave.hash
- create mode 100644 package/ifenslave/ifenslave.mk
+ package/Config.in                          |  1 +
+ package/python-chardet/Config.in           |  6 ++++++
+ package/python-chardet/python-chardet.hash |  4 ++++
+ package/python-chardet/python-chardet.mk   | 13 +++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-chardet/Config.in
+ create mode 100644 package/python-chardet/python-chardet.hash
+ create mode 100644 package/python-chardet/python-chardet.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9ed296f..9c1cda9 100644
+index 9ed296f..9ae351c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1484,6 +1484,7 @@ menu "Networking applications"
- 	source "package/httping/Config.in"
- 	source "package/ibrdtn-tools/Config.in"
- 	source "package/ibrdtnd/Config.in"
-+	source "package/ifenslave/Config.in"
- 	source "package/ifplugd/Config.in"
- 	source "package/iftop/Config.in"
- 	source "package/ifupdown/Config.in"
-diff --git a/package/ifenslave/Config.in b/package/ifenslave/Config.in
+@@ -652,6 +652,7 @@ menu "External python modules"
+ 	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
+ 	source "package/python-characteristic/Config.in"
++	source "package/python-chardet/Config.in"
+ 	source "package/python-cheetah/Config.in"
+ 	source "package/python-cherrypy/Config.in"
+ 	source "package/python-click/Config.in"
+diff --git a/package/python-chardet/Config.in b/package/python-chardet/Config.in
 new file mode 100644
-index 0000000..357e870
+index 0000000..8d7a0ee
 --- /dev/null
-+++ b/package/ifenslave/Config.in
++++ b/package/python-chardet/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_IFENSLAVE
-+	bool "ifenslave"
++config BR2_PACKAGE_PYTHON_CHARDET
++	bool "python-chardet"
 +	help
-+	  Configure network interfaces for parallel routing (bonding)
++	  Chardet: the Universal Character Encoding Detector
 +
-+	  http://anonscm.debian.org/cgit/collab-maint/ifenslave.git
-diff --git a/package/ifenslave/ifenslave.hash b/package/ifenslave/ifenslave.hash
++	  https://github.com/chardet/chardet
+diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
 new file mode 100644
-index 0000000..3e1247a
+index 0000000..472f77f
 --- /dev/null
-+++ b/package/ifenslave/ifenslave.hash
++++ b/package/python-chardet/python-chardet.hash
 @@ -0,0 +1,4 @@
 +# Locally computed
-+md5 3b3a925fc3502d846c46721516cf0d4d    ifenslave-debian_2.9.tar.gz
-+sha1    055ba806c96d085673a75b1d9b237e1ddf94e629    ifenslave-debian_2.9.tar.gz
-+sha256  f6a00b425098bd3a050774aa659d740cf0297fb018b3e4f268c270e7b1094e40    ifenslave-debian_2.9.tar.gz
-diff --git a/package/ifenslave/ifenslave.mk b/package/ifenslave/ifenslave.mk
++md5 1ce646cc083a7bb07398588db5b90043    python-chardet-2.3.0.tar.gz
++sha1    d94bc88a106a6baffc2ea8a410781f635042d5b5    python-chardet-2.3.0.tar.gz
++sha256  afb95679fb687fad167a714d929d033e3dd0d64b66d3646eecf117d350ae40cc    python-chardet-2.3.0.tar.gz
+diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
 new file mode 100644
-index 0000000..d335ddc
+index 0000000..d405ba7
 --- /dev/null
-+++ b/package/ifenslave/ifenslave.mk
-@@ -0,0 +1,16 @@
++++ b/package/python-chardet/python-chardet.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# ifenslave
++# python-chardet
 +#
 +################################################################################
 +
-+IFENSLAVE_VERSION = debian/2.9
-+IFENSLAVE_SITE = git://anonscm.debian.org/collab-maint/ifenslave.git
-+IFENSLAVE_LICENSE = GPLv3+
-+IFENSLAVE_LICENSE_FILES = debian/copyright
++PYTHON_CHARDET_VERSION = 2.3.0
++PYTHON_CHARDET_SITE = $(call github,chardet,chardet,$(PYTHON_CHARDET_VERSION))
++PYTHON_CHARDET_SETUP_TYPE = setuptools
++PYTHON_CHARDET_LICENSE = GPL-2+
++PYTHON_CHARDET_LICENSE_FILES = LICENSE
 +
-+define IFENSLAVE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/ifenslave $(TARGET_DIR)/sbin/ifenslave
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(python-package))
 -- 
 2.1.4
