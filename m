@@ -1,9 +1,9 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 16:45:25 +0100
-Subject: [Buildroot] [PATCH v2] python-chardet: new package
+Date: Mon,  2 Jan 2017 16:45:24 +0100
+Subject: [Buildroot] [PATCH v2] python-arrow: new package
 In-Reply-To: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
 References: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <1483371929-13907-4-git-send-email-david.bachelart@bbright.com>
+Message-ID: <1483371929-13907-3-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,69 +16,71 @@ Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
 Changes v1 -> v2:
   - download source from pypi.python.org
-  - use upstream MD5 sum in hash file
+  - use MD5 sum from upstream in hash file
 ---
- package/Config.in                          |  1 +
- package/python-chardet/Config.in           |  6 ++++++
- package/python-chardet/python-chardet.hash |  4 ++++
- package/python-chardet/python-chardet.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-chardet/Config.in
- create mode 100644 package/python-chardet/python-chardet.hash
- create mode 100644 package/python-chardet/python-chardet.mk
+ package/Config.in                      |  1 +
+ package/python-arrow/Config.in         |  7 +++++++
+ package/python-arrow/python-arrow.hash |  4 ++++
+ package/python-arrow/python-arrow.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-arrow/Config.in
+ create mode 100644 package/python-arrow/python-arrow.hash
+ create mode 100644 package/python-arrow/python-arrow.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 59fa851..d6b78ad 100644
+index 59fa851..caeb7f5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -652,6 +652,7 @@ menu "External python modules"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-characteristic/Config.in"
-+	source "package/python-chardet/Config.in"
- 	source "package/python-cheetah/Config.in"
- 	source "package/python-cherrypy/Config.in"
- 	source "package/python-click/Config.in"
-diff --git a/package/python-chardet/Config.in b/package/python-chardet/Config.in
+@@ -643,6 +643,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+ 	source "package/python-alsaaudio/Config.in"
+ 	source "package/python-argh/Config.in"
++	source "package/python-arrow/Config.in"
+ 	source "package/python-autobahn/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-beautifulsoup4/Config.in"
+diff --git a/package/python-arrow/Config.in b/package/python-arrow/Config.in
 new file mode 100644
-index 0000000..8d7a0ee
+index 0000000..1332a72
 --- /dev/null
-+++ b/package/python-chardet/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_CHARDET
-+	bool "python-chardet"
++++ b/package/python-arrow/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ARROW
++	bool "python-arrow"
++	select BR2_PACKAGE_PYTHON_DATEUTIL
 +	help
-+	  Chardet: the Universal Character Encoding Detector
++	  Better dates & times for Python
 +
-+	  https://github.com/chardet/chardet
-diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
++	  https://github.com/crsmithdev/arrow/
+diff --git a/package/python-arrow/python-arrow.hash b/package/python-arrow/python-arrow.hash
 new file mode 100644
-index 0000000..273c9e8
+index 0000000..2bdc397
 --- /dev/null
-+++ b/package/python-chardet/python-chardet.hash
++++ b/package/python-arrow/python-arrow.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/chardet/json, sha1 and sha256 locally computed
-+md5 25274d664ccb5130adae08047416e1a8    chardet-2.3.0.tar.gz
-+sha1    50af8f8771ecbeb7a22567129c6c281b8bec3b1c    chardet-2.3.0.tar.gz
-+sha256  e53e38b3a4afe6d1132de62b7400a4ac363452dc5dfcf8d88e8e0cce663c68aa    chardet-2.3.0.tar.gz
-diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
++# md5 from https://pypi.python.org/pypi/arrow/json, sha1 and sha256 locally computed
++md5 5d00592200050ad58284d45a4ee147c6    arrow-0.10.0.tar.gz
++sha1    5e5e043ce64b03274a6083c7fcfc0ac363c3b737    arrow-0.10.0.tar.gz
++sha256  805906f09445afc1f0fc80187db8fe07670e3b25cdafa09b8d8ac264a8c0c722    arrow-0.10.0.tar.gz
+diff --git a/package/python-arrow/python-arrow.mk b/package/python-arrow/python-arrow.mk
 new file mode 100644
-index 0000000..5cec4ae
+index 0000000..6ed702d
 --- /dev/null
-+++ b/package/python-chardet/python-chardet.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-arrow/python-arrow.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-chardet
++# python-arrow
 +#
 +################################################################################
 +
-+PYTHON_CHARDET_VERSION = 2.3.0
-+PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
-+PYTHON_CHARDET_SITE = https://pypi.python.org/packages/7d/87/4e3a3f38b2f5c578ce44f8dc2aa053217de9f0b6d737739b0ddac38ed237
-+PYTHON_CHARDET_SETUP_TYPE = setuptools
-+PYTHON_CHARDET_LICENSE = GPL-2+
-+PYTHON_CHARDET_LICENSE_FILES = LICENSE
++PYTHON_ARROW_VERSION = 0.10.0
++PYTHON_ARROW_SOURCE = arrow-$(PYTHON_ARROW_VERSION).tar.gz
++PYTHON_ARROW_SITE = https://pypi.python.org/packages/54/db/76459c4dd3561bbe682619a5c576ff30c42e37c2e01900ed30a501957150
++PYTHON_ARROW_DEPENDENCIES = python-dateutil
++PYTHON_ARROW_SETUP_TYPE = setuptools
++PYTHON_ARROW_LICENSE = Apache-2.0
++PYTHON_ARROW_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
