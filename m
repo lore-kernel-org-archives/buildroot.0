@@ -1,98 +1,34 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 2 Jan 2017 13:45:08 +0100
-Subject: [Buildroot] [PATCH 1/1] python-whoosh: new package
-In-Reply-To: <1483354166-8331-6-git-send-email-david.bachelart@bbright.com>
-References: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
- <1483354166-8331-6-git-send-email-david.bachelart@bbright.com>
-Message-ID: <CAGm1_ksEf6VHnhj9L-QjcTWknRozRj3ZfOjMS9=_SzV7qGXJrQ@mail.gmail.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Mon,  2 Jan 2017 11:42:58 -0300
+Subject: [Buildroot] [PATCH] weston: fix DEPENDENCIES typo
+Message-ID: <20170102144258.29339-1-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi David,
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-On Mon, Jan 2, 2017 at 11:49 AM, David Bachelart
-<david.bachelart@bbright.com> wrote:
-> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> ---
->  package/Config.in                        |  1 +
->  package/python-whoosh/Config.in          |  9 +++++++++
->  package/python-whoosh/python-whoosh.hash |  3 +++
->  package/python-whoosh/python-whoosh.mk   | 14 ++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/python-whoosh/Config.in
->  create mode 100644 package/python-whoosh/python-whoosh.hash
->  create mode 100644 package/python-whoosh/python-whoosh.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 9ed296f..1107d01 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -806,6 +806,7 @@ menu "External python modules"
->         source "package/python-web2py/Config.in"
->         source "package/python-webpy/Config.in"
->         source "package/python-werkzeug/Config.in"
-> +       source "package/python-whoosh/Config.in"
->         source "package/python-ws4py/Config.in"
->         source "package/python-wsaccel/Config.in"
->         source "package/python-xlrd/Config.in"
-> diff --git a/package/python-whoosh/Config.in b/package/python-whoosh/Config.in
-> new file mode 100644
-> index 0000000..3722704
-> --- /dev/null
-> +++ b/package/python-whoosh/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_WHOOSH
-> +       bool "python-whoosh"
-> +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-> +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-> +       help
-> +         Whoosh is a fast, pure-Python full text indexing, search, and
-> +         spell checking library.
-> +
-> +         https://pypi.python.org/pypi/Whoosh/
-> diff --git a/package/python-whoosh/python-whoosh.hash b/package/python-whoosh/python-whoosh.hash
-> new file mode 100644
-> index 0000000..b55f728
-> --- /dev/null
-> +++ b/package/python-whoosh/python-whoosh.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
+Fixes a build failure with the PPS patchset since libva isn't populated.
 
-please use comment format as in python-tornado package:
-https://git.busybox.net/buildroot/tree/package/python-tornado/python-tornado.hash,
-i.e. reference JSON file.
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/weston/weston.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-> +md5    9a0fc2df9335e1d2e81dd84a2c4c416f  Whoosh-2.7.0.tar.gz
-> +sha256 cdfc0e1c5173207ac7b312afe78d83fb552cfed30427bf7b3dba8b1d26cea8f7  Whoosh-2.7.0.tar.gz
-> diff --git a/package/python-whoosh/python-whoosh.mk b/package/python-whoosh/python-whoosh.mk
-> new file mode 100644
-> index 0000000..64f3820
-> --- /dev/null
-> +++ b/package/python-whoosh/python-whoosh.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-whoosh
-> +#
-> +################################################################################
-> +
-> +PYTHON_WHOOSH_VERSION = 2.7.0
-> +PYTHON_WHOOSH_SOURCE = Whoosh-$(PYTHON_WHOOSH_VERSION).tar.gz
-> +PYTHON_WHOOSH_SITE = http://pypi.python.org/packages/source/W/Whoosh
-> +PYTHON_WHOOSH_SETUP_TYPE = setuptools
-> +PYTHON_WHOOSH_LICENSE = BSD-3c
-> +PYTHON_WHOOSH_LICENSE_FILES = LICENSE.txt
-> +
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 89e16f1..3a02df0 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -109,7 +109,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBVA),y)
+ WESTON_CONF_OPTS += --enable-vaapi-recorder
+-WESTON_DEPENDENIES += libva
++WESTON_DEPENDENCIES += libva
+ else
+ WESTON_CONF_OPTS += --disable-vaapi-recorder
+ endif
+-- 
+2.10.2
