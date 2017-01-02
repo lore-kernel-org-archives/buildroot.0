@@ -1,39 +1,111 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 Jan 2017 16:20:16 -0300
-Subject: [Buildroot] [PATCH] freetype: bump to version 2.7.1
-Message-ID: <20170102192016.16688-1-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 2 Jan 2017 20:58:53 +0100
+Subject: [Buildroot] [PATCH v2] python-arrow: new package
+In-Reply-To: <1483371929-13907-3-git-send-email-david.bachelart@bbright.com>
+References: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
+ <1483371929-13907-3-git-send-email-david.bachelart@bbright.com>
+Message-ID: <CAGm1_ktQ+4FQPJznSSKyXsq5Oa_M7Q6OwJMHJucXpBAr_FbKZw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/freetype/freetype.hash | 2 +-
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, Jan 2, 2017 at 4:45 PM, David Bachelart
+<david.bachelart@bbright.com> wrote:
+> From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>
+> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
+> ---
+> Changes v1 -> v2:
+>   - download source from pypi.python.org
+>   - use MD5 sum from upstream in hash file
+> ---
+>  package/Config.in                      |  1 +
+>  package/python-arrow/Config.in         |  7 +++++++
+>  package/python-arrow/python-arrow.hash |  4 ++++
+>  package/python-arrow/python-arrow.mk   | 15 +++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-arrow/Config.in
+>  create mode 100644 package/python-arrow/python-arrow.hash
+>  create mode 100644 package/python-arrow/python-arrow.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 59fa851..caeb7f5 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -643,6 +643,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+>  menu "External python modules"
+>         source "package/python-alsaaudio/Config.in"
+>         source "package/python-argh/Config.in"
+> +       source "package/python-arrow/Config.in"
+>         source "package/python-autobahn/Config.in"
+>         source "package/python-backports-abc/Config.in"
+>         source "package/python-beautifulsoup4/Config.in"
+> diff --git a/package/python-arrow/Config.in b/package/python-arrow/Config.in
+> new file mode 100644
+> index 0000000..1332a72
+> --- /dev/null
+> +++ b/package/python-arrow/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_ARROW
+> +       bool "python-arrow"
+> +       select BR2_PACKAGE_PYTHON_DATEUTIL
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index d56742c..b2cec04 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	d6a451f5b754857d2aa3964fd4473f8bc5c64e879b24516d780fb26bec7f7d48	freetype-2.7.tar.bz2
-+sha256	3a3bb2c4e15ffb433f2032f50a5b5a92558206822e22bfe8cbe339af4aa82f88	freetype-2.7.1.tar.bz2
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 8a9a285..9484758 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.7
-+FREETYPE_VERSION = 2.7.1
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
--- 
-2.10.2
+tag # runtime is missing, see
+https://git.busybox.net/buildroot/tree/package/python-tornado/Config.in
+
+> +       help
+> +         Better dates & times for Python
+
+. is missing at the end of description
+
+> +
+> +         https://github.com/crsmithdev/arrow/
+> diff --git a/package/python-arrow/python-arrow.hash b/package/python-arrow/python-arrow.hash
+> new file mode 100644
+> index 0000000..2bdc397
+> --- /dev/null
+> +++ b/package/python-arrow/python-arrow.hash
+> @@ -0,0 +1,4 @@
+> +# md5 from https://pypi.python.org/pypi/arrow/json, sha1 and sha256 locally computed
+> +md5 5d00592200050ad58284d45a4ee147c6    arrow-0.10.0.tar.gz
+> +sha1    5e5e043ce64b03274a6083c7fcfc0ac363c3b737    arrow-0.10.0.tar.gz
+
+remove sha1
+
+> +sha256  805906f09445afc1f0fc80187db8fe07670e3b25cdafa09b8d8ac264a8c0c722    arrow-0.10.0.tar.gz
+> diff --git a/package/python-arrow/python-arrow.mk b/package/python-arrow/python-arrow.mk
+> new file mode 100644
+> index 0000000..6ed702d
+> --- /dev/null
+> +++ b/package/python-arrow/python-arrow.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-arrow
+> +#
+> +################################################################################
+> +
+> +PYTHON_ARROW_VERSION = 0.10.0
+> +PYTHON_ARROW_SOURCE = arrow-$(PYTHON_ARROW_VERSION).tar.gz
+> +PYTHON_ARROW_SITE = https://pypi.python.org/packages/54/db/76459c4dd3561bbe682619a5c576ff30c42e37c2e01900ed30a501957150
+> +PYTHON_ARROW_DEPENDENCIES = python-dateutil
+
+python-dateutil is a runtime dependency, so remove it. Btw have tried
+our "./support/scripts/scanpypi arrow" to add this package?
+
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+> +PYTHON_ARROW_SETUP_TYPE = setuptools
+> +PYTHON_ARROW_LICENSE = Apache-2.0
+> +PYTHON_ARROW_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
