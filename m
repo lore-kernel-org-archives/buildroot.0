@@ -1,9 +1,7 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 16:45:29 +0100
-Subject: [Buildroot] [PATCH v2] udpxy: new package
-In-Reply-To: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
-References: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <1483371929-13907-8-git-send-email-david.bachelart@bbright.com>
+Date: Mon,  2 Jan 2017 16:45:22 +0100
+Subject: [Buildroot] [PATCH v2] ifenslave: new package
+Message-ID: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,82 +11,73 @@ To: buildroot@busybox.net
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
 Changes v1 -> v2:
-  - Fix url in mk file (trailing slash)
+  - download tarball from snapshot.debian.org
+  - use upstream SHA256 sum in hash file
 ---
- package/Config.in        |  1 +
- package/udpxy/Config.in  |  8 ++++++++
- package/udpxy/udpxy.hash |  4 ++++
- package/udpxy/udpxy.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/udpxy/Config.in
- create mode 100644 package/udpxy/udpxy.hash
- create mode 100644 package/udpxy/udpxy.mk
+ package/Config.in                |  1 +
+ package/ifenslave/Config.in      |  6 ++++++
+ package/ifenslave/ifenslave.hash |  3 +++
+ package/ifenslave/ifenslave.mk   | 17 +++++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/ifenslave/Config.in
+ create mode 100644 package/ifenslave/ifenslave.hash
+ create mode 100644 package/ifenslave/ifenslave.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 59fa851..208516d 100644
+index 59fa851..5c4e969 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -45,6 +45,7 @@ menu "Audio and video applications"
- 	source "package/tovid/Config.in"
- 	source "package/tstools/Config.in"
- 	source "package/twolame/Config.in"
-+	source "package/udpxy/Config.in"
- 	source "package/upmpdcli/Config.in"
- 	source "package/v4l2grab/Config.in"
- 	source "package/vlc/Config.in"
-diff --git a/package/udpxy/Config.in b/package/udpxy/Config.in
+@@ -1497,6 +1497,7 @@ menu "Networking applications"
+ 	source "package/httping/Config.in"
+ 	source "package/ibrdtn-tools/Config.in"
+ 	source "package/ibrdtnd/Config.in"
++	source "package/ifenslave/Config.in"
+ 	source "package/ifplugd/Config.in"
+ 	source "package/iftop/Config.in"
+ 	source "package/ifupdown/Config.in"
+diff --git a/package/ifenslave/Config.in b/package/ifenslave/Config.in
 new file mode 100644
-index 0000000..febb2ef
+index 0000000..357e870
 --- /dev/null
-+++ b/package/udpxy/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_UDPXY
-+	bool "udpxy"
++++ b/package/ifenslave/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_IFENSLAVE
++	bool "ifenslave"
 +	help
-+	  udpxy is a UDP-to-HTTP multicast traffic relay daemon: it forwards UDP 
-+	  traffic from a given multicast subscription to the requesting HTTP 
-+	  client.
++	  Configure network interfaces for parallel routing (bonding)
 +
-+	  http://www.udpxy.com/
-diff --git a/package/udpxy/udpxy.hash b/package/udpxy/udpxy.hash
++	  http://anonscm.debian.org/cgit/collab-maint/ifenslave.git
+diff --git a/package/ifenslave/ifenslave.hash b/package/ifenslave/ifenslave.hash
 new file mode 100644
-index 0000000..93f1661
+index 0000000..dcf31d0
 --- /dev/null
-+++ b/package/udpxy/udpxy.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+md5 0c953f7dd80329c1a062997afb9b6744  udpxy.1.0.23-9-prod.tar.gz
-+sha1    4194fc98d51284da48d07c44bbc5bdfa4813a4b8    udpxy.1.0.23-9-prod.tar.gz
-+sha256  6ce33b1d14a1aeab4bd2566aca112e41943df4d002a7678d9a715108e6b714bd    udpxy.1.0.23-9-prod.tar.gz
-diff --git a/package/udpxy/udpxy.mk b/package/udpxy/udpxy.mk
++++ b/package/ifenslave/ifenslave.hash
+@@ -0,0 +1,3 @@
++# From http://snapshot.debian.org/archive/debian/20170102T091407Z/pool/main/i/ifenslave/ifenslave_2.9.dsc
++sha1 a17e88fa298ef337e872c8aa5d7a390921239d1a   ifenslave_2.9.tar.xz
++sha256  e5666c0b61347bd06f2394c16eca6895fcb5e5cc83d0a1c596a975274de5a3c9    ifenslave_2.9.tar.xz
+diff --git a/package/ifenslave/ifenslave.mk b/package/ifenslave/ifenslave.mk
 new file mode 100644
-index 0000000..a27ac42
+index 0000000..f808406
 --- /dev/null
-+++ b/package/udpxy/udpxy.mk
-@@ -0,0 +1,24 @@
++++ b/package/ifenslave/ifenslave.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# udpxy
++# ifenslave
 +#
-+#################################################################################
++################################################################################
 +
-+UDPXY_VERSION = 1.0.23-9-prod
-+UDPXY_SOURCE = udpxy.$(UDPXY_VERSION).tar.gz
-+UDPXY_SITE = http://www.udpxy.com/download/1_23
-+UDPXY_LICENSE = GPLv3+
-+UDPXY_LICENSE_FILES = README
++IFENSLAVE_VERSION = 2.9
++IFENSLAVE_SOURCE = ifenslave_$(IFENSLAVE_VERSION).tar.xz
++IFENSLAVE_SITE = http://snapshot.debian.org/archive/debian/20170102T091407Z/pool/main/i/ifenslave
++IFENSLAVE_LICENSE = GPLv3+
++IFENSLAVE_LICENSE_FILES = debian/copyright
 +
-+UDPXY_MAKE_OPTS=$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) PREFIX=/usr
-+
-+define UDPXY_BUILD_CMDS
-+  $(MAKE) $(UDPXY_MAKE_OPTS) -C $(@D)/
-+endef
-+
-+define UDPXY_INSTALL_TARGET_CMDS
-+  $(MAKE) $(UDPXY_MAKE_OPTS) -C $(@D)/ install
++define IFENSLAVE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/ifenslave $(TARGET_DIR)/sbin/ifenslave
 +endef
 +
 +$(eval $(generic-package))
-+
 -- 
 2.1.4
