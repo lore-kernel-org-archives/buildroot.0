@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 2 Jan 2017 21:00:36 +0100
-Subject: [Buildroot] [PATCH v2] python-chardet: new package
-In-Reply-To: <1483371929-13907-4-git-send-email-david.bachelart@bbright.com>
+Date: Mon, 2 Jan 2017 21:02:52 +0100
+Subject: [Buildroot] [PATCH v2] python-whoosh: new package
+In-Reply-To: <1483371929-13907-5-git-send-email-david.bachelart@bbright.com>
 References: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
- <1483371929-13907-4-git-send-email-david.bachelart@bbright.com>
-Message-ID: <CAGm1_ku6Aip7jBhEEK6oo=v6OP2guzbJKBw_5LRByL2Tg2shjQ@mail.gmail.com>
+ <1483371929-13907-5-git-send-email-david.bachelart@bbright.com>
+Message-ID: <CAGm1_kv4tW4RTJJCcwOq_noUrLTW8RS+=oUDQ1g1PST1z8Rs2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,83 +13,77 @@ To: buildroot@busybox.net
 
 On Mon, Jan 2, 2017 at 4:45 PM, David Bachelart
 <david.bachelart@bbright.com> wrote:
-> From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->
 > Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> ---
-> Changes v1 -> v2:
->   - download source from pypi.python.org
->   - use upstream MD5 sum in hash file
-> ---
->  package/Config.in                          |  1 +
->  package/python-chardet/Config.in           |  6 ++++++
->  package/python-chardet/python-chardet.hash |  4 ++++
->  package/python-chardet/python-chardet.mk   | 14 ++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100644 package/python-chardet/Config.in
->  create mode 100644 package/python-chardet/python-chardet.hash
->  create mode 100644 package/python-chardet/python-chardet.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 59fa851..d6b78ad 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -652,6 +652,7 @@ menu "External python modules"
->         source "package/python-certifi/Config.in"
->         source "package/python-cffi/Config.in"
->         source "package/python-characteristic/Config.in"
-> +       source "package/python-chardet/Config.in"
->         source "package/python-cheetah/Config.in"
->         source "package/python-cherrypy/Config.in"
->         source "package/python-click/Config.in"
-> diff --git a/package/python-chardet/Config.in b/package/python-chardet/Config.in
-> new file mode 100644
-> index 0000000..8d7a0ee
-> --- /dev/null
-> +++ b/package/python-chardet/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_CHARDET
-> +       bool "python-chardet"
-> +       help
-> +         Chardet: the Universal Character Encoding Detector
-
-. is missing at the end of the description
-
-> +
-> +         https://github.com/chardet/chardet
-> diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
-> new file mode 100644
-> index 0000000..273c9e8
-> --- /dev/null
-> +++ b/package/python-chardet/python-chardet.hash
-> @@ -0,0 +1,4 @@
-> +# md5 from https://pypi.python.org/pypi/chardet/json, sha1 and sha256 locally computed
-> +md5 25274d664ccb5130adae08047416e1a8    chardet-2.3.0.tar.gz
-> +sha1    50af8f8771ecbeb7a22567129c6c281b8bec3b1c    chardet-2.3.0.tar.gz
-
-remove sha1
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-> +sha256  e53e38b3a4afe6d1132de62b7400a4ac363452dc5dfcf8d88e8e0cce663c68aa    chardet-2.3.0.tar.gz
-> diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
+> ---
+> Changes v1 -> v2:
+>   - change comment format in .hash file (suggested by Yegor Yefremov)
+> ---
+>  package/Config.in                        |  1 +
+>  package/python-whoosh/Config.in          |  9 +++++++++
+>  package/python-whoosh/python-whoosh.hash |  3 +++
+>  package/python-whoosh/python-whoosh.mk   | 14 ++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-whoosh/Config.in
+>  create mode 100644 package/python-whoosh/python-whoosh.hash
+>  create mode 100644 package/python-whoosh/python-whoosh.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 59fa851..0c3eb1c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -810,6 +810,7 @@ menu "External python modules"
+>         source "package/python-web2py/Config.in"
+>         source "package/python-webpy/Config.in"
+>         source "package/python-werkzeug/Config.in"
+> +       source "package/python-whoosh/Config.in"
+>         source "package/python-ws4py/Config.in"
+>         source "package/python-wsaccel/Config.in"
+>         source "package/python-xlrd/Config.in"
+> diff --git a/package/python-whoosh/Config.in b/package/python-whoosh/Config.in
 > new file mode 100644
-> index 0000000..5cec4ae
+> index 0000000..3722704
 > --- /dev/null
-> +++ b/package/python-chardet/python-chardet.mk
+> +++ b/package/python-whoosh/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_WHOOSH
+> +       bool "python-whoosh"
+> +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+> +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+> +       help
+> +         Whoosh is a fast, pure-Python full text indexing, search, and
+> +         spell checking library.
+> +
+> +         https://pypi.python.org/pypi/Whoosh/
+> diff --git a/package/python-whoosh/python-whoosh.hash b/package/python-whoosh/python-whoosh.hash
+> new file mode 100644
+> index 0000000..b14dd0f
+> --- /dev/null
+> +++ b/package/python-whoosh/python-whoosh.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi/Whoosh/json, sha256 locally computed
+> +md5    9a0fc2df9335e1d2e81dd84a2c4c416f  Whoosh-2.7.0.tar.gz
+> +sha256 cdfc0e1c5173207ac7b312afe78d83fb552cfed30427bf7b3dba8b1d26cea8f7  Whoosh-2.7.0.tar.gz
+> diff --git a/package/python-whoosh/python-whoosh.mk b/package/python-whoosh/python-whoosh.mk
+> new file mode 100644
+> index 0000000..64f3820
+> --- /dev/null
+> +++ b/package/python-whoosh/python-whoosh.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-chardet
+> +# python-whoosh
 > +#
 > +################################################################################
 > +
-> +PYTHON_CHARDET_VERSION = 2.3.0
-> +PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
-> +PYTHON_CHARDET_SITE = https://pypi.python.org/packages/7d/87/4e3a3f38b2f5c578ce44f8dc2aa053217de9f0b6d737739b0ddac38ed237
-> +PYTHON_CHARDET_SETUP_TYPE = setuptools
-> +PYTHON_CHARDET_LICENSE = GPL-2+
-> +PYTHON_CHARDET_LICENSE_FILES = LICENSE
+> +PYTHON_WHOOSH_VERSION = 2.7.0
+> +PYTHON_WHOOSH_SOURCE = Whoosh-$(PYTHON_WHOOSH_VERSION).tar.gz
+> +PYTHON_WHOOSH_SITE = http://pypi.python.org/packages/source/W/Whoosh
+> +PYTHON_WHOOSH_SETUP_TYPE = setuptools
+> +PYTHON_WHOOSH_LICENSE = BSD-3c
+> +PYTHON_WHOOSH_LICENSE_FILES = LICENSE.txt
 > +
 > +$(eval $(python-package))
 > --
