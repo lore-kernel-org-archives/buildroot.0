@@ -1,9 +1,9 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 16:45:23 +0100
-Subject: [Buildroot] [PATCH v2] nmon: new package
+Date: Mon,  2 Jan 2017 16:45:26 +0100
+Subject: [Buildroot] [PATCH v2] python-whoosh: new package
 In-Reply-To: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
 References: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <1483371929-13907-2-git-send-email-david.bachelart@bbright.com>
+Message-ID: <1483371929-13907-5-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,84 +13,72 @@ To: buildroot@busybox.net
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
 Changes v1 -> v2:
-  - use upstream SHA1/MD5 sums in hash file
+  - change comment format in .hash file (suggested by Yegor Yefremov)
 ---
- package/Config.in      |  1 +
- package/nmon/Config.in |  7 +++++++
- package/nmon/nmon.hash |  5 +++++
- package/nmon/nmon.mk   | 26 ++++++++++++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/nmon/Config.in
- create mode 100644 package/nmon/nmon.hash
- create mode 100644 package/nmon/nmon.mk
+ package/Config.in                        |  1 +
+ package/python-whoosh/Config.in          |  9 +++++++++
+ package/python-whoosh/python-whoosh.hash |  3 +++
+ package/python-whoosh/python-whoosh.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-whoosh/Config.in
+ create mode 100644 package/python-whoosh/python-whoosh.hash
+ create mode 100644 package/python-whoosh/python-whoosh.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 59fa851..3377db2 100644
+index 59fa851..0c3eb1c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -99,6 +99,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/memstat/Config.in"
- 	source "package/netperf/Config.in"
- 	source "package/netsniff-ng/Config.in"
-+	source "package/nmon/Config.in"
- 	source "package/oprofile/Config.in"
- 	source "package/pax-utils/Config.in"
- 	source "package/pv/Config.in"
-diff --git a/package/nmon/Config.in b/package/nmon/Config.in
+@@ -810,6 +810,7 @@ menu "External python modules"
+ 	source "package/python-web2py/Config.in"
+ 	source "package/python-webpy/Config.in"
+ 	source "package/python-werkzeug/Config.in"
++	source "package/python-whoosh/Config.in"
+ 	source "package/python-ws4py/Config.in"
+ 	source "package/python-wsaccel/Config.in"
+ 	source "package/python-xlrd/Config.in"
+diff --git a/package/python-whoosh/Config.in b/package/python-whoosh/Config.in
 new file mode 100644
-index 0000000..9a620f4
+index 0000000..3722704
 --- /dev/null
-+++ b/package/nmon/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_NMON
-+	bool "nmon"
-+	select BR2_PACKAGE_NCURSES
++++ b/package/python-whoosh/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_WHOOSH
++	bool "python-whoosh"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
 +	help
-+	  Nmon is short for Nigel's performance Monitor for Linux
++	  Whoosh is a fast, pure-Python full text indexing, search, and 
++	  spell checking library.
 +
-+	  http://nmon.sourceforge.net/pmwiki.php
-diff --git a/package/nmon/nmon.hash b/package/nmon/nmon.hash
++	  https://pypi.python.org/pypi/Whoosh/
+diff --git a/package/python-whoosh/python-whoosh.hash b/package/python-whoosh/python-whoosh.hash
 new file mode 100644
-index 0000000..f3a073f
+index 0000000..b14dd0f
 --- /dev/null
-+++ b/package/nmon/nmon.hash
-@@ -0,0 +1,5 @@
-+# From https://sourceforge.net/projects/nmon/files/
-+md5 a72e3eb737c230cd309329330a5545bd    lmon16f.c
-+sha1    b69fdddf86ffe674e0133426fa09935ed678ab7d    lmon16f.c
-+# Locally computed
-+sha256  280a371e17488f8a2c5e0c64273155789be6fa5b937ab5c465488e591bdc5cd9    lmon16f.c
-diff --git a/package/nmon/nmon.mk b/package/nmon/nmon.mk
++++ b/package/python-whoosh/python-whoosh.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/Whoosh/json, sha256 locally computed
++md5	9a0fc2df9335e1d2e81dd84a2c4c416f  Whoosh-2.7.0.tar.gz
++sha256	cdfc0e1c5173207ac7b312afe78d83fb552cfed30427bf7b3dba8b1d26cea8f7  Whoosh-2.7.0.tar.gz
+diff --git a/package/python-whoosh/python-whoosh.mk b/package/python-whoosh/python-whoosh.mk
 new file mode 100644
-index 0000000..6643688
+index 0000000..64f3820
 --- /dev/null
-+++ b/package/nmon/nmon.mk
-@@ -0,0 +1,26 @@
++++ b/package/python-whoosh/python-whoosh.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# nmon
++# python-whoosh
 +#
 +################################################################################
 +
-+NMON_VERSION = 16f
-+NMON_SITE = http://sourceforge.net/projects/nmon/files
-+NMON_SOURCE = lmon$(NMON_VERSION).c
-+NMON_LICENSE = GPLv3+
++PYTHON_WHOOSH_VERSION = 2.7.0
++PYTHON_WHOOSH_SOURCE = Whoosh-$(PYTHON_WHOOSH_VERSION).tar.gz
++PYTHON_WHOOSH_SITE = http://pypi.python.org/packages/source/W/Whoosh
++PYTHON_WHOOSH_SETUP_TYPE = setuptools
++PYTHON_WHOOSH_LICENSE = BSD-3c
++PYTHON_WHOOSH_LICENSE_FILES = LICENSE.txt
 +
-+NMON_DEPENDENCIES = ncurses
-+
-+define NMON_EXTRACT_CMDS
-+  cp $(DL_DIR)/$(NMON_SOURCE) $(@D)
-+endef
-+
-+define NMON_BUILD_CMDS
-+  $(TARGET_CC) -o $(NMON_DIR)/nmon $(NMON_DIR)/$(NMON_SOURCE) -Wall -D JFS -D GETUSER -D LARGEMEM -D DEBIAN -lncurses -lm
-+endef
-+
-+define NMON_INSTALL_TARGET_CMDS
-+  $(INSTALL) -m 0755 -D $(@D)/nmon $(TARGET_DIR)/usr/bin/
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(python-package))
 -- 
 2.1.4
