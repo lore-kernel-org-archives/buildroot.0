@@ -1,9 +1,9 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 11:49:26 +0100
-Subject: [Buildroot] [PATCH 1/1] udpxy: new package
+Date: Mon,  2 Jan 2017 11:49:20 +0100
+Subject: [Buildroot] [PATCH 1/1] nmon: new package
 In-Reply-To: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
 References: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <1483354166-8331-9-git-send-email-david.bachelart@bbright.com>
+Message-ID: <1483354166-8331-3-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,80 +12,81 @@ To: buildroot@busybox.net
 
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
- package/Config.in        |  1 +
- package/udpxy/Config.in  |  8 ++++++++
- package/udpxy/udpxy.hash |  4 ++++
- package/udpxy/udpxy.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/udpxy/Config.in
- create mode 100644 package/udpxy/udpxy.hash
- create mode 100644 package/udpxy/udpxy.mk
+ package/Config.in      |  1 +
+ package/nmon/Config.in |  7 +++++++
+ package/nmon/nmon.hash |  4 ++++
+ package/nmon/nmon.mk   | 26 ++++++++++++++++++++++++++
+ 4 files changed, 38 insertions(+)
+ create mode 100644 package/nmon/Config.in
+ create mode 100644 package/nmon/nmon.hash
+ create mode 100644 package/nmon/nmon.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9ed296f..f9eb67e 100644
+index 9ed296f..25d22c4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -44,6 +44,7 @@ menu "Audio and video applications"
- 	source "package/tovid/Config.in"
- 	source "package/tstools/Config.in"
- 	source "package/twolame/Config.in"
-+	source "package/udpxy/Config.in"
- 	source "package/upmpdcli/Config.in"
- 	source "package/v4l2grab/Config.in"
- 	source "package/vlc/Config.in"
-diff --git a/package/udpxy/Config.in b/package/udpxy/Config.in
+@@ -98,6 +98,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/memstat/Config.in"
+ 	source "package/netperf/Config.in"
+ 	source "package/netsniff-ng/Config.in"
++	source "package/nmon/Config.in"
+ 	source "package/oprofile/Config.in"
+ 	source "package/pax-utils/Config.in"
+ 	source "package/pv/Config.in"
+diff --git a/package/nmon/Config.in b/package/nmon/Config.in
 new file mode 100644
-index 0000000..febb2ef
+index 0000000..9a620f4
 --- /dev/null
-+++ b/package/udpxy/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_UDPXY
-+	bool "udpxy"
++++ b/package/nmon/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_NMON
++	bool "nmon"
++	select BR2_PACKAGE_NCURSES
 +	help
-+	  udpxy is a UDP-to-HTTP multicast traffic relay daemon: it forwards UDP 
-+	  traffic from a given multicast subscription to the requesting HTTP 
-+	  client.
++	  Nmon is short for Nigel's performance Monitor for Linux
 +
-+	  http://www.udpxy.com/
-diff --git a/package/udpxy/udpxy.hash b/package/udpxy/udpxy.hash
++	  http://nmon.sourceforge.net/pmwiki.php
+diff --git a/package/nmon/nmon.hash b/package/nmon/nmon.hash
 new file mode 100644
-index 0000000..93f1661
+index 0000000..41b92b7
 --- /dev/null
-+++ b/package/udpxy/udpxy.hash
++++ b/package/nmon/nmon.hash
 @@ -0,0 +1,4 @@
 +# Locally computed
-+md5 0c953f7dd80329c1a062997afb9b6744  udpxy.1.0.23-9-prod.tar.gz
-+sha1    4194fc98d51284da48d07c44bbc5bdfa4813a4b8    udpxy.1.0.23-9-prod.tar.gz
-+sha256  6ce33b1d14a1aeab4bd2566aca112e41943df4d002a7678d9a715108e6b714bd    udpxy.1.0.23-9-prod.tar.gz
-diff --git a/package/udpxy/udpxy.mk b/package/udpxy/udpxy.mk
++md5 a72e3eb737c230cd309329330a5545bd    lmon16f.c
++sha1    b69fdddf86ffe674e0133426fa09935ed678ab7d    lmon16f.c
++sha256  280a371e17488f8a2c5e0c64273155789be6fa5b937ab5c465488e591bdc5cd9    lmon16f.c
+diff --git a/package/nmon/nmon.mk b/package/nmon/nmon.mk
 new file mode 100644
-index 0000000..d4e5351
+index 0000000..6643688
 --- /dev/null
-+++ b/package/udpxy/udpxy.mk
-@@ -0,0 +1,24 @@
++++ b/package/nmon/nmon.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# udpxy
++# nmon
 +#
-+#################################################################################
++################################################################################
 +
-+UDPXY_VERSION = 1.0.23-9-prod
-+UDPXY_SOURCE = udpxy.$(UDPXY_VERSION).tar.gz
-+UDPXY_SITE = http://www.udpxy.com/download/1_23/
-+UDPXY_LICENSE = GPLv3+
-+UDPXY_LICENSE_FILES = README
++NMON_VERSION = 16f
++NMON_SITE = http://sourceforge.net/projects/nmon/files
++NMON_SOURCE = lmon$(NMON_VERSION).c
++NMON_LICENSE = GPLv3+
 +
-+UDPXY_MAKE_OPTS=$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) PREFIX=/usr
++NMON_DEPENDENCIES = ncurses
 +
-+define UDPXY_BUILD_CMDS
-+  $(MAKE) $(UDPXY_MAKE_OPTS) -C $(@D)/
++define NMON_EXTRACT_CMDS
++  cp $(DL_DIR)/$(NMON_SOURCE) $(@D)
 +endef
 +
-+define UDPXY_INSTALL_TARGET_CMDS
-+  $(MAKE) $(UDPXY_MAKE_OPTS) -C $(@D)/ install
++define NMON_BUILD_CMDS
++  $(TARGET_CC) -o $(NMON_DIR)/nmon $(NMON_DIR)/$(NMON_SOURCE) -Wall -D JFS -D GETUSER -D LARGEMEM -D DEBIAN -lncurses -lm
++endef
++
++define NMON_INSTALL_TARGET_CMDS
++  $(INSTALL) -m 0755 -D $(@D)/nmon $(TARGET_DIR)/usr/bin/
 +endef
 +
 +$(eval $(generic-package))
-+
 -- 
 2.1.4
