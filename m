@@ -1,9 +1,9 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 11:49:23 +0100
-Subject: [Buildroot] [PATCH 1/1] python-whoosh: new package
+Date: Mon,  2 Jan 2017 11:49:26 +0100
+Subject: [Buildroot] [PATCH 1/1] udpxy: new package
 In-Reply-To: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
 References: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <1483354166-8331-6-git-send-email-david.bachelart@bbright.com>
+Message-ID: <1483354166-8331-9-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,70 +12,80 @@ To: buildroot@busybox.net
 
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
- package/Config.in                        |  1 +
- package/python-whoosh/Config.in          |  9 +++++++++
- package/python-whoosh/python-whoosh.hash |  3 +++
- package/python-whoosh/python-whoosh.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-whoosh/Config.in
- create mode 100644 package/python-whoosh/python-whoosh.hash
- create mode 100644 package/python-whoosh/python-whoosh.mk
+ package/Config.in        |  1 +
+ package/udpxy/Config.in  |  8 ++++++++
+ package/udpxy/udpxy.hash |  4 ++++
+ package/udpxy/udpxy.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/udpxy/Config.in
+ create mode 100644 package/udpxy/udpxy.hash
+ create mode 100644 package/udpxy/udpxy.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9ed296f..1107d01 100644
+index 9ed296f..f9eb67e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -806,6 +806,7 @@ menu "External python modules"
- 	source "package/python-web2py/Config.in"
- 	source "package/python-webpy/Config.in"
- 	source "package/python-werkzeug/Config.in"
-+	source "package/python-whoosh/Config.in"
- 	source "package/python-ws4py/Config.in"
- 	source "package/python-wsaccel/Config.in"
- 	source "package/python-xlrd/Config.in"
-diff --git a/package/python-whoosh/Config.in b/package/python-whoosh/Config.in
+@@ -44,6 +44,7 @@ menu "Audio and video applications"
+ 	source "package/tovid/Config.in"
+ 	source "package/tstools/Config.in"
+ 	source "package/twolame/Config.in"
++	source "package/udpxy/Config.in"
+ 	source "package/upmpdcli/Config.in"
+ 	source "package/v4l2grab/Config.in"
+ 	source "package/vlc/Config.in"
+diff --git a/package/udpxy/Config.in b/package/udpxy/Config.in
 new file mode 100644
-index 0000000..3722704
+index 0000000..febb2ef
 --- /dev/null
-+++ b/package/python-whoosh/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_WHOOSH
-+	bool "python-whoosh"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++++ b/package/udpxy/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_UDPXY
++	bool "udpxy"
 +	help
-+	  Whoosh is a fast, pure-Python full text indexing, search, and 
-+	  spell checking library.
++	  udpxy is a UDP-to-HTTP multicast traffic relay daemon: it forwards UDP 
++	  traffic from a given multicast subscription to the requesting HTTP 
++	  client.
 +
-+	  https://pypi.python.org/pypi/Whoosh/
-diff --git a/package/python-whoosh/python-whoosh.hash b/package/python-whoosh/python-whoosh.hash
++	  http://www.udpxy.com/
+diff --git a/package/udpxy/udpxy.hash b/package/udpxy/udpxy.hash
 new file mode 100644
-index 0000000..b55f728
+index 0000000..93f1661
 --- /dev/null
-+++ b/package/python-whoosh/python-whoosh.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
-+md5	9a0fc2df9335e1d2e81dd84a2c4c416f  Whoosh-2.7.0.tar.gz
-+sha256	cdfc0e1c5173207ac7b312afe78d83fb552cfed30427bf7b3dba8b1d26cea8f7  Whoosh-2.7.0.tar.gz
-diff --git a/package/python-whoosh/python-whoosh.mk b/package/python-whoosh/python-whoosh.mk
++++ b/package/udpxy/udpxy.hash
+@@ -0,0 +1,4 @@
++# Locally computed
++md5 0c953f7dd80329c1a062997afb9b6744  udpxy.1.0.23-9-prod.tar.gz
++sha1    4194fc98d51284da48d07c44bbc5bdfa4813a4b8    udpxy.1.0.23-9-prod.tar.gz
++sha256  6ce33b1d14a1aeab4bd2566aca112e41943df4d002a7678d9a715108e6b714bd    udpxy.1.0.23-9-prod.tar.gz
+diff --git a/package/udpxy/udpxy.mk b/package/udpxy/udpxy.mk
 new file mode 100644
-index 0000000..64f3820
+index 0000000..d4e5351
 --- /dev/null
-+++ b/package/python-whoosh/python-whoosh.mk
-@@ -0,0 +1,14 @@
++++ b/package/udpxy/udpxy.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# python-whoosh
++# udpxy
 +#
-+################################################################################
++#################################################################################
 +
-+PYTHON_WHOOSH_VERSION = 2.7.0
-+PYTHON_WHOOSH_SOURCE = Whoosh-$(PYTHON_WHOOSH_VERSION).tar.gz
-+PYTHON_WHOOSH_SITE = http://pypi.python.org/packages/source/W/Whoosh
-+PYTHON_WHOOSH_SETUP_TYPE = setuptools
-+PYTHON_WHOOSH_LICENSE = BSD-3c
-+PYTHON_WHOOSH_LICENSE_FILES = LICENSE.txt
++UDPXY_VERSION = 1.0.23-9-prod
++UDPXY_SOURCE = udpxy.$(UDPXY_VERSION).tar.gz
++UDPXY_SITE = http://www.udpxy.com/download/1_23/
++UDPXY_LICENSE = GPLv3+
++UDPXY_LICENSE_FILES = README
 +
-+$(eval $(python-package))
++UDPXY_MAKE_OPTS=$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) PREFIX=/usr
++
++define UDPXY_BUILD_CMDS
++  $(MAKE) $(UDPXY_MAKE_OPTS) -C $(@D)/
++endef
++
++define UDPXY_INSTALL_TARGET_CMDS
++  $(MAKE) $(UDPXY_MAKE_OPTS) -C $(@D)/ install
++endef
++
++$(eval $(generic-package))
++
 -- 
 2.1.4
