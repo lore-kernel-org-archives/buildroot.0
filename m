@@ -1,45 +1,131 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 Jan 2017 17:31:57 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.16
-Message-ID: <20170102203157.29060-1-gustavo@zacarias.com.ar>
+From: stefan.nickl at gmail.com <stefan.nickl@gmail.com>
+Date: Mon,  2 Jan 2017 23:38:24 +0100
+Subject: [Buildroot] [PATCH] lpppd: new package
+Message-ID: <20170102223824.28266-1-Stefan.Nickl@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From: Stefan Nickl <Stefan.Nickl@gmail.com>
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 7839dc9..7a2d782 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 31f52169bcfeef9efb61480d0950e928ad059552  sqlite-autoconf-3150200.tar.gz
-+sha1 5150313c332b598a98be0c4bd5a04031a216ab13  sqlite-autoconf-3160000.tar.gz
- # Calculated based on the hash above
--sha256 07b35063b9386865b78226cdaca9a299d938a87aaa8fdc4d73edb0cef30f3149  sqlite-autoconf-3150200.tar.gz
-+sha256 5102404047054b2cec2f43463293f94dea39425d42bf386d24596ab4fac7c7ff  sqlite-autoconf-3160000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index cb03249..9a9c7af 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3150200
-+SQLITE_VERSION = 3160000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = http://www.sqlite.org/2016
-+SQLITE_SITE = http://www.sqlite.org/2017
- SQLITE_LICENSE = Public domain
- SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_INSTALL_STAGING = YES
+After the official github repository for PPP has not seen
+any activity for a long time, I've created a fork that
+tries to do some modernization and shed some legacy.
+For more info, please see https://github.com/snickl/lpppd
+
+It is inteded as a drop-in replacement for the original PPP,
+therefore I've marked it as conflicting with the existing pppd
+package.
+
+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+---
+ package/Config.in        |  1 +
+ package/lpppd/Config.in  | 34 ++++++++++++++++++++++++++++++++++
+ package/lpppd/lpppd.hash |  2 ++
+ package/lpppd/lpppd.mk   | 31 +++++++++++++++++++++++++++++++
+ 4 files changed, 68 insertions(+)
+ create mode 100644 package/lpppd/Config.in
+ create mode 100644 package/lpppd/lpppd.hash
+ create mode 100644 package/lpppd/lpppd.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 59fa851..229151b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1527,6 +1527,7 @@ menu "Networking applications"
+ 	source "package/linphone/Config.in"
+ 	source "package/linux-zigbee/Config.in"
+ 	source "package/lldpd/Config.in"
++	source "package/lpppd/Config.in"
+ 	source "package/lrzsz/Config.in"
+ 	source "package/macchanger/Config.in"
+ 	source "package/memcached/Config.in"
+diff --git a/package/lpppd/Config.in b/package/lpppd/Config.in
+new file mode 100644
+index 0000000..ec9db6f
+--- /dev/null
++++ b/package/lpppd/Config.in
+@@ -0,0 +1,34 @@
++config BR2_PACKAGE_LPPPD
++	bool "lpppd"
++	depends on !BR2_STATIC_LIBS
++	depends on !BR2_PACKAGE_PPPD
++	depends on BR2_USE_MMU
++	help
++	  A fork of the Point-to-point protocol daemon
++	  for Linux systems.
++
++	  https://github.com/snickl/lpppd
++
++if BR2_PACKAGE_LPPPD
++
++config BR2_PACKAGE_LPPPD_FILTER
++	select BR2_PACKAGE_LIBPCAP
++	bool "filtering"
++	help
++	  Packet filtering abilities for lpppd. If enabled,
++	  the lpppd active-filter and pass-filter options
++	  are available.
++
++config BR2_PACKAGE_LPPPD_MULTILINK
++	bool "multilink"
++	help
++	  Enable multilink
++
++endif
++
++comment "lpppd conflicts with pppd"
++        depends on BR2_PACKAGE_PPPD
++
++comment "lpppd needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
+diff --git a/package/lpppd/lpppd.hash b/package/lpppd/lpppd.hash
+new file mode 100644
+index 0000000..db4fa68
+--- /dev/null
++++ b/package/lpppd/lpppd.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 d171cccd680abfd11975c9e58b0804b5677a272b126088fa338bae5f606c10c6 lpppd-v1.tar.gz
+diff --git a/package/lpppd/lpppd.mk b/package/lpppd/lpppd.mk
+new file mode 100644
+index 0000000..c5b01b1
+--- /dev/null
++++ b/package/lpppd/lpppd.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# lpppd
++#
++################################################################################
++
++LPPPD_VERSION = v1
++LPPPD_SITE = $(call github,snickl,lpppd,$(LPPPD_VERSION))
++LPPPD_LICENSE = LGPLv2+, LGPL, BSD-4c, BSD-3c, GPLv2+
++LPPPD_LICENSE_FILES = \
++	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
++	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
++
++LPPPD_CONF_OPTS = -DOPTION_LPPPD_INET6=ON
++
++ifeq ($(BR2_PACKAGE_LPPPD_FILTER),y)
++LPPPD_DEPENDENCIES += libpcap
++LPPPD_CONF_OPTS += -DOPTION_LPPPD_PPPD_FILTER=ON
++endif
++
++ifeq ($(BR2_PACKAGE_LPPPD_MULTILINK),y)
++LPPPD_CONF_OPTS += -DOPTION_LPPPD_PPPD_MULTILINK=ON
++endif
++
++define LPPPD_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++	$(INSTALL) -D -m 0755 $(LPPPD_DIR)/scripts/pon $(TARGET_DIR)/usr/bin/pon
++	$(INSTALL) -D -m 0755 $(LPPPD_DIR)/scripts/poff $(TARGET_DIR)/usr/bin/poff
++endef
++
++$(eval $(cmake-package))
 -- 
-2.10.2
+2.9.3
