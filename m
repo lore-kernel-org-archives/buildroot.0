@@ -1,9 +1,9 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 11:49:19 +0100
-Subject: [Buildroot] [PATCH 1/1] jsmn: new package
+Date: Mon,  2 Jan 2017 11:49:23 +0100
+Subject: [Buildroot] [PATCH 1/1] python-whoosh: new package
 In-Reply-To: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
 References: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <1483354166-8331-2-git-send-email-david.bachelart@bbright.com>
+Message-ID: <1483354166-8331-6-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,80 +12,70 @@ To: buildroot@busybox.net
 
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
- package/Config.in      |  1 +
- package/jsmn/Config.in |  7 +++++++
- package/jsmn/jsmn.hash |  4 ++++
- package/jsmn/jsmn.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/jsmn/Config.in
- create mode 100644 package/jsmn/jsmn.hash
- create mode 100644 package/jsmn/jsmn.mk
+ package/Config.in                        |  1 +
+ package/python-whoosh/Config.in          |  9 +++++++++
+ package/python-whoosh/python-whoosh.hash |  3 +++
+ package/python-whoosh/python-whoosh.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-whoosh/Config.in
+ create mode 100644 package/python-whoosh/python-whoosh.hash
+ create mode 100644 package/python-whoosh/python-whoosh.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9ed296f..69e956c 100644
+index 9ed296f..1107d01 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1096,6 +1096,7 @@ menu "JSON/XML"
- 	source "package/expat/Config.in"
- 	source "package/ezxml/Config.in"
- 	source "package/jansson/Config.in"
-+	source "package/jsmn/Config.in"
- 	source "package/json-c/Config.in"
- 	source "package/json-glib/Config.in"
- 	source "package/jsoncpp/Config.in"
-diff --git a/package/jsmn/Config.in b/package/jsmn/Config.in
+@@ -806,6 +806,7 @@ menu "External python modules"
+ 	source "package/python-web2py/Config.in"
+ 	source "package/python-webpy/Config.in"
+ 	source "package/python-werkzeug/Config.in"
++	source "package/python-whoosh/Config.in"
+ 	source "package/python-ws4py/Config.in"
+ 	source "package/python-wsaccel/Config.in"
+ 	source "package/python-xlrd/Config.in"
+diff --git a/package/python-whoosh/Config.in b/package/python-whoosh/Config.in
 new file mode 100644
-index 0000000..23d20f5
+index 0000000..3722704
 --- /dev/null
-+++ b/package/jsmn/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_JSMN
-+	bool "jsmn"
++++ b/package/python-whoosh/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_WHOOSH
++	bool "python-whoosh"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
 +	help
-+	  jsmn (pronounced like 'jasmine') is a minimalistic JSON parser in C. It can 
-+	  be easily integrated into resource-limited or embedded projects.
++	  Whoosh is a fast, pure-Python full text indexing, search, and 
++	  spell checking library.
 +
-+	  https://github.com/zserge/jsmn/
-diff --git a/package/jsmn/jsmn.hash b/package/jsmn/jsmn.hash
++	  https://pypi.python.org/pypi/Whoosh/
+diff --git a/package/python-whoosh/python-whoosh.hash b/package/python-whoosh/python-whoosh.hash
 new file mode 100644
-index 0000000..5cc51c3
+index 0000000..b55f728
 --- /dev/null
-+++ b/package/jsmn/jsmn.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+md5 78e2731c5697a3c35795b6350402e015    jsmn-6021415cc75e7922d45b12935f56348b064d8a7f.tar.gz
-+sha1    09b1a3493db6b1a77b03bc835aa9be6345db5269    jsmn-6021415cc75e7922d45b12935f56348b064d8a7f.tar.gz
-+sha256  e08993848b2abab62aa9572a560bb6e5ed4762f8537cd67c4de6cb17e17090a0    jsmn-6021415cc75e7922d45b12935f56348b064d8a7f.tar.gz
-diff --git a/package/jsmn/jsmn.mk b/package/jsmn/jsmn.mk
++++ b/package/python-whoosh/python-whoosh.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
++md5	9a0fc2df9335e1d2e81dd84a2c4c416f  Whoosh-2.7.0.tar.gz
++sha256	cdfc0e1c5173207ac7b312afe78d83fb552cfed30427bf7b3dba8b1d26cea8f7  Whoosh-2.7.0.tar.gz
+diff --git a/package/python-whoosh/python-whoosh.mk b/package/python-whoosh/python-whoosh.mk
 new file mode 100644
-index 0000000..788694d
+index 0000000..64f3820
 --- /dev/null
-+++ b/package/jsmn/jsmn.mk
-@@ -0,0 +1,25 @@
++++ b/package/python-whoosh/python-whoosh.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# jsmn
++# python-whoosh
 +#
 +################################################################################
 +
-+JSMN_VERSION = 6021415cc75e7922d45b12935f56348b064d8a7f
-+JSMN_SITE = $(call github,zserge,jsmn,$(JSMN_VERSION))
-+JSMN_LICENSE = BSD
-+JSMN_LICENSE_FILES = LICENSE
++PYTHON_WHOOSH_VERSION = 2.7.0
++PYTHON_WHOOSH_SOURCE = Whoosh-$(PYTHON_WHOOSH_VERSION).tar.gz
++PYTHON_WHOOSH_SITE = http://pypi.python.org/packages/source/W/Whoosh
++PYTHON_WHOOSH_SETUP_TYPE = setuptools
++PYTHON_WHOOSH_LICENSE = BSD-3c
++PYTHON_WHOOSH_LICENSE_FILES = LICENSE.txt
 +
-+JSMN_INSTALL_STAGING = YES
-+
-+define JSMN_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-+		AR="$(TARGET_AR)"
-+endef
-+
-+define JSMN_INSTALL_STAGING_CMDS
-+    $(INSTALL) -m 0644 $(@D)/libjsmn.a $(STAGING_DIR)/usr/lib/
-+    $(INSTALL) -m 0644 $(@D)/jsmn.h $(STAGING_DIR)/usr/include/
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(python-package))
 -- 
 2.1.4
