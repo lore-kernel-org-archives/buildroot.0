@@ -1,70 +1,79 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Mon, 2 Jan 2017 09:55:13 +0100
-Subject: [Buildroot] [PATCH v3 0/7] qt5 bump to 5.8.0-rc
-In-Reply-To: <20161221102024.71833cdc@free-electrons.com>
-References: <1481641171-10407-1-git-send-email-anaumann@ultratronik.de>
- <20161217154629.09d3f0e3@free-electrons.com>
- <3e4baa3d-e4cf-0a3f-6508-f68f87012812@andin.de>
- <20161219102642.2b2b57e3@free-electrons.com>
- <d5fd9949-6575-05f0-6dbb-8d9df79869d6@andin.de>
- <20161221102024.71833cdc@free-electrons.com>
-Message-ID: <56c27c5a-07e1-3709-4bfc-60521b0a12c1@andin.de>
+From: David Bachelart <david.bachelart@bbright.com>
+Date: Mon,  2 Jan 2017 11:49:18 +0100
+Subject: [Buildroot] [PATCH 1/1] ifenslave: new package
+Message-ID: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: David Bachelart <david.bachelart@bbright.com>
+---
+ package/Config.in                |  1 +
+ package/ifenslave/Config.in      |  6 ++++++
+ package/ifenslave/ifenslave.hash |  4 ++++
+ package/ifenslave/ifenslave.mk   | 16 ++++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/ifenslave/Config.in
+ create mode 100644 package/ifenslave/ifenslave.hash
+ create mode 100644 package/ifenslave/ifenslave.mk
 
-<snip>
->>
->> With that in mind I thought of our br2-external trees, which we now can
->> have multiple of. There would probably be some way to combine mainline
->> buildroot and an older version of the qt5 packages as external, but lots
->> of questions arise here also. Variable names, additional repos,
->> maintenance...
->
-> That just doesn't work in Buildroot: you can have a single package with
-> a given name. If your different packages for the different Qt versions
-> have different names, then it's a nightmare because all packages that
-> depend on Qt need to handle the different possibilities.
-
-Ok, was just an idea.
-
->
->> So no, I dont think thats a good proposal. But all other solutions I can
->> think of involve some kind of ugly code duplication, increased
->> complexity (ifeq...) and so on. And maintenance will have to be done
->> regardless of the implementation.
->> So with that in mind, I turn to my initial thought of last week. If
->> people/companies need maintenance of older versions, why not maintain
->> the buildroot release that has them? With IoT and the need to for long
->> term support, combined efforts for maintenance would be rather helpful,
->> right?
->
-> We discussed this with Peter, and we would like for now to support both
-> versions within the same package, with a "choice ... endchoice" that
-> allows to choose between the LTS release and the latest release.
->
-> If you look at your patch switching to 5.8 there is in fact very, very
-> little change in the .mk files, so that can be handled with a bunch of
-> ifeq () conditions.
-
-Ok, so the policy for the future would be to support 5.6/LTS + latest 
-release?
-For the hash files, is it possible to just add another line?
-
-About how to go on: I'm not clear if my v4 set stayed without comments, 
-for above not being integrated or just Christmas/New Years. Also, the 
-proposed release date of 5.8 moved to the 17th of January in the 
-meanwhile. What would be a good next step?
-
-Happy new year!
-Andreas
-
->
-> Thanks!
->
-> Thomas
->
+diff --git a/package/Config.in b/package/Config.in
+index 9ed296f..9c1cda9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1484,6 +1484,7 @@ menu "Networking applications"
+ 	source "package/httping/Config.in"
+ 	source "package/ibrdtn-tools/Config.in"
+ 	source "package/ibrdtnd/Config.in"
++	source "package/ifenslave/Config.in"
+ 	source "package/ifplugd/Config.in"
+ 	source "package/iftop/Config.in"
+ 	source "package/ifupdown/Config.in"
+diff --git a/package/ifenslave/Config.in b/package/ifenslave/Config.in
+new file mode 100644
+index 0000000..357e870
+--- /dev/null
++++ b/package/ifenslave/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_IFENSLAVE
++	bool "ifenslave"
++	help
++	  Configure network interfaces for parallel routing (bonding)
++
++	  http://anonscm.debian.org/cgit/collab-maint/ifenslave.git
+diff --git a/package/ifenslave/ifenslave.hash b/package/ifenslave/ifenslave.hash
+new file mode 100644
+index 0000000..3e1247a
+--- /dev/null
++++ b/package/ifenslave/ifenslave.hash
+@@ -0,0 +1,4 @@
++# Locally computed
++md5 3b3a925fc3502d846c46721516cf0d4d    ifenslave-debian_2.9.tar.gz
++sha1    055ba806c96d085673a75b1d9b237e1ddf94e629    ifenslave-debian_2.9.tar.gz
++sha256  f6a00b425098bd3a050774aa659d740cf0297fb018b3e4f268c270e7b1094e40    ifenslave-debian_2.9.tar.gz
+diff --git a/package/ifenslave/ifenslave.mk b/package/ifenslave/ifenslave.mk
+new file mode 100644
+index 0000000..d335ddc
+--- /dev/null
++++ b/package/ifenslave/ifenslave.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# ifenslave
++#
++################################################################################
++
++IFENSLAVE_VERSION = debian/2.9
++IFENSLAVE_SITE = git://anonscm.debian.org/collab-maint/ifenslave.git
++IFENSLAVE_LICENSE = GPLv3+
++IFENSLAVE_LICENSE_FILES = debian/copyright
++
++define IFENSLAVE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/ifenslave $(TARGET_DIR)/sbin/ifenslave
++endef
++
++$(eval $(generic-package))
+-- 
+2.1.4
