@@ -1,9 +1,9 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 11:49:20 +0100
-Subject: [Buildroot] [PATCH 1/1] nmon: new package
+Date: Mon,  2 Jan 2017 11:49:25 +0100
+Subject: [Buildroot] [PATCH 1/1] throttle: new package
 In-Reply-To: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
 References: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <1483354166-8331-3-git-send-email-david.bachelart@bbright.com>
+Message-ID: <1483354166-8331-8-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,81 +12,65 @@ To: buildroot@busybox.net
 
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
- package/Config.in      |  1 +
- package/nmon/Config.in |  7 +++++++
- package/nmon/nmon.hash |  4 ++++
- package/nmon/nmon.mk   | 26 ++++++++++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/nmon/Config.in
- create mode 100644 package/nmon/nmon.hash
- create mode 100644 package/nmon/nmon.mk
+ package/Config.in              |  1 +
+ package/throttle/Config.in     |  7 +++++++
+ package/throttle/throttle.hash |  2 ++
+ package/throttle/throttle.mk   | 12 ++++++++++++
+ 4 files changed, 22 insertions(+)
+ create mode 100644 package/throttle/Config.in
+ create mode 100644 package/throttle/throttle.hash
+ create mode 100644 package/throttle/throttle.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9ed296f..25d22c4 100644
+index 9ed296f..c98c6a8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -98,6 +98,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/memstat/Config.in"
- 	source "package/netperf/Config.in"
- 	source "package/netsniff-ng/Config.in"
-+	source "package/nmon/Config.in"
- 	source "package/oprofile/Config.in"
- 	source "package/pax-utils/Config.in"
- 	source "package/pv/Config.in"
-diff --git a/package/nmon/Config.in b/package/nmon/Config.in
+@@ -1752,6 +1752,7 @@ menu "System tools"
+ 	source "package/systemd-bootchart/Config.in"
+ 	source "package/sysvinit/Config.in"
+ 	source "package/tar/Config.in"
++	source "package/throttle/Config.in"
+ 	source "package/tpm-tools/Config.in"
+ 	source "package/unscd/Config.in"
+ 	source "package/util-linux/Config.in"
+diff --git a/package/throttle/Config.in b/package/throttle/Config.in
 new file mode 100644
-index 0000000..9a620f4
+index 0000000..30f9308
 --- /dev/null
-+++ b/package/nmon/Config.in
++++ b/package/throttle/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_NMON
-+	bool "nmon"
-+	select BR2_PACKAGE_NCURSES
++config BR2_PACKAGE_THROTTLE
++	bool "throttle"
 +	help
-+	  Nmon is short for Nigel's performance Monitor for Linux
++	  Throttle copies the standard input to the standard output while limiting
++	  bandwidth to the specified maximum.
 +
-+	  http://nmon.sourceforge.net/pmwiki.php
-diff --git a/package/nmon/nmon.hash b/package/nmon/nmon.hash
++	  http://rpms.famillecollet.com/rpmphp/zoom.php?rpm=throttle
+diff --git a/package/throttle/throttle.hash b/package/throttle/throttle.hash
 new file mode 100644
-index 0000000..41b92b7
+index 0000000..b8edef5
 --- /dev/null
-+++ b/package/nmon/nmon.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+md5 a72e3eb737c230cd309329330a5545bd    lmon16f.c
-+sha1    b69fdddf86ffe674e0133426fa09935ed678ab7d    lmon16f.c
-+sha256  280a371e17488f8a2c5e0c64273155789be6fa5b937ab5c465488e591bdc5cd9    lmon16f.c
-diff --git a/package/nmon/nmon.mk b/package/nmon/nmon.mk
++++ b/package/throttle/throttle.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  6d90e4dcd6c604846020d60e82df1576e0a022cb96716a709db4ebfa143d6772  throttle-1.2.tar.gz
+diff --git a/package/throttle/throttle.mk b/package/throttle/throttle.mk
 new file mode 100644
-index 0000000..6643688
+index 0000000..8f3bdc8
 --- /dev/null
-+++ b/package/nmon/nmon.mk
-@@ -0,0 +1,26 @@
++++ b/package/throttle/throttle.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# nmon
++# throttle
 +#
 +################################################################################
 +
-+NMON_VERSION = 16f
-+NMON_SITE = http://sourceforge.net/projects/nmon/files
-+NMON_SOURCE = lmon$(NMON_VERSION).c
-+NMON_LICENSE = GPLv3+
++THROTTLE_VERSION = 1.2
++THROTTLE_SITE = http://pkgs.fedoraproject.org/repo/pkgs/throttle/throttle-$(THROTTLE_VERSION).tar.gz/bb8abf5a9a63ed7d80951f056543a88c/
++THROTTLE_LICENSE = GPLv2+ 
++THROTTLE_LICENSE_FILES = COPYING
 +
-+NMON_DEPENDENCIES = ncurses
-+
-+define NMON_EXTRACT_CMDS
-+  cp $(DL_DIR)/$(NMON_SOURCE) $(@D)
-+endef
-+
-+define NMON_BUILD_CMDS
-+  $(TARGET_CC) -o $(NMON_DIR)/nmon $(NMON_DIR)/$(NMON_SOURCE) -Wall -D JFS -D GETUSER -D LARGEMEM -D DEBIAN -lncurses -lm
-+endef
-+
-+define NMON_INSTALL_TARGET_CMDS
-+  $(INSTALL) -m 0755 -D $(@D)/nmon $(TARGET_DIR)/usr/bin/
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 2.1.4
