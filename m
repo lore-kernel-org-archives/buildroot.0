@@ -1,87 +1,94 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 16:45:24 +0100
-Subject: [Buildroot] [PATCH v2] python-arrow: new package
+Date: Mon,  2 Jan 2017 16:45:29 +0100
+Subject: [Buildroot] [PATCH v2] udpxy: new package
 In-Reply-To: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
 References: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <1483371929-13907-3-git-send-email-david.bachelart@bbright.com>
+Message-ID: <1483371929-13907-8-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
 Changes v1 -> v2:
-  - download source from pypi.python.org
-  - use MD5 sum from upstream in hash file
+  - Fix url in mk file (trailing slash)
 ---
- package/Config.in                      |  1 +
- package/python-arrow/Config.in         |  7 +++++++
- package/python-arrow/python-arrow.hash |  4 ++++
- package/python-arrow/python-arrow.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-arrow/Config.in
- create mode 100644 package/python-arrow/python-arrow.hash
- create mode 100644 package/python-arrow/python-arrow.mk
+ package/Config.in        |  1 +
+ package/udpxy/Config.in  |  8 ++++++++
+ package/udpxy/udpxy.hash |  4 ++++
+ package/udpxy/udpxy.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/udpxy/Config.in
+ create mode 100644 package/udpxy/udpxy.hash
+ create mode 100644 package/udpxy/udpxy.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 59fa851..caeb7f5 100644
+index 59fa851..208516d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -643,6 +643,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-argh/Config.in"
-+	source "package/python-arrow/Config.in"
- 	source "package/python-autobahn/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
-diff --git a/package/python-arrow/Config.in b/package/python-arrow/Config.in
+@@ -45,6 +45,7 @@ menu "Audio and video applications"
+ 	source "package/tovid/Config.in"
+ 	source "package/tstools/Config.in"
+ 	source "package/twolame/Config.in"
++	source "package/udpxy/Config.in"
+ 	source "package/upmpdcli/Config.in"
+ 	source "package/v4l2grab/Config.in"
+ 	source "package/vlc/Config.in"
+diff --git a/package/udpxy/Config.in b/package/udpxy/Config.in
 new file mode 100644
-index 0000000..1332a72
+index 0000000..febb2ef
 --- /dev/null
-+++ b/package/python-arrow/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_ARROW
-+	bool "python-arrow"
-+	select BR2_PACKAGE_PYTHON_DATEUTIL
++++ b/package/udpxy/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_UDPXY
++	bool "udpxy"
 +	help
-+	  Better dates & times for Python
++	  udpxy is a UDP-to-HTTP multicast traffic relay daemon: it forwards UDP 
++	  traffic from a given multicast subscription to the requesting HTTP 
++	  client.
 +
-+	  https://github.com/crsmithdev/arrow/
-diff --git a/package/python-arrow/python-arrow.hash b/package/python-arrow/python-arrow.hash
++	  http://www.udpxy.com/
+diff --git a/package/udpxy/udpxy.hash b/package/udpxy/udpxy.hash
 new file mode 100644
-index 0000000..2bdc397
+index 0000000..93f1661
 --- /dev/null
-+++ b/package/python-arrow/python-arrow.hash
++++ b/package/udpxy/udpxy.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/arrow/json, sha1 and sha256 locally computed
-+md5 5d00592200050ad58284d45a4ee147c6    arrow-0.10.0.tar.gz
-+sha1    5e5e043ce64b03274a6083c7fcfc0ac363c3b737    arrow-0.10.0.tar.gz
-+sha256  805906f09445afc1f0fc80187db8fe07670e3b25cdafa09b8d8ac264a8c0c722    arrow-0.10.0.tar.gz
-diff --git a/package/python-arrow/python-arrow.mk b/package/python-arrow/python-arrow.mk
++# Locally computed
++md5 0c953f7dd80329c1a062997afb9b6744  udpxy.1.0.23-9-prod.tar.gz
++sha1    4194fc98d51284da48d07c44bbc5bdfa4813a4b8    udpxy.1.0.23-9-prod.tar.gz
++sha256  6ce33b1d14a1aeab4bd2566aca112e41943df4d002a7678d9a715108e6b714bd    udpxy.1.0.23-9-prod.tar.gz
+diff --git a/package/udpxy/udpxy.mk b/package/udpxy/udpxy.mk
 new file mode 100644
-index 0000000..6ed702d
+index 0000000..a27ac42
 --- /dev/null
-+++ b/package/python-arrow/python-arrow.mk
-@@ -0,0 +1,15 @@
++++ b/package/udpxy/udpxy.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# python-arrow
++# udpxy
 +#
-+################################################################################
++#################################################################################
 +
-+PYTHON_ARROW_VERSION = 0.10.0
-+PYTHON_ARROW_SOURCE = arrow-$(PYTHON_ARROW_VERSION).tar.gz
-+PYTHON_ARROW_SITE = https://pypi.python.org/packages/54/db/76459c4dd3561bbe682619a5c576ff30c42e37c2e01900ed30a501957150
-+PYTHON_ARROW_DEPENDENCIES = python-dateutil
-+PYTHON_ARROW_SETUP_TYPE = setuptools
-+PYTHON_ARROW_LICENSE = Apache-2.0
-+PYTHON_ARROW_LICENSE_FILES = LICENSE
++UDPXY_VERSION = 1.0.23-9-prod
++UDPXY_SOURCE = udpxy.$(UDPXY_VERSION).tar.gz
++UDPXY_SITE = http://www.udpxy.com/download/1_23
++UDPXY_LICENSE = GPLv3+
++UDPXY_LICENSE_FILES = README
 +
-+$(eval $(python-package))
++UDPXY_MAKE_OPTS=$(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) PREFIX=/usr
++
++define UDPXY_BUILD_CMDS
++  $(MAKE) $(UDPXY_MAKE_OPTS) -C $(@D)/
++endef
++
++define UDPXY_INSTALL_TARGET_CMDS
++  $(MAKE) $(UDPXY_MAKE_OPTS) -C $(@D)/ install
++endef
++
++$(eval $(generic-package))
++
 -- 
 2.1.4
