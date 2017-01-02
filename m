@@ -1,9 +1,9 @@
 From: David Bachelart <david.bachelart@bbright.com>
-Date: Mon,  2 Jan 2017 11:49:21 +0100
-Subject: [Buildroot] [PATCH 1/1] python-arrow: new package
+Date: Mon,  2 Jan 2017 11:49:24 +0100
+Subject: [Buildroot] [PATCH 1/1] sslh: new package
 In-Reply-To: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
 References: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <1483354166-8331-4-git-send-email-david.bachelart@bbright.com>
+Message-ID: <1483354166-8331-7-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +12,217 @@ To: buildroot@busybox.net
 
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
- package/Config.in                      |  1 +
- package/python-arrow/Config.in         |  7 +++++++
- package/python-arrow/python-arrow.hash |  4 ++++
- package/python-arrow/python-arrow.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-arrow/Config.in
- create mode 100644 package/python-arrow/python-arrow.hash
- create mode 100644 package/python-arrow/python-arrow.mk
+ package/Config.in                               |  1 +
+ package/sslh/0100-version-messup-with-git.patch | 47 +++++++++++++++++++++++++
+ package/sslh/Config.in                          | 14 ++++++++
+ package/sslh/S35sslh                            | 41 +++++++++++++++++++++
+ package/sslh/sslh.default                       | 14 ++++++++
+ package/sslh/sslh.hash                          |  4 +++
+ package/sslh/sslh.mk                            | 29 +++++++++++++++
+ 7 files changed, 150 insertions(+)
+ create mode 100644 package/sslh/0100-version-messup-with-git.patch
+ create mode 100644 package/sslh/Config.in
+ create mode 100644 package/sslh/S35sslh
+ create mode 100644 package/sslh/sslh.default
+ create mode 100644 package/sslh/sslh.hash
+ create mode 100644 package/sslh/sslh.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9ed296f..4337872 100644
+index 9ed296f..dbad568 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -643,6 +643,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-argh/Config.in"
-+	source "package/python-arrow/Config.in"
- 	source "package/python-autobahn/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
-diff --git a/package/python-arrow/Config.in b/package/python-arrow/Config.in
+@@ -1600,6 +1600,7 @@ endif
+ 	source "package/spice-protocol/Config.in"
+ 	source "package/squid/Config.in"
+ 	source "package/sshpass/Config.in"
++	source "package/sslh/Config.in"
+ 	source "package/strongswan/Config.in"
+ 	source "package/stunnel/Config.in"
+ 	source "package/tcpdump/Config.in"
+diff --git a/package/sslh/0100-version-messup-with-git.patch b/package/sslh/0100-version-messup-with-git.patch
 new file mode 100644
-index 0000000..1332a72
+index 0000000..f4bc7c9
 --- /dev/null
-+++ b/package/python-arrow/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_ARROW
-+	bool "python-arrow"
-+	select BR2_PACKAGE_PYTHON_DATEUTIL
-+	help
-+	  Better dates & times for Python
-+
-+	  https://github.com/crsmithdev/arrow/
-diff --git a/package/python-arrow/python-arrow.hash b/package/python-arrow/python-arrow.hash
++++ b/package/sslh/0100-version-messup-with-git.patch
+@@ -0,0 +1,47 @@
++diff --git a/genver.sh b/genver.sh
++index 4d6e76a..7e9176f 100755
++--- a/genver.sh
+++++ b/genver.sh
++@@ -7,7 +7,7 @@ else
++ 	QUIET=0
++ fi
++ 
++-if ! `(git status | grep -q "On branch") 2> /dev/null`; then
+++#if ! `(git status | grep -q "On branch") 2> /dev/null`; then
++         # If we don't have git, we can't work out what
++         # version this is. It must have been downloaded as a
++         # zip file. 
++@@ -23,20 +23,20 @@ if ! `(git status | grep -q "On branch") 2> /dev/null`; then
++             # release number
++             release=head-`perl -MPOSIX -e 'print strftime "%Y-%m-%d",localtime((stat "Makefile")[9])'`
++         fi
++-fi
++-
++-if head=`git rev-parse --verify HEAD 2>/dev/null`; then
++-	# generate the version info based on the tag
++-	release=`(git describe --tags || git --describe || git describe --all --long) \
++-		2>/dev/null | tr -d '\n'`
+++#fi
++ 
++-	# Are there uncommitted changes?
++-	git update-index --refresh --unmerged > /dev/null
++-	if git diff-index --name-only HEAD | grep -v "^scripts/package" \
++-	    | read dummy; then
++-		release="$release-dirty"
++-	fi
++-fi
+++#if head=`git rev-parse --verify HEAD 2>/dev/null`; then
+++#	# generate the version info based on the tag
+++#	release=`(git describe --tags || git --describe || git describe --all --long) \
+++#		2>/dev/null | tr -d '\n'`
+++#
+++#	# Are there uncommitted changes?
+++#	git update-index --refresh --unmerged > /dev/null
+++#	if git diff-index --name-only HEAD | grep -v "^scripts/package" \
+++#	    | read dummy; then
+++#		release="$release-dirty"
+++#	fi
+++#fi
++ 
++ 
++ if [ $QUIET -ne 1 ]; then
+diff --git a/package/sslh/Config.in b/package/sslh/Config.in
 new file mode 100644
-index 0000000..6c8a329
+index 0000000..3794175
 --- /dev/null
-+++ b/package/python-arrow/python-arrow.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+md5 b4ea162996977d572177da47efca5db5    python-arrow-0.10.0.tar.gz
-+sha1    5968918ae65808d92126898e6f9400d12cfec0e3    python-arrow-0.10.0.tar.gz
-+sha256  4ed4f6c86e9d3e75a1f77af13d6f5a08f6891ab5c815b20f1f7b7c88ffcad118    python-arrow-0.10.0.tar.gz
-diff --git a/package/python-arrow/python-arrow.mk b/package/python-arrow/python-arrow.mk
-new file mode 100644
-index 0000000..d37ab61
---- /dev/null
-+++ b/package/python-arrow/python-arrow.mk
++++ b/package/sslh/Config.in
 @@ -0,0 +1,14 @@
++config BR2_PACKAGE_SSLH
++	bool "sslh"
++	depends on BR2_INSTALL_LIBSTDCPP
++	# uses fork()
++	depends on BR2_USE_MMU
++	select BR2_PACKAGE_LIBCONFIG
++	help
++	  Applicative protocol multiplexer
++
++	  http://www.rutschle.net/tech/sslh.shtml
++
++comment "iperf needs a toolchain w/ C++"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/sslh/S35sslh b/package/sslh/S35sslh
+new file mode 100644
+index 0000000..63a16da
+--- /dev/null
++++ b/package/sslh/S35sslh
+@@ -0,0 +1,41 @@
++#!/bin/sh
++#
++# Starts the SSLH server
++#
++
++NAME=sslh
++DAEMON=/usr/sbin/$NAME
++PIDFILE=/var/run/$NAME.pid
++
++. /etc/default/sslh
++
++start()
++{
++	echo -n "Starting $NAME: "
++	start-stop-daemon -S -q --exec $DAEMON -- $DAEMON_OPTS --pidfile $PIDFILE && echo "OK" || echo "Failed"
++}
++
++stop()
++{
++	echo -n "Stopping $NAME: "
++	start-stop-daemon -K -q -x $DAEMON && echo "OK" || echo "Failed"
++	rm -f $PIDFILE
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart|reload)
++		stop
++		start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
++
++exit $?
+diff --git a/package/sslh/sslh.default b/package/sslh/sslh.default
+new file mode 100644
+index 0000000..2d2a1b1
+--- /dev/null
++++ b/package/sslh/sslh.default
+@@ -0,0 +1,14 @@
++# Default options for sslh initscript
++# sourced by /etc/init.d/sslh
++
++# Disabled by default, to force yourself
++# to read the configuration:
++# - /usr/share/doc/sslh/README.Debian (quick start)
++# - /usr/share/doc/sslh/README, at "Configuration" section
++# - sslh(8) via "man sslh" for more configuration details.
++# Once configuration ready, you *must* set RUN to yes here
++# and try to start sslh (standalone mode only)
++
++RUN=yes
++
++DAEMON_OPTS="--user root --listen 0.0.0.0:8090 --ssh 127.0.0.1:22 --http 127.0.0.1:80"
+diff --git a/package/sslh/sslh.hash b/package/sslh/sslh.hash
+new file mode 100644
+index 0000000..8a3dce9
+--- /dev/null
++++ b/package/sslh/sslh.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++md5 0e3568d5d234516c634d4df156473298    sslh-v1.18.tar.gz
++sha1    b2e3a4314f62fc8200ecfbadefebe809a84d8099    sslh-v1.18.tar.gz
++sha256  1601a5b377dcafc6b47d2fbb8d4d25cceb83053a4adcc5874d501a2d5a7745ad    sslh-v1.18.tar.gz
+diff --git a/package/sslh/sslh.mk b/package/sslh/sslh.mk
+new file mode 100644
+index 0000000..fa2d1a6
+--- /dev/null
++++ b/package/sslh/sslh.mk
+@@ -0,0 +1,29 @@
 +################################################################################
 +#
-+# python-arrow
++# sslh
 +#
 +################################################################################
 +
-+PYTHON_ARROW_VERSION = 0.10.0
-+PYTHON_ARROW_SITE = $(call github,crsmithdev,arrow,$(PYTHON_ARROW_VERSION))
-+PYTHON_ARROW_DEPENDENCIES = python-dateutil
-+PYTHON_ARROW_SETUP_TYPE = setuptools
-+PYTHON_ARROW_LICENSE = Apache-2.0
-+PYTHON_ARROW_LICENSE_FILES = LICENSE
++SSLH_VERSION = 1.17
++SSLH_SITE = http://www.rutschle.net/tech
++SSLH_SOURCE = sslh-v$(SSLH_VERSION).tar.gz
++SSLH_LICENSE = GPL-v2+
++SSLH_LICENSE_FILES = COPYING
 +
-+$(eval $(python-package))
++SSLH_DEPENDENCIES = libconfig
++
++define SSLH_BUILD_CMDS
++  $(TARGET_MAKE_ENV) make CC=$(TARGET_CC) -C $(SSLH_DIR)
++endef
++
++define SSLH_INSTALL_TARGET_CMDS
++  $(INSTALL) -m 755 -D $(@D)/sslh-fork $(TARGET_DIR)/usr/sbin/sslh
++  $(INSTALL) -m 644 -D package/sslh/sslh.default $(TARGET_DIR)/etc/default/sslh
++endef
++
++define SSLH_INSTALL_INIT_SYSV
++  $(INSTALL) -m 755 -D package/sslh/S35sslh $(TARGET_DIR)/etc/init.d/S35sslh
++endef
++
++$(eval $(generic-package))
++
 -- 
 2.1.4
