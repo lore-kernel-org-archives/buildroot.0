@@ -1,21 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Jan 2017 23:53:50 +0100
-Subject: [Buildroot] [PATCH] granite: bump to version 0.4.0.1
-In-Reply-To: <20170103195217.30322-1-gustavo@zacarias.com.ar> (Gustavo
- Zacarias's message of "Tue, 3 Jan 2017 16:52:17 -0300")
-References: <20170103195217.30322-1-gustavo@zacarias.com.ar>
-Message-ID: <87vatv3gch.fsf@dell.be.48ers.dk>
+Date: Tue, 3 Jan 2017 23:48:59 +0100
+Subject: [Buildroot] [git commit] collectd: fix riemann write plugin
+	dependencies
+Message-ID: <20170103225412.91D8B8180B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=103fd78bf77693d6e79212d1b8ec825ffd78fdba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.org/results/fe5/fe5b5ed6355a794e84894c4aaf62eda6529ed184/
+http://autobuild.buildroot.org/results/6c3/6c393cffb6ad4e676e311e9fc23ddbb2bcc2cf36/
 
-Committed, thanks.
+The plugin uses the riemann-c-client library since commit d55584214206
+(write_riemann: Use riemann-c-client), so adjust the dependencies to match.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/collectd/Config.in   | 2 +-
+ package/collectd/collectd.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index ab49b71..683141b 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -550,7 +550,7 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	# protobuf-c -> host-protobuf
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	select BR2_PACKAGE_PROTOBUF_C
++	select BR2_PACKAGE_RIEMANN_C_CLIENT
+ 	select BR2_PACKAGE_LIBTOOL
+ 	help
+ 	  Sends data to Riemann, a stream processing and monitoring system.
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 28c1b31..7ab7dd4 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -146,7 +146,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_OPENLDAP),openldap) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_PING),liboping) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_POSTGRESQL),postgresql) \
+-	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),libtool protobuf-c) \
++	$(if $(BR2_PACKAGE_COLLECTD_RIEMANN),libtool riemann-c-client) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_RRDTOOL),rrdtool) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SENSORS),lm-sensors) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_SMART),libatasmart) \
