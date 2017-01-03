@@ -1,187 +1,169 @@
-From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-Date: Tue, 3 Jan 2017 19:40:14 -0200
-Subject: [Buildroot] [PATCH] package/upower: new package
-In-Reply-To: <CAPdpN3C9Pq8uF5GQxshw2xSe0MmZ925OgqCFORF2_D7JJfHFbQ@mail.gmail.com>
-References: <20161229202907.12217-1-romain.naour@gmail.com>
- <CAPdpN3C9Pq8uF5GQxshw2xSe0MmZ925OgqCFORF2_D7JJfHFbQ@mail.gmail.com>
-Message-ID: <CAPdpN3AVPKtfbiiJrZVjM=MSSX7_-UoQerQdr_-ozGfTi3owGQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 3 Jan 2017 23:20:38 +0100
+Subject: [Buildroot] [PATCH 2/2] efl: do not force dependency on libudev
+ by making eeze a config option.
+In-Reply-To: <20170103212932.9254-3-barbieri@profusion.mobi>
+References: <20170103212932.9254-1-barbieri@profusion.mobi>
+ <20170103212932.9254-3-barbieri@profusion.mobi>
+Message-ID: <1bbc8ae0-66c1-5e55-4d1a-64dfba384d40@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ping.
+Hi Gustavo,
 
-Do we need to do anything to land this and
-http://patchwork.ozlabs.org/patch/709798/ (efl: optional 'upower'
-ecore system module.)
+Thanks for these patches!
 
-On Fri, Dec 30, 2016 at 11:40 AM, Gustavo Sverzut Barbieri
-<barbieri@profusion.mobi> wrote:
-> On Thu, Dec 29, 2016 at 6:29 PM, Romain Naour <romain.naour@gmail.com> wrote:
->> Backport an upstream patch.
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
->> ---
->>  package/Config.in                                  |  1 +
->>  .../0001-daemon-fix-get_critical_action.patch      | 34 ++++++++++++++++++++++
->>  package/upower/Config.in                           | 26 +++++++++++++++++
->>  package/upower/upower.hash                         |  2 ++
->>  package/upower/upower.mk                           | 25 ++++++++++++++++
->>  5 files changed, 88 insertions(+)
->>  create mode 100644 package/upower/0001-daemon-fix-get_critical_action.patch
->>  create mode 100644 package/upower/Config.in
->>  create mode 100644 package/upower/upower.hash
->>  create mode 100644 package/upower/upower.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 18818fa..da9715c 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -474,6 +474,7 @@ endmenu
->>         source "package/ubus/Config.in"
->>         source "package/udev/Config.in"
->>         source "package/udisks/Config.in"
->> +       source "package/upower/Config.in"
->>         source "package/usb_modeswitch/Config.in"
->>         source "package/usb_modeswitch_data/Config.in"
->>         source "package/usbmount/Config.in"
->> diff --git a/package/upower/0001-daemon-fix-get_critical_action.patch b/package/upower/0001-daemon-fix-get_critical_action.patch
->> new file mode 100644
->> index 0000000..02fc55c
->> --- /dev/null
->> +++ b/package/upower/0001-daemon-fix-get_critical_action.patch
->> @@ -0,0 +1,34 @@
->> +From 28cee8e2845b094488c337c4ecfa84ada0b6be60 Mon Sep 17 00:00:00 2001
->> +From: Martin Pitt <martin.pitt@ubuntu.com>
->> +Date: Tue, 23 Feb 2016 09:51:07 +0100
->> +Subject: [PATCH] daemon: fix get_critical_action()
->> +
->> +Fix copy&paste error from e7e9156f that called the wrong _complete_ function
->> +for up_daemon_get_critical_action().
->> +
->> +https://bugs.freedesktop.org/show_bug.cgi?id=94262
->> +
->> +[rebase on 0.99.4]
->> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
->
-> Reviewed-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
->
->> +---
->> + src/up-daemon.c | 4 ++--
->> + 1 file changed, 2 insertions(+), 2 deletions(-)
->> +
->> +diff --git a/src/up-daemon.c b/src/up-daemon.c
->> +index be14cbe..e95f904 100644
->> +--- a/src/up-daemon.c
->> ++++ b/src/up-daemon.c
->> +@@ -435,8 +435,8 @@ up_daemon_get_critical_action (UpExportedDaemon *skeleton,
->> +                              GDBusMethodInvocation *invocation,
->> +                              UpDaemon *daemon)
->> + {
->> +-      up_exported_daemon_complete_get_display_device (skeleton, invocation,
->> +-                                                      up_backend_get_critical_action (daemon->priv->backend));
->> ++      up_exported_daemon_complete_get_critical_action (skeleton, invocation,
->> ++                                                       up_backend_get_critical_action (daemon->priv->backend));
->> +       return TRUE;
->> + }
->> +
->> +--
->> +2.9.3
->> +
->> diff --git a/package/upower/Config.in b/package/upower/Config.in
->> new file mode 100644
->> index 0000000..8d9e84e
->> --- /dev/null
->> +++ b/package/upower/Config.in
->> @@ -0,0 +1,26 @@
->> +config BR2_PACKAGE_UPOWER
->> +       bool "upower"
->> +       depends on BR2_PACKAGE_HAS_UDEV
->> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libgudev, libusb
->> +       depends on BR2_USE_MMU # libgudev
->> +       depends on BR2_USE_WCHAR # libgudev
->> +       select BR2_PACKAGE_LIBGUDEV
->> +       select BR2_PACKAGE_LIBUSB
->> +       help
->> +         UPower is an abstraction for enumerating power devices, listening
->> +         to device events and querying history and statistics. Any
->> +         application or service on the system can access the
->> +         org.freedesktop.UPower service via the system message bus.
->> +
->> +         Note: upowerd require CONFIG_TIMER_STATS enabled in the Linux
->> +         kernel.
->> +
->> +         https://upower.freedesktop.org/
->> +
->> +comment "upower needs udev /dev management"
->> +       depends on BR2_USE_MMU
->> +       depends on !BR2_PACKAGE_HAS_UDEV
->> +
->> +comment "upower needs a toolchain w/ threads, wchar"
->> +       depends on BR2_USE_MMU
->> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
->> diff --git a/package/upower/upower.hash b/package/upower/upower.hash
->> new file mode 100644
->> index 0000000..0df67b4
->> --- /dev/null
->> +++ b/package/upower/upower.hash
->> @@ -0,0 +1,2 @@
->> +# Locally calculated
->> +sha256 9ca325a6ccef505529b268ebbbd9becd0ce65a65f6ac7ee31e2e5b17648037b0  upower-0.99.4.tar.xz
->> diff --git a/package/upower/upower.mk b/package/upower/upower.mk
->> new file mode 100644
->> index 0000000..471eb41
->> --- /dev/null
->> +++ b/package/upower/upower.mk
->> @@ -0,0 +1,25 @@
->> +################################################################################
->> +#
->> +# upower
->> +#
->> +################################################################################
->> +
->> +UPOWER_VERSION = 0.99.4
->> +UPOWER_SOURCE = upower-$(UPOWER_VERSION).tar.xz
->> +UPOWER_SITE = https://upower.freedesktop.org/releases
->> +UPOWER_LICENSE = GPLv2+
->> +UPOWER_LICENSE_FILES = COPYING
->> +
->> +# libupower-glib.so
->> +UPOWER_INSTALL_STAGING = YES
->> +
->> +UPOWER_DEPENDENCIES = \
->> +       host-intltool \
->> +       host-pkgconf \
->> +       libgudev \
->> +       libusb \
->> +       udev
->> +
->> +UPOWER_CONF_OPTS = --disable-man-pages --disable-tests
->> +
->> +$(eval $(autotools-package))
->> --
->> 2.9.3
->>
->
->
->
-> --
-> Gustavo Sverzut Barbieri
-> http://profusion.mobi embedded systems
-> --------------------------------------
-> MSN, GTalk, FaceTime: barbieri at gmail.com
-> Skype: gsbarbieri
-> Mobile: +55 (16) 99354-9890
+Le 03/01/2017 ? 22:29, Gustavo Sverzut Barbieri a ?crit :
+> Although highly recommended to be enabled, EFL's eeze can be disabled
+> and thus no dependency on libudev or dynamic device management.
 
+When I stated to rework and bump the efl packaging in Buildroot, the eeze
+dependency was mandatory. So I added an option to disable it only for the
+host-efl package. See [1]. As I said on IRC, I didn't event tested efl without
+eeze on the target and I don't think that the EFL developers even tested it.
 
+But since you are involved in efl development, I expect
+--you-really-know-what-you-re-doing-and-that-this-will-probably-break-things-and-you-will-fix-them-yourself-and-send-patches-abb
+:)
 
--- 
-Gustavo Sverzut Barbieri
-http://profusion.mobi embedded systems
---------------------------------------
-MSN, GTalk, FaceTime: barbieri at gmail.com
-Skype: gsbarbieri
-Mobile: +55 (16) 99354-9890
+[1]
+https://git.enlightenment.org/core/efl.git/commit/?id=4351f0fa8642b163799c6ce47610d5cd9f70acfa
+
+> 
+> Since 'BR2_PACKAGE_HAS_UDEV' has two ways to be satisfied (eudev or
+> systemd) we can't automatically select it, instead show a comment and
+> use 'depends on'.
+
+Otherwise the patch looks.
+
+> 
+> Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+> ---
+>  package/efl/Config.in | 25 ++++++++++++++++++++++---
+>  package/efl/efl.mk    |  9 ++++++++-
+>  2 files changed, 30 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/efl/Config.in b/package/efl/Config.in
+> index 542c354a8..f4cbc2806 100644
+> --- a/package/efl/Config.in
+> +++ b/package/efl/Config.in
+> @@ -4,7 +4,6 @@ config BR2_PACKAGE_EFL
+>  	depends on BR2_HOST_GCC_AT_LEAST_4_7
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_PACKAGE_HAS_UDEV # libudev
+>  	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+>  	depends on BR2_USE_MMU
+> @@ -37,6 +36,19 @@ config BR2_PACKAGE_EFL_BULLET
+>  	  simply not tested so you are on your own in terms of
+>  	  ensuring everything works if you do this.
+>  
+> +config BR2_PACKAGE_EFL_EEZE
+> +	bool "Enable eeze (udev) support (recommended)"
+> +	depends on BR2_PACKAGE_HAS_UDEV # libudev
+> +	default y
+> +	help
+> +	  Eeze is EFL's hardware abstraction layer on top of udev.
+> +	  Having it off will disable some hardware detetion, such as
+> +	  'drm' graphics engine or 'elput', as well as mounting
+> +	  removable media.
+> +
+> +comment "eeze needs udev /dev management (eudev or systemd)"
+> +	depends on !BR2_PACKAGE_HAS_UDEV
+> +
+>  config BR2_PACKAGE_EFL_FONTCONFIG
+>  	bool "Enable fontconfig support (recommended)"
+>  	select BR2_PACKAGE_FONTCONFIG
+> @@ -98,6 +110,7 @@ config BR2_PACKAGE_EFL_PULSEAUDIO
+>  
+>  config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
+>  	bool "Enable libmount support (recommended)"
+> +	depends on BR2_PACKAGE_EFL_EEZE
+>  	select BR2_PACKAGE_UTIL_LINUX
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+>  	# libblkid is part of required tools, see EFL's README.
+> @@ -108,9 +121,13 @@ config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
+>  	  devices etc... and disabling this will hurt support for
+>  	  Enlightenment and its filemanager.
+>  
+> +comment "efl's libmount support needs eeze"
+> +	depends on !BR2_PACKAGE_EFL_EEZE
+> +
+>  config BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
+>  	bool
+>  	default y if BR2_PACKAGE_EFL_BULLET && \
+> +		BR2_PACKAGE_EFL_EEZE && \
+>  		BR2_PACKAGE_EFL_FONTCONFIG && \
+>  		BR2_PACKAGE_EFL_GSTREAMER1 && \
+>  		BR2_PACKAGE_EFL_LIBFRIBIDI && \
+> @@ -197,6 +214,7 @@ endchoice # OpenGL support
+>  
+>  config BR2_PACKAGE_EFL_ELPUT
+>  	bool "Elput"
+> +	depends on BR2_PACKAGE_EFL_EEZE
+
+Add a new comment like for BR2_PACKAGE_EFL_EEZE
+
+>  	select BR2_PACKAGE_LIBINPUT
+>  	select BR2_PACKAGE_LIBXKBCOMMON
+>  	help
+> @@ -207,6 +225,7 @@ config BR2_PACKAGE_EFL_ELPUT
+>  
+>  config BR2_PACKAGE_EFL_DRM
+>  	bool "Evas DRM Engine"
+> +	depends on BR2_PACKAGE_EFL_EEZE
+
+Add a new comment like for BR2_PACKAGE_EFL_EEZE
+
+With that fixed
+   Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+>  	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
+>  	select BR2_PACKAGE_EFL_ELPUT
+> @@ -278,8 +297,8 @@ config BR2_PACKAGE_EFL_SVG
+>  
+>  endif # BR2_PACKAGE_EFL
+>  
+> -comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
+> -	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP \
+> +comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
+> +	depends on !BR2_INSTALL_LIBSTDCPP \
+>  		|| !BR2_HOST_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+>  		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+>  	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+> diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+> index ab08946c4..1e54f7281 100644
+> --- a/package/efl/efl.mk
+> +++ b/package/efl/efl.mk
+> @@ -20,7 +20,7 @@ EFL_LICENSE_FILES = \
+>  EFL_INSTALL_STAGING = YES
+>  
+>  EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
+> -	jpeg luajit lz4 udev zlib
+> +	jpeg luajit lz4 zlib
+>  
+>  # Configure options:
+>  # --disable-lua-old: build elua for the target.
+> @@ -59,6 +59,13 @@ else
+>  EFL_CONF_OPTS += --disable-cxx-bindings
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_EFL_EEZE),y)
+> +EFL_DEPENDENCIES += udev
+> +EFL_CONF_OPTS += --enable-libeeze
+> +else
+> +EFL_CONF_OPTS += --disable-libeeze
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT),y)
+>  EFL_DEPENDENCIES += util-linux
+>  EFL_CONF_OPTS += --enable-libmount
+> 
