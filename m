@@ -1,45 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 03 Jan 2017 16:02:50 -0300
-Subject: [Buildroot] [PATCH 1/1] Fix gcrypt library linker option on
- collectd.
-In-Reply-To: <1482988838-6777-1-git-send-email-jackzzjack@gmail.com>
-References: <1482988838-6777-1-git-send-email-jackzzjack@gmail.com>
-Message-ID: <6e30e6660557386a1bec2f421cdc0fc1@zacarias.com.ar>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Tue, 3 Jan 2017 11:04:12 -0800
+Subject: [Buildroot] [PATCH v2] package/xen: Update to version 4.8.0
+In-Reply-To: <20161223092238.3a692c89@free-electrons.com>
+References: <1482445317-9435-1-git-send-email-alistair.francis@xilinx.com>
+ <20161222235936.018f7807@free-electrons.com>
+ <CAKmqyKOMOCfa3+BAsdOuAOSy+acQnSTjQOcr9H2XxQbd1e9t4w@mail.gmail.com>
+ <20161223092238.3a692c89@free-electrons.com>
+Message-ID: <CAKmqyKM6kSfKJUhfXHXs9-2Rpw3k0HW0bF=Av2rMfX-XjJ3p5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-12-29 02:20, Yu-Ting, Kao wrote:
+On Fri, Dec 23, 2016 at 12:22 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Thu, 22 Dec 2016 17:09:42 -0800, Alistair Francis wrote:
+>
+>> I need to do that as well as unset the CFLAGS (I need to replace it
+>> with APPEND_CFLAGS).
+>>
+>> If I did the same thing but stored it in a Xen specific variable would
+>> that be ok?
+>
+> How did you "unset" the CFLAGS ?
 
-> @@ -177,6 +177,7 @@ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
->  COLLECTD_DEPENDENCIES += libgcrypt
->  COLLECTD_CONF_OPTS += --with-libgcrypt=$(STAGING_DIR)/usr
->  COLLECTD_CONF_ENV += 
-> LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-> +COLLECTD_CONF_ENV += LIBS="-lgcrypt"
->  else
->  COLLECTD_CONF_OPTS += --with-libgcrypt=no
->  endif
+I renamed the CFLAGS variable to APPEND_CLFAGS. That allowed me to
+build Xen without the CFALGS errors that we have previously run into.
 
-Hi.
-This won't work as expected since you're potentially stomping over LIBS 
-which is defined at the beginning of the package makefile, and also over 
-the re-stomping when the postgresql option is turned on (which doesn't 
-break the first one since it's defining both).
-Probably better to do something like, at the beginning:
+If I fix it up to only apply for Xen (instead of changing the global
+variables) then that shouldn't affect any other packages then.
 
-COLLECTD_CONF_ENV = LIBS="-lm $(COLLECTD_LIBS)"
+Thanks,
 
-And then:
+Alistair
 
-ifeq ($(BR2_PACKAGE_POSTGRESQL,y)
-COLLECTD_LIBS += -lpthread
-....
-
-ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-COLLECTD_LIBS += -lgcrypt
-....
-
-Regards.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
