@@ -1,47 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Jan 2017 23:51:26 +0100
-Subject: [Buildroot] [git commit] package/zlib: bump version to 1.2.10
-Message-ID: <20170103225412.BC5B37FB7E@busybox.osuosl.org>
+Date: Tue, 3 Jan 2017 23:51:11 +0100
+Subject: [Buildroot] [git commit] mpv: bump to version 0.23.0
+Message-ID: <20170103225412.AABFE7FB7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=268e5b82a6432c165a2e90c51daf259d8a388ce0
+commit: https://git.buildroot.net/buildroot/commit/?id=e143b0c73e62fa946c3b4417919fc98e352a8fc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changed _SITE url to the upstream project site because Sourceforge does
-not provide the tarball for 1.2.10 as of now.
+enca and libguess options have been dropped so adjust accordingly.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zlib/zlib.hash | 2 +-
- package/zlib/zlib.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mpv/mpv.hash |  2 +-
+ package/mpv/mpv.mk   | 11 +----------
+ 2 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/package/zlib/zlib.hash b/package/zlib/zlib.hash
-index d6382f8..17dc9b4 100644
---- a/package/zlib/zlib.hash
-+++ b/package/zlib/zlib.hash
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index be6b559..0e7aab7 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
 @@ -1,2 +1,2 @@
- # From http://www.zlib.net/
--md5	28f1205d8dd2001f26fec1e8c2cebe37	zlib-1.2.8.tar.xz
-+sha256 9612bf086047078ce3a1c154fc9052113fc1a2a97234a059da17a6299bd4dd32  zlib-1.2.10.tar.xz
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index 53eb84e..ba07f2c 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated
+-sha256	c0f9ac8f0e37a391d19007b333ef8787c2f45d75a0d4401c0098cde52c5082f6	v0.22.0.tar.gz
++sha256	8aeefe5970587dfc454d2b89726b603f156bd7a9ae427654eef0d60c68d94998	v0.23.0.tar.gz
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index d719075..5b83b6d 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZLIB_VERSION = 1.2.8
-+ZLIB_VERSION = 1.2.10
- ZLIB_SOURCE = zlib-$(ZLIB_VERSION).tar.xz
--ZLIB_SITE = http://downloads.sourceforge.net/project/libpng/zlib/$(ZLIB_VERSION)
-+ZLIB_SITE = http://www.zlib.net
- ZLIB_LICENSE = zlib license
- ZLIB_LICENSE_FILES = README
- ZLIB_INSTALL_STAGING = YES
+-MPV_VERSION = 0.22.0
++MPV_VERSION = 0.23.0
+ MPV_SITE = https://github.com/mpv-player/mpv/archive
+ MPV_SOURCE = v$(MPV_VERSION).tar.gz
+ MPV_DEPENDENCIES = \
+@@ -23,7 +23,6 @@ MPV_CONF_OPTS = \
+ 	--disable-cdda \
+ 	--disable-cocoa \
+ 	--disable-coreaudio \
+-	--disable-libguess \
+ 	--disable-libv4l2 \
+ 	--disable-opensles \
+ 	--disable-rpi \
+@@ -123,14 +122,6 @@ else
+ MPV_CONF_OPTS += --disable-drm
+ endif
+ 
+-# libenca support
+-ifeq ($(BR2_PACKAGE_LIBENCA),y)
+-MPV_CONF_OPTS += --enable-enca
+-MPV_DEPENDENCIES += libenca
+-else
+-MPV_CONF_OPTS += --disable-enca
+-endif
+-
+ # LUA support, only for lua51/lua52/luajit
+ # This enables the controller (OSD) together with libass
+ ifeq ($(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUA_5_2)$(BR2_PACKAGE_LUAJIT),y)
