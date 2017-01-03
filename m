@@ -1,47 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Jan 2017 16:23:45 +0100
-Subject: [Buildroot] [git commit] sqlite: bump to version 3.16
-Message-ID: <20170103152906.81BF87F94A@busybox.osuosl.org>
+Date: Tue, 3 Jan 2017 16:25:22 +0100
+Subject: [Buildroot] [git commit] m4: bump to version 1.4.18
+Message-ID: <20170103152906.B9A507FB3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec1d29c88996e4daca9530d1bdc7fd872e9f31c5
+commit: https://git.buildroot.net/buildroot/commit/?id=2895cf76404890cea487cf450b09b9f556cef964
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/m4/m4.hash | 2 +-
+ package/m4/m4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 7839dc9..7a2d782 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 31f52169bcfeef9efb61480d0950e928ad059552  sqlite-autoconf-3150200.tar.gz
-+sha1 5150313c332b598a98be0c4bd5a04031a216ab13  sqlite-autoconf-3160000.tar.gz
- # Calculated based on the hash above
--sha256 07b35063b9386865b78226cdaca9a299d938a87aaa8fdc4d73edb0cef30f3149  sqlite-autoconf-3150200.tar.gz
-+sha256 5102404047054b2cec2f43463293f94dea39425d42bf386d24596ab4fac7c7ff  sqlite-autoconf-3160000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index cb03249..9a9c7af 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/m4/m4.hash b/package/m4/m4.hash
+index 38214dc..79c36c8 100644
+--- a/package/m4/m4.hash
++++ b/package/m4/m4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	f0543c3beb51fa6b3337d8025331591e0e18d8ec2886ed391f1aade43477d508	m4-1.4.17.tar.xz
++sha256	f2c1e86ca0a404ff281631bdc8377638992744b175afb806e25871a24a934e07	m4-1.4.18.tar.xz
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 9b5d2d1..d53f7cb 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3150200
-+SQLITE_VERSION = 3160000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = http://www.sqlite.org/2016
-+SQLITE_SITE = http://www.sqlite.org/2017
- SQLITE_LICENSE = Public domain
- SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_INSTALL_STAGING = YES
+-M4_VERSION = 1.4.17
++M4_VERSION = 1.4.18
+ M4_SOURCE = m4-$(M4_VERSION).tar.xz
+ M4_SITE = $(BR2_GNU_MIRROR)/m4
+ M4_LICENSE = GPLv3+
