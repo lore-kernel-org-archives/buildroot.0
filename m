@@ -1,64 +1,53 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  3 Jan 2017 17:01:18 +0100
-Subject: [Buildroot] [PATCH 2/2] perl-cross: bump to version 1.1.2
-In-Reply-To: <20170103160118.13616-1-francois.perrad@gadz.org>
-References: <20170103160118.13616-1-francois.perrad@gadz.org>
-Message-ID: <20170103160118.13616-2-francois.perrad@gadz.org>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 3 Jan 2017 17:10:02 +0100
+Subject: [Buildroot] Perl-related bug, #9291
+In-Reply-To: <20161205230049.5f67d397@free-electrons.com>
+References: <20161015182827.5d030d2d@free-electrons.com>
+ <CAGhdn57yw=BXk7ZW2JLtf4OXYhR0Ziq5Z4u55uESdoFvrUMAvA@mail.gmail.com>
+ <20161205230049.5f67d397@free-electrons.com>
+Message-ID: <CAB0FRsuU_HkZ0MO=vSa7jp2Dd7RhU9LZqEqF+4oz4zNtDA1mkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.hash | 4 ++--
- package/perl/perl.mk   | 9 ++++-----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+2016-12-05 23:00 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Fri, 21 Oct 2016 22:02:27 +0200, Fran?ois Perrad wrote:
+>
+>> I fill a ticket https://github.com/arsv/perl-cross/issues/41
+>
+> This issue has been fixed. Could you take care of doing the necessary
+> changes to the perl package?
+>
+> It also looks like perl-cross has some more recent releases, like
+> 1.1.1, but there are some significant changes. According to the 1.1.0
+> changelog:
+>
+>  * Major code cleanup
+>  * Package name changed to perl-cross-N.M.tar.gz
+>  * Support for multiple perl versions
+>
+> If you could have a look, it would be nice. If bumping to 1.1.1 for now
+> is too complicated, then a patch that at least backports the message
+> queues related fix would be good to have.
+>
+> Thanks,
+>
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index ac417a3..9c40a53 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -3,5 +3,5 @@ md5    99f39abe614b50719d9915431e54fc1e                                 perl-5.2
- sha1   298fa605138c1a00dab95643130ae0edab369b4d                         perl-5.24.0.tar.bz2
- sha256 62328a53d157e8153b33e137594155f6f8b64418f7f9238210feb809585290e0 perl-5.24.0.tar.bz2
- 
--# No upstream hashes for the following
--sha256 cac4616274edaef81f48d8880d4224e05b81d0033ebad45d42a3a18664c3409c perl-5.24.0-cross-1.0.3.tar.gz
-+# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.2/perl-cross-1.1.2.hash
-+sha256 2a1b0a3ffe866bc3fd32c947c0a866360d2f26576c8f1c5c0b521d3a6e9d643d perl-cross-1.1.2.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 88bacef..f808a47 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -13,11 +13,10 @@ PERL_LICENSE = Artistic or GPLv1+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.0.3
--PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
-+PERL_CROSS_VERSION = 1.1.2
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
--PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
-+PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
- PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
- 
- # We use the perlcross hack to cross-compile perl. It should
-@@ -83,11 +82,11 @@ define PERL_BUILD_CMDS
- endef
- 
- define PERL_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl install.sym
- endef
- 
- define PERL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl install.sym
- endef
- 
- HOST_PERL_CONF_OPTS = \
--- 
-2.9.3
+Fixed with perl-cross-1.1.2
+
+Fran?ois
+
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
