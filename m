@@ -1,49 +1,35 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Tue, 3 Jan 2017 11:04:12 -0800
-Subject: [Buildroot] [PATCH v2] package/xen: Update to version 4.8.0
-In-Reply-To: <20161223092238.3a692c89@free-electrons.com>
-References: <1482445317-9435-1-git-send-email-alistair.francis@xilinx.com>
- <20161222235936.018f7807@free-electrons.com>
- <CAKmqyKOMOCfa3+BAsdOuAOSy+acQnSTjQOcr9H2XxQbd1e9t4w@mail.gmail.com>
- <20161223092238.3a692c89@free-electrons.com>
-Message-ID: <CAKmqyKM6kSfKJUhfXHXs9-2Rpw3k0HW0bF=Av2rMfX-XjJ3p5Q@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 03 Jan 2017 19:45:51 +0000
+Subject: [Buildroot] [Bug 7892] systemd-journald is broken
+In-Reply-To: <bug-7892-163@https.bugs.busybox.net/>
+References: <bug-7892-163@https.bugs.busybox.net/>
+Message-ID: <bug-7892-163-6zNP9JiSGD@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 23, 2016 at 12:22 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 22 Dec 2016 17:09:42 -0800, Alistair Francis wrote:
->
->> I need to do that as well as unset the CFLAGS (I need to replace it
->> with APPEND_CFLAGS).
->>
->> If I did the same thing but stored it in a Xen specific variable would
->> that be ok?
->
-> How did you "unset" the CFLAGS ?
+https://bugs.busybox.net/show_bug.cgi?id=7892
 
-I renamed the CFLAGS variable to APPEND_CLFAGS. That allowed me to
-build Xen without the CFALGS errors that we have previously run into.
+Andrey Smirnov <andrew.smirnov@gmail.com> changed:
 
-If I fix it up to only apply for Xen (instead of changing the global
-variables) then that shouldn't affect any other packages then.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |andrew.smirnov at gmail.com
 
-Thanks,
+--- Comment #22 from Andrey Smirnov <andrew.smirnov@gmail.com> ---
+(In reply to Yann E. MORIN from comment #21)
 
-Alistair
+Yann,
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I am seeing this bug in 2016.11 release and I would love to come up with some
+fix for it, so I was wondering if you ever made any progress w.r.t fixing the
+problem? I would like to try to come up with the fix myself and if you have
+anything that can give me a headstart, please do share.
+
+Thank you.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
