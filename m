@@ -1,118 +1,44 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Tue, 3 Jan 2017 10:48:56 +0100
-Subject: [Buildroot] [PATCH 1/1] jsmn: new package
-In-Reply-To: <1483354166-8331-2-git-send-email-david.bachelart@bbright.com>
-References: <1483354166-8331-1-git-send-email-david.bachelart@bbright.com>
- <1483354166-8331-2-git-send-email-david.bachelart@bbright.com>
-Message-ID: <CAKAx1cjMdSbFzTXX7G4u5qA8rKJ7i=9+Y3XJK+rYwtoxmLe09w@mail.gmail.com>
+From: =?UTF-8?Q?Jesper_B=C3=A6kdahl?= <jbb@gamblify.com>
+Date: Tue, 3 Jan 2017 10:56:45 +0100
+Subject: [Buildroot] [PATCH 1/1] gst1-vaapi: new package
+In-Reply-To: <20161216154428.200e5378@free-electrons.com>
+References: <1481813631-23515-1-git-send-email-jbb@gamblify.com>
+ <20161215214757.0eb1f3d8@free-electrons.com>
+ <CALnvph3Kr5Rtc8W5FD_oJSRm58sU_gmkNGQfy+M11kCz8BG3TA@mail.gmail.com>
+ <20161216154428.200e5378@free-electrons.com>
+Message-ID: <CALnvph0wzcSPGauyJ-SLfwTPf_sLLiwM=_Ac5=N2qysL7ZWS7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi David,
+> OK. The configure.ac script indeed checks for plugins-base, but not for
+> plugins-bad.
 
-On Mon, Jan 2, 2017 at 11:49 AM, David Bachelart <
-david.bachelart@bbright.com> wrote:
+In configure.ac line 245 we have:
+AG_GST_CHECK_MODULES([GST_CODEC_PARSERS],
+  [gstreamer-codecparsers-$GST_API_VERSION], [$GST_PBADREQ], [yes])
 
-> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> ---
->  package/Config.in      |  1 +
->  package/jsmn/Config.in |  7 +++++++
->  package/jsmn/jsmn.hash |  4 ++++
->  package/jsmn/jsmn.mk   | 25 +++++++++++++++++++++++++
->  4 files changed, 37 insertions(+)
->  create mode 100644 package/jsmn/Config.in
->  create mode 100644 package/jsmn/jsmn.hash
->  create mode 100644 package/jsmn/jsmn.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 9ed296f..69e956c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1096,6 +1096,7 @@ menu "JSON/XML"
->         source "package/expat/Config.in"
->         source "package/ezxml/Config.in"
->         source "package/jansson/Config.in"
-> +       source "package/jsmn/Config.in"
->         source "package/json-c/Config.in"
->         source "package/json-glib/Config.in"
->         source "package/jsoncpp/Config.in"
-> diff --git a/package/jsmn/Config.in b/package/jsmn/Config.in
-> new file mode 100644
-> index 0000000..23d20f5
-> --- /dev/null
-> +++ b/package/jsmn/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_JSMN
-> +       bool "jsmn"
-> +       help
-> +         jsmn (pronounced like 'jasmine') is a minimalistic JSON parser
-> in C. It can
-> +         be easily integrated into resource-limited or embedded projects.
-> +
-> +         https://github.com/zserge/jsmn/
-> diff --git a/package/jsmn/jsmn.hash b/package/jsmn/jsmn.hash
-> new file mode 100644
-> index 0000000..5cc51c3
-> --- /dev/null
-> +++ b/package/jsmn/jsmn.hash
-> @@ -0,0 +1,4 @@
-> +# Locally computed
-> +md5 78e2731c5697a3c35795b6350402e015    jsmn-
-> 6021415cc75e7922d45b12935f56348b064d8a7f.tar.gz
-> +sha1    09b1a3493db6b1a77b03bc835aa9be6345db5269    jsmn-
-> 6021415cc75e7922d45b12935f56348b064d8a7f.tar.gz
-> +sha256  e08993848b2abab62aa9572a560bb6e5ed4762f8537cd67c4de6cb17e17090a0
->   jsmn-6021415cc75e7922d45b12935f56348b064d8a7f.tar.gz
-> diff --git a/package/jsmn/jsmn.mk b/package/jsmn/jsmn.mk
-> new file mode 100644
-> index 0000000..788694d
-> --- /dev/null
-> +++ b/package/jsmn/jsmn.mk
-> @@ -0,0 +1,25 @@
-> +###########################################################
-> #####################
-> +#
-> +# jsmn
-> +#
-> +###########################################################
-> #####################
-> +
-> +JSMN_VERSION = 6021415cc75e7922d45b12935f56348b064d8a7f
-> +JSMN_SITE = $(call github,zserge,jsmn,$(JSMN_VERSION))
-> +JSMN_LICENSE = BSD
-> +JSMN_LICENSE_FILES = LICENSE
-> +
-> +JSMN_INSTALL_STAGING = YES
->
-?Aren't you missing a 'JSMN_INSTALL_TARGET = NO' here??
+which is checking for gstreamer-codecparsers that is part of plugins-bad?
 
-+
-> +define JSMN_BUILD_CMDS
-> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> +               CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-> +               AR="$(TARGET_AR)"
-> +endef
-> +
-> +define JSMN_INSTALL_STAGING_CMDS
-> +    $(INSTALL) -m 0644 $(@D)/libjsmn.a $(STAGING_DIR)/usr/lib/
-> +    $(INSTALL) -m 0644 $(@D)/jsmn.h $(STAGING_DIR)/usr/include/
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+> Could you have a look at the configure.ac script? It seems like it
+> supports multiple renderers, not only DRM. If you don't want to support
+> all of them because you don't use them, that's fine. But you should
+> then use the appropriate --enable/--disable options to enable the right
+> renderer, and disable the other ones.
 
-?Best regards,
-Lionel?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170103/208baf81/attachment.html>
+I can add conditional CONF_OPTS that adds --enable/--disable based on
+which renderers can be built e.g.:
+ifeq ($(BR2_PACKAGE_LIBDRM),y)
+GST1_VAAPI_CONF_OPTS += --enable-drm
+else
+GST1_VAAPI_CONF_OPTS += --disable-drm
+endif
+
+
+Best Regards,
+
+Jesper B?kdahl
+Hardware/Software Developer
+Gamblify
