@@ -1,45 +1,23 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  3 Jan 2017 18:44:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/zlib: bump version to 1.2.10
-Message-ID: <20170103174445.7393-1-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 03 Jan 2017 15:57:32 -0300
+Subject: [Buildroot] [PATCH 1/2] riemann-c-client: new package
+In-Reply-To: <20161228221806.32321-1-peter@korsgaard.com>
+References: <20161228221806.32321-1-peter@korsgaard.com>
+Message-ID: <20903538d3eacd2edb38abe885c262ef@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed _SITE url to the upstream project site because Sourceforge does
-not provide the tarball for 1.2.10 as of now.
+On 2016-12-28 19:18, Peter Korsgaard wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/zlib/zlib.hash | 2 +-
- package/zlib/zlib.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Riemann-c-client is a C client library for the Riemann monitoring 
+> system,
+> providing a convenient and simple API, high test coverage and a 
+> copyleft
+> license, along with API and ABI stability.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/zlib/zlib.hash b/package/zlib/zlib.hash
-index d6382f8d3..17dc9b4b8 100644
---- a/package/zlib/zlib.hash
-+++ b/package/zlib/zlib.hash
-@@ -1,2 +1,2 @@
- # From http://www.zlib.net/
--md5	28f1205d8dd2001f26fec1e8c2cebe37	zlib-1.2.8.tar.xz
-+sha256 9612bf086047078ce3a1c154fc9052113fc1a2a97234a059da17a6299bd4dd32  zlib-1.2.10.tar.xz
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index 53eb84e15..ba07f2cf7 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--ZLIB_VERSION = 1.2.8
-+ZLIB_VERSION = 1.2.10
- ZLIB_SOURCE = zlib-$(ZLIB_VERSION).tar.xz
--ZLIB_SITE = http://downloads.sourceforge.net/project/libpng/zlib/$(ZLIB_VERSION)
-+ZLIB_SITE = http://www.zlib.net
- ZLIB_LICENSE = zlib license
- ZLIB_LICENSE_FILES = README
- ZLIB_INSTALL_STAGING = YES
--- 
-2.11.0
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
