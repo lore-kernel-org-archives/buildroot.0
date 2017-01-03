@@ -1,43 +1,23 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  3 Jan 2017 22:01:03 +0100
-Subject: [Buildroot] [PATCH] package/skeleton: remove legacy mkdir
-Message-ID: <1483477263-15610-1-git-send-email-yann.morin.1998@free.fr>
+From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+Date: Tue,  3 Jan 2017 19:29:30 -0200
+Subject: [Buildroot] [PATCH 0/2] efl: allow smaller builds.
+Message-ID: <20170103212932.9254-1-barbieri@profusion.mobi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We've had this mkdir, in various forms, for aeons. It dates back to
-the inception of Buildroot, at the dawn of ages, when the toolchain
-support was still nascent. Evolution had it morph from /include, to
-a tuple-prefixed directory and a symlink there-to, then back to the
-/include directory, to the final /usr/include directory we've had
-for the last 9 years.
+These two patches will allow smaller builds of EFL.
 
-Anything that wants to install headers is supposed to be creating
-that directory beforehand; we don't need this legacy mkdir now.
+ 1) efl: fix target package dependency on util-linux
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    Drops util-linux if libmount support is not needed, it was
+    partially a bug on using the incorrect variable.
 
----
-OK, we can keep it, just for nostalgia; I just felt like writing some
-prose tonight. ;-)
----
- package/skeleton/skeleton.mk | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 1000161..e65ef61 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -107,7 +107,6 @@ define SKELETON_INSTALL_STAGING_CMDS
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
- 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
--	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
- 	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
- 	ln -snf lib $(STAGING_DIR)/$(SKELETON_LIB_SYMLINK)
- 	ln -snf lib $(STAGING_DIR)/usr/$(SKELETON_LIB_SYMLINK)
--- 
-2.7.4
+ 2) efl: do not force dependency on libudev by making eeze...
+
+    Follow the other 'recommends' options and allow eeze (udev's
+    wrapper) to not be built, this allows EFL to be used without /dev
+    management, thus no eudev/libudev.
