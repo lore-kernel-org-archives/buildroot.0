@@ -1,41 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Jan 2017 16:24:18 +0100
-Subject: [Buildroot] [git commit] xz: bump to version 5.2.3
-Message-ID: <20170103152906.9EDB77FB3B@busybox.osuosl.org>
+Date: Tue, 3 Jan 2017 16:21:18 +0100
+Subject: [Buildroot] [git commit] weston: fix DEPENDENCIES typo
+Message-ID: <20170103152906.72E727FB3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=190ba02f3881b8f6c6a3be1c7080fb883e42774c
+commit: https://git.buildroot.net/buildroot/commit/?id=8718bb82cbef6c18e5f575bd758fa02b68c276c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes a build failure with the PPS patchset since libva isn't populated.
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xz/xz.hash | 2 +-
- package/xz/xz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/weston/weston.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index f723f7e..20a4a47 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 6ff5f57a4b9167155e35e6da8b529de69270efb2b4cf3fbabf41a4ee793840b5  xz-5.2.2.tar.bz2
-+sha256 fd9ca16de1052aac899ad3495ad20dfa906c27b4a5070102a2ec35ca3a4740c1  xz-5.2.3.tar.bz2
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 5e1d7c6..40adb3d 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 89e16f1..3a02df0 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -109,7 +109,7 @@ endif
  
--XZ_VERSION = 5.2.2
-+XZ_VERSION = 5.2.3
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = http://tukaani.org/xz
- XZ_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_LIBVA),y)
+ WESTON_CONF_OPTS += --enable-vaapi-recorder
+-WESTON_DEPENDENIES += libva
++WESTON_DEPENDENCIES += libva
+ else
+ WESTON_CONF_OPTS += --disable-vaapi-recorder
+ endif
