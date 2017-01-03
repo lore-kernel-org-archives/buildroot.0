@@ -1,15 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Jan 2017 13:35:56 +0100
-Subject: [Buildroot] [PATCH v3 0/7] qt5 bump to 5.8.0-rc
-In-Reply-To: <56c27c5a-07e1-3709-4bfc-60521b0a12c1@andin.de>
-References: <1481641171-10407-1-git-send-email-anaumann@ultratronik.de>
- <20161217154629.09d3f0e3@free-electrons.com>
- <3e4baa3d-e4cf-0a3f-6508-f68f87012812@andin.de>
- <20161219102642.2b2b57e3@free-electrons.com>
- <d5fd9949-6575-05f0-6dbb-8d9df79869d6@andin.de>
- <20161221102024.71833cdc@free-electrons.com>
- <56c27c5a-07e1-3709-4bfc-60521b0a12c1@andin.de>
-Message-ID: <20170103133556.66be6aa6@free-electrons.com>
+Date: Tue, 3 Jan 2017 13:37:31 +0100
+Subject: [Buildroot] [PATCH 1/1] gst1-vaapi: new package
+In-Reply-To: <CALnvph0wzcSPGauyJ-SLfwTPf_sLLiwM=_Ac5=N2qysL7ZWS7Q@mail.gmail.com>
+References: <1481813631-23515-1-git-send-email-jbb@gamblify.com>
+ <20161215214757.0eb1f3d8@free-electrons.com>
+ <CALnvph3Kr5Rtc8W5FD_oJSRm58sU_gmkNGQfy+M11kCz8BG3TA@mail.gmail.com>
+ <20161216154428.200e5378@free-electrons.com>
+ <CALnvph0wzcSPGauyJ-SLfwTPf_sLLiwM=_Ac5=N2qysL7ZWS7Q@mail.gmail.com>
+Message-ID: <20170103133731.7fa364e5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,36 +16,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 2 Jan 2017 09:55:13 +0100, Andreas Naumann wrote:
-
-> > If you look at your patch switching to 5.8 there is in fact very, very
-> > little change in the .mk files, so that can be handled with a bunch of
-> > ifeq () conditions.  
+On Tue, 3 Jan 2017 10:56:45 +0100, Jesper B?kdahl wrote:
+> > OK. The configure.ac script indeed checks for plugins-base, but not for
+> > plugins-bad.  
 > 
-> Ok, so the policy for the future would be to support 5.6/LTS + latest 
-> release?
+> In configure.ac line 245 we have:
+> AG_GST_CHECK_MODULES([GST_CODEC_PARSERS],
+>   [gstreamer-codecparsers-$GST_API_VERSION], [$GST_PBADREQ], [yes])
+> 
+> which is checking for gstreamer-codecparsers that is part of plugins-bad?
 
-Yes, latest LTS and latest release.
+Hum, ok. I haven't checked myself, but if you say so, fine :-)
 
-> For the hash files, is it possible to just add another line?
+> > Could you have a look at the configure.ac script? It seems like it
+> > supports multiple renderers, not only DRM. If you don't want to support
+> > all of them because you don't use them, that's fine. But you should
+> > then use the appropriate --enable/--disable options to enable the right
+> > renderer, and disable the other ones.  
+> 
+> I can add conditional CONF_OPTS that adds --enable/--disable based on
+> which renderers can be built e.g.:
+> ifeq ($(BR2_PACKAGE_LIBDRM),y)
+> GST1_VAAPI_CONF_OPTS += --enable-drm
+> else
+> GST1_VAAPI_CONF_OPTS += --disable-drm
+> endif
 
-Yes, it is possible to have as many lines as you want in a hash file,
-matching different files.
-
-> About how to go on: I'm not clear if my v4 set stayed without comments, 
-> for above not being integrated or just Christmas/New Years.
-
-People haven't had the time to review it. I will not personally be able
-to look into it within the next two weeks, but hopefully someone else
-can have a look.
-
-However, I guess we need a version of the series that keeps the LTS
-version around.
-
-> Also, the proposed release date of 5.8 moved to the 17th of January
-> in the meanwhile. What would be a good next step?
-
-Definitely.
+You can do that, *or* if you don't need those renderers, simply disable
+them unconditionally for now. The next user interested in one renderer
+or the other can tweak the .mk file and send a follow-up patch.
 
 Thanks!
 
