@@ -1,33 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 04 Jan 2017 17:11:07 +0100
-Subject: [Buildroot] [PATCHv2] package/nut: bump version
-In-Reply-To: <1483261256-18816-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 1 Jan 2017 10:00:56 +0100")
-References: <1483261256-18816-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87o9zm24bo.fsf@dell.be.48ers.dk>
+Date: Wed, 04 Jan 2017 17:11:42 +0100
+Subject: [Buildroot] [PATCH] alsa-utils: disable manpages generation
+	from reStructured text
+In-Reply-To: <aa4954d6b24aa8262aa80964c01abe78de42b9d0.1483265273.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 1 Jan 2017 12:07:53 +0200")
+References: <aa4954d6b24aa8262aa80964c01abe78de42b9d0.1483265273.git.baruch@tkos.co.il>
+Message-ID: <87k2aa24ap.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Update our patches:
- >   - drop patch 1, replaced by an upstream equivalent; adapt config
- >     options and env accordingly,
- >   - drop patch 2, applied upstream,
- >   - rename patch 3
+ > The alsaucm man page rst source file is missing in the tarball. When rst2man
+ > is detected on the host, build fails:
 
- > gdlib-config and net-snmp-config are only used when said support is
- > enabled (resp. CGI and SNMP), so no need to pass them unconditionally.
+ > make[2]: *** No rule to make target 'alsaucm.1', needed by 'all-am'.  Stop.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Upstream added[1] the missing file to the tarball to fix this issue. But since
+ > we don't need the manpage to begin with, just disable rst2man to shorten build
+ > time by a few milliseconds.
 
- > ---
- > Changes v1 -> v2:
- >   - add missing SoB lines in patch 0001
- >   - fix commit title
+ > [1] http://git.alsa-project.org/?p=alsa-utils.git;a=commitdiff;h=c6bdde171e1532f7b37333a5a746b6e662f12c53
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
