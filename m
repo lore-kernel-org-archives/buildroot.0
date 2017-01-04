@@ -1,32 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Jan 2017 17:46:09 +0100
-Subject: [Buildroot] [git commit] firmware-imx: remove Makefile from target
-Message-ID: <20170104164617.86AA98005A@busybox.osuosl.org>
+Date: Wed, 04 Jan 2017 17:46:17 +0100
+Subject: [Buildroot] [PATCH] firmware-imx: remove Makefile from target
+In-Reply-To: <da4f2968d62c1c828196982058b05fdcb72b7cab.1483274048.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 1 Jan 2017 14:34:08 +0200")
+References: <da4f2968d62c1c828196982058b05fdcb72b7cab.1483274048.git.baruch@tkos.co.il>
+Message-ID: <877f6a22p2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8872a5873e2c1e0afbc559ecdb2074cdf5bd23a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/freescale-imx/firmware-imx/firmware-imx.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 1893929..08fb463 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -26,6 +26,7 @@ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
- 	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
- 	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
- 		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
-+	rm $(TARGET_DIR)/lib/firmware/imx/epdc/fsl-epdc.mk
- endef
- 
- $(eval $(generic-package))
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
