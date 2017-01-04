@@ -1,50 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Jan 2017 16:32:37 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] libpng: security bump to
-	version 1.6.27
-Message-ID: <20170104155710.7850981DDB@busybox.osuosl.org>
+Date: Wed, 04 Jan 2017 17:00:48 +0100
+Subject: [Buildroot] [PATCH] clamav: break configure breakage after zlib
+	1.2.10 version bump
+In-Reply-To: <20170104152734.29384-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 4 Jan 2017 16:27:34 +0100")
+References: <20170104152734.29384-1-peter@korsgaard.com>
+Message-ID: <87mvf63jdb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e1605409ae96f87a95450acd29d420261f4bb04
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes a NULL pointer dereference bug in png_set_text_2()
-CVE not assigned yet.
+subject should naturally have been 's/break configure/fix configure/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d4e08cdeaaaf5664b20c341fee9d62f5ae4878b3)
----
- package/libpng/libpng.hash | 6 +++---
- package/libpng/libpng.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b6b/b6ba2dfb42ee41ed0b8304aa8c78645245f3b341/
+ > http://autobuild.buildroot.net/results/eef/eef9a2dda2c172cd600dc74c1e5e60476d92280d/
+ > http://autobuild.buildroot.net/results/827/82798118795aa6334b4dd6eac06777682131da7f/
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index d2c377d..237a54f 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,4 +1,4 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.26/
--sha1 7a50569b26d57db9810409a59f1b87f8a8e387a3 libpng-1.6.26.tar.xz
-+# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.27/
-+sha1 af5d742f5d0a6492133aed7790bb43e8854cca64 libpng-1.6.27.tar.xz
- # Locally computed:
--sha256 266743a326986c3dbcee9d89b640595f6b16a293fd02b37d8c91348d317b73f9  libpng-1.6.26.tar.xz
-+sha256 fca2ffd97336356cdab9bfa8936b9d6dfd580a70205e5dfead3ac42cb054b57b  libpng-1.6.27.tar.xz
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index abb4928..4b3a4ad 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.26
-+LIBPNG_VERSION = 1.6.27
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+ > The clamav configure script by default checks for old zlib versions with
+ > known vulnerabilities and errors out if found:
+
+ > configure: error: The installed zlib version may contain a security bug.
+ > Please upgrade to 1.2.2 or later: http://www.zlib.net.  You can omit this
+ > check with --disable-zlib-vcheck but DO NOT REPORT any stability issues
+ > then!
+
+ > The check is unfortunately not very robust as it simply checks for a version
+ > string matching '1.2.1' (which 1.2.10 does):
+
+ > vuln=`grep "ZLIB_VERSION \"1.2.1" $ZLIB_HOME/include/zlib.h`
+
+ > As a workaround, pass --disable-zlib-vcheck to skip this check.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  package/clamav/clamav.mk | 1 +
+ >  1 file changed, 1 insertion(+)
+
+ > diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+ > index 6a82d66..36ab8be 100644
+ > --- a/package/clamav/clamav.mk
+ > +++ b/package/clamav/clamav.mk
+ > @@ -26,6 +26,7 @@ CLAMAV_CONF_OPTS = \
+ >  	--with-dbdir=/var/lib/clamav \
+ >  	--with-openssl=$(STAGING_DIR)/usr \
+ >  	--with-zlib=$(STAGING_DIR)/usr \
+ > +	--disable-zlib-vcheck \
+ >  	--disable-rpath \
+ >  	--disable-clamav \
+ >  	--disable-fanotify \
+ > -- 
+ > 2.10.2
+
+
+-- 
+Bye, Peter Korsgaard
