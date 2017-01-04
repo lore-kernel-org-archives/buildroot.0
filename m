@@ -1,42 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  4 Jan 2017 14:28:48 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.16.1
-Message-ID: <20170104172848.30462-1-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 4 Jan 2017 21:24:51 +0200
+Subject: [Buildroot] [PATCH] package/mpd: bump version to 0.20
+In-Reply-To: <87eg0i3j8q.fsf@dell.be.48ers.dk>
+References: <20170104154723.17946-1-joerg.krause@embedded.rocks>
+ <87eg0i3j8q.fsf@dell.be.48ers.dk>
+Message-ID: <20170104192451.g5jgpigd5bsqhiqw@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Peter,
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 7a2d782..208fcdb 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 5150313c332b598a98be0c4bd5a04031a216ab13  sqlite-autoconf-3160000.tar.gz
-+sha1 77f8c59fec1575c5e05462dccac956f141677647  sqlite-autoconf-3160100.tar.gz
- # Calculated based on the hash above
--sha256 5102404047054b2cec2f43463293f94dea39425d42bf386d24596ab4fac7c7ff  sqlite-autoconf-3160000.tar.gz
-+sha256 13fbe45e3088b3955feb2ae68648a0f81586d6d519766b211767a1ffcd268fd0  sqlite-autoconf-3160100.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 9a9c7af..609d7bc 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3160000
-+SQLITE_VERSION = 3160100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2017
- SQLITE_LICENSE = Public domain
+On Wed, Jan 04, 2017 at 05:03:33PM +0100, Peter Korsgaard wrote:
+> >>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+> 
+>  > Drop patch #0002 which was already fixed upstream long time ago in
+>  > commit 276a0d9500b8efc879e4f0c23e9d0e361849e295 using a slightly
+>  > different approach.
+> 
+>  > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> 
+> Committed, thanks.
+
+Not in master as of e8872a5873 (firmware-imx: remove Makefile from target).
+
+baruch
+
 -- 
-2.10.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
