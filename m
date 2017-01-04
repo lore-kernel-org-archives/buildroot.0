@@ -1,46 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 04 Jan 2017 17:39:40 +0100
-Subject: [Buildroot] Kernel Panic with BB Black + buildroot-2016.11.1
-In-Reply-To: <1483536685380-153942.post@n4.nabble.com> (Ashish Kumar Mishra's
- message of "Wed, 4 Jan 2017 05:31:25 -0800 (PST)")
-References: <1483536685380-153942.post@n4.nabble.com>
-Message-ID: <87bmvm2303.fsf@dell.be.48ers.dk>
+Date: Wed, 4 Jan 2017 17:46:09 +0100
+Subject: [Buildroot] [git commit] firmware-imx: remove Makefile from target
+Message-ID: <20170104164617.86AA98005A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ashish" == Ashish Kumar Mishra <dgashu55@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e8872a5873e2c1e0afbc559ecdb2074cdf5bd23a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi All , 
- > I updated my build root  setup from buildroot-2016.05 to buildroot-2016.11.1
- > . 
- > I was having an working build with buildroot-2016.05. 
- > Could team members provide some pointers as to how could i debug & figure
- > the cause of this panic. 
- > *The defconfig is :*-
- > ~/my_virtual_project/release_branch_v2 :: cat defconfig 
- > BR2_arm=y
- > BR2_cortex_a8=y
- > BR2_TOOLCHAIN_EXTERNAL=y
- > BR2_LINUX_KERNEL=y
- > BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- > BR2_LINUX_KERNEL_DTS_SUPPORT=y
- > BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-boneblack"
- > BR2_TARGET_UBOOT=y
- > BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- > BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_boneblack"
- > # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- > BR2_TARGET_UBOOT_FORMAT_IMG=y
- > BR2_TARGET_UBOOT_SPL=y
- > BR2_TARGET_UBOOT_SPL_NAME="MLO"
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-So how do you create your rootfs and filesystem image?
-
-Does it work if you instead build out beaglebone_defconfig? (E.G. make
-clean; make beaglebone_defconfig; make)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 1893929..08fb463 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -26,6 +26,7 @@ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
+ 	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
+ 		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
++	rm $(TARGET_DIR)/lib/firmware/imx/epdc/fsl-epdc.mk
+ endef
+ 
+ $(eval $(generic-package))
