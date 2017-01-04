@@ -1,102 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Jan 2017 23:50:26 +0100
-Subject: [Buildroot] [git commit] flac: bump to version 1.3.2
-Message-ID: <20170103225412.9E10D7FB7E@busybox.osuosl.org>
+From: Misha Komarovskiy <zombah@gmail.com>
+Date: Wed,  4 Jan 2017 03:10:05 +0300
+Subject: [Buildroot] [PATCH] package/cbootimage: add patch to fix bct_dump
+	crash
+Message-ID: <1483488605-30412-1-git-send-email-zombah@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5807b9ce3517b0a7d057a7ddcc7d0602d06cbe6a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Patch from upstream until version 1.8 release.
 
-And delete upstream patches.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Misha Komarovskiy <zombah@gmail.com>
 ---
- ...onfigure-don-t-try-to-unset-g-from-CFLAGS.patch | 27 ----------------------
- package/flac/0002-sigemptyset.patch                | 18 ---------------
- package/flac/flac.hash                             |  2 +-
- package/flac/flac.mk                               |  2 +-
- 4 files changed, 2 insertions(+), 47 deletions(-)
+ ...on-t-crash-on-devices-without-RSA-support.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/cbootimage/0001-bct_dump-don-t-crash-on-devices-without-RSA-support.patch
 
-diff --git a/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.patch b/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.patch
-deleted file mode 100644
-index 3aff5a8..0000000
---- a/package/flac/0001-configure-don-t-try-to-unset-g-from-CFLAGS.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--The sed expression is wrong, any flags with '-g' in any position gets
--zapped, for example:
--
---mfloat-gprs=double (for powerpc e500) -> -mfloatprs=double.
--
--Which gives build errors and is perfectly valid in real use scenarios to
--switch from e500v1 (single precision) code to e500v2 (double precision) code.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura flac-1.3.1.orig/configure flac-1.3.1/configure
----- flac-1.3.1.orig/configure	2014-11-27 20:43:29.921303105 -0300
--+++ flac-1.3.1/configure	2014-11-27 20:45:33.460250179 -0300
--@@ -19870,11 +19870,10 @@
-- 
-- if test "x$debug" = xtrue; then
-- 	CPPFLAGS="-DDEBUG $CPPFLAGS"
---	CFLAGS=$(echo "$CFLAGS" | sed 's/-g//')
---	CFLAGS="-g $CFLAGS"
--+	CFLAGS=$(echo "-g $CFLAGS")
-- else
-- 	CPPFLAGS="-DNDEBUG $CPPFLAGS"
---	CFLAGS=$(echo "$CFLAGS" | sed 's/-O2//;s/-g//')
--+	CFLAGS=$(echo "$CFLAGS" | sed 's/-O2//')
-- 	CFLAGS="-O3 -funroll-loops $CFLAGS"
-- fi
-- 
-diff --git a/package/flac/0002-sigemptyset.patch b/package/flac/0002-sigemptyset.patch
-deleted file mode 100644
-index 9cbc338..0000000
---- a/package/flac/0002-sigemptyset.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--Fix musl compile since it does not define __sigemptyset
--
--Downloaded from
--http://git.alpinelinux.org/cgit/aports/commit/main/flac/sigemptyset.patch?id=49fd0f4cebc46e2753d6a60e450078446f7f18a7
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
----- ./src/libFLAC/cpu.c.orig
--+++ ./src/libFLAC/cpu.c
--@@ -243,7 +243,7 @@
-- 		struct sigaction sigill_save;
-- 		struct sigaction sigill_sse;
-- 		sigill_sse.sa_sigaction = sigill_handler_sse_os;
---		__sigemptyset(&sigill_sse.sa_mask);
--+		sigemptyset(&sigill_sse.sa_mask);
-- 		sigill_sse.sa_flags = SA_SIGINFO | SA_RESETHAND; /* SA_RESETHAND just in case our SIGILL return jump breaks, so we don't get stuck in a loop */
-- 		if(0 == sigaction(SIGILL, &sigill_sse, &sigill_save))
-- 		{
-diff --git a/package/flac/flac.hash b/package/flac/flac.hash
-index 6a0da11..7ce76f1 100644
---- a/package/flac/flac.hash
-+++ b/package/flac/flac.hash
-@@ -1,2 +1,2 @@
- # From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
--sha256	4773c0099dba767d963fd92143263be338c48702172e8754b9bc5103efe1c56c	flac-1.3.1.tar.xz
-+sha256	91cfc3ed61dc40f47f050a109b08610667d73477af6ef36dcad31c31a4a8d53f	flac-1.3.2.tar.xz
-diff --git a/package/flac/flac.mk b/package/flac/flac.mk
-index b819064..5020d8a 100644
---- a/package/flac/flac.mk
-+++ b/package/flac/flac.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLAC_VERSION = 1.3.1
-+FLAC_VERSION = 1.3.2
- FLAC_SITE = http://downloads.xiph.org/releases/flac
- FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
- FLAC_INSTALL_STAGING = YES
+diff --git a/package/cbootimage/0001-bct_dump-don-t-crash-on-devices-without-RSA-support.patch b/package/cbootimage/0001-bct_dump-don-t-crash-on-devices-without-RSA-support.patch
+new file mode 100644
+index 0000000..536fb88
+--- /dev/null
++++ b/package/cbootimage/0001-bct_dump-don-t-crash-on-devices-without-RSA-support.patch
+@@ -0,0 +1,42 @@
++From 64045f993c2cd8989838aeaad3d22107d96d5596 Mon Sep 17 00:00:00 2001
++From: Stephen Warren <swarren@nvidia.com>
++Date: Thu, 28 Jul 2016 11:37:45 -0600
++Subject: [PATCH] bct_dump: don't crash on devices without RSA support
++
++format_rsa_param() currently crashes on chips that don't implement
++soc_config->get_value_size(); that is, on all chips before T124. Fix the
++function not to crash. Better might be to avoid even dumping RSA
++parameters on chips which don't support RSA, but that's a larger change
++that needs much more work.
++
++Fixes: 3c3b992a6814 ("Add support to dump rsa related fields for t210")
++Cc: Jimmy Zhang <jimmzhang@nvidia.com>
++Signed-off-by: Stephen Warren <swarren@nvidia.com>
++---
++ src/bct_dump.c | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/bct_dump.c b/src/bct_dump.c
++index 4f50fa2..b4ca9fc 100644
++--- a/src/bct_dump.c
+++++ b/src/bct_dump.c
++@@ -133,10 +133,14 @@ static void format_rsa_param(parse_token id, char const * message, void * data)
++ {
++ #define MAX_BYTE_NUMBER_PER_LINE	16
++ 	u_int8_t *rsa = (u_int8_t *)data;
++-	int size = g_soc_config->get_value_size(id);
++-	int byte_index;
+++	int size, byte_index;
++ 
++ 	printf("%s", message);
+++
+++	if (!g_soc_config->get_value_size)
+++		return;
+++
+++	size = g_soc_config->get_value_size(id);
++ 	for (byte_index = 0; byte_index < size; ++byte_index) {
++ 		printf(" %02x", *rsa++);
++ 
++-- 
++2.1.4
++
+-- 
+2.1.4
