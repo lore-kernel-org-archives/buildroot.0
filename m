@@ -1,69 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Jan 2017 17:01:42 +0100
-Subject: [Buildroot] [git commit] gd: security bump to version 2.2.3
-Message-ID: <20170104161500.DFC3781E76@busybox.osuosl.org>
+Date: Wed, 4 Jan 2017 17:02:12 +0100
+Subject: [Buildroot] [git commit] ca-certificates: bump to version 20161130
+Message-ID: <20170104161500.D88F77FAED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81dc283a00a6c1ed73bcb273b3ab23fc37a3a267
+commit: https://git.buildroot.net/buildroot/commit/?id=9138a573576d043113c376f30deb2393a5e254e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Security related fixes:
-This flaw is caused by loading data from external sources (file, custom ctx,
-etc) and are hard to validate before calling libgd APIs:
-
-- fix php bug 72339, Integer Overflow in _gd2GetHeader (CVE-2016-5766)
-- bug #248, fix Out-Of-Bounds Read in read_image_tga
-- gd: Buffer over-read issue when parsing crafted TGA file (CVE-2016-6132)
-
-Using application provided parameters, in these cases invalid data causes
-the issues:
-
- - Integer overflow error within _gdContributionsAlloc() (CVE-2016-6207)
- - fix php bug 72494, invalid color index not handled, can lead to crash ( CVE-2016-6128)
- - improve color check for CropThreshold
-
-The build system now enables -Wall and -Werror by default, so pass
---disable-werror to disable that.  Notice that this issue has been fixed
-upstream post-2.2.3:
-
-https://github.com/libgd/libgd/issues/339
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gd/gd.hash | 2 +-
- package/gd/gd.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ca-certificates/ca-certificates.hash | 4 ++--
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gd/gd.hash b/package/gd/gd.hash
-index d08220a..eb3da42 100644
---- a/package/gd/gd.hash
-+++ b/package/gd/gd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	489f756ce07f0c034b1a794f4d34fdb4d829256112cb3c36feb40bb56b79218c	libgd-2.2.2.tar.xz
-+sha256	746b6cbd6769a22ff3ba6f5756f3512a769bd4cdf4695dff17f4867f25fa7d3c	libgd-2.2.3.tar.xz
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 8de8d15..0777bdb 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -4,14 +4,14 @@
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index b467316..ecedba4 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,3 +1,3 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   4525a194736c6691dbd59fa87281b722837b4768                         ca-certificates_20160104.tar.xz
+-sha256 09eb770122e23260316120c0cbbddc8a1d33e7147210ce44e146084d5d5abcdd ca-certificates_20160104.tar.xz
++sha1   b190ca8849697e842e69401b28d4ee27130d8c4d                         ca-certificates_20161130.tar.xz
++sha256 04bca9e142a90a834aca0311f7ced237368d71fee7bd5c9f68ef7f4611aee471 ca-certificates_20161130.tar.xz
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index f26be64..d077a19 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--GD_VERSION = 2.2.2
-+GD_VERSION = 2.2.3
- GD_SOURCE = libgd-$(GD_VERSION).tar.xz
- GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
- GD_INSTALL_STAGING = YES
- GD_LICENSE = GD license
- GD_LICENSE_FILES = COPYING
- GD_CONFIG_SCRIPTS = gdlib-config
--GD_CONF_OPTS = --without-x --disable-rpath
-+GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
- GD_DEPENDENCIES = host-pkgconf
- 
- # gd forgets to link utilities with -pthread even though it uses
+-CA_CERTIFICATES_VERSION = 20160104
++CA_CERTIFICATES_VERSION = 20161130
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20160104T220912Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20161205T153846Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl
+ # ca-certificates can be built with either python 2 or python 3
+ # but it must be at least python 2.7
