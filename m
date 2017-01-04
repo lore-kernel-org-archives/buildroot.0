@@ -1,73 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Jan 2017 16:34:44 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] musl: workaround kernel
-	if_ether.h header conflict
-Message-ID: <20170104155710.852E281DDB@busybox.osuosl.org>
+Date: Wed, 4 Jan 2017 16:32:37 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] libpng: security bump to
+	version 1.6.27
+Message-ID: <20170104155710.7850981DDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f55695b405abd65f079237370ce4613a571ba804
+commit: https://git.buildroot.net/buildroot/commit/?id=0e1605409ae96f87a95450acd29d420261f4bb04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Add a patch that defines _LINUX_IF_ETHER_H in netinet/if_ether.h to avoid the
-conflicting kernel if_ether.h.
+Fixes a NULL pointer dereference bug in png_set_text_2()
+CVE not assigned yet.
 
-Other musl distros (Alpine, Sabotage, Gentoo) patch[1] the kernel headers
-instead. This is not practical in Buildroot, since we allow the user to choose
-the kernel version.
-
-This only fixes the normal case of including linux/if_ether.h (directly or
-indirectly) after netinet/if_ether.h.
-
-Fixes (tcpreplay):
-http://autobuild.buildroot.net/results/a65/a65b27f9e288f94f041ced64313dbf55af47bf36/
-
-[1] https://cgit.gentoo.org/proj/musl.git/diff/sys-kernel/linux-headers/files/libc-compat.h-prevent-redefinition-of-struct-ethhdr.patch?id=8eddda8072add075ebf56cf6d288bc1450d6b5f8
-
-Cc: Rich Felker <dalias@aerifal.cx>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 69ced963555b82f847d03ff3a832e4748ed0e721)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d4e08cdeaaaf5664b20c341fee9d62f5ae4878b3)
 ---
- package/musl/0002-avoid-kernel-if_ether.h.patch | 30 +++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/libpng/libpng.hash | 6 +++---
+ package/libpng/libpng.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/musl/0002-avoid-kernel-if_ether.h.patch b/package/musl/0002-avoid-kernel-if_ether.h.patch
-new file mode 100644
-index 0000000..8efbcc8
---- /dev/null
-+++ b/package/musl/0002-avoid-kernel-if_ether.h.patch
-@@ -0,0 +1,30 @@
-+From 3984adc4976de7553f51e0cf4de1e18c373b332b Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 15 Dec 2016 15:10:19 +0200
-+Subject: [PATCH] Avoid redefinition of struct ethhdr
-+
-+This is a workaround to the if_ether.h conflict between musl and the kernel.
-+Both define struct ethhdr.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ include/netinet/if_ether.h | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/include/netinet/if_ether.h b/include/netinet/if_ether.h
-+index 11ee65823f93..cfe1949d3371 100644
-+--- a/include/netinet/if_ether.h
-++++ b/include/netinet/if_ether.h
-+@@ -1,6 +1,9 @@
-+ #ifndef _NETINET_IF_ETHER_H
-+ #define _NETINET_IF_ETHER_H
-+ 
-++/* Suppress kernel if_ether.h header inclusion */
-++#define _LINUX_IF_ETHER_H
-++
-+ #include <stdint.h>
-+ #include <sys/types.h>
-+ 
-+-- 
-+2.10.2
-+
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index d2c377d..237a54f 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,4 +1,4 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.26/
+-sha1 7a50569b26d57db9810409a59f1b87f8a8e387a3 libpng-1.6.26.tar.xz
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.27/
++sha1 af5d742f5d0a6492133aed7790bb43e8854cca64 libpng-1.6.27.tar.xz
+ # Locally computed:
+-sha256 266743a326986c3dbcee9d89b640595f6b16a293fd02b37d8c91348d317b73f9  libpng-1.6.26.tar.xz
++sha256 fca2ffd97336356cdab9bfa8936b9d6dfd580a70205e5dfead3ac42cb054b57b  libpng-1.6.27.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index abb4928..4b3a4ad 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.26
++LIBPNG_VERSION = 1.6.27
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
