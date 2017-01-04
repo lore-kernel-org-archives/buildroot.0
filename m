@@ -1,64 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Jan 2017 17:07:46 +0100
-Subject: [Buildroot] [git commit] perl-cross: bump to version 1.1.2
-Message-ID: <20170104161500.F2BB87FAED@busybox.osuosl.org>
+Date: Wed, 4 Jan 2017 17:11:23 +0100
+Subject: [Buildroot] [git commit] alsa-utils: disable manpages generation
+	from reStructured text
+Message-ID: <20170104161501.146CC8082D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce12407148b9efcc607742bf0e8d3999723420d8
+commit: https://git.buildroot.net/buildroot/commit/?id=a954b84b584302998c70960bcb3197192f8d6d7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+The alsaucm man page rst source file is missing in the tarball. When rst2man
+is detected on the host, build fails:
+
+make[2]: *** No rule to make target 'alsaucm.1', needed by 'all-am'.  Stop.
+
+Upstream added[1] the missing file to the tarball to fix this issue. But since
+we don't need the manpage to begin with, just disable rst2man to shorten build
+time by a few milliseconds.
+
+[1] http://git.alsa-project.org/?p=alsa-utils.git;a=commitdiff;h=c6bdde171e1532f7b37333a5a746b6e662f12c53
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl/perl.hash | 4 ++--
- package/perl/perl.mk   | 9 ++++-----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/alsa-utils/alsa-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index ac417a3..9c40a53 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -3,5 +3,5 @@ md5    99f39abe614b50719d9915431e54fc1e                                 perl-5.2
- sha1   298fa605138c1a00dab95643130ae0edab369b4d                         perl-5.24.0.tar.bz2
- sha256 62328a53d157e8153b33e137594155f6f8b64418f7f9238210feb809585290e0 perl-5.24.0.tar.bz2
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 9113b8d..a72191e 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -23,6 +23,7 @@ ALSA_UTILS_CONF_ENV = \
  
--# No upstream hashes for the following
--sha256 cac4616274edaef81f48d8880d4224e05b81d0033ebad45d42a3a18664c3409c perl-5.24.0-cross-1.0.3.tar.gz
-+# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.2/perl-cross-1.1.2.hash
-+sha256 2a1b0a3ffe866bc3fd32c947c0a866360d2f26576c8f1c5c0b521d3a6e9d643d perl-cross-1.1.2.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 88bacef..f808a47 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -13,11 +13,10 @@ PERL_LICENSE = Artistic or GPLv1+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
+ ALSA_UTILS_CONF_OPTS = \
+ 	--disable-xmlto \
++	--disable-rst2man \
+ 	--with-curses=$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncursesw,ncurses)
  
--PERL_CROSS_VERSION = 1.0.3
--PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
-+PERL_CROSS_VERSION = 1.1.2
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
--PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
-+PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
- PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
- 
- # We use the perlcross hack to cross-compile perl. It should
-@@ -83,11 +82,11 @@ define PERL_BUILD_CMDS
- endef
- 
- define PERL_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(STAGING_DIR)" install.perl install.sym
- endef
- 
- define PERL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl install.sym
- endef
- 
- HOST_PERL_CONF_OPTS = \
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
