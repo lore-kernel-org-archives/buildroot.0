@@ -1,44 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Jan 2017 17:01:35 +0100
-Subject: [Buildroot] [git commit] libopenh264: bump to version 1.6.0
-Message-ID: <20170104161500.BAEFD817B0@busybox.osuosl.org>
+Date: Wed, 4 Jan 2017 17:04:18 +0100
+Subject: [Buildroot] [git commit] clamav: fix configure breakage after zlib
+	1.2.10 version bump
+Message-ID: <20170104161500.DED2381E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4153e9f25a80cfb29b207b40d4eeda78d8799caf
+commit: https://git.buildroot.net/buildroot/commit/?id=4970a780b7d73906850b4ca2e891bd2bc65f82c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Contains a number of bugfixes, some of which may be security related:
+Fixes:
+http://autobuild.buildroot.net/results/b6b/b6ba2dfb42ee41ed0b8304aa8c78645245f3b341/
+http://autobuild.buildroot.net/results/eef/eef9a2dda2c172cd600dc74c1e5e60476d92280d/
+http://autobuild.buildroot.net/results/827/82798118795aa6334b4dd6eac06777682131da7f/
 
-http://www.openwall.com/lists/oss-security/2017/01/02/1
+The clamav configure script by default checks for old zlib versions with
+known vulnerabilities and errors out if found:
+
+configure: error: The installed zlib version may contain a security bug.
+Please upgrade to 1.2.2 or later: http://www.zlib.net.  You can omit this
+check with --disable-zlib-vcheck but DO NOT REPORT any stability issues
+then!
+
+The check is unfortunately not very robust as it simply checks for a version
+string matching '1.2.1' (which 1.2.10 does):
+
+vuln=`grep "ZLIB_VERSION \"1.2.1" $ZLIB_HOME/include/zlib.h`
+
+As a workaround, pass --disable-zlib-vcheck to skip this check.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenh264/libopenh264.hash | 2 +-
- package/libopenh264/libopenh264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/clamav/clamav.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
-index 6d7c40b..2fc76ec 100644
---- a/package/libopenh264/libopenh264.hash
-+++ b/package/libopenh264/libopenh264.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 98077bd5d113c183ce02b678733b0cada2cf36750370579534c4d70f0b6c27b5  libopenh264-v1.5.0.tar.gz
-+sha256 65d307bf312543ad6e98ec02abb7c27d8fd2c9740fd069d7249844612674a2c7  libopenh264-v1.6.0.tar.gz
-diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
-index 6f1c7a6..40bbf80 100644
---- a/package/libopenh264/libopenh264.mk
-+++ b/package/libopenh264/libopenh264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENH264_VERSION = v1.5.0
-+LIBOPENH264_VERSION = v1.6.0
- LIBOPENH264_SITE = $(call github,cisco,openh264,$(LIBOPENH264_VERSION))
- LIBOPENH264_LICENSE = BSD-2c
- LIBOPENH264_LICENSE_FILES = LICENSE
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 6a82d66..36ab8be 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -26,6 +26,7 @@ CLAMAV_CONF_OPTS = \
+ 	--with-dbdir=/var/lib/clamav \
+ 	--with-openssl=$(STAGING_DIR)/usr \
+ 	--with-zlib=$(STAGING_DIR)/usr \
++	--disable-zlib-vcheck \
+ 	--disable-rpath \
+ 	--disable-clamav \
+ 	--disable-fanotify \
