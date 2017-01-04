@@ -1,59 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 04 Jan 2017 17:14:32 +0100
-Subject: [Buildroot] [PATCH] package/skeleton: remove legacy mkdir
-In-Reply-To: <1483477263-15610-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Tue, 3 Jan 2017 22:01:03 +0100")
-References: <1483477263-15610-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87fuky245z.fsf@dell.be.48ers.dk>
+Date: Wed, 4 Jan 2017 17:01:35 +0100
+Subject: [Buildroot] [git commit] libopenh264: bump to version 1.6.0
+Message-ID: <20170104161500.BAEFD817B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4153e9f25a80cfb29b207b40d4eeda78d8799caf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > We've had this mkdir, in various forms, for aeons. It dates back to
- > the inception of Buildroot, at the dawn of ages, when the toolchain
- > support was still nascent. Evolution had it morph from /include, to
- > a tuple-prefixed directory and a symlink there-to, then back to the
- > /include directory, to the final /usr/include directory we've had
- > for the last 9 years.
+Contains a number of bugfixes, some of which may be security related:
 
- > Anything that wants to install headers is supposed to be creating
- > that directory beforehand; we don't need this legacy mkdir now.
+http://www.openwall.com/lists/oss-security/2017/01/02/1
 
-But how is that different from the {lib,bin,sbin} directories we also
-create?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libopenh264/libopenh264.hash | 2 +-
+ package/libopenh264/libopenh264.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
- > ---
- > OK, we can keep it, just for nostalgia; I just felt like writing some
- > prose tonight. ;-)
- > ---
- >  package/skeleton/skeleton.mk | 1 -
- >  1 file changed, 1 deletion(-)
-
- > diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
- > index 1000161..e65ef61 100644
- > --- a/package/skeleton/skeleton.mk
- > +++ b/package/skeleton/skeleton.mk
- > @@ -107,7 +107,6 @@ define SKELETON_INSTALL_STAGING_CMDS
- >  	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/lib
- >  	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/bin
- >  	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/sbin
- > -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include
- >  	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(STAGING_DIR))
- >  	ln -snf lib $(STAGING_DIR)/$(SKELETON_LIB_SYMLINK)
- >  	ln -snf lib $(STAGING_DIR)/usr/$(SKELETON_LIB_SYMLINK)
- > -- 
- > 2.7.4
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
+index 6d7c40b..2fc76ec 100644
+--- a/package/libopenh264/libopenh264.hash
++++ b/package/libopenh264/libopenh264.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 98077bd5d113c183ce02b678733b0cada2cf36750370579534c4d70f0b6c27b5  libopenh264-v1.5.0.tar.gz
++sha256 65d307bf312543ad6e98ec02abb7c27d8fd2c9740fd069d7249844612674a2c7  libopenh264-v1.6.0.tar.gz
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+index 6f1c7a6..40bbf80 100644
+--- a/package/libopenh264/libopenh264.mk
++++ b/package/libopenh264/libopenh264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENH264_VERSION = v1.5.0
++LIBOPENH264_VERSION = v1.6.0
+ LIBOPENH264_SITE = $(call github,cisco,openh264,$(LIBOPENH264_VERSION))
+ LIBOPENH264_LICENSE = BSD-2c
+ LIBOPENH264_LICENSE_FILES = LICENSE
