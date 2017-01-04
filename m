@@ -1,81 +1,47 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed,  4 Jan 2017 16:47:23 +0100
-Subject: [Buildroot] [PATCH] package/mpd: bump version to 0.20
-Message-ID: <20170104154723.17946-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 4 Jan 2017 16:32:25 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] package/libpng: bump
+	version to 1.6.26
+Message-ID: <20170104155710.663A081E67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch #0002 which was already fixed upstream long time ago in
-commit 276a0d9500b8efc879e4f0c23e9d0e361849e295 using a slightly
-different approach.
+commit: https://git.buildroot.net/buildroot/commit/?id=14eb89da470cac2ca7322f5c27649ffe1f013bdf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit a10af5177901f03a6c851cb3c48a7920398af0d8)
 ---
- ...ad-Name-include-stdio.h-for-prctl-as-well.patch | 28 ----------------------
- package/mpd/mpd.hash                               |  2 +-
- package/mpd/mpd.mk                                 |  4 ++--
- 3 files changed, 3 insertions(+), 31 deletions(-)
- delete mode 100644 package/mpd/0002-thread-Name-include-stdio.h-for-prctl-as-well.patch
+ package/libpng/libpng.hash | 6 +++---
+ package/libpng/libpng.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mpd/0002-thread-Name-include-stdio.h-for-prctl-as-well.patch b/package/mpd/0002-thread-Name-include-stdio.h-for-prctl-as-well.patch
-deleted file mode 100644
-index 1943623ed..000000000
---- a/package/mpd/0002-thread-Name-include-stdio.h-for-prctl-as-well.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From a0a9fed68126eb24e04af924c0d46351ff5eeb0f Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Mon, 26 Jan 2015 09:55:04 -0300
--Subject: [PATCH] thread/Name: include stdio.h for prctl as well
--
--We're still using snprintf so we need it, otherwise it leads to build
--failure.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- src/thread/Name.hxx | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/thread/Name.hxx b/src/thread/Name.hxx
--index a99208d..8f9d7d3 100644
----- a/src/thread/Name.hxx
--+++ b/src/thread/Name.hxx
--@@ -25,6 +25,7 @@
-- #  include <pthread.h>
-- #elif defined(HAVE_PRCTL)
-- #  include <sys/prctl.h>
--+#  include <stdio.h>
-- #  ifdef PR_SET_NAME
-- #    define HAVE_THREAD_NAME
-- #  endif
---- 
--2.6.4
--
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index daa185efe..258f87b7b 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
-+sha256  48e9dde0f5c22dc26ff36e8d13e3dc575a1ee7558b5537a064f78a3b9dee1619  mpd-0.20.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index eb74f4f52..10e6b90dd 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index cc4bde2..d2c377d 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,4 +1,4 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.25/
+-sha1 fb471b7732d886b5adf10b4d689a90c88f005aa5 libpng-1.6.25.tar.xz
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.26/
++sha1 7a50569b26d57db9810409a59f1b87f8a8e387a3 libpng-1.6.26.tar.xz
+ # Locally computed:
+-sha256 09fe8d8341e8bfcfb3263100d9ac7ea2155b28dd8535f179111c1672ac8d8811  libpng-1.6.25.tar.xz
++sha256 266743a326986c3dbcee9d89b640595f6b16a293fd02b37d8c91348d317b73f9  libpng-1.6.26.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index c577cd5..abb4928 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).21
-+MPD_VERSION_MAJOR = 0.20
-+MPD_VERSION = $(MPD_VERSION_MAJOR)
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
--- 
-2.11.0
+-LIBPNG_VERSION = 1.6.25
++LIBPNG_VERSION = 1.6.26
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
