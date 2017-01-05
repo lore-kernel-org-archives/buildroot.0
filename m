@@ -1,43 +1,59 @@
-From: Ashish_Kumar_Mishra <dgashu55@gmail.com>
-Date: Wed, 4 Jan 2017 21:13:32 -0800 (PST)
-Subject: [Buildroot] Kernel Panic with BB Black + buildroot-2016.11.1
-In-Reply-To: <87bmvm2303.fsf@dell.be.48ers.dk>
-References: <1483536685380-153942.post@n4.nabble.com>
- <87bmvm2303.fsf@dell.be.48ers.dk>
-Message-ID: <1483593212540-153987.post@n4.nabble.com>
+From: Prasant J <pj0585@gmail.com>
+Date: Thu, 5 Jan 2017 11:48:30 +0530
+Subject: [Buildroot] dhcpcd build fails
+In-Reply-To: <87r34j2bo5.fsf@dell.be.48ers.dk>
+References: <CAA2DH4t=asj1xnvHChcXQXNU4Q0jkCHuwQ+pYDA-8mtpgKBnnw@mail.gmail.com>
+ <87r34j2bo5.fsf@dell.be.48ers.dk>
+Message-ID: <CAA2DH4shoEmg0dPgB5+5wFBK5yDcFz8OENJEm37eUaFLSZ+_yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-1) So how do you create your rootfs and filesystem image?
-I have the directory structure of 
-my_virtual_project/git_release_buildroot = Has the buildroot setup 
-my_virtual_project/release_branch_v2    =  Its here that i have my $(O)
-directory & the steps were 
-        *make -C ../git_release_buildroot/buildroot-2016.11.1 O=$(pwd)
-menuconfig
-        make *
-Then flashing the images from ~/my_virtual_project/release_branch_v2/images
-                 
+On Wed, Jan 4, 2017 at 7:02 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Prasant" == Prasant J <pj0585@gmail.com> writes:
+>
+>  > Hi,
+>  > I'm trying to build my rootfs from buildroot for my Analog Devices board.
+>  > "dhcpcd" package fails to build. Below are the details:
+>
+>
+>
+>  >>>> dhcpcd 6.6.7 Building
+>  > PATH="/WORK/build-repo/sc58x-dev/buildroot/output/host/bin:/WORK/build-repo/sc58x-dev/buildroot/output/host/sbin:/WORK/build-repo/sc58x-dev/buildroot/output/host/usr/bin:/WORK/build-repo/sc58x-dev/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/opt/analog/cces-linux-add-in/1.1.0/ARM/arm-linux-gnueabi/bin:/opt/analog/cces/2.3.0/ARM/arm-none-eabi/bin"
+>  > /usr/bin/make -j1 -C
+>  > /WORK/build-repo/sc58x-dev/buildroot/output/build/dhcpcd-6.6.7 all
+>  > make[1]: Entering directory
+>  > `/WORK/build-repo/sc58x-dev/buildroot/output/build/dhcpcd-6.6.7'
+>  > /WORK/build-repo/sc58x-dev/buildroot/output/host/usr/bin/arm-linux-gnueabi-gcc
+>  >  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+>  > -std=c99  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>  > -D_FILE_OFFSET_BITS=64 -D_BSD_SOURCE -D_XOPEN_SOURCE=700
+>  > -D_DEFAULT_SOURCE -DINET -DINET6 -I./crypt -c dhcpcd.c -o dhcpcd.o
+>  > In file included from
+>  > /WORK/build-repo/sc58x-dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/sys/socket.h:38:0,
+>  >                  from dhcpcd.c:33:
+>  > ipv6.h:154:41: error: invalid application of ?sizeof? to incomplete
+>  > type ?struct in6_pktinfo?
+>
+> It sounds like your toolchain doesn't have IPv6 support. Please provide
+> more details. What Buildroot version are you using and what is your
+> .config?
+>
+> --
+> Bye, Peter Korsgaard
 
-2) Does it work if you instead build out beaglebone_defconfig? (E.G. make
-clean; make beaglebone_defconfig; make
-Initially i had working setup of buildroot-2016.05 where i carried the build
-in the same directory .
-With buildroot-2016.11.1 , i am trying building externally as per step_1
-above. 
 
-3) As you pointed i will try to build the buildroot-2016.11.1 internally
-today & share the result. 
+Hi Peter,
 
-Could you please let me know if i am doing any step wrong here or missing
-some steps !!!!!
+Thanks for your response.
+
+I'm using Buildroot 2015.02 (This is released by Analog Devices)
+
+This patch has fixed the issue:
+https://patchwork.ozlabs.org/patch/465743/
 
 
 
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Kernel-Panic-with-BB-Black-buildroot-2016-11-1-tp153942p153987.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Regards, Pj
