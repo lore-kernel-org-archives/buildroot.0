@@ -1,1357 +1,289 @@
 From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Date: Thu,  5 Jan 2017 12:10:27 -0600
-Subject: [Buildroot] [PATCH 3/3] refpolicy: add default & custom
-	booleans.conf options
-In-Reply-To: <1483639827-25678-1-git-send-email-bryce.ferguson@rockwellcollins.com>
-References: <1483639827-25678-1-git-send-email-bryce.ferguson@rockwellcollins.com>
-Message-ID: <1483639827-25678-3-git-send-email-bryce.ferguson@rockwellcollins.com>
+Date: Thu, 5 Jan 2017 12:11:33 -0600
+Subject: [Buildroot] [PATCH v13 2/8] refpolicy: new package
+In-Reply-To: <20161212232121.01e9059e@free-electrons.com>
+References: <1477423570-15694-1-git-send-email-bryce.ferguson@rockwellcollins.com>
+ <1477423570-15694-2-git-send-email-bryce.ferguson@rockwellcollins.com>
+ <20161212232121.01e9059e@free-electrons.com>
+Message-ID: <CAKGmAFqOcWscn5bmiL=WvMct2vv38EhepqnWFqy1XesDuK180w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello,
 
-This patch adds the ability to specify custom paths for booleans.conf
-as well as provides a default file. The default file enables only a
-minimal amount of features which reduces build time.
+On Mon, Dec 12, 2016 at 4:21 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+>
+> Hello,
+>
+> On Tue, 25 Oct 2016 14:26:04 -0500, Bryce Ferguson wrote:
+> > From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> >
+> > The patch is for adding selinux reference policy (refpolicy).
+> > It is a complete SELinux policy that can be used as the system policy
+> > for a variety of systems and used as the basis for creating other
+policies.
+> >
+> > Changes were made to this patch in between versions 12 and 13 for which
+> > the change history can be found here: https://patchwork.ozlabs.org/p
+atch/649175/
+> >
+> > Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> > Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+> > Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+> > Signed-off-by: David Graziano <david.graziano@rockwellcollins.com>
+> > Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+>
+> This patch/commit is too complicated / too long. Please try to split it
+> into smaller chunks by only introducing the very mandatory
+> functionality first, and progressively add more capabilities.
+>
+> It also has a number of issues. See below for the details.
 
-Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
----
- package/refpolicy/Config.in     |   11 +
- package/refpolicy/booleans.conf | 1278 +++++++++++++++++++++++++++++++++++++++
- package/refpolicy/refpolicy.mk  |    6 +
- 3 files changed, 1295 insertions(+)
- create mode 100644 package/refpolicy/booleans.conf
+I have split this commit in three which should replace this one.  In these
+commits, I have also addressed your comments.
 
-diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
-index 3701370..8b9c7f0 100644
---- a/package/refpolicy/Config.in
-+++ b/package/refpolicy/Config.in
-@@ -99,4 +99,15 @@ config BR2_PACKAGE_REFPOLICY_MODULES_FILE
- 	  NOTE: This file is only used if a Custom Git repo is
- 	  not specified.
- 
-+config BR2_PACKAGE_REFPOLICY_BOOLEAN_FILE
-+	string "Refpolicy boolean configuration"
-+	default "package/refpolicy/booleans.conf"
-+	help
-+	  Location of a custom booleans.conf file that lists the
-+	  SELinux booleans to be set in the compiled
-+	  policy. See policy/booleans.conf in the refpolicy sources for
-+	  the complete list of available modules.
-+	  NOTE: This file is only used if a Custom Git repo is
-+	  not specified.
-+
- endif
-diff --git a/package/refpolicy/booleans.conf b/package/refpolicy/booleans.conf
-new file mode 100644
-index 0000000..31c70b9
---- /dev/null
-+++ b/package/refpolicy/booleans.conf
-@@ -0,0 +1,1278 @@
-+#
-+# Disable kernel module loading.
-+# 
-+secure_mode_insmod = false
-+
-+#
-+# Boolean to determine whether the system permits loading policy, setting
-+# enforcing mode, and changing boolean values.  Set this to true and you
-+# have to reboot to set it back.
-+# 
-+secure_mode_policyload = false
-+
-+#
-+# Enabling secure mode disallows programs, such as
-+# newrole, from transitioning to administrative
-+# user domains.
-+# 
-+secure_mode = false
-+
-+#
-+# Control users use of ping and traceroute
-+# 
-+user_ping = false
-+
-+#
-+# Determine whether ABRT can modify
-+# public files used for public file
-+# transfer services.
-+# 
-+abrt_anon_write = false
-+
-+#
-+# Determine whether abrt-handle-upload
-+# can modify public files used for public file
-+# transfer services in /var/spool/abrt-upload/.
-+# 
-+abrt_upload_watch_anon_write = true
-+
-+#
-+# Determine whether ABRT can run in
-+# the abrt_handle_event_t domain to
-+# handle ABRT event scripts.
-+# 
-+abrt_handle_event = false
-+
-+#
-+# Determine whether amavis can
-+# use JIT compiler.
-+# 
-+amavis_use_jit = false
-+
-+#
-+# Determine whether httpd can modify
-+# public files used for public file
-+# transfer services. Directories/Files must
-+# be labeled public_content_rw_t.
-+# 
-+allow_httpd_anon_write = false
-+
-+#
-+# Determine whether httpd can use mod_auth_pam.
-+# 
-+allow_httpd_mod_auth_pam = false
-+
-+#
-+# Determine whether httpd can use built in scripting.
-+# 
-+httpd_builtin_scripting = false
-+
-+#
-+# Determine whether httpd can check spam.
-+# 
-+httpd_can_check_spam = false
-+
-+#
-+# Determine whether httpd scripts and modules
-+# can connect to the network using TCP.
-+# 
-+httpd_can_network_connect = true
-+
-+#
-+# Determine whether httpd scripts and modules
-+# can connect to cobbler over the network.
-+# 
-+httpd_can_network_connect_cobbler = false
-+
-+#
-+# Determine whether scripts and modules can
-+# connect to databases over the network.
-+# 
-+httpd_can_network_connect_db = false
-+
-+#
-+# Determine whether httpd can connect to
-+# ldap over the network.
-+# 
-+httpd_can_network_connect_ldap = false
-+
-+#
-+# Determine whether httpd can connect
-+# to memcache server over the network.
-+# 
-+httpd_can_network_connect_memcache = false
-+
-+#
-+# Determine whether httpd can act as a relay.
-+# 
-+httpd_can_network_relay = false
-+
-+#
-+# Determine whether httpd daemon can
-+# connect to zabbix over the network.
-+# 
-+httpd_can_network_connect_zabbix = false
-+
-+#
-+# Determine whether httpd can send mail.
-+# 
-+httpd_can_sendmail = false
-+
-+#
-+# Determine whether httpd can communicate
-+# with avahi service via dbus.
-+# 
-+httpd_dbus_avahi = false
-+
-+#
-+# Determine wether httpd can use support.
-+# 
-+httpd_enable_cgi = false
-+
-+#
-+# Determine whether httpd can act as a
-+# FTP server by listening on the ftp port.
-+# 
-+httpd_enable_ftp_server = false
-+
-+#
-+# Determine whether httpd can traverse
-+# user home directories.
-+# 
-+httpd_enable_homedirs = false
-+
-+#
-+# Determine whether httpd gpg can modify
-+# public files used for public file
-+# transfer services. Directories/Files must
-+# be labeled public_content_rw_t.
-+# 
-+httpd_gpg_anon_write = false
-+
-+#
-+# Determine whether httpd can execute
-+# its temporary content.
-+# 
-+httpd_tmp_exec = false
-+
-+#
-+# Determine whether httpd scripts and
-+# modules can use execmem and execstack.
-+# 
-+httpd_execmem = true
-+
-+#
-+# Determine whether httpd can connect
-+# to port 80 for graceful shutdown.
-+# 
-+httpd_graceful_shutdown = false
-+
-+#
-+# Determine whether httpd can
-+# manage IPA content files.
-+# 
-+httpd_manage_ipa = false
-+
-+#
-+# Determine whether httpd can use mod_auth_ntlm_winbind.
-+# 
-+httpd_mod_auth_ntlm_winbind = false
-+
-+#
-+# Determine whether httpd can read
-+# generic user home content files.
-+# 
-+httpd_read_user_content = true
-+
-+#
-+# Determine whether httpd can change
-+# its resource limits.
-+# 
-+httpd_setrlimit = false
-+
-+#
-+# Determine whether httpd can run
-+# SSI executables in the same domain
-+# as system CGI scripts.
-+# 
-+httpd_ssi_exec = false
-+
-+#
-+# Determine whether httpd can communicate
-+# with the terminal. Needed for entering the
-+# passphrase for certificates at the terminal.
-+# 
-+httpd_tty_comm = false
-+
-+#
-+# Determine whether httpd can have full access
-+# to its content types.
-+# 
-+httpd_unified = false
-+
-+#
-+# Determine whether httpd can use
-+# cifs file systems.
-+# 
-+httpd_use_cifs = false
-+
-+#
-+# Determine whether httpd can
-+# use fuse file systems.
-+# 
-+httpd_use_fusefs = false
-+
-+#
-+# Determine whether httpd can use gpg.
-+# 
-+httpd_use_gpg = false
-+
-+#
-+# Determine whether httpd can use
-+# nfs file systems.
-+# 
-+httpd_use_nfs = false
-+
-+#
-+# Determine whether awstats can
-+# purge httpd log files.
-+# 
-+awstats_purge_apache_log_files = false
-+
-+#
-+# Determine whether Bind can bind tcp socket to http ports.
-+# 
-+named_tcp_bind_http_port = false
-+
-+#
-+# Determine whether Bind can write to master zone files.
-+# Generally this is used for dynamic DNS or zone transfers.
-+# 
-+named_write_master_zones = false
-+
-+#
-+# Determine whether boinc can execmem/execstack.
-+# 
-+boinc_execmem = true
-+
-+#
-+# Determine whether cdrecord can read
-+# various content. nfs, samba, removable
-+# devices, user temp and untrusted
-+# content files
-+# 
-+cdrecord_read_content = false
-+
-+#
-+# Determine whether clamscan can
-+# read user content files.
-+# 
-+clamav_read_user_content_files_clamscan = false
-+
-+#
-+# Determine whether clamscan can read
-+# all non-security files.
-+# 
-+clamav_read_all_non_security_files_clamscan = false
-+
-+#
-+# Determine whether can clamd use JIT compiler.
-+# 
-+clamd_use_jit = false
-+
-+#
-+# Determine whether Cobbler can modify
-+# public files used for public file
-+# transfer services.
-+# 
-+cobbler_anon_write = false
-+
-+#
-+# Determine whether Cobbler can connect
-+# to the network using TCP.
-+# 
-+cobbler_can_network_connect = false
-+
-+#
-+# Determine whether Cobbler can access
-+# cifs file systems.
-+# 
-+cobbler_use_cifs = false
-+
-+#
-+# Determine whether Cobbler can access
-+# nfs file systems.
-+# 
-+cobbler_use_nfs = false
-+
-+#
-+# Determine whether collectd can connect
-+# to the network using TCP.
-+# 
-+collectd_tcp_network_connect = false
-+
-+#
-+# Determine whether Condor can connect
-+# to the network using TCP.
-+# 
-+condor_tcp_network_connect = false
-+
-+#
-+# Determine whether system cron jobs
-+# can relabel filesystem for
-+# restoring file contexts.
-+# 
-+cron_can_relabel = false
-+
-+#
-+# Determine whether crond can execute jobs
-+# in the user domain as opposed to the
-+# the generic cronjob domain.
-+# 
-+cron_userdomain_transition = false
-+
-+#
-+# Determine whether extra rules
-+# should be enabled to support fcron.
-+# 
-+fcron_crond = false
-+
-+#
-+# Determine whether cvs can read shadow
-+# password files.
-+# 
-+allow_cvs_read_shadow = false
-+
-+#
-+# Determine whether dbadm can manage
-+# generic user files.
-+# 
-+dbadm_manage_user_files = false
-+
-+#
-+# Determine whether dbadm can read
-+# generic user files.
-+# 
-+dbadm_read_user_files = false
-+
-+#
-+# Determine whether DHCP daemon
-+# can use LDAP backends.
-+# 
-+dhcpd_use_ldap = false
-+
-+#
-+# Determine whether entropyd can use
-+# audio devices as the source for
-+# the entropy feeds.
-+# 
-+entropyd_use_audio = false
-+
-+#
-+# Determine whether exim can connect to
-+# databases.
-+# 
-+exim_can_connect_db = false
-+
-+#
-+# Determine whether exim can read generic
-+# user content files.
-+# 
-+exim_read_user_files = false
-+
-+#
-+# Determine whether exim can create,
-+# read, write, and delete generic user
-+# content files.
-+# 
-+exim_manage_user_files = false
-+
-+#
-+# Determine whether ftpd can modify
-+# public files used for public file
-+# transfer services. Directories/Files must
-+# be labeled public_content_rw_t.
-+# 
-+allow_ftpd_anon_write = false
-+
-+#
-+# Determine whether ftpd can login to
-+# local users and can read and write
-+# all files on the system, governed by DAC.
-+# 
-+allow_ftpd_full_access = false
-+
-+#
-+# Determine whether ftpd can use CIFS
-+# used for public file transfer services.
-+# 
-+allow_ftpd_use_cifs = false
-+
-+#
-+# Determine whether ftpd can use NFS
-+# used for public file transfer services.
-+# 
-+allow_ftpd_use_nfs = false
-+
-+#
-+# Determine whether ftpd can connect to
-+# databases over the TCP network.
-+# 
-+ftpd_connect_db = false
-+
-+#
-+# Determine whether ftpd can bind to all
-+# unreserved ports for passive mode.
-+# 
-+ftpd_use_passive_mode = false
-+
-+#
-+# Determine whether ftpd can connect to
-+# all unreserved ports.
-+# 
-+ftpd_connect_all_unreserved = false
-+
-+#
-+# Determine whether ftpd can read and write
-+# files in user home directories.
-+# 
-+ftp_home_dir = false
-+
-+#
-+# Determine whether sftpd can modify
-+# public files used for public file
-+# transfer services. Directories/Files must
-+# be labeled public_content_rw_t.
-+# 
-+sftpd_anon_write = false
-+
-+#
-+# Determine whether sftpd-can read and write
-+# files in user home directories.
-+# 
-+sftpd_enable_homedirs = false
-+
-+#
-+# Determine whether sftpd-can login to
-+# local users and read and write all
-+# files on the system, governed by DAC.
-+# 
-+sftpd_full_access = false
-+
-+#
-+# Determine whether sftpd can read and write
-+# files in user ssh home directories.
-+# 
-+sftpd_write_ssh_home = false
-+
-+#
-+# Determine whether Git CGI
-+# can search home directories.
-+# 
-+git_cgi_enable_homedirs = false
-+
-+#
-+# Determine whether Git CGI
-+# can access cifs file systems.
-+# 
-+git_cgi_use_cifs = false
-+
-+#
-+# Determine whether Git CGI
-+# can access nfs file systems.
-+# 
-+git_cgi_use_nfs = false
-+
-+#
-+# Determine whether Git session daemon
-+# can bind TCP sockets to all
-+# unreserved ports.
-+# 
-+git_session_bind_all_unreserved_ports = false
-+
-+#
-+# Determine whether calling user domains
-+# can execute Git daemon in the
-+# git_session_t domain.
-+# 
-+git_session_users = false
-+
-+#
-+# Determine whether Git session daemons
-+# can send syslog messages.
-+# 
-+git_session_send_syslog_msg = false
-+
-+#
-+# Determine whether Git system daemon
-+# can search home directories.
-+# 
-+git_system_enable_homedirs = false
-+
-+#
-+# Determine whether Git system daemon
-+# can access cifs file systems.
-+# 
-+git_system_use_cifs = false
-+
-+#
-+# Determine whether Git system daemon
-+# can access nfs file systems.
-+# 
-+git_system_use_nfs = false
-+
-+#
-+# Determine whether Gitosis can send mail.
-+# 
-+gitosis_can_sendmail = false
-+
-+#
-+# Determine whether GPG agent can manage
-+# generic user home content files. This is
-+# required by the --write-env-file option.
-+# 
-+gpg_agent_env_file = false
-+
-+#
-+# Determine whether icecast can listen
-+# on and connect to any TCP port.
-+# 
-+icecast_use_any_tcp_ports = false
-+
-+#
-+# Determine whether irc clients can
-+# listen on and connect to any
-+# unreserved TCP ports.
-+# 
-+irc_use_any_tcp_ports = false
-+
-+#
-+# Determine whether java can make
-+# its stack executable.
-+# 
-+allow_java_execstack = false
-+
-+#
-+# Determine whether kerberos is supported.
-+# 
-+allow_kerberos = false
-+
-+#
-+# Determine whether logwatch can connect
-+# to mail over the network.
-+# 
-+logwatch_can_network_connect_mail = false
-+
-+#
-+# Determine whether to support lpd server.
-+# 
-+use_lpd_server = false
-+
-+#
-+# Determine whether mcelog supports
-+# client mode.
-+# 
-+mcelog_client = false
-+
-+#
-+# Determine whether mcelog can execute scripts.
-+# 
-+mcelog_exec_scripts = true
-+
-+#
-+# Determine whether mcelog can use all
-+# the user ttys.
-+# 
-+mcelog_foreground = false
-+
-+#
-+# Determine whether mcelog supports
-+# server mode.
-+# 
-+mcelog_server = false
-+
-+#
-+# Determine whether mcelog can use syslog.
-+# 
-+mcelog_syslog = false
-+
-+#
-+# Determine whether minidlna can read generic user content.
-+# 
-+minidlna_read_generic_user_content = false
-+
-+#
-+# Determine whether mozilla can
-+# make its stack executable.
-+# 
-+mozilla_execstack = false
-+
-+#
-+# Determine whether mpd can traverse
-+# user home directories.
-+# 
-+mpd_enable_homedirs = false
-+
-+#
-+# Determine whether mpd can use
-+# cifs file systems.
-+# 
-+mpd_use_cifs = false
-+
-+#
-+# Determine whether mpd can use
-+# nfs file systems.
-+# 
-+mpd_use_nfs = false
-+
-+#
-+# Determine whether mplayer can make
-+# its stack executable.
-+# 
-+allow_mplayer_execstack = false
-+
-+#
-+# Determine whether mysqld can
-+# connect to all TCP ports.
-+# 
-+mysql_connect_any = false
-+
-+#
-+# Determine whether confined applications
-+# can use nscd shared memory.
-+# 
-+nscd_use_shm = false
-+
-+#
-+# Determine whether openvpn can
-+# read generic user home content files.
-+# 
-+openvpn_enable_homedirs = false
-+
-+#
-+# Determine whether openvpn can
-+# connect to the TCP network.
-+# 
-+openvpn_can_network_connect = false
-+
-+#
-+# Determine whether Polipo system
-+# daemon can access CIFS file systems.
-+# 
-+polipo_system_use_cifs = false
-+
-+#
-+# Determine whether Polipo system
-+# daemon can access NFS file systems.
-+# 
-+polipo_system_use_nfs = false
-+
-+#
-+# Determine whether calling user domains
-+# can execute Polipo daemon in the
-+# polipo_session_t domain.
-+# 
-+polipo_session_users = false
-+
-+#
-+# Determine whether Polipo session daemon
-+# can send syslog messages.
-+# 
-+polipo_session_send_syslog_msg = false
-+
-+#
-+# Determine whether portage can
-+# use nfs filesystems.
-+# 
-+portage_use_nfs = false
-+
-+#
-+# Determine whether postfix local
-+# can manage mail spool content.
-+# 
-+postfix_local_write_mail_spool = true
-+
-+#
-+# Determine whether pppd can
-+# load kernel modules.
-+# 
-+pppd_can_insmod = false
-+
-+#
-+# Determine whether common users can
-+# run pppd with a domain transition.
-+# 
-+pppd_for_user = false
-+
-+#
-+# Determine whether privoxy can
-+# connect to all tcp ports.
-+# 
-+privoxy_connect_any = false
-+
-+#
-+# Determine whether puppet can
-+# manage all non-security files.
-+# 
-+puppet_manage_all_files = false
-+
-+#
-+# Determine whether qemu has full
-+# access to the network.
-+# 
-+qemu_full_network = false
-+
-+#
-+# Determine whether rgmanager can
-+# connect to the network using TCP.
-+# 
-+rgmanager_can_network_connect = false
-+
-+#
-+# Determine whether fenced can
-+# connect to the TCP network.
-+# 
-+fenced_can_network_connect = false
-+
-+#
-+# Determine whether fenced can use ssh.
-+# 
-+fenced_can_ssh = false
-+
-+#
-+# Determine whether gssd can read
-+# generic user temporary content.
-+# 
-+allow_gssd_read_tmp = false
-+
-+#
-+# Determine whether gssd can write
-+# generic user temporary content.
-+# 
-+allow_gssd_write_tmp = false
-+
-+#
-+# Determine whether nfs can modify
-+# public files used for public file
-+# transfer services. Directories/Files must
-+# be labeled public_content_rw_t.
-+# 
-+allow_nfsd_anon_write = false
-+
-+#
-+# Determine whether rsync can use
-+# cifs file systems.
-+# 
-+rsync_use_cifs = false
-+
-+#
-+# Determine whether rsync can
-+# use fuse file systems.
-+# 
-+rsync_use_fusefs = false
-+
-+#
-+# Determine whether rsync can use
-+# nfs file systems.
-+# 
-+rsync_use_nfs = false
-+
-+#
-+# Determine whether rsync can
-+# run as a client
-+# 
-+rsync_client = false
-+
-+#
-+# Determine whether rsync can
-+# export all content read only.
-+# 
-+rsync_export_all_ro = false
-+
-+#
-+# Determine whether rsync can modify
-+# public files used for public file
-+# transfer services. Directories/Files must
-+# be labeled public_content_rw_t.
-+# 
-+allow_rsync_anon_write = false
-+
-+#
-+# Determine whether samba can modify
-+# public files used for public file
-+# transfer services. Directories/Files must
-+# be labeled public_content_rw_t.
-+# 
-+allow_smbd_anon_write = false
-+
-+#
-+# Determine whether samba can
-+# create home directories via pam.
-+# 
-+samba_create_home_dirs = false
-+
-+#
-+# Determine whether samba can act as the
-+# domain controller, add users, groups
-+# and change passwords.
-+# 
-+samba_domain_controller = false
-+
-+#
-+# Determine whether samba can
-+# act as a portmapper.
-+# 
-+samba_portmapper = false
-+
-+#
-+# Determine whether samba can share
-+# users home directories.
-+# 
-+samba_enable_home_dirs = false
-+
-+#
-+# Determine whether samba can share
-+# any content read only.
-+# 
-+samba_export_all_ro = false
-+
-+#
-+# Determine whether samba can share any
-+# content readable and writable.
-+# 
-+samba_export_all_rw = false
-+
-+#
-+# Determine whether samba can
-+# run unconfined scripts.
-+# 
-+samba_run_unconfined = false
-+
-+#
-+# Determine whether samba can
-+# use nfs file systems.
-+# 
-+samba_share_nfs = false
-+
-+#
-+# Determine whether samba can
-+# use fuse file systems.
-+# 
-+samba_share_fusefs = false
-+
-+#
-+# Determine whether sanlock can use
-+# nfs file systems.
-+# 
-+sanlock_use_nfs = false
-+
-+#
-+# Determine whether sanlock can use
-+# cifs file systems.
-+# 
-+sanlock_use_samba = false
-+
-+#
-+# Determine whether sasl can
-+# read shadow files.
-+# 
-+allow_saslauthd_read_shadow = false
-+
-+#
-+# Determine whether smartmon can support
-+# devices on 3ware controllers.
-+# 
-+smartmon_3ware = false
-+
-+#
-+# Determine whether spamassassin
-+# clients can use the network.
-+# 
-+spamassassin_can_network = false
-+
-+#
-+# Determine whether spamd can manage
-+# generic user home content.
-+# 
-+spamd_enable_home_dirs = false
-+
-+#
-+# Determine whether squid can
-+# connect to all TCP ports.
-+# 
-+squid_connect_any = false
-+
-+#
-+# Determine whether squid can run
-+# as a transparent proxy.
-+# 
-+squid_use_tproxy = false
-+
-+#
-+# Determine whether telepathy connection
-+# managers can connect to generic tcp ports.
-+# 
-+telepathy_tcp_connect_generic_network_ports = false
-+
-+#
-+# Determine whether telepathy connection
-+# managers can connect to any port.
-+# 
-+telepathy_connect_all_ports = false
-+
-+#
-+# Determine whether tftp can modify
-+# public files used for public file
-+# transfer services. Directories/Files must
-+# be labeled public_content_rw_t.
-+# 
-+tftp_anon_write = false
-+
-+#
-+# Determine whether tftp can manage
-+# generic user home content.
-+# 
-+tftp_enable_homedir = false
-+
-+#
-+# Determine whether tor can bind
-+# tcp sockets to all unreserved ports.
-+# 
-+tor_bind_all_unreserved_ports = false
-+
-+#
-+# Determine whether varnishd can
-+# use the full TCP network.
-+# 
-+varnishd_connect_any = false
-+
-+#
-+# Determine whether attempts by
-+# vbetool to mmap low regions should
-+# be silently blocked.
-+# 
-+vbetool_mmap_zero_ignore = false
-+
-+#
-+# Determine whether confined virtual guests
-+# can use serial/parallel communication ports.
-+# 
-+virt_use_comm = false
-+
-+#
-+# Determine whether confined virtual guests
-+# can use executable memory and can make
-+# their stack executable.
-+# 
-+virt_use_execmem = false
-+
-+#
-+# Determine whether confined virtual guests
-+# can use fuse file systems.
-+# 
-+virt_use_fusefs = false
-+
-+#
-+# Determine whether confined virtual guests
-+# can use nfs file systems.
-+# 
-+virt_use_nfs = false
-+
-+#
-+# Determine whether confined virtual guests
-+# can use cifs file systems.
-+# 
-+virt_use_samba = false
-+
-+#
-+# Determine whether confined virtual guests
-+# can manage device configuration.
-+# 
-+virt_use_sysfs = false
-+
-+#
-+# Determine whether confined virtual guests
-+# can use usb devices.
-+# 
-+virt_use_usb = false
-+
-+#
-+# Determine whether confined virtual guests
-+# can interact with xserver.
-+# 
-+virt_use_xserver = false
-+
-+#
-+# Determine whether confined virtual guests
-+# can use vfio for pci device pass through (vt-d).
-+# 
-+virt_use_vfio = false
-+
-+#
-+# Determine whether webadm can
-+# manage generic user files.
-+# 
-+webadm_manage_user_files = false
-+
-+#
-+# Determine whether webadm can
-+# read generic user files.
-+# 
-+webadm_read_user_files = false
-+
-+#
-+# Determine whether attempts by
-+# wine to mmap low regions should
-+# be silently blocked.
-+# 
-+wine_mmap_zero_ignore = false
-+
-+#
-+# Determine whether xend can
-+# run blktapctrl and tapdisk.
-+# 
-+xend_run_blktap = false
-+
-+#
-+# Determine whether xen can
-+# use fusefs file systems.
-+# 
-+xen_use_fusefs = false
-+
-+#
-+# Determine whether xen can
-+# use nfs file systems.
-+# 
-+xen_use_nfs = false
-+
-+#
-+# Determine whether xen can
-+# use samba file systems.
-+# 
-+xen_use_samba = false
-+
-+#
-+# Determine whether xguest can
-+# mount removable media.
-+# 
-+xguest_mount_media = false
-+
-+#
-+# Determine whether xguest can
-+# configure network manager.
-+# 
-+xguest_connect_network = false
-+
-+#
-+# Determine whether xguest can
-+# use blue tooth devices.
-+# 
-+xguest_use_bluetooth = false
-+
-+#
-+# Determine whether zabbix can
-+# connect to all TCP ports
-+# 
-+zabbix_can_network = false
-+
-+#
-+# Determine whether zebra daemon can
-+# manage its configuration files.
-+# 
-+allow_zebra_write_config = false
-+
-+#
-+# Control the ability to mmap a low area of the address space,
-+# as configured by /proc/sys/kernel/mmap_min_addr.
-+# 
-+mmap_low_allowed = false
-+
-+#
-+# Allow sysadm to debug or ptrace all processes.
-+# 
-+allow_ptrace = false
-+
-+#
-+# Allow unprived users to execute DDL statement
-+# 
-+sepgsql_enable_users_ddl = false
-+
-+#
-+# Allow transmit client label to foreign database
-+# 
-+sepgsql_transmit_client_label = false
-+
-+#
-+# Allow database admins to execute DML statement
-+# 
-+sepgsql_unconfined_dbadm = false
-+
-+#
-+# allow host key based authentication
-+# 
-+allow_ssh_keysign = false
-+
-+#
-+# Allow ssh logins as sysadm_r:sysadm_t
-+# 
-+ssh_sysadm_login = false
-+
-+#
-+# Allow ssh to use gpg-agent
-+# 
-+ssh_use_gpg_agent = false
-+
-+#
-+# Allows clients to write to the X server shared
-+# memory segments.
-+# 
-+allow_write_xshm = false
-+
-+#
-+# Allow xdm logins as sysadm
-+# 
-+xdm_sysadm_login = false
-+
-+#
-+# Support X userspace object manager
-+# 
-+xserver_object_manager = false
-+
-+#
-+# Allow users to resolve user passwd entries directly from ldap rather then using a sssd server
-+# 
-+authlogin_nsswitch_use_ldap = false
-+
-+#
-+# Enable support for upstart as the init program.
-+# 
-+init_upstart = false
-+
-+#
-+# Allow racoon to read shadow
-+# 
-+racoon_read_shadow = false
-+
-+#
-+# Allow the mount command to mount any directory or file.
-+# 
-+allow_mount_anyfile = false
-+
-+#
-+# Enable support for systemd-tmpfiles to manage all non-security files.
-+# 
-+systemd_tmpfiles_manage_all = false
-+
-+#
-+# Allow users to connect to mysql
-+# 
-+allow_user_mysql_connect = false
-+
-+#
-+# Allow users to connect to PostgreSQL
-+# 
-+allow_user_postgresql_connect = false
-+
-+#
-+# Allow regular users direct mouse access
-+# 
-+user_direct_mouse = false
-+
-+#
-+# Allow users to read system messages.
-+# 
-+user_dmesg = false
-+
-+#
-+# Allow user to r/w files on filesystems
-+# that do not have extended attributes (FAT, CDROM, FLOPPY)
-+# 
-+user_rw_noexattrfile = false
-+
-+#
-+# Allow w to display everyone
-+# 
-+user_ttyfile_stat = false
-+
-+#
-+# Allow unconfined executables to make their heap memory executable.  Doing this is a really bad idea. Probably indicates a badly coded executable, but could indicate an attack. This executable should be reported in bugzilla
-+# 
-+allow_execheap = false
-+
-+#
-+# Allow unconfined executables to map a memory region as both executable and writable, this is dangerous and the executable should be reported in bugzilla")
-+# 
-+allow_execmem = false
-+
-+#
-+# Allow all unconfined executables to use libraries requiring text relocation that are not labeled textrel_shlib_t")
-+# 
-+allow_execmod = false
-+
-+#
-+# Allow unconfined executables to make their stack executable.  This should never, ever be necessary. Probably indicates a badly coded executable, but could indicate an attack. This executable should be reported in bugzilla")
-+# 
-+allow_execstack = false
-+
-+#
-+# Enable polyinstantiated directory support.
-+# 
-+allow_polyinstantiation = false
-+
-+#
-+# Allow system to run with NIS
-+# 
-+allow_ypbind = false
-+
-+#
-+# Allow logging in and using the system from /dev/console.
-+# 
-+console_login = true
-+
-+#
-+# Enable reading of urandom for all domains.
-+# 
-+# 
-+# 
-+# 
-+# This should be enabled when all programs
-+# are compiled with ProPolice/SSP
-+# stack smashing protection.  All domains will
-+# be allowed to read from /dev/urandom.
-+# 
-+global_ssp = false
-+
-+#
-+# Allow email client to various content.
-+# nfs, samba, removable devices, and user temp
-+# files
-+# 
-+mail_read_content = false
-+
-+#
-+# Allow any files/directories to be exported read/write via NFS.
-+# 
-+nfs_export_all_rw = false
-+
-+#
-+# Allow any files/directories to be exported read/only via NFS.
-+# 
-+nfs_export_all_ro = false
-+
-+#
-+# Support NFS home directories
-+# 
-+use_nfs_home_dirs = false
-+
-+#
-+# Support SAMBA home directories
-+# 
-+use_samba_home_dirs = false
-+
-+#
-+# Allow users to run TCP servers (bind to ports and accept connection from
-+# the same domain and outside users)  disabling this forces FTP passive mode
-+# and may change other protocols.
-+# 
-+user_tcp_server = false
-+
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 0ac6e4f..01280ae 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -39,6 +39,11 @@ define REFPOLICY_CUSTOM_MODULES_CONF
- 	cp $(REFPOLICY_MODULES_FILE) $(@D)/policy/modules.conf
- endef
- 
-+REFPOLICY_BOOLEAN_FILE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_BOOLEAN_FILE))
-+define REFPOLICY_CUSTOM_BOOLEAN_CONF
-+	cp $(REFPOLICY_BOOLEAN_FILE) $(@D)/policy/booleans.conf
-+endef
-+
- define REFPOLICY_CONFIGURE_CMDS
- 	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) bare \
- 		$(REFPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
-@@ -49,6 +54,7 @@ define REFPOLICY_CONFIGURE_CMDS
- 	$(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) conf \
- 		$(REFPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
- 	$(REFPOLICY_CUSTOM_MODULES_CONF)
-+	$(REFPOLICY_CUSTOM_BOOLEAN_CONF)
- endef
- 
- define REFPOLICY_INSTALL_STAGING_CMDS
+>
+> > diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+> > new file mode 100644
+> > index 0000000..5a46829
+> > --- /dev/null
+> > +++ b/package/refpolicy/Config.in
+> > @@ -0,0 +1,146 @@
+> > +config BR2_PACKAGE_REFPOLICY
+> > +     bool "refpolicy"
+> > +     select BR2_PACKAGE_POLICYCOREUTILS
+> > +     select BR2_PACKAGE_BUSYBOX_SELINUX if BR2_PACKAGE_BUSYBOX
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # policycoreutils
+> > +     depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL #
+policycoreutils
+>
+> This does not properly account for the dependencies of policycoreutils
+> and SELinux support in Busybox, which are:
+>
+>         depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS # libsemanage
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
+>         depends on !BR2_STATIC_LIBS #libsemanage
+>         depends on !BR2_arc # libsemanage
+>         depends on BR2_TOOLCHAIN_USES_GLIBC # libsemanage
+>
+
+Fixed in new set of commits.
+
+> > +comment "refpolicy needs a toolchain w/ threads, glibc or musl"
+> > +     depends on !BR2_TOOLCHAIN_HAS_THREADS \
+> > +             || !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+>
+> So this comment needs fixing. It should be:
+>
+> comment "refpolicy needs a glibc toolchain w/ thread, dynamic library"
+>         depends on !BR2_arc
+>         depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
+>         depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
+>                 !BR2_TOOLCHAIN_USES_GLIBC
+>
+
+Fixed in new set of commits.
+
+> > +if BR2_PACKAGE_REFPOLICY
+> > +
+> > +choice
+> > +prompt "SELinux policy type"
+> > +default BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
+> > +
+> > +config BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
+> > +bool "Standard"
+> > +help
+> > +Standard SELinux policy
+>
+> What is a "Standard SELinux policy" ?
+>
+
+The "Standard SELinux policy" is type enforcement only.  I have specified
+that in the new set of commits.
+
+> > +
+> > +config BR2_PACKAGE_REFPOLICY_TYPE_MCS
+> > +bool "MCS"
+> > +help
+> > +SELinux policy with multi-catagory support
+>
+> Typo: category
+>
+
+Fixed typos in new set of commits.
+
+> > +
+> > +config BR2_PACKAGE_REFPOLICY_TYPE_MLS
+> > +bool "MLS"
+> > +help
+> > +SELinux policy with multi-catagory and multi-level support
+>
+> Typo: category
+>
+> > +endchoice
+>
+> The indentation of the choice is all wrong. It should be like this:
+>
+> choice
+>         prompt "SELinux policy type
+>         default BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
+>
+> config BR2_PACKAGE_REFPOLICY_TYPE_STANDARD
+>         bool "Standard"
+>         help
+>           ....
+>
+> config ...
+>         bool ...
+>         help
+>           ....
+>
+> endchoice
+
+Fixed indentation in new set of commits.
+
+> > +config BR2_PACKAGE_REFPOLICY_NAME
+> > +     string "Custom policy Name"
+> > +     default "Buildroot"
+>
+> Is it really useful to be able to customize this? I guess it can be
+> dropped in a first iteration.
+>
+
+Dropped in new set of commits.
+
+> > +config BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
+> > +     bool "Custom Git repository"
+> > +     select BR2_PACKAGE_REFPOLICY_CONTRIB
+>
+> This package no longer exists, and you're actually fetching it from the
+> refpolicy Git repo through the submodule if I understand correctly.
+
+Yes refpolicy uses the git submodule.  This has been removed in the new set
+of commits.
+
+> Same for this functionality: separate patch. I'm also not sure to
+> understand why we would want this exactly. What does this repository
+> typically contains? Can you show the layout of what it contains, so we
+> can understand what it's like?
+
+The custom git repository stuff was an artifact of an outdated method we
+were using.  I have removed it in the new set of commits.
+
+> > diff --git a/package/refpolicy/booleans.conf
+b/package/refpolicy/booleans.conf
+> > new file mode 100644
+> > index 0000000..31c70b9
+> > --- /dev/null
+> > +++ b/package/refpolicy/booleans.conf
+>
+> How was this file generated?
+
+Refpolicy generates modules.conf and booleans.conf as part of the build.
+The files here are taken from the build and paired down to a minimal amount
+of functionality to cut down on build times.  Each of them I have added as
+a separate commit to keep the patch sizes down.
+
+> > diff --git a/package/refpolicy/modules.conf b/package/refpolicy/
+modules.conf
+> > new file mode 100644
+> > index 0000000..2304dc4
+> > --- /dev/null
+> > +++ b/package/refpolicy/modules.conf
+>
+> How was this file generated? Do we need to keep it inside Buildroot?
+
+See comment above.
+
+> > +
+> > +# Passing the HOST_CONFIGURE_OPTS to the target build because all of
+the
+> > +# build utilities are expected to be on system. This fools the make
+files
+> > +# into using the host built utilities to compile the SELinux policy for
+> > +# the target.
+> > +#
+> > +# Note, the TEST_TOOLCHAIN option will also set the
+> > +# LD_LIBRARY_PATH at run time.
+> > +REFPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
+> > +     TEST_TOOLCHAIN="$(HOST_DIR)"
+>
+> That's really weird, and makes me wonder if we shouldn't have a
+> host-refpolicy package to build whatever host tool is needed, and a
+> refpolicy target package to actually build/install the policy on the
+> target.
+>
+
+We tracked this problem down and it ended up being one support tool that
+wasn't building correctly.  The reason it previously worked was because
+refpolicy doesn't build C application or binaries.  It uses python to build
+bytecode binary files for the policy.  A fix has been added for this in the
+new set of patches.
+
+> > +
+> > +     $(REFPOLICY_MAKE_ENV) $(REFPOLICY_MAKE) -C $(@D) conf \
+> > +             $(REFPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
+> > +     if [ -f $(@D)/modules.conf.bk ]; then \
+> > +             echo "[Preserved modules.conf]" ; \
+> > +             mv $(@D)/modules.conf.bk $(@D)/policy/modules.conf ; \
+> > +     fi
+>
+> Not clear at all why we need this modules.conf.bk dance. Since it's
+> only for "an external repo", can we get rid of this for now, or at
+> least have it as part of a subsequent patch.
+
+This was another artifact from an internal build process and has been
+removed in the new set of patches.
+
+> > +
+> > +define REFPOLICY_INSTALL_INIT_SYSV
+> > +     $(INSTALL) -m 0755 -D package/refpolicy/S00selinux \
+> > +             $(TARGET_DIR)/etc/init.d/S00selinux
+> > +endef
+> > +
+> > +ifeq ($(BR2_PACKAGE_REFPOLICY_MODULAR),y)
+> > +$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/selinux/$(BR
+2_PACKAGE_REFPOLICY_NAME)/policy
+> > +$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/selinux/$(BR
+2_PACKAGE_REFPOLICY_NAME)/modules/active/modules
+> > +$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/selinux/$(BR
+2_PACKAGE_REFPOLICY_NAME)/contexts/files
+> > +touch $(TARGET_DIR)/etc/selinux/$(BR2_PACKAGE_REFPOLICY_NAME)/cont
+exts/files/file_contexts.local
+>
+> This definitely cannot work at all, it's not part of any command.
+> Building a modular policy should only be added in a follow-up patch, to
+> keep the initial patch simpler.
+>
+
+I have removed the modular policy option in the new set of patches.
+
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+
+Thank you so much for the feedback!
+
 -- 
-1.9.1
+
+
+Bryce Ferguson
+Software Engineer
+Airborne Information Solutions \ Secure Platforms
+
+400 Collins Rd NE Cedar Rapids, Iowa 52498
+
+Bryce.Ferguson at rockwellcollins.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170105/62137b3a/attachment.html>
