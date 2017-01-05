@@ -1,28 +1,31 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Thu, 5 Jan 2017 10:35:23 +0100
-Subject: [Buildroot] How to switch off WiFi/BT on Raspberry Pi 3B from
-	buildroot
-Message-ID: <CALtfCQY6AUUm-jYYRQkr3vz_4zgCj_uT-mvrNEo1nL1XR8-K9A@mail.gmail.com>
+From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Date: Thu,  5 Jan 2017 10:45:18 +0100
+Subject: [Buildroot] [PATCH] SDL2 depends on MMU (fork)
+Message-ID: <1483609518-7756-1-git-send-email-guillaume.gardet@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+Fixes autobuilder failure http://autobuild.buildroot.net/results/2f7/2f738830bf98eb7284f99c11856a8694467b3daa
 
-Does anyone know how to disable WiFi and BT in the raspberry pi 3 from
-buildroot?
+Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+---
+ package/sdl2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-I would like to know if there is anyway to switch off the Hardware
-associated with the WiFi and Bluetooth.
-
-If I switch off the HW, I'm going to avoid EMC problems and I will get
-a lower power consumption.
-
-Obviously, If you don't load the driver associated with WiFi and
-Bluetooth they are no going to work, but I need another better option.
-
-Any suggestion?
-
-Oscar Gomez Fuente
+diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
+index b73611d..30d5c1a 100644
+--- a/package/sdl2/Config.in
++++ b/package/sdl2/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SDL2
+ 	bool "sdl2"
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Simple DirectMedia Layer 2 - SDL2 is a library that allows
+ 	  programs portable low level access to a video framebuffer,
+-- 
+1.8.4.5
