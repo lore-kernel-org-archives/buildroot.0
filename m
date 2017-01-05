@@ -1,112 +1,69 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 6 Jan 2017 00:20:55 +0100
-Subject: [Buildroot] [PATCH 1/2] efl: fix target package dependency on
- util-linux (libmount).
-In-Reply-To: <CAPdpN3CmdooHnHHHvmMguW6dBqsN+CksS6r2OUWCmRWPBvkZyg@mail.gmail.com>
+Date: Fri, 6 Jan 2017 00:25:28 +0100
+Subject: [Buildroot] [PATCH 2/2] efl: do not force dependency on libudev
+ by making eeze a config option.
+In-Reply-To: <CAPdpN3BepwRMCy-5QdY1zFCkYzN4OTUuW07AzAO7M1U63oE3BA@mail.gmail.com>
 References: <20170103212932.9254-1-barbieri@profusion.mobi>
- <20170103212932.9254-2-barbieri@profusion.mobi>
- <3b511a0a-99aa-23d3-0649-08c725fa9eea@gmail.com>
- <CAPdpN3CmdooHnHHHvmMguW6dBqsN+CksS6r2OUWCmRWPBvkZyg@mail.gmail.com>
-Message-ID: <f3f89ca1-087c-239c-5e01-c47cab50e3b3@gmail.com>
+ <20170103212932.9254-3-barbieri@profusion.mobi>
+ <1bbc8ae0-66c1-5e55-4d1a-64dfba384d40@gmail.com>
+ <CAPdpN3BepwRMCy-5QdY1zFCkYzN4OTUuW07AzAO7M1U63oE3BA@mail.gmail.com>
+Message-ID: <a717df73-14a3-4751-a5a9-4a16587e977e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 04/01/2017 ? 03:09, Gustavo Sverzut Barbieri a ?crit :
-> On Tue, Jan 3, 2017 at 8:37 PM, Romain Naour <romain.naour@gmail.com> wrote:
+Le 04/01/2017 ? 02:10, Gustavo Sverzut Barbieri a ?crit :
+> On Tue, Jan 3, 2017 at 8:20 PM, Romain Naour <romain.naour@gmail.com> wrote:
 >> Hi Gustavo,
 >>
+>> Thanks for these patches!
+>>
 >> Le 03/01/2017 ? 22:29, Gustavo Sverzut Barbieri a ?crit :
->>> use the correct variable (BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT) and do
->>> not impose dependency on util-linux if not needed.
->>>
->>> Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
->>> ---
->>>  package/efl/Config.in | 6 +++---
->>>  package/efl/efl.mk    | 4 ++--
->>>  2 files changed, 5 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/package/efl/Config.in b/package/efl/Config.in
->>> index c51fc564d..542c354a8 100644
->>> --- a/package/efl/Config.in
->>> +++ b/package/efl/Config.in
->>> @@ -17,9 +17,6 @@ config BR2_PACKAGE_EFL
->>>       # https://phab.enlightenment.org/T2728
->>>       select BR2_PACKAGE_LUAJIT # Lua support broken
->>>       select BR2_PACKAGE_LZ4
->>> -     select BR2_PACKAGE_UTIL_LINUX
->>> -     # libblkid is part of required tools, see EFL's README.
->>> -     select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>>> Although highly recommended to be enabled, EFL's eeze can be disabled
+>>> and thus no dependency on libudev or dynamic device management.
 >>
->> IIRC, There is a build issue behind this, but it was with an older efl version
->> (1.13 or 1.14). So I have to check this.
-> 
-> I did the cumbersome "make clean" then "make all" and it worked. So I
-> assume this is safe now, but as you see these are enabled if
-> BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT is enabled, and that's the
-> default.
-
-I did a build test today without util-linux package and it build fine with the
-current efl version (1.18.4)
-
-> 
-> 
->> BTW do you want to be added to DEVELOPERS file and receive any build issues from
->> Buildroot autobuilders related to efl packages ?
+>> When I stated to rework and bump the efl packaging in Buildroot, the eeze
+>> dependency was mandatory. So I added an option to disable it only for the
+>> host-efl package. See [1]. As I said on IRC, I didn't event tested efl without
+>> eeze on the target and I don't think that the EFL developers even tested it.
 >>
->> https://buildroot.org/downloads/manual/manual.html#DEVELOPERS
-> 
-> sounds good. Following that guideline I should add myself to that
-> file, likely in this patch. Okay?
-
-Well, It seems that the recommended way to do it is to send a separate patch.
-The reason is: if someone need to backport a patch adding a feature or a new
-package, we want to avoid a conflict in DEVELOPERS file while cherry-picking the
-commit.
-
-Thomas, can you confirm ?
-
-> 
-> 
->>>       select BR2_PACKAGE_ZLIB
->>>       help
->>>         Enlightenment Foundation Libraries
->>> @@ -101,7 +98,10 @@ config BR2_PACKAGE_EFL_PULSEAUDIO
->>>
->>>  config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
->>>       bool "Enable libmount support (recommended)"
+>> But since you are involved in efl development, I expect
+>> --you-really-know-what-you-re-doing-and-that-this-will-probably-break-things-and-you-will-fix-them-yourself-and-send-patches-abb
+>> :)
 >>
->> Maybe we should rename this option to BR2_PACKAGE_EFL_UTIL_LINUX and use
->> "Enable util-linux (limbount + libblkid) support (recommended)"
+>> [1]
+>> https://git.enlightenment.org/core/efl.git/commit/?id=4351f0fa8642b163799c6ce47610d5cd9f70acfa
 > 
-> Not sure... to tell you the truth I think libblkid is a "nice to
-> have", not must have... our code doesn't refer to anything in
-> libblkid, but if you want mount to auto detect the
-> partition/filesystem, then blkid is needed to scan the block device
-> and infer that AFAIU.
+> yes, I saw that and it's a nice addition. Eeze used to be optional,
+> but when we moved to the single efl tree I was one of the developers
+> unifying the autohell stuff and to make it simpler I reduced some
+> options until someone find a need for that... so you found it... and
+> I'm using it :-D
+
+:)
+
 > 
-> However if that's what people want I can do for sure, super simple.
+> I'm testing that inside qemu using a build derived from
+> qemu_arm_versatile_defconfig with glibc, efl and few other utilities
+> to test webkitefl. So far it's working, but if something break I'll
+> patch efl to fix that.
 
-I followed the README comment here and because BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-is not selected by default when util-linux package is selected.
-Also libblkid.so is not so big (~300Ko), I'm not sure we really need a new
-option BR2_PACKAGE_EFL_UTIL_LINUX_LIBLKID
-
-config BR2_PACKAGE_EFL_UTIL_LINUX_LIBLKID
-    bool "Enable libblkid support (recommended)"
-    depends on BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
-
-Ok, let's do it as you suggest
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[Build tested]
-Tested-by: Romain Naour <romain.naour@gmail.com>
+OK great!
 
 Best regards,
 Romain
 
 > 
 > 
+> 
+>>>  config BR2_PACKAGE_EFL_DRM
+>>>       bool "Evas DRM Engine"
+>>> +     depends on BR2_PACKAGE_EFL_EEZE
+>>
+>> Add a new comment like for BR2_PACKAGE_EFL_EEZE
+> 
+> will do.
 > 
 > 
