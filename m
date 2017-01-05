@@ -1,40 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  5 Jan 2017 22:16:38 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libpjsip: drop path to staging to
-	find libsrtp
+Date: Thu,  5 Jan 2017 22:16:37 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libpjsip: disable remaining
+	unspecified options
 In-Reply-To: <cover.1483650983.git.yann.morin.1998@free.fr>
 References: <cover.1483650983.git.yann.morin.1998@free.fr>
-Message-ID: <c1748115da6b3cd0269388e78450d97df370d387.1483650983.git.yann.morin.1998@free.fr>
+Message-ID: <e167e72120f50500b3d572cc39894e2a80ad51dd.1483650983.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As it happens, specifying the path where to look for libsrtp is not
-needed: pjsip does not use the argument to --with-external-srtp as a
-search path at all; it only checks whether it is 'no' or something
-else.
+There are a bunch of options that are left unspecified; explicitly
+disable them.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+The epoll case is special: the configure script is broken, and will
+enable it whether we pass --enable-epoll or --disable-epoll. But that's
+OK because we prefer epoll over the alternative (select). So we do not
+need to fix it. Which is nice becasue the configure.ac is named
+aconfigure.ac (yes, with a leading 'a'), so it does not autoreconf
+nicely... :-/
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+
 ---
- package/libpjsip/libpjsip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v1 -> v2;
+  - fix and comment the epoll mess  (Luca)
+---
+ package/libpjsip/libpjsip.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
 diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 70dd4aa..eb50f00 100644
+index cb0d866..70dd4aa 100644
 --- a/package/libpjsip/libpjsip.mk
 +++ b/package/libpjsip/libpjsip.mk
-@@ -52,7 +52,7 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-ipp \
- 	--disable-ssl \
- 	--disable-silk \
--	--with-external-srtp=$(STAGING_DIR)/usr
-+	--with-external-srtp
+@@ -36,8 +36,29 @@ LIBPJSIP_CONF_OPTS = \
+ 	--disable-ilbc-codec \
+ 	--disable-webrtc \
+ 	--disable-opus \
++	--disable-oss \
++	--disable-ext-sound \
++	--disable-small-filter \
++	--disable-large-filter \
++	--disable-g711-codec \
++	--disable-l16-codec \
++	--disable-g722-codec \
++	--disable-libsamplerate \
++	--disable-sdl \
++	--disable-ffmpeg \
++	--disable-v4l2 \
++	--disable-openh264 \
++	--disable-libyuv \
++	--disable-ipp \
++	--disable-ssl \
++	--disable-silk \
+ 	--with-external-srtp=$(STAGING_DIR)/usr
  
- # Note: aconfigure.ac is broken: --enable-epoll or --disable-epoll will
- # both enable it. But that's OK, epoll is better than the alternative,
++# Note: aconfigure.ac is broken: --enable-epoll or --disable-epoll will
++# both enable it. But that's OK, epoll is better than the alternative,
++# so we want to use it.
++LIBPJSIP_CONF_OPTS += --enable-epoll
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBPJSIP_DEPENDENCIES += openssl
+ LIBPJSIP_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
 -- 
 2.7.4
