@@ -1,55 +1,78 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 5 Jan 2017 23:29:44 +0100
-Subject: [Buildroot] [PATCH] SDL2 depends on MMU (fork)
-In-Reply-To: <20170105114235.xdt33mh3lx3icynt@sapphire.tkos.co.il>
-References: <1483609518-7756-1-git-send-email-guillaume.gardet@oliseo.fr>
- <20170105114235.xdt33mh3lx3icynt@sapphire.tkos.co.il>
-Message-ID: <9f85b175-5e2e-7b7d-e1df-4ea7ce1ea334@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 6 Jan 2017 00:05:04 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libpjsip: disable remaining
+ unspecified options
+In-Reply-To: <e167e72120f50500b3d572cc39894e2a80ad51dd.1483650983.git.yann.morin.1998@free.fr>
+References: <cover.1483650983.git.yann.morin.1998@free.fr>
+ <e167e72120f50500b3d572cc39894e2a80ad51dd.1483650983.git.yann.morin.1998@free.fr>
+Message-ID: <50cb584f-fd57-fe64-2156-3b4c1fde67f7@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guillaume,
+Hi,
 
-Le 05/01/2017 ? 12:42, Baruch Siach a ?crit :
-> Hi Guillaume,
+On 05/01/2017 22:16, Yann E. MORIN wrote:
+> There are a bunch of options that are left unspecified; explicitly
+> disable them.
 > 
-> On Thu, Jan 05, 2017 at 10:45:18AM +0100, Guillaume GARDET wrote:
->> Fixes autobuilder failure http://autobuild.buildroot.net/results/2f7/2f738830bf98eb7284f99c11856a8694467b3daa
->>
->> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
->> ---
->>  package/sdl2/Config.in | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
->> index b73611d..30d5c1a 100644
->> --- a/package/sdl2/Config.in
->> +++ b/package/sdl2/Config.in
->> @@ -1,6 +1,7 @@
->>  config BR2_PACKAGE_SDL2
->>  	bool "sdl2"
->>  	depends on !BR2_STATIC_LIBS
->> +	depends on BR2_USE_MMU # fork()
+> The epoll case is special: the configure script is broken, and will
+> enable it whether we pass --enable-epoll or --disable-epoll. But that's
+> OK because we prefer epoll over the alternative (select). So we do not
+> need to fix it. Which is nice becasue the configure.ac is named
+> aconfigure.ac (yes, with a leading 'a'), so it does not autoreconf
+> nicely... :-/
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> ---
+> Changes v1 -> v2;
+>   - fix and comment the epoll mess  (Luca)
+> ---
+>  package/libpjsip/libpjsip.mk | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+> index cb0d866..70dd4aa 100644
+> --- a/package/libpjsip/libpjsip.mk
+> +++ b/package/libpjsip/libpjsip.mk
+> @@ -36,8 +36,29 @@ LIBPJSIP_CONF_OPTS = \
+>  	--disable-ilbc-codec \
+>  	--disable-webrtc \
+>  	--disable-opus \
+> +	--disable-oss \
+> +	--disable-ext-sound \
+> +	--disable-small-filter \
+> +	--disable-large-filter \
+> +	--disable-g711-codec \
+> +	--disable-l16-codec \
+> +	--disable-g722-codec \
+> +	--disable-libsamplerate \
+> +	--disable-sdl \
+> +	--disable-ffmpeg \
+> +	--disable-v4l2 \
+> +	--disable-openh264 \
+> +	--disable-libyuv \
+> +	--disable-ipp \
+> +	--disable-ssl \
+> +	--disable-silk \
 
-It's actually BR2_PACKAGE_SDL2_X11 option that use fork().
-If you disable it, SDL2 package build fine with this configuration.
+Some of these added lines actually disable something that was previously
+enabled, as I detailed in [0], and the other ones don't hurt anyway.
 
-Best regards,
-Romain
+> +# Note: aconfigure.ac is broken: --enable-epoll or --disable-epoll will
+> +# both enable it. But that's OK, epoll is better than the alternative,
+> +# so we want to use it.
+> +LIBPJSIP_CONF_OPTS += --enable-epoll
 
-> 
-> You need to propagate this dependency to config symbols that select 
-> BR2_PACKAGE_SDL2, BR2_PACKAGE_FFMPEG_FFPLAY and BR2_PACKAGE_STELLA. See 
-> section 17.2.3 in the manual[1] for an explanation.
-> 
-> [1] http://nightly.buildroot.org/manual.html#_config_files
-> 
->>  	help
->>  	  Simple DirectMedia Layer 2 - SDL2 is a library that allows
->>  	  programs portable low level access to a video framebuffer,
-> 
-> baruch
-> 
+And epoll is in Linux since way over a decade now, that's enough!
+
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+[0] http://lists.busybox.net/pipermail/buildroot/2017-January/180926.html
+
+-- 
+Luca
