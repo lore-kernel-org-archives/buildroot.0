@@ -1,56 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  5 Jan 2017 22:16:33 +0100
-Subject: [Buildroot] [PATCH 0/2 v2] pjsip: configuration fixes
-Message-ID: <cover.1483650983.git.yann.morin.1998@free.fr>
+Date: Thu,  5 Jan 2017 22:16:38 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libpjsip: drop path to staging to
+	find libsrtp
+In-Reply-To: <cover.1483650983.git.yann.morin.1998@free.fr>
+References: <cover.1483650983.git.yann.morin.1998@free.fr>
+Message-ID: <c1748115da6b3cd0269388e78450d97df370d387.1483650983.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+As it happens, specifying the path where to look for libsrtp is not
+needed: pjsip does not use the argument to --with-external-srtp as a
+search path at all; it only checks whether it is 'no' or something
+else.
 
-This two-patch series cleanups and fixes our pjsip configuration
-options:
-  - ensure everything is explictly disabled and not left auto-detected,
-  - except for the epoll support that needs a quirk,
-  - fix an option value
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/libpjsip/libpjsip.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cahnges v1 -> v2:
-  - fix the epoll mess  (Luca)
-  - add tested and acked tags by Luca on second patch
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 231b317dd3cf2b4b05737231b67f87c529985fef
-
-  libgtk3: bump to version 3.22.6 (2017-01-05 16:19:26 +0100)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to c1748115da6b3cd0269388e78450d97df370d387
-
-  package/libpjsip: drop path to staging to find libsrtp (2017-01-05 22:06:09 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/libpjsip: disable remaining unspecified options
-      package/libpjsip: drop path to staging to find libsrtp
-
- package/libpjsip/libpjsip.mk | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
-
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 70dd4aa..eb50f00 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -52,7 +52,7 @@ LIBPJSIP_CONF_OPTS = \
+ 	--disable-ipp \
+ 	--disable-ssl \
+ 	--disable-silk \
+-	--with-external-srtp=$(STAGING_DIR)/usr
++	--with-external-srtp
+ 
+ # Note: aconfigure.ac is broken: --enable-epoll or --disable-epoll will
+ # both enable it. But that's OK, epoll is better than the alternative,
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
