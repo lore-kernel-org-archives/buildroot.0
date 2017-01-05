@@ -1,37 +1,40 @@
 From: Ashish_Kumar_Mishra <dgashu55@gmail.com>
-Date: Thu, 5 Jan 2017 00:34:11 -0800 (PST)
-Subject: [Buildroot] Kernel Panic with BB Black + buildroot-2016.11.1
-In-Reply-To: <1483593212540-153987.post@n4.nabble.com>
-References: <1483536685380-153942.post@n4.nabble.com>
- <87bmvm2303.fsf@dell.be.48ers.dk> <1483593212540-153987.post@n4.nabble.com>
-Message-ID: <1483605251342-153991.post@n4.nabble.com>
+Date: Thu, 5 Jan 2017 00:46:15 -0800 (PST)
+Subject: [Buildroot] Build Image goes to panic state with UBOOT-2016.09.01 [
+ Observation ]
+Message-ID: <1483605975276-153992.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All , 
-I tried multiple options today the observation of which are shared here :-
+I am trying to build an setup using the buildroot-2016.11.1 on Beagle bone
+black  & getting panic. 
 
+Debugging i could observe :-
 ToolChain ( Linaro ARM 2016.05 ) + Kernel (4.8.11) + Uboot ( 2016.09.01 ) 
-=> Panic
-ToolChain ( Linaro ARM 2016.05 ) + Kernel (4.6)      + Uboot ( 2016.09.01 ) 
-=> Panic
-ToolChain ( Linaro ARM 2016.05 ) + Kernel (4.8.11) + Uboot ( 2016.03 )      
-=> Boots Properly with NO PANIC
-ToolChain ( Linaro ARM 2016.05 ) + Kernel (4.6)      + Uboot ( 2016.03 )      
-=> Boots Properly with NO PANIC
+=> Panic 
+ToolChain ( Linaro ARM 2016.05 ) + Kernel (4.6)      + Uboot ( 2016.09.01 )   
+=> Panic  
 
-Hence i can observe that with the latest UBOOT beagle bone black creates an
-PANIC daily_scratch.txt
-<http://buildroot-busybox.2317881.n4.nabble.com/file/n153991/daily_scratch.txt> 
-. 
+If downgrade the Uboot to 2016.03 , the image boots properly. 
 
-The console log for various cases are attached along .
+Since this is my first project could members please help me with :-
+a) Has any other member observed the same ( this could help me understand
+that i am not goofing any aspect at my end )
+b) If yes then is this behaviour to be reported as an bug & whats the proper
+way of doing it . 
+
+Apologies if my query is not inline to forum rules , just want to understand
+the game here so that slowly i can also be a contributing member here . The
+details of steps i followed is discussed in separate thread at 
+http://buildroot-busybox.2317881.n4.nabble.com/Kernel-Panic-with-BB-Black-buildroot-2016-11-1-td153942.html
+
+Thanks...
 
 
 
 --
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Kernel-Panic-with-BB-Black-buildroot-2016-11-1-tp153942p153991.html
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Build-Image-goes-to-panic-state-with-UBOOT-2016-09-01-Observation-tp153992.html
 Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
