@@ -1,55 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  5 Jan 2017 20:47:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
-	mesa3d-headers}: bump version to 13.0.3
-Message-ID: <20170105194746.12581-1-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  5 Jan 2017 23:09:31 +0200
+Subject: [Buildroot] [PATCH] mpd: needs toolchain with C++14 support
+Message-ID: <891220d41f6022b8b875ac0d84bcccd9a8fe5b96.1483650571.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/3fe/3fe440c0b9d05acb44553a8f02f688570e06bca9/
+http://autobuild.buildroot.net/results/9b9/9b9659ba30afde49912276fe7f9c282953a352ab/
+http://autobuild.buildroot.net/results/208/208bb987f52b8ba65e3c6fc9b6e917dbd44c0fbd/
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 3cb0d2739..58ad97d99 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/mpd/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 82bbd8d21fea..e0bb60447c10 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -4,7 +4,7 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on BR2_USE_WCHAR # libglib2, flac
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -315,8 +315,8 @@ config BR2_PACKAGE_MPD_UPNP
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 13.0.2
-+MESA3D_HEADERS_VERSION = 13.0.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index dfab5e2a7..d0470dd39 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000274.html
--sha256 a6ed622645f4ed61da418bf65adde5bcc4bb79023c36ba7d6b45b389da4416d5  mesa-13.0.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2017-January/000283.html
-+sha256 d9aa8be5c176d00d0cd503cb2f64a5a403ea471ec819c022581414860d7ba40e  mesa-13.0.3.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index ed50371fe..67c3054ed 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ endif
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 13.0.2
-+MESA3D_VERSION = 13.0.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+-comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.6"
++comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 -- 
 2.11.0
