@@ -1,46 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  6 Jan 2017 13:52:40 +0100
-Subject: [Buildroot] [PATCH] libvncserver: security bump to version 0.9.11
-Message-ID: <20170106125240.5764-1-peter@korsgaard.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  6 Jan 2017 09:59:01 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 8, 9}.x series
+Message-ID: <20170106125902.30916-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Security related fixes:
-- Heap-based buffer overflow in rfbproto.c in LibVNCClient in LibVNCServer
-  before 0.9.11 (CVE-2016-9941)
-
-- Heap-based buffer overflow in ultra.c in LibVNCClient in LibVNCServer
-  before 0.9.11 (CVE-2016-9942)
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libvncserver/libvncserver.hash | 2 +-
- package/libvncserver/libvncserver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libvncserver/libvncserver.hash b/package/libvncserver/libvncserver.hash
-index 23d5fb080..8d994e4b6 100644
---- a/package/libvncserver/libvncserver.hash
-+++ b/package/libvncserver/libvncserver.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  ed10819a5bfbf269969f97f075939cc38273cc1b6d28bccfb0999fba489411f7  LibVNCServer-0.9.10.tar.gz
-+sha256  193d630372722a532136fd25c5326b2ca1a636cbb8bf9bb115ef869c804d2894  LibVNCServer-0.9.11.tar.gz
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 92cb1e1aa..d3f0657a5 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVNCSERVER_VERSION = 0.9.10
-+LIBVNCSERVER_VERSION = 0.9.11
- LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
- LIBVNCSERVER_SITE = https://github.com/LibVNC/libvncserver/archive
- LIBVNCSERVER_LICENSE = GPLv2+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 967dfad..e96d45d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.37"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.39"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.8.15"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9"		if BR2_KERNEL_HEADERS_4_9
++	default "4.4.40"	if BR2_KERNEL_HEADERS_4_4
++	default "4.8.16"	if BR2_KERNEL_HEADERS_4_8
++	default "4.9.1"		if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.11.0
+2.10.2
