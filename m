@@ -1,48 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 06 Jan 2017 09:54:53 +0000
-Subject: [Buildroot] [Bug 9571] New: buildroot fails while building opencv
- for arm64 platform
-Message-ID: <bug-9571-163@https.bugs.busybox.net/>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri,  6 Jan 2017 11:05:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/perl: change tarball compression to
+	xz
+Message-ID: <1483697123-5505-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9571
+Also update hash file.
 
-            Bug ID: 9571
-           Summary: buildroot fails while building opencv for arm64
-                    platform
-           Product: buildroot
-           Version: unspecified
-          Hardware: Other
-                OS: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: saik.iitk at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/perl/perl.hash | 8 ++++----
+ package/perl/perl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-i am getting the following error while building opencv. During opencv_core
-building, it is linking the following 
-
-
-sw/tools/linaro/gcc-aarch64-linux-gnu-4.9-2014.09/bin/../lib/gcc/aarch64-linux-gnu/4.9.2/../../../../aarch64-linux-gnu/bin/ld:
-/local_disk/sai/wpu_aug23/wpu-sw/src/common/utils/buildroot/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/lib/aarch64-linux-gnu/libm.a(k_standard.o)(.text+0x318):
-unresolvable R_AARCH64_ADR_PREL_PG_HI21 relocation against symbol
-`stderr@@GLIBC_2.17'
-
-
-and sinc libm.a is not built with option "-fPIC", The error can come and libm.a
-is default generated part of buildroot and i cannot build here. 
-
-
-Please have a look
-
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 9c40a53..5c1668b 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,7 +1,7 @@
+-# Hashes from: http://www.cpan.org/src/5.0/perl-5.24.0.tar.bz2.{md5,sha1,sha256}.txt
+-md5    99f39abe614b50719d9915431e54fc1e                                 perl-5.24.0.tar.bz2
+-sha1   298fa605138c1a00dab95643130ae0edab369b4d                         perl-5.24.0.tar.bz2
+-sha256 62328a53d157e8153b33e137594155f6f8b64418f7f9238210feb809585290e0 perl-5.24.0.tar.bz2
++# Hashes from: http://www.cpan.org/src/5.0/perl-5.24.0.tar.xz.{md5,sha1,sha256}.txt
++md5    59456ae4bd4b06cb6e57cb19a3b2d349                                 perl-5.24.0.tar.xz
++sha1   9d5424ac2debe979d1f7255fe0c818aff0b41b4c                         perl-5.24.0.tar.xz
++sha256 a9a37c0860380ecd7b23aa06d61c20fc5bc6d95198029f3684c44a9d7e2952f2 perl-5.24.0.tar.xz
+ 
+ # Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.2/perl-cross-1.1.2.hash
+ sha256 2a1b0a3ffe866bc3fd32c947c0a866360d2f26576c8f1c5c0b521d3a6e9d643d perl-cross-1.1.2.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index f808a47..f07a8e2 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -8,7 +8,7 @@
+ PERL_VERSION_MAJOR = 24
+ PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
+ PERL_SITE = http://www.cpan.org/src/5.0
+-PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
++PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPLv1+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+1.9.1
