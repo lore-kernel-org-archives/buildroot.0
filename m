@@ -1,35 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Jan 2017 12:18:30 +0100
-Subject: [Buildroot] [git commit] docs: Add bc to required tools
-Message-ID: <20170106112236.F2432818DF@busybox.osuosl.org>
+Date: Fri, 6 Jan 2017 12:20:48 +0100
+Subject: [Buildroot] [git commit] package/{mesa3d,
+	mesa3d-headers}: bump version to 13.0.3
+Message-ID: <20170106112237.1B4828057D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc67850dfa6da47bad3627b7f6cf62c0eabff783
+commit: https://git.buildroot.net/buildroot/commit/?id=a1fa333cf5a9ed5104ac99c5ccec46877f0ec398
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We check for bc under required packages.  It should be listed as such in the
-docs.
-
-Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/prerequisite.txt | 1 +
- 1 file changed, 1 insertion(+)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-index ac0ab62..110fab4 100644
---- a/docs/manual/prerequisite.txt
-+++ b/docs/manual/prerequisite.txt
-@@ -36,6 +36,7 @@ between distributions).
- ** +unzip+
- ** +rsync+
- ** +file+ (must be in +/usr/bin/file+)
-+** +bc+
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 3cb0d27..58ad97d 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- * Source fetching tools:
- ** +wget+
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 13.0.2
++MESA3D_HEADERS_VERSION = 13.0.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index dfab5e2..d0470dd 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2016-November/000274.html
+-sha256 a6ed622645f4ed61da418bf65adde5bcc4bb79023c36ba7d6b45b389da4416d5  mesa-13.0.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-January/000283.html
++sha256 d9aa8be5c176d00d0cd503cb2f64a5a403ea471ec819c022581414860d7ba40e  mesa-13.0.3.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index ed50371..67c3054 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 13.0.2
++MESA3D_VERSION = 13.0.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
