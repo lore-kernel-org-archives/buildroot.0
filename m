@@ -1,92 +1,100 @@
-From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-Date: Fri, 6 Jan 2017 10:42:24 -0200
-Subject: [Buildroot] [PATCH 1/2] efl: fix target package dependency on
-	util-linux (libmount).
-In-Reply-To: <f3f89ca1-087c-239c-5e01-c47cab50e3b3@gmail.com>
-References: <20170103212932.9254-1-barbieri@profusion.mobi>
- <20170103212932.9254-2-barbieri@profusion.mobi>
- <3b511a0a-99aa-23d3-0649-08c725fa9eea@gmail.com>
- <CAPdpN3CmdooHnHHHvmMguW6dBqsN+CksS6r2OUWCmRWPBvkZyg@mail.gmail.com>
- <f3f89ca1-087c-239c-5e01-c47cab50e3b3@gmail.com>
-Message-ID: <CAPdpN3D1eteey=yhSA7YSkLL3eK6nSoXtNBcUUcDAA3MMC7Ttw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  6 Jan 2017 09:46:10 -0300
+Subject: [Buildroot] [PATCH] libnice: bump to version 0.1.13
+Message-ID: <20170106124610.30812-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 5, 2017 at 9:20 PM, Romain Naour <romain.naour@gmail.com> wrote:
-> Le 04/01/2017 ? 03:09, Gustavo Sverzut Barbieri a ?crit :
->> On Tue, Jan 3, 2017 at 8:37 PM, Romain Naour <romain.naour@gmail.com> wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...-configure-failure-when-building-without-.patch | 45 ++++++++++++++++++++++
+ package/libnice/libnice.hash                       |  4 +-
+ package/libnice/libnice.mk                         |  4 +-
+ 3 files changed, 50 insertions(+), 3 deletions(-)
+ create mode 100644 package/libnice/0001-configure-Fix-configure-failure-when-building-without-.patch
 
-[...]
-
->>> BTW do you want to be added to DEVELOPERS file and receive any build issues from
->>> Buildroot autobuilders related to efl packages ?
->>>
->>> https://buildroot.org/downloads/manual/manual.html#DEVELOPERS
->>
->> sounds good. Following that guideline I should add myself to that
->> file, likely in this patch. Okay?
->
-> Well, It seems that the recommended way to do it is to send a separate patch.
-> The reason is: if someone need to backport a patch adding a feature or a new
-> package, we want to avoid a conflict in DEVELOPERS file while cherry-picking the
-> commit.
->
-> Thomas, can you confirm ?
-
-ok, will wait for Thomas to send as a separate patch or not.
-
-
->>>>       select BR2_PACKAGE_ZLIB
->>>>       help
->>>>         Enlightenment Foundation Libraries
->>>> @@ -101,7 +98,10 @@ config BR2_PACKAGE_EFL_PULSEAUDIO
->>>>
->>>>  config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
->>>>       bool "Enable libmount support (recommended)"
->>>
->>> Maybe we should rename this option to BR2_PACKAGE_EFL_UTIL_LINUX and use
->>> "Enable util-linux (limbount + libblkid) support (recommended)"
->>
->> Not sure... to tell you the truth I think libblkid is a "nice to
->> have", not must have... our code doesn't refer to anything in
->> libblkid, but if you want mount to auto detect the
->> partition/filesystem, then blkid is needed to scan the block device
->> and infer that AFAIU.
->>
->> However if that's what people want I can do for sure, super simple.
->
-> I followed the README comment here and because BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> is not selected by default when util-linux package is selected.
-> Also libblkid.so is not so big (~300Ko), I'm not sure we really need a new
-> option BR2_PACKAGE_EFL_UTIL_LINUX_LIBLKID
->
-> config BR2_PACKAGE_EFL_UTIL_LINUX_LIBLKID
->     bool "Enable libblkid support (recommended)"
->     depends on BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
->
-> Ok, let's do it as you suggest
-
-As I said, the liblkid is not a dependency per se... is more to make
-libmount useful, overall. This isn't specific to EFL.
-
-Looking at package/util-linux/Config.in to write this reply I saw it's
-already the case:
-
-config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-        bool "libmount"
-        depends on BR2_USE_MMU # fork()
-        select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-
-
-:-)
-
+diff --git a/package/libnice/0001-configure-Fix-configure-failure-when-building-without-.patch b/package/libnice/0001-configure-Fix-configure-failure-when-building-without-.patch
+new file mode 100644
+index 0000000..f6b2eb4
+--- /dev/null
++++ b/package/libnice/0001-configure-Fix-configure-failure-when-building-without-.patch
+@@ -0,0 +1,45 @@
++From 81a929ac141aae66b6450e8ce93cb357ed404cda Mon Sep 17 00:00:00 2001
++From: Timo Gurr <timo.gurr@gmail.com>
++Date: Mon, 1 Jun 2015 16:10:16 +0200
++Subject: [PATCH] configure: Fix configure failure when building without
++ gstreamer support
++
++Error introduced in 20ea22e0a11a9bdfe4d8125b68083249b694338a, resulting in a
++configure/build error when building without gstreamer:
++
++configure: error: conditional "HAVE_GST_CHECK" was never defined.
++Usually this means the macro was only invoked conditionally.
++
++https://bugs.freedesktop.org/show_bug.cgi?id=90801
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: upstream
++
++ configure.ac | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 6031cec..64a571f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -231,9 +231,6 @@ AS_IF([test "$with_gstreamer" != no], [
++ 		[
++ 		have_gst_check=no
++ 		])
++-
++-	AM_CONDITIONAL(HAVE_GST_CHECK, test "$have_gst_check" = yes)
++-
++ ])
++ 
++ AS_IF([test "$with_gstreamer010" != no], [
++@@ -260,6 +257,7 @@ AC_SUBST(gstplugindir)
++ AC_SUBST(gstplugin010dir)
++ 
++ AM_CONDITIONAL(WITH_GSTREAMER, test "$with_gstreamer" = yes)
+++AM_CONDITIONAL(HAVE_GST_CHECK, test "$have_gst_check" = yes)
++ AM_CONDITIONAL(WITH_GSTREAMER010, test "$with_gstreamer010" = yes)
++ 
++ GUPNP_IGD_REQUIRED=0.2.4
++-- 
++2.10.2
++
+diff --git a/package/libnice/libnice.hash b/package/libnice/libnice.hash
+index bb419b9..d08c2d7 100644
+--- a/package/libnice/libnice.hash
++++ b/package/libnice/libnice.hash
+@@ -1,2 +1,2 @@
+-# Locally computed
+-sha256 9da7f09909902d535389d929c3e4d69129528fb18438a6c8565ec812d9904ddf libnice-0.1.8.tar.gz
++# Locally computed after checking pgp signature
++sha256 61112d9f3be933a827c8365f20551563953af6718057928f51f487bfe88419e1 libnice-0.1.13.tar.gz
+diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
+index 68f5eae..3df596a 100644
+--- a/package/libnice/libnice.mk
++++ b/package/libnice/libnice.mk
+@@ -4,12 +4,14 @@
+ #
+ ################################################################################
+ 
+-LIBNICE_VERSION = 0.1.8
++LIBNICE_VERSION = 0.1.13
+ LIBNICE_SITE = http://nice.freedesktop.org/releases
+ LIBNICE_LICENSE = MPLv1.1 or LGPLv2.1
+ LIBNICE_LICENSE_FILES = COPYING COPYING.MPL COPYING.LGPL
+ LIBNICE_DEPENDENCIES = libglib2 host-pkgconf
+ LIBNICE_INSTALL_STAGING = YES
++# For 0001-configure-Fix-configure-failure-when-building-without-.patch
++LIBNICE_AUTORECONF = YES
+ LIBNICE_CONF_OPTS = \
+ 	--without-gstreamer \
+ 	--without-gstreamer-0.10 \
 -- 
-Gustavo Sverzut Barbieri
-http://profusion.mobi embedded systems
---------------------------------------
-MSN, GTalk, FaceTime: barbieri at gmail.com
-Skype: gsbarbieri
-Mobile: +55 (16) 99354-9890
+2.10.2
