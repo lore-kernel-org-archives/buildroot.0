@@ -1,41 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  6 Jan 2017 09:59:02 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.9.1
-In-Reply-To: <20170106125902.30916-1-gustavo@zacarias.com.ar>
-References: <20170106125902.30916-1-gustavo@zacarias.com.ar>
-Message-ID: <20170106125902.30916-2-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 06 Jan 2017 14:46:24 +0100
+Subject: [Buildroot] [PATCH] libnice: bump to version 0.1.13
+In-Reply-To: <20170106124610.30812-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Fri, 6 Jan 2017 09:46:10 -0300")
+References: <20170106124610.30812-1-gustavo@zacarias.com.ar>
+Message-ID: <87d1g0ti6n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f64a8dc..130d3fd 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.9)"
-+	bool "Latest version (4.9.1)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.9.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
