@@ -1,34 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Jan 2017 14:46:48 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 8, 9}.x series
-Message-ID: <20170106134703.987AD81EA2@busybox.osuosl.org>
+Date: Fri, 6 Jan 2017 14:46:50 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.9.1
+Message-ID: <20170106134703.A40517FFD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59d699c7fad66d08a5f61147e3adc2d418db6479
+commit: https://git.buildroot.net/buildroot/commit/?id=444253ef6e1d92740a27fed97801f11309e2bb62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 967dfad..e96d45d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.37"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.39"	if BR2_KERNEL_HEADERS_4_4
--	default "4.8.15"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9"		if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.40"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.8.16"	if BR2_KERNEL_HEADERS_4_8
-+	default "4.9.1"		if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index f64a8dc..130d3fd 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9)"
++	bool "Latest version (4.9.1)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.9.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
