@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Jan 2017 14:46:33 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 8, 9}.x series
-In-Reply-To: <20170106125902.30916-1-gustavo@zacarias.com.ar> (Gustavo
- Zacarias's message of "Fri, 6 Jan 2017 09:59:01 -0300")
+Date: Fri, 06 Jan 2017 14:46:40 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.9.1
+In-Reply-To: <20170106125902.30916-2-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Fri, 6 Jan 2017 09:59:02 -0300")
 References: <20170106125902.30916-1-gustavo@zacarias.com.ar>
-Message-ID: <878tqoti6e.fsf@dell.be.48ers.dk>
+ <20170106125902.30916-2-gustavo@zacarias.com.ar>
+Message-ID: <874m1cti67.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
