@@ -1,39 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 06 Jan 2017 18:54:30 +0000
-Subject: [Buildroot] [Bug 9566] [kmod] Compilation fails with uclibc
-In-Reply-To: <bug-9566-163@https.bugs.busybox.net/>
-References: <bug-9566-163@https.bugs.busybox.net/>
-Message-ID: <bug-9566-163-z86vNCVD7B@https.bugs.busybox.net/>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 6 Jan 2017 11:52:49 -0800
+Subject: [Buildroot] [PATCH 0/2] add custom xtensa core support to linux
+	and U-Boot
+In-Reply-To: <1482673838-24567-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1482673838-24567-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <CAMo8Bf+M13uuV-nbCCnXuvqzY8q6TDN58eX=sDmD-FTbJx5vsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9566
+ping?
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
-
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-The uClibc-ng patch has now been applied:
-
-commit ffad94e6ddde09c8388bdc0b5f825ddf77702182
-Author: Waldemar Brodkorb <wbx@openadk.org>
-Date:   Wed Dec 28 18:29:01 2016 +0100
-
-    uclibc: add kernel module syscall wrappers
-
-    Revert the decision to remove the wrappers, but remove the extra
-    Config symbol and add it by default. Required for kmod package.
-
-    Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On Sun, Dec 25, 2016 at 5:50 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> Hello,
+>
+> this series adds xtensa configuration overlay extraction to the prepatch
+> step of linux and U-Boot build. That allows building linux and U-Boot for
+> custom xtensa cores as a part of a buildroot build.
+>
+> Max Filippov (2):
+>   linux: add xtensa overlay unpacking to prepatch step
+>   uboot: add xtensa overlay unpacking to prepatch step
+>
+>  boot/uboot/uboot.mk | 10 ++++++++++
+>  linux/linux.mk      | 10 ++++++++++
+>  2 files changed, 20 insertions(+)
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thanks.
+-- Max
