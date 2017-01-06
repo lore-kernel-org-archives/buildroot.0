@@ -1,50 +1,64 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri,  6 Jan 2017 11:05:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/perl: change tarball compression to
-	xz
-Message-ID: <1483697123-5505-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 6 Jan 2017 12:44:23 +0200
+Subject: [Buildroot] [PATCH] package/mpd: needs GCC >= 4.9
+In-Reply-To: <20170106074548.9558-1-joerg.krause@embedded.rocks>
+References: <20170106074548.9558-1-joerg.krause@embedded.rocks>
+Message-ID: <20170106104423.vtcgfz4emvclos4j@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also update hash file.
+Hi J?rg,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/perl/perl.hash | 8 ++++----
- package/perl/perl.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Fri, Jan 06, 2017 at 08:45:48AM +0100, J?rg Krause wrote:
+> The version 0.20 of mpd uses C++14 language features and therefor
+> requires at least GCC version 4.9.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/3fe/3fe440c0b9d05acb44553a8f02f688570e06bca9/
+> http://autobuild.buildroot.net/results/d33/d3309bea9411fca70d61d07c36f58718bc87e6d1/
+> http://autobuild.buildroot.net/results/208/208bb987f52b8ba65e3c6fc9b6e917dbd44c0fbd/
+> http://autobuild.buildroot.net/results/9b9/9b9659ba30afde49912276fe7f9c282953a352ab/
+> .. and more.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 9c40a53..5c1668b 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.24.0.tar.bz2.{md5,sha1,sha256}.txt
--md5    99f39abe614b50719d9915431e54fc1e                                 perl-5.24.0.tar.bz2
--sha1   298fa605138c1a00dab95643130ae0edab369b4d                         perl-5.24.0.tar.bz2
--sha256 62328a53d157e8153b33e137594155f6f8b64418f7f9238210feb809585290e0 perl-5.24.0.tar.bz2
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.24.0.tar.xz.{md5,sha1,sha256}.txt
-+md5    59456ae4bd4b06cb6e57cb19a3b2d349                                 perl-5.24.0.tar.xz
-+sha1   9d5424ac2debe979d1f7255fe0c818aff0b41b4c                         perl-5.24.0.tar.xz
-+sha256 a9a37c0860380ecd7b23aa06d61c20fc5bc6d95198029f3684c44a9d7e2952f2 perl-5.24.0.tar.xz
- 
- # Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.2/perl-cross-1.1.2.hash
- sha256 2a1b0a3ffe866bc3fd32c947c0a866360d2f26576c8f1c5c0b521d3a6e9d643d perl-cross-1.1.2.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index f808a47..f07a8e2 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -8,7 +8,7 @@
- PERL_VERSION_MAJOR = 24
- PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
- PERL_SITE = http://www.cpan.org/src/5.0
--PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
-+PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPLv1+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
+This is identical to http://patchwork.ozlabs.org/patch/711567/.
+
+baruch
+
+> ---
+>  package/mpd/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+> index 82bbd8d21..e0bb60447 100644
+> --- a/package/mpd/Config.in
+> +++ b/package/mpd/Config.in
+> @@ -4,7 +4,7 @@ menuconfig BR2_PACKAGE_MPD
+>  	depends on BR2_USE_WCHAR # libglib2, flac
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+>  	depends on BR2_USE_MMU # libglib2
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+>  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+>  	select BR2_PACKAGE_BOOST
+>  	select BR2_PACKAGE_LIBGLIB2
+> @@ -315,8 +315,8 @@ config BR2_PACKAGE_MPD_UPNP
+>  
+>  endif
+>  
+> -comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.6"
+> +comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+> -		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+> +		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+
 -- 
-1.9.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
