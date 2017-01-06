@@ -1,48 +1,110 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Jan 2017 17:07:23 +0100
-Subject: [Buildroot] [git commit] libvncserver: security bump to version
-	0.9.11
-Message-ID: <20170106160826.D31DC7FAF4@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 6 Jan 2017 17:24:14 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libpjsip: disable remaining
+ unspecified options
+In-Reply-To: <50cb584f-fd57-fe64-2156-3b4c1fde67f7@lucaceresoli.net>
+References: <cover.1483650983.git.yann.morin.1998@free.fr>
+ <e167e72120f50500b3d572cc39894e2a80ad51dd.1483650983.git.yann.morin.1998@free.fr>
+ <50cb584f-fd57-fe64-2156-3b4c1fde67f7@lucaceresoli.net>
+Message-ID: <20170106162414.GA3710@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=143ba54758f6edf87f15e3ab2eae68519201ca81
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Luca, All,
 
-Security related fixes:
-- Heap-based buffer overflow in rfbproto.c in LibVNCClient in LibVNCServer
-  before 0.9.11 (CVE-2016-9941)
+On 2017-01-06 00:05 +0100, Luca Ceresoli spake thusly:
+> On 05/01/2017 22:16, Yann E. MORIN wrote:
+> > There are a bunch of options that are left unspecified; explicitly
+> > disable them.
+> > 
+> > The epoll case is special: the configure script is broken, and will
+> > enable it whether we pass --enable-epoll or --disable-epoll. But that's
+> > OK because we prefer epoll over the alternative (select). So we do not
+> > need to fix it. Which is nice becasue the configure.ac is named
+> > aconfigure.ac (yes, with a leading 'a'), so it does not autoreconf
+> > nicely... :-/
+> > 
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> > 
+> > ---
+> > Changes v1 -> v2;
+> >   - fix and comment the epoll mess  (Luca)
+> > ---
+> >  package/libpjsip/libpjsip.mk | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> > 
+> > diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+> > index cb0d866..70dd4aa 100644
+> > --- a/package/libpjsip/libpjsip.mk
+> > +++ b/package/libpjsip/libpjsip.mk
+> > @@ -36,8 +36,29 @@ LIBPJSIP_CONF_OPTS = \
+> >  	--disable-ilbc-codec \
+> >  	--disable-webrtc \
+> >  	--disable-opus \
+> > +	--disable-oss \
+> > +	--disable-ext-sound \
+> > +	--disable-small-filter \
+> > +	--disable-large-filter \
+> > +	--disable-g711-codec \
+> > +	--disable-l16-codec \
+> > +	--disable-g722-codec \
+> > +	--disable-libsamplerate \
+> > +	--disable-sdl \
+> > +	--disable-ffmpeg \
+> > +	--disable-v4l2 \
+> > +	--disable-openh264 \
+> > +	--disable-libyuv \
+> > +	--disable-ipp \
+> > +	--disable-ssl \
+> > +	--disable-silk \
+> 
+> Some of these added lines actually disable something that was previously
+> enabled, as I detailed in [0], and the other ones don't hurt anyway.
 
-- Heap-based buffer overflow in ultra.c in LibVNCClient in LibVNCServer
-  before 0.9.11 (CVE-2016-9942)
+Well, it does disable stuff, but most if not all of it is due to build
+ordering and there is no explicit dependency, like samplerate, ssl
+etc...
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libvncserver/libvncserver.hash | 2 +-
- package/libvncserver/libvncserver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+It is better to explicitly disable stuff rather than depend on build
+ordering.
 
-diff --git a/package/libvncserver/libvncserver.hash b/package/libvncserver/libvncserver.hash
-index 23d5fb0..8d994e4 100644
---- a/package/libvncserver/libvncserver.hash
-+++ b/package/libvncserver/libvncserver.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  ed10819a5bfbf269969f97f075939cc38273cc1b6d28bccfb0999fba489411f7  LibVNCServer-0.9.10.tar.gz
-+sha256  193d630372722a532136fd25c5326b2ca1a636cbb8bf9bb115ef869c804d2894  LibVNCServer-0.9.11.tar.gz
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 92cb1e1..d3f0657 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVNCSERVER_VERSION = 0.9.10
-+LIBVNCSERVER_VERSION = 0.9.11
- LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
- LIBVNCSERVER_SITE = https://github.com/LibVNC/libvncserver/archive
- LIBVNCSERVER_LICENSE = GPLv2+
+If people are interested in re-enabling those features, they'll have to
+send some patches to account for the dependencies.
+
+Something that I already did in the biggish asterisk series, for
+example:
+    https://patchwork.ozlabs.org/patch/709763/
+    https://patchwork.ozlabs.org/patch/709756/
+
+;-)
+
+> > +# Note: aconfigure.ac is broken: --enable-epoll or --disable-epoll will
+> > +# both enable it. But that's OK, epoll is better than the alternative,
+> > +# so we want to use it.
+> > +LIBPJSIP_CONF_OPTS += --enable-epoll
+> 
+> And epoll is in Linux since way over a decade now, that's enough!
+> 
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> [0] http://lists.busybox.net/pipermail/buildroot/2017-January/180926.html
+> 
+> -- 
+> Luca
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
