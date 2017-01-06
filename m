@@ -1,33 +1,35 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 6 Jan 2017 11:52:49 -0800
-Subject: [Buildroot] [PATCH 0/2] add custom xtensa core support to linux
-	and U-Boot
-In-Reply-To: <1482673838-24567-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1482673838-24567-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <CAMo8Bf+M13uuV-nbCCnXuvqzY8q6TDN58eX=sDmD-FTbJx5vsA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 06 Jan 2017 21:43:21 +0000
+Subject: [Buildroot] [Bug 9571] buildroot fails while building opencv for
+	arm64 platform
+In-Reply-To: <bug-9571-163@https.bugs.busybox.net/>
+References: <bug-9571-163@https.bugs.busybox.net/>
+Message-ID: <bug-9571-163-YfF5s8pHiz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping?
+https://bugs.busybox.net/show_bug.cgi?id=9571
 
-On Sun, Dec 25, 2016 at 5:50 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
-> Hello,
->
-> this series adds xtensa configuration overlay extraction to the prepatch
-> step of linux and U-Boot build. That allows building linux and U-Boot for
-> custom xtensa cores as a part of a buildroot build.
->
-> Max Filippov (2):
->   linux: add xtensa overlay unpacking to prepatch step
->   uboot: add xtensa overlay unpacking to prepatch step
->
->  boot/uboot/uboot.mk | 10 ++++++++++
->  linux/linux.mk      | 10 ++++++++++
->  2 files changed, 20 insertions(+)
+--- Comment #1 from Samuel Martin <s.martin49@gmail.com> ---
+To investigate this bug we need more details:
+- Buildroot version
+- Buildroot defconfig used leading to the situation
+- opencv package built? (opencv or opencv3)
+- is it a static only build?
+
+Have you tried to run: 'make clean && make' ?
+
+Have you tweak the opencv.mk (or opencv3.mk) file? if yes, how?
+
+Have you build the toolchain, then change some critical configurations
+requiring a full rebuild [1]?
+
+
+[1] http://nightly.buildroot.org/manual.html#full-rebuild
 
 -- 
-Thanks.
--- Max
+You are receiving this mail because:
+You are on the CC list for the bug.
