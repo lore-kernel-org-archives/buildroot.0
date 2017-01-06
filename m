@@ -1,20 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Jan 2017 12:19:30 +0100
-Subject: [Buildroot] [PATCH 1/1] docs: Add bc to required tools.
-In-Reply-To: <20170105192709.29145-1-m.hoffmann@cartelsol.com> (Marcus
- Hoffmann's message of "Thu, 5 Jan 2017 20:27:09 +0100")
-References: <20170105192709.29145-1-m.hoffmann@cartelsol.com>
-Message-ID: <877f68v3jx.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Jan 2017 12:20:33 +0100
+Subject: [Buildroot] [PATCH] heimdal: bump to version 7.1.0
+In-Reply-To: <20170105184505.8707-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Thu, 5 Jan 2017 15:45:05 -0300")
+References: <20170105184505.8707-1-gustavo@zacarias.com.ar>
+Message-ID: <8737gwv3i6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcus" == Marcus Hoffmann <m.hoffmann@cartelsol.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > We check for bc under required packages. It should be listed as such in the docs.
- > Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+ > Drop upstream patches and related autoreconf.
+ > Re-enable parallel builds to check against the autobuilders.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
