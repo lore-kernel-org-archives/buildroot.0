@@ -1,55 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Jan 2017 17:07:11 +0100
-Subject: [Buildroot] [git commit] irssi: security bump to 0.8.21
-Message-ID: <20170106160826.CBFE27FCBE@busybox.osuosl.org>
+Date: Fri, 6 Jan 2017 17:07:31 +0100
+Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.4.1
+Message-ID: <20170106160826.DCCB681EB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8528edfb3b3f6ee826c2339696c4c79c8ba5c938
+commit: https://git.buildroot.net/buildroot/commit/?id=47b0354775214b8e5aa3b0a63fafe76685dc3bf9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bugfixes:
-
-- CVE-2017-5193: Correct a NULL pointer dereference in the nickcmp function
-  found by Joseph Bisch (GL#1)
-
-- CVE-2017-5194: Correct an error when receiving invalid nick message (GL#4,
-  #466)
-
-- CVE-2017-5195: Correct an out of bounds read in certain incomplete control
-  codes found by Joseph Bisch (GL#2)
-
-- CVE-2017-5196: Correct an out of bounds read in certain incomplete
-  character sequences found by Hanno B??ck and independently by J.  Bisch
-  (GL#3)
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 33b2d0e..b1048bf 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 1e9a5ac..48cb17d 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	7882c4e821f5aac469c5e69e69d7e235f4986101285c675e81a9a95bfb20505a	irssi-0.8.20.tar.xz
-+sha256	e433063b8714dcf17438126902c9a9d5c97944b3185ecd0fc5ae25c4959bf35a	irssi-0.8.21.tar.xz
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index 0fb6fc7..e467f89 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.0.tar.bz2.sha256
+-sha256	8497eca976f3c4cdee7f46ffc228d755d2f0651da7c253fa6ae99d5a61ddd1b5	harfbuzz-1.4.0.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.1.tar.bz2.sha256
++sha256	85a27fab639a1d651737dcb6b69e4101e3fd09522fdfdcb793df810b5cb315bd	harfbuzz-1.4.1.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index a0112de..18a524a 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IRSSI_VERSION = 0.8.20
-+IRSSI_VERSION = 0.8.21
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+-HARFBUZZ_VERSION = 1.4.0
++HARFBUZZ_VERSION = 1.4.1
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
