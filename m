@@ -1,74 +1,54 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 06 Jan 2017 11:47:20 +0100
-Subject: [Buildroot] [PATCH] package/mpd: needs GCC >= 4.9
-In-Reply-To: <20170106104423.vtcgfz4emvclos4j@sapphire.tkos.co.il>
-References: <20170106074548.9558-1-joerg.krause@embedded.rocks>
- <20170106104423.vtcgfz4emvclos4j@sapphire.tkos.co.il>
-Message-ID: <1483699640.6879.2.camel@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  6 Jan 2017 12:10:30 +0100
+Subject: [Buildroot] [PATCH] irssi: security bump to 0.8.21
+Message-ID: <20170106111030.23080-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2017-01-06 at 12:44 +0200, Baruch Siach wrote:
-> Hi J?rg,
-> 
-> On Fri, Jan 06, 2017 at 08:45:48AM +0100, J?rg Krause wrote:
-> > The version 0.20 of mpd uses C++14 language features and therefor
-> > requires at least GCC version 4.9.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/3fe/3fe440c0b9d05acb44553a8f
-> > 02f688570e06bca9/
-> > http://autobuild.buildroot.net/results/d33/d3309bea9411fca70d61d07c
-> > 36f58718bc87e6d1/
-> > http://autobuild.buildroot.net/results/208/208bb987f52b8ba65e3c6fc9
-> > b6e917dbd44c0fbd/
-> > http://autobuild.buildroot.net/results/9b9/9b9659ba30afde49912276fe
-> > 7f9c282953a352ab/
-> > .. and more.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> This is identical to http://patchwork.ozlabs.org/patch/711567/.
-> 
+Bugfixes:
 
-Looks like our patches overlaped by a few minutes. I'll remove my patch
-from patchwork.
+- CVE-2017-5193: Correct a NULL pointer dereference in the nickcmp function
+  found by Joseph Bisch (GL#1)
 
-J?rg
+- CVE-2017-5194: Correct an error when receiving invalid nick message (GL#4,
+  #466)
 
-> 
-> > ---
-> > ?package/mpd/Config.in | 6 +++---
-> > ?1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> > index 82bbd8d21..e0bb60447 100644
-> > --- a/package/mpd/Config.in
-> > +++ b/package/mpd/Config.in
-> > @@ -4,7 +4,7 @@ menuconfig BR2_PACKAGE_MPD
-> > ?	depends on BR2_USE_WCHAR # libglib2, flac
-> > ?	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> > ?	depends on BR2_USE_MMU # libglib2
-> > -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-> > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-> > ?	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-> > ?	select BR2_PACKAGE_BOOST
-> > ?	select BR2_PACKAGE_LIBGLIB2
-> > @@ -315,8 +315,8 @@ config BR2_PACKAGE_MPD_UPNP
-> > ?
-> > ?endif
-> > ?
-> > -comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.6"
-> > +comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
-> > ?	depends on BR2_USE_MMU
-> > ?	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-> > ?	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> > -		!BR2_TOOLCHAIN_HAS_THREADS ||
-> > !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-> > +		!BR2_TOOLCHAIN_HAS_THREADS ||
-> > !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> 
-> 
+- CVE-2017-5195: Correct an out of bounds read in certain incomplete control
+  codes found by Joseph Bisch (GL#2)
+
+- CVE-2017-5196: Correct an out of bounds read in certain incomplete
+  character sequences found by Hanno B?ck and independently by J.  Bisch
+  (GL#3)
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 33b2d0e1d..b1048bf8f 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	7882c4e821f5aac469c5e69e69d7e235f4986101285c675e81a9a95bfb20505a	irssi-0.8.20.tar.xz
++sha256	e433063b8714dcf17438126902c9a9d5c97944b3185ecd0fc5ae25c4959bf35a	irssi-0.8.21.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 0fb6fc792..e467f8989 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 0.8.20
++IRSSI_VERSION = 0.8.21
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
+-- 
+2.11.0
