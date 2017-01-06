@@ -1,81 +1,132 @@
 From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
-Date: Fri,  6 Jan 2017 23:37:48 +0100
-Subject: [Buildroot] [PATCH 2/2] Update documentation of CMake infrastructure
-In-Reply-To: <20170106223748.2203-1-cedric.marie@openmailbox.org>
-References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
-Message-ID: <20170106223748.2203-2-cedric.marie@openmailbox.org>
+Date: Fri,  6 Jan 2017 23:37:47 +0100
+Subject: [Buildroot] [PATCH 1/2] Add BR2_CMAKE_USE_NINJA_BACKEND option
+Message-ID: <20170106223748.2203-1-cedric.marie@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Describe BR2_CMAKE_USE_NINJA_BACKEND option, and update all the
-variables that have changed with this evolution.
+CMake provides several backends. The default one is Make, but Ninja is
+also supported. Ninja is a small build system with a focus on speed.
 
-Replace LIBFOO_INSTALL_STAGING_OPTS and LIBFOO_INSTALL_TARGET_OPTS with
-LIBFOO_INSTALL_STAGING_ENV, LIBFOO_INSTALL_TARGET_ENV and
-LIBFOO_INSTALL_OPTS.
+If the new option BR2_CMAKE_USE_NINJA_BACKEND is enabled, CMake will
+use Ninja backend.
+
+In CMake package infrastructure, when this option is set:
+- Add host-ninja dependency
+- Add "-G Ninja" option in CMake configure step
+- Use ninja command instead of make ($(MAKE))
+
+Most of make arguments are compatible with ninja command. But there are
+a few differences:
+- Environment variables such as DESTDIR cannot be given in arguments.
+  Instead they must be set before the command (which is compatible with
+  make)
+- CMake does not handle VERBOSE variable with Ninja backend. Instead,
+  we must add -v option when VERBOSE is set.
+- install/fast target is specific to make backend. With ninja backend,
+  install target must be used (and it will not try to compile as make
+  backend does).
+
+Tested on following packages: cannelloni, graphite2, libcuefile,
+libubox, rabbitmq-c, ubus.
 
 Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
 ---
- docs/manual/adding-packages-cmake.txt | 37 +++++++++++++++++++++++------------
- 1 file changed, 25 insertions(+), 12 deletions(-)
+ Config.in            |  6 ++++++
+ package/pkg-cmake.mk | 26 ++++++++++++++++++++------
+ 2 files changed, 26 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-index 6ccf390..06331dd 100644
---- a/docs/manual/adding-packages-cmake.txt
-+++ b/docs/manual/adding-packages-cmake.txt
-@@ -117,25 +117,38 @@ typical packages will therefore only use a few of them.
-   the given package, for one reason or another. By default, set to
-   +$(MAKE)+. If parallel building is not supported by the package,
-   then it should be set to +LIBFOO_MAKE=$(MAKE1)+.
-+  When +BR2_CMAKE_USE_NINJA_BACKEND+ is enabled, the default value is
-+  +$(HOST_DIR)/usr/bin/ninja+. If parallel building is not supported by
-+  the package, then it should be set to
-+  +LIBFOO_MAKE=$(HOST_DIR)/usr/bin/ninja -j1+.
+diff --git a/Config.in b/Config.in
+index ccd777e..26ebcf6 100644
+--- a/Config.in
++++ b/Config.in
+@@ -656,6 +656,12 @@ config BR2_SHARED_STATIC_LIBS
  
- * +LIBFOO_MAKE_ENV+, to specify additional environment variables to
-   pass to make in the build step. These are passed before the +make+
-   command. By default, empty.
+ endchoice
  
- * +LIBFOO_MAKE_OPTS+, to specify additional variables to pass to make
--  in the build step. These are passed after the +make+ command. By
--  default, empty.
++config BR2_CMAKE_USE_NINJA_BACKEND
++	bool "Compile CMake packages with Ninja backend"
++        help
++          CMake provides several backends. The default one is Make, but
++          Ninja is also supported. Ninja is a small build system with a
++          focus on speed.
+ 
+ config BR2_PACKAGE_OVERRIDE_FILE
+ 	string "location of a package override file"
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 4e0e838..83bf79e 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -53,24 +53,35 @@ define inner-cmake-package
+ 
+ $(2)_CONF_ENV			?=
+ $(2)_CONF_OPTS			?=
++$(2)_INSTALL_STAGING_ENV	?= DESTDIR=$$(STAGING_DIR)
++$(2)_INSTALL_TARGET_ENV		?= DESTDIR=$$(TARGET_DIR)
++
++ifeq ($(BR2_CMAKE_USE_NINJA_BACKEND),y)
++$(2)_MAKE			?= $$(HOST_DIR)/usr/bin/ninja
++$(2)_MAKE_ENV			?=
++$(2)_MAKE_OPTS			?= $(if $(VERBOSE),-v)
++$(2)_INSTALL_OPTS		?= install
++else
+ $(2)_MAKE			?= $$(MAKE)
+ $(2)_MAKE_ENV			?=
+ $(2)_MAKE_OPTS			?=
+-$(2)_INSTALL_OPTS		?= install
+-$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
+-$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install/fast
++$(2)_INSTALL_OPTS		?= install/fast
++endif
+ 
+ $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
+ 
+ $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+ 
 -
--* +LIBFOO_INSTALL_STAGING_OPTS+ contains the make options used to
--  install the package to the staging directory. By default, the value
--  is +DESTDIR=$(STAGING_DIR) install+, which is correct for most
--  CMake packages. It is still possible to override it.
--
--* +LIBFOO_INSTALL_TARGET_OPTS+ contains the make options used to
-+  in the build step. These are passed after the +make+ or +ninja+
-+  command. If +BR2_CMAKE_USE_NINJA_BACKEND+ is enabled and +VERBOSE+ is
-+  set, the default value is -v. Otherwise it is empty. With Ninja
-+  backend, the verbose mode is not set in the configure step. Instead,
-+  ninja -v option must be used in the following steps.
-+
-+* +LIBFOO_INSTALL_STAGING_ENV+ contains environment variables to pass
-+  to make or ninja, to install the package to the staging directory. By
-+  default, the value is +DESTDIR=$(STAGING_DIR)+, which is correct for
-+  most CMake packages. It is still possible to override it.
-+
-+* +LIBFOO_INSTALL_TARGET_ENV+ contains environment variables to pass
-+  to make or ninja, to install the package to the target directory. By
-+  default, the value is +DESTDIR=$(TARGET_DIR)+. The default value is
-+  correct for most CMake packages, but it is still possible to override
-+  it if needed.
-+
-+* +LIBFOO_INSTALL_OPTS+ contains the make or ninja options used to
-   install the package to the target directory. By default, the value
--  is +DESTDIR=$(TARGET_DIR) install+. The default value is correct
--  for most CMake packages, but it is still possible to override it if
--  needed.
-+  is +install/fast+ for make and +install+ for ninja. The default value
-+  is correct for most CMake packages, but it is still possible to
-+  override it if needed.
+ ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
+ $(2)_BUILDDIR			= $$($(2)_SRCDIR)
+ else
+ $(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
+ endif
  
- With the CMake infrastructure, all the steps required to build and
- install the packages are already defined, and they generally work well
++ifeq ($(BR2_CMAKE_USE_NINJA_BACKEND),y)
++$(2)_CONF_OPTS += -G Ninja
++endif
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file. And take care of the differences between host and target
+@@ -146,6 +157,9 @@ endif
+ $(2)_DEPENDENCIES += host-pkgconf
+ 
+ $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
++ifeq ($(BR2_CMAKE_USE_NINJA_BACKEND),y)
++$(2)_DEPENDENCIES += host-ninja
++endif
+ 
+ #
+ # Build step. Only define it if not already defined by the package .mk
+@@ -179,7 +193,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_INSTALL_STAGING_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
+ endef
+ endif
+ 
+@@ -189,7 +203,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_INSTALL_TARGET_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
+ endef
+ endif
+ 
 -- 
 2.9.3
