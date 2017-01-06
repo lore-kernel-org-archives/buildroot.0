@@ -1,42 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Jan 2017 17:07:31 +0100
-Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.4.1
-Message-ID: <20170106160826.DCCB681EB1@busybox.osuosl.org>
+Date: Fri, 6 Jan 2017 17:07:23 +0100
+Subject: [Buildroot] [git commit] libvncserver: security bump to version
+	0.9.11
+Message-ID: <20170106160826.D31DC7FAF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47b0354775214b8e5aa3b0a63fafe76685dc3bf9
+commit: https://git.buildroot.net/buildroot/commit/?id=143ba54758f6edf87f15e3ab2eae68519201ca81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Security related fixes:
+- Heap-based buffer overflow in rfbproto.c in LibVNCClient in LibVNCServer
+  before 0.9.11 (CVE-2016-9941)
+
+- Heap-based buffer overflow in ultra.c in LibVNCClient in LibVNCServer
+  before 0.9.11 (CVE-2016-9942)
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libvncserver/libvncserver.hash | 2 +-
+ package/libvncserver/libvncserver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 1e9a5ac..48cb17d 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+diff --git a/package/libvncserver/libvncserver.hash b/package/libvncserver/libvncserver.hash
+index 23d5fb0..8d994e4 100644
+--- a/package/libvncserver/libvncserver.hash
++++ b/package/libvncserver/libvncserver.hash
 @@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.0.tar.bz2.sha256
--sha256	8497eca976f3c4cdee7f46ffc228d755d2f0651da7c253fa6ae99d5a61ddd1b5	harfbuzz-1.4.0.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.1.tar.bz2.sha256
-+sha256	85a27fab639a1d651737dcb6b69e4101e3fd09522fdfdcb793df810b5cb315bd	harfbuzz-1.4.1.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index a0112de..18a524a 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+ # Locally computed:
+-sha256  ed10819a5bfbf269969f97f075939cc38273cc1b6d28bccfb0999fba489411f7  LibVNCServer-0.9.10.tar.gz
++sha256  193d630372722a532136fd25c5326b2ca1a636cbb8bf9bb115ef869c804d2894  LibVNCServer-0.9.11.tar.gz
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index 92cb1e1..d3f0657 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.4.0
-+HARFBUZZ_VERSION = 1.4.1
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-LIBVNCSERVER_VERSION = 0.9.10
++LIBVNCSERVER_VERSION = 0.9.11
+ LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
+ LIBVNCSERVER_SITE = https://github.com/LibVNC/libvncserver/archive
+ LIBVNCSERVER_LICENSE = GPLv2+
