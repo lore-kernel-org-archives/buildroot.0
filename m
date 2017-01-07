@@ -1,48 +1,28 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Fri,  6 Jan 2017 19:30:06 -0500
-Subject: [Buildroot] [PATCH 1/1] rpm: disable static build support
-Message-ID: <20170107003006.17188-1-james.knight@rockwellcollins.com>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Sat, 7 Jan 2017 04:03:12 +0100
+Subject: [Buildroot] Kernel and u-boot tarballs with same name
+Message-ID: <4b4b1204-d0c2-b62f-275d-4fd5220b6cc3@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The RPM package requires dynamic linking support (dlfcn.h) for its
-capabilities related to plugins (and possibly more). The following
-commit adds a dependency to !BR2_STATIC_LIBS.
+Hey,
 
-Indirectly fixes (see [1]):
+I just stumbled about a weird build failure.
+I am using Xilinx' linux kernel and u-boot from their github:
+https://github.com/Xilinx/linux-xlnx and
+https://github.com/Xilinx/u-boot-xlnx
 
-  http://autobuild.buildroot.net/results/139/1394a6e43529a3969572912dcbdd5606770beeeb/
-  http://autobuild.buildroot.net/results/f4f/f4f8d21e70fcd79668847407586db2bf3e56feb5/
-  http://autobuild.buildroot.net/results/80e/80e40419d657ee16b4d38f08d894822e532ab63d/
-  http://autobuild.buildroot.net/results/f36/f368e1e7310a3cf8266fd351b8b76496868af7e7/
+They provide release tarballs both named like this:
+xilinx-v2016.4.tar.gz. Exactly the same for the kernel and u-boot.
+Buildroot now tries build the extracted kernel as u-boot which gave me a
+very confusing failure during configure.
 
-[1]: https://github.com/rpm-software-management/rpm/pull/118
+What would be the recommended approach here? I guess there is no way to
+provide a 'save as' name for a tarball?
+For now I changed back to checking out the git repo.
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
- package/rpm/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/rpm/Config.in b/package/rpm/Config.in
-index 8b7705d..9b4c8a7 100644
---- a/package/rpm/Config.in
-+++ b/package/rpm/Config.in
-@@ -1,10 +1,11 @@
--comment "rpm needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "rpm needs a toolchain w/ dynamic library and threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_RPM
- 	bool "rpm"
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
- 	depends on BR2_USE_MMU # fork()
--- 
-2.8.4.windows.1
+Best wishes,
+Marcus
