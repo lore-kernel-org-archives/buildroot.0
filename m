@@ -1,132 +1,48 @@
-From: =?UTF-8?q?C=C3=A9dric=20Marie?= <cedric.marie@openmailbox.org>
-Date: Fri,  6 Jan 2017 23:37:47 +0100
-Subject: [Buildroot] [PATCH 1/2] Add BR2_CMAKE_USE_NINJA_BACKEND option
-Message-ID: <20170106223748.2203-1-cedric.marie@openmailbox.org>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Fri,  6 Jan 2017 19:30:06 -0500
+Subject: [Buildroot] [PATCH 1/1] rpm: disable static build support
+Message-ID: <20170107003006.17188-1-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CMake provides several backends. The default one is Make, but Ninja is
-also supported. Ninja is a small build system with a focus on speed.
+The RPM package requires dynamic linking support (dlfcn.h) for its
+capabilities related to plugins (and possibly more). The following
+commit adds a dependency to !BR2_STATIC_LIBS.
 
-If the new option BR2_CMAKE_USE_NINJA_BACKEND is enabled, CMake will
-use Ninja backend.
+Indirectly fixes (see [1]):
 
-In CMake package infrastructure, when this option is set:
-- Add host-ninja dependency
-- Add "-G Ninja" option in CMake configure step
-- Use ninja command instead of make ($(MAKE))
+  http://autobuild.buildroot.net/results/139/1394a6e43529a3969572912dcbdd5606770beeeb/
+  http://autobuild.buildroot.net/results/f4f/f4f8d21e70fcd79668847407586db2bf3e56feb5/
+  http://autobuild.buildroot.net/results/80e/80e40419d657ee16b4d38f08d894822e532ab63d/
+  http://autobuild.buildroot.net/results/f36/f368e1e7310a3cf8266fd351b8b76496868af7e7/
 
-Most of make arguments are compatible with ninja command. But there are
-a few differences:
-- Environment variables such as DESTDIR cannot be given in arguments.
-  Instead they must be set before the command (which is compatible with
-  make)
-- CMake does not handle VERBOSE variable with Ninja backend. Instead,
-  we must add -v option when VERBOSE is set.
-- install/fast target is specific to make backend. With ninja backend,
-  install target must be used (and it will not try to compile as make
-  backend does).
+[1]: https://github.com/rpm-software-management/rpm/pull/118
 
-Tested on following packages: cannelloni, graphite2, libcuefile,
-libubox, rabbitmq-c, ubus.
-
-Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
- Config.in            |  6 ++++++
- package/pkg-cmake.mk | 26 ++++++++++++++++++++------
- 2 files changed, 26 insertions(+), 6 deletions(-)
+ package/rpm/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index ccd777e..26ebcf6 100644
---- a/Config.in
-+++ b/Config.in
-@@ -656,6 +656,12 @@ config BR2_SHARED_STATIC_LIBS
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index 8b7705d..9b4c8a7 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -1,10 +1,11 @@
+-comment "rpm needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "rpm needs a toolchain w/ dynamic library and threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	depends on BR2_USE_MMU
  
- endchoice
- 
-+config BR2_CMAKE_USE_NINJA_BACKEND
-+	bool "Compile CMake packages with Ninja backend"
-+        help
-+          CMake provides several backends. The default one is Make, but
-+          Ninja is also supported. Ninja is a small build system with a
-+          focus on speed.
- 
- config BR2_PACKAGE_OVERRIDE_FILE
- 	string "location of a package override file"
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 4e0e838..83bf79e 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -53,24 +53,35 @@ define inner-cmake-package
- 
- $(2)_CONF_ENV			?=
- $(2)_CONF_OPTS			?=
-+$(2)_INSTALL_STAGING_ENV	?= DESTDIR=$$(STAGING_DIR)
-+$(2)_INSTALL_TARGET_ENV		?= DESTDIR=$$(TARGET_DIR)
-+
-+ifeq ($(BR2_CMAKE_USE_NINJA_BACKEND),y)
-+$(2)_MAKE			?= $$(HOST_DIR)/usr/bin/ninja
-+$(2)_MAKE_ENV			?=
-+$(2)_MAKE_OPTS			?= $(if $(VERBOSE),-v)
-+$(2)_INSTALL_OPTS		?= install
-+else
- $(2)_MAKE			?= $$(MAKE)
- $(2)_MAKE_ENV			?=
- $(2)_MAKE_OPTS			?=
--$(2)_INSTALL_OPTS		?= install
--$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
--$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install/fast
-+$(2)_INSTALL_OPTS		?= install/fast
-+endif
- 
- $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
- 
- $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
- 
--
- ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
- $(2)_BUILDDIR			= $$($(2)_SRCDIR)
- else
- $(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
- endif
- 
-+ifeq ($(BR2_CMAKE_USE_NINJA_BACKEND),y)
-+$(2)_CONF_OPTS += -G Ninja
-+endif
-+
- #
- # Configure step. Only define it if not already defined by the package
- # .mk file. And take care of the differences between host and target
-@@ -146,6 +157,9 @@ endif
- $(2)_DEPENDENCIES += host-pkgconf
- 
- $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
-+ifeq ($(BR2_CMAKE_USE_NINJA_BACKEND),y)
-+$(2)_DEPENDENCIES += host-ninja
-+endif
- 
- #
- # Build step. Only define it if not already defined by the package .mk
-@@ -179,7 +193,7 @@ endif
- #
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_INSTALL_STAGING_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
- endef
- endif
- 
-@@ -189,7 +203,7 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_INSTALL_TARGET_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
- endef
- endif
- 
+ config BR2_PACKAGE_RPM
+ 	bool "rpm"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
+ 	depends on BR2_USE_MMU # fork()
 -- 
-2.9.3
+2.8.4.windows.1
