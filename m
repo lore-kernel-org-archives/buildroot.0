@@ -1,9 +1,7 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat,  7 Jan 2017 15:06:11 +0100
-Subject: [Buildroot] [PATCH] webp: bump to version 0.5.2
-In-Reply-To: <1483797971-30421-1-git-send-email-gilles.talis@gmail.com>
-References: <1483797971-30421-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <1483797971-30421-2-git-send-email-gilles.talis@gmail.com>
+Date: Sat,  7 Jan 2017 15:06:10 +0100
+Subject: [Buildroot] [PATCH] ocrad: bump to version 0.25
+Message-ID: <1483797971-30421-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +10,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/webp/webp.hash | 2 +-
- package/webp/webp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ocrad/ocrad.hash | 2 +-
+ package/ocrad/ocrad.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/webp/webp.hash b/package/webp/webp.hash
-index 328f263..bf4ee8f 100644
---- a/package/webp/webp.hash
-+++ b/package/webp/webp.hash
+diff --git a/package/ocrad/ocrad.hash b/package/ocrad/ocrad.hash
+index c40907b..d2a44ae 100644
+--- a/package/ocrad/ocrad.hash
++++ b/package/ocrad/ocrad.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	efbe0d58fda936f2ed99d0b837ed7087d064d6838931f282c4618d2a3f7390c4	libwebp-0.4.3.tar.gz
-+sha256	b75310c810b3eda222c77f6d6c26b061240e3d9060095de44b2c1bae291ecdef	libwebp-0.5.2.tar.gz
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index 8d9ca8f..d579d56 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated after checking pgp signature
+-sha256	4ec711239d6b667bac015ef9908cab3ea9f8fd73f098ae355498810c8e82a8cc	ocrad-0.21.tar.gz
++sha256	e710be9c030fbcbce2315077326c8268feb422c0bc39fa744644cbbd1f5d4dd4	ocrad-0.25.tar.lz
+diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
+index 7e4f8c1..14b91f0 100644
+--- a/package/ocrad/ocrad.mk
++++ b/package/ocrad/ocrad.mk
+@@ -4,11 +4,18 @@
  #
  ################################################################################
  
--WEBP_VERSION = 0.4.3
-+WEBP_VERSION = 0.5.2
- WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
- WEBP_SITE = http://downloads.webmproject.org/releases/webp
- WEBP_LICENSE = BSD-3c
+-OCRAD_VERSION = 0.21
++OCRAD_VERSION = 0.25
++OCRAD_SOURCE = ocrad-$(OCRAD_VERSION).tar.lz
+ OCRAD_SITE = $(BR2_GNU_MIRROR)/ocrad
+ OCRAD_LICENSE = GPLv3+
+ OCRAD_LICENSE_FILES = COPYING
+ OCRAD_INSTALL_STAGING = YES
++OCRAD_DEPENDENCIES = host-lzip
++
++define OCRAD_EXTRACT_CMDS
++    $(HOST_DIR)/usr/bin/lzip -d -c $(DL_DIR)/$(OCRAD_SOURCE) | \
++    tar --strip-components=1 -C $(@D) -xf -
++endef
+ 
+ # This is not a true autotools package.
+ define OCRAD_CONFIGURE_CMDS
 -- 
 2.5.0
