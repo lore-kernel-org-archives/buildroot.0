@@ -1,43 +1,31 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  8 Jan 2017 23:20:11 +0100
-Subject: [Buildroot] [PATCH] legacy/xserver: add a legacy entry for xserver
-	>= 1.19.0
-In-Reply-To: <20170108222011.3839-1-romain.naour@gmail.com>
-References: <20170108222011.3839-1-romain.naour@gmail.com>
-Message-ID: <20170108222011.3839-2-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun,  8 Jan 2017 23:42:44 +0100
+Subject: [Buildroot] [PATCH 1/2] nodejs: re-add 6.x patches
+Message-ID: <20170108224245.17612-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The legacy entry was missing in commit [1].
+Commit 3fd9c062e (nodejs: bump to version 6.9.2) bumped the 6.x version but
+forgot to rename the patch directory, so the patches were no longer used.
 
-[1] ec502ea8e4fec1e113b5f7c532809a05644a9fd4
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../nodejs/{6.9.1 => 6.9.2}/0001-gyp-force-link-command-to-use-CXX.patch  | 0
+ .../0002-inspector-don-t-build-when-ssl-support-is-disabled.patch         | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/nodejs/{6.9.1 => 6.9.2}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
+ rename package/nodejs/{6.9.1 => 6.9.2}/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch (100%)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 20445b8..8dfbbc8 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.02"
- 
-+config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
-+	bool "xserver AIGLX Extension removed"
-+	depends on !BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14 && !BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
-+	select BR2_LEGACY
-+	help
-+	  The xserver AIGLX Extension has been removed in 1.19.0 release.
-+
- config BR2_PACKAGE_PERL_DB_FILE
- 	bool "perl-db-file removed"
- 	select BR2_LEGACY
+diff --git a/package/nodejs/6.9.1/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.9.2/0001-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/6.9.1/0001-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/6.9.2/0001-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/6.9.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.9.2/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+similarity index 100%
+rename from package/nodejs/6.9.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+rename to package/nodejs/6.9.2/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
 -- 
-2.9.3
+2.11.0
