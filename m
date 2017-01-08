@@ -1,72 +1,66 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 08 Jan 2017 12:58:51 +0100
-Subject: [Buildroot] Need help with genimage
-Message-ID: <1483876731.4757.1.camel@embedded.rocks>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun,  8 Jan 2017 10:18:25 -0200
+Subject: [Buildroot] [PATCH RESEND v3] gst1-plugins-bad: Add kmssink support
+Message-ID: <1483877905-18606-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Add support for the KMS video sink element. From the Gstreamer 1.10
+release notes:
 
-I am trying to add support for the Banana Pro board to Buildroot. The
-Banana is similiar to the Orange Pi, so I am using a genimage.cfg based
-on the Pi for creating the sd card image:
+"New element kmssink to render video using Direct Rendering Manager (DRM)
+and Kernel Mode Setting (KMS) subsystems in the Linux kernel. It is oriented
+to be used mostly in embedded systems."
 
-    image boot.vfat {
-    	    vfat {
-    	    	    files = {
-    	    	    	    "zImage",
-    	    	    	    "sun7i-a20-bananapro.dtb",
-    	    	    	    "boot.scr"
-    	    	    }
-    	    }
-    	    size = 10M
-    }
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+Changes since v2:
+- Fix dependency comments
+Changes since v1:
+- Select libdrm and depends on BR2_TOOLCHAIN_HAS_THREADS
 
-    image sdcard.img {
-    	    hdimage {
-    	    }
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 7 +++++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 7 +++++++
+ 2 files changed, 14 insertions(+)
 
-    	    partition u-boot {
-    	    	    in-partition-table = "no"
-    	    	    image = "u-boot-sunxi-with-spl.bin"
-    	    	    offset = 8192
-    	    	    size = 1040384 # 1MB - 8192
-    	    }
-
-    	    partition boot {
-    	    	    partition-type = 0xC
-    	    	    bootable = "true"
-    	    	    image = "boot.vfat"
-    	    }
-
-    	    partition rootfs {
-    	    	    partition-type = 0x83
-    	    	    image = "rootfs.ext4"
-    	    	    size = 512M
-    	    }
-    }
-
-I am able to generate the sd card image and copy it to the sd card
-using Suses imagewriter. The board boots fine. However, the rootfs size
-is not 512MB as expected:
-
-# df -hT
-Filesystem???????????Type????????????Size??????Used Available Use%
-Mounted on
-/dev/root????????????ext4???????????38.7M?????37.9M?????????0 100% /
-devtmpfs?????????????devtmpfs??????501.9M?????????0????501.9M???0% /dev
-tmpfs????????????????tmpfs?????????502.4M?????????0????502.4M???0%
-/dev/shm
-tmpfs????????????????tmpfs?????????502.4M??????3.9M????498.4M???1% /tmp
-tmpfs????????????????tmpfs?????????502.4M?????24.0K????502.4M???0% /run
-
-I am not able to create any file larger file on the filesystem nor
-start some programs.
-
-What am I missing here? Can somebody enlighten me please :-)
-
-Best regards,
-J?rg Krause
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 16c0b7e..5c3ccd5 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -549,6 +549,13 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
+ 	help
+ 	  Fragmented streaming plugins
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS
++	bool "kmssink"
++	depends on BR2_TOOLCHAIN_HAS_THREADS #  libdrm -> libpthread-stubs
++	select BR2_PACKAGE_LIBDRM
++	help
++	  KMS video sink
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS
+ 	bool "libmms"
+ 	depends on BR2_USE_WCHAR # libmms -> libglib2
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index ba9f305..4d629f5 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -680,6 +680,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-hls
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-kms
++GST1_PLUGINS_BAD_DEPENDENCIES += libdrm
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-kms
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBMMS),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-libmms
+ GST1_PLUGINS_BAD_DEPENDENCIES += libmms
+-- 
+2.7.4
