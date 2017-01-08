@@ -1,50 +1,100 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 8 Jan 2017 06:37:13 +0200
-Subject: [Buildroot] [PATCH] libmad: disable ASO support for thumb-only
- ARM cores
-In-Reply-To: <20170107231126.2321-1-peter@korsgaard.com>
-References: <20170107231126.2321-1-peter@korsgaard.com>
-Message-ID: <20170108043713.4enoz63hnwtzt7sh@tarshish>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun,  8 Jan 2017 00:05:19 -0500
+Subject: [Buildroot] [V2] python-mutagen: new package
+Message-ID: <20170108050519.15969-1-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Mutagen is a Python module to handle audio metadata.
+It supports ASF, FLAC, MP4, Monkey?s Audio, MP3, Musepack, Ogg Opus,
+Ogg FLAC, Ogg Speex, Ogg Theora, Ogg Vorbis, True Audio, WavPack,
+OptimFROG, and AIFF audio files. All versions of ID3v2 are supported,
+and all standard ID3v2.4 frames are parsed.
 
-On Sun, Jan 08, 2017 at 12:11:26AM +0100, Peter Korsgaard wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/8d4/8d4ea8613487297f2c33f3b9cbd8903cfb96e4c6/
-> 
-> The ARM specific optimizations enabled by LIBMAD_ASO needs classic ARM
-> instructions support, so disable for thumb-only cores.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/libmad/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libmad/Config.in b/package/libmad/Config.in
-> index 7d66976c1..2f7543f74 100644
-> --- a/package/libmad/Config.in
-> +++ b/package/libmad/Config.in
-> @@ -37,7 +37,8 @@ config BR2_PACKAGE_LIBMAD_SSO
->  
->  config BR2_PACKAGE_LIBMAD_ASO
->  	bool "Architecture-specific optimizations"
-> -	default y
+It can read Xing headers to accurately calculate the bitrate and
+length of MP3s. ID3 and APEv2 tags can be edited regardless of
+audio format. It can also manipulate Ogg streams on an individual
+packet/page level.
 
-Why is this change needed? Isn't the added dependency enough?
+Mutagen works with Python 2.7, 3.3+ (CPython and PyPy) on Linux,
+Windows and macOS, and has no dedependencies outside the
+Python standard library.
 
-> +	# arm optimization needs classic arm instructions support
-> +	depends on !(BR2_arm && !BR2_ARM_CPU_HAS_ARM)
->  	help
->  	  Use certain architecture-specific optimizations.
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+---
+Changes V1 -> V2:
+ - Added BR2_PACKAGE_PYTHON_ZLIB as a requirement.  Without
+   this dependency, programs using python-mutagen will
+   fail to load with a import error complaining about not
+   being able to find zlib in python.
 
-baruch
+ package/Config.in                          |  1 +
+ package/python-mutagen/Config.in           |  9 +++++++++
+ package/python-mutagen/python-mutagen.hash |  3 +++
+ package/python-mutagen/python-mutagen.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-mutagen/Config.in
+ create mode 100644 package/python-mutagen/python-mutagen.hash
+ create mode 100644 package/python-mutagen/python-mutagen.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 341c77c..957c721 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -714,6 +714,7 @@ menu "External python modules"
+ 	source "package/python-meld3/Config.in"
+ 	source "package/python-mistune/Config.in"
+ 	source "package/python-msgpack/Config.in"
++	source "package/python-mutagen/Config.in"
+ 	source "package/python-mwclient/Config.in"
+ 	source "package/python-mwscrape/Config.in"
+ 	source "package/python-mwscrape2slob/Config.in"
+diff --git a/package/python-mutagen/Config.in b/package/python-mutagen/Config.in
+new file mode 100644
+index 0000000..9d864ae
+--- /dev/null
++++ b/package/python-mutagen/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_MUTAGEN
++	bool "python-mutagen"
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_ZLIB
++	help
++	  read and write audio tags for many formats
++
++	  https://mutagen.readthedocs.io/en/latest/#
+diff --git a/package/python-mutagen/python-mutagen.hash b/package/python-mutagen/python-mutagen.hash
+new file mode 100644
+index 0000000..8970a23
+--- /dev/null
++++ b/package/python-mutagen/python-mutagen.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/mutagen, sha256 locally computed
++md5	2bd50519d64411626fa22d405afbf078  mutagen-1.36.tar.gz
++sha256	d7ee37e33b8c5893c3ebf66edac31241eb9d48e1dc7ec647bbfbc180565a4bcd  mutagen-1.36.tar.gz
+diff --git a/package/python-mutagen/python-mutagen.mk b/package/python-mutagen/python-mutagen.mk
+new file mode 100644
+index 0000000..b8c37d3
+--- /dev/null
++++ b/package/python-mutagen/python-mutagen.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-mutagen
++#
++################################################################################
++
++PYTHON_MUTAGEN_VERSION = 1.36
++PYTHON_MUTAGEN_SOURCE = mutagen-$(PYTHON_MUTAGEN_VERSION).tar.gz
++PYTHON_MUTAGEN_SITE = https://pypi.python.org/packages/69/14/4a5c8360a727563291a7159de935ffff2b99ee783928169f0fea7445370f
++PYTHON_MUTAGEN_LICENSE = LGPLv3+
++PYTHON_MUTAGEN_LICENSE_FILES = COPYING.LESSER
++PYTHON_MUTAGEN_SETUP_TYPE = distutils
++
++$(eval $(python-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.9.3
