@@ -1,39 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Jan 2017 09:27:08 +0100
-Subject: [Buildroot] [git commit] libmad: disable ASO support for thumb-only
-	ARM cores
-Message-ID: <20170108082828.3BC4F8035D@busybox.osuosl.org>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 8 Jan 2017 09:46:39 +0100
+Subject: [Buildroot] [PATCH] arch: add support for OpenRISC architecture
+In-Reply-To: <f2295c57-e0cc-52d3-a708-5e4236ab3867@gmail.com>
+References: <20170107084803.GA6034@waldemar-brodkorb.de>
+ <f2295c57-e0cc-52d3-a708-5e4236ab3867@gmail.com>
+Message-ID: <20170108084639.GW1913@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c614db3550d549c0a75d5d425019cd397d913550
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Romain,
+Romain Naour wrote,
 
-Fixes:
-http://autobuild.buildroot.net/results/8d4/8d4ea8613487297f2c33f3b9cbd8903cfb96e4c6/
+> Hi Waldemar,
+> 
+> Le 07/01/2017 ? 09:48, Waldemar Brodkorb a ?crit :
+> > Add a sample defconfig which can be used to create a system for Qemu.
+> > Openrisc community is getting more active recently and tries
+> > to add missing patches upstream to gcc/gdb.
+> 
+> I'm wondering if all Binutils version (2.25.1, 2.26.1 and 2.27) can be used on
+> openRISC? Have you considered to use the openrisc fork [1] ?
 
-The ARM specific optimizations enabled by LIBMAD_ASO needs classic ARM
-instructions support, so disable for thumb-only cores.
+Thanks for your feedback. Yes all binutils version are working fine,
+I just double checked now. So there is no need to use the github
+version for binutils. There is no Linux gdb support, yet.
+You can't use gdbserver or gdb native for now.
+You could use gdb to debug bare metal code.
 
-[Peter: don't drop default y as pointed out by Baruch Siach]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libmad/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/libmad/Config.in b/package/libmad/Config.in
-index 7d66976..f93f54a 100644
---- a/package/libmad/Config.in
-+++ b/package/libmad/Config.in
-@@ -37,6 +37,8 @@ config BR2_PACKAGE_LIBMAD_SSO
- 
- config BR2_PACKAGE_LIBMAD_ASO
- 	bool "Architecture-specific optimizations"
-+	# arm optimization needs classic arm instructions support
-+	depends on !(BR2_arm && !BR2_ARM_CPU_HAS_ARM)
- 	default y
- 	help
- 	  Use certain architecture-specific optimizations.
+best regards
+ Waldemar 
