@@ -1,84 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Jan 2017 18:23:13 +0100
-Subject: [Buildroot] [git commit] ifenslave: new package
-Message-ID: <20170108172557.9B0DE81844@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 8 Jan 2017 19:45:38 +0200
+Subject: [Buildroot] Need help with genimage
+In-Reply-To: <1483876731.4757.1.camel@embedded.rocks>
+References: <1483876731.4757.1.camel@embedded.rocks>
+Message-ID: <20170108174537.jaz3hgr6zau623r7@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d637db1586d9d09bb3f3437d1df5d3539af6928
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi J?rg,
 
-[Peter: handle busybox applet interaction, add comment explaining no build
-	needed]
-Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                |  1 +
- package/ifenslave/Config.in      |  7 +++++++
- package/ifenslave/ifenslave.hash |  3 +++
- package/ifenslave/ifenslave.mk   | 20 ++++++++++++++++++++
- 4 files changed, 31 insertions(+)
+On Sun, Jan 08, 2017 at 12:58:51PM +0100, J?rg Krause wrote:
+> I am able to generate the sd card image and copy it to the sd card
+> using Suses imagewriter. The board boots fine. However, the rootfs size
+> is not 512MB as expected:
+> 
+> # df -hT
+> Filesystem???????????Type????????????Size??????Used Available Use%
+> Mounted on
+> /dev/root????????????ext4???????????38.7M?????37.9M?????????0 100% /
+> devtmpfs?????????????devtmpfs??????501.9M?????????0????501.9M???0% /dev
+> tmpfs????????????????tmpfs?????????502.4M?????????0????502.4M???0%
+> /dev/shm
+> tmpfs????????????????tmpfs?????????502.4M??????3.9M????498.4M???1% /tmp
+> tmpfs????????????????tmpfs?????????502.4M?????24.0K????502.4M???0% /run
+> 
+> I am not able to create any file larger file on the filesystem nor
+> start some programs.
+> 
+> What am I missing here? Can somebody enlighten me please :-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 341c77c..3a52a36 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1499,6 +1499,7 @@ menu "Networking applications"
- 	source "package/httping/Config.in"
- 	source "package/ibrdtn-tools/Config.in"
- 	source "package/ibrdtnd/Config.in"
-+	source "package/ifenslave/Config.in"
- 	source "package/ifplugd/Config.in"
- 	source "package/iftop/Config.in"
- 	source "package/ifupdown/Config.in"
-diff --git a/package/ifenslave/Config.in b/package/ifenslave/Config.in
-new file mode 100644
-index 0000000..2203284
---- /dev/null
-+++ b/package/ifenslave/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_IFENSLAVE
-+	bool "ifenslave"
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	help
-+	  Configure network interfaces for parallel routing (bonding)
-+
-+	  http://anonscm.debian.org/cgit/collab-maint/ifenslave.git
-diff --git a/package/ifenslave/ifenslave.hash b/package/ifenslave/ifenslave.hash
-new file mode 100644
-index 0000000..dcf31d0
---- /dev/null
-+++ b/package/ifenslave/ifenslave.hash
-@@ -0,0 +1,3 @@
-+# From http://snapshot.debian.org/archive/debian/20170102T091407Z/pool/main/i/ifenslave/ifenslave_2.9.dsc
-+sha1 a17e88fa298ef337e872c8aa5d7a390921239d1a   ifenslave_2.9.tar.xz
-+sha256  e5666c0b61347bd06f2394c16eca6895fcb5e5cc83d0a1c596a975274de5a3c9    ifenslave_2.9.tar.xz
-diff --git a/package/ifenslave/ifenslave.mk b/package/ifenslave/ifenslave.mk
-new file mode 100644
-index 0000000..1b82312
---- /dev/null
-+++ b/package/ifenslave/ifenslave.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# ifenslave
-+#
-+################################################################################
-+
-+IFENSLAVE_VERSION = 2.9
-+IFENSLAVE_SOURCE = ifenslave_$(IFENSLAVE_VERSION).tar.xz
-+IFENSLAVE_SITE = http://snapshot.debian.org/archive/debian/20170102T091407Z/pool/main/i/ifenslave
-+IFENSLAVE_LICENSE = GPLv3+
-+IFENSLAVE_LICENSE_FILES = debian/copyright
-+IFENSLAVE_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+
-+# shell script, so nothing to build
-+
-+define IFENSLAVE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/ifenslave $(TARGET_DIR)/sbin/ifenslave
-+endef
-+
-+$(eval $(generic-package))
+Unless you set BR2_TARGET_ROOTFS_EXT2_BLOCKS and BR2_TARGET_ROOTFS_EXT2_INODES 
+you'll get a minimal ext2/3/4 filesystem with no free space. Alternatively, 
+you may run on target the resize2fs tool from the e2fsprogs package on the 
+root filesystem to expand the filesystem to the size of the partition.
+
+Hope this helps,
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
