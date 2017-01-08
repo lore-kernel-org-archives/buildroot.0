@@ -1,24 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Jan 2017 21:42:55 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: AIGLX
+Date: Sun, 8 Jan 2017 21:39:07 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: AIGLX
 	Extension removed in 1.19.0
-In-Reply-To: <20161231163037.13818-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sat, 31 Dec 2016 17:30:37 +0100")
-References: <20161231163037.13818-1-romain.naour@gmail.com>
-Message-ID: <87fuktqo4w.fsf@dell.be.48ers.dk>
+Message-ID: <20170108204411.7FB0680ACD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ec502ea8e4fec1e113b5f7c532809a05644a9fd4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > https://cgit.freedesktop.org/xorg/xserver/commit/?id=501d8e2beb337e072c93c9310fcd927a099b9c3b
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://cgit.freedesktop.org/xorg/xserver/commit/?id=501d8e2beb337e072c93c9310fcd927a099b9c3b
 
-Committed, thanks.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xserver_xorg-server/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index b7f2b3e..1ee1f0b 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -132,6 +132,8 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
+ 	bool "Enable AIGLX Extension"
++	# AIGLX Extension removed in 1.19.0
++	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14 || BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	help
+ 	  Enable/Use AIGLX extension.
+ 
