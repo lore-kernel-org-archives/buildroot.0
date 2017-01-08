@@ -1,77 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Jan 2017 21:34:10 +0100
-Subject: [Buildroot] [git commit] python-arrow: new package
-Message-ID: <20170108203503.08A3A81845@busybox.osuosl.org>
+Date: Sun, 8 Jan 2017 21:31:25 +0100
+Subject: [Buildroot] [git commit] python-whoosh: new package
+Message-ID: <20170108203502.E464B81844@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=011db6e6bda3d2e3341600c7df68d74b6457c058
+commit: https://git.buildroot.net/buildroot/commit/?id=6a9e59c0c2367ccc62c1d898fb9b31c8f7fe0ddf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                      |  1 +
- package/python-arrow/Config.in         |  7 +++++++
- package/python-arrow/python-arrow.hash |  3 +++
- package/python-arrow/python-arrow.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+ package/Config.in                        |  1 +
+ package/python-whoosh/Config.in          |  9 +++++++++
+ package/python-whoosh/python-whoosh.hash |  3 +++
+ package/python-whoosh/python-whoosh.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index b0ff11f..8e03b30 100644
+index 9de98fa..f4e1b6e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -644,6 +644,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-argh/Config.in"
-+	source "package/python-arrow/Config.in"
- 	source "package/python-autobahn/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
-diff --git a/package/python-arrow/Config.in b/package/python-arrow/Config.in
+@@ -812,6 +812,7 @@ menu "External python modules"
+ 	source "package/python-web2py/Config.in"
+ 	source "package/python-webpy/Config.in"
+ 	source "package/python-werkzeug/Config.in"
++	source "package/python-whoosh/Config.in"
+ 	source "package/python-ws4py/Config.in"
+ 	source "package/python-wsaccel/Config.in"
+ 	source "package/python-xlrd/Config.in"
+diff --git a/package/python-whoosh/Config.in b/package/python-whoosh/Config.in
 new file mode 100644
-index 0000000..2449568
+index 0000000..1128ce6
 --- /dev/null
-+++ b/package/python-arrow/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_ARROW
-+	bool "python-arrow"
-+	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
++++ b/package/python-whoosh/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_WHOOSH
++	bool "python-whoosh"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
 +	help
-+	  Better dates and times for Python.
++	  Whoosh is a fast, pure-Python full text indexing, search and
++	  spell checking library.
 +
-+	  https://github.com/crsmithdev/arrow/
-diff --git a/package/python-arrow/python-arrow.hash b/package/python-arrow/python-arrow.hash
++	  https://pypi.python.org/pypi/Whoosh/
+diff --git a/package/python-whoosh/python-whoosh.hash b/package/python-whoosh/python-whoosh.hash
 new file mode 100644
-index 0000000..0b5076a
+index 0000000..b14dd0f
 --- /dev/null
-+++ b/package/python-arrow/python-arrow.hash
++++ b/package/python-whoosh/python-whoosh.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/arrow/json, sha256 locally computed
-+md5	5d00592200050ad58284d45a4ee147c6  arrow-0.10.0.tar.gz
-+sha256	805906f09445afc1f0fc80187db8fe07670e3b25cdafa09b8d8ac264a8c0c722  arrow-0.10.0.tar.gz
-diff --git a/package/python-arrow/python-arrow.mk b/package/python-arrow/python-arrow.mk
++# md5 from https://pypi.python.org/pypi/Whoosh/json, sha256 locally computed
++md5	9a0fc2df9335e1d2e81dd84a2c4c416f  Whoosh-2.7.0.tar.gz
++sha256	cdfc0e1c5173207ac7b312afe78d83fb552cfed30427bf7b3dba8b1d26cea8f7  Whoosh-2.7.0.tar.gz
+diff --git a/package/python-whoosh/python-whoosh.mk b/package/python-whoosh/python-whoosh.mk
 new file mode 100644
-index 0000000..6e2e331
+index 0000000..64f3820
 --- /dev/null
-+++ b/package/python-arrow/python-arrow.mk
++++ b/package/python-whoosh/python-whoosh.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-arrow
++# python-whoosh
 +#
 +################################################################################
 +
-+PYTHON_ARROW_VERSION = 0.10.0
-+PYTHON_ARROW_SOURCE = arrow-$(PYTHON_ARROW_VERSION).tar.gz
-+PYTHON_ARROW_SITE = https://pypi.python.org/packages/54/db/76459c4dd3561bbe682619a5c576ff30c42e37c2e01900ed30a501957150
-+PYTHON_ARROW_SETUP_TYPE = setuptools
-+PYTHON_ARROW_LICENSE = Apache-2.0
-+PYTHON_ARROW_LICENSE_FILES = LICENSE docs/_themes/COPYING.txt
++PYTHON_WHOOSH_VERSION = 2.7.0
++PYTHON_WHOOSH_SOURCE = Whoosh-$(PYTHON_WHOOSH_VERSION).tar.gz
++PYTHON_WHOOSH_SITE = http://pypi.python.org/packages/source/W/Whoosh
++PYTHON_WHOOSH_SETUP_TYPE = setuptools
++PYTHON_WHOOSH_LICENSE = BSD-3c
++PYTHON_WHOOSH_LICENSE_FILES = LICENSE.txt
 +
 +$(eval $(python-package))
