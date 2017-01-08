@@ -1,34 +1,72 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 8 Jan 2017 09:46:39 +0100
-Subject: [Buildroot] [PATCH] arch: add support for OpenRISC architecture
-In-Reply-To: <f2295c57-e0cc-52d3-a708-5e4236ab3867@gmail.com>
-References: <20170107084803.GA6034@waldemar-brodkorb.de>
- <f2295c57-e0cc-52d3-a708-5e4236ab3867@gmail.com>
-Message-ID: <20170108084639.GW1913@waldemar-brodkorb.de>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 08 Jan 2017 12:58:51 +0100
+Subject: [Buildroot] Need help with genimage
+Message-ID: <1483876731.4757.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
-Romain Naour wrote,
+Hi,
 
-> Hi Waldemar,
-> 
-> Le 07/01/2017 ? 09:48, Waldemar Brodkorb a ?crit :
-> > Add a sample defconfig which can be used to create a system for Qemu.
-> > Openrisc community is getting more active recently and tries
-> > to add missing patches upstream to gcc/gdb.
-> 
-> I'm wondering if all Binutils version (2.25.1, 2.26.1 and 2.27) can be used on
-> openRISC? Have you considered to use the openrisc fork [1] ?
+I am trying to add support for the Banana Pro board to Buildroot. The
+Banana is similiar to the Orange Pi, so I am using a genimage.cfg based
+on the Pi for creating the sd card image:
 
-Thanks for your feedback. Yes all binutils version are working fine,
-I just double checked now. So there is no need to use the github
-version for binutils. There is no Linux gdb support, yet.
-You can't use gdbserver or gdb native for now.
-You could use gdb to debug bare metal code.
+    image boot.vfat {
+    	    vfat {
+    	    	    files = {
+    	    	    	    "zImage",
+    	    	    	    "sun7i-a20-bananapro.dtb",
+    	    	    	    "boot.scr"
+    	    	    }
+    	    }
+    	    size = 10M
+    }
 
-best regards
- Waldemar 
+    image sdcard.img {
+    	    hdimage {
+    	    }
+
+    	    partition u-boot {
+    	    	    in-partition-table = "no"
+    	    	    image = "u-boot-sunxi-with-spl.bin"
+    	    	    offset = 8192
+    	    	    size = 1040384 # 1MB - 8192
+    	    }
+
+    	    partition boot {
+    	    	    partition-type = 0xC
+    	    	    bootable = "true"
+    	    	    image = "boot.vfat"
+    	    }
+
+    	    partition rootfs {
+    	    	    partition-type = 0x83
+    	    	    image = "rootfs.ext4"
+    	    	    size = 512M
+    	    }
+    }
+
+I am able to generate the sd card image and copy it to the sd card
+using Suses imagewriter. The board boots fine. However, the rootfs size
+is not 512MB as expected:
+
+# df -hT
+Filesystem???????????Type????????????Size??????Used Available Use%
+Mounted on
+/dev/root????????????ext4???????????38.7M?????37.9M?????????0 100% /
+devtmpfs?????????????devtmpfs??????501.9M?????????0????501.9M???0% /dev
+tmpfs????????????????tmpfs?????????502.4M?????????0????502.4M???0%
+/dev/shm
+tmpfs????????????????tmpfs?????????502.4M??????3.9M????498.4M???1% /tmp
+tmpfs????????????????tmpfs?????????502.4M?????24.0K????502.4M???0% /run
+
+I am not able to create any file larger file on the filesystem nor
+start some programs.
+
+What am I missing here? Can somebody enlighten me please :-)
+
+Best regards,
+J?rg Krause
