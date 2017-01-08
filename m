@@ -1,84 +1,93 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 08 Jan 2017 20:07:28 +0100
-Subject: [Buildroot] Need help with genimage
-In-Reply-To: <20170108190251.s43skw4rbni6tk6g@tarshish>
-References: <1483876731.4757.1.camel@embedded.rocks>
- <20170108174537.jaz3hgr6zau623r7@tarshish>
- <1483900357.4757.3.camel@embedded.rocks>
- <20170108190251.s43skw4rbni6tk6g@tarshish>
-Message-ID: <1483902448.4757.5.camel@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 8 Jan 2017 21:17:08 +0100
+Subject: [Buildroot] [git commit] nmon: new package
+Message-ID: <20170108201752.A623E81926@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2017-01-08 at 21:02 +0200, Baruch Siach wrote:
-> Hi J?rg,
-> 
-> On Sun, Jan 08, 2017 at 07:32:37PM +0100, J?rg Krause wrote:
-> > On Sun, 2017-01-08 at 19:45 +0200, Baruch Siach wrote:
-> > > On Sun, Jan 08, 2017 at 12:58:51PM +0100, J?rg Krause wrote:
-> > > > I am able to generate the sd card image and copy it to the sd
-> > > > card
-> > > > using Suses imagewriter. The board boots fine. However, the
-> > > > rootfs
-> > > > size
-> > > > is not 512MB as expected:
-> > > > 
-> > > > # df -hT
-> > > > Filesystem???????????Type????????????Size??????Used Available
-> > > > Use%
-> > > > Mounted on
-> > > > /dev/root????????????ext4???????????38.7M?????37.9M?????????0
-> > > > 100%
-> > > > /
-> > > > devtmpfs?????????????devtmpfs??????501.9M?????????0????501.9M??
-> > > > ?0%
-> > > > /dev
-> > > > tmpfs????????????????tmpfs?????????502.4M?????????0????502.4M??
-> > > > ?0%
-> > > > /dev/shm
-> > > > tmpfs????????????????tmpfs?????????502.4M??????3.9M????498.4M??
-> > > > ?1%
-> > > > /tmp
-> > > > tmpfs????????????????tmpfs?????????502.4M?????24.0K????502.4M??
-> > > > ?0%
-> > > > /run
-> > > > 
-> > > > I am not able to create any file larger file on the filesystem
-> > > > nor
-> > > > start some programs.
-> > > > 
-> > > > What am I missing here? Can somebody enlighten me please :-)
-> > > 
-> > > Unless you set BR2_TARGET_ROOTFS_EXT2_BLOCKS and
-> > > BR2_TARGET_ROOTFS_EXT2_INODES?
-> > > you'll get a minimal ext2/3/4 filesystem with no free space.
-> > > Alternatively,?
-> > > you may run on target the resize2fs tool from the e2fsprogs
-> > > package
-> > > on the?
-> > > root filesystem to expand the filesystem to the size of the
-> > > partition.
-> > 
-> > Which values should I use for blocks and inodes if I set the rootfs
-> > size to 512M in genimage.cfg? Any suggestions?
-> 
-> The Buildroot package/mke2img/mke2img script assumes a 1KB block
-> size, so you?
-> need 512K blocks.
-> 
-> The number of inodes determines the number of file entries in the
-> filesystem.?
-> A safe "inode ratio" default is one inode per 16384 bytes. That is
-> the native?
-> e2fsprogs package mke2fs tool default, but YMMV.
+commit: https://git.buildroot.net/buildroot/commit/?id=ea0ac289fcda7b844051e7f5113c3d09ffea86be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I see! Many thanks!
+[Peter: add _LICENSE_FILES, pass TARGET_CFLAGS/LDFLAGS, indent]
+Signed-off-by: David Bachelart <david.bachelart@bbright.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in      |  1 +
+ package/nmon/Config.in |  7 +++++++
+ package/nmon/nmon.hash |  5 +++++
+ package/nmon/nmon.mk   | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 41 insertions(+)
 
-I wonder why only one defconfig (nanopi_neo) is setting the blocks and
-inodes. However, maybe it's best to enable the resize2fs package by
-default in the defconfig and add a comment in the readme of the board.
-
-J?rg
+diff --git a/package/Config.in b/package/Config.in
+index 3a52a36..9de98fa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -99,6 +99,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/memstat/Config.in"
+ 	source "package/netperf/Config.in"
+ 	source "package/netsniff-ng/Config.in"
++	source "package/nmon/Config.in"
+ 	source "package/oprofile/Config.in"
+ 	source "package/pax-utils/Config.in"
+ 	source "package/pv/Config.in"
+diff --git a/package/nmon/Config.in b/package/nmon/Config.in
+new file mode 100644
+index 0000000..9a620f4
+--- /dev/null
++++ b/package/nmon/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_NMON
++	bool "nmon"
++	select BR2_PACKAGE_NCURSES
++	help
++	  Nmon is short for Nigel's performance Monitor for Linux
++
++	  http://nmon.sourceforge.net/pmwiki.php
+diff --git a/package/nmon/nmon.hash b/package/nmon/nmon.hash
+new file mode 100644
+index 0000000..f3a073f
+--- /dev/null
++++ b/package/nmon/nmon.hash
+@@ -0,0 +1,5 @@
++# From https://sourceforge.net/projects/nmon/files/
++md5 a72e3eb737c230cd309329330a5545bd    lmon16f.c
++sha1    b69fdddf86ffe674e0133426fa09935ed678ab7d    lmon16f.c
++# Locally computed
++sha256  280a371e17488f8a2c5e0c64273155789be6fa5b937ab5c465488e591bdc5cd9    lmon16f.c
+diff --git a/package/nmon/nmon.mk b/package/nmon/nmon.mk
+new file mode 100644
+index 0000000..9b9f889
+--- /dev/null
++++ b/package/nmon/nmon.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# nmon
++#
++################################################################################
++
++NMON_VERSION = 16f
++NMON_SITE = http://sourceforge.net/projects/nmon/files
++NMON_SOURCE = lmon$(NMON_VERSION).c
++NMON_LICENSE = GPLv3+
++NMON_LICENSE_FILES = $(NMON_SOURCE)
++NMON_DEPENDENCIES = ncurses
++NMON_CFLAGS = $(TARGET_CFLAGS) -D JFS -D GETUSER -D LARGEMEM -D DEBIAN
++
++define NMON_EXTRACT_CMDS
++	cp $(DL_DIR)/$(NMON_SOURCE) $(@D)
++endef
++
++define NMON_BUILD_CMDS
++	$(TARGET_CC) $(NMON_CFLAGS) $(TARGET_LDFLAGS) -o $(@D)/nmon \
++		$(@D)/$(NMON_SOURCE) -lncurses -lm
++endef
++
++define NMON_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/nmon $(TARGET_DIR)/usr/bin/
++endef
++
++$(eval $(generic-package))
