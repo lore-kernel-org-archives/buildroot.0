@@ -1,7 +1,7 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Sun,  8 Jan 2017 23:15:23 +0100
-Subject: [Buildroot] [PATCH] gqrx: new package
-Message-ID: <20170108221523.6794-1-gwenj@trabucayre.com>
+Date: Sun,  8 Jan 2017 23:24:21 +0100
+Subject: [Buildroot] [PATCH v2] gqrx: new package
+Message-ID: <20170108222421.7686-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,6 +20,9 @@ FFT-only instrument. There are also various hooks for interacting
 with external application using network sockets.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+Changes v1 -> v2:
+ * typo
 ---
  package/Config.in      |  1 +
  package/gqrx/Config.in | 38 ++++++++++++++++++++++++++++++++++++++
@@ -53,7 +56,7 @@ index 0000000..807b040
 +		!BR2_USE_WCHAR || BR2_STATIC_LIBS
 +
 +comment "gqrx needs gnuradio, fftw's single precision"
-+	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE)
++	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE
 +
 +config BR2_PACKAGE_GQRX
 +	bool "gqrx"
