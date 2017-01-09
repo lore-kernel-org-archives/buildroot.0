@@ -1,71 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jan 2017 10:03:34 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] gd: security bump to
-	version 2.2.3
-Message-ID: <20170109090439.E53557FF33@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 9 Jan 2017 07:22:13 -0300
+Subject: [Buildroot] How to switch off WiFi/BT on Raspberry Pi 3B from
+ buildroot
+In-Reply-To: <CALtfCQY6AUUm-jYYRQkr3vz_4zgCj_uT-mvrNEo1nL1XR8-K9A@mail.gmail.com>
+References: <CALtfCQY6AUUm-jYYRQkr3vz_4zgCj_uT-mvrNEo1nL1XR8-K9A@mail.gmail.com>
+Message-ID: <75b2d175-35a0-2a16-90f6-5c987d1eb4bc@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4c87ef8c6899ce040e9ffc6a6946e6d89954c99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+On 05/01/17 06:35, Oscar Gomez Fuente wrote:
 
-Security related fixes:
-This flaw is caused by loading data from external sources (file, custom ctx,
-etc) and are hard to validate before calling libgd APIs:
+> Hi everyone,
+>
+> Does anyone know how to disable WiFi and BT in the raspberry pi 3 from
+> buildroot?
+>
+> I would like to know if there is anyway to switch off the Hardware
+> associated with the WiFi and Bluetooth.
+>
+> If I switch off the HW, I'm going to avoid EMC problems and I will get
+> a lower power consumption.
+>
+> Obviously, If you don't load the driver associated with WiFi and
+> Bluetooth they are no going to work, but I need another better option.
+>
+> Any suggestion?
+>
+> Oscar Gomez Fuente
 
-- fix php bug 72339, Integer Overflow in _gd2GetHeader (CVE-2016-5766)
-- bug #248, fix Out-Of-Bounds Read in read_image_tga
-- gd: Buffer over-read issue when parsing crafted TGA file (CVE-2016-6132)
-
-Using application provided parameters, in these cases invalid data causes
-the issues:
-
- - Integer overflow error within _gdContributionsAlloc() (CVE-2016-6207)
- - fix php bug 72494, invalid color index not handled, can lead to crash ( CVE-2016-6128)
- - improve color check for CropThreshold
-
-The build system now enables -Wall and -Werror by default, so pass
---disable-werror to disable that.  Notice that this issue has been fixed
-upstream post-2.2.3:
-
-https://github.com/libgd/libgd/issues/339
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 81dc283a00a6c1ed73bcb273b3ab23fc37a3a267)
----
- package/gd/gd.hash | 2 +-
- package/gd/gd.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/gd/gd.hash b/package/gd/gd.hash
-index d08220a..eb3da42 100644
---- a/package/gd/gd.hash
-+++ b/package/gd/gd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	489f756ce07f0c034b1a794f4d34fdb4d829256112cb3c36feb40bb56b79218c	libgd-2.2.2.tar.xz
-+sha256	746b6cbd6769a22ff3ba6f5756f3512a769bd4cdf4695dff17f4867f25fa7d3c	libgd-2.2.3.tar.xz
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 8de8d15..0777bdb 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--GD_VERSION = 2.2.2
-+GD_VERSION = 2.2.3
- GD_SOURCE = libgd-$(GD_VERSION).tar.xz
- GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
- GD_INSTALL_STAGING = YES
- GD_LICENSE = GD license
- GD_LICENSE_FILES = COPYING
- GD_CONFIG_SCRIPTS = gdlib-config
--GD_CONF_OPTS = --without-x --disable-rpath
-+GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
- GD_DEPENDENCIES = host-pkgconf
- 
- # gd forgets to link utilities with -pthread even though it uses
+Hi.
+rfkill is meant for that (think "airplane mode").
+Regards.
