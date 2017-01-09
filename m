@@ -1,41 +1,25 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  9 Jan 2017 11:15:19 -0500
-Subject: [Buildroot] [1/5] checkpolicy: bump version to 2.6
-Message-ID: <20170109161523.6855-1-aduskett@codeblue.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 09 Jan 2017 17:19:01 +0100
+Subject: [Buildroot] [PATCH 2/2] libnss: bump to version 3.27.2
+In-Reply-To: <20170109140646.29648-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 9 Jan 2017 15:06:46 +0100")
+References: <20170109140646.29648-1-peter@korsgaard.com>
+ <20170109140646.29648-2-peter@korsgaard.com>
+Message-ID: <87o9zgmcju.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
----
- package/checkpolicy/checkpolicy.hash | 2 +-
- package/checkpolicy/checkpolicy.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
-index bc5199c..6208d77 100644
---- a/package/checkpolicy/checkpolicy.hash
-+++ b/package/checkpolicy/checkpolicy.hash
-@@ -1,2 +1,2 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 33af9f3eb19135a7e6536ecd3fbb9686323000016cd51eb88346346ed7546001  checkpolicy-2.5.tar.gz
-+sha256 0bebd18688ca8027b1b3b4ff1532c0626f1fe49883ae6cb74d9d385940e74157  checkpolicy-2.6.tar.gz
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index a21b39e..8328b39 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CHECKPOLICY_VERSION = 2.5
--CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
-+CHECKPOLICY_VERSION = 2.6
-+CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
- CHECKPOLICY_LICENSE = GPLv2
- CHECKPOLICY_LICENSE_FILES = COPYING
- 
+ > Fixes a memory leak in SSL_SetTrustAnchors():
+ > https://bugzilla.mozilla.org/show_bug.cgi?id=1318561
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.9.3
+Bye, Peter Korsgaard
