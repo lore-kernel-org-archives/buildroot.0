@@ -1,24 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Jan 2017 09:43:11 +0100
-Subject: [Buildroot] [PATCH 1/2] nodejs: re-add 6.x patches
-In-Reply-To: <20170108224245.17612-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 8 Jan 2017 23:42:44 +0100")
-References: <20170108224245.17612-1-peter@korsgaard.com>
-Message-ID: <87pojwpqsg.fsf@dell.be.48ers.dk>
+Date: Mon, 09 Jan 2017 09:48:42 +0100
+Subject: [Buildroot] [PATCH] pkg-perl: set PERL_USE_UNSAFE_INC
+In-Reply-To: <20170107081217.13863-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Sat, 7 Jan 2017 09:12:17 +0100")
+References: <20170107081217.13863-1-francois.perrad@gadz.org>
+Message-ID: <87lgukpqj9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > Commit 3fd9c062e (nodejs: bump to version 6.9.2) bumped the 6.x version but
- > forgot to rename the patch directory, so the patches were no longer used.
+ > Recent perls are built with the `default_inc_excludes_dot` option.
+ > As many CPAN modules rely on '.' in @INC, the toolchain
+ > must set `PERL_USE_UNSAFE_INC`.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed, thanks.
+
+As this is for our own host-perl, couldn't we just disable this option
+at build time?
 
 -- 
 Bye, Peter Korsgaard
