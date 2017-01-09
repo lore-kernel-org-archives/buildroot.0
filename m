@@ -1,41 +1,91 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  9 Jan 2017 15:56:11 -0500
-Subject: [Buildroot] [PATCH 1/4] sepolgen: bump version to 2.6
-Message-ID: <20170109205614.25011-1-aduskett@codeblue.com>
+Date: Mon,  9 Jan 2017 15:56:13 -0500
+Subject: [Buildroot] [PATCH 3/4] libselinux: allow python bindings on the
+	target filing system.
+In-Reply-To: <20170109205614.25011-1-aduskett@codeblue.com>
+References: <20170109205614.25011-1-aduskett@codeblue.com>
+Message-ID: <20170109205614.25011-3-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+If a user wants to use the tool audit2allow provided by
+policycoreutils, they will need the python bindings from
+libselinux on the target file system.
+
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/sepolgen/sepolgen.hash | 2 +-
- package/sepolgen/sepolgen.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libselinux/libselinux.mk | 49 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/sepolgen/sepolgen.hash b/package/sepolgen/sepolgen.hash
-index a377c66..b338a70 100644
---- a/package/sepolgen/sepolgen.hash
-+++ b/package/sepolgen/sepolgen.hash
-@@ -1,2 +1,2 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 8a1c6d3a78c9b6ad3555c74def555f65a62950bf21c111c585bfc382fec3a645  sepolgen-1.1.9.tar.gz
-+sha256 6a327b1576d914e57ad796a541a7a9bcceefb14c445355559993de0fdb8e7a60  sepolgen-2.6.tar.gz
-diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
-index efecee7..137eaed 100644
---- a/package/sepolgen/sepolgen.mk
-+++ b/package/sepolgen/sepolgen.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 165ac4c..5a03602 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -20,6 +20,53 @@ LIBSELINUX_MAKE_OPTS = \
+ 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
+ 	ARCH=$(KERNEL_ARCH)
  
--SEPOLGEN_VERSION = 1.1.9
--SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+SEPOLGEN_VERSION = 2.6
-+SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
- SEPOLGEN_LICENSE = GPLv2
- SEPOLGEN_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW),y)
++
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++LIBSELINUX_DEPENDENCIES += python3
++LIBSELINUX_PYTHONLIBDIR = -L$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/
++LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m/
++LIBSELINUX_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
++else
++LIBSELINUX_DEPENDENCIES += python
++LIBSELINUX_PYTHONLIBDIR = -L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/
++LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/
++LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
++endif
++
++define LIBSELINUX_BUILD_CMDS
++	# DESTDIR is needed during the compile to compute library and
++	# header paths.
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(LIBSELINUX_MAKE_OPTS) \
++		PYSITEDIR=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++		DESTDIR=$(STAGING_DIR) all pywrap
++		
++endef
++
++define LIBSELINUX_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(LIBSELINUX_MAKE_OPTS) \
++		PYSITEDIR=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++		DESTDIR=$(STAGING_DIR) install install-pywrap
++
++endef
++
++define LIBSELINUX_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(LIBSELINUX_MAKE_OPTS) \
++		PYSITEDIR=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++		DESTDIR=$(TARGET_DIR) install install-pywrap
++			
++	# Create the selinuxfs mount point
++	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
++	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
++		echo "none /selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
++endef
++
++
++else
++
+ define LIBSELINUX_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+@@ -41,6 +88,8 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
+ 		echo "none /selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
+ endef
+ 
++endif
++
+ HOST_LIBSELINUX_DEPENDENCIES = \
+ 	host-libsepol host-pcre host-swig
  
 -- 
 2.9.3
