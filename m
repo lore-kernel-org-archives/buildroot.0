@@ -1,43 +1,78 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  9 Jan 2017 11:15:21 -0500
-Subject: [Buildroot] [3/5] libsemanage: bump version to 2.6
+Date: Mon,  9 Jan 2017 11:15:22 -0500
+Subject: [Buildroot] [4/5] libsepol: bump version to 2.6
 In-Reply-To: <20170109161523.6855-1-aduskett@codeblue.com>
 References: <20170109161523.6855-1-aduskett@codeblue.com>
-Message-ID: <20170109161523.6855-3-aduskett@codeblue.com>
+Message-ID: <20170109161523.6855-4-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also removed patch 0003-add-stdarg-include.patch as this has been
+committed to upstream.
+
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/libsemanage/libsemanage.hash | 2 +-
- package/libsemanage/libsemanage.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libsepol/0003-add-stdarg-include.patch         | 18 ------------------
+ ...ln-relative.patch => 0003-revert-ln-relative.patch} |  0
+ package/libsepol/libsepol.hash                         |  2 +-
+ package/libsepol/libsepol.mk                           |  4 ++--
+ 4 files changed, 3 insertions(+), 21 deletions(-)
+ delete mode 100644 package/libsepol/0003-add-stdarg-include.patch
+ rename package/libsepol/{0004-revert-ln-relative.patch => 0003-revert-ln-relative.patch} (100%)
 
-diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-index 69f7c8d..62f4d83 100644
---- a/package/libsemanage/libsemanage.hash
-+++ b/package/libsemanage/libsemanage.hash
+diff --git a/package/libsepol/0003-add-stdarg-include.patch b/package/libsepol/0003-add-stdarg-include.patch
+deleted file mode 100644
+index 246c965..0000000
+--- a/package/libsepol/0003-add-stdarg-include.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Add missing <stdarg.h> include
+-
+-This is needed to fix the build on uClibc, due to the usage of
+-va_list.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Index: b/cil/src/cil_log.h
+-===================================================================
+---- a/cil/src/cil_log.h
+-+++ b/cil/src/cil_log.h
+-@@ -30,6 +30,7 @@
+- #define CIL_LOG_H_
+- 
+- #include <stdlib.h>
+-+#include <stdarg.h>
+- #include <cil/cil.h>
+- 
+- #define MAX_LOG_SIZE 512
+diff --git a/package/libsepol/0004-revert-ln-relative.patch b/package/libsepol/0003-revert-ln-relative.patch
+similarity index 100%
+rename from package/libsepol/0004-revert-ln-relative.patch
+rename to package/libsepol/0003-revert-ln-relative.patch
+diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
+index 266ce43..6c70506 100644
+--- a/package/libsepol/libsepol.hash
++++ b/package/libsepol/libsepol.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256 46e2f36254369b6e91d1eea0460c262b139361b055a3a67d3ceea2d8ef72e006 libsemanage-2.5.tar.gz
-+sha256 4f81541047290b751f2ffb926fcd381c186f22db18d9fe671b0b4a6a54e8cfce libsemanage-2.6.tar.gz
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 005b822..7545594 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
+ # From https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 2bdeec56d0a08b082b93b40703b4b3329cc5562152f7254d8f6ef6b56afe850a  libsepol-2.5.tar.gz
++sha256 d856d6506054f52abeaa3543ea2f2344595a3dc05d0d873ed7f724f7a16b1874  libsepol-2.6.tar.gz
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index bf85eef..61d1e61 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBSEMANAGE_VERSION = 2.5
--LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
-+LIBSEMANAGE_VERSION = 2.6
-+LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
- LIBSEMANAGE_LICENSE = LGPLv2.1+
- LIBSEMANAGE_LICENSE_FILES = COPYING
- LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+-LIBSEPOL_VERSION = 2.5
+-LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
++LIBSEPOL_VERSION = 2.6
++LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
+ LIBSEPOL_LICENSE = LGPLv2.1+
+ LIBSEPOL_LICENSE_FILES = COPYING
+ 
 -- 
 2.9.3
