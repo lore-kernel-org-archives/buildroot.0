@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 9 Jan 2017 15:50:56 +0000
-Subject: [Buildroot] [PATCH] lua-messagepack: bump version to 0.4.0
-Message-ID: <20170109155056.60774-1-Vincent.Riera@imgtec.com>
+Date: Mon, 9 Jan 2017 15:56:45 +0000
+Subject: [Buildroot] [PATCH] nano: bump version to 2.7.3
+Message-ID: <20170109155645.20749-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lua-messagepack/lua-messagepack.hash | 4 ++--
- package/lua-messagepack/lua-messagepack.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-messagepack/lua-messagepack.hash b/package/lua-messagepack/lua-messagepack.hash
-index d5858db..7da34e1 100644
---- a/package/lua-messagepack/lua-messagepack.hash
-+++ b/package/lua-messagepack/lua-messagepack.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	706e99424cfd4d86deed10764fb2d0094bac006c0c5be449470992e9f0779ffa  lua-messagepack-0.3.6-1.src.rock
--sha256	d3a82aea6423213f399735b291a6887b230fb3bb9bcfe7b530532f1756308566  lua-messagepack-lua53-0.3.6-1.src.rock
-+sha256 a8aac195dc835101a025385b4c5b596de6602c4ced85e0df35b7f52e6aa6ee5d  lua-messagepack-0.4.0-1.src.rock
-+sha256 85a3eef21e10eb6c3ebf584ce950610fc10457746a4b8dbcbcab4b626f7d3265  lua-messagepack-lua53-0.4.0-1.src.rock
-diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
-index 4bd3fdd..15fc182 100644
---- a/package/lua-messagepack/lua-messagepack.mk
-+++ b/package/lua-messagepack/lua-messagepack.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index d1814ae..94fd990 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 77016f73c686857ce8a3ec217832febb6e636122762d47ce3c6cbef6f7e390c2  nano-2.7.2.tar.xz
++sha256 d926ef5060d23bafec75dab9328bb9b9df9a08e58c56b9061d686f5698770bfc  nano-2.7.3.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 7f80554..da92268 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.3.6
-+LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.4.0
- ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_MESSAGEPACK_VERSION = lua53-$(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
- else
+ NANO_VERSION_MAJOR = 2.7
+-NANO_VERSION = $(NANO_VERSION_MAJOR).2
++NANO_VERSION = $(NANO_VERSION_MAJOR).3
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPLv3+
 -- 
 2.10.2
