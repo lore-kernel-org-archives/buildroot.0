@@ -1,57 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jan 2017 10:04:18 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] irssi: security bump to
-	0.8.21
-Message-ID: <20170109090439.EFF307FE1F@busybox.osuosl.org>
+Date: Mon, 9 Jan 2017 10:03:34 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] gd: security bump to
+	version 2.2.3
+Message-ID: <20170109090439.E53557FF33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=710a3094f8bd44703afbc977fec6fc3fe6101968
+commit: https://git.buildroot.net/buildroot/commit/?id=c4c87ef8c6899ce040e9ffc6a6946e6d89954c99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Bugfixes:
+Security related fixes:
+This flaw is caused by loading data from external sources (file, custom ctx,
+etc) and are hard to validate before calling libgd APIs:
 
-- CVE-2017-5193: Correct a NULL pointer dereference in the nickcmp function
-  found by Joseph Bisch (GL#1)
+- fix php bug 72339, Integer Overflow in _gd2GetHeader (CVE-2016-5766)
+- bug #248, fix Out-Of-Bounds Read in read_image_tga
+- gd: Buffer over-read issue when parsing crafted TGA file (CVE-2016-6132)
 
-- CVE-2017-5194: Correct an error when receiving invalid nick message (GL#4,
-  #466)
+Using application provided parameters, in these cases invalid data causes
+the issues:
 
-- CVE-2017-5195: Correct an out of bounds read in certain incomplete control
-  codes found by Joseph Bisch (GL#2)
+ - Integer overflow error within _gdContributionsAlloc() (CVE-2016-6207)
+ - fix php bug 72494, invalid color index not handled, can lead to crash ( CVE-2016-6128)
+ - improve color check for CropThreshold
 
-- CVE-2017-5196: Correct an out of bounds read in certain incomplete
-  character sequences found by Hanno B??ck and independently by J.  Bisch
-  (GL#3)
+The build system now enables -Wall and -Werror by default, so pass
+--disable-werror to disable that.  Notice that this issue has been fixed
+upstream post-2.2.3:
+
+https://github.com/libgd/libgd/issues/339
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8528edfb3b3f6ee826c2339696c4c79c8ba5c938)
+(cherry picked from commit 81dc283a00a6c1ed73bcb273b3ab23fc37a3a267)
 ---
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gd/gd.hash | 2 +-
+ package/gd/gd.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 33b2d0e..b1048bf 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
+diff --git a/package/gd/gd.hash b/package/gd/gd.hash
+index d08220a..eb3da42 100644
+--- a/package/gd/gd.hash
++++ b/package/gd/gd.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	7882c4e821f5aac469c5e69e69d7e235f4986101285c675e81a9a95bfb20505a	irssi-0.8.20.tar.xz
-+sha256	e433063b8714dcf17438126902c9a9d5c97944b3185ecd0fc5ae25c4959bf35a	irssi-0.8.21.tar.xz
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index 0fb6fc7..e467f89 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256	489f756ce07f0c034b1a794f4d34fdb4d829256112cb3c36feb40bb56b79218c	libgd-2.2.2.tar.xz
++sha256	746b6cbd6769a22ff3ba6f5756f3512a769bd4cdf4695dff17f4867f25fa7d3c	libgd-2.2.3.tar.xz
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 8de8d15..0777bdb 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--IRSSI_VERSION = 0.8.20
-+IRSSI_VERSION = 0.8.21
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
+-GD_VERSION = 2.2.2
++GD_VERSION = 2.2.3
+ GD_SOURCE = libgd-$(GD_VERSION).tar.xz
+ GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
+ GD_INSTALL_STAGING = YES
+ GD_LICENSE = GD license
+ GD_LICENSE_FILES = COPYING
+ GD_CONFIG_SCRIPTS = gdlib-config
+-GD_CONF_OPTS = --without-x --disable-rpath
++GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
+ GD_DEPENDENCIES = host-pkgconf
+ 
+ # gd forgets to link utilities with -pthread even though it uses
