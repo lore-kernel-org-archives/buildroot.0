@@ -1,42 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  9 Jan 2017 09:36:01 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.16.2
-Message-ID: <20170109123601.464-1-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 09 Jan 2017 13:43:51 +0100
+Subject: [Buildroot] [PATCH] mysql: propagate common dependencies to
+	toplevel config
+In-Reply-To: <20170109121645.porogilr3dlfaqgu@tarshish> (Baruch Siach's
+ message of "Mon, 9 Jan 2017 14:16:45 +0200")
+References: <20170109105654.14562-1-peter@korsgaard.com>
+ <20170109121645.porogilr3dlfaqgu@tarshish>
+Message-ID: <87mvf0o12w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 208fcdb..bb3707d 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 77f8c59fec1575c5e05462dccac956f141677647  sqlite-autoconf-3160100.tar.gz
-+sha1 64ca578ad44a94115b1db0406740e14288f74bb8  sqlite-autoconf-3160200.tar.gz
- # Calculated based on the hash above
--sha256 13fbe45e3088b3955feb2ae68648a0f81586d6d519766b211767a1ffcd268fd0  sqlite-autoconf-3160100.tar.gz
-+sha256 65cc0c3e9366f50c0679c5ccd31432cea894bc4a3e8947dabab88c8693263615  sqlite-autoconf-3160200.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 609d7bc..790caaf 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3160100
-+SQLITE_VERSION = 3160200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2017
- SQLITE_LICENSE = Public domain
+ > Hi Peter,
+ > On Mon, Jan 09, 2017 at 11:56:54AM +0100, Peter Korsgaard wrote:
+ >> Commit 3d707d2b (mysql: rename package to oracle-mysql, make a virtual
+ >> package) introduced a user selectable virtual BR2_PACKAGE_MYSQL package, but
+ >> didn't propagate the (common) dependencies of the two variants to it, so the
+ >> virtual package can now be selected even though neither of the variants are
+ >> available.
+ >> 
+ >> As several packages enable mysql support when BR2_PACKAGE_MYSQL is selected,
+ >> this causes a number of autobuilder issues:
+ >> 
+ >> http://autobuild.buildroot.net/results/7fe/7fe0d0a3e7ed0430852dc42b718dd037557207e8/
+ >> http://autobuild.buildroot.net/results/cc4/cc4c2d936f3e1ba6c0a9782b2218de54a4ff75d2/
+ >> 
+ >> Fix it by propagating the common dependencies of the two variants to the
+ >> virtual package to ensure it cannot be enabled unless at least one of them
+ >> are available.
+ >> 
+ >> Also move the toolchain comment outside the conditional so it is visible
+ >> when mysql isn't available.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+ > This is similar to http://patchwork.ozlabs.org/patch/709670/, but more 
+ > comprehensive. Looks good to me.
+
+Ups, I somehow missed your patch - Sorry about that!
+
+Committed, thanks.
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
