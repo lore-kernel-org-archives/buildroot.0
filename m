@@ -1,53 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Jan 2017 13:16:51 +0100
-Subject: [Buildroot] [PATCH RESEND v3] gst1-plugins-bad: Add kmssink
-	support
-In-Reply-To: <1483877905-18606-1-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Sun, 8 Jan 2017 10:18:25 -0200")
-References: <1483877905-18606-1-git-send-email-festevam@gmail.com>
-Message-ID: <87r34co2bw.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  9 Jan 2017 09:36:01 -0300
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.16.2
+Message-ID: <20170109123601.464-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Add support for the KMS video sink element. From the Gstreamer 1.10
- > release notes:
-
- > "New element kmssink to render video using Direct Rendering Manager (DRM)
- > and Kernel Mode Setting (KMS) subsystems in the Linux kernel. It is oriented
- > to be used mostly in embedded systems."
-
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
- > ---
- > Changes since v2:
- > - Fix dependency comments
- > Changes since v1:
- > - Select libdrm and depends on BR2_TOOLCHAIN_HAS_THREADS
-
- >  package/gstreamer1/gst1-plugins-bad/Config.in           | 7 +++++++
- >  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 7 +++++++
- >  2 files changed, 14 insertions(+)
-
- > diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
- > index 16c0b7e..5c3ccd5 100644
- > --- a/package/gstreamer1/gst1-plugins-bad/Config.in
- > +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
- > @@ -549,6 +549,13 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
- >  	help
- >  	  Fragmented streaming plugins
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 208fcdb..bb3707d 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 77f8c59fec1575c5e05462dccac956f141677647  sqlite-autoconf-3160100.tar.gz
++sha1 64ca578ad44a94115b1db0406740e14288f74bb8  sqlite-autoconf-3160200.tar.gz
+ # Calculated based on the hash above
+-sha256 13fbe45e3088b3955feb2ae68648a0f81586d6d519766b211767a1ffcd268fd0  sqlite-autoconf-3160100.tar.gz
++sha256 65cc0c3e9366f50c0679c5ccd31432cea894bc4a3e8947dabab88c8693263615  sqlite-autoconf-3160200.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 609d7bc..790caaf 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- > +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_KMS
- > +	bool "kmssink"
- > +	depends on BR2_TOOLCHAIN_HAS_THREADS #  libdrm -> libpthread-stubs
-
-This depends on is not strictly needed as gstreamer1 already depends on
-threads, but OK.
-
-Committed, thanks.
-
+-SQLITE_VERSION = 3160100
++SQLITE_VERSION = 3160200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2017
+ SQLITE_LICENSE = Public domain
 -- 
-Bye, Peter Korsgaard
+2.10.2
