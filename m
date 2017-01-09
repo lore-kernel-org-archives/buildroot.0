@@ -1,31 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jan 2017 09:42:59 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: Add entry for upower
-Message-ID: <20170109085750.9FACD802F1@busybox.osuosl.org>
+Date: Mon, 9 Jan 2017 09:47:50 +0100
+Subject: [Buildroot] [git commit] pkg-perl: set PERL_USE_UNSAFE_INC
+Message-ID: <20170109085750.A865381DBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11efe88448a11b33d646468ff5a3d9259c1f52ac
+commit: https://git.buildroot.net/buildroot/commit/?id=d23a2a5079e950e66504a623c44b46146e90e34f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Recent perls are built with the `default_inc_excludes_dot` option.
+As many CPAN modules rely on '.' in @INC, the toolchain
+must set `PERL_USE_UNSAFE_INC`.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-perl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b4b460f..79dd097 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1275,6 +1275,7 @@ F:	package/mcelog/
- F:	package/openpowerlink/
- F:	package/stress-ng/
- F:	package/terminology/
-+F:	package/upower/
- F:	package/xenomai/
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index a027810..4b20598 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -20,7 +20,7 @@
+ ################################################################################
  
- N:	Romain Perier <romain.perier@free-electrons.com>
+ PERL_ARCHNAME = $(ARCH)-linux
+-PERL_RUN = PERL5LIB= $(HOST_DIR)/usr/bin/perl
++PERL_RUN = PERL5LIB= PERL_USE_UNSAFE_INC=1 $(HOST_DIR)/usr/bin/perl
+ 
+ ################################################################################
+ # inner-perl-package -- defines how the configuration, compilation and
