@@ -1,30 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jan 2017 09:40:01 +0100
-Subject: [Buildroot] [git commit] nodejs: re-add 6.x patches
-Message-ID: <20170109085750.9131E81DBC@busybox.osuosl.org>
+Date: Mon, 9 Jan 2017 09:42:59 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: Add entry for upower
+Message-ID: <20170109085750.9FACD802F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba24804c1780522e634f4193945c48de67b36ed4
+commit: https://git.buildroot.net/buildroot/commit/?id=11efe88448a11b33d646468ff5a3d9259c1f52ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 3fd9c062e (nodejs: bump to version 6.9.2) bumped the 6.x version but
-forgot to rename the patch directory, so the patches were no longer used.
-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../nodejs/{6.9.1 => 6.9.2}/0001-gyp-force-link-command-to-use-CXX.patch  | 0
- .../0002-inspector-don-t-build-when-ssl-support-is-disabled.patch         | 0
- 2 files changed, 0 insertions(+), 0 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nodejs/6.9.1/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.9.2/0001-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/6.9.1/0001-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/6.9.2/0001-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/6.9.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.9.2/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-similarity index 100%
-rename from package/nodejs/6.9.1/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
-rename to package/nodejs/6.9.2/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b4b460f..79dd097 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1275,6 +1275,7 @@ F:	package/mcelog/
+ F:	package/openpowerlink/
+ F:	package/stress-ng/
+ F:	package/terminology/
++F:	package/upower/
+ F:	package/xenomai/
+ 
+ N:	Romain Perier <romain.perier@free-electrons.com>
