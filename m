@@ -1,22 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Jan 2017 17:18:55 +0100
-Subject: [Buildroot] [PATCH 1/2] libnspr: bump to version 4.13.1
-In-Reply-To: <20170109140646.29648-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 9 Jan 2017 15:06:45 +0100")
-References: <20170109140646.29648-1-peter@korsgaard.com>
-Message-ID: <87shosmck0.fsf@dell.be.48ers.dk>
+Date: Mon, 09 Jan 2017 17:19:14 +0100
+Subject: [Buildroot] [PATCH] nano: bump version to 2.7.3
+In-Reply-To: <20170109155645.20749-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 9 Jan 2017 15:56:45 +0000")
+References: <20170109155645.20749-1-Vincent.Riera@imgtec.com>
+Message-ID: <87fuksmcjh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Reverts a non-backwards compatible change to the pipe handling:
- > https://bugzilla.redhat.com/show_bug.cgi?id=1383918
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
