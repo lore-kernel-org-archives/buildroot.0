@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jan 2017 17:18:04 +0100
-Subject: [Buildroot] [git commit] libnss: bump to version 3.27.2
-Message-ID: <20170109163505.514FA7F909@busybox.osuosl.org>
+Date: Mon, 9 Jan 2017 17:18:19 +0100
+Subject: [Buildroot] [git commit] lua-messagepack: bump version to 0.4.0
+Message-ID: <20170109163505.5E1A181770@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4a470ecad98c5fd49c4a22d0efca5f18bd16f3f
+commit: https://git.buildroot.net/buildroot/commit/?id=06ecfbaf1ee723342e8ebc3622dbf1770b3294ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a memory leak in SSL_SetTrustAnchors():
-https://bugzilla.mozilla.org/show_bug.cgi?id=1318561
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
+ package/lua-messagepack/lua-messagepack.hash | 4 ++--
+ package/lua-messagepack/lua-messagepack.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index acc32e3..975e52d 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_27_1_RTM/src/SHA256SUMS
--sha256	fd3637a1930cd838239a89633a7ed9a18859ae9b599043f3a18f726dc4ec2a6b	nss-3.27.1.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_27_2_RTM/src/SHA256SUMS
-+sha256	dc8ac8524469d0230274fd13a53fdcd74efe4aa67205dde1a4a92be87dc28524	nss-3.27.2.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 931256c..4a40b0a 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/lua-messagepack/lua-messagepack.hash b/package/lua-messagepack/lua-messagepack.hash
+index d5858db..7da34e1 100644
+--- a/package/lua-messagepack/lua-messagepack.hash
++++ b/package/lua-messagepack/lua-messagepack.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	706e99424cfd4d86deed10764fb2d0094bac006c0c5be449470992e9f0779ffa  lua-messagepack-0.3.6-1.src.rock
+-sha256	d3a82aea6423213f399735b291a6887b230fb3bb9bcfe7b530532f1756308566  lua-messagepack-lua53-0.3.6-1.src.rock
++sha256 a8aac195dc835101a025385b4c5b596de6602c4ced85e0df35b7f52e6aa6ee5d  lua-messagepack-0.4.0-1.src.rock
++sha256 85a3eef21e10eb6c3ebf584ce950610fc10457746a4b8dbcbcab4b626f7d3265  lua-messagepack-lua53-0.4.0-1.src.rock
+diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
+index 4bd3fdd..15fc182 100644
+--- a/package/lua-messagepack/lua-messagepack.mk
++++ b/package/lua-messagepack/lua-messagepack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.27.1
-+LIBNSS_VERSION = 3.27.2
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.3.6
++LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.4.0
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUA_MESSAGEPACK_VERSION = lua53-$(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
+ else
