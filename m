@@ -1,53 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jan 2017 15:08:19 +0100
-Subject: [Buildroot] [git commit] cjson: bump version to v1.2.0
-Message-ID: <20170109140828.C6DC681DDA@busybox.osuosl.org>
+Date: Mon, 9 Jan 2017 15:07:24 +0100
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.16.2
+Message-ID: <20170109140828.BA84980500@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cd0f493d68a92b63e2f6a21b7ea7ea8c26a844a
+commit: https://git.buildroot.net/buildroot/commit/?id=cc24879f85d7c6060957baf297993be687aa1794
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also remove the patch since it's already contained in this release.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cjson/cjson.hash | 3 +--
- package/cjson/cjson.mk   | 8 +-------
- 2 files changed, 2 insertions(+), 9 deletions(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index fc0ed28..a6370de 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,2 @@
- # Locally computed:
--sha256	3487795d54440bdbd41b4b8e7688889526f2f9a652639f6036b9965016c800e7	cjson-v1.1.0.tar.gz
--sha256	8eea780ee5729275a5076002d92a4c7854ecb89968b26a81efeb5bd9828268a0	fcc89c4bb264d665929b00eeebc479a643a90896.patch
-+sha256 df549298ea6515058648eaacc62bcc4f82fa34f8b93af7753e30eb35c3841c7d  cjson-v1.2.0.tar.gz
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 7ac7a71..f0fe63b 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,16 +4,10 @@
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 208fcdb..bb3707d 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1 77f8c59fec1575c5e05462dccac956f141677647  sqlite-autoconf-3160100.tar.gz
++sha1 64ca578ad44a94115b1db0406740e14288f74bb8  sqlite-autoconf-3160200.tar.gz
+ # Calculated based on the hash above
+-sha256 13fbe45e3088b3955feb2ae68648a0f81586d6d519766b211767a1ffcd268fd0  sqlite-autoconf-3160100.tar.gz
++sha256 65cc0c3e9366f50c0679c5ccd31432cea894bc4a3e8947dabab88c8693263615  sqlite-autoconf-3160200.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 609d7bc..790caaf 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CJSON_VERSION = v1.1.0
-+CJSON_VERSION = v1.2.0
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
- CJSON_LICENSE_FILES = LICENSE
- 
--# This patch fixes -Werror=strict-overflow compile errors on sh4a and powerpc
--# toolchains:
--# http://autobuild.buildroot.net/results/3d899790acdc5c21733ff6f7f5a1b500e862ea0a
--CJSON_PATCH = \
--	https://github.com/DaveGamble/cjson/commit/fcc89c4bb264d665929b00eeebc479a643a90896.patch
--
- $(eval $(cmake-package))
+-SQLITE_VERSION = 3160100
++SQLITE_VERSION = 3160200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2017
+ SQLITE_LICENSE = Public domain
