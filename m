@@ -1,42 +1,26 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 9 Jan 2017 15:22:08 +0000
-Subject: [Buildroot] [PATCH] lttng-babeltrace: bump version to 1.5.1
-Message-ID: <20170109152208.27119-1-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 09 Jan 2017 16:25:25 +0100
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.4-3
+	(security)
+In-Reply-To: <20170109143440.441-1-Vincent.Riera@imgtec.com> (Vicente Olivert
+ Riera's message of "Mon, 9 Jan 2017 14:34:40 +0000")
+References: <20170109143440.441-1-Vincent.Riera@imgtec.com>
+Message-ID: <8760lontlm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lttng-babeltrace/lttng-babeltrace.hash | 6 +++---
- package/lttng-babeltrace/lttng-babeltrace.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.hash b/package/lttng-babeltrace/lttng-babeltrace.hash
-index 7f91b8b..8f29692 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.hash
-+++ b/package/lttng-babeltrace/lttng-babeltrace.hash
-@@ -1,3 +1,3 @@
--# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.0.tar.bz2.{md5,sha1}
--md5 43696383e44d1b85173db7cbd0335f06  babeltrace-1.5.0.tar.bz2
--sha1 13f106951c418632a2155ebe3cea51fa4929e748  babeltrace-1.5.0.tar.bz2
-+# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.1.tar.bz2.{md5,sha1}
-+md5 3f7d29ba2821a966d24759a928a15cdf  babeltrace-1.5.1.tar.bz2
-+sha1 07bffefed8ef68317f26e043ae5f71be58fdb783  babeltrace-1.5.1.tar.bz2
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index fb5cb65..abb3bba 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LTTNG_BABELTRACE_SITE = http://www.efficios.com/files/babeltrace
--LTTNG_BABELTRACE_VERSION = 1.5.0
-+LTTNG_BABELTRACE_VERSION = 1.5.1
- LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
- LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
- LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+ > Fixes CVE-2016-8707 (Fix possible buffer overflow when writing
+ > compressed TIFFS). This CVE fix is included since 7.0.3-9:
+ >   http://git.imagemagick.org/repos/ImageMagick/commit/fde5f55af94f189f16958535a9c22b439d71ac93
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
