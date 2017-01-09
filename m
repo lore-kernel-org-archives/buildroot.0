@@ -1,56 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 9 Jan 2017 15:12:48 +0200
-Subject: [Buildroot] [PATCH] tslib: bump version to 1.3
-In-Reply-To: <1483966822-16568-1-git-send-email-martin.kepplinger@ginzinger.com>
-References: <1483966822-16568-1-git-send-email-martin.kepplinger@ginzinger.com>
-Message-ID: <20170109131247.j527lnxeiwpkwyuv@tarshish>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 9 Jan 2017 13:39:37 +0000
+Subject: [Buildroot] [PATCH] cjson: bump version to v1.2.0
+Message-ID: <20170109133937.39891-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Martin,
+Also remove the patch since it's already contained in this release.
 
-On Mon, Jan 09, 2017 at 02:00:22PM +0100, Martin Kepplinger wrote:
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-> ---
->  package/tslib/tslib.hash | 4 +++-
->  package/tslib/tslib.mk   | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-> index fc493e7..f22767b 100644
-> --- a/package/tslib/tslib.hash
-> +++ b/package/tslib/tslib.hash
-> @@ -1,2 +1,4 @@
->  # Locally generated
-> -sha256  b6450f4d1bc8f4fbbb796a2d1210aee3ccf9ecf302a368dddf279c63eb634833  tslib-1.2.tar.gz
-> +sha256  599f51c265158e7801b166e879e19759e8d3e5fdf2fa99c630698fe162a41d56  tslib-1.3.tar.gz
-> +sha256  cae81f835c50415e0087eaec397e6507dfbb1603bbc78607bc37f501591e1f3e  tslib-1.3.tar.bz2
-> +sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/cjson/cjson.hash | 3 +--
+ package/cjson/cjson.mk   | 8 +-------
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
-Why do we need all these hashes? We only use .tar.gz now. Moving to .tar.xz 
-would be nice, as it saves network bandwidth. In any case, we only need one 
-hash for the archive we actually use.
-
-baruch
-
-> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-> index 6437f60..d6e66b7 100644
-> --- a/package/tslib/tslib.mk
-> +++ b/package/tslib/tslib.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TSLIB_VERSION = 1.2
-> +TSLIB_VERSION = 1.3
->  TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
->  TSLIB_LICENSE = GPL, LGPL
->  TSLIB_LICENSE_FILES = COPYING
-
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index fc0ed28..a6370de 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,2 @@
+ # Locally computed:
+-sha256	3487795d54440bdbd41b4b8e7688889526f2f9a652639f6036b9965016c800e7	cjson-v1.1.0.tar.gz
+-sha256	8eea780ee5729275a5076002d92a4c7854ecb89968b26a81efeb5bd9828268a0	fcc89c4bb264d665929b00eeebc479a643a90896.patch
++sha256 df549298ea6515058648eaacc62bcc4f82fa34f8b93af7753e30eb35c3841c7d  cjson-v1.2.0.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 7ac7a71..f0fe63b 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,16 +4,10 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.1.0
++CJSON_VERSION = v1.2.0
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
+ CJSON_LICENSE_FILES = LICENSE
+ 
+-# This patch fixes -Werror=strict-overflow compile errors on sh4a and powerpc
+-# toolchains:
+-# http://autobuild.buildroot.net/results/3d899790acdc5c21733ff6f7f5a1b500e862ea0a
+-CJSON_PATCH = \
+-	https://github.com/DaveGamble/cjson/commit/fcc89c4bb264d665929b00eeebc479a643a90896.patch
+-
+ $(eval $(cmake-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.10.2
