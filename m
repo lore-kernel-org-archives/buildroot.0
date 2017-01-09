@@ -1,39 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jan 2017 13:46:51 +0100
-Subject: [Buildroot] [git commit] nmon: not available on uclibc/musl
-Message-ID: <20170109124755.941B481DDA@busybox.osuosl.org>
+Date: Mon, 09 Jan 2017 13:56:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: disable on blackfin
+In-Reply-To: <20161227104456.24379-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 27 Dec 2016 11:44:56 +0100")
+References: <20161227104456.24379-1-bernd.kuhls@t-online.de>
+Message-ID: <87inpoo0hz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a96d58f6bab15a27193b0fc3188e9a5603237d89
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/70c/70ce1aa234e321884469d04282f80750bcf9abc8/
+ > Fixes
+ > http://autobuild.buildroot.net/results/533/533810941afbdd71cdd3eaeeb654ec3728daade0/
 
-nmon uses fstab.h which is only provided by glibc.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nmon/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Committed after extending the commit message, thanks.
 
-diff --git a/package/nmon/Config.in b/package/nmon/Config.in
-index 9a620f4..574ced3 100644
---- a/package/nmon/Config.in
-+++ b/package/nmon/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_NMON
- 	bool "nmon"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # fstab.h
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Nmon is short for Nigel's performance Monitor for Linux
- 
- 	  http://nmon.sourceforge.net/pmwiki.php
-+
-+comment "nmon needs a glibc toolchain"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
+-- 
+Bye, Peter Korsgaard
