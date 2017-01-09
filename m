@@ -1,83 +1,77 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  9 Jan 2017 15:56:14 -0500
-Subject: [Buildroot] [PATCH 4/4] policycoreutils: Add audit2allow support.
+Date: Mon,  9 Jan 2017 15:56:12 -0500
+Subject: [Buildroot] [PATCH 2/4] sepolgen: Add target compile option.
 In-Reply-To: <20170109205614.25011-1-aduskett@codeblue.com>
 References: <20170109205614.25011-1-aduskett@codeblue.com>
-Message-ID: <20170109205614.25011-4-aduskett@codeblue.com>
+Message-ID: <20170109205614.25011-2-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Policycoreutils is currently built without audit2allow support enabled.
-This patch adds the ability to build policycoreutils with audit2allow
-support.
+If a user wants to use the tool audit2allow provided by
+policycoreutils, they will need the python bindings from
+sepolgen on the target file system.
+
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/policycoreutils/Config.in          | 14 ++++++++++++++
- package/policycoreutils/policycoreutils.mk | 16 ++++++++++++++++
+ package/sepolgen/Config.in   |  8 ++++++++
+ package/sepolgen/sepolgen.mk | 22 ++++++++++++++++++++++
  2 files changed, 30 insertions(+)
+ create mode 100644 package/sepolgen/Config.in
 
-diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
-index 53238b4..d2ebb2f 100644
---- a/package/policycoreutils/Config.in
-+++ b/package/policycoreutils/Config.in
-@@ -45,6 +45,20 @@ config BR2_PACKAGE_POLICYCOREUTILS
- 
- if BR2_PACKAGE_POLICYCOREUTILS
- 
-+config BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW
-+	bool "audit2allow utility"
-+	select BR2_PACKAGE_SEPOLGEN
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_USE_MMU # glib2
+diff --git a/package/sepolgen/Config.in b/package/sepolgen/Config.in
+new file mode 100644
+index 0000000..f43a1bc
+--- /dev/null
++++ b/package/sepolgen/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_SEPOLGEN
++	bool "sepolgen"
 +	help
-+	  Enable audit2allow to be built
-+
-+comment "audit2allow requires python"
-+	depends on !BR2_PACKAGE_PYTHON
-+	depends on !BR2_PACKAGE_PYTHON3	  
-+	  
- config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
- 	bool "restorecond"
- 	select BR2_PACKAGE_LIBGLIB2
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 86639cc..5e1d536 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -39,6 +39,16 @@ POLICYCOREUTILS_MAKE_OPTS += \
- 	CPPFLAGS="$(TARGET_CPPFLAGS) -U_FILE_OFFSET_BITS" \
- 	ARCH="$(BR2_ARCH)"
++	  This package contains a Python module that forms the core of the 
++	  modern audit2allow (which is a part of the package policycoreutils). 
++	  It contains infrastructure for parsing SELinux related messages as 
++	  produced by the audit system. 
++	  It has facilities for generating policy based on required access.
+diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
+index 137eaed..c40bbb3 100644
+--- a/package/sepolgen/sepolgen.mk
++++ b/package/sepolgen/sepolgen.mk
+@@ -9,6 +9,27 @@ SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/fi
+ SEPOLGEN_LICENSE = GPLv2
+ SEPOLGEN_LICENSE_FILES = COPYING
  
++
++
 +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+POLICYCOREUTILS_DEPENDENCIES += python3
-+POLICYCOREUTILS_MAKE_OPTS += \
-+	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
++SEPOLGEN_DEPENDENCIES = python3
++SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
++	PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
 +else
-+POLICYCOREUTILS_DEPENDENCIES += python
-+POLICYCOREUTILS_MAKE_OPTS += \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
++SEPOLGEN_DEPENDENCIES = python
++SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
++	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
 +endif
 +
- POLICYCOREUTILS_MAKE_DIRS = \
- 	load_policy newrole run_init \
- 	secon semodule semodule_deps \
-@@ -50,6 +60,12 @@ ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND),y)
- POLICYCOREUTILS_MAKE_DIRS += restorecond
- POLICYCOREUTILS_DEPENDENCIES += libglib2
- endif
++define SEPOLGEN_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
++endef
 +
-+ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW),y)
-+POLICYCOREUTILS_DEPENDENCIES += sepolgen
-+POLICYCOREUTILS_MAKE_DIRS += audit2allow
-+endif
++define SEPOLGEN_INSTALL_TARGET_CMDS
++	$(MAKE_ENV) $(MAKE) -C $(@D) $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR) install
++endef
 +
- # We need to pass DESTDIR at build time because it's used by
- # policycoreutils build system to find headers and libraries.
- define POLICYCOREUTILS_BUILD_CMDS
++
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ HOST_SEPOLGEN_DEPENDENCIES = host-python3
+ HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
+@@ -28,3 +49,4 @@ define HOST_SEPOLGEN_INSTALL_CMDS
+ endef
+ 
+ $(eval $(host-generic-package))
++$(eval $(generic-package))
 -- 
 2.9.3
