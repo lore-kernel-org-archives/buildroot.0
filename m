@@ -1,43 +1,42 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 9 Jan 2017 14:34:40 +0000
-Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.4-3 (security)
-Message-ID: <20170109143440.441-1-Vincent.Riera@imgtec.com>
+Date: Mon, 9 Jan 2017 15:22:08 +0000
+Subject: [Buildroot] [PATCH] lttng-babeltrace: bump version to 1.5.1
+Message-ID: <20170109152208.27119-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2016-8707 (Fix possible buffer overflow when writing
-compressed TIFFS). This CVE fix is included since 7.0.3-9:
-  http://git.imagemagick.org/repos/ImageMagick/commit/fde5f55af94f189f16958535a9c22b439d71ac93
-
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lttng-babeltrace/lttng-babeltrace.hash | 6 +++---
+ package/lttng-babeltrace/lttng-babeltrace.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 9eb3a9e..e47c9b1 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 dc128b281c255d71d754934408d278b3ca314253103ca2501cd0b8d5ec98db74  ImageMagick-7.0.3-8.tar.xz
-+sha256 bc09ea103a82d1c2c093889eda7e36dd0aa7aa98a06c55de4b73932838459fc4  ImageMagick-7.0.4-3.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index f384fc3..ccd580f 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.hash b/package/lttng-babeltrace/lttng-babeltrace.hash
+index 7f91b8b..8f29692 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.hash
++++ b/package/lttng-babeltrace/lttng-babeltrace.hash
+@@ -1,3 +1,3 @@
+-# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.0.tar.bz2.{md5,sha1}
+-md5 43696383e44d1b85173db7cbd0335f06  babeltrace-1.5.0.tar.bz2
+-sha1 13f106951c418632a2155ebe3cea51fa4929e748  babeltrace-1.5.0.tar.bz2
++# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.1.tar.bz2.{md5,sha1}
++md5 3f7d29ba2821a966d24759a928a15cdf  babeltrace-1.5.1.tar.bz2
++sha1 07bffefed8ef68317f26e043ae5f71be58fdb783  babeltrace-1.5.1.tar.bz2
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index fb5cb65..abb3bba 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.3-8
-+IMAGEMAGICK_VERSION = 7.0.4-3
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+ LTTNG_BABELTRACE_SITE = http://www.efficios.com/files/babeltrace
+-LTTNG_BABELTRACE_VERSION = 1.5.0
++LTTNG_BABELTRACE_VERSION = 1.5.1
+ LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+ LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
+ LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
 -- 
 2.10.2
