@@ -1,44 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jan 2017 16:49:50 +0100
-Subject: [Buildroot] [git commit] lttng-babeltrace: bump version to 1.5.1
-Message-ID: <20170109155019.1D8F281D71@busybox.osuosl.org>
+Date: Mon, 9 Jan 2017 16:39:50 +0100
+Subject: [Buildroot] [git commit] gnutls: security bump to version 3.5.8
+Message-ID: <20170109155019.110DB81D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5c2d063278d876b0b5555f06e1e2e8e1b57bbcf
+commit: https://git.buildroot.net/buildroot/commit/?id=9b347c4acd15afd1368c2d1d24ca73557cb43ceb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+The 3.5.x has been promoted to stable, hence 3.4.x is deprecated and
+3.3.x kept as old-stable.
+
+libdane now specifies LGPLv2.1+ so drop the README kludge (which is also
+gone regarding licensing).
+
+libunistring is a new dependency, even though gnutls ships a builtin version
+we prefer to use unbundled to avoid duplication with other users and target
+size growth.
+
+Fixes:
+
+GNUTLS-SA-2017-01 - It was found using the OSS-FUZZ fuzzer
+infrastructure that decoding a specially crafted X.509 certificate with
+Proxy Certificate Information extension present could lead to a double
+free.
+GNUTLS-SA-2017-02 - It was found using the OSS-FUZZ fuzzer
+infrastructure that decoding a specially crafted OpenPGP certificate
+could lead to heap and stack overflows.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lttng-babeltrace/lttng-babeltrace.hash | 6 +++---
- package/lttng-babeltrace/lttng-babeltrace.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gnutls/Config.in   |  1 +
+ package/gnutls/gnutls.hash |  2 +-
+ package/gnutls/gnutls.mk   | 13 +++++--------
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.hash b/package/lttng-babeltrace/lttng-babeltrace.hash
-index 7f91b8b..8f29692 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.hash
-+++ b/package/lttng-babeltrace/lttng-babeltrace.hash
-@@ -1,3 +1,3 @@
--# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.0.tar.bz2.{md5,sha1}
--md5 43696383e44d1b85173db7cbd0335f06  babeltrace-1.5.0.tar.bz2
--sha1 13f106951c418632a2155ebe3cea51fa4929e748  babeltrace-1.5.0.tar.bz2
-+# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.1.tar.bz2.{md5,sha1}
-+md5 3f7d29ba2821a966d24759a928a15cdf  babeltrace-1.5.1.tar.bz2
-+sha1 07bffefed8ef68317f26e043ae5f71be58fdb783  babeltrace-1.5.1.tar.bz2
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index fb5cb65..abb3bba 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index 998e213..cfb7cb3 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GNUTLS
+ 	bool "gnutls"
+ 	select BR2_PACKAGE_LIBTASN1
++	select BR2_PACKAGE_LIBUNISTRING
+ 	select BR2_PACKAGE_NETTLE
+ 	select BR2_PACKAGE_PCRE
+ 	depends on BR2_USE_WCHAR
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 897562b..121f75a 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	9b50e8a670d5e950425d96935c7ddd415eb6f8079615a36df425f09a3143172e	gnutls-3.4.17.tar.xz
++sha256	0e97f243ae72b70307d684b84c7fe679385aa7a7a0e37e5be810193dcc17d4ff	gnutls-3.5.8.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index af7621c..4fab812 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -4,17 +4,13 @@
+ #
  ################################################################################
  
- LTTNG_BABELTRACE_SITE = http://www.efficios.com/files/babeltrace
--LTTNG_BABELTRACE_VERSION = 1.5.0
-+LTTNG_BABELTRACE_VERSION = 1.5.1
- LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
- LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
- LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+-GNUTLS_VERSION_MAJOR = 3.4
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17
++GNUTLS_VERSION_MAJOR = 3.5
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+-# README says that the core library is under LGPLv2.1+, but a few
+-# files in libdane specify LGPLv3+. It seems to be a mistake, and we
+-# therefore trust the README file here. A bug was reported upstream at
+-# https://gitlab.com/gnutls/gnutls/issues/109.
+ GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
+-GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER README
+-GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
++GNUTLS_LICENSE_FILES = doc/COPYING doc/COPYING.LESSER
++GNUTLS_DEPENDENCIES = host-pkgconf libunistring libtasn1 nettle pcre
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+ 	--disable-guile \
+@@ -23,6 +19,7 @@ GNUTLS_CONF_OPTS = \
+ 	--enable-local-libopts \
+ 	--enable-openssl-compatibility \
+ 	--with-libnettle-prefix=$(STAGING_DIR)/usr \
++	--with-libunistring-prefix=$(STAGING_DIR)/usr \
+ 	--with-librt-prefix=$(STAGING_DIR) \
+ 	--without-tpm \
+ 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools)
