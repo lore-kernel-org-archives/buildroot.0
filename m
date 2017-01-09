@@ -1,33 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jan 2017 21:15:13 +0100
-Subject: [Buildroot] [git commit] configs/warp7: Bump U-Boot to 2017.01
-	version
-Message-ID: <20170109201549.1C3B580450@busybox.osuosl.org>
+Date: Mon, 9 Jan 2017 21:14:08 +0100
+Subject: [Buildroot] [git commit] ser2net: bump version to 3.3
+Message-ID: <20170109201548.C4DA0818FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f95c5ee4de69fc015307cd612258dd8d17d045c
+commit: https://git.buildroot.net/buildroot/commit/?id=9cc726500cca6ce2de715f6e45f68f93d4de77dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/warp7_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ser2net/ser2net.hash | 2 +-
+ package/ser2net/ser2net.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-index 90a7338..c18a782 100644
---- a/configs/warp7_defconfig
-+++ b/configs/warp7_defconfig
-@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp7"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+index 1b93643..ae45e9c 100644
+--- a/package/ser2net/ser2net.hash
++++ b/package/ser2net/ser2net.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 e91cf85ab2c1769e17be7726b133f8f3ad197e9d4b445bb0b0d2f3f97f88a083  ser2net-3.2.tar.gz
++sha256 3d1cef5f48df8291e57d4d7d4eac2fc809ae644a5524ffca4aebef0f4e4153dc  ser2net-3.3.tar.gz
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index b33512e..a786b1a 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # wifi firmware for brcm43430
+-SER2NET_VERSION = 3.2
++SER2NET_VERSION = 3.3
+ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPLv2+
+ SER2NET_LICENSE_FILES = COPYING
