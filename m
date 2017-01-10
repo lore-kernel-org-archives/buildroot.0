@@ -1,41 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Jan 2017 15:51:17 +0100
-Subject: [Buildroot] [git commit] nano: bump version to 2.7.4
-Message-ID: <20170110145137.95E7D81E4B@busybox.osuosl.org>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Tue, 10 Jan 2017 13:06:31 -0200
+Subject: [Buildroot] [PATCH] configs/mx6sx_udoo_neo: Bump to U-Boot 2017.01
+Message-ID: <1484060791-32174-1-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2200ece1d9c9dd221e7e69cb02a52ba03e4242c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bump to U-Boot 2017.01, which supports mx6sx_udoo_neo by default.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Remove the U-Boot patch that we used for the previous version.
+
+Also adjust the 'fdtfile' name as it has been changed in U-Boot
+mainline.
+
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/udoo/neo/boot.scr.txt                  |   2 +-
+ board/udoo/neo/patches/uboot/0001-udoo.patch | 691 ---------------------------
+ configs/mx6sx_udoo_neo_defconfig             |   2 +-
+ 3 files changed, 2 insertions(+), 693 deletions(-)
+ delete mode 100644 board/udoo/neo/patches/uboot/0001-udoo.patch
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 94fd990..aa3e27b 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 d926ef5060d23bafec75dab9328bb9b9df9a08e58c56b9061d686f5698770bfc  nano-2.7.3.tar.xz
-+sha256 752170643039e2c95a433de357f0c70a8c4c4c561a90a7e7259a63e225b659b9  nano-2.7.4.tar.xz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index da92268..4632bed 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NANO_VERSION_MAJOR = 2.7
--NANO_VERSION = $(NANO_VERSION_MAJOR).3
-+NANO_VERSION = $(NANO_VERSION_MAJOR).4
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPLv3+
+diff --git a/board/udoo/neo/boot.scr.txt b/board/udoo/neo/boot.scr.txt
+index f647db3..7a8aa4b 100644
+--- a/board/udoo/neo/boot.scr.txt
++++ b/board/udoo/neo/boot.scr.txt
+@@ -2,6 +2,6 @@ setenv finduuid "part uuid mmc 0:1 uuid"
+ run finduuid
+ run findfdt
+ setenv bootargs "console=ttymxc0,115200 root=PARTUUID=${uuid} rootwait rootfstype=ext4"
+-load mmc 0:1 ${fdt_addr} boot/${fdt_file}
++load mmc 0:1 ${fdt_addr} boot/${fdtfile}
+ load mmc 0:1 ${loadaddr} boot/zImage
+ bootz ${loadaddr} - ${fdt_addr}
+diff --git a/board/udoo/neo/patches/uboot/0001-udoo.patch b/board/udoo/neo/patches/uboot/0001-udoo.patch
+deleted file mode 100644
+index ec1e00d..0000000
+diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
+index 1de19c0..a465eb9 100644
+--- a/configs/mx6sx_udoo_neo_defconfig
++++ b/configs/mx6sx_udoo_neo_defconfig
+@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="udoo_neo"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-- 
+2.7.4
