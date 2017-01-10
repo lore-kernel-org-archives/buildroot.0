@@ -1,36 +1,32 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 10 Jan 2017 10:05:52 -0600
-Subject: [Buildroot] [PATCH 1/1] package/ustr: fix ldconfig for host build
-Message-ID: <1484064352-50148-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Jan 2017 21:03:48 +0100
+Subject: [Buildroot] [PATCH 2/2] php: bump version to 7.1.0 (security)
+In-Reply-To: <20170109171334.57406-2-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 9 Jan 2017 17:13:34 +0000")
+References: <20170109171334.57406-1-Vincent.Riera@imgtec.com>
+ <20170109171334.57406-2-Vincent.Riera@imgtec.com>
+Message-ID: <87ziiyk7h7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-The host build of the ustr package also needs to not run the ldconfig to
-prevent a build failure caused by the symlink creating a race condition.
-Related commit for target build change was 22069232.
+ > Fixed CVEs:
+ >  - CVE-2016-9933 (imagefilltoborder stackoverflow on truecolor images)
+ >    http://bugs.php.net/72696
+ >  - CVE-2016-9934 (NULL Pointer Dereference in WDDX Packet
+ >    Deserialization with PDORow)
+ >    http://bugs.php.net/73331
 
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
- package/ustr/ustr.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Full ChangeLog:
+ >   http://php.net/ChangeLog-7.php#7.1.0
 
-diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
-index b3de50b..715914c 100644
---- a/package/ustr/ustr.mk
-+++ b/package/ustr/ustr.mk
-@@ -26,6 +26,7 @@ USTR_INSTALL_STAGING = YES
- USTR_MAKE_OPTS = all all-shared
- 
- USTR_CONF_OPTS += LDCONFIG=/bin/true
-+HOST_USTR_CONF_OPTS += LDCONFIG=/bin/true
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
