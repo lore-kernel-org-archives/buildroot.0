@@ -1,44 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Jan 2017 21:02:20 +0100
-Subject: [Buildroot] [git commit] php-imagick: bump version to 3.4.3RC1
-Message-ID: <20170110200748.724C481916@busybox.osuosl.org>
+Date: Tue, 10 Jan 2017 21:02:52 +0100
+Subject: [Buildroot] [git commit] php: bump version to 7.1.0 (security)
+Message-ID: <20170110200748.7D7AE81916@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cfddd92b67dc3208e89395368972d780e4d7cc1
+commit: https://git.buildroot.net/buildroot/commit/?id=e470b3fde7fe7e69fc5ec57fe8a5c8a4cd66c8cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version is marked as "stable" on php-imagick's website, plus is
-necessary for the upcoming php-7.1 version bump.
+Fixed CVEs:
+ - CVE-2016-9933 (imagefilltoborder stackoverflow on truecolor images)
+   http://bugs.php.net/72696
+ - CVE-2016-9934 (NULL Pointer Dereference in WDDX Packet
+   Deserialization with PDORow)
+   http://bugs.php.net/73331
+
+Full ChangeLog:
+  http://php.net/ChangeLog-7.php#7.1.0
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php-imagick/php-imagick.hash | 2 +-
- package/php-imagick/php-imagick.mk   | 2 +-
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php-imagick/php-imagick.hash b/package/php-imagick/php-imagick.hash
-index 551bed6..e991237 100644
---- a/package/php-imagick/php-imagick.hash
-+++ b/package/php-imagick/php-imagick.hash
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 0424e46..5e4bdcb 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 a729fbd69e0aa145824d61dc9225bfb636dcd8421874a5667ac3822e609449e1  imagick-3.4.1.tgz
-+sha256 50bbc46e78cd6e1ea5d7660be1722258e60b1729483ca14b02da7cf9f5ed3e6a  imagick-3.4.3RC1.tgz
-diff --git a/package/php-imagick/php-imagick.mk b/package/php-imagick/php-imagick.mk
-index 84cc311..ddcefda 100644
---- a/package/php-imagick/php-imagick.mk
-+++ b/package/php-imagick/php-imagick.mk
+ # From http://php.net/downloads.php
+-sha256 0f1dff6392a1cc2ed126b9695f580a2ed77eb09d2c23b41cabfb41e6f27a8c89  php-7.0.14.tar.xz
++sha256 a810b3f29c21407c24caa88f50649320d20ba6892ae1923132598b8a0ca145b6  php-7.1.0.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index e8c8f4b..2ba70aa 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_IMAGICK_VERSION = 3.4.1
-+PHP_IMAGICK_VERSION = 3.4.3RC1
- PHP_IMAGICK_SOURCE = imagick-$(PHP_IMAGICK_VERSION).tgz
- PHP_IMAGICK_SITE = http://pecl.php.net/get
- PHP_IMAGICK_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-PHP_VERSION = 7.0.14
++PHP_VERSION = 7.1.0
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
