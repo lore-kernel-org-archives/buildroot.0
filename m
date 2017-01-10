@@ -1,37 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 Jan 2017 10:06:46 -0300
-Subject: [Buildroot] [PATCH] collectd: fix libgcrypt support
-Message-ID: <20170110130646.16400-1-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 10 Jan 2017 13:46:31 +0000
+Subject: [Buildroot] [PATCH] nano: bump version to 2.7.4
+Message-ID: <20170110134631.38055-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the newer versions the collectd configure script expects
-libgcrypt-config as parameter rather than the location for the
-libgcrypt-config script. Adjust the package to account for this.
-Fixes:
-http://autobuild.buildroot.net/results/a49/a494bc905e4509528c4932f76a094b9ea8e70bd3/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/collectd/collectd.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 7ab7dd4..fa6ebae 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -175,8 +175,7 @@ endif
- # network can use libgcrypt
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- COLLECTD_DEPENDENCIES += libgcrypt
--COLLECTD_CONF_OPTS += --with-libgcrypt=$(STAGING_DIR)/usr
--COLLECTD_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-+COLLECTD_CONF_OPTS += --with-libgcrypt=$(STAGING_DIR)/usr/bin/libgcrypt-config
- else
- COLLECTD_CONF_OPTS += --with-libgcrypt=no
- endif
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 94fd990..aa3e27b 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 d926ef5060d23bafec75dab9328bb9b9df9a08e58c56b9061d686f5698770bfc  nano-2.7.3.tar.xz
++sha256 752170643039e2c95a433de357f0c70a8c4c4c561a90a7e7259a63e225b659b9  nano-2.7.4.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index da92268..4632bed 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 2.7
+-NANO_VERSION = $(NANO_VERSION_MAJOR).3
++NANO_VERSION = $(NANO_VERSION_MAJOR).4
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPLv3+
 -- 
 2.10.2
