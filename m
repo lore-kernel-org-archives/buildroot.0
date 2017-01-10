@@ -1,7 +1,7 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 10 Jan 2017 23:23:42 +0100
-Subject: [Buildroot] [PATCH] package/mpd: fix static linking with tremor
-Message-ID: <20170110222342.21045-1-joerg.krause@embedded.rocks>
+Date: Tue, 10 Jan 2017 23:39:25 +0100
+Subject: [Buildroot] [PATCH v2] package/mpd: fix static linking with tremor
+Message-ID: <20170110223925.2896-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,7 +17,13 @@ Help mpd to find tremor by providing the path to the library and passing
 LIBS through the environment. We use the host pkg-config tool to get the
 correct values from the vorbisidec.pc file.
 
+Fixes:
+http://autobuild.buildroot.net/results/6b9/6b97403e70caa12c32494b1c82ce61d3e4e456f6/
+
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+Changes v2:
+  - Add autobuild link
 ---
  package/mpd/mpd.mk | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
