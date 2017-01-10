@@ -1,103 +1,29 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Mon, 9 Jan 2017 15:07:49 -0800
-Subject: [Buildroot] [RFC] external toolchain scanner
-In-Reply-To: <df15f689-fb98-5710-6c90-2ee0e5efb0be@mentor.com>
-References: <303be768-557b-3b02-c4fd-ae11ec2858ec@mentor.com>
- <8037285d-a8b2-39c9-30c4-cba364583ae9@mentor.com>
- <20161208210228.GA27341@free.fr>
- <df15f689-fb98-5710-6c90-2ee0e5efb0be@mentor.com>
-Message-ID: <c542e7c5-39e9-5d1f-1611-63ad49d26371@mentor.com>
+From: Stewart Smith <stewart@linux.vnet.ibm.com>
+Date: Tue, 10 Jan 2017 12:38:16 +1100
+Subject: [Buildroot] [PATCH] kexec-lite: add KEXEC_LITE_LICENSE_FILES
+Message-ID: <20170110013816.17805-1-stewart@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/19/2016 12:07 PM, Hollis Blanchard wrote:
-> On 12/08/2016 01:02 PM, Yann E. MORIN wrote:
->> Well, finding the correct syseroot is not trivial: you need to know the
->> CFLAGS that are to be used, because they directly influence what sysroot
->> gcc will be searching for.
->>
->> ...
->>      # host/opt/ext-toolchain/bin/mips-img-linux-gnu-gcc -print-multi-lib
->>      mipsel-r2-hard-uclibc/lib;@muclibc at mips32r2@mabi=32 at EL
->>      mips-r2-hard-nan2008-uclibc/lib;@muclibc at mips32r2@mabi=32 at EB@mnan=2008
->>      mipsel-r2-hard-nan2008-uclibc/lib;@muclibc at mips32r2@mabi=32 at EL@mnan=2008
->>
->> Yes, that's 65 different ways to use a specific sysroot. The last three
->> lines mean:
->>
->>      when these flags flags are in use,              then use this sysroot
->>      -muclibc -mips32r2 -mabi=32 -EL                 mipsel-r2-hard-uclibc/lib
->>      -muclibc -mips32r2 -mabi=32 -EB -mnan=2008      mips-r2-hard-nan2008-uclibc/lib
->>      -muclibc -mips32r2 -mabi=32 -EL -mnan=2008      mipsel-r2-hard-nan2008-uclibc/lib
->>
->> The last two are pretty obvious: big vs. little endian. But when you
->> look at the antepenultimate line, you'll see that it differs only by not
->> specifying the way to treat NaNs.
->>
->> So, without the actual CFLAGS, you can't find the sysroot...
->>
->> And you can't know the actual CFLAGS untill you actually have a
->> Buildroot .config file.
->>
->> But you need the sysroot...
->>
->
-> A few thoughts:
->
-> 1. I can't escape the observation that what I have is actually useful 
-> for my limited case of a 1:1 target:sysroot relationship. Given that 
-> it works with Linaro's free downloadable toolchains, which I believe 
-> are popular, I suspect it could help many people.
->
-> 2. What options exactly determine the CFLAGS? If not a lot of 
-> processing is involved, those options could also be fed into the 
-> scanner for it to calculate CFLAGS independently, i.e.
->
->   * .config -> scanner -> combined.config
->   * combined.config -> make -> output/*
->
->
-> 3. Currently, the only user input for this script is the target 
-> architecture tuple, from which it tries to figure out the sysroot.
-> 3.1. Perhaps that should be flipped: the user could instead be 
-> required to input the sysroot, from which the target architecture 
-> could be determined?
-> 3.2. Perhaps the user could be required to input both the architecture 
-> /and/ sysroot. That would be an optional prompt if multiple sysroots 
-> are preset. Just like with the multiarch prompting that's done today, 
-> it could look like this:
-> aurora:buildroot$ ./support/scripts/scan-ext-toolchain \
-> > host/opt/ext-toolchain/bin/mips-img-linux-gnu-gcc
-> Toolchain supports multiple targets. Please choose one of the following:
->    aarch64-linux-gnu
->    arm-none-eabi
->    arm-none-linux-gnueabi
->
-> aurora:buildroot$ ./support/scripts/scan-ext-toolchain \
-> > -t arm-none-linux-gnueabi \
-> > host/opt/ext-toolchain/bin/mips-img-linux-gnu-gcc
-> Multiple sysroots available for target arm-none-linux-gnueabi. Please choose one of the following:
->    mipsel-r2-hard-uclibc
->    mips-r2-hard-nan2008-uclibc
->    mipsel-r2-hard-nan2008-uclibc
->
-> aurora:buildroot$ ./support/scripts/scan-ext-toolchain \
-> > -t arm-none-linux-gnueabi \
-> > -s mipsel-r2-hard-uclibc \
-> > host/opt/ext-toolchain/bin/mips-img-linux-gnu-gcc
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
-> ...
-> (I have no idea is this is feasible, just trying to figure out the 
-> right approach before I go digging.)
-Ping.
+Signed-off-by: Stewart Smith <stewart@linux.vnet.ibm.com>
+---
+ package/kexec-lite/kexec-lite.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hollis Blanchard <hollis_blanchard@mentor.com>
-Mentor Graphics Emulation Division
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170109/f5eb165b/attachment.html>
+diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
+index 2467306..b1b66fd 100644
+--- a/package/kexec-lite/kexec-lite.mk
++++ b/package/kexec-lite/kexec-lite.mk
+@@ -7,6 +7,7 @@
+ KEXEC_LITE_VERSION = 86e45a47e8cc1f598ccfa9b873a23067f4ecc36f
+ KEXEC_LITE_SITE = $(call github,antonblanchard,kexec-lite,$(KEXEC_LITE_VERSION))
+ KEXEC_LITE_LICENSE = GPLv2+
++KEXEC_LITE_LICENSE_FILES = COPYING
+ KEXEC_LITE_DEPENDENCIES = elfutils dtc
+ 
+ define KEXEC_LITE_BUILD_CMDS
+-- 
+2.9.3
