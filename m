@@ -1,28 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Jan 2017 15:34:33 +0100
-Subject: [Buildroot] Google feed API (Buildroot website)
-In-Reply-To: <CA+TH9Vn6uwiKdBF5u=fWyU0cyKpG-OtpzsxiY6P0m22O0eJUZQ@mail.gmail.com>
- (Angelo Compagnucci's message of "Wed, 11 Jan 2017 14:26:35 +0100")
-References: <CA+TH9Vn6uwiKdBF5u=fWyU0cyKpG-OtpzsxiY6P0m22O0eJUZQ@mail.gmail.com>
-Message-ID: <871sw9k6me.fsf@dell.be.48ers.dk>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Wed, 11 Jan 2017 17:19:50 +0100
+Subject: [Buildroot] [PATCH 1/1] rng-tools: Fix disabling package on non-x86
+	architectures.
+Message-ID: <20170111161950.28199-1-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+Commit 2f89476 ("package/libgpg-error: bump to version 1.23") introduced
+a BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS which was added as a dependency
+to all libgpg-error reverse dependencies.
 
- > Dear List,
- > As you may know Google discontinued it's feed api [1] so the Buildroot
- > website homepage is currently partially working.
+However, rng-tools only select libgpg-error if BR2_i386 || BR2_x86_64
+(for RDRAND) but the rng-tools dependency was added as
+BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && (BR2_i386 || BR2_x86_64),
+Therefore limiting rng-tools to the x86 architecture.
 
-Ahh yes :/
+This patch changes it as ..._ARCH_SUPPORT || !(BR2_i386 || BR2_x86_64).
 
- > Currently I'm looking for an alternative, but if my searches will be
- > fruitless, we should remove both the boxes at the end of the page.
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ package/rng-tools/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Agreed. Will you let me know the result of your search?
-
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index 0c538cc292..b00477d336 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_RNG_TOOLS
+ 	bool "rng-tools"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && (BR2_i386 || BR2_x86_64) # libgcrypt
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS || !(BR2_i386 || BR2_x86_64) # libgcrypt
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	# For rdrand ligcrypt is required and it's not obvious to users
+ 	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
 -- 
-Bye, Peter Korsgaard
+2.11.0
