@@ -1,63 +1,66 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 11 Jan 2017 15:22:22 -0600
-Subject: [Buildroot] [PATCH 1/1] python: disable _ssl.c build when
-	--disable-ssl
-Message-ID: <1484169742-28866-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: paul <paul.arssov@sbcglobal.net>
+Date: Wed, 11 Jan 2017 13:57:48 -0800
+Subject: [Buildroot] orange-pi build not working
+Message-ID: <5876AA5C.2010904@sbcglobal.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam <adam.allison@rockwellcollins.com>
+Hi ,
 
-When --disable-ssl is provided as an option,
-prevent the building of _ssl.c.
-Without this change, some GCC toolchains fail
-to build the _ssl module depending on the
-build configuration
-(we observed 4.85 worked and 4.9.4).
+I did pull the current 'buildroot' from git, and did a build with the 2 
+configs provided for orange pi boards -
+orangepi_pc_defcongfig
+orangepi_one_defcongfig
 
-Signed-off-by: Adam Allison <adam.allison@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
- package/python/111-optional-ssl.patch | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+Here are the results of testing for both types of builds -
+1. The hdmi supports is not enabled - nothing comes on screen
+2. The 'orange-pi' boards have dedicated serial port for boot logging; 
+the very first boot completes successfully - through the serial port I 
+am able to log-in as root, and run commands; for ex. 'uname -a' returns 
+'4.9.0' kernel;
+3. After first reboot, and any other boot the board reaches to the point 
+of starting the kernel but does not go any further.
 
-diff --git a/package/python/111-optional-ssl.patch b/package/python/111-optional-ssl.patch
-index 956d2a0..1584d64 100644
---- a/package/python/111-optional-ssl.patch
-+++ b/package/python/111-optional-ssl.patch
-@@ -4,7 +4,8 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
- ---
-  configure.in |    6 ++++++
-- 1 file changed, 6 insertions(+)
-+ setup.py     |    4 ++++
-+ 2 files changed, 10 insertions(+)
- 
- Index: b/configure.ac
- ===================================================================
-@@ -23,3 +24,20 @@ Index: b/configure.ac
-  AC_ARG_ENABLE(dbm,
-  	AS_HELP_STRING([--disable-dbm], [disable DBM]),
-  	[ if test "$enableval" = "no"; then
-+ 
-+Index: b/setup.py
-+===================================================================
-+--- a/setup.py
-++++ b/setup.py
-+@@ -806,6 +806,10 @@
-+                                       '/usr/contrib/ssl/lib/'
-+                                      ] )
-+ 
-++        if '--disable-ssl' in sysconfig.get_config_var("CONFIG_ARGS"):
-++            ssl_incs = None
-++            ssl_libs = None
-++
-+         if (ssl_incs is not None and
-+             ssl_libs is not None):
-+             exts.append( Extension('_ssl', ['_ssl.c'],
-+
--- 
-1.9.1
+Here is the output from the serial port logging -
+------------
+	..........
+Scanning mmc 0:1...
+
+Found U-Boot script /boot.scr
+
+reading /boot.scr
+
+300 bytes read in 14 ms (20.5 KiB/s)
+
+## Executing script at 43100000
+
+reading zImage
+
+3545792 bytes read in 189 ms (17.9 MiB/s)
+
+reading sun8i-h3-orangepi-pc.dtb
+
+13056 bytes read in 24 ms (531.3 KiB/s)
+
+## Flattened Device Tree blob at 43000000
+
+    Booting using the fdt blob at 0x43000000
+
+    Using Device Tree in place at 43000000, end 430062ff
+
+
+
+Starting kernel ...
+----------------
+
+Questions -
+1. Why is the hdmi port not enabled?
+2. Why does it boot completely only time, and then stops at 'Starting 
+kernel ...' ?
+
+
+Thanks,
+Paul.
