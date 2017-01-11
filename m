@@ -1,72 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Jan 2017 00:07:00 +0100
-Subject: [Buildroot] orange-pi build not working
-In-Reply-To: <5876AA5C.2010904@sbcglobal.net> (paul's message of "Wed, 11 Jan
- 2017 13:57:48 -0800")
-References: <5876AA5C.2010904@sbcglobal.net>
-Message-ID: <87wpe1i4bv.fsf@dell.be.48ers.dk>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Wed, 11 Jan 2017 15:55:07 -0800
+Subject: [Buildroot] [PATCH] boot-wrapper-aarch64: Allow users to
+ specify an initrd/initramfs file.
+In-Reply-To: <20161025235728.796804cc@free-electrons.com>
+References: <1475880304-21773-1-git-send-email-hollis_blanchard@mentor.com>
+ <1475880304-21773-2-git-send-email-hollis_blanchard@mentor.com>
+ <20161025235728.796804cc@free-electrons.com>
+Message-ID: <34543eb7-53cc-957b-31af-88a8319e3208@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "paul" == paul  <paul.arssov@sbcglobal.net> writes:
+On 10/25/2016 02:57 PM, Thomas Petazzoni wrote:
+>>   boot/boot-wrapper-aarch64/Config.in               |    8 ++++++++
+>>   boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk |    4 ++++
+>>   2 files changed, 12 insertions(+), 0 deletions(-)
+> [...]
+>
+> It should be something like:
+>
+> ifeq ($(BR2_TARGET_BOOT_WRAPPER_AARCH64_RAMDISK),y)
+> BOOT_WRAPPER_AARCH64_CONF_OPTS += --with-initrd=$(BINARIES_DIR)/rootfs.cpio
+> BOOT_WRAPPER_AARCH64_DEPENDENCIES += rootfs-cpio
+> endif
+I'm preparing a resend on this, but I'm having trouble with the dependency:
 
- > Hi ,
- > I did pull the current 'buildroot' from git, and did a build with the
- > 2 configs provided for orange pi boards -
- > orangepi_pc_defcongfig
- > orangepi_one_defcongfig
+$ rm /scratch1/hblancha/build/buildroot/images/rootfs.cpio
+$ make O=/scratch1/hblancha/build/buildroot boot-wrapper-aarch64-dirclean all
+[...]
+/scratch1/hblancha/build/buildroot/host/usr/bin/aarch64-buildroot-linux-gnu-ld: cannot find /scratch1/hblancha/build/buildroot/images/rootfs.cpio
 
- > Here are the results of testing for both types of builds -
- > 1. The hdmi supports is not enabled - nothing comes on screen
+I can see that rootfs-* is defined and used in fs/, but, well, ... it 
+doesn't seem to be working in this boot/ Makefile. Any advice?
 
-That is expected. There is currently no support in the mainline Linux
-kernel for the HDMI output on the H3 SoC used on these boards.
-
-> 2. The 'orange-pi' boards have dedicated serial port for boot logging;
- > the very first boot completes successfully - through the serial port I
- > am able to log-in as root, and run commands; for ex. 'uname -a'
- > returns '4.9.0' kernel;
- > 3. After first reboot, and any other boot the board reaches to the
- > point of starting the kernel but does not go any further.
-
- > Here is the output from the serial port logging -
- > ------------
- > 	..........
- > Scanning mmc 0:1...
-
- > Found U-Boot script /boot.scr
-
- > reading /boot.scr
-
- > 300 bytes read in 14 ms (20.5 KiB/s)
-
- > ## Executing script at 43100000
-
- > reading zImage
-
- > 3545792 bytes read in 189 ms (17.9 MiB/s)
-
- > reading sun8i-h3-orangepi-pc.dtb
-
- > 13056 bytes read in 24 ms (531.3 KiB/s)
-
- > ## Flattened Device Tree blob at 43000000
-
- >    Booting using the fdt blob at 0x43000000
-
- >    Using Device Tree in place at 43000000, end 430062ff
-
-
-
- > Starting kernel ...
-
-So no output at all after this? It sounds like your kernel image has
-somehow gotten corrupted. How did you reboot?
-
-Does it work again if you rewrite sdcard.img to the SD card?
-
--- 
-Bye, Peter Korsgaard
+Hollis Blanchard <hollis_blanchard@mentor.com>
+Mentor Graphics Emulation Division
