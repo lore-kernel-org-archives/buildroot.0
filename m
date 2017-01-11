@@ -1,52 +1,63 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 11 Jan 2017 20:56:27 +0100
-Subject: [Buildroot] [PATCH v2] package/mpd: fix static linking with
-	tremor
-In-Reply-To: <8760llkbqg.fsf@dell.be.48ers.dk>
-References: <20170110223925.2896-1-joerg.krause@embedded.rocks>
- <8760llkbqg.fsf@dell.be.48ers.dk>
-Message-ID: <1484164587.2499.1.camel@embedded.rocks>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 11 Jan 2017 15:22:22 -0600
+Subject: [Buildroot] [PATCH 1/1] python: disable _ssl.c build when
+	--disable-ssl
+Message-ID: <1484169742-28866-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2017-01-11 at 13:44 +0100, Peter Korsgaard wrote:
-> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
-> 
-> ?> Although tremor (the library is named vorbisidec) provides a pkg-
-> config
-> ?> file, mpd does not use it to find tremor. Since version 0.20 does
-> throw
-> ?> an error instead of a warning, that's why the issue was left
-> unnoticed
-> ?> by the autobuilders.
-> 
-> ?> Help mpd to find tremor by providing the path to the library and
-> passing
-> ?> LIBS through the environment. We use the host pkg-config tool to
-> get the
-> ?> correct values from the vorbisidec.pc file.
-> 
-> ?> Fixes:
-> ?> http://autobuild.buildroot.net/results/6b9/6b97403e70caa12c32494b1
-> c82ce61d3e4e456f6/
-> 
-> ?> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ?> ---
-> ?> Changes v2:
-> ?>???- Add autobuild link
-> 
-> It seems like this isn't sufficient:
-> 
-> http://autobuild.buildroot.net/results/2e3/2e3dbcdea34053675a0139c191
-> 1b6da1a6670e2c/build-end.log
-> 
-> Perhaps we need to add libogg to the pkg-config line as well?
+From: Adam <adam.allison@rockwellcollins.com>
 
-This is not a static linking issue. My read is that mpd forgets to
-consider OGG_LIBS in XIPH_LIBS. I will contact upstream about this
-issue.
+When --disable-ssl is provided as an option,
+prevent the building of _ssl.c.
+Without this change, some GCC toolchains fail
+to build the _ssl module depending on the
+build configuration
+(we observed 4.85 worked and 4.9.4).
 
-J?rg
+Signed-off-by: Adam Allison <adam.allison@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/python/111-optional-ssl.patch | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/package/python/111-optional-ssl.patch b/package/python/111-optional-ssl.patch
+index 956d2a0..1584d64 100644
+--- a/package/python/111-optional-ssl.patch
++++ b/package/python/111-optional-ssl.patch
+@@ -4,7 +4,8 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+ ---
+  configure.in |    6 ++++++
+- 1 file changed, 6 insertions(+)
++ setup.py     |    4 ++++
++ 2 files changed, 10 insertions(+)
+ 
+ Index: b/configure.ac
+ ===================================================================
+@@ -23,3 +24,20 @@ Index: b/configure.ac
+  AC_ARG_ENABLE(dbm,
+  	AS_HELP_STRING([--disable-dbm], [disable DBM]),
+  	[ if test "$enableval" = "no"; then
++ 
++Index: b/setup.py
++===================================================================
++--- a/setup.py
+++++ b/setup.py
++@@ -806,6 +806,10 @@
++                                       '/usr/contrib/ssl/lib/'
++                                      ] )
++ 
+++        if '--disable-ssl' in sysconfig.get_config_var("CONFIG_ARGS"):
+++            ssl_incs = None
+++            ssl_libs = None
+++
++         if (ssl_incs is not None and
++             ssl_libs is not None):
++             exts.append( Extension('_ssl', ['_ssl.c'],
++
+-- 
+1.9.1
