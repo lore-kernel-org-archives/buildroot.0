@@ -1,48 +1,36 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 10 Jan 2017 23:39:25 +0100
-Subject: [Buildroot] [PATCH v2] package/mpd: fix static linking with tremor
-Message-ID: <20170110223925.2896-1-joerg.krause@embedded.rocks>
+From: paul <paul.arssov@sbcglobal.net>
+Date: Tue, 10 Jan 2017 18:33:22 -0800
+Subject: [Buildroot] 'orangepi_one_defconfig' build issue
+Message-ID: <58759972.50708@sbcglobal.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Although tremor (the library is named vorbisidec) provides a pkg-config
-file, mpd does not use it to find tremor. Since version 0.20 does throw
-an error instead of a warning, that's why the issue was left unnoticed
-by the autobuilders.
+Hi,
 
-Help mpd to find tremor by providing the path to the library and passing
-LIBS through the environment. We use the host pkg-config tool to get the
-correct values from the vorbisidec.pc file.
+I did a build for orange-pi' board based on the recently posted 
+'orangepi_one_defconfig' , using buildroot-2016-11. There is this error 
+coming -
+--------------------
+       ...
+if ! support/scripts/check-kernel-headers.sh
+/media/p/data/ai-robo/bld-lnx/buildroot-2016.11/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot 
 
-Fixes:
-http://autobuild.buildroot.net/results/6b9/6b97403e70caa12c32494b1c82ce61d3e4e456f6/
+4.8; then exit 1; fi
+Incorrect selection of kernel headers: expected 4.8.x, got 4.9.x
+package/pkg-generic.mk:255: recipe for target
+'/media/p/data/ai-robo/bld-lnx/buildroot-2016.11/output/build/linux-headers-4.9/.stamp_staging_installed'
+failed
+make[1]: ***
+[/media/p/data/ai-robo/bld-lnx/buildroot-2016.11/output/build/linux-headers-4.9/.stamp_staging_installed]
+Error 1
+Makefile:76: recipe for target '_all' failed
+make: *** [_all] Error 2
+--------------------
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
-Changes v2:
-  - Add autobuild link
----
- package/mpd/mpd.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+I did try editing '.config' file but it still shows the same error.
+How do we solve the issue?
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 10e6b90dd..bee68436d 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -222,7 +222,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_MPD_TREMOR),y)
- MPD_DEPENDENCIES += tremor
--MPD_CONF_OPTS += --with-tremor
-+# Help mpd to find tremor in static linking scenarios
-+MPD_CONF_ENV += \
-+	TREMOR_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs vorbisidec`"
-+MPD_CONF_OPTS += --with-tremor=$(STAGING_DIR)/usr
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_TWOLAME),y)
--- 
-2.11.0
+Thanks, Paul.
