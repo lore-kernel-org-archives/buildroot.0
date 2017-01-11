@@ -1,41 +1,32 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Wed, 11 Jan 2017 17:19:50 +0100
-Subject: [Buildroot] [PATCH 1/1] rng-tools: Fix disabling package on non-x86
-	architectures.
-Message-ID: <20170111161950.28199-1-nicolas.cavallari@green-communications.fr>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
+Date: Wed, 11 Jan 2017 11:56:11 -0800
+Subject: [Buildroot] [PATCH] linux-headers: Account for LINUX_OVERRIDE_SRCDIR
+Message-ID: <20170111195611.837-1-andrew.smirnov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 2f89476 ("package/libgpg-error: bump to version 1.23") introduced
-a BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS which was added as a dependency
-to all libgpg-error reverse dependencies.
+Use the value of LINUX_OVERRIDE_SRCDIR as override directory when
+BR2_KERNEL_HEADERS_AS_KERNEL is specified.
 
-However, rng-tools only select libgpg-error if BR2_i386 || BR2_x86_64
-(for RDRAND) but the rng-tools dependency was added as
-BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && (BR2_i386 || BR2_x86_64),
-Therefore limiting rng-tools to the x86 architecture.
-
-This patch changes it as ..._ARCH_SUPPORT || !(BR2_i386 || BR2_x86_64).
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 ---
- package/rng-tools/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-headers/linux-headers.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index 0c538cc292..b00477d336 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && (BR2_i386 || BR2_x86_64) # libgcrypt
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS || !(BR2_i386 || BR2_x86_64) # libgcrypt
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	# For rdrand ligcrypt is required and it's not obvious to users
- 	select BR2_PACKAGE_LIBGCRYPT if BR2_i386 || BR2_x86_64
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 0900778..197efb4 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -10,6 +10,7 @@
+ ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+ 
+ LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
++LINUX_HEADERS_OVERRIDE_SRCDIR = $(LINUX_OVERRIDE_SRCDIR)
+ 
+ # Compute LINUX_HEADERS_SOURCE and LINUX_HEADERS_SITE from the configuration
+ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
 -- 
-2.11.0
+2.9.3
