@@ -1,54 +1,231 @@
-From: =?UTF-8?Q?Micha=c3=abl_Zweers?= <admin@gigabyte.getmyip.com>
-Date: Thu, 12 Jan 2017 16:14:45 +0100
-Subject: [Buildroot] orange-pi build not working
-In-Reply-To: <CACXmViYRiyOME4qytV0puMhMewe1A-J-24MEnkPaVKh9-=C72g@mail.gmail.com>
-References: <5876AA5C.2010904@sbcglobal.net> <87wpe1i4bv.fsf@dell.be.48ers.dk>
- <5876E124.30603@sbcglobal.net>
- <CACXmViYRiyOME4qytV0puMhMewe1A-J-24MEnkPaVKh9-=C72g@mail.gmail.com>
-Message-ID: <959b39b2-b40e-4725-6ff7-44e26479e19a@gigabyte.getmyip.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 12 Jan 2017 16:26:46 +0000
+Subject: [Buildroot] [Bug 9576] New: External tree with BR 2016.11 does not
+	work anymore
+Message-ID: <bug-9576-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=9576
 
-Sorry if this is unhelpful but have you told your kernel to use console ?
+            Bug ID: 9576
+           Summary: External tree with BR 2016.11 does not work anymore
+           Product: buildroot
+           Version: 2016.11
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: outtierbert at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-I can get the same results if  i dont set the console=... to uart in
-boot argument on my imx7 board.
+Hi all,
 
-kind regards,
-Micha?l
+I am using an external tree with buildroot. My external tree is in a seperate
+git repository and the buildroot source is fetched as a git submodule:
 
+./
+??? board
+??? ??? board definitions...
+??? buildroot
+??? ??? arch
+??? ??? board
+??? ??? boot
+??? ??? CHANGES
+??? ??? Config.in
+??? ??? Config.in.legacy
+??? ??? configs
+??? ??? COPYING
+??? ??? DEVELOPERS
+??? ??? dl
+??? ??? docs
+??? ??? fs
+??? ??? linux
+??? ??? Makefile
+??? ??? Makefile.legacy
+??? ??? output
+??? ??? package
+??? ??? README
+??? ??? support
+??? ??? system
+??? ??? toolchain
+??? Config.in
+??? configs
+??? ??? my_defconfig
+??? ??? several_defconfig
+??? external.desc
+??? external.mk
+??? package
+??? ??? custom package 1
+??? ??? custom package 2
+??? README.md
 
-On 12-1-2017 09:36, Peter Korsgaard wrote:
-> Hi,
-> 
-> Please keep the buildroot list in CC so others can help as well.
-> 
-> 
->>> So no output at all after this? It sounds like your kernel image has
->>> somehow gotten corrupted. How did you reboot?
->>
->> I did multiple builds with 4.8 and 4.9 kernels - same result. The
->> original/initial kernel is not corrupted because it boots ok.
->> I did reboot by either -
->> # reboot
->> or, disconnect/connect power
->> While power off/on may corrupt the sd card, 'reboot' cmd should not.
-> 
-> Funky, how are you powering the boards?
-> 
->> People did report on the list of functioning orange-pi-pc and orange-pi-one
->> boards.
->> How did they find the boards working?
-> 
-> I do have an orangepi-pc board stacked away here, and it did work in
-> the past. I'll try to find time this weekend to retest.
-> 
+This tree was working fine with buildroot 2016.08. To compile, I go into the
+/buildroot directory and run: make BR2_EXTERNAL=../ my_defconfig
+O=output/my_output and then make O=output/my_output
 
----
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+I followed the buildroot user manual on how to adapt an external tree for
+buildroot 2016.11. I created the external.desc file and changed every reference
+to $(BR2_EXTERNAL) to $(BR2_EXTERNAL_MY_EXTERNAL_TREE_PATH). Howver, now
+building does not work anymore. I get an infinite loop when making like in the
+snippet below. Can you help me diagnose the problem?
+
+Updating goal targets....
+Considering target file 'my_defconfig'.
+ File 'my_defconfig' does not exist.
+ Looking for an implicit rule for 'my_defconfig'.
+ Trying pattern rule with stem 'my'.
+ Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+ Trying implicit prerequisite '..//configs/my_defconfig'.
+ Trying rule prerequisite 'prepare-kconfig'.
+ Found an implicit rule for 'my_defconfig'.
+  Considering target file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+   Looking for an implicit rule for
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+   Trying pattern rule with stem 'c'.
+   Found an implicit rule for
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+   Finished prerequisites of target file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+  No need to remake target
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+  Considering target file '..//configs/my_defconfig'.
+   Looking for an implicit rule for '..//configs/my_defconfig'.
+   Trying pattern rule with stem 'my'.
+   Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+   Trying implicit prerequisite '..//configs/..//configs/my_defconfig'.
+   Trying rule prerequisite 'prepare-kconfig'.
+   Found an implicit rule for '..//configs/my_defconfig'.
+    Pruning file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+    Considering target file '..//configs/..//configs/my_defconfig'.
+     Looking for an implicit rule for '..//configs/..//configs/my_defconfig'.
+     Trying pattern rule with stem 'my'.
+     Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+     Trying implicit prerequisite
+'..//configs/..//configs/..//configs/my_defconfig'.
+     Trying rule prerequisite 'prepare-kconfig'.
+     Found an implicit rule for '..//configs/..//configs/my_defconfig'.
+      Pruning file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+      Considering target file
+'..//configs/..//configs/..//configs/my_defconfig'.
+       Looking for an implicit rule for
+'..//configs/..//configs/..//configs/my_defconfig'.
+       Trying pattern rule with stem 'my'.
+       Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+       Trying implicit prerequisite
+'..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+       Trying rule prerequisite 'prepare-kconfig'.
+       Found an implicit rule for
+'..//configs/..//configs/..//configs/my_defconfig'.
+        Pruning file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+        Considering target file
+'..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+         Looking for an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+         Trying pattern rule with stem 'my'.
+         Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+         Trying implicit prerequisite
+'..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+         Trying rule prerequisite 'prepare-kconfig'.
+         Found an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+          Pruning file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+          Considering target file
+'..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+           Looking for an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+           Trying pattern rule with stem 'my'.
+           Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+           Trying implicit prerequisite
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+           Trying rule prerequisite 'prepare-kconfig'.
+           Found an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+            Pruning file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+            Considering target file
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+             Looking for an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+             Trying pattern rule with stem 'my'.
+             Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+             Trying implicit prerequisite
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+             Trying rule prerequisite 'prepare-kconfig'.
+             Found an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+              Pruning file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+              Considering target file
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+               Looking for an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+               Trying pattern rule with stem 'my'.
+               Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+               Trying implicit prerequisite
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+               Trying rule prerequisite 'prepare-kconfig'.
+               Found an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                Pruning file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+                Considering target file
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                 Looking for an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                 Trying pattern rule with stem 'my'.
+                 Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+                 Trying implicit prerequisite
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                 Trying rule prerequisite 'prepare-kconfig'.
+                 Found an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                  Pruning file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+                  Considering target file
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                   Looking for an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                   Trying pattern rule with stem 'my'.
+                   Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+                   Trying implicit prerequisite
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                   Trying rule prerequisite 'prepare-kconfig'.
+                   Found an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                    Pruning file
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+                    Considering target file
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                     Looking for an implicit rule for
+'..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/..//configs/my_defconfig'.
+                     Trying pattern rule with stem 'my'.
+                     Trying rule prerequisite
+'/home/user/development/external-buildroot-tree/buildroot/output/my_output_folder/build/buildroot-config/conf'.
+                     Trying implicit prerequisite '..//configs/..//
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
