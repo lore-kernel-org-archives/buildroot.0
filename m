@@ -1,30 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 12 Jan 2017 20:35:50 +0000
-Subject: [Buildroot] [Bug 9576] External tree with BR 2016.11 does not work
-	anymore
-In-Reply-To: <bug-9576-163@https.bugs.busybox.net/>
-References: <bug-9576-163@https.bugs.busybox.net/>
-Message-ID: <bug-9576-163-ojo73yszt9@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 12 Jan 2017 21:38:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.6.14
+Message-ID: <20170112203821.26234-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9576
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Created attachment 6846
-  --> https://bugs.busybox.net/attachment.cgi?id=6846&action=edit
-Canonicalise paths to br2-external trees
-
-Hello,
-
-Could please try the attached patch?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 76966cf29..6412511d5 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,2 +1,2 @@
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.13.tar.xz.sha256
+-sha256 64a8a14fc5df92893d956868f144042891cc3e2d096bbf56241fec706635a8b7  freeswitch-1.6.13.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.14.tar.xz.sha256
++sha256 759cb79800c02b9476fcec4c88822942ed6183d9c2686015e4c293e22790cf35  freeswitch-1.6.14.tar.xz
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index ee3ff4fa8..8c107e990 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREESWITCH_VERSION = 1.6.13
++FREESWITCH_VERSION = 1.6.14
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ FREESWITCH_LICENSE = MPLv1.1, \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
