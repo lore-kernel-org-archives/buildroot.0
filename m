@@ -1,54 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Jan 2017 09:00:00 +0100
-Subject: [Buildroot] [PATCH] bind: security bump to version 9.11.0-P2
-Message-ID: <20170112080000.27394-1-peter@korsgaard.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 12 Jan 2017 09:03:15 +0100
+Subject: [Buildroot] [PATCH] package/mpd: add patch to fix linking with ogg
+Message-ID: <20170112080315.10962-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bugfixes:
+Building mpds internal static xiph library needs to link with libogg.
+Otherwise building mpd fails with:
 
- - CVE-2016-9131: A malformed response to an ANY query can cause an
-   assertion failure during recursion
+```
+/mips-linux-gnu/bin/ld: libxiph.a(libxiph_a-OggVisitor.o): undefined
+reference to symbol 'ogg_stream_packetout'
+```
 
- - CVE-2016-9147: An error handling a query response containing inconsistent
-   DNSSEC information could cause an assertion failure
+Add a patch which adds OGG_LIBS to XIPH_LIBS so that the linker finds
+the necessary ogg library.
 
- - CVE-2016-9444: An unusually-formed DS record response could cause an
-   assertion failure
+Fixes:
+http://autobuild.buildroot.net/results/9f0/9f062dc51daed5c5047faa8d79ecbd4e228f2572/
+http://autobuild.buildroot.net/results/1cc/1cc097c5022bd3161dc03b0866cb04075c944a64/
+http://autobuild.buildroot.net/results/2e3/2e3dbcdea34053675a0139c1911b6da1a6670e2c/
+.. and more.
 
- - CVE-2016-9778: An error handling certain queries using the
-   nxdomain-redirect feature could cause a REQUIRE assertion failure in db.c
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...002-Makefile.am-fix-linking-xiph-with-ogg.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/mpd/0002-Makefile.am-fix-linking-xiph-with-ogg.patch
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 3522149e9..dc472b121 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P1/bind-9.11.0-P1.tar.gz.sha256.asc
--sha256 094cd3134ba1b44f0910de1334f05a7dca68d583da038de40a8ad7a0cb1592c6  bind-9.11.0-P1.tar.gz
-+# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P2/bind-9.11.0-P2.tar.gz.sha256.asc
-+sha256 d651f83ce1c08c83d6ac8201685c4f2b5fdb79794f3a4f93c3948e0ef439c1e5  bind-9.11.0-P2.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index ee50acf3c..714308977 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.0-P1
-+BIND_VERSION = 9.11.0-P2
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+diff --git a/package/mpd/0002-Makefile.am-fix-linking-xiph-with-ogg.patch b/package/mpd/0002-Makefile.am-fix-linking-xiph-with-ogg.patch
+new file mode 100644
+index 000000000..1fe609508
+--- /dev/null
++++ b/package/mpd/0002-Makefile.am-fix-linking-xiph-with-ogg.patch
+@@ -0,0 +1,41 @@
++From 6ef588b2c230eae15f7f2563eca9d5f40c78d1d0 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Wed, 11 Jan 2017 21:06:37 +0100
++Subject: [PATCH] Makefile.am: fix linking xiph with ogg
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The internal static xiph library needs to link with libogg. Otherwise
++building mpd will fail:
++
++```
++/mips-linux-gnu/bin/ld: libxiph.a(libxiph_a-OggVisitor.o): undefined
++reference to symbol 'ogg_stream_packetout'
++```
++
++Upstream status: Pending
++http://mailman.blarg.de/pipermail/mpd-devel/2017-January/000594.html
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ Makefile.am | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index e0202b0cc..9030e68fb 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -614,7 +614,8 @@ libxiph_a_SOURCES += \
++ 	src/lib/xiph/OggStreamState.hxx
++ endif
++ 
++-XIPH_LIBS = libxiph.a
+++XIPH_LIBS = libxiph.a \
+++	$(OGG_LIBS)
++ 
++ endif
++ 
++-- 
++2.11.0
++
 -- 
 2.11.0
