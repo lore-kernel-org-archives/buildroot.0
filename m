@@ -1,39 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Jan 2017 09:36:06 +0100
-Subject: [Buildroot] orange-pi build not working
-In-Reply-To: <5876E124.30603@sbcglobal.net>
-References: <5876AA5C.2010904@sbcglobal.net> <87wpe1i4bv.fsf@dell.be.48ers.dk>
- <5876E124.30603@sbcglobal.net>
-Message-ID: <CACXmViYRiyOME4qytV0puMhMewe1A-J-24MEnkPaVKh9-=C72g@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 12 Jan 2017 12:04:51 +0100
+Subject: [Buildroot] [PATCH] package/ortp: bump version to 0.27.0
+Message-ID: <20170112110451.19511-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/ortp/ortp.hash | 2 +-
+ package/ortp/ortp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Please keep the buildroot list in CC so others can help as well.
-
-
->> So no output at all after this? It sounds like your kernel image has
->> somehow gotten corrupted. How did you reboot?
->
-> I did multiple builds with 4.8 and 4.9 kernels - same result. The
-> original/initial kernel is not corrupted because it boots ok.
-> I did reboot by either -
-> # reboot
-> or, disconnect/connect power
-> While power off/on may corrupt the sd card, 'reboot' cmd should not.
-
-Funky, how are you powering the boards?
-
-> People did report on the list of functioning orange-pi-pc and orange-pi-one
-> boards.
-> How did they find the boards working?
-
-I do have an orangepi-pc board stacked away here, and it did work in
-the past. I'll try to find time this weekend to retest.
-
+diff --git a/package/ortp/ortp.hash b/package/ortp/ortp.hash
+index 8b099a705..c990d96eb 100644
+--- a/package/ortp/ortp.hash
++++ b/package/ortp/ortp.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	0deb826b79b1fd329f7638821d5439dc343bc55bb122daa6c90d19116cfe8d9a	ortp-0.25.0.tar.gz
++sha256  eb61a833ab3ad80978d7007411240f46e9b2d1034373b9d9dfaac88c1b6ec0af  ortp-0.27.0.tar.gz
+diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
+index ca4a90d6d..864474f39 100644
+--- a/package/ortp/ortp.mk
++++ b/package/ortp/ortp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ORTP_VERSION = 0.25.0
++ORTP_VERSION = 0.27.0
+ ORTP_SITE = http://download.savannah.nongnu.org/releases/linphone/ortp/sources
+ 
+ ORTP_CONF_OPTS = --disable-strict
 -- 
-Bye, Peter Korsgaard
+2.11.0
