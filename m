@@ -1,71 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Jan 2017 09:17:05 +0100
-Subject: [Buildroot] [PATCH] linux-headers: Account for
- LINUX_OVERRIDE_SRCDIR
-In-Reply-To: <20170111195611.837-1-andrew.smirnov@gmail.com>
-References: <20170111195611.837-1-andrew.smirnov@gmail.com>
-Message-ID: <ecec3824-31cc-bcc0-ff85-bd7415cfee4e@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Jan 2017 09:36:06 +0100
+Subject: [Buildroot] orange-pi build not working
+In-Reply-To: <5876E124.30603@sbcglobal.net>
+References: <5876AA5C.2010904@sbcglobal.net> <87wpe1i4bv.fsf@dell.be.48ers.dk>
+ <5876E124.30603@sbcglobal.net>
+Message-ID: <CACXmViYRiyOME4qytV0puMhMewe1A-J-24MEnkPaVKh9-=C72g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
+
+Please keep the buildroot list in CC so others can help as well.
 
 
-On 11-01-17 20:56, Andrey Smirnov wrote:
-> Use the value of LINUX_OVERRIDE_SRCDIR as override directory when
-> BR2_KERNEL_HEADERS_AS_KERNEL is specified.
+>> So no output at all after this? It sounds like your kernel image has
+>> somehow gotten corrupted. How did you reboot?
+>
+> I did multiple builds with 4.8 and 4.9 kernels - same result. The
+> original/initial kernel is not corrupted because it boots ok.
+> I did reboot by either -
+> # reboot
+> or, disconnect/connect power
+> While power off/on may corrupt the sd card, 'reboot' cmd should not.
 
- Good catch! However, I'm not entirely convinced that we really want this.
+Funky, how are you powering the boards?
 
- A typical workflow would be to start from an upstream kernel, build a toolchain
-and userspace with it, and then begin with hacking on the kernel to e.g. add a
-driver. In that case it's rather unlikely that we really want to rebuild the
-toolchain, because the headers don't change.
+> People did report on the list of functioning orange-pi-pc and orange-pi-one
+> boards.
+> How did they find the boards working?
 
- That said, another possible scenario is that you don't configure any kernel
-version but just use the OVERRIDE_SRCDIR to point to a local directory. Since we
-removed the BR2_LINUX_KERNEL_CUSTOM_LOCAL, it's the only way to support that
-scenario. In addition, the principle of least surprise would suggest that
-BR2_KERNEL_HEADERS_AS_KERNEL would really work all the time, even if
-LINUX_OVERRIDE_SRCDIR is set.
-
- In short, I'm not really sure what is the best thing to do here. On thing though...
-
-
-> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> ---
->  package/linux-headers/linux-headers.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> index 0900778..197efb4 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -10,6 +10,7 @@
->  ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
->  
->  LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-> +LINUX_HEADERS_OVERRIDE_SRCDIR = $(LINUX_OVERRIDE_SRCDIR)
-
- ... At least we should use ?= here so it is still possible to override each one
-separately.
-
- If you resubmit, please include the pros and cons in the commit message for
-future reference.
-
- Regards,
- Arnout
-
->  # Compute LINUX_HEADERS_SOURCE and LINUX_HEADERS_SITE from the configuration
->  ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
-> 
+I do have an orangepi-pc board stacked away here, and it did work in
+the past. I'll try to find time this weekend to retest.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
