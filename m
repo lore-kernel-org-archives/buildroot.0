@@ -1,43 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Jan 2017 09:10:14 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] gnutls: bump to version
-	3.4.17
-Message-ID: <20170112081250.A06917FCCA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 12 Jan 2017 09:17:05 +0100
+Subject: [Buildroot] [PATCH] linux-headers: Account for
+ LINUX_OVERRIDE_SRCDIR
+In-Reply-To: <20170111195611.837-1-andrew.smirnov@gmail.com>
+References: <20170111195611.837-1-andrew.smirnov@gmail.com>
+Message-ID: <ecec3824-31cc-bcc0-ff85-bd7415cfee4e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fccadb5c12315eb32a2d2343647377153f5ee95b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 455487dbd1e6d616c1d82bafd4c6be6191d0c7b2)
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index f9725df..897562b 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	d99abb1b320771b58c949bab85e4b654dd1e3e9d92e2572204b7dc479d923927	gnutls-3.4.16.tar.xz
-+sha256	9b50e8a670d5e950425d96935c7ddd415eb6f8079615a36df425f09a3143172e	gnutls-3.4.17.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index d359a61..af7621c 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.4
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- # README says that the core library is under LGPLv2.1+, but a few
+On 11-01-17 20:56, Andrey Smirnov wrote:
+> Use the value of LINUX_OVERRIDE_SRCDIR as override directory when
+> BR2_KERNEL_HEADERS_AS_KERNEL is specified.
+
+ Good catch! However, I'm not entirely convinced that we really want this.
+
+ A typical workflow would be to start from an upstream kernel, build a toolchain
+and userspace with it, and then begin with hacking on the kernel to e.g. add a
+driver. In that case it's rather unlikely that we really want to rebuild the
+toolchain, because the headers don't change.
+
+ That said, another possible scenario is that you don't configure any kernel
+version but just use the OVERRIDE_SRCDIR to point to a local directory. Since we
+removed the BR2_LINUX_KERNEL_CUSTOM_LOCAL, it's the only way to support that
+scenario. In addition, the principle of least surprise would suggest that
+BR2_KERNEL_HEADERS_AS_KERNEL would really work all the time, even if
+LINUX_OVERRIDE_SRCDIR is set.
+
+ In short, I'm not really sure what is the best thing to do here. On thing though...
+
+
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+>  package/linux-headers/linux-headers.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index 0900778..197efb4 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -10,6 +10,7 @@
+>  ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+>  
+>  LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+> +LINUX_HEADERS_OVERRIDE_SRCDIR = $(LINUX_OVERRIDE_SRCDIR)
+
+ ... At least we should use ?= here so it is still possible to override each one
+separately.
+
+ If you resubmit, please include the pros and cons in the commit message for
+future reference.
+
+ Regards,
+ Arnout
+
+>  # Compute LINUX_HEADERS_SOURCE and LINUX_HEADERS_SITE from the configuration
+>  ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
