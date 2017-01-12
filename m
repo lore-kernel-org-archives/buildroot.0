@@ -1,44 +1,35 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 12 Jan 2017 10:30:57 -0200 (BRST)
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-01-11
-In-Reply-To: <20170112072936.BAC98207D1@mail.free-electrons.com>
-References: <20170112072936.BAC98207D1@mail.free-electrons.com>
-Message-ID: <1397774101.6731830.1484224257049.JavaMail.zimbra@datacom.ind.br>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 12 Jan 2017 13:38:30 +0000
+Subject: [Buildroot] [PATCH 1/2] vala: fix package suffix
+Message-ID: <20170112133831.12223-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Sent: Thursday, January 12, 2017 5:29:36 AM
-> Subject: [autobuild.buildroot.net] Your build results for 2017-01-11
+vala executable has a suffix and we reffer to it in our vala wrapper,
+but we assume that suffix is always the same as the major version. This
+can be wrong, so better to obtain the suffix number from the config.h
+file.
 
-> Hello,
-> 
-> This is the list of Buildroot build failures that occured on
-> 2017-01-11, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
-> 
-> Build failures related to your packages:
-> 
->     powerpc |                util-linux-2.29 |
->     http://autobuild.buildroot.net/results/3a2f228e0fa7b5cc28a13d49f48f1a6aef8d9d7a
->     powerpc |                util-linux-2.29 |
->     http://autobuild.buildroot.net/results/99e96069f652d511c6212a5bb6be29e68fb1747c
-> microblazeel |                util-linux-2.29 |
-> http://autobuild.buildroot.net/results/2dc5721aef93b7b410153bafad78248fac3db941
-> 
-> --
-> http://autobuild.buildroot.net
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/vala/vala.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Looks like the recent attempts to fix the util-linux + ncurses + wchar problem were
-not successful. I will take a look at this tonight.
-
-Carlos Santos (Casantos) - DATACOM, P&D
-?Something must be done. This is something. Therefore we must do it.?
-(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index dadfdfc..baa97ab 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -23,7 +23,7 @@ define HOST_VALA_INSTALL_WRAPPER
+ 		$(HOST_DIR)/usr/bin/vala
+ 	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
+ 		$(HOST_DIR)/usr/bin/valac
+-	$(SED) 's, at VALA_VERSION@,$(VALA_VERSION_MAJOR),' \
++	$(SED) 's, at VALA_VERSION@,$(shell grep PACKAGE_SUFFIX $(@D)/config.h | grep -o -E "[0-9]+\.[0-9]+"),' \
+ 		$(HOST_DIR)/usr/bin/vala \
+ 		$(HOST_DIR)/usr/bin/valac
+ endef
+-- 
+2.10.2
