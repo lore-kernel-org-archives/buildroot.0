@@ -1,53 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Jan 2017 09:11:26 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] php: bump version to
-	7.1.0 (security)
-Message-ID: <20170112081250.DD35A7FF33@busybox.osuosl.org>
+Date: Thu, 12 Jan 2017 09:10:42 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] gnutls: security bump to
+	version 3.5.8
+Message-ID: <20170112081250.ACE127FCCA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f4c1ac310db1f5681501cec79bf76dea47f0b41
+commit: https://git.buildroot.net/buildroot/commit/?id=2dd14234c9eacffcbe766d786dce0225b210604a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Fixed CVEs:
- - CVE-2016-9933 (imagefilltoborder stackoverflow on truecolor images)
-   http://bugs.php.net/72696
- - CVE-2016-9934 (NULL Pointer Dereference in WDDX Packet
-   Deserialization with PDORow)
-   http://bugs.php.net/73331
+The 3.5.x has been promoted to stable, hence 3.4.x is deprecated and
+3.3.x kept as old-stable.
 
-Full ChangeLog:
-  http://php.net/ChangeLog-7.php#7.1.0
+libdane now specifies LGPLv2.1+ so drop the README kludge (which is also
+gone regarding licensing).
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+libunistring is a new dependency, even though gnutls ships a builtin version
+we prefer to use unbundled to avoid duplication with other users and target
+size growth.
+
+Fixes:
+
+GNUTLS-SA-2017-01 - It was found using the OSS-FUZZ fuzzer
+infrastructure that decoding a specially crafted X.509 certificate with
+Proxy Certificate Information extension present could lead to a double
+free.
+GNUTLS-SA-2017-02 - It was found using the OSS-FUZZ fuzzer
+infrastructure that decoding a specially crafted OpenPGP certificate
+could lead to heap and stack overflows.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e470b3fde7fe7e69fc5ec57fe8a5c8a4cd66c8cc)
+(cherry picked from commit 9b347c4acd15afd1368c2d1d24ca73557cb43ceb)
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnutls/Config.in   |  1 +
+ package/gnutls/gnutls.hash |  2 +-
+ package/gnutls/gnutls.mk   | 13 +++++--------
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 0424e46..5e4bdcb 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index 998e213..cfb7cb3 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GNUTLS
+ 	bool "gnutls"
+ 	select BR2_PACKAGE_LIBTASN1
++	select BR2_PACKAGE_LIBUNISTRING
+ 	select BR2_PACKAGE_NETTLE
+ 	select BR2_PACKAGE_PCRE
+ 	depends on BR2_USE_WCHAR
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 897562b..121f75a 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
 @@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256 0f1dff6392a1cc2ed126b9695f580a2ed77eb09d2c23b41cabfb41e6f27a8c89  php-7.0.14.tar.xz
-+sha256 a810b3f29c21407c24caa88f50649320d20ba6892ae1923132598b8a0ca145b6  php-7.1.0.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 8c1ccef..42d8513 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated after checking pgp signature
+-sha256	9b50e8a670d5e950425d96935c7ddd415eb6f8079615a36df425f09a3143172e	gnutls-3.4.17.tar.xz
++sha256	0e97f243ae72b70307d684b84c7fe679385aa7a7a0e37e5be810193dcc17d4ff	gnutls-3.5.8.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index af7621c..4fab812 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -4,17 +4,13 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.0.14
-+PHP_VERSION = 7.1.0
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-GNUTLS_VERSION_MAJOR = 3.4
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17
++GNUTLS_VERSION_MAJOR = 3.5
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+-# README says that the core library is under LGPLv2.1+, but a few
+-# files in libdane specify LGPLv3+. It seems to be a mistake, and we
+-# therefore trust the README file here. A bug was reported upstream at
+-# https://gitlab.com/gnutls/gnutls/issues/109.
+ GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
+-GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER README
+-GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
++GNUTLS_LICENSE_FILES = doc/COPYING doc/COPYING.LESSER
++GNUTLS_DEPENDENCIES = host-pkgconf libunistring libtasn1 nettle pcre
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+ 	--disable-guile \
+@@ -23,6 +19,7 @@ GNUTLS_CONF_OPTS = \
+ 	--enable-local-libopts \
+ 	--enable-openssl-compatibility \
+ 	--with-libnettle-prefix=$(STAGING_DIR)/usr \
++	--with-libunistring-prefix=$(STAGING_DIR)/usr \
+ 	--with-librt-prefix=$(STAGING_DIR) \
+ 	--without-tpm \
+ 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools)
