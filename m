@@ -1,96 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Jan 2017 23:18:22 +0100
-Subject: [Buildroot] [PATCH] linux-headers: Account for
- LINUX_OVERRIDE_SRCDIR
-In-Reply-To: <CAHQ1cqEJ15w0WL+j0bZVWujjbR74PK-wsQgtUAKvCcGv8bPs_w@mail.gmail.com>
-References: <20170111195611.837-1-andrew.smirnov@gmail.com>
- <ecec3824-31cc-bcc0-ff85-bd7415cfee4e@mind.be>
- <CAHQ1cqEJ15w0WL+j0bZVWujjbR74PK-wsQgtUAKvCcGv8bPs_w@mail.gmail.com>
-Message-ID: <94849f83-cb05-e19c-6653-b5cadf2dbec4@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 12 Jan 2017 23:22:18 +0100
+Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: bump to
+	version 1.19.1
+Message-ID: <20170112222219.9495-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Include this bugfix [1] (freeze with DRI2).
+Tested using Enlightenment and Lugaru game on x86_64 target using DRI2.
 
+[1] https://bugs.freedesktop.org/show_bug.cgi?id=99333
 
-On 12-01-17 18:19, Andrey Smirnov wrote:
-> On Thu, Jan 12, 2017 at 12:17 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>
->> On 11-01-17 20:56, Andrey Smirnov wrote:
->>> Use the value of LINUX_OVERRIDE_SRCDIR as override directory when
->>> BR2_KERNEL_HEADERS_AS_KERNEL is specified.
->>
->>  Good catch! However, I'm not entirely convinced that we really want this.
->>
->>  A typical workflow would be to start from an upstream kernel, build a toolchain
->> and userspace with it, and then begin with hacking on the kernel to e.g. add a
->> driver. In that case it's rather unlikely that we really want to rebuild the
->> toolchain, because the headers don't change.
->>
-> 
-> I agree that typical "good day" workflow would be just as you
-> described. However, IMHO, there's also a "bad day" variant of that
-> workflow where "hacking on the kernel" implies "hacking on kernel
-> headers"(*cough* custom ioctls *cough*), which is also followed up by
-> a user-space tool that uses those changes and as such has
-> 'linux-headers' as a dependency.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../{1.19.0 => 1.19.1}/0001-modesettings-needs-dri2.patch             | 0
+ package/x11r7/xserver_xorg-server/Config.in                           | 4 ++--
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash            | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+ rename package/x11r7/xserver_xorg-server/{1.19.0 => 1.19.1}/0001-modesettings-needs-dri2.patch (100%)
 
- Certainly, but in that specific case you can easily set both
-LINUX_OVERRIDE_SRCDIR and LINUX_HEADERS_OVERRIDE_SRCDIR.
-
-
->>  That said, another possible scenario is that you don't configure any kernel
->> version but just use the OVERRIDE_SRCDIR to point to a local directory. Since we
->> removed the BR2_LINUX_KERNEL_CUSTOM_LOCAL, it's the only way to support that
->> scenario. In addition, the principle of least surprise would suggest that
->> BR2_KERNEL_HEADERS_AS_KERNEL would really work all the time, even if
->> LINUX_OVERRIDE_SRCDIR is set.
->>
->>  In short, I'm not really sure what is the best thing to do here. On thing though...
->>
->>
->>> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
->>> ---
->>>  package/linux-headers/linux-headers.mk | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
->>> index 0900778..197efb4 100644
->>> --- a/package/linux-headers/linux-headers.mk
->>> +++ b/package/linux-headers/linux-headers.mk
->>> @@ -10,6 +10,7 @@
->>>  ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
->>>
->>>  LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
->>> +LINUX_HEADERS_OVERRIDE_SRCDIR = $(LINUX_OVERRIDE_SRCDIR)
->>
->>  ... At least we should use ?= here so it is still possible to override each one
->> separately.
->>
-> 
-> I am more than happy to replace '=' with '?=', but I have to ask, why
-> would you ever want to do that? Why would you configure your build
-> system such that kernel headers are "Same as kernel being build" and
-> then set you kernel source and kernel header source to point at
-> different locations?
-
- Because the canonical way to work is that your BR2_LINUX_KERNEL_CUSTOM_REPO_URL
-points to your custom repository, and you just use LINUX_OVERRIDE_SRCDIR while
-doing the kernel development. So the application developers only use the updated
-kernel after it's explicitly been released. The kernel developer typically
-doesn't want to rebuild the toolchain when he switches on LINUX_OVERRIDE_SRCDIR.
-
-
- Regards,
- Arnout
-
+diff --git a/package/x11r7/xserver_xorg-server/1.19.0/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.19.1/0001-modesettings-needs-dri2.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.19.0/0001-modesettings-needs-dri2.patch
+rename to package/x11r7/xserver_xorg-server/1.19.1/0001-modesettings-needs-dri2.patch
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 1ee1f0b..0f1d1fe 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -74,7 +74,7 @@ choice
+ 	bool "X Window System server version"
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+-	bool "1.19.0"
++	bool "1.19.1"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_23
+ 	select BR2_PACKAGE_XLIB_LIBXFONT2
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+@@ -94,7 +94,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.19.0" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
++	default "1.19.1" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 54ae0ec..2f13ca6 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,5 +3,5 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2016-November/002737.html
+-sha256 149a708b50befc2d5a40b98d45ddd2ebe0beec018e6d0c663c43bad6210e4da3        xorg-server-1.19.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-January/002754.html
++sha256 79ae2cf39d3f6c4a91201d8dad549d1d774b3420073c5a70d390040aa965a7fb        xorg-server-1.19.1.tar.bz2
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.3
