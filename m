@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jan 2017 16:15:17 +0100
-Subject: [Buildroot] [git commit] package/freeswitch: bump version to 1.6.14
-Message-ID: <20170113152114.61A117FE10@busybox.osuosl.org>
+Date: Fri, 13 Jan 2017 16:08:16 +0100
+Subject: [Buildroot] [git commit] python-lxml: bump to version 3.7.2
+Message-ID: <20170113152114.337F481EC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44d2fdf62f115cd667d996896ffcad3923f975c8
+commit: https://git.buildroot.net/buildroot/commit/?id=94e03d5aa15f4eec7f1123996710051d57557df2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 76966cf..6412511 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index cab3e37..a1dc093 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
 @@ -1,2 +1,2 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.13.tar.xz.sha256
--sha256 64a8a14fc5df92893d956868f144042891cc3e2d096bbf56241fec706635a8b7  freeswitch-1.6.13.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.14.tar.xz.sha256
-+sha256 759cb79800c02b9476fcec4c88822942ed6183d9c2686015e4c293e22790cf35  freeswitch-1.6.14.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index ee3ff4f..8c107e9 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
+ # Locally computed
+-sha256  9c62eb2a1862e1ae285d7e7e3b7dc8772d387b19258086afcec143c6b7b8a5c9  lxml-3.7.0.tgz
++sha256  59d9176360dbc3919e9d4bfca85c1ca64ab4f4ee00e6f119d7150ba887e3410a  lxml-3.7.2.tgz
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 6495351..62c2980 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREESWITCH_VERSION = 1.6.13
-+FREESWITCH_VERSION = 1.6.14
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPLv1.1, \
+-PYTHON_LXML_VERSION = 3.7.0
++PYTHON_LXML_VERSION = 3.7.2
+ PYTHON_LXML_SITE = http://lxml.de/files
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
+ 
