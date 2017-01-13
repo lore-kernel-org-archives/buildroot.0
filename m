@@ -1,42 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jan 2017 16:11:52 +0100
-Subject: [Buildroot] [PATCH] boot/uboot: fix build for sunxi targets
-In-Reply-To: <20170113000428.4112-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Fri, 13 Jan 2017 01:04:28 +0100")
-References: <20170113000428.4112-1-joerg.krause@embedded.rocks>
-Message-ID: <874m13c7uv.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Jan 2017 16:13:09 +0100
+Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: bump to
+	version 1.19.1
+In-Reply-To: <20170112222219.9495-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Thu, 12 Jan 2017 23:22:18 +0100")
+References: <20170112222219.9495-1-romain.naour@gmail.com>
+Message-ID: <87ziivat8a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Since version 2017.01 U-Boot needs to run the binman tool on the host machine
- > for building the 'u-boot-sunxi-with-spl.bin' target. The binman tool is written
- > in Python 2 so we need to add the python host package when building this
- > target, otherwise the build fails:
+ > Include this bugfix [1] (freeze with DRI2).
+ > Tested using Enlightenment and Lugaru game on x86_64 target using DRI2.
 
- > ```
- >   BINMAN  u-boot-sunxi-with-spl.bin
- >   File "./tools/binman/binman", line 49
- >     print result
- >                ^
- > SyntaxError: Missing parentheses in call to 'print'
- > make[1]: *** [Makefile:1090: u-boot-sunxi-with-spl.bin] Error 1
- > ```
+ > [1] https://bugs.freedesktop.org/show_bug.cgi?id=99333
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-That's not very nice :/
-
-We already check for python on the build machine in dependencies.sh, so
-perhaps we could patch the binman sources to be compatible with python
-3 (and send the patch upstream)?
-
-Is that something you could look into?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
