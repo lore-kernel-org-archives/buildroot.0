@@ -1,51 +1,26 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 13 Jan 2017 01:04:28 +0100
-Subject: [Buildroot] [PATCH] boot/uboot: fix build for sunxi targets
-Message-ID: <20170113000428.4112-1-joerg.krause@embedded.rocks>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 12 Jan 2017 21:13:01 -0500
+Subject: [Buildroot] [PATCH 1/1] mkpasswd: remove dash from "host mkpasswd"
+	to match other host tools
+Message-ID: <1484273581-2327-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 2017.01 U-Boot needs to run the binman tool on the host machine
-for building the 'u-boot-sunxi-with-spl.bin' target. The binman tool is written
-in Python 2 so we need to add the python host package when building this
-target, otherwise the build fails:
-
-```
-  BINMAN  u-boot-sunxi-with-spl.bin
-  File "./tools/binman/binman", line 49
-    print result
-               ^
-SyntaxError: Missing parentheses in call to 'print'
-make[1]: *** [Makefile:1090: u-boot-sunxi-with-spl.bin] Error 1
-```
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- boot/uboot/uboot.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/mkpasswd/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 6b9d54454..02415ef63 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -280,6 +280,15 @@ endif
- UBOOT_DEPENDENCIES += host-uboot-tools
- endif
- 
-+# Since version 2017.01 U-Boot needs to run the binman tool on the host machine
-+# for building the 'u-boot-sunxi-with-spl.bin' target. The binman tool is
-+# written in Python 2 so we need to add the python host package here.
-+ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-+ifeq ($(findstring u-boot-sunxi-with-spl.bin,$(BR2_TARGET_UBOOT_SPL_NAME)),u-boot-sunxi-with-spl.bin)
-+UBOOT_DEPENDENCIES += host-python
-+endif
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
- 
- #
+diff --git a/package/mkpasswd/Config.in.host b/package/mkpasswd/Config.in.host
+index fb5bc80..93774bd 100644
+--- a/package/mkpasswd/Config.in.host
++++ b/package/mkpasswd/Config.in.host
+@@ -1,2 +1,2 @@
+ config BR2_PACKAGE_HOST_MKPASSWD
+-	bool "host-mkpasswd"
++	bool "host mkpasswd"
 -- 
-2.11.0
+1.9.1
