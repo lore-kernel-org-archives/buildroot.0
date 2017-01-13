@@ -1,43 +1,47 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Fri, 13 Jan 2017 13:29:49 +0100
-Subject: [Buildroot] [PATCH v2] tslib: bump version to 1.3
-In-Reply-To: <20170109131247.j527lnxeiwpkwyuv@tarshish>
-References: <20170109131247.j527lnxeiwpkwyuv@tarshish>
-Message-ID: <1484310589-4486-1-git-send-email-martin.kepplinger@ginzinger.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Jan 2017 13:41:18 +0100
+Subject: [Buildroot] [PATCH] rabbitmq-server: security bump to version 3.6.6
+Message-ID: <20170113124118.20028-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
----
-well. Here's the same thing with only the tar.gz hash included.
+Fixes a critical authentication vulnerability in the MQTT plugin
+(CVE-2016-9877):
 
- package/tslib/tslib.hash | 2 +-
- package/tslib/tslib.mk   | 2 +-
+MQTT (MQ Telemetry Transport) connection authentication with a
+username/password pair succeeds if an existing username is provided but the
+password is omitted from the connection request.  Connections that use TLS
+with a client-provided certificate are not affected.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rabbitmq-server/rabbitmq-server.hash | 2 +-
+ package/rabbitmq-server/rabbitmq-server.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index fc493e7..a80944c 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
+diff --git a/package/rabbitmq-server/rabbitmq-server.hash b/package/rabbitmq-server/rabbitmq-server.hash
+index be21477ff..3cd412dd0 100644
+--- a/package/rabbitmq-server/rabbitmq-server.hash
++++ b/package/rabbitmq-server/rabbitmq-server.hash
 @@ -1,2 +1,2 @@
- # Locally generated
--sha256  b6450f4d1bc8f4fbbb796a2d1210aee3ccf9ecf302a368dddf279c63eb634833  tslib-1.2.tar.gz
-+sha256  599f51c265158e7801b166e879e19759e8d3e5fdf2fa99c630698fe162a41d56  tslib-1.3.tar.gz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 6437f60..d6e66b7 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
+ # Locally computed
+-sha256 c696134e863f99191a301288c12d69ff00b7e648107ee52c8686ae047dde1bee  rabbitmq-server-3.6.1.tar.xz
++sha256 395689bcf57fd48aed452fcd43ff9a992de40067d3ea5c44e14680d69db7b78e  rabbitmq-server-3.6.6.tar.xz
+diff --git a/package/rabbitmq-server/rabbitmq-server.mk b/package/rabbitmq-server/rabbitmq-server.mk
+index 7e13c2d71..d55a8cc47 100644
+--- a/package/rabbitmq-server/rabbitmq-server.mk
++++ b/package/rabbitmq-server/rabbitmq-server.mk
 @@ -4,7 +4,7 @@
  #
- ################################################################################
+ #############################################################
  
--TSLIB_VERSION = 1.2
-+TSLIB_VERSION = 1.3
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_LICENSE = GPL, LGPL
- TSLIB_LICENSE_FILES = COPYING
+-RABBITMQ_SERVER_VERSION = 3.6.1
++RABBITMQ_SERVER_VERSION = 3.6.6
+ RABBITMQ_SERVER_SITE = http://www.rabbitmq.com/releases/rabbitmq-server/v$(RABBITMQ_SERVER_VERSION)
+ RABBITMQ_SERVER_SOURCE = rabbitmq-server-$(RABBITMQ_SERVER_VERSION).tar.xz
+ RABBITMQ_SERVER_LICENSE = MPLv1.1, Apache-2.0, BSD-2c, EPL, MIT, MPLv2.0
 -- 
-2.1.4
+2.11.0
