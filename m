@@ -1,38 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jan 2017 16:16:23 +0100
-Subject: [Buildroot] [PATCH] package/mpd: add patch to fix linking with
-	ogg
-In-Reply-To: <20170112080315.10962-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Thu, 12 Jan 2017 09:03:15 +0100")
-References: <20170112080315.10962-1-joerg.krause@embedded.rocks>
-Message-ID: <87inpjat2w.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Jan 2017 16:17:21 +0100
+Subject: [Buildroot] [PATCH] lttng-tools: bump version to 2.9.3
+In-Reply-To: <20170111142423.48621-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Wed, 11 Jan 2017 14:24:23 +0000")
+References: <20170111142423.48621-1-Vincent.Riera@imgtec.com>
+Message-ID: <87eg07at1a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Building mpds internal static xiph library needs to link with libogg.
- > Otherwise building mpd fails with:
+ > 0001-Fix-Add-missing-pthread.h-include.patch already included in this
+ > release:
 
- > ```
- > /mips-linux-gnu/bin/ld: libxiph.a(libxiph_a-OggVisitor.o): undefined
- > reference to symbol 'ogg_stream_packetout'
- > ```
+ >   https://github.com/lttng/lttng-tools/commit/5f702b607116a8303cb09fb091d8b9740c06baca
 
- > Add a patch which adds OGG_LIBS to XIPH_LIBS so that the linker finds
- > the necessary ogg library.
+ > --with-xml-prefix configure option doesn't exist, so drop it:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/9f0/9f062dc51daed5c5047faa8d79ecbd4e228f2572/
- > http://autobuild.buildroot.net/results/1cc/1cc097c5022bd3161dc03b0866cb04075c944a64/
- > http://autobuild.buildroot.net/results/2e3/2e3dbcdea34053675a0139c1911b6da1a6670e2c/
- > .. and more.
+ >   configure:22815: WARNING: unrecognized options: [snip], --with-xml-prefix
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
