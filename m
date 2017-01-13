@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jan 2017 16:08:19 +0100
-Subject: [Buildroot] [PATCH 1/2] python-urwid: bump to version 1.3.1
-In-Reply-To: <1484296987-18842-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Fri, 13 Jan 2017 09:43:06
+Date: Fri, 13 Jan 2017 16:08:26 +0100
+Subject: [Buildroot] [PATCH 2/2] python-lxml: bump to version 3.7.2
+In-Reply-To: <1484296987-18842-2-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Fri, 13 Jan 2017 09:43:07
  +0100")
 References: <1484296987-18842-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87h953c80s.fsf@dell.be.48ers.dk>
+ <1484296987-18842-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87d1frc80l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
