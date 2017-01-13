@@ -1,21 +1,21 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 13 Jan 2017 17:38:12 +0000
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 13 Jan 2017 09:40:45 -0800
 Subject: [Buildroot] [PATCH 1/2] toolchain: bump Codescape IMG MIPS
  version to 2016.05-06
 In-Reply-To: <76c2b972-93fc-5413-9bb3-f17ca76bccc1@imgtec.com>
 References: <20170113135540.64589-1-Vincent.Riera@imgtec.com>
  <c5dad2b8-f1bf-1907-71c8-836591c14c8f@gmail.com>
  <76c2b972-93fc-5413-9bb3-f17ca76bccc1@imgtec.com>
-Message-ID: <fc2be020-c230-1408-695c-ec08f837e134@imgtec.com>
+Message-ID: <bd50695c-eae6-765e-974e-10ea57ad776c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again Romain,
 
-On 13/01/17 17:35, Vicente Olivert Riera wrote:
+
+On 1/13/17 9:35 AM, Vicente Olivert Riera wrote:
 > Hi Romain,
 > 
 > On 13/01/17 17:10, Romain Naour wrote:
@@ -72,17 +72,12 @@ On 13/01/17 17:35, Vicente Olivert Riera wrote:
 > 
 > if we use the x86_64 versions we can only use them on 64bit machines. If
 > you use the x86 ones, we can use them on both 32 and 64bit machines.
-
-ok, I should have looked the linaro examples before replying to you :P
-
-Yes, we can use the "ifeq ($(HOSTARCH),x86)" trick to choose between the
-x86 and x86_64 version. I'll cook a patch for it next week.
-
-Thanks,
-
-Vincent
-
 > 
+
+You can detect the host architecture to help decide which one to use.
+for x86 to work on x86_64 you would require multilib support,which might
+also be an assumption that all x86_64 host linux distros may not meet.
+
 > Regards,
 > 
 > Vincent
