@@ -1,98 +1,84 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Fri, 13 Jan 2017 09:40:45 -0800
-Subject: [Buildroot] [PATCH 1/2] toolchain: bump Codescape IMG MIPS
- version to 2016.05-06
-In-Reply-To: <76c2b972-93fc-5413-9bb3-f17ca76bccc1@imgtec.com>
-References: <20170113135540.64589-1-Vincent.Riera@imgtec.com>
- <c5dad2b8-f1bf-1907-71c8-836591c14c8f@gmail.com>
- <76c2b972-93fc-5413-9bb3-f17ca76bccc1@imgtec.com>
-Message-ID: <bd50695c-eae6-765e-974e-10ea57ad776c@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 13 Jan 2017 17:55:01 +0000
+Subject: [Buildroot] [PATCH v2 2/2] toolchain: bump Codescape MTI MIPS
+	version to 2016.05-06
+In-Reply-To: <20170113175501.38416-1-Vincent.Riera@imgtec.com>
+References: <20170113175501.38416-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170113175501.38416-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also...
 
+  - Fix a typo in Config.in
+  - Take into account the host's architecture to download the x86 or
+    x86_64 version. This makes the IA32 libs dependency in unnecessary.
 
-On 1/13/17 9:35 AM, Vicente Olivert Riera wrote:
-> Hi Romain,
-> 
-> On 13/01/17 17:10, Romain Naour wrote:
->> Hi Vicente,
->>
->> Le 13/01/2017 ? 14:55, Vicente Olivert Riera a ?crit :
->>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>> ---
->>>  .../toolchain-external-codescape-img-mips/Config.in                   | 2 +-
->>>  .../toolchain-external-codescape-img-mips.hash                        | 4 ++--
->>>  .../toolchain-external-codescape-img-mips.mk                          | 2 +-
->>>  3 files changed, 4 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
->>> index 1f0d4d1..2250e17 100644
->>> --- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
->>> +++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
->>> @@ -6,7 +6,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
->>>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->>>  	select BR2_INSTALL_LIBSTDCPP
->>>  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
->>> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
->>> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
->>>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->>>  	select BR2_TOOLCHAIN_HAS_FORTRAN
->>>  	help
->>> diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
->>> index e4ae9e1..3d5703b 100644
->>> --- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
->>> +++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
->>> @@ -1,3 +1,3 @@
->>>  # Codescape toolchains from Imagination Technologies
->>> -# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
->>> -sha256 e3c1f292ac6a9f12480af431c85a7ed9dfa011a52fd62a50be3363ec6b9bc872  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
->>> +# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-06/downloads.html
->>> +sha256 8d9cdf711dd402d7bf82883d425c221038fe8ce9d0c91a3f6b30939d9d55476c  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
->>> diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
->>> index b4decfb..805e956 100644
->>> --- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
->>> +++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
->>> @@ -4,7 +4,7 @@
->>>  #
->>>  ################################################################################
->>>  
->>> -TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION = 2016.05-03
->>> +TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION = 2016.05-06
->>>  TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION)
->>>  TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_STRIP_COMPONENTS = 2
->>
->> Reviewed-by: Romain Naour <romain.naour@gmail.com>
->>
->> Not related to this patch but Codescape toolchains are also available for x86_64
->> hosts. Why not using x86_64 toolchain ?
-> 
-> if we use the x86_64 versions we can only use them on 64bit machines. If
-> you use the x86 ones, we can use them on both 32 and 64bit machines.
-> 
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+ - Fix a typo in Config.in
+ - Take into account the host's architecture to download the x86 or
+   x86_64 version. Remove IA32 libs dependency.
 
-You can detect the host architecture to help decide which one to use.
-for x86 to work on x86_64 you would require multilib support,which might
-also be an assumption that all x86_64 host linux distros may not meet.
+ .../toolchain-external-codescape-mti-mips/Config.in                 | 5 ++---
+ .../toolchain-external-codescape-mti-mips.hash                      | 5 +++--
+ .../toolchain-external-codescape-mti-mips.mk                        | 6 +++++-
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-> Regards,
-> 
-> Vincent
-> 
->>
->> Look at the Linaro toolchains for example.
->>
->> Best regards,
->> Romain
->>
->>>  
->>>
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+index f899467..f09eab0 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
+@@ -6,12 +6,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+ 		BR2_MIPS_CPU_MIPS32R5 || (BR2_MIPS_CPU_MIPS64R5 && !BR2_MIPS_SOFT_FLOAT)
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	help
+-	  Codescape MTI GNU Linux Toolchain 2015.10 for the MIPS
++	  Codescape MTI GNU Linux Toolchain 2016.05 for the MIPS
+ 	  architecture, from Imagination Technologies. It uses gcc
+ 	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
+ 	  headers 4.0. It has support for the following variants:
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
+index 0d785f2..d31f998 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
++++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
+@@ -1,3 +1,4 @@
+ # Codescape toolchains from Imagination Technologies
+-# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
+-sha256 10b8ab6d7c492abc19ecabafedc6bc5f12ff88107a3cb76dc452b3a9522d9c56  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
++# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-06/downloads.html
++sha256 3a7aba259beb05f0e3054b5a61a368a5085447f47361949a938ac9cc7de4227b  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
++sha256 a676a8b3647c8c651fb8935a75db8f00b79d36ec55676f7c05bac12b550788f7  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
+index e5733ca..d63a367 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
++++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
+@@ -4,11 +4,15 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION = 2016.05-03
++TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION = 2016.05-06
+ TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION)
+ TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STRIP_COMPONENTS = 2
+ 
++ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
++else
++TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz
++endif
+ 
+ # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
+ # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
+-- 
+2.10.2
