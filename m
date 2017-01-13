@@ -1,327 +1,536 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 13 Jan 2017 19:19:21 +0100
-Subject: [Buildroot] [PATCH 1/1] dieharder: new package
-In-Reply-To: <1484259791-7227-1-git-send-email-julien@vdg.name>
-References: <1484259791-7227-1-git-send-email-julien@vdg.name>
-Message-ID: <e3682b0f-7f5c-6b00-06d7-36a72e31a8f9@gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 13 Jan 2017 19:54:24 +0100
+Subject: [Buildroot] [PATCH 1/1] board: add support for Banana Pro
+Message-ID: <20170113185424.7031-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Julien,
+The board support package includes the following components:
+ - U-Boot 2016.11
+ - Linux 4.9.3
+ - packages:
+   - resize2fs to expand the minimal rootfs
+   - alsa-utils for basic audio usage of the on-board headphone jack
+     and microphone
+   - iw and wpa_supplicant for managing the wireless interface
 
-Le 12/01/2017 ? 23:23, Julien Viard de Galbert a ?crit :
-> Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
-> ---
-> Changes v3 -> v4
->   - wrap description to 72 columns (Thomas Petazoni)
->   - fix licence description (Thomas Petazoni)
->   - use _ENV instead of _OPTS for configure tweek (Thomas Petazoni)
->   - fix space around = in .mk (Thomas Petazoni)
->   - switched from _SUBDIR to _STRIP_COMPONENTS to ease patching
->   - added 4 patches :
->      - 2 to fix the build system
->      - 1 for c99 type missing
->      - 1 for compiling with musl libc (Romain Naour, Yann E. MORIN)
->   - depending on libtool, replacing missing libtool m4 files
->      and running autoreconf (found this was necessary when libtool is
->      no installed on host as the tarball ships symlinks to m4 files)
->   - added .hash file
-> Changes v2 -> v3
->   - remove intermediate variable use (suggested by Baruch Siach)
-> Changes v1 -> v2
->   - fixed typo "bin" instead of "big" (thanks Thomas Petazoni)
->   - select gls in config (suggested by Romain Naour)
->   - specified "includedir" to fix unsafe header path
-> 
-> Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
-> ---
->  package/Config.in                                  |  1 +
->  ...includedir-as-include-search-path-for-bui.patch | 57 ++++++++++++++++++++++
->  .../dieharder/0002-do-not-install-includes.patch   | 25 ++++++++++
->  .../dieharder/0003-Fix-missing-type-intptr_t.patch | 24 +++++++++
->  ...U_SOURCE-for-uint-and-M_PI-with-musl-libc.patch | 24 +++++++++
->  package/dieharder/Config.in                        | 10 ++++
->  package/dieharder/dieharder.hash                   |  3 ++
->  package/dieharder/dieharder.mk                     | 40 +++++++++++++++
->  8 files changed, 184 insertions(+)
->  create mode 100644 package/dieharder/0001-do-not-use-includedir-as-include-search-path-for-bui.patch
->  create mode 100644 package/dieharder/0002-do-not-install-includes.patch
->  create mode 100644 package/dieharder/0003-Fix-missing-type-intptr_t.patch
->  create mode 100644 package/dieharder/0004-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch
->  create mode 100644 package/dieharder/Config.in
->  create mode 100644 package/dieharder/dieharder.hash
->  create mode 100644 package/dieharder/dieharder.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 8c8c33e..978f5fd 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -72,6 +72,7 @@ menu "Debugging, profiling and benchmark"
->  	source "package/bonnie/Config.in"
->  	source "package/cache-calibrator/Config.in"
->  	source "package/dhrystone/Config.in"
-> +	source "package/dieharder/Config.in"
->  	source "package/dmalloc/Config.in"
->  	source "package/dropwatch/Config.in"
->  	source "package/dstat/Config.in"
-> diff --git a/package/dieharder/0001-do-not-use-includedir-as-include-search-path-for-bui.patch b/package/dieharder/0001-do-not-use-includedir-as-include-search-path-for-bui.patch
-> new file mode 100644
-> index 0000000..4e2dd08
-> --- /dev/null
-> +++ b/package/dieharder/0001-do-not-use-includedir-as-include-search-path-for-bui.patch
-> @@ -0,0 +1,57 @@
-> +From 691fd9bde5dce4a4da071a120b76c6eb95abb3a6 Mon Sep 17 00:00:00 2001
-> +From: Julien Viard de Galbert <julien@vdg.name>
-> +Date: Sun, 17 May 2015 15:04:54 +0200
-> +Subject: [PATCH 1/4] do not use includedir as include search path for build
+Two Linux patches are necessary to enable audio and wifi support. Both
+patches are fetched from the Linux next branch and are probably mainlined in
+Linux 4.11.
 
-Please add a small patch description and your SoB line here.
+A Linux configuration fragment enables the wireless device driver, which
+is not enabled by default in the mainline defconfig of the board.
 
-http://nightly.buildroot.org/manual.html#_format_and_licensing_of_the_package_patches
+The wifi chip needs a NVRAM configuration file which is provided in the
+rootfs overlay.
 
-> +
-> +---
-> + configure.ac             | 6 +++---
-> + dieharder/Makefile.am    | 2 +-
-> + libdieharder/Makefile.am | 2 +-
-> + 3 files changed, 5 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index b336115..91f7c64 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -96,9 +96,9 @@ AC_TYPE_SIZE_T
-> + AC_C_VOLATILE
-> + AC_C_INLINE
-> + 
-> +-DIEHARDER_CFLAGS="-I$includedir"
-> +-dieharder_CFLAGS="-std=c99 -Wall -pedantic -I$includedir"
-> +-libdieharder_lo_CFLAGS="-Wall -pedantic -I$includedir"
-> ++DIEHARDER_CFLAGS=""
-> ++dieharder_CFLAGS="-std=c99 -Wall -pedantic"
-> ++libdieharder_lo_CFLAGS="-Wall -pedantic"
-> + DIEHARDER_LIBS="-L$libdir -ldieharder"
-> + ACLOCAL_AMFLAGS="-I m4"
-> + 
-> +diff --git a/dieharder/Makefile.am b/dieharder/Makefile.am
-> +index e6fbff2..7bdac5c 100644
-> +--- a/dieharder/Makefile.am
-> ++++ b/dieharder/Makefile.am
-> +@@ -64,7 +64,7 @@ DEFINES = -DVERSION=$(VERSION)
-> + # CC = gcc
-> + 
-> + # Compile flags (use fairly standard -O3 as default)
-> +-AM_CPPFLAGS = -I ${top_srcdir}/include $(DEFINES) -I ${includedir}
-> ++AM_CPPFLAGS = -I ${top_srcdir}/include $(DEFINES)
-> + AM_CFLAGS = -O3
-> + 
-> + # Load flags (optional)
-> +diff --git a/libdieharder/Makefile.am b/libdieharder/Makefile.am
-> +index 5fd3396..0873f9c 100644
-> +--- a/libdieharder/Makefile.am
-> ++++ b/libdieharder/Makefile.am
-> +@@ -114,7 +114,7 @@ DEFINES = -DVERSION=$(VERSION) -DLITTLE_ENDIAN=$(LITTLE_ENDIAN)
-> + # CC = gcc
-> + 
-> + # Compile flags (use fairly standard -O3 as default)
-> +-AM_CPPFLAGS = $(DEFINES) -I ${top_srcdir}/include -I ${includedir}
-> ++AM_CPPFLAGS = $(DEFINES) -I ${top_srcdir}/include
-> + AM_CFLAGS = -O3 -Wall -pedantic -Wno-unused-variable 
-> + 
-> + #========================================================================
-> +-- 
-> +2.1.4
-> +
-> diff --git a/package/dieharder/0002-do-not-install-includes.patch b/package/dieharder/0002-do-not-install-includes.patch
-> new file mode 100644
-> index 0000000..c123184
-> --- /dev/null
-> +++ b/package/dieharder/0002-do-not-install-includes.patch
-> @@ -0,0 +1,25 @@
-> +From c55ddec8b74c0eb5bc81b0dfec2f80f8125c5947 Mon Sep 17 00:00:00 2001
-> +From: Julien Viard de Galbert <julien@vdg.name>
-> +Date: Sun, 17 May 2015 15:18:32 +0200
-> +Subject: [PATCH 2/4] do not install includes
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ board/lemaker/bananapro/boot.cmd                   |  5 ++
+ board/lemaker/bananapro/genimage.cfg               | 37 ++++++++++
+ board/lemaker/bananapro/linux-wifi.fragment        | 23 ++++++
+ ...ts-sun7i-Enable-audio-codec-on-Banana-Pro.patch | 35 +++++++++
+ ...-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch | 85 ++++++++++++++++++++++
+ board/lemaker/bananapro/post-build.sh              | 12 +++
+ board/lemaker/bananapro/post-image.sh              | 16 ++++
+ board/lemaker/bananapro/readme.txt                 | 71 ++++++++++++++++++
+ .../lib/firmware/brcm/brcmfmac43362-sdio.txt       | 56 ++++++++++++++
+ configs/bananapro_defconfig                        | 80 ++++++++++++++++++++
+ 10 files changed, 420 insertions(+)
+ create mode 100644 board/lemaker/bananapro/boot.cmd
+ create mode 100644 board/lemaker/bananapro/genimage.cfg
+ create mode 100644 board/lemaker/bananapro/linux-wifi.fragment
+ create mode 100644 board/lemaker/bananapro/patches/linux/0001-ARM-dts-sun7i-Enable-audio-codec-on-Banana-Pro.patch
+ create mode 100644 board/lemaker/bananapro/patches/linux/0002-ARM-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch
+ create mode 100755 board/lemaker/bananapro/post-build.sh
+ create mode 100755 board/lemaker/bananapro/post-image.sh
+ create mode 100644 board/lemaker/bananapro/readme.txt
+ create mode 100644 board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt
+ create mode 100644 configs/bananapro_defconfig
 
-Dito.
-
-> +
-> +---
-> + Makefile.am | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile.am b/Makefile.am
-> +index 489c493..0264c5e 100644
-> +--- a/Makefile.am
-> ++++ b/Makefile.am
-> +@@ -74,7 +74,7 @@ SPEC = $(PROJECT).spec
-> + # presume the simplest of dependencies and remake if includes change
-> + # for example.
-> + #========================================================================
-> +-all: $(LIBTIME) $(PROGTIME) $(INCTIME)
-> ++all: $(LIBTIME) $(PROGTIME)
-> + 
-> + # This is not, actually, a particularly useful toplevel target.  To
-> + # work correctly it also would require a full parsing of all
-> +-- 
-> +2.1.4
-> +
-> diff --git a/package/dieharder/0003-Fix-missing-type-intptr_t.patch b/package/dieharder/0003-Fix-missing-type-intptr_t.patch
-> new file mode 100644
-> index 0000000..f15b828
-> --- /dev/null
-> +++ b/package/dieharder/0003-Fix-missing-type-intptr_t.patch
-> @@ -0,0 +1,24 @@
-> +From ab3d1ce0dc67c33a2332ccf3bb16353e1b0e2ef8 Mon Sep 17 00:00:00 2001
-> +From: Julien Viard de Galbert <julien@vdg.name>
-> +Date: Sun, 8 Jan 2017 23:07:30 +0100
-> +Subject: [PATCH 3/4] Fix missing type intptr_t
-
-Dito.
-
-> +
-> +---
-> + include/dieharder/libdieharder.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/include/dieharder/libdieharder.h b/include/dieharder/libdieharder.h
-> +index 2138ebf..d98b758 100644
-> +--- a/include/dieharder/libdieharder.h
-> ++++ b/include/dieharder/libdieharder.h
-> +@@ -17,6 +17,7 @@
-> + 
-> + /* This turns on uint macro in c99 */
-> + #define __USE_MISC 1
-> ++#include <stdint.h>
-> + #include <sys/types.h>
-> + #include <sys/stat.h>
-> + #include <unistd.h>
-> +-- 
-> +2.1.4
-> +
-> diff --git a/package/dieharder/0004-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch b/package/dieharder/0004-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch
-> new file mode 100644
-> index 0000000..d52f123
-> --- /dev/null
-> +++ b/package/dieharder/0004-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch
-> @@ -0,0 +1,24 @@
-> +From 36208d9abc76cc888d13eefb26c52e466da2c2c1 Mon Sep 17 00:00:00 2001
-> +From: Julien Viard de Galbert <julien@vdg.name>
-> +Date: Wed, 11 Jan 2017 21:28:01 +0100
-> +Subject: [PATCH 4/4] Add _GNU_SOURCE for uint and M_PI with musl libc
-> +
-
-Dito.
-
-> +---
-> + include/dieharder/libdieharder.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/include/dieharder/libdieharder.h b/include/dieharder/libdieharder.h
-> +index d98b758..c1a5023 100644
-> +--- a/include/dieharder/libdieharder.h
-> ++++ b/include/dieharder/libdieharder.h
-> +@@ -17,6 +17,7 @@
-> + 
-> + /* This turns on uint macro in c99 */
-> + #define __USE_MISC 1
-> ++#define _GNU_SOURCE 1
-> + #include <stdint.h>
-> + #include <sys/types.h>
-> + #include <sys/stat.h>
-> +-- 
-> +2.1.4
-> +
-> diff --git a/package/dieharder/Config.in b/package/dieharder/Config.in
-> new file mode 100644
-> index 0000000..0288b82
-> --- /dev/null
-> +++ b/package/dieharder/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_DIEHARDER
-> +	bool "dieharder"
-> +	select BR2_PACKAGE_GSL
-> +	select BR2_PACKAGE_LIBTOOL
-
-This add libtool for the target.
-It seems you only need host-libtool so you can remove this line.
-
-> +	help
-> +	  dieharder is a fairly involved random number/uniform deviate
-> +	  generator tester. It is thus suitable for use in testing both
-> +	  software RNG's and hardware RNG's.
-> +
-> +	  http://www.phy.duke.edu/~rgb/General/dieharder.php
-> diff --git a/package/dieharder/dieharder.hash b/package/dieharder/dieharder.hash
-> new file mode 100644
-> index 0000000..8a44513
-> --- /dev/null
-> +++ b/package/dieharder/dieharder.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha256 6cff0ff8394c553549ac7433359ccfc955fb26794260314620dfa5e4cd4b727f dieharder-3.31.1.tgz
-> +
-> diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
-> new file mode 100644
-> index 0000000..cc1a359
-> --- /dev/null
-> +++ b/package/dieharder/dieharder.mk
-> @@ -0,0 +1,40 @@
-> +################################################################################
-> +#
-> +# dieharder
-> +#
-> +################################################################################
-> +
-> +DIEHARDER_VERSION = 3.31.1
-> +DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder
-
-I'm a bit worried about the maintenance of this tool, this version was released
-the 14-Oct-2011. But ok since it still build with gcc6 :)
-
-> +DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
-> +DIEHARDER_STRIP_COMPONENTS = 2
-> +DIEHARDER_LICENSE = GPLv2 with beverage clause
-> +DIEHARDER_LICENSE_FILES = $(DIEHARDER_SUBDIR)/COPYING
-
-DIEHARDER_SUBDIR is not set here, I guess you wanted to use dieharder/COPYING.
-Actually there are two COPYING files, one in the root of the source directory
-and another one in dieharder/COPYING
-
-Otherwise looks good.
-
-Best regards,
-Romain
-
-> +DIEHARDER_DEPENDENCIES = gsl host-libtool
-> +
-> +# Fix m4 links to points to the ones in staging (provided by libtool hence
-> +# the patch dependency).
-> +define DIEHARDER_POST_PATCH_FIXUP
-> +        for m in $(@D)/m4/*; do \
-> +		l=$$(readlink $$m) ;\
-> +		rm $$m ;\
-> +		ln -s $(HOST_DIR)$$l $$m ;\
-> +	done
-> +endef
-> +DIEHARDER_POST_PATCH_HOOKS += DIEHARDER_POST_PATCH_FIXUP
-> +
-> +# Ensure the libtool version is updated,
-> +# also make _CONF_ENV works instead of _CONF_OPTS for endiannes
-> +DIEHARDER_AUTORECONF = YES
-> +
-> +# fix endiannes detection
-> +ifeq ($(BR2_ENDIAN),"BIG")
-> +DIEHARDER_CONF_ENV = ac_cv_c_endian=big
-> +else
-> +DIEHARDER_CONF_ENV = ac_cv_c_endian=little
-> +endif
-> +
-> +# parallel build fail, disable it
-> +DIEHARDER_MAKE = $(MAKE1)
-> +
-> +$(eval $(autotools-package))
-> 
+diff --git a/board/lemaker/bananapro/boot.cmd b/board/lemaker/bananapro/boot.cmd
+new file mode 100644
+index 000000000..439f5b12c
+--- /dev/null
++++ b/board/lemaker/bananapro/boot.cmd
+@@ -0,0 +1,5 @@
++setenv fdt_high ffffffff
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun7i-a20-bananapro.dtb
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/lemaker/bananapro/genimage.cfg b/board/lemaker/bananapro/genimage.cfg
+new file mode 100644
+index 000000000..190a4b1ff
+--- /dev/null
++++ b/board/lemaker/bananapro/genimage.cfg
+@@ -0,0 +1,37 @@
++# Minimal SD card image for the Banana Pro
++# Based in the Orange Pi genimage.cfg
++
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun7i-a20-bananapro.dtb",
++			"boot.scr"
++		}
++	}
++	size = 10M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/lemaker/bananapro/linux-wifi.fragment b/board/lemaker/bananapro/linux-wifi.fragment
+new file mode 100644
+index 000000000..40ca859d4
+--- /dev/null
++++ b/board/lemaker/bananapro/linux-wifi.fragment
+@@ -0,0 +1,23 @@
++# Networking support
++CONFIG_WIRELESS=y
++CONFIG_CFG80211=y
++CONFIG_CFG80211_WEXT=y
++
++# Network device support
++CONFIG_WLAN=y
++CONFIG_WLAN_VENDOR_BROADCOM=y
++CONFIG_BRCMFMAC=m
++# CONFIG_WLAN_VENDOR_ADMTEK is not set
++# CONFIG_WLAN_VENDOR_ATH is not set
++# CONFIG_WLAN_VENDOR_ATMEL is not set
++# CONFIG_WLAN_VENDOR_CISCO is not set
++# CONFIG_WLAN_VENDOR_INTEL is not set
++# CONFIG_WLAN_VENDOR_INTERSIL is not set
++# CONFIG_WLAN_VENDOR_MARVELL is not set
++# CONFIG_WLAN_VENDOR_MEDIATEK is not set
++# CONFIG_WLAN_VENDOR_RALINK is not set
++# CONFIG_WLAN_VENDOR_REALTEK is not set
++# CONFIG_WLAN_VENDOR_RSI is not set
++# CONFIG_WLAN_VENDOR_ST is not set
++# CONFIG_WLAN_VENDOR_TI is not set
++# CONFIG_WLAN_VENDOR_ZYDAS is not set
+\ No newline at end of file
+diff --git a/board/lemaker/bananapro/patches/linux/0001-ARM-dts-sun7i-Enable-audio-codec-on-Banana-Pro.patch b/board/lemaker/bananapro/patches/linux/0001-ARM-dts-sun7i-Enable-audio-codec-on-Banana-Pro.patch
+new file mode 100644
+index 000000000..8552daafc
+--- /dev/null
++++ b/board/lemaker/bananapro/patches/linux/0001-ARM-dts-sun7i-Enable-audio-codec-on-Banana-Pro.patch
+@@ -0,0 +1,35 @@
++From 1647fe31882a105cef4c99770e4ec8ea47c5c653 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Wed, 4 Jan 2017 15:22:50 +0100
++Subject: [PATCH 1/1] ARM: dts: sun7i: Enable audio codec on Banana Pro
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This commit enables the on-chip audio codec present on the A20 SoC
++on the Banana Pro board.
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
++---
++ arch/arm/boot/dts/sun7i-a20-bananapro.dts | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/arch/arm/boot/dts/sun7i-a20-bananapro.dts b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
++index 19d63d4049de..03799c647e13 100644
++--- a/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+++++ b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
++@@ -104,6 +104,10 @@
++ 	status = "okay";
++ };
++ 
+++&codec {
+++	status = "okay";
+++};
+++
++ &ehci0 {
++ 	status = "okay";
++ };
++-- 
++2.11.0
++
+diff --git a/board/lemaker/bananapro/patches/linux/0002-ARM-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch b/board/lemaker/bananapro/patches/linux/0002-ARM-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch
+new file mode 100644
+index 000000000..7d514a808
+--- /dev/null
++++ b/board/lemaker/bananapro/patches/linux/0002-ARM-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch
+@@ -0,0 +1,85 @@
++From f2cb904f074bc7e90be475488872a82270e9bae7 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Mon, 9 Jan 2017 21:36:38 +0100
++Subject: [PATCH 2/2] ARM: dts: sun7i: Add wifi dt node on Banana Pro
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The Banana Pro has an AMPAK AP6181 WiFi+Bluetooth module. The WiFi part
++is a BCM43362 IC connected to MMC3 of the A20 SoC via SDIO. The IC also
++takes a power enable signal via GPIO.
++
++This commit adds a device-tree node to power it up, so the mmc subsys
++can scan it, and enables the mmc controller which is connected to it.
++
++As the wifi enable pin of the AP6181 module is not really a regulator,
++switch the mmc3 node to the mmc-pwrseq framework for controlling it.
++This more accurately reflectes how the hardware actually works.
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
++---
++ arch/arm/boot/dts/sun7i-a20-bananapro.dts | 29 +++++++++++++++++------------
++ 1 file changed, 17 insertions(+), 12 deletions(-)
++
++diff --git a/arch/arm/boot/dts/sun7i-a20-bananapro.dts b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
++index 03799c647e13..83516bc81225 100644
++--- a/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+++++ b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
++@@ -76,6 +76,13 @@
++ 		};
++ 	};
++ 
+++	wifi_pwrseq: wifi-pwrseq {
+++		compatible = "mmc-pwrseq-simple";
+++		pinctrl-names = "default";
+++		pinctrl-0 = <&vmmc3_pin_bananapro>;
+++		reset-gpios = <&pio 7 22 GPIO_ACTIVE_LOW>;
+++	};
+++
++ 	reg_gmac_3v3: gmac-3v3 {
++ 		compatible = "regulator-fixed";
++ 		pinctrl-names = "default";
++@@ -87,17 +94,6 @@
++ 		enable-active-high;
++ 		gpio = <&pio 7 23 GPIO_ACTIVE_HIGH>;
++ 	};
++-
++-	reg_vmmc3: vmmc3 {
++-		compatible = "regulator-fixed";
++-		pinctrl-names = "default";
++-		pinctrl-0 = <&vmmc3_pin_bananapro>;
++-		regulator-name = "vmmc3";
++-		regulator-min-microvolt = <3300000>;
++-		regulator-max-microvolt = <3300000>;
++-		enable-active-high;
++-		gpio = <&pio 7 22 GPIO_ACTIVE_HIGH>;
++-	};
++ };
++ 
++ &ahci {
++@@ -170,10 +166,19 @@
++ &mmc3 {
++ 	pinctrl-names = "default";
++ 	pinctrl-0 = <&mmc3_pins_a>;
++-	vmmc-supply = <&reg_vmmc3>;
+++	vmmc-supply = <&reg_vcc3v3>;
+++	mmc-pwrseq = <&wifi_pwrseq>;
++ 	bus-width = <4>;
++ 	non-removable;
++ 	status = "okay";
+++
+++	brcmf: bcrmf at 1 {
+++		reg = <1>;
+++		compatible = "brcm,bcm4329-fmac";
+++		interrupt-parent = <&pio>;
+++		interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
+++		interrupt-names = "host-wake";
+++	};
++ };
++ 
++ &ohci0 {
++-- 
++2.11.0
++
+diff --git a/board/lemaker/bananapro/post-build.sh b/board/lemaker/bananapro/post-build.sh
+new file mode 100755
+index 000000000..fb4b6e99e
+--- /dev/null
++++ b/board/lemaker/bananapro/post-build.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++
++# Remove all but the brcmfmac43362 firmware files
++find $TARGET_DIR/lib/firmware/brcm -type f -not -name "brcmfmac43362*" -delete
++
++BOARD_DIR="$(dirname $0)"
++MKIMAGE=$HOST_DIR/usr/bin/mkimage
++BOOT_CMD=$BOARD_DIR/boot.cmd
++BOOT_CMD_H=$BINARIES_DIR/boot.scr
++
++# U-Boot script
++$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
+diff --git a/board/lemaker/bananapro/post-image.sh b/board/lemaker/bananapro/post-image.sh
+new file mode 100755
+index 000000000..9cca1b178
+--- /dev/null
++++ b/board/lemaker/bananapro/post-image.sh
+@@ -0,0 +1,16 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage                           \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
++
++exit $?
+diff --git a/board/lemaker/bananapro/readme.txt b/board/lemaker/bananapro/readme.txt
+new file mode 100644
+index 000000000..1f8d1c514
+--- /dev/null
++++ b/board/lemaker/bananapro/readme.txt
+@@ -0,0 +1,71 @@
++Banana Pro
++
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++Buildroot environment for the Banana Pro. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++How to build it
++===============
++
++Configure Buildroot:
++
++  $ make bananapro_defconfig
++
++Compile everything and build the SD card image:
++
++  $ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ dd if=output/images/sdcard.img of=/dev/sdX
++
++Notes:
++  - replace 'sdX' with the actual device with your micro SD card
++  - you may need to be root to do that (use 'sudo')
++
++Insert the micro SD card in your Banana Pro and power it up. The console
++is on the debug TTL UART, 115200 8N1.
++
++Resizing the roof filesystem
++============================
++
++By default Buildroot creates a minimal root file system with very
++little free space. You can expand the filesystem using the resize2fs
++tool on the target:
++
++  # resize2fs /dev/mmcblk0p2
++
++Ethernet
++==========
++
++  # udhcpc -i eth0
++
++Wifi
++==========
++
++  # wpa_passphrase YOUR_SSID >> /etc/wpa_supplicant.conf
++  (enter the wifi password and press enter)
++  # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
++  # udhcpc -i wlan0
++
++Note:
++  - replace 'YOUR_SSID' with the actual SSID from your access point
++
++Audio
++==========
++
++Connect a headphone to the 3.5mm jack (TRRS). Note, that the Banana Pro
++has an on-board microphone, too.
++
++  # amixer cset name='Power Amplifier DAC Playback Switch' on
++  # amixer cset name='Power Amplifier Mute Switch' on
++  # amixer cset name='Power Amplifier Volume' 42
+diff --git a/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt b/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt
+new file mode 100644
+index 000000000..14a554fdd
+--- /dev/null
++++ b/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt
+@@ -0,0 +1,56 @@
++#AP6210_NVRAM_V1.2_03192013
++manfid=0x2d0
++prodid=0x492
++vendid=0x14e4
++devid=0x4343
++boardtype=0x0598
++
++# Board Revision is P307, same nvram file can be used for P304, P305, P306 and P307 as the tssi pa params used are same
++#Please force the automatic RX PER data to the respective board directory if not using P307 board, for e.g. for P305 boards force the data into the following directory /projects/BCM43362/a1_labdata/boardtests/results/sdg_rev0305
++boardrev=0x1307
++boardnum=777
++xtalfreq=26000
++boardflags=0x80201
++boardflags2=0x80
++sromrev=3
++wl0id=0x431b
++macaddr=00:90:4c:07:71:12
++aa2g=1
++ag0=2
++maxp2ga0=74
++cck2gpo=0x2222
++ofdm2gpo=0x44444444
++mcs2gpo0=0x6666
++mcs2gpo1=0x6666
++pa0maxpwr=56
++
++#P207 PA params
++#pa0b0=5447
++#pa0b1=-658
++#pa0b2=-175
++
++#Same PA params for P304,P305, P306, P307
++
++pa0b0=5447
++pa0b1=-607
++pa0b2=-160
++pa0itssit=62
++pa1itssit=62
++
++
++cckPwrOffset=5
++ccode=0
++rssismf2g=0xa
++rssismc2g=0x3
++rssisav2g=0x7
++triso2g=0
++noise_cal_enable_2g=0
++noise_cal_po_2g=0
++swctrlmap_2g=0x04040404,0x02020202,0x02020202,0x010101,0x1ff
++temp_add=29767
++temp_mult=425
++
++btc_flags=0x6
++btc_params0=5000
++btc_params1=1000
++btc_params6=63
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+new file mode 100644
+index 000000000..d5ac8c5c2
+--- /dev/null
++++ b/configs/bananapro_defconfig
+@@ -0,0 +1,80 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_EABIHF=y
++BR2_ARM_FPU_NEON_VFPV4=y
++
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++# Build options
++BR2_GLOBAL_PATCH_DIR="board/lemaker/bananapro/patches"
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="bananapro"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pro!"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_OVERLAY="board/lemaker/bananapro/rootfs_overlay"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/lemaker/bananapro/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.3"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapro"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++
++# Wifi firmware for brcm43362
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
++
++# Audio
++BR2_PACKAGE_ALSA_UTILS=y
++# BR2_PACKAGE_ALSA_UTILS_ALSAMIXER is not set
++BR2_PACKAGE_ALSA_UTILS_AMIXER=y
++BR2_PACKAGE_ALSA_UTILS_APLAY=y
++
++# For automatic firmware loading
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++
++# For expanding the root filesystem
++BR2_PACKAGE_E2FSPROGS=y
++BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
++
++# Wireless packages
++BR2_PACKAGE_IW=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
++BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
++
++# Host tools
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-- 
+2.11.0
