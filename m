@@ -1,141 +1,111 @@
 From: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
-Date: Fri, 13 Jan 2017 15:11:25 -0500
-Subject: [Buildroot] [PATCH 4/4] board/altera: update README for new scripts
-	and fixed some typos
+Date: Fri, 13 Jan 2017 15:11:24 -0500
+Subject: [Buildroot] [PATCH 3/4] board/altera: updated script to support
+	sockit automatic build
 In-Reply-To: <1484338285-21161-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
 References: <1484338285-21161-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
-Message-ID: <1484338285-21161-4-git-send-email-lucas.bajolet@savoirfairelinux.com>
+Message-ID: <1484338285-21161-3-git-send-email-lucas.bajolet@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The old README has a few typos which needed fixing.
-Also with the newer versions of U-Boot and the patch applied to the configuration, the partition table information and related commands need to be updated.
-
-Since the post-install script now supports Genimage, a new paragraph explaining how it works has been added.
+Added a post-install script and genimage configuration to build a dd-able image to install directly on an SD card.
 
 Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
 ---
- board/altera/readme.txt | 64 +++++++++++++++++++++++++------------------------
- 1 file changed, 33 insertions(+), 31 deletions(-)
+ board/altera/genimage.cfg       | 31 +++++++++++++++++++++++++++++++
+ board/altera/post-image.sh      | 29 ++++++++++++++++++++++++++++-
+ configs/altera_sockit_defconfig |  1 +
+ 3 files changed, 60 insertions(+), 1 deletion(-)
+ create mode 100644 board/altera/genimage.cfg
 
-diff --git a/board/altera/readme.txt b/board/altera/readme.txt
-index 1894a79..a19ba21 100644
---- a/board/altera/readme.txt
-+++ b/board/altera/readme.txt
-@@ -69,27 +69,13 @@ After building, you should obtain this tree:
- 
-     output/images/
-     ??? rootfs.ext2
--    ??? rootfs.ext3 -> rootfs.ext2
-     ??? rootfs.tar
-     ??? socfpga_cyclone5_sockit.dtb or socfpga_cyclone5_socdk.dtb
--    ??? socfpga.dtb
-+    ??? u-boot.bin
-     ??? u-boot.img
-     ??? u-boot-spl.bin
--    ??? uImage
--
--
--Signing the Preloader
-----------------------
--
--*** BEWARE ****
--The u-boot-spl.bin must be signed using the Altera's tool "mkpimage".
--This tool comes as a part of the Altera development environnment (SoC EDS).
--A fork of this tool have been done by Maxime Hadjinlian and can be found here:
--https://github.com/maximeh/mkpimage
--
--Remember that without signing the u-boot-spl.bin, the board will not boot !!!
--
--  $ mkpimage u-boot-spl.bin -o u-boot-spl-signed.bin
-+    ??? u-boot-spl.bin.crc
-+    ??? zImage
- 
- Prepare your SDcard
- ===================
-@@ -111,22 +97,26 @@ let's assume it is /dev/mmcblk0:
- Delete all previous partitions with 'd' then create the new partition table,
- using these options, pressing enter after each one:
- 
--  * n p 1 9000000 +20480K t 1 b
--  * n p 2 4096 +4496384K t 83
--  * n p 3 2048 +1024K t 3 a2
-+  * n p 1 1 4095
-+  * n p 2 4096 +22000
-+  * n p 3  <Enter> -- This will take the remaining space from the SD card
+diff --git a/board/altera/genimage.cfg b/board/altera/genimage.cfg
+new file mode 100644
+index 0000000..3107939
+--- /dev/null
++++ b/board/altera/genimage.cfg
+@@ -0,0 +1,31 @@
++image rootfs-img.vfat {
++	vfat {
++		file "socfpga.dtb" {image = "socfpga_cyclone5_sockit.dtb"}
++		file "zImage" {image = "zImage"}
++	}
 +
-+Then, still in fdisk, change the type of the partitions according to this
-+  * t 1 a2
-+  * t 2 b
- 
- Using the 'p' option, the SD card's partition must look like this:
- 
--Device         Boot     Start       End  Blocks  Id System
--/dev/mmcblk0p1        9000000   9041919   20960   b W95 FAT32
--/dev/mmcblk0p2           4096   8996863 4496384  83 Linux
--/dev/mmcblk0p3           2048      4095    1024  a2 Unknown
-+Device         Boot     Start     End   Blocks  Id  System
-+/dev/mmcblk0p1           2048    4095     2048  a2  Unknown
-+/dev/mmcblk0p2           4096   26096    22001   b  W95 FAT32
-+/dev/mmcblk0p3          26624 3862527  3835904  83  Linux
- 
- Then write the partition table using 'w' and exit.
- 
- Make partition one a DOS partition:
- 
--  $ sudo mkdosfs /dev/mmcblk0p1
-+  $ sudo mkdosfs /dev/mmcblk0p2
- 
- Install the binaries to the SDcard
- ----------------------------------
-@@ -139,27 +129,39 @@ The partition with type a2 is the partition scan by the first bootloader stage
- in the SoCkit ROM to find the next bootloader stage so we must write the signed
- preloader and the u-boot binaries in that partition:
- 
--  $ sudo dd if=u-boot-spl-signed.bin of=/dev/mmcblk0p3 bs=64k seek=0
--  $ sudo dd if=u-boot.img of=/dev/mmcblk0p3 bs=64k seek=4
-+  $ sudo dd if=u-boot-spl.bin of=/dev/mmcblk0p1 bs=64k seek=0
-+  $ sudo dd if=u-boot-spl.bin.crc of=/dev/mmcblk0p1 bs=64k seek=1
-+  $ sudo dd if=u-boot.img of=/dev/mmcblk0p1 bs=64k seek=4
- 
- Copy the Linux kernel and its Device tree:
- 
-   $ sudo mkdir /mnt/sdcard
--  $ sudo mount /dev/mmcblk0p1 /mnt/sdcard
--  $ sudo cp socfpga.dtb uImage /mnt/sdcard
-+  $ sudo mount /dev/mmcblk0p2 /mnt/sdcard
-+  $ sudo cp socfpga_cyclone5_sockit.dtb /mnt/sdcard/socfpga.dtb
-+  $ sudo cp zImage /mnt/sdcard
-   $ sudo umount /mnt/sdcard
- 
- Copy the rootfs:
- 
--  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p2 bs=64k
-+  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p3 bs=64k
-   $ sudo sync
- 
- It's Done!
- 
-+(ALT) Install the binaries to SDcard from genimage
-+--------------------------------------------
++	size = 10M
++}
 +
-+`genimage` will generate a `sockit_image.img` image in the output folder.
-+From that point, you will need to execute the following command:
++image sockit_image.img {
++	hdimage {
++	}
 +
-+   $ sudo dd if=sockit_image.img of=/dev/mmcblk0
++	partition uboot {
++		partition-type = 0xa2
++		image = "uboot-part.img"
++		offset = 0
++	}
 +
-+It's Done!
++	partition rootfs {
++		partition-type = 0xb
++		image = "rootfs-img.vfat"
++		offset = 1M
++	}
 +
- Finish
- ======
++	partition linux {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		offset = 12M
++	}
++}
+diff --git a/board/altera/post-image.sh b/board/altera/post-image.sh
+index 03e7819..a9aefc9 100755
+--- a/board/altera/post-image.sh
++++ b/board/altera/post-image.sh
+@@ -5,4 +5,31 @@
  
- Eject your SDcard, insert it in your SoCkit, and power it up.
+ # create a DTB file copy with the name expected by the u-boot config
+ # Name of the DTB is passed as the second argument to the script.
+-cp -af $BINARIES_DIR/${2}.dtb  $BINARIES_DIR/socfpga.dtb
++set -e
++
++BOARD_DIR=$(dirname $0)
++
++# Create SPL + bootloader image
++fallocate -l 1M $BINARIES_DIR/uboot-part.img
++dd if=$BINARIES_DIR/u-boot-spl.bin of=$BINARIES_DIR/uboot-part.img bs=64k seek=0
++dd if=$BINARIES_DIR/u-boot-spl.bin.crc of=$BINARIES_DIR/uboot-part.img bs=64k seek=1
++dd if=$BINARIES_DIR/u-boot.img of=$BINARIES_DIR/uboot-part.img bs=64k seek=4
++
++#########################################
++# Final image generation (using genimage)
++#########################################
++# Prepare data for image
++T=`mktemp -d`
++echo $T
++mkdir -p $T/root
++mkdir -p $T/tmp
++
++echo "* Generating sd-card image..."
++genimage \
++        --config $BOARD_DIR/genimage.cfg \
++        --rootpath $T/root \
++        --tmppath $T/tmp \
++        --inputpath $BINARIES_DIR \
++        --outputpath $BINARIES_DIR \
++
++rm -rf $T
+diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+index 1c9a499..ee1bd95 100644
+--- a/configs/altera_sockit_defconfig
++++ b/configs/altera_sockit_defconfig
+@@ -11,6 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
  
- if you want a serial console, you can plug a micro B USB cable on the USB-UART
--port, the serial port config to used is 57600/8-N-1.
-+port, the serial port config to use is 115200/8-N-1.
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
++BR2_PACKAGE_HOST_GENIMAGE=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
 -- 
 2.7.4
