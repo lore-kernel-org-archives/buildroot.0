@@ -1,896 +1,141 @@
 From: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
-Date: Fri, 13 Jan 2017 15:11:23 -0500
-Subject: [Buildroot] [PATCH 2/4] board/altera: changed path contents to
-	support sockit from official config
+Date: Fri, 13 Jan 2017 15:11:25 -0500
+Subject: [Buildroot] [PATCH 4/4] board/altera: update README for new scripts
+	and fixed some typos
 In-Reply-To: <1484338285-21161-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
 References: <1484338285-21161-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
-Message-ID: <1484338285-21161-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
+Message-ID: <1484338285-21161-4-git-send-email-lucas.bajolet@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The old patch was unnecessary now that there is a proper SoCkit configuration file in the Altera repository.
-However, with the board I use, unless partition 0:1 was set as the SPL/U-Boot partition, the device would not boot.
-The generated configuration by u-boot expected 0:1 to contain the dtb and zImage files to boot linux, hence this patch to change the behaviour and have 0:2 contain these informations.
+The old README has a few typos which needed fixing.
+Also with the newer versions of U-Boot and the patch applied to the configuration, the partition table information and related commands need to be updated.
 
-The patch also cleans the partition table a bit, as it can now be properly ordered.
+Since the post-install script now supports Genimage, a new paragraph explaining how it works has been added.
 
 Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
 ---
- .../sockit/altera_sockit_config_buildroot.patch    |  35 +
- .../uboot-sockit-preloader-sample-design.patch     | 820 ---------------------
- 2 files changed, 35 insertions(+), 820 deletions(-)
- create mode 100644 board/altera/sockit/altera_sockit_config_buildroot.patch
- delete mode 100644 board/altera/sockit/uboot-sockit-preloader-sample-design.patch
+ board/altera/readme.txt | 64 +++++++++++++++++++++++++------------------------
+ 1 file changed, 33 insertions(+), 31 deletions(-)
 
-diff --git a/board/altera/sockit/altera_sockit_config_buildroot.patch b/board/altera/sockit/altera_sockit_config_buildroot.patch
-new file mode 100644
-index 0000000..d2b5003
---- /dev/null
-+++ b/board/altera/sockit/altera_sockit_config_buildroot.patch
-@@ -0,0 +1,35 @@
-+From ba56b1703dde4e1be4e9d943722e382ad1348755 Mon Sep 17 00:00:00 2001
-+From: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
-+Date: Thu, 12 Jan 2017 17:25:15 -0500
-+Subject: [PATCH] sockfpga: Changed image and device tree partition information
-+ in config
-+
-+Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
-+---
-+ include/configs/socfpga_sockit.h | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/include/configs/socfpga_sockit.h b/include/configs/socfpga_sockit.h
-+index 3fceb31..ccbf56c 100644
-+--- a/include/configs/socfpga_sockit.h
-++++ b/include/configs/socfpga_sockit.h
-+@@ -42,13 +42,13 @@
-+ 	"fdt_addr=100\0" \
-+ 	"fdtimage=socfpga.dtb\0" \
-+ 	"bootm ${loadaddr} - ${fdt_addr}\0" \
-+-	"mmcroot=/dev/mmcblk0p2\0" \
-++	"mmcroot=/dev/mmcblk0p3\0" \
-+ 	"mmcboot=setenv bootargs " CONFIG_BOOTARGS \
-+ 		" root=${mmcroot} rw rootwait;" \
-+ 		"bootz ${loadaddr} - ${fdt_addr}\0" \
-+ 	"mmcload=mmc rescan;" \
-+-		"load mmc 0:1 ${loadaddr} ${bootimage};" \
-+-		"load mmc 0:1 ${fdt_addr} ${fdtimage}\0" \
-++		"load mmc 0:2 ${loadaddr} ${bootimage};" \
-++		"load mmc 0:2 ${fdt_addr} ${fdtimage}\0" \
-+ 	"qspiload=sf probe && mtdparts default && run ubiload\0" \
-+ 	"qspiboot=setenv bootargs " CONFIG_BOOTARGS \
-+ 		" ubi.mtd=1,64 root=ubi0:rootfs rw rootfstype=ubifs;"\
-+-- 
-+2.7.4
-+
-diff --git a/board/altera/sockit/uboot-sockit-preloader-sample-design.patch b/board/altera/sockit/uboot-sockit-preloader-sample-design.patch
-deleted file mode 100644
-index ddf0abc..0000000
---- a/board/altera/sockit/uboot-sockit-preloader-sample-design.patch
-+++ /dev/null
-@@ -1,820 +0,0 @@
--From c70f2ebb350da20af1a0ed4b7960b8e5a1952713 Mon Sep 17 00:00:00 2001
--From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
--Date: Thu, 20 Feb 2014 11:51:31 -0500
--Subject: [PATCH] board: add to sockit a working preloader design
+diff --git a/board/altera/readme.txt b/board/altera/readme.txt
+index 1894a79..a19ba21 100644
+--- a/board/altera/readme.txt
++++ b/board/altera/readme.txt
+@@ -69,27 +69,13 @@ After building, you should obtain this tree:
+ 
+     output/images/
+     ??? rootfs.ext2
+-    ??? rootfs.ext3 -> rootfs.ext2
+     ??? rootfs.tar
+     ??? socfpga_cyclone5_sockit.dtb or socfpga_cyclone5_socdk.dtb
+-    ??? socfpga.dtb
++    ??? u-boot.bin
+     ??? u-boot.img
+     ??? u-boot-spl.bin
+-    ??? uImage
 -
-----
-- board/altera/socfpga_cyclone5/build.h              |   2 +-
-- board/altera/socfpga_cyclone5/iocsr_config.c       | 314 ++++++++++-----------
-- board/altera/socfpga_cyclone5/pinmux_config.c      |  32 +--
-- board/altera/socfpga_cyclone5/pinmux_config.h      |   8 +-
-- board/altera/socfpga_cyclone5/sdram/sdram_config.h |  14 +-
-- .../altera/socfpga_cyclone5/sdram/sequencer_auto.h |  16 +-
-- .../sdram/sequencer_auto_ac_init.c                 |  16 +-
-- .../socfpga_cyclone5/sdram/sequencer_defines.h     |  34 +--
-- 8 files changed, 218 insertions(+), 218 deletions(-)
 -
--diff --git a/board/altera/socfpga_cyclone5/build.h b/board/altera/socfpga_cyclone5/build.h
--index e5d9c3c..a369015 100644
----- a/board/altera/socfpga_cyclone5/build.h
--+++ b/board/altera/socfpga_cyclone5/build.h
--@@ -29,7 +29,7 @@
--  * Handoff files must provide user option whether to
--  * enable watchdog during preloader execution phase
--  */
---#define CONFIG_PRELOADER_WATCHDOG_ENABLE	(0)
--+#define CONFIG_PRELOADER_WATCHDOG_ENABLE	(1)
-- 
-- /*
--  * Handoff files must provide user option whether to enable
--diff --git a/board/altera/socfpga_cyclone5/iocsr_config.c b/board/altera/socfpga_cyclone5/iocsr_config.c
--index fa663e1..90fc154 100644
----- a/board/altera/socfpga_cyclone5/iocsr_config.c
--+++ b/board/altera/socfpga_cyclone5/iocsr_config.c
--@@ -7,113 +7,113 @@ const unsigned long iocsr_scan_chain0_table[((CONFIG_HPS_IOCSR_SCANCHAIN0_LENGTH
-- 	0xC0000000,
-- 	0x0000003F,
-- 	0x00008000,
---	0x00020080,
---	0x08020000,
---	0x08000000,
---	0x00018020,
--+	0x00060180,
--+	0x18060000,
--+	0x18000000,
--+	0x00018060,
-- 	0x00000000,
-- 	0x00004000,
---	0x00010040,
---	0x04010000,
---	0x04000000,
---	0x00000010,
---	0x00004010,
--+	0x000300C0,
--+	0x0C030000,
--+	0x0C000000,
--+	0x00000030,
--+	0x0000C030,
-- 	0x00002000,
---	0x00020000,
---	0x02008000,
---	0x02000000,
---	0x00000008,
---	0x00002008,
--+	0x00018060,
--+	0x06018000,
--+	0x06000000,
--+	0x00000018,
--+	0x00006018,
-- 	0x00001000,
-- };
-- 
-- const unsigned long iocsr_scan_chain1_table[((CONFIG_HPS_IOCSR_SCANCHAIN1_LENGTH / 32) + 1)] = {
---	0x000C0300,
---	0x10040000,
---	0x100000C0,
---	0x00000040,
---	0x00010040,
--+	0x00100000,
--+	0x300C0000,
--+	0x300000C0,
--+	0x000000C0,
--+	0x000300C0,
-- 	0x00008000,
-- 	0x00080000,
---	0x18060000,
---	0x18000000,
---	0x00000060,
---	0x00018060,
--+	0x20000000,
--+	0x00000000,
--+	0x00000080,
--+	0x00020000,
-- 	0x00004000,
---	0x00010040,
--+	0x000300C0,
-- 	0x10000000,
---	0x04000000,
---	0x00000010,
---	0x00004010,
--+	0x0C000000,
--+	0x00000030,
--+	0x0000C030,
-- 	0x00002000,
---	0x06008020,
---	0x02008000,
--+	0x06018060,
--+	0x06018000,
-- 	0x01FE0000,
-- 	0xF8000000,
-- 	0x00000007,
-- 	0x00001000,
---	0x00004010,
---	0x01004000,
---	0x01000000,
---	0x00003004,
---	0x00001004,
--+	0x0000C030,
--+	0x0300C000,
--+	0x03000000,
--+	0x0000300C,
--+	0x0000300C,
-- 	0x00000800,
-- 	0x00000000,
-- 	0x00000000,
---	0x00800000,
---	0x00000002,
--+	0x01800000,
--+	0x00000006,
-- 	0x00002000,
-- 	0x00000400,
-- 	0x00000000,
---	0x00401000,
--+	0x00C03000,
-- 	0x00000003,
-- 	0x00000000,
-- 	0x00000000,
-- 	0x00000200,
---	0x00600802,
--+	0x00601806,
-- 	0x00000000,
---	0x80200000,
---	0x80000600,
---	0x00000200,
--+	0x80600000,
--+	0x80000601,
--+	0x00000601,
-- 	0x00000100,
---	0x00300401,
---	0xC0100400,
---	0x40100000,
---	0x40000300,
---	0x000C0100,
--+	0x00300C03,
--+	0xC0300C00,
--+	0xC0300000,
--+	0xC0000300,
--+	0x000C0300,
-- 	0x00000080,
-- };
-- 
-- const unsigned long iocsr_scan_chain2_table[((CONFIG_HPS_IOCSR_SCANCHAIN2_LENGTH / 32) + 1)] = {
---	0x80040100,
--+	0x300C0300,
-- 	0x00000000,
-- 	0x0FF00000,
-- 	0x00000000,
---	0x0C010040,
--+	0x0C0300C0,
-- 	0x00008000,
---	0x18020080,
---	0x00000000,
---	0x08000000,
---	0x00040020,
---	0x06018060,
--+	0x18060180,
--+	0x18060000,
--+	0x18000000,
--+	0x00018060,
--+	0x00018060,
-- 	0x00004000,
---	0x0C010040,
---	0x04010000,
--+	0x000300C0,
--+	0x0C030000,
-- 	0x00000030,
-- 	0x00000000,
---	0x03004010,
--+	0x0300C030,
-- 	0x00002000,
---	0x06008020,
---	0x02008000,
---	0x02000018,
---	0x00006008,
---	0x01802008,
--+	0x00018060,
--+	0x06018000,
--+	0x06000000,
--+	0x00000018,
--+	0x00006018,
-- 	0x00001000,
---	0x03004010,
---	0x01004000,
---	0x0100000C,
---	0x00003004,
---	0x00C01004,
--+	0x0000C030,
--+	0x00000000,
--+	0x03000000,
--+	0x0000000C,
--+	0x00C0300C,
-- 	0x00000800,
-- };
-- 
--@@ -170,14 +170,14 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0xA0000034,
-- 	0x0D000001,
-- 	0x6068030C,
---	0xC7034018,
---	0x0E381A01,
--+	0xCF034059,
--+	0x1E781A03,
-- 	0x8030C0D0,
---	0x34018606,
---	0x01A01C70,
--+	0x34059606,
--+	0x01A03CF0,
-- 	0x0C0D0000,
---	0x18606803,
---	0x01C70340,
--+	0x59606803,
--+	0x03CF0340,
-- 	0xD000001A,
-- 	0x068030C0,
-- 	0x10040000,
--@@ -244,15 +244,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0xA0000034,
-- 	0x0D000001,
-- 	0x6068030C,
---	0xC7034018,
---	0x0E381A01,
--+	0xCF034059,
--+	0x1E781A03,
-- 	0x8030C0D0,
---	0x34018606,
--+	0x34059606,
-- 	0x01A00000,
-- 	0x0C0D0000,
---	0x18606803,
---	0x01C70340,
---	0xD00E381A,
--+	0x59606803,
--+	0x03CF0340,
--+	0xD01E781A,
-- 	0x068030C0,
-- 	0x10040000,
-- 	0x00200000,
--@@ -273,7 +273,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0xAA0D4000,
-- 	0x01C3A810,
-- 	0xAA0D4000,
---	0x01C3A808,
--+	0x01C3A810,
-- 	0xAA0D4000,
-- 	0x01C3A810,
-- 	0x00040100,
--@@ -301,7 +301,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0x2A835000,
-- 	0x0070EA04,
-- 	0x2A835000,
---	0x0070EA02,
--+	0x0070EA04,
-- 	0x2A835000,
-- 	0x0070EA04,
-- 	0x00010040,
--@@ -321,15 +321,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0x14864000,
-- 	0x69A47A05,
-- 	0xCBCF23D7,
---	0xF41E791E,
---	0x034ED348,
--+	0xF5DE791E,
--+	0x0356D348,
-- 	0x821A0000,
-- 	0x0000D000,
-- 	0x01860680,
-- 	0xD769A47A,
-- 	0x1ECBCF23,
---	0x48F41E79,
---	0x00034ED3,
--+	0x48F5DE79,
--+	0x000356D3,
-- 	0x00080200,
-- 	0x00001000,
-- 	0x00080200,
--@@ -347,7 +347,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0xAA0D4000,
-- 	0x01C3A810,
-- 	0xAA0D4000,
---	0x01C3A808,
--+	0x01C3A810,
-- 	0xAA0D4000,
-- 	0x01C3A810,
-- 	0x00040100,
--@@ -375,7 +375,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0x2A835000,
-- 	0x0070EA04,
-- 	0x2A835000,
---	0x0070EA02,
--+	0x0070EA04,
-- 	0x2A835000,
-- 	0x0070EA04,
-- 	0x00015000,
--@@ -395,15 +395,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0x14864000,
-- 	0x69A47A05,
-- 	0xCBCF23D7,
---	0xF41E791E,
---	0x034ED348,
---	0x821A00C3,
--+	0xF5DE791E,
--+	0x0356D348,
--+	0x821A02CB,
-- 	0x0000D000,
-- 	0x00000680,
-- 	0xD769A47A,
-- 	0x1ECBCF23,
---	0x48F41E79,
---	0x00034ED3,
--+	0x48F5DE79,
--+	0x000356D3,
-- 	0x00080200,
-- 	0x00001000,
-- 	0x00080200,
--@@ -421,7 +421,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0xAA0D4000,
-- 	0x01C3A810,
-- 	0xAA0D4000,
---	0x01C3A808,
--+	0x01C3A810,
-- 	0xAA0D4000,
-- 	0x01C3A810,
-- 	0x00040100,
--@@ -449,7 +449,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0x2A835000,
-- 	0x0070EA04,
-- 	0x2A835000,
---	0x0070EA02,
--+	0x0070EA04,
-- 	0x2A835000,
-- 	0x0070EA04,
-- 	0x00010040,
--@@ -469,15 +469,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0x14864000,
-- 	0x69A47A05,
-- 	0xCBCF23D7,
---	0xF41E791E,
---	0x034ED348,
--+	0xF5DE791E,
--+	0x0356D348,
-- 	0x821A0000,
-- 	0x0000D000,
-- 	0x00000680,
-- 	0xD769A47A,
-- 	0x1ECBCF23,
---	0x48F41E79,
---	0x00034ED3,
--+	0x48F5DE79,
--+	0x000356D3,
-- 	0x00080200,
-- 	0x00001000,
-- 	0x00080200,
--@@ -495,7 +495,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0xAA0D4000,
-- 	0x01C3A810,
-- 	0xAA0D4000,
---	0x01C3A808,
--+	0x01C3A810,
-- 	0xAA0D4000,
-- 	0x01C3A810,
-- 	0x00040100,
--@@ -523,7 +523,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0x2A835000,
-- 	0x0070EA04,
-- 	0x2A835000,
---	0x0070EA02,
--+	0x0070EA04,
-- 	0x2A835000,
-- 	0x0070EA04,
-- 	0x00010040,
--@@ -543,15 +543,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0x14864000,
-- 	0x69A47A05,
-- 	0xCBCF23D7,
---	0xF41E791E,
---	0x034ED348,
--+	0xF5DE791E,
--+	0x0356D348,
-- 	0x821A0000,
-- 	0x0000D000,
-- 	0x00000680,
-- 	0xD769A47A,
-- 	0x1ECBCF23,
---	0x48F41E79,
---	0x00034ED3,
--+	0x48F5DE79,
--+	0x000356D3,
-- 	0x00080200,
-- 	0x00001000,
-- 	0x00080200,
--@@ -567,80 +567,80 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
-- 	0x04000002,
-- 	0x00820000,
-- 	0x00489000,
---	0x001A1A1A,
---	0x085506A0,
---	0x0000E1D4,
---	0x045506A0,
---	0x0000E1D4,
---	0x085506A0,
---	0x8000E1D4,
--+	0x801A1A1A,
--+	0x00000200,
--+	0x80000004,
--+	0x00000200,
--+	0x80000004,
--+	0x00000200,
--+	0x80000004,
-- 	0x00000200,
-- 	0x00000004,
---	0x04000000,
---	0x00000009,
---	0x00002410,
--+	0x00040000,
--+	0x10000000,
--+	0x00000000,
-- 	0x00000040,
---	0x41000000,
---	0x00002082,
---	0x00000350,
---	0x000000DA,
--+	0x00010000,
--+	0x40002000,
--+	0x00000100,
--+	0x40000002,
--+	0x00000100,
--+	0x40000002,
-- 	0x00000100,
-- 	0x40000002,
-- 	0x00000100,
-- 	0x00000002,
---	0x042A8350,
---	0x000070EA,
---	0x86000000,
---	0x08000004,
--+	0x00020000,
--+	0x08000000,
-- 	0x00000000,
---	0x00482000,
---	0x21800000,
---	0x00101061,
---	0x021541A8,
---	0x00003875,
---	0x011541A8,
---	0x00003875,
---	0x021541A8,
---	0x20003875,
--+	0x00000020,
--+	0x00008000,
--+	0x20001000,
--+	0x00000080,
--+	0x20000001,
--+	0x00000080,
--+	0x20000001,
--+	0x00000080,
--+	0x20000001,
-- 	0x00000080,
-- 	0x00000001,
---	0x41000000,
---	0x00000002,
---	0x00FF0904,
--+	0x00010000,
--+	0x04000000,
--+	0x00FF0000,
-- 	0x00000000,
---	0x90400000,
---	0x00000820,
--+	0x00004000,
--+	0x00000800,
-- 	0x80000001,
---	0x38D612AF,
---	0x86F8E38E,
---	0x0A0A78B4,
---	0x000D020A,
--+	0x00041419,
--+	0x40000000,
--+	0x04000816,
--+	0x000D0000,
-- 	0x00006800,
---	0x028A4320,
---	0xEBB4D23D,
---	0x8F65E791,
---	0xA47A0F3C,
---	0x0001A769,
---	0x00410D00,
--+	0x00000340,
--+	0xD000001A,
--+	0x06800000,
--+	0x00340000,
--+	0x0001A000,
--+	0x00000D00,
-- 	0x40000068,
---	0x3D000003,
---	0x91EBB4D2,
---	0x3C8F65E7,
---	0x69A47A0F,
---	0x000001A7,
--+	0x1A000003,
--+	0x00D00000,
--+	0x00068000,
--+	0x00003400,
--+	0x000001A0,
--+	0x00000401,
--+	0x00000008,
-- 	0x00000401,
-- 	0x00000008,
-- 	0x00000401,
-- 	0x00000008,
---	0x00000540,
---	0x000003A8,
---	0x10AA0D40,
---	0x8001C3A8,
--+	0x00000401,
--+	0x80000008,
-- 	0x0000007F,
--+	0x20000000,
-- 	0x00000000,
---	0x00004060,
---	0xE1208000,
--+	0xE0000080,
-- 	0x0000001F,
---	0x00004100,
--+	0x00004000,
-- };
-- 
--diff --git a/board/altera/socfpga_cyclone5/pinmux_config.c b/board/altera/socfpga_cyclone5/pinmux_config.c
--index 730067e..cfd74cd 100644
----- a/board/altera/socfpga_cyclone5/pinmux_config.c
--+++ b/board/altera/socfpga_cyclone5/pinmux_config.c
--@@ -23,7 +23,7 @@ unsigned long sys_mgr_init_table[CONFIG_HPS_PINMUX_NUM] = {
-- 	0, /* EMACIO18 */
-- 	0, /* EMACIO19 */
-- 	3, /* FLASHIO0 */
---	3, /* FLASHIO1 */
--+	0, /* FLASHIO1 */
-- 	3, /* FLASHIO2 */
-- 	3, /* FLASHIO3 */
-- 	0, /* FLASHIO4 */
--@@ -34,25 +34,25 @@ unsigned long sys_mgr_init_table[CONFIG_HPS_PINMUX_NUM] = {
-- 	3, /* FLASHIO9 */
-- 	3, /* FLASHIO10 */
-- 	3, /* FLASHIO11 */
---	3, /* GENERALIO0 */
---	3, /* GENERALIO1 */
---	3, /* GENERALIO2 */
---	3, /* GENERALIO3 */
---	3, /* GENERALIO4 */
---	3, /* GENERALIO5 */
---	3, /* GENERALIO6 */
---	3, /* GENERALIO7 */
---	3, /* GENERALIO8 */
--+	0, /* GENERALIO0 */
--+	1, /* GENERALIO1 */
--+	1, /* GENERALIO2 */
--+	1, /* GENERALIO3 */
--+	1, /* GENERALIO4 */
--+	0, /* GENERALIO5 */
--+	0, /* GENERALIO6 */
--+	0, /* GENERALIO7 */
--+	0, /* GENERALIO8 */
-- 	3, /* GENERALIO9 */
-- 	3, /* GENERALIO10 */
-- 	3, /* GENERALIO11 */
-- 	3, /* GENERALIO12 */
---	2, /* GENERALIO13 */
---	2, /* GENERALIO14 */
---	3, /* GENERALIO15 */
---	3, /* GENERALIO16 */
---	2, /* GENERALIO17 */
---	2, /* GENERALIO18 */
--+	0, /* GENERALIO13 */
--+	0, /* GENERALIO14 */
--+	1, /* GENERALIO15 */
--+	1, /* GENERALIO16 */
--+	1, /* GENERALIO17 */
--+	1, /* GENERALIO18 */
-- 	0, /* GENERALIO19 */
-- 	0, /* GENERALIO20 */
-- 	0, /* GENERALIO21 */
--diff --git a/board/altera/socfpga_cyclone5/pinmux_config.h b/board/altera/socfpga_cyclone5/pinmux_config.h
--index fb483ab..64c750a 100644
----- a/board/altera/socfpga_cyclone5/pinmux_config.h
--+++ b/board/altera/socfpga_cyclone5/pinmux_config.h
--@@ -11,15 +11,15 @@
-- #define CONFIG_HPS_UART0 (1)
-- #define CONFIG_HPS_UART1 (0)
-- #define CONFIG_HPS_TRACE (0)
---#define CONFIG_HPS_I2C0 (1)
---#define CONFIG_HPS_I2C1 (0)
--+#define CONFIG_HPS_I2C0 (0)
--+#define CONFIG_HPS_I2C1 (1)
-- #define CONFIG_HPS_I2C2 (0)
-- #define CONFIG_HPS_I2C3 (0)
-- #define CONFIG_HPS_SPIM0 (1)
---#define CONFIG_HPS_SPIM1 (0)
--+#define CONFIG_HPS_SPIM1 (1)
-- #define CONFIG_HPS_SPIS0 (0)
-- #define CONFIG_HPS_SPIS1 (0)
---#define CONFIG_HPS_CAN0 (1)
--+#define CONFIG_HPS_CAN0 (0)
-- #define CONFIG_HPS_CAN1 (0)
-- 
-- #define CONFIG_HPS_SDMMC_BUSWIDTH (4)
--diff --git a/board/altera/socfpga_cyclone5/sdram/sdram_config.h b/board/altera/socfpga_cyclone5/sdram/sdram_config.h
--index b90d6f3..dd027ef 100755
----- a/board/altera/socfpga_cyclone5/sdram/sdram_config.h
--+++ b/board/altera/socfpga_cyclone5/sdram/sdram_config.h
--@@ -4,16 +4,16 @@
-- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_MEMTYPE			(2)
-- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_MEMBL			(8)
-- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ADDRORDER		(0)
---#define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ECCEN			(1)
---#define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ECCCORREN		(1)
--+#define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ECCEN			(0)
--+#define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ECCCORREN		(0)
-- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_REORDEREN		(1)
-- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_STARVELIMIT		(10)
-- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_DQSTRKEN			(0)
-- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_NODMPINS			(0)
---#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TCWL			(6)
--+#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TCWL			(8)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_AL			(0)
---#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TCL			(7)
---#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TRRD			(4)
--+#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TCL			(11)
--+#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TRRD			(3)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TFAW			(12)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TRFC			(104)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING2_IF_TREFI		(3120)
--@@ -21,7 +21,7 @@
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING2_IF_TRP		(6)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING2_IF_TWR		(6)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING2_IF_TWTR		(4)
---#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TRTP			(4)
--+#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TRTP			(3)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TRAS			(14)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TRC			(20)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TMRD			(4)
--@@ -33,7 +33,7 @@
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMADDRW_ROWBITS		(15)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMADDRW_BANKBITS		(3)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMADDRW_CSBITS			(1)
---#define CONFIG_HPS_SDR_CTRLCFG_DRAMIFWIDTH_IFWIDTH		(40)
--+#define CONFIG_HPS_SDR_CTRLCFG_DRAMIFWIDTH_IFWIDTH		(32)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMDEVWIDTH_DEVWIDTH		(8)
-- #define CONFIG_HPS_SDR_CTRLCFG_DRAMINTR_INTREN			(0)
-- #define CONFIG_HPS_SDR_CTRLCFG_STATICCFG_MEMBL			(2)
--diff --git a/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h b/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h
--index e8c5484..919676d 100644
----- a/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h
--+++ b/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h
--@@ -34,7 +34,7 @@
-- #define __RW_MGR_ac_read_en 0x21
-- #define __RW_MGR_ac_mrs3_mirr 0x0C
-- #define __RW_MGR_ac_mrs2 0x05
---#define __RW_MGR_CONTENT_ac_mrs1 0x10090044
--+#define __RW_MGR_CONTENT_ac_mrs1 0x10090006
-- #define __RW_MGR_CONTENT_ac_mrs3 0x100B0000
-- #define __RW_MGR_CONTENT_ac_write_bank_0_col_0_nodata_wl_1 0x18980000
-- #define __RW_MGR_CONTENT_ac_act_1 0x106B0000
--@@ -46,8 +46,8 @@
-- #define __RW_MGR_CONTENT_ac_init_reset_0_cke_0 0x20700000
-- #define __RW_MGR_CONTENT_ac_read_bank_0_1_norden 0x10580008
-- #define __RW_MGR_CONTENT_ac_pre_all 0x10280400
---#define __RW_MGR_CONTENT_ac_mrs0_user 0x10080431
---#define __RW_MGR_CONTENT_ac_mrs0_dll_reset 0x10080530
--+#define __RW_MGR_CONTENT_ac_mrs0_user 0x10080471
--+#define __RW_MGR_CONTENT_ac_mrs0_dll_reset 0x10080570
-- #define __RW_MGR_CONTENT_ac_read_bank_0_0 0x13580000
-- #define __RW_MGR_CONTENT_ac_write_bank_0_col_1 0x1C980008
-- #define __RW_MGR_CONTENT_ac_read_bank_0_1 0x13580008
--@@ -55,21 +55,21 @@
-- #define __RW_MGR_CONTENT_ac_write_bank_1_col_1 0x1C9B0008
-- #define __RW_MGR_CONTENT_ac_write_bank_0_col_0 0x1C980000
-- #define __RW_MGR_CONTENT_ac_read_bank_1_0 0x135B0000
---#define __RW_MGR_CONTENT_ac_mrs1_mirr 0x100A0024
--+#define __RW_MGR_CONTENT_ac_mrs1_mirr 0x100A0006
-- #define __RW_MGR_CONTENT_ac_read_bank_1_1 0x135B0008
-- #define __RW_MGR_CONTENT_ac_des_odt_1 0x38780000
---#define __RW_MGR_CONTENT_ac_mrs0_dll_reset_mirr 0x100804C8
--+#define __RW_MGR_CONTENT_ac_mrs0_dll_reset_mirr 0x100804E8
-- #define __RW_MGR_CONTENT_ac_zqcl 0x10380400
-- #define __RW_MGR_CONTENT_ac_write_predata 0x38F80000
---#define __RW_MGR_CONTENT_ac_mrs0_user_mirr 0x10080449
--+#define __RW_MGR_CONTENT_ac_mrs0_user_mirr 0x10080469
-- #define __RW_MGR_CONTENT_ac_ref 0x10480000
-- #define __RW_MGR_CONTENT_ac_nop 0x30780000
-- #define __RW_MGR_CONTENT_ac_rdimm 0x10780000
---#define __RW_MGR_CONTENT_ac_mrs2_mirr 0x10090010
--+#define __RW_MGR_CONTENT_ac_mrs2_mirr 0x10090218
-- #define __RW_MGR_CONTENT_ac_write_bank_0_col_0_nodata 0x18180000
-- #define __RW_MGR_CONTENT_ac_read_en 0x33780000
-- #define __RW_MGR_CONTENT_ac_mrs3_mirr 0x100B0000
---#define __RW_MGR_CONTENT_ac_mrs2 0x100A0008
--+#define __RW_MGR_CONTENT_ac_mrs2 0x100A0218
-- 
-- #define __RW_MGR_READ_B2B_WAIT2 0x6A
-- #define __RW_MGR_LFSR_WR_RD_BANK_0_WAIT 0x31
--diff --git a/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c b/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c
--index e16efa1..20b4ca1 100644
----- a/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c
--+++ b/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c
--@@ -6,16 +6,16 @@ const alt_u32 ac_rom_init[36] =
-- {
-- 	0x20700000,
-- 	0x20780000,
---	0x10080431,
---	0x10080530,
---	0x10090044,
---	0x100a0008,
--+	0x10080471,
--+	0x10080570,
--+	0x10090006,
--+	0x100a0218,
-- 	0x100b0000,
-- 	0x10380400,
---	0x10080449,
---	0x100804c8,
---	0x100a0024,
---	0x10090010,
--+	0x10080469,
--+	0x100804e8,
--+	0x100a0006,
--+	0x10090218,
-- 	0x100b0000,
-- 	0x30780000,
-- 	0x38780000,
--diff --git a/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h b/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h
--index 52faf3f..b85b85c 100644
----- a/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h
--+++ b/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h
--@@ -1,28 +1,28 @@
-- #ifndef _SEQUENCER_DEFINES_H_
-- #define _SEQUENCER_DEFINES_H_
-- 
---#define AC_ROM_MR1_MIRR 0000000100100
--+#define AC_ROM_MR1_MIRR 0000000000110
-- #define AC_ROM_MR1_OCD_ENABLE
---#define AC_ROM_MR2_MIRR 0000000010000
--+#define AC_ROM_MR2_MIRR 0001000011000
-- #define AC_ROM_MR3_MIRR 0000000000000
-- #define AC_ROM_MR0_CALIB
---#define AC_ROM_MR0_DLL_RESET_MIRR 0010011001000
---#define AC_ROM_MR0_DLL_RESET 0010100110000
---#define AC_ROM_MR0_MIRR 0010001001001
---#define AC_ROM_MR0 0010000110001
---#define AC_ROM_MR1 0000001000100
---#define AC_ROM_MR2 0000000001000
--+#define AC_ROM_MR0_DLL_RESET_MIRR 0010011101000
--+#define AC_ROM_MR0_DLL_RESET 0010101110000
--+#define AC_ROM_MR0_MIRR 0010001101001
--+#define AC_ROM_MR0 0010001110001
--+#define AC_ROM_MR1 0000000000110
--+#define AC_ROM_MR2 0001000011000
-- #define AC_ROM_MR3 0000000000000
-- #define AFI_CLK_FREQ 401
-- #define AFI_RATE_RATIO 1
-- #define ARRIAVGZ 0
-- #define ARRIAV 0
---#define AVL_CLK_FREQ 67
--+#define AVL_CLK_FREQ 81
-- #define BFM_MODE 0
-- #define BURST2 0
-- #define CALIBRATE_BIT_SLIPS 0
---#define CALIB_LFIFO_OFFSET 7
---#define CALIB_VFIFO_OFFSET 5
--+#define CALIB_LFIFO_OFFSET 11
--+#define CALIB_VFIFO_OFFSET 9
-- #define CYCLONEV 1
-- #define DDR2 0
-- #define DDR3 1
--@@ -89,20 +89,20 @@
-- #define RW_MGR_MEM_CHIP_SELECT_WIDTH 1
-- #define RW_MGR_MEM_CLK_EN_WIDTH 1
-- #define RW_MGR_MEM_CONTROL_WIDTH 1
---#define RW_MGR_MEM_DATA_MASK_WIDTH 5
---#define RW_MGR_MEM_DATA_WIDTH 40
--+#define RW_MGR_MEM_DATA_MASK_WIDTH 4
--+#define RW_MGR_MEM_DATA_WIDTH 32
-- #define RW_MGR_MEM_DQ_PER_READ_DQS 8
-- #define RW_MGR_MEM_DQ_PER_WRITE_DQS 8
---#define RW_MGR_MEM_IF_READ_DQS_WIDTH 5
---#define RW_MGR_MEM_IF_WRITE_DQS_WIDTH 5
--+#define RW_MGR_MEM_IF_READ_DQS_WIDTH 4
--+#define RW_MGR_MEM_IF_WRITE_DQS_WIDTH 4
-- #define RW_MGR_MEM_NUMBER_OF_CS_PER_DIMM 1
-- #define RW_MGR_MEM_NUMBER_OF_RANKS 1
-- #define RW_MGR_MEM_ODT_WIDTH 1
-- #define RW_MGR_MEM_VIRTUAL_GROUPS_PER_READ_DQS 1
-- #define RW_MGR_MEM_VIRTUAL_GROUPS_PER_WRITE_DQS 1
-- #define RW_MGR_MR0_BL 1
---#define RW_MGR_MR0_CAS_LATENCY 3
---#define RW_MGR_TRUE_MEM_DATA_MASK_WIDTH 5
--+#define RW_MGR_MR0_CAS_LATENCY 7
--+#define RW_MGR_TRUE_MEM_DATA_MASK_WIDTH 4
-- #define RW_MGR_WRITE_TO_DEBUG_READ 1.0
-- #define SKEW_CALIBRATION 0
-- #define STATIC_FULL_CALIBRATION 1
---- 
--1.9.0
+-Signing the Preloader
+----------------------
 -
+-*** BEWARE ****
+-The u-boot-spl.bin must be signed using the Altera's tool "mkpimage".
+-This tool comes as a part of the Altera development environnment (SoC EDS).
+-A fork of this tool have been done by Maxime Hadjinlian and can be found here:
+-https://github.com/maximeh/mkpimage
+-
+-Remember that without signing the u-boot-spl.bin, the board will not boot !!!
+-
+-  $ mkpimage u-boot-spl.bin -o u-boot-spl-signed.bin
++    ??? u-boot-spl.bin.crc
++    ??? zImage
+ 
+ Prepare your SDcard
+ ===================
+@@ -111,22 +97,26 @@ let's assume it is /dev/mmcblk0:
+ Delete all previous partitions with 'd' then create the new partition table,
+ using these options, pressing enter after each one:
+ 
+-  * n p 1 9000000 +20480K t 1 b
+-  * n p 2 4096 +4496384K t 83
+-  * n p 3 2048 +1024K t 3 a2
++  * n p 1 1 4095
++  * n p 2 4096 +22000
++  * n p 3  <Enter> -- This will take the remaining space from the SD card
++
++Then, still in fdisk, change the type of the partitions according to this
++  * t 1 a2
++  * t 2 b
+ 
+ Using the 'p' option, the SD card's partition must look like this:
+ 
+-Device         Boot     Start       End  Blocks  Id System
+-/dev/mmcblk0p1        9000000   9041919   20960   b W95 FAT32
+-/dev/mmcblk0p2           4096   8996863 4496384  83 Linux
+-/dev/mmcblk0p3           2048      4095    1024  a2 Unknown
++Device         Boot     Start     End   Blocks  Id  System
++/dev/mmcblk0p1           2048    4095     2048  a2  Unknown
++/dev/mmcblk0p2           4096   26096    22001   b  W95 FAT32
++/dev/mmcblk0p3          26624 3862527  3835904  83  Linux
+ 
+ Then write the partition table using 'w' and exit.
+ 
+ Make partition one a DOS partition:
+ 
+-  $ sudo mkdosfs /dev/mmcblk0p1
++  $ sudo mkdosfs /dev/mmcblk0p2
+ 
+ Install the binaries to the SDcard
+ ----------------------------------
+@@ -139,27 +129,39 @@ The partition with type a2 is the partition scan by the first bootloader stage
+ in the SoCkit ROM to find the next bootloader stage so we must write the signed
+ preloader and the u-boot binaries in that partition:
+ 
+-  $ sudo dd if=u-boot-spl-signed.bin of=/dev/mmcblk0p3 bs=64k seek=0
+-  $ sudo dd if=u-boot.img of=/dev/mmcblk0p3 bs=64k seek=4
++  $ sudo dd if=u-boot-spl.bin of=/dev/mmcblk0p1 bs=64k seek=0
++  $ sudo dd if=u-boot-spl.bin.crc of=/dev/mmcblk0p1 bs=64k seek=1
++  $ sudo dd if=u-boot.img of=/dev/mmcblk0p1 bs=64k seek=4
+ 
+ Copy the Linux kernel and its Device tree:
+ 
+   $ sudo mkdir /mnt/sdcard
+-  $ sudo mount /dev/mmcblk0p1 /mnt/sdcard
+-  $ sudo cp socfpga.dtb uImage /mnt/sdcard
++  $ sudo mount /dev/mmcblk0p2 /mnt/sdcard
++  $ sudo cp socfpga_cyclone5_sockit.dtb /mnt/sdcard/socfpga.dtb
++  $ sudo cp zImage /mnt/sdcard
+   $ sudo umount /mnt/sdcard
+ 
+ Copy the rootfs:
+ 
+-  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p2 bs=64k
++  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p3 bs=64k
+   $ sudo sync
+ 
+ It's Done!
+ 
++(ALT) Install the binaries to SDcard from genimage
++--------------------------------------------
++
++`genimage` will generate a `sockit_image.img` image in the output folder.
++From that point, you will need to execute the following command:
++
++   $ sudo dd if=sockit_image.img of=/dev/mmcblk0
++
++It's Done!
++
+ Finish
+ ======
+ 
+ Eject your SDcard, insert it in your SoCkit, and power it up.
+ 
+ if you want a serial console, you can plug a micro B USB cable on the USB-UART
+-port, the serial port config to used is 57600/8-N-1.
++port, the serial port config to use is 115200/8-N-1.
 -- 
 2.7.4
