@@ -1,89 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 13 Jan 2017 09:30:55 +0100
-Subject: [Buildroot] [PATCH] boot-wrapper-aarch64: Allow users to
- specify an initrd/initramfs file.
-In-Reply-To: <0863737f-d337-2a87-1928-5c96d97e7281@mentor.com>
-References: <1475880304-21773-1-git-send-email-hollis_blanchard@mentor.com>
- <1475880304-21773-2-git-send-email-hollis_blanchard@mentor.com>
- <20161025235728.796804cc@free-electrons.com>
- <34543eb7-53cc-957b-31af-88a8319e3208@mentor.com>
- <6451f7b7-abcb-e3ad-eb21-973265a89321@mind.be>
- <0863737f-d337-2a87-1928-5c96d97e7281@mentor.com>
-Message-ID: <06354bcc-8f67-d260-3758-b0f9a21ef5fa@mind.be>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 13 Jan 2017 09:43:06 +0100
+Subject: [Buildroot] [PATCH 1/2] python-urwid: bump to version 1.3.1
+Message-ID: <1484296987-18842-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-urwid/python-urwid.hash | 6 +++---
+ package/python-urwid/python-urwid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 12-01-17 23:45, Hollis Blanchard wrote:
-> On 01/12/2017 02:30 PM, Arnout Vandecappelle wrote:
->> On 12-01-17 00:55, Hollis Blanchard wrote:
->>> On 10/25/2016 02:57 PM, Thomas Petazzoni wrote:
->>>>>    boot/boot-wrapper-aarch64/Config.in               |    8 ++++++++
->>>>>    boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk |    4 ++++
->>>>>    2 files changed, 12 insertions(+), 0 deletions(-)
->>>> [...]
->>>>
->>>> It should be something like:
->>>>
->>>> ifeq ($(BR2_TARGET_BOOT_WRAPPER_AARCH64_RAMDISK),y)
->>>> BOOT_WRAPPER_AARCH64_CONF_OPTS += --with-initrd=$(BINARIES_DIR)/rootfs.cpio
->>>> BOOT_WRAPPER_AARCH64_DEPENDENCIES += rootfs-cpio
->>>> endif
->>> I'm preparing a resend on this, but I'm having trouble with the dependency:
->>>
->>> $ rm /scratch1/hblancha/build/buildroot/images/rootfs.cpio
->>> $ make O=/scratch1/hblancha/build/buildroot boot-wrapper-aarch64-dirclean all
->>> [...]
->>> /scratch1/hblancha/build/buildroot/host/usr/bin/aarch64-buildroot-linux-gnu-ld:
->>> cannot find /scratch1/hblancha/build/buildroot/images/rootfs.cpio
->>>
->>> I can see that rootfs-* is defined and used in fs/, but, well, ... it doesn't
->>> seem to be working in this boot/ Makefile. Any advice?
->>   Difficult to say without seeing the patch. Does it work correctly if you call
->> 'make rootfs-cpio boot-wrapper-arch64'?
-> 
-> Same error. Earlier I see this:
-> make: Circular
-> /scratch1/hblancha/build/buildroot/build/boot-wrapper-aarch64-4266507a84f8c06452109d38e0350d4759740694/.stamp_configured
-> <- rootfs-cpio dependency dropped.
-
- Ah, of course: rootfs-cpio depends on PACKAGES, and boot-wrapper-aarch64 is in
-PACKAGES. Same issue as with initramfs, and which is the reason why initramfs
-doesn't use the normal DEPENDENCIES approach.
-
- A fundamental solution would probably involve a change in the infra to support
-leaving out a package from PACKAGES (but then there has to be another way of
-making sure it *does* get built).
-
- But for now, all I can think of is to do it similar to how we do it for linux:
-create a filesystem target for it, and then add some special custom rule to
-boot-wrapper-aarch64 to (re)build it with the cpio archive.
-
-> 
-> Full patch is here:
-> 
-> Author: Hollis Blanchard <hollis_blanchard@mentor.com>
-> Date:   Mon Sep 26 15:48:12 2016 -0700
-> 
->     boot-wrapper-aarch64: Allow users to specify an initrd/initramfs file.
->         Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
-
- BTW you have a missing blank line between the summary and the Sob.
-
-
- Regards,
- Arnout
-
-[snip]
-
+diff --git a/package/python-urwid/python-urwid.hash b/package/python-urwid/python-urwid.hash
+index eceed9d..c600851 100644
+--- a/package/python-urwid/python-urwid.hash
++++ b/package/python-urwid/python-urwid.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/urwid/1.3.0, sha256 locally computed
+-md5	a989acd54f4ff1a554add464803a9175  urwid-1.3.0.tar.gz
+-sha256	29f04fad3bf0a79c5491f7ebec2d50fa086e9d16359896c9204c6a92bc07aba2  urwid-1.3.0.tar.gz
++# md5 from https://pypi.python.org/pypi/urwid/json, sha256 locally computed
++md5	2e1a005cb31368fe21bfeba2d6ad5a5c  urwid-1.3.1.tar.gz
++sha256	cfcec03e36de25a1073e2e35c2c7b0cc6969b85745715c3a025a31d9786896a1  urwid-1.3.1.tar.gz
+diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
+index 1cd3022..e52a155 100644
+--- a/package/python-urwid/python-urwid.mk
++++ b/package/python-urwid/python-urwid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_URWID_VERSION = 1.3.0
++PYTHON_URWID_VERSION = 1.3.1
+ PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
+ PYTHON_URWID_SITE = https://pypi.python.org/packages/source/u/urwid
+ PYTHON_URWID_LICENSE = LGPLv2.1+
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
