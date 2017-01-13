@@ -1,112 +1,94 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 13 Jan 2017 02:30:49 -0200
-Subject: [Buildroot] [PATCH 1/1] util-linux: fix ncurses/wchar handling
-	(again)
-Message-ID: <1484281849-25875-1-git-send-email-casantos@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Jan 2017 08:30:05 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-01-12
+Message-ID: <20170113073005.79AA8207C0@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-util-linux #defines "wchar_t" as "char" when configured without widechar
-support. This conflicts with definition of wchar_t contained in stddef.h,
-so the compilation fails with
+Hello,
 
-    error: two or more data types in declaration specifiers
-    #define
-     wchar_t char
+Build statistics for 2017-01-12
+================================
 
-The error can be reproduced rearrangin the incluson order in some files
-under the text-utils directory.
+      successes : 154
+       failures : 39 
+       timeouts : 1  
+          TOTAL : 194
 
-Fixes:
+Classification of failures by reason
+====================================
 
-  http://autobuild.buildroot.net/results/3a2f228e0fa7b5cc28a13d49f48f1a6aef8d9d7a
-  http://autobuild.buildroot.net/results/99e96069f652d511c6212a5bb6be29e68fb1747c
-  http://autobuild.buildroot.net/results/2dc5721aef93b7b410153bafad78248fac3db941
+               sdl2_ttf-2.0.14 | 12
+                      mpd-0.20 | 4 
+                  fbterm-1.7.0 | 3 
+                 libnss-3.27.2 | 2 
+             berkeleydb-5.3.28 | 1 
+                  cppcms-1.0.5 | 1 
+                    cups-2.1.4 | 1 
+               domoticz-3.5877 | 1 
+             expect-2014-05-02 | 1 
+             host-nodejs-6.9.4 | 1 
+kmsxx-bd5f6471e619a6ba2987b... | 1 
+kvm-unit-tests-5731572b2ac2... | 1 
+                  lcdapi-v0.10 | 1 
+               libepoxy-v1.3.1 | 1 
+make[2]: *** [.obj/debug-sh... | 1 
+                    mosh-1.2.6 | 1 
+            netsniff-ng-v0.6.2 | 1 
+                 openssh-7.4p1 | 1 
+               openswan-2.6.46 | 1 
+               pulseview-0.3.0 | 1 
+        riemann-c-client-1.9.1 | 1 
+                     vlc-2.2.4 | 1 
+                 weston-1.12.0 | 1 
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- ...3-Fix-compilation-with-ncurses-and-uClibc.patch | 70 ++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 package/util-linux/0003-Fix-compilation-with-ncurses-and-uClibc.patch
 
-diff --git a/package/util-linux/0003-Fix-compilation-with-ncurses-and-uClibc.patch b/package/util-linux/0003-Fix-compilation-with-ncurses-and-uClibc.patch
-new file mode 100644
-index 0000000..95f9e34
---- /dev/null
-+++ b/package/util-linux/0003-Fix-compilation-with-ncurses-and-uClibc.patch
-@@ -0,0 +1,70 @@
-+From bcad0c3629101aeafec266ecb0221cac0f52fcec Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.ind.br>
-+Date: Fri, 13 Jan 2017 01:13:19 -0200
-+Subject: [PATCH] Fix compilation with ncurses and uClibc
-+
-+Replacing "wchar_t" by "char" in widechar.h causes a conflict with the
-+definition of wchar_t contained in stddef.h, which is included by c.h,
-+so the compilation fails with
-+
-+   error: two or more data types in declaration specifiers #define
-+   wchar_t char
-+
-+The error can be reproduced by configuring with --disable-widechar
-+--without-ncursesw --with-ncurses. It can be avoided by moving the
-+inclusion of widechar.h below the inclusion of c.h in colcrt.c,
-+colrm.c and column.c.
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-+---
-+ text-utils/colcrt.c | 2 +-
-+ text-utils/colrm.c  | 2 +-
-+ text-utils/column.c | 2 +-
-+ 3 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/text-utils/colcrt.c b/text-utils/colcrt.c
-+index 62f8425..f376350 100644
-+--- a/text-utils/colcrt.c
-++++ b/text-utils/colcrt.c
-+@@ -46,8 +46,8 @@
-+ #include <getopt.h>
-+ 
-+ #include "nls.h"
-+-#include "widechar.h"
-+ #include "c.h"
-++#include "widechar.h"
-+ #include "closestream.h"
-+ 
-+ /*
-+diff --git a/text-utils/colrm.c b/text-utils/colrm.c
-+index 431eae0..e799cd1 100644
-+--- a/text-utils/colrm.c
-++++ b/text-utils/colrm.c
-+@@ -44,9 +44,9 @@
-+ #include <unistd.h>
-+ 
-+ #include "nls.h"
-+-#include "widechar.h"
-+ #include "strutils.h"
-+ #include "c.h"
-++#include "widechar.h"
-+ #include "closestream.h"
-+ 
-+ /*
-+diff --git a/text-utils/column.c b/text-utils/column.c
-+index b8d31c9..e0144a2 100644
-+--- a/text-utils/column.c
-++++ b/text-utils/column.c
-+@@ -50,8 +50,8 @@
-+ #include <getopt.h>
-+ 
-+ #include "nls.h"
-+-#include "widechar.h"
-+ #include "c.h"
-++#include "widechar.h"
-+ #include "xalloc.h"
-+ #include "strutils.h"
-+ #include "closestream.h"
-+-- 
-+2.7.4
-+
+Detail of failures
+===================
+
+        m68k |              berkeleydb-5.3.28 | NOK | http://autobuild.buildroot.net/results/be3194836d31e9a091a296c10de855f609e6bda4
+        i586 |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/ef5b74e43e5c860b1bdc7b3ba2b572b943fd7b44
+        i586 |                     cups-2.1.4 | NOK | http://autobuild.buildroot.net/results/3133a04b5b0148e6c3ad3ec79881929ddf71ebfe
+ powerpc64le |                domoticz-3.5877 | NOK | http://autobuild.buildroot.net/results/2a4239c936df4dcac83315a61217f04631b1cf35
+      x86_64 |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/5c8ae3fe8b08fc5d617e825de25b4eafc7a00225
+         arc |                   fbterm-1.7.0 | NOK | http://autobuild.buildroot.net/results/c93ff74e03687ff6a31f891b0f537d1482f426e4
+         arc |                   fbterm-1.7.0 | NOK | http://autobuild.buildroot.net/results/c1af3e5b959ec79b09b9cb76635f312deefc488b
+         arm |                   fbterm-1.7.0 | NOK | http://autobuild.buildroot.net/results/d5811b5c6b23e9ddade0bfca994e6737d562fbdc
+        i686 |              host-nodejs-6.9.4 | NOK | http://autobuild.buildroot.net/results/57d6987a4f08e96b15e9fc6c3c8f5981590741a1
+        m68k | kmsxx-bd5f6471e619a6ba2987b... | NOK | http://autobuild.buildroot.net/results/361f5e70c653824029499e30ad01d68e382a22ee
+      x86_64 | kvm-unit-tests-5731572b2ac2... | NOK | http://autobuild.buildroot.net/results/8cf8785dd6172d8f78c1d94a682e764d54e0d3c2
+        m68k |                   lcdapi-v0.10 | NOK | http://autobuild.buildroot.net/results/05481d8370882a2743a467eb826daa0adf422dff
+     aarch64 |                libepoxy-v1.3.1 | NOK | http://autobuild.buildroot.net/results/dd26f416c4959c41616f9f18c255c9e1785ef181
+microblazeel |                  libnss-3.27.2 | NOK | http://autobuild.buildroot.net/results/1144240f27c8eaebe7314b4fd93f068c22ca1cd9
+microblazeel |                  libnss-3.27.2 | NOK | http://autobuild.buildroot.net/results/a264f1628d804bb22730a4e53f27cf89f338d158
+    mips64el | make[2]: *** [.obj/debug-sh... | TIM | http://autobuild.buildroot.net/results/5ac31e4c618ea5bbd7c548375554ac2d58ba0204
+        i586 |                     mosh-1.2.6 | NOK | http://autobuild.buildroot.net/results/027e6e710dcb75a72584f8f767ddae9c1638a16e
+      xtensa |                       mpd-0.20 | NOK | http://autobuild.buildroot.net/results/0b68772cca8dba42fafd70bc82bb427ad570d2f9
+      x86_64 |                       mpd-0.20 | NOK | http://autobuild.buildroot.net/results/8dfb84fdc5815deae43effebe297aa5000cc9c53
+       nios2 |                       mpd-0.20 | NOK | http://autobuild.buildroot.net/results/b4828a5f8e973e8755da453efdb9b47c40ca80b4
+      mipsel |                       mpd-0.20 | NOK | http://autobuild.buildroot.net/results/b5ec59f999bd2daec3e75428c3edd5c5741aa0d2
+      x86_64 |             netsniff-ng-v0.6.2 | NOK | http://autobuild.buildroot.net/results/44216734f379b242834a9438f02bd7aaeffc2f09
+        i586 |                  openssh-7.4p1 | NOK | http://autobuild.buildroot.net/results/2f4e6379c22621ba8f8d627380be38b53912f564
+         arm |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/37d0b4866a25d6ceabec2beb43f85aabd02eaa3a
+        i686 |                pulseview-0.3.0 | NOK | http://autobuild.buildroot.net/results/f513bd20044fdfb3c93a3d039e723c69f6850ec6
+        bfin |         riemann-c-client-1.9.1 | NOK | http://autobuild.buildroot.net/results/f3c39d99e03dff4b5effd3a68dec88ffc257639e
+         arm |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/230fd18e77ca6cd9de4b7467967ca920094efb6c
+       sparc |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/65bb55e40f159aebc2c6cfa49069b82b50c9c855
+microblazeel |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/01c42fcc778cf581587740aaeb64d6fbab74ec7c
+         arm |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/03c38fea721c7418de874fd97313fdf9a7ba9549
+      xtensa |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/76f7436b37171f6ac509a5e224b09cd0594c5d85
+        i686 |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/ba0c628fa3db231d71cb19e13199668aa4993ef5
+      xtensa |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/6ee85ae60d19dab53a9de555e880a45336302f1d
+         arc |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/bc70cdbf380de6cd756846278bfa76ce6dc4edfb
+         arc |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/1dd99cefc5b0dc3af4d63c300442cfc39c192bd4
+    mips64el |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/1ee1bd5287d5253b4f40a248d8c74ec597f62ea4
+microblazeel |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/7ced97ffc3e22222f2b4d95974a015e15f789ec1
+      xtensa |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/31588a6b5f86743d73a1f7d235daff658f83ad8f
+microblazeel |                      vlc-2.2.4 | NOK | http://autobuild.buildroot.net/results/144bb73017c146939f8aae4003cbf646d321dea3
+         arm |                  weston-1.12.0 | NOK | http://autobuild.buildroot.net/results/2dea0a1b82c535fded6fd67a69496d70e6bcca56
+
 -- 
-2.7.4
+http://autobuild.buildroot.net
