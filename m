@@ -1,10 +1,8 @@
 From: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
-Date: Fri, 13 Jan 2017 10:55:30 -0500
-Subject: [Buildroot] [PATCH 4/4] board/altera: Update README for new scripts
-	and fixed some typos
-In-Reply-To: <1484322930-27625-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
-References: <1484322930-27625-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
-Message-ID: <1484322930-27625-4-git-send-email-lucas.bajolet@savoirfairelinux.com>
+Date: Fri, 13 Jan 2017 10:55:27 -0500
+Subject: [Buildroot] [PATCH 1/4] configs/altera_sockit_defconfig: bump
+	kernel version to 4.7 and u-boot to v2016.11-rc3
+Message-ID: <1484322930-27625-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,73 +11,52 @@ To: buildroot@busybox.net
 
 Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
 ---
- board/altera/readme.txt | 34 +++++++++++++++++++++++++---------
- 1 file changed, 25 insertions(+), 9 deletions(-)
+ configs/altera_sockit_defconfig | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/board/altera/readme.txt b/board/altera/readme.txt
-index 1894a79..b002161 100644
---- a/board/altera/readme.txt
-+++ b/board/altera/readme.txt
-@@ -84,7 +84,7 @@ Signing the Preloader
- *** BEWARE ****
- The u-boot-spl.bin must be signed using the Altera's tool "mkpimage".
- This tool comes as a part of the Altera development environnment (SoC EDS).
--A fork of this tool have been done by Maxime Hadjinlian and can be found here:
-+A fork of this tool by Maxime Hadjinlian is available here:
- https://github.com/maximeh/mkpimage
+diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+index 0addbde..bbd3bfa 100644
+--- a/configs/altera_sockit_defconfig
++++ b/configs/altera_sockit_defconfig
+@@ -6,32 +6,28 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_FPU_NEON=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
  
- Remember that without signing the u-boot-spl.bin, the board will not boot !!!
-@@ -111,16 +111,20 @@ let's assume it is /dev/mmcblk0:
- Delete all previous partitions with 'd' then create the new partition table,
- using these options, pressing enter after each one:
+-# Linux headers same as kernel, a 3.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++# Linux headers same as kernel, a 4.7 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
  
--  * n p 1 9000000 +20480K t 1 b
--  * n p 2 4096 +4496384K t 83
--  * n p 3 2048 +1024K t 3 a2
-+  * n p 1 9000000 +20480K
-+  * n p 2 4096 +4496384K
-+  * n p 3 2048 +1024K
-+
-+Then, still in fdisk, change the type of the partitions according to this
-+  * t 1 a2
-+  * t 2 b
+-BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
  
- Using the 'p' option, the SD card's partition must look like this:
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.rocketboards.org/linux-socfpga.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/altera-opensource/linux-socfpga.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-4.7_16.10.02_pr"
+ BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_sockit"
  
--Device         Boot     Start       End  Blocks  Id System
--/dev/mmcblk0p1        9000000   9041919   20960   b W95 FAT32
--/dev/mmcblk0p2           4096   8996863 4496384  83 Linux
--/dev/mmcblk0p3           2048      4095    1024  a2 Unknown
-+Device         Boot     Start   End   Blocks  Id System
-+/dev/mmcblk0p1              1  1395     1395  a2 Unknown
-+/dev/mmcblk0p2           2048 22527    20480   b W95 FAT32
-+/dev/mmcblk0p3          24576 29119     4544  83 Linux
+ BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_3=y
  
- Then write the partition table using 'w' and exit.
- 
-@@ -156,10 +160,22 @@ Copy the rootfs:
- 
- It's Done!
- 
-+(ALT) Install the binaries to SDcard from genimage
-+--------------------------------------------
-+
-+`genimage` will generate a `sockit_image.img` image in the output folder.
-+From that point, you will need to execute the following command:
-+
-+   $ sudo dd if=sockit_image.img of=/dev/mmcblk0
-+
-+It's Done!
-+
-+NOTE: For the script to work, you will need `mkpimage` in your PATH somewhere as it is called at the end of the build.
-+
- Finish
- ======
- 
- Eject your SDcard, insert it in your SoCkit, and power it up.
- 
- if you want a serial console, you can plug a micro B USB cable on the USB-UART
--port, the serial port config to used is 57600/8-N-1.
-+port, the serial port config to use is 115200/8-N-1.
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
++BR2_TARGET_UBOOT_BOARDNAME="socfpga_sockit"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
+ BR2_TARGET_UBOOT_PATCH="board/altera/sockit"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2016.11-rc3"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
 -- 
 2.7.4
