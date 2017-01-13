@@ -1,47 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jan 2017 13:41:18 +0100
-Subject: [Buildroot] [PATCH] rabbitmq-server: security bump to version 3.6.6
-Message-ID: <20170113124118.20028-1-peter@korsgaard.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 13 Jan 2017 10:27:19 -0300
+Subject: [Buildroot] [PATCH] pcre: bump to version 8.40
+Message-ID: <20170113132719.25590-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a critical authentication vulnerability in the MQTT plugin
-(CVE-2016-9877):
-
-MQTT (MQ Telemetry Transport) connection authentication with a
-username/password pair succeeds if an existing username is provided but the
-password is omitted from the connection request.  Connections that use TLS
-with a client-provided certificate are not affected.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/rabbitmq-server/rabbitmq-server.hash | 2 +-
- package/rabbitmq-server/rabbitmq-server.mk   | 2 +-
+ package/pcre/pcre.hash | 2 +-
+ package/pcre/pcre.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rabbitmq-server/rabbitmq-server.hash b/package/rabbitmq-server/rabbitmq-server.hash
-index be21477ff..3cd412dd0 100644
---- a/package/rabbitmq-server/rabbitmq-server.hash
-+++ b/package/rabbitmq-server/rabbitmq-server.hash
+diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
+index bc50042..4c3c6c3 100644
+--- a/package/pcre/pcre.hash
++++ b/package/pcre/pcre.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256 c696134e863f99191a301288c12d69ff00b7e648107ee52c8686ae047dde1bee  rabbitmq-server-3.6.1.tar.xz
-+sha256 395689bcf57fd48aed452fcd43ff9a992de40067d3ea5c44e14680d69db7b78e  rabbitmq-server-3.6.6.tar.xz
-diff --git a/package/rabbitmq-server/rabbitmq-server.mk b/package/rabbitmq-server/rabbitmq-server.mk
-index 7e13c2d71..d55a8cc47 100644
---- a/package/rabbitmq-server/rabbitmq-server.mk
-+++ b/package/rabbitmq-server/rabbitmq-server.mk
+ # Locally calculated after checking pgp signature
+-sha256	b858099f82483031ee02092711689e7245586ada49e534a06e678b8ea9549e8b	pcre-8.39.tar.bz2
++sha256	00e27a29ead4267e3de8111fcaa59b132d0533cdfdbdddf4b0604279acbcf4f4	pcre-8.40.tar.bz2
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index a10950d..211e235 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
 @@ -4,7 +4,7 @@
  #
- #############################################################
+ ################################################################################
  
--RABBITMQ_SERVER_VERSION = 3.6.1
-+RABBITMQ_SERVER_VERSION = 3.6.6
- RABBITMQ_SERVER_SITE = http://www.rabbitmq.com/releases/rabbitmq-server/v$(RABBITMQ_SERVER_VERSION)
- RABBITMQ_SERVER_SOURCE = rabbitmq-server-$(RABBITMQ_SERVER_VERSION).tar.xz
- RABBITMQ_SERVER_LICENSE = MPLv1.1, Apache-2.0, BSD-2c, EPL, MIT, MPLv2.0
+-PCRE_VERSION = 8.39
++PCRE_VERSION = 8.40
+ PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
+ PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
+ PCRE_LICENSE = BSD-3c
 -- 
-2.11.0
+2.10.2
