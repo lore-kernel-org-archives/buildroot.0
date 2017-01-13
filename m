@@ -1,22 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jan 2017 16:08:26 +0100
-Subject: [Buildroot] [PATCH 2/2] python-lxml: bump to version 3.7.2
-In-Reply-To: <1484296987-18842-2-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Fri, 13 Jan 2017 09:43:07
- +0100")
-References: <1484296987-18842-1-git-send-email-yegorslists@googlemail.com>
- <1484296987-18842-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87d1frc80l.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Jan 2017 16:09:24 +0100
+Subject: [Buildroot] [PATCH 1/1] mkpasswd: remove dash from "host
+	mkpasswd" to match other host tools
+In-Reply-To: <1484273581-2327-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Thu, 12 Jan 2017 21:13:01 -0500")
+References: <1484273581-2327-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <878tqfc7yz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
 Committed, thanks.
 
