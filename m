@@ -1,41 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jan 2017 16:06:45 +0100
-Subject: [Buildroot] [git commit] pcre: bump to version 8.40
-Message-ID: <20170113152113.EF5277FE10@busybox.osuosl.org>
+Date: Fri, 13 Jan 2017 16:17:13 +0100
+Subject: [Buildroot] [git commit] lttng-tools: bump version to 2.9.3
+Message-ID: <20170113152114.7A83D7F87B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5652b0e0c619f0a87bb5f75ab628703775d72eee
+commit: https://git.buildroot.net/buildroot/commit/?id=2248fa6a5a9127b44150c2bcbfea5a368952a233
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+0001-Fix-Add-missing-pthread.h-include.patch already included in this
+release:
+
+  https://github.com/lttng/lttng-tools/commit/5f702b607116a8303cb09fb091d8b9740c06baca
+
+--with-xml-prefix configure option doesn't exist, so drop it:
+
+  configure:22815: WARNING: unrecognized options: [snip], --with-xml-prefix
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre/pcre.hash | 2 +-
- package/pcre/pcre.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Fix-Add-missing-pthread.h-include.patch   | 29 ----------------------
+ package/lttng-tools/lttng-tools.hash               |  6 ++---
+ package/lttng-tools/lttng-tools.mk                 |  4 +--
+ 3 files changed, 5 insertions(+), 34 deletions(-)
 
-diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
-index bc50042..4c3c6c3 100644
---- a/package/pcre/pcre.hash
-+++ b/package/pcre/pcre.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	b858099f82483031ee02092711689e7245586ada49e534a06e678b8ea9549e8b	pcre-8.39.tar.bz2
-+sha256	00e27a29ead4267e3de8111fcaa59b132d0533cdfdbdddf4b0604279acbcf4f4	pcre-8.40.tar.bz2
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index a10950d..211e235 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/lttng-tools/0001-Fix-Add-missing-pthread.h-include.patch b/package/lttng-tools/0001-Fix-Add-missing-pthread.h-include.patch
+deleted file mode 100644
+index 29706af..0000000
+--- a/package/lttng-tools/0001-Fix-Add-missing-pthread.h-include.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From c948391121f2eb411bc7d2049d96f267bfa643d8 Mon Sep 17 00:00:00 2001
+-From: Michael Jeanson <mjeanson@efficios.com>
+-Date: Mon, 5 Dec 2016 15:39:26 -0500
+-Subject: [PATCH] Fix: Add missing pthread.h include
+-
+-Some libc like musl and uClibc requires explicit includes of pthread.h
+-
+-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+-[Thomas: taken from lttng mailing list.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/common/defaults.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/common/defaults.h b/src/common/defaults.h
+-index 27f1ddc..37d222a 100644
+---- a/src/common/defaults.h
+-+++ b/src/common/defaults.h
+-@@ -20,6 +20,7 @@
+- #ifndef _DEFAULTS_H
+- #define _DEFAULTS_H
+- 
+-+#include <pthread.h>
+- #include <src/common/macros.h>
+- 
+- /* Default unix group name for tracing. */
+--- 
+-2.7.4
+-
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index 729ccf2..4f3d283 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,3 +1,3 @@
+-# From http://lttng.org/files/lttng-tools/lttng-tools-2.9.0.tar.bz2.{md5,sha1}
+-md5 75b5feb18aa2a136ebf70a14d2a5a6e5  lttng-tools-2.9.0.tar.bz2
+-sha1 299158fd8614e45ee596d793696feb86cdea34b2  lttng-tools-2.9.0.tar.bz2
++# From http://lttng.org/files/lttng-tools/lttng-tools-2.9.3.tar.bz2.{md5,sha1}
++md5 19fdcc5e9c307ef66581a2743a08a541  lttng-tools-2.9.3.tar.bz2
++sha1 78fdc9b7fd15f33ac60ea08320d679ce66e18bf7  lttng-tools-2.9.3.tar.bz2
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 66ac687..2df2dff 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--PCRE_VERSION = 8.39
-+PCRE_VERSION = 8.40
- PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
- PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
- PCRE_LICENSE = BSD-3c
+-LTTNG_TOOLS_VERSION = 2.9.0
++LTTNG_TOOLS_VERSION = 2.9.3
+ LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_LICENSE = GPLv2+, LGPLv2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
+ LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
+-LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr --disable-man-pages
++LTTNG_TOOLS_CONF_OPTS += --disable-man-pages
+ 
+ LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
+ 
