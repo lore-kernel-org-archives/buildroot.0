@@ -1,40 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 14 Jan 2017 22:17:28 +0200
-Subject: [Buildroot] [PATCH 2/3] tslib: disable raw input plugin under
-	kernel < v3.12
-In-Reply-To: <9af1cba158ce6dcb96f5f121d4105895fea911b9.1484425049.git.baruch@tkos.co.il>
-References: <9af1cba158ce6dcb96f5f121d4105895fea911b9.1484425049.git.baruch@tkos.co.il>
-Message-ID: <4e6b08821af14328fceacf79bbdfa70f82deae8e.1484425049.git.baruch@tkos.co.il>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Sun, 15 Jan 2017 03:54:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: disable icu support for
+	host build
+Message-ID: <1484448867-29347-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The SYN_CNT input code was added in kernel v3.12.
+ Apperently if both icu and nodejs enabled during the nodejs host build the
+nodejs buildsystem gets confused by the icu version installed by Buildroot
+(icu 58.2) and the one bundled with the nodejs source tree(icu 57),
+which ends up in linking-time errors as:
 
-Fixes:
-http://autobuild.buildroot.net/results/5cd/5cdb9d22092e9222cc7e8fe8dd3936305a5d371d/
-http://autobuild.buildroot.net/results/211/2115038caff1e036cbc9dcb5cb6905abe643552a/
-http://autobuild.buildroot.net/results/c79/c79de6fdd5cfe406979941790276296b6d1ec0b8/
+"""
+undefined reference to
+`icu_58::NumberFormat::format(icu_58::StringPiece,
+icu_58::UnicodeString&, icu_58::FieldPositionIterator*, UErrorCode&)
+const'
+"""
+(note the icu_58 in the symbol name while the bundled icu version is 57)
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ This patch disables the (not used) i18n support in the nodejs host build
+config in order to fix the issue. The issue doesn't affect the target build of
+nodejs.
+
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/tslib/tslib.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/nodejs/nodejs.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index d6e66b723955..7f74ca5fed04 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -13,4 +13,8 @@ TSLIB_AUTORECONF = YES
- TSLIB_INSTALL_STAGING = YES
- TSLIB_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 43b6169..82a012a 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -63,6 +63,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		--without-dtrace \
+ 		--without-etw \
+ 		--shared-zlib \
++		--with-intl=none \
+ 	)
+ endef
  
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12),)
-+TSLIB_CONF_OPTS += --disable-input
-+endif
-+
- $(eval $(autotools-package))
 -- 
-2.11.0
+2.7.4
