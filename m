@@ -1,9 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jan 2017 17:17:45 +0100
-Subject: [Buildroot] [PATCH 1/3] tslib: fix missing headers
-In-Reply-To: <9af1cba158ce6dcb96f5f121d4105895fea911b9.1484425049.git.baruch@tkos.co.il>
+Date: Sun, 15 Jan 2017 17:27:02 +0100
+Subject: [Buildroot] [PATCH 2/3] tslib: disable raw input plugin under
+ kernel < v3.12
+In-Reply-To: <4e6b08821af14328fceacf79bbdfa70f82deae8e.1484425049.git.baruch@tkos.co.il>
 References: <9af1cba158ce6dcb96f5f121d4105895fea911b9.1484425049.git.baruch@tkos.co.il>
-Message-ID: <20170115161745.GB3552@free.fr>
+ <4e6b08821af14328fceacf79bbdfa70f82deae8e.1484425049.git.baruch@tkos.co.il>
+Message-ID: <20170115162702.GE3552@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +15,16 @@ To: buildroot@busybox.net
 Baruch, All,
 
 On 2017-01-14 22:17 +0200, Baruch Siach spake thusly:
-> Add a patch adding missing headers.
+> The SYN_CNT input code was added in kernel v3.12.
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/cb8/cb81abe996b0fb0070ddcd01c0d695bcc0570548/
-> http://autobuild.buildroot.net/results/88a/88add491e10f2f7edeb15e0def8843f1321ac7af/
-> http://autobuild.buildroot.net/results/9db/9db1d64fd08c8763a1648e78d7b9155777de6cae/
+> http://autobuild.buildroot.net/results/5cd/5cdb9d22092e9222cc7e8fe8dd3936305a5d371d/
+> http://autobuild.buildroot.net/results/211/2115038caff1e036cbc9dcb5cb6905abe643552a/
+> http://autobuild.buildroot.net/results/c79/c79de6fdd5cfe406979941790276296b6d1ec0b8/
 > 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Damned, I did the patch for nothing... ;-)
+Again, you beat me to it. ;-)
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -30,51 +32,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  ...01-tests-ts_calibrate-add-missing-headers.patch | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
+>  package/tslib/tslib.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
-> new file mode 100644
-> index 000000000000..97cd4beacaba
-> --- /dev/null
-> +++ b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
-> @@ -0,0 +1,35 @@
-> +From 54b66bfe405d8b70c703684e60bedbad5c7d4213 Mon Sep 17 00:00:00 2001
-> +From: Baruch Siach <baruch@tkos.co.il>
-> +Date: Sat, 14 Jan 2017 21:35:53 +0200
-> +Subject: [PATCH] tests/ts_calibrate: add missing headers
+> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+> index d6e66b723955..7f74ca5fed04 100644
+> --- a/package/tslib/tslib.mk
+> +++ b/package/tslib/tslib.mk
+> @@ -13,4 +13,8 @@ TSLIB_AUTORECONF = YES
+>  TSLIB_INSTALL_STAGING = YES
+>  TSLIB_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+>  
+> +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12),)
+> +TSLIB_CONF_OPTS += --disable-input
+> +endif
 > +
-> +The open(2) system call requires sys/types.h and sys/stat.h. Fix the following
-> +build failure under uClibc-ng:
-> +
-> +ts_calibrate.c: In function ?main?:
-> +ts_calibrate.c:248:19: error: ?S_IRUSR? undeclared (first use in this function)
-> +                   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-> +                   ^
-> +
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +Upstream status: https://github.com/kergoth/tslib/pull/59
-> + tests/ts_calibrate.c | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/tests/ts_calibrate.c b/tests/ts_calibrate.c
-> +index c6652e479d4b..9a98d1f86205 100644
-> +--- a/tests/ts_calibrate.c
-> ++++ b/tests/ts_calibrate.c
-> +@@ -17,6 +17,8 @@
-> + #include <string.h>
-> + #include <unistd.h>
-> + #include <sys/time.h>
-> ++#include <sys/types.h>
-> ++#include <sys/stat.h>
-> + 
-> + #ifdef __ANDROID__
-> + #include <fcntl.h>
-> +-- 
-> +2.11.0
-> +
+>  $(eval $(autotools-package))
 > -- 
 > 2.11.0
 > 
