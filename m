@@ -1,50 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Jan 2017 18:52:52 +0100
-Subject: [Buildroot] [PATCH] python-bottle: bump version to 0.12.13
-Message-ID: <20170115175252.3704-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 15 Jan 2017 19:40:08 +0100
+Subject: [Buildroot] [PATCH] package/espeak: fix build issue with gcc6
+Message-ID: <20170115184008.7261-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-0.12.12 and 0.12.13 are both bugfix releases, fixing issues introduced in
-0.12.11:
+On some architecture, "char" is signed (x86_64, nios2...) so the
+compiler try to convert int 0xc2 and 0xba to a signed char.
+This is an error since gcc6 (Wnarrowing).
 
-https://github.com/bottlepy/bottle/issues/918
-https://github.com/bottlepy/bottle/issues/923
+cast string_ordinal init values.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+http://autobuild.buildroot.net/results/bae/baef9888b1979d18171668a675985e3f3b45fda6
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/python-bottle/python-bottle.hash | 4 ++--
- package/python-bottle/python-bottle.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...languages-cast-string_ordinal-init-values.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch
 
-diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
-index 357391d05..3006c16e9 100644
---- a/package/python-bottle/python-bottle.hash
-+++ b/package/python-bottle/python-bottle.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/bottle/json, sha256 locally computed
--md5	6c38912f4755ba71d852fbe320bdd61c  bottle-0.12.11.tar.gz
--sha256	a1958f9725042a9809ebe33d7eadf90d1d563a8bdd6ce5f01849bff7e941a731  bottle-0.12.11.tar.gz
-+md5	d2fe1b48c1d49217e78bf326b1cad437  bottle-0.12.13.tar.gz
-+sha256	39b751aee0b167be8dffb63ca81b735bbf1dd0905b3bc42761efedee8f123355  bottle-0.12.13.tar.gz
-diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
-index 475706214..6f071f64b 100644
---- a/package/python-bottle/python-bottle.mk
-+++ b/package/python-bottle/python-bottle.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_BOTTLE_VERSION = 0.12.11
-+PYTHON_BOTTLE_VERSION = 0.12.13
- PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
--PYTHON_BOTTLE_SITE = https://pypi.python.org/packages/a1/f6/0db23aeeb40c9a7c5d226b1f70ce63822c567178eee5b623bca3e0cc3bef
-+PYTHON_BOTTLE_SITE = https://pypi.python.org/packages/bd/99/04dc59ced52a8261ee0f965a8968717a255ea84a36013e527944dbf3468c
- PYTHON_BOTTLE_LICENSE = MIT
- # README.rst refers to the file "LICENSE" but it's not included
- PYTHON_BOTTLE_SETUP_TYPE = setuptools
+diff --git a/package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch b/package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch
+new file mode 100644
+index 0000000..d37e64c
+--- /dev/null
++++ b/package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch
+@@ -0,0 +1,33 @@
++From 451330d09a6a3500b40bc4f5896ba790ab46cd6c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 15 Jan 2017 19:37:31 +0100
++Subject: [PATCH 2/2] tr_languages: cast string_ordinal init values
++
++On some architecture, "char" is signed (x86_64, nios2...) so the
++compiler try to convert int 0xc2 and 0xba to a signed char.
++This is an error since gcc6 (Wnarrowing).
++
++Fixes:
++http://autobuild.buildroot.net/results/bae/baef9888b1979d18171668a675985e3f3b45fda6
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/tr_languages.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/tr_languages.cpp b/src/tr_languages.cpp
++index 5c80286..dbc6e36 100644
++--- a/src/tr_languages.cpp
+++++ b/src/tr_languages.cpp
++@@ -200,7 +200,7 @@ static const unsigned short chars_ignore_zwnj_hyphen[] = {
++ 	0x200d,  1, // zero width joiner
++ 	0, 0 };
++ 
++-const char string_ordinal[] = {0xc2,0xba,0};  // masculine ordinal character, UTF-8
+++const char string_ordinal[] = {(char)0xc2,(char)0xba,0};  // masculine ordinal character, UTF-8
++ 
++ 
++ static Translator* NewTranslator(void)
++-- 
++2.9.3
++
 -- 
-2.11.0
+2.9.3
