@@ -1,94 +1,50 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 Jan 2017 18:51:51 +0100
-Subject: [Buildroot] [PATCH v2 2/2] toolchain: bump Codescape MTI MIPS
- version to 2016.05-06
-In-Reply-To: <20170113175501.38416-2-Vincent.Riera@imgtec.com>
-References: <20170113175501.38416-1-Vincent.Riera@imgtec.com>
- <20170113175501.38416-2-Vincent.Riera@imgtec.com>
-Message-ID: <bedcf9a9-acc4-ac5a-4e86-5fcf3c67b1cc@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 Jan 2017 18:52:52 +0100
+Subject: [Buildroot] [PATCH] python-bottle: bump version to 0.12.13
+Message-ID: <20170115175252.3704-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente,
+0.12.12 and 0.12.13 are both bugfix releases, fixing issues introduced in
+0.12.11:
 
-Le 13/01/2017 ? 18:55, Vicente Olivert Riera a ?crit :
-> Also...
-> 
->   - Fix a typo in Config.in
->   - Take into account the host's architecture to download the x86 or
->     x86_64 version. This makes the IA32 libs dependency in unnecessary.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v1 -> v2:
->  - Fix a typo in Config.in
->  - Take into account the host's architecture to download the x86 or
->    x86_64 version. Remove IA32 libs dependency.
-> 
->  .../toolchain-external-codescape-mti-mips/Config.in                 | 5 ++---
->  .../toolchain-external-codescape-mti-mips.hash                      | 5 +++--
->  .../toolchain-external-codescape-mti-mips.mk                        | 6 +++++-
->  3 files changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-> index f899467..f09eab0 100644
-> --- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-> +++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-> @@ -6,12 +6,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
->  		BR2_MIPS_CPU_MIPS32R5 || (BR2_MIPS_CPU_MIPS64R5 && !BR2_MIPS_SOFT_FLOAT)
->  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->  	select BR2_INSTALL_LIBSTDCPP
-> -	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->  	select BR2_TOOLCHAIN_HAS_FORTRAN
->  	help
-> -	  Codescape MTI GNU Linux Toolchain 2015.10 for the MIPS
-> +	  Codescape MTI GNU Linux Toolchain 2016.05 for the MIPS
->  	  architecture, from Imagination Technologies. It uses gcc
->  	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
->  	  headers 4.0. It has support for the following variants:
-Same here         4.7
+https://github.com/bottlepy/bottle/issues/918
+https://github.com/bottlepy/bottle/issues/923
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-bottle/python-bottle.hash | 4 ++--
+ package/python-bottle/python-bottle.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Best regards,
-Romain
-
-> diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
-> index 0d785f2..d31f998 100644
-> --- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
-> +++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.hash
-> @@ -1,3 +1,4 @@
->  # Codescape toolchains from Imagination Technologies
-> -# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
-> -sha256 10b8ab6d7c492abc19ecabafedc6bc5f12ff88107a3cb76dc452b3a9522d9c56  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-> +# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-06/downloads.html
-> +sha256 3a7aba259beb05f0e3054b5a61a368a5085447f47361949a938ac9cc7de4227b  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-> +sha256 a676a8b3647c8c651fb8935a75db8f00b79d36ec55676f7c05bac12b550788f7  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz
-> diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
-> index e5733ca..d63a367 100644
-> --- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
-> +++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/toolchain-external-codescape-mti-mips.mk
-> @@ -4,11 +4,15 @@
->  #
->  ################################################################################
->  
-> -TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION = 2016.05-03
-> +TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION = 2016.05-06
->  TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION)
->  TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_STRIP_COMPONENTS = 2
->  
-> +ifeq ($(HOSTARCH),x86)
->  TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-> +else
-> +TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS_VERSION).for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz
-> +endif
->  
->  # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
->  # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
-> 
+diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
+index 357391d05..3006c16e9 100644
+--- a/package/python-bottle/python-bottle.hash
++++ b/package/python-bottle/python-bottle.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/bottle/json, sha256 locally computed
+-md5	6c38912f4755ba71d852fbe320bdd61c  bottle-0.12.11.tar.gz
+-sha256	a1958f9725042a9809ebe33d7eadf90d1d563a8bdd6ce5f01849bff7e941a731  bottle-0.12.11.tar.gz
++md5	d2fe1b48c1d49217e78bf326b1cad437  bottle-0.12.13.tar.gz
++sha256	39b751aee0b167be8dffb63ca81b735bbf1dd0905b3bc42761efedee8f123355  bottle-0.12.13.tar.gz
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index 475706214..6f071f64b 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BOTTLE_VERSION = 0.12.11
++PYTHON_BOTTLE_VERSION = 0.12.13
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+-PYTHON_BOTTLE_SITE = https://pypi.python.org/packages/a1/f6/0db23aeeb40c9a7c5d226b1f70ce63822c567178eee5b623bca3e0cc3bef
++PYTHON_BOTTLE_SITE = https://pypi.python.org/packages/bd/99/04dc59ced52a8261ee0f965a8968717a255ea84a36013e527944dbf3468c
+ PYTHON_BOTTLE_LICENSE = MIT
+ # README.rst refers to the file "LICENSE" but it's not included
+ PYTHON_BOTTLE_SETUP_TYPE = setuptools
+-- 
+2.11.0
