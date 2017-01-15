@@ -1,76 +1,147 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Jan 2017 08:48:12 +1100
-Subject: [Buildroot] [RFC] external toolchain scanner
-In-Reply-To: <fd01b978-5aea-2794-047c-968c7697b1bb@mind.be>
-References: <303be768-557b-3b02-c4fd-ae11ec2858ec@mentor.com>
- <8037285d-a8b2-39c9-30c4-cba364583ae9@mentor.com>
- <20161208210228.GA27341@free.fr>
- <df15f689-fb98-5710-6c90-2ee0e5efb0be@mentor.com>
- <c542e7c5-39e9-5d1f-1611-63ad49d26371@mentor.com>
- <20170112173223.GA3716@free.fr>
- <ef0f8d40-903d-1859-aa45-d99b8fe49887@mentor.com>
- <fd01b978-5aea-2794-047c-968c7697b1bb@mind.be>
-Message-ID: <20170116084812.5e7bafeb@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Jan 2017 22:51:40 +0100
+Subject: [Buildroot] [PATCH v2 2/3] nanopb: new package
+In-Reply-To: <20170112191523.23814-3-wak@google.com>
+References: <20161209011313.9549-1-wak@google.com>
+ <20170112191523.23814-1-wak@google.com>
+ <20170112191523.23814-3-wak@google.com>
+Message-ID: <20170115215140.GE4277@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+William, All,
 
-On Fri, 13 Jan 2017 00:43:16 +0100, Arnout Vandecappelle wrote:
+On 2017-01-12 11:15 -0800, William A. Kennington III spake thusly:
+> We chose not to use a stable version so that our version of nanopb
+> is compatible with pblog. In the future a stable version should be used.
 
-> * make menuconfig
-> * make
->  -> error "Incorrect toolchain settings detected. An updated config file has  
-> been generated in $(CONFIG_DIR)/config.toolchain. Copy it to
-> $(CONFIG_DIR)/.config and run 'make menuconfig' to verify."
-> * Copy
-> * make menuconfig
-> * make
+From this description, it looks like nanopb is only really usefull as a
+host tool. Yet, you also made it a target package. Is it intentional?
+
+If it is only a host tool that does not have a reason to be selected on
+its own, then do [**] below...
+
+> Signed-off-by: William A. Kennington III <wak@google.com>
+> ---
+>  package/Config.in          |  1 +
+>  package/nanopb/Config.in   |  8 ++++++++
+>  package/nanopb/nanopb.hash |  2 ++
+>  package/nanopb/nanopb.mk   | 25 +++++++++++++++++++++++++
+>  4 files changed, 36 insertions(+)
+>  create mode 100644 package/nanopb/Config.in
+>  create mode 100644 package/nanopb/nanopb.hash
+>  create mode 100644 package/nanopb/nanopb.mk
 > 
->  Or perhaps even better, add an option
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_AUTODISCOVER. This option would disable all the
-> other options except BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS, and also disable all the
-> other menus. This option would run the autodiscovery and overwrite the .config
-> file (removing the CUSTOM_AUTODISCOVER option again). So it would force the
-> following scenario:
-> 
-> * make menuconfig
-> * make
-> * make menuconfig
-> * make
-> 
->  But it's probably best to implement the first scenario and see where we go from
-> there.
+> diff --git a/package/Config.in b/package/Config.in
+> index 8c8c33ec3..625315c1c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1362,6 +1362,7 @@ endif
+>  	source "package/msgpack/Config.in"
+>  	source "package/mtdev2tuio/Config.in"
+>  	source "package/musl-compat-headers/Config.in"
+> +	source "package/nanopb/Config.in"
 
-To be honest, I find all of this very complicated, and even more
-confusing than what we have today. Using custom external toolchain is
-already an "advanced" feature, which users just getting started with
-Buildroot are unlikely to use. To me, using custom external toolchain
-is a bit of an advanced functionality, and people who need that will
-surely be able to understand the information they need to fill in
-"menuconfig" to make Buildroot "accept" the toolchain.
+[**] Move that to package/Config.in/host
 
-> >> I would rather that we work toward this goal, which would be a
-> >> termendous improvement on what we currently have.  
-> > I agree that emitting 5 errors at once, rather than emitting 1 error a time for
-> > 5 iterations, is an improvement on a disagreeable situation. I bet you can guess
-> > what I'll say next, though: when you look at the bigger picture, we shouldn't be
-> > in this situation to begin with. :-) When we already know the answers, we should
-> > tell the user, not the other way around.  
-> 
->  But perhaps that would be an easier first step. Instead of just reporting one
-> single error, report all errors and the correct config options so the user can
-> edit the .config file and add them.
+>  	source "package/openblas/Config.in"
+>  	source "package/orc/Config.in"
+>  	source "package/p11-kit/Config.in"
+> diff --git a/package/nanopb/Config.in b/package/nanopb/Config.in
+> new file mode 100644
+> index 000000000..4c5779f58
+> --- /dev/null
+> +++ b/package/nanopb/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_NANOPB
+> +	bool "nanopb"
+> +	help
+> +	  Nanopb is a small code-size Protocol Buffers implementation in ansi C.
+> +	  It is especially suitable for use in microcontrollers,
+> +	  but fits any memory restricted system.
+> +
+> +	  https://github.com/nanopb/nanopb
 
-Yes. *This* would be useful.
+[**] Don't give it a prompt; don't add help.
 
-Best regards,
+> diff --git a/package/nanopb/nanopb.hash b/package/nanopb/nanopb.hash
+> new file mode 100644
+> index 000000000..0a9224777
+> --- /dev/null
+> +++ b/package/nanopb/nanopb.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 d29305a235f9a58c95ffd999d258d7dd2c2cbb8b81312a4138dfe5802ff2c8e8 nanopb-afdbca39edfaef58073f661d23300e1133c4e8af.tar.gz
+> diff --git a/package/nanopb/nanopb.mk b/package/nanopb/nanopb.mk
+> new file mode 100644
+> index 000000000..0e3d8cf55
+> --- /dev/null
+> +++ b/package/nanopb/nanopb.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# nanopb
+> +#
+> +################################################################################
+> +
+> +NANOPB_VERSION = afdbca39edfaef58073f661d23300e1133c4e8af
+> +NANOPB_SITE = $(call github,nanopb,nanopb,$(NANOPB_VERSION))
+> +NANOPB_LICENSE = BSD-3c
+> +NANOPB_LICENSE_FILES = LICENSE.txt
+> +
+> +NANOPB_DEPENDENCIES = protobuf python-protobuf
+> +
+> +define HOST_NANOPB_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/generator/proto
+> +endef
+> +
+> +define NANOPB_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/generator/proto
+> +endef
+> +
+> +# We don't actually need to install anything as you include the library files
+> +# directly.
 
-Thomas
+Well, this is not clear at all.
+
+We do want packages to install their devel files in staging/ (for target
+packages) or in host/ (for host package).
+
+However, looking at the pblog package (next patch), it looks like pblog
+does not have a way to use instaleld files from nanopb... Sigh...
+
+What about this comment instead:
+
+    # The only user of host-nanopb is pblog, which can only use nanopb
+    # files from its build directory. So there is nothing to install.
+
+.. and then in pblog itself:
+
+    # pblog can not use installed files from nanopb; it really wants to
+    # use those from the build directory of nanopb. So we point it there.
+
+Yet, that is still a bit ugly... :-(
+
+Since you're the author of pblog, you may iwant to fix it to be able to
+use files the standard way (i.e. see of the toolchain can find them,
+like any other header/lib) and only revert to use a non-installed
+version as a last resort? ;-)
+
+> +$(eval $(host-generic-package))
+> +$(eval $(generic-package))
+
+If the target variant is really required, then this should be reversed.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
