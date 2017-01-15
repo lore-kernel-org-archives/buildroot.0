@@ -1,432 +1,335 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jan 2017 22:11:15 +0100
-Subject: [Buildroot] [PATCH] board/beaglebone: fix build issue with gcc6
-In-Reply-To: <20170115203551.6121-1-romain.naour@gmail.com>
-References: <20170115203551.6121-1-romain.naour@gmail.com>
-Message-ID: <20170115211115.GA4277@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 15 Jan 2017 21:47:11 +0100
+Subject: [Buildroot] [PATCH v5] dieharder: new package
+In-Reply-To: <1484508187-31681-1-git-send-email-julien@vdg.name>
+References: <1484508187-31681-1-git-send-email-julien@vdg.name>
+Message-ID: <d33a74a3-d3ed-ae89-281d-4f8574bd028a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Hi Julien,
 
-On 2017-01-15 21:35 +0100, Romain Naour spake thusly:
-> Backport a patch from linux-4.1.y stable branch (4.1.23) to support
-> gcc >= 6 compilers. The current kernel is based on 4.1.6 from ti's
-> processor-sdk-linux-02.00.00.00 branch.
+Le 15/01/2017 ? 20:23, Julien Viard de Galbert a ?crit :
+> Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
 
-I'm not quite sure we want to handle this backport on a vendor tree.
-It's up to them to handle it.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-Why don't we simply force gcc to gcc-5 in beaglebone_defconfig and
-beaglebone_qt5_defconfig instead?
+Best regards,
+Romain
 
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Lothar Felten <lothar.felten@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
-> The processor-sdk-linux-02.00.00.00 branch is not maintained since a
-> while (2015-10-02), maybe it's time to move to the
-> processor-sdk-linux-03.02.00 branch (4.4.32) ?
-> ---
->  ...c-integrate-the-various-compiler-gcc-345-.patch | 371 +++++++++++++++++++++
->  1 file changed, 371 insertions(+)
->  create mode 100644 board/beaglebone/patches/linux/0002-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch
+> Changes v4 -> v5 (Following Romain's comments)
+>   - added comments and signoff to patches
+>   - removed select BR2_PACKAGE_LIBTOOL as target libtool is not needed
+>   - fixed _LICENSE_FILES path
+>   - adding myself to DEVELOPERS for the dieharder package
+> Changes v3 -> v4
+>   - wrap description to 72 columns (Thomas Petazoni)
+>   - fix licence description (Thomas Petazoni)
+>   - use _ENV instead of _OPTS for configure tweek (Thomas Petazoni)
+>   - fix space around = in .mk (Thomas Petazoni)
+>   - switched from _SUBDIR to _STRIP_COMPONENTS to ease patching
+>   - added 4 patches :
+>      - 2 to fix the build system
+>      - 1 for c99 type missing
+>      - 1 for compiling with musl libc (Romain Naour, Yann E. MORIN)
+>   - depending on libtool, replacing missing libtool m4 files
+>      and running autoreconf (found this was necessary when libtool is
+>      no installed on host as the tarball ships symlinks to m4 files)
+>   - added .hash file
+> Changes v2 -> v3
+>   - remove intermediate variable use (suggested by Baruch Siach)
+> Changes v1 -> v2
+>   - fixed typo "bin" instead of "big" (thanks Thomas Petazoni)
+>   - select gls in config (suggested by Romain Naour)
+>   - specified "includedir" to fix unsafe header path
 > 
-> diff --git a/board/beaglebone/patches/linux/0002-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch b/board/beaglebone/patches/linux/0002-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch
+> Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> ---
+>  DEVELOPERS                                         |  3 ++
+>  package/Config.in                                  |  1 +
+>  ...includedir-as-include-search-path-for-bui.patch | 62 ++++++++++++++++++++++
+>  .../dieharder/0002-Do-not-install-includes.patch   | 28 ++++++++++
+>  .../dieharder/0003-Fix-missing-type-intptr_t.patch | 27 ++++++++++
+>  ...U_SOURCE-for-uint-and-M_PI-with-musl-libc.patch | 28 ++++++++++
+>  package/dieharder/Config.in                        |  9 ++++
+>  package/dieharder/dieharder.hash                   |  3 ++
+>  package/dieharder/dieharder.mk                     | 40 ++++++++++++++
+>  9 files changed, 201 insertions(+)
+>  create mode 100644 package/dieharder/0001-Do-not-use-includedir-as-include-search-path-for-bui.patch
+>  create mode 100644 package/dieharder/0002-Do-not-install-includes.patch
+>  create mode 100644 package/dieharder/0003-Fix-missing-type-intptr_t.patch
+>  create mode 100644 package/dieharder/0004-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch
+>  create mode 100644 package/dieharder/Config.in
+>  create mode 100644 package/dieharder/dieharder.hash
+>  create mode 100644 package/dieharder/dieharder.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 79dd097..bef6d36 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -868,6 +868,9 @@ F:	package/qt5/
+>  N:	Julien Floret <julien.floret@6wind.com>
+>  F:	package/lldpd/
+>  
+> +N:	Julien Viard de Galbert <julien@vdg.name>
+> +F:	package/dieharder/
+> +
+>  N:	Justin Maggard <jmaggard@netgear.com>
+>  F:	package/dtach/
+>  
+> diff --git a/package/Config.in b/package/Config.in
+> index 8c8c33e..978f5fd 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -72,6 +72,7 @@ menu "Debugging, profiling and benchmark"
+>  	source "package/bonnie/Config.in"
+>  	source "package/cache-calibrator/Config.in"
+>  	source "package/dhrystone/Config.in"
+> +	source "package/dieharder/Config.in"
+>  	source "package/dmalloc/Config.in"
+>  	source "package/dropwatch/Config.in"
+>  	source "package/dstat/Config.in"
+> diff --git a/package/dieharder/0001-Do-not-use-includedir-as-include-search-path-for-bui.patch b/package/dieharder/0001-Do-not-use-includedir-as-include-search-path-for-bui.patch
 > new file mode 100644
-> index 0000000..04f4067
+> index 0000000..4911fee
 > --- /dev/null
-> +++ b/board/beaglebone/patches/linux/0002-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch
-> @@ -0,0 +1,371 @@
-> +From 1fb62e5c33646358afd682af99e7a2f3562e2c90 Mon Sep 17 00:00:00 2001
-> +From: Joe Perches <joe@perches.com>
-> +Date: Thu, 25 Jun 2015 15:01:02 -0700
-> +Subject: [PATCH] compiler-gcc: integrate the various compiler-gcc[345].h files
+> +++ b/package/dieharder/0001-Do-not-use-includedir-as-include-search-path-for-bui.patch
+> @@ -0,0 +1,62 @@
+> +From dd9528ffbcc3b506d01e131010cc3bb0f83ca9b1 Mon Sep 17 00:00:00 2001
+> +From: Julien Viard de Galbert <julien@vdg.name>
+> +Date: Sat, 14 Jan 2017 14:06:42 +0100
+> +Subject: [PATCH 1/4] Do not use includedir as include search path for build
 > +
-> +[ Upstream commit cb984d101b30eb7478d32df56a0023e4603cba7f ]
+> +--includedir is not used to specify where a program should
+> +look for headers of libraries, but to tell where it should
+> +install its own headers.
 > +
-> +As gcc major version numbers are going to advance rather rapidly in the
-> +future, there's no real value in separate files for each compiler
-> +version.
-> +
-> +Deduplicate some of the macros #defined in each file too.
-> +
-> +Neaten comments using normal kernel commenting style.
-> +
-> +Signed-off-by: Joe Perches <joe@perches.com>
-> +Cc: Andi Kleen <andi@firstfloor.org>
-> +Cc: Michal Marek <mmarek@suse.cz>
-> +Cc: Segher Boessenkool <segher@kernel.crashing.org>
-> +Cc: Sasha Levin <levinsasha928@gmail.com>
-> +Cc: Anton Blanchard <anton@samba.org>
-> +Cc: Alan Modra <amodra@gmail.com>
-> +Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> +Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> +Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
-> +[Romain:
-> +  rebase on 4.1.6 used by processor-sdk-linux-02.00.00 ti branch]
-> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> +Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
 > +---
-> + include/linux/compiler-gcc.h  | 120 ++++++++++++++++++++++++++++++++++++++++--
-> + include/linux/compiler-gcc3.h |  23 --------
-> + include/linux/compiler-gcc4.h |  91 --------------------------------
-> + include/linux/compiler-gcc5.h |  67 -----------------------
-> + 4 files changed, 116 insertions(+), 185 deletions(-)
-> + delete mode 100644 include/linux/compiler-gcc3.h
-> + delete mode 100644 include/linux/compiler-gcc4.h
-> + delete mode 100644 include/linux/compiler-gcc5.h
+> + configure.ac             | 6 +++---
+> + dieharder/Makefile.am    | 2 +-
+> + libdieharder/Makefile.am | 2 +-
+> + 3 files changed, 5 insertions(+), 5 deletions(-)
 > +
-> +diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> +index 371e560..484ef6e 100644
-> +--- a/include/linux/compiler-gcc.h
-> ++++ b/include/linux/compiler-gcc.h
-> +@@ -115,10 +115,122 @@
-> + #define __maybe_unused			__attribute__((unused))
-> + #define __always_unused			__attribute__((unused))
+> +diff --git a/configure.ac b/configure.ac
+> +index b336115..91f7c64 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -96,9 +96,9 @@ AC_TYPE_SIZE_T
+> + AC_C_VOLATILE
+> + AC_C_INLINE
 > + 
-> +-#define __gcc_header(x) #x
-> +-#define _gcc_header(x) __gcc_header(linux/compiler-gcc##x.h)
-> +-#define gcc_header(x) _gcc_header(x)
-> +-#include gcc_header(__GNUC__)
-> ++/* gcc version specific checks */
-> ++
-> ++#if GCC_VERSION < 30200
-> ++# error Sorry, your compiler is too old - please upgrade it.
-> ++#endif
-> ++
-> ++#if GCC_VERSION < 30300
-> ++# define __used			__attribute__((__unused__))
-> ++#else
-> ++# define __used			__attribute__((__used__))
-> ++#endif
-> ++
-> ++#ifdef CONFIG_GCOV_KERNEL
-> ++# if GCC_VERSION < 30400
-> ++#   error "GCOV profiling support for gcc versions below 3.4 not included"
-> ++# endif /* __GNUC_MINOR__ */
-> ++#endif /* CONFIG_GCOV_KERNEL */
-> ++
-> ++#if GCC_VERSION >= 30400
-> ++#define __must_check		__attribute__((warn_unused_result))
-> ++#endif
-> ++
-> ++#if GCC_VERSION >= 40000
-> ++
-> ++/* GCC 4.1.[01] miscompiles __weak */
-> ++#ifdef __KERNEL__
-> ++# if GCC_VERSION >= 40100 &&  GCC_VERSION <= 40101
-> ++#  error Your version of gcc miscompiles the __weak directive
-> ++# endif
-> ++#endif
-> ++
-> ++#define __used			__attribute__((__used__))
-> ++#define __compiler_offsetof(a, b)					\
-> ++	__builtin_offsetof(a, b)
-> ++
-> ++#if GCC_VERSION >= 40100 && GCC_VERSION < 40600
-> ++# define __compiletime_object_size(obj) __builtin_object_size(obj, 0)
-> ++#endif
-> ++
-> ++#if GCC_VERSION >= 40300
-> ++/* Mark functions as cold. gcc will assume any path leading to a call
-> ++ * to them will be unlikely.  This means a lot of manual unlikely()s
-> ++ * are unnecessary now for any paths leading to the usual suspects
-> ++ * like BUG(), printk(), panic() etc. [but let's keep them for now for
-> ++ * older compilers]
-> ++ *
-> ++ * Early snapshots of gcc 4.3 don't support this and we can't detect this
-> ++ * in the preprocessor, but we can live with this because they're unreleased.
-> ++ * Maketime probing would be overkill here.
-> ++ *
-> ++ * gcc also has a __attribute__((__hot__)) to move hot functions into
-> ++ * a special section, but I don't see any sense in this right now in
-> ++ * the kernel context
-> ++ */
-> ++#define __cold			__attribute__((__cold__))
-> ++
-> ++#define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-> ++
-> ++#ifndef __CHECKER__
-> ++# define __compiletime_warning(message) __attribute__((warning(message)))
-> ++# define __compiletime_error(message) __attribute__((error(message)))
-> ++#endif /* __CHECKER__ */
-> ++#endif /* GCC_VERSION >= 40300 */
-> ++
-> ++#if GCC_VERSION >= 40500
-> ++/*
-> ++ * Mark a position in code as unreachable.  This can be used to
-> ++ * suppress control flow warnings after asm blocks that transfer
-> ++ * control elsewhere.
-> ++ *
-> ++ * Early snapshots of gcc 4.5 don't support this and we can't detect
-> ++ * this in the preprocessor, but we can live with this because they're
-> ++ * unreleased.  Really, we need to have autoconf for the kernel.
-> ++ */
-> ++#define unreachable() __builtin_unreachable()
-> ++
-> ++/* Mark a function definition as prohibited from being cloned. */
-> ++#define __noclone	__attribute__((__noclone__))
-> ++
-> ++#endif /* GCC_VERSION >= 40500 */
-> ++
-> ++#if GCC_VERSION >= 40600
-> ++/*
-> ++ * Tell the optimizer that something else uses this function or variable.
-> ++ */
-> ++#define __visible	__attribute__((externally_visible))
-> ++#endif
-> ++
-> ++/*
-> ++ * GCC 'asm goto' miscompiles certain code sequences:
-> ++ *
-> ++ *   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58670
-> ++ *
-> ++ * Work it around via a compiler barrier quirk suggested by Jakub Jelinek.
-> ++ *
-> ++ * (asm goto is automatically volatile - the naming reflects this.)
-> ++ */
-> ++#define asm_volatile_goto(x...)	do { asm goto(x); asm (""); } while (0)
-> ++
-> ++#ifdef CONFIG_ARCH_USE_BUILTIN_BSWAP
-> ++#if GCC_VERSION >= 40400
-> ++#define __HAVE_BUILTIN_BSWAP32__
-> ++#define __HAVE_BUILTIN_BSWAP64__
-> ++#endif
-> ++#if GCC_VERSION >= 40800 || (defined(__powerpc__) && GCC_VERSION >= 40600)
-> ++#define __HAVE_BUILTIN_BSWAP16__
-> ++#endif
-> ++#endif /* CONFIG_ARCH_USE_BUILTIN_BSWAP */
-> ++
-> ++#if GCC_VERSION >= 50000
-> ++#define KASAN_ABI_VERSION 4
-> ++#elif GCC_VERSION >= 40902
-> ++#define KASAN_ABI_VERSION 3
-> ++#endif
-> ++
-> ++#endif	/* gcc version >= 40000 specific checks */
+> +-DIEHARDER_CFLAGS="-I$includedir"
+> +-dieharder_CFLAGS="-std=c99 -Wall -pedantic -I$includedir"
+> +-libdieharder_lo_CFLAGS="-Wall -pedantic -I$includedir"
+> ++DIEHARDER_CFLAGS=""
+> ++dieharder_CFLAGS="-std=c99 -Wall -pedantic"
+> ++libdieharder_lo_CFLAGS="-Wall -pedantic"
+> + DIEHARDER_LIBS="-L$libdir -ldieharder"
+> + ACLOCAL_AMFLAGS="-I m4"
 > + 
-> + #if !defined(__noclone)
-> + #define __noclone	/* not needed */
-> +diff --git a/include/linux/compiler-gcc3.h b/include/linux/compiler-gcc3.h
-> +deleted file mode 100644
-> +index 7d89feb..0000000
-> +--- a/include/linux/compiler-gcc3.h
-> ++++ /dev/null
-> +@@ -1,23 +0,0 @@
-> +-#ifndef __LINUX_COMPILER_H
-> +-#error "Please don't include <linux/compiler-gcc3.h> directly, include <linux/compiler.h> instead."
-> +-#endif
-> +-
-> +-#if GCC_VERSION < 30200
-> +-# error Sorry, your compiler is too old - please upgrade it.
-> +-#endif
-> +-
-> +-#if GCC_VERSION >= 30300
-> +-# define __used			__attribute__((__used__))
-> +-#else
-> +-# define __used			__attribute__((__unused__))
-> +-#endif
-> +-
-> +-#if GCC_VERSION >= 30400
-> +-#define __must_check		__attribute__((warn_unused_result))
-> +-#endif
-> +-
-> +-#ifdef CONFIG_GCOV_KERNEL
-> +-# if GCC_VERSION < 30400
-> +-#   error "GCOV profiling support for gcc versions below 3.4 not included"
-> +-# endif /* __GNUC_MINOR__ */
-> +-#endif /* CONFIG_GCOV_KERNEL */
-> +diff --git a/include/linux/compiler-gcc4.h b/include/linux/compiler-gcc4.h
-> +deleted file mode 100644
-> +index 769e198..0000000
-> +--- a/include/linux/compiler-gcc4.h
-> ++++ /dev/null
-> +@@ -1,91 +0,0 @@
-> +-#ifndef __LINUX_COMPILER_H
-> +-#error "Please don't include <linux/compiler-gcc4.h> directly, include <linux/compiler.h> instead."
-> +-#endif
-> +-
-> +-/* GCC 4.1.[01] miscompiles __weak */
-> +-#ifdef __KERNEL__
-> +-# if GCC_VERSION >= 40100 &&  GCC_VERSION <= 40101
-> +-#  error Your version of gcc miscompiles the __weak directive
-> +-# endif
-> +-#endif
-> +-
-> +-#define __used			__attribute__((__used__))
-> +-#define __must_check 		__attribute__((warn_unused_result))
-> +-#define __compiler_offsetof(a,b) __builtin_offsetof(a,b)
-> +-
-> +-#if GCC_VERSION >= 40100 && GCC_VERSION < 40600
-> +-# define __compiletime_object_size(obj) __builtin_object_size(obj, 0)
-> +-#endif
-> +-
-> +-#if GCC_VERSION >= 40300
-> +-/* Mark functions as cold. gcc will assume any path leading to a call
-> +-   to them will be unlikely.  This means a lot of manual unlikely()s
-> +-   are unnecessary now for any paths leading to the usual suspects
-> +-   like BUG(), printk(), panic() etc. [but let's keep them for now for
-> +-   older compilers]
-> +-
-> +-   Early snapshots of gcc 4.3 don't support this and we can't detect this
-> +-   in the preprocessor, but we can live with this because they're unreleased.
-> +-   Maketime probing would be overkill here.
-> +-
-> +-   gcc also has a __attribute__((__hot__)) to move hot functions into
-> +-   a special section, but I don't see any sense in this right now in
-> +-   the kernel context */
-> +-#define __cold			__attribute__((__cold__))
-> +-
-> +-#define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-> +-
-> +-#ifndef __CHECKER__
-> +-# define __compiletime_warning(message) __attribute__((warning(message)))
-> +-# define __compiletime_error(message) __attribute__((error(message)))
-> +-#endif /* __CHECKER__ */
-> +-#endif /* GCC_VERSION >= 40300 */
-> +-
-> +-#if GCC_VERSION >= 40500
-> +-/*
-> +- * Mark a position in code as unreachable.  This can be used to
-> +- * suppress control flow warnings after asm blocks that transfer
-> +- * control elsewhere.
-> +- *
-> +- * Early snapshots of gcc 4.5 don't support this and we can't detect
-> +- * this in the preprocessor, but we can live with this because they're
-> +- * unreleased.  Really, we need to have autoconf for the kernel.
-> +- */
-> +-#define unreachable() __builtin_unreachable()
-> +-
-> +-/* Mark a function definition as prohibited from being cloned. */
-> +-#define __noclone	__attribute__((__noclone__))
-> +-
-> +-#endif /* GCC_VERSION >= 40500 */
-> +-
-> +-#if GCC_VERSION >= 40600
-> +-/*
-> +- * Tell the optimizer that something else uses this function or variable.
-> +- */
-> +-#define __visible __attribute__((externally_visible))
-> +-#endif
-> +-
-> +-/*
-> +- * GCC 'asm goto' miscompiles certain code sequences:
-> +- *
-> +- *   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58670
-> +- *
-> +- * Work it around via a compiler barrier quirk suggested by Jakub Jelinek.
-> +- *
-> +- * (asm goto is automatically volatile - the naming reflects this.)
-> +- */
-> +-#define asm_volatile_goto(x...)	do { asm goto(x); asm (""); } while (0)
-> +-
-> +-#ifdef CONFIG_ARCH_USE_BUILTIN_BSWAP
-> +-#if GCC_VERSION >= 40400
-> +-#define __HAVE_BUILTIN_BSWAP32__
-> +-#define __HAVE_BUILTIN_BSWAP64__
-> +-#endif
-> +-#if GCC_VERSION >= 40800 || (defined(__powerpc__) && GCC_VERSION >= 40600)
-> +-#define __HAVE_BUILTIN_BSWAP16__
-> +-#endif
-> +-#endif /* CONFIG_ARCH_USE_BUILTIN_BSWAP */
-> +-
-> +-#if GCC_VERSION >= 40902
-> +-#define KASAN_ABI_VERSION 3
-> +-#endif
-> +diff --git a/include/linux/compiler-gcc5.h b/include/linux/compiler-gcc5.h
-> +deleted file mode 100644
-> +index efee493..0000000
-> +--- a/include/linux/compiler-gcc5.h
-> ++++ /dev/null
-> +@@ -1,67 +0,0 @@
-> +-#ifndef __LINUX_COMPILER_H
-> +-#error "Please don't include <linux/compiler-gcc5.h> directly, include <linux/compiler.h> instead."
-> +-#endif
-> +-
-> +-#define __used				__attribute__((__used__))
-> +-#define __must_check			__attribute__((warn_unused_result))
-> +-#define __compiler_offsetof(a, b)	__builtin_offsetof(a, b)
-> +-
-> +-/* Mark functions as cold. gcc will assume any path leading to a call
-> +-   to them will be unlikely.  This means a lot of manual unlikely()s
-> +-   are unnecessary now for any paths leading to the usual suspects
-> +-   like BUG(), printk(), panic() etc. [but let's keep them for now for
-> +-   older compilers]
-> +-
-> +-   Early snapshots of gcc 4.3 don't support this and we can't detect this
-> +-   in the preprocessor, but we can live with this because they're unreleased.
-> +-   Maketime probing would be overkill here.
-> +-
-> +-   gcc also has a __attribute__((__hot__)) to move hot functions into
-> +-   a special section, but I don't see any sense in this right now in
-> +-   the kernel context */
-> +-#define __cold			__attribute__((__cold__))
-> +-
-> +-#define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-> +-
-> +-#ifndef __CHECKER__
-> +-# define __compiletime_warning(message) __attribute__((warning(message)))
-> +-# define __compiletime_error(message) __attribute__((error(message)))
-> +-#endif /* __CHECKER__ */
-> +-
-> +-/*
-> +- * Mark a position in code as unreachable.  This can be used to
-> +- * suppress control flow warnings after asm blocks that transfer
-> +- * control elsewhere.
-> +- *
-> +- * Early snapshots of gcc 4.5 don't support this and we can't detect
-> +- * this in the preprocessor, but we can live with this because they're
-> +- * unreleased.  Really, we need to have autoconf for the kernel.
-> +- */
-> +-#define unreachable() __builtin_unreachable()
-> +-
-> +-/* Mark a function definition as prohibited from being cloned. */
-> +-#define __noclone	__attribute__((__noclone__))
-> +-
-> +-/*
-> +- * Tell the optimizer that something else uses this function or variable.
-> +- */
-> +-#define __visible __attribute__((externally_visible))
-> +-
-> +-/*
-> +- * GCC 'asm goto' miscompiles certain code sequences:
-> +- *
-> +- *   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58670
-> +- *
-> +- * Work it around via a compiler barrier quirk suggested by Jakub Jelinek.
-> +- *
-> +- * (asm goto is automatically volatile - the naming reflects this.)
-> +- */
-> +-#define asm_volatile_goto(x...)	do { asm goto(x); asm (""); } while (0)
-> +-
-> +-#ifdef CONFIG_ARCH_USE_BUILTIN_BSWAP
-> +-#define __HAVE_BUILTIN_BSWAP32__
-> +-#define __HAVE_BUILTIN_BSWAP64__
-> +-#define __HAVE_BUILTIN_BSWAP16__
-> +-#endif /* CONFIG_ARCH_USE_BUILTIN_BSWAP */
-> +-
-> +-#define KASAN_ABI_VERSION 4
+> +diff --git a/dieharder/Makefile.am b/dieharder/Makefile.am
+> +index e6fbff2..7bdac5c 100644
+> +--- a/dieharder/Makefile.am
+> ++++ b/dieharder/Makefile.am
+> +@@ -64,7 +64,7 @@ DEFINES = -DVERSION=$(VERSION)
+> + # CC = gcc
+> + 
+> + # Compile flags (use fairly standard -O3 as default)
+> +-AM_CPPFLAGS = -I ${top_srcdir}/include $(DEFINES) -I ${includedir}
+> ++AM_CPPFLAGS = -I ${top_srcdir}/include $(DEFINES)
+> + AM_CFLAGS = -O3
+> + 
+> + # Load flags (optional)
+> +diff --git a/libdieharder/Makefile.am b/libdieharder/Makefile.am
+> +index 5fd3396..0873f9c 100644
+> +--- a/libdieharder/Makefile.am
+> ++++ b/libdieharder/Makefile.am
+> +@@ -114,7 +114,7 @@ DEFINES = -DVERSION=$(VERSION) -DLITTLE_ENDIAN=$(LITTLE_ENDIAN)
+> + # CC = gcc
+> + 
+> + # Compile flags (use fairly standard -O3 as default)
+> +-AM_CPPFLAGS = $(DEFINES) -I ${top_srcdir}/include -I ${includedir}
+> ++AM_CPPFLAGS = $(DEFINES) -I ${top_srcdir}/include
+> + AM_CFLAGS = -O3 -Wall -pedantic -Wno-unused-variable 
+> + 
+> + #========================================================================
 > +-- 
-> +2.9.3
+> +2.1.4
 > +
-> -- 
-> 2.9.3
+> diff --git a/package/dieharder/0002-Do-not-install-includes.patch b/package/dieharder/0002-Do-not-install-includes.patch
+> new file mode 100644
+> index 0000000..ccad96d
+> --- /dev/null
+> +++ b/package/dieharder/0002-Do-not-install-includes.patch
+> @@ -0,0 +1,28 @@
+> +From 9ee8200a6dec6aca7f4f37c46ca95ac1cb38306c Mon Sep 17 00:00:00 2001
+> +From: Julien Viard de Galbert <julien@vdg.name>
+> +Date: Sat, 14 Jan 2017 14:08:07 +0100
+> +Subject: [PATCH 2/4] Do not install includes
+> +
+> +We don't want include files on the target
+> +
+> +Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> +---
+> + Makefile.am | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/Makefile.am b/Makefile.am
+> +index 489c493..0264c5e 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -74,7 +74,7 @@ SPEC = $(PROJECT).spec
+> + # presume the simplest of dependencies and remake if includes change
+> + # for example.
+> + #========================================================================
+> +-all: $(LIBTIME) $(PROGTIME) $(INCTIME)
+> ++all: $(LIBTIME) $(PROGTIME)
+> + 
+> + # This is not, actually, a particularly useful toplevel target.  To
+> + # work correctly it also would require a full parsing of all
+> +-- 
+> +2.1.4
+> +
+> diff --git a/package/dieharder/0003-Fix-missing-type-intptr_t.patch b/package/dieharder/0003-Fix-missing-type-intptr_t.patch
+> new file mode 100644
+> index 0000000..28eca3d
+> --- /dev/null
+> +++ b/package/dieharder/0003-Fix-missing-type-intptr_t.patch
+> @@ -0,0 +1,27 @@
+> +From 30a4300b5accb96027a4f2c2a8598c5e730799a4 Mon Sep 17 00:00:00 2001
+> +From: Julien Viard de Galbert <julien@vdg.name>
+> +Date: Sat, 14 Jan 2017 14:18:10 +0100
+> +Subject: [PATCH 3/4] Fix missing type intptr_t
+> +
+> +With glibc-2.23 unistd.h need intptr_t when __USE_MISC is defined.
+> +
+> +Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> +---
+> + include/dieharder/libdieharder.h | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/include/dieharder/libdieharder.h b/include/dieharder/libdieharder.h
+> +index 2138ebf..d98b758 100644
+> +--- a/include/dieharder/libdieharder.h
+> ++++ b/include/dieharder/libdieharder.h
+> +@@ -17,6 +17,7 @@
+> + 
+> + /* This turns on uint macro in c99 */
+> + #define __USE_MISC 1
+> ++#include <stdint.h>
+> + #include <sys/types.h>
+> + #include <sys/stat.h>
+> + #include <unistd.h>
+> +-- 
+> +2.1.4
+> +
+> diff --git a/package/dieharder/0004-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch b/package/dieharder/0004-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch
+> new file mode 100644
+> index 0000000..4ceeec5
+> --- /dev/null
+> +++ b/package/dieharder/0004-Add-_GNU_SOURCE-for-uint-and-M_PI-with-musl-libc.patch
+> @@ -0,0 +1,28 @@
+> +From bce37eb5db6c502fa5b16b943567a85fcd69c572 Mon Sep 17 00:00:00 2001
+> +From: Julien Viard de Galbert <julien@vdg.name>
+> +Date: Sat, 14 Jan 2017 14:19:47 +0100
+> +Subject: [PATCH 4/4] Add _GNU_SOURCE for uint and M_PI with musl libc
+> +
+> +When building with musl libc _GNU_SOURCE need to be defined
+> +to provide uint type and M_PI macro
+> +
+> +Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> +---
+> + include/dieharder/libdieharder.h | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/include/dieharder/libdieharder.h b/include/dieharder/libdieharder.h
+> +index d98b758..c1a5023 100644
+> +--- a/include/dieharder/libdieharder.h
+> ++++ b/include/dieharder/libdieharder.h
+> +@@ -17,6 +17,7 @@
+> + 
+> + /* This turns on uint macro in c99 */
+> + #define __USE_MISC 1
+> ++#define _GNU_SOURCE 1
+> + #include <stdint.h>
+> + #include <sys/types.h>
+> + #include <sys/stat.h>
+> +-- 
+> +2.1.4
+> +
+> diff --git a/package/dieharder/Config.in b/package/dieharder/Config.in
+> new file mode 100644
+> index 0000000..9f442b5
+> --- /dev/null
+> +++ b/package/dieharder/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_DIEHARDER
+> +	bool "dieharder"
+> +	select BR2_PACKAGE_GSL
+> +	help
+> +	  dieharder is a fairly involved random number/uniform deviate
+> +	  generator tester. It is thus suitable for use in testing both
+> +	  software RNG's and hardware RNG's.
+> +
+> +	  http://www.phy.duke.edu/~rgb/General/dieharder.php
+> diff --git a/package/dieharder/dieharder.hash b/package/dieharder/dieharder.hash
+> new file mode 100644
+> index 0000000..8a44513
+> --- /dev/null
+> +++ b/package/dieharder/dieharder.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256 6cff0ff8394c553549ac7433359ccfc955fb26794260314620dfa5e4cd4b727f dieharder-3.31.1.tgz
+> +
+> diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
+> new file mode 100644
+> index 0000000..25cc348
+> --- /dev/null
+> +++ b/package/dieharder/dieharder.mk
+> @@ -0,0 +1,40 @@
+> +################################################################################
+> +#
+> +# dieharder
+> +#
+> +################################################################################
+> +
+> +DIEHARDER_VERSION = 3.31.1
+> +DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder
+> +DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
+> +DIEHARDER_STRIP_COMPONENTS = 2
+> +DIEHARDER_LICENSE = GPLv2 with beverage clause
+> +DIEHARDER_LICENSE_FILES = COPYING
+> +DIEHARDER_DEPENDENCIES = gsl host-libtool
+> +
+> +# Fix m4 links to points to the ones in staging (provided by libtool hence
+> +# the patch dependency).
+> +define DIEHARDER_POST_PATCH_FIXUP
+> +        for m in $(@D)/m4/*; do \
+> +		l=$$(readlink $$m) ;\
+> +		rm $$m ;\
+> +		ln -s $(HOST_DIR)$$l $$m ;\
+> +	done
+> +endef
+> +DIEHARDER_POST_PATCH_HOOKS += DIEHARDER_POST_PATCH_FIXUP
+> +
+> +# Ensure the libtool version is updated,
+> +# also make _CONF_ENV works instead of _CONF_OPTS for endiannes
+> +DIEHARDER_AUTORECONF = YES
+> +
+> +# fix endiannes detection
+> +ifeq ($(BR2_ENDIAN),"BIG")
+> +DIEHARDER_CONF_ENV = ac_cv_c_endian=big
+> +else
+> +DIEHARDER_CONF_ENV = ac_cv_c_endian=little
+> +endif
+> +
+> +# parallel build fail, disable it
+> +DIEHARDER_MAKE = $(MAKE1)
+> +
+> +$(eval $(autotools-package))
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
