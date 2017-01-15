@@ -1,66 +1,100 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 Jan 2017 19:40:08 +0100
-Subject: [Buildroot] [PATCH] package/espeak: fix build issue with gcc6
-Message-ID: <20170115184008.7261-1-romain.naour@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 15 Jan 2017 20:03:12 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2017-01-13
+In-Reply-To: <20170115172207.GG3552@free.fr>
+References: <20170114072939.0FF8220B7E@mail.free-electrons.com>
+ <1484408045.30558.1.camel@embedded.rocks> <20170115172207.GG3552@free.fr>
+Message-ID: <1484506992.2026.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some architecture, "char" is signed (x86_64, nios2...) so the
-compiler try to convert int 0xc2 and 0xba to a signed char.
-This is an error since gcc6 (Wnarrowing).
+Hi Yann,
 
-cast string_ordinal init values.
+On Sun, 2017-01-15 at 18:22 +0100, Yann E. MORIN wrote:
+> J?rg, All,
+> 
+> On 2017-01-14 16:34 +0100, J?rg Krause spake thusly:
+> > Hi,
+> > 
+> > On Sat, 2017-01-14 at 08:29 +0100, Thomas Petazzoni wrote:
+> > > Hello,
+> > > 
+> > > This is the list of Buildroot build failures that occured on
+> > > 2017-01-13, and for which you are a registered architecture
+> > > developer
+> > > or package developer. Please help us improving the quality of
+> > > Buildroot by investigating those build failures and sending
+> > > patches
+> > > to
+> > > fix them. Thanks!
+> > > 
+> > > Build failures related to your packages:
+> > > 
+> > > ?????????arm |???????????????????????mpd-0.20 | http://autobuild.
+> > > buil
+> > > droot.net/results/da259e57f96cf0dd6fbac9fe44826e93f986d9e9
+> > > ???????sparc |???????????????????????mpd-0.20 | http://autobuild.
+> > > buil
+> > > droot.net/results/242b4cff0257f353ce6b2df744c51488dbc0d2c5
+> > > ???????sparc |???????????????????????mpd-0.20 | http://autobuild.
+> > > buil
+> > > droot.net/results/8d50a025ffcc5b3408fa27f59f0cd896616dc2c6
+> > > ????????i686 |???????????????????????mpd-0.20 | http://autobuild.
+> > > buil
+> > > droot.net/results/362233e40960f8f0410bf24404fa05ce38cbfb56
+> > > ???????nios2 |???????????????????????mpd-0.20 | http://autobuild.
+> > > buil
+> > > droot.net/results/a5506440bd02726d6e3b0240ece876c73b92b546
+> > > ???????sparc |???????????????????????mpd-0.20 | http://autobuild.
+> > > buil
+> > > droot.net/results/e964b1f0ac39ec9c14f5e3b368132d8dc671c249
+> > > 
+> > 
+> > The error message is:
+> > 
+> > error: 'exception_ptr' in namespace 'std' does not name a type
+> > 
+> > The problem is related to this bug report [1]. Both std::future and
+> > std::exception_prt are only enabled in libstdc++ if
+> > 'ATOMIC_INT_LOCK_FREE > 1'. std::exception_prt is only supported
+> > for
+> > targets with always-lock-free atomics for int. This is a long-
+> > standing
+> > issue in the libstdc++ and was finally fixed in GCC trunk r244051
+> > [2][3] and will be available in GCC 7.0.
+> > 
+> > Any suggestions how to handle this build error?
+> > 
+> > 1) Disable for the targets concerned and wait for GCC 7.0?
+> > 2) Backport the patch?
+> 
+> The patch is not small... :-(
+> 
+> So I'd say we disable it on archs that do not have the lock-free int.
 
-Fixes:
-http://autobuild.buildroot.net/results/bae/baef9888b1979d18171668a675985e3f3b45fda6
+You're right. Furthermore, it does not apply cleanly on the 6er branch.
+I will prepare a patch in the next days.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...languages-cast-string_ordinal-init-values.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch
+J?rg
 
-diff --git a/package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch b/package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch
-new file mode 100644
-index 0000000..d37e64c
---- /dev/null
-+++ b/package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch
-@@ -0,0 +1,33 @@
-+From 451330d09a6a3500b40bc4f5896ba790ab46cd6c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 15 Jan 2017 19:37:31 +0100
-+Subject: [PATCH 2/2] tr_languages: cast string_ordinal init values
-+
-+On some architecture, "char" is signed (x86_64, nios2...) so the
-+compiler try to convert int 0xc2 and 0xba to a signed char.
-+This is an error since gcc6 (Wnarrowing).
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/bae/baef9888b1979d18171668a675985e3f3b45fda6
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/tr_languages.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/tr_languages.cpp b/src/tr_languages.cpp
-+index 5c80286..dbc6e36 100644
-+--- a/src/tr_languages.cpp
-++++ b/src/tr_languages.cpp
-+@@ -200,7 +200,7 @@ static const unsigned short chars_ignore_zwnj_hyphen[] = {
-+ 	0x200d,  1, // zero width joiner
-+ 	0, 0 };
-+ 
-+-const char string_ordinal[] = {0xc2,0xba,0};  // masculine ordinal character, UTF-8
-++const char string_ordinal[] = {(char)0xc2,(char)0xba,0};  // masculine ordinal character, UTF-8
-+ 
-+ 
-+ static Translator* NewTranslator(void)
-+-- 
-+2.9.3
-+
--- 
-2.9.3
+> 
+> > [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735
+> > [2] https://gcc.gnu.org/viewcvs/gcc/trunk/libstdc%2B%2B-v3/include/
+> > std/
+> > future?view=log&pathrev=244051
+> > [3] https://github.com/gcc-mirror/gcc/commit/c45be7f1aef92f2ea7363c
+> > bc46
+> > 27f943b83ca902
+> > 
+> > Best regards,
+> > J?rg Krause
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
