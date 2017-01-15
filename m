@@ -1,18 +1,18 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jan 2017 22:30:47 +0100
+Date: Sun, 15 Jan 2017 22:32:54 +0100
 Subject: [Buildroot] [PATCH v2 1/3] python-protobuf: Allow host building
 In-Reply-To: <20170112191523.23814-2-wak@google.com>
 References: <20161209011313.9549-1-wak@google.com>
  <20170112191523.23814-1-wak@google.com>
  <20170112191523.23814-2-wak@google.com>
-Message-ID: <20170115213047.GC4277@free.fr>
+Message-ID: <20170115213254.GD4277@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-William, All,
+Wlliam, All,
 
 On 2017-01-12 11:15 -0800, William A. Kennington III spake thusly:
 > Currently python-protobuf does not allow be built as a host package
@@ -33,18 +33,23 @@ On 2017-01-12 11:15 -0800, William A. Kennington III spake thusly:
 >  PYTHON_PROTOBUF_SUBDIR = python
 >  
 > +$(eval $(host-python-package))
->  $(eval $(python-package))
 
-This is not documented (AFAIK), but the host variant must go after the
-target variant. Otherwise, strange things can happen (because of the way
-variables have default values that depend on the order of evaluation,
-like the source archive for example).
+Oh, I forgot: the dependencies for the host variant must be explicitly
+specified:
 
-Note: this is valid for the following patch as awell, of course.
+    HOST_PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
 
 Regards,
 Yann E. MORIN.
 
+>  $(eval $(python-package))
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
