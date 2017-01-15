@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jan 2017 17:27:36 +0100
-Subject: [Buildroot] [PATCH 3/3] tslib: use upstream .tar.xz archive
-In-Reply-To: <4d652fd2c57debea2ae6732183afcc5105226f0f.1484425049.git.baruch@tkos.co.il>
-References: <9af1cba158ce6dcb96f5f121d4105895fea911b9.1484425049.git.baruch@tkos.co.il>
- <4d652fd2c57debea2ae6732183afcc5105226f0f.1484425049.git.baruch@tkos.co.il>
-Message-ID: <20170115162736.GF3552@free.fr>
+Date: Sun, 15 Jan 2017 18:23:54 +0100
+Subject: [Buildroot] [PATCH] jasper: disable PDF documentation generation
+In-Reply-To: <b17e9f42b1d2e17bb543c9d5b3b17e80a95c38d0.1484417309.git.baruch@tkos.co.il>
+References: <b17e9f42b1d2e17bb543c9d5b3b17e80a95c38d0.1484417309.git.baruch@tkos.co.il>
+Message-ID: <20170115172354.GH3552@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +12,45 @@ To: buildroot@busybox.net
 
 Baruch, All,
 
-On 2017-01-14 22:17 +0200, Baruch Siach spake thusly:
-> Save some network bandwidth.
-
-It indeed saves a mere 151KiB...
-
+On 2017-01-14 20:08 +0200, Baruch Siach spake thusly:
+> We don't need the PDF document on target. This also avoids incompatible host
+> Latex packages.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/e60/e60c4a71a08aebadd0bc3fb95a57a4a223e4b6fa/
+> http://autobuild.buildroot.net/results/4ec/4ec8a1735590a3cad4b74630b4b6bdd2e3a7eec8/
+> 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/jasper/jasper.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+> index f4db8c492064..d659682a56e9 100644
+> --- a/package/jasper/jasper.mk
+> +++ b/package/jasper/jasper.mk
+> @@ -10,6 +10,8 @@ JASPER_INSTALL_STAGING = YES
+>  JASPER_LICENSE = JasPer License Version 2.0
+>  JASPER_LICENSE_FILES = LICENSE
+>  JASPER_SUPPORTS_IN_SOURCE_BUILD = NO
+> +JASPER_CONF_OPTS = -DCMAKE_DISABLE_FIND_PACKAGE_DOXYGEN=TRUE \
+> +		-DCMAKE_DISABLE_FIND_PACKAGE_LATEX=TRUE
 
-Tested that the sha256 sum does match.
+In this situation, I prefer all options are on a line by the,selves:
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    JASPER_CONF_OPTS = \
+        -DCMAKE_DISABLE_FIND_PACKAGE_DOXYGEN=TRUE \
+        -DCMAKE_DISABLE_FIND_PACKAGE_LATEX=TRUE
+
+Otherwise:
+
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/tslib/tslib.hash | 2 +-
->  package/tslib/tslib.mk   | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-> index a80944c2174c..cdbe0d2cbed3 100644
-> --- a/package/tslib/tslib.hash
-> +++ b/package/tslib/tslib.hash
-> @@ -1,2 +1,2 @@
->  # Locally generated
-> -sha256  599f51c265158e7801b166e879e19759e8d3e5fdf2fa99c630698fe162a41d56  tslib-1.3.tar.gz
-> +sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
-> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-> index 7f74ca5fed04..df3de25a1b3a 100644
-> --- a/package/tslib/tslib.mk
-> +++ b/package/tslib/tslib.mk
-> @@ -6,6 +6,7 @@
->  
->  TSLIB_VERSION = 1.3
->  TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
-> +TSLIB_SOURCE = tslib-1.3.tar.xz
->  TSLIB_LICENSE = GPL, LGPL
->  TSLIB_LICENSE_FILES = COPYING
->  
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  JASPER_CONF_OPTS += -DJAS_ENABLE_SHARED=OFF
 > -- 
 > 2.11.0
 > 
