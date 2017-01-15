@@ -1,60 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jan 2017 22:32:54 +0100
-Subject: [Buildroot] [PATCH v2 1/3] python-protobuf: Allow host building
-In-Reply-To: <20170112191523.23814-2-wak@google.com>
-References: <20161209011313.9549-1-wak@google.com>
- <20170112191523.23814-1-wak@google.com>
- <20170112191523.23814-2-wak@google.com>
-Message-ID: <20170115213254.GD4277@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Jan 2017 08:48:12 +1100
+Subject: [Buildroot] [RFC] external toolchain scanner
+In-Reply-To: <fd01b978-5aea-2794-047c-968c7697b1bb@mind.be>
+References: <303be768-557b-3b02-c4fd-ae11ec2858ec@mentor.com>
+ <8037285d-a8b2-39c9-30c4-cba364583ae9@mentor.com>
+ <20161208210228.GA27341@free.fr>
+ <df15f689-fb98-5710-6c90-2ee0e5efb0be@mentor.com>
+ <c542e7c5-39e9-5d1f-1611-63ad49d26371@mentor.com>
+ <20170112173223.GA3716@free.fr>
+ <ef0f8d40-903d-1859-aa45-d99b8fe49887@mentor.com>
+ <fd01b978-5aea-2794-047c-968c7697b1bb@mind.be>
+Message-ID: <20170116084812.5e7bafeb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Wlliam, All,
+Hello,
 
-On 2017-01-12 11:15 -0800, William A. Kennington III spake thusly:
-> Currently python-protobuf does not allow be built as a host package
-> during a cross compile. We would like to be able to build nanopb as a
-> host package but can't without host-python-protobuf.
+On Fri, 13 Jan 2017 00:43:16 +0100, Arnout Vandecappelle wrote:
+
+> * make menuconfig
+> * make
+>  -> error "Incorrect toolchain settings detected. An updated config file has  
+> been generated in $(CONFIG_DIR)/config.toolchain. Copy it to
+> $(CONFIG_DIR)/.config and run 'make menuconfig' to verify."
+> * Copy
+> * make menuconfig
+> * make
 > 
-> Signed-off-by: William A. Kennington III <wak@google.com>
-> ---
->  package/python-protobuf/python-protobuf.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  Or perhaps even better, add an option
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_AUTODISCOVER. This option would disable all the
+> other options except BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS, and also disable all the
+> other menus. This option would run the autodiscovery and overwrite the .config
+> file (removing the CUSTOM_AUTODISCOVER option again). So it would force the
+> following scenario:
 > 
-> diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-> index d8be76dd7..d46bda243 100644
-> --- a/package/python-protobuf/python-protobuf.mk
-> +++ b/package/python-protobuf/python-protobuf.mk
-> @@ -13,4 +13,5 @@ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
->  PYTHON_PROTOBUF_SETUP_TYPE = setuptools
->  PYTHON_PROTOBUF_SUBDIR = python
->  
-> +$(eval $(host-python-package))
-
-Oh, I forgot: the dependencies for the host variant must be explicitly
-specified:
-
-    HOST_PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
-
-Regards,
-Yann E. MORIN.
-
->  $(eval $(python-package))
-> -- 
-> 2.11.0
+> * make menuconfig
+> * make
+> * make menuconfig
+> * make
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  But it's probably best to implement the first scenario and see where we go from
+> there.
 
+To be honest, I find all of this very complicated, and even more
+confusing than what we have today. Using custom external toolchain is
+already an "advanced" feature, which users just getting started with
+Buildroot are unlikely to use. To me, using custom external toolchain
+is a bit of an advanced functionality, and people who need that will
+surely be able to understand the information they need to fill in
+"menuconfig" to make Buildroot "accept" the toolchain.
+
+> >> I would rather that we work toward this goal, which would be a
+> >> termendous improvement on what we currently have.  
+> > I agree that emitting 5 errors at once, rather than emitting 1 error a time for
+> > 5 iterations, is an improvement on a disagreeable situation. I bet you can guess
+> > what I'll say next, though: when you look at the bigger picture, we shouldn't be
+> > in this situation to begin with. :-) When we already know the answers, we should
+> > tell the user, not the other way around.  
+> 
+>  But perhaps that would be an easier first step. Instead of just reporting one
+> single error, report all errors and the correct config options so the user can
+> edit the .config file and add them.
+
+Yes. *This* would be useful.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
