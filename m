@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jan 2017 17:27:02 +0100
-Subject: [Buildroot] [PATCH 2/3] tslib: disable raw input plugin under
- kernel < v3.12
-In-Reply-To: <4e6b08821af14328fceacf79bbdfa70f82deae8e.1484425049.git.baruch@tkos.co.il>
+Date: Sun, 15 Jan 2017 17:27:36 +0100
+Subject: [Buildroot] [PATCH 3/3] tslib: use upstream .tar.xz archive
+In-Reply-To: <4d652fd2c57debea2ae6732183afcc5105226f0f.1484425049.git.baruch@tkos.co.il>
 References: <9af1cba158ce6dcb96f5f121d4105895fea911b9.1484425049.git.baruch@tkos.co.il>
- <4e6b08821af14328fceacf79bbdfa70f82deae8e.1484425049.git.baruch@tkos.co.il>
-Message-ID: <20170115162702.GE3552@free.fr>
+ <4d652fd2c57debea2ae6732183afcc5105226f0f.1484425049.git.baruch@tkos.co.il>
+Message-ID: <20170115162736.GF3552@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +14,45 @@ To: buildroot@busybox.net
 Baruch, All,
 
 On 2017-01-14 22:17 +0200, Baruch Siach spake thusly:
-> The SYN_CNT input code was added in kernel v3.12.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/5cd/5cdb9d22092e9222cc7e8fe8dd3936305a5d371d/
-> http://autobuild.buildroot.net/results/211/2115038caff1e036cbc9dcb5cb6905abe643552a/
-> http://autobuild.buildroot.net/results/c79/c79de6fdd5cfe406979941790276296b6d1ec0b8/
-> 
+> Save some network bandwidth.
+
+It indeed saves a mere 151KiB...
+
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Again, you beat me to it. ;-)
+Tested that the sha256 sum does match.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/tslib/tslib.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/tslib/tslib.hash | 2 +-
+>  package/tslib/tslib.mk   | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 > 
+> diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+> index a80944c2174c..cdbe0d2cbed3 100644
+> --- a/package/tslib/tslib.hash
+> +++ b/package/tslib/tslib.hash
+> @@ -1,2 +1,2 @@
+>  # Locally generated
+> -sha256  599f51c265158e7801b166e879e19759e8d3e5fdf2fa99c630698fe162a41d56  tslib-1.3.tar.gz
+> +sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
 > diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-> index d6e66b723955..7f74ca5fed04 100644
+> index 7f74ca5fed04..df3de25a1b3a 100644
 > --- a/package/tslib/tslib.mk
 > +++ b/package/tslib/tslib.mk
-> @@ -13,4 +13,8 @@ TSLIB_AUTORECONF = YES
->  TSLIB_INSTALL_STAGING = YES
->  TSLIB_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+> @@ -6,6 +6,7 @@
 >  
-> +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12),)
-> +TSLIB_CONF_OPTS += --disable-input
-> +endif
-> +
->  $(eval $(autotools-package))
+>  TSLIB_VERSION = 1.3
+>  TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+> +TSLIB_SOURCE = tslib-1.3.tar.xz
+>  TSLIB_LICENSE = GPL, LGPL
+>  TSLIB_LICENSE_FILES = COPYING
+>  
 > -- 
 > 2.11.0
 > 
