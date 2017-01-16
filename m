@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 15:29:44 +0100
-Subject: [Buildroot] [git commit] cmake: bump version to 3.7.2
-Message-ID: <20170116143128.6675581E41@busybox.osuosl.org>
+Date: Mon, 16 Jan 2017 15:30:23 +0100
+Subject: [Buildroot] [git commit] zlib: bump to version 1.2.11
+Message-ID: <20170116143128.7D90381E43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8a6990c92451dab2ff9e14f3e94fdecbd79b604
+commit: https://git.buildroot.net/buildroot/commit/?id=bb0c2daae6da68415eb9a542a3205d39305bdc0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/zlib/zlib.hash | 2 +-
+ package/zlib/zlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 7a22f21..13c0237 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
+diff --git a/package/zlib/zlib.hash b/package/zlib/zlib.hash
+index 17dc9b4..81cb64e 100644
+--- a/package/zlib/zlib.hash
++++ b/package/zlib/zlib.hash
 @@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.7/cmake-3.7.1-SHA-256.txt
--sha256 449a5bce64dbd4d5b9517ebd1a1248ed197add6ad27934478976fd5f1f9330e1  cmake-3.7.1.tar.gz
-+# From http://www.cmake.org/files/v3.7/cmake-3.7.2-SHA-256.txt
-+sha256 dc1246c4e6d168ea4d6e042cfba577c1acd65feea27e56f5ff37df920c30cae0  cmake-3.7.2.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 107715c..0fd7139 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -5,7 +5,7 @@
+ # From http://www.zlib.net/
+-sha256 9612bf086047078ce3a1c154fc9052113fc1a2a97234a059da17a6299bd4dd32  zlib-1.2.10.tar.xz
++sha256 4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066  zlib-1.2.11.tar.xz
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index ba07f2c..deea5a5 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CMAKE_VERSION_MAJOR = 3.7
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+-ZLIB_VERSION = 1.2.10
++ZLIB_VERSION = 1.2.11
+ ZLIB_SOURCE = zlib-$(ZLIB_VERSION).tar.xz
+ ZLIB_SITE = http://www.zlib.net
+ ZLIB_LICENSE = zlib license
