@@ -1,22 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 13:43:11 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.9.4
-In-Reply-To: <1484507994-24309-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Sun, 15 Jan 2017 17:19:54 -0200")
-References: <1484507994-24309-1-git-send-email-festevam@gmail.com>
- <1484507994-24309-2-git-send-email-festevam@gmail.com>
-Message-ID: <8737gjdvkw.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Jan 2017 13:51:03 +0100
+Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 4.0.0
+In-Reply-To: <1484563705-28429-1-git-send-email-angelo.compagnucci@gmail.com>
+ (Angelo Compagnucci's message of "Mon, 16 Jan 2017 11:48:25 +0100")
+References: <1484563705-28429-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <87lgubcgnc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > This commit bumps python pillow to 4.0.0 version
+ > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-Committed, thanks.
+Looking at https://github.com/python-pillow/Pillow/releases, I see they
+have released a 4.0.0a version fixing a typo in setup.py. Any reason to
+stick to 4.0.0?
 
 -- 
 Bye, Peter Korsgaard
