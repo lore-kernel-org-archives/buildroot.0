@@ -1,41 +1,39 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 16 Jan 2017 22:14:54 +0100
-Subject: [Buildroot] [PATCH] package/mono: bump to version 4.6.2.16
-Message-ID: <1484601294-14853-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 16 Jan 2017 22:24:17 +0100
+Subject: [Buildroot] [PATCH 2/2] package/git: remove optional dependency to
+	libiconv
+In-Reply-To: <20170116212417.30415-1-bernd.kuhls@t-online.de>
+References: <20170116212417.30415-1-bernd.kuhls@t-online.de>
+Message-ID: <20170116212417.30415-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps mono to version 4.6.2.16
+Tested using this minimal defconfig:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+BR2_PACKAGE_GIT=y
+
+$ grep BR2_ENABLE_LOCALE= .config
+$
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mono/mono.hash | 2 +-
- package/mono/mono.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/git/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index 4d05458..6719fec 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 2981f518cace63bfe10953fecd57c7fef040077a1ac617967dde5466062c1327  mono-4.6.0.245.tar.bz2
-+sha256 8965d107f4ebf4583ba1b50e0dcad39f0dc6adac8df7a083e9c5879ad93c0ea4  mono-4.6.2.16.tar.bz2
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index ea4a7f1..20b9205 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONO_VERSION = 4.6.0.245
-+MONO_VERSION = 4.6.2.16
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPLv2 or MIT (compiler, tools), MIT (libs) or commercial
+diff --git a/package/git/Config.in b/package/git/Config.in
+index 9babbecf0..1f90e1180 100644
+--- a/package/git/Config.in
++++ b/package/git/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_GIT
+ 	bool "git"
+ 	depends on BR2_USE_MMU # uses fork()
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  Git is a free and open source distributed version control system
+ 	  designed to handle everything from small to very large projects.
 -- 
-2.7.4
+2.11.0
