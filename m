@@ -1,85 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 11:56:11 +0100
-Subject: [Buildroot] [git commit] toolchain: bump Codescape IMG MIPS version
-	to 2016.05-06
-Message-ID: <20170116124620.7F6AA8179D@busybox.osuosl.org>
+Date: Mon, 16 Jan 2017 13:45:00 +0100
+Subject: [Buildroot] [git commit] snmppp: bump to 3.3.8
+Message-ID: <20170116124621.2E8C77FB2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56016c27b29939fd4720bbf5152704a6e16ca560
+commit: https://git.buildroot.net/buildroot/commit/?id=8095343f015fce50c3d9a47c51d56b0b91326c10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also...
+Remove patch not needed anymore: the bug has been fixed in this release.
 
-- Fix a typo in Config.in
-- Take into account the host's architecture to download the x86 or
-  x86_64 version. This makes the IA32 libs dependency in unnecessary.
-
-[Peter: fix kernel headers comment as pointed out by Romain]
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../toolchain-external-codescape-img-mips/Config.in                | 7 +++----
- .../toolchain-external-codescape-img-mips.hash                     | 5 +++--
- .../toolchain-external-codescape-img-mips.mk                       | 6 +++++-
- 3 files changed, 11 insertions(+), 7 deletions(-)
+ package/snmppp/0001-Add-missing-includes.patch | 41 --------------------------
+ package/snmppp/snmppp.hash                     |  2 +-
+ package/snmppp/snmppp.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 43 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-index 1f0d4d1..e29c4dc 100644
---- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-@@ -5,15 +5,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
- 	depends on BR2_MIPS_CPU_MIPS32R6 || (BR2_MIPS_CPU_MIPS64R6 && !BR2_MIPS_SOFT_FLOAT)
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
- 	help
--	  Codescape IMG GNU Linux Toolchain 2015.10 for the MIPS
-+	  Codescape IMG GNU Linux Toolchain 2016.05 for the MIPS
- 	  architecture, from Imagination Technologies. It uses gcc
- 	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
--	  headers 4.0. It has support for the following variants:
-+	  headers 4.7. It has support for the following variants:
- 	    - MIPS32r6 - Big-Endian, Hard-Float, 2008 NaN, o32 ABI
- 	      Select 'MIPS (big endian)' Target Architecture
- 	      Select 'mips 32r6' Target Architecture Variant
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
-index e4ae9e1..6a12cfa 100644
---- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
-@@ -1,3 +1,4 @@
- # Codescape toolchains from Imagination Technologies
--# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
--sha256 e3c1f292ac6a9f12480af431c85a7ed9dfa011a52fd62a50be3363ec6b9bc872  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
-+# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-06/downloads.html
-+sha256 8d9cdf711dd402d7bf82883d425c221038fe8ce9d0c91a3f6b30939d9d55476c  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
-+sha256 6e2784d6df962fe4db7510c8a62ce3947b73f54207b10e18b52da59d1bc487bd  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.IMG.Linux.CentOS-5.x86_64.tar.gz
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
-index b4decfb..49a7027 100644
---- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
-@@ -4,11 +4,15 @@
+diff --git a/package/snmppp/0001-Add-missing-includes.patch b/package/snmppp/0001-Add-missing-includes.patch
+deleted file mode 100644
+index c3fa491..0000000
+--- a/package/snmppp/0001-Add-missing-includes.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 6433c6e8d81313ec7ef6c8d3abf96fffa537e23e Mon Sep 17 00:00:00 2001
+-From: Luca Ceresoli <luca@lucaceresoli.net>
+-Date: Tue, 1 Apr 2014 14:35:25 +0200
+-Subject: [PATCH] Add missing includes
+-
+-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+----
+- include/snmp_pp/config_snmp_pp.h.in | 4 ++++
+- include/snmp_pp/smival.h            | 1 +
+- 2 files changed, 5 insertions(+)
+-
+-diff --git a/include/snmp_pp/config_snmp_pp.h.in b/include/snmp_pp/config_snmp_pp.h.in
+-index 89a5b0d..3100713 100644
+---- a/include/snmp_pp/config_snmp_pp.h.in
+-+++ b/include/snmp_pp/config_snmp_pp.h.in
+-@@ -28,6 +28,10 @@
+- #ifndef _CONFIG_SNMP_PP_H_
+- #define _CONFIG_SNMP_PP_H_
+- 
+-+#ifdef __linux__
+-+#include <sys/socket.h>
+-+#endif
+-+
+- #define SNMP_PP_VERSION_STRING "@VERSION@"
+- #define SNMP_PP_VERSION @SNMP_PP_MAJOR_VERSION@
+- #define SNMP_PP_RELEASE @SNMP_PP_MINOR_VERSION@
+-diff --git a/include/snmp_pp/smival.h b/include/snmp_pp/smival.h
+-index 7a36fab..7522087 100644
+---- a/include/snmp_pp/smival.h
+-+++ b/include/snmp_pp/smival.h
+-@@ -59,6 +59,7 @@
+- #define _SMIVALUE
+- 
+- //----[ includes ]-----------------------------------------------------
+-+#include <string.h>
+- #include "snmp_pp/smi.h"
+- 
+- #ifdef SNMP_PP_NAMESPACE
+--- 
+-1.8.3.2
+-
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+index 462f413..2c97a48 100644
+--- a/package/snmppp/snmppp.hash
++++ b/package/snmppp/snmppp.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 2ef82819f2c4e9fec4c054a3e78a6d66f9927e306ea61d3a7aa6fe1218663da8  snmp++-3.3.7.tar.gz
++sha256 982b5f03436813b3094ace49ba5ececc595f9b6db1ad90bd8bf8494e39aa438f  snmp++-3.3.8.tar.gz
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 69ec925..1419514 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION = 2016.05-03
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION = 2016.05-06
- TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION)
- TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_STRIP_COMPONENTS = 2
- 
-+ifeq ($(HOSTARCH),x86)
- TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION).for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
-+else
-+TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION).for.MIPS.IMG.Linux.CentOS-5.x86_64.tar.gz
-+endif
- 
- # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
- # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
+-SNMPPP_VERSION = 3.3.7
++SNMPPP_VERSION = 3.3.8
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
