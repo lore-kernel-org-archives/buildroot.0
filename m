@@ -1,51 +1,60 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 16 Jan 2017 21:04:27 +0100
-Subject: [Buildroot] [PATCH] boot/uboot: fix build for sunxi targets
-In-Reply-To: <874m13c7uv.fsf@dell.be.48ers.dk>
-References: <20170113000428.4112-1-joerg.krause@embedded.rocks>
- <874m13c7uv.fsf@dell.be.48ers.dk>
-Message-ID: <1484597067.8221.1.camel@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 16 Jan 2017 21:59:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: Fix removal of libintl.h
+Message-ID: <20170116205903.26311-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Needed to fix
+http://autobuild.buildroot.net/results/6be/6be94fe2542f3ac9fb785dd22f504e25c2a7802e/
 
-On Fri, 2017-01-13 at 16:11 +0100, Peter Korsgaard wrote:
-> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
-> 
-> ?> Since version 2017.01 U-Boot needs to run the binman tool on the
-> host machine
-> ?> for building the 'u-boot-sunxi-with-spl.bin' target. The binman
-> tool is written
-> ?> in Python 2 so we need to add the python host package when
-> building this
-> ?> target, otherwise the build fails:
-> 
-> ?> ```
-> ?>???BINMAN??u-boot-sunxi-with-spl.bin
-> ?>???File "./tools/binman/binman", line 49
-> ?>?????print result
-> ?>????????????????^
-> ?> SyntaxError: Missing parentheses in call to 'print'
-> ?> make[1]: *** [Makefile:1090: u-boot-sunxi-with-spl.bin] Error 1
-> ?> ```
-> 
-> ?> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> That's not very nice :/
-> 
-> We already check for python on the build machine in dependencies.sh,
-> so
-> perhaps we could patch the binman sources to be compatible with
-> python
-> 3 (and send the patch upstream)?
-> 
-> Is that something you could look into?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...0004-Makefile.in-Fix-removal-of-libintl.h.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/uclibc/0004-Makefile.in-Fix-removal-of-libintl.h.patch
 
-I would rather not do the porting, but I can ask upstream about
-supporting Python 3.
-
-J?rg
+diff --git a/package/uclibc/0004-Makefile.in-Fix-removal-of-libintl.h.patch b/package/uclibc/0004-Makefile.in-Fix-removal-of-libintl.h.patch
+new file mode 100644
+index 000000000..7cbcd4778
+--- /dev/null
++++ b/package/uclibc/0004-Makefile.in-Fix-removal-of-libintl.h.patch
+@@ -0,0 +1,33 @@
++From 5f7b66fe28a785330a874a11001d7758dd5a59d7 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Mon, 16 Jan 2017 21:01:43 +0100
++Subject: [PATCH 1/1] Makefile.in: Fix removal of libintl.h
++
++A wrong filename was present in Makefile.in leaving libintl.h installed
++even if libintl support is disabled leading to wrong configure checks
++by other packages.
++
++Patch sent upstream:
++http://mailman.uclibc-ng.org/pipermail/devel/2017-January/001360.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index c8afe1cd0..bb3549c19 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -281,7 +281,7 @@ HEADERS_RM-$(UCLIBC_HAS_GETOPT_LONG)         += getopt.h
++ HEADERS_RM-$(UCLIBC_HAS_IPV6)                += netinet/ip6.h netinet/icmp6.h
++ HEADERS_RM-$(UCLIBC_HAS_BACKTRACE)           += execinfo.h
++ HEADERS_RM-$(UCLIBC_HAS_LIBICONV)            += iconv.h
++-HEADERS_RM-$(UCLIBC_HAS_LIBINTL)             += intl.h
+++HEADERS_RM-$(UCLIBC_HAS_LIBINTL)             += libintl.h
++ HEADERS_RM-$(UCLIBC_HAS_LOCALE)              += bits/uClibc_ctype.h
++ HEADERS_RM-$(UCLIBC_HAS_PTY)                 += pty.h
++ HEADERS_RM-$(UCLIBC_HAS_REALTIME)            += mqueue.h bits/mqueue.h sched.h \
++-- 
++2.11.0
++
+-- 
+2.11.0
