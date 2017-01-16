@@ -1,44 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 16 Jan 2017 22:04:33 +0100
-Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.5.6
-Message-ID: <20170116210433.17081-1-ps.report@gmx.net>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 16 Jan 2017 22:14:54 +0100
+Subject: [Buildroot] [PATCH] package/mono: bump to version 4.6.2.16
+Message-ID: <1484601294-14853-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+This commit bumps mono to version 4.6.2.16
 
-[1] https://lists.freedesktop.org/archives/input-tools/2017-January/001380.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/libevdev/libevdev.hash | 4 ++--
- package/libevdev/libevdev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mono/mono.hash | 2 +-
+ package/mono/mono.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 1dbdfdba7..613866cfb 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 4d05458..6719fec 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
 @@ -1,2 +1,2 @@
--# Hash from https://lists.freedesktop.org/archives/input-tools/2016-November/001375.html
--sha256 320120782018b992956b3fa29495c323832860807ac8ea74537e636a0e0280b1 libevdev-1.5.5.tar.xz
-+# Hash from https://lists.freedesktop.org/archives/input-tools/2017-January/001380.html
-+sha256 ecec7e9d66b1d3692f10b3b20aa97fb25e874a784c5552a7b1698091fef5a688 libevdev-1.5.6.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index fca362ff6..01ee7fbaa 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
+ # sha256 locally computed
+-sha256 2981f518cace63bfe10953fecd57c7fef040077a1ac617967dde5466062c1327  mono-4.6.0.245.tar.bz2
++sha256 8965d107f4ebf4583ba1b50e0dcad39f0dc6adac8df7a083e9c5879ad93c0ea4  mono-4.6.2.16.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index ea4a7f1..20b9205 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBEVDEV_VERSION = 1.5.5
-+LIBEVDEV_VERSION = 1.5.6
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
+-MONO_VERSION = 4.6.0.245
++MONO_VERSION = 4.6.2.16
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), MIT (libs) or commercial
 -- 
-2.11.0
+2.7.4
