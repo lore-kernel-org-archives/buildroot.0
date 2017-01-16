@@ -1,46 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Jan 2017 20:36:09 -0300
-Subject: [Buildroot] [PATCH v2] xtables-addons: bump to version 2.12
-Message-ID: <20170116233609.2425-1-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Jan 2017 00:37:59 +0100
+Subject: [Buildroot] [git commit] libevdev: bump version to 1.5.6
+Message-ID: <20170116233808.3C75E81E41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/xtables-addons/xtables-addons.hash | 6 +++---
- package/xtables-addons/xtables-addons.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=6e5653f493e1afd433326f717820109680f2518e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 323393d..9aa9c0e 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.11/
--sha1	356abeb8ae24da67178f1612bc0fcbfd83a5e7e7	xtables-addons-2.11.tar.xz
-+# From https://sourceforge.net/projects/xtables-addons/files/Xtables-addons/
-+sha1	70ace437ec84d9ec1970505cecf270ed0cbd273e	xtables-addons-2.12.tar.xz
- # Calculated based on the hash above
--sha256	f14f8953a9d3a70157a82883886ff6ec866c61dbea1585edb421478107279921	xtables-addons-2.11.tar.xz
-+sha256	c4865aa1c64c5ff173ff7b5d69425466c71f0f9b5eb5299c52c68bdcd46fa63b	xtables-addons-2.12.tar.xz
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index 54d1517..274e681 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,9 +4,9 @@
+For details see [1].
+
+[1] https://lists.freedesktop.org/archives/input-tools/2017-January/001380.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libevdev/libevdev.hash | 4 ++--
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 1dbdfdb..613866c 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from https://lists.freedesktop.org/archives/input-tools/2016-November/001375.html
+-sha256 320120782018b992956b3fa29495c323832860807ac8ea74537e636a0e0280b1 libevdev-1.5.5.tar.xz
++# Hash from https://lists.freedesktop.org/archives/input-tools/2017-January/001380.html
++sha256 ecec7e9d66b1d3692f10b3b20aa97fb25e874a784c5552a7b1698091fef5a688 libevdev-1.5.6.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index fca362f..01ee7fb 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTABLES_ADDONS_VERSION = 2.11
-+XTABLES_ADDONS_VERSION = 2.12
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
--XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/$(XTABLES_ADDONS_VERSION)
-+XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
- XTABLES_ADDONS_LICENSE = GPLv2+
- XTABLES_ADDONS_LICENSE_FILES = LICENSE
--- 
-2.10.2
+-LIBEVDEV_VERSION = 1.5.5
++LIBEVDEV_VERSION = 1.5.6
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
