@@ -1,21 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 15:30:06 +0100
-Subject: [Buildroot] [PATCH] sysstat: bump version to 11.4.3
-In-Reply-To: <20170116133426.21244-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Mon, 16 Jan 2017 13:34:26 +0000")
-References: <20170116133426.21244-1-Vincent.Riera@imgtec.com>
-Message-ID: <87mveraxht.fsf@dell.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 16 Jan 2017 16:46:18 +0100
+Subject: [Buildroot] [PATCH 1/3] python-toml: new package
+Message-ID: <20170116154620.27358-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Use GitHub instead of PyPI because PyPI release if out-of-date.
 
-Committed, thanks.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                    |  1 +
+ package/python-toml/Config.in        |  6 ++++++
+ package/python-toml/python-toml.hash |  2 ++
+ package/python-toml/python-toml.mk   | 13 +++++++++++++
+ 4 files changed, 22 insertions(+)
+ create mode 100644 package/python-toml/Config.in
+ create mode 100644 package/python-toml/python-toml.hash
+ create mode 100644 package/python-toml/python-toml.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 8c8c33ec3..1766089b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -800,6 +800,7 @@ menu "External python modules"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
++	source "package/python-toml/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+diff --git a/package/python-toml/Config.in b/package/python-toml/Config.in
+new file mode 100644
+index 000000000..a41622fc2
+--- /dev/null
++++ b/package/python-toml/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_TOML
++	bool "python-toml"
++	help
++	  Python Library for Tom's Obvious, Minimal Language.
++
++	  https://github.com/uiri/toml
+diff --git a/package/python-toml/python-toml.hash b/package/python-toml/python-toml.hash
+new file mode 100644
+index 000000000..cbc71a961
+--- /dev/null
++++ b/package/python-toml/python-toml.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	aee9679726f42fb09f48b9701a321571e0b6a51305c3e0f3913b3057d8bf7083  python-toml-0.9.2.tar.gz
+diff --git a/package/python-toml/python-toml.mk b/package/python-toml/python-toml.mk
+new file mode 100644
+index 000000000..fec113e1c
+--- /dev/null
++++ b/package/python-toml/python-toml.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-toml
++#
++################################################################################
++
++PYTHON_TOML_VERSION = 0.9.2
++PYTHON_TOML_SITE = $(call github,uiri,toml,$(PYTHON_TOML_VERSION))
++PYTHON_TOML_SETUP_TYPE = distutils
++PYTHON_TOML_LICENSE = MIT
++PYTHON_TOML_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-Bye, Peter Korsgaard
+2.11.0
