@@ -1,68 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 13:16:49 +0100
-Subject: [Buildroot] [git commit] tslib: fix missing headers
-Message-ID: <20170116124620.C9FC17FB2D@busybox.osuosl.org>
+Date: Mon, 16 Jan 2017 13:42:49 +0100
+Subject: [Buildroot] [git commit] package/espeak: fix build issue with gcc6
+Message-ID: <20170116124621.1CD207FB2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99c82eda9538f320ff83dcb702215bebe28ed131
+commit: https://git.buildroot.net/buildroot/commit/?id=c789262c68b28e3da4a0ee9fe519ce9285be2008
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch adding missing headers.
+On some architecture, "char" is signed (x86_64, nios2...) so the
+compiler try to convert int 0xc2 and 0xba to a signed char.
+This is an error since gcc6 (Wnarrowing).
+
+cast string_ordinal init values.
 
 Fixes:
-http://autobuild.buildroot.net/results/cb8/cb81abe996b0fb0070ddcd01c0d695bcc0570548/
-http://autobuild.buildroot.net/results/88a/88add491e10f2f7edeb15e0def8843f1321ac7af/
-http://autobuild.buildroot.net/results/9db/9db1d64fd08c8763a1648e78d7b9155777de6cae/
+http://autobuild.buildroot.net/results/bae/baef9888b1979d18171668a675985e3f3b45fda6
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-tests-ts_calibrate-add-missing-headers.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ ...languages-cast-string_ordinal-init-values.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
+diff --git a/package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch b/package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch
 new file mode 100644
-index 0000000..97cd4be
+index 0000000..d37e64c
 --- /dev/null
-+++ b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
-@@ -0,0 +1,35 @@
-+From 54b66bfe405d8b70c703684e60bedbad5c7d4213 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Sat, 14 Jan 2017 21:35:53 +0200
-+Subject: [PATCH] tests/ts_calibrate: add missing headers
++++ b/package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch
+@@ -0,0 +1,33 @@
++From 451330d09a6a3500b40bc4f5896ba790ab46cd6c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 15 Jan 2017 19:37:31 +0100
++Subject: [PATCH 2/2] tr_languages: cast string_ordinal init values
 +
-+The open(2) system call requires sys/types.h and sys/stat.h. Fix the following
-+build failure under uClibc-ng:
++On some architecture, "char" is signed (x86_64, nios2...) so the
++compiler try to convert int 0xc2 and 0xba to a signed char.
++This is an error since gcc6 (Wnarrowing).
 +
-+ts_calibrate.c: In function ???main???:
-+ts_calibrate.c:248:19: error: ???S_IRUSR??? undeclared (first use in this function)
-+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-+                   ^
++Fixes:
++http://autobuild.buildroot.net/results/bae/baef9888b1979d18171668a675985e3f3b45fda6
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+Upstream status: https://github.com/kergoth/tslib/pull/59
-+ tests/ts_calibrate.c | 2 ++
-+ 1 file changed, 2 insertions(+)
++ src/tr_languages.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/tests/ts_calibrate.c b/tests/ts_calibrate.c
-+index c6652e479d4b..9a98d1f86205 100644
-+--- a/tests/ts_calibrate.c
-++++ b/tests/ts_calibrate.c
-+@@ -17,6 +17,8 @@
-+ #include <string.h>
-+ #include <unistd.h>
-+ #include <sys/time.h>
-++#include <sys/types.h>
-++#include <sys/stat.h>
++diff --git a/src/tr_languages.cpp b/src/tr_languages.cpp
++index 5c80286..dbc6e36 100644
++--- a/src/tr_languages.cpp
+++++ b/src/tr_languages.cpp
++@@ -200,7 +200,7 @@ static const unsigned short chars_ignore_zwnj_hyphen[] = {
++ 	0x200d,  1, // zero width joiner
++ 	0, 0 };
 + 
-+ #ifdef __ANDROID__
-+ #include <fcntl.h>
++-const char string_ordinal[] = {0xc2,0xba,0};  // masculine ordinal character, UTF-8
+++const char string_ordinal[] = {(char)0xc2,(char)0xba,0};  // masculine ordinal character, UTF-8
++ 
++ 
++ static Translator* NewTranslator(void)
 +-- 
-+2.11.0
++2.9.3
 +
