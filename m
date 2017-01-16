@@ -1,60 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 16 Jan 2017 21:59:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: Fix removal of libintl.h
-Message-ID: <20170116205903.26311-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 16 Jan 2017 22:04:33 +0100
+Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.5.6
+Message-ID: <20170116210433.17081-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed to fix
-http://autobuild.buildroot.net/results/6be/6be94fe2542f3ac9fb785dd22f504e25c2a7802e/
+For details see [1].
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[1] https://lists.freedesktop.org/archives/input-tools/2017-January/001380.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...0004-Makefile.in-Fix-removal-of-libintl.h.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/uclibc/0004-Makefile.in-Fix-removal-of-libintl.h.patch
+ package/libevdev/libevdev.hash | 4 ++--
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/0004-Makefile.in-Fix-removal-of-libintl.h.patch b/package/uclibc/0004-Makefile.in-Fix-removal-of-libintl.h.patch
-new file mode 100644
-index 000000000..7cbcd4778
---- /dev/null
-+++ b/package/uclibc/0004-Makefile.in-Fix-removal-of-libintl.h.patch
-@@ -0,0 +1,33 @@
-+From 5f7b66fe28a785330a874a11001d7758dd5a59d7 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 16 Jan 2017 21:01:43 +0100
-+Subject: [PATCH 1/1] Makefile.in: Fix removal of libintl.h
-+
-+A wrong filename was present in Makefile.in leaving libintl.h installed
-+even if libintl support is disabled leading to wrong configure checks
-+by other packages.
-+
-+Patch sent upstream:
-+http://mailman.uclibc-ng.org/pipermail/devel/2017-January/001360.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index c8afe1cd0..bb3549c19 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -281,7 +281,7 @@ HEADERS_RM-$(UCLIBC_HAS_GETOPT_LONG)         += getopt.h
-+ HEADERS_RM-$(UCLIBC_HAS_IPV6)                += netinet/ip6.h netinet/icmp6.h
-+ HEADERS_RM-$(UCLIBC_HAS_BACKTRACE)           += execinfo.h
-+ HEADERS_RM-$(UCLIBC_HAS_LIBICONV)            += iconv.h
-+-HEADERS_RM-$(UCLIBC_HAS_LIBINTL)             += intl.h
-++HEADERS_RM-$(UCLIBC_HAS_LIBINTL)             += libintl.h
-+ HEADERS_RM-$(UCLIBC_HAS_LOCALE)              += bits/uClibc_ctype.h
-+ HEADERS_RM-$(UCLIBC_HAS_PTY)                 += pty.h
-+ HEADERS_RM-$(UCLIBC_HAS_REALTIME)            += mqueue.h bits/mqueue.h sched.h \
-+-- 
-+2.11.0
-+
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 1dbdfdba7..613866cfb 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from https://lists.freedesktop.org/archives/input-tools/2016-November/001375.html
+-sha256 320120782018b992956b3fa29495c323832860807ac8ea74537e636a0e0280b1 libevdev-1.5.5.tar.xz
++# Hash from https://lists.freedesktop.org/archives/input-tools/2017-January/001380.html
++sha256 ecec7e9d66b1d3692f10b3b20aa97fb25e874a784c5552a7b1698091fef5a688 libevdev-1.5.6.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index fca362ff6..01ee7fbaa 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.5.5
++LIBEVDEV_VERSION = 1.5.6
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
 -- 
 2.11.0
