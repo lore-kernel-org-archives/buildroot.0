@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 15:30:40 +0100
-Subject: [Buildroot] [git commit] sudo: bump to version 1.8.19p2
-Message-ID: <20170116143128.880FC81E43@busybox.osuosl.org>
+Date: Mon, 16 Jan 2017 15:31:06 +0100
+Subject: [Buildroot] [git commit] poppler: bump to version 0.51.0
+Message-ID: <20170116143128.9D57F81E41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99f7447df8ed74e20013b2ba736e32223d3bf901
+commit: https://git.buildroot.net/buildroot/commit/?id=f871c5545cc94fff3cd152136ad27d2f9f50a4df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sudo/sudo.hash | 2 +-
- package/sudo/sudo.mk   | 2 +-
+ package/poppler/poppler.hash | 2 +-
+ package/poppler/poppler.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index ef67392..82e1ad6 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index 21decf6..af597e0 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
 @@ -1,2 +1,2 @@
- # From: http://www.sudo.ws/download.html
--sha256 b8afb1cf8736b6c61f171f2bf4b174818d9e00e92ef73da55fabcd01286ffc92  sudo-1.8.19p1.tar.gz
-+sha256 237e18e67c2ad59ecacfa4b7707198b09fcf84914621585a9bc670dcc31a52e0  sudo-1.8.19p2.tar.gz
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index bc2a47b..12b16e0 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
+ # Locally calculated
+-sha256	c9c93318b789d3933f6e0bad3bc65110280c28eac3f0666284bb9c9a0ab4bc36	poppler-0.50.0.tar.xz
++sha256	e997c9ad81a8372f2dd03a02b00692b8cc479c220340c8881edaca540f402c1f	poppler-0.51.0.tar.xz
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 478da40..c40d5ff 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUDO_VERSION = 1.8.19p1
-+SUDO_VERSION = 1.8.19p2
- SUDO_SITE = http://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC BSD-3c
- SUDO_LICENSE_FILES = doc/LICENSE
+-POPPLER_VERSION = 0.50.0
++POPPLER_VERSION = 0.51.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = http://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
