@@ -1,41 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 13:17:20 +0100
-Subject: [Buildroot] [git commit] tslib: disable raw input plugin under
-	kernel < v3.12
-Message-ID: <20170116124620.D44417FB2D@busybox.osuosl.org>
+Date: Mon, 16 Jan 2017 13:18:35 +0100
+Subject: [Buildroot] [git commit] tslib: use upstream .tar.xz archive
+Message-ID: <20170116124620.DE2937FB2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46d6aa520f2490928f27da716356b00da357cc99
+commit: https://git.buildroot.net/buildroot/commit/?id=b2fa0472d14522557c8ac553a8553930658db502
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The SYN_CNT input code was added in kernel v3.12.
+Save some network bandwidth.
 
-Fixes:
-http://autobuild.buildroot.net/results/5cd/5cdb9d22092e9222cc7e8fe8dd3936305a5d371d/
-http://autobuild.buildroot.net/results/211/2115038caff1e036cbc9dcb5cb6905abe643552a/
-http://autobuild.buildroot.net/results/c79/c79de6fdd5cfe406979941790276296b6d1ec0b8/
-
+[Peter: use TSLIB_VERSION instead of hardcoding 1.3]
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tslib/tslib.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/tslib/tslib.hash | 2 +-
+ package/tslib/tslib.mk   | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index a80944c..cdbe0d2 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256  599f51c265158e7801b166e879e19759e8d3e5fdf2fa99c630698fe162a41d56  tslib-1.3.tar.gz
++sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
 diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index d6e66b7..7f74ca5 100644
+index 7f74ca5..2bf10eb 100644
 --- a/package/tslib/tslib.mk
 +++ b/package/tslib/tslib.mk
-@@ -13,4 +13,8 @@ TSLIB_AUTORECONF = YES
- TSLIB_INSTALL_STAGING = YES
- TSLIB_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+@@ -6,6 +6,7 @@
  
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12),)
-+TSLIB_CONF_OPTS += --disable-input
-+endif
-+
- $(eval $(autotools-package))
+ TSLIB_VERSION = 1.3
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
++TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL, LGPL
+ TSLIB_LICENSE_FILES = COPYING
+ 
