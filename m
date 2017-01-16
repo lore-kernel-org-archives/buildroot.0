@@ -1,25 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 11:53:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libxmlrpc: bump to version
-	1.39.12
-In-Reply-To: <20170113084818.16709-1-alvaro.gamez@hazent.com> (Alvaro Gamez
- Machado's message of "Fri, 13 Jan 2017 09:48:18 +0100")
-References: <20170113084818.16709-1-alvaro.gamez@hazent.com>
-Message-ID: <87r343ff8g.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Jan 2017 11:53:51 +0100
+Subject: [Buildroot] [PATCH] rabbitmq-server: security bump to version
+	3.6.6
+In-Reply-To: <20170113124118.20028-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 13 Jan 2017 13:41:18 +0100")
+References: <20170113124118.20028-1-peter@korsgaard.com>
+Message-ID: <87mverff7k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alvaro" == Alvaro Gamez Machado <alvaro.gamez@hazent.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Also:
- > * remove patch "Fix non C++ build" - merged upstream
- > * remove patch "Fix ar, ranlib handling" - merged upstream
- > * renumber remaining patches
+ > Fixes a critical authentication vulnerability in the MQTT plugin
+ > (CVE-2016-9877):
 
- > Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+ > MQTT (MQ Telemetry Transport) connection authentication with a
+ > username/password pair succeeds if an existing username is provided but the
+ > password is omitted from the connection request.  Connections that use TLS
+ > with a client-provided certificate are not affected.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
