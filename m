@@ -1,58 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 13:56:53 +0100
-Subject: [Buildroot] [git commit] package/mpd: drop dependency on libglib2
-Message-ID: <20170116125851.329E4818AA@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 16 Jan 2017 13:00:40 +0000
+Subject: [Buildroot] [Bug 9576] External tree with BR 2016.11 does not work
+	anymore
+In-Reply-To: <bug-9576-163@https.bugs.busybox.net/>
+References: <bug-9576-163@https.bugs.busybox.net/>
+Message-ID: <bug-9576-163-NPfSNPMmsl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0774df0918d9a159ecab21cc2290f81bc4850f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=9576
 
-Version 0.20.x does not depend on libglib2 anymore. Note, that the
-dependency on MMU and Thread remain, as MPD uses fork() and thread
-functionality.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpd/Config.in | 7 +++----
- package/mpd/mpd.mk    | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index e0bb604..9b22f68 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -1,13 +1,12 @@
- menuconfig BR2_PACKAGE_MPD
- 	bool "mpd"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_WCHAR # libglib2, flac
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
--	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_WCHAR # flac
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	select BR2_PACKAGE_BOOST
--	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
- 	help
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 82aca96..4469737 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -8,7 +8,7 @@ MPD_VERSION_MAJOR = 0.20
- MPD_VERSION = $(MPD_VERSION_MAJOR).2
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
--MPD_DEPENDENCIES = host-pkgconf boost libglib2
-+MPD_DEPENDENCIES = host-pkgconf boost
- MPD_LICENSE = GPLv2+
- MPD_LICENSE_FILES = COPYING
- MPD_AUTORECONF = YES
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed in git, thanks:
+
+https://git.buildroot.net/buildroot/commit/?id=05576fca13b129da8c7186ee2307981135d3391f
+
+I will also include it in the upcoming 2016.11.2 bugfix release.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
