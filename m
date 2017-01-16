@@ -1,51 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 13:24:05 +0100
-Subject: [Buildroot] [git commit] python-bottle: bump version to 0.12.13
-Message-ID: <20170116124621.08C488179D@busybox.osuosl.org>
+Date: Mon, 16 Jan 2017 11:56:11 +0100
+Subject: [Buildroot] [git commit] toolchain: bump Codescape IMG MIPS version
+	to 2016.05-06
+Message-ID: <20170116124620.7F6AA8179D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f386e50ee5f0d3d885b6948138b9a7fdc020308b
+commit: https://git.buildroot.net/buildroot/commit/?id=56016c27b29939fd4720bbf5152704a6e16ca560
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-0.12.12 and 0.12.13 are both bugfix releases, fixing issues introduced in
-0.12.11:
+Also...
 
-https://github.com/bottlepy/bottle/issues/918
-https://github.com/bottlepy/bottle/issues/923
+- Fix a typo in Config.in
+- Take into account the host's architecture to download the x86 or
+  x86_64 version. This makes the IA32 libs dependency in unnecessary.
 
+[Peter: fix kernel headers comment as pointed out by Romain]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-bottle/python-bottle.hash | 4 ++--
- package/python-bottle/python-bottle.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../toolchain-external-codescape-img-mips/Config.in                | 7 +++----
+ .../toolchain-external-codescape-img-mips.hash                     | 5 +++--
+ .../toolchain-external-codescape-img-mips.mk                       | 6 +++++-
+ 3 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
-index 357391d..3006c16 100644
---- a/package/python-bottle/python-bottle.hash
-+++ b/package/python-bottle/python-bottle.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/bottle/json, sha256 locally computed
--md5	6c38912f4755ba71d852fbe320bdd61c  bottle-0.12.11.tar.gz
--sha256	a1958f9725042a9809ebe33d7eadf90d1d563a8bdd6ce5f01849bff7e941a731  bottle-0.12.11.tar.gz
-+md5	d2fe1b48c1d49217e78bf326b1cad437  bottle-0.12.13.tar.gz
-+sha256	39b751aee0b167be8dffb63ca81b735bbf1dd0905b3bc42761efedee8f123355  bottle-0.12.13.tar.gz
-diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
-index 4757062..6f071f6 100644
---- a/package/python-bottle/python-bottle.mk
-+++ b/package/python-bottle/python-bottle.mk
-@@ -4,9 +4,9 @@
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+index 1f0d4d1..e29c4dc 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
+@@ -5,15 +5,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+ 	depends on BR2_MIPS_CPU_MIPS32R6 || (BR2_MIPS_CPU_MIPS64R6 && !BR2_MIPS_SOFT_FLOAT)
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	help
+-	  Codescape IMG GNU Linux Toolchain 2015.10 for the MIPS
++	  Codescape IMG GNU Linux Toolchain 2016.05 for the MIPS
+ 	  architecture, from Imagination Technologies. It uses gcc
+ 	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
+-	  headers 4.0. It has support for the following variants:
++	  headers 4.7. It has support for the following variants:
+ 	    - MIPS32r6 - Big-Endian, Hard-Float, 2008 NaN, o32 ABI
+ 	      Select 'MIPS (big endian)' Target Architecture
+ 	      Select 'mips 32r6' Target Architecture Variant
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
+index e4ae9e1..6a12cfa 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
++++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.hash
+@@ -1,3 +1,4 @@
+ # Codescape toolchains from Imagination Technologies
+-# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-03/downloads.html
+-sha256 e3c1f292ac6a9f12480af431c85a7ed9dfa011a52fd62a50be3363ec6b9bc872  Codescape.GNU.Tools.Package.2016.05-03.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
++# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2016.05-06/downloads.html
++sha256 8d9cdf711dd402d7bf82883d425c221038fe8ce9d0c91a3f6b30939d9d55476c  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
++sha256 6e2784d6df962fe4db7510c8a62ce3947b73f54207b10e18b52da59d1bc487bd  Codescape.GNU.Tools.Package.2016.05-06.for.MIPS.IMG.Linux.CentOS-5.x86_64.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
+index b4decfb..49a7027 100644
+--- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
++++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/toolchain-external-codescape-img-mips.mk
+@@ -4,11 +4,15 @@
  #
  ################################################################################
  
--PYTHON_BOTTLE_VERSION = 0.12.11
-+PYTHON_BOTTLE_VERSION = 0.12.13
- PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
--PYTHON_BOTTLE_SITE = https://pypi.python.org/packages/a1/f6/0db23aeeb40c9a7c5d226b1f70ce63822c567178eee5b623bca3e0cc3bef
-+PYTHON_BOTTLE_SITE = https://pypi.python.org/packages/bd/99/04dc59ced52a8261ee0f965a8968717a255ea84a36013e527944dbf3468c
- PYTHON_BOTTLE_LICENSE = MIT
- # README.rst refers to the file "LICENSE" but it's not included
- PYTHON_BOTTLE_SETUP_TYPE = setuptools
+-TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION = 2016.05-03
++TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION = 2016.05-06
+ TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION)
+ TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_STRIP_COMPONENTS = 2
+ 
++ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION).for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
++else
++TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_SOURCE = Codescape.GNU.Tools.Package.$(TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS_VERSION).for.MIPS.IMG.Linux.CentOS-5.x86_64.tar.gz
++endif
+ 
+ # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
+ # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
