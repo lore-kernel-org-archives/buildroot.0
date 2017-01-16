@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 15:29:31 +0100
-Subject: [Buildroot] [git commit] imagemagick: bump version to 7.0.4-4
-Message-ID: <20170116143128.5C5BC81DFF@busybox.osuosl.org>
+Date: Mon, 16 Jan 2017 15:30:40 +0100
+Subject: [Buildroot] [git commit] sudo: bump to version 1.8.19p2
+Message-ID: <20170116143128.880FC81E43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a89bdc363c637950fa86a015d99d90830a682dbe
+commit: https://git.buildroot.net/buildroot/commit/?id=99f7447df8ed74e20013b2ba736e32223d3bf901
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
+ package/sudo/sudo.hash | 2 +-
+ package/sudo/sudo.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index e47c9b1..d0ed022 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index ef67392..82e1ad6 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
 @@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 bc09ea103a82d1c2c093889eda7e36dd0aa7aa98a06c55de4b73932838459fc4  ImageMagick-7.0.4-3.tar.xz
-+sha256 c46975d23ff0c587219daaa3e1dbd43a54a5d7d5ec20d0bdc2c34188facdb0f9  ImageMagick-7.0.4-4.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index ccd580f..9d2c964 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+ # From: http://www.sudo.ws/download.html
+-sha256 b8afb1cf8736b6c61f171f2bf4b174818d9e00e92ef73da55fabcd01286ffc92  sudo-1.8.19p1.tar.gz
++sha256 237e18e67c2ad59ecacfa4b7707198b09fcf84914621585a9bc670dcc31a52e0  sudo-1.8.19p2.tar.gz
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index bc2a47b..12b16e0 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.4-3
-+IMAGEMAGICK_VERSION = 7.0.4-4
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+-SUDO_VERSION = 1.8.19p1
++SUDO_VERSION = 1.8.19p2
+ SUDO_SITE = http://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC BSD-3c
+ SUDO_LICENSE_FILES = doc/LICENSE
