@@ -1,42 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 16 Jan 2017 13:34:26 +0000
-Subject: [Buildroot] [PATCH] sysstat: bump version to 11.4.3
-Message-ID: <20170116133426.21244-1-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 16 Jan 2017 10:48:02 -0300
+Subject: [Buildroot] [PATCH] poppler: bump to version 0.51.0
+Message-ID: <20170116134802.6054-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sysstat/sysstat.hash | 4 ++--
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/poppler/poppler.hash | 2 +-
+ package/poppler/poppler.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index 5de5ec7..3b4dda8 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
-@@ -1,4 +1,4 @@
- # From: http://sebastien.godard.pagesperso-orange.fr/download.html
--sha1	84ac7feba76049f201e203c7ce0cc750479a9d43	sysstat-11.4.2.tar.xz
-+sha1 805002b2bef00cd9ab44c5037d09b29cb71a17f8  sysstat-11.4.3.tar.xz
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index 21decf6..af597e0 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
--sha256	1fd407f8971f5854bc853d931dd85bcbea08658130f3f8510a730d5561980f39  sysstat-11.4.2.tar.xz
-+sha256 02e9cafa5557fbae435d33e592373655df929d817ae711d31142dd2f7d4dcee7  sysstat-11.4.3.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 1a86fa0..c285342 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
+-sha256	c9c93318b789d3933f6e0bad3bc65110280c28eac3f0666284bb9c9a0ab4bc36	poppler-0.50.0.tar.xz
++sha256	e997c9ad81a8372f2dd03a02b00692b8cc479c220340c8881edaca540f402c1f	poppler-0.51.0.tar.xz
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 478da40..c40d5ff 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSSTAT_VERSION = 11.4.2
-+SYSSTAT_VERSION = 11.4.3
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
+-POPPLER_VERSION = 0.50.0
++POPPLER_VERSION = 0.51.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = http://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
 -- 
 2.10.2
