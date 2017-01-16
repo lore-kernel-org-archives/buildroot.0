@@ -1,88 +1,90 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 16 Jan 2017 08:36:49 +0100
-Subject: [Buildroot] [PATCH 2/2] package/mpd: drop dependency on libglib2
-In-Reply-To: <20170115211214.GB4277@free.fr>
-References: <20170115203435.908-1-joerg.krause@embedded.rocks>
- <20170115203435.908-2-joerg.krause@embedded.rocks>
- <20170115211214.GB4277@free.fr>
-Message-ID: <1484552209.1801.1.camel@embedded.rocks>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 16 Jan 2017 09:34:19 +0100
+Subject: [Buildroot] [PATCH 1/2] snmppp: bump to 3.3.8
+Message-ID: <1484555660-14319-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Remove patch not needed anymore: the bug has been fixed in this release.
 
-On Sun, 2017-01-15 at 22:12 +0100, Yann E. MORIN wrote:
-> J?rg, All,
-> 
-> On 2017-01-15 21:34 +0100, J?rg Krause spake thusly:
-> > Version 0.20.x does not depend on libglib2 anymore. Note, that the
-> > dependency on MMU and Thread remain, as MPD uses fork() and thread
-> > functionality.
-> 
-> This patch should be folded in the previous one.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/snmppp/0001-Add-missing-includes.patch | 41 --------------------------
+ package/snmppp/snmppp.hash                     |  2 +-
+ package/snmppp/snmppp.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 43 deletions(-)
+ delete mode 100644 package/snmppp/0001-Add-missing-includes.patch
 
-Note, that MPD has been bumped to version 0.20 some days ago. I agree,
-that this would have been the right place to remove the dependency,
-too. Now, it is just a bump from version 0.20 to 0.20.2. I seperated
-the two issues to make more clear that libglib2 was *not* dropped in
-0.20.2, but already in 0.20.
-
-J?rg
-
-> 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> > ?package/mpd/Config.in | 7 +++----
-> > ?package/mpd/mpd.mk????| 2 +-
-> > ?2 files changed, 4 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> > index e0bb60447..9b22f68ce 100644
-> > --- a/package/mpd/Config.in
-> > +++ b/package/mpd/Config.in
-> > @@ -1,13 +1,12 @@
-> > ?menuconfig BR2_PACKAGE_MPD
-> > ?	bool "mpd"
-> > ?	depends on BR2_INSTALL_LIBSTDCPP
-> > -	depends on BR2_USE_WCHAR # libglib2, flac
-> > -	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> > -	depends on BR2_USE_MMU # libglib2
-> > +	depends on BR2_USE_WCHAR # flac
-> > +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> > +	depends on BR2_USE_MMU # fork
-> > ?	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-> > ?	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-> > ?	select BR2_PACKAGE_BOOST
-> > -	select BR2_PACKAGE_LIBGLIB2
-> > ?	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-> > ?	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD ||
-> > BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS ||
-> > BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC ||
-> > BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
-> > ?	help
-> > diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-> > index 82aca9665..446973730 100644
-> > --- a/package/mpd/mpd.mk
-> > +++ b/package/mpd/mpd.mk
-> > @@ -8,7 +8,7 @@ MPD_VERSION_MAJOR = 0.20
-> > ?MPD_VERSION = $(MPD_VERSION_MAJOR).2
-> > ?MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
-> > ?MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR
-> > )
-> > -MPD_DEPENDENCIES = host-pkgconf boost libglib2
-> > +MPD_DEPENDENCIES = host-pkgconf boost
-> > ?MPD_LICENSE = GPLv2+
-> > ?MPD_LICENSE_FILES = COPYING
-> > ?MPD_AUTORECONF = YES
-> > --?
-> > 2.11.0
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+diff --git a/package/snmppp/0001-Add-missing-includes.patch b/package/snmppp/0001-Add-missing-includes.patch
+deleted file mode 100644
+index c3fa49152526..000000000000
+--- a/package/snmppp/0001-Add-missing-includes.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 6433c6e8d81313ec7ef6c8d3abf96fffa537e23e Mon Sep 17 00:00:00 2001
+-From: Luca Ceresoli <luca@lucaceresoli.net>
+-Date: Tue, 1 Apr 2014 14:35:25 +0200
+-Subject: [PATCH] Add missing includes
+-
+-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+----
+- include/snmp_pp/config_snmp_pp.h.in | 4 ++++
+- include/snmp_pp/smival.h            | 1 +
+- 2 files changed, 5 insertions(+)
+-
+-diff --git a/include/snmp_pp/config_snmp_pp.h.in b/include/snmp_pp/config_snmp_pp.h.in
+-index 89a5b0d..3100713 100644
+---- a/include/snmp_pp/config_snmp_pp.h.in
+-+++ b/include/snmp_pp/config_snmp_pp.h.in
+-@@ -28,6 +28,10 @@
+- #ifndef _CONFIG_SNMP_PP_H_
+- #define _CONFIG_SNMP_PP_H_
+- 
+-+#ifdef __linux__
+-+#include <sys/socket.h>
+-+#endif
+-+
+- #define SNMP_PP_VERSION_STRING "@VERSION@"
+- #define SNMP_PP_VERSION @SNMP_PP_MAJOR_VERSION@
+- #define SNMP_PP_RELEASE @SNMP_PP_MINOR_VERSION@
+-diff --git a/include/snmp_pp/smival.h b/include/snmp_pp/smival.h
+-index 7a36fab..7522087 100644
+---- a/include/snmp_pp/smival.h
+-+++ b/include/snmp_pp/smival.h
+-@@ -59,6 +59,7 @@
+- #define _SMIVALUE
+- 
+- //----[ includes ]-----------------------------------------------------
+-+#include <string.h>
+- #include "snmp_pp/smi.h"
+- 
+- #ifdef SNMP_PP_NAMESPACE
+--- 
+-1.8.3.2
+-
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+index 462f4135d9c6..2c97a4879100 100644
+--- a/package/snmppp/snmppp.hash
++++ b/package/snmppp/snmppp.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 2ef82819f2c4e9fec4c054a3e78a6d66f9927e306ea61d3a7aa6fe1218663da8  snmp++-3.3.7.tar.gz
++sha256 982b5f03436813b3094ace49ba5ececc595f9b6db1ad90bd8bf8494e39aa438f  snmp++-3.3.8.tar.gz
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 69ec925fc012..14195144513a 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNMPPP_VERSION = 3.3.7
++SNMPPP_VERSION = 3.3.8
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
+-- 
+2.7.4
