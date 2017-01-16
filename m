@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 15:29:21 +0100
-Subject: [Buildroot] [PATCH] lighttpd: bump version to 1.4.45
-In-Reply-To: <20170116131748.41759-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Mon, 16 Jan 2017 13:17:48 +0000")
-References: <20170116131748.41759-1-Vincent.Riera@imgtec.com>
-Message-ID: <87ziiraxj2.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Jan 2017 15:29:33 +0100
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.4-4
+In-Reply-To: <20170116131909.42353-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 16 Jan 2017 13:19:09 +0000")
+References: <20170116131909.42353-1-Vincent.Riera@imgtec.com>
+Message-ID: <87vatfaxiq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
