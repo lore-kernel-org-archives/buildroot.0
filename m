@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 16 Jan 2017 13:19:09 +0000
-Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.4-4
-Message-ID: <20170116131909.42353-1-Vincent.Riera@imgtec.com>
+Date: Mon, 16 Jan 2017 13:20:12 +0000
+Subject: [Buildroot] [PATCH] cmake: bump version to 3.7.2
+Message-ID: <20170116132012.43248-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index e47c9b1..d0ed022 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 7a22f21..13c0237 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
 @@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 bc09ea103a82d1c2c093889eda7e36dd0aa7aa98a06c55de4b73932838459fc4  ImageMagick-7.0.4-3.tar.xz
-+sha256 c46975d23ff0c587219daaa3e1dbd43a54a5d7d5ec20d0bdc2c34188facdb0f9  ImageMagick-7.0.4-4.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index ccd580f..9d2c964 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://www.cmake.org/files/v3.7/cmake-3.7.1-SHA-256.txt
+-sha256 449a5bce64dbd4d5b9517ebd1a1248ed197add6ad27934478976fd5f1f9330e1  cmake-3.7.1.tar.gz
++# From http://www.cmake.org/files/v3.7/cmake-3.7.2-SHA-256.txt
++sha256 dc1246c4e6d168ea4d6e042cfba577c1acd65feea27e56f5ff37df920c30cae0  cmake-3.7.2.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 107715c..0fd7139 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.4-3
-+IMAGEMAGICK_VERSION = 7.0.4-4
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+ CMAKE_VERSION_MAJOR = 3.7
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
 -- 
 2.10.2
