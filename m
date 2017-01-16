@@ -1,45 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 13:18:35 +0100
-Subject: [Buildroot] [git commit] tslib: use upstream .tar.xz archive
-Message-ID: <20170116124620.DE2937FB2D@busybox.osuosl.org>
+Date: Mon, 16 Jan 2017 13:43:07 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.9.4
+Message-ID: <20170116124621.2522B7FB2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2fa0472d14522557c8ac553a8553930658db502
+commit: https://git.buildroot.net/buildroot/commit/?id=8c84d40d32d67bfa052d438825b762049ab8d174
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Save some network bandwidth.
-
-[Peter: use TSLIB_VERSION instead of hardcoding 1.3]
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tslib/tslib.hash | 2 +-
- package/tslib/tslib.mk   | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index a80944c..cdbe0d2 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256  599f51c265158e7801b166e879e19759e8d3e5fdf2fa99c630698fe162a41d56  tslib-1.3.tar.gz
-+sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 7f74ca5..2bf10eb 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -6,6 +6,7 @@
+diff --git a/linux/Config.in b/linux/Config.in
+index e20d0d5..f19dce1 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
- TSLIB_VERSION = 1.3
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
-+TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL, LGPL
- TSLIB_LICENSE_FILES = COPYING
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.3)"
++	bool "Latest version (4.9.4)"
  
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.9.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.9.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
