@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 16 Jan 2017 16:46:18 +0100
-Subject: [Buildroot] [PATCH 1/3] python-toml: new package
-Message-ID: <20170116154620.27358-1-yegorslists@googlemail.com>
+Date: Mon, 16 Jan 2017 16:46:19 +0100
+Subject: [Buildroot] [PATCH 2/3] python-logbook: new package
+In-Reply-To: <20170116154620.27358-1-yegorslists@googlemail.com>
+References: <20170116154620.27358-1-yegorslists@googlemail.com>
+Message-ID: <20170116154620.27358-2-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,68 +12,67 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Use GitHub instead of PyPI because PyPI release if out-of-date.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                    |  1 +
- package/python-toml/Config.in        |  6 ++++++
- package/python-toml/python-toml.hash |  2 ++
- package/python-toml/python-toml.mk   | 13 +++++++++++++
- 4 files changed, 22 insertions(+)
- create mode 100644 package/python-toml/Config.in
- create mode 100644 package/python-toml/python-toml.hash
- create mode 100644 package/python-toml/python-toml.mk
+ package/Config.in                          |  1 +
+ package/python-logbook/Config.in           |  6 ++++++
+ package/python-logbook/python-logbook.hash |  3 +++
+ package/python-logbook/python-logbook.mk   | 13 +++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/python-logbook/Config.in
+ create mode 100644 package/python-logbook/python-logbook.hash
+ create mode 100644 package/python-logbook/python-logbook.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8c8c33ec3..1766089b0 100644
+index 1766089b0..e03b003fa 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -800,6 +800,7 @@ menu "External python modules"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tomako/Config.in"
-+	source "package/python-toml/Config.in"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
-diff --git a/package/python-toml/Config.in b/package/python-toml/Config.in
+@@ -709,6 +709,7 @@ menu "External python modules"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
+ 	source "package/python-lmdb/Config.in"
++	source "package/python-logbook/Config.in"
+ 	source "package/python-lxml/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-mako/Config.in"
+diff --git a/package/python-logbook/Config.in b/package/python-logbook/Config.in
 new file mode 100644
-index 000000000..a41622fc2
+index 000000000..9ae914432
 --- /dev/null
-+++ b/package/python-toml/Config.in
++++ b/package/python-logbook/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_TOML
-+	bool "python-toml"
++config BR2_PACKAGE_PYTHON_LOGBOOK
++	bool "python-logbook"
 +	help
-+	  Python Library for Tom's Obvious, Minimal Language.
++	  A logging replacement for Python.
 +
-+	  https://github.com/uiri/toml
-diff --git a/package/python-toml/python-toml.hash b/package/python-toml/python-toml.hash
++	  http://logbook.pocoo.org/
+diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
 new file mode 100644
-index 000000000..cbc71a961
+index 000000000..1a79046c3
 --- /dev/null
-+++ b/package/python-toml/python-toml.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	aee9679726f42fb09f48b9701a321571e0b6a51305c3e0f3913b3057d8bf7083  python-toml-0.9.2.tar.gz
-diff --git a/package/python-toml/python-toml.mk b/package/python-toml/python-toml.mk
++++ b/package/python-logbook/python-logbook.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/logbook/json, sha256 locally computed
++md5	22fea705e067c118925898f0c30b0508  Logbook-1.0.0.tar.gz
++sha256	87da2515a6b3db866283cb9d4e5a6ec44e52a1d556ebb2ea3b6e7e704b5f1872  Logbook-1.0.0.tar.gz
+diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
 new file mode 100644
-index 000000000..fec113e1c
+index 000000000..291237973
 --- /dev/null
-+++ b/package/python-toml/python-toml.mk
++++ b/package/python-logbook/python-logbook.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-toml
++# python-logbook
 +#
 +################################################################################
 +
-+PYTHON_TOML_VERSION = 0.9.2
-+PYTHON_TOML_SITE = $(call github,uiri,toml,$(PYTHON_TOML_VERSION))
-+PYTHON_TOML_SETUP_TYPE = distutils
-+PYTHON_TOML_LICENSE = MIT
-+PYTHON_TOML_LICENSE_FILES = LICENSE
++PYTHON_LOGBOOK_VERSION = 1.0.0
++PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
++PYTHON_LOGBOOK_SITE = https://pypi.python.org/packages/34/e8/6419c217bbf464fe8a902418120cccaf476201bd03b50958db24d6e90f65
++PYTHON_LOGBOOK_SETUP_TYPE = setuptools
++PYTHON_LOGBOOK_LICENSE = BSD-3c
 +
 +$(eval $(python-package))
 -- 
