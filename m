@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 13:13:28 +0100
-Subject: [Buildroot] [PATCH] jasper: bump to version 2.0.10
-In-Reply-To: <20170114173527.gflazmfwaguwgdr5@tarshish> (Baruch Siach's
- message of "Sat, 14 Jan 2017 19:35:27 +0200")
-References: <fb303a78ecb0aa757a78bc896b2c3627093528d3.1484254064.git.baruch@tkos.co.il>
- <87vatjat58.fsf@dell.be.48ers.dk>
- <20170114173527.gflazmfwaguwgdr5@tarshish>
-Message-ID: <87eg03fbiv.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Jan 2017 13:15:46 +0100
+Subject: [Buildroot] [PATCH] jasper: disable PDF documentation generation
+In-Reply-To: <b17e9f42b1d2e17bb543c9d5b3b17e80a95c38d0.1484417309.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sat, 14 Jan 2017 20:08:29 +0200")
+References: <b17e9f42b1d2e17bb543c9d5b3b17e80a95c38d0.1484417309.git.baruch@tkos.co.il>
+Message-ID: <87a8arfbf1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +13,16 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Hi,
+ > We don't need the PDF document on target. This also avoids incompatible host
+ > Latex packages.
 
- >> Committed, thanks.
- >> 
- >> Did you verify that none of the reverse dependencies need the jpeg
- >> support?
+ > Fixes:
+ > http://autobuild.buildroot.net/results/e60/e60c4a71a08aebadd0bc3fb95a57a4a223e4b6fa/
+ > http://autobuild.buildroot.net/results/4ec/4ec8a1735590a3cad4b74630b4b6bdd2e3a7eec8/
 
- > I just build tested libraw, opencv, and opencv3. All built fine without 
- > BR2_PACKAGE_JPEG.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- > Kodi selects both BR2_PACKAGE_JASPER and BR2_PACKAGE_JPEG unconditionally, so 
- > it should not be affected by this change.
-
-Ok, great - Thanks!
+Committed after reformatting as suggested by Yann, thanks.
 
 -- 
 Bye, Peter Korsgaard
