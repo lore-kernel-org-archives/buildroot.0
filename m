@@ -1,41 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Jan 2017 13:56:10 +0100
-Subject: [Buildroot] [git commit] package/mpd: bump version to 0.20.2
-Message-ID: <20170116125851.260D7818AA@busybox.osuosl.org>
+Date: Mon, 16 Jan 2017 13:56:53 +0100
+Subject: [Buildroot] [git commit] package/mpd: drop dependency on libglib2
+Message-ID: <20170116125851.329E4818AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3376a9ef62df61fc170c49c59e915ac5889d3650
+commit: https://git.buildroot.net/buildroot/commit/?id=d0774df0918d9a159ecab21cc2290f81bc4850f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Version 0.20.x does not depend on libglib2 anymore. Note, that the
+dependency on MMU and Thread remain, as MPD uses fork() and thread
+functionality.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mpd/Config.in | 7 +++----
+ package/mpd/mpd.mk    | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 258f87b..e1da994 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  48e9dde0f5c22dc26ff36e8d13e3dc575a1ee7558b5537a064f78a3b9dee1619  mpd-0.20.tar.xz
-+sha256  552a87d71c2981baeddf28c1856a7e071ea0236dd38bc75ec25d58529605ff77  mpd-0.20.2.tar.xz
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index e0bb604..9b22f68 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -1,13 +1,12 @@
+ menuconfig BR2_PACKAGE_MPD
+ 	bool "mpd"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_WCHAR # libglib2, flac
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+-	depends on BR2_USE_MMU # libglib2
++	depends on BR2_USE_WCHAR # flac
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	select BR2_PACKAGE_BOOST
+-	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
+ 	help
 diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index bee6843..82aca96 100644
+index 82aca96..4469737 100644
 --- a/package/mpd/mpd.mk
 +++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.20
--MPD_VERSION = $(MPD_VERSION_MAJOR)
-+MPD_VERSION = $(MPD_VERSION_MAJOR).2
+@@ -8,7 +8,7 @@ MPD_VERSION_MAJOR = 0.20
+ MPD_VERSION = $(MPD_VERSION_MAJOR).2
  MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
  MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+-MPD_DEPENDENCIES = host-pkgconf boost libglib2
++MPD_DEPENDENCIES = host-pkgconf boost
+ MPD_LICENSE = GPLv2+
+ MPD_LICENSE_FILES = COPYING
+ MPD_AUTORECONF = YES
