@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 16 Jan 2017 13:17:48 +0000
-Subject: [Buildroot] [PATCH] lighttpd: bump version to 1.4.45
-Message-ID: <20170116131748.41759-1-Vincent.Riera@imgtec.com>
+Date: Mon, 16 Jan 2017 13:19:09 +0000
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.4-4
+Message-ID: <20170116131909.42353-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lighttpd/lighttpd.hash | 2 +-
- package/lighttpd/lighttpd.mk   | 2 +-
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index c325fda..36783ff 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index e47c9b1..d0ed022 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,2 +1,2 @@
- # From http://www.lighttpd.net/
--sha256 adb66ca985651957feb209c91c55ebbf917d23630bfc3a216a2f70043c7b5422  lighttpd-1.4.44.tar.xz
-+sha256 1c97225deea33eefba6d4158c2cef27913d47553263516bbe9d2e2760fc43a3f  lighttpd-1.4.45.tar.xz
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index c36c3b6..b3127ef 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 bc09ea103a82d1c2c093889eda7e36dd0aa7aa98a06c55de4b73932838459fc4  ImageMagick-7.0.4-3.tar.xz
++sha256 c46975d23ff0c587219daaa3e1dbd43a54a5d7d5ec20d0bdc2c34188facdb0f9  ImageMagick-7.0.4-4.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index ccd580f..9d2c964 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).44
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).45
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3c
+-IMAGEMAGICK_VERSION = 7.0.4-3
++IMAGEMAGICK_VERSION = 7.0.4-4
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
 2.10.2
