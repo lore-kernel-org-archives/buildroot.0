@@ -1,70 +1,51 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Mon, 16 Jan 2017 10:36:25 -0800
-Subject: [Buildroot] [RFC] external toolchain scanner
-In-Reply-To: <87wpdv9ht6.fsf@dell.be.48ers.dk>
-References: <303be768-557b-3b02-c4fd-ae11ec2858ec@mentor.com>
- <8037285d-a8b2-39c9-30c4-cba364583ae9@mentor.com>
- <20161208210228.GA27341@free.fr>
- <df15f689-fb98-5710-6c90-2ee0e5efb0be@mentor.com>
- <c542e7c5-39e9-5d1f-1611-63ad49d26371@mentor.com>
- <20170112173223.GA3716@free.fr>
- <ef0f8d40-903d-1859-aa45-d99b8fe49887@mentor.com>
- <fd01b978-5aea-2794-047c-968c7697b1bb@mind.be>
- <20170116084812.5e7bafeb@free-electrons.com>
- <87wpdv9ht6.fsf@dell.be.48ers.dk>
-Message-ID: <35bcfb7d-f5dc-8889-4a55-ee38da545a51@mentor.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 16 Jan 2017 21:04:27 +0100
+Subject: [Buildroot] [PATCH] boot/uboot: fix build for sunxi targets
+In-Reply-To: <874m13c7uv.fsf@dell.be.48ers.dk>
+References: <20170113000428.4112-1-joerg.krause@embedded.rocks>
+ <874m13c7uv.fsf@dell.be.48ers.dk>
+Message-ID: <1484597067.8221.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/16/2017 06:54 AM, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> Hi,
->
->   >> But it's probably best to implement the first scenario and see where we go from
->   >> there.
->
->   > To be honest, I find all of this very complicated, and even more
->   > confusing than what we have today. Using custom external toolchain is
->   > already an "advanced" feature, which users just getting started with
->   > Buildroot are unlikely to use. To me, using custom external toolchain
->   > is a bit of an advanced functionality, and people who need that will
->   > surely be able to understand the information they need to fill in
->   > "menuconfig" to make Buildroot "accept" the toolchain.
->
-> Yes, I'm also not really sure what realistic use cases this scripts
-> covers.
-Sure, I can elaborate.
+Hi Peter,
 
-My team provides target software in binary and source form, which our 
-users can rebuild. Our users are accustomed to using an external 
-toolchain to rebuild the source, and so already have a toolchain 
-installed that they've been using (in some cases for years). In other 
-words, using an external toolchain is quite the opposite of "advanced": 
-being able to use their known/trusted toolchain is step 1.
+On Fri, 2017-01-13 at 16:11 +0100, Peter Korsgaard wrote:
+> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+> 
+> ?> Since version 2017.01 U-Boot needs to run the binman tool on the
+> host machine
+> ?> for building the 'u-boot-sunxi-with-spl.bin' target. The binman
+> tool is written
+> ?> in Python 2 so we need to add the python host package when
+> building this
+> ?> target, otherwise the build fails:
+> 
+> ?> ```
+> ?>???BINMAN??u-boot-sunxi-with-spl.bin
+> ?>???File "./tools/binman/binman", line 49
+> ?>?????print result
+> ?>????????????????^
+> ?> SyntaxError: Missing parentheses in call to 'print'
+> ?> make[1]: *** [Makefile:1090: u-boot-sunxi-with-spl.bin] Error 1
+> ?> ```
+> 
+> ?> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> 
+> That's not very nice :/
+> 
+> We already check for python on the build machine in dependencies.sh,
+> so
+> perhaps we could patch the binman sources to be compatible with
+> python
+> 3 (and send the patch upstream)?
+> 
+> Is that something you could look into?
 
-So that's perspective #1, for our users. Our team has a different 
-perspective (#2): we have target software expertise, but not a lot of 
-toolchain expertise. We would prefer to let producers of toolchains 
-distribute and maintain them. Given Buildroot's limitations on providing 
-host tools (which we've discussed in separate threads), we certainly 
-don't want to have Buildroot create an internal toolchain. We can 
-probably build and distribute a completely external toolchain (e.g. via 
-crosstool-ng), but then we need to a) maintain it and b) convince our 
-users that they should use ours instead of the one they've already 
-obtained from toolchain people who know what they're doing. :-) That 
-creates more work for us, so we don't want that either.
+I would rather not do the porting, but I can ask upstream about
+supporting Python 3.
 
-To summarize, our users want to rebuild our source using the toolchain 
-of their choice. They don't want a toolchain from us, and we don't want 
-to give them a toolchain. Buildroot currently makes this difficult. 
-Therefore, I have written a script that will make it easier to use 
-arbitrary external toolchains, and since it can help other people too 
-I'm offering to contribute it. Right now we are distributing this script 
-outside Buildroot, which works for us but doesn't help any other 
-Buildroot users.
-
-Hollis Blanchard <hollis_blanchard@mentor.com>
-Mentor Graphics Emulation Division
+J?rg
