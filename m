@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Jan 2017 10:48:02 -0300
-Subject: [Buildroot] [PATCH] poppler: bump to version 0.51.0
-Message-ID: <20170116134802.6054-1-gustavo@zacarias.com.ar>
+Date: Mon, 16 Jan 2017 10:48:37 -0300
+Subject: [Buildroot] [PATCH] libinput: bump to version 1.5.4
+Message-ID: <20170116134837.15107-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/poppler/poppler.hash | 2 +-
- package/poppler/poppler.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index 21decf6..af597e0 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 0345c13..73f5c01 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	c9c93318b789d3933f6e0bad3bc65110280c28eac3f0666284bb9c9a0ab4bc36	poppler-0.50.0.tar.xz
-+sha256	e997c9ad81a8372f2dd03a02b00692b8cc479c220340c8881edaca540f402c1f	poppler-0.51.0.tar.xz
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 478da40..c40d5ff 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-December/032110.html
+-sha256	91206c523b4e7aeecf296d0b94276c61bea90b9260d198c8ee3a91eced10a6e3	libinput-1.5.3.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032610.html
++sha256	6f9ad1ede468bd54ec4469b8a4eb93a6f62f7fe6480c7a43e36c5d58cc2822b7	libinput-1.5.4.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index b079305..f4ae0fc 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POPPLER_VERSION = 0.50.0
-+POPPLER_VERSION = 0.51.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = http://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+-LIBINPUT_VERSION = 1.5.3
++LIBINPUT_VERSION = 1.5.4
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
 2.10.2
