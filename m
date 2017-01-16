@@ -1,143 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 16 Jan 2017 22:24:16 +0100
-Subject: [Buildroot] [PATCH 1/2] package/git: Fix build without libiconv
-Message-ID: <20170116212417.30415-1-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 16 Jan 2017 20:35:09 -0300
+Subject: [Buildroot] [PATCH] xtables-addons: bump to version 2.12
+Message-ID: <20170116233509.2063-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Partly fixes
-http://autobuild.buildroot.net/results/6be/6be94fe2542f3ac9fb785dd22f504e25c2a7802e/
-
-This patch is also needed: http://patchwork.ozlabs.org/patch/715921/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../0001-configure.ac-fix-old-iconv-check.patch    | 42 ++++++++++++++++++
- .../git/0002-configure.ac-Fix-without-iconv.patch  | 51 ++++++++++++++++++++++
- package/git/git.mk                                 |  1 +
- 3 files changed, 94 insertions(+)
- create mode 100644 package/git/0001-configure.ac-fix-old-iconv-check.patch
- create mode 100644 package/git/0002-configure.ac-Fix-without-iconv.patch
+ package/xtables-addons/xtables-addons.hash | 6 +++---
+ package/xtables-addons/xtables-addons.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/git/0001-configure.ac-fix-old-iconv-check.patch b/package/git/0001-configure.ac-fix-old-iconv-check.patch
-new file mode 100644
-index 000000000..4aa48f610
---- /dev/null
-+++ b/package/git/0001-configure.ac-fix-old-iconv-check.patch
-@@ -0,0 +1,42 @@
-+From 3c170355aeba39bb310d8b9192c9623b380d5eae Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 16 Jan 2017 20:14:10 +0100
-+Subject: [PATCH 1/2] configure.ac: fix old iconv check
-+
-+According to
-+https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Running-the-Compiler.html
-+the parameter syntax of AC_COMPILE_IFELSE is
-+
-+(input, [action-if-true], [action-if-false])
-+
-+Displaying "no" when the test was positive and enabling support for old
-+iconv implementations by OLD_ICONV=UnfortunatelyYes when the test fails
-+it obviously wrong. This patch switches the actions to fix the problem.
-+
-+Patch sent upstream:
-+https://public-inbox.org/git/20170116195638.3713-1-bernd.kuhls at writeme.com/T/#t
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0b15f04b1..63e71a472 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -759,9 +759,9 @@ GIT_STASH_FLAGS($ICONVDIR)
-+ 
-+ AC_MSG_CHECKING([for old iconv()])
-+ AC_COMPILE_IFELSE([OLDICONVTEST_SRC],
-+-	[AC_MSG_RESULT([no])],
-+ 	[AC_MSG_RESULT([yes])
-+-	OLD_ICONV=UnfortunatelyYes])
-++	OLD_ICONV=UnfortunatelyYes],
-++	[AC_MSG_RESULT([no])])
-+ 
-+ GIT_UNSTASH_FLAGS($ICONVDIR)
-+ 
-+-- 
-+2.11.0
-+
-diff --git a/package/git/0002-configure.ac-Fix-without-iconv.patch b/package/git/0002-configure.ac-Fix-without-iconv.patch
-new file mode 100644
-index 000000000..0aa374023
---- /dev/null
-+++ b/package/git/0002-configure.ac-Fix-without-iconv.patch
-@@ -0,0 +1,51 @@
-+From f19defa5e9fd9fea339c2e2beb9d429dedc7a95a Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 16 Jan 2017 20:34:29 +0100
-+Subject: [PATCH 2/2] configure.ac: Fix --without-iconv
-+
-+GIT_PARSE_WITH(iconv)) sets NO_ICONV=YesPlease in
-+https://github.com/git/git/blob/maint/configure.ac#L327
-+
-+But the command GIT_CONF_SUBST([NO_ICONV]) in
-+https://github.com/git/git/blob/maint/configure.ac#L618
-+
-+is only executed when NO_ICONV is an empty variable
-+https://github.com/git/git/blob/maint/configure.ac#L578
-+
-+which has the effect that NO_ICONV=YesPlease is not written to
-+config.mak.autogen which breaks compilation in systems without iconv.
-+
-+Patch sent upstream:
-+https://public-inbox.org/git/20170116195638.3713-2-bernd.kuhls at writeme.com/T/#u
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 63e71a472..419469315 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -614,15 +614,15 @@ LIBS="$old_LIBS"
-+ 
-+ GIT_UNSTASH_FLAGS($ICONVDIR)
-+ 
-+-GIT_CONF_SUBST([NEEDS_LIBICONV])
-+-GIT_CONF_SUBST([NO_ICONV])
-+-
-+ if test -n "$NO_ICONV"; then
-+     NEEDS_LIBICONV=
-+ fi
-+ 
-+ fi
-+ 
-++GIT_CONF_SUBST([NEEDS_LIBICONV])
-++GIT_CONF_SUBST([NO_ICONV])
-++
-+ #
-+ # Define NO_DEFLATE_BOUND if deflateBound is missing from zlib.
-+ 
-+-- 
-+2.11.0
-+
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 7d4d36363..f47209a74 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -10,6 +10,7 @@ GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
- GIT_LICENSE_FILES = COPYING LGPL-2.1
- GIT_DEPENDENCIES = zlib host-gettext
-+GIT_AUTORECONF = YES
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index 323393d..9aa9c0e 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.11/
+-sha1	356abeb8ae24da67178f1612bc0fcbfd83a5e7e7	xtables-addons-2.11.tar.xz
++# From https://sourceforge.net/projects/xtables-addons/files/Xtables-addons/
++sha1	70ace437ec84d9ec1970505cecf270ed0cbd273e	xtables-addons-2.12.tar.xz
+ # Calculated based on the hash above
+-sha256	f14f8953a9d3a70157a82883886ff6ec866c61dbea1585edb421478107279921	xtables-addons-2.11.tar.xz
++sha256	c4865aa1c64c5ff173ff7b5d69425466c71f0f9b5eb5299c52c68bdcd46fa63b	xtables-addons-2.12.tar.xz
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 54d1517..ebf523d 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- GIT_DEPENDENCIES += openssl
+-XTABLES_ADDONS_VERSION = 2.11
++XTABLES_ADDONS_VERSION = 2.12
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+-XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/$(XTABLES_ADDONS_VERSION)
++#XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/$(XTABLES_ADDONS_VERSION)
++XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+ XTABLES_ADDONS_LICENSE = GPLv2+
+ XTABLES_ADDONS_LICENSE_FILES = LICENSE
 -- 
-2.11.0
+2.10.2
