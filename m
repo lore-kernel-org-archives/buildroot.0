@@ -1,72 +1,83 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 17 Jan 2017 11:20:44 +0100
-Subject: [Buildroot] [PATCH 1/8] python-pathvalidate: bump to version
-	0.13.0
-In-Reply-To: <20170117101725.19629-1-yegorslists@googlemail.com>
-References: <20170117101725.19629-1-yegorslists@googlemail.com>
-Message-ID: <CAGm1_ks1uMn+fG-F5VWOcFfa6zhWro5T65x2hChOAhtAFRMBgw@mail.gmail.com>
+Date: Tue, 17 Jan 2017 11:22:07 +0100
+Subject: [Buildroot] [PATCH 2/3] python-logbook: new package
+In-Reply-To: <20170116154620.27358-2-yegorslists@googlemail.com>
+References: <20170116154620.27358-1-yegorslists@googlemail.com>
+ <20170116154620.27358-2-yegorslists@googlemail.com>
+Message-ID: <CAGm1_kupvcaspEZJ3HuRr0Ro3jJR96t-4b0mLratpfF7-7vWmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 17, 2017 at 11:17 AM,  <yegorslists@googlemail.com> wrote:
+On Mon, Jan 16, 2017 at 4:46 PM,  <yegorslists@googlemail.com> wrote:
 > From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Add python-six to the runtime dependencies.
 >
 > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/python-pathvalidate/Config.in                | 1 +
->  package/python-pathvalidate/python-pathvalidate.hash | 4 ++--
->  package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
->  3 files changed, 5 insertions(+), 4 deletions(-)
+>  package/Config.in                          |  1 +
+>  package/python-logbook/Config.in           |  6 ++++++
+>  package/python-logbook/python-logbook.hash |  3 +++
+>  package/python-logbook/python-logbook.mk   | 13 +++++++++++++
+>  4 files changed, 23 insertions(+)
+>  create mode 100644 package/python-logbook/Config.in
+>  create mode 100644 package/python-logbook/python-logbook.hash
+>  create mode 100644 package/python-logbook/python-logbook.mk
 >
-> diff --git a/package/python-pathvalidate/Config.in b/package/python-pathvalidate/Config.in
-> index cc15fff7c..60163fbe0 100644
-> --- a/package/python-pathvalidate/Config.in
-> +++ b/package/python-pathvalidate/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_PATHVALIDATE
->         bool "python-pathvalidate"
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
->         select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
->         select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
->         help
-> diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
-> index e999c7325..68e6907db 100644
-> --- a/package/python-pathvalidate/python-pathvalidate.hash
-> +++ b/package/python-pathvalidate/python-pathvalidate.hash
-> @@ -1,3 +1,3 @@
->  # md5 from https://pypi.python.org/pypi/pathvalidate/json, sha256 locally computed
-> -md5    c9f517f6caba5eee56731425b5a75427  pathvalidate-0.9.4.tar.gz
-> -sha256 289a849464cced59314e6a0827f2d2232bb9891f8f4812574a6875a7c7e554b9  pathvalidate-0.9.4.tar.gz
-> +md5    03f0af69596f7de52d52753c2a585fce  pathvalidate-0.13.0.tar.gz
-> +sha256 1ecaebfbd32794abe5f47a20189d5f7dd196a6ba445c1a07429de6ce608bf9b9  pathvalidate-0.13.0.tar.gz
-> diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
-> index 25f254876..a8ab4ad24 100644
-> --- a/package/python-pathvalidate/python-pathvalidate.mk
-> +++ b/package/python-pathvalidate/python-pathvalidate.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->
-> -PYTHON_PATHVALIDATE_VERSION = 0.9.4
-> +PYTHON_PATHVALIDATE_VERSION = 0.13.0
->  PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
-> -PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/9a/4a/49d219ca919753017bacea87e161614ed66204246ee1e150091910cb57c7
-> +PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/3a/03/ca01cdbf0f7b766b414d134e71b2eb689619dba0ddee002d53c2d58f6436
->  PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
->  PYTHON_PATHVALIDATE_LICENSE = MIT
->  PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
-> --
-> 2.11.0
+> diff --git a/package/Config.in b/package/Config.in
+> index 1766089b0..e03b003fa 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -709,6 +709,7 @@ menu "External python modules"
+>         source "package/python-keyring/Config.in"
+>         source "package/python-libconfig/Config.in"
+>         source "package/python-lmdb/Config.in"
+> +       source "package/python-logbook/Config.in"
+>         source "package/python-lxml/Config.in"
+>         source "package/python-mad/Config.in"
+>         source "package/python-mako/Config.in"
+> diff --git a/package/python-logbook/Config.in b/package/python-logbook/Config.in
+> new file mode 100644
+> index 000000000..9ae914432
+> --- /dev/null
+> +++ b/package/python-logbook/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_LOGBOOK
+> +       bool "python-logbook"
+> +       help
+> +         A logging replacement for Python.
+> +
+> +         http://logbook.pocoo.org/
+> diff --git a/package/python-logbook/python-logbook.hash b/package/python-logbook/python-logbook.hash
+> new file mode 100644
+> index 000000000..1a79046c3
+> --- /dev/null
+> +++ b/package/python-logbook/python-logbook.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi/logbook/json, sha256 locally computed
+> +md5    22fea705e067c118925898f0c30b0508  Logbook-1.0.0.tar.gz
+> +sha256 87da2515a6b3db866283cb9d4e5a6ec44e52a1d556ebb2ea3b6e7e704b5f1872  Logbook-1.0.0.tar.gz
+> diff --git a/package/python-logbook/python-logbook.mk b/package/python-logbook/python-logbook.mk
+> new file mode 100644
+> index 000000000..291237973
+> --- /dev/null
+> +++ b/package/python-logbook/python-logbook.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# python-logbook
+> +#
+> +################################################################################
+> +
+> +PYTHON_LOGBOOK_VERSION = 1.0.0
+> +PYTHON_LOGBOOK_SOURCE = Logbook-$(PYTHON_LOGBOOK_VERSION).tar.gz
+> +PYTHON_LOGBOOK_SITE = https://pypi.python.org/packages/34/e8/6419c217bbf464fe8a902418120cccaf476201bd03b50958db24d6e90f65
+> +PYTHON_LOGBOOK_SETUP_TYPE = setuptools
+> +PYTHON_LOGBOOK_LICENSE = BSD-3c
 
-I forgot the cover letter saying, that this series depends on yesterday's one:
+Missing licence file was fixed upstream and will appear in the next bump:
 
-http://patchwork.ozlabs.org/patch/715801/
-http://patchwork.ozlabs.org/patch/715802/
-http://patchwork.ozlabs.org/patch/715803/
+https://github.com/getlogbook/logbook/pull/233
 
 Yegor
