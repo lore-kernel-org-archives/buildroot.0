@@ -1,78 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 17 Jan 2017 23:17:23 +0100
-Subject: [Buildroot] [PATCH] package/libcap: fix build with gperf >= 3.1
-Message-ID: <20170117221723.10235-1-romain.naour@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 17 Jan 2017 23:35:58 +0100
+Subject: [Buildroot] Relocatable staging dir and reference to build dir
+In-Reply-To: <CAFKqv7y-ARxUBgiubYHK_fUwtHz1L=zgXBHpMnSBAD2FDBXfOw@mail.gmail.com>
+References: <CAFKqv7y-ARxUBgiubYHK_fUwtHz1L=zgXBHpMnSBAD2FDBXfOw@mail.gmail.com>
+Message-ID: <25780650-1438-c875-d5cf-48ea44069c9f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See gperf 3.1 ChangeLog:
-* The 'len' parameter of the hash function and of the lookup function is now
-  of type 'size_t' instead of 'unsigned int'. This makes it safe to call these
-  functions with strings of length > 4 GB, on 64-bit machines.
 
-Fixes:
-http://autobuild.buildroot.net/results/a2d/a2da03b1a586fcfb0c7f9146aaf24bfab2e885b0
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
----
-I haven't checked how many packages are affected by this breakage...
----
- ...p-Change-the-len-parameter-type-to-size_t.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/libcap/0004-libcap-Change-the-len-parameter-type-to-size_t.patch
+On 05-01-17 16:32, J?r?me BARDON wrote:
+> Hello all,
+> 
+> Our need is to relocate the staging dir for developers (and automatic
+> bulld by Jenkins).
 
-diff --git a/package/libcap/0004-libcap-Change-the-len-parameter-type-to-size_t.patch b/package/libcap/0004-libcap-Change-the-len-parameter-type-to-size_t.patch
-new file mode 100644
-index 0000000..e28f780
---- /dev/null
-+++ b/package/libcap/0004-libcap-Change-the-len-parameter-type-to-size_t.patch
-@@ -0,0 +1,43 @@
-+From 532493467fa751edb12dc06b5e12c72d5d9baeef Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 17 Jan 2017 22:55:53 +0100
-+Subject: [PATCH] libcap: Change the 'len' parameter type to 'size_t'
-+
-+See gperf 3.1 ChangeLog:
-+* The 'len' parameter of the hash function and of the lookup function is now
-+  of type 'size_t' instead of 'unsigned int'. This makes it safe to call these
-+  functions with strings of length > 4 GB, on 64-bit machines.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/a2d/a2da03b1a586fcfb0c7f9146aaf24bfab2e885b0
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ libcap/Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/libcap/Makefile b/libcap/Makefile
-+index d189777..40cbc30 100644
-+--- a/libcap/Makefile
-++++ b/libcap/Makefile
-+@@ -22,7 +22,7 @@ all: $(MINLIBNAME) $(STALIBNAME) libcap.pc
-+ 
-+ ifeq ($(BUILD_GPERF),yes)
-+ USE_GPERF_OUTPUT = $(GPERF_OUTPUT)
-+-INCLUDE_GPERF_OUTPUT = -include $(GPERF_OUTPUT)
-++INCLUDE_GPERF_OUTPUT = -include string.h -include $(GPERF_OUTPUT)
-+ endif
-+ 
-+ libcap.pc: libcap.pc.in
-+@@ -41,7 +41,7 @@ cap_names.h: _makenames
-+ 	./_makenames > cap_names.h
-+ 
-+ $(GPERF_OUTPUT): cap_names.list.h
-+-	perl -e 'print "struct __cap_token_s { const char *name; int index; };\n%{\nconst struct __cap_token_s *__cap_lookup_name(const char *, unsigned int);\n%}\n%%\n"; while ($$l = <>) { $$l =~ s/[\{\"]//g; $$l =~ s/\}.*// ; print $$l; }' < $< | gperf --ignore-case --language=ANSI-C --readonly --null-strings --global-table --hash-function-name=__cap_hash_name --lookup-function-name="__cap_lookup_name" -c -t -m20 $(INDENT) > $@
-++	perl -e 'print "struct __cap_token_s { const char *name; int index; };\n%{\nconst struct __cap_token_s *__cap_lookup_name(const char *, size_t);\n%}\n%%\n"; while ($$l = <>) { $$l =~ s/[\{\"]//g; $$l =~ s/\}.*// ; print $$l; }' < $< | gperf --ignore-case --language=ANSI-C --readonly --null-strings --global-table --hash-function-name=__cap_hash_name --lookup-function-name="__cap_lookup_name" -c -t -m20 $(INDENT) > $@
-+ 
-+ cap_names.list.h: Makefile $(KERNEL_HEADERS)/linux/capability.h
-+ 	@echo "=> making $@ from $(KERNEL_HEADERS)/linux/capability.h"
-+-- 
-+2.9.3
-+
+ Sorry for the late reply, and it isn't even positive.
+
+ No, at the moment, the staging tree is not relocatable. See [1] ("Make the HOST
+directory a relocatable SDK") for details of what needs to be done. Several
+patches have been posted on the mailing list to progress in that direction, but
+it wasn't finished yet.
+
+> We found that there are absolute paths in the staging tree config
+> files for libs and also references to the bulld dir.
+> Is there a way to have relative paths in .la and pkgconfig files? Or
+> another mean to change absolute paths?
+
+ For .la and .pc files it should be relatively straightforward to postprocess
+them to convert to relative paths (using -L=/... and -I=/... to make them
+relative to the sysroot). Actually, the .pc files should already be "clean",
+except for a few buggy Xorg files IIRC.
+
+
+ Regards,
+ Arnout
+
+
+[1] http://elinux.org/Buildroot#Core_Buildroot_infrastructure
+> 
+> 
+> J?r?me Bardon
+> Aviwest
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 -- 
-2.9.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
