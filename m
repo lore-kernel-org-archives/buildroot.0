@@ -1,74 +1,39 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Tue, 17 Jan 2017 08:50:56 -0200 (BRST)
-Subject: [Buildroot] [PATCH v2] util-linux: fix ncurses/wchar handling
- (again)
-In-Reply-To: <20170117164437.36272eed@free-electrons.com>
-References: <1484281849-25875-1-git-send-email-casantos@datacom.ind.br>
- <1484301833-16403-1-git-send-email-casantos@datacom.ind.br>
- <20170117164437.36272eed@free-electrons.com>
-Message-ID: <288708440.7314310.1484650256382.JavaMail.zimbra@datacom.ind.br>
+From: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+Date: Tue, 17 Jan 2017 12:47:50 +0100
+Subject: [Buildroot] [PATCH] gperf: bump to version 3.1
+Message-ID: <20170117114750.20977-1-alvaro.gamez@hazent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org
-> Sent: Tuesday, January 17, 2017 3:44:37 AM
-> Subject: Re: [Buildroot] [PATCH v2] util-linux: fix ncurses/wchar handling (again)
+Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+---
+ package/gperf/gperf.hash | 2 +-
+ package/gperf/gperf.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Hello,
-> 
-> On Fri, 13 Jan 2017 08:03:53 -0200, Carlos Santos wrote:
->> util-linux #defines "wchar_t" as "char" when configured without widechar
->> support. This conflicts with definition of wchar_t contained in stddef.h,
->> so the compilation fails with
->> 
->>     error: two or more data types in declaration specifiers
->>     #define
->>      wchar_t char
->> 
->> The error can be avoided by rearranging the inclusion order in some files
->> under the text-utils directory.
->> 
->> Fixes:
->> 
->>   http://autobuild.buildroot.net/results/3a2f228e0fa7b5cc28a13d49f48f1a6aef8d9d7a
->>   http://autobuild.buildroot.net/results/99e96069f652d511c6212a5bb6be29e68fb1747c
->>   http://autobuild.buildroot.net/results/2dc5721aef93b7b410153bafad78248fac3db941
->> 
->> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> 
-> I tried to fix the same problem in commit
-> 5a18eabdf08564688761a9b2f35892d69d8f9a18, but apparently failed at
-> taking into account all the possible situations.
-> 
-> So if we are going to merge a different solution, I'd like to see an
-> investigation of whether commit
-> 5a18eabdf08564688761a9b2f35892d69d8f9a18 is still needed or not. If
-> it's not, then it should be reverted as well.
-
-Ok, I will take a look tonight.
-
-> I must say I find the fix of playing with the ordering of includes to
-> be somewhat hackish. Do we have a better solution? Is it really legal
-> for util-linux to redefine wchar_t? Should it use a better autoconf
-> check before doing this?
-> 
-> Thomas
-
-I'd rather disable ncurses support at all instead of resorting to ugly
-hacks. Looks like ncurses is important for other people, however, so I
-attempted to preserve it.
-
-As far as I understand the redefinition aims to compile util-linux for
-systems whose C libraries do not support wide characters at all (and
-therefore do not define wchar_t). Perhaps this was easy to do a long
-time ago but now that C compilers provide wchar_t as a built-in type
-it became complicated.
-
-Carlos Santos (Casantos) - DATACOM, P&D
-?Something must be done. This is something. Therefore we must do it.?
-(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
+diff --git a/package/gperf/gperf.hash b/package/gperf/gperf.hash
+index 370235c62..dae834223 100644
+--- a/package/gperf/gperf.hash
++++ b/package/gperf/gperf.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	767112a204407e62dbc3106647cf839ed544f3cf5d0f0523aaa2508623aad63e	gperf-3.0.4.tar.gz
++sha256	588546b945bba4b70b6a3a616e80b4ab466e3f33024a352fc2198112cdbb3ae2  gperf-3.1.tar.gz
+diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
+index 8ce3c95ff..014a24566 100644
+--- a/package/gperf/gperf.mk
++++ b/package/gperf/gperf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GPERF_VERSION = 3.0.4
++GPERF_VERSION = 3.1
+ GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
+ GPERF_LICENSE = GPLv3+
+ GPERF_LICENSE_FILES = COPYING
+-- 
+2.11.0
