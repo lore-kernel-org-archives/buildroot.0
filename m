@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 17 Jan 2017 11:17:19 +0100
-Subject: [Buildroot] [PATCH 2/8] python-dataproperty: bump to version 0.16.2
+Date: Tue, 17 Jan 2017 11:17:21 +0100
+Subject: [Buildroot] [PATCH 4/8] python-pathpy: new package
 In-Reply-To: <20170117101725.19629-1-yegorslists@googlemail.com>
 References: <20170117101725.19629-1-yegorslists@googlemail.com>
-Message-ID: <20170117101725.19629-2-yegorslists@googlemail.com>
+Message-ID: <20170117101725.19629-4-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,35 +14,69 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 4 ++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                        |  1 +
+ package/python-pathpy/Config.in          |  8 ++++++++
+ package/python-pathpy/python-pathpy.hash |  3 +++
+ package/python-pathpy/python-pathpy.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-pathpy/Config.in
+ create mode 100644 package/python-pathpy/python-pathpy.hash
+ create mode 100644 package/python-pathpy/python-pathpy.mk
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 301504285..d84b21458 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
--md5	65be4db859ad25bf2c1af25486710f00  DataProperty-0.13.5.tar.gz
--sha256	470e510d9636af446401d9f0bd79172b1f03c5b903819f2ccd4a06ac32ed64d9  DataProperty-0.13.5.tar.gz
-+md5	a05cb97210d41677bde224b53562add4  DataProperty-0.16.2.tar.gz
-+sha256	c2c6e1f2558bf03b0f8f2dc53a5eb00d9540babd3d69d299be878f2e32937e53  DataProperty-0.16.2.tar.gz
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 13ddf5f64..997019c72 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DATAPROPERTY_VERSION = 0.13.5
-+PYTHON_DATAPROPERTY_VERSION = 0.16.2
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/e0/30/71065e642a985366fc3900316592ff6b88891f96e42107936613cd7a020b
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/c8/95/4803e558a7e29ccf3adbf8f993ec53fe28c46df450892c4cc35c2f0ccedc
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+diff --git a/package/Config.in b/package/Config.in
+index 0d2701215..0f148af64 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -731,6 +731,7 @@ menu "External python modules"
+ 	source "package/python-paho-mqtt/Config.in"
+ 	source "package/python-pam/Config.in"
+ 	source "package/python-paramiko/Config.in"
++	source "package/python-pathpy/Config.in"
+ 	source "package/python-pathtools/Config.in"
+ 	source "package/python-pathvalidate/Config.in"
+ 	source "package/python-pexpect/Config.in"
+diff --git a/package/python-pathpy/Config.in b/package/python-pathpy/Config.in
+new file mode 100644
+index 000000000..98c05126b
+--- /dev/null
++++ b/package/python-pathpy/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PATHPY
++	bool "python-pathpy"
++	help
++	  path.py implements a path objects as first-class
++	  entities, allowing common operations on files to
++	  be invoked on those path objects directly.
++
++	  https://github.com/jaraco/path.py
+diff --git a/package/python-pathpy/python-pathpy.hash b/package/python-pathpy/python-pathpy.hash
+new file mode 100644
+index 000000000..4824e2a3c
+--- /dev/null
++++ b/package/python-pathpy/python-pathpy.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/path.py/json, sha256 locally computed
++md5	eb8469ad498d2e462bff8f3b2b5ea68d  path.py-10.0.tar.gz
++sha256	ba984a2b536158a8841dd33150fce16bcf04210e83f92da674cad0a8a8f61e00  path.py-10.0.tar.gz
+diff --git a/package/python-pathpy/python-pathpy.mk b/package/python-pathpy/python-pathpy.mk
+new file mode 100644
+index 000000000..577658602
+--- /dev/null
++++ b/package/python-pathpy/python-pathpy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pathpy
++#
++################################################################################
++
++PYTHON_PATHPY_VERSION = 10.0
++PYTHON_PATHPY_SOURCE = path.py-$(PYTHON_PATHPY_VERSION).tar.gz
++PYTHON_PATHPY_SITE = https://pypi.python.org/packages/f3/4e/3bce93c0d9e20abc6ed3aa7866beb688e889828ca2666743df11d9a30050
++PYTHON_PATHPY_SETUP_TYPE = setuptools
++PYTHON_PATHPY_LICENSE = MIT
++PYTHON_PATHPY_DEPENDENCIES = host-python-setuptools-scm
++
++$(eval $(python-package))
 -- 
 2.11.0
