@@ -1,40 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Jan 2017 22:23:27 -0300
-Subject: [Buildroot] [PATCH] libgtk3: bump to version 3.22.7
-Message-ID: <20170117012327.3094-1-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 17 Jan 2017 02:15:36 +0000
+Subject: [Buildroot] [Bug 9586] usbmount: usbmount slows down the system...
+ to a state of unsusable...
+In-Reply-To: <bug-9586-163@https.bugs.busybox.net/>
+References: <bug-9586-163@https.bugs.busybox.net/>
+Message-ID: <bug-9586-163-GEMDF9dFru@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=9586
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 1ef642f..12a25c9 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.6.sha256sum
--sha256 eba75a216a117f4391beb2971ba20ff8a1823f109893f0ab6c2eac2210ea172f  gtk+-3.22.6.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.7.sha256sum
-+sha256 a3a27564bfb1679ebbc75c37cd2bcd6e727c8bdfbcd3984d29305bf9ee60d432  gtk+-3.22.7.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 60f1bad..a1b8fc6 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).6
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).7
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Could you provide a minimal Buildroot configuration that exhibits the problem,
+for example based on one of the Qemu defconfigs that we provide, so that we can
+easily reproduce the issue? Thanks!
+
 -- 
-2.10.2
+You are receiving this mail because:
+You are on the CC list for the bug.
