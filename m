@@ -1,71 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Jan 2017 23:09:32 +0100
-Subject: [Buildroot] [PATCH v2 1/3] python-protobuf: Allow host building
-In-Reply-To: <20170115213047.GC4277@free.fr>
-References: <20161209011313.9549-1-wak@google.com>
- <20170112191523.23814-1-wak@google.com>
- <20170112191523.23814-2-wak@google.com> <20170115213047.GC4277@free.fr>
-Message-ID: <e7d849d0-fdc6-862a-53f4-23f07851dbae@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 17 Jan 2017 23:17:23 +0100
+Subject: [Buildroot] [PATCH] package/libcap: fix build with gperf >= 3.1
+Message-ID: <20170117221723.10235-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+See gperf 3.1 ChangeLog:
+* The 'len' parameter of the hash function and of the lookup function is now
+  of type 'size_t' instead of 'unsigned int'. This makes it safe to call these
+  functions with strings of length > 4 GB, on 64-bit machines.
 
+Fixes:
+http://autobuild.buildroot.net/results/a2d/a2da03b1a586fcfb0c7f9146aaf24bfab2e885b0
 
-On 15-01-17 22:30, Yann E. MORIN wrote:
-> William, All,
-> 
-> On 2017-01-12 11:15 -0800, William A. Kennington III spake thusly:
->> Currently python-protobuf does not allow be built as a host package
->> during a cross compile. We would like to be able to build nanopb as a
->> host package but can't without host-python-protobuf.
->>
->> Signed-off-by: William A. Kennington III <wak@google.com>
->> ---
->>  package/python-protobuf/python-protobuf.mk | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
->> index d8be76dd7..d46bda243 100644
->> --- a/package/python-protobuf/python-protobuf.mk
->> +++ b/package/python-protobuf/python-protobuf.mk
->> @@ -13,4 +13,5 @@ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
->>  PYTHON_PROTOBUF_SETUP_TYPE = setuptools
->>  PYTHON_PROTOBUF_SUBDIR = python
->>  
->> +$(eval $(host-python-package))
->>  $(eval $(python-package))
-> 
-> This is not documented (AFAIK), but the host variant must go after the
-> target variant. Otherwise, strange things can happen (because of the way
-> variables have default values that depend on the order of evaluation,
-> like the source archive for example).
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+---
+I haven't checked how many packages are affected by this breakage...
+---
+ ...p-Change-the-len-parameter-type-to-size_t.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/libcap/0004-libcap-Change-the-len-parameter-type-to-size_t.patch
 
- I think that this is not true. If it were true, then it would mean that
-host-only packages would be problematic, no? In fact, it is the
-host-after-target order where strange things could happen, but package-generic
-obviously deals with those strange things :-).
-
-
- That said, the Buildroot convention is to have host after target, so William,
-please do it like that.
-
- Regards,
- Arnout
-
-> Note: this is valid for the following patch as awell, of course.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> 
-
+diff --git a/package/libcap/0004-libcap-Change-the-len-parameter-type-to-size_t.patch b/package/libcap/0004-libcap-Change-the-len-parameter-type-to-size_t.patch
+new file mode 100644
+index 0000000..e28f780
+--- /dev/null
++++ b/package/libcap/0004-libcap-Change-the-len-parameter-type-to-size_t.patch
+@@ -0,0 +1,43 @@
++From 532493467fa751edb12dc06b5e12c72d5d9baeef Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Tue, 17 Jan 2017 22:55:53 +0100
++Subject: [PATCH] libcap: Change the 'len' parameter type to 'size_t'
++
++See gperf 3.1 ChangeLog:
++* The 'len' parameter of the hash function and of the lookup function is now
++  of type 'size_t' instead of 'unsigned int'. This makes it safe to call these
++  functions with strings of length > 4 GB, on 64-bit machines.
++
++Fixes:
++http://autobuild.buildroot.net/results/a2d/a2da03b1a586fcfb0c7f9146aaf24bfab2e885b0
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ libcap/Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libcap/Makefile b/libcap/Makefile
++index d189777..40cbc30 100644
++--- a/libcap/Makefile
+++++ b/libcap/Makefile
++@@ -22,7 +22,7 @@ all: $(MINLIBNAME) $(STALIBNAME) libcap.pc
++ 
++ ifeq ($(BUILD_GPERF),yes)
++ USE_GPERF_OUTPUT = $(GPERF_OUTPUT)
++-INCLUDE_GPERF_OUTPUT = -include $(GPERF_OUTPUT)
+++INCLUDE_GPERF_OUTPUT = -include string.h -include $(GPERF_OUTPUT)
++ endif
++ 
++ libcap.pc: libcap.pc.in
++@@ -41,7 +41,7 @@ cap_names.h: _makenames
++ 	./_makenames > cap_names.h
++ 
++ $(GPERF_OUTPUT): cap_names.list.h
++-	perl -e 'print "struct __cap_token_s { const char *name; int index; };\n%{\nconst struct __cap_token_s *__cap_lookup_name(const char *, unsigned int);\n%}\n%%\n"; while ($$l = <>) { $$l =~ s/[\{\"]//g; $$l =~ s/\}.*// ; print $$l; }' < $< | gperf --ignore-case --language=ANSI-C --readonly --null-strings --global-table --hash-function-name=__cap_hash_name --lookup-function-name="__cap_lookup_name" -c -t -m20 $(INDENT) > $@
+++	perl -e 'print "struct __cap_token_s { const char *name; int index; };\n%{\nconst struct __cap_token_s *__cap_lookup_name(const char *, size_t);\n%}\n%%\n"; while ($$l = <>) { $$l =~ s/[\{\"]//g; $$l =~ s/\}.*// ; print $$l; }' < $< | gperf --ignore-case --language=ANSI-C --readonly --null-strings --global-table --hash-function-name=__cap_hash_name --lookup-function-name="__cap_lookup_name" -c -t -m20 $(INDENT) > $@
++ 
++ cap_names.list.h: Makefile $(KERNEL_HEADERS)/linux/capability.h
++ 	@echo "=> making $@ from $(KERNEL_HEADERS)/linux/capability.h"
++-- 
++2.9.3
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.9.3
