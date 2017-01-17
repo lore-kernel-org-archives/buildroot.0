@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Jan 2017 23:35:58 +0100
-Subject: [Buildroot] Relocatable staging dir and reference to build dir
-In-Reply-To: <CAFKqv7y-ARxUBgiubYHK_fUwtHz1L=zgXBHpMnSBAD2FDBXfOw@mail.gmail.com>
-References: <CAFKqv7y-ARxUBgiubYHK_fUwtHz1L=zgXBHpMnSBAD2FDBXfOw@mail.gmail.com>
-Message-ID: <25780650-1438-c875-d5cf-48ea44069c9f@mind.be>
+Date: Tue, 17 Jan 2017 23:46:12 +0100
+Subject: [Buildroot] The chrootable self-compiling toolchain and
+	Buildroot
+In-Reply-To: <ac914698-10b9-73b3-0db0-a34df10e9990@lamiaworks.com.au>
+References: <ac914698-10b9-73b3-0db0-a34df10e9990@lamiaworks.com.au>
+Message-ID: <c1f3fe00-d9b4-f788-922e-2aeed3187c33@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +13,58 @@ To: buildroot@busybox.net
 
 
 
-On 05-01-17 16:32, J?r?me BARDON wrote:
-> Hello all,
+On 04-01-17 03:50, scsijon wrote:
 > 
-> Our need is to relocate the staging dir for developers (and automatic
-> bulld by Jenkins).
-
- Sorry for the late reply, and it isn't even positive.
-
- No, at the moment, the staging tree is not relocatable. See [1] ("Make the HOST
-directory a relocatable SDK") for details of what needs to be done. Several
-patches have been posted on the mailing list to progress in that direction, but
-it wasn't finished yet.
-
-> We found that there are absolute paths in the staging tree config
-> files for libs and also references to the bulld dir.
-> Is there a way to have relative paths in .la and pkgconfig files? Or
-> another mean to change absolute paths?
-
- For .la and .pc files it should be relatively straightforward to postprocess
-them to convert to relative paths (using -L=/... and -I=/... to make them
-relative to the sysroot). Actually, the .pc files should already be "clean",
-except for a few buggy Xorg files IIRC.
-
-
- Regards,
- Arnout
-
-
-[1] http://elinux.org/Buildroot#Core_Buildroot_infrastructure
+> BarryK, creator of Puppy Linux has come across a few problems in building with
+> buildroot!
 > 
+> Primarily:
 > 
-> J?r?me Bardon
-> Aviwest
+> [quote]I have been using Buildroot recently, to compile applications statically
+> with uclibc-ng. Buildroot is great, but it has one major shortcoming -- it
+> cannot create a chrootable self-compiling toolchain.[/quote]
+> 
+> The full message letting you know what's up is at
+> http://barryk.org/news/?viewDetailed=00479
+> 
+> Could someone have a look at it please and if possible give some help as it also
+> interests me and i'm sure quite a few other small linux builders who would like
+> to update the full system, but can't because of what seems to be the loss of
+> the  chrootable self-compiling toolchain function.
+> 
+> It would actually be nice to be able to build in top of buildroot.
+
+ This is a FAQ (well, actually, the reason we don't support it is because it
+isn't asked very often...) [1].
+
+[quote]
+It has been decided that support for the native compiler on the target would be
+stopped from the Buildroot-2012.11 release because:
+
+* this feature was neither maintained nor tested, and often broken;
+* this feature was only available for Buildroot toolchains;
+* Buildroot mostly targets small or very small target hardware with limited
+resource onboard (CPU, ram, mass-storage), for which compiling on the target
+does not make much sense;
+* Buildroot aims at easing the cross-compilation, making native compilation on
+the target unnecessary.
+
+If you need a compiler on your target anyway, then Buildroot is not suitable for
+your purpose. In such case, you need a real distribution and you should opt for
+something like:
+
+* openembedded
+* yocto
+* emdebian
+* Fedora
+* openSUSE ARM
+* Arch Linux ARM
+[/quote]
+
+[1] https://buildroot.org/downloads/manual/manual.html#faq-no-compiler-on-target
+> 
+> thanks
+> scsijon
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
