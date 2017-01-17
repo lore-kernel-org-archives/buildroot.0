@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 17 Jan 2017 11:17:21 +0100
-Subject: [Buildroot] [PATCH 4/8] python-pathpy: new package
+Date: Tue, 17 Jan 2017 11:17:22 +0100
+Subject: [Buildroot] [PATCH 5/8] python-vcversioner: new package
 In-Reply-To: <20170117101725.19629-1-yegorslists@googlemail.com>
 References: <20170117101725.19629-1-yegorslists@googlemail.com>
-Message-ID: <20170117101725.19629-4-yegorslists@googlemail.com>
+Message-ID: <20170117101725.19629-5-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +12,44 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+This package is needed only at the build stage, so make it
+a host package.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                        |  1 +
- package/python-pathpy/Config.in          |  8 ++++++++
- package/python-pathpy/python-pathpy.hash |  3 +++
- package/python-pathpy/python-pathpy.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-pathpy/Config.in
- create mode 100644 package/python-pathpy/python-pathpy.hash
- create mode 100644 package/python-pathpy/python-pathpy.mk
+ package/python-vcversioner/python-vcversioner.hash |  3 +++
+ package/python-vcversioner/python-vcversioner.mk   | 13 +++++++++++++
+ 2 files changed, 16 insertions(+)
+ create mode 100644 package/python-vcversioner/python-vcversioner.hash
+ create mode 100644 package/python-vcversioner/python-vcversioner.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 0d2701215..0f148af64 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -731,6 +731,7 @@ menu "External python modules"
- 	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-paramiko/Config.in"
-+	source "package/python-pathpy/Config.in"
- 	source "package/python-pathtools/Config.in"
- 	source "package/python-pathvalidate/Config.in"
- 	source "package/python-pexpect/Config.in"
-diff --git a/package/python-pathpy/Config.in b/package/python-pathpy/Config.in
+diff --git a/package/python-vcversioner/python-vcversioner.hash b/package/python-vcversioner/python-vcversioner.hash
 new file mode 100644
-index 000000000..98c05126b
+index 000000000..58573a18b
 --- /dev/null
-+++ b/package/python-pathpy/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_PATHPY
-+	bool "python-pathpy"
-+	help
-+	  path.py implements a path objects as first-class
-+	  entities, allowing common operations on files to
-+	  be invoked on those path objects directly.
-+
-+	  https://github.com/jaraco/path.py
-diff --git a/package/python-pathpy/python-pathpy.hash b/package/python-pathpy/python-pathpy.hash
-new file mode 100644
-index 000000000..4824e2a3c
---- /dev/null
-+++ b/package/python-pathpy/python-pathpy.hash
++++ b/package/python-vcversioner/python-vcversioner.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/path.py/json, sha256 locally computed
-+md5	eb8469ad498d2e462bff8f3b2b5ea68d  path.py-10.0.tar.gz
-+sha256	ba984a2b536158a8841dd33150fce16bcf04210e83f92da674cad0a8a8f61e00  path.py-10.0.tar.gz
-diff --git a/package/python-pathpy/python-pathpy.mk b/package/python-pathpy/python-pathpy.mk
++# md5 from https://pypi.python.org/pypi/vcversioner/json, sha256 locally computed
++md5	aab6ef5e0cf8614a1b1140ed5b7f107d  vcversioner-2.16.0.0.tar.gz
++sha256	dae60c17a479781f44a4010701833f1829140b1eeccd258762a74974aa06e19b  vcversioner-2.16.0.0.tar.gz
+diff --git a/package/python-vcversioner/python-vcversioner.mk b/package/python-vcversioner/python-vcversioner.mk
 new file mode 100644
-index 000000000..577658602
+index 000000000..e7a62f864
 --- /dev/null
-+++ b/package/python-pathpy/python-pathpy.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-vcversioner/python-vcversioner.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-pathpy
++# python-vcversioner
 +#
 +################################################################################
 +
-+PYTHON_PATHPY_VERSION = 10.0
-+PYTHON_PATHPY_SOURCE = path.py-$(PYTHON_PATHPY_VERSION).tar.gz
-+PYTHON_PATHPY_SITE = https://pypi.python.org/packages/f3/4e/3bce93c0d9e20abc6ed3aa7866beb688e889828ca2666743df11d9a30050
-+PYTHON_PATHPY_SETUP_TYPE = setuptools
-+PYTHON_PATHPY_LICENSE = MIT
-+PYTHON_PATHPY_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_VCVERSIONER_VERSION = 2.16.0.0
++PYTHON_VCVERSIONER_SOURCE = vcversioner-$(PYTHON_VCVERSIONER_VERSION).tar.gz
++PYTHON_VCVERSIONER_SITE = https://pypi.python.org/packages/c5/cc/33162c0a7b28a4d8c83da07bc2b12cee58c120b4a9e8bba31c41c8d35a16
++PYTHON_VCVERSIONER_SETUP_TYPE = setuptools
++PYTHON_VCVERSIONER_LICENSE = ISC
 +
-+$(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.11.0
