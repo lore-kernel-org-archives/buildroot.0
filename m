@@ -1,90 +1,107 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 18 Jan 2017 11:46:42 +0000
-Subject: [Buildroot] [PATCH] cups: bump version to 2.2.2
-Message-ID: <20170118114642.12860-1-Vincent.Riera@imgtec.com>
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date: Wed, 18 Jan 2017 14:58:08 +0100
+Subject: [Buildroot] [PATCH] libgpiod: new package
+Message-ID: <1484747888-25092-1-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And tweak 0003-Sanitize-the-installation-process.patch for this new
-release.
+Add a package containing a C library and a set of command-line tools
+for controlling GPIOs from user space using the new character device
+interface on linux.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/cups/0003-Sanitize-the-installation-process.patch | 14 +++++++-------
- package/cups/cups.hash                                    |  2 +-
- package/cups/cups.mk                                      |  4 ++--
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/libgpiod/Config.in     | 20 ++++++++++++++++++++
+ package/libgpiod/libgpiod.hash |  2 ++
+ package/libgpiod/libgpiod.mk   | 15 +++++++++++++++
+ 5 files changed, 39 insertions(+)
+ create mode 100644 package/libgpiod/Config.in
+ create mode 100644 package/libgpiod/libgpiod.hash
+ create mode 100644 package/libgpiod/libgpiod.mk
 
-diff --git a/package/cups/0003-Sanitize-the-installation-process.patch b/package/cups/0003-Sanitize-the-installation-process.patch
-index 25bfa42..bf81f68 100644
---- a/package/cups/0003-Sanitize-the-installation-process.patch
-+++ b/package/cups/0003-Sanitize-the-installation-process.patch
-@@ -18,13 +18,16 @@ cross-compiling:
-    prevent overwriting those files/directories, which meant calling
-    "make install" twice was failing.
- 
-+[Vincent: tweak the patch for 2.2.2 release]
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 79dd097..7326c7a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -126,6 +126,7 @@ F:	package/orbit/
+ N:	Bartosz Golaszewski <bgolaszewski@baylibre.com>
+ F:	package/autoconf-archive/
+ F:	package/doxygen/
++F:	package/libgpiod/
+ F:	package/libserialport/
+ F:	package/libsigrok/
+ F:	package/libsigrokdecode/
+diff --git a/package/Config.in b/package/Config.in
+index 8c8c33e..2100bc7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1045,6 +1045,7 @@ menu "Hardware handling"
+ 	source "package/libfreefare/Config.in"
+ 	source "package/libftdi/Config.in"
+ 	source "package/libftdi1/Config.in"
++	source "package/libgpiod/Config.in"
+ 	source "package/libgudev/Config.in"
+ 	source "package/libhid/Config.in"
+ 	source "package/libiio/Config.in"
+diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
+new file mode 100644
+index 0000000..63a7cb6
+--- /dev/null
++++ b/package/libgpiod/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_LIBGPIOD
++	bool "libgpiod"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
++	help
++	  This is a C library that abstracts the GPIO character
++	  device operations on linux.
 +
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- ---
-  Makedefs.in        | 12 ++++++------
-  conf/Makefile      |  6 +++---
-  notifier/Makefile  |  2 +-
-- scheduler/Makefile | 17 ++++++++---------
-- 4 files changed, 18 insertions(+), 19 deletions(-)
-+ scheduler/Makefile | 15 +++++++--------
-+ 4 files changed, 17 insertions(+), 18 deletions(-)
- 
- diff --git a/Makedefs.in b/Makedefs.in
- index 3afef0a..3e4f1bd 100644
-@@ -84,18 +87,15 @@ index 3206dd0..c34a4d7 100644
-  
-  #
- diff --git a/scheduler/Makefile b/scheduler/Makefile
--index c7d244d..a96a528 100644
-+index 251f017..25f2f5f 100644
- --- a/scheduler/Makefile
- +++ b/scheduler/Makefile
--@@ -148,30 +148,29 @@ install-data:
-+@@ -146,28 +146,27 @@ install-data:
-  	echo Creating $(SERVERBIN)/driver...
-  	$(INSTALL_DIR) -m 755 $(SERVERBIN)/driver
-  	echo Creating $(SERVERROOT)...
- -	$(INSTALL_DIR) -m 755 -g $(CUPS_GROUP) $(SERVERROOT)
- +	$(INSTALL_DIR) -m 755 $(SERVERROOT)
-- 	echo Creating $(SERVERROOT)/interfaces...
---	$(INSTALL_DIR) -m 755 -g $(CUPS_GROUP) $(SERVERROOT)/interfaces
--+	$(INSTALL_DIR) -m 755 $(SERVERROOT)/interfaces
-  	echo Creating $(SERVERROOT)/ppd...
- -	$(INSTALL_DIR) -m 755 -g $(CUPS_GROUP) $(SERVERROOT)/ppd
- +	$(INSTALL_DIR) -m 755 $(SERVERROOT)/ppd
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index 2d103f2..08c8c3c 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,2 +1,2 @@
- # Locally calculated:
--sha256 4b14fd833180ac529ebebea766a09094c2568bf8426e219cb3a1715304ef728d  cups-2.1.4-source.tar.gz
-+sha256 f589bb7d5d1dc3aa0915d7cf2b808571ef2e1530cd1a6ebe76ae8f9f4994e4f6  cups-2.2.2-source.tar.gz
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 2f8a18e..0573776 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CUPS_VERSION = 2.1.4
-+CUPS_VERSION = 2.2.2
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
--CUPS_SITE = https://github.com/apple/cups/releases/download/release-$(CUPS_VERSION)
-+CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = GPLv2 LGPLv2
- CUPS_LICENSE_FILES = LICENSE.txt
- CUPS_INSTALL_STAGING = YES
++	  https://github.com/brgl/libgpiod
++
++if BR2_PACKAGE_LIBGPIOD
++
++config BR2_PACKAGE_LIBGPIOD_TOOLS
++	bool "install tools"
++	help
++	  Include a set of command-line tools for managing GPIOs.
++
++endif
++
++comment "libgpiod needs kernel headers >= 4.8"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+new file mode 100644
+index 0000000..7d3b092
+--- /dev/null
++++ b/package/libgpiod/libgpiod.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 0f9f5215d0100a8066f4e6b064892747720e556cbb83f6c05d6151d68ec2025b libgpiod-0.1.tar.gz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+new file mode 100644
+index 0000000..282581e
+--- /dev/null
++++ b/package/libgpiod/libgpiod.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libgpiod
++#
++################################################################################
++
++LIBGPIOD_VERSION = 0.1
++LIBGPIOD_SITE = https://github.com/brgl/libgpiod/archive/v$(LIBGPIOD_VERSION)
++LIBGPIOD_LICENSE = GPLv3+
++LIBGPIOD_LICENSE_FILES = COPYING
++LIBGPIOD_AUTORECONF = YES
++LIBGPIOD_AUTORECONF_OPTS = --install
++LIBGPIOD_CONF_OPTS += --enable-tools=$(if $(BR2_PACKAGE_LIBGPIOD_TOOLS),yes,no)
++
++$(eval $(autotools-package))
 -- 
-2.10.2
+2.9.3
