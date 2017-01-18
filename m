@@ -1,30 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jan 2017 13:20:04 +1100
-Subject: [Buildroot] [PATCH] perl: fix static build with gdbm + gettext
-In-Reply-To: <20170117150403.11677-1-francois.perrad@gadz.org>
-References: <20170117150403.11677-1-francois.perrad@gadz.org>
-Message-ID: <20170118132004.25b03576@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 18 Jan 2017 03:48:03 +0000
+Subject: [Buildroot] [Bug 9596] New: KODI: --enable-lirc needs "HAVE_LIRC"
+ compiler definition to use the lirc subsystem
+Message-ID: <bug-9596-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9596
 
-On Tue, 17 Jan 2017 16:04:03 +0100, Francois Perrad wrote:
-> see http://autobuild.buildroot.org/results/d1f/d1f133ca3693b6653eed4fc513effc0bbdcfd9c9/
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  .../0001-fix-static-build-with-gdbm-gettext.patch    | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 package/perl/0001-fix-static-build-with-gdbm-gettext.patch
+            Bug ID: 9596
+           Summary: KODI: --enable-lirc needs "HAVE_LIRC" compiler
+                    definition to use the lirc subsystem
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: lipkegu at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Applied to master, thanks.
+When compiling kodi, with option --enable-lirc, the Lirc subsystem doesnt get
+initialized when "-DHAVE_LIRC isnt set. normaly --enable-lirc should set it but
+it doesnt.
 
-Thomas
+Reproduce case:
+https://github.com/xbmc/xbmc/blob/8d4a5bba55638dfd0bdc5e7de34f3e5293f99933/xbmc/input/ButtonTranslator.cpp#L601
+
+I removed the "HAVE_LIRC" definition from the code and the result was clear:
+
+01:00:26.239 T:3016212480    INFO: Loading special://xbmc/system/Lircmap.xml
+01:00:26.263 T:3016212480    INFO: * Adding remote mapping for device 'mceusb'
+01:00:26.265 T:3016212480    INFO: * Adding remote mapping for device
+'XboxDVDDongle'
+01:00:26.265 T:3016212480    INFO: * Adding remote mapping for device
+'Microsoft_Xbox'
+01:00:26.266 T:3016212480    INFO: * Adding remote mapping for device
+'PinnacleSysPCTVRemote'
+01:00:26.266 T:3016212480    INFO: * Adding remote mapping for device 'anysee'
+01:00:26.267 T:3016212480    INFO: * Adding remote mapping for device
+'iMON-PAD'
+01:00:26.267 T:3016212480    INFO: * Adding remote mapping for device
+'Antec_Veris_RM200'
+01:00:26.268 T:3016212480    INFO: * Adding remote mapping for device
+'MCE_via_iMON'
+01:00:26.268 T:3016212480    INFO: * Adding remote mapping for device
+'TwinHanRemote'
+01:00:26.269 T:3016212480    INFO: * Adding remote mapping for device
+'linux-input-layer'
+01:00:26.270 T:3016212480    INFO: * Linking remote mapping for
+'linux-input-layer' to 'cx23885_remote'
+01:00:26.270 T:3016212480    INFO: * Adding remote mapping for device
+'mediacenter'
+01:00:26.271 T:3016212480    INFO: * Adding remote mapping for device
+'devinput'
+01:00:26.276 T:3016212480    INFO: Loading special://profile/Lircmap.xml
+01:00:26.282 T:3016212480    INFO: * Adding remote mapping for device 'mceusb'
+01:00:26.283 T:3016212480    INFO: * Adding remote mapping for device
+'devinput'
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
