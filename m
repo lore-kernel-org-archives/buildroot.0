@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jan 2017 21:37:10 +1100
-Subject: [Buildroot] [PATCH] package/libcap: fix build with gperf >= 3.1
-In-Reply-To: <20170117221723.10235-1-romain.naour@gmail.com>
-References: <20170117221723.10235-1-romain.naour@gmail.com>
-Message-ID: <20170118213710.371edd2b@free-electrons.com>
+Date: Wed, 18 Jan 2017 21:40:22 +1100
+Subject: [Buildroot] [PATCH 2/2] package/ltp-testsuite: update configure
+ flags
+In-Reply-To: <20170118101236.24594-2-petr.vorel@gmail.com>
+References: <20170118101236.24594-1-petr.vorel@gmail.com>
+ <20170118101236.24594-2-petr.vorel@gmail.com>
+Message-ID: <20170118214022.064bd5fe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +14,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 17 Jan 2017 23:17:23 +0100, Romain Naour wrote:
-> + libcap/Makefile | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/libcap/Makefile b/libcap/Makefile
-> +index d189777..40cbc30 100644
-> +--- a/libcap/Makefile
-> ++++ b/libcap/Makefile
-> +@@ -22,7 +22,7 @@ all: $(MINLIBNAME) $(STALIBNAME) libcap.pc
-> + 
-> + ifeq ($(BUILD_GPERF),yes)
-> + USE_GPERF_OUTPUT = $(GPERF_OUTPUT)
-> +-INCLUDE_GPERF_OUTPUT = -include $(GPERF_OUTPUT)
-> ++INCLUDE_GPERF_OUTPUT = -include string.h -include $(GPERF_OUTPUT)
+On Wed, 18 Jan 2017 11:12:36 +0100, Petr Vorel wrote:
+> compile also open possix
+> 
+> remove power management (compiled by default since commit
+> b74bbed51b0c0d44b70b136326a8a23cbc64db01)
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-This change wasn't described in the patch description.
+Is this directly related to the ltp-testsuite version bump ? If that's
+the case, then it should be in the same patch.
 
 Thomas
 -- 
