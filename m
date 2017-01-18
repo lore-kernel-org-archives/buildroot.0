@@ -1,40 +1,53 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Wed, 18 Jan 2017 09:33:46 +0100
-Subject: [Buildroot] [PATCH] configs: beaglebone: bump kernel version to
-	4.4.32
-Message-ID: <1484728426-6610-1-git-send-email-lothar.felten@gmail.com>
+From: scsijon <scsijon@lamiaworks.com.au>
+Date: Wed, 18 Jan 2017 20:40:17 +1100
+Subject: [Buildroot] make menuconfig problem in latest snapshot
+In-Reply-To: <20170118175332.60e7a690@free-electrons.com>
+References: <c7623806-1a06-8500-af10-e94601258f79@lamiaworks.com.au>
+ <20170118175332.60e7a690@free-electrons.com>
+Message-ID: <56f73092-ec12-e0a4-d633-bee57e834628@lamiaworks.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to Linux kernel version 4.4.32 from the TI SDK 03.02.00.05
+sorry folks, i'm just starting to play with buildroot. It was just that 
+there was a snapshot that I d/l and tried to run that found the problem 
+so i'm not up to the stage of an actual build (running make) yet. I'm 
+just working my way through the manual and docs.
 
-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
----
- configs/beaglebone_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+regards
+scsijon
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index eefa81c..6fe3a5e 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a8=y
- BR2_GLOBAL_PATCH_DIR="board/beaglebone/patches"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52c4aa7cdb93d61f8008f380135beaf7b8fa6593"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="adde2ca9f86797071f6e7b2b9e779fa5e4a8f3cd"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-evmsk"
--- 
-1.9.1
+On 01/18/2017 05:53 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Wed, 18 Jan 2017 12:55:49 +1100, scsijon wrote:
+>> Found this error in todays snapshot
+>> --------------------------
+>> # make menuconfig
+>> support/scripts/br2-external: line 111: syntax error near unexpected
+>> token `"${br2_name}"'
+>> Makefile:197:
+>> /initrd/mnt/dev_save/firefox_downloads/buildroot-11/buildroot-20140118-snap/output/.br-external.mk:
+>> No such file or directory
+>> make: Failed to remake makefile
+>> `/initrd/mnt/dev_save/firefox_downloads/buildroot-11/buildroot-20140118-snap/output/.br-external.mk'.
+>> support/scripts/br2-external: line 111: syntax error near unexpected
+>> token `"${br2_name}"'
+>> make: ***
+>> [/initrd/mnt/dev_save/firefox_downloads/buildroot-11/buildroot-20140118-snap/output/build/.br2-external.in]
+>> Error 2
+>> #
+>> ----------------------------
+>
+> Thanks for the report! Can you try reverting commit
+> 05576fca13b129da8c7186ee2307981135d3391f ? I believe it's the one that
+> introduced the problem.
+>
+> Yann, are you sure that the nested double quotes are OK?
+>
+> Thanks,
+>
+> Thomas
+>
