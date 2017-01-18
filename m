@@ -1,29 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jan 2017 11:33:32 +0100
-Subject: [Buildroot] make menuconfig problem in latest snapshot
-In-Reply-To: <56f73092-ec12-e0a4-d633-bee57e834628@lamiaworks.com.au>
- (scsijon@lamiaworks.com.au's message of "Wed, 18 Jan 2017 20:40:17
- +1100")
-References: <c7623806-1a06-8500-af10-e94601258f79@lamiaworks.com.au>
- <20170118175332.60e7a690@free-electrons.com>
- <56f73092-ec12-e0a4-d633-bee57e834628@lamiaworks.com.au>
-Message-ID: <87inpcu077.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Jan 2017 21:37:10 +1100
+Subject: [Buildroot] [PATCH] package/libcap: fix build with gperf >= 3.1
+In-Reply-To: <20170117221723.10235-1-romain.naour@gmail.com>
+References: <20170117221723.10235-1-romain.naour@gmail.com>
+Message-ID: <20170118213710.371edd2b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "scsijon" == scsijon  <scsijon@lamiaworks.com.au> writes:
+Hello,
 
- > sorry folks, i'm just starting to play with buildroot. It was just
- > that there was a snapshot that I d/l and tried to run that found the
- > problem so i'm not up to the stage of an actual build (running make)
- > yet. I'm just working my way through the manual and docs.
+On Tue, 17 Jan 2017 23:17:23 +0100, Romain Naour wrote:
+> + libcap/Makefile | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/libcap/Makefile b/libcap/Makefile
+> +index d189777..40cbc30 100644
+> +--- a/libcap/Makefile
+> ++++ b/libcap/Makefile
+> +@@ -22,7 +22,7 @@ all: $(MINLIBNAME) $(STALIBNAME) libcap.pc
+> + 
+> + ifeq ($(BUILD_GPERF),yes)
+> + USE_GPERF_OUTPUT = $(GPERF_OUTPUT)
+> +-INCLUDE_GPERF_OUTPUT = -include $(GPERF_OUTPUT)
+> ++INCLUDE_GPERF_OUTPUT = -include string.h -include $(GPERF_OUTPUT)
 
-Ok, then please use the latest release (2016.11.1):
+This change wasn't described in the patch description.
 
-https://buildroot.org/download.html
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
