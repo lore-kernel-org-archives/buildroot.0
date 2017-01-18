@@ -1,75 +1,66 @@
-From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-Date: Wed, 18 Jan 2017 13:03:06 -0600
-Subject: [Buildroot] [PATCH 1/1] pure-ftpd: Added pure-ftpd quotas
-	config option
-In-Reply-To: <1484765931-18410-1-git-send-email-bryce.ferguson@rockwellcollins.com>
-References: <1484765931-18410-1-git-send-email-bryce.ferguson@rockwellcollins.com>
-Message-ID: <CAKGmAFoF0=MdO6pbufOquGzDOi=qxu6gOuC2wzD2ph=c11Ykcg@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 18 Jan 2017 17:20:52 -0200 (BRST)
+Subject: [Buildroot] building a cross toolchain
+In-Reply-To: <1067596533.8690266.1484760223268@mail.yahoo.com>
+References: <1067596533.8690266.1484760223268.ref@mail.yahoo.com>
+ <1067596533.8690266.1484760223268@mail.yahoo.com>
+Message-ID: <1411007900.7634494.1484767252252.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 18, 2017 at 12:58 PM, Bryce Ferguson
-<bryce.ferguson@rockwellcollins.com> wrote:
-> Added the pure-ftp quotas option.  When selected, the --with-quotas
-> compiler option is passed which enables the quota feature
->
-> Note that this increases the size of the pure-ftpd executable by
-> about 20%.
+> From: "Tal Lubko" <tallubko@yahoo.com>
+> To: buildroot at busybox.net
+> Sent: Wednesday, January 18, 2017 3:23:43 PM
+> Subject: [Buildroot] building a cross toolchain
 
-Added the note about the executable size difference as per Baruch's
-comments (https://patchwork.ozlabs.org/patch/711541/) and marked
-original as superseded.
+> Hi
 
->
-> Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
-> ---
->  package/pure-ftpd/Config.in    | 7 +++++++
->  package/pure-ftpd/pure-ftpd.mk | 4 ++++
->  2 files changed, 11 insertions(+)
->
-> diff --git a/package/pure-ftpd/Config.in b/package/pure-ftpd/Config.in
-> index 85fdef3..df28c4c 100644
-> --- a/package/pure-ftpd/Config.in
-> +++ b/package/pure-ftpd/Config.in
-> @@ -20,4 +20,11 @@ config BR2_PACKAGE_PURE_FTPD_FTPWHO
->           client sessions.  Only the system administrator may run this.  Output
->           can be text (default), HTML, XML data and parser-optimized.
->
-> +config BR2_PACKAGE_PURE_FTPD_QUOTAS
-> +       bool "quotas"
-> +       help
-> +         Enable virtual quotas. With virtual quotas, restrictions can be placed
-> +         on the maximum number of files a user can store in his account.  In
-> +         addition, restrictions can also be placed on the total size.
-> +
->  endif
-> diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-> index 80e432a..95e7065 100644
-> --- a/package/pure-ftpd/pure-ftpd.mk
-> +++ b/package/pure-ftpd/pure-ftpd.mk
-> @@ -49,4 +49,8 @@ ifeq ($(BR2_PACKAGE_PURE_FTPD_FTPWHO),y)
->  PURE_FTPD_CONF_OPTS += --with-ftpwho
->  endif
->
-> +ifeq ($(BR2_PACKAGE_PURE_FTPD_QUOTAS),y)
-> +PURE_FTPD_CONF_OPTS += --with-quotas
-> +endif
-> +
->  $(eval $(autotools-package))
-> --
-> 1.9.1
->
+> I wonder what is the best way to build cross compiler.
 
--- 
+You can build a cross-compiler using either Buildroot or an external
+tool like Crosstool-NG. You can also get a pre-built toolchain from
+a third-party vendor. Please refer to the Buildroot documentaion for
+deeper explanations:
 
+    http://www.buildroot.org/downloads/manual/manual.html#_cross_compilation_toolchain
 
-Bryce Ferguson
-Software Engineer
-Airborne Information Solutions \ Secure Platforms
+> I was told that the cross compiler should be located under /opt and
+> that is > better that it is built into the same place where it will
+> be placed afterwards.
 
-400 Collins Rd NE Cedar Rapids, Iowa 52498
+That's not mandatory. Modern toolchains can be installed at arbitrary
+paths. Moreover Buildroot provides a toolchain wrapper. Again, just
+read the documentation.
 
-Bryce.Ferguson at rockwellcollins.com
+> So what I do is
+> 1) set the "Host dir" to "/opt/my_cross_compiler"
+
+Remember thar in Buildroot lingo ?host dir? is the path where host
+tools are installed at build time. If you have a pre-built toolchain
+then Buildroot will install a wrapper under ?host dir? to invoke it.
+
+> 2) build the compiler
+
+You can build the compiler using Buildroot or an external tool like
+crosstool-NG. In my company we use crosstool-NG to fine-tune the
+compiler and to generate the GCC test suite. YMMV.
+
+> 3) tar it and give it to other users and tell them to place it in
+> the same location
+
+We did this initially in our project but now we just put the toolchain
+in an HTTP server and let buildroot download and install it. This makes
+the developer lives easier and allows us to upgrade the toolchain just
+changing BR2_TOOLCHAIN_EXTERNAL_URL.
+
+> Is that the right thing to do?
+
+It will probably work but there is no fixed ?right? way. You will need
+to do some experimentation and find the best choice.
+
+Carlos Santos (Casantos) - DATACOM, P&D
+?Something must be done. This is something. Therefore we must do it.?
+(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
