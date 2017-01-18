@@ -1,107 +1,44 @@
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Wed, 18 Jan 2017 14:58:08 +0100
-Subject: [Buildroot] [PATCH] libgpiod: new package
-Message-ID: <1484747888-25092-1-git-send-email-bgolaszewski@baylibre.com>
+From: Alvaro G. M. <alvaro.gamez@hazent.com>
+Date: Wed, 18 Jan 2017 17:01:50 +0100
+Subject: [Buildroot] [PATCH] package/libcap: fix build with gperf >= 3.1
+In-Reply-To: <20170118112249.uyk3bhcdzlt6ggcu@collins.gmr.ssr.upm.es>
+References: <20170117221723.10235-1-romain.naour@gmail.com>
+ <20170118112249.uyk3bhcdzlt6ggcu@collins.gmr.ssr.upm.es>
+Message-ID: <20170118160150.t7e4xs7u3bscpjqd@collins.gmr.ssr.upm.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a package containing a C library and a set of command-line tools
-for controlling GPIOs from user space using the new character device
-interface on linux.
+On Wed, Jan 18, 2017 at 12:22:49PM +0100, Alvaro G. M. wrote:
+> On Tue, Jan 17, 2017 at 11:17:23PM +0100, Romain Naour wrote:
+> > I haven't checked how many packages are affected by this breakage...
+> 
+> rgrep host-gperf packages/ helps getting this useful list:
+> systemd webkitgtk libsvgtiny libcap x11r7/xcb-util eudev qt5 kodi
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/libgpiod/Config.in     | 20 ++++++++++++++++++++
- package/libgpiod/libgpiod.hash |  2 ++
- package/libgpiod/libgpiod.mk   | 15 +++++++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/libgpiod/Config.in
- create mode 100644 package/libgpiod/libgpiod.hash
- create mode 100644 package/libgpiod/libgpiod.mk
+I grepped badly, the real list is, after removing false positive xcb-util:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 79dd097..7326c7a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -126,6 +126,7 @@ F:	package/orbit/
- N:	Bartosz Golaszewski <bgolaszewski@baylibre.com>
- F:	package/autoconf-archive/
- F:	package/doxygen/
-+F:	package/libgpiod/
- F:	package/libserialport/
- F:	package/libsigrok/
- F:	package/libsigrokdecode/
-diff --git a/package/Config.in b/package/Config.in
-index 8c8c33e..2100bc7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1045,6 +1045,7 @@ menu "Hardware handling"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
- 	source "package/libftdi1/Config.in"
-+	source "package/libgpiod/Config.in"
- 	source "package/libgudev/Config.in"
- 	source "package/libhid/Config.in"
- 	source "package/libiio/Config.in"
-diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
-new file mode 100644
-index 0000000..63a7cb6
---- /dev/null
-+++ b/package/libgpiod/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_LIBGPIOD
-+	bool "libgpiod"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+	help
-+	  This is a C library that abstracts the GPIO character
-+	  device operations on linux.
-+
-+	  https://github.com/brgl/libgpiod
-+
-+if BR2_PACKAGE_LIBGPIOD
-+
-+config BR2_PACKAGE_LIBGPIOD_TOOLS
-+	bool "install tools"
-+	help
-+	  Include a set of command-line tools for managing GPIOs.
-+
-+endif
-+
-+comment "libgpiod needs kernel headers >= 4.8"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-new file mode 100644
-index 0000000..7d3b092
---- /dev/null
-+++ b/package/libgpiod/libgpiod.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 0f9f5215d0100a8066f4e6b064892747720e556cbb83f6c05d6151d68ec2025b libgpiod-0.1.tar.gz
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-new file mode 100644
-index 0000000..282581e
---- /dev/null
-+++ b/package/libgpiod/libgpiod.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libgpiod
-+#
-+################################################################################
-+
-+LIBGPIOD_VERSION = 0.1
-+LIBGPIOD_SITE = https://github.com/brgl/libgpiod/archive/v$(LIBGPIOD_VERSION)
-+LIBGPIOD_LICENSE = GPLv3+
-+LIBGPIOD_LICENSE_FILES = COPYING
-+LIBGPIOD_AUTORECONF = YES
-+LIBGPIOD_AUTORECONF_OPTS = --install
-+LIBGPIOD_CONF_OPTS += --enable-tools=$(if $(BR2_PACKAGE_LIBGPIOD_TOOLS),yes,no)
-+
-+$(eval $(autotools-package))
+ systemd webkitgtk libsvgtiny libcap eudev qt5webkit kodi
+
+Tested and needs patch: libcap, libsvgtiny, eudev, systemd
+To be tested: webkitgtk, qt5webkit, kodi
+
+* systemd requires a patch, too, changing basically the same thing as those
+  before. This is longer because it uses gperf several times, but I've got
+  it ready if needed. I think I'll be sending only a patch or patch series
+  with all needed changes.
+
+I don't know how to test the remaining bits: webkitgtk, qt5webkit, kodi
+
+They all require libgtk3, but I can't select it:
+*** libgtk3 needs an OpenGL or an OpenGL-EGL/wayland backend ***
+
+What other things do I need to enable libgtk3?
+
+Thanks!
+
+
 -- 
-2.9.3
+Alvaro G. M.
