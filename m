@@ -1,31 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 18 Jan 2017 03:59:16 +0000
-Subject: [Buildroot] [Bug 9596] KODI: --enable-lirc needs "HAVE_LIRC"
- compiler definition to use the lirc subsystem
-In-Reply-To: <bug-9596-163@https.bugs.busybox.net/>
-References: <bug-9596-163@https.bugs.busybox.net/>
-Message-ID: <bug-9596-163-yYNKmwddDt@https.bugs.busybox.net/>
+From: scsijon <scsijon@lamiaworks.com.au>
+Date: Wed, 18 Jan 2017 12:55:49 +1100
+Subject: [Buildroot] make menuconfig problem in latest snapshot
+Message-ID: <c7623806-1a06-8500-af10-e94601258f79@lamiaworks.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9596
+Found this error in todays snapshot
+--------------------------
+# make menuconfig
+support/scripts/br2-external: line 111: syntax error near unexpected 
+token `"${br2_name}"'
+Makefile:197: 
+/initrd/mnt/dev_save/firefox_downloads/buildroot-11/buildroot-20140118-snap/output/.br-external.mk: 
+No such file or directory
+make: Failed to remake makefile 
+`/initrd/mnt/dev_save/firefox_downloads/buildroot-11/buildroot-20140118-snap/output/.br-external.mk'.
+support/scripts/br2-external: line 111: syntax error near unexpected 
+token `"${br2_name}"'
+make: *** 
+[/initrd/mnt/dev_save/firefox_downloads/buildroot-11/buildroot-20140118-snap/output/build/.br2-external.in] 
+Error 2
+#
+----------------------------
 
---- Comment #1 from lipkegu at gmail.com ---
-Solution:
-
-ifeq ($(BR2_PACKAGE_KODI_LIRC),y)
-KODI_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY)
---cflags --libs egl` -DHAVE_LIRC"
-KODI_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags
---libs egl` -DHAVE_LIRC"
-KODI_CONF_OPTS += --enable-lirc
-else
-KODI_CONF_OPTS += --disable-lirc
-endif
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+regards
+scsijon
