@@ -1,42 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Jan 2017 16:28:19 +1100
-Subject: [Buildroot] [git commit] qt5base: use libinput if selected
-Message-ID: <20170119052947.288C4817FF@busybox.osuosl.org>
+Date: Thu, 19 Jan 2017 16:30:29 +1100
+Subject: [Buildroot] [PATCH] qt5base: use libinput if selected
+In-Reply-To: <e9be1e34-cd1d-9a14-a99f-9c9829522b5f@grandegger.com>
+References: <e9be1e34-cd1d-9a14-a99f-9c9829522b5f@grandegger.com>
+Message-ID: <20170119163029.2716e590@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d153dba65b92a77f3b5e6178d02528c1c330df6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-[Thomas:
- - move condition to a different place in the .mk file, with other
-   similar conditions.
- - add an 'else' clause to pass -no-libinput in order to explicitly
-   disable libinput support when the libinput package is not available.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/qt5base/qt5base.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Wed, 18 Jan 2017 17:19:28 +0100, Wolfgang Grandegger wrote:
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  package/qt5/qt5base/qt5base.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 23dba2a..45ba4e6 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -161,6 +161,13 @@ else
- QT5BASE_CONFIGURE_OPTS += -no-gstreamer
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBINPUT),y)
-+QT5BASE_CONFIGURE_OPTS += -libinput
-+QT5BASE_DEPENDENCIES += libinput
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-libinput
-+endif
-+
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XCB)        += Qt5XcbQpa
+Thanks! I've applied to master, after doing the following changes:
+
+    [Thomas:
+     - move condition to a different place in the .mk file, with other
+       similar conditions.
+     - add an 'else' clause to pass -no-libinput in order to explicitly
+       disable libinput support when the libinput package is not available.]
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
