@@ -1,24 +1,17 @@
 From: Vassil Kolarov <vas@vas.io>
-Date: Thu, 19 Jan 2017 15:06:20 +0000
-Subject: [Buildroot] [PATCH 0/1] New package - pigpio
-Message-ID: <20170119150621.10390-1-vas@vas.io>
+Date: Thu, 19 Jan 2017 15:06:21 +0000
+Subject: [Buildroot] [PATCH 1/1] New package - pigpio
+In-Reply-To: <20170119150621.10390-1-vas@vas.io>
+References: <20170119150621.10390-1-vas@vas.io>
+Message-ID: <20170119150621.10390-2-vas@vas.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-
-I see a lot of people are looking to add pigpio when building RPi firmware, but no official buildroot package yet, so here is my proposal.
-I splitted the python module into a separate optional package as it may not be needed in some (many) cases.
-
-Regards,
-Vasco
-
-Vassil Kolarov (1):
-  added new package pigpio
-
+Signed-off-by: Vassil Kolarov <vas@vas.io>
+---
  package/Config.in                      |  2 ++
  package/pigpio/0001-Makefile.patch     | 36 ++++++++++++++++++++++++++++++++++
  package/pigpio/Config.in               |  6 ++++++
@@ -32,5 +25,135 @@ Vassil Kolarov (1):
  create mode 100644 package/python-pigpio/Config.in
  create mode 100644 package/python-pigpio/python-pigpio.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 8c8c33e..c6ec24e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1075,6 +1075,8 @@ menu "Hardware handling"
+ 	source "package/neardal/Config.in"
+ 	source "package/owfs/Config.in"
+ 	source "package/pcsc-lite/Config.in"
++	source "package/pigpio/Config.in"
++	source "package/python-pigpio/Config.in"
+ 	source "package/tslib/Config.in"
+ 	source "package/urg/Config.in"
+ 	source "package/wiringpi/Config.in"
+diff --git a/package/pigpio/0001-Makefile.patch b/package/pigpio/0001-Makefile.patch
+new file mode 100644
+index 0000000..e4848de
+--- /dev/null
++++ b/package/pigpio/0001-Makefile.patch
+@@ -0,0 +1,36 @@
++diff --git a/Makefile b/Makefile
++index 2341cf9..af0632a 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -90,13 +90,13 @@ install:	$(ALL)
++ 	install -m 0755 pig2vcd           $(DESTDIR)$(bindir)
++ 	install -m 0755 pigpiod           $(DESTDIR)$(bindir)
++ 	install -m 0755 pigs              $(DESTDIR)$(bindir)
++-	if which python2; then python2 setup.py install; fi
++-	if which python3; then python3 setup.py install; fi
+++	#if which python2; then python2 setup.py install --home=$(DESTDIR); fi
+++	#if which python3; then python3 setup.py install --home=$(DESTDIR); fi
++ 	install -m 0755 -d                $(DESTDIR)$(mandir)/man1
++ 	install -m 0644 *.1               $(DESTDIR)$(mandir)/man1
++ 	install -m 0755 -d                $(DESTDIR)$(mandir)/man3
++ 	install -m 0644 *.3               $(DESTDIR)$(mandir)/man3
++-	ldconfig
+++	#ldconfig
++ 
++ uninstall:
++ 	rm -f $(DESTDIR)$(includedir)/pigpio.h
++@@ -108,11 +108,11 @@ uninstall:
++ 	rm -f $(DESTDIR)$(bindir)/pig2vcd
++ 	rm -f $(DESTDIR)$(bindir)/pigpiod
++ 	rm -f $(DESTDIR)$(bindir)/pigs
++-	if which python2; then python2 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
++-	if which python3; then python3 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
+++	#if which python2; then python2 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
+++	#if which python3; then python3 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
++ 	rm -f $(DESTDIR)$(mandir)/man1/pig*.1
++ 	rm -f $(DESTDIR)$(mandir)/man3/pig*.3
++-	ldconfig
+++	#ldconfig
++ 
++ $(LIB1):	$(OBJ1)
++ 	$(SHLIB) -o $(LIB1) $(OBJ1)
+diff --git a/package/pigpio/Config.in b/package/pigpio/Config.in
+new file mode 100644
+index 0000000..3eeb0a7
+--- /dev/null
++++ b/package/pigpio/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PIGPIO
++	bool "pigpio"
++	help
++	  PIGPIO daemon.
++
++	  https://github.com/joan2937/pigpio
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+new file mode 100644
+index 0000000..6fe261b
+--- /dev/null
++++ b/package/pigpio/pigpio.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# pigpio
++#
++################################################################################
++
++PIGPIO_VERSION = 4862a16c9f76f9b2096055c98ef4fbc480dc1878
++PIGPIO_SITE = $(call github,joan2937,pigpio,$(PIGPIO_VERSION))
++PIGPIO_LICENSE = Unlicense
++PIGPIO_LICENSE_FILES = UNLICENCE
++
++define PIGPIO_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) VC_DIR=$(STAGING_DIR)/usr -C $(@D) -j4
++endef
++
++define PIGPIO_INSTALL_TARGET_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(@D) install
++endef
++
++$(eval $(generic-package))
+diff --git a/package/python-pigpio/Config.in b/package/python-pigpio/Config.in
+new file mode 100644
+index 0000000..c60f47d
+--- /dev/null
++++ b/package/python-pigpio/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_PIGPIO
++	bool "python-pigpio"
++	depends on BR2_PACKAGE_PIGPIO
++        select BR2_PACKAGE_LIBFFI
++        select BR2_PACKAGE_PYTHON
++        select BR2_PACKAGE_PYTHON_SSL
++        select BR2_PACKAGE_PYTHON_HASHLIB
++
++	help
++	  Python module for communicating with PIGPIO daemon.
++
++	  https://github.com/joan2937/pigpio
+diff --git a/package/python-pigpio/python-pigpio.mk b/package/python-pigpio/python-pigpio.mk
+new file mode 100644
+index 0000000..06f5aa1
+--- /dev/null
++++ b/package/python-pigpio/python-pigpio.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-pigpio
++#
++################################################################################
++
++PYTHON_PIGPIO_VERSION = 4862a16c9f76f9b2096055c98ef4fbc480dc1878
++PYTHON_PIGPIO_SITE = $(call github,joan2937,pigpio,$(PIGPIO_VERSION))
++PYTHON_PIGPIO_LICENSE = unlicense.org
++PYTHON_PIGPIO_LICENSE_FILES = UNLICENCE
++PYTHON_PIGPIO_SETUP_TYPE = distutils
++
++$(eval $(python-package))
 -- 
 2.9.3
