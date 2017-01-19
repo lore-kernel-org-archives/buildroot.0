@@ -1,184 +1,122 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 19 Jan 2017 16:08:39 +0100
-Subject: [Buildroot] [PATCH 1/1] added new package pigpio
-In-Reply-To: <20170119144844.9128-2-vas@vas.io>
-References: <20170119144844.9128-1-vas@vas.io>
- <20170119144844.9128-2-vas@vas.io>
-Message-ID: <CAGm1_kv3Y_Ku-10v+NCaJvnBFpFs9PK7fiDHcEMmjzKLfNS1kw@mail.gmail.com>
+From: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
+Date: Thu, 19 Jan 2017 10:32:12 -0500
+Subject: [Buildroot] [PATCH 3/4] board/altera: update patch to support new
+	official SoCkit
+In-Reply-To: <1484839933-17637-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
+References: <1484839933-17637-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
+Message-ID: <1484839933-17637-4-git-send-email-lucas.bajolet@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vassil,
+The old patch was unnecessary now that there is a proper SoCkit
+configuration file in the Altera repository.
 
-On Thu, Jan 19, 2017 at 3:48 PM, Vassil Kolarov <vas@vas.io> wrote:
-> Signed-off-by: Vassil Kolarov <vas@vas.io>
-> ---
->  package/Config.in                      |  2 ++
->  package/pigpio/0001-Makefile.patch     | 36 ++++++++++++++++++++++++++++++++++
->  package/pigpio/Config.in               |  6 ++++++
->  package/pigpio/pigpio.mk               | 20 +++++++++++++++++++
->  package/python-pigpio/Config.in        | 12 ++++++++++++
->  package/python-pigpio/python-pigpio.mk | 13 ++++++++++++
->  6 files changed, 89 insertions(+)
->  create mode 100644 package/pigpio/0001-Makefile.patch
->  create mode 100644 package/pigpio/Config.in
->  create mode 100644 package/pigpio/pigpio.mk
->  create mode 100644 package/python-pigpio/Config.in
->  create mode 100644 package/python-pigpio/python-pigpio.mk
+However, on the test board, unless partition 0:1 was set as
+the SPL/U-Boot partition, the device would not boot.
 
-You should either make two patches: one for pigpio and one for
-python-pigpio or try to integrate python installation into pigpio
-recipe.
+The generated configuration by u-boot expected 0:1 to contain the
+dtb and zImage files to boot linux, hence this patch to change the
+behaviour and have 0:2 contain these informations.
 
-> diff --git a/package/Config.in b/package/Config.in
-> index 8c8c33e..c6ec24e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1075,6 +1075,8 @@ menu "Hardware handling"
->         source "package/neardal/Config.in"
->         source "package/owfs/Config.in"
->         source "package/pcsc-lite/Config.in"
-> +       source "package/pigpio/Config.in"
-> +       source "package/python-pigpio/Config.in"
->         source "package/tslib/Config.in"
->         source "package/urg/Config.in"
->         source "package/wiringpi/Config.in"
-> diff --git a/package/pigpio/0001-Makefile.patch b/package/pigpio/0001-Makefile.patch
-> new file mode 100644
-> index 0000000..e4848de
-> --- /dev/null
-> +++ b/package/pigpio/0001-Makefile.patch
-> @@ -0,0 +1,36 @@
-> +diff --git a/Makefile b/Makefile
-> +index 2341cf9..af0632a 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -90,13 +90,13 @@ install:   $(ALL)
-> +       install -m 0755 pig2vcd           $(DESTDIR)$(bindir)
-> +       install -m 0755 pigpiod           $(DESTDIR)$(bindir)
-> +       install -m 0755 pigs              $(DESTDIR)$(bindir)
-> +-      if which python2; then python2 setup.py install; fi
-> +-      if which python3; then python3 setup.py install; fi
-> ++      #if which python2; then python2 setup.py install --home=$(DESTDIR); fi
-> ++      #if which python3; then python3 setup.py install --home=$(DESTDIR); fi
-> +       install -m 0755 -d                $(DESTDIR)$(mandir)/man1
-> +       install -m 0644 *.1               $(DESTDIR)$(mandir)/man1
-> +       install -m 0755 -d                $(DESTDIR)$(mandir)/man3
-> +       install -m 0644 *.3               $(DESTDIR)$(mandir)/man3
-> +-      ldconfig
-> ++      #ldconfig
-> +
-> + uninstall:
-> +       rm -f $(DESTDIR)$(includedir)/pigpio.h
-> +@@ -108,11 +108,11 @@ uninstall:
-> +       rm -f $(DESTDIR)$(bindir)/pig2vcd
-> +       rm -f $(DESTDIR)$(bindir)/pigpiod
-> +       rm -f $(DESTDIR)$(bindir)/pigs
-> +-      if which python2; then python2 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
-> +-      if which python3; then python3 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
-> ++      #if which python2; then python2 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
-> ++      #if which python3; then python3 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
-> +       rm -f $(DESTDIR)$(mandir)/man1/pig*.1
-> +       rm -f $(DESTDIR)$(mandir)/man3/pig*.3
-> +-      ldconfig
-> ++      #ldconfig
-> +
-> + $(LIB1):      $(OBJ1)
-> +       $(SHLIB) -o $(LIB1) $(OBJ1)
-> diff --git a/package/pigpio/Config.in b/package/pigpio/Config.in
-> new file mode 100644
-> index 0000000..3eeb0a7
-> --- /dev/null
-> +++ b/package/pigpio/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PIGPIO
-> +       bool "pigpio"
-> +       help
-> +         PIGPIO daemon.
-> +
-> +         https://github.com/joan2937/pigpio
-> diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-> new file mode 100644
-> index 0000000..6fe261b
-> --- /dev/null
-> +++ b/package/pigpio/pigpio.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# pigpio
-> +#
-> +################################################################################
-> +
-> +PIGPIO_VERSION = 4862a16c9f76f9b2096055c98ef4fbc480dc1878
-> +PIGPIO_SITE = $(call github,joan2937,pigpio,$(PIGPIO_VERSION))
-> +PIGPIO_LICENSE = Unlicense
-> +PIGPIO_LICENSE_FILES = UNLICENCE
-> +
-> +define PIGPIO_BUILD_CMDS
-> +       $(MAKE) $(TARGET_CONFIGURE_OPTS) VC_DIR=$(STAGING_DIR)/usr -C $(@D) -j4
+The patch also cleans the partition table a bit, as it can now
+be properly ordered.
 
-You don't need -j4 because Buildroot takes care of this itself
+Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
+---
+ board/altera/genimage.cfg       | 31 +++++++++++++++++++++++++++++++
+ board/altera/post-image.sh      | 29 ++++++++++++++++++++++++++++-
+ configs/altera_sockit_defconfig |  1 +
+ 3 files changed, 60 insertions(+), 1 deletion(-)
+ create mode 100644 board/altera/genimage.cfg
 
-> +endef
-> +
-> +define PIGPIO_INSTALL_TARGET_CMDS
-> +       $(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) -C $(@D) install
-> +endef
-> +
-> +$(eval $(generic-package))
-> diff --git a/package/python-pigpio/Config.in b/package/python-pigpio/Config.in
-> new file mode 100644
-> index 0000000..c60f47d
-> --- /dev/null
-> +++ b/package/python-pigpio/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_PYTHON_PIGPIO
-> +       bool "python-pigpio"
-> +       depends on BR2_PACKAGE_PIGPIO
-
-s/depends/select
-
-> +        select BR2_PACKAGE_LIBFFI
-
-libffi will be installed with python automatically
-
-> +        select BR2_PACKAGE_PYTHON
-
-according to setup.py this package should be both Py2 and Py3 compatible
-
-> +        select BR2_PACKAGE_PYTHON_SSL
-> +        select BR2_PACKAGE_PYTHON_HASHLIB
-
-Where will this functionality be used in code?
-
-Yegor
-
-> +       help
-> +         Python module for communicating with PIGPIO daemon.
-> +
-> +         https://github.com/joan2937/pigpio
-> diff --git a/package/python-pigpio/python-pigpio.mk b/package/python-pigpio/python-pigpio.mk
-> new file mode 100644
-> index 0000000..06f5aa1
-> --- /dev/null
-> +++ b/package/python-pigpio/python-pigpio.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# python-pigpio
-> +#
-> +################################################################################
-> +
-> +PYTHON_PIGPIO_VERSION = 4862a16c9f76f9b2096055c98ef4fbc480dc1878
-> +PYTHON_PIGPIO_SITE = $(call github,joan2937,pigpio,$(PIGPIO_VERSION))
-> +PYTHON_PIGPIO_LICENSE = unlicense.org
-> +PYTHON_PIGPIO_LICENSE_FILES = UNLICENCE
-> +PYTHON_PIGPIO_SETUP_TYPE = distutils
-> +
-> +$(eval $(python-package))
-> --
-> 2.9.3
->
+diff --git a/board/altera/genimage.cfg b/board/altera/genimage.cfg
+new file mode 100644
+index 0000000..3107939
+--- /dev/null
++++ b/board/altera/genimage.cfg
+@@ -0,0 +1,31 @@
++image rootfs-img.vfat {
++	vfat {
++		file "socfpga.dtb" {image = "socfpga_cyclone5_sockit.dtb"}
++		file "zImage" {image = "zImage"}
++	}
++
++	size = 10M
++}
++
++image sockit_image.img {
++	hdimage {
++	}
++
++	partition uboot {
++		partition-type = 0xa2
++		image = "uboot-part.img"
++		offset = 0
++	}
++
++	partition rootfs {
++		partition-type = 0xb
++		image = "rootfs-img.vfat"
++		offset = 1M
++	}
++
++	partition linux {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		offset = 12M
++	}
++}
+diff --git a/board/altera/post-image.sh b/board/altera/post-image.sh
+index 03e7819..a9aefc9 100755
+--- a/board/altera/post-image.sh
++++ b/board/altera/post-image.sh
+@@ -5,4 +5,31 @@
+ 
+ # create a DTB file copy with the name expected by the u-boot config
+ # Name of the DTB is passed as the second argument to the script.
+-cp -af $BINARIES_DIR/${2}.dtb  $BINARIES_DIR/socfpga.dtb
++set -e
++
++BOARD_DIR=$(dirname $0)
++
++# Create SPL + bootloader image
++fallocate -l 1M $BINARIES_DIR/uboot-part.img
++dd if=$BINARIES_DIR/u-boot-spl.bin of=$BINARIES_DIR/uboot-part.img bs=64k seek=0
++dd if=$BINARIES_DIR/u-boot-spl.bin.crc of=$BINARIES_DIR/uboot-part.img bs=64k seek=1
++dd if=$BINARIES_DIR/u-boot.img of=$BINARIES_DIR/uboot-part.img bs=64k seek=4
++
++#########################################
++# Final image generation (using genimage)
++#########################################
++# Prepare data for image
++T=`mktemp -d`
++echo $T
++mkdir -p $T/root
++mkdir -p $T/tmp
++
++echo "* Generating sd-card image..."
++genimage \
++        --config $BOARD_DIR/genimage.cfg \
++        --rootpath $T/root \
++        --tmppath $T/tmp \
++        --inputpath $BINARIES_DIR \
++        --outputpath $BINARIES_DIR \
++
++rm -rf $T
+diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+index 1c9a499..ee1bd95 100644
+--- a/configs/altera_sockit_defconfig
++++ b/configs/altera_sockit_defconfig
+@@ -11,6 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
+ 
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
++BR2_PACKAGE_HOST_GENIMAGE=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-- 
+2.7.4
