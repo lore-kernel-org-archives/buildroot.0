@@ -1,34 +1,48 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 Jan 2017 10:04:26 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
-Message-ID: <20170119130426.640-1-gustavo@zacarias.com.ar>
+Date: Thu, 19 Jan 2017 10:44:51 -0300
+Subject: [Buildroot] [PATCH] gd: security bump to version 2.2.4
+Message-ID: <20170119134451.8799-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+CVE-2016-9317 - gdImageCreate() doesn't check for oversized images and
+as such is prone to DoS vulnerabilities.
+CVE-2016-6912 - double-free in gdImageWebPtr()
+(without CVE):
+Potential unsigned underflow in gd_interpolation.c
+DOS vulnerability in gdImageCreateFromGd2Ctx()
+Signed Integer Overflow gd_io.c
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gd/gd.hash | 2 +-
+ package/gd/gd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9cb40e5..b4b3698 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -218,10 +218,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.69"	if BR2_KERNEL_HEADERS_3_12
--	default "3.18.46"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.47"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.37"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.43"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
- 	default "4.9.4"		if BR2_KERNEL_HEADERS_4_9
+diff --git a/package/gd/gd.hash b/package/gd/gd.hash
+index eb3da42..a1991b1 100644
+--- a/package/gd/gd.hash
++++ b/package/gd/gd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	746b6cbd6769a22ff3ba6f5756f3512a769bd4cdf4695dff17f4867f25fa7d3c	libgd-2.2.3.tar.xz
++sha256	137f13a7eb93ce72e32ccd7cebdab6874f8cf7ddf31d3a455a68e016ecd9e4e6	libgd-2.2.4.tar.xz
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 0777bdb..63d16eb 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GD_VERSION = 2.2.3
++GD_VERSION = 2.2.4
+ GD_SOURCE = libgd-$(GD_VERSION).tar.xz
+ GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
+ GD_INSTALL_STAGING = YES
 -- 
 2.10.2
