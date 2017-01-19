@@ -1,147 +1,79 @@
-From: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
-Date: Thu, 19 Jan 2017 10:32:13 -0500
-Subject: [Buildroot] [PATCH 4/4] board/altera: update README for new scripts
-	and fixed some typos
-In-Reply-To: <1484839933-17637-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Date: Thu, 19 Jan 2017 11:11:27 -0500
+Subject: [Buildroot] [PATCH 1/4] configs/altera_sockit: bump kernel to
+ 4.7 and u-boot to v2016.11-rc3
+In-Reply-To: <1484839933-17637-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
 References: <1484839933-17637-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
-Message-ID: <1484839933-17637-5-git-send-email-lucas.bajolet@savoirfairelinux.com>
+ <1484839933-17637-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
+Message-ID: <bf255b07-db38-9697-d3a4-9e9c18eb62a8@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The old README has a few typos which needed fixing.
-Also with the newer versions of U-Boot and the patch applied to
-the configuration, the partition table information and related
-commands need to be updated.
 
-Since the post-install script now supports Genimage,
-a new paragraph explaining how it works has been added.
 
-Also, removed link to mkpimage, since it is also natively
-supported by Buildroot as an option.
+On 01/19/2017 10:32 AM, Lucas Bajolet wrote:
+> Altera SoCkit could not build anymore on recent versions of
+> Buildroot due to a GCC 5+ update.
+> 
+> This patch solves the issue by bumping the Kernel version to 4.7,
+> making it compatible with GCC 5+.
+> 
+> The bootloader is also updated to a newer version since the board
+> is now officially supported by Altera in their U-Boot repository.
+> 
+> Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
+> ---
+>  configs/altera_sockit_defconfig | 19 ++++++++-----------
+>  1 file changed, 8 insertions(+), 11 deletions(-)
+> 
+> diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+> index 0addbde..1c9a499 100644
+> --- a/configs/altera_sockit_defconfig
+> +++ b/configs/altera_sockit_defconfig
+> @@ -6,32 +6,29 @@ BR2_ARM_ENABLE_NEON=y
+>  BR2_ARM_FPU_NEON=y
+>  BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  
+> -# Linux headers same as kernel, a 3.13 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
+> +# Linux headers same as kernel, a 4.7 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
+>  
+> -BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600=y
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/post-image.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
+>  
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.rocketboards.org/linux-socfpga.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/altera-opensource/linux-socfpga.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-4.7_16.10.02_pr"
+>  BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
+> -BR2_LINUX_KERNEL_UIMAGE=y
+> -BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_sockit"
+>  
+>  BR2_TARGET_ROOTFS_EXT2=y
+> -BR2_TARGET_ROOTFS_EXT2_3=y
+>  
+>  BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
+> +BR2_TARGET_UBOOT_BOARDNAME="socfpga_sockit"
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
+>  BR2_TARGET_UBOOT_PATCH="board/altera/sockit"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2016.11-rc3"
+>  BR2_TARGET_UBOOT_FORMAT_IMG=y
+>  BR2_TARGET_UBOOT_SPL=y
+>  BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
+> +BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC=y
+> 
 
-Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
----
- board/altera/readme.txt | 64 +++++++++++++++++++++++++------------------------
- 1 file changed, 33 insertions(+), 31 deletions(-)
-
-diff --git a/board/altera/readme.txt b/board/altera/readme.txt
-index 1894a79..a19ba21 100644
---- a/board/altera/readme.txt
-+++ b/board/altera/readme.txt
-@@ -69,27 +69,13 @@ After building, you should obtain this tree:
- 
-     output/images/
-     ??? rootfs.ext2
--    ??? rootfs.ext3 -> rootfs.ext2
-     ??? rootfs.tar
-     ??? socfpga_cyclone5_sockit.dtb or socfpga_cyclone5_socdk.dtb
--    ??? socfpga.dtb
-+    ??? u-boot.bin
-     ??? u-boot.img
-     ??? u-boot-spl.bin
--    ??? uImage
--
--
--Signing the Preloader
-----------------------
--
--*** BEWARE ****
--The u-boot-spl.bin must be signed using the Altera's tool "mkpimage".
--This tool comes as a part of the Altera development environnment (SoC EDS).
--A fork of this tool have been done by Maxime Hadjinlian and can be found here:
--https://github.com/maximeh/mkpimage
--
--Remember that without signing the u-boot-spl.bin, the board will not boot !!!
--
--  $ mkpimage u-boot-spl.bin -o u-boot-spl-signed.bin
-+    ??? u-boot-spl.bin.crc
-+    ??? zImage
- 
- Prepare your SDcard
- ===================
-@@ -111,22 +97,26 @@ let's assume it is /dev/mmcblk0:
- Delete all previous partitions with 'd' then create the new partition table,
- using these options, pressing enter after each one:
- 
--  * n p 1 9000000 +20480K t 1 b
--  * n p 2 4096 +4496384K t 83
--  * n p 3 2048 +1024K t 3 a2
-+  * n p 1 1 4095
-+  * n p 2 4096 +22000
-+  * n p 3  <Enter> -- This will take the remaining space from the SD card
-+
-+Then, still in fdisk, change the type of the partitions according to this
-+  * t 1 a2
-+  * t 2 b
- 
- Using the 'p' option, the SD card's partition must look like this:
- 
--Device         Boot     Start       End  Blocks  Id System
--/dev/mmcblk0p1        9000000   9041919   20960   b W95 FAT32
--/dev/mmcblk0p2           4096   8996863 4496384  83 Linux
--/dev/mmcblk0p3           2048      4095    1024  a2 Unknown
-+Device         Boot     Start     End   Blocks  Id  System
-+/dev/mmcblk0p1           2048    4095     2048  a2  Unknown
-+/dev/mmcblk0p2           4096   26096    22001   b  W95 FAT32
-+/dev/mmcblk0p3          26624 3862527  3835904  83  Linux
- 
- Then write the partition table using 'w' and exit.
- 
- Make partition one a DOS partition:
- 
--  $ sudo mkdosfs /dev/mmcblk0p1
-+  $ sudo mkdosfs /dev/mmcblk0p2
- 
- Install the binaries to the SDcard
- ----------------------------------
-@@ -139,27 +129,39 @@ The partition with type a2 is the partition scan by the first bootloader stage
- in the SoCkit ROM to find the next bootloader stage so we must write the signed
- preloader and the u-boot binaries in that partition:
- 
--  $ sudo dd if=u-boot-spl-signed.bin of=/dev/mmcblk0p3 bs=64k seek=0
--  $ sudo dd if=u-boot.img of=/dev/mmcblk0p3 bs=64k seek=4
-+  $ sudo dd if=u-boot-spl.bin of=/dev/mmcblk0p1 bs=64k seek=0
-+  $ sudo dd if=u-boot-spl.bin.crc of=/dev/mmcblk0p1 bs=64k seek=1
-+  $ sudo dd if=u-boot.img of=/dev/mmcblk0p1 bs=64k seek=4
- 
- Copy the Linux kernel and its Device tree:
- 
-   $ sudo mkdir /mnt/sdcard
--  $ sudo mount /dev/mmcblk0p1 /mnt/sdcard
--  $ sudo cp socfpga.dtb uImage /mnt/sdcard
-+  $ sudo mount /dev/mmcblk0p2 /mnt/sdcard
-+  $ sudo cp socfpga_cyclone5_sockit.dtb /mnt/sdcard/socfpga.dtb
-+  $ sudo cp zImage /mnt/sdcard
-   $ sudo umount /mnt/sdcard
- 
- Copy the rootfs:
- 
--  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p2 bs=64k
-+  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p3 bs=64k
-   $ sudo sync
- 
- It's Done!
- 
-+(ALT) Install the binaries to SDcard from genimage
-+--------------------------------------------
-+
-+`genimage` will generate a `sockit_image.img` image in the output folder.
-+From that point, you will need to execute the following command:
-+
-+   $ sudo dd if=sockit_image.img of=/dev/mmcblk0
-+
-+It's Done!
-+
- Finish
- ======
- 
- Eject your SDcard, insert it in your SoCkit, and power it up.
- 
- if you want a serial console, you can plug a micro B USB cable on the USB-UART
--port, the serial port config to used is 57600/8-N-1.
-+port, the serial port config to use is 115200/8-N-1.
--- 
-2.7.4
+Reviewed-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
