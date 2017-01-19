@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Jan 2017 13:03:15 +1100
-Subject: [Buildroot] [git commit] package/xcb-util: remove obsolete
-	dependency on gperf
-Message-ID: <20170119020949.308D881E46@busybox.osuosl.org>
+Date: Thu, 19 Jan 2017 13:09:48 +1100
+Subject: [Buildroot] [PATCH] package/xcb-util: remove obsolete
+ dependency on gperf
+In-Reply-To: <20170118111716.12640-1-alvaro.gamez@hazent.com>
+References: <20170118111716.12640-1-alvaro.gamez@hazent.com>
+Message-ID: <20170119130948.6a4d518d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b97b5b7a1d355673ce4e3bde16d9632946e9d464
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xcb-util/xcb-util.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 18 Jan 2017 12:17:16 +0100, Alvaro Gamez Machado wrote:
+> Signed-off-by: Alvaro Gamez Machado <alvaro.gamez@hazent.com>
+> ---
+>  package/x11r7/xcb-util/xcb-util.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
-index 4416d80..7b913e2 100644
---- a/package/x11r7/xcb-util/xcb-util.mk
-+++ b/package/x11r7/xcb-util/xcb-util.mk
-@@ -12,6 +12,6 @@ XCB_UTIL_SITE = http://xcb.freedesktop.org/dist
- XCB_UTIL_LICENSE = MIT
- 
- XCB_UTIL_INSTALL_STAGING = YES
--XCB_UTIL_DEPENDENCIES = host-gperf libxcb
-+XCB_UTIL_DEPENDENCIES = libxcb
- 
- $(eval $(autotools-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
