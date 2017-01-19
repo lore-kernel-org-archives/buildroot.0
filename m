@@ -1,59 +1,55 @@
-From: scsijon <scsijon@lamiaworks.com.au>
-Date: Thu, 19 Jan 2017 10:48:23 +1100
-Subject: [Buildroot] make menuconfig problem in latest snapshot
-In-Reply-To: <87inpcu077.fsf@dell.be.48ers.dk>
-References: <c7623806-1a06-8500-af10-e94601258f79@lamiaworks.com.au>
- <20170118175332.60e7a690@free-electrons.com>
- <56f73092-ec12-e0a4-d633-bee57e834628@lamiaworks.com.au>
- <87inpcu077.fsf@dell.be.48ers.dk>
-Message-ID: <90450d6e-bc60-a630-1b3f-cd89250d82cd@lamiaworks.com.au>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 19 Jan 2017 13:02:38 +1100
+Subject: [Buildroot] [git commit] barebox: bump to version 2017.01.0
+Message-ID: <20170119020248.C310981E41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks, I have already d/l that but I will need linux 4.10.x for this>
+commit: https://git.buildroot.net/buildroot/commit/?id=2739c354c97df7ec6d97e0cdc7ed38b5373cddcc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://shop.lenovo.com/us/en/tablets/lenovo/yoga-book/yoga-book-windows/?menu-id=yoga_book_windows
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-and 4.9.4 was the latest you had via the snapshot.
-
-Think of an ordinary Touchscreen Pen Tablet (like the samsung S2 pen) 
-with a Wacom Cintiq 13 instead of just a keyboard/touchpad attached.
-
-4.10 series will apparently have the extra settings to keep the two sets 
-of screens, touch pen positions and sensativity levels separate so you 
-can use the pen on both (multiple) screens. It's just only one has the 
-ability to work multiple pressure levels at present(in 4.9.x) with 
-multiple touchscreens.
-
-I've ordered the android version for now to play with, as the windows 
-version is currently unavailable in Australia where I live, but rather 
-than just rootkit'ing it and going from there, I want to eventually 
-build a complete standalone and portable linux system for our 
-CAD'ers/artists/comic creators/mangaka/etc in linux rather than them 
-being stuck with windows $packages as is at present.
-
-A friend who's involved with CAD and Drawing Software is working on a 
-version to work with these extra functions. I just have to get 'my bit' 
-up and running, else there will only be a windows version released.
-
-Anyway i'll play with 2016.11.1 for now, learn from that too see if it's 
-useable for what we need, and see what happens when you go to 4.10.x.
-
-regards
-scsijon
-
-On 01/18/2017 09:33 PM, Peter Korsgaard wrote:
->>>>>> "scsijon" == scsijon  <scsijon@lamiaworks.com.au> writes:
->
->  > sorry folks, i'm just starting to play with buildroot. It was just
->  > that there was a snapshot that I d/l and tried to run that found the
->  > problem so i'm not up to the stage of an actual build (running make)
->  > yet. I'm just working my way through the manual and docs.
->
-> Ok, then please use the latest release (2016.11.1):
->
-> https://buildroot.org/download.html
->
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 1548b0d..e6ecd82 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2016.08.0"
++	bool "2017.01.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2016.08.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2017.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index adcd4e0..f769c1d 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# http://www.barebox.org/download/barebox-2016.08.0.tar.bz2.md5
+-md5 66b8f79d337fa4a7bb8744b1a7867474 barebox-2016.08.0.tar.bz2
++# http://www.barebox.org/download/barebox-2017.01.0.tar.bz2.md5
++md5 d2933437885497b09d69d6e6f4beeffc  barebox-2017.01.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 610d3422137f0e6e9a72f51caad17d1b2c46314ee03b2ae35799a1c5425478ab barebox-2016.08.0.tar.bz2
++sha256 ca4cc06bdc7183e3fcb4bed300f1e820df1e022a7b86fdcf64205ddb6a103567  barebox-2017.01.0.tar.bz2
