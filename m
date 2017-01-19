@@ -1,139 +1,76 @@
-From: Scott Ellis <scott@jumpnowtek.com>
-Date: Thu, 19 Jan 2017 16:31:47 -0500 (EST)
-Subject: [Buildroot] [Proposal] Build RPi dtbo overlays instead of just
-	copying
-In-Reply-To: <20170119130923.72a70f90@free-electrons.com>
-References: <1484767966.594811027@apps.rackspace.com> 
- <20170119130923.72a70f90@free-electrons.com>
-Message-ID: <1484861507.765228595@apps.rackspace.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 19 Jan 2017 22:48:18 +0100
+Subject: [Buildroot] Fwd: Undelivered Mail Returned to Sender
+In-Reply-To: <55b233af-89ae-5e3a-42a5-4d9a79c8f122@oliseo.fr>
+References: <20170119135330.BD1852003F1@smtp2-g21.free.fr>
+ <55b233af-89ae-5e3a-42a5-4d9a79c8f122@oliseo.fr>
+Message-ID: <c2501178-2fb3-65db-5505-789f97cdf70d@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> BTW, if there is a make rule for .dtbo, have you tried simply adding
-> your list of .dtbo of interest to BR2_LINUX_KERNEL_USE_INTREE_DTS ?
->
+Hi Guillaume,
 
-Its a little awkward, but I think it will work.
-
-I had to add the 'overlays/' path to the dts name for the kernel
-build to see it
-
-For example
-
-  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b overlays/pwm-with-clk-overlay"
-
-This is the same thing you have to do manually if you don't use the
-'make dtbs' target.
-
-scott at fractal:~/rpi/linux$ make pwm-with-clk.dtbo
-make: *** No rule to make target 'pwm-with-clk.dtbo'.  Stop.
-
-scott at fractal:~/rpi/linux$ make pwm-with-clk-overlay.dtbo
-make: *** No rule to make target 'pwm-with-clk-overlay.dtbo'.  Stop.
-
-scott at fractal:~/rpi/linux$ make overlays/pwm-with-clk.dtbo
-make: *** No rule to make target 'overlays/pwm-with-clk.dtbo'.  Stop.
-
-scott at fractal:~/rpi/linux$ make overlays/pwm-with-clk-overlay.dtbo
-make: *** No rule to make target 'overlays/pwm-with-clk-overlay.dtbo'.  Stop.
-
-scott at fractal:~/rpi/linux$ make overlays/pwm-with-clk-overlay.dtb
-...
-DTC     arch/arm/boot/dts/overlays/pwm-with-clk-overlay.dtb
-
-
-The overlay that's generated has the name 'pwm-with-clk-overlay.dtb'
-
-So it still has to be renamed for the RPi to use it as an overlay
-
-  pwm-with-clk-overlay.dtb -> pwm-with-clk.dtbo
-
-And it has to be copied to the boot partition 'overlays/' directory.
-
-But this can all be handled in a post-xxx script.
-
-Unless there is a better suggestion, I'll play around with doing
-it this way instead.
-
-Thanks.
-
-Best regards,
-Scott
-
-"Thomas Petazzoni" <thomas.petazzoni@free-electrons.com> said:
-
+Le 19/01/2017 ? 14:55, Guillaume GARDET - Olis?o a ?crit :
 > Hello,
 > 
-> On Wed, 18 Jan 2017 14:32:46 -0500 (EST), Scott Ellis wrote:
->> Currently RPi dtbo overlays come from the rpi-firmware package and are
->> just copies of the binaries built upstream.
->>
->> The source for the dtbos are in the same github.com/raspberrypi/linux
->> tree that Buildroot is using for the kernel and the main board dtb.
+> I received the following error message while sending emails using "git
+> send-email" command as usual.
 > 
-> Indeed.
+> It seems that Buildroot list is blocking my emails.
+
+I received you patch twice and it's not in the ml archive... weird...
+Peter, can you have a look ?
+
+Best regards,
+Romain
+
 > 
->> I'm suggesting the overlay dtbos should be in sync with the kernel
->> and the main dtb we are using and get built at the same time.
->>
->> The particular problem I want to solve is to allow my modifications
->> to overlays or addition of new overlays both via standard kernel patches
->> get built and installed into the image.
+> -- 
+> Cordialement,
+> Guillaume GARDET
+> guillaume.gardet at oliseo.fr
 > 
-> Makes sense.
+> OLIS?O
+> 47 rue Ch?teau Musset
+> 79180 CHAURAY
+> FRANCE
+> Tel : +33 (0)6 24 66 73 93
+> http://www.oliseo.fr
 > 
->> I understand this is an RPi specific change to linux.mk, so I'm asking
->> first whether it is of interest and worthwhile submitting a patch.
 > 
-> Indeed the below is too RPi specific in my opinion. If we want to merge
-> a solution, it has to be more generic, which is difficult to achieve
-> because there are no overlays in the upstream Linux kernel so there is
-> nothing that shows what should be the "standard" way of
-> storing/building overlays.
 > 
->> +ifeq ($(BR2_LINUX_KERNEL_DTS_OVERLAYS_SUPPORT),y)
->> +define LINUX_INSTALL_DTB_OVERLAYS
->> +       cp $(KERNEL_ARCH_PATH)/boot/dts/overlays/*.dtbo $(1)
+> -------- Message transf?r? --------
+> Sujet : 	Undelivered Mail Returned to Sender
+> Date : 	Thu, 19 Jan 2017 14:53:30 +0100 (CET)
+> De : 	Mail Delivery System <MAILER-DAEMON@smtp.free.fr>
+> Pour : 	guillaume.gardet at oliseo.fr
 > 
-> Perhaps the location where the .dtbo are produced should be
-> configurable, since it's not a standardized behavior that they end up
-> in arch/ARCH/boot/dts/overlays/ ?
 > 
->>  ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
->> @@ -350,6 +357,10 @@ define LINUX_BUILD_CMDS
->>         @if grep -q "CONFIG_MODULES=y" $(@D)/.config; then      \
->>                 $(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ; 
->>       \
->>         fi
->> +       $(if $(BR2_LINUX_KERNEL_DTS_OVERLAYS_SUPPORT),
->> +               $(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) dtbs ;    
->>       \
->> +       )
 > 
-> I'm not sure how to handle that one. It doesn't relate only to overlay
-> support, but also to regular Device Trees. It is actually going to
-> build all Device Trees that are enabled for the currently selected
-> kernel configuration.
+> This is the mail system at host smtp2-g21.free.fr.
 > 
-> BTW, if there is a make rule for .dtbo, have you tried simply adding
-> your list of .dtbo of interest to BR2_LINUX_KERNEL_USE_INTREE_DTS ?
->
->> @@ -390,6 +403,8 @@ endef
->>  define LINUX_INSTALL_IMAGES_CMDS
->>         $(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
->>         $(call LINUX_INSTALL_DTB,$(BINARIES_DIR))
->> +       mkdir -p $(BINARIES_DIR)/rpi-firmware/overlays
->> +       $(call LINUX_INSTALL_DTB_OVERLAYS,$(BINARIES_DIR)/rpi-firmware/overlays)
+> I'm sorry to have to inform you that your message could not
+> be delivered to one or more recipients. It's attached below.
 > 
-> This rpi-firmware reference is clearly too RPi specific to be in
-> linux.mk.
+> For further assistance, please send mail to postmaster.
 > 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> If you do so, please include this problem report. You can
+> delete your own text from the attached returned message.
+> 
+>                    The mail system
+> 
+> <buildroot@buildroot.org>: host smtp2.osuosl.org[140.211.166.133] said: 550
+>     5.7.1 Service unavailable; Client host [212.27.42.2] blocked using
+>     psbl.surriel.rbldns; Listed in PSBL, see
+>     http://psbl.org/listing?ip=212.27.42.2 (in reply to RCPT TO command)
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
