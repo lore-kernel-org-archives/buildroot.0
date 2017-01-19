@@ -1,58 +1,43 @@
 From: Alvaro G. M. <alvaro.gamez@hazent.com>
-Date: Thu, 19 Jan 2017 11:07:03 +0100
-Subject: [Buildroot] [PATCH] package/libcap: fix build with gperf >= 3.1
-In-Reply-To: <31db6b87-7aba-9335-0be9-5b99a9c4c6a1@gmail.com>
-References: <20170117221723.10235-1-romain.naour@gmail.com>
- <20170118112249.uyk3bhcdzlt6ggcu@collins.gmr.ssr.upm.es>
- <20170118160150.t7e4xs7u3bscpjqd@collins.gmr.ssr.upm.es>
- <31db6b87-7aba-9335-0be9-5b99a9c4c6a1@gmail.com>
-Message-ID: <20170119100703.y5lilo4pneopdrai@collins.gmr.ssr.upm.es>
+Date: Thu, 19 Jan 2017 11:29:32 +0100
+Subject: [Buildroot] Change to size_t makes gperf 3.1 incompatible with code
+ written for 3.0.4
+Message-ID: <20170119102932.c7xzz6ncm4iypi5p@collins.gmr.ssr.upm.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 18, 2017 at 10:31:51PM +0100, Romain Naour wrote:
-> Hi Alvaro,
-> 
-> Le 18/01/2017 ? 17:01, Alvaro G. M. a ?crit :
-> > On Wed, Jan 18, 2017 at 12:22:49PM +0100, Alvaro G. M. wrote:
-> > I don't know how to test the remaining bits: webkitgtk, qt5webkit, kodi
-> > 
-> > They all require libgtk3, but I can't select it:
-> > *** libgtk3 needs an OpenGL or an OpenGL-EGL/wayland backend ***
-> > 
-> > What other things do I need to enable libgtk3?
-> 
-> Thanks for your investigation!
-> 
-> libgtk3 needs an OpenGL provider, you can use Mesa3d as OpenGL provider on x86
-> with a Gallium driver.
+Hi!
 
-Thank you! I've been able to select them now. However, cairo compilation
-fails regarding OpenGL. I guess this is a bug on buildroot's cairo package?
+I'm a user of gperf and I sometimes contribute to buildroot
+(https://buildroot.org/), which allows for easy compilation of packages and
+bundling them into a root filesystem.
 
-checking whether cairo's OpenGLESv2 surface backend feature could be enabled... no (glesv2.pc nor OpenGL ES 2.0 headers not found)
-configure: error:  OpenGLESv2 surface backend feature could not be enabled
-package/pkg-generic.mk:206: recipe for target '/tmp/buildroot/output/build/cairo-1.14.8/.stamp_configured' failed
-make: *** [/tmp/buildroot/output/build/cairo-1.14.8/.stamp_configured] Error 1
+When upgrading gperf to recent release, we've come to notice that gperf
+users usually hardcode function prototypes, as (const char *str, unsigned len);
 
-> 
-> But since we need to fix several package like eudev and systemd, I would suggest
-> to report this issue to gperf maintainer and see what he say.
+However, latest change from unsigned to size_t, even though perfectly
+reasonable, produces a mismatch between function and its prototype, so code
+written for gperf 3.0.4 output isn't able to compile using gperf 3.1 output.
 
-Yes, I agree. My intuition says most people probably won't even know that
-gperf has released a new version (3.0.4 was released in 2009), so maybe
-gperf maintainer will want to set a default option to let it behave as
-previous version, so it remains compatible.
+I've searched on buildroot's package database and these packages require
+modifications to work with gperf 3.1:
 
+eudev, libsvgtiny, systemd, webkitgtk, libcap, qt5webkit, kodi
 
-I'll write to gperf mailing list and see what his opinions are on the
-matter.
+I was wondering if gperf could possibly include a compatibility option,
+enabled by default, so that code generated maintains the old prototype and
+only uses size_t when explicitly asked for.
 
+Otherwise, I think this version could have been maybe named 4.0, so as to
+make this incompatibility clearer?
 
-Best regards
+Well, thanks for this new release anyway, I'm personally very happy with the
+addition of --constants-prefix parameter!
+
+Best regards!
 
 -- 
 Alvaro G. M.
