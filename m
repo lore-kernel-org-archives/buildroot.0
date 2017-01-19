@@ -1,152 +1,67 @@
-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Date: Thu, 19 Jan 2017 12:05:31 -0500
-Subject: [Buildroot] [PATCH 4/4] board/altera: update README for new
- scripts and fixed some typos
-In-Reply-To: <1484839933-17637-5-git-send-email-lucas.bajolet@savoirfairelinux.com>
-References: <1484839933-17637-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
- <1484839933-17637-5-git-send-email-lucas.bajolet@savoirfairelinux.com>
-Message-ID: <29af587c-d4d6-9c6f-4b85-2e5d6eb458ad@savoirfairelinux.com>
+From: =?UTF-8?Q?Guillaume_GARDET_-_Olis=c3=a9o?= <guillaume.gardet@oliseo.fr>
+Date: Thu, 19 Jan 2017 14:55:37 +0100
+Subject: [Buildroot] Fwd: Undelivered Mail Returned to Sender
+In-Reply-To: <20170119135330.BD1852003F1@smtp2-g21.free.fr>
+References: <20170119135330.BD1852003F1@smtp2-g21.free.fr>
+Message-ID: <55b233af-89ae-5e3a-42a5-4d9a79c8f122@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
+
+I received the following error message while sending emails using "git send-email" command as usual.
+
+It seems that Buildroot list is blocking my emails.
+
+-- 
+Cordialement,
+Guillaume GARDET
+guillaume.gardet at oliseo.fr
+
+OLIS?O
+47 rue Ch?teau Musset
+79180 CHAURAY
+FRANCE
+Tel : +33 (0)6 24 66 73 93
+http://www.oliseo.fr
 
 
-On 01/19/2017 10:32 AM, Lucas Bajolet wrote:
-> The old README has a few typos which needed fixing.
-> Also with the newer versions of U-Boot and the patch applied to
-> the configuration, the partition table information and related
-> commands need to be updated.
-> 
-> Since the post-install script now supports Genimage,
-> a new paragraph explaining how it works has been added.
-> 
-> Also, removed link to mkpimage, since it is also natively
-> supported by Buildroot as an option.
-> 
-> Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
-> ---
->  board/altera/readme.txt | 64 +++++++++++++++++++++++++------------------------
->  1 file changed, 33 insertions(+), 31 deletions(-)
-> 
-> diff --git a/board/altera/readme.txt b/board/altera/readme.txt
-> index 1894a79..a19ba21 100644
-> --- a/board/altera/readme.txt
-> +++ b/board/altera/readme.txt
-> @@ -69,27 +69,13 @@ After building, you should obtain this tree:
->  
->      output/images/
->      ??? rootfs.ext2
-> -    ??? rootfs.ext3 -> rootfs.ext2
->      ??? rootfs.tar
->      ??? socfpga_cyclone5_sockit.dtb or socfpga_cyclone5_socdk.dtb
-> -    ??? socfpga.dtb
-> +    ??? u-boot.bin
->      ??? u-boot.img
->      ??? u-boot-spl.bin
-> -    ??? uImage
-> -
-> -
-> -Signing the Preloader
-> ----------------------
-> -
-> -*** BEWARE ****
-> -The u-boot-spl.bin must be signed using the Altera's tool "mkpimage".
-> -This tool comes as a part of the Altera development environnment (SoC EDS).
-> -A fork of this tool have been done by Maxime Hadjinlian and can be found here:
-> -https://github.com/maximeh/mkpimage
-> -
-> -Remember that without signing the u-boot-spl.bin, the board will not boot !!!
-> -
-> -  $ mkpimage u-boot-spl.bin -o u-boot-spl-signed.bin
-> +    ??? u-boot-spl.bin.crc
-> +    ??? zImage
->  
->  Prepare your SDcard
->  ===================
-> @@ -111,22 +97,26 @@ let's assume it is /dev/mmcblk0:
->  Delete all previous partitions with 'd' then create the new partition table,
->  using these options, pressing enter after each one:
->  
-> -  * n p 1 9000000 +20480K t 1 b
-> -  * n p 2 4096 +4496384K t 83
-> -  * n p 3 2048 +1024K t 3 a2
-> +  * n p 1 1 4095
-> +  * n p 2 4096 +22000
-> +  * n p 3  <Enter> -- This will take the remaining space from the SD card
-> +
-> +Then, still in fdisk, change the type of the partitions according to this
-> +  * t 1 a2
-> +  * t 2 b
->  
->  Using the 'p' option, the SD card's partition must look like this:
->  
-> -Device         Boot     Start       End  Blocks  Id System
-> -/dev/mmcblk0p1        9000000   9041919   20960   b W95 FAT32
-> -/dev/mmcblk0p2           4096   8996863 4496384  83 Linux
-> -/dev/mmcblk0p3           2048      4095    1024  a2 Unknown
-> +Device         Boot     Start     End   Blocks  Id  System
-> +/dev/mmcblk0p1           2048    4095     2048  a2  Unknown
-> +/dev/mmcblk0p2           4096   26096    22001   b  W95 FAT32
-> +/dev/mmcblk0p3          26624 3862527  3835904  83  Linux
->  
->  Then write the partition table using 'w' and exit.
->  
->  Make partition one a DOS partition:
->  
-> -  $ sudo mkdosfs /dev/mmcblk0p1
-> +  $ sudo mkdosfs /dev/mmcblk0p2
->  
->  Install the binaries to the SDcard
->  ----------------------------------
-> @@ -139,27 +129,39 @@ The partition with type a2 is the partition scan by the first bootloader stage
->  in the SoCkit ROM to find the next bootloader stage so we must write the signed
->  preloader and the u-boot binaries in that partition:
->  
-> -  $ sudo dd if=u-boot-spl-signed.bin of=/dev/mmcblk0p3 bs=64k seek=0
-> -  $ sudo dd if=u-boot.img of=/dev/mmcblk0p3 bs=64k seek=4
-> +  $ sudo dd if=u-boot-spl.bin of=/dev/mmcblk0p1 bs=64k seek=0
-> +  $ sudo dd if=u-boot-spl.bin.crc of=/dev/mmcblk0p1 bs=64k seek=1
-> +  $ sudo dd if=u-boot.img of=/dev/mmcblk0p1 bs=64k seek=4
->  
->  Copy the Linux kernel and its Device tree:
->  
->    $ sudo mkdir /mnt/sdcard
-> -  $ sudo mount /dev/mmcblk0p1 /mnt/sdcard
-> -  $ sudo cp socfpga.dtb uImage /mnt/sdcard
-> +  $ sudo mount /dev/mmcblk0p2 /mnt/sdcard
-> +  $ sudo cp socfpga_cyclone5_sockit.dtb /mnt/sdcard/socfpga.dtb
-> +  $ sudo cp zImage /mnt/sdcard
->    $ sudo umount /mnt/sdcard
->  
->  Copy the rootfs:
->  
-> -  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p2 bs=64k
-> +  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p3 bs=64k
->    $ sudo sync
->  
->  It's Done!
->  
-> +(ALT) Install the binaries to SDcard from genimage
-> +--------------------------------------------
-> +
-> +`genimage` will generate a `sockit_image.img` image in the output folder.
-> +From that point, you will need to execute the following command:
-> +
-> +   $ sudo dd if=sockit_image.img of=/dev/mmcblk0
-> +
-> +It's Done!
-> +
->  Finish
->  ======
->  
->  Eject your SDcard, insert it in your SoCkit, and power it up.
->  
->  if you want a serial console, you can plug a micro B USB cable on the USB-UART
-> -port, the serial port config to used is 57600/8-N-1.
-> +port, the serial port config to use is 115200/8-N-1.
-> 
 
-Reviewed-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+-------- Message transf?r? --------
+Sujet : 	Undelivered Mail Returned to Sender
+Date : 	Thu, 19 Jan 2017 14:53:30 +0100 (CET)
+De : 	Mail Delivery System <MAILER-DAEMON@smtp.free.fr>
+Pour : 	guillaume.gardet at oliseo.fr
+
+
+
+This is the mail system at host smtp2-g21.free.fr.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                    The mail system
+
+<buildroot@buildroot.org>: host smtp2.osuosl.org[140.211.166.133] said: 550
+     5.7.1 Service unavailable; Client host [212.27.42.2] blocked using
+     psbl.surriel.rbldns; Listed in PSBL, see
+     http://psbl.org/listing?ip=212.27.42.2 (in reply to RCPT TO command)
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170119/618c095b/attachment.html>
+-------------- next part --------------
+An embedded message was scrubbed...
+From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Subject: [PATCH] SDL2_X11 depends on MMU (fork)
+Date: Thu, 19 Jan 2017 14:53:21 +0100
+Size: 1442
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170119/618c095b/attachment.eml>
