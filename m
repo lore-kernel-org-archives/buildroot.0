@@ -1,50 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jan 2017 15:09:12 +0100
-Subject: [Buildroot] [git commit] gd: security bump to version 2.2.4
-Message-ID: <20170119140932.4E6FA81EC1@busybox.osuosl.org>
+Date: Thu, 19 Jan 2017 15:00:01 +0100
+Subject: [Buildroot] [git commit] screen: bump version to 4.5.0
+Message-ID: <20170119140932.2AC9981871@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39885cc5b0c6ff175fe3a115231bc2428840e7b7
+commit: https://git.buildroot.net/buildroot/commit/?id=8480c528398ecb35bf62d857f25f6b7eaa0f44a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2016-9317 - gdImageCreate() doesn't check for oversized images and
-as such is prone to DoS vulnerabilities.
-CVE-2016-6912 - double-free in gdImageWebPtr()
-(without CVE):
-Potential unsigned underflow in gd_interpolation.c
-DOS vulnerability in gdImageCreateFromGd2Ctx()
-Signed Integer Overflow gd_io.c
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gd/gd.hash | 2 +-
- package/gd/gd.mk   | 2 +-
+ package/screen/screen.hash | 2 +-
+ package/screen/screen.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gd/gd.hash b/package/gd/gd.hash
-index eb3da42..a1991b1 100644
---- a/package/gd/gd.hash
-+++ b/package/gd/gd.hash
+diff --git a/package/screen/screen.hash b/package/screen/screen.hash
+index ee5105a..7ddc337 100644
+--- a/package/screen/screen.hash
++++ b/package/screen/screen.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	746b6cbd6769a22ff3ba6f5756f3512a769bd4cdf4695dff17f4867f25fa7d3c	libgd-2.2.3.tar.xz
-+sha256	137f13a7eb93ce72e32ccd7cebdab6874f8cf7ddf31d3a455a68e016ecd9e4e6	libgd-2.2.4.tar.xz
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 0777bdb..63d16eb 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
+ # Locally calculated after checking pgp signature
+-sha256 ef722a54759a3bf23aad272bbf33c414c1078cad6bcd982fada93c0d7917218b  screen-4.4.0.tar.gz
++sha256 01c3a7c362185f35d6a95dff52d64337076496acd034d717de3c263500cfefb0  screen-4.5.0.tar.gz
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index 16a97cc..519a02a 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GD_VERSION = 2.2.3
-+GD_VERSION = 2.2.4
- GD_SOURCE = libgd-$(GD_VERSION).tar.xz
- GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
- GD_INSTALL_STAGING = YES
+-SCREEN_VERSION = 4.4.0
++SCREEN_VERSION = 4.5.0
+ SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
+ SCREEN_LICENSE = GPLv3+
+ SCREEN_LICENSE_FILES = COPYING
