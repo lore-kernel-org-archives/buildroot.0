@@ -1,24 +1,36 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 20 Jan 2017 08:43:30 -0200 (BRST)
-Subject: [Buildroot] e2fsprogs: keep util-linux's fsck if chosen
-Message-ID: <975127181.7868248.1484909010264.JavaMail.zimbra@datacom.ind.br>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 20 Jan 2017 14:46:13 +0100
+Subject: [Buildroot] [PATCH] tslib: needs kernel headers 3.12
+In-Reply-To: <20170120033551.4cpamcz63irneymp@tarshish> (Baruch Siach's
+ message of "Fri, 20 Jan 2017 05:35:51 +0200")
+References: <4a250493e254e7a958267c5ce153f9ef05e6fc69.1484830247.git.baruch@tkos.co.il>
+ <20170120112630.557f297d@free-electrons.com>
+ <20170120033551.4cpamcz63irneymp@tarshish>
+Message-ID: <87r33xsv2y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Did you have time to work on combining these patches?
+Hi,
 
-    http://patchwork.ozlabs.org/patch/696634/
-    http://patchwork.ozlabs.org/patch/697234/
+ >> Isn't this a bit annoying for people using tslib on kernel olders than
+ >> 3.12 ? Isn't there a simpler patch to tslib to avoid depending on
+ >> headers >= 3.12 ?
 
-Please let me know if you need some help. I can take care of
-this task if necessary.
+ > The present build failure seems to be easy to fix by skipping the ts_uinput 
+ > tool on pre 3.12 kernels. But since upstream explicitly states that 3.12 is 
+ > the oldest supported kernel (see commit message link) we are on our own here.
 
-Carlos Santos (Casantos) - DATACOM, P&D
-Rua Am?rica, 1000 - Eldorado do Sul, RS, Brasil - 92990-000
-casantos at datacom.ind.br          +55 51 3933.3000 ext. 3627
-http://www.datacom.ind.br
+I had the same idea originally, but as it isn't completely nontrivial to
+disable the new code and against the wishes of upstream I decided to
+leave that work for people needing it on pre-3.12 kernels.
+
+With that said, if upstream isn't interested in integrating such a patch
+then it isn't really nice having to carry it in Buildroot either.
+
+-- 
+Bye, Peter Korsgaard
