@@ -1,44 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 20 Jan 2017 05:35:51 +0200
-Subject: [Buildroot] [PATCH] tslib: needs kernel headers 3.12
-In-Reply-To: <20170120112630.557f297d@free-electrons.com>
-References: <4a250493e254e7a958267c5ce153f9ef05e6fc69.1484830247.git.baruch@tkos.co.il>
- <20170120112630.557f297d@free-electrons.com>
-Message-ID: <20170120033551.4cpamcz63irneymp@tarshish>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 20 Jan 2017 03:46:17 +0000
+Subject: [Buildroot] [Bug 9606] New: xorg-server cannot build for ARM target
+Message-ID: <bug-9606-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=9606
 
-On Fri, Jan 20, 2017 at 11:26:30AM +1100, Thomas Petazzoni wrote:
-> On Thu, 19 Jan 2017 14:50:47 +0200, Baruch Siach wrote:
-> > Kernel headers 3.12+ are required since tslib version 1.3.
-> > 
-> > https://github.com/kergoth/tslib/blob/master/README.markdown
-> > 
-> > Update tslib reverse dependencies.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/28d/28df38e2a042f1b5940bf35c18334ebf8810a348/
-> > http://autobuild.buildroot.net/results/c38/c383cfee3673aa9fba36a86f1e68de63413c2987/
-> > http://autobuild.buildroot.net/results/6dd/6ddb2cd9f4f41ee03dc10a73422ad37070811732/
-> > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> Isn't this a bit annoying for people using tslib on kernel olders than
-> 3.12 ? Isn't there a simpler patch to tslib to avoid depending on
-> headers >= 3.12 ?
+            Bug ID: 9606
+           Summary: xorg-server cannot build for ARM target
+           Product: buildroot
+           Version: 2016.11
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: icenowy at aosc.xyz
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-The present build failure seems to be easy to fix by skipping the ts_uinput 
-tool on pre 3.12 kernels. But since upstream explicitly states that 3.12 is 
-the oldest supported kernel (see commit message link) we are on our own here.
+Created attachment 6861
+  --> https://bugs.busybox.net/attachment.cgi?id=6861&action=edit
+Compressed .config file
 
-baruch
+make[6]: Entering directory
+'/home/icenowy/sda9/buildroot/buildroot-2016.11.1/output/build/xserver_xorg-server-1.18.4/hw/xfree86/os-support/linux'
+  CC       lnx_init.lo
+In file included from lnx_init.c:33:0:
+../../../../hw/xfree86/common/compiler.h: In function 'xf_outb':
+../../../../hw/xfree86/common/compiler.h:770:5: error: implicit declaration of
+function 'outb' [-Werror=implicit-function-declaration]
+     outb(val, port);
+     ^
+../../../../hw/xfree86/common/compiler.h:770:5: warning: nested extern
+declaration of 'outb' [-Wnested-externs]
+../../../../hw/xfree86/common/compiler.h: In function 'xf_outw':
+../../../../hw/xfree86/common/compiler.h:776:5: error: implicit declaration of
+function 'outw' [-Werror=implicit-function-declaration]
+     outw(val, port);
+     ^
+../../../../hw/xfree86/common/compiler.h:776:5: warning: nested extern
+declaration of 'outw' [-Wnested-externs]
+../../../../hw/xfree86/common/compiler.h: In function 'xf_outl':
+../../../../hw/xfree86/common/compiler.h:782:5: error: implicit declaration of
+function 'outl' [-Werror=implicit-function-declaration]
+     outl(val, port);
+     ^
+../../../../hw/xfree86/common/compiler.h:782:5: warning: nested extern
+declaration of 'outl' [-Wnested-externs]
+cc1: some warnings being treated as errors
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+You are receiving this mail because:
+You are on the CC list for the bug.
