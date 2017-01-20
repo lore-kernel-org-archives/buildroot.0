@@ -1,41 +1,42 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 20 Jan 2017 10:30:05 +0100
-Subject: [Buildroot] [PATCH 12/12] libxml-parser-perl: bump to version 2.44
-In-Reply-To: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
-References: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1484904605-11239-12-git-send-email-francois.perrad@gadz.org>
+From: =?UTF-8?Q?Guillaume_GARDET_-_Olis=c3=a9o?= <guillaume.gardet@oliseo.fr>
+Date: Fri, 20 Jan 2017 10:52:23 +0100
+Subject: [Buildroot] Fwd: Undelivered Mail Returned to Sender
+In-Reply-To: <20170120112854.578246e9@free-electrons.com>
+References: <20170119135330.BD1852003F1@smtp2-g21.free.fr>
+ <55b233af-89ae-5e3a-42a5-4d9a79c8f122@oliseo.fr>
+ <20170120112854.578246e9@free-electrons.com>
+Message-ID: <fa51a009-07c0-946d-cf50-e31d2003ede7@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/libxml-parser-perl/libxml-parser-perl.hash | 2 +-
- package/libxml-parser-perl/libxml-parser-perl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.hash b/package/libxml-parser-perl/libxml-parser-perl.hash
-index 4a8c0d3..d8e0df5 100644
---- a/package/libxml-parser-perl/libxml-parser-perl.hash
-+++ b/package/libxml-parser-perl/libxml-parser-perl.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 b48197cd2265a26c5f016489f11a7b450d8833cb8b3d6a46ee15975740894de9 XML-Parser-2.41.tar.gz
-+sha256 1ae9d07ee9c35326b3d9aad56eae71a6730a73a116b9fe9e8a4758b7cc033216 XML-Parser-2.44.tar.gz
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-index 9e5325c..e512815 100644
---- a/package/libxml-parser-perl/libxml-parser-perl.mk
-+++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXML_PARSER_PERL_VERSION = 2.41
-+LIBXML_PARSER_PERL_VERSION = 2.44
- LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
- LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
- HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
--- 
-2.7.4
+Le 20/01/2017 ? 01:28, Thomas Petazzoni a ?crit :
+> Hello,
+>
+> On Thu, 19 Jan 2017 14:55:37 +0100, Guillaume GARDET - Olis?o wrote:
+>
+>> I received the following error message while sending emails using
+>> "git send-email" command as usual.
+>>
+>> It seems that Buildroot list is blocking my emails.
+> <buildroot@buildroot.org>: host smtp2.osuosl.org[140.211.166.133] said: 550
+>      5.7.1 Service unavailable; Client host [212.27.42.2] blocked using
+>      psbl.surriel.rbldns; Listed in PSBL, see
+>      http://psbl.org/listing?ip=212.27.42.2 (in reply to RCPT TO command)
+>
+> This typically means your SMTP server is listed in a blacklist, which
+> the osuosl.org SMTP server uses to decide whether it should accept your
+> e-mail or not.
+
+Yes, I saw that but this is an SMTP server from Free Telecom (Internet provider). So, other people on the list may be affected.
+
+
+Guillaume
+
+
+>
+> Thomas
