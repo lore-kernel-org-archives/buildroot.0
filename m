@@ -1,57 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 15:59:01 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] bind: security bump to
-	version 9.11.0-P2
-Message-ID: <20170120145944.DABE480466@busybox.osuosl.org>
+Date: Fri, 20 Jan 2017 15:59:13 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] rabbitmq-server: security
+	bump to version 3.6.6
+Message-ID: <20170120145944.E582F7FD35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f35878bdfb9fa62bcc5a39ca357f9985fb623968
+commit: https://git.buildroot.net/buildroot/commit/?id=fc4e332ec7b1d180298b24c01ae1fc495362b0bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Bugfixes:
+Fixes a critical authentication vulnerability in the MQTT plugin
+(CVE-2016-9877):
 
- - CVE-2016-9131: A malformed response to an ANY query can cause an
-   assertion failure during recursion
-
- - CVE-2016-9147: An error handling a query response containing inconsistent
-   DNSSEC information could cause an assertion failure
-
- - CVE-2016-9444: An unusually-formed DS record response could cause an
-   assertion failure
-
- - CVE-2016-9778: An error handling certain queries using the
-   nxdomain-redirect feature could cause a REQUIRE assertion failure in db.c
+MQTT (MQ Telemetry Transport) connection authentication with a
+username/password pair succeeds if an existing username is provided but the
+password is omitted from the connection request.  Connections that use TLS
+with a client-provided certificate are not affected.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4bab93be70ba576668a9fa19d0ff92ce2b97c905)
+(cherry picked from commit a502f9acfd7ec5592d1e059e0180928b15abd59f)
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rabbitmq-server/rabbitmq-server.hash | 2 +-
+ package/rabbitmq-server/rabbitmq-server.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 3522149..dc472b1 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
+diff --git a/package/rabbitmq-server/rabbitmq-server.hash b/package/rabbitmq-server/rabbitmq-server.hash
+index be21477..3cd412d 100644
+--- a/package/rabbitmq-server/rabbitmq-server.hash
++++ b/package/rabbitmq-server/rabbitmq-server.hash
 @@ -1,2 +1,2 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P1/bind-9.11.0-P1.tar.gz.sha256.asc
--sha256 094cd3134ba1b44f0910de1334f05a7dca68d583da038de40a8ad7a0cb1592c6  bind-9.11.0-P1.tar.gz
-+# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P2/bind-9.11.0-P2.tar.gz.sha256.asc
-+sha256 d651f83ce1c08c83d6ac8201685c4f2b5fdb79794f3a4f93c3948e0ef439c1e5  bind-9.11.0-P2.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index ee50acf..7143089 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+ # Locally computed
+-sha256 c696134e863f99191a301288c12d69ff00b7e648107ee52c8686ae047dde1bee  rabbitmq-server-3.6.1.tar.xz
++sha256 395689bcf57fd48aed452fcd43ff9a992de40067d3ea5c44e14680d69db7b78e  rabbitmq-server-3.6.6.tar.xz
+diff --git a/package/rabbitmq-server/rabbitmq-server.mk b/package/rabbitmq-server/rabbitmq-server.mk
+index 7e13c2d..d55a8cc 100644
+--- a/package/rabbitmq-server/rabbitmq-server.mk
++++ b/package/rabbitmq-server/rabbitmq-server.mk
 @@ -4,7 +4,7 @@
  #
- ################################################################################
+ #############################################################
  
--BIND_VERSION = 9.11.0-P1
-+BIND_VERSION = 9.11.0-P2
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-RABBITMQ_SERVER_VERSION = 3.6.1
++RABBITMQ_SERVER_VERSION = 3.6.6
+ RABBITMQ_SERVER_SITE = http://www.rabbitmq.com/releases/rabbitmq-server/v$(RABBITMQ_SERVER_VERSION)
+ RABBITMQ_SERVER_SOURCE = rabbitmq-server-$(RABBITMQ_SERVER_VERSION).tar.xz
+ RABBITMQ_SERVER_LICENSE = MPLv1.1, Apache-2.0, BSD-2c, EPL, MIT, MPLv2.0
