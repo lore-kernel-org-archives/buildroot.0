@@ -1,38 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 16:45:51 +0100
-Subject: [Buildroot] [PATCH 1/4] configs/altera_sockit: bump kernel to
-	4.7 and u-boot to v2016.11-rc3
-In-Reply-To: <20170120141513.34e1010e@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 20 Jan 2017 14:15:13 +1100")
-References: <1484839933-17637-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
- <1484839933-17637-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
- <20170120141513.34e1010e@free-electrons.com>
-Message-ID: <87efzxspjk.fsf@dell.be.48ers.dk>
+Date: Fri, 20 Jan 2017 16:40:44 +0100
+Subject: [Buildroot] [git commit] mariadb: bump version to 10.1.21
+Message-ID: <20170120154611.01EE981ED9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5ca24398432c59f0b87b181c0c9fff69942c3c16
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > On Thu, 19 Jan 2017 10:32:10 -0500, Lucas Bajolet wrote:
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mariadb/mariadb.hash | 5 ++++-
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
- >> BR2_TARGET_UBOOT=y
- >> -BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
- >> +BR2_TARGET_UBOOT_BOARDNAME="socfpga_sockit"
- >> BR2_TARGET_UBOOT_CUSTOM_GIT=y
- >> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
- >> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
- >> BR2_TARGET_UBOOT_PATCH="board/altera/sockit"
- >> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga"
- >> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2016.11-rc3"
-
- > Why do you bump to a -rc version rather than a final stable version?
-
-And as this v2016.11-rc3 tag is identical to the upstream v2016.11-rc3
-tag, why use this u-boot-socfpga repo instead of upstream u-boot?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index c86eb44..3d6520f 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,2 +1,5 @@
++# From https://downloads.mariadb.org/mariadb/10.1.21/
++sha1 f9ccaa9881b98eeef68f4dbcf5ab9653c903819f  mariadb-10.1.21.tar.gz
++
+ # Locally computed
+-sha256 c24e83f24d674d9912319f9e9422f093c8ca6be1721a4380cbd74792b89ba0b9  mariadb-10.1.20.tar.gz
++sha256 5a816355781ea22a6c65a436d8162f19bd292ec90e2b7d9499c031ae4a659490  mariadb-10.1.21.tar.gz
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 6c609da..d667208 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.20
++MARIADB_VERSION = 10.1.21
+ MARIADB_SOURCE = mariadb-$(MARIADB_VERSION).tar.gz
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
