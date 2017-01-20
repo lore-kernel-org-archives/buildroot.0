@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 20 Jan 2017 10:29:56 +0100
-Subject: [Buildroot] [PATCH 03/12] perl-try-tiny: bump to version 0.28
+Date: Fri, 20 Jan 2017 10:29:57 +0100
+Subject: [Buildroot] [PATCH 04/12] perl-mojolicious: bump to version 7.20
 In-Reply-To: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
 References: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1484904605-11239-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1484904605-11239-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-try-tiny/Config.in          | 4 ++--
- package/perl-try-tiny/perl-try-tiny.hash | 4 ++--
- package/perl-try-tiny/perl-try-tiny.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
+ package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-try-tiny/Config.in b/package/perl-try-tiny/Config.in
-index ea25589..5c115b6 100644
---- a/package/perl-try-tiny/Config.in
-+++ b/package/perl-try-tiny/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_TRY_TINY
- 	bool "perl-try-tiny"
- 	help
--	  minimal try/catch with proper preservation of $@
-+	  Minimal try/catch with proper preservation of $@
- 
--	  https://github.com/karenetheridge/Try-Tiny
-+	  https://github.com/p5sagit/Try-Tiny
-diff --git a/package/perl-try-tiny/perl-try-tiny.hash b/package/perl-try-tiny/perl-try-tiny.hash
-index dc44f18..c6dbd44 100644
---- a/package/perl-try-tiny/perl-try-tiny.hash
-+++ b/package/perl-try-tiny/perl-try-tiny.hash
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index 23a30e5..21b2768 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    1a12a51cfeb7e2c301e4ae093c7ecdfb Try-Tiny-0.24.tar.gz
--sha256 9b7a1af24c0256973d175369ebbdc25ec01e2452a97f2d3ab61481c826f38d81 Try-Tiny-0.24.tar.gz
-+md5    e2f8af601a62981aab30df15a6f47475 Try-Tiny-0.28.tar.gz
-+sha256 f1d166be8aa19942c4504c9111dade7aacb981bc5b3a2a5c5f6019646db8c146 Try-Tiny-0.28.tar.gz
-diff --git a/package/perl-try-tiny/perl-try-tiny.mk b/package/perl-try-tiny/perl-try-tiny.mk
-index f033197..b4d35ab 100644
---- a/package/perl-try-tiny/perl-try-tiny.mk
-+++ b/package/perl-try-tiny/perl-try-tiny.mk
+-md5    91799c9c21e116dc438fdec1ede5a977 Mojolicious-7.0.tar.gz
+-sha256 2da57d411aaf718d6b93deebd08d3c36e7f32ef66b6a539854f72119ad9b6bc2 Mojolicious-7.0.tar.gz
++md5    97a935d64fc2aaf5538e6ab704bbc420 Mojolicious-7.20.tar.gz
++sha256 ddd034bdd2b99f64498f30b9859c2f2607318f43983dfe36e14bfdf1526fd693 Mojolicious-7.20.tar.gz
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index 1bc31bb..b3e6615 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_TRY_TINY_VERSION = 0.24
-+PERL_TRY_TINY_VERSION = 0.28
- PERL_TRY_TINY_SOURCE = Try-Tiny-$(PERL_TRY_TINY_VERSION).tar.gz
- PERL_TRY_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_TRY_TINY_LICENSE = MIT
+-PERL_MOJOLICIOUS_VERSION = 7.0
++PERL_MOJOLICIOUS_VERSION = 7.20
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
 -- 
 2.7.4
