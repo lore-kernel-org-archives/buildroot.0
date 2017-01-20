@@ -1,48 +1,69 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 20 Jan 2017 16:18:54 -0200
-Subject: [Buildroot] [PATCH] poco: avoid build failures on multicore hosts
-Message-ID: <1484936334-19116-1-git-send-email-casantos@datacom.ind.br>
+From: John Moon <johncarlmoon@gmail.com>
+Date: Fri, 20 Jan 2017 11:20:37 -0800
+Subject: [Buildroot] Extra package libraries not resolved on target system
+	(Xilinx aarch64)
+Message-ID: <CAKuvFvRqf6BomOx5exQHCeC=g61bOD_zJNYF-sw2G9YEr+UtHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Parallel build still fails on heavilly multicore machines (e.g. -j25)
-and hacks likecommit 32f4957b153bdabe7af60d529942aca7d1a4783d do not
-seem to be effective.
+Using the Xilinx SDK aarch64 toolchain with Buildroot, extra packages are
+having trouble resolving their libraries on the target system. For example,
+openssh requires libcrypto.so.1.0.0, but can't find that library when
+running ssh-keygen:
 
-Let's simply use MAKE1 for the build step, instead.
 
-Fixes:
-http://autobuild.buildroot.net/results/388/38834ad3013fe79e5e4f75997133f1bd827be6dc
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+# LD_DEBUG=libs ssh-keygen
 
----
-Extra information: here at DATACOM we have a build farm with several
-multicore blades that usually build with "make -j25". With this setup we
-have been observing compilation failures each two days.
+      1653:     find library=libcrypto.so.1.0.0 [0]; searching
 
-Change-Id: If80cd0b01ceb8b0aee886ea96a266fa864fa8eb0
----
- package/poco/poco.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+      1653:      search cache=/etc/ld.so.cache
 
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 79452c0..54ec701 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -57,8 +57,9 @@ define POCO_CONFIGURE_CMDS
- 		--no-samples)
- endef
- 
-+# Use $(MAKE1) to avoid failures on heavilly parallel machines (e.g. -j25)
- define POCO_BUILD_CMDS
--	$(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
-+	$(MAKE1) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
- 		MYSQL_LIBDIR=$(STAGING_DIR)/usr/lib/mysql \
- 		MYSQL_INCDIR=$(STAGING_DIR)/usr/include/mysql \
- 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) -C $(@D)
--- 
-2.7.4
+      1653:      search
+path=/lib/aarch64-linux-gnu/tls/aarch64:/lib/aarch64-linux-gnu/tls:/lib/aarch64-linux-gnu/aarch64:/lib/aarch64-linux-gnu:/usr/lib/aarch)
+
+      1653:       trying
+file=/lib/aarch64-linux-gnu/tls/aarch64/libcrypto.so.1.0.0
+
+      1653:       trying file=/lib/aarch64-linux-gnu/tls/libcrypto.so.1.0.0
+
+      1653:       trying
+file=/lib/aarch64-linux-gnu/aarch64/libcrypto.so.1.0.0
+
+     1653:       trying file=/lib/aarch64-linux-gnu/libcrypto.so.1.0.0
+
+      1653:       trying
+file=/usr/lib/aarch64-linux-gnu/tls/aarch64/libcrypto.so.1.0.0
+
+      1653:       trying
+file=/usr/lib/aarch64-linux-gnu/tls/libcrypto.so.1.0.0
+
+      1653:       trying
+file=/usr/lib/aarch64-linux-gnu/aarch64/libcrypto.so.1.0.0
+
+      1653:       trying file=/usr/lib/aarch64-linux-gnu/libcrypto.so.1.0.0
+
+      1653:
+
+ssh-keygen: error while loading shared libraries: libcrypto.so.1.0.0:
+cannot open shared object file: No such file or directory
+
+
+However, the library *does* exist in /usr/lib. If I create a symlink on the
+target (ln -s /usr/lib/* /lib/aarch64-linux-gnu/), then everything resolves
+correctly. Why are the binaries looking for their libraries in /lib/<tuple>
+and /usr/lib/<tuple> instead of just /lib and /usr/lib?
+
+
+The toolchain has GCC version 4.9.x, kernel headers 4.4.x, and I'm using
+glibc/eglibc.
+
+
+Thank you - this is my first post to the mailing list - hopefully I'm not
+making any faux pas's.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170120/0c2d0c23/attachment.html>
