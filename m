@@ -1,40 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 21:23:17 +0100
-Subject: [Buildroot] [git commit] qt5multimedia: install examples
-Message-ID: <20170120202351.D6CEA819A4@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 20 Jan 2017 17:25:45 -0300
+Subject: [Buildroot] [PATCH] hdparm: bump to version 9.51
+Message-ID: <20170120202545.27411-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9efbfd9f531c5ef115e5ea7f369ad0b8de16d1ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/qt5/qt5multimedia/qt5multimedia.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/hdparm/hdparm.hash | 4 ++--
+ package/hdparm/hdparm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 67e7968..3075ffc 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -59,9 +59,16 @@ define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
- endef
- endif
+diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
+index 96f8650..1402169 100644
+--- a/package/hdparm/hdparm.hash
++++ b/package/hdparm/hdparm.hash
+@@ -1,3 +1,3 @@
+ # From http://sourceforge.net/projects/hdparm/files/hdparm/
+-md5	d380062ad6c4b40076736efbb640f1f5		hdparm-9.50.tar.gz
+-sha1	2acfb9ab9f6aae0d1d69e302ae2861342e4a374e	hdparm-9.50.tar.gz
++md5	8fe0a71db02f7ffc602d14a69f766cff	hdparm-9.51.tar.gz
++sha1	cc9dc4cbaa00f7534988c37111be8e2c6e81cf73	hdparm-9.51.tar.gz
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index e9a2088..4a53e93 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
-+       cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/multimedia* $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
-+endif
-+
- define QT5MULTIMEDIA_INSTALL_TARGET_CMDS
- 	$(QT5MULTIMEDIA_INSTALL_TARGET_LIBS)
- 	$(QT5MULTIMEDIA_INSTALL_TARGET_QMLS)
-+	$(QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES)
- endef
- 
- $(eval $(generic-package))
+-HDPARM_VERSION = 9.50
++HDPARM_VERSION = 9.51
+ HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
+ HDPARM_LICENSE = BSD-Style
+ HDPARM_LICENSE_FILES = LICENSE.TXT
+-- 
+2.10.2
