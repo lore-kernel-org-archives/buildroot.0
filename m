@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jan 2017 14:08:48 +1100
-Subject: [Buildroot] [PATCH] SDL2_X11 depends on MMU (fork)
-In-Reply-To: <20170119215327.10668-1-romain.naour@gmail.com>
-References: <20170119215327.10668-1-romain.naour@gmail.com>
-Message-ID: <20170120140848.0978edc6@free-electrons.com>
+Date: Fri, 20 Jan 2017 14:09:23 +1100
+Subject: [Buildroot] [git commit] package/ltp-testsuite: update configure
+	flags
+Message-ID: <20170120030930.51B2480288@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d4745040e6a7937d53c803bc00f7b4158e682404
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 19 Jan 2017 22:53:27 +0100, Romain Naour wrote:
-> From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-> 
-> Fixes autobuilder failure http://autobuild.buildroot.net/results/2f7/2f738830bf98eb7284f99c11856a8694467b3daa
-> 
-> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-> Cc: baruch at tkos.co.il
-> Cc: romain.naour at gmail.com
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> Guillaume's email sent with git send-email seems rejected by the mailing list server...
-> ---
->  package/sdl2/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+compile also open possix
 
-I've applied, after fixing two things:
+remove power management (compiled by default since commit
+b74bbed51b0c0d44b70b136326a8a23cbc64db01)
 
- - The commit title did not comply with our usual practice, it was
-   lacking a package prefix, "sdl2: ".
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ltp-testsuite/ltp-testsuite.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- - The depends on BR2_USE_MMU dependency was not provided to the
-   Config.in comment as it should have been.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index f892dc0..9d82087 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -10,7 +10,7 @@ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download
+ LTP_TESTSUITE_LICENSE = GPLv2, GPLv2+
+ LTP_TESTSUITE_LICENSE_FILES = COPYING
+ LTP_TESTSUITE_CONF_OPTS += \
+-	--with-power-management-testsuite \
++	--with-open-posix-testsuite \
+ 	--with-realtime-testsuite
+ 
+ ifeq ($(BR2_LINUX_KERNEL),y)
