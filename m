@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 20:37:47 +0100
-Subject: [Buildroot] [PATCH 12/12] libxml-parser-perl: bump to version
-	2.44
-In-Reply-To: <1484904605-11239-12-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Fri, 20 Jan 2017 10:30:05 +0100")
+Date: Fri, 20 Jan 2017 20:39:58 +0100
+Subject: [Buildroot] [PATCH 06/12] perl-net-dns: bump to version 1.07
+In-Reply-To: <1484904605-11239-6-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Fri, 20 Jan 2017 10:29:59 +0100")
 References: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
- <1484904605-11239-12-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87a8alset0.fsf@dell.be.48ers.dk>
+ <1484904605-11239-6-git-send-email-francois.perrad@gadz.org>
+Message-ID: <8760l9sepd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,53 +15,28 @@ To: buildroot@busybox.net
 >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > ---
+ >  package/perl-net-dns/Config.in         | 4 ++--
+ >  package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ >  package/perl-net-dns/perl-net-dns.mk   | 2 +-
+ >  3 files changed, 5 insertions(+), 5 deletions(-)
 
-Ehh, I've already added this version bump 1.5 months ago?
-
-commit 16fdd76743118dea9321ef6e238a29605ec8e234
-Author: J?rg Krause <joerg.krause@embedded.rocks>
-Date:   Fri Dec 2 08:56:59 2016 +0100
-
-    package/libxml-parser-perl: bump version to 2.44
-
-    Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-> ---
- >  package/libxml-parser-perl/libxml-parser-perl.hash | 2 +-
- >  package/libxml-parser-perl/libxml-parser-perl.mk   | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
-
- > diff --git a/package/libxml-parser-perl/libxml-parser-perl.hash
- > b/package/libxml-parser-perl/libxml-parser-perl.hash
- > index 4a8c0d3..d8e0df5 100644
- > --- a/package/libxml-parser-perl/libxml-parser-perl.hash
- > +++ b/package/libxml-parser-perl/libxml-parser-perl.hash
- > @@ -1,2 +1,2 @@
- >  # locally computed hash
- > -sha256 b48197cd2265a26c5f016489f11a7b450d8833cb8b3d6a46ee15975740894de9 XML-Parser-2.41.tar.gz
- > +sha256 1ae9d07ee9c35326b3d9aad56eae71a6730a73a116b9fe9e8a4758b7cc033216 XML-Parser-2.44.tar.gz
- > diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk
- > b/package/libxml-parser-perl/libxml-parser-perl.mk
- > index 9e5325c..e512815 100644
- > --- a/package/libxml-parser-perl/libxml-parser-perl.mk
- > +++ b/package/libxml-parser-perl/libxml-parser-perl.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+ > diff --git a/package/perl-net-dns/Config.in b/package/perl-net-dns/Config.in
+ > index 24ce481..c156505 100644
+ > --- a/package/perl-net-dns/Config.in
+ > +++ b/package/perl-net-dns/Config.in
+ > @@ -2,6 +2,6 @@ config BR2_PACKAGE_PERL_NET_DNS
+ >  	bool "perl-net-dns"
+ >  	select BR2_PACKAGE_PERL_DIGEST_HMAC
+ >  	help
+ > -	  Net::DNS is a DNS resolver implemented in Perl.
+ > +	  Perl Interface to the Domain Name System
  
- > -LIBXML_PARSER_PERL_VERSION = 2.41
- > +LIBXML_PARSER_PERL_VERSION = 2.44
- >  LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
- >  LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
- >  HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
- > -- 
- > 2.7.4
+ > -	  http://www.net-dns.org
+ > +	  https://metacpan.org/release/Net-DNS
 
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+The old homepage is IMHO better. It seems much more detailed, so I've
+kept it and committed patches 1-11, thanks.
 
 -- 
 Bye, Peter Korsgaard
