@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 20 Jan 2017 10:30:02 +0100
-Subject: [Buildroot] [PATCH 09/12] perl-libwww-perl: bump to version 6.16
+Date: Fri, 20 Jan 2017 10:30:04 +0100
+Subject: [Buildroot] [PATCH 11/12] perl-module-build: bump to version 0.4220
 In-Reply-To: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
 References: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1484904605-11239-9-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1484904605-11239-11-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
- package/perl-libwww-perl/perl-libwww-perl.mk   | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/perl-module-build/perl-module-build.hash | 4 ++--
+ package/perl-module-build/perl-module-build.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index ffc180f..d3b3328 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
+index d42dbad..0363ac5 100644
+--- a/package/perl-module-build/perl-module-build.hash
++++ b/package/perl-module-build/perl-module-build.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    6888c9d8728cd6f3ea3c9754461c9f94 libwww-perl-6.15.tar.gz
--sha256 6f349d45c21b1ec0501c4437dfcb70570940e6c3d5bff783bd91d4cddead8322 libwww-perl-6.15.tar.gz
-+md5    0880fade10edcf5f60087e42f1db4481 libwww-perl-6.16.tar.gz
-+sha256 daffd268000f92d241f8ae5508ae5616dbd02f15a587b4fbcd14998ccc15ce22 libwww-perl-6.16.tar.gz
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index 594eb7d..8d4d00e 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
-@@ -4,11 +4,9 @@
+-md5    7e3b17e14b54036c5ac18c27f7955e79 Module-Build-0.4218.tar.gz
+-sha256 1ef0aa529a3f296f894a5e79240a77d71be60dd595e8cad3a0d04c7ea187c0d0 Module-Build-0.4218.tar.gz
++md5    9df204e188462a4410d496f316c2c531 Module-Build-0.4220.tar.gz
++sha256 fb1207c7e799366f7a8adda3f135bf8141c4d6068505650d4db2b2d3ce34b5a2 Module-Build-0.4220.tar.gz
+diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
+index 0effbac..3c27002 100644
+--- a/package/perl-module-build/perl-module-build.mk
++++ b/package/perl-module-build/perl-module-build.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_LIBWWW_PERL_VERSION = 6.15
-+PERL_LIBWWW_PERL_VERSION = 6.16
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
--PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
--PERL_LIBWWW_PERL_LICENSE = Artistic or GPLv1+
--PERL_LIBWWW_LICENSE_FILES = README
-+PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_DEPENDENCIES = \
- 	perl-encode-locale \
- 	perl-file-listing \
-@@ -22,5 +20,7 @@ PERL_LIBWWW_PERL_DEPENDENCIES = \
- 	perl-net-http \
- 	perl-uri \
- 	perl-www-robotrules
-+PERL_LIBWWW_PERL_LICENSE = Artistic or GPLv1+
-+PERL_LIBWWW_PERL_LICENSE_FILES = LICENSE
- 
- $(eval $(perl-package))
+-PERL_MODULE_BUILD_VERSION = 0.4218
++PERL_MODULE_BUILD_VERSION = 0.4220
+ PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
+ PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
+ PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
 -- 
 2.7.4
