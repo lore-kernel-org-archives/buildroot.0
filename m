@@ -1,57 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 20:29:49 +0100
-Subject: [Buildroot] [git commit] perl-try-tiny: bump to version 0.28
-Message-ID: <20170120194046.5900480DB7@busybox.osuosl.org>
+Date: Fri, 20 Jan 2017 21:11:15 +0100
+Subject: [Buildroot] Extra package libraries not resolved on target
+	system (Xilinx aarch64)
+In-Reply-To: <CAKuvFvRqf6BomOx5exQHCeC=g61bOD_zJNYF-sw2G9YEr+UtHA@mail.gmail.com>
+ (John Moon's message of "Fri, 20 Jan 2017 11:20:37 -0800")
+References: <CAKuvFvRqf6BomOx5exQHCeC=g61bOD_zJNYF-sw2G9YEr+UtHA@mail.gmail.com>
+Message-ID: <871svxsd98.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94173ce4700e40203a0a5b33251623cf0a3d3760
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "John" == John Moon <johncarlmoon@gmail.com> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/perl-try-tiny/Config.in          | 4 ++--
- package/perl-try-tiny/perl-try-tiny.hash | 4 ++--
- package/perl-try-tiny/perl-try-tiny.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Hi,
 
-diff --git a/package/perl-try-tiny/Config.in b/package/perl-try-tiny/Config.in
-index ea25589..5c115b6 100644
---- a/package/perl-try-tiny/Config.in
-+++ b/package/perl-try-tiny/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_TRY_TINY
- 	bool "perl-try-tiny"
- 	help
--	  minimal try/catch with proper preservation of $@
-+	  Minimal try/catch with proper preservation of $@
- 
--	  https://github.com/karenetheridge/Try-Tiny
-+	  https://github.com/p5sagit/Try-Tiny
-diff --git a/package/perl-try-tiny/perl-try-tiny.hash b/package/perl-try-tiny/perl-try-tiny.hash
-index dc44f18..c6dbd44 100644
---- a/package/perl-try-tiny/perl-try-tiny.hash
-+++ b/package/perl-try-tiny/perl-try-tiny.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    1a12a51cfeb7e2c301e4ae093c7ecdfb Try-Tiny-0.24.tar.gz
--sha256 9b7a1af24c0256973d175369ebbdc25ec01e2452a97f2d3ab61481c826f38d81 Try-Tiny-0.24.tar.gz
-+md5    e2f8af601a62981aab30df15a6f47475 Try-Tiny-0.28.tar.gz
-+sha256 f1d166be8aa19942c4504c9111dade7aacb981bc5b3a2a5c5f6019646db8c146 Try-Tiny-0.28.tar.gz
-diff --git a/package/perl-try-tiny/perl-try-tiny.mk b/package/perl-try-tiny/perl-try-tiny.mk
-index f033197..b4d35ab 100644
---- a/package/perl-try-tiny/perl-try-tiny.mk
-+++ b/package/perl-try-tiny/perl-try-tiny.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_TRY_TINY_VERSION = 0.24
-+PERL_TRY_TINY_VERSION = 0.28
- PERL_TRY_TINY_SOURCE = Try-Tiny-$(PERL_TRY_TINY_VERSION).tar.gz
- PERL_TRY_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_TRY_TINY_LICENSE = MIT
+ > Using the Xilinx SDK aarch64 toolchain with Buildroot, extra packages are
+ > having trouble resolving their libraries on the target system. For example,
+ > openssh requires libcrypto.so.1.0.0, but can't find that library when
+ > running ssh-keygen:
+
+Is this toolchain publicly available somewhere?
+
+
+ > # LD_DEBUG=libs ssh-keygen
+
+ >       1653:     find library=libcrypto.so.1.0.0 [0]; searching
+
+ >       1653:      search cache=/etc/ld.so.cache
+
+ >       1653:      search
+ > path=/lib/aarch64-linux-gnu/tls/aarch64:/lib/aarch64-linux-gnu/tls:/lib/aarch64-linux-gnu/aarch64:/lib/aarch64-linux-gnu:/usr/lib/aarch)
+
+So it seems to be using Debian style /lib/<tuple> library paths.
+
+
+ > ssh-keygen: error while loading shared libraries: libcrypto.so.1.0.0:
+ > cannot open shared object file: No such file or directory
+
+
+ > However, the library *does* exist in /usr/lib. If I create a symlink on the
+ > target (ln -s /usr/lib/* /lib/aarch64-linux-gnu/), then everything resolves
+ > correctly.
+
+What Buildroot version are you using? The logic in
+toolchain/external/pkg-toolchain-external.mk should normally create such
+a symlink for you if it is able to detect the ARCH_LIB_DIR with this
+logic:
+
+# Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
+# Note: the skeleton package additionally creates lib32->lib or lib64->lib
+# (as appropriate)
+#
+# $1: destination directory (TARGET_DIR / STAGING_DIR)
+create_lib_symlinks = \
+       $(Q)DESTDIR="$(strip $1)" ; \
+       ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+       if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
+               ln -snf lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
+               ln -snf lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
+       fi
+
+Perhaps you can add some echo statements here to see what goes wrong?
+
+ > Why are the binaries looking for their libraries in /lib/<tuple>
+ > and /usr/lib/<tuple> instead of just /lib and /usr/lib?
+
+Because the toolchain is configured to do so.
+
+
+ > The toolchain has GCC version 4.9.x, kernel headers 4.4.x, and I'm using
+ > glibc/eglibc.
+
+That's quite old for aarch64. Is there any specific reason why you are
+using this toolchain?
+
+ > Thank you - this is my first post to the mailing list - hopefully I'm not
+ > making any faux pas's.
+
+No no, don't worry ;)
+
+-- 
+Bye, Peter Korsgaard
