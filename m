@@ -1,7 +1,9 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 21:16:05 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9}.x series
-Message-ID: <20170120201606.11834-1-peter@korsgaard.com>
+Date: Fri, 20 Jan 2017 21:16:06 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.9.5
+In-Reply-To: <20170120201606.11834-1-peter@korsgaard.com>
+References: <20170120201606.11834-1-peter@korsgaard.com>
+Message-ID: <20170120201606.11834-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,22 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
+ linux/Config.in | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b4b3698f7..c5361a172 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.43"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.44"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.4"		if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.5"		if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index f19dce1a4..4a3c29a68 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.4)"
++	bool "Latest version (4.9.5)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.9.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.9.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
 2.11.0
