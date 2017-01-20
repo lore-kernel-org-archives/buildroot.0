@@ -1,52 +1,115 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 15:59:24 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] gd: security bump to
-	version 2.2.4
-Message-ID: <20170120145945.105E180762@busybox.osuosl.org>
+From: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
+Date: Fri, 20 Jan 2017 10:12:38 -0500
+Subject: [Buildroot] [PATCH v3 2/3] board/altera: added genimage script to
+	SoCkit
+In-Reply-To: <1484925159-25292-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
+References: <1484925159-25292-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
+Message-ID: <1484925159-25292-3-git-send-email-lucas.bajolet@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f72645e89ddebe19b69e7396965770cfd27bb65
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+Previously, the Altera SoCkit image has to be built manually by
+the developer who wanted to use it.
 
-Fixes:
-CVE-2016-9317 - gdImageCreate() doesn't check for oversized images and
-as such is prone to DoS vulnerabilities.
-CVE-2016-6912 - double-free in gdImageWebPtr()
-(without CVE):
-Potential unsigned underflow in gd_interpolation.c
-DOS vulnerability in gdImageCreateFromGd2Ctx()
-Signed Integer Overflow gd_io.c
+This patch introduces a `genimage.cfg` file to build the image
+automatically when done building the files from source.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 39885cc5b0c6ff175fe3a115231bc2428840e7b7)
+Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
 ---
- package/gd/gd.hash | 2 +-
- package/gd/gd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/altera/genimage.cfg       | 31 +++++++++++++++++++++++++++++++
+ board/altera/post-image.sh      | 29 ++++++++++++++++++++++++++++-
+ configs/altera_sockit_defconfig |  1 +
+ 3 files changed, 60 insertions(+), 1 deletion(-)
+ create mode 100644 board/altera/genimage.cfg
 
-diff --git a/package/gd/gd.hash b/package/gd/gd.hash
-index eb3da42..a1991b1 100644
---- a/package/gd/gd.hash
-+++ b/package/gd/gd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	746b6cbd6769a22ff3ba6f5756f3512a769bd4cdf4695dff17f4867f25fa7d3c	libgd-2.2.3.tar.xz
-+sha256	137f13a7eb93ce72e32ccd7cebdab6874f8cf7ddf31d3a455a68e016ecd9e4e6	libgd-2.2.4.tar.xz
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 0777bdb..63d16eb 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/altera/genimage.cfg b/board/altera/genimage.cfg
+new file mode 100644
+index 0000000..3107939
+--- /dev/null
++++ b/board/altera/genimage.cfg
+@@ -0,0 +1,31 @@
++image rootfs-img.vfat {
++	vfat {
++		file "socfpga.dtb" {image = "socfpga_cyclone5_sockit.dtb"}
++		file "zImage" {image = "zImage"}
++	}
++
++	size = 10M
++}
++
++image sockit_image.img {
++	hdimage {
++	}
++
++	partition uboot {
++		partition-type = 0xa2
++		image = "uboot-part.img"
++		offset = 0
++	}
++
++	partition rootfs {
++		partition-type = 0xb
++		image = "rootfs-img.vfat"
++		offset = 1M
++	}
++
++	partition linux {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		offset = 12M
++	}
++}
+diff --git a/board/altera/post-image.sh b/board/altera/post-image.sh
+index 03e7819..a9aefc9 100755
+--- a/board/altera/post-image.sh
++++ b/board/altera/post-image.sh
+@@ -5,4 +5,31 @@
  
--GD_VERSION = 2.2.3
-+GD_VERSION = 2.2.4
- GD_SOURCE = libgd-$(GD_VERSION).tar.xz
- GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
- GD_INSTALL_STAGING = YES
+ # create a DTB file copy with the name expected by the u-boot config
+ # Name of the DTB is passed as the second argument to the script.
+-cp -af $BINARIES_DIR/${2}.dtb  $BINARIES_DIR/socfpga.dtb
++set -e
++
++BOARD_DIR=$(dirname $0)
++
++# Create SPL + bootloader image
++fallocate -l 1M $BINARIES_DIR/uboot-part.img
++dd if=$BINARIES_DIR/u-boot-spl.bin of=$BINARIES_DIR/uboot-part.img bs=64k seek=0
++dd if=$BINARIES_DIR/u-boot-spl.bin.crc of=$BINARIES_DIR/uboot-part.img bs=64k seek=1
++dd if=$BINARIES_DIR/u-boot.img of=$BINARIES_DIR/uboot-part.img bs=64k seek=4
++
++#########################################
++# Final image generation (using genimage)
++#########################################
++# Prepare data for image
++T=`mktemp -d`
++echo $T
++mkdir -p $T/root
++mkdir -p $T/tmp
++
++echo "* Generating sd-card image..."
++genimage \
++        --config $BOARD_DIR/genimage.cfg \
++        --rootpath $T/root \
++        --tmppath $T/tmp \
++        --inputpath $BINARIES_DIR \
++        --outputpath $BINARIES_DIR \
++
++rm -rf $T
+diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+index 9349ebc..fef54ac 100644
+--- a/configs/altera_sockit_defconfig
++++ b/configs/altera_sockit_defconfig
+@@ -11,6 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
+ 
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
++BR2_PACKAGE_HOST_GENIMAGE=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-- 
+2.7.4
