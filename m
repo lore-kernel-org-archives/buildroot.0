@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 20 Jan 2017 17:25:45 -0300
-Subject: [Buildroot] [PATCH] hdparm: bump to version 9.51
-Message-ID: <20170120202545.27411-1-gustavo@zacarias.com.ar>
+Date: Fri, 20 Jan 2017 17:25:56 -0300
+Subject: [Buildroot] [PATCH] iperf3: bump to version 3.1.5
+Message-ID: <20170120202556.29928-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/hdparm/hdparm.hash | 4 ++--
- package/hdparm/hdparm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/iperf3/iperf3.hash | 2 +-
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
-index 96f8650..1402169 100644
---- a/package/hdparm/hdparm.hash
-+++ b/package/hdparm/hdparm.hash
-@@ -1,3 +1,3 @@
- # From http://sourceforge.net/projects/hdparm/files/hdparm/
--md5	d380062ad6c4b40076736efbb640f1f5		hdparm-9.50.tar.gz
--sha1	2acfb9ab9f6aae0d1d69e302ae2861342e4a374e	hdparm-9.50.tar.gz
-+md5	8fe0a71db02f7ffc602d14a69f766cff	hdparm-9.51.tar.gz
-+sha1	cc9dc4cbaa00f7534988c37111be8e2c6e81cf73	hdparm-9.51.tar.gz
-diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
-index e9a2088..4a53e93 100644
---- a/package/hdparm/hdparm.mk
-+++ b/package/hdparm/hdparm.mk
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 0cac1e3..e43210b 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,2 +1,2 @@
+ # From http://software.es.net/iperf/news.html
+-sha256  db61d70ac62003ebe0bf15496bd8c4b3c4b728578a44d0a1a88fcf8afc0e8f76  iperf-3.1.4.tar.gz
++sha256   6e1a6200cd38baeab58ef0d7b8769e7aa6410c3a3168e65ea8277a4de79e5500 iperf-3.1.5.tar.gz
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 7623786..909c104 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HDPARM_VERSION = 9.50
-+HDPARM_VERSION = 9.51
- HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
- HDPARM_LICENSE = BSD-Style
- HDPARM_LICENSE_FILES = LICENSE.TXT
+-IPERF3_VERSION = 3.1.4
++IPERF3_VERSION = 3.1.5
+ IPERF3_SITE = http://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
 -- 
 2.10.2
