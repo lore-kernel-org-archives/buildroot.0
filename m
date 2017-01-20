@@ -1,41 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 21:16:06 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.9.5
-In-Reply-To: <20170120201606.11834-1-peter@korsgaard.com>
-References: <20170120201606.11834-1-peter@korsgaard.com>
-Message-ID: <20170120201606.11834-2-peter@korsgaard.com>
+Date: Fri, 20 Jan 2017 21:19:42 +0100
+Subject: [Buildroot] [PATCH] poco: avoid build failures on multicore
+	hosts
+In-Reply-To: <1484936334-19116-1-git-send-email-casantos@datacom.ind.br>
+ (Carlos Santos's message of "Fri, 20 Jan 2017 16:18:54 -0200")
+References: <1484936334-19116-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <87wpdpqyap.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f19dce1a4..4a3c29a68 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.9.4)"
-+	bool "Latest version (4.9.5)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.9.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.9.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ > Parallel build still fails on heavilly multicore machines (e.g. -j25)
+ > and hacks likecommit 32f4957b153bdabe7af60d529942aca7d1a4783d do not
+ > seem to be effective.
+
+ > Let's simply use MAKE1 for the build step, instead.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/388/38834ad3013fe79e5e4f75997133f1bd827be6dc
+
+ > Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+
+ > ---
+ > Extra information: here at DATACOM we have a build farm with several
+ > multicore blades that usually build with "make -j25". With this setup we
+ > have been observing compilation failures each two days.
+
+ > Change-Id: If80cd0b01ceb8b0aee886ea96a266fa864fa8eb0
+
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
