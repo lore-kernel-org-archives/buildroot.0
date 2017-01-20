@@ -1,85 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 21:11:15 +0100
-Subject: [Buildroot] Extra package libraries not resolved on target
-	system (Xilinx aarch64)
-In-Reply-To: <CAKuvFvRqf6BomOx5exQHCeC=g61bOD_zJNYF-sw2G9YEr+UtHA@mail.gmail.com>
- (John Moon's message of "Fri, 20 Jan 2017 11:20:37 -0800")
-References: <CAKuvFvRqf6BomOx5exQHCeC=g61bOD_zJNYF-sw2G9YEr+UtHA@mail.gmail.com>
-Message-ID: <871svxsd98.fsf@dell.be.48ers.dk>
+Date: Fri, 20 Jan 2017 21:16:05 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9}.x series
+Message-ID: <20170120201606.11834-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "John" == John Moon <johncarlmoon@gmail.com> writes:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
-
- > Using the Xilinx SDK aarch64 toolchain with Buildroot, extra packages are
- > having trouble resolving their libraries on the target system. For example,
- > openssh requires libcrypto.so.1.0.0, but can't find that library when
- > running ssh-keygen:
-
-Is this toolchain publicly available somewhere?
-
-
- > # LD_DEBUG=libs ssh-keygen
-
- >       1653:     find library=libcrypto.so.1.0.0 [0]; searching
-
- >       1653:      search cache=/etc/ld.so.cache
-
- >       1653:      search
- > path=/lib/aarch64-linux-gnu/tls/aarch64:/lib/aarch64-linux-gnu/tls:/lib/aarch64-linux-gnu/aarch64:/lib/aarch64-linux-gnu:/usr/lib/aarch)
-
-So it seems to be using Debian style /lib/<tuple> library paths.
-
-
- > ssh-keygen: error while loading shared libraries: libcrypto.so.1.0.0:
- > cannot open shared object file: No such file or directory
-
-
- > However, the library *does* exist in /usr/lib. If I create a symlink on the
- > target (ln -s /usr/lib/* /lib/aarch64-linux-gnu/), then everything resolves
- > correctly.
-
-What Buildroot version are you using? The logic in
-toolchain/external/pkg-toolchain-external.mk should normally create such
-a symlink for you if it is able to detect the ARCH_LIB_DIR with this
-logic:
-
-# Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
-# Note: the skeleton package additionally creates lib32->lib or lib64->lib
-# (as appropriate)
-#
-# $1: destination directory (TARGET_DIR / STAGING_DIR)
-create_lib_symlinks = \
-       $(Q)DESTDIR="$(strip $1)" ; \
-       ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-       if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
-               ln -snf lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
-               ln -snf lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
-       fi
-
-Perhaps you can add some echo statements here to see what goes wrong?
-
- > Why are the binaries looking for their libraries in /lib/<tuple>
- > and /usr/lib/<tuple> instead of just /lib and /usr/lib?
-
-Because the toolchain is configured to do so.
-
-
- > The toolchain has GCC version 4.9.x, kernel headers 4.4.x, and I'm using
- > glibc/eglibc.
-
-That's quite old for aarch64. Is there any specific reason why you are
-using this toolchain?
-
- > Thank you - this is my first post to the mailing list - hopefully I'm not
- > making any faux pas's.
-
-No no, don't worry ;)
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b4b3698f7..c5361a172 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.43"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.44"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.4"		if BR2_KERNEL_HEADERS_4_9
++	default "4.9.5"		if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Bye, Peter Korsgaard
+2.11.0
