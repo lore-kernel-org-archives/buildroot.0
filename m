@@ -1,46 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jan 2017 14:15:13 +1100
-Subject: [Buildroot] [PATCH 1/4] configs/altera_sockit: bump kernel to
- 4.7 and u-boot to v2016.11-rc3
-In-Reply-To: <1484839933-17637-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
-References: <1484839933-17637-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
- <1484839933-17637-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
-Message-ID: <20170120141513.34e1010e@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 20 Jan 2017 05:35:51 +0200
+Subject: [Buildroot] [PATCH] tslib: needs kernel headers 3.12
+In-Reply-To: <20170120112630.557f297d@free-electrons.com>
+References: <4a250493e254e7a958267c5ce153f9ef05e6fc69.1484830247.git.baruch@tkos.co.il>
+ <20170120112630.557f297d@free-electrons.com>
+Message-ID: <20170120033551.4cpamcz63irneymp@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 19 Jan 2017 10:32:10 -0500, Lucas Bajolet wrote:
+On Fri, Jan 20, 2017 at 11:26:30AM +1100, Thomas Petazzoni wrote:
+> On Thu, 19 Jan 2017 14:50:47 +0200, Baruch Siach wrote:
+> > Kernel headers 3.12+ are required since tslib version 1.3.
+> > 
+> > https://github.com/kergoth/tslib/blob/master/README.markdown
+> > 
+> > Update tslib reverse dependencies.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/28d/28df38e2a042f1b5940bf35c18334ebf8810a348/
+> > http://autobuild.buildroot.net/results/c38/c383cfee3673aa9fba36a86f1e68de63413c2987/
+> > http://autobuild.buildroot.net/results/6dd/6ddb2cd9f4f41ee03dc10a73422ad37070811732/
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> Isn't this a bit annoying for people using tslib on kernel olders than
+> 3.12 ? Isn't there a simpler patch to tslib to avoid depending on
+> headers >= 3.12 ?
 
->  BR2_TARGET_UBOOT=y
-> -BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
-> +BR2_TARGET_UBOOT_BOARDNAME="socfpga_sockit"
->  BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
->  BR2_TARGET_UBOOT_PATCH="board/altera/sockit"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-opensource/u-boot-socfpga"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2016.11-rc3"
+The present build failure seems to be easy to fix by skipping the ts_uinput 
+tool on pre 3.12 kernels. But since upstream explicitly states that 3.12 is 
+the oldest supported kernel (see commit message link) we are on our own here.
 
-Why do you bump to a -rc version rather than a final stable version?
+baruch
 
-Also, you only remove the existing U-Boot patch in PATCH 2/4. Which
-means if I apply only PATCH 1/4, the build is broken.
-
-Patch series should be bisectable: applying PATCH 1/4 only should work,
-applying PATCH 1/4 and 2/4 only should work, applying PATCH 1/4, 2/4
-and 3/4 only should work.
-
-Could you rework your series with this in mind?
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
