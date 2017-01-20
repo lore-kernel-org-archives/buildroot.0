@@ -1,43 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jan 2017 20:28:04 +0100
-Subject: [Buildroot] [git commit] perl-path-tiny: bump to version 0.100
-Message-ID: <20170120194046.4E18380DB7@busybox.osuosl.org>
+Date: Fri, 20 Jan 2017 20:31:39 +0100
+Subject: [Buildroot] [git commit] perl-xml-libxml: bump to version 2.0128
+Message-ID: <20170120194046.8E91380DB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bef8a30b440d4113d688cd7d02340860fc34e46
+commit: https://git.buildroot.net/buildroot/commit/?id=171cd2c5cc2220b5a5f25d96b526132a9840de23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-path-tiny/perl-path-tiny.hash | 4 ++--
- package/perl-path-tiny/perl-path-tiny.mk   | 2 +-
+ package/perl-xml-libxml/perl-xml-libxml.hash | 4 ++--
+ package/perl-xml-libxml/perl-xml-libxml.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-path-tiny/perl-path-tiny.hash b/package/perl-path-tiny/perl-path-tiny.hash
-index a62c165..259469c 100644
---- a/package/perl-path-tiny/perl-path-tiny.hash
-+++ b/package/perl-path-tiny/perl-path-tiny.hash
+diff --git a/package/perl-xml-libxml/perl-xml-libxml.hash b/package/perl-xml-libxml/perl-xml-libxml.hash
+index 1d42bf2..b6195c3 100644
+--- a/package/perl-xml-libxml/perl-xml-libxml.hash
++++ b/package/perl-xml-libxml/perl-xml-libxml.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    840696b295230682c727297c87fe42d6 Path-Tiny-0.072.tar.gz
--sha256 d7507c7822d4f7f60a5329d26c8afce31022cd92d02b011e367cc6a1eeae6981 Path-Tiny-0.072.tar.gz
-+md5    92ece7b2aa09f18035b0550b0118bdee Path-Tiny-0.100.tar.gz
-+sha256 8b8c4c9db710470a26b356e7187eba47217fbba1fe8bd0ad72c5b2cc8f6ba10c Path-Tiny-0.100.tar.gz
-diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
-index 0af84fd..ed1304d 100644
---- a/package/perl-path-tiny/perl-path-tiny.mk
-+++ b/package/perl-path-tiny/perl-path-tiny.mk
+-md5    c6007524ddec3be6cfbb8f68f5aa791c XML-LibXML-2.0126.tar.gz
+-sha256 0e735ab72e2ba77070a58a737fd6c61fa6aa198527abc59a5d5627f0650a60af XML-LibXML-2.0126.tar.gz
++md5    9904690371679e082ff2c23677b6c90e XML-LibXML-2.0128.tar.gz
++sha256 26e7ba451f3bade4d29ff00653a2ee01d13fe38b9a2ebcd0b0f3f82f9f688f2b XML-LibXML-2.0128.tar.gz
+diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
+index 66c606b..8d8f590 100644
+--- a/package/perl-xml-libxml/perl-xml-libxml.mk
++++ b/package/perl-xml-libxml/perl-xml-libxml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PATH_TINY_VERSION = 0.072
-+PERL_PATH_TINY_VERSION = 0.100
- PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
- PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
- PERL_PATH_TINY_LICENSE = Apache-2.0
+-PERL_XML_LIBXML_VERSION = 2.0126
++PERL_XML_LIBXML_VERSION = 2.0128
+ PERL_XML_LIBXML_SOURCE = XML-LibXML-$(PERL_XML_LIBXML_VERSION).tar.gz
+ PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
+ PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2 perl-xml-namespacesupport perl-xml-sax perl-xml-sax-base
