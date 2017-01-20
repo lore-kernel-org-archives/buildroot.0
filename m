@@ -1,39 +1,48 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Fri, 20 Jan 2017 17:46:22 +0100
-Subject: [Buildroot] [PATCH] qt5multimedia: install examples
-Message-ID: <a6f0d8e2-f507-d836-06a9-a864bf309c70@grandegger.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 20 Jan 2017 16:18:54 -0200
+Subject: [Buildroot] [PATCH] poco: avoid build failures on multicore hosts
+Message-ID: <1484936334-19116-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+Parallel build still fails on heavilly multicore machines (e.g. -j25)
+and hacks likecommit 32f4957b153bdabe7af60d529942aca7d1a4783d do not
+seem to be effective.
+
+Let's simply use MAKE1 for the build step, instead.
+
+Fixes:
+http://autobuild.buildroot.net/results/388/38834ad3013fe79e5e4f75997133f1bd827be6dc
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
 ---
- package/qt5/qt5multimedia/qt5multimedia.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Extra information: here at DATACOM we have a build farm with several
+multicore blades that usually build with "make -j25". With this setup we
+have been observing compilation failures each two days.
 
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 67e7968..3075ffc 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -59,9 +59,16 @@ define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
-+       cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/multimedia* $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
-+endif
-+
- define QT5MULTIMEDIA_INSTALL_TARGET_CMDS
- 	$(QT5MULTIMEDIA_INSTALL_TARGET_LIBS)
- 	$(QT5MULTIMEDIA_INSTALL_TARGET_QMLS)
-+	$(QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES)
+Change-Id: If80cd0b01ceb8b0aee886ea96a266fa864fa8eb0
+---
+ package/poco/poco.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 79452c0..54ec701 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -57,8 +57,9 @@ define POCO_CONFIGURE_CMDS
+ 		--no-samples)
  endef
  
- $(eval $(generic-package))
++# Use $(MAKE1) to avoid failures on heavilly parallel machines (e.g. -j25)
+ define POCO_BUILD_CMDS
+-	$(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
++	$(MAKE1) POCO_TARGET_OSARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS) \
+ 		MYSQL_LIBDIR=$(STAGING_DIR)/usr/lib/mysql \
+ 		MYSQL_INCDIR=$(STAGING_DIR)/usr/include/mysql \
+ 		DEFAULT_TARGET=$(POCO_MAKE_TARGET) -C $(@D)
 -- 
-1.9.1
+2.7.4
