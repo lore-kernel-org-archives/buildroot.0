@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jan 2017 11:28:54 +1100
-Subject: [Buildroot] Fwd: Undelivered Mail Returned to Sender
-In-Reply-To: <55b233af-89ae-5e3a-42a5-4d9a79c8f122@oliseo.fr>
-References: <20170119135330.BD1852003F1@smtp2-g21.free.fr>
- <55b233af-89ae-5e3a-42a5-4d9a79c8f122@oliseo.fr>
-Message-ID: <20170120112854.578246e9@free-electrons.com>
+Date: Fri, 20 Jan 2017 13:18:17 +1100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-01-18
+In-Reply-To: <20170120003818.GA5114@tungsten.ozlabs.ibm.com>
+References: <20170119072929.AFCF620C11@mail.free-electrons.com>
+ <20170120003818.GA5114@tungsten.ozlabs.ibm.com>
+Message-ID: <20170120131817.382b2ac9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +14,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 19 Jan 2017 14:55:37 +0100, Guillaume GARDET - Olis?o wrote:
+On Fri, 20 Jan 2017 11:38:18 +1100, Sam Bobroff wrote:
 
-> I received the following error message while sending emails using
-> "git send-email" command as usual.
+> > This is the list of Buildroot build failures that occured on
+> > 2017-01-18, and for which you are a registered architecture developer
+> > or package developer. Please help us improving the quality of
+> > Buildroot by investigating those build failures and sending patches to
+> > fix them. Thanks!
+> > 
+> > Build failures related to your architectures:  
 > 
-> It seems that Buildroot list is blocking my emails.
+> [snip]
+> 
+> >    powerpc64 |                  openocd-0.9.0 | http://autobuild.buildroot.net/results/0640114028b1e633cefc682e8d6a8283a3a39019  
+> 
+> Hi Thomas,
+> 
+> I've had a look at the openocd failure, above, and while it's simple and
+> I have a patch for it, there might be something odd going on so I
+> thought I should ask you about it first.
+> 
+> The failure is in the install stage, caused by the documentation being
+> regenerated from the .texi input, which fails. It's easy to fix by
+> tweaking the Makefile (actualy Makefile.in) as has been done on many
+> other packages... however, what I'm curious about is why the error is
+> showing up in the autobuilder in the first place.
+> 
+> The file modification times in the package's archive seem to be correct:
+> $ ls openocd-0.9.0.orig/doc/openocd.{info,texi}
+> -rw-r--r-- 1 xxxx xxxx   3,542 2015-05-18 07:13:55.000000000 +1000
+> openocd-0.9.0.orig/doc/openocd.info
+> -rw-r--r-- 1 xxxx xxxx 354,589 2015-05-18 07:04:07.000000000 +1000
+> openocd-0.9.0.orig/doc/openocd.texi
+> 
+> (And I can't replicate the autobuilder failure unless I touch the .texi
+> file.)
+> 
+> Is something you've seen before?  Could something on the autobuilder be
+> touching a file or otherwise confusing the timestamp?
+> 
+> What I don't understand is how this particular file causes a
+> re-generation yet other files don't (e.g. Makefile.am would cause
+> regeneration of Makefile.in but that doesn't happen).
+> 
+> Any ideas? Just send the patch?
 
-<buildroot@buildroot.org>: host smtp2.osuosl.org[140.211.166.133] said: 550
-    5.7.1 Service unavailable; Client host [212.27.42.2] blocked using
-    psbl.surriel.rbldns; Listed in PSBL, see
-    http://psbl.org/listing?ip=212.27.42.2 (in reply to RCPT TO command)
-
-This typically means your SMTP server is listed in a blacklist, which
-the osuosl.org SMTP server uses to decide whether it should accept your
-e-mail or not.
+I don't really have a good idea. I'm adding the Buildroot mailing list
+in Cc in case other folks have more ideas.
 
 Thomas
 -- 
