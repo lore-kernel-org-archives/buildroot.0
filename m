@@ -1,69 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jan 2017 13:18:17 +1100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-01-18
-In-Reply-To: <20170120003818.GA5114@tungsten.ozlabs.ibm.com>
-References: <20170119072929.AFCF620C11@mail.free-electrons.com>
- <20170120003818.GA5114@tungsten.ozlabs.ibm.com>
-Message-ID: <20170120131817.382b2ac9@free-electrons.com>
+Date: Fri, 20 Jan 2017 13:18:55 +1100
+Subject: [Buildroot] [git commit] python-toml: new package
+Message-ID: <20170120021901.8EB0581810@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=23f0a280d1d75fc739e6847ebe9b27e3b5c03707
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Jan 2017 11:38:18 +1100, Sam Bobroff wrote:
+Use GitHub instead of PyPI because PyPI release if out-of-date.
 
-> > This is the list of Buildroot build failures that occured on
-> > 2017-01-18, and for which you are a registered architecture developer
-> > or package developer. Please help us improving the quality of
-> > Buildroot by investigating those build failures and sending patches to
-> > fix them. Thanks!
-> > 
-> > Build failures related to your architectures:  
-> 
-> [snip]
-> 
-> >    powerpc64 |                  openocd-0.9.0 | http://autobuild.buildroot.net/results/0640114028b1e633cefc682e8d6a8283a3a39019  
-> 
-> Hi Thomas,
-> 
-> I've had a look at the openocd failure, above, and while it's simple and
-> I have a patch for it, there might be something odd going on so I
-> thought I should ask you about it first.
-> 
-> The failure is in the install stage, caused by the documentation being
-> regenerated from the .texi input, which fails. It's easy to fix by
-> tweaking the Makefile (actualy Makefile.in) as has been done on many
-> other packages... however, what I'm curious about is why the error is
-> showing up in the autobuilder in the first place.
-> 
-> The file modification times in the package's archive seem to be correct:
-> $ ls openocd-0.9.0.orig/doc/openocd.{info,texi}
-> -rw-r--r-- 1 xxxx xxxx   3,542 2015-05-18 07:13:55.000000000 +1000
-> openocd-0.9.0.orig/doc/openocd.info
-> -rw-r--r-- 1 xxxx xxxx 354,589 2015-05-18 07:04:07.000000000 +1000
-> openocd-0.9.0.orig/doc/openocd.texi
-> 
-> (And I can't replicate the autobuilder failure unless I touch the .texi
-> file.)
-> 
-> Is something you've seen before?  Could something on the autobuilder be
-> touching a file or otherwise confusing the timestamp?
-> 
-> What I don't understand is how this particular file causes a
-> re-generation yet other files don't (e.g. Makefile.am would cause
-> regeneration of Makefile.in but that doesn't happen).
-> 
-> Any ideas? Just send the patch?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                    |  1 +
+ package/python-toml/Config.in        |  6 ++++++
+ package/python-toml/python-toml.hash |  2 ++
+ package/python-toml/python-toml.mk   | 13 +++++++++++++
+ 4 files changed, 22 insertions(+)
 
-I don't really have a good idea. I'm adding the Buildroot mailing list
-in Cc in case other folks have more ideas.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 8c8c33e..1766089 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -800,6 +800,7 @@ menu "External python modules"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
++	source "package/python-toml/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+diff --git a/package/python-toml/Config.in b/package/python-toml/Config.in
+new file mode 100644
+index 0000000..a41622f
+--- /dev/null
++++ b/package/python-toml/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_TOML
++	bool "python-toml"
++	help
++	  Python Library for Tom's Obvious, Minimal Language.
++
++	  https://github.com/uiri/toml
+diff --git a/package/python-toml/python-toml.hash b/package/python-toml/python-toml.hash
+new file mode 100644
+index 0000000..cbc71a9
+--- /dev/null
++++ b/package/python-toml/python-toml.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	aee9679726f42fb09f48b9701a321571e0b6a51305c3e0f3913b3057d8bf7083  python-toml-0.9.2.tar.gz
+diff --git a/package/python-toml/python-toml.mk b/package/python-toml/python-toml.mk
+new file mode 100644
+index 0000000..fec113e
+--- /dev/null
++++ b/package/python-toml/python-toml.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-toml
++#
++################################################################################
++
++PYTHON_TOML_VERSION = 0.9.2
++PYTHON_TOML_SITE = $(call github,uiri,toml,$(PYTHON_TOML_VERSION))
++PYTHON_TOML_SETUP_TYPE = distutils
++PYTHON_TOML_LICENSE = MIT
++PYTHON_TOML_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
