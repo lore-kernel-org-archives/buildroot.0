@@ -1,69 +1,68 @@
-From: John Moon <johncarlmoon@gmail.com>
-Date: Fri, 20 Jan 2017 11:20:37 -0800
-Subject: [Buildroot] Extra package libraries not resolved on target system
-	(Xilinx aarch64)
-Message-ID: <CAKuvFvRqf6BomOx5exQHCeC=g61bOD_zJNYF-sw2G9YEr+UtHA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 20 Jan 2017 20:37:47 +0100
+Subject: [Buildroot] [PATCH 12/12] libxml-parser-perl: bump to version
+	2.44
+In-Reply-To: <1484904605-11239-12-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Fri, 20 Jan 2017 10:30:05 +0100")
+References: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
+ <1484904605-11239-12-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87a8alset0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using the Xilinx SDK aarch64 toolchain with Buildroot, extra packages are
-having trouble resolving their libraries on the target system. For example,
-openssh requires libcrypto.so.1.0.0, but can't find that library when
-running ssh-keygen:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
+Ehh, I've already added this version bump 1.5 months ago?
 
-# LD_DEBUG=libs ssh-keygen
+commit 16fdd76743118dea9321ef6e238a29605ec8e234
+Author: J?rg Krause <joerg.krause@embedded.rocks>
+Date:   Fri Dec 2 08:56:59 2016 +0100
 
-      1653:     find library=libcrypto.so.1.0.0 [0]; searching
+    package/libxml-parser-perl: bump version to 2.44
 
-      1653:      search cache=/etc/ld.so.cache
+    Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-      1653:      search
-path=/lib/aarch64-linux-gnu/tls/aarch64:/lib/aarch64-linux-gnu/tls:/lib/aarch64-linux-gnu/aarch64:/lib/aarch64-linux-gnu:/usr/lib/aarch)
+> ---
+ >  package/libxml-parser-perl/libxml-parser-perl.hash | 2 +-
+ >  package/libxml-parser-perl/libxml-parser-perl.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-      1653:       trying
-file=/lib/aarch64-linux-gnu/tls/aarch64/libcrypto.so.1.0.0
+ > diff --git a/package/libxml-parser-perl/libxml-parser-perl.hash
+ > b/package/libxml-parser-perl/libxml-parser-perl.hash
+ > index 4a8c0d3..d8e0df5 100644
+ > --- a/package/libxml-parser-perl/libxml-parser-perl.hash
+ > +++ b/package/libxml-parser-perl/libxml-parser-perl.hash
+ > @@ -1,2 +1,2 @@
+ >  # locally computed hash
+ > -sha256 b48197cd2265a26c5f016489f11a7b450d8833cb8b3d6a46ee15975740894de9 XML-Parser-2.41.tar.gz
+ > +sha256 1ae9d07ee9c35326b3d9aad56eae71a6730a73a116b9fe9e8a4758b7cc033216 XML-Parser-2.44.tar.gz
+ > diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk
+ > b/package/libxml-parser-perl/libxml-parser-perl.mk
+ > index 9e5325c..e512815 100644
+ > --- a/package/libxml-parser-perl/libxml-parser-perl.mk
+ > +++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -LIBXML_PARSER_PERL_VERSION = 2.41
+ > +LIBXML_PARSER_PERL_VERSION = 2.44
+ >  LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+ >  LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+ >  HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
+ > -- 
+ > 2.7.4
 
-      1653:       trying file=/lib/aarch64-linux-gnu/tls/libcrypto.so.1.0.0
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
-      1653:       trying
-file=/lib/aarch64-linux-gnu/aarch64/libcrypto.so.1.0.0
-
-     1653:       trying file=/lib/aarch64-linux-gnu/libcrypto.so.1.0.0
-
-      1653:       trying
-file=/usr/lib/aarch64-linux-gnu/tls/aarch64/libcrypto.so.1.0.0
-
-      1653:       trying
-file=/usr/lib/aarch64-linux-gnu/tls/libcrypto.so.1.0.0
-
-      1653:       trying
-file=/usr/lib/aarch64-linux-gnu/aarch64/libcrypto.so.1.0.0
-
-      1653:       trying file=/usr/lib/aarch64-linux-gnu/libcrypto.so.1.0.0
-
-      1653:
-
-ssh-keygen: error while loading shared libraries: libcrypto.so.1.0.0:
-cannot open shared object file: No such file or directory
-
-
-However, the library *does* exist in /usr/lib. If I create a symlink on the
-target (ln -s /usr/lib/* /lib/aarch64-linux-gnu/), then everything resolves
-correctly. Why are the binaries looking for their libraries in /lib/<tuple>
-and /usr/lib/<tuple> instead of just /lib and /usr/lib?
-
-
-The toolchain has GCC version 4.9.x, kernel headers 4.4.x, and I'm using
-glibc/eglibc.
-
-
-Thank you - this is my first post to the mailing list - hopefully I'm not
-making any faux pas's.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170120/0c2d0c23/attachment.html>
+-- 
+Bye, Peter Korsgaard
