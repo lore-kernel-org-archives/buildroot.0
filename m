@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 20 Jan 2017 10:30:04 +0100
-Subject: [Buildroot] [PATCH 11/12] perl-module-build: bump to version 0.4220
+Date: Fri, 20 Jan 2017 10:30:05 +0100
+Subject: [Buildroot] [PATCH 12/12] libxml-parser-perl: bump to version 2.44
 In-Reply-To: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
 References: <1484904605-11239-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1484904605-11239-11-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1484904605-11239-12-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-module-build/perl-module-build.hash | 4 ++--
- package/perl-module-build/perl-module-build.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libxml-parser-perl/libxml-parser-perl.hash | 2 +-
+ package/libxml-parser-perl/libxml-parser-perl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
-index d42dbad..0363ac5 100644
---- a/package/perl-module-build/perl-module-build.hash
-+++ b/package/perl-module-build/perl-module-build.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    7e3b17e14b54036c5ac18c27f7955e79 Module-Build-0.4218.tar.gz
--sha256 1ef0aa529a3f296f894a5e79240a77d71be60dd595e8cad3a0d04c7ea187c0d0 Module-Build-0.4218.tar.gz
-+md5    9df204e188462a4410d496f316c2c531 Module-Build-0.4220.tar.gz
-+sha256 fb1207c7e799366f7a8adda3f135bf8141c4d6068505650d4db2b2d3ce34b5a2 Module-Build-0.4220.tar.gz
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-index 0effbac..3c27002 100644
---- a/package/perl-module-build/perl-module-build.mk
-+++ b/package/perl-module-build/perl-module-build.mk
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.hash b/package/libxml-parser-perl/libxml-parser-perl.hash
+index 4a8c0d3..d8e0df5 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.hash
++++ b/package/libxml-parser-perl/libxml-parser-perl.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 b48197cd2265a26c5f016489f11a7b450d8833cb8b3d6a46ee15975740894de9 XML-Parser-2.41.tar.gz
++sha256 1ae9d07ee9c35326b3d9aad56eae71a6730a73a116b9fe9e8a4758b7cc033216 XML-Parser-2.44.tar.gz
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 9e5325c..e512815 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MODULE_BUILD_VERSION = 0.4218
-+PERL_MODULE_BUILD_VERSION = 0.4220
- PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
- PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
- PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
+-LIBXML_PARSER_PERL_VERSION = 2.41
++LIBXML_PARSER_PERL_VERSION = 2.44
+ LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+ LIBXML_PARSER_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+ HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
 -- 
 2.7.4
