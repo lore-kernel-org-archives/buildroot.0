@@ -1,64 +1,41 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sat, 21 Jan 2017 18:52:55 -0200 (BRST)
-Subject: [Buildroot] [PATCH v2] util-linux: fix ncurses/wchar handling
- (again)
-In-Reply-To: <1101067464.7863096.1484907843988.JavaMail.zimbra@datacom.ind.br>
-References: <1484281849-25875-1-git-send-email-casantos@datacom.ind.br>
- <1484301833-16403-1-git-send-email-casantos@datacom.ind.br>
- <20170117164437.36272eed@free-electrons.com>
- <cc558229-46cf-ebf9-7df1-280cf8c7e18e@cartelsol.com>
- <52160250.7827358.1484854130829.JavaMail.zimbra@datacom.ind.br>
- <1101067464.7863096.1484907843988.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <1604742275.8026398.1485031975434.JavaMail.zimbra@datacom.ind.br>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Jan 2017 21:59:29 +0100
+Subject: [Buildroot] [PATCH 1/1]
+	package/x11r7/xdriver_xf86-video-openchrome: needs DRI
+Message-ID: <20170121205929.9516-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Carlos Santos" <casantos@datacom.ind.br>
-> To: "Marcus Hoffmann" <m.hoffmann@cartelsol.com>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Cc: buildroot at busybox.net
-> Sent: Friday, January 20, 2017 8:24:03 AM
-> Subject: Re: [Buildroot] [PATCH v2] util-linux: fix ncurses/wchar handling (again)
+Fixes
+http://autobuild.buildroot.net/results/89c/89c9641553734495aa7844951dfd25fe0ec0d9f9/
 
-[...]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xdriver_xf86-video-openchrome/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> Good news! My patch was accepted and applied upstream:
-> 
->    http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5
-> 
-
-Hi,
-
-Would a solution like this be considered too much hacky?
-
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index 4f19851..46b58f0 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/util-linux/v2.29/sha256sums.asc
- sha256 2c59ea67cc7b564104f60532f6e0a95fe17a91acb870ba8fd7e986f273abf9e7  util-linux-2.29.tar.xz
-+# Locally computed
-+sha256 d0c3ecc2d80106b65a005056baab4be78bf7184d25fae88aa358c65db54b578c  ?id=9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 51ece90..6140fe1 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -8,6 +8,7 @@ UTIL_LINUX_VERSION_MAJOR = 2.29
- UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
-+UTIL_LINUX_PATCH = http://git.kernel.org/cgit/utils/util-linux/util-linux.git/patch/?id=9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5
+diff --git a/package/x11r7/xdriver_xf86-video-openchrome/Config.in b/package/x11r7/xdriver_xf86-video-openchrome/Config.in
+index e2bb6c490..c970b9e25 100644
+--- a/package/x11r7/xdriver_xf86-video-openchrome/Config.in
++++ b/package/x11r7/xdriver_xf86-video-openchrome/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_OPENCHROME
+ 	bool "xf86-video-openchrome"
+-	depends on BR2_PACKAGE_MESA3D
++	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
+@@ -17,5 +17,5 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_OPENCHROME
  
- # For 0001-build-sys-prefer-pkg-config-for-ncurses.patch and
- # 0002-build-sys-cleanup-UL_NCURSES_CHECK.patch
-
-The only disadvantage seems to be the ugly file name. I looked ad the download
-support scripts and was unable to find a way to save with a more friendly name
-like ?util-linux-9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5.patch?.
-
-Carlos Santos (Casantos) - DATACOM, P&D
-?Something must be done. This is something. Therefore we must do it.?
-(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
+ 	  https://www.freedesktop.org/wiki/Openchrome/
+ 
+-comment "xf86-video-openchrome needs mesa3d"
+-	depends on !BR2_PACKAGE_MESA3D
++comment "xf86-video-openchrome needs a DRI driver from mesa3d"
++	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER
+-- 
+2.11.0
