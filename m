@@ -1,40 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Jan 2017 13:55:38 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.9.5
-Message-ID: <20170121125742.A7E2B81916@busybox.osuosl.org>
+Date: Sat, 21 Jan 2017 13:55:51 +0100
+Subject: [Buildroot] [git commit] iperf3: bump to version 3.1.5
+Message-ID: <20170121125742.C1E2581916@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a36a464bf1f1b056f39f2c95d66c8e27e078fe47
+commit: https://git.buildroot.net/buildroot/commit/?id=eb6bb34115fc460035dce452402d4dde3ad3a328
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/iperf3/iperf3.hash | 2 +-
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f19dce1..4a3c29a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 0cac1e3..e43210b 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,2 +1,2 @@
+ # From http://software.es.net/iperf/news.html
+-sha256  db61d70ac62003ebe0bf15496bd8c4b3c4b728578a44d0a1a88fcf8afc0e8f76  iperf-3.1.4.tar.gz
++sha256   6e1a6200cd38baeab58ef0d7b8769e7aa6410c3a3168e65ea8277a4de79e5500 iperf-3.1.5.tar.gz
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 7623786..909c104 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.9.4)"
-+	bool "Latest version (4.9.5)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.9.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.9.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-IPERF3_VERSION = 3.1.4
++IPERF3_VERSION = 3.1.5
+ IPERF3_SITE = http://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
