@@ -1,30 +1,30 @@
-From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Date: Sat, 21 Jan 2017 19:23:43 +0100
-Subject: [Buildroot] Updating GNU classpath
-Message-ID: <98391600-4a26-2b57-ba89-fb2bd4dd1787@cartelsol.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 21 Jan 2017 19:51:27 +0100
+Subject: [Buildroot] Adding kmscube support
+In-Reply-To: <CAOMZO5CSA9UfZ9TNb249EPRaR+M57pby+LbTbEg0Fj0W=OAvEg@mail.gmail.com>
+ (Fabio Estevam's message of "Sat, 21 Jan 2017 13:27:29 -0200")
+References: <CAOMZO5BDx6SqN-ZxU+ogJNetjtZhDqWrF0cB5YhqC7pW3NwaSA@mail.gmail.com>
+ <CAOMZO5AYjEb56ErnvnAQ-PA4xtZb_97BsGyqYRF2tWSj+Osi-A@mail.gmail.com>
+ <CAOMZO5DdVzn6+p3vDqjRXt=a28NVNAOw84H=-d8zio_J9gyNLg@mail.gmail.com>
+ <87y3y4pnrk.fsf@dell.be.48ers.dk>
+ <CAOMZO5Az55JR=3ao1d5khYTtybqeJZXK8SkTDB_kxfmGQvEPyQ@mail.gmail.com>
+ <CAOMZO5CSA9UfZ9TNb249EPRaR+M57pby+LbTbEg0Fj0W=OAvEg@mail.gmail.com>
+Message-ID: <87tw8sp7ps.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
-I wanted to update GNU classpath to version 0.99 (released March 2012,
-but anyway, latest release).
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-Unfortunately there seems to be a bug in the autoconf scripts, such that
-configure always fails when specifying --disable-tools[1].
-I'm no expert in autoconf scripts but I looked at them for some time and
-couldn't find the root cause of the bug.
+Hi,
 
-Can we enable the tools option and delete the binaries before/after
-installing? Or just enable this option and be done with it?
-It bumps the package size from ~ 9.6 MB to 10.7 MB.
+ > Managed to fix it. kmscube is running fine on mx6 now :-)
 
-What is the preferred way forward?
+ > Will submit the etnaviv mesa patches when the final mesa 17.0.0 is out.
 
-Thanks,
-Marcus
+Great, thanks!
 
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70660
+-- 
+Bye, Peter Korsgaard
