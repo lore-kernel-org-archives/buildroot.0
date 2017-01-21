@@ -1,75 +1,57 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat, 21 Jan 2017 20:13:14 +0100
-Subject: [Buildroot] [PATCH] package/hplip: fix build by bumping to version
-	3.16.11
-Message-ID: <20170121191314.11474-1-joerg.krause@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Jan 2017 21:01:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/eudev: fix build with gperf 3.1
+Message-ID: <20170121200112.12593-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adjust patch #2 to apply successfully.
+Fixes
+http://autobuild.buildroot.net/results/1a0/1a0e76e2782a63e2b2fc2fc0d79471802afa4d35/
 
-Fixes:
-http://autobuild.buildroot.net/results/bee/beea88e0848ccabcafe6b92c2a69074ed1114225/
-http://autobuild.buildroot.net/results/4ba/4ba68d3e6764f395f3314c46c4d06b101c23479c/
-http://autobuild.buildroot.net/results/345/3455044679a497fbee72378e59178724305720d9/
-.. and many more.
+Tested on current buildroot master (eb6bb3411) with and without
+http://patchwork.ozlabs.org/patch/716134/
 
-The previous version 3.15.11 failed to build because of:
-
-```
-hpijs/hpcupsfax.cpp: In function 'int main(int, char**)':
-prnt/hpijs/hpcupsfax.cpp:651:5: error: 'ppd_file_t' was not declared in
-this scope
-     ppd_file_t          *ppd;
-     ^
-```
-
-`ppd_file_t` is defined in "cups/ppd.h" which was not included in 3.15.11, but
-is in 3.16.11.
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch | 2 +-
- package/hplip/hplip.hash                                        | 2 +-
- package/hplip/hplip.mk                                          | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/eudev/0003-fix-build-with-gperf31.patch | 27 +++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/eudev/0003-fix-build-with-gperf31.patch
 
-diff --git a/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
-index 7c7538d1a..814749017 100644
---- a/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
-+++ b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
-@@ -23,7 +23,7 @@ index 8b06428..680cad5 100755
- @@ -27,8 +27,7 @@
-  
-  #AC_PREREQ(2.59)
-- AC_INIT([HP Linux Imaging and Printing], [3.15.11], [3.15.11], [hplip])
-+ AC_INIT([HP Linux Imaging and Printing], [3.16.11], [3.16.11], [hplip])
- -#AM_INIT_AUTOMAKE([1.9 foreign])
- -AM_INIT_AUTOMAKE
- +AM_INIT_AUTOMAKE([1.9 foreign subdir-objects])
-diff --git a/package/hplip/hplip.hash b/package/hplip/hplip.hash
-index 75ff7d3d0..9dfb7a2ad 100644
---- a/package/hplip/hplip.hash
-+++ b/package/hplip/hplip.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  33c4711bde04a34b81f3f70e6277a0375dded171469e5aa8b9cef1a14a407c6d  hplip-3.15.11.tar.gz
-+sha256  f6e20cacb4891e4e60fc5de2213a10f8d0c68840f9b511aa38cfca0cb29f9b24  hplip-3.16.11.tar.gz
-diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
-index d70e2e926..9a2c9db02 100644
---- a/package/hplip/hplip.mk
-+++ b/package/hplip/hplip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HPLIP_VERSION = 3.15.11
-+HPLIP_VERSION = 3.16.11
- HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
- HPLIP_AUTORECONF = YES
- HPLIP_DEPENDENCIES = cups libusb jpeg host-pkgconf
+diff --git a/package/eudev/0003-fix-build-with-gperf31.patch b/package/eudev/0003-fix-build-with-gperf31.patch
+new file mode 100644
+index 000000000..bec9565c3
+--- /dev/null
++++ b/package/eudev/0003-fix-build-with-gperf31.patch
+@@ -0,0 +1,27 @@
++From 5bab4d8de0dcbb8e2e7d4d5125b4aea1652a0d60 Mon Sep 17 00:00:00 2001
++From: "Anthony G. Basile" <blueness@gentoo.org>
++Date: Thu, 5 Jan 2017 16:21:17 -0500
++Subject: [PATCH] src/udev/udev-builtin-keyboard.c: fix build with gperf 3.1
++
++Signed-off-by: Anthony G. Basile <blueness@gentoo.org>
++
++Downloaded from upstream commit:
++https://github.com/gentoo/eudev/commit/5bab4d8de0dcbb8e2e7d4d5125b4aea1652a0d60
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/udev/udev-builtin-keyboard.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/src/udev/udev-builtin-keyboard.c b/src/udev/udev-builtin-keyboard.c
++index 73171c3..fad3520 100644
++--- a/src/udev/udev-builtin-keyboard.c
+++++ b/src/udev/udev-builtin-keyboard.c
++@@ -28,7 +28,6 @@
++ 
++ #include "udev.h"
++ 
++-static const struct key *keyboard_lookup_key(const char *str, unsigned len);
++ #include "keyboard-keys-from-name.h"
++ #include "keyboard-keys-to-name.h"
++ 
 -- 
 2.11.0
