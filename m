@@ -1,161 +1,30 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 21 Jan 2017 18:56:14 +0100
-Subject: [Buildroot] [PATCH 0/9] A checkpackage script that verifies a
- package coding style
-In-Reply-To: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
-References: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
-Message-ID: <8f81bbcd-b8a5-a63e-4f7f-37fb0fce66dd@gmail.com>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Sat, 21 Jan 2017 19:23:43 +0100
+Subject: [Buildroot] Updating GNU classpath
+Message-ID: <98391600-4a26-2b57-ba89-fb2bd4dd1787@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ricardo,
+Hey,
+I wanted to update GNU classpath to version 0.99 (released March 2012,
+but anyway, latest release).
 
-Le 31/12/2016 ? 04:21, Ricardo Martincoski a ?crit :
-> This patch series is only a prototype.
-> Please feel free to reject the series if it is too far from what you want.
-> 
-> I started this patch series out of curiosity.
-> Later on, I saw that something similar was in the todo list [1].
-> 
-> It probably could be achieved using flex + bison, or pyacc, or perl, or
-> something else.
-> But I implemented using python and non-strict checks, trying to:
-> - reduce the chance of problems related to differences between host machines;
-> - allow incremental development based on feedback from patch reviews;
-> - keep the maintenance easy;
-> - generate low number of false warnings.
-> 
-> The first patch is an example package to be used to test the output of the
-> script for all patches in the series.
-> 
-> The second patch includes a txt file with an overall description and some hints,
-> the main engine that calls check functions for each type of file, the first
-> check function, and also many comments in the library files that reflect what I
-> attempted to accomplish. Of course, the comments can be cut if you disagree with
-> any of them.
-> 
-> Remaining patches include check functions for each type of file. I put the
-> patches that I think are most likely to be rejected in the end.
+Unfortunately there seems to be a bug in the autoconf scripts, such that
+configure always fails when specifying --disable-tools[1].
+I'm no expert in autoconf scripts but I looked at them for some time and
+couldn't find the root cause of the bug.
 
-I don't really agree with that, especially for the last one (check *.mk for typo
-in variable) since it will catch easily our/my keyboard dyslexia symptoms :)
+Can we enable the tools option and delete the binaries before/after
+installing? Or just enable this option and be done with it?
+It bumps the package size from ~ 9.6 MB to 10.7 MB.
 
-> 
-> Also in the series there is a blob for the manual trying to clarify the expected
-> format for help text.
-> 
-> I did not include yet:
-> - entry to DEVELOPERS (just because it is the first iteration);
-> - explicit license entry (I guess this way the script inherits the Buildroot
->   license).
-> 
-> For each patch I include using 'git notes':
-> - the time it takes to run for all current packages;
+What is the preferred way forward?
 
-Well ~3 seconds to check all packages with all check enable is not bad.
+Thanks,
+Marcus
 
-> - for each check function:
->   - the number of warnings it generates for all current packages;
->   - sample output running on the (bad) example package.
-> 
-> Here is the list of check functions implemented in this series:
-> 
-> *.patch:
-> - check_apply_order
-> - check_newline_at_eof
-> - check_numbered_subject
-> - check_sob
-> 
-> Config.in.*:
-> - check_attributes_order
-> - check_consecutive_empty_lines
-> - check_empty_last_line
-> - check_help_text
-> - check_indent
-> - check_newline_at_eof
-> - check_trailing_space
-> 
-> *.hash:
-> - check_consecutive_empty_lines
-> - check_empty_last_line
-> - check_hash_filename
-> - check_hash_number_of_fields
-> - check_hash_type
-> - check_newline_at_eof
-> - check_trailing_space
-> 
-> *.mk:
-> - check_consecutive_empty_lines
-> - check_empty_last_line
-> - check_indent
-> - check_newline_at_eof
-> - check_package_header
-> - check_space_before_backslash
-> - check_trailing_backslash
-> - check_trailing_space
-> - check_typo_in_package_variable
-> - check_useless_flag
-> 
-> [1] http://elinux.org/Buildroot#Todo_list
 
-The check-package script find several thousand (~2500) coding style issue or
-typos. I think the most important now is to fix all typos in variable since it
-can lead to a build failure or a licensing issue.
-
-I'll continue to test this series and probably use it during the next Buildroot
-meeting.
-
-Thanks!
-
-Best regards,
-Romain
-
-> 
-> Regards,
-> Ricardo
-> 
-> 
-> Ricardo Martincoski (9):
->   support/scripts/check-package: example
->   support/scripts/check-package: new script
->   check-package: check whitespace and empty lines
->   check-package: check *.hash files
->   check-package: check *.patch files
->   check-package: check *.mk files
->   docs/manual: size of tab in package description
->   check-package: check Config.in.* files
->   check-package: check *.mk for typo in variable
-> 
->  docs/manual/adding-packages-directory.txt          |   8 +-
->  docs/manual/writing-rules.txt                      |   6 +-
->  support/scripts/check-package                      | 136 ++++++++++++
->  .../package/package1/0001-do-something.patch       |  24 +++
->  .../package/package1/0002-do-something-else.patch  |  24 +++
->  .../package/package1/Config.in                     |  42 ++++
->  .../package/package1/package1.hash                 |   8 +
->  .../package/package1/package1.mk                   |  48 +++++
->  .../package/package1/wrong-name.patch              |  13 ++
->  support/scripts/check-package.txt                  |  76 +++++++
->  support/scripts/checkpackagelib.py                 |  56 +++++
->  support/scripts/checkpackagelib_config.py          | 136 ++++++++++++
->  support/scripts/checkpackagelib_hash.py            |  76 +++++++
->  support/scripts/checkpackagelib_mk.py              | 229 +++++++++++++++++++++
->  support/scripts/checkpackagelib_patch.py           |  50 +++++
->  15 files changed, 927 insertions(+), 5 deletions(-)
->  create mode 100755 support/scripts/check-package
->  create mode 100644 support/scripts/check-package-example/package/package1/0001-do-something.patch
->  create mode 100644 support/scripts/check-package-example/package/package1/0002-do-something-else.patch
->  create mode 100644 support/scripts/check-package-example/package/package1/Config.in
->  create mode 100644 support/scripts/check-package-example/package/package1/package1.hash
->  create mode 100644 support/scripts/check-package-example/package/package1/package1.mk
->  create mode 100644 support/scripts/check-package-example/package/package1/wrong-name.patch
->  create mode 100644 support/scripts/check-package.txt
->  create mode 100644 support/scripts/checkpackagelib.py
->  create mode 100644 support/scripts/checkpackagelib_config.py
->  create mode 100644 support/scripts/checkpackagelib_hash.py
->  create mode 100644 support/scripts/checkpackagelib_mk.py
->  create mode 100644 support/scripts/checkpackagelib_patch.py
-> 
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70660
