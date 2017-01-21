@@ -1,127 +1,155 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 21 Jan 2017 22:49:19 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libgpiod: new package
-In-Reply-To: <1484827310-13779-2-git-send-email-bgolaszewski@baylibre.com>
-References: <1484827310-13779-1-git-send-email-bgolaszewski@baylibre.com>
- <1484827310-13779-2-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <55bca4f2-aa9e-9c44-528b-79e0a4f42e70@gmail.com>
+Date: Sat, 21 Jan 2017 23:25:29 +0100
+Subject: [Buildroot] [PATCH 1/2] Add BR2_CMAKE_USE_NINJA_BACKEND option
+In-Reply-To: <20170106223748.2203-1-cedric.marie@openmailbox.org>
+References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
+Message-ID: <ef982565-16ec-591b-aaed-d22e5a634851@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bartosz,
+Hi C?dric,
 
-Le 19/01/2017 ? 13:01, Bartosz Golaszewski a ?crit :
-> Add a package containing a C library and a set of command-line tools
-> for controlling GPIOs from user space using the new character device
-> interface on linux.
+Le 06/01/2017 ? 23:37, C?dric Marie a ?crit :
+> CMake provides several backends. The default one is Make, but Ninja is
+> also supported. Ninja is a small build system with a focus on speed.
 > 
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> If the new option BR2_CMAKE_USE_NINJA_BACKEND is enabled, CMake will
+> use Ninja backend.
+> 
+> In CMake package infrastructure, when this option is set:
+> - Add host-ninja dependency
+> - Add "-G Ninja" option in CMake configure step
+> - Use ninja command instead of make ($(MAKE))
+> 
+> Most of make arguments are compatible with ninja command. But there are
+> a few differences:
+> - Environment variables such as DESTDIR cannot be given in arguments.
+>   Instead they must be set before the command (which is compatible with
+>   make)
+> - CMake does not handle VERBOSE variable with Ninja backend. Instead,
+>   we must add -v option when VERBOSE is set.
+> - install/fast target is specific to make backend. With ninja backend,
+>   install target must be used (and it will not try to compile as make
+>   backend does).
+> 
+> Tested on following packages: cannelloni, graphite2, libcuefile,
+> libubox, rabbitmq-c, ubus.
 
-libgpiod doesn't build with a musl toolchain:
+There are currently 146 packages using CMake in Buildroot, I'm not sure all of
+them support ninja backend yet.
 
-../../include/gpiod.h:232:49: warning: its scope is only this definition or
-declaration, which is probably not what you want
-../../include/gpiod.h:249:8: warning: ?struct timespec? declared inside
-parameter list
-        gpiod_event_cb callback, void *cbdata) GPIOD_API;
-        ^
-../../include/gpiod.h:683:18: error: field ?ts? has incomplete type
-  struct timespec ts;
+I would suggest to enable Ninja backend package by package when it has been tested.
 
-Can you take a look ?
-
+> 
+> Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
 > ---
->  package/Config.in              |  1 +
->  package/libgpiod/Config.in     | 20 ++++++++++++++++++++
->  package/libgpiod/libgpiod.hash |  2 ++
->  package/libgpiod/libgpiod.mk   | 14 ++++++++++++++
->  4 files changed, 37 insertions(+)
->  create mode 100644 package/libgpiod/Config.in
->  create mode 100644 package/libgpiod/libgpiod.hash
->  create mode 100644 package/libgpiod/libgpiod.mk
+>  Config.in            |  6 ++++++
+>  package/pkg-cmake.mk | 26 ++++++++++++++++++++------
+>  2 files changed, 26 insertions(+), 6 deletions(-)
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 8c8c33e..2100bc7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1045,6 +1045,7 @@ menu "Hardware handling"
->  	source "package/libfreefare/Config.in"
->  	source "package/libftdi/Config.in"
->  	source "package/libftdi1/Config.in"
-> +	source "package/libgpiod/Config.in"
->  	source "package/libgudev/Config.in"
->  	source "package/libhid/Config.in"
->  	source "package/libiio/Config.in"
-> diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
-> new file mode 100644
-> index 0000000..63a7cb6
-> --- /dev/null
-> +++ b/package/libgpiod/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_LIBGPIOD
-> +	bool "libgpiod"
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+> diff --git a/Config.in b/Config.in
+> index ccd777e..26ebcf6 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -656,6 +656,12 @@ config BR2_SHARED_STATIC_LIBS
+>  
+>  endchoice
+>  
+> +config BR2_CMAKE_USE_NINJA_BACKEND
+> +	bool "Compile CMake packages with Ninja backend"
+> +        help
 
-Why it depend on kernel headers 4.8 ?
+Indent with one tab.
 
-> +	help
-> +	  This is a C library that abstracts the GPIO character
-> +	  device operations on linux.
-> +
-> +	  https://github.com/brgl/libgpiod
-> +
-> +if BR2_PACKAGE_LIBGPIOD
-> +
-> +config BR2_PACKAGE_LIBGPIOD_TOOLS
-> +	bool "install tools"
-> +	help
-> +	  Include a set of command-line tools for managing GPIOs.
-> +
-> +endif
-> +
-> +comment "libgpiod needs kernel headers >= 4.8"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-> diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-> new file mode 100644
-> index 0000000..7de17bb
-> --- /dev/null
-> +++ b/package/libgpiod/libgpiod.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 0f9f5215d0100a8066f4e6b064892747720e556cbb83f6c05d6151d68ec2025b libgpiod-v0.1.tar.gz
-> diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-> new file mode 100644
-> index 0000000..aca3d5d
-> --- /dev/null
-> +++ b/package/libgpiod/libgpiod.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# libgpiod
-> +#
-> +################################################################################
-> +
-> +LIBGPIOD_VERSION = v0.1
-> +LIBGPIOD_SITE = $(call github,brgl,libgpiod,$(LIBGPIOD_VERSION))
-> +LIBGPIOD_LICENSE = GPLv3+
-> +LIBGPIOD_LICENSE_FILES = COPYING
-> +LIBGPIOD_AUTORECONF = YES
+> +          CMake provides several backends. The default one is Make, but
+> +          Ninja is also supported. Ninja is a small build system with a
+> +          focus on speed.
 
-A comment must be added to explain why the package use autoreconf.
+Indent with one tab and 2 spaces.
 
-> +LIBGPIOD_CONF_OPTS += --$(if $(BR2_PACKAGE_LIBGPIOD_TOOLS),enable,disable)-tools
+>  
+>  config BR2_PACKAGE_OVERRIDE_FILE
+>  	string "location of a package override file"
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 4e0e838..83bf79e 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -53,24 +53,35 @@ define inner-cmake-package
+>  
+>  $(2)_CONF_ENV			?=
+>  $(2)_CONF_OPTS			?=
+> +$(2)_INSTALL_STAGING_ENV	?= DESTDIR=$$(STAGING_DIR)
+> +$(2)_INSTALL_TARGET_ENV		?= DESTDIR=$$(TARGET_DIR)
+> +
+> +ifeq ($(BR2_CMAKE_USE_NINJA_BACKEND),y)
+> +$(2)_MAKE			?= $$(HOST_DIR)/usr/bin/ninja
+> +$(2)_MAKE_ENV			?=
+> +$(2)_MAKE_OPTS			?= $(if $(VERBOSE),-v)
+> +$(2)_INSTALL_OPTS		?= install
+> +else
+>  $(2)_MAKE			?= $$(MAKE)
+>  $(2)_MAKE_ENV			?=
+>  $(2)_MAKE_OPTS			?=
+> -$(2)_INSTALL_OPTS		?= install
+> -$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
+> -$(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install/fast
+> +$(2)_INSTALL_OPTS		?= install/fast
 
-I'm not sure this coding style will be accepted as is, maybe you can do like
-util-linux package:
-
-$(if $(BR2_PACKAGE_LIBGPIOD_TOOLS),--enable-tools,--disable-tools)
+I think these changes should be in a preparatory patch before adding Ninja
+backend support.
 
 Best regards,
 Romain
 
+> +endif
+>  
+>  $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
+>  
+>  $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+>  
+> -
+>  ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
+>  $(2)_BUILDDIR			= $$($(2)_SRCDIR)
+>  else
+>  $(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
+>  endif
+>  
+> +ifeq ($(BR2_CMAKE_USE_NINJA_BACKEND),y)
+> +$(2)_CONF_OPTS += -G Ninja
+> +endif
 > +
-> +$(eval $(autotools-package))
+>  #
+>  # Configure step. Only define it if not already defined by the package
+>  # .mk file. And take care of the differences between host and target
+> @@ -146,6 +157,9 @@ endif
+>  $(2)_DEPENDENCIES += host-pkgconf
+>  
+>  $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
+> +ifeq ($(BR2_CMAKE_USE_NINJA_BACKEND),y)
+> +$(2)_DEPENDENCIES += host-ninja
+> +endif
+>  
+>  #
+>  # Build step. Only define it if not already defined by the package .mk
+> @@ -179,7 +193,7 @@ endif
+>  #
+>  ifndef $(2)_INSTALL_STAGING_CMDS
+>  define $(2)_INSTALL_STAGING_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_INSTALL_STAGING_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+>  
+> @@ -189,7 +203,7 @@ endif
+>  #
+>  ifndef $(2)_INSTALL_TARGET_CMDS
+>  define $(2)_INSTALL_TARGET_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_INSTALL_TARGET_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+>  
 > 
