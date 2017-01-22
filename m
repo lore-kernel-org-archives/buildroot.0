@@ -1,38 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Jan 2017 14:57:53 +0100
-Subject: [Buildroot] [PATCH 1/2] package/weston: do not try to build dev docs
+Date: Sun, 22 Jan 2017 14:57:54 +0100
+Subject: [Buildroot] [PATCH 2/2] package/weston: fix build with musl
 In-Reply-To: <cover.1485093464.git.yann.morin.1998@free.fr>
 References: <cover.1485093464.git.yann.morin.1998@free.fr>
-Message-ID: <24de480e72ed68aa96f39be0186f9603bed9ca0f.1485093464.git.yann.morin.1998@free.fr>
+Message-ID: <ed8826b3fb08068e0473cd8f1037e683844d4373.1485093464.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The developper's documentation will be automatically built when doxygen
-is present. But we can't guarantee that it is.
+With musl, stdint.h is not automatically pulled-in by any other header,
+so it must be explicitly included.
 
-Besides, we are not interested in the devlopper's documentation.
-
-Simply disable it.
+Fixes:
+    http://autobuild.buildroot.net/results/a2f5811f6029f8f3c87dcbea905b9747d55c9c24
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/weston/weston.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../weston/0006-tests-add-missing-include.patch    | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/weston/0006-tests-add-missing-include.patch
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 3a02df0..9bd127c 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -20,6 +20,7 @@ WESTON_CONF_OPTS = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
- 	--disable-headless-compositor \
- 	--disable-colord \
-+	--disable-devdocs \
- 	--disable-setuid-install
- 
- WESTON_MAKE_OPTS = \
+diff --git a/package/weston/0006-tests-add-missing-include.patch b/package/weston/0006-tests-add-missing-include.patch
+new file mode 100644
+index 0000000..67dc3df
+--- /dev/null
++++ b/package/weston/0006-tests-add-missing-include.patch
+@@ -0,0 +1,36 @@
++From 4c9e149d641a9945c3a8e15707b8712834f08c4f Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 22 Jan 2017 14:46:28 +0100
++Subject: [PATCH] tests: add missing include
++
++The int32_t type is defined in stdint.h.
++
++The musl C library is very conservative in the headers that it
++internally includes, and stdint.h is not included by any other header,
++unlike with glibc or uClibc, which breaks the build.
++
++Add the missing header.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Status: sent upstream
++    https://lists.freedesktop.org/archives/wayland-devel/2017-January/032771.html
++---
++ tests/string-test.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tests/string-test.c b/tests/string-test.c
++index a72ec30..5571b52 100644
++--- a/tests/string-test.c
+++++ b/tests/string-test.c
++@@ -28,6 +28,7 @@
++ #include <stdlib.h>
++ #include <stdbool.h>
++ #include <stdio.h>
+++#include <stdint.h>
++ #include <assert.h>
++ 
++ #include "shared/string-helpers.h"
++-- 
++2.7.4
++
 -- 
 2.7.4
