@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jan 2017 17:34:27 +1100
-Subject: [Buildroot] [PATCH 1/3] pkg-perl: add PREFER_INSTALLER variable
-In-Reply-To: <20170121115118.17938-1-francois.perrad@gadz.org>
+Date: Sun, 22 Jan 2017 17:35:40 +1100
+Subject: [Buildroot] [PATCH 2/3] perl-gd: bump to version 2.56
+In-Reply-To: <20170121115118.17938-2-francois.perrad@gadz.org>
 References: <20170121115118.17938-1-francois.perrad@gadz.org>
-Message-ID: <20170122173427.32f9f737@free-electrons.com>
+ <20170121115118.17938-2-francois.perrad@gadz.org>
+Message-ID: <20170122173540.6f156a76@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 21 Jan 2017 12:51:16 +0100, Francois Perrad wrote:
+On Sat, 21 Jan 2017 12:51:17 +0100, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl-gd/0002-lgd.patch                              | 4 ++--
+>  package/perl-gd/0003-force.patch                            | 2 +-
+>  package/perl-gd/0004-gdlib-config-is-now-configurable.patch | 2 +-
+>  package/perl-gd/Config.in                                   | 2 +-
+>  package/perl-gd/perl-gd.hash                                | 4 ++--
+>  package/perl-gd/perl-gd.mk                                  | 5 +++--
+>  6 files changed, 10 insertions(+), 9 deletions(-)
 
-> +* +PERL_FOO_PREFER_INSTALLER+/+HOST_PERL_FOO_PREFER_INSTALLER+, with the
-> +  value 'EUMM', the use of +Makefile.PL+ is prefered at +Build.pl+.
+Why do we have to suddenly add this new PREFER_INSTALLER variable when
+bumping perl-gd ? It should be explained in the commit log.
 
-Should be "Build.PL" (i.e PL in capital letters).
+Do you expect other Perl packages to need this new PREFER_INSTALLER
+variable ?
 
-> +  By default, 'MB'.
-
-Is it possible to find values that are less cryptic than EUMM and MB ?
-Either a boolean style:
-
-<pkg>_USES_MODULE_BUILD = YES/NO
-
-or:
-
-<pkg>_BUILD_TYPE = Module-Build / ExtUtils-MakeMaker
-
-Or are EUMM/MB values already used in the Perl community?
-
-> +# equivalent at $CPAN::Config{prefer_installer}
-
-I don't understand what this sentence means.
-
-> +# legal values are MB and EUMM: if a module comes
-> +# with both a Makefile.PL and a Build.PL, use the
-> +# former (EUMM) or the latter (MB); if the module
-> +# comes with only one of the two, that one will be
-> +# used no matter the setting
-> +$(2)_PREFER_INSTALLER ?= MB
-
-If we keep this name, it should be:
-
-<pkg>_PREFERRED_INSTALLER
+Thanks,
 
 Thomas
 -- 
