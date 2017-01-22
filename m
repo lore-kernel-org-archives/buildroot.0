@@ -1,51 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jan 2017 17:52:18 +1100
-Subject: [Buildroot] [PATCH] package/hplip: fix build by bumping to
- version 3.16.11
-In-Reply-To: <20170121191314.11474-1-joerg.krause@embedded.rocks>
-References: <20170121191314.11474-1-joerg.krause@embedded.rocks>
-Message-ID: <20170122175218.7e97670b@free-electrons.com>
+Date: Sun, 22 Jan 2017 17:52:28 +1100
+Subject: [Buildroot] [git commit] opus: security bump to 1.1.4
+Message-ID: <20170122065235.3C94C818BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f00a528ce68e24bb9f162416a5cf25bdc65fce20
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Jan 2017 20:13:14 +0100, J?rg Krause wrote:
-> Adjust patch #2 to apply successfully.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/bee/beea88e0848ccabcafe6b92c2a69074ed1114225/
-> http://autobuild.buildroot.net/results/4ba/4ba68d3e6764f395f3314c46c4d06b101c23479c/
-> http://autobuild.buildroot.net/results/345/3455044679a497fbee72378e59178724305720d9/
-> .. and many more.
-> 
-> The previous version 3.15.11 failed to build because of:
-> 
-> ```
-> hpijs/hpcupsfax.cpp: In function 'int main(int, char**)':
-> prnt/hpijs/hpcupsfax.cpp:651:5: error: 'ppd_file_t' was not declared in
-> this scope
->      ppd_file_t          *ppd;
->      ^
-> ```
-> 
-> `ppd_file_t` is defined in "cups/ppd.h" which was not included in 3.15.11, but
-> is in 3.16.11.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch | 2 +-
->  package/hplip/hplip.hash                                        | 2 +-
->  package/hplip/hplip.mk                                          | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+Fixes CVE-2017-0381: A remote code execution vulnerability in
+silk/NLSF_stabilize.c in libopus in Mediaserver could enable an attacker
+using a specially crafted file to cause memory corruption during media file
+and data processing.
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/opus/opus.hash | 2 +-
+ package/opus/opus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/opus/opus.hash b/package/opus/opus.hash
+index 2aac69b..7349ec4 100644
+--- a/package/opus/opus.hash
++++ b/package/opus/opus.hash
+@@ -1,2 +1,2 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256	58b6fe802e7e30182e95d0cde890c0ace40b6f125cffc50635f0ad2eef69b633	opus-1.1.3.tar.gz
++sha256	9122b6b380081dd2665189f97bfd777f04f92dc3ab6698eea1dbb27ad59d8692	opus-1.1.4.tar.gz
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index 5cd727f..020be88 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPUS_VERSION = 1.1.3
++OPUS_VERSION = 1.1.4
+ OPUS_SITE = http://downloads.xiph.org/releases/opus
+ OPUS_LICENSE = BSD-3c
+ OPUS_LICENSE_FILES = COPYING
