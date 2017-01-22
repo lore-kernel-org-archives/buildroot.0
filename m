@@ -1,105 +1,51 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 22 Jan 2017 01:15:41 -0200
-Subject: [Buildroot] [PATCH v3 1/2] Revert "util-linux: fix ncurses/wchar
-	handling"
-In-Reply-To: <1484301833-16403-1-git-send-email-casantos@datacom.ind.br>
-References: <1484301833-16403-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <1485054942-17504-1-git-send-email-casantos@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Jan 2017 17:26:00 +1100
+Subject: [Buildroot] [PATCH] package/mpd: disable on SPARCV8, NIOS2,
+ ARMV{4, 5}
+In-Reply-To: <20170121161100.3142-1-joerg.krause@embedded.rocks>
+References: <20170121161100.3142-1-joerg.krause@embedded.rocks>
+Message-ID: <20170122172600.333588cf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 5a18eabdf08564688761a9b2f35892d69d8f9a18.
+Hello,
 
-It did not take into account all the possible situations. A different fix
-will be provided in a forthcomming patch.
+On Sat, 21 Jan 2017 17:11:00 +0100, J?rg Krause wrote:
+> Since version 0.20 mpd uses the C++11 feature `std::exception_ptr` which
+> is not available on architectures that do not have always-lock-free
+> atomics for int.
+> 
+> The issue [1,2] has been fixed in GCC trunk r244051 [3] and will be
+> available in GCC 7. However, as GCC 7 is not released yet and will not
+> be before the next release of Buildroot, we disable the following
+> architectures, which caused build errors on the autobuilders:
+>   * SPARCV8
+>   * NIOS2
+>   * ARMV4
+>   * ARMV5
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/1c5/1c5090fe361b08c60277e54be1bfa7e80d5d31d8/
+> http://autobuild.buildroot.net/results/076/07621b958a3a35066790543586549aa41f2effa9/
+> http://autobuild.buildroot.net/results/7b1/7b12d41bee83ad20251dbc7026e0fc665d5abe0c/
+> .. and many more
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/util-linux/Config.in     |  5 -----
- package/util-linux/util-linux.mk | 20 ++++++++++----------
- 2 files changed, 10 insertions(+), 15 deletions(-)
+How many packages are potentially affected by this?
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index cfb2451..e957f84 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -207,7 +207,6 @@ config BR2_PACKAGE_UTIL_LINUX_MORE
- 	bool "more"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  File perusal filter for crt viewing
- 
-@@ -253,7 +252,6 @@ config BR2_PACKAGE_UTIL_LINUX_PG
- 	bool "pg"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Browse pagewise through text files
- 
-@@ -300,7 +298,6 @@ config BR2_PACKAGE_UTIL_LINUX_SETPRIV
- config BR2_PACKAGE_UTIL_LINUX_SETTERM
- 	bool "setterm"
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Set terminal attributes
- 
-@@ -313,14 +310,12 @@ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
- config BR2_PACKAGE_UTIL_LINUX_TUNELP
- 	bool "tunelp"
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Set various parameters for the lp device
- 
- config BR2_PACKAGE_UTIL_LINUX_UL
- 	bool "ul"
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Do underlining
- 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 414465c..51ece90 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -45,21 +45,21 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- UTIL_LINUX_DEPENDENCIES += busybox
- endif
- 
--ifeq ($(BR2_USE_WCHAR),y)
--UTIL_LINUX_CONF_OPTS += --enable-widechar
--else
--UTIL_LINUX_CONF_OPTS += --disable-widechar
--endif
--
--ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
- UTIL_LINUX_DEPENDENCIES += ncurses
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- UTIL_LINUX_CONF_OPTS += --with-ncursesw
- UTIL_LINUX_CONF_ENV += NCURSESW5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
--else ifeq ($(BR2_PACKAGE_NCURSES):$(BR2_USE_WCHAR),y:)
--UTIL_LINUX_DEPENDENCIES += ncurses
--UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses
-+else
-+UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses --disable-widechar
- UTIL_LINUX_CONF_ENV += NCURSES5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
-+endif
-+else
-+ifeq ($(BR2_USE_WCHAR),y)
-+UTIL_LINUX_CONF_OPTS += --enable-widechar
- else
-+UTIL_LINUX_CONF_OPTS += --disable-widechar
-+endif
- UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
- endif
- 
+The reason I'm asking is because I believe a
+BR2_TOOLCHAIN_HAS_GCC_BUG_xyz hidden option would be a bit better:
+
+ 1. It would document what this is for
+
+ 2. It would avoid repeating the architecture conditions
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
