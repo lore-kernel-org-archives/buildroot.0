@@ -1,37 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jan 2017 17:47:16 +1100
-Subject: [Buildroot] [PATCH 1/1] package/eudev: fix build with gperf 3.1
-In-Reply-To: <20170121200112.12593-1-bernd.kuhls@t-online.de>
-References: <20170121200112.12593-1-bernd.kuhls@t-online.de>
-Message-ID: <20170122174716.143b256b@free-electrons.com>
+Date: Sun, 22 Jan 2017 17:51:36 +1100
+Subject: [Buildroot] [git commit] package/hplip: fix build by bumping to
+	version 3.16.11
+Message-ID: <20170122065149.9BD5C80794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5af5eaec9ac59423d04fe3c90fe0d56f010aee6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Jan 2017 21:01:12 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/1a0/1a0e76e2782a63e2b2fc2fc0d79471802afa4d35/
-> 
-> Tested on current buildroot master (eb6bb3411) with and without
-> http://patchwork.ozlabs.org/patch/716134/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Adjust patch #2 to apply successfully.
 
-Since we have reverted the bump to gperf 3.1, I'm not sure it makes
-sense to add a patch to fix an issue that doesn't exist.
+Fixes:
+http://autobuild.buildroot.net/results/bee/beea88e0848ccabcafe6b92c2a69074ed1114225/
+http://autobuild.buildroot.net/results/4ba/4ba68d3e6764f395f3314c46c4d06b101c23479c/
+http://autobuild.buildroot.net/results/345/3455044679a497fbee72378e59178724305720d9/
+.. and many more.
 
-An e-mail has been sent to the gperf maintainers to let them know that
-version 3.1 breaks backward compatibility. We probably should wait for
-their feedback before adding more stuff to Buildroot.
+The previous version 3.15.11 failed to build because of:
 
-Best regards,
+```
+hpijs/hpcupsfax.cpp: In function 'int main(int, char**)':
+prnt/hpijs/hpcupsfax.cpp:651:5: error: 'ppd_file_t' was not declared in
+this scope
+     ppd_file_t          *ppd;
+     ^
+```
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+`ppd_file_t` is defined in "cups/ppd.h" which was not included in 3.15.11, but
+is in 3.16.11.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch | 2 +-
+ package/hplip/hplip.hash                                        | 2 +-
+ package/hplip/hplip.mk                                          | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
+index 7c7538d..8147490 100644
+--- a/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
++++ b/package/hplip/0002-configure.in-fix-AM_INIT_AUTOMAKE-call.patch
+@@ -23,7 +23,7 @@ index 8b06428..680cad5 100755
+ @@ -27,8 +27,7 @@
+  
+  #AC_PREREQ(2.59)
+- AC_INIT([HP Linux Imaging and Printing], [3.15.11], [3.15.11], [hplip])
++ AC_INIT([HP Linux Imaging and Printing], [3.16.11], [3.16.11], [hplip])
+ -#AM_INIT_AUTOMAKE([1.9 foreign])
+ -AM_INIT_AUTOMAKE
+ +AM_INIT_AUTOMAKE([1.9 foreign subdir-objects])
+diff --git a/package/hplip/hplip.hash b/package/hplip/hplip.hash
+index 75ff7d3..9dfb7a2 100644
+--- a/package/hplip/hplip.hash
++++ b/package/hplip/hplip.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  33c4711bde04a34b81f3f70e6277a0375dded171469e5aa8b9cef1a14a407c6d  hplip-3.15.11.tar.gz
++sha256  f6e20cacb4891e4e60fc5de2213a10f8d0c68840f9b511aa38cfca0cb29f9b24  hplip-3.16.11.tar.gz
+diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
+index d70e2e9..9a2c9db 100644
+--- a/package/hplip/hplip.mk
++++ b/package/hplip/hplip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HPLIP_VERSION = 3.15.11
++HPLIP_VERSION = 3.16.11
+ HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
+ HPLIP_AUTORECONF = YES
+ HPLIP_DEPENDENCIES = cups libusb jpeg host-pkgconf
