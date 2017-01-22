@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jan 2017 17:26:00 +1100
-Subject: [Buildroot] [PATCH] package/mpd: disable on SPARCV8, NIOS2,
- ARMV{4, 5}
-In-Reply-To: <20170121161100.3142-1-joerg.krause@embedded.rocks>
-References: <20170121161100.3142-1-joerg.krause@embedded.rocks>
-Message-ID: <20170122172600.333588cf@free-electrons.com>
+Date: Sun, 22 Jan 2017 17:28:20 +1100
+Subject: [Buildroot] [git commit] xorg-server: not available with musl
+ on ARM
+In-Reply-To: <20170121125742.776B97FA45@busybox.osuosl.org>
+References: <20170121125742.776B97FA45@busybox.osuosl.org>
+Message-ID: <20170122172820.0086ea0b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 21 Jan 2017 17:11:00 +0100, J?rg Krause wrote:
-> Since version 0.20 mpd uses the C++11 feature `std::exception_ptr` which
-> is not available on architectures that do not have always-lock-free
-> atomics for int.
-> 
-> The issue [1,2] has been fixed in GCC trunk r244051 [3] and will be
-> available in GCC 7. However, as GCC 7 is not released yet and will not
-> be before the next release of Buildroot, we disable the following
-> architectures, which caused build errors on the autobuilders:
->   * SPARCV8
->   * NIOS2
->   * ARMV4
->   * ARMV5
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1c5/1c5090fe361b08c60277e54be1bfa7e80d5d31d8/
-> http://autobuild.buildroot.net/results/076/07621b958a3a35066790543586549aa41f2effa9/
-> http://autobuild.buildroot.net/results/7b1/7b12d41bee83ad20251dbc7026e0fc665d5abe0c/
-> .. and many more
+On Sat, 21 Jan 2017 13:55:07 +0100, Peter Korsgaard wrote:
 
-How many packages are potentially affected by this?
+> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+> index 0f1d1fe..1c8f8cf 100644
+> --- a/package/x11r7/xserver_xorg-server/Config.in
+> +++ b/package/x11r7/xserver_xorg-server/Config.in
+> @@ -1,6 +1,11 @@
+> +comment "xorg-server needs a glibc or uClibc toolchain"
+> +	depends on BR2_arm && BR2_TOOLCHAIN_USES_MUSL
+> +
+>  config BR2_PACKAGE_XSERVER_XORG_SERVER
+>  	bool "xorg-server"
+>  	depends on BR2_USE_MMU # fork()
+> +	# xserver uses inb/outb on arm, which aren't available with musl
+> +	depends on !(BR2_arm && BR2_TOOLCHAIN_USES_MUSL)
 
-The reason I'm asking is because I believe a
-BR2_TOOLCHAIN_HAS_GCC_BUG_xyz hidden option would be a bit better:
-
- 1. It would document what this is for
-
- 2. It would avoid repeating the architecture conditions
-
-Thanks!
+This looks a bit weird to me. X.org is a major piece of software, and
+there are musl-based distributions that do run X, though perhaps not on
+ARM. Has the issue been reported to the musl developers?
 
 Thomas
 -- 
