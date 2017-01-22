@@ -1,19 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Jan 2017 23:34:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-In-Reply-To: <20170122145046.13964-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 22 Jan 2017 15:50:46 +0100")
-References: <20170122145046.13964-1-bernd.kuhls@t-online.de>
-Message-ID: <878tq24tbg.fsf@dell.be.48ers.dk>
+Date: Sun, 22 Jan 2017 23:36:00 +0100
+Subject: [Buildroot] [PATCH] package/wavemon: bump to version 0.8.1
+In-Reply-To: <20170122211200.19911-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Sun, 22 Jan 2017 22:12:00 +0100")
+References: <20170122211200.19911-1-joerg.krause@embedded.rocks>
+Message-ID: <87ziii3epb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > No need to fetch the musl patch from upstream anymore.
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Committed, thanks.
 
