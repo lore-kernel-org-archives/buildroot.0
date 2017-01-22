@@ -1,105 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jan 2017 17:53:19 +1100
-Subject: [Buildroot] [git commit] Revert "util-linux: fix ncurses/wchar
-	handling"
-Message-ID: <20170122065355.ED3DF8188A@busybox.osuosl.org>
+Date: Sun, 22 Jan 2017 17:53:24 +1100
+Subject: [Buildroot] [git commit] util-linux: fix ncurses/wchar handling
+	(again)
+Message-ID: <20170122065356.0C7678188A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=051fde24e47e92873ba36f5a692c1f6da78496d1
+commit: https://git.buildroot.net/buildroot/commit/?id=961f13eedf461499c7fbb9c1c2bdff9f8b01d079
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 5a18eabdf08564688761a9b2f35892d69d8f9a18.
+Since commit 006a328ad6bed214ec3c4d92120510ea37329dd1 ("util-linux: fix
+build with ncurses"), we have a build failure that occurs with musl and
+uClibc-ng toolchains when wide-char support is not enabled in ncurses.
 
-It did not take into account all the possible situations. A different fix
-will be provided in a forthcomming patch.
+The problem occurs because util-linux #defines its own wchar_t (as char)
+when configured without widechar support. It was fixed upstream, so pull
+the corresponding patch from the util-linux git repository.
+
+Fixes:
+  http://autobuild.buildroot.net/results/3a2f228e0fa7b5cc28a13d49f48f1a6aef8d9d7a
+  http://autobuild.buildroot.net/results/99e96069f652d511c6212a5bb6be29e68fb1747c
+  http://autobuild.buildroot.net/results/2dc5721aef93b7b410153bafad78248fac3db941
+  http://autobuild.buildroot.net/results/8a9e197ba7a292b18f8c0c36dca974685556a38a
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/util-linux/Config.in     |  5 -----
- package/util-linux/util-linux.mk | 20 ++++++++++----------
- 2 files changed, 10 insertions(+), 15 deletions(-)
+ ...ix-compilation-with-ncurses-and-uClibc-or.patch | 92 ++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index cfb2451..e957f84 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -207,7 +207,6 @@ config BR2_PACKAGE_UTIL_LINUX_MORE
- 	bool "more"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  File perusal filter for crt viewing
- 
-@@ -253,7 +252,6 @@ config BR2_PACKAGE_UTIL_LINUX_PG
- 	bool "pg"
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Browse pagewise through text files
- 
-@@ -300,7 +298,6 @@ config BR2_PACKAGE_UTIL_LINUX_SETPRIV
- config BR2_PACKAGE_UTIL_LINUX_SETTERM
- 	bool "setterm"
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Set terminal attributes
- 
-@@ -313,14 +310,12 @@ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
- config BR2_PACKAGE_UTIL_LINUX_TUNELP
- 	bool "tunelp"
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Set various parameters for the lp device
- 
- config BR2_PACKAGE_UTIL_LINUX_UL
- 	bool "ul"
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
- 	help
- 	  Do underlining
- 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 414465c..51ece90 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -45,21 +45,21 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- UTIL_LINUX_DEPENDENCIES += busybox
- endif
- 
--ifeq ($(BR2_USE_WCHAR),y)
--UTIL_LINUX_CONF_OPTS += --enable-widechar
--else
--UTIL_LINUX_CONF_OPTS += --disable-widechar
--endif
--
--ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
- UTIL_LINUX_DEPENDENCIES += ncurses
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- UTIL_LINUX_CONF_OPTS += --with-ncursesw
- UTIL_LINUX_CONF_ENV += NCURSESW5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
--else ifeq ($(BR2_PACKAGE_NCURSES):$(BR2_USE_WCHAR),y:)
--UTIL_LINUX_DEPENDENCIES += ncurses
--UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses
-+else
-+UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses --disable-widechar
- UTIL_LINUX_CONF_ENV += NCURSES5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
-+endif
-+else
-+ifeq ($(BR2_USE_WCHAR),y)
-+UTIL_LINUX_CONF_OPTS += --enable-widechar
- else
-+UTIL_LINUX_CONF_OPTS += --disable-widechar
-+endif
- UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
- endif
- 
+diff --git a/package/util-linux/0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch b/package/util-linux/0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch
+new file mode 100644
+index 0000000..2a1e56d
+--- /dev/null
++++ b/package/util-linux/0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch
+@@ -0,0 +1,92 @@
++From 9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.ind.br>
++Date: Thu, 19 Jan 2017 17:27:37 -0200
++Subject: [PATCH] build-sys: fix compilation with ncurses and uClibc or musl
++ libc
++
++Compiling util-linux with musl and uClibc-ng toolchains when wide-char
++support is not enabled in ncurses results in compilation failures with
++the following message:
++
++    error: two or more data types in declaration specifiers
++    #define
++     wchar_t char
++
++The problem occurs because util-linux #defines its own wchar_t (as char)
++when configured without widechar support. This conflicts with definition
++of wchar_t contained in stddef.h.
++
++This error can be reproduced running "<toolchain-cc -o test test.c" with
++the following test program:
++
++    #include <ctype.h>
++    #define wchar_t char
++    #include <stddef.h>
++
++    int main()
++    {
++        return 0;
++    }
++
++The only way to avoid the problem it to reorder the inclusion of headers
++in some files under the text-utils directory.
++
++Addresses:
++  http://autobuild.buildroot.net/results/3a2f228e0fa7b5cc28a13d49f48f1a6aef8d9d7a
++  http://autobuild.buildroot.net/results/99e96069f652d511c6212a5bb6be29e68fb1747c
++  http://autobuild.buildroot.net/results/2dc5721aef93b7b410153bafad78248fac3db941
++  http://autobuild.buildroot.net/results/8a9e197ba7a292b18f8c0c36dca974685556a38a
++
++Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
++---
++ text-utils/colcrt.c | 2 +-
++ text-utils/colrm.c  | 2 +-
++ text-utils/column.c | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/text-utils/colcrt.c b/text-utils/colcrt.c
++index c6bba4b..346a10f 100644
++--- a/text-utils/colcrt.c
+++++ b/text-utils/colcrt.c
++@@ -46,8 +46,8 @@
++ #include <getopt.h>
++ 
++ #include "nls.h"
++-#include "widechar.h"
++ #include "c.h"
+++#include "widechar.h"
++ #include "closestream.h"
++ 
++ /*
++diff --git a/text-utils/colrm.c b/text-utils/colrm.c
++index 9510b72..d474696 100644
++--- a/text-utils/colrm.c
+++++ b/text-utils/colrm.c
++@@ -44,9 +44,9 @@
++ #include <unistd.h>
++ 
++ #include "nls.h"
++-#include "widechar.h"
++ #include "strutils.h"
++ #include "c.h"
+++#include "widechar.h"
++ #include "closestream.h"
++ 
++ /*
++diff --git a/text-utils/column.c b/text-utils/column.c
++index 43b3af5..2eb47a3 100644
++--- a/text-utils/column.c
+++++ b/text-utils/column.c
++@@ -50,8 +50,8 @@
++ #include <getopt.h>
++ 
++ #include "nls.h"
++-#include "widechar.h"
++ #include "c.h"
+++#include "widechar.h"
++ #include "xalloc.h"
++ #include "strutils.h"
++ #include "closestream.h"
++-- 
++2.7.4
++
