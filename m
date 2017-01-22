@@ -1,52 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Jan 2017 23:35:41 +0100
-Subject: [Buildroot] [git commit] package/wavemon: bump to version 0.8.1
-Message-ID: <20170122223619.8477C8005F@busybox.osuosl.org>
+Date: Sun, 22 Jan 2017 23:33:42 +0100
+Subject: [Buildroot] [git commit] package/x265: bump version to 2.2
+Message-ID: <20170122223619.664F28005F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fa89d2ca82bd6228b3983951648772203028504
+commit: https://git.buildroot.net/buildroot/commit/?id=d88e4d355925e89f668229d6d7b31633f03710ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No need to fetch the musl patch from upstream anymore.
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wavemon/wavemon.hash | 3 +--
- package/wavemon/wavemon.mk   | 5 +----
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ package/x265/x265.hash | 2 +-
+ package/x265/x265.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
-index e35f6ac..69bd2b4 100644
---- a/package/wavemon/wavemon.hash
-+++ b/package/wavemon/wavemon.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  81ee1f06f8349fee62e98ec5b53dff5b76c4d8fcb439f20cca806255239e3a2a  wavemon-v0.8.0.tar.gz
--sha256  681b86ef1469df8f7091040258dd01169bea2a7df294185c35bc867725deab2f  01e987a032b81af7bbeba1c439759d750dc1f398.patch
-+sha256  c9ea57da4f8161401bcaaca17b37bcdf16ffb88baad2370afed2e15a7f71af73  wavemon-v0.8.1.tar.gz
-diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
-index 746d45f..5a1b7ee 100644
---- a/package/wavemon/wavemon.mk
-+++ b/package/wavemon/wavemon.mk
-@@ -4,15 +4,12 @@
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index 92b5bea..5672d79 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256	3e4654133ed957a98708fdb4cb9a154d9e80922b84e26e43fc462a101c5b15c8	x265_1.9.tar.gz
++sha256 b872552535e41fbffa03ba7cbcd3479c42c4053868309292e78e147b7773ac4b  x265_2.2.tar.gz
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index e737c31..0fbdb01 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAVEMON_VERSION = v0.8.0
-+WAVEMON_VERSION = v0.8.1
- WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
- WAVEMON_LICENSE = GPLv3+
- WAVEMON_LICENSE_FILES = COPYING
- WAVEMON_DEPENDENCIES = host-pkgconf libnl ncurses
- 
--# Fix musl build issue
--WAVEMON_PATCH = https://github.com/uoaerg/wavemon/commit/01e987a032b81af7bbeba1c439759d750dc1f398.patch
--
- # Handwritten Makefile.in, automake isn't used
- WAVEMON_MAKE_OPTS = CC="$(TARGET_CC)"
- 
+-X265_VERSION = 1.9
++X265_VERSION = 2.2
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPLv2+
