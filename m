@@ -1,39 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 22 Jan 2017 15:50:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-Message-ID: <20170122145046.13964-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Jan 2017 20:17:10 +0100
+Subject: [Buildroot] [PATCH 2/2] gdb: bump 7.12 series to 7.12.1
+In-Reply-To: <20170122191710.22600-1-peter@korsgaard.com>
+References: <20170122191710.22600-1-peter@korsgaard.com>
+Message-ID: <20170122191710.22600-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tvheadend/tvheadend.hash | 2 +-
- package/tvheadend/tvheadend.mk   | 2 +-
+ package/gdb/Config.in.host | 2 +-
+ package/gdb/gdb.hash       | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index ca10dc38bf..d34dbf1f4e 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 71dd3d8efa32d592342ff6955cc2cd317f07e74d2d546977eb9bc45136dd5de6  tvheadend-50a370707aedf5c127e92bb517c378aa8ac04657.tar.gz
-+sha256 ac3c088654864781f2b2a2797e3a8b03a1b2e86db731c08cb5f296a04069560d  tvheadend-e5f5a4278949afc96e26d6cd50cf968e0e92d7b6.tar.gz
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index a3afec8c03..42c6767f60 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index b8b7779cf..24e2274cc 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -60,4 +60,4 @@ config BR2_GDB_VERSION
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.10.1"   if BR2_GDB_VERSION_7_10
+ 	default "7.11.1"   if BR2_GDB_VERSION_7_11 || !BR2_PACKAGE_HOST_GDB
+-	default "7.12"     if BR2_GDB_VERSION_7_12
++	default "7.12.1"   if BR2_GDB_VERSION_7_12
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index d6813ed6d..1e205dbe9 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -1,7 +1,7 @@
+ # From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
+ sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe504958b5372de610dcb952c679cf8fa9c1bdadd380294fbf59b6e366010	gdb-7.10.1.tar.xz
+ sha512  f80ec6c8a0f0b54c8b945666e875809174402b7e121efb378ebac931a91f9a1cc0048568f8e2f42ae8ae2392ff8d144c2e51d41c7398935017450aaf29838360	gdb-7.11.1.tar.xz
+-sha512  f610338b3a24dfb387c295431d806a0c1375e8ce51b8dd8bbfd2efc4612d0c0ed40ad4393508afca0071eca70688f62bc4f199da5e75ad16f64d91c3bc046033	gdb-7.12.tar.xz
++sha512  0ac8d0a495103611ef41167a08313a010dce6ca4c6d827cbe8558a0c1a1a8a6bfa53f1b7704251289cababbfaaf9e075550cdf741a54d6cd9ca3433d910efcd8	gdb-7.12.1.tar.xz
  
--TVHEADEND_VERSION = 50a370707aedf5c127e92bb517c378aa8ac04657
-+TVHEADEND_VERSION = e5f5a4278949afc96e26d6cd50cf968e0e92d7b6
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+ # Locally calculated (fetched from Github)
+ sha512  0a467091d4b01fbecabb4b8da1cb743025c70e7f4874a0b5c8fa2ec623569a39bde6762b91806de0be6e63711aeb6909715cfbe43860de73d8aec6159a9f10a7	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
 -- 
 2.11.0
