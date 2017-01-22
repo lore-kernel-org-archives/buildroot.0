@@ -1,46 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jan 2017 17:52:28 +1100
-Subject: [Buildroot] [git commit] opus: security bump to 1.1.4
-Message-ID: <20170122065235.3C94C818BE@busybox.osuosl.org>
+Date: Sun, 22 Jan 2017 17:52:35 +1100
+Subject: [Buildroot] [PATCH] opus: security bump to 1.1.4
+In-Reply-To: <20170121134037.32421-1-peter@korsgaard.com>
+References: <20170121134037.32421-1-peter@korsgaard.com>
+Message-ID: <20170122175235.7f2c32d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f00a528ce68e24bb9f162416a5cf25bdc65fce20
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes CVE-2017-0381: A remote code execution vulnerability in
-silk/NLSF_stabilize.c in libopus in Mediaserver could enable an attacker
-using a specially crafted file to cause memory corruption during media file
-and data processing.
+On Sat, 21 Jan 2017 14:40:37 +0100, Peter Korsgaard wrote:
+> Fixes CVE-2017-0381: A remote code execution vulnerability in
+> silk/NLSF_stabilize.c in libopus in Mediaserver could enable an attacker
+> using a specially crafted file to cause memory corruption during media file
+> and data processing.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/opus/opus.hash | 2 +-
+>  package/opus/opus.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/opus/opus.hash | 2 +-
- package/opus/opus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/opus/opus.hash b/package/opus/opus.hash
-index 2aac69b..7349ec4 100644
---- a/package/opus/opus.hash
-+++ b/package/opus/opus.hash
-@@ -1,2 +1,2 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256	58b6fe802e7e30182e95d0cde890c0ace40b6f125cffc50635f0ad2eef69b633	opus-1.1.3.tar.gz
-+sha256	9122b6b380081dd2665189f97bfd777f04f92dc3ab6698eea1dbb27ad59d8692	opus-1.1.4.tar.gz
-diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-index 5cd727f..020be88 100644
---- a/package/opus/opus.mk
-+++ b/package/opus/opus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPUS_VERSION = 1.1.3
-+OPUS_VERSION = 1.1.4
- OPUS_SITE = http://downloads.xiph.org/releases/opus
- OPUS_LICENSE = BSD-3c
- OPUS_LICENSE_FILES = COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
