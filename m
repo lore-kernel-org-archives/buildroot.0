@@ -1,67 +1,143 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sat, 21 Jan 2017 22:26:19 -0200 (BRST)
-Subject: [Buildroot] [PATCH v2] util-linux: fix ncurses/wchar handling
- (again)
-In-Reply-To: <1604742275.8026398.1485031975434.JavaMail.zimbra@datacom.ind.br>
-References: <1484281849-25875-1-git-send-email-casantos@datacom.ind.br>
- <1484301833-16403-1-git-send-email-casantos@datacom.ind.br>
- <20170117164437.36272eed@free-electrons.com>
- <cc558229-46cf-ebf9-7df1-280cf8c7e18e@cartelsol.com>
- <52160250.7827358.1484854130829.JavaMail.zimbra@datacom.ind.br>
- <1101067464.7863096.1484907843988.JavaMail.zimbra@datacom.ind.br>
- <1604742275.8026398.1485031975434.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <463389962.8027894.1485044779415.JavaMail.zimbra@datacom.ind.br>
+Date: Sun, 22 Jan 2017 01:15:42 -0200
+Subject: [Buildroot] [PATCH v3 2/2] util-linux: fix ncurses/wchar handling
+	(again)
+In-Reply-To: <1485054942-17504-1-git-send-email-casantos@datacom.ind.br>
+References: <1484301833-16403-1-git-send-email-casantos@datacom.ind.br>
+ <1485054942-17504-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1485054942-17504-2-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Carlos Santos" <casantos@datacom.ind.br>
-> To: "Marcus Hoffmann" <m.hoffmann@cartelsol.com>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Cc: buildroot at busybox.net
-> Sent: Saturday, January 21, 2017 6:52:55 PM
-> Subject: Re: [Buildroot] [PATCH v2] util-linux: fix ncurses/wchar handling (again)
----8<---
-> Hi,
-> 
-> Would a solution like this be considered too much hacky?
-> 
-> diff --git a/package/util-linux/util-linux.hash
-> b/package/util-linux/util-linux.hash
-> index 4f19851..46b58f0 100644
-> --- a/package/util-linux/util-linux.hash
-> +++ b/package/util-linux/util-linux.hash
-> @@ -1,2 +1,4 @@
-> # From https://www.kernel.org/pub/linux/utils/util-linux/v2.29/sha256sums.asc
-> sha256 2c59ea67cc7b564104f60532f6e0a95fe17a91acb870ba8fd7e986f273abf9e7
-> util-linux-2.29.tar.xz
-> +# Locally computed
-> +sha256 d0c3ecc2d80106b65a005056baab4be78bf7184d25fae88aa358c65db54b578c
-> ?id=9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index 51ece90..6140fe1 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -8,6 +8,7 @@ UTIL_LINUX_VERSION_MAJOR = 2.29
-> UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
-> UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
-> UTIL_LINUX_SITE =
-> $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
-> +UTIL_LINUX_PATCH =
-> http://git.kernel.org/cgit/utils/util-linux/util-linux.git/patch/?id=9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5
-> 
-> # For 0001-build-sys-prefer-pkg-config-for-ncurses.patch and
-> # 0002-build-sys-cleanup-UL_NCURSES_CHECK.patch
-> 
-> The only disadvantage seems to be the ugly file name. I looked ad the download
-> support scripts and was unable to find a way to save with a more friendly name
-> like ?util-linux-9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5.patch?.
+Since commit 006a328ad6bed214ec3c4d92120510ea37329dd1 ("util-linux: fix
+build with ncurses"), we have a build failure that occurs with musl and
+uClibc-ng toolchains when wide-char support is not enabled in ncurses.
 
-Answering to my own question: cgit accepts a request like
+The problem occurs because util-linux #defines its own wchar_t (as char)
+when configured without widechar support. It was fixed upstream, so pull
+the corresponding patch from the util-linux git repository.
 
-    http://git.kernel.org/cgit/utils/util-linux/util-linux.git/patch/9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5.patch
+Fixes:
+  http://autobuild.buildroot.net/results/3a2f228e0fa7b5cc28a13d49f48f1a6aef8d9d7a
+  http://autobuild.buildroot.net/results/99e96069f652d511c6212a5bb6be29e68fb1747c
+  http://autobuild.buildroot.net/results/2dc5721aef93b7b410153bafad78248fac3db941
+  http://autobuild.buildroot.net/results/8a9e197ba7a292b18f8c0c36dca974685556a38a
 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Something must be done. This is something. Therefore we must do it.?
-(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+
+---
+Changes v1 -> v2
+  - Fixed commit message (mental note: do not run "git commit" at 2:30 AM)
+Changes v2 -> v3
+  - Pull the patch from the util-linux git repository
+  - Simplify commit message
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ ...ix-compilation-with-ncurses-and-uClibc-or.patch | 92 ++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+ create mode 100644 package/util-linux/0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch
+
+diff --git a/package/util-linux/0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch b/package/util-linux/0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch
+new file mode 100644
+index 0000000..2a1e56d
+--- /dev/null
++++ b/package/util-linux/0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch
+@@ -0,0 +1,92 @@
++From 9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.ind.br>
++Date: Thu, 19 Jan 2017 17:27:37 -0200
++Subject: [PATCH] build-sys: fix compilation with ncurses and uClibc or musl
++ libc
++
++Compiling util-linux with musl and uClibc-ng toolchains when wide-char
++support is not enabled in ncurses results in compilation failures with
++the following message:
++
++    error: two or more data types in declaration specifiers
++    #define
++     wchar_t char
++
++The problem occurs because util-linux #defines its own wchar_t (as char)
++when configured without widechar support. This conflicts with definition
++of wchar_t contained in stddef.h.
++
++This error can be reproduced running "<toolchain-cc -o test test.c" with
++the following test program:
++
++    #include <ctype.h>
++    #define wchar_t char
++    #include <stddef.h>
++
++    int main()
++    {
++        return 0;
++    }
++
++The only way to avoid the problem it to reorder the inclusion of headers
++in some files under the text-utils directory.
++
++Addresses:
++  http://autobuild.buildroot.net/results/3a2f228e0fa7b5cc28a13d49f48f1a6aef8d9d7a
++  http://autobuild.buildroot.net/results/99e96069f652d511c6212a5bb6be29e68fb1747c
++  http://autobuild.buildroot.net/results/2dc5721aef93b7b410153bafad78248fac3db941
++  http://autobuild.buildroot.net/results/8a9e197ba7a292b18f8c0c36dca974685556a38a
++
++Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
++---
++ text-utils/colcrt.c | 2 +-
++ text-utils/colrm.c  | 2 +-
++ text-utils/column.c | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/text-utils/colcrt.c b/text-utils/colcrt.c
++index c6bba4b..346a10f 100644
++--- a/text-utils/colcrt.c
+++++ b/text-utils/colcrt.c
++@@ -46,8 +46,8 @@
++ #include <getopt.h>
++ 
++ #include "nls.h"
++-#include "widechar.h"
++ #include "c.h"
+++#include "widechar.h"
++ #include "closestream.h"
++ 
++ /*
++diff --git a/text-utils/colrm.c b/text-utils/colrm.c
++index 9510b72..d474696 100644
++--- a/text-utils/colrm.c
+++++ b/text-utils/colrm.c
++@@ -44,9 +44,9 @@
++ #include <unistd.h>
++ 
++ #include "nls.h"
++-#include "widechar.h"
++ #include "strutils.h"
++ #include "c.h"
+++#include "widechar.h"
++ #include "closestream.h"
++ 
++ /*
++diff --git a/text-utils/column.c b/text-utils/column.c
++index 43b3af5..2eb47a3 100644
++--- a/text-utils/column.c
+++++ b/text-utils/column.c
++@@ -50,8 +50,8 @@
++ #include <getopt.h>
++ 
++ #include "nls.h"
++-#include "widechar.h"
++ #include "c.h"
+++#include "widechar.h"
++ #include "xalloc.h"
++ #include "strutils.h"
++ #include "closestream.h"
++-- 
++2.7.4
++
+-- 
+2.7.4
