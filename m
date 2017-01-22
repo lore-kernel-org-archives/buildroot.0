@@ -1,61 +1,129 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 22 Jan 2017 11:19:45 +0100
-Subject: [Buildroot] [PATCH] package/mpd: disable on SPARCV8, NIOS2,
- ARMV{4, 5}
-In-Reply-To: <20170122172600.333588cf@free-electrons.com>
-References: <20170121161100.3142-1-joerg.krause@embedded.rocks>
- <20170122172600.333588cf@free-electrons.com>
-Message-ID: <1485080385.6667.1.camel@embedded.rocks>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 22 Jan 2017 12:36:08 +0100
+Subject: [Buildroot] [PATCH 1/2] bctoolbox: new package
+In-Reply-To: <20170112134034.29031-1-joerg.krause@embedded.rocks>
+References: <20170112134034.29031-1-joerg.krause@embedded.rocks>
+Message-ID: <920006c3-d58e-46ed-e88f-1e57456c16b5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi J?rg,
 
-On Sun, 2017-01-22 at 17:26 +1100, Thomas Petazzoni wrote:
-> Hello,
+Le 12/01/2017 ? 14:40, J?rg Krause a ?crit :
+> bctoolbox is a utilities library used by Belledonne Communications
+> softwares like belle-sip, mediastreamer2 and linphone.
 > 
-> On Sat, 21 Jan 2017 17:11:00 +0100, J?rg Krause wrote:
-> > Since version 0.20 mpd uses the C++11 feature `std::exception_ptr`
-> > which
-> > is not available on architectures that do not have always-lock-free
-> > atomics for int.
-> > 
-> > The issue [1,2] has been fixed in GCC trunk r244051 [3] and will be
-> > available in GCC 7. However, as GCC 7 is not released yet and will
-> > not
-> > be before the next release of Buildroot, we disable the following
-> > architectures, which caused build errors on the autobuilders:
-> > ? * SPARCV8
-> > ? * NIOS2
-> > ? * ARMV4
-> > ? * ARMV5
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/1c5/1c5090fe361b08c60277e54b
-> > e1bfa7e80d5d31d8/
-> > http://autobuild.buildroot.net/results/076/07621b958a3a350667905435
-> > 86549aa41f2effa9/
-> > http://autobuild.buildroot.net/results/7b1/7b12d41bee83ad20251dbc70
-> > 26e0fc665d5abe0c/
-> > .. and many more
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/Config.in                |  1 +
+>  package/bctoolbox/Config.in      |  8 ++++++++
+>  package/bctoolbox/bctoolbox.hash |  2 ++
+>  package/bctoolbox/bctoolbox.mk   | 30 ++++++++++++++++++++++++++++++
+>  4 files changed, 41 insertions(+)
+>  create mode 100644 package/bctoolbox/Config.in
+>  create mode 100644 package/bctoolbox/bctoolbox.hash
+>  create mode 100644 package/bctoolbox/bctoolbox.mk
 > 
-> How many packages are potentially affected by this?
+> diff --git a/package/Config.in b/package/Config.in
+> index 8c8c33ec3..9609e9740 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1289,6 +1289,7 @@ menu "Other"
+>  	source "package/argp-standalone/Config.in"
+>  	source "package/armadillo/Config.in"
+>  	source "package/atf/Config.in"
+> +	source "package/bctoolbox/Config.in"
+>  	source "package/bdwgc/Config.in"
+>  	source "package/boost/Config.in"
+>  	source "package/clapack/Config.in"
+> diff --git a/package/bctoolbox/Config.in b/package/bctoolbox/Config.in
+> new file mode 100644
+> index 000000000..09165cd8d
+> --- /dev/null
+> +++ b/package/bctoolbox/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_BCTOOLBOX
+> +	bool "bctoolbox"
+> +	select BR2_PACKAGE_MBEDTLS
 
-Not sure about this. Eventually all C++11 packages using
-std:exception_ptr or std::future are affected. I am not aware of any
-other Buildroot package besides MPD.
+bctoolbox depends on threads support:
+"find_package(Threads REQUIRED)"
 
-> The reason I'm asking is because I believe a
-> BR2_TOOLCHAIN_HAS_GCC_BUG_xyz hidden option would be a bit better:
+-- Looking for pthread.h
+-- Looking for pthread.h - not found
+CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:148
+(message):
+  Could NOT find Threads (missing: Threads_FOUND)
+
+> +	help
+> +	  Utilities library used by Belledonne Communications softwares like
+
+This line is a bit too long.
+
+> +	  belle-sip, mediastreamer2 and linphone.
+> +
+> +	  https://github.com/BelledonneCommunications/bctoolbox
+> diff --git a/package/bctoolbox/bctoolbox.hash b/package/bctoolbox/bctoolbox.hash
+> new file mode 100644
+> index 000000000..70be55c3d
+> --- /dev/null
+> +++ b/package/bctoolbox/bctoolbox.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256  da7df7ff359a9829e9e6ef98dfe9fead0cf735b8a4a5da1b1047f467dee1b2a9  bctoolbox-0.4.0.tar.gz
+> diff --git a/package/bctoolbox/bctoolbox.mk b/package/bctoolbox/bctoolbox.mk
+> new file mode 100644
+> index 000000000..a5b75a468
+> --- /dev/null
+> +++ b/package/bctoolbox/bctoolbox.mk
+> @@ -0,0 +1,30 @@
+> +################################################################################
+> +#
+> +# bctoolbox
+> +#
+> +################################################################################
+> +
+> +BCTOOLBOX_VERSION = 0.4.0
+> +BCTOOLBOX_SITE = $(call github,BelledonneCommunications,bctoolbox,$(BCTOOLBOX_VERSION))
+> +BCTOOLBOX_LICENSE = GPLv2+
+> +BCTOOLBOX_LICENSE_FILES = COPYING
+> +BCTOOLBOX_DEPENDENCIES = mbedtls
+
+Maybe add a comment to say that the mbedtls support is preferred over polarssl
+support.
+
+> +BCTOOLBOX_INSTALL_STAGING = YES
+> +
+> +BCTOOLBOX_CONF_OPTS = \
+> +	-DENABLE_STRICT=OFF \
+> +	-DENABLE_TESTS_COMPONENT=OFF \
+> +	-DENABLE_TESTS=OFF
+
+The build system is looking for git binary, you can add -DGIT_EXECUTABLE=OFF to
+remove the error message (ignored):
+
+-- Found Git: /usr/bin/git (found suitable version "2.9.3", minimum required is
+"1.7.10")
+fatal: Not a git repository (or any parent up to mount point /home)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+
+Best regards,
+Romain
+
+> +
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +BCTOOLBOX_CONF_OPTS += \
+> +	-DENABLE_SHARED=OFF -DENABLE_STATIC=ON
+> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+> +BCTOOLBOX_CONF_OPTS += \
+> +	-DENABLE_SHARED=ON -DENABLE_STATIC=ON
+> +else ifeq ($(BR2_SHARED_LIBS),y)
+> +BCTOOLBOX_CONF_OPTS += \
+> +	-DENABLE_SHARED=ON -DENABLE_STATIC=OFF
+> +endif
+> +
+> +$(eval $(cmake-package))
 > 
-> ?1. It would document what this is for
-> 
-> ?2. It would avoid repeating the architecture conditions
-
-Yes, this would be better in case more packages show up. Shall I make
-an updated fix?
-
-J?rg
