@@ -1,50 +1,45 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 22 Jan 2017 22:12:00 +0100
-Subject: [Buildroot] [PATCH] package/wavemon: bump to version 0.8.1
-Message-ID: <20170122211200.19911-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Jan 2017 22:05:51 +0100
+Subject: [Buildroot] [PATCH] nodejs: unbreak 0.10.x host build
+Message-ID: <20170122210551.9704-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No need to fetch the musl patch from upstream anymore.
+Fixes:
+http://autobuild.buildroot.net/results/833/8334631b54fdfd43d38ca00f42e4d5a98e3a70c4/
+http://autobuild.buildroot.net/results/9c0/9c08e0b745fab671123facb4a46f60eec5afd718/
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Commit 24d90db52a74 (package/nodejs: disable icu support for host build)
+added --with-intl=none to host configure flags to fix an issue related to
+icu.  The 0.10.x version unfortunately doesn't understand this configure
+flag and errors out when provided, breaking the build:
+
+configure: error: no such option: --with-intl
+
+The 0.10.x version doesn't seem to have this icu issue (E.G. no autobuilder
+issues before this commit and unable to reproduce locally), so fix it by
+only passing --with-intl=none for the 6.9.x version.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wavemon/wavemon.hash | 3 +--
- package/wavemon/wavemon.mk   | 5 +----
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ package/nodejs/nodejs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
-index e35f6ace6..69bd2b4bf 100644
---- a/package/wavemon/wavemon.hash
-+++ b/package/wavemon/wavemon.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  81ee1f06f8349fee62e98ec5b53dff5b76c4d8fcb439f20cca806255239e3a2a  wavemon-v0.8.0.tar.gz
--sha256  681b86ef1469df8f7091040258dd01169bea2a7df294185c35bc867725deab2f  01e987a032b81af7bbeba1c439759d750dc1f398.patch
-+sha256  c9ea57da4f8161401bcaaca17b37bcdf16ffb88baad2370afed2e15a7f71af73  wavemon-v0.8.1.tar.gz
-diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
-index 746d45f33..5a1b7ee0d 100644
---- a/package/wavemon/wavemon.mk
-+++ b/package/wavemon/wavemon.mk
-@@ -4,15 +4,12 @@
- #
- ################################################################################
- 
--WAVEMON_VERSION = v0.8.0
-+WAVEMON_VERSION = v0.8.1
- WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
- WAVEMON_LICENSE = GPLv3+
- WAVEMON_LICENSE_FILES = COPYING
- WAVEMON_DEPENDENCIES = host-pkgconf libnl ncurses
- 
--# Fix musl build issue
--WAVEMON_PATCH = https://github.com/uoaerg/wavemon/commit/01e987a032b81af7bbeba1c439759d750dc1f398.patch
--
- # Handwritten Makefile.in, automake isn't used
- WAVEMON_MAKE_OPTS = CC="$(TARGET_CC)"
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 82a012ad7..042cc3fb0 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -63,7 +63,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		--without-dtrace \
+ 		--without-etw \
+ 		--shared-zlib \
+-		--with-intl=none \
++		$(if $(BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS),--with-intl=none) \
+ 	)
+ endef
  
 -- 
 2.11.0
