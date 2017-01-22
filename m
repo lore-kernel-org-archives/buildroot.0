@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Jan 2017 23:33:42 +0100
-Subject: [Buildroot] [git commit] package/x265: bump version to 2.2
-Message-ID: <20170122223619.664F28005F@busybox.osuosl.org>
+Date: Sun, 22 Jan 2017 23:33:21 +0100
+Subject: [Buildroot] [git commit] package/x264: bump version
+Message-ID: <20170122223619.5B89980434@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d88e4d355925e89f668229d6d7b31633f03710ce
+commit: https://git.buildroot.net/buildroot/commit/?id=4bae469b0d2d4cca1a8db0ff019acfafcc1e8d58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x265/x265.hash | 2 +-
- package/x265/x265.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x264/x264.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x265/x265.hash b/package/x265/x265.hash
-index 92b5bea..5672d79 100644
---- a/package/x265/x265.hash
-+++ b/package/x265/x265.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256	3e4654133ed957a98708fdb4cb9a154d9e80922b84e26e43fc462a101c5b15c8	x265_1.9.tar.gz
-+sha256 b872552535e41fbffa03ba7cbcd3479c42c4053868309292e78e147b7773ac4b  x265_2.2.tar.gz
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index e737c31..0fbdb01 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index 19111f0..aa7bb55 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X265_VERSION = 1.9
-+X265_VERSION = 2.2
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
- X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- X265_LICENSE = GPLv2+
+-X264_VERSION = 72d53ab2ac7af24597a824e868f2ef363a22f5d4
++X264_VERSION = b97ae0644f16bad2e2c9c9181264a946769a0aa0
+ X264_SITE = git://git.videolan.org/x264.git
+ X264_LICENSE = GPLv2+
+ X264_DEPENDENCIES = host-pkgconf
