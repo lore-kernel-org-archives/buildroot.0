@@ -1,31 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Jan 2017 22:07:21 +0100
-Subject: [Buildroot] [PATCH] ruby: bump version to 2.4.0
-In-Reply-To: <871sw7asxn.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Fri, 13 Jan 2017 16:19:32 +0100")
-References: <20170109171403.57632-1-Vincent.Riera@imgtec.com>
- <871sw7asxn.fsf@dell.be.48ers.dk>
-Message-ID: <87lgu24xdi.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 22 Jan 2017 22:12:00 +0100
+Subject: [Buildroot] [PATCH] package/wavemon: bump to version 0.8.1
+Message-ID: <20170122211200.19911-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+No need to fetch the musl patch from upstream anymore.
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
- >> The problem addressed by 0001 patch has been fixed upstream and is that
- >> fix is included in this release:
- >> https://github.com/ruby/ruby/commit/aa107497cd379b713eba8cecdb9a882bb1e0dd89
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/wavemon/wavemon.hash | 3 +--
+ package/wavemon/wavemon.mk   | 5 +----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
- >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
- > Committed, thanks.
-
-This seems to cause a number of build issues. Care to take a look?
-
-http://autobuild.buildroot.net/?reason=ruby-2.4.0
-
+diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
+index e35f6ace6..69bd2b4bf 100644
+--- a/package/wavemon/wavemon.hash
++++ b/package/wavemon/wavemon.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  81ee1f06f8349fee62e98ec5b53dff5b76c4d8fcb439f20cca806255239e3a2a  wavemon-v0.8.0.tar.gz
+-sha256  681b86ef1469df8f7091040258dd01169bea2a7df294185c35bc867725deab2f  01e987a032b81af7bbeba1c439759d750dc1f398.patch
++sha256  c9ea57da4f8161401bcaaca17b37bcdf16ffb88baad2370afed2e15a7f71af73  wavemon-v0.8.1.tar.gz
+diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
+index 746d45f33..5a1b7ee0d 100644
+--- a/package/wavemon/wavemon.mk
++++ b/package/wavemon/wavemon.mk
+@@ -4,15 +4,12 @@
+ #
+ ################################################################################
+ 
+-WAVEMON_VERSION = v0.8.0
++WAVEMON_VERSION = v0.8.1
+ WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
+ WAVEMON_LICENSE = GPLv3+
+ WAVEMON_LICENSE_FILES = COPYING
+ WAVEMON_DEPENDENCIES = host-pkgconf libnl ncurses
+ 
+-# Fix musl build issue
+-WAVEMON_PATCH = https://github.com/uoaerg/wavemon/commit/01e987a032b81af7bbeba1c439759d750dc1f398.patch
+-
+ # Handwritten Makefile.in, automake isn't used
+ WAVEMON_MAKE_OPTS = CC="$(TARGET_CC)"
+ 
 -- 
-Bye, Peter Korsgaard
+2.11.0
