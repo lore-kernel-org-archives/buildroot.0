@@ -1,33 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jan 2017 17:52:35 +1100
-Subject: [Buildroot] [PATCH] opus: security bump to 1.1.4
-In-Reply-To: <20170121134037.32421-1-peter@korsgaard.com>
-References: <20170121134037.32421-1-peter@korsgaard.com>
-Message-ID: <20170122175235.7f2c32d5@free-electrons.com>
+Date: Sun, 22 Jan 2017 17:53:19 +1100
+Subject: [Buildroot] [git commit] Revert "util-linux: fix ncurses/wchar
+	handling"
+Message-ID: <20170122065355.ED3DF8188A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=051fde24e47e92873ba36f5a692c1f6da78496d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Jan 2017 14:40:37 +0100, Peter Korsgaard wrote:
-> Fixes CVE-2017-0381: A remote code execution vulnerability in
-> silk/NLSF_stabilize.c in libopus in Mediaserver could enable an attacker
-> using a specially crafted file to cause memory corruption during media file
-> and data processing.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/opus/opus.hash | 2 +-
->  package/opus/opus.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+This reverts commit 5a18eabdf08564688761a9b2f35892d69d8f9a18.
 
-Applied to master, thanks.
+It did not take into account all the possible situations. A different fix
+will be provided in a forthcomming patch.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/Config.in     |  5 -----
+ package/util-linux/util-linux.mk | 20 ++++++++++----------
+ 2 files changed, 10 insertions(+), 15 deletions(-)
+
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index cfb2451..e957f84 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -207,7 +207,6 @@ config BR2_PACKAGE_UTIL_LINUX_MORE
+ 	bool "more"
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  File perusal filter for crt viewing
+ 
+@@ -253,7 +252,6 @@ config BR2_PACKAGE_UTIL_LINUX_PG
+ 	bool "pg"
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  Browse pagewise through text files
+ 
+@@ -300,7 +298,6 @@ config BR2_PACKAGE_UTIL_LINUX_SETPRIV
+ config BR2_PACKAGE_UTIL_LINUX_SETTERM
+ 	bool "setterm"
+ 	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  Set terminal attributes
+ 
+@@ -313,14 +310,12 @@ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
+ config BR2_PACKAGE_UTIL_LINUX_TUNELP
+ 	bool "tunelp"
+ 	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  Set various parameters for the lp device
+ 
+ config BR2_PACKAGE_UTIL_LINUX_UL
+ 	bool "ul"
+ 	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_NCURSES_WCHAR if BR2_USE_WCHAR
+ 	help
+ 	  Do underlining
+ 
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 414465c..51ece90 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -45,21 +45,21 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ UTIL_LINUX_DEPENDENCIES += busybox
+ endif
+ 
+-ifeq ($(BR2_USE_WCHAR),y)
+-UTIL_LINUX_CONF_OPTS += --enable-widechar
+-else
+-UTIL_LINUX_CONF_OPTS += --disable-widechar
+-endif
+-
+-ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++ifeq ($(BR2_PACKAGE_NCURSES),y)
+ UTIL_LINUX_DEPENDENCIES += ncurses
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+ UTIL_LINUX_CONF_OPTS += --with-ncursesw
+ UTIL_LINUX_CONF_ENV += NCURSESW5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+-else ifeq ($(BR2_PACKAGE_NCURSES):$(BR2_USE_WCHAR),y:)
+-UTIL_LINUX_DEPENDENCIES += ncurses
+-UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses
++else
++UTIL_LINUX_CONF_OPTS += --without-ncursesw --with-ncurses --disable-widechar
+ UTIL_LINUX_CONF_ENV += NCURSES5_CONFIG=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
++endif
++else
++ifeq ($(BR2_USE_WCHAR),y)
++UTIL_LINUX_CONF_OPTS += --enable-widechar
+ else
++UTIL_LINUX_CONF_OPTS += --disable-widechar
++endif
+ UTIL_LINUX_CONF_OPTS += --without-ncursesw --without-ncurses
+ endif
+ 
