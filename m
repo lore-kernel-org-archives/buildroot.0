@@ -1,28 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 20:47:17 +0100
-Subject: [Buildroot] [PATCH] util-linux: bump version to 2.29.1
-In-Reply-To: <20170123135250.56972-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Mon, 23 Jan 2017 13:52:50 +0000")
-References: <20170123135250.56972-1-Vincent.Riera@imgtec.com>
-Message-ID: <87mvehk18a.fsf@dell.be.48ers.dk>
+Date: Mon, 23 Jan 2017 20:43:15 +0100
+Subject: [Buildroot] [git commit] libinput: bump version to 1.6.0
+Message-ID: <20170123194745.82C348183D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c933ff93ed0a56ee90caa2704302aa64bd19b606
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > 0001-build-sys-prefer-pkg-config-for-ncurses.patch already included:
- >   http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=3f7429fd2d539c7f948f72bd829404b55ac19d9f
- > 0002-build-sys-cleanup-UL_NCURSES_CHECK.patch already included:
- >   http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=862326451184bb0fe9c2b2b110fcfc986f9b1734
- > 0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch already
- > included:
- >   http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Do we then still need _AUTORECONF = yes and the MKINSTALLDIRS workaround
-at the bottom of the .mk?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 73f5c01..dd3573f 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032610.html
+-sha256	6f9ad1ede468bd54ec4469b8a4eb93a6f62f7fe6480c7a43e36c5d58cc2822b7	libinput-1.5.4.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032746.html
++sha256 b7534f518d735c643aedca2fb4694683dfddc8d0600cfb628c87a18e65255832  libinput-1.6.0.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index f4ae0fc..52aca9a 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.5.4
++LIBINPUT_VERSION = 1.6.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
