@@ -1,26 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 23 Jan 2017 21:53:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x264: add hash
-Message-ID: <20170123205348.19608-1-bernd.kuhls@t-online.de>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 23 Jan 2017 14:47:17 -0500
+Subject: [Buildroot] [PATCH] mariadb: explicitly disable dtrace detection
+Message-ID: <1485200837-23626-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x264/x264.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/x264/x264.hash
+By default, mariadb's cmake script tries to detect dtrace support. On
+hosts that have dtrace installed, this incorrectly enables dtrace and
+causes compile errors.
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-new file mode 100644
-index 0000000000..c61e2a2df7
---- /dev/null
-+++ b/package/x264/x264.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 888af681679374fa5147ba629eab8cf1704864ddd9ad6be3a8057a6c86bc9392  x264-b97ae0644f16bad2e2c9c9181264a946769a0aa0.tar.gz
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/mariadb/mariadb.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index d667208..2e7305e 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -43,6 +43,9 @@ MARIADB_CONF_OPTS += -DWITH_JEMALLOC=no -DWITHOUT_TOKUDB=1
+ # Make it explicit that we are cross-compiling
+ MARIADB_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
+ 
++# Explicitly disable dtrace to avoid detection of a host version
++MARIADB_CONF_OPTS += -DENABLE_DTRACE=0
++
+ ifeq ($(BR2_PACKAGE_MARIADB_SERVER),y)
+ MARIADB_CONF_OPTS += -DWITH_EMBEDDED_SERVER=ON
+ else
 -- 
-2.11.0
+2.7.4
