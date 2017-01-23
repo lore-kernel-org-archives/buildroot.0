@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 20:43:23 +0100
-Subject: [Buildroot] [PATCH] libinput: bump version to 1.6.0
-In-Reply-To: <20170123133417.27192-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Mon, 23 Jan 2017 13:34:17 +0000")
-References: <20170123133417.27192-1-Vincent.Riera@imgtec.com>
-Message-ID: <87vat5k1es.fsf@dell.be.48ers.dk>
+Date: Mon, 23 Jan 2017 20:47:17 +0100
+Subject: [Buildroot] [PATCH] util-linux: bump version to 2.29.1
+In-Reply-To: <20170123135250.56972-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 23 Jan 2017 13:52:50 +0000")
+References: <20170123135250.56972-1-Vincent.Riera@imgtec.com>
+Message-ID: <87mvehk18a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +13,16 @@ To: buildroot@busybox.net
 
 >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > 0001-build-sys-prefer-pkg-config-for-ncurses.patch already included:
+ >   http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=3f7429fd2d539c7f948f72bd829404b55ac19d9f
+ > 0002-build-sys-cleanup-UL_NCURSES_CHECK.patch already included:
+ >   http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=862326451184bb0fe9c2b2b110fcfc986f9b1734
+ > 0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch already
+ > included:
+ >   http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5
 
-Committed, thanks.
+Do we then still need _AUTORECONF = yes and the MKINSTALLDIRS workaround
+at the bottom of the .mk?
 
 -- 
 Bye, Peter Korsgaard
