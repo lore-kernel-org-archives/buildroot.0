@@ -1,27 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 23:07:57 +0100
-Subject: [Buildroot] [PATCH 1/2] gdb: unbreak 7.12 target gdb/gdbserver
-	build without C++ support
-In-Reply-To: <20170122191710.22600-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 22 Jan 2017 20:17:09 +0100")
-References: <20170122191710.22600-1-peter@korsgaard.com>
-Message-ID: <87sho9ig5e.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Jan 2017 11:34:51 +1300
+Subject: [Buildroot] [PATCH] python-lxml: allow build as host package
+In-Reply-To: <1485179476-6049-1-git-send-email-casantos@datacom.ind.br>
+References: <1485179476-6049-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20170124113451.2af0d791@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello,
 
- > gdb 7.12+ by default builds with a C++ compiler, which naturally doesn't
- > work when we don't have C++ support in the toolchain.
+On Mon, 23 Jan 2017 11:51:16 -0200, Carlos Santos wrote:
+> While currently there is no in-tree Buildroot package which depends on
+> host-python-lxml, we (DATACOM) have some proprietary modules that use it
+> in their test scripts.
+> 
+> We tested python-lxml as host package and confirmed that it builds and
+> works correctly. Someone else might require it, so we are proposing its
+> inclusion.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
- > Fix it by passing --disable-build-with-cxx for such setups.
+I remain a little bit uncomfortable with host packages that have no
+in-tree user, as it means the code is dead and never tested by our
+autobuilder infrastructure.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+That being said, lots of aspects of Buildroot are already not tested by
+our autobuilder infra, so maybe my argument is not so good after all.
 
-Committed, thanks.
+Peter, what is your feeling on this ?
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
