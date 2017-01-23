@@ -1,79 +1,39 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 Jan 2017 12:02:11 +0000
-Subject: [Buildroot] SQLite upgrade
-In-Reply-To: <1166793068.4748811485170873577.JavaMail.httpd@webmail-40.iol.local>
-References: <1166793068.4748811485170873577.JavaMail.httpd@webmail-40.iol.local>
-Message-ID: <df98e295-3d08-b2d2-f8b4-76be779a5824@imgtec.com>
+Date: Mon, 23 Jan 2017 12:48:37 +0000
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.4-5
+Message-ID: <20170123124837.55830-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simone,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 23/01/17 11:27, sred_94 at libero.it wrote:
-> Dear Sirs,
-> 
-> Currently I use the branch "2016.05" of buildroot, which includes SQLite
-> version 3120200, but I need to install SQLite version 3160200.
-> 
-> How can I solve this problem?
-> 
-> Thanking you in advance,
-
-The 3120200 update happened with commit
-0fc78cbe8b609c7c795e116d6107324458186013. You already have this commit
-applied, that why you have that 3120200 version included.
-
-The 3160200 update happened with commit
-cc24879f85d7c6060957baf297993be687aa1794 and you would like to have that
-version.
-
-What you can do is:
- - list all commits that modify package/sqlite/ between 3120200 and 3160200
- - cherry-pick each one of those commits.
-
-For instance, this will list all commits that modified package/sqlite/
-between 3120200 and 3160200:
-
-git log --reverse --pretty=format:"%h"
-0fc78cbe8b609c7c795e116d6107324458186013..cc24879f85d7c6060957baf297993be687aa1794
-package/sqlite/
-
-Note, the first commit (which is the update to 3120200) is NOT included.
-And the --reverse option is mandatory since you want the commits in
-chronological order. The output should be something like this:
-
-bd540fb
-067b268
-27281b5
-75fc043
-701f0e1
-8af8c9d
-ec1d29c
-f08eeb8
-cc24879
-
-Now, for each one of those you need to perform a "git cherry-pick", so.
-Below you have a one-liner command that does everything:
-
-for commit in $(git log --reverse --pretty=format:"%h"
-0fc78cbe8b609c7c795e116d6107324458186013..cc24879f85d7c6060957baf297993be687aa1794
-package/sqlite/); do git cherry-pick $commit; done
-
-That assumes you are checked-out on 2016.05 (git checkout 2016.05).
-
-Regards,
-
-Vincent
-
-> 
-> Simone Rossi
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index d0ed022..3f5bfb1 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 c46975d23ff0c587219daaa3e1dbd43a54a5d7d5ec20d0bdc2c34188facdb0f9  ImageMagick-7.0.4-4.tar.xz
++sha256 69178335a906202928571e25b1670a4bb066500b9693c7ba554583e8d700fcf5  ImageMagick-7.0.4-5.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 9d2c964..64c6a35 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.4-4
++IMAGEMAGICK_VERSION = 7.0.4-5
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
+-- 
+2.10.2
