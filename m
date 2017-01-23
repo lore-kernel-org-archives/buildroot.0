@@ -1,31 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jan 2017 21:09:42 +1300
-Subject: [Buildroot] [PATCH 1/2] docker-engine: security bump to version
- 1.12.6
-In-Reply-To: <20170122213956.1805-1-peter@korsgaard.com>
-References: <20170122213956.1805-1-peter@korsgaard.com>
-Message-ID: <20170123210942.296a6215@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 23 Jan 2017 09:02:55 +0100
+Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.1.21
+In-Reply-To: <87inp9sprj.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Fri, 20 Jan 2017 16:41:04 +0100")
+References: <20170120151947.10915-1-bluemrp9@gmail.com>
+ <87inp9sprj.fsf@dell.be.48ers.dk>
+Message-ID: <87h94qkxu8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Sun, 22 Jan 2017 22:39:55 +0100, Peter Korsgaard wrote:
-> Fixes runC privilege escalation (CVE-2016-9962).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/docker-engine/docker-engine.hash | 2 +-
->  package/docker-engine/docker-engine.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+ >> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 
-Both applied to master, thanks!
+ > Committed, thanks.
 
-Thomas
+I now noticed that this update fixes a number of security issues:
+
+https://mariadb.com/kb/en/mariadb/mariadb-10121-release-notes/
+
+So it is a candidate for a backport to 2016.11.2. Please mention that in
+the commit message in the future, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
