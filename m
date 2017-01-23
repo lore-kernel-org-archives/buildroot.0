@@ -1,27 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 22:55:51 +0100
-Subject: [Buildroot] [git commit] package/x264: add hash
-Message-ID: <20170123220844.E25527FE47@busybox.osuosl.org>
+Date: Mon, 23 Jan 2017 22:58:51 +0100
+Subject: [Buildroot] [git commit] raspberrypi2_defconfig: bump kernel
+	version to 4.4.43
+Message-ID: <20170123220845.1C2C881E43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69889fc7b0dcc18444e01bacb746757a4d355ba8
+commit: https://git.buildroot.net/buildroot/commit/?id=79899f7b99e1d3a8cd11f979d2dec44cff905b05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x264/x264.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/raspberrypi2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-new file mode 100644
-index 0000000..c61e2a2
---- /dev/null
-+++ b/package/x264/x264.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 888af681679374fa5147ba629eab8cf1704864ddd9ad6be3a8057a6c86bc9392  x264-b97ae0644f16bad2e2c9c9181264a946769a0aa0.tar.gz
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index e94f350..1ec92e7 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -13,7 +13,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="c6d86f7aa554854b04614ebb4d394766081fb41f"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1ebe8d4a4c96cd6a90805c74233a468854960f67"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
