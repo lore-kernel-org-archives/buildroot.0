@@ -1,22 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 23:08:00 +0100
-Subject: [Buildroot] [PATCH 2/2] gdb: bump 7.12 series to 7.12.1
-In-Reply-To: <20170122191710.22600-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 22 Jan 2017 20:17:10 +0100")
-References: <20170122191710.22600-1-peter@korsgaard.com>
- <20170122191710.22600-2-peter@korsgaard.com>
-Message-ID: <87o9yxig5b.fsf@dell.be.48ers.dk>
+Date: Mon, 23 Jan 2017 22:57:37 +0100
+Subject: [Buildroot] [git commit] mariadb: explicitly disable dtrace
+	detection
+Message-ID: <20170123220844.F299B7FE47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=06013d690bae911f5b74ec241106da696ffea100
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+By default, mariadb's cmake script tries to detect dtrace support. On
+hosts that have dtrace installed, this incorrectly enables dtrace and
+causes compile errors.
 
-Committed, thanks.
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mariadb/mariadb.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index d667208..2e7305e 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -43,6 +43,9 @@ MARIADB_CONF_OPTS += -DWITH_JEMALLOC=no -DWITHOUT_TOKUDB=1
+ # Make it explicit that we are cross-compiling
+ MARIADB_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
+ 
++# Explicitly disable dtrace to avoid detection of a host version
++MARIADB_CONF_OPTS += -DENABLE_DTRACE=0
++
+ ifeq ($(BR2_PACKAGE_MARIADB_SERVER),y)
+ MARIADB_CONF_OPTS += -DWITH_EMBEDDED_SERVER=ON
+ else
