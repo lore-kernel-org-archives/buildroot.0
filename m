@@ -1,68 +1,85 @@
-From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
-Date: Mon, 23 Jan 2017 14:39:45 +0100
-Subject: [Buildroot]
- =?utf-8?q?=5BPATCH_1/2=5D_Add_BR2=5FCMAKE=5FUSE=5FNIN?=
- =?utf-8?q?JA=5FBACKEND_option?=
-In-Reply-To: <ef982565-16ec-591b-aaed-d22e5a634851@gmail.com>
-References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
- <ef982565-16ec-591b-aaed-d22e5a634851@gmail.com>
-Message-ID: <2260e784237284271ff7745986b82cc8@openmailbox.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 23 Jan 2017 13:51:13 +0000
+Subject: [Buildroot] [PATCH] php: bump version to 7.1.1
+Message-ID: <20170123135113.23214-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+0006-Fix-php-fpm.service.in.patch already included:
+  https://github.com/php/php-src/commit/bb19125781c0794da9a63fee62e263ff4efff661
 
-Le 2017-01-21 23:25, Romain Naour a ?crit?:
-> There are currently 146 packages using CMake in Buildroot, I'm not sure 
-> all of
-> them support ninja backend yet.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/php/0006-Fix-php-fpm.service.in.patch | 35 ---------------------------
+ package/php/php.hash                          |  2 +-
+ package/php/php.mk                            |  2 +-
+ 3 files changed, 2 insertions(+), 37 deletions(-)
+ delete mode 100644 package/php/0006-Fix-php-fpm.service.in.patch
 
-I don't think there is anything specific to a package that can make it 
-support ninja backend or not.
-CMake provides several backends, and the result is expected to be the 
-same whatever the backend. If not, this is a bug in CMake.
-
-> I would suggest to enable Ninja backend package by package when it has
-> been tested.
-
-What do you mean exactly "enable Ninja backend package by package"?
-- Add an option for each package?
-- Switch to ninja backend if supported by the package, without option 
-(i.e. force ninja backend)?
-- Keep a global option - the one in my patch - but only apply it on 
-packages that will define a specific package variable to say "OK I can 
-do it"?
-
-My point of view is that we should keep a global option - that could be 
-described as experimental - and never enable it in an official 
-defconfig.
-If someone enables it, and find a package that does not compile with 
-ninja backend, he can either disable the option (he knows that it is 
-experimental), or/and send a bug to either CMake or the package 
-maintainer.
-
-Moreover, I think we can't just say "this package is ninja compliant". 
-Maybe if we change a single option in configure step, it will not 
-compile anymore.
-
-Let me know what you're expecting exactly...
-
-> Indent with one tab.
-> Indent with one tab and 2 spaces.
-
-OK, sorry for that, didn't pay enough attention.
-
-
-> I think these changes should be in a preparatory patch before adding 
-> Ninja
-> backend support.
-
-Sorry I don't understand what you mean with "preparatory patch".
-
-Regards,
-
+diff --git a/package/php/0006-Fix-php-fpm.service.in.patch b/package/php/0006-Fix-php-fpm.service.in.patch
+deleted file mode 100644
+index 68cb50a..0000000
+--- a/package/php/0006-Fix-php-fpm.service.in.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 1a8714d0b56e06301b3c261eaef93d897ec5d834 Mon Sep 17 00:00:00 2001
+-From: Floris Bos <bos@je-eigen-domein.nl>
+-Date: Fri, 1 May 2015 15:28:55 +0200
+-Subject: [PATCH] Fix php-fpm.service.in
+-
+-- Expand file paths.
+-- Remove obsolete After=syslog.target. Syslog is socket activated nowadays.
+-
+-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+----
+- sapi/fpm/php-fpm.service.in | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/sapi/fpm/php-fpm.service.in b/sapi/fpm/php-fpm.service.in
+-index a2df30e..c135f04 100644
+---- a/sapi/fpm/php-fpm.service.in
+-+++ b/sapi/fpm/php-fpm.service.in
+-@@ -1,11 +1,11 @@
+- [Unit]
+- Description=The PHP FastCGI Process Manager
+--After=syslog.target network.target
+-+After=network.target
+- 
+- [Service]
+- Type=@php_fpm_systemd@
+--PIDFile=@localstatedir@/run/php-fpm.pid
+--ExecStart=@sbindir@/php-fpm --nodaemonize --fpm-config @sysconfdir@/php-fpm.conf
+-+PIDFile=@EXPANDED_LOCALSTATEDIR@/run/php-fpm.pid
+-+ExecStart=@EXPANDED_SBINDIR@/php-fpm --nodaemonize --fpm-config @EXPANDED_SYSCONFDIR@/php-fpm.conf
+- ExecReload=/bin/kill -USR2 $MAINPID
+- 
+- [Install]
+--- 
+-2.7.4
+-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 5e4bdcb..9c94b9e 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256 a810b3f29c21407c24caa88f50649320d20ba6892ae1923132598b8a0ca145b6  php-7.1.0.tar.xz
++sha256 b3565b0c1441064eba204821608df1ec7367abff881286898d900c2c2a5ffe70  php-7.1.1.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 2ba70aa..1379ad5 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.1.0
++PHP_VERSION = 7.1.1
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-C?dric
+2.10.2
