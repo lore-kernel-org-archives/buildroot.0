@@ -1,40 +1,68 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 Jan 2017 13:34:17 +0000
-Subject: [Buildroot] [PATCH] libinput: bump version to 1.6.0
-Message-ID: <20170123133417.27192-1-Vincent.Riera@imgtec.com>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Mon, 23 Jan 2017 14:39:45 +0100
+Subject: [Buildroot]
+ =?utf-8?q?=5BPATCH_1/2=5D_Add_BR2=5FCMAKE=5FUSE=5FNIN?=
+ =?utf-8?q?JA=5FBACKEND_option?=
+In-Reply-To: <ef982565-16ec-591b-aaed-d22e5a634851@gmail.com>
+References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
+ <ef982565-16ec-591b-aaed-d22e5a634851@gmail.com>
+Message-ID: <2260e784237284271ff7745986b82cc8@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 73f5c01..dd3573f 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032610.html
--sha256	6f9ad1ede468bd54ec4469b8a4eb93a6f62f7fe6480c7a43e36c5d58cc2822b7	libinput-1.5.4.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032746.html
-+sha256 b7534f518d735c643aedca2fb4694683dfddc8d0600cfb628c87a18e65255832  libinput-1.6.0.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index f4ae0fc..52aca9a 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.5.4
-+LIBINPUT_VERSION = 1.6.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+Le 2017-01-21 23:25, Romain Naour a ?crit?:
+> There are currently 146 packages using CMake in Buildroot, I'm not sure 
+> all of
+> them support ninja backend yet.
+
+I don't think there is anything specific to a package that can make it 
+support ninja backend or not.
+CMake provides several backends, and the result is expected to be the 
+same whatever the backend. If not, this is a bug in CMake.
+
+> I would suggest to enable Ninja backend package by package when it has
+> been tested.
+
+What do you mean exactly "enable Ninja backend package by package"?
+- Add an option for each package?
+- Switch to ninja backend if supported by the package, without option 
+(i.e. force ninja backend)?
+- Keep a global option - the one in my patch - but only apply it on 
+packages that will define a specific package variable to say "OK I can 
+do it"?
+
+My point of view is that we should keep a global option - that could be 
+described as experimental - and never enable it in an official 
+defconfig.
+If someone enables it, and find a package that does not compile with 
+ninja backend, he can either disable the option (he knows that it is 
+experimental), or/and send a bug to either CMake or the package 
+maintainer.
+
+Moreover, I think we can't just say "this package is ninja compliant". 
+Maybe if we change a single option in configure step, it will not 
+compile anymore.
+
+Let me know what you're expecting exactly...
+
+> Indent with one tab.
+> Indent with one tab and 2 spaces.
+
+OK, sorry for that, didn't pay enough attention.
+
+
+> I think these changes should be in a preparatory patch before adding 
+> Ninja
+> backend support.
+
+Sorry I don't understand what you mean with "preparatory patch".
+
+Regards,
+
 -- 
-2.10.2
+C?dric
