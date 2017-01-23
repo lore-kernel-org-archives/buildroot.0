@@ -1,38 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 22:57:37 +0100
-Subject: [Buildroot] [git commit] mariadb: explicitly disable dtrace
-	detection
-Message-ID: <20170123220844.F299B7FE47@busybox.osuosl.org>
+Date: Mon, 23 Jan 2017 22:55:19 +0100
+Subject: [Buildroot] [git commit] qt5quickcontrols2: install examples
+Message-ID: <20170123220844.D2E89805F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06013d690bae911f5b74ec241106da696ffea100
+commit: https://git.buildroot.net/buildroot/commit/?id=aecb95fe3608a757e32247193db335830182158b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, mariadb's cmake script tries to detect dtrace support. On
-hosts that have dtrace installed, this incorrectly enables dtrace and
-causes compile errors.
-
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index d667208..2e7305e 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -43,6 +43,9 @@ MARIADB_CONF_OPTS += -DWITH_JEMALLOC=no -DWITHOUT_TOKUDB=1
- # Make it explicit that we are cross-compiling
- MARIADB_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
+diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+index a5ad3f6..8de7932 100644
+--- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
++++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+@@ -30,11 +30,18 @@ define QT5QUICKCONTROLS2_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
  
-+# Explicitly disable dtrace to avoid detection of a host version
-+MARIADB_CONF_OPTS += -DENABLE_DTRACE=0
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/quickcontrols2 $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
 +
- ifeq ($(BR2_PACKAGE_MARIADB_SERVER),y)
- MARIADB_CONF_OPTS += -DWITH_EMBEDDED_SERVER=ON
- else
+ define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5LabsTemplates.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/controls $(TARGET_DIR)/usr/qml/Qt/labs
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/calendar $(TARGET_DIR)/usr/qml/Qt/labs
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/templates $(TARGET_DIR)/usr/qml/Qt/labs
++	$(QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES)
+ endef
+ 
+ $(eval $(generic-package))
