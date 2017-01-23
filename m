@@ -1,47 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 15:50:54 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] docker-engine: security
-	bump to version 1.12.6
-Message-ID: <20170123145719.2E9FF81EA9@busybox.osuosl.org>
+Date: Mon, 23 Jan 2017 16:17:46 +0100
+Subject: [Buildroot] [PATCH] go: security bump to version 1.7.4
+Message-ID: <20170123151746.25228-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af96b7fd097c7ddf1718085c1c66d3a2d85ff031
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+On Darwin, user's trust preferences for root certificates were not honored.
+If the user had a root certificate loaded in their Keychain that was
+explicitly not trusted, a Go program would still verify a connection using
+that root certificate.  This is addressed by https://golang.org/cl/33721,
+tracked in https://golang.org/issue/18141.  Thanks to Xy Ziemba for
+identifying and reporting this issue.
 
-Fixes runC privilege escalation (CVE-2016-9962).
+The net/http package's Request.ParseMultipartForm method starts writing to
+temporary files once the request body size surpasses the given "maxMemory"
+limit.  It was possible for an attacker to generate a multipart request
+crafted such that the server ran out of file descriptors.  This is addressed
+by https://golang.org/cl/30410, tracked in https://golang.org/issue/17965.
+Thanks to Simon Rawet for the report.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 157ddf77e403c6ee00faef44fc32f8f679964204)
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 6697d8a..5e09453 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/go/go.hash b/package/go/go.hash
+index ff0e8f7a8..e50f0041f 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 81b337368efafb631a75f6ad5469413fd5828ce672592c374adf894dc05abd38  docker-engine-v1.12.5.tar.gz
-+sha256 0413f3513c2a6842ed9cf837154c8a722e9b34cb36b33430348489baa183707e  docker-engine-v1.12.6.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 2cd71dd..d575662 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,8 +4,8 @@
+ # Locally computed:
+-sha256 ce4f331352313ad7ba9db5daf6f7f81581f3ca9c862d272ae02ee5a3cb294023  go1.7.2.src.tar.gz
++sha256 4c189111e9ba651a2bb3ee868aa881fab36b2f2da3409e80885ca758a6b614cc  go1.7.4.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 057d9fd1d..bd308902b 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = v1.12.5
--DOCKER_ENGINE_COMMIT = 7392c3b0ce0f9d3e918a321c66668c5d1ef4f689
-+DOCKER_ENGINE_VERSION = v1.12.6
-+DOCKER_ENGINE_COMMIT = 78d18021ecba00c00730dec9d56de6896f9e708d
- DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+-GO_VERSION = 1.7.2
++GO_VERSION = 1.7.4
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
+-- 
+2.11.0
