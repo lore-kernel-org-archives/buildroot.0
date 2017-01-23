@@ -1,42 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jan 2017 19:07:29 +1100
-Subject: [Buildroot] [PATCH] nodejs: unbreak 0.10.x host build
-In-Reply-To: <20170122210551.9704-1-peter@korsgaard.com>
-References: <20170122210551.9704-1-peter@korsgaard.com>
-Message-ID: <20170123190729.74057d6f@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 23 Jan 2017 09:08:57 +0100
+Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.1.21
+In-Reply-To: <87h94qkxu8.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 23 Jan 2017 09:02:55 +0100")
+References: <20170120151947.10915-1-bluemrp9@gmail.com>
+ <87inp9sprj.fsf@dell.be.48ers.dk> <87h94qkxu8.fsf@dell.be.48ers.dk>
+Message-ID: <878tq2kxk6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Sun, 22 Jan 2017 22:05:51 +0100, Peter Korsgaard wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/833/8334631b54fdfd43d38ca00f42e4d5a98e3a70c4/
-> http://autobuild.buildroot.net/results/9c0/9c08e0b745fab671123facb4a46f60eec5afd718/
-> 
-> Commit 24d90db52a74 (package/nodejs: disable icu support for host build)
-> added --with-intl=none to host configure flags to fix an issue related to
-> icu.  The 0.10.x version unfortunately doesn't understand this configure
-> flag and errors out when provided, breaking the build:
-> 
-> configure: error: no such option: --with-intl
-> 
-> The 0.10.x version doesn't seem to have this icu issue (E.G. no autobuilder
-> issues before this commit and unable to reproduce locally), so fix it by
-> only passing --with-intl=none for the 6.9.x version.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/nodejs/nodejs.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+ >>> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 
-Applied to master, thanks.
+ >> Committed, thanks.
 
-Thomas
+ > I now noticed that this update fixes a number of security issues:
+
+ > https://mariadb.com/kb/en/mariadb/mariadb-10121-release-notes/
+
+ > So it is a candidate for a backport to 2016.11.2. Please mention that in
+ > the commit message in the future, thanks.
+
+Sorry, mariadb was only added after 2016.11, but still - Adding the CVEs
+to the commit message would be nice.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
