@@ -1,43 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 15:50:15 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] docker-engine: bump
-	version to v1.12.5
-Message-ID: <20170123145719.1605180DE6@busybox.osuosl.org>
+Date: Mon, 23 Jan 2017 15:51:32 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] runc: security bump to
+	fix CVE-2016-9962
+Message-ID: <20170123145719.46E2980DE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aea7079fbf3e4bdc43ecc157e30df319dc9a122
+commit: https://git.buildroot.net/buildroot/commit/?id=b13040fa27baf8fcb412aca3624fd1426ab598cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+RunC allowed additional container processes via runc exec to be ptraced by
+the pid 1 of the container.  This allows the main processes of the
+container, if running as root, to gain access to file-descriptors of these
+new processes during the initialization and can lead to container escapes or
+modification of runC state before the process is fully placed inside the
+container.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3eddce6ea04a752388bec22a623320290a5834b5)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit d6706dc430ebb1dade6f90a8d45503c23abec99d)
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index ecc5c66..6697d8a 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 5b5400e..0b6a24f 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 cf4f876593abde06b4c19f971163a853a21b1992d75bd2fe5d8bea9015b09f87  docker-engine-v1.12.3.tar.gz
-+sha256 81b337368efafb631a75f6ad5469413fd5828ce672592c374adf894dc05abd38  docker-engine-v1.12.5.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index fdb3c07..ade6fbb 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+ # Locally computed
+-sha256 638742c48426b9a3281aeb619e27513d972de228bdbd43b478baea99c186d491  runc-v1.0.0-rc2.tar.gz
++sha256 374822cc2895ed3899b7a3a03b566413ea782fccec1307231f27894e9c6d5bea  runc-50a19c6ff828c58e5dab13830bd3dacde268afe5.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 661872c..95afcaa 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = v1.12.3
-+DOCKER_ENGINE_VERSION = v1.12.5
- DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+-RUNC_VERSION = v1.0.0-rc2
++RUNC_VERSION = 50a19c6ff828c58e5dab13830bd3dacde268afe5
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
