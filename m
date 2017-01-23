@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 22:58:51 +0100
-Subject: [Buildroot] [git commit] raspberrypi2_defconfig: bump kernel
+Date: Mon, 23 Jan 2017 22:58:54 +0100
+Subject: [Buildroot] [git commit] raspberrypi3_defconfig: bump kernel
 	version to 4.4.43
-Message-ID: <20170123220845.1C2C881E43@busybox.osuosl.org>
+Message-ID: <20170123220845.27A10805F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79899f7b99e1d3a8cd11f979d2dec44cff905b05
+commit: https://git.buildroot.net/buildroot/commit/?id=55af371b4c3950b1c66722947ece4590336401bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/raspberrypi2_defconfig | 2 +-
+ configs/raspberrypi3_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index e94f350..1ec92e7 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 4cd046d..6fceaa0 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
 @@ -13,7 +13,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_GIT=y
