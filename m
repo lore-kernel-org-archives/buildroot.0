@@ -1,34 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jan 2017 09:08:57 +0100
-Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.1.21
-In-Reply-To: <87h94qkxu8.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 23 Jan 2017 09:02:55 +0100")
-References: <20170120151947.10915-1-bluemrp9@gmail.com>
- <87inp9sprj.fsf@dell.be.48ers.dk> <87h94qkxu8.fsf@dell.be.48ers.dk>
-Message-ID: <878tq2kxk6.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Jan 2017 19:07:35 +1100
+Subject: [Buildroot] [git commit] docker-engine: security bump to version
+	1.12.6
+Message-ID: <20170123080912.DDA148179D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=157ddf77e403c6ee00faef44fc32f8f679964204
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
->>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
- >>> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Fixes runC privilege escalation (CVE-2016-9962).
 
- >> Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > I now noticed that this update fixes a number of security issues:
-
- > https://mariadb.com/kb/en/mariadb/mariadb-10121-release-notes/
-
- > So it is a candidate for a backport to 2016.11.2. Please mention that in
- > the commit message in the future, thanks.
-
-Sorry, mariadb was only added after 2016.11, but still - Adding the CVEs
-to the commit message would be nice.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 6697d8a..5e09453 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 81b337368efafb631a75f6ad5469413fd5828ce672592c374adf894dc05abd38  docker-engine-v1.12.5.tar.gz
++sha256 0413f3513c2a6842ed9cf837154c8a722e9b34cb36b33430348489baa183707e  docker-engine-v1.12.6.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 2cd71dd..d575662 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = v1.12.5
+-DOCKER_ENGINE_COMMIT = 7392c3b0ce0f9d3e918a321c66668c5d1ef4f689
++DOCKER_ENGINE_VERSION = v1.12.6
++DOCKER_ENGINE_COMMIT = 78d18021ecba00c00730dec9d56de6896f9e708d
+ DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
