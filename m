@@ -1,65 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 18:16:33 +1300
-Subject: [Buildroot] [PATCH v3 3/3] board/altera: update README for new
- scripts and fixed some typos
-In-Reply-To: <1484925159-25292-4-git-send-email-lucas.bajolet@savoirfairelinux.com>
-References: <1484925159-25292-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
- <1484925159-25292-4-git-send-email-lucas.bajolet@savoirfairelinux.com>
-Message-ID: <20170124181633.653f3617@free-electrons.com>
+Date: Tue, 24 Jan 2017 18:21:10 +1300
+Subject: [Buildroot] [git commit] package/x265: Disable -march selection
+	from CMakeLists.txt
+Message-ID: <20170124052116.8E8D081EC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=52ef38396a814c468b0b713d3ff95b36b3791832
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Jan 2017 10:12:39 -0500, Lucas Bajolet wrote:
+Fixes
+http://autobuild.buildroot.net/results/996/9961313a870b833b48438d8d258c5b5323025790/
 
->      output/images/
->      ??? rootfs.ext2
-> -    ??? rootfs.ext3 -> rootfs.ext2
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x265/0001-fix-gcc-options.patch | 52 +++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-As explained in my review on PATCH 1/3, ext3 should probably be kept in
-the defconfig, and therefore this should be kept.
-
->  Prepare your SDcard
->  ===================
-> @@ -111,22 +97,26 @@ let's assume it is /dev/mmcblk0:
->  Delete all previous partitions with 'd' then create the new partition table,
->  using these options, pressing enter after each one:
->  
-> -  * n p 1 9000000 +20480K t 1 b
-> -  * n p 2 4096 +4496384K t 83
-> -  * n p 3 2048 +1024K t 3 a2
-> +  * n p 1 1 4095
-> +  * n p 2 4096 +22000
-> +  * n p 3  <Enter> -- This will take the remaining space from the SD card
-> +
-> +Then, still in fdisk, change the type of the partitions according to this
-> +  * t 1 a2
-> +  * t 2 b
-
-Remove all this stuff that explains how to prepare the SD card. If we
-have a genimage script that creates a ready to use SD card image, then
-there is no need to re-explain all of this in the readme.txt file.
-
-> +(ALT) Install the binaries to SDcard from genimage
-> +--------------------------------------------
-> +
-> +`genimage` will generate a `sockit_image.img` image in the output folder.
-> +From that point, you will need to execute the following command:
-> +
-> +   $ sudo dd if=sockit_image.img of=/dev/mmcblk0
-
-Please name the image sdcard.img, and use the following instruction:
-
-	sudo dd if=output/images/sdcard.img of=/dev/mmcblk0
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/x265/0001-fix-gcc-options.patch b/package/x265/0001-fix-gcc-options.patch
+new file mode 100644
+index 0000000..8151821
+--- /dev/null
++++ b/package/x265/0001-fix-gcc-options.patch
+@@ -0,0 +1,52 @@
++# HG changeset patch
++# User Bertrand Jacquin <bertrand@jacquin.bzh>
++# Date 1444431941 -3600
++# Node ID 5c6d2a6f2f9a0534933cc999b3845be4344e1af0
++# Parent  b6156a08b1def3584647f26096866c1a0c11e54a
++build: Disable -march selection from CMakeLists.txt
++
++x32 arch as defined on https://sites.google.com/site/x32abi is neither
++X86 nor X64, then forcing -march=i686 leads to build failure as wrong
++-march is used.
++
++Forcing -march, -mfloat-abi and -mfpu for ARM is also wrong
++
++As a global sanity sake, disable all forced -march in CMakeLists
++
++Backported from upstream pull request:
++https://bitbucket.org/multicoreware/x265/pull-requests/21
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -r 58dddcf01b7d source/CMakeLists.txt
++--- a/source/CMakeLists.txt	Mon Jan 23 09:50:33 2017 +0530
+++++ b/source/CMakeLists.txt	Mon Jan 23 21:03:10 2017 +0100
++@@ -194,28 +194,6 @@
++     if(NATIVE_BUILD)
++         if(INTEL_CXX)
++             add_definitions(-xhost)
++-        else()
++-            add_definitions(-march=native)
++-        endif()
++-    elseif(X86 AND NOT X64)
++-        string(FIND "${CMAKE_CXX_FLAGS}" "-march" marchPos)
++-        if(marchPos LESS "0")
++-            add_definitions(-march=i686)
++-            if(WIN32 AND NOT INTEL_CXX AND NOT CLANG AND
++-               CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
++-                add_definitions(-mpreferred-stack-boundary=2)
++-            endif()
++-        endif()
++-    endif()
++-    if(ARM AND CROSS_COMPILE_ARM)
++-        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
++-    elseif(ARM)
++-        find_package(Neon)
++-        if(CPU_HAS_NEON)
++-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
++-            add_definitions(-DHAVE_NEON)
++-        else()
++-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
++         endif()
++     endif()
++     add_definitions(${ARM_ARGS})
