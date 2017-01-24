@@ -1,52 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 22:49:17 +1300
-Subject: [Buildroot] [git commit] python-setuptools-scm: new package
-Message-ID: <20170124095724.C017F81ECE@busybox.osuosl.org>
+Date: Tue, 24 Jan 2017 22:56:30 +1300
+Subject: [Buildroot] [git commit] python-pytablereader: new package
+Message-ID: <20170124095724.F0CF57FB3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3022787c73e7474e4ebb2647a561bea2d2bc45b3
+commit: https://git.buildroot.net/buildroot/commit/?id=20e1d5d3122d1e9fab7a50f89fbff646b96be9dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This package is only needed at build stage, so make it a host
-package.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-setuptools-scm/python-setuptools-scm.hash |  3 +++
- package/python-setuptools-scm/python-setuptools-scm.mk   | 14 ++++++++++++++
- 2 files changed, 17 insertions(+)
+ package/Config.in                                     |  1 +
+ package/python-pytablereader/Config.in                | 19 +++++++++++++++++++
+ .../python-pytablereader/python-pytablereader.hash    |  3 +++
+ package/python-pytablereader/python-pytablereader.mk  | 14 ++++++++++++++
+ 4 files changed, 37 insertions(+)
 
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
+diff --git a/package/Config.in b/package/Config.in
+index 809c995..2bcb5d2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -773,6 +773,7 @@ menu "External python modules"
+ 	source "package/python-pysnmp-apps/Config.in"
+ 	source "package/python-pysnmp-mibs/Config.in"
+ 	source "package/python-pysocks/Config.in"
++	source "package/python-pytablereader/Config.in"
+ 	source "package/python-pytablewriter/Config.in"
+ 	source "package/python-pytrie/Config.in"
+ 	source "package/python-pytz/Config.in"
+diff --git a/package/python-pytablereader/Config.in b/package/python-pytablereader/Config.in
 new file mode 100644
-index 0000000..734fc5a
+index 0000000..050ff65
 --- /dev/null
-+++ b/package/python-setuptools-scm/python-setuptools-scm.hash
++++ b/package/python-pytablereader/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_PYTHON_PYTABLEREADER
++	bool "python-pytablereader"
++	select BR2_PACKAGE_PYTHON_BEAUTIFULSOUP4 # runtime
++	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
++	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
++	select BR2_PACKAGE_PYTHON_LOGBOOK # runtime
++	select BR2_PACKAGE_PYTHON_MARKDOWN2 # runtime
++	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
++	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
++	select BR2_PACKAGE_PYTHON_PATHPY # runtime
++	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_XLRD # runtime
++	help
++	  A python library to load structured table data from
++	  files/URL with various data formats:
++	  CSV/Excel/HTML/JSON/LTSV/Markdown/TSV.
++
++	  https://github.com/thombashi/pytablereader
+diff --git a/package/python-pytablereader/python-pytablereader.hash b/package/python-pytablereader/python-pytablereader.hash
+new file mode 100644
+index 0000000..7d1438a
+--- /dev/null
++++ b/package/python-pytablereader/python-pytablereader.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/setuptools_scm/json, sha256 locally computed
-+md5	b6916c78ed6253d6602444fad4279c5b  setuptools_scm-1.15.0.tar.gz
-+sha256	daf12d05aa2155a46aa357453757ffdc47d87f839e62114f042bceac6a619e2f  setuptools_scm-1.15.0.tar.gz
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
++# md5 from https://pypi.python.org/pypi/pytablereader/json, sha256 locally computed
++md5	ae95462a1a982186d1307ee0d6e275e2  pytablereader-0.8.8.tar.gz
++sha256	6ba95dc699d2c7ab7bc4b3f0224a17404255d110a3ece8ba12217d650aa7de79  pytablereader-0.8.8.tar.gz
+diff --git a/package/python-pytablereader/python-pytablereader.mk b/package/python-pytablereader/python-pytablereader.mk
 new file mode 100644
-index 0000000..993fbb9
+index 0000000..2b6f2d4
 --- /dev/null
-+++ b/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-pytablereader/python-pytablereader.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-setuptools-scm
++# python-pytablereader
 +#
 +################################################################################
 +
-+PYTHON_SETUPTOOLS_SCM_VERSION = 1.15.0
-+PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
-+PYTHON_SETUPTOOLS_SCM_SITE = https://pypi.python.org/packages/80/b7/31b6ae5fcb188e37f7e31abe75f9be90490a5456a72860fa6e643f8a3cbc
-+PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
-+PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
-+PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
++PYTHON_PYTABLEREADER_VERSION = 0.8.8
++PYTHON_PYTABLEREADER_SOURCE = pytablereader-$(PYTHON_PYTABLEREADER_VERSION).tar.gz
++PYTHON_PYTABLEREADER_SITE = https://pypi.python.org/packages/05/0c/7801617e60ce0d9b4cc57cb542cc431a95b9f43ac1ac14030017163da29d
++PYTHON_PYTABLEREADER_SETUP_TYPE = setuptools
++PYTHON_PYTABLEREADER_LICENSE = MIT
++PYTHON_PYTABLEREADER_LICENSE_FILES = LICENSE
 +
-+$(eval $(host-python-package))
++$(eval $(python-package))
