@@ -1,47 +1,38 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 24 Jan 2017 23:14:22 +1300
-Subject: [Buildroot] [PATCH 2/3] micropython-lib: depend on pcre
-In-Reply-To: <20170124101423.11479-1-judge.packham@gmail.com>
-References: <20170124101423.11479-1-judge.packham@gmail.com>
-Message-ID: <20170124101423.11479-2-judge.packham@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Jan 2017 23:14:18 +1300
+Subject: [Buildroot] [PATCH 1/2] vala: fix package suffix
+In-Reply-To: <20170112133831.12223-1-Vincent.Riera@imgtec.com>
+References: <20170112133831.12223-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170124231418.3d5f2985@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The micropython libs load libpcre dynamically using the foreign function
-interface (libffi). Without pcre the build will succeed but at run time
-anything that uses the 're' module will have issues.
+Hello,
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- package/micropython-lib/Config.in          | 1 +
- package/micropython-lib/micropython-lib.mk | 1 +
- 2 files changed, 2 insertions(+)
+On Thu, 12 Jan 2017 13:38:30 +0000, Vicente Olivert Riera wrote:
+> vala executable has a suffix and we reffer to it in our vala wrapper,
+> but we assume that suffix is always the same as the major version. This
+> can be wrong, so better to obtain the suffix number from the config.h
+> file.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-diff --git a/package/micropython-lib/Config.in b/package/micropython-lib/Config.in
-index a7e017be7..be8c87562 100644
---- a/package/micropython-lib/Config.in
-+++ b/package/micropython-lib/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MICROPYTHON_LIB
- 	bool "micropython-lib"
-+	select BR2_PACKAGE_PCRE
- 	depends on BR2_PACKAGE_MICROPYTHON
- 	help
- 	  Core Python libraries ported to MicroPython.
-diff --git a/package/micropython-lib/micropython-lib.mk b/package/micropython-lib/micropython-lib.mk
-index a0b533a53..478d6d690 100644
---- a/package/micropython-lib/micropython-lib.mk
-+++ b/package/micropython-lib/micropython-lib.mk
-@@ -8,6 +8,7 @@ MICROPYTHON_LIB_VERSION = v1.8.2
- MICROPYTHON_LIB_SITE = $(call github,micropython,micropython-lib,$(MICROPYTHON_LIB_VERSION))
- MICROPYTHON_LIB_LICENSE = Python software foundation license v2 (some modules), MIT (everything else)
- MICROPYTHON_LIB_LICENSE_FILES = LICENSE
-+MICROPYTHON_LIB_DEPENDENCIES = pcre
- 
- define MICROPYTHON_LIB_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+Nope, that is not needed I believe.
+
+Like all Gnome projects, 0.35 is not a stable vala version, so there's
+no reason to package it. And I guess that also explains why vala 0.35
+still uses 0.34 as the package suffix.
+
+So, by not package a development version, we also don't need this "fix
+package suffix" patch.
+
+Best regards,
+
+Thomas
 -- 
-2.11.0.24.ge6920cf
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
