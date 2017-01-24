@@ -1,37 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 22:20:10 +1300
-Subject: [Buildroot] [V2 1/3] pkg-perl: add PREFER_INSTALLER variable
-In-Reply-To: <20170124082534.21033-1-francois.perrad@gadz.org>
-References: <20170124082534.21033-1-francois.perrad@gadz.org>
-Message-ID: <20170124222010.2a6acb8f@free-electrons.com>
+Date: Tue, 24 Jan 2017 22:20:46 +1300
+Subject: [Buildroot] [git commit] pure-ftpd: Added pure-ftpd quotas config
+	option
+Message-ID: <20170124092152.40F3781A06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4a25798cafddfa597a45f4d7a7a1d51b9db28e27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 24 Jan 2017 09:25:32 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  docs/manual/adding-packages-perl.txt |  8 ++++++--
->  package/pkg-perl.mk                  | 20 ++++++++++++++------
->  2 files changed, 20 insertions(+), 8 deletions(-)
+Added the pure-ftp quotas option.  When selected, the --with-quotas
+compiler option is passed which enables the quota feature
 
-Thanks for this v2, but I've already reviewed and it doesn't seem like
-you have taken into account my comments. There has been no reply from
-you to the comments I made on the v1, and there is no changelog in your
-v2 to understand what has changed compared to v1.
+Note that this increases the size of the pure-ftpd executable by
+about 20%.
 
-When there are review comments, it would be useful if you could *reply*
-rather than just sending a new version that fixes some of the comments
-and totally ignores the rest of the comments ?
+Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pure-ftpd/Config.in    | 8 ++++++++
+ package/pure-ftpd/pure-ftpd.mk | 4 ++++
+ 2 files changed, 12 insertions(+)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/pure-ftpd/Config.in b/package/pure-ftpd/Config.in
+index 85fdef3..57b78d1 100644
+--- a/package/pure-ftpd/Config.in
++++ b/package/pure-ftpd/Config.in
+@@ -20,4 +20,12 @@ config BR2_PACKAGE_PURE_FTPD_FTPWHO
+ 	  client sessions.  Only the system administrator may run this.  Output
+ 	  can be text (default), HTML, XML data and parser-optimized.
+ 
++config BR2_PACKAGE_PURE_FTPD_QUOTAS
++	bool "quotas"
++	help
++	  Enable virtual quotas. With virtual quotas, restrictions can
++	  be placed on the maximum number of files a user can store in
++	  his account. In addition, restrictions can also be placed
++	  on the total size.
++
+ endif
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 80e432a..95e7065 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -49,4 +49,8 @@ ifeq ($(BR2_PACKAGE_PURE_FTPD_FTPWHO),y)
+ PURE_FTPD_CONF_OPTS += --with-ftpwho
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PURE_FTPD_QUOTAS),y)
++PURE_FTPD_CONF_OPTS += --with-quotas
++endif
++
+ $(eval $(autotools-package))
