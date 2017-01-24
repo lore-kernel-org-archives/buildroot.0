@@ -1,56 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Jan 2017 12:30:34 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] go: security bump to
-	version 1.7.4
-Message-ID: <20170124113053.5014C81EE0@busybox.osuosl.org>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Tue, 24 Jan 2017 10:46:32 -0200 (BRST)
+Subject: [Buildroot] [PATCH] util-linux: bump version to 2.29.1
+In-Reply-To: <87mvehk18a.fsf@dell.be.48ers.dk>
+References: <20170123135250.56972-1-Vincent.Riera@imgtec.com>
+ <87mvehk18a.fsf@dell.be.48ers.dk>
+Message-ID: <1637362373.8405549.1485261992908.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9227779188b3fc65b513c46de0b5e1bc056fea8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+> From: "Peter Korsgaard" <peter@korsgaard.com>
+> To: "Vicente Olivert Riera" <Vincent.Riera@imgtec.com>
+> Cc: buildroot at buildroot.org
+> Sent: Monday, January 23, 2017 5:47:17 PM
+> Subject: Re: [Buildroot] [PATCH] util-linux: bump version to 2.29.1
 
-On Darwin, user's trust preferences for root certificates were not honored.
-If the user had a root certificate loaded in their Keychain that was
-explicitly not trusted, a Go program would still verify a connection using
-that root certificate.  This is addressed by https://golang.org/cl/33721,
-tracked in https://golang.org/issue/18141.  Thanks to Xy Ziemba for
-identifying and reporting this issue.
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+> 
+> > 0001-build-sys-prefer-pkg-config-for-ncurses.patch already included:
+> >   http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=3f7429fd2d539c7f948f72bd829404b55ac19d9f
+> > 0002-build-sys-cleanup-UL_NCURSES_CHECK.patch already included:
+> >   http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=862326451184bb0fe9c2b2b110fcfc986f9b1734
+> > 0003-build-sys-fix-compilation-with-ncurses-and-uClibc-or.patch already
+> > included:
+> >   http://git.kernel.org/cgit/utils/util-linux/util-linux.git/commit/?id=9ea8ded37b648bbd538cbf9c4d144b8b1a93c1b5
+> 
+> Do we then still need _AUTORECONF = yes and the MKINSTALLDIRS workaround
+> at the bottom of the .mk?
 
-The net/http package's Request.ParseMultipartForm method starts writing to
-temporary files once the request body size surpasses the given "maxMemory"
-limit.  It was possible for an attacker to generate a multipart request
-crafted such that the server ran out of file descriptors.  This is addressed
-by https://golang.org/cl/30410, tracked in https://golang.org/issue/17965.
-Thanks to Simon Rawet for the report.
+I confirmed that both util-linux and host-util-linux build successfully without _AUTORECONF = yes and the MKINSTALLDIRS workaround.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5c9db62171cefb125193a6f814a0046536fc76a1)
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/go/go.hash b/package/go/go.hash
-index ff0e8f7..e50f004 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256 ce4f331352313ad7ba9db5daf6f7f81581f3ca9c862d272ae02ee5a3cb294023  go1.7.2.src.tar.gz
-+sha256 4c189111e9ba651a2bb3ee868aa881fab36b2f2da3409e80885ca758a6b614cc  go1.7.4.src.tar.gz
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 057d9fd..bd30890 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.7.2
-+GO_VERSION = 1.7.4
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?Something must be done. This is something. Therefore we must do it.?
+(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
