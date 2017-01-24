@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 18:08:00 +1300
-Subject: [Buildroot] [PATCH v3 1/3] configs/altera_sockit: bump kernel
- to 4.7 and u-boot to v2016.11-rc3
-In-Reply-To: <1484925159-25292-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
+Date: Tue, 24 Jan 2017 18:13:50 +1300
+Subject: [Buildroot] [PATCH v3 2/3] board/altera: added genimage script
+ to SoCkit
+In-Reply-To: <1484925159-25292-3-git-send-email-lucas.bajolet@savoirfairelinux.com>
 References: <1484925159-25292-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
- <1484925159-25292-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
-Message-ID: <20170124180800.519741d9@free-electrons.com>
+ <1484925159-25292-3-git-send-email-lucas.bajolet@savoirfairelinux.com>
+Message-ID: <20170124181350.53d9379f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,87 +14,114 @@ To: buildroot@busybox.net
 
 Hello,
 
-The commit title is wrong: you're bumping to U-Boot 2016.09. Also, I
-have some other questions.
-
-On Fri, 20 Jan 2017 10:12:37 -0500, Lucas Bajolet wrote:
-
-> The old patch became useless, and was replaced by a new one,
-> to fix a booting problem with the board we have, which could
-> not load when the SPL+U-Boot were not on the first partition.
+On Fri, 20 Jan 2017 10:12:38 -0500, Lucas Bajolet wrote:
+> Previously, the Altera SoCkit image has to be built manually by
+> the developer who wanted to use it.
 > 
-> The patch also helps organize the partition table in a more
-> natural way.
+> This patch introduces a `genimage.cfg` file to build the image
+> automatically when done building the files from source.
+> 
+> Signed-off-by: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
 
-I don't understand why is the patch needed. The patch only the U-Boot
-environment to load the kernel/DTB from partition 2 instead of
-partition 1, and have the root filesystem in partition 3 instead of
-partition 2.
+This is really good to have.
 
-Why is this needed? A typical scenario for such platforms is often to
-have the first partition be a FAT partition with the bootloader, kernel
-image and DTB, and the second partition containing the root filesystem.
-Which would perfectly match the original U-Boot environment. So why
-change it?
-
-> diff --git a/board/altera/sockit/altera_sockit_config_buildroot.patch b/board/altera/sockit/altera_sockit_config_buildroot.patch
+> diff --git a/board/altera/genimage.cfg b/board/altera/genimage.cfg
 > new file mode 100644
-> index 0000000..d2b5003
+> index 0000000..3107939
 > --- /dev/null
-> +++ b/board/altera/sockit/altera_sockit_config_buildroot.patch
+> +++ b/board/altera/genimage.cfg
+> @@ -0,0 +1,31 @@
+> +image rootfs-img.vfat {
 
-The "buildroot" part of the name is not relevant. Also, it would be
-better to use:
+This really isn't the "root filesystem".
 
-BR2_GLOBAL_PATCH_DIR=board/altera/sockit/patches
+> +	vfat {
+> +		file "socfpga.dtb" {image = "socfpga_cyclone5_sockit.dtb"}
+> +		file "zImage" {image = "zImage"}
+> +	}
+> +
+> +	size = 10M
+> +}
+> +
+> +image sockit_image.img {
+> +	hdimage {
+> +	}
+> +
+> +	partition uboot {
+> +		partition-type = 0xa2
+> +		image = "uboot-part.img"
+> +		offset = 0
+> +	}
+> +
+> +	partition rootfs {
+> +		partition-type = 0xb
+> +		image = "rootfs-img.vfat"
+> +		offset = 1M
+> +	}
+> +
+> +	partition linux {
+> +		partition-type = 0x83
+> +		image = "rootfs.ext2"
+> +		offset = 12M
+> +	}
 
-And then put your patch in board/altera/sockit/patches/uboot/
+This layout is weird, because it doesn't match the U-Boot default
+environment (as exposed in my review of PATCH 1/3). I imagine that if
+U-Boot is using partition 1 to store the kernel+DTB and partition 2 to
+store the root filesystem, it's because there is no need for a
+partition to store the bootloader itself, it can probably be stored raw
+at the beginning of the SD card ?
 
-> @@ -0,0 +1,35 @@
-> +From ba56b1703dde4e1be4e9d943722e382ad1348755 Mon Sep 17 00:00:00 2001
-> +From: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
-> +Date: Thu, 12 Jan 2017 17:25:15 -0500
-> +Subject: [PATCH] sockfpga: Changed image and device tree partition information
-> + in config
+>  # create a DTB file copy with the name expected by the u-boot config
+>  # Name of the DTB is passed as the second argument to the script.
+> -cp -af $BINARIES_DIR/${2}.dtb  $BINARIES_DIR/socfpga.dtb
 
-This only describes what you're doing (which everyone can see in the
-patch), but not *why* you're doing this.
+So you're removing the code, but not the comment that explains what it
+does? This seems weird :)
+
+> +set -e
+> +
+> +BOARD_DIR=$(dirname $0)
+> +
+> +# Create SPL + bootloader image
+> +fallocate -l 1M $BINARIES_DIR/uboot-part.img
+> +dd if=$BINARIES_DIR/u-boot-spl.bin of=$BINARIES_DIR/uboot-part.img bs=64k seek=0
+> +dd if=$BINARIES_DIR/u-boot-spl.bin.crc of=$BINARIES_DIR/uboot-part.img bs=64k seek=1
+> +dd if=$BINARIES_DIR/u-boot.img of=$BINARIES_DIR/uboot-part.img bs=64k seek=4
+
+I guess this really doesn't need a partition, right?
+
+> +#########################################
+> +# Final image generation (using genimage)
+> +#########################################
+> +# Prepare data for image
+> +T=`mktemp -d`
+> +echo $T
+> +mkdir -p $T/root
+> +mkdir -p $T/tmp
+
+Please look at how other genimage scripts do this instead of using a
+different solution. See board/raspberrypi/post-image.sh for example.
 
 > diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
-> index 0addbde..9349ebc 100644
+> index 9349ebc..fef54ac 100644
 > --- a/configs/altera_sockit_defconfig
 > +++ b/configs/altera_sockit_defconfig
-> @@ -6,32 +6,29 @@ BR2_ARM_ENABLE_NEON=y
->  BR2_ARM_FPU_NEON=y
->  BR2_ARM_INSTRUCTIONS_THUMB2=y
+> @@ -11,6 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
 >  
-> -# Linux headers same as kernel, a 3.13 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
-> +# Linux headers same as kernel, a 4.7 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
->  
-> -BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600=y
 >  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/post-image.sh"
 >  BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
->  
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.rocketboards.org/linux-socfpga.git"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/altera-opensource/linux-socfpga.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-4.7_16.10.02_pr"
->  BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
-> -BR2_LINUX_KERNEL_UIMAGE=y
-> -BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_sockit"
->  
->  BR2_TARGET_ROOTFS_EXT2=y
-> -BR2_TARGET_ROOTFS_EXT2_3=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
 
-Why are you dropping this line ?
+You also need:
 
-Thanks,
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_MTOOLS=y
+
+if your genimage configuration creates a FAT partition (which it
+currently does).
+
+Thanks!
 
 Thomas
 -- 
