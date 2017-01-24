@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jan 2017 09:54:50 +1300
-Subject: [Buildroot] [PATCH 2/3] micropython-lib: depend on pcre
-In-Reply-To: <20170124101423.11479-2-judge.packham@gmail.com>
-References: <20170124101423.11479-1-judge.packham@gmail.com>
- <20170124101423.11479-2-judge.packham@gmail.com>
-Message-ID: <20170125095450.2cb6aea4@free-electrons.com>
+Date: Wed, 25 Jan 2017 10:15:58 +1300
+Subject: [Buildroot] [V2 02/10] janus-gateway: Make sofia-sip a optional
+ dependency.
+In-Reply-To: <20170124203139.15919-2-aduskett@codeblue.com>
+References: <20170124203139.15919-1-aduskett@codeblue.com>
+ <20170124203139.15919-2-aduskett@codeblue.com>
+Message-ID: <20170125101558.1b2dcfdf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 24 Jan 2017 23:14:22 +1300, Chris Packham wrote:
-> The micropython libs load libpcre dynamically using the foreign function
-> interface (libffi). Without pcre the build will succeed but at run time
-> anything that uses the 're' module will have issues.
+On Tue, 24 Jan 2017 15:31:31 -0500, Adam Duskett wrote:
 
-If it's only a runtime dependency, then why do you have
-"MICROPYTHON_LIBS_DEPENDENCIES = pcre" ? Selecting it in Config.in is
-sufficient to ensure that it will be built "at some point" during the
-build. In such cases, we normally do just:
+> +if BR2_PACKAGE_JANUS_GATEWAY
+> +
+> +comment "janus-gateway plugins"
+> +
+> +config BR2_PACKAGE_JANUS_PLUGIN_SIP
+> +	bool "janus sip gateway plugin"
 
-	select BR2_PACKAGE_PCRE # runtime
+You should select the SOFIA_SIP package here, and inherit its
+dependencies.
 
-and that's it.
+> +	default n
+
+Not needed, this is the default (applies to all other patches).
+
+Also, since you no longer select the SOFIA_SIP package from the
+top-level janus-gateway option, you may want to double check if all the
+janus-gateway "depends on" are still necessary.
 
 Thomas
 -- 
