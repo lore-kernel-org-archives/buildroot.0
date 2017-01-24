@@ -1,46 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Jan 2017 14:02:01 +0100
-Subject: [Buildroot] [git commit] wireshark: security bump to version 2.2.4
-Message-ID: <20170124140955.5E93A80DAE@busybox.osuosl.org>
+Date: Tue, 24 Jan 2017 14:02:10 +0100
+Subject: [Buildroot] [git commit] collectd: bump to version 5.7.1
+Message-ID: <20170124140955.6B13080AD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2515437e51036f0ad2d89ca16d07cd5b022fdbe9
+commit: https://git.buildroot.net/buildroot/commit/?id=61df194ad37c44da697f2cdbc452f48bbd5342c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-wnpa-sec-2017-01 - The ASTERIX dissector could go into an infinite loop.
-wnpa-sec-2017-02 - The DHCPv6 dissector could go into a large loop.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/collectd/collectd.hash | 2 +-
+ package/collectd/collectd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index c6d398a..e3eeef3 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
+diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
+index 2accf83..be2f646 100644
+--- a/package/collectd/collectd.hash
++++ b/package/collectd/collectd.hash
 @@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.3.txt
--sha256 97bac89e88892054a5848a9f7e0c36aa399a2008900829b078e29cab0ddd593b  wireshark-2.2.3.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.4.txt
-+sha256 42a7fb35eed5a32478153e24601a284bb50148b7ba919c3e8452652f4c2a3911  wireshark-2.2.4.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 07a3044..edd830d 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
+ # From https://collectd.org/files/SHA256SUM
+-sha256	25a05fbdc6baad571554342bbac6141928bf95a47fc60ee3b32e46d0c89ef2b2	collectd-5.7.0.tar.bz2
++sha256	7edd3643c0842215553b2421d5456f4e9a8a58b07e216b40a7e8e91026d8e501	collectd-5.7.1.tar.bz2
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index fa6ebae..38354ac 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 2.2.3
-+WIRESHARK_VERSION = 2.2.4
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-COLLECTD_VERSION = 5.7.0
++COLLECTD_VERSION = 5.7.1
+ COLLECTD_SITE = http://collectd.org/files
+ COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
