@@ -1,46 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 22:49:04 +1300
-Subject: [Buildroot] [git commit] python-dataproperty: bump to version 0.16.2
-Message-ID: <20170124095724.B15307FB3B@busybox.osuosl.org>
+Date: Tue, 24 Jan 2017 22:54:37 +1300
+Subject: [Buildroot] [git commit] python-vcversioner: new package
+Message-ID: <20170124095724.D694981EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2f3619997ed52beb2c811bfa674411ccf8d2d51
+commit: https://git.buildroot.net/buildroot/commit/?id=38a7c36c4d286610c1caa8df5e38e146f5db8051
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This package is needed only at the build stage, so make it
+a host package.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 4 ++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-vcversioner/python-vcversioner.hash |  3 +++
+ package/python-vcversioner/python-vcversioner.mk   | 13 +++++++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 3015042..d84b214 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
--md5	65be4db859ad25bf2c1af25486710f00  DataProperty-0.13.5.tar.gz
--sha256	470e510d9636af446401d9f0bd79172b1f03c5b903819f2ccd4a06ac32ed64d9  DataProperty-0.13.5.tar.gz
-+md5	a05cb97210d41677bde224b53562add4  DataProperty-0.16.2.tar.gz
-+sha256	c2c6e1f2558bf03b0f8f2dc53a5eb00d9540babd3d69d299be878f2e32937e53  DataProperty-0.16.2.tar.gz
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 13ddf5f..997019c 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DATAPROPERTY_VERSION = 0.13.5
-+PYTHON_DATAPROPERTY_VERSION = 0.16.2
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/e0/30/71065e642a985366fc3900316592ff6b88891f96e42107936613cd7a020b
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/c8/95/4803e558a7e29ccf3adbf8f993ec53fe28c46df450892c4cc35c2f0ccedc
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+diff --git a/package/python-vcversioner/python-vcversioner.hash b/package/python-vcversioner/python-vcversioner.hash
+new file mode 100644
+index 0000000..58573a1
+--- /dev/null
++++ b/package/python-vcversioner/python-vcversioner.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/vcversioner/json, sha256 locally computed
++md5	aab6ef5e0cf8614a1b1140ed5b7f107d  vcversioner-2.16.0.0.tar.gz
++sha256	dae60c17a479781f44a4010701833f1829140b1eeccd258762a74974aa06e19b  vcversioner-2.16.0.0.tar.gz
+diff --git a/package/python-vcversioner/python-vcversioner.mk b/package/python-vcversioner/python-vcversioner.mk
+new file mode 100644
+index 0000000..e7a62f8
+--- /dev/null
++++ b/package/python-vcversioner/python-vcversioner.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-vcversioner
++#
++################################################################################
++
++PYTHON_VCVERSIONER_VERSION = 2.16.0.0
++PYTHON_VCVERSIONER_SOURCE = vcversioner-$(PYTHON_VCVERSIONER_VERSION).tar.gz
++PYTHON_VCVERSIONER_SITE = https://pypi.python.org/packages/c5/cc/33162c0a7b28a4d8c83da07bc2b12cee58c120b4a9e8bba31c41c8d35a16
++PYTHON_VCVERSIONER_SETUP_TYPE = setuptools
++PYTHON_VCVERSIONER_LICENSE = ISC
++
++$(eval $(host-python-package))
