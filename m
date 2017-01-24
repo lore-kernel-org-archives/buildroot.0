@@ -1,40 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jan 2017 08:21:47 -0300
-Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.4.2
-Message-ID: <20170124112147.11475-1-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 Jan 2017 12:30:34 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] go: security bump to
+	version 1.7.4
+Message-ID: <20170124113053.5014C81EE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=9227779188b3fc65b513c46de0b5e1bc056fea8e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 48cb17d..6bf5bee 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+On Darwin, user's trust preferences for root certificates were not honored.
+If the user had a root certificate loaded in their Keychain that was
+explicitly not trusted, a Go program would still verify a connection using
+that root certificate.  This is addressed by https://golang.org/cl/33721,
+tracked in https://golang.org/issue/18141.  Thanks to Xy Ziemba for
+identifying and reporting this issue.
+
+The net/http package's Request.ParseMultipartForm method starts writing to
+temporary files once the request body size surpasses the given "maxMemory"
+limit.  It was possible for an attacker to generate a multipart request
+crafted such that the server ran out of file descriptors.  This is addressed
+by https://golang.org/cl/30410, tracked in https://golang.org/issue/17965.
+Thanks to Simon Rawet for the report.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5c9db62171cefb125193a6f814a0046536fc76a1)
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index ff0e8f7..e50f004 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
 @@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.1.tar.bz2.sha256
--sha256	85a27fab639a1d651737dcb6b69e4101e3fd09522fdfdcb793df810b5cb315bd	harfbuzz-1.4.1.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.2.tar.bz2.sha256
-+sha256	8f234dcfab000fdec24d43674fffa2fdbdbd654eb176afbde30e8826339cb7b3	harfbuzz-1.4.2.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 18a524a..458b072 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+ # Locally computed:
+-sha256 ce4f331352313ad7ba9db5daf6f7f81581f3ca9c862d272ae02ee5a3cb294023  go1.7.2.src.tar.gz
++sha256 4c189111e9ba651a2bb3ee868aa881fab36b2f2da3409e80885ca758a6b614cc  go1.7.4.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 057d9fd..bd30890 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.4.1
-+HARFBUZZ_VERSION = 1.4.2
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
--- 
-2.10.2
+-GO_VERSION = 1.7.2
++GO_VERSION = 1.7.4
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
