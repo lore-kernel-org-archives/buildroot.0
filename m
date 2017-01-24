@@ -1,58 +1,39 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 24 Jan 2017 14:54:38 -0500
-Subject: [Buildroot] [PATCH 10/10] janus-gateway: Make voicemail plugin
-	optional.
-In-Reply-To: <20170124195438.4144-1-aduskett@codeblue.com>
-References: <20170124195438.4144-1-aduskett@codeblue.com>
-Message-ID: <20170124195438.4144-10-aduskett@codeblue.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Jan 2017 09:12:24 +1300
+Subject: [Buildroot] [2/5] libselinux: bump version to 2.6
+In-Reply-To: <1485263338.2005.10.camel@codeblue.com>
+References: <20170109161523.6855-1-aduskett@codeblue.com>
+ <20170109161523.6855-2-aduskett@codeblue.com>
+ <20170124233039.1f0813e9@free-electrons.com>
+ <1485263338.2005.10.camel@codeblue.com>
+Message-ID: <20170125091224.6eb5b0a7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently janus-gateway is built by default with the voicemail plugin.
-This causes a example config file to be placed on the target filing system
-that the user may not need or want.
-This patch makes the voicemail plugin a option.
+Hello,
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
----
- package/janus-gateway/Config.in        | 4 ++++
- package/janus-gateway/janus-gateway.mk | 6 ++++++
- 2 files changed, 10 insertions(+)
+On Tue, 24 Jan 2017 13:08:59 +0000, Adam Duskett wrote:
 
-diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index deedc36..f74895f 100644
---- a/package/janus-gateway/Config.in
-+++ b/package/janus-gateway/Config.in
-@@ -53,6 +53,10 @@ config BR2_PACKAGE_JANUS_PLUGIN_VIDEO_ROOM
- 	bool "janus video room plugin"
- 	default n
- 
-+config BR2_PACKAGE_JANUS_PLUGIN_VOICE_MAIL
-+	bool "janus voice mail plugin"
-+	default n
-+
- endif
- 
- comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 040973d..d716c2e 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -75,6 +75,12 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-plugin-videoroom
- endif
- 
-+ifeq ($(BR2_PACKAGE_JANUS_PLUGIN_VOICE_MAIL),y)
-+JANUS_GATEWAY_CONF_OPTS += --enable-plugin-voicemail
-+else
-+JANUS_GATEWAY_CONF_OPTS += --disable-plugin-voicemail
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
- JANUS_GATEWAY_DEPENDENCIES += libwebsockets
- JANUS_GATEWAY_CONF_OPTS += --enable-websockets
+> What C library are you using?  I am using glibc and it compiles without
+> any issue.  
+
+The C library of the target system doesn't matter: what fails to build
+is host-libselinux, i.e a host package.
+
+So it seems like to be that there is an issue with the old Debian
+system I'm using on my autobuilder instance (which is where I did the
+test build).
+
+I'll try to have a closer look and see if I can understand what's going
+on, since you apparently can't reproduce it on a different host system.
+
+Thanks!
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
