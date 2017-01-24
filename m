@@ -1,60 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 22:48:59 +1300
-Subject: [Buildroot] [git commit] python-pathvalidate: bump to version 0.13.0
-Message-ID: <20170124095724.A64E181807@busybox.osuosl.org>
+Date: Tue, 24 Jan 2017 22:49:04 +1300
+Subject: [Buildroot] [git commit] python-dataproperty: bump to version 0.16.2
+Message-ID: <20170124095724.B15307FB3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c673c9fcab584627198be4be2ff28350773deee5
+commit: https://git.buildroot.net/buildroot/commit/?id=f2f3619997ed52beb2c811bfa674411ccf8d2d51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add python-six to the runtime dependencies.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pathvalidate/Config.in                | 1 +
- package/python-pathvalidate/python-pathvalidate.hash | 4 ++--
- package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-dataproperty/python-dataproperty.hash | 4 ++--
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pathvalidate/Config.in b/package/python-pathvalidate/Config.in
-index cc15fff..60163fb 100644
---- a/package/python-pathvalidate/Config.in
-+++ b/package/python-pathvalidate/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PATHVALIDATE
- 	bool "python-pathvalidate"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
- 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
- 	help
-diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
-index e999c73..68e6907 100644
---- a/package/python-pathvalidate/python-pathvalidate.hash
-+++ b/package/python-pathvalidate/python-pathvalidate.hash
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index 3015042..d84b214 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pathvalidate/json, sha256 locally computed
--md5	c9f517f6caba5eee56731425b5a75427  pathvalidate-0.9.4.tar.gz
--sha256	289a849464cced59314e6a0827f2d2232bb9891f8f4812574a6875a7c7e554b9  pathvalidate-0.9.4.tar.gz
-+md5	03f0af69596f7de52d52753c2a585fce  pathvalidate-0.13.0.tar.gz
-+sha256	1ecaebfbd32794abe5f47a20189d5f7dd196a6ba445c1a07429de6ce608bf9b9  pathvalidate-0.13.0.tar.gz
-diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
-index 25f2548..a8ab4ad 100644
---- a/package/python-pathvalidate/python-pathvalidate.mk
-+++ b/package/python-pathvalidate/python-pathvalidate.mk
+ # md5 from https://pypi.python.org/pypi/dataproperty/json, sha256 locally computed
+-md5	65be4db859ad25bf2c1af25486710f00  DataProperty-0.13.5.tar.gz
+-sha256	470e510d9636af446401d9f0bd79172b1f03c5b903819f2ccd4a06ac32ed64d9  DataProperty-0.13.5.tar.gz
++md5	a05cb97210d41677bde224b53562add4  DataProperty-0.16.2.tar.gz
++sha256	c2c6e1f2558bf03b0f8f2dc53a5eb00d9540babd3d69d299be878f2e32937e53  DataProperty-0.16.2.tar.gz
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 13ddf5f..997019c 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHVALIDATE_VERSION = 0.9.4
-+PYTHON_PATHVALIDATE_VERSION = 0.13.0
- PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
--PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/9a/4a/49d219ca919753017bacea87e161614ed66204246ee1e150091910cb57c7
-+PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/3a/03/ca01cdbf0f7b766b414d134e71b2eb689619dba0ddee002d53c2d58f6436
- PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
- PYTHON_PATHVALIDATE_LICENSE = MIT
- PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
+-PYTHON_DATAPROPERTY_VERSION = 0.13.5
++PYTHON_DATAPROPERTY_VERSION = 0.16.2
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/e0/30/71065e642a985366fc3900316592ff6b88891f96e42107936613cd7a020b
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/c8/95/4803e558a7e29ccf3adbf8f993ec53fe28c46df450892c4cc35c2f0ccedc
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
