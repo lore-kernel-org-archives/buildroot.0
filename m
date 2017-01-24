@@ -1,71 +1,60 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 24 Jan 2017 10:46:49 +0100
-Subject: [Buildroot] [PATCH 1/3] pkg-perl: add PREFER_INSTALLER variable
-In-Reply-To: <20170122173427.32f9f737@free-electrons.com>
-References: <20170121115118.17938-1-francois.perrad@gadz.org>
- <20170122173427.32f9f737@free-electrons.com>
-Message-ID: <CAB0FRsvqFrfQFFy_1HvvS-1U484faKf-Fe9L0_-q1GqW3=vwJw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Jan 2017 22:48:59 +1300
+Subject: [Buildroot] [git commit] python-pathvalidate: bump to version 0.13.0
+Message-ID: <20170124095724.A64E181807@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-01-22 7:34 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Sat, 21 Jan 2017 12:51:16 +0100, Francois Perrad wrote:
->
->> +* +PERL_FOO_PREFER_INSTALLER+/+HOST_PERL_FOO_PREFER_INSTALLER+, with the
->> +  value 'EUMM', the use of +Makefile.PL+ is prefered at +Build.pl+.
->
-> Should be "Build.PL" (i.e PL in capital letters).
+commit: https://git.buildroot.net/buildroot/commit/?id=c673c9fcab584627198be4be2ff28350773deee5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixed in V2
+Add python-six to the runtime dependencies.
 
->
->> +  By default, 'MB'.
->
-> Is it possible to find values that are less cryptic than EUMM and MB ?
-> Either a boolean style:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-pathvalidate/Config.in                | 1 +
+ package/python-pathvalidate/python-pathvalidate.hash | 4 ++--
+ package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-No, I use same name (prefer_installer) and values (EUMM, MB) as in
-cpan client (see http://perldoc.perl.org/CPAN.html#Config-Variables).
-I don't want invent new ones.
-
-Fran?ois
-
->
-> <pkg>_USES_MODULE_BUILD = YES/NO
->
-> or:
->
-> <pkg>_BUILD_TYPE = Module-Build / ExtUtils-MakeMaker
->
-> Or are EUMM/MB values already used in the Perl community?
->
->> +# equivalent at $CPAN::Config{prefer_installer}
->
-> I don't understand what this sentence means.
->
->> +# legal values are MB and EUMM: if a module comes
->> +# with both a Makefile.PL and a Build.PL, use the
->> +# former (EUMM) or the latter (MB); if the module
->> +# comes with only one of the two, that one will be
->> +# used no matter the setting
->> +$(2)_PREFER_INSTALLER ?= MB
->
-> If we keep this name, it should be:
->
-> <pkg>_PREFERRED_INSTALLER
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/python-pathvalidate/Config.in b/package/python-pathvalidate/Config.in
+index cc15fff..60163fb 100644
+--- a/package/python-pathvalidate/Config.in
++++ b/package/python-pathvalidate/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PATHVALIDATE
+ 	bool "python-pathvalidate"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+ 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
+ 	help
+diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
+index e999c73..68e6907 100644
+--- a/package/python-pathvalidate/python-pathvalidate.hash
++++ b/package/python-pathvalidate/python-pathvalidate.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/pathvalidate/json, sha256 locally computed
+-md5	c9f517f6caba5eee56731425b5a75427  pathvalidate-0.9.4.tar.gz
+-sha256	289a849464cced59314e6a0827f2d2232bb9891f8f4812574a6875a7c7e554b9  pathvalidate-0.9.4.tar.gz
++md5	03f0af69596f7de52d52753c2a585fce  pathvalidate-0.13.0.tar.gz
++sha256	1ecaebfbd32794abe5f47a20189d5f7dd196a6ba445c1a07429de6ce608bf9b9  pathvalidate-0.13.0.tar.gz
+diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
+index 25f2548..a8ab4ad 100644
+--- a/package/python-pathvalidate/python-pathvalidate.mk
++++ b/package/python-pathvalidate/python-pathvalidate.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PATHVALIDATE_VERSION = 0.9.4
++PYTHON_PATHVALIDATE_VERSION = 0.13.0
+ PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
+-PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/9a/4a/49d219ca919753017bacea87e161614ed66204246ee1e150091910cb57c7
++PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/3a/03/ca01cdbf0f7b766b414d134e71b2eb689619dba0ddee002d53c2d58f6436
+ PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
+ PYTHON_PATHVALIDATE_LICENSE = MIT
+ PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
