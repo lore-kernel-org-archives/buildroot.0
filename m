@@ -1,42 +1,39 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 24 Jan 2017 14:54:33 -0500
-Subject: [Buildroot] [PATCH 05/10] janus-gateway: Make recordplay plugin
-	optional.
-In-Reply-To: <20170124195438.4144-1-aduskett@codeblue.com>
-References: <20170124195438.4144-1-aduskett@codeblue.com>
-Message-ID: <20170124195438.4144-5-aduskett@codeblue.com>
+Date: Tue, 24 Jan 2017 14:54:29 -0500
+Subject: [Buildroot] [PATCH 01/10] janus-gateway: bump to version 0.2.1
+Message-ID: <20170124195438.4144-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently janus-gateway is built by default with the recordplay plugin.
-This causes a example config file to be placed on the target filing system
-that the user may not need or want.
-This patch makes the recordplay plugin a option.
-
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/janus-gateway/janus-gateway.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/janus-gateway/janus-gateway.hash | 2 +-
+ package/janus-gateway/janus-gateway.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index fece97a..68b9c31 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 4d341a54d3eae5506c3e2409f4a6e4f5159dc4ece3197aaf077d3eb997e69a10 janus-gateway-v0.1.0.tar.gz
++sha256 5d071592faca2a1574b996b4ca07b6c9e02cd42a719b0dbb4bfb5dfde8d55ff3 janus-gateway-v0.2.1.tar.gz
 diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index e1e3601..d2ffb8b 100644
+index d65ab19..4b87b33 100644
 --- a/package/janus-gateway/janus-gateway.mk
 +++ b/package/janus-gateway/janus-gateway.mk
-@@ -38,6 +38,12 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-plugin-echotest
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_JANUS_PLUGIN_RECORDPLAY),y)
-+JANUS_GATEWAY_CONF_OPTS += --enable-plugin-recordplay
-+else
-+JANUS_GATEWAY_CONF_OPTS += --disable-plugin-recordplay
-+endif
-+
- ifeq ($(BR2_PACKAGE_JANUS_PLUGIN_SIP_GATEWAY),y)
- JANUS_GATEWAY_DEPENDENCIES += sofia-sip
- JANUS_GATEWAY_CONF_OPTS += --enable-plugin-sip
+-JANUS_GATEWAY_VERSION = v0.1.0
++JANUS_GATEWAY_VERSION = v0.2.1
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPLv3
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 -- 
 2.9.3
