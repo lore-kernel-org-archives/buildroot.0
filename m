@@ -1,82 +1,57 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 24 Jan 2017 15:31:31 -0500
-Subject: [Buildroot] [V2 02/10] janus-gateway: Make sofia-sip a optional
-	dependency.
+Date: Tue, 24 Jan 2017 15:31:35 -0500
+Subject: [Buildroot] [V2 06/10] janus-gateway: Make streaming plugin
+	optional.
 In-Reply-To: <20170124203139.15919-1-aduskett@codeblue.com>
 References: <20170124203139.15919-1-aduskett@codeblue.com>
-Message-ID: <20170124203139.15919-2-aduskett@codeblue.com>
+Message-ID: <20170124203139.15919-6-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently janus-gateway requires sofia-sip in the build system, however
-this is unessasary.  This patch makes the sip gateway plugin a option.
-It also creates a menuconfig for janus gateway for the following patches
-that enable selecting more optional plugins.
+Currently janus-gateway is built by default with the streaming plugin.
+This causes a example config file to be placed on the target filing system
+that the user may not need or want.
+This patch makes the streaming  plugin a option.
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
-v1 -> v2: No changes
+v1 -> v2: Fixed patch so that this patch only adds the plugin to both the
+Config.in and the .mk file.
 
- package/janus-gateway/Config.in        | 12 ++++++++++--
- package/janus-gateway/janus-gateway.mk |  9 ++++++++-
- 2 files changed, 18 insertions(+), 3 deletions(-)
+ package/janus-gateway/Config.in        | 4 ++++
+ package/janus-gateway/janus-gateway.mk | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
 diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 20491b7..2a25c01 100644
+index 7d1ccf9..a7edb61 100644
 --- a/package/janus-gateway/Config.in
 +++ b/package/janus-gateway/Config.in
-@@ -1,9 +1,8 @@
--config BR2_PACKAGE_JANUS_GATEWAY
-+menuconfig BR2_PACKAGE_JANUS_GATEWAY
- 	bool "janus-gateway"
- 	select BR2_PACKAGE_LIBMICROHTTPD
- 	select BR2_PACKAGE_JANSSON
- 	select BR2_PACKAGE_LIBNICE
--	select BR2_PACKAGE_SOFIA_SIP
- 	select BR2_PACKAGE_LIBSRTP
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_DING_LIBS
-@@ -18,6 +17,15 @@ config BR2_PACKAGE_JANUS_GATEWAY
+@@ -37,6 +37,10 @@ config BR2_PACKAGE_JANUS_PLUGIN_SIP
+ 	bool "janus sip gateway plugin"
+ 	default n
  
- 	  https://github.com/meetecho/janus-gateway
- 
-+if BR2_PACKAGE_JANUS_GATEWAY
-+
-+comment "janus-gateway plugins"
-+
-+config BR2_PACKAGE_JANUS_PLUGIN_SIP
-+	bool "janus sip gateway plugin"
++config  BR2_PACKAGE_JANUS_PLUGIN_STREAMING
++	bool "janus streaming plugin"
 +	default n
-+endif
 +
+ endif
+ 
  comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 4b87b33..77254e6 100644
+index d2ffb8b..2ad1990 100644
 --- a/package/janus-gateway/janus-gateway.mk
 +++ b/package/janus-gateway/janus-gateway.mk
-@@ -11,7 +11,7 @@ JANUS_GATEWAY_LICENSE_FILES = COPYING
+@@ -51,6 +51,12 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-plugin-sip
+ endif
  
- # ding-libs provides the ini_config library
- JANUS_GATEWAY_DEPENDENCIES = host-pkgconf libmicrohttpd jansson \
--	libnice sofia-sip libsrtp host-gengetopt openssl ding-libs
-+	libnice libsrtp host-gengetopt openssl ding-libs
- 
- # Straight out of the repository, no ./configure, and we also patch
- # configure.ac.
-@@ -26,6 +26,13 @@ JANUS_GATEWAY_CONF_OPTS = \
- 	--disable-data-channels \
- 	--disable-rabbitmq
- 
-+ifeq ($(BR2_PACKAGE_JANUS_PLUGIN_SIP_GATEWAY),y)
-+JANUS_GATEWAY_DEPENDENCIES += sofia-sip
-+JANUS_GATEWAY_CONF_OPTS += --enable-plugin-sip
++ifeq ($(BR2_PACKAGE_JANUS_PLUGIN_STREAMING),y)
++JANUS_GATEWAY_CONF_OPTS += --enable-plugin-streaming
 +else
-+JANUS_GATEWAY_CONF_OPTS += --disable-plugin-sip
++JANUS_GATEWAY_CONF_OPTS += --disable-plugin-streaming
 +endif
 +
  ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
