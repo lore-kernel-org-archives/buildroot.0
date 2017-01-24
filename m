@@ -1,62 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Jan 2017 17:28:15 +0100
-Subject: [Buildroot] [git commit] micropython: bump version to v1.8.7
-Message-ID: <20170124163140.529C1817FF@busybox.osuosl.org>
+Date: Tue, 24 Jan 2017 17:31:08 +0100
+Subject: [Buildroot] [PATCH 1/3] micropython: bump version to v1.8.7
+In-Reply-To: <20170124101423.11479-1-judge.packham@gmail.com> (Chris Packham's
+ message of "Tue, 24 Jan 2017 23:14:21 +1300")
+References: <20170124101423.11479-1-judge.packham@gmail.com>
+Message-ID: <87tw8oh12r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ef4993889f70f25c27cf4bd101c7af57bc76c07
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
 
-The install step now requires CROSS_COMPILE as some C files are
-generated at install time. Also remove patches that have been applied
-upstream.
+ > The install step now requires CROSS_COMPILE as some C files are
+ > generated at install time. Also remove patches that have been applied
+ > upstream.
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/micropython/micropython.hash | 4 +---
- package/micropython/micropython.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ > Signed-off-by: Chris Packham <judge.packham@gmail.com>
 
-diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-index 28c008d..6ab7b10 100644
---- a/package/micropython/micropython.hash
-+++ b/package/micropython/micropython.hash
-@@ -1,4 +1,2 @@
- #locally computed
--sha256 871378fcf1f1042c399896d5673da67d12e1fb36c2e706af289fc959bc8f7a57  micropython-v1.8.3.tar.gz
--sha256 ff3194ebecda99023d7c1bb94d32b31b9491e95a79958a25ffd05213c5553acc  8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
--sha256 ac19af8587211d7229074fefa1a3a3c0fe807babc7cf9ce53606f05958699448  a50b26e4b00ed094aa1ac74eac2fc2d8eb9ea1ed.patch
-+sha256 55dd751c4c812809841fd06f4729b8341171c4b6c1dc28a9412455282554f8a5  micropython-v1.8.7.tar.gz
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 2f47ad8..8336fb4 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
- 
--MICROPYTHON_VERSION = v1.8.3
-+MICROPYTHON_VERSION = v1.8.7
- MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
- MICROPYTHON_LICENSE = MIT
- MICROPYTHON_LICENSE_FILES = LICENSE
- MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
--MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch \
--	https://github.com/micropython/micropython/commit/a50b26e4b00ed094aa1ac74eac2fc2d8eb9ea1ed.patch
- 
- # Use fallback implementation for exception handling on architectures that don't
- # have explicit support.
-@@ -33,6 +31,8 @@ endef
- define MICROPYTHON_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/unix \
- 		$(MICROPYTHON_MAKE_OPTS) \
-+		CROSS_COMPILE=$(TARGET_CROSS) \
-+		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
- 		DESTDIR=$(TARGET_DIR) \
- 		PREFIX=$(TARGET_DIR)/usr \
- 		install
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
