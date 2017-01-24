@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 11:40:06 +1300
-Subject: [Buildroot] [PATCH v6] dieharder: new package
-In-Reply-To: <1485087282-26931-1-git-send-email-julien@vdg.name>
-References: <1485087282-26931-1-git-send-email-julien@vdg.name>
-Message-ID: <20170124114006.67ab47db@free-electrons.com>
+Date: Tue, 24 Jan 2017 18:08:00 +1300
+Subject: [Buildroot] [PATCH v3 1/3] configs/altera_sockit: bump kernel
+ to 4.7 and u-boot to v2016.11-rc3
+In-Reply-To: <1484925159-25292-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
+References: <1484925159-25292-1-git-send-email-lucas.bajolet@savoirfairelinux.com>
+ <1484925159-25292-2-git-send-email-lucas.bajolet@savoirfairelinux.com>
+Message-ID: <20170124180800.519741d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,94 +14,87 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks a lot for all your iterations. It looks mostly good, but I have
-a few questions, see below.
+The commit title is wrong: you're bumping to U-Boot 2016.09. Also, I
+have some other questions.
 
-On Sun, 22 Jan 2017 13:14:42 +0100, Julien Viard de Galbert wrote:
+On Fri, 20 Jan 2017 10:12:37 -0500, Lucas Bajolet wrote:
 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 91e82ac..75c8e71 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -868,6 +868,9 @@ F:	package/qt5/
->  N:	Julien Floret <julien.floret@6wind.com>
->  F:	package/lldpd/
->  
-> +N:	Julien Viard de Galbert <julien@vdg.name>
-> +F:	package/dieharder/
-> +
+> The old patch became useless, and was replaced by a new one,
+> to fix a booting problem with the board we have, which could
+> not load when the SPL+U-Boot were not on the first partition.
+> 
+> The patch also helps organize the partition table in a more
+> natural way.
 
-This should be in a separate patch, so that backporting the new package
-to an older version of Buildroot doesn't cause a conflict in the
-DEVELOPERS file.
+I don't understand why is the patch needed. The patch only the U-Boot
+environment to load the kernel/DTB from partition 2 instead of
+partition 1, and have the root filesystem in partition 3 instead of
+partition 2.
 
-> diff --git a/package/dieharder/0002-Do-not-install-includes.patch b/package/dieharder/0002-Do-not-install-includes.patch
+Why is this needed? A typical scenario for such platforms is often to
+have the first partition be a FAT partition with the bootloader, kernel
+image and DTB, and the second partition containing the root filesystem.
+Which would perfectly match the original U-Boot environment. So why
+change it?
+
+> diff --git a/board/altera/sockit/altera_sockit_config_buildroot.patch b/board/altera/sockit/altera_sockit_config_buildroot.patch
 > new file mode 100644
-> index 0000000..6ece2a9
+> index 0000000..d2b5003
 > --- /dev/null
-> +++ b/package/dieharder/0002-Do-not-install-includes.patch
-> @@ -0,0 +1,28 @@
-> +From 9ee8200a6dec6aca7f4f37c46ca95ac1cb38306c Mon Sep 17 00:00:00 2001
-> +From: Julien Viard de Galbert <julien@vdg.name>
-> +Date: Sat, 14 Jan 2017 14:08:07 +0100
-> +Subject: [PATCH] Do not install includes
-> +
-> +We don't want include files on the target
-> +
-> +Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> +++ b/board/altera/sockit/altera_sockit_config_buildroot.patch
 
-Why is this patch needed?
+The "buildroot" part of the name is not relevant. Also, it would be
+better to use:
 
-Header files are automatically removed from the target filesystem by
-the target-finalize logic in the main Buildroot Makefile. So there is
-no need to add special code in packages to remove header files.
+BR2_GLOBAL_PATCH_DIR=board/altera/sockit/patches
 
-Regarding the other patches, could you submit them to the upstream
-project? They all make sense for upstream I believe.
+And then put your patch in board/altera/sockit/patches/uboot/
 
-> +DIEHARDER_VERSION = 3.31.1
-> +DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder
-> +DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
-> +DIEHARDER_STRIP_COMPONENTS = 2
-> +DIEHARDER_LICENSE = GPLv2 with beverage clause
+> @@ -0,0 +1,35 @@
+> +From ba56b1703dde4e1be4e9d943722e382ad1348755 Mon Sep 17 00:00:00 2001
+> +From: Lucas Bajolet <lucas.bajolet@savoirfairelinux.com>
+> +Date: Thu, 12 Jan 2017 17:25:15 -0500
+> +Subject: [PATCH] sockfpga: Changed image and device tree partition information
+> + in config
 
-Interesting license :)
+This only describes what you're doing (which everyone can see in the
+patch), but not *why* you're doing this.
 
-> +DIEHARDER_LICENSE_FILES = COPYING
-> +DIEHARDER_DEPENDENCIES = gsl host-libtool
-> +
-> +# Fix m4 links to points to the ones in staging (provided by libtool hence
-> +# the patch dependency).
-> +define DIEHARDER_POST_PATCH_FIXUP
-> +	for m in $(@D)/m4/*; do \
-> +		l=$$(readlink $$m) ;\
-> +		rm $$m ;\
-> +		ln -s $(HOST_DIR)$$l $$m ;\
-> +	done
-> +endef
-> +DIEHARDER_POST_PATCH_HOOKS += DIEHARDER_POST_PATCH_FIXUP
+> diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+> index 0addbde..9349ebc 100644
+> --- a/configs/altera_sockit_defconfig
+> +++ b/configs/altera_sockit_defconfig
+> @@ -6,32 +6,29 @@ BR2_ARM_ENABLE_NEON=y
+>  BR2_ARM_FPU_NEON=y
+>  BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  
+> -# Linux headers same as kernel, a 3.13 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
+> +# Linux headers same as kernel, a 4.7 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
+>  
+> -BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600=y
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/post-image.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
+>  
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.rocketboards.org/linux-socfpga.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/altera-opensource/linux-socfpga.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-4.7_16.10.02_pr"
+>  BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
+> -BR2_LINUX_KERNEL_UIMAGE=y
+> -BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_sockit"
+>  
+>  BR2_TARGET_ROOTFS_EXT2=y
+> -BR2_TARGET_ROOTFS_EXT2_3=y
 
-This looks weird. I haven't looked at the package in details though.
-Could you explain a bit more what's going on.
+Why are you dropping this line ?
 
-> +
-> +# Ensure the libtool version is updated,
-
-Why?
-
-> +# also make _CONF_ENV works instead of _CONF_OPTS for endiannes
-
-I don't see what this means. _CONF_ENV works regardless of whether
-AUTORECONF is YES or NO.
-
-> +DIEHARDER_AUTORECONF = YES
-> +
-> +# fix endiannes detection
-
-endianness with two 's' at the end, see
-https://en.wikipedia.org/wiki/Endianness.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
