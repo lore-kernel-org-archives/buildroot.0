@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 24 Jan 2017 22:18:21 +0100
-Subject: [Buildroot] [PATCH 4/9] check-package: check *.hash files
-In-Reply-To: <20161231032110.11573-5-ricardo.martincoski@gmail.com>
+Date: Tue, 24 Jan 2017 22:21:31 +0100
+Subject: [Buildroot] [PATCH 5/9] check-package: check *.patch files
+In-Reply-To: <20161231032110.11573-6-ricardo.martincoski@gmail.com>
 References: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
- <20161231032110.11573-5-ricardo.martincoski@gmail.com>
-Message-ID: <CAAXf6LVJgdMqDuUcfzDdW8Mw19ukfCRcaR8SdvhPyoiqhiGeFA@mail.gmail.com>
+ <20161231032110.11573-6-ricardo.martincoski@gmail.com>
+Message-ID: <CAAXf6LUx4hv+PNKyfpOaqcptyKkfpEjKVEtipE4gSJLQYojLRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,15 @@ To: buildroot@busybox.net
 
 On Sat, Dec 31, 2016 at 4:21 AM, Ricardo Martincoski
 <ricardo.martincoski@gmail.com> wrote:
-> Check each hash entry (see [1]) and warn when:
-> - it does not have three fields;
-> - its type is unknown;
-> - its length does not match its type;
-> - the name of the file contains a directory component.
+> Warn when the name of the patch file does not start with number (apply
+> order), see [1].
+> Warn when the patch was generated using git format-patch without -N, see
+> [2].
+> Warn when the patch file has no SoB, see [3].
 >
-> [1] http://nightly.buildroot.org/#adding-packages-hash
+> [1] http://nightly.buildroot.org/#_providing_patches
+> [2] http://patchwork.ozlabs.org/patch/704753/
+> [3] http://nightly.buildroot.org/#_format_and_licensing_of_the_package_patches
 >
 > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 > ---
@@ -27,91 +29,74 @@ On Sat, Dec 31, 2016 at 4:21 AM, Ricardo Martincoski
 > Notes:
 >     $ time support/scripts/check-package $(find package -type f) >/dev/null 2>/dev/null
 >
->     real        0m0.837s
->     user        0m0.780s
+>     real        0m1.153s
+>     user        0m1.096s
 >     sys 0m0.056s
 >
->     CHECK_HASH_FILENAME:
->      support/scripts/check-package --include-only check_hash_filename \
->      $(find package -name '*.hash') 2>/dev/null | wc -l
->       0
+>     CHECK_APPLY_ORDER:
+>      support/scripts/check-package --include-only check_apply_order \
+>      $(find package -name '*.patch') 2>/dev/null | wc -l
+>       4
 >      (cd support/scripts/check-package-example && \
->      ../check-package --include-only check_hash_filename -vv package/*/*)
->       package/package1/package1.hash:5: use filename without directory component (http://nightly.buildroot.org/#adding-packages-hash)
->       sha256< tab  >12345678901234567890123456789012345678901234567890123456789012345< tab  >dl/package1-1.0.tar.gz
+>      ../check-package --include-only check_apply_order -vv package/*/*)
+>       package/package1/wrong-name.patch:0: use name <number>-<description>.patch (http://nightly.buildroot.org/#_providing_patches)
 >       159 lines processed
 >       1 warnings generated
 >
->     CHECK_HASH_NUMBER_OF_FIELDS:
->      support/scripts/check-package --include-only check_hash_number_of_fields \
->      $(find package -name '*.hash') 2>/dev/null | wc -l
->       0
+>     CHECK_NUMBERED_SUBJECT:
+>      support/scripts/check-package --include-only check_numbered_subject \
+>      $(find package -name '*.patch') 2>/dev/null | wc -l
+>       149
 >      (cd support/scripts/check-package-example && \
->      ../check-package --include-only check_hash_number_of_fields -vv package/*/*)
->       package/package1/package1.hash:6: expected three fields (http://nightly.buildroot.org/#adding-packages-hash)
->       sha256 1234567890123456789012345678901234567890123456789012345678901234
+>      ../check-package --include-only check_numbered_subject -vv package/*/*)
+>       package/package1/0001-do-something.patch:4: generate your patches with 'git format-patch -N'
+>       Subject: [PATCH 25/39] do something
 >       159 lines processed
 >       1 warnings generated
 >
->     CHECK_HASH_TYPE:
->      support/scripts/check-package --include-only check_hash_type \
->      $(find package -name '*.hash') 2>/dev/null | wc -l
->       1
+>     CHECK_SOB:
+>      support/scripts/check-package --include-only check_sob \
+>      $(find package -name '*.patch') 2>/dev/null | wc -l
+>       143
 >      (cd support/scripts/check-package-example && \
->      ../check-package --include-only check_hash_type -vv package/*/*)
->       package/package1/package1.hash:3: hash size does not match type (http://nightly.buildroot.org/#adding-packages-hash)
->       sha256 123456789 package1-1.0.tar.gz
->       expected 64 hex digits
->       package/package1/package1.hash:4: unexpected type of hash (http://nightly.buildroot.org/#adding-packages-hash)
->       crc16< tab  >123456789< tab  >package1-1.0.tar.gz
->       package/package1/package1.hash:5: hash size does not match type (http://nightly.buildroot.org/#adding-packages-hash)
->       sha256< tab  >12345678901234567890123456789012345678901234567890123456789012345< tab  >dl/package1-1.0.tar.gz
->       expected 64 hex digits
+>      ../check-package --include-only check_sob -vv package/*/*)
+>       package/package1/0001-do-something.patch:0: missing Signed-off-by in the header (http://nightly.buildroot.org/#_format_and_licensing_of_the_package_patches)
+>       package/package1/wrong-name.patch:0: missing Signed-off-by in the header (http://nightly.buildroot.org/#_format_and_licensing_of_the_package_patches)
 >       159 lines processed
->       3 warnings generated
+>       2 warnings generated
 >
->  support/scripts/checkpackagelib_hash.py | 66 +++++++++++++++++++++++++++++++++
->  1 file changed, 66 insertions(+)
+>  support/scripts/checkpackagelib_patch.py | 43 ++++++++++++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
 >
-> diff --git a/support/scripts/checkpackagelib_hash.py b/support/scripts/checkpackagelib_hash.py
-> index d095f9255..646c6cc12 100644
-> --- a/support/scripts/checkpackagelib_hash.py
-> +++ b/support/scripts/checkpackagelib_hash.py
-> @@ -3,8 +3,74 @@
+> diff --git a/support/scripts/checkpackagelib_patch.py b/support/scripts/checkpackagelib_patch.py
+> index 0fb3685a7..f10dc31c4 100644
+> --- a/support/scripts/checkpackagelib_patch.py
+> +++ b/support/scripts/checkpackagelib_patch.py
+> @@ -3,5 +3,48 @@
 >  # functions don't need to check for things already checked by running
->  # "make package-dirclean package-source".
+>  # "make package-dirclean package-patch".
 >
 > +import re
 > +
 >  # Notice: ignore 'imported but unused' from pyflakes for check functions.
->  from checkpackagelib import check_consecutive_empty_lines
->  from checkpackagelib import check_empty_last_line
 >  from checkpackagelib import check_newline_at_eof
->  from checkpackagelib import check_trailing_space
 > +
 > +
-> +def _empty_line_or_comment(text):
-> +    return text.strip() == "" or text.startswith("#")
+> +APPLY_ORDER = re.compile("/\d{1,4}-[^/]*$")
 > +
 > +
-> +FILENAME_WITH_SLASH = re.compile("/")
-> +
-> +
-> +def check_hash_filename(
+> +def check_apply_order(
 > +        fname, args, lineno=0, text=None, start=False, end=False):
-> +    if start or end or _empty_line_or_comment(text):
-> +        return
+> +    if start and not APPLY_ORDER.search(fname):
+> +        return ["{}:0: use name <number>-<description>.patch "
+> +                "({}#_providing_patches)".format(fname, args.manual_url)]
 > +
-> +    fields = text.split()
-> +    if len(fields) < 3:
-> +        return
 > +
-> +    filename = fields[2]
-> +    if FILENAME_WITH_SLASH.search(filename):
+> +NUMBERED_PATCH = re.compile("Subject:\s*\[PATCH\s*\d+/\d+\]")
 
-This is overkill. It is more simple and I expect more performant to just do:
+Is this really a requirement? This numbering in the patch header is
+unrelated to the number used in the filename. One can expect many
+'PATCH 1/1' in the same package directory. I would leave out this
+test.
 
-    if '/' in filename:
-
-Best regards,
-Thomas
+/Thomas
