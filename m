@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 18:26:57 +1300
-Subject: [Buildroot] [PATCH 1/1] package/x265: Disable -march selection
- from CMakeLists.txt
-In-Reply-To: <20170123200722.25942-1-bernd.kuhls@t-online.de>
-References: <20170123200722.25942-1-bernd.kuhls@t-online.de>
-Message-ID: <20170124182657.6f40be4c@free-electrons.com>
+Date: Tue, 24 Jan 2017 18:27:07 +1300
+Subject: [Buildroot] [PATCH] configs: beaglebone: bump kernel version to
+ 4.4.32
+In-Reply-To: <1484728426-6610-1-git-send-email-lothar.felten@gmail.com>
+References: <1484728426-6610-1-git-send-email-lothar.felten@gmail.com>
+Message-ID: <20170124182707.2e815603@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 23 Jan 2017 21:07:22 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/996/9961313a870b833b48438d8d258c5b5323025790/
+On Wed, 18 Jan 2017 09:33:46 +0100, Lothar Felten wrote:
+> Switch to Linux kernel version 4.4.32 from the TI SDK 03.02.00.05
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 > ---
->  package/x265/0001-fix-gcc-options.patch | 52 +++++++++++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 package/x265/0001-fix-gcc-options.patch
+>  configs/beaglebone_defconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
