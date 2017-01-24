@@ -1,39 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 23:20:26 +1300
-Subject: [Buildroot] [PATCH 1/1] rng-tools: Fix disabling package on
- non-x86 architectures.
-In-Reply-To: <20170111161950.28199-1-nicolas.cavallari@green-communications.fr>
-References: <20170111161950.28199-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20170124232026.539d5020@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 Jan 2017 07:23:06 -0300
+Subject: [Buildroot] [PATCH] collectd: bump to version 5.7.1
+Message-ID: <20170124102306.24442-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/collectd/collectd.hash | 2 +-
+ package/collectd/collectd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 11 Jan 2017 17:19:50 +0100, Nicolas Cavallari wrote:
-> Commit 2f89476 ("package/libgpg-error: bump to version 1.23") introduced
-> a BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS which was added as a dependency
-> to all libgpg-error reverse dependencies.
-> 
-> However, rng-tools only select libgpg-error if BR2_i386 || BR2_x86_64
-> (for RDRAND) but the rng-tools dependency was added as
-> BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && (BR2_i386 || BR2_x86_64),
-> Therefore limiting rng-tools to the x86 architecture.
-> 
-> This patch changes it as ..._ARCH_SUPPORT || !(BR2_i386 || BR2_x86_64).
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
->  package/rng-tools/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
+index 2accf83..be2f646 100644
+--- a/package/collectd/collectd.hash
++++ b/package/collectd/collectd.hash
+@@ -1,2 +1,2 @@
+ # From https://collectd.org/files/SHA256SUM
+-sha256	25a05fbdc6baad571554342bbac6141928bf95a47fc60ee3b32e46d0c89ef2b2	collectd-5.7.0.tar.bz2
++sha256	7edd3643c0842215553b2421d5456f4e9a8a58b07e216b40a7e8e91026d8e501	collectd-5.7.1.tar.bz2
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index fa6ebae..38354ac 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COLLECTD_VERSION = 5.7.0
++COLLECTD_VERSION = 5.7.1
+ COLLECTD_SITE = http://collectd.org/files
+ COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.10.2
