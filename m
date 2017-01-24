@@ -1,31 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 23:35:16 +1300
-Subject: [Buildroot] [PATCH v2 1/1] rpm: disable static build support
-In-Reply-To: <20170109140817.10184-1-james.knight@rockwellcollins.com>
-References: <20170109140817.10184-1-james.knight@rockwellcollins.com>
-Message-ID: <20170124233516.2eadd994@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 Jan 2017 11:10:52 +0100
+Subject: [Buildroot] [PATCH 1/1] toybox: new package
+In-Reply-To: <CA+TH9Vmveq-bH2x1PnYg5zC=dDgy079N6sSdqe-+Gn2aUab5eA@mail.gmail.com>
+ (Angelo Compagnucci's message of "Tue, 24 Jan 2017 10:33:41 +0100")
+References: <5422DBCD.10505@landley.net>
+ <CA+TH9Vk+5EVM7xFgcjQG8C1qWFmRwb-fNhu=HSzJ2YKwDT9kmw@mail.gmail.com>
+ <54DBCBA5.7010307@landley.net>
+ <CA+TH9Vmveq-bH2x1PnYg5zC=dDgy079N6sSdqe-+Gn2aUab5eA@mail.gmail.com>
+Message-ID: <87k29kix8z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-On Mon,  9 Jan 2017 09:08:17 -0500, James Knight wrote:
-> The RPM package requires dynamic linking support (dlfcn.h) for its
-> capabilities related to plugins (and possibly more). The following
-> commit adds a dependency to !BR2_STATIC_LIBS.
-> 
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> ---
-> Changes v1 -> v2:
->   - Cleanup commit message (suggested by Yann E. MORIN [1]).
+ > Hi Rob,
+ > Sorry for asking you again, but it will be a new toybox patch any time soon?
 
-Applied to master, thanks.
+ > I would really like to have toybox in buildroot!
 
-Thomas
+Out of interest, why? What does it bring you that busybox doesn't have?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
