@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jan 2017 08:21:41 -0300
+Date: Tue, 24 Jan 2017 08:21:47 -0300
 Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.4.2
-Message-ID: <20170124112141.11429-1-gustavo@zacarias.com.ar>
+Message-ID: <20170124112147.11475-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
