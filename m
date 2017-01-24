@@ -1,41 +1,32 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 24 Jan 2017 23:14:23 +1300
-Subject: [Buildroot] [PATCH 3/3] micropython-lib: bump version to v1.8.6
-In-Reply-To: <20170124101423.11479-1-judge.packham@gmail.com>
-References: <20170124101423.11479-1-judge.packham@gmail.com>
-Message-ID: <20170124101423.11479-3-judge.packham@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 Jan 2017 07:17:11 -0300
+Subject: [Buildroot] [PATCH 1/2] vala: fix package suffix
+In-Reply-To: <20170124231418.3d5f2985@free-electrons.com>
+References: <20170112133831.12223-1-Vincent.Riera@imgtec.com>
+ <20170124231418.3d5f2985@free-electrons.com>
+Message-ID: <07705b3b-bc14-338b-888f-f50dabeffd4b@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- package/micropython-lib/micropython-lib.hash | 2 +-
- package/micropython-lib/micropython-lib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 24/01/17 07:14, Thomas Petazzoni wrote:
 
-diff --git a/package/micropython-lib/micropython-lib.hash b/package/micropython-lib/micropython-lib.hash
-index fc1595a9c..bc0c22efc 100644
---- a/package/micropython-lib/micropython-lib.hash
-+++ b/package/micropython-lib/micropython-lib.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 4f9250a93413c9925b912d54fe3aaee2d275c82bdb447fc07a090fc60287f5e8  micropython-lib-v1.8.2.tar.gz
-+sha256 eb696009ff8c33004211e484649b34edb14f3efb2ff618942bc8888716757a55  micropython-lib-v1.8.6.tar.gz
-diff --git a/package/micropython-lib/micropython-lib.mk b/package/micropython-lib/micropython-lib.mk
-index 478d6d690..8c8b1426f 100644
---- a/package/micropython-lib/micropython-lib.mk
-+++ b/package/micropython-lib/micropython-lib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MICROPYTHON_LIB_VERSION = v1.8.2
-+MICROPYTHON_LIB_VERSION = v1.8.6
- MICROPYTHON_LIB_SITE = $(call github,micropython,micropython-lib,$(MICROPYTHON_LIB_VERSION))
- MICROPYTHON_LIB_LICENSE = Python software foundation license v2 (some modules), MIT (everything else)
- MICROPYTHON_LIB_LICENSE_FILES = LICENSE
--- 
-2.11.0.24.ge6920cf
+> Nope, that is not needed I believe.
+>
+> Like all Gnome projects, 0.35 is not a stable vala version, so there's
+> no reason to package it. And I guess that also explains why vala 0.35
+> still uses 0.34 as the package suffix.
+>
+> So, by not package a development version, we also don't need this "fix
+> package suffix" patch.
+>
+> Best regards,
+>
+> Thomas
+
+Hi All.
+Indeed, odd major numbers in the gnome project are development versions, 
+like gtk 3.89, glib 2.51 and others.
+Regards.
