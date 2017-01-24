@@ -1,41 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Jan 2017 17:30:16 +0100
-Subject: [Buildroot] [git commit] micropython-lib: bump version to v1.8.6
-Message-ID: <20170124163140.6F854819B7@busybox.osuosl.org>
+Date: Tue, 24 Jan 2017 17:28:15 +0100
+Subject: [Buildroot] [git commit] micropython: bump version to v1.8.7
+Message-ID: <20170124163140.529C1817FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=014d310d6bb374e45e04c64ff0129c8df268cdbf
+commit: https://git.buildroot.net/buildroot/commit/?id=7ef4993889f70f25c27cf4bd101c7af57bc76c07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The install step now requires CROSS_COMPILE as some C files are
+generated at install time. Also remove patches that have been applied
+upstream.
 
 Signed-off-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/micropython-lib/micropython-lib.hash | 2 +-
- package/micropython-lib/micropython-lib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/micropython/micropython.hash | 4 +---
+ package/micropython/micropython.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/micropython-lib/micropython-lib.hash b/package/micropython-lib/micropython-lib.hash
-index fc1595a..bc0c22e 100644
---- a/package/micropython-lib/micropython-lib.hash
-+++ b/package/micropython-lib/micropython-lib.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 4f9250a93413c9925b912d54fe3aaee2d275c82bdb447fc07a090fc60287f5e8  micropython-lib-v1.8.2.tar.gz
-+sha256 eb696009ff8c33004211e484649b34edb14f3efb2ff618942bc8888716757a55  micropython-lib-v1.8.6.tar.gz
-diff --git a/package/micropython-lib/micropython-lib.mk b/package/micropython-lib/micropython-lib.mk
-index 478d6d6..8c8b142 100644
---- a/package/micropython-lib/micropython-lib.mk
-+++ b/package/micropython-lib/micropython-lib.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index 28c008d..6ab7b10 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,4 +1,2 @@
+ #locally computed
+-sha256 871378fcf1f1042c399896d5673da67d12e1fb36c2e706af289fc959bc8f7a57  micropython-v1.8.3.tar.gz
+-sha256 ff3194ebecda99023d7c1bb94d32b31b9491e95a79958a25ffd05213c5553acc  8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch
+-sha256 ac19af8587211d7229074fefa1a3a3c0fe807babc7cf9ce53606f05958699448  a50b26e4b00ed094aa1ac74eac2fc2d8eb9ea1ed.patch
++sha256 55dd751c4c812809841fd06f4729b8341171c4b6c1dc28a9412455282554f8a5  micropython-v1.8.7.tar.gz
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 2f47ad8..8336fb4 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -4,13 +4,11 @@
  #
  ################################################################################
  
--MICROPYTHON_LIB_VERSION = v1.8.2
-+MICROPYTHON_LIB_VERSION = v1.8.6
- MICROPYTHON_LIB_SITE = $(call github,micropython,micropython-lib,$(MICROPYTHON_LIB_VERSION))
- MICROPYTHON_LIB_LICENSE = Python software foundation license v2 (some modules), MIT (everything else)
- MICROPYTHON_LIB_LICENSE_FILES = LICENSE
+-MICROPYTHON_VERSION = v1.8.3
++MICROPYTHON_VERSION = v1.8.7
+ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
+-MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8c6856d2e76c5865d9f30cad2c51615d4a1a1418.patch \
+-	https://github.com/micropython/micropython/commit/a50b26e4b00ed094aa1ac74eac2fc2d8eb9ea1ed.patch
+ 
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
+@@ -33,6 +31,8 @@ endef
+ define MICROPYTHON_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/unix \
+ 		$(MICROPYTHON_MAKE_OPTS) \
++		CROSS_COMPILE=$(TARGET_CROSS) \
++		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
+ 		DESTDIR=$(TARGET_DIR) \
+ 		PREFIX=$(TARGET_DIR)/usr \
+ 		install
