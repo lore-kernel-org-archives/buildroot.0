@@ -1,39 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jan 2017 09:12:24 +1300
-Subject: [Buildroot] [2/5] libselinux: bump version to 2.6
-In-Reply-To: <1485263338.2005.10.camel@codeblue.com>
-References: <20170109161523.6855-1-aduskett@codeblue.com>
- <20170109161523.6855-2-aduskett@codeblue.com>
- <20170124233039.1f0813e9@free-electrons.com>
- <1485263338.2005.10.camel@codeblue.com>
-Message-ID: <20170125091224.6eb5b0a7@free-electrons.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 24 Jan 2017 15:31:30 -0500
+Subject: [Buildroot] [V2 01/10] janus-gateway: bump to version v0.2.1
+Message-ID: <20170124203139.15919-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+---
+v1 -> v2: No changes
 
-On Tue, 24 Jan 2017 13:08:59 +0000, Adam Duskett wrote:
+ package/janus-gateway/janus-gateway.hash | 2 +-
+ package/janus-gateway/janus-gateway.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> What C library are you using?  I am using glibc and it compiles without
-> any issue.  
-
-The C library of the target system doesn't matter: what fails to build
-is host-libselinux, i.e a host package.
-
-So it seems like to be that there is an issue with the old Debian
-system I'm using on my autobuilder instance (which is where I did the
-test build).
-
-I'll try to have a closer look and see if I can understand what's going
-on, since you apparently can't reproduce it on a different host system.
-
-Thanks!
-
-Thomas
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index fece97a..68b9c31 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 4d341a54d3eae5506c3e2409f4a6e4f5159dc4ece3197aaf077d3eb997e69a10 janus-gateway-v0.1.0.tar.gz
++sha256 5d071592faca2a1574b996b4ca07b6c9e02cd42a719b0dbb4bfb5dfde8d55ff3 janus-gateway-v0.2.1.tar.gz
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index d65ab19..4b87b33 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANUS_GATEWAY_VERSION = v0.1.0
++JANUS_GATEWAY_VERSION = v0.2.1
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPLv3
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
