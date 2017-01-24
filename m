@@ -1,77 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2017 23:24:46 +1300
-Subject: [Buildroot] [git commit] openvpn: bump version to 2.4.0
-Message-ID: <20170124103054.EA3D781979@busybox.osuosl.org>
+Date: Tue, 24 Jan 2017 23:30:39 +1300
+Subject: [Buildroot] [2/5] libselinux: bump version to 2.6
+In-Reply-To: <20170109161523.6855-2-aduskett@codeblue.com>
+References: <20170109161523.6855-1-aduskett@codeblue.com>
+ <20170109161523.6855-2-aduskett@codeblue.com>
+Message-ID: <20170124233039.1f0813e9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=878dc8cc9b9d774bc7821156af3cd838c435453b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
---enable-password-save option has been removed
-(https://github.com/OpenVPN/openvpn/commit/9ffd00e7541d83571b9eec087c6b3545ff68441f). Since
-it now defaults to "enabled" in the upstream package, there is no
-point in adding Config.in.legacy support for it: Config.in.legacy
-logic only kicks in when the option is enabled, but the upstream
-package precisely preserve the compatibility with this situation.
+On Mon,  9 Jan 2017 11:15:20 -0500, Adam Duskett wrote:
+> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+> ---
+>  package/libselinux/libselinux.hash | 2 +-
+>  package/libselinux/libselinux.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/openvpn/Config.in    | 6 ------
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 8 +-------
- 3 files changed, 2 insertions(+), 14 deletions(-)
+I've tried a build with this entire series of patches applied, and I'm
+getting:
 
-diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
-index 8ba4ea1..5fa191d 100644
---- a/package/openvpn/Config.in
-+++ b/package/openvpn/Config.in
-@@ -28,10 +28,4 @@ config BR2_PACKAGE_OPENVPN_SMALL
- 	  You loose eurephia, debugging info, help messages and more.
- 	  It saves around 100 KiB in binary file size.
- 
--config BR2_PACKAGE_OPENVPN_PWSAVE
--	bool "Allow passwords in files"
--	help
--	  Allow --askpass and --auth-user-pass passwords to be read
--	  from a file.
--
- endif
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index a21608a..600c250 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 f3a0d0eaf8d544409f76a9f2a238a0cd3dde9e1a9c1f98ac732a8b572bcdee98  openvpn-2.3.14.tar.xz
-+sha256 6f23ba49a1dbeb658f49c7ae17d9ea979de6d92c7357de3d55cd4525e1b2f87e  openvpn-2.4.0.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 1765fb4..5e3df59 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVPN_VERSION = 2.3.14
-+OPENVPN_VERSION = 2.4.0
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
-@@ -42,12 +42,6 @@ else
- OPENVPN_CONF_OPTS += --disable-lzo
- endif
- 
--ifeq ($(BR2_PACKAGE_OPENVPN_PWSAVE),y)
--OPENVPN_CONF_OPTS += --enable-password-save
--else
--OPENVPN_CONF_OPTS += --disable-password-save
--endif
--
- define OPENVPN_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn \
- 		$(TARGET_DIR)/usr/sbin/openvpn
+/usr/bin/gcc -O2 -I/home/test/buildroot/output/host/usr/include -I../include -I/home/test/buildroot/output/host/usr/include -D_GNU_SOURCE  -DNO_ANDROID_BACKEND   -c -o regex.o regex.c
+regex.c:16:2: error: #error __BYTE_ORDER__ not defined. Unable to determine endianness.
+make[2]: *** [regex.o] Error 1
+make[2]: Leaving directory `/home/test/buildroot/output/build/host-libselinux-2.6/src'
+make[1]: *** [all] Error 1
+make[1]: Leaving directory `/home/test/buildroot/output/build/host-libselinux-2.6'
+make: *** [/home/test/buildroot/output/build/host-libselinux-2.6/.stamp_built] Error 2
+
+The configuration to reproduce is:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_POLICYCOREUTILS=y
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_CHECKPOLICY=y
+
+Could you have a look?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
