@@ -1,46 +1,28 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 25 Jan 2017 23:15:34 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-01-24
-In-Reply-To: <1485378342.7516.1.camel@embedded.rocks>
-References: <20170125073013.D171D20CD4@mail.free-electrons.com>
- <1485378342.7516.1.camel@embedded.rocks>
-Message-ID: <20170125211534.dugtv6byofg3wvg5@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 25 Jan 2017 22:24:13 +0100
+Subject: [Buildroot] [PATCH] Revert "tslib: disable raw input plugin
+	under kernel < v3.12"
+In-Reply-To: <94c51efa07549195cb340849a8657fe552c05387.1485369174.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 25 Jan 2017 20:32:54 +0200")
+References: <94c51efa07549195cb340849a8657fe552c05387.1485369174.git.baruch@tkos.co.il>
+Message-ID: <87vat2g7eq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Wed, Jan 25, 2017 at 10:05:42PM +0100, J?rg Krause wrote:
-> On Wed, 2017-01-25 at 08:30 +0100, Thomas Petazzoni wrote:
-> [snip]
-> 
-> > Detail of failures
-> > ===================
-> > 
-> > ????????i586 |????????????????bctoolbox-0.4.0 | NOK | http://autobuil
-> > d.buildroot.net/results/4b4b00ad3b95ddacc9d5cc31c34e457ee55c9364
-> 
-> Unfortunately I cannot reproduce this issue. Is it a rpath issue? cmake
-> links a test program with host zlib:
-> 
-> [..]/i586-buildroot-linux-musl/bin/ld: warning: libc.so.6, needed by
-> /usr/lib32/libz.so.1, not found (try using -rpath or -rpath-link)
-> /usr/lib32/libz.so.1: undefined reference to `strcpy at GLIBC_2.0'
+ > This reverts commit 46d6aa520f2490928f27da716356b00da357cc99.
+ > Since commit 7c60211ce382 (tslib: needs kernel headers 3.12)
+ > BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 is always enabled when building tslib. No
+ > need to check for that.
 
-This is your host library.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-> I have no idea how to fix it. bctoolbox' cmakelists.txt does set
-> CMAKE_INSTALL_RPATH=/usr/lib. Is this a problem?
+Committed, thanks.
 
-That is definitely not compatible with cross compilation.
-
-baruch
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
