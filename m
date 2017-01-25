@@ -1,118 +1,90 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 25 Jan 2017 11:26:10 -0500
-Subject: [Buildroot] [V4 1/1] python-mutagen: new package
-Message-ID: <20170125162610.24101-1-aduskett@codeblue.com>
+From: Lionel Flandrin <lionel@svkt.org>
+Date: Wed, 25 Jan 2017 17:50:04 +0100
+Subject: [Buildroot] [PATCH] python-jinja2: bump to version 2.9.4
+In-Reply-To: <20170125141658.1626-1-yegorslists@googlemail.com>
+References: <20170125141658.1626-1-yegorslists@googlemail.com>
+Message-ID: <20170125165003.ql5pcrjddhhwumeq@ed>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mutagen is a Python module to handle audio metadata.
-It supports ASF, FLAC, MP4, Monkey?s Audio, MP3, Musepack, Ogg Opus,
-Ogg FLAC, Ogg Speex, Ogg Theora, Ogg Vorbis, True Audio, WavPack,
-OptimFROG, and AIFF audio files. All versions of ID3v2 are supported,
-and all standard ID3v2.4 frames are parsed.
+On Wed, Jan 25, 2017 at 03:16:58PM +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> While bumping fix async feature related issue:
+> 
+> Both asyncsupport.py and asyncfilters.py use async feature, that is
+> not available in Python 2 and some features available in Python 3.6.
+> So in both cases *.py compilation would produce compiler errors.
+> Hence remove both files after package extraction.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-It can read Xing headers to accurately calculate the bitrate and
-length of MP3s. ID3 and APEv2 tags can be edited regardless of
-audio format. It can also manipulate Ogg streams on an individual
-packet/page level.
+Tested-by: Lionel Flandrin <lionel@svkt.org>
 
-Mutagen works with Python 2.7, 3.3+ (CPython and PyPy) on Linux,
-Windows and macOS, and has no dedependencies outside the
-Python standard library.
+> ---
+>  package/python-jinja2/python-jinja2.hash |  6 +++---
+>  package/python-jinja2/python-jinja2.mk   | 14 ++++++++++++--
+>  2 files changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+> index 04fcbc86c..46ea75faa 100644
+> --- a/package/python-jinja2/python-jinja2.hash
+> +++ b/package/python-jinja2/python-jinja2.hash
+> @@ -1,3 +1,3 @@
+> -# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=edb51693fe22c53cee5403775c71a99e, sha256 locally computed.
+> -md5	edb51693fe22c53cee5403775c71a99e  Jinja2-2.8.tar.gz
+> -sha256	bc1ff2ff88dbfacefde4ddde471d1417d3b304e8df103a7a9437d47269201bf4  Jinja2-2.8.tar.gz
+> +# md5 from https://pypi.python.org/pypi/jinja2/json, sha256 locally computed
+> +md5	b151bfab6fb728fb7a06da4299161c74  Jinja2-2.9.4.tar.gz
+> +sha256	aab8d8ca9f45624f1e77f2844bf3c144d180e97da8824c2a6d7552ad039b5442  Jinja2-2.9.4.tar.gz
+> diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+> index ce6e2b9c5..16b7b204c 100644
+> --- a/package/python-jinja2/python-jinja2.mk
+> +++ b/package/python-jinja2/python-jinja2.mk
+> @@ -4,14 +4,24 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_JINJA2_VERSION = 2.8
+> +PYTHON_JINJA2_VERSION = 2.9.4
+>  PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+> -PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
+> +PYTHON_JINJA2_SITE = https://pypi.python.org/packages/f4/3f/28387a5bbc6883082c16784c6135440b94f9d5938fb156ff579798e18eda
+>  PYTHON_JINJA2_SETUP_TYPE = setuptools
+>  PYTHON_JINJA2_LICENSE = BSD-3c
+>  PYTHON_JINJA2_LICENSE_FILES = LICENSE
+>  # In host build, setup.py tries to download markupsafe if it is not installed
+>  HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+>  
+> +# Both asyncsupport.py and asyncfilters.py use async feature, that is
+> +# not available in Python 2 and some features available in Python 3.6.
+> +# So in both cases *.py compilation would produce compiler errors.
+> +# Hence remove both files after package extraction.
+> +define PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
+> +	rm $(@D)/jinja2/asyncsupport.py $(@D)/jinja2/asyncfilters.py
+> +endef
+> +
+> +PYTHON_JINJA2_POST_EXTRACT_HOOKS = PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
+> +
+>  $(eval $(python-package))
+>  $(eval $(host-python-package))
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-v3 - v4:
-  - Fixed licensing information.
-  
-v2 - v3: 
-  - Readded longer help explination.
-  - Added check for python2 or python3 zlib.
-
-v1 - v2:
-  - Added BR2_PACKAGE_PYTHON_ZLIB as a requirement.  Without
-   this dependency, programs using python-mutagen will
-   fail to load with a import error complaining about not
-   being able to find zlib in python.
-   
-   
- package/Config.in                          |  1 +
- package/python-mutagen/Config.in           | 18 ++++++++++++++++++
- package/python-mutagen/python-mutagen.hash |  3 +++
- package/python-mutagen/python-mutagen.mk   | 14 ++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/python-mutagen/Config.in
- create mode 100644 package/python-mutagen/python-mutagen.hash
- create mode 100644 package/python-mutagen/python-mutagen.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index c7b6862..0023e7b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -724,6 +724,7 @@ menu "External python modules"
- 	source "package/python-meld3/Config.in"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-msgpack/Config.in"
-+	source "package/python-mutagen/Config.in"
- 	source "package/python-mwclient/Config.in"
- 	source "package/python-mwscrape/Config.in"
- 	source "package/python-mwscrape2slob/Config.in"
-diff --git a/package/python-mutagen/Config.in b/package/python-mutagen/Config.in
-new file mode 100644
-index 0000000..faaff39
---- /dev/null
-+++ b/package/python-mutagen/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_PYTHON_MUTAGEN
-+	bool "python-mutagen"
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	help
-+	  Mutagen is a Python module to handle audio metadata. 
-+	  It supports ASF, FLAC, MP4, Monkey?s Audio, MP3, Musepack, Ogg Opus, 
-+	  Ogg FLAC, Ogg Speex, Ogg Theora, Ogg Vorbis, True Audio, WavPack, 
-+	  OptimFROG, and AIFF audio files. All versions of ID3v2 are supported, 
-+	  and all standard ID3v2.4 frames are parsed. 
-+	  
-+	  It can read Xing headers to accurately calculate the bitrate and length 
-+	  of MP3s. ID3 and APEv2 tags can be edited regardless of audio format. 
-+	  It can also manipulate Ogg streams on an individual packet/page level.
-+
-+	  https://mutagen.readthedocs.io/en/latest/#
-diff --git a/package/python-mutagen/python-mutagen.hash b/package/python-mutagen/python-mutagen.hash
-new file mode 100644
-index 0000000..8970a23
---- /dev/null
-+++ b/package/python-mutagen/python-mutagen.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/mutagen, sha256 locally computed
-+md5	2bd50519d64411626fa22d405afbf078  mutagen-1.36.tar.gz
-+sha256	d7ee37e33b8c5893c3ebf66edac31241eb9d48e1dc7ec647bbfbc180565a4bcd  mutagen-1.36.tar.gz
-diff --git a/package/python-mutagen/python-mutagen.mk b/package/python-mutagen/python-mutagen.mk
-new file mode 100644
-index 0000000..fa7b34d
---- /dev/null
-+++ b/package/python-mutagen/python-mutagen.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-mutagen
-+#
-+################################################################################
-+
-+PYTHON_MUTAGEN_VERSION = 1.36
-+PYTHON_MUTAGEN_SOURCE = mutagen-$(PYTHON_MUTAGEN_VERSION).tar.gz
-+PYTHON_MUTAGEN_SITE = https://pypi.python.org/packages/69/14/4a5c8360a727563291a7159de935ffff2b99ee783928169f0fea7445370f
-+PYTHON_MUTAGEN_LICENSE = LGPLv2+
-+PYTHON_MUTAGEN_LICENSE_FILES = COPYING
-+PYTHON_MUTAGEN_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
 -- 
-2.9.3
+Lionel Flandrin
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170125/c1ef8f5f/attachment.asc>
