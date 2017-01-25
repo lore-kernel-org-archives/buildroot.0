@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 25 Jan 2017 23:25:26 +1300
-Subject: [Buildroot] [git commit] policycoreutils: bump version to 2.6
-Message-ID: <20170125102553.DDBAB8057D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libsemanage: bump version to 2.6
+Message-ID: <20170125102553.BC38580DAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2957074559cb386662376e381ce26990d46bca0d
+commit: https://git.buildroot.net/buildroot/commit/?id=0c61c4cd317bed43478415c3f3cd74ba1ec31f8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/policycoreutils/policycoreutils.hash | 2 +-
- package/policycoreutils/policycoreutils.mk   | 4 ++--
+ package/libsemanage/libsemanage.hash | 2 +-
+ package/libsemanage/libsemanage.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
-index 44cb0c3..999a778 100644
---- a/package/policycoreutils/policycoreutils.hash
-+++ b/package/policycoreutils/policycoreutils.hash
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 69f7c8d..62f4d83 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
 @@ -1,2 +1,2 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 329382cfe9fa977678abf541dcd8fe3847cf0c83b24654c8f7322343907078a1 policycoreutils-2.5.tar.gz
-+sha256 68891b376f5048edc53c6ccb2fca44da3dc7f4563f4b6894e201d70c04a05a29 policycoreutils-2.6.tar.gz
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-index 86639cc..6076bb9 100644
---- a/package/policycoreutils/policycoreutils.mk
-+++ b/package/policycoreutils/policycoreutils.mk
+ # Locally computed
+-sha256 46e2f36254369b6e91d1eea0460c262b139361b055a3a67d3ceea2d8ef72e006 libsemanage-2.5.tar.gz
++sha256 4f81541047290b751f2ffb926fcd381c186f22db18d9fe671b0b4a6a54e8cfce libsemanage-2.6.tar.gz
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index 005b822..7545594 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--POLICYCOREUTILS_VERSION = 2.5
--POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
-+POLICYCOREUTILS_VERSION = 2.6
-+POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
- POLICYCOREUTILS_LICENSE = GPLv2
- POLICYCOREUTILS_LICENSE_FILES = COPYING
- 
+-LIBSEMANAGE_VERSION = 2.5
+-LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
++LIBSEMANAGE_VERSION = 2.6
++LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
+ LIBSEMANAGE_LICENSE = LGPLv2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
