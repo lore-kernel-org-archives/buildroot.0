@@ -1,44 +1,52 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Wed, 25 Jan 2017 10:24:59 +0100
-Subject: [Buildroot] [PATCH] tslib: needs kernel headers 3.12
-In-Reply-To: <87r33xsv2y.fsf@dell.be.48ers.dk>
-References: <4a250493e254e7a958267c5ce153f9ef05e6fc69.1484830247.git.baruch@tkos.co.il>
- <20170120112630.557f297d@free-electrons.com>
- <20170120033551.4cpamcz63irneymp@tarshish> <87r33xsv2y.fsf@dell.be.48ers.dk>
-Message-ID: <aca25d05-0dd2-cb1c-87bf-4475e18991e4@ginzinger.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 25 Jan 2017 10:46:03 +0100
+Subject: [Buildroot] [PATCH 1/2] python-flask: bump to version 0.12
+In-Reply-To: <20170125091854.2kwm43d3ncxbfdhp@ed>
+References: <20170125090150.2548-1-lionel@svkt.org>
+ <CAGm1_kuKj1_2rA6H6PfyxRXNSfY1ndNvGnS3VKeHTFfwb_VmGw@mail.gmail.com>
+ <20170125091854.2kwm43d3ncxbfdhp@ed>
+Message-ID: <CAGm1_kv4xehMCtxw+VG2ccHS7F8WsOzwQYrxSq+CVPk02mXGRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-01-20 14:46, Peter Korsgaard wrote:
->>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
-> Hi,
-> 
->  >> Isn't this a bit annoying for people using tslib on kernel olders than
->  >> 3.12 ? Isn't there a simpler patch to tslib to avoid depending on
->  >> headers >= 3.12 ?
-> 
->  > The present build failure seems to be easy to fix by skipping the ts_uinput 
->  > tool on pre 3.12 kernels. But since upstream explicitly states that 3.12 is 
->  > the oldest supported kernel (see commit message link) we are on our own here.
-> 
-> I had the same idea originally, but as it isn't completely nontrivial to
-> disable the new code and against the wishes of upstream I decided to
-> leave that work for people needing it on pre-3.12 kernels.
-> 
-> With that said, if upstream isn't interested in integrating such a patch
-> then it isn't really nice having to carry it in Buildroot either.
-> 
+On Wed, Jan 25, 2017 at 10:18 AM, Lionel Flandrin <lionel@svkt.org> wrote:
+> On Wed, Jan 25, 2017 at 10:09:42AM +0100, Yegor Yefremov wrote:
+>> On Wed, Jan 25, 2017 at 10:01 AM, Lionel Flandrin <lionel@svkt.org> wrote:
+>> > Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+>>
+>> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> Care to update jinja as well https://github.com/pallets/jinja/releases
+>>
+>> Yegor
+>
+> I tried to do so but I got a nasty error:
+>
+>   Traceback (most recent call last):
+>     File "/home/lionel/src/ambix/buildroot/output/host/usr/lib/python3.5/py_compile.py", line 125, in compile
+>       _optimize=optimize)
+>     File "<frozen importlib._bootstrap_external>", line 700, in source_to_code
+>     File "<frozen importlib._bootstrap>", line 222, in _call_with_frames_removed
+>     File "/home/lionel/src/ambix/buildroot/output/target/usr/lib/python3.5/site-packages/jinja2/asyncfilters.py", line 24
+>   SyntaxError: 'yield' inside async function
+>
+> I asked on IRC and I've been told that:
+>
+> < mitsuhiko> simias: this is not a problem with jinja
+> < mitsuhiko> it's a limitation in whatever build tool you use
+> < mitsuhiko> pip deals with that
+> < mitsuhiko> you can ignore it. it's a warning basically
+>
+> So I'll have to dig a bit deeper to understand what's going wrong here.
 
-I (as the upstream maintainer) would happily take a patch that brings
-back support for old kernels. plugins/input-raw and tools/ts_uinput
-should be affected as they use multitouch.
+It seems like this will be working for Python 3.6 only [1]. And I
+doubt it will be working in Python 2 at all.
 
-Simply properly disabling them during configure would be an acceptable
-first step to have as a requirement for old kernels.
+So let's wait for an official release and take a look at this then.
 
-A github pull request or a patch here would be equally fine with me and
-I'd be happy to have it in version 1.4.
+[1] http://stackoverflow.com/questions/37549846/how-to-use-yield-inside-async-function
+
+Yegor
