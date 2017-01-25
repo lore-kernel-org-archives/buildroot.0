@@ -1,24 +1,24 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 25 Jan 2017 08:42:42 -0500
-Subject: [Buildroot] [V3 07/10] janus-gateway: Make text room plugin
+Date: Wed, 25 Jan 2017 08:42:43 -0500
+Subject: [Buildroot] [V3 08/10] janus-gateway: Make video call plugin
 	optional.
 In-Reply-To: <20170125134245.12920-1-aduskett@codeblue.com>
 References: <20170125134245.12920-1-aduskett@codeblue.com>
-Message-ID: <20170125134245.12920-7-aduskett@codeblue.com>
+Message-ID: <20170125134245.12920-8-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently janus-gateway is built by default with the text room plugin.
+Currently janus-gateway is built by default with the video call plugin.
 This causes a example config file to be placed on the target filing system
-that the user may not need or want, creates a 63K .so
+that the user may not need or want, creates a 47K .so
 file on the target directory, and janus will also generate a warning when
 ran if the plugin does not have a matching configuration file setup by
 the user, as it will not use the example config file by default.
 
-This patch makes the text room plugin optional.
+This patch makes the video call plugin optional.
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
@@ -33,31 +33,31 @@ v1 -> v2:
  2 files changed, 9 insertions(+)
 
 diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 07393ab..836fb8b 100644
+index 836fb8b..092bb60 100644
 --- a/package/janus-gateway/Config.in
 +++ b/package/janus-gateway/Config.in
-@@ -36,6 +36,9 @@ config BR2_PACKAGE_JANUS_SIP_GATEWAY
- config  BR2_PACKAGE_JANUS_STREAMING
- 	bool "streaming"
+@@ -39,6 +39,9 @@ config  BR2_PACKAGE_JANUS_STREAMING
+ config BR2_PACKAGE_JANUS_TEXT_ROOM
+ 	bool "text room"
  
-+config BR2_PACKAGE_JANUS_TEXT_ROOM
-+	bool "text room"
++config BR2_PACKAGE_JANUS_VIDEO_CALL
++	bool "video call"
 +
  endif
  
  comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
 diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 96a81fe..52acd5c 100644
+index 52acd5c..cfd8a7b 100644
 --- a/package/janus-gateway/janus-gateway.mk
 +++ b/package/janus-gateway/janus-gateway.mk
-@@ -58,6 +58,12 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-plugin-streaming
+@@ -64,6 +64,12 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-plugin-textroom
  endif
  
-+ifeq ($(BR2_PACKAGE_JANUS_TEXT_ROOM),y)
-+JANUS_GATEWAY_CONF_OPTS += --enable-plugin-textroom
++ifeq ($(BR2_PACKAGE_JANUS_VIDEO_CALL),y)
++JANUS_GATEWAY_CONF_OPTS += --enable-plugin-videocall
 +else
-+JANUS_GATEWAY_CONF_OPTS += --disable-plugin-textroom
++JANUS_GATEWAY_CONF_OPTS += --disable-plugin-videocall
 +endif
 +
  ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
