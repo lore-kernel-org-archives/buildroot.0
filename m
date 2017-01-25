@@ -1,27 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jan 2017 16:40:03 +1300
-Subject: [Buildroot] [PATCH 0/2 v2] pjsip: configuration fixes
-In-Reply-To: <cover.1483650983.git.yann.morin.1998@free.fr>
-References: <cover.1483650983.git.yann.morin.1998@free.fr>
-Message-ID: <20170125164003.7c867d99@free-electrons.com>
+Date: Wed, 25 Jan 2017 16:41:06 +1300
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis:
+	disable DRI support when not available
+Message-ID: <20170125034120.E39948189C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=04c5e1ba16b168a4bec96cc6b4600907cf325425
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  5 Jan 2017 22:16:33 +0100, Yann E. MORIN wrote:
+Fixes
+http://autobuild.buildroot.net/results/ad8/ad861cb34c15a91e511042d8e47e2c3132cd5898/
 
-> Yann E. MORIN (2):
->       package/libpjsip: disable remaining unspecified options
->       package/libpjsip: drop path to staging to find libsrtp
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Both applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+index b1fce83..d244749 100644
+--- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
++++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+@@ -12,4 +12,8 @@ XDRIVER_XF86_VIDEO_SIS_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_SIS_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xf86driproto xproto_xineramaproto xproto_xproto
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
++XDRIVER_XF86_VIDEO_SIS_CONF_OPTS = --disable-dri
++endif
++
+ $(eval $(autotools-package))
