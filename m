@@ -1,48 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jan 2017 22:24:50 +0100
-Subject: [Buildroot] [git commit] eudev: drop obsolete --with-firmware-path
-	configure flag
-Message-ID: <20170125213156.91E5381EC8@busybox.osuosl.org>
+Date: Wed, 25 Jan 2017 22:27:40 +0100
+Subject: [Buildroot] [git commit] package/libgpiod: bump version to v0.1.1
+Message-ID: <20170125213156.BA68181F58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7725131cdbc610f1229d8d48320e58993b0252d
+commit: https://git.buildroot.net/buildroot/commit/?id=658de310c0b713d265f38831b92d603cd6e31f68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As recently discussed on the list:
+This is a bug-fix release that addresses the musl libc compatibility
+issues encountered with buildroot.
 
-http://lists.busybox.net/pipermail/buildroot/2017-January/182147.html
+We can also remove the patch which got merged upstream.
 
-eudev no longer has legacy user space firmware loading and the
---with-firmware-path configure flag since the 3.1.3 release:
-
-commit 3b717594600fa717cdf9bcfd0c7c1b703b245482
-Author: Kay Sievers <kay@vrfy.org>
-Date:   Mon Sep 1 09:07:49 2014 -0400
-
-    udev: remove userspace firmware loading support
-
-    Signed-off-by: Anthony G. Basile <blueness@gentoo.org>
-
-So drop it from EUDEV_CONF_OPTS to limit confusion.
-
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eudev/eudev.mk | 1 -
- 1 file changed, 1 deletion(-)
+ ...de-gpiod.h-include-missing-time.h-include.patch | 36 ----------------------
+ package/libgpiod/libgpiod.hash                     |  2 +-
+ package/libgpiod/libgpiod.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 38 deletions(-)
 
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 941b4d8..2f5bd6c 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -17,7 +17,6 @@ EUDEV_CONF_OPTS = \
- 	--disable-manpages \
- 	--sbindir=/sbin \
- 	--libexecdir=/lib \
--	--with-firmware-path=/lib/firmware \
- 	--disable-introspection \
- 	--enable-kmod \
- 	--enable-blkid
+diff --git a/package/libgpiod/0001-include-gpiod.h-include-missing-time.h-include.patch b/package/libgpiod/0001-include-gpiod.h-include-missing-time.h-include.patch
+deleted file mode 100644
+index f3744fd..0000000
+--- a/package/libgpiod/0001-include-gpiod.h-include-missing-time.h-include.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 93fd4a02233d29f78b261d99d9ce6b14869b19c7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 23 Jan 2017 21:17:15 +1300
+-Subject: [PATCH] include/gpiod.h: include missing <time.h> include
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-gpiod.h uses "struct timespec", but forgets to include the <time.h>
+-header which defines "struct timespec". This causes a build error with
+-the musl C library:
+-
+-In file included from core.c:11:0:
+-../../include/gpiod.h:232:49: warning: ???struct timespec??? declared inside parameter list
+- typedef int (*gpiod_event_cb)(int, const struct timespec *, void *);
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- include/gpiod.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/include/gpiod.h b/include/gpiod.h
+-index 8c5858e..c1f252d 100644
+---- a/include/gpiod.h
+-+++ b/include/gpiod.h
+-@@ -22,6 +22,7 @@
+- 
+- #include <stdlib.h>
+- #include <stdbool.h>
+-+#include <time.h>
+- 
+- #ifdef __cplusplus
+- extern "C" {
+--- 
+-2.7.4
+-
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 7de17bb..7ba0531 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 0f9f5215d0100a8066f4e6b064892747720e556cbb83f6c05d6151d68ec2025b libgpiod-v0.1.tar.gz
++sha256 07f75ae1e0c086d28d77ef60d0566180698ce11c3271d89da444c0fc6c2f4580 libgpiod-v0.1.1.tar.gz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index b9bd311..e2e27f9 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = v0.1
++LIBGPIOD_VERSION = v0.1.1
+ LIBGPIOD_SITE = $(call github,brgl,libgpiod,$(LIBGPIOD_VERSION))
+ LIBGPIOD_LICENSE = GPLv3+
+ LIBGPIOD_LICENSE_FILES = COPYING
