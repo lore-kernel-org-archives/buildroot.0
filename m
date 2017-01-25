@@ -1,114 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jan 2017 09:55:14 +0100
-Subject: [Buildroot] [git commit] Update for 2016.11.2
-Message-ID: <20170125085530.4DDAF81F6C@busybox.osuosl.org>
+From: Lionel Flandrin <lionel@svkt.org>
+Date: Wed, 25 Jan 2017 10:01:49 +0100
+Subject: [Buildroot] [PATCH 1/2] python-flask: bump to version 0.12
+Message-ID: <20170125090150.2548-1-lionel@svkt.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3e4b0fb5362893d9ca5bb517a96027f563b3cc1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Lionel Flandrin <lionel@svkt.org>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- support/misc/Vagrantfile   |  2 +-
- 3 files changed, 29 insertions(+), 10 deletions(-)
+ package/python-flask/python-flask.hash | 4 ++--
+ package/python-flask/python-flask.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index d6df438..37adfad 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2016.11.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2016.11.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2016.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2016.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2016.11.1.tar.gz">buildroot-2016.11.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2016.11.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2016.11.2.tar.gz">buildroot-2016.11.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2016.11.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2016.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2016.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2016.11.1.tar.bz2">buildroot-2016.11.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2016.11.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2016.11.2.tar.bz2">buildroot-2016.11.2.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2016.11.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 72e0e77..7139144 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2016.11.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>25 January 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2016.11.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2016.11.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.11.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2017-January/182095.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2016.11.2.tar.bz2">2016.11.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index ee653de..dc4c15d 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
+diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
+index 01ccc6e29..919b07598 100644
+--- a/package/python-flask/python-flask.hash
++++ b/package/python-flask/python-flask.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/flask/json, sha256 locally computed
+-md5	d2af95d8fe79cf7da099f062dd122a08  Flask-0.11.1.tar.gz
+-sha256	b4713f2bfb9ebc2966b8a49903ae0d3984781d5c878591cf2f7b484d28756b0e  Flask-0.11.1.tar.gz
++md5	c1d30f51cff4a38f9454b23328a15c5a  Flask-0.12.tar.gz
++sha256	93e803cdbe326a61ebd5c5d353959397c85f829bec610d59cb635c9f97d7ca8b  Flask-0.12.tar.gz
+diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
+index 204eba0af..6c25a6d14 100644
+--- a/package/python-flask/python-flask.mk
++++ b/package/python-flask/python-flask.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # Buildroot version to use
--RELEASE='2016.11.1'
-+RELEASE='2016.11.2'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+-PYTHON_FLASK_VERSION = 0.11.1
++PYTHON_FLASK_VERSION = 0.12
+ PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
+-PYTHON_FLASK_SITE = https://pypi.python.org/packages/55/8a/78e165d30f0c8bb5d57c429a30ee5749825ed461ad6c959688872643ffb3
++PYTHON_FLASK_SITE = https://pypi.python.org/packages/4b/3a/4c20183df155dd2e39168e35d53a388efb384a512ca6c73001d8292c094a
+ PYTHON_FLASK_SETUP_TYPE = setuptools
+ PYTHON_FLASK_LICENSE = BSD-3c
+ PYTHON_FLASK_LICENSE_FILES = LICENSE
+-- 
+2.11.0
