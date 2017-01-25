@@ -1,62 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 25 Jan 2017 21:20:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: bump version to 10.0
-References: <20170122141637.18048-1-bernd.kuhls@t-online.de>
- <20170124182624.1313b78b@free-electrons.com>
-Message-ID: <XnsA708D90E23565ID313208userindividu@bernd-kuhls.de>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 25 Jan 2017 21:29:15 +0100
+Subject: [Buildroot] [PATCH] package/mediastreamer: fix build by bumping to
+	version 2.14.0
+Message-ID: <20170125202915.8084-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The current available version 2.12.1 of mediastreamer does not compile with the
+latest version 0.27 of oRTP, which was recently updated in Buildroot in [1].
+Bump mediastreamer to latest version 2.14.0 to fix the incompatibility:
 
-[posted and mailed]
+```
+base/msfactory.c:169:3: error: too few arguments to function 'ortp_set_log_level_mask'
+   ortp_set_log_level_mask(ORTP_MESSAGE|ORTP_WARNING|ORTP_ERROR|ORTP_FATAL);
+```
 
-Thomas Petazzoni <thomas.petazzoni-
-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
-news:20170124182624.1313b78b at free-electrons.com:
+Note that we need to fetch a patch from upstream to fix the build with
+the bctoolbox version 0.4.0.
 
-> Hello,
-> 
-> On Sun, 22 Jan 2017 15:16:37 +0100, Bernd Kuhls wrote:
-> 
->> Dependency to json-c was dropped, updated reverse dependencies as well.
->> Added optional dependency to libatomic_ops.
-> 
-> If libatomic_ops is an optional dependency, why are you selecting it
-> from the Config.in file?
+Fixes:
+http://autobuild.buildroot.net/results/9aa/9aa3cdad6e22ad1656eec59fc92fb7cb79afc4cd/
+http://autobuild.buildroot.net/results/09e/09e8fabb72cafa284419f096da95299c51c03899/
+http://autobuild.buildroot.net/results/29c/29c8ddd25c76f4c5b74f31a576c7ace9f76677db/
+.. and some more.
 
-Most likely because I do not fully understand the handling of atomic 
-operations in buildroot ;)
+[1] http://patchwork.ozlabs.org/patch/718277/
 
-Pulseaudio has optional support for libatomic_ops, first it checks whether 
-the toolchain itself supports __sync_bool_compare_and_swap
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mediastreamer/mediastreamer.hash | 3 ++-
+ package/mediastreamer/mediastreamer.mk   | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-https://cgit.freedesktop.org/pulseaudio/pulseaudio/tree/configure.ac#n253
-
-to prefer this toolchain support if available:
-https://cgit.freedesktop.org/pulseaudio/pulseaudio/tree/configure.ac#n263
-
-Otherwise it needs libatomic_ops
-https://cgit.freedesktop.org/pulseaudio/pulseaudio/tree/configure.ac#n251
-
-I tried to code this configure logic by Pulseaudio into the buildroot 
-package...
-
-> Which is exactly why I'm asking above why you are selecting
-> libatomic_ops if it's really an optional dependency.
-
-On platforms lacking BR2_TOOLCHAIN_HAS_SYNC_4 libatomic_ops is therefore a 
-hard dependency, all others do not need libatomic_ops because Pulseaudio 
-will use the toolchain code.
-
-Please note that you wrote a similar
-
-    	select BR2_PACKAGE_LIBATOMIC_OPS if !BR2_TOOLCHAIN_HAS_SYNC_4
-
-for libdrm: https://git.buildroot.net/buildroot/commit/package/libdrm?
-id=e4d55d33737485d8055c2fe3453e29fee51a05d7
-
-Regards, Bernd
+diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
+index 21964a864..0f1ac77ce 100644
+--- a/package/mediastreamer/mediastreamer.hash
++++ b/package/mediastreamer/mediastreamer.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	0dbf8d4f721a04db9ec0982e98a4e852ad2d3acbcbd25edd96a66164a980f2e7	mediastreamer-2.12.1.tar.gz
++sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
++sha256  90091ab0aa7a77381ab1ca5d88cdfa4e7f62505fb452a2bea0f70054d9d1aece  26f884bf977977041fe6f98a0af186be1580bf22.patch
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index a12bfb4b2..6e05afc54 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEDIASTREAMER_VERSION = 2.12.1
++MEDIASTREAMER_VERSION = 2.14.0
+ MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
+ MEDIASTREAMER_INSTALL_STAGING = YES
+ MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext
+@@ -13,6 +13,13 @@ MEDIASTREAMER_CONF_OPTS = --disable-tests --disable-glx --disable-strict
+ MEDIASTREAMER_LICENSE = GPLv2+
+ MEDIASTREAMER_LICENSE_FILES = COPYING
+ 
++# fix compilation issue with latest bctoolbox (touches configure.ac)
++MEDIASTREAMER_PATCH = \
++	https://github.com/BelledonneCommunications/mediastreamer2/commit/26f884bf977977041fe6f98a0af186be1580bf22.patch
++
++# patching configure.ac
++MEDIASTREAMER_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
+ MEDIASTREAMER_CONF_OPTS += --enable-alsa
+ MEDIASTREAMER_DEPENDENCIES += alsa-lib
+-- 
+2.11.0
