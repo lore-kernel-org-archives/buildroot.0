@@ -1,69 +1,79 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 25 Jan 2017 08:42:40 -0500
-Subject: [Buildroot] [V3 05/10] janus-gateway: Make recordplay plugin
-	optional.
+Date: Wed, 25 Jan 2017 08:42:37 -0500
+Subject: [Buildroot] [V3 02/10] janus-gateway: Make sofia-sip a optional
+	dependency.
 In-Reply-To: <20170125134245.12920-1-aduskett@codeblue.com>
 References: <20170125134245.12920-1-aduskett@codeblue.com>
-Message-ID: <20170125134245.12920-5-aduskett@codeblue.com>
+Message-ID: <20170125134245.12920-2-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently janus-gateway is built by default with the record and play plugin.
-This causes a example config file to be placed on the target filing system
-that the user may not need or want, creates a 68K .so
-file on the target directory, and janus will also create a warning when ran
-if the plugin does not have a matching configuration file setup by the user,
-as it will not use the example config file by default.
-
-This patch makes the record and play plugin a option.
+Currently janus-gateway requires sofia-sip in the build system, however
+this is unessasary. This patch makes the sip gateway plugin a option.
+It also creates a menuconfig for janus gateway for the following patches
+that enable selecting more optional plugins.
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
 v2 -> v3:
   - Removed 'PLUGIN' from the name; as this is implied.
   - Removed 'default n' from the config file, as this is the default.
-
-v1 -> v2:
+  - selecting the sip gateway plugin now selects the sofia sip package.
+v1 -> v2: 
   - Fixed patch so that this patch only adds the plugin to both the
     Config.in and the .mk file.
-    
- package/janus-gateway/Config.in        | 3 +++
- package/janus-gateway/janus-gateway.mk | 6 ++++++
- 2 files changed, 9 insertions(+)
+
+ package/janus-gateway/Config.in        | 12 +++++++++++-
+ package/janus-gateway/janus-gateway.mk |  7 +++++++
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 1975f53..db29b19 100644
+index b9a2c66..b0a2e5d 100644
 --- a/package/janus-gateway/Config.in
 +++ b/package/janus-gateway/Config.in
-@@ -26,6 +26,9 @@ config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
- config BR2_PACKAGE_JANUS_ECHO_TEST
- 	bool "echo test"
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_JANUS_GATEWAY
++menuconfig BR2_PACKAGE_JANUS_GATEWAY
+ 	bool "janus-gateway"
+ 	select BR2_PACKAGE_JANSSON
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -15,6 +15,16 @@ config BR2_PACKAGE_JANUS_GATEWAY
  
-+config BR2_PACKAGE_JANUS_RECORDPLAY
-+	bool "record and play"
+ 	  https://github.com/meetecho/janus-gateway
+ 
++if BR2_PACKAGE_JANUS_GATEWAY
 +
- config BR2_PACKAGE_JANUS_SIP_GATEWAY
- 	select BR2_PACKAGE_SOFIA_SIP
- 	bool "sip gateway"
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index ce12393..a051e58 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -39,6 +39,12 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-plugin-echotest
- endif
- 
-+ifeq ($(BR2_PACKAGE_JANUS_RECORDPLAY),y)
-+JANUS_GATEWAY_CONF_OPTS += --enable-plugin-recordplay
-+else
-+JANUS_GATEWAY_CONF_OPTS += --disable-plugin-recordplay
++comment "janus-gateway plugins"
++
++config BR2_PACKAGE_JANUS_SIP_GATEWAY
++	select BR2_PACKAGE_SOFIA_SIP
++	bool "sip gateway"
++
 +endif
 +
- ifeq ($(BR2_PACKAGE_JANUS_SIP_GATEWAY),y)
- JANUS_GATEWAY_DEPENDENCIES += sofia-sip
- JANUS_GATEWAY_CONF_OPTS += --enable-plugin-sip
+ comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 1b83768..dac324f 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -26,6 +26,13 @@ JANUS_GATEWAY_CONF_OPTS = \
+ 	--disable-data-channels \
+ 	--disable-rabbitmq
+ 
++ifeq ($(BR2_PACKAGE_JANUS_SIP_GATEWAY),y)
++JANUS_GATEWAY_DEPENDENCIES += sofia-sip
++JANUS_GATEWAY_CONF_OPTS += --enable-plugin-sip
++else
++JANUS_GATEWAY_CONF_OPTS += --disable-plugin-sip
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
+ JANUS_GATEWAY_DEPENDENCIES += libwebsockets
+ JANUS_GATEWAY_CONF_OPTS += --enable-websockets
 -- 
 2.9.3
