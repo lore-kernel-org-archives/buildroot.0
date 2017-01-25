@@ -1,32 +1,55 @@
-From: Lionel Flandrin <lionel@svkt.org>
-Date: Wed, 25 Jan 2017 10:01:50 +0100
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: Add Lionel FLandrin for
-	package/flask
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 25 Jan 2017 10:09:42 +0100
+Subject: [Buildroot] [PATCH 1/2] python-flask: bump to version 0.12
 In-Reply-To: <20170125090150.2548-1-lionel@svkt.org>
 References: <20170125090150.2548-1-lionel@svkt.org>
-Message-ID: <20170125090150.2548-2-lionel@svkt.org>
+Message-ID: <CAGm1_kuKj1_2rA6H6PfyxRXNSfY1ndNvGnS3VKeHTFfwb_VmGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Lionel Flandrin <lionel@svkt.org>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, Jan 25, 2017 at 10:01 AM, Lionel Flandrin <lionel@svkt.org> wrote:
+> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 00b100446..309c39419 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -917,6 +917,7 @@ F:	boot/afboot-stm32/
- N:	Lionel Flandrin <lionel@svkt.org>
- F:	package/python-babel/
- F:	package/python-flask-babel/
-+F:	package/python-flask/
- 
- N:	Lionel Orry <lionel.orry@gmail.com>
- F:	package/mongrel2/
--- 
-2.11.0
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Care to update jinja as well https://github.com/pallets/jinja/releases
+
+Yegor
+
+> ---
+>  package/python-flask/python-flask.hash | 4 ++--
+>  package/python-flask/python-flask.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
+> index 01ccc6e29..919b07598 100644
+> --- a/package/python-flask/python-flask.hash
+> +++ b/package/python-flask/python-flask.hash
+> @@ -1,3 +1,3 @@
+>  # md5 from https://pypi.python.org/pypi/flask/json, sha256 locally computed
+> -md5    d2af95d8fe79cf7da099f062dd122a08  Flask-0.11.1.tar.gz
+> -sha256 b4713f2bfb9ebc2966b8a49903ae0d3984781d5c878591cf2f7b484d28756b0e  Flask-0.11.1.tar.gz
+> +md5    c1d30f51cff4a38f9454b23328a15c5a  Flask-0.12.tar.gz
+> +sha256 93e803cdbe326a61ebd5c5d353959397c85f829bec610d59cb635c9f97d7ca8b  Flask-0.12.tar.gz
+> diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
+> index 204eba0af..6c25a6d14 100644
+> --- a/package/python-flask/python-flask.mk
+> +++ b/package/python-flask/python-flask.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>
+> -PYTHON_FLASK_VERSION = 0.11.1
+> +PYTHON_FLASK_VERSION = 0.12
+>  PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
+> -PYTHON_FLASK_SITE = https://pypi.python.org/packages/55/8a/78e165d30f0c8bb5d57c429a30ee5749825ed461ad6c959688872643ffb3
+> +PYTHON_FLASK_SITE = https://pypi.python.org/packages/4b/3a/4c20183df155dd2e39168e35d53a388efb384a512ca6c73001d8292c094a
+>  PYTHON_FLASK_SETUP_TYPE = setuptools
+>  PYTHON_FLASK_LICENSE = BSD-3c
+>  PYTHON_FLASK_LICENSE_FILES = LICENSE
+> --
+> 2.11.0
+>
