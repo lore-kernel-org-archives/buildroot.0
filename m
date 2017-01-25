@@ -1,67 +1,68 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 25 Jan 2017 08:42:43 -0500
-Subject: [Buildroot] [V3 08/10] janus-gateway: Make video call plugin
+Date: Wed, 25 Jan 2017 08:42:39 -0500
+Subject: [Buildroot] [V3 04/10] janus-gateway: Make echo test plugin
 	optional.
 In-Reply-To: <20170125134245.12920-1-aduskett@codeblue.com>
 References: <20170125134245.12920-1-aduskett@codeblue.com>
-Message-ID: <20170125134245.12920-8-aduskett@codeblue.com>
+Message-ID: <20170125134245.12920-4-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently janus-gateway is built by default with the video call plugin.
+Currently janus-gateway is built by default with the echo test plugin.
 This causes a example config file to be placed on the target filing system
-that the user may not need or want, creates a 47K .so
+that the user may not need or want, creates a 36K .so
 file on the target directory, and janus will also generate a warning when
 ran if the plugin does not have a matching configuration file setup by
 the user, as it will not use the example config file by default.
 
-This patch makes the video call plugin optional.
+This patch makes the echo test plugin optional.
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
 v2 -> v3:
   - Removed 'PLUGIN' from the name; as this is implied.
   - Removed 'default n' from the config file, as this is the default.
-v1 -> v2:
-  - No changes.
-
+v1 -> v2: 
+  - Fixed patch so that this patch only adds the plugin to both the
+    Config.in and the .mk file.
+    
  package/janus-gateway/Config.in        | 3 +++
  package/janus-gateway/janus-gateway.mk | 6 ++++++
  2 files changed, 9 insertions(+)
 
 diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 836fb8b..092bb60 100644
+index c89c723..1975f53 100644
 --- a/package/janus-gateway/Config.in
 +++ b/package/janus-gateway/Config.in
-@@ -39,6 +39,9 @@ config  BR2_PACKAGE_JANUS_STREAMING
- config BR2_PACKAGE_JANUS_TEXT_ROOM
- 	bool "text room"
+@@ -23,6 +23,9 @@ config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
+ 	select BR2_PACKAGE_OPUS
+ 	bool "audio bridge"
  
-+config BR2_PACKAGE_JANUS_VIDEO_CALL
-+	bool "video call"
++config BR2_PACKAGE_JANUS_ECHO_TEST
++	bool "echo test"
 +
- endif
- 
- comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
+ config BR2_PACKAGE_JANUS_SIP_GATEWAY
+ 	select BR2_PACKAGE_SOFIA_SIP
+ 	bool "sip gateway"
 diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 52acd5c..cfd8a7b 100644
+index 1f9ba49..ce12393 100644
 --- a/package/janus-gateway/janus-gateway.mk
 +++ b/package/janus-gateway/janus-gateway.mk
-@@ -64,6 +64,12 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-plugin-textroom
+@@ -33,6 +33,12 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-plugin-audiobridge
  endif
  
-+ifeq ($(BR2_PACKAGE_JANUS_VIDEO_CALL),y)
-+JANUS_GATEWAY_CONF_OPTS += --enable-plugin-videocall
++ifeq ($(BR2_PACKAGE_JANUS_ECHO_TEST),y)
++JANUS_GATEWAY_CONF_OPTS += --enable-plugin-echotest
 +else
-+JANUS_GATEWAY_CONF_OPTS += --disable-plugin-videocall
++JANUS_GATEWAY_CONF_OPTS += --disable-plugin-echotest
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
- JANUS_GATEWAY_DEPENDENCIES += libwebsockets
- JANUS_GATEWAY_CONF_OPTS += --enable-websockets
+ ifeq ($(BR2_PACKAGE_JANUS_SIP_GATEWAY),y)
+ JANUS_GATEWAY_DEPENDENCIES += sofia-sip
+ JANUS_GATEWAY_CONF_OPTS += --enable-plugin-sip
 -- 
 2.9.3
