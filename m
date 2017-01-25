@@ -1,68 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 25 Jan 2017 22:43:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: Only CLI client
-	depends on !uClibc
-Message-ID: <20170125214358.14952-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 25 Jan 2017 22:48:13 +0100
+Subject: [Buildroot] [PATCH] configs: add Qemu nios2 defconfig
+Message-ID: <20170125214813.28226-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested using this minimal defconfig
+Tested with Qemu the latest master (upcoming 2.9 release)
 
-BR2_KERNEL_HEADERS_3_4=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PACKAGE_BLUEZ5_UTILS=y
-BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL=y
-BR2_PACKAGE_BLUEZ5_UTILS_TEST=y
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/bluez5_utils/Config.in | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+Tested with the codesourcery Nios2 prebuild toolchain and internal
+toolchain.
+---
+ board/qemu/nios2-10m50/linux-4.9.fragment | 3 +++
+ board/qemu/nios2-10m50/readme.txt         | 9 +++++++++
+ configs/qemu_nios2_10m50_defconfig        | 7 +++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 board/qemu/nios2-10m50/linux-4.9.fragment
+ create mode 100644 board/qemu/nios2-10m50/readme.txt
+ create mode 100644 configs/qemu_nios2_10m50_defconfig
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 18b7bbf0e0..a7c0ee4ba4 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -6,8 +6,6 @@ config BR2_PACKAGE_BLUEZ5_UTILS
- 	depends on !BR2_STATIC_LIBS # uses dlfcn
- 	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with 4.x version
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
--	# wordexp support not in our uClibc configuration
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -41,10 +39,15 @@ comment "OBEX support needs a toolchain w/ C++"
- 
- config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- 	bool "build CLI client"
-+	# wordexp support not in our uClibc configuration
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	select BR2_PACKAGE_READLINE
- 	help
- 	  Enable the Bluez 5.x command line client.
- 
-+comment "bluez5-utils client needs a glibc or musl toolchain"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/board/qemu/nios2-10m50/linux-4.9.fragment b/board/qemu/nios2-10m50/linux-4.9.fragment
+new file mode 100644
+index 0000000..72ffcd3
+--- /dev/null
++++ b/board/qemu/nios2-10m50/linux-4.9.fragment
+@@ -0,0 +1,3 @@
++# Embed the DTB in the kernel image
++CONFIG_NIOS2_DTB_SOURCE_BOOL=y
++CONFIG_NIOS2_DTB_SOURCE="arch/nios2/boot/dts/10m50_devboard.dts"
+diff --git a/board/qemu/nios2-10m50/readme.txt b/board/qemu/nios2-10m50/readme.txt
+new file mode 100644
+index 0000000..978ba95
+--- /dev/null
++++ b/board/qemu/nios2-10m50/readme.txt
+@@ -0,0 +1,9 @@
++Run the emulation with:
 +
- config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
- 	bool "install GATT tool"
- 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
-@@ -77,10 +80,9 @@ config BR2_PACKAGE_BLUEZ5_UTILS_TEST
- 
- endif
- 
--comment "bluez5-utils needs a glibc or musl toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
-+comment "bluez5-utils needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS || \
--		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_MMU
- 
++  qemu-system-nios2 -kernel output/images/vmlinux -nographic
++
++The login prompt will appear in the terminal that started Qemu.
++
++Tested with the upcoming QEMU 2.9.0 [1]
++
++[1] http://git.qemu.org/?p=qemu.git;h=ae5045ae5b2bbd8ce1335d1b05f9ecacca83a6cf
+diff --git a/configs/qemu_nios2_10m50_defconfig b/configs/qemu_nios2_10m50_defconfig
+new file mode 100644
+index 0000000..d6b3e1f
+--- /dev/null
++++ b/configs/qemu_nios2_10m50_defconfig
+@@ -0,0 +1,7 @@
++BR2_nios2=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.5"
++BR2_LINUX_KERNEL_DEFCONFIG="10m50"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/nios2-10m50/linux-4.9.fragment"
++BR2_TARGET_ROOTFS_INITRAMFS=y
 -- 
-2.11.0
+2.9.3
