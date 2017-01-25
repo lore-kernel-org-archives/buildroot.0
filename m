@@ -1,52 +1,36 @@
-From: Ted Victorio <tvan5bee@yahoo.com>
-Date: Wed, 25 Jan 2017 20:31:44 +0000 (UTC)
-Subject: [Buildroot] Eclipse/Buildroot toolchain: make: *** [hello.o] Error 1
-References: <1098752994.802685.1485376304266.ref@mail.yahoo.com>
-Message-ID: <1098752994.802685.1485376304266@mail.yahoo.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Wed, 25 Jan 2017 22:05:42 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-01-24
+In-Reply-To: <20170125073013.D171D20CD4@mail.free-electrons.com>
+References: <20170125073013.D171D20CD4@mail.free-electrons.com>
+Message-ID: <1485378342.7516.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+On Wed, 2017-01-25 at 08:30 +0100, Thomas Petazzoni wrote:
+> Hello,
 
-I've installed the following:- sudo apt-get install build-essential autotools-dev autoconf automake make
-- buildroot-2016.11.tar.gz was installed with External toolchain toolchain (LINARO_ARM)
-    In  Toolchain -> Copy gdb server to the Target.
-                  -> Register toolchain within Eclipse Buildroot plug-in
-        Build options -> "build packages with debugging symbols"
+[snip]
 
-- eclipse-cpp-luna-SR2-linux-gtk.tar.gz
-- openjdk-7-jre
-- Eclipse Luna - buildroot : http://buildroot.org/downloads/eclipse/luna 
+> Detail of failures
+> ===================
+> 
+> ????????i586 |????????????????bctoolbox-0.4.0 | NOK | http://autobuil
+> d.buildroot.net/results/4b4b00ad3b95ddacc9d5cc31c34e457ee55c9364
 
-I followed steps to activate and install the Buildroot Eclipse plugin
-(https://github.com/mbats/eclipse-buildroot-bundle/wiki/Tutorial-:-How-to-activate-and-install-the-Buildroot-Eclipse-plugin-%3F)
+Unfortunately I cannot reproduce this issue. Is it a rpath issue? cmake
+links a test program with host zlib:
 
-I created a new C project using the Buildroot toolchain 
-(https://github.com/mbats/eclipse-buildroot-bundle/wiki/Tutorial-:-How-to-create-a-new-C-project-using-the-Buildroot-toolchain-%3F)
+[..]/i586-buildroot-linux-musl/bin/ld: warning: libc.so.6, needed by
+/usr/lib32/libz.so.1, not found (try using -rpath or -rpath-link)
+/usr/lib32/libz.so.1: undefined reference to `strcpy at GLIBC_2.0'
 
+I have no idea how to fix it. bctoolbox' cmakelists.txt does set
+CMAKE_INSTALL_RPATH=/usr/lib. Is this a problem?
 
-    When I created new C test project, I do see the Buildroot ARM toolchains:
-    The PATH is pointing to the correct location
-        PATH: /home/test/Downloads/buildroot-2016.11/output/host/usr/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
-
-When Build the project, this error occurs:
-    make: *** [hello.o] Error 1        test   C/C++ Problem
-
-Please advise. Thank you very much.
-Ted    
-
-
---------------------------------------------------------------------------------
-test project:
-hello.c:
-
-#include <stdio.h>
-
-int main()
-{
-    printf("\n..hello..\n");
-    return 0;
-}
+Best regards,
+J?rg Krause
