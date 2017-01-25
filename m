@@ -1,89 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jan 2017 22:27:40 +0100
-Subject: [Buildroot] [git commit] package/libgpiod: bump version to v0.1.1
-Message-ID: <20170125213156.BA68181F58@busybox.osuosl.org>
+Date: Wed, 25 Jan 2017 22:25:31 +0100
+Subject: [Buildroot] [git commit] package/mediastreamer: fix build by
+	bumping to version 2.14.0
+Message-ID: <20170125213156.A60F781EC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=658de310c0b713d265f38831b92d603cd6e31f68
+commit: https://git.buildroot.net/buildroot/commit/?id=b29a9115d7149f2c84cec793d9fe31bc74d97540
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a bug-fix release that addresses the musl libc compatibility
-issues encountered with buildroot.
+The current available version 2.12.1 of mediastreamer does not compile with the
+latest version 0.27 of oRTP, which was recently updated in Buildroot in [1].
+Bump mediastreamer to latest version 2.14.0 to fix the incompatibility:
 
-We can also remove the patch which got merged upstream.
+```
+base/msfactory.c:169:3: error: too few arguments to function 'ortp_set_log_level_mask'
+   ortp_set_log_level_mask(ORTP_MESSAGE|ORTP_WARNING|ORTP_ERROR|ORTP_FATAL);
+```
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Note that we need to fetch a patch from upstream to fix the build with
+the bctoolbox version 0.4.0.
+
+Fixes:
+http://autobuild.buildroot.net/results/9aa/9aa3cdad6e22ad1656eec59fc92fb7cb79afc4cd/
+http://autobuild.buildroot.net/results/09e/09e8fabb72cafa284419f096da95299c51c03899/
+http://autobuild.buildroot.net/results/29c/29c8ddd25c76f4c5b74f31a576c7ace9f76677db/
+.. and some more.
+
+[1] http://patchwork.ozlabs.org/patch/718277/
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...de-gpiod.h-include-missing-time.h-include.patch | 36 ----------------------
- package/libgpiod/libgpiod.hash                     |  2 +-
- package/libgpiod/libgpiod.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 38 deletions(-)
+ package/mediastreamer/mediastreamer.hash | 3 ++-
+ package/mediastreamer/mediastreamer.mk   | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgpiod/0001-include-gpiod.h-include-missing-time.h-include.patch b/package/libgpiod/0001-include-gpiod.h-include-missing-time.h-include.patch
-deleted file mode 100644
-index f3744fd..0000000
---- a/package/libgpiod/0001-include-gpiod.h-include-missing-time.h-include.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 93fd4a02233d29f78b261d99d9ce6b14869b19c7 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 23 Jan 2017 21:17:15 +1300
--Subject: [PATCH] include/gpiod.h: include missing <time.h> include
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--gpiod.h uses "struct timespec", but forgets to include the <time.h>
--header which defines "struct timespec". This causes a build error with
--the musl C library:
--
--In file included from core.c:11:0:
--../../include/gpiod.h:232:49: warning: ???struct timespec??? declared inside parameter list
-- typedef int (*gpiod_event_cb)(int, const struct timespec *, void *);
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/gpiod.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/include/gpiod.h b/include/gpiod.h
--index 8c5858e..c1f252d 100644
----- a/include/gpiod.h
--+++ b/include/gpiod.h
--@@ -22,6 +22,7 @@
-- 
-- #include <stdlib.h>
-- #include <stdbool.h>
--+#include <time.h>
-- 
-- #ifdef __cplusplus
-- extern "C" {
---- 
--2.7.4
--
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 7de17bb..7ba0531 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 0f9f5215d0100a8066f4e6b064892747720e556cbb83f6c05d6151d68ec2025b libgpiod-v0.1.tar.gz
-+sha256 07f75ae1e0c086d28d77ef60d0566180698ce11c3271d89da444c0fc6c2f4580 libgpiod-v0.1.1.tar.gz
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index b9bd311..e2e27f9 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
+diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
+index 21964a8..0f1ac77 100644
+--- a/package/mediastreamer/mediastreamer.hash
++++ b/package/mediastreamer/mediastreamer.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	0dbf8d4f721a04db9ec0982e98a4e852ad2d3acbcbd25edd96a66164a980f2e7	mediastreamer-2.12.1.tar.gz
++sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
++sha256  90091ab0aa7a77381ab1ca5d88cdfa4e7f62505fb452a2bea0f70054d9d1aece  26f884bf977977041fe6f98a0af186be1580bf22.patch
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index a12bfb4..b4f0c52 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPIOD_VERSION = v0.1
-+LIBGPIOD_VERSION = v0.1.1
- LIBGPIOD_SITE = $(call github,brgl,libgpiod,$(LIBGPIOD_VERSION))
- LIBGPIOD_LICENSE = GPLv3+
- LIBGPIOD_LICENSE_FILES = COPYING
+-MEDIASTREAMER_VERSION = 2.12.1
++MEDIASTREAMER_VERSION = 2.14.0
+ MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
+ MEDIASTREAMER_INSTALL_STAGING = YES
+ MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext
+@@ -13,6 +13,13 @@ MEDIASTREAMER_CONF_OPTS = --disable-tests --disable-glx --disable-strict
+ MEDIASTREAMER_LICENSE = GPLv2+
+ MEDIASTREAMER_LICENSE_FILES = COPYING
+ 
++# fix compilation issue with latest bctoolbox (touches configure.ac)
++MEDIASTREAMER_PATCH = \
++	https://github.com/BelledonneCommunications/mediastreamer2/commit/26f884bf977977041fe6f98a0af186be1580bf22.patch
++
++# patching configure.ac
++MEDIASTREAMER_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
+ MEDIASTREAMER_CONF_OPTS += --enable-alsa
+ MEDIASTREAMER_DEPENDENCIES += alsa-lib
