@@ -1,7 +1,7 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 25 Jan 2017 09:53:53 -0500
-Subject: [Buildroot] [PATCH 1/1] sngrep: new package
-Message-ID: <20170125145353.23360-1-aduskett@codeblue.com>
+Date: Wed, 25 Jan 2017 09:54:46 -0500
+Subject: [Buildroot] [V3 1/1] sngrep: new package
+Message-ID: <20170125145446.23466-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
