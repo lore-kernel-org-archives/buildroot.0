@@ -1,46 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jan 2017 23:04:17 +1300
-Subject: [Buildroot] [PATCH] jack2: fix NGREG build failures
-In-Reply-To: <1481991706-7060-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1481991706-7060-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170125230417.5e0bf244@free-electrons.com>
+Date: Wed, 25 Jan 2017 23:05:20 +1300
+Subject: [Buildroot] [git commit] linux-pam: adjust login pam file for
+	SELinux
+Message-ID: <20170125100542.4C8C67FF75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=be9157e1c060ef2ed1c358ee445e610e892c972b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 17 Dec 2016 17:21:46 +0100, Thomas Petazzoni wrote:
-> This commit replaces the patch adding nios2 "support" to jack2 by a more
-> generic approach that solves the NGREG definition problem by using
-> proper checks in the waf script. This allows to remove the
-> architecture-specific compile time conditionals, and will solve build
-> failures on other architectures than just nios2.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/d15dc78cdd74b51b551512ce1ba88e4d61219e86/ (xtensa)
->   http://autobuild.buildroot.net/results/8244e3fdda52d3f4f24d7199e8855c99a2a7b4b1/ (arc)
->   http://autobuild.buildroot.net/results/badb9ec391f9f0438d593a2768f2f6c6a873c021/ (microblaze)
-> 
-> This commit has been built tested with all the external toolchains used
-> in the autobuilders.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/jack2/0001-Add-support-for-nios2.patch     | 34 ---------
->  .../jack2/0001-Improve-check-for-ucontext.patch    | 84 ++++++++++++++++++++++
->  2 files changed, 84 insertions(+), 34 deletions(-)
->  delete mode 100644 package/jack2/0001-Add-support-for-nios2.patch
->  create mode 100644 package/jack2/0001-Improve-check-for-ucontext.patch
+When SELinux support is enabled, the login pam file installed by
+linux-pam should be adjusted to use the pam_selinux.so module.
 
-Since the patch has been applied upstream, and nobody objected, I
-applied this patch to master.
+To achieve this in a reasonably simple manner, we introduce the SELinux
+related lines in login.pam as comments, and if SELinux support is
+enabled, turn those commented lines into real lines.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-pam/linux-pam.mk | 5 +++++
+ package/linux-pam/login.pam    | 2 ++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index 6ce3839..c8ba30f 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -29,6 +29,10 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ LINUX_PAM_CONF_OPTS += --enable-selinux
+ LINUX_PAM_DEPENDENCIES += libselinux
++define LINUX_PAM_SELINUX_PAMFILE_TWEAK
++	$(SED) 's/^# \(.*pam_selinux.so.*\)$$/\1/' \
++		$(TARGET_DIR)/etc/pam.d/login
++endef
+ else
+ LINUX_PAM_CONF_OPTS += --disable-selinux
+ endif
+@@ -46,6 +50,7 @@ define LINUX_PAM_INSTALL_CONFIG
+ 		$(TARGET_DIR)/etc/pam.d/login
+ 	$(INSTALL) -m 0644 -D package/linux-pam/other.pam \
+ 		$(TARGET_DIR)/etc/pam.d/other
++	$(LINUX_PAM_SELINUX_PAMFILE_TWEAK)
+ endef
+ 
+ LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_INSTALL_CONFIG
+diff --git a/package/linux-pam/login.pam b/package/linux-pam/login.pam
+index 01f5632..5df7db6 100644
+--- a/package/linux-pam/login.pam
++++ b/package/linux-pam/login.pam
+@@ -4,7 +4,9 @@ account		required	pam_unix.so
+ 
+ password	required	pam_unix.so nullok
+ 
++# session	required	pam_selinux.so close
+ session		required	pam_limits.so
+ session		required	pam_env.so
+ session		required	pam_unix.so
+ session		optional	pam_lastlog.so
++# session	required	pam_selinux.so open
