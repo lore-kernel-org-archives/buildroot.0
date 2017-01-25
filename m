@@ -1,7 +1,7 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 25 Jan 2017 11:26:01 -0500
-Subject: [Buildroot] [PATCH 1/1] python-mutagen: new package
-Message-ID: <20170125162601.24034-1-aduskett@codeblue.com>
+Date: Wed, 25 Jan 2017 11:26:10 -0500
+Subject: [Buildroot] [V4 1/1] python-mutagen: new package
+Message-ID: <20170125162610.24101-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
