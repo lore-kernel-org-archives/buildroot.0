@@ -1,48 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jan 2017 07:28:03 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] wireshark: security bump
-	to version 2.2.4
-Message-ID: <20170125064905.CD38181EC1@busybox.osuosl.org>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Wed, 25 Jan 2017 20:13:02 +1300
+Subject: [Buildroot] [PATCH 2/3] micropython-lib: depend on pcre
+In-Reply-To: <20170125095450.2cb6aea4@free-electrons.com>
+References: <20170124101423.11479-1-judge.packham@gmail.com>
+ <20170124101423.11479-2-judge.packham@gmail.com>
+ <20170125095450.2cb6aea4@free-electrons.com>
+Message-ID: <CAFOYHZCU0__+T+B2+u26Fm5rrpP+QJqVPAkS27PEqbemHS7sDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e08b1f94841f30302c7ae433bea0f8cf0f6d1f61
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+On Wed, Jan 25, 2017 at 9:54 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 24 Jan 2017 23:14:22 +1300, Chris Packham wrote:
+>> The micropython libs load libpcre dynamically using the foreign function
+>> interface (libffi). Without pcre the build will succeed but at run time
+>> anything that uses the 're' module will have issues.
+>
+> If it's only a runtime dependency, then why do you have
+> "MICROPYTHON_LIBS_DEPENDENCIES = pcre" ? Selecting it in Config.in is
+> sufficient to ensure that it will be built "at some point" during the
+> build. In such cases, we normally do just:
+>
+>         select BR2_PACKAGE_PCRE # runtime
+>
+> and that's it.
 
-Fixes:
-wnpa-sec-2017-01 - The ASTERIX dissector could go into an infinite loop.
-wnpa-sec-2017-02 - The DHCPv6 dissector could go into a large loop.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2515437e51036f0ad2d89ca16d07cd5b022fdbe9)
----
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index c6d398a..e3eeef3 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.3.txt
--sha256 97bac89e88892054a5848a9f7e0c36aa399a2008900829b078e29cab0ddd593b  wireshark-2.2.3.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.4.txt
-+sha256 42a7fb35eed5a32478153e24601a284bb50148b7ba919c3e8452652f4c2a3911  wireshark-2.2.4.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 07a3044..edd830d 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 2.2.3
-+WIRESHARK_VERSION = 2.2.4
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+Good point. I didn't look for any other examples of runtime
+dependencies. As Peter has already applied this one I'll send another
+to clarify that this is a runtime dependency and not a build time one.
