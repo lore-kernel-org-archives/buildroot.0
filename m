@@ -1,65 +1,31 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 25 Jan 2017 22:48:13 +0100
-Subject: [Buildroot] [PATCH] configs: add Qemu nios2 defconfig
-Message-ID: <20170125214813.28226-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Jan 2017 11:01:22 +1300
+Subject: [Buildroot] [PATCH 1/1] ucl: Use -std=iso9899:1990 instead of
+ -std=c90
+In-Reply-To: <20170125192020.27140-1-stilor@att.net>
+References: <20170125192020.27140-1-stilor@att.net>
+Message-ID: <20170126110122.1f420135@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested with Qemu the latest master (upcoming 2.9 release)
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
----
-Tested with the codesourcery Nios2 prebuild toolchain and internal
-toolchain.
----
- board/qemu/nios2-10m50/linux-4.9.fragment | 3 +++
- board/qemu/nios2-10m50/readme.txt         | 9 +++++++++
- configs/qemu_nios2_10m50_defconfig        | 7 +++++++
- 3 files changed, 19 insertions(+)
- create mode 100644 board/qemu/nios2-10m50/linux-4.9.fragment
- create mode 100644 board/qemu/nios2-10m50/readme.txt
- create mode 100644 configs/qemu_nios2_10m50_defconfig
+On Wed, 25 Jan 2017 11:20:20 -0800, Alexey Neyman wrote:
+> The shorter alias, -std=c90, is not known by older versions of GCC.
+> See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=20631.
+> 
+> Signed-off-by: Alexey Neyman <stilor@att.net>
 
-diff --git a/board/qemu/nios2-10m50/linux-4.9.fragment b/board/qemu/nios2-10m50/linux-4.9.fragment
-new file mode 100644
-index 0000000..72ffcd3
---- /dev/null
-+++ b/board/qemu/nios2-10m50/linux-4.9.fragment
-@@ -0,0 +1,3 @@
-+# Embed the DTB in the kernel image
-+CONFIG_NIOS2_DTB_SOURCE_BOOL=y
-+CONFIG_NIOS2_DTB_SOURCE="arch/nios2/boot/dts/10m50_devboard.dts"
-diff --git a/board/qemu/nios2-10m50/readme.txt b/board/qemu/nios2-10m50/readme.txt
-new file mode 100644
-index 0000000..978ba95
---- /dev/null
-+++ b/board/qemu/nios2-10m50/readme.txt
-@@ -0,0 +1,9 @@
-+Run the emulation with:
-+
-+  qemu-system-nios2 -kernel output/images/vmlinux -nographic
-+
-+The login prompt will appear in the terminal that started Qemu.
-+
-+Tested with the upcoming QEMU 2.9.0 [1]
-+
-+[1] http://git.qemu.org/?p=qemu.git;h=ae5045ae5b2bbd8ce1335d1b05f9ecacca83a6cf
-diff --git a/configs/qemu_nios2_10m50_defconfig b/configs/qemu_nios2_10m50_defconfig
-new file mode 100644
-index 0000000..d6b3e1f
---- /dev/null
-+++ b/configs/qemu_nios2_10m50_defconfig
-@@ -0,0 +1,7 @@
-+BR2_nios2=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.5"
-+BR2_LINUX_KERNEL_DEFCONFIG="10m50"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/nios2-10m50/linux-4.9.fragment"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
+Thanks for the patch. Is this fixing a specific autobuilder issue? In
+which situation have you seen the failure?
+
+Thanks,
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
