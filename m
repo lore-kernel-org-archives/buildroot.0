@@ -1,67 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jan 2017 16:44:37 +1300
-Subject: [Buildroot] [git commit] package/libasplib: bump version
-Message-ID: <20170125034447.7ABA481EA5@busybox.osuosl.org>
+Date: Wed, 25 Jan 2017 16:44:42 +1300
+Subject: [Buildroot] [git commit] package/libasplib: fix build error on m68k
+Message-ID: <20170125034447.86DEB7FE9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f1c60326f3b6afdb297403889a1be70d85bc24d
+commit: https://git.buildroot.net/buildroot/commit/?id=336c2a4db0331fd2bfc8a2798337d9c58d4cbc1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libasplib now contains modules, we enable only those for the moment
-which do not need external dependencies. We are not in a hurry to fully
-support all features of this package because the upcoming Kodi release
-17.x-Krypton will not carry any ADSP add-ons:
-https://github.com/xbmc/repo-binary-addons/commit/db3b767309df25daae4f01f01dba85ca7b3464b0
+Patch written by Waldemar Brodkorb:
+http://lists.busybox.net/pipermail/buildroot/2016-November/177726.html
 
--DASPLIB_MODULES_TO_BUILD=some looks hackish because the default is to
-enable all modules:
-https://github.com/AchimTuran/asplib/blob/master/CMakeLists.txt#L35
+This patch however did not work: "Unfortunately libasplib cmake
+infrastructure ignores my CMAKE_CXX_FLAGS."
 
-But -DASPLIB_MODULES_TO_BUILD=OFF does not disable the build of all
-modules as well because of
-https://github.com/AchimTuran/asplib/blob/master/asplib_modules/CMakeLists.txt#L19
-so I added "some" as fake value.
+To make this patch work libasplib needed to be bumped because the cmake
+infrastructure was updated back in August 2016 which fixed the problem:
+https://github.com/AchimTuran/asplib/commit/6326d1f5e8dad9fd9947b7f4688ddddda91e9e9e
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libasplib/libasplib.hash |  2 +-
- package/libasplib/libasplib.mk   | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ package/libasplib/libasplib.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libasplib/libasplib.hash b/package/libasplib/libasplib.hash
-index bbd027d..76534e5 100644
---- a/package/libasplib/libasplib.hash
-+++ b/package/libasplib/libasplib.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ccc2718c79a8d684317cc1987ede88b198e1602df47d0f18f03d474eda00af9c libasplib-f7219142e790a329b002a94f3db943abcb183739.tar.gz
-+sha256 68e117348fa17592dde7672477e927119a0e477103ced1d3a57d92e30880a147  libasplib-be7fac89218a84b75f7598e3d76625ece99296f2.tar.gz
 diff --git a/package/libasplib/libasplib.mk b/package/libasplib/libasplib.mk
-index 41aeaeb..038fc38 100644
+index 038fc38..b3b1fdb 100644
 --- a/package/libasplib/libasplib.mk
 +++ b/package/libasplib/libasplib.mk
-@@ -4,10 +4,18 @@
- #
- ################################################################################
+@@ -18,4 +18,11 @@ LIBASPLIB_CONF_OPTS = \
+ 	-DBUILD_SIGNALS=ON \
+ 	-DBUILD_TIMER=ON
  
--LIBASPLIB_VERSION = f7219142e790a329b002a94f3db943abcb183739
-+LIBASPLIB_VERSION = be7fac89218a84b75f7598e3d76625ece99296f2
- LIBASPLIB_SITE = $(call github,AchimTuran,asplib,$(LIBASPLIB_VERSION))
- LIBASPLIB_LICENSE = GPLv3+
- LIBASPLIB_LICENSE_FILES = LICENSE
- LIBASPLIB_INSTALL_STAGING = YES
- 
-+LIBASPLIB_CONF_OPTS = \
-+	-DASPLIB_MODULES_TO_BUILD=some \
-+	-DBUILD_BIQUAD=ON \
-+	-DBUILD_IIR=ON \
-+	-DBUILD_LOGGER=ON \
-+	-DBUILD_SIGNALS=ON \
-+	-DBUILD_TIMER=ON
++# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
++ifeq ($(BR2_m68k_cf),y)
++LIBASPLIB_CXXFLAGS += -fno-dwarf2-cfi-asm
++endif
++
++LIBASPLIB_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(LIBASPLIB_CXXFLAGS)"
 +
  $(eval $(cmake-package))
