@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jan 2017 14:13:15 +1300
-Subject: [Buildroot] [git commit] DEVELOPERS: add Lionel Flandrin
-Message-ID: <20170125011321.258E27FB4A@busybox.osuosl.org>
+Date: Wed, 25 Jan 2017 14:21:19 +1300
+Subject: [Buildroot] [PATCH 1/3] python-babel: new package
+In-Reply-To: <20170124144347.19723-1-lionel@svkt.org>
+References: <20170124144347.19723-1-lionel@svkt.org>
+Message-ID: <20170125142119.18c29014@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f604cad2d91aa0a1c0c7daf6d8439c2c4c6e056
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Developper for package/python-babel and package/python-flask-babel.
+On Tue, 24 Jan 2017 15:43:45 +0100, Lionel Flandrin wrote:
+> A collection of tools for internationalizing Python applications.
+> 
+> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+> ---
+>  package/Config.in                      |  1 +
+>  package/python-babel/Config.in         |  8 ++++++++
+>  package/python-babel/python-babel.hash |  3 +++
+>  package/python-babel/python-babel.mk   | 14 ++++++++++++++
+>  4 files changed, 26 insertions(+)
+>  create mode 100644 package/python-babel/Config.in
+>  create mode 100644 package/python-babel/python-babel.hash
+>  create mode 100644 package/python-babel/python-babel.mk
 
-Signed-off-by: Lionel Flandrin <lionel@svkt.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+All three patches applied to master. Thanks for the patches, and thanks
+Yegor for the review!
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a8e7e13..00b1004 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -914,6 +914,10 @@ F:	package/aircrack-ng/
- N:	Lee Jones <lee.jones@linaro.org>
- F:	boot/afboot-stm32/
- 
-+N:	Lionel Flandrin <lionel@svkt.org>
-+F:	package/python-babel/
-+F:	package/python-flask-babel/
-+
- N:	Lionel Orry <lionel.orry@gmail.com>
- F:	package/mongrel2/
- 
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
