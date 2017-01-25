@@ -1,55 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jan 2017 09:44:17 +0100
-Subject: [Buildroot] Buildroot 2016.11.2 released
-Message-ID: <87d1fbh6la.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Jan 2017 09:50:33 +0100
+Subject: [Buildroot] [git commit] Update for 2016.11.2
+Message-ID: <20170125085127.A153E81F15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=8847039f64a790298163de7769350bae292af37a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.net).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Peter: drop Makefile changes]
+(cherry picked from commit b8e588e623868d6ab239786b4cf486e1defc9c1c)
+---
+ CHANGES | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Buildroot 2016.11.2 is released - Go download it at:
-
-http://buildroot.net/downloads/buildroot-2016.11.2.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2016.11.2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Buildroot 2016.11.2 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2016.11.1 release.
-
-- Fixes for compilation/runtime issues in docker-engine, musl and runc.
-
-- Security fixes for bind, docker-engine, gd, gnutls, go, imagemagick,
-  irssi, libpng, libvncserver, musl, opus, php, rabbitmq-server, runc
-  and wireshark.
-
-- A fix for BR2_EXTERNAL trees referenced using relative paths,
-  which broke in 2016.11.
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2016.11.1..
-    10  Peter Korsgaard
-     6  Gustavo Zacarias
-     3  Vicente Olivert Riera
-     2  Christian Stewart
-     1  Baruch Siach
-     1  Bernd Kuhls
-     1  Fabrice Fontaine
-     1  Yann E. MORIN
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index 8dee2f5..ec749a1 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,18 @@
++2016.11.2, Released January 25th, 2017
++
++	Important / security related fixes.
++
++	A fix for BR2_EXTERNAL trees referenced using relative paths,
++	which broke in 2016.11.
++
++	Updated/fixed packages: bind, docker-engine, gd, gnutls, go,
++	imagemagick, irssi, libpng, libvncserver, musl, opus, php,
++	php-imagick, rabbitmq-server, runc, wireshark,
++
++	Issues resolved (http://bugs.buildroot.org):
++
++	#9576: External tree with BR 2016.11 does not work anymore
++
+ 2016.11.1, Released December 29th, 2016
+ 
+ 	Important / security related fixes.
