@@ -1,75 +1,52 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 25 Jan 2017 21:29:15 +0100
-Subject: [Buildroot] [PATCH] package/mediastreamer: fix build by bumping to
-	version 2.14.0
-Message-ID: <20170125202915.8084-1-joerg.krause@embedded.rocks>
+From: Ted Victorio <tvan5bee@yahoo.com>
+Date: Wed, 25 Jan 2017 20:31:44 +0000 (UTC)
+Subject: [Buildroot] Eclipse/Buildroot toolchain: make: *** [hello.o] Error 1
+References: <1098752994.802685.1485376304266.ref@mail.yahoo.com>
+Message-ID: <1098752994.802685.1485376304266@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current available version 2.12.1 of mediastreamer does not compile with the
-latest version 0.27 of oRTP, which was recently updated in Buildroot in [1].
-Bump mediastreamer to latest version 2.14.0 to fix the incompatibility:
+Hi all,
 
-```
-base/msfactory.c:169:3: error: too few arguments to function 'ortp_set_log_level_mask'
-   ortp_set_log_level_mask(ORTP_MESSAGE|ORTP_WARNING|ORTP_ERROR|ORTP_FATAL);
-```
+I've installed the following:- sudo apt-get install build-essential autotools-dev autoconf automake make
+- buildroot-2016.11.tar.gz was installed with External toolchain toolchain (LINARO_ARM)
+    In  Toolchain -> Copy gdb server to the Target.
+                  -> Register toolchain within Eclipse Buildroot plug-in
+        Build options -> "build packages with debugging symbols"
 
-Note that we need to fetch a patch from upstream to fix the build with
-the bctoolbox version 0.4.0.
+- eclipse-cpp-luna-SR2-linux-gtk.tar.gz
+- openjdk-7-jre
+- Eclipse Luna - buildroot : http://buildroot.org/downloads/eclipse/luna 
 
-Fixes:
-http://autobuild.buildroot.net/results/9aa/9aa3cdad6e22ad1656eec59fc92fb7cb79afc4cd/
-http://autobuild.buildroot.net/results/09e/09e8fabb72cafa284419f096da95299c51c03899/
-http://autobuild.buildroot.net/results/29c/29c8ddd25c76f4c5b74f31a576c7ace9f76677db/
-.. and some more.
+I followed steps to activate and install the Buildroot Eclipse plugin
+(https://github.com/mbats/eclipse-buildroot-bundle/wiki/Tutorial-:-How-to-activate-and-install-the-Buildroot-Eclipse-plugin-%3F)
 
-[1] http://patchwork.ozlabs.org/patch/718277/
+I created a new C project using the Buildroot toolchain 
+(https://github.com/mbats/eclipse-buildroot-bundle/wiki/Tutorial-:-How-to-create-a-new-C-project-using-the-Buildroot-toolchain-%3F)
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mediastreamer/mediastreamer.hash | 3 ++-
- package/mediastreamer/mediastreamer.mk   | 9 ++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
-index 21964a864..0f1ac77ce 100644
---- a/package/mediastreamer/mediastreamer.hash
-+++ b/package/mediastreamer/mediastreamer.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	0dbf8d4f721a04db9ec0982e98a4e852ad2d3acbcbd25edd96a66164a980f2e7	mediastreamer-2.12.1.tar.gz
-+sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
-+sha256  90091ab0aa7a77381ab1ca5d88cdfa4e7f62505fb452a2bea0f70054d9d1aece  26f884bf977977041fe6f98a0af186be1580bf22.patch
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index a12bfb4b2..6e05afc54 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEDIASTREAMER_VERSION = 2.12.1
-+MEDIASTREAMER_VERSION = 2.14.0
- MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
- MEDIASTREAMER_INSTALL_STAGING = YES
- MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext
-@@ -13,6 +13,13 @@ MEDIASTREAMER_CONF_OPTS = --disable-tests --disable-glx --disable-strict
- MEDIASTREAMER_LICENSE = GPLv2+
- MEDIASTREAMER_LICENSE_FILES = COPYING
- 
-+# fix compilation issue with latest bctoolbox (touches configure.ac)
-+MEDIASTREAMER_PATCH = \
-+	https://github.com/BelledonneCommunications/mediastreamer2/commit/26f884bf977977041fe6f98a0af186be1580bf22.patch
-+
-+# patching configure.ac
-+MEDIASTREAMER_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
- MEDIASTREAMER_CONF_OPTS += --enable-alsa
- MEDIASTREAMER_DEPENDENCIES += alsa-lib
--- 
-2.11.0
+    When I created new C test project, I do see the Buildroot ARM toolchains:
+    The PATH is pointing to the correct location
+        PATH: /home/test/Downloads/buildroot-2016.11/output/host/usr/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+
+When Build the project, this error occurs:
+    make: *** [hello.o] Error 1        test   C/C++ Problem
+
+Please advise. Thank you very much.
+Ted    
+
+
+--------------------------------------------------------------------------------
+test project:
+hello.c:
+
+#include <stdio.h>
+
+int main()
+{
+    printf("\n..hello..\n");
+    return 0;
+}
