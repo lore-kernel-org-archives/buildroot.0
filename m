@@ -1,43 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jan 2017 22:27:00 +0100
-Subject: [Buildroot] [PATCH] package/mediastreamer: fix build by bumping
-	to version 2.14.0
-In-Reply-To: <20170125202915.8084-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Wed, 25 Jan 2017 21:29:15 +0100")
-References: <20170125202915.8084-1-joerg.krause@embedded.rocks>
-Message-ID: <87r33qg7a3.fsf@dell.be.48ers.dk>
+Date: Wed, 25 Jan 2017 22:31:30 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain/wrapper: fix building without
+	glibc
+In-Reply-To: <20161231225649.x6lp2l6oavetrbth@sapphire.tkos.co.il> (Baruch
+ Siach's message of "Sun, 1 Jan 2017 00:56:50 +0200")
+References: <20161231153017.10545-1-marcinch7@gmail.com>
+ <20161231225649.x6lp2l6oavetrbth@sapphire.tkos.co.il>
+Message-ID: <87bmuug72l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The current available version 2.12.1 of mediastreamer does not compile with the
- > latest version 0.27 of oRTP, which was recently updated in Buildroot in [1].
- > Bump mediastreamer to latest version 2.14.0 to fix the incompatibility:
+ > Hi Marcin,
+ > On Sat, Dec 31, 2016 at 04:30:17PM +0100, Marcin Chojnacki wrote:
+ >> toolchain-wrapper.c now uses program_invocation_short_name, which is
+ >> a glibc specific extension. This causes build to fail when using a
+ >> system with libc different than glibc (musl, BSD libc, etc.)
+ >> 
+ >> This change makes toolchain-wrapper.c portable, by setting it's value
+ >> to getprogname() when __GLIBC__ is not defined, and thus makes running
+ >> buildroot possible on glibc-less systems.
 
- > ```
- > base/msfactory.c:169:3: error: too few arguments to function 'ortp_set_log_level_mask'
- >    ortp_set_log_level_mask(ORTP_MESSAGE|ORTP_WARNING|ORTP_ERROR|ORTP_FATAL);
- > ```
+ > getprogname() is BSD specific[1]. None of the major Linux libcs (glibc, 
+ > uclibc-ng, musl) provide it.
 
- > Note that we need to fetch a patch from upstream to fix the build with
- > the bctoolbox version 0.4.0.
+ > [1] https://www.freebsd.org/cgi/man.cgi?query=getprogname&sektion=3
 
- > Fixes:
- > http://autobuild.buildroot.net/results/9aa/9aa3cdad6e22ad1656eec59fc92fb7cb79afc4cd/
- > http://autobuild.buildroot.net/results/09e/09e8fabb72cafa284419f096da95299c51c03899/
- > http://autobuild.buildroot.net/results/29c/29c8ddd25c76f4c5b74f31a576c7ace9f76677db/
- > .. and some more.
-
- > [1] http://patchwork.ozlabs.org/patch/718277/
-
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-
-Committed, thanks.
+Out of interest, what system are you trying to use Buildroot on? A BSD
+variant? I would imagine a number of other things breaking on !Linux
+systems.
 
 -- 
 Bye, Peter Korsgaard
