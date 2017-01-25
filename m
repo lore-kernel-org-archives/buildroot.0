@@ -1,48 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jan 2017 11:44:31 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x]
-	package/x11r7/xlib_libXpm: bump version to 3.5.12
-Message-ID: <20170125104623.C2FA7803FC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Jan 2017 23:46:54 +1300
+Subject: [Buildroot] [PATCH v2] udpxy: new package
+In-Reply-To: <1483371929-13907-8-git-send-email-david.bachelart@bbright.com>
+References: <1483371929-13907-1-git-send-email-david.bachelart@bbright.com>
+ <1483371929-13907-8-git-send-email-david.bachelart@bbright.com>
+Message-ID: <20170125234654.5cc128df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d09bfa43f26930566e4dc704c03b5e2599e33af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+Hello,
 
-Fixes CVE-2016-10164: The affected code is prone to two 32 bit integer
-overflows while parsing extensions: the amount of extensions and their
-concatenated length.
+On Mon,  2 Jan 2017 16:45:29 +0100, David Bachelart wrote:
+> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
+> ---
+> Changes v1 -> v2:
+>   - Fix url in mk file (trailing slash)
+> ---
+>  package/Config.in        |  1 +
+>  package/udpxy/Config.in  |  8 ++++++++
+>  package/udpxy/udpxy.hash |  4 ++++
+>  package/udpxy/udpxy.mk   | 24 ++++++++++++++++++++++++
+>  4 files changed, 37 insertions(+)
+>  create mode 100644 package/udpxy/Config.in
+>  create mode 100644 package/udpxy/udpxy.hash
+>  create mode 100644 package/udpxy/udpxy.mk
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit e9f66e194a43e9dac4a8c88bcb5b3253845cd805)
----
- package/x11r7/xlib_libXpm/xlib_libXpm.hash | 4 ++--
- package/x11r7/xlib_libXpm/xlib_libXpm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thanks for the patch. I've applied to Buildroot, with the following
+changes:
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.hash b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-index 22c9fc6..d94a902 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-September/056010.html
--sha256	c5bdafa51d1ae30086fac01ab83be8d47fe117b238d3437f8e965434090e041c	libXpm-3.5.11.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-December/002752.html
-+sha256 fd6a6de3da48de8d1bb738ab6be4ad67f7cb0986c39bd3f7d51dd24f7854bdec  libXpm-3.5.12.tar.bz2
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 997ef95..c8c5496 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXPM_VERSION = 3.5.11
-+XLIB_LIBXPM_VERSION = 3.5.12
- XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.bz2
- XLIB_LIBXPM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
+    [Thomas:
+     - keep only sha256 hash, not needed to have md5 and sha1 when sha256 is
+       provided
+     - add BR2_USE_MMU dependency, since the program uses fork()
+     - remove UDPXY_MAKE_OPTS, and use the appropriate options during the
+       build and install steps directly
+     - use TARGET_MAKE_ENV in the build and install steps]
+
+Also, I've committed a change to the DEVELOPERS file that adds you as a
+contact for this package.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
