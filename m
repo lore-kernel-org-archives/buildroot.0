@@ -1,46 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Jan 2017 12:59:21 +1300
-Subject: [Buildroot] [PATCH 1/2] python-flask: bump to version 0.12
-In-Reply-To: <20170125145021.5a2sw6ha7yewpkqw@ed>
-References: <20170125091854.2kwm43d3ncxbfdhp@ed>
- <CAGm1_kv4xehMCtxw+VG2ccHS7F8WsOzwQYrxSq+CVPk02mXGRA@mail.gmail.com>
- <20170125095858.x6lh5xjwby5lav3m@ed>
- <CAGm1_ku-nNH0va1aACBvcea6ypYg6R_U7jjAzOktxav0cBvjjA@mail.gmail.com>
- <20170125102228.ykcq4xsa5xnp7yar@ed>
- <CAGm1_ksjuWGAFNX+HggMp1QaOoUAdBPkwV78+EPY1oq18qVEtQ@mail.gmail.com>
- <20170125121659.5eaex6iynmrbrxb4@ed>
- <CAGm1_kv15AZWDZC82Zup4JMd+RrMjxe4Qn=Hrhu27jM_RB5VHg@mail.gmail.com>
- <20170125130241.5jwsxvs67a5qd2xc@ed>
- <CAGm1_ksOzrvqpvf6=-A5tiezcKhZuo5-PK+UpzmhNLKNp-_Rvw@mail.gmail.com>
- <20170125145021.5a2sw6ha7yewpkqw@ed>
-Message-ID: <20170126125921.66cc8f8e@free-electrons.com>
+From: Alexey Neyman <stilor@att.net>
+Date: Wed, 25 Jan 2017 15:56:06 -0800
+Subject: [Buildroot] [PATCH 1/1] ucl: Use -std=iso9899:1990 instead of
+ -std=c90
+In-Reply-To: <20170126110122.1f420135@free-electrons.com>
+References: <20170125192020.27140-1-stilor@att.net>
+ <20170126110122.1f420135@free-electrons.com>
+Message-ID: <5e956d07-4799-a49b-f813-e92318e1f872@att.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 01/25/2017 02:01 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Wed, 25 Jan 2017 11:20:20 -0800, Alexey Neyman wrote:
+>> The shorter alias, -std=c90, is not known by older versions of GCC.
+>> See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=20631.
+>>
+>> Signed-off-by: Alexey Neyman <stilor@att.net>
+> Thanks for the patch. Is this fixing a specific autobuilder issue? In
+> which situation have you seen the failure?
+Issue observed on a CentOS6.x build machine, which has GCC 4.4. The 
+--std=c90 appeared in 4.5.
 
-On Wed, 25 Jan 2017 15:50:21 +0100, Lionel Flandrin wrote:
-
-> I'll test your patch ASAP but regarding mitsuhiko's comment in the
-> github issue:
-> 
->   @thmo these files are not imported so that is not an
->   issue. Bytecompilation is supposed to skip over files it cannot byte
->   compile as a result of this. pip does this correctly.
-> 
-> Doesn't this mean that it'd be better to patch buildroot's bytecompile
-> code to gracefully handle this situation by mimicking pip's behaviour
-> in this situation?
-
-I think it was on purpose that our byte compilation process actually
-aborts when there is a failure. Otherwise real issues remain unnoticed.
-I believe this pip behavior is actually pretty terrible.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Regards,
+Alexey.
