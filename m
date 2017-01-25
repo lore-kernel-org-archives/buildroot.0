@@ -1,41 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jan 2017 14:37:43 +1300
-Subject: [Buildroot] [PATCH 1/2] Add BR2_CMAKE_USE_NINJA_BACKEND option
-In-Reply-To: <20170106223748.2203-1-cedric.marie@openmailbox.org>
-References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
-Message-ID: <20170125143743.0df51d6d@free-electrons.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 24 Jan 2017 21:10:18 -0600
+Subject: [Buildroot] [PATCH 1/1] e2fsprogs: Fix debugfs ls -p option
+Message-ID: <1485313818-842-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-On Fri,  6 Jan 2017 23:37:47 +0100, C?dric Marie wrote:
->  $(2)_CONF_ENV			?=
->  $(2)_CONF_OPTS			?=
-> +$(2)_INSTALL_STAGING_ENV	?= DESTDIR=$$(STAGING_DIR)
-> +$(2)_INSTALL_TARGET_ENV		?= DESTDIR=$$(TARGET_DIR)
+The debugfs "ls -p" option can print out invalid characters that the
+other ls options do not print out. This patch fixes the issue by
+utilizing the same file name print function that the other ls options
+use.
 
-We don't have such options in any other package infrastructure. So I
-think I'd prefer if you kept just INSTALL_STAGING_OPTS and
-INSTALL_TARGET_OPTS, and define them to the appropriate value depending
-on whether you're using Ninja or Make.
+Upstream: https://patchwork.ozlabs.org/patch/707942/
 
-Are there any existing CMake package that overrides
-INSTALL_STAGING_OPTS or INSTALL_TARGET_OPTS ? If that's the case, then
-we cannot change its semantic like this without taking care of those
-packages first.
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ ...debugfs-ls-p-can-print-invalid-characters.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/e2fsprogs/0003-debugfs-ls-p-can-print-invalid-characters.patch
 
-But as I said in my other reply on this thread, I'd really like to get
-some justification of why adding support for the Ninja backend is
-useful.
-
-Thanks!
-
-Thomas
+diff --git a/package/e2fsprogs/0003-debugfs-ls-p-can-print-invalid-characters.patch b/package/e2fsprogs/0003-debugfs-ls-p-can-print-invalid-characters.patch
+new file mode 100644
+index 0000000..7930d3f
+--- /dev/null
++++ b/package/e2fsprogs/0003-debugfs-ls-p-can-print-invalid-characters.patch
+@@ -0,0 +1,34 @@
++From bbe22bbb4b46b70cea9eb368fd15b6f651c8ddce Mon Sep 17 00:00:00 2001
++From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++Date: Thu, 15 Dec 2016 08:40:21 -0600
++Subject: [PATCH] debugfs: ls -p can print invalid characters
++
++The recent modification to the "ls -p" function can print out characters
++that the other ls functions do not print out. Adding a slight change to
++use the same print function for all of the ls options.
++
++Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
++---
++ debugfs/ls.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/debugfs/ls.c b/debugfs/ls.c
++index 057e3f6..cb40627 100644
++--- a/debugfs/ls.c
+++++ b/debugfs/ls.c
++@@ -122,8 +122,10 @@ static int list_dir_proc(ext2_ino_t dir EXT2FS_ATTR((unused)),
++ 				return 0;
++ 		} else
++ 			memset(&inode, 0, sizeof(struct ext2_inode));
++-		fprintf(ls->f,"/%u/%06o/%d/%d/%*s/", ino, inode.i_mode,
++-			inode.i_uid, inode.i_gid, thislen, dirent->name);
+++		fprintf(ls->f,"/%u/%06o/%d/%d/", ino, inode.i_mode,
+++			inode.i_uid, inode.i_gid);
+++		print_filename(ls->f, dirent, options);
+++		fputc('/', ls->f);
++ 		if (LINUX_S_ISDIR(inode.i_mode))
++ 			fprintf(ls->f, "/");
++ 		else
++-- 
++1.9.1
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.9.1
