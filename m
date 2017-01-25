@@ -1,96 +1,48 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 25 Jan 2017 09:09:04 -0500
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 25 Jan 2017 16:44:03 +0200
 Subject: [Buildroot] [V2 1/1] sngrep: new package
-Message-ID: <20170125140904.26849-1-aduskett@codeblue.com>
+In-Reply-To: <20170125140904.26849-1-aduskett@codeblue.com>
+References: <20170125140904.26849-1-aduskett@codeblue.com>
+Message-ID: <20170125144403.bfj52rm3mmdjtd7n@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sngrep is a tool for displaying SIP calls message flows from terminal.
-It supports live capture to display realtime SIP packets and can also
-be used as PCAP viewer.
+Hi Adam,
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
----
-v1 - v2:
- - Added select BR2_PACKAGE_NCURSES_WCHAR.
- - Added select BR2_PACKAGE_NCURSES_TARGET_PANEL
- - Added select BR2_PACKAGE_NCURSES_TARGET_FORM
- - Added select BR2_PACKAGE_NCURSES_TARGET_MENU
- - Changed version downloaded to v1.4.2 (I didn't see the release tab!)
+On Wed, Jan 25, 2017 at 09:09:04AM -0500, Adam Duskett wrote:
+> diff --git a/package/sngrep/Config.in b/package/sngrep/Config.in
+> new file mode 100644
+> index 0000000..a976cea
+> --- /dev/null
+> +++ b/package/sngrep/Config.in
+> @@ -0,0 +1,17 @@
+> +comment "sngrep needs a toolchain w/ wchar, threads"
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 
- package/Config.in          |  1 +
- package/sngrep/Config.in   | 17 +++++++++++++++++
- package/sngrep/sngrep.hash |  1 +
- package/sngrep/sngrep.mk   | 14 ++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/sngrep/Config.in
- create mode 100644 package/sngrep/sngrep.hash
- create mode 100644 package/sngrep/sngrep.mk
+This comment does not match that actual dependencies below.
 
-diff --git a/package/Config.in b/package/Config.in
-index c7b6862..0572110 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1625,6 +1625,7 @@ endif
- 	source "package/shairport-sync/Config.in"
- 	source "package/shellinabox/Config.in"
- 	source "package/smcroute/Config.in"
-+	source "package/sngrep/Config.in"
- 	source "package/socat/Config.in"
- 	source "package/socketcand/Config.in"
- 	source "package/softether/Config.in"
-diff --git a/package/sngrep/Config.in b/package/sngrep/Config.in
-new file mode 100644
-index 0000000..a976cea
---- /dev/null
-+++ b/package/sngrep/Config.in
-@@ -0,0 +1,17 @@
-+comment "sngrep needs a toolchain w/ wchar, threads"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+
-+config BR2_PACKAGE_SNGREP
-+	bool "sngrep"
-+	select BR2_PACKAGE_NCURSES_WCHAR
-+	select BR2_PACKAGE_NCURSES_TARGET_PANEL
-+	select BR2_PACKAGE_NCURSES_TARGET_FORM
-+	select BR2_PACKAGE_NCURSES_TARGET_MENU
-+	depends on BR2_PACKAGE_LIBPCAP
-+	depends on BR2_PACKAGE_NCURSES
-+	help
-+	  sngrep is a tool for displaying SIP calls message flows from terminal.
-+	  It supports live capture to display realtime SIP packets and can also be 
-+	  used as PCAP viewer.
-+
-diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
-new file mode 100644
-index 0000000..dd75f89
---- /dev/null
-+++ b/package/sngrep/sngrep.hash
-@@ -0,0 +1 @@
-+sha256 30fbfb4f90ed8805194b39683a8a2ed465776ffd60df4482bd029d63b316b3f1 sngrep-v1.4.2.tar.gz
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-new file mode 100644
-index 0000000..c3d4ca5
---- /dev/null
-+++ b/package/sngrep/sngrep.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# sngrep
-+#
-+################################################################################
-+
-+SNGREP_VERSION = v1.4.2
-+SNGREP_SITE = $(call github,irontec,sngrep,$(SNGREP_VERSION))
-+SNGREP_LICENSE = GPLv3+
-+SNGREP_LICENSE_FILES = LICENSE
-+SNGREP_AUTORECONF = YES
-+SNGREP_DEPENDENCIES = libpcap ncurses
-+
-+$(eval $(autotools-package))
+> +
+> +
+
+Redundant empty line.
+
+> +config BR2_PACKAGE_SNGREP
+> +	bool "sngrep"
+> +	select BR2_PACKAGE_NCURSES_WCHAR
+> +	select BR2_PACKAGE_NCURSES_TARGET_PANEL
+> +	select BR2_PACKAGE_NCURSES_TARGET_FORM
+> +	select BR2_PACKAGE_NCURSES_TARGET_MENU
+> +	depends on BR2_PACKAGE_LIBPCAP
+> +	depends on BR2_PACKAGE_NCURSES
+
+These should be select.
+
+baruch
+
 -- 
-2.9.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
