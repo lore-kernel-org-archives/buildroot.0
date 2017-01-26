@@ -1,42 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Jan 2017 10:05:57 +0000
-Subject: [Buildroot] [Bug 9616] New: CMake host packages cannot provide
-	CONF_ENV
-Message-ID: <bug-9616-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 26 Jan 2017 07:36:01 -0300
+Subject: [Buildroot] [PATCH] graphite2: bump to version 1.3.9
+Message-ID: <20170126103601.11656-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9616
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/graphite2/graphite2.hash | 4 ++--
+ package/graphite2/graphite2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-            Bug ID: 9616
-           Summary: CMake host packages cannot provide CONF_ENV
-           Product: buildroot
-           Version: 2016.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ovalentin at awox.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-Created attachment 6871
-  --> https://bugs.busybox.net/attachment.cgi?id=6871&action=edit
-Add environment uppon configuration
-
-When building an host package, HOST_*_CONF_ENV is not installed in the
-environment during the configuration.
-
-Providing with a patch suggestion,
-
-thanks.
-
+diff --git a/package/graphite2/graphite2.hash b/package/graphite2/graphite2.hash
+index d22b67c..86be69e 100644
+--- a/package/graphite2/graphite2.hash
++++ b/package/graphite2/graphite2.hash
+@@ -1,3 +1,3 @@
+ # From http://sourceforge.net/projects/silgraphite/files/graphite2
+-md5	236d2cb1f831fe33083112afbb555f0e	graphite2-1.3.8.tgz
+-sha1	0c802628dacf3bfa2c1654d7d72b76e20e1adc97	graphite2-1.3.8.tgz
++md5	17e6a3b1a88c100c9e3fc0763c85d269	graphite2-1.3.9.tgz
++sha1	0693e9eef87edf1792db247dd38794211666a1b9	graphite2-1.3.9.tgz
+diff --git a/package/graphite2/graphite2.mk b/package/graphite2/graphite2.mk
+index d066a1c..5f6848f 100644
+--- a/package/graphite2/graphite2.mk
++++ b/package/graphite2/graphite2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRAPHITE2_VERSION = 1.3.8
++GRAPHITE2_VERSION = 1.3.9
+ GRAPHITE2_SOURCE = graphite2-$(GRAPHITE2_VERSION).tgz
+ GRAPHITE2_SITE = http://downloads.sourceforge.net/project/silgraphite/graphite2
+ GRAPHITE2_INSTALL_STAGING = YES
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.10.2
