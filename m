@@ -1,57 +1,43 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 26 Jan 2017 16:39:30 -0500
-Subject: [Buildroot] [V2 1/2] sngrep: fix dependency error.
-Message-ID: <20170126213931.9987-1-aduskett@codeblue.com>
+Date: Thu, 26 Jan 2017 16:43:09 -0500
+Subject: [Buildroot] [PATCH 1/1] openssl: bump to version 1.0.2k
+Message-ID: <20170126214309.12649-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sngrep will complain if libgcrypt isn't compiled. I am not sure
-how or why I didn't notice this issue to begin with, but
-I added it as a dependency and select it in the Config.in file now.
-I also added 'depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS' as per
-baruch's suggestion.
-
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
-v1 -> v2:
-  - Added 'depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS' to Config.in
-  - Split changes into two patches.
-  
- package/sngrep/Config.in | 2 ++
- package/sngrep/sngrep.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sngrep/Config.in b/package/sngrep/Config.in
-index 4d0d80c..fc27413 100644
---- a/package/sngrep/Config.in
-+++ b/package/sngrep/Config.in
-@@ -3,9 +3,11 @@ comment "sngrep needs a toolchain w/ threads"
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 0dc5450..064eeca 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2j.tar.gz.sha256
+-sha256	e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431	openssl-1.0.2j.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
++sha256	6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0	openssl-1.0.2k.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 814c435..1536982 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_SNGREP
- 	bool "sngrep"
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_LIBGCRYPT
- 	help
- 	  sngrep is a tool for displaying SIP calls message flows from
- 	  terminal.  It supports live capture to display realtime SIP
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index f504771..5b51762 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -9,7 +9,7 @@ SNGREP_SITE = $(call github,irontec,sngrep,$(SNGREP_VERSION))
- SNGREP_LICENSE = GPLv3+
- SNGREP_LICENSE_FILES = LICENSE
- SNGREP_AUTORECONF = YES
--SNGREP_DEPENDENCIES = libpcap ncurses
-+SNGREP_DEPENDENCIES = libpcap ncurses libgcrypt
- 
- # our ncurses wchar support is not properly detected
- SNGREP_CONF_OPTS += --disable-unicode
+-OPENSSL_VERSION = 1.0.2j
++OPENSSL_VERSION = 1.0.2k
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
 -- 
 2.9.3
