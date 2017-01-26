@@ -1,85 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Jan 2017 22:35:05 +0100
-Subject: [Buildroot] [git commit] board: raspberrypi: use regular kernel
-	image
-Message-ID: <20170126214426.32BD1820EE@busybox.osuosl.org>
+Date: Thu, 26 Jan 2017 22:34:36 +0100
+Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.2k
+Message-ID: <20170126214426.2325B820EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a09c1990808908416b6435e24a2ee10d7b3d7d3
+commit: https://git.buildroot.net/buildroot/commit/?id=f9a6a2df56012b2ee6d171ca9371910c668bfa78
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since release 4.4 a kernel without a trailer is assumed to be device tree
-capable. Since our Raspberry Pi defconfigs all use the newer firmware we can
-just use the regular kernel image.
+Fixes:
+CVE-2017-3731 - Truncated packet could crash via OOB read.
+CVE-2017-3732 - BN_mod_exp may produce incorrect results on x86_64
+CVE-2016-7055 - Montgomery multiplication may produce incorrect results
 
-https://www.raspberrypi.org/documentation/configuration/device-tree.md
-
-Tested on Raspberry Pi 3.
-
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/raspberrypi/genimage-raspberrypi.cfg  | 2 +-
- board/raspberrypi/genimage-raspberrypi0.cfg | 2 +-
- board/raspberrypi/genimage-raspberrypi2.cfg | 2 +-
- board/raspberrypi/genimage-raspberrypi3.cfg | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/raspberrypi/genimage-raspberrypi.cfg b/board/raspberrypi/genimage-raspberrypi.cfg
-index 74758f5..bd5166a 100644
---- a/board/raspberrypi/genimage-raspberrypi.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi.cfg
-@@ -9,7 +9,7 @@ image boot.vfat {
-       "rpi-firmware/config.txt",
-       "rpi-firmware/fixup.dat",
-       "rpi-firmware/start.elf",
--      "kernel-marked/zImage"
-+      "zImage"
-     }
-   }
-   size = 32M
-diff --git a/board/raspberrypi/genimage-raspberrypi0.cfg b/board/raspberrypi/genimage-raspberrypi0.cfg
-index a38840c..a9d4c45 100644
---- a/board/raspberrypi/genimage-raspberrypi0.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi0.cfg
-@@ -7,7 +7,7 @@ image boot.vfat {
-       "rpi-firmware/config.txt",
-       "rpi-firmware/fixup.dat",
-       "rpi-firmware/start.elf",
--      "kernel-marked/zImage"
-+      "zImage"
-     }
-   }
-   size = 32M
-diff --git a/board/raspberrypi/genimage-raspberrypi2.cfg b/board/raspberrypi/genimage-raspberrypi2.cfg
-index 443c821..a3be2a3 100644
---- a/board/raspberrypi/genimage-raspberrypi2.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi2.cfg
-@@ -7,7 +7,7 @@ image boot.vfat {
-       "rpi-firmware/config.txt",
-       "rpi-firmware/fixup.dat",
-       "rpi-firmware/start.elf",
--      "kernel-marked/zImage"
-+      "zImage"
-     }
-   }
-   size = 32M
-diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
-index baab0c4..3c9f1e5 100644
---- a/board/raspberrypi/genimage-raspberrypi3.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi3.cfg
-@@ -8,7 +8,7 @@ image boot.vfat {
-       "rpi-firmware/fixup.dat",
-       "rpi-firmware/start.elf",
-       "rpi-firmware/overlays",
--      "kernel-marked/zImage"
-+      "zImage"
-     }
-   }
-   size = 32M
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 0dc5450..064eeca 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2j.tar.gz.sha256
+-sha256	e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431	openssl-1.0.2j.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
++sha256	6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0	openssl-1.0.2k.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 814c435..1536982 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.2j
++OPENSSL_VERSION = 1.0.2k
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
