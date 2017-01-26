@@ -1,10 +1,10 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 26 Jan 2017 15:04:14 +0100
-Subject: [Buildroot] [PATCH v5 03/10] qt53d/qt5quickcontrols2/qt5serialbus :
-	move out of tech preview
+Date: Thu, 26 Jan 2017 15:04:13 +0100
+Subject: [Buildroot] [PATCH v5 02/10] qt5enginio : move into legacy
+	compatibility
 In-Reply-To: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
 References: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
-Message-ID: <1485439461-4797-4-git-send-email-anaumann@ultratronik.de>
+Message-ID: <1485439461-4797-3-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,33 @@ To: buildroot@busybox.net
 
 From: Julien Corjon <corjon.j@ecagroup.com>
 
-See http://blog.qt.io/blog/2016/06/16/qt-5-7-released/
+See https://wiki.qt.io/New_Features_in_Qt_5.7
 
 Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 ---
- package/qt5/Config.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/qt5/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index faa58d8..cff118d 100644
+index eb97fba..faa58d8 100644
 --- a/package/qt5/Config.in
 +++ b/package/qt5/Config.in
-@@ -44,6 +44,7 @@ config BR2_QT5_VERSION_5_6
- 
- endchoice
- 
-+source "package/qt5/qt53d/Config.in"
- source "package/qt5/qt5base/Config.in"
+@@ -48,7 +48,6 @@ source "package/qt5/qt5base/Config.in"
  source "package/qt5/qt5canvas3d/Config.in"
  source "package/qt5/qt5connectivity/Config.in"
-@@ -53,7 +54,9 @@ source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5declarative/Config.in"
+-source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
  source "package/qt5/qt5location/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
-+source "package/qt5/qt5quickcontrols2/Config.in"
- source "package/qt5/qt5sensors/Config.in"
-+source "package/qt5/qt5serialbus/Config.in"
- source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5tools/Config.in"
-@@ -61,10 +64,6 @@ source "package/qt5/qt5webchannel/Config.in"
- source "package/qt5/qt5websockets/Config.in"
- source "package/qt5/qt5x11extras/Config.in"
- source "package/qt5/qt5xmlpatterns/Config.in"
--comment "technology preview"
--source "package/qt5/qt53d/Config.in"
--source "package/qt5/qt5quickcontrols2/Config.in"
--source "package/qt5/qt5serialbus/Config.in"
+@@ -67,6 +66,7 @@ source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5quickcontrols2/Config.in"
+ source "package/qt5/qt5serialbus/Config.in"
  comment "legacy compatibility"
- source "package/qt5/qt5enginio/Config.in"
++source "package/qt5/qt5enginio/Config.in"
  source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5webkit/Config.in"
+ endif
 -- 
 1.9.1
