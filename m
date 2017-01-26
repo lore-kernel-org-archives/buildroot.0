@@ -1,34 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Jan 2017 21:00:02 +1300
-Subject: [Buildroot] [PATCH 1/1] ucl: Use -std=iso9899:1990 instead of
- -std=c90
-In-Reply-To: <5e956d07-4799-a49b-f813-e92318e1f872@att.net>
-References: <20170125192020.27140-1-stilor@att.net>
- <20170126110122.1f420135@free-electrons.com>
- <5e956d07-4799-a49b-f813-e92318e1f872@att.net>
-Message-ID: <20170126210002.3b5860ae@free-electrons.com>
+Date: Thu, 26 Jan 2017 21:02:48 +1300
+Subject: [Buildroot] [git commit] package/bluez5_utils: Only CLI client
+	depends on !uClibc
+Message-ID: <20170126080306.AF54681E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4cba46d8119c216f7340fd8a393e4cb8e69e29ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 25 Jan 2017 15:56:06 -0800, Alexey Neyman wrote:
+Tested using this minimal defconfig
 
-> Issue observed on a CentOS6.x build machine, which has GCC 4.4. The 
-> --std=c90 appeared in 4.5.
+BR2_KERNEL_HEADERS_3_4=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PACKAGE_BLUEZ5_UTILS=y
+BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL=y
+BR2_PACKAGE_BLUEZ5_UTILS_TEST=y
 
-OK. I was surprised because my autobuilder instance also uses GCC 4.4
-as the host compiler, and the build failure was never detected.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bluez5_utils/Config.in | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-But host-ucl is only used as a dependency of host-upx, which itself is
-also only used as a dependency of syslinux. Since syslinux is a
-bootloader, it does not get build tested by the autobuilders.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 18b7bbf..a7c0ee4 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -6,8 +6,6 @@ config BR2_PACKAGE_BLUEZ5_UTILS
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn
+ 	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with 4.x version
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+-	# wordexp support not in our uClibc configuration
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -41,10 +39,15 @@ comment "OBEX support needs a toolchain w/ C++"
+ 
+ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ 	bool "build CLI client"
++	# wordexp support not in our uClibc configuration
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	select BR2_PACKAGE_READLINE
+ 	help
+ 	  Enable the Bluez 5.x command line client.
+ 
++comment "bluez5-utils client needs a glibc or musl toolchain"
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 	bool "install GATT tool"
+ 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+@@ -77,10 +80,9 @@ config BR2_PACKAGE_BLUEZ5_UTILS_TEST
+ 
+ endif
+ 
+-comment "bluez5-utils needs a glibc or musl toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
++comment "bluez5-utils needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS || \
+-		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU
+ 
