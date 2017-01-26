@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Jan 2017 22:25:17 +0100
-Subject: [Buildroot] [PATCH 1/4] board: raspberrypi: use regular kernel
- image
-In-Reply-To: <50eb8d771ad78ed54338e29b393808d251366102.1485408968.git.baruch@tkos.co.il>
+Date: Thu, 26 Jan 2017 22:25:39 +0100
+Subject: [Buildroot] [PATCH 2/4] board: raspberrypi: don't generate a
+ marked kernel
+In-Reply-To: <5d2c97394f64bc671c4183567db7169e3ff50804.1485408968.git.baruch@tkos.co.il>
 References: <50eb8d771ad78ed54338e29b393808d251366102.1485408968.git.baruch@tkos.co.il>
-Message-ID: <20170126212517.GD3413@free.fr>
+ <5d2c97394f64bc671c4183567db7169e3ff50804.1485408968.git.baruch@tkos.co.il>
+Message-ID: <20170126212539.GE3413@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +15,7 @@ To: buildroot@busybox.net
 Baruch, All,
 
 On 2017-01-26 07:36 +0200, Baruch Siach spake thusly:
-> Since release 4.4 a kernel without a trailer is assumed to be device tree
-> capable. Since our Raspberry Pi defconfigs all use the newer firmware we can
-> just use the regular kernel image.
-> 
-> https://www.raspberrypi.org/documentation/configuration/device-tree.md
-> 
-> Tested on Raspberry Pi 3.
+> We no longer use the marked kernel.
 > 
 > Cc: Peter Seiderer <ps.report@gmx.net>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
@@ -31,64 +26,57 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  board/raspberrypi/genimage-raspberrypi.cfg  | 2 +-
->  board/raspberrypi/genimage-raspberrypi0.cfg | 2 +-
->  board/raspberrypi/genimage-raspberrypi2.cfg | 2 +-
->  board/raspberrypi/genimage-raspberrypi3.cfg | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
+>  board/raspberrypi/post-image.sh | 5 -----
+>  board/raspberrypi/readme.txt    | 7 ++-----
+>  2 files changed, 2 insertions(+), 10 deletions(-)
 > 
-> diff --git a/board/raspberrypi/genimage-raspberrypi.cfg b/board/raspberrypi/genimage-raspberrypi.cfg
-> index 74758f5e25b7..bd5166a0f313 100644
-> --- a/board/raspberrypi/genimage-raspberrypi.cfg
-> +++ b/board/raspberrypi/genimage-raspberrypi.cfg
-> @@ -9,7 +9,7 @@ image boot.vfat {
->        "rpi-firmware/config.txt",
->        "rpi-firmware/fixup.dat",
->        "rpi-firmware/start.elf",
-> -      "kernel-marked/zImage"
-> +      "zImage"
->      }
->    }
->    size = 32M
-> diff --git a/board/raspberrypi/genimage-raspberrypi0.cfg b/board/raspberrypi/genimage-raspberrypi0.cfg
-> index a38840c829af..a9d4c4501fd9 100644
-> --- a/board/raspberrypi/genimage-raspberrypi0.cfg
-> +++ b/board/raspberrypi/genimage-raspberrypi0.cfg
-> @@ -7,7 +7,7 @@ image boot.vfat {
->        "rpi-firmware/config.txt",
->        "rpi-firmware/fixup.dat",
->        "rpi-firmware/start.elf",
-> -      "kernel-marked/zImage"
-> +      "zImage"
->      }
->    }
->    size = 32M
-> diff --git a/board/raspberrypi/genimage-raspberrypi2.cfg b/board/raspberrypi/genimage-raspberrypi2.cfg
-> index 443c821872f5..a3be2a34426e 100644
-> --- a/board/raspberrypi/genimage-raspberrypi2.cfg
-> +++ b/board/raspberrypi/genimage-raspberrypi2.cfg
-> @@ -7,7 +7,7 @@ image boot.vfat {
->        "rpi-firmware/config.txt",
->        "rpi-firmware/fixup.dat",
->        "rpi-firmware/start.elf",
-> -      "kernel-marked/zImage"
-> +      "zImage"
->      }
->    }
->    size = 32M
-> diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
-> index baab0c4cc108..3c9f1e5e2a22 100644
-> --- a/board/raspberrypi/genimage-raspberrypi3.cfg
-> +++ b/board/raspberrypi/genimage-raspberrypi3.cfg
-> @@ -8,7 +8,7 @@ image boot.vfat {
->        "rpi-firmware/fixup.dat",
->        "rpi-firmware/start.elf",
->        "rpi-firmware/overlays",
-> -      "kernel-marked/zImage"
-> +      "zImage"
->      }
->    }
->    size = 32M
+> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+> index c00975288c6f..b2bb07067835 100755
+> --- a/board/raspberrypi/post-image.sh
+> +++ b/board/raspberrypi/post-image.sh
+> @@ -18,11 +18,6 @@ __EOF__
+>  	;;
+>  esac
+>  
+> -# Mark the kernel as DT-enabled
+> -mkdir -p "${BINARIES_DIR}/kernel-marked"
+> -${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
+> -	"${BINARIES_DIR}/kernel-marked/zImage"
+> -
+>  rm -rf "${GENIMAGE_TMP}"
+>  
+>  genimage                           \
+> diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+> index 03178ff95fa4..b6adca5151f6 100644
+> --- a/board/raspberrypi/readme.txt
+> +++ b/board/raspberrypi/readme.txt
+> @@ -53,7 +53,6 @@ After building, you should obtain this tree:
+>      +-- bcm2709-rpi-2-b.dtb         [1]
+>      +-- bcm2710-rpi-3-b.dtb         [1]
+>      +-- boot.vfat
+> -    +-- kernel-marked/zImage        [2]
+>      +-- rootfs.ext4
+>      +-- rpi-firmware/
+>      |   +-- bootcode.bin
+> @@ -61,16 +60,14 @@ After building, you should obtain this tree:
+>      |   +-- config.txt
+>      |   +-- fixup.dat
+>      |   +-- start.elf
+> -    |   `-- overlays/               [3]
+> +    |   `-- overlays/               [2]
+>      +-- sdcard.img
+>      `-- zImage
+>  
+>  [1] Not all of them will be present, depending on the RaspberryPi
+>      model you are using.
+>  
+> -[2] This is the mkknlimg DT-marked kernel.
+> -
+> -[3] Only for the Raspberry Pi 3 Model (overlay pi3-miniuart-bt is needed
+> +[2] Only for the Raspberry Pi 3 Model (overlay pi3-miniuart-bt is needed
+>      to enable the RPi3 serial console otherwise occupied by the bluetooth
+>      chip). Alternative would be to disable the serial console in cmdline.txt
+>      and /etc/inittab.
 > -- 
 > 2.11.0
 > 
