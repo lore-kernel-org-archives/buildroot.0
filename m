@@ -1,34 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Jan 2017 21:53:50 +1300
-Subject: [Buildroot] [git commit] DEVELOPERS: update Adam Duskett entry
-Message-ID: <20170126085444.E094881F58@busybox.osuosl.org>
+Date: Thu, 26 Jan 2017 21:55:05 +1300
+Subject: [Buildroot] [V3 1/1] sngrep: new package
+In-Reply-To: <20170125145446.23466-1-aduskett@codeblue.com>
+References: <20170125145446.23466-1-aduskett@codeblue.com>
+Message-ID: <20170126215505.1334a8ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24a79041350fdadfd660c0514adfe79c86ca58b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Adam has contributed the python-mutagen and sngrep packages, so add
-him as a developer for those two packages.
+On Wed, 25 Jan 2017 09:54:46 -0500, Adam Duskett wrote:
+> sngrep is a tool for displaying SIP calls message flows from terminal.
+> It supports live capture to display realtime SIP packets and can also
+> be used as PCAP viewer.
+> 
+> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+I've applied, but after doing quite a few changes:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6fe8620..cd0e664 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -31,6 +31,8 @@ F:	package/gstreamer1/gst1-rtsp-server/
- 
- N:	Adam Duskett <aduskett@gmail.com>
- F:	package/nginx-naxsi/
-+F:	package/python-mutagen/
-+F:	package/sngrep/
- 
- N:	Alex Suykov <alex.suykov@gmail.com>
- F:	package/vboot-utils/
+    [Thomas:
+     - ncurses wide char and other sub-options are not needed to build
+       sngrep, so they are removed, as well as the wchar
+       dependency. ncurses with wchar support is only needed when
+       --enable-unicode is passed, but even then, it doesn't work because
+       the configure script searches <ncursesw/ncurses.h>, so unicode
+       support has been explicitly disabled.
+     - add optional dependencies on OpenSSL, GnuTLS and PCRE. This also
+       makes sure they are explicitly enabled/disabled depending on the
+       configuration.
+     - add upstream URL in Config.in file.]
+
+In a follow-up commit, I also added you in the DEVELOPERS file for
+python-mutagen and sngrep.
+
+Thanks for your contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
