@@ -1,47 +1,44 @@
 From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 26 Jan 2017 15:04:15 +0100
-Subject: [Buildroot] [PATCH v5 04/10] Conditional revert "qt5base: install
-	bundled fonts to target"
+Date: Thu, 26 Jan 2017 15:04:17 +0100
+Subject: [Buildroot] [PATCH v5 06/10] qt5quickcontrols: More deterministic
+	target install
 In-Reply-To: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
 References: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
-Message-ID: <1485439461-4797-5-git-send-email-anaumann@ultratronik.de>
+Message-ID: <1485439461-4797-7-git-send-email-anaumann@ultratronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Corjon <corjon.j@ecagroup.com>
+Restrict target install to quickcontrols(1) qmls only.
 
-qtbase carries nor more fonts since c5ceabb9a1caf6b9b7615a28c3097f221772f645
-
-So for Qt Version 5.8.0 this reverts commit cdfa21b06041eb601e0bea79f2c8f50e9d637384
-and part of 186ef9f6f4647ed34b67a3427a5e0e249f0794e7
+Installing everything under qml/QtQuick includes e.g. quickcontrols2 if
+existent in staging (but not selected). Another issue may arise e.g. for a
+external package that creates more files than it installs itself under
+qml/QtQuick. In that case, it would depend on the order of the packages how
+much gets installed into target.
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 ---
- package/qt5/qt5base/qt5base.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 1b3e2d3..78c7a81 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -256,12 +256,14 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
- 	fi
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+index b33ff15..c2946bc 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+@@ -31,7 +31,10 @@ define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
  endef
  
-+ifeq ($(BR2_QT5_VERSION_5_6),y)
- define QT5BASE_INSTALL_TARGET_FONTS
- 	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
- 		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
- 		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
- 	fi
+ define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
+-	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
  endef
-+endif
  
- define QT5BASE_INSTALL_TARGET_EXAMPLES
- 	if [ -d $(STAGING_DIR)/usr/lib/qt/examples/ ] ; then \
+ $(eval $(generic-package))
 -- 
 1.9.1
