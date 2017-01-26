@@ -1,50 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Jan 2017 22:34:36 +0100
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.2k
-Message-ID: <20170126214426.2325B820EE@busybox.osuosl.org>
+Date: Thu, 26 Jan 2017 22:35:15 +0100
+Subject: [Buildroot] [git commit] board: raspberrypi: don't generate a
+	marked kernel
+Message-ID: <20170126214426.3C10B7FCEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9a6a2df56012b2ee6d171ca9371910c668bfa78
+commit: https://git.buildroot.net/buildroot/commit/?id=3cca45ee6d516e9cd21f3bea9ba3d525c1805b47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2017-3731 - Truncated packet could crash via OOB read.
-CVE-2017-3732 - BN_mod_exp may produce incorrect results on x86_64
-CVE-2016-7055 - Montgomery multiplication may produce incorrect results
+We no longer use the marked kernel.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/raspberrypi/post-image.sh | 5 -----
+ board/raspberrypi/readme.txt    | 7 ++-----
+ 2 files changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 0dc5450..064eeca 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2j.tar.gz.sha256
--sha256	e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431	openssl-1.0.2j.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
-+sha256	6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0	openssl-1.0.2k.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 814c435..1536982 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index c009752..b2bb070 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -18,11 +18,6 @@ __EOF__
+ 	;;
+ esac
  
--OPENSSL_VERSION = 1.0.2j
-+OPENSSL_VERSION = 1.0.2k
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+-# Mark the kernel as DT-enabled
+-mkdir -p "${BINARIES_DIR}/kernel-marked"
+-${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
+-	"${BINARIES_DIR}/kernel-marked/zImage"
+-
+ rm -rf "${GENIMAGE_TMP}"
+ 
+ genimage                           \
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 03178ff..b6adca5 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -53,7 +53,6 @@ After building, you should obtain this tree:
+     +-- bcm2709-rpi-2-b.dtb         [1]
+     +-- bcm2710-rpi-3-b.dtb         [1]
+     +-- boot.vfat
+-    +-- kernel-marked/zImage        [2]
+     +-- rootfs.ext4
+     +-- rpi-firmware/
+     |   +-- bootcode.bin
+@@ -61,16 +60,14 @@ After building, you should obtain this tree:
+     |   +-- config.txt
+     |   +-- fixup.dat
+     |   +-- start.elf
+-    |   `-- overlays/               [3]
++    |   `-- overlays/               [2]
+     +-- sdcard.img
+     `-- zImage
+ 
+ [1] Not all of them will be present, depending on the RaspberryPi
+     model you are using.
+ 
+-[2] This is the mkknlimg DT-marked kernel.
+-
+-[3] Only for the Raspberry Pi 3 Model (overlay pi3-miniuart-bt is needed
++[2] Only for the Raspberry Pi 3 Model (overlay pi3-miniuart-bt is needed
+     to enable the RPi3 serial console otherwise occupied by the bluetooth
+     chip). Alternative would be to disable the serial console in cmdline.txt
+     and /etc/inittab.
