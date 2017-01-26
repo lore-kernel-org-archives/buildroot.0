@@ -1,57 +1,51 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 26 Jan 2017 16:39:31 -0500
-Subject: [Buildroot] [V2 2/2] sngrep: fix error if gnutls and openssl are
-	both enabled.
-In-Reply-To: <20170126213931.9987-1-aduskett@codeblue.com>
-References: <20170126213931.9987-1-aduskett@codeblue.com>
-Message-ID: <20170126213931.9987-2-aduskett@codeblue.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Jan 2017 23:06:45 +0100
+Subject: [Buildroot] [PATCH] legacy/xserver: add a legacy entry for
+	xserver >= 1.19.0
+In-Reply-To: <20170126205915.GC3413@free.fr> (Yann E. MORIN's message of "Thu, 
+ 26 Jan 2017 21:59:15 +0100")
+References: <20170108222011.3839-1-romain.naour@gmail.com>
+ <20170108222011.3839-2-romain.naour@gmail.com>
+ <20170124233306.40f3d345@free-electrons.com>
+ <f51b9d8d-6853-b7fc-b16d-5205dda0da21@mind.be>
+ <20170126205915.GC3413@free.fr>
+Message-ID: <87efzpcw7e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the changes applied by thomas I noticed that sngrep will now
-fail to configure if both openssl and gnutls are selected
-(both can't be enabled at the same time.)  I set openssl to take
-precidence over gnutls, mainly because it's the larger of the two
-dependencies, and if the user has selected it they probably want
-to use it.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
----
-v1 -> v2:
-  - Changed else to else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-  
- package/sngrep/sngrep.mk | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+Hi,
 
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index 5b51762..0008c1d 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -14,17 +14,14 @@ SNGREP_DEPENDENCIES = libpcap ncurses libgcrypt
- # our ncurses wchar support is not properly detected
- SNGREP_CONF_OPTS += --disable-unicode
- 
--ifeq ($(BR2_PACKAGE_GNUTLS),y)
--SNGREP_DEPENDENCIES += gnutls
--SNGREP_CONF_OPTS += --with-gnutls
--else
--SNGREP_CONF_OPTS += --without-gnutls
--endif
--
-+# openssl and gnutls can't be enable at the same time.
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SNGREP_DEPENDENCIES += openssl
- SNGREP_CONF_OPTS += --with-openssl
--else
-+SNGREP_CONF_OPTS += --without-gnutls
-+else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+SNGREP_DEPENDENCIES += gnutls
-+SNGREP_CONF_OPTS += --with-gnutls
- SNGREP_CONF_OPTS += --without-openssl
- endif
- 
+ >> > Hum, but then we have the BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX option
+ >> > defined in two different places, with two different prompts. Do we
+ >> > really want to do this?
+ >> 
+ >> No we don't. We certainly don't want that changing some option (the server
+ >> version) suddenly creates a legacy option.
+
+ > My stake on this:
+
+ >   - we must add a legacy entry for 1.18
+
+Ok.
+
+ >   - we must not add a legacy entry for AIGLX, because it is not yet
+ >     legacy. It will turn legacy when the last xserver version we have
+ >     that support AIGLX is dropped. For now, it is just an package option
+ >     that is only available with some versions (1.17 and 1.14).
+
+As I understood it, AIGLX support is now unconditionally enabled:
+
+https://cgit.freedesktop.org/xorg/xserver/commit/?id=501d8e2beb337e072c93c9310fcd927a099b9c3b
+
+So the legacy option would just state that this option is now
+unconditionally enabled. I'm not sure how helpful that is. The user is
+presumably already notified that the server version has changed
+(E.G. from 1.14/1.17 to 1.19+).
+
 -- 
-2.9.3
+Bye, Peter Korsgaard
