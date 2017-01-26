@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Jan 2017 20:59:08 +1300
+Date: Thu, 26 Jan 2017 21:00:02 +1300
 Subject: [Buildroot] [PATCH 1/1] ucl: Use -std=iso9899:1990 instead of
  -std=c90
-In-Reply-To: <20170125192020.27140-1-stilor@att.net>
+In-Reply-To: <5e956d07-4799-a49b-f813-e92318e1f872@att.net>
 References: <20170125192020.27140-1-stilor@att.net>
-Message-ID: <20170126205908.503b03bb@free-electrons.com>
+ <20170126110122.1f420135@free-electrons.com>
+ <5e956d07-4799-a49b-f813-e92318e1f872@att.net>
+Message-ID: <20170126210002.3b5860ae@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +15,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 25 Jan 2017 11:20:20 -0800, Alexey Neyman wrote:
-> The shorter alias, -std=c90, is not known by older versions of GCC.
-> See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=20631.
-> 
-> Signed-off-by: Alexey Neyman <stilor@att.net>
-> ---
->  package/ucl/ucl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 25 Jan 2017 15:56:06 -0800, Alexey Neyman wrote:
 
-Applied to master, thanks.
+> Issue observed on a CentOS6.x build machine, which has GCC 4.4. The 
+> --std=c90 appeared in 4.5.
+
+OK. I was surprised because my autobuilder instance also uses GCC 4.4
+as the host compiler, and the build failure was never detected.
+
+But host-ucl is only used as a dependency of host-upx, which itself is
+also only used as a dependency of syslinux. Since syslinux is a
+bootloader, it does not get build tested by the autobuilders.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
