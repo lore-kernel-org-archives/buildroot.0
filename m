@@ -1,83 +1,74 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 26 Jan 2017 16:52:03 +0100
-Subject: [Buildroot] [PATCH] python-pyqrcode: new package
-Message-ID: <20170126155203.10807-1-yegorslists@googlemail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 26 Jan 2017 11:14:59 -0500
+Subject: [Buildroot] [PATCH 1/1] sngrep: fix dependency and configuration
+	issues.
+Message-ID: <20170126161459.17210-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+With the changes applied by thomas I noticed that sngrep will now
+fail to configure if both openssl and gnutls are selected
+(both can't be enabled at the same time.)  I set openssl to take
+precidence over gnutls, mainly because it's the larger of the two
+dependencies, and if the user has selected it they probably want
+to use it.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+I also noticed that sngrep will complain if libgcrypt isn't compiled
+as well.  Not sure why I didn't notice this issue to begin with, but
+I added it as a dependency and select it in the Config.in file now.
+
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/Config.in                            |  1 +
- package/python-pyqrcode/Config.in            | 11 +++++++++++
- package/python-pyqrcode/python-pyqrcode.hash |  3 +++
- package/python-pyqrcode/python-pyqrcode.mk   | 14 ++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-pyqrcode/Config.in
- create mode 100644 package/python-pyqrcode/python-pyqrcode.hash
- create mode 100644 package/python-pyqrcode/python-pyqrcode.mk
+ package/sngrep/Config.in |  1 +
+ package/sngrep/sngrep.mk | 13 +++++--------
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f48b89454..ae35c9b62 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -766,6 +766,7 @@ menu "External python modules"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pyparted/Config.in"
- 	source "package/python-pypcap/Config.in"
-+	source "package/python-pyqrcode/Config.in"
- 	source "package/python-pyqt/Config.in"
- 	source "package/python-pyqt5/Config.in"
- 	source "package/python-pyratemp/Config.in"
-diff --git a/package/python-pyqrcode/Config.in b/package/python-pyqrcode/Config.in
-new file mode 100644
-index 000000000..01b7ae813
---- /dev/null
-+++ b/package/python-pyqrcode/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PYQRCODE
-+	bool "python-pyqrcode"
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_CODECSCJK if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_CODECSCJK if BR2_PACKAGE_PYTHON3 # runtime
-+	help
-+	  A QR code generator written purely in Python with SVG, EPS,
-+	  PNG and terminal output.
-+
-+	  https://github.com/mnooner256/pyqrcode
-diff --git a/package/python-pyqrcode/python-pyqrcode.hash b/package/python-pyqrcode/python-pyqrcode.hash
-new file mode 100644
-index 000000000..619ddb0cc
---- /dev/null
-+++ b/package/python-pyqrcode/python-pyqrcode.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/pyqrcode/json, sha256 locally computed
-+md5	371f29f4b03bd2830c6e0319258b1259  PyQRCode-1.2.1.tar.gz
-+sha256	fdbf7634733e56b72e27f9bce46e4550b75a3a2c420414035cae9d9d26b234d5  PyQRCode-1.2.1.tar.gz
-diff --git a/package/python-pyqrcode/python-pyqrcode.mk b/package/python-pyqrcode/python-pyqrcode.mk
-new file mode 100644
-index 000000000..67e167a4b
---- /dev/null
-+++ b/package/python-pyqrcode/python-pyqrcode.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pyqrcode
-+#
-+################################################################################
-+
-+PYTHON_PYQRCODE_VERSION = 1.2.1
-+PYTHON_PYQRCODE_SOURCE = PyQRCode-$(PYTHON_PYQRCODE_VERSION).tar.gz
-+PYTHON_PYQRCODE_SITE = https://pypi.python.org/packages/37/61/f07226075c347897937d4086ef8e55f0a62ae535e28069884ac68d979316
-+PYTHON_PYQRCODE_SETUP_TYPE = setuptools
-+PYTHON_PYQRCODE_LICENSE = BSD-3c
-+PYTHON_PYQRCODE_LICENSE_FILES = setup.py
-+
-+$(eval $(python-package))
+diff --git a/package/sngrep/Config.in b/package/sngrep/Config.in
+index 4d0d80c..c3b8469 100644
+--- a/package/sngrep/Config.in
++++ b/package/sngrep/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_SNGREP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_LIBGCRYPT
+ 	help
+ 	  sngrep is a tool for displaying SIP calls message flows from
+ 	  terminal.  It supports live capture to display realtime SIP
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index f504771..e168bb1 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -9,22 +9,19 @@ SNGREP_SITE = $(call github,irontec,sngrep,$(SNGREP_VERSION))
+ SNGREP_LICENSE = GPLv3+
+ SNGREP_LICENSE_FILES = LICENSE
+ SNGREP_AUTORECONF = YES
+-SNGREP_DEPENDENCIES = libpcap ncurses
++SNGREP_DEPENDENCIES = libpcap ncurses libgcrypt
+ 
+ # our ncurses wchar support is not properly detected
+ SNGREP_CONF_OPTS += --disable-unicode
+ 
+-ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-SNGREP_DEPENDENCIES += gnutls
+-SNGREP_CONF_OPTS += --with-gnutls
+-else
+-SNGREP_CONF_OPTS += --without-gnutls
+-endif
+-
++# openssl and gnutls can't be enable at the same time.
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SNGREP_DEPENDENCIES += openssl
+ SNGREP_CONF_OPTS += --with-openssl
++SNGREP_CONF_OPTS += --without-gnutls
+ else
++SNGREP_DEPENDENCIES += gnutls
++SNGREP_CONF_OPTS += --with-gnutls
+ SNGREP_CONF_OPTS += --without-openssl
+ endif
+ 
 -- 
-2.11.0
+2.9.3
