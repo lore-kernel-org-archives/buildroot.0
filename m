@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2017 21:18:40 +1300
-Subject: [Buildroot] [PATCH v5 02/10] qt5enginio : move into legacy
- compatibility
-In-Reply-To: <1485439461-4797-3-git-send-email-anaumann@ultratronik.de>
+Date: Fri, 27 Jan 2017 21:19:09 +1300
+Subject: [Buildroot] [PATCH v5 03/10]
+ qt53d/qt5quickcontrols2/qt5serialbus : move out of tech preview
+In-Reply-To: <1485439461-4797-4-git-send-email-anaumann@ultratronik.de>
 References: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
- <1485439461-4797-3-git-send-email-anaumann@ultratronik.de>
-Message-ID: <20170127211840.73919907@free-electrons.com>
+ <1485439461-4797-4-git-send-email-anaumann@ultratronik.de>
+Message-ID: <20170127211909.3faa0796@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +14,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 26 Jan 2017 15:04:13 +0100, Andreas Naumann wrote:
+On Thu, 26 Jan 2017 15:04:14 +0100, Andreas Naumann wrote:
 > From: Julien Corjon <corjon.j@ecagroup.com>
 > 
-> See https://wiki.qt.io/New_Features_in_Qt_5.7
+> See http://blog.qt.io/blog/2016/06/16/qt-5-7-released/
 > 
 > Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 > Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 
-But this is only true for Qt >= 5.7. So if the user selects Qt 5.6,
-this is not true :-/
+Same here, this is only true for Qt >= 5.7, so if the user selects Qt
+5.6, those modules are still in "tech preview".
 
 Thomas
 -- 
