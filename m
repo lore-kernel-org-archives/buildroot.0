@@ -1,58 +1,39 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 27 Jan 2017 13:47:38 -0500
-Subject: [Buildroot] [V2 1/1] libpjsip: bump to version 2.6
-Message-ID: <20170127184738.9374-1-aduskett@codeblue.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Jan 2017 15:52:53 -0300
+Subject: [Buildroot] [PATCH] hiawatha: bump to version 10.5
+Message-ID: <20170127185253.21784-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition, --disable-webrtc has been changed to --disable-libwebrtc
-in the aconfigure file.
-
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v1 -> v2:
-  - Re-added the header for the makefile.
- package/libpjsip/libpjsip.hash | 6 +++---
- package/libpjsip/libpjsip.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/hiawatha/hiawatha.hash | 2 +-
+ package/hiawatha/hiawatha.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index 9976065..ec636a8 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,5 +1,5 @@
--# From http://www.pjsip.org/release/2.5.5/MD5SUM.TXT
--md5	183f7144b9aa238884243c0fc52ece36  pjproject-2.5.5.tar.bz2
-+# From http://www.pjsip.org/release/2.6/MD5SUM.TXT
-+md5	c347a672679e7875ce572e18517884b2  pjproject-2.6.tar.bz2
- 
- # Locally computed
--sha256	ab39207b761d3485199cd881410afeb2d171dff7c2bf75e8caae91c6dca508f3	pjproject-2.5.5.tar.bz2
-+sha256	2f5a1da1c174d845871c758bd80fbb580fca7799d3cfaa0d3c4e082b5161c7b4	pjproject-2.6.tar.bz2
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index eb50f00..b0d0609 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
+diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
+index 31025d9..636dfd5 100644
+--- a/package/hiawatha/hiawatha.hash
++++ b/package/hiawatha/hiawatha.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	e40ebcbde8fbd5a14dbf7279143757aea02a461940daa5c460496871eaa75454	hiawatha-10.4.tar.gz
++sha256	d76155430dc9100de412088bd68978a2a9052832609c7ac961dccaf2550c618a	hiawatha-10.5.tar.gz
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 8821b0f..abe57b7 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPJSIP_VERSION = 2.5.5
-+LIBPJSIP_VERSION = 2.6
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
- LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
- LIBPJSIP_DEPENDENCIES = libsrtp
-@@ -34,7 +34,7 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-opencore-amr \
- 	--disable-g7221-codec \
- 	--disable-ilbc-codec \
--	--disable-webrtc \
-+	--disable-libwebrtc \
- 	--disable-opus \
- 	--disable-oss \
- 	--disable-ext-sound \
+-HIAWATHA_VERSION = 10.4
++HIAWATHA_VERSION = 10.5
+ HIAWATHA_SITE = http://www.hiawatha-webserver.org/files
+ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPLv2
 -- 
-2.9.3
+2.10.2
