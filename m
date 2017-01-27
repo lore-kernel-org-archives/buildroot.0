@@ -1,46 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jan 2017 13:26:32 +0100
-Subject: [Buildroot] [PATCH] Makefile, manual: Bump copyright year
-Message-ID: <20170127122632.16882-1-peter@korsgaard.com>
+Date: Fri, 27 Jan 2017 13:46:48 +0100
+Subject: [Buildroot] [PATCH] config: bump linux kernel to 4.9.6 in
+	synopsys defconfigs
+In-Reply-To: <1485519972-15580-1-git-send-email-vzakhar@synopsys.com> (Vlad
+ Zakharov's message of "Fri, 27 Jan 2017 15:26:12 +0300")
+References: <1485519972-15580-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <87sho4brgn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Happy 2017!
+>>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile               | 2 +-
- docs/manual/manual.txt | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > With this commit we update ARC defconfigs with the following:
+ >   - "snps_axs101_defconfig" and "snps_axs103_defconfig":
+ >      - bump linux kernel version to 4.9.6
+ >      - set up host linux headers to 4.9
 
-diff --git a/Makefile b/Makefile
-index b99996ecb..5e4bc92c8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -2,7 +2,7 @@
- #
- # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
- # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
--# Copyright (C) 2014-2016 by the Buildroot developers <buildroot@buildroot.org>
-+# Copyright (C) 2014-2017 by the Buildroot developers <buildroot@buildroot.org>
- #
- # This program is free software; you can redistribute it and/or modify
- # it under the terms of the GNU General Public License as published by
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 7630ea6c7..490ed031e 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -12,7 +12,7 @@ It is licensed under the GNU General Public License, version 2. Refer to the
- http://git.buildroot.org/buildroot/tree/COPYING[COPYING] file in the Buildroot
- sources for the full text of this license.
- 
--Copyright (C) 2004-2014 The Buildroot developers
-+Copyright (C) 2004-2017 The Buildroot developers
- 
- image::logo.png[]
- 
+ > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+ > ---
+ >  configs/snps_axs101_defconfig | 6 +++---
+ >  configs/snps_axs103_defconfig | 6 +++---
+ >  2 files changed, 6 insertions(+), 6 deletions(-)
+
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
