@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2017 18:28:54 +1300
-Subject: [Buildroot] [V2 1/2] sngrep: fix dependency error.
-In-Reply-To: <20170126213931.9987-1-aduskett@codeblue.com>
-References: <20170126213931.9987-1-aduskett@codeblue.com>
-Message-ID: <20170127182854.7c0fa91f@free-electrons.com>
+Date: Fri, 27 Jan 2017 21:01:20 +1300
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: Add Lionel FLandrin for
+ package/flask
+In-Reply-To: <20170125090150.2548-2-lionel@svkt.org>
+References: <20170125090150.2548-1-lionel@svkt.org>
+ <20170125090150.2548-2-lionel@svkt.org>
+Message-ID: <20170127210120.321686f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +14,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 26 Jan 2017 16:39:30 -0500, Adam Duskett wrote:
-> sngrep will complain if libgcrypt isn't compiled. I am not sure
-> how or why I didn't notice this issue to begin with, but
-> I added it as a dependency and select it in the Config.in file now.
-> I also added 'depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS' as per
-> baruch's suggestion.
-> 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+On Wed, 25 Jan 2017 10:01:50 +0100, Lionel Flandrin wrote:
+> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+> ---
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 
-sngrep builds just fine for me without libgcrypt, so clearly this isn't
-needed.
-
-What however is needed is that libgcrypt is needed when gnutls support
-is enabled.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
