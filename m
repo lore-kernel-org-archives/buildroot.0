@@ -1,52 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jan 2017 13:16:44 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] openssl: security bump to
-	version 1.0.2k
-Message-ID: <20170127122052.1791381F85@busybox.osuosl.org>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Fri, 27 Jan 2017 15:26:12 +0300
+Subject: [Buildroot] [PATCH] config: bump linux kernel to 4.9.6 in synopsys
+	defconfigs
+Message-ID: <1485519972-15580-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=841fc4f3c5340841c8729be629f8db82fa800202
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+With this commit we update ARC defconfigs with the following:
 
-Fixes:
-CVE-2017-3731 - Truncated packet could crash via OOB read.
-CVE-2017-3732 - BN_mod_exp may produce incorrect results on x86_64
-CVE-2016-7055 - Montgomery multiplication may produce incorrect results
+  - "snps_axs101_defconfig" and "snps_axs103_defconfig":
+     - bump linux kernel version to 4.9.6
+     - set up host linux headers to 4.9
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f9a6a2df56012b2ee6d171ca9371910c668bfa78)
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 ---
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/snps_axs101_defconfig | 6 +++---
+ configs/snps_axs103_defconfig | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 0dc5450..064eeca 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2j.tar.gz.sha256
--sha256	e7aff292be21c259c6af26469c7a9b3ba26e9abaaffd325e3dccc9785256c431	openssl-1.0.2j.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2k.tar.gz.sha256
-+sha256	6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0	openssl-1.0.2k.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 814c435..1536982 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
+index 07564b4..48372ac 100644
+--- a/configs/snps_axs101_defconfig
++++ b/configs/snps_axs101_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
  
--OPENSSL_VERSION = 1.0.2j
-+OPENSSL_VERSION = 1.0.2k
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+-# Linux headers same as kernel, a 4.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ 
+ # Bootloader
+diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
+index d2a838e..eb16b70 100644
+--- a/configs/snps_axs103_defconfig
++++ b/configs/snps_axs103_defconfig
+@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ 
+-# Linux headers same as kernel, a 4.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
+ 
+ # Bootloader
+-- 
+2.7.4
