@@ -1,47 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jan 2017 19:10:22 +0100
-Subject: [Buildroot] [git commit] Makefile, manual: Bump copyright year
-Message-ID: <20170127181103.42D557F999@busybox.osuosl.org>
+Date: Fri, 27 Jan 2017 19:08:00 +0100
+Subject: [Buildroot] [git commit] configs: introduce hs38 HAPS defconfig
+Message-ID: <20170127181103.2D6BC81F86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f46ac03518681c3842f6075fd6176a0f3bf29fd4
+commit: https://git.buildroot.net/buildroot/commit/?id=41bd9730268e7ada8aaf2c11682b68ddca989a75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Happy 2017!
+This commit adds yet another development platform for ARC.
 
+This time around it is HAPS or ZeBU based prototyping platform used
+widely for both ARC hardware and software bring-up and verification.
+
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile               | 2 +-
- docs/manual/manual.txt | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/snps_archs38_zebu_defconfig | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index b99996e..5e4bc92 100644
---- a/Makefile
-+++ b/Makefile
-@@ -2,7 +2,7 @@
- #
- # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
- # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
--# Copyright (C) 2014-2016 by the Buildroot developers <buildroot@buildroot.org>
-+# Copyright (C) 2014-2017 by the Buildroot developers <buildroot@buildroot.org>
- #
- # This program is free software; you can redistribute it and/or modify
- # it under the terms of the GNU General Public License as published by
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 7630ea6..490ed03 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -12,7 +12,7 @@ It is licensed under the GNU General Public License, version 2. Refer to the
- http://git.buildroot.org/buildroot/tree/COPYING[COPYING] file in the Buildroot
- sources for the full text of this license.
- 
--Copyright (C) 2004-2014 The Buildroot developers
-+Copyright (C) 2004-2017 The Buildroot developers
- 
- image::logo.png[]
- 
+diff --git a/configs/snps_archs38_zebu_defconfig b/configs/snps_archs38_zebu_defconfig
+new file mode 100644
+index 0000000..96d941a
+--- /dev/null
++++ b/configs/snps_archs38_zebu_defconfig
+@@ -0,0 +1,18 @@
++# Architecture
++BR2_arcle=y
++BR2_archs38=y
++
++# System
++BR2_TARGET_GENERIC_HOSTNAME="zebu_hs"
++BR2_TARGET_GENERIC_ISSUE="Welcome to the HAPS Development Platform"
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_DEFCONFIG="zebu_hs_smp"
++BR2_LINUX_KERNEL_VMLINUX=y
