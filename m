@@ -1,59 +1,33 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 27 Jan 2017 12:04:26 -0500
-Subject: [Buildroot] [PATCH 1/1] pjsip: bump to version 2.6
-Message-ID: <20170127170426.19010-1-aduskett@codeblue.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Jan 2017 14:18:42 -0300
+Subject: [Buildroot] [PATCH] samba4: update answer cache
+Message-ID: <20170127171842.4317-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition, --disable-webrtc has been changed to --disable-libwebrtc
-in the aconfigure file.
+Some toolchain/package combinations require an additional touch (answer)
+in the cache file. Fixes:
+http://autobuild.buildroot.net/results/426/4266a1690b85bde8da130a84845d1985128bda63/
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libpjsip/libpjsip.hash |  6 +++---
- package/libpjsip/libpjsip.mk   | 10 ++--------
- 2 files changed, 5 insertions(+), 11 deletions(-)
+ package/samba4/samba4-cache.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index 9976065..ec636a8 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,5 +1,5 @@
--# From http://www.pjsip.org/release/2.5.5/MD5SUM.TXT
--md5	183f7144b9aa238884243c0fc52ece36  pjproject-2.5.5.tar.bz2
-+# From http://www.pjsip.org/release/2.6/MD5SUM.TXT
-+md5	c347a672679e7875ce572e18517884b2  pjproject-2.6.tar.bz2
- 
- # Locally computed
--sha256	ab39207b761d3485199cd881410afeb2d171dff7c2bf75e8caae91c6dca508f3	pjproject-2.5.5.tar.bz2
-+sha256	2f5a1da1c174d845871c758bd80fbb580fca7799d3cfaa0d3c4e082b5161c7b4	pjproject-2.6.tar.bz2
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index eb50f00..f8adf5f 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -1,10 +1,4 @@
--################################################################################
--#
--# libpjsip
--#
--################################################################################
--
--LIBPJSIP_VERSION = 2.5.5
-+LIBPJSIP_VERSION = 2.6
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
- LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
- LIBPJSIP_DEPENDENCIES = libsrtp
-@@ -34,7 +28,7 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-opencore-amr \
- 	--disable-g7221-codec \
- 	--disable-ilbc-codec \
--	--disable-webrtc \
-+	--disable-libwebrtc \
- 	--disable-opus \
- 	--disable-oss \
- 	--disable-ext-sound \
+diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
+index c9e34b6..3ba8a75 100644
+--- a/package/samba4/samba4-cache.txt
++++ b/package/samba4/samba4-cache.txt
+@@ -23,6 +23,7 @@ Checking whether setreuid is available: OK
+ Checking whether setresuid is available: OK
+ Checking whether seteuid is available: OK
+ Checking whether fcntl locking is available: OK
++Checking whether fcntl lock supports open file description locks: OK
+ Checking for the maximum value of the 'time_t' type: OK
+ Checking whether the realpath function allows a NULL argument: OK
+ Checking whether POSIX capabilities are available: OK
 -- 
-2.9.3
+2.10.2
