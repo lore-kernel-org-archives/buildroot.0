@@ -1,68 +1,61 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Fri, 27 Jan 2017 00:02:37 +0100
-Subject: [Buildroot] [PATCH] wine: Bump to version 2.0
-Message-ID: <1485471757-29305-1-git-send-email-nerv@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Jan 2017 20:21:19 +1300
+Subject: [Buildroot] [git commit] sngrep: fix error if gnutls and openssl
+	are both enabled
+Message-ID: <20170127072421.067837FA9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/wine/wine.hash |  2 +-
- package/wine/wine.mk   | 15 +++++++++++----
- 2 files changed, 12 insertions(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=a5391ca453eb21c5dba9a0a6252b4f4eb995247b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index a5297f0..b4b67cd 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 b1797896eb3b63aab8a4753cc756d6211a0e85460146a1b52063ec79c13906d3 wine-1.8.6.tar.bz2
-+sha256 9756f5a2129b6a83ba701e546173cbff86caa671b0af73eb8f72c03b20c066c6 wine-2.0.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 1947daa..f9b2e1a 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+gnutls and openssl support can't be enabled at the same time in
+sngrep. Prefer openssl if available, otherwise use gnutls.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/7c775b1faf7be90fb4acd3653600f7b6b48aa86f/
+
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+[Thomas:
+ - regroup CONF_OPTS lines
+ - add an 'else' clause to explicitly disable gnutls and openssl when
+   none are available
+ - add a reference to the autobuilder failure]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sngrep/sngrep.mk | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index f504771..b4b91c9 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -14,18 +14,15 @@ SNGREP_DEPENDENCIES = libpcap ncurses
+ # our ncurses wchar support is not properly detected
+ SNGREP_CONF_OPTS += --disable-unicode
  
--WINE_VERSION = 1.8.6
-+WINE_VERSION = 2.0
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
--WINE_SITE = https://dl.winehq.org/wine/source/1.8
-+WINE_SITE = https://dl.winehq.org/wine/source/2.0
- WINE_LICENSE = LGPLv2.1+
- WINE_LICENSE_FILES = COPYING.LIB LICENSE
- WINE_DEPENDENCIES = host-bison host-flex host-wine
-@@ -85,9 +85,9 @@ else
- WINE_CONF_OPTS += --without-gnutls
- endif
- 
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- WINE_CONF_OPTS += --with-gstreamer
--WINE_DEPENDENCIES += gst-plugins-base
-+WINE_DEPENDENCIES += gst1-plugins-base
+-ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-SNGREP_DEPENDENCIES += gnutls
+-SNGREP_CONF_OPTS += --with-gnutls
+-else
+-SNGREP_CONF_OPTS += --without-gnutls
+-endif
+-
++# openssl and gnutls can't be enabled at the same time.
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SNGREP_DEPENDENCIES += openssl
+-SNGREP_CONF_OPTS += --with-openssl
++SNGREP_CONF_OPTS += --with-openssl --without-gnutls
++else ifeq ($(BR2_PACKAGE_GNUTLS),y)
++SNGREP_DEPENDENCIES += gnutls
++SNGREP_CONF_OPTS += --with-gnutls --without-openssl
  else
- WINE_CONF_OPTS += --without-gstreamer
- endif
-@@ -221,6 +221,13 @@ else
- WINE_CONF_OPTS += --without-tiff
+-SNGREP_CONF_OPTS += --without-openssl
++SNGREP_CONF_OPTS += --without-gnutls --without-openssl
  endif
  
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+WINE_CONF_OPTS += --with-udev
-+WINE_DEPENDENCIES += udev
-+else
-+WINE_CONF_OPTS += --without-udev
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- WINE_CONF_OPTS += --with-x
- WINE_DEPENDENCIES += xlib_libX11
--- 
-2.7.4
+ ifeq ($(BR2_PACKAGE_PCRE),y)
