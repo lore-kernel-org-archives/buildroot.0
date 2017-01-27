@@ -1,33 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 27 Jan 2017 14:18:42 -0300
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Jan 2017 19:10:00 +0100
 Subject: [Buildroot] [PATCH] samba4: update answer cache
-Message-ID: <20170127171842.4317-1-gustavo@zacarias.com.ar>
+In-Reply-To: <20170127171842.4317-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Fri, 27 Jan 2017 14:18:42 -0300")
+References: <20170127171842.4317-1-gustavo@zacarias.com.ar>
+Message-ID: <87k29gbchz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some toolchain/package combinations require an additional touch (answer)
-in the cache file. Fixes:
-http://autobuild.buildroot.net/results/426/4266a1690b85bde8da130a84845d1985128bda63/
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/samba4/samba4-cache.txt | 1 +
- 1 file changed, 1 insertion(+)
+ > Some toolchain/package combinations require an additional touch (answer)
+ > in the cache file. Fixes:
+ > http://autobuild.buildroot.net/results/426/4266a1690b85bde8da130a84845d1985128bda63/
 
-diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
-index c9e34b6..3ba8a75 100644
---- a/package/samba4/samba4-cache.txt
-+++ b/package/samba4/samba4-cache.txt
-@@ -23,6 +23,7 @@ Checking whether setreuid is available: OK
- Checking whether setresuid is available: OK
- Checking whether seteuid is available: OK
- Checking whether fcntl locking is available: OK
-+Checking whether fcntl lock supports open file description locks: OK
- Checking for the maximum value of the 'time_t' type: OK
- Checking whether the realpath function allows a NULL argument: OK
- Checking whether POSIX capabilities are available: OK
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
