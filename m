@@ -1,34 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jan 2017 14:17:11 +0100
-Subject: [Buildroot] [git commit] configs/qemu: enable tmpfs for or1k
-Message-ID: <20170127134326.B4D76820F9@busybox.osuosl.org>
+From: Andreas Naumann <dev@andin.de>
+Date: Fri, 27 Jan 2017 15:20:31 +0100
+Subject: [Buildroot] [PATCH v5 08/10] python-pyqt5: Depend directly on
+ Qt5 rather than its toolchain requirements
+In-Reply-To: <20170127212120.04eaddfe@free-electrons.com>
+References: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
+ <1485439461-4797-9-git-send-email-anaumann@ultratronik.de>
+ <20170127212120.04eaddfe@free-electrons.com>
+Message-ID: <9311d4db-5c83-2dfe-48d7-9cd9ded1af28@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03b93b6c1cc329fc1c40a94a4daba3571e45e6f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-This is used by buildroot default initscripts and results in some ugly
-errors on startup otherwise.
+Am 27.01.2017 um 09:21 schrieb Thomas Petazzoni:
+> Hello,
+>
+> On Thu, 26 Jan 2017 15:04:19 +0100, Andreas Naumann wrote:
+>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+>> ---
+>>  package/python-pyqt5/Config.in | 13 +++----------
+>>  1 file changed, 3 insertions(+), 10 deletions(-)
+>
+> What was the motivation for this change? The commit log is empty :-/
+>
+> Note that I don't disagree with the change, but a little bit more
+> details about the rationale would be good.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/qemu/or1k/linux-4.9.config | 1 +
- 1 file changed, 1 insertion(+)
+That would be your comment in v3 of this set:
 
-diff --git a/board/qemu/or1k/linux-4.9.config b/board/qemu/or1k/linux-4.9.config
-index 5ba03c3..0a817b1 100644
---- a/board/qemu/or1k/linux-4.9.config
-+++ b/board/qemu/or1k/linux-4.9.config
-@@ -14,6 +14,7 @@ CONFIG_IP_MULTICAST=y
- # CONFIG_WIRELESS is not set
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_TMPFS=y
- CONFIG_NETDEVICES=y
- CONFIG_ETHOC=y
- # CONFIG_WLAN is not set
+"When you want python-qt5 it's really obvious that you need
+Qt5, so for the user it's logical to enable Qt5 and then Python-Qt5."
+
+Unfortunately, I wont have time to rework this and your other two 
+comments in the next 10 days. If you need to apply the set earlier than 
+that, feel free to just change as needed.
+
+
+Thanks!
+Andreas
+
+>
+> Thomas
+>
