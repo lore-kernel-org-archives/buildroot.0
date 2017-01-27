@@ -1,41 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jan 2017 21:32:42 +0100
-Subject: [Buildroot] [git commit] hiawatha: bump to version 10.5
-Message-ID: <20170127203327.74CEE81F71@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 27 Jan 2017 22:01:54 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add Yann for libgsm
+In-Reply-To: <20170127193518.1C0EA7FED4@busybox.osuosl.org>
+References: <20170127193518.1C0EA7FED4@busybox.osuosl.org>
+Message-ID: <20170127210154.GB3430@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f2ec3ad878c24791d6fadefaea0860b718b90b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/hiawatha/hiawatha.hash | 2 +-
- package/hiawatha/hiawatha.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2017-01-28 08:34 +1300, Thomas Petazzoni spake thusly:
+> commit: https://git.buildroot.net/buildroot/commit/?id=bcb22f794dba8510b3ebc5c0c3c7e316029fb7b3
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c432ff3..7b9f5a0 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1616,6 +1616,7 @@ F:	package/dvb-apps/
+>  F:	package/keyutils/
+>  F:	package/libbsd/
+>  F:	package/libedit/
+> +F:	package/libgsm/
 
-diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
-index 31025d9..636dfd5 100644
---- a/package/hiawatha/hiawatha.hash
-+++ b/package/hiawatha/hiawatha.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	e40ebcbde8fbd5a14dbf7279143757aea02a461940daa5c460496871eaa75454	hiawatha-10.4.tar.gz
-+sha256	d76155430dc9100de412088bd68978a2a9052832609c7ac961dccaf2550c618a	hiawatha-10.5.tar.gz
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index 8821b0f..abe57b7 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HIAWATHA_VERSION = 10.4
-+HIAWATHA_VERSION = 10.5
- HIAWATHA_SITE = http://www.hiawatha-webserver.org/files
- HIAWATHA_DEPENDENCIES = zlib
- HIAWATHA_LICENSE = GPLv2
+In fact, the patch was initially from Bernd; I just carried it in my own
+branch.
+
+But I can take care of it when it breaks, sure. ;-)
+
+Regards,
+Yann E. MORIN.
+
+>  F:	package/libinput/
+>  F:	package/libiscsi/
+>  F:	package/libseccomp/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
