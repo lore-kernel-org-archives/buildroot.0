@@ -1,91 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jan 2017 13:09:49 +0100
-Subject: [Buildroot] [git commit] package/mpd: bump to version 0.20.3
-Message-ID: <20170127121332.6BD7F81EAD@busybox.osuosl.org>
+Date: Fri, 27 Jan 2017 13:12:31 +0100
+Subject: [Buildroot] [git commit] package/libgpg-error: bump to version 1.26
+Message-ID: <20170127121332.82ABC82119@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a8530af9ea6425e1ee29a53231aaddffb64ac84
+commit: https://git.buildroot.net/buildroot/commit/?id=24734c5dcb565c59a48fe398fea9e1422c4d2618
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Remove patch #2 which has been applied upstream.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...002-Makefile.am-fix-linking-xiph-with-ogg.patch | 41 ----------------------
- package/mpd/mpd.hash                               |  2 +-
- package/mpd/mpd.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 43 deletions(-)
+ package/libgpg-error/libgpg-error.hash | 2 +-
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/0002-Makefile.am-fix-linking-xiph-with-ogg.patch b/package/mpd/0002-Makefile.am-fix-linking-xiph-with-ogg.patch
-deleted file mode 100644
-index 1fe6095..0000000
---- a/package/mpd/0002-Makefile.am-fix-linking-xiph-with-ogg.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 6ef588b2c230eae15f7f2563eca9d5f40c78d1d0 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
--Date: Wed, 11 Jan 2017 21:06:37 +0100
--Subject: [PATCH] Makefile.am: fix linking xiph with ogg
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The internal static xiph library needs to link with libogg. Otherwise
--building mpd will fail:
--
--```
--/mips-linux-gnu/bin/ld: libxiph.a(libxiph_a-OggVisitor.o): undefined
--reference to symbol 'ogg_stream_packetout'
--```
--
--Upstream status: Pending
--http://mailman.blarg.de/pipermail/mpd-devel/2017-January/000594.html
--
--Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-----
-- Makefile.am | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index e0202b0cc..9030e68fb 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -614,7 +614,8 @@ libxiph_a_SOURCES += \
-- 	src/lib/xiph/OggStreamState.hxx
-- endif
-- 
---XIPH_LIBS = libxiph.a
--+XIPH_LIBS = libxiph.a \
--+	$(OGG_LIBS)
-- 
-- endif
-- 
---- 
--2.11.0
--
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index e1da994..e4709e6 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index 85d433d..dac36db 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256  552a87d71c2981baeddf28c1856a7e071ea0236dd38bc75ec25d58529605ff77  mpd-0.20.2.tar.xz
-+sha256  2238c1233f5318800ede7c37eeaf705c04920315de572dc666aff6ca682eb0f9  mpd-0.20.3.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 4469737..527de77 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+-sha256 88cb2d2370f8378fd38452b99dc1419a80fd5897739b7198a4a7996364507803  libgpg-error-1.24.tar.gz
++sha256  3df7432dc17ef66c764c3fc4a1d309a9b4a0485c914ecfdb61b71e9bf45fd930  libgpg-error-1.26.tar.gz
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 1945673..5126c0a 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.20
--MPD_VERSION = $(MPD_VERSION_MAJOR).2
-+MPD_VERSION = $(MPD_VERSION_MAJOR).3
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+-LIBGPG_ERROR_VERSION = 1.24
++LIBGPG_ERROR_VERSION = 1.26
+ LIBGPG_ERROR_SITE = ftp://ftp.gnupg.org/gcrypt/libgpg-error
+ LIBGPG_ERROR_LICENSE = GPLv2+, LGPLv2.1+
+ LIBGPG_ERROR_LICENSE_FILES = COPYING COPYING.LIB
