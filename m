@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2017 08:31:11 +1300
-Subject: [Buildroot] Add basic support for the AArch64 architecture
-In-Reply-To: <1485544196978-155378.post@n4.nabble.com>
-References: <1351442438-20639-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1485544196978-155378.post@n4.nabble.com>
-Message-ID: <20170128083111.68a9efc8@free-electrons.com>
+Date: Sat, 28 Jan 2017 08:34:28 +1300
+Subject: [Buildroot] [git commit] DEVELOPERS: add Yann for libgsm
+Message-ID: <20170127193518.1C0EA7FED4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bcb22f794dba8510b3ebc5c0c3c7e316029fb7b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 27 Jan 2017 11:09:56 -0800 (PST), gbarry wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Do you have this set of patches posted in a git huh repo somewhere ? I am
-> trying to get an ARM64 system running using buildroot and Linux 4.4.
-
-You're replying to a patch series from 2012. It has been merged since a
-long long time. So it's all available from the official Buildroot Git
-repository.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c432ff3..7b9f5a0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1616,6 +1616,7 @@ F:	package/dvb-apps/
+ F:	package/keyutils/
+ F:	package/libbsd/
+ F:	package/libedit/
++F:	package/libgsm/
+ F:	package/libinput/
+ F:	package/libiscsi/
+ F:	package/libseccomp/
