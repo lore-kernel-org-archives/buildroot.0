@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2017 21:52:49 +1300
-Subject: [Buildroot] [PATCH 1/1] Fix gcrypt library linker option on
- collectd.
-In-Reply-To: <1482988838-6777-1-git-send-email-jackzzjack@gmail.com>
-References: <1482988838-6777-1-git-send-email-jackzzjack@gmail.com>
-Message-ID: <20170127215249.49ef7a37@free-electrons.com>
+Date: Fri, 27 Jan 2017 21:53:36 +1300
+Subject: [Buildroot] [PATCH 1/1] gst-plugins-base: add missing
+ dependency on libxml2 for subparse
+In-Reply-To: <1482979928-2625-1-git-send-email-danomimanchego123@gmail.com>
+References: <1482979928-2625-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20170127215336.42e110de@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 29 Dec 2016 13:20:38 +0800, Yu-Ting, Kao wrote:
+On Wed, 28 Dec 2016 21:52:08 -0500, Danomi Manchego wrote:
+> The gst-plugins-base configure script claims that the subparse plugin is
+> dependency-less - but it also silently disables subparse if libxml2 is
+> not available.  So depend on libxml2 when subparse is selected.
+> 
+> Note: the analogous gst1 subparse plugin does not have this requirement.
+> 
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 > ---
->  package/collectd/collectd.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/gstreamer/gst-plugins-base/Config.in           | 1 +
+>  package/gstreamer/gst-plugins-base/gst-plugins-base.mk | 1 +
+>  2 files changed, 2 insertions(+)
 
-What problem is this commit fixing? An autobuilder failure? If so,
-there should be a reference to it. I don't see any collectd issue
-reported by the autobuilders:
-http://autobuild.buildroot.net/?reason=collectd-5.7.1. Maybe this issue
-has already been fixed?
+I've applied to master, but before that, I've moved the "subparse"
+option from the "dependency-less plugins" category to the "plugins with
+external dependencies" section.
 
-Also, the commit title should always have the format:
-
-	<package>: <short description>
-
-so in your case, it should be:
-
-	collectd: ...
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
