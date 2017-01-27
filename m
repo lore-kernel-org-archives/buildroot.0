@@ -1,23 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jan 2017 19:10:09 +0100
-Subject: [Buildroot] [PATCH] configs: introduce hs38 HAPS defconfig
-In-Reply-To: <1485523890-22929-1-git-send-email-vzakhar@synopsys.com> (Vlad
- Zakharov's message of "Fri, 27 Jan 2017 16:31:30 +0300")
-References: <1485523890-22929-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <87fuk4bchq.fsf@dell.be.48ers.dk>
+Date: Fri, 27 Jan 2017 19:10:40 +0100
+Subject: [Buildroot] [PATCH] Makefile, manual: Bump copyright year
+In-Reply-To: <20170127122632.16882-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 27 Jan 2017 13:26:32 +0100")
+References: <20170127122632.16882-1-peter@korsgaard.com>
+Message-ID: <87bmusbcgv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > This commit adds yet another development platform for ARC.
- > This time around it is HAPS or ZeBU based prototyping platform used
- > widely for both ARC hardware and software bring-up and verification.
-
- > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+ > Happy 2017!
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  Makefile               | 2 +-
+ >  docs/manual/manual.txt | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Committed, thanks.
 
