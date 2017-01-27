@@ -1,32 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2017 21:21:20 +1300
-Subject: [Buildroot] [PATCH v5 08/10] python-pyqt5: Depend directly on
- Qt5 rather than its toolchain requirements
-In-Reply-To: <1485439461-4797-9-git-send-email-anaumann@ultratronik.de>
-References: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
- <1485439461-4797-9-git-send-email-anaumann@ultratronik.de>
-Message-ID: <20170127212120.04eaddfe@free-electrons.com>
+From: sred_94 at libero.it <sred_94@libero.it>
+Date: Fri, 27 Jan 2017 09:31:41 +0100 (CET)
+Subject: [Buildroot] R: Re:  install curl-config
+Message-ID: <1055550358.5945811485505901491.JavaMail.httpd@webmail-40.iol.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
 
-On Thu, 26 Jan 2017 15:04:19 +0100, Andreas Naumann wrote:
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> ---
->  package/python-pyqt5/Config.in | 13 +++----------
->  1 file changed, 3 insertions(+), 10 deletions(-)
+It would seem that I have solved by specifying the path of curl-config in the 
+setup.py of the pycurl module.
+Thanks for the support.
 
-What was the motivation for this change? The commit log is empty :-/
+Regards,
 
-Note that I don't disagree with the change, but a little bit more
-details about the rationale would be good.
+Simone Rossi
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+
+>----Messaggio originale----
+>Da: "Peter Korsgaard" <peter@korsgaard.com>
+>Data: 26-gen-2017 17.52
+>A: "sred_94 at libero.it"<sred_94@libero.it>
+>Cc: <buildroot@busybox.net>
+>Ogg: Re: [Buildroot] install curl-config
+>
+>>>>>> "sred" == sred 94 at libero it <sred_94@libero.it> writes:
+>
+> > Dear Sirs,
+> > I am using buildroot 2016.05 and I have installed libcurl library, but
+> > I also need curl-config, because it is required by the pycurl package.
+>
+>What do you mean exactly? It gets installed into
+>output/staging/usr/bin. Does pycurl need it at runtime (E.G. on the
+>target)?
+>
+>-- 
+>Bye, Peter Korsgaard
+>_______________________________________________
+>buildroot mailing list
+>buildroot at busybox.net
+>http://lists.busybox.net/mailman/listinfo/buildroot
+>
