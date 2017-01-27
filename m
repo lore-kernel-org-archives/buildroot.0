@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2017 21:53:36 +1300
-Subject: [Buildroot] [PATCH 1/1] gst-plugins-base: add missing
- dependency on libxml2 for subparse
-In-Reply-To: <1482979928-2625-1-git-send-email-danomimanchego123@gmail.com>
-References: <1482979928-2625-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20170127215336.42e110de@free-electrons.com>
+Date: Fri, 27 Jan 2017 21:54:08 +1300
+Subject: [Buildroot] [PATCH] rtl8188eu: Move the post install target
+ hook before the infras
+In-Reply-To: <20161226150707.2663-1-ezequiel@vanguardiasur.com.ar>
+References: <20161226150707.2663-1-ezequiel@vanguardiasur.com.ar>
+Message-ID: <20170127215408.6c325ab6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 28 Dec 2016 21:52:08 -0500, Danomi Manchego wrote:
-> The gst-plugins-base configure script claims that the subparse plugin is
-> dependency-less - but it also silently disables subparse if libxml2 is
-> not available.  So depend on libxml2 when subparse is selected.
+On Mon, 26 Dec 2016 12:07:07 -0300, Ezequiel Garcia wrote:
+> The hook is only used to install firmware blobs, and so it
+> doesn't need to be declared after the kernel-module infra.
+> Move it where it belong, to avoid confusion.
 > 
-> Note: the analogous gst1 subparse plugin does not have this requirement.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> --
+> This is just a nitpick, but since contributors are likely to
+> use this package as an example, let's avoid copy-pasted cluttering.
 > ---
->  package/gstreamer/gst-plugins-base/Config.in           | 1 +
->  package/gstreamer/gst-plugins-base/gst-plugins-base.mk | 1 +
->  2 files changed, 2 insertions(+)
+>  package/rtl8188eu/rtl8188eu.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-I've applied to master, but before that, I've moved the "subparse"
-option from the "dependency-less plugins" category to the "plugins with
-external dependencies" section.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
