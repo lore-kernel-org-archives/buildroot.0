@@ -1,67 +1,46 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Fri, 27 Jan 2017 15:26:12 +0300
-Subject: [Buildroot] [PATCH] config: bump linux kernel to 4.9.6 in synopsys
-	defconfigs
-Message-ID: <1485519972-15580-1-git-send-email-vzakhar@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Jan 2017 13:26:32 +0100
+Subject: [Buildroot] [PATCH] Makefile, manual: Bump copyright year
+Message-ID: <20170127122632.16882-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this commit we update ARC defconfigs with the following:
+Happy 2017!
 
-  - "snps_axs101_defconfig" and "snps_axs103_defconfig":
-     - bump linux kernel version to 4.9.6
-     - set up host linux headers to 4.9
-
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/snps_axs101_defconfig | 6 +++---
- configs/snps_axs103_defconfig | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ Makefile               | 2 +-
+ docs/manual/manual.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
-index 07564b4..48372ac 100644
---- a/configs/snps_axs101_defconfig
-+++ b/configs/snps_axs101_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+diff --git a/Makefile b/Makefile
+index b99996ecb..5e4bc92c8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ #
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
+-# Copyright (C) 2014-2016 by the Buildroot developers <buildroot@buildroot.org>
++# Copyright (C) 2014-2017 by the Buildroot developers <buildroot@buildroot.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 7630ea6c7..490ed031e 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -12,7 +12,7 @@ It is licensed under the GNU General Public License, version 2. Refer to the
+ http://git.buildroot.org/buildroot/tree/COPYING[COPYING] file in the Buildroot
+ sources for the full text of this license.
  
--# Linux headers same as kernel, a 4.8 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+-Copyright (C) 2004-2014 The Buildroot developers
++Copyright (C) 2004-2017 The Buildroot developers
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
- BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ image::logo.png[]
  
- # Bootloader
-diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
-index d2a838e..eb16b70 100644
---- a/configs/snps_axs103_defconfig
-+++ b/configs/snps_axs103_defconfig
-@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
- 
--# Linux headers same as kernel, a 4.8 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_8=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.8.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
- BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
- 
- # Bootloader
 -- 
-2.7.4
+2.11.0
