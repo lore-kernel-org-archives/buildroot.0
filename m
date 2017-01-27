@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2017 21:17:03 +1300
-Subject: [Buildroot] [PATCH 1/3] mkpimage: rewrite to support header
- version 1
-In-Reply-To: <20170126112831.28107-1-lionel@svkt.org>
-References: <20170126112516.h465tdgnpl4ixh3f@ed>
- <20170126112831.28107-1-lionel@svkt.org>
-Message-ID: <20170127211703.7e7d1113@free-electrons.com>
+Date: Fri, 27 Jan 2017 21:18:40 +1300
+Subject: [Buildroot] [PATCH v5 02/10] qt5enginio : move into legacy
+ compatibility
+In-Reply-To: <1485439461-4797-3-git-send-email-anaumann@ultratronik.de>
+References: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
+ <1485439461-4797-3-git-send-email-anaumann@ultratronik.de>
+Message-ID: <20170127211840.73919907@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 26 Jan 2017 12:28:31 +0100, Lionel Flandrin wrote:
-> mkpimage is a proprietary tool part of Altera's Embedded Development
-> Suite which is used to generate the image files supported by their
-> BootROMs.
+On Thu, 26 Jan 2017 15:04:13 +0100, Andreas Naumann wrote:
+> From: Julien Corjon <corjon.j@ecagroup.com>
 > 
-> Newer versions of their SoCs (such as the Arria 10) use header version
-> 1 which was not supported by the previous version of this tool.
+> See https://wiki.qt.io/New_Features_in_Qt_5.7
 > 
-> This new version supports header version 1, improves error handling
-> and tweaks the output to bring it closer to Altera's own tool. In
-> particular the padding calculations have been changed. In all the
-> configurations tested this program and Altera's mkpimage produce
-> exactly the same files (while the previous version didn't).
-> 
-> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 
-Why not import the new version of this program available in Barebox,
-which does support V1 headers nowadays?
-
-Otherwise, where does your version comes from?
-
-Best regards,
+But this is only true for Qt >= 5.7. So if the user selects Qt 5.6,
+this is not true :-/
 
 Thomas
 -- 
