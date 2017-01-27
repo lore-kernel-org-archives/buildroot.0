@@ -1,32 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2017 21:44:20 +1300
-Subject: [Buildroot] [RFC] package/sdl2_ttf: include GL/gl.h while
- checking for OpenGL support
-In-Reply-To: <20161229004735.6293-1-romain.naour@gmail.com>
-References: <20161229004735.6293-1-romain.naour@gmail.com>
-Message-ID: <20170127214420.042c9bf0@free-electrons.com>
+Date: Fri, 27 Jan 2017 21:49:56 +1300
+Subject: [Buildroot] [git commit] gst-plugins-base: add missing dependency
+	on libxml2 for subparse
+Message-ID: <20170127085018.B13D282101@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=13b8ed48c33d5d9deebb64ae189501b375198890
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 29 Dec 2016 01:47:35 +0100, Romain Naour wrote:
-> Since SDL2 2.0.4, SDL2 OpenGL headers (SDL_opengl.h) are unconditionally
-> installed even if the OpenGL support has been disabled. So the SDL_ttf
-> build system enable the OpenGL support without checking for a GL
-> provider.
+The gst-plugins-base configure script claims that the subparse plugin is
+dependency-less - but it also silently disables subparse if libxml2 is
+not available.  So depend on libxml2 when subparse is selected.
 
-Isn't the real fix to modify SDL so that it doesn't install
-SDL_opengl.h when OpenGL support is disabled?
+Note: the analogous gst1 subparse plugin does not have this requirement.
 
-What was the motivation between the change in SDL to install
-SDL_opengl.h unconditionally?
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer/gst-plugins-base/Config.in           | 7 ++++---
+ package/gstreamer/gst-plugins-base/gst-plugins-base.mk | 1 +
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/gstreamer/gst-plugins-base/Config.in b/package/gstreamer/gst-plugins-base/Config.in
+index 8ad9a8e..e9c8239 100644
+--- a/package/gstreamer/gst-plugins-base/Config.in
++++ b/package/gstreamer/gst-plugins-base/Config.in
+@@ -46,9 +46,6 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_PLAYBACK
+ 	bool "playback (mandatory)"
+ 	default y
+ 
+-config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_SUBPARSE
+-	bool "subparse"
+-
+ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_TCP
+ 	bool "tcp"
+ 
+@@ -92,6 +89,10 @@ comment "pango plugin needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
++config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_SUBPARSE
++	bool "subparse"
++	select BR2_PACKAGE_LIBXML2
++
+ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_THEORA
+ 	bool "theora (*.ogg video)"
+ 	select BR2_PACKAGE_LIBTHEORA
+diff --git a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+index e1374ed..51c22a9 100644
+--- a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
++++ b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+@@ -111,6 +111,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_SUBPARSE),y)
+ GST_PLUGINS_BASE_CONF_OPTS += --enable-subparse
++GST_PLUGINS_BASE_DEPENDENCIES += libxml2
+ else
+ GST_PLUGINS_BASE_CONF_OPTS += --disable-subparse
+ endif
