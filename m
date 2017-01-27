@@ -1,44 +1,85 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 27 Jan 2017 10:51:39 +0100
-Subject: [Buildroot] [PATCH] package/libgcrypt: bump to version 1.7.6
-Message-ID: <20170127095139.12911-1-joerg.krause@embedded.rocks>
+From: Lionel Flandrin <lionel@svkt.org>
+Date: Fri, 27 Jan 2017 10:52:51 +0100
+Subject: [Buildroot] [PATCH 1/3] mkpimage: rewrite to support header
+ version 1
+In-Reply-To: <20170127211703.7e7d1113@free-electrons.com>
+References: <20170126112516.h465tdgnpl4ixh3f@ed>
+ <20170126112831.28107-1-lionel@svkt.org>
+ <20170127211703.7e7d1113@free-electrons.com>
+Message-ID: <20170127095249.d74pnbgc32fhp7do@ed>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No announcement was made for this version, so the hash was calculated locally.
+On Fri, Jan 27, 2017 at 09:17:03PM +1300, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 26 Jan 2017 12:28:31 +0100, Lionel Flandrin wrote:
+> > mkpimage is a proprietary tool part of Altera's Embedded Development
+> > Suite which is used to generate the image files supported by their
+> > BootROMs.
+> > 
+> > Newer versions of their SoCs (such as the Arria 10) use header version
+> > 1 which was not supported by the previous version of this tool.
+> > 
+> > This new version supports header version 1, improves error handling
+> > and tweaks the output to bring it closer to Altera's own tool. In
+> > particular the padding calculations have been changed. In all the
+> > configurations tested this program and Altera's mkpimage produce
+> > exactly the same files (while the previous version didn't).
+> > 
+> > Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+> 
+> Why not import the new version of this program available in Barebox,
+> which does support V1 headers nowadays?
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/libgcrypt/libgcrypt.hash | 6 ++----
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+Because I only noticed that too late... The comment about the barebox
+version was in the mk and when I saw it I was almost already done with
+my version. My search engine skills failed me once again.
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 89c5719b5..48bbd6af5 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,4 +1,2 @@
--# From https://lists.gnu.org/archive/html/info-gnu/2016-12/msg00007.html
--sha1 fa485d854748fc06ea041b3057b2de2f12fbc17f  libgcrypt-1.7.5.tar.bz2
--# Calculated based on the hash above
--sha256 d1fea4128beef2bb30a470af6bafabccc503ced350534fb9dd8f5a53ffbae800  libgcrypt-1.7.5.tar.bz2
-+# Locally calculated
-+sha256  626aafee84af9d2ce253d2c143dc1c0902dda045780cc241f39970fc60be05bc  libgcrypt-1.7.6.tar.bz2
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 48c62b4e5..a034358b3 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGCRYPT_VERSION = 1.7.5
-+LIBGCRYPT_VERSION = 1.7.6
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+Furthermore this version supports some additional parameters like
+setting the alignment and the entry point offset in the header (which
+are also supported in Altera's tool). It's also a little more user
+friendly (better error reporting etc...). Not a huge deal but still.
+
+More importantly it's closer to Altera's original mkpimage, both in
+command line usage and in the resulting image format making it a
+better canditate for drop-in replacement. So I decided that it was
+worth finishing it.
+
+> Otherwise, where does your version comes from?
+
+It's original work based on the current version of mkpimage.c in the
+buildroot repo and my reverse-engineering of version 16.1 of Altera's
+closed source java-based mkpimage.
+
+I realize it might make it a bit "off-topic" for inclusion in source
+form in buildroot's repo but it's not exactly complicated code either,
+it's a simple 14byte header and a 32bit CRC.
+
+I've compared the output of this code with altera's and barebox's
+version and they all generate the same binaries with the caveat that
+barebox's version uses different alignment constraints and doesn't
+handle certain options.
+
+But really it's up to you, for my current use case I can live with
+barebox's updated version if you prefer. Alternatively I could try
+getting this version of the code in barebox first, even though I don't
+use the project myself.
+
+> Best regards,
+> 
+> Thomas
+
+Thank you for taking the time to review this,
 -- 
-2.11.0
+Lionel Flandrin
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170127/ae7fd5f0/attachment.asc>
