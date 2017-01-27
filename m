@@ -1,85 +1,39 @@
-From: Lionel Flandrin <lionel@svkt.org>
-Date: Fri, 27 Jan 2017 10:52:51 +0100
-Subject: [Buildroot] [PATCH 1/3] mkpimage: rewrite to support header
- version 1
-In-Reply-To: <20170127211703.7e7d1113@free-electrons.com>
-References: <20170126112516.h465tdgnpl4ixh3f@ed>
- <20170126112831.28107-1-lionel@svkt.org>
- <20170127211703.7e7d1113@free-electrons.com>
-Message-ID: <20170127095249.d74pnbgc32fhp7do@ed>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 27 Jan 2017 10:56:33 +0100
+Subject: [Buildroot] [PATCH] package/libgpg-error: bump to version 1.26
+Message-ID: <20170127095633.27798-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 27, 2017 at 09:17:03PM +1300, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 26 Jan 2017 12:28:31 +0100, Lionel Flandrin wrote:
-> > mkpimage is a proprietary tool part of Altera's Embedded Development
-> > Suite which is used to generate the image files supported by their
-> > BootROMs.
-> > 
-> > Newer versions of their SoCs (such as the Arria 10) use header version
-> > 1 which was not supported by the previous version of this tool.
-> > 
-> > This new version supports header version 1, improves error handling
-> > and tweaks the output to bring it closer to Altera's own tool. In
-> > particular the padding calculations have been changed. In all the
-> > configurations tested this program and Altera's mkpimage produce
-> > exactly the same files (while the previous version didn't).
-> > 
-> > Signed-off-by: Lionel Flandrin <lionel@svkt.org>
-> 
-> Why not import the new version of this program available in Barebox,
-> which does support V1 headers nowadays?
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/libgpg-error/libgpg-error.hash | 2 +-
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Because I only noticed that too late... The comment about the barebox
-version was in the mk and when I saw it I was almost already done with
-my version. My search engine skills failed me once again.
-
-Furthermore this version supports some additional parameters like
-setting the alignment and the entry point offset in the header (which
-are also supported in Altera's tool). It's also a little more user
-friendly (better error reporting etc...). Not a huge deal but still.
-
-More importantly it's closer to Altera's original mkpimage, both in
-command line usage and in the resulting image format making it a
-better canditate for drop-in replacement. So I decided that it was
-worth finishing it.
-
-> Otherwise, where does your version comes from?
-
-It's original work based on the current version of mkpimage.c in the
-buildroot repo and my reverse-engineering of version 16.1 of Altera's
-closed source java-based mkpimage.
-
-I realize it might make it a bit "off-topic" for inclusion in source
-form in buildroot's repo but it's not exactly complicated code either,
-it's a simple 14byte header and a 32bit CRC.
-
-I've compared the output of this code with altera's and barebox's
-version and they all generate the same binaries with the caveat that
-barebox's version uses different alignment constraints and doesn't
-handle certain options.
-
-But really it's up to you, for my current use case I can live with
-barebox's updated version if you prefer. Alternatively I could try
-getting this version of the code in barebox first, even though I don't
-use the project myself.
-
-> Best regards,
-> 
-> Thomas
-
-Thank you for taking the time to review this,
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index 85d433df7..dac36db09 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 88cb2d2370f8378fd38452b99dc1419a80fd5897739b7198a4a7996364507803  libgpg-error-1.24.tar.gz
++sha256  3df7432dc17ef66c764c3fc4a1d309a9b4a0485c914ecfdb61b71e9bf45fd930  libgpg-error-1.26.tar.gz
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 1945673bc..5126c0a81 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPG_ERROR_VERSION = 1.24
++LIBGPG_ERROR_VERSION = 1.26
+ LIBGPG_ERROR_SITE = ftp://ftp.gnupg.org/gcrypt/libgpg-error
+ LIBGPG_ERROR_LICENSE = GPLv2+, LGPLv2.1+
+ LIBGPG_ERROR_LICENSE_FILES = COPYING COPYING.LIB
 -- 
-Lionel Flandrin
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170127/ae7fd5f0/attachment.asc>
+2.11.0
