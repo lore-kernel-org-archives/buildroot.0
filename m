@@ -1,103 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2017 22:20:29 +1300
-Subject: [Buildroot] [PATCH] ipmiutil: bump version and build fix
-In-Reply-To: <1483376873-27023-1-git-send-email-david.bachelart@bbright.com>
-References: <1483376873-27023-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20170127222029.329c1ccd@free-electrons.com>
+Date: Fri, 27 Jan 2017 22:22:56 +1300
+Subject: [Buildroot] [git commit] toolchain-external: bump CodeSourcery
+	AMD64 to 2016.11-19
+Message-ID: <20170127092308.70F67801E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ae84d5633101fef22f58bf8fc6c1783d97265621
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  2 Jan 2017 18:07:53 +0100, David Bachelart wrote:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../toolchain-external-codesourcery-amd64/Config.in          | 12 ++++++------
+ .../toolchain-external-codesourcery-amd64.hash               |  4 ++--
+ .../toolchain-external-codesourcery-amd64.mk                 |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-> diff --git a/package/ipmiutil/0002-cross-compile-remove-linux-flavour-detection.patch b/package/ipmiutil/0002-cross-compile-remove-linux-flavour-detection.patch
-> new file mode 100644
-> index 0000000..68507f9
-> --- /dev/null
-> +++ b/package/ipmiutil/0002-cross-compile-remove-linux-flavour-detection.patch
-> @@ -0,0 +1,93 @@
-> +cross-compile: remove linux flavour detection
-
-Why is this patch needed? Can we find a solution that can be
-potentially accepted by the upstream developers?
-
-> +-	if test "$sslver" = "1.1"; then
-> +-		echo "Detected openssl-$sslver" 
-> +-		MD2_CFLAGS="-DSKIP_MD2 -DSSL11"
-> +-	else 
-> ++#	if test "$sslver" = "1.1"; then
-> ++#		echo "Detected openssl-$sslver" 
-> ++#		MD2_CFLAGS="-DSKIP_MD2 -DSSL11"
-> ++#	else 
-
-So for some parts of the code, you're removing it, for other parts,
-you're commenting it. Why so?
-
-Also, is this really related to the "Linux flavor" detection? It seems
-more related to the MD2 thing (next patch).
-
-> diff --git a/package/ipmiutil/0003-cross-compilation-MD2-activation-is-now-a-configure-.patch b/package/ipmiutil/0003-cross-compilation-MD2-activation-is-now-a-configure-.patch
-> new file mode 100644
-> index 0000000..79f01c9
-> --- /dev/null
-> +++ b/package/ipmiutil/0003-cross-compilation-MD2-activation-is-now-a-configure-.patch
-> @@ -0,0 +1,61 @@
-> +cross compilation: MD2 activation is now a configure option
-
-Why?
-
-> ++MD2_CFLAGS="-DSKIP_MD2"
-> ++AC_ARG_ENABLE([md2],
-> ++    [  --enable-md2        build with MD2 support, requires later openssl.],
-
-"later openssl" ?
-
-> ++#	 if test -f "$LIB_DIR/libcrypto.so"; then
-> ++#		strings $LIB_DIR/libcrypto.so | grep EVP_md2 >/dev/null 2>&1
-> ++#		if test $? -ne 0; then
-> ++#			echo "No MD2 detected in openssl libcrypto.so"
-> ++#			MD2_CFLAGS="-DSKIP_MD2"
-> ++#		fi
-> ++#	 else
-> ++#		echo "No openssl $LIB_DIR/libcrypto.so detected"
-> ++#		MD2_CFLAGS="-DSKIP_MD2"
-> ++#	 fi
-
-Ah, ok, now I see why you're doing this.
-
-Please replace all this crap by an ac_check_lib() check:
-
-ac_check_lib([crypto], [EVP_md2])
-
-This will do a compile test to see if libcrypto really provides the
-EVP_md2() function.
-
-> diff --git a/package/ipmiutil/0004-cross-compilation-remove-stack-protection.patch b/package/ipmiutil/0004-cross-compilation-remove-stack-protection.patch
-> new file mode 100644
-> index 0000000..d58602b
-> --- /dev/null
-> +++ b/package/ipmiutil/0004-cross-compilation-remove-stack-protection.patch
-> @@ -0,0 +1,38 @@
-> +cross compilation: remove stack protection
-> +
-> +Fixes:
-> +    http://autobuild.buildroot.net/results/c01/c01548a751a08dcb176e8faa78a9850b68da2873/
-> +    http://autobuild.buildroot.net/results/a35/a357ae5e96a8eca8b80f568870e08917c844ca05/
-> +
-> +Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-
-No, that's not a correct patch. The problem is in the toolchain. SSP
-support is known to be broken on i586/musl. And it is broken for all
-packages, not just for ipmiutil.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
+index 86486c8..32d79eb 100644
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+-	bool "Sourcery CodeBench AMD64 2015.11"
++	bool "Sourcery CodeBench AMD64 2016.11"
+ 	depends on BR2_x86_64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_STATIC_LIBS
+@@ -9,13 +9,13 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	help
+ 	  Sourcery CodeBench toolchain for the amd64 (x86_64)
+-	  architectures, from Mentor Graphics. It uses gcc 5.2,
+-	  binutils 2.25.51, glibc 2.22, gdb 7.10.50 and kernel headers
+-	  4.2. It has support for the following variants:
++	  architectures, from Mentor Graphics. It uses gcc 6.2,
++	  binutils 2.26, glibc 2.24, gdb 7.11 and kernel headers
++	  4.7. It has support for the following variants:
+ 	    - AMD Puma/Jaguar (family 16h), glibc
+ 	    Default for x86_64, nothing special to do.
+ 	    - AMD Steamroller (family 15h), glibc
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash
+index ea5f300..291e6a5 100644
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 3c31206c8b9277f409ee00e4777ba82dfa6da2a4ca0926501cd5fb6bbd1b407e  amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-sha256 0b673f5035f97d5d03c31272cddab0f117d39ad76a5ad2a3bc98c156571527de  amd-2015.11-139-x86_64-amd-linux-gnu.src.tar.bz2
++sha256 a6c23837dd45a33866c60a2fd8d7af40520cd84ff1059abda797952d7ee0fafd  amd-2016.11-19-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
++sha256 d61ce0b5648ad63cca16fe233c82e7eaa6a3212a549d69a527e7a2d5350f7b4a  amd-2016.11-19-x86_64-amd-linux-gnu.src.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk
+index 4b8e31c..1697e5e 100644
+--- a/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk
++++ b/toolchain/toolchain-external/toolchain-external-codesourcery-amd64/toolchain-external-codesourcery-amd64.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
+-TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION = 2015.11-139
++TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION = 2016.11-19
+ TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_SOURCE = amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
+ TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_ACTUAL_SOURCE_TARBALL = amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
+ 
