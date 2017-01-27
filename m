@@ -1,65 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2017 21:37:53 +1300
-Subject: [Buildroot] [PATCH v2] sslh: new package
-In-Reply-To: <1485423636-8104-1-git-send-email-david.bachelart@bbright.com>
-References: <1485423636-8104-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20170127213753.3d5c7aff@free-electrons.com>
+Date: Fri, 27 Jan 2017 21:38:08 +1300
+Subject: [Buildroot] [git commit] DEVELOPERS: add David Bachelart for sslh
+Message-ID: <20170127083834.210AE81F86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b6e3dc51bcc397bc79df2a3138fad03123b1f90e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Jan 2017 10:40:36 +0100, David Bachelart wrote:
-> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> ---
-> Changes v1 -> v2:
->   - rewrite patch (suggested by Thomas Petazzoni). sslh version is 
->     extracted from git, but this version is corrupted if we use git 
->     as VCS for buildroot. This new patch is a more flexible way to 
->     handle this : the version is now extracted from git only if the
->     sslh directory is handled by git
->   - fix comment in Config.in file (suggested by Thomas Petazzoni)
->   - rewrite init script (suggested by Thomas Petazzoni)
->   - remove sslh.default file (suggested by Thomas Petazzoni)
->   - fix sslh.mk file (suggested by Thomas Petazzoni)
->     - indentation
->     - version now includes "v" prefix
->     - fix license
->     - use install target of upstream makefile
->   - register myself as developer for sslh in DEVELOPERS file
-> ---
->  DEVELOPERS                                         |  1 +
->  package/Config.in                                  |  1 +
->  ...ion-while-building-sslh-in-a-larger-git-t.patch | 43 +++++++++++++++++++
->  package/sslh/Config.in                             | 14 +++++++
->  package/sslh/S35sslh                               | 48 ++++++++++++++++++++++
->  package/sslh/sslh.hash                             |  4 ++
->  package/sslh/sslh.mk                               | 28 +++++++++++++
->  7 files changed, 139 insertions(+)
->  create mode 100644 package/sslh/0001-secure-version-while-building-sslh-in-a-larger-git-t.patch
->  create mode 100644 package/sslh/Config.in
->  create mode 100644 package/sslh/S35sslh
->  create mode 100644 package/sslh/sslh.hash
->  create mode 100644 package/sslh/sslh.mk
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-I've applied to master, after doing the following changes:
-
-    [Thomas:
-     - fix download location
-     - remove <pkg>_SOURCE variable, it was the default value
-     - remove trailing space
-     - keep only sha256 hash.]
-
-The biggest problem was the download location: it was just wrong, and
-it couldn't even download the tarball.
-
-Thanks for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e0021d7..c432ff3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -383,6 +383,7 @@ F:	package/ccrypt/
+ F:	package/dos2unix/
+ F:	package/ipmiutil/
+ F:	package/python-daemon/
++F:	package/sslh/
+ F:	package/udpxy/
+ 
+ N:	David Bender <codehero@gmail.com>
