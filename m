@@ -1,28 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2017 23:29:55 +1300
-Subject: [Buildroot] [PATCH v1 1/6] qt5base: add examples license
- information
-In-Reply-To: <20161219201026.13040-1-ps.report@gmx.net>
-References: <20161219201026.13040-1-ps.report@gmx.net>
-Message-ID: <20170128232955.03a8bef7@free-electrons.com>
+Date: Sat, 28 Jan 2017 23:32:37 +1300
+Subject: [Buildroot] [git commit] package/libasplib: Fix time.h include
+Message-ID: <20170128103251.4DC817F978@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=958bd2fad27abe4beab328e4f72a6b4e9d2f775b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 19 Dec 2016 21:10:21 +0100, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qt5/qt5base/qt5base.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+Fixes
+http://autobuild.buildroot.net/results/cc0/cc0b928ee24a526b7c82fd3f391e2be024a14578/
 
-All 6 patches applied. Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...0001-asplib_CPUTimer.h-Fix-time.h-include.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libasplib/0001-asplib_CPUTimer.h-Fix-time.h-include.patch b/package/libasplib/0001-asplib_CPUTimer.h-Fix-time.h-include.patch
+new file mode 100644
+index 0000000..c91ddbf
+--- /dev/null
++++ b/package/libasplib/0001-asplib_CPUTimer.h-Fix-time.h-include.patch
+@@ -0,0 +1,39 @@
++From 7291289ba0c052e45e2a0330642318798d6a4caf Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Fri, 27 Jan 2017 16:02:27 +0100
++Subject: [PATCH 1/1] asplib_CPUTimer.h: Fix time.h include
++
++According to https://linux.die.net/man/3/clock_gettime time.h needs to
++be included instead of sys/time.h.
++
++This patch fixes a build error found by buildroot autobuilders:
++
++http://autobuild.buildroot.net/results/cc0/cc0b928ee24a526b7c82fd3f391e2be024a14578//
++
++/home/peko/autobuild/instance-1/output/build/libasplib-be7fac89218a84b75f7598e3d76625ece99296f2/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.cpp: In member function 'void asplib::CCPUTimer::start_Timer()':
++/home/peko/autobuild/instance-1/output/build/libasplib-be7fac89218a84b75f7598e3d76625ece99296f2/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.cpp:69:19: error: 'CLOCK_REALTIME' was not declared in this scope
++     clock_gettime(CLOCK_REALTIME, &m_startTime);
++
++Patch sent upstream: https://github.com/AchimTuran/asplib/pull/34
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h b/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h
++index a61ff49..a9676e0 100644
++--- a/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h
+++++ b/asplib_modules/Timer/asplib/Timer/asplib_CPUTimer.h
++@@ -29,7 +29,7 @@
++   #include <windows.h>
++   #include <time.h>
++ #elif defined(TARGET_LINUX)
++-  #include <sys/time.h>
+++  #include <time.h>
++ #endif
++ 
++ namespace asplib
++-- 
++2.11.0
++
