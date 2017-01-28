@@ -1,83 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2017 23:06:32 +1300
-Subject: [Buildroot] [PATCH v2] jsmn: new package
-In-Reply-To: <1483441304-3789-1-git-send-email-david.bachelart@bbright.com>
-References: <1483441304-3789-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20170128230632.71598265@free-electrons.com>
+Date: Sat, 28 Jan 2017 23:21:30 +1300
+Subject: [Buildroot] [git commit] package/cbootimage: enable target variant
+Message-ID: <20170128102305.31D5581E65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f9edac7ec45958ebd22f156f7ca859e1dbf0673a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this contribution! I applied, but after doing a number of
-changes. See below.
+This allow bootloader modification online on Tegra-targets
 
-On Tue,  3 Jan 2017 12:01:44 +0100, David Bachelart wrote:
-> diff --git a/package/jsmn/Config.in b/package/jsmn/Config.in
-> new file mode 100644
-> index 0000000..23d20f5
-> --- /dev/null
-> +++ b/package/jsmn/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_JSMN
-> +	bool "jsmn"
-> +	help
-> +	  jsmn (pronounced like 'jasmine') is a minimalistic JSON parser in C. It can 
-> +	  be easily integrated into resource-limited or embedded projects.
+Signed-off-by: Misha Komarovskiy <zombah@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                | 1 +
+ package/cbootimage/Config.in     | 9 +++++++++
+ package/cbootimage/cbootimage.mk | 2 ++
+ package/jsmn/jsmn.mk             | 4 ++--
+ 4 files changed, 14 insertions(+), 2 deletions(-)
 
-Those lines were too long, so I rewrapped the Config.in help text.
-
-> diff --git a/package/jsmn/jsmn.hash b/package/jsmn/jsmn.hash
-> new file mode 100644
-> index 0000000..5cc51c3
-> --- /dev/null
-> +++ b/package/jsmn/jsmn.hash
-> @@ -0,0 +1,4 @@
-> +# Locally computed
-> +md5 78e2731c5697a3c35795b6350402e015    jsmn-6021415cc75e7922d45b12935f56348b064d8a7f.tar.gz
-> +sha1    09b1a3493db6b1a77b03bc835aa9be6345db5269    jsmn-6021415cc75e7922d45b12935f56348b064d8a7f.tar.gz
-> +sha256  e08993848b2abab62aa9572a560bb6e5ed4762f8537cd67c4de6cb17e17090a0    jsmn-6021415cc75e7922d45b12935f56348b064d8a7f.tar.gz
-
-Having a sha256 is sufficient, we consider it a sufficiently strong
-hash.
-
-> +JSMN_VERSION = 6021415cc75e7922d45b12935f56348b064d8a7f
-> +JSMN_SITE = $(call github,zserge,jsmn,$(JSMN_VERSION))
-> +JSMN_LICENSE = BSD
-
-This is wrong. First BSD is not a license, you must specify BSD-2c or
-BSD-3c. But more importantly, the project is not under a BSD license,
-it's under a MIT license.
-
-> +JSMN_LICENSE_FILES = LICENSE
-> +
-> +JSMN_INSTALL_STAGING = YES
-> +JSMN_INSTALL_TARGET = NO
-> +
-> +define JSMN_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> +		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-> +		AR="$(TARGET_AR)"
-
-Instead of passing CC and AR manually, I've used
-$(TARGET_CONFIGURE_OPTS), which is shorter and better.
-
-> +endef
-> +
-> +define JSMN_INSTALL_STAGING_CMDS
-> +    $(INSTALL) -m 0644 $(@D)/libjsmn.a $(STAGING_DIR)/usr/lib/
-> +    $(INSTALL) -m 0644 $(@D)/jsmn.h $(STAGING_DIR)/usr/include/
-
-Indentation was wrong: you should use one tab to indent commands. And
-the destination paths should be full paths, including the filename.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 6ce19df..796ad33 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -353,6 +353,7 @@ endmenu
+ 	source "package/avrdude/Config.in"
+ 	source "package/bcache-tools/Config.in"
+ 	source "package/biosdevname/Config.in"
++	source "package/cbootimage/Config.in"
+ 	source "package/cc-tool/Config.in"
+ 	source "package/cdrkit/Config.in"
+ 	source "package/cryptsetup/Config.in"
+diff --git a/package/cbootimage/Config.in b/package/cbootimage/Config.in
+new file mode 100644
+index 0000000..1a7fef0
+--- /dev/null
++++ b/package/cbootimage/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_CBOOTIMAGE
++	bool "cbootimage"
++	depends on BR2_arm || BR2_armeb
++	help
++	  This project provides a tool which compiles BCT (Boot
++	  Configuration Table) images to place into the boot flash of
++	  a Tegra-based device.
++
++	  https://github.com/NVIDIA/cbootimage
+diff --git a/package/cbootimage/cbootimage.mk b/package/cbootimage/cbootimage.mk
+index 20b17dd..1b5672d 100644
+--- a/package/cbootimage/cbootimage.mk
++++ b/package/cbootimage/cbootimage.mk
+@@ -10,4 +10,6 @@ CBOOTIMAGE_LICENSE = GPLv2
+ CBOOTIMAGE_LICENSE_FILES = COPYING
+ CBOOTIMAGE_AUTORECONF = YES
+ 
++$(eval $(autotools-package))
+ $(eval $(host-autotools-package))
++
+diff --git a/package/jsmn/jsmn.mk b/package/jsmn/jsmn.mk
+index 30dd9c8..c98f279 100644
+--- a/package/jsmn/jsmn.mk
++++ b/package/jsmn/jsmn.mk
+@@ -17,8 +17,8 @@ define JSMN_BUILD_CMDS
+ endef
+ 
+ define JSMN_INSTALL_STAGING_CMDS
+-	$(INSTALL) -m 0644 $(@D)/libjsmn.a $(STAGING_DIR)/usr/lib/libjsmn.a
+-	$(INSTALL) -m 0644 $(@D)/jsmn.h $(STAGING_DIR)/usr/include/jsmn.h
++	$(INSTALL) -D -m 0644 $(@D)/libjsmn.a $(STAGING_DIR)/usr/lib/libjsmn.a
++	$(INSTALL) -D -m 0644 $(@D)/jsmn.h $(STAGING_DIR)/usr/include/jsmn.h
+ endef
+ 
+ $(eval $(generic-package))
