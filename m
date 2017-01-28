@@ -1,33 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2017 23:23:07 +1300
-Subject: [Buildroot] [PATCH 1/1] package/cbootimage: enable target
- variant
-In-Reply-To: <1482181701-2671-1-git-send-email-zombah@gmail.com>
-References: <1482181701-2671-1-git-send-email-zombah@gmail.com>
-Message-ID: <20170128232307.2c126d13@free-electrons.com>
+Date: Sat, 28 Jan 2017 23:25:23 +1300
+Subject: [Buildroot] [git commit] qt5base: add examples license information
+Message-ID: <20170128102924.C242E81EBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=abd35cad939250cc7e7a0657233e9debf9441efc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Dec 2016 00:08:21 +0300, Misha Komarovskiy wrote:
-> This allow bootloader modification online on Tegra-targets
-> 
-> Signed-off-by: Misha Komarovskiy <zombah@gmail.com>
-> ---
->  package/Config.in                | 1 +
->  package/cbootimage/Config.in     | 9 +++++++++
->  package/cbootimage/cbootimage.mk | 1 +
->  3 files changed, 11 insertions(+)
->  create mode 100644 package/cbootimage/Config.in
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5base/qt5base.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 45ba4e6..bbbaf0f 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -47,6 +47,10 @@ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
+ QT5BASE_LICENSE = GPLv3 or LGPLv2.1 with exception or LGPLv3, GFDLv1.3 (docs)
+ QT5BASE_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++QT5BASE_LICENSE := $(QT5BASE_LICENSE), BSD-3c (examples)
++QT5BASE_LICENSE_FILES += header.BSD
++endif
+ else
+ QT5BASE_LICENSE = Commercial license
+ QT5BASE_REDISTRIBUTE = NO
