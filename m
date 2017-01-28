@@ -1,61 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2017 21:39:40 +1300
-Subject: [Buildroot] [git commit] janus-gateway: make recordplay plugin
-	optional
-Message-ID: <20170128084141.B7F6A7FAC7@busybox.osuosl.org>
+Date: Sat, 28 Jan 2017 21:39:35 +1300
+Subject: [Buildroot] [git commit] janus-gateway: remove unnecessary
+	dependencies
+Message-ID: <20170128084141.782AC81E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75175e4cd7cdc097d0b4d8bc1f67506d69e7b3b0
+commit: https://git.buildroot.net/buildroot/commit/?id=e942b7e731a697f1f77793a7adeb17c72bc411c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently janus-gateway is built by default with the record and play plugin.
-This causes a example config file to be placed on the target filing system
-that the user may not need or want, creates a 68K .so
-file on the target directory, and janus will also create a warning when ran
-if the plugin does not have a matching configuration file setup by the user,
-as it will not use the example config file by default.
-
-This patch makes the record and play plugin a option.
+janus-gateway currently depends on several dependencies that are not
+mandatory. This commit removes all non-mandatory dependencies. The
+build has been tested to work fine with this reduced set of
+dependencies.
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/janus-gateway/Config.in        | 3 +++
- package/janus-gateway/janus-gateway.mk | 6 ++++++
- 2 files changed, 9 insertions(+)
+ package/janus-gateway/Config.in        | 7 ++-----
+ package/janus-gateway/janus-gateway.mk | 4 ++--
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 39297a8..c050ede 100644
+index 20491b7..b9a2c66 100644
 --- a/package/janus-gateway/Config.in
 +++ b/package/janus-gateway/Config.in
-@@ -26,6 +26,9 @@ config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
- config BR2_PACKAGE_JANUS_ECHO_TEST
- 	bool "echo test"
- 
-+config BR2_PACKAGE_JANUS_RECORDPLAY
-+	bool "record and play"
-+
- config BR2_PACKAGE_JANUS_SIP_GATEWAY
- 	bool "sip gateway"
- 	select BR2_PACKAGE_SOFIA_SIP
+@@ -1,14 +1,11 @@
+ config BR2_PACKAGE_JANUS_GATEWAY
+ 	bool "janus-gateway"
+-	select BR2_PACKAGE_LIBMICROHTTPD
+ 	select BR2_PACKAGE_JANSSON
++	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBNICE
+-	select BR2_PACKAGE_SOFIA_SIP
+ 	select BR2_PACKAGE_LIBSRTP
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_DING_LIBS
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt, libmicrohttpd
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libmicrohttpd
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_WCHAR # libnice -> libglib2
+ 	depends on BR2_USE_MMU # libnice
+ 	depends on !BR2_STATIC_LIBS # dlopen
 diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index ce12393..a051e58 100644
+index 4b87b33..1b83768 100644
 --- a/package/janus-gateway/janus-gateway.mk
 +++ b/package/janus-gateway/janus-gateway.mk
-@@ -39,6 +39,12 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-plugin-echotest
- endif
+@@ -10,8 +10,8 @@ JANUS_GATEWAY_LICENSE = GPLv3
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_PACKAGE_JANUS_RECORDPLAY),y)
-+JANUS_GATEWAY_CONF_OPTS += --enable-plugin-recordplay
-+else
-+JANUS_GATEWAY_CONF_OPTS += --disable-plugin-recordplay
-+endif
-+
- ifeq ($(BR2_PACKAGE_JANUS_SIP_GATEWAY),y)
- JANUS_GATEWAY_DEPENDENCIES += sofia-sip
- JANUS_GATEWAY_CONF_OPTS += --enable-plugin-sip
+ # ding-libs provides the ini_config library
+-JANUS_GATEWAY_DEPENDENCIES = host-pkgconf libmicrohttpd jansson \
+-	libnice sofia-sip libsrtp host-gengetopt openssl ding-libs
++JANUS_GATEWAY_DEPENDENCIES = host-pkgconf jansson libnice \
++	libsrtp host-gengetopt libglib2 openssl 
+ 
+ # Straight out of the repository, no ./configure, and we also patch
+ # configure.ac.
