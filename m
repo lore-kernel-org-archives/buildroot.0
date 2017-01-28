@@ -1,69 +1,67 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Jan 2017 18:49:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fbterm: Fix building against
-	libiconv
-Message-ID: <20170128174916.11214-1-bernd.kuhls@t-online.de>
+Date: Sat, 28 Jan 2017 19:25:31 +0100
+Subject: [Buildroot] [PATCH] ruby: bump version to 2.4.0
+References: <20170109171403.57632-1-Vincent.Riera@imgtec.com>
+ <871sw7asxn.fsf@dell.be.48ers.dk> <87lgu24xdi.fsf@dell.be.48ers.dk>
+Message-ID: <r94vldxsb4.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/d5d/d5d9705eea16f07848a313d9c83f491569734c5d/
+Am Sun, 22 Jan 2017 22:07:21 +0100 schrieb Peter Korsgaard:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/fbterm/0004-iconv.patch | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/fbterm/0004-iconv.patch
+> This seems to cause a number of build issues. Care to take a look?
+> 
+> http://autobuild.buildroot.net/?reason=ruby-2.4.0
 
-diff --git a/package/fbterm/0004-iconv.patch b/package/fbterm/0004-iconv.patch
-new file mode 100644
-index 000000000..39c9182e4
---- /dev/null
-+++ b/package/fbterm/0004-iconv.patch
-@@ -0,0 +1,41 @@
-+Fix building against libiconv
-+
-+Downloaded from
-+https://github.com/kyak/openwrt-packages/blob/master/fbterm/patches/001-iconv.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- a/src/lib/io.cpp
-++++ b/src/lib/io.cpp
-+@@ -119,10 +119,10 @@ void IoPipe::setCodec(const s8 *up, cons
-+ 	if (!strcasecmp(up, down)) return;
-+ 
-+ 	mCodecRead = iconv_open(up, down);
-+-	if (mCodecRead == (void*)-1) mCodecRead = 0;
-++	if (mCodecRead == (iconv_t)(-1)) mCodecRead = 0;
-+ 
-+ 	mCodecWrite = iconv_open(down, up);
-+-	if (mCodecWrite == (void*)-1) mCodecWrite = 0;
-++	if (mCodecWrite == (iconv_t)(-1)) mCodecWrite = 0;
-+ }
-+ 
-+ #define BUF_SIZE 10240
-+--- a/src/lib/io.h
-++++ b/src/lib/io.h
-+@@ -23,6 +23,7 @@
-+ 
-+ #include "type.h"
-+ #include "instance.h"
-++#include <iconv.h>
-+ 
-+ class IoPipe {
-+ public:
-+@@ -47,7 +48,7 @@ private:
-+ 	void writeIo(s8 *buf, u32 len);
-+ 
-+ 	s32 mFd;
-+-	void *mCodecRead, *mCodecWrite;
-++	iconv_t mCodecRead, mCodecWrite;
-+ 	s8 mBufRead[16], mBufWrite[16];
-+ 	u32 mBufLenRead, mBufLenWrite;
-+ };
--- 
-2.11.0
+Hi,
+
+apparantly configure has problems detecting math functions of uClibc:
+
+http://autobuild.buildroot.net/
+results/2aa/2aa668247b6925ff1290182a67092156b5bcc1b2//build-end.log
+
+checking for finite... no
+[...]
+checking for isinf... no
+checking for isnan... no
+
+http://autobuild.buildroot.net/
+results/2aa/2aa668247b6925ff1290182a67092156b5bcc1b2//ruby-2.4.0/
+config.log
+
+configure:20069: checking for finite
+configure:20069: /home/test/autobuild/run/instance-1/output/host/usr/bin/
+m68k-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -
+D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -
+D_FILE_OFFSET_BITS=64  conftest.c -lgmp -ldl -lcrypt -lm  >&5
+conftest.c:238:6: warning: conflicting types for built-in function 
+'finite'
+ char finite ();
+      ^
+/tmp/ccip45ij.o: In function `main':
+conftest.c:(.text.startup+0x6): undefined reference to `finite'
+collect2: error: ld returned 1 exit status
+
+although uClibc supports these functions.
+
+Hacking ruby.mk like this
+
+RUBY_CONF_ENV += \
+       ac_cv_func_finite=yes \
+       ac_cv_func_isinf=yes \
+       ac_cv_func_isnan=yes
+endif
+
+fixes the build:
+
+checking for finite... (cached) yes
+[...]
+checking for isinf... (cached) yes
+checking for isnan... (cached) yes
+
+Shall I send a patch with this hack?
+
+Regards, Bernd
