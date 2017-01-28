@@ -1,67 +1,130 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Jan 2017 19:25:31 +0100
-Subject: [Buildroot] [PATCH] ruby: bump version to 2.4.0
-References: <20170109171403.57632-1-Vincent.Riera@imgtec.com>
- <871sw7asxn.fsf@dell.be.48ers.dk> <87lgu24xdi.fsf@dell.be.48ers.dk>
-Message-ID: <r94vldxsb4.ln2@ID-313208.user.individual.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Jan 2017 21:24:05 +0100
+Subject: [Buildroot] [PATCH v3,1/1] hiredis: new package
+Message-ID: <1485635045-86074-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 22 Jan 2017 22:07:21 +0100 schrieb Peter Korsgaard:
+Minimalistic C client for Redis >= 1.2
 
-> This seems to cause a number of build issues. Care to take a look?
-> 
-> http://autobuild.buildroot.net/?reason=ruby-2.4.0
+It is minimalistic because it just adds minimal support for
+the protocol, but at the same time it uses a high level
+printf-alike API in order to make it much higher level than
+otherwise suggested by its minimal code base and the lack of
+explicit bindings for every Redis command.
 
-Hi,
+https://github.com/redis/hiredis
 
-apparantly configure has problems detecting math functions of uClibc:
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+Changes v2 -> v3 (after review of Romain Naour):
+ - Add -D option to INSTALL instead of calling mkdir -p
 
-http://autobuild.buildroot.net/
-results/2aa/2aa668247b6925ff1290182a67092156b5bcc1b2//build-end.log
+Changes v1 -> v2:
+ - Do not use make install as it will always build static and shared
+   version of the library (which will fail if BR2_STATIC_LIBS is set)
 
-checking for finite... no
-[...]
-checking for isinf... no
-checking for isnan... no
+ package/Config.in            |  1 +
+ package/hiredis/Config.in    | 12 ++++++++++++
+ package/hiredis/hiredis.hash |  2 ++
+ package/hiredis/hiredis.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 61 insertions(+)
+ create mode 100644 package/hiredis/Config.in
+ create mode 100644 package/hiredis/hiredis.hash
+ create mode 100644 package/hiredis/hiredis.mk
 
-http://autobuild.buildroot.net/
-results/2aa/2aa668247b6925ff1290182a67092156b5bcc1b2//ruby-2.4.0/
-config.log
-
-configure:20069: checking for finite
-configure:20069: /home/test/autobuild/run/instance-1/output/host/usr/bin/
-m68k-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -
-D_FILE_OFFSET_BITS=64  -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -
-D_FILE_OFFSET_BITS=64  conftest.c -lgmp -ldl -lcrypt -lm  >&5
-conftest.c:238:6: warning: conflicting types for built-in function 
-'finite'
- char finite ();
-      ^
-/tmp/ccip45ij.o: In function `main':
-conftest.c:(.text.startup+0x6): undefined reference to `finite'
-collect2: error: ld returned 1 exit status
-
-although uClibc supports these functions.
-
-Hacking ruby.mk like this
-
-RUBY_CONF_ENV += \
-       ac_cv_func_finite=yes \
-       ac_cv_func_isinf=yes \
-       ac_cv_func_isnan=yes
-endif
-
-fixes the build:
-
-checking for finite... (cached) yes
-[...]
-checking for isinf... (cached) yes
-checking for isnan... (cached) yes
-
-Shall I send a patch with this hack?
-
-Regards, Bernd
+diff --git a/package/Config.in b/package/Config.in
+index b6b409c..df17dd6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -925,6 +925,7 @@ menu "Database"
+ 	source "package/berkeleydb/Config.in"
+ 	source "package/cppdb/Config.in"
+ 	source "package/gdbm/Config.in"
++	source "package/hiredis/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
+ 	source "package/libpqxx/Config.in"
+diff --git a/package/hiredis/Config.in b/package/hiredis/Config.in
+new file mode 100644
+index 0000000..1656355
+--- /dev/null
++++ b/package/hiredis/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HIREDIS
++	bool "hiredis"
++	help
++	  Minimalistic C client for Redis >= 1.2
++
++	  It is minimalistic because it just adds minimal support for
++	  the protocol, but at the same time it uses a high level
++	  printf-alike API in order to make it much higher level than
++	  otherwise suggested by its minimal code base and the lack of
++	  explicit bindings for every Redis command.
++
++	  https://github.com/redis/hiredis
+diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+new file mode 100644
+index 0000000..2c788a6
+--- /dev/null
++++ b/package/hiredis/hiredis.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	717e6fc8dc2819bef522deaca516de9e51b9dfa68fe393b7db5c3b6079196f78	hiredis-v0.13.3.tar.gz
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+new file mode 100644
+index 0000000..ff7944b
+--- /dev/null
++++ b/package/hiredis/hiredis.mk
+@@ -0,0 +1,46 @@
++################################################################################
++#
++# hiredis
++#
++################################################################################
++
++HIREDIS_VERSION = v0.13.3
++HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
++HIREDIS_LICENSE = BSD-3c
++HIREDIS_LICENSE_FILES = COPYING
++HIREDIS_INSTALL_STAGING = YES
++
++HIREDIS_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	PREFIX=/usr
++
++HIREDIS_TARGETS = hiredis.pc
++ifeq ($(BR2_STATIC_LIBS),y)
++HIREDIS_TARGETS += static
++else ifeq ($(BR2_SHARED_LIBS),y)
++HIREDIS_TARGETS += dynamic
++else ifeq $(BR2_SHARED_STATIC_LIBS),y)
++HIREDIS_TARGETS += dynamic static
++endif
++
++define HIREDIS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(HIREDIS_MAKE_OPTS) -C $(@D) \
++		$(HIREDIS_TARGETS)
++endef
++
++HIREDIS_INCLUDE_DIR = $(STAGING_DIR)/usr/include/hiredis
++
++# Do not call make install as this target will build shared and static libraries
++define HIREDIS_INSTALL_STAGING_CMDS
++	mkdir -p $(HIREDIS_INCLUDE_DIR)
++	cp -dpfr $(@D)/hiredis.h $(@D)/async.h $(@D)/read.h $(@D)/sds.h \
++		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
++	$(INSTALL) -D -m 0644 $(@D)/libhiredis* $(STAGING_DIR)/usr/lib
++	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc $(STAGING_DIR)/usr/lib/pkgconfig
++endef
++
++define HIREDIS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/libhiredis* $(TARGET_DIR)/usr/lib
++endef
++
++$(eval $(generic-package))
+-- 
+2.5.0
