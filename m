@@ -1,58 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2017 15:28:39 +1300
-Subject: [Buildroot] [git commit] libpjsip: bump to version 2.6
-Message-ID: <20170128023002.7D88A820F7@busybox.osuosl.org>
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+Date: Fri, 27 Jan 2017 18:20:32 -0700
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-01-26
+In-Reply-To: <87y3xw9mr5.fsf@dell.be.48ers.dk>
+References: <20170127073003.CA12320D83@mail.free-electrons.com>
+ <20170127215534.GC3430@free.fr> <87y3xw9mr5.fsf@dell.be.48ers.dk>
+Message-ID: <CAGrGpJAGqD1zOJYUcPqGGjt6rEgO-XttKh3XjtU5eb1oikvbbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93916d0757e26374bd10ea4f38c8e353e88a37ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I forwarded the issue to Sam Lantinga, author of SDL, and just got this
+note back.   Assuming he is reasonably prompt, I suggest waiting till he
+fixes SDL_ttf.
 
-In addition, --disable-webrtc has been changed to --disable-libwebrtc
-in the aconfigure file.
+Peter
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libpjsip/libpjsip.hash | 6 +++---
- package/libpjsip/libpjsip.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Sam Lantinga
+6:06 PM (13 minutes ago)
+to me
+I'll fix SDL_ttf so it's smarter about OpenGL detection
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index 9976065..ec636a8 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,5 +1,5 @@
--# From http://www.pjsip.org/release/2.5.5/MD5SUM.TXT
--md5	183f7144b9aa238884243c0fc52ece36  pjproject-2.5.5.tar.bz2
-+# From http://www.pjsip.org/release/2.6/MD5SUM.TXT
-+md5	c347a672679e7875ce572e18517884b2  pjproject-2.6.tar.bz2
- 
- # Locally computed
--sha256	ab39207b761d3485199cd881410afeb2d171dff7c2bf75e8caae91c6dca508f3	pjproject-2.5.5.tar.bz2
-+sha256	2f5a1da1c174d845871c758bd80fbb580fca7799d3cfaa0d3c4e082b5161c7b4	pjproject-2.6.tar.bz2
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index eb50f00..b0d0609 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPJSIP_VERSION = 2.5.5
-+LIBPJSIP_VERSION = 2.6
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
- LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
- LIBPJSIP_DEPENDENCIES = libsrtp
-@@ -34,7 +34,7 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-opencore-amr \
- 	--disable-g7221-codec \
- 	--disable-ilbc-codec \
--	--disable-webrtc \
-+	--disable-libwebrtc \
- 	--disable-opus \
- 	--disable-oss \
- 	--disable-ext-sound \
+
+
+
+On Fri, Jan 27, 2017 at 3:11 PM, Peter Korsgaard <peter@korsgaard.com>
+wrote:
+
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+> Hi,
+>
+>  > So... Those are due to a stupdity in both the sdl2 install procedure and
+>  > the sdl2_ttf configure:
+>
+>  >   - sdl2 will always install all its headers, even those for features
+>  >     that are disabled, like SDL_opengl.h et al.;
+>
+>  >   - sdl_ttf will try to compile (not link) a program that includes
+>  >     SDL_opengl.h and concludes that GL support is enabled;
+>
+>  >   - sdl2_ttf will then build and try to link with -lGL.
+>
+>  > Bummer.
+>
+>  > Cc-ing Guillaume and Peter. Any idea? ;-)
+>
+> I don't really know much about SDL2, but how about deleting SDL_opengl.h
+> as a sdl2 post-target-install step? (or rather, get upstream to fix it
+> so it doesn't get installed in the first place, but this can be a
+> solution for now).
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170127/8a1fd566/attachment.html>
