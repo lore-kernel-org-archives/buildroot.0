@@ -1,149 +1,151 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 28 Jan 2017 14:57:49 +0100
-Subject: [Buildroot] [PATCH v2,1/1] hiredis: new package
-In-Reply-To: <1482534365-79003-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1482534365-79003-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <835b48e1-9fea-1dd8-2ac3-fb9662b80a9d@gmail.com>
+Date: Sat, 28 Jan 2017 15:35:43 +0100
+Subject: [Buildroot] [PATCH 1/1] firejail: new package
+In-Reply-To: <1477502552-4236-1-git-send-email-cdf123@cdf123.net>
+References: <1477502552-4236-1-git-send-email-cdf123@cdf123.net>
+Message-ID: <59647f3f-b654-acf0-1fd6-09a47a388d47@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hi Chris,
 
-Le 24/12/2016 ? 00:06, Fabrice Fontaine a ?crit :
-> Minimalistic C client for Redis >= 1.2
+Le 26/10/2016 ? 19:22, Chris Frederick a ?crit :
+> Firejail Security Sandbox
+> https://firejail.wordpress.com/
 > 
-> It is minimalistic because it just adds minimal support for
-> the protocol, but at the same time it uses a high level
-> printf-alike API in order to make it much higher level than
-> otherwise suggested by its minimal code base and the lack of
-> explicit bindings for every Redis command.
+> Lightweight application sandboxing system using seccomp and kernel
+> namespaces.
 > 
-> https://github.com/redis/hiredis
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> Signed-off-by: Chris Frederick <cdf123@cdf123.net>
 > ---
+>  DEVELOPERS                     |  3 +++
+>  package/Config.in              |  1 +
+>  package/firejail/Config.in     | 17 +++++++++++++++++
+>  package/firejail/firejail.hash |  2 ++
+>  package/firejail/firejail.mk   | 27 +++++++++++++++++++++++++++
+>  5 files changed, 50 insertions(+)
+>  create mode 100644 package/firejail/Config.in
+>  create mode 100644 package/firejail/firejail.hash
+>  create mode 100644 package/firejail/firejail.mk
 > 
-> Changes v1 -> v2:
->  - Do not use make install as it will always build static and shared
->    version of the library (which will fail if BR2_STATIC_LIBS is set)
-> 
->  package/Config.in            |  1 +
->  package/hiredis/Config.in    | 12 +++++++++++
->  package/hiredis/hiredis.hash |  2 ++
->  package/hiredis/hiredis.mk   | 47 ++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 62 insertions(+)
->  create mode 100644 package/hiredis/Config.in
->  create mode 100644 package/hiredis/hiredis.hash
->  create mode 100644 package/hiredis/hiredis.mk
-> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 16d9b55..3dcd0e2 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -291,6 +291,9 @@ F:	package/libdvbsi/
+>  F:	package/libsvg/
+>  F:	package/libsvg-cairo/
+>  
+> +N:	Chris Frederick (chrisf at cdf123.net)
+> +F:	package/firejail/
+> +
+
+We usually prefer adding a new DEVELOPERS entry in a separate patch.
+
+>  N:	Chris Packham <judge.packham@gmail.com>
+>  F:	package/eventlog/
+>  F:	package/micropython/
 > diff --git a/package/Config.in b/package/Config.in
-> index b6b409c..df17dd6 100644
+> index 9399f63..be20478 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -925,6 +925,7 @@ menu "Database"
->  	source "package/berkeleydb/Config.in"
->  	source "package/cppdb/Config.in"
->  	source "package/gdbm/Config.in"
-> +	source "package/hiredis/Config.in"
->  	source "package/kompexsqlite/Config.in"
->  	source "package/leveldb/Config.in"
->  	source "package/libpqxx/Config.in"
-> diff --git a/package/hiredis/Config.in b/package/hiredis/Config.in
+> @@ -1710,6 +1710,7 @@ menu "System tools"
+>  	source "package/efibootmgr/Config.in"
+>  	source "package/efivar/Config.in"
+>  	source "package/emlog/Config.in"
+> +	source "package/firejail/Config.in"
+>  	source "package/ftop/Config.in"
+>  	source "package/getent/Config.in"
+>  	source "package/htop/Config.in"
+> diff --git a/package/firejail/Config.in b/package/firejail/Config.in
 > new file mode 100644
-> index 0000000..1656355
+> index 0000000..45fc496
 > --- /dev/null
-> +++ b/package/hiredis/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_HIREDIS
-> +	bool "hiredis"
+> +++ b/package/firejail/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_FIREJAIL
+> +	bool "firejail"
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+
+Why it depends on glibc ?
+
 > +	help
-> +	  Minimalistic C client for Redis >= 1.2
+> +	  Firejail is a SUID program that reduces the risk of security
+> +	  breaches by restricting the running environment of untrusted
+> +	  applications using Linux namespaces and seccomp-bpf. It
+> +	  allows a process and all its descendants to have their own
+> +	  private view of the globally shared kernel resources, such
+> +	  as the network stack, process table, mount table.
 > +
-> +	  It is minimalistic because it just adds minimal support for
-> +	  the protocol, but at the same time it uses a high level
-> +	  printf-alike API in order to make it much higher level than
-> +	  otherwise suggested by its minimal code base and the lack of
-> +	  explicit bindings for every Redis command.
+> +	  https://firejail.wordpress.com/
 > +
-> +	  https://github.com/redis/hiredis
-> diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+> +comment "firejail needs a glibc toolchain"
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
+
+Package dependencies must be propagated to the comment dependencies:
+
+comment "firejail needs a glibc toolchain w/ threads"
+	depends on BR2_USE_MMU
+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
+
+> diff --git a/package/firejail/firejail.hash b/package/firejail/firejail.hash
 > new file mode 100644
-> index 0000000..2c788a6
+> index 0000000..dc2eb80
 > --- /dev/null
-> +++ b/package/hiredis/hiredis.hash
+> +++ b/package/firejail/firejail.hash
 > @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256	717e6fc8dc2819bef522deaca516de9e51b9dfa68fe393b7db5c3b6079196f78	hiredis-v0.13.3.tar.gz
-> diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+> +# From 
+> +sha256 4f3bceee973b84fdf13a5d5ab0060d140ecc8e42c19c945e7fb93f0fd8499b47  firejail-0.9.42.tar.xz
+> diff --git a/package/firejail/firejail.mk b/package/firejail/firejail.mk
 > new file mode 100644
-> index 0000000..7360467
+> index 0000000..3926e8a
 > --- /dev/null
-> +++ b/package/hiredis/hiredis.mk
-> @@ -0,0 +1,47 @@
+> +++ b/package/firejail/firejail.mk
+> @@ -0,0 +1,27 @@
 > +################################################################################
 > +#
-> +# hiredis
+> +# firejail
 > +#
 > +################################################################################
 > +
-> +HIREDIS_VERSION = v0.13.3
-> +HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
-> +HIREDIS_LICENSE = BSD-3c
-> +HIREDIS_LICENSE_FILES = COPYING
-> +HIREDIS_INSTALL_STAGING = YES
-> +
-> +HIREDIS_MAKE_OPTS = \
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	PREFIX=/usr
-> +
-> +HIREDIS_TARGETS = hiredis.pc
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +HIREDIS_TARGETS += static
-> +else ifeq ($(BR2_SHARED_LIBS),y)
-> +HIREDIS_TARGETS += dynamic
-> +else ifeq $(BR2_SHARED_STATIC_LIBS),y)
-> +HIREDIS_TARGETS += dynamic static
-> +endif
-> +
-> +define HIREDIS_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(HIREDIS_MAKE_OPTS) -C $(@D) \
-> +		$(HIREDIS_TARGETS)
-> +endef
-> +
-> +HIREDIS_INCLUDE_DIR = $(STAGING_DIR)/usr/include/hiredis
-> +
-> +# Do not call make install as this target will build shared and static libraries
-> +define HIREDIS_INSTALL_STAGING_CMDS
-> +	mkdir -p $(HIREDIS_INCLUDE_DIR)
-> +	cp -dpfr $(@D)/hiredis.h $(@D)/async.h $(@D)/read.h $(@D)/sds.h \
-> +		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
-> +	$(INSTALL) -m 0644 $(@D)/libhiredis* $(STAGING_DIR)/usr/lib
+> +FIREJAIL_VERSION = 0.9.42
+> +FIREJAIL_SITE = http://download.sourceforge.net/firejail
+> +FIREJAIL_SOURCE = firejail-$(FIREJAIL_VERSION).tar.xz
+> +FIREJAIL_LICENSE = GPLv2+
+> +FIREJAIL_LICENSE_FILES = COPYING
+> +FIREJAIL_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
 
-Add -D for consistency ($(TARGET_DIR)/usr/lib is likely created before building
-hiredis)
+ARCH is not defined in the Makefile.
 
-> +	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-> +	$(INSTALL) -m 0644 $(@D)/hiredis.pc $(STAGING_DIR)/usr/lib/pkgconfig
+> +	USERCOMPILE="$(TARGET_CFLAGS)" USERLINK="$(TARGET_LDFLAGS)"
 
-Instead of using mkdir -p, add -D option to INSTALL command.
+Same of USERCOMPILE and USERLINK which are not defined in the Makefile.
 
-> +endef
+Actually, setting FIREJAIL_MAKE_OPTS seems not useful at all.
+
 > +
-> +define HIREDIS_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0644 $(@D)/libhiredis* $(TARGET_DIR)/usr/lib
+> +FIREJAIL_CONF_OPTS = \
+> +	--enable-bind \
+> +	--enable-busybox-workaround \
 
-Same here.
-
-With that fixed:
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+This option should depends on BR2_PACKAGE_BUSYBOX.
 
 Best regards,
 Romain
 
+> +	--enable-file-transfer \
+> +	--enable-network \
+> +	--enable-seccomp \
+> +	--enable-userns
+> +
+> +define FIREJAIL_PERMISSIONS
+> +	/usr/bin/firejail f 4755 0 0 - - - - -
 > +endef
 > +
-> +$(eval $(generic-package))
+> +$(eval $(autotools-package))
 > 
