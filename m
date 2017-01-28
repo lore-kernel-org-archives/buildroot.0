@@ -1,56 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2017 21:11:18 +1300
-Subject: [Buildroot] [git commit] valgrind: Force -fno-stack-protector in
-	CFLAGS
-Message-ID: <20170128081206.C951381EB9@busybox.osuosl.org>
+Date: Sat, 28 Jan 2017 21:39:40 +1300
+Subject: [Buildroot] [git commit] janus-gateway: make audio bridge plugin
+	optional
+Message-ID: <20170128084141.98CD87FAC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=994ac94c57bb422abc818674be4f9e04c8ff60ca
+commit: https://git.buildroot.net/buildroot/commit/?id=6f8f669341ec5489bd1fad4bcd874bdc120fc7c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Valgrind must be compiled with no stack protection. Valgrind defaults
-CFLAGS to -fno-stack-protector, but Buildroot's CFLAGS may override
-if SSP is enabled.
+Currently janus-gateway is built by default with the audio bridge plugin.
+This causes a example config file to be placed on the target filing system
+that the user may not need or want, creates a 119K .so
+file on the target directory, adds the dependency of opus for this
+plugin, and janus will also create a warning when ran if the plugin does
+not have a matching configuration file setup by the user, as it will not use
+the example config file by default.
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+This patch makes the audio bridge plugin a option, removes the check for opus,
+adds opus as a dependency to the audio bridge plugin, and selects the opus
+package automatically when the user selects the plugin.
+
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/valgrind/valgrind.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/janus-gateway/Config.in        |  4 ++++
+ package/janus-gateway/janus-gateway.mk | 14 +++++++-------
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 087a381..652432f 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -17,6 +17,13 @@ VALGRIND_INSTALL_STAGING = YES
- # patch 0004-Fixes-for-musl-libc.patch touching configure.ac
- VALGRIND_AUTORECONF = YES
+diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
+index 5ce84db..95b12a9 100644
+--- a/package/janus-gateway/Config.in
++++ b/package/janus-gateway/Config.in
+@@ -19,6 +19,10 @@ if BR2_PACKAGE_JANUS_GATEWAY
  
-+# Valgrind must be compiled with no stack protection, so forcefully
-+# pass -fno-stack-protector to override what Buildroot may have in
-+# TARGET_CFLAGS if BR2_SSP_* support is enabled.
-+VALGRIND_CFLAGS = \
-+	$(TARGET_CFLAGS) \
-+	-fno-stack-protector
+ comment "plugins"
+ 
++config BR2_PACKAGE_JANUS_AUDIO_BRIDGE
++	bool "audio bridge"
++	select BR2_PACKAGE_OPUS
 +
- # When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
- # -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
- # it forcibly adds -march=mips64. This causes Valgrind to be built
-@@ -27,9 +34,11 @@ VALGRIND_AUTORECONF = YES
- # and pass the right -march option, so they take precedence over
- # Valgrind's wrongfully detected value.
- ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
--VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -march=$(BR2_GCC_TARGET_ARCH)"
-+VALGRIND_CFLAGS += -march=$(BR2_GCC_TARGET_ARCH)
+ config BR2_PACKAGE_JANUS_SIP_GATEWAY
+ 	bool "sip gateway"
+ 	select BR2_PACKAGE_SOFIA_SIP
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index dac324f..1f9ba49 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -26,6 +26,13 @@ JANUS_GATEWAY_CONF_OPTS = \
+ 	--disable-data-channels \
+ 	--disable-rabbitmq
+ 
++ifeq ($(BR2_PACKAGE_JANUS_AUDIO_BRIDGE),y)
++JANUS_GATEWAY_DEPENDENCIES += opus
++JANUS_GATEWAY_CONF_OPTS += --enable-plugin-audiobridge
++else
++JANUS_GATEWAY_CONF_OPTS += --disable-plugin-audiobridge
++endif
++
+ ifeq ($(BR2_PACKAGE_JANUS_SIP_GATEWAY),y)
+ JANUS_GATEWAY_DEPENDENCIES += sofia-sip
+ JANUS_GATEWAY_CONF_OPTS += --enable-plugin-sip
+@@ -40,13 +47,6 @@ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-websockets
  endif
  
-+VALGRIND_CONF_ENV = CFLAGS="$(VALGRIND_CFLAGS)"
-+
- # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
- # host tuple to determine whether it's being built for ARMv7 or
- # not. Therefore, we adjust the host tuple to specify we're on
+-ifeq ($(BR2_PACKAGE_OPUS),y)
+-JANUS_GATEWAY_DEPENDENCIES += opus
+-JANUS_GATEWAY_CONF_OPTS += --enable-plugin-audiobridge
+-else
+-JANUS_GATEWAY_CONF_OPTS += --disable-plugin-audiobridge
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBOGG),y)
+ JANUS_GATEWAY_DEPENDENCIES += libogg
+ JANUS_GATEWAY_CONF_OPTS += --enable-plugin-voicemail
