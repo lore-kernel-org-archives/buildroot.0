@@ -1,14 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2017 21:45:21 +1300
-Subject: [Buildroot] [PATCH 1/2] efl: fix target package dependency on
- util-linux (libmount).
-In-Reply-To: <f3f89ca1-087c-239c-5e01-c47cab50e3b3@gmail.com>
-References: <20170103212932.9254-1-barbieri@profusion.mobi>
- <20170103212932.9254-2-barbieri@profusion.mobi>
- <3b511a0a-99aa-23d3-0649-08c725fa9eea@gmail.com>
- <CAPdpN3CmdooHnHHHvmMguW6dBqsN+CksS6r2OUWCmRWPBvkZyg@mail.gmail.com>
- <f3f89ca1-087c-239c-5e01-c47cab50e3b3@gmail.com>
-Message-ID: <20170128214521.21067f36@free-electrons.com>
+Date: Sat, 28 Jan 2017 21:46:49 +1300
+Subject: [Buildroot] [V3 01/10] janus-gateway: remove unessasary
+ dependencies.
+In-Reply-To: <20170125134245.12920-1-aduskett@codeblue.com>
+References: <20170125134245.12920-1-aduskett@codeblue.com>
+Message-ID: <20170128214649.0dd28fa7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,23 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 6 Jan 2017 00:20:55 +0100, Romain Naour wrote:
-> > sounds good. Following that guideline I should add myself to that
-> > file, likely in this patch. Okay?  
+On Wed, 25 Jan 2017 08:42:36 -0500, Adam Duskett wrote:
+> Janus gateway currently depends on several dependencies that are not
+> necessary.  I removed every select and depend from the config file and
+> re-enabled each dependency until I had a list of the bare minimum needed
+> to compile the package.  I also removed sofia-sip from the dependency
+> list for the following patch.
 > 
-> Well, It seems that the recommended way to do it is to send a separate patch.
-> The reason is: if someone need to backport a patch adding a feature or a new
-> package, we want to avoid a conflict in DEVELOPERS file while cherry-picking the
-> commit.
-> 
-> Thomas, can you confirm ?
+> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+> ---
+> v2 - v3:
+>  - No changes
 
-Correct. Please send a separate patch.
+I've applied the entire series. One thing that was wrong is that you
+added the "select" statements *before* the "bool" statements in the
+Config.in file, while we do the opposite in the rest of Buildroot. So
+I've fixed that up.
+
+I've also added a commit that fixes an autobuilder issue caused by the
+streaming plugin requiring kernel headers >= 3.9 because of
+SO_REUSEPORT.
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
