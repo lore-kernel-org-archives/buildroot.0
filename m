@@ -1,9 +1,9 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 28 Jan 2017 15:35:43 +0100
-Subject: [Buildroot] [PATCH 1/1] firejail: new package
-In-Reply-To: <1477502552-4236-1-git-send-email-cdf123@cdf123.net>
-References: <1477502552-4236-1-git-send-email-cdf123@cdf123.net>
-Message-ID: <59647f3f-b654-acf0-1fd6-09a47a388d47@gmail.com>
+Date: Sat, 28 Jan 2017 15:55:22 +0100
+Subject: [Buildroot] [PATCH 1/1] sudo: Add ldap support for sudoers rules
+In-Reply-To: <1477323263-6689-1-git-send-email-cdf123@cdf123.net>
+References: <1477323263-6689-1-git-send-email-cdf123@cdf123.net>
+Message-ID: <e3b18d4b-5eba-ea4f-f8da-0c07e3eff8ae@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,140 +12,74 @@ To: buildroot@busybox.net
 
 Hi Chris,
 
-Le 26/10/2016 ? 19:22, Chris Frederick a ?crit :
-> Firejail Security Sandbox
-> https://firejail.wordpress.com/
+Le 24/10/2016 ? 17:34, Chris Frederick a ?crit :
+> Added Config.in options to enable/disable the option, and check options
+> in sudo.mk to add openldap as a dependancy and compile with --with-ldap.
 > 
-> Lightweight application sandboxing system using seccomp and kernel
-> namespaces.
+> When sudo is built with ldap, /etc/sudoers is only read in for defaults,
+> all rules need to be provided via ldap which is configured by the user
+> in /etc/ldap.conf.
+> 
+> Since the user explicitly has to provide /etc/ldap.conf, we use 'depends
+> on' so that the user is obliged to explicitly enable openldap before the
+> option becomes visible.
 > 
 > Signed-off-by: Chris Frederick <cdf123@cdf123.net>
 > ---
->  DEVELOPERS                     |  3 +++
->  package/Config.in              |  1 +
->  package/firejail/Config.in     | 17 +++++++++++++++++
->  package/firejail/firejail.hash |  2 ++
->  package/firejail/firejail.mk   | 27 +++++++++++++++++++++++++++
->  5 files changed, 50 insertions(+)
->  create mode 100644 package/firejail/Config.in
->  create mode 100644 package/firejail/firejail.hash
->  create mode 100644 package/firejail/firejail.mk
+>  package/sudo/Config.in | 13 +++++++++++++
+>  package/sudo/sudo.mk   |  7 +++++++
+>  2 files changed, 20 insertions(+)
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 16d9b55..3dcd0e2 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -291,6 +291,9 @@ F:	package/libdvbsi/
->  F:	package/libsvg/
->  F:	package/libsvg-cairo/
+> diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+> index cbef15d..72bb5d7 100644
+> --- a/package/sudo/Config.in
+> +++ b/package/sudo/Config.in
+> @@ -9,3 +9,16 @@ config BR2_PACKAGE_SUDO
+>  	  but still allow people to get their work done.
 >  
-> +N:	Chris Frederick (chrisf at cdf123.net)
-> +F:	package/firejail/
+>  	  http://www.sudo.ws/sudo/
 > +
-
-We usually prefer adding a new DEVELOPERS entry in a separate patch.
-
->  N:	Chris Packham <judge.packham@gmail.com>
->  F:	package/eventlog/
->  F:	package/micropython/
-> diff --git a/package/Config.in b/package/Config.in
-> index 9399f63..be20478 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1710,6 +1710,7 @@ menu "System tools"
->  	source "package/efibootmgr/Config.in"
->  	source "package/efivar/Config.in"
->  	source "package/emlog/Config.in"
-> +	source "package/firejail/Config.in"
->  	source "package/ftop/Config.in"
->  	source "package/getent/Config.in"
->  	source "package/htop/Config.in"
-> diff --git a/package/firejail/Config.in b/package/firejail/Config.in
-> new file mode 100644
-> index 0000000..45fc496
-> --- /dev/null
-> +++ b/package/firejail/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_FIREJAIL
-> +	bool "firejail"
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-
-Why it depends on glibc ?
-
+> +if BR2_PACKAGE_SUDO
+> +config BR2_PACKAGE_SUDO_LDAP
+> +	bool "ldap integration"
+> +	depends on BR2_PACKAGE_OPENLDAP
 > +	help
-> +	  Firejail is a SUID program that reduces the risk of security
-> +	  breaches by restricting the running environment of untrusted
-> +	  applications using Linux namespaces and seccomp-bpf. It
-> +	  allows a process and all its descendants to have their own
-> +	  private view of the globally shared kernel resources, such
-> +	  as the network stack, process table, mount table.
+> +	  Allows you to manage sudoers rules in a centralized ldap
+> +	  directory. This restricts the /etc/sudoers file from
+> +	  defining rules, only defaults will be read. All rules will
+> +	  need to be provided via ldap configured in /etc/ldap.conf
 > +
-> +	  https://firejail.wordpress.com/
-> +
-> +comment "firejail needs a glibc toolchain"
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
+> +	  http://www.sudo.ws/man/1.8.15/sudoers.ldap.man.html
 
-Package dependencies must be propagated to the comment dependencies:
+Maybe add a comment here
 
-comment "firejail needs a glibc toolchain w/ threads"
-	depends on BR2_USE_MMU
-	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
+comment "ldap integration needs openldap"
+	depends on !BR2_PACKAGE_OPENLDAP
 
-> diff --git a/package/firejail/firejail.hash b/package/firejail/firejail.hash
-> new file mode 100644
-> index 0000000..dc2eb80
-> --- /dev/null
-> +++ b/package/firejail/firejail.hash
-> @@ -0,0 +1,2 @@
-> +# From 
-> +sha256 4f3bceee973b84fdf13a5d5ab0060d140ecc8e42c19c945e7fb93f0fd8499b47  firejail-0.9.42.tar.xz
-> diff --git a/package/firejail/firejail.mk b/package/firejail/firejail.mk
-> new file mode 100644
-> index 0000000..3926e8a
-> --- /dev/null
-> +++ b/package/firejail/firejail.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# firejail
-> +#
-> +################################################################################
-> +
-> +FIREJAIL_VERSION = 0.9.42
-> +FIREJAIL_SITE = http://download.sourceforge.net/firejail
-> +FIREJAIL_SOURCE = firejail-$(FIREJAIL_VERSION).tar.xz
-> +FIREJAIL_LICENSE = GPLv2+
-> +FIREJAIL_LICENSE_FILES = COPYING
-> +FIREJAIL_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+Otherwise:
 
-ARCH is not defined in the Makefile.
-
-> +	USERCOMPILE="$(TARGET_CFLAGS)" USERLINK="$(TARGET_LDFLAGS)"
-
-Same of USERCOMPILE and USERLINK which are not defined in the Makefile.
-
-Actually, setting FIREJAIL_MAKE_OPTS seems not useful at all.
-
-> +
-> +FIREJAIL_CONF_OPTS = \
-> +	--enable-bind \
-> +	--enable-busybox-workaround \
-
-This option should depends on BR2_PACKAGE_BUSYBOX.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
-> +	--enable-file-transfer \
-> +	--enable-network \
-> +	--enable-seccomp \
-> +	--enable-userns
+> +endif
+> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+> index f28312a..45273bb 100644
+> --- a/package/sudo/sudo.mk
+> +++ b/package/sudo/sudo.mk
+> @@ -30,6 +30,13 @@ else
+>  SUDO_CONF_OPTS += --without-pam
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_SUDO_LDAP),y)
+> +SUDO_DEPENDENCIES += openldap
+> +SUDO_CONF_OPTS += --with-ldap
+> +else
+> +SUDO_CONF_OPTS += --without-ldap
+> +endif
 > +
-> +define FIREJAIL_PERMISSIONS
-> +	/usr/bin/firejail f 4755 0 0 - - - - -
-> +endef
-> +
-> +$(eval $(autotools-package))
+>  # mksigname/mksiglist needs to run on build host to generate source files
+>  define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+>  	$(MAKE) $(HOST_CONFIGURE_OPTS) \
 > 
