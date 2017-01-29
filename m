@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jan 2017 14:11:52 +0100
-Subject: [Buildroot] [git commit] jsmn: new package
-In-Reply-To: <87tw8j9ugd.fsf@dell.be.48ers.dk>
-References: <20170128100442.D3EC581938@busybox.osuosl.org>
- <87tw8j9ugd.fsf@dell.be.48ers.dk>
-Message-ID: <20170129141152.2002025a@free-electrons.com>
+Date: Sun, 29 Jan 2017 14:18:04 +0100
+Subject: [Buildroot] [PATCH 1/1] sudo: Add ldap support for sudoers rules
+In-Reply-To: <e3b18d4b-5eba-ea4f-f8da-0c07e3eff8ae@gmail.com>
+References: <1477323263-6689-1-git-send-email-cdf123@cdf123.net>
+ <e3b18d4b-5eba-ea4f-f8da-0c07e3eff8ae@gmail.com>
+Message-ID: <20170129141804.4749c24d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 28 Jan 2017 14:37:22 +0100, Peter Korsgaard wrote:
+On Sat, 28 Jan 2017 15:55:22 +0100, Romain Naour wrote:
 
->  > +define JSMN_INSTALL_STAGING_CMDS
->  > +	$(INSTALL) -m 0644 $(@D)/libjsmn.a $(STAGING_DIR)/usr/lib/libjsmn.a
->  > +	$(INSTALL) -m 0644 $(@D)/jsmn.h $(STAGING_DIR)/usr/include/jsmn.h  
+> Maybe add a comment here
 > 
-> We normally use install -D to create the destination directories if
-> needed. I agree that these directories are very likely to be created
-> already, but for consistency -D would be nice.
+> comment "ldap integration needs openldap"
+> 	depends on !BR2_PACKAGE_OPENLDAP
 
-Gaah. I knew I had done it. But it ended up in the wrong commit :-/
+Well, I'm not against Config.in comments, but in that case, isn't it
+sufficiently obvious to the user? Surely if you think about using LDAP
+support in sudo, you know that you need to have some kind of LDAP
+implementation.
 
-See
-https://git.buildroot.org/buildroot/commit/?id=f9edac7ec45958ebd22f156f7ca859e1dbf0673a.
-
-That's what happens when applying patches between two flights in an
-airport I guess :-/
+Which makes me think that perhaps a new sub-option is maybe not needed.
+Why not just enable LDAP support in sudo when BR2_PACKAGE_OPENLDAP=y ?
 
 Thomas
 -- 
