@@ -1,39 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 29 Jan 2017 23:11:55 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-01-24
-In-Reply-To: <1485722254.4549.1.camel@embedded.rocks>
-References: <20170125073013.D171D20CD4@mail.free-electrons.com>
- <1485378342.7516.1.camel@embedded.rocks>
- <20170125211534.dugtv6byofg3wvg5@tarshish>
- <CAHXCMM+cL0UnnfhgFTtkeC7L+jRh8s=tr-U5CTC0YZxzUBb4bA@mail.gmail.com>
- <1485722254.4549.1.camel@embedded.rocks>
-Message-ID: <20170129211155.f6sebtrdmsrwb2yw@tarshish>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 29 Jan 2017 22:15:11 +0100
+Subject: [Buildroot] [PATCH] package/mbedtls: fix zlib support
+Message-ID: <20170129211511.9747-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+To enable compression support using zlib it is necessary to uncomment
+the define for MBEDTLS_ZLIB_SUPPORT in config.h [1].
 
-On Sun, Jan 29, 2017 at 09:37:34PM +0100, J?rg Krause wrote:
-> On Thu, 2017-01-26 at 12:04 +0100, Samuel Martin wrote:
-> > On Wed, Jan 25, 2017 at 10:15 PM, Baruch Siach <baruch@tkos.co.il>
-> > wrote:
-> > > On Wed, Jan 25, 2017 at 10:05:42PM +0100, J?rg Krause wrote:
-> > > > Unfortunately I cannot reproduce this issue. Is it a rpath issue?
-> > > > cmake links a test program with host zlib:
-> > 
-> > Note: I'm not able to reproduce the error either.
-> 
-> I wonder, what makes the difference to be able to reproduce the issue.
+Note, that enabling TLS compression may make mbedTLS vulnerable to the
+CRIME attack [1]. It should not be enabled unless is is sure CRIME and
+similar attacks are not applicable to the particulare situation.
 
-See http://lists.busybox.net/pipermail/buildroot/2017-January/182237.html.
+As zlib is probably enabled in most systems, maybe it is best to make
+the compression support a user choice and add the warning from [1]?
 
-baruch
+[1] https://tls.mbed.org/kb/how-to/deflate-compression-in-ssl-tls
 
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mbedtls/mbedtls.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index a8bd61f12..7171af9f9 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -42,6 +42,11 @@ endif
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ MBEDTLS_CONF_OPTS += -DENABLE_ZLIB_SUPPORT=ON
+ MBEDTLS_DEPENDENCIES += zlib
++define MBEDTLS_ENABLE_ZLIB
++	$(SED) "s://#define MBEDTLS_ZLIB_SUPPORT:#define MBEDTLS_ZLIB_SUPPORT:" \
++		$(@D)/include/mbedtls/config.h
++endef
++MBEDTLS_POST_PATCH_HOOKS += MBEDTLS_ENABLE_ZLIB
+ else
+ MBEDTLS_CONF_OPTS += -DENABLE_ZLIB_SUPPORT=OFF
+ endif
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
