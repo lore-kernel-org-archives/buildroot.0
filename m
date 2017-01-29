@@ -1,83 +1,167 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jan 2017 08:29:26 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-01-28
-Message-ID: <20170129072926.E4A5721D36@mail.free-electrons.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Sun, 29 Jan 2017 12:27:59 +0100
+Subject: [Buildroot] [PATCH v3] gqrx: new package
+Message-ID: <20170129112759.1690-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Build statistics for 2017-01-28
-================================
+Gqrx is an open source software defined radio (SDR) receiver implemented
+using GNU Radio and the Qt GUI toolkit. Currently it works on Linux
+and Mac with hardware supported by gr-osmosdr, including Funcube Dongle,
+RTL-SDR, Airspy, HackRF, BladeRF, RFSpace, USRP and SoapySDR.
 
-      successes : 139
-       failures : 35 
-       timeouts : 1  
-          TOTAL : 175
+Gqrx can operate as an AM/FM/SSB receiver with audio output or as an
+FFT-only instrument. There are also various hooks for interacting
+with external application using network sockets.
 
-Classification of failures by reason
-====================================
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+Changes v2 -> v3:
+ * backport patch to fix Wmisleading-indentation with gcc6;
+ * inherits alsa-lib or portaudio dependencies from gr-audio;
+ * reduce help text size;
+ * add upstream url.
+Changes v1 -> v2:
+ * typo
+---
+ package/Config.in                                |  1 +
+ package/gqrx/0001-fix_compilation_in_gcc-6.patch | 34 ++++++++++++++++++++++
+ package/gqrx/Config.in                           | 36 ++++++++++++++++++++++++
+ package/gqrx/gqrx.hash                           |  2 ++
+ package/gqrx/gqrx.mk                             | 15 ++++++++++
+ 5 files changed, 88 insertions(+)
+ create mode 100644 package/gqrx/0001-fix_compilation_in_gcc-6.patch
+ create mode 100644 package/gqrx/Config.in
+ create mode 100644 package/gqrx/gqrx.hash
+ create mode 100644 package/gqrx/gqrx.mk
 
-               sdl2_ttf-2.0.14 | 5 
-                 sngrep-v1.4.2 | 5 
-                    mpd-0.20.3 | 4 
-                   ortp-0.27.0 | 4 
-               openswan-2.6.46 | 3 
-                    ruby-2.4.0 | 3 
-                  fbterm-1.7.0 | 2 
-        riemann-c-client-1.9.1 | 2 
-                  guile-2.0.13 | 1 
-          janus-gateway-v0.2.1 | 1 
-                  lcdapi-v0.10 | 1 
-                 libnss-3.27.2 | 1 
-             lttng-tools-2.9.3 | 1 
-                 mplayer-1.3.0 | 1 
-python-libconfig-b271c3d9da... | 1 
-zbar-854a5d97059e395807091a... | 1 
-
-
-Detail of failures
-===================
-
-         arm |                   fbterm-1.7.0 | NOK | http://autobuild.buildroot.net/results/d5d9705eea16f07848a313d9c83f491569734c5d
-         arc |                   fbterm-1.7.0 | NOK | http://autobuild.buildroot.net/results/230a2d3c33385ae42101c96d13cc5abaa21877e8
-         arm |                   guile-2.0.13 | NOK | http://autobuild.buildroot.net/results/a2e866b7b0c34e2b69f2fb817f8161531526000c
-        sh4a |           janus-gateway-v0.2.1 | NOK | http://autobuild.buildroot.net/results/89005444f3dee9002881b5449cd137a32a286e27
-        m68k |                   lcdapi-v0.10 | NOK | http://autobuild.buildroot.net/results/f8f4e6708372cdd122df5fc741d310c80087d1ab
-microblazeel |                  libnss-3.27.2 | NOK | http://autobuild.buildroot.net/results/7d5954a5856352e58dd48e530082b9986e00b3e8
-         arm |              lttng-tools-2.9.3 | NOK | http://autobuild.buildroot.net/results/6093aa2de58afe140bd52f1b5f465b6663d2b2cb
-         arm |                     mpd-0.20.3 | NOK | http://autobuild.buildroot.net/results/71126c6718b864c06e2fdf1c7888c016d0c6be44
-       nios2 |                     mpd-0.20.3 | NOK | http://autobuild.buildroot.net/results/62db87ea34de97971798929050e8578db1ae7d5b
-         arm |                     mpd-0.20.3 | NOK | http://autobuild.buildroot.net/results/d2026ef1dd06df3d04dbf24a7aa75e3066635439
-       nios2 |                     mpd-0.20.3 | NOK | http://autobuild.buildroot.net/results/3860d05fa021720b8f61de74b4f18bcd106682d3
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/ac84e46bea0c16ca41ed4f83ffaa99c74db083b5
-         arm |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/9565b91012118d17a02dfbdb56c133554e1a3e5c
-microblazeel |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/430e5be3819a1424cbed25d3166dce75267d6d5b
-microblazeel |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/d4dbdd1648cc536da6932800865668edbe685ea6
-         arm |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/8fb4635e253f2175d37796cb3109f7d8125e5a4f
-         arm |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/77f78feed127364a393c894d87e5bc0172ac6cca
-     powerpc |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/70984c248a544dc0f4d12bfa255711b3ae41570f
-        m68k |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/cd6b1920a1f6a14fce815a34ee9bf52c921653f4
-      x86_64 | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/322d8ed53ddf19c6d4553dd2654fda1a6ebfce60
-        bfin |         riemann-c-client-1.9.1 | NOK | http://autobuild.buildroot.net/results/fc80326880fb19cd6fbd6c0073916373a52ef873
-        bfin |         riemann-c-client-1.9.1 | NOK | http://autobuild.buildroot.net/results/68ba30a2692884f30ca97aa5f9670e3389541600
-        m68k |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/2aa668247b6925ff1290182a67092156b5bcc1b2
-      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/74eafbd635471956979899633b3a51b738de17a8
-      x86_64 |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/a42758dcfe5cd83ed34e645a9a6203fe59e8f1c2
-         arm |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/ba68fec555d128b673106c893e7bae41e26884aa
-     powerpc |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/db87a00a7cd1f8d1627fa4a39a0f67e9328b2b0f
-         arc |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/be9d9d0d75dca62d9edb28c1e4d81f7f33b30ea8
-         arm |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/f09b7e33d3ab115d3f720be4476cb1171100f1af
-        m68k |                sdl2_ttf-2.0.14 | NOK | http://autobuild.buildroot.net/results/d92be55947d3aa87a4ba1a5e40070aeab9fe0a8b
-         arc |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/5e4a4929f5547a82a104a1590fd27cb0773fa3ca
-        i686 |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/4ad1fa53f4aadd320ee0528c25c2032298601fb2
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/b7674ffabd6227356a9cf8bf943a260778bc8808
-      x86_64 |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/3a4751fcc6184d562df80d1cd6bf53e788e21392
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/6993c398649469e25f2491fdb8f1ac9b6d6d8c3c
-   powerpc64 | zbar-854a5d97059e395807091a... | TIM | http://autobuild.buildroot.net/results/23cd6b3c7d8fd1355eaad224cb46c5bf46294781
-
+diff --git a/package/Config.in b/package/Config.in
+index 8c8c33e..a4341e5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1429,6 +1429,7 @@ menu "Miscellaneous"
+ 	source "package/empty/Config.in"
+ 	source "package/gnuradio/Config.in"
+ 	source "package/googlefontdirectory/Config.in"
++	source "package/gqrx/Config.in"
+ 	source "package/gr-osmosdr/Config.in"
+ 	source "package/gsettings-desktop-schemas/Config.in"
+ 	source "package/haveged/Config.in"
+diff --git a/package/gqrx/0001-fix_compilation_in_gcc-6.patch b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
+new file mode 100644
+index 0000000..e1824c3
+--- /dev/null
++++ b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
+@@ -0,0 +1,34 @@
++From e6baaee4968345a53e977f593362267a91041cff Mon Sep 17 00:00:00 2001
++From: Valentin Ochs <a@0au.de>
++Date: Fri, 21 Oct 2016 20:12:50 +0200
++Subject: [PATCH 05/34] Cosmetic & readability changes
++
++Backport patch from
++https://github.com/csete/gqrx/commit/e6baaee4968345a53e977f593362267a91041cff
++
++Fix compilation in gcc-6
++
++Signed-off-by: Valentin Ochs <a@0au.de>
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++diff --git a/src/qtgui/plotter.cpp b/src/qtgui/plotter.cpp
++index e491632..b877546 100644
++--- a/src/qtgui/plotter.cpp
+++++ b/src/qtgui/plotter.cpp
++@@ -1336,8 +1336,11 @@ void CPlotter::drawOverlay()
++ #endif
++ 
++             int level = 0;
++-            for (; level < nLevels && tagEnd[level] > x; level++);
++-                level %= nLevels;
+++            while(level < nLevels && tagEnd[level] > x)
+++                level++;
+++            
+++            if(level == nLevels)
+++                level = 0;
++ 
++             tagEnd[level] = x + nameWidth + slant - 1;
++             m_BookmarkTags.append(qMakePair<QRect, qint64>(QRect(x, level * levelHeight, nameWidth + slant, fontHeight), bookmarks[i].frequency));
++-- 
++2.10.2
++
+diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+new file mode 100644
+index 0000000..fadd5a2
+--- /dev/null
++++ b/package/gqrx/Config.in
+@@ -0,0 +1,36 @@
++comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR || BR2_STATIC_LIBS
++
++comment "gqrx needs gnuradio, fftw's single precision, alsa-lib or portaudio"
++	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
++		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO)
++
++config BR2_PACKAGE_GQRX
++	bool "gqrx"
++	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
++	depends on BR2_PACKAGE_GNURADIO
++	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO # gr-audio
++	depends on BR2_INSTALL_LIBSTDCPP # boost, qt5
++	depends on !BR2_STATIC_LIBS # qt5
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, qt5
++	depends on BR2_USE_WCHAR # boost, qt5
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_GNURADIO_ANALOG
++	select BR2_PACKAGE_GNURADIO_AUDIO
++	select BR2_PACKAGE_GNURADIO_BLOCKS
++	select BR2_PACKAGE_GNURADIO_DIGITAL
++	select BR2_PACKAGE_GNURADIO_FFT
++	select BR2_PACKAGE_GNURADIO_FILTER
++	select BR2_PACKAGE_GR_OSMOSDR
++	select BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	select BR2_PACKAGE_QT5SVG
++	help
++	  Gqrx is an open source software defined radio receiver (SDR) powered by
++	  the GNU Radio and the Qt graphical toolkit.
++
++	  http://gqrx.dk/
+diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
+new file mode 100644
+index 0000000..2d126aa
+--- /dev/null
++++ b/package/gqrx/gqrx.hash
+@@ -0,0 +1,2 @@
++# Locally calculated:
++sha256 53d25db8d987a41ccccaf6fd85262bd7770cdfab5539b5901c4558756483c9db  gqrx-v2.6.tar.gz
+diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
+new file mode 100644
+index 0000000..b591e60
+--- /dev/null
++++ b/package/gqrx/gqrx.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# gqrx
++#
++################################################################################
++
++GQRX_VERSION = v2.6
++GQRX_SITE = $(call github,csete,gqrx,$(GQRX_VERSION))
++GQRX_LICENSE = GPLv3+, Apache-2.0
++GQRX_LICENSE_FILES = COPYING LICENSE-CTK
++GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr qt5base qt5svg
++
++GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
++
++$(eval $(cmake-package))
 -- 
-http://autobuild.buildroot.net
+2.10.2
