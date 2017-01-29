@@ -1,40 +1,131 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 29 Jan 2017 19:55:19 +0100
-Subject: [Buildroot] [PATCH] package/upmpdcli: bump to version 1.2.12
-Message-ID: <20170129185519.9841-1-joerg.krause@embedded.rocks>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 29 Jan 2017 18:10:17 -0200
+Subject: [Buildroot] [PATCH] configs/imx6q-sabresd: Add new defconfig
+Message-ID: <1485720617-23089-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Add imx6q-sabresd_defconfig which supports imx6q-sabresd board using
+mainline U-Boot and mainline kernel.
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 0f9e40816..bcd78318c 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
-@@ -1,2 +1,2 @@
--# Manually calculated:
--sha256  a925dac1721fe002c16ed3c9e2de0370c2fe6c1e6f4f97a7551f20c6226cc0e2  upmpdcli-1.2.10.tar.gz
-+# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.12.tar.gz.sha256:
-+sha256  20d97c2e5ff6911e1e1538edb1487823479802cba6bd4f4c4a74035edf61cb26  upmpdcli-1.2.12.tar.gz
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index d1d6ab4b4..83efa0530 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UPMPDCLI_VERSION = 1.2.10
-+UPMPDCLI_VERSION = 1.2.12
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
+Keep freescale_imx6qsabresd_defconfig for those who want to run U-Boot and
+kernel versions from NXP.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ board/freescale/imx6q-sabresd/readme.txt | 57 ++++++++++++++++++++++++++++++++
+ configs/imx6q-sabresd_defconfig          | 36 ++++++++++++++++++++
+ 2 files changed, 93 insertions(+)
+ create mode 100644 board/freescale/imx6q-sabresd/readme.txt
+ create mode 100644 configs/imx6q-sabresd_defconfig
+
+diff --git a/board/freescale/imx6q-sabresd/readme.txt b/board/freescale/imx6q-sabresd/readme.txt
+new file mode 100644
+index 0000000..10e973c
+--- /dev/null
++++ b/board/freescale/imx6q-sabresd/readme.txt
+@@ -0,0 +1,57 @@
++*******************************
++Freescale i.MX6Q Sabre SD board
++*******************************
++
++This file documents the Buildroot support for the Freescale i.MX6Q Sabre SD
++board.
++
++This configuration uses U-Boot mainline and kernel mainline.
++
++Build
++=====
++
++First, configure Buildroot for the i.MX6Q Sabre SD board:
++
++  make imx6q-sabresd_defconfig
++
++Build all components:
++
++  make
++
++You will find the following files in output/images/ :
++  - imx6q-sabresd.dtb
++  - rootfs.ext4
++  - rootfs.tar
++  - sdcard.img
++  - u-boot.imx
++  - zImage
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a SD card. Launch the following
++command as root:
++
++  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/freescale/common/imx/genimage.cfg.template.
++
++Boot the i.MX6Q Sabre SD board
++==============================
++
++To boot your newly created system:
++- insert the SD card in the SD3 slot of the board (close to the HDMI connector);
++- put a micro USB cable into the Debug USB Port and connect using a terminal
++  emulator at 115200 bps, 8n1;
++- power on the board.
++
++Enjoy!
+diff --git a/configs/imx6q-sabresd_defconfig b/configs/imx6q-sabresd_defconfig
+new file mode 100644
+index 0000000..1491668
+--- /dev/null
++++ b/configs/imx6q-sabresd_defconfig
+@@ -0,0 +1,36 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_FPU_VFPV3=y
++
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++
++# System
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++
++# required tools to create the SD card image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
 -- 
-2.11.0
+2.7.4
