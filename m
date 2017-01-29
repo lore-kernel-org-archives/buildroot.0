@@ -1,41 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Jan 2017 18:24:38 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/sngrep: fix static linking
-	against libpcap
-Message-ID: <20170129172438.23835-1-bernd.kuhls@t-online.de>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 29 Jan 2017 19:55:19 +0100
+Subject: [Buildroot] [PATCH] package/upmpdcli: bump to version 1.2.12
+Message-ID: <20170129185519.9841-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Inspired by
-https://git.buildroot.net/buildroot/tree/package/aircrack-ng/aircrack-ng.mk#n30
-
-Fixes
-http://autobuild.buildroot.net/results/699/6993c398649469e25f2491fdb8f1ac9b6d6d8c3c/
-http://autobuild.buildroot.net/results/846/8468df3462ac6d53faef228ca241bc500b2d7a52/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
-v2: optimized pcap-config call (Thomas)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/sngrep/sngrep.mk | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index 52c8a2da4..b82d8cefa 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -11,6 +11,9 @@ SNGREP_LICENSE_FILES = LICENSE
- SNGREP_AUTORECONF = YES
- SNGREP_DEPENDENCIES = libpcap ncurses
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 0f9e40816..bcd78318c 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,2 +1,2 @@
+-# Manually calculated:
+-sha256  a925dac1721fe002c16ed3c9e2de0370c2fe6c1e6f4f97a7551f20c6226cc0e2  upmpdcli-1.2.10.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.2.12.tar.gz.sha256:
++sha256  20d97c2e5ff6911e1e1538edb1487823479802cba6bd4f4c4a74035edf61cb26  upmpdcli-1.2.12.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index d1d6ab4b4..83efa0530 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+SNGREP_CONF_ENV += \
-+	$(if $(BR2_STATIC_LIBS),LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`")
-+
- # our ncurses wchar support is not properly detected
- SNGREP_CONF_OPTS += --disable-unicode
- 
+-UPMPDCLI_VERSION = 1.2.10
++UPMPDCLI_VERSION = 1.2.12
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
 -- 
 2.11.0
