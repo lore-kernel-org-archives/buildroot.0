@@ -1,31 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jan 2017 14:59:37 +0100
-Subject: [Buildroot] [V2 1/3] pkg-perl: add PREFER_INSTALLER variable
-In-Reply-To: <20170124082534.21033-1-francois.perrad@gadz.org>
-References: <20170124082534.21033-1-francois.perrad@gadz.org>
-Message-ID: <20170129145937.316dcbba@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 29 Jan 2017 15:37:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fbterm: Fix building against
+	libiconv
+References: <20170128174916.11214-1-bernd.kuhls@t-online.de>
+ <20170129142633.4ba3c0b4@free-electrons.com>
+Message-ID: <dab1mdxd4l.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Sun, 29 Jan 2017 14:26:33 +0100 schrieb Thomas Petazzoni:
 
-On Tue, 24 Jan 2017 09:25:32 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  docs/manual/adding-packages-perl.txt |  8 ++++++--
->  package/pkg-perl.mk                  | 20 ++++++++++++++------
->  2 files changed, 20 insertions(+), 8 deletions(-)
+> Applied to master, thanks. However, this means that fbterm links against
+> libiconv when available, no? So perhaps we should have:
+> 
+> ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> FBTERM_DEPENDENCIES += libiconv endif
+> 
+> in fbterm.mk ?
 
-Entire series applied, thanks! I did some tweaks to the documentation
-changes before applying, but nothing major.
+Hi,
 
-Thanks again!
+I think this is not needed, because fbterm depends on BR2_ENABLE_LOCALE, 
+while libiconv depends on !BR2_ENABLE_LOCALE. The build error occured 
+while including iconv.h from uClibc.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
