@@ -1,123 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jan 2017 14:54:08 +0100
-Subject: [Buildroot] [git commit] pkg-perl: add PREFER_INSTALLER variable
-Message-ID: <20170129135833.D817A817F4@busybox.osuosl.org>
+Date: Sun, 29 Jan 2017 14:57:04 +0100
+Subject: [Buildroot] [git commit] perl-gd: bump to version 2.56
+Message-ID: <20170129135833.E5705817F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f102d8284acf6619a1e8119dc76dc48957a4bef
+commit: https://git.buildroot.net/buildroot/commit/?id=31c3ad17ed22b1d2d04ade1c0a3b942876592dfe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+perl-gd now supplies a Build.PL, but this one is not cross-compilation
+friendly. So, we still use Makefile.PL like in previous version by using
+the new <pkg>_PREFER_INSTALLER variable.
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Thomas: tweak documentation.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-perl.txt | 11 +++++++++--
- package/pkg-perl.mk                  | 20 ++++++++++++++------
- 2 files changed, 23 insertions(+), 8 deletions(-)
+ package/perl-gd/0002-lgd.patch                              | 4 ++--
+ package/perl-gd/0003-force.patch                            | 2 +-
+ package/perl-gd/0004-gdlib-config-is-now-configurable.patch | 2 +-
+ package/perl-gd/Config.in                                   | 2 +-
+ package/perl-gd/perl-gd.hash                                | 4 ++--
+ package/perl-gd/perl-gd.mk                                  | 5 +++--
+ 6 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
-index 4f5a6a4..3476b62 100644
---- a/docs/manual/adding-packages-perl.txt
-+++ b/docs/manual/adding-packages-perl.txt
-@@ -68,8 +68,8 @@ As a policy, packages that provide Perl/CPAN modules should all be
- named +perl-<something>+ in Buildroot.
+diff --git a/package/perl-gd/0002-lgd.patch b/package/perl-gd/0002-lgd.patch
+index 4a69c2a..2827cd7 100644
+--- a/package/perl-gd/0002-lgd.patch
++++ b/package/perl-gd/0002-lgd.patch
+@@ -7,7 +7,7 @@ Index: b/Makefile.PL
+ ===================================================================
+ --- a/Makefile.PL
+ +++ b/Makefile.PL
+-@@ -34,9 +34,9 @@
++@@ -42,9 +42,9 @@
+  END
+  }
+  
+@@ -18,7 +18,7 @@ Index: b/Makefile.PL
+  
+  # support for AMD64 libraries
+  if (-d '/usr/lib64') {
+-@@ -291,7 +291,6 @@
++@@ -294,7 +294,6 @@
+    @$LIBPATH      = map {s/^-L// && "-L$_"} split /\s+/,$ldflags;
+    @$LIBS         = split /\s+/,$libs;
+  
+diff --git a/package/perl-gd/0003-force.patch b/package/perl-gd/0003-force.patch
+index 0a121a9..611066b 100644
+--- a/package/perl-gd/0003-force.patch
++++ b/package/perl-gd/0003-force.patch
+@@ -7,7 +7,7 @@ Index: b/Makefile.PL
+ ===================================================================
+ --- a/Makefile.PL
+ +++ b/Makefile.PL
+-@@ -35,13 +35,15 @@
++@@ -43,13 +43,15 @@
+  }
+  
+  push @LIBS, "-lgd";
+diff --git a/package/perl-gd/0004-gdlib-config-is-now-configurable.patch b/package/perl-gd/0004-gdlib-config-is-now-configurable.patch
+index dea6126..58df225 100644
+--- a/package/perl-gd/0004-gdlib-config-is-now-configurable.patch
++++ b/package/perl-gd/0004-gdlib-config-is-now-configurable.patch
+@@ -53,7 +53,7 @@ index dfe8ad7..0fa6ef3 100644
+  #############################################################################################
+  
+  if ($^O eq 'VMS'){
+-@@ -275,7 +286,7 @@ exit 0;
++@@ -278,7 +289,7 @@ exit 0;
+  
+  sub try_to_autoconfigure {
+    my ($options,$lib_gd_path,$INC,$LIBPATH,$LIBS) = @_;
+diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
+index 61f7e5d..2b7a265 100644
+--- a/package/perl-gd/Config.in
++++ b/package/perl-gd/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_PERL_GD
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_GD
+ 	help
+-	  Interface to Gd Graphics Library
++	  Perl interface to the gd2 graphics library
  
- This infrastructure handles various Perl build systems :
--+ExtUtils-MakeMaker+, +Module-Build+ and +Module-Build-Tiny+.
--+Build.PL+ is always preferred when a package provides a +Makefile.PL+
-++ExtUtils-MakeMaker+ (EUMM), +Module-Build+ (MB) and +Module-Build-Tiny+.
-++Build.PL+ is preferred by default when a package provides a +Makefile.PL+
- and a +Build.PL+.
+ 	  https://metacpan.org/release/GD
  
- The main macro of the Perl/CPAN package infrastructure is
-@@ -97,6 +97,13 @@ A few additional variables, specific to the Perl/CPAN infrastructure,
- can also be defined. Many of them are only useful in very specific
- cases, typical packages will therefore only use a few of them.
- 
-+* +PERL_FOO_PREFER_INSTALLER+/+HOST_PERL_FOO_PREFER_INSTALLER+,
-+  specifies the preferred installation method. Possible values are
-+  +EUMM+ (for +Makefile.PL+ based installation using
-+  +ExtUtils-MakeMaker+) and +MB+ (for +Build.PL+ based installation
-+  using +Module-Build+). This variable is only used when the package
-+  provides both installation methods.
-+
- * +PERL_FOO_CONF_ENV+/+HOST_PERL_FOO_CONF_ENV+, to specify additional
-   environment variables to pass to the +perl Makefile.PL+ or +perl Build.PL+.
-   By default, empty.
-diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-index 4b20598..cc94cd9 100644
---- a/package/pkg-perl.mk
-+++ b/package/pkg-perl.mk
-@@ -49,6 +49,14 @@ else
- $(2)_DEPENDENCIES += host-perl
- endif
- 
-+# From http://perldoc.perl.org/CPAN.html#Config-Variables - prefer_installer
-+#       legal values are MB and EUMM: if a module comes
-+#       with both a Makefile.PL and a Build.PL, use the
-+#       former (EUMM) or the latter (MB); if the module
-+#       comes with only one of the two, that one will be
-+#       used no matter the setting
-+$(2)_PREFER_INSTALLER ?= MB
-+
+diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
+index c6822ae..0c16d3f 100644
+--- a/package/perl-gd/perl-gd.hash
++++ b/package/perl-gd/perl-gd.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    d2c9b18123bcaff8672eb50f2eb37ed3 GD-2.53.tar.gz
+-sha256 d05d01fe95e581adb3468cf05ab5d405db7497c0fb3ec7ecf23d023705fab7aa GD-2.53.tar.gz
++md5    c4b3afd98b2c4ce3c2e1027d101a8f1e GD-2.56.tar.gz
++sha256 1f103d1c98de8621504642ed7fb79f1b40f5f6a63c2abe9390a8ab78617248f9 GD-2.56.tar.gz
+diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+index 99568cb..ea8fd5c 100644
+--- a/package/perl-gd/perl-gd.mk
++++ b/package/perl-gd/perl-gd.mk
+@@ -4,12 +4,13 @@
  #
- # Configure step. Only define it if not already defined by the package
- # .mk file. And take care of the differences between host and target
-@@ -59,7 +67,7 @@ ifeq ($(4),target)
+ ################################################################################
  
- # Configure package for target
- define $(2)_CONFIGURE_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$($(2)_CONF_ENV) \
- 		PERL_MM_USE_DEFAULT=1 \
- 		$$(PERL_RUN) Build.PL \
-@@ -109,7 +117,7 @@ else
+-PERL_GD_VERSION = 2.53
++PERL_GD_VERSION = 2.56
+ PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
+ PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS
+ PERL_GD_DEPENDENCIES = zlib libpng freetype gd
+-PERL_GD_LICENSE = Artistic-2.0 or GPLv1+
++PERL_GD_LICENSE = Artistic or GPLv1+
+ PERL_GD_LICENSE_FILES = LICENSE
++PERL_GD_PREFER_INSTALLER = EUMM
  
- # Configure package for host
- define $(2)_CONFIGURE_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$($(2)_CONF_ENV) \
- 		PERL_MM_USE_DEFAULT=1 \
- 		$$(PERL_RUN) Build.PL \
-@@ -135,7 +143,7 @@ ifeq ($(4),target)
- 
- # Build package for target
- define $(2)_BUILD_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
- 	else \
- 		$$(MAKE1) \
-@@ -148,7 +156,7 @@ else
- 
- # Build package for host
- define $(2)_BUILD_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
- 	else \
- 		$$(MAKE1) $$($(2)_BUILD_OPTS) pure_all; \
-@@ -163,7 +171,7 @@ endif
- #
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$(PERL_RUN) Build $$($(2)_INSTALL_TARGET_OPTS) install; \
- 	else \
- 		$$(MAKE1) $$($(2)_INSTALL_TARGET_OPTS) pure_install; \
-@@ -177,7 +185,7 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
-+	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$(PERL_RUN) Build $$($(2)_INSTALL_TARGET_OPTS) install; \
- 	else \
- 		$$(MAKE1) $$($(2)_INSTALL_TARGET_OPTS) pure_install; \
+ PERL_GD_CONF_OPTS = \
+ 	-options=FT,PNG \
