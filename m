@@ -1,116 +1,111 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 29 Jan 2017 21:37:34 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-01-24
-In-Reply-To: <CAHXCMM+cL0UnnfhgFTtkeC7L+jRh8s=tr-U5CTC0YZxzUBb4bA@mail.gmail.com>
-References: <20170125073013.D171D20CD4@mail.free-electrons.com>
- <1485378342.7516.1.camel@embedded.rocks>
- <20170125211534.dugtv6byofg3wvg5@tarshish>
- <CAHXCMM+cL0UnnfhgFTtkeC7L+jRh8s=tr-U5CTC0YZxzUBb4bA@mail.gmail.com>
-Message-ID: <1485722254.4549.1.camel@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 29 Jan 2017 21:41:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bluez-tools: new package
+Message-ID: <20170129204128.23938-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/bluez-tools/Config.in        | 19 +++++++++++++++++++
+ package/bluez-tools/bluez-tools.hash |  3 +++
+ package/bluez-tools/bluez-tools.mk   | 23 +++++++++++++++++++++++
+ 5 files changed, 47 insertions(+)
+ create mode 100644 package/bluez-tools/Config.in
+ create mode 100644 package/bluez-tools/bluez-tools.hash
+ create mode 100644 package/bluez-tools/bluez-tools.mk
 
-On Thu, 2017-01-26 at 12:04 +0100, Samuel Martin wrote:
-> Hi all,
-> 
-> On Wed, Jan 25, 2017 at 10:15 PM, Baruch Siach <baruch@tkos.co.il>
-> wrote:
-> > Hi J?rg,
-> > 
-> > On Wed, Jan 25, 2017 at 10:05:42PM +0100, J?rg Krause wrote:
-> > > On Wed, 2017-01-25 at 08:30 +0100, Thomas Petazzoni wrote:
-> > > [snip]
-> > > 
-> > > > Detail of failures
-> > > > ===================
-> > > > 
-> > > > ????????i586 |????????????????bctoolbox-0.4.0 | NOK | http://au
-> > > > tobuil
-> > > > d.buildroot.net/results/4b4b00ad3b95ddacc9d5cc31c34e457ee55c936
-> > > > 4
-> 
-> Regarding this package, apologies I missed it during the initial
-> review :s
-
-Never mind! That's the autobuilder are there for, right?
-
-> This build failure occurs because it goes in a path it should not.
-> In the Config.in: it is mentionned that mbedtls is prefered to
-> polarssl [1], hence the select [1] and the dependency in the *.mk
-> [2].
-> However, the cmake configure flags are not set accordingly to this,
-> and the defaults may play against us [3].
-> 
-> I would suggest to set the ENABLE_{MBEDTLS,POLARSSL} flags in the
-> *.mk first.
-> This should prevent from following this case [4], as displayed in the
-> build log [5].
-
-Support for PolarSSL is only enabled if mbedTLS is not found, but I
-agree, it's better to disable it explicitly.
-
-> After this, if the CheckSymbolExists still causes error, we may need
-> to patch the bctoolbox
-> cmake code to set/fix the variables used by CheckSymbolExists [6].
-
-I prepared a patch of FindMbedTLS.cmake which checks if mbedtls was
-build with libz support and if so, add libz to MBEDTLS_LIBRARIES. This
-way, CMake should take care of linking against the libz in sysroot.
-
-> > > 
-> > > Unfortunately I cannot reproduce this issue. Is it a rpath issue?
-> > > cmake
-> > > links a test program with host zlib:
-> 
-> Note: I'm not able to reproduce the error either.
-
-I wonder, what makes the difference to be able to reproduce the issue.
-
-> > > 
-> > > [..]/i586-buildroot-linux-musl/bin/ld: warning: libc.so.6, needed
-> > > by
-> > > /usr/lib32/libz.so.1, not found (try using -rpath or -rpath-link)
-> > > /usr/lib32/libz.so.1: undefined reference to `strcpy at GLIBC_2.0'
-> > 
-> > This is your host library.
-> > 
-> > > I have no idea how to fix it. bctoolbox' cmakelists.txt does set
-> > > CMAKE_INSTALL_RPATH=/usr/lib. Is this a problem?
-> > 
-> > That is definitely not compatible with cross compilation.
-> > 
-> > baruch
-> > 
-> > --
-> > ?????http://baruch.siach.name/blog/??????????????????~. .~???Tk
-> > Open Systems
-> > =}------------------------------------------------ooO--U--Ooo----
-> > --------{=
-> > ???- baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.
-> > il -
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> Regards,
-> 
-> [1] https://git.buildroot.net/buildroot/tree/package/bctoolbox/Config
-> .in#n5
-> [2] https://git.buildroot.net/buildroot/tree/package/bctoolbox/bctool
-> box.mk#n11
-> [3] https://github.com/BelledonneCommunications/bctoolbox/blob/master
-> /CMakeLists.txt#L44
-> [4] https://github.com/BelledonneCommunications/bctoolbox/blob/master
-> /CMakeLists.txt#L88
-> [5] http://autobuild.buildroot.net/results/4b4/4b4b00ad3b95ddacc9d5cc
-> 31c34e457ee55c9364/build-end.log
-> [6] https://cmake.org/cmake/help/v3.0/module/CheckSymbolExists.html
-> 
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b6e0c63c1..3b6418684 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -150,6 +150,7 @@ N:	Bernd Kuhls <bernd.kuhls@t-online.de>
+ F:	package/apache/
+ F:	package/apr/
+ F:	package/apr-util/
++F:	package/bluez-tools/
+ F:	package/clamav/
+ F:	package/dovecot/
+ F:	package/dovecot-pigeonhole/
+diff --git a/package/Config.in b/package/Config.in
+index 4ae0432a1..bc8c611bc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1479,6 +1479,7 @@ menu "Networking applications"
+ 	source "package/batctl/Config.in"
+ 	source "package/bcusdk/Config.in"
+ 	source "package/bind/Config.in"
++	source "package/bluez-tools/Config.in"
+ 	source "package/bluez_utils/Config.in"
+ 	source "package/bluez5_utils/Config.in"
+ 	source "package/bmon/Config.in"
+diff --git a/package/bluez-tools/Config.in b/package/bluez-tools/Config.in
+new file mode 100644
+index 000000000..5a1b7d041
+--- /dev/null
++++ b/package/bluez-tools/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_BLUEZ_TOOLS
++	bool "bluez-tools"
++	depends on BR2_PACKAGE_BLUEZ_UTILS || BR2_PACKAGE_BLUEZ5_UTILS
++	depends on BR2_USE_MMU # dbus, libglib2
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
++	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_DBUS_GLIB
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_READLINE if BR2_PACKAGE_BLUEZ5_UTILS
++	help
++	  A set of tools to manage bluetooth devices for linux
++
++	  https://github.com/khvzak/bluez-tools
++
++comment "bluez-tools needs a toolchain w/ wchar, threads"
++	depends on BR2_PACKAGE_BLUEZ_UTILS || BR2_PACKAGE_BLUEZ5_UTILS
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/bluez-tools/bluez-tools.hash b/package/bluez-tools/bluez-tools.hash
+new file mode 100644
+index 000000000..214fa5bdf
+--- /dev/null
++++ b/package/bluez-tools/bluez-tools.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 56204ddd1cc7890d60f6a47507755f786fa3ee28f1da370a32ca7d7e0795a953  bluez-tools-171181b6ef6c94aefc828dc7fd8de136b9f97532.tar.gz
++sha256 62ca98af63d2ae142dbc77995c6bd4c259eaba4a5832daa33ae9e3d585b9205f  bluez-tools-97efd293491ad7ec96a655665339908f2478b3d1.tar.gz
+diff --git a/package/bluez-tools/bluez-tools.mk b/package/bluez-tools/bluez-tools.mk
+new file mode 100644
+index 000000000..022330faf
+--- /dev/null
++++ b/package/bluez-tools/bluez-tools.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# bluez-tools
++#
++################################################################################
++
++ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
++# this is the last version compatible with BlueZ 4 API
++BLUEZ_TOOLS_VERSION = 171181b6ef6c94aefc828dc7fd8de136b9f97532
++else
++BLUEZ_TOOLS_VERSION = 97efd293491ad7ec96a655665339908f2478b3d1
++endif
++BLUEZ_TOOLS_SITE = $(call github,khvzak,bluez-tools,$(BLUEZ_TOOLS_VERSION))
++BLUEZ_TOOLS_AUTORECONF = YES
++BLUEZ_TOOLS_DEPENDENCIES = host-pkgconf dbus dbus-glib
++
++ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
++BLUEZ_TOOLS_DEPENDENCIES += bluez_utils
++else
++BLUEZ_TOOLS_DEPENDENCIES += bluez5_utils readline
++endif
++
++$(eval $(autotools-package))
+-- 
+2.11.0
