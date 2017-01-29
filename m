@@ -1,111 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Jan 2017 21:41:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bluez-tools: new package
-Message-ID: <20170129204128.23938-1-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 29 Jan 2017 23:11:55 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-01-24
+In-Reply-To: <1485722254.4549.1.camel@embedded.rocks>
+References: <20170125073013.D171D20CD4@mail.free-electrons.com>
+ <1485378342.7516.1.camel@embedded.rocks>
+ <20170125211534.dugtv6byofg3wvg5@tarshish>
+ <CAHXCMM+cL0UnnfhgFTtkeC7L+jRh8s=tr-U5CTC0YZxzUBb4bA@mail.gmail.com>
+ <1485722254.4549.1.camel@embedded.rocks>
+Message-ID: <20170129211155.f6sebtrdmsrwb2yw@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/bluez-tools/Config.in        | 19 +++++++++++++++++++
- package/bluez-tools/bluez-tools.hash |  3 +++
- package/bluez-tools/bluez-tools.mk   | 23 +++++++++++++++++++++++
- 5 files changed, 47 insertions(+)
- create mode 100644 package/bluez-tools/Config.in
- create mode 100644 package/bluez-tools/bluez-tools.hash
- create mode 100644 package/bluez-tools/bluez-tools.mk
+Hi J?rg,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b6e0c63c1..3b6418684 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -150,6 +150,7 @@ N:	Bernd Kuhls <bernd.kuhls@t-online.de>
- F:	package/apache/
- F:	package/apr/
- F:	package/apr-util/
-+F:	package/bluez-tools/
- F:	package/clamav/
- F:	package/dovecot/
- F:	package/dovecot-pigeonhole/
-diff --git a/package/Config.in b/package/Config.in
-index 4ae0432a1..bc8c611bc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1479,6 +1479,7 @@ menu "Networking applications"
- 	source "package/batctl/Config.in"
- 	source "package/bcusdk/Config.in"
- 	source "package/bind/Config.in"
-+	source "package/bluez-tools/Config.in"
- 	source "package/bluez_utils/Config.in"
- 	source "package/bluez5_utils/Config.in"
- 	source "package/bmon/Config.in"
-diff --git a/package/bluez-tools/Config.in b/package/bluez-tools/Config.in
-new file mode 100644
-index 000000000..5a1b7d041
---- /dev/null
-+++ b/package/bluez-tools/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_BLUEZ_TOOLS
-+	bool "bluez-tools"
-+	depends on BR2_PACKAGE_BLUEZ_UTILS || BR2_PACKAGE_BLUEZ5_UTILS
-+	depends on BR2_USE_MMU # dbus, libglib2
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_DBUS_GLIB
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_READLINE if BR2_PACKAGE_BLUEZ5_UTILS
-+	help
-+	  A set of tools to manage bluetooth devices for linux
-+
-+	  https://github.com/khvzak/bluez-tools
-+
-+comment "bluez-tools needs a toolchain w/ wchar, threads"
-+	depends on BR2_PACKAGE_BLUEZ_UTILS || BR2_PACKAGE_BLUEZ5_UTILS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/bluez-tools/bluez-tools.hash b/package/bluez-tools/bluez-tools.hash
-new file mode 100644
-index 000000000..214fa5bdf
---- /dev/null
-+++ b/package/bluez-tools/bluez-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 56204ddd1cc7890d60f6a47507755f786fa3ee28f1da370a32ca7d7e0795a953  bluez-tools-171181b6ef6c94aefc828dc7fd8de136b9f97532.tar.gz
-+sha256 62ca98af63d2ae142dbc77995c6bd4c259eaba4a5832daa33ae9e3d585b9205f  bluez-tools-97efd293491ad7ec96a655665339908f2478b3d1.tar.gz
-diff --git a/package/bluez-tools/bluez-tools.mk b/package/bluez-tools/bluez-tools.mk
-new file mode 100644
-index 000000000..022330faf
---- /dev/null
-+++ b/package/bluez-tools/bluez-tools.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# bluez-tools
-+#
-+################################################################################
-+
-+ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
-+# this is the last version compatible with BlueZ 4 API
-+BLUEZ_TOOLS_VERSION = 171181b6ef6c94aefc828dc7fd8de136b9f97532
-+else
-+BLUEZ_TOOLS_VERSION = 97efd293491ad7ec96a655665339908f2478b3d1
-+endif
-+BLUEZ_TOOLS_SITE = $(call github,khvzak,bluez-tools,$(BLUEZ_TOOLS_VERSION))
-+BLUEZ_TOOLS_AUTORECONF = YES
-+BLUEZ_TOOLS_DEPENDENCIES = host-pkgconf dbus dbus-glib
-+
-+ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
-+BLUEZ_TOOLS_DEPENDENCIES += bluez_utils
-+else
-+BLUEZ_TOOLS_DEPENDENCIES += bluez5_utils readline
-+endif
-+
-+$(eval $(autotools-package))
+On Sun, Jan 29, 2017 at 09:37:34PM +0100, J?rg Krause wrote:
+> On Thu, 2017-01-26 at 12:04 +0100, Samuel Martin wrote:
+> > On Wed, Jan 25, 2017 at 10:15 PM, Baruch Siach <baruch@tkos.co.il>
+> > wrote:
+> > > On Wed, Jan 25, 2017 at 10:05:42PM +0100, J?rg Krause wrote:
+> > > > Unfortunately I cannot reproduce this issue. Is it a rpath issue?
+> > > > cmake links a test program with host zlib:
+> > 
+> > Note: I'm not able to reproduce the error either.
+> 
+> I wonder, what makes the difference to be able to reproduce the issue.
+
+See http://lists.busybox.net/pipermail/buildroot/2017-January/182237.html.
+
+baruch
+
 -- 
-2.11.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
