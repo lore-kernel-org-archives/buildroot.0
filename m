@@ -1,88 +1,90 @@
 From: Lionel Flandrin <lionel@svkt.org>
-Date: Mon, 30 Jan 2017 11:33:26 +0100
-Subject: [Buildroot] [PATCH 2/2] u-boot: Add support for Altera mkpimage
-	generation
-In-Reply-To: <20170130103326.14427-1-lionel@svkt.org>
-References: <20170128112720.umcchfeyyc7i6rdo@localhost.localdomain>
- <20170130103326.14427-1-lionel@svkt.org>
-Message-ID: <20170130103326.14427-2-lionel@svkt.org>
+Date: Mon, 30 Jan 2017 11:40:52 +0100
+Subject: [Buildroot] [PATCH 1/2] python-gunicorn: new package
+Message-ID: <20170130104053.16234-1-lionel@svkt.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This image format is used by Altera's SoC FPGAs BootROMs.
+Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for UNIX. It?s a
+pre-fork worker model ported from Ruby?s Unicorn project. The Gunicorn
+server is broadly compatible with various web frameworks, simply
+implemented, light on server resource usage, and fairly speedy.
 
 Signed-off-by: Lionel Flandrin <lionel@svkt.org>
 ---
- boot/uboot/Config.in | 30 ++++++++++++++++++++++++++++++
- boot/uboot/uboot.mk  | 12 ++++++++++++
- 2 files changed, 42 insertions(+)
+ package/Config.in                            |  1 +
+ package/python-gunicorn/Config.in            | 15 +++++++++++++++
+ package/python-gunicorn/python-gunicorn.hash |  3 +++
+ package/python-gunicorn/python-gunicorn.mk   | 14 ++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/python-gunicorn/Config.in
+ create mode 100644 package/python-gunicorn/python-gunicorn.hash
+ create mode 100644 package/python-gunicorn/python-gunicorn.mk
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 4e629c0ef..30db8d8b4 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -255,6 +255,36 @@ config BR2_TARGET_UBOOT_FORMAT_NAND_ERASE_SIZE
- 
- endif
- 
-+config BR2_TARGET_UBOOT_FORMAT_MKPIMAGE
-+       bool "u-boot-dtb.mkpimage (Altera SoC BootROMs)"
-+       help
-+          Altera's mkpimage format used on their SoCs.
+diff --git a/package/Config.in b/package/Config.in
+index 6a3a1a7c7..c68d84889 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -696,6 +696,7 @@ menu "External python modules"
+ 	source "package/python-flup/Config.in"
+ 	source "package/python-futures/Config.in"
+ 	source "package/python-gobject/Config.in"
++	source "package/python-gunicorn/Config.in"
+ 	source "package/python-html5lib/Config.in"
+ 	source "package/python-httplib2/Config.in"
+ 	source "package/python-humanize/Config.in"
+diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
+new file mode 100644
+index 000000000..d675c03e0
+--- /dev/null
++++ b/package/python-gunicorn/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PYTHON_GUNICORN
++	bool "python-gunicorn"
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
++	help
++	  Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for
++	  UNIX. It?s a pre-fork worker model ported from Ruby?s
++	  Unicorn project. The Gunicorn server is broadly compatible
++	  with various web frameworks, simply implemented, light on
++	  server resource usage, and fairly speedy.
 +
-+if BR2_TARGET_UBOOT_FORMAT_MKPIMAGE
++	  http://gunicorn.org/
+diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
+new file mode 100644
+index 000000000..a282bc995
+--- /dev/null
++++ b/package/python-gunicorn/python-gunicorn.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
++md5	338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
++sha256	813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
+diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
+new file mode 100644
+index 000000000..c33b753db
+--- /dev/null
++++ b/package/python-gunicorn/python-gunicorn.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-gunicorn
++#
++################################################################################
 +
-+choice
-+       prompt "mkpimage header"
-+       default BR2_TARGET_UBOOT_FORMAT_MKPIMAGE_V1
-+       help
-+         Select the header format for mkpimage
++PYTHON_GUNICORN_VERSION = 19.6.0
++PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
++PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
++PYTHON_GUNICORN_SETUP_TYPE = setuptools
++PYTHON_GUNICORN_LICENSE = BSD-3c
++PYTHON_GUNICORN_LICENSE_FILES = LICENSE
 +
-+config BR2_TARGET_UBOOT_FORMAT_MKPIMAGE_V0
-+       bool "Arria/Cyclone V (v0)"
-+       help
-+         Header version 1, used by the Arria V and Cyclone V SoCs
-+
-+config BR2_TARGET_UBOOT_FORMAT_MKPIMAGE_V1
-+       bool "Arria 10 (v1)"
-+       help
-+         Header version 1, used by the Arria10 SoC
-+endchoice
-+
-+config BR2_TARGET_UBOOT_FORMAT_MKPIMAGE_VERSION
-+       int
-+       default 0 if BR2_TARGET_UBOOT_FORMAT_MKPIMAGE_V0
-+       default 1 if BR2_TARGET_UBOOT_FORMAT_MKPIMAGE_V1
-+endif
-+
- config BR2_TARGET_UBOOT_FORMAT_CUSTOM
- 	bool "Custom (specify below)"
- 	help
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 6b9d54454..7637349fa 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -104,6 +104,18 @@ UBOOT_MAKE_TARGET += u-boot.sb
- UBOOT_DEPENDENCIES += host-elftosb host-openssl
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_MKPIMAGE),y)
-+define UBOOT_ALTERA_MKPIMAGE
-+       $(HOST_DIR)/usr/bin/mkpimage \
-+               -v $(BR2_TARGET_UBOOT_FORMAT_MKPIMAGE_VERSION) \
-+               -o $(BINARIES_DIR)/u-boot-dtb.mkpimage \
-+               $(@D)/u-boot-dtb.bin
-+endef
-+UBOOT_MAKE_TARGET += u-boot-dtb.bin
-+UBOOT_DEPENDENCIES += host-mkpimage
-+UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_ALTERA_MKPIMAGE
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
- UBOOT_BINS += $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
- endif
++$(eval $(python-package))
 -- 
 2.11.0
