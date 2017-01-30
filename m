@@ -1,32 +1,43 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Jan 2017 15:44:43 -0300
-Subject: [Buildroot] [PATCH] heimdal: disable parallel make
-Message-ID: <20170130184443.1023-1-gustavo@zacarias.com.ar>
+Date: Mon, 30 Jan 2017 16:02:22 -0300
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.5.5
+Message-ID: <20170130190222.17132-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It still seems to suffer from issues. Fixes:
-http://autobuild.buildroot.net/results/e21/e2176cb5adacdad14371d4828f13a1c23f0e18d5/
+Switch download URL to match the website and avoid issues.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/heimdal/heimdal.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index a20ec8f..5376a6c 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
-@@ -8,6 +8,7 @@ HEIMDAL_VERSION = 7.1.0
- HEIMDAL_SITE = http://www.h5l.org/dist/src
- HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
- HEIMDAL_INSTALL_STAGING = YES
-+HEIMDAL_MAKE = $(MAKE1)
- # static because of -fPIC issues with e2fsprogs on x86_64 host
- HOST_HEIMDAL_CONF_OPTS = \
- 	--disable-shared \
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 1148db2..4fec55d 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	1800d10ea14cabef67c83cc56a0f37f4f30ba5df218b3a1e7c874069a08c0f40	samba-4.5.4.tar.gz
++sha256	bff02762b3e4ee030f02266c6e24a0b888248b387246219b7fbe3e1758ef2184	samba-4.5.5.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 7eacf8a..4020caa 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.5.4
+-SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
++SAMBA4_VERSION = 4.5.5
++SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+ SAMBA4_LICENSE = GPLv3+
 -- 
 2.10.2
