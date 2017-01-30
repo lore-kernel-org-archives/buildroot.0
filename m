@@ -1,40 +1,38 @@
-From: Francesco Negri <francesconegri@gmail.com>
-Date: Mon, 30 Jan 2017 10:38:29 +0100
-Subject: [Buildroot] [PATCH 1/1] git-crypt: new package
-In-Reply-To: <20170130052832.bo2h4xebwfbbe4zo@tarshish>
-References: <20170130002853.76103-1-francesconegri@gmail.com>
- <20170130052832.bo2h4xebwfbbe4zo@tarshish>
-Message-ID: <CA+KB-ZZX5EdzPJ32YP1PtXrwxUWZQe1B6UoO9si2uP3vvxJr3A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Jan 2017 10:49:52 +0100
+Subject: [Buildroot] [PATCH] package/mpd: disable on SPARCV8, NIOS2,
+ ARMV{4, 5}
+In-Reply-To: <1485080385.6667.1.camel@embedded.rocks>
+References: <20170121161100.3142-1-joerg.krause@embedded.rocks>
+ <20170122172600.333588cf@free-electrons.com>
+ <1485080385.6667.1.camel@embedded.rocks>
+Message-ID: <20170130104952.409eb0d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch. Thanks for your help, this is my first patch for buildroot
-and I am still learning how things work.
+Hello,
 
-On 30 Jan 2017 6:28 am, "Baruch Siach" <baruch@tkos.co.il> wrote:
-> You should also propagate BR2_PACKAGE_GIT dependency here (BR2_USE_MMU).
+On Sun, 22 Jan 2017 11:19:45 +0100, J?rg Krause wrote:
 
-Right, will do.
+> > The reason I'm asking is because I believe a
+> > BR2_TOOLCHAIN_HAS_GCC_BUG_xyz hidden option would be a bit better:
+> > 
+> > ?1. It would document what this is for
+> > 
+> > ?2. It would avoid repeating the architecture conditions  
+> 
+> Yes, this would be better in case more packages show up. Shall I make
+> an updated fix?
 
-> https://www.agwa.name/projects/git-crypt/ looks more informative.
+Yes, please :)
 
-Agreed.
+Thanks!
 
-> A dependencies comment is missing. See section 17.2.4 in the manual[1].
-
-Sorry, missed that part. I will add it.
-
-> Upstream tarball (see below) has upstream provided hash[2].
-> Any reason not to use upstream tarball?
-
-No reason, I simply didn't notice the tarball and the hash were
-available, I will use those.
-
-> A 'select BR2_PACKAGE_OPENSSL' in Config.in is missing.
-
-Thanks, will add.
-
-Francesco
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
