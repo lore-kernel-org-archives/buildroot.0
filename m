@@ -1,61 +1,40 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 30 Jan 2017 09:14:15 +0100
-Subject: [Buildroot] Relocatable internal toolchain
-In-Reply-To: <a46d8432-bc43-5b0c-5a7a-a04e8993912e@grandegger.com>
-References: <57c96cfd-7d0c-c9de-04d2-2da8f5dd7f7c@grandegger.com>
- <CAHXCMML2HKsOgxZRLpcMbCY8Lci6-N_s1+qVTRxCHqyvP+rzgg@mail.gmail.com>
- <11e6deef-d790-33d8-b0ad-3477a51e369f@grandegger.com>
- <a46d8432-bc43-5b0c-5a7a-a04e8993912e@grandegger.com>
-Message-ID: <CAHXCMMJ1HL5EY=veTL02uA+LrEi1_4J4h008S2zhCEpgQjePig@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Jan 2017 10:11:30 +0100
+Subject: [Buildroot] [PATCH v5 08/10] python-pyqt5: Depend directly on
+ Qt5 rather than its toolchain requirements
+In-Reply-To: <9311d4db-5c83-2dfe-48d7-9cd9ded1af28@andin.de>
+References: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
+ <1485439461-4797-9-git-send-email-anaumann@ultratronik.de>
+ <20170127212120.04eaddfe@free-electrons.com>
+ <9311d4db-5c83-2dfe-48d7-9cd9ded1af28@andin.de>
+Message-ID: <20170130101130.3ed6e634@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Wolfgang, all,
+Hello,
 
-On Mon, Jan 30, 2017 at 8:31 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
->
-> Buildroot's build system is quite new too me. At a first glance it's rather
-> heavy stuff! So I first tried the patches you mentioned to see what I get.
-> After some tweaking due to "file permissions" and "file in use" issues with
-> patchelf, the build did succeed. But subsequent builds then required setting
-> LD_LIBRARY_PATH for the host tools. Then I moved the buildroot output
-> directory to a different location to see if relocation, as I understand it,
-> works. My test cases are some out-of-tree QT5 examples:
->
->   $ cd <a-path>/examples
->   $ <path-to-buildroot-output>/host/usr/bin/qmake
->   Could not find qmake configuration file devices/linux-buildroot-g++.
->   Error processing project file: /home/wolf/junk/examples/examples.pro
->
-> How do I set the new path to the toolchain. Likely I have missed something.
+On Fri, 27 Jan 2017 15:20:31 +0100, Andreas Naumann wrote:
 
-I have no clue about this, but a quick google search gives me a
-possible way to fix/workaround this [5] (with no warranty at all).
+> That would be your comment in v3 of this set:
+> 
+> "When you want python-qt5 it's really obvious that you need
+> Qt5, so for the user it's logical to enable Qt5 and then Python-Qt5."
 
->
-> Apart from the "rpath", the path to the build directory is also in many text
-> (configuration scripts, etc.) files. What did work for me was replacing the
-> path to the build directory ("<buildroot-output>/host/usr") with the new
-> location in all text files.
->
-> Not sure if we speak/think about the same "relocation" behaviour.
+Sure. What I meant is that such explanation should be part of the
+commit log. This way, if a few months/years from now we wonder why this
+change was done, we have the explanation in the commit log.
 
-Yes we are, I just forgot to give the main link to this task, which
-details many things to fix/support for a complete relocatable SDK.
-Note that the series I posted just dealt with the rpath point so far,
-unstacking one point after the other.
+> Unfortunately, I wont have time to rework this and your other two 
+> comments in the next 10 days. If you need to apply the set earlier than 
+> that, feel free to just change as needed.
 
->
-> Wolfgang.
+Sure, thanks!
 
-Regards,
-
-
-[5] http://doc.qt.io/qt-5/qmake-environment-reference.html
-[6] http://elinux.org/Buildroot#Core_Buildroot_infrastructure
-
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
