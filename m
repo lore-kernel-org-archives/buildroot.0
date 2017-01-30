@@ -1,39 +1,96 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Jan 2017 10:44:49 -0300
-Subject: [Buildroot] [PATCH] shared-mime-info: bump to version 1.8
-Message-ID: <20170130134449.3848-1-gustavo@zacarias.com.ar>
+From: Francesco Negri <francesconegri@gmail.com>
+Date: Mon, 30 Jan 2017 14:55:17 +0100
+Subject: [Buildroot] [PATCH v4 1/1] git-crypt: new package
+In-Reply-To: <20170130132702.85804-1-francesconegri@gmail.com>
+References: <20170130132702.85804-1-francesconegri@gmail.com>
+Message-ID: <20170130135517.5010-1-francesconegri@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Francesco Negri <francesconegri@gmail.com>
 ---
- package/shared-mime-info/shared-mime-info.hash | 2 +-
- package/shared-mime-info/shared-mime-info.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v3 -> v4:
+  - more accurate info on licenses
+---
+ package/Config.in                |  1 +
+ package/git-crypt/Config.in      | 15 +++++++++++++++
+ package/git-crypt/git-crypt.hash |  2 ++
+ package/git-crypt/git-crypt.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 package/git-crypt/Config.in
+ create mode 100644 package/git-crypt/git-crypt.hash
+ create mode 100644 package/git-crypt/git-crypt.mk
 
-diff --git a/package/shared-mime-info/shared-mime-info.hash b/package/shared-mime-info/shared-mime-info.hash
-index 2007e0e..cf6c8f3 100644
---- a/package/shared-mime-info/shared-mime-info.hash
-+++ b/package/shared-mime-info/shared-mime-info.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	eacc781cfebaa2074e43cf9521dc7ab4391ace8a4712902b2841669c83144d2e	shared-mime-info-1.7.tar.xz
-+sha256	2af55ef1a0319805b74ab40d331a3962c905477d76c086f49e34dc96363589e9	shared-mime-info-1.8.tar.xz
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index e917ab5..64bb4d5 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHARED_MIME_INFO_VERSION = 1.7
-+SHARED_MIME_INFO_VERSION = 1.8
- SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.xz
- SHARED_MIME_INFO_SITE = https://people.freedesktop.org/~hadess
- SHARED_MIME_INFO_INSTALL_STAGING = YES
+diff --git a/package/Config.in b/package/Config.in
+index 6a3a1a7c7..067ff3cc9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -138,6 +138,7 @@ menu "Development tools"
+ 	source "package/gawk/Config.in"
+ 	source "package/gettext/Config.in"
+ 	source "package/git/Config.in"
++	source "package/git-crypt/Config.in"
+ 	source "package/gperf/Config.in"
+ 	source "package/grep/Config.in"
+ 	source "package/jq/Config.in"
+diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
+new file mode 100644
+index 000000000..4e1ca4a2b
+--- /dev/null
++++ b/package/git-crypt/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_GIT_CRYPT
++	bool "git-crypt"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # git
++	select BR2_PACKAGE_GIT
++	select BR2_PACKAGE_OPENSSL
++	help
++	  git-crypt enables transparent encryption and decryption of files in a
++	  git repository.
++
++	  https://www.agwa.name/projects/git-crypt/
++
++comment "git-crypt needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU
+diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
+new file mode 100644
+index 000000000..8589f03f7
+--- /dev/null
++++ b/package/git-crypt/git-crypt.hash
+@@ -0,0 +1,2 @@
++# Hash from: https://lists.cloudmutt.com/pipermail/git-crypt-announce/2015-May/000003.html
++sha256 0a8f92c0a0a125bf768d0c054d947ca4e4b8d6556454b0e7e87fb907ee17cf06 git-crypt-0.5.0.tar.gz
+diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
+new file mode 100644
+index 000000000..fc3e44f81
+--- /dev/null
++++ b/package/git-crypt/git-crypt.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# git-crypt
++#
++################################################################################
++
++GIT_CRYPT_VERSION = 0.5.0
++GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
++GIT_CRYPT_DEPENDENCIES = git openssl
++GIT_CRYPT_LICENSE = GPLv3+, MIT
++GIT_CRYPT_LICENSE_FILES = COPYING parse_options.hpp
++
++define GIT_CRYPT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
++endef
++
++define GIT_CRYPT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/git-crypt $(TARGET_DIR)/usr/bin/git-crypt
++endef
++
++$(eval $(generic-package))
 -- 
-2.10.2
+2.11.0
