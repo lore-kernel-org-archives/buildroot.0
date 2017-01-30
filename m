@@ -1,45 +1,106 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Jan 2017 09:59:18 -0300
-Subject: [Buildroot] [PATCH] squid: security bump to version 3.5.24
-Message-ID: <20170130125918.3599-1-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 30 Jan 2017 13:59:47 +0100
+Subject: [Buildroot] [PATCH 1/2] python-gunicorn: new package
+In-Reply-To: <20170130122032.3113-1-lionel@svkt.org>
+References: <20170130121749.vqutrxs5aljdyopx@ed>
+ <20170130122032.3113-1-lionel@svkt.org>
+Message-ID: <CAGm1_kveJmw6BSgzJ_sVo0vYDEczJhnGxyt=ubF+U3MAHDfoJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-* Mitigate DoS attacks that use client-initiated SSL/TLS renegotiation.
+On Mon, Jan 30, 2017 at 1:20 PM, Lionel Flandrin <lionel@svkt.org> wrote:
+> Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for UNIX. It?s a
+> pre-fork worker model ported from Ruby?s Unicorn project. The Gunicorn
+> server is broadly compatible with various web frameworks, simply
+> implemented, light on server resource usage, and fairly speedy.
+>
+> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+> ---
+>  package/Config.in                            |  1 +
+>  package/python-gunicorn/Config.in            | 13 +++++++++++++
+>  package/python-gunicorn/python-gunicorn.hash |  3 +++
+>  package/python-gunicorn/python-gunicorn.mk   | 14 ++++++++++++++
+>  4 files changed, 31 insertions(+)
+>  create mode 100644 package/python-gunicorn/Config.in
+>  create mode 100644 package/python-gunicorn/python-gunicorn.hash
+>  create mode 100644 package/python-gunicorn/python-gunicorn.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 6a3a1a7c7..c68d84889 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -696,6 +696,7 @@ menu "External python modules"
+>         source "package/python-flup/Config.in"
+>         source "package/python-futures/Config.in"
+>         source "package/python-gobject/Config.in"
+> +       source "package/python-gunicorn/Config.in"
+>         source "package/python-html5lib/Config.in"
+>         source "package/python-httplib2/Config.in"
+>         source "package/python-humanize/Config.in"
+> diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
+> new file mode 100644
+> index 000000000..9c6084c57
+> --- /dev/null
+> +++ b/package/python-gunicorn/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_PYTHON_GUNICORN
+> +       bool "python-gunicorn"
+> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS
+> +       select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
+> +       select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+# runtime tags are missing
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index c5251fd..d9b7924 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.23.tar.xz.asc
--md5 9b68f689e3d9578932b9c6a4041037c2  squid-3.5.23.tar.xz
--sha1 33e43869d5eeb0fdfd1d625e6d6edee0617b2b22  squid-3.5.23.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.24.tar.xz.asc
-+md5 3fae511e16b6379b61c011914673973d  squid-3.5.24.tar.xz
-+sha1 f203637783301a4b86e554b6dd226de721762ae5  squid-3.5.24.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e664122..cf0378a 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).23
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).24
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
--- 
-2.10.2
+other than that looks good to me
+
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+If you'Re going to send v3 please add change history as desribed in [1]
+
+[1] http://nightly.buildroot.org/manual.html#submitting-patches
+
+Yegor
+
+> +       help
+> +         Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for
+> +         UNIX. It?s a pre-fork worker model ported from Ruby?s
+> +         Unicorn project. The Gunicorn server is broadly compatible
+> +         with various web frameworks, simply implemented, light on
+> +         server resource usage, and fairly speedy.
+> +
+> +         http://gunicorn.org/
+> diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
+> new file mode 100644
+> index 000000000..a282bc995
+> --- /dev/null
+> +++ b/package/python-gunicorn/python-gunicorn.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
+> +md5    338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
+> +sha256 813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
+> diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
+> new file mode 100644
+> index 000000000..426e80973
+> --- /dev/null
+> +++ b/package/python-gunicorn/python-gunicorn.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-gunicorn
+> +#
+> +################################################################################
+> +
+> +PYTHON_GUNICORN_VERSION = 19.6.0
+> +PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
+> +PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
+> +PYTHON_GUNICORN_SETUP_TYPE = setuptools
+> +PYTHON_GUNICORN_LICENSE = MIT
+> +PYTHON_GUNICORN_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.11.0
+>
