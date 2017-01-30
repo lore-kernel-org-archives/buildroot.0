@@ -1,91 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 10:18:39 +0100
-Subject: [Buildroot] [PATCH] ruby: bump version to 2.4.0
-In-Reply-To: <20170130041946.GJ11210@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Mon, 30 Jan 2017 05:19:46 +0100")
-References: <20170109171403.57632-1-Vincent.Riera@imgtec.com>
- <871sw7asxn.fsf@dell.be.48ers.dk> <87lgu24xdi.fsf@dell.be.48ers.dk>
- <r94vldxsb4.ln2@ID-313208.user.individual.net>
- <20170130041946.GJ11210@waldemar-brodkorb.de>
-Message-ID: <87fuk0aosw.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Jan 2017 10:23:16 +0100
+Subject: [Buildroot] [PATCH 1/2] Add BR2_CMAKE_USE_NINJA_BACKEND option
+In-Reply-To: <901720b443e9bb90750a71c8797bbf0d@openmailbox.org>
+References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
+ <ef982565-16ec-591b-aaed-d22e5a634851@gmail.com>
+ <2260e784237284271ff7745986b82cc8@openmailbox.org>
+ <e48cfb34-6f4c-1c7b-c737-c5a57eb464e0@gmail.com>
+ <20170125142716.55e7d7b3@free-electrons.com>
+ <901720b443e9bb90750a71c8797bbf0d@openmailbox.org>
+Message-ID: <20170130102316.2a02ed3a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+Hello,
 
-Hi,
+On Thu, 26 Jan 2017 18:27:36 +0100, C?dric Marie wrote:
 
- >> apparantly configure has problems detecting math functions of uClibc:
+> Le 2017-01-25 02:27, Thomas Petazzoni a ?crit?:
+> > But then that's a bit annoying because we would have to explicitly
+> > set this option to "YES" on all packages that support the Ninja backend
+> > (most likely the majority).
+> > 
+> > I think it would make more sense to default the other way around, i.e
+> > default to YES, and set it to NO on the few packages that do not
+> > properly support the Ninja backend.
+> > 
+> > Or maybe better: do not introduce a per-package option for the moment,
+> > have only the global one, see in practice how many packages work /
+> > don't work and decide if we need a per-package option, and what default
+> > value it should have.  
+> 
+> OK, but it seems that Romain has already noticed a problem with 
+> openpowerlink, so it is likely that this option will be necessary - and 
+> hopefully default to YES (supported).
 
- > Because configure checks for functions, but isfinite, isinf and isnan
- > are implemented as macros. For Dragonfly they explicitely set
- > isinf/isnan as available:
- > https://github.com/ruby/ruby/blob/trunk/configure.in#L1278
+Indeed.
 
- > Shouldn't this be reported upstream?
- > I think this is an autotool detection bug.
+> So, why did I want to introduce this option?
+> 
+> Because I'm not using Buildroot in one-shot mode. I'm developping in a 
+> Buildroot environment. So I often make foo-rebuild my package, and I'm 
+> interested in saving time for each rebuild.
 
- >> although uClibc supports these functions.
+OK, understood. But do you have numbers showing that "make foo-rebuild"
+is actually faster with Ninja ?
 
- > finite seems obsoleted and isfinite should be used. 
+In the tests done by Romain, it's only saving 1-2 seconds on the
+total build of a package. So I would suspect that the savings on a
+partial build are even smaller.
 
- > It appears musl implements finite as function for backward compatibility.
- > Therefore the check does not fail for musl toolchains.
- > https://git.musl-libc.org/cgit/musl/tree/src/math/finite.c
+Even if your CMake packages are private, can you give us some numbers
+that show the time benefits of Ninja?
 
- > For glibc the check fails and the replacement functions for
- > finite, isinf and isnan are used.
+> I know this is not what Buildroot is designed for. (Yet, there are a few 
+> things that seem to be present for dev mode (rsync with OVERRIDE_SRCDIR 
+> for example), so this is not "pure one-shot" either.)
 
- > For uclibc-ng the check fails, but the replacement functions cannot
- > be used, because finite is already defined as macro for backward
- > compatibility. (added a while ago for inetd..)
+Well, if we do have features such as OVERRIDE_SRCDIR, it's precisely to
+make Buildroot usable/useful also during the development. So if there
+are things we can improve in this area, it's good to have.
 
-Indeed, finite is a function on musl. On my glibc version they are also
-(weakly) defined (and configure correctly finds them):
+Thanks,
 
-nm -D /lib/x86_64-linux-gnu/libc.so.6|grep -wE 'finite|isinf|isnan'
-0000000000032310 W finite
-00000000000322a0 W isinf
-00000000000322e0 W isnan
-
-I'm not sure what the spec (if any exists) for these legacy BSD
-functions say about if the unprefixed symbols really need to be
-available, but it is certainly a difference between uClibc-ng and
-glibc/musl.
-
- >> Hacking ruby.mk like this
- >> 
- >> RUBY_CONF_ENV += \
- >> ac_cv_func_finite=yes \
- >> ac_cv_func_isinf=yes \
- >> ac_cv_func_isnan=yes
- >> endif
-
- > I think this is the best thing todo inside buildroot.
-
-Yes, that might be the way to go. Notice that musl implements isinf /
-isnan as macros, so the detection fails. The reason why it doesn't cause
-linker errors is that include/ruby/missing.h checks if isnan is a macro
-before providing a local declaration:
-
-#ifndef isnan
-# ifndef HAVE_ISNAN
-RUBY_EXTERN int isnan(double);
-# endif
-#endif
-
-vs:
-
-#ifndef HAVE_FINITE
-RUBY_EXTERN int finite(double);
-#endif
-
-So another solution is to add an #ifndef finite around it. That fix
-could probably be upstreamed as they already do it for a number of other
-functions.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
