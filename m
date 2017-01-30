@@ -1,41 +1,46 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 30 Jan 2017 12:00:14 -0500
-Subject: [Buildroot] [PATCH 1/1] sepolgen: bump to version 2.6
-Message-ID: <20170130170014.10201-1-aduskett@codeblue.com>
+Date: Mon, 30 Jan 2017 12:09:00 -0500
+Subject: [Buildroot] [PATCH 1/1] libselinux: Fix host installation issue.
+Message-ID: <20170130170900.12471-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+libselinux currently installs the python module in the host
+directory starting with the full path to the buildroot directory.
+
+IE: If buildroot was in /home/foo/buildroot, the python
+module will be installed to:
+/home/foo/buildroot/output/host/home/foo/buildroot/output/host/usr/lib/
+
+This patch fixes this by not passing the DESTDIR=$(HOST_DIR) when running
+the install commands, as passing DESTDIR during the build command will
+set the proper directory to install to.  This only effects the pywrap
+module.
+
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/sepolgen/sepolgen.hash | 2 +-
- package/sepolgen/sepolgen.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libselinux/libselinux.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/sepolgen/sepolgen.hash b/package/sepolgen/sepolgen.hash
-index a377c66..b338a70 100644
---- a/package/sepolgen/sepolgen.hash
-+++ b/package/sepolgen/sepolgen.hash
-@@ -1,2 +1,2 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 8a1c6d3a78c9b6ad3555c74def555f65a62950bf21c111c585bfc382fec3a645  sepolgen-1.1.9.tar.gz
-+sha256 6a327b1576d914e57ad796a541a7a9bcceefb14c445355559993de0fdb8e7a60  sepolgen-2.6.tar.gz
-diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
-index efecee7..137eaed 100644
---- a/package/sepolgen/sepolgen.mk
-+++ b/package/sepolgen/sepolgen.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 44120c4..bd3f984 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -80,9 +80,10 @@ define HOST_LIBSELINUX_INSTALL_CMDS
+ 		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
+ 		SHLIBDIR=$(HOST_DIR)/usr/lib SBINDIR=$(HOST_DIR)/usr/sbin install
+ 	(cd $(HOST_DIR)/usr/lib; $(HOSTLN) -sf libselinux.so.1 libselinux.so)
+-	# Install python interface wrapper
++	# Install python interface wrapper. Do not pass destdir as this will
++	# case the python module to install in the incorrect location.
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+-		$(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
++		$(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
+ endef
  
--SEPOLGEN_VERSION = 1.1.9
--SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+SEPOLGEN_VERSION = 2.6
-+SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
- SEPOLGEN_LICENSE = GPLv2
- SEPOLGEN_LICENSE_FILES = COPYING
- 
+ $(eval $(generic-package))
 -- 
 2.9.3
