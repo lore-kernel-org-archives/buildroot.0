@@ -1,88 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Jan 2017 23:06:33 +0100
-Subject: [Buildroot] [git commit] package/pkgconf: variable pkgdatadir also
-	needs sysroot prefixing, wayland patch III
-Message-ID: <20170129221325.5180781F72@busybox.osuosl.org>
+From: Francesco Negri <francesconegri@gmail.com>
+Date: Mon, 30 Jan 2017 01:28:53 +0100
+Subject: [Buildroot] [PATCH 1/1] git-crypt: new package
+Message-ID: <20170130002853.76103-1-francesconegri@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e74c1312d35866c05813b4690412548eaaff61a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Needed when wayland support is enabled in xserver_xorg-server.
-
-This patch fixes the final build error:
-
-Making all in xwayland
-make[3]: Entering directory '/home/buildroot/br5/output/build/xserver_xorg-server-1.19.0/hw/xwayland'
-make[3]: *** No rule to make target '/usr/share/wayland-protocols/unstable/relative-pointer/relative-pointer-unstable-v1.xml', needed by 'relative-pointer-unstable-v1-client-protocol.h'.  Stop.
-
-when trying to build
-http://autobuild.buildroot.net/results/cf0/cf026e9b18e86b9890341612050f4d166a7b822d/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francesco Negri <francesconegri@gmail.com>
 ---
- ...0001-Fix-all-variables-sysroot-prefix-problem.patch | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ package/Config.in                |  1 +
+ package/git-crypt/Config.in      |  9 +++++++++
+ package/git-crypt/git-crypt.hash |  2 ++
+ package/git-crypt/git-crypt.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/git-crypt/Config.in
+ create mode 100644 package/git-crypt/git-crypt.hash
+ create mode 100644 package/git-crypt/git-crypt.mk
 
-diff --git a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-index bac9f62..bc2b527 100644
---- a/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-+++ b/package/pkgconf/0001-Fix-all-variables-sysroot-prefix-problem.patch
-@@ -1,4 +1,4 @@
--From abc7a780f2a52a1aa3ee288e17140b817b545cc3 Mon Sep 17 00:00:00 2001
-+From aa6bbc09e68426592faf722630fe92b6ede75bc8 Mon Sep 17 00:00:00 2001
- From: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Date: Mon, 2 Nov 2015 18:38:00 -0300
- Subject: [PATCH] Fix all-variables sysroot prefix problem
-@@ -14,15 +14,19 @@ the directories may be requested barebones via pkg-config
- --variable=includedir libfool for example.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/package/Config.in b/package/Config.in
+index 6a3a1a7c7..067ff3cc9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -138,6 +138,7 @@ menu "Development tools"
+ 	source "package/gawk/Config.in"
+ 	source "package/gettext/Config.in"
+ 	source "package/git/Config.in"
++	source "package/git-crypt/Config.in"
+ 	source "package/gperf/Config.in"
+ 	source "package/grep/Config.in"
+ 	source "package/jq/Config.in"
+diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
+new file mode 100644
+index 000000000..15a12b5c6
+--- /dev/null
++++ b/package/git-crypt/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_GIT_CRYPT
++	bool "git-crypt"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_GIT
++	help
++	  git-crypt enables transparent encryption and decryption of files in a
++	  git repository.
 +
-+Added pkgdatadir to the list of to-be-prefixed variables.
++	  https://github.com/AGWA/git-crypt
+diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
+new file mode 100644
+index 000000000..fe18498cc
+--- /dev/null
++++ b/package/git-crypt/git-crypt.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 5150144a528bc74eeb47a2884cf2fefe978a1d1dc0223bbfcac395fa6a73a410 git-crypt-0.5.0.tar.gz
+diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
+new file mode 100644
+index 000000000..9f7df223d
+--- /dev/null
++++ b/package/git-crypt/git-crypt.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# git-crypt
++#
++################################################################################
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-- main.c | 17 ++++++++++++-----
-- 1 file changed, 12 insertions(+), 5 deletions(-)
-+ main.c | 19 ++++++++++++++-----
-+ 1 file changed, 14 insertions(+), 5 deletions(-)
- 
- diff --git a/main.c b/main.c
--index 6947126..52d16c2 100644
-+index 6947126..ce5e18f 100644
- --- a/main.c
- +++ b/main.c
--@@ -313,9 +313,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-+@@ -313,9 +313,13 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-  			memset(req->buf, 0, sizeof(req->buf));
-  
-  			if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-@@ -33,12 +37,13 @@ index 6947126..52d16c2 100644
- +			    	(!strcmp(req->variable, "includedir") || \
- +				    !strcmp(req->variable, "libdir") || \
- +				    !strcmp(req->variable, "mapdir") || \
-++				    !strcmp(req->variable, "pkgdatadir") || \
- +				    !strcmp(req->variable, "sdkdir")))
- +					strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-  			strlcat(req->buf, var, sizeof(req->buf));
-  			return;
-  		}
--@@ -323,8 +326,12 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-+@@ -323,8 +327,13 @@ print_variable(pkg_t *pkg, void *data, unsigned int flags)
-  		strlcat(req->buf, " ", sizeof(req->buf));
-  
-  		if (*var == '/' && (flags & PKGF_MUNGE_SYSROOT_PREFIX) &&
-@@ -48,6 +53,7 @@ index 6947126..52d16c2 100644
- +		    	(!strcmp(req->variable, "includedir") || \
- +			    !strcmp(req->variable, "libdir") || \
- +			    !strcmp(req->variable, "mapdir") || \
-++			    !strcmp(req->variable, "pkgdatadir") || \
- +			    !strcmp(req->variable, "sdkdir")))
- +				strlcat(req->buf, sysroot_dir, sizeof(req->buf));
-  
++GIT_CRYPT_VERSION = 0.5.0
++GIT_CRYPT_SITE = $(call github,agwa,git-crypt,$(GIT_CRYPT_VERSION))
++GIT_CRYPT_DEPENDENCIES = git openssl
++GIT_CRYPT_LICENSE = GPLv3
++GIT_CRYPT_LICENSE_FILES = COPYING
++
++define GIT_CRYPT_BUILD_CMDS
++	$(MAKE) CXX="$(TARGET_CXX)" -C $(@D) all
++endef
++
++define GIT_CRYPT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/git-crypt $(TARGET_DIR)/usr/bin/git-crypt
++endef
++
++$(eval $(generic-package))
+-- 
+2.11.0
