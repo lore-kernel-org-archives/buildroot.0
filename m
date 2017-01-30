@@ -1,7 +1,7 @@
 From: Francesco Negri <francesconegri@gmail.com>
-Date: Mon, 30 Jan 2017 01:28:53 +0100
+Date: Mon, 30 Jan 2017 01:13:51 +0100
 Subject: [Buildroot] [PATCH 1/1] git-crypt: new package
-Message-ID: <20170130002853.76103-1-francesconegri@gmail.com>
+Message-ID: <20170130001351.67555-1-francesconegri@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
