@@ -1,97 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jan 2017 08:29:25 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-01-29
-Message-ID: <20170130072925.E0B0B20CD6@mail.free-electrons.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Mon, 30 Jan 2017 08:31:51 +0100
+Subject: [Buildroot] Relocatable internal toolchain
+In-Reply-To: <11e6deef-d790-33d8-b0ad-3477a51e369f@grandegger.com>
+References: <57c96cfd-7d0c-c9de-04d2-2da8f5dd7f7c@grandegger.com>
+ <CAHXCMML2HKsOgxZRLpcMbCY8Lci6-N_s1+qVTRxCHqyvP+rzgg@mail.gmail.com>
+ <11e6deef-d790-33d8-b0ad-3477a51e369f@grandegger.com>
+Message-ID: <a46d8432-bc43-5b0c-5a7a-a04e8993912e@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Samuel,
 
-Build statistics for 2017-01-29
-================================
+Am 26.01.2017 um 18:46 schrieb Wolfgang Grandegger:
+> Hi Samuel,
+>
+> Am 26.01.2017 um 11:47 schrieb Samuel Martin:
+>> Hi Wolfgang, all,
+>>
+>> On Thu, Jan 26, 2017 at 9:25 AM, Wolfgang Grandegger
+>> <wg@grandegger.com> wrote:
+>>> Hello,
+>>>
+>>> I prefer a relocatable (internal) toolchain and before digging
+>>> deeper... Are
+>>> there any plans in that direction? I realized some attempts (patches) to
+>>> make the buildroot toolchain relocatable but they have not (yet) been
+>>> accepted. What are the pros and cons? Are there principle problems?
+>>
+>> Yes, there are plans for this.
+>
+> Great!
+>
+>> There had been a couple of the series posted on this topic (the latest
+>> one [1]).
+>> And we talked about this during the last Buildroot Meeting, you can
+>> check the report [2] for detailed conclusions.
+>> To sum-up:
+>> - Producing the relocatable host tools will be addressed step-by-step;
+>> - Preparatory changes making buildroot using absolute canonical paths
+>> are already merged [4];
+>> - Next step: fixing RPATH in host tools binaries thanks to some
+>> patchelf [3] features to be implemented and upstreamed (this should be
+>> enough to meet Buildroot needs);
+>> - Cleaning up RPATH in target binaries is delayed.
+>>
+>> Unfortunately, I got no freetime to spend on patchelf source code
+>> [3] since the meeting.
+>
+> Thanks for the quick introduction...
+>
+>> If you are interested in or want to take over this topic, don't
+>> hesitate to drop a message on the Buildroot mailing list.
+>
+> I will have a closer look. Let's see if I can do something.
 
-      successes : 135
-       failures : 43 
-       timeouts : 0  
-          TOTAL : 178
+Buildroot's build system is quite new too me. At a first glance it's 
+rather heavy stuff! So I first tried the patches you mentioned to see 
+what I get. After some tweaking due to "file permissions" and "file in 
+use" issues with patchelf, the build did succeed. But subsequent builds 
+then required setting LD_LIBRARY_PATH for the host tools. Then I moved 
+the buildroot output directory to a different location to see if 
+relocation, as I understand it, works. My test cases are some 
+out-of-tree QT5 examples:
 
-Classification of failures by reason
-====================================
+   $ cd <a-path>/examples
+   $ <path-to-buildroot-output>/host/usr/bin/qmake
+   Could not find qmake configuration file devices/linux-buildroot-g++.
+   Error processing project file: /home/wolf/junk/examples/examples.pro
 
-                    ruby-2.4.0 | 11
-                 sngrep-v1.4.2 | 4 
-                 openocd-0.9.0 | 3 
-             berkeleydb-5.3.28 | 2 
-                  fbterm-1.7.0 | 2 
-                  lcdapi-v0.10 | 2 
-                    mpd-0.20.3 | 2 
-               openswan-2.6.46 | 2 
-            host-heimdal-7.1.0 | 1 
-                ipmiutil-2.9.9 | 1 
-          janus-gateway-v0.2.1 | 1 
-                 libnss-3.27.2 | 1 
-               librsvg-2.40.16 | 1 
-             lttng-tools-2.9.3 | 1 
-                   ncftp-3.2.6 | 1 
-                 opencv-2.4.13 | 1 
-                   ortp-0.27.0 | 1 
-               pulseview-0.3.0 | 1 
-               tcpreplay-4.1.2 | 1 
-               trousers-0.3.13 | 1 
-                     vlc-2.2.4 | 1 
-                 wavpack-5.1.0 | 1 
-                      x265-2.2 | 1 
+How do I set the new path to the toolchain. Likely I have missed something.
 
+Apart from the "rpath", the path to the build directory is also in many 
+text (configuration scripts, etc.) files. What did work for me was 
+replacing the path to the build directory 
+("<buildroot-output>/host/usr") with the new location in all text files.
 
-Detail of failures
-===================
+Not sure if we speak/think about the same "relocation" behaviour.
 
-        m68k |              berkeleydb-5.3.28 | NOK | http://autobuild.buildroot.net/results/a7a5d92551e7367c6113d9f59f077fad7a67f3c4
-        m68k |              berkeleydb-5.3.28 | NOK | http://autobuild.buildroot.net/results/392bd447793a9e841f6a2a7dac938aa271a308b9
-      xtensa |                   fbterm-1.7.0 | NOK | http://autobuild.buildroot.net/results/1e443b6f78fe327e19090853f8f803145ca12780
-         arc |                   fbterm-1.7.0 | NOK | http://autobuild.buildroot.net/results/e584f1bb3edc63b346212a03d5da1f6025f8ad96
-        m68k |             host-heimdal-7.1.0 | NOK | http://autobuild.buildroot.net/results/e2176cb5adacdad14371d4828f13a1c23f0e18d5
-        i586 |                 ipmiutil-2.9.9 | NOK | http://autobuild.buildroot.net/results/ff62e76ada3b3db909d68ab13e24c6979f0a1e34
-       sparc |           janus-gateway-v0.2.1 | NOK | http://autobuild.buildroot.net/results/ecfdeb4df2e0c4010da29ab7377bc8d282e3e2d0
-        m68k |                   lcdapi-v0.10 | NOK | http://autobuild.buildroot.net/results/4f9662bffc807816bd77a21e17ac34bcf2cd70f0
-        m68k |                   lcdapi-v0.10 | NOK | http://autobuild.buildroot.net/results/c7831e187b8e943f50d08a43afff365d38a97923
-microblazeel |                  libnss-3.27.2 | NOK | http://autobuild.buildroot.net/results/66fa21cb25240be97aac66ca572b6c8a0ade1a20
-      x86_64 |                librsvg-2.40.16 | NOK | http://autobuild.buildroot.net/results/862cb84de704558341d3b9b2481158ec42063fbf
-     powerpc |              lttng-tools-2.9.3 | NOK | http://autobuild.buildroot.net/results/57c8da0f05c6bbf07b4788b3ca03150b5b2e33d1
-       nios2 |                     mpd-0.20.3 | NOK | http://autobuild.buildroot.net/results/ad806e94eb6bcac594982cf71959de60cadc9e46
-         arm |                     mpd-0.20.3 | NOK | http://autobuild.buildroot.net/results/70095eab00ed3cdd0fe7a4da933c6a59e26de78e
-      x86_64 |                    ncftp-3.2.6 | NOK | http://autobuild.buildroot.net/results/66adfbf6fe35b828466bac0f12265f23f606f6e2
-        sh4a |                  opencv-2.4.13 | NOK | http://autobuild.buildroot.net/results/088c567e2c2c2dc5827bed88812af9eeb7b070f4
-   powerpc64 |                  openocd-0.9.0 | NOK | http://autobuild.buildroot.net/results/41128ee78841fb7935b7c8e6f8fd9f3270370610
-   powerpc64 |                  openocd-0.9.0 | NOK | http://autobuild.buildroot.net/results/87c0a4eab510fa2135b067e899449849c4e01245
- powerpc64le |                  openocd-0.9.0 | NOK | http://autobuild.buildroot.net/results/d43974658e974a78a632cf81d25ac983c91e5ef0
-      xtensa |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/f8a9aa82cead93e5093f3162d54733cbce19bd36
-     powerpc |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/772feae6b247a821bd90d36f392b44e49db1a223
-         arm |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/1fca7b83ba30e004bba8a85a48fbefb82380d95a
-        i686 |                pulseview-0.3.0 | NOK | http://autobuild.buildroot.net/results/c1ef386a0f487a6331bd5b8300907b28e0670a8c
-         sh4 |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/06b140c0a696341ca455971f7b66753600490000
-     powerpc |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/e05dbf9e28a6626c14125056025345b27b1691e5
-     powerpc |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/19489da272041c5fd373e7c14f5842b422672018
-         arc |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/a1ae2ef495ec466d3aa834c52e86f8b649cfc625
-      x86_64 |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/54babfac1527aefebfbf412db13ae454ef178496
-        bfin |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/2382ee4cfc91df65a89ba2bbeab36c156b839265
-         sh4 |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/77e0c2fda3ae453204592fe5ff8842af1322eacb
-        m68k |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/56007a790aac1bdc5eb23ae974e77e77bc2a5549
-        bfin |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/7404268ea0a4604213041b6e04a3541de074e2ba
-      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/f5557950262984b4617841fe0afc5f2a351e16ba
-      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/ef19e085cbc79157f12478592bfafe0b7cc35246
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/daa1d2e2b51014ddd0d63cfa6a033352eafa8d21
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/2e0da014e6657c18b6e33792d989b00fd58c56c3
-        bfin |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/b205e00a2802dc35d6a9ed4c45dd09ede08d3ec5
-      x86_64 |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/815c99edb68c5a887eedec8de9404789933751c8
-         arm |                tcpreplay-4.1.2 | NOK | http://autobuild.buildroot.net/results/dde54ccefa32af1f46a4af5b6caed822c3209dfc
-         arc |                trousers-0.3.13 | NOK | http://autobuild.buildroot.net/results/404e2a53e2eaae11410a70c0d90141383ba86766
-microblazeel |                      vlc-2.2.4 | NOK | http://autobuild.buildroot.net/results/f8437ba3514aff6b9f1abe1cb4362857e4b6bf1b
-     powerpc |                  wavpack-5.1.0 | NOK | http://autobuild.buildroot.net/results/37e4c163d00872eed7482d9b8bf585462e07fc1e
-         arm |                       x265-2.2 | NOK | http://autobuild.buildroot.net/results/9f7a253801181b91461e2bedd811a392018392cb
-
--- 
-http://autobuild.buildroot.net
+Wolfgang.
