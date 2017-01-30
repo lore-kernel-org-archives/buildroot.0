@@ -1,60 +1,45 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 30 Jan 2017 20:33:16 +0100
-Subject: [Buildroot] [PATCH v5 04/10] Conditional revert "qt5base:
- install bundled fonts to target"
-In-Reply-To: <1485439461-4797-5-git-send-email-anaumann@ultratronik.de>
-References: <1485439461-4797-1-git-send-email-anaumann@ultratronik.de>
- <1485439461-4797-5-git-send-email-anaumann@ultratronik.de>
-Message-ID: <20170130203316.06e17698@gmx.net>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 30 Jan 2017 20:55:56 +0100
+Subject: [Buildroot] [PATCH] package/mpd: disable on SPARCV8, NIOS2,
+ ARMV{4, 5}
+In-Reply-To: <20170130104952.409eb0d9@free-electrons.com>
+References: <20170121161100.3142-1-joerg.krause@embedded.rocks>
+ <20170122172600.333588cf@free-electrons.com>
+ <1485080385.6667.1.camel@embedded.rocks>
+ <20170130104952.409eb0d9@free-electrons.com>
+Message-ID: <1485806156.3759.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 26 Jan 2017 15:04:15 +0100, Andreas Naumann <anaumann@ultratronik.de> wrote:
-
-> From: Julien Corjon <corjon.j@ecagroup.com>
+On Mon, 2017-01-30 at 10:49 +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> qtbase carries nor more fonts since c5ceabb9a1caf6b9b7615a28c3097f221772f645
+> On Sun, 22 Jan 2017 11:19:45 +0100, J?rg Krause wrote:
 > 
-> So for Qt Version 5.8.0 this reverts commit cdfa21b06041eb601e0bea79f2c8f50e9d637384
-> and part of 186ef9f6f4647ed34b67a3427a5e0e249f0794e7
-
-Time for a new subject, eg. 'qt5base: conditional install bundled fonts'?
-
-And a new patch description (the resulting patch hase nothing more to do with
-reverting a particular patch)?
-
-Regards,
-Peter
-
-
+> > > The reason I'm asking is because I believe a
+> > > BR2_TOOLCHAIN_HAS_GCC_BUG_xyz hidden option would be a bit
+> > > better:
+> > > 
+> > > ?1. It would document what this is for
+> > > 
+> > > ?2. It would avoid repeating the architecture conditions??
+> > 
+> > Yes, this would be better in case more packages show up. Shall I
+> > make
+> > an updated fix?
 > 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> ---
->  package/qt5/qt5base/qt5base.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 1b3e2d3..78c7a81 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -256,12 +256,14 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
->  	fi
->  endef
->  
-> +ifeq ($(BR2_QT5_VERSION_5_6),y)
->  define QT5BASE_INSTALL_TARGET_FONTS
->  	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
->  		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
->  		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
->  	fi
->  endef
-> +endif
->  
->  define QT5BASE_INSTALL_TARGET_EXAMPLES
->  	if [ -d $(STAGING_DIR)/usr/lib/qt/examples/ ] ; then \
+> Yes, please :)
+
+OK.
+
+I'm a little upset that there will be no MPD available for the ARMv5
+architecture until GCC 7 is available?in Buildroot. Maybe we can still
+support the 0.19 branch for the archs which are affected by the GCC
+issue and use the 0.20 otherwise? Any objections?
+
+J?rg
