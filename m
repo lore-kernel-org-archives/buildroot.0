@@ -1,120 +1,151 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 30 Jan 2017 13:02:36 +0200
-Subject: [Buildroot] [PATCH v2 1/1] git-crypt: new package
-In-Reply-To: <20170130105808.86147-1-francesconegri@gmail.com>
-References: <20170130002853.76103-1-francesconegri@gmail.com>
- <20170130105808.86147-1-francesconegri@gmail.com>
-Message-ID: <20170130110236.4uabn3nvyz6r4vsm@tarshish>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 30 Jan 2017 12:03:27 +0100
+Subject: [Buildroot] [PATCH] lua: bump to version 5.3.4
+Message-ID: <20170130110327.5103-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francesco,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/lua/5.3.3/0012-fix-loop-parser.patch       | 31 ----------------------
+ package/lua/{5.3.3 => 5.3.4}/0001-root-path.patch  |  2 +-
+ .../0002-shared-libs-for-lua.patch                 |  0
+ package/lua/{5.3.3 => 5.3.4}/0004-lua-pc.patch     |  2 +-
+ package/lua/{5.3.3 => 5.3.4}/0011-linenoise.patch  |  2 +-
+ package/lua/lua.hash                               |  4 +--
+ package/lua/lua.mk                                 |  3 ++-
+ 7 files changed, 7 insertions(+), 37 deletions(-)
+ delete mode 100644 package/lua/5.3.3/0012-fix-loop-parser.patch
+ rename package/lua/{5.3.3 => 5.3.4}/0001-root-path.patch (95%)
+ rename package/lua/{5.3.3 => 5.3.4}/0002-shared-libs-for-lua.patch (100%)
+ rename package/lua/{5.3.3 => 5.3.4}/0004-lua-pc.patch (98%)
+ rename package/lua/{5.3.3 => 5.3.4}/0011-linenoise.patch (97%)
 
-On Mon, Jan 30, 2017 at 11:58:08AM +0100, Francesco Negri wrote:
-> Signed-off-by: Francesco Negri <francesconegri@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - added BR2_USE_MMU and BR2_PACKAGE_OPENSSL to Config.in
->   - added dependency comment (hope it is correct!)
->   - download from official website instead of GitHub
->   - use hash from git-crypt mailing list
-> ---
->  package/Config.in                |  1 +
->  package/git-crypt/Config.in      | 15 +++++++++++++++
->  package/git-crypt/git-crypt.hash |  2 ++
->  package/git-crypt/git-crypt.mk   | 23 +++++++++++++++++++++++
->  4 files changed, 41 insertions(+)
->  create mode 100644 package/git-crypt/Config.in
->  create mode 100644 package/git-crypt/git-crypt.hash
->  create mode 100644 package/git-crypt/git-crypt.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 6a3a1a7c7..067ff3cc9 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -138,6 +138,7 @@ menu "Development tools"
->  	source "package/gawk/Config.in"
->  	source "package/gettext/Config.in"
->  	source "package/git/Config.in"
-> +	source "package/git-crypt/Config.in"
->  	source "package/gperf/Config.in"
->  	source "package/grep/Config.in"
->  	source "package/jq/Config.in"
-> diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
-> new file mode 100644
-> index 000000000..e7a67ae47
-> --- /dev/null
-> +++ b/package/git-crypt/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_GIT_CRYPT
-> +	bool "git-crypt"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	select BR2_PACKAGE_GIT
-> +	select BR2_USE_MMU # git
-
-You can't select BR2_USE_MMU; it's determined by the target architecture. You 
-need to depend on BR2_USE_MMU.
-
-> +	select BR2_PACKAGE_OPENSSL
-> +	help
-> +	  git-crypt enables transparent encryption and decryption of files in a
-> +	  git repository.
-> +
-> +	  https://www.agwa.name/projects/git-crypt/
-> +
-> +comment "git-crypt needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_MMU
-> diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
-> new file mode 100644
-> index 000000000..8589f03f7
-> --- /dev/null
-> +++ b/package/git-crypt/git-crypt.hash
-> @@ -0,0 +1,2 @@
-> +# Hash from: https://lists.cloudmutt.com/pipermail/git-crypt-announce/2015-May/000003.html
-> +sha256 0a8f92c0a0a125bf768d0c054d947ca4e4b8d6556454b0e7e87fb907ee17cf06 git-crypt-0.5.0.tar.gz
-> diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
-> new file mode 100644
-> index 000000000..13f8f435b
-> --- /dev/null
-> +++ b/package/git-crypt/git-crypt.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# git-crypt
-> +#
-> +################################################################################
-> +
-> +GIT_CRYPT_VERSION = 0.5.0
-> +
-> +GIT_CRYPT_SOURCE = git-crypt-$(GIT_CRYPT_VERSION).tar.gz
-
-This is the default, so it can be dropped.
-
-> +GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
-> +GIT_CRYPT_DEPENDENCIES = git openssl
-> +GIT_CRYPT_LICENSE = GPLv3
-> +GIT_CRYPT_LICENSE_FILES = COPYING
-> +
-> +define GIT_CRYPT_BUILD_CMDS
-> +	$(MAKE) CXX="$(TARGET_CXX)" -C $(@D) all
-
-You missed Thomas' comment.
-
-> +endef
-> +
-> +define GIT_CRYPT_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/git-crypt $(TARGET_DIR)/usr/bin/git-crypt
-> +endef
-> +
-> +$(eval $(generic-package))
-
-baruch
-
+diff --git a/package/lua/5.3.3/0012-fix-loop-parser.patch b/package/lua/5.3.3/0012-fix-loop-parser.patch
+deleted file mode 100644
+index 7b321e5..0000000
+--- a/package/lua/5.3.3/0012-fix-loop-parser.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-Expression list with four or more expressions in a 'for' loop can crash the interpreter.
+-
+-Fetch from: https://www.lua.org/bugs.html#5.3.3-1
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-
+---- a/src/lparser.c
+-+++ b/src/lparser.c
+-@@ -323,6 +323,8 @@
+-       luaK_nil(fs, reg, extra);
+-     }
+-   }
+-+  if (nexps > nvars)
+-+    ls->fs->freereg -= nexps - nvars;  /* remove extra values */
+- }
+- 
+- 
+-@@ -1160,11 +1162,8 @@
+-     int nexps;
+-     checknext(ls, '=');
+-     nexps = explist(ls, &e);
+--    if (nexps != nvars) {
+-+    if (nexps != nvars)
+-       adjust_assign(ls, nvars, nexps, &e);
+--      if (nexps > nvars)
+--        ls->fs->freereg -= nexps - nvars;  /* remove extra values */
+--    }
+-     else {
+-       luaK_setoneret(ls->fs, &e);  /* close last expression */
+-       luaK_storevar(ls->fs, &lh->v, &e);
+--- 
+diff --git a/package/lua/5.3.3/0001-root-path.patch b/package/lua/5.3.4/0001-root-path.patch
+similarity index 95%
+rename from package/lua/5.3.3/0001-root-path.patch
+rename to package/lua/5.3.4/0001-root-path.patch
+index d8ef8d0..a44c55c 100644
+--- a/package/lua/5.3.3/0001-root-path.patch
++++ b/package/lua/5.3.4/0001-root-path.patch
+@@ -6,7 +6,7 @@ Index: b/src/luaconf.h
+ ===================================================================
+ --- a/src/luaconf.h
+ +++ b/src/luaconf.h
+-@@ -188,7 +188,7 @@
++@@ -200,7 +200,7 @@
+ 
+  #else			/* }{ */
+ 
+diff --git a/package/lua/5.3.3/0002-shared-libs-for-lua.patch b/package/lua/5.3.4/0002-shared-libs-for-lua.patch
+similarity index 100%
+rename from package/lua/5.3.3/0002-shared-libs-for-lua.patch
+rename to package/lua/5.3.4/0002-shared-libs-for-lua.patch
+diff --git a/package/lua/5.3.3/0004-lua-pc.patch b/package/lua/5.3.4/0004-lua-pc.patch
+similarity index 98%
+rename from package/lua/5.3.3/0004-lua-pc.patch
+rename to package/lua/5.3.4/0004-lua-pc.patch
+index edf7ec3..615a7db 100644
+--- a/package/lua/5.3.3/0004-lua-pc.patch
++++ b/package/lua/5.3.4/0004-lua-pc.patch
+@@ -14,7 +14,7 @@ Index: b/etc/lua.pc
+ +# grep '^V=' ../Makefile
+ +V= 5.3
+ +# grep '^R=' ../Makefile
+-+R= 5.3.3
+++R= 5.3.4
+ +
+ +# grep '^INSTALL_.*=' ../Makefile | sed 's/INSTALL_TOP/prefix/'
+ +prefix= /usr
+diff --git a/package/lua/5.3.3/0011-linenoise.patch b/package/lua/5.3.4/0011-linenoise.patch
+similarity index 97%
+rename from package/lua/5.3.3/0011-linenoise.patch
+rename to package/lua/5.3.4/0011-linenoise.patch
+index f3ced2b..574e6c8 100644
+--- a/package/lua/5.3.3/0011-linenoise.patch
++++ b/package/lua/5.3.4/0011-linenoise.patch
+@@ -8,7 +8,7 @@ Index: b/src/lua.c
+ ===================================================================
+ --- a/src/lua.c
+ +++ b/src/lua.c
+-@@ -83,6 +83,13 @@
++@@ -85,6 +85,13 @@
+  #define lua_saveline(L,line)	((void)L, add_history(line))
+  #define lua_freeline(L,b)	((void)L, free(b))
+  
+diff --git a/package/lua/lua.hash b/package/lua/lua.hash
+index 04459e9..32e7472 100644
+--- a/package/lua/lua.hash
++++ b/package/lua/lua.hash
+@@ -1,6 +1,6 @@
+ # Hashes from: http://www.lua.org/ftp/
+-md5 703f75caa4fdf4a911c1a72e67a27498           lua-5.3.3.tar.gz
+-sha1 a0341bc3d1415b814cc738b2ec01ae56045d64ef  lua-5.3.3.tar.gz
++md5 53a9c68bcc0eda58bdc2095ad5cdfc63           lua-5.3.4.tar.gz
++sha1 79790cfd40e09ba796b01a571d4d63b52b1cd950  lua-5.3.4.tar.gz
+ 
+ md5 913fdb32207046b273fdb17aad70be13           lua-5.2.4.tar.gz
+ sha1 ef15259421197e3d85b7d6e4871b8c26fd82c1cf  lua-5.2.4.tar.gz
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 131b88d..7c8c93e 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+-LUA_VERSION = 5.3.3
++LUA_VERSION = 5.3.4
+ else
+ ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+ LUA_VERSION = 5.2.4
+@@ -56,6 +56,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LUA_32BITS),y)
+ define LUA_32BITS_LUACONF
++	@$(call MESSAGE,"Patching src/luaconf.h")
+ 	$(SED) 's/\/\* #define LUA_32BITS \*\//#define LUA_32BITS/' $(@D)/src/luaconf.h
+ endef
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.9.3
