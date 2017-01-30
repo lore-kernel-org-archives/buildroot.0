@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 21:15:32 +0100
-Subject: [Buildroot] [git commit] libsodium: bump to version 1.0.11
-Message-ID: <20170130201643.3CD9E7FFF1@busybox.osuosl.org>
+Date: Mon, 30 Jan 2017 21:12:50 +0100
+Subject: [Buildroot] [git commit] gst1-libav: bump to version 1.10.3
+Message-ID: <20170130201642.F1E247FA5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b4acf923b0e4c46d058a28877df805785258496
+commit: https://git.buildroot.net/buildroot/commit/?id=4e943e1274b4d202185916de3c9ef7158bf492a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsodium/libsodium.hash | 2 +-
- package/libsodium/libsodium.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
-index 8b79555..3b129a0 100644
---- a/package/libsodium/libsodium.hash
-+++ b/package/libsodium/libsodium.hash
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
+index 8cda287..9c84630 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	c0f191d2527852641e0a996b7b106d2e04cbc76ea50731b2d0babd3409301926	libsodium-1.0.8.tar.gz
-+sha256	a14549db3c49f6ae2170cbbf4664bd48ace50681045e8dbea7c8d9fb96f9c765	libsodium-1.0.11.tar.gz
-diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-index a8c28a6..1d21bb3 100644
---- a/package/libsodium/libsodium.mk
-+++ b/package/libsodium/libsodium.mk
+-# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.10.2.tar.xz.sha256sum
+-sha256 a3dd7036211f061e1eda04f985b7a9dd1a91b754f767ff2587eb6ec28f44e73c  gst-libav-1.10.2.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.10.3.tar.xz.sha256sum
++sha256 9a6bc165b1862b18b98d9f1755c43806e4839a80f69ec7ea9a2dab61b65752a9  gst-libav-1.10.3.tar.xz
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 8687ac6..ec84b77 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSODIUM_VERSION = 1.0.8
-+LIBSODIUM_VERSION = 1.0.11
- LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
- LIBSODIUM_LICENSE = ISC
- LIBSODIUM_LICENSE_FILES = LICENSE
+-GST1_LIBAV_VERSION = 1.10.2
++GST1_LIBAV_VERSION = 1.10.3
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
+ GST1_LIBAV_CONF_OPTS = --with-system-libav
