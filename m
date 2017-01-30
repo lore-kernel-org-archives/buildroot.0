@@ -1,41 +1,98 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 14:13:40 +0100
-Subject: [Buildroot] [git commit] moarvm: bump to version 2017.01
-Message-ID: <20170130131409.AECF17FC6C@busybox.osuosl.org>
+From: Francesco Negri <francesconegri@gmail.com>
+Date: Mon, 30 Jan 2017 14:27:02 +0100
+Subject: [Buildroot] [PATCH v3 1/1] git-crypt: new package
+In-Reply-To: <20170130105808.86147-1-francesconegri@gmail.com>
+References: <20170130105808.86147-1-francesconegri@gmail.com>
+Message-ID: <20170130132702.85804-1-francesconegri@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66fbae4c9c25aa8f23e243302321d900b0ce71d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francesco Negri <francesconegri@gmail.com>
 ---
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v2 -> v3:
+  - add TARGET_MAKE_ENV and TARGET_CONFIGURE_OPTS in make cmd
+  - use depends, not select, for BR2_USE_MMU
+  - remove unnecessary GIT_CRYPT_SOURCE
+---
+ package/Config.in                |  1 +
+ package/git-crypt/Config.in      | 15 +++++++++++++++
+ package/git-crypt/git-crypt.hash |  2 ++
+ package/git-crypt/git-crypt.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 package/git-crypt/Config.in
+ create mode 100644 package/git-crypt/git-crypt.hash
+ create mode 100644 package/git-crypt/git-crypt.mk
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 2e49811..e6335ab 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 5eaa8ff47b1c25e023a900947f88222fffe0884ce74652659ecd2265ae2d1387  MoarVM-2016.11.tar.gz
-+sha256 2074693a42a7f31218bf69b70fd5b73d6fd1a1d0e31eaf3f528e204963e94c53  MoarVM-2017.01.tar.gz
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index d091174..b459474 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOARVM_VERSION = 2016.11
-+MOARVM_VERSION = 2017.01
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+diff --git a/package/Config.in b/package/Config.in
+index 6a3a1a7c7..067ff3cc9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -138,6 +138,7 @@ menu "Development tools"
+ 	source "package/gawk/Config.in"
+ 	source "package/gettext/Config.in"
+ 	source "package/git/Config.in"
++	source "package/git-crypt/Config.in"
+ 	source "package/gperf/Config.in"
+ 	source "package/grep/Config.in"
+ 	source "package/jq/Config.in"
+diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
+new file mode 100644
+index 000000000..4e1ca4a2b
+--- /dev/null
++++ b/package/git-crypt/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_GIT_CRYPT
++	bool "git-crypt"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # git
++	select BR2_PACKAGE_GIT
++	select BR2_PACKAGE_OPENSSL
++	help
++	  git-crypt enables transparent encryption and decryption of files in a
++	  git repository.
++
++	  https://www.agwa.name/projects/git-crypt/
++
++comment "git-crypt needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU
+diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
+new file mode 100644
+index 000000000..8589f03f7
+--- /dev/null
++++ b/package/git-crypt/git-crypt.hash
+@@ -0,0 +1,2 @@
++# Hash from: https://lists.cloudmutt.com/pipermail/git-crypt-announce/2015-May/000003.html
++sha256 0a8f92c0a0a125bf768d0c054d947ca4e4b8d6556454b0e7e87fb907ee17cf06 git-crypt-0.5.0.tar.gz
+diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
+new file mode 100644
+index 000000000..3ef2bd26f
+--- /dev/null
++++ b/package/git-crypt/git-crypt.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# git-crypt
++#
++################################################################################
++
++GIT_CRYPT_VERSION = 0.5.0
++GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
++GIT_CRYPT_DEPENDENCIES = git openssl
++GIT_CRYPT_LICENSE = GPLv3
++GIT_CRYPT_LICENSE_FILES = COPYING
++
++define GIT_CRYPT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
++endef
++
++define GIT_CRYPT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/git-crypt $(TARGET_DIR)/usr/bin/git-crypt
++endef
++
++$(eval $(generic-package))
+-- 
+2.11.0
