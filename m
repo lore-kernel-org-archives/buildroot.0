@@ -1,66 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 13:34:32 +0100
-Subject: [Buildroot] [git commit] syslog-ng: Bump version to v3.9.1
-Message-ID: <20170130125320.8D04F7FC94@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 30 Jan 2017 13:53:54 +0100
+Subject: [Buildroot] [PATCH] moarvm: bump to version 2017.01
+Message-ID: <20170130125354.2625-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0e656f423f0bfdd2c3b509d6fe28334c994e45c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/syslog-ng/syslog-ng.hash |  2 +-
- package/syslog-ng/syslog-ng.mk   | 13 +++++++++++--
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index f1dcf52..ba066d1 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index 2e49811..e6335ab 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 49201dcfd59c8992936aa16c694f5e6593d505b44895f6c66b7d7f7895ce2c62  syslog-ng-3.7.3.tar.gz
-+sha256 5678856a550ae790618fabde9d1447f932ce7a9080d55dca8fc5df1202c70a17  syslog-ng-3.9.1.tar.gz
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index cfc7d0d..61fc48f 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
+-sha256 5eaa8ff47b1c25e023a900947f88222fffe0884ce74652659ecd2265ae2d1387  MoarVM-2016.11.tar.gz
++sha256 2074693a42a7f31218bf69b70fd5b73d6fd1a1d0e31eaf3f528e204963e94c53  MoarVM-2017.01.tar.gz
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index d091174..b459474 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSLOG_NG_VERSION = 3.7.3
-+SYSLOG_NG_VERSION = 3.9.1
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPLv2.1+ (syslog-ng core), GPLv2+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING
-@@ -12,7 +12,8 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- 	eventlog libglib2 openssl pcre
- # rabbit-mq needs -lrt
- SYSLOG_NG_CONF_ENV = LIBS=-lrt
--SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run
-+SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
-+	--disable-java --disable-java-modules
- 
- # We override busybox's S01logging init script
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-@@ -75,6 +76,14 @@ else
- SYSLOG_NG_CONF_OPTS += --disable-spoof-source
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+SYSLOG_NG_DEPENDENCIES += libcurl
-+SYSLOG_NG_CONF_OPTS += --enable-http
-+SYSLOG_NG_CONF_OPTS += --with-libcurl="$(STAGING_DIR)/usr"
-+else
-+SYSLOG_NG_CONF_OPTS += --disable-http
-+endif
-+
- ifeq ($(BR2_INIT_SYSTEMD),y)
- SYSLOG_NG_DEPENDENCIES += systemd
- SYSLOG_NG_CONF_OPTS += \
+-MOARVM_VERSION = 2016.11
++MOARVM_VERSION = 2017.01
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
+-- 
+2.9.3
