@@ -1,45 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 21:15:28 +0100
-Subject: [Buildroot] [git commit] samba4: bump to version 4.5.5
-Message-ID: <20170130201643.33A627FFF1@busybox.osuosl.org>
+Date: Mon, 30 Jan 2017 21:11:11 +0100
+Subject: [Buildroot] [git commit] gstreamer1: bump to version 1.10.3
+Message-ID: <20170130201642.C0AFA7FFF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b504da17f87b51b8e1da7843092ae44b27d9865
+commit: https://git.buildroot.net/buildroot/commit/?id=ea20333b1ae45f112761018f317423e4aee24b8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch download URL to match the website and avoid issues.
+Drop upstream patch as well.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ed-access-support-for-unknown-architectur.patch | 37 ----------------------
+ package/gstreamer1/gstreamer1/gstreamer1.hash      |  4 +--
+ package/gstreamer1/gstreamer1/gstreamer1.mk        |  2 +-
+ 3 files changed, 3 insertions(+), 40 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 1148db2..4fec55d 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
+diff --git a/package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch b/package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch
+deleted file mode 100644
+index 06897fb..0000000
+--- a/package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 20bbce5758abf3493f3d7dc10edd335701c3a02c Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Mon, 5 Dec 2016 20:54:55 +0100
+-Subject: [PATCH] Fix unaligned access support for unknown architectures.
+-
+-Better be safe (assume no unaligned access) than sorry (bail out
+-with error message at compile time).
+-
+-Fixes compile for xtensa and microblaze architectures.
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- gst/gstconfig.h.in | 6 ++----
+- 1 file changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/gst/gstconfig.h.in b/gst/gstconfig.h.in
+-index c2e8361..3a17398 100644
+---- a/gst/gstconfig.h.in
+-+++ b/gst/gstconfig.h.in
+-@@ -104,12 +104,10 @@
+-  * http://docs.oracle.com/cd/E19205-01/820-4155/c++_faq.html#Vers6
+-  * https://software.intel.com/en-us/node/583402
+-  */
+--#if defined(__alpha__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__mips__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64)
+--#  define GST_HAVE_UNALIGNED_ACCESS 0
+--#elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
+-+#if defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
+- #  define GST_HAVE_UNALIGNED_ACCESS 1
+- #else
+--#  error "Could not detect architecture; don't know whether it supports unaligned access! Please file a bug."
+-+#  define GST_HAVE_UNALIGNED_ACCESS 0
+- #endif
+- 
+- /**
+--- 
+-2.11.0
+-
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 3fd7c6b..f65061b 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	1800d10ea14cabef67c83cc56a0f37f4f30ba5df218b3a1e7c874069a08c0f40	samba-4.5.4.tar.gz
-+sha256	bff02762b3e4ee030f02266c6e24a0b888248b387246219b7fbe3e1758ef2184	samba-4.5.5.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 7eacf8a..4020caa 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,8 +4,8 @@
+-# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.10.2.tar.xz.sha256sum
+-sha256 150e8e81febac94c161d8141cde78a38038a8f56e8ec549f353da54994278d65  gstreamer-1.10.2.tar.xz
++# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.10.3.tar.xz.sha256sum
++sha256 85b9dc1b2991f224fa90d534ec57014896c479e061dc9fa1bc16ae17cbebb63d  gstreamer-1.10.3.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 6086e13..ac2c988 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.5.4
--SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
-+SAMBA4_VERSION = 4.5.5
-+SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
- SAMBA4_LICENSE = GPLv3+
+-GSTREAMER1_VERSION = 1.10.2
++GSTREAMER1_VERSION = 1.10.3
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
