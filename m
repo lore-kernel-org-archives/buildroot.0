@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 21:13:20 +0100
-Subject: [Buildroot] [git commit] gst-omx: bump to version 1.10.3
-Message-ID: <20170130201643.1F7B57FFF1@busybox.osuosl.org>
+Date: Mon, 30 Jan 2017 21:15:28 +0100
+Subject: [Buildroot] [git commit] samba4: bump to version 4.5.5
+Message-ID: <20170130201643.33A627FFF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=222a3468c91a0a9f35f69e77497dc360c29c821f
+commit: https://git.buildroot.net/buildroot/commit/?id=2b504da17f87b51b8e1da7843092ae44b27d9865
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Switch download URL to match the website and avoid issues.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
- package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index d52b61f..be39ef7 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 1148db2..4fec55d 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
 @@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.2.tar.xz.sha256sum
--sha256 c069a9cf775c92f889ca8f3b2fc718e428cd0579b7b805851a960c850a7aa497  gst-omx-1.10.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.3.tar.xz.sha256sum
-+sha256 dd88451e175df7a6b6f619eff0f43a6078054ec7068787b19faf89af94cdb6e1  gst-omx-1.10.3.tar.xz
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index fcc7058..d55ef5f 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256	1800d10ea14cabef67c83cc56a0f37f4f30ba5df218b3a1e7c874069a08c0f40	samba-4.5.4.tar.gz
++sha256	bff02762b3e4ee030f02266c6e24a0b888248b387246219b7fbe3e1758ef2184	samba-4.5.5.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 7eacf8a..4020caa 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--GST_OMX_VERSION = 1.10.2
-+GST_OMX_VERSION = 1.10.3
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- 
+-SAMBA4_VERSION = 4.5.4
+-SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
++SAMBA4_VERSION = 4.5.5
++SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+ SAMBA4_LICENSE = GPLv3+
