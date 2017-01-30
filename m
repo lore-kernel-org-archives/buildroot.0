@@ -1,106 +1,128 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 30 Jan 2017 13:59:47 +0100
+Date: Mon, 30 Jan 2017 14:00:57 +0100
 Subject: [Buildroot] [PATCH 1/2] python-gunicorn: new package
-In-Reply-To: <20170130122032.3113-1-lionel@svkt.org>
-References: <20170130121749.vqutrxs5aljdyopx@ed>
- <20170130122032.3113-1-lionel@svkt.org>
-Message-ID: <CAGm1_kveJmw6BSgzJ_sVo0vYDEczJhnGxyt=ubF+U3MAHDfoJg@mail.gmail.com>
+In-Reply-To: <20170130121749.vqutrxs5aljdyopx@ed>
+References: <20170130104053.16234-1-lionel@svkt.org>
+ <CAGm1_ktd6NSCw9Hcc3P9ag3Nh0a3Qnoso3vgBGCWsaZDrL7ZLA@mail.gmail.com>
+ <20170130121749.vqutrxs5aljdyopx@ed>
+Message-ID: <CAGm1_ktczPk7h9jOY6D7ANaH3WBsXNnC+R79KmNawMu1FhLSTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 30, 2017 at 1:20 PM, Lionel Flandrin <lionel@svkt.org> wrote:
-> Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for UNIX. It?s a
-> pre-fork worker model ported from Ruby?s Unicorn project. The Gunicorn
-> server is broadly compatible with various web frameworks, simply
-> implemented, light on server resource usage, and fairly speedy.
+On Mon, Jan 30, 2017 at 1:17 PM, Lionel Flandrin <lflandrin@ereca.fr> wrote:
+> On Mon, Jan 30, 2017 at 12:31:06PM +0100, Yegor Yefremov wrote:
+>> Hi Lionel,
 >
-> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
-> ---
->  package/Config.in                            |  1 +
->  package/python-gunicorn/Config.in            | 13 +++++++++++++
->  package/python-gunicorn/python-gunicorn.hash |  3 +++
->  package/python-gunicorn/python-gunicorn.mk   | 14 ++++++++++++++
->  4 files changed, 31 insertions(+)
->  create mode 100644 package/python-gunicorn/Config.in
->  create mode 100644 package/python-gunicorn/python-gunicorn.hash
->  create mode 100644 package/python-gunicorn/python-gunicorn.mk
+> Hello Yegor,
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 6a3a1a7c7..c68d84889 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -696,6 +696,7 @@ menu "External python modules"
->         source "package/python-flup/Config.in"
->         source "package/python-futures/Config.in"
->         source "package/python-gobject/Config.in"
-> +       source "package/python-gunicorn/Config.in"
->         source "package/python-html5lib/Config.in"
->         source "package/python-httplib2/Config.in"
->         source "package/python-humanize/Config.in"
-> diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
-> new file mode 100644
-> index 000000000..9c6084c57
-> --- /dev/null
-> +++ b/package/python-gunicorn/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_PYTHON_GUNICORN
-> +       bool "python-gunicorn"
-> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS
-> +       select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
-> +       select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
+>> On Mon, Jan 30, 2017 at 11:40 AM, Lionel Flandrin <lionel@svkt.org> wrote:
+>> > Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for UNIX. It?s a
+>> > pre-fork worker model ported from Ruby?s Unicorn project. The Gunicorn
+>> > server is broadly compatible with various web frameworks, simply
+>> > implemented, light on server resource usage, and fairly speedy.
+>> >
+>> > Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+>> > ---
+>> >  package/Config.in                            |  1 +
+>> >  package/python-gunicorn/Config.in            | 15 +++++++++++++++
+>> >  package/python-gunicorn/python-gunicorn.hash |  3 +++
+>> >  package/python-gunicorn/python-gunicorn.mk   | 14 ++++++++++++++
+>> >  4 files changed, 33 insertions(+)
+>> >  create mode 100644 package/python-gunicorn/Config.in
+>> >  create mode 100644 package/python-gunicorn/python-gunicorn.hash
+>> >  create mode 100644 package/python-gunicorn/python-gunicorn.mk
+>> >
+>> > diff --git a/package/Config.in b/package/Config.in
+>> > index 6a3a1a7c7..c68d84889 100644
+>> > --- a/package/Config.in
+>> > +++ b/package/Config.in
+>> > @@ -696,6 +696,7 @@ menu "External python modules"
+>> >         source "package/python-flup/Config.in"
+>> >         source "package/python-futures/Config.in"
+>> >         source "package/python-gobject/Config.in"
+>> > +       source "package/python-gunicorn/Config.in"
+>> >         source "package/python-html5lib/Config.in"
+>> >         source "package/python-httplib2/Config.in"
+>> >         source "package/python-humanize/Config.in"
+>> > diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
+>> > new file mode 100644
+>> > index 000000000..d675c03e0
+>> > --- /dev/null
+>> > +++ b/package/python-gunicorn/Config.in
+>> > @@ -0,0 +1,15 @@
+>> > +config BR2_PACKAGE_PYTHON_GUNICORN
+>> > +       bool "python-gunicorn"
+>> > +       select BR2_PACKAGE_PYTHON_SETUPTOOLS
+>>
+>> is setuptools package really needed at runtime?
+>
+> It uses pkg_resources which I believe is part of setuptools:
+>
+> https://github.com/benoitc/gunicorn/blob/master/gunicorn/util.py#L13
 
-# runtime tags are missing
-
-other than that looks good to me
-
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-If you'Re going to send v3 please add change history as desribed in [1]
-
-[1] http://nightly.buildroot.org/manual.html#submitting-patches
+OK. I see it now.
 
 Yegor
 
-> +       help
-> +         Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for
-> +         UNIX. It?s a pre-fork worker model ported from Ruby?s
-> +         Unicorn project. The Gunicorn server is broadly compatible
-> +         with various web frameworks, simply implemented, light on
-> +         server resource usage, and fairly speedy.
-> +
-> +         http://gunicorn.org/
-> diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
-> new file mode 100644
-> index 000000000..a282bc995
-> --- /dev/null
-> +++ b/package/python-gunicorn/python-gunicorn.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
-> +md5    338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
-> +sha256 813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
-> diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
-> new file mode 100644
-> index 000000000..426e80973
-> --- /dev/null
-> +++ b/package/python-gunicorn/python-gunicorn.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-gunicorn
-> +#
-> +################################################################################
-> +
-> +PYTHON_GUNICORN_VERSION = 19.6.0
-> +PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
-> +PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
-> +PYTHON_GUNICORN_SETUP_TYPE = setuptools
-> +PYTHON_GUNICORN_LICENSE = MIT
-> +PYTHON_GUNICORN_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> --
-> 2.11.0
+>> > +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
+>> > +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+>>
+>> what module requires zlib? I see no related imports
 >
+> I assumed it needed it for some reason. Looks like I was wrong.
+>
+>> > +       select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
+>> > +       select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
+>> > +       help
+>> > +         Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for
+>> > +         UNIX. It?s a pre-fork worker model ported from Ruby?s
+>> > +         Unicorn project. The Gunicorn server is broadly compatible
+>> > +         with various web frameworks, simply implemented, light on
+>> > +         server resource usage, and fairly speedy.
+>> > +
+>> > +         http://gunicorn.org/
+>> > diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
+>> > new file mode 100644
+>> > index 000000000..a282bc995
+>> > --- /dev/null
+>> > +++ b/package/python-gunicorn/python-gunicorn.hash
+>> > @@ -0,0 +1,3 @@
+>> > +# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
+>> > +md5    338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
+>> > +sha256 813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
+>> > diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
+>> > new file mode 100644
+>> > index 000000000..c33b753db
+>> > --- /dev/null
+>> > +++ b/package/python-gunicorn/python-gunicorn.mk
+>> > @@ -0,0 +1,14 @@
+>> > +################################################################################
+>> > +#
+>> > +# python-gunicorn
+>> > +#
+>> > +################################################################################
+>> > +
+>> > +PYTHON_GUNICORN_VERSION = 19.6.0
+>> > +PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
+>> > +PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
+>> > +PYTHON_GUNICORN_SETUP_TYPE = setuptools
+>> > +PYTHON_GUNICORN_LICENSE = BSD-3c
+>>
+>> licence is MIT and not BSD-3c
+>
+> Good catch. I'll add the _LICENSE_FILES while I'm at it.
+>
+>> Yegor
+>>
+>> > +PYTHON_GUNICORN_LICENSE_FILES = LICENSE
+>> > +
+>> > +$(eval $(python-package))
+>> > --
+>> > 2.11.0
+>> >
+>
+> --
+> Lionel Flandrin
