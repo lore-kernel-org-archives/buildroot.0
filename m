@@ -1,37 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 30 Jan 2017 14:28:35 +0200
-Subject: [Buildroot] [PATCH v2 1/1] git-crypt: new package
-In-Reply-To: <CA+KB-ZbXLs8erLcoxue2VTbr-_h5qkYsidAKJXgGke8R7AwrMA@mail.gmail.com>
-References: <20170130002853.76103-1-francesconegri@gmail.com>
- <20170130105808.86147-1-francesconegri@gmail.com>
- <20170130110236.4uabn3nvyz6r4vsm@tarshish>
- <CA+KB-ZZEz1JqXhPZuoCQnoWaC81304JCc-Ae1pf_7t+Lnc9H=A@mail.gmail.com>
- <CA+KB-ZbXLs8erLcoxue2VTbr-_h5qkYsidAKJXgGke8R7AwrMA@mail.gmail.com>
-Message-ID: <20170130122835.tupwb77p6webshtp@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 Jan 2017 13:34:13 +0100
+Subject: [Buildroot] [PATCH] lua: bump to version 5.3.4
+In-Reply-To: <20170130110327.5103-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Mon, 30 Jan 2017 12:03:27 +0100")
+References: <20170130110327.5103-1-francois.perrad@gadz.org>
+Message-ID: <87bmuoafqy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francesco,
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-On Mon, Jan 30, 2017 at 01:08:28PM +0100, Francesco Negri wrote:
-> On Mon, Jan 30, 2017 at 12:07 PM, Francesco Negri
-> <francesconegri@gmail.com> wrote:
-> > I tried using the command suggested by Thomas, but the build fails with:
-> 
-> I found the error is caused by $(TARGET_CONFIGURE_OPTS) setting
-> LDFLAGS="". Setting it to LDFLAGS="-lcrypto" fixes the error. What
-> would be the best way to do this in git-crypt.mk?
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-In that case I think it would be better to do
+>  ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ > -LUA_VERSION = 5.3.3
+ > +LUA_VERSION = 5.3.4
+ >  else
+ >  ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+ >  LUA_VERSION = 5.2.4
+ > @@ -56,6 +56,7 @@ endif
+ 
+ >  ifeq ($(BR2_PACKAGE_LUA_32BITS),y)
+ >  define LUA_32BITS_LUACONF
+ > +	@$(call MESSAGE,"Patching src/luaconf.h")
+ >  	$(SED) 's/\/\* #define LUA_32BITS \*\//#define LUA_32BITS/' $(@D)/src/luaconf.h
+ >  endef
 
-  $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) ...
+So far no other packages add custom MESSAGE calls, so unless there's a
+strong reason to display this I would prefer not to.
 
-baruch
+Committed with the MESSAGE line dropped, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
