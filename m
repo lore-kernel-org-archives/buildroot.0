@@ -1,59 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 21:16:05 +0100
-Subject: [Buildroot] [git commit] lcms2: add upstream security fix for
-	CVE-2016-10165
-Message-ID: <20170130201643.4684A7FFF1@busybox.osuosl.org>
+Date: Mon, 30 Jan 2017 21:15:32 +0100
+Subject: [Buildroot] [git commit] libsodium: bump to version 1.0.11
+Message-ID: <20170130201643.3CD9E7FFF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd2e115a3feb501afc11d3c6ce29fd947a631cda
+commit: https://git.buildroot.net/buildroot/commit/?id=6b4acf923b0e4c46d058a28877df805785258496
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-An out-of-bounds read in cmstypes.c in Type_MLU_Read function was found,
-leading to heap memory leak triggered by crafted ICC profile.
-
-https://bugzilla.redhat.com/show_bug.cgi?id=1367357
-
-Add upstream patch to fix it.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-Added-an-extra-check-to-MLU-bounds.patch  | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/libsodium/libsodium.hash | 2 +-
+ package/libsodium/libsodium.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch b/package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch
-new file mode 100644
-index 0000000..9a5d9dd
---- /dev/null
-+++ b/package/lcms2/0002-Added-an-extra-check-to-MLU-bounds.patch
-@@ -0,0 +1,27 @@
-+From 5ca71a7bc18b6897ab21d815d15e218e204581e2 Mon Sep 17 00:00:00 2001
-+From: Marti <marti.maria@tktbrainpower.com>
-+Date: Mon, 15 Aug 2016 23:31:39 +0200
-+Subject: [PATCH] Added an extra check to MLU bounds
-+
-+Thanks to Ibrahim el-sayed for spotting the bug
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/cmstypes.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/cmstypes.c b/src/cmstypes.c
-+index cb61860..c7328b9 100644
-+--- a/src/cmstypes.c
-++++ b/src/cmstypes.c
-+@@ -1460,6 +1460,7 @@ void *Type_MLU_Read(struct _cms_typehandler_struct* self, cmsIOHANDLER* io, cmsU
-+ 
-+         // Check for overflow
-+         if (Offset < (SizeOfHeader + 8)) goto Error;
-++        if ((Offset + Len) > SizeOfTag + 8) goto Error;
-+ 
-+         // True begin of the string
-+         BeginOfThisString = Offset - SizeOfHeader - 8;
-+-- 
-+2.11.0
-+
+diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
+index 8b79555..3b129a0 100644
+--- a/package/libsodium/libsodium.hash
++++ b/package/libsodium/libsodium.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	c0f191d2527852641e0a996b7b106d2e04cbc76ea50731b2d0babd3409301926	libsodium-1.0.8.tar.gz
++sha256	a14549db3c49f6ae2170cbbf4664bd48ace50681045e8dbea7c8d9fb96f9c765	libsodium-1.0.11.tar.gz
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index a8c28a6..1d21bb3 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSODIUM_VERSION = 1.0.8
++LIBSODIUM_VERSION = 1.0.11
+ LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
+ LIBSODIUM_LICENSE = ISC
+ LIBSODIUM_LICENSE_FILES = LICENSE
