@@ -1,126 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 21:09:57 +0100
-Subject: [Buildroot] [git commit] hiredis: new package
-Message-ID: <20170130201642.B65327FA5C@busybox.osuosl.org>
+Date: Mon, 30 Jan 2017 21:11:18 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-base: bump to version 1.10.3
+Message-ID: <20170130201642.CCF7F7FA5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c487d0671d444a024707f8c5fa5d7571090b629f
+commit: https://git.buildroot.net/buildroot/commit/?id=08bc0a0a605a9ba010dfe0b689da5c826c666df3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Minimalistic C client for Redis >= 1.2
-
-It is minimalistic because it just adds minimal support for
-the protocol, but at the same time it uses a high level
-printf-alike API in order to make it much higher level than
-otherwise suggested by its minimal code base and the lack of
-explicit bindings for every Redis command.
-
-https://github.com/redis/hiredis
-
-[Peter: use install -t / -D, fix arguments]
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in            |  1 +
- package/hiredis/Config.in    | 12 +++++++++++
- package/hiredis/hiredis.hash |  2 ++
- package/hiredis/hiredis.mk   | 48 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 63 insertions(+)
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 067ff3c..d1c517a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -945,6 +945,7 @@ menu "Database"
- 	source "package/berkeleydb/Config.in"
- 	source "package/cppdb/Config.in"
- 	source "package/gdbm/Config.in"
-+	source "package/hiredis/Config.in"
- 	source "package/kompexsqlite/Config.in"
- 	source "package/leveldb/Config.in"
- 	source "package/libpqxx/Config.in"
-diff --git a/package/hiredis/Config.in b/package/hiredis/Config.in
-new file mode 100644
-index 0000000..1656355
---- /dev/null
-+++ b/package/hiredis/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_HIREDIS
-+	bool "hiredis"
-+	help
-+	  Minimalistic C client for Redis >= 1.2
-+
-+	  It is minimalistic because it just adds minimal support for
-+	  the protocol, but at the same time it uses a high level
-+	  printf-alike API in order to make it much higher level than
-+	  otherwise suggested by its minimal code base and the lack of
-+	  explicit bindings for every Redis command.
-+
-+	  https://github.com/redis/hiredis
-diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
-new file mode 100644
-index 0000000..2c788a6
---- /dev/null
-+++ b/package/hiredis/hiredis.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	717e6fc8dc2819bef522deaca516de9e51b9dfa68fe393b7db5c3b6079196f78	hiredis-v0.13.3.tar.gz
-diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
-new file mode 100644
-index 0000000..eb96711
---- /dev/null
-+++ b/package/hiredis/hiredis.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# hiredis
-+#
-+################################################################################
-+
-+HIREDIS_VERSION = v0.13.3
-+HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
-+HIREDIS_LICENSE = BSD-3c
-+HIREDIS_LICENSE_FILES = COPYING
-+HIREDIS_INSTALL_STAGING = YES
-+
-+HIREDIS_MAKE_OPTS = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	PREFIX=/usr
-+
-+HIREDIS_TARGETS = hiredis.pc
-+ifeq ($(BR2_STATIC_LIBS),y)
-+HIREDIS_TARGETS += static
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+HIREDIS_TARGETS += dynamic
-+else ifeq $(BR2_SHARED_STATIC_LIBS),y)
-+HIREDIS_TARGETS += dynamic static
-+endif
-+
-+define HIREDIS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(HIREDIS_MAKE_OPTS) -C $(@D) \
-+		$(HIREDIS_TARGETS)
-+endef
-+
-+HIREDIS_INCLUDE_DIR = $(STAGING_DIR)/usr/include/hiredis
-+
-+# Do not call make install as this target will build shared and static libraries
-+define HIREDIS_INSTALL_STAGING_CMDS
-+	mkdir -p $(HIREDIS_INCLUDE_DIR)
-+	cp -dpfr $(@D)/hiredis.h $(@D)/async.h $(@D)/read.h $(@D)/sds.h \
-+		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
-+	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/hiredis.pc
-+	$(INSTALL) -m 0644 -t $(STAGING_DIR)/usr/lib $(@D)/libhiredis*
-+endef
-+
-+define HIREDIS_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/lib
-+	$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/lib $(@D)/libhiredis*
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+index 3f4d0cd..86116f0 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.10.2.tar.xz.sha256sum
+-sha256 fbc0d40fcb746d2efe2ea47444674029912f66e6107f232766d33b722b97de20  gst-plugins-base-1.10.2.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.10.3.tar.xz.sha256sum
++sha256 e6299617d705a0cbfb535107c1d3a8fc0f0967f14193a8c5c7583f46a88b1710  gst-plugins-base-1.10.3.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 1014bd7..76602cc 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_BASE_VERSION = 1.10.2
++GST1_PLUGINS_BASE_VERSION = 1.10.3
+ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+ GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
