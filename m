@@ -1,101 +1,87 @@
-From: =?UTF-8?Q?Guillaume_GARDET_-_Olis=c3=a9o?= <guillaume.gardet@oliseo.fr>
-Date: Mon, 30 Jan 2017 16:14:40 +0100
-Subject: [Buildroot] Firmware auto-loading does not work
-In-Reply-To: <87ziiffdqw.fsf@dell.be.48ers.dk>
-References: <5a5c69bf-efc5-e35c-f95c-d303047320c4@oliseo.fr>
- <874m0ngv5h.fsf@dell.be.48ers.dk>
- <7ee11e7f-a489-9f3a-cfd8-3d93f291f695@oliseo.fr>
- <87ziiffdqw.fsf@dell.be.48ers.dk>
-Message-ID: <718ddc67-8e29-1c1b-3a73-74ada73662ab@oliseo.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 30 Jan 2017 13:40:43 -0300
+Subject: [Buildroot] [PATCH 1/9] gstreamer1: bump to version 1.10.3
+Message-ID: <20170130164051.330-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop upstream patch as well.
 
-Le 25/01/2017 ? 14:52, Peter Korsgaard a ?crit :
->>>>>> "Guillaume" == Guillaume GARDET <- Olis?o <guillaume.gardet@oliseo.fr>> writes:
->   > Le 25/01/2017 ? 13:51, Peter Korsgaard a ?crit :
->   >>>>>>> "Guillaume" == Guillaume GARDET <- Olis?o <guillaume.gardet@oliseo.fr>> writes:
->   >> > Hello,
->   >> > I am using buildroot 2016.05 (with a 2.6.37 kernel) and firmware
->   >> > auto-loading does not work. I need to do it manually (through
->   >> > sysfs). I tried mdev and eudev, both are not working.
->   >>
->   >> > Is there a known bug about that? In busybox, maybe?
->   >>
->   >> If you have tried both eudev and mdev, then it is unlikely to be a bug
->   >> in busybox (mdev). Are you using busybox modprobe applet or kmod?
->
->   > This is not a problem of module loading (it is working fine) but
->   > loading _firmware_ to devices for the WiFi dongle in my case.
->
-> Heh, I wonder how I could misread your email so much - Sorry about that.
->
-> First of all, our default busybox configuration has
-> CONFIG_FEATURE_MDEV_LOAD_FIRMWARE disabled. Have you enabled it? Without
-> that option, mdev doesn't do anything about firmware.
->
-> Less ancient (since 3.7, so 2012) Linux kernels directly loads firmware
-> files from the kernel, so the support in mdev isn't needed, but as you
-> are using an ancient kernel this doesn't work for you:
->
-> commit abb139e75c2cdbb955e840d6331cb5863e409d0e
-> Author: Linus Torvalds <torvalds@linux-foundation.org>
-> Date:   Wed Oct 3 15:58:32 2012 -0700
->
->      firmware: teach the kernel to load firmware files directly from the filesystem
->
->      This is a first step in allowing people to by-pass udev for loading
->      device firmware.  Current versions of udev will deadlock (causing us to
->      block for the 30 second timeout) under some circumstances if the
->      firmware is loaded as part of the module initialization path, and this
->      is causing problems for media drivers in particular.
->
->      The current patch hardcodes the firmware path that udev uses by default,
->      and will fall back to the legacy udev mode if the firmware cannot be
->      found there.  We'd like to add support for both configuring the paths
->      and the fallback behaviour, but in the meantime this hopefully fixes the
->      immediate problem, while also giving us a way forward.
->
->      [ v2: Some VFS layer interface cleanups suggested by Al Viro ]
->      [ v3: use the default udev paths suggested by Kay Sievers ]
->
->      Suggested-by: Ivan Kalvachev <ikalvachev@gmail.com>
->      Acked-by: Greg KH <gregkh@linuxfoundation.org>
->      Acked-by: Al Viro <viro@zeniv.linux.org.uk>
->      Cc: Mauro Carvalho Chehab <mchehab@redhat.com>
->      Cc: Kay Sievers <kay@redhat.com>
->      Cc: Ming Lei <ming.lei@canonical.com>
->      Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
->
-> Looking at eudev git history, I see that the legacy user space loading
-> support got removed in 2014, so that is why it isn't working with eudev
-> either:
->
-> commit 3b717594600fa717cdf9bcfd0c7c1b703b245482
-> Author: Kay Sievers <kay@vrfy.org>
-> Date:   Mon Sep 1 09:07:49 2014 -0400
->
->     udev: remove userspace firmware loading support
->
->     Signed-off-by: Anthony G. Basile <blueness@gentoo.org>
->
-> We should probably enable CONFIG_FEATURE_MDEV_LOAD_FIRMWARE in our
-> default busybox.config to better support these old systems.
->
-> Can you confirm that it works if you enable that option.
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...ed-access-support-for-unknown-architectur.patch | 37 ----------------------
+ package/gstreamer1/gstreamer1/gstreamer1.hash      |  4 +--
+ package/gstreamer1/gstreamer1/gstreamer1.mk        |  2 +-
+ 3 files changed, 3 insertions(+), 40 deletions(-)
+ delete mode 100644 package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch
 
-I get back the hardware for testing and it still does not work, even if I enable CONFIG_FEATURE_MDEV_LOAD_FIRMWARE=y :
-     phy0 -> rt2x00lib_request_firmware: Info - Loading firmware file 'rt2870.bin'.
-and after 60 seconds, I get:
-     phy0 -> rt2x00lib_request_firmware: Error - Failed to request Firmware.
-     phy0 -> rt2x00lib_request_firmware: Error - Error is '-2'.
-
-Whereas the firmware file is in /lib/firmware/
-
-Any idea what could be wrong?
-
-Guillaume
+diff --git a/package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch b/package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch
+deleted file mode 100644
+index 06897fb..0000000
+--- a/package/gstreamer1/gstreamer1/0001-Fix-unaligned-access-support-for-unknown-architectur.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 20bbce5758abf3493f3d7dc10edd335701c3a02c Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Mon, 5 Dec 2016 20:54:55 +0100
+-Subject: [PATCH] Fix unaligned access support for unknown architectures.
+-
+-Better be safe (assume no unaligned access) than sorry (bail out
+-with error message at compile time).
+-
+-Fixes compile for xtensa and microblaze architectures.
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- gst/gstconfig.h.in | 6 ++----
+- 1 file changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/gst/gstconfig.h.in b/gst/gstconfig.h.in
+-index c2e8361..3a17398 100644
+---- a/gst/gstconfig.h.in
+-+++ b/gst/gstconfig.h.in
+-@@ -104,12 +104,10 @@
+-  * http://docs.oracle.com/cd/E19205-01/820-4155/c++_faq.html#Vers6
+-  * https://software.intel.com/en-us/node/583402
+-  */
+--#if defined(__alpha__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__mips__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64)
+--#  define GST_HAVE_UNALIGNED_ACCESS 0
+--#elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
+-+#if defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
+- #  define GST_HAVE_UNALIGNED_ACCESS 1
+- #else
+--#  error "Could not detect architecture; don't know whether it supports unaligned access! Please file a bug."
+-+#  define GST_HAVE_UNALIGNED_ACCESS 0
+- #endif
+- 
+- /**
+--- 
+-2.11.0
+-
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 3fd7c6b..f65061b 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.10.2.tar.xz.sha256sum
+-sha256 150e8e81febac94c161d8141cde78a38038a8f56e8ec549f353da54994278d65  gstreamer-1.10.2.tar.xz
++# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.10.3.tar.xz.sha256sum
++sha256 85b9dc1b2991f224fa90d534ec57014896c479e061dc9fa1bc16ae17cbebb63d  gstreamer-1.10.3.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 6086e13..ac2c988 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.10.2
++GSTREAMER1_VERSION = 1.10.3
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
+-- 
+2.10.2
