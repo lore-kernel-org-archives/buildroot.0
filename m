@@ -1,42 +1,126 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 21:13:02 +0100
-Subject: [Buildroot] [git commit] gst1-rtsp-server: bump to version 1.10.3
-Message-ID: <20170130201643.1500F7FFF1@busybox.osuosl.org>
+Date: Mon, 30 Jan 2017 21:09:57 +0100
+Subject: [Buildroot] [git commit] hiredis: new package
+Message-ID: <20170130201642.B65327FA5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3146abdc88bb93c66ee6e714dedced5fca49582b
+commit: https://git.buildroot.net/buildroot/commit/?id=c487d0671d444a024707f8c5fa5d7571090b629f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Minimalistic C client for Redis >= 1.2
+
+It is minimalistic because it just adds minimal support for
+the protocol, but at the same time it uses a high level
+printf-alike API in order to make it much higher level than
+otherwise suggested by its minimal code base and the lack of
+explicit bindings for every Redis command.
+
+https://github.com/redis/hiredis
+
+[Peter: use install -t / -D, fix arguments]
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in            |  1 +
+ package/hiredis/Config.in    | 12 +++++++++++
+ package/hiredis/hiredis.hash |  2 ++
+ package/hiredis/hiredis.mk   | 48 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 63 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index 30cd684..21d4ba5 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.10.2.tar.xz.sha256sum
--sha256 822dd6f754fea2bbf3369a7c388372f49b74668fb57943c1888675e544b07235  gst-rtsp-server-1.10.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.10.3.tar.xz.sha256sum
-+sha256 baf9f7d229711cb3d823a447a930132f809b3321eab3535491bb01c8a21566fe  gst-rtsp-server-1.10.3.tar.xz
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 8fcaaf4..a2e8eec 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_RTSP_SERVER_VERSION = 1.10.2
-+GST1_RTSP_SERVER_VERSION = 1.10.3
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPLv2+
+diff --git a/package/Config.in b/package/Config.in
+index 067ff3c..d1c517a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -945,6 +945,7 @@ menu "Database"
+ 	source "package/berkeleydb/Config.in"
+ 	source "package/cppdb/Config.in"
+ 	source "package/gdbm/Config.in"
++	source "package/hiredis/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
+ 	source "package/libpqxx/Config.in"
+diff --git a/package/hiredis/Config.in b/package/hiredis/Config.in
+new file mode 100644
+index 0000000..1656355
+--- /dev/null
++++ b/package/hiredis/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HIREDIS
++	bool "hiredis"
++	help
++	  Minimalistic C client for Redis >= 1.2
++
++	  It is minimalistic because it just adds minimal support for
++	  the protocol, but at the same time it uses a high level
++	  printf-alike API in order to make it much higher level than
++	  otherwise suggested by its minimal code base and the lack of
++	  explicit bindings for every Redis command.
++
++	  https://github.com/redis/hiredis
+diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+new file mode 100644
+index 0000000..2c788a6
+--- /dev/null
++++ b/package/hiredis/hiredis.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	717e6fc8dc2819bef522deaca516de9e51b9dfa68fe393b7db5c3b6079196f78	hiredis-v0.13.3.tar.gz
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+new file mode 100644
+index 0000000..eb96711
+--- /dev/null
++++ b/package/hiredis/hiredis.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# hiredis
++#
++################################################################################
++
++HIREDIS_VERSION = v0.13.3
++HIREDIS_SITE = $(call github,redis,hiredis,$(HIREDIS_VERSION))
++HIREDIS_LICENSE = BSD-3c
++HIREDIS_LICENSE_FILES = COPYING
++HIREDIS_INSTALL_STAGING = YES
++
++HIREDIS_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	PREFIX=/usr
++
++HIREDIS_TARGETS = hiredis.pc
++ifeq ($(BR2_STATIC_LIBS),y)
++HIREDIS_TARGETS += static
++else ifeq ($(BR2_SHARED_LIBS),y)
++HIREDIS_TARGETS += dynamic
++else ifeq $(BR2_SHARED_STATIC_LIBS),y)
++HIREDIS_TARGETS += dynamic static
++endif
++
++define HIREDIS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(HIREDIS_MAKE_OPTS) -C $(@D) \
++		$(HIREDIS_TARGETS)
++endef
++
++HIREDIS_INCLUDE_DIR = $(STAGING_DIR)/usr/include/hiredis
++
++# Do not call make install as this target will build shared and static libraries
++define HIREDIS_INSTALL_STAGING_CMDS
++	mkdir -p $(HIREDIS_INCLUDE_DIR)
++	cp -dpfr $(@D)/hiredis.h $(@D)/async.h $(@D)/read.h $(@D)/sds.h \
++		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
++	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/hiredis.pc
++	$(INSTALL) -m 0644 -t $(STAGING_DIR)/usr/lib $(@D)/libhiredis*
++endef
++
++define HIREDIS_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/lib
++	$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/lib $(@D)/libhiredis*
++endef
++
++$(eval $(generic-package))
