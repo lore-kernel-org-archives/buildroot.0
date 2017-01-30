@@ -1,41 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 15:16:58 +0100
-Subject: [Buildroot] [git commit] shared-mime-info: bump to version 1.8
-Message-ID: <20170130143937.952448040F@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 30 Jan 2017 15:50:21 +0100
+Subject: [Buildroot] [PATCH v3 1/2] python-gunicorn: new package
+In-Reply-To: <20170130141118.6587-1-lionel@svkt.org>
+References: <20170130122032.3113-1-lionel@svkt.org>
+ <20170130141118.6587-1-lionel@svkt.org>
+Message-ID: <CAGm1_kt4rP1svgm6TJPJ=OhCfdDDafEmpM4svU9R_mEzWQuLLg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e43e7c53a8e17b218ef1b43f2036f9727871357
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Jan 30, 2017 at 3:11 PM, Lionel Flandrin <lionel@svkt.org> wrote:
+> Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for UNIX. It?s a
+> pre-fork worker model ported from Ruby?s Unicorn project. The Gunicorn
+> server is broadly compatible with various web frameworks, simply
+> implemented, light on server resource usage, and fairly speedy.
+>
+> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/shared-mime-info/shared-mime-info.hash | 2 +-
- package/shared-mime-info/shared-mime-info.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/shared-mime-info/shared-mime-info.hash b/package/shared-mime-info/shared-mime-info.hash
-index 2007e0e..cf6c8f3 100644
---- a/package/shared-mime-info/shared-mime-info.hash
-+++ b/package/shared-mime-info/shared-mime-info.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	eacc781cfebaa2074e43cf9521dc7ab4391ace8a4712902b2841669c83144d2e	shared-mime-info-1.7.tar.xz
-+sha256	2af55ef1a0319805b74ab40d331a3962c905477d76c086f49e34dc96363589e9	shared-mime-info-1.8.tar.xz
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index e917ab5..64bb4d5 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHARED_MIME_INFO_VERSION = 1.7
-+SHARED_MIME_INFO_VERSION = 1.8
- SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.xz
- SHARED_MIME_INFO_SITE = https://people.freedesktop.org/~hadess
- SHARED_MIME_INFO_INSTALL_STAGING = YES
+Thanks.
+
+Yegor
+
+> ---
+> Changes v1 -> v2:
+>   - Remove ZLIB dependency
+>   - Change license to MIT
+>
+> Changes v2 -> v3:
+>   - Add # runtime tags
+> ---
+>  package/Config.in                            |  1 +
+>  package/python-gunicorn/Config.in            | 13 +++++++++++++
+>  package/python-gunicorn/python-gunicorn.hash |  3 +++
+>  package/python-gunicorn/python-gunicorn.mk   | 14 ++++++++++++++
+>  4 files changed, 31 insertions(+)
+>  create mode 100644 package/python-gunicorn/Config.in
+>  create mode 100644 package/python-gunicorn/python-gunicorn.hash
+>  create mode 100644 package/python-gunicorn/python-gunicorn.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 6a3a1a7c7..c68d84889 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -696,6 +696,7 @@ menu "External python modules"
+>         source "package/python-flup/Config.in"
+>         source "package/python-futures/Config.in"
+>         source "package/python-gobject/Config.in"
+> +       source "package/python-gunicorn/Config.in"
+>         source "package/python-html5lib/Config.in"
+>         source "package/python-httplib2/Config.in"
+>         source "package/python-humanize/Config.in"
+> diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
+> new file mode 100644
+> index 000000000..79cda3eaa
+> --- /dev/null
+> +++ b/package/python-gunicorn/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_PYTHON_GUNICORN
+> +       bool "python-gunicorn"
+> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+> +       select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+> +       select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+> +       help
+> +         Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for
+> +         UNIX. It?s a pre-fork worker model ported from Ruby?s
+> +         Unicorn project. The Gunicorn server is broadly compatible
+> +         with various web frameworks, simply implemented, light on
+> +         server resource usage, and fairly speedy.
+> +
+> +         http://gunicorn.org/
+> diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
+> new file mode 100644
+> index 000000000..a282bc995
+> --- /dev/null
+> +++ b/package/python-gunicorn/python-gunicorn.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
+> +md5    338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
+> +sha256 813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
+> diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
+> new file mode 100644
+> index 000000000..426e80973
+> --- /dev/null
+> +++ b/package/python-gunicorn/python-gunicorn.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-gunicorn
+> +#
+> +################################################################################
+> +
+> +PYTHON_GUNICORN_VERSION = 19.6.0
+> +PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
+> +PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
+> +PYTHON_GUNICORN_SETUP_TYPE = setuptools
+> +PYTHON_GUNICORN_LICENSE = MIT
+> +PYTHON_GUNICORN_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.11.0
+>
