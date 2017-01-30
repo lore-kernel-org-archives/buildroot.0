@@ -1,56 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 30 Jan 2017 15:38:49 +0200
-Subject: [Buildroot] [PATCH v3 1/1] git-crypt: new package
-In-Reply-To: <20170130132702.85804-1-francesconegri@gmail.com>
-References: <20170130105808.86147-1-francesconegri@gmail.com>
- <20170130132702.85804-1-francesconegri@gmail.com>
-Message-ID: <20170130133849.a4ybqgk4filn5o7h@tarshish>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 30 Jan 2017 10:44:32 -0300
+Subject: [Buildroot] [PATCH] libxkbcommon: bump to version 0.7.1
+Message-ID: <20170130134432.3800-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francesco,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libxkbcommon/libxkbcommon.hash | 4 ++--
+ package/libxkbcommon/libxkbcommon.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Looks good now except for one more comment below.
-
-On Mon, Jan 30, 2017 at 02:27:02PM +0100, Francesco Negri wrote:
-> Signed-off-by: Francesco Negri <francesconegri@gmail.com>
-
-[snip]
-
-> diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
-> new file mode 100644
-> index 000000000..3ef2bd26f
-> --- /dev/null
-> +++ b/package/git-crypt/git-crypt.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# git-crypt
-> +#
-> +################################################################################
-> +
-> +GIT_CRYPT_VERSION = 0.5.0
-> +GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
-> +GIT_CRYPT_DEPENDENCIES = git openssl
-> +GIT_CRYPT_LICENSE = GPLv3
-> +GIT_CRYPT_LICENSE_FILES = COPYING
-
-Source code files include the "or any later version" language, so the license 
-should be GPLv3+.
-
-A few files (parse_options.*, fhstream.*) are under the MIT license.
-
-The end result it:
-
-GIT_CRYPT_LICENSE = GPLv3+, MIT
-GIT_CRYPT_LICENSE_FILES = COPYING parse_options.hpp
-
-baruch
-
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index 2677099..525f9ff 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-November/031544.html
+-sha256	09351592312d67b438655f54da5b67853026662c4a57e6be4d225f04a9989798	libxkbcommon-0.7.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032725.html
++sha256	ba59305d2e19e47c27ea065c2e0df96ebac6a3c6e97e28ae5620073b6084e68b	libxkbcommon-0.7.1.tar.xz
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 3a0600b..c39a7c0 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXKBCOMMON_VERSION = 0.7.0
++LIBXKBCOMMON_VERSION = 0.7.1
+ LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.10.2
