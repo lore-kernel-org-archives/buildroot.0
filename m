@@ -1,72 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jan 2017 10:23:16 +0100
-Subject: [Buildroot] [PATCH 1/2] Add BR2_CMAKE_USE_NINJA_BACKEND option
-In-Reply-To: <901720b443e9bb90750a71c8797bbf0d@openmailbox.org>
-References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
- <ef982565-16ec-591b-aaed-d22e5a634851@gmail.com>
- <2260e784237284271ff7745986b82cc8@openmailbox.org>
- <e48cfb34-6f4c-1c7b-c737-c5a57eb464e0@gmail.com>
- <20170125142716.55e7d7b3@free-electrons.com>
- <901720b443e9bb90750a71c8797bbf0d@openmailbox.org>
-Message-ID: <20170130102316.2a02ed3a@free-electrons.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Mon, 30 Jan 2017 10:36:52 +0100
+Subject: [Buildroot] Relocatable internal toolchain
+In-Reply-To: <CAHXCMMJ1HL5EY=veTL02uA+LrEi1_4J4h008S2zhCEpgQjePig@mail.gmail.com>
+References: <57c96cfd-7d0c-c9de-04d2-2da8f5dd7f7c@grandegger.com>
+ <CAHXCMML2HKsOgxZRLpcMbCY8Lci6-N_s1+qVTRxCHqyvP+rzgg@mail.gmail.com>
+ <11e6deef-d790-33d8-b0ad-3477a51e369f@grandegger.com>
+ <a46d8432-bc43-5b0c-5a7a-a04e8993912e@grandegger.com>
+ <CAHXCMMJ1HL5EY=veTL02uA+LrEi1_4J4h008S2zhCEpgQjePig@mail.gmail.com>
+Message-ID: <418de570-9eff-444d-578e-792c7f03dae7@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Samuel,
 
-On Thu, 26 Jan 2017 18:27:36 +0100, C?dric Marie wrote:
-
-> Le 2017-01-25 02:27, Thomas Petazzoni a ?crit?:
-> > But then that's a bit annoying because we would have to explicitly
-> > set this option to "YES" on all packages that support the Ninja backend
-> > (most likely the majority).
-> > 
-> > I think it would make more sense to default the other way around, i.e
-> > default to YES, and set it to NO on the few packages that do not
-> > properly support the Ninja backend.
-> > 
-> > Or maybe better: do not introduce a per-package option for the moment,
-> > have only the global one, see in practice how many packages work /
-> > don't work and decide if we need a per-package option, and what default
-> > value it should have.  
+Am 30.01.2017 um 09:14 schrieb Samuel Martin:
+> Hi Wolfgang, all,
 > 
-> OK, but it seems that Romain has already noticed a problem with 
-> openpowerlink, so it is likely that this option will be necessary - and 
-> hopefully default to YES (supported).
-
-Indeed.
-
-> So, why did I want to introduce this option?
+> On Mon, Jan 30, 2017 at 8:31 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
+>>
+>> Buildroot's build system is quite new too me. At a first glance it's rather
+>> heavy stuff! So I first tried the patches you mentioned to see what I get.
+>> After some tweaking due to "file permissions" and "file in use" issues with
+>> patchelf, the build did succeed. But subsequent builds then required setting
+>> LD_LIBRARY_PATH for the host tools. Then I moved the buildroot output
+>> directory to a different location to see if relocation, as I understand it,
+>> works. My test cases are some out-of-tree QT5 examples:
+>>
+>>   $ cd <a-path>/examples
+>>   $ <path-to-buildroot-output>/host/usr/bin/qmake
+>>   Could not find qmake configuration file devices/linux-buildroot-g++.
+>>   Error processing project file: /home/wolf/junk/examples/examples.pro
+>>
+>> How do I set the new path to the toolchain. Likely I have missed something.
 > 
-> Because I'm not using Buildroot in one-shot mode. I'm developping in a 
-> Buildroot environment. So I often make foo-rebuild my package, and I'm 
-> interested in saving time for each rebuild.
+> I have no clue about this, but a quick google search gives me a
+> possible way to fix/workaround this [5] (with no warranty at all).
 
-OK, understood. But do you have numbers showing that "make foo-rebuild"
-is actually faster with Ninja ?
+See below...
 
-In the tests done by Romain, it's only saving 1-2 seconds on the
-total build of a package. So I would suspect that the savings on a
-partial build are even smaller.
+>> Apart from the "rpath", the path to the build directory is also in many text
+>> (configuration scripts, etc.) files. What did work for me was replacing the
+>> path to the build directory ("<buildroot-output>/host/usr") with the new
+>> location in all text files.
+>>
+>> Not sure if we speak/think about the same "relocation" behaviour.
+> 
+> Yes we are, I just forgot to give the main link to this task, which
+> details many things to fix/support for a complete relocatable SDK.
+> Note that the series I posted just dealt with the rpath point so far,
+> unstacking one point after the other.
 
-Even if your CMake packages are private, can you give us some numbers
-that show the time benefits of Ninja?
+OK, I see! The script I mentioned does:
 
-> I know this is not what Buildroot is designed for. (Yet, there are a few 
-> things that seem to be present for dev mode (rsync with OVERRIDE_SRCDIR 
-> for example), so this is not "pure one-shot" either.)
+  for FILE in $(grep -r  "${FINDSTR}"  . -l ) ; do
+	if [ ! -h ${FILE} ] && [ -n  "$(file ${FILE} | cut -d: -f2 | grep text )" ]
+		then
+		echo ${FILE}
+		sed -i s,"${FINDSTR}",${REPLACESTR},g ${FILE}
+	fi 	
+  done
 
-Well, if we do have features such as OVERRIDE_SRCDIR, it's precisely to
-make Buildroot usable/useful also during the development. So if there
-are things we can improve in this area, it's good to have.
+Such a script is mentioned in [6]. Relocation works fine (for me) also
+without fixing "rpath", and for the qmake examples above.
+
+> [5] http://doc.qt.io/qt-5/qmake-environment-reference.html
+> [6] http://elinux.org/Buildroot#Core_Buildroot_infrastructure
+
+It's getting clearer what has do be done...
 
 Thanks,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Wolfgang.
