@@ -1,42 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Jan 2017 13:45:10 -0300
-Subject: [Buildroot] [PATCH 9/9] gst-omx: bump to version 1.10.3
-In-Reply-To: <20170130164510.17184-1-gustavo@zacarias.com.ar>
-References: <20170130164510.17184-1-gustavo@zacarias.com.ar>
-Message-ID: <20170130164510.17184-9-gustavo@zacarias.com.ar>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 30 Jan 2017 12:00:14 -0500
+Subject: [Buildroot] [PATCH 1/1] sepolgen: bump to version 2.6
+Message-ID: <20170130170014.10201-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
- package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
+ package/sepolgen/sepolgen.hash | 2 +-
+ package/sepolgen/sepolgen.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index d52b61f..be39ef7 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
+diff --git a/package/sepolgen/sepolgen.hash b/package/sepolgen/sepolgen.hash
+index a377c66..b338a70 100644
+--- a/package/sepolgen/sepolgen.hash
++++ b/package/sepolgen/sepolgen.hash
 @@ -1,2 +1,2 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.2.tar.xz.sha256sum
--sha256 c069a9cf775c92f889ca8f3b2fc718e428cd0579b7b805851a960c850a7aa497  gst-omx-1.10.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.10.3.tar.xz.sha256sum
-+sha256 dd88451e175df7a6b6f619eff0f43a6078054ec7068787b19faf89af94cdb6e1  gst-omx-1.10.3.tar.xz
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index fcc7058..d55ef5f 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
-@@ -4,7 +4,7 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 8a1c6d3a78c9b6ad3555c74def555f65a62950bf21c111c585bfc382fec3a645  sepolgen-1.1.9.tar.gz
++sha256 6a327b1576d914e57ad796a541a7a9bcceefb14c445355559993de0fdb8e7a60  sepolgen-2.6.tar.gz
+diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
+index efecee7..137eaed 100644
+--- a/package/sepolgen/sepolgen.mk
++++ b/package/sepolgen/sepolgen.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--GST_OMX_VERSION = 1.10.2
-+GST_OMX_VERSION = 1.10.3
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+-SEPOLGEN_VERSION = 1.1.9
+-SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
++SEPOLGEN_VERSION = 2.6
++SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
+ SEPOLGEN_LICENSE = GPLv2
+ SEPOLGEN_LICENSE_FILES = COPYING
  
 -- 
-2.10.2
+2.9.3
