@@ -1,148 +1,107 @@
-From: Francesco Negri <francesconegri@gmail.com>
-Date: Mon, 30 Jan 2017 12:07:52 +0100
-Subject: [Buildroot] [PATCH v2 1/1] git-crypt: new package
-In-Reply-To: <20170130110236.4uabn3nvyz6r4vsm@tarshish>
-References: <20170130002853.76103-1-francesconegri@gmail.com>
- <20170130105808.86147-1-francesconegri@gmail.com>
- <20170130110236.4uabn3nvyz6r4vsm@tarshish>
-Message-ID: <CA+KB-ZZEz1JqXhPZuoCQnoWaC81304JCc-Ae1pf_7t+Lnc9H=A@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 30 Jan 2017 12:31:06 +0100
+Subject: [Buildroot] [PATCH 1/2] python-gunicorn: new package
+In-Reply-To: <20170130104053.16234-1-lionel@svkt.org>
+References: <20170130104053.16234-1-lionel@svkt.org>
+Message-ID: <CAGm1_ktd6NSCw9Hcc3P9ag3Nh0a3Qnoso3vgBGCWsaZDrL7ZLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Lionel,
 
-> You can't select BR2_USE_MMU; it's determined by the target architecture. You
-need to depend on BR2_USE_MMU.
-
-Sorry, my bad.
-
-> This is the default, so it can be dropped.
-
-K, will do.
-
-> You missed Thomas' comment.
-
-Apologies, I read Thomas' comment a few seconds after submitting v2.
-
-I tried using the command suggested by Thomas, but the build fails with:
-
-  undefined reference to `AES_set_encrypt_key'
-
-followed by a few other "undefined reference" errors.
-
-I'm not sure how to fix it.
-
-Thanks,
-Francesco
-
-On Mon, Jan 30, 2017 at 12:02 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Francesco,
+On Mon, Jan 30, 2017 at 11:40 AM, Lionel Flandrin <lionel@svkt.org> wrote:
+> Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for UNIX. It?s a
+> pre-fork worker model ported from Ruby?s Unicorn project. The Gunicorn
+> server is broadly compatible with various web frameworks, simply
+> implemented, light on server resource usage, and fairly speedy.
 >
-> On Mon, Jan 30, 2017 at 11:58:08AM +0100, Francesco Negri wrote:
->> Signed-off-by: Francesco Negri <francesconegri@gmail.com>
->> ---
->> Changes v1 -> v2:
->>   - added BR2_USE_MMU and BR2_PACKAGE_OPENSSL to Config.in
->>   - added dependency comment (hope it is correct!)
->>   - download from official website instead of GitHub
->>   - use hash from git-crypt mailing list
->> ---
->>  package/Config.in                |  1 +
->>  package/git-crypt/Config.in      | 15 +++++++++++++++
->>  package/git-crypt/git-crypt.hash |  2 ++
->>  package/git-crypt/git-crypt.mk   | 23 +++++++++++++++++++++++
->>  4 files changed, 41 insertions(+)
->>  create mode 100644 package/git-crypt/Config.in
->>  create mode 100644 package/git-crypt/git-crypt.hash
->>  create mode 100644 package/git-crypt/git-crypt.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 6a3a1a7c7..067ff3cc9 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -138,6 +138,7 @@ menu "Development tools"
->>       source "package/gawk/Config.in"
->>       source "package/gettext/Config.in"
->>       source "package/git/Config.in"
->> +     source "package/git-crypt/Config.in"
->>       source "package/gperf/Config.in"
->>       source "package/grep/Config.in"
->>       source "package/jq/Config.in"
->> diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
->> new file mode 100644
->> index 000000000..e7a67ae47
->> --- /dev/null
->> +++ b/package/git-crypt/Config.in
->> @@ -0,0 +1,15 @@
->> +config BR2_PACKAGE_GIT_CRYPT
->> +     bool "git-crypt"
->> +     depends on BR2_INSTALL_LIBSTDCPP
->> +     select BR2_PACKAGE_GIT
->> +     select BR2_USE_MMU # git
+> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+> ---
+>  package/Config.in                            |  1 +
+>  package/python-gunicorn/Config.in            | 15 +++++++++++++++
+>  package/python-gunicorn/python-gunicorn.hash |  3 +++
+>  package/python-gunicorn/python-gunicorn.mk   | 14 ++++++++++++++
+>  4 files changed, 33 insertions(+)
+>  create mode 100644 package/python-gunicorn/Config.in
+>  create mode 100644 package/python-gunicorn/python-gunicorn.hash
+>  create mode 100644 package/python-gunicorn/python-gunicorn.mk
 >
-> You can't select BR2_USE_MMU; it's determined by the target architecture. You
-> need to depend on BR2_USE_MMU.
->
->> +     select BR2_PACKAGE_OPENSSL
->> +     help
->> +       git-crypt enables transparent encryption and decryption of files in a
->> +       git repository.
->> +
->> +       https://www.agwa.name/projects/git-crypt/
->> +
->> +comment "git-crypt needs a toolchain w/ C++"
->> +     depends on !BR2_INSTALL_LIBSTDCPP
->> +     depends on BR2_USE_MMU
->> diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
->> new file mode 100644
->> index 000000000..8589f03f7
->> --- /dev/null
->> +++ b/package/git-crypt/git-crypt.hash
->> @@ -0,0 +1,2 @@
->> +# Hash from: https://lists.cloudmutt.com/pipermail/git-crypt-announce/2015-May/000003.html
->> +sha256 0a8f92c0a0a125bf768d0c054d947ca4e4b8d6556454b0e7e87fb907ee17cf06 git-crypt-0.5.0.tar.gz
->> diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
->> new file mode 100644
->> index 000000000..13f8f435b
->> --- /dev/null
->> +++ b/package/git-crypt/git-crypt.mk
->> @@ -0,0 +1,23 @@
->> +################################################################################
->> +#
->> +# git-crypt
->> +#
->> +################################################################################
->> +
->> +GIT_CRYPT_VERSION = 0.5.0
->> +
->> +GIT_CRYPT_SOURCE = git-crypt-$(GIT_CRYPT_VERSION).tar.gz
->
-> This is the default, so it can be dropped.
->
->> +GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
->> +GIT_CRYPT_DEPENDENCIES = git openssl
->> +GIT_CRYPT_LICENSE = GPLv3
->> +GIT_CRYPT_LICENSE_FILES = COPYING
->> +
->> +define GIT_CRYPT_BUILD_CMDS
->> +     $(MAKE) CXX="$(TARGET_CXX)" -C $(@D) all
->
-> You missed Thomas' comment.
->
->> +endef
->> +
->> +define GIT_CRYPT_INSTALL_TARGET_CMDS
->> +     $(INSTALL) -D -m 0755 $(@D)/git-crypt $(TARGET_DIR)/usr/bin/git-crypt
->> +endef
->> +
->> +$(eval $(generic-package))
->
-> baruch
->
+> diff --git a/package/Config.in b/package/Config.in
+> index 6a3a1a7c7..c68d84889 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -696,6 +696,7 @@ menu "External python modules"
+>         source "package/python-flup/Config.in"
+>         source "package/python-futures/Config.in"
+>         source "package/python-gobject/Config.in"
+> +       source "package/python-gunicorn/Config.in"
+>         source "package/python-html5lib/Config.in"
+>         source "package/python-httplib2/Config.in"
+>         source "package/python-humanize/Config.in"
+> diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
+> new file mode 100644
+> index 000000000..d675c03e0
+> --- /dev/null
+> +++ b/package/python-gunicorn/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_PYTHON_GUNICORN
+> +       bool "python-gunicorn"
+> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS
+
+is setuptools package really needed at runtime?
+
+> +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
+> +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+
+what module requires zlib? I see no related imports
+
+> +       select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
+> +       select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
+> +       help
+> +         Gunicorn ?Green Unicorn? is a Python WSGI HTTP Server for
+> +         UNIX. It?s a pre-fork worker model ported from Ruby?s
+> +         Unicorn project. The Gunicorn server is broadly compatible
+> +         with various web frameworks, simply implemented, light on
+> +         server resource usage, and fairly speedy.
+> +
+> +         http://gunicorn.org/
+> diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
+> new file mode 100644
+> index 000000000..a282bc995
+> --- /dev/null
+> +++ b/package/python-gunicorn/python-gunicorn.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi/gunicorn/json, sha256 locally computed
+> +md5    338e5e8a83ea0f0625f768dba4597530  gunicorn-19.6.0.tar.gz
+> +sha256 813f6916d18a4c8e90efde72f419308b357692f81333cb1125f80013d22fb618  gunicorn-19.6.0.tar.gz
+> diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
+> new file mode 100644
+> index 000000000..c33b753db
+> --- /dev/null
+> +++ b/package/python-gunicorn/python-gunicorn.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-gunicorn
+> +#
+> +################################################################################
+> +
+> +PYTHON_GUNICORN_VERSION = 19.6.0
+> +PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
+> +PYTHON_GUNICORN_SITE = https://pypi.python.org/packages/84/ce/7ea5396efad1cef682bbc4068e72a0276341d9d9d0f501da609fab9fcb80
+> +PYTHON_GUNICORN_SETUP_TYPE = setuptools
+> +PYTHON_GUNICORN_LICENSE = BSD-3c
+
+licence is MIT and not BSD-3c
+
+Yegor
+
+> +PYTHON_GUNICORN_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
 > --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> 2.11.0
+>
