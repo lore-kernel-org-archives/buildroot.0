@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Jan 2017 10:44:32 -0300
-Subject: [Buildroot] [PATCH] libxkbcommon: bump to version 0.7.1
-Message-ID: <20170130134432.3800-1-gustavo@zacarias.com.ar>
+Date: Mon, 30 Jan 2017 10:44:49 -0300
+Subject: [Buildroot] [PATCH] shared-mime-info: bump to version 1.8
+Message-ID: <20170130134449.3848-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libxkbcommon/libxkbcommon.hash | 4 ++--
- package/libxkbcommon/libxkbcommon.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/shared-mime-info/shared-mime-info.hash | 2 +-
+ package/shared-mime-info/shared-mime-info.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index 2677099..525f9ff 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
+diff --git a/package/shared-mime-info/shared-mime-info.hash b/package/shared-mime-info/shared-mime-info.hash
+index 2007e0e..cf6c8f3 100644
+--- a/package/shared-mime-info/shared-mime-info.hash
++++ b/package/shared-mime-info/shared-mime-info.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-November/031544.html
--sha256	09351592312d67b438655f54da5b67853026662c4a57e6be4d225f04a9989798	libxkbcommon-0.7.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032725.html
-+sha256	ba59305d2e19e47c27ea065c2e0df96ebac6a3c6e97e28ae5620073b6084e68b	libxkbcommon-0.7.1.tar.xz
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index 3a0600b..c39a7c0 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
+ # Locally calculated
+-sha256	eacc781cfebaa2074e43cf9521dc7ab4391ace8a4712902b2841669c83144d2e	shared-mime-info-1.7.tar.xz
++sha256	2af55ef1a0319805b74ab40d331a3962c905477d76c086f49e34dc96363589e9	shared-mime-info-1.8.tar.xz
+diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
+index e917ab5..64bb4d5 100644
+--- a/package/shared-mime-info/shared-mime-info.mk
++++ b/package/shared-mime-info/shared-mime-info.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXKBCOMMON_VERSION = 0.7.0
-+LIBXKBCOMMON_VERSION = 0.7.1
- LIBXKBCOMMON_SITE = http://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
+-SHARED_MIME_INFO_VERSION = 1.7
++SHARED_MIME_INFO_VERSION = 1.8
+ SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.xz
+ SHARED_MIME_INFO_SITE = https://people.freedesktop.org/~hadess
+ SHARED_MIME_INFO_INSTALL_STAGING = YES
 -- 
 2.10.2
