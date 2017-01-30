@@ -1,29 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jan 2017 21:15:56 +0100
-Subject: [Buildroot] [PATCH] lcms2: add upstream security fix for
-	CVE-2016-10165
-In-Reply-To: <20170130130512.13275-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 30 Jan 2017 14:05:12 +0100")
-References: <20170130130512.13275-1-peter@korsgaard.com>
-Message-ID: <878tps718j.fsf@dell.be.48ers.dk>
+Date: Mon, 30 Jan 2017 21:11:31 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-bad: bump to version 1.10.3
+Message-ID: <20170130201642.DF4737FFF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b370fa3896da2fa8b51b2dba43f034233402d475
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > An out-of-bounds read in cmstypes.c in Type_MLU_Read function was found,
- > leading to heap memory leak triggered by crafted ICC profile.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > https://bugzilla.redhat.com/show_bug.cgi?id=1367357
-
- > Add upstream patch to fix it.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+index 999a4e8..2d0f913 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.10.2.tar.xz.sha256sum
+-sha256 0795ca9303a99cc7e44dda0e6e18524de02b39892e4b68eaba488f7b9db53a3a  gst-plugins-bad-1.10.2.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.10.3.tar.xz.sha256sum
++sha256 24099351fb6984c9e7560de06e072ff2e33d0b2db38b8fcc7afefb536e5094e7  gst-plugins-bad-1.10.3.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 4d629f5..0628494 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_BAD_VERSION = 1.10.2
++GST1_PLUGINS_BAD_VERSION = 1.10.3
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+ GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
