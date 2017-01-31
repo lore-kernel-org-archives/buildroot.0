@@ -1,84 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 31 Jan 2017 19:37:40 +0100
-Subject: [Buildroot] [PATCH 06/16] package/x11r7/xdriver_xf86-video-glint:
-	bump version to 1.2.9
+Date: Tue, 31 Jan 2017 19:37:37 +0100
+Subject: [Buildroot] [PATCH 03/16] package/x11r7/xdriver_xf86-video-mga:
+	bump version to 1.6.5
 In-Reply-To: <20170131183750.15481-1-bernd.kuhls@t-online.de>
 References: <20170131183750.15481-1-bernd.kuhls@t-online.de>
-Message-ID: <20170131183750.15481-6-bernd.kuhls@t-online.de>
+Message-ID: <20170131183750.15481-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed 0001-mbstring.patch & 0002-abi23.patch, applied upstream.
+Removed 0002-abi23.patch, applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-glint/0001-mbstring.patch   | 35 ----------------------
- .../xdriver_xf86-video-glint/0002-abi23.patch      | 33 --------------------
- .../xdriver_xf86-video-glint.hash                  |  4 +--
- .../xdriver_xf86-video-glint.mk                    |  3 +-
- 4 files changed, 3 insertions(+), 72 deletions(-)
- delete mode 100644 package/x11r7/xdriver_xf86-video-glint/0001-mbstring.patch
- delete mode 100644 package/x11r7/xdriver_xf86-video-glint/0002-abi23.patch
+ .../x11r7/xdriver_xf86-video-mga/0002-abi23.patch  | 33 ----------------------
+ .../xdriver_xf86-video-mga.hash                    |  4 +--
+ .../xdriver_xf86-video-mga.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 36 deletions(-)
+ delete mode 100644 package/x11r7/xdriver_xf86-video-mga/0002-abi23.patch
 
-diff --git a/package/x11r7/xdriver_xf86-video-glint/0001-mbstring.patch b/package/x11r7/xdriver_xf86-video-glint/0001-mbstring.patch
+diff --git a/package/x11r7/xdriver_xf86-video-mga/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-mga/0002-abi23.patch
 deleted file mode 100644
-index 635600abb..000000000
---- a/package/x11r7/xdriver_xf86-video-glint/0001-mbstring.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 073d5b0b392781bf4a6aa7f9e2dbe2ae51caed2c Mon Sep 17 00:00:00 2001
--From: Adam Jackson <ajax@redhat.com>
--Date: Tue, 25 Sep 2012 12:54:38 +0000
--Subject: Remove mibstore.h
--
--Signed-off-by: Adam Jackson <ajax@redhat.com>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-glint/commit/?id=073d5b0b392781bf4a6aa7f9e2dbe2ae51caed2c
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/glint_driver.c b/src/glint_driver.c
--index b6d20a9..aa78516 100644
----- a/src/glint_driver.c
--+++ b/src/glint_driver.c
--@@ -52,8 +52,6 @@
-- #include "compiler.h"
-- #include "mipointer.h"
-- 
---#include "mibstore.h"
---
-- #include "pm3_regs.h"
-- #include "glint_regs.h"
-- #include "IBM.h"
--@@ -2904,7 +2902,6 @@ GLINTScreenInit(SCREEN_INIT_ARGS_DECL)
--         }
--     }
-- 
---    miInitializeBackingStore(pScreen);
--     xf86SetBackingStore(pScreen);
--     xf86SetSilkenMouse(pScreen);
-- 
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-glint/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-glint/0002-abi23.patch
-deleted file mode 100644
-index 1d8f7f22c..000000000
---- a/package/x11r7/xdriver_xf86-video-glint/0002-abi23.patch
+index b2b691789..000000000
+--- a/package/x11r7/xdriver_xf86-video-mga/0002-abi23.patch
 +++ /dev/null
 @@ -1,33 +0,0 @@
--From 2eb4d03d2280deec4d6f1b06aaa16477a641af9a Mon Sep 17 00:00:00 2001
+-From df094bfffe4ef097bfd9a569f2d2e35649c1a3c7 Mon Sep 17 00:00:00 2001
 -From: Adam Jackson <ajax@redhat.com>
 -Date: Tue, 19 Jul 2016 10:03:56 -0400
 -Subject: Adapt Block/WakeupHandler signature for ABI 23
 -
 -Signed-off-by: Adam Jackson <ajax@redhat.com>
 ----
--Downloaded from:
--https://cgit.freedesktop.org/xorg/driver/xf86-video-glint/commit/?id=2eb4d03d2280deec4d6f1b06aaa16477a641af9a
+-Downloaded from
+-https://cgit.freedesktop.org/xorg/driver/xf86-video-mga/commit/?id=df094bfffe4ef097bfd9a569f2d2e35649c1a3c7
 -
 -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
@@ -103,32 +60,27 @@ index 1d8f7f22c..000000000
 --- 
 -cgit v0.10.2
 -
-diff --git a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.hash b/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.hash
-index ad3fbaa76..f4e42bf4c 100644
---- a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.hash
-+++ b/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.hash
+diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
+index 081577d4a..0187e6fbb 100644
+--- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
++++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2012-July/002011.html
--sha256	657f883bb3a4e4278399eba73840862c3642706ae8b0a4798ec97a31b3524221	xf86-video-glint-1.2.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-January/002759.html
-+sha256 852833ab2ea9ce519195dfd061a6c7aa5945a093cdc19546d1e9e69df7d577d2  xf86-video-glint-1.2.9.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk b/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
-index 76c3da1ca..52bc567e5 100644
---- a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
-+++ b/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
-@@ -4,12 +4,11 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-February/002533.html
+-sha256	48c6690b6751c76f53de64f8dbeaa9d6c62dbcfe890c768fd87167951247d44f	xf86-video-mga-1.6.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-January/002765.html
++sha256 b663cd8e6364f7c4e2637b9fcab9861d0e3971518c73b00d213f6545a1289422  xf86-video-mga-1.6.5.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+index 771ec18ce..065a68ea6 100644
+--- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
++++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_GLINT_VERSION = 1.2.8
-+XDRIVER_XF86_VIDEO_GLINT_VERSION = 1.2.9
- XDRIVER_XF86_VIDEO_GLINT_SOURCE = xf86-video-glint-$(XDRIVER_XF86_VIDEO_GLINT_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_GLINT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_GLINT_LICENSE = MIT
- XDRIVER_XF86_VIDEO_GLINT_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_GLINT_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_GLINT_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xf86driproto xproto_xproto
- 
- $(eval $(autotools-package))
+-XDRIVER_XF86_VIDEO_MGA_VERSION = 1.6.4
++XDRIVER_XF86_VIDEO_MGA_VERSION = 1.6.5
+ XDRIVER_XF86_VIDEO_MGA_SOURCE = xf86-video-mga-$(XDRIVER_XF86_VIDEO_MGA_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_MGA_SITE = http://xorg.freedesktop.org/archive/individual/driver
+ XDRIVER_XF86_VIDEO_MGA_LICENSE = MIT
 -- 
 2.11.0
