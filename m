@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 31 Jan 2017 17:03:39 +0100
-Subject: [Buildroot] [PATCH 2/6] toolchain helpers: clarify rsync excludes
-	in copy_toolchain_sysroot
+Date: Tue, 31 Jan 2017 17:03:38 +0100
+Subject: [Buildroot] [PATCH 1/6] toolchain-external: remove stale references
+	to (ARCH_)LIBC_A_LOCATION
 In-Reply-To: <20170131160343.27144-1-patrickdepinguin@gmail.com>
 References: <20170131160343.27144-1-patrickdepinguin@gmail.com>
-Message-ID: <20170131160343.27144-3-patrickdepinguin@gmail.com>
+Message-ID: <20170131160343.27144-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +13,65 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The copy_toolchain_sysroot helper features a complex rsync loop that copies
-various directories from the extracted toolchain to the staging directory.
-The complexity mainly stems from the fact that we support multilib toolchain
-tarballs but only copy one of the multilib variants into staging.
-
-Increase understandability of this logic by explicitly restricting the
-rsync excludes to the iteration of the for loop they are relevant for.
-Additionally, update the function comment.
-
-Note: all attempts to reduce duplication between both rsync while keeping
-things nice and readable failed. One has to be extremely careful regarding
-line continuation, indentation, and single vs double quoting. In the end, a
-split up rsync seemed most clean.
+The variables LIBC_A_LOCATION and ARCH_LIBC_A_LOCATION were killed in commit
+646bd86908f7f995cdc2b95e0be381d97600f905 but the corresponding descriptions
+were never removed.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- toolchain/helpers.mk | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+ .../toolchain-external/pkg-toolchain-external.mk   | 30 ++++++++--------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 72e7292..06dc197 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -39,11 +39,16 @@ copy_toolchain_lib_root = \
- # dir. The operation of this function is rendered a little bit
- # complicated by the support for multilib toolchains.
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index e0a8b41..6658875 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -347,35 +347,27 @@ endef
  #
--# We start by copying etc, lib, sbin and usr from the sysroot of the
--# selected architecture variant (as pointed by ARCH_SYSROOT_DIR). This
--# allows to import into the staging directory the C library and
--# companion libraries for the correct architecture variant. We
--# explictly only copy etc, lib, sbin and usr since other directories
-+# We start by copying etc, 'lib', sbin, usr and usr/'lib' from the
-+# sysroot of the selected architecture variant (as pointed to by
-+# ARCH_SYSROOT_DIR). This allows to import into the staging directory
-+# the C library and companion libraries for the correct architecture
-+# variant. 'lib' may not be literally 'lib' but could be something else,
-+# e.g. lib32-fp (as determined by ARCH_LIB_DIR) and we only want to copy
-+# that lib directory and no other. When copying usr, we therefore need
-+# to be extra careful not to include usr/lib* but we _do_ want to
-+# include usr/libexec.
-+# We are selective in the directories we copy since other directories
- # might exist for other architecture variants (on Codesourcery
- # toolchain, the sysroot for the default architecture variant contains
- # the armv4t and thumb2 subdirectories, which are the sysroot for the
-@@ -90,9 +95,14 @@ copy_toolchain_sysroot = \
- 	SUPPORT_LIB_DIR="$(strip $5)" ; \
- 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
- 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
--			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
--				--include '/libexec*/' --exclude '/lib*/' \
--				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
-+			if [ "$$i" = "usr" ]; then \
-+				rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale'\
-+					--include '/libexec*/' --exclude '/lib*/' \
-+					$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
-+			else \
-+				rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale'\
-+					$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
-+			fi ; \
- 		fi ; \
- 	done ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+ # Variables are defined as follows:
+ #
+-#  LIBC_A_LOCATION:     location of the libc.a file in the default
+-#                       multilib variant (allows to find the main
+-#                       sysroot directory)
+-#                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/usr/lib/libc.a
+-#
+-#  SYSROOT_DIR:         the main sysroot directory, deduced from
+-#                       LIBC_A_LOCATION by removing the
+-#                       usr/lib[32|64]/libc.a part of the path.
++# SYSROOT_DIR:          the main sysroot directory, deduced from the location of
++#                       the libc.a file in the default multilib variant, by
++#                       removing the usr/lib[32|64]/libc.a part of the path.
+ #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/
+ #
+-# ARCH_LIBC_A_LOCATION: location of the libc.a file in the selected
+-#                       multilib variant (taking into account the
+-#                       CFLAGS). Allows to find the sysroot of the
+-#                       selected multilib variant.
+-#                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/mips16/soft-float/el/usr/lib/libc.a
+-#
+ # ARCH_SYSROOT_DIR:     the sysroot of the selected multilib variant,
+-#                       deduced from ARCH_LIBC_A_LOCATION by removing
+-#                       usr/lib[32|64]/libc.a at the end of the path.
++#                       deduced from the location of the libc.a file in the
++#                       selected multilib variant (taking into account the
++#                       CFLAGS), by removing usr/lib[32|64]/libc.a at the end
++#                       of the path.
+ #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/mips16/soft-float/el/
+ #
+ # ARCH_LIB_DIR:         'lib', 'lib32' or 'lib64' depending on where libraries
+-#                       are stored. Deduced from ARCH_LIBC_A_LOCATION by
+-#                       looking at usr/lib??/libc.a.
++#                       are stored. Deduced from the location of the libc.a file
++#                       in the selected multilib variant, by looking at
++#                       usr/lib??/libc.a.
+ #                       Ex: lib
+ #
+ # ARCH_SUBDIR:          the relative location of the sysroot of the selected
+ #                       multilib variant compared to the main sysroot.
+-#			Ex: mips16/soft-float/el
++#                       Ex: mips16/soft-float/el
+ #
+ # SUPPORT_LIB_DIR:      some toolchains, such as recent Linaro toolchains,
+ #                       store GCC support libraries (libstdc++,
 -- 
 2.10.2
