@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 31 Jan 2017 19:37:50 +0100
-Subject: [Buildroot] [PATCH 16/16] package/xutil_util-macros: bump version
-	to 1.19.1
+Date: Tue, 31 Jan 2017 19:37:46 +0100
+Subject: [Buildroot] [PATCH 12/16] package/x11r7/xlib_libXi: bump version to
+	1.7.9
 In-Reply-To: <20170131183750.15481-1-bernd.kuhls@t-online.de>
 References: <20170131183750.15481-1-bernd.kuhls@t-online.de>
-Message-ID: <20170131183750.15481-16-bernd.kuhls@t-online.de>
+Message-ID: <20170131183750.15481-12-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xutil_util-macros/xutil_util-macros.hash | 4 ++--
- package/xutil_util-macros/xutil_util-macros.mk   | 2 +-
+ package/x11r7/xlib_libXi/xlib_libXi.hash | 4 ++--
+ package/x11r7/xlib_libXi/xlib_libXi.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xutil_util-macros/xutil_util-macros.hash b/package/xutil_util-macros/xutil_util-macros.hash
-index bcb6c585d..0f0509a13 100644
---- a/package/xutil_util-macros/xutil_util-macros.hash
-+++ b/package/xutil_util-macros/xutil_util-macros.hash
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.hash b/package/x11r7/xlib_libXi/xlib_libXi.hash
+index e7a4032fb..9f2c3e30b 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.hash
++++ b/package/x11r7/xlib_libXi/xlib_libXi.hash
 @@ -1,2 +1,2 @@
--# From http://article.gmane.org/gmane.comp.freedesktop.xorg.announce/2141
--sha256	2835b11829ee634e19fa56517b4cfc52ef39acea0cd82e15f68096e27cbed0ba	util-macros-1.19.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-January/002773.html
-+sha256 18d459400558f4ea99527bc9786c033965a3db45bf4c6a32eefdc07aa9e306a6  util-macros-1.19.1.tar.bz2
-diff --git a/package/xutil_util-macros/xutil_util-macros.mk b/package/xutil_util-macros/xutil_util-macros.mk
-index 1451a0698..d01b3e0d2 100644
---- a/package/xutil_util-macros/xutil_util-macros.mk
-+++ b/package/xutil_util-macros/xutil_util-macros.mk
+-# From https://lists.x.org/archives/xorg-announce/2016-October/002733.html
+-sha256 d8f2fa8d53141c41ff521627df9b2fa9c05f6f142fd9881152bab36549ac27bb  libXi-1.7.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-January/002768.html
++sha256 c2e6b8ff84f9448386c1b5510a5cf5a16d788f76db018194dacdc200180faf45  libXi-1.7.9.tar.bz2
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
+index de680ea05..d593c1e95 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.mk
++++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XUTIL_UTIL_MACROS_VERSION = 1.19.0
-+XUTIL_UTIL_MACROS_VERSION = 1.19.1
- XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.bz2
- XUTIL_UTIL_MACROS_SITE = http://xorg.freedesktop.org/releases/individual/util
- XUTIL_UTIL_MACROS_LICENSE = MIT
+-XLIB_LIBXI_VERSION = 1.7.8
++XLIB_LIBXI_VERSION = 1.7.9
+ XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
+ XLIB_LIBXI_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXI_LICENSE = MIT
 -- 
 2.11.0
