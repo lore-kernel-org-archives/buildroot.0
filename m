@@ -1,8 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 31 Jan 2017 17:03:37 +0100
-Subject: [Buildroot] [PATCH 0/6] toolchain-external: copy_toolchain_sysroot
-	improvements
-Message-ID: <20170131160343.27144-1-patrickdepinguin@gmail.com>
+Date: Tue, 31 Jan 2017 17:03:39 +0100
+Subject: [Buildroot] [PATCH 2/6] toolchain helpers: clarify rsync excludes
+	in copy_toolchain_sysroot
+In-Reply-To: <20170131160343.27144-1-patrickdepinguin@gmail.com>
+References: <20170131160343.27144-1-patrickdepinguin@gmail.com>
+Message-ID: <20170131160343.27144-3-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,34 +13,68 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Hi,
+The copy_toolchain_sysroot helper features a complex rsync loop that copies
+various directories from the extracted toolchain to the staging directory.
+The complexity mainly stems from the fact that we support multilib toolchain
+tarballs but only copy one of the multilib variants into staging.
 
-This toolchain patch series started out to fix the handling of the Cavium Octeon
-2 toolchain (last patch) but along the way I fixed a few other things.
-Details are found in the commit messages of these patches.
+Increase understandability of this logic by explicitly restricting the
+rsync excludes to the iteration of the for loop they are relevant for.
+Additionally, update the function comment.
 
-I tested a number of external toolchains and arches available in Buildroot, as
-well as the Octeon SDK toolchain.  I think I understand the situation
-sufficiently well to get some confidence, but this is the type of
-change that is difficult to get 100% certainty about.
+Note: all attempts to reduce duplication between both rsync while keeping
+things nice and readable failed. One has to be extremely careful regarding
+line continuation, indentation, and single vs double quoting. In the end, a
+split up rsync seemed most clean.
 
-Best regards,
-Thomas
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ toolchain/helpers.mk | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-Thomas De Schampheleire (6):
-  toolchain-external: remove stale references to (ARCH_)LIBC_A_LOCATION
-  toolchain helpers: clarify rsync excludes in copy_toolchain_sysroot
-  toolchain-external: handle ld.so fixups centrally
-  toolchain helpers: introduce function relpath_prefix
-  toolchain-external: cover multilib toolchains with lib/<variant>
-    layout
-  DEVELOPERS: update Thomas De Schampheleire
-
- DEVELOPERS                                         |  9 ++--
- toolchain/helpers.mk                               | 63 +++++++++++++++++-----
- .../toolchain-external/pkg-toolchain-external.mk   | 40 +++++++-------
- .../toolchain-external-codesourcery-aarch64.mk     | 10 ----
- 4 files changed, 73 insertions(+), 49 deletions(-)
-
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 72e7292..06dc197 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -39,11 +39,16 @@ copy_toolchain_lib_root = \
+ # dir. The operation of this function is rendered a little bit
+ # complicated by the support for multilib toolchains.
+ #
+-# We start by copying etc, lib, sbin and usr from the sysroot of the
+-# selected architecture variant (as pointed by ARCH_SYSROOT_DIR). This
+-# allows to import into the staging directory the C library and
+-# companion libraries for the correct architecture variant. We
+-# explictly only copy etc, lib, sbin and usr since other directories
++# We start by copying etc, 'lib', sbin, usr and usr/'lib' from the
++# sysroot of the selected architecture variant (as pointed to by
++# ARCH_SYSROOT_DIR). This allows to import into the staging directory
++# the C library and companion libraries for the correct architecture
++# variant. 'lib' may not be literally 'lib' but could be something else,
++# e.g. lib32-fp (as determined by ARCH_LIB_DIR) and we only want to copy
++# that lib directory and no other. When copying usr, we therefore need
++# to be extra careful not to include usr/lib* but we _do_ want to
++# include usr/libexec.
++# We are selective in the directories we copy since other directories
+ # might exist for other architecture variants (on Codesourcery
+ # toolchain, the sysroot for the default architecture variant contains
+ # the armv4t and thumb2 subdirectories, which are the sysroot for the
+@@ -90,9 +95,14 @@ copy_toolchain_sysroot = \
+ 	SUPPORT_LIB_DIR="$(strip $5)" ; \
+ 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
+ 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+-			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
+-				--include '/libexec*/' --exclude '/lib*/' \
+-				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
++			if [ "$$i" = "usr" ]; then \
++				rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale'\
++					--include '/libexec*/' --exclude '/lib*/' \
++					$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
++			else \
++				rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale'\
++					$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
++			fi ; \
+ 		fi ; \
+ 	done ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
 -- 
 2.10.2
