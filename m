@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 Jan 2017 23:44:55 +0100
-Subject: [Buildroot] [PATCH] cjson: bump version to v1.2.1
-In-Reply-To: <20170131160541.51329-1-Vincent.Riera@imgtec.com> (Vicente
- Olivert Riera's message of "Tue, 31 Jan 2017 16:05:41 +0000")
-References: <20170131160541.51329-1-Vincent.Riera@imgtec.com>
-Message-ID: <877f5argrc.fsf@dell.be.48ers.dk>
+Date: Tue, 31 Jan 2017 23:50:53 +0100
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.4-6
+In-Reply-To: <20170131161731.27870-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Tue, 31 Jan 2017 16:17:31 +0000")
+References: <20170131161731.27870-1-Vincent.Riera@imgtec.com>
+Message-ID: <8737fyrghe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +15,11 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Committed after extending the commit message to make it clear that this
-is a security bump fixing:
+Same as for cjson, this fixes a (potential) security issue:
 
-https://github.com/DaveGamble/cJSON/issues/96
+https://github.com/ImageMagick/ImageMagick/issues/362
 
-Please mention such things in your commit message in the future, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
