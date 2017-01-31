@@ -1,261 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 Jan 2017 23:37:27 +0100
-Subject: [Buildroot] [git commit] log4cxx: fix build issue with gcc6+ on
-	architectures with signed char
-Message-ID: <20170131225116.859A8820FF@busybox.osuosl.org>
+Date: Tue, 31 Jan 2017 23:48:51 +0100
+Subject: [Buildroot] [git commit] imagemagick: security bump to version
+	7.0.4-6
+Message-ID: <20170131225116.A890280DB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=326228b80fca35e8ca07196692ed753fff69eb18
+commit: https://git.buildroot.net/buildroot/commit/?id=e5f505efac725b7e12b22f1341ce0523df73a79f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/029/02946a75f478b1304896e7a0794bb6aa527e45c0/
-http://autobuild.buildroot.net/results/14b/14b9cab834540a01c9c838ea579dc73e383f754a/
-http://autobuild.buildroot.net/results/de8/de8f2b132084a10fbe8efb38c7b31adca4562852/
+Fixes an use of uninitialized data issue in MAT image format that may have
+security impact:
 
-The source code contains a number of character constants > 127, which causes
-build errors with gcc6+ on architectures where char is signed:
+https://github.com/ImageMagick/ImageMagick/issues/362
 
-locationinfo.cpp:163:21: error: narrowing conversion of '237' from 'int' to 'char' inside { } [-Wnarrowing]
-
-Fix it by adding an upstream patch adding explicit static_cast around these.
-Also add a local patch to fix the test suite as this is not fixed upstream.
-
+[Peter: extend commit message, mention (potential) security impact]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ch-for-LOGCXX-400-LOGCXX-404-LOGCXX-402-L.patch | 180 +++++++++++++++++++++
- ....cpp-fix-narrowing-conversion-compile-err.patch |  36 +++++
- 2 files changed, 216 insertions(+)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/log4cxx/0004-Applied-patch-for-LOGCXX-400-LOGCXX-404-LOGCXX-402-L.patch b/package/log4cxx/0004-Applied-patch-for-LOGCXX-400-LOGCXX-404-LOGCXX-402-L.patch
-new file mode 100644
-index 0000000..a0c9b3f
---- /dev/null
-+++ b/package/log4cxx/0004-Applied-patch-for-LOGCXX-400-LOGCXX-404-LOGCXX-402-L.patch
-@@ -0,0 +1,180 @@
-+From 5b75dfa78b2c5e95296cee0201bc045ef7264ed0 Mon Sep 17 00:00:00 2001
-+From: Christian Grobmeier <grobmeier@apache.org>
-+Date: Tue, 27 Nov 2012 09:39:18 +0000
-+Subject: [PATCH] Applied patch for LOGCXX-400 LOGCXX-404 LOGCXX-402 LOGCXX-403
-+ LOGCXX-401 thanks to Andrew Lazarus
-+
-+git-svn-id: https://svn.apache.org/repos/asf/logging/log4cxx/trunk at 1414037 13f79535-47bb-0310-9956-ffa450edef68
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ pom.xml                                             | 2 ++
-+ src/main/cpp/locationinfo.cpp                       | 4 ++--
-+ src/main/cpp/loggingevent.cpp                       | 2 +-
-+ src/main/cpp/ndc.cpp                                | 4 ++--
-+ src/main/cpp/objectoutputstream.cpp                 | 4 ++--
-+ src/main/cpp/transcoder.cpp                         | 2 +-
-+ src/main/include/log4cxx/helpers/object.h           | 6 +++---
-+ src/main/include/log4cxx/helpers/simpledateformat.h | 4 +++-
-+ src/main/include/log4cxx/logstring.h                | 2 +-
-+ 9 files changed, 17 insertions(+), 13 deletions(-)
-+
-+diff --git a/pom.xml b/pom.xml
-+index 3504c8a3..255907bd 100644
-+--- a/pom.xml
-++++ b/pom.xml
-+@@ -55,6 +55,7 @@
-+ </organization>
-+ <build>
-+     <plugins>
-++    <!--
-+       <plugin>
-+         <artifactId>maven-antrun-plugin</artifactId>
-+         <executions>
-+@@ -166,6 +167,7 @@
-+           </dependency>
-+         </dependencies>
-+       </plugin>  
-++      -->
-+           <plugin>
-+          <artifactId>maven-assembly-plugin</artifactId>
-+          <configuration>
-+diff --git a/src/main/cpp/locationinfo.cpp b/src/main/cpp/locationinfo.cpp
-+index e76ea29c..1daa3a5f 100644
-+--- a/src/main/cpp/locationinfo.cpp
-++++ b/src/main/cpp/locationinfo.cpp
-+@@ -153,8 +153,8 @@ void LocationInfo::write(ObjectOutputStream& os, Pool& p) const {
-+          0x61, 0x70, 0x61, 0x63, 0x68, 0x65, 0x2E, 0x6C, 
-+          0x6F, 0x67, 0x34, 0x6A, 0x2E, 0x73, 0x70, 0x69, 
-+          0x2E, 0x4C, 0x6F, 0x63, 0x61, 0x74, 0x69, 0x6F, 
-+-         0x6E, 0x49, 0x6E, 0x66, 0x6F, 0xED, 0x99, 0xBB, 
-+-         0xE1, 0x4A, 0x91, 0xA5, 0x7C, 0x02, 0x00, 0x01, 
-++         0x6E, 0x49, 0x6E, 0x66, 0x6F, static_cast<char>(0xED), static_cast<char>(0x99), static_cast<char>(0xBB), 
-++         static_cast<char>(0xE1), 0x4A, static_cast<char>(0x91), static_cast<char>(0xA5), 0x7C, 0x02, 0x00, 0x01, 
-+          0x4C, 0x00, 0x08, 0x66, 0x75, 0x6C, 0x6C, 0x49, 
-+          0x6E, 0x66, 0x6F, 
-+             0x74, 0x00, 0x12, 0x4C, 0x6A, 
-+diff --git a/src/main/cpp/loggingevent.cpp b/src/main/cpp/loggingevent.cpp
-+index 1c0d4be7..edbf40b6 100644
-+--- a/src/main/cpp/loggingevent.cpp
-++++ b/src/main/cpp/loggingevent.cpp
-+@@ -242,7 +242,7 @@ void LoggingEvent::writeProlog(ObjectOutputStream& os, Pool& p)  {
-+         0x68, 0x65, 0x2E, 0x6C, 0x6F, 0x67, 0x34, 0x6A, 
-+         0x2E, 0x73, 0x70, 0x69, 0x2E, 0x4C, 0x6F, 0x67, 
-+         0x67, 0x69, 0x6E, 0x67, 0x45, 0x76, 0x65, 0x6E, 
-+-        0x74, 0xF3, 0xF2, 0xB9, 0x23, 0x74, 0x0B, 0xB5, 
-++        0x74, static_cast<char>(0xF3), static_cast<char>(0xF2), static_cast<char>(0xB9), 0x23, 0x74, 0x0B, static_cast<char>(0xB5), 
-+         0x3F, 0x03, 0x00, 0x0A, 0x5A, 0x00, 0x15, 0x6D, 
-+         0x64, 0x63, 0x43, 0x6F, 0x70, 0x79, 0x4C, 0x6F, 
-+         0x6F, 0x6B, 0x75, 0x70, 0x52, 0x65, 0x71, 0x75, 
-+diff --git a/src/main/cpp/ndc.cpp b/src/main/cpp/ndc.cpp
-+index 4ab612dd..89788c16 100644
-+--- a/src/main/cpp/ndc.cpp
-++++ b/src/main/cpp/ndc.cpp
-+@@ -309,7 +309,7 @@ bool NDC::pop(CFStringRef& dst)
-+         Stack& stack = data->getStack();
-+         if(!stack.empty())
-+         {
-+-                dst = Transcoder::encode(stack.top().message);
-++                dst = Transcoder::encode(getMessage(stack.top()));
-+                 stack.pop();
-+                 data->recycle();
-+                 return true;
-+@@ -326,7 +326,7 @@ bool NDC::peek(CFStringRef& dst)
-+         Stack& stack = data->getStack();
-+         if(!stack.empty())
-+         {
-+-                dst = Transcoder::encode(stack.top().message);
-++                dst = Transcoder::encode(getMessage(stack.top()));
-+                 return true;
-+         }
-+         data->recycle();
-+diff --git a/src/main/cpp/objectoutputstream.cpp b/src/main/cpp/objectoutputstream.cpp
-+index 7cd696b8..9567a856 100644
-+--- a/src/main/cpp/objectoutputstream.cpp
-++++ b/src/main/cpp/objectoutputstream.cpp
-+@@ -36,7 +36,7 @@ ObjectOutputStream::ObjectOutputStream(OutputStreamPtr outputStream, Pool& p)
-+        objectHandle(0x7E0000),
-+        classDescriptions(new ClassDescriptionMap())
-+ {
-+-   char start[] = { 0xAC, 0xED, 0x00, 0x05 };
-++   char start[] = { static_cast<char>(0xAC), static_cast<char>(0xED), 0x00, 0x05 };
-+    ByteBuffer buf(start, sizeof(start));
-+    os->write(buf, p);
-+ }
-+@@ -85,7 +85,7 @@ void ObjectOutputStream::writeObject(const MDC::Map& val, Pool& p) {
-+         0x72, 0x00, 0x13, 0x6A, 0x61, 0x76, 0x61, 
-+         0x2E, 0x75, 0x74, 0x69, 0x6C, 0x2E, 0x48, 0x61, 
-+         0x73, 0x68, 0x74, 0x61, 0x62, 0x6C, 0x65, 0x13, 
-+-        0xBB, 0x0F, 0x25, 0x21, 0x4A, 0xE4, 0xB8, 0x03, 
-++        static_cast<char>(0xBB), 0x0F, 0x25, 0x21, 0x4A, static_cast<char>(0xE4), static_cast<char>(0xB8), 0x03,
-+         0x00, 0x02, 0x46, 0x00, 0x0A, 0x6C, 0x6F, 0x61, 
-+         0x64, 0x46, 0x61, 0x63, 0x74, 0x6F, 0x72, 0x49, 
-+         0x00, 0x09, 0x74, 0x68, 0x72, 0x65, 0x73, 0x68, 
-+diff --git a/src/main/cpp/transcoder.cpp b/src/main/cpp/transcoder.cpp
-+index d572ffce..32bed844 100644
-+--- a/src/main/cpp/transcoder.cpp
-++++ b/src/main/cpp/transcoder.cpp
-+@@ -356,7 +356,7 @@ static void encodeUTF16(unsigned int sv, String& dst) {
-+         unsigned char u = (unsigned char) (sv >> 16);
-+         unsigned char w = (unsigned char) (u - 1);
-+         unsigned short hs = (0xD800 + ((w & 0xF) << 6) + ((sv & 0xFFFF) >> 10));
-+-        unsigned short ls = (0xDC00 + (sv && 0x3FF));
-++        unsigned short ls = (0xDC00 + (sv & 0x3FF));
-+         dst.append(1, hs);
-+         dst.append(1, ls);
-+     }
-+diff --git a/src/main/include/log4cxx/helpers/object.h b/src/main/include/log4cxx/helpers/object.h
-+index 92d44c55..b9386c47 100644
-+--- a/src/main/include/log4cxx/helpers/object.h
-++++ b/src/main/include/log4cxx/helpers/object.h
-+@@ -61,8 +61,8 @@ static const helpers::Class& getStaticClass();\
-+ static const log4cxx::helpers::ClassRegistration&  registerClass();
-+ 
-+ #define IMPLEMENT_LOG4CXX_OBJECT(object)\
-+-const log4cxx::helpers::Class& object::getClass() const { return getStaticClass(); }\
-+-const log4cxx::helpers::Class& object::getStaticClass() { \
-++const ::log4cxx::helpers::Class& object::getClass() const { return getStaticClass(); }\
-++const ::log4cxx::helpers::Class& object::getStaticClass() { \
-+    static Clazz##object theClass;                         \
-+    return theClass;                                       \
-+ }                                                                      \
-+@@ -71,7 +71,7 @@ const log4cxx::helpers::ClassRegistration& object::registerClass() {   \
-+     return classReg; \
-+ }\
-+ namespace log4cxx { namespace classes { \
-+-const log4cxx::helpers::ClassRegistration& object##Registration = object::registerClass(); \
-++const ::log4cxx::helpers::ClassRegistration& object##Registration = object::registerClass(); \
-+ } }
-+ 
-+ 
-+diff --git a/src/main/include/log4cxx/helpers/simpledateformat.h b/src/main/include/log4cxx/helpers/simpledateformat.h
-+index 9c27f685..76fb784c 100644
-+--- a/src/main/include/log4cxx/helpers/simpledateformat.h
-++++ b/src/main/include/log4cxx/helpers/simpledateformat.h
-+@@ -29,7 +29,9 @@
-+ #include <vector>
-+ #include <time.h>
-+ 
-+-namespace std { class locale; }
-++#include <locale>
-++
-++using std::locale;
-+ 
-+ namespace log4cxx
-+ {
-+diff --git a/src/main/include/log4cxx/logstring.h b/src/main/include/log4cxx/logstring.h
-+index 3bbcdf2d..19e8aec7 100644
-+--- a/src/main/include/log4cxx/logstring.h
-++++ b/src/main/include/log4cxx/logstring.h
-+@@ -27,7 +27,7 @@
-+ #include <string>
-+ #include <log4cxx/log4cxx.h>
-+ 
-+-#if LOG4CXX_LOGCHAR_IS_WCHAR && LOG4CXX_LOGCHAR_IS_UTF8 && LOG4CXX_LOGCHAR_IS_UNICHAR
-++#if (LOG4CXX_LOGCHAR_IS_WCHAR + LOG4CXX_LOGCHAR_IS_UTF8 + LOG4CXX_LOGCHAR_IS_UNICHAR)>1
-+ #error only one of LOG4CXX_LOGCHAR_IS_WCHAR, LOG4CXX_LOGCHAR_IS_UTF8 or LOG4CXX_LOGCHAR_IS_UNICHAR may be true
-+ #endif
-+ 
-+-- 
-+2.11.0
-+
-diff --git a/package/log4cxx/0005-domtestcase.cpp-fix-narrowing-conversion-compile-err.patch b/package/log4cxx/0005-domtestcase.cpp-fix-narrowing-conversion-compile-err.patch
-new file mode 100644
-index 0000000..b3f43bf
---- /dev/null
-+++ b/package/log4cxx/0005-domtestcase.cpp-fix-narrowing-conversion-compile-err.patch
-@@ -0,0 +1,36 @@
-+From afc191aec355619d6ebabb2cad660a5a8ad4569b Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Mon, 30 Jan 2017 23:13:43 +0100
-+Subject: [PATCH] domtestcase.cpp: fix narrowing conversion compile error with
-+ gcc 6+ / signed char
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/test/cpp/xml/domtestcase.cpp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/test/cpp/xml/domtestcase.cpp b/src/test/cpp/xml/domtestcase.cpp
-+index ad276d1a..2a1e6e2e 100644
-+--- a/src/test/cpp/xml/domtestcase.cpp
-++++ b/src/test/cpp/xml/domtestcase.cpp
-+@@ -190,7 +190,7 @@ public:
-+                 DOMConfigurator::configure(LOG4CXX_TEST_STR("input/xml/DOMTestCase3.xml"));
-+                 LOG4CXX_INFO(logger, "File name is expected to end with a superscript 3")
-+ #if LOG4CXX_LOGCHAR_IS_UTF8
-+-                const logchar fname[] = { 0x6F, 0x75, 0x74, 0x70, 0x75, 0x74, 0x2F, 0x64, 0x6F, 0x6D, 0xC2, 0xB3, 0 };
-++                const logchar fname[] = { 0x6F, 0x75, 0x74, 0x70, 0x75, 0x74, 0x2F, 0x64, 0x6F, 0x6D, static_cast<logchar>(0xC2), static_cast<logchar>(0xB3), 0 };
-+ #else
-+                 const logchar fname[] = { 0x6F, 0x75, 0x74, 0x70, 0x75, 0x74, 0x2F, 0x64, 0x6F, 0x6D, 0xB3, 0 };
-+ #endif
-+@@ -209,7 +209,7 @@ public:
-+                 DOMConfigurator::configure(LOG4CXX_TEST_STR("input/xml/DOMTestCase4.xml"));
-+                 LOG4CXX_INFO(logger, "File name is expected to end with an ideographic 4")
-+ #if LOG4CXX_LOGCHAR_IS_UTF8
-+-                const logchar fname[] = { 0x6F, 0x75, 0x74, 0x70, 0x75, 0x74, 0x2F, 0x64, 0x6F, 0x6D, 0xE3, 0x86, 0x95, 0 };
-++                const logchar fname[] = { 0x6F, 0x75, 0x74, 0x70, 0x75, 0x74, 0x2F, 0x64, 0x6F, 0x6D, static_cast<logchar>(0xE3), static_cast<logchar>(0x86), static_cast<logchar>(0x95), 0 };
-+ #else
-+                 const logchar fname[] = { 0x6F, 0x75, 0x74, 0x70, 0x75, 0x74, 0x2F, 0x64, 0x6F, 0x6D, 0x3195, 0 };
-+ #endif
-+-- 
-+2.11.0
-+
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 3f5bfb1..90e1db5 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 69178335a906202928571e25b1670a4bb066500b9693c7ba554583e8d700fcf5  ImageMagick-7.0.4-5.tar.xz
++sha256 1ee004740b7ab47fff3c92ae4a89dcbd0181c4d5f31fcb7e3697412ea384a0da  ImageMagick-7.0.4-6.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 64c6a35..a917297 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.4-5
++IMAGEMAGICK_VERSION = 7.0.4-6
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
