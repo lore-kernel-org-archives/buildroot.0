@@ -1,59 +1,54 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Tue, 31 Jan 2017 08:59:05 +0100
-Subject: [Buildroot] [PATCH v6 3/9] qt53d/qt5quickcontrols2/qt5serialbus :
-	move out of tech preview
+Date: Tue, 31 Jan 2017 08:59:11 +0100
+Subject: [Buildroot] [PATCH v6 9/9] package/python-pyqt5: add patch to fix
+	build with Qt 5.8.0
 In-Reply-To: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <1485849551-20469-4-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <1485849551-20469-10-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Corjon <corjon.j@ecagroup.com>
-
-See http://blog.qt.io/blog/2016/06/16/qt-5-7-released/
-
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/qt5/Config.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ ...owOkButtonHint-and-WindowCancelButtonHint.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/python-pyqt5/0003-remove-WindowOkButtonHint-and-WindowCancelButtonHint.patch
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index faa58d8..cff118d 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -44,6 +44,7 @@ config BR2_QT5_VERSION_5_6
- 
- endchoice
- 
-+source "package/qt5/qt53d/Config.in"
- source "package/qt5/qt5base/Config.in"
- source "package/qt5/qt5canvas3d/Config.in"
- source "package/qt5/qt5connectivity/Config.in"
-@@ -53,7 +54,9 @@ source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5location/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
-+source "package/qt5/qt5quickcontrols2/Config.in"
- source "package/qt5/qt5sensors/Config.in"
-+source "package/qt5/qt5serialbus/Config.in"
- source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5tools/Config.in"
-@@ -61,10 +64,6 @@ source "package/qt5/qt5webchannel/Config.in"
- source "package/qt5/qt5websockets/Config.in"
- source "package/qt5/qt5x11extras/Config.in"
- source "package/qt5/qt5xmlpatterns/Config.in"
--comment "technology preview"
--source "package/qt5/qt53d/Config.in"
--source "package/qt5/qt5quickcontrols2/Config.in"
--source "package/qt5/qt5serialbus/Config.in"
- comment "legacy compatibility"
- source "package/qt5/qt5enginio/Config.in"
- source "package/qt5/qt5script/Config.in"
+diff --git a/package/python-pyqt5/0003-remove-WindowOkButtonHint-and-WindowCancelButtonHint.patch b/package/python-pyqt5/0003-remove-WindowOkButtonHint-and-WindowCancelButtonHint.patch
+new file mode 100644
+index 0000000..146cce0
+--- /dev/null
++++ b/package/python-pyqt5/0003-remove-WindowOkButtonHint-and-WindowCancelButtonHint.patch
+@@ -0,0 +1,27 @@
++From bb7cbdede46f72468bbb1b9bbefd43a1dbad21c0 Mon Sep 17 00:00:00 2001
++From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
++Date: Mon, 30 Jan 2017 18:28:15 +0100
++Subject: [PATCH] remove WindowOkButtonHint and WindowCancelButtonHint from
++ qnamespace.sip as they are removed from qt5.8
++
++Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
++---
++ sip/QtCore/qnamespace.sip | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/sip/QtCore/qnamespace.sip b/sip/QtCore/qnamespace.sip
++index 2db83b7..559f410 100644
++--- a/sip/QtCore/qnamespace.sip
+++++ b/sip/QtCore/qnamespace.sip
++@@ -209,8 +209,6 @@ namespace Qt
++         WindowContextHelpButtonHint,
++         WindowShadeButtonHint,
++         WindowStaysOnTopHint,
++-        WindowOkButtonHint,
++-        WindowCancelButtonHint,
++         WindowStaysOnBottomHint,
++         WindowCloseButtonHint,
++         MacWindowToolBarButtonHint,
++-- 
++2.7.4
++
 -- 
 2.7.4
