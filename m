@@ -1,56 +1,71 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 31 Jan 2017 21:38:51 +1300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-01-29
-In-Reply-To: <20170131075322.tevd2javfdq7dqof@tarshish>
-References: <20170130072925.E0B0B20CD6@mail.free-electrons.com>
- <CAFOYHZDvPhhUcSn3G3tGG0sOLZcesWJL0a0USCnFT-pbsh=Qhw@mail.gmail.com>
- <20170131042747.e5mchgg5btbereoc@tarshish>
- <CAFOYHZAB7EcUYCY6xdHGpx_pZuBaVTkGCAxpOq9Fky7qY1gJGw@mail.gmail.com>
- <20170131075322.tevd2javfdq7dqof@tarshish>
-Message-ID: <CAFOYHZBqDs9oVpQBh7uvOpbfw5XqXZPbwB6sq9tWfzSiWj+m5A@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 31 Jan 2017 11:04:58 +0200
+Subject: [Buildroot] LIBFOO_GIT_SUBMODULES
+In-Reply-To: <CABLXdK9v992hQEmmZGx+r0JW8aDtSHJV2+bcteLtdnP4BVrgYw@mail.gmail.com>
+References: <CABLXdK9xko_SrWN1JQtSwZTxJ8PJuW=CVr6b4D4XR8RiEMXfcg@mail.gmail.com>
+ <20170131083011.ut2ltabpqw23v2m5@tarshish>
+ <CABLXdK_n0B3nF+iJF5CeD3jDpfieOgpG7RbtnAHOkMTun-_0CQ@mail.gmail.com>
+ <CABLXdK9v992hQEmmZGx+r0JW8aDtSHJV2+bcteLtdnP4BVrgYw@mail.gmail.com>
+Message-ID: <20170131090458.hubcad6ddjd3zfcp@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 31, 2017 at 8:53 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Chris,
->
-> On Tue, Jan 31, 2017 at 08:43:27PM +1300, Chris Packham wrote:
->> On Tue, Jan 31, 2017 at 5:27 PM, Baruch Siach <baruch@tkos.co.il> wrote:
->> > On Tue, Jan 31, 2017 at 05:05:05PM +1300, Chris Packham wrote:
->> >> On Mon, Jan 30, 2017 at 8:29 PM, Thomas Petazzoni
->> >> <thomas.petazzoni@free-electrons.com> wrote:
->> >> >
->> >> >          arm |                tcpreplay-4.1.2 | NOK | http://autobuild.buildroot.net/results/dde54ccefa32af1f46a4af5b6caed822c3209dfc
->> >>
->> >> Looks like a common problem with musl-libc not liking applications
->> >> that include linux headers directly. I've reported the issue upstream
->> >> https://github.com/appneta/tcpreplay/issues/275 if I get time I'll see
->> >> if I submit a fix for it.sl
->> >
->> > This is a libc/kernel issue. I'm not sure libc users can do much about that.
->> >
->> > This build failure is fixed by commit 69ced963555b (musl: workaround kernel
->> > if_ether.h header conflict). The autobuilder needs a rebuild of its pre-built
->> > toolchains to take effect.
->>
->> Hmm openwrt went a different way
->> https://github.com/openwrt/packages/pull/1386/commits/a0968fae
->
-> They'll need to patch this way every single package that uses if_ether.h.
-> These kind of patches tend to be hard to upstream.
->
->> Did you try getting your patch into musl? It seems like a logical fix
->> but the fact they've got a FAQ on this specific problem makes me think
->> they must have something against this type of solution.
->
-> As the commit log indicates, Rich Felker, musl maintainer, was CCed on this
-> patch.
->
+Hi Ricardo,
 
-For what it's worth I've submitted a pull request for tcpreplay anyway
-https://github.com/appneta/tcpreplay/pull/276. I won't bother with a
-buildroot patch to include the fix (unless someone really wants it).
+Please keep the Buildroot list on Cc.
+
+On Tue, Jan 31, 2017 at 09:51:49AM +0100, Ricardo Herrero wrote:
+>  I?m using Buildroot-2016.05, maybe it?s too outdated?
+
+It seems so. Support for git submodules download was added in commit 
+ec3e057f791 (core/pkg-infra: download git submodules if the package wants 
+them), which was part of release 2016.08.
+
+You may try cherry-picking this commit.
+
+baruch
+
+> On Tue, Jan 31, 2017 at 9:43 AM, Ricardo Herrero <ricardo.herrero@gmail.com>
+> wrote:
+> 
+> >  Thanks for the help, I have tried different values for my .mk file but I
+> > still can?t get it work, It is like buildroot doesn?t use the variable,
+> > maybe I?m using and old version of buildroot? This is the first part of my
+> > .mk,
+> >
+> > *AREADETECTOR_VERSION = bf48e03*
+> > *AREADETECTOR_SITE_METHOD = git*
+> > *AREADETECTOR_GIT_SUBMODULES = Y*
+> > *AREADETECTOR_SITE = https://github.com/areaDetector/areaDetector.git
+> > <https://github.com/areaDetector/areaDetector.git>*
+> > *AREADETECTOR_DIR = $(BUILD_DIR)/areaDetector-$(AREADETECTOR_VERSION)*
+> > *#AREADETECTOR_CAT = $(ZCAT)*
+> > *AREADETECTOR_LICENSE = AREADETECTOR*
+> > *AREADETECTOR_LICENSE_FILES = LICENSE*
+> > *AREADETECTOR_INSTALL_TARGET = YES*
+> > *AREADETECTOR_TARGET = $(TARGET_DIR)/opt/epics/support/areaDetector*
+> >
+> > And I?m sending you also my .mk and Config.in if you would like to test it.
+> >
+> > On Tue, Jan 31, 2017 at 9:30 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> >
+> >> On Tue, Jan 31, 2017 at 09:20:46AM +0100, Ricardo Herrero wrote:
+> >> >  I?m trying to use github to download a repository with submodules, as
+> >> if I
+> >> > we using "*git clone --recursive*". The manual talks about
+> >> > *LIBFOO_GIT_SUBMODULES
+> >> > *when you set *LIBFOO_SITE_METHOD = git* but the manual doesn?t say
+> >> > anything about what we are supposed to configure in this variable. Do we
+> >> > have to write Y or YES? The fact is that it is not working and buildroot
+> >> > does not give any advice.
+> >>
+> >> You may set LIBFOO_GIT_SUBMODULES to any non-empty value to trigger a
+> >> recursive git clone.
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
