@@ -1,91 +1,86 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Jan 2017 18:31:06 +0100
-Subject: [Buildroot] [PATCH] core: enhance printvars
-In-Reply-To: <CAAXf6LUwymo-EZXVjeyjiuuaFnXSirYr4o9krs0Xkxv64=oBiQ@mail.gmail.com>
-References: <1485641971-25278-1-git-send-email-yann.morin.1998@free.fr>
- <CAAXf6LUwymo-EZXVjeyjiuuaFnXSirYr4o9krs0Xkxv64=oBiQ@mail.gmail.com>
-Message-ID: <20170131173106.GA3534@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 31 Jan 2017 19:37:36 +0100
+Subject: [Buildroot] [PATCH 02/16] package/x11r7/xdriver_xf86-video-sis:
+	bump version to 0.10.9
+In-Reply-To: <20170131183750.15481-1-bernd.kuhls@t-online.de>
+References: <20170131183750.15481-1-bernd.kuhls@t-online.de>
+Message-ID: <20170131183750.15481-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Removed 0002-abi23.patch, applied upstream.
 
-On 2017-01-31 11:12 +0100, Thomas De Schampheleire spake thusly:
-> On Sat, Jan 28, 2017 at 11:19 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Currently, the output of printvars copntains the name of the variable,
-> > its expanded value and its un-expanded value.
-> >
-> > However, most of the time, we need the actual, expanded value, so it can
-> > be re-used from a (non-Buildroot) infrastructure script, like a
-> > post-build script, or a build-farm driver (e.g. a Jenkins job...)
-> >
-> > Add two options that a user may set to change the output of printvars:
-> >   - RAW_VARS, if set, will drop the unexpanded value
-> >   - QUOTED_VARS, if set, will quote the expanded value
-> >
-> > So that it can be used as such:
-> >
-> >     $ make -s printvars VARS=BUSYBOX_VERSION RAW_VARS=1 QUOTED_VARS=1
-> >     BUSYBOX_VERSION='1.26.2'
-> >
-> > And it is even possible to directly evaluate it in a shell script:
-> >
-> >     eval $(make -s printvars VARS=BUSYBOX_VERSION RAW_VARS=1 QUOTED_VARS=1)
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 5e4bc92..67a9b5d 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -934,7 +934,7 @@ printvars:
-> >                 $(sort $(if $(VARS),$(filter $(VARS),$(.VARIABLES)),$(.VARIABLES))), \
-> >                 $(if $(filter-out environment% default automatic, \
-> >                                 $(origin $V)), \
-> > -               $(info $V=$($V) ($(value $V)))))
-> > +               $(info $V=$(if $(QUOTED_VARS),')$($V)$(if $(QUOTED_VARS),')$(if $(RAW_VARS),, ($(value $V))))))
-> >
-> >  clean:
-> >         rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
-> > --
-> > 2.7.4
-> 
-> 
-> Very nice, I've been needing this a few times before too.
-> 
-> I do think we should document the new flags QUOTED_VARS and RAW_VARS
-> somewhere (and in general 'printvars' itself). Perhaps here:
-> http://buildroot.uclibc.org/downloads/manual/manual.html#make-tips ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../x11r7/xdriver_xf86-video-sis/0002-abi23.patch  | 33 ----------------------
+ .../xdriver_xf86-video-sis.hash                    |  4 +--
+ .../xdriver_xf86-video-sis.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 36 deletions(-)
+ delete mode 100644 package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
 
-Damned, I forgot to document it, indeed...
-
-I was instead thinking of documenting it in the output of 'make help'.
-
-But both there and in the manual seems OK for me. I'll do.
-
-> Regarding naming (I realize, these are nits): RAW sounds like somehow
-> opposite of QUOTED. What about using PLAIN rather than RAW ?
-> An alternative is to change the default behavior to be raw/plain, and
-> add a VERBOSE option to display also the unexpanded value.
-
-Well, I prefer not to change the current behaviour.
-
-If others prefer we change the current behaviour, so be it. I'll wait
-for more feedback.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
+deleted file mode 100644
+index 109f74537..000000000
+--- a/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 96fee560cd8bf7bf27048ce5fe67b7af6838c8d0 Mon Sep 17 00:00:00 2001
+-From: Adam Jackson <ajax@redhat.com>
+-Date: Tue, 19 Jul 2016 10:03:56 -0400
+-Subject: Adapt Block/WakeupHandler signature for ABI 23
+-
+-Signed-off-by: Adam Jackson <ajax@redhat.com>
+----
+-Downloaded from
+-https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=96fee560cd8bf7bf27048ce5fe67b7af6838c8d0
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff --git a/src/compat-api.h b/src/compat-api.h
+-index 6bc946f..89976e4 100644
+---- a/src/compat-api.h
+-+++ b/src/compat-api.h
+-@@ -75,8 +75,13 @@
+- 
+- #define SCREEN_INIT_ARGS_DECL ScreenPtr pScreen, int argc, char **argv
+- 
+-+#if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(23, 0)
+-+#define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout
+-+#define BLOCKHANDLER_ARGS arg, pTimeout
+-+#else
+- #define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout, pointer pReadmask
+- #define BLOCKHANDLER_ARGS arg, pTimeout, pReadmask
+-+#endif
+- 
+- #define CLOSE_SCREEN_ARGS_DECL ScreenPtr pScreen
+- #define CLOSE_SCREEN_ARGS pScreen
+--- 
+-cgit v0.10.2
+-
+diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
+index dfc78143e..98ea8b1e4 100644
+--- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
++++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-August/002628.html
+-sha256	c8f3f2577f69334dfcc4bf96477dce45161170555f3abdfa105599e61bc7d3fe	xf86-video-sis-0.10.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-January/002756.html
++sha256 5226b7407c601afa32d6cbf155f9182da95d92cdc89c1f83471e1927e552c10d  xf86-video-sis-0.10.9.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+index 5792f8e34..833246e35 100644
+--- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
++++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.8
++XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.9
+ XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SIS_LICENSE = MIT
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
