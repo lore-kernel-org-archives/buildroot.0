@@ -1,56 +1,94 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 31 Jan 2017 09:53:22 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-01-29
-In-Reply-To: <CAFOYHZAB7EcUYCY6xdHGpx_pZuBaVTkGCAxpOq9Fky7qY1gJGw@mail.gmail.com>
-References: <20170130072925.E0B0B20CD6@mail.free-electrons.com>
- <CAFOYHZDvPhhUcSn3G3tGG0sOLZcesWJL0a0USCnFT-pbsh=Qhw@mail.gmail.com>
- <20170131042747.e5mchgg5btbereoc@tarshish>
- <CAFOYHZAB7EcUYCY6xdHGpx_pZuBaVTkGCAxpOq9Fky7qY1gJGw@mail.gmail.com>
-Message-ID: <20170131075322.tevd2javfdq7dqof@tarshish>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Tue, 31 Jan 2017 08:59:02 +0100
+Subject: [Buildroot] [PATCH v6 0/9] bump/choice for qt 5.8.0
+Message-ID: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Chris,
+Changes v5 -> v6:
+This is the updated version of Andreas' patchset, with the following changes:
+ * fix conflicts introduced by the Qt example license related commits
+ * fix the python-pyqt5 patches to not patching the sip-generated c++
+   code but the sip files themselves
 
-On Tue, Jan 31, 2017 at 08:43:27PM +1300, Chris Packham wrote:
-> On Tue, Jan 31, 2017 at 5:27 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > On Tue, Jan 31, 2017 at 05:05:05PM +1300, Chris Packham wrote:
-> >> On Mon, Jan 30, 2017 at 8:29 PM, Thomas Petazzoni
-> >> <thomas.petazzoni@free-electrons.com> wrote:
-> >> >
-> >> >          arm |                tcpreplay-4.1.2 | NOK | http://autobuild.buildroot.net/results/dde54ccefa32af1f46a4af5b6caed822c3209dfc
-> >>
-> >> Looks like a common problem with musl-libc not liking applications
-> >> that include linux headers directly. I've reported the issue upstream
-> >> https://github.com/appneta/tcpreplay/issues/275 if I get time I'll see
-> >> if I submit a fix for it.sl
-> >
-> > This is a libc/kernel issue. I'm not sure libc users can do much about that.
-> >
-> > This build failure is fixed by commit 69ced963555b (musl: workaround kernel
-> > if_ether.h header conflict). The autobuilder needs a rebuild of its pre-built
-> > toolchains to take effect.
-> 
-> Hmm openwrt went a different way
-> https://github.com/openwrt/packages/pull/1386/commits/a0968fae
+The Qt 5.8 config (and pyqt5) was tested on Raspberry Pi.
 
-They'll need to patch this way every single package that uses if_ether.h. 
-These kind of patches tend to be hard to upstream.
+Julien Corjon (3):
+  qt5enginio : move into legacy compatibility
+  qt53d/qt5quickcontrols2/qt5serialbus : move out of tech preview
+  Conditional revert "qt5base: install bundled fonts to target"
 
-> Did you try getting your patch into musl? It seems like a logical fix
-> but the fact they've got a FAQ on this specific problem makes me think
-> they must have something against this type of solution.
+Naumann Andreas (6):
+  qt5: add choice between version 5.6.2 and 5.8.0
+  qt5declarative: enable Quick for non-GL platforms for Qt 5.8.0
+  qt5quickcontrols: More deterministic target install
+  qt5quickcontrols/qt5quickcontrols2: enable for software renderer for
+    Qt 5.8.0
+  python-pyqt5: Depend directly on Qt5 rather than its toolchain
+    requirements
+  python-pyqt5: Fix for Qt 5.8.0
 
-As the commit log indicates, Rich Felker, musl maintainer, was CCed on this 
-patch.
-
-baruch
+ package/python-pyqt5/0002-fix-qt-5.6.2.patch       | 28 ------------
+ package/python-pyqt5/0002-fix-qt5.8-build.patch    | 28 ++++++++++++
+ package/python-pyqt5/Config.in                     | 13 ++----
+ package/qt5/Config.in                              | 27 ++++++++---
+ package/qt5/qt5.mk                                 |  8 ++++
+ package/qt5/qt53d/qt53d.hash                       |  3 ++
+ .../0006-eglfs-rasp-pi-header-inclusion.patch      | 45 ------------------
+ ...fs-fix-eglfs_mali-compile-for-odroid-mali.patch | 53 ----------------------
+ .../0006-eglfs-rasp-pi-header-inclusion.patch      | 45 ++++++++++++++++++
+ ...fs-fix-eglfs_mali-compile-for-odroid-mali.patch | 53 ++++++++++++++++++++++
+ package/qt5/qt5base/qt5base.hash                   |  3 ++
+ package/qt5/qt5base/qt5base.mk                     | 15 ++++++
+ package/qt5/qt5canvas3d/qt5canvas3d.hash           |  3 ++
+ package/qt5/qt5connectivity/qt5connectivity.hash   |  3 ++
+ package/qt5/qt5connectivity/qt5connectivity.mk     |  5 ++
+ package/qt5/qt5declarative/Config.in               |  6 +--
+ package/qt5/qt5declarative/qt5declarative.hash     |  3 ++
+ package/qt5/qt5declarative/qt5declarative.mk       |  5 ++
+ .../qt5graphicaleffects/qt5graphicaleffects.hash   |  3 ++
+ .../qt5/qt5graphicaleffects/qt5graphicaleffects.mk |  5 ++
+ package/qt5/qt5imageformats/qt5imageformats.hash   |  3 ++
+ package/qt5/qt5imageformats/qt5imageformats.mk     |  5 ++
+ package/qt5/qt5location/qt5location.hash           |  3 ++
+ package/qt5/qt5location/qt5location.mk             |  5 ++
+ package/qt5/qt5multimedia/qt5multimedia.hash       |  3 ++
+ package/qt5/qt5multimedia/qt5multimedia.mk         |  8 ++++
+ package/qt5/qt5quickcontrols/Config.in             |  4 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  3 ++
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk   |  5 +-
+ package/qt5/qt5quickcontrols2/Config.in            |  4 +-
+ .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  3 ++
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk | 12 +++++
+ package/qt5/qt5script/qt5script.hash               |  3 ++
+ package/qt5/qt5sensors/qt5sensors.hash             |  3 ++
+ package/qt5/qt5sensors/qt5sensors.mk               |  5 ++
+ package/qt5/qt5serialbus/qt5serialbus.hash         |  3 ++
+ package/qt5/qt5serialport/qt5serialport.hash       |  3 ++
+ package/qt5/qt5serialport/qt5serialport.mk         |  5 ++
+ package/qt5/qt5svg/qt5svg.hash                     |  3 ++
+ package/qt5/qt5svg/qt5svg.mk                       |  5 ++
+ package/qt5/qt5tools/qt5tools.hash                 |  3 ++
+ package/qt5/qt5tools/qt5tools.mk                   |  5 ++
+ package/qt5/qt5webchannel/qt5webchannel.hash       |  3 ++
+ package/qt5/qt5webchannel/qt5webchannel.mk         |  5 ++
+ package/qt5/qt5webkit/qt5webkit.hash               |  3 ++
+ package/qt5/qt5websockets/qt5websockets.hash       |  3 ++
+ package/qt5/qt5websockets/qt5websockets.mk         |  5 ++
+ package/qt5/qt5x11extras/qt5x11extras.hash         |  3 ++
+ package/qt5/qt5x11extras/qt5x11extras.mk           |  5 ++
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  3 ++
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |  5 ++
+ 51 files changed, 334 insertions(+), 151 deletions(-)
+ delete mode 100644 package/python-pyqt5/0002-fix-qt-5.6.2.patch
+ create mode 100644 package/python-pyqt5/0002-fix-qt5.8-build.patch
+ delete mode 100644 package/qt5/qt5base/0006-eglfs-rasp-pi-header-inclusion.patch
+ delete mode 100644 package/qt5/qt5base/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
+ create mode 100644 package/qt5/qt5base/5.6.2/0006-eglfs-rasp-pi-header-inclusion.patch
+ create mode 100644 package/qt5/qt5base/5.6.2/0007-eglfs-fix-eglfs_mali-compile-for-odroid-mali.patch
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
