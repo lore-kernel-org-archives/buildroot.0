@@ -1,98 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 31 Jan 2017 17:03:40 +0100
-Subject: [Buildroot] [PATCH 3/6] toolchain-external: handle ld.so fixups
-	centrally
-In-Reply-To: <20170131160343.27144-1-patrickdepinguin@gmail.com>
-References: <20170131160343.27144-1-patrickdepinguin@gmail.com>
-Message-ID: <20170131160343.27144-4-patrickdepinguin@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 31 Jan 2017 16:05:41 +0000
+Subject: [Buildroot] [PATCH] cjson: bump version to v1.2.1
+Message-ID: <20170131160541.51329-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-
-Normally, the Buildroot toolchain logic copies all required libraries from
-the external toolchain to the staging directory, including the dynamic
-loader ld-*.so.
-There are cases, however, where the dynamic loader is _not_ automatically
-copied to staging. This happens when the dynamic loader is not inside
-ARCH_LIB_DIR itself (e.g. lib64), but instead resides in 'lib' (assume, of
-course, that ARCH_LIB_DIR != 'lib').
-
-Currently, this is fixed in a toolchain-specific fixup, e.g. by recreating a
-missing symlink or copying over a missing file. Such toolchain specific
-fixups are not very nice.
-
-Moreover, in a subsequent patch, the value of ARCH_LIB_DIR changes for some
-toolchains, causing them to have the same problem of a missing dynamic
-loader. This used to be the case for older Linaro toolchains with libraries
-in 'lib/<tuple>': Buildroot used to set ARCH_LIB_DIR=lib but the mentioned
-patch changes it to 'lib/<tuple>' instead. As a result, the files directly
-under 'lib/' will no longer be copied. There should be none, but the dynamic
-loader is a notable exception.
-[Note: support for these older Linaro toolchain has been removed in 2016.11]
-
-Instead, copy over the ld.so file(s)/link(s) from the extracted toolchain
-into staging, in the central copy_toolchain_sysroot function. The existing
-toolchain logic will then handle the copy of these files from staging to
-target.
-This means the toolchain-specific fixups can be removed.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- toolchain/helpers.mk                                          | 11 +++++++++++
- .../toolchain-external-codesourcery-aarch64.mk                | 10 ----------
- 2 files changed, 11 insertions(+), 10 deletions(-)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 06dc197..6720629 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -55,6 +55,11 @@ copy_toolchain_lib_root = \
- # corresponding architecture variants), and we don't want to import
- # them.
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index a6370de..903880f 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 df549298ea6515058648eaacc62bcc4f82fa34f8b93af7753e30eb35c3841c7d  cjson-v1.2.0.tar.gz
++sha256 1d976ca423d714b7e836cfbc1980b56f49962d0dfe654edb3c2ffa5c713af242  cjson-v1.2.1.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index f0fe63b..11c34c5 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
  #
-+# It is possible that ARCH_LIB_DIR does not contain the dynamic loader
-+# (ld*.so or similar) because it (or the main symlink to it) normally
-+# resides in /lib while ARCH_LIB_DIR may be something else (e.g. lib64).
-+# Therefore, copy the dynamic loader separately.
-+#
- # Then, if the selected architecture variant is not the default one
- # (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR), then we :
- #
-@@ -105,6 +110,12 @@ copy_toolchain_sysroot = \
- 			fi ; \
- 		fi ; \
- 	done ; \
-+	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
-+		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
-+	fi ; \
-+	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
-+		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
-+	fi ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
- 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-index bc58c44..5f4453a 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-@@ -9,14 +9,4 @@ TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION = 2014.11-95
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SOURCE = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_ACTUAL_SOURCE_TARBALL = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
+ ################################################################################
  
--define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
--	ln -sf ld-2.20.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
--endef
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
--
--define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
--	ln -sf ld-2.20.so $(TARGET_DIR)/lib/ld-linux-aarch64.so.1
--endef
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
--
- $(eval $(toolchain-external-package))
+-CJSON_VERSION = v1.2.0
++CJSON_VERSION = v1.2.1
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 -- 
 2.10.2
