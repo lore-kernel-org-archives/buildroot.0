@@ -1,67 +1,46 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Tue, 31 Jan 2017 08:59:07 +0100
-Subject: [Buildroot] [PATCH v6 5/9] qt5declarative: enable Quick for non-GL
-	platforms for Qt 5.8.0
+Date: Tue, 31 Jan 2017 08:59:04 +0100
+Subject: [Buildroot] [PATCH v6 2/9] qt5enginio : move into legacy
+	compatibility
 In-Reply-To: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <1485849551-20469-6-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <1485849551-20469-3-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Naumann Andreas <ANaumann@ultratronik.de>
+From: Julien Corjon <corjon.j@ecagroup.com>
 
-Since Qt 5.8.0 provides a software rasterizer we can enable Quick for non-GL
-platforms. However, some modules provide less functionality without OpenGL,
-so install steps have to be limited for the softrender only backend:
-- qtmultimedia does not provide qml
+See https://wiki.qt.io/New_Features_in_Qt_5.7
 
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/qt5/qt5declarative/Config.in       | 6 +++---
- package/qt5/qt5multimedia/qt5multimedia.mk | 3 +++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/qt5/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-index eba4c8d..a8accdb 100644
---- a/package/qt5/qt5declarative/Config.in
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -15,11 +15,11 @@ config BR2_PACKAGE_QT5DECLARATIVE
- if BR2_PACKAGE_QT5DECLARATIVE
- 
- comment "quick module needs an OpenGL-capable backend"
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
- 
- config BR2_PACKAGE_QT5DECLARATIVE_QUICK
- 	bool "quick module"
--	select BR2_PACKAGE_QT5BASE_OPENGL
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-+	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8
- 
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index eb97fba..faa58d8 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -48,7 +48,6 @@ source "package/qt5/qt5base/Config.in"
+ source "package/qt5/qt5canvas3d/Config.in"
+ source "package/qt5/qt5connectivity/Config.in"
+ source "package/qt5/qt5declarative/Config.in"
+-source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5location/Config.in"
+@@ -67,6 +66,7 @@ source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5quickcontrols2/Config.in"
+ source "package/qt5/qt5serialbus/Config.in"
+ comment "legacy compatibility"
++source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5webkit/Config.in"
  endif
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 7ce947a..b11b8d1 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -58,11 +58,14 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
- endef
- endif
- 
-+# QtMultimedia QMLs have a hard dependency on OpenGL -> not available for softraster backends
-+ifeq ($(BR2_PACKAGE_QT5_GL_AVAILABLE),y)
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
- define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
- endef
- endif
-+endif
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
 -- 
 2.7.4
