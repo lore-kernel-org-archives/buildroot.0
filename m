@@ -1,10 +1,10 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Tue, 31 Jan 2017 08:59:10 +0100
-Subject: [Buildroot] [PATCH v6 8/9] python-pyqt5: Depend directly on Qt5
-	rather than its toolchain requirements
+Date: Tue, 31 Jan 2017 08:59:07 +0100
+Subject: [Buildroot] [PATCH v6 5/9] qt5declarative: enable Quick for non-GL
+	platforms for Qt 5.8.0
 In-Reply-To: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <1485849551-20469-9-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <1485849551-20469-6-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,55 @@ To: buildroot@busybox.net
 
 From: Naumann Andreas <ANaumann@ultratronik.de>
 
- When pyqt5 is used it's obvious that qt5 needs to be selected and configured
-by the user, hence we enforce it by making pyqt5 depending on qt5, rather than
-selecting it and depending only on the qt5 requirements.
+Since Qt 5.8.0 provides a software rasterizer we can enable Quick for non-GL
+platforms. However, some modules provide less functionality without OpenGL,
+so install steps have to be limited for the softrender only backend:
+- qtmultimedia does not provide qml
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/python-pyqt5/Config.in | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ package/qt5/qt5declarative/Config.in       | 6 +++---
+ package/qt5/qt5multimedia/qt5multimedia.mk | 3 +++
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
-index 4eca68a..20ac988 100644
---- a/package/python-pyqt5/Config.in
-+++ b/package/python-pyqt5/Config.in
-@@ -1,16 +1,9 @@
--comment "python-pyqt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
--	depends on !BR2_PACKAGE_QT
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "python-pyqt5 needs Qt5"
-+	depends on !BR2_PACKAGE_QT5
+diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+index eba4c8d..a8accdb 100644
+--- a/package/qt5/qt5declarative/Config.in
++++ b/package/qt5/qt5declarative/Config.in
+@@ -15,11 +15,11 @@ config BR2_PACKAGE_QT5DECLARATIVE
+ if BR2_PACKAGE_QT5DECLARATIVE
  
- config BR2_PACKAGE_PYTHON_PYQT5
- 	bool "python-pyqt5"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_WCHAR # qt5
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
--	depends on !BR2_STATIC_LIBS # qt5
--	depends on !BR2_PACKAGE_QT # qt5
--	select BR2_PACKAGE_QT5
-+	depends on BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_PYTHON_SIP
- 	help
- 	  Python bindings for Qt 5
+ comment "quick module needs an OpenGL-capable backend"
+-	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
+ 
+ config BR2_PACKAGE_QT5DECLARATIVE_QUICK
+ 	bool "quick module"
+-	select BR2_PACKAGE_QT5BASE_OPENGL
+-	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
++	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8
+ 
+ endif
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 7ce947a..b11b8d1 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -58,11 +58,14 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
+ endef
+ endif
+ 
++# QtMultimedia QMLs have a hard dependency on OpenGL -> not available for softraster backends
++ifeq ($(BR2_PACKAGE_QT5_GL_AVAILABLE),y)
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+ define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
+ endef
+ endif
++endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
 -- 
 2.7.4
