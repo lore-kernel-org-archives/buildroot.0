@@ -1,43 +1,131 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 Jan 2017 10:20:25 +0100
-Subject: [Buildroot] [PATCH] riemann-c-client: fix build on bfin
-Message-ID: <20170131092025.19080-1-peter@korsgaard.com>
+Date: Tue, 31 Jan 2017 10:21:28 +0100
+Subject: [Buildroot] [git commit] configs/imx6q-sabresd: Add new defconfig
+Message-ID: <20170131092145.B361F81EC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/8de/8de7e533fed3c48fdbe164bc9286148e63494c8f/build-end.log
-http://autobuild.buildroot.net/results/828/828a4e09cb14c33b021bd347394104ff8b6dba78/build-end.log
-http://autobuild.buildroot.net/results/fc8/fc80326880fb19cd6fbd6c0073916373a52ef873/build-end.log
+commit: https://git.buildroot.net/buildroot/commit/?id=6d26c18aca2a94bd971f82fcbf375329feb33942
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LD symbol versioning is not working on blackfin even though ld accepts the
---version-script argument, causing link errors, so disable it.
+Add imx6q-sabresd_defconfig which supports imx6q-sabresd board using
+mainline U-Boot and mainline kernel.
 
-Notice: These autobuilder issues happened with an external fdpic toolchain,
-but the issue also occurs with internal toolchain / binutils 2.27 and
-fdpic/flat.
+Keep freescale_imx6qsabresd_defconfig for those who want to run U-Boot and
+kernel versions from NXP.
 
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/riemann-c-client/riemann-c-client.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ board/freescale/imx6q-sabresd/readme.txt | 57 ++++++++++++++++++++++++++++++++
+ configs/imx6q-sabresd_defconfig          | 36 ++++++++++++++++++++
+ 2 files changed, 93 insertions(+)
 
-diff --git a/package/riemann-c-client/riemann-c-client.mk b/package/riemann-c-client/riemann-c-client.mk
-index 027898be0..559351998 100644
---- a/package/riemann-c-client/riemann-c-client.mk
-+++ b/package/riemann-c-client/riemann-c-client.mk
-@@ -15,4 +15,9 @@ RIEMANN_C_CLIENT_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_GNUTLS),gnutls) \
- 	$(if $(BR2_PACKAGE_JSON_C),json-c)
- 
-+ifeq ($(BR2_bfin),y)
-+# ld symbol versioning not working on bfin
-+RIEMANN_C_CLIENT_CONF_ENV += ac_cv_prog_ld_version_script=no
-+endif
+diff --git a/board/freescale/imx6q-sabresd/readme.txt b/board/freescale/imx6q-sabresd/readme.txt
+new file mode 100644
+index 0000000..10e973c
+--- /dev/null
++++ b/board/freescale/imx6q-sabresd/readme.txt
+@@ -0,0 +1,57 @@
++*******************************
++Freescale i.MX6Q Sabre SD board
++*******************************
 +
- $(eval $(autotools-package))
--- 
-2.11.0
++This file documents the Buildroot support for the Freescale i.MX6Q Sabre SD
++board.
++
++This configuration uses U-Boot mainline and kernel mainline.
++
++Build
++=====
++
++First, configure Buildroot for the i.MX6Q Sabre SD board:
++
++  make imx6q-sabresd_defconfig
++
++Build all components:
++
++  make
++
++You will find the following files in output/images/ :
++  - imx6q-sabresd.dtb
++  - rootfs.ext4
++  - rootfs.tar
++  - sdcard.img
++  - u-boot.imx
++  - zImage
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a SD card. Launch the following
++command as root:
++
++  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/freescale/common/imx/genimage.cfg.template.
++
++Boot the i.MX6Q Sabre SD board
++==============================
++
++To boot your newly created system:
++- insert the SD card in the SD3 slot of the board (close to the HDMI connector);
++- put a micro USB cable into the Debug USB Port and connect using a terminal
++  emulator at 115200 bps, 8n1;
++- power on the board.
++
++Enjoy!
+diff --git a/configs/imx6q-sabresd_defconfig b/configs/imx6q-sabresd_defconfig
+new file mode 100644
+index 0000000..1491668
+--- /dev/null
++++ b/configs/imx6q-sabresd_defconfig
+@@ -0,0 +1,36 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_FPU_VFPV3=y
++
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++
++# System
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++
++# required tools to create the SD card image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
