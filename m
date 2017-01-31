@@ -1,44 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 Jan 2017 23:37:45 +0100
-Subject: [Buildroot] [git commit] riemann-c-client: fix build on bfin
-Message-ID: <20170131225116.9021280DB5@busybox.osuosl.org>
+Date: Tue, 31 Jan 2017 23:48:32 +0100
+Subject: [Buildroot] [git commit] cjson: security bump to version v1.2.1
+Message-ID: <20170131225116.9BB2C80DB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0b8e1835bee9ee2bc5b3ab8c1052c83c907bf19
+commit: https://git.buildroot.net/buildroot/commit/?id=130b9dcea164f33e7a446b5a9d53e3d499d2d1b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/8de/8de7e533fed3c48fdbe164bc9286148e63494c8f/build-end.log
-http://autobuild.buildroot.net/results/828/828a4e09cb14c33b021bd347394104ff8b6dba78/build-end.log
-http://autobuild.buildroot.net/results/fc8/fc80326880fb19cd6fbd6c0073916373a52ef873/build-end.log
+Fixes a potential NULL pointer dereference in
+cJSONUtils_InplaceDecodePointerString():
 
-LD symbol versioning is not working on blackfin even though ld accepts the
---version-script argument, causing link errors, so disable it.
+https://github.com/DaveGamble/cJSON/issues/96
 
-Notice: These autobuilder issues happened with an external fdpic toolchain,
-but the issue also occurs with internal toolchain / binutils 2.27 and
-fdpic/flat.
-
+[Peter: extend commit message, mention (potential) security impact]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/riemann-c-client/riemann-c-client.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/riemann-c-client/riemann-c-client.mk b/package/riemann-c-client/riemann-c-client.mk
-index 027898b..5593519 100644
---- a/package/riemann-c-client/riemann-c-client.mk
-+++ b/package/riemann-c-client/riemann-c-client.mk
-@@ -15,4 +15,9 @@ RIEMANN_C_CLIENT_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_GNUTLS),gnutls) \
- 	$(if $(BR2_PACKAGE_JSON_C),json-c)
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index a6370de..903880f 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 df549298ea6515058648eaacc62bcc4f82fa34f8b93af7753e30eb35c3841c7d  cjson-v1.2.0.tar.gz
++sha256 1d976ca423d714b7e836cfbc1980b56f49962d0dfe654edb3c2ffa5c713af242  cjson-v1.2.1.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index f0fe63b..11c34c5 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_bfin),y)
-+# ld symbol versioning not working on bfin
-+RIEMANN_C_CLIENT_CONF_ENV += ac_cv_prog_ld_version_script=no
-+endif
-+
- $(eval $(autotools-package))
+-CJSON_VERSION = v1.2.0
++CJSON_VERSION = v1.2.1
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
