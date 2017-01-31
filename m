@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 31 Jan 2017 17:03:38 +0100
-Subject: [Buildroot] [PATCH 1/6] toolchain-external: remove stale references
-	to (ARCH_)LIBC_A_LOCATION
+Date: Tue, 31 Jan 2017 17:03:41 +0100
+Subject: [Buildroot] [PATCH 4/6] toolchain helpers: introduce function
+	relpath_prefix
 In-Reply-To: <20170131160343.27144-1-patrickdepinguin@gmail.com>
 References: <20170131160343.27144-1-patrickdepinguin@gmail.com>
-Message-ID: <20170131160343.27144-2-patrickdepinguin@gmail.com>
+Message-ID: <20170131160343.27144-5-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,65 +13,56 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The variables LIBC_A_LOCATION and ARCH_LIBC_A_LOCATION were killed in commit
-646bd86908f7f995cdc2b95e0be381d97600f905 but the corresponding descriptions
-were never removed.
+The helper function copy_toolchain_sysroot has some logic to transform a
+path into a number of '../' components based on the depth of that path.
+
+As this same logic will be needed in another place in a subsequent patch,
+extract it into a separate helper relpath_prefix.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- .../toolchain-external/pkg-toolchain-external.mk   | 30 ++++++++--------------
- 1 file changed, 11 insertions(+), 19 deletions(-)
+ toolchain/helpers.mk | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index e0a8b41..6658875 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -347,35 +347,27 @@ endef
- #
- # Variables are defined as follows:
- #
--#  LIBC_A_LOCATION:     location of the libc.a file in the default
--#                       multilib variant (allows to find the main
--#                       sysroot directory)
--#                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/usr/lib/libc.a
--#
--#  SYSROOT_DIR:         the main sysroot directory, deduced from
--#                       LIBC_A_LOCATION by removing the
--#                       usr/lib[32|64]/libc.a part of the path.
-+# SYSROOT_DIR:          the main sysroot directory, deduced from the location of
-+#                       the libc.a file in the default multilib variant, by
-+#                       removing the usr/lib[32|64]/libc.a part of the path.
- #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/
- #
--# ARCH_LIBC_A_LOCATION: location of the libc.a file in the selected
--#                       multilib variant (taking into account the
--#                       CFLAGS). Allows to find the sysroot of the
--#                       selected multilib variant.
--#                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/mips16/soft-float/el/usr/lib/libc.a
--#
- # ARCH_SYSROOT_DIR:     the sysroot of the selected multilib variant,
--#                       deduced from ARCH_LIBC_A_LOCATION by removing
--#                       usr/lib[32|64]/libc.a at the end of the path.
-+#                       deduced from the location of the libc.a file in the
-+#                       selected multilib variant (taking into account the
-+#                       CFLAGS), by removing usr/lib[32|64]/libc.a at the end
-+#                       of the path.
- #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/mips16/soft-float/el/
- #
- # ARCH_LIB_DIR:         'lib', 'lib32' or 'lib64' depending on where libraries
--#                       are stored. Deduced from ARCH_LIBC_A_LOCATION by
--#                       looking at usr/lib??/libc.a.
-+#                       are stored. Deduced from the location of the libc.a file
-+#                       in the selected multilib variant, by looking at
-+#                       usr/lib??/libc.a.
- #                       Ex: lib
- #
- # ARCH_SUBDIR:          the relative location of the sysroot of the selected
- #                       multilib variant compared to the main sysroot.
--#			Ex: mips16/soft-float/el
-+#                       Ex: mips16/soft-float/el
- #
- # SUPPORT_LIB_DIR:      some toolchains, such as recent Linaro toolchains,
- #                       store GCC support libraries (libstdc++,
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 6720629..ba14b38 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -121,11 +121,7 @@ copy_toolchain_sysroot = \
+ 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+ 		fi ; \
+ 		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
+-		relpath="./" ; \
+-		nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
+-		for slash in `seq 1 $${nbslashs}` ; do \
+-			relpath=$${relpath}"../" ; \
+-		done ; \
++		relpath="$(call relpath_prefix,$${ARCH_SUBDIR})./" ; \
+ 		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
+ 		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+ 	fi ; \
+@@ -424,3 +420,22 @@ check_toolchain_ssp = \
+ gen_gdbinit_file = \
+ 	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
+ 	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
++
++# Given a path, determine the relative prefix (../) needed to return to the
++# root level. Note that the last component is treated as a file component; use a
++# trailing slash to force treating it as a directory. Examples:
++#     relpath_prefix(lib32) = ""
++#     relpath_prefix(lib32/octeon2) = "../"
++#     relpath_prefix(lib32/octeon2/) = "../../"
++#
++# $1: input path
++define relpath_prefix
++$$( \
++	prefix="" ; \
++	nbslashs=`printf $1 | sed 's%[^/]%%g' | wc -c` ; \
++	for slash in `seq 1 $${nbslashs}` ; do \
++		prefix=$${prefix}"../" ; \
++	done ; \
++	printf "$$prefix" ;\
++)
++endef
 -- 
 2.10.2
