@@ -1,48 +1,94 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Tue, 31 Jan 2017 08:59:06 +0100
-Subject: [Buildroot] [PATCH v6 4/9] Conditional revert "qt5base: install
-	bundled fonts to target"
+Date: Tue, 31 Jan 2017 08:59:09 +0100
+Subject: [Buildroot] [PATCH v6 7/9] qt5quickcontrols/qt5quickcontrols2:
+	enable for software renderer for Qt 5.8.0
 In-Reply-To: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <1485849551-20469-5-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <1485849551-20469-8-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Corjon <corjon.j@ecagroup.com>
-
-qtbase carries nor more fonts since c5ceabb9a1caf6b9b7615a28c3097f221772f645
-
-So for Qt Version 5.8.0 this reverts commit cdfa21b06041eb601e0bea79f2c8f50e9d637384
-and part of 186ef9f6f4647ed34b67a3427a5e0e249f0794e7
+From: Naumann Andreas <ANaumann@ultratronik.de>
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/qt5/qt5base/qt5base.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/qt5/qt5quickcontrols/Config.in             |  4 ++--
+ package/qt5/qt5quickcontrols2/Config.in            |  4 ++--
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk | 12 ++++++++++++
+ 3 files changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index c09bf58..0a70dc8 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -260,12 +260,14 @@ define QT5BASE_INSTALL_TARGET_PLUGINS
- 	fi
+diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
+index 0fe8465..d1a4fa5 100644
+--- a/package/qt5/qt5quickcontrols/Config.in
++++ b/package/qt5/qt5quickcontrols/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
+ 	bool "qt5quickcontrols"
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+ 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+-	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+@@ -13,5 +13,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
+ 	  http://qt.io
+ 
+ comment "qt5quickcontrols needs an OpenGL-capable backend"
+-	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
+index 1e57674..ea22a2b 100644
+--- a/package/qt5/qt5quickcontrols2/Config.in
++++ b/package/qt5/qt5quickcontrols2/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
+ 	bool "qt5quickcontrols2"
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+ 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+-	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative/quick
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8 # qt5declarative/quick
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative/quick
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+@@ -13,5 +13,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
+ 	  http://qt.io
+ 
+ comment "qt5quickcontrols2 needs an OpenGL-capable backend"
+-	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+index 8de7932..0ef25e2 100644
+--- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
++++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+@@ -36,6 +36,7 @@ define QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES
  endef
+ endif
  
 +ifeq ($(BR2_QT5_VERSION_5_6),y)
- define QT5BASE_INSTALL_TARGET_FONTS
- 	if [ -d $(STAGING_DIR)/usr/lib/fonts/ ] ; then \
- 		mkdir -p $(TARGET_DIR)/usr/lib/fonts ; \
- 		cp -dpfr $(STAGING_DIR)/usr/lib/fonts/* $(TARGET_DIR)/usr/lib/fonts ; \
- 	fi
+ define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5LabsTemplates.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/controls $(TARGET_DIR)/usr/qml/Qt/labs
+@@ -43,5 +44,16 @@ define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/templates $(TARGET_DIR)/usr/qml/Qt/labs
+ 	$(QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES)
  endef
++else
++define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickTemplates2.so.* $(TARGET_DIR)/usr/lib
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickControls2.so.* $(TARGET_DIR)/usr/lib
++	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/calendar $(TARGET_DIR)/usr/qml/Qt/labs
++	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/platform $(TARGET_DIR)/usr/qml/Qt/labs
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls.2 $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Templates.2 $(TARGET_DIR)/usr/qml/QtQuick
++	$(QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES)
++endef
 +endif
  
- define QT5BASE_INSTALL_TARGET_EXAMPLES
- 	if [ -d $(STAGING_DIR)/usr/lib/qt/examples/ ] ; then \
+ $(eval $(generic-package))
 -- 
 2.7.4
