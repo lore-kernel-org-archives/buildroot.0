@@ -1,40 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2017 21:38:32 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4,
-	9}.x and 3.12 series
-Message-ID: <20170201204118.7A66C82037@busybox.osuosl.org>
+Date: Wed, 1 Feb 2017 21:39:18 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-tdfx:
+	bump version to 1.4.7
+Message-ID: <20170201204118.8894F82037@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5918a7c53cdcad7e8729a8f4046351a491c43a5
+commit: https://git.buildroot.net/buildroot/commit/?id=c3637918f36548f58ba4e2d672a8123fcb1c1ce2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Removed 0002-abi23.patch, applied upstream.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../x11r7/xdriver_xf86-video-tdfx/0002-abi23.patch | 39 ----------------------
+ .../xdriver_xf86-video-tdfx.hash                   |  4 +--
+ .../xdriver_xf86-video-tdfx.mk                     |  2 +-
+ 3 files changed, 3 insertions(+), 42 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 8d47365..671be96 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -217,12 +217,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.84"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.104"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.69"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.70"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.18.47"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.45"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.46"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.6"		if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.7"		if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/x11r7/xdriver_xf86-video-tdfx/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-tdfx/0002-abi23.patch
+deleted file mode 100644
+index 7e5d650..0000000
+--- a/package/x11r7/xdriver_xf86-video-tdfx/0002-abi23.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From b99390efcb55d7d4a68e8c595119c1af4426fc0b Mon Sep 17 00:00:00 2001
+-From: Adam Jackson <ajax@redhat.com>
+-Date: Tue, 19 Jul 2016 10:03:56 -0400
+-Subject: Adapt Block/WakeupHandler signature for ABI 23
+-
+-Signed-off-by: Adam Jackson <ajax@redhat.com>
+----
+-Downloaded from
+-https://cgit.freedesktop.org/xorg/driver/xf86-video-tdfx/patch/?id=b99390efcb55d7d4a68e8c595119c1af4426fc0b
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff --git a/src/compat-api.h b/src/compat-api.h
+-index 98ba435..44daea4 100644
+---- a/src/compat-api.h
+-+++ b/src/compat-api.h
+-@@ -78,11 +78,19 @@
+- 
+- #define SCREEN_INIT_ARGS_DECL ScreenPtr pScreen, int argc, char **argv
+- 
+-+#if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(23, 0)
+-+#define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout
+-+#define BLOCKHANDLER_ARGS arg, pTimeout
+-+
+-+#define WAKEUPHANDLER_ARGS_DECL ScreenPtr arg, unsigned long result
+-+#define WAKEUPHANDLER_ARGS arg, result
+-+#else
+- #define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout, pointer pReadmask
+- #define BLOCKHANDLER_ARGS arg, pTimeout, pReadmask
+- 
+- #define WAKEUPHANDLER_ARGS_DECL ScreenPtr arg, unsigned long result, pointer read_mask
+- #define WAKEUPHANDLER_ARGS arg, result, read_mask
+-+#endif
+- 
+- #define CLOSE_SCREEN_ARGS_DECL ScreenPtr pScreen
+- #define CLOSE_SCREEN_ARGS pScreen
+--- 
+-cgit v0.10.2
+-
+diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash
+index 1cdef2a..8488559 100644
+--- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash
++++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-February/002536.html
+-sha256	3a8a88867c40ad61f1c9a09ffd7ac64102fa821685855d50ce66c7603dcc6d37	xf86-video-tdfx-1.4.6.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-January/002755.html
++sha256 4cf48ee14ead52b23493c3dce5032496fd68bf1d000170bb138730497e212a42  xf86-video-tdfx-1.4.7.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+index 942dcf3..471e6cf 100644
+--- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
++++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_TDFX_VERSION = 1.4.6
++XDRIVER_XF86_VIDEO_TDFX_VERSION = 1.4.7
+ XDRIVER_XF86_VIDEO_TDFX_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_TDFX_SOURCE = xf86-video-tdfx-$(XDRIVER_XF86_VIDEO_TDFX_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_TDFX_LICENSE = MIT
