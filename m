@@ -1,40 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2017 22:04:04 +0100
-Subject: [Buildroot] [PATCH 6/6] DEVELOPERS: update Thomas De
- Schampheleire
-In-Reply-To: <20170131160343.27144-7-patrickdepinguin@gmail.com>
-References: <20170131160343.27144-1-patrickdepinguin@gmail.com>
- <20170131160343.27144-7-patrickdepinguin@gmail.com>
-Message-ID: <20170201220404.0f4bf129@free-electrons.com>
+Date: Wed, 1 Feb 2017 22:04:49 +0100
+Subject: [Buildroot] [git commit] toolchain-external: remove stale
+	references to (ARCH_)LIBC_A_LOCATION
+Message-ID: <20170201210518.3018881EC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=497f69889d21200e55a7519cf64819e9ce6e59cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 31 Jan 2017 17:03:43 +0100, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> The originally added entries were based on 'last committer' heuristics, but
-> I do not particularly feel responsible for them.
+The variables LIBC_A_LOCATION and ARCH_LIBC_A_LOCATION were killed in commit
+646bd86908f7f995cdc2b95e0be381d97600f905 but the corresponding descriptions
+were never removed.
 
-Come on, you don't even maintain the packages you've contributed! :-)
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../toolchain-external/pkg-toolchain-external.mk   | 30 ++++++++--------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-> Instead update the list with more appropriate entries.
-> 
-> Additionally, update my email address.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  DEVELOPERS | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-
-Anyway, applied to master, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index e0a8b41..6658875 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -347,35 +347,27 @@ endef
+ #
+ # Variables are defined as follows:
+ #
+-#  LIBC_A_LOCATION:     location of the libc.a file in the default
+-#                       multilib variant (allows to find the main
+-#                       sysroot directory)
+-#                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/usr/lib/libc.a
+-#
+-#  SYSROOT_DIR:         the main sysroot directory, deduced from
+-#                       LIBC_A_LOCATION by removing the
+-#                       usr/lib[32|64]/libc.a part of the path.
++# SYSROOT_DIR:          the main sysroot directory, deduced from the location of
++#                       the libc.a file in the default multilib variant, by
++#                       removing the usr/lib[32|64]/libc.a part of the path.
+ #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/
+ #
+-# ARCH_LIBC_A_LOCATION: location of the libc.a file in the selected
+-#                       multilib variant (taking into account the
+-#                       CFLAGS). Allows to find the sysroot of the
+-#                       selected multilib variant.
+-#                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/mips16/soft-float/el/usr/lib/libc.a
+-#
+ # ARCH_SYSROOT_DIR:     the sysroot of the selected multilib variant,
+-#                       deduced from ARCH_LIBC_A_LOCATION by removing
+-#                       usr/lib[32|64]/libc.a at the end of the path.
++#                       deduced from the location of the libc.a file in the
++#                       selected multilib variant (taking into account the
++#                       CFLAGS), by removing usr/lib[32|64]/libc.a at the end
++#                       of the path.
+ #                       Ex: /x-tools/mips-2011.03/mips-linux-gnu/libc/mips16/soft-float/el/
+ #
+ # ARCH_LIB_DIR:         'lib', 'lib32' or 'lib64' depending on where libraries
+-#                       are stored. Deduced from ARCH_LIBC_A_LOCATION by
+-#                       looking at usr/lib??/libc.a.
++#                       are stored. Deduced from the location of the libc.a file
++#                       in the selected multilib variant, by looking at
++#                       usr/lib??/libc.a.
+ #                       Ex: lib
+ #
+ # ARCH_SUBDIR:          the relative location of the sysroot of the selected
+ #                       multilib variant compared to the main sysroot.
+-#			Ex: mips16/soft-float/el
++#                       Ex: mips16/soft-float/el
+ #
+ # SUPPORT_LIB_DIR:      some toolchains, such as recent Linaro toolchains,
+ #                       store GCC support libraries (libstdc++,
