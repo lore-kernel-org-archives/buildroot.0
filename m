@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2017 21:39:20 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis: bump
-	version to 0.10.9
-Message-ID: <20170201204118.C730E82131@busybox.osuosl.org>
+Date: Wed, 1 Feb 2017 21:39:22 +0100
+Subject: [Buildroot] [git commit]
+	package/x11r7/xdriver_xf86-video-siliconmotion: bump version
+	to 1.7.9
+Message-ID: <20170201204118.CC87D82037@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea367a7126d4d68627589c43bf569b63800f9e97
+commit: https://git.buildroot.net/buildroot/commit/?id=0446de43de534fd13a796ca02f73fe36eb48350a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed 0002-abi23.patch, applied upstream.
+Removed 0001-abi23.patch, applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../x11r7/xdriver_xf86-video-sis/0002-abi23.patch  | 33 ----------------------
- .../xdriver_xf86-video-sis.hash                    |  4 +--
- .../xdriver_xf86-video-sis.mk                      |  2 +-
+ .../0001-abi23.patch                               | 33 ----------------------
+ .../xdriver_xf86-video-siliconmotion.hash          |  4 +--
+ .../xdriver_xf86-video-siliconmotion.mk            |  2 +-
  3 files changed, 3 insertions(+), 36 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
+diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/0001-abi23.patch b/package/x11r7/xdriver_xf86-video-siliconmotion/0001-abi23.patch
 deleted file mode 100644
-index 109f745..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0002-abi23.patch
+index 2cd6e63..0000000
+--- a/package/x11r7/xdriver_xf86-video-siliconmotion/0001-abi23.patch
 +++ /dev/null
 @@ -1,33 +0,0 @@
--From 96fee560cd8bf7bf27048ce5fe67b7af6838c8d0 Mon Sep 17 00:00:00 2001
+-From e67f3949648c20e16ac756ae28ea4a2b4a1d0f4c Mon Sep 17 00:00:00 2001
 -From: Adam Jackson <ajax@redhat.com>
 -Date: Tue, 19 Jul 2016 10:03:56 -0400
 -Subject: Adapt Block/WakeupHandler signature for ABI 23
@@ -36,7 +37,7 @@ index 109f745..0000000
 -Signed-off-by: Adam Jackson <ajax@redhat.com>
 ----
 -Downloaded from
--https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=96fee560cd8bf7bf27048ce5fe67b7af6838c8d0
+-https://cgit.freedesktop.org/xorg/driver/xf86-video-siliconmotion/patch/?id=e67f3949648c20e16ac756ae28ea4a2b4a1d0f4c
 -
 -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
@@ -61,25 +62,25 @@ index 109f745..0000000
 --- 
 -cgit v0.10.2
 -
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
-index dfc7814..98ea8b1 100644
---- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
+diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash
+index 42f39d2..819698c 100644
+--- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash
++++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-August/002628.html
--sha256	c8f3f2577f69334dfcc4bf96477dce45161170555f3abdfa105599e61bc7d3fe	xf86-video-sis-0.10.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-January/002756.html
-+sha256 5226b7407c601afa32d6cbf155f9182da95d92cdc89c1f83471e1927e552c10d  xf86-video-sis-0.10.9.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-index 5792f8e..833246e 100644
---- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-May/002604.html
+-sha256	e9d449a9fd9e58b4e018447b6c64005f7874cffb1777e513ac9fc41a86071beb	xf86-video-siliconmotion-1.7.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-January/002763.html
++sha256 d0f3c691e71108d27a061beb62bf78b36ec35bd755905692734dd68cfb3359bc  xf86-video-siliconmotion-1.7.9.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
+index f8ea403..53b19f9 100644
+--- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
++++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.8
-+XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.9
- XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SIS_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION = 1.7.8
++XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION = 1.7.9
+ XDRIVER_XF86_VIDEO_SILICONMOTION_SOURCE = xf86-video-siliconmotion-$(XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_SILICONMOTION_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE = MIT
