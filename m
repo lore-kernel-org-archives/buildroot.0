@@ -1,45 +1,119 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  1 Feb 2017 22:48:42 +0200
-Subject: [Buildroot] [PATCH v2] dbus: remove init script status op
-Message-ID: <9db6a8643a625337a6b477efd537a9245a26f594.1485982122.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Feb 2017 21:52:10 +0100
+Subject: [Buildroot] [git commit] docs/website/sponsors.html: Google and
+	Mind sponsors of FOSDEM 2017 meeting
+Message-ID: <20170201205257.E696B82125@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The status command calls the Upstrat status utility which we don't have.
+commit: https://git.buildroot.net/buildroot/commit/?id=21d3f1228968c998c50adb0aa068a8ae640a51c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2: Correct the commit log (Thomas P)
----
- package/dbus/S30dbus | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+This commit updates the sponsors page on our web site to indicate that
+Google and Mind are sponsoring the Buildroot Developers Meeting at
+FOSDEM 2017 in Brussels.
 
-diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
-index 4427b5c72c0a..b4bcf9c7aa9a 100644
---- a/package/dbus/S30dbus
-+++ b/package/dbus/S30dbus
-@@ -53,10 +53,6 @@ case "$1" in
-     stop)
-         stop
-         ;;
--    status)
--        status $processname
--        RETVAL=$?
--        ;;
-     restart)
-         stop
-         start
-@@ -72,7 +68,7 @@ case "$1" in
-         RETVAL=$?
-         ;;
-     *)
--        echo "Usage: $0 {start|stop|status|restart|condrestart|reload}"
-+        echo "Usage: $0 {start|stop|restart|condrestart|reload}"
-         ;;
- esac
- exit $RETVAL
--- 
-2.11.0
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/website/sponsors.html | 57 +++++++++++++++++++++++++---------------------
+ 1 file changed, 31 insertions(+), 26 deletions(-)
+
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index 6d97ca5..e0f1aab 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -9,40 +9,42 @@
+     <div class="panel-body">
+ 
+       <div class="row">
++
+ 	<div class="col-sm-12">
+ 	  <div class="panel panel-default">
+ 	    <div class="panel-body">
+ 	      <div class="col-sm-4">
+-		<a href="http://www.mind.be">
+-		  <img class="img-responsive center-block" src="images/mind-logo.png"/>
++		<a href="http://www.google.com">
++		  <img class="img-responsive center-block" src="images/google-logo.png"/>
+ 		</a>
+ 	      </div>
+ 	      <div class="col-sm-8">
+-		As it did in previous years and at FOSDEM, <a href="http://www.mind.be">Mind</a>
+-		is sponsoring the Friday night dinner at the <a href="http://elinux.org/Buildroot:DeveloperDaysELCE2016">Buildroot
+-		Developers Meeting at ELCE 2016</a> in Berlin.
++		<a href="http://www.google.com">Google</a> is
++		sponsoring
++		the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017">Buildroot
++		  Developers Meeting at FOSDEM 2017</a> in Brussels, by
++		providing logistics for the meeting: a free meeting
++		room and lunch for the participants.
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	</div>
+ 
+-	<div class="col-sm-12">
+-	  <div class="panel panel-default">
+-	    <div class="panel-body">
+-	      <div class="col-sm-4">
+-		<a href="http://www.free-electrons.com">
+-		  <img class="img-responsive center-block" src="images/free-electrons-logo.png"/>
+-		</a>
+-	      </div>
+-	      <div class="col-sm-8">
+-		<a href="http://www.free-electrons.com">Free
+-		Electrons</a> is sponsoring the <a href="http://elinux.org/Buildroot:DeveloperDaysELCE2016">Buildroot
+-		Developers Meeting at ELCE 2016</a> in Berlin, by making a donation to the
+-		<a href="http://in-berlin.de/">IN-Berlin</a> organization who hosted the event.
++	  <div class="col-sm-12">
++	    <div class="panel panel-default">
++	      <div class="panel-body">
++		<div class="col-sm-4">
++		  <a href="http://www.mind.be">
++		    <img class="img-responsive center-block" src="images/mind-logo.png"/>
++		  </a>
++		</div>
++		<div class="col-sm-8">
++		  As it did in previous years, <a href="http://www.mind.be">Mind</a>
++		  is sponsoring the Monday night dinner at the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017">Buildroot
++		    Developers Meeting at FOSDEM 2017</a> in Brussels.
++		</div>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-
+     </div>
+   </div>
+ 
+@@ -80,9 +82,10 @@
+ 	      </div>
+ 	      <div class="col-sm-12">
+ 		<a href="http://www.mind.be">Mind</a> sponsored the
+-		dinner of the FOSDEM 2014, 2015 and 2016 Developers
+-		Meeting (Brussels), the meeting room and the dinner
+-		for the ELCE 2014 Developers Meeting (D??sseldorf).
++		dinner of the FOSDEM 2014, 2015, 2016 and 2017
++		Developers Meeting (Brussels) and ELCE 2016 (Berlin),
++		the meeting room and the dinner for the ELCE 2014
++		Developers Meeting (D??sseldorf).
+ 	      </div>
+ 	    </div>
+ 	  </div>
+@@ -214,9 +217,11 @@
+ 		    <img class="img-responsive center-block" src="images/free-electrons-logo.png"/></a></p>
+ 	      </div>
+ 	      <div class="col-sm-12">
+-		<p><a href="http://www.free-electrons.com">Free Electrons</a>
+-		  sponsored the lunch for the ELCE 2009 Developer Days in
+-		  Grenoble, France.</p>
++		<p><a href="http://www.free-electrons.com">Free
++		  Electrons</a> sponsored the meeting location for the
++		  ELCE 2016 Developer Days in Berlin, Germany, and the
++		  lunch for the ELCE 2009 Developer Days in Grenoble,
++		  France.</p>
+ 	      </div>
+ 	    </div>
+ 	  </div>
