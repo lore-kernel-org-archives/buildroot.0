@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2017 22:13:21 +0100
-Subject: [Buildroot] [PATCH v2] dbus: remove init script status op
-In-Reply-To: <9db6a8643a625337a6b477efd537a9245a26f594.1485982122.git.baruch@tkos.co.il>
-References: <9db6a8643a625337a6b477efd537a9245a26f594.1485982122.git.baruch@tkos.co.il>
-Message-ID: <20170201221321.64b1c0be@free-electrons.com>
+Date: Wed, 1 Feb 2017 22:21:48 +0100
+Subject: [Buildroot] [PATCH 1/1] libcurl: optional verbose strings config
+In-Reply-To: <CAGReGbRcsp25tZ=YV8+sFp2ZH17XZYhK7AVu2St7C1iKT3nfkA@mail.gmail.com>
+References: <1485883613-48485-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20170201220318.06114262@free-electrons.com>
+ <CAGReGbRcsp25tZ=YV8+sFp2ZH17XZYhK7AVu2St7C1iKT3nfkA@mail.gmail.com>
+Message-ID: <20170201222148.5798ec02@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  1 Feb 2017 22:48:42 +0200, Baruch Siach wrote:
-> The status command calls the Upstrat status utility which we don't have.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v2: Correct the commit log (Thomas P)
-> ---
->  package/dbus/S30dbus | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+On Wed, 1 Feb 2017 15:15:20 -0600, Judd Meinders wrote:
 
-Applied to master, after fixing the typo in the commit log, as noticed
-by Peter Seiderer.
+> The original (and still) default selection of libcurl uses
+> --disable-verbose so the new sub option is meant to merely provide the
+> availability to include the verbose output as a library feature.  I
+> wasn't thinking target size I guess.
 
-Thanks,
+My point was that if the size increase caused by --enable-verbose was
+really small, then having a Buildroot sub-option just for this would
+really be pointless.
+
+More config options in Buildroot means more complexity, more
+combinations of configurations, and therefore more chances for things
+to break. Hence we always think twice about adding new configuration
+options.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
