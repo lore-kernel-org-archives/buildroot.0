@@ -1,43 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  1 Feb 2017 16:34:49 +0200
-Subject: [Buildroot] [PATCH] dbus: remove init script status op
-Message-ID: <e13ba7be4cd326b90b0c71cc25b44718f18d8980.1485959689.git.baruch@tkos.co.il>
+From: Ignacy =?iso-8859-2?Q?Gaw=EAdzki?= <ignacy.gawedzki@green-communications.fr>
+Date: Wed, 1 Feb 2017 14:53:10 +0100
+Subject: [Buildroot] [PATCH] Don't disable dependency tracking if using
+ <pkg>_OVERRIDE_SRCDIR.
+Message-ID: <20170201135310.3ghqvpqww25jfzm2@zenon.in.qult.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no status() shell routine in this script.
+Include the --disable-dependency-tracking option in
+<pkg>_CONFIGURE_CMDS only on the condition that <pkg>_OVERRIDE_SRCDIR
+is empty.  Dependency tracking is very welcome while developing in
+order to properly rebuild when calling make <pkg>-rebuild for
+instance.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
 ---
- package/dbus/S30dbus | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/pkg-autotools.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
-index 4427b5c72c0a..b4bcf9c7aa9a 100644
---- a/package/dbus/S30dbus
-+++ b/package/dbus/S30dbus
-@@ -53,10 +53,6 @@ case "$1" in
-     stop)
-         stop
-         ;;
--    status)
--        status $processname
--        RETVAL=$?
--        ;;
-     restart)
-         stop
-         start
-@@ -72,7 +68,7 @@ case "$1" in
-         RETVAL=$?
-         ;;
-     *)
--        echo "Usage: $0 {start|stop|status|restart|condrestart|reload}"
-+        echo "Usage: $0 {start|stop|restart|condrestart|reload}"
-         ;;
- esac
- exit $RETVAL
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index f7b8488..e8579f4 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -199,7 +199,8 @@ define $(2)_CONFIGURE_CMDS
+ 		--disable-documentation \
+ 		--with-xmlto=no \
+ 		--with-fop=no \
+-		--disable-dependency-tracking \
++		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),, \
++		   --disable-dependency-tracking) \
+ 		--enable-ipv6 \
+ 		$$(DISABLE_NLS) \
+ 		$$(SHARED_STATIC_LIBS_OPTS) \
+@@ -232,7 +233,8 @@ define $(2)_CONFIGURE_CMDS
+ 		--disable-debug \
+ 		--with-xmlto=no \
+ 		--with-fop=no \
+-		--disable-dependency-tracking \
++		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),, \
++		   --disable-dependency-tracking) \
+ 		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
+ 	)
+ endef
 -- 
-2.11.0
+2.9.3
