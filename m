@@ -1,35 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2017 22:05:27 +0100
-Subject: [Buildroot] [PATCH 1/6] toolchain-external: remove stale
- references to (ARCH_)LIBC_A_LOCATION
-In-Reply-To: <20170131160343.27144-2-patrickdepinguin@gmail.com>
-References: <20170131160343.27144-1-patrickdepinguin@gmail.com>
- <20170131160343.27144-2-patrickdepinguin@gmail.com>
-Message-ID: <20170201220527.14fad935@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 1 Feb 2017 22:06:10 +0100
+Subject: [Buildroot] [PATCH v2] dbus: remove init script status op
+In-Reply-To: <9db6a8643a625337a6b477efd537a9245a26f594.1485982122.git.baruch@tkos.co.il>
+References: <9db6a8643a625337a6b477efd537a9245a26f594.1485982122.git.baruch@tkos.co.il>
+Message-ID: <20170201220610.5831727d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Baruch,
 
-On Tue, 31 Jan 2017 17:03:38 +0100, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On Wed,  1 Feb 2017 22:48:42 +0200, Baruch Siach <baruch@tkos.co.il> wrote:
+
+> The status command calls the Upstrat status utility which we don't have.
+
+Minor typo, s/Upstrat/Upstart/...
+
+Regards,
+Peter
+
+
 > 
-> The variables LIBC_A_LOCATION and ARCH_LIBC_A_LOCATION were killed in commit
-> 646bd86908f7f995cdc2b95e0be381d97600f905 but the corresponding descriptions
-> were never removed.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  .../toolchain-external/pkg-toolchain-external.mk   | 30 ++++++++--------------
->  1 file changed, 11 insertions(+), 19 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> v2: Correct the commit log (Thomas P)
+> ---
+>  package/dbus/S30dbus | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
+> index 4427b5c72c0a..b4bcf9c7aa9a 100644
+> --- a/package/dbus/S30dbus
+> +++ b/package/dbus/S30dbus
+> @@ -53,10 +53,6 @@ case "$1" in
+>      stop)
+>          stop
+>          ;;
+> -    status)
+> -        status $processname
+> -        RETVAL=$?
+> -        ;;
+>      restart)
+>          stop
+>          start
+> @@ -72,7 +68,7 @@ case "$1" in
+>          RETVAL=$?
+>          ;;
+>      *)
+> -        echo "Usage: $0 {start|stop|status|restart|condrestart|reload}"
+> +        echo "Usage: $0 {start|stop|restart|condrestart|reload}"
+>          ;;
+>  esac
+>  exit $RETVAL
