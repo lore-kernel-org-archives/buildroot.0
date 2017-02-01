@@ -1,56 +1,51 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 1 Feb 2017 22:06:10 +0100
-Subject: [Buildroot] [PATCH v2] dbus: remove init script status op
-In-Reply-To: <9db6a8643a625337a6b477efd537a9245a26f594.1485982122.git.baruch@tkos.co.il>
-References: <9db6a8643a625337a6b477efd537a9245a26f594.1485982122.git.baruch@tkos.co.il>
-Message-ID: <20170201220610.5831727d@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Feb 2017 22:10:44 +0100
+Subject: [Buildroot] [git commit] core infra: make sure apply-patches is
+	called with correct tar
+Message-ID: <20170201211114.E684481DCA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+commit: https://git.buildroot.net/buildroot/commit/?id=cee060e98e7681c81ced198f078ddc1e7881c9ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  1 Feb 2017 22:48:42 +0200, Baruch Siach <baruch@tkos.co.il> wrote:
+Buildroot has a mechanism to detect a too-old or missing tar program on the
+host machine, and builds a custom host-tar if needed. An example situation
+is a RHEL5 host machine, where tar is knowingly too old.
 
-> The status command calls the Upstrat status utility which we don't have.
+The apply-patches script also employs tar, in case the patches come as an
+archive. However, tar is called as 'tar' without any absolute path, and the
+environment does not point in any way to the possibly custom tar. As a
+result, the too-old-tar is called. A particular problem is the flag '-a'
+which is missing on e.g. RHEL5.
 
-Minor typo, s/Upstrat/Upstart/...
+Previously, this problem went unnoticed: tar would fail, but apply-patches
+did not notice it, and the overall return code of the script was 'success'.
+However, commit d5ae67b4 added 'set -e' to the script, causing any error to
+halt execution of the script with an error.
 
-Regards,
-Peter
+Fix the problem by adding the Buildroot-built host tools to the PATH when
+calling apply-patches.
 
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v2: Correct the commit log (Thomas P)
-> ---
->  package/dbus/S30dbus | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
-> index 4427b5c72c0a..b4bcf9c7aa9a 100644
-> --- a/package/dbus/S30dbus
-> +++ b/package/dbus/S30dbus
-> @@ -53,10 +53,6 @@ case "$1" in
->      stop)
->          stop
->          ;;
-> -    status)
-> -        status $processname
-> -        RETVAL=$?
-> -        ;;
->      restart)
->          stop
->          start
-> @@ -72,7 +68,7 @@ case "$1" in
->          RETVAL=$?
->          ;;
->      *)
-> -        echo "Usage: $0 {start|stop|status|restart|condrestart|reload}"
-> +        echo "Usage: $0 {start|stop|restart|condrestart|reload}"
->          ;;
->  esac
->  exit $RETVAL
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 688d5b1..4a3eb26 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -215,7 +215,7 @@ FLEX := $(shell which flex || type -p flex)
+ BISON := $(shell which bison || type -p bison)
+ UNZIP := $(shell which unzip || type -p unzip) -q
+ 
+-APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(QUIET),-s)
++APPLY_PATCHES = PATH=$(HOST_DIR)/usr/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
+ 
+ HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
+ HOST_CFLAGS   ?= -O2
