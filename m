@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2017 22:21:48 +0100
-Subject: [Buildroot] [PATCH 1/1] libcurl: optional verbose strings config
-In-Reply-To: <CAGReGbRcsp25tZ=YV8+sFp2ZH17XZYhK7AVu2St7C1iKT3nfkA@mail.gmail.com>
-References: <1485883613-48485-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20170201220318.06114262@free-electrons.com>
- <CAGReGbRcsp25tZ=YV8+sFp2ZH17XZYhK7AVu2St7C1iKT3nfkA@mail.gmail.com>
-Message-ID: <20170201222148.5798ec02@free-electrons.com>
+Date: Wed, 1 Feb 2017 22:19:16 +0100
+Subject: [Buildroot] [git commit] sepolgen: bump to version 2.6
+Message-ID: <20170201212622.726207FA7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ebd029c9d9eacb649d6d1826a061830477e31d39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 1 Feb 2017 15:15:20 -0600, Judd Meinders wrote:
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sepolgen/sepolgen.hash | 2 +-
+ package/sepolgen/sepolgen.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> The original (and still) default selection of libcurl uses
-> --disable-verbose so the new sub option is meant to merely provide the
-> availability to include the verbose output as a library feature.  I
-> wasn't thinking target size I guess.
-
-My point was that if the size increase caused by --enable-verbose was
-really small, then having a Buildroot sub-option just for this would
-really be pointless.
-
-More config options in Buildroot means more complexity, more
-combinations of configurations, and therefore more chances for things
-to break. Hence we always think twice about adding new configuration
-options.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/sepolgen/sepolgen.hash b/package/sepolgen/sepolgen.hash
+index a377c66..b338a70 100644
+--- a/package/sepolgen/sepolgen.hash
++++ b/package/sepolgen/sepolgen.hash
+@@ -1,2 +1,2 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 8a1c6d3a78c9b6ad3555c74def555f65a62950bf21c111c585bfc382fec3a645  sepolgen-1.1.9.tar.gz
++sha256 6a327b1576d914e57ad796a541a7a9bcceefb14c445355559993de0fdb8e7a60  sepolgen-2.6.tar.gz
+diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
+index efecee7..137eaed 100644
+--- a/package/sepolgen/sepolgen.mk
++++ b/package/sepolgen/sepolgen.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SEPOLGEN_VERSION = 1.1.9
+-SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
++SEPOLGEN_VERSION = 2.6
++SEPOLGEN_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
+ SEPOLGEN_LICENSE = GPLv2
+ SEPOLGEN_LICENSE_FILES = COPYING
+ 
