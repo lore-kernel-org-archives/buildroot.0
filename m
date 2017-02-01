@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2017 21:39:36 +0100
-Subject: [Buildroot] [git commit] package/xutil_util-macros: bump version to
-	1.19.1
-Message-ID: <20170201204119.5FB748184E@busybox.osuosl.org>
+Date: Wed, 1 Feb 2017 21:39:30 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-evdev:
+	bump version to 2.10.5
+Message-ID: <20170201204119.2D24782037@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a20f92a612a67482faa78b8e0b1fd6dbc58e4514
+commit: https://git.buildroot.net/buildroot/commit/?id=c3d9d4711e4f5673b66598e28a10adf9cc826a41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xutil_util-macros/xutil_util-macros.hash | 4 ++--
- package/xutil_util-macros/xutil_util-macros.mk   | 2 +-
+ package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash | 4 ++--
+ package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xutil_util-macros/xutil_util-macros.hash b/package/xutil_util-macros/xutil_util-macros.hash
-index bcb6c58..0f0509a 100644
---- a/package/xutil_util-macros/xutil_util-macros.hash
-+++ b/package/xutil_util-macros/xutil_util-macros.hash
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
+index 389356f..bf9a2cd 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
 @@ -1,2 +1,2 @@
--# From http://article.gmane.org/gmane.comp.freedesktop.xorg.announce/2141
--sha256	2835b11829ee634e19fa56517b4cfc52ef39acea0cd82e15f68096e27cbed0ba	util-macros-1.19.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-January/002773.html
-+sha256 18d459400558f4ea99527bc9786c033965a3db45bf4c6a32eefdc07aa9e306a6  util-macros-1.19.1.tar.bz2
-diff --git a/package/xutil_util-macros/xutil_util-macros.mk b/package/xutil_util-macros/xutil_util-macros.mk
-index 1451a06..d01b3e0 100644
---- a/package/xutil_util-macros/xutil_util-macros.mk
-+++ b/package/xutil_util-macros/xutil_util-macros.mk
+-# From https://lists.x.org/archives/xorg-announce/2016-October/002718.html
+-sha256 bbf6a03fbce1a6c0c7d874eef519fd0a854bf01b515c745d41fa551ce6490cc2  xf86-input-evdev-2.10.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-January/002767.html
++sha256 9edaa6205baf6d2922cc4db3d8e54a7e7773b5f733b0ae90f6be7725f983b70d  xf86-input-evdev-2.10.5.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 9ec893b..4933c42 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XUTIL_UTIL_MACROS_VERSION = 1.19.0
-+XUTIL_UTIL_MACROS_VERSION = 1.19.1
- XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.bz2
- XUTIL_UTIL_MACROS_SITE = http://xorg.freedesktop.org/releases/individual/util
- XUTIL_UTIL_MACROS_LICENSE = MIT
+-XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.4
++XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.5
+ XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
