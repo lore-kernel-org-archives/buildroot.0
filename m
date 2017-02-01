@@ -1,7 +1,14 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  1 Feb 2017 08:29:28 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-01-31
-Message-ID: <20170201072928.608D421D02@mail.free-electrons.com>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Wed, 1 Feb 2017 09:13:55 +0100
+Subject: [Buildroot] Relocatable internal toolchain
+In-Reply-To: <418de570-9eff-444d-578e-792c7f03dae7@grandegger.com>
+References: <57c96cfd-7d0c-c9de-04d2-2da8f5dd7f7c@grandegger.com>
+ <CAHXCMML2HKsOgxZRLpcMbCY8Lci6-N_s1+qVTRxCHqyvP+rzgg@mail.gmail.com>
+ <11e6deef-d790-33d8-b0ad-3477a51e369f@grandegger.com>
+ <a46d8432-bc43-5b0c-5a7a-a04e8993912e@grandegger.com>
+ <CAHXCMMJ1HL5EY=veTL02uA+LrEi1_4J4h008S2zhCEpgQjePig@mail.gmail.com>
+ <418de570-9eff-444d-578e-792c7f03dae7@grandegger.com>
+Message-ID: <d81c11f5-0003-133a-501a-6377af9ca970@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,76 +17,65 @@ To: buildroot@busybox.net
 
 Hello,
 
-Build statistics for 2017-01-31
-================================
+Am 30.01.2017 um 10:36 schrieb Wolfgang Grandegger:
+> Hi Samuel,
+>
+> Am 30.01.2017 um 09:14 schrieb Samuel Martin:
+>> Hi Wolfgang, all,
+>>
+>> On Mon, Jan 30, 2017 at 8:31 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
+>>>
+>>> Buildroot's build system is quite new too me. At a first glance it's rather
+>>> heavy stuff! So I first tried the patches you mentioned to see what I get.
+>>> After some tweaking due to "file permissions" and "file in use" issues with
+>>> patchelf, the build did succeed. But subsequent builds then required setting
+>>> LD_LIBRARY_PATH for the host tools. Then I moved the buildroot output
+>>> directory to a different location to see if relocation, as I understand it,
+>>> works. My test cases are some out-of-tree QT5 examples:
+>>>
+>>>   $ cd <a-path>/examples
+>>>   $ <path-to-buildroot-output>/host/usr/bin/qmake
+>>>   Could not find qmake configuration file devices/linux-buildroot-g++.
+>>>   Error processing project file: /home/wolf/junk/examples/examples.pro
+>>>
+>>> How do I set the new path to the toolchain. Likely I have missed something.
+>>
+>> I have no clue about this, but a quick google search gives me a
+>> possible way to fix/workaround this [5] (with no warranty at all).
+>
+> See below...
+>
+>>> Apart from the "rpath", the path to the build directory is also in many text
+>>> (configuration scripts, etc.) files. What did work for me was replacing the
+>>> path to the build directory ("<buildroot-output>/host/usr") with the new
+>>> location in all text files.
+>>>
+>>> Not sure if we speak/think about the same "relocation" behaviour.
+>>
+>> Yes we are, I just forgot to give the main link to this task, which
+>> details many things to fix/support for a complete relocatable SDK.
+>> Note that the series I posted just dealt with the rpath point so far,
+>> unstacking one point after the other.
+>
+> OK, I see! The script I mentioned does:
+>
+>   for FILE in $(grep -r  "${FINDSTR}"  . -l ) ; do
+> 	if [ ! -h ${FILE} ] && [ -n  "$(file ${FILE} | cut -d: -f2 | grep text )" ]
+> 		then
+> 		echo ${FILE}
+> 		sed -i s,"${FINDSTR}",${REPLACESTR},g ${FILE}
+> 	fi 	
+>   done
+>
+> Such a script is mentioned in [6]. Relocation works fine (for me) also
+> without fixing "rpath", and for the qmake examples above.
+>
+>> [5] http://doc.qt.io/qt-5/qmake-environment-reference.html
+>> [6] http://elinux.org/Buildroot#Core_Buildroot_infrastructure
+>
+> It's getting clearer what has do be done...
 
-      successes : 116
-       failures : 37 
-       timeouts : 1  
-          TOTAL : 154
+Digging deeper... Is there a simple way of re-triggering the population 
+of the host, staging and target trees without doing a make clean?
 
-Classification of failures by reason
-====================================
-
-               openswan-2.6.46 | 8 
-                    ruby-2.4.0 | 8 
-                   ortp-0.27.0 | 4 
-                 sngrep-v1.4.2 | 4 
-                    mpd-0.20.3 | 3 
-               bctoolbox-0.4.0 | 1 
-kmsxx-bd5f6471e619a6ba2987b... | 1 
-                 libraw-0.17.1 | 1 
-                log4cxx-0.10.0 | 1 
-            lttng-libust-2.9.0 | 1 
-make[3]: *** [all-recursive... | 1 
-                 mplayer-1.3.0 | 1 
-                   ncftp-3.2.6 | 1 
-python-libconfig-b271c3d9da... | 1 
-        riemann-c-client-1.9.1 | 1 
-                 wavpack-5.1.0 | 1 
-
-
-Detail of failures
-===================
-
-        i586 |                bctoolbox-0.4.0 | NOK | http://autobuild.buildroot.net/results/80bcc0f208cd41f74bf09a6495ac173193275a3e
-        m68k | kmsxx-bd5f6471e619a6ba2987b... | NOK | http://autobuild.buildroot.net/results/f7e01993d6bb86430a56123499fa7293230917be
-        i686 |                  libraw-0.17.1 | NOK | http://autobuild.buildroot.net/results/7eccd6c170c49c671d94110669c8a4ae47d075a3
-      x86_64 |                 log4cxx-0.10.0 | NOK | http://autobuild.buildroot.net/results/e03011dc085dcfd82b186b959fc15e9ddcfed26d
-      x86_64 |             lttng-libust-2.9.0 | NOK | http://autobuild.buildroot.net/results/571bca494a5a937106bcd09d3d333491ba349f58
- powerpc64le | make[3]: *** [all-recursive... | TIM | http://autobuild.buildroot.net/results/5c2cb2bd8413e425b27fb72644c9737a53dcc8fe
-       nios2 |                     mpd-0.20.3 | NOK | http://autobuild.buildroot.net/results/64ca7ef43bad14e02f8943e0926f695505c89650
-       nios2 |                     mpd-0.20.3 | NOK | http://autobuild.buildroot.net/results/d4c98f0e22fc41b02d434ae5656cee41ab121f0d
-       nios2 |                     mpd-0.20.3 | NOK | http://autobuild.buildroot.net/results/b78fddbc1835ba5c7bdc300c82dfab6487691394
-        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/28a3755ce6058fd97994f2ade02be2bff248e184
-      x86_64 |                    ncftp-3.2.6 | NOK | http://autobuild.buildroot.net/results/6583c5a22d6fe02823fb5ee642ab725c6983d7da
-     powerpc |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/a5552e592251034313d1d9d2fa9cc42a0b47fe1d
-         arc |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/23ffed83cdc8eb4669941f5aadfc7d8dcdaa2b25
-      xtensa |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/9191e9abcf104d31d0cdcfaaa452f6c6124884c1
-      xtensa |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/d47014a60b33562d754b85ef0b343539ad66c11a
-      xtensa |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/a0172958532e796c1124a699152428be03efd20e
-microblazeel |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/eb4d97adfc8fdf0cb1992cac9d8ca37e95ca8a5d
-      xtensa |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/2e2f1bb0035746cb9041df071b61187528922eae
-         arc |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/39a9169a865dea741f92d6aa5328896860e4482e
-      xtensa |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/e8747f1a34a96e90faf2495c833b408e0e97e11f
-         arm |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/c2dd263902bb84a03d9be27c95140202c6fa4265
-         arm |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/8a824906b071123c5c21b188b020595b686f8d17
-        m68k |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/b275391bdec756a43c607f59dcf8e308f83534ce
-      x86_64 | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/f035bf8d13287bba689172f5ad15a5e2c3f61c17
-        bfin |         riemann-c-client-1.9.1 | NOK | http://autobuild.buildroot.net/results/3097550fb68bbf4ac9d0130c7bddccbc5861b7f5
-         arm |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/f5030932c2fa6d3a870ca2b7b5d110e7b417f737
-     powerpc |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/f1cb80a0996f6a7b56be5a277828bd1a49b53a2f
-      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/1f9c64a8750442aa680d84f2801100273925b998
-      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/f964fbc87bf86649a868a5d7c1d33a1badb26312
-         sh4 |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/6acebdde71334c4f2b1037acde6e5180e1ca90a8
-      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/8c9b96edfb45c4f72e7c4d7a431195bda28686f8
-      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/3e4c97de2dd4f29dede990f4267d35332c0f045c
-      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/1e449b0f6fc2e4fd55371d9644dfefcabe7bf774
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/fab0a7846e57e273843c3bcd409949cecaeadd07
-    mips64el |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/0fc76dd9e39665580029f77a18553cebe33a6266
-        sh4a |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/61a8b4551eaeb5db8503f87e38e020023fefc0cc
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/7b8dabc2ccdac0f58dc9ea0a8c249472a895757e
-         arm |                  wavpack-5.1.0 | NOK | http://autobuild.buildroot.net/results/812f920b71b316564c2016c27788921fbb4c3d84
-
--- 
-http://autobuild.buildroot.net
+Wolfgang.
