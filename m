@@ -1,56 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 Feb 2017 12:34:58 +0100
-Subject: [Buildroot] [git commit] redis: security bump to version 3.2.7
-Message-ID: <20170201113636.F06E1820FC@busybox.osuosl.org>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed,  1 Feb 2017 08:18:54 -0500
+Subject: [Buildroot] [PATCH 2/2] gst1-vaapi: add optional encoder support.
+In-Reply-To: <20170201131854.3046-1-Adamduskett@outlook.com>
+References: <20170201131854.3046-1-Adamduskett@outlook.com>
+Message-ID: <20170201131854.3046-2-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbc042b91ef118cf2fc42b6b5558161c752ce6e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-  https://www.reddit.com/r/redis/comments/5r8wxn/redis_327_is_out_important_security_fixes_inside/
-
-From the notes:
-Upgrade urgency HIGH.
-
-This release fixes important security and correctness issues.  It is
-especially important to upgrade for Redis Cluster users and for users
-running Redis in their laptop since a cross-scripting attack is fixed in
-this release.
-
-[Peter: extend description]
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/redis/redis.hash | 4 ++--
- package/redis/redis.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-vaapi/Config.in     | 7 +++++++
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk | 5 ++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index b6e8eac..d4ac7c3 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1	0c7bc5c751bdbc6fabed178db9cdbdd948915d1b 	redis-3.2.6.tar.gz
-+sha1 6889af053020cd72ebb16805ead0ce9b3a69a9ef  redis-3.2.7.tar.gz
- # Calculated based on the hash above
--sha256	2e1831c5a315e400d72bda4beaa98c0cfbe3f4eb8b20c269371634390cf729fa	redis-3.2.6.tar.gz
-+sha256 bf9df3e5374bfe7bfc3386380f9df13d94990011504ef07632b3609bb2836fa9  redis-3.2.7.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 0b07d18..63964b5 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
+index 44461e3..e33e612 100644
+--- a/package/gstreamer1/gst1-vaapi/Config.in
++++ b/package/gstreamer1/gst1-vaapi/Config.in
+@@ -33,6 +33,13 @@ config BR2_PACKAGE_GST1_VAAPI
+   	  
+ 	  https://cgit.freedesktop.org/gstreamer/gstreamer-vaapi
  
--REDIS_VERSION = 3.2.6
-+REDIS_VERSION = 3.2.7
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
++if BR2_PACKAGE_GST1_VAAPI
++
++config BR2_PACKAGE_GST1_VAAPI_ENCODERS
++	bool "Build encoders"
++
++endif
++
+ comment "gst1-vaapi needs udev /dev management and a toolchain w/ threads, dynamic library"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index 470d95f..966fe9b 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+@@ -18,11 +18,14 @@ GST1_VAAPI_DEPENDENCIES += \
+ 	libdrm
+ 	
+ GST1_VAAPI_CONF_OPTS += \
+-	--disable-encoders \
+ 	--disable-x11 \
+ 	--disable-glx \
+ 	--disable-wayland \
+ 	--disable-egl \
+ 	--disable-gtk-doc-html
+ 
++ifneq ($(BR2_PACKAGE_GST1_VAAPI_ENCODERS),y)
++	GST1_VAAPI_CONF_OPTS += --disable-encoders
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.9.3
