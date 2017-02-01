@@ -1,41 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  1 Feb 2017 21:40:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xkeyboard-config: bump
-	version to 2.20
-Message-ID: <20170201204007.8071-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Feb 2017 21:38:24 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.9.7
+Message-ID: <20170201204118.725C78212C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xkeyboard-config/xkeyboard-config.hash | 4 ++--
- package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=b8af80c32172e9a3f70aeda38f4e0f6136cb7429
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index 1869491e7..104a5aba1 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-@@ -1,2 +1,2 @@
--# From https://lists.x.org/archives/xorg-announce/2016-September/002715.html
--sha256 83dfd186b9eb9ced69e01d8d8e2f15b6a79b2e30124874ef086f2d3048f45827  xkeyboard-config-2.19.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-February/002775.html
-+sha256 d1bfc72553c4e3ef1cd6f13eec0488cf940498b612ab8a0b362e7090c94bc134  xkeyboard-config-2.20.tar.bz2
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index c3d1d8977..bdaf0268d 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index 9caa39a..3b8d613 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
--XKEYBOARD_CONFIG_VERSION = 2.19
-+XKEYBOARD_CONFIG_VERSION = 2.20
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
--- 
-2.11.0
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.6)"
++	bool "Latest version (4.9.7)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.9.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.9.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
