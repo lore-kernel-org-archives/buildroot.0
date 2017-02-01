@@ -1,35 +1,127 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2017 21:39:22 +0100
-Subject: [Buildroot] [git commit]
-	package/x11r7/xdriver_xf86-video-siliconmotion: bump version
-	to 1.7.9
-Message-ID: <20170201204118.CC87D82037@busybox.osuosl.org>
+Date: Wed, 1 Feb 2017 21:39:23 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-nv: bump
+	version to 2.1.21
+Message-ID: <20170201204118.D7B5C8212E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0446de43de534fd13a796ca02f73fe36eb48350a
+commit: https://git.buildroot.net/buildroot/commit/?id=1982e6ae6af6ededba91e0b5c884971cfa4d131c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed 0001-abi23.patch, applied upstream.
+Removed 0001-mibstore.patch & 0002-abi23.patch, applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-abi23.patch                               | 33 ----------------------
- .../xdriver_xf86-video-siliconmotion.hash          |  4 +--
- .../xdriver_xf86-video-siliconmotion.mk            |  2 +-
- 3 files changed, 3 insertions(+), 36 deletions(-)
+ .../xdriver_xf86-video-nv/0001-mibstore.patch      | 86 ----------------------
+ .../x11r7/xdriver_xf86-video-nv/0002-abi23.patch   | 39 ----------
+ .../xdriver_xf86-video-nv.hash                     |  4 +-
+ .../xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk |  2 +-
+ 4 files changed, 3 insertions(+), 128 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/0001-abi23.patch b/package/x11r7/xdriver_xf86-video-siliconmotion/0001-abi23.patch
+diff --git a/package/x11r7/xdriver_xf86-video-nv/0001-mibstore.patch b/package/x11r7/xdriver_xf86-video-nv/0001-mibstore.patch
 deleted file mode 100644
-index 2cd6e63..0000000
---- a/package/x11r7/xdriver_xf86-video-siliconmotion/0001-abi23.patch
+index e71418b..0000000
+--- a/package/x11r7/xdriver_xf86-video-nv/0001-mibstore.patch
 +++ /dev/null
-@@ -1,33 +0,0 @@
--From e67f3949648c20e16ac756ae28ea4a2b4a1d0f4c Mon Sep 17 00:00:00 2001
+@@ -1,86 +0,0 @@
+-From fc78fe98222b0204b8a2872a529763d6fe5048da Mon Sep 17 00:00:00 2001
+-From: Adam Jackson <ajax@redhat.com>
+-Date: Tue, 25 Sep 2012 12:54:49 +0000
+-Subject: Remove mibstore.h
+-
+-Signed-off-by: Adam Jackson <ajax@redhat.com>
+----
+-Fetch from:
+-http://cgit.freedesktop.org/xorg/driver/xf86-video-nv/commit/?id=fc78fe98222b0204b8a2872a529763d6fe5048da
+-
+-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+-
+-diff --git a/src/g80_driver.c b/src/g80_driver.c
+-index cc4e197..719b96c 100644
+---- a/src/g80_driver.c
+-+++ b/src/g80_driver.c
+-@@ -34,7 +34,6 @@
+- #include <xf86Resources.h>
+- #endif
+- #include <mipointer.h>
+--#include <mibstore.h>
+- #include <micmap.h>
+- #include <xf86cmap.h>
+- #include <fb.h>
+-@@ -833,7 +832,6 @@ G80ScreenInit(SCREEN_INIT_ARGS_DECL)
+-         }
+-     }
+- 
+--    miInitializeBackingStore(pScreen);
+-     xf86SetBackingStore(pScreen);
+-     xf86SetSilkenMouse(pScreen);
+- 
+-diff --git a/src/nv_driver.c b/src/nv_driver.c
+-index 6dad6e5..8f35334 100644
+---- a/src/nv_driver.c
+-+++ b/src/nv_driver.c
+-@@ -2550,7 +2550,6 @@ NVScreenInit(SCREEN_INIT_ARGS_DECL)
+-     if (!pNv->NoAccel)
+- 	NVAccelInit(pScreen);
+-     
+--    miInitializeBackingStore(pScreen);
+-     xf86SetBackingStore(pScreen);
+-     xf86SetSilkenMouse(pScreen);
+- 
+-diff --git a/src/nv_include.h b/src/nv_include.h
+-index fb190bf..f174eef 100644
+---- a/src/nv_include.h
+-+++ b/src/nv_include.h
+-@@ -24,9 +24,6 @@
+- /* All drivers initialising the SW cursor need this */
+- #include "mipointer.h"
+- 
+--/* All drivers implementing backing store need this */
+--#include "mibstore.h"
+--
+- #include "micmap.h"
+- 
+- #include "xf86DDC.h"
+-diff --git a/src/riva_driver.c b/src/riva_driver.c
+-index e0667ef..759501e 100644
+---- a/src/riva_driver.c
+-+++ b/src/riva_driver.c
+-@@ -1168,7 +1168,6 @@ RivaScreenInit(SCREEN_INIT_ARGS_DECL)
+-     if (!pRiva->NoAccel)
+- 	RivaAccelInit(pScreen);
+-     
+--    miInitializeBackingStore(pScreen);
+-     xf86SetBackingStore(pScreen);
+-     xf86SetSilkenMouse(pScreen);
+- 
+-diff --git a/src/riva_include.h b/src/riva_include.h
+-index f2c5302..c7aeef7 100644
+---- a/src/riva_include.h
+-+++ b/src/riva_include.h
+-@@ -22,9 +22,6 @@
+- /* All drivers initialising the SW cursor need this */
+- #include "mipointer.h"
+- 
+--/* All drivers implementing backing store need this */
+--#include "mibstore.h"
+--
+- #include "micmap.h"
+- 
+- #include "xf86DDC.h"
+---
+-cgit v0.9.0.2-2-gbebe
+diff --git a/package/x11r7/xdriver_xf86-video-nv/0002-abi23.patch b/package/x11r7/xdriver_xf86-video-nv/0002-abi23.patch
+deleted file mode 100644
+index 7b7bb34..0000000
+--- a/package/x11r7/xdriver_xf86-video-nv/0002-abi23.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 42e260a7ab630fdfa4664f467dad25e7178ff809 Mon Sep 17 00:00:00 2001
 -From: Adam Jackson <ajax@redhat.com>
 -Date: Tue, 19 Jul 2016 10:03:56 -0400
 -Subject: Adapt Block/WakeupHandler signature for ABI 23
@@ -37,24 +129,30 @@ index 2cd6e63..0000000
 -Signed-off-by: Adam Jackson <ajax@redhat.com>
 ----
 -Downloaded from
--https://cgit.freedesktop.org/xorg/driver/xf86-video-siliconmotion/patch/?id=e67f3949648c20e16ac756ae28ea4a2b4a1d0f4c
+-https://cgit.freedesktop.org/xorg/driver/xf86-video-nv/commit/?id=42e260a7ab630fdfa4664f467dad25e7178ff809
 -
 -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
 -diff --git a/src/compat-api.h b/src/compat-api.h
--index 6bc946f..89976e4 100644
+-index 0a87cf5..62d9481 100644
 ---- a/src/compat-api.h
 -+++ b/src/compat-api.h
--@@ -75,8 +75,13 @@
+-@@ -78,11 +78,19 @@
 - 
 - #define SCREEN_INIT_ARGS_DECL ScreenPtr pScreen, int argc, char **argv
 - 
 -+#if ABI_VIDEODRV_VERSION >= SET_ABI_VERSION(23, 0)
 -+#define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout
 -+#define BLOCKHANDLER_ARGS arg, pTimeout
+-+
+-+#define WAKEUPHANDLER_ARGS_DECL ScreenPtr arg, unsigned long result
+-+#define WAKEUPHANDLER_ARGS arg, result
 -+#else
 - #define BLOCKHANDLER_ARGS_DECL ScreenPtr arg, pointer pTimeout, pointer pReadmask
 - #define BLOCKHANDLER_ARGS arg, pTimeout, pReadmask
+- 
+- #define WAKEUPHANDLER_ARGS_DECL ScreenPtr arg, unsigned long result, pointer read_mask
+- #define WAKEUPHANDLER_ARGS arg, result, read_mask
 -+#endif
 - 
 - #define CLOSE_SCREEN_ARGS_DECL ScreenPtr pScreen
@@ -62,25 +160,25 @@ index 2cd6e63..0000000
 --- 
 -cgit v0.10.2
 -
-diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash
-index 42f39d2..819698c 100644
---- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash
-+++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.hash
+diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash
+index 8083ea2..fe91307 100644
+--- a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash
++++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-May/002604.html
--sha256	e9d449a9fd9e58b4e018447b6c64005f7874cffb1777e513ac9fc41a86071beb	xf86-video-siliconmotion-1.7.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-January/002763.html
-+sha256 d0f3c691e71108d27a061beb62bf78b36ec35bd755905692734dd68cfb3359bc  xf86-video-siliconmotion-1.7.9.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-index f8ea403..53b19f9 100644
---- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-+++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
+-# From http://lists.x.org/archives/xorg-announce/2012-July/002030.html
+-sha256	8395f65501f16f9cbaae8f598b02c6f18e78f4d3d30a08cb8d547dc2e00c10bf xf86-video-nv-2.1.20.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2017-January/002761.html
++sha256 1f98649e6ff0e8214b9d5dcac661f1d004be8e73823d8247b9c7025fd81db32d  xf86-video-nv-2.1.21.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
+index 655bee9..430ce4a 100644
+--- a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
++++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION = 1.7.8
-+XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION = 1.7.9
- XDRIVER_XF86_VIDEO_SILICONMOTION_SOURCE = xf86-video-siliconmotion-$(XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_SILICONMOTION_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_NV_VERSION = 2.1.20
++XDRIVER_XF86_VIDEO_NV_VERSION = 2.1.21
+ XDRIVER_XF86_VIDEO_NV_SOURCE = xf86-video-nv-$(XDRIVER_XF86_VIDEO_NV_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_NV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_NV_LICENSE = MIT
