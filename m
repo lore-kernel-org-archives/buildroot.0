@@ -1,43 +1,64 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  2 Feb 2017 08:27:31 +0100
-Subject: [Buildroot] [PATCH 13/38] package/kodi: add powerpc64 support
+Date: Thu,  2 Feb 2017 08:27:36 +0100
+Subject: [Buildroot] [PATCH 18/38] package/kodi: add optional support for
+	pulseaudio
 In-Reply-To: <20170202072756.6624-1-bernd.kuhls@t-online.de>
 References: <20170202072756.6624-1-bernd.kuhls@t-online.de>
-Message-ID: <20170202072756.6624-13-bernd.kuhls@t-online.de>
+Message-ID: <20170202072756.6624-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Configure support was added by this commit:
-https://github.com/xbmc/xbmc/commit/7e3b5672cc425ab9161f4b33e7f2cd77637cd6fc
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/kodi/Config.in | 6 ++++++
+ package/kodi/kodi.mk   | 8 +++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a16bcc6c5..aab8c624c 100644
+index 6f8e9a1cc..246cc8a48 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # libcdio, and others
- 	default y if (BR2_aarch64 || BR2_arm || \
- 		(BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || \
-+		BR2_powerpc64 || BR2_powerpc64le || \
- 		BR2_i386 || BR2_x86_64) \
- 		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
- 		&& BR2_TOOLCHAIN_HAS_SYNC_8
-@@ -32,7 +33,7 @@ config BR2_PACKAGE_KODI_GL_EGL
- 	depends on !BR2_aarch64 && !BR2_arm # kodi needs egl/gles on arm
+@@ -193,6 +193,12 @@ config BR2_PACKAGE_KODI_NONFREE
+ 	  Enable components with non-free licenses. This option
+ 	  currently only controls support for RAR archives.
  
- comment "kodi needs an OpenGL EGL with either an openGL or an OpenGL ES backend"
--	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_aarch64 && !BR2_arm # kodi needs egl/gles on arm
- 	depends on !BR2_PACKAGE_KODI_GL_EGL && !BR2_PACKAGE_KODI_EGL_GLES
++config BR2_PACKAGE_KODI_PULSEAUDIO
++	bool "pulseaudio"
++	select BR2_PACKAGE_PULSEAUDIO
++	help
++	  Enable Pulseaudio support.
++
+ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+ 	bool "shairport"
+ 	select BR2_PACKAGE_LIBSHAIRPLAY
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 08ed68b14..ccf6c3a3e 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -64,7 +64,6 @@ KODI_MAKE_ENV = \
+ KODI_CONF_OPTS +=  \
+ 	--with-ffmpeg=shared \
+ 	--disable-openmax \
+-	--disable-pulse \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
  
- comment "kodi requires an OpenGL ES and EGL backend"
+@@ -277,6 +276,13 @@ else
+ KODI_CONF_OPTS += --disable-optical-drive
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_PULSEAUDIO),y)
++KODI_CONF_OPTS += --enable-pulse
++KODI_DEPENDENCIES += pulseaudio
++else
++KODI_CONF_OPTS += --disable-pulse
++endif
++
+ # Add HOST_DIR to PATH for codegenerator.mk to find swig
+ define KODI_BOOTSTRAP
+ 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)/tools/depends/native/JsonSchemaBuilder
 -- 
 2.11.0
