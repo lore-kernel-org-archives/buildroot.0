@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  2 Feb 2017 08:27:27 +0100
-Subject: [Buildroot] [PATCH 09/38] package/kodi: add patch to disable online
-	check
+Date: Thu,  2 Feb 2017 08:27:28 +0100
+Subject: [Buildroot] [PATCH 10/38] package/kodi-inputstream-rtmp: new package
 In-Reply-To: <20170202072756.6624-1-bernd.kuhls@t-online.de>
 References: <20170202072756.6624-1-bernd.kuhls@t-online.de>
-Message-ID: <20170202072756.6624-9-bernd.kuhls@t-online.de>
+Message-ID: <20170202072756.6624-10-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,80 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/0098-disable-online-check.patch | 65 ++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/kodi/0098-disable-online-check.patch
+ package/kodi-inputstream-rtmp/Config.in                  |  7 +++++++
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash |  2 ++
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 13 +++++++++++++
+ package/kodi/Config.in                                   |  4 ++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-inputstream-rtmp/Config.in
+ create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+ create mode 100644 package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
 
-diff --git a/package/kodi/0098-disable-online-check.patch b/package/kodi/0098-disable-online-check.patch
+diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
 new file mode 100644
-index 000000000..ef8bd4990
+index 000000000..c40bff2d7
 --- /dev/null
-+++ b/package/kodi/0098-disable-online-check.patch
-@@ -0,0 +1,65 @@
-+Ported from LibreELEC
-+https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi/patches/kodi-100.03-disable-online-check.patch
++++ b/package/kodi-inputstream-rtmp/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
++	bool "kodi-inputstream-rtmp"
++	select BR2_PACKAGE_RTMPDUMP
++	help
++	  RTMP input stream add-on for Kodi
 +
++	  https://github.com/notspiff/inputstream.rtmp
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+new file mode 100644
+index 000000000..673547300
+--- /dev/null
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 d89ebb21256fcac35ddb961d42e2cae7709b15a431e717054a0cab7f9a54b391  kodi-inputstream-rtmp-v1.0.3.tar.gz
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+new file mode 100644
+index 000000000..c19fe562e
+--- /dev/null
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-inputstream-rtmp
++#
++################################################################################
 +
-+From 468f917d3c1ee6f84b1a075d327d7c7626f1e223 Mon Sep 17 00:00:00 2001
-+From: Stefan Saraev <stefan@saraev.ca>
-+Date: Sat, 18 Apr 2015 15:03:31 +0300
-+Subject: [PATCH 03/13] disable online check
++KODI_INPUTSTREAM_RTMP_VERSION = v1.0.3
++KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
++KODI_INPUTSTREAM_RTMP_LICENSE = GPLv2+
++KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
++KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
 +
-+---
-+ xbmc/GUIInfoManager.cpp              | 1 -
-+ xbmc/utils/SystemInfo.cpp            | 5 +----
-+ xbmc/windows/GUIWindowSystemInfo.cpp | 1 -
-+ 3 files changed, 1 insertion(+), 6 deletions(-)
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index ef555b502..842e0b6a3 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -267,6 +267,10 @@ menu "Audio encoder addons"
+ 	source "package/kodi-audioencoder-wav/Config.in"
+ endmenu
+ 
++menu "Inputstream addons"
++	source "package/kodi-inputstream-rtmp/Config.in"
++endmenu
 +
-+diff --git a/xbmc/GUIInfoManager.cpp b/xbmc/GUIInfoManager.cpp
-+index cb09e75..a218e1d 100644
-+--- a/xbmc/GUIInfoManager.cpp
-++++ b/xbmc/GUIInfoManager.cpp
-+@@ -278,7 +278,6 @@ const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACT
-+                                   { "currentwindow",    SYSTEM_CURRENT_WINDOW },
-+                                   { "currentcontrol",   SYSTEM_CURRENT_CONTROL },
-+                                   { "dvdlabel",         SYSTEM_DVD_LABEL },
-+-                                  { "internetstate",    SYSTEM_INTERNET_STATE },
-+                                   { "osversioninfo",    SYSTEM_OS_VERSION_INFO },
-+                                   { "kernelversion",    SYSTEM_OS_VERSION_INFO }, // old, not correct name
-+                                   { "uptime",           SYSTEM_UPTIME },
-+diff --git a/xbmc/utils/SystemInfo.cpp b/xbmc/utils/SystemInfo.cpp
-+index f423cfe..d8483d0 100644
-+--- a/xbmc/utils/SystemInfo.cpp
-++++ b/xbmc/utils/SystemInfo.cpp
-+@@ -247,7 +247,6 @@ bool CSysInfoJob::DoWork()
-+ {
-+   m_info.systemUptime      = GetSystemUpTime(false);
-+   m_info.systemTotalUptime = GetSystemUpTime(true);
-+-  m_info.internetState     = GetInternetState();
-+   m_info.videoEncoder      = GetVideoEncoder();
-+   m_info.cpuFrequency      = GetCPUFreqInfo();
-+   m_info.osVersionInfo     = CSysInfo::GetOsPrettyNameWithVersion() + " (kernel: " + CSysInfo::GetKernelName() + " " + CSysInfo::GetKernelVersionFull() + ")";
-+@@ -1023,9 +1022,7 @@ int CSysInfo::GetXbmcBitness(void)
-+ 
-+ bool CSysInfo::HasInternet()
-+ {
-+-  if (m_info.internetState != CSysData::UNKNOWN)
-+-    return m_info.internetState == CSysData::CONNECTED;
-+-  return (m_info.internetState = CSysInfoJob::GetInternetState()) == CSysData::CONNECTED;
-++  return m_info.internetState == CSysData::UNKNOWN;
-+ }
-+ 
-+ std::string CSysInfo::GetHddSpaceInfo(int drive, bool shortText)
-+diff --git a/xbmc/windows/GUIWindowSystemInfo.cpp b/xbmc/windows/GUIWindowSystemInfo.cpp
-+index 6ff2391..ee73c88 100644
-+--- a/xbmc/windows/GUIWindowSystemInfo.cpp
-++++ b/xbmc/windows/GUIWindowSystemInfo.cpp
-+@@ -125,7 +125,6 @@ void CGUIWindowSystemInfo::FrameMove()
-+     SetControlLabel(i++, "%s: %s", 13160, NETWORK_GATEWAY_ADDRESS);
-+     SetControlLabel(i++, "%s: %s", 13161, NETWORK_DNS1_ADDRESS);
-+     SetControlLabel(i++, "%s: %s", 20307, NETWORK_DNS2_ADDRESS);
-+-    SetControlLabel(i++, "%s %s", 13295, SYSTEM_INTERNET_STATE);
-+   }
-+ 
-+   else if (m_section == CONTROL_BT_VIDEO)
-+-- 
-+2.5.0
-+
+ menu "PVR addons"
+ 	source "package/kodi-pvr-argustv/Config.in"
+ 	source "package/kodi-pvr-dvblink/Config.in"
 -- 
 2.11.0
