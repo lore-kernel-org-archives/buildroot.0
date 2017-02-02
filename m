@@ -1,79 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  2 Feb 2017 08:27:29 +0100
-Subject: [Buildroot] [PATCH 11/38] package/kodi: move rtmp support to new
-	addon kodi-inputstream-rtmp
+Date: Thu,  2 Feb 2017 08:27:24 +0100
+Subject: [Buildroot] [PATCH 06/38] package/libcec: bump version to 4.0.2
 In-Reply-To: <20170202072756.6624-1-bernd.kuhls@t-online.de>
 References: <20170202072756.6624-1-bernd.kuhls@t-online.de>
-Message-ID: <20170202072756.6624-11-bernd.kuhls@t-online.de>
+Message-ID: <20170202072756.6624-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rtmp support was moved from Kodi to an addon:
-https://github.com/xbmc/xbmc/commit/d04f43a4eb6f920cc42a28627b580f17e2be1bb5
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy       | 7 +++++++
- package/kodi/Config.in | 7 -------
- package/kodi/kodi.mk   | 7 -------
- 3 files changed, 7 insertions(+), 14 deletions(-)
+ package/libcec/libcec.hash | 2 +-
+ package/libcec/libcec.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 20445b8a1..7dd9189ee 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -262,6 +262,13 @@ config BR2_GDB_VERSION_7_9
- ###############################################################################
- comment "Legacy options removed in 2016.11"
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index 377f343a2..5416c20fe 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  0f29d5a2d155b507807ba896bc3b3e50a0ab56bf8f543a2bf5c2798c790292b5  libcec-2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd.tar.gz
++sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 55c5fbb83..1fe69ee98 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_KODI_RTMPDUMP
-+	bool "kodi rtmp"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
-+	help
-+	  Internal rtmp support was moved to addon kodi-inputstream-rtmp
-+
- config BR2_PACKAGE_PHP_SAPI_CLI_CGI
- 	bool "PHP CGI and CLI options are now seperate"
- 	select BR2_PACKAGE_PHP_SAPI_CLI
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 842e0b6a3..84319b91a 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -177,13 +177,6 @@ config BR2_PACKAGE_KODI_NONFREE
- 	  Enable components with non-free licenses. This option
- 	  currently only controls support for RAR archives.
+-LIBCEC_VERSION = 2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd
+-LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
++LIBCEC_VERSION = 4.0.2
++LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPLv2+
+ LIBCEC_LICENSE_FILES = COPYING
  
--config BR2_PACKAGE_KODI_RTMPDUMP
--	bool "rtmp"
--	select BR2_PACKAGE_RTMPDUMP
--	help
--	  Enable RTMP input support.
--	  Select this if you want to play back rtmp stream.
--
- config BR2_PACKAGE_KODI_LIBSHAIRPLAY
- 	bool "shairport"
- 	select BR2_PACKAGE_LIBSHAIRPLAY
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 9fe559c1e..a035cb74c 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -186,13 +186,6 @@ else
- KODI_CONF_OPTS += --disable-nfs
- endif
- 
--ifeq ($(BR2_PACKAGE_KODI_RTMPDUMP),y)
--KODI_DEPENDENCIES += rtmpdump
--KODI_CONF_OPTS += --enable-rtmp
--else
--KODI_CONF_OPTS += --disable-rtmp
--endif
--
- ifeq ($(BR2_PACKAGE_KODI_LIBBLURAY),y)
- KODI_DEPENDENCIES += libbluray
- KODI_CONF_OPTS += --enable-libbluray
 -- 
 2.11.0
