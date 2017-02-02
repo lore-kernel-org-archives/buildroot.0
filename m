@@ -1,52 +1,48 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 2 Feb 2017 20:31:06 +0100
-Subject: [Buildroot] [PATCH v6 1/9] qt5: add choice between version
- 5.6.2 and 5.8.0
-In-Reply-To: <1485849551-20469-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1485849551-20469-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20170202203106.10275402@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 02 Feb 2017 21:06:11 +0100
+Subject: [Buildroot] [PATCH 4/5] package/kodi: add Kconfig option to
+ make TexturePacker optional
+References: <20170202075554.6946-1-berndkuhls@hotmail.com>
+ <VI1P192MB023746ADC6A2DA7B29E02362D94C0@VI1P192MB0237.EURP192.PROD.OUTLOOK.COM>
+ <20170202153335.01131157@free-electrons.com>
+Message-ID: <j2gcmdxanu.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
+Hi Thomas,
 
-On Tue, 31 Jan 2017 08:59:03 +0100, Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com> wrote:
+FYI: I uploaded my patch series to
+https://github.com/bkuhls/buildroot/tree/kodi_br
 
-[...]
-> - qt5base: remove gstreamer related config-option ([5])
+for easier testing.
+
+Am Thu, 02 Feb 2017 15:33:35 +0100 schrieb Thomas Petazzoni:
+
+> Hello,
 > 
-[...]
-> [5]  https://code.qt.io/cgit/qt/qtbase.git/commit/?id=7d4da559afb62a779b3d90a65fb679cb5433f203
+> On Thu, 2 Feb 2017 07:56:07 +0000, Bernd Kuhls wrote:
+>> From: Bernd Kuhls <bernd.kuhls@t-online.de>
+>> 
+>> Signed-off-by: Bernd Kuhls
+>> <bernd.kuhls@t-online.de>
+>> Signed-off-by: Bernd Kuhls
+>> <berndkuhls@hotmail.com>
 > 
-[...]
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index bbbaf0f..c09bf58 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -41,12 +41,19 @@ else
-[...]
->  
->  # gstreamer 0.10 support is broken in qt5multimedia
-> +ifeq ($(BR2_QT5_VERSION_5_6),y)
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
->  QT5BASE_CONFIGURE_OPTS += -gstreamer 1.0
->  QT5BASE_DEPENDENCIES   += gst1-plugins-base
->  else
->  QT5BASE_CONFIGURE_OPTS += -no-gstreamer
->  endif
-> +endif
+> A non-empty commit log here would be good, since the patch is
+> non-trivial.
 
-I think this configuration options should go to qt5multimedia.mk for
-the Qt5.8 (or not !Qt5.6) case...
+Done:
+https://github.com/bkuhls/buildroot/
+commit/70162c3677f516b118c7d72a5d439475198f9c33
 
-Regards,
-Peter
+The rest of the github branch is unchanged compared to my patch series.
 
+> Minor nit: many of your patches have two Signed-off-by line with your
+> name, but different e-mail addresses. This is not very useful.
 
-	$ grep gstreamer build/qt5multimedia-5.8.0/config_help.txt 
-  -no-gstreamer ........ Disable support for GStreamer
-  -gstreamer [version] . Enable GStreamer support [auto]
+I know, sorry, I had problems mailing the patch series this morning.
+
+Regards, Bernd
