@@ -1,86 +1,82 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu,  2 Feb 2017 17:45:02 -0500
-Subject: [Buildroot] [PATCH 1/4] sepolgen: allow compiling for target
-Message-ID: <20170202224505.22882-1-Adamduskett@outlook.com>
+Date: Thu,  2 Feb 2017 17:45:04 -0500
+Subject: [Buildroot] [PATCH 3/4] libselinux: allow compiling python wrapper
+	module for target
+In-Reply-To: <20170202224505.22882-1-Adamduskett@outlook.com>
+References: <20170202224505.22882-1-Adamduskett@outlook.com>
+Message-ID: <20170202224505.22882-3-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sepolgen is currently a host-only package, however it is a dependency
-of audit2allow.  This patch allows for sepolgen to be compiled for the
-target.
+libselinux currently does not compile it's python wrapper module
+for the target.  This is needed for audit2allow to function properly.
+
+This patch allows for the python wrapper to be built.  The current
+makefile will try to install the python wrapper to the host directory
+unless the PYSITEDIR variable is set.  I wrapped the build of the
+python wrapper in a check for AUDIT2ALLOW because of the extra python
+dependency, as I am sure many users don't want to have to install
+python if they don't have to.
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/Config.in            |  1 +
- package/sepolgen/Config.in   |  9 +++++++++
- package/sepolgen/sepolgen.mk | 19 +++++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/sepolgen/Config.in
+ package/libselinux/libselinux.mk | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index d1c517a..9fedc23 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1707,6 +1707,7 @@ endmenu
- 
- menu "Security"
- 	source "package/policycoreutils/Config.in"
-+	source "package/sepolgen/Config.in"
- 	source "package/setools/Config.in"
- endmenu
- 
-diff --git a/package/sepolgen/Config.in b/package/sepolgen/Config.in
-new file mode 100644
-index 0000000..87621b6
---- /dev/null
-+++ b/package/sepolgen/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SEPOLGEN
-+	bool "sepolgen"
-+    select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
-+	help
-+	  This package contains a Python module that forms the core of the 
-+	  modern audit2allow (which is a part of the package policycoreutils). 
-+	  It contains infrastructure for parsing SELinux related messages as 
-+	  produced by the audit system. 
-+	  It has facilities for generating policy based on required access.
-diff --git a/package/sepolgen/sepolgen.mk b/package/sepolgen/sepolgen.mk
-index 137eaed..ce3f683 100644
---- a/package/sepolgen/sepolgen.mk
-+++ b/package/sepolgen/sepolgen.mk
-@@ -10,6 +10,24 @@ SEPOLGEN_LICENSE = GPLv2
- SEPOLGEN_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+SEPOLGEN_DEPENDENCIES = python3
-+SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
-+	PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-+else
-+SEPOLGEN_DEPENDENCIES = python
-+SEPOLGEN_MAKE_CMDS = $(TARGET_CONFIGURE_OPTS) \
-+	PYTHONLIBDIR=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+endif
-+
-+define SEPOLGEN_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR)
-+endef
-+
-+define SEPOLGEN_INSTALL_TARGET_CMDS
-+	$(MAKE_ENV) $(MAKE) -C $(@D) $(SEPOLGEN_MAKE_CMDS) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
- HOST_SEPOLGEN_DEPENDENCIES = host-python3
- HOST_SEPOLGEN_MAKE_CMDS = $(HOST_CONFIGURE_OPTS) \
- 	PYTHONLIBDIR=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
-@@ -27,4 +45,5 @@ define HOST_SEPOLGEN_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_SEPOLGEN_MAKE_CMDS) DESTDIR=$(HOST_DIR) install
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 44120c4..fba5d41 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -30,6 +30,7 @@ endef
+ define LIBSELINUX_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
++		
  endef
  
-+$(eval $(generic-package))
- $(eval $(host-generic-package))
+ define LIBSELINUX_INSTALL_TARGET_CMDS
+@@ -39,8 +40,39 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
+ 	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
+ 	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
+ 		echo "none /selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
++		
+ endef
+ 
++ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW),y)
++LIBSELINUX_DEPENDENCIES += host-swig
++
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++LIBSELINUX_DEPENDENCIES += python3
++LIBSELINUX_PYTHONLIBDIR = -L$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
++LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m
++LIBSELINUX_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
++else
++LIBSELINUX_DEPENDENCIES += python
++LIBSELINUX_PYTHONLIBDIR = -L$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
++LIBSELINUX_PYINC = -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
++LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
++endif
++
++LIBSELINUX_MAKE_OPTS += \
++	PYINC="$(LIBSELINUX_PYINC)" \
++	PYTHONLIBDIR="$(LIBSELINUX_PYTHONLIBDIR)" \
++	PYLIBVER="$(LIBSELINUX_PYLIBVER)" \
++	PYSITEDIR=$(TARGET_DIR)/usr/lib/$(LIBSELINUX_PYLIBVER)/site-packages \
++	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
++
++LIBSELINUX_BUILD_CMDS += $(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
++	$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) swigify pywrap
++
++LIBSELINUX_INSTALL_TARGET_CMDS += $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++	$(LIBSELINUX_MAKE_OPTS) install-pywrap
++
++endif
++
+ HOST_LIBSELINUX_DEPENDENCIES = \
+ 	host-libsepol host-pcre host-swig
+ 
 -- 
 2.9.3
