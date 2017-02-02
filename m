@@ -1,134 +1,44 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 2 Feb 2017 19:43:58 +0100
-Subject: [Buildroot] [PATCH v6 7/9] qt5quickcontrols/qt5quickcontrols2:
- enable for software renderer for Qt 5.8.0
-In-Reply-To: <028a2758-e937-7da1-2802-a8f733fb51c9@gmail.com>
-References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1485849551-20469-8-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20170201211825.66e24ddb@gmx.net>
- <028a2758-e937-7da1-2802-a8f733fb51c9@gmail.com>
-Message-ID: <20170202194358.6d3a66dc@gmx.net>
+Date: Thu,  2 Feb 2017 20:08:08 +0100
+Subject: [Buildroot] [PATCH v2] libv4l: qv4l2 needs c++11 (since Qt5.7)
+Message-ID: <20170202190808.25242-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Zoltan,
+Fixes:
+  .../host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
+   #error This file requires compiler and library support \
+    ^
+  In file included from .../host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/type_traits:35:0,
+                   from .../host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore/qglobal.h:45,
 
-On Thu, 2 Feb 2017 09:55:31 +0100, Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com> wrote:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Based on the 'qt5 bump to 5.8.0' patch series by Julien Corjon, Andreas Naumann
+and Zoltan Gyarmati (see [1])
 
-> On 02/01/2017 09:18 PM, Peter Seiderer wrote:
-> > Hello *,
-> >
-> > On Tue, 31 Jan 2017 08:59:09 +0100, Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com> wrote:
-> >
-> >> From: Naumann Andreas <ANaumann@ultratronik.de>
-> >>
-> >> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> >> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> >> ---
-> >>  package/qt5/qt5quickcontrols/Config.in             |  4 ++--
-> >>  package/qt5/qt5quickcontrols2/Config.in            |  4 ++--
-> >>  package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk | 12 ++++++++++++
-> >>  3 files changed, 16 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
-> >> index 0fe8465..d1a4fa5 100644
-> >> --- a/package/qt5/qt5quickcontrols/Config.in
-> >> +++ b/package/qt5/qt5quickcontrols/Config.in
-> >> @@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
-> >>  	bool "qt5quickcontrols"
-> >>  	select BR2_PACKAGE_QT5DECLARATIVE
-> >>  	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-> >> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-> >> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8
-> >>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> >>  	help
-> >>  	  Qt is a cross-platform application and UI framework for
-> >> @@ -13,5 +13,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
-> >>  	  http://qt.io
-> >>  
-> >>  comment "qt5quickcontrols needs an OpenGL-capable backend"
-> >> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-> >> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
-> >>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> >> diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
-> >> index 1e57674..ea22a2b 100644
-> >> --- a/package/qt5/qt5quickcontrols2/Config.in
-> >> +++ b/package/qt5/qt5quickcontrols2/Config.in
-> >> @@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
-> >>  	bool "qt5quickcontrols2"
-> >>  	select BR2_PACKAGE_QT5DECLARATIVE
-> >>  	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-> >> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative/quick
-> >> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8 # qt5declarative/quick
-> >>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative/quick
-> >>  	help
-> >>  	  Qt is a cross-platform application and UI framework for
-> >> @@ -13,5 +13,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
-> >>  	  http://qt.io
-> >>  
-> >>  comment "qt5quickcontrols2 needs an OpenGL-capable backend"
-> >> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-> >> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
-> >>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> >> diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
-> >> index 8de7932..0ef25e2 100644
-> >> --- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
-> >> +++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
-> >> @@ -36,6 +36,7 @@ define QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES
-> >>  endef
-> >>  endif
-> >>  
-> >> +ifeq ($(BR2_QT5_VERSION_5_6),y)
-> >>  define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
-> >>  	cp -dpf $(STAGING_DIR)/usr/lib/libQt5LabsTemplates.so.* $(TARGET_DIR)/usr/lib
-> >>  	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/controls $(TARGET_DIR)/usr/qml/Qt/labs
-> >> @@ -43,5 +44,16 @@ define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
-> >>  	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/templates $(TARGET_DIR)/usr/qml/Qt/labs
-> >>  	$(QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES)
-> >>  endef
-> >> +else
-> >> +define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
-> >> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickTemplates2.so.* $(TARGET_DIR)/usr/lib
-> >> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickControls2.so.* $(TARGET_DIR)/usr/lib
-> >> +	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/calendar $(TARGET_DIR)/usr/qml/Qt/labs
-> >> +	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/platform $(TARGET_DIR)/usr/qml/Qt/labs
-> >> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls.2 $(TARGET_DIR)/usr/qml/QtQuick
-> >> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Templates.2 $(TARGET_DIR)/usr/qml/QtQuick
-> >> +	$(QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES)
-> >> +endef
-> >> +endif
-> > This last part of the patch, fixing the installation for Qt5.8.0 has nothing to do with
-> > the patch subject '...enable for software renderer...' and should go to the first patch
-> > of the series or to an extra patch....
->
-> Indeed, thanks for the feedback! Did you spot anything else in the patchset?
->
+[1] http://lists.busybox.net/pipermail/buildroot/2017-January/182603.html
+---
+ package/libv4l/libv4l.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Only the suggestion for a new subject for '[PATCH v6 4/9] Conditional revert "qt5base:
-install bundled fonts to target"' ([1]) and my follow up patch
-'[PATCH v1] libv4l: qv4l2 needs c++11 (since Qt5.7)' ([2]) needs an update for
-the Qt5.6/Qt5.8 selection case (coming soon)....
-
-Regards,
-Peter
-
-[1] http://lists.busybox.net/pipermail/buildroot/2017-January/182564.html
-[2] http://lists.busybox.net/pipermail/buildroot/2016-December/180086.html
-
-> >
-> > Regards,
-> > Peter
-> >
-> >
-> >>  
-> >>  $(eval $(generic-package))
-> 
-> Thanks, regards,
-> 
-> Zoltan Gyarmati
-> https://zgyarmati.de
-> 
-> 
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index d55741426..2bb088576 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -66,6 +66,10 @@ LIBV4L_CONF_ENV += \
+ 	ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc \
+ 	ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc \
+ 	ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
++# since Qt5.7.x c++11 is needed (LTS Qt5.6.x is the last one without this requirement)
++ifneq ($(BR2_QT5_VERSION_5_6),y)
++LIBV4L_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++endif
+ else ifeq ($(BR2_PACKAGE_QT_OPENGL_GL_DESKTOP),y)
+ LIBV4L_CONF_OPTS += --enable-qv4l2
+ LIBV4L_DEPENDENCIES += qt
+-- 
+2.11.0
