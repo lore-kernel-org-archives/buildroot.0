@@ -1,114 +1,45 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Thu, 2 Feb 2017 09:55:31 +0100
-Subject: [Buildroot] [PATCH v6 7/9] qt5quickcontrols/qt5quickcontrols2:
- enable for software renderer for Qt 5.8.0
-In-Reply-To: <20170201211825.66e24ddb@gmx.net>
+Date: Thu, 2 Feb 2017 09:57:57 +0100
+Subject: [Buildroot] [PATCH v6 8/9] python-pyqt5: Depend directly on Qt5
+ rather than its toolchain requirements
+In-Reply-To: <20170201222915.58e4f805@free-electrons.com>
 References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1485849551-20469-8-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20170201211825.66e24ddb@gmx.net>
-Message-ID: <028a2758-e937-7da1-2802-a8f733fb51c9@gmail.com>
+ <1485849551-20469-9-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <20170201222915.58e4f805@free-electrons.com>
+Message-ID: <38d15b3f-1032-4cda-b73e-9489c8a11806@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/01/2017 09:18 PM, Peter Seiderer wrote:
-> Hello *,
+On 02/01/2017 10:29 PM, Thomas Petazzoni wrote:
+
+> Hello,
 >
-> On Tue, 31 Jan 2017 08:59:09 +0100, Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com> wrote:
->
+> On Tue, 31 Jan 2017 08:59:10 +0100, Zoltan Gyarmati wrote:
 >> From: Naumann Andreas <ANaumann@ultratronik.de>
+>>
+>>  When pyqt5 is used it's obvious that qt5 needs to be selected and configured
+>> by the user, hence we enforce it by making pyqt5 depending on qt5, rather than
+>> selecting it and depending only on the qt5 requirements.
 >>
 >> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 >> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
->> ---
->>  package/qt5/qt5quickcontrols/Config.in             |  4 ++--
->>  package/qt5/qt5quickcontrols2/Config.in            |  4 ++--
->>  package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk | 12 ++++++++++++
->>  3 files changed, 16 insertions(+), 4 deletions(-)
->>
->> diff --git a/package/qt5/qt5quickcontrols/Config.in b/package/qt5/qt5quickcontrols/Config.in
->> index 0fe8465..d1a4fa5 100644
->> --- a/package/qt5/qt5quickcontrols/Config.in
->> +++ b/package/qt5/qt5quickcontrols/Config.in
->> @@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
->>  	bool "qt5quickcontrols"
->>  	select BR2_PACKAGE_QT5DECLARATIVE
->>  	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
->> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
->> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8
->>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
->>  	help
->>  	  Qt is a cross-platform application and UI framework for
->> @@ -13,5 +13,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS
->>  	  http://qt.io
->>  
->>  comment "qt5quickcontrols needs an OpenGL-capable backend"
->> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
->> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
->>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
->> diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
->> index 1e57674..ea22a2b 100644
->> --- a/package/qt5/qt5quickcontrols2/Config.in
->> +++ b/package/qt5/qt5quickcontrols2/Config.in
->> @@ -2,7 +2,7 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
->>  	bool "qt5quickcontrols2"
->>  	select BR2_PACKAGE_QT5DECLARATIVE
->>  	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
->> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative/quick
->> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8 # qt5declarative/quick
->>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative/quick
->>  	help
->>  	  Qt is a cross-platform application and UI framework for
->> @@ -13,5 +13,5 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
->>  	  http://qt.io
->>  
->>  comment "qt5quickcontrols2 needs an OpenGL-capable backend"
->> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
->> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
->>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
->> diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
->> index 8de7932..0ef25e2 100644
->> --- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
->> +++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
->> @@ -36,6 +36,7 @@ define QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES
->>  endef
->>  endif
->>  
->> +ifeq ($(BR2_QT5_VERSION_5_6),y)
->>  define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
->>  	cp -dpf $(STAGING_DIR)/usr/lib/libQt5LabsTemplates.so.* $(TARGET_DIR)/usr/lib
->>  	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/controls $(TARGET_DIR)/usr/qml/Qt/labs
->> @@ -43,5 +44,16 @@ define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
->>  	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/templates $(TARGET_DIR)/usr/qml/Qt/labs
->>  	$(QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES)
->>  endef
->> +else
->> +define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
->> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickTemplates2.so.* $(TARGET_DIR)/usr/lib
->> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickControls2.so.* $(TARGET_DIR)/usr/lib
->> +	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/calendar $(TARGET_DIR)/usr/qml/Qt/labs
->> +	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/platform $(TARGET_DIR)/usr/qml/Qt/labs
->> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls.2 $(TARGET_DIR)/usr/qml/QtQuick
->> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Templates.2 $(TARGET_DIR)/usr/qml/QtQuick
->> +	$(QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES)
->> +endef
->> +endif
-> This last part of the patch, fixing the installation for Qt5.8.0 has nothing to do with
-> the patch subject '...enable for software renderer...' and should go to the first patch
-> of the series or to an extra patch....
-Indeed, thanks for the feedback! Did you spot anything else in the patchset?
+> The previous version of this patch series from Andreas was doing this
+> change for both python-pyqt and python-pyqt5. But in your new version,
+> you have removed Andreas patch making the change to python-pyqt, and
+> only kept the python-pyqt5 change. Why? Due to this, the handling of
+> python-pyqt would no longer be consistent with the one of python-pyqt5.
 
+Ah, i was focusing on the qt5 related things, but you are right, it
+should be consistent, i'll add it back, thanks for noting this. Did you
+find any other flaw in the series?
 >
-> Regards,
-> Peter
+> Thanks,
 >
->
->>  
->>  $(eval $(generic-package))
-
-Thanks, regards,
+> Thomas
+Thanks,
 
 Zoltan Gyarmati
 https://zgyarmati.de
@@ -120,4 +51,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 473 bytes
 Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170202/63064c89/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170202/84cc8b61/attachment.asc>
