@@ -1,44 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  2 Feb 2017 20:08:08 +0100
-Subject: [Buildroot] [PATCH v2] libv4l: qv4l2 needs c++11 (since Qt5.7)
-Message-ID: <20170202190808.25242-1-ps.report@gmx.net>
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date: Thu,  2 Feb 2017 17:36:16 +0100
+Subject: [Buildroot] [PATCH v2] package/libgpiod: bump version to v0.1.2
+Message-ID: <1486053376-31993-1-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  .../host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
-   #error This file requires compiler and library support \
-    ^
-  In file included from .../host/usr/arm-buildroot-linux-gnueabihf/include/c++/5.4.0/type_traits:35:0,
-                   from .../host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/QtCore/qglobal.h:45,
+This is a small bug-fix release:
+  - include <poll.h> instead of <sys/poll.h> in gpioset
+  - fix a formatting issue in gpioinfo for chips with >100 GPIO lines
+  - fix a bug when requesting both-edges event notifications
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
-Based on the 'qt5 bump to 5.8.0' patch series by Julien Corjon, Andreas Naumann
-and Zoltan Gyarmati (see [1])
+v1 -> v2:
+- fixed a copy/paste error in the commit message
 
-[1] http://lists.busybox.net/pipermail/buildroot/2017-January/182603.html
----
- package/libv4l/libv4l.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index d55741426..2bb088576 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -66,6 +66,10 @@ LIBV4L_CONF_ENV += \
- 	ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc \
- 	ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc \
- 	ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
-+# since Qt5.7.x c++11 is needed (LTS Qt5.6.x is the last one without this requirement)
-+ifneq ($(BR2_QT5_VERSION_5_6),y)
-+LIBV4L_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+endif
- else ifeq ($(BR2_PACKAGE_QT_OPENGL_GL_DESKTOP),y)
- LIBV4L_CONF_OPTS += --enable-qv4l2
- LIBV4L_DEPENDENCIES += qt
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 7ba0531..9901be6 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 07f75ae1e0c086d28d77ef60d0566180698ce11c3271d89da444c0fc6c2f4580 libgpiod-v0.1.1.tar.gz
++sha256 c9a60e1073aacb25b4ad06d513f31416335b5a710f869cb7e838d2abb62e1e00 libgpiod-v0.1.2.tar.gz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index e2e27f9..dbf9511 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = v0.1.1
++LIBGPIOD_VERSION = v0.1.2
+ LIBGPIOD_SITE = $(call github,brgl,libgpiod,$(LIBGPIOD_VERSION))
+ LIBGPIOD_LICENSE = GPLv3+
+ LIBGPIOD_LICENSE_FILES = COPYING
 -- 
-2.11.0
+2.9.3
