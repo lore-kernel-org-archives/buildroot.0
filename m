@@ -1,94 +1,69 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu,  2 Feb 2017 17:45:03 -0500
-Subject: [Buildroot] [PATCH 2/4] checkpolicy: allow compiling for target
-In-Reply-To: <20170202224505.22882-1-Adamduskett@outlook.com>
-References: <20170202224505.22882-1-Adamduskett@outlook.com>
-Message-ID: <20170202224505.22882-2-Adamduskett@outlook.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 3 Feb 2017 00:06:59 +0100
+Subject: [Buildroot] [PATCH v6 8/9] python-pyqt5: Depend directly on Qt5
+ rather than its toolchain requirements
+In-Reply-To: <1485849551-20469-9-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <1485849551-20469-9-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <6958a95d-a884-31f1-92cb-516fcbfcde4e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-checkpolicy is currently a host-only package, however it is a dependency
-of audit2allow.  This patch allows for checkpolicy to be compiled for the
-target.
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
- package/Config.in                  |  1 +
- package/checkpolicy/Config.in      | 11 +++++++++++
- package/checkpolicy/checkpolicy.mk | 23 +++++++++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 package/checkpolicy/Config.in
 
-diff --git a/package/Config.in b/package/Config.in
-index 9fedc23..90d9273 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1706,6 +1706,7 @@ menu "Real-Time"
- endmenu
- 
- menu "Security"
-+	source "package/checkpolicy/Config.in"
- 	source "package/policycoreutils/Config.in"
- 	source "package/sepolgen/Config.in"
- 	source "package/setools/Config.in"
-diff --git a/package/checkpolicy/Config.in b/package/checkpolicy/Config.in
-new file mode 100644
-index 0000000..894ce39
---- /dev/null
-+++ b/package/checkpolicy/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_CHECKPOLICY
-+	bool "checkpolicy"
-+	select BR2_PACKAGE_FLEX
-+	help
-+	  checkpolicy is the SELinux policy compiler. It uses libsepol
-+	  to generate the binary policy. checkpolicy uses the static
-+	  libsepol since it deals with low level details of the policy
-+	  that have not been encapsulated/abstracted by a proper
-+	  shared library interface.
-+
-+	  http://selinuxproject.org/page/Main_Page
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index 8328b39..7af5edf 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
-@@ -8,6 +8,28 @@ CHECKPOLICY_VERSION = 2.6
- CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20161014
- CHECKPOLICY_LICENSE = GPLv2
- CHECKPOLICY_LICENSE_FILES = COPYING
-+LIBSELINUX_INSTALL_STAGING = YES
-+
-+CHECKPOLICY_DEPENDENCIES = libselinux host-bison flex
-+
-+TARGET_CHECKPOLICY_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
-+	LEX="$(HOST_DIR)/usr/bin/flex" \
-+	YACC="$(HOST_DIR)/usr/bin/bison -y"
-+	
-+
-+# DESTDIR is used at build time to find libselinux
-+define CHECKPOLICY_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
-+endef
-+
-+define CHECKPOLICY_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-+
-+endef
-+
-+define CHECKPOLICY_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-+endef
- 
- HOST_CHECKPOLICY_DEPENDENCIES = host-libselinux host-flex host-bison
- 
-@@ -24,4 +46,5 @@ define HOST_CHECKPOLICY_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR) install
- endef
- 
-+$(eval $(generic-package))
- $(eval $(host-generic-package))
+On 31-01-17 08:59, Zoltan Gyarmati wrote:
+> From: Naumann Andreas <ANaumann@ultratronik.de>
+> 
+>  When pyqt5 is used it's obvious that qt5 needs to be selected and configured
+> by the user, hence we enforce it by making pyqt5 depending on qt5, rather than
+> selecting it and depending only on the qt5 requirements.
+
+ I'm not so sure that this really is an improvement. Andreas, can you explain
+why this is needed?
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+> ---
+>  package/python-pyqt5/Config.in | 13 +++----------
+>  1 file changed, 3 insertions(+), 10 deletions(-)
+> 
+> diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
+> index 4eca68a..20ac988 100644
+> --- a/package/python-pyqt5/Config.in
+> +++ b/package/python-pyqt5/Config.in
+> @@ -1,16 +1,9 @@
+> -comment "python-pyqt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
+> -	depends on !BR2_PACKAGE_QT
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+> -		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+> +comment "python-pyqt5 needs Qt5"
+> +	depends on !BR2_PACKAGE_QT5
+>  
+>  config BR2_PACKAGE_PYTHON_PYQT5
+>  	bool "python-pyqt5"
+> -	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_USE_WCHAR # qt5
+> -	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
+> -	depends on !BR2_STATIC_LIBS # qt5
+> -	depends on !BR2_PACKAGE_QT # qt5
+> -	select BR2_PACKAGE_QT5
+> +	depends on BR2_PACKAGE_QT5
+>  	select BR2_PACKAGE_PYTHON_SIP
+>  	help
+>  	  Python bindings for Qt 5
+> 
+
 -- 
-2.9.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
