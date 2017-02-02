@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  2 Feb 2017 08:27:24 +0100
-Subject: [Buildroot] [PATCH 06/38] package/libcec: bump version to 4.0.2
+Date: Thu,  2 Feb 2017 08:27:27 +0100
+Subject: [Buildroot] [PATCH 09/38] package/kodi: add patch to disable online
+	check
 In-Reply-To: <20170202072756.6624-1-bernd.kuhls@t-online.de>
 References: <20170202072756.6624-1-bernd.kuhls@t-online.de>
-Message-ID: <20170202072756.6624-6-bernd.kuhls@t-online.de>
+Message-ID: <20170202072756.6624-9-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +13,80 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcec/libcec.hash | 2 +-
- package/libcec/libcec.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi/0098-disable-online-check.patch | 65 ++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/kodi/0098-disable-online-check.patch
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index 377f343a2..5416c20fe 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  0f29d5a2d155b507807ba896bc3b3e50a0ab56bf8f543a2bf5c2798c790292b5  libcec-2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd.tar.gz
-+sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 55c5fbb83..1fe69ee98 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBCEC_VERSION = 2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd
--LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
-+LIBCEC_VERSION = 4.0.2
-+LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPLv2+
- LIBCEC_LICENSE_FILES = COPYING
- 
+diff --git a/package/kodi/0098-disable-online-check.patch b/package/kodi/0098-disable-online-check.patch
+new file mode 100644
+index 000000000..ef8bd4990
+--- /dev/null
++++ b/package/kodi/0098-disable-online-check.patch
+@@ -0,0 +1,65 @@
++Ported from LibreELEC
++https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi/patches/kodi-100.03-disable-online-check.patch
++
++
++From 468f917d3c1ee6f84b1a075d327d7c7626f1e223 Mon Sep 17 00:00:00 2001
++From: Stefan Saraev <stefan@saraev.ca>
++Date: Sat, 18 Apr 2015 15:03:31 +0300
++Subject: [PATCH 03/13] disable online check
++
++---
++ xbmc/GUIInfoManager.cpp              | 1 -
++ xbmc/utils/SystemInfo.cpp            | 5 +----
++ xbmc/windows/GUIWindowSystemInfo.cpp | 1 -
++ 3 files changed, 1 insertion(+), 6 deletions(-)
++
++diff --git a/xbmc/GUIInfoManager.cpp b/xbmc/GUIInfoManager.cpp
++index cb09e75..a218e1d 100644
++--- a/xbmc/GUIInfoManager.cpp
+++++ b/xbmc/GUIInfoManager.cpp
++@@ -278,7 +278,6 @@ const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACT
++                                   { "currentwindow",    SYSTEM_CURRENT_WINDOW },
++                                   { "currentcontrol",   SYSTEM_CURRENT_CONTROL },
++                                   { "dvdlabel",         SYSTEM_DVD_LABEL },
++-                                  { "internetstate",    SYSTEM_INTERNET_STATE },
++                                   { "osversioninfo",    SYSTEM_OS_VERSION_INFO },
++                                   { "kernelversion",    SYSTEM_OS_VERSION_INFO }, // old, not correct name
++                                   { "uptime",           SYSTEM_UPTIME },
++diff --git a/xbmc/utils/SystemInfo.cpp b/xbmc/utils/SystemInfo.cpp
++index f423cfe..d8483d0 100644
++--- a/xbmc/utils/SystemInfo.cpp
+++++ b/xbmc/utils/SystemInfo.cpp
++@@ -247,7 +247,6 @@ bool CSysInfoJob::DoWork()
++ {
++   m_info.systemUptime      = GetSystemUpTime(false);
++   m_info.systemTotalUptime = GetSystemUpTime(true);
++-  m_info.internetState     = GetInternetState();
++   m_info.videoEncoder      = GetVideoEncoder();
++   m_info.cpuFrequency      = GetCPUFreqInfo();
++   m_info.osVersionInfo     = CSysInfo::GetOsPrettyNameWithVersion() + " (kernel: " + CSysInfo::GetKernelName() + " " + CSysInfo::GetKernelVersionFull() + ")";
++@@ -1023,9 +1022,7 @@ int CSysInfo::GetXbmcBitness(void)
++ 
++ bool CSysInfo::HasInternet()
++ {
++-  if (m_info.internetState != CSysData::UNKNOWN)
++-    return m_info.internetState == CSysData::CONNECTED;
++-  return (m_info.internetState = CSysInfoJob::GetInternetState()) == CSysData::CONNECTED;
+++  return m_info.internetState == CSysData::UNKNOWN;
++ }
++ 
++ std::string CSysInfo::GetHddSpaceInfo(int drive, bool shortText)
++diff --git a/xbmc/windows/GUIWindowSystemInfo.cpp b/xbmc/windows/GUIWindowSystemInfo.cpp
++index 6ff2391..ee73c88 100644
++--- a/xbmc/windows/GUIWindowSystemInfo.cpp
+++++ b/xbmc/windows/GUIWindowSystemInfo.cpp
++@@ -125,7 +125,6 @@ void CGUIWindowSystemInfo::FrameMove()
++     SetControlLabel(i++, "%s: %s", 13160, NETWORK_GATEWAY_ADDRESS);
++     SetControlLabel(i++, "%s: %s", 13161, NETWORK_DNS1_ADDRESS);
++     SetControlLabel(i++, "%s: %s", 20307, NETWORK_DNS2_ADDRESS);
++-    SetControlLabel(i++, "%s %s", 13295, SYSTEM_INTERNET_STATE);
++   }
++ 
++   else if (m_section == CONTROL_BT_VIDEO)
++-- 
++2.5.0
++
 -- 
 2.11.0
