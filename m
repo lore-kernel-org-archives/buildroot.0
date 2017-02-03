@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri,  3 Feb 2017 15:29:50 -0500
-Subject: [Buildroot] [PATCH 02/11] audit: bump to version 2.7.1
+Date: Fri,  3 Feb 2017 15:29:52 -0500
+Subject: [Buildroot] [PATCH 04/11] jansson: bump to version 2.9
 In-Reply-To: <20170203202959.18916-1-aduskett@codeblue.com>
 References: <20170203202959.18916-1-aduskett@codeblue.com>
-Message-ID: <20170203202959.18916-2-aduskett@codeblue.com>
+Message-ID: <20170203202959.18916-4-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
+ package/jansson/jansson.hash | 2 +-
+ package/jansson/jansson.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 6b0f0c3..2ae8f99 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
+diff --git a/package/jansson/jansson.hash b/package/jansson/jansson.hash
+index 013d929..adb345d 100644
+--- a/package/jansson/jansson.hash
++++ b/package/jansson/jansson.hash
 @@ -1,2 +1,2 @@
- #Locally computed
--sha256 05533f5d88d9520ceebfd8bfb3fd998ca4a2b246757fec7bbd8e33c287544537 audit-2.7.tar.gz
-+sha256 0441790794fd9375dbca598fa0ffb46c57ff37b3a24b94ffec0bbee3215cca09 audit-2.7.1.tar.gz
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index a576662..298ef20 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
+ # Locally calculated after checking pgp signature
+-sha256	7905e6590fb316c0ff943df3dc6a21cd81a59cff7a6d12514054c359d04d78d7	jansson-2.7.tar.gz
++sha256	0ad0d074ca049a36637e7abef755d40849ad73e926b93914ce294927b97bd2a5	jansson-2.9.tar.gz
+diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
+index 193fafb..5e13118 100644
+--- a/package/jansson/jansson.mk
++++ b/package/jansson/jansson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AUDIT_VERSION = 2.7
-+AUDIT_VERSION = 2.7.1
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPLv2+ (programs), unclear (libraries)
- AUDIT_LICENSE_FILES = COPYING
+-JANSSON_VERSION = 2.7
++JANSSON_VERSION = 2.9
+ JANSSON_SITE = http://www.digip.org/jansson/releases
+ JANSSON_LICENSE = MIT
+ JANSSON_LICENSE_FILES = LICENSE
 -- 
 2.9.3
