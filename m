@@ -1,10 +1,8 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri,  3 Feb 2017 21:57:45 +0100
-Subject: [Buildroot] [PATCH 3/3] graph-depends: split off get_rdepends from
-	get_depends
-In-Reply-To: <20170203205745.14488-1-patrickdepinguin@gmail.com>
-References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
-Message-ID: <20170203205745.14488-5-patrickdepinguin@gmail.com>
+Date: Fri,  3 Feb 2017 21:57:41 +0100
+Subject: [Buildroot] [PATCH 0/3] graph-depends: split off some functions to
+	pkgutil.py
+Message-ID: <20170203205745.14488-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,80 +11,22 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The use of a 'rule' variable that can contain 'show-depends' or
-'show-rdepends' is not logical if get_depends is considered as a reusable
-function from various scripts. The name of these rules are too much an
-implementation detail.
+The main goal of this patch set is to extract get_version and get_depends from
+graph-depends into a separate file pkgutil.py, for reuse by other scripts.
 
-Therefore, split the existing get_depends into two separate functions
-get_depends and get_rdepends, while keeping code duplication to a minimum.
+The script I need it for is not really upstreamable (opkg generation for some
+packages), but I think the changes I'm submitting here could be useful in other
+cases too.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- support/scripts/graph-depends |  6 +++---
- support/scripts/pkgutil.py    | 17 +++++++++++++----
- 2 files changed, 16 insertions(+), 7 deletions(-)
+Thomas De Schampheleire (3):
+  graph-depends: avoid use of global var 'rule' in get_depends
+  graph-depends: split off get_version/get_depends into pkgutil.py
+  graph-depends: split off get_rdepends from get_depends
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 7aedcb5..fbd5917 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -102,13 +102,13 @@ else:
- transitive = args.transitive
- 
- if args.direct:
--    rule = "show-depends"
-+    get_depends_func = pkgutil.get_depends
-     arrow_dir = "forward"
- else:
-     if mode == MODE_FULL:
-         sys.stderr.write("--reverse needs a package\n")
-         sys.exit(1)
--    rule = "show-rdepends"
-+    get_depends_func = pkgutil.get_rdepends
-     arrow_dir = "back"
- 
- # Get the colours: we need exactly three colours,
-@@ -157,7 +157,7 @@ def get_all_depends(pkgs):
-     if len(filtered_pkgs) == 0:
-         return []
- 
--    depends = pkgutil.get_depends(filtered_pkgs, rule)
-+    depends = get_depends_func(filtered_pkgs)
- 
-     deps = set()
-     for pkg in filtered_pkgs:
-diff --git a/support/scripts/pkgutil.py b/support/scripts/pkgutil.py
-index a911123..cd1bbd5 100644
---- a/support/scripts/pkgutil.py
-+++ b/support/scripts/pkgutil.py
-@@ -27,10 +27,7 @@ def get_version(pkgs):
-         version[pkg] = output[i]
-     return version
- 
--# Execute the "make <pkg>-show-depends" command to get the list of
--# dependencies of a given list of packages, and return the list of
--# dependencies formatted as a Python dictionary.
--def get_depends(pkgs, rule):
-+def _get_depends(pkgs, rule):
-     sys.stderr.write("Getting dependencies for %s\n" % pkgs)
-     cmd = ["make", "-s", "--no-print-directory" ]
-     for pkg in pkgs:
-@@ -53,3 +50,15 @@ def get_depends(pkgs, rule):
-         else:
-             deps[pkg] = pkg_deps
-     return deps
-+
-+# Execute the "make <pkg>-show-depends" command to get the list of
-+# dependencies of a given list of packages, and return the list of
-+# dependencies formatted as a Python dictionary.
-+def get_depends(pkgs):
-+    return _get_depends(pkgs, 'show-depends')
-+
-+# Execute the "make <pkg>-show-rdepends" command to get the list of
-+# reverse dependencies of a given list of packages, and return the
-+# list of dependencies formatted as a Python dictionary.
-+def get_rdepends(pkgs):
-+    return _get_depends(pkgs, 'show-rdepends')
+ support/scripts/graph-depends | 59 ++++-----------------------------------
+ support/scripts/pkgutil.py    | 64 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 70 insertions(+), 53 deletions(-)
+ create mode 100644 support/scripts/pkgutil.py
+
 -- 
 2.10.2
