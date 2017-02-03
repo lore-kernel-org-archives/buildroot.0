@@ -1,20 +1,125 @@
-From: thierry.xenomai43 at yahoo.com <thierry.xenomai43@yahoo.com>
-Date: Fri, 3 Feb 2017 14:00:04 +0000 (UTC)
-Subject: [Buildroot] [BUILDROOT] [Xenomai 3.0.3]
- 0001-bfin-remove-inline-keyword.patch bad patch
-References: <354636581.581164.1486130404046.ref@mail.yahoo.com>
-Message-ID: <354636581.581164.1486130404046@mail.yahoo.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 3 Feb 2017 15:16:58 +0100
+Subject: [Buildroot] [PATCH] uclibc: enable mips{32,64}r6 support
+Message-ID: <20170203141658.GA9200@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-? Hi,I need to develop Real-Time aplication with Xenomai 3.0.3 for a RaspberryPi 3 target (ARM 64bit). I try to make project with Linux kernel v4.4.21 and Xenomai 3.0.3 When I compil my project I get this error message during the ?0001-bfin-remove-inline-keyword.patch? patch apply:
-WARNING: no hash file for xenomai-3.0.3.tar.bz2>>> xenomai 3.0.3 Extractingbzcat /home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/dl/xenomai-3.0.3.tar.bz2 | tar --strip-components=1 -C /home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/output/build/xenomai-3.0.3 -xf ->>> xenomai 3.0.3 PatchingApplying 0001-bfin-remove-inline-keyword.patch using patch: can't find file to patch at input line 29Perhaps you used the wrong -p or --strip option?The text leading up to this was:--------------------------|From 2a96c8bbe19a193d9ae6d0780fc274abc4df03e3 Mon Sep 17 00:00:00 2001|From: Romain Naour <romain.naour@gmail.com>|Date: Sat, 5 Nov 2016 19:09:00 +0100|Subject: [PATCH] bfin: remove inline keyword||Xenomai user space tools fail to build for bfin target since it's|provide it's own pthread_atfork(), shm_open() and shm_unlink()|definition using the inline keyword and weak attribute.||With gcc 5+ the weak attribute is discarded by the inline keyword,|so each symbol are global and are redefined several time while|linking.||Fixes:|http://autobuild.buildroot.net/results/0c2/0c2e5eb4edd4f9427f61d3c9b67a12a7a0e24140||Patch status: upstream,|https://git.xenomai.org/xenomai-2.6.git/commit/?id=917dcebb26ec492f276cdc3b55867aa90e01fa12||Signed-off-by: Romain Naour <romain.naour@gmail.com>|---| include/asm-blackfin/syscall.h | 10 +++++-----| 1 file changed, 5 insertions(+), 5 deletions(-)||diff --git a/include/asm-blackfin/syscall.h b/include/asm-blackfin/syscall.h|index 9eda8b9..b5728b5 100644|--- a/include/asm-blackfin/syscall.h|+++ b/include/asm-blackfin/syscall.h--------------------------No file to patch. Skipping patch.3 out of 3 hunks ignoredpackage/pkg-generic.mk:180: recipe for target '/home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/output/build/xenomai-3.0.3/.stamp_patched' failedmake[1]: *** [/home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/output/build/xenomai-3.0.3/.stamp_patched] Error 1Makefile:76: recipe for target '_all' failedmake: *** [_all] Error 2?My process method is the next :make raspberrypi3_defconfig make menuconfigin "Target package ? Libraries ?Hard handling" I select package ?wiringpi?in "Kernel ? Linux Kernel" I select ?Custom Git Repository?in ??Toolchain ? Kernel Headers?? I select ?Same as kernel being built?in ??System configuration ? enable rootlogin with password?? I select ?Yes?in "System configuration ? Root passwort" I init my password.?I save my configuration. ?I modify the "package/xenomai/xenomai.mk" file lick this :?################################################################################## xenomai#################################################################################?XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))ifeq ($(XENOMAI_VERSION),)
-XENOMAI_VERSION = 3.0.3
-elseBR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)endif?XENOMAI_SITE = https://xenomai.org/downloads/xenomai/stableXENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2XENOMAI_LICENSE = headers: GPLv2+ with exception, libraries: LGPLv2.1+, kernel: GPLv2+, docs: GFDLv1.2+, ipipe patch and can driver: GPLv2# GFDL is not included but refers to gnu.orgXENOMAI_LICENSE_FILES = debian/copyright include/COPYING src/skins/native/COPYING ksrc/nucleus/COPYING?XENOMAI_INSTALL_STAGING = YESXENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-userXENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user?XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install?define XENOMAI_REMOVE_DEVFILES for i in xeno-config xeno-info wrap-link.sh ; do \ rm -f $(TARGET_DIR)/usr/bin/$$i ; \ doneendef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_DEVFILES?ifeq ($(BR2_PACKAGE_XENOMAI_TESTSUITE),)define XENOMAI_REMOVE_TESTSUITE rm -rf $(TARGET_DIR)/usr/share/xenomai/ for i in klatency rtdm xeno xeno-load check-vdso \ irqloop cond-torture-posix switchtest arith \ sigtest clocktest cyclictest latency wakeup-time \ xeno-test cond-torture-native mutex-torture-posix \ mutex-torture-native ; do \ rm -f $(TARGET_DIR)/usr/bin/$$i ; \ doneendef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_TESTSUITEendif?ifeq ($(BR2_PACKAGE_XENOMAI_RTCAN),)define XENOMAI_REMOVE_RTCAN_PROGS for i in rtcanrecv rtcansend ; do \ rm -f $(TARGET_DIR)/usr/bin/$$i ; \ done rm -f $(TARGET_DIR)/usr/sbin/rtcanconfigendef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_RTCAN_PROGSendif?ifeq ($(BR2_PACKAGE_XENOMAI_ANALOGY),)define XENOMAI_REMOVE_ANALOGY for i in cmd_bits cmd_read cmd_write insn_write \ insn_bits insn_read ; do \ rm -f $(TARGET_DIR)/usr/bin/$$i ; \ done rm -f $(TARGET_DIR)/usr/sbin/analogy_config rm -f $(TARGET_DIR)/usr/lib/libanalogy.*endef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_ANALOGYendif?XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,native)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)?define XENOMAI_REMOVE_SKINS for i in $(XENOMAI_REMOVE_SKIN_LIST) ; do \ rm -f $(TARGET_DIR)/usr/lib/lib$$i.* ; \ if [ $$i == "posix" ] ; then \ rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \ fi ; \ doneendef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_SKINS?define XENOMAI_DEVICES/dev/rtheap c 666 0 0 10 254 0 0 -/dev/rtscope c 666 0 0 10 253 0 0 -/dev/rtp c 666 0 0 150 0 0 1 32endef?ifeq ($(BR2_PACKAGE_HAS_UDEV),y)XENOMAI_DEPENDENCIES += udev?define XENOMAI_INSTALL_UDEV_RULES if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \ for f in $(@D)/ksrc/nucleus/udev/*.rules ; do \ cp $$f $(TARGET_DIR)/etc/udev/rules.d/ || exit 1 ; \ done ; \ fi;endef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_INSTALL_UDEV_RULESendif # udev?$(eval $(autotools-package))???When I use the command 'make' I get the error message mentioned above.?My questions :?Where can I found the compatible ?0001-bfin-remove-inline-keyword.patch? patch ?Where can I found I-pipe patch for 4.4.21 Linux kernel and ARM 64bit ?
-Thanks for helpBest regardThierry
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170203/8025fc0b/attachment.html>
+The config for ISA choice is removed for a long time as
+the buildsystem does not pass -march=mips* to the compiler anymore.
+For mips{32,64}r6 support NAN selection is required.
+
+Tested with qemu mips32/mips64 defconfigs.
+
+A small patch is required. Bug found while testing qemu defconfigs.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ ...0001-fstat-make-new-code-aarch64-specific.patch | 29 ++++++++++++++++++++++
+ package/uclibc/Config.in                           |  7 +++---
+ package/uclibc/uclibc.mk                           | 10 ++++----
+ toolchain/toolchain-buildroot/Config.in            |  2 --
+ 4 files changed, 37 insertions(+), 11 deletions(-)
+ create mode 100644 package/uclibc/0001-fstat-make-new-code-aarch64-specific.patch
+
+diff --git a/package/uclibc/0001-fstat-make-new-code-aarch64-specific.patch b/package/uclibc/0001-fstat-make-new-code-aarch64-specific.patch
+new file mode 100644
+index 0000000..eb0198d
+--- /dev/null
++++ b/package/uclibc/0001-fstat-make-new-code-aarch64-specific.patch
+@@ -0,0 +1,29 @@
++From 71127e5cc937878883e6021da3da337a7aa9c099 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Fri, 3 Feb 2017 06:04:16 +0100
++Subject: [PATCH 10229/10229] fstat: make new code aarch64 specific
++
++The new code get's used by MIPS64 N64 and fails.
++Make the new code aarch64 specific.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ libc/sysdeps/linux/common/fstat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libc/sysdeps/linux/common/fstat.c b/libc/sysdeps/linux/common/fstat.c
++index ac77eb2..c27f926 100644
++--- a/libc/sysdeps/linux/common/fstat.c
+++++ b/libc/sysdeps/linux/common/fstat.c
++@@ -21,7 +21,7 @@ int fstat(int fd, struct stat *buf)
++ }
++ libc_hidden_def(fstat)
++ 
++-#elif __WORDSIZE == 64 && defined __NR_newfstatat
+++#elif __WORDSIZE == 64 && defined __NR_newfstatat && __aarch64__
++ #include <fcntl.h>
++ 
++ int fstat(int fd, struct stat *buf)
++-- 
++2.1.4
++
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 4d5f629..0628af3 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -128,12 +128,11 @@ config BR2_UCLIBC_MIPS_ABI
+ 	default "N32" if BR2_MIPS_NABI32
+ 	default "N64" if BR2_MIPS_NABI64
+ 
+-config BR2_UCLIBC_MIPS_ISA
++config BR2_UCLIBC_MIPS_NAN
+ 	string
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
+-	default "MIPS32" if BR2_MIPS_CPU_MIPS32
+-	default "MIPS32R2" if BR2_MIPS_CPU_MIPS32R2
+-	default "MIPS64" if BR2_MIPS_CPU_MIPS64
++	default "LEGACY" if BR2_MIPS_CPU_MIPS32 || BR2_MIPS_CPU_MIPS64
++	default "2008" if BR2_MIPS_CPU_MIPS32R6 || BR2_MIPS_CPU_MIPS64R6
+ 
+ config BR2_UCLIBC_SH_TYPE
+ 	string
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 9f9bffb..8f6035e 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -163,10 +163,10 @@ define UCLIBC_MIPS_ABI_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_MIPS_ABI),$(@D)/.config)
+ endef
+ 
+-UCLIBC_MIPS_ISA = CONFIG_MIPS_ISA_$(call qstrip,$(BR2_UCLIBC_MIPS_ISA))
+-define UCLIBC_MIPS_ISA_CONFIG
+-	$(SED) '/CONFIG_MIPS_ISA_.*/d' $(@D)/.config
+-	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_MIPS_ISA),$(@D)/.config)
++UCLIBC_MIPS_NAN = CONFIG_MIPS_NAN_$(call qstrip,$(BR2_UCLIBC_MIPS_NAN))
++define UCLIBC_MIPS_NAN_CONFIG
++	$(SED) '/CONFIG_MIPS_NAN_.*/d' $(@D)/.config
++	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_MIPS_NAN),$(@D)/.config)
+ endef
+ endif # mips
+ 
+@@ -418,7 +418,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_ARM_NO_CONTEXT_FUNCS)
+ 	$(UCLIBC_M68K_BINFMT_FLAT)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
+-	$(UCLIBC_MIPS_ISA_CONFIG)
++	$(UCLIBC_MIPS_NAN_CONFIG)
+ 	$(UCLIBC_SH_TYPE_CONFIG)
+ 	$(UCLIBC_SPARC_TYPE_CONFIG)
+ 	$(UCLIBC_POWERPC_TYPE_CONFIG)
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 9c672d2..a46b65e 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -34,8 +34,6 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
+ 		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
+-	# Unsupported for MIPS R6
+-	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+ 	help
+ 	  This option selects uClibc-ng as the C library for the
+ 	  cross-compilation toolchain.
+-- 
+2.1.4
