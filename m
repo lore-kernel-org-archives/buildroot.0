@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  3 Feb 2017 17:20:00 +0100
-Subject: [Buildroot] [PATCH v2 06/38] package/libcec: bump version to 4.0.2
+Date: Fri,  3 Feb 2017 17:19:59 +0100
+Subject: [Buildroot] [PATCH v2 05/38] package/kodi-platform: bump version
 In-Reply-To: <20170203162032.2923-1-bernd.kuhls@t-online.de>
 References: <20170203162032.2923-1-bernd.kuhls@t-online.de>
-Message-ID: <20170203162032.2923-7-bernd.kuhls@t-online.de>
+Message-ID: <20170203162032.2923-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcec/libcec.hash | 2 +-
- package/libcec/libcec.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-platform/kodi-platform.hash | 2 +-
+ package/kodi-platform/kodi-platform.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index 377f343a2..5416c20fe 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
+diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
+index a2484484e..a8a58f4ef 100644
+--- a/package/kodi-platform/kodi-platform.hash
++++ b/package/kodi-platform/kodi-platform.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256  0f29d5a2d155b507807ba896bc3b3e50a0ab56bf8f543a2bf5c2798c790292b5  libcec-2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd.tar.gz
-+sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 55c5fbb83..1fe69ee98 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,8 +4,8 @@
+-sha256  88741358d5d54a0031553ac28aa63bc56c44d994a76f8651bac94a1e244a6595  kodi-platform-45d6ad1984fdb1dc855076ff18484dbec33939d1.tar.gz
++sha256 951bd9d74ff34aca18f96bb5eae15533c3ec489eb8ec946cd4a8b4073d49f56d  kodi-platform-c8188d82678fec6b784597db69a68e74ff4986b5.tar.gz
+diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
+index 4b642f9cf..606ca1a9f 100644
+--- a/package/kodi-platform/kodi-platform.mk
++++ b/package/kodi-platform/kodi-platform.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCEC_VERSION = 2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd
--LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
-+LIBCEC_VERSION = 4.0.2
-+LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPLv2+
- LIBCEC_LICENSE_FILES = COPYING
- 
+-KODI_PLATFORM_VERSION = 45d6ad1984fdb1dc855076ff18484dbec33939d1
++KODI_PLATFORM_VERSION = c8188d82678fec6b784597db69a68e74ff4986b5
+ KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
+ KODI_PLATFORM_LICENSE = GPLv2+
+ KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
 -- 
 2.11.0
