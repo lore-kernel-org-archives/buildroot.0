@@ -1,44 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  3 Feb 2017 17:20:19 +0100
-Subject: [Buildroot] [PATCH v2 25/38] package/kodi-adsp-freesurround: bump
-	version
+Date: Fri,  3 Feb 2017 17:20:11 +0100
+Subject: [Buildroot] [PATCH v2 17/38] package/kodi: add optional support for
+	lcms2
 In-Reply-To: <20170203162032.2923-1-bernd.kuhls@t-online.de>
 References: <20170203162032.2923-1-bernd.kuhls@t-online.de>
-Message-ID: <20170203162032.2923-26-bernd.kuhls@t-online.de>
+Message-ID: <20170203162032.2923-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added by
+https://github.com/xbmc/xbmc/commit/4a635240ae5a6a3a03750efba0f30b65b5de7c2d
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash | 2 +-
- package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/kodi/Config.in | 6 ++++++
+ package/kodi/kodi.mk   | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
-index f23717f79..2649bbdcb 100644
---- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
-+++ b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 652c32d0c4b61343cbed13b6edd1ab4ad35280240a0ddb386f04adaa46986e7f kodi-adsp-freesurround-08b691d3d9a0382d2f6f789a31614fb02512036c.tar.gz
-+sha256 cf6985be6839530027861b54e2146693d05e802363281ef6f8c1f352dbf94b5c  kodi-adsp-freesurround-34f50406bcba22e364711562e5b9205e57ae844b.tar.gz
-diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-index 49cf67327..799cda579 100644
---- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-+++ b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-@@ -4,7 +4,9 @@
- #
- ################################################################################
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index ed51833f9..6f8e9a1cc 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -134,6 +134,12 @@ config BR2_PACKAGE_KODI_DBUS
+ 	help
+ 	  Enable D-Bus support
  
--KODI_ADSP_FREESURROUND_VERSION = 08b691d3d9a0382d2f6f789a31614fb02512036c
-+# This cset is on the branch 'Krypton'
-+# When Kodi is updated, then this should be updated to the corresponding branch
-+KODI_ADSP_FREESURROUND_VERSION = 34f50406bcba22e364711562e5b9205e57ae844b
- KODI_ADSP_FREESURROUND_SITE = $(call github,kodi-adsp,adsp.freesurround,$(KODI_ADSP_FREESURROUND_VERSION))
- KODI_ADSP_FREESURROUND_LICENSE = GPLv3+
- KODI_ADSP_FREESURROUND_LICENSE_FILES = LICENSE.md
++config BR2_PACKAGE_KODI_LCMS2
++	bool "lcms2"
++	select BR2_PACKAGE_LCMS2
++	help
++	  Enable lcms2 support
++
+ config BR2_PACKAGE_KODI_LIBBLURAY
+ 	bool "blu-ray"
+ 	select BR2_PACKAGE_LIBBLURAY
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 28d58bfe3..08ed68b14 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -198,6 +198,13 @@ else
+ KODI_CONF_OPTS += --disable-nfs
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_LCMS2),y)
++KODI_DEPENDENCIES += lcms2
++KODI_CONF_OPTS += --enable-lcms2
++else
++KODI_CONF_OPTS += --disable-lcms2
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_LIBBLURAY),y)
+ KODI_DEPENDENCIES += libbluray
+ KODI_CONF_OPTS += --enable-libbluray
 -- 
 2.11.0
