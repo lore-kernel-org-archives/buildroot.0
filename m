@@ -1,89 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 3 Feb 2017 14:14:49 +0100
-Subject: [Buildroot] [git commit] tcpdump: security bump to version 4.9.0
-Message-ID: <20170203131921.1E1A581D77@busybox.osuosl.org>
+Date: Fri, 3 Feb 2017 14:25:04 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] imagemagick: security
+	bump to version 7.0.4-6
+Message-ID: <20170203132519.236668195D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=183b443e579b31b14bd95f98ecd95b2efc0554f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=dc7fd80cc9e5aadb71cf9354d435236e0a6c771e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Security fixes in this release (from the Debian changelog):
+Fixes an use of uninitialized data issue in MAT image format that may have
+security impact:
 
-    + CVE-2016-7922: buffer overflow in print-ah.c:ah_print().
-    + CVE-2016-7923: buffer overflow in print-arp.c:arp_print().
-    + CVE-2016-7924: buffer overflow in print-atm.c:oam_print().
-    + CVE-2016-7925: buffer overflow in print-sl.c:sl_if_print().
-    + CVE-2016-7926: buffer overflow in print-ether.c:ethertype_print().
-    + CVE-2016-7927: buffer overflow in print-802_11.c:ieee802_11_radio_print().
-    + CVE-2016-7928: buffer overflow in print-ipcomp.c:ipcomp_print().
-    + CVE-2016-7929: buffer overflow in print-juniper.c:juniper_parse_header().
-    + CVE-2016-7930: buffer overflow in print-llc.c:llc_print().
-    + CVE-2016-7931: buffer overflow in print-mpls.c:mpls_print().
-    + CVE-2016-7932: buffer overflow in print-pim.c:pimv2_check_checksum().
-    + CVE-2016-7933: buffer overflow in print-ppp.c:ppp_hdlc_if_print().
-    + CVE-2016-7934: buffer overflow in print-udp.c:rtcp_print().
-    + CVE-2016-7935: buffer overflow in print-udp.c:rtp_print().
-    + CVE-2016-7936: buffer overflow in print-udp.c:udp_print().
-    + CVE-2016-7937: buffer overflow in print-udp.c:vat_print().
-    + CVE-2016-7938: integer overflow in print-zeromq.c:zmtp1_print_frame().
-    + CVE-2016-7939: buffer overflow in print-gre.c, multiple functions.
-    + CVE-2016-7940: buffer overflow in print-stp.c, multiple functions.
-    + CVE-2016-7973: buffer overflow in print-atalk.c, multiple functions.
-    + CVE-2016-7974: buffer overflow in print-ip.c, multiple functions.
-    + CVE-2016-7975: buffer overflow in print-tcp.c:tcp_print().
-    + CVE-2016-7983: buffer overflow in print-bootp.c:bootp_print().
-    + CVE-2016-7984: buffer overflow in print-tftp.c:tftp_print().
-    + CVE-2016-7985: buffer overflow in print-calm-fast.c:calm_fast_print().
-    + CVE-2016-7986: buffer overflow in print-geonet.c, multiple functions.
-    + CVE-2016-7992: buffer overflow in print-cip.c:cip_if_print().
-    + CVE-2016-7993: a bug in util-print.c:relts_print() could cause a
-      buffer overflow in multiple protocol parsers (DNS, DVMRP, HSRP, IGMP,
-      lightweight resolver protocol, PIM).
-    + CVE-2016-8574: buffer overflow in print-fr.c:frf15_print().
-    + CVE-2016-8575: buffer overflow in print-fr.c:q933_print().
-    + CVE-2017-5202: buffer overflow in print-isoclns.c:clnp_print().
-    + CVE-2017-5203: buffer overflow in print-bootp.c:bootp_print().
-    + CVE-2017-5204: buffer overflow in print-ip6.c:ip6_print().
-    + CVE-2017-5205: buffer overflow in print-isakmp.c:ikev2_e_print().
-    + CVE-2017-5341: buffer overflow in print-otv.c:otv_print().
-    + CVE-2017-5342: a bug in multiple protocol parsers (Geneve, GRE, NSH,
-      OTV, VXLAN and VXLAN GPE) could cause a buffer overflow in
-      print-ether.c:ether_print().
-    + CVE-2017-5482: buffer overflow in print-fr.c:q933_print().
-    + CVE-2017-5483: buffer overflow in print-snmp.c:asn1_parse().
-    + CVE-2017-5484: buffer overflow in print-atm.c:sig_print().
-    + CVE-2017-5485: buffer overflow in addrtoname.c:lookup_nsap().
-    + CVE-2017-5486: buffer overflow in print-isoclns.c:clnp_print().
+https://github.com/ImageMagick/ImageMagick/issues/362
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Peter: extend commit message, mention (potential) security impact]
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+(cherry picked from commit e5f505efac725b7e12b22f1341ce0523df73a79f)
 ---
- package/tcpdump/tcpdump.hash | 2 +-
- package/tcpdump/tcpdump.mk   | 2 +-
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 21fb83f..966db1f 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 3f5bfb1..90e1db5 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 20e4341ec48fcf72abcae312ea913e6ba6b958617b2f3fb496d51f0ae88d831c  tcpdump-4.8.1.tar.gz
-+sha256 eae98121cbb1c9adbedd9a777bf2eae9fa1c1c676424a54740311c8abcee5a5e  tcpdump-4.9.0.tar.gz
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 3773fcb..e71f9c1 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 69178335a906202928571e25b1670a4bb066500b9693c7ba554583e8d700fcf5  ImageMagick-7.0.4-5.tar.xz
++sha256 1ee004740b7ab47fff3c92ae4a89dcbd0181c4d5f31fcb7e3697412ea384a0da  ImageMagick-7.0.4-6.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 64c6a35..a917297 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TCPDUMP_VERSION = 4.8.1
-+TCPDUMP_VERSION = 4.9.0
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3c
- TCPDUMP_LICENSE_FILES = LICENSE
+-IMAGEMAGICK_VERSION = 7.0.4-5
++IMAGEMAGICK_VERSION = 7.0.4-6
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
