@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 4 Feb 2017 00:18:15 +0100
+Date: Sat, 4 Feb 2017 00:30:20 +0100
 Subject: [Buildroot] [BUILDROOT 2016.11.2] Change kernel version (I need
  4.1.18)
-In-Reply-To: <1313003300.253161.1486114996684@mail.yahoo.com>
-References: <1313003300.253161.1486114996684.ref@mail.yahoo.com>
- <1313003300.253161.1486114996684@mail.yahoo.com>
-Message-ID: <4fe57fc0-9d51-4610-3252-fff67d210f64@mind.be>
+In-Reply-To: <1022335655.874129.1486143487328@mail.yahoo.com>
+References: <1022335655.874129.1486143487328.ref@mail.yahoo.com>
+ <1022335655.874129.1486143487328@mail.yahoo.com>
+Message-ID: <bc0053c5-142a-6bb6-bdfe-bcb731bf0070@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +14,24 @@ To: buildroot@busybox.net
 
 
 
-On 03-02-17 10:43, thierry.xenomai43 at yahoo.com wrote:
->  
-> Hello,
-> ?
-> I need to compile a 4.1.18 kernel linux for a RaspberryPi 3 target (ARM 64bit)
-> to patch it with an ADEOS I-pipe (I get ipipe patch only for 4.1.18 kernel).
-> ?
-> To start I want to test a simple project without the Xenomai package and with
-> linux 4.1.18.
-> ?
-> I tried to change the version of the Linux kernel but during the compilation I
-> get the following error message:
-> 
-> which: no flex in
-> (/home/app/grmon-eval-2.0.60/linux/bin:/home/app/sparc-elf-4.4.2/bin:/home/app/grmon-eval-2.0.60/linux/bin:/home/app/sparc-elf-4.4.2/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/app/altera/quartus/bin:/home/thierry/.local/bin:/home/thierry/bin:/home/app/altera/quartus/bin)
-> which: no bison in
-> (/home/app/grmon-eval-2.0.60/linux/bin:/home/app/sparc-elf-4.4.2/bin:/home/app/grmon-eval-2.0.60/linux/bin:/home/app/sparc-elf-4.4.2/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/app/altera/quartus/bin:/home/thierry/.local/bin:/home/thierry/bin:/home/app/altera/quartus/bin)
-> which: no cmake in
-> (/home/app/grmon-eval-2.0.60/linux/bin:/home/app/sparc-elf-4.4.2/bin:/home/app/grmon-eval-2.0.60/linux/bin:/home/app/sparc-elf-4.4.2/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/app/altera/quartus/bin:/home/thierry/.local/bin:/home/thierry/bin:/home/app/altera/quartus/bin)
-> ***
-> *** Can't find default configuration "arch/arm/configs/bcm2709_defconfig"!
-> ***
-> scripts/kconfig/Makefile:105: recipe for target 'bcm2709_defconfig' failed
+On 03-02-17 18:38, thierry.xenomai43 at yahoo.com wrote:
+[snip]
+> I modify the "package/xenomai/xenomai.mk" file lick this :
+[snip]
+> XENOMAI_VERSION = 3.0.3
 
- The upstream 4.1 kernel doesn't have bcm2709_defconfig. You have to use a
-rpi3-specific kernel. Take the rpi-4.1.y branch from the RPi repo on
-https://github.com/raspberrypi/linux
+ When you change a package version, the patches won't apply anymore. For your
+particular case, you probably don't care about blackfin so you can just remove
+0001-bfin-remove-inline-keyword.patch.
 
+ A word of warning though: the update to Xenomai 3 is pretty major, it is quite
+likely that you will encounter more issues.
 
  Regards,
  Arnout
 
+
 [snip]
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
