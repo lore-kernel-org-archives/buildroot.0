@@ -1,41 +1,86 @@
-From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
-Date: Fri, 03 Feb 2017 11:44:37 +0100
-Subject: [Buildroot]
- =?utf-8?q?=5BPATCH_1/2=5D_Add_BR2=5FCMAKE=5FUSE=5FNIN?=
- =?utf-8?q?JA=5FBACKEND_option?=
-In-Reply-To: <20170201211232.2f4effde@free-electrons.com>
-References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
- <ef982565-16ec-591b-aaed-d22e5a634851@gmail.com>
- <2260e784237284271ff7745986b82cc8@openmailbox.org>
- <e48cfb34-6f4c-1c7b-c737-c5a57eb464e0@gmail.com>
- <20170125142716.55e7d7b3@free-electrons.com>
- <901720b443e9bb90750a71c8797bbf0d@openmailbox.org>
- <20170130102316.2a02ed3a@free-electrons.com>
- <1422fd7b4aadc4c1efbec44cf687740c@openmailbox.org>
- <20170201211232.2f4effde@free-electrons.com>
-Message-ID: <059fe06e34e46aed269bf4210c143516@openmailbox.org>
+From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Date: Fri, 3 Feb 2017 12:45:18 +0100
+Subject: [Buildroot] [PATCH] tslib: bump to 1.4
+Message-ID: <1486122318-17699-1-git-send-email-martin.kepplinger@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 2017-02-01 21:12, Thomas Petazzoni a ?crit?:
-> In the first case you're using the shell built-in "time" program, in
-> the later you're using the separate /usr/bin/time program. Try:
+---
+Older kernel headers than 3.12 should be supported again, but I didn't run
+tests, so I kept it in Config.in; just so you know in case you want to try.
 
-Thank you, I was not aware of that.
 
-> I'm indeed not sure it's really worth the effort for such a small
-> saving.
+ ...01-tests-ts_calibrate-add-missing-headers.patch | 35 ----------------------
+ package/tslib/tslib.hash                           |  4 +--
+ package/tslib/tslib.mk                             |  2 +-
+ 3 files changed, 3 insertions(+), 38 deletions(-)
+ delete mode 100644 package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
 
-OK, so let's forget it. Moreover, as you have mentioned in your reply to 
-the second patch (on documentation), there are some problems with 
-$(2)_INSTALL_STAGING/TARGET_OPTS being changed to 
-$(2)_INSTALL_STAGING/TARGET_ENV, and also with parallel build support 
-being not supported for some packages.
-
-Regards.
-
+diff --git a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
+deleted file mode 100644
+index 97cd4be..0000000
+--- a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 54b66bfe405d8b70c703684e60bedbad5c7d4213 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Sat, 14 Jan 2017 21:35:53 +0200
+-Subject: [PATCH] tests/ts_calibrate: add missing headers
+-
+-The open(2) system call requires sys/types.h and sys/stat.h. Fix the following
+-build failure under uClibc-ng:
+-
+-ts_calibrate.c: In function ?main?:
+-ts_calibrate.c:248:19: error: ?S_IRUSR? undeclared (first use in this function)
+-                   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+-                   ^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/kergoth/tslib/pull/59
+- tests/ts_calibrate.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/tests/ts_calibrate.c b/tests/ts_calibrate.c
+-index c6652e479d4b..9a98d1f86205 100644
+---- a/tests/ts_calibrate.c
+-+++ b/tests/ts_calibrate.c
+-@@ -17,6 +17,8 @@
+- #include <string.h>
+- #include <unistd.h>
+- #include <sys/time.h>
+-+#include <sys/types.h>
+-+#include <sys/stat.h>
+- 
+- #ifdef __ANDROID__
+- #include <fcntl.h>
+--- 
+-2.11.0
+-
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index cdbe0d2..6540ac8 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,2 @@
+-# Locally generated
+-sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
++# taken from https://github.com/kergoth/tslib/releases/tag/1.4
++sha256  ad0373f1dbfda27caec92cb10421227f226c79d160488f1ac915585ba947741f  tslib-1.4.tar.xz
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index d3388a2..5ea526e 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.3
++TSLIB_VERSION = 1.4
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL, LGPL
 -- 
-C?dric
+2.1.4
