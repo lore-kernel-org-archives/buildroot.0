@@ -1,47 +1,79 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  3 Feb 2017 17:20:26 +0100
-Subject: [Buildroot] [PATCH v2 32/38] package/kodi-visualisation-waveforhue:
-	bump version
+Date: Fri,  3 Feb 2017 17:20:28 +0100
+Subject: [Buildroot] [PATCH v2 34/38] package/kodi-inputstream-adaptive: new
+	package
 In-Reply-To: <20170203162032.2923-1-bernd.kuhls@t-online.de>
 References: <20170203162032.2923-1-bernd.kuhls@t-online.de>
-Message-ID: <20170203162032.2923-33-bernd.kuhls@t-online.de>
+Message-ID: <20170203162032.2923-35-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed upstream repo as per:
-https://github.com/notspiff/visualization.waveforhue/pull/3#issuecomment-221105720
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash  | 2 +-
- .../kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk    | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-inputstream-adaptive/Config.in                 |  8 ++++++++
+ .../kodi-inputstream-adaptive.hash                          |  2 ++
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 13 +++++++++++++
+ package/kodi/Config.in                                      |  1 +
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-inputstream-adaptive/Config.in
+ create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+ create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-index 5f49daae9..e7e97f1d8 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 2590ce4ee1816ffdf59fe33580a36fba49fbd1f60f4c9022b3315e04debc9c73 kodi-visualisation-waveforhue-e87d5c7d7e7504036b80af8bc89f4cf6489085fe.tar.gz
-+sha256 80c466c55aee97d01442892135d4785070333e39f45942da17b65239758e5ae9  kodi-visualisation-waveforhue-b1805dbdba07e5e5b62115490c703aca43e9065c.tar.gz
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-index 28eeb4d88..21840f18b 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+new file mode 100644
+index 000000000..d5fe5e61c
+--- /dev/null
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
++	bool "kodi-inputstream-adaptive"
++	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_KODI_PLATFORM
++	help
++	  Kodi inputstream addon for several manifest types
++
++	  https://github.com/peak3d/inputstream.adaptive
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+new file mode 100644
+index 000000000..d3600eb19
+--- /dev/null
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 7e3fbb9bac11777b2f553fce0f36f2dd463adbb956a957e6c000c7013202b9ad  kodi-inputstream-adaptive-v1.0.6.tar.gz
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+new file mode 100644
+index 000000000..bd3c34c0c
+--- /dev/null
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-inputstream-adaptive
++#
++################################################################################
++
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = v1.0.6
++KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
++KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPLv2+
++KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
++KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 246cc8a48..63a58e59c 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -283,6 +283,7 @@ menu "Audio encoder addons"
+ endmenu
  
--KODI_VISUALISATION_WAVEFORHUE_VERSION = e87d5c7d7e7504036b80af8bc89f4cf6489085fe
--KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,notspiff,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
-+KODI_VISUALISATION_WAVEFORHUE_VERSION = b1805dbdba07e5e5b62115490c703aca43e9065c
-+KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,hardyt,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
- KODI_VISUALISATION_WAVEFORHUE_LICENSE = GPLv2+
- KODI_VISUALISATION_WAVEFORHUE_LICENSE_FILES = COPYING
- KODI_VISUALISATION_WAVEFORHUE_DEPENDENCIES = kodi
+ menu "Inputstream addons"
++	source "package/kodi-inputstream-adaptive/Config.in"
+ 	source "package/kodi-inputstream-rtmp/Config.in"
+ endmenu
+ 
 -- 
 2.11.0
