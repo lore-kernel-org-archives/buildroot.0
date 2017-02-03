@@ -1,79 +1,213 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  3 Feb 2017 17:20:28 +0100
-Subject: [Buildroot] [PATCH v2 34/38] package/kodi-inputstream-adaptive: new
-	package
-In-Reply-To: <20170203162032.2923-1-bernd.kuhls@t-online.de>
-References: <20170203162032.2923-1-bernd.kuhls@t-online.de>
-Message-ID: <20170203162032.2923-35-bernd.kuhls@t-online.de>
+From: thierry.xenomai43 at yahoo.com <thierry.xenomai43@yahoo.com>
+Date: Fri, 3 Feb 2017 17:38:07 +0000 (UTC)
+Subject: [Buildroot] [BUILDROOT 2016.11.2] Change kernel version (I need
+ 4.1.18)
+References: <1022335655.874129.1486143487328.ref@mail.yahoo.com>
+Message-ID: <1022335655.874129.1486143487328@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-inputstream-adaptive/Config.in                 |  8 ++++++++
- .../kodi-inputstream-adaptive.hash                          |  2 ++
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 13 +++++++++++++
- package/kodi/Config.in                                      |  1 +
- 4 files changed, 24 insertions(+)
- create mode 100644 package/kodi-inputstream-adaptive/Config.in
- create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
- create mode 100644 package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+Hi,
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-new file mode 100644
-index 000000000..d5fe5e61c
---- /dev/null
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
-+	bool "kodi-inputstream-adaptive"
-+	select BR2_PACKAGE_LIBPLATFORM
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	help
-+	  Kodi inputstream addon for several manifest types
-+
-+	  https://github.com/peak3d/inputstream.adaptive
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-new file mode 100644
-index 000000000..d3600eb19
---- /dev/null
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 7e3fbb9bac11777b2f553fce0f36f2dd463adbb956a957e6c000c7013202b9ad  kodi-inputstream-adaptive-v1.0.6.tar.gz
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-new file mode 100644
-index 000000000..bd3c34c0c
---- /dev/null
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-inputstream-adaptive
-+#
-+################################################################################
-+
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = v1.0.6
-+KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
-+KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPLv2+
-+KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
-+KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 246cc8a48..63a58e59c 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -283,6 +283,7 @@ menu "Audio encoder addons"
- endmenu
- 
- menu "Inputstream addons"
-+	source "package/kodi-inputstream-adaptive/Config.in"
- 	source "package/kodi-inputstream-rtmp/Config.in"
- endmenu
- 
--- 
-2.11.0
+I'm sorry, I had a problem with my precedent mail
+
+I need to develop Real-Time aplication with Xenomai 3.0.3 for a RaspberryPi 3 target (ARM 64bit).
+I try to make project with Linux kernel v4.4.21 and Xenomai 3.0.3
+When I compil my project I get this error message during the ?0001-bfin-remove-inline-keyword.patch? patch apply:
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+WARNING: no hash file for xenomai-3.0.3.tar.bz2
+>>> xenomai 3.0.3 Extracting
+bzcat /home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/dl/xenomai-3.0.3.tar.bz2 | tar --strip-components=1 -C /home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/output/build/xenomai-3.0.3 -xf -
+>>> xenomai 3.0.3 Patching
+Applying 0001-bfin-remove-inline-keyword.patch using patch:
+can't find file to patch at input line 29
+Perhaps you used the wrong -p or --strip option?
+The text leading up to this was:
+--------------------------
+|From 2a96c8bbe19a193d9ae6d0780fc274abc4df03e3 Mon Sep 17 00:00:00 2001
+|From: Romain Naour <romain.naour@gmail.com>
+|Date: Sat, 5 Nov 2016 19:09:00 +0100
+|Subject: [PATCH] bfin: remove inline keyword
+|
+|Xenomai user space tools fail to build for bfin target since it's
+|provide it's own pthread_atfork(), shm_open() and shm_unlink()
+|definition using the inline keyword and weak attribute.
+|
+|With gcc 5+ the weak attribute is discarded by the inline keyword,
+|so each symbol are global and are redefined several time while
+|linking.
+|
+|Fixes:
+|http://autobuild.buildroot.net/results/0c2/0c2e5eb4edd4f9427f61d3c9b67a12a7a0e24140
+|
+|Patch status: upstream,
+|https://git.xenomai.org/xenomai-2.6.git/commit/?id=917dcebb26ec492f276cdc3b55867aa90e01fa12
+|
+|Signed-off-by: Romain Naour <romain.naour@gmail.com>
+|---
+| include/asm-blackfin/syscall.h | 10 +++++-----
+| 1 file changed, 5 insertions(+), 5 deletions(-)
+|
+|diff --git a/include/asm-blackfin/syscall.h b/include/asm-blackfin/syscall.h
+|index 9eda8b9..b5728b5 100644
+|--- a/include/asm-blackfin/syscall.h
+|+++ b/include/asm-blackfin/syscall.h
+--------------------------
+No file to patch. Skipping patch.
+3 out of 3 hunks ignored
+package/pkg-generic.mk:180: recipe for target '/home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/output/build/xenomai-3.0.3/.stamp_patched' failed
+make[1]: *** [/home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/output/build/xenomai-3.0.3/.stamp_patched] Error 1
+Makefile:76: recipe for target '_all' failed
+make: *** [_all] Error 2
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+?
+My process method is the next :
+make raspberrypi3_defconfig
+make menuconfig
+??? in "Target package ? Libraries ? Hard handling" I select package ?wiringpi?
+??? in "Kernel ? Linux Kernel" I select ?Custom Git Repository?
+??? in ??Toolchain ? Kernel Headers?? I select ?Same as kernel being built?
+??? in ??System configuration ? enable rootlogin with password?? I select ?Yes?
+??? in "System configuration ? Root passwort" I init my password.
+?
+I save my configuration.
+?
+I modify the "package/xenomai/xenomai.mk" file lick this :
+?
+################################################################################
+#
+# xenomai
+#
+################################################################################
+?
+XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+ifeq ($(XENOMAI_VERSION),)
+
+XENOMAI_VERSION = 3.0.3
+
+else
+BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+endif
+?
+XENOMAI_SITE = https://xenomai.org/downloads/xenomai/stable
+XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+XENOMAI_LICENSE = headers: GPLv2+ with exception, libraries: LGPLv2.1+, kernel: GPLv2+, docs: GFDLv1.2+, ipipe patch and can driver: GPLv2
+# GFDL is not included but refers to gnu.org
+XENOMAI_LICENSE_FILES = debian/copyright include/COPYING src/skins/native/COPYING ksrc/nucleus/COPYING
+?
+XENOMAI_INSTALL_STAGING = YES
+XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
+XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
+?
+XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
+?
+define XENOMAI_REMOVE_DEVFILES
+for i in xeno-config xeno-info wrap-link.sh ; do \
+rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+done
+endef
+?
+XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_DEVFILES
+?
+ifeq ($(BR2_PACKAGE_XENOMAI_TESTSUITE),)
+define XENOMAI_REMOVE_TESTSUITE
+rm -rf $(TARGET_DIR)/usr/share/xenomai/
+for i in klatency rtdm xeno xeno-load check-vdso \
+irqloop cond-torture-posix switchtest arith \
+sigtest clocktest cyclictest latency wakeup-time \
+xeno-test cond-torture-native mutex-torture-posix \
+mutex-torture-native ; do \
+rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+done
+endef
+?
+XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_TESTSUITE
+endif
+?
+ifeq ($(BR2_PACKAGE_XENOMAI_RTCAN),)
+define XENOMAI_REMOVE_RTCAN_PROGS
+for i in rtcanrecv rtcansend ; do \
+rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+done
+rm -f $(TARGET_DIR)/usr/sbin/rtcanconfig
+endef
+?
+XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_RTCAN_PROGS
+endif
+?
+ifeq ($(BR2_PACKAGE_XENOMAI_ANALOGY),)
+define XENOMAI_REMOVE_ANALOGY
+for i in cmd_bits cmd_read cmd_write insn_write \
+insn_bits insn_read ; do \
+rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+done
+rm -f $(TARGET_DIR)/usr/sbin/analogy_config
+rm -f $(TARGET_DIR)/usr/lib/libanalogy.*
+endef
+?
+XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_ANALOGY
+endif
+?
+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,native)
+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)
+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)
+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)
+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)
+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
+?
+define XENOMAI_REMOVE_SKINS
+for i in $(XENOMAI_REMOVE_SKIN_LIST) ; do \
+rm -f $(TARGET_DIR)/usr/lib/lib$$i.* ; \
+if [ $$i == "posix" ] ; then \
+rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \
+fi ; \
+done
+endef
+?
+XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_SKINS
+?
+define XENOMAI_DEVICES
+/dev/rtheap c 666 0 0 10 254 0 0 -
+/dev/rtscope c 666 0 0 10 253 0 0 -
+/dev/rtp c 666 0 0 150 0 0 1 32
+endef
+?
+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+XENOMAI_DEPENDENCIES += udev
+?
+define XENOMAI_INSTALL_UDEV_RULES
+if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \
+for f in $(@D)/ksrc/nucleus/udev/*.rules ; do \
+cp $$f $(TARGET_DIR)/etc/udev/rules.d/ || exit 1 ; \
+done ; \
+fi;
+endef
+?
+XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_INSTALL_UDEV_RULES
+endif # udev
+?
+$(eval $(autotools-package))
+?
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+?
+When I use the command 'make' I get the error message mentioned above.
+?
+My questions :
+?
+Where can I found the compatible ?0001-bfin-remove-inline-keyword.patch? patch ?
+Where can I found I-pipe patch for 4.4.21 Linux kernel and ARM 64bit ?
+
+Thanks for help
+Best regard
+Thierry
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170203/b28dbd2e/attachment-0001.html>
