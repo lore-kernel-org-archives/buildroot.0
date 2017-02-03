@@ -1,68 +1,41 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri,  3 Feb 2017 15:29:58 -0500
-Subject: [Buildroot] [PATCH 10/11] openvmtools: bump version to
-	5a9033ddfa95786d867e4d02bbb9a29bac8fb64f
+Date: Fri,  3 Feb 2017 15:29:59 -0500
+Subject: [Buildroot] [PATCH 11/11] portaudio: bump to version 190600_20161030
 In-Reply-To: <20170203202959.18916-1-aduskett@codeblue.com>
 References: <20170203202959.18916-1-aduskett@codeblue.com>
-Message-ID: <20170203202959.18916-10-aduskett@codeblue.com>
+Message-ID: <20170203202959.18916-11-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Technically this is 10.1.0, however the initial release left out a config
-directory causing autoconfig to fail.  See this post:
-https://github.com/vmware/open-vm-tools/issues/115#issuecomment-269963907
-
-As such, I specified the hash to fix the release:
-https://github.com/vmware/open-vm-tools/commit/5a9033ddfa95786d867e4d02bbb9a29bac8fb64f
-
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/openvmtools/openvmtools.hash |  2 +-
- package/openvmtools/openvmtools.mk   | 10 ++--------
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ package/portaudio/portaudio.hash | 2 +-
+ package/portaudio/portaudio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvmtools/openvmtools.hash b/package/openvmtools/openvmtools.hash
-index ae28377..bf344e5 100644
---- a/package/openvmtools/openvmtools.hash
-+++ b/package/openvmtools/openvmtools.hash
+diff --git a/package/portaudio/portaudio.hash b/package/portaudio/portaudio.hash
+index 2a19316..ca7baf7 100644
+--- a/package/portaudio/portaudio.hash
++++ b/package/portaudio/portaudio.hash
 @@ -1,2 +1,2 @@
- # locally computed
--sha256  6b415f6093a15ffce10d3c4b69aa7ff106bdc0efd88e18a70a59d6941d4d2379  openvmtools-stable-9.10.2.tar.gz
-+sha256  ff384ab0c11e19db0fd6ddab60e8ae48a4591b141fb3a8e8f1d4e1a489dd293f  openvmtools-5a9033ddfa95786d867e4d02bbb9a29bac8fb64f.tar.gz
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 40a7dac..d3eda5c 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -4,11 +4,12 @@
+ # Locally calculated
+-sha256	8fe024a5f0681e112c6979808f684c3516061cc51d3acc0b726af98fc96c8d57	pa_stable_v19_20140130.tgz
++sha256	f5a21d7dcd6ee84397446fa1fa1a0675bb2e8a4a6dceb4305a8404698d8d1513	pa_stable_v190600_20161030.tgz
+diff --git a/package/portaudio/portaudio.mk b/package/portaudio/portaudio.mk
+index d1ef07a..0cf754c 100644
+--- a/package/portaudio/portaudio.mk
++++ b/package/portaudio/portaudio.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVMTOOLS_VERSION = stable-9.10.2
-+OPENVMTOOLS_VERSION = 5a9033ddfa95786d867e4d02bbb9a29bac8fb64f
- OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
- OPENVMTOOLS_SUBDIR = open-vm-tools
- OPENVMTOOLS_LICENSE = LGPLv2.1
- OPENVMTOOLS_LICENSE_FILES = $(OPENVMTOOLS_SUBDIR)/COPYING
-+
- # Autoreconf needed or config/missing will run configure again at buildtime
- OPENVMTOOLS_AUTORECONF = YES
- OPENVMTOOLS_CONF_OPTS = --with-dnet \
-@@ -45,13 +46,6 @@ else
- OPENVMTOOLS_CONF_OPTS += --without-pam
- endif
- 
--# configure needs execution permission
--define OPENVMTOOLS_PRE_CONFIGURE_CHMOD
--	chmod 0755 $(@D)/$(OPENVMTOOLS_SUBDIR)/configure
--endef
--
--OPENVMTOOLS_PRE_CONFIGURE_HOOKS += OPENVMTOOLS_PRE_CONFIGURE_CHMOD
--
- # symlink needed by lib/system/systemLinux.c (or will cry in /var/log/messages)
- # defined in lib/misc/hostinfoPosix.c
- # /sbin/shutdown needed for Guest OS restart/shutdown from hypervisor
+-PORTAUDIO_VERSION = v19_20140130
++PORTAUDIO_VERSION = v190600_20161030
+ PORTAUDIO_SITE = http://www.portaudio.com/archives
+ PORTAUDIO_SOURCE = pa_stable_$(PORTAUDIO_VERSION).tgz
+ PORTAUDIO_INSTALL_STAGING = YES
 -- 
 2.9.3
