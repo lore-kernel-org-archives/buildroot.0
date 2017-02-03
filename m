@@ -1,40 +1,20 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 3 Feb 2017 11:30:07 -0200
-Subject: [Buildroot] Firmware auto-loading does not work
-In-Reply-To: <47a61250-05eb-b3e6-54f6-3bb27e897f0e@oliseo.fr>
-References: <5a5c69bf-efc5-e35c-f95c-d303047320c4@oliseo.fr>
- <874m0ngv5h.fsf@dell.be.48ers.dk>
- <7ee11e7f-a489-9f3a-cfd8-3d93f291f695@oliseo.fr>
- <87ziiffdqw.fsf@dell.be.48ers.dk>
- <718ddc67-8e29-1c1b-3a73-74ada73662ab@oliseo.fr>
- <871svk8t56.fsf@dell.be.48ers.dk>
- <47a61250-05eb-b3e6-54f6-3bb27e897f0e@oliseo.fr>
-Message-ID: <CAOMZO5B2N2bONBTYGj0v3pWCZzsE4PtYtrWOkbmf4ML_Zq7V+g@mail.gmail.com>
+From: thierry.xenomai43 at yahoo.com <thierry.xenomai43@yahoo.com>
+Date: Fri, 3 Feb 2017 14:00:04 +0000 (UTC)
+Subject: [Buildroot] [BUILDROOT] [Xenomai 3.0.3]
+ 0001-bfin-remove-inline-keyword.patch bad patch
+References: <354636581.581164.1486130404046.ref@mail.yahoo.com>
+Message-ID: <354636581.581164.1486130404046@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 3, 2017 at 7:51 AM, Guillaume GARDET - Olis?o
-<guillaume.gardet@oliseo.fr> wrote:
-
-> The thing is that the PATH is not good :
-> * requested :
-> /sys/devices/platform/musb-omap2430/musb-hdrc.0/usb2/2-1/2-1:1.0/firmware/2-1:1.0
-> * real:
-> /sys/devices/platform/musb-omap2430.0/musb-hdrc.0/usb2/2-1/2-1:1.0/firmware/2-1:1.0
->
-> The only difference is the ".0" missing after musb-omap2430. Any idea why
-> there is this difference?
-
-This depends on how you registered the musb-omap2430 platform device.
-If you pass '-1' as the id then it will not register with the .0 in
-the name.
-
-Check how we do this on arch/arm/mach-imx/devices/platform-pata_imx.c,
-for example.
-
-imx_add_platform_device("pata_imx", -1, res, ARRAY_SIZE(res), NULL, 0);
-
-The '-1' is the key thing here.
+? Hi,I need to develop Real-Time aplication with Xenomai 3.0.3 for a RaspberryPi 3 target (ARM 64bit). I try to make project with Linux kernel v4.4.21 and Xenomai 3.0.3 When I compil my project I get this error message during the ?0001-bfin-remove-inline-keyword.patch? patch apply:
+WARNING: no hash file for xenomai-3.0.3.tar.bz2>>> xenomai 3.0.3 Extractingbzcat /home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/dl/xenomai-3.0.3.tar.bz2 | tar --strip-components=1 -C /home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/output/build/xenomai-3.0.3 -xf ->>> xenomai 3.0.3 PatchingApplying 0001-bfin-remove-inline-keyword.patch using patch: can't find file to patch at input line 29Perhaps you used the wrong -p or --strip option?The text leading up to this was:--------------------------|From 2a96c8bbe19a193d9ae6d0780fc274abc4df03e3 Mon Sep 17 00:00:00 2001|From: Romain Naour <romain.naour@gmail.com>|Date: Sat, 5 Nov 2016 19:09:00 +0100|Subject: [PATCH] bfin: remove inline keyword||Xenomai user space tools fail to build for bfin target since it's|provide it's own pthread_atfork(), shm_open() and shm_unlink()|definition using the inline keyword and weak attribute.||With gcc 5+ the weak attribute is discarded by the inline keyword,|so each symbol are global and are redefined several time while|linking.||Fixes:|http://autobuild.buildroot.net/results/0c2/0c2e5eb4edd4f9427f61d3c9b67a12a7a0e24140||Patch status: upstream,|https://git.xenomai.org/xenomai-2.6.git/commit/?id=917dcebb26ec492f276cdc3b55867aa90e01fa12||Signed-off-by: Romain Naour <romain.naour@gmail.com>|---| include/asm-blackfin/syscall.h | 10 +++++-----| 1 file changed, 5 insertions(+), 5 deletions(-)||diff --git a/include/asm-blackfin/syscall.h b/include/asm-blackfin/syscall.h|index 9eda8b9..b5728b5 100644|--- a/include/asm-blackfin/syscall.h|+++ b/include/asm-blackfin/syscall.h--------------------------No file to patch. Skipping patch.3 out of 3 hunks ignoredpackage/pkg-generic.mk:180: recipe for target '/home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/output/build/xenomai-3.0.3/.stamp_patched' failedmake[1]: *** [/home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RTv2/output/build/xenomai-3.0.3/.stamp_patched] Error 1Makefile:76: recipe for target '_all' failedmake: *** [_all] Error 2?My process method is the next :make raspberrypi3_defconfig make menuconfigin "Target package ? Libraries ?Hard handling" I select package ?wiringpi?in "Kernel ? Linux Kernel" I select ?Custom Git Repository?in ??Toolchain ? Kernel Headers?? I select ?Same as kernel being built?in ??System configuration ? enable rootlogin with password?? I select ?Yes?in "System configuration ? Root passwort" I init my password.?I save my configuration. ?I modify the "package/xenomai/xenomai.mk" file lick this :?################################################################################## xenomai#################################################################################?XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))ifeq ($(XENOMAI_VERSION),)
+XENOMAI_VERSION = 3.0.3
+elseBR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)endif?XENOMAI_SITE = https://xenomai.org/downloads/xenomai/stableXENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2XENOMAI_LICENSE = headers: GPLv2+ with exception, libraries: LGPLv2.1+, kernel: GPLv2+, docs: GFDLv1.2+, ipipe patch and can driver: GPLv2# GFDL is not included but refers to gnu.orgXENOMAI_LICENSE_FILES = debian/copyright include/COPYING src/skins/native/COPYING ksrc/nucleus/COPYING?XENOMAI_INSTALL_STAGING = YESXENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-userXENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user?XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install?define XENOMAI_REMOVE_DEVFILES for i in xeno-config xeno-info wrap-link.sh ; do \ rm -f $(TARGET_DIR)/usr/bin/$$i ; \ doneendef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_DEVFILES?ifeq ($(BR2_PACKAGE_XENOMAI_TESTSUITE),)define XENOMAI_REMOVE_TESTSUITE rm -rf $(TARGET_DIR)/usr/share/xenomai/ for i in klatency rtdm xeno xeno-load check-vdso \ irqloop cond-torture-posix switchtest arith \ sigtest clocktest cyclictest latency wakeup-time \ xeno-test cond-torture-native mutex-torture-posix \ mutex-torture-native ; do \ rm -f $(TARGET_DIR)/usr/bin/$$i ; \ doneendef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_TESTSUITEendif?ifeq ($(BR2_PACKAGE_XENOMAI_RTCAN),)define XENOMAI_REMOVE_RTCAN_PROGS for i in rtcanrecv rtcansend ; do \ rm -f $(TARGET_DIR)/usr/bin/$$i ; \ done rm -f $(TARGET_DIR)/usr/sbin/rtcanconfigendef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_RTCAN_PROGSendif?ifeq ($(BR2_PACKAGE_XENOMAI_ANALOGY),)define XENOMAI_REMOVE_ANALOGY for i in cmd_bits cmd_read cmd_write insn_write \ insn_bits insn_read ; do \ rm -f $(TARGET_DIR)/usr/bin/$$i ; \ done rm -f $(TARGET_DIR)/usr/sbin/analogy_config rm -f $(TARGET_DIR)/usr/lib/libanalogy.*endef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_ANALOGYendif?XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,native)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)?define XENOMAI_REMOVE_SKINS for i in $(XENOMAI_REMOVE_SKIN_LIST) ; do \ rm -f $(TARGET_DIR)/usr/lib/lib$$i.* ; \ if [ $$i == "posix" ] ; then \ rm -f $(TARGET_DIR)/usr/lib/posix.wrappers ; \ fi ; \ doneendef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_SKINS?define XENOMAI_DEVICES/dev/rtheap c 666 0 0 10 254 0 0 -/dev/rtscope c 666 0 0 10 253 0 0 -/dev/rtp c 666 0 0 150 0 0 1 32endef?ifeq ($(BR2_PACKAGE_HAS_UDEV),y)XENOMAI_DEPENDENCIES += udev?define XENOMAI_INSTALL_UDEV_RULES if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \ for f in $(@D)/ksrc/nucleus/udev/*.rules ; do \ cp $$f $(TARGET_DIR)/etc/udev/rules.d/ || exit 1 ; \ done ; \ fi;endef?XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_INSTALL_UDEV_RULESendif # udev?$(eval $(autotools-package))???When I use the command 'make' I get the error message mentioned above.?My questions :?Where can I found the compatible ?0001-bfin-remove-inline-keyword.patch? patch ?Where can I found I-pipe patch for 4.4.21 Linux kernel and ARM 64bit ?
+Thanks for helpBest regardThierry
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170203/8025fc0b/attachment.html>
