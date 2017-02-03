@@ -1,126 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 3 Feb 2017 20:56:18 +0100
-Subject: [Buildroot] [git commit] uclibc: enable mips{32,64}r6 support
-Message-ID: <20170203200312.1C70F807CF@busybox.osuosl.org>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri,  3 Feb 2017 15:29:49 -0500
+Subject: [Buildroot] [PATCH 01/11] acpid: bump to version 2.0.28
+Message-ID: <20170203202959.18916-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b3d493095576707691685ce54318ad87340b923
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The config for ISA choice is removed for a long time as
-the buildsystem does not pass -march=mips* to the compiler anymore.
-For mips{32,64}r6 support NAN selection is required.
-
-Tested with qemu mips32/mips64 defconfigs.
-
-A small patch is required. Bug found while testing qemu defconfigs.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- ...0001-fstat-make-new-code-aarch64-specific.patch | 29 ++++++++++++++++++++++
- package/uclibc/Config.in                           |  7 +++---
- package/uclibc/uclibc.mk                           | 10 ++++----
- toolchain/toolchain-buildroot/Config.in            |  2 --
- 4 files changed, 37 insertions(+), 11 deletions(-)
+ package/acpid/acpid.hash | 4 ++--
+ package/acpid/acpid.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/0001-fstat-make-new-code-aarch64-specific.patch b/package/uclibc/0001-fstat-make-new-code-aarch64-specific.patch
-new file mode 100644
-index 0000000..eb0198d
---- /dev/null
-+++ b/package/uclibc/0001-fstat-make-new-code-aarch64-specific.patch
-@@ -0,0 +1,29 @@
-+From 71127e5cc937878883e6021da3da337a7aa9c099 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Fri, 3 Feb 2017 06:04:16 +0100
-+Subject: [PATCH 10229/10229] fstat: make new code aarch64 specific
-+
-+The new code get's used by MIPS64 N64 and fails.
-+Make the new code aarch64 specific.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ libc/sysdeps/linux/common/fstat.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libc/sysdeps/linux/common/fstat.c b/libc/sysdeps/linux/common/fstat.c
-+index ac77eb2..c27f926 100644
-+--- a/libc/sysdeps/linux/common/fstat.c
-++++ b/libc/sysdeps/linux/common/fstat.c
-+@@ -21,7 +21,7 @@ int fstat(int fd, struct stat *buf)
-+ }
-+ libc_hidden_def(fstat)
-+ 
-+-#elif __WORDSIZE == 64 && defined __NR_newfstatat
-++#elif __WORDSIZE == 64 && defined __NR_newfstatat && __aarch64__
-+ #include <fcntl.h>
-+ 
-+ int fstat(int fd, struct stat *buf)
-+-- 
-+2.1.4
-+
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 4d5f629..0628af3 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -128,12 +128,11 @@ config BR2_UCLIBC_MIPS_ABI
- 	default "N32" if BR2_MIPS_NABI32
- 	default "N64" if BR2_MIPS_NABI64
+diff --git a/package/acpid/acpid.hash b/package/acpid/acpid.hash
+index 91990fd..9cf91d9 100644
+--- a/package/acpid/acpid.hash
++++ b/package/acpid/acpid.hash
+@@ -1,3 +1,3 @@
+ # From https://sourceforge.net/projects/acpid2/files/
+-md5	e41bdf628e122edb4342fca432ea7db9	acpid-2.0.27.tar.xz
+-sha1	aabf129499f99b3c14e7a9f5b5ec717b0913e9c8	acpid-2.0.27.tar.xz
++md5	0432407b5ff75ae8e08afb43052fde2b	acpid-2.0.28.tar.xz
++sha1	a5cb34d53eb6965293c436db23dc81550273975b	acpid-2.0.28.tar.xz
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index 510282b..f561b90 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--config BR2_UCLIBC_MIPS_ISA
-+config BR2_UCLIBC_MIPS_NAN
- 	string
- 	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
--	default "MIPS32" if BR2_MIPS_CPU_MIPS32
--	default "MIPS32R2" if BR2_MIPS_CPU_MIPS32R2
--	default "MIPS64" if BR2_MIPS_CPU_MIPS64
-+	default "LEGACY" if BR2_MIPS_CPU_MIPS32 || BR2_MIPS_CPU_MIPS64
-+	default "2008" if BR2_MIPS_CPU_MIPS32R6 || BR2_MIPS_CPU_MIPS64R6
- 
- config BR2_UCLIBC_SH_TYPE
- 	string
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 9f9bffb..8f6035e 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -163,10 +163,10 @@ define UCLIBC_MIPS_ABI_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_MIPS_ABI),$(@D)/.config)
- endef
- 
--UCLIBC_MIPS_ISA = CONFIG_MIPS_ISA_$(call qstrip,$(BR2_UCLIBC_MIPS_ISA))
--define UCLIBC_MIPS_ISA_CONFIG
--	$(SED) '/CONFIG_MIPS_ISA_.*/d' $(@D)/.config
--	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_MIPS_ISA),$(@D)/.config)
-+UCLIBC_MIPS_NAN = CONFIG_MIPS_NAN_$(call qstrip,$(BR2_UCLIBC_MIPS_NAN))
-+define UCLIBC_MIPS_NAN_CONFIG
-+	$(SED) '/CONFIG_MIPS_NAN_.*/d' $(@D)/.config
-+	$(call KCONFIG_ENABLE_OPT,$(UCLIBC_MIPS_NAN),$(@D)/.config)
- endef
- endif # mips
- 
-@@ -418,7 +418,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(UCLIBC_ARM_NO_CONTEXT_FUNCS)
- 	$(UCLIBC_M68K_BINFMT_FLAT)
- 	$(UCLIBC_MIPS_ABI_CONFIG)
--	$(UCLIBC_MIPS_ISA_CONFIG)
-+	$(UCLIBC_MIPS_NAN_CONFIG)
- 	$(UCLIBC_SH_TYPE_CONFIG)
- 	$(UCLIBC_SPARC_TYPE_CONFIG)
- 	$(UCLIBC_POWERPC_TYPE_CONFIG)
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 9c672d2..a46b65e 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -34,8 +34,6 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
- 		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
- 		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
--	# Unsupported for MIPS R6
--	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
- 	help
- 	  This option selects uClibc-ng as the C library for the
- 	  cross-compilation toolchain.
+-ACPID_VERSION = 2.0.27
++ACPID_VERSION = 2.0.28
+ ACPID_SOURCE = acpid-$(ACPID_VERSION).tar.xz
+ ACPID_SITE = http://downloads.sourceforge.net/project/acpid2
+ ACPID_LICENSE = GPLv2+
+-- 
+2.9.3
