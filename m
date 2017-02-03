@@ -1,86 +1,98 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Fri, 3 Feb 2017 12:45:18 +0100
-Subject: [Buildroot] [PATCH] tslib: bump to 1.4
-Message-ID: <1486122318-17699-1-git-send-email-martin.kepplinger@ginzinger.com>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Fri,  3 Feb 2017 14:11:17 +0200
+Subject: [Buildroot] [PATCH] libamcodec: bump version to
+	296f39bc6fc47ddf5d88b9fd3cfb82a5b39048ca
+Message-ID: <20170203121117.16653-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ - remove 0001-Include-stdint.h-where-needed.patch as it was merged into
+   the tree.
+
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
-Older kernel headers than 3.12 should be supported again, but I didn't run
-tests, so I kept it in Config.in; just so you know in case you want to try.
+ .../0001-Include-stdint.h-where-needed.patch       | 47 ----------------------
+ package/libamcodec/libamcodec.hash                 |  2 +-
+ package/libamcodec/libamcodec.mk                   |  2 +-
+ 3 files changed, 2 insertions(+), 49 deletions(-)
+ delete mode 100644 package/libamcodec/0001-Include-stdint.h-where-needed.patch
 
-
- ...01-tests-ts_calibrate-add-missing-headers.patch | 35 ----------------------
- package/tslib/tslib.hash                           |  4 +--
- package/tslib/tslib.mk                             |  2 +-
- 3 files changed, 3 insertions(+), 38 deletions(-)
- delete mode 100644 package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
-
-diff --git a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
+diff --git a/package/libamcodec/0001-Include-stdint.h-where-needed.patch b/package/libamcodec/0001-Include-stdint.h-where-needed.patch
 deleted file mode 100644
-index 97cd4be..0000000
---- a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
+index 6d588f6b1..000000000
+--- a/package/libamcodec/0001-Include-stdint.h-where-needed.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 54b66bfe405d8b70c703684e60bedbad5c7d4213 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Sat, 14 Jan 2017 21:35:53 +0200
--Subject: [PATCH] tests/ts_calibrate: add missing headers
+@@ -1,47 +0,0 @@
+-From ff6d4326f839321c079d60ae9301c6202942f675 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 27 Aug 2016 14:31:04 +0200
+-Subject: [PATCH] Include <stdint.h> where needed
 -
--The open(2) system call requires sys/types.h and sys/stat.h. Fix the following
--build failure under uClibc-ng:
+-The {u,}int{8,16,32}_t types are defined in <stdint.h>, so it should be
+-included when such types are used.
 -
--ts_calibrate.c: In function ?main?:
--ts_calibrate.c:248:19: error: ?S_IRUSR? undeclared (first use in this function)
--                   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
--                   ^
+-Not including <stdint.h> might work by accident with some C libraries
+-due to it being included by other headers, but it for example causes
+-build failures with the musl C library.
 -
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Upstream-status: https://github.com/mdrjr/c2_aml_libs/pull/1
 ----
--Upstream status: https://github.com/kergoth/tslib/pull/59
-- tests/ts_calibrate.c | 2 ++
-- 1 file changed, 2 insertions(+)
+- amadec/audio-dec.h               | 1 +
+- amavutils/include/Amvideoutils.h | 2 ++
+- 2 files changed, 3 insertions(+)
 -
--diff --git a/tests/ts_calibrate.c b/tests/ts_calibrate.c
--index c6652e479d4b..9a98d1f86205 100644
----- a/tests/ts_calibrate.c
--+++ b/tests/ts_calibrate.c
--@@ -17,6 +17,8 @@
-- #include <string.h>
-- #include <unistd.h>
-- #include <sys/time.h>
--+#include <sys/types.h>
--+#include <sys/stat.h>
+-diff --git a/amadec/audio-dec.h b/amadec/audio-dec.h
+-index 4325fe4..ac0f36b 100644
+---- a/amadec/audio-dec.h
+-+++ b/amadec/audio-dec.h
+-@@ -12,6 +12,7 @@
+- #define AUDIO_DEC_H
 - 
-- #ifdef __ANDROID__
-- #include <fcntl.h>
+- #include<pthread.h>
+-+#include <stdint.h>
+- 
+- #include <audio-out.h>
+- #include <audiodsp.h>
+-diff --git a/amavutils/include/Amvideoutils.h b/amavutils/include/Amvideoutils.h
+-index 6f978e4..94f10a6 100644
+---- a/amavutils/include/Amvideoutils.h
+-+++ b/amavutils/include/Amvideoutils.h
+-@@ -5,6 +5,8 @@
+- extern "C" {
+- #endif
+- 
+-+#include <stdint.h>
+-+
+- #define HDMI_HDCP_PASS           (1)
+- #define HDMI_HDCP_FAILED      (0)
+- #define HDMI_NOCONNECT        (-1)
 --- 
--2.11.0
+-2.7.4
 -
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index cdbe0d2..6540ac8 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
+diff --git a/package/libamcodec/libamcodec.hash b/package/libamcodec/libamcodec.hash
+index 13bb1e85b..a76d20a95 100644
+--- a/package/libamcodec/libamcodec.hash
++++ b/package/libamcodec/libamcodec.hash
 @@ -1,2 +1,2 @@
--# Locally generated
--sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
-+# taken from https://github.com/kergoth/tslib/releases/tag/1.4
-+sha256  ad0373f1dbfda27caec92cb10421227f226c79d160488f1ac915585ba947741f  tslib-1.4.tar.xz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index d3388a2..5ea526e 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
+ # Locally computed hash
+-sha256 5e4a1157e75f802585445df55182b5ef123f635b7faca95fbda3f7cdef8bad1c  libamcodec-6f9b99182f94be14fce785c75aa1e9bce868e229.tar.gz
++sha256 2c9812154b6dfd6a6c9c43aa334d0d03f299379fdf83c20121ad3f3d3f97c666  libamcodec-296f39bc6fc47ddf5d88b9fd3cfb82a5b39048ca.tar.gz
+diff --git a/package/libamcodec/libamcodec.mk b/package/libamcodec/libamcodec.mk
+index 8fab95dce..3fab228fd 100644
+--- a/package/libamcodec/libamcodec.mk
++++ b/package/libamcodec/libamcodec.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TSLIB_VERSION = 1.3
-+TSLIB_VERSION = 1.4
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL, LGPL
+-LIBAMCODEC_VERSION = 6f9b99182f94be14fce785c75aa1e9bce868e229
++LIBAMCODEC_VERSION = 296f39bc6fc47ddf5d88b9fd3cfb82a5b39048ca
+ LIBAMCODEC_SITE = $(call github,mdrjr,c2_aml_libs,$(LIBAMCODEC_VERSION))
+ LIBAMCODEC_DEPENDENCIES = alsa-lib
+ LIBAMCODEC_LICENSE = Unclear
 -- 
-2.1.4
+2.11.1
