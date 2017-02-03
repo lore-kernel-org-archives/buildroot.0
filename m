@@ -1,87 +1,101 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  3 Feb 2017 07:43:43 +0200
-Subject: [Buildroot] [PATCH] tcpdump: security bump to version 4.9.0
-Message-ID: <c90f71438e578bdeec4c211d113ef5eb726915de.1486100623.git.baruch@tkos.co.il>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri,  3 Feb 2017 10:26:41 +0300
+Subject: [Buildroot] [PATCH] toolchain-external: Update Synopsys prebuilt
+	toolchain for ARC cores
+Message-ID: <1486106801-19293-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Security fixes in this release (from the Debian changelog):
+Sync external prebuilt toolchain with the one we now build in Buildroot,
+i.e. arc-2016.09. Since that prebuilt toolchain finally has IPv6 enabled
+it works pretty fine for building packages in Buildroot.
 
-    + CVE-2016-7922: buffer overflow in print-ah.c:ah_print().
-    + CVE-2016-7923: buffer overflow in print-arp.c:arp_print().
-    + CVE-2016-7924: buffer overflow in print-atm.c:oam_print().
-    + CVE-2016-7925: buffer overflow in print-sl.c:sl_if_print().
-    + CVE-2016-7926: buffer overflow in print-ether.c:ethertype_print().
-    + CVE-2016-7927: buffer overflow in print-802_11.c:ieee802_11_radio_print().
-    + CVE-2016-7928: buffer overflow in print-ipcomp.c:ipcomp_print().
-    + CVE-2016-7929: buffer overflow in print-juniper.c:juniper_parse_header().
-    + CVE-2016-7930: buffer overflow in print-llc.c:llc_print().
-    + CVE-2016-7931: buffer overflow in print-mpls.c:mpls_print().
-    + CVE-2016-7932: buffer overflow in print-pim.c:pimv2_check_checksum().
-    + CVE-2016-7933: buffer overflow in print-ppp.c:ppp_hdlc_if_print().
-    + CVE-2016-7934: buffer overflow in print-udp.c:rtcp_print().
-    + CVE-2016-7935: buffer overflow in print-udp.c:rtp_print().
-    + CVE-2016-7936: buffer overflow in print-udp.c:udp_print().
-    + CVE-2016-7937: buffer overflow in print-udp.c:vat_print().
-    + CVE-2016-7938: integer overflow in print-zeromq.c:zmtp1_print_frame().
-    + CVE-2016-7939: buffer overflow in print-gre.c, multiple functions.
-    + CVE-2016-7940: buffer overflow in print-stp.c, multiple functions.
-    + CVE-2016-7973: buffer overflow in print-atalk.c, multiple functions.
-    + CVE-2016-7974: buffer overflow in print-ip.c, multiple functions.
-    + CVE-2016-7975: buffer overflow in print-tcp.c:tcp_print().
-    + CVE-2016-7983: buffer overflow in print-bootp.c:bootp_print().
-    + CVE-2016-7984: buffer overflow in print-tftp.c:tftp_print().
-    + CVE-2016-7985: buffer overflow in print-calm-fast.c:calm_fast_print().
-    + CVE-2016-7986: buffer overflow in print-geonet.c, multiple functions.
-    + CVE-2016-7992: buffer overflow in print-cip.c:cip_if_print().
-    + CVE-2016-7993: a bug in util-print.c:relts_print() could cause a
-      buffer overflow in multiple protocol parsers (DNS, DVMRP, HSRP, IGMP,
-      lightweight resolver protocol, PIM).
-    + CVE-2016-8574: buffer overflow in print-fr.c:frf15_print().
-    + CVE-2016-8575: buffer overflow in print-fr.c:q933_print().
-    + CVE-2017-5202: buffer overflow in print-isoclns.c:clnp_print().
-    + CVE-2017-5203: buffer overflow in print-bootp.c:bootp_print().
-    + CVE-2017-5204: buffer overflow in print-ip6.c:ip6_print().
-    + CVE-2017-5205: buffer overflow in print-isakmp.c:ikev2_e_print().
-    + CVE-2017-5341: buffer overflow in print-otv.c:otv_print().
-    + CVE-2017-5342: a bug in multiple protocol parsers (Geneve, GRE, NSH,
-      OTV, VXLAN and VXLAN GPE) could cause a buffer overflow in
-      print-ether.c:ether_print().
-    + CVE-2017-5482: buffer overflow in print-fr.c:q933_print().
-    + CVE-2017-5483: buffer overflow in print-snmp.c:asn1_parse().
-    + CVE-2017-5484: buffer overflow in print-atm.c:sig_print().
-    + CVE-2017-5485: buffer overflow in addrtoname.c:lookup_nsap().
-    + CVE-2017-5486: buffer overflow in print-isoclns.c:clnp_print().
+Still note:
+ 1) There might be subtle differences between uClibc configuration
+    compared to Buildroot's one.
+ 2) A couple of patches we apply on top of Builroot-built toolchain
+    are obviously missing in the prebuilt version - they will be
+    available in the next release.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Vlad Zakharov <vzakhar@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tcpdump/tcpdump.hash | 2 +-
- package/tcpdump/tcpdump.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../toolchain-external-synopsys-arc/Config.in                | 12 +++++-------
+ .../toolchain-external-synopsys-arc.hash                     |  8 ++++----
+ .../toolchain-external-synopsys-arc.mk                       |  6 +++---
+ 3 files changed, 12 insertions(+), 14 deletions(-)
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 21fb83f4181d..966db1f3aaed 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 20e4341ec48fcf72abcae312ea913e6ba6b958617b2f3fb496d51f0ae88d831c  tcpdump-4.8.1.tar.gz
-+sha256 eae98121cbb1c9adbedd9a777bf2eae9fa1c1c676424a54740311c8abcee5a5e  tcpdump-4.9.0.tar.gz
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 3773fcb9c099..e71f9c113fd0 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+index 641eca848422..f438ea765de5 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+@@ -1,20 +1,18 @@
+ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+-	bool "Synopsys ARC 2014.12 toolchain"
++	bool "Synopsys ARC 2016.09 toolchain"
+ 	depends on BR2_arc
+ 	depends on BR2_HOSTARCH = "x86_64"
+-	# does not provide IPv6, and lacks many uClibc features
+-	# expected by Buildroot. The next Synopsys toolchain version
+-	# should fix those problems.
+-	depends on BROKEN
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	help
+ 	  Toolchain for the ARC cores, from
+ 	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+index b684cced9a87..c96f53b1f68c 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu_2014.12_prebuilt_uclibc_le_arc700_linux_install.tar.gz
+-sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+-sha256 aaaf6facd1f60a3cd2a537154ea39cd7d70501c175e30e01a97e8df6cb8226c7  arc_gnu_2014.12_prebuilt_uclibc_le_archs_linux_install.tar.gz
+-sha256 30711c5f15762764d4cd5ec1e6ced5b1fddd03aac41c424b0c4ec8a45d5d79cd  arc_gnu_2014.12_prebuilt_uclibc_be_archs_linux_install.tar.gz
++sha256 9123e35510cc9105e5f9468d5154e0093770d7c11ed771c1a595ecf813692baf  arc_gnu_2016.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
++sha256 3140066cdbda2df7ed0fb60424bbd9db740fb25393928e733234b0bf65508df2  arc_gnu_2016.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
++sha256 aa6edb2101b13df3ac59f8d8ccbcfba37a6f7882f0e03baa9d9883480dbed4e7  arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
++sha256 4de227bf73536a87784d88e5f10085b91ede62c76ef8fedf53b4bf2e215054cf  arc_gnu_2016.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+index 14ea5e350c72..f4cb7b73a13d 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--TCPDUMP_VERSION = 4.8.1
-+TCPDUMP_VERSION = 4.9.0
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3c
- TCPDUMP_LICENSE_FILES = LICENSE
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2014.12
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2016.09
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
+ 
+ ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
+ TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = arc700
+@@ -19,6 +19,6 @@ else
+ TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS = be
+ endif
+ 
+-TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
++TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE)_linux_install.tar.gz
+ 
+ $(eval $(toolchain-external-package))
 -- 
-2.11.0
+2.7.4
