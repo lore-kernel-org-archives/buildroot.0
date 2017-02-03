@@ -1,60 +1,41 @@
-From: =?UTF-8?Q?Guillaume_GARDET_-_Olis=c3=a9o?= <guillaume.gardet@oliseo.fr>
-Date: Fri, 3 Feb 2017 10:51:56 +0100
-Subject: [Buildroot] Firmware auto-loading does not work
-In-Reply-To: <871svk8t56.fsf@dell.be.48ers.dk>
-References: <5a5c69bf-efc5-e35c-f95c-d303047320c4@oliseo.fr>
- <874m0ngv5h.fsf@dell.be.48ers.dk>
- <7ee11e7f-a489-9f3a-cfd8-3d93f291f695@oliseo.fr>
- <87ziiffdqw.fsf@dell.be.48ers.dk>
- <718ddc67-8e29-1c1b-3a73-74ada73662ab@oliseo.fr>
- <871svk8t56.fsf@dell.be.48ers.dk>
-Message-ID: <47a61250-05eb-b3e6-54f6-3bb27e897f0e@oliseo.fr>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Fri, 03 Feb 2017 11:44:37 +0100
+Subject: [Buildroot]
+ =?utf-8?q?=5BPATCH_1/2=5D_Add_BR2=5FCMAKE=5FUSE=5FNIN?=
+ =?utf-8?q?JA=5FBACKEND_option?=
+In-Reply-To: <20170201211232.2f4effde@free-electrons.com>
+References: <20170106223748.2203-1-cedric.marie@openmailbox.org>
+ <ef982565-16ec-591b-aaed-d22e5a634851@gmail.com>
+ <2260e784237284271ff7745986b82cc8@openmailbox.org>
+ <e48cfb34-6f4c-1c7b-c737-c5a57eb464e0@gmail.com>
+ <20170125142716.55e7d7b3@free-electrons.com>
+ <901720b443e9bb90750a71c8797bbf0d@openmailbox.org>
+ <20170130102316.2a02ed3a@free-electrons.com>
+ <1422fd7b4aadc4c1efbec44cf687740c@openmailbox.org>
+ <20170201211232.2f4effde@free-electrons.com>
+Message-ID: <059fe06e34e46aed269bf4210c143516@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le 2017-02-01 21:12, Thomas Petazzoni a ?crit?:
+> In the first case you're using the shell built-in "time" program, in
+> the later you're using the separate /usr/bin/time program. Try:
 
-I found the problem thanks to mdev log:
-     mdev[716]: 00:04:57.841774 ACTION:add SUBSYSTEM:firmware DEVNAME:(null) DEVPATH:/devices/platform/musb-omap2430/musb-hdrc.0/usb2/2-1/2-1:1.0/firmware/2-1:1.0 FW:rt2870.bin
-     mdev[716]: rule matched, line -1
-     mdev[716]: can't change directory to '/sys/devices/platform/musb-omap2430/musb-hdrc.0/usb2/2-1/2-1:1.0/firmware/2-1:1.0': No such file or directory
-     mdev[717]: 00:05:57.982454 ACTION:remove SUBSYSTEM:firmware DEVNAME:(null) DEVPATH:/devices/platform/musb-omap2430/musb-hdrc.0/usb2/2-1/2-1:1.0/firmware/2-1:1.0 FW:rt2870.bin
-     mdev[717]: 00:05:57.982545 exiting
+Thank you, I was not aware of that.
 
-The thing is that the PATH is not good :
-* requested : /sys/devices/platform/musb-omap2430/musb-hdrc.0/usb2/2-1/2-1:1.0/firmware/2-1:1.0
-* real: /sys/devices/platform/musb-omap2430.0/musb-hdrc.0/usb2/2-1/2-1:1.0/firmware/2-1:1.0
+> I'm indeed not sure it's really worth the effort for such a small
+> saving.
 
-The only difference is the ".0" missing after musb-omap2430. Any idea why there is this difference?
+OK, so let's forget it. Moreover, as you have mentioned in your reply to 
+the second patch (on documentation), there are some problems with 
+$(2)_INSTALL_STAGING/TARGET_OPTS being changed to 
+$(2)_INSTALL_STAGING/TARGET_ENV, and also with parallel build support 
+being not supported for some packages.
 
+Regards.
 
-Guillaume
-
-
-
-
-Le 30/01/2017 ? 16:27, Peter Korsgaard a ?crit :
->>>>>> "Guillaume" == Guillaume GARDET <- Olis?o <guillaume.gardet@oliseo.fr>> writes:
-> Hi,
->
->   >> Can you confirm that it works if you enable that option.
->   >>
->
->   > I get back the hardware for testing and it still does not work, even if I enable CONFIG_FEATURE_MDEV_LOAD_FIRMWARE=y :
->   >     phy0 -> rt2x00lib_request_firmware: Info - Loading firmware file 'rt2870.bin'.
->   > and after 60 seconds, I get:
->   >     phy0 -> rt2x00lib_request_firmware: Error - Failed to request Firmware.
->   >     phy0 -> rt2x00lib_request_firmware: Error - Error is '-2'.
->
->   > Whereas the firmware file is in /lib/firmware/
->
->   > Any idea what could be wrong?
->
-> Not really. Please double check that you enabled
-> CONFIG_FEATURE_MDEV_LOAD_FIRMWARE in busybox. To debug further, I
-> suggest you stick some fprintf statements (E.G. to your serial port /
-> console) in mdev.c to see if it gets called and what is going on.
->
+-- 
+C?dric
