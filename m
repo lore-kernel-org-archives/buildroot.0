@@ -1,663 +1,272 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  3 Feb 2017 17:20:32 +0100
-Subject: [Buildroot] [PATCH v2 38/38] package/kodi.*: Add -DOVERRIDE_PATHS=1
-	to all binary addons
+Date: Fri,  3 Feb 2017 17:20:23 +0100
+Subject: [Buildroot] [PATCH v2 29/38] package/kodi-screensaver-*: mass
+	version bump
 In-Reply-To: <20170203162032.2923-1-bernd.kuhls@t-online.de>
 References: <20170203162032.2923-1-bernd.kuhls@t-online.de>
-Message-ID: <20170203162032.2923-39-bernd.kuhls@t-online.de>
+Message-ID: <20170203162032.2923-30-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed after https://github.com/xbmc/xbmc/pull/10359
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-adsp-basic/kodi-adsp-basic.mk                             | 1 +
- package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk               | 1 +
- package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk         | 1 +
- package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk       | 1 +
- package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk               | 1 +
- package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk         | 1 +
- package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk         | 1 +
- package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk         | 1 +
- package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk       | 1 +
- package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk     | 1 +
- package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk               | 1 +
- package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk               | 1 +
- package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk           | 1 +
- package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk                 | 1 +
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk         | 1 +
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk                 | 1 +
- package/kodi-pvr-argustv/kodi-pvr-argustv.mk                           | 1 +
- package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk                           | 1 +
- package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk                       | 1 +
- package/kodi-pvr-filmon/kodi-pvr-filmon.mk                             | 1 +
- package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk                       | 1 +
- package/kodi-pvr-hts/kodi-pvr-hts.mk                                   | 1 +
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk                     | 1 +
- package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk | 1 +
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk                             | 1 +
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk                           | 1 +
- package/kodi-pvr-njoy/kodi-pvr-njoy.mk                                 | 1 +
- package/kodi-pvr-pctv/kodi-pvr-pctv.mk                                 | 1 +
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk                           | 1 +
- package/kodi-pvr-vbox/kodi-pvr-vbox.mk                                 | 1 +
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk                         | 1 +
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk                             | 1 +
- package/kodi-pvr-wmc/kodi-pvr-wmc.mk                                   | 1 +
- package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk       | 1 +
- package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk       | 1 +
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk     | 1 +
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk           | 1 +
- package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk | 1 +
- package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk       | 1 +
- package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk | 2 +-
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk         | 1 +
- package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk     | 1 +
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk                 | 1 +
- package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk                 | 1 +
- package/kodi-screensaver-stars/kodi-screensaver-stars.mk               | 1 +
- package/kodi-skin-confluence/kodi-skin-confluence.mk                   | 1 +
- package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk       | 1 +
- package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk     | 1 +
- package/kodi-visualisation-goom/kodi-visualisation-goom.mk             | 2 +-
- package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk   | 1 +
- package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk     | 1 +
- package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk | 1 +
- package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk     | 1 +
- 53 files changed, 53 insertions(+), 2 deletions(-)
+ package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash      | 2 +-
+ package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk        | 2 +-
+ package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash      | 2 +-
+ package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk        | 2 +-
+ package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash    | 2 +-
+ package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk      | 2 +-
+ package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash          | 2 +-
+ package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk            | 2 +-
+ .../kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash    | 2 +-
+ package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk  | 2 +-
+ package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash      | 2 +-
+ package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk        | 2 +-
+ .../kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash    | 2 +-
+ package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk  | 2 +-
+ package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash        | 2 +-
+ package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk          | 2 +-
+ package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash    | 2 +-
+ package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk      | 2 +-
+ package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash                | 2 +-
+ package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk                  | 2 +-
+ package/kodi-screensaver-stars/kodi-screensaver-stars.hash              | 2 +-
+ package/kodi-screensaver-stars/kodi-screensaver-stars.mk                | 2 +-
+ 22 files changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/package/kodi-adsp-basic/kodi-adsp-basic.mk b/package/kodi-adsp-basic/kodi-adsp-basic.mk
-index 08cc61f09..d490c0ba4 100644
---- a/package/kodi-adsp-basic/kodi-adsp-basic.mk
-+++ b/package/kodi-adsp-basic/kodi-adsp-basic.mk
-@@ -11,5 +11,6 @@ KODI_ADSP_BASIC_SITE = $(call github,kodi-adsp,adsp.basic,$(KODI_ADSP_BASIC_VERS
- KODI_ADSP_BASIC_LICENSE = GPLv3+
- KODI_ADSP_BASIC_LICENSE_FILES = LICENSE.md
- KODI_ADSP_BASIC_DEPENDENCIES = libplatform kodi-platform
-+KODI_ADSP_BASIC_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-index 799cda579..f09ab7ae0 100644
---- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-+++ b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-@@ -11,5 +11,6 @@ KODI_ADSP_FREESURROUND_SITE = $(call github,kodi-adsp,adsp.freesurround,$(KODI_A
- KODI_ADSP_FREESURROUND_LICENSE = GPLv3+
- KODI_ADSP_FREESURROUND_LICENSE_FILES = LICENSE.md
- KODI_ADSP_FREESURROUND_DEPENDENCIES = libplatform kodi-platform
-+KODI_ADSP_FREESURROUND_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-index a40744812..ee2399540 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-@@ -9,5 +9,6 @@ KODI_AUDIODECODER_MODPLUG_SITE = $(call github,notspiff,audiodecoder.modplug,$(K
- KODI_AUDIODECODER_MODPLUG_LICENSE = GPLv2+
- KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = src/ModplugCodec.cpp
- KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi-platform libmodplug
-+KODI_AUDIODECODER_MODPLUG_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-index 9e8a734b3..cacdf3da9 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-@@ -9,5 +9,6 @@ KODI_AUDIODECODER_NOSEFART_SITE = $(call github,notspiff,audiodecoder.nosefart,$
- KODI_AUDIODECODER_NOSEFART_LICENSE = GPLv2+
- KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = src/NSFCodec.cpp
- KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_NOSEFART_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
-index 41ed9ef0f..444a68122 100644
---- a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
-+++ b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
-@@ -9,5 +9,6 @@ KODI_AUDIODECODER_OPUS_SITE = $(call github,notspiff,audiodecoder.opus,$(KODI_AU
- KODI_AUDIODECODER_OPUS_LICENSE = GPLv2+
- KODI_AUDIODECODER_OPUS_LICENSE_FILES = src/OpusCodec.cpp
- KODI_AUDIODECODER_OPUS_DEPENDENCIES = kodi-platform libogg opus opusfile
-+KODI_AUDIODECODER_OPUS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-index 826b255cb..a26d1405b 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-@@ -9,5 +9,6 @@ KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,$(K
- KODI_AUDIODECODER_SIDPLAY_LICENSE = GPLv2+
- KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
- KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
-+KODI_AUDIODECODER_SIDPLAY_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-index 6d7cfb251..0e855792a 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-@@ -9,5 +9,6 @@ KODI_AUDIODECODER_SNESAPU_SITE = $(call github,notspiff,audiodecoder.snesapu,$(K
- KODI_AUDIODECODER_SNESAPU_LICENSE = GPLv2+
- KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = src/SPCCodec.cpp
- KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_SNESAPU_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-index d5af5276a..1f2d3fe1e 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-@@ -9,5 +9,6 @@ KODI_AUDIODECODER_STSOUND_SITE = $(call github,notspiff,audiodecoder.stsound,$(K
- KODI_AUDIODECODER_STSOUND_LICENSE = GPLv2+
- KODI_AUDIODECODER_STSOUND_LICENSE_FILES = src/YMCodec.cpp
- KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_STSOUND_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-index cc2f586f8..7da860544 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-@@ -9,5 +9,6 @@ KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,notspiff,audiodecoder.timidity,$
- KODI_AUDIODECODER_TIMIDITY_LICENSE = GPLv2+
- KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
- KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi
-+KODI_AUDIODECODER_TIMIDITY_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-index 6358f0638..a5f7d1dc5 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-@@ -9,5 +9,6 @@ KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,notspiff,audiodecoder.vgmstream
- KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPLv2+
- KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = src/VGMCodec.cpp
- KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_VGMSTREAM_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-index 4835b0c10..172c1cdda 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-@@ -9,5 +9,6 @@ KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOE
- KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
- KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
- KODI_AUDIOENCODER_FLAC_DEPENDENCIES = flac kodi libogg host-pkgconf
-+KODI_AUDIOENCODER_FLAC_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-index 8b1b7cffd..30bed55a2 100644
---- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-@@ -10,6 +10,7 @@ KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
- KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
- KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
- KODI_AUDIOENCODER_LAME_CONF_OPTS += \
-+	-DOVERRIDE_PATHS=1 \
- 	-DLAME_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-index 5bb4e5ef1..0ae983864 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-@@ -9,5 +9,6 @@ KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AU
- KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
- KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
- KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis host-pkgconf
-+KODI_AUDIOENCODER_VORBIS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-index 1e5635833..328c9b880 100644
---- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-+++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-@@ -9,5 +9,6 @@ KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENC
- KODI_AUDIOENCODER_WAV_LICENSE = GPLv2+
- KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
- KODI_AUDIOENCODER_WAV_DEPENDENCIES = kodi
-+KODI_AUDIOENCODER_WAV_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index bd3c34c0c..3098019ad 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -9,5 +9,6 @@ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KOD
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPLv2+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
- KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
-+KODI_INPUTSTREAM_ADAPTIVE_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-index c19fe562e..771b00d70 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-@@ -9,5 +9,6 @@ KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,$(KODI_INPU
- KODI_INPUTSTREAM_RTMP_LICENSE = GPLv2+
- KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
- KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
-+KODI_INPUTSTREAM_RTMP_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-index 58aae06a3..9293c23b7 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-@@ -11,5 +11,6 @@ KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VE
- KODI_PVR_ARGUSTV_LICENSE = GPLv2+
- KODI_PVR_ARGUSTV_LICENSE_FILES = src/client.h
- KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_ARGUSTV_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-index 44ed2b048..3b741006f 100644
---- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-+++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-@@ -11,5 +11,6 @@ KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VE
- KODI_PVR_DVBLINK_LICENSE = GPLv2+
- KODI_PVR_DVBLINK_LICENSE_FILES = src/client.h
- KODI_PVR_DVBLINK_DEPENDENCIES = kodi-platform tinyxml2
-+KODI_PVR_DVBLINK_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-index 95f3d2f45..24d0bacd7 100644
---- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-+++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-@@ -11,5 +11,6 @@ KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIE
- KODI_PVR_DVBVIEWER_LICENSE = GPLv2+
- KODI_PVR_DVBVIEWER_LICENSE_FILES = src/client.h
- KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi-platform
-+KODI_PVR_DVBVIEWER_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-index be1792ea3..fd4e2a060 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-@@ -11,5 +11,6 @@ KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSI
- KODI_PVR_FILMON_LICENSE = GPLv2+
- KODI_PVR_FILMON_LICENSE_FILES = src/client.h
- KODI_PVR_FILMON_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_FILMON_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
-index b2612c7ff..35638c8d3 100644
---- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
-+++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
-@@ -11,5 +11,6 @@ KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOME
- KODI_PVR_HDHOMERUN_LICENSE = GPLv2+
- KODI_PVR_HDHOMERUN_LICENSE_FILES = src/client.h
- KODI_PVR_HDHOMERUN_DEPENDENCIES = jsoncpp kodi-platform libhdhomerun
-+KODI_PVR_HDHOMERUN_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-index 6b53641d2..364361154 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-@@ -11,5 +11,6 @@ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
- KODI_PVR_HTS_LICENSE = GPLv2+
- KODI_PVR_HTS_LICENSE_FILES = src/client.h
- KODI_PVR_HTS_DEPENDENCIES = kodi-platform
-+KODI_PVR_HTS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index 0613f5cf1..1d281ce30 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -11,5 +11,6 @@ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTV
- KODI_PVR_IPTVSIMPLE_LICENSE = GPLv2+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
- KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform
-+KODI_PVR_IPTVSIMPLE_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-index 6565dda04..bdda36bc3 100644
---- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-+++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-@@ -11,5 +11,6 @@ KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvse
- KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPLv2+
- KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = src/client.h
- KODI_PVR_MEDIAPORTAL_TVSERVER_DEPENDENCIES = kodi-platform
-+KODI_PVR_MEDIAPORTAL_TVSERVER_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index ebb770ca8..5bd62d07e 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -11,5 +11,6 @@ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION
- KODI_PVR_MYTHTV_LICENSE = GPLv2+
- KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
- KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
-+KODI_PVR_MYTHTV_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index aa40f021c..2ee6abbaf 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-@@ -11,5 +11,6 @@ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VE
- KODI_PVR_NEXTPVR_LICENSE = GPLv2+
- KODI_PVR_NEXTPVR_LICENSE_FILES = src/client.h
- KODI_PVR_NEXTPVR_DEPENDENCIES = kodi-platform
-+KODI_PVR_NEXTPVR_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-index e2695d6da..a479f1028 100644
---- a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-+++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-@@ -11,5 +11,6 @@ KODI_PVR_NJOY_SITE = $(call github,kodi-pvr,pvr.njoy,$(KODI_PVR_NJOY_VERSION))
- KODI_PVR_NJOY_LICENSE = GPLv2+
- KODI_PVR_NJOY_LICENSE_FILES = src/client.h
- KODI_PVR_NJOY_DEPENDENCIES = kodi-platform
-+KODI_PVR_NJOY_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-index 3d30ade50..2fb6fee6d 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-@@ -11,5 +11,6 @@ KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
- KODI_PVR_PCTV_LICENSE = GPLv2+
- KODI_PVR_PCTV_LICENSE_FILES = src/client.h
- KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_PCTV_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-index 9a8b2aa32..e032fed39 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-@@ -11,5 +11,6 @@ KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VE
- KODI_PVR_STALKER_LICENSE = GPLv2+
- KODI_PVR_STALKER_LICENSE_FILES = src/client.h
- KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_STALKER_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-index 5b36acb57..de900ad25 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-@@ -11,5 +11,6 @@ KODI_PVR_VBOX_SITE = $(call github,kodi-pvr,pvr.vbox,$(KODI_PVR_VBOX_VERSION))
- KODI_PVR_VBOX_LICENSE = GPLv2+
- KODI_PVR_VBOX_LICENSE_FILES = src/client.h
- KODI_PVR_VBOX_DEPENDENCIES = kodi-platform
-+KODI_PVR_VBOX_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-index f8f7818a4..373f6b440 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-@@ -11,5 +11,6 @@ KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI
- KODI_PVR_VDR_VNSI_LICENSE = GPLv2+
- KODI_PVR_VDR_VNSI_LICENSE_FILES = src/client.h
- KODI_PVR_VDR_VNSI_DEPENDENCIES = kodi-platform
-+KODI_PVR_VDR_VNSI_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index 4a3f1ce69..37d614bd5 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-@@ -11,5 +11,6 @@ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSI
- KODI_PVR_VUPLUS_LICENSE = GPLv2+
- KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
- KODI_PVR_VUPLUS_DEPENDENCIES = kodi-platform
-+KODI_PVR_VUPLUS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-index 7f72ebfc6..4b55a71c3 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-@@ -11,5 +11,6 @@ KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
- KODI_PVR_WMC_LICENSE = GPLv2+
- KODI_PVR_WMC_LICENSE_FILES = src/client.h
- KODI_PVR_WMC_DEPENDENCIES = kodi-platform
-+KODI_PVR_WMC_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+index a70f1b0a5..7d105beeb 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 b76b9ba122cebddc7c201b088d93e86fde8fc76e7e9f167ff3e43c3390088f3f kodi-screensaver-asteroids-c7ae05f1881b9abda6a1ac6beaca8d64a164c4fa.tar.gz
++sha256 2e072e6aad12f707dec1e70b7df26c590bb41fed8880dcfdbe6c99949b7e287a  kodi-screensaver-asteroids-v1.1.2.tar.gz
 diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-index b753d7532..a99a02ae9 100644
+index 1af1f2ed6..b753d7532 100644
 --- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
 +++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-@@ -9,5 +9,6 @@ KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,$
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_ASTEROIDS_VERSION = c7ae05f1881b9abda6a1ac6beaca8d64a164c4fa
++KODI_SCREENSAVER_ASTEROIDS_VERSION = v1.1.2
+ KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
  KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPLv2+
  KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
- KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_ASTEROIDS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
+index 5f04031af..f8f6d7b2f 100644
+--- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 6bf9367889c4ddece7e0c3720762d41bb0b22fc9ab28d1c8759edb1f77487ecd kodi-screensaver-asterwave-0dc2c48dadb100954eef823e7e3a5f502ce65b1e.tar.gz
++sha256 48cd459b60b2407b8bae9107760a013d04ee29e00fddbce9550291896d42ef64  kodi-screensaver-asterwave-v1.1.0.tar.gz
 diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-index b8c3a2adf..264774149 100644
+index 7c718ccd8..b8c3a2adf 100644
 --- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
 +++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-@@ -7,5 +7,6 @@
- KODI_SCREENSAVER_ASTERWAVE_VERSION = v1.1.0
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_ASTERWAVE_VERSION = 0dc2c48dadb100954eef823e7e3a5f502ce65b1e
++KODI_SCREENSAVER_ASTERWAVE_VERSION = v1.1.0
  KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,notspiff,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
  KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = kodi libglu libsoil
-+KODI_SCREENSAVER_ASTERWAVE_CONF_OPTS = -DOVERRIDE_PATHS=1
  
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+index 6fc273d18..63b9d3c93 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 25e497c6843a7d933d1e4736e8dcb671bc9881328d5e27349dd0b25cb9be07eb kodi-screensaver-biogenesis-39928eef56ed639085d401dd97bf18f44b1f3e8b.tar.gz
++sha256 b97dc804261b19df725e0a9f1af3be6903226ae616fcac170f7b9c1a67bf811a  kodi-screensaver-biogenesis-v1.1.0.tar.gz
 diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-index 8ca578fcb..ec60d07a5 100644
+index dce6968d2..8ca578fcb 100644
 --- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
 +++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-@@ -9,5 +9,6 @@ KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,notspiff,screensaver.biogenesis
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_BIOGENESIS_VERSION = 39928eef56ed639085d401dd97bf18f44b1f3e8b
++KODI_SCREENSAVER_BIOGENESIS_VERSION = v1.1.0
+ KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,notspiff,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
  KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPLv2+
  KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = src/Life.cpp
- KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_BIOGENESIS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+index ebf19d9de..21443d82b 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 c2d19c33aff73b99cbf51f943b62e58b2b6233dcf1d789ae8f73e92fa96f07bc kodi-screensaver-cpblobs-87a3abfbe6e4fd1089548eab77a84902d0e1af60.tar.gz
++sha256 1ca5e4de61251de7e420dc6ded3156960f9bb52ed7ff0243f305768147d470e3  kodi-screensaver-cpblobs-v1.1.0.tar.gz
 diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-index 14c47ad5e..719888183 100644
+index bf67ea089..14c47ad5e 100644
 --- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
 +++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-@@ -9,5 +9,6 @@ KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,notspiff,screensaver.cpblobs,$(KOD
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_CPBLOBS_VERSION = 87a3abfbe6e4fd1089548eab77a84902d0e1af60
++KODI_SCREENSAVER_CPBLOBS_VERSION = v1.1.0
+ KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,notspiff,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
  KODI_SCREENSAVER_CPBLOBS_LICENSE = GPLv2
  KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
- KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = kodi libsoil
-+KODI_SCREENSAVER_CPBLOBS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+index 01183d74f..ff9d6d024 100644
+--- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
++++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 680e9354adcb7048b5c2b55b3c49cf37cea0e12e6564018cd694feeb253c90dd kodi-screensaver-crystalmorph-2e7c10e3543f5aaab6fd2f5aa9d05b976a43ba68.tar.gz
++sha256 a8400c8d8be0fe0ba616ad1d0ef5fd798980a9dd4e38ef88bee9bf74a06975d5  kodi-screensaver-crystalmorph-1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e.tar.gz
 diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
-index c6471db90..211f8aff1 100644
+index 49ddb43c3..c6471db90 100644
 --- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
 +++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
-@@ -9,5 +9,6 @@ KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalm
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 2e7c10e3543f5aaab6fd2f5aa9d05b976a43ba68
++KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e
+ KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
  KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPLv2+
  KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
- KODI_SCREENSAVER_CRYSTALMORPH_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_CRYSTALMORPH_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
+index 93394532e..212aee663 100644
+--- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
++++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 fc114434db18a885fda30ac6b82fe82ec1d5ed97e2ff6414b4927487da684871 kodi-screensaver-greynetic-80e850eb3cbc7ee2c937fcab666dc45d2b2ee0bb.tar.gz
++sha256 55a77487f02d282e8431e64de3cb263489037c2374a4b9cdd7aa189093e7621f  kodi-screensaver-greynetic-v1.1.0.tar.gz
 diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-index baad4a3fa..c513f0227 100644
+index 9773bac1c..baad4a3fa 100644
 --- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
 +++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-@@ -9,5 +9,6 @@ KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,notspiff,screensaver.greynetic,$
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_GREYNETIC_VERSION = 80e850eb3cbc7ee2c937fcab666dc45d2b2ee0bb
++KODI_SCREENSAVER_GREYNETIC_VERSION = v1.1.0
+ KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,notspiff,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
  KODI_SCREENSAVER_GREYNETIC_LICENSE = GPLv2+
  KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = src/GreyNetic.cpp
- KODI_SCREENSAVER_GREYNETIC_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_GREYNETIC_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
+index 5ae2459cf..55deabea1 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 91990a29072cf85f4b9253a16a362d83fdfcc7595de796d982a189aa8618555c  kodi-screensaver-matrixtrails-16057e7195f930109f0a4aea999296ca315700e5.tar.gz
++sha256 2b531f51b86536df2a5268547e3d1b7fabc8a1dc930808b46685afcc455bb8fa  kodi-screensaver-matrixtrails-v1.1.0.tar.gz
 diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-index 1da96695a..6693bf48b 100644
+index 5ecacdf56..1da96695a 100644
 --- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
 +++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-@@ -8,7 +8,7 @@ KODI_SCREENSAVER_MATRIXTRAILS_VERSION = v1.1.0
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 16057e7195f930109f0a4aea999296ca315700e5
++KODI_SCREENSAVER_MATRIXTRAILS_VERSION = v1.1.0
  KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,notspiff,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
  KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPLv2+
  KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = src/matrixtrails.cpp
--
- KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
-+KODI_SCREENSAVER_MATRIXTRAILS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+index 79d4dd40a..aad8314bd 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 59a5cdfa6387760205efabcd91bc64fdc92f103c8f213b650018160f6c1a691c kodi-screensaver-pingpong-5c7cf6fd9f9ff1468f620bb891e66bebd3a5fe17.tar.gz
++sha256 99e9cbc3815d4e3dad964b2d233dbf6acc4416121398f7fca75f3811cb04d88f  kodi-screensaver-pingpong-v1.1.0.tar.gz
 diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-index 71395b9b8..1ba31765e 100644
+index 2adf9601f..71395b9b8 100644
 --- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 +++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-@@ -9,5 +9,6 @@ KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,$(K
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_PINGPONG_VERSION = 5c7cf6fd9f9ff1468f620bb891e66bebd3a5fe17
++KODI_SCREENSAVER_PINGPONG_VERSION = v1.1.0
+ KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
  KODI_SCREENSAVER_PINGPONG_LICENSE = GPLv2+
  KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
- KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_PINGPONG_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
+index 9aea92925..de5f6cf5d 100644
+--- a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
++++ b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 13ce2881f8eaf9936691cf66b9f3471a718ae87249d62ade55174201873fb496 kodi-screensaver-planestate-95b6d1ec72f37bcd16cf8e5d49806193dba883f0.tar.gz
++sha256 6059630e56bd022a27f73fe7c94fcf6a66792e7bb10f54a7893f536c23b95b99  kodi-screensaver-planestate-5341406dd05439a1a0245ab3f6d1a8964461d0e5.tar.gz
 diff --git a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
-index 0e90ffc5d..f64f7b23d 100644
+index 38885c5cb..0e90ffc5d 100644
 --- a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
 +++ b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
-@@ -7,5 +7,6 @@
- KODI_SCREENSAVER_PLANESTATE_VERSION = 5341406dd05439a1a0245ab3f6d1a8964461d0e5
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_PLANESTATE_VERSION = 95b6d1ec72f37bcd16cf8e5d49806193dba883f0
++KODI_SCREENSAVER_PLANESTATE_VERSION = 5341406dd05439a1a0245ab3f6d1a8964461d0e5
  KODI_SCREENSAVER_PLANESTATE_SITE = $(call github,notspiff,screensaver.planestate,$(KODI_SCREENSAVER_PLANESTATE_VERSION))
  KODI_SCREENSAVER_PLANESTATE_DEPENDENCIES = kodi libsoil
-+KODI_SCREENSAVER_PLANESTATE_CONF_OPTS = -DOVERRIDE_PATHS=1
  
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
+index c79e3f5f1..a16ee8e09 100644
+--- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
++++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 951bc3259407b7f21183c34556b1efc4c40bfafec61008cd543f382f67466184 kodi-screensaver-pyro-2476b77d9954980a27e07eb8eb0727e2af226351.tar.gz
++sha256 0dcaed581ffe5595878338a8c9c55bd7acc87e03d30a4d3ca4a03c3f8db66ddc  kodi-screensaver-pyro-v1.1.0.tar.gz
 diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-index 7ed9acfb8..7e1577636 100644
+index f90405275..7ed9acfb8 100644
 --- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
 +++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-@@ -9,5 +9,6 @@ KODI_SCREENSAVER_PYRO_SITE = $(call github,notspiff,screensaver.pyro,$(KODI_SCRE
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_PYRO_VERSION = 2476b77d9954980a27e07eb8eb0727e2af226351
++KODI_SCREENSAVER_PYRO_VERSION = v1.1.0
+ KODI_SCREENSAVER_PYRO_SITE = $(call github,notspiff,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
  KODI_SCREENSAVER_PYRO_LICENSE = GPLv2+
  KODI_SCREENSAVER_PYRO_LICENSE_FILES = src/Pyro.cpp
- KODI_SCREENSAVER_PYRO_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_PYRO_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-index 8ae899b6d..47de96546 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-@@ -9,5 +9,6 @@ KODI_SCREENSAVER_RSXS_SITE = $(call github,notspiff,screensavers.rsxs,$(KODI_SCR
- KODI_SCREENSAVER_RSXS_LICENSE = GPLv3
- KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
- KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi libpng xlib_libXmu
-+KODI_SCREENSAVER_RSXS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
+index 107ada470..7f8c9aefd 100644
+--- a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
++++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 79633afcdccf5df31c98d2144bd23086d691e7749255b4295b183b535d9b7abf kodi-screensaver-stars-28bf79d4dce040e9fbdc25f51007e13950cab937.tar.gz
++sha256 525caac94fd2bd858daf9fa7719eea4181c168e5c692bb896689625bf4437d32  kodi-screensaver-stars-v1.1.0.tar.gz
 diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-index b49377220..7929422e8 100644
+index b5b5206d1..b49377220 100644
 --- a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
 +++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-@@ -9,5 +9,6 @@ KODI_SCREENSAVER_STARS_SITE = $(call github,notspiff,screensaver.stars,$(KODI_SC
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_STARS_VERSION = 28bf79d4dce040e9fbdc25f51007e13950cab937
++KODI_SCREENSAVER_STARS_VERSION = v1.1.0
+ KODI_SCREENSAVER_STARS_SITE = $(call github,notspiff,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
  KODI_SCREENSAVER_STARS_LICENSE = GPLv2+
  KODI_SCREENSAVER_STARS_LICENSE_FILES = src/StarField.cpp
- KODI_SCREENSAVER_STARS_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_STARS_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-index 8ffa817a3..2f4f8099e 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-@@ -9,6 +9,7 @@ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFL
- KODI_SKIN_CONFLUENCE_LICENSE = GPLv2+
- KODI_SKIN_CONFLUENCE_LICENSE_FILES = COPYING
- KODI_SKIN_CONFLUENCE_DEPENDENCIES = kodi
-+KODI_SKIN_CONFLUENCE_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- ifeq ($(BR2_PACKAGE_KODI_TEXTUREPACKER),y)
- define KODI_SKIN_CONFLUENCE_BUILD_CMDS
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-index 3f2ce1a41..90107f108 100644
---- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-@@ -9,5 +9,6 @@ KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,$
- KODI_VISUALISATION_FISHBMC_LICENSE = GPLv2+
- KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
- KODI_VISUALISATION_FISHBMC_DEPENDENCIES = kodi
-+KODI_VISUALISATION_FISHBMC_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
-index af250eaa1..390b78d46 100644
---- a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
-+++ b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
-@@ -7,5 +7,6 @@
- KODI_VISUALISATION_FOUNTAIN_VERSION = faf49ac0acde558e925fa0a3eb3dbb49606278b4
- KODI_VISUALISATION_FOUNTAIN_SITE = $(call github,notspiff,visualization.fountain,$(KODI_VISUALISATION_FOUNTAIN_VERSION))
- KODI_VISUALISATION_FOUNTAIN_DEPENDENCIES = kodi libsoil
-+KODI_VISUALISATION_FOUNTAIN_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-index 7099cbef7..00769711f 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-@@ -8,7 +8,7 @@ KODI_VISUALISATION_GOOM_VERSION = v1.1.0
- KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
- KODI_VISUALISATION_GOOM_LICENSE = GPLv2+
- KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
--
- KODI_VISUALISATION_GOOM_DEPENDENCIES = kodi
-+KODI_VISUALISATION_GOOM_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-index d90afab0e..b6d0bec2c 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-@@ -9,5 +9,6 @@ KODI_VISUALISATION_SHADERTOY_SITE = $(call github,notspiff,visualization.shadert
- KODI_VISUALISATION_SHADERTOY_LICENSE = GPLv2+
- KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
- KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libplatform
-+KODI_VISUALISATION_SHADERTOY_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-index 20fcce829..60b9050c3 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-@@ -9,5 +9,6 @@ KODI_VISUALISATION_SPECTRUM_SITE = $(call github,notspiff,visualization.spectrum
- KODI_VISUALISATION_SPECTRUM_LICENSE = GPLv2+
- KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
- KODI_VISUALISATION_SPECTRUM_DEPENDENCIES = kodi
-+KODI_VISUALISATION_SPECTRUM_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-index 21840f18b..b6022b54d 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-@@ -9,5 +9,6 @@ KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,hardyt,visualization.waveforh
- KODI_VISUALISATION_WAVEFORHUE_LICENSE = GPLv2+
- KODI_VISUALISATION_WAVEFORHUE_LICENSE_FILES = COPYING
- KODI_VISUALISATION_WAVEFORHUE_DEPENDENCIES = kodi
-+KODI_VISUALISATION_WAVEFORHUE_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-index 0d9f0f064..0344eb566 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-@@ -9,5 +9,6 @@ KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform
- KODI_VISUALISATION_WAVEFORM_LICENSE = GPLv2+
- KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
- KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = kodi
-+KODI_VISUALISATION_WAVEFORM_CONF_OPTS = -DOVERRIDE_PATHS=1
- 
- $(eval $(cmake-package))
 -- 
 2.11.0
