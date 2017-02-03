@@ -1,101 +1,74 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri,  3 Feb 2017 10:26:41 +0300
-Subject: [Buildroot] [PATCH] toolchain-external: Update Synopsys prebuilt
-	toolchain for ARC cores
-Message-ID: <1486106801-19293-1-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri,  3 Feb 2017 08:29:07 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-02-02
+Message-ID: <20170203072907.2CB4120BB6@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sync external prebuilt toolchain with the one we now build in Buildroot,
-i.e. arc-2016.09. Since that prebuilt toolchain finally has IPv6 enabled
-it works pretty fine for building packages in Buildroot.
+Hello,
 
-Still note:
- 1) There might be subtle differences between uClibc configuration
-    compared to Buildroot's one.
- 2) A couple of patches we apply on top of Builroot-built toolchain
-    are obviously missing in the prebuilt version - they will be
-    available in the next release.
+Build statistics for 2017-02-02
+================================
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Vlad Zakharov <vzakhar@synopsys.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../toolchain-external-synopsys-arc/Config.in                | 12 +++++-------
- .../toolchain-external-synopsys-arc.hash                     |  8 ++++----
- .../toolchain-external-synopsys-arc.mk                       |  6 +++---
- 3 files changed, 12 insertions(+), 14 deletions(-)
+      successes : 120
+       failures : 28 
+       timeouts : 0  
+          TOTAL : 148
 
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-index 641eca848422..f438ea765de5 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-@@ -1,20 +1,18 @@
- config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
--	bool "Synopsys ARC 2014.12 toolchain"
-+	bool "Synopsys ARC 2016.09 toolchain"
- 	depends on BR2_arc
- 	depends on BR2_HOSTARCH = "x86_64"
--	# does not provide IPv6, and lacks many uClibc features
--	# expected by Buildroot. The next Synopsys toolchain version
--	# should fix those problems.
--	depends on BROKEN
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_ENABLE_LOCALE
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	help
- 	  Toolchain for the ARC cores, from
- 	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-index b684cced9a87..c96f53b1f68c 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu_2014.12_prebuilt_uclibc_le_arc700_linux_install.tar.gz
--sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
--sha256 aaaf6facd1f60a3cd2a537154ea39cd7d70501c175e30e01a97e8df6cb8226c7  arc_gnu_2014.12_prebuilt_uclibc_le_archs_linux_install.tar.gz
--sha256 30711c5f15762764d4cd5ec1e6ced5b1fddd03aac41c424b0c4ec8a45d5d79cd  arc_gnu_2014.12_prebuilt_uclibc_be_archs_linux_install.tar.gz
-+sha256 9123e35510cc9105e5f9468d5154e0093770d7c11ed771c1a595ecf813692baf  arc_gnu_2016.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
-+sha256 3140066cdbda2df7ed0fb60424bbd9db740fb25393928e733234b0bf65508df2  arc_gnu_2016.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
-+sha256 aa6edb2101b13df3ac59f8d8ccbcfba37a6f7882f0e03baa9d9883480dbed4e7  arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
-+sha256 4de227bf73536a87784d88e5f10085b91ede62c76ef8fedf53b4bf2e215054cf  arc_gnu_2016.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-index 14ea5e350c72..f4cb7b73a13d 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2014.12
--TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)
-+TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2016.09
-+TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
- 
- ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
- TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = arc700
-@@ -19,6 +19,6 @@ else
- TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS = be
- endif
- 
--TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
-+TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE)_linux_install.tar.gz
- 
- $(eval $(toolchain-external-package))
+Classification of failures by reason
+====================================
+
+                    ruby-2.4.0 | 7 
+           imagemagick-7.0.4-6 | 3 
+                 libraw-0.17.1 | 3 
+                 libnss-3.27.2 | 2 
+            lttng-libust-2.9.0 | 2 
+               openswan-2.6.46 | 2 
+             berkeleydb-5.3.28 | 1 
+               cbootimage-v1.7 | 1 
+                 mplayer-1.3.0 | 1 
+                   ortp-0.27.0 | 1 
+               qt5webkit-5.6.2 | 1 
+        riemann-c-client-1.9.1 | 1 
+                 sngrep-v1.4.2 | 1 
+               trousers-0.3.13 | 1 
+                     vlc-2.2.4 | 1 
+
+
+Detail of failures
+===================
+
+        m68k |              berkeleydb-5.3.28 | NOK | http://autobuild.buildroot.net/results/37c81c5bb7296e3fd0d35c0fe5c6705778fc3e5b
+         arm |                cbootimage-v1.7 | NOK | http://autobuild.buildroot.net/results/7e32e38079caf6d7f6d0465a73ed0dd037ccb173
+        i686 |            imagemagick-7.0.4-6 | NOK | http://autobuild.buildroot.net/results/3414b776c24bd98647a56d8234c69e9fa6cca2b7
+      mipsel |            imagemagick-7.0.4-6 | NOK | http://autobuild.buildroot.net/results/33f4ad226234095b9021a837f96cd8dd03ec6511
+         arm |            imagemagick-7.0.4-6 | NOK | http://autobuild.buildroot.net/results/2ee5d620f9287fe1d43091580e6f8014e63dfa4c
+microblazeel |                  libnss-3.27.2 | NOK | http://autobuild.buildroot.net/results/5f0c0278eebc953e85004f4f3241af41ba5a465d
+microblazeel |                  libnss-3.27.2 | NOK | http://autobuild.buildroot.net/results/c85ccdb6b8fdfab0afe6cdea9a21b2a3ae1dd979
+        sh4a |                  libraw-0.17.1 | NOK | http://autobuild.buildroot.net/results/d1f9e7c8455e6345b0ff62594a6cd3a47b4f9768
+        i686 |                  libraw-0.17.1 | NOK | http://autobuild.buildroot.net/results/9e06fdc771aaada25e3c16c339db787f445728dc
+        i686 |                  libraw-0.17.1 | NOK | http://autobuild.buildroot.net/results/49138aef078f0715642982c8b3c74ef7b4b398b7
+      x86_64 |             lttng-libust-2.9.0 | NOK | http://autobuild.buildroot.net/results/1f8a5b1138695ade56bd122c347481a5ef12fd39
+         arm |             lttng-libust-2.9.0 | NOK | http://autobuild.buildroot.net/results/38c33af104972b549cfa00a7694bcf95edaa9085
+        i686 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/98398a13c54a82f2182cfbdaa36ec095caf7c6e7
+      xtensa |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/6f3d77af7e0a3f53558907344efc82ac79ed040d
+         arc |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/730bb0068d65df349baf042fda597793763f2b0c
+         arm |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/403a29dc91e9352b3b70b996d22d96054d90f284
+      mipsel |                qt5webkit-5.6.2 | NOK | http://autobuild.buildroot.net/results/fed4f2f2f735deca3ee1cb4dba17793a0af2d18d
+        m68k |         riemann-c-client-1.9.1 | NOK | http://autobuild.buildroot.net/results/47368849c3c1e0bdb8c5d059ba442df3d8196e9d
+      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/13d09bf6dfaa89f5a6daf48f722120174eaaecb0
+      xtensa |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/eee4006d1d05fdda347600c66afdda02a76cdcfb
+        bfin |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/1f6a16f98c650c8002efed94e6abd4e60d5b53ba
+         arc |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/155cfb7565c04e090e5b2a589e17d5180ee93f93
+microblazeel |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/04186c9db3f0df7dfe91da0d8193fd0729bdac58
+        i686 |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/c8937949d0684d07c59a95e7361c22693d0dbfb4
+     powerpc |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/7f9ddbb8be764e6bfa996d94791decb414864821
+      mipsel |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/b34b91b540765fec208a809499ba1dfebad085f0
+         arc |                trousers-0.3.13 | NOK | http://autobuild.buildroot.net/results/157ec01ded720c482024512583b2d833ce971da5
+         arc |                      vlc-2.2.4 | NOK | http://autobuild.buildroot.net/results/069517736e10598dd575e419c4bb443bb14dd048
+
 -- 
-2.7.4
+http://autobuild.buildroot.net
