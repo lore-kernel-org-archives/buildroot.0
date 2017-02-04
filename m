@@ -1,29 +1,21 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 04 Feb 2017 13:02:03 +0100
-Subject: [Buildroot] [PATCH v3 00/38] kodi: bump to version 17.0-Krypton
-References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
-Message-ID: <XnsA712849706A6CberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 04 Feb 2017 13:03:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/git: bump version to 2.11.1
+In-Reply-To: <20170204113153.11242-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 4 Feb 2017 12:31:53 +0100")
+References: <20170204113153.11242-1-bernd.kuhls@t-online.de>
+Message-ID: <87fujuyxgf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
-news:20170204114451.20935-1-bernd.kuhls at t-online.de:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> this series bumps Kodi to 17.0-Krypton, released 2017/02/01.
-> 
-> Regards, Bernd
-> 
-> v3: fixed legal-info for libplatform & kodi-skin-confluence
-> v2: added commit log to "package/kodi: add Kconfig option to make
->     TexturePacker optional" (Thomas)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Hi,
+Committed, thanks.
 
-https://github.com/bkuhls/buildroot/commits/kodi_br
-
-was updated as well.
-
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
