@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 4 Feb 2017 17:14:16 +0100
-Subject: [Buildroot] [git commit] libmicrohttpd: bump version to 0.9.52
-Message-ID: <20170204162521.EB4AB81EEE@busybox.osuosl.org>
+Date: Sat, 4 Feb 2017 13:04:22 +0100
+Subject: [Buildroot] [git commit] audit: bump to version 2.7.1
+Message-ID: <20170204162521.B7A398164D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c24187114fc4489117400f9e3dfbdebe0edd1799
+commit: https://git.buildroot.net/buildroot/commit/?id=7858e7fd5cb8966198caaf25556961bac018099b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index b228716..5c15b9d 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 6b0f0c3..2ae8f99 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	d1b6385068abded29b6470e383287aa7705de05ae3c08ad0bf5747ac4dc6ebd7	libmicrohttpd-0.9.50.tar.gz
-+sha256	54797f6e763d417627f89f60e4ae0a431dab0523f92f83def23ea02d0defafea	libmicrohttpd-0.9.52.tar.gz
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 2266d3c..83791b3 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
+ #Locally computed
+-sha256 05533f5d88d9520ceebfd8bfb3fd998ca4a2b246757fec7bbd8e33c287544537 audit-2.7.tar.gz
++sha256 0441790794fd9375dbca598fa0ffb46c57ff37b3a24b94ffec0bbee3215cca09 audit-2.7.1.tar.gz
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index a576662..298ef20 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 0.9.50
-+LIBMICROHTTPD_VERSION = 0.9.52
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+-AUDIT_VERSION = 2.7
++AUDIT_VERSION = 2.7.1
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPLv2+ (programs), unclear (libraries)
+ AUDIT_LICENSE_FILES = COPYING
