@@ -1,29 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 04 Feb 2017 09:18:06 +0100
-Subject: [Buildroot] [PATCH v2] package/libgpiod: bump version to v0.1.2
-In-Reply-To: <1486055331-1615-1-git-send-email-bgolaszewski@baylibre.com>
- (Bartosz Golaszewski's message of "Thu, 2 Feb 2017 18:08:51 +0100")
-References: <1486055331-1615-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <8760kq1i9t.fsf@dell.be.48ers.dk>
+Date: Sat, 04 Feb 2017 09:23:26 +0100
+Subject: [Buildroot] [PATCH 1/1] libuio: remove gettext dependency
+In-Reply-To: <20170203213534.16429-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Fri, 3 Feb 2017 22:35:34 +0100")
+References: <20170203213534.16429-1-patrickdepinguin@gmail.com>
+Message-ID: <87wpd6z7nl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bartosz" == Bartosz Golaszewski <bgolaszewski@baylibre.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > This is a small bug-fix release:
- >   - include <poll.h> instead of <sys/poll.h> in gpioset
- >   - fix a formatting issue in gpioinfo for chips with >100 GPIO lines
- >   - fix a bug when requesting both-edges event notifications
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > The gettext dependency of libuio is only needed for internationalization of
+ > messages in the lsuio program. Since the real purpose for libuio is the
+ > library, the impact of gettext on build time is considered too large for the
+ > benefit for those users that want to use lsuio.
 
- > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
- > ---
- > v1 -> v2:
- > - fixed a copy/paste error in the commit message
+ > Patch libuio to disable internationalization.
+ > Previous statements related to gettext, makeinfo, ... are now no longer
+ > needed.
 
-Committed, thanks.
+Hmm, we don't like to maintain non-upstreamable patches like this. Have
+you discussed this with upstream? Perhaps they would be OK with
+something like a --disable-tools configure flag?
 
 -- 
 Bye, Peter Korsgaard
