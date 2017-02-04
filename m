@@ -1,30 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 04 Feb 2017 17:22:53 +0100
-Subject: [Buildroot] [PATCH 10/11] openvmtools: bump version to
-	5a9033ddfa95786d867e4d02bbb9a29bac8fb64f
-In-Reply-To: <20170203202959.18916-10-aduskett@codeblue.com> (Adam Duskett's
- message of "Fri, 3 Feb 2017 15:29:58 -0500")
-References: <20170203202959.18916-1-aduskett@codeblue.com>
- <20170203202959.18916-10-aduskett@codeblue.com>
-Message-ID: <878tpmx6w2.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  4 Feb 2017 17:43:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/unixodbc: add optional dependency
+	to libtool
+Message-ID: <20170204164327.10478-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+To get reproducable builds of unixodbc add libtool as optional
+dependency.
 
- > Technically this is 10.1.0, however the initial release left out a config
- > directory causing autoconfig to fail.  See this post:
- > https://github.com/vmware/open-vm-tools/issues/115#issuecomment-269963907
+Without libtool:
 
- > As such, I specified the hash to fix the release:
- > https://github.com/vmware/open-vm-tools/commit/5a9033ddfa95786d867e4d02bbb9a29bac8fb64f
+$ host/usr/bin/x86_64-linux-readelf -a target/usr/lib/libodbc.so.2.0.0 | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
- > Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+With libtool:
 
-Committed, thanks.
+$ host/usr/bin/x86_64-linux-readelf -a target/usr/lib/libodbc.so.2.0.0 | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libltdl.so.7]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/unixodbc/unixodbc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/unixodbc/unixodbc.mk b/package/unixodbc/unixodbc.mk
+index f66daab4a..280fe5791 100644
+--- a/package/unixodbc/unixodbc.mk
++++ b/package/unixodbc/unixodbc.mk
+@@ -20,6 +20,13 @@ else
+ UNIXODBC_CONF_OPTS += --disable-iconv
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBTOOL),y)
++UNIXODBC_CONF_OPTS += --without-included-ltdl
++UNIXODBC_DEPENDENCIES += libtool
++else
++UNIXODBC_CONF_OPTS += --with-included-ltdl
++endif
++
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ UNIXODBC_CONF_OPTS += --enable-readline
+ UNIXODBC_DEPENDENCIES += readline
 -- 
-Bye, Peter Korsgaard
+2.11.0
