@@ -1,92 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Feb 2017 12:44:22 +0100
-Subject: [Buildroot] [PATCH v3 09/38] package/kodi: add patch to disable
-	online check
+Date: Sat,  4 Feb 2017 12:44:26 +0100
+Subject: [Buildroot] [PATCH v3 13/38] package/kodi: add powerpc64 support
 In-Reply-To: <20170204114451.20935-1-bernd.kuhls@t-online.de>
 References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
-Message-ID: <20170204114451.20935-10-bernd.kuhls@t-online.de>
+Message-ID: <20170204114451.20935-14-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Configure support was added by this commit:
+https://github.com/xbmc/xbmc/commit/7e3b5672cc425ab9161f4b33e7f2cd77637cd6fc
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/0098-disable-online-check.patch | 65 ++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/kodi/0098-disable-online-check.patch
+ package/kodi/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/kodi/0098-disable-online-check.patch b/package/kodi/0098-disable-online-check.patch
-new file mode 100644
-index 000000000..ef8bd4990
---- /dev/null
-+++ b/package/kodi/0098-disable-online-check.patch
-@@ -0,0 +1,65 @@
-+Ported from LibreELEC
-+https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/mediacenter/kodi/patches/kodi-100.03-disable-online-check.patch
-+
-+
-+From 468f917d3c1ee6f84b1a075d327d7c7626f1e223 Mon Sep 17 00:00:00 2001
-+From: Stefan Saraev <stefan@saraev.ca>
-+Date: Sat, 18 Apr 2015 15:03:31 +0300
-+Subject: [PATCH 03/13] disable online check
-+
-+---
-+ xbmc/GUIInfoManager.cpp              | 1 -
-+ xbmc/utils/SystemInfo.cpp            | 5 +----
-+ xbmc/windows/GUIWindowSystemInfo.cpp | 1 -
-+ 3 files changed, 1 insertion(+), 6 deletions(-)
-+
-+diff --git a/xbmc/GUIInfoManager.cpp b/xbmc/GUIInfoManager.cpp
-+index cb09e75..a218e1d 100644
-+--- a/xbmc/GUIInfoManager.cpp
-++++ b/xbmc/GUIInfoManager.cpp
-+@@ -278,7 +278,6 @@ const infomap system_labels[] =  {{ "hasnetwork",       SYSTEM_ETHERNET_LINK_ACT
-+                                   { "currentwindow",    SYSTEM_CURRENT_WINDOW },
-+                                   { "currentcontrol",   SYSTEM_CURRENT_CONTROL },
-+                                   { "dvdlabel",         SYSTEM_DVD_LABEL },
-+-                                  { "internetstate",    SYSTEM_INTERNET_STATE },
-+                                   { "osversioninfo",    SYSTEM_OS_VERSION_INFO },
-+                                   { "kernelversion",    SYSTEM_OS_VERSION_INFO }, // old, not correct name
-+                                   { "uptime",           SYSTEM_UPTIME },
-+diff --git a/xbmc/utils/SystemInfo.cpp b/xbmc/utils/SystemInfo.cpp
-+index f423cfe..d8483d0 100644
-+--- a/xbmc/utils/SystemInfo.cpp
-++++ b/xbmc/utils/SystemInfo.cpp
-+@@ -247,7 +247,6 @@ bool CSysInfoJob::DoWork()
-+ {
-+   m_info.systemUptime      = GetSystemUpTime(false);
-+   m_info.systemTotalUptime = GetSystemUpTime(true);
-+-  m_info.internetState     = GetInternetState();
-+   m_info.videoEncoder      = GetVideoEncoder();
-+   m_info.cpuFrequency      = GetCPUFreqInfo();
-+   m_info.osVersionInfo     = CSysInfo::GetOsPrettyNameWithVersion() + " (kernel: " + CSysInfo::GetKernelName() + " " + CSysInfo::GetKernelVersionFull() + ")";
-+@@ -1023,9 +1022,7 @@ int CSysInfo::GetXbmcBitness(void)
-+ 
-+ bool CSysInfo::HasInternet()
-+ {
-+-  if (m_info.internetState != CSysData::UNKNOWN)
-+-    return m_info.internetState == CSysData::CONNECTED;
-+-  return (m_info.internetState = CSysInfoJob::GetInternetState()) == CSysData::CONNECTED;
-++  return m_info.internetState == CSysData::UNKNOWN;
-+ }
-+ 
-+ std::string CSysInfo::GetHddSpaceInfo(int drive, bool shortText)
-+diff --git a/xbmc/windows/GUIWindowSystemInfo.cpp b/xbmc/windows/GUIWindowSystemInfo.cpp
-+index 6ff2391..ee73c88 100644
-+--- a/xbmc/windows/GUIWindowSystemInfo.cpp
-++++ b/xbmc/windows/GUIWindowSystemInfo.cpp
-+@@ -125,7 +125,6 @@ void CGUIWindowSystemInfo::FrameMove()
-+     SetControlLabel(i++, "%s: %s", 13160, NETWORK_GATEWAY_ADDRESS);
-+     SetControlLabel(i++, "%s: %s", 13161, NETWORK_DNS1_ADDRESS);
-+     SetControlLabel(i++, "%s: %s", 20307, NETWORK_DNS2_ADDRESS);
-+-    SetControlLabel(i++, "%s %s", 13295, SYSTEM_INTERNET_STATE);
-+   }
-+ 
-+   else if (m_section == CONTROL_BT_VIDEO)
-+-- 
-+2.5.0
-+
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index a16bcc6c5..aab8c624c 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU # libcdio, and others
+ 	default y if (BR2_aarch64 || BR2_arm || \
+ 		(BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || \
++		BR2_powerpc64 || BR2_powerpc64le || \
+ 		BR2_i386 || BR2_x86_64) \
+ 		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+ 		&& BR2_TOOLCHAIN_HAS_SYNC_8
+@@ -32,7 +33,7 @@ config BR2_PACKAGE_KODI_GL_EGL
+ 	depends on !BR2_aarch64 && !BR2_arm # kodi needs egl/gles on arm
+ 
+ comment "kodi needs an OpenGL EGL with either an openGL or an OpenGL ES backend"
+-	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_aarch64 && !BR2_arm # kodi needs egl/gles on arm
+ 	depends on !BR2_PACKAGE_KODI_GL_EGL && !BR2_PACKAGE_KODI_EGL_GLES
+ 
+ comment "kodi requires an OpenGL ES and EGL backend"
 -- 
 2.11.0
