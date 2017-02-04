@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat,  4 Feb 2017 14:42:06 +0100
-Subject: [Buildroot] [PATCHv2 02/10] toolchain-external: handle ld.so fixups
-	centrally
+Date: Sat,  4 Feb 2017 14:42:07 +0100
+Subject: [Buildroot] [PATCHv2 03/10] toolchain helpers: introduce function
+	relpath_prefix
 In-Reply-To: <20170204134214.20592-1-patrickdepinguin@gmail.com>
 References: <20170204134214.20592-1-patrickdepinguin@gmail.com>
-Message-ID: <20170204134214.20592-3-patrickdepinguin@gmail.com>
+Message-ID: <20170204134214.20592-4-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,88 +13,58 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Normally, the Buildroot toolchain logic copies all required libraries from
-the external toolchain to the staging directory, including the dynamic
-loader ld-*.so.
-There are cases, however, where the dynamic loader is _not_ automatically
-copied to staging. This happens when the dynamic loader is not inside
-ARCH_LIB_DIR itself (e.g. lib64), but instead resides in 'lib' (assume, of
-course, that ARCH_LIB_DIR != 'lib').
+The helper function copy_toolchain_sysroot has some logic to transform a
+path into a number of '../' components based on the depth of that path.
 
-Currently, this is fixed in a toolchain-specific fixup, e.g. by recreating a
-missing symlink or copying over a missing file. Such toolchain specific
-fixups are not very nice.
-
-Moreover, in a subsequent patch, the value of ARCH_LIB_DIR changes for some
-toolchains, causing them to have the same problem of a missing dynamic
-loader. This used to be the case for older Linaro toolchains with libraries
-in 'lib/<tuple>': Buildroot used to set ARCH_LIB_DIR=lib but the mentioned
-patch changes it to 'lib/<tuple>' instead. As a result, the files directly
-under 'lib/' will no longer be copied. There should be none, but the dynamic
-loader is a notable exception.
-[Note: support for these older Linaro toolchain has been removed in 2016.11]
-
-Instead, copy over the ld.so file(s)/link(s) from the extracted toolchain
-into staging, in the central copy_toolchain_sysroot function. The existing
-toolchain logic will then handle the copy of these files from staging to
-target.
-This means the toolchain-specific fixups can be removed.
+As this same logic will be needed in another place in a subsequent patch,
+extract it into a separate helper relpath_prefix.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
 v2: no changes
 
- toolchain/helpers.mk                                          | 11 +++++++++++
- .../toolchain-external-codesourcery-aarch64.mk                | 10 ----------
- 2 files changed, 11 insertions(+), 10 deletions(-)
+ toolchain/helpers.mk | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
 
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 06dc197..6720629 100644
+index 6720629..ba14b38 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -55,6 +55,11 @@ copy_toolchain_lib_root = \
- # corresponding architecture variants), and we don't want to import
- # them.
- #
-+# It is possible that ARCH_LIB_DIR does not contain the dynamic loader
-+# (ld*.so or similar) because it (or the main symlink to it) normally
-+# resides in /lib while ARCH_LIB_DIR may be something else (e.g. lib64).
-+# Therefore, copy the dynamic loader separately.
-+#
- # Then, if the selected architecture variant is not the default one
- # (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR), then we :
- #
-@@ -105,6 +110,12 @@ copy_toolchain_sysroot = \
- 			fi ; \
- 		fi ; \
- 	done ; \
-+	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
-+		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
-+	fi ; \
-+	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
-+		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
-+	fi ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+@@ -121,11 +121,7 @@ copy_toolchain_sysroot = \
  			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-index bc58c44..5f4453a 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
-@@ -9,14 +9,4 @@ TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION = 2014.11-95
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SOURCE = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
- TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_ACTUAL_SOURCE_TARBALL = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
- 
--define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
--	ln -sf ld-2.20.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
--endef
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
--
--define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
--	ln -sf ld-2.20.so $(TARGET_DIR)/lib/ld-linux-aarch64.so.1
--endef
--TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
--
- $(eval $(toolchain-external-package))
+ 		fi ; \
+ 		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
+-		relpath="./" ; \
+-		nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
+-		for slash in `seq 1 $${nbslashs}` ; do \
+-			relpath=$${relpath}"../" ; \
+-		done ; \
++		relpath="$(call relpath_prefix,$${ARCH_SUBDIR})./" ; \
+ 		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
+ 		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+ 	fi ; \
+@@ -424,3 +420,22 @@ check_toolchain_ssp = \
+ gen_gdbinit_file = \
+ 	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
+ 	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
++
++# Given a path, determine the relative prefix (../) needed to return to the
++# root level. Note that the last component is treated as a file component; use a
++# trailing slash to force treating it as a directory. Examples:
++#     relpath_prefix(lib32) = ""
++#     relpath_prefix(lib32/octeon2) = "../"
++#     relpath_prefix(lib32/octeon2/) = "../../"
++#
++# $1: input path
++define relpath_prefix
++$$( \
++	prefix="" ; \
++	nbslashs=`printf $1 | sed 's%[^/]%%g' | wc -c` ; \
++	for slash in `seq 1 $${nbslashs}` ; do \
++		prefix=$${prefix}"../" ; \
++	done ; \
++	printf "$$prefix" ;\
++)
++endef
 -- 
 2.10.2
