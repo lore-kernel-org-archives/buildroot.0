@@ -1,185 +1,96 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat,  4 Feb 2017 23:34:54 +0100
-Subject: [Buildroot] [PATCH 1/1] docs/website: Feed API and gmane fix
-Message-ID: <1486247694-7324-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sat,  4 Feb 2017 23:33:54 +0100
+Subject: [Buildroot] [PATCH 1/1] support/misc/Vagrantfile: Enable website
+Message-ID: <1486247634-5995-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Google retired feed API, this patch changes in favour of
-  yahoo yql for rss to json conversion
-* Gmane is gone, replacing it with nabble.
-* Removed the import for feed api libraries
-* Updates to the latest jquery version
-* Reorganized javascript code in buildroot.js to accomodate
-  the mentioned fixings
+This patch enables buildroot website inside Vagrant
+and makes it accessible on localhost:8888 outside. It could be
+usefull for website development or simply navigating it
+without internet access.
+
+* Removed apt-get update to speedup first boot
+* Moved archive download at first to accomodate Apache
+* Added Apache configuration via here document
+* Added 80 to 8888 port redirection
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- docs/website/footer.html     |  5 ++--
- docs/website/header.html     |  2 +-
- docs/website/js/buildroot.js | 71 ++++++++++++++++----------------------------
- docs/website/support.html    |  6 ++--
- 4 files changed, 33 insertions(+), 51 deletions(-)
+ support/misc/Vagrantfile | 52 +++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 38 insertions(+), 14 deletions(-)
 
-diff --git a/docs/website/footer.html b/docs/website/footer.html
-index 16fab36..279c8b1 100644
---- a/docs/website/footer.html
-+++ b/docs/website/footer.html
-@@ -1,6 +1,5 @@
--	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
--	<script src="https://oss.maxcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
--	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-+	<script src="https://oss.maxcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
- 	<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
- 	<script type="text/javascript" src="js/buildroot.js"></script>
- </body>
-diff --git a/docs/website/header.html b/docs/website/header.html
-index 3842f32..ef6724f 100644
---- a/docs/website/header.html
-+++ b/docs/website/header.html
-@@ -10,7 +10,7 @@
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index dc4c15d..fefce5b 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -14,6 +14,8 @@ VM_CORES=1
+ Vagrant.configure('2') do |config|
+ 	config.vm.box = 'bento/ubuntu-16.04'
  
- 	<title>Buildroot - Making Embedded Linux Easy</title>
- 
--	<link href="https://oss.maxcdn.com/bootswatch/3.3.5/paper/bootstrap.min.css" rel="stylesheet">
-+	<link href="https://oss.maxcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet">
- 	<link href="css/main.css" rel="stylesheet">
- 
- 	<!--[if lt IE 9]>
-diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
-index 122436e..f86d0d5 100644
---- a/docs/website/js/buildroot.js
-+++ b/docs/website/js/buildroot.js
-@@ -1,15 +1,17 @@
- function load_activity(feedurl, divid) {
--    var feed = new google.feeds.Feed(feedurl);
-+    var yqlURL = "https://query.yahooapis.com/v1/public/yql";
-+    var yqlQS = "?q=select%20*%20from%20xml%20where%20url%20%3D%20'";
-+    var yqlOPTS = "'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
-     var container = document.getElementById(divid);
--    var loaded = 0;
--    var nb_display = 8;
--    feed.setNumEntries(30);
--    feed.load(function(result) {
--        if (result.error) {
--        	return;
--        }
--        for (var i = 0; i < result.feed.entries.length; i++) {
--            var entry = result.feed.entries[i];
-+    var url = yqlURL + yqlQS + encodeURIComponent(feedurl) + yqlOPTS;
++	config.vm.network "forwarded_port", guest: 80, host: 8888
 +
-+    $.getJSON(url, function(data){
-+        var result = data.query.results;
-+        var loaded = 0;
-+        var nb_display = 8;
-+        if (result==null) return;
-+        for (var i = 0; i < result.feed.entry.length; i++) {
-+            var entry = result.feed.entry[i];
-             if (entry.title.indexOf("git commit") != -1)
-                 continue;
-             loaded += 1;
-@@ -17,7 +19,7 @@ function load_activity(feedurl, divid) {
-                 break;
-             var div = document.createElement("p");
-             var link = document.createElement("a");
--            var d = new Date(entry.publishedDate);
-+            var d = new Date(entry.published);
-             var data = '[' + d.toLocaleDateString() + '] ' + entry.title
-             var text = document.createTextNode(data);
-             link.appendChild(text);
-@@ -33,11 +35,6 @@ function load_activity(feedurl, divid) {
-     });
- }
+ 	config.vm.provider :vmware_fusion do |v, override|
+ 		v.vmx['memsize'] = VM_MEMORY
+ 		v.vmx['numvcpus'] = VM_CORES
+@@ -41,19 +43,41 @@ Vagrant.configure('2') do |config|
+ 		end
+ 	end
  
--function initialize() {
--    load_activity("http://rss.gmane.org/topics/excerpts/gmane.comp.lib.uclibc.buildroot", "mailing-list-activity");
--    load_activity("http://git.buildroot.org/buildroot/atom/?h=master", "commit-activity");
--}
+-	config.vm.provision 'shell', inline:
+-		"sudo dpkg --add-architecture i386
+-		sudo apt-get -q update
+-		sudo apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
+-		sudo apt-get -q -y upgrade
+-		sudo apt-get -q -y install build-essential libncurses5-dev \
+-			git bzr cvs mercurial subversion libc6:i386 unzip bc
+-		sudo apt-get -q -y autoremove
+-		sudo apt-get -q -y clean
+-		sudo update-locale LC_ALL=C"
 -
- function google_analytics() {
-     var _gaq = _gaq || [];
-     _gaq.push(['_setAccount', 'UA-21761074-1']);
-@@ -53,34 +50,6 @@ function google_analytics() {
-     s.parentNode.insertBefore(ga, s);
- }
- 
--$(function() {
--  $('a[href*=#]:not([href=#])').click(function() {
--    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
--      var target = $(this.hash);
--      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
--      if (target.length) {
--        $('html,body').animate({
--          scrollTop: target.offset().top
--        }, 1000);
--        return false;
--      }
--    }
--  });
--});
--
--google.load("feeds", "1");
--google.setOnLoadCallback(initialize);
--google_analytics();
--
--jQuery(document).ready(function($) {
--    var url = window.location.href;
--    // Get the basename of the URL
--    url = url.split(/[\\/]/).pop()
--    $('.nav a[href="/' + url + '"]').parent().addClass('active');
--
--    $('#slides').html('<iframe src="https://docs.google.com/gview?url=http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
--});
--
- function showTooltip(elem, msg) {
-     elem.setAttribute('class', 'btn tooltipped tooltipped-s');
-     elem.setAttribute('aria-label', msg);
-@@ -98,7 +67,7 @@ clipboard.on('success', function(e) {
- });
- 
- $(function() {
--  $('a[href*=#]:not([href=#])').click(function() {
-+  $('a[href*=\\#]:not([href=\\#])').click(function() {
-     if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-       var target = $(this.hash);
-       target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-@@ -111,3 +80,15 @@ $(function() {
-     }
-   });
- });
+ 	config.vm.provision 'shell', privileged: false, inline:
+-		"echo 'Downloading and extracting buildroot #{RELEASE}'
+-		wget -q -c http://buildroot.org/downloads/buildroot-#{RELEASE}.tar.gz
+-		tar axf buildroot-#{RELEASE}.tar.gz"
++"echo 'Downloading and extracting buildroot #{RELEASE}'
++wget -q -c http://buildroot.org/downloads/buildroot-#{RELEASE}.tar.gz
++tar axf buildroot-#{RELEASE}.tar.gz"
 +
-+jQuery(document).ready(function($) {
-+    var url = window.location.href;
-+    // Get the basename of the URL
-+    url = url.split(/[\\/]/).pop()
-+    $('.nav a[href="/' + url + '"]').parent().addClass('active');
++	config.vm.provision 'shell', privileged: true, inline:
++"sed -i 's|deb http://us.archive.ubuntu.com/ubuntu/|deb mirror://mirrors.ubuntu.com/mirrors.txt|g' /etc/apt/sources.list
++dpkg --add-architecture i386
++apt-get -q update
++apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
++apt-get -q -y install build-essential libncurses5-dev \
++	git bzr cvs mercurial subversion libc6:i386 unzip bc \
++	apache2
++apt-get -q -y autoremove
++apt-get -q -y clean
++update-locale LC_ALL=C
 +
-+    load_activity("http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-busybox-ft2.xml", "mailing-list-activity");
-+    load_activity("http://git.buildroot.org/buildroot/atom/?h=master", "commit-activity");
++# Configure Apache for buildroot website
++a2enmod include
++cat << EOF > /etc/apache2/sites-enabled/000-default.conf
++<VirtualHost *:80>
++ServerAdmin webmaster at localhost
++DocumentRoot /home/vagrant/buildroot-#{RELEASE}/docs/website/
++ErrorLog ${APACHE_LOG_DIR}/error.log
++CustomLog ${APACHE_LOG_DIR}/access.log combined
++<Directory />
++Options Indexes FollowSymLinks Includes ExecCGI Includes
++AllowOverride All
++Require all granted
++Allow from all
++AddType text/html .html
++AddOutputFilter INCLUDES .html
++</Directory>
++</VirtualHost>
++EOF
++service apache2 restart"
 +
-+    $('#slides').html('<iframe src="https://docs.google.com/gview?url=http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
-+});
-diff --git a/docs/website/support.html b/docs/website/support.html
-index 92ee03b..a1184c8 100644
---- a/docs/website/support.html
-+++ b/docs/website/support.html
-@@ -50,9 +50,11 @@
- 		    list, since there is a good chance someone else has asked the same question
- 		    before.</p>
- 
--		  <form method="get" action="http://search.gmane.org/">
-+		  <form method="get" action="http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp">
- 		    <input type="text" name="query">
--		    <input type="hidden" name="group" value="gmane.comp.lib.uclibc.buildroot">
-+		    <input type="hidden" name="macro" value="search_page">
-+		    <input type="hidden" name="node" value="2">
-+		    <input type="hidden" name="sort" value="date">
- 		    <button type="submit" class="btn btn-default">Submit</button>
- 		  </form>
- 		</div>
+ end
 -- 
 2.7.4
