@@ -1,41 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 4 Feb 2017 13:04:22 +0100
-Subject: [Buildroot] [git commit] audit: bump to version 2.7.1
-Message-ID: <20170204162521.B7A398164D@busybox.osuosl.org>
+Date: Sat, 4 Feb 2017 17:20:15 +0100
+Subject: [Buildroot] [git commit] openvmtools: bump version to
+	5a9033ddfa95786d867e4d02bbb9a29bac8fb64f
+Message-ID: <20170204162522.396578164D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7858e7fd5cb8966198caaf25556961bac018099b
+commit: https://git.buildroot.net/buildroot/commit/?id=c225bd9762903b4c39524446c77f8bedcaa66bf5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Technically this is 10.1.0, however the initial release left out a config
+directory causing autoconfig to fail.  See this post:
+https://github.com/vmware/open-vm-tools/issues/115#issuecomment-269963907
+
+As such, I specified the hash to fix the release:
+https://github.com/vmware/open-vm-tools/commit/5a9033ddfa95786d867e4d02bbb9a29bac8fb64f
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openvmtools/openvmtools.hash |  2 +-
+ package/openvmtools/openvmtools.mk   | 10 ++--------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 6b0f0c3..2ae8f99 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
+diff --git a/package/openvmtools/openvmtools.hash b/package/openvmtools/openvmtools.hash
+index ae28377..bf344e5 100644
+--- a/package/openvmtools/openvmtools.hash
++++ b/package/openvmtools/openvmtools.hash
 @@ -1,2 +1,2 @@
- #Locally computed
--sha256 05533f5d88d9520ceebfd8bfb3fd998ca4a2b246757fec7bbd8e33c287544537 audit-2.7.tar.gz
-+sha256 0441790794fd9375dbca598fa0ffb46c57ff37b3a24b94ffec0bbee3215cca09 audit-2.7.1.tar.gz
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index a576662..298ef20 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
+ # locally computed
+-sha256  6b415f6093a15ffce10d3c4b69aa7ff106bdc0efd88e18a70a59d6941d4d2379  openvmtools-stable-9.10.2.tar.gz
++sha256  ff384ab0c11e19db0fd6ddab60e8ae48a4591b141fb3a8e8f1d4e1a489dd293f  openvmtools-5a9033ddfa95786d867e4d02bbb9a29bac8fb64f.tar.gz
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 40a7dac..d3eda5c 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--AUDIT_VERSION = 2.7
-+AUDIT_VERSION = 2.7.1
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPLv2+ (programs), unclear (libraries)
- AUDIT_LICENSE_FILES = COPYING
+-OPENVMTOOLS_VERSION = stable-9.10.2
++OPENVMTOOLS_VERSION = 5a9033ddfa95786d867e4d02bbb9a29bac8fb64f
+ OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
+ OPENVMTOOLS_SUBDIR = open-vm-tools
+ OPENVMTOOLS_LICENSE = LGPLv2.1
+ OPENVMTOOLS_LICENSE_FILES = $(OPENVMTOOLS_SUBDIR)/COPYING
++
+ # Autoreconf needed or config/missing will run configure again at buildtime
+ OPENVMTOOLS_AUTORECONF = YES
+ OPENVMTOOLS_CONF_OPTS = --with-dnet \
+@@ -45,13 +46,6 @@ else
+ OPENVMTOOLS_CONF_OPTS += --without-pam
+ endif
+ 
+-# configure needs execution permission
+-define OPENVMTOOLS_PRE_CONFIGURE_CHMOD
+-	chmod 0755 $(@D)/$(OPENVMTOOLS_SUBDIR)/configure
+-endef
+-
+-OPENVMTOOLS_PRE_CONFIGURE_HOOKS += OPENVMTOOLS_PRE_CONFIGURE_CHMOD
+-
+ # symlink needed by lib/system/systemLinux.c (or will cry in /var/log/messages)
+ # defined in lib/misc/hostinfoPosix.c
+ # /sbin/shutdown needed for Guest OS restart/shutdown from hypervisor
