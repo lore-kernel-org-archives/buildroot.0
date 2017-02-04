@@ -1,50 +1,54 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Feb 2017 12:44:34 +0100
-Subject: [Buildroot] [PATCH v3 21/38] package/kodi-pvr-mythtv: bump version
-	to 4.12.12
+Date: Sat,  4 Feb 2017 12:44:25 +0100
+Subject: [Buildroot] [PATCH v3 12/38] package/kodi: add aarch64 support
 In-Reply-To: <20170204114451.20935-1-bernd.kuhls@t-online.de>
 References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
-Message-ID: <20170204114451.20935-22-bernd.kuhls@t-online.de>
+Message-ID: <20170204114451.20935-13-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream repo was changed:
-https://github.com/xbmc/repo-binary-addons/commit/cf93c8be639a3122db3ecb11c0b42d76e2e1da98
+Configure support was added by this commit:
+https://github.com/xbmc/xbmc/commit/62c160c23ed4c074d106f30a43638fac66568ac6
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index 0e9eba87e..4022f6620 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 f6d61b134a96a25820b616e60e43ac1ed33bd3f8b9f7612a6f6324356b78582d kodi-pvr-mythtv-84b0b6b122ca779588de5c895ef77b6bc454e859.tar.gz
-+sha256 596fc11f26574939c5610f82f033808ca8d923543462254e793eab08d6c7d41c  kodi-pvr-mythtv-4.12.12.tar.gz
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index a8a1a6dae..ebb770ca8 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 84319b91a..a16bcc6c5 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -1,7 +1,9 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	depends on BR2_USE_MMU # libcdio, and others
+-	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
++	default y if (BR2_aarch64 || BR2_arm || \
++		(BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || \
++		BR2_i386 || BR2_x86_64) \
+ 		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
+ 		&& BR2_TOOLCHAIN_HAS_SYNC_8
  
--# This cset is on the branch 'Jarvis'
-+# This cset is on the branch 'Krypton'
- # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_MYTHTV_VERSION = 84b0b6b122ca779588de5c895ef77b6bc454e859
--KODI_PVR_MYTHTV_SITE = $(call github,kodi-pvr,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
-+KODI_PVR_MYTHTV_VERSION = 4.12.12
-+KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPLv2+
- KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
- KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
+@@ -27,14 +29,14 @@ config BR2_PACKAGE_KODI_GL_EGL
+ 	default y
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+-	depends on !BR2_arm # kodi needs egl/gles on arm
++	depends on !BR2_aarch64 && !BR2_arm # kodi needs egl/gles on arm
+ 
+ comment "kodi needs an OpenGL EGL with either an openGL or an OpenGL ES backend"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_PACKAGE_KODI_GL_EGL && !BR2_PACKAGE_KODI_EGL_GLES
+ 
+ comment "kodi requires an OpenGL ES and EGL backend"
+-	depends on BR2_arm
++	depends on BR2_aarch64 || BR2_arm
+ 	depends on !BR2_PACKAGE_KODI_EGL_GLES
+ 
+ menuconfig BR2_PACKAGE_KODI
 -- 
 2.11.0
