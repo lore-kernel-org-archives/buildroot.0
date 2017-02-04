@@ -1,34 +1,55 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 4 Feb 2017 14:10:06 +0100
-Subject: [Buildroot] [PATCH 1/1] pkg-generic: include symbolic links to
-	files in packages-file-list.txt
-In-Reply-To: <87o9yiz6x5.fsf@dell.be.48ers.dk>
-References: <20170203212752.4016-1-patrickdepinguin@gmail.com>
- <87o9yiz6x5.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LXXH28qJPGtSNR1o9yFzJaBboN5ax_XoppqhroNELyn9Q@mail.gmail.com>
+Date: Sat,  4 Feb 2017 14:42:04 +0100
+Subject: [Buildroot] [PATCHv2 00/10] toolchain: improvements to
+	copy_toolchain_sysroot and copy_toolchain_lib_root
+Message-ID: <20170204134214.20592-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 4, 2017 at 9:39 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
->
->  > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->  > Using the package instrumentation hooks, a file packages-file-list.txt is
->  > created containing the list of files installed by a package with their size.
->
->  > Due to the use of 'find -type f', symbolic links to files are not included
->  > in this file list. Since the original purpose of this file was to calculate
->  > the total size of a package and symbolic links have file size 0, this was
->  > not a problem.
->
->  > However, if packages-file-list.txt is reused for other purposes, for example
->  > to get a complete list of files installed by a package regardless of size,
->  > symbolic links are important.
->  > Using 'find -xtype f' instead solves the problem.
->
-> So what about directories and symlinks to directories?
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Ok, I guess there's no problem in including them too. I'll try it, thanks.
+Hi,
+
+This toolchain patch series started out to fix the handling of the Cavium Octeon
+2 toolchain (see patch "cover multilib toolchains with lib/<variant>/layout")
+but along the way I fixed/improved a few other things.
+Details are found in the commit messages of these patches.
+
+I tested a number of external toolchains and arches available in Buildroot, as
+well as the Octeon SDK toolchain.  I think I understand the situation
+sufficiently well to get some confidence, but this is the type of
+change that is difficult to get 100% certainty about.
+
+Best regards,
+Thomas
+
+v2:
+- fix broken symlinks in patch "cover multilib toolchains ..."
+- simplification of fixed broken symlinks
+- improvements in copy_toolchain_lib_root
+
+Thomas De Schampheleire (10):
+  toolchain-external: clarify rsync excludes in copy_toolchain_sysroot
+  toolchain-external: handle ld.so fixups centrally
+  toolchain helpers: introduce function relpath_prefix
+  toolchain-external: cover multilib toolchains with lib/<variant>
+    layout
+  toolchain helpers: introduce simplify_symlink
+  toolchain-external: simplify previously-broken symbolic links
+  toolchain: copy_toolchain_lib_root: remove unused variable LIBDIR
+  toolchain: copy_toolchain_lib_root: clarify logic
+  toolchain: copy_toolchain_lib_root: clarify input parameter
+  toolchain: copy_toolchain_lib_root: copy symlinks instead of
+    recreating them
+
+ package/glibc/glibc.mk                             |   4 +-
+ toolchain/helpers.mk                               | 126 +++++++++++++++++----
+ .../toolchain-external/pkg-toolchain-external.mk   |  14 ++-
+ .../toolchain-external-codesourcery-aarch64.mk     |  10 --
+ 4 files changed, 114 insertions(+), 40 deletions(-)
+
+-- 
+2.10.2
