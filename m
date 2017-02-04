@@ -1,36 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Feb 2017 12:44:36 +0100
-Subject: [Buildroot] [PATCH v3 23/38] package/kodi-pvr-mediaportal-tvserver:
-	needs locale support
+Date: Sat,  4 Feb 2017 12:44:30 +0100
+Subject: [Buildroot] [PATCH v3 17/38] package/kodi: add optional support for
+	lcms2
 In-Reply-To: <20170204114451.20935-1-bernd.kuhls@t-online.de>
 References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
-Message-ID: <20170204114451.20935-24-bernd.kuhls@t-online.de>
+Message-ID: <20170204114451.20935-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added by
+https://github.com/xbmc/xbmc/commit/4a635240ae5a6a3a03750efba0f30b65b5de7c2d
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-mediaportal-tvserver/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/kodi/Config.in | 6 ++++++
+ package/kodi/kodi.mk   | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/kodi-pvr-mediaportal-tvserver/Config.in b/package/kodi-pvr-mediaportal-tvserver/Config.in
-index 733ca8859..d63ad882e 100644
---- a/package/kodi-pvr-mediaportal-tvserver/Config.in
-+++ b/package/kodi-pvr-mediaportal-tvserver/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_KODI_PVR_MEDIAPORTAL_TVSERVER
- 	bool "kodi-pvr-mediaportal-tvserver"
-+	depends on BR2_ENABLE_LOCALE # for included live555
- 	select BR2_PACKAGE_KODI_PLATFORM
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index ed51833f9..6f8e9a1cc 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -134,6 +134,12 @@ config BR2_PACKAGE_KODI_DBUS
  	help
- 	  MediaPortal TVServer PVR client addon for Kodi
+ 	  Enable D-Bus support
  
- 	  https://github.com/kodi-pvr/pvr.mediaportal.tvserver
++config BR2_PACKAGE_KODI_LCMS2
++	bool "lcms2"
++	select BR2_PACKAGE_LCMS2
++	help
++	  Enable lcms2 support
 +
-+comment "kodi-pvr-mediaportal-tvserver needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
+ config BR2_PACKAGE_KODI_LIBBLURAY
+ 	bool "blu-ray"
+ 	select BR2_PACKAGE_LIBBLURAY
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 28d58bfe3..08ed68b14 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -198,6 +198,13 @@ else
+ KODI_CONF_OPTS += --disable-nfs
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_LCMS2),y)
++KODI_DEPENDENCIES += lcms2
++KODI_CONF_OPTS += --enable-lcms2
++else
++KODI_CONF_OPTS += --disable-lcms2
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_LIBBLURAY),y)
+ KODI_DEPENDENCIES += libbluray
+ KODI_CONF_OPTS += --enable-libbluray
 -- 
 2.11.0
