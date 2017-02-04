@@ -1,35 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Feb 2017 23:51:31 +0100
-Subject: [Buildroot] [PATCH 1/1] docs/website: Feed API and gmane fix
-In-Reply-To: <1486247694-7324-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1486247694-7324-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20170204235131.7332d861@free-electrons.com>
+Date: Sat, 4 Feb 2017 23:55:20 +0100
+Subject: [Buildroot] [git commit] package/unixodbc: add optional dependency
+	to libtool
+Message-ID: <20170204225537.68BD081F6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0064b2fb749e309a24e5983f08204b85468fcab4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  4 Feb 2017 23:34:54 +0100, Angelo Compagnucci wrote:
-> * Google retired feed API, this patch changes in favour of
->   yahoo yql for rss to json conversion
-> * Gmane is gone, replacing it with nabble.
-> * Removed the import for feed api libraries
-> * Updates to the latest jquery version
-> * Reorganized javascript code in buildroot.js to accomodate
->   the mentioned fixings
+To get reproducible builds of unixodbc add libtool as optional
+dependency.
 
-This bullet list is a very good indication that this patch should be
-split into several smaller patches. It's doing lots of things that are
-fairly independent, or if not independent, that can be split into
-several steps.
+Without libtool:
 
-Thanks,
+$ host/usr/bin/x86_64-linux-readelf -a target/usr/lib/libodbc.so.2.0.0 | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+With libtool:
+
+$ host/usr/bin/x86_64-linux-readelf -a target/usr/lib/libodbc.so.2.0.0 | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libltdl.so.7]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/unixodbc/unixodbc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/unixodbc/unixodbc.mk b/package/unixodbc/unixodbc.mk
+index f66daab..280fe57 100644
+--- a/package/unixodbc/unixodbc.mk
++++ b/package/unixodbc/unixodbc.mk
+@@ -20,6 +20,13 @@ else
+ UNIXODBC_CONF_OPTS += --disable-iconv
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBTOOL),y)
++UNIXODBC_CONF_OPTS += --without-included-ltdl
++UNIXODBC_DEPENDENCIES += libtool
++else
++UNIXODBC_CONF_OPTS += --with-included-ltdl
++endif
++
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ UNIXODBC_CONF_OPTS += --enable-readline
+ UNIXODBC_DEPENDENCIES += readline
