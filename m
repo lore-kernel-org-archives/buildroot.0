@@ -1,58 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Feb 2017 12:44:28 +0100
-Subject: [Buildroot] [PATCH v3 15/38] package/kodi: add optional support for
-	bluez5
+Date: Sat,  4 Feb 2017 12:44:34 +0100
+Subject: [Buildroot] [PATCH v3 21/38] package/kodi-pvr-mythtv: bump version
+	to 4.12.12
 In-Reply-To: <20170204114451.20935-1-bernd.kuhls@t-online.de>
 References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
-Message-ID: <20170204114451.20935-16-bernd.kuhls@t-online.de>
+Message-ID: <20170204114451.20935-22-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Upstream repo was changed:
+https://github.com/xbmc/repo-binary-addons/commit/cf93c8be639a3122db3ecb11c0b42d76e2e1da98
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 8 ++++++++
- package/kodi/kodi.mk   | 7 +++++++
- 2 files changed, 15 insertions(+)
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index cd24fa8b5..f880153f6 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -122,6 +122,14 @@ config BR2_PACKAGE_KODI_AVAHI
- 	  Enable Avahi support.
- 	  Select this if you want Kodi to support Bonjour protocol.
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 0e9eba87e..4022f6620 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 f6d61b134a96a25820b616e60e43ac1ed33bd3f8b9f7612a6f6324356b78582d kodi-pvr-mythtv-84b0b6b122ca779588de5c895ef77b6bc454e859.tar.gz
++sha256 596fc11f26574939c5610f82f033808ca8d923543462254e793eab08d6c7d41c  kodi-pvr-mythtv-4.12.12.tar.gz
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index a8a1a6dae..ebb770ca8 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_KODI_BLUEZ
-+	bool "bluetooth"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
-+	depends on !BR2_PACKAGE_BLUEZ_UTILS # bluez5_utils
-+	select BR2_PACKAGE_BLUEZ5_UTILS
-+	help
-+	    Enable bluetooth support
-+
- config BR2_PACKAGE_KODI_DBUS
- 	bool "dbus"
- 	select BR2_PACKAGE_DBUS
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index a035cb74c..2b53d94a1 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -124,6 +124,13 @@ else
- KODI_CONF_OPTS += --disable-libcap
- endif
- 
-+ifeq ($(BR2_PACKAGE_KODI_BLUEZ),y)
-+KODI_CONF_OPTS += --enable-libbluetooth
-+KODI_DEPENDENCIES += bluez5_utils
-+else
-+KODI_CONF_OPTS += --disable-libbluetooth
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_DBUS),y)
- KODI_DEPENDENCIES += dbus
- KODI_CONF_OPTS += --enable-dbus
+-# This cset is on the branch 'Jarvis'
++# This cset is on the branch 'Krypton'
+ # When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_MYTHTV_VERSION = 84b0b6b122ca779588de5c895ef77b6bc454e859
+-KODI_PVR_MYTHTV_SITE = $(call github,kodi-pvr,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
++KODI_PVR_MYTHTV_VERSION = 4.12.12
++KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPLv2+
+ KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
+ KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
 -- 
 2.11.0
