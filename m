@@ -1,34 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 04 Feb 2017 09:39:18 +0100
-Subject: [Buildroot] [PATCH 1/1] pkg-generic: include symbolic links to
-	files in packages-file-list.txt
-In-Reply-To: <20170203212752.4016-1-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Fri, 3 Feb 2017 22:27:52 +0100")
-References: <20170203212752.4016-1-patrickdepinguin@gmail.com>
-Message-ID: <87o9yiz6x5.fsf@dell.be.48ers.dk>
+Date: Sat, 4 Feb 2017 09:18:55 +0100
+Subject: [Buildroot] [git commit] squashfs: bump to fix RHEL 5 compilation
+	error
+Message-ID: <20170204083947.2D2CE802EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ee90313c648b7e0eb28ffad3a458f3e18bab23d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Using the package instrumentation hooks, a file packages-file-list.txt is
- > created containing the list of files installed by a package with their size.
+Bump squashfs with one commit to fix a compilation error on the ancient RHEL
+5 distribution.
 
- > Due to the use of 'find -type f', symbolic links to files are not included
- > in this file list. Since the original purpose of this file was to calculate
- > the total size of a package and symbolic links have file size 0, this was
- > not a problem.
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squashfs/squashfs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > However, if packages-file-list.txt is reused for other purposes, for example
- > to get a complete list of files installed by a package regardless of size,
- > symbolic links are important.
- > Using 'find -xtype f' instead solves the problem.
-
-So what about directories and symlinks to directories?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 1a5f1ea..4f84872 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUASHFS_VERSION = 9c1db6d13a51a2e009f0027ef336ce03624eac0d
++SQUASHFS_VERSION = 3de1687d7432ea9b302c2db9521996f506c140a3
+ SQUASHFS_SITE = https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
+ SQUASHFS_SITE_METHOD = git
+ SQUASHFS_LICENSE = GPLv2+
