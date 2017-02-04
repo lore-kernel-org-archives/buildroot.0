@@ -1,44 +1,79 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Feb 2017 12:44:38 +0100
-Subject: [Buildroot] [PATCH v3 25/38] package/kodi-adsp-freesurround: bump
-	version
+Date: Sat,  4 Feb 2017 12:44:24 +0100
+Subject: [Buildroot] [PATCH v3 11/38] package/kodi: move rtmp support to new
+	addon kodi-inputstream-rtmp
 In-Reply-To: <20170204114451.20935-1-bernd.kuhls@t-online.de>
 References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
-Message-ID: <20170204114451.20935-26-bernd.kuhls@t-online.de>
+Message-ID: <20170204114451.20935-12-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+rtmp support was moved from Kodi to an addon:
+https://github.com/xbmc/xbmc/commit/d04f43a4eb6f920cc42a28627b580f17e2be1bb5
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash | 2 +-
- package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ Config.in.legacy       | 7 +++++++
+ package/kodi/Config.in | 7 -------
+ package/kodi/kodi.mk   | 7 -------
+ 3 files changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
-index f23717f79..2649bbdcb 100644
---- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
-+++ b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 652c32d0c4b61343cbed13b6edd1ab4ad35280240a0ddb386f04adaa46986e7f kodi-adsp-freesurround-08b691d3d9a0382d2f6f789a31614fb02512036c.tar.gz
-+sha256 cf6985be6839530027861b54e2146693d05e802363281ef6f8c1f352dbf94b5c  kodi-adsp-freesurround-34f50406bcba22e364711562e5b9205e57ae844b.tar.gz
-diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-index 49cf67327..799cda579 100644
---- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-+++ b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
-@@ -4,7 +4,9 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 20445b8a1..7dd9189ee 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -262,6 +262,13 @@ config BR2_GDB_VERSION_7_9
+ ###############################################################################
+ comment "Legacy options removed in 2016.11"
  
--KODI_ADSP_FREESURROUND_VERSION = 08b691d3d9a0382d2f6f789a31614fb02512036c
-+# This cset is on the branch 'Krypton'
-+# When Kodi is updated, then this should be updated to the corresponding branch
-+KODI_ADSP_FREESURROUND_VERSION = 34f50406bcba22e364711562e5b9205e57ae844b
- KODI_ADSP_FREESURROUND_SITE = $(call github,kodi-adsp,adsp.freesurround,$(KODI_ADSP_FREESURROUND_VERSION))
- KODI_ADSP_FREESURROUND_LICENSE = GPLv3+
- KODI_ADSP_FREESURROUND_LICENSE_FILES = LICENSE.md
++config BR2_PACKAGE_KODI_RTMPDUMP
++	bool "kodi rtmp"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
++	help
++	  Internal rtmp support was moved to addon kodi-inputstream-rtmp
++
+ config BR2_PACKAGE_PHP_SAPI_CLI_CGI
+ 	bool "PHP CGI and CLI options are now seperate"
+ 	select BR2_PACKAGE_PHP_SAPI_CLI
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 842e0b6a3..84319b91a 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -177,13 +177,6 @@ config BR2_PACKAGE_KODI_NONFREE
+ 	  Enable components with non-free licenses. This option
+ 	  currently only controls support for RAR archives.
+ 
+-config BR2_PACKAGE_KODI_RTMPDUMP
+-	bool "rtmp"
+-	select BR2_PACKAGE_RTMPDUMP
+-	help
+-	  Enable RTMP input support.
+-	  Select this if you want to play back rtmp stream.
+-
+ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+ 	bool "shairport"
+ 	select BR2_PACKAGE_LIBSHAIRPLAY
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 9fe559c1e..a035cb74c 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -186,13 +186,6 @@ else
+ KODI_CONF_OPTS += --disable-nfs
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_KODI_RTMPDUMP),y)
+-KODI_DEPENDENCIES += rtmpdump
+-KODI_CONF_OPTS += --enable-rtmp
+-else
+-KODI_CONF_OPTS += --disable-rtmp
+-endif
+-
+ ifeq ($(BR2_PACKAGE_KODI_LIBBLURAY),y)
+ KODI_DEPENDENCIES += libbluray
+ KODI_CONF_OPTS += --enable-libbluray
 -- 
 2.11.0
