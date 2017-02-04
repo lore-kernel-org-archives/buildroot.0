@@ -1,46 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 4 Feb 2017 09:15:37 +0100
-Subject: [Buildroot] [git commit] package/libgpiod: bump version to v0.1.2
-Message-ID: <20170204083947.199BE80DAE@busybox.osuosl.org>
+Date: Sat, 4 Feb 2017 09:25:43 +0100
+Subject: [Buildroot] [git commit] gengetopt: add patch to fix compilation
+	warnings in generated code
+Message-ID: <20170204083947.3854480DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=058b7f6a6529f188522bdde696cdc0f1b2dd0a22
+commit: https://git.buildroot.net/buildroot/commit/?id=774e7b0bfdc875a168348f5b92728e566ead2eb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a small bug-fix release:
-  - include <poll.h> instead of <sys/poll.h> in gpioset
-  - fix a formatting issue in gpioinfo for chips with >100 GPIO lines
-  - fix a bug when requesting both-edges event notifications
+getgetopt generates code that causes compilation warnings in current
+versions of gcc. If gengetopt is used for programs that set -Werror during
+compilation, these compilation warnings become real problems.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Unfortunately, the gengetopt project seems dead for several years now. Last
+release dates back to 2012. There is an open bug for this problem [1], with
+a proposed patch, but no response from the maintainers.
+
+Apply the patch from the bug report to fix the problem.
+
+[1]  http://savannah.gnu.org/bugs/?40243
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ix-compilation-warnings-in-generated-code.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 7ba0531..9901be6 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 07f75ae1e0c086d28d77ef60d0566180698ce11c3271d89da444c0fc6c2f4580 libgpiod-v0.1.1.tar.gz
-+sha256 c9a60e1073aacb25b4ad06d513f31416335b5a710f869cb7e838d2abb62e1e00 libgpiod-v0.1.2.tar.gz
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index e2e27f9..dbf9511 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPIOD_VERSION = v0.1.1
-+LIBGPIOD_VERSION = v0.1.2
- LIBGPIOD_SITE = $(call github,brgl,libgpiod,$(LIBGPIOD_VERSION))
- LIBGPIOD_LICENSE = GPLv3+
- LIBGPIOD_LICENSE_FILES = COPYING
+diff --git a/package/gengetopt/0001-fix-compilation-warnings-in-generated-code.patch b/package/gengetopt/0001-fix-compilation-warnings-in-generated-code.patch
+new file mode 100644
+index 0000000..88961e6
+--- /dev/null
++++ b/package/gengetopt/0001-fix-compilation-warnings-in-generated-code.patch
+@@ -0,0 +1,65 @@
++Fix compilation warnings in generated code
++
++Patch taken from open bug report http://savannah.gnu.org/bugs/?40243
++(project gengetopt seems to be dead; no hope for a new release soon)
++
++Imported by Philippe Mariman.
++This description by Thomas De Schampheleire.
++
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++
++Index: gengetopt-2.22.6/src/skels/c_source.cc
++===================================================================
++--- gengetopt-2.22.6.orig/src/skels/c_source.cc	2012-11-07 20:58:29.000000000 +0100
+++++ gengetopt-2.22.6/src/skels/c_source.cc	2014-11-20 12:05:02.597527761 +0100
++@@ -2424,9 +2424,12 @@
++       stream << "  FIX_UNUSED (field);";
++       stream << "\n";
++       stream << indent_str;
+++      stream << "  FIX_UNUSED (stop_char);";
+++      stream << "\n";
+++      stream << indent_str;
+++      stream << "  FIX_UNUSED (val);";
++       stream << "\n";
++       stream << indent_str;
++-      stream << "  stop_char = 0;";
++       stream << "\n";
++       stream << indent_str;
++       stream << "  found = 0;";
++@@ -3981,6 +3984,12 @@
++       stream << "\n";
++       stream << indent_str;
++     }
+++  else
+++    {
+++      stream << "  FIX_UNUSED (check_required);";
+++      stream << "\n";
+++      stream << indent_str;
+++    }
++   stream << "\n";
++   stream << indent_str;
++   indent = 2;
++Index: gengetopt-2.22.6/src/skels/c_source.h_skel
++===================================================================
++--- gengetopt-2.22.6.orig/src/skels/c_source.h_skel	2012-11-02 18:43:24.000000000 +0100
+++++ gengetopt-2.22.6/src/skels/c_source.h_skel	2014-11-20 12:05:22.501528424 +0100
++@@ -767,8 +767,9 @@
++   char **string_field;
++ @ENDIF@
++   FIX_UNUSED (field);
+++  FIX_UNUSED (stop_char);
+++  FIX_UNUSED (val);
++ 
++-  stop_char = 0;
++   found = 0;
++ 
++   if (!multiple_option && prev_given && (*prev_given || (check_ambiguity && *field_given)))
++@@ -1327,6 +1328,8 @@
++     {
++       error_occurred += @parser_name at _required2 (args_info, argv[0], additional_error);
++     }
+++ at ELSE@
+++  FIX_UNUSED (check_required);
++ @ENDIF@
++ 
++   @parser_name@_release (&local_args_info);
