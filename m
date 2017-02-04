@@ -1,82 +1,33 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat,  4 Feb 2017 14:42:05 +0100
-Subject: [Buildroot] [PATCHv2 01/10] toolchain-external: clarify rsync
-	excludes in copy_toolchain_sysroot
-In-Reply-To: <20170204134214.20592-1-patrickdepinguin@gmail.com>
-References: <20170204134214.20592-1-patrickdepinguin@gmail.com>
-Message-ID: <20170204134214.20592-2-patrickdepinguin@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 Feb 2017 15:24:30 +0100
+Subject: [Buildroot] Checking the size of the output images
+In-Reply-To: <CAF_dkJBqGLEdB3q3qKNK+Nk0-SkY4dSz_g3j9XVnmwvpwAeRPA@mail.gmail.com>
+References: <CAF_dkJBqGLEdB3q3qKNK+Nk0-SkY4dSz_g3j9XVnmwvpwAeRPA@mail.gmail.com>
+Message-ID: <20170204152430.3a35dff4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Hello,
 
-The copy_toolchain_sysroot helper features a complex rsync loop that copies
-various directories from the extracted toolchain to the staging directory.
-The complexity mainly stems from the fact that we support multilib toolchain
-tarballs but only copy one of the multilib variants into staging.
+On Fri, 3 Feb 2017 09:17:13 -0500, Patrick Doyle wrote:
+> Is there a buildroot standard way to check the size of the zImage file
+> produced to ensure that it will fit in a particular flash partition?
+> 
+> I can invent one, but I'd rather follow existing examples, and it
+> seems to me that this should probably be a common enough scenario that
+> others have already address it.
 
-Increase understandability of this logic by explicitly restricting the
-rsync excludes to the iteration of the for loop they are relevant for.
-Additionally, update the function comment.
+I guess you can simply write a post-image script that does whatever
+checks you want on the images produced by Buildroot (including making
+sure the image size is below a given value).
 
-Note: all attempts to reduce duplication between both rsync while keeping
-things nice and readable failed. One has to be extremely careful regarding
-line continuation, indentation, and single vs double quoting. In the end, a
-split up rsync seemed most clean.
+Best regards,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
-v2: no changes
-
- toolchain/helpers.mk | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
-
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 72e7292..06dc197 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -39,11 +39,16 @@ copy_toolchain_lib_root = \
- # dir. The operation of this function is rendered a little bit
- # complicated by the support for multilib toolchains.
- #
--# We start by copying etc, lib, sbin and usr from the sysroot of the
--# selected architecture variant (as pointed by ARCH_SYSROOT_DIR). This
--# allows to import into the staging directory the C library and
--# companion libraries for the correct architecture variant. We
--# explictly only copy etc, lib, sbin and usr since other directories
-+# We start by copying etc, 'lib', sbin, usr and usr/'lib' from the
-+# sysroot of the selected architecture variant (as pointed to by
-+# ARCH_SYSROOT_DIR). This allows to import into the staging directory
-+# the C library and companion libraries for the correct architecture
-+# variant. 'lib' may not be literally 'lib' but could be something else,
-+# e.g. lib32-fp (as determined by ARCH_LIB_DIR) and we only want to copy
-+# that lib directory and no other. When copying usr, we therefore need
-+# to be extra careful not to include usr/lib* but we _do_ want to
-+# include usr/libexec.
-+# We are selective in the directories we copy since other directories
- # might exist for other architecture variants (on Codesourcery
- # toolchain, the sysroot for the default architecture variant contains
- # the armv4t and thumb2 subdirectories, which are the sysroot for the
-@@ -90,9 +95,14 @@ copy_toolchain_sysroot = \
- 	SUPPORT_LIB_DIR="$(strip $5)" ; \
- 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
- 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
--			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
--				--include '/libexec*/' --exclude '/lib*/' \
--				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
-+			if [ "$$i" = "usr" ]; then \
-+				rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale'\
-+					--include '/libexec*/' --exclude '/lib*/' \
-+					$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
-+			else \
-+				rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale'\
-+					$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
-+			fi ; \
- 		fi ; \
- 	done ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
