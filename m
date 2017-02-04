@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 04 Feb 2017 13:04:14 +0100
-Subject: [Buildroot] [PATCH 02/11] audit: bump to version 2.7.1
-In-Reply-To: <20170203202959.18916-2-aduskett@codeblue.com> (Adam Duskett's
- message of "Fri, 3 Feb 2017 15:29:50 -0500")
+Date: Sat, 04 Feb 2017 13:06:58 +0100
+Subject: [Buildroot] [PATCH 03/11] dbus: bump to version 1.11.8
+In-Reply-To: <20170203202959.18916-3-aduskett@codeblue.com> (Adam Duskett's
+ message of "Fri, 3 Feb 2017 15:29:51 -0500")
 References: <20170203202959.18916-1-aduskett@codeblue.com>
- <20170203202959.18916-2-aduskett@codeblue.com>
-Message-ID: <877f56yxfl.fsf@dell.be.48ers.dk>
+ <20170203202959.18916-3-aduskett@codeblue.com>
+Message-ID: <8737fuyxb1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,39 @@ To: buildroot@busybox.net
 >>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
  > Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+ > ---
+ >  package/dbus/dbus.hash | 2 +-
+ >  package/dbus/dbus.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
+ > diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+ > index 14bee20..910a85c 100644
+ > --- a/package/dbus/dbus.hash
+ > +++ b/package/dbus/dbus.hash
+ > @@ -1,2 +1,2 @@
+ >  # Locally calculated after checking pgp signature
+ > -sha256	23238f70353e38ce5ca183ebc9525c0d97ac00ef640ad29cf794782af6e6a083  dbus-1.10.14.tar.gz
+ > +sha256	fa207530d694706e33378c87e65b2b4304eb99fff71fc6d6caa6f70591b9afd5  dbus-1.11.8.tar.gz
+ > diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+ > index c765e0a..e74e8ba 100644
+ > --- a/package/dbus/dbus.mk
+ > +++ b/package/dbus/dbus.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -DBUS_VERSION = 1.10.14
+ > +DBUS_VERSION = 1.11.8
+
+I believe dbus uses the gtk/gnome numbering scheme, where odd minor
+numbers (in major.minor.micro) means development versions. Looking at
+the DBus website I indeed see:
+
+The current stable branch is D-Bus 1.10.x. This is the recommended
+version for most purposes.
+
+So I would prefer not to bump to the 1.11.x series. Is there any
+specific reason why you want to do this?
 
 -- 
 Bye, Peter Korsgaard
