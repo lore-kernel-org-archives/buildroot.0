@@ -1,47 +1,64 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun,  5 Feb 2017 17:59:30 +0100
-Subject: [Buildroot] [PATCH 1/3] docs/website: bump jquery and bootstrap
-In-Reply-To: <1486313972-27474-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1486313972-27474-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1486313972-27474-2-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sun, 5 Feb 2017 19:28:01 +0100
+Subject: [Buildroot] [PATCH 1/1] docs/website: Feed API and gmane fix
+In-Reply-To: <20170205145557.0e88713a@free-electrons.com>
+References: <1486247694-7324-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20170204235131.7332d861@free-electrons.com>
+ <CA+TH9VkC93CiJefDnUM6NxLpMGQYZCes5e6F3BySnyaK+YkxdA@mail.gmail.com>
+ <20170205145557.0e88713a@free-electrons.com>
+Message-ID: <CA+TH9V=1VXs3rmE-=gjnhNcGsdSc5zWFGEpPQju7a+5h-4sb1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps jquery and bootstrap to the latest versions.
+Dear Thomas Petazzoni,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- docs/website/footer.html | 4 ++--
- docs/website/header.html | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+2017-02-05 14:55 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Sun, 5 Feb 2017 09:52:00 +0100, Angelo Compagnucci wrote:
+>
+>> Honestly, I cannot see your point here. I really cannot understand why
+>> I should submit a patch that fixes the gogole feed API but leaves the
+>> site broken because gmane is out of service. The rest of things are
+>> functional to these fixings, so again cannot be splitted.
+>> This patch makes the minimal set of changes to fix the currently
+>> broken website. If not interested, please discard it.
+>
+> You're doing a few completely independent things in here:
+>  - Bumping the jquery/bootstrap versions
+>  - Switching to the Yahoo feed API and fixing to using a non GMane RSS
+>    feed
+>  - Fixing the search engine to not use GMane
+>
+> I don't understand why you suddenly get mad, while all I'm asking is
+> exactly what we ask for all other Buildroot patches: one patch does
+> just one logical change. We ask this to all contributors. Why should
+> your contributions be handled with different rules?
 
-diff --git a/docs/website/footer.html b/docs/website/footer.html
-index 16fab36..1fcfd70 100644
---- a/docs/website/footer.html
-+++ b/docs/website/footer.html
-@@ -1,5 +1,5 @@
--	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
--	<script src="https://oss.maxcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-+	<script src="https://oss.maxcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
- 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
- 	<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
- 	<script type="text/javascript" src="js/buildroot.js"></script>
-diff --git a/docs/website/header.html b/docs/website/header.html
-index 3842f32..ef6724f 100644
---- a/docs/website/header.html
-+++ b/docs/website/header.html
-@@ -10,7 +10,7 @@
- 
- 	<title>Buildroot - Making Embedded Linux Easy</title>
- 
--	<link href="https://oss.maxcdn.com/bootswatch/3.3.5/paper/bootstrap.min.css" rel="stylesheet">
-+	<link href="https://oss.maxcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet">
- 	<link href="css/main.css" rel="stylesheet">
- 
- 	<!--[if lt IE 9]>
+Just sent the patch as a series. Hope this will make someone happy :) !
+
+BTW, I think that having a bit of flexibility will help in the long
+term. Having the website broken and having a patch that fixes it
+should not bring up all that formality also considering I'm the author
+of the current website and I know the matter (at least confined to the
+website itself).
+
+Sincerely, Angelo
+
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
+
+
 -- 
-2.7.4
+Profile: http://it.linkedin.com/in/compagnucciangelo
