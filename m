@@ -1,208 +1,144 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 5 Feb 2017 23:23:21 +0100
-Subject: [Buildroot] [PATCH v3] gqrx: new package
-In-Reply-To: <20170129112759.1690-1-gwenj@trabucayre.com>
-References: <20170129112759.1690-1-gwenj@trabucayre.com>
-Message-ID: <27187297-48bf-e44a-81c5-d44181588dbf@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  5 Feb 2017 23:38:52 +0100
+Subject: [Buildroot] [PATCHv2] package/libplatform: bump version to 2.1.0
+Message-ID: <1486334332-6520-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gwenhael,
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Le 29/01/2017 ? 12:27, Gwenhael Goavec-Merou a ?crit :
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> Gqrx is an open source software defined radio (SDR) receiver implemented
-> using GNU Radio and the Qt GUI toolkit. Currently it works on Linux
-> and Mac with hardware supported by gr-osmosdr, including Funcube Dongle,
-> RTL-SDR, Airspy, HackRF, BladeRF, RFSpace, USRP and SoapySDR.
-> 
-> Gqrx can operate as an AM/FM/SSB receiver with audio output or as an
-> FFT-only instrument. There are also various hooks for interacting
-> with external application using network sockets.
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
-> Changes v2 -> v3:
->  * backport patch to fix Wmisleading-indentation with gcc6;
->  * inherits alsa-lib or portaudio dependencies from gr-audio;
->  * reduce help text size;
->  * add upstream url.
-> Changes v1 -> v2:
->  * typo
-> ---
->  package/Config.in                                |  1 +
->  package/gqrx/0001-fix_compilation_in_gcc-6.patch | 34 ++++++++++++++++++++++
->  package/gqrx/Config.in                           | 36 ++++++++++++++++++++++++
->  package/gqrx/gqrx.hash                           |  2 ++
->  package/gqrx/gqrx.mk                             | 15 ++++++++++
->  5 files changed, 88 insertions(+)
->  create mode 100644 package/gqrx/0001-fix_compilation_in_gcc-6.patch
->  create mode 100644 package/gqrx/Config.in
->  create mode 100644 package/gqrx/gqrx.hash
->  create mode 100644 package/gqrx/gqrx.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 8c8c33e..a4341e5 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1429,6 +1429,7 @@ menu "Miscellaneous"
->  	source "package/empty/Config.in"
->  	source "package/gnuradio/Config.in"
->  	source "package/googlefontdirectory/Config.in"
-> +	source "package/gqrx/Config.in"
->  	source "package/gr-osmosdr/Config.in"
->  	source "package/gsettings-desktop-schemas/Config.in"
->  	source "package/haveged/Config.in"
-> diff --git a/package/gqrx/0001-fix_compilation_in_gcc-6.patch b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-> new file mode 100644
-> index 0000000..e1824c3
-> --- /dev/null
-> +++ b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-> @@ -0,0 +1,34 @@
-> +From e6baaee4968345a53e977f593362267a91041cff Mon Sep 17 00:00:00 2001
-> +From: Valentin Ochs <a@0au.de>
-> +Date: Fri, 21 Oct 2016 20:12:50 +0200
-> +Subject: [PATCH 05/34] Cosmetic & readability changes
-> +
-> +Backport patch from
-> +https://github.com/csete/gqrx/commit/e6baaee4968345a53e977f593362267a91041cff
-> +
-> +Fix compilation in gcc-6
-> +
-> +Signed-off-by: Valentin Ochs <a@0au.de>
-> +Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> +---
-> +diff --git a/src/qtgui/plotter.cpp b/src/qtgui/plotter.cpp
-> +index e491632..b877546 100644
-> +--- a/src/qtgui/plotter.cpp
-> ++++ b/src/qtgui/plotter.cpp
-> +@@ -1336,8 +1336,11 @@ void CPlotter::drawOverlay()
-> + #endif
-> + 
-> +             int level = 0;
-> +-            for (; level < nLevels && tagEnd[level] > x; level++);
-> +-                level %= nLevels;
-> ++            while(level < nLevels && tagEnd[level] > x)
-> ++                level++;
-> ++            
-> ++            if(level == nLevels)
-> ++                level = 0;
-> + 
-> +             tagEnd[level] = x + nameWidth + slant - 1;
-> +             m_BookmarkTags.append(qMakePair<QRect, qint64>(QRect(x, level * levelHeight, nameWidth + slant, fontHeight), bookmarks[i].frequency));
-> +-- 
-> +2.10.2
-> +
-> diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-> new file mode 100644
-> index 0000000..fadd5a2
-> --- /dev/null
-> +++ b/package/gqrx/Config.in
-> @@ -0,0 +1,36 @@
-> +comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_USE_WCHAR || BR2_STATIC_LIBS
-> +
-> +comment "gqrx needs gnuradio, fftw's single precision, alsa-lib or portaudio"
-> +	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
-> +		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO)
-> +
-> +config BR2_PACKAGE_GQRX
-> +	bool "gqrx"
-> +	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
-> +	depends on BR2_PACKAGE_GNURADIO
-> +	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO # gr-audio
+Replaced patch with better one.
 
-I'm not sure if PORTAUDIO is really a dependency here since you enable only the
-gr-audio backend.
+Updated license info after
+https://github.com/Pulse-Eight/platform/commit/a1e5905874d5cdbce110344558d21a2810dead9c
 
-If you want to support gqrx with Portaudio support, you should probably enable
-Portaudio backend. Otherwise keep only ALSA_LIB in the dependency.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Samuel, Yann: fix the 0001 patch]
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-> +	depends on BR2_INSTALL_LIBSTDCPP # boost, qt5
-> +	depends on !BR2_STATIC_LIBS # qt5
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, qt5
-> +	depends on BR2_USE_WCHAR # boost, qt5
-> +	select BR2_PACKAGE_BOOST
-> +	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-> +	select BR2_PACKAGE_BOOST_SYSTEM
-> +	select BR2_PACKAGE_GNURADIO_ANALOG
-> +	select BR2_PACKAGE_GNURADIO_AUDIO
-> +	select BR2_PACKAGE_GNURADIO_BLOCKS
-> +	select BR2_PACKAGE_GNURADIO_DIGITAL
-> +	select BR2_PACKAGE_GNURADIO_FFT
-> +	select BR2_PACKAGE_GNURADIO_FILTER
-> +	select BR2_PACKAGE_GR_OSMOSDR
-> +	select BR2_PACKAGE_QT5
+---
+Changes v1 -> v2:
+  - use the proper methods to find headers and libs (thanks Samuel!)
+---
+ .../libplatform/0001-fix-p8-platform-config.patch  | 29 ++++++++++++++++
+ ...nfig.cmake-fix-paths-for-cross-compilatio.patch | 40 ----------------------
+ package/libplatform/libplatform.hash               |  2 +-
+ package/libplatform/libplatform.mk                 |  8 ++---
+ 4 files changed, 34 insertions(+), 45 deletions(-)
+ create mode 100644 package/libplatform/0001-fix-p8-platform-config.patch
+ delete mode 100644 package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
 
-There is a recursive dependency now with this change:
-
-package/qt5/Config.in:18:error: recursive dependency detected!
-package/qt5/Config.in:18:	symbol BR2_PACKAGE_QT5 is selected by BR2_PACKAGE_GQRX
-package/gqrx/Config.in:9:	symbol BR2_PACKAGE_GQRX depends on BR2_PACKAGE_ALSA_LIB
-package/alsa-lib/Config.in:4:	symbol BR2_PACKAGE_ALSA_LIB is selected by
-BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA
-package/gstreamer/gst-plugins-base/Config.in:72:	symbol
-BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA depends on BR2_PACKAGE_GST_PLUGINS_BASE
-package/gstreamer/gst-plugins-base/Config.in:1:	symbol
-BR2_PACKAGE_GST_PLUGINS_BASE is selected by BR2_PACKAGE_QT_WEBKIT
-package/qt/Config.in:464:	symbol BR2_PACKAGE_QT_WEBKIT depends on
-BR2_PACKAGE_QT_GUI_MODULE
-package/qt/Config.in:135:	symbol BR2_PACKAGE_QT_GUI_MODULE is selected by
-BR2_PACKAGE_QWT
-package/qwt/Config.in:4:	symbol BR2_PACKAGE_QWT depends on BR2_PACKAGE_QT5
-
-If you look at pulseview or opencv3, when a package needs qt5 it should depends
-on it.
-
-> +	select BR2_PACKAGE_QT5BASE_GUI
-> +	select BR2_PACKAGE_QT5BASE_WIDGETS
-> +	select BR2_PACKAGE_QT5SVG
-> +	help
-> +	  Gqrx is an open source software defined radio receiver (SDR) powered by
-> +	  the GNU Radio and the Qt graphical toolkit.
-
-Well, the help text content from v1 [1] was ok, it's was only a coding style
-issue (The help text should be wrapped to fit 72 columns).
-
-Best regards,
-Romain
-
-[1] http://patchwork.ozlabs.org/patch/712424/
-
-> +
-> +	  http://gqrx.dk/
-> diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-> new file mode 100644
-> index 0000000..2d126aa
-> --- /dev/null
-> +++ b/package/gqrx/gqrx.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated:
-> +sha256 53d25db8d987a41ccccaf6fd85262bd7770cdfab5539b5901c4558756483c9db  gqrx-v2.6.tar.gz
-> diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-> new file mode 100644
-> index 0000000..b591e60
-> --- /dev/null
-> +++ b/package/gqrx/gqrx.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# gqrx
-> +#
-> +################################################################################
-> +
-> +GQRX_VERSION = v2.6
-> +GQRX_SITE = $(call github,csete,gqrx,$(GQRX_VERSION))
-> +GQRX_LICENSE = GPLv3+, Apache-2.0
-> +GQRX_LICENSE_FILES = COPYING LICENSE-CTK
-> +GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr qt5base qt5svg
-> +
-> +GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
-> +
-> +$(eval $(cmake-package))
-> 
+diff --git a/package/libplatform/0001-fix-p8-platform-config.patch b/package/libplatform/0001-fix-p8-platform-config.patch
+new file mode 100644
+index 0000000..ae616fb
+--- /dev/null
++++ b/package/libplatform/0001-fix-p8-platform-config.patch
+@@ -0,0 +1,29 @@
++p8-platform-config: fix lookup paths
++
++Use the proper methods to find the headers and the library.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++
++diff -durN libplatform-2.1.0.orig/p8-platform-config.cmake.in libplatform-2.1.0/p8-platform-config.cmake.in
++--- libplatform-2.1.0.orig/p8-platform-config.cmake.in	2016-10-24 11:56:25.000000000 +0200
+++++ libplatform-2.1.0/p8-platform-config.cmake.in	2017-02-05 23:28:36.472697979 +0100
++@@ -10,7 +10,7 @@
++ #
++ # propagate these properties from one build system to the other
++ set (p8-platform_VERSION "@p8-platform_VERSION_MAJOR at .@p8-platform_VERSION_MINOR@")
++-set (p8-platform_INCLUDE_DIRS @p8-platform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
+++find_path (p8-platform_INCLUDE_DIRS p8-platform/os.h)
++ set (p8-platform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
++ set (p8-platform_LINKER_FLAGS "@p8-platform_LINKER_FLAGS@")
++ set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
++@@ -19,7 +19,7 @@
++ if(WIN32)
++   set (p8-platform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/p8-platform.lib")
++ else(WIN32)
++-  set (p8-platform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lp8-platform")
+++  find_library (p8-platform_LIBRARY p8-platform)
++ endif(WIN32)
++ set (p8-platform_LIBRARIES ${p8-platform_LIBRARY} "@p8-platform_LIBRARIES@")
++ mark_as_advanced (p8-platform_LIBRARY)
+diff --git a/package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch b/package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
+deleted file mode 100644
+index 89f35bd..0000000
+--- a/package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 65ba437ed5514dd5762a796d349ed5db49e40fe7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Wed, 29 Jul 2015 21:26:16 +0200
+-Subject: [PATCH] platform-config.cmake: fix paths for cross-compilation
+-
+-Headers and library paths in platform-config.cmake must take into
+-account ${CMAKE_FIND_ROOT_PATH} to work in cross-compilation.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- platform-config.cmake.in | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/platform-config.cmake.in b/platform-config.cmake.in
+-index 7fe35fe..78b5085 100644
+---- a/platform-config.cmake.in
+-+++ b/platform-config.cmake.in
+-@@ -10,16 +10,16 @@
+- #
+- # propagate these properties from one build system to the other
+- set (platform_VERSION "@platform_VERSION_MAJOR at .@platform_VERSION_MINOR@")
+--set (platform_INCLUDE_DIRS @platform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
+-+set (platform_INCLUDE_DIRS ${CMAKE_FIND_ROOT_PATH}/@platform_INCLUDE_DIRS@ ${CMAKE_FIND_ROOT_PATH}/@CMAKE_INSTALL_PREFIX@/include)
+- set (platform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
+- set (platform_LINKER_FLAGS "@platform_LINKER_FLAGS@")
+- set (platform_CONFIG_VARS "@platform_CONFIG_VARS@")
+- 
+- # libraries come from the build tree where this file was generated
+- if(WIN32)
+--  set (platform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/platform.lib")
+-+  set (platform_LIBRARY "${CMAKE_FIND_ROOT_PATH}/@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/platform.lib")
+- else(WIN32)
+--  set (platform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lplatform")
+-+  set (platform_LIBRARY "-L${CMAKE_FIND_ROOT_PATH}/@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lplatform")
+- endif(WIN32)
+- set (platform_LIBRARIES ${platform_LIBRARY} "@platform_LIBRARIES@")
+- mark_as_advanced (platform_LIBRARY)
+--- 
+-2.5.0
+-
+diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
+index 8975dfd..e3d5ed5 100644
+--- a/package/libplatform/libplatform.hash
++++ b/package/libplatform/libplatform.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  3603ead8b16a48cb35b1e6dea330a693f10552b1a6ea036c5db9ec248cd8baf5  libplatform-feafe68e3e0b02c3261aefb3d711863ef6fadd38.tar.gz
++sha256 88711f1b949285867538a0b2e4189532778e1515325dfa1851eae9d18b6affd9  libplatform-2.1.0.tar.gz
+diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+index 6d54915..d9cd582 100644
+--- a/package/libplatform/libplatform.mk
++++ b/package/libplatform/libplatform.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-LIBPLATFORM_VERSION = feafe68e3e0b02c3261aefb3d711863ef6fadd38
+-LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
+-LIBPLATFORM_LICENSE = GPLv2+, PHP license v3.01
+-LIBPLATFORM_LICENSE_FILES = src/os.h src/util/fstrcmp.c
++LIBPLATFORM_VERSION = 2.1.0
++LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,p8-platform-$(LIBPLATFORM_VERSION))
++LIBPLATFORM_LICENSE = GPLv2+
++LIBPLATFORM_LICENSE_FILES = src/os.h
+ LIBPLATFORM_INSTALL_STAGING = YES
+ 
+ $(eval $(cmake-package))
+-- 
+2.7.4
