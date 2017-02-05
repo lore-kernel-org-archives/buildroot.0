@@ -1,51 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Feb 2017 15:20:02 +0100
-Subject: [Buildroot] [git commit] graph-depends: avoid use of global var
-	'rule' in get_depends
-Message-ID: <20170205142050.9B8D380285@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun,  5 Feb 2017 12:40:22 -0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.9.8
+Message-ID: <1486305623-26682-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd8b531d24431141a919daf6c50cca7de8547023
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Function get_depends was recently changed to support both normal
-dependencies as reverse dependencies, via a global variable 'rule' that
-equals 'show-depends' or 'show-rdepends'.
-
-As a subsequent function will extract this function get_depends to a
-separate file, the use of globals is problematic.
-
-Instead, pass the global as an argument.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- support/scripts/graph-depends | 4 ++--
+ linux/Config.in | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index c3c97cb..095619a 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -161,7 +161,7 @@ def get_targets():
- # Execute the "make <pkg>-show-depends" command to get the list of
- # dependencies of a given list of packages, and return the list of
- # dependencies formatted as a Python dictionary.
--def get_depends(pkgs):
-+def get_depends(pkgs, rule):
-     sys.stderr.write("Getting dependencies for %s\n" % pkgs)
-     cmd = ["make", "-s", "--no-print-directory" ]
-     for pkg in pkgs:
-@@ -204,7 +204,7 @@ def get_all_depends(pkgs):
-     if len(filtered_pkgs) == 0:
-         return []
+diff --git a/linux/Config.in b/linux/Config.in
+index 3b8d613..ff2defc 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
--    depends = get_depends(filtered_pkgs)
-+    depends = get_depends(filtered_pkgs, rule)
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.7)"
++	bool "Latest version (4.9.8)"
  
-     deps = set()
-     for pkg in filtered_pkgs:
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.9.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.9.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-- 
+2.7.4
