@@ -1,39 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Feb 2017 21:59:51 +0100
-Subject: [Buildroot] [PATCH] package/tmux: fix build
-In-Reply-To: <1486311686-24971-1-git-send-email-yann.morin.1998@free.fr>
-References: <1486311686-24971-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170205215951.554fe94a@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Feb 2017 22:13:09 +0100
+Subject: [Buildroot] [PATCH 2/3] graph-depends: split off
+ get_version/get_depends into pkgutil.py
+In-Reply-To: <20170203205745.14488-4-patrickdepinguin@gmail.com>
+References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
+ <20170203205745.14488-4-patrickdepinguin@gmail.com>
+Message-ID: <20170205211308.GA3562@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas DS, All,
 
-On Sun,  5 Feb 2017 17:21:26 +0100, Yann E. MORIN wrote:
-> The bump to the latest libevent version exposed a latent bug in tmux,
-> which tries to re-define a variable exposed by the C library.
-> 
-> This breaks with uClibc-ng wihch defines it const char*, while glibc and
-> musl define it as non-const.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/31d/31d37c95b40d297b90a6181ec79c42ee1e2e5090/
->     http://autobuild.buildroot.org/results/ccc/ccc9d2e995ba1eaf19f6b325b0af5ebeb8066e7f/
->     http://autobuild.buildroot.org/results/8a2/8a28d43bd0c079c1b49b61b0c6ef7de79eda0549/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  ...t-re-define-program_invocation_short_name.patch | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/tmux/0001-compat-don-t-re-define-program_invocation_short_name.patch
+On 2017-02-03 21:57 +0100, Thomas De Schampheleire spake thusly:
+[--SNIP--]
+> +import pkgutil
 
-Applied to master, thanks.
+So, I always claimed I was not a Python expoert, but should we not do:
 
-Thomas
+    from okgutil import get_versions get_depends
+
+of something similar?
+
+[--SNIP--]
+> @@ -204,7 +157,7 @@ def get_all_depends(pkgs):
+>      if len(filtered_pkgs) == 0:
+>          return []
+>  
+> -    depends = get_depends(filtered_pkgs, rule)
+> +    depends = pkgutil.get_depends(filtered_pkgs, rule)
+
+And then just use get_depends here?
+
+>      deps = set()
+>      for pkg in filtered_pkgs:
+> @@ -377,7 +330,7 @@ if check_only:
+>      sys.exit(0)
+>  
+>  dict_deps = remove_extra_deps(dict_deps)
+> -dict_version = get_version([pkg for pkg in allpkgs
+> +dict_version = pkgutil.get_version([pkg for pkg in allpkgs
+
+Ditto?
+
+>                                  if pkg != "all" and not pkg.startswith("root")])
+>  
+>  # Print the attributes of a node: label and fill-color
+> diff --git a/support/scripts/pkgutil.py b/support/scripts/pkgutil.py
+> new file mode 100644
+> index 0000000..a911123
+> --- /dev/null
+> +++ b/support/scripts/pkgutil.py
+> @@ -0,0 +1,55 @@
+> +#!/usr/bin/env python
+
+As I understand it, this file is not supposed to be standalone, but just
+a "library" of functions?
+
+So it should not need to have the sha-bang line, yes?
+
+Otherwise, I'm not opposed to this.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
