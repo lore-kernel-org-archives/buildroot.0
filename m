@@ -1,64 +1,44 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 5 Feb 2017 19:28:01 +0100
-Subject: [Buildroot] [PATCH 1/1] docs/website: Feed API and gmane fix
-In-Reply-To: <20170205145557.0e88713a@free-electrons.com>
-References: <1486247694-7324-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170204235131.7332d861@free-electrons.com>
- <CA+TH9VkC93CiJefDnUM6NxLpMGQYZCes5e6F3BySnyaK+YkxdA@mail.gmail.com>
- <20170205145557.0e88713a@free-electrons.com>
-Message-ID: <CA+TH9V=1VXs3rmE-=gjnhNcGsdSc5zWFGEpPQju7a+5h-4sb1w@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 5 Feb 2017 21:37:47 +0100
+Subject: [Buildroot] [PATCH 1/3] graph-depends: avoid use of global var
+ 'rule' in get_depends
+In-Reply-To: <20170205152042.4c65c085@free-electrons.com>
+References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
+ <20170203205745.14488-2-patrickdepinguin@gmail.com>
+ <20170205152042.4c65c085@free-electrons.com>
+Message-ID: <CAAXf6LVO+aBL8jb_GRpU4sTKYtwCikASS6Z-vwgbmV=mpi-QKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
-
-2017-02-05 14:55 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
+On Sun, Feb 5, 2017 at 3:20 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
-> On Sun, 5 Feb 2017 09:52:00 +0100, Angelo Compagnucci wrote:
+> On Fri,  3 Feb 2017 21:57:42 +0100, Thomas De Schampheleire wrote:
+>> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>
+>> Function get_depends was recently changed to support both normal
+>> dependencies as reverse dependencies, via a global variable 'rule' that
+>> equals 'show-depends' or 'show-rdepends'.
+>>
+>> As a subsequent function will extract this function get_depends to a
+>> separate file, the use of globals is problematic.
+>>
+>> Instead, pass the global as an argument.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>> ---
+>>  support/scripts/graph-depends | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
->> Honestly, I cannot see your point here. I really cannot understand why
->> I should submit a patch that fixes the gogole feed API but leaves the
->> site broken because gmane is out of service. The rest of things are
->> functional to these fixings, so again cannot be splitted.
->> This patch makes the minimal set of changes to fix the currently
->> broken website. If not interested, please discard it.
->
-> You're doing a few completely independent things in here:
->  - Bumping the jquery/bootstrap versions
->  - Switching to the Yahoo feed API and fixing to using a non GMane RSS
->    feed
->  - Fixing the search engine to not use GMane
->
-> I don't understand why you suddenly get mad, while all I'm asking is
-> exactly what we ask for all other Buildroot patches: one patch does
-> just one logical change. We ask this to all contributors. Why should
-> your contributions be handled with different rules?
+> Applied to master, thanks. We really need to clean up this script to
+> move the "global" code into a main() function. Right now there is some
+> global code intermixed with sub-functions, it's horrible.
 
-Just sent the patch as a series. Hope this will make someone happy :) !
-
-BTW, I think that having a bit of flexibility will help in the long
-term. Having the website broken and having a patch that fixes it
-should not bring up all that formality also considering I'm the author
-of the current website and I know the matter (at least confined to the
-website itself).
-
-Sincerely, Angelo
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Thanks.
+Yes, I agree to move the global code into main. I didn't do it in this
+series to not wander off too much of the real goal, but since you have
+the same idea I can do it as a follow-up later.
