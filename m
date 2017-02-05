@@ -1,54 +1,55 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 05 Feb 2017 08:59:37 +0100
-Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
-	Kodi-specific patches
-References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
- <20170204114451.20935-2-bernd.kuhls@t-online.de>
- <20170204230821.GA3805@free.fr>
-Message-ID: <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 5 Feb 2017 09:52:00 +0100
+Subject: [Buildroot] [PATCH 1/1] docs/website: Feed API and gmane fix
+In-Reply-To: <20170204235131.7332d861@free-electrons.com>
+References: <1486247694-7324-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20170204235131.7332d861@free-electrons.com>
+Message-ID: <CA+TH9VkC93CiJefDnUM6NxLpMGQYZCes5e6F3BySnyaK+YkxdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Dear Thomas Petazzoni,
 
-Hi Yann,
+2017-02-04 23:51 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Sat,  4 Feb 2017 23:34:54 +0100, Angelo Compagnucci wrote:
+>> * Google retired feed API, this patch changes in favour of
+>>   yahoo yql for rss to json conversion
+>> * Gmane is gone, replacing it with nabble.
+>> * Removed the import for feed api libraries
+>> * Updates to the latest jquery version
+>> * Reorganized javascript code in buildroot.js to accomodate
+>>   the mentioned fixings
+>
+> This bullet list is a very good indication that this patch should be
+> split into several smaller patches. It's doing lots of things that are
+> fairly independent, or if not independent, that can be split into
+> several steps.
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20170204230821.GA3805 at free.fr:
+Honestly, I cannot see your point here. I really cannot understand why
+I should submit a patch that fixes the gogole feed API but leaves the
+site broken because gmane is out of service. The rest of things are
+functional to these fixings, so again cannot be splitted.
+This patch makes the minimal set of changes to fix the currently
+broken website. If not interested, please discard it.
 
-> Bernd, All,
-> 
-> On 2017-02-04 12:44 +0100, Bernd Kuhls spake thusly:
->> The Kodi build system needs .a files to create
->> usr/lib/kodi/system/players/VideoPlayer/libdvdcss-i486-linux.so
-> 
-> This is really nasty.
-> 
-> What happens if one does not have the .a library, but just the .so one
-> instead? Does the build really fail?
+Sincerely, Angelo.
 
-Yes.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
 
-> I've had a quick look at cmake/modules/FindLibDvd.cmake and it only
-> requires the .a files in the case that it compiles its own version.
 
-Kodi 17 still uses autoconf, support for it will be dropped in Kodi 18.
 
-> So, could you double check if it really does not work with a shared
-> version?
-> 
-> Ditto for libdvdnav and libdvdread.
-
-libdvd* needs .a files:
-https://github.com/xbmc/xbmc/blob/Krypton/lib/libdvd/Makefile.in#L7
-
-to build wrapped .so libs based on .o files extracted from .a files:
-
-https://github.com/xbmc/xbmc/blob/Krypton/lib/libdvd/Makefile.in#L75
-https://github.com/xbmc/xbmc/blob/Krypton/lib/libdvd/Makefile.in#L84
-https://github.com/xbmc/xbmc/blob/Krypton/lib/libdvd/Makefile.in#L85
-
-Regards, Bernd
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
