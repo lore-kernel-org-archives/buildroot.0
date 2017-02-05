@@ -1,39 +1,34 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun,  5 Feb 2017 12:40:22 -0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.9.8
-Message-ID: <1486305623-26682-1-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Feb 2017 15:52:49 +0100
+Subject: [Buildroot] [PATCH] libamcodec: bump version to
+ 296f39bc6fc47ddf5d88b9fd3cfb82a5b39048ca
+In-Reply-To: <20170203121117.16653-1-daggs@gmx.com>
+References: <20170203121117.16653-1-daggs@gmx.com>
+Message-ID: <20170205155249.47b4036d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3b8d613..ff2defc 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.9.7)"
-+	bool "Latest version (4.9.8)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.9.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.9.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+On Fri,  3 Feb 2017 14:11:17 +0200, Dagg Stompler wrote:
+>  - remove 0001-Include-stdint.h-where-needed.patch as it was merged into
+>    the tree.
+> 
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> ---
+>  .../0001-Include-stdint.h-where-needed.patch       | 47 ----------------------
+>  package/libamcodec/libamcodec.hash                 |  2 +-
+>  package/libamcodec/libamcodec.mk                   |  2 +-
+>  3 files changed, 2 insertions(+), 49 deletions(-)
+>  delete mode 100644 package/libamcodec/0001-Include-stdint.h-where-needed.patch
+
+Applied to master, thanks.
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
