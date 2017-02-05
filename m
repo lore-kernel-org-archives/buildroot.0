@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Feb 2017 22:13:09 +0100
-Subject: [Buildroot] [PATCH 2/3] graph-depends: split off
- get_version/get_depends into pkgutil.py
-In-Reply-To: <20170203205745.14488-4-patrickdepinguin@gmail.com>
+Date: Sun, 5 Feb 2017 22:14:34 +0100
+Subject: [Buildroot] [PATCH 3/3] graph-depends: split off get_rdepends
+ from get_depends
+In-Reply-To: <20170203205745.14488-5-patrickdepinguin@gmail.com>
 References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
- <20170203205745.14488-4-patrickdepinguin@gmail.com>
-Message-ID: <20170205211308.GA3562@free.fr>
+ <20170203205745.14488-5-patrickdepinguin@gmail.com>
+Message-ID: <20170205211434.GB3562@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,56 +15,92 @@ To: buildroot@busybox.net
 Thomas DS, All,
 
 On 2017-02-03 21:57 +0100, Thomas De Schampheleire spake thusly:
-[--SNIP--]
-> +import pkgutil
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> The use of a 'rule' variable that can contain 'show-depends' or
+> 'show-rdepends' is not logical if get_depends is considered as a reusable
+> function from various scripts. The name of these rules are too much an
+> implementation detail.
+> 
+> Therefore, split the existing get_depends into two separate functions
+> get_depends and get_rdepends, while keeping code duplication to a minimum.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-So, I always claimed I was not a Python expoert, but should we not do:
-
-    from okgutil import get_versions get_depends
-
-of something similar?
-
-[--SNIP--]
-> @@ -204,7 +157,7 @@ def get_all_depends(pkgs):
->      if len(filtered_pkgs) == 0:
->          return []
->  
-> -    depends = get_depends(filtered_pkgs, rule)
-> +    depends = pkgutil.get_depends(filtered_pkgs, rule)
-
-And then just use get_depends here?
-
->      deps = set()
->      for pkg in filtered_pkgs:
-> @@ -377,7 +330,7 @@ if check_only:
->      sys.exit(0)
->  
->  dict_deps = remove_extra_deps(dict_deps)
-> -dict_version = get_version([pkg for pkg in allpkgs
-> +dict_version = pkgutil.get_version([pkg for pkg in allpkgs
-
-Ditto?
-
->                                  if pkg != "all" and not pkg.startswith("root")])
->  
->  # Print the attributes of a node: label and fill-color
-> diff --git a/support/scripts/pkgutil.py b/support/scripts/pkgutil.py
-> new file mode 100644
-> index 0000000..a911123
-> --- /dev/null
-> +++ b/support/scripts/pkgutil.py
-> @@ -0,0 +1,55 @@
-> +#!/usr/bin/env python
-
-As I understand it, this file is not supposed to be standalone, but just
-a "library" of functions?
-
-So it should not need to have the sha-bang line, yes?
-
-Otherwise, I'm not opposed to this.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  support/scripts/graph-depends |  6 +++---
+>  support/scripts/pkgutil.py    | 17 +++++++++++++----
+>  2 files changed, 16 insertions(+), 7 deletions(-)
+> 
+> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+> index 7aedcb5..fbd5917 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -102,13 +102,13 @@ else:
+>  transitive = args.transitive
+>  
+>  if args.direct:
+> -    rule = "show-depends"
+> +    get_depends_func = pkgutil.get_depends
+>      arrow_dir = "forward"
+>  else:
+>      if mode == MODE_FULL:
+>          sys.stderr.write("--reverse needs a package\n")
+>          sys.exit(1)
+> -    rule = "show-rdepends"
+> +    get_depends_func = pkgutil.get_rdepends
+>      arrow_dir = "back"
+>  
+>  # Get the colours: we need exactly three colours,
+> @@ -157,7 +157,7 @@ def get_all_depends(pkgs):
+>      if len(filtered_pkgs) == 0:
+>          return []
+>  
+> -    depends = pkgutil.get_depends(filtered_pkgs, rule)
+> +    depends = get_depends_func(filtered_pkgs)
+>  
+>      deps = set()
+>      for pkg in filtered_pkgs:
+> diff --git a/support/scripts/pkgutil.py b/support/scripts/pkgutil.py
+> index a911123..cd1bbd5 100644
+> --- a/support/scripts/pkgutil.py
+> +++ b/support/scripts/pkgutil.py
+> @@ -27,10 +27,7 @@ def get_version(pkgs):
+>          version[pkg] = output[i]
+>      return version
+>  
+> -# Execute the "make <pkg>-show-depends" command to get the list of
+> -# dependencies of a given list of packages, and return the list of
+> -# dependencies formatted as a Python dictionary.
+> -def get_depends(pkgs, rule):
+> +def _get_depends(pkgs, rule):
+>      sys.stderr.write("Getting dependencies for %s\n" % pkgs)
+>      cmd = ["make", "-s", "--no-print-directory" ]
+>      for pkg in pkgs:
+> @@ -53,3 +50,15 @@ def get_depends(pkgs, rule):
+>          else:
+>              deps[pkg] = pkg_deps
+>      return deps
+> +
+> +# Execute the "make <pkg>-show-depends" command to get the list of
+> +# dependencies of a given list of packages, and return the list of
+> +# dependencies formatted as a Python dictionary.
+> +def get_depends(pkgs):
+> +    return _get_depends(pkgs, 'show-depends')
+> +
+> +# Execute the "make <pkg>-show-rdepends" command to get the list of
+> +# reverse dependencies of a given list of packages, and return the
+> +# list of dependencies formatted as a Python dictionary.
+> +def get_rdepends(pkgs):
+> +    return _get_depends(pkgs, 'show-rdepends')
+> -- 
+> 2.10.2
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
