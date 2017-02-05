@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Feb 2017 23:07:11 +0100
-Subject: [Buildroot] [PATCH] ruby: bump version to 2.4.0
-In-Reply-To: <87fuk0aosw.fsf@dell.be.48ers.dk>
-References: <20170109171403.57632-1-Vincent.Riera@imgtec.com>
- <871sw7asxn.fsf@dell.be.48ers.dk> <87lgu24xdi.fsf@dell.be.48ers.dk>
- <r94vldxsb4.ln2@ID-313208.user.individual.net>
- <20170130041946.GJ11210@waldemar-brodkorb.de>
- <87fuk0aosw.fsf@dell.be.48ers.dk>
-Message-ID: <20170205230711.6c945266@free-electrons.com>
+Date: Sun, 5 Feb 2017 23:13:53 +0100
+Subject: [Buildroot] [PATCH 1/1] secilc: new package
+In-Reply-To: <20170201153423.13611-1-Adamduskett@outlook.com>
+References: <20170201153423.13611-1-Adamduskett@outlook.com>
+Message-ID: <20170205231353.0363ae97@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,31 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 30 Jan 2017 10:18:39 +0100, Peter Korsgaard wrote:
+On Wed,  1 Feb 2017 10:34:23 -0500, Adam Duskett wrote:
+> The SELinux CIL Compiler is a compiler that converts the CIL language as
+> described on the CIL design wiki into a kernel binary policy file.
+> http://github.com/SELinuxProject/cil/wiki/
+> 
+> In addition, the default makefile always tries to build the man pages
+> and there is no way to not build them.  If we try to build them, it would
+> require the dependency xmlto.  As such, I have included a small patch that
+> removes the man page building step from the makefile.
+> 
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-> Yes, that might be the way to go. Notice that musl implements isinf /
-> isnan as macros, so the detection fails. The reason why it doesn't cause
-> linker errors is that include/ruby/missing.h checks if isnan is a macro
-> before providing a local declaration:
-> 
-> #ifndef isnan
-> # ifndef HAVE_ISNAN
-> RUBY_EXTERN int isnan(double);
-> # endif
-> #endif
-> 
-> vs:
-> 
-> #ifndef HAVE_FINITE
-> RUBY_EXTERN int finite(double);
-> #endif
-> 
-> So another solution is to add an #ifndef finite around it. That fix
-> could probably be upstreamed as they already do it for a number of other
-> functions.
+I am not very familiar with SELinux. However, should this compiler
+really be a target package? Does it make sense to use it on the target?
+In the context of an embedded system, wouldn't be the policy be
+compiled on the host, and installed "pre-compiled" on the target? If
+that's the case, then secilc should be a host package, not a target
+package.
 
-Vicente, since you provided the patch bumping ruby to 2.4.0, could you
-provide a patch that fixes the build issues, as suggested by Peter?
+Could you clarify how secilc is meant to be used, and why you've chosen
+to implement it as a target package?
 
 Thanks!
 
