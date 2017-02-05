@@ -1,44 +1,41 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 5 Feb 2017 21:37:47 +0100
-Subject: [Buildroot] [PATCH 1/3] graph-depends: avoid use of global var
- 'rule' in get_depends
-In-Reply-To: <20170205152042.4c65c085@free-electrons.com>
-References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
- <20170203205745.14488-2-patrickdepinguin@gmail.com>
- <20170205152042.4c65c085@free-electrons.com>
-Message-ID: <CAAXf6LVO+aBL8jb_GRpU4sTKYtwCikASS6Z-vwgbmV=mpi-QKw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Feb 2017 20:00:50 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.9.8
+Message-ID: <20170205205505.9992C81D35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 5, 2017 at 3:20 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri,  3 Feb 2017 21:57:42 +0100, Thomas De Schampheleire wrote:
->> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->>
->> Function get_depends was recently changed to support both normal
->> dependencies as reverse dependencies, via a global variable 'rule' that
->> equals 'show-depends' or 'show-rdepends'.
->>
->> As a subsequent function will extract this function get_depends to a
->> separate file, the use of globals is problematic.
->>
->> Instead, pass the global as an argument.
->>
->> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->> ---
->>  support/scripts/graph-depends | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> Applied to master, thanks. We really need to clean up this script to
-> move the "global" code into a main() function. Right now there is some
-> global code intermixed with sub-functions, it's horrible.
+commit: https://git.buildroot.net/buildroot/commit/?id=bc0bd6fe92dd5f0c294c109e845274983d5a0ed9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks.
-Yes, I agree to move the global code into main. I didn't do it in this
-series to not wander off too much of the real goal, but since you have
-the same idea I can do it as a follow-up later.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index 3b8d613..ff2defc 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.7)"
++	bool "Latest version (4.9.8)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.9.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.9.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
