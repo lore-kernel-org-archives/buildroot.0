@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Feb 2017 15:20:10 +0100
-Subject: [Buildroot] [PATCH] package/mpd: bump to version 0.20.4
-In-Reply-To: <20170205141351.13974-1-joerg.krause@embedded.rocks>
-References: <20170205141351.13974-1-joerg.krause@embedded.rocks>
-Message-ID: <20170205152010.2a76b98b@free-electrons.com>
+Date: Sun, 5 Feb 2017 15:20:42 +0100
+Subject: [Buildroot] [PATCH 1/3] graph-depends: avoid use of global var
+ 'rule' in get_depends
+In-Reply-To: <20170203205745.14488-2-patrickdepinguin@gmail.com>
+References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
+ <20170203205745.14488-2-patrickdepinguin@gmail.com>
+Message-ID: <20170205152042.4c65c085@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +14,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  5 Feb 2017 15:13:51 +0100, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+On Fri,  3 Feb 2017 21:57:42 +0100, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Function get_depends was recently changed to support both normal
+> dependencies as reverse dependencies, via a global variable 'rule' that
+> equals 'show-depends' or 'show-rdepends'.
+> 
+> As a subsequent function will extract this function get_depends to a
+> separate file, the use of globals is problematic.
+> 
+> Instead, pass the global as an argument.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > ---
->  package/mpd/mpd.hash | 2 +-
->  package/mpd/mpd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  support/scripts/graph-depends | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Applied to master, thanks. We really need to clean up this script to
+move the "global" code into a main() function. Right now there is some
+global code intermixed with sub-functions, it's horrible.
 
 Thomas
 -- 
