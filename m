@@ -1,55 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Feb 2017 22:47:29 +0100
-Subject: [Buildroot] [git commit] docs/website: switching from gmane to
-	nabble
-Message-ID: <20170205214745.79C0B80525@busybox.osuosl.org>
+Date: Sun, 5 Feb 2017 22:47:01 +0100
+Subject: [Buildroot] [git commit] docs/website: bump jquery and bootstrap
+Message-ID: <20170205214745.53DF2820F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18426200e629166595d7f35f3cd7647698f5b7e9
+commit: https://git.buildroot.net/buildroot/commit/?id=ad2f351a1d981978df74823ebb78cc6a3323f2fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Gmane mailing list infrastructure is broken from some time,
-switching to nabble both for rss and search services.
+This patch bumps jquery and bootstrap to the latest versions.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/website/js/buildroot.js | 2 +-
- docs/website/support.html    | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ docs/website/footer.html | 4 ++--
+ docs/website/header.html | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
-index 83983e6..da43664 100644
---- a/docs/website/js/buildroot.js
-+++ b/docs/website/js/buildroot.js
-@@ -87,7 +87,7 @@ jQuery(document).ready(function($) {
-     url = url.split(/[\\/]/).pop()
-     $('.nav a[href="/' + url + '"]').parent().addClass('active');
+diff --git a/docs/website/footer.html b/docs/website/footer.html
+index 16fab36..1fcfd70 100644
+--- a/docs/website/footer.html
++++ b/docs/website/footer.html
+@@ -1,5 +1,5 @@
+-	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+-	<script src="https://oss.maxcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
++	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
++	<script src="https://oss.maxcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+ 	<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
+ 	<script type="text/javascript" src="js/buildroot.js"></script>
+diff --git a/docs/website/header.html b/docs/website/header.html
+index 3842f32..ef6724f 100644
+--- a/docs/website/header.html
++++ b/docs/website/header.html
+@@ -10,7 +10,7 @@
  
--    load_activity("http://rss.gmane.org/topics/excerpts/gmane.comp.lib.uclibc.buildroot", "mailing-list-activity");
-+    load_activity("http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-busybox-ft2.xml", "mailing-list-activity");
-     load_activity("http://git.buildroot.org/buildroot/atom/?h=master", "commit-activity");
+ 	<title>Buildroot - Making Embedded Linux Easy</title>
  
-     $('#slides').html('<iframe src="https://docs.google.com/gview?url=http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
-diff --git a/docs/website/support.html b/docs/website/support.html
-index 92ee03b..a1184c8 100644
---- a/docs/website/support.html
-+++ b/docs/website/support.html
-@@ -50,9 +50,11 @@
- 		    list, since there is a good chance someone else has asked the same question
- 		    before.</p>
+-	<link href="https://oss.maxcdn.com/bootswatch/3.3.5/paper/bootstrap.min.css" rel="stylesheet">
++	<link href="https://oss.maxcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet">
+ 	<link href="css/main.css" rel="stylesheet">
  
--		  <form method="get" action="http://search.gmane.org/">
-+		  <form method="get" action="http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp">
- 		    <input type="text" name="query">
--		    <input type="hidden" name="group" value="gmane.comp.lib.uclibc.buildroot">
-+		    <input type="hidden" name="macro" value="search_page">
-+		    <input type="hidden" name="node" value="2">
-+		    <input type="hidden" name="sort" value="date">
- 		    <button type="submit" class="btn btn-default">Submit</button>
- 		  </form>
- 		</div>
+ 	<!--[if lt IE 9]>
