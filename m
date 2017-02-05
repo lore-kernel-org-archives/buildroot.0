@@ -1,106 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Feb 2017 22:14:34 +0100
-Subject: [Buildroot] [PATCH 3/3] graph-depends: split off get_rdepends
- from get_depends
-In-Reply-To: <20170203205745.14488-5-patrickdepinguin@gmail.com>
-References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
- <20170203205745.14488-5-patrickdepinguin@gmail.com>
-Message-ID: <20170205211434.GB3562@free.fr>
+Date: Sun, 5 Feb 2017 22:24:09 +0100
+Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
+ Kodi-specific patches
+In-Reply-To: <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
+ <20170204114451.20935-2-bernd.kuhls@t-online.de>
+ <20170204230821.GA3805@free.fr>
+ <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20170205212408.GC3562@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas DS, All,
+Bernd, All,
 
-On 2017-02-03 21:57 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On 2017-02-05 08:59 +0100, Bernd Kuhls spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+> news:20170204230821.GA3805 at free.fr:
 > 
-> The use of a 'rule' variable that can contain 'show-depends' or
-> 'show-rdepends' is not logical if get_depends is considered as a reusable
-> function from various scripts. The name of these rules are too much an
-> implementation detail.
+> > Bernd, All,
+> > 
+> > On 2017-02-04 12:44 +0100, Bernd Kuhls spake thusly:
+> >> The Kodi build system needs .a files to create
+> >> usr/lib/kodi/system/players/VideoPlayer/libdvdcss-i486-linux.so
+> > 
+> > This is really nasty.
+> > 
+> > What happens if one does not have the .a library, but just the .so one
+> > instead? Does the build really fail?
 > 
-> Therefore, split the existing get_depends into two separate functions
-> get_depends and get_rdepends, while keeping code duplication to a minimum.
+> Yes.
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> > I've had a quick look at cmake/modules/FindLibDvd.cmake and it only
+> > requires the .a files in the case that it compiles its own version.
+> 
+> Kodi 17 still uses autoconf, support for it will be dropped in Kodi 18.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Ah, OK, I was mislead then.
+
+Indeed their code to handle the libdvdcss, libdvdnav and libdvdread is
+just ugly. Han me my flamethrower...
+
+Instead, I believe their code could be simplified (and fixed) using
+this:
+
+   73 $(SYSDIR)/libdvdcss-$(ARCH).so: $(WRAPPER) $(WRAPPER_DEF)
+   74     [ -d libdvdcss ] || mkdir libdvdcss
+   75     cd libdvdcss; $(AR) x $(DVDCSS_A)
+   76     $(CC) -o $@ $(SO_LDFLAGS) -Wl,--soname,$@ -Wl,--unresolved-symbols=ignore-all -ldvdcss -lm \
+   77         `cat $(WRAPPER_DEF)` $(WRAPPER)
+
+Or something similar...
+
+Ditto for the other lib.
+
+Since this code is slated for removal upstream, I think it is acceptable
+that we carry that kind of patch, especially since the replacement
+CMakeList.txt looks like it is sane.
+
+Could you test this, please?
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  support/scripts/graph-depends |  6 +++---
->  support/scripts/pkgutil.py    | 17 +++++++++++++----
->  2 files changed, 16 insertions(+), 7 deletions(-)
-> 
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index 7aedcb5..fbd5917 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -102,13 +102,13 @@ else:
->  transitive = args.transitive
->  
->  if args.direct:
-> -    rule = "show-depends"
-> +    get_depends_func = pkgutil.get_depends
->      arrow_dir = "forward"
->  else:
->      if mode == MODE_FULL:
->          sys.stderr.write("--reverse needs a package\n")
->          sys.exit(1)
-> -    rule = "show-rdepends"
-> +    get_depends_func = pkgutil.get_rdepends
->      arrow_dir = "back"
->  
->  # Get the colours: we need exactly three colours,
-> @@ -157,7 +157,7 @@ def get_all_depends(pkgs):
->      if len(filtered_pkgs) == 0:
->          return []
->  
-> -    depends = pkgutil.get_depends(filtered_pkgs, rule)
-> +    depends = get_depends_func(filtered_pkgs)
->  
->      deps = set()
->      for pkg in filtered_pkgs:
-> diff --git a/support/scripts/pkgutil.py b/support/scripts/pkgutil.py
-> index a911123..cd1bbd5 100644
-> --- a/support/scripts/pkgutil.py
-> +++ b/support/scripts/pkgutil.py
-> @@ -27,10 +27,7 @@ def get_version(pkgs):
->          version[pkg] = output[i]
->      return version
->  
-> -# Execute the "make <pkg>-show-depends" command to get the list of
-> -# dependencies of a given list of packages, and return the list of
-> -# dependencies formatted as a Python dictionary.
-> -def get_depends(pkgs, rule):
-> +def _get_depends(pkgs, rule):
->      sys.stderr.write("Getting dependencies for %s\n" % pkgs)
->      cmd = ["make", "-s", "--no-print-directory" ]
->      for pkg in pkgs:
-> @@ -53,3 +50,15 @@ def get_depends(pkgs, rule):
->          else:
->              deps[pkg] = pkg_deps
->      return deps
-> +
-> +# Execute the "make <pkg>-show-depends" command to get the list of
-> +# dependencies of a given list of packages, and return the list of
-> +# dependencies formatted as a Python dictionary.
-> +def get_depends(pkgs):
-> +    return _get_depends(pkgs, 'show-depends')
-> +
-> +# Execute the "make <pkg>-show-rdepends" command to get the list of
-> +# reverse dependencies of a given list of packages, and return the
-> +# list of dependencies formatted as a Python dictionary.
-> +def get_rdepends(pkgs):
-> +    return _get_depends(pkgs, 'show-rdepends')
-> -- 
-> 2.10.2
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
