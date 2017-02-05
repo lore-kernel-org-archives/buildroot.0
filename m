@@ -1,54 +1,25 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun,  5 Feb 2017 17:59:32 +0100
-Subject: [Buildroot] [PATCH 3/3] docs/website: switching from gmane to nabble
-In-Reply-To: <1486313972-27474-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1486313972-27474-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1486313972-27474-4-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sun,  5 Feb 2017 17:59:29 +0100
+Subject: [Buildroot] [PATCH 0/3] docs/website: fixing feed API and gmane
+Message-ID: <1486313972-27474-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gmane mailing list infrastructure is broken from some time,
-switching to nabble both for rss and search services.
+This patch series fixes the buildroot website and make it working again.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- docs/website/js/buildroot.js | 2 +-
- docs/website/support.html    | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Angelo Compagnucci (3):
+  docs/website: bump jquery and bootstrap
+  docs/website: fix google feed API
+  docs/website: switching from gmane to nabble
 
-diff --git a/docs/website/js/buildroot.js b/docs/website/js/buildroot.js
-index 83983e6..da43664 100644
---- a/docs/website/js/buildroot.js
-+++ b/docs/website/js/buildroot.js
-@@ -87,7 +87,7 @@ jQuery(document).ready(function($) {
-     url = url.split(/[\\/]/).pop()
-     $('.nav a[href="/' + url + '"]').parent().addClass('active');
- 
--    load_activity("http://rss.gmane.org/topics/excerpts/gmane.comp.lib.uclibc.buildroot", "mailing-list-activity");
-+    load_activity("http://buildroot-busybox.2317881.n4.nabble.com/Buildroot-busybox-ft2.xml", "mailing-list-activity");
-     load_activity("http://git.buildroot.org/buildroot/atom/?h=master", "commit-activity");
- 
-     $('#slides').html('<iframe src="https://docs.google.com/gview?url=http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf&embedded=true" style="position:absolute; width:100%; height:100%; top:0; left:0;" frameborder="0"></iframe>')
-diff --git a/docs/website/support.html b/docs/website/support.html
-index 92ee03b..a1184c8 100644
---- a/docs/website/support.html
-+++ b/docs/website/support.html
-@@ -50,9 +50,11 @@
- 		    list, since there is a good chance someone else has asked the same question
- 		    before.</p>
- 
--		  <form method="get" action="http://search.gmane.org/">
-+		  <form method="get" action="http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp">
- 		    <input type="text" name="query">
--		    <input type="hidden" name="group" value="gmane.comp.lib.uclibc.buildroot">
-+		    <input type="hidden" name="macro" value="search_page">
-+		    <input type="hidden" name="node" value="2">
-+		    <input type="hidden" name="sort" value="date">
- 		    <button type="submit" class="btn btn-default">Submit</button>
- 		  </form>
- 		</div>
+ docs/website/footer.html     |  5 ++-
+ docs/website/header.html     |  2 +-
+ docs/website/js/buildroot.js | 73 ++++++++++++++++----------------------------
+ docs/website/support.html    |  6 ++--
+ 4 files changed, 34 insertions(+), 52 deletions(-)
+
 -- 
 2.7.4
