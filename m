@@ -1,55 +1,68 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 5 Feb 2017 09:52:00 +0100
-Subject: [Buildroot] [PATCH 1/1] docs/website: Feed API and gmane fix
-In-Reply-To: <20170204235131.7332d861@free-electrons.com>
-References: <1486247694-7324-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170204235131.7332d861@free-electrons.com>
-Message-ID: <CA+TH9VkC93CiJefDnUM6NxLpMGQYZCes5e6F3BySnyaK+YkxdA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun,  5 Feb 2017 14:45:06 +0100
+Subject: [Buildroot] [PATCHv2 1/2] instrumentation: extract duplication to
+	get list of installed files
+In-Reply-To: <20170205134507.15328-1-patrickdepinguin@gmail.com>
+References: <20170205134507.15328-1-patrickdepinguin@gmail.com>
+Message-ID: <20170205134507.15328-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-2017-02-04 23:51 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Sat,  4 Feb 2017 23:34:54 +0100, Angelo Compagnucci wrote:
->> * Google retired feed API, this patch changes in favour of
->>   yahoo yql for rss to json conversion
->> * Gmane is gone, replacing it with nabble.
->> * Removed the import for feed api libraries
->> * Updates to the latest jquery version
->> * Reorganized javascript code in buildroot.js to accomodate
->>   the mentioned fixings
->
-> This bullet list is a very good indication that this patch should be
-> split into several smaller patches. It's doing lots of things that are
-> fairly independent, or if not independent, that can be split into
-> several steps.
+Before and after the building of each package, the instrumentation hooks are
+run. One of these hooks obtains the list of files installed by a package.
 
-Honestly, I cannot see your point here. I really cannot understand why
-I should submit a patch that fixes the gogole feed API but leaves the
-site broken because gmane is out of service. The rest of things are
-functional to these fixings, so again cannot be splitted.
-This patch makes the minimal set of changes to fix the currently
-broken website. If not interested, please discard it.
+The code to obtain this list is currently duplicated in the start and end
+part of the hook. While the amount of duplication is currently small, a
+subsequent patch will make more changes to this code, increasing the
+duplication.
 
-Sincerely, Angelo.
+Therefore, split off into a helper function.
 
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+v2: new patch
 
+ package/pkg-generic.mk | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3ca71b0..077b02b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -57,13 +57,17 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ 
+ # Hooks to collect statistics about installed files
+ 
++define _step_pkg_size_get_file_list
++	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
++		$1
++endef
++
+ # This hook will be called before the target installation of a
+ # package. We store in a file named .br_filelist_before the list of
+ # files currently installed in the target. Note that the MD5 is also
+ # stored, in order to identify if the files are overwritten.
+ define step_pkg_size_start
+-	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
+-		$($(PKG)_DIR)/.br_filelist_before
++	$(call _step_pkg_size_get_file_list,$($(PKG)_DIR)/.br_filelist_before)
+ endef
+ 
+ # This hook will be called after the target installation of a
+@@ -72,8 +76,7 @@ endef
+ # a diff with the .br_filelist_before to compute the list of files
+ # installed by this package.
+ define step_pkg_size_end
+-	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
+-		$($(PKG)_DIR)/.br_filelist_after
++	$(call _step_pkg_size_get_file_list,$($(PKG)_DIR)/.br_filelist_after)
+ 	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
+ 		while read hash file ; do \
+ 			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.10.2
