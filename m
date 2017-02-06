@@ -1,27 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 19:21:51 +0100
-Subject: [Buildroot] Odd comment in openntpd/Config.in
-In-Reply-To: <o7aan0$qvb$1@blaine.gmane.org>
-References: <o7aan0$qvb$1@blaine.gmane.org>
-Message-ID: <20170206192151.0b748b95@free-electrons.com>
+Date: Mon, 6 Feb 2017 19:22:08 +0100
+Subject: [Buildroot] [git commit] openntpd: fix Config.in comment dependency
+Message-ID: <20170206182321.2D2DA7FC3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=00f5c60b5bc33b30074d1f50af107b9eb29c780e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 6 Feb 2017 17:10:56 +0000 (UTC), Grant Edwards wrote:
+BR2_PACKAGE_OPENNTPD has a "depends on !BR2_PACKAGE_NTP" because the
+openntpd package conflicts with the ntp package.
 
-> Is the "!" in the comment is a typo?
+So the Config.in comment of openntpd should also not be visible when ntp
+is selected. Otherwise the comment will show up when the user has a
+non-NPTL toolchain, and once he enables NPTL support, the comment
+disappears, but the package option doesn't appear.
 
-However, there is one thing that is wrong in this Config.in file: the
-main option has depends on !BR2_PACKAGE_NTP, but not the comment, while
-it should have. I'll fix that up.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openntpd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/openntpd/Config.in b/package/openntpd/Config.in
+index 1433b09..1b856c0 100644
+--- a/package/openntpd/Config.in
++++ b/package/openntpd/Config.in
+@@ -13,4 +13,5 @@ config BR2_PACKAGE_OPENNTPD
+ 
+ comment "openntpd needs a toolchain w/ NPTL"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_NTP
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
