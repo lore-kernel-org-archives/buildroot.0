@@ -1,10 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:40 -0500
-Subject: [Buildroot] [PATCH 27/44] linux-firmware: add netxen gigabit
-	ethernet option
+Date: Mon,  6 Feb 2017 15:24:42 -0500
+Subject: [Buildroot] [PATCH 29/44] linux-firmware: add sxg alacritech isnic
+	option
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-28-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-30-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,37 +18,37 @@ Signed-off-by: Adam Duskett <aduskett@codeblue.com>
  2 files changed, 11 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index f88009d..ee8254f 100644
+index 2747a33..8ea536b 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -400,6 +400,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MYRICOM
+@@ -415,6 +415,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_SLICOSS_ISNIC
  	help
- 	  Firmware files for MyriCOM Gigabit Ethernet
+ 	  Firmware files for slicoss Alacritech IS-NIC products
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_NETXEN
-+	bool "NetXen Multi port (1/10) Gigabit Ethernet NIC"
++config BR2_PACKAGE_LINUX_FIRMWARE_SGX_ISNIC
++	bool "sxg - Alacritech IS-NIC products"
 +	help
-+	  Firmware files for the NetXen Multi port (1/10) Gigabit Ethernet NIC
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169
- 	bool "Realtek 8169"
- 	help
++	  Firmware files for sxg Alacritech IS-NIC products
++	  
+ endmenu
+ 
+ menu "DVB firmware"
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index c5eceed..f61ce60 100644
+index c3d6273..1e80f12 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -506,6 +506,12 @@ LINUX_FIRMWARE_DIRS += myricom/
+@@ -539,6 +539,12 @@ LINUX_FIRMWARE_DIRS += slicoss/
  # which is installed unconditionally
  endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_NETXEN),y)
-+LINUX_FIRMWARE_FILES += phanfw.bin/
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_SGX_ISNIC),y)
++LINUX_FIRMWARE_DIRS += sxg/
 +# No license file; the license is in the file WHENCE
 +# which is installed unconditionally
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169),y)
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_XCx000),y)
  LINUX_FIRMWARE_FILES += \
- 	rtl_nic/rtl8105e-1.fw \
+ 	dvb-fe-xc4000-1.4.1.fw \
 -- 
 2.9.3
