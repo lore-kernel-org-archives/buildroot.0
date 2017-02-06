@@ -1,64 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Feb 2017 22:56:53 +0100
-Subject: [Buildroot] [git commit] binutils: backport fix for
-	xg_reverse_shift_count
-Message-ID: <20170206215734.91D0A81F6C@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon,  6 Feb 2017 22:59:33 +0100
+Subject: [Buildroot] [PATCH] docs/manual: centralize recommendations about
+	BR2_DL_DIR
+Message-ID: <1486418373-26759-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76e1594f0004098fc01aeac2b9a8292fd8c5c104
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+We currently have two places where we recommend where BR2_DL_DIR
+should be set: "Environment variables" and "Location of downloaded
+packages". The former recommends setting BR2_DL_DIR in the .config,
+the latter kind of endorses using ~/.bashrc.
 
-binutils-2.27 gas has bug that results in the following kind of build
-error when assembling bb[cs]i.l on big-endian xtensa targets:
+We prefer suggesting the ~/.bashrc way since it avoids downloading the
+same file multiple times, and anyway ot's wise to have all the details
+in a unique place. So remove the .config suggestion from "Environment
+variables" and let it just point to "Location of downloaded packages".
 
-  ieee754-sf.S:237: Error: invalid symbolic operand
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- ...tensa.c-fixup-xg_reverse_shift_count-typo.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ docs/manual/common-usage.txt      | 5 +++--
+ docs/manual/download-location.txt | 2 ++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/2.27/0130-tc-xtensa.c-fixup-xg_reverse_shift_count-typo.patch b/package/binutils/2.27/0130-tc-xtensa.c-fixup-xg_reverse_shift_count-typo.patch
-new file mode 100644
-index 0000000..7973607
---- /dev/null
-+++ b/package/binutils/2.27/0130-tc-xtensa.c-fixup-xg_reverse_shift_count-typo.patch
-@@ -0,0 +1,33 @@
-+From 78fb7e37eb8bb08ae537d6c487996ff17c810332 Mon Sep 17 00:00:00 2001
-+From: Trevor Saunders <tbsaunde+binutils@tbsaunde.org>
-+Date: Mon, 26 Sep 2016 12:42:11 -0400
-+Subject: [PATCH] tc-xtensa.c: fixup xg_reverse_shift_count typo
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 7602260bab4f..8dd99a6dacc3 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -91,8 +91,9 @@ to +make+ or set in the environment:
+   Buildroot stores/retrieves downloaded files
+   +
+   Note that the Buildroot download directory can also be set from the
+-  configuration interface, so through the Buildroot +.config+ file; this
+-  is the recommended way of setting it.
++  configuration interface, so through the Buildroot +.config+ file. See
++  xref:download-location[] for more details on how you can set the download
++  directory.
+ * +BR2_GRAPH_ALT+, if set and non-empty, to use an alternate color-scheme in
+   build-time graphs
+ * +BR2_GRAPH_OUT+ to set the filetype of generated graphs, either +pdf+ (the
+diff --git a/docs/manual/download-location.txt b/docs/manual/download-location.txt
+index 0b53f54ca14e..d485df94f59a 100644
+--- a/docs/manual/download-location.txt
++++ b/docs/manual/download-location.txt
+@@ -1,6 +1,8 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
+ 
++[[download-location]]
 +
-+gas/ChangeLog:
-+
-+2016-09-26  Trevor Saunders  <tbsaunde+binutils@tbsaunde.org>
-+
-+	* config/tc-xtensa.c (xg_reverse_shift_count): Pass cnt_arg instead of
-+	cnt_argp to concat.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ gas/config/tc-xtensa.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
-+index d062044..ca261ae 100644
-+--- a/gas/config/tc-xtensa.c
-++++ b/gas/config/tc-xtensa.c
-+@@ -2228,7 +2228,7 @@ xg_reverse_shift_count (char **cnt_argp)
-+   cnt_arg = *cnt_argp;
-+ 
-+   /* replace the argument with "31-(argument)" */
-+-  new_arg = concat ("31-(", cnt_argp, ")", (char *) NULL);
-++  new_arg = concat ("31-(", cnt_arg, ")", (char *) NULL);
-+ 
-+   free (cnt_arg);
-+   *cnt_argp = new_arg;
-+-- 
-+2.1.4
-+
+ ==== Location of downloaded packages
+ 
+ The various tarballs that are downloaded by Buildroot are all stored
+-- 
+2.7.4
