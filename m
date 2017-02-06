@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:30 -0500
-Subject: [Buildroot] [PATCH 17/44] linux-firmware: add iwlwifi-5150 option
+Date: Mon,  6 Feb 2017 15:24:31 -0500
+Subject: [Buildroot] [PATCH 18/44] linux-firmware: add mediatek mt7650 option
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-18-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-19-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +12,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/linux-firmware/Config.in         | 6 ++++++
- package/linux-firmware/linux-firmware.mk | 5 +++++
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 6 ++++++
  2 files changed, 11 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 6ec08b8..9722775 100644
+index 9722775..3aeb61c 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -180,6 +180,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000
- 	  Firmware files for the Intel Wifi 5000 devices supported by
- 	  the iwlwifi kernel driver.
+@@ -291,6 +291,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U
+ 	help
+ 	  MediaTek MT7601U
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5150
-+	bool "Intel iwlwifi 5150"
++config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7650
++	bool "MediaTek MT7650"
 +	help
-+	  Firmware files for the Intel Wifi 5150 devices supported by
-+	  the iwlwifi kernel driver.
++	  MediaTek MT7650
 +	  
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A
- 	bool "Intel iwlwifi 6000G2A"
+ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
+ 	bool "Ralink rt2501/rt61"
  	help
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index d8a4e60..b883a0c 100644
+index b883a0c..a2c5ae5 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -393,6 +393,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-5000-5.ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+@@ -317,6 +317,12 @@ LINUX_FIRMWARE_FILES += mt7601u.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
  endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5150),y)
-+LINUX_FIRMWARE_FILES += iwlwifi-5150-2.ucode
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
++# MT7601
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7650),y)
++LINUX_FIRMWARE_FILES += mt7650.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A),y)
- LINUX_FIRMWARE_FILES += iwlwifi-6000g2a-6.ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+ # wl127x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
+ # wl1271-nvs.bin is a symlink to wl127x-nvs.bin
 -- 
 2.9.3
