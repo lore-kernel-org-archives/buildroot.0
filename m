@@ -1,26 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 6 Feb 2017 17:15:36 +0100
-Subject: [Buildroot] [PATCH v2] size-stats: don't count hard links
-In-Reply-To: <1477319799-13570-1-git-send-email-fhunleth@troodon-software.com>
-References: <1477319799-13570-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <CAAXf6LXZ+OB+m76h2xwpV=a9RK2Xrs1pAdu4dZaEG-1=dtgVkQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  6 Feb 2017 17:24:37 +0100
+Subject: [Buildroot] [PATCH v2] package/efl: enable Wayland support if
+	available
+Message-ID: <20170206162437.12748-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 24, 2016 at 4:36 PM, Frank Hunleth
-<fhunleth@troodon-software.com> wrote:
-> This change adds inode tracking to the size-stats script so that hard
-> links don't cause files to be double counted. This has a significant
-> effect on the size computation for some packages. For example, git has
-> around a dozen hard links to a large file. Before this change, git would
-> weigh in at about 170 MB with the total filesystem size reported as
-> 175 MB. The actual rootfs.ext2 size was around 16 MB. With the change,
-> the git package registers at 10.5 MB with a total filesystem size of
-> 15.8 MB.
->
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+If all the dependencies are present to select the efl wayland
+support, enable it by default.
 
-Acked-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+v2: rebase on master
+---
+ package/efl/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 5e89af6..a8f9d41 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -180,6 +180,7 @@ config BR2_PACKAGE_EFL_WAYLAND
+ 	depends on BR2_PACKAGE_EFL_EEZE # efl drm
+ 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
+ 	select BR2_PACKAGE_EFL_DRM
++	default y
+ 
+ comment "Wayland support needs udev /dev management (eeze) and OpenGL ES w/ EGL, threads"
+ 	depends on BR2_PACKAGE_WAYLAND
+-- 
+2.9.3
