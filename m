@@ -1,43 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 19:54:01 +0100
-Subject: [Buildroot] [PATCH 1/1] sudo: Add ldap support for sudoers rules
-In-Reply-To: <1477323263-6689-1-git-send-email-cdf123@cdf123.net>
-References: <1477323263-6689-1-git-send-email-cdf123@cdf123.net>
-Message-ID: <20170206195401.11ccbee3@free-electrons.com>
+Date: Mon, 6 Feb 2017 20:00:23 +0100
+Subject: [Buildroot] [git commit] systemd: add missing dhcp.network file
+Message-ID: <20170206190028.7FD5682135@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6c49d3acdf18d04c4ad8b59923d84d7945e5ebe4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 24 Oct 2016 10:34:23 -0500, Chris Frederick wrote:
-> Added Config.in options to enable/disable the option, and check options
-> in sudo.mk to add openldap as a dependancy and compile with --with-ldap.
-> 
-> When sudo is built with ldap, /etc/sudoers is only read in for defaults,
-> all rules need to be provided via ldap which is configured by the user
-> in /etc/ldap.conf.
-> 
-> Since the user explicitly has to provide /etc/ldap.conf, we use 'depends
-> on' so that the user is obliged to explicitly enable openldap before the
-> option becomes visible.
-> 
-> Signed-off-by: Chris Frederick <cdf123@cdf123.net>
-> ---
->  package/sudo/Config.in | 13 +++++++++++++
->  package/sudo/sudo.mk   |  7 +++++++
->  2 files changed, 20 insertions(+)
+This file was missing from commit
+84d997d6890f1d045c4d6084148fd9b2d674a6c7 ("system(d): allow auto net
+configuration with networkd")
 
-I've applied, after removing the explicit Config.in option and instead
-relying on whether BR2_PACKAGE_OPENLDAP is enabled or not to decide if
-ldap support should be enabled or not in sudo.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/dhcp.network | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/systemd/dhcp.network b/package/systemd/dhcp.network
+new file mode 100644
+index 0000000..9b636fa
+--- /dev/null
++++ b/package/systemd/dhcp.network
+@@ -0,0 +1,4 @@
++[Match]
++Name=SYSTEMD_NETWORKD_DHCP_IFACE
++[Network]
++DHCP=ipv4
