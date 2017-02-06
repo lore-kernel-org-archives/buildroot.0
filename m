@@ -1,211 +1,245 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 Feb 2017 17:10:28 +0100
-Subject: [Buildroot] [PATCH v4] efl: do not force dependency on libudev by
-	making eeze a config option.
-Message-ID: <20170206161028.11380-1-romain.naour@gmail.com>
+Date: Mon, 6 Feb 2017 16:43:17 +0100
+Subject: [Buildroot] [PATCH v2] gtest/gmock: bump to version 1.8.0
+In-Reply-To: <34bbf827-4564-e812-5677-91bc63c95dde@mind.be>
+References: <1473286853-23560-1-git-send-email-casantos@datacom.ind.br>
+ <1473290219-27701-1-git-send-email-casantos@datacom.ind.br>
+ <34bbf827-4564-e812-5677-91bc63c95dde@mind.be>
+Message-ID: <77897237-1b37-56d0-aecd-48f66a0358c5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+Hi Carlos, Fabrice, All,
 
-Although highly recommended to be enabled, EFL's eeze can be disabled
-and thus no dependency on libudev or dynamic device management.
+I removed the last remaining gtest related patch [1] from patchwork since the
+gtest/gmock 1.8.0 is now available.
 
-Since 'BR2_PACKAGE_HAS_UDEV' has two ways to be satisfied (eudev or
-systemd) we can't automatically select it, instead show a comment and
-use 'depends on'.
+What's the status of this patch bump?
+Can you send an updated version?
 
-Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-[Romain:
-  - Propagate the eeze dependency to enlightenment and efl Wayland
-  - Remove udev provider from eeze comment in efl's Config.in
-  - Add comments when eeze is not available]
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v4: Propagate eeze dependency to BR2_PACKAGE_EFL_WAYLAND
-    Add some comments about udev management (eeze)
-v3: Add missing udev in Enlightenment comment text (Baruch Siach)
-v2: Propagate the eeze dependency to enlightenment
-    Remove udev provider from eeze comment in efl's Config.in since
-    we don't explicitely name all possible providers in comment.
----
- package/efl/Config.in           | 38 +++++++++++++++++++++++++++++++-------
- package/efl/efl.mk              |  9 ++++++++-
- package/enlightenment/Config.in |  7 +++++--
- 3 files changed, 44 insertions(+), 10 deletions(-)
+Thanks!
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 8b06a49..5e89af6 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_EFL
- 	depends on BR2_HOST_GCC_AT_LEAST_4_7
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_PACKAGE_HAS_UDEV # libudev
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
- 	depends on BR2_USE_MMU
-@@ -37,6 +36,19 @@ config BR2_PACKAGE_EFL_BULLET
- 	  simply not tested so you are on your own in terms of
- 	  ensuring everything works if you do this.
- 
-+config BR2_PACKAGE_EFL_EEZE
-+	bool "Enable eeze (udev) support (recommended)"
-+	depends on BR2_PACKAGE_HAS_UDEV # libudev
-+	default y
-+	help
-+	  Eeze is EFL's hardware abstraction layer on top of udev.
-+	  Having it off will disable some hardware detection, such as
-+	  'drm' graphics engine or 'elput', as well as mounting
-+	  removable media.
-+
-+comment "eeze needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+
- config BR2_PACKAGE_EFL_FONTCONFIG
- 	bool "Enable fontconfig support (recommended)"
- 	select BR2_PACKAGE_FONTCONFIG
-@@ -98,6 +110,7 @@ config BR2_PACKAGE_EFL_PULSEAUDIO
- 
- config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
- 	bool "Enable libmount support (recommended)"
-+	depends on BR2_PACKAGE_EFL_EEZE
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	# libblkid is part of required tools, see EFL's README.
-@@ -108,9 +121,13 @@ config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
- 	  devices etc... and disabling this will hurt support for
- 	  Enlightenment and its filemanager.
- 
-+comment "efl's libmount support needs udev /dev management (eeze)"
-+	depends on !BR2_PACKAGE_EFL_EEZE
-+
- config BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
- 	bool
- 	default y if BR2_PACKAGE_EFL_BULLET && \
-+		BR2_PACKAGE_EFL_EEZE && \
- 		BR2_PACKAGE_EFL_FONTCONFIG && \
- 		BR2_PACKAGE_EFL_GSTREAMER1 && \
- 		BR2_PACKAGE_EFL_LIBFRIBIDI && \
-@@ -160,13 +177,14 @@ config BR2_PACKAGE_EFL_WAYLAND
- 	depends on BR2_PACKAGE_WAYLAND
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # Evas DRM Engine -> libdrm
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # Evas DRM Engine
-+	depends on BR2_PACKAGE_EFL_EEZE # efl drm
- 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
- 	select BR2_PACKAGE_EFL_DRM
- 
--comment "Wayland support needs OpenGL ES w/ EGL, threads"
-+comment "Wayland support needs udev /dev management (eeze) and OpenGL ES w/ EGL, threads"
- 	depends on BR2_PACKAGE_WAYLAND
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
--		|| !BR2_PACKAGE_EFL_OPENGLES
-+		|| !BR2_PACKAGE_EFL_OPENGLES || !BR2_PACKAGE_EFL_EEZE
- 
- choice
- 	bool "OpenGL support"
-@@ -198,6 +216,7 @@ endchoice # OpenGL support
- 
- config BR2_PACKAGE_EFL_ELPUT
- 	bool "Elput"
-+	depends on BR2_PACKAGE_EFL_EEZE
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 	help
-@@ -206,8 +225,12 @@ config BR2_PACKAGE_EFL_ELPUT
- 	  ecore_drm, etc) to handle interfacing with libinput without
- 	  having to duplicate the code in each subsystem.
- 
-+comment "Elput support needs udev /dev management (eeze)"
-+	depends on !BR2_PACKAGE_EFL_EEZE
-+
- config BR2_PACKAGE_EFL_DRM
- 	bool "Evas DRM Engine"
-+	depends on BR2_PACKAGE_EFL_EEZE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
- 	select BR2_PACKAGE_EFL_ELPUT
-@@ -216,8 +239,9 @@ config BR2_PACKAGE_EFL_DRM
- 	help
- 	  This option enable building support for the Evas DRM Engine.
- 
--comment "Evas DRM Engine needs mesa3d w/ EGL support, threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL
-+comment "Evas DRM Engine needs udev /dev management (eeze) and mesa3d w/ EGL support, threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_MESA3D_OPENGL_EGL \
-+		|| !BR2_PACKAGE_EFL_EEZE
- 
- comment "libevas loaders"
- 
-@@ -279,8 +303,8 @@ config BR2_PACKAGE_EFL_SVG
- 
- endif # BR2_PACKAGE_EFL
- 
--comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
--	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP \
-+comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_HOST_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
- 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index ab08946..1e54f72 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -20,7 +20,7 @@ EFL_LICENSE_FILES = \
- EFL_INSTALL_STAGING = YES
- 
- EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
--	jpeg luajit lz4 udev zlib
-+	jpeg luajit lz4 zlib
- 
- # Configure options:
- # --disable-lua-old: build elua for the target.
-@@ -59,6 +59,13 @@ else
- EFL_CONF_OPTS += --disable-cxx-bindings
- endif
- 
-+ifeq ($(BR2_PACKAGE_EFL_EEZE),y)
-+EFL_DEPENDENCIES += udev
-+EFL_CONF_OPTS += --enable-libeeze
-+else
-+EFL_CONF_OPTS += --disable-libeeze
-+endif
-+
- ifeq ($(BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT),y)
- EFL_DEPENDENCIES += util-linux
- EFL_CONF_OPTS += --enable-libmount
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index b5d889b..d1dee25 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -9,10 +9,12 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	# libedbus -> dbus, efl libraries
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_EFL
-+	depends on BR2_PACKAGE_HAS_UDEV # efl (eeze) -> libudev
- 	depends on BR2_PACKAGE_XORG7
- 	# libevas-generic-loaders-svg -> librsvg -> pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_EFL_X_XLIB
-+	select BR2_PACKAGE_EFL_EEZE
- 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
- 	select BR2_PACKAGE_EFL_PNG # needed at runtime by enlightenment_start
- 	select BR2_PACKAGE_EFL_SVG
-@@ -26,7 +28,8 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 
- 	  http://www.enlightenment.org/
- 
--comment "enlightenment needs a toolchain w/ wchar, C++, threads"
-+comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads"
- 	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_PACKAGE_HAS_UDEV
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--- 
-2.9.3
+Best regards,
+Romain
+
+[1] http://patchwork.ozlabs.org/patch/667729/
+
+Le 11/09/2016 ? 14:09, Arnout Vandecappelle a ?crit :
+>  Big patch, so lots of comments on this one...
+> 
+> 
+> On 08-09-16 01:16, Carlos Santos wrote:
+>> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>
+>> Version 1.8.0 now includes gmock so merge gmock package inside gtest.
+>>
+>> In this merge:
+>>  - Add gmock as a suboption of gtest (BR2_PACKAGE_GTEST_GMOCK)
+>>    following advice from Arnout Vandecappelle
+>>  - Make gmock a virtual package that selects BR2_PACKAGE_GTEST and
+>>    BR2_PACKAGE_GTEST_GMOCK, to provide backward compatibility
+> 
+>  I don't think this is a good idea.
+> 
+> * It means we have to keep on supporting the BR2_PACKAGE_GMOCK option for some
+> time. Let's say two years down the line we decide to remove it, it means we have
+> to move it to legacy at that time. So long term, we gain exactly nothing.
+> * The legacy approach works perfectly. The Config.in.legacy entry will make sure
+> that the package remains selected. If an external package depends on gmock,
+> you'll get an immediate build termination because make doesn't know how to build
+> gmock. Since the user has just removed gmock from the legacy menu, it should be
+> quite obvious what needs to be done.
+> * This is abusing the virtual package infra for something it wasn't meant for.
+> We want to avoid adding bad examples to buildroot.
+> 
+> 
+>>  - Use cmake to install libraries and headers and add missing files
+>>    (gtest.pc, gtest-config, gmock.pc) in
+>>    GTEST_POST_INSTALL_STAGING_HOOKS instead of redefining
+>>    GTEST_INSTALL_STAGING_CMDS
+>>  - Remove patch on Python as gmock/gtest now supports python 3.0
+>>    (commit 456fc2b5c4e9ebf05a5987dfe1ff0ac9ffeb53cc)
+>>  - Add the correct license in HOST_GTEST_LICENSE as all python code in
+>>    googlemock/scripts/generator is licensed under Apache-2.0 and not
+>>    BSD-3c
+>>  - Fix URL of gtest project in Config.in
+>>
+>> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+>>
+>> ---
+>> Changes v1 -> v2
+>>   - Add mirtual package for host-gmock, as pointed-out by Arnout
+>>     Vandecappelle.
+> 
+>  Well, no, I never mentioned virtual-package, I said to add a legacy entry.
+> 
+>>
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+>> ---
+>>  package/gmock/0001-force-use-python2.patch | 20 ----------
+>>  package/gmock/Config.in                    | 26 +++++--------
+>>  package/gmock/gmock.hash                   |  2 -
+>>  package/gmock/gmock.mk                     | 60 +-----------------------------
+>>  package/gtest/Config.in                    | 28 +++++++++++++-
+>>  package/{gmock => gtest}/gmock.pc          |  2 +-
+>>  package/gtest/gtest.hash                   |  2 +-
+>>  package/gtest/gtest.mk                     | 52 +++++++++++++++++++++-----
+>>  package/gtest/gtest.pc                     |  2 +-
+>>  9 files changed, 84 insertions(+), 110 deletions(-)
+>>  delete mode 100644 package/gmock/0001-force-use-python2.patch
+>>  delete mode 100644 package/gmock/gmock.hash
+>>  rename package/{gmock => gtest}/gmock.pc (93%)
+> [snip]
+>> diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+>> index eb30905..249971e 100644
+>> --- a/package/gtest/gtest.mk
+>> +++ b/package/gtest/gtest.mk
+>> @@ -4,13 +4,27 @@
+>>  #
+>>  ################################################################################
+>>  
+>> -# Make sure this remains the same version as the gmock one
+>> -GTEST_VERSION = release-1.7.0
+>> +GTEST_VERSION = release-1.8.0
+>>  GTEST_SITE = $(call github,google,googletest,$(GTEST_VERSION))
+>>  GTEST_INSTALL_STAGING = YES
+>>  GTEST_INSTALL_TARGET = NO
+>>  GTEST_LICENSE = BSD-3c
+>> -GTEST_LICENSE_FILES = LICENSE
+>> +GTEST_LICENSE_FILES = googletest/LICENSE
+>> +
+>> +ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
+>> +GTEST_LICENSE_FILES += googlemock/LICENSE
+> 
+>  It has the same content, so it doesn't make sense adding it. Since it's now a
+> single package, a single license file is definitely enough.
+> 
+>> +GTEST_DEPENDENCIES = host-gtest
+>> +
+>> +HOST_GTEST_LICENSE = Apache-2.0
+> 
+>  This is so weird that it deserves a separate comment.
+> 
+> # HOST_GTEST is just the generator script, which has a different license
+> # than the rest of gtest. Also, the generator script is not installed on
+> # target so its license doesn't need to be mentioned for the target package.
+> 
+>> +HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
+>> +HOST_GTEST_DEPENDENCIES = host-python
+> 
+>  Is the host-python dependency still needed? If python-2.6 doesn't work, yes it
+> is, but then there should be a comment. But the README file says "Python 2.3.5
+> or later"...
+> 
+>  All this HOST_GTEST stuff should be defined unconditionally.
+> 
+>> +else
+>> +# By default, gtest also builds gmock
+>> +GTEST_SUBDIR = googletest
+> 
+>  Actually, the top-level CMakeLists has the options BUILD_GTEST and BUILD_GMOCK
+> (the latter implies the former in a rather complicated way). It's better to use
+> those rather than messing with SUBDIR.
+> 
+>> +endif
+>> +
+>> +HOST_GTEST_GMOCK_PYTHONPATH = \
+>> +        $(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+>>  
+>>  # While it is possible to build gtest as shared library, using this gtest shared
+>>  # library requires to set some special configure option in the project using
+>> @@ -21,11 +35,7 @@ GTEST_LICENSE_FILES = LICENSE
+>>  # the gtest sources.
+>>  GTEST_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF
+>>  
+>> -define GTEST_INSTALL_STAGING_CMDS
+>> -	$(INSTALL) -D -m 0755 $(@D)/libgtest.a $(STAGING_DIR)/usr/lib/libgtest.a
+>> -	$(INSTALL) -D -m 0755 $(@D)/libgtest_main.a $(STAGING_DIR)/usr/lib/libgtest_main.a
+>> -	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gtest/
+>> -	cp -rp $(@D)/include/gtest/* $(STAGING_DIR)/usr/include/gtest/
+>> +define GTEST_INSTALL_MISSING_FILES
+>>  	$(INSTALL) -D -m 0644 package/gtest/gtest.pc \
+>>  		$(STAGING_DIR)/usr/lib/pkgconfig/gtest.pc
+>>  	# Generate the gtest-config script manually, since the CMake
+>> @@ -39,9 +49,33 @@ define GTEST_INSTALL_STAGING_CMDS
+>>  		s%@bindir@%$(STAGING_DIR)/usr/bin%;\
+>>  		s%@PTHREAD_CFLAGS@%%;\
+>>  		s%@PTHREAD_LIBS@%-lpthread%;' \
+>> -		$(@D)/scripts/gtest-config.in \
+>> +		$(@D)/googletest/scripts/gtest-config.in \
+>>  		> $(STAGING_DIR)/usr/bin/gtest-config
+>>  	chmod +x $(STAGING_DIR)/usr/bin/gtest-config
+>>  endef
+>>  
+>> +GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_INSTALL_MISSING_FILES
+>> +
+>> +ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
+>> +define GTEST_GMOCK_INSTALL_MISSING_FILE
+>> +	$(INSTALL) -D -m 0755 package/gtest/gmock.pc \
+>> +		$(STAGING_DIR)/usr/lib/pkgconfig/gmock.pc
+>> +endef
+>> +
+>> +GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_GMOCK_INSTALL_MISSING_FILE
+>> +
+>> +define HOST_GTEST_INSTALL_CMDS
+> 
+>  This shouldn't be inside the GTEST_GMOCK condition.
+> 
+>> +	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
+>> +		$(HOST_DIR)/usr/bin/gmock_gen.py
+>> +	ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
+>> +	cp -rp $(@D)/googlemock/scripts/generator/cpp \
+>> +		$(HOST_GTEST_GMOCK_PYTHONPATH)
+> 
+>  This is just copied from the current implementation, so OK. However, now I look
+> like it, this seems a really twisted way of installing this script. The normal
+> approach would be
+> 
+> 	mkdir -p $(HOST_DIR)/usr/lib/gmock
+> 	cp -r $(@D)/googlemock/scripts/generator/* $(HOST_DIR)/usr/lib/gmock
+> 	ln -sf ../lib/gmock/gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
+> 
+>  I.e. install the script itself together with the libraries it imports, and
+> symlink to it from $PATH. This way, the script will find the libraries by itself
+> (it extends sys.path with $0).
+> 
+>  That way, the script is also usable with the system's python. So, unless you
+> make this change, the host-python dependency really _is_ needed, otherwise the
+> gmock_gen imports won't be found when executing the script.
+> 
+>> +endef
+>> +endif
+>> +
+>>  $(eval $(cmake-package))
+>> +ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
+> 
+>  This should _definitely_ not be in the GTEST_GMOCK condition. We never let the
+> package definition itself depend on the config options.
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+>> +# The host package does not build anything, just installs gmock_gen stuff, so
+>> +# it does not need to be a host-cmake-package.
+>> +$(eval $(host-generic-package))
+>> +endif
+>> diff --git a/package/gtest/gtest.pc b/package/gtest/gtest.pc
+>> index b7a8aa4..594e79d 100644
+>> --- a/package/gtest/gtest.pc
+>> +++ b/package/gtest/gtest.pc
+>> @@ -5,7 +5,7 @@ includedir=${prefix}/include
+>>  
+>>  Name: gtest
+>>  Description: Google C++ Testing Framework
+>> -Version: 1.7.0
+>> +Version: 1.8.0
+>>  Libs: -L${libdir} -lgtest
+>>  Libs.private: -lpthread
+>>  Cflags: -I${includedir}
+>>
+> 
