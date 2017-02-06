@@ -1,40 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 13:50:02 +0100
-Subject: [Buildroot] [PATCH 3/3] graph-depends: split off get_rdepends
- from get_depends
-In-Reply-To: <20170203205745.14488-5-patrickdepinguin@gmail.com>
-References: <20170203205745.14488-1-patrickdepinguin@gmail.com>
- <20170203205745.14488-5-patrickdepinguin@gmail.com>
-Message-ID: <20170206135002.6dd292ae@free-electrons.com>
+Date: Mon, 6 Feb 2017 13:53:01 +0100
+Subject: [Buildroot] [git commit] package/mbedtls: fix zlib support
+Message-ID: <20170206125757.2CA0F81DAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c1a77961c1aca6cd50e3ad44b5b39350f1070286
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  3 Feb 2017 21:57:45 +0100, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> The use of a 'rule' variable that can contain 'show-depends' or
-> 'show-rdepends' is not logical if get_depends is considered as a reusable
-> function from various scripts. The name of these rules are too much an
-> implementation detail.
-> 
-> Therefore, split the existing get_depends into two separate functions
-> get_depends and get_rdepends, while keeping code duplication to a minimum.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  support/scripts/graph-depends |  6 +++---
->  support/scripts/pkgutil.py    | 17 +++++++++++++----
->  2 files changed, 16 insertions(+), 7 deletions(-)
+To enable compression support using zlib it is necessary to uncomment
+the define for MBEDTLS_ZLIB_SUPPORT in config.h [1].
 
-Applied to master, thanks.
+Note, that enabling TLS compression may make mbedTLS vulnerable to the
+CRIME attack [1]. It should not be enabled unless is is sure CRIME and
+similar attacks are not applicable to the particulare situation.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+As zlib is probably enabled in most systems, maybe it is best to make
+the compression support a user choice and add the warning from [1]?
+
+[1] https://tls.mbed.org/kb/how-to/deflate-compression-in-ssl-tls
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mbedtls/mbedtls.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index a8bd61f..7171af9 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -42,6 +42,11 @@ endif
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ MBEDTLS_CONF_OPTS += -DENABLE_ZLIB_SUPPORT=ON
+ MBEDTLS_DEPENDENCIES += zlib
++define MBEDTLS_ENABLE_ZLIB
++	$(SED) "s://#define MBEDTLS_ZLIB_SUPPORT:#define MBEDTLS_ZLIB_SUPPORT:" \
++		$(@D)/include/mbedtls/config.h
++endef
++MBEDTLS_POST_PATCH_HOOKS += MBEDTLS_ENABLE_ZLIB
+ else
+ MBEDTLS_CONF_OPTS += -DENABLE_ZLIB_SUPPORT=OFF
+ endif
