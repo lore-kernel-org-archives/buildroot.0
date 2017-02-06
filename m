@@ -1,41 +1,155 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Feb 2017 22:16:29 +0100
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 3.2.3
-Message-ID: <20170206212523.90555817F4@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 6 Feb 2017 22:27:20 +0100
+Subject: [Buildroot] [PATCH v6 0/9] bump/choice for qt 5.8.0
+In-Reply-To: <90b134ea-494d-95a1-cff1-e12cae8486e3@mind.be>
+References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <20170206164058.3f443334@free-electrons.com>
+ <0ac2d242-962a-9293-4690-d51e0b7031e0@andin.de>
+ <d086f97e-ac3d-6046-55fc-caf22e21d9e4@mind.be>
+ <20170206213600.15eea69c@gmx.net>
+ <6fdf578d-3b56-fa90-2adb-2d3dbf6118ca@mind.be>
+ <20170206220602.01a04b3c@gmx.net>
+ <90b134ea-494d-95a1-cff1-e12cae8486e3@mind.be>
+Message-ID: <20170206222720.5a8b3d30@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3baf8217ed760f75ff5eb224a9711ec48a36ac02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Arnout,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 6 Feb 2017 22:09:21 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index b1ad2f7..6adf7e4 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 3f01bd1fe1a17a277f8c84869e5d9192b4b978cb660872aa2b54c3cc8a2fedfc  ffmpeg-3.2.2.tar.xz
-+sha256 54ce502aca10b7e6059f19220ea2f68fa0c9c4c4d255ae13e615f08f0c94dcc5  ffmpeg-3.2.3.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 7e98ef6..6540d41 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.2.2
-+FFMPEG_VERSION = 3.2.3
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+> 
+> 
+> On 06-02-17 22:06, Peter Seiderer wrote:
+> > Hello Arnout,
+> > 
+> > On Mon, 6 Feb 2017 21:54:15 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+> > 
+> >>
+> >>
+> >> On 06-02-17 21:36, Peter Seiderer wrote:
+> >>> On Mon, 6 Feb 2017 21:24:34 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >>>
+> >>>>
+> >>>>
+> >>>> On 06-02-17 18:44, Andreas Naumann wrote:
+> >>>>> Hi,
+> >>>>>
+> >>>>> first of all, thanks everybody for taking over and pushing this further. My
+> >>>>> finding on this below..
+> >>>>>
+> >>>>> Am 06.02.2017 um 16:40 schrieb Thomas Petazzoni:
+> >>>>>> Hello,
+> >>>>>>
+> >>>>>> On Tue, 31 Jan 2017 08:59:02 +0100, Zoltan Gyarmati wrote:
+> >>>>>>
+> >>>>>>> The Qt 5.8 config (and pyqt5) was tested on Raspberry Pi.
+> >>>>>>
+> >>>>>> As Arnout said we are trying to apply this patch series (or actually a
+> >>>>>> subset of it). We have already fixed the comments that people have
+> >>>>>> raised, and you can see the result at:
+> >>>>>>
+> >>>>>>   http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=qt5-bump
+> >>>>>>
+> >>>>>> Unfortunately, this fails to build with the following defconfig:
+> >>>>>>
+> >>>>>> BR2_arm=y
+> >>>>>> BR2_cortex_a8=y
+> >>>>>> BR2_TOOLCHAIN_EXTERNAL=y
+> >>>>>> BR2_PACKAGE_QT5=y
+> >>>>>> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+> >>>>>> BR2_PACKAGE_QT5DECLARATIVE=y
+> >>>>>> BR2_PACKAGE_QT5IMAGEFORMATS=y
+> >>>>>> BR2_PACKAGE_QT5LOCATION=y
+> >>>>>> BR2_PACKAGE_QT5MULTIMEDIA=y
+> >>>>>> BR2_PACKAGE_QT5SENSORS=y
+> >>>>>> BR2_PACKAGE_QT5SERIALBUS=y
+> >>>>>> BR2_PACKAGE_QT5SVG=y
+> >>>>>> BR2_PACKAGE_QT5TOOLS=y
+> >>>>>> BR2_PACKAGE_QT5TOOLS_PIXELTOOL=y
+> >>>>>> BR2_PACKAGE_QT5TOOLS_QTDIAG=y
+> >>>>>> BR2_PACKAGE_QT5TOOLS_QTPATHS=y
+> >>>>>> BR2_PACKAGE_QT5TOOLS_QTPLUGININFO=y
+> >>>>>> BR2_PACKAGE_QT5WEBCHANNEL=y
+> >>>>>> BR2_PACKAGE_QT5ENGINIO=y
+> >>>>>>
+> >>>>>> With the following error message during the qt5base build:
+> >>>>>>
+> >>>>>>   Project ERROR: Library 'libpng' is not defined.
+> >>>>>>
+> >>>>>> Could you take our branch, and see why there is this build failure ?
+> >>>>>
+> >>>>> I have tried your branch and defconfig and see the same failure. Unfortunately I
+> >>>>> have no idea why it happens, I have never observed that problem.
+> >>>>>
+> >>>>> There are reports about these kind of problem, but without a hint for the real
+> >>>>> reason.
+> >>>>> https://bugreports.qt.io/browse/QTBUG-57148
+> >>>>
+> >>>>  That's something else, it happens while building the bundled freetype which we
+> >>>> don't do.
+> >>>>
+> >>>>> https://bugreports.qt.io/browse/QTBUG-57794
+> >>>>
+> >>>>  That one looks like the same issue.
+> >>>>
+> >>>>>
+> >>>>> After fiddling a little, I can get over it by selecting
+> >>>>> BR2_PACKAGE_QT5BASE_FONTCONFIG. Unfortunately I run out of time debugging
+> >>>>> further for now.
+> >>>>
+> >>>>  Since it would be really nice to have Qt5.8 in 2017.02, I wouldn't mind working
+> >>>> around it with
+> >>>>
+> >>>> 	# Not clear why this is needed, the build fails without it
+> >>>> 	select BR2_PACKAGE_QT5BASE_FONTCONFIG if BR2_PACKAGE_QT5_VERSION_LATEST
+> >>>>
+> >>>> to BR2_PACKAGE_QT5BASE_PNG. Thomas and I looked at it as well for a little while
+> >>>> and couldn't come up with an explanation.
+> >>>>
+> >>>>  It would be good however to report our findings in QTBUG-57794.
+> >>>
+> >>> QTBUG-57794 points to QTBUG-58038 [1] with fix attached (see [2] and [3]),
+> >>> may be worth a try?
+> >>
+> >>  How did I miss that reference!
+> >>
+> > 
+> > And the patche worked for me with the given defconfig...
+> > 
+> >>  But that is not the correct fix for us. That fix will make sure that the
+> >> bundled freetype is built when the system libpng is selected. But we of course
+> >> want the system freetype, not the bundled one. QTBUG-58038 will indeed fix the
+> >> build, but it's not what we want. We need to pass -system-freetype and select
+> >> BR2_PACKAGE_FREETYPE.
+> > 
+> > I think this would be another improvement fix/patch (can be done on top of the
+> > patchset)?
+> 
+>  So what you propose is to first commit 5.8 with the patch from QTBUG-58038, and
+> subsequently add -system-freetype and remove the patch again?
+> 
+
+Yes (and no need to remove the patch which fixes a real problem with compiling the
+bundled freetype library and can for sure be removed with the next version bump
+to 5.8.1). It is not the cleanest thing to do but fixes the build problem...
+
+Changing from bundled freetype to system freetype is a real enhancement of the
+buildroot qt5base package (bundled freetype-2.6.1, system freetype-2.7.1) and
+should be done in an extra patch (even if it fixes/avoids the bundled compile
+problem)?
+
+For some other libs (eg. sqlite) buildroot supports the system vs. bundled
+option....in case we support this for freetype the patch needed too...
+
+Regards,
+Peter
+
+>  Regards,
+>  Arnout
+> 
+> > System freetype is not used at the moment (not for 5.6 and 5.8)...
+> 
