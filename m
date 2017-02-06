@@ -1,38 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 16:20:34 +0100
-Subject: [Buildroot] [PATCH 1/1] opkg-utils: new package
-In-Reply-To: <20170206145743.12972-1-patrickdepinguin@gmail.com>
-References: <20170206145743.12972-1-patrickdepinguin@gmail.com>
-Message-ID: <20170206162034.26a1f5fc@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 6 Feb 2017 16:23:26 +0100
+Subject: [Buildroot] [V2 1/1] ntp: security bump to verserion 4.2.8p9
+In-Reply-To: <20170206160232.7513524b@free-electrons.com>
+References: <20170206141225.2311-1-aduskett@codeblue.com>
+ <20170206155817.5e945678@free-electrons.com>
+ <1486393216.2005.19.camel@codeblue.com>
+ <20170206160232.7513524b@free-electrons.com>
+Message-ID: <91082fe8-697b-f4c9-a154-e74ab462a138@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Mon,  6 Feb 2017 15:57:43 +0100, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+On 06-02-17 16:02, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Originally, the opkg sources also contained the tools needed to _create_ an
-> opkg package. In later releases, this code has been split to a separate
-> package opkg-utils.
+> On Mon, 6 Feb 2017 15:00:16 +0000, Adam Duskett wrote:
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  package/Config.in.host            |  1 +
->  package/opkg-utils/Config.in.host |  6 ++++++
->  package/opkg-utils/opkg-utils.mk  | 21 +++++++++++++++++++++
->  3 files changed, 28 insertions(+)
->  create mode 100644 package/opkg-utils/Config.in.host
->  create mode 100644 package/opkg-utils/opkg-utils.mk
+>> That's the million dollar question!  As far as I can tell, it's a
+>> real decision from upstream, as many of the files now include
+>> libssl_compat.h, however if you want, I can try to play around
+>> with them and see if they are 100% mandatory or not.
+> 
+> That would be useful, yes.
 
-Applied to master, thanks. I added a hash file, and added you in
-DEVELOPERS file for this package.
+ It's really weird that they introduce such a dependency in a p8 -> p9 bump...
 
-Thomas
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
