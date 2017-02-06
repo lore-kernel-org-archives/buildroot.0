@@ -1,143 +1,142 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Feb 2017 21:54:15 +0100
-Subject: [Buildroot] [PATCH v6 0/9] bump/choice for qt 5.8.0
-In-Reply-To: <20170206213600.15eea69c@gmx.net>
-References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20170206164058.3f443334@free-electrons.com>
- <0ac2d242-962a-9293-4690-d51e0b7031e0@andin.de>
- <d086f97e-ac3d-6046-55fc-caf22e21d9e4@mind.be>
- <20170206213600.15eea69c@gmx.net>
-Message-ID: <6fdf578d-3b56-fa90-2adb-2d3dbf6118ca@mind.be>
+From: Julien Viard de Galbert <julien@vdg.name>
+Date: Mon, 6 Feb 2017 21:56:31 +0100
+Subject: [Buildroot] [PATCH v6] dieharder: new package
+In-Reply-To: <20170124114006.67ab47db@free-electrons.com>
+References: <1485087282-26931-1-git-send-email-julien@vdg.name>
+ <20170124114006.67ab47db@free-electrons.com>
+Message-ID: <20170206205631.GA17594@vdg.name>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 06-02-17 21:36, Peter Seiderer wrote:
-> On Mon, 6 Feb 2017 21:24:34 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+On Tue, Jan 24, 2017 at 11:40:06AM +1300, Thomas Petazzoni wrote:
+> Hello,
 > 
->>
->>
->> On 06-02-17 18:44, Andreas Naumann wrote:
->>> Hi,
->>>
->>> first of all, thanks everybody for taking over and pushing this further. My
->>> finding on this below..
->>>
->>> Am 06.02.2017 um 16:40 schrieb Thomas Petazzoni:
->>>> Hello,
->>>>
->>>> On Tue, 31 Jan 2017 08:59:02 +0100, Zoltan Gyarmati wrote:
->>>>
->>>>> The Qt 5.8 config (and pyqt5) was tested on Raspberry Pi.
->>>>
->>>> As Arnout said we are trying to apply this patch series (or actually a
->>>> subset of it). We have already fixed the comments that people have
->>>> raised, and you can see the result at:
->>>>
->>>>   http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=qt5-bump
->>>>
->>>> Unfortunately, this fails to build with the following defconfig:
->>>>
->>>> BR2_arm=y
->>>> BR2_cortex_a8=y
->>>> BR2_TOOLCHAIN_EXTERNAL=y
->>>> BR2_PACKAGE_QT5=y
->>>> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
->>>> BR2_PACKAGE_QT5DECLARATIVE=y
->>>> BR2_PACKAGE_QT5IMAGEFORMATS=y
->>>> BR2_PACKAGE_QT5LOCATION=y
->>>> BR2_PACKAGE_QT5MULTIMEDIA=y
->>>> BR2_PACKAGE_QT5SENSORS=y
->>>> BR2_PACKAGE_QT5SERIALBUS=y
->>>> BR2_PACKAGE_QT5SVG=y
->>>> BR2_PACKAGE_QT5TOOLS=y
->>>> BR2_PACKAGE_QT5TOOLS_PIXELTOOL=y
->>>> BR2_PACKAGE_QT5TOOLS_QTDIAG=y
->>>> BR2_PACKAGE_QT5TOOLS_QTPATHS=y
->>>> BR2_PACKAGE_QT5TOOLS_QTPLUGININFO=y
->>>> BR2_PACKAGE_QT5WEBCHANNEL=y
->>>> BR2_PACKAGE_QT5ENGINIO=y
->>>>
->>>> With the following error message during the qt5base build:
->>>>
->>>>   Project ERROR: Library 'libpng' is not defined.
->>>>
->>>> Could you take our branch, and see why there is this build failure ?
->>>
->>> I have tried your branch and defconfig and see the same failure. Unfortunately I
->>> have no idea why it happens, I have never observed that problem.
->>>
->>> There are reports about these kind of problem, but without a hint for the real
->>> reason.
->>> https://bugreports.qt.io/browse/QTBUG-57148
->>
->>  That's something else, it happens while building the bundled freetype which we
->> don't do.
->>
->>> https://bugreports.qt.io/browse/QTBUG-57794
->>
->>  That one looks like the same issue.
->>
->>>
->>> After fiddling a little, I can get over it by selecting
->>> BR2_PACKAGE_QT5BASE_FONTCONFIG. Unfortunately I run out of time debugging
->>> further for now.
->>
->>  Since it would be really nice to have Qt5.8 in 2017.02, I wouldn't mind working
->> around it with
->>
->> 	# Not clear why this is needed, the build fails without it
->> 	select BR2_PACKAGE_QT5BASE_FONTCONFIG if BR2_PACKAGE_QT5_VERSION_LATEST
->>
->> to BR2_PACKAGE_QT5BASE_PNG. Thomas and I looked at it as well for a little while
->> and couldn't come up with an explanation.
->>
->>  It would be good however to report our findings in QTBUG-57794.
+> Thanks a lot for all your iterations. It looks mostly good, but I have
+> a few questions, see below.
 > 
-> QTBUG-57794 points to QTBUG-58038 [1] with fix attached (see [2] and [3]),
-> may be worth a try?
+Hello,
 
- How did I miss that reference!
+See my comments bellow
 
- But that is not the correct fix for us. That fix will make sure that the
-bundled freetype is built when the system libpng is selected. But we of course
-want the system freetype, not the bundled one. QTBUG-58038 will indeed fix the
-build, but it's not what we want. We need to pass -system-freetype and select
-BR2_PACKAGE_FREETYPE.
-
- To be checked:
-
-- is this also the case for 5.6?
-
-- under which circumstances does freetype have to be selected?
-
- Regards,
- Arnout
-
+> On Sun, 22 Jan 2017 13:14:42 +0100, Julien Viard de Galbert wrote:
 > 
-> Regards,
-> Peter
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 91e82ac..75c8e71 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -868,6 +868,9 @@ F:	package/qt5/
+> >  N:	Julien Floret <julien.floret@6wind.com>
+> >  F:	package/lldpd/
+> >  
+> > +N:	Julien Viard de Galbert <julien@vdg.name>
+> > +F:	package/dieharder/
+> > +
 > 
+> This should be in a separate patch, so that backporting the new package
+> to an older version of Buildroot doesn't cause a conflict in the
+> DEVELOPERS file.
 > 
-> [1] https://bugreports.qt.io/browse/QTBUG-58038
-> [2] https://codereview.qt-project.org/181808
-> [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4dcfd90e4fd7d4c49138038dbbcbda8794a9fbff
-> 
-> 
->>
->>  Regards,
->>  Arnout
->>
-> 
+Ok I'll do that.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> > diff --git a/package/dieharder/0002-Do-not-install-includes.patch b/package/dieharder/0002-Do-not-install-includes.patch
+> > new file mode 100644
+> > index 0000000..6ece2a9
+> > --- /dev/null
+> > +++ b/package/dieharder/0002-Do-not-install-includes.patch
+> > @@ -0,0 +1,28 @@
+> > +From 9ee8200a6dec6aca7f4f37c46ca95ac1cb38306c Mon Sep 17 00:00:00 2001
+> > +From: Julien Viard de Galbert <julien@vdg.name>
+> > +Date: Sat, 14 Jan 2017 14:08:07 +0100
+> > +Subject: [PATCH] Do not install includes
+> > +
+> > +We don't want include files on the target
+> > +
+> > +Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
+> 
+> Why is this patch needed?
+> 
+> Header files are automatically removed from the target filesystem by
+> the target-finalize logic in the main Buildroot Makefile. So there is
+> no need to add special code in packages to remove header files.
+> 
+I'll double check I had this patch written almost 2 years ago when I first
+tried to package dieharder, I remember the build system had several
+glitches...
+
+> Regarding the other patches, could you submit them to the upstream
+> project? They all make sense for upstream I believe.
+> 
+I'll do it, yes.
+
+> > +DIEHARDER_VERSION = 3.31.1
+> > +DIEHARDER_SITE = http://www.phy.duke.edu/~rgb/General/dieharder
+> > +DIEHARDER_SOURCE = dieharder-$(DIEHARDER_VERSION).tgz
+> > +DIEHARDER_STRIP_COMPONENTS = 2
+> > +DIEHARDER_LICENSE = GPLv2 with beverage clause
+> 
+> Interesting license :)
+> 
+> > +DIEHARDER_LICENSE_FILES = COPYING
+> > +DIEHARDER_DEPENDENCIES = gsl host-libtool
+> > +
+> > +# Fix m4 links to points to the ones in staging (provided by libtool hence
+> > +# the patch dependency).
+> > +define DIEHARDER_POST_PATCH_FIXUP
+> > +	for m in $(@D)/m4/*; do \
+> > +		l=$$(readlink $$m) ;\
+> > +		rm $$m ;\
+> > +		ln -s $(HOST_DIR)$$l $$m ;\
+> > +	done
+> > +endef
+> > +DIEHARDER_POST_PATCH_HOOKS += DIEHARDER_POST_PATCH_FIXUP
+> 
+> This looks weird. I haven't looked at the package in details though.
+> Could you explain a bit more what's going on.
+Well the package ships symbolic links to the host libtool:
+libtool.m4 -> /usr/share/aclocal/libtool.m4
+lrwxrwxrwx 1 julien julien 33 oct.  17  2015 lt~obsolete.m4 -> /usr/share/aclocal/lt~obsolete.m4
+lrwxrwxrwx 1 julien julien 31 oct.  17  2015 ltoptions.m4 -> /usr/share/aclocal/ltoptions.m4
+lrwxrwxrwx 1 julien julien 29 oct.  17  2015 ltsugar.m4 -> /usr/share/aclocal/ltsugar.m4
+lrwxrwxrwx 1 julien julien 31 oct.  17  2015 ltversion.m4 -> /usr/share/aclocal/ltversion.m4
+
+On my current build host I don't have libtool installed, that's how I got to this one.
+> 
+> > +
+> > +# Ensure the libtool version is updated,
+> 
+> Why?
+> 
+Well if the m4 script it points to are unknown I don't see how we can
+live without updating it.
+
+> > +# also make _CONF_ENV works instead of _CONF_OPTS for endiannes
+> 
+> I don't see what this means. _CONF_ENV works regardless of whether
+> AUTORECONF is YES or NO.
+> 
+It means that I don't know how was the original config script generated,
+but it whould not honor it's environment. running autoreconf fixes it.
+
+> > +DIEHARDER_AUTORECONF = YES
+> > +
+> > +# fix endiannes detection
+> 
+> endianness with two 's' at the end, see
+> https://en.wikipedia.org/wiki/Endianness.
+> 
+Ok sorry for that one.
+
+Best Regards,
+
+Julien VdG
+
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
