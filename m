@@ -1,10 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:49 -0500
-Subject: [Buildroot] [PATCH 36/44] linux-firmware: add keyspan usaxxx serial
+Date: Mon,  6 Feb 2017 15:24:50 -0500
+Subject: [Buildroot] [PATCH 37/44] linux-firmware: add keyspan pda serial
 	adapter option
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-37-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-38-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +14,38 @@ To: buildroot@busybox.net
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
  package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 7 +++++++
- 2 files changed, 12 insertions(+)
+ package/linux-firmware/linux-firmware.mk | 9 +++++++++
+ 2 files changed, 14 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 064afa1..417cb7f 100644
+index 417cb7f..8b3cd6a 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -482,6 +482,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_EDGEPORT
- 	bool "USB Inside Out Edgeport Serial Driver"
+@@ -488,6 +488,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_KEYSPAN_USA
  	help
- 	  USB Inside Out Edgeport Serial Driver
-+	  
-+config BR2_PACKAGE_LINUX_FIRMWARE_KEYSPAN_USA
-+	bool "USB Keyspan USA-xxx serial devices"
-+	help
-+	  Firmware files for USB Keyspan USA-xxx serial devices
+ 	  Firmware files for USB Keyspan USA-xxx serial devices
  
++config BR2_PACKAGE_LINUX_FIRMWARE_KEYSPAN_PDA
++	bool "USB Keyspan PDA single-port serial devices"
++	help
++	  Firmware files for USB Keyspan single-port serial devices
++
  endmenu # Serial
  
+ endif
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 9f0e7fe..b444a9c 100644
+index b444a9c..7bc149a 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -653,6 +653,13 @@ LINUX_FIRMWARE_DIRS += edgeport
+@@ -660,6 +660,15 @@ LINUX_FIRMWARE_DIRS += keyspan
  # which is installed unconditionally
  endif
  
-+# Keyspan USAxxx Serial adapters
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_KEYSPAN_USA),y)
-+LINUX_FIRMWARE_DIRS += keyspan
++# Keyspan PDA Serial adapters
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_KEYSPAN_PDA),y)
++LINUX_FIRMWARE_FILES += \
++	keyspan_pda/keyspan_pda.fw \
++	keyspan_pda/xircom_pgs.fw
 +# No license file; the license is in the file WHENCE
 +# which is installed unconditionally
 +endif
