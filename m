@@ -1,34 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 19:13:47 +0100
-Subject: [Buildroot] [git commit] package/cpio: Fix GNU Mirror Path
-Message-ID: <20170206181456.4355B81DBC@busybox.osuosl.org>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Mon, 6 Feb 2017 18:19:16 +0000 (UTC)
+Subject: [Buildroot] Odd comment in openntpd/Config.in
+References: <o7aan0$qvb$1@blaine.gmane.org>
+ <20170206181317.i3gc4336rm7u2lkd@tarshish>
+Message-ID: <o7aen3$mj0$1@blaine.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f3627a91fd97ee9442755403e2864cd32994f6d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2017-02-06, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Grant,
+>
+> On Mon, Feb 06, 2017 at 05:10:56PM +0000, Grant Edwards wrote:
+>> In https://git.busybox.net/buildroot/tree/package/openntpd/Config.in:
+>> 
+>> config BR2_PACKAGE_OPENNTPD
+>>        bool "openntpd"
+>>        depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>>        [...]
+>> 
+>> comment "openntpd needs a toolchain w/ NPTL"
+>>         [...]
+>>         depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>> 
+>> Is the "!" in the comment is a typo?
+>
+> We want to show the comment only when the toolchain has no NPTL support. So 
+> the "!" makes perfect sense to me.
 
-Replacing ftpmirror.gnu.org with BR2_GNU_MIRROR variable
+Ah.  That's because you didn't misread it and think that the "depends
+on" line was part of the comment itself and not the option that
+controls when the comment is displayed.
 
-Signed-off-by: Brian 'redbeard' Harrington <redbeard@coreos.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cpio/cpio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
-index 1576127..b0b8fa6 100644
---- a/package/cpio/cpio.mk
-+++ b/package/cpio/cpio.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CPIO_VERSION = 2.12
--CPIO_SITE = http://ftp.gnu.org/gnu/cpio
-+CPIO_SITE = $(BR2_GNU_MIRROR)/cpio
- CPIO_CONF_OPTS = --bindir=/bin
- CPIO_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- CPIO_LICENSE = GPLv3+
+-- 
+Grant Edwards               grant.b.edwards        Yow! Psychoanalysis??
+                                  at               I thought this was a nude
+                              gmail.com            rap session!!!
