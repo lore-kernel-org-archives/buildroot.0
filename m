@@ -1,38 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 22:38:06 +0100
-Subject: [Buildroot] [PATCH 1/1] sudo: Add ldap support for sudoers rules
-In-Reply-To: <87r33buhqk.fsf@dell.be.48ers.dk>
-References: <1477323263-6689-1-git-send-email-cdf123@cdf123.net>
- <20170206195401.11ccbee3@free-electrons.com>
- <87r33buhqk.fsf@dell.be.48ers.dk>
-Message-ID: <20170206223806.5632b9ad@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 6 Feb 2017 22:43:01 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] imagemagick: fix build of
+	png support when jpeg support is disabled
+Message-ID: <20170206214306.7956A82115@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ca84b0177e4ab83eaff94cd6a0c4ae56d99afee0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-On Mon, 06 Feb 2017 22:33:39 +0100, Peter Korsgaard wrote:
+Fixes:
+http://autobuild.buildroot.net/results/d20/d20eecec8e7b947759185f77a6c8e610dd7393f3/
+http://autobuild.buildroot.net/results/ee1/ee15efa8ae3f95244980810155ff7ba9f885a59d/
+http://autobuild.buildroot.net/results/aa8/aa80f2fd4c7dd884ea8a1b55ad15a40c7bf40501/
+http://autobuild.buildroot.net/results/9aa/9aaa044f78115d7f599ea09669c0d6bface5633e/
 
->  > I've applied, after removing the explicit Config.in option and instead
->  > relying on whether BR2_PACKAGE_OPENLDAP is enabled or not to decide if
->  > ldap support should be enabled or not in sudo.  
-> 
-> Notice that this was discussed during the first review:
-> 
-> http://lists.busybox.net/pipermail/buildroot/2016-October/175480.html
-> 
-> Apparently sudo with pam support really needs a configured
-> /etc/ldap.conf, which might be confusing to people that (perhaps
-> unrelated to eachother) enabled both sudo and ldap.
+This combination is broken since 7.0.4-6.
 
-So in other words we really want to have a sub-option for this
-situation?
+Since commit a9e228f8ac26 (Implemented a private PNG caNv (canvas) chunk),
+PNGsLong gets called unconditionally, but it is only defined if JPEG
+support is enabled (which defines JNG_SUPPORTED), breaking the build:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+MagickCore/.libs/libMagickCore-7.Q16HDRI.a(MagickCore_libMagickCore_7_Q16HDRI_la-png.o): In function `WriteOnePNGImage':
+png.c:(.text+0x748d): undefined reference to `PNGsLong'
+png.c:(.text+0x74b7): undefined reference to `PNGsLong'
+
+Fix it by adding a patch unconditionally defining the helper function.
+
+Patch submitted upstream.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit c6f8088fdd56384fb9dc61ca31a0c1772acfde93)
+---
+ ...-png.c-unbreak-build-without-JPEG-support.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+
+diff --git a/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch b/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
+new file mode 100644
+index 0000000..00a1045
+--- /dev/null
++++ b/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
+@@ -0,0 +1,47 @@
++From 5d0e9c53f49022df5154eb3c04900f48b1c6448e Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Mon, 6 Feb 2017 17:39:31 +0100
++Subject: [PATCH] png.c: unbreak build without JPEG support
++
++Since commit a9e228f8ac26 (Implemented a private PNG caNv (canvas) chunk),
++PNGsLong gets called unconditionally, but it is only defined if JPEG
++support is enabled (which defines JNG_SUPPORTED), breaking the build:
++
++MagickCore/.libs/libMagickCore-7.Q16HDRI.a(MagickCore_libMagickCore_7_Q16HDRI_la-png.o): In function `WriteOnePNGImage':
++png.c:(.text+0x748d): undefined reference to `PNGsLong'
++png.c:(.text+0x74b7): undefined reference to `PNGsLong'
++
++For build log, see:
++http://autobuild.buildroot.net/results/d20/d20eecec8e7b947759185f77a6c8e610dd7393f3/build-end.log
++
++Fix it by unconditionally defining the helper function.
++
++Submitted-upstream: https://github.com/ImageMagick/ImageMagick/pull/373
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ coders/png.c | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/coders/png.c b/coders/png.c
++index aebe59281..1328b1aab 100644
++--- a/coders/png.c
+++++ b/coders/png.c
++@@ -1229,7 +1229,6 @@ static void PNGLong(png_bytep p,png_uint_32 value)
++   *p++=(png_byte) (value & 0xff);
++ }
++ 
++-#if defined(JNG_SUPPORTED)
++ static void PNGsLong(png_bytep p,png_int_32 value)
++ {
++   *p++=(png_byte) ((value >> 24) & 0xff);
++@@ -1237,7 +1236,6 @@ static void PNGsLong(png_bytep p,png_int_32 value)
++   *p++=(png_byte) ((value >> 8) & 0xff);
++   *p++=(png_byte) (value & 0xff);
++ }
++-#endif
++ 
++ static void PNGShort(png_bytep p,png_uint_16 value)
++ {
++-- 
++2.11.0
++
