@@ -1,10 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:39 -0500
-Subject: [Buildroot] [PATCH 26/44] linux-firmware: add myricom ethernet
-	option
+Date: Mon,  6 Feb 2017 15:24:33 -0500
+Subject: [Buildroot] [PATCH 20/44] linux-firmware: add adaptec starfire
+	ethernet option
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-27-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-21-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,37 +18,37 @@ Signed-off-by: Adam Duskett <aduskett@codeblue.com>
  2 files changed, 11 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 422e340..f88009d 100644
+index 6cf4c18..2a4ab3d 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -395,6 +395,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_KLSI_KL5USB101
- 	help
- 	  Firmware files for USB KLSI KL5USB101-based Ethernet devices
+@@ -350,6 +350,11 @@ endmenu
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_MYRICOM
-+	bool "MyriCOM Gigabit Ethernet"
+ menu "Ethernet firmware"
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_ADAPTEC_STARFIRE
++	bool "Adaptec Starfire/DuraLAN support"
 +	help
-+	  Firmware files for MyriCOM Gigabit Ethernet
++	  Firmware files for the Adaptec Starfire/DuraLAN ethernet card
 +
- config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169
- 	bool "Realtek 8169"
+ config BR2_PACKAGE_LINUX_FIRMWARE_BNX2X
+ 	bool "Broadcom NetXtremeII"
  	help
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index f76fa97..c5eceed 100644
+index 60d7f8a..c748b29 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -500,6 +500,12 @@ LINUX_FIRMWARE_DIRS += kaweth/
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.kaweth
+@@ -448,6 +448,12 @@ LINUX_FIRMWARE_FILES += iwlwifi-8265-*.ucode
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
  endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MYRICOM),y)
-+LINUX_FIRMWARE_DIRS += myricom/
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ADAPTEC_STARFIRE),y)
++LINUX_FIRMWARE_DIRS += adaptec
 +# No license file; the license is in the file WHENCE
 +# which is installed unconditionally
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169),y)
- LINUX_FIRMWARE_FILES += \
- 	rtl_nic/rtl8105e-1.fw \
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2X),y)
+ LINUX_FIRMWARE_FILES += bnx2x/*
+ # No license file; the license is in the file WHENCE
 -- 
 2.9.3
