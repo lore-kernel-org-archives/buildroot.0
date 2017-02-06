@@ -1,49 +1,67 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon,  6 Feb 2017 20:36:31 +0100
-Subject: [Buildroot] [PATCH] python-gunicorn: fix build issues
-Message-ID: <20170206193631.12382-1-maxime.hadjinlian@gmail.com>
+From: Ignacy =?iso-8859-2?Q?Gaw=EAdzki?= <ignacy.gawedzki@green-communications.fr>
+Date: Mon, 6 Feb 2017 20:37:29 +0100
+Subject: [Buildroot] [PATCH] Don't disable dependency tracking if using
+ <pkg>_OVERRIDE_SRCDIR.
+In-Reply-To: <2a135f21-ffe1-06b8-37d3-e78f7a51798f@gmail.com>
+References: <20170201135310.3ghqvpqww25jfzm2@zenon.in.qult.net>
+ <2a135f21-ffe1-06b8-37d3-e78f7a51798f@gmail.com>
+Message-ID: <20170206193729.i3epqqqekvlgiime@zenon.in.qult.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix:
-    http://autobuild.buildroot.org/results/b2d/b2d43dd3c52cc9f586009a10a40f97b07548322d/build-end.log
+On Mon, Feb 06, 2017 at 07:39:00PM +0100, thus spake Romain Naour:
+> Hi Ignacy,
+> 
+> Le 01/02/2017 ? 14:53, Ignacy Gaw?dzki a ?crit :
+> > Include the --disable-dependency-tracking option in
+> > <pkg>_CONFIGURE_CMDS only on the condition that <pkg>_OVERRIDE_SRCDIR
+> > is empty.  Dependency tracking is very welcome while developing in
+> > order to properly rebuild when calling make <pkg>-rebuild for
+> > instance.
+> > 
+> > Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+> > ---
+> >  package/pkg-autotools.mk | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> > index f7b8488..e8579f4 100644
+> > --- a/package/pkg-autotools.mk
+> > +++ b/package/pkg-autotools.mk
+> > @@ -199,7 +199,8 @@ define $(2)_CONFIGURE_CMDS
+> >  		--disable-documentation \
+> >  		--with-xmlto=no \
+> >  		--with-fop=no \
+> > -		--disable-dependency-tracking \
+> > +		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),, \
+> > +		   --disable-dependency-tracking) \
+> >  		--enable-ipv6 \
+> >  		$$(DISABLE_NLS) \
+> >  		$$(SHARED_STATIC_LIBS_OPTS) \
+> > @@ -232,7 +233,8 @@ define $(2)_CONFIGURE_CMDS
+> >  		--disable-debug \
+> >  		--with-xmlto=no \
+> >  		--with-fop=no \
+> > -		--disable-dependency-tracking \
+> > +		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),, \
+> > +		   --disable-dependency-tracking) \
+> 
+> You're likely working on the target variant, so probably you can let the
+> dependency tracking enabled for the host?
 
-The issue arise from the fact that we compile all *.py files but the
-_gaiohttp.py file is using Python3 ("yield from") syntax which causes an
-error.
+Dependency tracking was initially *disabled* for both target and host.
+I suppose that <pkg>_OVERRIDE_SRCDIR works for both target and host,
+so I don't see why we should leave it disabled for one and not the
+other.
 
-So we are using Python2, delete this file as it won't ever be imported
-anyway as it is checked by gunicorn in the __init__.py file of the worker
-module.
+Regards,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/python-gunicorn/python-gunicorn.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Ignacy
 
-diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
-index 426e809730..cfb7da110c 100644
---- a/package/python-gunicorn/python-gunicorn.mk
-+++ b/package/python-gunicorn/python-gunicorn.mk
-@@ -11,4 +11,16 @@ PYTHON_GUNICORN_SETUP_TYPE = setuptools
- PYTHON_GUNICORN_LICENSE = MIT
- PYTHON_GUNICORN_LICENSE_FILES = LICENSE
- 
-+# At the end of the build, we try to compile all py files using the host python
-+# that has been built.
-+# The GAIO HTTP Worker is only compatible with Python3.4.2 and up. So don't try
-+# to compile it with python 2.x
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+define PYTHON_GUNICORN_REMOVE_GAIO_WORKER
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/ \
-+		-name "_gaiohttp.py" -exec rm -f {} \;
-+endef
-+PYTHON_GUNICORN_POST_INSTALL_TARGET_HOOKS += PYTHON_GUNICORN_REMOVE_GAIO_WORKER
-+endif
-+
- $(eval $(python-package))
 -- 
-2.11.0
+Ignacy Gaw?dzki
+R&D Engineer
+Green Communications
