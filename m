@@ -1,177 +1,63 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon,  6 Feb 2017 20:34:47 +0100
-Subject: [Buildroot] [PATCH v4] gqrx: new package
-Message-ID: <20170206193447.1283-1-gwenj@trabucayre.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon,  6 Feb 2017 11:35:04 -0800
+Subject: [Buildroot] [PATCH] binutils: backport fix for
+	xg_reverse_shift_count
+Message-ID: <1486409704-16096-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+binutils-2.27 gas has bug that results in the following kind of build
+error when assembling bb[cs]i.l on big-endian xtensa targets:
 
-Gqrx is an open source software defined radio (SDR) receiver implemented
-using GNU Radio and the Qt GUI toolkit. Currently it works on Linux
-and Mac with hardware supported by gr-osmosdr, including Funcube Dongle,
-RTL-SDR, Airspy, HackRF, BladeRF, RFSpace, USRP and SoapySDR.
+  ieee754-sf.S:237: Error: invalid symbolic operand
 
-Gqrx can operate as an AM/FM/SSB receiver with audio output or as an
-FFT-only instrument. There are also various hooks for interacting
-with external application using network sockets.
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
-Changes v3 -> v4:
- * revert help text and fix columns size;
- * depends on BR2_PACKAGE_QT5 instead of select
-Changes v2 -> v3:
- * backport patch to fix Wmisleading-indentation with gcc6;
- * inherits alsa-lib or portaudio dependencies from gr-audio;
- * reduce help text size;
- * add upstream url.
-Changes v1 -> v2:
- * typo
----
- package/Config.in                                |  1 +
- package/gqrx/0001-fix_compilation_in_gcc-6.patch | 34 +++++++++++++++++++
- package/gqrx/Config.in                           | 43 ++++++++++++++++++++++++
- package/gqrx/gqrx.hash                           |  2 ++
- package/gqrx/gqrx.mk                             | 15 +++++++++
- 5 files changed, 95 insertions(+)
- create mode 100644 package/gqrx/0001-fix_compilation_in_gcc-6.patch
- create mode 100644 package/gqrx/Config.in
- create mode 100644 package/gqrx/gqrx.hash
- create mode 100644 package/gqrx/gqrx.mk
+ ...tensa.c-fixup-xg_reverse_shift_count-typo.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/binutils/2.27/0130-tc-xtensa.c-fixup-xg_reverse_shift_count-typo.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index cb6c12e..4ea0de1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1449,6 +1449,7 @@ menu "Miscellaneous"
- 	source "package/empty/Config.in"
- 	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
-+	source "package/gqrx/Config.in"
- 	source "package/gr-osmosdr/Config.in"
- 	source "package/gsettings-desktop-schemas/Config.in"
- 	source "package/haveged/Config.in"
-diff --git a/package/gqrx/0001-fix_compilation_in_gcc-6.patch b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
+diff --git a/package/binutils/2.27/0130-tc-xtensa.c-fixup-xg_reverse_shift_count-typo.patch b/package/binutils/2.27/0130-tc-xtensa.c-fixup-xg_reverse_shift_count-typo.patch
 new file mode 100644
-index 0000000..e1824c3
+index 0000000..7973607
 --- /dev/null
-+++ b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-@@ -0,0 +1,34 @@
-+From e6baaee4968345a53e977f593362267a91041cff Mon Sep 17 00:00:00 2001
-+From: Valentin Ochs <a@0au.de>
-+Date: Fri, 21 Oct 2016 20:12:50 +0200
-+Subject: [PATCH 05/34] Cosmetic & readability changes
++++ b/package/binutils/2.27/0130-tc-xtensa.c-fixup-xg_reverse_shift_count-typo.patch
+@@ -0,0 +1,33 @@
++From 78fb7e37eb8bb08ae537d6c487996ff17c810332 Mon Sep 17 00:00:00 2001
++From: Trevor Saunders <tbsaunde+binutils@tbsaunde.org>
++Date: Mon, 26 Sep 2016 12:42:11 -0400
++Subject: [PATCH] tc-xtensa.c: fixup xg_reverse_shift_count typo
 +
-+Backport patch from
-+https://github.com/csete/gqrx/commit/e6baaee4968345a53e977f593362267a91041cff
++gas/ChangeLog:
 +
-+Fix compilation in gcc-6
++2016-09-26  Trevor Saunders  <tbsaunde+binutils@tbsaunde.org>
 +
-+Signed-off-by: Valentin Ochs <a@0au.de>
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++	* config/tc-xtensa.c (xg_reverse_shift_count): Pass cnt_arg instead of
++	cnt_argp to concat.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 +---
-+diff --git a/src/qtgui/plotter.cpp b/src/qtgui/plotter.cpp
-+index e491632..b877546 100644
-+--- a/src/qtgui/plotter.cpp
-++++ b/src/qtgui/plotter.cpp
-+@@ -1336,8 +1336,11 @@ void CPlotter::drawOverlay()
-+ #endif
++ gas/config/tc-xtensa.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index d062044..ca261ae 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -2228,7 +2228,7 @@ xg_reverse_shift_count (char **cnt_argp)
++   cnt_arg = *cnt_argp;
 + 
-+             int level = 0;
-+-            for (; level < nLevels && tagEnd[level] > x; level++);
-+-                level %= nLevels;
-++            while(level < nLevels && tagEnd[level] > x)
-++                level++;
-++            
-++            if(level == nLevels)
-++                level = 0;
++   /* replace the argument with "31-(argument)" */
++-  new_arg = concat ("31-(", cnt_argp, ")", (char *) NULL);
+++  new_arg = concat ("31-(", cnt_arg, ")", (char *) NULL);
 + 
-+             tagEnd[level] = x + nameWidth + slant - 1;
-+             m_BookmarkTags.append(qMakePair<QRect, qint64>(QRect(x, level * levelHeight, nameWidth + slant, fontHeight), bookmarks[i].frequency));
++   free (cnt_arg);
++   *cnt_argp = new_arg;
 +-- 
-+2.10.2
++2.1.4
 +
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-new file mode 100644
-index 0000000..0908b9f
---- /dev/null
-+++ b/package/gqrx/Config.in
-@@ -0,0 +1,43 @@
-+comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR || BR2_STATIC_LIBS
-+
-+comment "gqrx needs qt5, gnuradio, fftw's single precision, alsa-lib or portaudio"
-+	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
-+		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO) || !BR2_PACKAGE_QT5
-+
-+config BR2_PACKAGE_GQRX
-+	bool "gqrx"
-+	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
-+	depends on BR2_PACKAGE_GNURADIO
-+	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO # gr-audio
-+	depends on BR2_INSTALL_LIBSTDCPP # boost, qt5
-+	depends on !BR2_STATIC_LIBS # qt5
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, qt5
-+	depends on BR2_USE_WCHAR # boost, qt5
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_GNURADIO_ANALOG
-+	select BR2_PACKAGE_GNURADIO_AUDIO
-+	select BR2_PACKAGE_GNURADIO_BLOCKS
-+	select BR2_PACKAGE_GNURADIO_DIGITAL
-+	select BR2_PACKAGE_GNURADIO_FFT
-+	select BR2_PACKAGE_GNURADIO_FILTER
-+	select BR2_PACKAGE_GR_OSMOSDR
-+	depends on BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE_GUI
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5SVG
-+	help
-+	  Gqrx is an open source software defined radio (SDR) receiver
-+	  implemented using GNU Radio and the Qt GUI toolkit. Currently
-+	  it works on Linux and Mac with hardware supported by gr-osmosdr,
-+	  including Funcube Dongle, RTL-SDR, Airspy, HackRF, BladeRF,
-+	  RFSpace, USRP and SoapySDR.
-+
-+	  Gqrx can operate as an AM/FM/SSB receiver with audio output or
-+	  as an FFT-only instrument. There are also various hooks for
-+	  interacting with external application using network sockets.
-+
-+	  http://gqrx.dk/
-diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-new file mode 100644
-index 0000000..2d126aa
---- /dev/null
-+++ b/package/gqrx/gqrx.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated:
-+sha256 53d25db8d987a41ccccaf6fd85262bd7770cdfab5539b5901c4558756483c9db  gqrx-v2.6.tar.gz
-diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-new file mode 100644
-index 0000000..b591e60
---- /dev/null
-+++ b/package/gqrx/gqrx.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# gqrx
-+#
-+################################################################################
-+
-+GQRX_VERSION = v2.6
-+GQRX_SITE = $(call github,csete,gqrx,$(GQRX_VERSION))
-+GQRX_LICENSE = GPLv3+, Apache-2.0
-+GQRX_LICENSE_FILES = COPYING LICENSE-CTK
-+GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr qt5base qt5svg
-+
-+GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
-+
-+$(eval $(cmake-package))
 -- 
-2.10.2
+2.1.4
