@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 14:00:56 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/sngrep: fix static linking
- against libpcap
-In-Reply-To: <20170129172438.23835-1-bernd.kuhls@t-online.de>
-References: <20170129172438.23835-1-bernd.kuhls@t-online.de>
-Message-ID: <20170206140056.17dcb4fd@free-electrons.com>
+Date: Mon, 6 Feb 2017 14:04:04 +0100
+Subject: [Buildroot] [git commit] configs/odroidc2: bump uboot version to
+	eb5d2d16fd45f52ec49e9b4ff9d562630c08e61c
+Message-ID: <20170206130440.19B7781F87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ae5af87e61d961287f6ff0c0ccbda97ce0092476
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Jan 2017 18:24:38 +0100, Bernd Kuhls wrote:
-> Inspired by
-> https://git.buildroot.net/buildroot/tree/package/aircrack-ng/aircrack-ng.mk#n30
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/699/6993c398649469e25f2491fdb8f1ac9b6d6d8c3c/
-> http://autobuild.buildroot.net/results/846/8468df3462ac6d53faef228ca241bc500b2d7a52/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: optimized pcap-config call (Thomas)
+this version bump allows usage of hardkernel's secure signatures when
+booting a system
 
-Applied to master, thanks.
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/odroidc2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+index 95a9169..ecee2ad 100644
+--- a/configs/odroidc2_defconfig
++++ b/configs/odroidc2_defconfig
+@@ -28,7 +28,7 @@ BR2_LINUX_KERNEL_IMAGE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="1ec799cec97574a9838bc25b286484e579a41652"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="eb5d2d16fd45f52ec49e9b4ff9d562630c08e61c"
+ BR2_TARGET_UBOOT_BOARDNAME="odroidc2"
+ 
+ # Required tools to create the SD image
