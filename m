@@ -1,55 +1,74 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:16 -0500
-Subject: [Buildroot] [PATCH 03/44] linux-firmware: add korg121 audio device
-	option
+Date: Mon,  6 Feb 2017 15:24:20 -0500
+Subject: [Buildroot] [PATCH 07/44] linux-firmware: rename firmware_radeon to
+	firmware_ati_radeon
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-4-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-8-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This change is needed because there is now a amd_radeon option as well.
+
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 7 +++++++
- 2 files changed, 12 insertions(+)
+ package/linux-firmware/Config.in         | 10 +++++-----
+ package/linux-firmware/linux-firmware.mk |  9 ++++++---
+ 2 files changed, 11 insertions(+), 8 deletions(-)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 87fdd38..2b53280 100644
+index d3aca2c..1c0ba39 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -25,6 +25,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_SST_DSP
- 	help
- 	  Firmware files for Intel Baytrail SST DSP audio.
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_KORG1212
-+	bool "Korg 1212 IO audio device"
-+	help
-+	  Firmware files for Korg 1212 IO audio device.
-+
- endmenu # Audio
+@@ -49,16 +49,16 @@ endmenu # Audio
  
  menu "Video firmware"
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_ATI_RADEON
++	bool "ATI Radeon video card firmware"
++	help
++	  Firmware files for ATI Radeon video cards.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_I915
+ 	bool "Intel i915 video card firmware"
+ 	help
+ 	  Firmware files for the Intel i915 video cards.
+ 
+-config BR2_PACKAGE_LINUX_FIRMWARE_RADEON
+-	bool "AMD Radeon video card firmware"
+-	help
+-	  Firmware files for AMD Radeon video cards.
+-
+ endmenu # Video
+ 
+ menu "Bluetooth firmware"
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 67152e1..03eea82 100644
+index 6568c97..7fa066d 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -28,6 +28,13 @@ LINUX_FIRMWARE_FILES += intel/fw_sst_0f28.bin-48kHz_i2s_master
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.fw_sst_0f28
+@@ -57,14 +57,17 @@ LINUX_FIRMWARE_FILES += yamaha/
+ # WHENCE which is installed unconditionally
  endif
  
-+# Korg 1212 audio device
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_KORG1212),y)
-+LINUX_FIRMWARE_FILES += korg/
-+# No license file; the license is in the file WHENCE
-+# which is installed unconditionally
++# ATI Radeon
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATI_RADEON),y)
++LINUX_FIRMWARE_DIRS += radeon
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.radeon
 +endif
 +
  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_I915),y)
  LINUX_FIRMWARE_DIRS += i915
  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.i915
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RADEON),y)
+-LINUX_FIRMWARE_DIRS += radeon
+-LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.radeon
+ endif
+ 
+ # Intel Wireless Bluetooth
 -- 
 2.9.3
