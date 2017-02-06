@@ -1,10 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:48 -0500
-Subject: [Buildroot] [PATCH 35/44] linux-firmware: add edgeport serial
-	device option
+Date: Mon,  6 Feb 2017 15:24:49 -0500
+Subject: [Buildroot] [PATCH 36/44] linux-firmware: add keyspan usaxxx serial
+	adapter option
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-36-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-37-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,32 +18,32 @@ Signed-off-by: Adam Duskett <aduskett@codeblue.com>
  2 files changed, 12 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 7f494c2..064afa1 100644
+index 064afa1..417cb7f 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -478,6 +478,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_COMPUTONE
+@@ -482,6 +482,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_EDGEPORT
+ 	bool "USB Inside Out Edgeport Serial Driver"
  	help
- 	  Firmware files for Computone IntelliPort Plus serial device
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_EDGEPORT
-+	bool "USB Inside Out Edgeport Serial Driver"
+ 	  USB Inside Out Edgeport Serial Driver
++	  
++config BR2_PACKAGE_LINUX_FIRMWARE_KEYSPAN_USA
++	bool "USB Keyspan USA-xxx serial devices"
 +	help
-+	  USB Inside Out Edgeport Serial Driver
-+
++	  Firmware files for USB Keyspan USA-xxx serial devices
+ 
  endmenu # Serial
  
- endif
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 9a05ace..9f0e7fe 100644
+index 9f0e7fe..b444a9c 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -646,6 +646,13 @@ LINUX_FIRMWARE_FILES += intelliport2.bin
+@@ -653,6 +653,13 @@ LINUX_FIRMWARE_DIRS += edgeport
  # which is installed unconditionally
  endif
  
-+# USB Inside Out Edgeport
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_EDGEPORT),y)
-+LINUX_FIRMWARE_DIRS += edgeport
++# Keyspan USAxxx Serial adapters
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_KEYSPAN_USA),y)
++LINUX_FIRMWARE_DIRS += keyspan
 +# No license file; the license is in the file WHENCE
 +# which is installed unconditionally
 +endif
