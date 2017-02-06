@@ -1,155 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 6 Feb 2017 22:27:20 +0100
-Subject: [Buildroot] [PATCH v6 0/9] bump/choice for qt 5.8.0
-In-Reply-To: <90b134ea-494d-95a1-cff1-e12cae8486e3@mind.be>
-References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20170206164058.3f443334@free-electrons.com>
- <0ac2d242-962a-9293-4690-d51e0b7031e0@andin.de>
- <d086f97e-ac3d-6046-55fc-caf22e21d9e4@mind.be>
- <20170206213600.15eea69c@gmx.net>
- <6fdf578d-3b56-fa90-2adb-2d3dbf6118ca@mind.be>
- <20170206220602.01a04b3c@gmx.net>
- <90b134ea-494d-95a1-cff1-e12cae8486e3@mind.be>
-Message-ID: <20170206222720.5a8b3d30@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 06 Feb 2017 22:33:39 +0100
+Subject: [Buildroot] [PATCH 1/1] sudo: Add ldap support for sudoers rules
+In-Reply-To: <20170206195401.11ccbee3@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 6 Feb 2017 19:54:01 +0100")
+References: <1477323263-6689-1-git-send-email-cdf123@cdf123.net>
+ <20170206195401.11ccbee3@free-electrons.com>
+Message-ID: <87r33buhqk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 6 Feb 2017 22:09:21 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+ > Hello,
+ > On Mon, 24 Oct 2016 10:34:23 -0500, Chris Frederick wrote:
+ >> Added Config.in options to enable/disable the option, and check options
+ >> in sudo.mk to add openldap as a dependancy and compile with --with-ldap.
+ >> 
+ >> When sudo is built with ldap, /etc/sudoers is only read in for defaults,
+ >> all rules need to be provided via ldap which is configured by the user
+ >> in /etc/ldap.conf.
+ >> 
+ >> Since the user explicitly has to provide /etc/ldap.conf, we use 'depends
+ >> on' so that the user is obliged to explicitly enable openldap before the
+ >> option becomes visible.
+ >> 
+ >> Signed-off-by: Chris Frederick <cdf123@cdf123.net>
+ >> ---
+ >> package/sudo/Config.in | 13 +++++++++++++
+ >> package/sudo/sudo.mk   |  7 +++++++
+ >> 2 files changed, 20 insertions(+)
 
-> 
-> 
-> On 06-02-17 22:06, Peter Seiderer wrote:
-> > Hello Arnout,
-> > 
-> > On Mon, 6 Feb 2017 21:54:15 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
-> > 
-> >>
-> >>
-> >> On 06-02-17 21:36, Peter Seiderer wrote:
-> >>> On Mon, 6 Feb 2017 21:24:34 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>>
-> >>>>
-> >>>>
-> >>>> On 06-02-17 18:44, Andreas Naumann wrote:
-> >>>>> Hi,
-> >>>>>
-> >>>>> first of all, thanks everybody for taking over and pushing this further. My
-> >>>>> finding on this below..
-> >>>>>
-> >>>>> Am 06.02.2017 um 16:40 schrieb Thomas Petazzoni:
-> >>>>>> Hello,
-> >>>>>>
-> >>>>>> On Tue, 31 Jan 2017 08:59:02 +0100, Zoltan Gyarmati wrote:
-> >>>>>>
-> >>>>>>> The Qt 5.8 config (and pyqt5) was tested on Raspberry Pi.
-> >>>>>>
-> >>>>>> As Arnout said we are trying to apply this patch series (or actually a
-> >>>>>> subset of it). We have already fixed the comments that people have
-> >>>>>> raised, and you can see the result at:
-> >>>>>>
-> >>>>>>   http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=qt5-bump
-> >>>>>>
-> >>>>>> Unfortunately, this fails to build with the following defconfig:
-> >>>>>>
-> >>>>>> BR2_arm=y
-> >>>>>> BR2_cortex_a8=y
-> >>>>>> BR2_TOOLCHAIN_EXTERNAL=y
-> >>>>>> BR2_PACKAGE_QT5=y
-> >>>>>> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-> >>>>>> BR2_PACKAGE_QT5DECLARATIVE=y
-> >>>>>> BR2_PACKAGE_QT5IMAGEFORMATS=y
-> >>>>>> BR2_PACKAGE_QT5LOCATION=y
-> >>>>>> BR2_PACKAGE_QT5MULTIMEDIA=y
-> >>>>>> BR2_PACKAGE_QT5SENSORS=y
-> >>>>>> BR2_PACKAGE_QT5SERIALBUS=y
-> >>>>>> BR2_PACKAGE_QT5SVG=y
-> >>>>>> BR2_PACKAGE_QT5TOOLS=y
-> >>>>>> BR2_PACKAGE_QT5TOOLS_PIXELTOOL=y
-> >>>>>> BR2_PACKAGE_QT5TOOLS_QTDIAG=y
-> >>>>>> BR2_PACKAGE_QT5TOOLS_QTPATHS=y
-> >>>>>> BR2_PACKAGE_QT5TOOLS_QTPLUGININFO=y
-> >>>>>> BR2_PACKAGE_QT5WEBCHANNEL=y
-> >>>>>> BR2_PACKAGE_QT5ENGINIO=y
-> >>>>>>
-> >>>>>> With the following error message during the qt5base build:
-> >>>>>>
-> >>>>>>   Project ERROR: Library 'libpng' is not defined.
-> >>>>>>
-> >>>>>> Could you take our branch, and see why there is this build failure ?
-> >>>>>
-> >>>>> I have tried your branch and defconfig and see the same failure. Unfortunately I
-> >>>>> have no idea why it happens, I have never observed that problem.
-> >>>>>
-> >>>>> There are reports about these kind of problem, but without a hint for the real
-> >>>>> reason.
-> >>>>> https://bugreports.qt.io/browse/QTBUG-57148
-> >>>>
-> >>>>  That's something else, it happens while building the bundled freetype which we
-> >>>> don't do.
-> >>>>
-> >>>>> https://bugreports.qt.io/browse/QTBUG-57794
-> >>>>
-> >>>>  That one looks like the same issue.
-> >>>>
-> >>>>>
-> >>>>> After fiddling a little, I can get over it by selecting
-> >>>>> BR2_PACKAGE_QT5BASE_FONTCONFIG. Unfortunately I run out of time debugging
-> >>>>> further for now.
-> >>>>
-> >>>>  Since it would be really nice to have Qt5.8 in 2017.02, I wouldn't mind working
-> >>>> around it with
-> >>>>
-> >>>> 	# Not clear why this is needed, the build fails without it
-> >>>> 	select BR2_PACKAGE_QT5BASE_FONTCONFIG if BR2_PACKAGE_QT5_VERSION_LATEST
-> >>>>
-> >>>> to BR2_PACKAGE_QT5BASE_PNG. Thomas and I looked at it as well for a little while
-> >>>> and couldn't come up with an explanation.
-> >>>>
-> >>>>  It would be good however to report our findings in QTBUG-57794.
-> >>>
-> >>> QTBUG-57794 points to QTBUG-58038 [1] with fix attached (see [2] and [3]),
-> >>> may be worth a try?
-> >>
-> >>  How did I miss that reference!
-> >>
-> > 
-> > And the patche worked for me with the given defconfig...
-> > 
-> >>  But that is not the correct fix for us. That fix will make sure that the
-> >> bundled freetype is built when the system libpng is selected. But we of course
-> >> want the system freetype, not the bundled one. QTBUG-58038 will indeed fix the
-> >> build, but it's not what we want. We need to pass -system-freetype and select
-> >> BR2_PACKAGE_FREETYPE.
-> > 
-> > I think this would be another improvement fix/patch (can be done on top of the
-> > patchset)?
-> 
->  So what you propose is to first commit 5.8 with the patch from QTBUG-58038, and
-> subsequently add -system-freetype and remove the patch again?
-> 
+ > I've applied, after removing the explicit Config.in option and instead
+ > relying on whether BR2_PACKAGE_OPENLDAP is enabled or not to decide if
+ > ldap support should be enabled or not in sudo.
 
-Yes (and no need to remove the patch which fixes a real problem with compiling the
-bundled freetype library and can for sure be removed with the next version bump
-to 5.8.1). It is not the cleanest thing to do but fixes the build problem...
+Notice that this was discussed during the first review:
 
-Changing from bundled freetype to system freetype is a real enhancement of the
-buildroot qt5base package (bundled freetype-2.6.1, system freetype-2.7.1) and
-should be done in an extra patch (even if it fixes/avoids the bundled compile
-problem)?
+http://lists.busybox.net/pipermail/buildroot/2016-October/175480.html
 
-For some other libs (eg. sqlite) buildroot supports the system vs. bundled
-option....in case we support this for freetype the patch needed too...
+Apparently sudo with pam support really needs a configured
+/etc/ldap.conf, which might be confusing to people that (perhaps
+unrelated to eachother) enabled both sudo and ldap.
 
-Regards,
-Peter
-
->  Regards,
->  Arnout
-> 
-> > System freetype is not used at the moment (not for 5.6 and 5.8)...
-> 
+-- 
+Bye, Peter Korsgaard
