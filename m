@@ -1,152 +1,185 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 14:13:25 +0100
-Subject: [Buildroot] [git commit] package/libplatform: bump version to 2.1.0
-Message-ID: <20170206131533.37704820EE@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 6 Feb 2017 13:16:05 +0000
+Subject: [Buildroot] [PATCH] wget: bump version to 1.19
+Message-ID: <20170206131605.32791-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ac3045453d701b1fbea0d04333642a76fbfecc4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+package/wget/0001-utils-rename-base64_-encode-decode.patch already
+included in this release, so drop it:
+  http://git.savannah.gnu.org/cgit/wget.git/commit/?id=e4e9d3c1c801190b5c8232284b26d170924b1696
 
-Rebased patch 0001.
-
-Updated license info after
-https://github.com/Pulse-Eight/platform/commit/a1e5905874d5cdbce110344558d21a2810dead9c
-
-Fixes:
-    http://autobuild.buildroot.org/results/052/052b29efb3e5b208003ea40aa6499297bbbb7ad4/
-    http://autobuild.buildroot.org/results/0d4/0d4d7fefc86269e825c6cc842077daccf9b4f7ee/
-    http://autobuild.buildroot.org/results/700/7003798bbb8dbed72d651863149490221583057b/
-    ...
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- .../0001-p8-platform-config-fix-lookup-paths.patch | 38 ++++++++++++++++++++
- ...nfig.cmake-fix-paths-for-cross-compilatio.patch | 40 ----------------------
- package/libplatform/libplatform.hash               |  2 +-
- package/libplatform/libplatform.mk                 |  8 ++---
- 4 files changed, 43 insertions(+), 45 deletions(-)
+ .../0001-utils-rename-base64_-encode-decode.patch  | 134 ---------------------
+ package/wget/wget.hash                             |   2 +-
+ package/wget/wget.mk                               |   2 +-
+ 3 files changed, 2 insertions(+), 136 deletions(-)
+ delete mode 100644 package/wget/0001-utils-rename-base64_-encode-decode.patch
 
-diff --git a/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch b/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
-new file mode 100644
-index 0000000..d487fd9
---- /dev/null
-+++ b/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
-@@ -0,0 +1,38 @@
-+From 01b5478638c705af29f09ad4ed70289f70a21dcf Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Mon, 6 Feb 2017 14:04:47 +0100
-+Subject: [PATCH] p8-platform-config: fix lookup paths
-+
-+Use the proper methods to find the headers and the library.
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ p8-platform-config.cmake.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/p8-platform-config.cmake.in b/p8-platform-config.cmake.in
-+index 47f30f1..f59418d 100644
-+--- a/p8-platform-config.cmake.in
-++++ b/p8-platform-config.cmake.in
-+@@ -10,7 +10,7 @@
-+ #
-+ # propagate these properties from one build system to the other
-+ set (p8-platform_VERSION "@p8-platform_VERSION_MAJOR at .@p8-platform_VERSION_MINOR@")
-+-set (p8-platform_INCLUDE_DIRS @p8-platform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
-++find_path (p8-platform_INCLUDE_DIRS p8-platform/os.h)
-+ set (p8-platform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
-+ set (p8-platform_LINKER_FLAGS "@p8-platform_LINKER_FLAGS@")
-+ set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
-+@@ -19,7 +19,7 @@ set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
-+ if(WIN32)
-+   set (p8-platform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/p8-platform.lib")
-+ else(WIN32)
-+-  set (p8-platform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lp8-platform")
-++  find_library (p8-platform_LIBRARY p8-platform)
-+ endif(WIN32)
-+ set (p8-platform_LIBRARIES ${p8-platform_LIBRARY} "@p8-platform_LIBRARIES@")
-+ mark_as_advanced (p8-platform_LIBRARY)
-+-- 
-+2.7.4
-+
-diff --git a/package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch b/package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
+diff --git a/package/wget/0001-utils-rename-base64_-encode-decode.patch b/package/wget/0001-utils-rename-base64_-encode-decode.patch
 deleted file mode 100644
-index 89f35bd..0000000
---- a/package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
+index f219afa..0000000
+--- a/package/wget/0001-utils-rename-base64_-encode-decode.patch
 +++ /dev/null
-@@ -1,40 +0,0 @@
--From 65ba437ed5514dd5762a796d349ed5db49e40fe7 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Wed, 29 Jul 2015 21:26:16 +0200
--Subject: [PATCH] platform-config.cmake: fix paths for cross-compilation
+@@ -1,134 +0,0 @@
+-From 9e68787576fec304da23af26dca963a4cdea7765 Mon Sep 17 00:00:00 2001
+-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+-Date: Tue, 8 Nov 2016 23:42:53 +0530
+-Subject: [PATCH] utils: rename base64_{encode,decode}
 -
--Headers and library paths in platform-config.cmake must take into
--account ${CMAKE_FIND_ROOT_PATH} to work in cross-compilation.
+-When statically linking with gnutls, we get definition clash error for
+-base64_encode which is also defined by gnutls.
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-/home/rahul.bedarkar/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgnutls.a(base64.o): In function `base64_encode':
+-base64.c:(.text+0x148): multiple definition of `base64_encode'
+-utils.o:utils.c:(.text+0x4378): first defined here
+-collect2: error: ld returned 1 exit status
+-
+-To prevent definition clash, rename base64_{encode,decode}
+-
+-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ----
-- platform-config.cmake.in | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
+- src/http-ntlm.c | 6 +++---
+- src/http.c      | 4 ++--
+- src/utils.c     | 8 ++++----
+- src/utils.h     | 4 ++--
+- 4 files changed, 11 insertions(+), 11 deletions(-)
 -
--diff --git a/platform-config.cmake.in b/platform-config.cmake.in
--index 7fe35fe..78b5085 100644
----- a/platform-config.cmake.in
--+++ b/platform-config.cmake.in
--@@ -10,16 +10,16 @@
-- #
-- # propagate these properties from one build system to the other
-- set (platform_VERSION "@platform_VERSION_MAJOR at .@platform_VERSION_MINOR@")
---set (platform_INCLUDE_DIRS @platform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
--+set (platform_INCLUDE_DIRS ${CMAKE_FIND_ROOT_PATH}/@platform_INCLUDE_DIRS@ ${CMAKE_FIND_ROOT_PATH}/@CMAKE_INSTALL_PREFIX@/include)
-- set (platform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
-- set (platform_LINKER_FLAGS "@platform_LINKER_FLAGS@")
-- set (platform_CONFIG_VARS "@platform_CONFIG_VARS@")
+-diff --git a/src/http-ntlm.c b/src/http-ntlm.c
+-index 56c40ae..87f5a37 100644
+---- a/src/http-ntlm.c
+-+++ b/src/http-ntlm.c
+-@@ -122,7 +122,7 @@ ntlm_input (struct ntlmdata *ntlm, const char *header)
 - 
-- # libraries come from the build tree where this file was generated
-- if(WIN32)
---  set (platform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/platform.lib")
--+  set (platform_LIBRARY "${CMAKE_FIND_ROOT_PATH}/@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/platform.lib")
-- else(WIN32)
---  set (platform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lplatform")
--+  set (platform_LIBRARY "-L${CMAKE_FIND_ROOT_PATH}/@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lplatform")
-- endif(WIN32)
-- set (platform_LIBRARIES ${platform_LIBRARY} "@platform_LIBRARIES@")
-- mark_as_advanced (platform_LIBRARY)
+-       DEBUGP (("Received a type-2 NTLM message.\n"));
+- 
+--      size = base64_decode (header, buffer);
+-+      size = wget_base64_decode (header, buffer);
+-       if (size < 0)
+-         return false;           /* malformed base64 from server */
+- 
+-@@ -411,7 +411,7 @@ ntlm_output (struct ntlmdata *ntlm, const char *user, const char *passwd,
+-     size = 32 + hostlen + domlen;
+- 
+-     base64 = (char *) alloca (BASE64_LENGTH (size) + 1);
+--    base64_encode (ntlmbuf, size, base64);
+-+    wget_base64_encode (ntlmbuf, size, base64);
+- 
+-     output = concat_strings ("NTLM ", base64, (char *) 0);
+-     break;
+-@@ -584,7 +584,7 @@ ntlm_output (struct ntlmdata *ntlm, const char *user, const char *passwd,
+- 
+-     /* convert the binary blob into base64 */
+-     base64 = (char *) alloca (BASE64_LENGTH (size) + 1);
+--    base64_encode (ntlmbuf, size, base64);
+-+    wget_base64_encode (ntlmbuf, size, base64);
+- 
+-     output = concat_strings ("NTLM ", base64, (char *) 0);
+- 
+-diff --git a/src/http.c b/src/http.c
+-index 7e60a07..368d30d 100644
+---- a/src/http.c
+-+++ b/src/http.c
+-@@ -2818,7 +2818,7 @@ metalink_from_http (const struct response *resp, const struct http_stat *hs,
+-           char *bin_hash = alloca (dig_hash_str_len * 3 / 4 + 1);
+-           size_t hash_bin_len;
+- 
+--          hash_bin_len = base64_decode (dig_hash, bin_hash);
+-+          hash_bin_len = wget_base64_decode (dig_hash, bin_hash);
+- 
+-           /* One slot for me, one for zero-termination.  */
+-           mfile->checksums =
+-@@ -4546,7 +4546,7 @@ basic_authentication_encode (const char *user, const char *passwd)
+-   sprintf (t1, "%s:%s", user, passwd);
+- 
+-   t2 = (char *)alloca (BASE64_LENGTH (len1) + 1);
+--  base64_encode (t1, len1, t2);
+-+  wget_base64_encode (t1, len1, t2);
+- 
+-   return concat_strings ("Basic ", t2, (char *) 0);
+- }
+-diff --git a/src/utils.c b/src/utils.c
+-index b07da9f..355f0ce 100644
+---- a/src/utils.c
+-+++ b/src/utils.c
+-@@ -2140,7 +2140,7 @@ xsleep (double seconds)
+-    base64 data.  */
+- 
+- size_t
+--base64_encode (const void *data, size_t length, char *dest)
+-+wget_base64_encode (const void *data, size_t length, char *dest)
+- {
+-   /* Conversion table.  */
+-   static const char tbl[64] = {
+-@@ -2208,7 +2208,7 @@ base64_encode (const void *data, size_t length, char *dest)
+-    This function originates from Free Recode.  */
+- 
+- ssize_t
+--base64_decode (const char *base64, void *dest)
+-+wget_base64_decode (const char *base64, void *dest)
+- {
+-   /* Table of base64 values for first 128 characters.  Note that this
+-      assumes ASCII (but so does Wget in other places).  */
+-@@ -2588,7 +2588,7 @@ wg_pubkey_pem_to_der (const char *pem, unsigned char **der, size_t *der_len)
+- 
+-   base64data = xmalloc (BASE64_LENGTH(stripped_pem_count));
+- 
+--  size = base64_decode (stripped_pem, base64data);
+-+  size = wget_base64_decode (stripped_pem, base64data);
+- 
+-   if (size < 0) {
+-     xfree (base64data);           /* malformed base64 from server */
+-@@ -2651,7 +2651,7 @@ wg_pin_peer_pubkey (const char *pinnedpubkey, const char *pubkey, size_t pubkeyl
+-           end_pos[0] = '\0';
+- 
+-         /* decode base64 pinnedpubkey, 8 is length of "sha256//" */
+--        decoded_hash_length = base64_decode (begin_pos + 8, expectedsha256sumdigest);
+-+        decoded_hash_length = wget_base64_decode (begin_pos + 8, expectedsha256sumdigest);
+-         /* if valid base64, compare sha256 digests directly */
+-         if (SHA256_DIGEST_SIZE == decoded_hash_length &&
+-            !memcmp (sha256sumdigest, expectedsha256sumdigest, SHA256_DIGEST_SIZE)) {
+-diff --git a/src/utils.h b/src/utils.h
+-index f224b73..aaac730 100644
+---- a/src/utils.h
+-+++ b/src/utils.h
+-@@ -140,8 +140,8 @@ void xsleep (double);
+- /* How many bytes it will take to store LEN bytes in base64.  */
+- #define BASE64_LENGTH(len) (4 * (((len) + 2) / 3))
+- 
+--size_t base64_encode (const void *, size_t, char *);
+--ssize_t base64_decode (const char *, void *);
+-+size_t wget_base64_encode (const void *, size_t, char *);
+-+ssize_t wget_base64_decode (const char *, void *);
+- 
+- #ifdef HAVE_LIBPCRE
+- void *compile_pcre_regex (const char *);
 --- 
--2.5.0
+-2.6.2
 -
-diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
-index 8975dfd..e3d5ed5 100644
---- a/package/libplatform/libplatform.hash
-+++ b/package/libplatform/libplatform.hash
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 6d26723..8611cfb 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256  3603ead8b16a48cb35b1e6dea330a693f10552b1a6ea036c5db9ec248cd8baf5  libplatform-feafe68e3e0b02c3261aefb3d711863ef6fadd38.tar.gz
-+sha256 88711f1b949285867538a0b2e4189532778e1515325dfa1851eae9d18b6affd9  libplatform-2.1.0.tar.gz
-diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
-index 6d54915..d9cd582 100644
---- a/package/libplatform/libplatform.mk
-+++ b/package/libplatform/libplatform.mk
-@@ -4,10 +4,10 @@
+ # Locally calculated after checking pgp signature
+-sha256  b5b55b75726c04c06fe253daec9329a6f1a3c0c1878e3ea76ebfebc139ea9cc1  wget-1.18.tar.xz
++sha256 0f1157bbf4daae19f3e1ddb70c6ccb2067feb834a6aa23c9d9daa7f048606384  wget-1.19.tar.xz
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index c9efc03..e0f680b 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPLATFORM_VERSION = feafe68e3e0b02c3261aefb3d711863ef6fadd38
--LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
--LIBPLATFORM_LICENSE = GPLv2+, PHP license v3.01
--LIBPLATFORM_LICENSE_FILES = src/os.h src/util/fstrcmp.c
-+LIBPLATFORM_VERSION = 2.1.0
-+LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,p8-platform-$(LIBPLATFORM_VERSION))
-+LIBPLATFORM_LICENSE = GPLv2+
-+LIBPLATFORM_LICENSE_FILES = src/os.h
- LIBPLATFORM_INSTALL_STAGING = YES
- 
- $(eval $(cmake-package))
+-WGET_VERSION = 1.18
++WGET_VERSION = 1.19
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
+-- 
+2.10.2
