@@ -1,35 +1,42 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 Feb 2017 17:24:37 +0100
-Subject: [Buildroot] [PATCH v2] package/efl: enable Wayland support if
-	available
-Message-ID: <20170206162437.12748-1-romain.naour@gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 6 Feb 2017 14:46:13 -0200 (BRST)
+Subject: [Buildroot] [PATCH v2] gtest/gmock: bump to version 1.8.0
+In-Reply-To: <77897237-1b37-56d0-aecd-48f66a0358c5@gmail.com>
+References: <1473286853-23560-1-git-send-email-casantos@datacom.ind.br>
+ <1473290219-27701-1-git-send-email-casantos@datacom.ind.br>
+ <34bbf827-4564-e812-5677-91bc63c95dde@mind.be>
+ <77897237-1b37-56d0-aecd-48f66a0358c5@gmail.com>
+Message-ID: <589161756.1634889.1486399573210.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If all the dependencies are present to select the efl wayland
-support, enable it by default.
+> From: "Romain Naour" <romain.naour@gmail.com>
+> To: "Arnout Vandecappelle" <arnout@mind.be>, "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org
+> Cc: "fabrice fontaine" <fabrice.fontaine@orange.com>, "fontaine fabrice" <fontaine.fabrice@gmail.com>, "Thomas
+> Petazzoni" <thomas.petazzoni@free-electrons.com>
+> Sent: Monday, February 6, 2017 1:43:17 PM
+> Subject: Re: [Buildroot] [PATCH v2] gtest/gmock: bump to version 1.8.0
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v2: rebase on master
----
- package/efl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> Hi Carlos, Fabrice, All,
+> 
+> I removed the last remaining gtest related patch [1] from patchwork since the
+> gtest/gmock 1.8.0 is now available.
+> 
+> What's the status of this patch bump?
+> Can you send an updated version?
+> 
+> Thanks!
+> 
+> Best regards,
+> Romain
+> 
+> [1] http://patchwork.ozlabs.org/patch/667729/
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 5e89af6..a8f9d41 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -180,6 +180,7 @@ config BR2_PACKAGE_EFL_WAYLAND
- 	depends on BR2_PACKAGE_EFL_EEZE # efl drm
- 	depends on BR2_PACKAGE_EFL_OPENGLES # OpenGL ES with EGL support only
- 	select BR2_PACKAGE_EFL_DRM
-+	default y
- 
- comment "Wayland support needs udev /dev management (eeze) and OpenGL ES w/ EGL, threads"
- 	depends on BR2_PACKAGE_WAYLAND
--- 
-2.9.3
+I will probably have time to work on these GTest/Gmock issues again by Thursday.
+
+Carlos Santos (Casantos) - DATACOM, P&D
+?Something must be done. This is something. Therefore we must do it.?
+(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
