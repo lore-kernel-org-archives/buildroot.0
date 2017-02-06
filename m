@@ -1,185 +1,170 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 6 Feb 2017 13:16:05 +0000
-Subject: [Buildroot] [PATCH] wget: bump version to 1.19
-Message-ID: <20170206131605.32791-1-Vincent.Riera@imgtec.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  6 Feb 2017 14:25:10 +0100
+Subject: [Buildroot] [PATCH v2] efl: do not force dependency on libudev by
+	making eeze a config option.
+Message-ID: <20170206132510.6247-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-package/wget/0001-utils-rename-base64_-encode-decode.patch already
-included in this release, so drop it:
-  http://git.savannah.gnu.org/cgit/wget.git/commit/?id=e4e9d3c1c801190b5c8232284b26d170924b1696
+From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Although highly recommended to be enabled, EFL's eeze can be disabled
+and thus no dependency on libudev or dynamic device management.
+
+Since 'BR2_PACKAGE_HAS_UDEV' has two ways to be satisfied (eudev or
+systemd) we can't automatically select it, instead show a comment and
+use 'depends on'.
+
+Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+[Romain:
+  - Propagate the eeze dependency to enlightenment
+  - Remove udev provider from eeze comment in efl's Config.in]
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../0001-utils-rename-base64_-encode-decode.patch  | 134 ---------------------
- package/wget/wget.hash                             |   2 +-
- package/wget/wget.mk                               |   2 +-
- 3 files changed, 2 insertions(+), 136 deletions(-)
- delete mode 100644 package/wget/0001-utils-rename-base64_-encode-decode.patch
+v2: Propagate the eeze dependency to enlightenment
+    Remove udev provider from eeze comment in efl's Config.in since
+    we don't explicitely name all possible providers in comment.
+---
+ package/efl/Config.in           | 25 ++++++++++++++++++++++---
+ package/efl/efl.mk              |  9 ++++++++-
+ package/enlightenment/Config.in |  5 ++++-
+ 3 files changed, 34 insertions(+), 5 deletions(-)
 
-diff --git a/package/wget/0001-utils-rename-base64_-encode-decode.patch b/package/wget/0001-utils-rename-base64_-encode-decode.patch
-deleted file mode 100644
-index f219afa..0000000
---- a/package/wget/0001-utils-rename-base64_-encode-decode.patch
-+++ /dev/null
-@@ -1,134 +0,0 @@
--From 9e68787576fec304da23af26dca963a4cdea7765 Mon Sep 17 00:00:00 2001
--From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
--Date: Tue, 8 Nov 2016 23:42:53 +0530
--Subject: [PATCH] utils: rename base64_{encode,decode}
--
--When statically linking with gnutls, we get definition clash error for
--base64_encode which is also defined by gnutls.
--
--/home/rahul.bedarkar/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgnutls.a(base64.o): In function `base64_encode':
--base64.c:(.text+0x148): multiple definition of `base64_encode'
--utils.o:utils.c:(.text+0x4378): first defined here
--collect2: error: ld returned 1 exit status
--
--To prevent definition clash, rename base64_{encode,decode}
--
--Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-----
-- src/http-ntlm.c | 6 +++---
-- src/http.c      | 4 ++--
-- src/utils.c     | 8 ++++----
-- src/utils.h     | 4 ++--
-- 4 files changed, 11 insertions(+), 11 deletions(-)
--
--diff --git a/src/http-ntlm.c b/src/http-ntlm.c
--index 56c40ae..87f5a37 100644
----- a/src/http-ntlm.c
--+++ b/src/http-ntlm.c
--@@ -122,7 +122,7 @@ ntlm_input (struct ntlmdata *ntlm, const char *header)
-- 
--       DEBUGP (("Received a type-2 NTLM message.\n"));
-- 
---      size = base64_decode (header, buffer);
--+      size = wget_base64_decode (header, buffer);
--       if (size < 0)
--         return false;           /* malformed base64 from server */
-- 
--@@ -411,7 +411,7 @@ ntlm_output (struct ntlmdata *ntlm, const char *user, const char *passwd,
--     size = 32 + hostlen + domlen;
-- 
--     base64 = (char *) alloca (BASE64_LENGTH (size) + 1);
---    base64_encode (ntlmbuf, size, base64);
--+    wget_base64_encode (ntlmbuf, size, base64);
-- 
--     output = concat_strings ("NTLM ", base64, (char *) 0);
--     break;
--@@ -584,7 +584,7 @@ ntlm_output (struct ntlmdata *ntlm, const char *user, const char *passwd,
-- 
--     /* convert the binary blob into base64 */
--     base64 = (char *) alloca (BASE64_LENGTH (size) + 1);
---    base64_encode (ntlmbuf, size, base64);
--+    wget_base64_encode (ntlmbuf, size, base64);
-- 
--     output = concat_strings ("NTLM ", base64, (char *) 0);
-- 
--diff --git a/src/http.c b/src/http.c
--index 7e60a07..368d30d 100644
----- a/src/http.c
--+++ b/src/http.c
--@@ -2818,7 +2818,7 @@ metalink_from_http (const struct response *resp, const struct http_stat *hs,
--           char *bin_hash = alloca (dig_hash_str_len * 3 / 4 + 1);
--           size_t hash_bin_len;
-- 
---          hash_bin_len = base64_decode (dig_hash, bin_hash);
--+          hash_bin_len = wget_base64_decode (dig_hash, bin_hash);
-- 
--           /* One slot for me, one for zero-termination.  */
--           mfile->checksums =
--@@ -4546,7 +4546,7 @@ basic_authentication_encode (const char *user, const char *passwd)
--   sprintf (t1, "%s:%s", user, passwd);
-- 
--   t2 = (char *)alloca (BASE64_LENGTH (len1) + 1);
---  base64_encode (t1, len1, t2);
--+  wget_base64_encode (t1, len1, t2);
-- 
--   return concat_strings ("Basic ", t2, (char *) 0);
-- }
--diff --git a/src/utils.c b/src/utils.c
--index b07da9f..355f0ce 100644
----- a/src/utils.c
--+++ b/src/utils.c
--@@ -2140,7 +2140,7 @@ xsleep (double seconds)
--    base64 data.  */
-- 
-- size_t
---base64_encode (const void *data, size_t length, char *dest)
--+wget_base64_encode (const void *data, size_t length, char *dest)
-- {
--   /* Conversion table.  */
--   static const char tbl[64] = {
--@@ -2208,7 +2208,7 @@ base64_encode (const void *data, size_t length, char *dest)
--    This function originates from Free Recode.  */
-- 
-- ssize_t
---base64_decode (const char *base64, void *dest)
--+wget_base64_decode (const char *base64, void *dest)
-- {
--   /* Table of base64 values for first 128 characters.  Note that this
--      assumes ASCII (but so does Wget in other places).  */
--@@ -2588,7 +2588,7 @@ wg_pubkey_pem_to_der (const char *pem, unsigned char **der, size_t *der_len)
-- 
--   base64data = xmalloc (BASE64_LENGTH(stripped_pem_count));
-- 
---  size = base64_decode (stripped_pem, base64data);
--+  size = wget_base64_decode (stripped_pem, base64data);
-- 
--   if (size < 0) {
--     xfree (base64data);           /* malformed base64 from server */
--@@ -2651,7 +2651,7 @@ wg_pin_peer_pubkey (const char *pinnedpubkey, const char *pubkey, size_t pubkeyl
--           end_pos[0] = '\0';
-- 
--         /* decode base64 pinnedpubkey, 8 is length of "sha256//" */
---        decoded_hash_length = base64_decode (begin_pos + 8, expectedsha256sumdigest);
--+        decoded_hash_length = wget_base64_decode (begin_pos + 8, expectedsha256sumdigest);
--         /* if valid base64, compare sha256 digests directly */
--         if (SHA256_DIGEST_SIZE == decoded_hash_length &&
--            !memcmp (sha256sumdigest, expectedsha256sumdigest, SHA256_DIGEST_SIZE)) {
--diff --git a/src/utils.h b/src/utils.h
--index f224b73..aaac730 100644
----- a/src/utils.h
--+++ b/src/utils.h
--@@ -140,8 +140,8 @@ void xsleep (double);
-- /* How many bytes it will take to store LEN bytes in base64.  */
-- #define BASE64_LENGTH(len) (4 * (((len) + 2) / 3))
-- 
---size_t base64_encode (const void *, size_t, char *);
---ssize_t base64_decode (const char *, void *);
--+size_t wget_base64_encode (const void *, size_t, char *);
--+ssize_t wget_base64_decode (const char *, void *);
-- 
-- #ifdef HAVE_LIBPCRE
-- void *compile_pcre_regex (const char *);
---- 
--2.6.2
--
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 6d26723..8611cfb 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  b5b55b75726c04c06fe253daec9329a6f1a3c0c1878e3ea76ebfebc139ea9cc1  wget-1.18.tar.xz
-+sha256 0f1157bbf4daae19f3e1ddb70c6ccb2067feb834a6aa23c9d9daa7f048606384  wget-1.19.tar.xz
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index c9efc03..e0f680b 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 8b06a49..79346b3 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_EFL
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_7
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_PACKAGE_HAS_UDEV # libudev
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+ 	depends on BR2_USE_MMU
+@@ -37,6 +36,19 @@ config BR2_PACKAGE_EFL_BULLET
+ 	  simply not tested so you are on your own in terms of
+ 	  ensuring everything works if you do this.
  
--WGET_VERSION = 1.18
-+WGET_VERSION = 1.19
- WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
++config BR2_PACKAGE_EFL_EEZE
++	bool "Enable eeze (udev) support (recommended)"
++	depends on BR2_PACKAGE_HAS_UDEV # libudev
++	default y
++	help
++	  Eeze is EFL's hardware abstraction layer on top of udev.
++	  Having it off will disable some hardware detection, such as
++	  'drm' graphics engine or 'elput', as well as mounting
++	  removable media.
++
++comment "eeze needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
++
+ config BR2_PACKAGE_EFL_FONTCONFIG
+ 	bool "Enable fontconfig support (recommended)"
+ 	select BR2_PACKAGE_FONTCONFIG
+@@ -98,6 +110,7 @@ config BR2_PACKAGE_EFL_PULSEAUDIO
+ 
+ config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
+ 	bool "Enable libmount support (recommended)"
++	depends on BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	# libblkid is part of required tools, see EFL's README.
+@@ -108,9 +121,13 @@ config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
+ 	  devices etc... and disabling this will hurt support for
+ 	  Enlightenment and its filemanager.
+ 
++comment "efl's libmount support needs eeze"
++	depends on !BR2_PACKAGE_EFL_EEZE
++
+ config BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
+ 	bool
+ 	default y if BR2_PACKAGE_EFL_BULLET && \
++		BR2_PACKAGE_EFL_EEZE && \
+ 		BR2_PACKAGE_EFL_FONTCONFIG && \
+ 		BR2_PACKAGE_EFL_GSTREAMER1 && \
+ 		BR2_PACKAGE_EFL_LIBFRIBIDI && \
+@@ -198,6 +215,7 @@ endchoice # OpenGL support
+ 
+ config BR2_PACKAGE_EFL_ELPUT
+ 	bool "Elput"
++	depends on BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_LIBINPUT
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+ 	help
+@@ -208,6 +226,7 @@ config BR2_PACKAGE_EFL_ELPUT
+ 
+ config BR2_PACKAGE_EFL_DRM
+ 	bool "Evas DRM Engine"
++	depends on BR2_PACKAGE_EFL_EEZE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
+ 	select BR2_PACKAGE_EFL_ELPUT
+@@ -279,8 +298,8 @@ config BR2_PACKAGE_EFL_SVG
+ 
+ endif # BR2_PACKAGE_EFL
+ 
+-comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
+-	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP \
++comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_HOST_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index ab08946..1e54f72 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -20,7 +20,7 @@ EFL_LICENSE_FILES = \
+ EFL_INSTALL_STAGING = YES
+ 
+ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
+-	jpeg luajit lz4 udev zlib
++	jpeg luajit lz4 zlib
+ 
+ # Configure options:
+ # --disable-lua-old: build elua for the target.
+@@ -59,6 +59,13 @@ else
+ EFL_CONF_OPTS += --disable-cxx-bindings
+ endif
+ 
++ifeq ($(BR2_PACKAGE_EFL_EEZE),y)
++EFL_DEPENDENCIES += udev
++EFL_CONF_OPTS += --enable-libeeze
++else
++EFL_CONF_OPTS += --disable-libeeze
++endif
++
+ ifeq ($(BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT),y)
+ EFL_DEPENDENCIES += util-linux
+ EFL_CONF_OPTS += --enable-libmount
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index b5d889b..2e2bd57 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -9,10 +9,12 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	# libedbus -> dbus, efl libraries
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_EFL
++	depends on BR2_PACKAGE_HAS_UDEV # efl (eeze) -> libudev
+ 	depends on BR2_PACKAGE_XORG7
+ 	# libevas-generic-loaders-svg -> librsvg -> pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_EFL_X_XLIB
++	select BR2_PACKAGE_EFL_EEZE
+ 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
+ 	select BR2_PACKAGE_EFL_PNG # needed at runtime by enlightenment_start
+ 	select BR2_PACKAGE_EFL_SVG
+@@ -28,5 +30,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 
+ comment "enlightenment needs a toolchain w/ wchar, C++, threads"
+ 	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 -- 
-2.10.2
+2.9.3
