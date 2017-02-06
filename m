@@ -1,94 +1,126 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Feb 2017 22:43:01 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] imagemagick: fix build of
-	png support when jpeg support is disabled
-Message-ID: <20170206214306.7956A82115@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 6 Feb 2017 22:49:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bluez-tools: new package
+In-Reply-To: <20170129204128.23938-1-bernd.kuhls@t-online.de>
+References: <20170129204128.23938-1-bernd.kuhls@t-online.de>
+Message-ID: <63ffe7c2-0b26-ddd4-074c-db4f18cb6e90@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca84b0177e4ab83eaff94cd6a0c4ae56d99afee0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+Hi Bernd,
 
-Fixes:
-http://autobuild.buildroot.net/results/d20/d20eecec8e7b947759185f77a6c8e610dd7393f3/
-http://autobuild.buildroot.net/results/ee1/ee15efa8ae3f95244980810155ff7ba9f885a59d/
-http://autobuild.buildroot.net/results/aa8/aa80f2fd4c7dd884ea8a1b55ad15a40c7bf40501/
-http://autobuild.buildroot.net/results/9aa/9aaa044f78115d7f599ea09669c0d6bface5633e/
+Le 29/01/2017 ? 21:41, Bernd Kuhls a ?crit :
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  DEVELOPERS                           |  1 +
+>  package/Config.in                    |  1 +
+>  package/bluez-tools/Config.in        | 19 +++++++++++++++++++
+>  package/bluez-tools/bluez-tools.hash |  3 +++
+>  package/bluez-tools/bluez-tools.mk   | 23 +++++++++++++++++++++++
+>  5 files changed, 47 insertions(+)
+>  create mode 100644 package/bluez-tools/Config.in
+>  create mode 100644 package/bluez-tools/bluez-tools.hash
+>  create mode 100644 package/bluez-tools/bluez-tools.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index b6e0c63c1..3b6418684 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -150,6 +150,7 @@ N:	Bernd Kuhls <bernd.kuhls@t-online.de>
+>  F:	package/apache/
+>  F:	package/apr/
+>  F:	package/apr-util/
+> +F:	package/bluez-tools/
+>  F:	package/clamav/
+>  F:	package/dovecot/
+>  F:	package/dovecot-pigeonhole/
+> diff --git a/package/Config.in b/package/Config.in
+> index 4ae0432a1..bc8c611bc 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1479,6 +1479,7 @@ menu "Networking applications"
+>  	source "package/batctl/Config.in"
+>  	source "package/bcusdk/Config.in"
+>  	source "package/bind/Config.in"
+> +	source "package/bluez-tools/Config.in"
+>  	source "package/bluez_utils/Config.in"
+>  	source "package/bluez5_utils/Config.in"
+>  	source "package/bmon/Config.in"
+> diff --git a/package/bluez-tools/Config.in b/package/bluez-tools/Config.in
+> new file mode 100644
+> index 000000000..5a1b7d041
+> --- /dev/null
+> +++ b/package/bluez-tools/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_BLUEZ_TOOLS
+> +	bool "bluez-tools"
+> +	depends on BR2_PACKAGE_BLUEZ_UTILS || BR2_PACKAGE_BLUEZ5_UTILS
+> +	depends on BR2_USE_MMU # dbus, libglib2
+> +	depends on BR2_USE_WCHAR # libglib2
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+> +	select BR2_PACKAGE_DBUS
+> +	select BR2_PACKAGE_DBUS_GLIB
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_READLINE if BR2_PACKAGE_BLUEZ5_UTILS
+> +	help
+> +	  A set of tools to manage bluetooth devices for linux
+> +
+> +	  https://github.com/khvzak/bluez-tools
+> +
+> +comment "bluez-tools needs a toolchain w/ wchar, threads"
+> +	depends on BR2_PACKAGE_BLUEZ_UTILS || BR2_PACKAGE_BLUEZ5_UTILS
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/bluez-tools/bluez-tools.hash b/package/bluez-tools/bluez-tools.hash
+> new file mode 100644
+> index 000000000..214fa5bdf
+> --- /dev/null
+> +++ b/package/bluez-tools/bluez-tools.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256 56204ddd1cc7890d60f6a47507755f786fa3ee28f1da370a32ca7d7e0795a953  bluez-tools-171181b6ef6c94aefc828dc7fd8de136b9f97532.tar.gz
+> +sha256 62ca98af63d2ae142dbc77995c6bd4c259eaba4a5832daa33ae9e3d585b9205f  bluez-tools-97efd293491ad7ec96a655665339908f2478b3d1.tar.gz
+> diff --git a/package/bluez-tools/bluez-tools.mk b/package/bluez-tools/bluez-tools.mk
+> new file mode 100644
+> index 000000000..022330faf
+> --- /dev/null
+> +++ b/package/bluez-tools/bluez-tools.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# bluez-tools
+> +#
+> +################################################################################
+> +
+> +ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
+> +# this is the last version compatible with BlueZ 4 API
+> +BLUEZ_TOOLS_VERSION = 171181b6ef6c94aefc828dc7fd8de136b9f97532
+> +else
+> +BLUEZ_TOOLS_VERSION = 97efd293491ad7ec96a655665339908f2478b3d1
+> +endif
+> +BLUEZ_TOOLS_SITE = $(call github,khvzak,bluez-tools,$(BLUEZ_TOOLS_VERSION))
+> +BLUEZ_TOOLS_AUTORECONF = YES
 
-This combination is broken since 7.0.4-6.
+Usually we prefer adding a comment to say why AUTORECONF is needed.
+(sources fetched from github, no configure script)
 
-Since commit a9e228f8ac26 (Implemented a private PNG caNv (canvas) chunk),
-PNGsLong gets called unconditionally, but it is only defined if JPEG
-support is enabled (which defines JNG_SUPPORTED), breaking the build:
+With that fixed:
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-MagickCore/.libs/libMagickCore-7.Q16HDRI.a(MagickCore_libMagickCore_7_Q16HDRI_la-png.o): In function `WriteOnePNGImage':
-png.c:(.text+0x748d): undefined reference to `PNGsLong'
-png.c:(.text+0x74b7): undefined reference to `PNGsLong'
+Best regards,
+Romain
 
-Fix it by adding a patch unconditionally defining the helper function.
 
-Patch submitted upstream.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit c6f8088fdd56384fb9dc61ca31a0c1772acfde93)
----
- ...-png.c-unbreak-build-without-JPEG-support.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
-
-diff --git a/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch b/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
-new file mode 100644
-index 0000000..00a1045
---- /dev/null
-+++ b/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
-@@ -0,0 +1,47 @@
-+From 5d0e9c53f49022df5154eb3c04900f48b1c6448e Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Mon, 6 Feb 2017 17:39:31 +0100
-+Subject: [PATCH] png.c: unbreak build without JPEG support
-+
-+Since commit a9e228f8ac26 (Implemented a private PNG caNv (canvas) chunk),
-+PNGsLong gets called unconditionally, but it is only defined if JPEG
-+support is enabled (which defines JNG_SUPPORTED), breaking the build:
-+
-+MagickCore/.libs/libMagickCore-7.Q16HDRI.a(MagickCore_libMagickCore_7_Q16HDRI_la-png.o): In function `WriteOnePNGImage':
-+png.c:(.text+0x748d): undefined reference to `PNGsLong'
-+png.c:(.text+0x74b7): undefined reference to `PNGsLong'
-+
-+For build log, see:
-+http://autobuild.buildroot.net/results/d20/d20eecec8e7b947759185f77a6c8e610dd7393f3/build-end.log
-+
-+Fix it by unconditionally defining the helper function.
-+
-+Submitted-upstream: https://github.com/ImageMagick/ImageMagick/pull/373
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ coders/png.c | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/coders/png.c b/coders/png.c
-+index aebe59281..1328b1aab 100644
-+--- a/coders/png.c
-++++ b/coders/png.c
-+@@ -1229,7 +1229,6 @@ static void PNGLong(png_bytep p,png_uint_32 value)
-+   *p++=(png_byte) (value & 0xff);
-+ }
-+ 
-+-#if defined(JNG_SUPPORTED)
-+ static void PNGsLong(png_bytep p,png_int_32 value)
-+ {
-+   *p++=(png_byte) ((value >> 24) & 0xff);
-+@@ -1237,7 +1236,6 @@ static void PNGsLong(png_bytep p,png_int_32 value)
-+   *p++=(png_byte) ((value >> 8) & 0xff);
-+   *p++=(png_byte) (value & 0xff);
-+ }
-+-#endif
-+ 
-+ static void PNGShort(png_bytep p,png_uint_16 value)
-+ {
-+-- 
-+2.11.0
-+
+> +BLUEZ_TOOLS_DEPENDENCIES = host-pkgconf dbus dbus-glib
+> +
+> +ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
+> +BLUEZ_TOOLS_DEPENDENCIES += bluez_utils
+> +else
+> +BLUEZ_TOOLS_DEPENDENCIES += bluez5_utils readline
+> +endif
+> +
+> +$(eval $(autotools-package))
+> 
