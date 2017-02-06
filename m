@@ -1,10 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 09:00:11 -0500
-Subject: [Buildroot] [PATCH 4/5] pps-tools: bump to version
+Date: Mon,  6 Feb 2017 09:00:10 -0500
+Subject: [Buildroot] [PATCH 3/5] x264: bump to version
 	97eaef2ab82a46d13ea5e00270712d6475fbe42b
 In-Reply-To: <20170206140012.1029-1-aduskett@codeblue.com>
 References: <20170206140012.1029-1-aduskett@codeblue.com>
-Message-ID: <20170206140012.1029-4-aduskett@codeblue.com>
+Message-ID: <20170206140012.1029-3-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/pps-tools/pps-tools.hash | 2 +-
- package/pps-tools/pps-tools.mk   | 2 +-
+ package/x264/x264.hash | 2 +-
+ package/x264/x264.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pps-tools/pps-tools.hash b/package/pps-tools/pps-tools.hash
-index 9fa62cb..da7bce4 100644
---- a/package/pps-tools/pps-tools.hash
-+++ b/package/pps-tools/pps-tools.hash
+diff --git a/package/x264/x264.hash b/package/x264/x264.hash
+index c61e2a2..9551093 100644
+--- a/package/x264/x264.hash
++++ b/package/x264/x264.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 28d4e5aa845f659a6ab4174bbf579e22e2d2c87dc72fd6d07306a6a249c27c76  pps-tools-0deb9c7e135e9380a6d09e9d2e938a146bb698c8.tar.gz
-+sha256 eee0a76118cf11d94f575ee43804a6991379f2c734b400ba01ac4811d0498e97  pps-tools-47333f24af878f67ce48022e8af16419713aa1ac.tar.gz
-diff --git a/package/pps-tools/pps-tools.mk b/package/pps-tools/pps-tools.mk
-index 48feea9..c3e147a 100644
---- a/package/pps-tools/pps-tools.mk
-+++ b/package/pps-tools/pps-tools.mk
+ # Locally computed
+-sha256 888af681679374fa5147ba629eab8cf1704864ddd9ad6be3a8057a6c86bc9392  x264-b97ae0644f16bad2e2c9c9181264a946769a0aa0.tar.gz
++sha256 9fc4651981453d0428a2ad16889b6b63d1f2e7347ea321f20347fc3a021ee912  x264-97eaef2ab82a46d13ea5e00270712d6475fbe42b.tar.gz
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index aa7bb55..80437c4 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PPS_TOOLS_VERSION = 0deb9c7e135e9380a6d09e9d2e938a146bb698c8
-+PPS_TOOLS_VERSION = 47333f24af878f67ce48022e8af16419713aa1ac
- PPS_TOOLS_SITE = $(call github,ago,pps-tools,$(PPS_TOOLS_VERSION))
- PPS_TOOLS_INSTALL_STAGING = YES
- PPS_TOOLS_LICENSE = GPLv2+
+-X264_VERSION = b97ae0644f16bad2e2c9c9181264a946769a0aa0
++X264_VERSION = 97eaef2ab82a46d13ea5e00270712d6475fbe42b
+ X264_SITE = git://git.videolan.org/x264.git
+ X264_LICENSE = GPLv2+
+ X264_DEPENDENCIES = host-pkgconf
 -- 
 2.9.3
