@@ -1,35 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 17:25:19 +0100
-Subject: [Buildroot] [PATCH 1/2] python-attrs: new package
-In-Reply-To: <20170206155624.9336-1-yegorslists@googlemail.com>
-References: <20170206155624.9336-1-yegorslists@googlemail.com>
-Message-ID: <20170206172519.46e21404@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 6 Feb 2017 17:15:36 +0100
+Subject: [Buildroot] [PATCH v2] size-stats: don't count hard links
+In-Reply-To: <1477319799-13570-1-git-send-email-fhunleth@troodon-software.com>
+References: <1477319799-13570-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <CAAXf6LXZ+OB+m76h2xwpV=a9RK2Xrs1pAdu4dZaEG-1=dtgVkQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, Oct 24, 2016 at 4:36 PM, Frank Hunleth
+<fhunleth@troodon-software.com> wrote:
+> This change adds inode tracking to the size-stats script so that hard
+> links don't cause files to be double counted. This has a significant
+> effect on the size computation for some packages. For example, git has
+> around a dozen hard links to a large file. Before this change, git would
+> weigh in at about 170 MB with the total filesystem size reported as
+> 175 MB. The actual rootfs.ext2 size was around 16 MB. With the change,
+> the git package registers at 10.5 MB with a total filesystem size of
+> 15.8 MB.
+>
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-On Mon,  6 Feb 2017 16:56:23 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                      |  1 +
->  package/python-attrs/Config.in         |  8 ++++++++
->  package/python-attrs/python-attrs.hash |  3 +++
->  package/python-attrs/python-attrs.mk   | 14 ++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/python-attrs/Config.in
->  create mode 100644 package/python-attrs/python-attrs.hash
->  create mode 100644 package/python-attrs/python-attrs.mk
-
-Both applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Acked-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
