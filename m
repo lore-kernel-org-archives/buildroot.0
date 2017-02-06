@@ -1,36 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 14:04:16 +0100
-Subject: [Buildroot] [git commit] configs/odroidc2: bump kernel version to
-	a7fe6f2258e30c7a547908b5480bdbe6b56d6d3c
-Message-ID: <20170206130440.2406581E9E@busybox.osuosl.org>
+Date: Mon, 6 Feb 2017 14:05:06 +0100
+Subject: [Buildroot] [PATCH] odroidc2: update boot.ini to
+ 5ce6bcc6d8048ba5ff351516b751d52f5cda6981
+In-Reply-To: <20170127074401.25156-1-daggs@gmx.com>
+References: <20170127074401.25156-1-daggs@gmx.com>
+Message-ID: <20170206140506.182790bc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab72923a1fb0551ed05b4c09117fc6564482ed24
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-this kernel rev has numerous bug fixes, framework upgrades and new
-features added.
+On Fri, 27 Jan 2017 09:44:01 +0200, Dagg Stompler wrote:
+> changes:
+>  - add multicam support
+>  - add the new options
+>  - organization and add uhs and card remove controls
+>  - clarify hdmi/dvi/vga selection
+> 
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> ---
+>  board/hardkernel/odroidc2/boot.ini | 152 +++++++++++++++++++++++++++++++++----
+>  1 file changed, 139 insertions(+), 13 deletions(-)
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/odroidc2_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-index ecee2ad..f2d8229 100644
---- a/configs/odroidc2_defconfig
-+++ b/configs/odroidc2_defconfig
-@@ -16,7 +16,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/hardkernel/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="925e508d37c76848881a8c8f7e9b02abc5731d88"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a7fe6f2258e30c7a547908b5480bdbe6b56d6d3c"
- BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
