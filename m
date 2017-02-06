@@ -1,77 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 17:15:35 +0100
-Subject: [Buildroot] [git commit] python-attrs: new package
-Message-ID: <20170206161703.B4B0081EA9@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 6 Feb 2017 17:18:56 +0100
+Subject: [Buildroot] [Patch v2 0/4] Add support for Cargo,
+ the Rust package manager
+In-Reply-To: <1468534054-14110-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1468534054-14110-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <3db01a49-aec6-f231-051b-5f6e381b2a87@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ebf0a963f86889bb6d71feb79b1ef83fa7232be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15-07-16 00:07, Eric Le Bihan wrote:
+> This series adds support for Cargo, the Rust package manager by providing a
+> package for the host variant.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                      |  1 +
- package/python-attrs/Config.in         |  8 ++++++++
- package/python-attrs/python-attrs.hash |  3 +++
- package/python-attrs/python-attrs.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+ Hi Eric,
 
-diff --git a/package/Config.in b/package/Config.in
-index cb6c12e..907b1e6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -650,6 +650,7 @@ menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-argh/Config.in"
- 	source "package/python-arrow/Config.in"
-+	source "package/python-attrs/Config.in"
- 	source "package/python-autobahn/Config.in"
- 	source "package/python-babel/Config.in"
- 	source "package/python-backports-abc/Config.in"
-diff --git a/package/python-attrs/Config.in b/package/python-attrs/Config.in
-new file mode 100644
-index 0000000..fb0ab24
---- /dev/null
-+++ b/package/python-attrs/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_ATTRS
-+	bool "python-attrs"
-+	help
-+	  attrs is the Python package that will bring back the joy of
-+	  writing classes by relieving you from the drudgery of
-+	  implementing object protocols (aka dunder methods).
-+
-+	  https://attrs.readthedocs.io/
-diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-new file mode 100644
-index 0000000..33ecd2c
---- /dev/null
-+++ b/package/python-attrs/python-attrs.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/attrs/json, sha256 locally computed
-+md5	4ec003c49360853cf935113d1ae56151  attrs-16.3.0.tar.gz
-+sha256	80203177723e36f3bbe15aa8553da6e80d47bfe53647220ccaa9ad7a5e473ccc  attrs-16.3.0.tar.gz
-diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
-new file mode 100644
-index 0000000..5e7985a
---- /dev/null
-+++ b/package/python-attrs/python-attrs.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-attrs
-+#
-+################################################################################
-+
-+PYTHON_ATTRS_VERSION = 16.3.0
-+PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
-+PYTHON_ATTRS_SITE = https://pypi.python.org/packages/01/b0/3ac73bf6df716a38568a16f6a9cbc46cc9e8ed6fe30c8768260030db55d4
-+PYTHON_ATTRS_SETUP_TYPE = setuptools
-+PYTHON_ATTRS_LICENSE = MIT
-+PYTHON_ATTRS_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+ Even though this series didn't receive any review, I've marked it as Changes
+Requested in patchwork because it depends on the Rust stuff. When you resubmit,
+could you combine both in a single series?
+
+ Thanks,
+ Arnout
+
+> 
+> v1 -> v2:
+> 
+>  - bump cargo to 0.11.0
+>  - make host-libssh2 depends on host-openssl
+> 
+> Eric Le Bihan (4):
+>   libssh2: add host variant
+>   libhttpparser: add host variant
+>   cargo-bootstrap: new package
+>   cargo: new package
+> 
+>  package/cargo-bootstrap/cargo-bootstrap.hash |   3 +
+>  package/cargo-bootstrap/cargo-bootstrap.mk   |  14 ++++
+>  package/cargo/0001-Allow-use-of-wget.patch   |  56 ++++++++++++++
+>  package/cargo/cargo.hash                     |   2 +
+>  package/cargo/cargo.in                       |   2 +
+>  package/cargo/cargo.mk                       | 106 +++++++++++++++++++++++++++
+>  package/cargo/config.in                      |   2 +
+>  package/libhttpparser/libhttpparser.mk       |   9 +++
+>  package/libssh2/libssh2.mk                   |   6 ++
+>  9 files changed, 200 insertions(+)
+>  create mode 100644 package/cargo-bootstrap/cargo-bootstrap.hash
+>  create mode 100644 package/cargo-bootstrap/cargo-bootstrap.mk
+>  create mode 100644 package/cargo/0001-Allow-use-of-wget.patch
+>  create mode 100644 package/cargo/cargo.hash
+>  create mode 100644 package/cargo/cargo.in
+>  create mode 100644 package/cargo/cargo.mk
+>  create mode 100644 package/cargo/config.in
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
