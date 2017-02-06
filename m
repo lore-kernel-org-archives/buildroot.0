@@ -1,10 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:27 -0500
-Subject: [Buildroot] [PATCH 14/44] linux-firmware: add atheros ar3011
-	bluetooth option
+Date: Mon,  6 Feb 2017 15:24:37 -0500
+Subject: [Buildroot] [PATCH 24/44] linux-firmware: add intel e100 option
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-15-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-25-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +13,40 @@ To: buildroot@busybox.net
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
  package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+ package/linux-firmware/linux-firmware.mk | 5 +++++
+ 2 files changed, 10 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 46f9e64..82d5355 100644
+index 622441b..7e3cd25 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -97,6 +97,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ABT_QCA61X4
+@@ -385,6 +385,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T6
  	help
- 	  Firmware files for Qualcomm Atheros QCA61x4 Bluetooth chips
+ 	  Firmware files for Chelsio T6 1Gb and 10Gb ethernet cards (cxgb6)
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_ABT_AR3011
-+	bool "Qualcomm Atheros Bluetooth support for AR3011 chips"
++config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100
++	bool "Intel PRO/100 Ethernet NIC"
 +	help
-+	  Firmware files for Qualcomm Atheros AR3011 Bluetooth chips
++	  Firmware files for the Intel PRO/100 Ethernet NIC ethernet card
 +
- config BR2_PACKAGE_LINUX_FIRMWARE_IBT
- 	bool "Intel Wireless Bluetooth"
+ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169
+ 	bool "Realtek 8169"
  	help
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 2609653..e0ddb0d 100644
+index d47d05d..ff0d653 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -121,6 +121,12 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += \
- 	qca/NOTICE.txt
+@@ -490,6 +490,11 @@ LINUX_FIRMWARE_FILES += cxgb4/t6fw-1.16.26.0.bin cxgb4/t6fw.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
  endif
  
-+# Quallcomm Atheros AR3011 Bluetooth
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ABT_AR3011),y)
-+LINUX_FIRMWARE_FILES += ath3k-1.fw
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100),y)
++LINUX_FIRMWARE_DIRS += e100/
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.e100
 +endif
 +
- # rt2501/rt61
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61),y)
- LINUX_FIRMWARE_FILES += rt2561.bin rt2561s.bin rt2661.bin
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169),y)
+ LINUX_FIRMWARE_FILES += \
+ 	rtl_nic/rtl8105e-1.fw \
 -- 
 2.9.3
