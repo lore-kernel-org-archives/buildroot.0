@@ -1,192 +1,103 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 6 Feb 2017 21:07:17 +0100
-Subject: [Buildroot] [PATCH v4] gqrx: new package
-In-Reply-To: <20170206193447.1283-1-gwenj@trabucayre.com>
-References: <20170206193447.1283-1-gwenj@trabucayre.com>
-Message-ID: <ce84b060-8c22-6424-10df-44d6a20330d1@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 6 Feb 2017 21:24:34 +0100
+Subject: [Buildroot] [PATCH v6 0/9] bump/choice for qt 5.8.0
+In-Reply-To: <0ac2d242-962a-9293-4690-d51e0b7031e0@andin.de>
+References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <20170206164058.3f443334@free-electrons.com>
+ <0ac2d242-962a-9293-4690-d51e0b7031e0@andin.de>
+Message-ID: <d086f97e-ac3d-6046-55fc-caf22e21d9e4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gwenhael,
 
-Le 06/02/2017 ? 20:34, Gwenhael Goavec-Merou a ?crit :
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+
+On 06-02-17 18:44, Andreas Naumann wrote:
+> Hi,
 > 
-> Gqrx is an open source software defined radio (SDR) receiver implemented
-> using GNU Radio and the Qt GUI toolkit. Currently it works on Linux
-> and Mac with hardware supported by gr-osmosdr, including Funcube Dongle,
-> RTL-SDR, Airspy, HackRF, BladeRF, RFSpace, USRP and SoapySDR.
+> first of all, thanks everybody for taking over and pushing this further. My
+> finding on this below..
 > 
-> Gqrx can operate as an AM/FM/SSB receiver with audio output or as an
-> FFT-only instrument. There are also various hooks for interacting
-> with external application using network sockets.
+> Am 06.02.2017 um 16:40 schrieb Thomas Petazzoni:
+>> Hello,
+>>
+>> On Tue, 31 Jan 2017 08:59:02 +0100, Zoltan Gyarmati wrote:
+>>
+>>> The Qt 5.8 config (and pyqt5) was tested on Raspberry Pi.
+>>
+>> As Arnout said we are trying to apply this patch series (or actually a
+>> subset of it). We have already fixed the comments that people have
+>> raised, and you can see the result at:
+>>
+>>   http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=qt5-bump
+>>
+>> Unfortunately, this fails to build with the following defconfig:
+>>
+>> BR2_arm=y
+>> BR2_cortex_a8=y
+>> BR2_TOOLCHAIN_EXTERNAL=y
+>> BR2_PACKAGE_QT5=y
+>> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+>> BR2_PACKAGE_QT5DECLARATIVE=y
+>> BR2_PACKAGE_QT5IMAGEFORMATS=y
+>> BR2_PACKAGE_QT5LOCATION=y
+>> BR2_PACKAGE_QT5MULTIMEDIA=y
+>> BR2_PACKAGE_QT5SENSORS=y
+>> BR2_PACKAGE_QT5SERIALBUS=y
+>> BR2_PACKAGE_QT5SVG=y
+>> BR2_PACKAGE_QT5TOOLS=y
+>> BR2_PACKAGE_QT5TOOLS_PIXELTOOL=y
+>> BR2_PACKAGE_QT5TOOLS_QTDIAG=y
+>> BR2_PACKAGE_QT5TOOLS_QTPATHS=y
+>> BR2_PACKAGE_QT5TOOLS_QTPLUGININFO=y
+>> BR2_PACKAGE_QT5WEBCHANNEL=y
+>> BR2_PACKAGE_QT5ENGINIO=y
+>>
+>> With the following error message during the qt5base build:
+>>
+>>   Project ERROR: Library 'libpng' is not defined.
+>>
+>> Could you take our branch, and see why there is this build failure ?
 > 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
-> Changes v3 -> v4:
->  * revert help text and fix columns size;
->  * depends on BR2_PACKAGE_QT5 instead of select
-> Changes v2 -> v3:
->  * backport patch to fix Wmisleading-indentation with gcc6;
->  * inherits alsa-lib or portaudio dependencies from gr-audio;
->  * reduce help text size;
->  * add upstream url.
-> Changes v1 -> v2:
->  * typo
-> ---
->  package/Config.in                                |  1 +
->  package/gqrx/0001-fix_compilation_in_gcc-6.patch | 34 +++++++++++++++++++
->  package/gqrx/Config.in                           | 43 ++++++++++++++++++++++++
->  package/gqrx/gqrx.hash                           |  2 ++
->  package/gqrx/gqrx.mk                             | 15 +++++++++
->  5 files changed, 95 insertions(+)
->  create mode 100644 package/gqrx/0001-fix_compilation_in_gcc-6.patch
->  create mode 100644 package/gqrx/Config.in
->  create mode 100644 package/gqrx/gqrx.hash
->  create mode 100644 package/gqrx/gqrx.mk
+> I have tried your branch and defconfig and see the same failure. Unfortunately I
+> have no idea why it happens, I have never observed that problem.
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index cb6c12e..4ea0de1 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1449,6 +1449,7 @@ menu "Miscellaneous"
->  	source "package/empty/Config.in"
->  	source "package/gnuradio/Config.in"
->  	source "package/googlefontdirectory/Config.in"
-> +	source "package/gqrx/Config.in"
->  	source "package/gr-osmosdr/Config.in"
->  	source "package/gsettings-desktop-schemas/Config.in"
->  	source "package/haveged/Config.in"
-> diff --git a/package/gqrx/0001-fix_compilation_in_gcc-6.patch b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-> new file mode 100644
-> index 0000000..e1824c3
-> --- /dev/null
-> +++ b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-> @@ -0,0 +1,34 @@
-> +From e6baaee4968345a53e977f593362267a91041cff Mon Sep 17 00:00:00 2001
-> +From: Valentin Ochs <a@0au.de>
-> +Date: Fri, 21 Oct 2016 20:12:50 +0200
-> +Subject: [PATCH 05/34] Cosmetic & readability changes
-> +
-> +Backport patch from
-> +https://github.com/csete/gqrx/commit/e6baaee4968345a53e977f593362267a91041cff
-> +
-> +Fix compilation in gcc-6
-> +
-> +Signed-off-by: Valentin Ochs <a@0au.de>
-> +Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> +---
-> +diff --git a/src/qtgui/plotter.cpp b/src/qtgui/plotter.cpp
-> +index e491632..b877546 100644
-> +--- a/src/qtgui/plotter.cpp
-> ++++ b/src/qtgui/plotter.cpp
-> +@@ -1336,8 +1336,11 @@ void CPlotter::drawOverlay()
-> + #endif
-> + 
-> +             int level = 0;
-> +-            for (; level < nLevels && tagEnd[level] > x; level++);
-> +-                level %= nLevels;
-> ++            while(level < nLevels && tagEnd[level] > x)
-> ++                level++;
-> ++            
-> ++            if(level == nLevels)
-> ++                level = 0;
-> + 
-> +             tagEnd[level] = x + nameWidth + slant - 1;
-> +             m_BookmarkTags.append(qMakePair<QRect, qint64>(QRect(x, level * levelHeight, nameWidth + slant, fontHeight), bookmarks[i].frequency));
-> +-- 
-> +2.10.2
-> +
-> diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-> new file mode 100644
-> index 0000000..0908b9f
-> --- /dev/null
-> +++ b/package/gqrx/Config.in
-> @@ -0,0 +1,43 @@
-> +comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_USE_WCHAR || BR2_STATIC_LIBS
-> +
-> +comment "gqrx needs qt5, gnuradio, fftw's single precision, alsa-lib or portaudio"
-> +	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
-> +		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO) || !BR2_PACKAGE_QT5
-> +
-> +config BR2_PACKAGE_GQRX
-> +	bool "gqrx"
-> +	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
-> +	depends on BR2_PACKAGE_GNURADIO
-> +	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO # gr-audio
-> +	depends on BR2_INSTALL_LIBSTDCPP # boost, qt5
-> +	depends on !BR2_STATIC_LIBS # qt5
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, qt5
-> +	depends on BR2_USE_WCHAR # boost, qt5
-> +	select BR2_PACKAGE_BOOST
-> +	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-> +	select BR2_PACKAGE_BOOST_SYSTEM
-> +	select BR2_PACKAGE_GNURADIO_ANALOG
-> +	select BR2_PACKAGE_GNURADIO_AUDIO
-> +	select BR2_PACKAGE_GNURADIO_BLOCKS
-> +	select BR2_PACKAGE_GNURADIO_DIGITAL
-> +	select BR2_PACKAGE_GNURADIO_FFT
-> +	select BR2_PACKAGE_GNURADIO_FILTER
-> +	select BR2_PACKAGE_GR_OSMOSDR
-> +	depends on BR2_PACKAGE_QT5
+> There are reports about these kind of problem, but without a hint for the real
+> reason.
+> https://bugreports.qt.io/browse/QTBUG-57148
 
-Please keep all "depends on" on top of all "select".
-This one can be fixed wile applying.
+ That's something else, it happens while building the bundled freetype which we
+don't do.
 
-Otherwise:
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+> https://bugreports.qt.io/browse/QTBUG-57794
 
-Best regards,
-Romain
+ That one looks like the same issue.
 
-
-> +	select BR2_PACKAGE_QT5BASE_GUI
-> +	select BR2_PACKAGE_QT5BASE_WIDGETS
-> +	select BR2_PACKAGE_QT5SVG
-> +	help
-> +	  Gqrx is an open source software defined radio (SDR) receiver
-> +	  implemented using GNU Radio and the Qt GUI toolkit. Currently
-> +	  it works on Linux and Mac with hardware supported by gr-osmosdr,
-> +	  including Funcube Dongle, RTL-SDR, Airspy, HackRF, BladeRF,
-> +	  RFSpace, USRP and SoapySDR.
-> +
-> +	  Gqrx can operate as an AM/FM/SSB receiver with audio output or
-> +	  as an FFT-only instrument. There are also various hooks for
-> +	  interacting with external application using network sockets.
-> +
-> +	  http://gqrx.dk/
-> diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-> new file mode 100644
-> index 0000000..2d126aa
-> --- /dev/null
-> +++ b/package/gqrx/gqrx.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated:
-> +sha256 53d25db8d987a41ccccaf6fd85262bd7770cdfab5539b5901c4558756483c9db  gqrx-v2.6.tar.gz
-> diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-> new file mode 100644
-> index 0000000..b591e60
-> --- /dev/null
-> +++ b/package/gqrx/gqrx.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# gqrx
-> +#
-> +################################################################################
-> +
-> +GQRX_VERSION = v2.6
-> +GQRX_SITE = $(call github,csete,gqrx,$(GQRX_VERSION))
-> +GQRX_LICENSE = GPLv3+, Apache-2.0
-> +GQRX_LICENSE_FILES = COPYING LICENSE-CTK
-> +GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr qt5base qt5svg
-> +
-> +GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
-> +
-> +$(eval $(cmake-package))
 > 
+> After fiddling a little, I can get over it by selecting
+> BR2_PACKAGE_QT5BASE_FONTCONFIG. Unfortunately I run out of time debugging
+> further for now.
+
+ Since it would be really nice to have Qt5.8 in 2017.02, I wouldn't mind working
+around it with
+
+	# Not clear why this is needed, the build fails without it
+	select BR2_PACKAGE_QT5BASE_FONTCONFIG if BR2_PACKAGE_QT5_VERSION_LATEST
+
+to BR2_PACKAGE_QT5BASE_PNG. Thomas and I looked at it as well for a little while
+and couldn't come up with an explanation.
+
+ It would be good however to report our findings in QTBUG-57794.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
