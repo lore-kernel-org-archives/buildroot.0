@@ -1,68 +1,192 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Feb 2017 21:07:00 +0100
-Subject: [Buildroot] [RFC: PATCH 3/3] system: enable predictable net
- interface names
-In-Reply-To: <1474113519-24713-4-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1474113519-24713-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1474113519-24713-4-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <CACXmVibUnH38chTyOboc0fJMN2kn3NWm2Dnhg8xbi82ddPotZg@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 6 Feb 2017 21:07:17 +0100
+Subject: [Buildroot] [PATCH v4] gqrx: new package
+In-Reply-To: <20170206193447.1283-1-gwenj@trabucayre.com>
+References: <20170206193447.1283-1-gwenj@trabucayre.com>
+Message-ID: <ce84b060-8c22-6424-10df-44d6a20330d1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 17, 2016 at 1:58 PM, Eric Le Bihan
-<eric.le.bihan.dev@free.fr> wrote:
+Hi Gwenhael,
 
-Hi and sorry for the slow response.
+Le 06/02/2017 ? 20:34, Gwenhael Goavec-Merou a ?crit :
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Gqrx is an open source software defined radio (SDR) receiver implemented
+> using GNU Radio and the Qt GUI toolkit. Currently it works on Linux
+> and Mac with hardware supported by gr-osmosdr, including Funcube Dongle,
+> RTL-SDR, Airspy, HackRF, BladeRF, RFSpace, USRP and SoapySDR.
+> 
+> Gqrx can operate as an AM/FM/SSB receiver with audio output or as an
+> FFT-only instrument. There are also various hooks for interacting
+> with external application using network sockets.
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+> Changes v3 -> v4:
+>  * revert help text and fix columns size;
+>  * depends on BR2_PACKAGE_QT5 instead of select
+> Changes v2 -> v3:
+>  * backport patch to fix Wmisleading-indentation with gcc6;
+>  * inherits alsa-lib or portaudio dependencies from gr-audio;
+>  * reduce help text size;
+>  * add upstream url.
+> Changes v1 -> v2:
+>  * typo
+> ---
+>  package/Config.in                                |  1 +
+>  package/gqrx/0001-fix_compilation_in_gcc-6.patch | 34 +++++++++++++++++++
+>  package/gqrx/Config.in                           | 43 ++++++++++++++++++++++++
+>  package/gqrx/gqrx.hash                           |  2 ++
+>  package/gqrx/gqrx.mk                             | 15 +++++++++
+>  5 files changed, 95 insertions(+)
+>  create mode 100644 package/gqrx/0001-fix_compilation_in_gcc-6.patch
+>  create mode 100644 package/gqrx/Config.in
+>  create mode 100644 package/gqrx/gqrx.hash
+>  create mode 100644 package/gqrx/gqrx.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index cb6c12e..4ea0de1 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1449,6 +1449,7 @@ menu "Miscellaneous"
+>  	source "package/empty/Config.in"
+>  	source "package/gnuradio/Config.in"
+>  	source "package/googlefontdirectory/Config.in"
+> +	source "package/gqrx/Config.in"
+>  	source "package/gr-osmosdr/Config.in"
+>  	source "package/gsettings-desktop-schemas/Config.in"
+>  	source "package/haveged/Config.in"
+> diff --git a/package/gqrx/0001-fix_compilation_in_gcc-6.patch b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
+> new file mode 100644
+> index 0000000..e1824c3
+> --- /dev/null
+> +++ b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
+> @@ -0,0 +1,34 @@
+> +From e6baaee4968345a53e977f593362267a91041cff Mon Sep 17 00:00:00 2001
+> +From: Valentin Ochs <a@0au.de>
+> +Date: Fri, 21 Oct 2016 20:12:50 +0200
+> +Subject: [PATCH 05/34] Cosmetic & readability changes
+> +
+> +Backport patch from
+> +https://github.com/csete/gqrx/commit/e6baaee4968345a53e977f593362267a91041cff
+> +
+> +Fix compilation in gcc-6
+> +
+> +Signed-off-by: Valentin Ochs <a@0au.de>
+> +Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> +---
+> +diff --git a/src/qtgui/plotter.cpp b/src/qtgui/plotter.cpp
+> +index e491632..b877546 100644
+> +--- a/src/qtgui/plotter.cpp
+> ++++ b/src/qtgui/plotter.cpp
+> +@@ -1336,8 +1336,11 @@ void CPlotter::drawOverlay()
+> + #endif
+> + 
+> +             int level = 0;
+> +-            for (; level < nLevels && tagEnd[level] > x; level++);
+> +-                level %= nLevels;
+> ++            while(level < nLevels && tagEnd[level] > x)
+> ++                level++;
+> ++            
+> ++            if(level == nLevels)
+> ++                level = 0;
+> + 
+> +             tagEnd[level] = x + nameWidth + slant - 1;
+> +             m_BookmarkTags.append(qMakePair<QRect, qint64>(QRect(x, level * levelHeight, nameWidth + slant, fontHeight), bookmarks[i].frequency));
+> +-- 
+> +2.10.2
+> +
+> diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+> new file mode 100644
+> index 0000000..0908b9f
+> --- /dev/null
+> +++ b/package/gqrx/Config.in
+> @@ -0,0 +1,43 @@
+> +comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_USE_WCHAR || BR2_STATIC_LIBS
+> +
+> +comment "gqrx needs qt5, gnuradio, fftw's single precision, alsa-lib or portaudio"
+> +	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
+> +		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO) || !BR2_PACKAGE_QT5
+> +
+> +config BR2_PACKAGE_GQRX
+> +	bool "gqrx"
+> +	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
+> +	depends on BR2_PACKAGE_GNURADIO
+> +	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO # gr-audio
+> +	depends on BR2_INSTALL_LIBSTDCPP # boost, qt5
+> +	depends on !BR2_STATIC_LIBS # qt5
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, qt5
+> +	depends on BR2_USE_WCHAR # boost, qt5
+> +	select BR2_PACKAGE_BOOST
+> +	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+> +	select BR2_PACKAGE_BOOST_SYSTEM
+> +	select BR2_PACKAGE_GNURADIO_ANALOG
+> +	select BR2_PACKAGE_GNURADIO_AUDIO
+> +	select BR2_PACKAGE_GNURADIO_BLOCKS
+> +	select BR2_PACKAGE_GNURADIO_DIGITAL
+> +	select BR2_PACKAGE_GNURADIO_FFT
+> +	select BR2_PACKAGE_GNURADIO_FILTER
+> +	select BR2_PACKAGE_GR_OSMOSDR
+> +	depends on BR2_PACKAGE_QT5
 
-> Since v197, udev and eudev automatically assign predictable, stable
-> network interface names for all local Ethernet, WLAN and WWAN
-> interfaces.
+Please keep all "depends on" on top of all "select".
+This one can be fixed wile applying.
 
-Are you sure about eudev? I don't seem to find any references to that
-rules file (or anything related) in eudev-3.2.1.
+Otherwise:
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-> This is a departure from the traditional interface naming scheme
-> (eth0, eth1, etc).
->
-> Add a configuration option to enable or disable this feature, which is
-> disabled by default to be coherent with the behavior set when udev is
-> not used.
->
-> See https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
-> for details.
+Best regards,
+Romain
 
-This document talks about adding a symlink to /dev/null from
-/etc/systemd/network/99-default.link, but that is not what you are
-doing. Why?
 
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index 1000161..74b0636 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -242,6 +242,17 @@ endif
->  TARGET_FINALIZE_HOOKS += SKELETON_REMOUNT_RW
->  endif # BR2_INIT_BUSYBOX || BR2_INIT_SYSV
->
-> +ifeq ($(BR2_SYSTEM_PREDICTABLE_NETIF_NAMES),y)
-> +define SKELETON_MANAGE_PREDITABLE_NETIF_NAMES
-> +       rm -f $(TARGET_DIR)/etc/udev/rules.d/80-net-setup-links.rules
-> +endef
-> +else
-> +define SKELETON_MANAGE_PREDITABLE_NETIF_NAMES
-> +       touch $(TARGET_DIR)/etc/udev/rules.d/80-net-setup-links.rules
-> +endef
-> +endif
-
-I take it that the idea is for this file to "shadow" a file of the
-same name in /lib/udev/rules? Looking in systemd-232 there is only a
-80-net-setup-link.rules file (link not links)?
-
-If it all boils down to it being a systemd specific option that can be
-handled by a single symlink in an overlay/post-build script, then I
-don't think it is worth to have it.
-
--- 
-Bye, Peter Korsgaard
+> +	select BR2_PACKAGE_QT5BASE_GUI
+> +	select BR2_PACKAGE_QT5BASE_WIDGETS
+> +	select BR2_PACKAGE_QT5SVG
+> +	help
+> +	  Gqrx is an open source software defined radio (SDR) receiver
+> +	  implemented using GNU Radio and the Qt GUI toolkit. Currently
+> +	  it works on Linux and Mac with hardware supported by gr-osmosdr,
+> +	  including Funcube Dongle, RTL-SDR, Airspy, HackRF, BladeRF,
+> +	  RFSpace, USRP and SoapySDR.
+> +
+> +	  Gqrx can operate as an AM/FM/SSB receiver with audio output or
+> +	  as an FFT-only instrument. There are also various hooks for
+> +	  interacting with external application using network sockets.
+> +
+> +	  http://gqrx.dk/
+> diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
+> new file mode 100644
+> index 0000000..2d126aa
+> --- /dev/null
+> +++ b/package/gqrx/gqrx.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated:
+> +sha256 53d25db8d987a41ccccaf6fd85262bd7770cdfab5539b5901c4558756483c9db  gqrx-v2.6.tar.gz
+> diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
+> new file mode 100644
+> index 0000000..b591e60
+> --- /dev/null
+> +++ b/package/gqrx/gqrx.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# gqrx
+> +#
+> +################################################################################
+> +
+> +GQRX_VERSION = v2.6
+> +GQRX_SITE = $(call github,csete,gqrx,$(GQRX_VERSION))
+> +GQRX_LICENSE = GPLv3+, Apache-2.0
+> +GQRX_LICENSE_FILES = COPYING LICENSE-CTK
+> +GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr qt5base qt5svg
+> +
+> +GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
+> +
+> +$(eval $(cmake-package))
+> 
