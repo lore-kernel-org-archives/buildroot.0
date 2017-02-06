@@ -1,54 +1,53 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:24 -0500
-Subject: [Buildroot] [PATCH 11/44] linux-firmware: add g07007 mpeg-4 encoder
-	option.
+Date: Mon,  6 Feb 2017 15:24:21 -0500
+Subject: [Buildroot] [PATCH 08/44] linux-firmware: add amd radeon option
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-12-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-9-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because this is also a video device, I renamed the video menu to
-video card and created a video encoder/decoder firmware menu.
-
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/linux-firmware/Config.in | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index b3be6f8..0d6ff51 100644
+index 1c0ba39..48c5963 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -47,7 +47,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_YAMAHA
+@@ -49,6 +49,11 @@ endmenu # Audio
  
- endmenu # Audio
+ menu "Video firmware"
  
--menu "Video firmware"
-+menu "Video card firmware"
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_AMD_RADEON
- 	bool "AMD Radeon video card firmware"
-@@ -74,7 +74,16 @@ config BR2_PACKAGE_LINUX_FIRMWARE_NOUVEAU
- 	help
- 	  Firmware files for various NVIDIA cards.
- 
--endmenu # Video
-+endmenu # Video card
-+
-+menu "Video encoder/decoder firmware"
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_GO7007
-+	bool "GO7007 MPEG-4 encoder"
++config BR2_PACKAGE_LINUX_FIRMWARE_AMD_RADEON
++	bool "AMD Radeon video card firmware"
 +	help
-+	  Firmware files for the GO7007 MPEG-4 encoder.
++	  Firmware files for AMD Radeon video cards.
++  
+ config BR2_PACKAGE_LINUX_FIRMWARE_ATI_RADEON
+ 	bool "ATI Radeon video card firmware"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 7fa066d..b3ba1b0 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -57,6 +57,12 @@ LINUX_FIRMWARE_FILES += yamaha/
+ # WHENCE which is installed unconditionally
+ endif
+ 
++# AMD Radeon
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AMD_RADEON),y)
++LINUX_FIRMWARE_DIRS += amdgpu
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.amdgpu
++endif
 +
-+endmenu # Video encoder
- 
- menu "Bluetooth firmware"
- 
+ # ATI Radeon
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATI_RADEON),y)
+ LINUX_FIRMWARE_DIRS += radeon
 -- 
 2.9.3
