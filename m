@@ -1,14 +1,15 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  6 Feb 2017 14:09:22 +0100
-Subject: [Buildroot] [PATCHv3] package/libplatform: bump version to 2.1.0
-Message-ID: <1486386562-29752-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Feb 2017 14:13:25 +0100
+Subject: [Buildroot] [git commit] package/libplatform: bump version to 2.1.0
+Message-ID: <20170206131533.37704820EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=2ac3045453d701b1fbea0d04333642a76fbfecc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Rebased patch 0001.
 
@@ -24,22 +25,13 @@ Fixes:
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
----
-Changes v2 -> v3:
-  - make it a git patch  (Thomas)
-  - add references to autobuild failures  (Thomas)
-
-Changes v1 -> v2:
-  - use the proper methods to find headers and libs (thanks Samuel!)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  .../0001-p8-platform-config-fix-lookup-paths.patch | 38 ++++++++++++++++++++
  ...nfig.cmake-fix-paths-for-cross-compilatio.patch | 40 ----------------------
  package/libplatform/libplatform.hash               |  2 +-
  package/libplatform/libplatform.mk                 |  8 ++---
  4 files changed, 43 insertions(+), 45 deletions(-)
- create mode 100644 package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
- delete mode 100644 package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
 
 diff --git a/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch b/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
 new file mode 100644
@@ -158,5 +150,3 @@ index 6d54915..d9cd582 100644
  LIBPLATFORM_INSTALL_STAGING = YES
  
  $(eval $(cmake-package))
--- 
-2.7.4
