@@ -1,38 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Feb 2017 14:28:23 +0100
-Subject: [Buildroot] [PATCH v6 9/9] package/python-pyqt5: add patch to
- fix build with Qt 5.8.0
-In-Reply-To: <2cec291c-c9ae-7c21-ff8e-bbb6ba8d53b8@gmail.com>
-References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1485849551-20469-10-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <440fc7aa-0144-2c36-37ea-9e6139de71e0@mind.be>
- <2cec291c-c9ae-7c21-ff8e-bbb6ba8d53b8@gmail.com>
-Message-ID: <4c2d3248-0ae4-9b65-ab13-d8ed4a25e5dc@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 6 Feb 2017 15:28:48 +0200
+Subject: [Buildroot] [PATCH v2] efl: do not force dependency on libudev
+ by making eeze a config option.
+In-Reply-To: <20170206132510.6247-1-romain.naour@gmail.com>
+References: <20170206132510.6247-1-romain.naour@gmail.com>
+Message-ID: <20170206132848.5yedfv7qzqqimz2m@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Romain,
 
+On Mon, Feb 06, 2017 at 02:25:10PM +0100, Romain Naour wrote:
+> @@ -28,5 +30,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
+>  
+>  comment "enlightenment needs a toolchain w/ wchar, C++, threads"
+>  	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
+> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+> +		!BR2_PACKAGE_HAS_UDEV
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 
-On 06-02-17 09:57, Zoltan Gyarmati wrote:
-> Dear Arnout, Peter, Thomas,
-> 
-> 
-> ok, thanks for the feedbacks, I'll tailor together a new version in the
-> upcoming days,
+What about updating the comment text?
 
- Thomas is going to apply it now during the BR developer days, so there is no
-need to resend the series. If there is any patch from the series that is still
-problematic, Thomas will say so.
+baruch
 
- Regards,
- Arnout
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
