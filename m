@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 18:50:14 +0100
-Subject: [Buildroot] [RFC: PATCH 2/3] system: allow auto net
- configuration with networkd
-In-Reply-To: <1474113519-24713-3-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1474113519-24713-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1474113519-24713-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20170206185014.5e291980@free-electrons.com>
+Date: Mon, 6 Feb 2017 18:50:41 +0100
+Subject: [Buildroot] [PATCH][autobuild] autobuild-run: introduce
+ "--http-url" option for submition URL
+In-Reply-To: <1477142835-17843-1-git-send-email-vzakhar@synopsys.com>
+References: <1477142835-17843-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <20170206185041.67b0e587@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 17 Sep 2016 13:58:38 +0200, Eric Le Bihan wrote:
-> Allow automatic network configuration via systemd-networkd if selected.
+On Sat, 22 Oct 2016 16:27:15 +0300, Vlad Zakharov wrote:
+> This commit introduces "--http-url" option.
+> Described option is used to pass URL of the resourse to submit the
+> results of the script.
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Default value refers to standard buildroot sumbition URL:
+> http://autobuild.buildroot.org/submit/
+> 
+> Such update allows users to submit ther results not only to
+> standard buildroot autobuild resource but also somewhere
+> else.
+> 
+> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 > ---
->  system/Config.in | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+>  scripts/autobuild-run | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-I've applied, but in fact squashed into the previous patch as it really
-is the same change.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
