@@ -1,170 +1,38 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 Feb 2017 14:25:10 +0100
-Subject: [Buildroot] [PATCH v2] efl: do not force dependency on libudev by
-	making eeze a config option.
-Message-ID: <20170206132510.6247-1-romain.naour@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 6 Feb 2017 14:28:23 +0100
+Subject: [Buildroot] [PATCH v6 9/9] package/python-pyqt5: add patch to
+ fix build with Qt 5.8.0
+In-Reply-To: <2cec291c-c9ae-7c21-ff8e-bbb6ba8d53b8@gmail.com>
+References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <1485849551-20469-10-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <440fc7aa-0144-2c36-37ea-9e6139de71e0@mind.be>
+ <2cec291c-c9ae-7c21-ff8e-bbb6ba8d53b8@gmail.com>
+Message-ID: <4c2d3248-0ae4-9b65-ab13-d8ed4a25e5dc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
 
-Although highly recommended to be enabled, EFL's eeze can be disabled
-and thus no dependency on libudev or dynamic device management.
 
-Since 'BR2_PACKAGE_HAS_UDEV' has two ways to be satisfied (eudev or
-systemd) we can't automatically select it, instead show a comment and
-use 'depends on'.
+On 06-02-17 09:57, Zoltan Gyarmati wrote:
+> Dear Arnout, Peter, Thomas,
+> 
+> 
+> ok, thanks for the feedbacks, I'll tailor together a new version in the
+> upcoming days,
 
-Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-[Romain:
-  - Propagate the eeze dependency to enlightenment
-  - Remove udev provider from eeze comment in efl's Config.in]
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v2: Propagate the eeze dependency to enlightenment
-    Remove udev provider from eeze comment in efl's Config.in since
-    we don't explicitely name all possible providers in comment.
----
- package/efl/Config.in           | 25 ++++++++++++++++++++++---
- package/efl/efl.mk              |  9 ++++++++-
- package/enlightenment/Config.in |  5 ++++-
- 3 files changed, 34 insertions(+), 5 deletions(-)
+ Thomas is going to apply it now during the BR developer days, so there is no
+need to resend the series. If there is any patch from the series that is still
+problematic, Thomas will say so.
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 8b06a49..79346b3 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_EFL
- 	depends on BR2_HOST_GCC_AT_LEAST_4_7
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_PACKAGE_HAS_UDEV # libudev
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
- 	depends on BR2_USE_MMU
-@@ -37,6 +36,19 @@ config BR2_PACKAGE_EFL_BULLET
- 	  simply not tested so you are on your own in terms of
- 	  ensuring everything works if you do this.
- 
-+config BR2_PACKAGE_EFL_EEZE
-+	bool "Enable eeze (udev) support (recommended)"
-+	depends on BR2_PACKAGE_HAS_UDEV # libudev
-+	default y
-+	help
-+	  Eeze is EFL's hardware abstraction layer on top of udev.
-+	  Having it off will disable some hardware detection, such as
-+	  'drm' graphics engine or 'elput', as well as mounting
-+	  removable media.
-+
-+comment "eeze needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+
- config BR2_PACKAGE_EFL_FONTCONFIG
- 	bool "Enable fontconfig support (recommended)"
- 	select BR2_PACKAGE_FONTCONFIG
-@@ -98,6 +110,7 @@ config BR2_PACKAGE_EFL_PULSEAUDIO
- 
- config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
- 	bool "Enable libmount support (recommended)"
-+	depends on BR2_PACKAGE_EFL_EEZE
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	# libblkid is part of required tools, see EFL's README.
-@@ -108,9 +121,13 @@ config BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT
- 	  devices etc... and disabling this will hurt support for
- 	  Enlightenment and its filemanager.
- 
-+comment "efl's libmount support needs eeze"
-+	depends on !BR2_PACKAGE_EFL_EEZE
-+
- config BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
- 	bool
- 	default y if BR2_PACKAGE_EFL_BULLET && \
-+		BR2_PACKAGE_EFL_EEZE && \
- 		BR2_PACKAGE_EFL_FONTCONFIG && \
- 		BR2_PACKAGE_EFL_GSTREAMER1 && \
- 		BR2_PACKAGE_EFL_LIBFRIBIDI && \
-@@ -198,6 +215,7 @@ endchoice # OpenGL support
- 
- config BR2_PACKAGE_EFL_ELPUT
- 	bool "Elput"
-+	depends on BR2_PACKAGE_EFL_EEZE
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 	help
-@@ -208,6 +226,7 @@ config BR2_PACKAGE_EFL_ELPUT
- 
- config BR2_PACKAGE_EFL_DRM
- 	bool "Evas DRM Engine"
-+	depends on BR2_PACKAGE_EFL_EEZE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
- 	select BR2_PACKAGE_EFL_ELPUT
-@@ -279,8 +298,8 @@ config BR2_PACKAGE_EFL_SVG
- 
- endif # BR2_PACKAGE_EFL
- 
--comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
--	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP \
-+comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_HOST_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
- 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index ab08946..1e54f72 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -20,7 +20,7 @@ EFL_LICENSE_FILES = \
- EFL_INSTALL_STAGING = YES
- 
- EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
--	jpeg luajit lz4 udev zlib
-+	jpeg luajit lz4 zlib
- 
- # Configure options:
- # --disable-lua-old: build elua for the target.
-@@ -59,6 +59,13 @@ else
- EFL_CONF_OPTS += --disable-cxx-bindings
- endif
- 
-+ifeq ($(BR2_PACKAGE_EFL_EEZE),y)
-+EFL_DEPENDENCIES += udev
-+EFL_CONF_OPTS += --enable-libeeze
-+else
-+EFL_CONF_OPTS += --disable-libeeze
-+endif
-+
- ifeq ($(BR2_PACKAGE_EFL_UTIL_LINUX_LIBMOUNT),y)
- EFL_DEPENDENCIES += util-linux
- EFL_CONF_OPTS += --enable-libmount
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index b5d889b..2e2bd57 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -9,10 +9,12 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	# libedbus -> dbus, efl libraries
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_EFL
-+	depends on BR2_PACKAGE_HAS_UDEV # efl (eeze) -> libudev
- 	depends on BR2_PACKAGE_XORG7
- 	# libevas-generic-loaders-svg -> librsvg -> pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_EFL_X_XLIB
-+	select BR2_PACKAGE_EFL_EEZE
- 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
- 	select BR2_PACKAGE_EFL_PNG # needed at runtime by enlightenment_start
- 	select BR2_PACKAGE_EFL_SVG
-@@ -28,5 +30,6 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 
- comment "enlightenment needs a toolchain w/ wchar, C++, threads"
- 	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_PACKAGE_HAS_UDEV
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ Regards,
+ Arnout
 -- 
-2.9.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
