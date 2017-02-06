@@ -1,51 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Feb 2017 17:15:43 +0100
-Subject: [Buildroot] [PATCH v4] efl: do not force dependency on libudev
- by making eeze a config option.
-In-Reply-To: <20170206161028.11380-1-romain.naour@gmail.com>
-References: <20170206161028.11380-1-romain.naour@gmail.com>
-Message-ID: <20170206171543.1c417917@free-electrons.com>
+Date: Mon, 6 Feb 2017 17:15:35 +0100
+Subject: [Buildroot] [git commit] python-attrs: new package
+Message-ID: <20170206161703.B4B0081EA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9ebf0a963f86889bb6d71feb79b1ef83fa7232be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  6 Feb 2017 17:10:28 +0100, Romain Naour wrote:
-> From: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-> 
-> Although highly recommended to be enabled, EFL's eeze can be disabled
-> and thus no dependency on libudev or dynamic device management.
-> 
-> Since 'BR2_PACKAGE_HAS_UDEV' has two ways to be satisfied (eudev or
-> systemd) we can't automatically select it, instead show a comment and
-> use 'depends on'.
-> 
-> Signed-off-by: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
-> [Romain:
->   - Propagate the eeze dependency to enlightenment and efl Wayland
->   - Remove udev provider from eeze comment in efl's Config.in
->   - Add comments when eeze is not available]
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> v4: Propagate eeze dependency to BR2_PACKAGE_EFL_WAYLAND
->     Add some comments about udev management (eeze)
-> v3: Add missing udev in Enlightenment comment text (Baruch Siach)
-> v2: Propagate the eeze dependency to enlightenment
->     Remove udev provider from eeze comment in efl's Config.in since
->     we don't explicitely name all possible providers in comment.
-> ---
->  package/efl/Config.in           | 38 +++++++++++++++++++++++++++++++-------
->  package/efl/efl.mk              |  9 ++++++++-
->  package/enlightenment/Config.in |  7 +++++--
->  3 files changed, 44 insertions(+), 10 deletions(-)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                      |  1 +
+ package/python-attrs/Config.in         |  8 ++++++++
+ package/python-attrs/python-attrs.hash |  3 +++
+ package/python-attrs/python-attrs.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index cb6c12e..907b1e6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -650,6 +650,7 @@ menu "External python modules"
+ 	source "package/python-alsaaudio/Config.in"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-arrow/Config.in"
++	source "package/python-attrs/Config.in"
+ 	source "package/python-autobahn/Config.in"
+ 	source "package/python-babel/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+diff --git a/package/python-attrs/Config.in b/package/python-attrs/Config.in
+new file mode 100644
+index 0000000..fb0ab24
+--- /dev/null
++++ b/package/python-attrs/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_ATTRS
++	bool "python-attrs"
++	help
++	  attrs is the Python package that will bring back the joy of
++	  writing classes by relieving you from the drudgery of
++	  implementing object protocols (aka dunder methods).
++
++	  https://attrs.readthedocs.io/
+diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
+new file mode 100644
+index 0000000..33ecd2c
+--- /dev/null
++++ b/package/python-attrs/python-attrs.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/attrs/json, sha256 locally computed
++md5	4ec003c49360853cf935113d1ae56151  attrs-16.3.0.tar.gz
++sha256	80203177723e36f3bbe15aa8553da6e80d47bfe53647220ccaa9ad7a5e473ccc  attrs-16.3.0.tar.gz
+diff --git a/package/python-attrs/python-attrs.mk b/package/python-attrs/python-attrs.mk
+new file mode 100644
+index 0000000..5e7985a
+--- /dev/null
++++ b/package/python-attrs/python-attrs.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-attrs
++#
++################################################################################
++
++PYTHON_ATTRS_VERSION = 16.3.0
++PYTHON_ATTRS_SOURCE = attrs-$(PYTHON_ATTRS_VERSION).tar.gz
++PYTHON_ATTRS_SITE = https://pypi.python.org/packages/01/b0/3ac73bf6df716a38568a16f6a9cbc46cc9e8ed6fe30c8768260030db55d4
++PYTHON_ATTRS_SETUP_TYPE = setuptools
++PYTHON_ATTRS_LICENSE = MIT
++PYTHON_ATTRS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
