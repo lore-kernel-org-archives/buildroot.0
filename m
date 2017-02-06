@@ -1,8 +1,8 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  6 Feb 2017 18:00:51 +0100
-Subject: [Buildroot] [PATCH] imagemagick: fix build of png support when jpeg
-	support is disabled
-Message-ID: <20170206170051.18865-1-peter@korsgaard.com>
+Date: Mon,  6 Feb 2017 18:02:55 +0100
+Subject: [Buildroot] [PATCHv2] imagemagick: fix build of png support when
+	jpeg support is disabled
+Message-ID: <20170206170255.19487-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,16 +31,19 @@ Patch submitted upstream.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-png.c-unbreak-build-without-JPEG-support.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ Changes since v1:
+ - Add link to upstream pull request
+
+ ...-png.c-unbreak-build-without-JPEG-support.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
  create mode 100644 package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
 
 diff --git a/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch b/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
 new file mode 100644
-index 000000000..1eaae1c63
+index 000000000..00a1045bb
 --- /dev/null
 +++ b/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
-@@ -0,0 +1,46 @@
+@@ -0,0 +1,47 @@
 +From 5d0e9c53f49022df5154eb3c04900f48b1c6448e Mon Sep 17 00:00:00 2001
 +From: Peter Korsgaard <peter@korsgaard.com>
 +Date: Mon, 6 Feb 2017 17:39:31 +0100
@@ -59,6 +62,7 @@ index 000000000..1eaae1c63
 +
 +Fix it by unconditionally defining the helper function.
 +
++Submitted-upstream: https://github.com/ImageMagick/ImageMagick/pull/373
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
 + coders/png.c | 2 --
