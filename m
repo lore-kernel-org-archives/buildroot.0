@@ -1,59 +1,40 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 6 Feb 2017 19:39:00 +0100
-Subject: [Buildroot] [PATCH] Don't disable dependency tracking if using
- <pkg>_OVERRIDE_SRCDIR.
-In-Reply-To: <20170201135310.3ghqvpqww25jfzm2@zenon.in.qult.net>
-References: <20170201135310.3ghqvpqww25jfzm2@zenon.in.qult.net>
-Message-ID: <2a135f21-ffe1-06b8-37d3-e78f7a51798f@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Feb 2017 19:39:13 +0100
+Subject: [Buildroot] [PATCH v2] size-stats: don't count hard links
+In-Reply-To: <1477319799-13570-1-git-send-email-fhunleth@troodon-software.com>
+References: <1477319799-13570-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20170206193913.25f86b2e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ignacy,
+Hello,
 
-Le 01/02/2017 ? 14:53, Ignacy Gaw?dzki a ?crit :
-> Include the --disable-dependency-tracking option in
-> <pkg>_CONFIGURE_CMDS only on the condition that <pkg>_OVERRIDE_SRCDIR
-> is empty.  Dependency tracking is very welcome while developing in
-> order to properly rebuild when calling make <pkg>-rebuild for
-> instance.
+On Mon, 24 Oct 2016 10:36:39 -0400, Frank Hunleth wrote:
+> This change adds inode tracking to the size-stats script so that hard
+> links don't cause files to be double counted. This has a significant
+> effect on the size computation for some packages. For example, git has
+> around a dozen hard links to a large file. Before this change, git would
+> weigh in at about 170 MB with the total filesystem size reported as
+> 175 MB. The actual rootfs.ext2 size was around 16 MB. With the change,
+> the git package registers at 10.5 MB with a total filesystem size of
+> 15.8 MB.
 > 
-> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 > ---
->  package/pkg-autotools.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index f7b8488..e8579f4 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -199,7 +199,8 @@ define $(2)_CONFIGURE_CMDS
->  		--disable-documentation \
->  		--with-xmlto=no \
->  		--with-fop=no \
-> -		--disable-dependency-tracking \
-> +		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),, \
-> +		   --disable-dependency-tracking) \
->  		--enable-ipv6 \
->  		$$(DISABLE_NLS) \
->  		$$(SHARED_STATIC_LIBS_OPTS) \
-> @@ -232,7 +233,8 @@ define $(2)_CONFIGURE_CMDS
->  		--disable-debug \
->  		--with-xmlto=no \
->  		--with-fop=no \
-> -		--disable-dependency-tracking \
-> +		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),, \
-> +		   --disable-dependency-tracking) \
+> Changes v1 -> v2:
+>   - Moved hardlink check to build_package_size() so that hardlinks
+>     could also be detected in files belonging to no package
+>   - The v1 patch had the effect of listing all but one hardlinked
+>     files as having 0 size in file-size-stats.csv. This no longer
+>     happens anymore. All files have their listed size.
 
-You're likely working on the target variant, so probably you can let the
-dependency tracking enabled for the host?
+Applied to master, thanks.
 
-Best regards,
-Romain
-
->  		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
->  	)
->  endef
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
