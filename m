@@ -1,35 +1,35 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:55 -0500
-Subject: [Buildroot] [PATCH 42/44] linux-firmware: t4fw bump to version
-	1.16.26.0
+Date: Mon,  6 Feb 2017 15:24:57 -0500
+Subject: [Buildroot] [PATCH 44/44] linux-firmware: fix typo in config file.
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-43-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-45-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Currently the help for the Chelsio T5 has (cxgb4).
+I changed this to (cxgb5)
+
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- package/linux-firmware/linux-firmware.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index d8b1729..fc1ff7b 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -473,8 +473,8 @@ LINUX_FIRMWARE_DIRS += tigon
- endif
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 48af36a..f05201f 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -378,7 +378,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4
+ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5
+ 	bool "Chelsio T5"
+ 	help
+-	  Firmware files for Chelsio T5 1Gb and 10Gb ethernet cards (cxgb4)
++	  Firmware files for Chelsio T5 1Gb and 10Gb ethernet cards (cxgb5)
  
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4),y)
--# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.14.4.0.bin
--LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.14.4.0.bin cxgb4/t4fw.bin
-+# cxgb4/t4fw.bin is a symlink to cxgb4/t4fw-1.16.26.0.bin
-+LINUX_FIRMWARE_FILES += cxgb4/t4fw-1.16.26.0.bin cxgb4/t4fw.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
- endif
- 
+ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T6
+ 	bool "Chelsio T6"
 -- 
 2.9.3
