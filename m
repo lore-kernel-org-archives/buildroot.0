@@ -1,10 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Feb 2017 15:24:25 -0500
-Subject: [Buildroot] [PATCH 12/44] linux-firmware: add samsung mfc video
-	encoder/decoder option
+Date: Mon,  6 Feb 2017 15:24:28 -0500
+Subject: [Buildroot] [PATCH 15/44] linux-firmware: add atheros ar3012
+	bluetooth option
 In-Reply-To: <20170206202457.31527-1-aduskett@codeblue.com>
 References: <20170206202457.31527-1-aduskett@codeblue.com>
-Message-ID: <20170206202457.31527-13-aduskett@codeblue.com>
+Message-ID: <20170206202457.31527-16-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,56 +14,61 @@ To: buildroot@busybox.net
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
  package/linux-firmware/Config.in         |  5 +++++
- package/linux-firmware/linux-firmware.mk | 21 +++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ package/linux-firmware/linux-firmware.mk | 26 ++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 0d6ff51..0bc6d77 100644
+index 82d5355..8913f68 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -83,6 +83,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_GO7007
+@@ -102,6 +102,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ABT_AR3011
  	help
- 	  Firmware files for the GO7007 MPEG-4 encoder.
+ 	  Firmware files for Qualcomm Atheros AR3011 Bluetooth chips
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_SAMSUNG_MFC
-+	bool "Samsung MFC video encoder/decoder driver"
++config BR2_PACKAGE_LINUX_FIRMWARE_ABT_AR3012
++	bool "Qualcomm Atheros Bluetooth support for AR3012 chips"
 +	help
-+	  Firmware files for the Samsung MFC video encoder/decoder.
-+
- endmenu # Video encoder
- 
- menu "Bluetooth firmware"
++	  Firmware files for Qualcomm Atheros AR3012 Bluetooth chips
++	  	  	  
+ config BR2_PACKAGE_LINUX_FIRMWARE_IBT
+ 	bool "Intel Wireless Bluetooth"
+ 	help
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index b471bd4..bdeabfa 100644
+index e0ddb0d..673e656 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -57,6 +57,27 @@ LINUX_FIRMWARE_FILES += yamaha/
- # WHENCE which is installed unconditionally
+@@ -127,6 +127,32 @@ LINUX_FIRMWARE_FILES += ath3k-1.fw
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
  endif
  
-+# Go7007 Mpeg4 encoder
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_GO7007),y)
-+LINUX_FIRMWARE_DIRS += go7007
++# Quallcomm Atheros AR3012 Bluetooth
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ABT_AR3012),y)
 +LINUX_FIRMWARE_FILES += \
-+	s2250.fw \
-+	s2250_loader.fw
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.go7007
++	ar3k/AthrBT_0x01020001.dfu \
++	ar3k/ramps_0x01020001_26.dfu \
++	ar3k/AthrBT_0x01020200.dfu \
++	ar3k/ramps_0x01020200_26.dfu \
++	ar3k/ramps_0x01020200_40.dfu \
++	ar3k/AthrBT_0x31010000.dfu \
++	ar3k/ramps_0x31010000_40.dfu \
++	ar3k/AthrBT_0x11020000.dfu \
++	ar3k/ramps_0x11020000_40.dfu \
++	ar3k/ramps_0x01020201_26.dfu \
++	ar3k/ramps_0x01020201_40.dfu \
++	ar3k/AthrBT_0x41020000.dfu \
++	ar3k/ramps_0x41020000_40.dfu \
++	ar3k/AthrBT_0x11020100.dfu \
++	ar3k/ramps_0x11020100_40.dfu \
++	ar3k/AthrBT_0x31010100.dfu \
++	ar3k/ramps_0x31010100_40.dfu \
++	ar3k/AthrBT_0x01020201.dfu \
++	ar3k/1020201coex/ramps_0x01020201_26_HighPriority.dfu
++	
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
 +endif
 +
-+# Samsung MFC video encoder/decoder
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_SAMSUNG_MFC),y)
-+LINUX_FIRMWARE_FILES += \
-+	s5p-mfc.fw \
-+	s5p-mfc-v6.fw \
-+	s5p-mfc-v6-v2.fw \
-+	s5p-mfc-v7.fw \
-+	s5p-mfc-v8.fw
-+# No license file; the license is in the file WHENCE
-+# which is installed unconditionally
-+endif
-+
- # AMD Radeon
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AMD_RADEON),y)
- LINUX_FIRMWARE_DIRS += amdgpu
+ # rt2501/rt61
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61),y)
+ LINUX_FIRMWARE_FILES += rt2561.bin rt2561s.bin rt2661.bin
 -- 
 2.9.3
