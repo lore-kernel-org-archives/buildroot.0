@@ -1,65 +1,74 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Feb 2017 17:18:56 +0100
-Subject: [Buildroot] [Patch v2 0/4] Add support for Cargo,
- the Rust package manager
-In-Reply-To: <1468534054-14110-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1468534054-14110-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <3db01a49-aec6-f231-051b-5f6e381b2a87@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Feb 2017 17:17:35 +0100
+Subject: [Buildroot] [git commit] python-bitstring: new package
+Message-ID: <20170206162303.F24918211D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15-07-16 00:07, Eric Le Bihan wrote:
-> This series adds support for Cargo, the Rust package manager by providing a
-> package for the host variant.
+commit: https://git.buildroot.net/buildroot/commit/?id=c9129558b960de1264319e8518d74674a877d5b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Hi Eric,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                              |  1 +
+ package/python-bitstring/Config.in             |  6 ++++++
+ package/python-bitstring/python-bitstring.hash |  2 ++
+ package/python-bitstring/python-bitstring.mk   | 14 ++++++++++++++
+ 4 files changed, 23 insertions(+)
 
- Even though this series didn't receive any review, I've marked it as Changes
-Requested in patchwork because it depends on the Rust stuff. When you resubmit,
-could you combine both in a single series?
-
- Thanks,
- Arnout
-
-> 
-> v1 -> v2:
-> 
->  - bump cargo to 0.11.0
->  - make host-libssh2 depends on host-openssl
-> 
-> Eric Le Bihan (4):
->   libssh2: add host variant
->   libhttpparser: add host variant
->   cargo-bootstrap: new package
->   cargo: new package
-> 
->  package/cargo-bootstrap/cargo-bootstrap.hash |   3 +
->  package/cargo-bootstrap/cargo-bootstrap.mk   |  14 ++++
->  package/cargo/0001-Allow-use-of-wget.patch   |  56 ++++++++++++++
->  package/cargo/cargo.hash                     |   2 +
->  package/cargo/cargo.in                       |   2 +
->  package/cargo/cargo.mk                       | 106 +++++++++++++++++++++++++++
->  package/cargo/config.in                      |   2 +
->  package/libhttpparser/libhttpparser.mk       |   9 +++
->  package/libssh2/libssh2.mk                   |   6 ++
->  9 files changed, 200 insertions(+)
->  create mode 100644 package/cargo-bootstrap/cargo-bootstrap.hash
->  create mode 100644 package/cargo-bootstrap/cargo-bootstrap.mk
->  create mode 100644 package/cargo/0001-Allow-use-of-wget.patch
->  create mode 100644 package/cargo/cargo.hash
->  create mode 100644 package/cargo/cargo.in
->  create mode 100644 package/cargo/cargo.mk
->  create mode 100644 package/cargo/config.in
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/Config.in b/package/Config.in
+index 907b1e6..114a5ad 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -655,6 +655,7 @@ menu "External python modules"
+ 	source "package/python-babel/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-beautifulsoup4/Config.in"
++	source "package/python-bitstring/Config.in"
+ 	source "package/python-bottle/Config.in"
+ 	source "package/python-can/Config.in"
+ 	source "package/python-cbor/Config.in"
+diff --git a/package/python-bitstring/Config.in b/package/python-bitstring/Config.in
+new file mode 100644
+index 0000000..93d7682
+--- /dev/null
++++ b/package/python-bitstring/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_BITSTRING
++	bool "python-bitstring"
++	help
++	  Simple construction, analysis and modification of binary data.
++
++	  https://github.com/scott-griffiths/bitstring
+diff --git a/package/python-bitstring/python-bitstring.hash b/package/python-bitstring/python-bitstring.hash
+new file mode 100644
+index 0000000..52630e0
+--- /dev/null
++++ b/package/python-bitstring/python-bitstring.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	b769620c1b52d6c1548c6c4f055613f4eee3120ed8a5cff4ba4ffbbc8a582286  bitstring-3.1.5.tar.gz
+diff --git a/package/python-bitstring/python-bitstring.mk b/package/python-bitstring/python-bitstring.mk
+new file mode 100644
+index 0000000..2c8fb99
+--- /dev/null
++++ b/package/python-bitstring/python-bitstring.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-bitstring
++#
++################################################################################
++
++PYTHON_BITSTRING_VERSION = 3.1.5
++PYTHON_BITSTRING_SOURCE = bitstring-$(PYTHON_BITSTRING_VERSION).tar.gz
++PYTHON_BITSTRING_SITE = https://github.com/scott-griffiths/bitstring/archive
++PYTHON_BITSTRING_SETUP_TYPE = distutils
++PYTHON_BITSTRING_LICENSE = MIT
++PYTHON_BITSTRING_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
