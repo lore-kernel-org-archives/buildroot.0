@@ -1,47 +1,80 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue,  7 Feb 2017 12:08:17 +0100
-Subject: [Buildroot] [PATCH] docs/manual: suggest 'YES' as the value for
-	LIBFOO_GIT_SUBMODULES
-Message-ID: <1486465697-30876-1-git-send-email-luca@lucaceresoli.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 7 Feb 2017 12:20:39 +0100
+Subject: [Buildroot] [PATCHv2 03/10] toolchain helpers: introduce
+ function relpath_prefix
+In-Reply-To: <20170204134214.20592-4-patrickdepinguin@gmail.com>
+References: <20170204134214.20592-1-patrickdepinguin@gmail.com>
+ <20170204134214.20592-4-patrickdepinguin@gmail.com>
+Message-ID: <273596b5-0b39-2118-5581-b96f335326ec@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The manual mentions LIBFOO_GIT_SUBMODULES but does not tell what value
-it should have. The implementation only checks whether the variable is
-non-empty, but we should suggest a specific value to avoid people
-wondering what they have to set, and to try setting weird values.
+Hi Thomas,
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Ricardo Herrero <ricardo.herrero@gmail.com>
----
- docs/manual/adding-packages-generic.txt | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Le 04/02/2017 ? 14:42, Thomas De Schampheleire a ?crit :
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> The helper function copy_toolchain_sysroot has some logic to transform a
+> path into a number of '../' components based on the depth of that path.
+> 
+> As this same logic will be needed in another place in a subsequent patch,
+> extract it into a separate helper relpath_prefix.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+> v2: no changes
+> 
+>  toolchain/helpers.mk | 25 ++++++++++++++++++++-----
+>  1 file changed, 20 insertions(+), 5 deletions(-)
+> 
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 6720629..ba14b38 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -121,11 +121,7 @@ copy_toolchain_sysroot = \
+>  			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+>  		fi ; \
+>  		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
+> -		relpath="./" ; \
+> -		nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
+> -		for slash in `seq 1 $${nbslashs}` ; do \
+> -			relpath=$${relpath}"../" ; \
+> -		done ; \
+> +		relpath="$(call relpath_prefix,$${ARCH_SUBDIR})./" ; \
+>  		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
+>  		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+>  	fi ; \
+> @@ -424,3 +420,22 @@ check_toolchain_ssp = \
+>  gen_gdbinit_file = \
+>  	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
+>  	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
+> +
+> +# Given a path, determine the relative prefix (../) needed to return to the
+> +# root level. Note that the last component is treated as a file component; use a
+> +# trailing slash to force treating it as a directory. Examples:
+> +#     relpath_prefix(lib32) = ""
+> +#     relpath_prefix(lib32/octeon2) = "../"
+> +#     relpath_prefix(lib32/octeon2/) = "../../"
+> +#
+> +# $1: input path
+> +define relpath_prefix
+> +$$( \
+> +	prefix="" ; \
+> +	nbslashs=`printf $1 | sed 's%[^/]%%g' | wc -c` ; \
+> +	for slash in `seq 1 $${nbslashs}` ; do \
+> +		prefix=$${prefix}"../" ; \
+> +	done ; \
+> +	printf "$$prefix" ;\
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 0e111e1199de..a08283c5a39d 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -317,11 +317,12 @@ information is (assuming the package name is +libfoo+) :
-      the package source code. Buildroot copies the contents of the
-      source directory into the package's build directory.
- 
--* +LIBFOO_GIT_SUBMODULES+, when +LIBFOO_SITE_METHOD=git+, will create
--  an archive with the git submodules in the repository.
--  Note that we try not to use such git submodules when they contain
--  bundled libraries, in which case we prefer to use those libraries
--  from their own package.
-+* +LIBFOO_GIT_SUBMODULES+ can be set to +YES+ to create an archive
-+  with the git submodules in the repository.  This is only available
-+  for packages downloaded with git (i.e. when
-+  +LIBFOO_SITE_METHOD=git+).  Note that we try not to use such git
-+  submodules when they contain bundled libraries, in which case we
-+  prefer to use those libraries from their own package.
- 
- * +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
-   (directories) that tar must strip from file names on extraction.
--- 
-2.7.4
+missing space after ";"
+
+Best regards,
+Romain
+
+
+> +)
+> +endef
+> 
