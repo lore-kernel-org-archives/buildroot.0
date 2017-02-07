@@ -1,115 +1,154 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Feb 2017 22:29:59 +0100
-Subject: [Buildroot] [git commit] fakedate: new package
-Message-ID: <20170207220536.3BDEC80DA0@busybox.osuosl.org>
+Date: Tue, 7 Feb 2017 21:45:01 +0100
+Subject: [Buildroot] [git commit] reproducible: fix DATE/TIME macros in
+	toolchain-wrapper
+Message-ID: <20170207220536.3244882123@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a268768c71ce1189f7a124dbe6869900a3ee3554
+commit: https://git.buildroot.net/buildroot/commit/?id=76838f63412a30a358210e457dda4b79f7730624
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-`date' is widely used by packages to include build information in their
-binaries. Unfortunately, this is incompatible with BR2_REPRODUCIBLE.
+The use of the __DATE__ and __TIME__ macros are one of the most common
+sources of non-reproducible binaries. In order to fix that, gcc 7 supports
+the SOURCE_DATE_EPOCH variable:
 
-Instead of having to identify all `date' invocations in the different
-packages, this commit adds a small tool that allows to always return
-the same date.
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=e3e8c48c4a494d9da741c1c8ea6c4c0b7c4ff934
+
+This patch take advantage of toolchain-wrapper to provide support of
+SOURCE_DATE_EPOCH to older gcc versions.
+
+Function get_source_date_epoch() come directly from gcc git.
 
 This work was sponsored by `BA Robotic Systems'.
 
-[Peter: drop debugging print]
+[Peter: use sizeof for character array sizes, make function static,
+	extend commit message, add upstream gcc commit]
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fakedate/fakedate    | 57 ++++++++++++++++++++++++++++++++++++++++++++
- package/fakedate/fakedate.mk | 15 ++++++++++++
- 2 files changed, 72 insertions(+)
+ toolchain/toolchain-wrapper.c | 72 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 71 insertions(+), 1 deletion(-)
 
-diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
-new file mode 100755
-index 0000000..4a9b9b5
---- /dev/null
-+++ b/package/fakedate/fakedate
-@@ -0,0 +1,57 @@
-+#!/bin/sh
-+# vim: set sw=4 expandtab:
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+# General Public License for more details.
-+#
-+# You should have received a copy of the GNU General Public License
-+# along with this program; if not, write to the Free Software
-+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-+#
-+# Copyright (C) 2016 J??r??me Pouiller <jezz@sysmic.org>
-+#
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 100aa18..eb4ee8d 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -22,12 +22,15 @@
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <errno.h>
++#include <time.h>
+ 
+ #ifdef BR_CCACHE
+ static char ccache_path[PATH_MAX];
+ #endif
+ static char path[PATH_MAX];
+ static char sysroot[PATH_MAX];
++static char source_time[sizeof("-D__TIME__=\"HH:MM:SS\"")];
++static char source_date[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
+ 
+ /**
+  * GCC errors out with certain combinations of arguments (examples are
+@@ -39,8 +42,11 @@ static char sysroot[PATH_MAX];
+  * 	-mfloat-abi=
+  * 	-march=
+  * 	-mcpu=
++ * 	-D__TIME__=
++ * 	-D__DATE__=
++ * 	-Wno-builtin-macro-redefined
+  */
+-#define EXCLUSIVE_ARGS	3
++#define EXCLUSIVE_ARGS	6
+ 
+ static char *predef_args[] = {
+ #ifdef BR_CCACHE
+@@ -157,6 +163,47 @@ static void check_unsafe_path(const char *arg,
+ 	}
+ }
+ 
++/* Read SOURCE_DATE_EPOCH from environment to have a deterministic
++ * timestamp to replace embedded current dates to get reproducible
++ * results.  Returns -1 if SOURCE_DATE_EPOCH is not defined.
++ */
++static time_t get_source_date_epoch()
++{
++	char *source_date_epoch;
++	long long epoch;
++	char *endptr;
 +
-+# Sanity check
-+if ! readlink -f "$0" | grep -q fakedate; then
-+    echo "fakedate: Please name this script \`fakedate'"
-+    exit 1
-+fi
++	source_date_epoch = getenv("SOURCE_DATE_EPOCH");
++	if (!source_date_epoch)
++		return (time_t) -1;
 +
-+DATE_BIN=false
-+# Do not call `date' directly since it will produce an infinite recursion.
-+# Instead, find path of true `date' binary.
-+for P in `echo $PATH | tr ':' ' '`; do
-+    if [ -x "$P/date" ]; then
-+        if readlink -f "$P/date" | grep -qv fakedate; then
-+            DATE_BIN="$P/date"
-+            break;
-+        fi
-+    fi
-+done
++	errno = 0;
++	epoch = strtoll(source_date_epoch, &endptr, 10);
++	if ((errno == ERANGE && (epoch == LLONG_MAX || epoch == LLONG_MIN))
++			|| (errno != 0 && epoch == 0)) {
++		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
++				"strtoll: %s\n", strerror(errno));
++		exit(2);
++	}
++	if (endptr == source_date_epoch) {
++		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
++				"no digits were found: %s\n", endptr);
++		exit(2);
++	}
++	if (*endptr != '\0') {
++		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
++				"trailing garbage: %s\n", endptr);
++		exit(2);
++	}
++	if (epoch < 0) {
++		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
++				"value must be nonnegative: %lld \n", epoch);
++		exit(2);
++	}
 +
-+if [ -n "$SOURCE_DATE_EPOCH" ]; then
-+    FORCE_EPOCH=1
-+    for i in "$@"; do
-+        # Use of --date, --file and --reference (and their short option counter
-+        # parts) is incompatible with SOURCE_DATE_EPOCH.
-+        # -u and -R are the only short options without argument. So they could
-+        # appear between '-' and option we want to match.
-+        if echo "$i" | grep -qE '^-([uR]*d|-date|[uR]*f|-file|[uR]*r|--reference)'; then
-+            FORCE_EPOCH=0
-+            break;
-+        fi
-+    done
-+    if [ $FORCE_EPOCH -eq 1 ]; then
-+        echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of true time" >&2
-+        exec $DATE_BIN -d "@$SOURCE_DATE_EPOCH" "$@"
-+    fi
-+fi
++	return (time_t) epoch;
++}
 +
-+exec $DATE_BIN "$@"
-diff --git a/package/fakedate/fakedate.mk b/package/fakedate/fakedate.mk
-new file mode 100644
-index 0000000..61d4bd7
---- /dev/null
-+++ b/package/fakedate/fakedate.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# fakedate
-+#
-+################################################################################
+ int main(int argc, char **argv)
+ {
+ 	char **args, **cur, **exec_args;
+@@ -167,6 +214,7 @@ int main(int argc, char **argv)
+ 	char *paranoid_wrapper;
+ 	int paranoid;
+ 	int ret, i, count = 0, debug;
++	time_t source_date_epoch;
+ 
+ 	/* Calculate the relative paths */
+ 	basename = strrchr(progpath, '/');
+@@ -272,6 +320,28 @@ int main(int argc, char **argv)
+ 	}
+ #endif /* ARCH || CPU */
+ 
++	source_date_epoch = get_source_date_epoch();
++	if (source_date_epoch != -1) {
++		struct tm *tm = localtime(&source_date_epoch);
++		if (!tm) {
++			perror("__FILE__: localtime");
++			return 3;
++		}
++		ret = strftime(source_time, sizeof(source_time), "-D__TIME__=\"%T\"", tm);
++		if (!ret) {
++			perror("__FILE__: overflow");
++			return 3;
++		}
++		*cur++ = source_time;
++		ret = strftime(source_date, sizeof(source_date), "-D__DATE__=\"%b %e %Y\"", tm);
++		if (!ret) {
++			perror("__FILE__: overflow");
++			return 3;
++		}
++		*cur++ = source_date;
++		*cur++ = "-Wno-builtin-macro-redefined";
++	}
 +
-+# source included in buildroot
-+HOST_FAKEDATE_LICENSE = GPLv2+
-+
-+define HOST_FAKEDATE_INSTALL_CMDS
-+	$(INSTALL) -D -m 755 package/fakedate/fakedate $(HOST_DIR)/usr/bin/fakedate
-+	ln -sfn fakedate $(HOST_DIR)/usr/bin/date
-+endef
-+
-+$(eval $(host-generic-package))
+ 	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+ 	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
+ 		paranoid = 1;
