@@ -1,11 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 7 Feb 2017 15:32:32 +0100
-Subject: [Buildroot] [PATCH v5 01/19] reproducible: fix DATE/TIME macros
- in toolchain-wrapper
-In-Reply-To: <1482241596-31688-2-git-send-email-jezz@sysmic.org>
+Date: Tue, 7 Feb 2017 15:32:33 +0100
+Subject: [Buildroot] [PATCH v5 02/19] fakedate: new package
+In-Reply-To: <1482241596-31688-3-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-2-git-send-email-jezz@sysmic.org>
-Message-ID: <CAHXCMMKrS8kad54BS4N09pz-WqUfr48yYh5jo59BXATLGLDSow@mail.gmail.com>
+ <1482241596-31688-3-git-send-email-jezz@sysmic.org>
+Message-ID: <CAHXCMMK2Uoksvr4Wh1pP-AtqKdnk7NdSG3mwKe1whwnYJwuOBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +14,12 @@ To: buildroot@busybox.net
 Hi J?r?me, all,
 
 On Tue, Dec 20, 2016 at 2:46 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> The use __DATE__ and __TIME__ are one of most common sources of
-> non-reproducible binaries. In order to fix that, gcc begin to support
-> SOURCE_DATE_EPOCH variable. This patch take advantage of toolchain-wrapper
-> to provide support of SOURCE_DATE_EPOCH to older gcc versions.
+> `date' is widely used by packages to include build information in their
+> binaries. Unfortunately, this is incompatible with  BR2_REPRODUCIBLE.
 >
-> Function get_source_date_epoch() come directly from gcc git.
+> Instead of having to identify all `date' invocations in the different
+> packages, this commit adds a small tool that allows to always return
+> the same date.
 >
 > This work was sponsored by `BA Robotic Systems'.
 >
@@ -29,7 +28,6 @@ On Tue, Dec 20, 2016 at 2:46 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 Regards,
-
 
 -- 
 Samuel
