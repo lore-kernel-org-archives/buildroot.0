@@ -1,56 +1,64 @@
-From: Luca Ceresoli <lucaceresoli77@gmail.com>
-Date: Tue, 7 Feb 2017 16:18:08 +0100
-Subject: [Buildroot] [PATCH 1/4] support/scripts: add script to test a
- package
-In-Reply-To: <d1a206971ebad3baa346e54205fb4f198d979aa7.1486475561.git.yann.morin.1998@free.fr>
-References: <cover.1486475561.git.yann.morin.1998@free.fr>
- <d1a206971ebad3baa346e54205fb4f198d979aa7.1486475561.git.yann.morin.1998@free.fr>
-Message-ID: <cefdf04c-ff06-5ee7-86ce-97fa36c09000@lucaceresoli.net>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 7 Feb 2017 16:26:20 +0100
+Subject: [Buildroot] [PATCH v5 16/19] infra-libtool: inform libtool that
+ STAGING_DIR is reachable at runtime
+In-Reply-To: <1482241596-31688-17-git-send-email-jezz@sysmic.org>
+References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
+ <1482241596-31688-17-git-send-email-jezz@sysmic.org>
+Message-ID: <CAHXCMMJvhxqau3YPspkf2WiSY6YLbBrF8DwDNwMphYJkU4u7Jg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi J?r?me,
 
-On 07/02/2017 14:52, Yann E. MORIN wrote:
-> This script helps in testing that a pacakge builds fine on a wide range
-> of architectures and toolchains: BE/LE, 32/64-bit, musl/glibc/uclibc...
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> [yann.morin.1998 at free.fr:
->  - completely rewrite the script from Thomas, with help from Luca
-> ]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+On Tue, Dec 20, 2016 at 2:46 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> When installing binaries to $TARGET_DIR, libtool add `$STAGING_DIR{,/usr}/lib'
+> to RPATH. This is annoying to create reproducible binaries. This patch just
+> inform libtool that these paths are reachable on runtime and it is necessary to
 
-Just two very minor nits about wording. For the rest the diff from the
-version I already reviewed is very limited anyway.
+s/it is necessary/it is not necessary/
 
-[...]
+> add then to RPATH.
+>
+> Notice `$lt_cv_sys_lib_dlsearch_path_spec' was introduced in libtool v2.0.
+> Packages with libtool v1.5 continue to include `$STAGING_DIR{,/usr}/lib' in
+> their RPATH. The few packages that use libtool v1.5 have to be patched
+> individually in order to make them reproducible (adding AUTORECONF=YES should
+> be sufficient in most cases).
+>
+> Note, instead of providing $lt_cv_sys_lib_dlsearch_path_spec, Yocto patch
+> libtool:
+>    http://git.yoctoproject.org/cgit.cgi/poky/tree/meta/recipes-devtools/libtool/libtool/fix-final-rpath.patch
+>
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/Makefile.in | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 688d5b1..6a341f2 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -355,6 +355,7 @@ TARGET_CONFIGURE_ARGS = \
+>         ac_cv_func_calloc_0_nonnull=yes \
+>         ac_cv_func_realloc_0_nonnull=yes \
+>         lt_cv_sys_lib_search_path_spec="" \
+> +       lt_cv_sys_lib_dlsearch_path_spec="/lib /usr/lib $(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
+>         $(BR2_AC_CV_C_BIGENDIAN) \
+>         $(BR2_GT_CV_FUNC_GNUGETTEXT_LIBC)
+>
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-> +help() {
-> +    cat <<_EOF_
-> +test-pkg: test-build a package against various toolchains and architectures
-> +
-> +The supplied config snippet is appended to each toolchain config, the
-> +resulting configuration is checked that it still contains all options
-
-"is checked that it still contains" seems wrong to me.
-I'd reword it as "is checked to ensure it still contains".
-
-> +specified in the snippet; if any is missing, the build is skipped, on the
-> +assumption that the package under test requires a toolchain or architecture
-> +feature that is missing.
-> +
-> +The list of toolchains is retrieved from Buildroot autobuilders, available
-
-from Buildroot autobuilders -> from the Buildroot autobuilders
-
-With these fixed:
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Regards,
 
 -- 
-Luca
+Samuel
