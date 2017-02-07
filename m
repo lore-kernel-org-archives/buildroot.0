@@ -1,24 +1,42 @@
-From: Ilias Apalodimas <apalos@gmail.com>
-Date: Tue,  7 Feb 2017 18:20:57 +0200
-Subject: [Buildroot] [PATCH 0/1] Added keepalived package
-Message-ID: <1486484458-8233-1-git-send-email-apalos@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Feb 2017 17:40:15 +0100
+Subject: [Buildroot] [git commit] logrotate: enable selinux support
+Message-ID: <20170207164039.03F287FA9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add Support for keepalived
+commit: https://git.buildroot.net/buildroot/commit/?id=61c8273e2357f6aab202f6c8653f85f21c3c4f7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ilias Apalodimas (1):
-  Added keepalived package
+Selinux is currently disabled staticly in logrotate. This patch fixes
+this by checking for libselinux and adding it as a dependecy if it has
+been selected.
 
- package/Config.in                |  1 +
- package/keepalived/Config.in     | 13 +++++++++++++
- package/keepalived/keepalived.mk | 13 +++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/keepalived/Config.in
- create mode 100644 package/keepalived/keepalived.mk
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/logrotate/logrotate.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
--- 
-1.9.1
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 7828870..5fd779e 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -12,7 +12,13 @@ LOGROTATE_DEPENDENCIES = popt host-pkgconf
+ # tarball does not have a generated configure script
+ LOGROTATE_AUTORECONF = YES
+ LOGROTATE_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs popt`"
+-LOGROTATE_CONF_OPTS = --without-selinux
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++LOGROTATE_CONF_OPTS += --with-selinux
++LOGROTATE_DEPENDENCIES += libselinux
++else
++LOGROTATE_CONF_OPTS += --without-selinux
++endif
+ 
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ LOGROTATE_DEPENDENCIES += acl
