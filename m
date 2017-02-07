@@ -1,36 +1,61 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 7 Feb 2017 21:51:14 +0000 (UTC)
-Subject: [Buildroot] [PATCH 1/1] Add notes explaining that SITE_METHOD
- == local prevents any patches from being applied to the package sources.
-References: <20170207204053.18749-1-grant.b.edwards@gmail.com>
- <CAAXf6LU_5HZ1aDfCi+T1SZcx3bk7276uReqP4HHvmSMiC-5+xg@mail.gmail.com>
-Message-ID: <o7dfgi$2tn$2@blaine.gmane.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue,  7 Feb 2017 22:56:37 +0100
+Subject: [Buildroot] [PATCHv3 00/12] toolchain: improvements to
+	copy_toolchain_sysroot and copy_toolchain_lib_root
+Message-ID: <20170207215649.364-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-02-07, Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
-> Hi Grant,
->
-> On Tue, Feb 7, 2017 at 9:40 PM, Grant Edwards <grant.b.edwards@gmail.com> wrote:
->> Signed-off-by: Grant Edwards <grant.b.edwards@gmail.com>
->> ---
->>  docs/manual/adding-packages-generic.txt | 17 +++++++++--------
->>  docs/manual/customize-patches.txt       |  3 ++-
->>  docs/manual/patch-policy.txt            |  4 ++++
->>  3 files changed, 15 insertions(+), 9 deletions(-)
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-> When a package source is overridden using the FOO_OVERRIDE_SRCDIR
-> mechanism, the same is true: no patches are applied automatically, the
-> overridden srcdir is supposed to be complete and used as-is. Perhaps
-> the documentation updates could also cover that?
+Hi,
 
-Sure, I'll add that.
+This toolchain patch series started out to fix the handling of the Cavium Octeon
+2 toolchain (see patch "cover multilib toolchains with lib/<variant>/layout")
+but along the way I fixed/improved a few other things.
+Details are found in the commit messages of these patches.
+
+I tested a number of external toolchains and arches available in Buildroot, as
+well as the Octeon SDK toolchain.  I think I understand the situation
+sufficiently well to get some confidence, but this is the type of
+change that is difficult to get 100% certainty about.
+
+Best regards,
+Thomas
+
+v3: after live review by ThomasP and Romain:
+- reduce nesting level of copy_toolchain_sysroot
+- remove unnecessarily added exclude of ARCH_LIB_DIR in rsync
+- fix locale exclude
+v2:
+- fix broken symlinks in patch "cover multilib toolchains ..."
+- simplification of fixed broken symlinks
+- improvements in copy_toolchain_lib_root
+
+Thomas De Schampheleire (12):
+  toolchain-external: reduce nesting in copy_toolchain_sysroot
+  toolchain-external: fix broken handling of 'usr/lib/locale'
+  toolchain-external: clarify rsync excludes in copy_toolchain_sysroot
+  toolchain-external: handle ld.so fixups centrally
+  toolchain helpers: introduce function relpath_prefix
+  toolchain-external: cover multilib toolchains with lib/<variant>
+    layout
+  toolchain helpers: introduce simplify_symlink
+  toolchain-external: simplify previously-broken symbolic links
+  toolchain: copy_toolchain_lib_root: remove unused variable LIBDIR
+  toolchain: copy_toolchain_lib_root: clarify logic
+  toolchain: copy_toolchain_lib_root: clarify input parameter
+  toolchain: copy_toolchain_lib_root: copy symlinks instead of
+    recreating them
+
+ package/glibc/glibc.mk                             |   4 +-
+ toolchain/helpers.mk                               | 124 +++++++++++++++++----
+ .../toolchain-external/pkg-toolchain-external.mk   |  14 ++-
+ .../toolchain-external-codesourcery-aarch64.mk     |  10 --
+ 4 files changed, 113 insertions(+), 39 deletions(-)
 
 -- 
-Grant Edwards               grant.b.edwards        Yow! I'm having an
-                                  at               EMOTIONAL OUTBURST!!  But,
-                              gmail.com            uh, WHY is there a WAFFLE
-                                                   in my PAJAMA POCKET??
+2.10.2
