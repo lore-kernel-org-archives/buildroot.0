@@ -1,282 +1,92 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  7 Feb 2017 13:02:39 -0500
-Subject: [Buildroot] [PATCH 3/3] ncurses: bump to 6.0
-Message-ID: <20170207180239.31904-1-Adamduskett@outlook.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 07 Feb 2017 20:07:43 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-01-24
+In-Reply-To: <CAHXCMMJ_bNBo+dx3N1ugJQmJQxCvc+PaWjY93oYCi1nTBQQTew@mail.gmail.com>
+References: <20170125073013.D171D20CD4@mail.free-electrons.com>
+ <1485378342.7516.1.camel@embedded.rocks>
+ <20170125211534.dugtv6byofg3wvg5@tarshish>
+ <CAHXCMM+cL0UnnfhgFTtkeC7L+jRh8s=tr-U5CTC0YZxzUBb4bA@mail.gmail.com>
+ <1485722254.4549.1.camel@embedded.rocks>
+ <20170129211155.f6sebtrdmsrwb2yw@tarshish>
+ <1485806342.3759.3.camel@embedded.rocks>
+ <20170130212025.a5mmf5kfig3kgngo@tarshish>
+ <1485811370.2212.0.camel@embedded.rocks>
+ <20170130212602.xmxjbkp4zzrfhuof@tarshish>
+ <1486333037.12820.6.camel@embedded.rocks>
+ <20170206120617.7760c340@free-electrons.com>
+ <CAHXCMMKmaRC8z6-A_xucDxiAhz1-2xqPhGvogMLhW8uTO2Xw7Q@mail.gmail.com>
+ <7A7D81D5-CC2B-41A5-9275-C9D7F63A5CF1@embedded.rocks>
+ <CAHXCMMJ5Mp=8v-AmAY20wGz0UZ3qBoRMAQmZBFhWVApkM4dnZA@mail.gmail.com>
+ <C119D098-632D-42AB-A4C7-13481318DDDC@embedded.rocks>
+ <CAHXCMMJy9T9QTviUMUUqxR8j3Y866BfXQbQ7uN4xcu6BY87eig@mail.gmail.com>
+ <1486424308.4950.9.camel@embedded.rocks>
+ <CAHXCMMJ-HNK9mCC8_cf1Fk4CnX7NCGF9ypWBVCu2JeBa5oK8CQ@mail.gmail.com>
+ <1486472439.1692.3.camel@embedded.rocks>
+ <CAHXCMMJ_bNBo+dx3N1ugJQmJQxCvc+PaWjY93oYCi1nTBQQTew@mail.gmail.com>
+Message-ID: <1486494463.2089.0.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ncurses 6.0 has been out for a while now (August 8th 2015!)  This
-patch brings us up to the latest version.  Not too many changes had
-to occure to get this working well.
+Hi Samuel,
 
-- The first patch is no longer needed as it was fixed in the new release.
-- The other two packages are still applicable, however I did have to change
-  the line numbers.  Because that is the only thing I had to change, I didn't
-  put my signature on them.  If this is needed I will gladly do so.
-- A new option: --with-pkg-config-libdir has been added. Without it
-  pkg files wouldn't install to the correct location.
-- NCURSES_ABI_VERSION is no longer needed, as there is only 6.
+On Tue, 2017-02-07 at 14:29 +0100, Samuel Martin wrote:
+> On Tue, Feb 7, 2017 at 2:00 PM, J?rg Krause <joerg.krause@embedded.ro
+> cks> wrote:
+> > Hi Samuel,
+> > 
+> > On Tue, 2017-02-07 at 12:28 +0100, Samuel Martin wrote:
+> > > J?rg, all,
+> > > 
+> > > On Tue, Feb 7, 2017 at 12:38 AM, J?rg Krause
+> > > <joerg.krause@embedded.rocks> wrote:
+> > > > Hi Samuel,
+> > > > 
+> > 
+> > [snip]
+> > 
+> > > > 
+> > > > Version 3.6.3 works, too. So, I did a git bisect. The rpath
+> > > > issue
+> > > > was
+> > > > introduced in "Teach find_library and find_package to search
+> > > > lib32
+> > > > paths" [1].
+> > > 
+> > > Thanks for the investigation!
+> > > 
+> > > > 
+> > > > Any ideas how to fix this?
+> > > 
+> > > Not so far :-/
+> > 
+> > Ray Donnely proposed a potential fix for this issue [1] on the
+> > CMake
+> > mailing list. I have not tried the patch so far.
+> 
+> Good to know CMake folks are already on this issue.
+> 
+> > 
+> > > Could you apply this change, run (from an already populated build
+> > > tree, no need to restart the build from scratch):
+> > > ? $ make mbedtls-dirclean mbedtls-configure 2>&1 | tee mbedtls-
+> > > configure.log
+> > > 
+> > > and pastebin/share the mbedtls-configure.log file?
+> > 
+> > Sorry, but I don't understand. Which change do you mean? Should I
+> > run
+> > this on the Debian (bctoolbox build error is reproducable) or the
+> > Arch
+> > (bctoolbox build error is not reproducable) host? Which CMake
+> > version
+> > should I use?
+> 
+> Sorry, I forgot the url :s this one:
+> http://code.bulix.org/pkabso-113323
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
----
- .../ncurses/0001-fixup-pkg-config-handling.patch   | 89 ----------------------
- ...Klib_gen.patch => 0001-gcc-5.x-MKlib_gen.patch} |  7 +-
- package/ncurses/0002-recognise-uclinux.patch       | 28 +++++++
- package/ncurses/0003-recognise-uclinux.patch       | 30 --------
- package/ncurses/ncurses.hash                       |  2 +-
- package/ncurses/ncurses.mk                         |  8 +-
- 6 files changed, 36 insertions(+), 128 deletions(-)
- delete mode 100644 package/ncurses/0001-fixup-pkg-config-handling.patch
- rename package/ncurses/{0002-gcc-5.x-MKlib_gen.patch => 0001-gcc-5.x-MKlib_gen.patch} (87%)
- create mode 100644 package/ncurses/0002-recognise-uclinux.patch
- delete mode 100644 package/ncurses/0003-recognise-uclinux.patch
-
-diff --git a/package/ncurses/0001-fixup-pkg-config-handling.patch b/package/ncurses/0001-fixup-pkg-config-handling.patch
-deleted file mode 100644
-index e1cfc75..0000000
---- a/package/ncurses/0001-fixup-pkg-config-handling.patch
-+++ /dev/null
-@@ -1,89 +0,0 @@
--Change handling of PKG_CONFIG_LIBDIR
--
--When PKG_CONFIG_LIBDIR was unset in the environment, the configure
--script was deducing the PKG_CONFIG_LIBDIR from the location of the
--pkg-config binary, which doesn't make a lot of sense, and isn't done
--by other autotools based packages.
--
--Also, the configure script was checking that the directory really
--exists. This forced to create the directory *and* provide an absolute
--path in PKG_CONFIG_LIBDIR, which didn't play well with the fact that
--at installation time, PKG_CONFIG_LIBDIR is suffixed to DESTDIR, which
--means that we got two times the staging directory location.
--
--This patch fixes both of those issues. Also, since ncurses uses a fork
--of autoconf 2.13, we can't simply use _AUTORECONF=YES, so we also fix
--the configure script in this patch.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/configure
--===================================================================
----- a/configure
--+++ b/configure
--@@ -3623,27 +3623,20 @@
-- 
-- 	# Leave this as something that can be overridden in the environment.
-- 	if test -z "$PKG_CONFIG_LIBDIR" ; then
---		PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG" | sed -e 's,/[^/]*/[^/]*$,,'`/lib/pkgconfig
--+		PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig"
-- 	fi
--+
-- 	PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG_LIBDIR" | sed -e 's/^://' -e 's/:.*//'`
---	if test -n "$PKG_CONFIG_LIBDIR" && test -d "$PKG_CONFIG_LIBDIR" ; then
-- 
---# Check whether --enable-pc-files or --disable-pc-files was given.
---if test "${enable_pc_files+set}" = set; then
---  enableval="$enable_pc_files"
---  enable_pc_files=$enableval
---else
---  enable_pc_files=no
---fi;
---		echo "$as_me:3638: result: $enable_pc_files" >&5
---echo "${ECHO_T}$enable_pc_files" >&6
--+        # Check whether --enable-pc-files or --disable-pc-files was given.
--+	if test "${enable_pc_files+set}" = set; then
--+	    enableval="$enable_pc_files"
--+	    enable_pc_files=$enableval
-- 	else
---		echo "$as_me:3641: result: no" >&5
---echo "${ECHO_T}no" >&6
---		{ echo "$as_me:3643: WARNING: did not find library $PKG_CONFIG_LIBDIR" >&5
---echo "$as_me: WARNING: did not find library $PKG_CONFIG_LIBDIR" >&2;}
---		enable_pc_files=no
---	fi
--+	    enable_pc_files=no
--+	fi;
--+	echo "$as_me:3638: result: $enable_pc_files" >&5
--+	echo "${ECHO_T}$enable_pc_files" >&6
-- fi
-- 
-- echo "$as_me:3649: checking if we should assume mixed-case filenames" >&5
--Index: b/configure.in
--===================================================================
----- a/configure.in
--+++ b/configure.in
--@@ -174,20 +174,14 @@
-- 
-- 	# Leave this as something that can be overridden in the environment.
-- 	if test -z "$PKG_CONFIG_LIBDIR" ; then
---		PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG" | sed -e 's,/[[^/]]*/[[^/]]*$,,'`/lib/pkgconfig
--+		PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig"
-- 	fi
-- 	PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG_LIBDIR" | sed -e 's/^://' -e 's/:.*//'`
---	if test -n "$PKG_CONFIG_LIBDIR" && test -d "$PKG_CONFIG_LIBDIR" ; then
---		AC_ARG_ENABLE(pc-files,
--+	AC_ARG_ENABLE(pc-files,
-- 			[  --enable-pc-files       generate and install .pc files for pkg-config],
-- 			[enable_pc_files=$enableval],
-- 			[enable_pc_files=no])
---		AC_MSG_RESULT($enable_pc_files)
---	else
---		AC_MSG_RESULT(no)
---		AC_MSG_WARN(did not find library $PKG_CONFIG_LIBDIR)
---		enable_pc_files=no
---	fi
--+	AC_MSG_RESULT($enable_pc_files)
-- fi
-- AC_SUBST(PKG_CONFIG_LIBDIR)
-- 
-diff --git a/package/ncurses/0002-gcc-5.x-MKlib_gen.patch b/package/ncurses/0001-gcc-5.x-MKlib_gen.patch
-similarity index 87%
-rename from package/ncurses/0002-gcc-5.x-MKlib_gen.patch
-rename to package/ncurses/0001-gcc-5.x-MKlib_gen.patch
-index 25c2bd0..958621a 100644
---- a/package/ncurses/0002-gcc-5.x-MKlib_gen.patch
-+++ b/package/ncurses/0001-gcc-5.x-MKlib_gen.patch
-@@ -12,9 +12,9 @@ http://ncurses.scripts.mit.edu/?p=ncurses.git;a=commit;h=97bb4678dc03e753290b39b
- Original author: Thomas E. Dickey <dickey@invisible-island.net>
- Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
- 
----- a/ncurses/base/MKlib_gen.sh.orig	2015-07-23 21:52:32.239481505 +0300
--+++ b/ncurses/base/MKlib_gen.sh	2015-07-23 21:53:20.772966587 +0300
--@@ -437,11 +437,22 @@
-+--- a/ncurses/base/MKlib_gen.sh	2015-08-06 20:48:24.000000000 -0400
-++++ b/ncurses/base/MKlib_gen.sh	2017-02-07 10:09:01.293962392 -0500
-+@@ -491,11 +491,22 @@
-  	-e 's/gen_$//' \
-  	-e 's/  / /g' >>$TMP
-  
-@@ -41,3 +41,4 @@ Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
-  | $AWK -f $AW2 \
-  | sed -f $ED3 \
-  | sed \
-+
-diff --git a/package/ncurses/0002-recognise-uclinux.patch b/package/ncurses/0002-recognise-uclinux.patch
-new file mode 100644
-index 0000000..502d3c8
---- /dev/null
-+++ b/package/ncurses/0002-recognise-uclinux.patch
-@@ -0,0 +1,28 @@
-+aclocal: fix detection for uclinux hosts
-+
-+uclinux is just a linux like the others...
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+--- a/aclocal.m4	2015-08-05 20:46:34.000000000 -0400
-++++ b/aclocal.m4	2017-02-07 09:58:17.770056849 -0500
-+@@ -7656,7 +7656,7 @@
-+ 	cf_xopen_source="-D_SGI_SOURCE"
-+ 	cf_XOPEN_SOURCE=
-+ 	;;
-+-(linux*|gnu*|mint*|k*bsd*-gnu)
-++(linux*|uclinux*|gnu*|mint*|k*bsd*-gnu)
-+ 	CF_GNU_SOURCE
-+ 	;;
-+ (minix*)
-+diff -durN a/configure b/configure
-+--- a/configure	2015-08-05 05:20:32.000000000 -0400
-++++ b/configure	2017-02-07 09:58:52.883886426 -0500
-+@@ -7869,7 +7869,7 @@
-+ 	cf_xopen_source="-D_SGI_SOURCE"
-+ 	cf_XOPEN_SOURCE=
-+ 	;;
-+-(linux*|gnu*|mint*|k*bsd*-gnu)
-++(linux*|uclinux*|gnu*|mint*|k*bsd*-gnu)
-+ 
-+ echo "$as_me:7874: checking if we must define _GNU_SOURCE" >&5
-+ echo $ECHO_N "checking if we must define _GNU_SOURCE... $ECHO_C" >&6
-diff --git a/package/ncurses/0003-recognise-uclinux.patch b/package/ncurses/0003-recognise-uclinux.patch
-deleted file mode 100644
-index e86546c..0000000
---- a/package/ncurses/0003-recognise-uclinux.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--aclocal: fix detection for uclinux hosts
--
--uclinux is just a linux like the others...
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff -durN ncurses-5.9.orig/aclocal.m4 ncurses-5.9/aclocal.m4
----- ncurses-5.9.orig/aclocal.m4	2011-04-01 01:35:38.000000000 +0200
--+++ ncurses-5.9/aclocal.m4	2016-08-21 15:24:47.003620029 +0200
--@@ -6531,7 +6531,7 @@
-- irix[[56]].*) #(vi
-- 	cf_xopen_source="-D_SGI_SOURCE"
-- 	;;
---linux*|gnu*|mint*|k*bsd*-gnu) #(vi
--+linux*|uclinux*|gnu*|mint*|k*bsd*-gnu) #(vi
-- 	CF_GNU_SOURCE
-- 	;;
-- mirbsd*) #(vi
--diff -durN ncurses-5.9.orig/configure ncurses-5.9/configure
----- ncurses-5.9.orig/configure	2016-08-21 15:21:50.789285661 +0200
--+++ ncurses-5.9/configure	2016-08-21 15:24:35.187463625 +0200
--@@ -6984,7 +6984,7 @@
-- irix[56].*) #(vi
-- 	cf_xopen_source="-D_SGI_SOURCE"
-- 	;;
---linux*|gnu*|mint*|k*bsd*-gnu) #(vi
--+linux*|uclinux*|gnu*|mint*|k*bsd*-gnu) #(vi
-- 
-- echo "$as_me:6996: checking if we must define _GNU_SOURCE" >&5
-- echo $ECHO_N "checking if we must define _GNU_SOURCE... $ECHO_C" >&6
-diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
-index 482b2d4..6bca143 100644
---- a/package/ncurses/ncurses.hash
-+++ b/package/ncurses/ncurses.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	9046298fb440324c9d4135ecea7879ffed8546dd1b58e59430ea07a4633f563b	ncurses-5.9.tar.gz
-+sha256	f551c24b30ce8bfb6e96d9f59b42fbea30fa3a6123384172f9e7284bcf647260	ncurses-6.0.tar.gz
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 343909f..d0070f6 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--NCURSES_VERSION = 5.9
-+NCURSES_VERSION = 6.0
- NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
- NCURSES_INSTALL_STAGING = YES
- NCURSES_DEPENDENCIES = host-ncurses
- NCURSES_PROGS = clear infocmp tabs tic toe tput tset
- NCURSES_LICENSE = MIT with advertising clause
- NCURSES_LICENSE_FILES = README
--NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)$(NCURSES_ABI_VERSION)-config
-+NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
- 
- NCURSES_CONF_OPTS = \
- 	--without-cxx \
-@@ -26,6 +26,7 @@ NCURSES_CONF_OPTS = \
- 	--enable-const \
- 	--enable-overwrite \
- 	--enable-pc-files \
-+	--with-pkg-config-libdir="/usr/lib/pkgconfig" \
- 	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
- 	--without-manpages
- 
-@@ -107,7 +108,6 @@ NCURSES_LINK_STAGING_LIBS = \
- NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
- 
- NCURSES_CONF_OPTS += --enable-ext-colors
--NCURSES_ABI_VERSION = 6
- NCURSES_TERMINFO_FILES += \
- 	p/putty-256color \
- 	x/xterm+256color \
-@@ -116,8 +116,6 @@ NCURSES_TERMINFO_FILES += \
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
- 
--else # BR2_PACKAGE_NCURSES_WCHAR
--NCURSES_ABI_VERSION = 5
- endif # BR2_PACKAGE_NCURSES_WCHAR
- 
- ifneq ($(BR2_ENABLE_DEBUG),y)
--- 
-2.9.3
+This is the link to the output:
+http://code.bulix.org/gu6jeh-113374
