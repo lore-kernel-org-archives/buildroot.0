@@ -1,9 +1,10 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  7 Feb 2017 12:48:10 +0100
-Subject: [Buildroot] [PATCH 2/4] python-pyopenssl: bump to version 16.2.0
+Date: Tue,  7 Feb 2017 12:48:12 +0100
+Subject: [Buildroot] [PATCH 4/4] python-service-identity: bump version to
+	16.0.0
 In-Reply-To: <20170207114812.24632-1-yegorslists@googlemail.com>
 References: <20170207114812.24632-1-yegorslists@googlemail.com>
-Message-ID: <20170207114812.24632-2-yegorslists@googlemail.com>
+Message-ID: <20170207114812.24632-4-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +15,36 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-pyopenssl/python-pyopenssl.hash | 6 +++---
- package/python-pyopenssl/python-pyopenssl.mk   | 4 ++--
+ package/python-service-identity/python-service-identity.hash | 6 +++---
+ package/python-service-identity/python-service-identity.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
-index 27427d2a1..894c4f8ba 100644
---- a/package/python-pyopenssl/python-pyopenssl.hash
-+++ b/package/python-pyopenssl/python-pyopenssl.hash
+diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
+index caf29dc46..09561d8f9 100644
+--- a/package/python-service-identity/python-service-identity.hash
++++ b/package/python-service-identity/python-service-identity.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9587d813dcf656e9f2760e41a3682dc3, sha256 locally computed
--md5     9587d813dcf656e9f2760e41a3682dc3  pyOpenSSL-16.0.0.tar.gz
--sha256  363d10ee43d062285facf4e465f4f5163f9f702f9134f0a5896f134cbb92d17d  pyOpenSSL-16.0.0.tar.gz
-+# md5 from https://pypi.python.org/pypi/pyopenssl/json, sha256 locally computed
-+md5     6635503758c65ea6f70d18d1b18e46d5  pyOpenSSL-16.2.0.tar.gz
-+sha256  7779a3bbb74e79db234af6a08775568c6769b5821faecf6e2f4143edb227516e  pyOpenSSL-16.2.0.tar.gz
-diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
-index 760641115..a5312a063 100644
---- a/package/python-pyopenssl/python-pyopenssl.mk
-+++ b/package/python-pyopenssl/python-pyopenssl.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cea0b0156d73b025ecef660fb51f0d9a, sha256 locally computed.
+-md5	cea0b0156d73b025ecef660fb51f0d9a  service_identity-14.0.0.tar.gz
+-sha256	3105a319a7c558490666694f599be0c377ad54824eefb404cde4ce49e74a4f5a  service_identity-14.0.0.tar.gz
++# md5 from https://pypi.python.org/pypi/service_identity/json, sha256 locally computed
++md5	d52392597b9c44a740abf322bfdb21e6  service_identity-16.0.0.tar.gz
++sha256	0630e222f59f91f3db498be46b1d879ff220955d7bbad719a5cb9ad14e3c3036  service_identity-16.0.0.tar.gz
+diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
+index 9eca3c1da..88549abff 100644
+--- a/package/python-service-identity/python-service-identity.mk
++++ b/package/python-service-identity/python-service-identity.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYOPENSSL_VERSION = 16.0.0
-+PYTHON_PYOPENSSL_VERSION = 16.2.0
- PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
--PYTHON_PYOPENSSL_SITE = https://pypi.python.org/packages/source/p/pyOpenSSL
-+PYTHON_PYOPENSSL_SITE = https://pypi.python.org/packages/0c/d6/b1fe519846a21614fa4f8233361574eddb223e0bc36b182140d916acfb3b
- PYTHON_PYOPENSSL_LICENSE = Apache-2.0
- PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
- PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
+-PYTHON_SERVICE_IDENTITY_VERSION = 14.0.0
++PYTHON_SERVICE_IDENTITY_VERSION = 16.0.0
+ PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
+-PYTHON_SERVICE_IDENTITY_SITE = http://pypi.python.org/packages/source/s/service_identity
++PYTHON_SERVICE_IDENTITY_SITE = https://pypi.python.org/packages/f3/2a/7c04e7ab74f9f2be026745a9ffa81fd9d56139fa6f5f4b4c8a8c07b2bfba
+ PYTHON_SERVICE_IDENTITY_LICENSE = MIT
+ PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
+ PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
 -- 
 2.11.0
