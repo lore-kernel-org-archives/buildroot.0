@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Feb 2017 17:48:37 +0100
-Subject: [Buildroot] [PATCH v2 2/4] support/download/git: optimized
- download of sha1
-In-Reply-To: <20161202152123.20399-3-ricardo.martincoski@datacom.ind.br>
+Date: Tue, 7 Feb 2017 17:49:01 +0100
+Subject: [Buildroot] [RFC v2 4/4] support/download/git: shallow fetch of
+ all branches
+In-Reply-To: <20161202152123.20399-5-ricardo.martincoski@datacom.ind.br>
 References: <20161202152123.20399-1-ricardo.martincoski@datacom.ind.br>
- <20161202152123.20399-3-ricardo.martincoski@datacom.ind.br>
-Message-ID: <e557663d-d8e9-ddec-7f94-515c02d80b0d@mind.be>
+ <20161202152123.20399-5-ricardo.martincoski@datacom.ind.br>
+Message-ID: <e83213f4-1303-41f2-3b87-3a662dcac1a9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,29 +15,36 @@ To: buildroot@busybox.net
 
 
 On 02-12-16 16:21, Ricardo Martincoski wrote:
-> Shallow fetch don't work for downloading SHAs. However it's common to
-> track a tag or branch by the commit SHA so that a branch or tag doesn't
-> unexpectedly change.
+> When a branch of a package is tracked using sha1 and the remote branch
+> moves (usually gets another commit), this script stops using a shallow
+> fetch since the sha1 is not anymore the head of the branch, falling back
+> to a full clone.
 > 
-> We can take advantage of this scenario by searching the remote for a ref
-> that it equivalent to our sha, then shallow fetching that ref instead.
+> As a middle ground between a --depth 1 fetch and a full clone, fetch all
+> branches with depth of 100. We have a good change to catch the desired
+> version reducing the data transfer from the remote when fetching from
+> large repos, especially hardware-specific linux trees.
 > 
-> Regarding the case the remote changes between the git ls-remote and the
-> git fetch, once the script creates the equivalent of a shallow clone,
-> the fetch and the checkout do what is expected:
-> - for a sha1 of a removed ref (branch, tag or special ref), the fetch
->   fails, falling back to the equivalent of a full clone;
-> - for a sha1 of a changed ref (branch, tag or special ref), the checkout
->   fails (because the desired sha1 is not fetched), falling back to the
->   equivalent of a full clone;
-> In both cases, the checkout after the equivalent of a full clone or
-> mirror clone is successful if the sha1 is still reachable from any ref.
+> In the case the desired version is not in this shallow fetch, fall back
+> to a full fetch that reuses the objects already downloaded.
 > 
-> Similar patch was submitted in [1] using git clone.
-> [1] http://patchwork.ozlabs.org/patch/681841/
+> This method causes an extra burden in the server side ('Compressing
+> objects'), usually a few seconds, but the potential reduction of data
+> transferred should be beneficial for both the user and the server.
 > 
-> Reported-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-> Reported-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+> https://github.com/raspberrypi/linux.git
+> 100 commits from all branches 567.47 MiB
+> git clone 1.49 GiB
+> 
+> https://github.com/Freescale/linux-fslc.git
+> 100 commits from all branches 944.72 MiB + 73.89 KiB
+> git clone 1.68 GiB
+> 
+> https://github.com/linux-sunxi/sunxi-mali-proprietary
+> 100 commits from all branches 7.55 MiB
+> git clone 7.55 MiB
+> 
+> Reported-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
