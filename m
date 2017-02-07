@@ -1,68 +1,117 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 7 Feb 2017 11:59:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openocd: fix autobuild failure
-In-Reply-To: <a4955e4a-4a46-1ae4-6db4-98302ebaf54b@lucaceresoli.net>
-References: <dafa5878ec5dd9e55107657faf46560fb7aeb9d3.1486440154.git.sam.bobroff@au1.ibm.com>
- <a4955e4a-4a46-1ae4-6db4-98302ebaf54b@lucaceresoli.net>
-Message-ID: <CAHXCMM+WNSDxudxn5NtFFB_xr5cQYOKuwAaOt8wPn9Qn77AMUw@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 7 Feb 2017 12:04:23 +0100
+Subject: [Buildroot] [PATCHv2 02/10] toolchain-external: handle ld.so
+ fixups centrally
+In-Reply-To: <20170204134214.20592-3-patrickdepinguin@gmail.com>
+References: <20170204134214.20592-1-patrickdepinguin@gmail.com>
+ <20170204134214.20592-3-patrickdepinguin@gmail.com>
+Message-ID: <f666d254-78cc-2a4a-8d5a-497aa157f775@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 7, 2017 at 11:15 AM, Luca Ceresoli <lucaceresoli77@gmail.com> wrote:
-> Hi Sam,
->
-> On 07/02/2017 05:02, Sam Bobroff wrote:
->> See the included package patch for a description of the issue, which
->> causes the doc target to be rebuilt, which fails and breaks the build.
->> Fix it by removing the doc subdirectory from the build.
->>
->> Fixes
->> http://autobuild.buildroot.net/results/53ed571327c814a23fcf03c7ad5bcd551b6732a6
->>
->> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
->> ---
->>
->>  package/openocd/0003-disable-docs.patch | 37 +++++++++++++++++++++++++++++++++
->>  1 file changed, 37 insertions(+)
->>  create mode 100644 package/openocd/0003-disable-docs.patch
->>
->> diff --git a/package/openocd/0003-disable-docs.patch b/package/openocd/0003-disable-docs.patch
->> new file mode 100644
->> index 000000000..36fb152ee
->> --- /dev/null
->> +++ b/package/openocd/0003-disable-docs.patch
->> @@ -0,0 +1,37 @@
->> +doc: do not build
->> +
->> +Due to the way the version file is handled by a special script that encodes the
->> +file modification time as a human readable *local* time value, a clean build
->> +will sometimes, depending on the local time zone, attempt to re-build the
->> +documentation, which may fail.
->> +
->> +We don't want the documentation so fix this by disabling it.
->
-> Can't we instead add a --disable-docs flag to openocd and upstream it?
-> The patch you proposed is not for upstream, so we'd have to carry it in
-> Buildroot potentially forever.
+Hi Thomas,
 
-I think some people will appreciate this ;)
-This patch [1] is in the github mirror, but never got in gerrit for
-proper submission (shame on me!).
+Le 04/02/2017 ? 14:42, Thomas De Schampheleire a ?crit :
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> 
+> Normally, the Buildroot toolchain logic copies all required libraries from
+> the external toolchain to the staging directory, including the dynamic
+> loader ld-*.so.
+> There are cases, however, where the dynamic loader is _not_ automatically
+> copied to staging. This happens when the dynamic loader is not inside
+> ARCH_LIB_DIR itself (e.g. lib64), but instead resides in 'lib' (assume, of
+> course, that ARCH_LIB_DIR != 'lib').
+> 
+> Currently, this is fixed in a toolchain-specific fixup, e.g. by recreating a
+> missing symlink or copying over a missing file. Such toolchain specific
+> fixups are not very nice.
 
->
-> --
-> Luca
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Indeed, like the one I introduced in [1]. The CodeSourcery AArch64 toolchain
+(which is still in Buildroot) was broken for more than one year, then ThomasP
+applied the patch...
 
-[1] https://github.com/ntfreak/openocd/pull/4/commits/2c0cc66d5388e07679ac9f07c1ce0f8469931f02
+[1] 4d39ca1c2ab19766abf0430abe9b65ba0e16602b
 
-Regards,
+> 
+> Moreover, in a subsequent patch, the value of ARCH_LIB_DIR changes for some
+> toolchains, causing them to have the same problem of a missing dynamic
+> loader. This used to be the case for older Linaro toolchains with libraries
+> in 'lib/<tuple>': Buildroot used to set ARCH_LIB_DIR=lib but the mentioned
+> patch changes it to 'lib/<tuple>' instead. As a result, the files directly
+> under 'lib/' will no longer be copied. There should be none, but the dynamic
+> loader is a notable exception.
+> [Note: support for these older Linaro toolchain has been removed in 2016.11]
+> 
+> Instead, copy over the ld.so file(s)/link(s) from the extracted toolchain
+> into staging, in the central copy_toolchain_sysroot function. The existing
+> toolchain logic will then handle the copy of these files from staging to
+> target.
+> This means the toolchain-specific fixups can be removed.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+> v2: no changes
+> 
+>  toolchain/helpers.mk                                          | 11 +++++++++++
+>  .../toolchain-external-codesourcery-aarch64.mk                | 10 ----------
+>  2 files changed, 11 insertions(+), 10 deletions(-)
+> 
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 06dc197..6720629 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -55,6 +55,11 @@ copy_toolchain_lib_root = \
+>  # corresponding architecture variants), and we don't want to import
+>  # them.
+>  #
+> +# It is possible that ARCH_LIB_DIR does not contain the dynamic loader
+> +# (ld*.so or similar) because it (or the main symlink to it) normally
+> +# resides in /lib while ARCH_LIB_DIR may be something else (e.g. lib64).
+> +# Therefore, copy the dynamic loader separately.
+> +#
+>  # Then, if the selected architecture variant is not the default one
+>  # (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR), then we :
+>  #
+> @@ -105,6 +110,12 @@ copy_toolchain_sysroot = \
+>  			fi ; \
+>  		fi ; \
+>  	done ; \
+> +	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
+> +		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so $(STAGING_DIR)/lib/ ; \
+> +	fi ; \
+> +	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
+> +		cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
+> +	fi ; \
 
--- 
-Samuel
+It's far better than having ld-*.so version hardcoded in the .mk...
+
+Best regards,
+Romain
+
+
+>  	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+>  		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+>  			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+> diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
+> index bc58c44..5f4453a 100644
+> --- a/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
+> +++ b/toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/toolchain-external-codesourcery-aarch64.mk
+> @@ -9,14 +9,4 @@ TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION = 2014.11-95
+>  TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_SOURCE = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
+>  TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_ACTUAL_SOURCE_TARBALL = aarch64-amd-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX).src.tar.bz2
+>  
+> -define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
+> -	ln -sf ld-2.20.so $(STAGING_DIR)/lib/ld-linux-aarch64.so.1
+> -endef
+> -TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_STAGING_FIXUP
+> -
+> -define TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
+> -	ln -sf ld-2.20.so $(TARGET_DIR)/lib/ld-linux-aarch64.so.1
+> -endef
+> -TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_POST_INSTALL_TARGET_HOOKS += TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64_TARGET_FIXUP
+> -
+>  $(eval $(toolchain-external-package))
+> 
