@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Feb 2017 17:49:01 +0100
-Subject: [Buildroot] [RFC v2 4/4] support/download/git: shallow fetch of
- all branches
-In-Reply-To: <20161202152123.20399-5-ricardo.martincoski@datacom.ind.br>
-References: <20161202152123.20399-1-ricardo.martincoski@datacom.ind.br>
- <20161202152123.20399-5-ricardo.martincoski@datacom.ind.br>
-Message-ID: <e83213f4-1303-41f2-3b87-3a662dcac1a9@mind.be>
+Date: Tue, 7 Feb 2017 17:55:23 +0100
+Subject: [Buildroot] Interaction between SITE_METHOD=LOCAL and .patch
+ files
+In-Reply-To: <o7araj$clq$1@blaine.gmane.org>
+References: <o7araj$clq$1@blaine.gmane.org>
+Message-ID: <0a532bbd-e625-a41e-ece3-6974bd63d4a2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +13,41 @@ To: buildroot@busybox.net
 
 
 
-On 02-12-16 16:21, Ricardo Martincoski wrote:
-> When a branch of a package is tracked using sha1 and the remote branch
-> moves (usually gets another commit), this script stops using a shallow
-> fetch since the sha1 is not anymore the head of the branch, falling back
-> to a full clone.
+On 06-02-17 22:54, Grant Edwards wrote:
+> I've been chasing a bug in a package for a couple days, and have been
+> baffled because the executable failed with segfault when it was built
+> from a local package.tar.gz file located in thepackage directory
+> (where the package.mk file is).  However, if I unpack package.tar.gz
+> and then set the SITE_METHOD to LOCAL, the executable works fine.
 > 
-> As a middle ground between a --depth 1 fetch and a full clone, fetch all
-> branches with depth of 100. We have a good change to catch the desired
-> version reducing the data transfer from the remote when fetching from
-> large repos, especially hardware-specific linux trees.
-> 
-> In the case the desired version is not in this shallow fetch, fall back
-> to a full fetch that reuses the objects already downloaded.
-> 
-> This method causes an extra burden in the server side ('Compressing
-> objects'), usually a few seconds, but the potential reduction of data
-> transferred should be beneficial for both the user and the server.
-> 
-> https://github.com/raspberrypi/linux.git
-> 100 commits from all branches 567.47 MiB
-> git clone 1.49 GiB
-> 
-> https://github.com/Freescale/linux-fslc.git
-> 100 commits from all branches 944.72 MiB + 73.89 KiB
-> git clone 1.68 GiB
-> 
-> https://github.com/linux-sunxi/sunxi-mali-proprietary
-> 100 commits from all branches 7.55 MiB
-> git clone 7.55 MiB
-> 
-> Reported-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+> After comparing build trees that worked with build trees that failed,
+> I finallythat setting SITE_METHOD = LOCAL prevents the application of
+> the .patch files present in the package directory. 
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ It does. The technical reason for that is that SITE_METHOD = local is
+implemented using _OVERRIDE_SRCDIR, and for that we don't want to apply patches
+because the typical use case is to build some different version to which the
+patches wouldn't apply anyway.
+
+ Also, when you set SITE_METHOD = local, there should be no reason to apply
+patches because you can just as well apply them in your custom tarball.
+
+> I don't find this behavior documented anywhere.  The description of
+> SITE_METHOD only says it affects how the sources are fetched.  It
+> doesn't say anything about it controlling whether or not patches are
+> applied.  Is it interaction intentional, or is it a bug?
+
+ Indeed, it should be documented. Care to send a patch?
 
  Regards,
  Arnout
 
-[snip]
+> 
+> [FWIW, the package in question is the most recent version of the ipkg
+> package, and the 0001-fix-musl-build.patch is what breaks it.  Since
+> that package has already been removed, I won't bother to file a bug
+> report.]
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
