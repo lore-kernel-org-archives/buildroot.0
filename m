@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 06 Feb 2017 22:33:34 -0200
-Subject: [Buildroot] [PATCH 9/9] check-package: check *.mk for typo in
- variable
-References: <d4c92dd2-1140-224e-090b-291b4b1e9e40@gmail.com>
-Message-ID: <589915de15cc8_1b4d3ff5d49eab882791@ultri3.mail>
+Date: Mon, 06 Feb 2017 22:52:14 -0200
+Subject: [Buildroot] [PATCH 0/9] A checkpackage script that verifies a
+ package coding style
+References: <8f81bbcd-b8a5-a63e-4f7f-37fb0fce66dd@gmail.com>
+Message-ID: <58991a3e51c12_1b4d3ff5d2019f982964@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,55 @@ To: buildroot@busybox.net
 
 Romain,
 
-On Sat, Jan 21, 2017 at 03:19 PM, Romain Naour wrote:
+On Sat, Jan 21, 2017 at 03:56 PM, Romain Naour wrote:
 
 > Le 31/12/2016 ? 04:21, Ricardo Martincoski a ?crit :
 
 [snip]
 
-> This one produce a false positive with MYSQL_SOCKET from oracle-mysql because
-> it's a virtual package providing mysql:
+>> Remaining patches include check functions for each type of file. I put the
+>> patches that I think are most likely to be rejected in the end.
 > 
-> package/oracle-mysql/oracle-mysql.mk:19: possible typo: MYSQL_SOCKET ->
-> *ORACLE_MYSQL*
-> 
-> MYSQL_SOCKET = /run/mysql/mysql.sock
+> I don't really agree with that, especially for the last one (check *.mk for typo
+> in variable) since it will catch easily our/my keyboard dyslexia symptoms :)
 
-The easy way is to just add MYSQL_SOCKET to the ALLOWED regex ...
+:)
 
 > 
-> ORACLE_MYSQL_PROVIDES = mysql
+>> 
+>> Also in the series there is a blob for the manual trying to clarify the expected
+>> format for help text.
+>> 
+>> I did not include yet:
+>> - entry to DEVELOPERS (just because it is the first iteration);
+>> - explicit license entry (I guess this way the script inherits the Buildroot
+>>   license).
+>> 
+>> For each patch I include using 'git notes':
+>> - the time it takes to run for all current packages;
 > 
-> Maybe we could add an exception for variables named <<provider_name>_PROVIDES>_* ?
+> Well ~3 seconds to check all packages with all check enable is not bad.
+> 
+>> - for each check function:
+>>   - the number of warnings it generates for all current packages;
+>>   - sample output running on the (bad) example package.
 
-... but I will try this generic approach, probably in a similar way I did for
-the LINUX_TOOL_ prefix. It sounds more correct.
+[snip]
+
+>> 
+>> [1] http://elinux.org/Buildroot#Todo_list
+> 
+> The check-package script find several thousand (~2500) coding style issue or
+> typos. I think the most important now is to fix all typos in variable since it
+> can lead to a build failure or a licensing issue.
+
+I will start with the easy ones :) among the typos in variables.
 
 > 
-> MYSQL_SOCKET is used in mariadb and php packages.
-> 
-> Other warnings (15) are real real typo or variable without the right package prefix.
+> I'll continue to test this series and probably use it during the next Buildroot
+> meeting.
 
-Thank you for your review.
-Sorry the delay.
+Nice. Thanks.
 
 Best regards,
 Ricardo
