@@ -1,59 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Feb 2017 17:46:27 +0100
-Subject: [Buildroot] [PATCH 1/1] Added keepalived package
-In-Reply-To: <1486484458-8233-2-git-send-email-apalos@gmail.com>
-References: <1486484458-8233-1-git-send-email-apalos@gmail.com>
- <1486484458-8233-2-git-send-email-apalos@gmail.com>
-Message-ID: <20170207174627.025008a8@free-electrons.com>
+Date: Tue, 7 Feb 2017 17:46:48 +0100
+Subject: [Buildroot] [git commit] qt5enginio: move into legacy compatibility
+Message-ID: <20170207164722.B66567FB44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7adfb5bafca666c4fc8b1c300772f8fcfa47ba6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  7 Feb 2017 18:20:58 +0200, Ilias Apalodimas wrote:
-> Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
+See https://wiki.qt.io/New_Features_in_Qt_5.7
 
-Thanks for this patch. This looks mostly good, so great for a first
-contribution.
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-A few comments:
-
- - You don't need to send a series with a cover letter for just a
-   single patch. Just send the patch itself.
-
- - Make a change to the DEVELOPERS file to associate your name/email to
-   this package. This way, you'll get notified when/if this package
-   fails to build, or when someone sends a patch touching this package.
-
- - You're missing a hash file. See other packages and the manual for
-   the format/details.
-
-> diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
-> new file mode 100644
-> index 0000000..ee4ab7a
-> --- /dev/null
-> +++ b/package/keepalived/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_KEEPALIVED
-> +	bool "keepalived"
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_POPT
-
-Are you sure this builds even for no-MMU platforms, static linking
-scenario? It's pretty likely that keepalived uses fork() and therefore
-will not work on no-MMU platforms.
-
-Yann E. Morin has just submitted a script today to help checking a
-package, you may want to use it. It will be merged soon, which will
-make things easier.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 88b25d5..7afce74 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -56,7 +56,6 @@ source "package/qt5/qt5base/Config.in"
+ source "package/qt5/qt5canvas3d/Config.in"
+ source "package/qt5/qt5connectivity/Config.in"
+ source "package/qt5/qt5declarative/Config.in"
+-source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5location/Config.in"
+@@ -75,6 +74,7 @@ source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5quickcontrols2/Config.in"
+ source "package/qt5/qt5serialbus/Config.in"
+ comment "legacy compatibility"
++source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5webkit/Config.in"
+ endif
