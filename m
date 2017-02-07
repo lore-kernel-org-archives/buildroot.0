@@ -1,48 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Feb 2017 14:25:23 +0100
-Subject: [Buildroot] [git commit] python-service-identity: bump version to
-	16.0.0
-Message-ID: <20170207132545.C6AC981926@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 7 Feb 2017 14:29:40 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-01-24
+In-Reply-To: <1486472439.1692.3.camel@embedded.rocks>
+References: <20170125073013.D171D20CD4@mail.free-electrons.com>
+ <1485378342.7516.1.camel@embedded.rocks>
+ <20170125211534.dugtv6byofg3wvg5@tarshish>
+ <CAHXCMM+cL0UnnfhgFTtkeC7L+jRh8s=tr-U5CTC0YZxzUBb4bA@mail.gmail.com>
+ <1485722254.4549.1.camel@embedded.rocks>
+ <20170129211155.f6sebtrdmsrwb2yw@tarshish>
+ <1485806342.3759.3.camel@embedded.rocks>
+ <20170130212025.a5mmf5kfig3kgngo@tarshish>
+ <1485811370.2212.0.camel@embedded.rocks>
+ <20170130212602.xmxjbkp4zzrfhuof@tarshish>
+ <1486333037.12820.6.camel@embedded.rocks>
+ <20170206120617.7760c340@free-electrons.com>
+ <CAHXCMMKmaRC8z6-A_xucDxiAhz1-2xqPhGvogMLhW8uTO2Xw7Q@mail.gmail.com>
+ <7A7D81D5-CC2B-41A5-9275-C9D7F63A5CF1@embedded.rocks>
+ <CAHXCMMJ5Mp=8v-AmAY20wGz0UZ3qBoRMAQmZBFhWVApkM4dnZA@mail.gmail.com>
+ <C119D098-632D-42AB-A4C7-13481318DDDC@embedded.rocks>
+ <CAHXCMMJy9T9QTviUMUUqxR8j3Y866BfXQbQ7uN4xcu6BY87eig@mail.gmail.com>
+ <1486424308.4950.9.camel@embedded.rocks>
+ <CAHXCMMJ-HNK9mCC8_cf1Fk4CnX7NCGF9ypWBVCu2JeBa5oK8CQ@mail.gmail.com>
+ <1486472439.1692.3.camel@embedded.rocks>
+Message-ID: <CAHXCMMJ_bNBo+dx3N1ugJQmJQxCvc+PaWjY93oYCi1nTBQQTew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c03f112b63327409c6ebb301d2fa8d873233e0da
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Feb 7, 2017 at 2:00 PM, J?rg Krause <joerg.krause@embedded.rocks> wrote:
+> Hi Samuel,
+>
+> On Tue, 2017-02-07 at 12:28 +0100, Samuel Martin wrote:
+>> J?rg, all,
+>>
+>> On Tue, Feb 7, 2017 at 12:38 AM, J?rg Krause
+>> <joerg.krause@embedded.rocks> wrote:
+>> > Hi Samuel,
+>> >
+>
+> [snip]
+>
+>> >
+>> > Version 3.6.3 works, too. So, I did a git bisect. The rpath issue
+>> > was
+>> > introduced in "Teach find_library and find_package to search lib32
+>> > paths" [1].
+>>
+>> Thanks for the investigation!
+>>
+>> >
+>> > Any ideas how to fix this?
+>>
+>> Not so far :-/
+>
+> Ray Donnely proposed a potential fix for this issue [1] on the CMake
+> mailing list. I have not tried the patch so far.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-service-identity/python-service-identity.hash | 6 +++---
- package/python-service-identity/python-service-identity.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Good to know CMake folks are already on this issue.
 
-diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
-index caf29dc..09561d8 100644
---- a/package/python-service-identity/python-service-identity.hash
-+++ b/package/python-service-identity/python-service-identity.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cea0b0156d73b025ecef660fb51f0d9a, sha256 locally computed.
--md5	cea0b0156d73b025ecef660fb51f0d9a  service_identity-14.0.0.tar.gz
--sha256	3105a319a7c558490666694f599be0c377ad54824eefb404cde4ce49e74a4f5a  service_identity-14.0.0.tar.gz
-+# md5 from https://pypi.python.org/pypi/service_identity/json, sha256 locally computed
-+md5	d52392597b9c44a740abf322bfdb21e6  service_identity-16.0.0.tar.gz
-+sha256	0630e222f59f91f3db498be46b1d879ff220955d7bbad719a5cb9ad14e3c3036  service_identity-16.0.0.tar.gz
-diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
-index 9eca3c1..88549ab 100644
---- a/package/python-service-identity/python-service-identity.mk
-+++ b/package/python-service-identity/python-service-identity.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SERVICE_IDENTITY_VERSION = 14.0.0
-+PYTHON_SERVICE_IDENTITY_VERSION = 16.0.0
- PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
--PYTHON_SERVICE_IDENTITY_SITE = http://pypi.python.org/packages/source/s/service_identity
-+PYTHON_SERVICE_IDENTITY_SITE = https://pypi.python.org/packages/f3/2a/7c04e7ab74f9f2be026745a9ffa81fd9d56139fa6f5f4b4c8a8c07b2bfba
- PYTHON_SERVICE_IDENTITY_LICENSE = MIT
- PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
- PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
+>
+>> Could you apply this change, run (from an already populated build
+>> tree, no need to restart the build from scratch):
+>>   $ make mbedtls-dirclean mbedtls-configure 2>&1 | tee mbedtls-
+>> configure.log
+>>
+>> and pastebin/share the mbedtls-configure.log file?
+>
+> Sorry, but I don't understand. Which change do you mean? Should I run
+> this on the Debian (bctoolbox build error is reproducable) or the Arch
+> (bctoolbox build error is not reproducable) host? Which CMake version
+> should I use?
+
+Sorry, I forgot the url :s this one:
+http://code.bulix.org/pkabso-113323
+
+>
+> [1] https://gitlab.kitware.com/mingwandroid/cmake/commit/b937ff949d8fda
+> ab7d8b812d503f67f8cef69532
+>
+> J?rg
+
+
+
+-- 
+Samuel
