@@ -1,103 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Feb 2017 14:43:18 +0100
-Subject: [Buildroot] [git commit] tslib: bump to 1.4
-Message-ID: <20170207134448.7D4AE80AC7@busybox.osuosl.org>
+Date: Tue, 07 Feb 2017 14:48:31 +0100
+Subject: [Buildroot] [PATCH] docs/manual: suggest 'YES' as the value for
+	LIBFOO_GIT_SUBMODULES
+In-Reply-To: <1486465697-30876-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Tue, 7 Feb 2017 12:08:17 +0100")
+References: <1486465697-30876-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87k292ru1c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06216078f6bac4b3208bb3ae5de3c76f8f4a86af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-additionally, this:
+ > The manual mentions LIBFOO_GIT_SUBMODULES but does not tell what value
+ > it should have. The implementation only checks whether the variable is
+ > non-empty, but we should suggest a specific value to avoid people
+ > wondering what they have to set, and to try setting weird values.
 
- * removes the patch adding missing headers (fixed upstream)
- * slightly changes the package description
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Cc: Baruch Siach <baruch@tkos.co.il>
+ > Cc: Ricardo Herrero <ricardo.herrero@gmail.com>
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...01-tests-ts_calibrate-add-missing-headers.patch | 35 ----------------------
- package/tslib/Config.in                            |  2 +-
- package/tslib/tslib.hash                           |  4 +--
- package/tslib/tslib.mk                             |  2 +-
- 4 files changed, 4 insertions(+), 39 deletions(-)
+Committed, thanks.
 
-diff --git a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
-deleted file mode 100644
-index 97cd4be..0000000
---- a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 54b66bfe405d8b70c703684e60bedbad5c7d4213 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Sat, 14 Jan 2017 21:35:53 +0200
--Subject: [PATCH] tests/ts_calibrate: add missing headers
--
--The open(2) system call requires sys/types.h and sys/stat.h. Fix the following
--build failure under uClibc-ng:
--
--ts_calibrate.c: In function ???main???:
--ts_calibrate.c:248:19: error: ???S_IRUSR??? undeclared (first use in this function)
--                   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
--                   ^
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://github.com/kergoth/tslib/pull/59
-- tests/ts_calibrate.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/tests/ts_calibrate.c b/tests/ts_calibrate.c
--index c6652e479d4b..9a98d1f86205 100644
----- a/tests/ts_calibrate.c
--+++ b/tests/ts_calibrate.c
--@@ -17,6 +17,8 @@
-- #include <string.h>
-- #include <unistd.h>
-- #include <sys/time.h>
--+#include <sys/types.h>
--+#include <sys/stat.h>
-- 
-- #ifdef __ANDROID__
-- #include <fcntl.h>
---- 
--2.11.0
--
-diff --git a/package/tslib/Config.in b/package/tslib/Config.in
-index 6b86ebc..3665301 100644
---- a/package/tslib/Config.in
-+++ b/package/tslib/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_TSLIB
- 	depends on !BR2_STATIC_LIBS # dlopen
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 	help
--	  Tslib is an abstraction layer for touchscreen panel events.
-+	  Tslib is a filtering layer for touchscreen panel events.
- 
- 	  https://github.com/kergoth/tslib
- 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index cdbe0d2..6540ac8 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,2 +1,2 @@
--# Locally generated
--sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
-+# taken from https://github.com/kergoth/tslib/releases/tag/1.4
-+sha256  ad0373f1dbfda27caec92cb10421227f226c79d160488f1ac915585ba947741f  tslib-1.4.tar.xz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index d3388a2..5ea526e 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.3
-+TSLIB_VERSION = 1.4
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL, LGPL
+-- 
+Bye, Peter Korsgaard
