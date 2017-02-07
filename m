@@ -1,72 +1,99 @@
-From: Ilias Apalodimas <apalos@gmail.com>
-Date: Tue, 7 Feb 2017 18:57:01 +0200
-Subject: [Buildroot] [PATCH 1/1] Added keepalived package
-In-Reply-To: <20170207174627.025008a8@free-electrons.com>
-References: <1486484458-8233-1-git-send-email-apalos@gmail.com>
- <1486484458-8233-2-git-send-email-apalos@gmail.com>
- <20170207174627.025008a8@free-electrons.com>
-Message-ID: <CADvJCofBk31eJP0nY2-=cP=xeF=N5iz_xBp1FNSMcnY+oQXExA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Feb 2017 18:08:57 +0100
+Subject: [Buildroot] [PATCH v6 0/9] bump/choice for qt 5.8.0
+In-Reply-To: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <20170207180857.160bfecf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Andreas, Zoltan, Peter,
 
-I'll add the hash file, totally forgot about it and i'll fix the
-DEVELOPERS file.
-I haven't tried it on no-mmu and i doubt it will build properly as you
-pointed out.
+First of all, thanks a lot for all your work on Qt5. Qt is definitely a
+very important package in Buildroot, so it's great to have a group of
+contributors taking care of it.
 
-Regards
-Ilias
+On Tue, 31 Jan 2017 08:59:02 +0100, Zoltan Gyarmati wrote:
 
-On Tue, Feb 7, 2017 at 6:46 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue,  7 Feb 2017 18:20:58 +0200, Ilias Apalodimas wrote:
->> Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
->
-> Thanks for this patch. This looks mostly good, so great for a first
-> contribution.
->
-> A few comments:
->
->  - You don't need to send a series with a cover letter for just a
->    single patch. Just send the patch itself.
->
->  - Make a change to the DEVELOPERS file to associate your name/email to
->    this package. This way, you'll get notified when/if this package
->    fails to build, or when someone sends a patch touching this package.
->
->  - You're missing a hash file. See other packages and the manual for
->    the format/details.
->
->> diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
->> new file mode 100644
->> index 0000000..ee4ab7a
->> --- /dev/null
->> +++ b/package/keepalived/Config.in
->> @@ -0,0 +1,13 @@
->> +config BR2_PACKAGE_KEEPALIVED
->> +     bool "keepalived"
->> +     select BR2_PACKAGE_OPENSSL
->> +     select BR2_PACKAGE_POPT
->
-> Are you sure this builds even for no-MMU platforms, static linking
-> scenario? It's pretty likely that keepalived uses fork() and therefore
-> will not work on no-MMU platforms.
->
-> Yann E. Morin has just submitted a script today to help checking a
-> package, you may want to use it. It will be merged soon, which will
-> make things easier.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> Julien Corjon (3):
+>   qt5enginio : move into legacy compatibility
+>   qt53d/qt5quickcontrols2/qt5serialbus : move out of tech preview
+
+I've applied those two patches. However, I am not entirely happy with
+them, because the status of each module (tech preview, legacy) actually
+depends on whether you consider Qt 5.6 or 5.8. So maybe we should
+remove this classification entirely, and instead document the status of
+each module in their Config.in help text. This way, we can say in the
+help text: "This module is considered tech preview in Qt 5.6, but is in
+the core Qt since 5.8", etc.
+
+Could one of you work on this? It should be an easy thing.
+
+>   Conditional revert "qt5base: install bundled fonts to target"
+
+This commit is applied.
+
+> Naumann Andreas (6):
+>   qt5: add choice between version 5.6.2 and 5.8.0
+
+This is applied, with a number of changes:
+
+    [Thomas:
+     - tweak commit log about GStreamer related changes, suggested by Arnout
+     - move the gcc 4.8 dependency from the main qt5 option to just the
+       qt5.8 selection, so that qt5.6 can still be built if gcc < 4.8 is
+       used. Noticed by Arnout.
+     - rename the options of the version selection to not include the
+       version number itself so that we don't have to keep legacy
+       symbols. Noticed by Arnout.
+     - introduce changes to qt5quickcontrols2.mk needed to handle qt5.6
+       vs. qt5.8, borrowed from a later patch in the series.
+     - add patch for python-pyqt5 to fix the build with Qt 5.8.
+     - add fix to libv4l.mk from Peter Seiderer to fix the build with Qt
+       5.8.
+     - renumber patches for 5.6.2, suggested by Arnout.]
+
+>   qt5declarative: enable Quick for non-GL platforms for Qt 5.8.0
+
+This is not applied, as there were still some comments. Could you
+address them and resubmit an updated version?
+
+>   qt5quickcontrols: More deterministic target install
+
+Applied.
+
+>   qt5quickcontrols/qt5quickcontrols2: enable for software renderer for
+>     Qt 5.8.0
+
+Not applied, it's related to "qt5declarative: enable Quick for non-GL
+platforms for Qt 5.8.0".
+
+>   python-pyqt5: Depend directly on Qt5 rather than its toolchain
+>     requirements
+
+Applied, ans also the corresponding python-pyqt change.
+
+>   python-pyqt5: Fix for Qt 5.8.0
+
+Applied, but merged into the 5.8 bump, since it's needed. I've also
+merged into the same commit the freetype related build fix from Peter
+Seiderer, and the v4l2 fix also from Peter.
+
+Could you monitor the autobuilders in the next few days and see if Qt
+related issues pop up?
+
+We really wanted to have Qt 5.8 in 2017.02, for which we will release
+rc1 in a few days. It was a bit of a risky decision, so we hope that we
+won't have too many build issues following this bump. And if we do,
+that we'll have your help to fix them up :-)
+
+Thanks again!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
