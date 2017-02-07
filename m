@@ -1,61 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Feb 2017 15:46:25 +0100
-Subject: [Buildroot] [PATCH] support/scripts: add script to test a
-	package
-In-Reply-To: <87zihyqd0o.fsf@dell.be.48ers.dk>
-References: <1486404173-31700-1-git-send-email-yann.morin.1998@free.fr>
- <508724e1-501e-4e44-6817-55bcdbf2f8ee@lucaceresoli.net>
- <20170207093303.GB3578@free.fr> <87zihyqd0o.fsf@dell.be.48ers.dk>
-Message-ID: <20170207144625.GE3578@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 7 Feb 2017 15:51:49 +0100
+Subject: [Buildroot] [PATCH v5 05/19] pycompile: allow to force
+	compilation
+In-Reply-To: <1482241596-31688-6-git-send-email-jezz@sysmic.org>
+References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
+ <1482241596-31688-6-git-send-email-jezz@sysmic.org>
+Message-ID: <CAHXCMMK1Vma3--xX=G5MFL0i4d8QROTAUk6z71_G6As2TNkxJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi J?r?me, all,
 
-On 2017-02-07 15:41 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > Luca, All,
->  > On 2017-02-06 21:40 +0100, Luca Ceresoli spake thusly:
->  >> On 06/02/2017 19:02, Yann E. MORIN wrote:
->  > [--SNIP--]
->  >> > +    printf ", olddefconfig"
->  >> > +    if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
->  >> > +        printf ": FAILED\n"
->  >> > +        return
->  >> > +    fi
->  >> > +    while read line; do
->  >> > +        if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
->  >> 
->  >> I suggest removing the redirects and using 'grep -q' here.
-> 
->  > grep -q is not POSIX. ;-)
-> 
-> But is that a real concern?
+On Tue, Dec 20, 2016 at 2:46 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+> By default, compile_dir() rely on modification time to know if a python file
+> have to be built again. However in some circumstances (when doing reproducible
+> builds), modification times are not reliable. Thus, this patch add a way to
+> force rebuild of all python sources.
+>
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-No, of course it is not. But I prefer not having non-portable stuff when
-the portable solution is pretty easy and straightforward... Personal
-preference...
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
+> ---
+>
+> Notes:
+>     v5:
+>       - Improve commit log
+>     v3:
+>       - new patch
+>
+>  support/scripts/pycompile.py | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+> index fde711a..5598f8a 100644
+> --- a/support/scripts/pycompile.py
+> +++ b/support/scripts/pycompile.py
+> @@ -10,6 +10,7 @@ from __future__ import print_function
+>  import sys
+>  import py_compile
+>  import compileall
+> +import argparse
+>
+>  class ReportProblem:
+>      def __nonzero__(self):
+> @@ -21,4 +22,12 @@ class ReportProblem:
+>
+>  report_problem = ReportProblem()
+>
+> -compileall.compile_dir(sys.argv[1], quiet=report_problem)
+> +parser = argparse.ArgumentParser(description='Compile Python source files in a directory tree.')
+> +parser.add_argument("target", metavar='DIRECTORY',
+> +        help='Directory to scan')
+> +parser.add_argument("--force", action='store_true',
+> +        help="Force compilation even if alread compiled")
+> +
+> +args = parser.parse_args()
+> +
+> +compileall.compile_dir(args.target, force=args.force, quiet=report_problem)
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 Regards,
-Yann E. MORIN.
-
-> We do use grep -q quite a bit already
-> (including in dependencies.sh):
-> 
-> git grep 'grep -q' | wc -l
-> 46
-> 
-> -- 
-> Bye, Peter Korsgaard
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
