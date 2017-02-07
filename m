@@ -1,75 +1,94 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Tue, 7 Feb 2017 09:22:23 +0100
-Subject: [Buildroot] [PATCH v6 8/9] python-pyqt5: Depend directly on Qt5
- rather than its toolchain requirements
-In-Reply-To: <6958a95d-a884-31f1-92cb-516fcbfcde4e@mind.be>
-References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1485849551-20469-9-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <6958a95d-a884-31f1-92cb-516fcbfcde4e@mind.be>
-Message-ID: <42d5f9f6-e274-7b66-325a-bd88d69d8256@andin.de>
+From: LogiSch17 <logi.tss@hotmail.de>
+Date: Tue, 7 Feb 2017 00:34:45 -0800 (PST)
+Subject: [Buildroot] BR2_EXTERNAL tree - Config.in can`t open
+ /package/Config.in after Update to 2016.11
+Message-ID: <1486456485390-156297.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi guys,
+i have the following problem, i just update to 2016.11 from 2016.05 .
+Then i converted my br2_external trees as descripted.
+After that when i am tyring to make, or make menuconfig i get:
 
-Am 03.02.2017 um 00:06 schrieb Arnout Vandecappelle:
->
->
-> On 31-01-17 08:59, Zoltan Gyarmati wrote:
->> From: Naumann Andreas <ANaumann@ultratronik.de>
->>
->>  When pyqt5 is used it's obvious that qt5 needs to be selected and configured
->> by the user, hence we enforce it by making pyqt5 depending on qt5, rather than
->> selecting it and depending only on the qt5 requirements.
->
->  I'm not so sure that this really is an improvement. Andreas, can you explain
-> why this is needed?
+[lorenz at lorenzPc mattros]$ make
+make -C /home/lorenz/mattros/buildroot O=/home/lorenz/mattros/ziesel/output
+BR2_EXTERNAL_ZIESEL_PATH=/home/lorenz/mattros PROJECT_NAME=ziesel
+BR2_DEFCONFIG=/home/lorenz/mattros/ziesel/defconfig defconfig
+  GEN     /home/lorenz/mattros/ziesel/output/Makefile
+/home/lorenz/mattros/Config.in:1: can't open file "/pigpio/Config.in"
+make[1]: *** [Makefile:875: defconfig] Fehler 1
+make: *** [common.mk:41: default] Fehler 2
 
-Since Qt 5.7 the toolchain needs at least C++11 support so theoretically 
-we need to add that everywhere we select Qt5.
-Thomas suggested that depending on rather than selecting Qt5 would 
-simplify this. Maybe that fact should also go into the commit message.
 
-regards,
-Andreas
+I am using the following directory structure:
+-board 
+     +ziesel
+          +cmdline.txt
+          +...
+-buildroot
+    +..
+-overlays
+    +..
+-patches
+    +..
+-pigpio
+     +Config.in
+     +libpigpio.mk
+-rtimu
+     +Config.in
+     +rtimu.mk
+-ziesel-gui
+     +Config.in
+     +ziesel-gui.mk
+     +src
+         +myProgramm..
+-ziesel
+      + defconfig
+      + output
+-common.mk
+-Config.in
+-external.desc
+-external.mk
+-Makefile
 
->
->  Regards,
->  Arnout
->
->>
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
->> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
->> ---
->>  package/python-pyqt5/Config.in | 13 +++----------
->>  1 file changed, 3 insertions(+), 10 deletions(-)
->>
->> diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
->> index 4eca68a..20ac988 100644
->> --- a/package/python-pyqt5/Config.in
->> +++ b/package/python-pyqt5/Config.in
->> @@ -1,16 +1,9 @@
->> -comment "python-pyqt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
->> -	depends on !BR2_PACKAGE_QT
->> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->> -		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
->> +comment "python-pyqt5 needs Qt5"
->> +	depends on !BR2_PACKAGE_QT5
->>
->>  config BR2_PACKAGE_PYTHON_PYQT5
->>  	bool "python-pyqt5"
->> -	depends on BR2_INSTALL_LIBSTDCPP
->> -	depends on BR2_USE_WCHAR # qt5
->> -	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
->> -	depends on !BR2_STATIC_LIBS # qt5
->> -	depends on !BR2_PACKAGE_QT # qt5
->> -	select BR2_PACKAGE_QT5
->> +	depends on BR2_PACKAGE_QT5
->>  	select BR2_PACKAGE_PYTHON_SIP
->>  	help
->>  	  Python bindings for Qt 5
->>
->
+This is my external.desc:
+name: ZIESEL
+
+my Config.in:
+source "$BR2_EXTERNAL_ZIESEL_PATH/pigpio/Config.in"
+source "$BR2_EXTERNAL_ZIESEL_PATH/ziesel-gui/Config.in"
+source "$BR2_EXTERNAL_ZIESEL_PATH/rtimu/Config.in"
+
+my external.mk:
+include $(BR2_EXTERNAL_ZIESEL_PATH)/pigpio/libpigpio.mk
+include $(BR2_EXTERNAL_ZIESEL_PATH)/ziesel-gui/ziesel-gui.mk
+include $(BR2_EXTERNAL_ZIESEL_PATH)/rtimu/rtimu.mk
+
+my Makefile:
+PROJECT_NAME := ziesel
+
+include common.mk
+
+and here is my /pigpio/Config.in:
+config BR2_PACKAGE_PIGPIO
+	bool "libpigpio"
+	help
+	  libpigpio is a C library for the Raspberry Pi which allows control of the
+general purpose input outputs (gpios).
+
+before i updated everything worked perfekt.
+I am not sure what i am doing wrong here.
+When i remove pigpio from Config.in and external.mk , i get the same error
+for ziesel-gui
+
+
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/BR2-EXTERNAL-tree-Config-in-can-t-open-package-Config-in-after-Update-to-2016-11-tp156297.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
