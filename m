@@ -1,51 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  7 Feb 2017 22:56:45 +0100
-Subject: [Buildroot] [PATCHv3 08/12] toolchain-external: simplify
-	previously-broken symbolic links
-In-Reply-To: <20170207215649.364-1-patrickdepinguin@gmail.com>
-References: <20170207215649.364-1-patrickdepinguin@gmail.com>
-Message-ID: <20170207215649.364-9-patrickdepinguin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 07 Feb 2017 23:01:36 +0100
+Subject: [Buildroot] [PATCH v5 04/19] reproducible: enable fakedate
+In-Reply-To: <1482241596-31688-5-git-send-email-jezz@sysmic.org>
+ (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Tue, 20 Dec 2016 14:46:21 +0100")
+References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
+ <1482241596-31688-5-git-send-email-jezz@sysmic.org>
+Message-ID: <877f51r77j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
 
-A previous commit rewrote broken symbolic links in staging, caused by a
-non-singular ARCH_LIB_DIR. In this case, the symbolic links are typically
-using one or more intermediate directory symlinks, which can be simplified
-using the newly introduced simplify_symlink helper.
+ > Enable fakedate for whole build process.
+ > This work was sponsored by `BA Robotic Systems'.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
-v3: no changes
-v2: new patch
+ > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+ > ---
 
- toolchain/helpers.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ > Notes:
+ >     v3:
+ >       - Build host-fakedate before toolchain (Thomas)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 7bc5498..fda6146 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -63,6 +63,8 @@ copy_toolchain_lib_root = \
- # components, as links to the current directory are always fine.
- # We need to fix the broken links by removing the right amount of ../
- # dots from the link destination.
-+# Once the link destination is valid again, it can be simplified to
-+# remove the dependency on intermediate directory symlinks.
- #
- # It is possible that ARCH_LIB_DIR does not contain the dynamic loader
- # (ld*.so or similar) because it (or the main symlink to it) normally
-@@ -126,6 +128,7 @@ copy_toolchain_sysroot = \
- 			LINKTARGET=`readlink $$i` ; \
- 			NEWLINKTARGET=$${LINKTARGET\#$$relpath} ; \
- 			ln -sf $${NEWLINKTARGET} $$i ; \
-+			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
- 		done ; \
- 	fi ; \
- 	if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so ]; then \
+Committed, thanks.
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
