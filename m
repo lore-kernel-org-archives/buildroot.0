@@ -1,50 +1,62 @@
-From: Luca Ceresoli <lucaceresoli77@gmail.com>
-Date: Tue, 7 Feb 2017 11:15:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openocd: fix autobuild failure
-In-Reply-To: <dafa5878ec5dd9e55107657faf46560fb7aeb9d3.1486440154.git.sam.bobroff@au1.ibm.com>
-References: <dafa5878ec5dd9e55107657faf46560fb7aeb9d3.1486440154.git.sam.bobroff@au1.ibm.com>
-Message-ID: <a4955e4a-4a46-1ae4-6db4-98302ebaf54b@lucaceresoli.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 7 Feb 2017 12:18:02 +0200
+Subject: [Buildroot] [PATCH] ruby: assume we always have finite,
+ isinf and isnan for uClibc
+In-Reply-To: <20170207094759.45076-1-Vincent.Riera@imgtec.com>
+References: <20170207094759.45076-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170207101802.ftxepyhshb6juvjk@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+Hi Vicente,
 
-On 07/02/2017 05:02, Sam Bobroff wrote:
-> See the included package patch for a description of the issue, which
-> causes the doc target to be rebuilt, which fails and breaks the build.
-> Fix it by removing the doc subdirectory from the build.
+On Tue, Feb 07, 2017 at 09:47:59AM +0000, Vicente Olivert Riera wrote:
+> uClibc has __finite, __isinf and __isnan, and Ruby's configure script
+> checks for finite, isinf and isnan (note the missing leading __).
+> Because of the naming difference the checks fail, therefore the symbols
+> HAVE_FINITE, HAVE_ISINF and HAVE_ISNAN are not defined.
+> Ruby code relies on those symbols in order to define its own version of
+> the finite, isinf and isnan functions. Since the symbols haven't been
+> defined, those definitions cause conflicts with the already-existing
+> functions.
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/53ed571327c814a23fcf03c7ad5bcd551b6732a6
+> Fixes:
+>   http://autobuild.buildroot.net/results/f34/f34dc20749c6f6d12c51eddf3ee6c2ef41d7c13d/
 > 
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
+>  package/ruby/ruby.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
->  package/openocd/0003-disable-docs.patch | 37 +++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/openocd/0003-disable-docs.patch
-> 
-> diff --git a/package/openocd/0003-disable-docs.patch b/package/openocd/0003-disable-docs.patch
-> new file mode 100644
-> index 000000000..36fb152ee
-> --- /dev/null
-> +++ b/package/openocd/0003-disable-docs.patch
-> @@ -0,0 +1,37 @@
-> +doc: do not build
-> +
-> +Due to the way the version file is handled by a special script that encodes the
-> +file modification time as a human readable *local* time value, a clean build
-> +will sometimes, depending on the local time zone, attempt to re-build the
-> +documentation, which may fail.
-> +
-> +We don't want the documentation so fix this by disabling it.
+> diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+> index 4c6459b..30b53d7 100644
+> --- a/package/ruby/ruby.mk
+> +++ b/package/ruby/ruby.mk
+> @@ -29,6 +29,13 @@ RUBY_CFLAGS += -O2
+>  endif
+>  RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
+>  
+> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
 
-Can't we instead add a --disable-docs flag to openocd and upstream it?
-The patch you proposed is not for upstream, so we'd have to carry it in
-Buildroot potentially forever.
+IIUC these symbols are always defined (either as macros or as functions), so 
+why not make this unconditional?
+
+> +RUBY_CONF_ENV += \
+> +	ac_cv_func_finite=yes \
+> +	ac_cv_func_isinf=yes \
+> +	ac_cv_func_isnan=yes
+> +endif
+> +
+>  ifeq ($(BR2_bfin),y)
+>  RUBY_CONF_ENV += ac_cv_func_dl_iterate_phdr=no
+>  # Blackfin doesn't have FFI closure support, needed by the fiddle
+
+baruch
 
 -- 
-Luca
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
