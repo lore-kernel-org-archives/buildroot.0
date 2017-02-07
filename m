@@ -1,87 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  7 Feb 2017 23:08:17 +0100
-Subject: [Buildroot] [PATCH] fakedate: simplify logic
-Message-ID: <20170207220817.5781-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 7 Feb 2017 23:14:30 +0100
+Subject: [Buildroot] [PATCH] Don't disable dependency tracking if using
+ <pkg>_OVERRIDE_SRCDIR.
+In-Reply-To: <20170206193729.i3epqqqekvlgiime@zenon.in.qult.net>
+References: <20170201135310.3ghqvpqww25jfzm2@zenon.in.qult.net>
+ <2a135f21-ffe1-06b8-37d3-e78f7a51798f@gmail.com>
+ <20170206193729.i3epqqqekvlgiime@zenon.in.qult.net>
+Message-ID: <f2750ce8-3ac0-6e72-20ca-1c2141b7621a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We can use IFS=':' to get the shell to split on colons instead of running
-tr, and using -ef to check for the same file is nicer than relying on magic
-symlink-to-fakedate.
+Hi Ignacy,
 
-Notice that -ef isn't stricly posix (but supported by bash/dash/zsh), so
-I've changed the shebang to /bin/bash.
+Le 06/02/2017 ? 20:37, Ignacy Gaw?dzki a ?crit :
+> On Mon, Feb 06, 2017 at 07:39:00PM +0100, thus spake Romain Naour:
+>> Hi Ignacy,
+>>
+>> Le 01/02/2017 ? 14:53, Ignacy Gaw?dzki a ?crit :
+>>> Include the --disable-dependency-tracking option in
+>>> <pkg>_CONFIGURE_CMDS only on the condition that <pkg>_OVERRIDE_SRCDIR
+>>> is empty.  Dependency tracking is very welcome while developing in
+>>> order to properly rebuild when calling make <pkg>-rebuild for
+>>> instance.
+>>>
+>>> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+>>> ---
+>>>  package/pkg-autotools.mk | 6 ++++--
+>>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+>>> index f7b8488..e8579f4 100644
+>>> --- a/package/pkg-autotools.mk
+>>> +++ b/package/pkg-autotools.mk
+>>> @@ -199,7 +199,8 @@ define $(2)_CONFIGURE_CMDS
+>>>  		--disable-documentation \
+>>>  		--with-xmlto=no \
+>>>  		--with-fop=no \
+>>> -		--disable-dependency-tracking \
+>>> +		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),, \
+>>> +		   --disable-dependency-tracking) \
+>>>  		--enable-ipv6 \
+>>>  		$$(DISABLE_NLS) \
+>>>  		$$(SHARED_STATIC_LIBS_OPTS) \
+>>> @@ -232,7 +233,8 @@ define $(2)_CONFIGURE_CMDS
+>>>  		--disable-debug \
+>>>  		--with-xmlto=no \
+>>>  		--with-fop=no \
+>>> -		--disable-dependency-tracking \
+>>> +		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),, \
+>>> +		   --disable-dependency-tracking) \
+>>
+>> You're likely working on the target variant, so probably you can let the
+>> dependency tracking enabled for the host?
+> 
+> Dependency tracking was initially *disabled* for both target and host.
+> I suppose that <pkg>_OVERRIDE_SRCDIR works for both target and host,
+> so I don't see why we should leave it disabled for one and not the
+> other.
 
-While we are at it, restructure the logic to do a single exec at the end
-instead of handling the epoch/!epoch cases differently for simplicity.
+Indeed <pkg>_OVERRIDE_SRCDIR works for both target and host packages and the
+"dependency tracking" was disabled (see [1]) to reduce the build time.
 
-With that out of the way we can directly install it as $HOST/usr/bin/date
-instead of the fakedate / date symlink.
+My initial feeling is to allow to enable the "dependency tracking" only when
+doing active development on a *target* package using <pkg>_OVERRIDE_SRCDIR.
+Buildroot is unlikely used for active development on a *host* package.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fakedate/fakedate    | 16 +++++-----------
- package/fakedate/fakedate.mk |  3 +--
- 2 files changed, 6 insertions(+), 13 deletions(-)
+But ok, if you're using <pkg>_OVERRIDE_SRCDIR for a host package, you probably
+don't really care of the build time...
 
-diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
-index 4a9b9b5e6..abe6b38f9 100755
---- a/package/fakedate/fakedate
-+++ b/package/fakedate/fakedate
-@@ -1,4 +1,4 @@
--#!/bin/sh
-+#!/bin/bash
- # vim: set sw=4 expandtab:
- #
- # This program is free software; you can redistribute it and/or modify
-@@ -18,18 +18,12 @@
- # Copyright (C) 2016 J?r?me Pouiller <jezz@sysmic.org>
- #
- 
--# Sanity check
--if ! readlink -f "$0" | grep -q fakedate; then
--    echo "fakedate: Please name this script \`fakedate'"
--    exit 1
--fi
--
- DATE_BIN=false
- # Do not call `date' directly since it will produce an infinite recursion.
- # Instead, find path of true `date' binary.
--for P in `echo $PATH | tr ':' ' '`; do
-+IFS=':'; for P in $PATH; do
-     if [ -x "$P/date" ]; then
--        if readlink -f "$P/date" | grep -qv fakedate; then
-+        if ! [ "$P/date" -ef "$0" ]; then
-             DATE_BIN="$P/date"
-             break;
-         fi
-@@ -50,8 +44,8 @@ if [ -n "$SOURCE_DATE_EPOCH" ]; then
-     done
-     if [ $FORCE_EPOCH -eq 1 ]; then
-         echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of true time" >&2
--        exec $DATE_BIN -d "@$SOURCE_DATE_EPOCH" "$@"
-+	ARGS="-d @$SOURCE_DATE_EPOCH"
-     fi
- fi
- 
--exec $DATE_BIN "$@"
-+exec $DATE_BIN $ARGS "$@"
-diff --git a/package/fakedate/fakedate.mk b/package/fakedate/fakedate.mk
-index 61d4bd702..e81ce5dac 100644
---- a/package/fakedate/fakedate.mk
-+++ b/package/fakedate/fakedate.mk
-@@ -8,8 +8,7 @@
- HOST_FAKEDATE_LICENSE = GPLv2+
- 
- define HOST_FAKEDATE_INSTALL_CMDS
--	$(INSTALL) -D -m 755 package/fakedate/fakedate $(HOST_DIR)/usr/bin/fakedate
--	ln -sfn fakedate $(HOST_DIR)/usr/bin/date
-+	$(INSTALL) -D -m 755 package/fakedate/fakedate $(HOST_DIR)/usr/bin/date
- endef
- 
- $(eval $(host-generic-package))
--- 
-2.11.0
+Lets see other opinion.
+
+Best regards,
+Romain
+
+[1]
+https://git.busybox.net/buildroot/commit/?id=3e37b0fc6cbbe2245e39fedb247a381fb4e0d992
+
+> 
+> Regards,
+> 
+> Ignacy
+> 
