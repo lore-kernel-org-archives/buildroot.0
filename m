@@ -1,58 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Feb 2017 17:55:23 +0100
-Subject: [Buildroot] Interaction between SITE_METHOD=LOCAL and .patch
- files
-In-Reply-To: <o7araj$clq$1@blaine.gmane.org>
-References: <o7araj$clq$1@blaine.gmane.org>
-Message-ID: <0a532bbd-e625-a41e-ece3-6974bd63d4a2@mind.be>
+From: Ilias Apalodimas <apalos@gmail.com>
+Date: Tue, 7 Feb 2017 18:57:01 +0200
+Subject: [Buildroot] [PATCH 1/1] Added keepalived package
+In-Reply-To: <20170207174627.025008a8@free-electrons.com>
+References: <1486484458-8233-1-git-send-email-apalos@gmail.com>
+ <1486484458-8233-2-git-send-email-apalos@gmail.com>
+ <20170207174627.025008a8@free-electrons.com>
+Message-ID: <CADvJCofBk31eJP0nY2-=cP=xeF=N5iz_xBp1FNSMcnY+oQXExA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+I'll add the hash file, totally forgot about it and i'll fix the
+DEVELOPERS file.
+I haven't tried it on no-mmu and i doubt it will build properly as you
+pointed out.
 
-On 06-02-17 22:54, Grant Edwards wrote:
-> I've been chasing a bug in a package for a couple days, and have been
-> baffled because the executable failed with segfault when it was built
-> from a local package.tar.gz file located in thepackage directory
-> (where the package.mk file is).  However, if I unpack package.tar.gz
-> and then set the SITE_METHOD to LOCAL, the executable works fine.
-> 
-> After comparing build trees that worked with build trees that failed,
-> I finallythat setting SITE_METHOD = LOCAL prevents the application of
-> the .patch files present in the package directory. 
+Regards
+Ilias
 
- It does. The technical reason for that is that SITE_METHOD = local is
-implemented using _OVERRIDE_SRCDIR, and for that we don't want to apply patches
-because the typical use case is to build some different version to which the
-patches wouldn't apply anyway.
-
- Also, when you set SITE_METHOD = local, there should be no reason to apply
-patches because you can just as well apply them in your custom tarball.
-
-> I don't find this behavior documented anywhere.  The description of
-> SITE_METHOD only says it affects how the sources are fetched.  It
-> doesn't say anything about it controlling whether or not patches are
-> applied.  Is it interaction intentional, or is it a bug?
-
- Indeed, it should be documented. Care to send a patch?
-
- Regards,
- Arnout
-
-> 
-> [FWIW, the package in question is the most recent version of the ipkg
-> package, and the 0001-fix-musl-build.patch is what breaks it.  Since
-> that package has already been removed, I won't bother to file a bug
-> report.]
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+On Tue, Feb 7, 2017 at 6:46 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue,  7 Feb 2017 18:20:58 +0200, Ilias Apalodimas wrote:
+>> Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
+>
+> Thanks for this patch. This looks mostly good, so great for a first
+> contribution.
+>
+> A few comments:
+>
+>  - You don't need to send a series with a cover letter for just a
+>    single patch. Just send the patch itself.
+>
+>  - Make a change to the DEVELOPERS file to associate your name/email to
+>    this package. This way, you'll get notified when/if this package
+>    fails to build, or when someone sends a patch touching this package.
+>
+>  - You're missing a hash file. See other packages and the manual for
+>    the format/details.
+>
+>> diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
+>> new file mode 100644
+>> index 0000000..ee4ab7a
+>> --- /dev/null
+>> +++ b/package/keepalived/Config.in
+>> @@ -0,0 +1,13 @@
+>> +config BR2_PACKAGE_KEEPALIVED
+>> +     bool "keepalived"
+>> +     select BR2_PACKAGE_OPENSSL
+>> +     select BR2_PACKAGE_POPT
+>
+> Are you sure this builds even for no-MMU platforms, static linking
+> scenario? It's pretty likely that keepalived uses fork() and therefore
+> will not work on no-MMU platforms.
+>
+> Yann E. Morin has just submitted a script today to help checking a
+> package, you may want to use it. It will be merged soon, which will
+> make things easier.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
