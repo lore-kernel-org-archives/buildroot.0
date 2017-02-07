@@ -1,57 +1,60 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 7 Feb 2017 15:32:38 +0100
-Subject: [Buildroot] [PATCH v5 04/19] reproducible: enable fakedate
-In-Reply-To: <1482241596-31688-5-git-send-email-jezz@sysmic.org>
-References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-5-git-send-email-jezz@sysmic.org>
-Message-ID: <CAHXCMMLjMt=09Wd0L7CZ82qqbyVVDis78G31wOvMb8xNzEkG2Q@mail.gmail.com>
+From: Ilias Apalodimas <apalos@gmail.com>
+Date: Tue, 7 Feb 2017 16:35:59 +0200
+Subject: [Buildroot] keepalived support
+Message-ID: <CADvJCoeZWzF+QOOb5amdVyP+gCRZDMA12Zi3ZeAuZqxafuoXDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?r?me, all,
+Sending inline patch, the .patch file was scrubbed.
 
-On Tue, Dec 20, 2016 at 2:46 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> Enable fakedate for whole build process.
->
-> This work was sponsored by `BA Robotic Systems'.
->
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+BR
+Ilias
 
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-> ---
->
-> Notes:
->     v3:
->       - Build host-fakedate before toolchain (Thomas)
->
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Makefile b/Makefile
-> index b80b9e1..ad7fde5 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -254,6 +254,7 @@ export LC_ALL = C
->  export GZIP = -n
->  BR2_VERSION_GIT_EPOCH = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
->  export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(BR2_VERSION_GIT_EPOCH),$(BR2_VERSION_EPOCH))
-> +DEPENDENCIES_HOST_PREREQ += host-fakedate
->  endif
->
->  # To put more focus on warnings, be less verbose as default
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Regards,
-
--- 
-Samuel
+diff --git a/package/Config.in b/package/Config.in
+index 114a5ad..f0f1dec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1546,6 +1546,7 @@ menu "Networking applications"
+    source "package/irssi/Config.in"
+    source "package/iw/Config.in"
+    source "package/janus-gateway/Config.in"
++   source "package/keepalived/Config.in"
+    source "package/kismet/Config.in"
+    source "package/knock/Config.in"
+    source "package/leafnode2/Config.in"
+diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
+new file mode 100644
+index 0000000..efa07e1
+--- /dev/null
++++ b/package/keepalived/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_KEEPALIVED
++   bool "keepalived"
++   depends on BR2_PACKAGE_POPT && BR2_PACKAGE_OPENSSL
++   help
++     Keepalived package.
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+new file mode 100644
+index 0000000..9073376
+--- /dev/null
++++ b/package/keepalived/keepalived.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# keepalived
++#
++################################################################################
++
++KEEPALIVED_VERSION = 1.3.2
++KEEPALIVED_SOURCE = keepalived-$(KEEPALIVED_VERSION).tar.gz
++KEEPALIVED_SITE = http://www.keepalived.org/software
++KEEPALIVED_DEPENDENCIES = popt openssl
++KEEPALIVED_LICENSE = GPLv2
++KEEPALIVED_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
+Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
