@@ -1,82 +1,36 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 7 Feb 2017 09:07:55 -0500
-Subject: [Buildroot] [PATCH 1/2] gst1-vaapi: new package.
-In-Reply-To: <CAFSsvmrw6nKB4-YqBgAEQ_zSYS0otdAKfTWrrC1jcgjHUUFfEw@mail.gmail.com>
-References: <20170201131854.3046-1-Adamduskett@outlook.com>
- <20170201223021.2a07c7f0@free-electrons.com>
- <CAFSsvmrw6nKB4-YqBgAEQ_zSYS0otdAKfTWrrC1jcgjHUUFfEw@mail.gmail.com>
-Message-ID: <CAFSsvmpcmumaxeansEE6zE_p76h58zdeu1NhTN1bkBraH99SZQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 07 Feb 2017 15:28:57 +0100
+Subject: [Buildroot] [V2 1/1] ntp: security bump to verserion 4.2.8p9
+In-Reply-To: <CAFSsvmqWkJqiUOnCtJh0eJmtqqVJdCZ1wh8uBVSy4bAZbcPFuw@mail.gmail.com>
+ (Adam Duskett's message of "Mon, 6 Feb 2017 16:18:15 -0500")
+References: <20170206141225.2311-1-aduskett@codeblue.com>
+ <20170206155817.5e945678@free-electrons.com>
+ <1486393216.2005.19.camel@codeblue.com>
+ <20170206160232.7513524b@free-electrons.com>
+ <91082fe8-697b-f4c9-a154-e74ab462a138@mind.be>
+ <CAFSsvmqWkJqiUOnCtJh0eJmtqqVJdCZ1wh8uBVSy4bAZbcPFuw@mail.gmail.com>
+Message-ID: <878tpirs5y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
-On Fri, Feb 3, 2017 at 8:08 AM, Adam Duskett <aduskett@gmail.com> wrote:
-> On Wed, Feb 1, 2017 at 4:30 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Wed,  1 Feb 2017 08:18:53 -0500, Adam Duskett wrote:
->>> gstreamer-vaapi consists in a collection of VA-API based plugins for
->>> GStreamer and helper libraries.  These libraries are used for hardware
->>> decoding and encoding of several video formats.
->>>
->>> decoding formats:
->>> JPEG, MPEG-2, MPEG-4:2, H.264 AVC, H.264 MVC, VP8, VC-1, WMV3, and HEVC.
->>>
->>> encoding formats:
->>> MPEG-2, H.264 AVC, H.264 MVC, JPEG, VP8, HEVC
->>>
->>> The package won't compile without at least one renderer enabled, so I
->>> chose to enable DRM by default, as X11, GLX, and wayland are heavy
->>> handed with the dependencies.  As such, I have disabled every option
->>> defaulting to yes except for DRM for the first patch.
->>>
->>> Also, these codecs are only for x86 and require a Intel CPU (See Hardware
->>> Requirements on line 82 of the README file.)
->>>
->>> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
->>
->> We already had a patch pending in patchwork adding the same package,
->> proposed by Jesper Baekdahl. Could you please sync with Jesper to
->> propose a single patch?
->>
-> Hey Thomas!
->
-> I sent an email out just a few minutes ago.  Hopefully, he responds soon!
->
-> Question: What is the established procedure if somebody doesn't respond?
->
->
->>
->>
->> Thanks,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux and Kernel engineering
->> http://free-electrons.com
->
-> Thanks!
->
-> Adam
+ > After doing some digging into the source code, it looks like there
+ > are two new files: include/libssl_compat.h and libssl_compat.c
 
-I just got word from Jesper; he is fine with my patch.
+ > These files are now referenced in quite a few places, all of which
+ > would take quite a bit of time to unwind.
 
-"Hi Adam,
+ > I would suggest leaving openssl as a dependency unless somebody else
+ > wants to take a crack at cleaning it up.
 
-Sorry for the late answer. You can take over the patch.
+Yes, I had a look as well. Most can be handled by a #ifdef OPENSSL
+around the openssl specific stuff, but a number of places now use more
+EVP_MD_CTX_* functions that aren't covered by the emulation functions in
+ntp_md5.h.
 
-Best Regards,
-
-Jesper B?kdahl
-Hardware/Software Developer
-Gamblify"
-
-So if you find this patch acceptable it looks like he is fine with it!
-
-Adam
+-- 
+Bye, Peter Korsgaard
