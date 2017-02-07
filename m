@@ -1,49 +1,104 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Feb 2017 15:29:41 +0100
-Subject: [Buildroot] [V2 1/1] ntp: security bump to verserion 4.2.8p9
-In-Reply-To: <20170206141225.2311-1-aduskett@codeblue.com> (Adam Duskett's
- message of "Mon, 6 Feb 2017 09:12:25 -0500")
-References: <20170206141225.2311-1-aduskett@codeblue.com>
-Message-ID: <874m06rs4q.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Feb 2017 15:29:53 +0100
+Subject: [Buildroot] [PATCH 4/4] supprt/test-pkg: add option to limit
+ the number of tests
+In-Reply-To: <3a2dfc3a5dcf4389d2b65b91de95124385241a18.1486475561.git.yann.morin.1998@free.fr>
+References: <cover.1486475561.git.yann.morin.1998@free.fr>
+ <3a2dfc3a5dcf4389d2b65b91de95124385241a18.1486475561.git.yann.morin.1998@free.fr>
+Message-ID: <20170207142953.GD3578@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+All,
 
- > This version of ntp fixes several vulnerabilities.
- > CVE-2016-9311
- > CVE-2016-9310
- > CVE-2016-7427
- > CVE-2016-7428
- > CVE-2016-9312
- > CVE-2016-7431
- > CVE-2016-7434
- > CVE-2016-7429
- > CVE-2016-7426
- > CVE-2016-7433
+On 2017-02-07 14:53 +0100, Yann E. MORIN spake thusly:
+> Sometimes, it interesting to have a global overview of whether the
+> package builds at all or not, rather than test on all toolchains.
+> 
+> Add an option that allows testing on a limited set of randomly choosen
+> toolchains.
 
- > http://www.kb.cert.org/vuls/id/633847
+Forget that patch, there is an issue when the option is not provided. :-(
 
- > In addition, libssl_compat.h is now included in many files, which
- > references openssl/evp.h, openssl/dsa.h, and openssl/rsa.h.
- > Even if a you pass --disable-ssl as a configuration option, these
- > files are now required.
+Regards,
+Yann E. MORIN.
 
- > As such, I have also added openssl as a dependency, and it is now
- > automatically selected when you select ntp.
-
- > Signed-off-by: Adam Duskett <aduskett@codeblue.com>
- > ---
- > v1 -> v2:
- >   - Changed subject to indicate a security bump. (suggested by Baruch)
- >   - Removed check to see if openssl is enabled (suggested by Baruch)
- >   - Added the option --with-crypto to the configuration options by default. 
-
-It's a bit of a pain that openssl no longer is optional, but fixing that
-seems to be nontrivial. Committed, thanks.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  support/scripts/test-pkg | 19 +++++++++++++++----
+>  1 file changed, 15 insertions(+), 4 deletions(-)
+> 
+> diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
+> index 604a759..0b4615d 100755
+> --- a/support/scripts/test-pkg
+> +++ b/support/scripts/test-pkg
+> @@ -5,15 +5,16 @@ TOOLCHAINS_BASE_URL='http://autobuild.buildroot.org/toolchains/configs'
+>  
+>  main() {
+>      local o O opts
+> -    local cfg dir pkg toolchain
+> +    local cfg dir pkg random toolchain
+>      local ret nb_dl nb_cfg nb_skip nb_clean nb_build
+>      local -a toolchains
+>  
+> -    o='hc:d:p:'
+> -    O='help,config-snippet:build-dir:package:'
+> +    o='hc:d:p:r:'
+> +    O='help,config-snippet:build-dir:package:,random::'
+>      opts="$( getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}"  )"
+>      eval set -- "${opts}"
+>  
+> +    random=0
+>      while [ ${#} -gt 0 ]; do
+>          case "${1}" in
+>          (-h|--help)
+> @@ -28,6 +29,9 @@ main() {
+>          (-p|--package)
+>              pkg="${2}"; shift 2
+>              ;;
+> +        (-r|--random)
+> +            random="${2}"; shift 2
+> +            ;;
+>          (--)
+>              shift; break
+>              ;;
+> @@ -43,7 +47,10 @@ main() {
+>      # Extract the names of the toolchains
+>      # http://server/path/to/name.config,arch,libc  -->  name
+>      toolchains=( $( curl -s "${TOOLCHAINS_BASE_URL}/toolchain-configs.csv" \
+> -                    |sed -r -e 's/,.*//; s:.*/(.*)\.config:\1:; /internal/d;'
+> +                    |sed -r -e 's/,.*//; s:.*/(.*)\.config:\1:; /internal/d;' \
+> +                    |if [ ${random} -gt 0 ]; then \
+> +                        sort -R |head -n ${random} |sort
+> +                     fi
+>                    )
+>                 )
+>  
+> @@ -187,6 +194,10 @@ Options
+>          Test-build the package PKG, by running 'make PKG'; if not specified,
+>          just runs 'make'.
+>  
+> +    -r N, --random N
+> +        Limit the tests to the N randomly selected toolchains, instead of
+> +        building all.
+> +
+>  Example:
+>  
+>      Testing libcec would require a config snippet that contains:
+> -- 
+> 2.7.4
+> 
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
