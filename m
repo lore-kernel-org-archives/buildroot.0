@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 7 Feb 2017 15:52:08 +0100
-Subject: [Buildroot] [PATCH v5 09/19] python2: remove full path from .pyc
-In-Reply-To: <1482241596-31688-10-git-send-email-jezz@sysmic.org>
+Date: Tue, 7 Feb 2017 15:52:16 +0100
+Subject: [Buildroot] [PATCH v5 10/19] python3: remove full path from .pyc
+In-Reply-To: <1482241596-31688-11-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-10-git-send-email-jezz@sysmic.org>
-Message-ID: <CAHXCMMLdL-DV7i5Z2nZ0g-gpUFuO+JiGhJKN7QpUcG5CDZLsug@mail.gmail.com>
+ <1482241596-31688-11-git-send-email-jezz@sysmic.org>
+Message-ID: <CAHXCMMKgjt6xE1us0kmMXDCoE2D7gi3ZcoewwS4sXuyee01e2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,27 +31,27 @@ Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 >     v3:
 >       - Typo in commit log (Arnout)
 >
->  package/python/python.mk | 7 ++++---
+>  package/python3/python3.mk | 7 ++++---
 >  1 file changed, 4 insertions(+), 3 deletions(-)
 >
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index cbe7c19..18ab14c 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -243,9 +243,10 @@ endif
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 1817b22..2562be7 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -237,9 +237,10 @@ endif
 >
->  define PYTHON_CREATE_PYC_FILES
->         PYTHONPATH="$(PYTHON_PATH)" \
-> -       $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+>  define PYTHON3_CREATE_PYC_FILES
+>         PYTHONPATH="$(PYTHON3_PATH)" \
+> -       $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
 > -               support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
-> -               $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
-> +       cd $(TARGET_DIR) && $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+> -               $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
+> +       cd $(TARGET_DIR) && $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
 > +               $(TOPDIR)/support/scripts/pycompile.py \
 > +               $(if $(BR2_REPRODUCIBLE),--force) \
-> +               usr/lib/python$(PYTHON_VERSION_MAJOR)
+> +               usr/lib/python$(PYTHON3_VERSION_MAJOR)
 >  endef
 >
->  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON_PY_PYC),y)
+>  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
 > --
 > 1.9.1
 >
