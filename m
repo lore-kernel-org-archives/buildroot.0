@@ -1,10 +1,11 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 7 Feb 2017 15:51:58 +0100
-Subject: [Buildroot] [PATCH v5 07/19] python3: generate reproducible .pyc
-In-Reply-To: <1482241596-31688-8-git-send-email-jezz@sysmic.org>
+Date: Tue, 7 Feb 2017 15:52:01 +0100
+Subject: [Buildroot] [PATCH v5 08/19] reproducible: try to detect most
+ common errors
+In-Reply-To: <1482241596-31688-9-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-8-git-send-email-jezz@sysmic.org>
-Message-ID: <CAHXCMM+HJMtRfpVuSdL=1wXrqBxuqZdV+h0j9ewMzrah4+gQjQ@mail.gmail.com>
+ <1482241596-31688-9-git-send-email-jezz@sysmic.org>
+Message-ID: <CAHXCMM+auV3cG9e_hPKC9FMBJRuz=nUTMEg=qnuUP1G-AjuLGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +15,42 @@ To: buildroot@busybox.net
 Hi J?r?me, all,
 
 On Tue, Dec 20, 2016 at 2:46 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> .pyc files contain modification time of .py source. In order to make build
-> reproducible, we fix modification time of all .py before compiling .pyc files.
+> Some package includes some information from build environment in their results.
+> This practice is incompatible with reproducible builds.
 >
-> In add, since pycompile rely on modification times to know if a file need to be
-> recompiled, it is safer to force recompilation of all source files.
+> This patch scans final target to research most common patterns.
 >
-> This work was sponsored by `BA Robotic Systems'.
+> Since we only search fixed strings (grep is called with -F), this search is
+> fast (on my station, 60ms for a target of 40MB).
+>
+> Note, it could be a good idea to also match current user name. However, build
+> path often contains username and, until now, we do not try to avoid build path
+> in result.
 >
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 > ---
+>  Makefile | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
-> Notes:
->     v5:
->       - Typo in commit log
->       - Explain why we pass --force to pycompile
->     v3:
->       - Force compilation instead of removing .pyc
->
->  package/python3/python3.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 8bfae79..1817b22 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -227,10 +227,18 @@ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdat
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
+> diff --git a/Makefile b/Makefile
+> index ad7fde5..5b504c1 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -708,6 +708,11 @@ endif
+>                 $(call MESSAGE,"Executing post-build script $(s)"); \
+>                 $(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
 >
 > +ifeq ($(BR2_REPRODUCIBLE),y)
-> +define PYTHON3_FIX_TIME
-> +       find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
-> +               xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
-> +endef
-> +PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_FIX_TIME
+> +       grep -raoF -e "`uname -r`" -e "`uname -v`" -e "`uname -n`" $(TARGET_DIR) | \
+> +               sed 's/\(.*\):\(.*\)/Warning: \1 may contain unreproducible information: \2/' | uniq
 > +endif
 > +
->  define PYTHON3_CREATE_PYC_FILES
->         PYTHONPATH="$(PYTHON3_PATH)" \
->         $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
-> -               support/scripts/pycompile.py \
-> +               support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
->                 $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
->  endef
->
+>  target-post-image: $(TARGETS_ROOTFS) target-finalize
+>         @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+>                 $(call MESSAGE,"Executing post-image script $(s)"); \
 > --
 > 1.9.1
 >
