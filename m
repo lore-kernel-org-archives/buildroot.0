@@ -1,29 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Feb 2017 12:08:40 +0100
-Subject: [Buildroot] [PATCH] ruby: assume we always have finite,
-	isinf and isnan for uClibc
-In-Reply-To: <20170207101802.ftxepyhshb6juvjk@tarshish> (Baruch Siach's
- message of "Tue, 7 Feb 2017 12:18:02 +0200")
-References: <20170207094759.45076-1-Vincent.Riera@imgtec.com>
- <20170207101802.ftxepyhshb6juvjk@tarshish>
-Message-ID: <87r33atg07.fsf@dell.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue,  7 Feb 2017 12:08:17 +0100
+Subject: [Buildroot] [PATCH] docs/manual: suggest 'YES' as the value for
+	LIBFOO_GIT_SUBMODULES
+Message-ID: <1486465697-30876-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+The manual mentions LIBFOO_GIT_SUBMODULES but does not tell what value
+it should have. The implementation only checks whether the variable is
+non-empty, but we should suggest a specific value to avoid people
+wondering what they have to set, and to try setting weird values.
 
-Hi,
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Ricardo Herrero <ricardo.herrero@gmail.com>
+---
+ docs/manual/adding-packages-generic.txt | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
- >> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-
- > IIUC these symbols are always defined (either as macros or as functions), so 
- > why not make this unconditional?
-
-True, but it is really a workaround for uClibc, so I've kept it like
-this.
-
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 0e111e1199de..a08283c5a39d 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -317,11 +317,12 @@ information is (assuming the package name is +libfoo+) :
+      the package source code. Buildroot copies the contents of the
+      source directory into the package's build directory.
+ 
+-* +LIBFOO_GIT_SUBMODULES+, when +LIBFOO_SITE_METHOD=git+, will create
+-  an archive with the git submodules in the repository.
+-  Note that we try not to use such git submodules when they contain
+-  bundled libraries, in which case we prefer to use those libraries
+-  from their own package.
++* +LIBFOO_GIT_SUBMODULES+ can be set to +YES+ to create an archive
++  with the git submodules in the repository.  This is only available
++  for packages downloaded with git (i.e. when
++  +LIBFOO_SITE_METHOD=git+).  Note that we try not to use such git
++  submodules when they contain bundled libraries, in which case we
++  prefer to use those libraries from their own package.
+ 
+ * +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
+   (directories) that tar must strip from file names on extraction.
 -- 
-Bye, Peter Korsgaard
+2.7.4
