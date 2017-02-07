@@ -1,124 +1,37 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Tue, 7 Feb 2017 09:41:26 +0100
-Subject: [Buildroot] [PATCH v6 5/9] qt5declarative: enable Quick for
- non-GL platforms for Qt 5.8.0
-In-Reply-To: <f6764894-9b11-b449-f970-c94811e8089a@mind.be>
-References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1485849551-20469-6-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <f6764894-9b11-b449-f970-c94811e8089a@mind.be>
-Message-ID: <1e155259-ffc8-04e3-c334-f6a7378fe50a@andin.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 7 Feb 2017 09:43:35 +0100
+Subject: [Buildroot] [git commit] poppler: fix typo in variable name
+Message-ID: <20170207090318.845E981D3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=94a39b017882f4cbe0c7cd863bf6a9c27fe4b35d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Am 02.02.2017 um 23:20 schrieb Arnout Vandecappelle:
->
->
-> On 31-01-17 08:59, Zoltan Gyarmati wrote:
->> From: Naumann Andreas <ANaumann@ultratronik.de>
->>
->> Since Qt 5.8.0 provides a software rasterizer we can enable Quick for non-GL
->> platforms. However, some modules provide less functionality without OpenGL,
->> so install steps have to be limited for the softrender only backend:
->> - qtmultimedia does not provide qml
->>
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
->> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
->> ---
->>  package/qt5/qt5declarative/Config.in       | 6 +++---
->>  package/qt5/qt5multimedia/qt5multimedia.mk | 3 +++
->>  2 files changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
->> index eba4c8d..a8accdb 100644
->> --- a/package/qt5/qt5declarative/Config.in
->> +++ b/package/qt5/qt5declarative/Config.in
->> @@ -15,11 +15,11 @@ config BR2_PACKAGE_QT5DECLARATIVE
->>  if BR2_PACKAGE_QT5DECLARATIVE
->>
->>  comment "quick module needs an OpenGL-capable backend"
->> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
->> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
->>
->>  config BR2_PACKAGE_QT5DECLARATIVE_QUICK
->>  	bool "quick module"
->> -	select BR2_PACKAGE_QT5BASE_OPENGL
->> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
->> +	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
->> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8
->
->  This means that the conditions that are added to be able to select
-> BR2_PACKAGE_QT5DECLARATIVE_QUICK are no longer correct (e.g. in
-> qt5quickcontrols). Since the condition is a bit complicated, it's probably
-> better to add an auxiliary symbol:
->
-> config BR2_PACKAGE_QT5DECLARATIVE_QUICK_AVAILABLE
-> 	default y
-> 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_QT5_VERSION_5_6
->
-> comment "quick module needs an OpenGL-capable backend"
-> 	depends on !BR2_PACKAGE_QT5DECLARATIVE_QUICK_AVAILABLE
->
-> etc.
->
->  Do that as a separate patch that converts all the existing users of
-> BR2_PACKAGE_QT5DECLARATIVE_QUICK.
->
->  Note that it has to be checked if all the packages that now depend on
-> BR2_PACKAGE_QT5_GL_AVAILABLE really do work with the softrenderer.
->
->
+As pointed out during the check-package discussion, there is a typo in a
+variable name:
 
-Ok, I'll do that once the new patch set is out.
+http://lists.busybox.net/pipermail/buildroot/2016-December/180765.html
 
->
->>
->>  endif
->> diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
->> index 7ce947a..b11b8d1 100644
->> --- a/package/qt5/qt5multimedia/qt5multimedia.mk
->> +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
->> @@ -58,11 +58,14 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
->>  endef
->>  endif
->>
->> +# QtMultimedia QMLs have a hard dependency on OpenGL -> not available for softraster backends
->
->  Line is too long - wrap at 80 characters.
->
->  Just to be sure: if you try to use these QML classes you get a runtime failure,
-> correct? So the only reason not to copy them is that we know they won't work anyway?
+Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/poppler/poppler.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes. I cant quite remember how exactly it failed but it did quite 
-harshly. But that was with the beta version. Not copying the qmls of 
-course also results in an error message for applications which try to 
-include them.
-So in the end its maybe not worth it, because it also adds maintenance 
-effort in case it is fixed upstream sometime in the future. Going to 
-remove that part.
-
-
-regards,
-Andreas
-
-
->
->  Regards,
->  Arnout
->
->> +ifeq ($(BR2_PACKAGE_QT5_GL_AVAILABLE),y)
->>  ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
->>  define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
->>  	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
->>  endef
->>  endif
->> +endif
->>
->>  ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
->>  define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
->>
->
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index c40d5ff..3e8a9f4 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -18,7 +18,7 @@ ifeq ($(BR2_PACKAGE_CAIRO),y)
+ POPPLER_CONF_OPTS += --enable-cairo-output
+ POPPLER_DEPENDENCIES += cairo
+ else
+-POPLER_CONF_OPTS += --disable-cairo-output
++POPPLER_CONF_OPTS += --disable-cairo-output
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
