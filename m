@@ -1,94 +1,124 @@
-From: LogiSch17 <logi.tss@hotmail.de>
-Date: Tue, 7 Feb 2017 00:34:45 -0800 (PST)
-Subject: [Buildroot] BR2_EXTERNAL tree - Config.in can`t open
- /package/Config.in after Update to 2016.11
-Message-ID: <1486456485390-156297.post@n4.nabble.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Tue, 7 Feb 2017 09:41:26 +0100
+Subject: [Buildroot] [PATCH v6 5/9] qt5declarative: enable Quick for
+ non-GL platforms for Qt 5.8.0
+In-Reply-To: <f6764894-9b11-b449-f970-c94811e8089a@mind.be>
+References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <1485849551-20469-6-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <f6764894-9b11-b449-f970-c94811e8089a@mind.be>
+Message-ID: <1e155259-ffc8-04e3-c334-f6a7378fe50a@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
-i have the following problem, i just update to 2016.11 from 2016.05 .
-Then i converted my br2_external trees as descripted.
-After that when i am tyring to make, or make menuconfig i get:
+Hi,
 
-[lorenz at lorenzPc mattros]$ make
-make -C /home/lorenz/mattros/buildroot O=/home/lorenz/mattros/ziesel/output
-BR2_EXTERNAL_ZIESEL_PATH=/home/lorenz/mattros PROJECT_NAME=ziesel
-BR2_DEFCONFIG=/home/lorenz/mattros/ziesel/defconfig defconfig
-  GEN     /home/lorenz/mattros/ziesel/output/Makefile
-/home/lorenz/mattros/Config.in:1: can't open file "/pigpio/Config.in"
-make[1]: *** [Makefile:875: defconfig] Fehler 1
-make: *** [common.mk:41: default] Fehler 2
+Am 02.02.2017 um 23:20 schrieb Arnout Vandecappelle:
+>
+>
+> On 31-01-17 08:59, Zoltan Gyarmati wrote:
+>> From: Naumann Andreas <ANaumann@ultratronik.de>
+>>
+>> Since Qt 5.8.0 provides a software rasterizer we can enable Quick for non-GL
+>> platforms. However, some modules provide less functionality without OpenGL,
+>> so install steps have to be limited for the softrender only backend:
+>> - qtmultimedia does not provide qml
+>>
+>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+>> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+>> ---
+>>  package/qt5/qt5declarative/Config.in       | 6 +++---
+>>  package/qt5/qt5multimedia/qt5multimedia.mk | 3 +++
+>>  2 files changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+>> index eba4c8d..a8accdb 100644
+>> --- a/package/qt5/qt5declarative/Config.in
+>> +++ b/package/qt5/qt5declarative/Config.in
+>> @@ -15,11 +15,11 @@ config BR2_PACKAGE_QT5DECLARATIVE
+>>  if BR2_PACKAGE_QT5DECLARATIVE
+>>
+>>  comment "quick module needs an OpenGL-capable backend"
+>> -	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+>> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
+>>
+>>  config BR2_PACKAGE_QT5DECLARATIVE_QUICK
+>>  	bool "quick module"
+>> -	select BR2_PACKAGE_QT5BASE_OPENGL
+>> -	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+>> +	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
+>> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8
+>
+>  This means that the conditions that are added to be able to select
+> BR2_PACKAGE_QT5DECLARATIVE_QUICK are no longer correct (e.g. in
+> qt5quickcontrols). Since the condition is a bit complicated, it's probably
+> better to add an auxiliary symbol:
+>
+> config BR2_PACKAGE_QT5DECLARATIVE_QUICK_AVAILABLE
+> 	default y
+> 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_QT5_VERSION_5_6
+>
+> comment "quick module needs an OpenGL-capable backend"
+> 	depends on !BR2_PACKAGE_QT5DECLARATIVE_QUICK_AVAILABLE
+>
+> etc.
+>
+>  Do that as a separate patch that converts all the existing users of
+> BR2_PACKAGE_QT5DECLARATIVE_QUICK.
+>
+>  Note that it has to be checked if all the packages that now depend on
+> BR2_PACKAGE_QT5_GL_AVAILABLE really do work with the softrenderer.
+>
+>
+
+Ok, I'll do that once the new patch set is out.
+
+>
+>>
+>>  endif
+>> diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+>> index 7ce947a..b11b8d1 100644
+>> --- a/package/qt5/qt5multimedia/qt5multimedia.mk
+>> +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+>> @@ -58,11 +58,14 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
+>>  endef
+>>  endif
+>>
+>> +# QtMultimedia QMLs have a hard dependency on OpenGL -> not available for softraster backends
+>
+>  Line is too long - wrap at 80 characters.
+>
+>  Just to be sure: if you try to use these QML classes you get a runtime failure,
+> correct? So the only reason not to copy them is that we know they won't work anyway?
+
+Yes. I cant quite remember how exactly it failed but it did quite 
+harshly. But that was with the beta version. Not copying the qmls of 
+course also results in an error message for applications which try to 
+include them.
+So in the end its maybe not worth it, because it also adds maintenance 
+effort in case it is fixed upstream sometime in the future. Going to 
+remove that part.
 
 
-I am using the following directory structure:
--board 
-     +ziesel
-          +cmdline.txt
-          +...
--buildroot
-    +..
--overlays
-    +..
--patches
-    +..
--pigpio
-     +Config.in
-     +libpigpio.mk
--rtimu
-     +Config.in
-     +rtimu.mk
--ziesel-gui
-     +Config.in
-     +ziesel-gui.mk
-     +src
-         +myProgramm..
--ziesel
-      + defconfig
-      + output
--common.mk
--Config.in
--external.desc
--external.mk
--Makefile
-
-This is my external.desc:
-name: ZIESEL
-
-my Config.in:
-source "$BR2_EXTERNAL_ZIESEL_PATH/pigpio/Config.in"
-source "$BR2_EXTERNAL_ZIESEL_PATH/ziesel-gui/Config.in"
-source "$BR2_EXTERNAL_ZIESEL_PATH/rtimu/Config.in"
-
-my external.mk:
-include $(BR2_EXTERNAL_ZIESEL_PATH)/pigpio/libpigpio.mk
-include $(BR2_EXTERNAL_ZIESEL_PATH)/ziesel-gui/ziesel-gui.mk
-include $(BR2_EXTERNAL_ZIESEL_PATH)/rtimu/rtimu.mk
-
-my Makefile:
-PROJECT_NAME := ziesel
-
-include common.mk
-
-and here is my /pigpio/Config.in:
-config BR2_PACKAGE_PIGPIO
-	bool "libpigpio"
-	help
-	  libpigpio is a C library for the Raspberry Pi which allows control of the
-general purpose input outputs (gpios).
-
-before i updated everything worked perfekt.
-I am not sure what i am doing wrong here.
-When i remove pigpio from Config.in and external.mk , i get the same error
-for ziesel-gui
+regards,
+Andreas
 
 
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/BR2-EXTERNAL-tree-Config-in-can-t-open-package-Config-in-after-Update-to-2016-11-tp156297.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+>
+>  Regards,
+>  Arnout
+>
+>> +ifeq ($(BR2_PACKAGE_QT5_GL_AVAILABLE),y)
+>>  ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+>>  define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
+>>  	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
+>>  endef
+>>  endif
+>> +endif
+>>
+>>  ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+>>  define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
+>>
+>
