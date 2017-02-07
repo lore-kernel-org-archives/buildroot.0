@@ -1,85 +1,140 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue,  7 Feb 2017 14:40:53 -0600
-Subject: [Buildroot] [PATCH 1/1] Add notes explaining that SITE_METHOD ==
-	local prevents any patches from being applied to the package
-	sources.
-Message-ID: <20170207204053.18749-1-grant.b.edwards@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 07 Feb 2017 21:41:41 +0100
+Subject: [Buildroot] [PATCH v5 01/19] reproducible: fix DATE/TIME macros
+	in toolchain-wrapper
+In-Reply-To: <1482241596-31688-2-git-send-email-jezz@sysmic.org>
+ (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Tue, 20 Dec 2016 14:46:18 +0100")
+References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
+ <1482241596-31688-2-git-send-email-jezz@sysmic.org>
+Message-ID: <87k291rawq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Grant Edwards <grant.b.edwards@gmail.com>
----
- docs/manual/adding-packages-generic.txt | 17 +++++++++--------
- docs/manual/customize-patches.txt       |  3 ++-
- docs/manual/patch-policy.txt            |  4 ++++
- 3 files changed, 15 insertions(+), 9 deletions(-)
+>>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index a08283c..cdacb8b 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -217,13 +217,13 @@ information is (assuming the package name is +libfoo+) :
-   full URL and download the patch from this location. Otherwise,
-   Buildroot will assume that the patch should be downloaded from
-   +LIBFOO_SITE+. If +HOST_LIBFOO_PATCH+ is not specified, it defaults
--  to +LIBFOO_PATCH+. Note that patches that are included in Buildroot
--  itself use a different mechanism: all files of the form
--  +*.patch+ present in the package directory inside
--  Buildroot will be applied to the package after extraction (see
--  xref:patch-policy[patching a package]). Finally, patches listed in
--  the +LIBFOO_PATCH+ variable are applied _before_ the patches stored
--  in the Buildroot package directory.
-+  to +LIBFOO_PATCH+.  Patches that are included in Buildroot itself
-+  use a different mechanism: all files of the form +*.patch+ present
-+  in the package directory inside Buildroot will be applied to the
-+  package after applying patches specified by +LIBFOO_PATCH+.  (See
-+  xref:patch-policy[patching a package].) If +LIBFOO_SITE_METHOD+ is
-+  set to +local+ no patches are applied: the source directory is used
-+  as-is.
+ > The use __DATE__ and __TIME__ are one of most common sources of
+
+The use of.
+
+ > non-reproducible binaries. In order to fix that, gcc begin to support
+ > SOURCE_DATE_EPOCH variable. This patch take advantage of toolchain-wrapper
+ > to provide support of SOURCE_DATE_EPOCH to older gcc versions.
+
+ > Function get_source_date_epoch() come directly from gcc git.
+
+ > This work was sponsored by `BA Robotic Systems'.
+
+ > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+ > ---
+
+ > Notes:
+ >     v3:
+ >       - Handle $SOURCE_DATE_EPOCH at runtime (Thomas)
+ >     v2:
+ >       - Overload __TIME__ and __DATE__ instead of patching gcc (Thomas)
+
+ >  toolchain/toolchain-wrapper.c | 74 ++++++++++++++++++++++++++++++++++++++++++-
+ >  1 file changed, 73 insertions(+), 1 deletion(-)
+
+ > diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+ > index d59629b..6150574 100644
+ > --- a/toolchain/toolchain-wrapper.c
+ > +++ b/toolchain/toolchain-wrapper.c
+ > @@ -22,12 +22,17 @@
+ >  #include <unistd.h>
+ >  #include <stdlib.h>
+ >  #include <errno.h>
+ > +#include <time.h>
  
- * +LIBFOO_SITE+ provides the location of the package, which can be a
-   URL or a local filesystem path. HTTP, FTP and SCP are supported URL
-@@ -315,7 +315,8 @@ information is (assuming the package name is +libfoo+) :
-   ** +local+ for a local source code directory. One should use this
-      when +LIBFOO_SITE+ specifies a local directory path containing
-      the package source code. Buildroot copies the contents of the
--     source directory into the package's build directory.
-+     source directory into the package's build directory.  No patches
-+     are applied: the source directory contents are used as-is.
+ >  #ifdef BR_CCACHE
+ >  static char ccache_path[PATH_MAX];
+ >  #endif
+ >  static char path[PATH_MAX];
+ >  static char sysroot[PATH_MAX];
+ > +// strlen("-D__TIME__=\"HH:MM:SS\"") + 1 = 22
+ > +static char source_time[22];
+ > +// strlen("-D__DATE__=\"MMM DD YYYY\"") + 1 = 25
+ > +static char source_date[25];
+
+It is nicer to simply use sizeof on that string, E.G.:
+
+static char source_time[sizeof("-D__TIME__=\"HH:MM:SS\"")];
+
+Then the comment can be dropped and the comment never gets out of sync
+with the size.
+
+
+ >  /**
+ >   * GCC errors out with certain combinations of arguments (examples are
+ > @@ -39,8 +44,11 @@ static char sysroot[PATH_MAX];
+ >   * 	-mfloat-abi=
+ >   * 	-march=
+ >   * 	-mcpu=
+ > + * 	-D__TIME__=
+ > + * 	-D__DATE__=
+ > + * 	-Wno-builtin-macro-redefined
+ >   */
+ > -#define EXCLUSIVE_ARGS	3
+ > +#define EXCLUSIVE_ARGS	6
  
- * +LIBFOO_GIT_SUBMODULES+ can be set to +YES+ to create an archive
-   with the git submodules in the repository.  This is only available
-diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
-index fa63541..05c935b 100644
---- a/docs/manual/customize-patches.txt
-+++ b/docs/manual/customize-patches.txt
-@@ -11,7 +11,8 @@ architecture.
+ >  static char *predef_args[] = {
+ >  #ifdef BR_CCACHE
+ > @@ -139,6 +147,47 @@ static void check_unsafe_path(const char *arg,
+ >  	}
+ >  }
  
- The +BR2_GLOBAL_PATCH_DIR+ configuration option can be used to specify
- a space separated list of one or more directories containing package
--patches.
-+patches.  [If a package's +_SITE_METHOD+ is set to +local+, no patches
-+are applied.]
- 
- For a specific version +<packageversion>+ of a specific package
- +<packagename>+, patches are applied from +BR2_GLOBAL_PATCH_DIR+ as
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index e1df8b0..9976d03 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -59,6 +59,10 @@ details.
- [[patch-apply-order]]
- === How patches are applied
- 
-+If a packate's +_SITE_METHOD+ is set to +local+, no patches are
-+applied: the source directory is used as-is.  Otherwise, patches are
-+applied as specified below.
-+
- . Run the +<packagename>_PRE_PATCH_HOOKS+ commands if defined;
- 
- . Cleanup the build directory, removing any existing +*.rej+ files;
+ > +/* Read SOURCE_DATE_EPOCH from environment to have a deterministic
+ > + * timestamp to replace embedded current dates to get reproducible
+ > + * results.  Returns -1 if SOURCE_DATE_EPOCH is not defined.
+ > + */
+ > +time_t get_source_date_epoch()
+
+This should be static.
+
+
+> +{
+ > +	char *source_date_epoch;
+ > +	long long epoch;
+ > +	char *endptr;
+ > +
+ > +	source_date_epoch = getenv("SOURCE_DATE_EPOCH");
+ > +	if (!source_date_epoch)
+ > +		return (time_t) -1;
+ > +
+ > +	errno = 0;
+ > +	epoch = strtoll (source_date_epoch, &endptr, 10);
+
+NIT: No space between strtoll and '('.
+
+> +	if ((errno == ERANGE && (epoch == LLONG_MAX || epoch == LLONG_MIN))
+ > +			|| (errno != 0 && epoch == 0)) {
+ > +		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
+ > +				"strtoll: %s\n", strerror(errno));
+ > +		exit(2);
+ > +	}
+ > +	if (endptr == source_date_epoch) {
+ > +		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
+ > +				"no digits were found: %s\n", endptr);
+ > +		exit(2);
+ > +	}
+ > +	if (*endptr != '\0') {
+ > +		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
+ > +				"trailing garbage: %s\n", endptr);
+ > +		exit(2);
+ > +	}
+ > +	if (epoch < 0) {
+ > +		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
+ > +				"value must be nonnegative: %lld \n", epoch);
+ > +		exit(2);
+ > +	}
+
+I'm not sure this detailed error handling is really needed, but OK.
+
+Committed, thanks.
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
