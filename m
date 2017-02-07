@@ -1,41 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Feb 2017 10:58:50 +0100
-Subject: [Buildroot] [PATCH 5/9] check-package: check *.patch files
-In-Reply-To: <CAAXf6LUx4hv+PNKyfpOaqcptyKkfpEjKVEtipE4gSJLQYojLRw@mail.gmail.com>
-References: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
- <20161231032110.11573-6-ricardo.martincoski@gmail.com>
- <CAAXf6LUx4hv+PNKyfpOaqcptyKkfpEjKVEtipE4gSJLQYojLRw@mail.gmail.com>
-Message-ID: <20170207105850.57f5df89@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 7 Feb 2017 12:14:58 +0200
+Subject: [Buildroot] [PATCH v2] tslib: bump to 1.4
+In-Reply-To: <1486460873-30025-1-git-send-email-martin.kepplinger@ginzinger.com>
+References: <20170203141416.4b41aff7@free-electrons.com>
+ <1486460873-30025-1-git-send-email-martin.kepplinger@ginzinger.com>
+Message-ID: <20170207101458.c5uhhasch73sihfx@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Martin,
 
-On Tue, 24 Jan 2017 22:21:31 +0100, Thomas De Schampheleire wrote:
+On Tue, Feb 07, 2017 at 10:47:53AM +0100, Martin Kepplinger wrote:
+> The update to 1.4, besides the version bump, includes
+>  * removing the patch fixing missing headers (upstream)
+>  * removing the dependency on 3.12 headers
 
-> > +NUMBERED_PATCH = re.compile("Subject:\s*\[PATCH\s*\d+/\d+\]")  
+You should update also tslib reverse dependencies.
+
+I suggest to leave the kernel version dependency removal out of this patch, 
+and add a separate revert of 7c60211ce382 instead.
+
+>  * a small change in the package description
 > 
-> Is this really a requirement? This numbering in the patch header is
-> unrelated to the number used in the filename. One can expect many
-> 'PATCH 1/1' in the same package directory. I would leave out this
-> test.
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
 
-We normally require patches in package/<foo>/ to be generated with "git
-format-patch -N", so that their prefix is [PATCH] and not [PATCH x/y].
+baruch
 
-However, we do not require all patches to be Git formatted. It's kind
-of required when the upstream project uses Git as its version control
-system. But when the upstream project uses some other version control
-system, other patch formats are excepted, like hand-generated patches
-with "diff", or patches generated with "quilt". Not everyone wants to
-find with Mercurial to find out to generate a patch with this damn
-thing :-)
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
