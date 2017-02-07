@@ -1,39 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Feb 2017 14:42:42 +0100
-Subject: [Buildroot] [PATCH 2/2] Revert "tslib: needs kernel headers
-	3.12"
-In-Reply-To: <1486466728-24435-2-git-send-email-martin.kepplinger@ginzinger.com>
- (Martin Kepplinger's message of "Tue, 7 Feb 2017 12:25:28 +0100")
-References: <20170207101458.c5uhhasch73sihfx@tarshish>
- <1486466728-24435-1-git-send-email-martin.kepplinger@ginzinger.com>
- <1486466728-24435-2-git-send-email-martin.kepplinger@ginzinger.com>
-Message-ID: <87o9yerub1.fsf@dell.be.48ers.dk>
+Date: Tue, 7 Feb 2017 14:43:18 +0100
+Subject: [Buildroot] [git commit] tslib: bump to 1.4
+Message-ID: <20170207134448.7D4AE80AC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Kepplinger <martin.kepplinger@ginzinger.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=06216078f6bac4b3208bb3ae5de3c76f8f4a86af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This reverts commit 7c60211ce38273580f1f8bf5886771406f9899ca.
- > tslib-1.4 removes this dependency.
+additionally, this:
 
-I did a quick test build with the following config (3.5.4 headers):
+ * removes the patch adding missing headers (fixed upstream)
+ * slightly changes the package description
 
-BR2_x86_64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_TSLIB=y
+Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...01-tests-ts_calibrate-add-missing-headers.patch | 35 ----------------------
+ package/tslib/Config.in                            |  2 +-
+ package/tslib/tslib.hash                           |  4 +--
+ package/tslib/tslib.mk                             |  2 +-
+ 4 files changed, 4 insertions(+), 39 deletions(-)
 
-input-raw.c: In function 'ts_input_read_mt':
-input-raw.c:520:11: error: 'ABS_MT_TOOL_X' undeclared (first use in this function)
-input-raw.c:520:11: note: each undeclared identifier is reported only once for each function it appears in
-input-raw.c:525:11: error: 'ABS_MT_TOOL_Y' undeclared (first use in this function)
-Makefile:825: recipe for target 'input-raw.lo' failed
-make[4]: *** [input-raw.lo] Error 1
-make[4]: *** Waiting for unfinished jobs....
-
-So it seems like this still isn't fixed.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
+deleted file mode 100644
+index 97cd4be..0000000
+--- a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 54b66bfe405d8b70c703684e60bedbad5c7d4213 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Sat, 14 Jan 2017 21:35:53 +0200
+-Subject: [PATCH] tests/ts_calibrate: add missing headers
+-
+-The open(2) system call requires sys/types.h and sys/stat.h. Fix the following
+-build failure under uClibc-ng:
+-
+-ts_calibrate.c: In function ???main???:
+-ts_calibrate.c:248:19: error: ???S_IRUSR??? undeclared (first use in this function)
+-                   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+-                   ^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/kergoth/tslib/pull/59
+- tests/ts_calibrate.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/tests/ts_calibrate.c b/tests/ts_calibrate.c
+-index c6652e479d4b..9a98d1f86205 100644
+---- a/tests/ts_calibrate.c
+-+++ b/tests/ts_calibrate.c
+-@@ -17,6 +17,8 @@
+- #include <string.h>
+- #include <unistd.h>
+- #include <sys/time.h>
+-+#include <sys/types.h>
+-+#include <sys/stat.h>
+- 
+- #ifdef __ANDROID__
+- #include <fcntl.h>
+--- 
+-2.11.0
+-
+diff --git a/package/tslib/Config.in b/package/tslib/Config.in
+index 6b86ebc..3665301 100644
+--- a/package/tslib/Config.in
++++ b/package/tslib/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_TSLIB
+ 	depends on !BR2_STATIC_LIBS # dlopen
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 	help
+-	  Tslib is an abstraction layer for touchscreen panel events.
++	  Tslib is a filtering layer for touchscreen panel events.
+ 
+ 	  https://github.com/kergoth/tslib
+ 
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index cdbe0d2..6540ac8 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,2 @@
+-# Locally generated
+-sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
++# taken from https://github.com/kergoth/tslib/releases/tag/1.4
++sha256  ad0373f1dbfda27caec92cb10421227f226c79d160488f1ac915585ba947741f  tslib-1.4.tar.xz
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index d3388a2..5ea526e 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.3
++TSLIB_VERSION = 1.4
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL, LGPL
