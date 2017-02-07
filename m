@@ -1,104 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Feb 2017 15:29:53 +0100
-Subject: [Buildroot] [PATCH 4/4] supprt/test-pkg: add option to limit
- the number of tests
-In-Reply-To: <3a2dfc3a5dcf4389d2b65b91de95124385241a18.1486475561.git.yann.morin.1998@free.fr>
-References: <cover.1486475561.git.yann.morin.1998@free.fr>
- <3a2dfc3a5dcf4389d2b65b91de95124385241a18.1486475561.git.yann.morin.1998@free.fr>
-Message-ID: <20170207142953.GD3578@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 7 Feb 2017 15:26:22 +0100
+Subject: [Buildroot] [git commit] ntp: security bump to verserion 4.2.8p9
+Message-ID: <20170207143308.4619C80DA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ebf6f64b76059e31a85f982cb04f80ad5982dac3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-02-07 14:53 +0100, Yann E. MORIN spake thusly:
-> Sometimes, it interesting to have a global overview of whether the
-> package builds at all or not, rather than test on all toolchains.
-> 
-> Add an option that allows testing on a limited set of randomly choosen
-> toolchains.
+This version of ntp fixes several vulnerabilities.
 
-Forget that patch, there is an issue when the option is not provided. :-(
+CVE-2016-9311
+CVE-2016-9310
+CVE-2016-7427
+CVE-2016-7428
+CVE-2016-9312
+CVE-2016-7431
+CVE-2016-7434
+CVE-2016-7429
+CVE-2016-7426
+CVE-2016-7433
 
-Regards,
-Yann E. MORIN.
+http://www.kb.cert.org/vuls/id/633847
 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  support/scripts/test-pkg | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
-> 
-> diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-> index 604a759..0b4615d 100755
-> --- a/support/scripts/test-pkg
-> +++ b/support/scripts/test-pkg
-> @@ -5,15 +5,16 @@ TOOLCHAINS_BASE_URL='http://autobuild.buildroot.org/toolchains/configs'
->  
->  main() {
->      local o O opts
-> -    local cfg dir pkg toolchain
-> +    local cfg dir pkg random toolchain
->      local ret nb_dl nb_cfg nb_skip nb_clean nb_build
->      local -a toolchains
->  
-> -    o='hc:d:p:'
-> -    O='help,config-snippet:build-dir:package:'
-> +    o='hc:d:p:r:'
-> +    O='help,config-snippet:build-dir:package:,random::'
->      opts="$( getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}"  )"
->      eval set -- "${opts}"
->  
-> +    random=0
->      while [ ${#} -gt 0 ]; do
->          case "${1}" in
->          (-h|--help)
-> @@ -28,6 +29,9 @@ main() {
->          (-p|--package)
->              pkg="${2}"; shift 2
->              ;;
-> +        (-r|--random)
-> +            random="${2}"; shift 2
-> +            ;;
->          (--)
->              shift; break
->              ;;
-> @@ -43,7 +47,10 @@ main() {
->      # Extract the names of the toolchains
->      # http://server/path/to/name.config,arch,libc  -->  name
->      toolchains=( $( curl -s "${TOOLCHAINS_BASE_URL}/toolchain-configs.csv" \
-> -                    |sed -r -e 's/,.*//; s:.*/(.*)\.config:\1:; /internal/d;'
-> +                    |sed -r -e 's/,.*//; s:.*/(.*)\.config:\1:; /internal/d;' \
-> +                    |if [ ${random} -gt 0 ]; then \
-> +                        sort -R |head -n ${random} |sort
-> +                     fi
->                    )
->                 )
->  
-> @@ -187,6 +194,10 @@ Options
->          Test-build the package PKG, by running 'make PKG'; if not specified,
->          just runs 'make'.
->  
-> +    -r N, --random N
-> +        Limit the tests to the N randomly selected toolchains, instead of
-> +        building all.
-> +
->  Example:
->  
->      Testing libcec would require a config snippet that contains:
-> -- 
-> 2.7.4
-> 
+In addition, libssl_compat.h is now included in many files, which
+references openssl/evp.h, openssl/dsa.h, and openssl/rsa.h.
+Even if a you pass --disable-ssl as a configuration option, these
+files are now required.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+As such, I have also added openssl as a dependency, and it is now
+automatically selected when you select ntp.
+
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ntp/Config.in |  1 +
+ package/ntp/ntp.hash  |  6 +++---
+ package/ntp/ntp.mk    | 15 +++++----------
+ 3 files changed, 9 insertions(+), 13 deletions(-)
+
+diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+index 8ce9a5b..1af02db 100644
+--- a/package/ntp/Config.in
++++ b/package/ntp/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NTP
+ 	bool "ntp"
+ 	select BR2_PACKAGE_LIBEVENT
++	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Network Time Protocol suite/programs.
+ 	  Provides things like ntpd, ntpdate, ntpq, etc...
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index 2a1155b..c6838d8 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,4 +1,4 @@
+-# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p8.tar.gz.md5
+-md5	4a8636260435b230636f053ffd070e34	ntp-4.2.8p8.tar.gz
++# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p9.tar.gz.md5
++md5	857452b05f5f2e033786f77ade1974ed	ntp-4.2.8p9.tar.gz
+ # Calculated based on the hash above
+-sha256	2ab3d0b5f0456e6311dda1cc27ab75da108762773a19e46abd938bd9407b97ee	ntp-4.2.8p8.tar.gz
++sha256	b724287778e1bac625b447327c9851eedef020517a3545625e9f652a90f30b72	ntp-4.2.8p9.tar.gz
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 7f9e0d6..edbf1c8 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p8
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p9
+ NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+-NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
++NTP_DEPENDENCIES = host-pkgconf libevent openssl $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = ntp license
+ NTP_LICENSE_FILES = COPYRIGHT
+ NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
+@@ -17,17 +17,12 @@ NTP_CONF_OPTS = \
+ 	--disable-tickadj \
+ 	--disable-debugging \
+ 	--with-yielding-select=yes \
+-	--disable-local-libevent
++	--disable-local-libevent \
++	--with-crypto
++
+ # 0002-ntp-syscalls-fallback.patch
+ NTP_AUTORECONF = YES
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-NTP_CONF_OPTS += --with-crypto
+-NTP_DEPENDENCIES += openssl
+-else
+-NTP_CONF_OPTS += --without-crypto --disable-openssl-random
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ NTP_CONF_OPTS += --enable-linuxcaps
+ NTP_DEPENDENCIES += libcap
