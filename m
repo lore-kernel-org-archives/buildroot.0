@@ -1,8 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  7 Feb 2017 22:56:37 +0100
-Subject: [Buildroot] [PATCHv3 00/12] toolchain: improvements to
-	copy_toolchain_sysroot and copy_toolchain_lib_root
-Message-ID: <20170207215649.364-1-patrickdepinguin@gmail.com>
+Date: Tue,  7 Feb 2017 22:56:38 +0100
+Subject: [Buildroot] [PATCHv3 01/12] toolchain-external: reduce nesting in
+	copy_toolchain_sysroot
+In-Reply-To: <20170207215649.364-1-patrickdepinguin@gmail.com>
+References: <20170207215649.364-1-patrickdepinguin@gmail.com>
+Message-ID: <20170207215649.364-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,51 +13,39 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Hi,
+As discussed with Thomas Petazzoni, we can reduce the nesting level by early
+returning on an invalid iteration.
 
-This toolchain patch series started out to fix the handling of the Cavium Octeon
-2 toolchain (see patch "cover multilib toolchains with lib/<variant>/layout")
-but along the way I fixed/improved a few other things.
-Details are found in the commit messages of these patches.
+I did not move the 'else' case (the common case) outside the if-else because
+it would make the code less symmetrical and IMO makes it _less_ clear.
 
-I tested a number of external toolchains and arches available in Buildroot, as
-well as the Octeon SDK toolchain.  I think I understand the situation
-sufficiently well to get some confidence, but this is the type of
-change that is difficult to get 100% certainty about.
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+v3: new patch
 
-Best regards,
-Thomas
+ toolchain/helpers.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-v3: after live review by ThomasP and Romain:
-- reduce nesting level of copy_toolchain_sysroot
-- remove unnecessarily added exclude of ARCH_LIB_DIR in rsync
-- fix locale exclude
-v2:
-- fix broken symlinks in patch "cover multilib toolchains ..."
-- simplification of fixed broken symlinks
-- improvements in copy_toolchain_lib_root
-
-Thomas De Schampheleire (12):
-  toolchain-external: reduce nesting in copy_toolchain_sysroot
-  toolchain-external: fix broken handling of 'usr/lib/locale'
-  toolchain-external: clarify rsync excludes in copy_toolchain_sysroot
-  toolchain-external: handle ld.so fixups centrally
-  toolchain helpers: introduce function relpath_prefix
-  toolchain-external: cover multilib toolchains with lib/<variant>
-    layout
-  toolchain helpers: introduce simplify_symlink
-  toolchain-external: simplify previously-broken symbolic links
-  toolchain: copy_toolchain_lib_root: remove unused variable LIBDIR
-  toolchain: copy_toolchain_lib_root: clarify logic
-  toolchain: copy_toolchain_lib_root: clarify input parameter
-  toolchain: copy_toolchain_lib_root: copy symlinks instead of
-    recreating them
-
- package/glibc/glibc.mk                             |   4 +-
- toolchain/helpers.mk                               | 124 +++++++++++++++++----
- .../toolchain-external/pkg-toolchain-external.mk   |  14 ++-
- .../toolchain-external-codesourcery-aarch64.mk     |  10 --
- 4 files changed, 113 insertions(+), 39 deletions(-)
-
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 72e7292..8cae996 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -89,11 +89,12 @@ copy_toolchain_sysroot = \
+ 	ARCH_LIB_DIR="$(strip $4)" ; \
+ 	SUPPORT_LIB_DIR="$(strip $5)" ; \
+ 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
+-		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+-			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
+-				--include '/libexec*/' --exclude '/lib*/' \
+-				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
++		if [ ! -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
++			continue ; \
+ 		fi ; \
++		rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
++			--include '/libexec*/' --exclude '/lib*/' \
++			$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+ 	done ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
 -- 
 2.10.2
