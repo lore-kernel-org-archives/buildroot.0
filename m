@@ -1,48 +1,73 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  7 Feb 2017 16:56:36 +0100
-Subject: [Buildroot] [PATCH] python-pyyaml: bump to version 3.12
-Message-ID: <20170207155636.28399-1-yegorslists@googlemail.com>
+From: Ilias Apalodimas <apalos@gmail.com>
+Date: Tue,  7 Feb 2017 18:20:58 +0200
+Subject: [Buildroot] [PATCH 1/1] Added keepalived package
+In-Reply-To: <1486484458-8233-1-git-send-email-apalos@gmail.com>
+References: <1486484458-8233-1-git-send-email-apalos@gmail.com>
+Message-ID: <1486484458-8233-2-git-send-email-apalos@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
 ---
- package/python-pyyaml/python-pyyaml.hash | 7 +++----
- package/python-pyyaml/python-pyyaml.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/Config.in                |  1 +
+ package/keepalived/Config.in     | 13 +++++++++++++
+ package/keepalived/keepalived.mk | 13 +++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/keepalived/Config.in
+ create mode 100644 package/keepalived/keepalived.mk
 
-diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
-index a6d9a776a..209ab27e5 100644
---- a/package/python-pyyaml/python-pyyaml.hash
-+++ b/package/python-pyyaml/python-pyyaml.hash
-@@ -1,4 +1,3 @@
--# From https://pypi.python.org/pypi?:action=show_md5&digest=f50e08ef0fe55178479d3a618efe21db
--md5 f50e08ef0fe55178479d3a618efe21db PyYAML-3.11.tar.gz
--# Locally computed
--sha256 c36c938a872e5ff494938b33b14aaa156cb439ec67548fcab3535bb78b0846e8 PyYAML-3.11.tar.gz
-+# md5 from https://pypi.python.org/pypi/pyyaml/json, sha256 locally computed
-+md5 4c129761b661d181ebf7ff4eb2d79950 PyYAML-3.12.tar.gz
-+sha256 592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab PyYAML-3.12.tar.gz
-diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
-index f3d72833d..0509a7adb 100644
---- a/package/python-pyyaml/python-pyyaml.mk
-+++ b/package/python-pyyaml/python-pyyaml.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYYAML_VERSION = 3.11
-+PYTHON_PYYAML_VERSION = 3.12
- PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
--PYTHON_PYYAML_SITE = https://pypi.python.org/packages/source/P/PyYAML
-+PYTHON_PYYAML_SITE = https://pypi.python.org/packages/4a/85/db5a2df477072b2902b0eb892feb37d88ac635d36245a72a6a69b23b383a
- PYTHON_PYYAML_SETUP_TYPE = distutils
- PYTHON_PYYAML_LICENSE = Python software foundation license v2
- PYTHON_PYYAML_LICENSE_FILES = LICENSE
+diff --git a/package/Config.in b/package/Config.in
+index 114a5ad..f0f1dec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1546,6 +1546,7 @@ menu "Networking applications"
+ 	source "package/irssi/Config.in"
+ 	source "package/iw/Config.in"
+ 	source "package/janus-gateway/Config.in"
++	source "package/keepalived/Config.in"
+ 	source "package/kismet/Config.in"
+ 	source "package/knock/Config.in"
+ 	source "package/leafnode2/Config.in"
+diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
+new file mode 100644
+index 0000000..ee4ab7a
+--- /dev/null
++++ b/package/keepalived/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_KEEPALIVED
++	bool "keepalived"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_POPT
++	help
++	  The main goal of the keepalived project is to add a strong & robust
++	  keepalive facility to the Linux Virtual Server project.
++	  It implements a multilayer TCP/IP stack checks. Keepalived implements
++	  a framework based on three family checks : Layer3, Layer4 & Layer5.
++	  This framework gives the daemon the ability of checking a LVS server
++	  pool states. Keepalived can be sumarize as a LVS driving daemon.
++
++	  http://www.keepalived.org/
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+new file mode 100644
+index 0000000..4f8a6b2
+--- /dev/null
++++ b/package/keepalived/keepalived.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# keepalived
++#
++################################################################################
++
++KEEPALIVED_VERSION = 1.3.2
++KEEPALIVED_SITE = http://www.keepalived.org/software
++KEEPALIVED_DEPENDENCIES = popt openssl
++KEEPALIVED_LICENSE = GPLv2+
++KEEPALIVED_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-2.11.0
+1.9.1
