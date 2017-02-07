@@ -1,42 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Feb 2017 09:43:41 +0100
-Subject: [Buildroot] [git commit] babeld: fix typo in variable name
-Message-ID: <20170207090318.92F717FA5F@busybox.osuosl.org>
+Date: Tue, 07 Feb 2017 10:03:59 +0100
+Subject: [Buildroot] [PATCH 9/9] check-package: check *.mk for typo in
+	variable
+In-Reply-To: <20161231032110.11573-10-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sat, 31 Dec 2016 01:21:10 -0200")
+References: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
+ <20161231032110.11573-10-ricardo.martincoski@gmail.com>
+Message-ID: <87zihytls0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2cf7ca0e2fd9763ec566c3e8808f08dcb9391d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
-As pointed out during the check-package discussion, there is a typo in a
-variable name:
+ > Warn when a variable is defined in a .mk file and it don't start with
+ > the package name.
 
-http://lists.busybox.net/pipermail/buildroot/2016-December/180765.html
+ > This function generates false warnings and the maintenance of the
+ > whitelist can be an extra burden, but it catches some typos really hard
+ > to see:
+ > - POPLER_CONF_OPTS [1]
+ > - BALELD_LICENSE [2]
+ > - DRDB_UTILS_DEPENDENCIES [3]
+ > - PERL_LIBWWW_LICENSE_FILES [4]
+ > - AVRDUDR_LICENSE_FILES [5]
+ > - GST1_PLUGINS_ULGY_HAS_GPL_LICENSE [6]
+ > - ON2_8170_LICENSE [7]
+ > - LIBFDTI_CONF_OPTS [8][9]
+ > - IPSEC_DEPENDENCIES [10]
 
-Fixing that also shows that the license file was misspelled, so fix that as
-well (LICENSE/LICENCE).
+Thanks, I've fixed these typos!
 
-Reported-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/babeld/babeld.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
-index ca39c71..d718237 100644
---- a/package/babeld/babeld.mk
-+++ b/package/babeld/babeld.mk
-@@ -6,8 +6,8 @@
- 
- BABELD_VERSION = 1.7.1
- BABELD_SITE = http://www.pps.univ-paris-diderot.fr/~jch/software/files
--BALELD_LICENSE = MIT
--BALELD_LICENSE_FILES = LICENSE
-+BABELD_LICENSE = MIT
-+BABELD_LICENSE_FILES = LICENCE
- 
- define BABELD_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
+-- 
+Bye, Peter Korsgaard
