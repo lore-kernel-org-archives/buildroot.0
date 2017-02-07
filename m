@@ -1,121 +1,103 @@
 From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Tue, 7 Feb 2017 12:25:28 +0100
-Subject: [Buildroot] [PATCH 2/2] Revert "tslib: needs kernel headers 3.12"
-In-Reply-To: <1486466728-24435-1-git-send-email-martin.kepplinger@ginzinger.com>
+Date: Tue, 7 Feb 2017 12:25:27 +0100
+Subject: [Buildroot] [PATCH 1/2] tslib: bump to 1.4
+In-Reply-To: <20170207101458.c5uhhasch73sihfx@tarshish>
 References: <20170207101458.c5uhhasch73sihfx@tarshish>
- <1486466728-24435-1-git-send-email-martin.kepplinger@ginzinger.com>
-Message-ID: <1486466728-24435-2-git-send-email-martin.kepplinger@ginzinger.com>
+Message-ID: <1486466728-24435-1-git-send-email-martin.kepplinger@ginzinger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 7c60211ce38273580f1f8bf5886771406f9899ca.
-
-tslib-1.4 removes this dependency.
+additionally this
+ * removes the patch adding missing headers (fixed upstream)
+ * slightly changes the package desctiption
 
 Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
 ---
- package/directfb/Config.in                       | 5 ++---
- package/qt/Config.mouse.in                       | 5 ++---
- package/qt5/qt5base/Config.in                    | 5 ++---
- package/tslib/Config.in                          | 5 ++---
- package/x11r7/xdriver_xf86-input-tslib/Config.in | 5 ++---
- 5 files changed, 10 insertions(+), 15 deletions(-)
+ ...01-tests-ts_calibrate-add-missing-headers.patch | 35 ----------------------
+ package/tslib/Config.in                            |  2 +-
+ package/tslib/tslib.hash                           |  4 +--
+ package/tslib/tslib.mk                             |  2 +-
+ 4 files changed, 4 insertions(+), 39 deletions(-)
+ delete mode 100644 package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 35c0309..b552164 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -113,12 +113,11 @@ config BR2_PACKAGE_DIRECTFB_SERIALMOUSE
- config BR2_PACKAGE_DIRECTFB_TSLIB
- 	bool "enable touchscreen support"
- 	depends on !BR2_STATIC_LIBS # tslib
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # tslib
- 	default y
- 	select BR2_PACKAGE_TSLIB
- 
--comment "touchscreen support needs a toolchain w/ dynamic library, headers >= 3.12"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+comment "touchscreen support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_DIRECTFB_GIF
- 	bool "enable GIF support"
-diff --git a/package/qt/Config.mouse.in b/package/qt/Config.mouse.in
-index f15f8d5..11da956 100644
---- a/package/qt/Config.mouse.in
-+++ b/package/qt/Config.mouse.in
-@@ -13,10 +13,9 @@ config BR2_PACKAGE_QT_MOUSE_TSLIB
- 	bool "tslib"
- 	select BR2_PACKAGE_TSLIB
- 	depends on !BR2_STATIC_LIBS # tslib
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # tslib
- 
--comment "tslib support needs a toolchain w/ dynamic library, headers >= 3.12"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+comment "tslib support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_QT_MOUSE_QVFB
- 	bool "qvfb"
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index e273caa..f22e034 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -278,12 +278,11 @@ config BR2_PACKAGE_QT5BASE_ICU
- config BR2_PACKAGE_QT5BASE_TSLIB
- 	bool "Enable Tslib support"
- 	depends on !BR2_STATIC_LIBS # dlopen
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # tslib
- 	select BR2_PACKAGE_TSLIB
- 	help
- 	  This options enables the Tslib plugin
- 
--comment "tslib support needs a toolchain w/ dynamic library, headers >= 3.12"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+comment "tslib support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
- 
- endif
+diff --git a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
+deleted file mode 100644
+index 97cd4be..0000000
+--- a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 54b66bfe405d8b70c703684e60bedbad5c7d4213 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Sat, 14 Jan 2017 21:35:53 +0200
+-Subject: [PATCH] tests/ts_calibrate: add missing headers
+-
+-The open(2) system call requires sys/types.h and sys/stat.h. Fix the following
+-build failure under uClibc-ng:
+-
+-ts_calibrate.c: In function ?main?:
+-ts_calibrate.c:248:19: error: ?S_IRUSR? undeclared (first use in this function)
+-                   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+-                   ^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/kergoth/tslib/pull/59
+- tests/ts_calibrate.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/tests/ts_calibrate.c b/tests/ts_calibrate.c
+-index c6652e479d4b..9a98d1f86205 100644
+---- a/tests/ts_calibrate.c
+-+++ b/tests/ts_calibrate.c
+-@@ -17,6 +17,8 @@
+- #include <string.h>
+- #include <unistd.h>
+- #include <sys/time.h>
+-+#include <sys/types.h>
+-+#include <sys/stat.h>
+- 
+- #ifdef __ANDROID__
+- #include <fcntl.h>
+--- 
+-2.11.0
+-
 diff --git a/package/tslib/Config.in b/package/tslib/Config.in
-index 3665301..bc5d790 100644
+index 6b86ebc..3665301 100644
 --- a/package/tslib/Config.in
 +++ b/package/tslib/Config.in
-@@ -1,11 +1,10 @@
- config BR2_PACKAGE_TSLIB
- 	bool "tslib"
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_TSLIB
  	depends on !BR2_STATIC_LIBS # dlopen
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
  	help
- 	  Tslib is a filtering layer for touchscreen panel events.
+-	  Tslib is an abstraction layer for touchscreen panel events.
++	  Tslib is a filtering layer for touchscreen panel events.
  
  	  https://github.com/kergoth/tslib
  
--comment "tslib needs a toolchain w/ dynamic library, headers >= 3.12"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+comment "tslib needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/Config.in b/package/x11r7/xdriver_xf86-input-tslib/Config.in
-index 79b7396..9c6e296 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-tslib/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
- 	bool "xf86-input-tslib"
- 	depends on !BR2_STATIC_LIBS # tslib
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # tslib
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-@@ -11,5 +10,5 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index cdbe0d2..6540ac8 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,2 +1,2 @@
+-# Locally generated
+-sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
++# taken from https://github.com/kergoth/tslib/releases/tag/1.4
++sha256  ad0373f1dbfda27caec92cb10421227f226c79d160488f1ac915585ba947741f  tslib-1.4.tar.xz
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index d3388a2..5ea526e 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.ptxdist.org/software/xf86-input-tslib/index_en.html
- 
--comment "xf86-input-tslib needs a toolchain w/ dynamic library, headers >= 3.12"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+comment "xf86-input-tslib needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+-TSLIB_VERSION = 1.3
++TSLIB_VERSION = 1.4
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL, LGPL
 -- 
 2.1.4
