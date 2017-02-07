@@ -1,110 +1,101 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Tue, 7 Feb 2017 10:47:53 +0100
-Subject: [Buildroot] [PATCH v2] tslib: bump to 1.4
-In-Reply-To: <20170203141416.4b41aff7@free-electrons.com>
-References: <20170203141416.4b41aff7@free-electrons.com>
-Message-ID: <1486460873-30025-1-git-send-email-martin.kepplinger@ginzinger.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Feb 2017 10:52:39 +0100
+Subject: [Buildroot] [PATCH] support/scripts: add script to test a
+	package
+In-Reply-To: <CAAXf6LVfFMFd4fSVrn6EEkzszWPs4XmmEtBWAUX8kJeZskZc-g@mail.gmail.com>
+References: <1486404173-31700-1-git-send-email-yann.morin.1998@free.fr>
+ <CAAXf6LVfFMFd4fSVrn6EEkzszWPs4XmmEtBWAUX8kJeZskZc-g@mail.gmail.com>
+Message-ID: <20170207095239.GC3578@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The update to 1.4, besides the version bump, includes
- * removing the patch fixing missing headers (upstream)
- * removing the dependency on 3.12 headers
- * a small change in the package description
+Thomas DS, All,
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
----
- ...01-tests-ts_calibrate-add-missing-headers.patch | 35 ----------------------
- package/tslib/Config.in                            |  7 ++---
- package/tslib/tslib.hash                           |  4 +--
- package/tslib/tslib.mk                             |  2 +-
- 4 files changed, 6 insertions(+), 42 deletions(-)
- delete mode 100644 package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
+On 2017-02-06 21:44 +0100, Thomas De Schampheleire spake thusly:
+> On Mon, Feb 6, 2017 at 7:02 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > This script helps in testing that a pacakge builds fine on a wide range
+> 
+> package
 
-diff --git a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch b/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
-deleted file mode 100644
-index 97cd4be..0000000
---- a/package/tslib/0001-tests-ts_calibrate-add-missing-headers.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 54b66bfe405d8b70c703684e60bedbad5c7d4213 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Sat, 14 Jan 2017 21:35:53 +0200
--Subject: [PATCH] tests/ts_calibrate: add missing headers
--
--The open(2) system call requires sys/types.h and sys/stat.h. Fix the following
--build failure under uClibc-ng:
--
--ts_calibrate.c: In function ?main?:
--ts_calibrate.c:248:19: error: ?S_IRUSR? undeclared (first use in this function)
--                   S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
--                   ^
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://github.com/kergoth/tslib/pull/59
-- tests/ts_calibrate.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/tests/ts_calibrate.c b/tests/ts_calibrate.c
--index c6652e479d4b..9a98d1f86205 100644
----- a/tests/ts_calibrate.c
--+++ b/tests/ts_calibrate.c
--@@ -17,6 +17,8 @@
-- #include <string.h>
-- #include <unistd.h>
-- #include <sys/time.h>
--+#include <sys/types.h>
--+#include <sys/stat.h>
-- 
-- #ifdef __ANDROID__
-- #include <fcntl.h>
---- 
--2.11.0
--
-diff --git a/package/tslib/Config.in b/package/tslib/Config.in
-index 6b86ebc..bc5d790 100644
---- a/package/tslib/Config.in
-+++ b/package/tslib/Config.in
-@@ -1,11 +1,10 @@
- config BR2_PACKAGE_TSLIB
- 	bool "tslib"
- 	depends on !BR2_STATIC_LIBS # dlopen
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 	help
--	  Tslib is an abstraction layer for touchscreen panel events.
-+	  Tslib is a filtering layer for touchscreen panel events.
- 
- 	  https://github.com/kergoth/tslib
- 
--comment "tslib needs a toolchain w/ dynamic library, headers >= 3.12"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+comment "tslib needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index cdbe0d2..6540ac8 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,2 +1,2 @@
--# Locally generated
--sha256  e935101adca980a14d1a13362796222575f99e6a41db585e8358fffddb98d92c  tslib-1.3.tar.xz
-+# taken from https://github.com/kergoth/tslib/releases/tag/1.4
-+sha256  ad0373f1dbfda27caec92cb10421227f226c79d160488f1ac915585ba947741f  tslib-1.4.tar.xz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index d3388a2..5ea526e 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.3
-+TSLIB_VERSION = 1.4
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL, LGPL
+Meh... ;-)
+
+> > +        printf "error: no toolchain found (networking issue?)\n" 2>&1; exit 1
+> What is the purpose of 2>&1 ? Don't you mean >&2 , i.e. send the print
+> command to stderr ?
+
+Yup...
+
+> > +    local tc="${2}"
+> Pretty cryptic, 'tc' for 'toolchain, IMO.
+[--SNIP--]
+> > +    if ! curl -s "${TOOLCHAINS_BASE_URL}/${toolchain}.config" >"${dir}/.config"; then
+> Here you use 'toolchain' iso 'tc', which is the loop variable used
+> before calling this function. This works 'by luck', but is not the
+> intended design.
+
+Fixed.
+
+> > +    printf ", olddefconfig"
+> > +    if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
+> > +        printf ": FAILED\n"
+> > +        return
+> > +    fi
+> > +    while read line; do
+> > +        if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
+> > +            printf ", SKIPPED\n"
+> > +            return
+> > +        fi
+> > +    done <"${cfg}"
+> 
+> I think a brief comment of what is happening before each block would be useful.
+> What is happening here? You try to set the config provided by the user
+> and then check if it worked?
+
+Would the following be OK? ;-)
+
+    We want all the options from the snippet to be present as-is (=y or
+    not set) in the actual .config; if one of them is not, it means some
+    dependency from the toolchain or arch is not available, in which
+    case this config is untestable and we skip it.
+
+> If that understanding is correct,
+> couldn't the 'SKIPPED' message not be more verbose in explaining _why_
+> it was skipped? A short explanation, and the line/config option that
+> caused this skip.
+
+I'd like to keep the output as simple as possible. The missing stuff can
+be stored in a file in the output dir.
+
+> > +${my_name}: test that a package builds with various toolchains and archs
+> 
+> I would start discussing about 'archs' vs 'arches' so perhaps we
+> should just use 'architectures'.
+
+OK.
+
+> > +${my_name} will test-build a package (as specified in a .config snippet)
+> > +against various toolchains on different architectures.
+> > +
+> > +The list of toolchains is retrieved from Buidlroot autobuilders.
+> > +
+> > +In case failures are noticed, you have the opportunity to fix the issue
+> > +and relaunch the test.
+> 
+> I find it a bit odd to 'get the opportunity to fix', isn't this
+> obvious that if it failed you need to fix and retest?
+
+I'll try to rephrase that.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
