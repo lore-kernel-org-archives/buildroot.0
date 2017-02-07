@@ -1,11 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 7 Feb 2017 15:51:49 +0100
-Subject: [Buildroot] [PATCH v5 05/19] pycompile: allow to force
-	compilation
-In-Reply-To: <1482241596-31688-6-git-send-email-jezz@sysmic.org>
+Date: Tue, 7 Feb 2017 15:51:55 +0100
+Subject: [Buildroot] [PATCH v5 06/19] python2: generate reproducible .pyc
+In-Reply-To: <1482241596-31688-7-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-6-git-send-email-jezz@sysmic.org>
-Message-ID: <CAHXCMMK1Vma3--xX=G5MFL0i4d8QROTAUk6z71_G6As2TNkxJA@mail.gmail.com>
+ <1482241596-31688-7-git-send-email-jezz@sysmic.org>
+Message-ID: <CAHXCMMK+4Cy=ei3xAP7DW+AatH=6H-89oYx6J7g=EQTGOo3s5g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +14,14 @@ To: buildroot@busybox.net
 Hi J?r?me, all,
 
 On Tue, Dec 20, 2016 at 2:46 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> By default, compile_dir() rely on modification time to know if a python file
-> have to be built again. However in some circumstances (when doing reproducible
-> builds), modification times are not reliable. Thus, this patch add a way to
-> force rebuild of all python sources.
+> .pyc files contain modification time of .py source. In order to make
+> build reproducible, we fix modification time of all .py before compiling .pyc
+> files.
+>
+> In add, since pycompile rely on modification times to know if a file need to be
+> recompiled, it is safer to force recompilation of all source files.
+>
+> This work was sponsored by `BA Robotic Systems'.
 >
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
@@ -28,39 +31,39 @@ Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 >
 > Notes:
 >     v5:
->       - Improve commit log
+>       - Typo in commit log
+>       - Explain why we pass --force to pycompile
+>       - Fix indent
 >     v3:
->       - new patch
+>       - Force compilation instead of removing .pyc
 >
->  support/scripts/pycompile.py | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+>  package/python/python.mk | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 >
-> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-> index fde711a..5598f8a 100644
-> --- a/support/scripts/pycompile.py
-> +++ b/support/scripts/pycompile.py
-> @@ -10,6 +10,7 @@ from __future__ import print_function
->  import sys
->  import py_compile
->  import compileall
-> +import argparse
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index cfd5a0a..cbe7c19 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -233,10 +233,18 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
 >
->  class ReportProblem:
->      def __nonzero__(self):
-> @@ -21,4 +22,12 @@ class ReportProblem:
->
->  report_problem = ReportProblem()
->
-> -compileall.compile_dir(sys.argv[1], quiet=report_problem)
-> +parser = argparse.ArgumentParser(description='Compile Python source files in a directory tree.')
-> +parser.add_argument("target", metavar='DIRECTORY',
-> +        help='Directory to scan')
-> +parser.add_argument("--force", action='store_true',
-> +        help="Force compilation even if alread compiled")
+> +ifeq ($(BR2_REPRODUCIBLE),y)
+> +define PYTHON_FIX_TIME
+> +       find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
+> +               xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
+> +endef
+> +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_FIX_TIME
+> +endif
 > +
-> +args = parser.parse_args()
-> +
-> +compileall.compile_dir(args.target, force=args.force, quiet=report_problem)
+>  define PYTHON_CREATE_PYC_FILES
+>         PYTHONPATH="$(PYTHON_PATH)" \
+>         $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+> -               support/scripts/pycompile.py \
+> +               support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+>                 $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
+>  endef
+>
 > --
 > 1.9.1
 >
