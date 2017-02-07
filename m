@@ -1,157 +1,77 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Tue, 7 Feb 2017 10:39:30 +0100
-Subject: [Buildroot] [PATCH v6 5/9] qt5declarative: enable Quick for
- non-GL platforms for Qt 5.8.0
-In-Reply-To: <1e155259-ffc8-04e3-c334-f6a7378fe50a@andin.de>
-References: <1485849551-20469-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1485849551-20469-6-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <f6764894-9b11-b449-f970-c94811e8089a@mind.be>
- <1e155259-ffc8-04e3-c334-f6a7378fe50a@andin.de>
-Message-ID: <129b363f-70a5-bae2-7eda-f10001e8165b@gmail.com>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Tue, 7 Feb 2017 10:46:45 +0100
+Subject: [Buildroot] [PATCH v3] gqrx: new package
+In-Reply-To: <41224157-4708-6eb4-114b-3ce5a51472df@gmail.com>
+References: <20170129112759.1690-1-gwenj@trabucayre.com>
+ <27187297-48bf-e44a-81c5-d44181588dbf@gmail.com>
+ <20170206203432.146570d7@x230.trabucayre.com>
+ <41224157-4708-6eb4-114b-3ce5a51472df@gmail.com>
+Message-ID: <20170207104645.1b20b4be@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas & All,
+Hi Romain,
 
-just to avoid duplicated efforts: are you planning to work on this
-series and prepare the next iteration? I can dedicate time to this
-tomorrow morning earliest, so then either i can start to assemble the
-patchset based on the collected comments, or test it if one is submitted
-in the meantime...
+On Mon, 6 Feb 2017 20:55:47 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
+
+> Hi Gwenhael,
+> 
+[...]
+> >>> +
+> >>> diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+> >>> new file mode 100644
+> >>> index 0000000..fadd5a2
+> >>> --- /dev/null
+> >>> +++ b/package/gqrx/Config.in
+> >>> @@ -0,0 +1,36 @@
+> >>> +comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic
+> >>> library"
+> >>> +	depends on !BR2_INSTALL_LIBSTDCPP
+> >>> || !BR2_TOOLCHAIN_HAS_THREADS || \
+> >>> +		!BR2_USE_WCHAR || BR2_STATIC_LIBS
+> >>> +
+> >>> +comment "gqrx needs gnuradio, fftw's single precision, alsa-lib
+> >>> or portaudio"
+> >>> +	depends on !BR2_PACKAGE_GNURADIO
+> >>> || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
+> >>> +		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO)
+> >>> +
+> >>> +config BR2_PACKAGE_GQRX
+> >>> +	bool "gqrx"
+> >>> +	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
+> >>> +	depends on BR2_PACKAGE_GNURADIO
+> >>> +	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO
+> >>> # gr-audio    
+> >>
+> >> I'm not sure if PORTAUDIO is really a dependency here since you
+> >> enable only the gr-audio backend.
+> >>
+> >> If you want to support gqrx with Portaudio support, you should
+> >> probably enable Portaudio backend. Otherwise keep only ALSA_LIB in
+> >> the dependency.
+> >>  
+> > gr-audio depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO
+> > consequently if I select this option I must to check if this
+> > dependencies are verified no?  
+> 
+> I don't really know gqrx, but what's happen when gr-audio package is
+> build with portaudio support and gqrx is build with Gr-audio backend?
+> Because portaudio support seems to be disabled in that case (i.e
+> build without -DWITH_PORTAUDIO). I did a test build and it build
+> fine... but I didn't test at runtime.
+> 
+> If it's ok for you, then ok :)
+> 
+line
+GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
+Is used to enable gr-audio as backend instead of, default, portaudio.
+The choice is exclusive, consequently if the backend is gr-audio, the
+build skip portaudio backend. The runtime work fine.
 
 Thanks,
-
-Zoltan Gyarmati
-https://zgyarmati.de
-
-On 02/07/2017 09:41 AM, Andreas Naumann wrote:
-> Hi,
->
-> Am 02.02.2017 um 23:20 schrieb Arnout Vandecappelle:
->>
->>
->> On 31-01-17 08:59, Zoltan Gyarmati wrote:
->>> From: Naumann Andreas <ANaumann@ultratronik.de>
->>>
->>> Since Qt 5.8.0 provides a software rasterizer we can enable Quick
->>> for non-GL
->>> platforms. However, some modules provide less functionality without
->>> OpenGL,
->>> so install steps have to be limited for the softrender only backend:
->>> - qtmultimedia does not provide qml
->>>
->>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
->>> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
->>> ---
->>>  package/qt5/qt5declarative/Config.in       | 6 +++---
->>>  package/qt5/qt5multimedia/qt5multimedia.mk | 3 +++
->>>  2 files changed, 6 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/package/qt5/qt5declarative/Config.in
->>> b/package/qt5/qt5declarative/Config.in
->>> index eba4c8d..a8accdb 100644
->>> --- a/package/qt5/qt5declarative/Config.in
->>> +++ b/package/qt5/qt5declarative/Config.in
->>> @@ -15,11 +15,11 @@ config BR2_PACKAGE_QT5DECLARATIVE
->>>  if BR2_PACKAGE_QT5DECLARATIVE
->>>
->>>  comment "quick module needs an OpenGL-capable backend"
->>> -    depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
->>> +    depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_QT5_VERSION_5_6
->>>
->>>  config BR2_PACKAGE_QT5DECLARATIVE_QUICK
->>>      bool "quick module"
->>> -    select BR2_PACKAGE_QT5BASE_OPENGL
->>> -    depends on BR2_PACKAGE_QT5_GL_AVAILABLE
->>> +    select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
->>> +    depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_QT5_VERSION_5_8
->>
->>  This means that the conditions that are added to be able to select
->> BR2_PACKAGE_QT5DECLARATIVE_QUICK are no longer correct (e.g. in
->> qt5quickcontrols). Since the condition is a bit complicated, it's
->> probably
->> better to add an auxiliary symbol:
->>
->> config BR2_PACKAGE_QT5DECLARATIVE_QUICK_AVAILABLE
->>     default y
->>     depends on BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_QT5_VERSION_5_6
->>
->> comment "quick module needs an OpenGL-capable backend"
->>     depends on !BR2_PACKAGE_QT5DECLARATIVE_QUICK_AVAILABLE
->>
->> etc.
->>
->>  Do that as a separate patch that converts all the existing users of
->> BR2_PACKAGE_QT5DECLARATIVE_QUICK.
->>
->>  Note that it has to be checked if all the packages that now depend on
->> BR2_PACKAGE_QT5_GL_AVAILABLE really do work with the softrenderer.
->>
->>
->
-> Ok, I'll do that once the new patch set is out.
->
->>
->>>
->>>  endif
->>> diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk
->>> b/package/qt5/qt5multimedia/qt5multimedia.mk
->>> index 7ce947a..b11b8d1 100644
->>> --- a/package/qt5/qt5multimedia/qt5multimedia.mk
->>> +++ b/package/qt5/qt5multimedia/qt5multimedia.mk
->>> @@ -58,11 +58,14 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
->>>  endef
->>>  endif
->>>
->>> +# QtMultimedia QMLs have a hard dependency on OpenGL -> not
->>> available for softraster backends
->>
->>  Line is too long - wrap at 80 characters.
->>
->>  Just to be sure: if you try to use these QML classes you get a
->> runtime failure,
->> correct? So the only reason not to copy them is that we know they
->> won't work anyway?
->
-> Yes. I cant quite remember how exactly it failed but it did quite
-> harshly. But that was with the beta version. Not copying the qmls of
-> course also results in an error message for applications which try to
-> include them.
-> So in the end its maybe not worth it, because it also adds maintenance
-> effort in case it is fixed upstream sometime in the future. Going to
-> remove that part.
->
->
-> regards,
-> Andreas
->
->
->>
->>  Regards,
->>  Arnout
->>
->>> +ifeq ($(BR2_PACKAGE_QT5_GL_AVAILABLE),y)
->>>  ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
->>>  define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
->>>      cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia
->>> $(TARGET_DIR)/usr/qml/
->>>  endef
->>>  endif
->>> +endif
->>>
->>>  ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
->>>  define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
->>>
->>
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170207/1883d06e/attachment.asc>
+Gwen
+[...]
