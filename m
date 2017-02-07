@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 7 Feb 2017 17:46:48 +0100
-Subject: [Buildroot] [git commit] qt5quickcontrols: More deterministic
-	target install
-Message-ID: <20170207164722.D84547FB44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-pyqt: use 'depends on' rather than
+	'select' for Qt
+Message-ID: <20170207164722.F1F1D8215E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b80efa327a98aa9e5f821ac55d459c01400b151a
+commit: https://git.buildroot.net/buildroot/commit/?id=ac73162553699d0a1f21e4d1a766b0b772d77b08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Restrict target install to quickcontrols(1) qmls only.
-
-Installing everything under qml/QtQuick includes e.g. quickcontrols2 if
-existent in staging (but not selected). Another issue may arise e.g. for a
-external package that creates more files than it installs itself under
-qml/QtQuick. In that case, it would depend on the order of the packages how
-much gets installed into target.
+When pyqt is used it's obvious that qt needs to be selected and
+configured by the user, hence we enforce it by making pyqt depending on
+qt, rather than selecting it and depending only on the qt requirements.
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5quickcontrols/qt5quickcontrols.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/python-pyqt/Config.in | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-index b33ff15..c2946bc 100644
---- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-+++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-@@ -31,7 +31,10 @@ define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
- endef
+diff --git a/package/python-pyqt/Config.in b/package/python-pyqt/Config.in
+index a50cb74..6934a4c 100644
+--- a/package/python-pyqt/Config.in
++++ b/package/python-pyqt/Config.in
+@@ -1,13 +1,9 @@
+-comment "python-pyqt needs a toolchain w/ C++, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "python-pyqt needs Qt4"
++	depends on !BR2_PACKAGE_QT
  
- define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
--	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
- endef
- 
- $(eval $(generic-package))
+ config BR2_PACKAGE_PYTHON_PYQT
+ 	bool "python-pyqt"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # qt
+-	depends on BR2_USE_MMU # qt
+-	select BR2_PACKAGE_QT
++	depends on BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_PYTHON_SIP
+ 	help
+ 	  PyQt4 for Qt Embedded 4 bindings.
