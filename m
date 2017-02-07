@@ -1,60 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Feb 2017 11:46:52 +0100
-Subject: [Buildroot] [git commit] ruby: assume we always have finite,
-	isinf and isnan for uClibc
-Message-ID: <20170207104720.41DB081909@busybox.osuosl.org>
+From: Luca Ceresoli <lucaceresoli77@gmail.com>
+Date: Tue, 7 Feb 2017 11:48:51 +0100
+Subject: [Buildroot] [PATCH] support/scripts: add script to test a
+	package
+In-Reply-To: <20170207093303.GB3578@free.fr>
+References: <1486404173-31700-1-git-send-email-yann.morin.1998@free.fr>
+ <508724e1-501e-4e44-6817-55bcdbf2f8ee@lucaceresoli.net>
+ <20170207093303.GB3578@free.fr>
+Message-ID: <d27fcad2-14be-ebe7-8786-d8d3f1726176@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99e01a35f9e6cf9d17ef65cc9c983f3b364723b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann, Thomas,
 
-On uClibc, finite, isinf and isnan are not directly implemented as
-functions.  Instead math.h #define's these to __finite, __isinf and __isnan,
-which are real functions.
+On 07/02/2017 10:33, Yann E. MORIN wrote:
+> Luca, All,
+> 
+> On 2017-02-06 21:40 +0100, Luca Ceresoli spake thusly:
+>> On 06/02/2017 19:02, Yann E. MORIN wrote:
+> [--SNIP--]
+>>> +    printf ", olddefconfig"
+>>> +    if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
+>>> +        printf ": FAILED\n"
+>>> +        return
+>>> +    fi
+>>> +    while read line; do
+>>> +        if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
+>>
+>> I suggest removing the redirects and using 'grep -q' here.
+> 
+> grep -q is not POSIX. ;-)
 
-This confuses the Ruby configure script which use AC_REPLACE_FUNCS to
-detect these, as it really checks for a function without including math.h.
+:-(
 
-Because of the naming difference the checks fail, therefore the symbols
-HAVE_FINITE, HAVE_ISINF and HAVE_ISNAN are not defined.
-Ruby code relies on those symbols in order to define its own version of
-the finite, isinf and isnan functions. Since the symbols haven't been
-defined, those definitions cause conflicts with the already-existing
-functions.
+In the meantime I finished building one package (exim) with all
+toolchains, with and without '-p exim'. I also introduced various
+errors: wrong URL, wrong build/configure commands, wrong config snippet,
+network disconnection.
 
-Fixes:
-  http://autobuild.buildroot.net/results/f34/f34dc20749c6f6d12c51eddf3ee6c2ef41d7c13d/
+It all work as expected. So, with the discussed fixed, I expect to add
+my Acked and Tested tags.
 
-[Peter: extend description, add comment in .mk]
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ruby/ruby.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 4c6459b..f0dc63b 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -29,6 +29,17 @@ RUBY_CFLAGS += -O2
- endif
- RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
- 
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+# On uClibc, finite, isinf and isnan are not directly implemented as
-+# functions.  Instead math.h #define's these to __finite, __isinf and
-+# __isnan, confusing the Ruby configure script. Tell it that they
-+# really are available.
-+RUBY_CONF_ENV += \
-+	ac_cv_func_finite=yes \
-+	ac_cv_func_isinf=yes \
-+	ac_cv_func_isnan=yes
-+endif
-+
- ifeq ($(BR2_bfin),y)
- RUBY_CONF_ENV += ac_cv_func_dl_iterate_phdr=no
- # Blackfin doesn't have FFI closure support, needed by the fiddle
+Thanks.
+-- 
+Luca
