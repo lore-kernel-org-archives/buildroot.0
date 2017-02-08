@@ -1,106 +1,112 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 08 Feb 2017 15:50:31 +0100
-Subject: [Buildroot] [PATCH] fakedate: simplify logic
-In-Reply-To: <20170207220817.5781-1-peter@korsgaard.com>
-References: <20170207220817.5781-1-peter@korsgaard.com>
-Message-ID: <3055501.XEoAAfpss1@sagittea>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed,  8 Feb 2017 13:17:43 -0200
+Subject: [Buildroot] [PATCH] util-linux: link scriptreplay with libm (for
+	isnan)
+Message-ID: <1486567063-21852-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+- Cherry-pick a patch from upstream to link scriptreplay to libm (for
+  "isnam").
+- Add a patch that improves the detection of isnan when using uClibc.
+  This patch is for util-linux v2.29.1 and must be adapted to their
+  master branch to be submitted upstream.
 
-On Tuesday 07 February 2017 23:08:17 Peter Korsgaard wrote:
-[...]
-> diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
-> index 4a9b9b5e6..abe6b38f9 100755
-> --- a/package/fakedate/fakedate
-> +++ b/package/fakedate/fakedate
-> @@ -1,4 +1,4 @@
-> -#!/bin/sh
-> +#!/bin/bash
->  # vim: set sw=4 expandtab:
->  #
->  # This program is free software; you can redistribute it and/or 
-modify
-> @@ -18,18 +18,12 @@
->  # Copyright (C) 2016 J?r?me Pouiller <jezz@sysmic.org>
->  #
->  
-> -# Sanity check
-> -if ! readlink -f "$0" | grep -q fakedate; then
-> -    echo "fakedate: Please name this script \`fakedate'"
-> -    exit 1
-> -fi
-> -
->  DATE_BIN=false
->  # Do not call `date' directly since it will produce an infinite 
-recursion.
->  # Instead, find path of true `date' binary.
-> -for P in `echo $PATH | tr ':' ' '`; do
-> +IFS=':'; for P in $PATH; do
+Fixes:
+  http://autobuild.buildroot.net/results/2c2/2c29a78ed81ca844a87dcd076ab3e14ea080296d
+  http://autobuild.buildroot.net/results/404/404b10f359b2ae8a7216729fa1bab37fed2d3d4c
 
-I think you have to reset $IFS to its previous value after used
-it.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ ...-sys-use-lm-for-scriptreplay-if-necessary.patch | 32 +++++++++++++++++++
+ ...mprove-detection-of-the-isnan-function-in.patch | 37 ++++++++++++++++++++++
+ 2 files changed, 69 insertions(+)
+ create mode 100644 package/util-linux/0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch
+ create mode 100644 package/util-linux/0002-build-sys-improve-detection-of-the-isnan-function-in.patch
 
-Globally, I dislike use of $IFS. I think it may produce unattended side 
-effects.
-
-
->      if [ -x "$P/date" ]; then
-> -        if readlink -f "$P/date" | grep -qv fakedate; then
-> +        if ! [ "$P/date" -ef "$0" ]; then
-
-Nice! I didn't know '-ef'.
-
->              DATE_BIN="$P/date"
->              break;
->          fi
-> @@ -50,8 +44,8 @@ if [ -n "$SOURCE_DATE_EPOCH" ]; then
->      done
->      if [ $FORCE_EPOCH -eq 1 ]; then
->          echo "date: Warning: using \$SOURCE_DATE_EPOCH instead of 
-true time" >&2
-> -        exec $DATE_BIN -d "@$SOURCE_DATE_EPOCH" "$@"
-> +	ARGS="-d @$SOURCE_DATE_EPOCH"
-
-Indentation seems incorrect: s/\t/        /
-
->      fi
->  fi
->  
-> -exec $DATE_BIN "$@"
-> +exec $DATE_BIN $ARGS "$@"
-
-It's matter of taste.
-
-
-> diff --git a/package/fakedate/fakedate.mk 
-b/package/fakedate/fakedate.mk
-> index 61d4bd702..e81ce5dac 100644
-> --- a/package/fakedate/fakedate.mk
-> +++ b/package/fakedate/fakedate.mk
-> @@ -8,8 +8,7 @@
->  HOST_FAKEDATE_LICENSE = GPLv2+
->  
->  define HOST_FAKEDATE_INSTALL_CMDS
-> -	$(INSTALL) -D -m 755 package/fakedate/fakedate 
-$(HOST_DIR)/usr/bin/fakedate
-> -	ln -sfn fakedate $(HOST_DIR)/usr/bin/date
-> +	$(INSTALL) -D -m 755 package/fakedate/fakedate 
-$(HOST_DIR)/usr/bin/date
-
-Hmm... In order to not confuse user, I prefer to keep fakedate as 
-original name and adding a symlink beside.
-
->  endef
->  
->  $(eval $(host-generic-package))
-> 
-
+diff --git a/package/util-linux/0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch b/package/util-linux/0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch
+new file mode 100644
+index 0000000..8333ee1
+--- /dev/null
++++ b/package/util-linux/0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch
+@@ -0,0 +1,32 @@
++From 02283be90292b2f57183aa930c4d69375f1d905d Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Wed, 18 Jan 2017 13:17:21 +0100
++Subject: [PATCH 1/2] build-sys: use -lm for scriptreplay if necessary
++
++Reported-by: Bert van Hall <bert.vanhall@avionic-design.de>
++Addresses: https://github.com/karelzak/util-linux/pull/397
++Signed-off-by: Karel Zak <kzak@redhat.com>
++(cherry picked from commit feda4342df1ced25df3d200ed23469e740196c86)
++
++Conflicts:
++	configure.ac
++---
++ term-utils/Makemodule.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/term-utils/Makemodule.am b/term-utils/Makemodule.am
++index 1b7c5fc..ad1bb1f 100644
++--- a/term-utils/Makemodule.am
+++++ b/term-utils/Makemodule.am
++@@ -21,7 +21,7 @@ if BUILD_SCRIPTREPLAY
++ usrbin_exec_PROGRAMS += scriptreplay
++ dist_man_MANS += term-utils/scriptreplay.1
++ scriptreplay_SOURCES = term-utils/scriptreplay.c
++-scriptreplay_LDADD = $(LDADD) libcommon.la
+++scriptreplay_LDADD = $(LDADD) libcommon.la $(MATH_LIBS)
++ endif # BUILD_SCRIPTREPLAY
++ 
++ 
++-- 
++2.7.4
++
+diff --git a/package/util-linux/0002-build-sys-improve-detection-of-the-isnan-function-in.patch b/package/util-linux/0002-build-sys-improve-detection-of-the-isnan-function-in.patch
+new file mode 100644
+index 0000000..4f1bb23
+--- /dev/null
++++ b/package/util-linux/0002-build-sys-improve-detection-of-the-isnan-function-in.patch
+@@ -0,0 +1,37 @@
++From 064a0445f33a67e5498d492dabe0dfc687859756 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@datacom.ind.br>
++Date: Wed, 8 Feb 2017 09:29:30 -0200
++Subject: [PATCH 2/2] build-sys: improve detection of the "isnan" function in
++ uClibc
++
++Since commit beceb14b450ded6560ed743634a5e80604a8edf3, MATH_LIBS is set
++to "-lm" when the isnan function is detected. In uClibc, however, isnan
++is a macro that calls __isnan, __isnanf, or __isnanl, depending on the
++size of the argument (double, float or long double).
++
++Fixes:
++  http://autobuild.buildroot.net/results/2c2/2c29a78ed81ca844a87dcd076ab3e14ea080296d/
++  http://autobuild.buildroot.net/results/404/404b10f359b2ae8a7216729fa1bab37fed2d3d4c/
++
++Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
++---
++ configure.ac | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index cc0563b..d03469c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -428,7 +428,8 @@ AC_CHECK_FUNCS([reboot], [have_reboot=yes],[have_reboot=no])
++ AM_CONDITIONAL([HAVE_OPENAT], [test "x$have_openat" = xyes])
++ 
++ AC_CHECK_FUNCS([isnan], [],
++-       [AC_CHECK_LIB([m], [isnan], [MATH_LIBS="-lm"])]
+++	[AC_CHECK_LIB([m], [isnan], [MATH_LIBS="-lm"])]
+++	[AC_CHECK_LIB([m], [__isnan], [MATH_LIBS="-lm"])]
++ )
++ AC_SUBST([MATH_LIBS])
++ 
++-- 
++2.7.4
++
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+2.7.4
