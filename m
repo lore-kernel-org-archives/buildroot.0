@@ -1,48 +1,116 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Wed,  8 Feb 2017 11:26:33 +0100
-Subject: [Buildroot] [PATCH v2 0/2] Qt5 submenu updates
-Message-ID: <1486549595-15691-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Date: Wed,  8 Feb 2017 11:26:34 +0100
+Subject: [Buildroot] [PATCH v2 1/2] remove menu comment about deprecated
+	modules
+In-Reply-To: <1486549595-15691-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1486549595-15691-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <1486549595-15691-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patchset removes the 'deprecated' section from the Qt5 submenu
-and adds hints to the help text about the tech preview/deprecated status
-of the modules as proposed by Thomas and also adds extended help texts to the various
-Qt5 modules, as proposed by Arnout.
+As now the Qt version is configurable to simplify the menu display
+logic we remove the menu comment about deprecated modules and
+indicate it in the relevant modules' help text instead, and also
+mention in the help text if a package's tech preview status has been
+changed between Qt 5.6 and Qt 5.8
 
-v2: Add mentioning of tech preview status as well
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ package/qt5/Config.in                   | 7 +++----
+ package/qt5/qt53d/Config.in             | 4 ++++
+ package/qt5/qt5enginio/Config.in        | 3 +++
+ package/qt5/qt5quickcontrols2/Config.in | 3 +++
+ package/qt5/qt5serialbus/Config.in      | 3 +++
+ 5 files changed, 16 insertions(+), 4 deletions(-)
 
-Zoltan Gyarmati (2):
-  remove menu comment about deprecated modules
-  package/qt5/*: add meaningful help texts and package URLs
-
- package/qt5/Config.in                     | 7 +++----
- package/qt5/qt53d/Config.in               | 4 ++++
- package/qt5/qt5canvas3d/Config.in         | 5 +++--
- package/qt5/qt5connectivity/Config.in     | 6 ++++--
- package/qt5/qt5declarative/Config.in      | 6 ++++--
- package/qt5/qt5enginio/Config.in          | 8 ++++++--
- package/qt5/qt5graphicaleffects/Config.in | 6 ++++--
- package/qt5/qt5imageformats/Config.in     | 5 +++--
- package/qt5/qt5location/Config.in         | 6 ++++--
- package/qt5/qt5multimedia/Config.in       | 7 +++++--
- package/qt5/qt5quickcontrols/Config.in    | 5 +++--
- package/qt5/qt5quickcontrols2/Config.in   | 5 ++++-
- package/qt5/qt5script/Config.in           | 5 +++--
- package/qt5/qt5sensors/Config.in          | 5 +++--
- package/qt5/qt5serialbus/Config.in        | 5 ++++-
- package/qt5/qt5serialport/Config.in       | 6 ++++--
- package/qt5/qt5svg/Config.in              | 5 +++--
- package/qt5/qt5tools/Config.in            | 5 +++--
- package/qt5/qt5webchannel/Config.in       | 6 ++++--
- package/qt5/qt5webkit/Config.in           | 6 ++++--
- package/qt5/qt5websockets/Config.in       | 7 +++++--
- package/qt5/qt5x11extras/Config.in        | 5 +++--
- package/qt5/qt5xmlpatterns/Config.in      | 5 +++--
- 23 files changed, 86 insertions(+), 44 deletions(-)
-
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 6929434..3b2c724 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -57,23 +57,22 @@ source "package/qt5/qt5base/Config.in"
+ source "package/qt5/qt5canvas3d/Config.in"
+ source "package/qt5/qt5connectivity/Config.in"
+ source "package/qt5/qt5declarative/Config.in"
++source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5location/Config.in"
+ source "package/qt5/qt5multimedia/Config.in"
+ source "package/qt5/qt5quickcontrols/Config.in"
+ source "package/qt5/qt5quickcontrols2/Config.in"
++source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5sensors/Config.in"
+ source "package/qt5/qt5serialbus/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
+ source "package/qt5/qt5svg/Config.in"
+ source "package/qt5/qt5tools/Config.in"
+ source "package/qt5/qt5webchannel/Config.in"
++source "package/qt5/qt5webkit/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
+-comment "legacy compatibility"
+-source "package/qt5/qt5enginio/Config.in"
+-source "package/qt5/qt5script/Config.in"
+-source "package/qt5/qt5webkit/Config.in"
+ endif
+diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
+index ff50204..27f27a8 100644
+--- a/package/qt5/qt53d/Config.in
++++ b/package/qt5/qt53d/Config.in
+@@ -12,6 +12,10 @@ config BR2_PACKAGE_QT53D
+ 
+ 	  This package corresponds to the qt53d module.
+ 
++
++	  This module was in tech preview in Qt 5.6, and promoted
++	  to a core module in Qt 5.7.0.
++
+ 	  Enable the assimp package to gain the assimp sceneparser plugin.
+ 
+ 	  http://doc.qt.io/qt-5/qt3d-index.html
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index fcb866c..dba75e2 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -10,4 +10,7 @@ config BR2_PACKAGE_QT5ENGINIO
+ 
+ 	  This package corresponds to the qt5enginio module.
+ 
++	  This package has been tagged as deprecated since version
++	  5.6 and not recommended for new design.
++
+ 	  http://qt.io
+diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
+index 1e57674..d2267cb 100644
+--- a/package/qt5/qt5quickcontrols2/Config.in
++++ b/package/qt5/qt5quickcontrols2/Config.in
+@@ -10,6 +10,9 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
+ 
+ 	  This package corresponds to the qt5quickcontrols2 module.
+ 
++	  This module was in tech preview in Qt 5.6, and promoted
++	  to a core module in Qt 5.7.0.
++
+ 	  http://qt.io
+ 
+ comment "qt5quickcontrols2 needs an OpenGL-capable backend"
+diff --git a/package/qt5/qt5serialbus/Config.in b/package/qt5/qt5serialbus/Config.in
+index f5b713d..3960ada 100644
+--- a/package/qt5/qt5serialbus/Config.in
++++ b/package/qt5/qt5serialbus/Config.in
+@@ -9,6 +9,9 @@ config BR2_PACKAGE_QT5SERIALBUS
+ 
+ 	  This package corresponds to the qt5serialbus module.
+ 
++	  This module was in tech preview in Qt 5.6, and promoted
++	  to a core module in Qt 5.8.0.
++
+ 	  http://qt.io
+ 
+ comment "qt5serialbus needs headers >= 3.6"
 -- 
 2.7.4
