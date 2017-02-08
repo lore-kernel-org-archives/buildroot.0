@@ -1,45 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Feb 2017 11:05:56 +0100
-Subject: [Buildroot] [PATCH 1/5] support/testing: core testing
- infrastructure
-In-Reply-To: <CAAXf6LXnRWvi3i0B2q1r_gRjgTkyNjXhdSasMLyYiFrr3=RTWg@mail.gmail.com>
-References: <1486467363-19881-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1486467363-19881-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LXnRWvi3i0B2q1r_gRjgTkyNjXhdSasMLyYiFrr3=RTWg@mail.gmail.com>
-Message-ID: <20170208110556.6a3ed63a@free-electrons.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Wed,  8 Feb 2017 11:26:33 +0100
+Subject: [Buildroot] [PATCH v2 0/2] Qt5 submenu updates
+Message-ID: <1486549595-15691-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patchset removes the 'deprecated' section from the Qt5 submenu
+and adds hints to the help text about the tech preview/deprecated status
+of the modules as proposed by Thomas and also adds extended help texts to the various
+Qt5 modules, as proposed by Arnout.
 
-On Wed, 8 Feb 2017 10:50:13 +0100, Thomas De Schampheleire wrote:
+v2: Add mentioning of tech preview status as well
 
-> Is there a particular reason why you use unittest and nose2, rather
-> than the popular pytest ?
+Zoltan Gyarmati (2):
+  remove menu comment about deprecated modules
+  package/qt5/*: add meaningful help texts and package URLs
 
-First because I'm not a Pythonist, so I have no idea what is "popular"
-in the Python world.
+ package/qt5/Config.in                     | 7 +++----
+ package/qt5/qt53d/Config.in               | 4 ++++
+ package/qt5/qt5canvas3d/Config.in         | 5 +++--
+ package/qt5/qt5connectivity/Config.in     | 6 ++++--
+ package/qt5/qt5declarative/Config.in      | 6 ++++--
+ package/qt5/qt5enginio/Config.in          | 8 ++++++--
+ package/qt5/qt5graphicaleffects/Config.in | 6 ++++--
+ package/qt5/qt5imageformats/Config.in     | 5 +++--
+ package/qt5/qt5location/Config.in         | 6 ++++--
+ package/qt5/qt5multimedia/Config.in       | 7 +++++--
+ package/qt5/qt5quickcontrols/Config.in    | 5 +++--
+ package/qt5/qt5quickcontrols2/Config.in   | 5 ++++-
+ package/qt5/qt5script/Config.in           | 5 +++--
+ package/qt5/qt5sensors/Config.in          | 5 +++--
+ package/qt5/qt5serialbus/Config.in        | 5 ++++-
+ package/qt5/qt5serialport/Config.in       | 6 ++++--
+ package/qt5/qt5svg/Config.in              | 5 +++--
+ package/qt5/qt5tools/Config.in            | 5 +++--
+ package/qt5/qt5webchannel/Config.in       | 6 ++++--
+ package/qt5/qt5webkit/Config.in           | 6 ++++--
+ package/qt5/qt5websockets/Config.in       | 7 +++++--
+ package/qt5/qt5x11extras/Config.in        | 5 +++--
+ package/qt5/qt5xmlpatterns/Config.in      | 5 +++--
+ 23 files changed, 86 insertions(+), 44 deletions(-)
 
-What lead me to use nose2 is because it is capable of executing tests
-in parallel. In practice, this currently doesn't work due to how the
-Qemu emulation is started (I use a fixed TCP port for the telnet
-connection used for the serial port), but if we fix that, tests can be
-executed in parallel, this is something I had tested when choosing
-nose2.
-
-Apparently, pytest can also run tests in parallel, according to
-http://pytest.org/dev/xdist.html.
-
-I honestly don't care which Python testing infrastructure is used, as
-long as there is one. If you think pytest is better (and indeed its
-website seems to be nicely documented and it seems to offer lots of
-features), then patches are welcome :-)
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
