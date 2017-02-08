@@ -1,33 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Feb 2017 15:31:28 +0100
-Subject: [Buildroot] [PATCH v5 01/19] reproducible: fix DATE/TIME macros
- in toolchain-wrapper
-In-Reply-To: <87fujopxh4.fsf@dell.be.48ers.dk>
-References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <20170208132039.0160d3ea@free-electrons.com>
- <87k290pzha.fsf@dell.be.48ers.dk> <1762252.FU4Uq4VmnQ@sagittea>
- <87fujopxh4.fsf@dell.be.48ers.dk>
-Message-ID: <20170208153128.09d1e74a@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 08 Feb 2017 15:42:31 +0100
+Subject: [Buildroot] [PATCH] wget: add upstream patch to fix build
+	failure
+In-Reply-To: <1486560738-4708-1-git-send-email-rahul.bedarkar@imgtec.com>
+ (Rahul Bedarkar's message of "Wed, 8 Feb 2017 19:02:18 +0530")
+References: <1486560738-4708-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <87bmucpwvc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Rahul" == Rahul Bedarkar <rahul.bedarkar@imgtec.com> writes:
 
-On Wed, 08 Feb 2017 15:29:27 +0100, Peter Korsgaard wrote:
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/fed/fed53124d43c37629295ddc4cdc371f4dc862860
 
->  >   2. Postpone problem: Buildroot also contains patches under GPLv3 and
->  >      anyway, users will use a GPLv3 compiler.  
-> 
-> I think that is the most sensible thing to do. What do others say?
+ > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 
-Indeed, gcc itself, which is called by this wrapper, is under GPLv3. So
-it's not a big deal if the wrapper is GPLv3 I believe.
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
