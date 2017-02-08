@@ -1,12 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Feb 2017 10:01:19 +0100
+Date: Wed, 8 Feb 2017 10:02:48 +0100
 Subject: [Buildroot] Interaction between SITE_METHOD=LOCAL and .patch
  files
-In-Reply-To: <o7cvgb$209$1@blaine.gmane.org>
+In-Reply-To: <87o9ydrdep.fsf@dell.be.48ers.dk>
 References: <o7araj$clq$1@blaine.gmane.org>
  <0a532bbd-e625-a41e-ece3-6974bd63d4a2@mind.be>
- <o7cvgb$209$1@blaine.gmane.org>
-Message-ID: <20170208100119.6b551420@free-electrons.com>
+ <o7cvgb$209$1@blaine.gmane.org> <o7d0l8$c5k$1@blaine.gmane.org>
+ <87o9ydrdep.fsf@dell.be.48ers.dk>
+Message-ID: <20170208100248.5fa0965d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,31 +16,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 7 Feb 2017 17:18:04 +0000 (UTC), Grant Edwards wrote:
+On Tue, 07 Feb 2017 20:47:42 +0100, Peter Korsgaard wrote:
 
-> Can SITE_METHOD = local be used with a custom tarball?
+>  > Is it just the .patch files found in the package directory that are
+>  > skipped in the [FOO_SITE_METHOD = local] case?  Or are all patches
+>  > skipped (also skipping those specified by FOO_PATCH and
+>  > BR2_GLOBAL_PATCH_DIR)?  
+> 
+> All patches, it skips directly to to the configure step.
 
-No. Arnout got it wrong here. You've got the following choices:
+Just to clarify things:
 
- <pkg>_SITE_METHOD = local
- <pkg>_SITE = /path/to/directory
+ * For all site methods (except local/OVERRIDE_SRCDIR), the steps
+   through which a package go are:
 
-*OR*
+   source -> extract -> patch -> configure -> build -> install
 
- <pkg>_SITE_METHOD = file
- <pkg>_SITE = /path/to/local/tarball.tar.gz
+ * For the local site method and OVERRIDE_SRCDIR, the steps through
+   which a package go are:
 
-So the "local" site method points to a directory, and patches are *NOT*
-applied. The "file" site method points to a local tarball, and patches
-*ARE* applied.
+   rsync -> configure -> build -> install
 
-> My understanding from the docs is that it requires an unpacked source
-> directory tree [in which, as you said, one can easily apply whatever
-> patches are required].
-
-Your understanding is correct.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
