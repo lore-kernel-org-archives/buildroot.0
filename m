@@ -1,36 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Feb 2017 14:46:09 +0100
-Subject: [Buildroot] [PATCH v5 01/19] reproducible: fix DATE/TIME macros
-	in toolchain-wrapper
-In-Reply-To: <20170208132039.0160d3ea@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 8 Feb 2017 13:20:39 +0100")
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Wed, 08 Feb 2017 15:10:37 +0100
+Subject: [Buildroot] [PATCH v5 02/19] fakedate: new package
+In-Reply-To: <87fujprajp.fsf@dell.be.48ers.dk>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-2-git-send-email-jezz@sysmic.org>
- <87k291rawq.fsf@dell.be.48ers.dk> <2610985.18vsFpMzc5@sagittea>
- <20170208132039.0160d3ea@free-electrons.com>
-Message-ID: <87k290pzha.fsf@dell.be.48ers.dk>
+ <1482241596-31688-3-git-send-email-jezz@sysmic.org>
+ <87fujprajp.fsf@dell.be.48ers.dk>
+Message-ID: <4829509.5X0V2zccCj@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello Peter,
 
- > Hello,
- > On Wed, 08 Feb 2017 11:07:07 +0100, J?r?me Pouiller wrote:
+On Tuesday 07 February 2017 21:49:30 Peter Korsgaard wrote:
+> >>>>> "J?r?me" == J?r?me Pouiller <jezz@sysmic.org> writes:
+> 
+>  > `date' is widely used by packages to include build information in 
+their
+>  > binaries. Unfortunately, this is incompatible with  
+BR2_REPRODUCIBLE.
+> 
+>  > Instead of having to identify all `date' invocations in the 
+different
+>  > packages, this commit adds a small tool that allows to always 
+return
+>  > the same date.
+[...]
 
- >> > I'm not sure this detailed error handling is really needed, but OK.  
- >> 
- >> In fact I copy-paste get_source_date_epoch() from gcc git. So toolchain
- >> wrapper will produce exactly same error messages than upstream gcc
- >> (and it include same coding style error :-) ).
+> Would using something like libfaketime not be a more generic solution?
+> 
+> https://github.com/wolfcw/libfaketime
 
- > So now our toolchain-wrapper is under GPLv3 :-/
+You mean enabling something like libfaketime for whole compile process?
 
-Yes, if the function is considered large and and original enough to be
-considered copyrightable - Afterall it is just a getenv + strtoll and a
-bit of error checking.
+I think it would break compilation process. In add, I prefer to have a 
+very tight control over necessary conditions to override 'date' output.
 
 -- 
-Bye, Peter Korsgaard
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
