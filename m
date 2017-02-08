@@ -1,38 +1,58 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 8 Feb 2017 09:16:01 -0200 (BRST)
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-02-07
-In-Reply-To: <20170208072913.30FDC20CBC@mail.free-electrons.com>
-References: <20170208072913.30FDC20CBC@mail.free-electrons.com>
-Message-ID: <1076890080.1905896.1486552561123.JavaMail.zimbra@datacom.ind.br>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 8 Feb 2017 12:42:48 +0100
+Subject: [Buildroot] [PATCH 1/5] support/testing: core testing
+	infrastructure
+In-Reply-To: <20170208110556.6a3ed63a@free-electrons.com>
+References: <1486467363-19881-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1486467363-19881-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LXnRWvi3i0B2q1r_gRjgTkyNjXhdSasMLyYiFrr3=RTWg@mail.gmail.com>
+ <20170208110556.6a3ed63a@free-electrons.com>
+Message-ID: <CAAXf6LWp4w+1J5MqYp6uOXWvXG3s0+V1qRt0p8jFM4pTv-qatg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Sent: Wednesday, February 8, 2017 5:29:13 AM
-> Subject: [autobuild.buildroot.net] Your build results for 2017-02-07
-
+On Wed, Feb 8, 2017 at 11:05 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
-> 
-> This is the list of Buildroot build failures that occured on
-> 2017-02-07, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
-> 
-> Build failures related to your packages:
-> 
->         arc |              util-linux-2.29.1 |
->         http://autobuild.buildroot.net/results/404b10f359b2ae8a7216729fa1bab37fed2d3d4c
->         arc |              util-linux-2.29.1 |
->         http://autobuild.buildroot.net/results/2c29a78ed81ca844a87dcd076ab3e14ea080296d
+>
+> On Wed, 8 Feb 2017 10:50:13 +0100, Thomas De Schampheleire wrote:
+>
+>> Is there a particular reason why you use unittest and nose2, rather
+>> than the popular pytest ?
+>
+> First because I'm not a Pythonist, so I have no idea what is "popular"
+> in the Python world.
+>
+> What lead me to use nose2 is because it is capable of executing tests
+> in parallel. In practice, this currently doesn't work due to how the
+> Qemu emulation is started (I use a fixed TCP port for the telnet
+> connection used for the serial port), but if we fix that, tests can be
+> executed in parallel, this is something I had tested when choosing
+> nose2.
+>
+> Apparently, pytest can also run tests in parallel, according to
+> http://pytest.org/dev/xdist.html.
+>
+> I honestly don't care which Python testing infrastructure is used, as
+> long as there is one. If you think pytest is better (and indeed its
+> website seems to be nicely documented and it seems to offer lots of
+> features), then patches are welcome :-)
+>
 
-I found the cause of the problem. A patch to fix it will soon be submitted to buildroot and upstream.
+We have switched from nose (1) to pytest in Kallithea a while ago.
+We are not using xdist at the moment though, because our setup code is
+not ready for it.
 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Something must be done. This is something. Therefore we must do it.?
-(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
+To switch to pytest now shouldn't be complex, it can off-the-shelve
+continue to support unittest-style tests. However, pytest 'fixtures'
+are the alternative to such setup/teardown methods and are more
+powerful. But you don't _have_ to use them.
+
+Anyway, I agree that it is not crucial at all, and the actual impact
+of nose on the code is currently minimal, so switching can be done at
+a later time.
+
+/Thomas
