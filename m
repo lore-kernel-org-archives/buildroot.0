@@ -1,210 +1,121 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  8 Feb 2017 21:15:24 +0100
-Subject: [Buildroot] [PATCH 1/6] support/scripts: add script to test a
-	package
+Date: Wed,  8 Feb 2017 21:15:26 +0100
+Subject: [Buildroot] [PATCH 3/6] support/test-pkg: report number and types
+	of failures
 In-Reply-To: <cover.1486584734.git.yann.morin.1998@free.fr>
 References: <cover.1486584734.git.yann.morin.1998@free.fr>
-Message-ID: <085941ea3e9e9f34405ac10780d5c8aa2a6317aa.1486584734.git.yann.morin.1998@free.fr>
+Message-ID: <dcd8080c616142b0f7f761e3749c92306b2f6863.1486584734.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This script helps in testing that a package builds fine on a wide range
-of architectures and toolchains: BE/LE, 32/64-bit, musl/glibc/uclibc...
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[yann.morin.1998 at free.fr:
- - completely rewrite the script from Thomas, with help from Luca
-]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
-Changes v2 -> v3:
-  - grammar  (Luca)
----
- support/scripts/test-pkg | 168 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 168 insertions(+)
- create mode 100755 support/scripts/test-pkg
+ support/scripts/test-pkg | 42 ++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 36 insertions(+), 6 deletions(-)
 
 diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-new file mode 100755
-index 0000000..008b32c
---- /dev/null
+index 5eeaf63..f40b51d 100755
+--- a/support/scripts/test-pkg
 +++ b/support/scripts/test-pkg
-@@ -0,0 +1,168 @@
-+#!/bin/bash
-+set -e
-+
-+TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv'
-+
-+main() {
-+    local o O opts
-+    local cfg dir pkg toolchain
-+    local -a toolchains
-+
-+    o='hc:d:p:'
-+    O='help,config-snippet:build-dir:package:'
-+    opts="$( getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}"  )"
-+    eval set -- "${opts}"
-+
-+    while [ ${#} -gt 0 ]; do
-+        case "${1}" in
-+        (-h|--help)
-+            help; exit 0
-+            ;;
-+        (-c|--config-snippet)
-+            cfg="${2}"; shift 2
-+            ;;
-+        (-d|--build-dir)
-+            dir="${2}"; shift 2
-+            ;;
-+        (-p|--package)
-+            pkg="${2}"; shift 2
-+            ;;
-+        (--)
-+            shift; break
-+            ;;
+@@ -6,6 +6,7 @@ TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-conf
+ main() {
+     local o O opts
+     local cfg dir pkg toolchain
++    local ret nb_dl nb_cfg nb_skip nb_clean nb_build
+     local -a toolchains
+ 
+     o='hc:d:p:'
+@@ -51,9 +52,38 @@ main() {
+         printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
+     fi
+ 
++    nb_dl=0
++    nb_cfg=0
++    nb_skip=0
++    nb_clean=0
++    nb_build=0
+     for toolchain in "${toolchains[@]}"; do
+-        build_one "${dir}" "${toolchain}" "${cfg}" "${pkg}"
++        build_one "${dir}" "${toolchain}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
++        case ${ret} in
++        (0) ;;
++        (1) : $((nb_dl++));;
++        (2) : $((nb_cfg++));;
++        (3) : $((nb_skip++));;
++        (4) : $((nb_clean++));;
++        (5) : $((nb_build++));;
 +        esac
-+    done
-+    if [ -z "${cfg}" ]; then
-+        printf "error: no config snippet specified\n" >&2; exit 1
+     done
++
++    if [ ${nb_dl} -ne 0 ]; then
++        printf "%d configurations could not be downloaded\n" ${nb_dl}
 +    fi
-+    if [ -z "${dir}" ]; then
-+        dir="${HOME}/br-test-pkg"
++    if [ ${nb_cfg} -ne 0 ]; then
++        printf "%d configurations could not be applied\n" ${nb_cfg}
 +    fi
-+
-+    # Extract the URLs of the toolchains; drop internal toolchains
-+    # E.g.: http://server/path/to/name.config,arch,libc
-+    #  -->  http://server/path/to/name.config
-+    toolchains=( $( curl -s "${TOOLCHAINS_URL}" \
-+                    |sed -r -e 's/,.*//; /internal/d;'
-+                  )
-+               )
-+
-+    if [ ${#toolchains[@]} -eq 0 ]; then
-+        printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
++    if [ ${nb_skip} -ne 0 ]; then
++        printf "%d configurations were skipped\n" ${nb_skip}
 +    fi
-+
-+    for toolchain in "${toolchains[@]}"; do
-+        build_one "${dir}" "${toolchain}" "${cfg}" "${pkg}"
-+    done
-+}
-+
-+build_one() {
-+    local dir="${1}"
-+    local url="${2}"
-+    local cfg="${3}"
-+    local pkg="${4}"
-+    local toolchain line
-+
-+    # Using basename(1) on a URL works nicely
-+    toolchain="$( basename "${url}" .config )"
-+
-+    printf "%40s: " "${toolchain}"
-+
-+    dir="${dir}/${toolchain}"
-+    mkdir -p "${dir}"
-+
-+    printf "download config"
-+    if ! curl -s "${url}" >"${dir}/.config"; then
-+        printf ": FAILED\n"
-+        return
++    if [ ${nb_clean} -ne 0 ]; then
++        printf "%d configurations could not be dircleaned\n" ${nb_clean}
 +    fi
-+
-+    cat >>"${dir}/.config" <<-_EOF_
-+	BR2_INIT_NONE=y
-+	BR2_SYSTEM_BIN_SH_NONE=y
-+	# BR2_PACKAGE_BUSYBOX is not set
-+	# BR2_TARGET_ROOTFS_TAR is not set
-+	_EOF_
-+    cat "${cfg}" >>"${dir}/.config"
-+
-+    printf ", olddefconfig"
-+    if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
-+        printf ": FAILED\n"
-+        return
++    if [ ${nb_build} -ne 0 ]; then
++        printf "%d configurations would not build\n" ${nb_build}
 +    fi
-+    # We want all the options from the snippet to be present as-is (set
-+    # or not set) in the actual .config; if one of them is not, it means
-+    # some dependency from the toolchain or arch is not available, in
-+    # which case this config is untestable and we skip it.
-+    while read line; do
-+        if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
-+            printf ", SKIPPED\n"
-+            return
-+        fi
-+    done <"${cfg}"
-+
-+    if [ -n "${pkg}" ]; then
-+        printf ", dirclean"
-+        if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
-+            printf ": FAILED\n"
-+            return
-+        fi
-+    fi
-+
-+    printf ", build"
-+    # shellcheck disable=SC2086
-+    if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
-+        printf ": FAILED\n"
-+        return
-+    fi
-+
-+    printf ": OK\n"
-+}
-+
-+help() {
-+    cat <<_EOF_
-+test-pkg: test-build a package against various toolchains and architectures
-+
-+The supplied config snippet is appended to each toolchain config, the
-+resulting configuration is checked to ensure it still contains all options
-+specified in the snippet; if any is missing, the build is skipped, on the
-+assumption that the package under test requires a toolchain or architecture
-+feature that is missing.
-+
-+In case failures are noticed, you can fix the package and just re-run the
-+same command again; it will re-run the test where it failed. If you did
-+specify a package (with -p), the package build dir will be removed first.
-+
-+The list of toolchains is retrieved from the Buildroot autobuilders, available
-+at ${TOOLCHAINS_URL}.
-+
-+Options:
-+
-+    -h, --help
-+        Print this help.
-+
-+    -c CFG, --config-snippet CFG
-+        Use the CFG file as the source for the config snippet. This file
-+        should contain all the config options required to build a package.
-+
-+    -d DIR, --build-dir DIR
-+        Do the builds in directory DIR, one sub-dir per toolchain.
-+
-+    -p PKG, --package PKG
-+        Test-build the package PKG, by running 'make PKG'; if not specified,
-+        just runs 'make'.
-+
-+Example:
-+
-+    Testing libcec would require a config snippet that contains:
-+        BR2_PACKAGE_LIBCEC=y
-+
-+    Testing libcurl with openSSL support would require a snippet such as:
-+        BR2_PACKAGE_OPENSSL=y
-+        BR2_PACKAGE_LIBCURL=y
-+
-+_EOF_
-+}
-+
-+my_name="${0##*/}"
-+main "${@}"
+ }
+ 
+ build_one() {
+@@ -74,7 +104,7 @@ build_one() {
+     printf "download config"
+     if ! curl -s "${url}" >"${dir}/.config"; then
+         printf ": FAILED\n"
+-        return
++        return 1
+     fi
+ 
+     cat >>"${dir}/.config" <<-_EOF_
+@@ -88,7 +118,7 @@ build_one() {
+     printf ", olddefconfig"
+     if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
+         printf ": FAILED\n"
+-        return
++        return 2
+     fi
+     # We want all the options from the snippet to be present as-is (set
+     # or not set) in the actual .config; if one of them is not, it means
+@@ -103,7 +133,7 @@ build_one() {
+     done <"${cfg}" >"${dir}/missing.config"
+     if ${skip}; then
+         printf ", SKIPPED\n"
+-        return
++        return 3
+     fi
+     # Remove file, it's empty anyway.
+     rm -f "${dir}/missing.config"
+@@ -112,7 +142,7 @@ build_one() {
+         printf ", dirclean"
+         if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
+             printf ": FAILED\n"
+-            return
++            return 4
+         fi
+     fi
+ 
+@@ -120,7 +150,7 @@ build_one() {
+     # shellcheck disable=SC2086
+     if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
+         printf ": FAILED\n"
+-        return
++        return 5
+     fi
+ 
+     printf ": OK\n"
 -- 
 2.7.4
