@@ -1,56 +1,56 @@
-From: Ilias Apalodimas <apalos@gmail.com>
-Date: Wed, 8 Feb 2017 17:43:04 +0200
-Subject: [Buildroot] [PATCHv2 1/1] Added keepalived
-In-Reply-To: <877f50pwly.fsf@dell.be.48ers.dk>
-References: <1486542692-26969-1-git-send-email-apalos@gmail.com>
- <877f50pwly.fsf@dell.be.48ers.dk>
-Message-ID: <CADvJCocfcTVx31KuuqMrCWS4zYKH2PAOWMFwee6tELNY_0jo3A@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 8 Feb 2017 11:20:32 -0500
+Subject: [Buildroot] [PATCH 3/3] ncurses: bump to 6.0
+In-Reply-To: <20170208095903.1ad79bd4@free-electrons.com>
+References: <20170207180239.31904-1-Adamduskett@outlook.com>
+ <20170208095903.1ad79bd4@free-electrons.com>
+Message-ID: <CAFSsvmou7U-Qr=n56+iCkfUvuYWeZFexaBpX+RmcxhUpJSzFwg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will do on first chance!
+Hi Thomas
 
-Regards
-Ilias
+On Wed, Feb 8, 2017 at 3:59 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue,  7 Feb 2017 13:02:39 -0500, Adam Duskett wrote:
+>> ncurses 6.0 has been out for a while now (August 8th 2015!)  This
+>> patch brings us up to the latest version.  Not too many changes had
+>> to occure to get this working well.
+>>
+>> - The first patch is no longer needed as it was fixed in the new release.
+>> - The other two packages are still applicable, however I did have to change
+>>   the line numbers.  Because that is the only thing I had to change, I didn't
+>>   put my signature on them.  If this is needed I will gladly do so.
+>> - A new option: --with-pkg-config-libdir has been added. Without it
+>>   pkg files wouldn't install to the correct location.
+>> - NCURSES_ABI_VERSION is no longer needed, as there is only 6.
+>>
+>> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+>
+> Did you test this with a large number of ncurses reverse dependencies
+> (i.e packages that depend on ncurses) ?
+>
+> Major updates to ncurses tend to easily break packages that rely on
+> ncurses, so we really need to check a good number of packages before
+> committing this. Could you indicate which Buildroot configuration you
+> have tested to validate this bump?
+>
 
-On Wed, Feb 8, 2017 at 4:48 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Ilias" == Ilias Apalodimas <apalos@gmail.com> writes:
+As previously talked about in IRC, I am using several packages that
+require ncurses.
+SNGREP, alsamixer, readline, and nano are just a few of them.   They
+all work well with 6.0!
+
+> Thanks,
 >
->  > Changelog:
->  >  - Added keepalived on DEVELOPERS file
->  >  - Fix package dependecies as proposed(MMU support)
->  >  - Added keepalived.hash
->
-> Thanks for the update. This changelog should not be part of the git
-> commit, so it should go after the --- line.
->
->  > +++ b/package/keepalived/keepalived.mk
->  > @@ -0,0 +1,13 @@
->  > +################################################################################
->  > +#
->  > +# keepalived
->  > +#
->  > +################################################################################
->  > +
->  > +KEEPALIVED_VERSION = 1.3.2
->  > +KEEPALIVED_SITE = http://www.keepalived.org/software
->  > +KEEPALIVED_DEPENDENCIES = popt openssl
->  > +KEEPALIVED_LICENSE = GPLv2+
->  > +KEEPALIVED_LICENSE_FILES = COPYING
->  > +
->  > +$(eval $(autotools-package))
->
-> This looks good, but a quick look at the configure script shows that it
-> uses pkg-config so you should most likely depend on host-pkgconf and
-> there are a number of optional dependencies that we do have in Buildroot
-> (E.G. dbus, glib, ipset, libnl, netsnmp, ..) that should either be
-> enabled/disabled depending on if those packages are enabled or
-> forcefully disabled to ensure reproducable builds.
->
-> Can you look into that please?
->
+> Thomas
 > --
-> Bye, Peter Korsgaard
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+Adam
