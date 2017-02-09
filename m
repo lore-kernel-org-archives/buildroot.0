@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 21:40:44 +0100
-Subject: [Buildroot] [PATCH 7/7] ddrescue: fix target build
-In-Reply-To: <99cad486180867002ec348364cf9ac9028b74d0e.1486669818.git.baruch@tkos.co.il>
-References: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
- <99cad486180867002ec348364cf9ac9028b74d0e.1486669818.git.baruch@tkos.co.il>
-Message-ID: <20170209214044.6aacb66e@free-electrons.com>
+Date: Thu, 9 Feb 2017 21:42:09 +0100
+Subject: [Buildroot] [PATCH v3 2/2] Added keepalived
+In-Reply-To: <1486672636-20750-2-git-send-email-apalos@gmail.com>
+References: <1486672636-20750-1-git-send-email-apalos@gmail.com>
+ <1486672636-20750-2-git-send-email-apalos@gmail.com>
+Message-ID: <20170209214209.5f28f345@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  9 Feb 2017 21:50:18 +0200, Baruch Siach wrote:
-> ddrescue is not an autotools package. Covert to generic package to make it
-> build correctly for target architecture.
-> 
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Thu,  9 Feb 2017 22:37:16 +0200, Ilias Apalodimas wrote:
+> Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
 > ---
->  package/ddrescue/ddrescue.mk | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
+>  package/ipset/ipset.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+> index db4952b..bb40fee 100644
+> --- a/package/ipset/ipset.mk
+> +++ b/package/ipset/ipset.mk
+> @@ -13,5 +13,6 @@ IPSET_CONF_OPTS = --with-kmod=no
+>  IPSET_AUTORECONF = YES
+>  IPSET_LICENSE = GPLv2
+>  IPSET_LICENSE_FILES = COPYING
+> +IPSET_INSTALL_STAGING = YES
 
-It's really weird to have this mixed with a patch series related to
-improving lzip support. I know ddrescue is using lzip, but this patch
-is really unrelated from lzip support. It would be better to send such
-patches separately.
+Why? ipset installs some libraries used by other packages?
 
-Nevertheless, this was very useful, so I've applied. Thanks!
+In any case, this shouldn't be a separate commit, it should be part of
+the commit adding the keepalived package.
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
