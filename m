@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 22:58:32 +0100
-Subject: [Buildroot] [PATCH 2/6] support/test-pkg: store lines missing
- from resulting configuraiton
-In-Reply-To: <bad3fa5a5e3580885fb587dc22cd933b92e82f69.1486584734.git.yann.morin.1998@free.fr>
+Date: Thu, 9 Feb 2017 22:59:46 +0100
+Subject: [Buildroot] [PATCH 3/6] support/test-pkg: report number and
+ types of failures
+In-Reply-To: <dcd8080c616142b0f7f761e3749c92306b2f6863.1486584734.git.yann.morin.1998@free.fr>
 References: <cover.1486584734.git.yann.morin.1998@free.fr>
- <bad3fa5a5e3580885fb587dc22cd933b92e82f69.1486584734.git.yann.morin.1998@free.fr>
-Message-ID: <20170209225832.6c96ecf3@free-electrons.com>
+ <dcd8080c616142b0f7f761e3749c92306b2f6863.1486584734.git.yann.morin.1998@free.fr>
+Message-ID: <20170209225946.54b9b744@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +14,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  8 Feb 2017 21:15:25 +0100, Yann E. MORIN wrote:
-> When a build is skipped, store the lines from the config snippet, that
-> are missing in the resulting configuration, in a file in the build
-> directory, for the user to inspect.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> 
-> ---
-> Changes v2 -> v3:
->   - simplify the code a bit  (Luca)
-> ---
->  support/scripts/test-pkg | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
+On Wed,  8 Feb 2017 21:15:26 +0100, Yann E. MORIN wrote:
 
-Applied to master, thanks.
+> +    if [ ${nb_dl} -ne 0 ]; then
+> +        printf "%d configurations could not be downloaded\n" ${nb_dl}
+> +    fi
+> +    if [ ${nb_cfg} -ne 0 ]; then
+> +        printf "%d configurations could not be applied\n" ${nb_cfg}
+> +    fi
+> +    if [ ${nb_skip} -ne 0 ]; then
+> +        printf "%d configurations were skipped\n" ${nb_skip}
+> +    fi
+> +    if [ ${nb_clean} -ne 0 ]; then
+> +        printf "%d configurations could not be dircleaned\n" ${nb_clean}
+> +    fi
+> +    if [ ${nb_build} -ne 0 ]; then
+> +        printf "%d configurations would not build\n" ${nb_build}
+> +    fi
+
+This is really verbose and not very useful. Instead what would be much
+more useful is just:
+
+	successes = %d, failures = %d, skipped = %d
+
+(possibly presented in a different way, my point is really that number
+of successes, number of failures and numbers of skipped configurations
+is really all what matters)
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
