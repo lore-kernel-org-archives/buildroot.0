@@ -1,118 +1,140 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 09 Feb 2017 21:02:49 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-01-24
-In-Reply-To: <CAHXCMMJ_bNBo+dx3N1ugJQmJQxCvc+PaWjY93oYCi1nTBQQTew@mail.gmail.com>
-References: <20170125073013.D171D20CD4@mail.free-electrons.com>
- <1485378342.7516.1.camel@embedded.rocks>
- <20170125211534.dugtv6byofg3wvg5@tarshish>
- <CAHXCMM+cL0UnnfhgFTtkeC7L+jRh8s=tr-U5CTC0YZxzUBb4bA@mail.gmail.com>
- <1485722254.4549.1.camel@embedded.rocks>
- <20170129211155.f6sebtrdmsrwb2yw@tarshish>
- <1485806342.3759.3.camel@embedded.rocks>
- <20170130212025.a5mmf5kfig3kgngo@tarshish>
- <1485811370.2212.0.camel@embedded.rocks>
- <20170130212602.xmxjbkp4zzrfhuof@tarshish>
- <1486333037.12820.6.camel@embedded.rocks>
- <20170206120617.7760c340@free-electrons.com>
- <CAHXCMMKmaRC8z6-A_xucDxiAhz1-2xqPhGvogMLhW8uTO2Xw7Q@mail.gmail.com>
- <7A7D81D5-CC2B-41A5-9275-C9D7F63A5CF1@embedded.rocks>
- <CAHXCMMJ5Mp=8v-AmAY20wGz0UZ3qBoRMAQmZBFhWVApkM4dnZA@mail.gmail.com>
- <C119D098-632D-42AB-A4C7-13481318DDDC@embedded.rocks>
- <CAHXCMMJy9T9QTviUMUUqxR8j3Y866BfXQbQ7uN4xcu6BY87eig@mail.gmail.com>
- <1486424308.4950.9.camel@embedded.rocks>
- <CAHXCMMJ-HNK9mCC8_cf1Fk4CnX7NCGF9ypWBVCu2JeBa5oK8CQ@mail.gmail.com>
- <1486472439.1692.3.camel@embedded.rocks>
- <CAHXCMMJ_bNBo+dx3N1ugJQmJQxCvc+PaWjY93oYCi1nTBQQTew@mail.gmail.com>
-Message-ID: <1486670569.4238.1.camel@embedded.rocks>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 9 Feb 2017 21:26:12 +0100
+Subject: [Buildroot] [PATCH 3/7] core: add generic support for lz
+ archives
+In-Reply-To: <0fe191c3ce1294b21d01067eac0ec83e543ec97c.1486669818.git.baruch@tkos.co.il>
+References: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
+ <0fe191c3ce1294b21d01067eac0ec83e543ec97c.1486669818.git.baruch@tkos.co.il>
+Message-ID: <20170209212612.6ef24427@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Baruch,
 
-On Tue, 2017-02-07 at 14:29 +0100, Samuel Martin wrote:
-> On Tue, Feb 7, 2017 at 2:00 PM, J?rg Krause <joerg.krause@embedded.ro
-> cks> wrote:
-> > Hi Samuel,
-> > 
-> > On Tue, 2017-02-07 at 12:28 +0100, Samuel Martin wrote:
-> > > J?rg, all,
-> > > 
-> > > On Tue, Feb 7, 2017 at 12:38 AM, J?rg Krause
-> > > <joerg.krause@embedded.rocks> wrote:
-> > > > Hi Samuel,
-> > > > 
-> > 
-> > [snip]
-> > 
-> > > > 
-> > > > Version 3.6.3 works, too. So, I did a git bisect. The rpath
-> > > > issue
-> > > > was
-> > > > introduced in "Teach find_library and find_package to search
-> > > > lib32
-> > > > paths" [1].
-> > > 
-> > > Thanks for the investigation!
-> > > 
-> > > > 
-> > > > Any ideas how to fix this?
-> > > 
-> > > Not so far :-/
-> > 
-> > Ray Donnely proposed a potential fix for this issue [1] on the
-> > CMake
-> > mailing list. I have not tried the patch so far.
+
+On Thu,  9 Feb 2017 21:50:14 +0200, Baruch Siach <baruch@tkos.co.il> wrote:
+
+> This commit teaches the generic code how to extract .tar.lz archives. When
+> lzip is not installed on the host, host-lzip gets built automatically.
 > 
-> Good to know CMake folks are already on this issue.
 
-I had a closer look on why the rpath '/usr/lib32' is used in CMake 3.7.
-This upstream commit [1] adds a property `FIND_LIBRARY_USE_LIB32_PATHS`
-which is set to TRUE for the Linux platform [2]. This changes the
-behavior of `find_library()`. Before the commit `/sysroot/usr/lib` was
-found as library path, but now it's `/sysroot/usr/lib32`.
+On my host there is no lzip installed, with your patches applied I get the following
+error message:
 
-When determining the runtime search path, CMake compares the pathes
-found by `find_library()` with a list of implicit runtime pathes. This
-list contains `/sysroot/usr/lib` but not `/sysroot/usr/lib32`.
+which: no lzip in (/home/seiderer/Work/build_arm_qt5_stdcpp11_001/host/usr/bin)
+You must install '/home/seiderer/Work/build_arm_qt5_stdcpp11_001/host/usr/bin/lzip' on your build machine
+support/dependencies/dependencies.mk:22: recipe for target 'core-dependencies' failed
+make[1]: *** [core-dependencies] Error 1
+Makefile:16: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-If the library path found by `find_library()` matches a search path
-from the list of implicit runtime pathes it is dropped, otherwise it is
-added to rpath after removing the `/sysroot` path.
+Regards,
+Peter
 
-As the implicit runtime search pathes does not contain
-`/sysroot/usr/lib32` the rpath is set to `/usr/lib32`.
 
-Note, that this is true not only for bctoolbox but for all CMake
-packages!
-
-The behavior of determining the runtime path is controlled by the
-property `FIND_LIBRARY_USE_LIB32_PATHS`. As already mentioned, the
-value is set to `TRUE` for the Linux platfrom. I tried to overwrite the
-property in the toolchain file, without any luck.
-
-Another possibility might be to add `/sysroot/usr/lib32` to the list of
-implicit link directories, but using
-`CMAKE_C_IMPLICIT_LINK_DIRECTORIES` in the toolchain file did not work
-for me.
-
-An approach which worked for me was to remove the `CMAKE_SYSTEM_NAME`
-setting from the toolchain file. This way, I was able to set the
-`FIND_LIBRARY_USE_LIB32_PATHS` property to `FALSE` and `/usr/lib32` was
-not set as rpath anymore.
-
-Samuel, do you have any idea how to set the property
-`FIND_LIBRARY_USE_LIB32_PATHS` without removing `CMAKE_SYSTEM_NAME`
-from the toolchain file?
-
-Or is there any other solution?
-
-[1] https://gitlab.kitware.com/cmake/cmake/commit/896ad251de49f167f4ce3
-cbbcf9a6cce85a16681
-[2] https://gitlab.kitware.com/cmake/cmake/blob/896ad251de49f167f4ce3cb
-bcf9a6cce85a16681/Modules/Platform/Linux.cmake#L56
-
-J?rg
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  Config.in                               |  7 +++++++
+>  Makefile                                |  1 +
+>  package/pkg-generic.mk                  |  8 +++-----
+>  package/pkg-utils.mk                    |  1 +
+>  support/dependencies/check-host-lzip.mk |  4 ++++
+>  support/dependencies/check-host-lzip.sh | 14 ++++++++++++++
+>  6 files changed, 30 insertions(+), 5 deletions(-)
+>  create mode 100644 support/dependencies/check-host-lzip.mk
+>  create mode 100755 support/dependencies/check-host-lzip.sh
+> 
+> diff --git a/Config.in b/Config.in
+> index ccd777e8bb00..bd8f0d1a10ee 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -158,6 +158,13 @@ config BR2_XZCAT
+>  	  Command to be used to extract a xz'ed file to stdout.
+>  	  Default is "xzcat"
+>  
+> +config BR2_LZCAT
+> +	string "lzcat command"
+> +	default "lzip -d -c"
+> +	help
+> +	  Command to be used to extract a lzip'ed file to stdout.
+> +	  Default is "lzip -d -c"
+> +
+>  config BR2_TAR_OPTIONS
+>  	string "Tar options"
+>  	default ""
+> diff --git a/Makefile b/Makefile
+> index df3b64eb03ec..b4550e098958 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -431,6 +431,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+>  ZCAT := $(call qstrip,$(BR2_ZCAT))
+>  BZCAT := $(call qstrip,$(BR2_BZCAT))
+>  XZCAT := $(call qstrip,$(BR2_XZCAT))
+> +LZCAT := $(call qstrip,$(BR2_LZCAT))
+>  TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+>  
+>  # packages compiled for the host go here
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 3ca71b03b9df..303dda090daa 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -928,11 +928,9 @@ endif # SITE_METHOD
+>  
+>  # $(firstword) is used here because the extractor can have arguments, like
+>  # ZCAT="gzip -d -c", and to check for the dependency we only want 'gzip'.
+> -# Do not add xzcat to the list of required dependencies, as it gets built
+> -# automatically if it isn't found.
+> -ifneq ($$(call suitable-extractor,$$($(2)_SOURCE)),$$(XZCAT))
+> -DL_TOOLS_DEPENDENCIES += $$(firstword $$(call suitable-extractor,$$($(2)_SOURCE)))
+> -endif
+> +# Remove xzcat/lzip from the list of required dependencies, as they get built
+> +# automatically if they're not found.
+> +DL_TOOLS_DEPENDENCIES += $$(filter-out xzcat lzip,$$(firstword $$(call suitable-extractor,$$($(2)_SOURCE))))
+>  
+>  # Ensure all virtual targets are PHONY. Listed alphabetically.
+>  .PHONY:	$(1) \
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index c5d4080c72f4..bc926dadeffd 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -36,6 +36,7 @@ pkgname = $(lastword $(subst /, ,$(pkgdir)))
+>  # Define extractors for different archive suffixes
+>  INFLATE.bz2  = $(BZCAT)
+>  INFLATE.gz   = $(ZCAT)
+> +INFLATE.lz   = $(LZCAT)
+>  INFLATE.lzma = $(XZCAT)
+>  INFLATE.tbz  = $(BZCAT)
+>  INFLATE.tbz2 = $(BZCAT)
+> diff --git a/support/dependencies/check-host-lzip.mk b/support/dependencies/check-host-lzip.mk
+> new file mode 100644
+> index 000000000000..32ab9f4daffe
+> --- /dev/null
+> +++ b/support/dependencies/check-host-lzip.mk
+> @@ -0,0 +1,4 @@
+> +ifeq (,$(call suitable-host-package,lzip,$(LZCAT)))
+> +DEPENDENCIES_HOST_PREREQ += host-lzip
+> +LZCAT = $(HOST_DIR)/usr/bin/lzip -d -c
+> +endif
+> diff --git a/support/dependencies/check-host-lzip.sh b/support/dependencies/check-host-lzip.sh
+> new file mode 100755
+> index 000000000000..4f8a2ba3de5b
+> --- /dev/null
+> +++ b/support/dependencies/check-host-lzip.sh
+> @@ -0,0 +1,14 @@
+> +#!/bin/sh
+> +
+> +candidate="$1"
+> +
+> +lzip=`which $candidate 2>/dev/null`
+> +if [ ! -x "$lzip" ]; then
+> +	lzip=`which lzip 2>/dev/null`
+> +	if [ ! -x "$lzip" ]; then
+> +		# echo nothing: no suitable lzip found
+> +		exit 1
+> +	fi
+> +fi
+> +
+> +echo $lzip
