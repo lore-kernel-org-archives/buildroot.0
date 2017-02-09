@@ -1,25 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 09 Feb 2017 22:01:41 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-12-04
-References: <20161205073000.5E3E921D23@mail.free-electrons.com>
-Message-ID: <lu1vmdxtsu.ln2@ID-313208.user.individual.net>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu,  9 Feb 2017 19:10:50 -0200
+Subject: [Buildroot] [PATCH] configs/mx25pdk: Bump U-Boot and kernel versions
+Message-ID: <1486674650-26891-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 05 Dec 2016 08:30:00 +0100 schrieb Thomas Petazzoni:
+Bump U-Boot to 2017.01 version and kernel to 4.9.9.
 
->       x86_64 | xdriver_xf86-video-vmware-1... | NOK | http://
-autobuild.buildroot.net/results/7b38105dd1115ac622964cf243ac137b7624fb43
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/mx25pdk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Hi,
-
-fixed by http://patchwork.ozlabs.org/patch/706833/
-
-Should also fix todays build error
-http://autobuild.buildroot.net/?reason=xdriver_xf86-video-vmware-13.2.1
-
-Regards, Bernd
+diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
+index 65a6d12..c97ba76 100644
+--- a/configs/mx25pdk_defconfig
++++ b/configs/mx25pdk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
+ 
+-# Linux headers same as kernel, a 4.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx25pdk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
+-- 
+2.7.4
