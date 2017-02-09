@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 22:18:21 +0100
-Subject: [Buildroot] [PATCH v1] qt5base: select qt-libpng in case
- builtin freetype library is used
-In-Reply-To: <20170209174008.22871-1-ps.report@gmx.net>
-References: <20170209174008.22871-1-ps.report@gmx.net>
-Message-ID: <20170209221821.00c1dd4b@free-electrons.com>
+Date: Thu, 9 Feb 2017 22:19:22 +0100
+Subject: [Buildroot] [PATCH v2 1/2] remove menu comment about deprecated
+ modules
+In-Reply-To: <1486549595-15691-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1486549595-15691-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <1486549595-15691-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <20170209221922.59206647@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +14,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  9 Feb 2017 18:40:08 +0100, Peter Seiderer wrote:
+On Wed,  8 Feb 2017 11:26:34 +0100, Zoltan Gyarmati wrote:
+> As now the Qt version is configurable to simplify the menu display
+> logic we remove the menu comment about deprecated modules and
+> indicate it in the relevant modules' help text instead, and also
+> mention in the help text if a package's tech preview status has been
+> changed between Qt 5.6 and Qt 5.8
+> 
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+> ---
+>  package/qt5/Config.in                   | 7 +++----
+>  package/qt5/qt53d/Config.in             | 4 ++++
+>  package/qt5/qt5enginio/Config.in        | 3 +++
+>  package/qt5/qt5quickcontrols2/Config.in | 3 +++
+>  package/qt5/qt5serialbus/Config.in      | 3 +++
+>  5 files changed, 16 insertions(+), 4 deletions(-)
 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 2cf0331b0..afe373123 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -149,7 +149,12 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),fontconfig)
->  QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GIF),,-no-gif)
->  QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_JPEG),-system-libjpeg,-no-libjpeg)
->  QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_JPEG),jpeg)
-> +ifeq ($(BR2_QT5_VERSION_5_6)$(BR2_PACKAGE_QT5BASE_FONTCONFIG),)
-> +# qt-5.8.0 freetype needs libpng support
-> +QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_PNG),-system-libpng,-qt-libpng)
+Applied to master after fixing the commit title: it was missing a
+"package/qt5" prefix.
 
-Are you sure we need -qt-libpng in all cases when there is no
-fontconfig support? Isn't it only needed when the GUI module is enabled?
-
-Also, why is the builtin freetype library used? We generally don't like
-to use the builtin libraries. Can we instead rely on external libpng
-and external freetype?
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
