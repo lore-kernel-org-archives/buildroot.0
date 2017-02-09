@@ -1,74 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 23:24:29 +0100
-Subject: [Buildroot] [PATCH 3/6] infra: fix 'packages-file-list.txt'
- with TLP
-In-Reply-To: <20161114132238.6569-4-jezz@sysmic.org>
-References: <20161114132238.6569-1-jezz@sysmic.org>
- <20161114132238.6569-4-jezz@sysmic.org>
-Message-ID: <20170209232429.0c133424@free-electrons.com>
+Date: Thu, 9 Feb 2017 23:24:59 +0100
+Subject: [Buildroot] [git commit] lxc: bump to version 2.0.7
+Message-ID: <20170209222503.CCD34821E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d07ad7f399ad53d230787f2347e3dffb43641a07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding Gustavo in Cc. Gustavo, you are working on TLP support. Could
-you comment on the below patch?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lxc/lxc.hash | 3 +--
+ package/lxc/lxc.mk   | 8 +-------
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
-See also my comments below.
-
-On Mon, 14 Nov 2016 14:22:35 +0100, J?r?me Pouiller wrote:
-> Until now, `$(BUILD_DIR)/packages-file-list.txt' was not filled properly when
-> top level parallelization is enabled. Therefore, all scripts that rely on
-> packages-file-list.txt did not work.
-> 
-> In order to fix it,this patch place target installation task in a critical
-> section.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/pkg-generic.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 987efa6..c5f70e0 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -62,6 +62,9 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
->  # files currently installed in the target. Note that the MD5 is also
->  # stored, in order to identify if the files are overwritten.
->  define step_pkg_size_start
-> +	while ! flock $(BUILD_DIR) -c "[ ! -e $(BUILD_DIR)/.target_lock ] && touch $(BUILD_DIR)/.target_lock"; do \
-> +		sleep 0.5; \
-> +	done
-
-I personally don't really like this retry loop around flock, but since
-package-file-list.txt is a global file, I don't really see how to do
-otherwise. Unless storing a per-package file with just the time/date of
-the start/end of each step for this package, and then have a
-post-processing logic at the very end of the build that regroups all
-those per-package files into a single global file, ordering the entries
-by their timestamp. Don't know if it's really better.
-
-
->  	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
->  		$($(PKG)_DIR)/.br_filelist_before
->  endef
-> @@ -78,6 +81,7 @@ define step_pkg_size_end
->  		while read hash file ; do \
->  			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
->  		done
-> +	rm $(BUILD_DIR)/.target_lock
->  endef
->  
->  define step_pkg_size
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index 8fb4dc0..f80c88d 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256	7c292cd0055dac1a0e6fbb6a7740fd12b6ffb204603c198faf37c11c9d6dcd7a	lxc-2.0.6.tar.gz
+-sha256	e8ca30fb1e8d6dbafb5cccc04b3fd1784c35bc8ccf79112036e5166924b6b01d	64fa248372c90c9d98fc9d67f80327d865c11a48.patch
++sha256	1c09c075f06ec029f86fa6370c7d379494ff4c66a129eda17af7b7b41e055f5d	lxc-2.0.7.tar.gz
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index d803916..455814b 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,18 +4,12 @@
+ #
+ ################################################################################
+ 
+-LXC_VERSION = 2.0.6
++LXC_VERSION = 2.0.7
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
+ LXC_INSTALL_STAGING = YES
+-# we're patching configure.ac
+-LXC_AUTORECONF = YES
+-
+-# This patch adds --enable-gnutls option
+-LXC_PATCH = \
+-	https://github.com/lxc/lxc/commit/64fa248372c90c9d98fc9d67f80327d865c11a48.patch
+ 
+ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-python --disable-werror \
