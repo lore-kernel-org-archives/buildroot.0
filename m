@@ -1,42 +1,36 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  9 Feb 2017 18:40:08 +0100
-Subject: [Buildroot] [PATCH v1] qt5base: select qt-libpng in case builtin
-	freetype library is used
-Message-ID: <20170209174008.22871-1-ps.report@gmx.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu,  9 Feb 2017 18:47:57 +0100
+Subject: [Buildroot] [PATCH 4/6] arch/sparc: mark SPARCv8 as affected by GCC
+	PR libstdc++/64735
+In-Reply-To: <20170209174759.15819-1-joerg.krause@embedded.rocks>
+References: <20170209174759.15819-1-joerg.krause@embedded.rocks>
+Message-ID: <20170209174759.15819-5-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+SPARCv8 does not support always lock-free atomic ints. Therefore,
+exception_ptr, nested_exception, and future from libstdc++ are not
+available before GCC 7.
 
-  Project ERROR: Library 'libpng' is not defined.
-  make[3]: *** [sub-3rdparty-freetype-make_first] Error 3
-
-[1] http://autobuild.buildroot.net/results/219162ba616289f799a5053c4dcc6b8574284283
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/qt5/qt5base/qt5base.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/Config.in.sparc | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 2cf0331b0..afe373123 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -149,7 +149,12 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),fontconfig)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GIF),,-no-gif)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_JPEG),-system-libjpeg,-no-libjpeg)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_JPEG),jpeg)
-+ifeq ($(BR2_QT5_VERSION_5_6)$(BR2_PACKAGE_QT5BASE_FONTCONFIG),)
-+# qt-5.8.0 freetype needs libpng support
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_PNG),-system-libpng,-qt-libpng)
-+else
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_PNG),-system-libpng,-no-libpng)
-+endif
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_PNG),libpng)
- 
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DBUS),-dbus,-no-dbus)
+diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+index 307540fdb..85b7c8cd8 100644
+--- a/arch/Config.in.sparc
++++ b/arch/Config.in.sparc
+@@ -9,6 +9,7 @@ choice
+ config BR2_sparc_v8
+ 	bool "v8"
+ 	depends on BR2_sparc
++	select BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ config BR2_sparc_leon3
+ 	bool "leon3"
+ 	depends on BR2_sparc
 -- 
-2.11.0
+2.11.1
