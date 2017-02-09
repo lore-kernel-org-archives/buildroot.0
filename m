@@ -1,51 +1,36 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  9 Feb 2017 23:30:54 +0100
-Subject: [Buildroot] [PATCH v1 1/2] qt5base: use system/buildroot provided
-	freetype
-Message-ID: <20170209223055.31121-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Feb 2017 23:33:23 +0100
+Subject: [Buildroot] [PATCH 2/2] u-boot: Add support for Altera mkpimage
+ generation
+In-Reply-To: <20170130103326.14427-2-lionel@svkt.org>
+References: <20170128112720.umcchfeyyc7i6rdo@localhost.localdomain>
+ <20170130103326.14427-1-lionel@svkt.org>
+ <20170130103326.14427-2-lionel@svkt.org>
+Message-ID: <20170209233323.7f57c186@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+Hello,
 
-  Project ERROR: Library 'libpng' is not defined.
-  make[3]: *** [sub-3rdparty-freetype-make_first] Error 3
+On Mon, 30 Jan 2017 11:33:26 +0100, Lionel Flandrin wrote:
+> This image format is used by Altera's SoC FPGAs BootROMs.
+> 
+> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
 
-[1] http://autobuild.buildroot.net/results/219162ba616289f799a5053c4dcc6b8574284283
+I missed it on my first review, but it seems like you missed it as
+well: we already have some logic in uboot.mk to call mkpimage. See the
+BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC option.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/qt5base/Config.in  | 1 +
- package/qt5/qt5base/qt5base.mk | 2 ++
- 2 files changed, 3 insertions(+)
+This should be extended rather than having two options doing the same
+thing.
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index f22e034b3..337dcf245 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -128,6 +128,7 @@ config BR2_PACKAGE_QT5BASE_XML
- 
- config BR2_PACKAGE_QT5BASE_GUI
- 	bool "gui module"
-+	select BR2_PACKAGE_FREETYPE
- 	# At least one graphic backend must be enabled, so enable
- 	# linuxfb if nothing is enabled.
- 	select BR2_PACKAGE_QT5BASE_LINUXFB if \
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 2cf0331b0..07803e776 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -100,6 +100,8 @@ endif
- # We have to use --enable-linuxfb, otherwise Qt thinks that -linuxfb
- # is to add a link against the "inuxfb" library.
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-gui,-no-gui)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-system-freetype,-no-freetype)
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_GUI),freetype)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_WIDGETS),-widgets,-no-widgets)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_LINUXFB),--enable-linuxfb,-no-linuxfb)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),-directfb,-no-directfb)
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
