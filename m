@@ -1,37 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 22:56:02 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/qt5/*: add meaningful help
- texts and package URLs
-In-Reply-To: <9deada82-b895-95d9-5a11-06eba47c9960@gmail.com>
-References: <1486549595-15691-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1486549595-15691-3-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <20170209222048.0a9e3c45@free-electrons.com>
- <9deada82-b895-95d9-5a11-06eba47c9960@gmail.com>
-Message-ID: <20170209225602.08c4433b@free-electrons.com>
+Date: Thu, 9 Feb 2017 22:57:13 +0100
+Subject: [Buildroot] [git commit] support/test-pkg: store lines missing from
+	resulting configuraiton
+Message-ID: <20170209215802.3553482196@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5c58ceec2aad7415bfb8d4cee1d98779535b615
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 9 Feb 2017 22:53:00 +0100, Zoltan Gyarmati wrote:
+When a build is skipped, store the lines from the config snippet, that
+are missing in the resulting configuration, in a file in the build
+directory, for the user to inspect.
 
-> > Applied to master, thanks. Since you're interested in Qt5, what about
-> > adding yourself for package/qt5/ in the DEVELOPERS file?  
->  Yes, it's fine with me,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/test-pkg | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-Then, can you send a patch adding yourself ? :-)
-
-> anyway I'm also testing the QtWebView build
-> in the upcoming days, so there are more patches coming...
-
-Cool! Is QtWebView implemented by the qtwebengine module? There were
-already some past submissions of this module on the mailing list.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
+index 008b32c..5eeaf63 100755
+--- a/support/scripts/test-pkg
++++ b/support/scripts/test-pkg
+@@ -61,7 +61,7 @@ build_one() {
+     local url="${2}"
+     local cfg="${3}"
+     local pkg="${4}"
+-    local toolchain line
++    local toolchain line skip
+ 
+     # Using basename(1) on a URL works nicely
+     toolchain="$( basename "${url}" .config )"
+@@ -94,12 +94,19 @@ build_one() {
+     # or not set) in the actual .config; if one of them is not, it means
+     # some dependency from the toolchain or arch is not available, in
+     # which case this config is untestable and we skip it.
++    skip=false
+     while read line; do
+         if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
+-            printf ", SKIPPED\n"
+-            return
++            printf "%s\n" "${line}"
++            skip=true
+         fi
+-    done <"${cfg}"
++    done <"${cfg}" >"${dir}/missing.config"
++    if ${skip}; then
++        printf ", SKIPPED\n"
++        return
++    fi
++    # Remove file, it's empty anyway.
++    rm -f "${dir}/missing.config"
+ 
+     if [ -n "${pkg}" ]; then
+         printf ", dirclean"
