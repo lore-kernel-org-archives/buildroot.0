@@ -1,39 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 09 Feb 2017 11:12:11 +0100
-Subject: [Buildroot] rsyslog plugin selection
-In-Reply-To: <CAAXf6LU7juM840CBNO7=wus8H_OUuByzNW7jwKZ36GX4dp9c9Q@mail.gmail.com>
- (Thomas De Schampheleire's message of "Thu, 9 Feb 2017 10:43:40
- +0100")
-References: <CAAXf6LUgTQBZK7HnzKd6q64XnAA7nX_n7X3LDdRZfEvKtfeq7w@mail.gmail.com>
- <8737fopew4.fsf@dell.be.48ers.dk>
- <CAAXf6LU7juM840CBNO7=wus8H_OUuByzNW7jwKZ36GX4dp9c9Q@mail.gmail.com>
-Message-ID: <87poiroepw.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu,  9 Feb 2017 08:27:08 -0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.9.9
+Message-ID: <1486636029-10366-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
-
- > I should have mentioned it in my original mail, but the amount of
- > plugins is about 50:
- > http://www.rsyslog.com/plugins/
-
-FYI, not all of them sounds useful (E.G. solaris) or we don't have the
-needed dependencies in BR (relp, hdfs, ..)
-
-Do we have the n
- > Nevertheless, I do think that using separate options is indeed the
- > best approach. To limit the visual impact in the config editor, I
- > would group them in a submenu instead of flat in the main menu.
-
- > Do you agree?
-
-Yes, I agree. It is quite a lot of options, but not really worse than
-the gst1-plugins-* stuff.
-
+diff --git a/linux/Config.in b/linux/Config.in
+index ff2defc..740dd39 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.8)"
++	bool "Latest version (4.9.9)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.9.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.9.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
-Bye, Peter Korsgaard
+2.7.4
