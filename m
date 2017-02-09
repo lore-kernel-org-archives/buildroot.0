@@ -1,44 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 09:41:41 +0100
-Subject: [Buildroot] [PATCH 1/1] automake: fix unescaped left brace
- warning patch.
-In-Reply-To: <20170209000710.13754-1-Adamduskett@outlook.com>
-References: <20170209000710.13754-1-Adamduskett@outlook.com>
-Message-ID: <20170209094141.3fe22e82@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 9 Feb 2017 10:43:40 +0100
+Subject: [Buildroot] rsyslog plugin selection
+In-Reply-To: <8737fopew4.fsf@dell.be.48ers.dk>
+References: <CAAXf6LUgTQBZK7HnzKd6q64XnAA7nX_n7X3LDdRZfEvKtfeq7w@mail.gmail.com>
+ <8737fopew4.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LU7juM840CBNO7=wus8H_OUuByzNW7jwKZ36GX4dp9c9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Feb 8, 2017 at 10:10 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>
+>  > Hi,
+>  > The rsyslog package in Buildroot currently hardcodes the list of
+>  > plugins to enable. These plugins define what types of input, output,
+>  > parsing, etc. is supported, and is typically very application
+>  > dependent.
+>
+>  > The current selection amounts to about 1 MB of rootfs, while the
+>  > rsyslog daemon itself is only about half of that. By restricting the
+>  > list of plugins to those a project actually needs, it is thus possible
+>  > to reduce the size of the rootfs.
+>
+>  > Two questions arise:
+>  > 1. should we use one config symbol with a string list, or separate
+>  > config symbols for each plugin?
+>
+>  > 2. should we keep the current set as default, even if it contains less
+>  > common options?
+>
+> Separate config options are IMHO quite a lot more user friendly, so if
+> we are not talking about a LOT (20+) of options then that is what I
+> would prefer.
+>
 
-On Wed,  8 Feb 2017 19:07:10 -0500, Adam Duskett wrote:
+I should have mentioned it in my original mail, but the amount of
+plugins is about 50:
+http://www.rsyslog.com/plugins/
 
->  .../0002-fix-unescaped-left-brace-warning.patch       | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->  create mode 100644 package/automake/0002-fix-unescaped-left-brace-warning.patch
-> 
-> diff --git a/package/automake/0002-fix-unescaped-left-brace-warning.patch b/package/automake/0002-fix-unescaped-left-brace-warning.patch
-> new file mode 100644
-> index 0000000..a33b1f1
-> --- /dev/null
-> +++ b/package/automake/0002-fix-unescaped-left-brace-warning.patch
-> @@ -0,0 +1,19 @@
-> +Automake currently has a unescaped left brace in it's automake.in folder
-> +that generates the warning:
-> +Unescaped left brace in regex is deprecated, passed through in regex;
-> +This patch fixes this warning.
-> +
-> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Nevertheless, I do think that using separate options is indeed the
+best approach. To limit the visual impact in the config editor, I
+would group them in a submenu instead of flat in the main menu.
 
-I am *really* uncomfortable about merging patches touching the automake
-code base if those patches are not upstream. So please submit this
-upstream, and if it gets accepted, then we can integrate it in
-Buildroot.
+Do you agree?
 
+
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
