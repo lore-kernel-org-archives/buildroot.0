@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 21:36:24 +0100
-Subject: [Buildroot] [PATCH 1/7] lzip: use the more informative homepage
- link
-In-Reply-To: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
+Date: Thu, 9 Feb 2017 21:36:27 +0100
+Subject: [Buildroot] [PATCH 2/7] lzip: bump to version 1.18
+In-Reply-To: <fa4b425f441697169b27a47c9c5c1001f2802ea1.1486669818.git.baruch@tkos.co.il>
 References: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
-Message-ID: <20170209213624.4b50214a@free-electrons.com>
+ <fa4b425f441697169b27a47c9c5c1001f2802ea1.1486669818.git.baruch@tkos.co.il>
+Message-ID: <20170209213627.48b3872c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  9 Feb 2017 21:50:12 +0200, Baruch Siach wrote:
+On Thu,  9 Feb 2017 21:50:13 +0200, Baruch Siach wrote:
+> Also, correct license.
+> 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/lzip/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/lzip/lzip.hash | 4 +++-
+>  package/lzip/lzip.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
