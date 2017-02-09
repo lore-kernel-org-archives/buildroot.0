@@ -1,47 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  9 Feb 2017 11:29:52 +0100
-Subject: [Buildroot] [PATCH 2/2] libevent: drop openssl static linking
-	workaround
-In-Reply-To: <20170209102952.6351-1-peter@korsgaard.com>
-References: <20170209102952.6351-1-peter@korsgaard.com>
-Message-ID: <20170209102952.6351-2-peter@korsgaard.com>
+Date: Thu, 9 Feb 2017 12:03:58 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.9.9
+Message-ID: <20170209110417.AED0280E33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit f29bb169cf (libevent: fix openssl detection when statically linking)
-forced libevent to link against zlib when statically linking against openssl
-as the configure script failed to do this.
+commit: https://git.buildroot.net/buildroot/commit/?id=cf2cd2048d41fc66a3c31fa89f4c3b941a2e7636
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since then libevent has been bumped, and it now uses pkg-config to figure
-out how to link with openssl, so ensure pkg-config is available and drop the
-now-unneeded workaround.
-
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libevent/libevent.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index 128bb2ac7..5458ce316 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -24,13 +24,8 @@ LIBEVENT_POST_INSTALL_TARGET_HOOKS += LIBEVENT_REMOVE_PYSCRIPT
- endif
+diff --git a/linux/Config.in b/linux/Config.in
+index ff2defc..740dd39 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LIBEVENT_DEPENDENCIES += openssl
-+LIBEVENT_DEPENDENCIES += host-pkgconf openssl
- LIBEVENT_CONF_OPTS += --enable-openssl
--# openssl needs zlib but configure forgets to link against it causing
--# openssl detection to fail
--ifeq ($(BR2_STATIC_LIBS),y)
--LIBEVENT_CONF_ENV += OPENSSL_LIBADD='-lz'
--endif
- else
- LIBEVENT_CONF_OPTS += --disable-openssl
- endif
--- 
-2.11.0
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.8)"
++	bool "Latest version (4.9.9)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.9.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.9.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
