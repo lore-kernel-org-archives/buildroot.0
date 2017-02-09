@@ -1,44 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 21:55:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cryptodev: fix build
-In-Reply-To: <1486636324-12767-1-git-send-email-sebastien.szymanski@armadeus.com>
-References: <1486636324-12767-1-git-send-email-sebastien.szymanski@armadeus.com>
-Message-ID: <20170209215542.5198e04d@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 9 Feb 2017 21:56:01 +0100
+Subject: [Buildroot] [PATCH 7/7] ddrescue: fix target build
+In-Reply-To: <20170209214044.6aacb66e@free-electrons.com>
+References: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
+ <99cad486180867002ec348364cf9ac9028b74d0e.1486669818.git.baruch@tkos.co.il>
+ <20170209214044.6aacb66e@free-electrons.com>
+Message-ID: <20170209215601.30e9091a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Baruch, Thomas,
 
-On Thu,  9 Feb 2017 11:32:04 +0100, S?bastien Szymanski wrote:
-> cryptodev-linux-1.8 build is broken with kernel >= 4.6.0 because of
-> APIs changes in the kernel. Upstream already fixed this:
+On Thu, 9 Feb 2017 21:40:44 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
 > 
-> https://github.com/cryptodev-linux/cryptodev-linux/commit/2b29be8ac41414ed19cb4f5d5626d9bd0d7b11a8
-> https://github.com/cryptodev-linux/cryptodev-linux/commit/f126e4837e6334d0464540995df7426fedf6b175
-> https://github.com/cryptodev-linux/cryptodev-linux/commit/f14b4706b0d04988e7e5bc8c4d2aefef9f029d9d
-> https://github.com/cryptodev-linux/cryptodev-linux/commit/cb186f682679383e8b5806240927903730ce85d9
+> On Thu,  9 Feb 2017 21:50:18 +0200, Baruch Siach wrote:
+> > ddrescue is not an autotools package. Covert to generic package to make it
+> > build correctly for target architecture.
+> > 
+> > Cc: Peter Seiderer <ps.report@gmx.net>
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >  package/ddrescue/ddrescue.mk | 18 +++++++++++++++++-
+> >  1 file changed, 17 insertions(+), 1 deletion(-)
 > 
-> Bump to latest commit to fix cryptodev-linux build.
+> It's really weird to have this mixed with a patch series related to
+> improving lzip support. I know ddrescue is using lzip, but this patch
+> is really unrelated from lzip support. It would be better to send such
+> patches separately.
 > 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
->  package/cryptodev-linux/cryptodev-linux.hash | 4 ++--
->  package/cryptodev-linux/cryptodev-linux.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> Nevertheless, this was very useful, so I've applied. Thanks!
 
-I've applied after tweaking the commit title: the package is
-cryptodev-linux, not cryptodev, and "fix build" is very fuzzy. I've
-changed it to:
+To late for my Tested-by ;-)
 
-	package/cryptodev-linux: fix with with recent kernels
+Nevertheless many thanks for spotting this one...
 
-Thanks a lot!
+Regards,
+Peter
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+> Thomas
