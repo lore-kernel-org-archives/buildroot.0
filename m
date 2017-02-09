@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 22:19:22 +0100
-Subject: [Buildroot] [PATCH v2 1/2] remove menu comment about deprecated
- modules
-In-Reply-To: <1486549595-15691-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Date: Thu, 9 Feb 2017 22:20:48 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/qt5/*: add meaningful help
+ texts and package URLs
+In-Reply-To: <1486549595-15691-3-git-send-email-mr.zoltan.gyarmati@gmail.com>
 References: <1486549595-15691-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1486549595-15691-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20170209221922.59206647@free-electrons.com>
+ <1486549595-15691-3-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <20170209222048.0a9e3c45@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  8 Feb 2017 11:26:34 +0100, Zoltan Gyarmati wrote:
-> As now the Qt version is configurable to simplify the menu display
-> logic we remove the menu comment about deprecated modules and
-> indicate it in the relevant modules' help text instead, and also
-> mention in the help text if a package's tech preview status has been
-> changed between Qt 5.6 and Qt 5.8
-> 
+On Wed,  8 Feb 2017 11:26:35 +0100, Zoltan Gyarmati wrote:
 > Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 > ---
->  package/qt5/Config.in                   | 7 +++----
->  package/qt5/qt53d/Config.in             | 4 ++++
->  package/qt5/qt5enginio/Config.in        | 3 +++
->  package/qt5/qt5quickcontrols2/Config.in | 3 +++
->  package/qt5/qt5serialbus/Config.in      | 3 +++
->  5 files changed, 16 insertions(+), 4 deletions(-)
+>  package/qt5/qt5canvas3d/Config.in         | 5 +++--
+>  package/qt5/qt5connectivity/Config.in     | 6 ++++--
+>  package/qt5/qt5declarative/Config.in      | 6 ++++--
+>  package/qt5/qt5enginio/Config.in          | 5 +++--
+>  package/qt5/qt5graphicaleffects/Config.in | 6 ++++--
+>  package/qt5/qt5imageformats/Config.in     | 5 +++--
+>  package/qt5/qt5location/Config.in         | 6 ++++--
+>  package/qt5/qt5multimedia/Config.in       | 7 +++++--
+>  package/qt5/qt5quickcontrols/Config.in    | 5 +++--
+>  package/qt5/qt5quickcontrols2/Config.in   | 2 +-
+>  package/qt5/qt5script/Config.in           | 5 +++--
+>  package/qt5/qt5sensors/Config.in          | 5 +++--
+>  package/qt5/qt5serialbus/Config.in        | 2 +-
+>  package/qt5/qt5serialport/Config.in       | 6 ++++--
+>  package/qt5/qt5svg/Config.in              | 5 +++--
+>  package/qt5/qt5tools/Config.in            | 5 +++--
+>  package/qt5/qt5webchannel/Config.in       | 6 ++++--
+>  package/qt5/qt5webkit/Config.in           | 6 ++++--
+>  package/qt5/qt5websockets/Config.in       | 7 +++++--
+>  package/qt5/qt5x11extras/Config.in        | 5 +++--
+>  package/qt5/qt5xmlpatterns/Config.in      | 5 +++--
+>  21 files changed, 70 insertions(+), 40 deletions(-)
 
-Applied to master after fixing the commit title: it was missing a
-"package/qt5" prefix.
+Applied to master, thanks. Since you're interested in Qt5, what about
+adding yourself for package/qt5/ in the DEVELOPERS file?
+
+Also Peter (Seiderer), you are only listed for a few Qt5 modules in
+DEVELOPERS, what about using package/qt5/ instead?
+
+Both of you are using Qt5 apparently, and this is a very important
+package in Buildroot. Having more people looking after build failures
+and reviewing Qt5 patches would be good.
 
 Thanks!
 
