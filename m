@@ -1,42 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 22:51:25 +0100
-Subject: [Buildroot] [PATCH 1/6] support/scripts: add script to test a
- package
-In-Reply-To: <085941ea3e9e9f34405ac10780d5c8aa2a6317aa.1486584734.git.yann.morin.1998@free.fr>
-References: <cover.1486584734.git.yann.morin.1998@free.fr>
- <085941ea3e9e9f34405ac10780d5c8aa2a6317aa.1486584734.git.yann.morin.1998@free.fr>
-Message-ID: <20170209225125.1158f331@free-electrons.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Thu, 9 Feb 2017 22:53:00 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/qt5/*: add meaningful help
+ texts and package URLs
+In-Reply-To: <20170209222048.0a9e3c45@free-electrons.com>
+References: <1486549595-15691-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <1486549595-15691-3-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <20170209222048.0a9e3c45@free-electrons.com>
+Message-ID: <9deada82-b895-95d9-5a11-06eba47c9960@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 02/09/2017 10:20 PM, Thomas Petazzoni wrote:
 
-On Wed,  8 Feb 2017 21:15:24 +0100, Yann E. MORIN wrote:
-> This script helps in testing that a package builds fine on a wide range
-> of architectures and toolchains: BE/LE, 32/64-bit, musl/glibc/uclibc...
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> [yann.morin.1998 at free.fr:
->  - completely rewrite the script from Thomas, with help from Luca
-> ]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Hello,
+>
+> On Wed,  8 Feb 2017 11:26:35 +0100, Zoltan Gyarmati wrote:
+>> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+>> ---
+>>  package/qt5/qt5canvas3d/Config.in         | 5 +++--
+>>  package/qt5/qt5connectivity/Config.in     | 6 ++++--
+>>  package/qt5/qt5declarative/Config.in      | 6 ++++--
+>>  package/qt5/qt5enginio/Config.in          | 5 +++--
+>>  package/qt5/qt5graphicaleffects/Config.in | 6 ++++--
+>>  package/qt5/qt5imageformats/Config.in     | 5 +++--
+>>  package/qt5/qt5location/Config.in         | 6 ++++--
+>>  package/qt5/qt5multimedia/Config.in       | 7 +++++--
+>>  package/qt5/qt5quickcontrols/Config.in    | 5 +++--
+>>  package/qt5/qt5quickcontrols2/Config.in   | 2 +-
+>>  package/qt5/qt5script/Config.in           | 5 +++--
+>>  package/qt5/qt5sensors/Config.in          | 5 +++--
+>>  package/qt5/qt5serialbus/Config.in        | 2 +-
+>>  package/qt5/qt5serialport/Config.in       | 6 ++++--
+>>  package/qt5/qt5svg/Config.in              | 5 +++--
+>>  package/qt5/qt5tools/Config.in            | 5 +++--
+>>  package/qt5/qt5webchannel/Config.in       | 6 ++++--
+>>  package/qt5/qt5webkit/Config.in           | 6 ++++--
+>>  package/qt5/qt5websockets/Config.in       | 7 +++++--
+>>  package/qt5/qt5x11extras/Config.in        | 5 +++--
+>>  package/qt5/qt5xmlpatterns/Config.in      | 5 +++--
+>>  21 files changed, 70 insertions(+), 40 deletions(-)
+> Applied to master, thanks. Since you're interested in Qt5, what about
+> adding yourself for package/qt5/ in the DEVELOPERS file?
+ Yes, it's fine with me, anyway I'm also testing the QtWebView build
+in the upcoming days, so there are more patches coming...
+>
+> Also Peter (Seiderer), you are only listed for a few Qt5 modules in
+> DEVELOPERS, what about using package/qt5/ instead?
+>
+> Both of you are using Qt5 apparently, and this is a very important
+> package in Buildroot. Having more people looking after build failures
+> and reviewing Qt5 patches would be good.
+>
+> Thanks!
+>
+> Thomas
+Thx, regards,
 
-Another comment: now that the script itself has been merged, adding a
-quick note in the manual about it would be nice, so that developers
-adding new packages (or bumping versions) can quickly test by using
-this script.
+Zoltan Gyarmati
+https://zgyarmati.de
 
-Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170209/84cf3240/attachment.asc>
