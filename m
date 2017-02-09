@@ -1,117 +1,95 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  9 Feb 2017 18:47:59 +0100
-Subject: [Buildroot] [PATCH 6/6] package/mpd: add choice between version
-	0.19 and 0.20
-In-Reply-To: <20170209174759.15819-1-joerg.krause@embedded.rocks>
-References: <20170209174759.15819-1-joerg.krause@embedded.rocks>
-Message-ID: <20170209174759.15819-7-joerg.krause@embedded.rocks>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  9 Feb 2017 18:48:29 +0100
+Subject: [Buildroot] [PATCH v1] ddrescue: new package
+Message-ID: <20170209174829.23326-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MPD version 0.20 being affected by GCC PR libstdc++/64735 means no mpd
-package available in Buildroot for the architectures NIOSII, ARMv4,
-ARMv5 and SPARCv8 until GCC 7 is released.
-
-As the next Buildroot release is in 2017.02 which is before GCC 7 is
-expected to be released add a choise between version 0.19 and 0.20, so
-that there is still an mpd package available for the affected
-architectures.
-
-Note, that we bumped the version from 0.19 to 0.20 within the current Buildroot
-release cycle.
-
-Note, that for the version 0.19 MPD requires libglib2.
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/mpd/Config.in | 31 +++++++++++++++++++++++++------
- package/mpd/mpd.mk    |  9 +++++++++
- 2 files changed, 34 insertions(+), 6 deletions(-)
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/ddrescue/Config.in     |  8 ++++++++
+ package/ddrescue/ddrescue.hash |  2 ++
+ package/ddrescue/ddrescue.mk   | 19 +++++++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/ddrescue/Config.in
+ create mode 100644 package/ddrescue/ddrescue.hash
+ create mode 100644 package/ddrescue/ddrescue.mk
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 8a28b4f1a..2f993737f 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -4,8 +4,6 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_USE_WCHAR # flac
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-@@ -20,6 +18,30 @@ menuconfig BR2_PACKAGE_MPD
- 
- if BR2_PACKAGE_MPD
- 
-+choice
-+	prompt "MPD version"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b8ccb4615..94f680454 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1186,6 +1186,7 @@ F:	board/raspberrypi/
+ F:	configs/raspberrypi3_defconfig
+ F:	package/assimp/
+ F:	package/bcm2835/
++F:	package/ddrescue/
+ F:	package/dejavu/
+ F:	package/dillo/
+ F:	package/edid-decode/
+diff --git a/package/Config.in b/package/Config.in
+index 114a5ad5f..deff0fe2c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1756,6 +1756,7 @@ menu "System tools"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpuload/Config.in"
+ 	source "package/dcron/Config.in"
++	source "package/ddrescue/Config.in"
+ 	source "package/debianutils/Config.in"
+ 	source "package/docker-containerd/Config.in"
+ 	source "package/docker-engine/Config.in"
+diff --git a/package/ddrescue/Config.in b/package/ddrescue/Config.in
+new file mode 100644
+index 000000000..7ec87ced7
+--- /dev/null
++++ b/package/ddrescue/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_DDRESCUE
++	bool "ddrescue"
++	help
++	  GNU ddrescue is a data recovery tool. It copies data from one file
++	  or block device (hard disc, cdrom, etc) to another, trying to
++	  rescue the good parts first in case of read errors.
 +
-+config BR2_MPD_VERSION_0_20
-+	bool "0.20"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++	  http://www.gnu.org/software/ddrescue/ddrescue.html
+diff --git a/package/ddrescue/ddrescue.hash b/package/ddrescue/ddrescue.hash
+new file mode 100644
+index 000000000..bffa6153f
+--- /dev/null
++++ b/package/ddrescue/ddrescue.hash
+@@ -0,0 +1,2 @@
++# From http://lists.gnu.org/archive/html/info-gnu/2017-02/msg00003.html
++sha1 df981672a612639ad0934e3fa6546a41d2feb99e ddrescue-1.22.tar.lz
+diff --git a/package/ddrescue/ddrescue.mk b/package/ddrescue/ddrescue.mk
+new file mode 100644
+index 000000000..23f03436e
+--- /dev/null
++++ b/package/ddrescue/ddrescue.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# ddrescue
++#
++################################################################################
 +
-+comment "version 0.20 needs toolchain w/ gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++DDRESCUE_VERSION = 1.22
++DDRESCUE_SOURCE = ddrescue-$(DDRESCUE_VERSION).tar.lz
++DDRESCUE_SITE = http://download.savannah.gnu.org/releases/ddrescue
++DDRESCUE_LICENSE = GPLv2+
++DDRESCUE_LICENSE_FILES = COPYING
++DDRESCUE_DEPENDENCIES = host-lzip
 +
-+comment "version 0.20 needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++define DDRESCUE_EXTRACT_CMDS
++	$(HOST_DIR)/usr/bin/lzip -d -c $(DL_DIR)/$(DDRESCUE_SOURCE) | \
++		tar --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
++endef
 +
-+config BR2_MPD_VERSION_0_19
-+	bool "0.19"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-+	select BR2_PACKAGE_LIBGLIB2
-+
-+comment "version 0.19 needs toolchain w/ gcc >= 4.6"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-+
-+endchoice
-+
- comment "Archive plugins"
- 
- config BR2_PACKAGE_MPD_BZIP2
-@@ -319,7 +341,4 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--
--comment "mpd needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 0efc8685f..ad5d2a678 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -4,8 +4,13 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_MPD_VERSION_0_20),y)
- MPD_VERSION_MAJOR = 0.20
- MPD_VERSION = $(MPD_VERSION_MAJOR).4
-+else
-+MPD_VERSION_MAJOR = 0.19
-+MPD_VERSION = $(MPD_VERSION_MAJOR).21
-+endif
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
-@@ -13,6 +18,10 @@ MPD_LICENSE = GPLv2+
- MPD_LICENSE_FILES = COPYING
- MPD_AUTORECONF = YES
- 
-+ifeq ($(BR2_MPD_VERSION_0_19),y)
-+MPD_DEPENDENCIES += libglib2
-+endif
-+
- # Some options need an explicit --disable or --enable
- 
- # Zeroconf support depends on libdns_sd from avahi.
++$(eval $(autotools-package))
 -- 
-2.11.1
+2.11.0
