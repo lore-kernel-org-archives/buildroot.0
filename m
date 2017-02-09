@@ -1,50 +1,62 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu,  9 Feb 2017 19:10:50 -0200
-Subject: [Buildroot] [PATCH] configs/mx25pdk: Bump U-Boot and kernel versions
-Message-ID: <1486674650-26891-1-git-send-email-festevam@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 9 Feb 2017 23:11:28 +0200
+Subject: [Buildroot] [PATCH 3/7] core: add generic support for lz
+	archives
+In-Reply-To: <20170209210037.sdsevsypvfsgjbw3@tarshish>
+References: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
+ <0fe191c3ce1294b21d01067eac0ec83e543ec97c.1486669818.git.baruch@tkos.co.il>
+ <20170209212612.6ef24427@gmx.net>
+ <20170209210037.sdsevsypvfsgjbw3@tarshish>
+Message-ID: <20170209211128.ssawhi6brgz7dh5q@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2017.01 version and kernel to 4.9.9.
+Hi Peter,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/mx25pdk_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Thu, Feb 09, 2017 at 11:00:37PM +0200, Baruch Siach wrote:
+> On Thu, Feb 09, 2017 at 09:26:12PM +0100, Peter Seiderer wrote:
+> > On Thu,  9 Feb 2017 21:50:14 +0200, Baruch Siach <baruch@tkos.co.il> wrote:
+> > > This commit teaches the generic code how to extract .tar.lz archives. When
+> > > lzip is not installed on the host, host-lzip gets built automatically.
+> > > 
+> > 
+> > On my host there is no lzip installed, with your patches applied I get the following
+> > error message:
+> > 
+> > which: no lzip in (/home/seiderer/Work/build_arm_qt5_stdcpp11_001/host/usr/bin)
+> > You must install '/home/seiderer/Work/build_arm_qt5_stdcpp11_001/host/usr/bin/lzip' on your build machine
+> > support/dependencies/dependencies.mk:22: recipe for target 'core-dependencies' failed
+> > make[1]: *** [core-dependencies] Error 1
+> > Makefile:16: recipe for target '_all' failed
+> > make: *** [_all] Error 2
+> 
+> Thanks for testing.
+> 
+> Does this fixes your problem?
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 303dda090daa..eb01c2fa0e2f 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -930,7 +930,7 @@ endif # SITE_METHOD
+>  # ZCAT="gzip -d -c", and to check for the dependency we only want 'gzip'.
+>  # Remove xzcat/lzip from the list of required dependencies, as they get built
+>  # automatically if they're not found.
+> -DL_TOOLS_DEPENDENCIES += $$(filter-out xzcat lzip,$$(firstword $$(call suitable-extractor,$$($(2)_SOURCE))))
+> +DL_TOOLS_DEPENDENCIES += $$(filter-out xzcat lzip,$$(notdir $$(firstword $$(call suitable-extractor,$$($(2)_SOURCE)))))
+>  
+>  # Ensure all virtual targets are PHONY. Listed alphabetically.
+>  .PHONY:	$(1) \
 
-diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
-index 65a6d12..c97ba76 100644
---- a/configs/mx25pdk_defconfig
-+++ b/configs/mx25pdk_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_arm926t=y
- 
--# Linux headers same as kernel, a 4.6 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx25pdk"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.9"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
+Thinking about it again, this is clearly not the right solution. It breaks 
+custom BR2_LZCAT. I'll try to come up with something better.
+
+baruch
+
 -- 
-2.7.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
