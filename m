@@ -1,87 +1,30 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Thu,  9 Feb 2017 11:07:19 -0600
-Subject: [Buildroot] [PATCH 1/1] Add text explaining that patches are not
-	applied for SITE_METHOD==local or OVERRRIDE_SRCDIR cases.
-Message-ID: <20170209170719.32146-1-grant.b.edwards@gmail.com>
+From: Luca Ceresoli <lucaceresoli77@gmail.com>
+Date: Thu, 9 Feb 2017 18:09:34 +0100
+Subject: [Buildroot] [PATCH 3/6] support/test-pkg: report number and
+ types of failures
+In-Reply-To: <dcd8080c616142b0f7f761e3749c92306b2f6863.1486584734.git.yann.morin.1998@free.fr>
+References: <cover.1486584734.git.yann.morin.1998@free.fr>
+ <dcd8080c616142b0f7f761e3749c92306b2f6863.1486584734.git.yann.morin.1998@free.fr>
+Message-ID: <0487b92f-1b25-fbaa-5bfe-ff9e82014d04@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Grant Edwards <grant.b.edwards@gmail.com>
----
- docs/manual/adding-packages-generic.txt | 18 ++++++++++--------
- docs/manual/customize-patches.txt       |  4 +++-
- docs/manual/patch-policy.txt            |  5 +++++
- 3 files changed, 18 insertions(+), 9 deletions(-)
+Hi,
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index a08283c..bbd3cf5 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -217,13 +217,14 @@ information is (assuming the package name is +libfoo+) :
-   full URL and download the patch from this location. Otherwise,
-   Buildroot will assume that the patch should be downloaded from
-   +LIBFOO_SITE+. If +HOST_LIBFOO_PATCH+ is not specified, it defaults
--  to +LIBFOO_PATCH+. Note that patches that are included in Buildroot
--  itself use a different mechanism: all files of the form
--  +*.patch+ present in the package directory inside
--  Buildroot will be applied to the package after extraction (see
--  xref:patch-policy[patching a package]). Finally, patches listed in
--  the +LIBFOO_PATCH+ variable are applied _before_ the patches stored
--  in the Buildroot package directory.
-+  to +LIBFOO_PATCH+.  Patches that are included in Buildroot itself
-+  use a different mechanism: all files of the form +*.patch+ present
-+  in the package directory inside Buildroot will be applied to the
-+  package after applying patches specified by +LIBFOO_PATCH+.  (See
-+  xref:patch-policy[patching a package].) [If +LIBFOO_SITE_METHOD+ is
-+  set to +local+, or if the +OVERRIDE_SRCDIR+ is used to specify a
-+  source directory, no patches are applied: the source directory is
-+  used as-is.]
- 
- * +LIBFOO_SITE+ provides the location of the package, which can be a
-   URL or a local filesystem path. HTTP, FTP and SCP are supported URL
-@@ -315,7 +316,8 @@ information is (assuming the package name is +libfoo+) :
-   ** +local+ for a local source code directory. One should use this
-      when +LIBFOO_SITE+ specifies a local directory path containing
-      the package source code. Buildroot copies the contents of the
--     source directory into the package's build directory.
-+     source directory into the package's build directory.  No patches
-+     are applied: the source directory contents are used as-is.
- 
- * +LIBFOO_GIT_SUBMODULES+ can be set to +YES+ to create an archive
-   with the git submodules in the repository.  This is only available
-diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
-index fa63541..18e6af8 100644
---- a/docs/manual/customize-patches.txt
-+++ b/docs/manual/customize-patches.txt
-@@ -11,7 +11,9 @@ architecture.
- 
- The +BR2_GLOBAL_PATCH_DIR+ configuration option can be used to specify
- a space separated list of one or more directories containing package
--patches.
-+patches.  [If a package's +_SITE_METHOD+ is set to +local+, or if the
-++OVERRIDE_SRCDIR+ feature is used to specify a source directory, no
-+patches are applied.]
- 
- For a specific version +<packageversion>+ of a specific package
- +<packagename>+, patches are applied from +BR2_GLOBAL_PATCH_DIR+ as
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index e1df8b0..33e1640 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -59,6 +59,11 @@ details.
- [[patch-apply-order]]
- === How patches are applied
- 
-+If a packate's +_SITE_METHOD+ is set to +local+, or if the
-++OVERRIDE_SRCDIR+ feature is used to specify a source directory, no
-+patches are applied: the source is used as-is.  Otherwise, patches are
-+applied as specified below.
-+
- . Run the +<packagename>_PRE_PATCH_HOOKS+ commands if defined;
- 
- . Cleanup the build directory, removing any existing +*.rej+ files;
+On 08/02/2017 21:15, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Review confirmed since the patch has not changed since v2.
+
+Additionally:
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+
 -- 
-2.10.2
+Luca
