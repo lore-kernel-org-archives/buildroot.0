@@ -1,50 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Feb 2017 15:01:40 +0100
-Subject: [Buildroot] [git commit] tslib: bump to 1.5
-Message-ID: <20170209140255.C4BB8821B5@busybox.osuosl.org>
+Date: Thu, 9 Feb 2017 15:02:09 +0100
+Subject: [Buildroot] [git commit] libevent: disable sample programs to
+	workaround static linking issue
+Message-ID: <20170209140258.145747FE2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=211d8a9dce207d832459644e227d8ac99399d394
+commit: https://git.buildroot.net/buildroot/commit/?id=1de31b0a67fac403944fe26897d0b0cf0b24f7d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Fixes:
+http://autobuild.buildroot.net/results/1e7/1e7027b1b87d88b4517b1b19d3a2ae54c24f2c10/
+http://autobuild.buildroot.net/results/ff7/ff7e010b41e7448d15d20396e9e9bd7319dd493b/
+http://autobuild.buildroot.net/results/269/269a3a76f61c65423ba703a85e94cc003fb75e4c/
+
+Libevent/libtool gets confused by the library order when statically linking
+the sample programs and passes -lz before -lcrypto even though libcrypto
+uses zlib.
+
+/bin/bash ./libtool --tag=CC --mode=link ..  -o sample/https-client \
+	sample/https-client.o sample/hostcheck.o \
+	sample/openssl_hostname_validation.o libevent.la \
+	libevent_openssl.la -lssl -lcrypto -lz -lz -lcrypto
+
+libtool: link: ..  -o sample/https-client sample/https-client.o \
+	sample/hostcheck.o sample/openssl_hostname_validation.o \
+	./.libs/libevent.a ./.libs/libevent_openssl.a \
+	-lssl -lz -lcrypto
+
+../libcrypto.a(c_zlib.o): In function `zlib_stateful_expand_block':
+c_zlib.c:(.text+0x30): undefined reference to `inflate'
+
+This is most likely fixable, but as the sample programs aren't installed /
+used, simply skip building them to save time and work around this issue.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tslib/tslib.hash | 6 ++----
- package/tslib/tslib.mk   | 3 +--
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ package/libevent/libevent.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index b731df2..d7ae4dc 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,4 +1,2 @@
--# taken from https://github.com/kergoth/tslib/releases/tag/1.4
--sha256  ad0373f1dbfda27caec92cb10421227f226c79d160488f1ac915585ba947741f  tslib-1.4.tar.xz
--# Locally computed
--sha256	b76d25358d1e2bbcc88b0b225e8d71cd00a4795f6d17020bae270940b17d0825  02795c4fa8b842c6fc017e86b5e036466bd4d3ef.patch
-+# https://github.com/kergoth/tslib/releases/download/1.5/tslib-1.5.tar.xz.sha256
-+sha256  94874fe72c5af5c9be642a2ce524f014eb1d59d15cf852f2d3b2cf380f04252d  tslib-1.5.tar.xz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 356c4c2..08b1d26 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index 0a5417f..128bb2a 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -11,6 +11,7 @@ LIBEVENT_LICENSE = BSD-3c, OpenBSD
+ LIBEVENT_LICENSE_FILES = LICENSE
+ # For 0001-Disable-building-test-programs.patch
+ LIBEVENT_AUTORECONF = YES
++LIBEVENT_CONF_OPTS = --disable-samples
  
--TSLIB_VERSION = 1.4
-+TSLIB_VERSION = 1.5
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL, LGPL
- TSLIB_LICENSE_FILES = COPYING
- 
--TSLIB_PATCH = https://github.com/kergoth/tslib/commit/02795c4fa8b842c6fc017e86b5e036466bd4d3ef.patch
- TSLIB_AUTORECONF = YES
- TSLIB_INSTALL_STAGING = YES
- TSLIB_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+ define LIBEVENT_REMOVE_PYSCRIPT
+ 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
