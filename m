@@ -1,54 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 23:29:37 +0100
-Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
- Kodi-specific patches
-In-Reply-To: <rk5nmdxipi.ln2@ID-313208.user.individual.net>
-References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
- <20170204114451.20935-2-bernd.kuhls@t-online.de>
- <20170204230821.GA3805@free.fr>
- <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20170205212408.GC3562@free.fr>
- <i6vmmdxipi.ln2@ID-313208.user.individual.net>
- <rk5nmdxipi.ln2@ID-313208.user.individual.net>
-Message-ID: <20170209232937.2a071f11@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  9 Feb 2017 23:30:55 +0100
+Subject: [Buildroot] [PATCH v1 2/2] WIP: qt5base: use system/buildroot
+	provided harfbuzz
+In-Reply-To: <20170209223055.31121-1-ps.report@gmx.net>
+References: <20170209223055.31121-1-ps.report@gmx.net>
+Message-ID: <20170209223055.31121-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Missing BR2_TOOLCHAIN_HAS_SYNC_4 dependecy propagation from harfbuzz.
+---
+ package/qt5/qt5base/Config.in  | 1 +
+ package/qt5/qt5base/qt5base.mk | 2 ++
+ 2 files changed, 3 insertions(+)
 
-On Mon, 06 Feb 2017 22:15:39 +0100, Bernd Kuhls wrote:
-
-> > I will try, but I am unsure that your proposal will work.  
-> 
-> Hi Yann,
-> 
-> tried and failed.
-
-Are these .a files still needed after the switch to CMake as the build
-system for Kodi?
-
-I would be OK to merge those hacks for libdvdcss, libdvdread and
-libdvdnav if we know they are going to be removed when the next version
-of Kodi is released. However, if these hacks are still needed for the
-next version of Kodi, then I'm afraid I won't merge them. This is way
-too ugly, and what Kodi is doing here is truly horrible and should be
-fixed in Kodi.
-
-This is a quite critical topic, as it's blocking the inclusion of the
-new version of Kodi in Buildroot.
-
-Also, for the patches that apply to the libdvdcss, libdvdread and
-libdvdnav code base, it would be good to know if they have been
-submitted to the respective upstream projects, or if it's stuff that we
-may have to keep in Buildroot forever.
-
-Thanks!
-
-Thomas
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 337dcf245..9cfbd10ab 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -129,6 +129,7 @@ config BR2_PACKAGE_QT5BASE_XML
+ config BR2_PACKAGE_QT5BASE_GUI
+ 	bool "gui module"
+ 	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_HARFBUZZ
+ 	# At least one graphic backend must be enabled, so enable
+ 	# linuxfb if nothing is enabled.
+ 	select BR2_PACKAGE_QT5BASE_LINUXFB if \
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 07803e776..5c17c649d 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -102,6 +102,8 @@ endif
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-gui,-no-gui)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-system-freetype,-no-freetype)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_GUI),freetype)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-system-harfbuzz,-no-harfbuzz)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_GUI),harfbuzz)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_WIDGETS),-widgets,-no-widgets)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_LINUXFB),--enable-linuxfb,-no-linuxfb)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),-directfb,-no-directfb)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
