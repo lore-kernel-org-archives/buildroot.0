@@ -1,49 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 21:39:15 +0100
-Subject: [Buildroot] [git commit] ddrescue: fix target build
-Message-ID: <20170209203947.E195C821EB@busybox.osuosl.org>
+Date: Thu, 9 Feb 2017 21:40:44 +0100
+Subject: [Buildroot] [PATCH 7/7] ddrescue: fix target build
+In-Reply-To: <99cad486180867002ec348364cf9ac9028b74d0e.1486669818.git.baruch@tkos.co.il>
+References: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
+ <99cad486180867002ec348364cf9ac9028b74d0e.1486669818.git.baruch@tkos.co.il>
+Message-ID: <20170209214044.6aacb66e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc8c12345cf2ff6e154845f89d1ba65ea2bd3f49
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-ddrescue is not an autotools package. Convert to generic package to make
-it build correctly for target architecture.
+On Thu,  9 Feb 2017 21:50:18 +0200, Baruch Siach wrote:
+> ddrescue is not an autotools package. Covert to generic package to make it
+> build correctly for target architecture.
+> 
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/ddrescue/ddrescue.mk | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ddrescue/ddrescue.mk | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+It's really weird to have this mixed with a patch series related to
+improving lzip support. I know ddrescue is using lzip, but this patch
+is really unrelated from lzip support. It would be better to send such
+patches separately.
 
-diff --git a/package/ddrescue/ddrescue.mk b/package/ddrescue/ddrescue.mk
-index 23f0343..145d052 100644
---- a/package/ddrescue/ddrescue.mk
-+++ b/package/ddrescue/ddrescue.mk
-@@ -16,4 +16,20 @@ define DDRESCUE_EXTRACT_CMDS
- 		tar --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
- endef
- 
--$(eval $(autotools-package))
-+define DDRESCUE_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		$(TARGET_MAKE_ENV) ./configure \
-+		--prefix=/usr \
-+		$(TARGET_CONFIGURE_OPTS) \
-+	)
-+endef
-+
-+define DDRESCUE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define DDRESCUE_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+endef
-+
-+$(eval $(generic-package))
+Nevertheless, this was very useful, so I've applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
