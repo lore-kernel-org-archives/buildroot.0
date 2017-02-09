@@ -1,44 +1,55 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 9 Feb 2017 22:52:55 +0200
-Subject: [Buildroot] [PATCH 7/7] ddrescue: fix target build
-In-Reply-To: <20170209214044.6aacb66e@free-electrons.com>
-References: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
- <99cad486180867002ec348364cf9ac9028b74d0e.1486669818.git.baruch@tkos.co.il>
- <20170209214044.6aacb66e@free-electrons.com>
-Message-ID: <20170209205255.oqgsll6bsfvfqt7i@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Feb 2017 21:54:59 +0100
+Subject: [Buildroot] [git commit] package/cryptodev-linux: fix build with
+	recent kernels
+Message-ID: <20170209205509.18E7A8218E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=d4eb669de285bcb478de9059677a6d3ec191d180
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Feb 09, 2017 at 09:40:44PM +0100, Thomas Petazzoni wrote:
-> On Thu,  9 Feb 2017 21:50:18 +0200, Baruch Siach wrote:
-> > ddrescue is not an autotools package. Covert to generic package to make it
-> > build correctly for target architecture.
-> > 
-> > Cc: Peter Seiderer <ps.report@gmx.net>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> >  package/ddrescue/ddrescue.mk | 18 +++++++++++++++++-
-> >  1 file changed, 17 insertions(+), 1 deletion(-)
-> 
-> It's really weird to have this mixed with a patch series related to
-> improving lzip support. I know ddrescue is using lzip, but this patch
-> is really unrelated from lzip support. It would be better to send such
-> patches separately.
+cryptodev-linux-1.8 build is broken with kernel >= 4.6.0 because of
+APIs changes in the kernel. Upstream already fixed this:
 
-I found the problem when testing ddrescue build, and the patch context depends 
-on the previous patch. So I thought it might be better to keep the path in 
-this series to indicate the dependency.
+https://github.com/cryptodev-linux/cryptodev-linux/commit/2b29be8ac41414ed19cb4f5d5626d9bd0d7b11a8
+https://github.com/cryptodev-linux/cryptodev-linux/commit/f126e4837e6334d0464540995df7426fedf6b175
+https://github.com/cryptodev-linux/cryptodev-linux/commit/f14b4706b0d04988e7e5bc8c4d2aefef9f029d9d
+https://github.com/cryptodev-linux/cryptodev-linux/commit/cb186f682679383e8b5806240927903730ce85d9
 
-But you are right. I should have posted this patch separately.
+Bump to latest commit to fix cryptodev-linux build.
 
-baruch
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cryptodev-linux/cryptodev-linux.hash | 4 ++--
+ package/cryptodev-linux/cryptodev-linux.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
+index d7195ac..6d9efca 100644
+--- a/package/cryptodev-linux/cryptodev-linux.hash
++++ b/package/cryptodev-linux/cryptodev-linux.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking php signature
+-sha256	67fabde9fb67b286a96c4f45b594b0eccd0f761b495705c18f2ae9461b831376	cryptodev-linux-1.8.tar.gz
++# Locally calculated
++sha256 a87e354e1218e6a2e3083f7be6a3e351c42ec55515f1aff1b50bd301cee7d8dd cryptodev-linux-2b29be8ac41414ed19cb4f5d5626d9bd0d7b11a8.tar.gz
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index e23e1e3..709c6ed 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CRYPTODEV_LINUX_VERSION = 1.8
+-CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
++CRYPTODEV_LINUX_VERSION = 2b29be8ac41414ed19cb4f5d5626d9bd0d7b11a8
++CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPLv2+
+ CRYPTODEV_LINUX_LICENSE_FILES = COPYING
