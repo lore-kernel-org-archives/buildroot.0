@@ -1,49 +1,42 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  9 Feb 2017 21:50:18 +0200
-Subject: [Buildroot] [PATCH 7/7] ddrescue: fix target build
+Date: Thu,  9 Feb 2017 21:50:15 +0200
+Subject: [Buildroot] [PATCH 4/7] ed: use generic extract command
 In-Reply-To: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
 References: <a74544c971456bb628345f38c83de4148a6ca1e9.1486669818.git.baruch@tkos.co.il>
-Message-ID: <99cad486180867002ec348364cf9ac9028b74d0e.1486669818.git.baruch@tkos.co.il>
+Message-ID: <362732cc172526c591a4a1a15292c664b0d21332.1486669818.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ddrescue is not an autotools package. Covert to generic package to make it
-build correctly for target architecture.
+The generic code now knows how to extract .tar.lz archives. Remove the local
+extract code.
 
-Cc: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/ddrescue/ddrescue.mk | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ package/ed/ed.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/ddrescue/ddrescue.mk b/package/ddrescue/ddrescue.mk
-index 4c87e4dac8fa..4e244e6bdaef 100644
---- a/package/ddrescue/ddrescue.mk
-+++ b/package/ddrescue/ddrescue.mk
-@@ -10,4 +10,20 @@ DDRESCUE_SITE = http://download.savannah.gnu.org/releases/ddrescue
- DDRESCUE_LICENSE = GPLv2+
- DDRESCUE_LICENSE_FILES = COPYING
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 50adeb4ec5b4..6b9f65ec5280 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -10,15 +10,9 @@ ED_SOURCE = ed-$(ED_VERSION).tar.lz
+ ED_CONF_OPTS = \
+ 	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+ 	LDFLAGS="$(TARGET_LDFLAGS)"
+-ED_DEPENDENCIES = host-lzip
+ ED_LICENSE = GPLv3+
+ ED_LICENSE_FILES = COPYING
  
--$(eval $(autotools-package))
-+define DDRESCUE_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		$(TARGET_MAKE_ENV) ./configure \
-+		--prefix=/usr \
-+		$(TARGET_CONFIGURE_OPTS) \
-+	)
-+endef
-+
-+define DDRESCUE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define DDRESCUE_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+endef
-+
-+$(eval $(generic-package))
+-define ED_EXTRACT_CMDS
+-	$(HOST_DIR)/usr/bin/lzip -d -c $(DL_DIR)/$(ED_SOURCE) | \
+-		tar --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
+-endef
+-
+ define ED_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_MAKE_ENV) ./configure \
 -- 
 2.11.0
