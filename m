@@ -1,49 +1,45 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed,  8 Feb 2017 19:07:10 -0500
-Subject: [Buildroot] [PATCH 1/1] automake: fix unescaped left brace warning
-	patch.
-Message-ID: <20170209000710.13754-1-Adamduskett@outlook.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  9 Feb 2017 06:36:32 +0200
+Subject: [Buildroot] [PATCH] lm-sensors: download from debian snapshot
+	archive
+Message-ID: <99da53828ab38a20d970d06066e692dcbc49ec7d.1486614992.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Automake currently has a unescaped left brace in it's automake.in folder
-that generates the warning:
-Unescaped left brace in regex is deprecated, passed through in regex;
-This patch fixes this warning.
+ftp.netroedge.com is (also) down. Download the package from the Debian
+snapshot archive.
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- .../0002-fix-unescaped-left-brace-warning.patch       | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/automake/0002-fix-unescaped-left-brace-warning.patch
+ package/lm-sensors/lm-sensors.hash | 2 +-
+ package/lm-sensors/lm-sensors.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/automake/0002-fix-unescaped-left-brace-warning.patch b/package/automake/0002-fix-unescaped-left-brace-warning.patch
-new file mode 100644
-index 0000000..a33b1f1
---- /dev/null
-+++ b/package/automake/0002-fix-unescaped-left-brace-warning.patch
-@@ -0,0 +1,19 @@
-+Automake currently has a unescaped left brace in it's automake.in folder
-+that generates the warning:
-+Unescaped left brace in regex is deprecated, passed through in regex;
-+This patch fixes this warning.
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+
-+diff -Naur a/bin/automake.in b/bin/automake.in
-+--- a/bin/automake.in	2015-01-05 14:25:55.000000000 -0500
-++++ b/bin/automake.in	2017-02-08 18:59:24.963611569 -0500
-+@@ -3878,7 +3878,7 @@
-+ sub substitute_ac_subst_variables
-+ {
-+   my ($text) = @_;
-+-  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
-++  $text =~ s/\$\{([^ \t=:+{}]+)\}/substitute_ac_subst_variables_worker ($1)/ge;
-+   return $text;
-+ }
-+
+diff --git a/package/lm-sensors/lm-sensors.hash b/package/lm-sensors/lm-sensors.hash
+index 8cbd3d1f7573..eeaa633f461f 100644
+--- a/package/lm-sensors/lm-sensors.hash
++++ b/package/lm-sensors/lm-sensors.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	e0579016081a262dd23eafe1d22b41ebde78921e73a1dcef71e05e424340061f	lm_sensors-3.4.0.tar.bz2
++sha256	e0579016081a262dd23eafe1d22b41ebde78921e73a1dcef71e05e424340061f	lm-sensors_3.4.0.orig.tar.bz2
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index 314d107dc356..a72bba26e63c 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ LM_SENSORS_VERSION = 3.4.0
+-LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
+-LM_SENSORS_SITE = ftp://ftp.netroedge.com/pub/lm-sensors
++LM_SENSORS_SOURCE = lm-sensors_$(LM_SENSORS_VERSION).orig.tar.bz2
++LM_SENSORS_SITE = http://snapshot.debian.org/archive/debian/20170208T211941Z/pool/main/l/lm-sensors
+ LM_SENSORS_INSTALL_STAGING = YES
+ LM_SENSORS_DEPENDENCIES = host-bison host-flex
+ LM_SENSORS_LICENSE = libsensors LGPLv2.1+, programs GPLv2+
 -- 
-2.9.3
+2.11.0
