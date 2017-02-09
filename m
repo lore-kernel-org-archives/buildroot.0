@@ -1,59 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2017 22:20:48 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/qt5/*: add meaningful help
- texts and package URLs
-In-Reply-To: <1486549595-15691-3-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1486549595-15691-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1486549595-15691-3-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20170209222048.0a9e3c45@free-electrons.com>
+Date: Thu, 9 Feb 2017 22:22:21 +0100
+Subject: [Buildroot] [git commit] configs/mx25pdk: Bump U-Boot and kernel
+	versions
+Message-ID: <20170209212226.A934B82189@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0699f4ab0b7d6c43cb9d9ffec7c21c3c40473a10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  8 Feb 2017 11:26:35 +0100, Zoltan Gyarmati wrote:
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> ---
->  package/qt5/qt5canvas3d/Config.in         | 5 +++--
->  package/qt5/qt5connectivity/Config.in     | 6 ++++--
->  package/qt5/qt5declarative/Config.in      | 6 ++++--
->  package/qt5/qt5enginio/Config.in          | 5 +++--
->  package/qt5/qt5graphicaleffects/Config.in | 6 ++++--
->  package/qt5/qt5imageformats/Config.in     | 5 +++--
->  package/qt5/qt5location/Config.in         | 6 ++++--
->  package/qt5/qt5multimedia/Config.in       | 7 +++++--
->  package/qt5/qt5quickcontrols/Config.in    | 5 +++--
->  package/qt5/qt5quickcontrols2/Config.in   | 2 +-
->  package/qt5/qt5script/Config.in           | 5 +++--
->  package/qt5/qt5sensors/Config.in          | 5 +++--
->  package/qt5/qt5serialbus/Config.in        | 2 +-
->  package/qt5/qt5serialport/Config.in       | 6 ++++--
->  package/qt5/qt5svg/Config.in              | 5 +++--
->  package/qt5/qt5tools/Config.in            | 5 +++--
->  package/qt5/qt5webchannel/Config.in       | 6 ++++--
->  package/qt5/qt5webkit/Config.in           | 6 ++++--
->  package/qt5/qt5websockets/Config.in       | 7 +++++--
->  package/qt5/qt5x11extras/Config.in        | 5 +++--
->  package/qt5/qt5xmlpatterns/Config.in      | 5 +++--
->  21 files changed, 70 insertions(+), 40 deletions(-)
+Bump U-Boot to 2017.01 version and kernel to 4.9.9.
 
-Applied to master, thanks. Since you're interested in Qt5, what about
-adding yourself for package/qt5/ in the DEVELOPERS file?
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/mx25pdk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Also Peter (Seiderer), you are only listed for a few Qt5 modules in
-DEVELOPERS, what about using package/qt5/ instead?
-
-Both of you are using Qt5 apparently, and this is a very important
-package in Buildroot. Having more people looking after build failures
-and reviewing Qt5 patches would be good.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
+index 65a6d12..c97ba76 100644
+--- a/configs/mx25pdk_defconfig
++++ b/configs/mx25pdk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
+ 
+-# Linux headers same as kernel, a 4.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx25pdk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
