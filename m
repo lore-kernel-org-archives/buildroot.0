@@ -1,7 +1,9 @@
 From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Thu,  9 Feb 2017 14:45:55 +0100
-Subject: [Buildroot] [PATCH 1/4] libscrypt: New package
-Message-ID: <20170209134558.3723-1-stefan.sorensen@spectralink.com>
+Date: Thu,  9 Feb 2017 14:45:56 +0100
+Subject: [Buildroot] [PATCH 2/4] cracklib: New package
+In-Reply-To: <20170209134558.3723-1-stefan.sorensen@spectralink.com>
+References: <20170209134558.3723-1-stefan.sorensen@spectralink.com>
+Message-ID: <20170209134558.3723-2-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,86 +12,114 @@ To: buildroot@busybox.net
 
 Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 ---
- package/Config.in                |  1 +
- package/libscrypt/Config.in      |  7 +++++++
- package/libscrypt/libscrypt.hash |  2 ++
- package/libscrypt/libscrypt.mk   | 33 +++++++++++++++++++++++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 package/libscrypt/Config.in
- create mode 100644 package/libscrypt/libscrypt.hash
- create mode 100644 package/libscrypt/libscrypt.mk
+ package/Config.in              |  1 +
+ package/cracklib/Config.in     | 28 ++++++++++++++++++++++++++++
+ package/cracklib/cracklib.hash |  3 +++
+ package/cracklib/cracklib.mk   | 39 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 71 insertions(+)
+ create mode 100644 package/cracklib/Config.in
+ create mode 100644 package/cracklib/cracklib.hash
+ create mode 100644 package/cracklib/cracklib.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 114a5ad..4a95749 100644
+index 4a95749..a149936 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -928,6 +928,7 @@ menu "Crypto"
- 	source "package/libmcrypt/Config.in"
- 	source "package/libmhash/Config.in"
- 	source "package/libnss/Config.in"
-+	source "package/libscrypt/Config.in"
- 	source "package/libsecret/Config.in"
- 	source "package/libsha1/Config.in"
- 	source "package/libsodium/Config.in"
-diff --git a/package/libscrypt/Config.in b/package/libscrypt/Config.in
+@@ -1317,6 +1317,7 @@ menu "Other"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
+ 	source "package/cppcms/Config.in"
++	source "package/cracklib/Config.in"
+ 	source "package/dawgdic/Config.in"
+ 	source "package/ding-libs/Config.in"
+ 	source "package/eigen/Config.in"
+diff --git a/package/cracklib/Config.in b/package/cracklib/Config.in
 new file mode 100644
-index 0000000..c443d0d
+index 0000000..cf428fd
 --- /dev/null
-+++ b/package/libscrypt/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBSCRYPT
-+	bool "libscrypt"
++++ b/package/cracklib/Config.in
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_CRACKLIB
++	bool "cracklib"
 +	help
-+	  This is a library that implements the secure password
-+	  hashing function "scrypt".
++	  CrackLib tests passwords to determine whether they match
++	  certain security-oriented characteristics, with the purpose
++	  of stopping users from choosing passwords that are easy to
++	  guess. CrackLib performs several tests on passwords: it
++	  tries to generate words from a username and gecos entry and
++	  checks those words against the password; it checks for
++	  simplistic patterns in passwords; and it checks for the
++	  password in a dictionary.
 +
-+	  http://www.lolware.net/libscrypt.html
-diff --git a/package/libscrypt/libscrypt.hash b/package/libscrypt/libscrypt.hash
++	  https://github.com/cracklib/cracklib
++
++if BR2_PACKAGE_CRACKLIB
++
++config BR2_PACKAGE_CRACKLIB_TOOLS
++	bool "install tools"
++	help
++	  Install cracklib command line tools for creating dicts.
++
++config BR2_PACKAGE_CRACKLIB_FULL_DICT
++	bool "full dict"
++	help
++	  Install the full cracklib dict (requires about 8Mb extra target
++	  space).
++
++endif
+diff --git a/package/cracklib/cracklib.hash b/package/cracklib/cracklib.hash
 new file mode 100644
-index 0000000..920d752
+index 0000000..3038a47
 --- /dev/null
-+++ b/package/libscrypt/libscrypt.hash
-@@ -0,0 +1,2 @@
++++ b/package/cracklib/cracklib.hash
+@@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256	68e377e79745c10d489b759b970e52d819dbb80dd8ca61f8c975185df3f457d3	v1.21.tar.gz
-diff --git a/package/libscrypt/libscrypt.mk b/package/libscrypt/libscrypt.mk
++sha256	17cf76943de272fd579ed831a1fd85339b393f8d00bf9e0d17c91e972f583343	cracklib-2.9.6.tar.gz
++sha256	27973245225eeb9d0090e97f3dea4197dec99b64d9d3a791a60298f3b021824c	cracklib-words-2.9.6.gz
+diff --git a/package/cracklib/cracklib.mk b/package/cracklib/cracklib.mk
 new file mode 100644
-index 0000000..5da9928
+index 0000000..c8e7fd5
 --- /dev/null
-+++ b/package/libscrypt/libscrypt.mk
-@@ -0,0 +1,33 @@
++++ b/package/cracklib/cracklib.mk
+@@ -0,0 +1,39 @@
 +################################################################################
 +#
-+# libscrypt
++# cracklib
 +#
 +################################################################################
 +
-+LIBSCRYPT_VERSION = 1.21
-+LIBSCRYPT_SOURCE = v$(LIBSCRYPT_VERSION).tar.gz
-+LIBSCRYPT_SITE = https://github.com/technion/libscrypt/archive
-+LIBSCRYPT_LICENSE = BSD
-+LIBSCRYPT_INSTALL_STAGING = YES
-+
-+define LIBSCRYPT_DISABLE_STACK_PROTECTOR
-+	$(SED) 's/-fstack-protector//g' $(@D)/Makefile
-+endef
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
-+LIBSCRYPT_POST_EXTRACT_HOOKS += LIBSCRYPT_DISABLE_STACK_PROTECTOR
++CRACKLIB_VERSION = 2.9.6
++CRACKLIB_SITE = https://github.com/cracklib/cracklib/releases/download/cracklib-$(CRACKLIB_VERSION)
++CRACKLIB_LICENSE = LGPLv2+
++CRACKLIB_LICENSE_FILES = COPYING.LIB README-LICENSE
++CRACKLIB_INSTALL_STAGING = YES
++CRACKLIB_DEPENDENCIES = host-cracklib
++ifeq ($(BR2_PACKAGE_CRACKLIB_FULL_DICT),y)
++CRACKLIB_EXTRA_DOWNLOADS = cracklib-words-$(CRACKLIB_VERSION).gz
 +endif
 +
-+define LIBSCRYPT_BUILD_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
++ifeq ($(BR2_PACKAGE_CRACKLIB_TOOLS),)
++define CRACKLIB_REMOVE_TOOLS
++	rm -f $(TARGET_DIR)/usr/sbin/*cracklib*
 +endef
 +
-+define LIBSCRYPT_INSTALL_STAGING_CMDS
-+        $(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) install
++CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_REMOVE_TOOLS
++endif
++
++ifeq ($(BR2_PACKAGE_CRACKLIB_FULL_DICT),y)
++CRACKLIB_DICT_SOURCE = $(DL_DIR)/cracklib-words-$(CRACKLIB_VERSION).gz
++else
++CRACKLIB_DICT_SOURCE = $(@D)/dicts/cracklib-small
++endif
++
++define CRACKLIB_BUILD_DICT
++	cracklib-format $(CRACKLIB_DICT_SOURCE) | cracklib-packer $(TARGET_DIR)/usr/share/cracklib/pw_dict
++	rm $(TARGET_DIR)/usr/share/cracklib/cracklib-small
 +endef
 +
-+define LIBSCRYPT_INSTALL_TARGET_CMDS
-+        $(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) install
-+endef
++CRACKLIB_POST_INSTALL_TARGET_HOOKS += CRACKLIB_BUILD_DICT
 +
-+$(eval $(generic-package))
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.9.3
