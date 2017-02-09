@@ -1,48 +1,48 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  9 Feb 2017 18:47:53 +0100
-Subject: [Buildroot] [PATCH 0/6] Deal with GCC PR libstdc++/64735
-Message-ID: <20170209174759.15819-1-joerg.krause@embedded.rocks>
+Date: Thu,  9 Feb 2017 18:47:58 +0100
+Subject: [Buildroot] [PATCH 5/6] package/mpd: affected by GCC PR
+	libstdc++/64735
+In-Reply-To: <20170209174759.15819-1-joerg.krause@embedded.rocks>
+References: <20170209174759.15819-1-joerg.krause@embedded.rocks>
+Message-ID: <20170209174759.15819-6-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libstdc++ does not support exception propagation without lock-free atomic int.
-The issue has been filed as GCC PR libstdc++/64735 [1] and fixed in GCC trunk
-r244051 [2] and will be available in GCC 7. Patch #1 adds an option for
-toolchains affected by this bug.
+MPD uses `exception_ptr` from libstdc++ which is not available for
+architectures affected by GCC PR libstdc++/64735.
 
-Patch #2, #3, and #4 marks the architectures NIOS II, ARMv4, ARMv5 and SPARCv8
-as affected by this bug.
+Fixes:
+http://autobuild.buildroot.net/results/552/552e0c4d6482b60045a91fd398c4ffecd8877cce/
+http://autobuild.buildroot.net/results/4d3/4d384950b6dba21163bdcd7721ddad133beeb72b/
+http://autobuild.buildroot.net/results/842/842e992315dd78765938e6b629386a18fa9bb00c/
+.. and many more.
 
-At least package mpd version 0.20 does not build for those architectures as it uses
-`exception_ptr`. The package was bumped within the current release cycle. Mark the
-package as affected in patch #5.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mpd/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Patch #6 adds a choice between version 0.20 and 0.19 to mpd to still allow
-building the package for the above architectures. Version 0.19 does not use the
-exception C++11 feature and is therefore unaffected by GCC PR libstdc++/64735.
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735
-[2] https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=244051
-
-J?rg Krause (6):
-  toolchain: add option for toolchains affected by GCC PR
-    libstdc++/64735
-  arch: mark NIOS II as affected by GCC PR libstdc++/64735
-  arch/arm: mark ARMv{4,5} as affected by GCC PR libstdc++/64735
-  arch/sparc: mark SPARCv8 as affected by GCC PR libstdc++/64735
-  package/mpd: affected by GCC PR libstdc++/64735
-  package/mpd: add choice between version 0.19 and 0.20
-
- arch/Config.in                |  1 +
- arch/Config.in.arm            |  2 ++
- arch/Config.in.sparc          |  1 +
- package/mpd/Config.in         | 27 +++++++++++++++++++++++++--
- package/mpd/mpd.mk            |  9 +++++++++
- toolchain/toolchain-common.in |  4 ++++
- 6 files changed, 42 insertions(+), 2 deletions(-)
-
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 9b22f68ce..8a28b4f1a 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -5,6 +5,7 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -319,3 +320,6 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
++comment "mpd needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
 2.11.1
