@@ -1,41 +1,117 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  9 Feb 2017 21:57:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-input-libinput:
-	bump version to 0.24.0
-Message-ID: <20170209205725.27597-1-bernd.kuhls@t-online.de>
+From: Ilias Apalodimas <apalos@gmail.com>
+Date: Thu,  9 Feb 2017 22:59:19 +0200
+Subject: [Buildroot] [PATCH v4 1/2] keepalived: new package
+Message-ID: <1486673960-2600-1-git-send-email-apalos@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
 ---
- .../xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash      | 4 ++--
- .../x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk  | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/keepalived/Config.in       | 14 ++++++++++++++
+ package/keepalived/keepalived.hash |  3 +++
+ package/keepalived/keepalived.mk   | 32 ++++++++++++++++++++++++++++++++
+ 5 files changed, 53 insertions(+)
+ create mode 100644 package/keepalived/Config.in
+ create mode 100644 package/keepalived/keepalived.hash
+ create mode 100644 package/keepalived/keepalived.mk
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index abc066427..0d3529493 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.x.org/archives/xorg-announce/2016-December/002749.html
--sha256 0b53ebdfe8f8fc7554dd92af1b1c3088a6d3ec4ae1a33fc76f57d635c736a9dc  xf86-input-libinput-0.23.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-February/002776.html
-+sha256 ddcb07350aed59b2996a92a1b4ff64d1c0b0c86a3f0ddca15b2b1c8c8bb13628  xf86-input-libinput-0.24.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index 696a8575c..e293b4e80 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 94f6804..eb02c4a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -765,6 +765,9 @@ F:	package/python-rpi-gpio/
+ N:	Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+ F:	package/angularjs/
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.23.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.24.0
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
++N:	Ilias Apalodimas <apalos@gmail.com>
++F:	package/keepalived/
++
+ N:	James Knight <james.knight@rockwellcollins.com>
+ F:	package/atkmm/
+ F:	package/cairomm/
+diff --git a/package/Config.in b/package/Config.in
+index deff0fe..5b3871c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1546,6 +1546,7 @@ menu "Networking applications"
+ 	source "package/irssi/Config.in"
+ 	source "package/iw/Config.in"
+ 	source "package/janus-gateway/Config.in"
++	source "package/keepalived/Config.in"
+ 	source "package/kismet/Config.in"
+ 	source "package/knock/Config.in"
+ 	source "package/leafnode2/Config.in"
+diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
+new file mode 100644
+index 0000000..721eed5
+--- /dev/null
++++ b/package/keepalived/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_KEEPALIVED
++	bool "keepalived"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_POPT
++	depends on BR2_USE_MMU
++	help
++	  The main goal of the keepalived project is to add a strong & robust
++	  keepalive facility to the Linux Virtual Server project.
++	  It implements a multilayer TCP/IP stack checks. Keepalived implements
++	  a framework based on three family checks : Layer3, Layer4 & Layer5.
++	  This framework gives the daemon the ability of checking a LVS server
++	  pool states. Keepalived can be sumarize as a LVS driving daemon.
++
++	  http://www.keepalived.org/
+diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
+new file mode 100644
+index 0000000..e868587
+--- /dev/null
++++ b/package/keepalived/keepalived.hash
+@@ -0,0 +1,3 @@
++# From http://www.keepalived.org/download.html
++md5 744025d57c7f065c42fe925b0283897e	keepalived-1.3.2.tar.gz
++sha1	449f06dfce07e05c1ebd516d0545182e1416f264  keepalived-1.3.2.tar.gz
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+new file mode 100644
+index 0000000..da5b5d8
+--- /dev/null
++++ b/package/keepalived/keepalived.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# keepalived
++#
++################################################################################
++
++KEEPALIVED_VERSION = 1.3.2
++KEEPALIVED_SITE = http://www.keepalived.org/software
++KEEPALIVED_DEPENDENCIES = host-pkgconf openssl popt
++KEEPALIVED_LICENSE = GPLv2+
++KEEPALIVED_LICENSE_FILES = COPYING
++KEEPALIVED_CONF_OPTS += --disable-dbus
++
++ifeq ($(BR2_PACKAGE_LIBNL),y)
++KEEPALIVED_DEPENDENCIES += libnfnetlink
++endif
++
++ifeq ($(BR2_PACKAGE_IPSET),y)
++KEEPALIVED_DEPENDENCIES += ipset
++KEEPALIVED_CONF_OPTS += --enable-libipset
++else
++KEEPALIVED_CONF_OPTS += --disable-libipset
++endif
++
++ifeq ($(BR2_PACKAGE_IPTABLES),y)
++KEEPALIVED_DEPENDENCIES += iptables
++KEEPALIVED_CONF_OPTS += --enable-libiptc
++else
++KEEPALIVED_CONF_OPTS += --disable-libiptc
++endif
++
++$(eval $(autotools-package))
 -- 
-2.11.0
+1.9.1
