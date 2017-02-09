@@ -1,48 +1,36 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  9 Feb 2017 18:47:58 +0100
-Subject: [Buildroot] [PATCH 5/6] package/mpd: affected by GCC PR
+Date: Thu,  9 Feb 2017 18:47:55 +0100
+Subject: [Buildroot] [PATCH 2/6] arch: mark NIOS II as affected by GCC PR
 	libstdc++/64735
 In-Reply-To: <20170209174759.15819-1-joerg.krause@embedded.rocks>
 References: <20170209174759.15819-1-joerg.krause@embedded.rocks>
-Message-ID: <20170209174759.15819-6-joerg.krause@embedded.rocks>
+Message-ID: <20170209174759.15819-3-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MPD uses `exception_ptr` from libstdc++ which is not available for
-architectures affected by GCC PR libstdc++/64735.
-
-Fixes:
-http://autobuild.buildroot.net/results/552/552e0c4d6482b60045a91fd398c4ffecd8877cce/
-http://autobuild.buildroot.net/results/4d3/4d384950b6dba21163bdcd7721ddad133beeb72b/
-http://autobuild.buildroot.net/results/842/842e992315dd78765938e6b629386a18fa9bb00c/
-.. and many more.
+NIOS II does not support always lock-free atomic ints. Therefore,
+exception_ptr, nested_exception, and future from libstdc++ are not
+available before GCC 7.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/mpd/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 9b22f68ce..8a28b4f1a 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -5,6 +5,7 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-@@ -319,3 +320,6 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+
-+comment "mpd needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/arch/Config.in b/arch/Config.in
+index 7149b2cb3..31e674d92 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -154,6 +154,7 @@ config BR2_mips64el
+ config BR2_nios2
+ 	bool "Nios II"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
++	select BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	help
+ 	  Nios II is a soft core processor from Altera Corporation.
+ 	  http://www.altera.com/
 -- 
 2.11.1
