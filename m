@@ -1,52 +1,62 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Thu,  9 Feb 2017 11:32:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cryptodev: fix build
-Message-ID: <1486636324-12767-1-git-send-email-sebastien.szymanski@armadeus.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  9 Feb 2017 14:31:28 +0200
+Subject: [Buildroot] [PATCH] quagga: security bump to version 1.1.1
+Message-ID: <e55666701bd52cc6cb17c23a5f0054eaf01c00c4.1486643488.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cryptodev-linux-1.8 build is broken with kernel >= 4.6.0 because of
-APIs changes in the kernel. Upstream already fixed this:
+Fixes CVE-2017-5495: Telnet interface input buffer allocates unbounded amounts
+of memory, leading to DoS.
 
-https://github.com/cryptodev-linux/cryptodev-linux/commit/2b29be8ac41414ed19cb4f5d5626d9bd0d7b11a8
-https://github.com/cryptodev-linux/cryptodev-linux/commit/f126e4837e6334d0464540995df7426fedf6b175
-https://github.com/cryptodev-linux/cryptodev-linux/commit/f14b4706b0d04988e7e5bc8c4d2aefef9f029d9d
-https://github.com/cryptodev-linux/cryptodev-linux/commit/cb186f682679383e8b5806240927903730ce85d9
+Add optional dependency on protobuf-c.
 
-Bump to latest commit to fix cryptodev-linux build.
-
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/cryptodev-linux/cryptodev-linux.hash | 4 ++--
- package/cryptodev-linux/cryptodev-linux.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/quagga/quagga.hash |  2 +-
+ package/quagga/quagga.mk   | 12 +++++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
-index d7195ac..6d9efca 100644
---- a/package/cryptodev-linux/cryptodev-linux.hash
-+++ b/package/cryptodev-linux/cryptodev-linux.hash
+diff --git a/package/quagga/quagga.hash b/package/quagga/quagga.hash
+index 23a0a8245bda..6da37cf80614 100644
+--- a/package/quagga/quagga.hash
++++ b/package/quagga/quagga.hash
 @@ -1,2 +1,2 @@
--# Locally calculated after checking php signature
--sha256	67fabde9fb67b286a96c4f45b594b0eccd0f761b495705c18f2ae9461b831376	cryptodev-linux-1.8.tar.gz
-+# Locally calculated
-+sha256 a87e354e1218e6a2e3083f7be6a3e351c42ec55515f1aff1b50bd301cee7d8dd cryptodev-linux-2b29be8ac41414ed19cb4f5d5626d9bd0d7b11a8.tar.gz
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index e23e1e3..709c6ed 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated after checking pgp signature
+-sha256	d284af5dd875dbba90ab875d40db5d68fdc9ede17a76f2af525f85344be56767	quagga-1.0.20160315.tar.xz
++sha256	b5a94e5bdad3062e04595a5692b8cc435f0a85102f75dfdca0a06d093b4ef63f	quagga-1.1.1.tar.gz
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index ad2aff4ea817..c17ceaade33f 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,10 +4,9 @@
  #
  ################################################################################
  
--CRYPTODEV_LINUX_VERSION = 1.8
--CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
-+CRYPTODEV_LINUX_VERSION = 2b29be8ac41414ed19cb4f5d5626d9bd0d7b11a8
-+CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPLv2+
- CRYPTODEV_LINUX_LICENSE_FILES = COPYING
+-QUAGGA_VERSION = 1.0.20160315
+-QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
++QUAGGA_VERSION = 1.1.1
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+-QUAGGA_DEPENDENCIES = host-gawk
++QUAGGA_DEPENDENCIES = host-gawk host-pkgconf
+ QUAGGA_LICENSE = GPLv2+
+ QUAGGA_LICENSE_FILES = COPYING
+ 
+@@ -29,6 +28,13 @@ else
+ QUAGGA_CONF_OPTS += --disable-capabilities
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PROTOBUF_C),y)
++QUAGGA_CONF_OPTS += --enable-protobuf
++QUAGGA_DEPENDENCIES += protobuf-c
++else
++QUAGGA_CONF_OPTS += --disable-protobuf
++endif
++
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ZEBRA),--enable-zebra,--disable-zebra)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGPD),--enable-bgpd,--disable-bgpd)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_RIPD),--enable-ripd,--disable-ripd)
 -- 
-2.7.3
+2.11.0
