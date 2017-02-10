@@ -1,54 +1,31 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 10 Feb 2017 20:15:57 -0200 (BRST)
-Subject: [Buildroot] [PATCH] util-linux: enable AUTORECONF
-In-Reply-To: <1552883366.9888052.1486739768812.JavaMail.zimbra@datacom.ind.br>
-References: <1486735300-25677-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1552883366.9888052.1486739768812.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <1611848288.9966568.1486764957118.JavaMail.zimbra@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Feb 2017 23:27:58 +0100
+Subject: [Buildroot] [PATCH] package/libplatform: rename to new upstream
+ name
+In-Reply-To: <1486749451-14259-1-git-send-email-yann.morin.1998@free.fr>
+References: <1486749451-14259-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170210232758.151eef5f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Carlos Santos" <casantos@datacom.ind.br>
-> To: "Rahul Bedarkar" <rahul.bedarkar@imgtec.com>
-> Cc: buildroot at buildroot.org
-> Sent: Friday, February 10, 2017 1:16:08 PM
-> Subject: Re: [Buildroot] [PATCH] util-linux: enable AUTORECONF
+Hello,
 
->> From: "Rahul Bedarkar" <rahul.bedarkar@imgtec.com>
->> To: buildroot at buildroot.org
->> Cc: "Rahul Bedarkar" <rahul.bedarkar@imgtec.com>, "Carlos Santos"
->> <casantos@datacom.ind.br>
->> Sent: Friday, February 10, 2017 12:01:40 PM
->> Subject: [PATCH] util-linux: enable AUTORECONF
-> 
->> Commit 55a9737895cb ("util-linux: link scriptreplay with libm (for isnan)")
->> added two patches that touch configure.ac and Makemodule.am. But forgot
->> to enable AUTORECONF.
->> 
->> When AUTORECONF is disabled and configure.ac is patched, it looks like
->> make will detect change in timestamps and trigger reconfig. But it
->> later fails because of missing dependencies. To fix this, explicitly
->> enable AUTORECONF.
->> 
->> Fixes:
->>  http://autobuild.buildroot.net/results/544/544e8da290d40424ea3d1bffad7e0b8a566de495
+On Fri, 10 Feb 2017 18:57:31 +0100, Yann E. MORIN wrote:
+> libplatform now goes by the nickname libp8platform.
 
-[...]
+Where do you see this? The github project is still named just
+"platform", it's the version that is named p8-platform-<something>.
 
-> 
-> I'd prefer to avoid autoreconf but looks like it is required, so,
-> 
-> Acked-by: Carlos Santos <casantos@datacom.ind.br>
-> 
-> I was unable to reproduce 544e8da290d40424ea3d1bffad7e0b8a566de495 on my
-> machine (Fedora release 24). It can be related to the build environment.
+Am I missing something?
 
-Mystery solved: automake is installed on my machine, so /usr/bin/aclocal-1.15
-is used when host-automake is not built.
+What does p8platform means? Is it really better than libplatform? Is
+this rename really worth the effort?
 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Something must be done. This is something. Therefore we must do it.?
-(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
