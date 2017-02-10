@@ -1,39 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 10 Feb 2017 21:48:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 3.2.4
-Message-ID: <20170210204809.27751-1-bernd.kuhls@t-online.de>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 10 Feb 2017 20:15:57 -0200 (BRST)
+Subject: [Buildroot] [PATCH] util-linux: enable AUTORECONF
+In-Reply-To: <1552883366.9888052.1486739768812.JavaMail.zimbra@datacom.ind.br>
+References: <1486735300-25677-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <1552883366.9888052.1486739768812.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <1611848288.9966568.1486764957118.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> From: "Carlos Santos" <casantos@datacom.ind.br>
+> To: "Rahul Bedarkar" <rahul.bedarkar@imgtec.com>
+> Cc: buildroot at buildroot.org
+> Sent: Friday, February 10, 2017 1:16:08 PM
+> Subject: Re: [Buildroot] [PATCH] util-linux: enable AUTORECONF
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 6adf7e440a..33942b9763 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 54ce502aca10b7e6059f19220ea2f68fa0c9c4c4d255ae13e615f08f0c94dcc5  ffmpeg-3.2.3.tar.xz
-+sha256 6e38ff14f080c98b58cf5967573501b8cb586e3a173b591f3807d8f0660daf7a  ffmpeg-3.2.4.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 6540d41c52..4447b724c4 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.2.3
-+FFMPEG_VERSION = 3.2.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
--- 
-2.11.0
+>> From: "Rahul Bedarkar" <rahul.bedarkar@imgtec.com>
+>> To: buildroot at buildroot.org
+>> Cc: "Rahul Bedarkar" <rahul.bedarkar@imgtec.com>, "Carlos Santos"
+>> <casantos@datacom.ind.br>
+>> Sent: Friday, February 10, 2017 12:01:40 PM
+>> Subject: [PATCH] util-linux: enable AUTORECONF
+> 
+>> Commit 55a9737895cb ("util-linux: link scriptreplay with libm (for isnan)")
+>> added two patches that touch configure.ac and Makemodule.am. But forgot
+>> to enable AUTORECONF.
+>> 
+>> When AUTORECONF is disabled and configure.ac is patched, it looks like
+>> make will detect change in timestamps and trigger reconfig. But it
+>> later fails because of missing dependencies. To fix this, explicitly
+>> enable AUTORECONF.
+>> 
+>> Fixes:
+>>  http://autobuild.buildroot.net/results/544/544e8da290d40424ea3d1bffad7e0b8a566de495
+
+[...]
+
+> 
+> I'd prefer to avoid autoreconf but looks like it is required, so,
+> 
+> Acked-by: Carlos Santos <casantos@datacom.ind.br>
+> 
+> I was unable to reproduce 544e8da290d40424ea3d1bffad7e0b8a566de495 on my
+> machine (Fedora release 24). It can be related to the build environment.
+
+Mystery solved: automake is installed on my machine, so /usr/bin/aclocal-1.15
+is used when host-automake is not built.
+
+Carlos Santos (Casantos) - DATACOM, P&D
+?Something must be done. This is something. Therefore we must do it.?
+(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
