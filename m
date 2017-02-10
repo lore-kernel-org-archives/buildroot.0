@@ -1,93 +1,115 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 10 Feb 2017 12:00:12 +0100
-Subject: [Buildroot] [PATCH 1/2] augeas: new package
-Message-ID: <20170210110013.30448-1-joerg.krause@embedded.rocks>
+From: Lionel Flandrin <lionel@svkt.org>
+Date: Fri, 10 Feb 2017 14:21:53 +0100
+Subject: [Buildroot] [PATCH 2/2] u-boot: Add support for Altera mkpimage
+ generation
+In-Reply-To: <20170210103034.2036a164@free-electrons.com>
+References: <20170128112720.umcchfeyyc7i6rdo@localhost.localdomain>
+ <20170130103326.14427-1-lionel@svkt.org>
+ <20170130103326.14427-2-lionel@svkt.org>
+ <20170209233323.7f57c186@free-electrons.com>
+ <20170210091030.dalq2ch2xazgb2w7@ed>
+ <20170210103034.2036a164@free-electrons.com>
+Message-ID: <20170210132153.4lob5gvir7zgicvn@ed>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Augeas is a configuration editing tool. It parses configuration files in
-their native formats and transforms them into a tree. Configuration
-changes are made by manipulating this tree and saving it back into
-native config files.
+On Fri, Feb 10, 2017 at 10:30:34AM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 10 Feb 2017 10:10:31 +0100, Lionel Flandrin wrote:
+> 
+> > > I missed it on my first review, but it seems like you missed it as
+> > > well: we already have some logic in uboot.mk to call mkpimage. See the
+> > > BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC option.
+> > > 
+> > > This should be extended rather than having two options doing the same
+> > > thing.  
+> > 
+> > I didn't miss it but the existing code is used for u-boot SPL
+> > generation, I didn't think there was an easy way to reuse it for
+> > "full" u-boot packaging (but admitedly my Make-foo is a bit
+> > weak). It's a different set of options.
+> > 
+> > The previous altera chips only had a 64K internal RAM which meant that
+> > you almost always had to use a SPL to bootstrap the bootloader. The
+> > newer chips however contain 256K of internal RAM so you can fit a full
+> > u-boot in a single stage quite snugly.
+> 
+> OK. Then I think we want something better indeed, because it's
+> completely impossible to understand if we have two separate options.
+> 
+> Here is what I would propose:
+> 
+>  1. Add an option BR2_TARGET_UBOOT_FORMAT_DTB_BIN so select
+>     u-boot-dtb.bin as the output format.
+> 
+>  2. Adjust the BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC option logic
+>     so that it will mkpimage the SPL if there is a SPL, or mkpimage the
+>     full U-Boot if u-boot-dtb.bin is selected. Something like:
+> 
+> config BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC
+>         bool "CRC U-Boot image for Altera SoC FPGA"
+>         depends on BR2_arm
+>         depends on BR2_TARGET_UBOOT_SPL || BR2_TARGET_UBOOT_FORMAT_DTB_BIN
+>         help
+> 
+> 	  Pass the U-Boot image through the mkpimage tool to enable
+> 	  booting on the Altera SoC FPGA based platforms.
+> 
+> 	  On some platforms, it's the SPL that needs to be passed
+> 	  through mkpimage. On some other platforms there is no SPL
+> 	  because the internal SRAM is big enough to store the full
+> 	  U-Boot. In this case, it's directly the full U-Boot image
+> 	  that is passed through mkpimage.
+> 
+> 	  Therefore, this option will convert the SPL image defined by
+> 	  BR2_TARGET_UBOOT_SPL_NAME using mkpimage if
+> 	  BR2_TARGET_UBOOT_SPL is enabled. Otherwise, it will convert
+> 	  the full U-Boot image u-boot-dtb.bin if
+> 	  BR2_TARGET_UBOOT_FORMAT_DTB_BIN is enabled.
+> 
+> And then in the .mk file, something like:
+> 
+> ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
+> ifeq ($(BR2_TARGET_UBOOT_SPL),y)
+> UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
+> else
+> UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = u-boot-dtb.bin
+> endif
+> define UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
+>         $(foreach f,$(UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES), \
+>                 $(HOST_DIR)/usr/bin/mkpimage \
+>                         -o $(BINARIES_DIR)/$(notdir $(call qstrip,$(f))).crc \
+>                         $(@D)/$(call qstrip,$(f))
+>         )
+> endef
+> UBOOT_DEPENDENCIES += host-mkpimage
+> UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
+> endif
+> 
+> Could you try this, and verify it works for both the SPL and full
+> U-Boot image cases?
+> 
+> Thanks!
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/Config.in          |  1 +
- package/augeas/Config.in   | 11 +++++++++++
- package/augeas/augeas.hash |  2 ++
- package/augeas/augeas.mk   | 22 ++++++++++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/augeas/Config.in
- create mode 100644 package/augeas/augeas.hash
- create mode 100644 package/augeas/augeas.mk
+Thank you for that, I'll give it a try and (hopefully) get back to you
+with a new patch.
 
-diff --git a/package/Config.in b/package/Config.in
-index 114a5ad5f..6956a788a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1409,6 +1409,7 @@ menu "Security"
- endmenu
- 
- menu "Text and terminal handling"
-+	source "package/augeas/Config.in"
- 	source "package/enchant/Config.in"
- 	source "package/icu/Config.in"
- 	source "package/libcli/Config.in"
-diff --git a/package/augeas/Config.in b/package/augeas/Config.in
-new file mode 100644
-index 000000000..efbc19b43
---- /dev/null
-+++ b/package/augeas/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_AUGEAS
-+	bool "augeas"
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  Augeas is a configuration editing tool. It parses configuration
-+	  files in their native formats and transforms them into a tree.
-+	  Configuration changes are made by manipulating this tree and
-+	  saving it back into native config files.
-+
-+	  http://augeas.net
-diff --git a/package/augeas/augeas.hash b/package/augeas/augeas.hash
-new file mode 100644
-index 000000000..9640757eb
---- /dev/null
-+++ b/package/augeas/augeas.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b9315575d07f7ba28ca2f9f60b4987dfe77b5970c98b59dc6ca7873fc4979763  augeas-1.7.0.tar.gz
-diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
-new file mode 100644
-index 000000000..7a1f2f8ce
---- /dev/null
-+++ b/package/augeas/augeas.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# augeas
-+#
-+################################################################################
-+
-+AUGEAS_VERSION = 1.7.0
-+AUGEAS_SITE = http://download.augeas.net
-+AUGEAS_INSTALL_STAGING = YES
-+AUGEAS_LICENSE = LGPLv2.1+
-+AUGEAS_LICENSE_FILES = COPYING
-+AUGEAS_DEPENDENCIES = host-pkgconf readline libxml2
-+
-+AUGEAS_CONF_OPTS = --disable-gnulib-tests
-+
-+# Remove the test lenses which occupy about 1.4 MB on the target
-+define AUGEAS_REMOVE_TEST_LENSES
-+	rm -rf $(TARGET_DIR)/usr/share/augeas/lenses/dist/tests
-+endef
-+AUGEAS_POST_INSTALL_TARGET_HOOKS += AUGEAS_REMOVE_TEST_LENSES
-+
-+$(eval $(autotools-package))
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+
 -- 
-2.11.1
+Lionel Flandrin
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170210/2cd7f85a/attachment.asc>
