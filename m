@@ -1,38 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Feb 2017 09:36:34 +0100
-Subject: [Buildroot] [PATCH v1 1/2] qt5base: use system/buildroot
- provided freetype
-In-Reply-To: <20170209223055.31121-1-ps.report@gmx.net>
-References: <20170209223055.31121-1-ps.report@gmx.net>
-Message-ID: <20170210093634.68f43e26@free-electrons.com>
+From: Lionel Flandrin <lionel@svkt.org>
+Date: Fri, 10 Feb 2017 10:10:31 +0100
+Subject: [Buildroot] [PATCH 2/2] u-boot: Add support for Altera mkpimage
+ generation
+In-Reply-To: <20170209233323.7f57c186@free-electrons.com>
+References: <20170128112720.umcchfeyyc7i6rdo@localhost.localdomain>
+ <20170130103326.14427-1-lionel@svkt.org>
+ <20170130103326.14427-2-lionel@svkt.org>
+ <20170209233323.7f57c186@free-electrons.com>
+Message-ID: <20170210091030.dalq2ch2xazgb2w7@ed>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Thu,  9 Feb 2017 23:30:54 +0100, Peter Seiderer wrote:
-> Fixes [1]:
+On Thu, Feb 09, 2017 at 11:33:23PM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
->   Project ERROR: Library 'libpng' is not defined.
->   make[3]: *** [sub-3rdparty-freetype-make_first] Error 3
+> On Mon, 30 Jan 2017 11:33:26 +0100, Lionel Flandrin wrote:
+> > This image format is used by Altera's SoC FPGAs BootROMs.
+> > 
+> > Signed-off-by: Lionel Flandrin <lionel@svkt.org>
 > 
-> [1] http://autobuild.buildroot.net/results/219162ba616289f799a5053c4dcc6b8574284283
+> I missed it on my first review, but it seems like you missed it as
+> well: we already have some logic in uboot.mk to call mkpimage. See the
+> BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC option.
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> This should be extended rather than having two options doing the same
+> thing.
 
-So since Qt 5.8, both freetype and harfbuzz are mandatory for the GUI
-support ?
+I didn't miss it but the existing code is used for u-boot SPL
+generation, I didn't think there was an easy way to reuse it for
+"full" u-boot packaging (but admitedly my Make-foo is a bit
+weak). It's a different set of options.
 
-Should we make these additional dependencies only exist for the Qt
-latest version (they were not needed for Qt 5.6) ?
+The previous altera chips only had a 64K internal RAM which meant that
+you almost always had to use a SPL to bootstrap the bootloader. The
+newer chips however contain 256K of internal RAM so you can fit a full
+u-boot in a single stage quite snugly.
 
-Thanks!
+> Thanks!
+> 
+> Thomas
 
-Thomas
+Thank you for reviewing this,
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Lionel Flandrin
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170210/7b5e1554/attachment.asc>
