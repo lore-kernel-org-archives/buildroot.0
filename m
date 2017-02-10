@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Feb 2017 09:15:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cryptodev: fix build
-In-Reply-To: <87fujmmrr8.fsf@dell.be.48ers.dk>
-References: <1486636324-12767-1-git-send-email-sebastien.szymanski@armadeus.com>
- <20170209215542.5198e04d@free-electrons.com>
- <87fujmmrr8.fsf@dell.be.48ers.dk>
-Message-ID: <20170210091500.7a74edf7@free-electrons.com>
+Date: Fri, 10 Feb 2017 09:36:34 +0100
+Subject: [Buildroot] [PATCH v1 1/2] qt5base: use system/buildroot
+ provided freetype
+In-Reply-To: <20170209223055.31121-1-ps.report@gmx.net>
+References: <20170209223055.31121-1-ps.report@gmx.net>
+Message-ID: <20170210093634.68f43e26@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 10 Feb 2017 08:25:47 +0100, Peter Korsgaard wrote:
-
->  > I've applied after tweaking the commit title: the package is
->  > cryptodev-linux, not cryptodev, and "fix build" is very fuzzy. I've
->  > changed it to:  
+On Thu,  9 Feb 2017 23:30:54 +0100, Peter Seiderer wrote:
+> Fixes [1]:
 > 
->  > 	package/cryptodev-linux: fix with with recent kernels  
+>   Project ERROR: Library 'libpng' is not defined.
+>   make[3]: *** [sub-3rdparty-freetype-make_first] Error 3
 > 
-> Do you really find 'with with' so much clearer? :P
+> [1] http://autobuild.buildroot.net/results/219162ba616289f799a5053c4dcc6b8574284283
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Still better than "fix build", but indeed not entirely perfect :-)
+So since Qt 5.8, both freetype and harfbuzz are mandatory for the GUI
+support ?
 
-> (Luckily your commit message was correct)
+Should we make these additional dependencies only exist for the Qt
+latest version (they were not needed for Qt 5.6) ?
 
-Pffiou :)
+Thanks!
 
 Thomas
 -- 
