@@ -1,42 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 10 Feb 2017 07:52:14 +0200
-Subject: [Buildroot] [PATCH 2/4] ed: use generic extract command
-In-Reply-To: <fc3fe88b52644ba99855a47be4950f2b9d8b7dd9.1486705936.git.baruch@tkos.co.il>
-References: <fc3fe88b52644ba99855a47be4950f2b9d8b7dd9.1486705936.git.baruch@tkos.co.il>
-Message-ID: <d61a070418fd158bef1420dbd16e48f0cbd8ddee.1486705936.git.baruch@tkos.co.il>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 10 Feb 2017 07:52:30 +0100
+Subject: [Buildroot] [PATCH 1/6] toolchain: add option for toolchains
+ affected by GCC PR libstdc++/64735
+In-Reply-To: <20170209213057.33fa79ba@free-electrons.com>
+References: <20170209174759.15819-1-joerg.krause@embedded.rocks>
+ <20170209174759.15819-2-joerg.krause@embedded.rocks>
+ <20170209213057.33fa79ba@free-electrons.com>
+Message-ID: <1486709550.9565.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The generic code now knows how to extract .tar.lz archives. Remove the local
-extract code.
+Hi Thomas,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ed/ed.mk | 6 ------
- 1 file changed, 6 deletions(-)
+On Thu, 2017-02-09 at 21:30 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu,??9 Feb 2017 18:47:54 +0100, J?rg Krause wrote:
+> 
+> > +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64735
+> 
+> I've taken a part of your commit log, and added it as a comment here.
+> 
+> > +config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+> > +	bool
+> 
+> Instead of having this option selected by the architecture code, I've
+> added the relevant "default y" and "depends on" here. I believe it's
+> not worth spreading these selects all over the place.
 
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index 50adeb4ec5b4..6b9f65ec5280 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -10,15 +10,9 @@ ED_SOURCE = ed-$(ED_VERSION).tar.lz
- ED_CONF_OPTS = \
- 	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
- 	LDFLAGS="$(TARGET_LDFLAGS)"
--ED_DEPENDENCIES = host-lzip
- ED_LICENSE = GPLv3+
- ED_LICENSE_FILES = COPYING
- 
--define ED_EXTRACT_CMDS
--	$(HOST_DIR)/usr/bin/lzip -d -c $(DL_DIR)/$(ED_SOURCE) | \
--		tar --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
--endef
--
- define ED_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_MAKE_ENV) ./configure \
--- 
-2.11.0
+You're right! It's much cleaner this way. Thanks!
+
+> Now that I write this, I realize I've written the logic in the wrong
+> way, I'll fix that up now.
+
+J?rg
