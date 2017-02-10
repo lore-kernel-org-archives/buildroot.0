@@ -1,80 +1,279 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Fri, 10 Feb 2017 18:40:04 +0100
-Subject: [Buildroot] [PATCH 3/6] infra: fix 'packages-file-list.txt'
-	with TLP
-In-Reply-To: <20170209232429.0c133424@free-electrons.com>
-References: <20161114132238.6569-1-jezz@sysmic.org>
- <20161114132238.6569-4-jezz@sysmic.org>
- <20170209232429.0c133424@free-electrons.com>
-Message-ID: <18141971.6S5PrfofuZ@sagittae>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 10 Feb 2017 18:57:31 +0100
+Subject: [Buildroot] [PATCH] package/libplatform: rename to new upstream name
+Message-ID: <1486749451-14259-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+libplatform now goes by the nickname libp8platform.
 
-On Thursday 9 February 2017 23:24:29 CET Thomas Petazzoni wrote:
-> Hello,
-> 
-> Adding Gustavo in Cc. Gustavo, you are working on TLP support. Could
-> you comment on the below patch?
-> 
-> See also my comments below.
-> 
-> On Mon, 14 Nov 2016 14:22:35 +0100, J?r?me Pouiller wrote:
-> > Until now, `$(BUILD_DIR)/packages-file-list.txt' was not filled properly
-> > when top level parallelization is enabled. Therefore, all scripts that
-> > rely on packages-file-list.txt did not work.
-> > 
-> > In order to fix it,this patch place target installation task in a critical
-> > section.
-> > 
-> > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> > ---
-> > 
-> >  package/pkg-generic.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 987efa6..c5f70e0 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -62,6 +62,9 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
-> > 
-> >  # files currently installed in the target. Note that the MD5 is also
-> >  # stored, in order to identify if the files are overwritten.
-> >  define step_pkg_size_start
-> > 
-> > +	while ! flock $(BUILD_DIR) -c "[ ! -e $(BUILD_DIR)/.target_lock ] &&
-> > touch $(BUILD_DIR)/.target_lock"; do \ +		sleep 0.5; \
-> > +	done
-> 
-> I personally don't really like this retry loop around flock, but since
-> package-file-list.txt is a global file, I don't really see how to do
-> otherwise. Unless storing a per-package file with just the time/date of
-> the start/end of each step for this package, and then have a
-> post-processing logic at the very end of the build that regroups all
-> those per-package files into a single global file, ordering the entries
-> by their timestamp. Don't know if it's really better.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ Config.in.legacy                                            |  8 ++++++++
+ DEVELOPERS                                                  |  2 +-
+ package/Config.in                                           |  2 +-
+ package/kodi-adsp-basic/Config.in                           |  2 +-
+ package/kodi-adsp-basic/kodi-adsp-basic.mk                  |  2 +-
+ package/kodi-adsp-freesurround/Config.in                    |  2 +-
+ package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk    |  2 +-
+ package/kodi-platform/Config.in                             |  2 +-
+ package/kodi-platform/kodi-platform.mk                      |  2 +-
+ package/kodi-visualisation-shadertoy/Config.in              |  2 +-
+ .../kodi-visualisation-shadertoy.mk                         |  2 +-
+ package/libcec/Config.in                                    |  2 +-
+ package/libcec/libcec.mk                                    |  2 +-
+ .../0001-p8-platform-config-fix-lookup-paths.patch          |  0
+ package/{libplatform => libp8platform}/Config.in            |  2 +-
+ .../libplatform.hash => libp8platform/libp8platform.hash}   |  2 +-
+ package/libp8platform/libp8platform.mk                      | 13 +++++++++++++
+ package/libplatform/libplatform.mk                          | 13 -------------
+ 18 files changed, 35 insertions(+), 27 deletions(-)
+ rename package/{libplatform => libp8platform}/0001-p8-platform-config-fix-lookup-paths.patch (100%)
+ rename package/{libplatform => libp8platform}/Config.in (79%)
+ rename package/{libplatform/libplatform.hash => libp8platform/libp8platform.hash} (69%)
+ create mode 100644 package/libp8platform/libp8platform.mk
+ delete mode 100644 package/libplatform/libplatform.mk
 
-I think that any tool involving parallel processing need one day or another
-to protect code inside a critical section. Even if we find another way to 
-solve current problem, I am pretty sure we will need it later, anyway.
-
-However, I think I am going to modify my patch in order to provide a
-generic mutex implementation that would be enabled iff TLP is enable.
-
-I wonder where I should place lock file. In add, tools like fakedate,
-check-shlibs-deps and other QA tools could also generate log or
-temporary files. Currently, we place all of them in build/ without any
-specific rules. Maybe we should have a naming policy for these files?
-(prefix them with "BR_"?) or place them elsewhere than in build/?
-
-[...]
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 20445b8..06a894c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,14 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.02"
+ 
++config BR2_PACKAGE_LIBPLATFORM
++	bool "libplatform has been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LIBP8PLATFORM
++	help
++	  libplatform has been renamed to libp8platform, the new
++	  upstream name.
++
+ config BR2_PACKAGE_PERL_DB_FILE
+ 	bool "perl-db-file removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 94f6804..339d202 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -195,8 +195,8 @@ F:	package/libminiupnpc/
+ F:	package/libnatpmp/
+ F:	package/libogg/
+ F:	package/libopenh264/
++F:	package/libp8platform/
+ F:	package/libpciaccess/
+-F:	package/libplatform/
+ F:	package/libsidplay2/
+ F:	package/libsilk/
+ F:	package/libsndfile/
+diff --git a/package/Config.in b/package/Config.in
+index deff0fe..719e8e9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1353,8 +1353,8 @@ menu "Other"
+ 	source "package/libite/Config.in"
+ 	source "package/liblinear/Config.in"
+ 	source "package/libnspr/Config.in"
++	source "package/libp8platform/Config.in"
+ 	source "package/libpfm4/Config.in"
+-	source "package/libplatform/Config.in"
+ 	source "package/libplist/Config.in"
+ 	source "package/libpthread-stubs/Config.in"
+ 	source "package/libpthsem/Config.in"
+diff --git a/package/kodi-adsp-basic/Config.in b/package/kodi-adsp-basic/Config.in
+index 87bdd19..ba0b813 100644
+--- a/package/kodi-adsp-basic/Config.in
++++ b/package/kodi-adsp-basic/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KODI_ADSP_BASIC
+ 	bool "kodi-adsp-basic"
+-	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_LIBP8PLATFORM
+ 	select BR2_PACKAGE_KODI_PLATFORM
+ 	help
+ 	  This add-on contains basic dsp related parts to handle
+diff --git a/package/kodi-adsp-basic/kodi-adsp-basic.mk b/package/kodi-adsp-basic/kodi-adsp-basic.mk
+index 0b1ba95..d7453ae 100644
+--- a/package/kodi-adsp-basic/kodi-adsp-basic.mk
++++ b/package/kodi-adsp-basic/kodi-adsp-basic.mk
+@@ -8,6 +8,6 @@ KODI_ADSP_BASIC_VERSION = cb56e0eb6530fd50a286d47ef0be529001e9d556
+ KODI_ADSP_BASIC_SITE = $(call github,kodi-adsp,adsp.basic,$(KODI_ADSP_BASIC_VERSION))
+ KODI_ADSP_BASIC_LICENSE = GPLv3+
+ KODI_ADSP_BASIC_LICENSE_FILES = LICENSE.md
+-KODI_ADSP_BASIC_DEPENDENCIES = libplatform kodi-platform
++KODI_ADSP_BASIC_DEPENDENCIES = libp8platform kodi-platform
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-adsp-freesurround/Config.in b/package/kodi-adsp-freesurround/Config.in
+index 80aadf1..9df8e56 100644
+--- a/package/kodi-adsp-freesurround/Config.in
++++ b/package/kodi-adsp-freesurround/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KODI_ADSP_FREESURROUND
+ 	bool "kodi-adsp-freesurround"
+-	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_LIBP8PLATFORM
+ 	select BR2_PACKAGE_KODI_PLATFORM
+ 	help
+ 	  FreeSurround is meant to be the KODI equivalent of your
+diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
+index 49cf673..1b85070 100644
+--- a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
++++ b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
+@@ -8,6 +8,6 @@ KODI_ADSP_FREESURROUND_VERSION = 08b691d3d9a0382d2f6f789a31614fb02512036c
+ KODI_ADSP_FREESURROUND_SITE = $(call github,kodi-adsp,adsp.freesurround,$(KODI_ADSP_FREESURROUND_VERSION))
+ KODI_ADSP_FREESURROUND_LICENSE = GPLv3+
+ KODI_ADSP_FREESURROUND_LICENSE_FILES = LICENSE.md
+-KODI_ADSP_FREESURROUND_DEPENDENCIES = libplatform kodi-platform
++KODI_ADSP_FREESURROUND_DEPENDENCIES = libp8platform kodi-platform
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-platform/Config.in b/package/kodi-platform/Config.in
+index cde1925..696e9ec 100644
+--- a/package/kodi-platform/Config.in
++++ b/package/kodi-platform/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KODI_PLATFORM
+ 	bool
+-	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_LIBP8PLATFORM
+ 	help
+ 	  Kodi add-on platform support library
+ 
+diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
+index 4b642f9..1a20790 100644
+--- a/package/kodi-platform/kodi-platform.mk
++++ b/package/kodi-platform/kodi-platform.mk
+@@ -9,6 +9,6 @@ KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
+ KODI_PLATFORM_LICENSE = GPLv2+
+ KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
+ KODI_PLATFORM_INSTALL_STAGING = YES
+-KODI_PLATFORM_DEPENDENCIES = libplatform kodi
++KODI_PLATFORM_DEPENDENCIES = libp8platform kodi
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
+index ac17702..cfbe628 100644
+--- a/package/kodi-visualisation-shadertoy/Config.in
++++ b/package/kodi-visualisation-shadertoy/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
+ 	bool "kodi-visualisation-shadertoy"
+ 	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_HAS_LIBGL
+-	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_LIBP8PLATFORM
+ 	help
+ 	  Shadertoy visualiser for Kodi
+ 
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+index e5f2d91..44602e2 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+@@ -8,7 +8,7 @@ KODI_VISUALISATION_SHADERTOY_VERSION = f9988007681bf37e6c03d6992bae30133b020608
+ KODI_VISUALISATION_SHADERTOY_SITE = $(call github,notspiff,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
+ KODI_VISUALISATION_SHADERTOY_LICENSE = GPLv2+
+ KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
+-KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libplatform
++KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libp8platform
+ 
+ ifeq ($(BR2_PACKAGE_LIBGLEW),y)
+ KODI_VISUALISATION_SHADERTOY_DEPENDENCIES += libglew
+diff --git a/package/libcec/Config.in b/package/libcec/Config.in
+index 2dddc53..bf73ba0 100644
+--- a/package/libcec/Config.in
++++ b/package/libcec/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBCEC
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+-	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_LIBP8PLATFORM
+ 	help
+ 	  libcec allows you in combination with the right hardware to
+ 	  control your home theater devices with your TV remote
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index f00e10f..c66d402 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -10,7 +10,7 @@ LIBCEC_LICENSE = GPLv2+
+ LIBCEC_LICENSE_FILES = COPYING
+ 
+ LIBCEC_INSTALL_STAGING = YES
+-LIBCEC_DEPENDENCIES = host-pkgconf libplatform
++LIBCEC_DEPENDENCIES = host-pkgconf libp8platform
+ 
+ ifeq ($(BR2_PACKAGE_LOCKDEV),y)
+ LIBCEC_DEPENDENCIES += lockdev
+diff --git a/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch b/package/libp8platform/0001-p8-platform-config-fix-lookup-paths.patch
+similarity index 100%
+rename from package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
+rename to package/libp8platform/0001-p8-platform-config-fix-lookup-paths.patch
+diff --git a/package/libplatform/Config.in b/package/libp8platform/Config.in
+similarity index 79%
+rename from package/libplatform/Config.in
+rename to package/libp8platform/Config.in
+index 7d275b1..ee0ae08 100644
+--- a/package/libplatform/Config.in
++++ b/package/libp8platform/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_LIBPLATFORM
++config BR2_PACKAGE_LIBP8PLATFORM
+ 	bool
+ 	help
+ 	  Platform support library used by libCEC and binary add-ons for Kodi
+diff --git a/package/libplatform/libplatform.hash b/package/libp8platform/libp8platform.hash
+similarity index 69%
+rename from package/libplatform/libplatform.hash
+rename to package/libp8platform/libp8platform.hash
+index e3d5ed5..a120155 100644
+--- a/package/libplatform/libplatform.hash
++++ b/package/libp8platform/libp8platform.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 88711f1b949285867538a0b2e4189532778e1515325dfa1851eae9d18b6affd9  libplatform-2.1.0.tar.gz
++sha256 88711f1b949285867538a0b2e4189532778e1515325dfa1851eae9d18b6affd9  libp8platform-2.1.0.tar.gz
+diff --git a/package/libp8platform/libp8platform.mk b/package/libp8platform/libp8platform.mk
+new file mode 100644
+index 0000000..ea97b42
+--- /dev/null
++++ b/package/libp8platform/libp8platform.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libp8platform
++#
++################################################################################
++
++LIBP8PLATFORM_VERSION = 2.1.0
++LIBP8PLATFORM_SITE = $(call github,Pulse-Eight,platform,p8-platform-$(LIBP8PLATFORM_VERSION))
++LIBP8PLATFORM_LICENSE = GPLv2+
++LIBP8PLATFORM_LICENSE_FILES = src/os.h
++LIBP8PLATFORM_INSTALL_STAGING = YES
++
++$(eval $(cmake-package))
+diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+deleted file mode 100644
+index d9cd582..0000000
+--- a/package/libplatform/libplatform.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# libplatform
+-#
+-################################################################################
+-
+-LIBPLATFORM_VERSION = 2.1.0
+-LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,p8-platform-$(LIBPLATFORM_VERSION))
+-LIBPLATFORM_LICENSE = GPLv2+
+-LIBPLATFORM_LICENSE_FILES = src/os.h
+-LIBPLATFORM_INSTALL_STAGING = YES
+-
+-$(eval $(cmake-package))
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+2.7.4
