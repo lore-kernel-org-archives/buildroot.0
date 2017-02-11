@@ -1,74 +1,74 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Feb 2017 17:03:42 +0100
-Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
-	Kodi-specific patches
-References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
- <20170204114451.20935-2-bernd.kuhls@t-online.de>
- <20170204230821.GA3805@free.fr>
- <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20170205212408.GC3562@free.fr>
- <i6vmmdxipi.ln2@ID-313208.user.individual.net>
- <rk5nmdxipi.ln2@ID-313208.user.individual.net>
- <20170209232937.2a071f11@free-electrons.com>
-Message-ID: <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Feb 2017 17:08:25 +0100
+Subject: [Buildroot] [PATCH 1/6] support/scripts: add script to test a
+ package
+In-Reply-To: <70e8.589b94e3.db816@xdna.net>
+References: <cover.1486584734.git.yann.morin.1998@free.fr>
+ <085941ea3e9e9f34405ac10780d5c8aa2a6317aa.1486584734.git.yann.morin.1998@free.fr>
+ <70e8.589b94e3.db816@xdna.net>
+Message-ID: <20170211160824.GA20146@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Cam, All,
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20170209232937.2a071f11 at free-electrons.com: 
+Since you did not Cc me on that mail, I only noticed it now...
 
-Hi Thomas,
+On 2017-02-08 22:00 -0000, Cam Hutchison spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> writes:
+> >This script helps in testing that a package builds fine on a wide range
+> >of architectures and toolchains: BE/LE, 32/64-bit, musl/glibc/uclibc...
+[--SNIP--]
+> >+    if [ ${#toolchains[@]} -eq 0 ]; then
+> >+        printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
+> 
+> The format string should be in single quotes as it contains a glob char.
 
-> Are these .a files still needed after the switch to CMake as the build
-> system for Kodi?
+Nope, wildcards are not expanded in double quotes (as you then noticed).
 
-fortunately no.
+> I usually put all printf format strings in single quotes since printf is
+> doing the substitutions, not the shell.
 
-> Also, for the patches that apply to the libdvdcss, libdvdread and
-> libdvdnav code base, it would be good to know if they have been
-> submitted to the respective upstream projects, or if it's stuff that we
-> may have to keep in Buildroot forever.
+I tend to agree on the principle: format strings should be
+single-quoted. But then we have disparate quoting styles, and I don;t
+like it. I prefer a single quoting style...
 
-Afaics when using the new CMake-based build system of Kodi 17 it will
-build libdvd* itself by using Kodi-specific tarballs:
+But your point is valid as well.
 
-https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
-cmake#L100
-https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
-cmake#L132
-https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
-cmake#L164
+[--SNIP--]
+> >+    while read line; do
+> >+        if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
+> 
+> You should use grep -Fx here since ${line} might contains regex chars:
+> 
+>         if ! grep -Fx "${line}" "${dir}/.config" >/dev/null 2>&1; then
+> 
+> ....
+> 
+> >+            printf ", SKIPPED\n"
+> >+            return
+> >+        fi
+> >+    done <"${cfg}"
+> 
+> .... but I'd get rid of the loop altogether and use comm(1); something like:
+> 
+>     if [ -n "$( comm -23 <(sort "${cfg}") <(sort "${dir/.config}") )" ]; then
+>         printf ", SKIPPED\n"
+> 	return
+>     fi
 
-So we do neither need to patch libdvd* anymore nor provide them as 
-dependent packages, KODI_EXTRA_DOWNLOADS can be used to provide the 
-tarballs.
+Yup, I'll take a look at using comm instead. Thanks for the tip! :-)
 
-First build tests were successful but I would like to be cautious about the 
-switch to CMake because I only started to use it today with an x86_64 
-toolchain so I have not much experience with it, as of this moment I never 
-did a runtime test of the compiled binaries. I hope to find some time for 
-this in the coming days but until then you can find my patches here:
+Regards,
+Yann E. MORIN.
 
-https://github.com/bkuhls/buildroot/tree/kodi_cmake
-
-Please note that LibreElec and Gentoo already build Kodi 17 using CMake:
-
-https://github.com/LibreELEC/LibreELEC.tv/blob/libreelec-
-8.0/packages/mediacenter/kodi/package.mk#L34
-
-https://gitweb.gentoo.org/repo/gentoo.git/tree/media-tv/kodi/kodi-
-17.0.ebuild#n161
-
-Do we still have external toolchains based on uClibc 0.9.33.2?
-If yes, we need to keep 
-https://git.buildroot.net/buildroot/tree/package/kodi/0003-ALSA-fix-device-
-change-event-support.patch and add CMake checks for eventfd_read & 
-eventfd_write.
-
-Regards, Bernd
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
