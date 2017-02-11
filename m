@@ -1,49 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Feb 2017 16:44:55 +0100
-Subject: [Buildroot]
- =?utf-8?q?=5BPATCH_2/2=5D_DEVELOPERS=3A_add_J=C3=B6rg?=
- =?utf-8?q?__Krause_for_augeus?=
-In-Reply-To: <20170210110013.30448-2-joerg.krause@embedded.rocks>
-References: <20170210110013.30448-1-joerg.krause@embedded.rocks>
- <20170210110013.30448-2-joerg.krause@embedded.rocks>
-Message-ID: <20170211164455.64a95639@free-electrons.com>
+Date: Sat, 11 Feb 2017 16:45:38 +0100
+Subject: [Buildroot] [git commit branch/next] lxc: enable selinux if package
+	is selected
+Message-ID: <20170211154542.EE0BE81E9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=25707b2fd63abbf93417d7d878c29d7585914ea9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 10 Feb 2017 12:00:13 +0100, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index b8ccb4615..71f9fcad3 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -893,6 +893,7 @@ F:	package/x11r7/xdriver_xf86-video-imx/
->  F:	package/x11r7/xdriver_xf86-video-imx-viv/
->  
->  N:	J?rg Krause <joerg.krause@embedded.rocks>
-> +F:	package/augeas/
->  F:	package/bctoolbox/
->  F:	package/libshout/
->  F:	package/libupnpp/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lxc/lxc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-We have changed our mind at the last Buildroot developers meeting. We
-now want the modification to the DEVELOPERS file to be part of the
-patch adding the package. Since you received some feedback on the .mk
-file itself, could you resubmit, with the DEVELOPERS changes merged in
-the main patch?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 455814b..b79197f 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -29,6 +29,13 @@ else
+ LXC_CONF_OPTS += --disable-seccomp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++LXC_CONF_OPTS += --enable-selinux
++LXC_DEPENDENCIES += libselinux
++else
++LXC_CONF_OPTS += --disable-selinux
++endif
++
+ ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
+ LXC_CONF_OPTS += --enable-lua
+ LXC_DEPENDENCIES += luainterpreter
