@@ -1,66 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Feb 2017 17:08:25 +0100
-Subject: [Buildroot] [PATCH 1/6] support/scripts: add script to test a
- package
-In-Reply-To: <70e8.589b94e3.db816@xdna.net>
-References: <cover.1486584734.git.yann.morin.1998@free.fr>
- <085941ea3e9e9f34405ac10780d5c8aa2a6317aa.1486584734.git.yann.morin.1998@free.fr>
- <70e8.589b94e3.db816@xdna.net>
-Message-ID: <20170211160824.GA20146@free.fr>
+Date: Sat, 11 Feb 2017 17:37:06 +0100
+Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
+ Kodi-specific patches
+In-Reply-To: <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
+References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
+ <20170204114451.20935-2-bernd.kuhls@t-online.de>
+ <20170204230821.GA3805@free.fr>
+ <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20170205212408.GC3562@free.fr>
+ <i6vmmdxipi.ln2@ID-313208.user.individual.net>
+ <rk5nmdxipi.ln2@ID-313208.user.individual.net>
+ <20170209232937.2a071f11@free-electrons.com>
+ <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
+Message-ID: <20170211163706.GB20146@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cam, All,
+Bernd, All,
 
-Since you did not Cc me on that mail, I only noticed it now...
-
-On 2017-02-08 22:00 -0000, Cam Hutchison spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> writes:
-> >This script helps in testing that a package builds fine on a wide range
-> >of architectures and toolchains: BE/LE, 32/64-bit, musl/glibc/uclibc...
-[--SNIP--]
-> >+    if [ ${#toolchains[@]} -eq 0 ]; then
-> >+        printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
+On 2017-02-11 17:03 +0100, Bernd Kuhls spake thusly:
+> Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote
+> in news:20170209232937.2a071f11 at free-electrons.com: 
 > 
-> The format string should be in single quotes as it contains a glob char.
-
-Nope, wildcards are not expanded in double quotes (as you then noticed).
-
-> I usually put all printf format strings in single quotes since printf is
-> doing the substitutions, not the shell.
-
-I tend to agree on the principle: format strings should be
-single-quoted. But then we have disparate quoting styles, and I don;t
-like it. I prefer a single quoting style...
-
-But your point is valid as well.
-
-[--SNIP--]
-> >+    while read line; do
-> >+        if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
+> Hi Thomas,
 > 
-> You should use grep -Fx here since ${line} might contains regex chars:
+> > Are these .a files still needed after the switch to CMake as the build
+> > system for Kodi?
 > 
->         if ! grep -Fx "${line}" "${dir}/.config" >/dev/null 2>&1; then
+> fortunately no.
 > 
-> ....
+> > Also, for the patches that apply to the libdvdcss, libdvdread and
+> > libdvdnav code base, it would be good to know if they have been
+> > submitted to the respective upstream projects, or if it's stuff that we
+> > may have to keep in Buildroot forever.
 > 
-> >+            printf ", SKIPPED\n"
-> >+            return
-> >+        fi
-> >+    done <"${cfg}"
+> Afaics when using the new CMake-based build system of Kodi 17 it will
+> build libdvd* itself by using Kodi-specific tarballs:
 > 
-> .... but I'd get rid of the loop altogether and use comm(1); something like:
-> 
->     if [ -n "$( comm -23 <(sort "${cfg}") <(sort "${dir/.config}") )" ]; then
->         printf ", SKIPPED\n"
-> 	return
->     fi
+> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
+> cmake#L100
+> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
+> cmake#L132
+> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
+> cmake#L164
 
-Yup, I'll take a look at using comm instead. Thanks for the tip! :-)
+That's just insane that they got rid of their internal copies, to just
+re-introduce them a release later... :-(
+
+However, from those files you quoted:
+
+    https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.cmake#L2
+
+So Kodi actually *can* use external dvdcss, dvdread and dvdnav
+libraries. It /just/ needs KODI_DEPENDSBUILD (whjatever that is supposed
+to mean... :-/ )
+
+> So we do neither need to patch libdvd* anymore nor provide them as 
+> dependent packages, KODI_EXTRA_DOWNLOADS can be used to provide the 
+> tarballs.
+> 
+> First build tests were successful but I would like to be cautious about the 
+> switch to CMake because I only started to use it today with an x86_64 
+> toolchain so I have not much experience with it, as of this moment I never 
+> did a runtime test of the compiled binaries. I hope to find some time for 
+> this in the coming days but until then you can find my patches here:
+> 
+> https://github.com/bkuhls/buildroot/tree/kodi_cmake
+> 
+> Please note that LibreElec and Gentoo already build Kodi 17 using CMake:
+> 
+> https://github.com/LibreELEC/LibreELEC.tv/blob/libreelec-
+> 8.0/packages/mediacenter/kodi/package.mk#L34
+> 
+> https://gitweb.gentoo.org/repo/gentoo.git/tree/media-tv/kodi/kodi-
+> 17.0.ebuild#n161
+> 
+> Do we still have external toolchains based on uClibc 0.9.33.2?
+> If yes, we need to keep 
+> https://git.buildroot.net/buildroot/tree/package/kodi/0003-ALSA-fix-device-
+> change-event-support.patch and add CMake checks for eventfd_read & 
+> eventfd_write.
+
+I'd say we should not care about uClibc < 1.0, it's dead.
+
+So, either we mark Kodi as !uclibc, or we let the user keep the pieces
+if they are stuck with such an antediluvian toolchain. Get into the 21st
+century, man... ;-]
+
+Actually, I think we should start detecting such old toolchains and
+refuse to use them.
 
 Regards,
 Yann E. MORIN.
