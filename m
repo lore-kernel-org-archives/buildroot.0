@@ -1,8 +1,7 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Feb 2017 17:37:06 +0100
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Feb 2017 18:02:27 +0100
 Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
- Kodi-specific patches
-In-Reply-To: <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
+	Kodi-specific patches
 References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
  <20170204114451.20935-2-bernd.kuhls@t-online.de>
  <20170204230821.GA3805@free.fr>
@@ -12,95 +11,34 @@ References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
  <rk5nmdxipi.ln2@ID-313208.user.individual.net>
  <20170209232937.2a071f11@free-electrons.com>
  <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
-Message-ID: <20170211163706.GB20146@free.fr>
+ <20170211163706.GB20146@free.fr>
+Message-ID: <XnsA719B7856709BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+[posted and mailed]
 
-On 2017-02-11 17:03 +0100, Bernd Kuhls spake thusly:
-> Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote
-> in news:20170209232937.2a071f11 at free-electrons.com: 
-> 
-> Hi Thomas,
-> 
-> > Are these .a files still needed after the switch to CMake as the build
-> > system for Kodi?
-> 
-> fortunately no.
-> 
-> > Also, for the patches that apply to the libdvdcss, libdvdread and
-> > libdvdnav code base, it would be good to know if they have been
-> > submitted to the respective upstream projects, or if it's stuff that we
-> > may have to keep in Buildroot forever.
-> 
-> Afaics when using the new CMake-based build system of Kodi 17 it will
-> build libdvd* itself by using Kodi-specific tarballs:
-> 
-> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
-> cmake#L100
-> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
-> cmake#L132
-> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
-> cmake#L164
+Hi Yann,
 
-That's just insane that they got rid of their internal copies, to just
-re-introduce them a release later... :-(
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+news:20170211163706.GB20146 at free.fr: 
 
-However, from those files you quoted:
+> So Kodi actually *can* use external dvdcss, dvdread and dvdnav
+> libraries. It /just/ needs KODI_DEPENDSBUILD (whjatever that is supposed
+> to mean... :-/ )
 
-    https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.cmake#L2
+Kodi can build _all_ its dependencies during build:
+https://github.com/xbmc/xbmc/tree/Krypton/tools/depends/target
+https://github.com/xbmc/xbmc/blob/Krypton/tools/depends/target/Toolchain.cmak
+e.in#L84
 
-So Kodi actually *can* use external dvdcss, dvdread and dvdnav
-libraries. It /just/ needs KODI_DEPENDSBUILD (whjatever that is supposed
-to mean... :-/ )
+If KODI_DEPENDSBUILD = OFF then Kodi assumes all dependencies were build
+outside Kodi: https://github.com/xbmc/xbmc/pull/11088
 
-> So we do neither need to patch libdvd* anymore nor provide them as 
-> dependent packages, KODI_EXTRA_DOWNLOADS can be used to provide the 
-> tarballs.
-> 
-> First build tests were successful but I would like to be cautious about the 
-> switch to CMake because I only started to use it today with an x86_64 
-> toolchain so I have not much experience with it, as of this moment I never 
-> did a runtime test of the compiled binaries. I hope to find some time for 
-> this in the coming days but until then you can find my patches here:
-> 
-> https://github.com/bkuhls/buildroot/tree/kodi_cmake
-> 
-> Please note that LibreElec and Gentoo already build Kodi 17 using CMake:
-> 
-> https://github.com/LibreELEC/LibreELEC.tv/blob/libreelec-
-> 8.0/packages/mediacenter/kodi/package.mk#L34
-> 
-> https://gitweb.gentoo.org/repo/gentoo.git/tree/media-tv/kodi/kodi-
-> 17.0.ebuild#n161
-> 
-> Do we still have external toolchains based on uClibc 0.9.33.2?
-> If yes, we need to keep 
-> https://git.buildroot.net/buildroot/tree/package/kodi/0003-ALSA-fix-device-
-> change-event-support.patch and add CMake checks for eventfd_read & 
-> eventfd_write.
+Yes, maybe we could build libdvd* using buildroot, but we would still need
+to add the Kodi-specific patches to the packages which I want to avoid.
 
-I'd say we should not care about uClibc < 1.0, it's dead.
-
-So, either we mark Kodi as !uclibc, or we let the user keep the pieces
-if they are stuck with such an antediluvian toolchain. Get into the 21st
-century, man... ;-]
-
-Actually, I think we should start detecting such old toolchains and
-refuse to use them.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards, Bernd
