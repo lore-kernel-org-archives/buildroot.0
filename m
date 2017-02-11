@@ -1,78 +1,48 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 11 Feb 2017 22:19:36 +0100
-Subject: [Buildroot] [PATCH 1/6] support/scripts: add script to test a
-	package
-In-Reply-To: <20170211160824.GA20146@free.fr>
-References: <cover.1486584734.git.yann.morin.1998@free.fr>
- <085941ea3e9e9f34405ac10780d5c8aa2a6317aa.1486584734.git.yann.morin.1998@free.fr>
- <70e8.589b94e3.db816@xdna.net> <20170211160824.GA20146@free.fr>
-Message-ID: <CAAXf6LVR03z=HfgkN8QNpawG4G0WYvFmjswiexSCX2icw1dzvQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 11 Feb 2017 22:35:05 +0100
+Subject: [Buildroot] [PATCH v1 2/2] WIP: qt5base: use system/buildroot
+ provided harfbuzz
+In-Reply-To: <20170211192055.157a05a1@free-electrons.com>
+References: <20170209223055.31121-1-ps.report@gmx.net>
+ <20170209223055.31121-2-ps.report@gmx.net>
+ <20170210171223.0492d6ca@gmx.net>
+ <20170211192055.157a05a1@free-electrons.com>
+Message-ID: <20170211223505.0c88b566@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 11, 2017 at 5:08 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Cam, All,
->
-> Since you did not Cc me on that mail, I only noticed it now...
->
-> On 2017-02-08 22:00 -0000, Cam Hutchison spake thusly:
->> "Yann E. MORIN" <yann.morin.1998@free.fr> writes:
->> >This script helps in testing that a package builds fine on a wide range
->> >of architectures and toolchains: BE/LE, 32/64-bit, musl/glibc/uclibc...
-> [--SNIP--]
->> >+    if [ ${#toolchains[@]} -eq 0 ]; then
->> >+        printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
->>
->> The format string should be in single quotes as it contains a glob char.
->
-> Nope, wildcards are not expanded in double quotes (as you then noticed).
->
->> I usually put all printf format strings in single quotes since printf is
->> doing the substitutions, not the shell.
->
-> I tend to agree on the principle: format strings should be
-> single-quoted. But then we have disparate quoting styles, and I don;t
-> like it. I prefer a single quoting style...
->
-> But your point is valid as well.
->
-> [--SNIP--]
->> >+    while read line; do
->> >+        if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
->>
->> You should use grep -Fx here since ${line} might contains regex chars:
->>
->>         if ! grep -Fx "${line}" "${dir}/.config" >/dev/null 2>&1; then
->>
->> ....
->>
->> >+            printf ", SKIPPED\n"
->> >+            return
->> >+        fi
->> >+    done <"${cfg}"
->>
->> .... but I'd get rid of the loop altogether and use comm(1); something like:
->>
->>     if [ -n "$( comm -23 <(sort "${cfg}") <(sort "${dir/.config}") )" ]; then
->>         printf ", SKIPPED\n"
->>       return
->>     fi
->
-> Yup, I'll take a look at using comm instead. Thanks for the tip! :-)
->
+Hello Thomas,
 
-Here is a feature request, but only if it does not add much
-complexity: I was expecting the script to accept this:
+On Sat, 11 Feb 2017 19:20:55 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-echo "BR2_PACKAGE_BUSYBOX=y" | support/scripts/test-pkg -p busybox -c -
+> Hello,
+> 
+> On Fri, 10 Feb 2017 17:12:23 +0100, Peter Seiderer wrote:
+> 
+> > Qt5 does not (yet) have the dependency on BR2_TOOLCHAIN_HAS_SYNC_4 (but seems
+> > to compile fine with the bundled version of harfbuzz), is this
+> > because (the existing) dependency on BR2_TOOLCHAIN_HAS_THREADS_NPTL is
+> > 'stronger' than BR2_TOOLCHAIN_HAS_SYNC_4 (or is this complete unrelated)?
+> 
+> These are completely unrelated. For example, SPARC has NPTL, but not
+> BR2_TOOLCHAIN_HAS_SYNC_4.
 
-i.e. let '-' indicate that the config snippet is to be taken from
-standard input, a principle supported by many unix tools already.
-The 'echo' could be more complex in someone else's use case, for
-example a concatenation of several pre-existing snippets.
+Thanks for the answer...
 
-Best regards,
-Thomas
+Found the trick of the Qt built-in harfbuzz, they use the QAtomicPointer implementation
+instead of the default harfbuzz provided for hb_atomic_int_impl_add, hb_atomic_ptr_impl_get
+and hb_atomic_ptr_impl_cmpexch (see qtbase-opensource-src-5.8.0/src/3rdparty/harfbuzz-ng/config.h).
+
+What should we do for the !BR2_TOOLCHAIN_HAS_SYNC_4 case:
+
+- fall back to qt built-in harfbuzz
+- disable harfbuzz support
+
+Regards,
+Peter
+
+> 
+> Thomas
