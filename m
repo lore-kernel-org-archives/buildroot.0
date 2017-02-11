@@ -1,13 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Feb 2017 23:21:51 +0100
-Subject: [Buildroot] [PATCH 3/6] support/test-pkg: report number and
- types of failures
-In-Reply-To: <CAAXf6LW6WkZx=KZTTVt9vSuq7kChPfa2sXMhYAPYh2MN53cwgw@mail.gmail.com>
+Date: Sat, 11 Feb 2017 23:24:11 +0100
+Subject: [Buildroot] [PATCH 5/6] support/test-pkg: add option to use an
+ alternate list of toolchains
+In-Reply-To: <CAAXf6LUziDRqmGPj5OOToOUZN8Ynb+VKkL5VEyyWhjtx3by9GA@mail.gmail.com>
 References: <cover.1486584734.git.yann.morin.1998@free.fr>
- <dcd8080c616142b0f7f761e3749c92306b2f6863.1486584734.git.yann.morin.1998@free.fr>
- <20170209225946.54b9b744@free-electrons.com>
- <CAAXf6LW6WkZx=KZTTVt9vSuq7kChPfa2sXMhYAPYh2MN53cwgw@mail.gmail.com>
-Message-ID: <20170211222151.GD20146@free.fr>
+ <03ebcd068e7602bfbb059ed2c6759c8ba03819e9.1486584734.git.yann.morin.1998@free.fr>
+ <CAAXf6LUziDRqmGPj5OOToOUZN8Ynb+VKkL5VEyyWhjtx3by9GA@mail.gmail.com>
+Message-ID: <20170211222411.GE20146@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,53 +15,57 @@ To: buildroot@busybox.net
 
 Thomas DS, All,
 
-On 2017-02-11 20:48 +0100, Thomas De Schampheleire spake thusly:
-> On Thu, Feb 9, 2017 at 10:59 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Hello,
+On 2017-02-11 20:53 +0100, Thomas De Schampheleire spake thusly:
+> On Wed, Feb 8, 2017 at 9:15 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > For now, testing a package requires network access. However, there are
+> > situations where everything is already cached locally (especially the
+> > toolchains tarballs) and network is not available (e.g. in the train,
+> > travelling back from FOSDEM...)
 > >
-> > On Wed,  8 Feb 2017 21:15:26 +0100, Yann E. MORIN wrote:
+> > Alternatively, one may also want to test against a subset of the default
+> > toolchains (e.g. the ones known to have a specific issue).
 > >
-> >> +    if [ ${nb_dl} -ne 0 ]; then
-> >> +        printf "%d configurations could not be downloaded\n" ${nb_dl}
-> >> +    fi
-> >> +    if [ ${nb_cfg} -ne 0 ]; then
-> >> +        printf "%d configurations could not be applied\n" ${nb_cfg}
-> >> +    fi
-> >> +    if [ ${nb_skip} -ne 0 ]; then
-> >> +        printf "%d configurations were skipped\n" ${nb_skip}
-> >> +    fi
-> >> +    if [ ${nb_clean} -ne 0 ]; then
-> >> +        printf "%d configurations could not be dircleaned\n" ${nb_clean}
-> >> +    fi
-> >> +    if [ ${nb_build} -ne 0 ]; then
-> >> +        printf "%d configurations would not build\n" ${nb_build}
-> >> +    fi
+> > Add an option to use an alternate URL, which can be remote or a path to
+> > a local file.
+[--SNIP--]
+> > +    # Transform local paths to URI to make curl happy and simplify
+> > +    # our code path
+> > +    case "${url}" in
+> > +    (/*)    url="file://${url}";;
+> > +    esac
+> > +
+> >      # Extract the URLs of the toolchains; drop internal toolchains
+> >      # E.g.: http://server/path/to/name.config,arch,libc
+> >      #  -->  http://server/path/to/name.config
+> > -    toolchains=( $( curl -s "${TOOLCHAINS_URL}" \
+> > +    toolchains=( $( curl -s "${url}" \
+> >                      |sed -r -e 's/,.*//; /internal/d;' \
+> >                      |if [ ${random} -gt 0 ]; then \
+> >                          sort -R |head -n ${random}
+> > @@ -102,6 +112,12 @@ build_one() {
+> >      local pkg="${4}"
+> >      local toolchain line skip
 > >
-> > This is really verbose and not very useful. Instead what would be much
-> > more useful is just:
-> >
-> >         successes = %d, failures = %d, skipped = %d
-> >
-> > (possibly presented in a different way, my point is really that number
-> > of successes, number of failures and numbers of skipped configurations
-> > is really all what matters)
-> >
+> > +    # Transform local paths to URI to make curl happy and simplify
+> > +    # our code path
+> > +    case "${url}" in
+> > +    (/*)    url="file://${url}";;
+> > +    esac
 > 
-> I agree with Thomas here. Especially because a failure in download,
-> olddefconfig and dirclean steps is exceptional. Most failures will be
-> due to build problems or to a lesser extent invalid cofigurations
-> (either completely invalid == developer error in providing the
-> snippet, or invalid in some toolchains only).
-> Since the amount of toolchains that will be checked is limited, it is
-> not a lot of work to scroll up to view the actual problems.
+> Some duplication that could be extracted to a function?
 
-I already fixed it as per Thomas P. suggestion. It will be in the next
-re-spin (tomorrow).
+I wondered as much, too, but this is really trivial code. Also, if this
+gets to be a function, then that would have to be used using shell
+expansion, like:
+
+    url="$(canonical_url "${url}")"
+
+which does not look very nice either.
+
+So I believe duplication is acceptable in this case.
 
 Regards,
 Yann E. MORIN.
-
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
