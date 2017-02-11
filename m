@@ -1,136 +1,255 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 11 Feb 2017 16:13:33 +0100
-Subject: [Buildroot] [PATCH 1/2] augeas: new package
-In-Reply-To: <20170210110013.30448-1-joerg.krause@embedded.rocks>
-References: <20170210110013.30448-1-joerg.krause@embedded.rocks>
-Message-ID: <289e8922-ab01-115e-9f15-680e0d53e101@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Feb 2017 16:24:18 +0100
+Subject: [Buildroot] Buildroot 2017.02-rc1 released
+Message-ID: <20170211162418.6b76579b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+Hi,
 
-Le 10/02/2017 ? 12:00, J?rg Krause a ?crit :
-> Augeas is a configuration editing tool. It parses configuration files in
-> their native formats and transforms them into a tree. Configuration
-> changes are made by manipulating this tree and saving it back into
-> native config files.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/Config.in          |  1 +
->  package/augeas/Config.in   | 11 +++++++++++
->  package/augeas/augeas.hash |  2 ++
->  package/augeas/augeas.mk   | 22 ++++++++++++++++++++++
->  4 files changed, 36 insertions(+)
->  create mode 100644 package/augeas/Config.in
->  create mode 100644 package/augeas/augeas.hash
->  create mode 100644 package/augeas/augeas.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 114a5ad5f..6956a788a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1409,6 +1409,7 @@ menu "Security"
->  endmenu
->  
->  menu "Text and terminal handling"
-> +	source "package/augeas/Config.in"
->  	source "package/enchant/Config.in"
->  	source "package/icu/Config.in"
->  	source "package/libcli/Config.in"
-> diff --git a/package/augeas/Config.in b/package/augeas/Config.in
-> new file mode 100644
-> index 000000000..efbc19b43
-> --- /dev/null
-> +++ b/package/augeas/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_AUGEAS
-> +	bool "augeas"
-> +	select BR2_PACKAGE_LIBXML2
-> +	select BR2_PACKAGE_READLINE
-> +	help
-> +	  Augeas is a configuration editing tool. It parses configuration
-> +	  files in their native formats and transforms them into a tree.
-> +	  Configuration changes are made by manipulating this tree and
-> +	  saving it back into native config files.
+Buildroot 2017.02-rc1 is released - Go download it at:
 
-"The help text should be wrapped to fit 72 columns." see [1]
+http://buildroot.net/downloads/buildroot-2017.02-rc1.tar.gz
 
-Note: one Tab count as 8 characters.
+or
 
-[1] http://nightly.buildroot.org/#writing-rules-config-in
+http://buildroot.net/downloads/buildroot-2017.02-rc1.tar.bz2
 
-> +
-> +	  http://augeas.net
-> diff --git a/package/augeas/augeas.hash b/package/augeas/augeas.hash
-> new file mode 100644
-> index 000000000..9640757eb
-> --- /dev/null
-> +++ b/package/augeas/augeas.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256  b9315575d07f7ba28ca2f9f60b4987dfe77b5970c98b59dc6ca7873fc4979763  augeas-1.7.0.tar.gz
-> diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
-> new file mode 100644
-> index 000000000..7a1f2f8ce
-> --- /dev/null
-> +++ b/package/augeas/augeas.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# augeas
-> +#
-> +################################################################################
-> +
-> +AUGEAS_VERSION = 1.7.0
-> +AUGEAS_SITE = http://download.augeas.net
-> +AUGEAS_INSTALL_STAGING = YES
-> +AUGEAS_LICENSE = LGPLv2.1+
-> +AUGEAS_LICENSE_FILES = COPYING
-> +AUGEAS_DEPENDENCIES = host-pkgconf readline libxml2
-> +
-> +AUGEAS_CONF_OPTS = --disable-gnulib-tests
-> +
-> +# Remove the test lenses which occupy about 1.4 MB on the target
-> +define AUGEAS_REMOVE_TEST_LENSES
-> +	rm -rf $(TARGET_DIR)/usr/share/augeas/lenses/dist/tests
-> +endef
-> +AUGEAS_POST_INSTALL_TARGET_HOOKS += AUGEAS_REMOVE_TEST_LENSES
+Or get it from Git:
 
-The packaging looks good but augeas fail to build with some toolchain/arch:
+git://git.buildroot.net/buildroot
 
-./support/scripts/test-pkg -c pkg-config -d test-pkg/ -p augeas
+Please give it a spin and report any problems to the mailing list or
+bug tracker.
 
-br-arcle-hs38: download config, olddefconfig, dirclean, build: FAILED
+With 1218 changes, this cycle is almost exactly as busy as the
+2016.11-rc1 cycle, and again a bit more than 100 different persons
+contributed patches.
 
-/tmp/ccQRgMGk.s: Assembler messages:
-/tmp/ccQRgMGk.s:1159: Error: Bad expression: @pcl + , at .LANCHOR0@pcl-24.
-/tmp/ccQRgMGk.s:1159: Error: extra comma
-/tmp/ccQRgMGk.s:1159: Error: syntax error
+Important changes and improvements
+==================================
 
-Maybe report this one to ARC people...
+Infrastructure:
 
-br-arm-basic: download config, olddefconfig, dirclean, build: FAILED
+  - numerous improvements to support reproducible builds
 
-./.libs/libaugeas.so: undefined reference to `wctomb'
-./.libs/libaugeas.so: undefined reference to `mbtowc'
+  - new waf-package package infrastructure to support packages
+    that use the Waf build system. 6 packages converted to
+    this infrastructure.
 
-br-arm-cortex-m4-full: download config, olddefconfig, dirclean, build: FAILED
-br-arm-full-static: download config, olddefconfig, dirclean, build: FAILED
-br-m68k-5208-full: download config, olddefconfig, dirclean, build: FAILED
+  - add option <pkg>_PREFER_INSTALLER to the perl package
+    infrastructure
 
-./.libs/libaugeas.a(internal.o): In function `xasprintf':
-internal.c:(.text+0x64c): multiple definition of `xasprintf'
-augtool.o:augtool.c:(.text+0x5d8): first defined here
+Architecture:
 
-Can you take a look?
+  - add support for the OpenRISC CPU architecture
+
+  - merge description of the ARM and ARM64 options, and add
+    support for selecting a specific ARM64 core
+
+Toolchain:
+
+  - major rework of the external toolchain support. It is now
+    split into several packages, one per external toolchain,
+    and a common infrastructure.
+
+  - important fix for musl to prevent a conflict between musl
+    and kernel headers (fixes the build of numerous packages
+    with musl)
+
+  - uClibc-ng bumped to 1.0.22, and therefore enable uClibc
+    for ARM64, mips32r6 and mips64r6
+
+  - add gdb 7.12.1, and switch to gdb 7.11 as the default
+
+  - Linaro toolchains updated to 2016.11, ARC toolchain
+    components updated to arc-2016.09, MIPS Codescape
+    toolchains bumped to 2016.05-06, CodeSourcery AMD64 and
+    NIOS2 toolchains bumped
+
+  - remove Analog Devices toolchain for the Blackfin
+    architecture, remove pre-built musl toolchains from
+    musl.codu.org
+
+New defconfigs: Freescale i.MX23EVK, Qemu OpenRISC emulation,
+Qemu NIOS2 emulation, Grinn chiliBoard, Freescale i.MX6Q
+SabreSD, BeagleBoard X15, OrangePi One, ARC HS38 HAPS
+
+New packages: angular-websocket, aubio, bctoolbox, darkhttpd,
+ddrescue, easydbus, fakedate, git-crypt, hiredis, ifenslave,
+jsmn, libgpiod, libgsm, linux-syscall-support, mariadb, mimic,
+nginx-dav-ext, nmon, opkg-utils, policycoreutils,
+pru-software-support, python-arrow, python-attrs,
+python-babel, python-bitstring, python-chardet,
+python-constantly, python-flask-babel, python-gunicorn,
+python-incremental, python-jsonschema, python-logbook,
+python-markdown2, python-mbstrdecoder, python-mutagen,
+python-pathpy, python-pudb, python-pyqrcode,
+python-pytablereader, python-setuptools-scm, python-sh,
+python-toml, python-vcversioner, python-whoosh,
+raspberrypi-usbboot, riemann-c-client, rtl8723bs, skalibs,
+sslh, sngrep, ti-cgt-pru, uclibc-ng-test, udpxy, uhttpd,
+upower, ustream-ssl, waf, xlib_libXfont2
+
+Removed packages: perl-db-file, snowball-hdmiservice,
+snowball-init
+
+Tooling: addition of a test-pkg script to help contributors
+build test their package.
+
+And the usual package version updates and bug fixes. See the CHANGES
+file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02-rc1
+
+Statistics
+==========
+
+Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2016.11..
+
+   163  Gustavo Zacarias
+   102  Bernd Kuhls
+    92  Peter Korsgaard
+    90  Vicente Olivert Riera
+    83  Thomas Petazzoni
+    49  Fabio Estevam
+    48  Romain Naour
+    43  Yegor Yefremov
+    42  Baruch Siach
+    41  Adam Duskett
+    36  J?rg Krause
+    35  Yann E. MORIN
+    34  Francois Perrad
+    28  Peter Seiderer
+    20  Waldemar Brodkorb
+    15  Fabrice Fontaine
+    15  Rahul Bedarkar
+    14  J?r?me Pouiller
+    12  Arnout Vandecappelle
+    10  Danomi Manchego
+     9  Lionel Flandrin
+     9  Thomas De Schampheleire
+     8  Dagg Stompler
+     8  David Bachelart
+     8  Sam bobroff
+     7  James Knight
+     6  Angelo Compagnucci
+     6  Erico Nunes
+     6  Luca Ceresoli
+     6  Marcin Niestroj
+     6  Naumann Andreas
+     6  Zoltan Gyarmati
+     5  Chris Packham
+     5  Frank Hunleth
+     5  Martin Kepplinger
+     5  Rahul Jain
+     5  Sergey Matyukevich
+     5  Zakharov Vlad
+     4  Alvaro G. M
+     4  Bartosz Golaszewski
+     4  Carlos Santos
+     4  Eric Le Bihan
+     4  Gustavo Sverzut Barbieri
+     4  Ryan Coe
+     3  Alexey Brodkin
+     3  Andy Shevchenko
+     3  Ash Charles
+     3  Brian Redbeard
+     3  Bryce Ferguson
+     3  Christian Stewart
+     3  Ezequiel Garcia
+     3  Gary Bisson
+     3  Gilles Chanteperdrix
+     3  Jerzy Grzegorek
+     3  Johan Oudinet
+     3  Julien Corjon
+     3  Martin Bark
+     3  Matt Weber
+     3  Maxime Hadjinlian
+     3  Petr Vorel
+     3  Tobias Klauser
+     3  Wolfgang Grandegger
+     2  Alistair Francis
+     2  Andr? Hentschel
+     2  Brandon Maier
+     2  Clayton Shotwell
+     2  Gilles Talis
+     2  Marcin Nowakowski
+     2  Matt Kraai
+     2  Max Filippov
+     2  Misha Komarovskiy
+     2  Phil Eichinger
+     1  Alexey Neyman
+     1  Alvaro Gamez Machado
+     1  Bimal Jacob
+     1  Chris Frederick
+     1  Christian Kellermann
+     1  Daniel Mack
+     1  Fabien Parent
+     1  Fabio Porcedda
+     1  Francesco Negri
+     1  Ga?l PORTAY
+     1  Guillaume GARDET
+     1  Jack Kao
+     1  Jean-Baptiste Tr?dez
+     1  Jens Kleintje
+     1  Jordan Yelloz
+     1  Judd Meinders
+     1  Julien Floret
+     1  Lothar Felten
+     1  Marcus Hoffmann
+     1  Matt Flax
+     1  Michael Walle
+     1  Nicolas Cavallari
+     1  Patrick Devlin
+     1  Paul Cercueil
+     1  Ray Kinsella
+     1  Sam Mendoza-Jonas
+     1  Sergio Prado
+     1  Stewart Smith
+     1  S?bastien Szymanski
+     1  Tal Shorer
+     1  Tatsuyuki Ishi
+     1  Theo Debrouwere
+     1  Trent Piepho
+
+And a special thanks to our patch reviewers:
+
+git log 2016.11.. | grep -Ei '(reviewed|acked)-by:' | \
+    sed 's/.*by: //' | sort | uniq -c | sort -n -r
+
+     43 Romain Naour <romain.naour@gmail.com>
+     16 "Yann E. MORIN" <yann.morin.1998@free.fr>
+      9 Yegor Yefremov <yegorslists@googlemail.com>
+      9 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+      7 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+      5 Luca Ceresoli <luca@lucaceresoli.net>
+      4 Samuel Martin <s.martin49@gmail.com>
+      3 Bernd Kuhls <bernd.kuhls@t-online.de>
+      2 Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+      2 Gustavo Zacarias <gustavo@zacarias.com.ar>
+      2 Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+      1 Steven Rostedt <rostedt@goodmis.org>
+      1 Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+      1 Mark Charlebois <charlebm@gmail.com>
+      1 Julien Corjon <corjon.j@ecagroup.com>
+      1 Joel Stanley <joel@jms.id.au>
+      1 Francois Perrad <francois.perrad@gadz.org>
+      1 Carlos Santos <casantos@datacom.ind.br>
+      1 Alexey Brodkin <abrodkin@synopsys.com>
+
+Like usual, I will now create a next branch and start merging in new
+features, rather than wait until 2017.02 is released.
 
 Best regards,
-Romain
 
-> +
-> +$(eval $(autotools-package))
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
