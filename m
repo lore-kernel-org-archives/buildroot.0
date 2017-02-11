@@ -1,46 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Feb 2017 16:48:37 +0100
-Subject: [Buildroot] [PATCH v2] poco: build it as "poco", not "poco-poco"
-In-Reply-To: <c56b756cdb1ca9426d7a9ec5d04ba9462c6d4006.1486811718.git.casantos@datacom.ind.br>
-References: <1486771153-10386-1-git-send-email-casantos@datacom.ind.br>
- <c56b756cdb1ca9426d7a9ec5d04ba9462c6d4006.1486811718.git.casantos@datacom.ind.br>
-Message-ID: <20170211164837.26d4de3c@free-electrons.com>
+Date: Sat, 11 Feb 2017 16:49:00 +0100
+Subject: [Buildroot] [git commit branch/next] package: qemu: bump version to
+	2.8.0
+Message-ID: <20170211160037.8D49F818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f56b13897b9f30c78d7ccd78a25b1e985179d2ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 11 Feb 2017 09:15:55 -0200, Carlos Santos wrote:
+This adds a CPU definition for the Cortex A7 along with improvements described
+here: http://wiki.qemu-project.org/ChangeLog/2.8
 
-> -POCO_VERSION = poco-1.7.2-release
-> -POCO_SITE = $(call github,pocoproject,poco,$(POCO_VERSION))
-> +POCO_VERSION = 1.7.2
-> +POCO_VERSION_TAG = poco-$(POCO_VERSION)-release
-> +POCO_SITE = $(call github,pocoproject,poco,$(POCO_VERSION_TAG))
+Tested on an ARM Cortex A7 target (both target and host builds). The change log
+does not describe any incompatible changes that would affect buildroot targets
+as far as I am aware.
 
-In all packages, we currently use directly the upstream tag name as the
-<pkg>_VERSION value. I.e, we already had some people who wanted to do:
+Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-FOO_VERSION = 1.2.3
-FOO_SITE = $(call github,foo,bar,v$(FOO_VERSION))
-
-and we said no, the version should be v1.2.3.
-
-So I'm not sure why we would want to do this differently for the poco
-package. Yes, poco-poco-1.7.2-release seems weird, but if you find this
-weird, then it's upstream who should change the name of their tags.
-
-That being said, one thing that might lead us to change our mind is
-when we will do tracking of new upstream releases. In this situation,
-it might be easier to have a "cleaner" <pkg>_VERSION variable. See for
-example the list of versions visible at
-https://release-monitoring.org/project/5418/.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 572a5c9..19cb306 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,2 +1,2 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 326e739506ba690daf69fc17bd3913a6c313d9928d743bd8eddb82f403f81e53  qemu-2.7.0.tar.bz2
++sha256 dafd5d7f649907b6b617b822692f4c82e60cf29bc0fc58bc2036219b591e5e62  qemu-2.8.0.tar.bz2
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 66efcba..e744556 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QEMU_VERSION = 2.7.0
++QEMU_VERSION = 2.8.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+ QEMU_SITE = http://wiki.qemu.org/download
+ QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
