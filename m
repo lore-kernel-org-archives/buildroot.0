@@ -1,8 +1,8 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 11 Feb 2017 23:47:14 +0100
-Subject: [Buildroot] [PATCH for-master] package/gdb: backport uptream fix
+Date: Sat, 11 Feb 2017 23:51:19 +0100
+Subject: [Buildroot] [PATCH v2 for-master] package/gdb: backport uptream fix
 	for simulator build issue with bfin
-Message-ID: <20170211224714.1277-1-romain.naour@gmail.com>
+Message-ID: <20170211225119.2986-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,9 +23,11 @@ Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Waldemar Brodkorb <wbx@openadk.org>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+v2: add my SoB line in the backported patch
+---
  .../0001-Revert-sim-unify-SIM_CPU-definition.patch | 355 ---------------------
- ...lit-out-common-mach-model-defines-into-ar.patch | 151 +++++++++
- 2 files changed, 151 insertions(+), 355 deletions(-)
+ ...lit-out-common-mach-model-defines-into-ar.patch | 155 +++++++++
+ 2 files changed, 155 insertions(+), 355 deletions(-)
  delete mode 100644 package/gdb/7.11.1/0001-Revert-sim-unify-SIM_CPU-definition.patch
  create mode 100644 package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
 
@@ -392,10 +394,10 @@ index 8a8eece..0000000
 -
 diff --git a/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch b/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
 new file mode 100644
-index 0000000..c62a6b8
+index 0000000..5841cfd
 --- /dev/null
 +++ b/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
-@@ -0,0 +1,151 @@
+@@ -0,0 +1,155 @@
 +From 7a09ed68e203a813d88fb7fc6eeb1e92209561a5 Mon Sep 17 00:00:00 2001
 +From: Mike Frysinger <vapier@gentoo.org>
 +Date: Mon, 8 Aug 2016 13:06:49 +0800
@@ -407,6 +409,10 @@ index 0000000..c62a6b8
 +drop the old SIM_CPU typedef (which is duplicated in common code).  By
 +splitting the two up, we can unwind this dependency chain, and drop the
 +old typedef.  It also fixes building with older gcc versions.
++
++[Romain: backport from gdb 7.12]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++
 +---
 + sim/bfin/ChangeLog  |  9 +++++++++
 + sim/bfin/arch.h     | 44 ++++++++++++++++++++++++++++++++++++++++++++
