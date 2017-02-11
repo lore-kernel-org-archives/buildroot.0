@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Feb 2017 16:34:51 +0100
-Subject: [Buildroot] [PATCH v1] DEVELOPERS: update my entry list
-In-Reply-To: <20170210202843.4624-1-ps.report@gmx.net>
-References: <20170210202843.4624-1-ps.report@gmx.net>
-Message-ID: <20170211163451.3fb86e51@free-electrons.com>
+Date: Sat, 11 Feb 2017 16:38:45 +0100
+Subject: [Buildroot] [PATCH] infra/ccache: avoid color diagnostics with
+ GCC older than v4.9
+In-Reply-To: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
+References: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20170211163845.71459758@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +13,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 10 Feb 2017 21:28:43 +0100, Peter Seiderer wrote:
-> Interested in all qt5 stuff.
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  DEVELOPERS | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+Adding Arnout, Yann and Gustavo in Cc.
 
-Applied to master, thanks.
+On Fri, 10 Feb 2017 11:34:08 -0200, Carlos Santos wrote:
+> When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to GCC but
+> this flag requires GCC v4.9 or later. Older versions fail, complaining
+> about the unrecognized command line option.
+> 
+> The problem is not detectable in the autobuilders because they redirect
+> the output to files/pipes and ccache adds the offending flag only when
+> stderr is a terminal.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+
+This looks good to me in principle, so if Arnout, Yann and Gustavo
+don't complain, I'm going to soon apply this to master.
+
+Another option would be to adjust this in ccache itself at compile time
+(i.e when ccache gets built) rather than having to pass this additional
+GCC_COLORS variable in the environment when building things. This way
+we would be absolutely sure -fdiagnostics-color will never be passed.
+Hence why I'd like the feedback from other developers.
+
+A few nits below (but I can fix while applying).
+
+> +# When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to GCC but
+> +# this flag requires GCC v4.9 or later. Older versions fail, complaining
+> +# about unrecognized command line option.
+> +ifneq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_9),y)
+
+I think we tend to use:
+
+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_9),)
+
+instead.
+
+> +	TARGET_MAKE_ENV += GCC_COLORS=""
+
+And we don't indent such lines.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
