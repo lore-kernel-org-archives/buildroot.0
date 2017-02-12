@@ -1,65 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Feb 2017 13:33:26 +0100
-Subject: [Buildroot] [PATCH] infra/ccache: avoid color diagnostics with
- GCC older than v4.9
-In-Reply-To: <20170212131443.155d5a7d@free-electrons.com>
+Date: Sun, 12 Feb 2017 13:34:56 +0100
+Subject: [Buildroot] [PATCH v2] infra/ccache: avoid color diagnostics
+ with GCC older than v4.9
+In-Reply-To: <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
 References: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
- <20170211163845.71459758@free-electrons.com>
- <20170212100800.GC4533@free.fr>
- <20170212131443.155d5a7d@free-electrons.com>
-Message-ID: <20170212123326.GA11105@free.fr>
+ <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20170212123456.GB11105@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Carlos, All,
 
-On 2017-02-12 13:14 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 12 Feb 2017 11:08:00 +0100, Yann E. MORIN wrote:
+On 2017-02-12 09:33 -0200, Carlos Santos spake thusly:
+> Ensure that the GCC_COLORS environment variable is empty when calling
+> ccache. When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to
+> GCC but this flag requires GCC v4.9 or later. Older versions complain
+> about the unrecognized command line option.
 > 
-> > > Another option would be to adjust this in ccache itself at compile time
-> > > (i.e when ccache gets built) rather than having to pass this additional
-> > > GCC_COLORS variable in the environment when building things. This way
-> > > we would be absolutely sure -fdiagnostics-color will never be passed.
-> > > Hence why I'd like the feedback from other developers.  
-> > 
-> > But there is no config option to disable that in ccache. The behaviour
-> > is hard-coded; we would need a patch to disable that.
+> That behavior is hard-coded in ccache; we would need a patch to either
+> make it optional or disable it at all. Notice also that the problem is
+> not detectable in the autobuilders because they redirect the output to
+> files/pipes and ccache adds the offending flag only when stderr is a
+> terminal.
 > 
-> We could sed it like we already do in package/ccache/ccache.mk for
-> other things.
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
-Something like, maybe:
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-    diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-    index f174a5d..35d7a7b 100644
-    --- a/package/ccache/ccache.mk
-    +++ b/package/ccache/ccache.mk
-    @@ -31,6 +31,7 @@ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
-     define HOST_CCACHE_PATCH_CONFIGURATION
-     	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
-     	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
-    +	sed -i  '/if (getenv("GCC_COLORS")/,+4d' $(@D)/ccache.c
-     endef
-     
-     HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
-
-Or would we want it to be conditional on gcc < 4.9? In anycase, I think
-overridign the environment variable is much easier...
-
-> > And we might need that for the host as well, no?
-> > 
-> >     ifeq ($(BR2_HOST_GCC_AT_LEAST_4_9),)
-> >     HOST_MAKE_ENV += GCC_COLORS=""
-> >     endif
-> Check Carlos original patch, it was there.
-
-I didn't look; I only saw your own reply...
+Should go to master.
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> Changes v1->v2
+>   Fix indentation, use positive logic and improve the commit message,
+>   acording to comments from Thomas Petazzoni and Yann E. MORIN.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+>  package/Makefile.in | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 4a3eb26..e5e595a 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -236,6 +236,13 @@ export PERL5LIB=$(HOST_DIR)/usr/lib/perl
+>  
+>  TARGET_MAKE_ENV = PATH=$(BR_PATH)
+>  
+> +# When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to GCC but
+> +# this flag requires GCC v4.9 or later. Older versions fail, complaining
+> +# about unrecognized command line option.
+> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_9),)
+> +TARGET_MAKE_ENV += GCC_COLORS=""
+> +endif
+> +
+>  TARGET_CONFIGURE_OPTS = \
+>  	$(TARGET_MAKE_ENV) \
+>  	AR="$(TARGET_AR)" \
+> @@ -285,6 +292,11 @@ HOST_MAKE_ENV = \
+>  	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+>  	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig"
+>  
+> +# Prevent ccache from passing '-fdiagnostics-color' (see above).
+> +ifeq ($(BR2_HOST_GCC_AT_LEAST_4_9),)
+> +HOST_MAKE_ENV += GCC_COLORS=""
+> +endif
+> +
+>  HOST_CONFIGURE_OPTS = \
+>  	$(HOST_MAKE_ENV) \
+>  	AR="$(HOSTAR)" \
+> -- 
+> 2.7.4
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
