@@ -1,51 +1,29 @@
-From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Date: Sun, 12 Feb 2017 16:00:07 +0100
-Subject: [Buildroot] [PATCH v3] classpath: bump to version 0.99
-In-Reply-To: <20170212154145.1def8a2c@free-electrons.com>
-References: <20170212015451.16715-1-m.hoffmann@cartelsol.com>
- <20170212020444.32045-1-m.hoffmann@cartelsol.com>
- <20170212154145.1def8a2c@free-electrons.com>
-Message-ID: <0f4181a3-ea43-79e3-6cae-2bd339cc88b9@cartelsol.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Feb 2017 16:02:11 +0100
+Subject: [Buildroot] [PATCH 1/7 v4] supprt/test-pkg: fix code style
+In-Reply-To: <22f1d6982cb72bde788f2ea5d9c91f791c73e217.1486911180.git.yann.morin.1998@free.fr>
+References: <cover.1486911180.git.yann.morin.1998@free.fr>
+ <22f1d6982cb72bde788f2ea5d9c91f791c73e217.1486911180.git.yann.morin.1998@free.fr>
+Message-ID: <20170212160211.534f7d0d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-On 12.02.2017 15:41, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 12 Feb 2017 03:04:44 +0100, Marcus Hoffmann wrote:
-> 
->> -CLASSPATH_VERSION = 0.98
->> +CLASSPATH_VERSION = 0.99
->>  CLASSPATH_SITE = $(BR2_GNU_MIRROR)/classpath
->>  CLASSPATH_CONF_OPTS = \
->>  	--disable-examples \
->> -	--disable-plugin \
->>  	--disable-rpath \
->>  	--disable-Werror \
->>  	--disable-gconf-peer \
->> -	--disable-tools
->> +	--disable-gjdoc
-> 
-> There was a typo here: missing final backslash. Due to this, Buildroot
-> could not build this package at all. Did you test it before submitting
-> the patch? :-)
+On Sun, 12 Feb 2017 15:53:05 +0100, Yann E. MORIN wrote:
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  support/scripts/test-pkg | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 
-I let it run through the test-pkg script. And then I think I reordered
-some lines before the final commit... :-/ Sorry about that.
+Applied to master after fixing the typo in the commit title. Thanks!
 
-I saw you fixed it already. Thanks, and sorry again!
-
-> 
->> +	--enable-tools
-> 
-> Thanks!
-> 
-> Thomas
-> 
-
-Marcus
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
