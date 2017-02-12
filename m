@@ -1,88 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Feb 2017 13:34:56 +0100
-Subject: [Buildroot] [PATCH v2] infra/ccache: avoid color diagnostics
- with GCC older than v4.9
-In-Reply-To: <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
-References: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
- <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20170212123456.GB11105@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 12 Feb 2017 13:46:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/avahi: fix gettext dependency
+	handling
+Message-ID: <20170212124615.8875-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Currently avahi only adds -lintl when BR2_NEEDS_GETTEXT_IF_LOCALE is
+enabled. This is insufficent for defconfigs where BR2_PACKAGE_GETTEXT
+was selected by other packages without BR2_NEEDS_GETTEXT_IF_LOCALE
+being enabled at the same time. If gettext was built before avahi,
+and avahi uses optional dbus support, avahi configure detects libintl:
 
-On 2017-02-12 09:33 -0200, Carlos Santos spake thusly:
-> Ensure that the GCC_COLORS environment variable is empty when calling
-> ccache. When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to
-> GCC but this flag requires GCC v4.9 or later. Older versions complain
-> about the unrecognized command line option.
-> 
-> That behavior is hard-coded in ccache; we would need a patch to either
-> make it optional or disable it at all. Notice also that the problem is
-> not detectable in the autobuilders because they redirect the output to
-> files/pipes and ccache adds the offending flag only when stderr is a
-> terminal.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+checking libintl.h usability... yes
+checking libintl.h presence... yes
+checking for libintl.h... yes
+checking for ngettext in libc... no
+checking for bindtextdomain in -lintl... yes
+checking for ngettext in -lintl... yes
+checking for dgettext in -lintl... yes
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+and breaks at linking stage:
 
-Should go to master.
+  CCLD     avahi-publish
+/home/buildroot/br7_freeswitch/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/5.4.0/../../../../i586-buildroot-linux-uclibc/bin/ld: avahi_publish-avahi-publish.o: undefined reference to symbol 'libintl_dgettext'
+/home/buildroot/br7_freeswitch/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/lib32/libintl.so.8: error adding symbols: DSO missing from command line
+collect2: error: ld returned 1 exit status
 
-Regards,
-Yann E. MORIN.
+To reproduce use this minimal defconfig:
 
-> ---
-> Changes v1->v2
->   Fix indentation, use positive logic and improve the commit message,
->   acording to comments from Thomas Petazzoni and Yann E. MORIN.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/Makefile.in | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 4a3eb26..e5e595a 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -236,6 +236,13 @@ export PERL5LIB=$(HOST_DIR)/usr/lib/perl
->  
->  TARGET_MAKE_ENV = PATH=$(BR_PATH)
->  
-> +# When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to GCC but
-> +# this flag requires GCC v4.9 or later. Older versions fail, complaining
-> +# about unrecognized command line option.
-> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_9),)
-> +TARGET_MAKE_ENV += GCC_COLORS=""
-> +endif
-> +
->  TARGET_CONFIGURE_OPTS = \
->  	$(TARGET_MAKE_ENV) \
->  	AR="$(TARGET_AR)" \
-> @@ -285,6 +292,11 @@ HOST_MAKE_ENV = \
->  	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
->  	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig"
->  
-> +# Prevent ccache from passing '-fdiagnostics-color' (see above).
-> +ifeq ($(BR2_HOST_GCC_AT_LEAST_4_9),)
-> +HOST_MAKE_ENV += GCC_COLORS=""
-> +endif
-> +
->  HOST_CONFIGURE_OPTS = \
->  	$(HOST_MAKE_ENV) \
->  	AR="$(HOSTAR)" \
-> -- 
-> 2.7.4
-> 
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PACKAGE_GETTEXT=y
+BR2_PACKAGE_DBUS=y
+BR2_PACKAGE_AVAHI=y
 
+and build gettext before avahi.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/avahi/avahi.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 069b45a96..901beaaba 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -96,9 +96,7 @@ AVAHI_CONF_OPTS = \
+ 	--with-autoipd-user=avahi \
+ 	--with-autoipd-group=avahi
+ 
+-AVAHI_DEPENDENCIES = \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-intltool \
+-	host-pkgconf host-gettext
++AVAHI_DEPENDENCIES = host-intltool host-pkgconf host-gettext
+ 
+ AVAHI_CFLAGS = $(TARGET_CFLAGS)
+ 
+@@ -168,7 +166,10 @@ endif
+ 
+ AVAHI_CONF_ENV += CFLAGS="$(AVAHI_CFLAGS)"
+ 
+-AVAHI_MAKE_OPTS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
++ifeq ($(BR2_PACKAGE_GETTEXT),y)
++AVAHI_DEPENDENCIES += gettext
++AVAHI_CONF_ENV += LIBS=-lintl
++endif
+ 
+ define AVAHI_USERS
+ 	avahi -1 avahi -1 * - - -
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
