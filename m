@@ -1,80 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 12 Feb 2017 22:07:53 +0200
-Subject: [Buildroot] [PATCH 1/4] core: add generic support for lz
-	archives
-In-Reply-To: <CAAXf6LXPLcVSVXjzvzNBsvisp1H0E4YtAVDAeJuuQqj6NBz9fQ@mail.gmail.com>
-References: <fc3fe88b52644ba99855a47be4950f2b9d8b7dd9.1486705936.git.baruch@tkos.co.il>
- <CAAXf6LXPLcVSVXjzvzNBsvisp1H0E4YtAVDAeJuuQqj6NBz9fQ@mail.gmail.com>
-Message-ID: <20170212200753.bfpudufftk5lhelp@tarshish>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 12 Feb 2017 21:10:18 +0100
+Subject: [Buildroot] Report of the Buildroot Developer Meeting @FOSDEM2017
+Message-ID: <e9520d1a-de83-b62f-47c5-efcf8c3e484a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+ Hi Buildrooters,
 
-On Sat, Feb 11, 2017 at 10:16:20PM +0100, Thomas De Schampheleire wrote:
-> On Fri, Feb 10, 2017 at 6:52 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > +# host-extractor(filename): same as suitable-extractor, but filter out
-> > +# extractors we build when the host lacks one.
-> > +host-extractor = $(INFLATE$(filter-out .lz .lzma .xz,$(suffix $(1))))
-> 
-> suitable-extractor and host-extractor now render different output for
-> a given file which makes no sense in general for functions named like
-> this. You only need the different output to decide whether extra
-> dependency checks need to be done, not to determine what the extractor
-> is.
-> 
-> Also, the list of extensions is kind of 'magic' and not immediately
-> linked with the changes in support/dependencies (this was already true
-> with the original situation, true). It would be great if the
-> exceptions could be steered from the check-host-foo.mk files directly,
-> which is the conceptually right place: when that file exists it will
-> take over all checking, if it does not then the checking is done in
-> the standard DL_TOOLS_DEPENDENCIES.
-> 
-> I thought hard on a way to attack the problem without needing to know
-> the extensions and more in line with the original change, but it is
-> not easy due to the fact that XZCAT and such can contain spaces which
-> does not fit well with make.
-> For clarity, I wanted to let check-host-xz.mk append to a new variable, e.g.
->     DL_TOOLS_DEPENDENCIES_PRECHECKED_VARS += $(XZCAT)
-> and in pkg-generic.mk use this list to drive the exceptions:
->     ifeq (,$$(filter $$(call
-> suitable-extractor,$$($(2)_SOURCE)),$$(DL_TOOLS_DEPENDENCIES_PRECHECKED_VARS)))
->     DL_TOOLS_DEPENDENCIES += $$(firstword $$(call
-> suitable-extractor,$$($(2)_SOURCE)))
->     endif
-> This could work if we first replace all spaces with another character,
-> both when appending to DL_TOOLS_DEPENDENCIES_PRECHECKED_VARS as in the
-> first argument of the filter function.
-> But perhaps it makes things too complex.
+ On Monday and Tuesday 6-7 February 2017, we held a Buildroot Developer Meeting
+in Brussels. You can find the report (and some pictures) at [1]. Here are some
+highlights.
 
-Indeed.
+* We reuse the same subjects as last year for GSoC. Unfortunately, we didn't
+actually submit the proposal in time (last Thursday), so no GSoC this year...
 
-> An alternative is to stick closer to your proposal, but with some changes:
-> - let check-host-foo.mk define the list of extensions that it handles
-> instead of the magic list, e.g.
->   EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .xz
-> - rename host-extractor to something else, e.g. extractor-dependency
-> - perhaps it makes sense to let extractor-dependency handle the
-> $(firstword) call
-> 
-> Given my input, what do you think?
+* We're going to be a little more relaxed about accepting host packages.
 
-I like your second suggestion better. Patches follow.
+* We will use 2017.02 as an LTS release which we will maintain for a year (but
+maybe longer). It will have regular releases (roughly monthly but no promises).
+It will contain mainly security bumps, but also bugfix bumps and buildroot
+infrastructure bugfixes.
 
-> Separate note: it could make sense to split this patch in two: one to
-> refactor the handing of the dependencies, and a second one to cover
-> lz7.
 
-I agree.
+ We also discussed quite a few technical questions that users have encountered
+and what is the best way to deal with them. See the report for details. And
+finally, we did some hacking and patchwork cleanup.
 
-Thanks for reviewing,
-baruch
+ A big thank to our sponsors for making this possible:
+
+- Google for providing the location and free lunch;
+- Mind for funding the Monday evening pizza.
+
+ Regards,
+ Arnout
+
+
+[1] http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
