@@ -1,36 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Feb 2017 14:57:22 +0100
-Subject: [Buildroot] porting old build system to the buildroot
-In-Reply-To: <CAPTQzAB=Gk7qrnaRbTbujQXKUbiF4Srgi7+8UibP4cAiN=AVCg@mail.gmail.com>
-References: <CAPTQzAB=Gk7qrnaRbTbujQXKUbiF4Srgi7+8UibP4cAiN=AVCg@mail.gmail.com>
-Message-ID: <20170212145722.2be8b56b@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 12 Feb 2017 14:02:03 +0000
+Subject: [Buildroot] [Bug 9651] libxcb-1.12b built Error
+In-Reply-To: <bug-9651-163@https.bugs.busybox.net/>
+References: <bug-9651-163@https.bugs.busybox.net/>
+Message-ID: <bug-9651-163-tRC4rM9xBN@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9651
 
-On Sun, 12 Feb 2017 14:46:57 +0200, Anatoly Asviyan wrote:
+--- Comment #1 from Skamlinux <kalman.staudinger@gmail.com> ---
+root# cd buildroot
+root# make
+>>> host-libxcb 1.12 Building
+PATH="/root/buildroot/output/host/bin:/root/buildroot/output/host/sbin:/root/buildroot/output/host/usr/bin:/root/buildroot/output/host/usr/sbin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/root/my-applications/bin:/usr/games"
+PKG_CONFIG="/root/buildroot/output/host/usr/bin/pkg-config"
+PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+PKG_CONFIG_LIBDIR="/root/buildroot/output/host/usr/lib/pkgconfig:/root/buildroot/output/host/usr/share/pkgconfig"
+ /usr/bin/make -j3  -C /root/buildroot/output/build/host-libxcb-1.12/
+make[1]: Entering directory `/root/buildroot/output/build/host-libxcb-1.12'
+Making all in src
+make[2]: Entering directory `/root/buildroot/output/build/host-libxcb-1.12/src'
+make[2]: warning: -jN forced in submake: disabling jobserver mode.
+  GEN      xproto.c
+  GEN      bigreq.c
+  GEN      xc_misc.c
 
-> I am porting old build system to the buildroot. How do I express
-> "-mthumb -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 -mfpu=neon
-> -mfloat-abi=softfp -DARM_NEON"
-> as a buildroot's config?
-> 
-> Toolchains is CodeSourcery/arm-2009q1  arm-none-linux-gnueabi gcc 4.3.3
-> 
-> I've set correct values (I hope they are) in "Target options" menu, but
-> still see gcc invocations without those flags.
+Failed to load the xcbgen Python package!
+Make sure that xcb/proto installed it on your Python path.
+If not, you will need to create a .pth file or define $PYTHONPATH
+to extend the path.
+Refer to the README file in xcb/proto for more info.
 
-Flags are passed inside the compiler wrapper, so you don't see them on
-the command line. If you want to see them:
+Traceback (most recent call last):
+  File "./c_client.py", line 3294, in <module>
+    from xcbgen.state import Module
+  File
+"/root/buildroot/output/host/usr/lib/python2.7/site-packages/xcbgen/state.py",
+line 5, in <module>
+    from xml.etree.cElementTree import parse
+  File
+"/root/buildroot/output/host/usr/lib/python2.7/xml/etree/cElementTree.py", line
+3, in <module>
+    from _elementtree import *
+ImportError:
+/root/buildroot/output/host/usr/lib/python2.7/lib-dynload/_elementtree.so:
+undefined symbol: PyUnicodeUCS2_FromFormat
+make[2]: *** [bigreq.c] Error 1
+make[2]: *** Waiting for unfinished jobs....
 
-	export BR2_DEBUG_WRAPPER=1
+Failed to load the xcbgen Python package!
+Make sure that xcb/proto installed it on your Python path.
+If not, you will need to create a .pth file or define $PYTHONPATH
+to extend the path.
+Refer to the README file in xcb/proto for more info.
 
-Thomas
+Traceback (most recent call last):
+  File "./c_client.py", line 3294, in <module>
+    from xcbgen.state import Module
+  File
+"/root/buildroot/output/host/usr/lib/python2.7/site-packages/xcbgen/state.py",
+line 5, in <module>
+    from xml.etree.cElementTree import parse
+  File
+"/root/buildroot/output/host/usr/lib/python2.7/xml/etree/cElementTree.py", line
+3, in <module>
+    from _elementtree import *
+ImportError:
+/root/buildroot/output/host/usr/lib/python2.7/lib-dynload/_elementtree.so:
+undefined symbol: PyUnicodeUCS2_FromFormat
+make[2]: *** [xc_misc.c] Error 1
+
+Failed to load the xcbgen Python package!
+Make sure that xcb/proto installed it on your Python path.
+If not, you will need to create a .pth file or define $PYTHONPATH
+to extend the path.
+Refer to the README file in xcb/proto for more info.
+
+Traceback (most recent call last):
+  File "./c_client.py", line 3294, in <module>
+    from xcbgen.state import Module
+  File
+"/root/buildroot/output/host/usr/lib/python2.7/site-packages/xcbgen/state.py",
+line 5, in <module>
+    from xml.etree.cElementTree import parse
+  File
+"/root/buildroot/output/host/usr/lib/python2.7/xml/etree/cElementTree.py", line
+3, in <module>
+    from _elementtree import *
+ImportError:
+/root/buildroot/output/host/usr/lib/python2.7/lib-dynload/_elementtree.so:
+undefined symbol: PyUnicodeUCS2_FromFormat
+make[2]: *** [xproto.c] Error 1
+make[2]: Leaving directory `/root/buildroot/output/build/host-libxcb-1.12/src'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/root/buildroot/output/build/host-libxcb-1.12'
+make: *** [/root/buildroot/output/build/host-libxcb-1.12/.stamp_built] Error 2
+root#
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
