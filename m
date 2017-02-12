@@ -1,46 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Feb 2017 14:37:09 +0100
-Subject: [Buildroot] [PATCHv3] package/ccache: do not force colored
-	diagnostics
-In-Reply-To: <20170212143432.4aa112f0@free-electrons.com>
-References: <1486906227-5682-1-git-send-email-yann.morin.1998@free.fr>
- <20170212143432.4aa112f0@free-electrons.com>
-Message-ID: <20170212133709.GD11105@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Feb 2017 14:57:22 +0100
+Subject: [Buildroot] porting old build system to the buildroot
+In-Reply-To: <CAPTQzAB=Gk7qrnaRbTbujQXKUbiF4Srgi7+8UibP4cAiN=AVCg@mail.gmail.com>
+References: <CAPTQzAB=Gk7qrnaRbTbujQXKUbiF4Srgi7+8UibP4cAiN=AVCg@mail.gmail.com>
+Message-ID: <20170212145722.2be8b56b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-02-12 14:34 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 12 Feb 2017 14:30:27 +0100, Yann E. MORIN wrote:
-[--SNIP--]
-> > +# too old to support colored output diagnostics.
-> > +ifneq ($(BR2_HOST_GCC_AT_LEAST_4_9)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_9),yy)
-> > +define CCACHE_NO_GCC_COLORS
-> > +	sed -i  '/if (getenv("GCC_COLORS")/,+3d' $(@D)/ccache.c
+On Sun, 12 Feb 2017 14:46:57 +0200, Anatoly Asviyan wrote:
+
+> I am porting old build system to the buildroot. How do I express
+> "-mthumb -march=armv7-a -mcpu=cortex-a8 -mtune=cortex-a8 -mfpu=neon
+> -mfloat-abi=softfp -DARM_NEON"
+> as a buildroot's config?
 > 
-> Using $(SED) not possible here?
-
-I did as was done in the other macro, above.
-
-> > +endef
-> > +
-> > +#HOST_CCACHE_POST_PATCH_HOOKS += CCACHE_NO_GCC_COLORS
+> Toolchains is CodeSourcery/arm-2009q1  arm-none-linux-gnueabi gcc 4.3.3
 > 
-> Line commented? :-)
+> I've set correct values (I hope they are) in "Target options" menu, but
+> still see gcc invocations without those flags.
 
-Meh, I again forgot to commit --ammend
+Flags are passed inside the compiler wrapper, so you don't see them on
+the command line. If you want to see them:
 
-Regards,
-Yann E. MORIN.
+	export BR2_DEBUG_WRAPPER=1
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
