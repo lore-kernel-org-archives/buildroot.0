@@ -1,557 +1,808 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 11 Feb 2017 23:51:19 +0100
-Subject: [Buildroot] [PATCH v2 for-master] package/gdb: backport uptream fix
-	for simulator build issue with bfin
-Message-ID: <20170211225119.2986-1-romain.naour@gmail.com>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Sun, 12 Feb 2017 02:47:07 +0100
+Subject: [Buildroot] [PATCH 1/1] classpath: bump to version 0.99
+Message-ID: <20170212014707.16259-1-m.hoffmann@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This revert the commit [1] which break the simulator for aarch64.
-Backport the upstream fix instead (from 7.12).
+Drop both patches since they are included upstream.
+We don't need to autoreconf now.
 
-[1] f71ad71f24fbeca1a81cc9efe79016a7db6f1320
+Note: classpath 0.99 has a bug in it's autoconf scripts, such that
+configure always fails when specifying --disable-tools[1].
+We enable these for now.
 
-Tested with gcc 4.4.5 (debian squeeze chroot).
+Also explicitly disable GJDoc generation, as this defaults to on now.
 
-Fixes:
-http://autobuild.buildroot.net/results/cfd/cfdc9117fef7ecdf5cc5fc907a6fe8701a2c174a
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70660
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
 ---
-v2: add my SoB line in the backported patch
----
- .../0001-Revert-sim-unify-SIM_CPU-definition.patch | 355 ---------------------
- ...lit-out-common-mach-model-defines-into-ar.patch | 155 +++++++++
- 2 files changed, 155 insertions(+), 355 deletions(-)
- delete mode 100644 package/gdb/7.11.1/0001-Revert-sim-unify-SIM_CPU-definition.patch
- create mode 100644 package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
+ package/classpath/0001-fix-gmp-include.patch  |  46 --
+ package/classpath/0002-add-config-rpath.patch | 680 --------------------------
+ package/classpath/classpath.hash              |   2 +-
+ package/classpath/classpath.mk                |   7 +-
+ 4 files changed, 4 insertions(+), 731 deletions(-)
+ delete mode 100644 package/classpath/0001-fix-gmp-include.patch
+ delete mode 100644 package/classpath/0002-add-config-rpath.patch
 
-diff --git a/package/gdb/7.11.1/0001-Revert-sim-unify-SIM_CPU-definition.patch b/package/gdb/7.11.1/0001-Revert-sim-unify-SIM_CPU-definition.patch
+diff --git a/package/classpath/0001-fix-gmp-include.patch b/package/classpath/0001-fix-gmp-include.patch
 deleted file mode 100644
-index 8a8eece..0000000
---- a/package/gdb/7.11.1/0001-Revert-sim-unify-SIM_CPU-definition.patch
+index f7a3920..0000000
+--- a/package/classpath/0001-fix-gmp-include.patch
 +++ /dev/null
-@@ -1,355 +0,0 @@
--From 77080d5f7fd47dd567f22807d336bc9111f93d7b Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 4 Aug 2016 23:44:24 +0200
--Subject: [PATCH] Revert "sim: unify SIM_CPU definition"
+@@ -1,46 +0,0 @@
+-The GMP include is hardcoded to /usr/include causing obvious problems.
 -
--This reverts commit 20bca71d82598a015de0991196e45f0b5f7ead81.
+-From classpath CVS:
+-http://cvs.savannah.gnu.org/viewvc/classpath/configure.ac?root=classpath&r1=1.245&r2=1.246
 -
--This change causes a redefinition of SIM_CPU on the Blackfin
--architecture, as it is defined in both the common sim/common/sim-base.h
--and the architecture specific sim/bfin/sim-main.h.
+-[Gustavo: ditch -L or libtool complains loudly]
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- sim/arm/sim-main.h        | 3 +++
-- sim/avr/sim-main.h        | 2 ++
-- sim/bfin/sim-main.h       | 2 --
-- sim/common/sim-base.h     | 2 --
-- sim/cr16/sim-main.h       | 2 ++
-- sim/cris/sim-main.h       | 3 +++
-- sim/d10v/sim-main.h       | 2 ++
-- sim/frv/sim-main.h        | 3 +++
-- sim/ft32/sim-main.h       | 2 ++
-- sim/h8300/sim-main.h      | 3 +++
-- sim/iq2000/sim-main.h     | 3 +++
-- sim/lm32/sim-main.h       | 3 +++
-- sim/m32r/sim-main.h       | 3 +++
-- sim/m68hc11/sim-main.h    | 3 +++
-- sim/mcore/sim-main.h      | 2 ++
-- sim/microblaze/sim-main.h | 3 +++
-- sim/mips/sim-main.h       | 3 +++
-- sim/mn10300/sim-main.h    | 2 ++
-- sim/moxie/sim-main.h      | 3 +++
-- sim/msp430/sim-main.h     | 3 +++
-- sim/sh/sim-main.h         | 3 +++
-- sim/sh64/sim-main.h       | 3 +++
-- sim/v850/sim-main.h       | 3 +++
-- 23 files changed, 57 insertions(+), 4 deletions(-)
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--diff --git a/sim/arm/sim-main.h b/sim/arm/sim-main.h
--index 3620810..f644122 100644
----- a/sim/arm/sim-main.h
--+++ b/sim/arm/sim-main.h
--@@ -20,6 +20,9 @@
-- #define SIM_MAIN_H
-- 
-- #include "sim-basics.h"
+---- a/configure.ac	2010/01/30 01:33:50	1.245
+-+++ b/configure.ac	2010/05/04 12:29:23	1.246
+-@@ -752,10 +752,32 @@
+-   dnl __gmpz_mul_si for earlier versions (>= 3.1).
+-   dnl IMPORTANT: if you decide to look for __gmpz_combit, don't forget to
+-   dnl change the name of the corresponding ac_ variable on lines 860...
+-+  AC_ARG_WITH(gmp, [  --with-gmp=PATH         specify prefix directory for the installed GMP package.
+-+                          Equivalent to --with-gmp-include=PATH/include
+-+                          plus --with-gmp-lib=PATH/lib])
+-+  AC_ARG_WITH(gmp_include, [  --with-gmp-include=PATH specify directory for installed GMP include files])
+-+  AC_ARG_WITH(gmp_lib, [  --with-gmp-lib=PATH     specify directory for the installed GMP library])
 -+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/avr/sim-main.h b/sim/avr/sim-main.h
--index 47155e3..cd41045 100644
----- a/sim/avr/sim-main.h
--+++ b/sim/avr/sim-main.h
--@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- 
-- #include "sim-basics.h"
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- struct _sim_cpu {
--diff --git a/sim/bfin/sim-main.h b/sim/bfin/sim-main.h
--index 51fb87e..cf1ed57 100644
----- a/sim/bfin/sim-main.h
--+++ b/sim/bfin/sim-main.h
--@@ -24,8 +24,6 @@
-- #include "sim-basics.h"
-- #include "sim-signal.h"
-- 
---/* TODO: Delete this.  Need to convert bu32/etc... to common sim types
---         and unwind the bfin-sim.h/machs.h include below first though.  */
-- typedef struct _sim_cpu SIM_CPU;
-- 
-- #include "bfin-sim.h"
--diff --git a/sim/common/sim-base.h b/sim/common/sim-base.h
--index 350b352..1b849f4 100644
----- a/sim/common/sim-base.h
--+++ b/sim/common/sim-base.h
--@@ -72,8 +72,6 @@ typedef address_word sim_cia;
-- #define INVALID_INSTRUCTION_ADDRESS ((address_word)0 - 1)
-- #endif
-- 
---/* TODO: Probably should just delete SIM_CPU.  */
---typedef struct _sim_cpu SIM_CPU;
-- typedef struct _sim_cpu sim_cpu;
-- 
-- #include "sim-module.h"
--diff --git a/sim/cr16/sim-main.h b/sim/cr16/sim-main.h
--index 208f917..78e3996 100644
----- a/sim/cr16/sim-main.h
--+++ b/sim/cr16/sim-main.h
--@@ -24,6 +24,8 @@
-- typedef long int           word;
-- typedef unsigned long int  uword;
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/cris/sim-main.h b/sim/cris/sim-main.h
--index 8aab970..0ff907f 100644
----- a/sim/cris/sim-main.h
--+++ b/sim/cris/sim-main.h
--@@ -29,6 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
--    one of -scache/-pbb.  */
-- #define WITH_SCACHE_PBB 1
-- 
--+struct _sim_cpu;
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "symcat.h"
-- #include "sim-basics.h"
-- #include "cgen-types.h"
--diff --git a/sim/d10v/sim-main.h b/sim/d10v/sim-main.h
--index 76f06d8..fd5bd51 100644
----- a/sim/d10v/sim-main.h
--+++ b/sim/d10v/sim-main.h
--@@ -24,6 +24,8 @@
-- typedef long int           word;
-- typedef unsigned long int  uword;
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/frv/sim-main.h b/sim/frv/sim-main.h
--index f95c1cc..701e208 100644
----- a/sim/frv/sim-main.h
--+++ b/sim/frv/sim-main.h
--@@ -19,6 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- 
-- /* Main header for the frv.  */
-- 
--+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
-- /* sim-basics.h includes config.h but cgen-types.h must be included before
--    sim-basics.h and cgen-types.h needs config.h.  */
-- #include "config.h"
--diff --git a/sim/ft32/sim-main.h b/sim/ft32/sim-main.h
--index a15b247..eef0201 100644
----- a/sim/ft32/sim-main.h
--+++ b/sim/ft32/sim-main.h
--@@ -25,6 +25,8 @@
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "ft32-sim.h"
-- 
-- struct _sim_cpu {
--diff --git a/sim/h8300/sim-main.h b/sim/h8300/sim-main.h
--index 6dbc1ac..e95c4d9 100644
----- a/sim/h8300/sim-main.h
--+++ b/sim/h8300/sim-main.h
--@@ -87,6 +87,9 @@ enum h8_typecodes {
-- };
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- /* Structure used to describe addressing */
--diff --git a/sim/iq2000/sim-main.h b/sim/iq2000/sim-main.h
--index 829f9bb..a770dc5 100644
----- a/sim/iq2000/sim-main.h
--+++ b/sim/iq2000/sim-main.h
--@@ -4,6 +4,9 @@
-- #ifndef SIM_MAIN_H
-- #define SIM_MAIN_H
-- 
--+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
-- /* sim-basics.h includes config.h but cgen-types.h must be included before
--    sim-basics.h and cgen-types.h needs config.h.  */
-- #include "config.h"
--diff --git a/sim/lm32/sim-main.h b/sim/lm32/sim-main.h
--index 20e2b71..eeffde3 100644
----- a/sim/lm32/sim-main.h
--+++ b/sim/lm32/sim-main.h
--@@ -25,6 +25,9 @@
-- 
-- #define WITH_SCACHE_PBB 1
-- 
--+struct _sim_cpu;		/* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "symcat.h"
-- #include "sim-basics.h"
-- #include "cgen-types.h"
--diff --git a/sim/m32r/sim-main.h b/sim/m32r/sim-main.h
--index 5b24ce8..39f7ecc 100644
----- a/sim/m32r/sim-main.h
--+++ b/sim/m32r/sim-main.h
--@@ -8,6 +8,9 @@
--    one of -scache/-pbb.  */
-- #define WITH_SCACHE_PBB 1
-- 
--+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "symcat.h"
-- #include "sim-basics.h"
-- #include "cgen-types.h"
--diff --git a/sim/m68hc11/sim-main.h b/sim/m68hc11/sim-main.h
--index b940df7..0aa096f 100644
----- a/sim/m68hc11/sim-main.h
--+++ b/sim/m68hc11/sim-main.h
--@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- #define _SIM_MAIN_H
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-signal.h"
-- #include "sim-base.h"
-- 
--diff --git a/sim/mcore/sim-main.h b/sim/mcore/sim-main.h
--index fce26e8..fa7ee9f 100644
----- a/sim/mcore/sim-main.h
--+++ b/sim/mcore/sim-main.h
--@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- typedef long int           word;
-- typedef unsigned long int  uword;
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/microblaze/sim-main.h b/sim/microblaze/sim-main.h
--index 3a7b088..9e6bf01 100644
----- a/sim/microblaze/sim-main.h
--+++ b/sim/microblaze/sim-main.h
--@@ -20,6 +20,9 @@
-- 
-- #include "microblaze.h"
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- /* The machine state.
--diff --git a/sim/mips/sim-main.h b/sim/mips/sim-main.h
--index 0ea1234..eedbfc9 100644
----- a/sim/mips/sim-main.h
--+++ b/sim/mips/sim-main.h
--@@ -27,6 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- mips_core_signal ((SD), (CPU), (CIA), (MAP), (NR_BYTES), (ADDR), (TRANSFER), (ERROR))
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/mn10300/sim-main.h b/sim/mn10300/sim-main.h
--index 7171c03..3a917e7 100644
----- a/sim/mn10300/sim-main.h
--+++ b/sim/mn10300/sim-main.h
--@@ -38,6 +38,8 @@
-- #include "itable.h"
-- #include "idecode.h"
-- 
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #define SIM_CORE_SIGNAL(SD,CPU,CIA,MAP,NR_BYTES,ADDR,TRANSFER,ERROR)  \
-- mn10300_core_signal ((SD), (CPU), (CIA), (MAP), (NR_BYTES), (ADDR), (TRANSFER), (ERROR))
-- 
--diff --git a/sim/moxie/sim-main.h b/sim/moxie/sim-main.h
--index 7091f21..b6b5ca3 100644
----- a/sim/moxie/sim-main.h
--+++ b/sim/moxie/sim-main.h
--@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- #define SIM_MAIN_H
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- #include "bfd.h"
-- 
--diff --git a/sim/msp430/sim-main.h b/sim/msp430/sim-main.h
--index 4a2ab22..c7cdc5e 100644
----- a/sim/msp430/sim-main.h
--+++ b/sim/msp430/sim-main.h
--@@ -23,6 +23,9 @@
-- 
-- #include "sim-basics.h"
-- #include "sim-signal.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "msp430-sim.h"
-- #include "sim-base.h"
-- 
--diff --git a/sim/sh/sim-main.h b/sim/sh/sim-main.h
--index 4af7b03..6ab42a6 100644
----- a/sim/sh/sim-main.h
--+++ b/sim/sh/sim-main.h
--@@ -20,6 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-- #define SIM_MAIN_H
-- 
-- #include "sim-basics.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- typedef struct
--diff --git a/sim/sh64/sim-main.h b/sim/sh64/sim-main.h
--index da8f516..5fd7095 100644
----- a/sim/sh64/sim-main.h
--+++ b/sim/sh64/sim-main.h
--@@ -3,6 +3,9 @@
-- #ifndef SIM_MAIN_H
-- #define SIM_MAIN_H
-- 
--+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
--+typedef struct _sim_cpu SIM_CPU;
--+
-- /* sim-basics.h includes config.h but cgen-types.h must be included before
--    sim-basics.h and cgen-types.h needs config.h.  */
-- #include "config.h"
--diff --git a/sim/v850/sim-main.h b/sim/v850/sim-main.h
--index e7276a6..1a45f97 100644
----- a/sim/v850/sim-main.h
--+++ b/sim/v850/sim-main.h
--@@ -9,6 +9,9 @@
-- #include "sim-basics.h"
-- #include "sim-signal.h"
-- #include "sim-fpu.h"
--+
--+typedef struct _sim_cpu SIM_CPU;
--+
-- #include "sim-base.h"
-- 
-- #include "simops.h"
---- 
--2.7.4
+-   if test "x${COMPILE_GMP}" = xyes; then
+-+    AC_MSG_CHECKING([for GMP directories])
+-+    if test "x$with_gmp" != x; then
+-+       gmplibs="-lgmp"
+-+       gmpinc="-I$with_gmp/include"
+-+       if test "x$with_gmp_include" != x; then
+-+       	  gmpinc="-I$with_gmp_include $gmpinc"
+-+       fi
+-+       if test "x$with_gmp_lib" != x; then
+-+       	  gmplibs="$gmplibs"
+-+       fi
+-+    else
+-+        with_gmp="/usr"
+-+	gmplibs="-lgmp"
+-+    	gmpinc="-I/usr/include"
+-+    fi
+-+    AC_MSG_RESULT([prefix=$with_gmp, libs=$gmplibs, inc=$gmpinc])
+-     AC_CHECK_LIB(gmp, __gmpz_mul_si,
+--      [GMP_CFLAGS=-I/usr/include
+--       GMP_LIBS=-lgmp ],
+-+      [GMP_CFLAGS="$gmpinc"
+-+       GMP_LIBS="$gmplibs" ],
+-       [GMP_CFLAGS=
+-        GMP_LIBS= ])
+-     AC_SUBST(GMP_CFLAGS)
+diff --git a/package/classpath/0002-add-config-rpath.patch b/package/classpath/0002-add-config-rpath.patch
+deleted file mode 100644
+index 3a8a7d0..0000000
+--- a/package/classpath/0002-add-config-rpath.patch
++++ /dev/null
+@@ -1,680 +0,0 @@
+-Add config.rpath from upstream CVS to avoid (re)autoconfiguring errors.
 -
-diff --git a/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch b/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
-new file mode 100644
-index 0000000..5841cfd
---- /dev/null
-+++ b/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
-@@ -0,0 +1,155 @@
-+From 7a09ed68e203a813d88fb7fc6eeb1e92209561a5 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Mon, 8 Aug 2016 13:06:49 +0800
-+Subject: [PATCH] sim: bfin: split out common mach/model defines into arch.h
-+ [PR sim/20438]
-+
-+The current machs.h mixes common enums with Blackfin-specific defines.
-+This causes us troubles with header inclusion order such that we can't
-+drop the old SIM_CPU typedef (which is duplicated in common code).  By
-+splitting the two up, we can unwind this dependency chain, and drop the
-+old typedef.  It also fixes building with older gcc versions.
-+
-+[Romain: backport from gdb 7.12]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+
-+---
-+ sim/bfin/ChangeLog  |  9 +++++++++
-+ sim/bfin/arch.h     | 44 ++++++++++++++++++++++++++++++++++++++++++++
-+ sim/bfin/machs.h    | 20 --------------------
-+ sim/bfin/sim-main.h |  8 ++------
-+ 4 files changed, 55 insertions(+), 26 deletions(-)
-+ create mode 100644 sim/bfin/arch.h
-+
-+diff --git a/sim/bfin/ChangeLog b/sim/bfin/ChangeLog
-+index 3dea7c9..a995436 100644
-+--- a/sim/bfin/ChangeLog
-++++ b/sim/bfin/ChangeLog
-+@@ -1,3 +1,12 @@
-++2016-08-13  Mike Frysinger  <vapier@gentoo.org>
-++
-++	PR sim/20438
-++	* machs.h (MODEL_TYPE, MACH_ATTR, BFIN_INSN_*): Move ...
-++	* arch.h: ... to this new header file.
-++	* sim-main.h (SIM_CPU): Delete.
-++	Include arch.h before sim-base.h, and move sim-base.h before
-++	bfin-sim.h.
-++
-+ 2016-01-10  Mike Frysinger  <vapier@gentoo.org>
-+ 
-+ 	* config.in, configure: Regenerate.
-+diff --git a/sim/bfin/arch.h b/sim/bfin/arch.h
-+new file mode 100644
-+index 0000000..b86d3e9
-+--- /dev/null
-++++ b/sim/bfin/arch.h
-+@@ -0,0 +1,44 @@
-++/* Simulator for Analog Devices Blackfin processors.
-++
-++   Copyright (C) 2005-2016 Free Software Foundation, Inc.
-++   Contributed by Analog Devices, Inc.
-++
-++   This file is part of simulators.
-++
-++   This program is free software; you can redistribute it and/or modify
-++   it under the terms of the GNU General Public License as published by
-++   the Free Software Foundation; either version 3 of the License, or
-++   (at your option) any later version.
-++
-++   This program is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++   GNU General Public License for more details.
-++
-++   You should have received a copy of the GNU General Public License
-++   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-++
-++#ifndef BFIN_ARCH_H
-++#define BFIN_ARCH_H
-++
-++typedef enum model_type {
-++#define P(n) MODEL_BF##n,
-++#include "proc_list.def"
-++#undef P
-++  MODEL_MAX
-++} MODEL_TYPE;
-++
-++typedef enum mach_attr {
-++  MACH_BASE,
-++  MACH_BFIN,
-++  MACH_MAX
-++} MACH_ATTR;
-++
-++enum {
-++#define I(insn) BFIN_INSN_##insn,
-++#include "insn_list.def"
-++#undef I
-++  BFIN_INSN_MAX
-++};
-++
-++#endif
-+diff --git a/sim/bfin/machs.h b/sim/bfin/machs.h
-+index 0372982..36819ae 100644
-+--- a/sim/bfin/machs.h
-++++ b/sim/bfin/machs.h
-+@@ -21,19 +21,6 @@
-+ #ifndef _BFIN_MACHS_H_
-+ #define _BFIN_MACHS_H_
-+ 
-+-typedef enum model_type {
-+-#define P(n) MODEL_BF##n,
-+-#include "proc_list.def"
-+-#undef P
-+-  MODEL_MAX
-+-} MODEL_TYPE;
-+-
-+-typedef enum mach_attr {
-+-  MACH_BASE,
-+-  MACH_BFIN,
-+-  MACH_MAX
-+-} MACH_ATTR;
-+-
-+ #define CPU_MODEL_NUM(cpu) MODEL_NUM (CPU_MODEL (cpu))
-+ 
-+ /* XXX: Some of this probably belongs in CPU_MODEL.  */
-+@@ -46,13 +33,6 @@ void bfin_model_cpu_init (SIM_DESC, SIM_CPU *);
-+ bu32 bfin_model_get_chipid (SIM_DESC);
-+ bu32 bfin_model_get_dspid (SIM_DESC);
-+ 
-+-enum {
-+-#define I(insn) BFIN_INSN_##insn,
-+-#include "insn_list.def"
-+-#undef I
-+-  BFIN_INSN_MAX
-+-};
-+-
-+ #define BFIN_COREMMR_CEC_BASE		0xFFE02100
-+ #define BFIN_COREMMR_CEC_SIZE		(4 * 5)
-+ #define BFIN_COREMMR_CTIMER_BASE	0xFFE03000
-+diff --git a/sim/bfin/sim-main.h b/sim/bfin/sim-main.h
-+index 51fb87e..34fd153 100644
-+--- a/sim/bfin/sim-main.h
-++++ b/sim/bfin/sim-main.h
-+@@ -23,17 +23,13 @@
-+ 
-+ #include "sim-basics.h"
-+ #include "sim-signal.h"
-+-
-+-/* TODO: Delete this.  Need to convert bu32/etc... to common sim types
-+-         and unwind the bfin-sim.h/machs.h include below first though.  */
-+-typedef struct _sim_cpu SIM_CPU;
-++#include "arch.h"
-++#include "sim-base.h"
-+ 
-+ #include "bfin-sim.h"
-+ 
-+ #include "machs.h"
-+ 
-+-#include "sim-base.h"
-+-
-+ struct _sim_cpu {
-+   /* ... simulator specific members ... */
-+   struct bfin_cpu_state state;
-+-- 
-+2.9.3
-+
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura classpath-0.98.orig/config.rpath classpath-0.98/config.rpath
+---- classpath-0.98.orig/config.rpath	1969-12-31 21:00:00.000000000 -0300
+-+++ classpath-0.98/config.rpath	2013-07-10 09:36:51.894281025 -0300
+-@@ -0,0 +1,672 @@
+-+#! /bin/sh
+-+# Output a system dependent set of variables, describing how to set the
+-+# run time search path of shared libraries in an executable.
+-+#
+-+#   Copyright 1996-2010 Free Software Foundation, Inc.
+-+#   Taken from GNU libtool, 2001
+-+#   Originally by Gordon Matzigkeit <gord@gnu.ai.mit.edu>, 1996
+-+#
+-+#   This file is free software; the Free Software Foundation gives
+-+#   unlimited permission to copy and/or distribute it, with or without
+-+#   modifications, as long as this notice is preserved.
+-+#
+-+# The first argument passed to this file is the canonical host specification,
+-+#    CPU_TYPE-MANUFACTURER-OPERATING_SYSTEM
+-+# or
+-+#    CPU_TYPE-MANUFACTURER-KERNEL-OPERATING_SYSTEM
+-+# The environment variables CC, GCC, LDFLAGS, LD, with_gnu_ld
+-+# should be set by the caller.
+-+#
+-+# The set of defined variables is at the end of this script.
+-+
+-+# Known limitations:
+-+# - On IRIX 6.5 with CC="cc", the run time search patch must not be longer
+-+#   than 256 bytes, otherwise the compiler driver will dump core. The only
+-+#   known workaround is to choose shorter directory names for the build
+-+#   directory and/or the installation directory.
+-+
+-+# All known linkers require a `.a' archive for static linking (except MSVC,
+-+# which needs '.lib').
+-+libext=a
+-+shrext=.so
+-+
+-+host="$1"
+-+host_cpu=`echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+-+host_vendor=`echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+-+host_os=`echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+-+
+-+# Code taken from libtool.m4's _LT_CC_BASENAME.
+-+
+-+for cc_temp in $CC""; do
+-+  case $cc_temp in
+-+    compile | *[\\/]compile | ccache | *[\\/]ccache ) ;;
+-+    distcc | *[\\/]distcc | purify | *[\\/]purify ) ;;
+-+    \-*) ;;
+-+    *) break;;
+-+  esac
+-+done
+-+cc_basename=`echo "$cc_temp" | sed -e 's%^.*/%%'`
+-+
+-+# Code taken from libtool.m4's _LT_COMPILER_PIC.
+-+
+-+wl=
+-+if test "$GCC" = yes; then
+-+  wl='-Wl,'
+-+else
+-+  case "$host_os" in
+-+    aix*)
+-+      wl='-Wl,'
+-+      ;;
+-+    darwin*)
+-+      case $cc_basename in
+-+        xlc*)
+-+          wl='-Wl,'
+-+          ;;
+-+      esac
+-+      ;;
+-+    mingw* | cygwin* | pw32* | os2* | cegcc*)
+-+      ;;
+-+    hpux9* | hpux10* | hpux11*)
+-+      wl='-Wl,'
+-+      ;;
+-+    irix5* | irix6* | nonstopux*)
+-+      wl='-Wl,'
+-+      ;;
+-+    newsos6)
+-+      ;;
+-+    linux* | k*bsd*-gnu)
+-+      case $cc_basename in
+-+        ecc*)
+-+          wl='-Wl,'
+-+          ;;
+-+        icc* | ifort*)
+-+          wl='-Wl,'
+-+          ;;
+-+        lf95*)
+-+          wl='-Wl,'
+-+          ;;
+-+        pgcc | pgf77 | pgf90)
+-+          wl='-Wl,'
+-+          ;;
+-+        ccc*)
+-+          wl='-Wl,'
+-+          ;;
+-+        como)
+-+          wl='-lopt='
+-+          ;;
+-+        *)
+-+          case `$CC -V 2>&1 | sed 5q` in
+-+            *Sun\ C*)
+-+              wl='-Wl,'
+-+              ;;
+-+          esac
+-+          ;;
+-+      esac
+-+      ;;
+-+    osf3* | osf4* | osf5*)
+-+      wl='-Wl,'
+-+      ;;
+-+    rdos*)
+-+      ;;
+-+    solaris*)
+-+      wl='-Wl,'
+-+      ;;
+-+    sunos4*)
+-+      wl='-Qoption ld '
+-+      ;;
+-+    sysv4 | sysv4.2uw2* | sysv4.3*)
+-+      wl='-Wl,'
+-+      ;;
+-+    sysv4*MP*)
+-+      ;;
+-+    sysv5* | unixware* | sco3.2v5* | sco5v6* | OpenUNIX*)
+-+      wl='-Wl,'
+-+      ;;
+-+    unicos*)
+-+      wl='-Wl,'
+-+      ;;
+-+    uts4*)
+-+      ;;
+-+  esac
+-+fi
+-+
+-+# Code taken from libtool.m4's _LT_LINKER_SHLIBS.
+-+
+-+hardcode_libdir_flag_spec=
+-+hardcode_libdir_separator=
+-+hardcode_direct=no
+-+hardcode_minus_L=no
+-+
+-+case "$host_os" in
+-+  cygwin* | mingw* | pw32* | cegcc*)
+-+    # FIXME: the MSVC++ port hasn't been tested in a loooong time
+-+    # When not using gcc, we currently assume that we are using
+-+    # Microsoft Visual C++.
+-+    if test "$GCC" != yes; then
+-+      with_gnu_ld=no
+-+    fi
+-+    ;;
+-+  interix*)
+-+    # we just hope/assume this is gcc and not c89 (= MSVC++)
+-+    with_gnu_ld=yes
+-+    ;;
+-+  openbsd*)
+-+    with_gnu_ld=no
+-+    ;;
+-+esac
+-+
+-+ld_shlibs=yes
+-+if test "$with_gnu_ld" = yes; then
+-+  # Set some defaults for GNU ld with shared library support. These
+-+  # are reset later if shared libraries are not supported. Putting them
+-+  # here allows them to be overridden if necessary.
+-+  # Unlike libtool, we use -rpath here, not --rpath, since the documented
+-+  # option of GNU ld is called -rpath, not --rpath.
+-+  hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+  case "$host_os" in
+-+    aix[3-9]*)
+-+      # On AIX/PPC, the GNU linker is very broken
+-+      if test "$host_cpu" != ia64; then
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    amigaos*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      hardcode_minus_L=yes
+-+      # Samuel A. Falvo II <kc5tja@dolphin.openprojects.net> reports
+-+      # that the semantics of dynamic libraries on AmigaOS, at least up
+-+      # to version 4, is to share data among multiple programs linked
+-+      # with the same dynamic library.  Since this doesn't match the
+-+      # behavior of shared libraries on other platforms, we cannot use
+-+      # them.
+-+      ld_shlibs=no
+-+      ;;
+-+    beos*)
+-+      if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    cygwin* | mingw* | pw32* | cegcc*)
+-+      # hardcode_libdir_flag_spec is actually meaningless, as there is
+-+      # no search path for DLLs.
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    interix[3-9]*)
+-+      hardcode_direct=no
+-+      hardcode_libdir_flag_spec='${wl}-rpath,$libdir'
+-+      ;;
+-+    gnu* | linux* | k*bsd*-gnu)
+-+      if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    netbsd*)
+-+      ;;
+-+    solaris*)
+-+      if $LD -v 2>&1 | grep 'BFD 2\.8' > /dev/null; then
+-+        ld_shlibs=no
+-+      elif $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    sysv5* | sco3.2v5* | sco5v6* | unixware* | OpenUNIX*)
+-+      case `$LD -v 2>&1` in
+-+        *\ [01].* | *\ 2.[0-9].* | *\ 2.1[0-5].*)
+-+          ld_shlibs=no
+-+          ;;
+-+        *)
+-+          if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+            hardcode_libdir_flag_spec='`test -z "$SCOABSPATH" && echo ${wl}-rpath,$libdir`'
+-+          else
+-+            ld_shlibs=no
+-+          fi
+-+          ;;
+-+      esac
+-+      ;;
+-+    sunos4*)
+-+      hardcode_direct=yes
+-+      ;;
+-+    *)
+-+      if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+  esac
+-+  if test "$ld_shlibs" = no; then
+-+    hardcode_libdir_flag_spec=
+-+  fi
+-+else
+-+  case "$host_os" in
+-+    aix3*)
+-+      # Note: this linker hardcodes the directories in LIBPATH if there
+-+      # are no directories specified by -L.
+-+      hardcode_minus_L=yes
+-+      if test "$GCC" = yes; then
+-+        # Neither direct hardcoding nor static linking is supported with a
+-+        # broken collect2.
+-+        hardcode_direct=unsupported
+-+      fi
+-+      ;;
+-+    aix[4-9]*)
+-+      if test "$host_cpu" = ia64; then
+-+        # On IA64, the linker does run time linking by default, so we don't
+-+        # have to do anything special.
+-+        aix_use_runtimelinking=no
+-+      else
+-+        aix_use_runtimelinking=no
+-+        # Test if we are trying to use run time linking or normal
+-+        # AIX style linking. If -brtl is somewhere in LDFLAGS, we
+-+        # need to do runtime linking.
+-+        case $host_os in aix4.[23]|aix4.[23].*|aix[5-9]*)
+-+          for ld_flag in $LDFLAGS; do
+-+            if (test $ld_flag = "-brtl" || test $ld_flag = "-Wl,-brtl"); then
+-+              aix_use_runtimelinking=yes
+-+              break
+-+            fi
+-+          done
+-+          ;;
+-+        esac
+-+      fi
+-+      hardcode_direct=yes
+-+      hardcode_libdir_separator=':'
+-+      if test "$GCC" = yes; then
+-+        case $host_os in aix4.[012]|aix4.[012].*)
+-+          collect2name=`${CC} -print-prog-name=collect2`
+-+          if test -f "$collect2name" && \
+-+            strings "$collect2name" | grep resolve_lib_name >/dev/null
+-+          then
+-+            # We have reworked collect2
+-+            :
+-+          else
+-+            # We have old collect2
+-+            hardcode_direct=unsupported
+-+            hardcode_minus_L=yes
+-+            hardcode_libdir_flag_spec='-L$libdir'
+-+            hardcode_libdir_separator=
+-+          fi
+-+          ;;
+-+        esac
+-+      fi
+-+      # Begin _LT_AC_SYS_LIBPATH_AIX.
+-+      echo 'int main () { return 0; }' > conftest.c
+-+      ${CC} ${LDFLAGS} conftest.c -o conftest
+-+      aix_libpath=`dump -H conftest 2>/dev/null | sed -n -e '/Import File Strings/,/^$/ { /^0/ { s/^0  *\(.*\)$/\1/; p; }
+-+}'`
+-+      if test -z "$aix_libpath"; then
+-+        aix_libpath=`dump -HX64 conftest 2>/dev/null | sed -n -e '/Import File Strings/,/^$/ { /^0/ { s/^0  *\(.*\)$/\1/; p; }
+-+}'`
+-+      fi
+-+      if test -z "$aix_libpath"; then
+-+        aix_libpath="/usr/lib:/lib"
+-+      fi
+-+      rm -f conftest.c conftest
+-+      # End _LT_AC_SYS_LIBPATH_AIX.
+-+      if test "$aix_use_runtimelinking" = yes; then
+-+        hardcode_libdir_flag_spec='${wl}-blibpath:$libdir:'"$aix_libpath"
+-+      else
+-+        if test "$host_cpu" = ia64; then
+-+          hardcode_libdir_flag_spec='${wl}-R $libdir:/usr/lib:/lib'
+-+        else
+-+          hardcode_libdir_flag_spec='${wl}-blibpath:$libdir:'"$aix_libpath"
+-+        fi
+-+      fi
+-+      ;;
+-+    amigaos*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      hardcode_minus_L=yes
+-+      # see comment about different semantics on the GNU ld section
+-+      ld_shlibs=no
+-+      ;;
+-+    bsdi[45]*)
+-+      ;;
+-+    cygwin* | mingw* | pw32* | cegcc*)
+-+      # When not using gcc, we currently assume that we are using
+-+      # Microsoft Visual C++.
+-+      # hardcode_libdir_flag_spec is actually meaningless, as there is
+-+      # no search path for DLLs.
+-+      hardcode_libdir_flag_spec=' '
+-+      libext=lib
+-+      ;;
+-+    darwin* | rhapsody*)
+-+      hardcode_direct=no
+-+      if test "$GCC" = yes ; then
+-+        :
+-+      else
+-+        case $cc_basename in
+-+          xlc*)
+-+            ;;
+-+          *)
+-+            ld_shlibs=no
+-+            ;;
+-+        esac
+-+      fi
+-+      ;;
+-+    dgux*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      ;;
+-+    freebsd1*)
+-+      ld_shlibs=no
+-+      ;;
+-+    freebsd2.2*)
+-+      hardcode_libdir_flag_spec='-R$libdir'
+-+      hardcode_direct=yes
+-+      ;;
+-+    freebsd2*)
+-+      hardcode_direct=yes
+-+      hardcode_minus_L=yes
+-+      ;;
+-+    freebsd* | dragonfly*)
+-+      hardcode_libdir_flag_spec='-R$libdir'
+-+      hardcode_direct=yes
+-+      ;;
+-+    hpux9*)
+-+      hardcode_libdir_flag_spec='${wl}+b ${wl}$libdir'
+-+      hardcode_libdir_separator=:
+-+      hardcode_direct=yes
+-+      # hardcode_minus_L: Not really in the search PATH,
+-+      # but as the default location of the library.
+-+      hardcode_minus_L=yes
+-+      ;;
+-+    hpux10*)
+-+      if test "$with_gnu_ld" = no; then
+-+        hardcode_libdir_flag_spec='${wl}+b ${wl}$libdir'
+-+        hardcode_libdir_separator=:
+-+        hardcode_direct=yes
+-+        # hardcode_minus_L: Not really in the search PATH,
+-+        # but as the default location of the library.
+-+        hardcode_minus_L=yes
+-+      fi
+-+      ;;
+-+    hpux11*)
+-+      if test "$with_gnu_ld" = no; then
+-+        hardcode_libdir_flag_spec='${wl}+b ${wl}$libdir'
+-+        hardcode_libdir_separator=:
+-+        case $host_cpu in
+-+          hppa*64*|ia64*)
+-+            hardcode_direct=no
+-+            ;;
+-+          *)
+-+            hardcode_direct=yes
+-+            # hardcode_minus_L: Not really in the search PATH,
+-+            # but as the default location of the library.
+-+            hardcode_minus_L=yes
+-+            ;;
+-+        esac
+-+      fi
+-+      ;;
+-+    irix5* | irix6* | nonstopux*)
+-+      hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+      hardcode_libdir_separator=:
+-+      ;;
+-+    netbsd*)
+-+      hardcode_libdir_flag_spec='-R$libdir'
+-+      hardcode_direct=yes
+-+      ;;
+-+    newsos6)
+-+      hardcode_direct=yes
+-+      hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+      hardcode_libdir_separator=:
+-+      ;;
+-+    openbsd*)
+-+      if test -f /usr/libexec/ld.so; then
+-+        hardcode_direct=yes
+-+        if test -z "`echo __ELF__ | $CC -E - | grep __ELF__`" || test "$host_os-$host_cpu" = "openbsd2.8-powerpc"; then
+-+          hardcode_libdir_flag_spec='${wl}-rpath,$libdir'
+-+        else
+-+          case "$host_os" in
+-+            openbsd[01].* | openbsd2.[0-7] | openbsd2.[0-7].*)
+-+              hardcode_libdir_flag_spec='-R$libdir'
+-+              ;;
+-+            *)
+-+              hardcode_libdir_flag_spec='${wl}-rpath,$libdir'
+-+              ;;
+-+          esac
+-+        fi
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    os2*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      hardcode_minus_L=yes
+-+      ;;
+-+    osf3*)
+-+      hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+      hardcode_libdir_separator=:
+-+      ;;
+-+    osf4* | osf5*)
+-+      if test "$GCC" = yes; then
+-+        hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+      else
+-+        # Both cc and cxx compiler support -rpath directly
+-+        hardcode_libdir_flag_spec='-rpath $libdir'
+-+      fi
+-+      hardcode_libdir_separator=:
+-+      ;;
+-+    solaris*)
+-+      hardcode_libdir_flag_spec='-R$libdir'
+-+      ;;
+-+    sunos4*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      hardcode_direct=yes
+-+      hardcode_minus_L=yes
+-+      ;;
+-+    sysv4)
+-+      case $host_vendor in
+-+        sni)
+-+          hardcode_direct=yes # is this really true???
+-+          ;;
+-+        siemens)
+-+          hardcode_direct=no
+-+          ;;
+-+        motorola)
+-+          hardcode_direct=no #Motorola manual says yes, but my tests say they lie
+-+          ;;
+-+      esac
+-+      ;;
+-+    sysv4.3*)
+-+      ;;
+-+    sysv4*MP*)
+-+      if test -d /usr/nec; then
+-+        ld_shlibs=yes
+-+      fi
+-+      ;;
+-+    sysv4*uw2* | sysv5OpenUNIX* | sysv5UnixWare7.[01].[10]* | unixware7* | sco3.2v5.0.[024]*)
+-+      ;;
+-+    sysv5* | sco3.2v5* | sco5v6*)
+-+      hardcode_libdir_flag_spec='`test -z "$SCOABSPATH" && echo ${wl}-R,$libdir`'
+-+      hardcode_libdir_separator=':'
+-+      ;;
+-+    uts4*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      ;;
+-+    *)
+-+      ld_shlibs=no
+-+      ;;
+-+  esac
+-+fi
+-+
+-+# Check dynamic linker characteristics
+-+# Code taken from libtool.m4's _LT_SYS_DYNAMIC_LINKER.
+-+# Unlike libtool.m4, here we don't care about _all_ names of the library, but
+-+# only about the one the linker finds when passed -lNAME. This is the last
+-+# element of library_names_spec in libtool.m4, or possibly two of them if the
+-+# linker has special search rules.
+-+library_names_spec=      # the last element of library_names_spec in libtool.m4
+-+libname_spec='lib$name'
+-+case "$host_os" in
+-+  aix3*)
+-+    library_names_spec='$libname.a'
+-+    ;;
+-+  aix[4-9]*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  amigaos*)
+-+    library_names_spec='$libname.a'
+-+    ;;
+-+  beos*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  bsdi[45]*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  cygwin* | mingw* | pw32* | cegcc*)
+-+    shrext=.dll
+-+    library_names_spec='$libname.dll.a $libname.lib'
+-+    ;;
+-+  darwin* | rhapsody*)
+-+    shrext=.dylib
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  dgux*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  freebsd1*)
+-+    ;;
+-+  freebsd* | dragonfly*)
+-+    case "$host_os" in
+-+      freebsd[123]*)
+-+        library_names_spec='$libname$shrext$versuffix' ;;
+-+      *)
+-+        library_names_spec='$libname$shrext' ;;
+-+    esac
+-+    ;;
+-+  gnu*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  hpux9* | hpux10* | hpux11*)
+-+    case $host_cpu in
+-+      ia64*)
+-+        shrext=.so
+-+        ;;
+-+      hppa*64*)
+-+        shrext=.sl
+-+        ;;
+-+      *)
+-+        shrext=.sl
+-+        ;;
+-+    esac
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  interix[3-9]*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  irix5* | irix6* | nonstopux*)
+-+    library_names_spec='$libname$shrext'
+-+    case "$host_os" in
+-+      irix5* | nonstopux*)
+-+        libsuff= shlibsuff=
+-+        ;;
+-+      *)
+-+        case $LD in
+-+          *-32|*"-32 "|*-melf32bsmip|*"-melf32bsmip ") libsuff= shlibsuff= ;;
+-+          *-n32|*"-n32 "|*-melf32bmipn32|*"-melf32bmipn32 ") libsuff=32 shlibsuff=N32 ;;
+-+          *-64|*"-64 "|*-melf64bmip|*"-melf64bmip ") libsuff=64 shlibsuff=64 ;;
+-+          *) libsuff= shlibsuff= ;;
+-+        esac
+-+        ;;
+-+    esac
+-+    ;;
+-+  linux*oldld* | linux*aout* | linux*coff*)
+-+    ;;
+-+  linux* | k*bsd*-gnu)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  knetbsd*-gnu)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  netbsd*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  newsos6)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  nto-qnx*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  openbsd*)
+-+    library_names_spec='$libname$shrext$versuffix'
+-+    ;;
+-+  os2*)
+-+    libname_spec='$name'
+-+    shrext=.dll
+-+    library_names_spec='$libname.a'
+-+    ;;
+-+  osf3* | osf4* | osf5*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  rdos*)
+-+    ;;
+-+  solaris*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  sunos4*)
+-+    library_names_spec='$libname$shrext$versuffix'
+-+    ;;
+-+  sysv4 | sysv4.3*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  sysv4*MP*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  sysv5* | sco3.2v5* | sco5v6* | unixware* | OpenUNIX* | sysv4*uw2*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  uts4*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+esac
+-+
+-+sed_quote_subst='s/\(["`$\\]\)/\\\1/g'
+-+escaped_wl=`echo "X$wl" | sed -e 's/^X//' -e "$sed_quote_subst"`
+-+shlibext=`echo "$shrext" | sed -e 's,^\.,,'`
+-+escaped_libname_spec=`echo "X$libname_spec" | sed -e 's/^X//' -e "$sed_quote_subst"`
+-+escaped_library_names_spec=`echo "X$library_names_spec" | sed -e 's/^X//' -e "$sed_quote_subst"`
+-+escaped_hardcode_libdir_flag_spec=`echo "X$hardcode_libdir_flag_spec" | sed -e 's/^X//' -e "$sed_quote_subst"`
+-+
+-+LC_ALL=C sed -e 's/^\([a-zA-Z0-9_]*\)=/acl_cv_\1=/' <<EOF
+-+
+-+# How to pass a linker flag through the compiler.
+-+wl="$escaped_wl"
+-+
+-+# Static library suffix (normally "a").
+-+libext="$libext"
+-+
+-+# Shared library suffix (normally "so").
+-+shlibext="$shlibext"
+-+
+-+# Format of library name prefix.
+-+libname_spec="$escaped_libname_spec"
+-+
+-+# Library names that the linker finds when passed -lNAME.
+-+library_names_spec="$escaped_library_names_spec"
+-+
+-+# Flag to hardcode \$libdir into a binary during linking.
+-+# This must work even if \$libdir does not exist.
+-+hardcode_libdir_flag_spec="$escaped_hardcode_libdir_flag_spec"
+-+
+-+# Whether we need a single -rpath flag with a separated argument.
+-+hardcode_libdir_separator="$hardcode_libdir_separator"
+-+
+-+# Set to yes if using DIR/libNAME.so during linking hardcodes DIR into the
+-+# resulting binary.
+-+hardcode_direct="$hardcode_direct"
+-+
+-+# Set to yes if using the -LDIR flag during linking hardcodes DIR into the
+-+# resulting binary.
+-+hardcode_minus_L="$hardcode_minus_L"
+-+
+-+EOF
+diff --git a/package/classpath/classpath.hash b/package/classpath/classpath.hash
+index 25d3e8c..8ee0ab4 100644
+--- a/package/classpath/classpath.hash
++++ b/package/classpath/classpath.hash
+@@ -1,2 +1,2 @@
+ # From http://www.gnu.org/software/classpath/announce/20090205.html
+-sha1	1d6e8d1b3542a35bbd1013c61fab3cfae083decb	classpath-0.98.tar.gz
++sha256	f929297f8ae9b613a1a167e231566861893260651d913ad9b6c11933895fecc8	classpath-0.99.tar.gz
+diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
+index 3825c76..97b7f0d 100644
+--- a/package/classpath/classpath.mk
++++ b/package/classpath/classpath.mk
+@@ -4,21 +4,20 @@
+ #
+ ################################################################################
+ 
+-CLASSPATH_VERSION = 0.98
++CLASSPATH_VERSION = 0.99
+ CLASSPATH_SITE = $(BR2_GNU_MIRROR)/classpath
+ CLASSPATH_CONF_OPTS = \
+ 	--disable-examples \
+-	--disable-plugin \
+ 	--disable-rpath \
+ 	--disable-Werror \
+ 	--disable-gconf-peer \
+-	--disable-tools
++	--disable-gjdoc
++	--enable-tools
+ 
+ # classpath assumes qt runs on top of X11, but we
+ # don't support qt4 on X11
+ CLASSPATH_CONF_OPTS += --disable-qt-peer
+ CLASSPATH_DEPENDENCIES = host-pkgconf
+-CLASSPATH_AUTORECONF = YES
+ CLASSPATH_LICENSE = GPLv2+ with exception
+ CLASSPATH_LICENSE_FILES = COPYING
+ 
 -- 
 2.9.3
