@@ -1,9 +1,9 @@
 From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Date: Sun, 12 Feb 2017 02:54:51 +0100
-Subject: [Buildroot] [PATCH v2] classpath: bump to version 0.99
-In-Reply-To: <20170212014707.16259-1-m.hoffmann@cartelsol.com>
-References: <20170212014707.16259-1-m.hoffmann@cartelsol.com>
-Message-ID: <20170212015451.16715-1-m.hoffmann@cartelsol.com>
+Date: Sun, 12 Feb 2017 03:04:44 +0100
+Subject: [Buildroot] [PATCH v3] classpath: bump to version 0.99
+In-Reply-To: <20170212015451.16715-1-m.hoffmann@cartelsol.com>
+References: <20170212015451.16715-1-m.hoffmann@cartelsol.com>
+Message-ID: <20170212020444.32045-1-m.hoffmann@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,19 +18,24 @@ configure always fails when specifying --disable-tools[1].
 We enable these for now.
 
 Also explicitly disable GJDoc generation, as this defaults to on now.
+--disable-plugin is not needed any more, since this is now the default.
 
 [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70660
 
 Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
 ---
+Changes v2 -> v3:
+  - Fixed announcement url in .hash file (This time for real...)
+  - Clarify dropping the --disable-plugin option.
+
 Changes v1 -> v2:
   - Fixed announcement url in .hash file
 
  package/classpath/0001-fix-gmp-include.patch  |  46 --
  package/classpath/0002-add-config-rpath.patch | 680 --------------------------
- package/classpath/classpath.hash              |   2 +-
+ package/classpath/classpath.hash              |   4 +-
  package/classpath/classpath.mk                |   7 +-
- 4 files changed, 4 insertions(+), 731 deletions(-)
+ 4 files changed, 5 insertions(+), 732 deletions(-)
  delete mode 100644 package/classpath/0001-fix-gmp-include.patch
  delete mode 100644 package/classpath/0002-add-config-rpath.patch
 
@@ -773,12 +778,13 @@ index 3a8a7d0..0000000
 -+
 -+EOF
 diff --git a/package/classpath/classpath.hash b/package/classpath/classpath.hash
-index 25d3e8c..8ee0ab4 100644
+index 25d3e8c..d1c5b5c 100644
 --- a/package/classpath/classpath.hash
 +++ b/package/classpath/classpath.hash
 @@ -1,2 +1,2 @@
- # From http://www.gnu.org/software/classpath/announce/20090205.html
+-# From http://www.gnu.org/software/classpath/announce/20090205.html
 -sha1	1d6e8d1b3542a35bbd1013c61fab3cfae083decb	classpath-0.98.tar.gz
++# From https://www.gnu.org/software/classpath/announce/20120307.html
 +sha256	f929297f8ae9b613a1a167e231566861893260651d913ad9b6c11933895fecc8	classpath-0.99.tar.gz
 diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
 index 3825c76..97b7f0d 100644
