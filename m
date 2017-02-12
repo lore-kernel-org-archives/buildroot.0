@@ -1,67 +1,63 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun, 12 Feb 2017 09:33:01 -0200
-Subject: [Buildroot] [PATCH v2] infra/ccache: avoid color diagnostics with
-	GCC older than v4.9
-In-Reply-To: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
-References: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 12 Feb 2017 12:13:45 +0000
+Subject: [Buildroot] [Bug 9651] New: libxcb-1.12b built Error
+Message-ID: <bug-9651-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ensure that the GCC_COLORS environment variable is empty when calling
-ccache. When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to
-GCC but this flag requires GCC v4.9 or later. Older versions complain
-about the unrecognized command line option.
+https://bugs.busybox.net/show_bug.cgi?id=9651
 
-That behavior is hard-coded in ccache; we would need a patch to either
-make it optional or disable it at all. Notice also that the problem is
-not detectable in the autobuilders because they redirect the output to
-files/pipes and ccache adds the offending flag only when stderr is a
-terminal.
+            Bug ID: 9651
+           Summary: libxcb-1.12b built Error
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: kalman.staudinger at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
-Changes v1->v2
-  Fix indentation, use positive logic and improve the commit message,
-  acording to comments from Thomas Petazzoni and Yann E. MORIN.
+[7m>>> libxcb 1.12 Building[27m
+PATH="/root/buildroot/output/host/bin:/root/buildroot/output/host/sbin:/root/buildroot/output/host/usr/bin:/root/buildroot/output/host/usr/sbin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/root/my-applications/bin:/usr/games"
+ /usr/bin/make -j3  -C /root/buildroot/output/build/libxcb-1.12/
+make[1]: Entering directory `/root/buildroot/output/build/libxcb-1.12'
+Making all in src
+make[2]: Entering directory `/root/buildroot/output/build/libxcb-1.12/src'
+  GEN      xproto.c
+  GEN      bigreq.c
+  GEN      xc_misc.c
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/Makefile.in | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Failed to load the xcbgen Python package!
+Make sure that xcb/proto installed it on your Python path.
+If not, you will need to create a .pth file or define $PYTHONPATH
+to extend the path.
+Refer to the README file in xcb/proto for more info.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 4a3eb26..e5e595a 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -236,6 +236,13 @@ export PERL5LIB=$(HOST_DIR)/usr/lib/perl
- 
- TARGET_MAKE_ENV = PATH=$(BR_PATH)
- 
-+# When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to GCC but
-+# this flag requires GCC v4.9 or later. Older versions fail, complaining
-+# about unrecognized command line option.
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_9),)
-+TARGET_MAKE_ENV += GCC_COLORS=""
-+endif
-+
- TARGET_CONFIGURE_OPTS = \
- 	$(TARGET_MAKE_ENV) \
- 	AR="$(TARGET_AR)" \
-@@ -285,6 +292,11 @@ HOST_MAKE_ENV = \
- 	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
- 	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig"
- 
-+# Prevent ccache from passing '-fdiagnostics-color' (see above).
-+ifeq ($(BR2_HOST_GCC_AT_LEAST_4_9),)
-+HOST_MAKE_ENV += GCC_COLORS=""
-+endif
-+
- HOST_CONFIGURE_OPTS = \
- 	$(HOST_MAKE_ENV) \
- 	AR="$(HOSTAR)" \
+
+Failed to load the xcbgen Python package!
+Make sure that xcb/proto installed it on your Python path.
+If not, you will need to create a .pth file or define $PYTHONPATH
+to extend the path.
+Refer to the README file in xcb/proto for more info.
+
+
+Failed to load the xcbgen Python package!
+Make sure that xcb/proto installed it on your Python path.
+If not, you will need to create a .pth file or define $PYTHONPATH
+to extend the path.
+Refer to the README file in xcb/proto for more info.
+
+make[2]: Leaving directory `/root/buildroot/output/build/libxcb-1.12/src'
+make[1]: Leaving directory `/root/buildroot/output/build/libxcb-1.12'
+
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
