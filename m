@@ -1,32 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Feb 2017 16:02:39 +0100
-Subject: [Buildroot] [PATCH 5/7 v4] support/test-pkg: report number and
- types of failures
-In-Reply-To: <db2e8970b27e4173ddfb2af2c334398ab262f03e.1486911180.git.yann.morin.1998@free.fr>
-References: <cover.1486911180.git.yann.morin.1998@free.fr>
- <db2e8970b27e4173ddfb2af2c334398ab262f03e.1486911180.git.yann.morin.1998@free.fr>
-Message-ID: <20170212160239.2a912b57@free-electrons.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun, 12 Feb 2017 13:02:23 -0200 (BRST)
+Subject: [Buildroot] [PATCH v5] gtest/gmock: bump to version 1.8.0
+In-Reply-To: <20170212153749.7f9aff72@free-electrons.com>
+References: <1473290219-27701-1-git-send-email-casantos@datacom.ind.br>
+ <c410065bcf02dbf9548965118905fb4e0edfcc40.1486901824.git.casantos@datacom.ind.br>
+ <20170212153749.7f9aff72@free-electrons.com>
+Message-ID: <116271.9983971.1486911743876.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org, "Fabrice Fontaine" <fabrice.fontaine@orange.com>, "romain naour" <romain.naour@gmail.com>,
+> "yann morin 1998" <yann.morin.1998@free.fr>
+> Sent: Sunday, February 12, 2017 12:37:49 PM
+> Subject: Re: [Buildroot] [PATCH v5] gtest/gmock: bump to version 1.8.0
 
-On Sun, 12 Feb 2017 15:53:09 +0100, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  support/scripts/test-pkg | 24 ++++++++++++++++++------
->  1 file changed, 18 insertions(+), 6 deletions(-)
+> Hello,
+> 
+> On Sun, 12 Feb 2017 10:17:27 -0200, Carlos Santos wrote:
+> 
+>> +define HOST_GTEST_INSTALL_CMDS
+>> +	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
+>> +		$(HOST_DIR)/usr/bin/gmock_gen.py
+>> +	ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
+> 
+> Is there a good reason to not install directly gmock_gen.py as
+> gmock_gen ?
 
-Applied to master, thanks.
+IIRC some of out tests build calling gmock_gen.py and other calling gmock_gen
+but I need to check that tomorrow, at office. Right now I'm at home, without
+access to that code.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Carlos Santos (Casantos) - DATACOM, P&D
+?Something must be done. This is something. Therefore we must do it.?
+(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
