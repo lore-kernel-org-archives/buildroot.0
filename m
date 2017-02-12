@@ -1,36 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Feb 2017 18:28:26 +0100
-Subject: [Buildroot] [PATCH v5] gtest/gmock: bump to version 1.8.0
-In-Reply-To: <116271.9983971.1486911743876.JavaMail.zimbra@datacom.ind.br>
-References: <1473290219-27701-1-git-send-email-casantos@datacom.ind.br>
- <c410065bcf02dbf9548965118905fb4e0edfcc40.1486901824.git.casantos@datacom.ind.br>
- <20170212153749.7f9aff72@free-electrons.com>
- <116271.9983971.1486911743876.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20170212182826.58d53bad@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 12 Feb 2017 17:58:39 +0000
+Subject: [Buildroot] [Bug 9656] New: util-list: schedutils doesn't build on
+ target w/o enabling basic binaries
+Message-ID: <bug-9656-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9656
 
-On Sun, 12 Feb 2017 13:02:23 -0200 (BRST), Carlos Santos wrote:
+            Bug ID: 9656
+           Summary: util-list: schedutils doesn't build on target w/o
+                    enabling basic binaries
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: aholtzma at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> > Is there a good reason to not install directly gmock_gen.py as
-> > gmock_gen ?  
-> 
-> IIRC some of out tests build calling gmock_gen.py and other calling gmock_gen
-> but I need to check that tomorrow, at office. Right now I'm at home, without
-> access to that code.
+When I tried to add the schedutils portion of util-linux to my build, I noticed
+that that it wasn't getting built on the target. Further investigation shows
+that the culprit was the --disable-all-programs that was turned on if the basic
+binaries option (BR2_PACKAGE_UTIL_LINUX_BINARIES) was not set. If
+--disable-all-programs is set, the schedutils will not be built. This is not
+the case for other options like mount, which *do* get built. This is probably a
+autoconf bug in util-linux.
 
-OK. Since it's weird, perhaps make sense to add a quick comment above
-this piece of code.
+Version is git commit c77f7c689ffc8c5fd139e4622bd6f9d315bbc254, which is just
+after the disable-all-programs change landed.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
