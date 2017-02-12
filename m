@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Feb 2017 16:02:11 +0100
-Subject: [Buildroot] [PATCH 1/7 v4] supprt/test-pkg: fix code style
-In-Reply-To: <22f1d6982cb72bde788f2ea5d9c91f791c73e217.1486911180.git.yann.morin.1998@free.fr>
+Date: Sun, 12 Feb 2017 16:02:27 +0100
+Subject: [Buildroot] [PATCH 2/7 v4] support/scripts: check the config
+	snippet exists
+In-Reply-To: <7ccab625829fd6ffb0487f067c4267a6b3e3f82b.1486911180.git.yann.morin.1998@free.fr>
 References: <cover.1486911180.git.yann.morin.1998@free.fr>
- <22f1d6982cb72bde788f2ea5d9c91f791c73e217.1486911180.git.yann.morin.1998@free.fr>
-Message-ID: <20170212160211.534f7d0d@free-electrons.com>
+ <7ccab625829fd6ffb0487f067c4267a6b3e3f82b.1486911180.git.yann.morin.1998@free.fr>
+Message-ID: <20170212160227.12cc4602@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +14,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 12 Feb 2017 15:53:05 +0100, Yann E. MORIN wrote:
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Sun, 12 Feb 2017 15:53:06 +0100, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  support/scripts/test-pkg | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+>  support/scripts/test-pkg | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Applied to master after fixing the typo in the commit title. Thanks!
+Applied to master, after adjusting the commit title to
+support/test-pkg, in order to be consistent with other patches in the
+series.
 
 Thomas
 -- 
