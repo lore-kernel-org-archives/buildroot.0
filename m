@@ -1,101 +1,134 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Feb 2017 15:53:09 +0100
-Subject: [Buildroot] [PATCH 5/7 v4] support/test-pkg: report number and
-	types of failures
+Date: Sun, 12 Feb 2017 15:53:10 +0100
+Subject: [Buildroot] [PATCH 6/7 v4] support/test-pkg: add option to use an
+	alternate list of toolchains
 In-Reply-To: <cover.1486911180.git.yann.morin.1998@free.fr>
 References: <cover.1486911180.git.yann.morin.1998@free.fr>
-Message-ID: <db2e8970b27e4173ddfb2af2c334398ab262f03e.1486911180.git.yann.morin.1998@free.fr>
+Message-ID: <4cf937974900e49494cdc92df604a64b6366dfee.1486911180.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For now, testing a package requires network access. However, there are
+situations where everything is already cached locally (especially the
+toolchains tarballs) and network is not available (e.g. in the train,
+travelling back from FOSDEM...)
+
+Alternatively, one may also want to test against a subset of the default
+toolchains (e.g. the ones known to have a specific issue).
+
+Add an option to use an alternate URL, which can be remote or a path to
+a local file.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- support/scripts/test-pkg | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ support/scripts/test-pkg | 47 +++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 41 insertions(+), 6 deletions(-)
 
 diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-index d9ae5c5..a040ce1 100755
+index a040ce1..9626c1a 100755
 --- a/support/scripts/test-pkg
 +++ b/support/scripts/test-pkg
-@@ -6,6 +6,7 @@ TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-conf
+@@ -5,16 +5,17 @@ TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-conf
+ 
  main() {
      local o O opts
-     local cfg dir pkg random toolchain
-+    local ret nb nb_skip nb_fail
+-    local cfg dir pkg random toolchain
++    local cfg dir pkg random url toolchain
+     local ret nb nb_skip nb_fail
      local -a toolchains
  
-     o='hc:d:p:r:'
-@@ -63,9 +64,20 @@ main() {
-         printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
+-    o='hc:d:p:r:'
+-    O='help,config-snippet:build-dir:package:,random:'
++    o='hc:d:p:r:t:'
++    O='help,config-snippet:build-dir:package:,random:,toolchains:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
+ 
+     random=0
++    url="${TOOLCHAINS_URL}"
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+         (-h|--help)
+@@ -32,6 +33,9 @@ main() {
+         (-r|--random)
+             random="${2}"; shift 2
+             ;;
++        (-t|--toolchains)
++            url="${2}"; shift 2
++            ;;
+         (--)
+             shift; break
+             ;;
+@@ -47,10 +51,16 @@ main() {
+         dir="${HOME}/br-test-pkg"
      fi
  
-+    nb=0
-+    nb_skip=0
-+    nb_fail=0
-     for toolchain in "${toolchains[@]}"; do
--        build_one "${dir}" "${toolchain}" "${cfg}" "${pkg}"
-+        build_one "${dir}" "${toolchain}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
-+        case ${ret} in
-+        (0) ;;
-+        (1) : $((nb_skip++));;
-+        (2) : $((nb_fail++));;
-+        esac
-+        : $((nb++))
-     done
++    # Transform local paths to URI to make curl happy and simplify
++    # our code path
++    case "${url}" in
++    (/*)    url="file://${url}";;
++    esac
 +
-+    printf "%d builds, %d skipped, %d failed\n" ${nb} ${nb_skip} ${nb_fail}
- }
+     # Extract the URLs of the toolchains; drop internal toolchains
+     # E.g.: http://server/path/to/name.config,arch,libc
+     #  -->  http://server/path/to/name.config
+-    toolchains=($(curl -s "${TOOLCHAINS_URL}" \
++    toolchains=($(curl -s "${url}" \
+                   |sed -r -e 's/,.*//; /internal/d;' \
+                   |if [ ${random} -gt 0 ]; then \
+                       sort -R |head -n ${random}
+@@ -87,6 +97,12 @@ build_one() {
+     local pkg="${4}"
+     local toolchain
  
- build_one() {
-@@ -85,7 +97,7 @@ build_one() {
++    # Transform local paths to URI to make curl happy and simplify
++    # our code path
++    case "${url}" in
++    (/*)    url="file://${url}";;
++    esac
++
+     # Using basename(1) on a URL works nicely
+     toolchain="$(basename "${url}" .config)"
  
-     if ! curl -s "${url}" >"${dir}/.config"; then
-         printf "FAILED\n"
--        return
-+        return 2
-     fi
+@@ -156,8 +172,22 @@ In case failures are noticed, you can fix the package and just re-run the
+ same command again; it will re-run the test where it failed. If you did
+ specify a package (with -p), the package build dir will be removed first.
  
-     cat >>"${dir}/.config" <<-_EOF_
-@@ -98,7 +110,7 @@ build_one() {
+-The list of toolchains is retrieved from the Buildroot autobuilders, available
+-at ${TOOLCHAINS_URL}.
++Unless specified with -t, the list of toolchains is retrieved from the
++Buildroot autobuilders, available at:
++    ${TOOLCHAINS_URL}
++
++The list of toolchains should contain the URLs to all toolchains, one per
++line, along with the architecture and C library used, separated by commas,
++"URL,ARCH,LIBC" (only the first field, URL, is used by this script). For
++example:
++
++    https://server/path/to/toolchain-1.config,arm,glibc
++    /path/to/local-toolchain.config,i386,musl
++
++The URL for each toolchain should point to a .config file that contains
++only the toolchain and architecture settings. URLs that contain the string
++'internal' are skipped, on the assumption that the configuration would
++build an internal toolchain (which takes a lot of time).
  
-     if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
-         printf "FAILED\n"
--        return
-+        return 2
-     fi
-     # We want all the options from the snippet to be present as-is (set
-     # or not set) in the actual .config; if one of them is not, it means
-@@ -109,7 +121,7 @@ build_one() {
-     comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
-     if [ -s "${dir}/missing.config" ]; then
-         printf "SKIPPED\n"
--        return
-+        return 1
-     fi
-     # Remove file, it's empty anyway.
-     rm -f "${dir}/missing.config"
-@@ -117,14 +129,14 @@ build_one() {
-     if [ -n "${pkg}" ]; then
-         if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
-             printf "FAILED\n"
--            return
-+            return 2
-         fi
-     fi
+ Options:
  
-     # shellcheck disable=SC2086
-     if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
-         printf "FAILED\n"
--        return
-+        return 2
-     fi
+@@ -179,6 +209,11 @@ Options:
+         Limit the tests to the N randomly selected toolchains, instead of
+         building with all toolchains.
  
-     printf "OK\n"
++    -t URL, --toolchains URL
++        Use the toolchains described at URL instead of the toolchains used
++        by the Buildroot autobuilders (see above). URL can be a path to a
++        local file.
++
+ Example:
+ 
+     Testing libcec would require a config snippet that contains:
 -- 
 2.7.4
