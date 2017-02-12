@@ -1,49 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Feb 2017 21:10:18 +0100
-Subject: [Buildroot] Report of the Buildroot Developer Meeting @FOSDEM2017
-Message-ID: <e9520d1a-de83-b62f-47c5-efcf8c3e484a@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 12 Feb 2017 22:15:38 +0200
+Subject: [Buildroot] [PATCH v3 1/5] package: refactor listing of extractor
+	dependencies
+Message-ID: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Buildrooters,
+Don't special case $(XZCAT) when constructing DL_TOOLS_DEPENDENCIES. The next
+commit will introduce another extractor that automatically builds when not
+installed. Introduce EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS that lists
+archive extensions for which the extractor is already checked in
+support/dependencies/check-host-foo.mk. Use this in the newly introduced
+extractor-dependency to populate DL_TOOLS_DEPENDENCIES.
 
- On Monday and Tuesday 6-7 February 2017, we held a Buildroot Developer Meeting
-in Brussels. You can find the report (and some pictures) at [1]. Here are some
-highlights.
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v3: new patch; split from the next as preparatory cleanup (Thomas DS)
+---
+ package/pkg-generic.mk                   | 8 +-------
+ package/pkg-utils.mk                     | 7 +++++++
+ support/dependencies/check-host-xzcat.mk | 1 +
+ 3 files changed, 9 insertions(+), 7 deletions(-)
 
-* We reuse the same subjects as last year for GSoC. Unfortunately, we didn't
-actually submit the proposal in time (last Thursday), so no GSoC this year...
-
-* We're going to be a little more relaxed about accepting host packages.
-
-* We will use 2017.02 as an LTS release which we will maintain for a year (but
-maybe longer). It will have regular releases (roughly monthly but no promises).
-It will contain mainly security bumps, but also bugfix bumps and buildroot
-infrastructure bugfixes.
-
-
- We also discussed quite a few technical questions that users have encountered
-and what is the best way to deal with them. See the report for details. And
-finally, we did some hacking and patchwork cleanup.
-
- A big thank to our sponsors for making this possible:
-
-- Google for providing the location and free lunch;
-- Mind for funding the Monday evening pizza.
-
- Regards,
- Arnout
-
-
-[1] http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3ca71b03b9df..e8a8021e3c37 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -926,13 +926,7 @@ else ifeq ($$($(2)_SITE_METHOD),cvs)
+ DL_TOOLS_DEPENDENCIES += cvs
+ endif # SITE_METHOD
+ 
+-# $(firstword) is used here because the extractor can have arguments, like
+-# ZCAT="gzip -d -c", and to check for the dependency we only want 'gzip'.
+-# Do not add xzcat to the list of required dependencies, as it gets built
+-# automatically if it isn't found.
+-ifneq ($$(call suitable-extractor,$$($(2)_SOURCE)),$$(XZCAT))
+-DL_TOOLS_DEPENDENCIES += $$(firstword $$(call suitable-extractor,$$($(2)_SOURCE)))
+-endif
++DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+ 
+ # Ensure all virtual targets are PHONY. Listed alphabetically.
+ .PHONY:	$(1) \
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index c5d4080c72f4..4821456da5b0 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -45,6 +45,13 @@ INFLATE.tar  = cat
+ # suitable-extractor(filename): returns extractor based on suffix
+ suitable-extractor = $(INFLATE$(suffix $(1)))
+ 
++# extractor-dependency(filename): returns extractor for 'filename' if the
++# extractor is a dependency. If we build the extractor return nothing.
++# $(firstword) is used here because the extractor can have arguments, like
++# ZCAT="gzip -d -c", and to check for the dependency we only want 'gzip'.
++extractor-dependency = $(firstword$(INFLATE$(filter-out \
++	$(EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS),$(suffix $(1))))
++
+ # check-deprecated-variable -- throw an error on deprecated variables
+ # example:
+ #   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
+diff --git a/support/dependencies/check-host-xzcat.mk b/support/dependencies/check-host-xzcat.mk
+index 5e08b6e8866e..c6d9eebe4d2c 100644
+--- a/support/dependencies/check-host-xzcat.mk
++++ b/support/dependencies/check-host-xzcat.mk
+@@ -3,5 +3,6 @@
+ 
+ ifeq (,$(call suitable-host-package,xzcat,$(XZCAT)))
+ DEPENDENCIES_HOST_PREREQ += host-xz
++EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .xz .lzma
+ XZCAT = $(HOST_DIR)/usr/bin/xzcat
+ endif
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
