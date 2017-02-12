@@ -1,56 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Feb 2017 15:53:07 +0100
-Subject: [Buildroot] [PATCH 3/7 v4] support/test-pkg: simplify the config
-	check
+Date: Sun, 12 Feb 2017 15:53:09 +0100
+Subject: [Buildroot] [PATCH 5/7 v4] support/test-pkg: report number and
+	types of failures
 In-Reply-To: <cover.1486911180.git.yann.morin.1998@free.fr>
 References: <cover.1486911180.git.yann.morin.1998@free.fr>
-Message-ID: <b36d56df4dd3ca5c4a1e91fd5baa3226a83d1cf3.1486911180.git.yann.morin.1998@free.fr>
+Message-ID: <db2e8970b27e4173ddfb2af2c334398ab262f03e.1486911180.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use comm(1) to check that all our config options are properly set in the
-resulting configuration, rather than our canned and fragile code.
-
-Reported-by: Cam Hutchison <camh@xdna.net>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- support/scripts/test-pkg | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ support/scripts/test-pkg | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
 diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-index 11ec18c..a1d272a 100755
+index d9ae5c5..a040ce1 100755
 --- a/support/scripts/test-pkg
 +++ b/support/scripts/test-pkg
-@@ -73,7 +73,7 @@ build_one() {
-     local url="${2}"
-     local cfg="${3}"
-     local pkg="${4}"
--    local toolchain line skip
-+    local toolchain
+@@ -6,6 +6,7 @@ TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-conf
+ main() {
+     local o O opts
+     local cfg dir pkg random toolchain
++    local ret nb nb_skip nb_fail
+     local -a toolchains
  
-     # Using basename(1) on a URL works nicely
-     toolchain="$(basename "${url}" .config)"
-@@ -106,14 +106,10 @@ build_one() {
-     # or not set) in the actual .config; if one of them is not, it means
-     # some dependency from the toolchain or arch is not available, in
-     # which case this config is untestable and we skip it.
--    skip=false
--    while read line; do
--        if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
--            printf "%s\n" "${line}"
--            skip=true
--        fi
--    done <"${cfg}" >"${dir}/missing.config"
--    if ${skip}; then
-+    # We don't care about the locale to sort in, as long as both sort are
-+    # done in the same locale.
-+    comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
-+    if [ -s "${dir}/missing.config" ]; then
-         printf ", SKIPPED\n"
-         return
+     o='hc:d:p:r:'
+@@ -63,9 +64,20 @@ main() {
+         printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
      fi
+ 
++    nb=0
++    nb_skip=0
++    nb_fail=0
+     for toolchain in "${toolchains[@]}"; do
+-        build_one "${dir}" "${toolchain}" "${cfg}" "${pkg}"
++        build_one "${dir}" "${toolchain}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
++        case ${ret} in
++        (0) ;;
++        (1) : $((nb_skip++));;
++        (2) : $((nb_fail++));;
++        esac
++        : $((nb++))
+     done
++
++    printf "%d builds, %d skipped, %d failed\n" ${nb} ${nb_skip} ${nb_fail}
+ }
+ 
+ build_one() {
+@@ -85,7 +97,7 @@ build_one() {
+ 
+     if ! curl -s "${url}" >"${dir}/.config"; then
+         printf "FAILED\n"
+-        return
++        return 2
+     fi
+ 
+     cat >>"${dir}/.config" <<-_EOF_
+@@ -98,7 +110,7 @@ build_one() {
+ 
+     if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
+         printf "FAILED\n"
+-        return
++        return 2
+     fi
+     # We want all the options from the snippet to be present as-is (set
+     # or not set) in the actual .config; if one of them is not, it means
+@@ -109,7 +121,7 @@ build_one() {
+     comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
+     if [ -s "${dir}/missing.config" ]; then
+         printf "SKIPPED\n"
+-        return
++        return 1
+     fi
+     # Remove file, it's empty anyway.
+     rm -f "${dir}/missing.config"
+@@ -117,14 +129,14 @@ build_one() {
+     if [ -n "${pkg}" ]; then
+         if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
+             printf "FAILED\n"
+-            return
++            return 2
+         fi
+     fi
+ 
+     # shellcheck disable=SC2086
+     if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
+         printf "FAILED\n"
+-        return
++        return 2
+     fi
+ 
+     printf "OK\n"
 -- 
 2.7.4
