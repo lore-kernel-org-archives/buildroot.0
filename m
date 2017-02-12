@@ -1,79 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Feb 2017 15:53:08 +0100
-Subject: [Buildroot] [PATCH 4/7 v4] support/test-pkg: be less verbose
+Date: Sun, 12 Feb 2017 15:53:07 +0100
+Subject: [Buildroot] [PATCH 3/7 v4] support/test-pkg: simplify the config
+	check
 In-Reply-To: <cover.1486911180.git.yann.morin.1998@free.fr>
 References: <cover.1486911180.git.yann.morin.1998@free.fr>
-Message-ID: <95e64c37c1aad5a121306030a71e58afaa3ad064.1486911180.git.yann.morin.1998@free.fr>
+Message-ID: <b36d56df4dd3ca5c4a1e91fd5baa3226a83d1cf3.1486911180.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Requested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Use comm(1) to check that all our config options are properly set in the
+resulting configuration, rather than our canned and fragile code.
+
+Reported-by: Cam Hutchison <camh@xdna.net>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- support/scripts/test-pkg | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ support/scripts/test-pkg | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
 diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-index a1d272a..d9ae5c5 100755
+index 11ec18c..a1d272a 100755
 --- a/support/scripts/test-pkg
 +++ b/support/scripts/test-pkg
-@@ -83,9 +83,8 @@ build_one() {
-     dir="${dir}/${toolchain}"
-     mkdir -p "${dir}"
+@@ -73,7 +73,7 @@ build_one() {
+     local url="${2}"
+     local cfg="${3}"
+     local pkg="${4}"
+-    local toolchain line skip
++    local toolchain
  
--    printf "download config"
-     if ! curl -s "${url}" >"${dir}/.config"; then
--        printf ": FAILED\n"
-+        printf "FAILED\n"
+     # Using basename(1) on a URL works nicely
+     toolchain="$(basename "${url}" .config)"
+@@ -106,14 +106,10 @@ build_one() {
+     # or not set) in the actual .config; if one of them is not, it means
+     # some dependency from the toolchain or arch is not available, in
+     # which case this config is untestable and we skip it.
+-    skip=false
+-    while read line; do
+-        if ! grep "^${line}\$" "${dir}/.config" >/dev/null 2>&1; then
+-            printf "%s\n" "${line}"
+-            skip=true
+-        fi
+-    done <"${cfg}" >"${dir}/missing.config"
+-    if ${skip}; then
++    # We don't care about the locale to sort in, as long as both sort are
++    # done in the same locale.
++    comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
++    if [ -s "${dir}/missing.config" ]; then
+         printf ", SKIPPED\n"
          return
      fi
- 
-@@ -97,9 +96,8 @@ build_one() {
- 	_EOF_
-     cat "${cfg}" >>"${dir}/.config"
- 
--    printf ", olddefconfig"
-     if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
--        printf ": FAILED\n"
-+        printf "FAILED\n"
-         return
-     fi
-     # We want all the options from the snippet to be present as-is (set
-@@ -110,28 +108,26 @@ build_one() {
-     # done in the same locale.
-     comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
-     if [ -s "${dir}/missing.config" ]; then
--        printf ", SKIPPED\n"
-+        printf "SKIPPED\n"
-         return
-     fi
-     # Remove file, it's empty anyway.
-     rm -f "${dir}/missing.config"
- 
-     if [ -n "${pkg}" ]; then
--        printf ", dirclean"
-         if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
--            printf ": FAILED\n"
-+            printf "FAILED\n"
-             return
-         fi
-     fi
- 
--    printf ", build"
-     # shellcheck disable=SC2086
-     if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
--        printf ": FAILED\n"
-+        printf "FAILED\n"
-         return
-     fi
- 
--    printf ": OK\n"
-+    printf "OK\n"
- }
- 
- help() {
 -- 
 2.7.4
