@@ -1,65 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Feb 2017 15:53:05 +0100
-Subject: [Buildroot] [PATCH 1/7 v4] supprt/test-pkg: fix code style
+Date: Sun, 12 Feb 2017 15:53:06 +0100
+Subject: [Buildroot] [PATCH 2/7 v4] support/scripts: check the config
+	snippet exists
 In-Reply-To: <cover.1486911180.git.yann.morin.1998@free.fr>
 References: <cover.1486911180.git.yann.morin.1998@free.fr>
-Message-ID: <22f1d6982cb72bde788f2ea5d9c91f791c73e217.1486911180.git.yann.morin.1998@free.fr>
+Message-ID: <7ccab625829fd6ffb0487f067c4267a6b3e3f82b.1486911180.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- support/scripts/test-pkg | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ support/scripts/test-pkg | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-index b867da8..9066fa0 100755
+index 9066fa0..11ec18c 100755
 --- a/support/scripts/test-pkg
 +++ b/support/scripts/test-pkg
-@@ -10,7 +10,7 @@ main() {
- 
-     o='hc:d:p:r:'
-     O='help,config-snippet:build-dir:package:,random:'
--    opts="$( getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}"  )"
-+    opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
-     eval set -- "${opts}"
- 
-     random=0
-@@ -46,14 +46,14 @@ main() {
-     # Extract the URLs of the toolchains; drop internal toolchains
-     # E.g.: http://server/path/to/name.config,arch,libc
-     #  -->  http://server/path/to/name.config
--    toolchains=( $( curl -s "${TOOLCHAINS_URL}" \
--                    |sed -r -e 's/,.*//; /internal/d;' \
--                    |if [ ${random} -gt 0 ]; then \
--                        sort -R |head -n ${random}
--                     else
--                        cat
--                     fi |sort
--                  )
-+    toolchains=($(curl -s "${TOOLCHAINS_URL}" \
-+                  |sed -r -e 's/,.*//; /internal/d;' \
-+                  |if [ ${random} -gt 0 ]; then \
-+                      sort -R |head -n ${random}
-+                   else
-+                      cat
-+                   fi |sort
-+                 )
-                )
- 
-     if [ ${#toolchains[@]} -eq 0 ]; then
-@@ -73,7 +73,7 @@ build_one() {
-     local toolchain line skip
- 
-     # Using basename(1) on a URL works nicely
--    toolchain="$( basename "${url}" .config )"
-+    toolchain="$(basename "${url}" .config)"
- 
-     printf "%40s: " "${toolchain}"
- 
+@@ -39,6 +39,9 @@ main() {
+     if [ -z "${cfg}" ]; then
+         printf "error: no config snippet specified\n" >&2; exit 1
+     fi
++    if [ ! -e "${cfg}" ]; then
++        printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
++    fi
+     if [ -z "${dir}" ]; then
+         dir="${HOME}/br-test-pkg"
+     fi
 -- 
 2.7.4
