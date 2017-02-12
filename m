@@ -1,165 +1,313 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 12 Feb 2017 21:26:56 +0100
-Subject: [Buildroot] [PATCH 1/1] libmaxminddb: new package
-Message-ID: <1486931216-34024-1-git-send-email-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 12 Feb 2017 22:27:15 +0100
+Subject: [Buildroot] [PATCH v2] Add gitlab-CI support
+In-Reply-To: <20170207145550.11009-1-arnout@mind.be>
+References: <20170207145550.11009-1-arnout@mind.be>
+Message-ID: <20170212212715.29524-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+The buildroot repository is now mirrored on
+https://gitlab.com/buildroot.org/buildroot so we can use Gitlab-CI to
+test Buildroot. Gitlab-CI is controlled by a .gitlab-ci.yml file
+that exists in the repository.
 
-C library for the MaxMind DB file format
+For now, the only test is building all defconfigs (inspired on
+https://travis-ci.org/buildroot/buildroot-defconfig-testing/). Since
+all the defconfigs have to be specified in the .gitlab-ci.yml file,
+we generate the file based on .gitlab-ci.yml.in. The generated
+.gitlab-ci.yml file has to be committed into the repository, though,
+otherwise Gitlab-CI doesn't see it. So there is also a test to verify
+that .gitlab-ci.yml is up-to-date.
 
-The libmaxminddb library provides a C library for reading
-MaxMind DB files, including the GeoIP2 databases from MaxMind.
-This is a custom binary format designed to facilitate fast
-lookups of IP addresses while allowing for great flexibility
-in the type of data associated with an address.
+Building all the defconfigs takes a long time. Gitlab-CI will do that
+every time it pulls from git.buildroot.org, which is once per hour.
+That is way too often. Therefore, the defconfigs are not built on pull,
+but only on explicit trigger through the API or when a tag is added.
 
-The MaxMind DB format is an open format. The spec is available
-at http://maxmind.github.io/MaxMind-DB/. This spec is licensed
-under the Creative Commons Attribution-ShareAlike 3.0 Unported
-License.
-
-http://maxmind.github.io/libmaxminddb
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in                                  |  1 +
- .../0001-Add-disable-tests-to-configure.patch      | 53 ++++++++++++++++++++++
- package/libmaxminddb/Config.in                     | 17 +++++++
- package/libmaxminddb/libmaxminddb.hash             |  2 +
- package/libmaxminddb/libmaxminddb.mk               | 15 ++++++
- 5 files changed, 88 insertions(+)
- create mode 100644 package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
- create mode 100644 package/libmaxminddb/Config.in
- create mode 100644 package/libmaxminddb/libmaxminddb.hash
- create mode 100644 package/libmaxminddb/libmaxminddb.mk
+v2: Remove the custom before-script for check-gitlab-ci.yml.
+    'make' is needed, so most of the rest of the before script is
+    needed as well, so it's not so useful to avoid it.
 
-diff --git a/package/Config.in b/package/Config.in
-index deff0fe..49d9ac8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1238,6 +1238,7 @@ menu "Networking"
- 	source "package/libidn/Config.in"
- 	source "package/libiscsi/Config.in"
- 	source "package/libldns/Config.in"
-+	source "package/libmaxminddb/Config.in"
- 	source "package/libmbus/Config.in"
- 	source "package/libmemcached/Config.in"
- 	source "package/libmicrohttpd/Config.in"
-diff --git a/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch b/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
+I pushed to my private buildroot clone on gitlab and triggered a build.
+See https://gitlab.com/arnout/buildroot/pipelines/6435620
+
+I think it would be useful to still apply this to master.
+---
+ .gitlab-ci.yml    | 189 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ .gitlab-ci.yml.in |  48 ++++++++++++++
+ Makefile          |   3 +
+ 3 files changed, 240 insertions(+)
+ create mode 100644 .gitlab-ci.yml
+ create mode 100644 .gitlab-ci.yml.in
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
 new file mode 100644
-index 0000000..1ae5acc
+index 0000000000..f7fa5a0972
 --- /dev/null
-+++ b/package/libmaxminddb/0001-Add-disable-tests-to-configure.patch
-@@ -0,0 +1,53 @@
-+From b12ca226c111730e2ef5d8a3d929dbd943fbe763 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 9 Feb 2017 21:40:43 +0100
-+Subject: [PATCH] Add --disable-tests to configure
++++ b/.gitlab-ci.yml
+@@ -0,0 +1,189 @@
++# Configuration for Gitlab-CI.
++# Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
++# The .gitlab-ci.yml file is generated from .gitlab-ci.yml.in.
++# It needs to be regenerated every time a defconfig is added, using
++# "make .gitlab-ci.yml".
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile.am  |  6 +++++-
-+ configure.ac | 10 ++++++++++
-+ 2 files changed, 15 insertions(+), 1 deletion(-)
++image: debian:stable
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 1804945..cebcd31 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -5,8 +5,12 @@ nodist_include_HEADERS = include/maxminddb_config.h
-+ 
-+ SUBDIRS = \
-+   src     \
-+-  bin     \
-++  bin
-++
-++if TESTS
-++SUBDIRS += \
-+   t
-++endif
-+ 
-+ EXTRA_DIST = doc t Changes.md LICENSE NOTICE README.md projects/VS12 projects/VS12-tests
-+ dist-hook:
-+diff --git a/configure.ac b/configure.ac
-+index 7916212..fc53ffd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -119,6 +119,16 @@ AC_ARG_ENABLE(
-+         esac],[debug=false])
-+ AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
-+ 
-++AC_ARG_ENABLE(
-++        [tests],
-++        [  --enable-tests    Compilation of tests code],
-++        [case "${enableval}" in
-++          yes) tests=true ;;
-++          no)  tests=false ;;
-++          *) AC_MSG_ERROR([bad value ${enableval} for --enable-tests]) ;;
-++        esac],[tests=false])
-++AM_CONDITIONAL([TESTS], [test x$tests = xtrue])
-++
-+ AC_CONFIG_FILES([Makefile
-+                  src/Makefile
-+                  bin/Makefile
-+-- 
-+2.5.0
++before_script:
++    - dpkg --add-architecture i386
++    # The container has not packe lists, so need to update first
++    - apt-get update -qq
++    - apt-get install -y -qq build-essential locales git bzr cvs mercurial subversion libc6:i386 unzip bc wget cpio
++    # To be able to generate a toolchain with locales, enable one UTF-8 locale
++    - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
++    - /usr/sbin/locale-gen
 +
-diff --git a/package/libmaxminddb/Config.in b/package/libmaxminddb/Config.in
++check-gitlab-ci.yml:
++    script:
++        - cp .gitlab-ci.yml .gitlab-ci.yml.orig
++        - make .gitlab-ci.yml
++        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
++
++.defconfig: &defconfig
++    # Running the defconfigs for every push is too much, so limit to
++    # explicit triggers through the API.
++    only:
++        - triggers
++        - tags
++    script:
++        - echo 'Configure Buildroot'
++        - make ${CI_BUILD_NAME}
++        - echo 'Build buildroot'
++        - |
++            make > >(tee build.log |grep '>>>') 2>&1 || {
++                echo 'Failed build last output'
++                tail -200 build.log
++                exit 1
++            }
++    artifacts:
++        when: always
++        expire_in: 2 weeks
++        paths:
++            - build.log
++            - output/images/
++            - output/build/build-time.log
++            - output/build/packages-file-list.txt
++
++acmesystems_aria_g25_128mb_defconfig: *defconfig
++acmesystems_aria_g25_256mb_defconfig: *defconfig
++acmesystems_arietta_g25_128mb_defconfig: *defconfig
++acmesystems_arietta_g25_256mb_defconfig: *defconfig
++altera_socdk_defconfig: *defconfig
++altera_sockit_defconfig: *defconfig
++arcturus_ucp1020_defconfig: *defconfig
++arm_foundationv8_defconfig: *defconfig
++arm_juno_defconfig: *defconfig
++armadeus_apf27_defconfig: *defconfig
++armadeus_apf28_defconfig: *defconfig
++armadeus_apf51_defconfig: *defconfig
++armadeus_apf9328_defconfig: *defconfig
++at91sam9260eknf_defconfig: *defconfig
++at91sam9g20dfc_defconfig: *defconfig
++at91sam9g45m10ek_defconfig: *defconfig
++at91sam9rlek_defconfig: *defconfig
++at91sam9x5ek_defconfig: *defconfig
++atmel_sama5d2_xplained_mmc_defconfig: *defconfig
++atmel_sama5d2_xplained_mmc_dev_defconfig: *defconfig
++atmel_sama5d3_xplained_defconfig: *defconfig
++atmel_sama5d3_xplained_dev_defconfig: *defconfig
++atmel_sama5d3_xplained_mmc_defconfig: *defconfig
++atmel_sama5d3_xplained_mmc_dev_defconfig: *defconfig
++atmel_sama5d3xek_defconfig: *defconfig
++atmel_sama5d4_xplained_defconfig: *defconfig
++atmel_sama5d4_xplained_dev_defconfig: *defconfig
++atmel_sama5d4_xplained_mmc_defconfig: *defconfig
++atmel_sama5d4_xplained_mmc_dev_defconfig: *defconfig
++beagleboardx15_defconfig: *defconfig
++beaglebone_defconfig: *defconfig
++beaglebone_qt5_defconfig: *defconfig
++chromebook_snow_defconfig: *defconfig
++ci20_defconfig: *defconfig
++cubieboard2_defconfig: *defconfig
++firefly_rk3288_defconfig: *defconfig
++firefly_rk3288_demo_defconfig: *defconfig
++freescale_imx28evk_defconfig: *defconfig
++freescale_imx31_3stack_defconfig: *defconfig
++freescale_imx6dlsabreauto_defconfig: *defconfig
++freescale_imx6dlsabresd_defconfig: *defconfig
++freescale_imx6qsabreauto_defconfig: *defconfig
++freescale_imx6qsabresd_defconfig: *defconfig
++freescale_imx6sololiteevk_defconfig: *defconfig
++freescale_imx6sxsabresd_defconfig: *defconfig
++freescale_imx6ulevk_defconfig: *defconfig
++freescale_imx7dsabresd_defconfig: *defconfig
++freescale_mpc8315erdb_defconfig: *defconfig
++freescale_p1010rdb_pa_defconfig: *defconfig
++galileo_defconfig: *defconfig
++gdb_bfin_bf512_defconfig: *defconfig
++grinn_chiliboard_defconfig: *defconfig
++grinn_liteboard_defconfig: *defconfig
++imx23evk_defconfig: *defconfig
++imx6q-sabresd_defconfig: *defconfig
++imx6ulpico_defconfig: *defconfig
++lego_ev3_defconfig: *defconfig
++linksprite_pcduino_defconfig: *defconfig
++minnowboard_defconfig: *defconfig
++minnowboard_max-graphical_defconfig: *defconfig
++minnowboard_max_defconfig: *defconfig
++mx25pdk_defconfig: *defconfig
++mx51evk_defconfig: *defconfig
++mx53loco_defconfig: *defconfig
++mx6cubox_defconfig: *defconfig
++mx6sx_udoo_neo_defconfig: *defconfig
++mx6udoo_defconfig: *defconfig
++nanopi_neo_defconfig: *defconfig
++nitrogen6sx_defconfig: *defconfig
++nitrogen6x_defconfig: *defconfig
++nitrogen7_defconfig: *defconfig
++odroidc2_defconfig: *defconfig
++olimex_a20_olinuxino_lime2_defconfig: *defconfig
++olimex_a20_olinuxino_lime_defconfig: *defconfig
++olimex_a20_olinuxino_lime_mali_defconfig: *defconfig
++olimex_a20_olinuxino_micro_defconfig: *defconfig
++olimex_imx233_olinuxino_defconfig: *defconfig
++openblocks_a6_defconfig: *defconfig
++orangepi_one_defconfig: *defconfig
++orangepi_pc_defconfig: *defconfig
++pandaboard_defconfig: *defconfig
++pc_x86_64_bios_defconfig: *defconfig
++pc_x86_64_efi_defconfig: *defconfig
++qemu_aarch64_virt_defconfig: *defconfig
++qemu_arm_versatile_defconfig: *defconfig
++qemu_arm_versatile_nommu_defconfig: *defconfig
++qemu_arm_vexpress_defconfig: *defconfig
++qemu_m68k_mcf5208_defconfig: *defconfig
++qemu_m68k_q800_defconfig: *defconfig
++qemu_microblazebe_mmu_defconfig: *defconfig
++qemu_microblazeel_mmu_defconfig: *defconfig
++qemu_mips32r2_malta_defconfig: *defconfig
++qemu_mips32r2el_malta_defconfig: *defconfig
++qemu_mips32r6_malta_defconfig: *defconfig
++qemu_mips32r6el_malta_defconfig: *defconfig
++qemu_mips64_malta_defconfig: *defconfig
++qemu_mips64el_malta_defconfig: *defconfig
++qemu_mips64r6_malta_defconfig: *defconfig
++qemu_mips64r6el_malta_defconfig: *defconfig
++qemu_nios2_10m50_defconfig: *defconfig
++qemu_or1k_defconfig: *defconfig
++qemu_ppc64_pseries_defconfig: *defconfig
++qemu_ppc_g3beige_defconfig: *defconfig
++qemu_ppc_mpc8544ds_defconfig: *defconfig
++qemu_ppc_virtex_ml507_defconfig: *defconfig
++qemu_sh4_r2d_defconfig: *defconfig
++qemu_sh4eb_r2d_defconfig: *defconfig
++qemu_sparc64_sun4u_defconfig: *defconfig
++qemu_sparc_ss10_defconfig: *defconfig
++qemu_x86_64_defconfig: *defconfig
++qemu_x86_defconfig: *defconfig
++qemu_xtensa_lx60_defconfig: *defconfig
++qemu_xtensa_lx60_nommu_defconfig: *defconfig
++raspberrypi0_defconfig: *defconfig
++raspberrypi2_defconfig: *defconfig
++raspberrypi3_defconfig: *defconfig
++raspberrypi_defconfig: *defconfig
++riotboard_defconfig: *defconfig
++roseapplepi_defconfig: *defconfig
++s6lx9_microboard_defconfig: *defconfig
++sheevaplug_defconfig: *defconfig
++snps_aarch64_vdk_defconfig: *defconfig
++snps_archs38_vdk_defconfig: *defconfig
++snps_archs38_zebu_defconfig: *defconfig
++snps_axs101_defconfig: *defconfig
++snps_axs103_defconfig: *defconfig
++stm32f429_disco_defconfig: *defconfig
++stm32f469_disco_defconfig: *defconfig
++telit_evk_pro3_defconfig: *defconfig
++toradex_apalis_imx6_defconfig: *defconfig
++ts4800_defconfig: *defconfig
++ts4900_defconfig: *defconfig
++ts5x00_defconfig: *defconfig
++via_imx6_vab820_defconfig: *defconfig
++wandboard_defconfig: *defconfig
++warp7_defconfig: *defconfig
++warpboard_defconfig: *defconfig
++zynq_microzed_defconfig: *defconfig
++zynq_zc706_defconfig: *defconfig
++zynq_zed_defconfig: *defconfig
++zynq_zybo_defconfig: *defconfig
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
 new file mode 100644
-index 0000000..957572e
+index 0000000000..a8e91c1ca4
 --- /dev/null
-+++ b/package/libmaxminddb/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBMAXMINDDB
-+	bool "libmaxminddb"
-+	help
-+	  C library for the MaxMind DB file format
++++ b/.gitlab-ci.yml.in
+@@ -0,0 +1,48 @@
++# Configuration for Gitlab-CI.
++# Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
++# The .gitlab-ci.yml file is generated from .gitlab-ci.yml.in.
++# It needs to be regenerated every time a defconfig is added, using
++# "make .gitlab-ci.yml".
 +
-+	  The libmaxminddb library provides a C library for reading
-+	  MaxMind DB files, including the GeoIP2 databases from MaxMind.
-+	  This is a custom binary format designed to facilitate fast
-+	  lookups of IP addresses while allowing for great flexibility
-+	  in the type of data associated with an address.
++image: debian:stable
 +
-+	  The MaxMind DB format is an open format. The spec is available
-+	  at http://maxmind.github.io/MaxMind-DB/. This spec is licensed
-+	  under the Creative Commons Attribution-ShareAlike 3.0 Unported
-+	  License.
++before_script:
++    - dpkg --add-architecture i386
++    # The container has not packe lists, so need to update first
++    - apt-get update -qq
++    - apt-get install -y -qq build-essential locales git bzr cvs mercurial subversion libc6:i386 unzip bc wget cpio
++    # To be able to generate a toolchain with locales, enable one UTF-8 locale
++    - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
++    - /usr/sbin/locale-gen
 +
-+	  http://maxmind.github.io/libmaxminddb
-diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
-new file mode 100644
-index 0000000..3d5b4ca
---- /dev/null
-+++ b/package/libmaxminddb/libmaxminddb.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	4147241d4e3103bd843167ae5a0d5cf176632b6898cb1cca6223d2d58cc53ef5	libmaxminddb-1.2.0.tar.gz
-diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
-new file mode 100644
-index 0000000..2b6bbb7
---- /dev/null
-+++ b/package/libmaxminddb/libmaxminddb.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libmaxminddb
-+#
-+################################################################################
++check-gitlab-ci.yml:
++    script:
++        - cp .gitlab-ci.yml .gitlab-ci.yml.orig
++        - make .gitlab-ci.yml
++        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
 +
-+LIBMAXMINDDB_VERSION = 1.2.0
-+LIBMAXMINDDB_SITE = $(call github,maxmind,libmaxminddb,$(LIBMAXMINDDB_VERSION))
-+LIBMAXMINDDB_INSTALL_STAGING = YES
-+LIBMAXMINDDB_LICENSE = Apache-2.0
-+LIBMAXMINDDB_LICENSE_FILES = LICENSE
-+LIBMAXMINDDB_AUTORECONF = YES
-+LIBMAXMINDDB_CONF_OPTS = --disable-tests
++.defconfig: &defconfig
++    # Running the defconfigs for every push is too much, so limit to
++    # explicit triggers through the API.
++    only:
++        - triggers
++        - tags
++    script:
++        - echo 'Configure Buildroot'
++        - make ${CI_BUILD_NAME}
++        - echo 'Build buildroot'
++        - |
++            make > >(tee build.log |grep '>>>') 2>&1 || {
++                echo 'Failed build last output'
++                tail -200 build.log
++                exit 1
++            }
++    artifacts:
++        when: always
++        expire_in: 2 weeks
++        paths:
++            - build.log
++            - output/images/
++            - output/build/build-time.log
++            - output/build/packages-file-list.txt
 +
-+$(eval $(autotools-package))
+diff --git a/Makefile b/Makefile
+index dcda8fe024..bf653a587c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1066,6 +1066,9 @@ release:
+ print-version:
+ 	@echo $(BR2_VERSION_FULL)
+ 
++.gitlab-ci.yml: .gitlab-ci.yml.in configs/*_defconfig
++	(cd configs; ls -1 *_defconfig) | sed 's/$$/: *defconfig/' | cat $< - > $@
++
+ include docs/manual/manual.mk
+ -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(dir)/docs/*/*.mk)
+ 
 -- 
-2.5.0
+2.11.0
