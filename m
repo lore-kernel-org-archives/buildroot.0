@@ -1,7 +1,9 @@
 From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Date: Sun, 12 Feb 2017 02:47:07 +0100
-Subject: [Buildroot] [PATCH 1/1] classpath: bump to version 0.99
-Message-ID: <20170212014707.16259-1-m.hoffmann@cartelsol.com>
+Date: Sun, 12 Feb 2017 02:54:51 +0100
+Subject: [Buildroot] [PATCH v2] classpath: bump to version 0.99
+In-Reply-To: <20170212014707.16259-1-m.hoffmann@cartelsol.com>
+References: <20170212014707.16259-1-m.hoffmann@cartelsol.com>
+Message-ID: <20170212015451.16715-1-m.hoffmann@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,6 +23,9 @@ Also explicitly disable GJDoc generation, as this defaults to on now.
 
 Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
 ---
+Changes v1 -> v2:
+  - Fixed announcement url in .hash file
+
  package/classpath/0001-fix-gmp-include.patch  |  46 --
  package/classpath/0002-add-config-rpath.patch | 680 --------------------------
  package/classpath/classpath.hash              |   2 +-
