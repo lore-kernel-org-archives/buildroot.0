@@ -1,121 +1,569 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Feb 2017 08:28:57 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-02-11
-Message-ID: <20170212072857.7E8D12075A@mail.free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 12 Feb 2017 10:26:08 +0100
+Subject: [Buildroot] [PATCH v2 for-master] package/gdb: backport uptream
+ fix for simulator build issue with bfin
+In-Reply-To: <20170211225119.2986-1-romain.naour@gmail.com>
+References: <20170211225119.2986-1-romain.naour@gmail.com>
+Message-ID: <20170212102608.0e0c51e9@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Romain,
 
-Build statistics for 2017-02-11
-================================
+> Subject: PATCH v2 for-master] package/gdb: backport uptream fix for simulator build issue with bfin
 
-      successes : 213
-       failures : 58 
-       timeouts : 1  
-          TOTAL : 272
+s/uptream/upstream/
 
-Classification of failures by reason
-====================================
-
-                 sngrep-v1.4.2 | 8 
-               openswan-2.6.46 | 5 
-                     wget-1.19 | 5 
-                   ortp-0.27.0 | 3 
-                  samba4-4.5.5 | 3 
-                 wavpack-5.1.0 | 3 
-               bctoolbox-0.4.0 | 2 
-             berkeleydb-5.3.28 | 2 
-                 ddrescue-1.22 | 2 
-kmsxx-bd5f6471e619a6ba2987b... | 2 
-                 libv4l-1.12.2 | 2 
-        riemann-c-client-1.9.1 | 2 
-               trousers-0.3.13 | 2 
-                  cppcms-1.0.5 | 1 
-                    cups-2.2.2 | 1 
-               domoticz-3.5877 | 1 
-            ecryptfs-utils-109 | 1 
-               host-gdb-7.11.1 | 1 
-          janus-gateway-v0.2.1 | 1 
-make[1]: *** [complex.o] Te... | 1 
-                    mosh-1.2.6 | 1 
-                    mpv-0.23.0 | 1 
-                 opencv-2.4.13 | 1 
-                 openssh-7.4p1 | 1 
-           oracle-mysql-5.1.73 | 1 
-               polarssl-1.2.19 | 1 
-python-libconfig-b271c3d9da... | 1 
-                 qt5base-5.8.0 | 1 
-                    ruby-2.4.0 | 1 
-                 sudo-1.8.19p2 | 1 
-             util-linux-2.29.1 | 1 
+Regards,
+Peter
 
 
-Detail of failures
-===================
+On Sat, 11 Feb 2017 23:51:19 +0100, Romain Naour <romain.naour@gmail.com> wrote:
 
-        m68k |                bctoolbox-0.4.0 | NOK | http://autobuild.buildroot.net/results/be8b4cb8d11fb5952a2f5a0a163bf050da5f9f0a
-         arm |                bctoolbox-0.4.0 | NOK | http://autobuild.buildroot.net/results/6555bda98bf978eeb40138fb611d83e1a6e42f7d
-        m68k |              berkeleydb-5.3.28 | NOK | http://autobuild.buildroot.net/results/890b7dd8f8087416ca73b9dab510feeafbe4b6f5
-        m68k |              berkeleydb-5.3.28 | NOK | http://autobuild.buildroot.net/results/3d2d840b5debda09f9de25680c67e967bc7fffc3
-        i586 |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/d52d3ca883f81f39b9e98da3ea88414badaffd8b
-        i586 |                     cups-2.2.2 | NOK | http://autobuild.buildroot.net/results/f6d3a20470b5002d90ae6fc6033f340ef64a0417
-         arm |                  ddrescue-1.22 | NOK | http://autobuild.buildroot.net/results/06ae4d43acc11d23a4f00b5a10f46d3bb1d96830
-         arm |                  ddrescue-1.22 | NOK | http://autobuild.buildroot.net/results/903056fb6a5f089cfa3ba676dc33f7922d7ac2fc
- powerpc64le |                domoticz-3.5877 | NOK | http://autobuild.buildroot.net/results/fd366f35221f287cf72694f6a84b3b938a4d6042
- powerpc64le |             ecryptfs-utils-109 | NOK | http://autobuild.buildroot.net/results/4bd27afef12a0d0d2503a820ade82bf4eb3c64ce
-     aarch64 |                host-gdb-7.11.1 | NOK | http://autobuild.buildroot.net/results/cfdc9117fef7ecdf5cc5fc907a6fe8701a2c174a
-       sparc |           janus-gateway-v0.2.1 | NOK | http://autobuild.buildroot.net/results/7cfb84762344eb3a1a0ff0859b22f0fe5eb478ed
-        m68k | kmsxx-bd5f6471e619a6ba2987b... | NOK | http://autobuild.buildroot.net/results/7ebaa00b2d14131fadd15df6db32632828c1de33
-        m68k | kmsxx-bd5f6471e619a6ba2987b... | NOK | http://autobuild.buildroot.net/results/42c2aa4b58de3ab84a27f53a696fa60d087c178b
-      x86_64 |                  libv4l-1.12.2 | NOK | http://autobuild.buildroot.net/results/828ccd02ebd6ae3411bd414801db8525f9018a1d
-      x86_64 |                  libv4l-1.12.2 | NOK | http://autobuild.buildroot.net/results/3853351aaa658c8b377420c18630195ba2689f55
-      mipsel | make[1]: *** [complex.o] Te... | TIM | http://autobuild.buildroot.net/results/3ac351f1506e1e80c45914bcc5da5ff10c7dd49d
-        i586 |                     mosh-1.2.6 | NOK | http://autobuild.buildroot.net/results/04614d3b553ce7656f5341df2d72b9068cde2f84
- powerpc64le |                     mpv-0.23.0 | NOK | http://autobuild.buildroot.net/results/76cc513215eb6e26c15092d15aee6439b7826bc3
-        i686 |                  opencv-2.4.13 | NOK | http://autobuild.buildroot.net/results/f935bf9716cdb93a2076aff9cba099cba43d9064
-        i586 |                  openssh-7.4p1 | NOK | http://autobuild.buildroot.net/results/742a8bf4726de6e9ba6926e3fb6019a434454e48
-         arc |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/148bd2158ae4c302e04f20bf94dd7fc10074a21b
-         arm |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/49b0dbd2a5a92a5286bd6574eca1061936425370
-         arc |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/f8b36ecba7c86306ea5bc3fcb28b4b1b6f1deab8
-         arm |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/aa18900709a28dc5f0dfbab7e332435f9b8fcb5b
-      xtensa |                openswan-2.6.46 | NOK | http://autobuild.buildroot.net/results/8d937cf837c1dca32f6796ddd7641ccc9b8d0f35
-       nios2 |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/dd4da14ba9448949bbc73310408d52874e10a1ad
-         arm |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/48cdffba37750ce7d09196dcb4993f09458c8f0d
-        m68k |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/fe6b7efd943a5bf44fbd73dba85c69e59bf5e278
-        m68k |                    ortp-0.27.0 | NOK | http://autobuild.buildroot.net/results/4c230e806657ae8dcccb31a0168c34d72e897d08
-         arm |                polarssl-1.2.19 | NOK | http://autobuild.buildroot.net/results/ce77d8fc6f24ddc1e691270a1148dc692e2b66d1
-         arm | python-libconfig-b271c3d9da... | NOK | http://autobuild.buildroot.net/results/0dbb0c6d8df9c3754ed59f8770ea34694531bd05
-        mips |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/9483013f78a70974594001869fbf4d42f02eec29
-         arc |         riemann-c-client-1.9.1 | NOK | http://autobuild.buildroot.net/results/47d7d9eab665e44704dc2e9cb2baba99176c410c
-         arc |         riemann-c-client-1.9.1 | NOK | http://autobuild.buildroot.net/results/2e19dadc36bdc4a2a5805bca212182dac1e681c2
-        i586 |                     ruby-2.4.0 | NOK | http://autobuild.buildroot.net/results/41351d260ebc787cc7c46fb90c5906cda20ccdf6
-microblazeel |                   samba4-4.5.5 | NOK | http://autobuild.buildroot.net/results/d58422bbce3c3a501de99de1218eec342cb4c4a9
-        m68k |                   samba4-4.5.5 | NOK | http://autobuild.buildroot.net/results/c7f760709c242e9ed578474082e66012eb8230b5
-        m68k |                   samba4-4.5.5 | NOK | http://autobuild.buildroot.net/results/c2d667a32c4c6d1c2bb1492afd4f0c2b5576d5c7
-        sh4a |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/aba6406ffc7c339ffebfb320479ede3b682c112f
-        m68k |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/fa45fb0fba5735616ac07af8ff55f3cfbc476e66
-      x86_64 |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/098c0a0ddacc703da969bf7b09c173d6b7fc799e
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/821a3833b36437b83c7e39e13d564afe5ce5cc8d
-     aarch64 |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/f48fd5db4674dece1f640d1779c3a2cd13295060
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/2af6cab470e0987607f3a2e2be8d925871e8fb68
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/a3e9ced5d8ec4f5a99a8ba719dbb1e7e59b75208
-         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/83d319baa1fe6cc89aef2cacde370eb3416ade5d
-        i586 |                  sudo-1.8.19p2 | NOK | http://autobuild.buildroot.net/results/682531f368c4e982cafe9e625dd41f6d8c7f93f9
-         arc |                trousers-0.3.13 | NOK | http://autobuild.buildroot.net/results/214915aafc5db6db4cd936ad80e92c6fb18f163a
-         arc |                trousers-0.3.13 | NOK | http://autobuild.buildroot.net/results/8c7272b671d01d9fa25b87feed4e3ad28017bdf7
-      xtensa |              util-linux-2.29.1 | NOK | http://autobuild.buildroot.net/results/28d90e11ea238eac774dd4722625d29f00c1d271
-microblazeel |                  wavpack-5.1.0 | NOK | http://autobuild.buildroot.net/results/b9a03588c2c1b300147740f1b016d82c7f76f6c6
-     powerpc |                  wavpack-5.1.0 | NOK | http://autobuild.buildroot.net/results/36d79d43a0d26bf848dc50244f2a9754269ad67f
-         arm |                  wavpack-5.1.0 | NOK | http://autobuild.buildroot.net/results/024721851986d19277ac64a698dfa2fda8f127ce
-         sh4 |                      wget-1.19 | NOK | http://autobuild.buildroot.net/results/dcae21523adc125598bf99b8d99e9d8bf63f695f
-         arm |                      wget-1.19 | NOK | http://autobuild.buildroot.net/results/61e6fefbf28905789969a427a82f09c1ba3fb97b
-        i686 |                      wget-1.19 | NOK | http://autobuild.buildroot.net/results/c9b7cb6adbb1f71231cb0100556372e44cf63f97
-      x86_64 |                      wget-1.19 | NOK | http://autobuild.buildroot.net/results/9b8b203e100ff48db9f9836e891ddffeccb90654
-         arc |                      wget-1.19 | NOK | http://autobuild.buildroot.net/results/4f54c65f197593e039fc4b547bca3fb4e7b44ef4
-
--- 
-http://autobuild.buildroot.net
+> This revert the commit [1] which break the simulator for aarch64.
+> Backport the upstream fix instead (from 7.12).
+> 
+> [1] f71ad71f24fbeca1a81cc9efe79016a7db6f1320
+> 
+> Tested with gcc 4.4.5 (debian squeeze chroot).
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/cfd/cfdc9117fef7ecdf5cc5fc907a6fe8701a2c174a
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Waldemar Brodkorb <wbx@openadk.org>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> v2: add my SoB line in the backported patch
+> ---
+>  .../0001-Revert-sim-unify-SIM_CPU-definition.patch | 355 ---------------------
+>  ...lit-out-common-mach-model-defines-into-ar.patch | 155 +++++++++
+>  2 files changed, 155 insertions(+), 355 deletions(-)
+>  delete mode 100644 package/gdb/7.11.1/0001-Revert-sim-unify-SIM_CPU-definition.patch
+>  create mode 100644 package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
+> 
+> diff --git a/package/gdb/7.11.1/0001-Revert-sim-unify-SIM_CPU-definition.patch b/package/gdb/7.11.1/0001-Revert-sim-unify-SIM_CPU-definition.patch
+> deleted file mode 100644
+> index 8a8eece..0000000
+> --- a/package/gdb/7.11.1/0001-Revert-sim-unify-SIM_CPU-definition.patch
+> +++ /dev/null
+> @@ -1,355 +0,0 @@
+> -From 77080d5f7fd47dd567f22807d336bc9111f93d7b Mon Sep 17 00:00:00 2001
+> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -Date: Thu, 4 Aug 2016 23:44:24 +0200
+> -Subject: [PATCH] Revert "sim: unify SIM_CPU definition"
+> -
+> -This reverts commit 20bca71d82598a015de0991196e45f0b5f7ead81.
+> -
+> -This change causes a redefinition of SIM_CPU on the Blackfin
+> -architecture, as it is defined in both the common sim/common/sim-base.h
+> -and the architecture specific sim/bfin/sim-main.h.
+> -
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ----
+> - sim/arm/sim-main.h        | 3 +++
+> - sim/avr/sim-main.h        | 2 ++
+> - sim/bfin/sim-main.h       | 2 --
+> - sim/common/sim-base.h     | 2 --
+> - sim/cr16/sim-main.h       | 2 ++
+> - sim/cris/sim-main.h       | 3 +++
+> - sim/d10v/sim-main.h       | 2 ++
+> - sim/frv/sim-main.h        | 3 +++
+> - sim/ft32/sim-main.h       | 2 ++
+> - sim/h8300/sim-main.h      | 3 +++
+> - sim/iq2000/sim-main.h     | 3 +++
+> - sim/lm32/sim-main.h       | 3 +++
+> - sim/m32r/sim-main.h       | 3 +++
+> - sim/m68hc11/sim-main.h    | 3 +++
+> - sim/mcore/sim-main.h      | 2 ++
+> - sim/microblaze/sim-main.h | 3 +++
+> - sim/mips/sim-main.h       | 3 +++
+> - sim/mn10300/sim-main.h    | 2 ++
+> - sim/moxie/sim-main.h      | 3 +++
+> - sim/msp430/sim-main.h     | 3 +++
+> - sim/sh/sim-main.h         | 3 +++
+> - sim/sh64/sim-main.h       | 3 +++
+> - sim/v850/sim-main.h       | 3 +++
+> - 23 files changed, 57 insertions(+), 4 deletions(-)
+> -
+> -diff --git a/sim/arm/sim-main.h b/sim/arm/sim-main.h
+> -index 3620810..f644122 100644
+> ---- a/sim/arm/sim-main.h
+> -+++ b/sim/arm/sim-main.h
+> -@@ -20,6 +20,9 @@
+> - #define SIM_MAIN_H
+> - 
+> - #include "sim-basics.h"
+> -+
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - #include "bfd.h"
+> - 
+> -diff --git a/sim/avr/sim-main.h b/sim/avr/sim-main.h
+> -index 47155e3..cd41045 100644
+> ---- a/sim/avr/sim-main.h
+> -+++ b/sim/avr/sim-main.h
+> -@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> - 
+> - #include "sim-basics.h"
+> - 
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - 
+> - struct _sim_cpu {
+> -diff --git a/sim/bfin/sim-main.h b/sim/bfin/sim-main.h
+> -index 51fb87e..cf1ed57 100644
+> ---- a/sim/bfin/sim-main.h
+> -+++ b/sim/bfin/sim-main.h
+> -@@ -24,8 +24,6 @@
+> - #include "sim-basics.h"
+> - #include "sim-signal.h"
+> - 
+> --/* TODO: Delete this.  Need to convert bu32/etc... to common sim types
+> --         and unwind the bfin-sim.h/machs.h include below first though.  */
+> - typedef struct _sim_cpu SIM_CPU;
+> - 
+> - #include "bfin-sim.h"
+> -diff --git a/sim/common/sim-base.h b/sim/common/sim-base.h
+> -index 350b352..1b849f4 100644
+> ---- a/sim/common/sim-base.h
+> -+++ b/sim/common/sim-base.h
+> -@@ -72,8 +72,6 @@ typedef address_word sim_cia;
+> - #define INVALID_INSTRUCTION_ADDRESS ((address_word)0 - 1)
+> - #endif
+> - 
+> --/* TODO: Probably should just delete SIM_CPU.  */
+> --typedef struct _sim_cpu SIM_CPU;
+> - typedef struct _sim_cpu sim_cpu;
+> - 
+> - #include "sim-module.h"
+> -diff --git a/sim/cr16/sim-main.h b/sim/cr16/sim-main.h
+> -index 208f917..78e3996 100644
+> ---- a/sim/cr16/sim-main.h
+> -+++ b/sim/cr16/sim-main.h
+> -@@ -24,6 +24,8 @@
+> - typedef long int           word;
+> - typedef unsigned long int  uword;
+> - 
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - #include "bfd.h"
+> - 
+> -diff --git a/sim/cris/sim-main.h b/sim/cris/sim-main.h
+> -index 8aab970..0ff907f 100644
+> ---- a/sim/cris/sim-main.h
+> -+++ b/sim/cris/sim-main.h
+> -@@ -29,6 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> -    one of -scache/-pbb.  */
+> - #define WITH_SCACHE_PBB 1
+> - 
+> -+struct _sim_cpu;
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "symcat.h"
+> - #include "sim-basics.h"
+> - #include "cgen-types.h"
+> -diff --git a/sim/d10v/sim-main.h b/sim/d10v/sim-main.h
+> -index 76f06d8..fd5bd51 100644
+> ---- a/sim/d10v/sim-main.h
+> -+++ b/sim/d10v/sim-main.h
+> -@@ -24,6 +24,8 @@
+> - typedef long int           word;
+> - typedef unsigned long int  uword;
+> - 
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - #include "bfd.h"
+> - 
+> -diff --git a/sim/frv/sim-main.h b/sim/frv/sim-main.h
+> -index f95c1cc..701e208 100644
+> ---- a/sim/frv/sim-main.h
+> -+++ b/sim/frv/sim-main.h
+> -@@ -19,6 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> - 
+> - /* Main header for the frv.  */
+> - 
+> -+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - /* sim-basics.h includes config.h but cgen-types.h must be included before
+> -    sim-basics.h and cgen-types.h needs config.h.  */
+> - #include "config.h"
+> -diff --git a/sim/ft32/sim-main.h b/sim/ft32/sim-main.h
+> -index a15b247..eef0201 100644
+> ---- a/sim/ft32/sim-main.h
+> -+++ b/sim/ft32/sim-main.h
+> -@@ -25,6 +25,8 @@
+> - #include "sim-base.h"
+> - #include "bfd.h"
+> - 
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "ft32-sim.h"
+> - 
+> - struct _sim_cpu {
+> -diff --git a/sim/h8300/sim-main.h b/sim/h8300/sim-main.h
+> -index 6dbc1ac..e95c4d9 100644
+> ---- a/sim/h8300/sim-main.h
+> -+++ b/sim/h8300/sim-main.h
+> -@@ -87,6 +87,9 @@ enum h8_typecodes {
+> - };
+> - 
+> - #include "sim-basics.h"
+> -+
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - 
+> - /* Structure used to describe addressing */
+> -diff --git a/sim/iq2000/sim-main.h b/sim/iq2000/sim-main.h
+> -index 829f9bb..a770dc5 100644
+> ---- a/sim/iq2000/sim-main.h
+> -+++ b/sim/iq2000/sim-main.h
+> -@@ -4,6 +4,9 @@
+> - #ifndef SIM_MAIN_H
+> - #define SIM_MAIN_H
+> - 
+> -+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - /* sim-basics.h includes config.h but cgen-types.h must be included before
+> -    sim-basics.h and cgen-types.h needs config.h.  */
+> - #include "config.h"
+> -diff --git a/sim/lm32/sim-main.h b/sim/lm32/sim-main.h
+> -index 20e2b71..eeffde3 100644
+> ---- a/sim/lm32/sim-main.h
+> -+++ b/sim/lm32/sim-main.h
+> -@@ -25,6 +25,9 @@
+> - 
+> - #define WITH_SCACHE_PBB 1
+> - 
+> -+struct _sim_cpu;		/* FIXME: should be in sim-basics.h */
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "symcat.h"
+> - #include "sim-basics.h"
+> - #include "cgen-types.h"
+> -diff --git a/sim/m32r/sim-main.h b/sim/m32r/sim-main.h
+> -index 5b24ce8..39f7ecc 100644
+> ---- a/sim/m32r/sim-main.h
+> -+++ b/sim/m32r/sim-main.h
+> -@@ -8,6 +8,9 @@
+> -    one of -scache/-pbb.  */
+> - #define WITH_SCACHE_PBB 1
+> - 
+> -+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "symcat.h"
+> - #include "sim-basics.h"
+> - #include "cgen-types.h"
+> -diff --git a/sim/m68hc11/sim-main.h b/sim/m68hc11/sim-main.h
+> -index b940df7..0aa096f 100644
+> ---- a/sim/m68hc11/sim-main.h
+> -+++ b/sim/m68hc11/sim-main.h
+> -@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> - #define _SIM_MAIN_H
+> - 
+> - #include "sim-basics.h"
+> -+
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-signal.h"
+> - #include "sim-base.h"
+> - 
+> -diff --git a/sim/mcore/sim-main.h b/sim/mcore/sim-main.h
+> -index fce26e8..fa7ee9f 100644
+> ---- a/sim/mcore/sim-main.h
+> -+++ b/sim/mcore/sim-main.h
+> -@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> - typedef long int           word;
+> - typedef unsigned long int  uword;
+> - 
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - #include "bfd.h"
+> - 
+> -diff --git a/sim/microblaze/sim-main.h b/sim/microblaze/sim-main.h
+> -index 3a7b088..9e6bf01 100644
+> ---- a/sim/microblaze/sim-main.h
+> -+++ b/sim/microblaze/sim-main.h
+> -@@ -20,6 +20,9 @@
+> - 
+> - #include "microblaze.h"
+> - #include "sim-basics.h"
+> -+
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - 
+> - /* The machine state.
+> -diff --git a/sim/mips/sim-main.h b/sim/mips/sim-main.h
+> -index 0ea1234..eedbfc9 100644
+> ---- a/sim/mips/sim-main.h
+> -+++ b/sim/mips/sim-main.h
+> -@@ -27,6 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> - mips_core_signal ((SD), (CPU), (CIA), (MAP), (NR_BYTES), (ADDR), (TRANSFER), (ERROR))
+> - 
+> - #include "sim-basics.h"
+> -+
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - #include "bfd.h"
+> - 
+> -diff --git a/sim/mn10300/sim-main.h b/sim/mn10300/sim-main.h
+> -index 7171c03..3a917e7 100644
+> ---- a/sim/mn10300/sim-main.h
+> -+++ b/sim/mn10300/sim-main.h
+> -@@ -38,6 +38,8 @@
+> - #include "itable.h"
+> - #include "idecode.h"
+> - 
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #define SIM_CORE_SIGNAL(SD,CPU,CIA,MAP,NR_BYTES,ADDR,TRANSFER,ERROR)  \
+> - mn10300_core_signal ((SD), (CPU), (CIA), (MAP), (NR_BYTES), (ADDR), (TRANSFER), (ERROR))
+> - 
+> -diff --git a/sim/moxie/sim-main.h b/sim/moxie/sim-main.h
+> -index 7091f21..b6b5ca3 100644
+> ---- a/sim/moxie/sim-main.h
+> -+++ b/sim/moxie/sim-main.h
+> -@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> - #define SIM_MAIN_H
+> - 
+> - #include "sim-basics.h"
+> -+
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - #include "bfd.h"
+> - 
+> -diff --git a/sim/msp430/sim-main.h b/sim/msp430/sim-main.h
+> -index 4a2ab22..c7cdc5e 100644
+> ---- a/sim/msp430/sim-main.h
+> -+++ b/sim/msp430/sim-main.h
+> -@@ -23,6 +23,9 @@
+> - 
+> - #include "sim-basics.h"
+> - #include "sim-signal.h"
+> -+
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "msp430-sim.h"
+> - #include "sim-base.h"
+> - 
+> -diff --git a/sim/sh/sim-main.h b/sim/sh/sim-main.h
+> -index 4af7b03..6ab42a6 100644
+> ---- a/sim/sh/sim-main.h
+> -+++ b/sim/sh/sim-main.h
+> -@@ -20,6 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> - #define SIM_MAIN_H
+> - 
+> - #include "sim-basics.h"
+> -+
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - 
+> - typedef struct
+> -diff --git a/sim/sh64/sim-main.h b/sim/sh64/sim-main.h
+> -index da8f516..5fd7095 100644
+> ---- a/sim/sh64/sim-main.h
+> -+++ b/sim/sh64/sim-main.h
+> -@@ -3,6 +3,9 @@
+> - #ifndef SIM_MAIN_H
+> - #define SIM_MAIN_H
+> - 
+> -+struct _sim_cpu; /* FIXME: should be in sim-basics.h */
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - /* sim-basics.h includes config.h but cgen-types.h must be included before
+> -    sim-basics.h and cgen-types.h needs config.h.  */
+> - #include "config.h"
+> -diff --git a/sim/v850/sim-main.h b/sim/v850/sim-main.h
+> -index e7276a6..1a45f97 100644
+> ---- a/sim/v850/sim-main.h
+> -+++ b/sim/v850/sim-main.h
+> -@@ -9,6 +9,9 @@
+> - #include "sim-basics.h"
+> - #include "sim-signal.h"
+> - #include "sim-fpu.h"
+> -+
+> -+typedef struct _sim_cpu SIM_CPU;
+> -+
+> - #include "sim-base.h"
+> - 
+> - #include "simops.h"
+> --- 
+> -2.7.4
+> -
+> diff --git a/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch b/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
+> new file mode 100644
+> index 0000000..5841cfd
+> --- /dev/null
+> +++ b/package/gdb/7.11.1/0001-sim-bfin-split-out-common-mach-model-defines-into-ar.patch
+> @@ -0,0 +1,155 @@
+> +From 7a09ed68e203a813d88fb7fc6eeb1e92209561a5 Mon Sep 17 00:00:00 2001
+> +From: Mike Frysinger <vapier@gentoo.org>
+> +Date: Mon, 8 Aug 2016 13:06:49 +0800
+> +Subject: [PATCH] sim: bfin: split out common mach/model defines into arch.h
+> + [PR sim/20438]
+> +
+> +The current machs.h mixes common enums with Blackfin-specific defines.
+> +This causes us troubles with header inclusion order such that we can't
+> +drop the old SIM_CPU typedef (which is duplicated in common code).  By
+> +splitting the two up, we can unwind this dependency chain, and drop the
+> +old typedef.  It also fixes building with older gcc versions.
+> +
+> +[Romain: backport from gdb 7.12]
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> +
+> +---
+> + sim/bfin/ChangeLog  |  9 +++++++++
+> + sim/bfin/arch.h     | 44 ++++++++++++++++++++++++++++++++++++++++++++
+> + sim/bfin/machs.h    | 20 --------------------
+> + sim/bfin/sim-main.h |  8 ++------
+> + 4 files changed, 55 insertions(+), 26 deletions(-)
+> + create mode 100644 sim/bfin/arch.h
+> +
+> +diff --git a/sim/bfin/ChangeLog b/sim/bfin/ChangeLog
+> +index 3dea7c9..a995436 100644
+> +--- a/sim/bfin/ChangeLog
+> ++++ b/sim/bfin/ChangeLog
+> +@@ -1,3 +1,12 @@
+> ++2016-08-13  Mike Frysinger  <vapier@gentoo.org>
+> ++
+> ++	PR sim/20438
+> ++	* machs.h (MODEL_TYPE, MACH_ATTR, BFIN_INSN_*): Move ...
+> ++	* arch.h: ... to this new header file.
+> ++	* sim-main.h (SIM_CPU): Delete.
+> ++	Include arch.h before sim-base.h, and move sim-base.h before
+> ++	bfin-sim.h.
+> ++
+> + 2016-01-10  Mike Frysinger  <vapier@gentoo.org>
+> + 
+> + 	* config.in, configure: Regenerate.
+> +diff --git a/sim/bfin/arch.h b/sim/bfin/arch.h
+> +new file mode 100644
+> +index 0000000..b86d3e9
+> +--- /dev/null
+> ++++ b/sim/bfin/arch.h
+> +@@ -0,0 +1,44 @@
+> ++/* Simulator for Analog Devices Blackfin processors.
+> ++
+> ++   Copyright (C) 2005-2016 Free Software Foundation, Inc.
+> ++   Contributed by Analog Devices, Inc.
+> ++
+> ++   This file is part of simulators.
+> ++
+> ++   This program is free software; you can redistribute it and/or modify
+> ++   it under the terms of the GNU General Public License as published by
+> ++   the Free Software Foundation; either version 3 of the License, or
+> ++   (at your option) any later version.
+> ++
+> ++   This program is distributed in the hope that it will be useful,
+> ++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> ++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> ++   GNU General Public License for more details.
+> ++
+> ++   You should have received a copy of the GNU General Public License
+> ++   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> ++
+> ++#ifndef BFIN_ARCH_H
+> ++#define BFIN_ARCH_H
+> ++
+> ++typedef enum model_type {
+> ++#define P(n) MODEL_BF##n,
+> ++#include "proc_list.def"
+> ++#undef P
+> ++  MODEL_MAX
+> ++} MODEL_TYPE;
+> ++
+> ++typedef enum mach_attr {
+> ++  MACH_BASE,
+> ++  MACH_BFIN,
+> ++  MACH_MAX
+> ++} MACH_ATTR;
+> ++
+> ++enum {
+> ++#define I(insn) BFIN_INSN_##insn,
+> ++#include "insn_list.def"
+> ++#undef I
+> ++  BFIN_INSN_MAX
+> ++};
+> ++
+> ++#endif
+> +diff --git a/sim/bfin/machs.h b/sim/bfin/machs.h
+> +index 0372982..36819ae 100644
+> +--- a/sim/bfin/machs.h
+> ++++ b/sim/bfin/machs.h
+> +@@ -21,19 +21,6 @@
+> + #ifndef _BFIN_MACHS_H_
+> + #define _BFIN_MACHS_H_
+> + 
+> +-typedef enum model_type {
+> +-#define P(n) MODEL_BF##n,
+> +-#include "proc_list.def"
+> +-#undef P
+> +-  MODEL_MAX
+> +-} MODEL_TYPE;
+> +-
+> +-typedef enum mach_attr {
+> +-  MACH_BASE,
+> +-  MACH_BFIN,
+> +-  MACH_MAX
+> +-} MACH_ATTR;
+> +-
+> + #define CPU_MODEL_NUM(cpu) MODEL_NUM (CPU_MODEL (cpu))
+> + 
+> + /* XXX: Some of this probably belongs in CPU_MODEL.  */
+> +@@ -46,13 +33,6 @@ void bfin_model_cpu_init (SIM_DESC, SIM_CPU *);
+> + bu32 bfin_model_get_chipid (SIM_DESC);
+> + bu32 bfin_model_get_dspid (SIM_DESC);
+> + 
+> +-enum {
+> +-#define I(insn) BFIN_INSN_##insn,
+> +-#include "insn_list.def"
+> +-#undef I
+> +-  BFIN_INSN_MAX
+> +-};
+> +-
+> + #define BFIN_COREMMR_CEC_BASE		0xFFE02100
+> + #define BFIN_COREMMR_CEC_SIZE		(4 * 5)
+> + #define BFIN_COREMMR_CTIMER_BASE	0xFFE03000
+> +diff --git a/sim/bfin/sim-main.h b/sim/bfin/sim-main.h
+> +index 51fb87e..34fd153 100644
+> +--- a/sim/bfin/sim-main.h
+> ++++ b/sim/bfin/sim-main.h
+> +@@ -23,17 +23,13 @@
+> + 
+> + #include "sim-basics.h"
+> + #include "sim-signal.h"
+> +-
+> +-/* TODO: Delete this.  Need to convert bu32/etc... to common sim types
+> +-         and unwind the bfin-sim.h/machs.h include below first though.  */
+> +-typedef struct _sim_cpu SIM_CPU;
+> ++#include "arch.h"
+> ++#include "sim-base.h"
+> + 
+> + #include "bfin-sim.h"
+> + 
+> + #include "machs.h"
+> + 
+> +-#include "sim-base.h"
+> +-
+> + struct _sim_cpu {
+> +   /* ... simulator specific members ... */
+> +   struct bfin_cpu_state state;
+> +-- 
+> +2.9.3
+> +
