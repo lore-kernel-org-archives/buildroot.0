@@ -1,90 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Feb 2017 13:51:10 +0100
-Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
- Kodi-specific patches
-In-Reply-To: <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
-References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
- <20170204114451.20935-2-bernd.kuhls@t-online.de>
- <20170204230821.GA3805@free.fr>
- <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20170205212408.GC3562@free.fr>
- <i6vmmdxipi.ln2@ID-313208.user.individual.net>
- <rk5nmdxipi.ln2@ID-313208.user.individual.net>
- <20170209232937.2a071f11@free-electrons.com>
- <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
-Message-ID: <20170212135110.61e55c66@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 12 Feb 2017 14:57:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/avahi: fix gettext dependency
+ handling
+In-Reply-To: <20170212124615.8875-1-bernd.kuhls@t-online.de>
+References: <20170212124615.8875-1-bernd.kuhls@t-online.de>
+Message-ID: <20170212125738.ds7suxyz4g6csvcp@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Bernd,
 
-On Sat, 11 Feb 2017 17:03:42 +0100, Bernd Kuhls wrote:
-
-> > Are these .a files still needed after the switch to CMake as the build
-> > system for Kodi?  
+On Sun, Feb 12, 2017 at 01:46:15PM +0100, Bernd Kuhls wrote:
+> Currently avahi only adds -lintl when BR2_NEEDS_GETTEXT_IF_LOCALE is
+> enabled. This is insufficent for defconfigs where BR2_PACKAGE_GETTEXT
+> was selected by other packages without BR2_NEEDS_GETTEXT_IF_LOCALE
+> being enabled at the same time. If gettext was built before avahi,
+> and avahi uses optional dbus support, avahi configure detects libintl:
 > 
-> fortunately no.
-
-Good.
-
-> > Also, for the patches that apply to the libdvdcss, libdvdread and
-> > libdvdnav code base, it would be good to know if they have been
-> > submitted to the respective upstream projects, or if it's stuff that we
-> > may have to keep in Buildroot forever.  
+> checking libintl.h usability... yes
+> checking libintl.h presence... yes
+> checking for libintl.h... yes
+> checking for ngettext in libc... no
+> checking for bindtextdomain in -lintl... yes
+> checking for ngettext in -lintl... yes
+> checking for dgettext in -lintl... yes
 > 
-> Afaics when using the new CMake-based build system of Kodi 17 it will
-> build libdvd* itself by using Kodi-specific tarballs:
+> and breaks at linking stage:
 > 
-> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
-> cmake#L100
-> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
-> cmake#L132
-> https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.
-> cmake#L164
+>   CCLD     avahi-publish
+> /home/buildroot/br7_freeswitch/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/5.4.0/../../../../i586-buildroot-linux-uclibc/bin/ld: avahi_publish-avahi-publish.o: undefined reference to symbol 'libintl_dgettext'
+> /home/buildroot/br7_freeswitch/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/lib32/libintl.so.8: error adding symbols: DSO missing from command line
+> collect2: error: ld returned 1 exit status
 > 
-> So we do neither need to patch libdvd* anymore nor provide them as 
-> dependent packages, KODI_EXTRA_DOWNLOADS can be used to provide the 
-> tarballs.
-
-Except that we definitely don't want this thing. Kodi should use the
-libdvd* libraries built by Buildroot. Not download/build its own.
-
-> First build tests were successful but I would like to be cautious about the 
-> switch to CMake because I only started to use it today with an x86_64 
-> toolchain so I have not much experience with it, as of this moment I never 
-> did a runtime test of the compiled binaries. I hope to find some time for 
-> this in the coming days but until then you can find my patches here:
+> To reproduce use this minimal defconfig:
 > 
-> https://github.com/bkuhls/buildroot/tree/kodi_cmake
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> BR2_PACKAGE_GETTEXT=y
+> BR2_PACKAGE_DBUS=y
+> BR2_PACKAGE_AVAHI=y
 > 
-> Please note that LibreElec and Gentoo already build Kodi 17 using CMake:
+> and build gettext before avahi.
 > 
-> https://github.com/LibreELEC/LibreELEC.tv/blob/libreelec-
-> 8.0/packages/mediacenter/kodi/package.mk#L34
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/avahi/avahi.mk | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 > 
-> https://gitweb.gentoo.org/repo/gentoo.git/tree/media-tv/kodi/kodi-
-> 17.0.ebuild#n161
+> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+> index 069b45a96..901beaaba 100644
+> --- a/package/avahi/avahi.mk
+> +++ b/package/avahi/avahi.mk
+> @@ -96,9 +96,7 @@ AVAHI_CONF_OPTS = \
+>  	--with-autoipd-user=avahi \
+>  	--with-autoipd-group=avahi
+>  
+> -AVAHI_DEPENDENCIES = \
+> -	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-intltool \
+> -	host-pkgconf host-gettext
+> +AVAHI_DEPENDENCIES = host-intltool host-pkgconf host-gettext
+>  
+>  AVAHI_CFLAGS = $(TARGET_CFLAGS)
+>  
+> @@ -168,7 +166,10 @@ endif
+>  
+>  AVAHI_CONF_ENV += CFLAGS="$(AVAHI_CFLAGS)"
+>  
+> -AVAHI_MAKE_OPTS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
+> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
+> +AVAHI_DEPENDENCIES += gettext
+> +AVAHI_CONF_ENV += LIBS=-lintl
+> +endif
 
-I leave it up to you when it is a good time to switch to the CMake
-based build system.
+Why do you switch from AVAHI_MAKE_OPTS to AVAHI_CONF_ENV?
 
-> Do we still have external toolchains based on uClibc 0.9.33.2?
-> If yes, we need to keep 
-> https://git.buildroot.net/buildroot/tree/package/kodi/0003-ALSA-fix-device-
-> change-event-support.patch and add CMake checks for eventfd_read & 
-> eventfd_write.
+<PKG>_CONF_ENV is arguably better, but this change is not mentioned in the 
+commit log.
 
-No, we don't care about uClibc 0.9.33.2 anymore. The only external
-toolchain that was using an old uClibc version was the Analog Devices
-Blackfin toolchain, and we got rid of it during the last cycle.
+baruch
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
