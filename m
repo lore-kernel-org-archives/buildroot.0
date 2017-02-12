@@ -1,57 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Feb 2017 15:54:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/avahi: fix gettext dependency
- handling
-In-Reply-To: <20170212124615.8875-1-bernd.kuhls@t-online.de>
-References: <20170212124615.8875-1-bernd.kuhls@t-online.de>
-Message-ID: <20170212155448.06ceac07@free-electrons.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun, 12 Feb 2017 12:55:37 -0200 (BRST)
+Subject: [Buildroot] [PATCH v2] infra/ccache: avoid color diagnostics
+ with GCC older than v4.9
+In-Reply-To: <20170212141425.GE11105@free.fr>
+References: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
+ <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
+ <20170212141425.GE11105@free.fr>
+Message-ID: <609383214.9983962.1486911337173.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, arnout at mind.be,
+> gustavo at zacarias.com.ar
+> Sent: Sunday, February 12, 2017 12:14:25 PM
+> Subject: Re: [PATCH v2] infra/ccache: avoid color diagnostics with GCC older than v4.9
 
-On Sun, 12 Feb 2017 13:46:15 +0100, Bernd Kuhls wrote:
-> Currently avahi only adds -lintl when BR2_NEEDS_GETTEXT_IF_LOCALE is
-> enabled. This is insufficent for defconfigs where BR2_PACKAGE_GETTEXT
-> was selected by other packages without BR2_NEEDS_GETTEXT_IF_LOCALE
-> being enabled at the same time. If gettext was built before avahi,
-> and avahi uses optional dbus support, avahi configure detects libintl:
+> Carlos, All,
 > 
-> checking libintl.h usability... yes
-> checking libintl.h presence... yes
-> checking for libintl.h... yes
-> checking for ngettext in libc... no
-> checking for bindtextdomain in -lintl... yes
-> checking for ngettext in -lintl... yes
-> checking for dgettext in -lintl... yes
+> On 2017-02-12 09:33 -0200, Carlos Santos spake thusly:
+>> Ensure that the GCC_COLORS environment variable is empty when calling
+>> ccache. When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to
+>> GCC but this flag requires GCC v4.9 or later. Older versions complain
+>> about the unrecognized command line option.
 > 
-> and breaks at linking stage:
+> So, while fixing my own patch about the issue [0], I noticed that I was
+> not even able to make it fail in the first place...
 > 
->   CCLD     avahi-publish
-> /home/buildroot/br7_freeswitch/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/5.4.0/../../../../i586-buildroot-linux-uclibc/bin/ld: avahi_publish-avahi-publish.o: undefined reference to symbol 'libintl_dgettext'
-> /home/buildroot/br7_freeswitch/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/lib32/libintl.so.8: error adding symbols: DSO missing from command line
-> collect2: error: ld returned 1 exit status
+> I'm using this defconfig, which uses a gcc-4.7:
 > 
-> To reproduce use this minimal defconfig:
+>    BR2_x86_i686=y
+>    BR2_CCACHE=y
+>    BR2_TOOLCHAIN_EXTERNAL=y
 > 
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_PACKAGE_GETTEXT=y
-> BR2_PACKAGE_DBUS=y
-> BR2_PACKAGE_AVAHI=y
+> and Thomas reported he was also unable to reproduce the failure with:
 > 
-> and build gettext before avahi.
+>    BR2_sh=y
+>    BR2_sh4a=y
+>    BR2_CCACHE=y
+>    BR2_TOOLCHAIN_EXTERNAL=y
+>    BR2_INIT_NONE=y
+>    BR2_SYSTEM_BIN_SH_NONE=y
+>    # BR2_PACKAGE_BUSYBOX is not set
+>    BR2_PACKAGE_DEVMEM2=y
+>    # BR2_TARGET_ROOTFS_TAR is not set
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> which also uses gcc-4.7.
+> 
+> Can you provide a reliable way to reproduce the issue, please?
 
-I haven't looked at your patch yet, but there is another patch pending
-in patchwork for what looks like the same issue, and some discussion
-took place on it: http://patchwork.ozlabs.org/patch/683732/.
+What does "echo $GCC_COLORS" say? And remember that you must not
+redirect the output to a file or pipe.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Carlos Santos (Casantos) - DATACOM, P&D
+?Something must be done. This is something. Therefore we must do it.?
+(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
