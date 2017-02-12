@@ -1,94 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Feb 2017 23:01:16 +0100
-Subject: [Buildroot] [PATCH v3] support/download/git: Prioritize remote
- archive
-In-Reply-To: <1472060848-14178-1-git-send-email-kamath.ben@gmail.com>
-References: <1471469135-19009-1-git-send-email-kamath.ben@gmail.com>
- <1472060848-14178-1-git-send-email-kamath.ben@gmail.com>
-Message-ID: <ae7956e3-a69e-ca48-9541-9bc0104118f3@mind.be>
+From: Lijun QIN <lijun.qin2008@gmail.com>
+Date: Sun, 12 Feb 2017 16:28:40 -0600
+Subject: [Buildroot] bison-2.4.3 compiling issue
+Message-ID: <CALD51P_KryQ2hGeqZqYj_vEt6d_Pmcn39aL=p9p6KrW534UGTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Benjamin,
+I have two projects  using buildroot.
+
+Project one - buildroot-2011.05 + 32-Bit Ubuntu Linux 12.04 works,
+Project two - buildroot-2015.11 + 32-Bit Ubuntu Linux 16.04 works
+I moved buildroot-2011.05 to Ubuntu Linux 16.04, intending to use Single
+build machine for both projects.
+
+But buildroot-2011.05 + 32-Bit Ubuntu Linux 16.04 works fails at
+host-bison-2.4.3
+Could someboy could offer any adivce ? Using single really helps me
+increase efficiency.
+Thank you so much,
+Lijun Qin
 
 
-On 24-08-16 19:47, Benjamin Kamath wrote:
-> Attempt to do a remote archive since it shortcuts us past a few steps when
-> available. Additionally. if the git server has uploadArchive.allowUnreachable
-> set to true, then this method can also work on arbitrary sha1s, offering a huge
-> speed advantage over a full clone.
-> 
-> Signed-off-by: Benjamin Kamath <kamath.ben@gmail.com>
+A portion of log attached:
 
- After some discussion at the Buildroot developer meeting, we decided not to
-accept this patch, for the following reasons.
-
-* We want to keep the download/git script as simple as reasonably possible.
-
-* Not many upstream sites support this option.
-
-* We now have good support for shallow clones; in most cases, the shallow clone
-handling will give equal benefits.
-
-
- So I've marked this patch as rejected in patchwork.
-
- If you feel it is important to include this feature in Buildroot after all,
-feel free to argue your case.
-
- And finally, sorry that it took so long before we reacted to your patch.
-
- Regards,
- Arnout
-
-
-> ---
-> Changes v2 -> v3:
->     - Indicate to user if the remote archive fails (suggested by Yann)
->     - redirect all errors from git archive to /dev/null since this
->       operation fails on most public git servers
-> Changes v1 -> v2:
->     - Skip remote archive for repositories with submodules (suggested by Yann)
-> 
->  support/download/git | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/support/download/git b/support/download/git
-> index 416cd1b..ec49057 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -36,6 +36,22 @@ _git() {
->      eval ${GIT} "${@}"
->  }
->  
-> +# Try a remote archive, since it is as fast as a shallow clone and can give us
-> +# an archive directly. Also, if uploadArchive.allowUnreachable is set to true
-> +# on the remote, this will also work for arbitrary sha1s, and will offer a
-> +# considerable speedup over a full clone. This will not work for submodules.
-> +# Since this command fails on most public git servers, consign the output to 
-> +# oblivion but still trace as a warning.
-> +if [ ${recurse} -eq 0 ]; then
-> +    printf "Doing remote archive\n"
-> +    if _git archive --format=tar.gz --prefix=${basename}/ --remote=${repo} \
-> +        -o ${output} ${cset} >/dev/null 2>&1; then
-> +        exit 0
-> +    else
-> +        printf "Remote archive failed, falling back to cloning\n"
-> +    fi
-> +fi
-> +
->  # Try a shallow clone, since it is faster than a full clone - but that only
->  # works if the version is a ref (tag or branch). Before trying to do a shallow
->  # clone we check if ${cset} is in the list provided by git ls-remote. If not
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+In file included from yyerror.c:20:0:
+./stdio.h:458:1: error: 'gets' undeclared here (not in a function)
+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+ ^
+depbase=`echo dup-safer-flag.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+/usr/bin/gcc  -I.     -O2
+-I/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/include
+-I/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/host/usr/include
+-MT dup-safer-flag.o -MD -MP -MF $depbase.Tpo -c -o dup-safer-flag.o
+dup-safer-flag.c &&\
+mv -f $depbase.Tpo $depbase.Po
+Makefile:1303: recipe for target 'yyerror.o' failed
+make[6]: *** [yyerror.o] Error 1
+make[6]: *** Waiting for unfinished jobs....
+make[6]: Leaving directory
+'/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-bison-2.4.3/lib'
+Makefile:1325: recipe for target 'all-recursive' failed
+make[5]: *** [all-recursive] Error 1
+make[5]: Leaving directory
+'/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-bison-2.4.3/lib'
+Makefile:1100: recipe for target 'all' failed
+make[4]: *** [all] Error 2
+make[4]: Leaving directory
+'/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-bison-2.4.3/lib'
+Makefile:1002: recipe for target 'all-recursive' failed
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory
+'/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-bison-2.4.3'
+Makefile:933: recipe for target 'all' failed
+make[2]: *** [all] Error 2
+make[2]: Leaving directory
+'/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-bison-2.4.3'
+package/Makefile.package.in:295: recipe for target
+'/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-bison-2.4.3/.stamp_built'
+failed
+make[1]: ***
+[/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2/output/build/host-bison-2.4.3/.stamp_built]
+Error 2
+make[1]: Leaving directory
+'/home/dfvsmdev/workspace/obi/obi-eval/rootfs/buildroot-2011.05-sdk5.1.2'
+Makefile:343: recipe for target 'rootfs.all' failed
+make: *** [rootfs.all] Error 2
+dfvsmdev at dfvsmdev-PowerEdge-R530:~/workspace/obi/obi-eval$
+/host-bison-2.4.3/.stamp_built' failed
+> ^C
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170212/a0eab943/attachment.html>
