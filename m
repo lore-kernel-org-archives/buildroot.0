@@ -1,114 +1,107 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Feb 2017 15:53:11 +0100
-Subject: [Buildroot] [PATCH 7/7 v4] support/test-pkg: print number of
-	toolchain and progress
-In-Reply-To: <cover.1486911180.git.yann.morin.1998@free.fr>
-References: <cover.1486911180.git.yann.morin.1998@free.fr>
-Message-ID: <05e8a8e4a66b175edcd8f6250c583051f77eeae9.1486911180.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Feb 2017 15:53:48 +0100
+Subject: [Buildroot] [PATCH v5] gqrx: new package
+In-Reply-To: <20170210140112.26552-1-gwenj@trabucayre.com>
+References: <20170210140112.26552-1-gwenj@trabucayre.com>
+Message-ID: <20170212155348.0f14e2a3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- support/scripts/test-pkg | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+Hello,
 
-diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-index 9626c1a..8d47415 100755
---- a/support/scripts/test-pkg
-+++ b/support/scripts/test-pkg
-@@ -6,7 +6,7 @@ TOOLCHAINS_URL='http://autobuild.buildroot.org/toolchains/configs/toolchain-conf
- main() {
-     local o O opts
-     local cfg dir pkg random url toolchain
--    local ret nb nb_skip nb_fail
-+    local ret nb nb_skip nb_fail nb_tc
-     local -a toolchains
- 
-     o='hc:d:p:r:t:'
-@@ -70,21 +70,25 @@ main() {
-                  )
-                )
- 
--    if [ ${#toolchains[@]} -eq 0 ]; then
-+    nb_tc="${#toolchains[@]}"
-+    if [ ${nb_tc} -eq 0 ]; then
-         printf "error: no toolchain found (networking issue?)\n" >&2; exit 1
-     fi
-+    printf "Found %d toolchains\n" ${nb_tc}
- 
-     nb=0
-     nb_skip=0
-     nb_fail=0
-     for toolchain in "${toolchains[@]}"; do
-+        : $((nb++))
-+        printf "%40s [%*d/%d]: " "$(basename "${toolchain}" .config)" \
-+                                 ${#nb_tc} ${nb} ${nb_tc}
-         build_one "${dir}" "${toolchain}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
-         case ${ret} in
--        (0) ;;
--        (1) : $((nb_skip++));;
--        (2) : $((nb_fail++));;
-+        (0) printf "OK\n";;
-+        (1) : $((nb_skip++)); printf "SKIPPED\n";;
-+        (2) : $((nb_fail++)); printf "FAILED\n";;
-         esac
--        : $((nb++))
-     done
- 
-     printf "%d builds, %d skipped, %d failed\n" ${nb} ${nb_skip} ${nb_fail}
-@@ -106,13 +110,10 @@ build_one() {
-     # Using basename(1) on a URL works nicely
-     toolchain="$(basename "${url}" .config)"
- 
--    printf "%40s: " "${toolchain}"
--
-     dir="${dir}/${toolchain}"
-     mkdir -p "${dir}"
- 
-     if ! curl -s "${url}" >"${dir}/.config"; then
--        printf "FAILED\n"
-         return 2
-     fi
- 
-@@ -125,7 +126,6 @@ build_one() {
-     cat "${cfg}" >>"${dir}/.config"
- 
-     if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
--        printf "FAILED\n"
-         return 2
-     fi
-     # We want all the options from the snippet to be present as-is (set
-@@ -136,7 +136,6 @@ build_one() {
-     # done in the same locale.
-     comm -23 <(sort "${cfg}") <(sort "${dir}/.config") >"${dir}/missing.config"
-     if [ -s "${dir}/missing.config" ]; then
--        printf "SKIPPED\n"
-         return 1
-     fi
-     # Remove file, it's empty anyway.
-@@ -144,18 +143,14 @@ build_one() {
- 
-     if [ -n "${pkg}" ]; then
-         if ! make O="${dir}" "${pkg}-dirclean" >> "${dir}/logfile" 2>&1; then
--            printf "FAILED\n"
-             return 2
-         fi
-     fi
- 
-     # shellcheck disable=SC2086
-     if ! make O="${dir}" ${pkg} >> "${dir}/logfile" 2>&1; then
--        printf "FAILED\n"
-         return 2
-     fi
--
--    printf "OK\n"
- }
- 
- help() {
+On Fri, 10 Feb 2017 15:01:12 +0100, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Gqrx is an open source software defined radio (SDR) receiver implemented
+> using GNU Radio and the Qt GUI toolkit. Currently it works on Linux
+> and Mac with hardware supported by gr-osmosdr, including Funcube Dongle,
+> RTL-SDR, Airspy, HackRF, BladeRF, RFSpace, USRP and SoapySDR.
+> 
+> Gqrx can operate as an AM/FM/SSB receiver with audio output or as an
+> FFT-only instrument. There are also various hooks for interacting
+> with external application using network sockets.
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+I've applied to the next branch, after fixing a few issues, see below.
+
+>  package/Config.in                                |  1 +
+>  package/gqrx/0001-fix_compilation_in_gcc-6.patch | 34 +++++++++++++++++++
+>  package/gqrx/Config.in                           | 43 ++++++++++++++++++++++++
+>  package/gqrx/gqrx.hash                           |  2 ++
+>  package/gqrx/gqrx.mk                             | 15 +++++++++
+
+You forgot to add an entry to the DEVELOPERS file, so I've added that.
+This way you'll receive notifications when there are build failures! :-)
+
+> diff --git a/package/gqrx/0001-fix_compilation_in_gcc-6.patch b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
+> new file mode 100644
+> index 0000000..e1824c3
+> --- /dev/null
+> +++ b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
+> @@ -0,0 +1,34 @@
+> +From e6baaee4968345a53e977f593362267a91041cff Mon Sep 17 00:00:00 2001
+> +From: Valentin Ochs <a@0au.de>
+> +Date: Fri, 21 Oct 2016 20:12:50 +0200
+> +Subject: [PATCH 05/34] Cosmetic & readability changes
+
+This 05/34 doesn't make sense in the context of Buildroot, so I've
+dropped that.
+
+> diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+> new file mode 100644
+> index 0000000..c6bef76
+> --- /dev/null
+> +++ b/package/gqrx/Config.in
+> @@ -0,0 +1,43 @@
+> +comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_USE_WCHAR || BR2_STATIC_LIBS
+> +
+> +comment "gqrx needs qt5, gnuradio, fftw's single precision, alsa-lib or portaudio"
+> +	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
+> +		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO) || !BR2_PACKAGE_QT5
+> +
+> +config BR2_PACKAGE_GQRX
+> +	bool "gqrx"
+> +	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO # gr-audio
+
+Not the default of this package, but this is really annoying. What do
+you think of changing the BR2_PACKAGE_GNURADIO_AUDIO option to do this:
+
+	select BR2_PACKAGE_ALSA_LIB if !BR2_PACKAGE_PORTAUDIO
+
+This way, we're sure at least one of the two is selected, and we can
+then directly "select BR2_PACKAGE_GNURADIO_AUDIO" within having to
+worry about this anymore.
+
+> +	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
+
+This one is also annoying. Did you see the work that was posted on the
+mailing list a while ago to allow building all variants of fftw? This
+would allow to select the fftw package like any other. It would be
+really really better. If you have some time to pick up this work and
+finalize it, it would be nice.
+
+> +	depends on BR2_PACKAGE_GNURADIO
+> +	depends on BR2_PACKAGE_QT5
+> +	depends on BR2_INSTALL_LIBSTDCPP # boost, qt5
+> +	depends on !BR2_STATIC_LIBS # qt5
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, qt5
+> +	depends on BR2_USE_WCHAR # boost, qt5
+
+Since you're using "depends on BR2_PACKAGE_QT5", there is no need to
+replicate the Qt5 dependencies here. So I've dropped the ", qt5"
+comments and the BR2_STATIC_LIBS dependency.
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
