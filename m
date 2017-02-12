@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Feb 2017 15:37:49 +0100
-Subject: [Buildroot] [PATCH v5] gtest/gmock: bump to version 1.8.0
-In-Reply-To: <c410065bcf02dbf9548965118905fb4e0edfcc40.1486901824.git.casantos@datacom.ind.br>
-References: <1473290219-27701-1-git-send-email-casantos@datacom.ind.br>
- <c410065bcf02dbf9548965118905fb4e0edfcc40.1486901824.git.casantos@datacom.ind.br>
-Message-ID: <20170212153749.7f9aff72@free-electrons.com>
+Date: Sun, 12 Feb 2017 15:40:18 +0100
+Subject: [Buildroot] [git commit branch/next] classpath: fix typo in
+	CLASSPATH_CONF_OPTS definition
+Message-ID: <20170212144106.F3478817A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=292998ca752a899ef0d91e2507e47535af7178ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 12 Feb 2017 10:17:27 -0200, Carlos Santos wrote:
+This typo was introduced by commit
+8f8c02e596e781df77b8cd7d5e7b3c33ae5e36b2 ("classpath: bump to version
+0.99").
 
-> +define HOST_GTEST_INSTALL_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
-> +		$(HOST_DIR)/usr/bin/gmock_gen.py
-> +	ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/classpath/classpath.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is there a good reason to not install directly gmock_gen.py as
-gmock_gen ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
+index 97b7f0d..e4cd0f8 100644
+--- a/package/classpath/classpath.mk
++++ b/package/classpath/classpath.mk
+@@ -11,7 +11,7 @@ CLASSPATH_CONF_OPTS = \
+ 	--disable-rpath \
+ 	--disable-Werror \
+ 	--disable-gconf-peer \
+-	--disable-gjdoc
++	--disable-gjdoc \
+ 	--enable-tools
+ 
+ # classpath assumes qt runs on top of X11, but we
