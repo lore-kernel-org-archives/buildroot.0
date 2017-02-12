@@ -1,53 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Feb 2017 15:14:31 +0100
-Subject: [Buildroot] [PATCH v3] classpath: bump to version 0.99
-In-Reply-To: <20170212020444.32045-1-m.hoffmann@cartelsol.com>
-References: <20170212015451.16715-1-m.hoffmann@cartelsol.com>
- <20170212020444.32045-1-m.hoffmann@cartelsol.com>
-Message-ID: <20170212151431.1fe6cce3@free-electrons.com>
+Date: Sun, 12 Feb 2017 15:15:16 +0100
+Subject: [Buildroot] [git commit branch/next] e2fsprogs: bump to version
+	1.43.4
+Message-ID: <20170212141522.B624E82116@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b6886d42f251e040b1267d9d46f0d1f49ed3098a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 12 Feb 2017 03:04:44 +0100, Marcus Hoffmann wrote:
-> Drop both patches since they are included upstream.
-> We don't need to autoreconf now.
-> 
-> Note: classpath 0.99 has a bug in it's autoconf scripts, such that
-> configure always fails when specifying --disable-tools[1].
-> We enable these for now.
-> 
-> Also explicitly disable GJDoc generation, as this defaults to on now.
-> --disable-plugin is not needed any more, since this is now the default.
-> 
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70660
-> 
-> Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-> ---
-> Changes v2 -> v3:
->   - Fixed announcement url in .hash file (This time for real...)
->   - Clarify dropping the --disable-plugin option.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, thanks. I have two comments though:
-
- 1. If you're using/interested in classpath, would you mind adding your
-    name in the DEVELOPERS file for this package? Same if you're
-    using/interested in jamvm. Those two packages are currently not
-    associated to any developer, it would be nice to have a developer
-    interested in those two packages.
-
- 2. classpath has a "depends on BR2_PACKAGE_JAMVM" and jamvm has a
-    "select BR2_PACKAGE_CLASSPATH" which feels a bit like a circular
-    dependency. It would be nice to fix that up as well.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 5fd9f3d..cf41e3a 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,2 +1,2 @@
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.3/sha256sums.asc
+-sha256 744ca4e9a8e6c943601b2744d1ae658e5f37d35b5ea5b1dea86985320bd87f37  e2fsprogs-1.43.3.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.4/sha256sums.asc
++sha256 54b3f21123a531a6a536b9cdcc21344b0122a72790dbe4dacc98e64db25e4a24  e2fsprogs-1.43.4.tar.xz
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 0253510..e501684 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.43.3
++E2FSPROGS_VERSION = 1.43.4
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
