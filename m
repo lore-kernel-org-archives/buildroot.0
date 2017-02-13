@@ -1,46 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Feb 2017 18:01:46 +0100
-Subject: [Buildroot] [git commit] riemann-c-client: disable parallel make
-Message-ID: <20170213170237.86E6C7FDA0@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 13 Feb 2017 18:24:51 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: fix build on powerpc64le
+Message-ID: <1487006691-34766-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=896455cff7ff46dd069c74be39c39aa85cb4e129
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+There is an issue with powerpc64le and boost::uuids::random_generator on the
+following line of code (from include/boost/uuid/seed_rng.hpp):
+sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
+This line "inspects the first couple bytes (here eight) of the std::rand
+function to seed some rng. Due to the implementation of process_bytes and
+inlining happening, it seems that one of the loops therein uses &rand-1 as
+some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
+the link will succeed."
+See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
 
 Fixes:
-http://autobuild.buildroot.net/results/2f8/2f85a2d19232365f7e5fddde6092af9dd74d4518/
-http://autobuild.buildroot.net/results/80d/80d83c650c668ee1e87c288bd7a0ce63eab95631/
+ - http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
 
-The build system doesn't specify any dependencies between the generated
-header files and the source files including them, causing a race condition:
-
-  GEN      lib/riemann/proto/riemann.pb-c.c
-  GEN      lib/riemann/proto/riemann.pb-c.h
-  CC       src/src_riemann_client-riemann-client.o
-In file included from ./lib/riemann/riemann-client.h:23:0,
-                 from src/riemann-client.c:18:
-./lib/riemann/attribute.h:21:40: fatal error: riemann/proto/riemann.pb-c.h: No such file or directory
-
-Work around it by forcing non-parallel make.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/riemann-c-client/riemann-c-client.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/domoticz/domoticz.mk | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/package/riemann-c-client/riemann-c-client.mk b/package/riemann-c-client/riemann-c-client.mk
-index 5593519..c8a411c 100644
---- a/package/riemann-c-client/riemann-c-client.mk
-+++ b/package/riemann-c-client/riemann-c-client.mk
-@@ -10,6 +10,7 @@ RIEMANN_C_CLIENT_SITE = https://github.com/algernon/riemann-c-client/releases/do
- RIEMANN_C_CLIENT_LICENSE = LGPLv3+
- RIEMANN_C_CLIENT_LICENSE_FILES = LICENSE
- RIEMANN_C_CLIENT_INSTALL_STAGING = YES
-+RIEMANN_C_CLIENT_MAKE = $(MAKE1)
- RIEMANN_C_CLIENT_DEPENDENCIES = \
- 	host-pkgconf protobuf-c \
- 	$(if $(BR2_PACKAGE_GNUTLS),gnutls) \
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index f43dbda..48cdbc4 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -18,6 +18,21 @@ DOMOTICZ_DEPENDENCIES = \
+ 	sqlite \
+ 	zlib
+ 
++# Fixes:
++# http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
++# There is an issue with powerpc64le and boost::uuids::random_generator on the
++# following line of code (from include/boost/uuid/seed_rng.hpp):
++# sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
++# This line "inspects the first couple bytes (here eight) of the std::rand
++# function to seed some rng. Due to the implementation of process_bytes and
++# inlining happening, it seems that one of the loops therein uses &rand-1 as
++# some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
++# the link will succeed."
++# See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
++ifeq ($(BR2_powerpc64le),y)
++DOMOTICZ_CXXFLAGS += -O0
++endif
++
+ # Due to the dependency on mosquitto, domoticz depends on
+ # !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
+ DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
+@@ -27,7 +42,8 @@ DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
+ DOMOTICZ_CONF_OPTS += \
+ 	-DUSE_BUILTIN_LUA=OFF \
+ 	-DUSE_BUILTIN_SQLITE=OFF \
+-	-DUSE_BUILTIN_MQTT=OFF
++	-DUSE_BUILTIN_MQTT=OFF \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(DOMOTICZ_CXXFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ DOMOTICZ_DEPENDENCIES += libusb
+-- 
+2.5.0
