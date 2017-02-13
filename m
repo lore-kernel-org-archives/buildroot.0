@@ -1,71 +1,58 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Mon, 13 Feb 2017 16:28:06 +0100
-Subject: [Buildroot] Shell scripts does not emit finished() to QProcess
-In-Reply-To: <1486997512738-156891.post@n4.nabble.com>
-References: <1486997512738-156891.post@n4.nabble.com>
-Message-ID: <ce6994a6-76f7-a075-51b6-e80dc306cdd8@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 13 Feb 2017 13:29:21 -0200
+Subject: [Buildroot] [PATCH 1/2 v2] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.0.0
+Message-ID: <1486999762-4118-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Logi,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+Changes since v1:
+- None
 
-sounds interesting, i never experienced anything similar.
-Could you pls post a short example code which can reproduce the problem?
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-In the meantime you can also try to debug the issue with strace -f , it
-might shed more light.
-
-Zoltan Gyarmati
-https://zgyarmati.de
-
-On 02/13/2017 03:51 PM, LogiSch17 wrote:
-> Hi guys,
-> Since I updated to 2016.11 i don?t get any exit messages from shell scripts
-> when i execute them from my Qt Programm via QProcess. But the scripts has
-> been executed.
->
-> Also
-> process->waitForFinished(); 
-> does only wait its default 30000msecs.
->
-> In my test script i am only have on mkdir like:
->
-> #!/bin/sh
-> mkdir /usr/test
-> exit 0
->  
-> I am also connected to errorOccurred(), but i don?t get any errors. 
->
-> When i am testing my code on my arch desktop everything works fine.
->
-> Does anyone have the same problem?
-> Or can anyone test this at the newest buildroot version?
-> I would be very grateful for helping.
->
-> Greetings
-> Logi
->
->
->
->
-> --
-> View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Shell-scripts-does-not-emit-finished-to-QProcess-tp156891.html
-> Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170213/11eeb8b2/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170213/11eeb8b2/attachment.asc>
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 2c62c48..1ff72f7 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 13.0.4
++MESA3D_HEADERS_VERSION = 17.0.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index b3c4b77..09d3ef8 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-February/000294.html
+-sha256 a95d7ce8f7bd5f88585e4be3144a341236d8c0fc91f6feaec59bb8ba3120e726  mesa-13.0.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-dev/2017-February/144115.html
++sha256 39db3d59700159add7f977307d12a7dfe016363e760ad82280ac4168ea668481  mesa-17.0.0.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 0c68ded..3bfb005 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 13.0.4
++MESA3D_VERSION = 17.0.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.7.4
