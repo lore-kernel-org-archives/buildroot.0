@@ -1,83 +1,60 @@
-From: Lionel Flandrin <lionel@svkt.org>
-Date: Mon, 13 Feb 2017 15:57:16 +0100
-Subject: [Buildroot] [PATCH 2/2] u-boot: add support for full image
- socfpga mkpimage support
-In-Reply-To: <20170213152747.13a39b36@free-electrons.com>
-References: <20170130103326.14427-2-lionel@svkt.org>
- <20170213135934.32014-1-lionel@svkt.org>
- <20170213135934.32014-2-lionel@svkt.org>
- <20170213152747.13a39b36@free-electrons.com>
-Message-ID: <20170213145716.e7gshandk5sokluc@ed>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Feb 2017 15:58:29 +0100
+Subject: [Buildroot] [PATCH 1/1] Install raptor package in staging
+In-Reply-To: <1182785180.5405440.1486972873694@mail.yahoo.com>
+References: <1182785180.5405440.1486972873694.ref@mail.yahoo.com>
+ <1182785180.5405440.1486972873694@mail.yahoo.com>
+Message-ID: <20170213155829.7663c0e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 13, 2017 at 03:27:47PM +0100, Thomas Petazzoni wrote:
-> Hello,
+Hello,
 
-Hello Thomas,
+Thanks for your contribution! This looks mostly good, but I have a few
+comments below.
 
-> Thanks for this new iteration!
+The commit title should be:
+
+	raptor: install package to staging
+
+indeed, for consistency reasons, we want all commit titles to follow
+the format:
+
+	<package>: <short description>
+
+On Mon, 13 Feb 2017 08:01:13 +0000 (UTC), Erwan Gautron wrote:
+> Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
+
+Could you expand the commit log to explain *why* we want to install
+this package to staging?
+
+> ?package/raptor/raptor.mk | 2 +-
+> ?1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> On Mon, 13 Feb 2017 14:59:34 +0100, Lionel Flandrin wrote:
-> 
-> >  ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
-> > +ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-> > +UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
-> > +UBOOT_CRC_ALTERA_SOCFPGA_HEADER_VERSION = 0
-> > +else
-> > +UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = u-boot-dtb.bin
-> > +UBOOT_CRC_ALTERA_SOCFPGA_HEADER_VERSION = 1
-> > +endif
-> 
-> So when the SPL is used, the header version should always be 0, and
-> when the full U-Boot is used directly, the header version should always
-> be 1 ?
-> 
-> I thought 0 was for older SoCs, and 1 for newer SoCs. Or are we sure
-> that SPL booting will only ever be used on older SoCs, and direct U-Boot
-> booting will only be used on newer SoCs ?
+> diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+> index aea14e3..a2c2b23 100644
+> --- a/package/raptor/raptor.mk
+> +++ b/package/raptor/raptor.mk
+> @@ -13,7 +13,7 @@ RAPTOR_LICENSE_FILES = LICENSE.txt
+> ?
+> ?# Flag is added to make sure the patch is applied for the configure.ac of raptor.
+> ?RAPTOR_AUTORECONF = YES
+> -
+> +RAPTOR_INSTALL_STAGING=YES
 
-Yeah I considered adding an option for selecting the version,
-technically it could go either way but in practice I can't think of a
-situation where you'd want a v1 header with a SPL or vice versa.
+Missing spaces before and after the equal sign.
 
-Basically:
-Cyclone V/Arria V ->  64K internal RAM + header v0
-Arria 10          -> 256K internal RAM + header v1
+I could have fixed this and the commit title myself, but I can't fix
+the reason why this patch is useful. So can you fix all three issues
+and submit an updated version of your patch?
 
-I believe the main reason for the v1 header is simply to allow file
-sizes greater than 64k.
+Thanks a lot!
 
-Unless you managed to create a full u-boot build smaller than 64K
-you'd never be able to make a v0 image without SPL.
-
-You could technically create a v1 SPL image (which the current
-Makefile wouldn't allow) but I'm not sure why anybody would want that.
-
-So I thought adding an option might end up being more confusing than
-helpful even if it results in a bit of "magic" in the makefile.
-
-
-On a completely unrelated tangent: I kept the previous naming
-convention for the resulting image, which creates ".crc"
-files. Changing this would break build systems that use the SPL images
-but I thought it was a rather unexpected extension for these files. My
-previous patch used ".mkpimage". Altera uses "-mkpimage.bin".
-
-That being said it might not be worth breaking people's builds over
-that.
-
-> Thomas
-
+Thomas
 -- 
-Lionel Flandrin
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170213/cb2bc337/attachment.asc>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
