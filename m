@@ -1,52 +1,57 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 13 Feb 2017 22:37:13 +0100
-Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
-In-Reply-To: <8760kema97.fsf@dell.be.48ers.dk>
-References: <20170213093502.26507-1-peter@korsgaard.com>
- <20170213132925.5324f141@free-electrons.com>
- <8760kema97.fsf@dell.be.48ers.dk>
-Message-ID: <20170213213713.GA12810@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Feb 2017 22:37:09 +0100
+Subject: [Buildroot] [git commit] glmark2: bump version to fix build
+Message-ID: <20170213213728.2F196821E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-Peter Korsgaard wrote,
+commit: https://git.buildroot.net/buildroot/commit/?id=8b8b4f7bfe50a33bbda9ed0cbbdc5170c3147625
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  > Hello,
->  > On Mon, 13 Feb 2017 10:35:02 +0100, Peter Korsgaard wrote:
-> 
->  >> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
->  >> index 1d174c18b..3750897bb 100644
->  >> --- a/package/kmsxx/Config.in
->  >> +++ b/package/kmsxx/Config.in
->  >> @@ -4,6 +4,7 @@ config BR2_PACKAGE_KMSXX
->  >> depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
->  >> depends on BR2_INSTALL_LIBSTDCPP
->  >> depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
->  >> +	depends on !BR2_m68k # gcc ice
-> 
->  > As usual, I really prefer if we report the bug to gcc upstream, and
->  > then do a depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_xyz. Otherwise, it's
->  > really tricky to keep track of when this or that issue gets resolved
->  > and when we can re-enable m68k.
-> 
->  > CC'ing Waldemar on this.
-> 
-> That's also fine by me if somebody wants to do that. I personally don't
-> know/care enough about m68k, and it has been failing since October
-> without anything happening, so I think we should disable it.
+The package otherwise fails to build with a recent toolchain with GCC6
+(tested with Linaro ARM 2016.11).
 
-It is not that nothing happened.
-I think this would be solved by my following patch:
-http://buildroot-busybox.2317881.n4.nabble.com/PATCH-m68k-add-special-gcc-flag-to-avoid-ICE-for-coldfire-td151151.html
+It used to fail at sqrt check during package configuration:
+ Checking for function sqrt               : not found
+ The configuration failed
 
-Did you had a chance to discuss the required changes with Arnout in
-the last developer meeting?
+Bumping version to latest HEAD fixes the issue as explained in the
+following discussion:
+https://github.com/glmark2/glmark2/issues/15
 
-best regards
- Waldemar
+Fixes:
+
+  http://autobuild.buildroot.net/results/8dc9400505b9087ce290981d95486598df0beb56/
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+[Thomas: add reference to autobuilder failure.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glmark2/glmark2.hash | 2 +-
+ package/glmark2/glmark2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/glmark2/glmark2.hash b/package/glmark2/glmark2.hash
+index 7868b37..92c53e5 100644
+--- a/package/glmark2/glmark2.hash
++++ b/package/glmark2/glmark2.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 421bdb87ed8c04a25f60816c7754d45e91a45136f5489df59d74001c159882b8 glmark2-fa71af2dfab711fac87b9504b6fc9862f44bf72a.tar.gz
++sha256 ea59bd267a88e2c773423eec43f7cb90b0ca1c369762e836dec575ebdcdcc012 glmark2-7215c0f337dae0b232535549c37fca441747a891.tar.gz
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index e35e36a..f9631a0 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GLMARK2_VERSION = fa71af2dfab711fac87b9504b6fc9862f44bf72a
++GLMARK2_VERSION = 7215c0f337dae0b232535549c37fca441747a891
+ GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
+ GLMARK2_LICENSE = GPLv3+ SGIv1
+ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
