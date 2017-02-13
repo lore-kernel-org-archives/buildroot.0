@@ -1,42 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Feb 2017 15:32:52 +0100
-Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
-In-Reply-To: <20170213132925.5324f141@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 13 Feb 2017 13:29:25 +0100")
-References: <20170213093502.26507-1-peter@korsgaard.com>
- <20170213132925.5324f141@free-electrons.com>
-Message-ID: <8760kema97.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 13 Feb 2017 08:44:45 -0600
+Subject: [Buildroot] [PATCH 1/1] Install raptor package in staging
+In-Reply-To: <1182785180.5405440.1486972873694@mail.yahoo.com>
+References: <1182785180.5405440.1486972873694.ref@mail.yahoo.com>
+ <1182785180.5405440.1486972873694@mail.yahoo.com>
+Message-ID: <CANQCQpas02hTnx7e4y1DDjc+Pe9bR78oU0T4wbLXs_wtaiqDCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Erwan,
 
- > Hello,
- > On Mon, 13 Feb 2017 10:35:02 +0100, Peter Korsgaard wrote:
+On Mon, Feb 13, 2017 at 2:01 AM, Erwan Gautron <erwan.gautron@yahoo.fr> wrote:
+> Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
+> ---
+>  package/raptor/raptor.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+> index aea14e3..a2c2b23 100644
+> --- a/package/raptor/raptor.mk
+> +++ b/package/raptor/raptor.mk
+> @@ -13,7 +13,7 @@ RAPTOR_LICENSE_FILES = LICENSE.txt
+>
+>  # Flag is added to make sure the patch is applied for the configure.ac of
+> raptor.
+>  RAPTOR_AUTORECONF = YES
+> -
+> +RAPTOR_INSTALL_STAGING=YES
 
- >> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
- >> index 1d174c18b..3750897bb 100644
- >> --- a/package/kmsxx/Config.in
- >> +++ b/package/kmsxx/Config.in
- >> @@ -4,6 +4,7 @@ config BR2_PACKAGE_KMSXX
- >> depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
- >> depends on BR2_INSTALL_LIBSTDCPP
- >> depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
- >> +	depends on !BR2_m68k # gcc ice
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
- > As usual, I really prefer if we report the bug to gcc upstream, and
- > then do a depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_xyz. Otherwise, it's
- > really tricky to keep track of when this or that issue gets resolved
- > and when we can re-enable m68k.
+>  RAPTOR_CONF_OPTS =\
+>      --with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config \
+>      --with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config
+> --
+> 2.7.4
+>
 
- > CC'ing Waldemar on this.
 
-That's also fine by me if somebody wants to do that. I personally don't
-know/care enough about m68k, and it has been failing since October
-without anything happening, so I think we should disable it.
 
 -- 
-Bye, Peter Korsgaard
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
