@@ -1,66 +1,65 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 13 Feb 2017 23:34:54 +0100
-Subject: [Buildroot] [PATCH v2 1/2] qt5base: use system/buildroot provided
-	freetype
-Message-ID: <20170213223455.9915-1-ps.report@gmx.net>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 13 Feb 2017 20:41:29 -0200 (BRST)
+Subject: [Buildroot] [PATCH v2] infra/ccache: avoid color diagnostics
+ with GCC older than v4.9
+In-Reply-To: <20170212141425.GE11105@free.fr>
+References: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
+ <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
+ <20170212141425.GE11105@free.fr>
+Message-ID: <1044520233.10180443.1487025689348.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select (and use) builroot provided freetype in case qt5base gui is
-selected (gui without freetype/font support makes not much sense
-and gives compile errors).
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, arnout at mind.be,
+> gustavo at zacarias.com.ar
+> Sent: Sunday, February 12, 2017 12:14:25 PM
+> Subject: Re: [PATCH v2] infra/ccache: avoid color diagnostics with GCC older than v4.9
 
-Qt 5.6 needs some support to find the include headers, 5.8 is
-clever enough inherently.
+> Carlos, All,
+[...]
+> 
+> Can you provide a reliable way to reproduce the issue, please?
+> 
+> Regards,
+> Yann E. MORIN.
 
-Fixes [1] (by avoiding the build-in freetype library which depends
-on avtivated libpng support):
+Sorry, I forgot so send this yesterday. Here is a reliable reproducer:
 
-  Project ERROR: Library 'libpng' is not defined.
-  make[3]: *** [sub-3rdparty-freetype-make_first] Error 3
+$ cat defconfig 
+BR2_powerpc=y
+BR2_powerpc_8548=y
+BR2_CCACHE=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng_e500v2-linux-gnuspe.tar.xz"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="powerpc-ctng_e500v2-linux-gnuspe"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_OPENSSL=y
+$ 
+$ echo $GCC_COLORS 
+error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01
+$
+$ make V=1 BR2_JLEVEL=1 openssl-dirclean openssl
+[...]
+/work/ccache-colors/host/usr/bin/powerpc-ctng_e500v2-linux-gnuspe-gcc -I. -I.. -I../include  -fPIC -DOPENSSL_PIC -DZLIB_SHARED -DZLIB -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H -DB_ENDIAN -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mabi=spe -mfloat-gprs=double -Wa,-me500x2 -Os  -Wall -DOPENSSL_BN_ASM_MONT -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM -DAES_ASM -DVPAES_ASM -c  -o ppccpuid.o ppccpuid.s
+powerpc-ctng_e500v2-linux-gnuspe-gcc: error: unrecognized command line option '-fdiagnostics-color'
+<builtin>: recipe for target 'ppccpuid.o' failed
+make[3]: *** [ppccpuid.o] Error 1
+Makefile:287: recipe for target 'build_crypto' failed
+make[2]: *** [build_crypto] Error 1
+package/pkg-generic.mk:216: recipe for target '/work/ccache-colors/build/openssl-1.0.2k/.stamp_built' failed
+make[1]: *** [/work/ccache-colors/build/openssl-1.0.2k/.stamp_built] Error 2
+Makefile:16: recipe for target '_all' failed
+make: *** [_all] Error 2
 
-[1] http://autobuild.buildroot.net/results/219162ba616289f799a5053c4dcc6b8574284283
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
- - updated patch description
- - checked and fixed for Qt 5.6
----
- package/qt5/qt5base/Config.in  | 1 +
- package/qt5/qt5base/qt5base.mk | 5 +++++
- 2 files changed, 6 insertions(+)
-
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index f22e034b3..337dcf245 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -128,6 +128,7 @@ config BR2_PACKAGE_QT5BASE_XML
- 
- config BR2_PACKAGE_QT5BASE_GUI
- 	bool "gui module"
-+	select BR2_PACKAGE_FREETYPE
- 	# At least one graphic backend must be enabled, so enable
- 	# linuxfb if nothing is enabled.
- 	select BR2_PACKAGE_QT5BASE_LINUXFB if \
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 09bf5cf7b..3825f5bcc 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -100,6 +100,11 @@ endif
- # We have to use --enable-linuxfb, otherwise Qt thinks that -linuxfb
- # is to add a link against the "inuxfb" library.
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-gui,-no-gui)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-system-freetype,-no-freetype)
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
-+QT5BASE_CONFIGURE_OPTS += -I$(STAGING_DIR)/usr/include/freetype2
-+endif
-+QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_GUI),freetype)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_WIDGETS),-widgets,-no-widgets)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_LINUXFB),--enable-linuxfb,-no-linuxfb)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DIRECTFB),-directfb,-no-directfb)
--- 
-2.11.0
+Carlos Santos (Casantos) - DATACOM, P&D
+?Something must be done. This is something. Therefore we must do it.?
+(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
