@@ -1,69 +1,79 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 13 Feb 2017 22:30:45 +0100
-Subject: [Buildroot] [PATCH] openswan: fix autobuild failures with uClibc-ng
-Message-ID: <20170213213045.GA13499@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Feb 2017 22:31:17 +0100
+Subject: [Buildroot] [PATCH v2] kmscube: Add new package
+In-Reply-To: <1487011784-24966-1-git-send-email-festevam@gmail.com>
+References: <1487011784-24966-1-git-send-email-festevam@gmail.com>
+Message-ID: <20170213223117.0125c14e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix following autobuild failures:
+Hello,
 
-Fixes:
-  http://autobuild.buildroot.net/results/31cf680c48bec8ba4450a6fe2156cb441c4dd660
-  http://autobuild.buildroot.net/results/95220f231810cb12ba97a6b44af79f84af706c82
+On Mon, 13 Feb 2017 16:49:44 -0200, Fabio Estevam wrote:
+> Add support for kmscube application, which is helpful for testing
+> kms/drm drivers.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- .../0001-uClibc-ng-is-compatible-to-glibc.patch    | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/openswan/0001-uClibc-ng-is-compatible-to-glibc.patch
+Thanks for this patch. I have a few comments, see below.
 
-diff --git a/package/openswan/0001-uClibc-ng-is-compatible-to-glibc.patch b/package/openswan/0001-uClibc-ng-is-compatible-to-glibc.patch
-new file mode 100644
-index 0000000..aa4d0ed
---- /dev/null
-+++ b/package/openswan/0001-uClibc-ng-is-compatible-to-glibc.patch
-@@ -0,0 +1,39 @@
-+From 0f7bf4706d2932aaa50904fc529a853c9f86478f Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Mon, 13 Feb 2017 22:18:11 +0100
-+Subject: [PATCH] uClibc-ng is compatible to glibc
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+Pull-Request: https://github.com/xelerance/Openswan/pull/227
-+
-+---
-+ linux/include/openswan.h | 12 ------------
-+ 1 file changed, 12 deletions(-)
-+
-+diff --git a/linux/include/openswan.h b/linux/include/openswan.h
-+index e2c45a130..66b9d42b2 100644
-+--- a/linux/include/openswan.h
-++++ b/linux/include/openswan.h
-+@@ -27,18 +27,6 @@
-+ #endif
-+ 
-+ /*
-+- * When using uclibc, malloc(0) returns NULL instead of success. This is
-+- * to make it use the inbuilt work-around.
-+- * See: http://osdir.com/ml/network.freeswan.devel/2003-11/msg00009.html
-+- */
-+-#ifdef __UCLIBC__
-+-# if !defined(__MALLOC_GLIBC_COMPAT__) && !defined(MALLOC_GLIBC_COMPAT)
-+-#  warning Please compile uclibc with GLIBC_COMPATIBILITY defined
-+-# endif
-+-#endif
-+-
-+-
-+-/*
-+  * We've just got to have some datatypes defined...  And annoyingly, just
-+  * where we get them depends on whether we're in userland or not.
-+  */
-+-- 
-+2.11.1
-+
+> diff --git a/package/kmscube/Config.in b/package/kmscube/Config.in
+> new file mode 100644
+> index 0000000..b3c3c8d
+> --- /dev/null
+> +++ b/package/kmscube/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_KMSCUBE
+> +	bool "kmscube"
+> +	depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM
+
+kmscube apparently wants EGL and OpenGL ES:
+
+PKG_CHECK_MODULES(EGL, egl)
+PKG_CHECK_MODULES(GLES2, glesv2)
+
+so probably this needs to be taken into account here by using the
+BR2_PACKAGE_MESA3D_OPENGL_EGL and BR2_PACKAGE_MESA3D_OPENGL_ES symbols.
+
+> +	help
+> +	  kmscube is an application to test kms/drm drivers.  
+
+Trailing space at the end of the line + missing upstream project URL.
+
+> diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+> new file mode 100644
+> index 0000000..267fffa
+> --- /dev/null
+> +++ b/package/kmscube/kmscube.mk
+> @@ -0,0 +1,14 @@
+
+Missing usual comment header.
+
+> +KMSCUBE_VERSION = 8c6a20901f95e1b465bbca127f9d47fcfb8762e6
+> +KMSCUBE_SITE = $(call github,robclark,kmscube,$(KMSCUBE_VERSION))
+> +KMSCUBE_DEPENDENCIES = host-pkgconf libdrm mesa3d
+> +KMSCUBE_INSTALL_TARGET = YES
+
+This is useless, as it is the default.
+
+> +KMSCUBE_AUTORECONF = YES
+> +KMSCUBE_INSTALL_STAGING = Y
+
+This line doesn't do anything because 'Y' is not a valid value. And
+anyway, there's most likely no point in installing kmscube to staging.
+
+License information is also missing, and you forgot to add yourself to
+the DEVELOPERS file (should be done in the same patch).
+
+Could you address those issues and submit an updated version?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
