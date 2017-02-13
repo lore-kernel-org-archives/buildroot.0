@@ -1,32 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Feb 2017 21:01:33 +0100
-Subject: [Buildroot] [git commit] docs/website/news.html: fix link to
-	2017.02-rc1 tarball
-Message-ID: <20170213200158.1CCA181EA9@busybox.osuosl.org>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Mon, 13 Feb 2017 21:08:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/classpath: Don't depend on jamvm
+Message-ID: <20170213200838.21068-1-m.hoffmann@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de0985455e1991095f98bf149522bab4393cf8f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+GNU classpath can exist without jamvm, so don't depend on it.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
 ---
- docs/website/news.html | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/classpath/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 6e81c6e..96cadfd 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -25,7 +25,7 @@
- 	</p>
- 
- 	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
--	  <a href="/downloads/buildroot-2016.11-rc1.tar.bz2">2017.12-rc1
-+	  <a href="/downloads/buildroot-2017.02-rc1.tar.bz2">2017.12-rc1
- 	    release candidate</a>, and report any
- 	  problems found to the
- 	  <a href="support.html">mailing list</a> or
+diff --git a/package/classpath/Config.in b/package/classpath/Config.in
+index ce71160..caab619 100644
+--- a/package/classpath/Config.in
++++ b/package/classpath/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_CLASSPATH
+ 	bool "classpath"
+ 	select BR2_NEEDS_HOST_JAR
+ 	select BR2_NEEDS_HOST_JAVAC
+-	depends on BR2_PACKAGE_JAMVM
+ 	help
+ 	  GNU Classpath, Essential Libraries for Java, is a GNU
+ 	  project to create free core class libraries for use with
+-- 
+2.9.3
