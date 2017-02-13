@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Feb 2017 13:29:25 +0100
-Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
-In-Reply-To: <20170213093502.26507-1-peter@korsgaard.com>
-References: <20170213093502.26507-1-peter@korsgaard.com>
-Message-ID: <20170213132925.5324f141@free-electrons.com>
+Date: Mon, 13 Feb 2017 13:35:07 +0100
+Subject: [Buildroot] [PATCH v5] gqrx: new package
+In-Reply-To: <20170213093839.38b994c9@x230.trabucayre.com>
+References: <20170210140112.26552-1-gwenj@trabucayre.com>
+ <20170212155348.0f14e2a3@free-electrons.com>
+ <20170213093839.38b994c9@x230.trabucayre.com>
+Message-ID: <20170213133507.67a46075@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +14,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 13 Feb 2017 10:35:02 +0100, Peter Korsgaard wrote:
+On Mon, 13 Feb 2017 09:38:39 +0100, gwenhael.goavec wrote:
 
-> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
-> index 1d174c18b..3750897bb 100644
-> --- a/package/kmsxx/Config.in
-> +++ b/package/kmsxx/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_KMSXX
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
-> +	depends on !BR2_m68k # gcc ice
+> I'm agree, maybe portaudio by default because gnuradio users seems to
+> use it preferentially.
 
-As usual, I really prefer if we report the bug to gcc upstream, and
-then do a depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_xyz. Otherwise, it's
-really tricky to keep track of when this or that issue gets resolved
-and when we can re-enable m68k.
+OK. portaudio only depends on thread support, and gnuradio already
+needs thread support anyway. So you can directly:
 
-CC'ing Waldemar on this.
+	select BR2_PACKAGE_PORTAUDIO if !BR2_PACKAGE_ALSA_LIB
+
+in the BR2_PACKAGE_GNURADIO_AUDIO option.
+
+> > > +	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio    
+> > 
+> > This one is also annoying. Did you see the work that was posted on the
+> > mailing list a while ago to allow building all variants of fftw? This
+> > would allow to select the fftw package like any other. It would be
+> > really really better. If you have some time to pick up this work and
+> > finalize it, it would be nice.
+> >   
+> Thanks to highlight this patch because I've missed this one. I've,
+> recently, looking at a way to build all flavors for this package
+> instead of just one.
+> Currently, according to the precision specified, fftw produce a dynamic
+> library with a name corresponding to the precision. All others files
+> (headers and doc) are the same and there are no risk with overwrite.
+> I must update this patch.
+
+That would be nice. However, there were some issues with the patch, so
+it is not going to be good as-is. Make sure to read the discussion I
+had with the original submitter. I remember spending quite some time
+interacting with him/her to try to find a good solution (but that
+wasn't trivial).
+
+Thanks!
 
 Thomas
 -- 
