@@ -1,66 +1,79 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 13 Feb 2017 18:24:51 +0100
-Subject: [Buildroot] [PATCH 1/1] domoticz: fix build on powerpc64le
-Message-ID: <1487006691-34766-1-git-send-email-fontaine.fabrice@gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 13 Feb 2017 18:26:52 +0100
+Subject: [Buildroot] [PATCH] kmscube: Add new package
+In-Reply-To: <1487001271-5503-1-git-send-email-festevam@gmail.com>
+References: <1487001271-5503-1-git-send-email-festevam@gmail.com>
+Message-ID: <CAAMH-yvUXusU-TRdQy631L=JZR2H5DRtonLQTNW+bsBd-DFVUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is an issue with powerpc64le and boost::uuids::random_generator on the
-following line of code (from include/boost/uuid/seed_rng.hpp):
-sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
-This line "inspects the first couple bytes (here eight) of the std::rand
-function to seed some rng. Due to the implementation of process_bytes and
-inlining happening, it seems that one of the loops therein uses &rand-1 as
-some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
-the link will succeed."
-See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
+Hi Fabio,
 
-Fixes:
- - http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
+On Mon, Feb 13, 2017 at 4:54 PM, Fabio Estevam <festevam@gmail.com> wrote:
+> Add support for kmscube application, which is helpful for testing
+> kms/drm drivers.
+>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  package/Config.in            |  1 +
+>  package/kmscube/Config.in    |  5 +++++
+>  package/kmscube/kmscube.hash |  2 ++
+>  package/kmscube/kmscube.mk   | 14 ++++++++++++++
+>  4 files changed, 22 insertions(+)
+>  create mode 100644 package/kmscube/Config.in
+>  create mode 100644 package/kmscube/kmscube.hash
+>  create mode 100644 package/kmscube/kmscube.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index deff0fe..af52e1a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -239,6 +239,7 @@ comment "Graphic applications"
+>         source "package/glmark2/Config.in"
+>         source "package/gnuplot/Config.in"
+>         source "package/jhead/Config.in"
+> +       source "package/kmscube/Config.in"
+>         source "package/mesa3d-demos/Config.in"
+>         source "package/qt5cinex/Config.in"
+>         source "package/rrdtool/Config.in"
+> diff --git a/package/kmscube/Config.in b/package/kmscube/Config.in
+> new file mode 100644
+> index 0000000..b3c3c8d
+> --- /dev/null
+> +++ b/package/kmscube/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_KMSCUBE
+> +       bool "kmscube"
+> +       depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM
+> +       help
+> +         kmscube is an application to test kms/drm drivers.
+> diff --git a/package/kmscube/kmscube.hash b/package/kmscube/kmscube.hash
+> new file mode 100644
+> index 0000000..a66eb5b
+> --- /dev/null
+> +++ b/package/kmscube/kmscube.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 d2f8e2601a2a5c3d07902019a8f39f61ddfea90fbb265720151c00a65798d3be kmscube-be60c2f26fbc79038b246dc9a3b8b5fa2fa1fe54.tar.gz
+> diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+> new file mode 100644
+> index 0000000..bb079f5
+> --- /dev/null
+> +++ b/package/kmscube/kmscube.mk
+> @@ -0,0 +1,14 @@
+> +KMSCUBE_VERSION = be60c2f26fbc79038b246dc9a3b8b5fa2fa1fe54
+> +KMSCUBE_SITE = $(call github,austriancoder,kmscube,$(KMSCUBE_VERSION))
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/domoticz/domoticz.mk | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+I believe Rob Clark's version is more up to date and has more traction:
+https://github.com/robclark/kmscube
 
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index f43dbda..48cdbc4 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -18,6 +18,21 @@ DOMOTICZ_DEPENDENCIES = \
- 	sqlite \
- 	zlib
- 
-+# Fixes:
-+# http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
-+# There is an issue with powerpc64le and boost::uuids::random_generator on the
-+# following line of code (from include/boost/uuid/seed_rng.hpp):
-+# sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
-+# This line "inspects the first couple bytes (here eight) of the std::rand
-+# function to seed some rng. Due to the implementation of process_bytes and
-+# inlining happening, it seems that one of the loops therein uses &rand-1 as
-+# some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
-+# the link will succeed."
-+# See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
-+ifeq ($(BR2_powerpc64le),y)
-+DOMOTICZ_CXXFLAGS += -O0
-+endif
-+
- # Due to the dependency on mosquitto, domoticz depends on
- # !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
- DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
-@@ -27,7 +42,8 @@ DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
- DOMOTICZ_CONF_OPTS += \
- 	-DUSE_BUILTIN_LUA=OFF \
- 	-DUSE_BUILTIN_SQLITE=OFF \
--	-DUSE_BUILTIN_MQTT=OFF
-+	-DUSE_BUILTIN_MQTT=OFF \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(DOMOTICZ_CXXFLAGS)"
- 
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
- DOMOTICZ_DEPENDENCIES += libusb
--- 
-2.5.0
+It has RPi VC4 support and someone asked for i.MX support as well:
+https://github.com/robclark/kmscube/pull/7
+
+Hopefully this latter will get merged soon.
+
+Regards,
+Gary
