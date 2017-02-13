@@ -1,88 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Feb 2017 16:20:36 +0100
-Subject: [Buildroot] [PATCH 2/2] u-boot: add support for full image
- socfpga mkpimage support
-In-Reply-To: <20170213145716.e7gshandk5sokluc@ed>
-References: <20170130103326.14427-2-lionel@svkt.org>
- <20170213135934.32014-1-lionel@svkt.org>
- <20170213135934.32014-2-lionel@svkt.org>
- <20170213152747.13a39b36@free-electrons.com>
- <20170213145716.e7gshandk5sokluc@ed>
-Message-ID: <20170213162036.4ab6a939@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 13 Feb 2017 13:24:59 -0200
+Subject: [Buildroot] [PATCH 1/2] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.0.0
+Message-ID: <1486999500-12196-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-On Mon, 13 Feb 2017 15:57:16 +0100, Lionel Flandrin wrote:
-
-> > Thanks for this new iteration!
-> > 
-> > On Mon, 13 Feb 2017 14:59:34 +0100, Lionel Flandrin wrote:
-> >   
-> > >  ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
-> > > +ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-> > > +UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
-> > > +UBOOT_CRC_ALTERA_SOCFPGA_HEADER_VERSION = 0
-> > > +else
-> > > +UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = u-boot-dtb.bin
-> > > +UBOOT_CRC_ALTERA_SOCFPGA_HEADER_VERSION = 1
-> > > +endif  
-> > 
-> > So when the SPL is used, the header version should always be 0, and
-> > when the full U-Boot is used directly, the header version should always
-> > be 1 ?
-> > 
-> > I thought 0 was for older SoCs, and 1 for newer SoCs. Or are we sure
-> > that SPL booting will only ever be used on older SoCs, and direct U-Boot
-> > booting will only be used on newer SoCs ?  
-> 
-> Yeah I considered adding an option for selecting the version,
-> technically it could go either way but in practice I can't think of a
-> situation where you'd want a v1 header with a SPL or vice versa.
-> 
-> Basically:
-> Cyclone V/Arria V ->  64K internal RAM + header v0
-> Arria 10          -> 256K internal RAM + header v1
-> 
-> I believe the main reason for the v1 header is simply to allow file
-> sizes greater than 64k.
-> 
-> Unless you managed to create a full u-boot build smaller than 64K
-> you'd never be able to make a v0 image without SPL.
-> 
-> You could technically create a v1 SPL image (which the current
-> Makefile wouldn't allow) but I'm not sure why anybody would want that.
-> 
-> So I thought adding an option might end up being more confusing than
-> helpful even if it results in a bit of "magic" in the makefile.
-
-OK, thanks for the explanation. It makes sense to me. However, I
-believe this should be explicitly mentioned in the help text of the
-Config.in option.
-
-> On a completely unrelated tangent: I kept the previous naming
-> convention for the resulting image, which creates ".crc"
-> files. Changing this would break build systems that use the SPL images
-> but I thought it was a rather unexpected extension for these files. My
-> previous patch used ".mkpimage". Altera uses "-mkpimage.bin".
-> 
-> That being said it might not be worth breaking people's builds over
-> that.
-
-Yeah, just keep the existing .crc extension. The other extension you
-propose don't really bring any benefit, and keeping .crc makes sure
-things won't break for existing users. As long as the generated file
-name is mentioned in the help text of the Config.in option, we're good
-IMO.
-
-Thanks!
-
-Thomas
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 2c62c48..1ff72f7 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 13.0.4
++MESA3D_HEADERS_VERSION = 17.0.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index b3c4b77..09d3ef8 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-February/000294.html
+-sha256 a95d7ce8f7bd5f88585e4be3144a341236d8c0fc91f6feaec59bb8ba3120e726  mesa-13.0.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-dev/2017-February/144115.html
++sha256 39db3d59700159add7f977307d12a7dfe016363e760ad82280ac4168ea668481  mesa-17.0.0.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 0c68ded..3bfb005 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 13.0.4
++MESA3D_VERSION = 17.0.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
