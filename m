@@ -1,63 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Feb 2017 22:26:12 +0100
-Subject: [Buildroot] [PATCH v2] Add gitlab-CI support
-In-Reply-To: <707812a9-c5d0-15c6-85f1-bf3a64782a21@cartelsol.com>
-References: <20170207145550.11009-1-arnout@mind.be>
- <20170212212715.29524-1-arnout@mind.be>
- <707812a9-c5d0-15c6-85f1-bf3a64782a21@cartelsol.com>
-Message-ID: <f6e4d4ea-509b-8ed0-46ee-152a01251212@mind.be>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 13 Feb 2017 22:30:45 +0100
+Subject: [Buildroot] [PATCH] openswan: fix autobuild failures with uClibc-ng
+Message-ID: <20170213213045.GA13499@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Marcus,
+Add patch to fix following autobuild failures:
 
- Thank you for your feedback! I'll take it into account for v3.
+Fixes:
+  http://autobuild.buildroot.net/results/31cf680c48bec8ba4450a6fe2156cb441c4dd660
+  http://autobuild.buildroot.net/results/95220f231810cb12ba97a6b44af79f84af706c82
 
-On 13-02-17 13:18, Marcus Hoffmann wrote:
-> Hello Arnout,
-> 
-> I did something similar for our buildroot project. See my comments below.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ .../0001-uClibc-ng-is-compatible-to-glibc.patch    | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/openswan/0001-uClibc-ng-is-compatible-to-glibc.patch
 
- If you have any more suggestions, I welcome them.
-
-> 
-> On 12.02.2017 22:27, Arnout Vandecappelle (Essensium/Mind) wrote:
-[snip]
->> +        - echo 'Configure Buildroot'
->> +        - make ${CI_BUILD_NAME}
->> +        - echo 'Build buildroot'
->> +        - |
->> +            make > >(tee build.log |grep '>>>') 2>&1 || {
->> +                echo 'Failed build last output'
->> +                tail -200 build.log
->> +                exit 1
->> +            }
-> 
-> I wondered why you used process substitution here, instead of something
-> like this (Which I find easier to understand, but that might just be me.):
-> 
-> make 2>&1 | tee build.log | grep '>>>' || {echo [...]}
-> 
-> But then we'd have to set -o pipefail, is that the reason for not using
-> a pipeline, or am I missing something else?
-
- I didn't think about it too hard, I just copied it from Thomas Petazzoni's
-Travis script [1]. But now you mention it, it's probably because of the pipefail.
-
-
- Regards,
- Arnout
-
-
-[snip]
-
+diff --git a/package/openswan/0001-uClibc-ng-is-compatible-to-glibc.patch b/package/openswan/0001-uClibc-ng-is-compatible-to-glibc.patch
+new file mode 100644
+index 0000000..aa4d0ed
+--- /dev/null
++++ b/package/openswan/0001-uClibc-ng-is-compatible-to-glibc.patch
+@@ -0,0 +1,39 @@
++From 0f7bf4706d2932aaa50904fc529a853c9f86478f Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 13 Feb 2017 22:18:11 +0100
++Subject: [PATCH] uClibc-ng is compatible to glibc
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++Pull-Request: https://github.com/xelerance/Openswan/pull/227
++
++---
++ linux/include/openswan.h | 12 ------------
++ 1 file changed, 12 deletions(-)
++
++diff --git a/linux/include/openswan.h b/linux/include/openswan.h
++index e2c45a130..66b9d42b2 100644
++--- a/linux/include/openswan.h
+++++ b/linux/include/openswan.h
++@@ -27,18 +27,6 @@
++ #endif
++ 
++ /*
++- * When using uclibc, malloc(0) returns NULL instead of success. This is
++- * to make it use the inbuilt work-around.
++- * See: http://osdir.com/ml/network.freeswan.devel/2003-11/msg00009.html
++- */
++-#ifdef __UCLIBC__
++-# if !defined(__MALLOC_GLIBC_COMPAT__) && !defined(MALLOC_GLIBC_COMPAT)
++-#  warning Please compile uclibc with GLIBC_COMPATIBILITY defined
++-# endif
++-#endif
++-
++-
++-/*
++  * We've just got to have some datatypes defined...  And annoyingly, just
++  * where we get them depends on whether we're in userland or not.
++  */
++-- 
++2.11.1
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
