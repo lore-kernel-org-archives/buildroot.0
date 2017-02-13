@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Feb 2017 13:26:12 +0100
-Subject: [Buildroot] bison-2.4.3 compiling issue
-In-Reply-To: <CALD51P_KryQ2hGeqZqYj_vEt6d_Pmcn39aL=p9p6KrW534UGTw@mail.gmail.com>
-References: <CALD51P_KryQ2hGeqZqYj_vEt6d_Pmcn39aL=p9p6KrW534UGTw@mail.gmail.com>
-Message-ID: <20170213132612.7a8c8899@free-electrons.com>
+Date: Mon, 13 Feb 2017 13:29:25 +0100
+Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
+In-Reply-To: <20170213093502.26507-1-peter@korsgaard.com>
+References: <20170213093502.26507-1-peter@korsgaard.com>
+Message-ID: <20170213132925.5324f141@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 12 Feb 2017 16:28:40 -0600, Lijun QIN wrote:
+On Mon, 13 Feb 2017 10:35:02 +0100, Peter Korsgaard wrote:
 
-> But buildroot-2011.05 + 32-Bit Ubuntu Linux 16.04 works fails at
-> host-bison-2.4.3
-> Could someboy could offer any adivce ? Using single really helps me
-> increase efficiency.
+> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
+> index 1d174c18b..3750897bb 100644
+> --- a/package/kmsxx/Config.in
+> +++ b/package/kmsxx/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_KMSXX
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+> +	depends on !BR2_m68k # gcc ice
 
-Bump the bison version to a newer one, or alternatively apply a fix
-like
-https://dev.openwrt.org/browser/branches/backfire/tools/bison/patches/100-fix-gets-removal.patch?rev=33081.
+As usual, I really prefer if we report the bug to gcc upstream, and
+then do a depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_xyz. Otherwise, it's
+really tricky to keep track of when this or that issue gets resolved
+and when we can re-enable m68k.
 
-Best regards,
+CC'ing Waldemar on this.
 
 Thomas
 -- 
