@@ -1,24 +1,28 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Feb 2017 19:06:50 +0100
-Subject: [Buildroot] [PATCH 1/2 v2] package/{mesa3d,
- mesa3d-headers}: bump version to 17.0.0
-References: <1486999762-4118-1-git-send-email-festevam@gmail.com>
-Message-ID: <q699ndxbuo.ln2@ID-313208.user.individual.net>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 13 Feb 2017 16:27:02 -0200
+Subject: [Buildroot] [PATCH] kmscube: Add new package
+In-Reply-To: <CAAMH-yvUXusU-TRdQy631L=JZR2H5DRtonLQTNW+bsBd-DFVUg@mail.gmail.com>
+References: <1487001271-5503-1-git-send-email-festevam@gmail.com>
+ <CAAMH-yvUXusU-TRdQy631L=JZR2H5DRtonLQTNW+bsBd-DFVUg@mail.gmail.com>
+Message-ID: <CAOMZO5Bghu3ktmoNGZfEWxr=kymuReNwSJeqEasTKearW8+hTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 13 Feb 2017 13:29:21 -0200 schrieb Fabio Estevam:
+Hi Gary,
 
-> -MESA3D_VERSION = 13.0.4
-> +MESA3D_VERSION = 17.0.0
+On Mon, Feb 13, 2017 at 3:26 PM, Gary Bisson
+<gary.bisson@boundarydevices.com> wrote:
 
-Hi,
+> I believe Rob Clark's version is more up to date and has more traction:
+> https://github.com/robclark/kmscube
+>
+> It has RPi VC4 support and someone asked for i.MX support as well:
+> https://github.com/robclark/kmscube/pull/7
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Actually if https://github.com/robclark/kmscube/pull/5 is applied then
+it will support i.MX automatically.
 
-Compiled-tested and, with versions up to rc2, run-time tested.
-
-Regards, Bernd
+I can change to using Rob's tree.
