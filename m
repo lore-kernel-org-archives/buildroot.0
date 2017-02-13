@@ -1,44 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Feb 2017 10:35:02 +0100
-Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
-Message-ID: <20170213093502.26507-1-peter@korsgaard.com>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Mon, 13 Feb 2017 10:10:00 +0000
+Subject: [Buildroot] [PATCH] motion: disable autotools host optimization
+In-Reply-To: <20170211151850.11e14f69@free-electrons.com>
+References: <1486723019-97464-1-git-send-email-ray.kinsella@intel.com>
+ <20170211151850.11e14f69@free-electrons.com>
+Message-ID: <a5f1e3c2-1499-724d-fa11-9ddea22c2b5b@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/273/2738e5fd446467b105f6dcca391500e3734e5a9b/
-http://autobuild.buildroot.net/results/7eb/7ebaa00b2d14131fadd15df6db32632828c1de33/
-http://autobuild.buildroot.net/results/42c/42c2aa4b58de3ab84a27f53a696fa60d087c178b/
+Most welcome.
 
-GCC dies with an internal compiler error when building kmsxx on m68k, so disable it.
+Ray K
 
-These autobuilder issues are with a 2016.11 toolchain (gcc 5.x), but also
-verified with gcc 6.3.0 / binutils 2.27.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kmsxx/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
-index 1d174c18b..3750897bb 100644
---- a/package/kmsxx/Config.in
-+++ b/package/kmsxx/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_KMSXX
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
-+	depends on !BR2_m68k # gcc ice
- 	select BR2_PACKAGE_LIBDRM
- 	help
- 	  libkms++ is a C++11 library for kernel mode setting.
-@@ -24,3 +25,4 @@ endif
- comment "kms++ needs a toolchain w/ threads, C++, gcc >= 4.8, headers >= 3.8"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	depends on !BR2_m68k
--- 
-2.11.0
+On 11/02/2017 14:18, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Fri, 10 Feb 2017 10:36:59 +0000, Ray Kinsella wrote:
+>> The motion autotools script helpfully detects the host
+>> Microprocessors intr set and optimizes for it.
+>> Disabling this feature causes autotools to use the
+>> target parameters passed by BR instead.
+>>
+>> Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+>> ---
+>>  package/motion/motion.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> Applied to master, thanks.
+>
+> Thomas
+>
