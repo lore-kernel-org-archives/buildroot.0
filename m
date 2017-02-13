@@ -1,42 +1,83 @@
-From: LogiSch17 <logi.tss@hotmail.de>
-Date: Mon, 13 Feb 2017 06:51:52 -0800 (PST)
-Subject: [Buildroot] Shell scripts does not emit finished() to QProcess
-Message-ID: <1486997512738-156891.post@n4.nabble.com>
+From: Lionel Flandrin <lionel@svkt.org>
+Date: Mon, 13 Feb 2017 15:57:16 +0100
+Subject: [Buildroot] [PATCH 2/2] u-boot: add support for full image
+ socfpga mkpimage support
+In-Reply-To: <20170213152747.13a39b36@free-electrons.com>
+References: <20170130103326.14427-2-lionel@svkt.org>
+ <20170213135934.32014-1-lionel@svkt.org>
+ <20170213135934.32014-2-lionel@svkt.org>
+ <20170213152747.13a39b36@free-electrons.com>
+Message-ID: <20170213145716.e7gshandk5sokluc@ed>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
-Since I updated to 2016.11 i don?t get any exit messages from shell scripts
-when i execute them from my Qt Programm via QProcess. But the scripts has
-been executed.
+On Mon, Feb 13, 2017 at 03:27:47PM +0100, Thomas Petazzoni wrote:
+> Hello,
 
-Also
-process->waitForFinished(); 
-does only wait its default 30000msecs.
+Hello Thomas,
 
-In my test script i am only have on mkdir like:
+> Thanks for this new iteration!
+> 
+> On Mon, 13 Feb 2017 14:59:34 +0100, Lionel Flandrin wrote:
+> 
+> >  ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
+> > +ifeq ($(BR2_TARGET_UBOOT_SPL),y)
+> > +UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
+> > +UBOOT_CRC_ALTERA_SOCFPGA_HEADER_VERSION = 0
+> > +else
+> > +UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = u-boot-dtb.bin
+> > +UBOOT_CRC_ALTERA_SOCFPGA_HEADER_VERSION = 1
+> > +endif
+> 
+> So when the SPL is used, the header version should always be 0, and
+> when the full U-Boot is used directly, the header version should always
+> be 1 ?
+> 
+> I thought 0 was for older SoCs, and 1 for newer SoCs. Or are we sure
+> that SPL booting will only ever be used on older SoCs, and direct U-Boot
+> booting will only be used on newer SoCs ?
 
-#!/bin/sh
-mkdir /usr/test
-exit 0
- 
-I am also connected to errorOccurred(), but i don?t get any errors. 
+Yeah I considered adding an option for selecting the version,
+technically it could go either way but in practice I can't think of a
+situation where you'd want a v1 header with a SPL or vice versa.
 
-When i am testing my code on my arch desktop everything works fine.
+Basically:
+Cyclone V/Arria V ->  64K internal RAM + header v0
+Arria 10          -> 256K internal RAM + header v1
 
-Does anyone have the same problem?
-Or can anyone test this at the newest buildroot version?
-I would be very grateful for helping.
+I believe the main reason for the v1 header is simply to allow file
+sizes greater than 64k.
 
-Greetings
-Logi
+Unless you managed to create a full u-boot build smaller than 64K
+you'd never be able to make a v0 image without SPL.
+
+You could technically create a v1 SPL image (which the current
+Makefile wouldn't allow) but I'm not sure why anybody would want that.
+
+So I thought adding an option might end up being more confusing than
+helpful even if it results in a bit of "magic" in the makefile.
 
 
+On a completely unrelated tangent: I kept the previous naming
+convention for the resulting image, which creates ".crc"
+files. Changing this would break build systems that use the SPL images
+but I thought it was a rather unexpected extension for these files. My
+previous patch used ".mkpimage". Altera uses "-mkpimage.bin".
 
+That being said it might not be worth breaking people's builds over
+that.
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Shell-scripts-does-not-emit-finished-to-QProcess-tp156891.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+> Thomas
+
+-- 
+Lionel Flandrin
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170213/cb2bc337/attachment.asc>
