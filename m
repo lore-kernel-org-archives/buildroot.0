@@ -1,40 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Feb 2017 17:05:48 +0100
-Subject: [Buildroot] [PATCH v3] classpath: bump to version 0.99
-In-Reply-To: <20170213142952.302e6ee4@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 13 Feb 2017 14:29:52 +0100")
-References: <20170212015451.16715-1-m.hoffmann@cartelsol.com>
- <20170212020444.32045-1-m.hoffmann@cartelsol.com>
- <20170212151431.1fe6cce3@free-electrons.com>
- <5160b52a-c48a-4b52-3d0e-9d73a6fb5c37@cartelsol.com>
- <20170213142952.302e6ee4@free-electrons.com>
-Message-ID: <871sv2m5yb.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Feb 2017 17:09:11 +0100
+Subject: [Buildroot] [PATCHv3] package/ccache: do not force colored
+ diagnostics
+In-Reply-To: <04456b76-8eed-f7e8-0bf8-b649bee98bcb@mind.be>
+References: <1486906227-5682-1-git-send-email-yann.morin.1998@free.fr>
+ <04456b76-8eed-f7e8-0bf8-b649bee98bcb@mind.be>
+Message-ID: <20170213160911.GA3956@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Arnout, All,
 
-Hi,
+On 2017-02-12 22:39 +0100, Arnout Vandecappelle spake thusly:
+> On 12-02-17 14:30, Yann E. MORIN wrote:
+> > When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to GCC but
+> > this flag requires GCC v4.9 or later. Older versions complain about the
+> > unrecognized command line option.
+> > 
+> > We could override GCC_COLORS in the environment, but this would not be
+> > enough since some packages may call directly $(CC) or $(HOSTCC) (like
+> > makedevs do, as spotted by Thomas).
+> > 
+> > Since we use the same ccache build for both host and target, we disable
+> > that behaviour when either the host or target compiler is tool old to
+> > support this, at the cost of nol onger colorising output diagnostics for
+> > the one that is recent enough.
+> 
+>  Actually, if the user sets GCC_COLORS in his environment while his host
+> compiler is too old to support that option, then he's just plain stupid, no?
+> 
+>  But anyway, I would tend to say, let's simplify things and do a global
+> "unexport GCC_COLORS" like we already do for a few other options. IMHO
+> colourized output is not so useful in Buildroot context. A global unexport is a
+> lot simpler.
 
- > My understanding is that the build dependency is:
+I agree, too.
 
- > 	jamvm -> classpath
+Although I could well see that someone is actively developping a package
+(with an FOO_OVERRIDE_SRCDIR) and would be interested in having the
+colors for that package. In which case they could add a local override
+for this specific package, a-la:
 
- > i.e the classpath package needs to be built/installed before we build
- > the jamvm package. If that's the case, then I would keep the "select
- > BR2_PACKAGE_CLASSPATH" in jamvm/Config.in, but get rid of the "depends
- > on BR2_PACKAGE_JAMVM" in classpath/Config.in.
+    FOO_MAKE_ENV += GCC_COLORS=blabla
 
- > Peter, you're the one who added classpath originally (commit
- > 5062f530081913bd0487f0f879be180f30836ab8) including this "depends on
- > BR2_PACKAGE_JAMVM" dependency. What do you think ?
-
-I don't recall the details, but as far as I remember the thinking was
-that classpath only made sense if we have a jvm (and jamvm is our only
-jvm).
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
