@@ -1,65 +1,51 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 13 Feb 2017 20:41:29 -0200 (BRST)
-Subject: [Buildroot] [PATCH v2] infra/ccache: avoid color diagnostics
- with GCC older than v4.9
-In-Reply-To: <20170212141425.GE11105@free.fr>
-References: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
- <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
- <20170212141425.GE11105@free.fr>
-Message-ID: <1044520233.10180443.1487025689348.JavaMail.zimbra@datacom.ind.br>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Feb 2017 23:51:10 +0100
+Subject: [Buildroot] [PATCH] ntfs-3g: add security fix for CVE-2017-0358
+Message-ID: <20170213225110.31788-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, arnout at mind.be,
-> gustavo at zacarias.com.ar
-> Sent: Sunday, February 12, 2017 12:14:25 PM
-> Subject: Re: [PATCH v2] infra/ccache: avoid color diagnostics with GCC older than v4.9
+Jann Horn, Project Zero (Google) discovered that ntfs-3g, a read-write
+NTFS driver for FUSE does not not scrub the environment before
+executing modprobe to load the fuse module. This influence the behavior
+of modprobe (MODPROBE_OPTIONS environment variable, --config and
+--dirname options) potentially allowing for local root privilege
+escalation if ntfs-3g is installed setuid.
 
-> Carlos, All,
-[...]
-> 
-> Can you provide a reliable way to reproduce the issue, please?
-> 
-> Regards,
-> Yann E. MORIN.
+Notice that Buildroot does NOT install netfs-3g setuid root, but custom
+permission tables might be used, causing it to vulnerable to the above.
 
-Sorry, I forgot so send this yesterday. Here is a reliable reproducer:
+ntfs-3g does not seem to have a publicly available version control system
+and no new releases have been made, so instead grab the patch from Debian.
 
-$ cat defconfig 
-BR2_powerpc=y
-BR2_powerpc_8548=y
-BR2_CCACHE=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng_e500v2-linux-gnuspe.tar.xz"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="powerpc-ctng_e500v2-linux-gnuspe"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_OPENSSL=y
-$ 
-$ echo $GCC_COLORS 
-error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01
-$
-$ make V=1 BR2_JLEVEL=1 openssl-dirclean openssl
-[...]
-/work/ccache-colors/host/usr/bin/powerpc-ctng_e500v2-linux-gnuspe-gcc -I. -I.. -I../include  -fPIC -DOPENSSL_PIC -DZLIB_SHARED -DZLIB -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H -DB_ENDIAN -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mabi=spe -mfloat-gprs=double -Wa,-me500x2 -Os  -Wall -DOPENSSL_BN_ASM_MONT -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM -DAES_ASM -DVPAES_ASM -c  -o ppccpuid.o ppccpuid.s
-powerpc-ctng_e500v2-linux-gnuspe-gcc: error: unrecognized command line option '-fdiagnostics-color'
-<builtin>: recipe for target 'ppccpuid.o' failed
-make[3]: *** [ppccpuid.o] Error 1
-Makefile:287: recipe for target 'build_crypto' failed
-make[2]: *** [build_crypto] Error 1
-package/pkg-generic.mk:216: recipe for target '/work/ccache-colors/build/openssl-1.0.2k/.stamp_built' failed
-make[1]: *** [/work/ccache-colors/build/openssl-1.0.2k/.stamp_built] Error 2
-Makefile:16: recipe for target '_all' failed
-make: *** [_all] Error 2
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ntfs-3g/ntfs-3g.hash | 1 +
+ package/ntfs-3g/ntfs-3g.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Something must be done. This is something. Therefore we must do it.?
-(from the BBC series ?Yes, Prime Minister?, ?Power to the people?)
+diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
+index 4875cc47b..eaa3d9871 100644
+--- a/package/ntfs-3g/ntfs-3g.hash
++++ b/package/ntfs-3g/ntfs-3g.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 d7b72c05e4b3493e6095be789a760c9f5f2b141812d5b885f3190c98802f1ea0 ntfs-3g_ntfsprogs-2016.2.22.tgz
++sha256 43deadaeade489934b0b45e2ed8aa5f853ad0364fbde7ad144211b80132ea041  0003-CVE-2017-0358.patch
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index b59e335bc..6e1a8f946 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -7,6 +7,7 @@
+ NTFS_3G_VERSION = 2016.2.22
+ NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
+ NTFS_3G_SITE = http://tuxera.com/opensource
++NTFS_3G_PATCH = https://sources.debian.net/data/main/n/ntfs-3g/1:2016.2.22AR.1-4/debian/patches/0003-CVE-2017-0358.patch
+ NTFS_3G_CONF_OPTS = --disable-ldconfig
+ NTFS_3G_INSTALL_STAGING = YES
+ NTFS_3G_DEPENDENCIES = host-pkgconf
+-- 
+2.11.0
