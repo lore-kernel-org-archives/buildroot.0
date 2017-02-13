@@ -1,79 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Feb 2017 22:31:17 +0100
-Subject: [Buildroot] [PATCH v2] kmscube: Add new package
-In-Reply-To: <1487011784-24966-1-git-send-email-festevam@gmail.com>
-References: <1487011784-24966-1-git-send-email-festevam@gmail.com>
-Message-ID: <20170213223117.0125c14e@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 13 Feb 2017 22:37:13 +0100
+Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
+In-Reply-To: <8760kema97.fsf@dell.be.48ers.dk>
+References: <20170213093502.26507-1-peter@korsgaard.com>
+ <20170213132925.5324f141@free-electrons.com>
+ <8760kema97.fsf@dell.be.48ers.dk>
+Message-ID: <20170213213713.GA12810@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
+Peter Korsgaard wrote,
 
-On Mon, 13 Feb 2017 16:49:44 -0200, Fabio Estevam wrote:
-> Add support for kmscube application, which is helpful for testing
-> kms/drm drivers.
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+>  > Hello,
+>  > On Mon, 13 Feb 2017 10:35:02 +0100, Peter Korsgaard wrote:
+> 
+>  >> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
+>  >> index 1d174c18b..3750897bb 100644
+>  >> --- a/package/kmsxx/Config.in
+>  >> +++ b/package/kmsxx/Config.in
+>  >> @@ -4,6 +4,7 @@ config BR2_PACKAGE_KMSXX
+>  >> depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+>  >> depends on BR2_INSTALL_LIBSTDCPP
+>  >> depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+>  >> +	depends on !BR2_m68k # gcc ice
+> 
+>  > As usual, I really prefer if we report the bug to gcc upstream, and
+>  > then do a depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_xyz. Otherwise, it's
+>  > really tricky to keep track of when this or that issue gets resolved
+>  > and when we can re-enable m68k.
+> 
+>  > CC'ing Waldemar on this.
+> 
+> That's also fine by me if somebody wants to do that. I personally don't
+> know/care enough about m68k, and it has been failing since October
+> without anything happening, so I think we should disable it.
 
-Thanks for this patch. I have a few comments, see below.
+It is not that nothing happened.
+I think this would be solved by my following patch:
+http://buildroot-busybox.2317881.n4.nabble.com/PATCH-m68k-add-special-gcc-flag-to-avoid-ICE-for-coldfire-td151151.html
 
-> diff --git a/package/kmscube/Config.in b/package/kmscube/Config.in
-> new file mode 100644
-> index 0000000..b3c3c8d
-> --- /dev/null
-> +++ b/package/kmscube/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_KMSCUBE
-> +	bool "kmscube"
-> +	depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM
+Did you had a chance to discuss the required changes with Arnout in
+the last developer meeting?
 
-kmscube apparently wants EGL and OpenGL ES:
-
-PKG_CHECK_MODULES(EGL, egl)
-PKG_CHECK_MODULES(GLES2, glesv2)
-
-so probably this needs to be taken into account here by using the
-BR2_PACKAGE_MESA3D_OPENGL_EGL and BR2_PACKAGE_MESA3D_OPENGL_ES symbols.
-
-> +	help
-> +	  kmscube is an application to test kms/drm drivers.  
-
-Trailing space at the end of the line + missing upstream project URL.
-
-> diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
-> new file mode 100644
-> index 0000000..267fffa
-> --- /dev/null
-> +++ b/package/kmscube/kmscube.mk
-> @@ -0,0 +1,14 @@
-
-Missing usual comment header.
-
-> +KMSCUBE_VERSION = 8c6a20901f95e1b465bbca127f9d47fcfb8762e6
-> +KMSCUBE_SITE = $(call github,robclark,kmscube,$(KMSCUBE_VERSION))
-> +KMSCUBE_DEPENDENCIES = host-pkgconf libdrm mesa3d
-> +KMSCUBE_INSTALL_TARGET = YES
-
-This is useless, as it is the default.
-
-> +KMSCUBE_AUTORECONF = YES
-> +KMSCUBE_INSTALL_STAGING = Y
-
-This line doesn't do anything because 'Y' is not a valid value. And
-anyway, there's most likely no point in installing kmscube to staging.
-
-License information is also missing, and you forgot to add yourself to
-the DEVELOPERS file (should be done in the same patch).
-
-Could you address those issues and submit an updated version?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+best regards
+ Waldemar
