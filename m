@@ -1,67 +1,50 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 13 Feb 2017 20:03:29 -0200
-Subject: [Buildroot] [PATCH v2] kmscube: Add new package
-In-Reply-To: <20170213223117.0125c14e@free-electrons.com>
-References: <1487011784-24966-1-git-send-email-festevam@gmail.com>
- <20170213223117.0125c14e@free-electrons.com>
-Message-ID: <CAOMZO5Dwdu5-+bV=TXA6=-wg+=W05BhE1eEYhzZk6zV71MUBdA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Feb 2017 23:08:08 +0100
+Subject: [Buildroot] [PATCH] vim: security bump to version 8.0.0329
+Message-ID: <20170213220808.29540-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes:
 
-Thanks for your review.
+- CVE-2016-1248: vim before patch 8.0.0056 does not properly validate values
+  for the 'filetype', 'syntax' and 'keymap' options, which may result in the
+  execution of arbitrary code if a file with a specially crafted modeline is
+  opened.
 
-On Mon, Feb 13, 2017 at 7:31 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+- CVE-2017-5953: vim before patch 8.0.0322 does not properly validate values
+  for tree length when handling a spell file, which may result in an integer
+  overflow at a memory allocation site and a resultant buffer overflow.
 
->> diff --git a/package/kmscube/Config.in b/package/kmscube/Config.in
->> new file mode 100644
->> index 0000000..b3c3c8d
->> --- /dev/null
->> +++ b/package/kmscube/Config.in
->> @@ -0,0 +1,5 @@
->> +config BR2_PACKAGE_KMSCUBE
->> +     bool "kmscube"
->> +     depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM
->
-> kmscube apparently wants EGL and OpenGL ES:
->
-> PKG_CHECK_MODULES(EGL, egl)
-> PKG_CHECK_MODULES(GLES2, glesv2)
->
-> so probably this needs to be taken into account here by using the
-> BR2_PACKAGE_MESA3D_OPENGL_EGL and BR2_PACKAGE_MESA3D_OPENGL_ES symbols.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-When building kmscube via Buildroot I see:
-
-checking for DRM... yes
-checking for GBM... yes
-checking for EGL... yes
-checking for GLES2... yes
-
-BR2_PACKAGE_MESA3D_OPENGL_EGL is selected by the Etnaviv mesa driver:
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV, which comes from a patch I
-sent today.
-
-I don't have BR2_PACKAGE_MESA3D_OPENGL_ES option selected, but I do
-get "checking for GLES2... yes", so I am bit confused.
-
-Is your suggestion to do something like this?
-
-config BR2_PACKAGE_KMSCUBE
- bool "kmscube"
- depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM
- depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
- select BR2_PACKAGE_MESA3D_OPENGL_ES
-
-> License information is also missing, and you forgot to add yourself to
-> the DEVELOPERS file (should be done in the same patch).
-
-It is not clear by looking at the header files which license this
-project uses. How should I do in a case like this?
-
-Thanks
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index bc4a08e9c..28c6b97e3 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 9b4790dafc886537096a6e1953ee0424b8c308881b97151a7bfba1f9fd14e3f9  vim-v8.0.0001.tar.gz
++sha256 6fbe0ec1228f951ba598b48ac8033f41ca4934cc34689a6008685e7c26477ae2  vim-v8.0.0329.tar.gz
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 308855eae..ec494608e 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = v8.0.0001
++VIM_VERSION = v8.0.0329
+ VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
+ # Win over busybox vi since vim is more feature-rich
+ VIM_DEPENDENCIES = \
+-- 
+2.11.0
