@@ -1,50 +1,36 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 13 Feb 2017 17:10:19 +0100
-Subject: [Buildroot]
- =?iso-8859-1?q?=5BPATCH_2/2=5D_DEVELOPERS=3A_add_J=F6?=
- =?iso-8859-1?q?rg__Krause_for_augeus?=
-In-Reply-To: <20170211164455.64a95639@free-electrons.com>
-References: <20170210110013.30448-1-joerg.krause@embedded.rocks>
- <20170210110013.30448-2-joerg.krause@embedded.rocks>
- <20170211164455.64a95639@free-electrons.com>
-Message-ID: <1487002219.2638.2.camel@embedded.rocks>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 13 Feb 2017 17:13:18 +0100
+Subject: [Buildroot] [PATCH 1/2] GNURadio: gr-audio: select alsa-lib if no
+	backend selected
+Message-ID: <20170213161319.25131-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On Sat, 2017-02-11 at 16:44 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 10 Feb 2017 12:00:13 +0100, J?rg Krause wrote:
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> > ?DEVELOPERS | 1 +
-> > ?1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index b8ccb4615..71f9fcad3 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -893,6 +893,7 @@ F:	package/x11r7/xdriver_xf86-video-imx/
-> > ?F:	package/x11r7/xdriver_xf86-video-imx-viv/
-> > ?
-> > ?N:	J?rg Krause <joerg.krause@embedded.rocks>
-> > +F:	package/augeas/
-> > ?F:	package/bctoolbox/
-> > ?F:	package/libshout/
-> > ?F:	package/libupnpp/
-> 
-> We have changed our mind at the last Buildroot developers meeting. We
-> now want the modification to the DEVELOPERS file to be part of the
-> patch adding the package. Since you received some feedback on the .mk
-> file itself, could you resubmit, with the DEVELOPERS changes merged
-> in
-> the main patch?
+gr-audio may be built with alsa-lib or portaudio support. To simplify
+dependencies if no backend is selected, then alsa-lib is the default choice.
 
-Of course!
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/gnuradio/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-J?rg
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 8301afe..0291d70 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -32,7 +32,7 @@ if BR2_PACKAGE_GNURADIO
+ 
+ config BR2_PACKAGE_GNURADIO_AUDIO
+ 	bool "gr-audio"
+-	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO
++	select BR2_PACKAGE_ALSA_LIB if !BR2_PACKAGE_PORTAUDIO
+ 	help
+ 	  Add audio source/sink to GNU Radio
+ 
+-- 
+2.10.2
