@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Feb 2017 22:39:00 +0100
-Subject: [Buildroot] [PATCH] glmark2: bump version
-In-Reply-To: <20170213200619.10535-1-gary.bisson@boundarydevices.com>
-References: <20170213200619.10535-1-gary.bisson@boundarydevices.com>
-Message-ID: <20170213223900.7167f053@free-electrons.com>
+Date: Mon, 13 Feb 2017 22:39:31 +0100
+Subject: [Buildroot] [git commit branch/next] gnuradio: make gr-audio select
+	alsa-lib if no backend selected
+Message-ID: <20170213214039.B391581F7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e528ed77401f2a62b0284c289deab8a3c1d5d76f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 13 Feb 2017 21:06:19 +0100, Gary Bisson wrote:
-> The package otherwise fails to build with a recent toolchain with GCC6
-> (tested with Linaro ARM 2016.11).
-> 
-> It used to fail at sqrt check during package configuration:
->  Checking for function sqrt               : not found
->  The configuration failed
-> 
-> Bumping version to latest HEAD fixes the issue as explained in the
-> following discussion:
-> https://github.com/glmark2/glmark2/issues/15
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
->  package/glmark2/glmark2.hash | 2 +-
->  package/glmark2/glmark2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+gr-audio may be built with alsa-lib or portaudio support. To simplify
+dependencies if no backend is selected, we automatically select alsa-lib
+as the default audio backend if portaudio is not enabled.
 
-Applied to master, thanks. However, I had to add a reference to an
-autobuilder issue (after checking that I could reproduce the issue, and
-that it was indeed fixed by your patch). Next time, could you make sure
-to include a reference to the autobuilder failure being fixed?
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gnuradio/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 8301afe..0291d70 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -32,7 +32,7 @@ if BR2_PACKAGE_GNURADIO
+ 
+ config BR2_PACKAGE_GNURADIO_AUDIO
+ 	bool "gr-audio"
+-	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO
++	select BR2_PACKAGE_ALSA_LIB if !BR2_PACKAGE_PORTAUDIO
+ 	help
+ 	  Add audio source/sink to GNU Radio
+ 
