@@ -1,43 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Feb 2017 15:27:47 +0100
-Subject: [Buildroot] [PATCH 2/2] u-boot: add support for full image
- socfpga mkpimage support
-In-Reply-To: <20170213135934.32014-2-lionel@svkt.org>
-References: <20170130103326.14427-2-lionel@svkt.org>
- <20170213135934.32014-1-lionel@svkt.org>
- <20170213135934.32014-2-lionel@svkt.org>
-Message-ID: <20170213152747.13a39b36@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Feb 2017 15:32:52 +0100
+Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
+In-Reply-To: <20170213132925.5324f141@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 13 Feb 2017 13:29:25 +0100")
+References: <20170213093502.26507-1-peter@korsgaard.com>
+ <20170213132925.5324f141@free-electrons.com>
+Message-ID: <8760kema97.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Thanks for this new iteration!
+ > Hello,
+ > On Mon, 13 Feb 2017 10:35:02 +0100, Peter Korsgaard wrote:
 
-On Mon, 13 Feb 2017 14:59:34 +0100, Lionel Flandrin wrote:
+ >> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
+ >> index 1d174c18b..3750897bb 100644
+ >> --- a/package/kmsxx/Config.in
+ >> +++ b/package/kmsxx/Config.in
+ >> @@ -4,6 +4,7 @@ config BR2_PACKAGE_KMSXX
+ >> depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+ >> depends on BR2_INSTALL_LIBSTDCPP
+ >> depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+ >> +	depends on !BR2_m68k # gcc ice
 
->  ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
-> +ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-> +UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
-> +UBOOT_CRC_ALTERA_SOCFPGA_HEADER_VERSION = 0
-> +else
-> +UBOOT_CRC_ALTERA_SOCFPGA_INPUT_IMAGES = u-boot-dtb.bin
-> +UBOOT_CRC_ALTERA_SOCFPGA_HEADER_VERSION = 1
-> +endif
+ > As usual, I really prefer if we report the bug to gcc upstream, and
+ > then do a depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_xyz. Otherwise, it's
+ > really tricky to keep track of when this or that issue gets resolved
+ > and when we can re-enable m68k.
 
-So when the SPL is used, the header version should always be 0, and
-when the full U-Boot is used directly, the header version should always
-be 1 ?
+ > CC'ing Waldemar on this.
 
-I thought 0 was for older SoCs, and 1 for newer SoCs. Or are we sure
-that SPL booting will only ever be used on older SoCs, and direct U-Boot
-booting will only be used on newer SoCs ?
+That's also fine by me if somebody wants to do that. I personally don't
+know/care enough about m68k, and it has been failing since October
+without anything happening, so I think we should disable it.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
