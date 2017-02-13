@@ -1,37 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Feb 2017 18:02:06 +0100
-Subject: [Buildroot] [PATCH] riemann-c-client: disable parallel make
-In-Reply-To: <20170213090741.9137-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 13 Feb 2017 10:07:41 +0100")
-References: <20170213090741.9137-1-peter@korsgaard.com>
-Message-ID: <87o9y6kos1.fsf@dell.be.48ers.dk>
+Date: Mon, 13 Feb 2017 18:01:14 +0100
+Subject: [Buildroot] [git commit] bind: security bump to version 9.11.0-P3
+Message-ID: <20170213170237.7C53E81EC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b9141fc88b24b6e0d565f84ee768f3199f31a6cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > http://autobuild.buildroot.net/results/2f8/2f85a2d19232365f7e5fddde6092af9dd74d4518/
- > http://autobuild.buildroot.net/results/80d/80d83c650c668ee1e87c288bd7a0ce63eab95631/
+Fixes CVE-2017-3135: Combination of DNS64 and RPZ Can Lead to Crash:
 
- > The build system doesn't specify any dependencies between the generated
- > header files and the source files including them, causing a race condition:
+https://kb.isc.org/article/AA-01453
 
- >   GEN      lib/riemann/proto/riemann.pb-c.c
- >   GEN      lib/riemann/proto/riemann.pb-c.h
- >   CC       src/src_riemann_client-riemann-client.o
- > In file included from ./lib/riemann/riemann-client.h:23:0,
- >                  from src/riemann-client.c:18:
- > ./lib/riemann/attribute.h:21:40: fatal error: riemann/proto/riemann.pb-c.h: No such file or directory
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Work around it by forcing non-parallel make.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index dc472b1..780e43b 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P2/bind-9.11.0-P2.tar.gz.sha256.asc
+-sha256 d651f83ce1c08c83d6ac8201685c4f2b5fdb79794f3a4f93c3948e0ef439c1e5  bind-9.11.0-P2.tar.gz
++# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P3/bind-9.11.0-P3.tar.gz.sha256.asc
++sha256 0feee0374bcbdee73a9d4277f3c5007622279572d520d7c27a4b64015d8ca9e9  bind-9.11.0-P3.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 7143089..860ee9d 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.0-P2
++BIND_VERSION = 9.11.0-P3
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
