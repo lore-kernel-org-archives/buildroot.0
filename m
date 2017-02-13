@@ -1,44 +1,38 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 13 Feb 2017 17:13:19 +0100
-Subject: [Buildroot] [PATCH 2/2] gqrx: suppress audio backend dependencies
-In-Reply-To: <20170213161319.25131-1-gwenj@trabucayre.com>
-References: <20170213161319.25131-1-gwenj@trabucayre.com>
-Message-ID: <20170213161319.25131-2-gwenj@trabucayre.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Feb 2017 17:27:18 +0100
+Subject: [Buildroot] [PATCH v3] classpath: bump to version 0.99
+In-Reply-To: <20170213170918.5428781c@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 13 Feb 2017 17:09:18 +0100")
+References: <20170212015451.16715-1-m.hoffmann@cartelsol.com>
+ <20170212020444.32045-1-m.hoffmann@cartelsol.com>
+ <20170212151431.1fe6cce3@free-electrons.com>
+ <5160b52a-c48a-4b52-3d0e-9d73a6fb5c37@cartelsol.com>
+ <20170213142952.302e6ee4@free-electrons.com>
+ <871sv2m5yb.fsf@dell.be.48ers.dk>
+ <20170213170918.5428781c@free-electrons.com>
+Message-ID: <87wpcukqe1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Now gr-audio selects an audio backend by default. Consequently, it is no more
-needed to depends on BR2_PACKAGE_ALSA_LIB or BR2_PACKAGE_PORTAUDIO.
+Hi,
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/gqrx/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ >> I don't recall the details, but as far as I remember the thinking was
+ >> that classpath only made sense if we have a jvm (and jamvm is our only
+ >> jvm).
 
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-index 5f7a561..1dc40c6 100644
---- a/package/gqrx/Config.in
-+++ b/package/gqrx/Config.in
-@@ -2,13 +2,12 @@ comment "gqrx needs a toolchain w/ C++, threads, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR
- 
--comment "gqrx needs qt5, gnuradio, fftw's single precision, alsa-lib or portaudio"
-+comment "gqrx needs qt5, gnuradio, fftw's single precision"
- 	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
--		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO) || !BR2_PACKAGE_QT5
-+		!BR2_PACKAGE_QT5
- 
- config BR2_PACKAGE_GQRX
- 	bool "gqrx"
--	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO # gr-audio
- 	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
- 	depends on BR2_PACKAGE_GNURADIO
- 	depends on BR2_PACKAGE_QT5
+ > Agreed. But that creates a kind of weird circular dependency, no?
+
+ > Or perhaps we should just get rid of the prompt for classpath
+ > completely?
+
+Either that or dropping the 'depends on jamvm' from classpath. It indeed
+isn't very useful without a jvm, but it still builds Ok and I guess a
+lot of other package combinations also don't make a lot of sense.
+
 -- 
-2.10.2
+Bye, Peter Korsgaard
