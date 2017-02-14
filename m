@@ -1,24 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 20:37:16 +0100
-Subject: [Buildroot] [PATCH] kmsxx: fix build error for m68k/coldfire
-In-Reply-To: <20170214141006.GA12260@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Tue, 14 Feb 2017 15:10:06 +0100")
-References: <20170214141006.GA12260@waldemar-brodkorb.de>
-Message-ID: <87vascimxf.fsf@dell.be.48ers.dk>
+Date: Tue, 14 Feb 2017 20:37:50 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-13
+In-Reply-To: <20170214180232.u2m4hirisgquonui@tarshish> (Baruch Siach's
+ message of "Tue, 14 Feb 2017 20:02:32 +0200")
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+ <20170214180232.u2m4hirisgquonui@tarshish>
+Message-ID: <87r330imwh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes:
- >   http://autobuild.buildroot.org/results/fc8/fc820e0b558537f771588b0e1291a8332427ff8d/
+ > Hi Thomas,
+ > On Tue, Feb 14, 2017 at 02:27:25PM +0100, Thomas Petazzoni wrote: 
+ >> > x86_64 | tcpreplay-4.1.2 | NOK |
+ >> http://autobuild.buildroot.net/results/b3c31e803ff552a196ce5717372c09d6f64c91bf
+ >> 
+ >> error: redefinition of 'struct ethhdr'
+ >> 
+ >> I believe this has been fixed by the rebuild of the toolchains I
+ >> deployed yesterday, which has the improvements done by Baruch. Baruch,
+ >> could you confirm?
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > I confirmed the tcpreplay builds successfully with the newly built 2017.02-rc1 
+ > based x86-64-musl toolchain.
 
-Committed, thanks.
+Ok, great!
 
 -- 
 Bye, Peter Korsgaard
