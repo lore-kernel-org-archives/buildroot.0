@@ -1,42 +1,70 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Feb 2017 18:01:23 +0200
-Subject: [Buildroot] [BUILDROOT] Add a text file on "/tmp" directory
- during img compilation
-In-Reply-To: <o7v72q$48j$1@blaine.gmane.org>
-References: <288390896.7283593.1487081370913.ref@mail.yahoo.com>
- <288390896.7283593.1487081370913@mail.yahoo.com>
- <o7v72q$48j$1@blaine.gmane.org>
-Message-ID: <20170214160123.3ewogltceen2c34i@tarshish>
+Date: Tue, 14 Feb 2017 18:08:44 +0200
+Subject: [Buildroot] [PATCH 1/1] bluez5_utils: Add config option to
+ install "bdaddr"
+In-Reply-To: <1487084632-16396-1-git-send-email-vishalthanki@gmail.com>
+References: <1487084632-16396-1-git-send-email-vishalthanki@gmail.com>
+Message-ID: <20170214160844.ts44yh2l4ghzwvad@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Grant, Thierry,
+Hi Vishal Thanki,
 
-On Tue, Feb 14, 2017 at 03:17:46PM +0000, Grant Edwards wrote:
-> On 2017-02-14, <thierry.xenomai43@yahoo.com> <thierry.xenomai43@yahoo.com> wrote:
-> > I would like to add a text files and bin?files on "/tmp" directory
-> > during the image making.
+On Tue, Feb 14, 2017 at 04:03:52PM +0100, Vishal Thanki wrote:
+> "bdaddr" utility allows to change the Bluetooth device
+> address. This patch adds a config option to enable
+> installation of bdaddr utility.
 > 
-> https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+> Signed-off-by: Vishal Thanki <vishalthanki@gmail.com>
+> ---
+>  package/bluez5_utils/Config.in       | 6 ++++++
+>  package/bluez5_utils/bluez5_utils.mk | 7 +++++++
+>  2 files changed, 13 insertions(+)
 > 
-> You can configure buildroot to run a script after the root tree is
-> done but but before the final image is created by setting the
-> BR2_ROOTFS_POST_BUILD_SCRIPT option. Look under
-> 
->   System Configuration
->     Custom scripts to run before creating filesystem images
-> 
-> In that script you can add/delete/remove files from the tree.
-> 
-> If all you want to do is add files, you can use the BR2_ROOTFS_OVERLAY
-> option to point to a tree that is copied on top of the target tree.
+> diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+> index a7c0ee4..00f8ec2 100644
+> --- a/package/bluez5_utils/Config.in
+> +++ b/package/bluez5_utils/Config.in
+> @@ -64,6 +64,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+>  	help
+>  	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
+>  
+> +config BR2_PACKAGE_BLUEZ5_TOOLS_BDADDR
+> +	bool "install bdaddr tool"
+> +	depends on BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+> +	help
+> +	  The "bdaddr" tool is used for changing the Bluetooth device address.
 
-That won't work with the default Buildroot configuration, since tmpfs is 
-mounted over /tmp. You need to supply your own skeleton if you want to 
-override this. See 'System configuration' -> 'Root FS skeleton' in menuconfig.
+bdaddr is less than 100KB. I don't think it's worth another config option. 
+100KB is negligible when you already have glib and dbus. I'd suggested to 
+either install bdaddr unconditionally, or have a single option for all tools/ 
+executables that are not covered by another config option already.
+
+> +
+>  config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
+>  	bool "build sixaxis plugin"
+>  	depends on BR2_PACKAGE_HAS_UDEV
+> diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+> index 66c3eab..f9e73c2 100644
+> --- a/package/bluez5_utils/bluez5_utils.mk
+> +++ b/package/bluez5_utils/bluez5_utils.mk
+> @@ -38,6 +38,13 @@ else
+>  BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_BLUEZ5_TOOLS_BDADDR),y)
+> +define BLUEZ5_UTILS_INSTALL_BDADDR
+> +	$(INSTALL) -D -m 0755 $(@D)/tools/bdaddr $(TARGET_DIR)/usr/bin/bdaddr
+> +endef
+> +BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += BLUEZ5_UTILS_INSTALL_BDADDR
+> +endif
+> +
+>  # enable sixaxis plugin
+>  ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
+>  BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
 
 baruch
 
