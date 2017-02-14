@@ -1,72 +1,58 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 14 Feb 2017 16:01:19 +0100
-Subject: [Buildroot] Issue with Vivante OpenGL driver and X11
-In-Reply-To: <8775b095-2254-947b-4d4f-919bcb9c1a6d@free-electrons.com>
-References: <16509520-1f05-41eb-8053-24716f1091d4@free-electrons.com>
- <20170214142113.di4mod3zmnjc52gg@t450s.lan>
- <8775b095-2254-947b-4d4f-919bcb9c1a6d@free-electrons.com>
-Message-ID: <CAAMH-yuJJb37AHMgaJW1U0V4KR=9FGvvWjX5YTLxdDXgJgsqiQ@mail.gmail.com>
+From: Vishal Thanki <vishalthanki@gmail.com>
+Date: Tue, 14 Feb 2017 16:03:52 +0100
+Subject: [Buildroot] [PATCH 1/1] bluez5_utils: Add config option to install
+	"bdaddr"
+Message-ID: <1487084632-16396-1-git-send-email-vishalthanki@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Myl?ne,
+"bdaddr" utility allows to change the Bluetooth device
+address. This patch adds a config option to enable
+installation of bdaddr utility.
 
-On Tue, Feb 14, 2017 at 3:56 PM, Mylene Josserand
-<mylene.josserand@free-electrons.com> wrote:
-> Hi Gary,
->
-> On 14/02/2017 15:21, Gary Bisson wrote:
->>
->> Hi Mylene, All,
->>
->> On Tue, Feb 14, 2017 at 03:06:28PM +0100, Mylene Josserand wrote:
->>>
->>> Hello everyone,
->>>
->>> I got an issue with OpenGL Vivante support with X11 on Nitrogen board
->>> (nitrogen6max).
->>>
->>> I am on Buildroot's Master branch, last commit:
->>> 5bf12ad141f5de02c79c04a773e7709b87070229
->>>
->>> I tried Qt5 OpenGL examples and X is segfaulting. I tested with vivante
->>> examples too (tutorial2) and same issue.
->>>
->>> You can find a log here:
->>> http://code.bulix.org/wfkcna-115447
->>>
->>> Any idea? Did I miss something or configured something wrong?
->>
->>
->> No, you're just the first lucky user trying X 1.19 on i.MX6Q.
->
->
-> Okay :)
->
->>
->> Fortunately for us Yocto users already faced that actually:
->>
->> https://lists.yoctoproject.org/pipermail/meta-freescale/2017-January/020127.html
->>
->> It seems that this patch is required on xserver:
->> https://patchwork.openembedded.org/patch/136696/
->>
->> Can you try it and let us know how it goes?
->
->
-> Yes, I just tested it and adding this patch make the Vivante examples
-> working fine without segfault error!
+Signed-off-by: Vishal Thanki <vishalthanki@gmail.com>
+---
+ package/bluez5_utils/Config.in       | 6 ++++++
+ package/bluez5_utils/bluez5_utils.mk | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-Cool, thanks for testing!
-
-> Are you going to send a patch to Buildroot to add this X11's patch? (I guess
-> so)
-
-Well I won't have time to do it today and you're the one who tried it
-and probably have a patch locally already so feel free to submit it.
-
-Thanks,
-Gary
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index a7c0ee4..00f8ec2 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -64,6 +64,12 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+ 	help
+ 	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
+ 
++config BR2_PACKAGE_BLUEZ5_TOOLS_BDADDR
++	bool "install bdaddr tool"
++	depends on BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
++	help
++	  The "bdaddr" tool is used for changing the Bluetooth device address.
++
+ config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
+ 	bool "build sixaxis plugin"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 66c3eab..f9e73c2 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -38,6 +38,13 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BLUEZ5_TOOLS_BDADDR),y)
++define BLUEZ5_UTILS_INSTALL_BDADDR
++	$(INSTALL) -D -m 0755 $(@D)/tools/bdaddr $(TARGET_DIR)/usr/bin/bdaddr
++endef
++BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += BLUEZ5_UTILS_INSTALL_BDADDR
++endif
++
+ # enable sixaxis plugin
+ ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
+-- 
+2.4.11
