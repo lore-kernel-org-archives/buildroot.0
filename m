@@ -1,41 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Feb 2017 16:49:50 +0100
-Subject: [Buildroot] [git commit] poppler: bump to version 0.52.0
-Message-ID: <20170301170422.19F3E82297@busybox.osuosl.org>
+Date: Tue, 14 Feb 2017 20:22:36 +0100
+Subject: [Buildroot] [git commit] barebox: bump to version 2017.02.0
+Message-ID: <20170301170420.D8ED6800CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=897f7f124245f95fca334acfa77ffd7aaadb5f88
+commit: https://git.buildroot.net/buildroot/commit/?id=e6ca4ed3b9db794d958e61a3f757f6717efddb7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poppler/poppler.hash | 2 +-
- package/poppler/poppler.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index af597e0..1c57ef3 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	e997c9ad81a8372f2dd03a02b00692b8cc479c220340c8881edaca540f402c1f	poppler-0.51.0.tar.xz
-+sha256	528b661738839f9a25f6e580fcd2d5db007e0a1948580c6489f0062798ca1992	poppler-0.52.0.tar.xz
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index fda8284..5c2d096 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index e6ecd82..85956d6 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--POPPLER_VERSION = 0.51.0
-+POPPLER_VERSION = 0.52.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = http://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2017.01.0"
++	bool "2017.02.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2017.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2017.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index f769c1d..5750597 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# http://www.barebox.org/download/barebox-2017.01.0.tar.bz2.md5
+-md5 d2933437885497b09d69d6e6f4beeffc  barebox-2017.01.0.tar.bz2
++# http://www.barebox.org/download/barebox-2017.02.0.tar.bz2.md5
++md5 4651f5fa5e794a9739dd71eece0fe702  barebox-2017.02.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 ca4cc06bdc7183e3fcb4bed300f1e820df1e022a7b86fdcf64205ddb6a103567  barebox-2017.01.0.tar.bz2
++sha256 d65d864fe598d61ed9c6712e32d50742e6996aae02acaae5955c3b22166344cb  barebox-2017.02.0.tar.bz2
