@@ -1,39 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 16:10:59 +0100
-Subject: [Buildroot] Analysis of build results for 2017-02-13
-In-Reply-To: <87lgt8kepo.fsf@dell.be.48ers.dk>
-References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
- <20170214142725.1b9e98ae@free-electrons.com>
- <87lgt8kepo.fsf@dell.be.48ers.dk>
-Message-ID: <20170214161059.6a096f81@free-electrons.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 14 Feb 2017 15:17:46 +0000 (UTC)
+Subject: [Buildroot] [BUILDROOT] Add a text file on "/tmp" directory
+ during img compilation
+References: <288390896.7283593.1487081370913.ref@mail.yahoo.com>
+ <288390896.7283593.1487081370913@mail.yahoo.com>
+Message-ID: <o7v72q$48j$1@blaine.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2017-02-14, <thierry.xenomai43@yahoo.com> <thierry.xenomai43@yahoo.com> wrote:
 
-On Tue, 14 Feb 2017 15:51:47 +0100, Peter Korsgaard wrote:
+> I would like to add a text files and bin?files on "/tmp" directory
+> during the image making.
 
-> Yes, I believe so (this failures are with gcc 6.x). I had a quick look
-> yesterday, and our synergy package is ancient. It seems to have moved to
-> github and changed quite a bit since then.
-> 
-> https://github.com/symless/synergy/
-> 
-> The last release in the 1.3.x series is 1.3.8. I'll take a look and see
-> if that has fixed this issue.
+https://buildroot.org/downloads/manual/manual.html#rootfs-custom
 
-See:
+You can configure buildroot to run a script after the root tree is
+done but but before the final image is created by setting the
+BR2_ROOTFS_POST_BUILD_SCRIPT option. Look under
 
-  [PATCH 1/1] package/synergy: bump to version 1.8.5
+  System Configuration
+    Custom scripts to run before creating filesystem images
 
-on the mailing list. But that's a rather big update, with somewhat
-scary things.
+In that script you can add/delete/remove files from the tree.
 
-Thomas
+If all you want to do is add files, you can use the BR2_ROOTFS_OVERLAY
+option to point to a tree that is copied on top of the target tree.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Grant Edwards               grant.b.edwards        Yow! An Italian is COMBING
+                                  at               his hair in suburban DES
+                              gmail.com            MOINES!
