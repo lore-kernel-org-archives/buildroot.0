@@ -1,67 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 22:39:38 +0100
-Subject: [Buildroot] [PATCH v3 1/5] package: refactor listing of
- extractor dependencies
-In-Reply-To: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
-References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
-Message-ID: <20170214223938.5dc7c382@free-electrons.com>
+Date: Tue, 14 Feb 2017 22:34:43 +0100
+Subject: [Buildroot] [git commit] ddrescue: fix uclibc compile
+Message-ID: <20170214214107.6AB7282138@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3c0aeeed04ecfb9a2e8650b4fa0f515a7959e7cf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 12 Feb 2017 22:15:38 +0200, Baruch Siach wrote:
-> Don't special case $(XZCAT) when constructing DL_TOOLS_DEPENDENCIES. The next
-> commit will introduce another extractor that automatically builds when not
-> installed. Introduce EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS that lists
-> archive extensions for which the extractor is already checked in
-> support/dependencies/check-host-foo.mk. Use this in the newly introduced
-> extractor-dependency to populate DL_TOOLS_DEPENDENCIES.
-> 
-> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes compile failure with uclibc [1] because of missing stdio.h include:
 
-I thought this patch series would be material for the next branch, as
-to me it was just an improvement/cleanup.
+  In file included from io.cc:28:0:
+  block.h:219:22: error: ???FILE??? has not been declared
+     int write_mapfile( FILE * f = 0, const bool timestamp = false,
 
-But in fact, it is actually a fix: all packages that depend on
-host-lzip today are broken. Take ddrescue for example (but ed and ocrad
-are doing the same):
+[1] http://autobuild.buildroot.net/results/4ac0754f1cc5ea934d6437e89d1f4906fb3fd0a8
 
-DDRESCUE_DEPENDENCIES = host-lzip
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../ddrescue/0001-io.cc-add-stdio.h-include.patch  | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-define DDRESCUE_EXTRACT_CMDS
-        $(HOST_DIR)/usr/bin/lzip -d -c $(DL_DIR)/$(DDRESCUE_SOURCE) | \
-                tar --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
-endef
-
-So they put host-lzip in <pkg>_DEPENDENCIES, and use
-$(HOST_DIR)/usr/bin/lzip in the extract step.
-
-The problem is that the dependencies in <pkg>_DEPENDENCIES are only
-guaranteed to be available before the *configure* step of the package,
-not before the extract step. So if you run:
-
-$ make ddrescue-patch
-
-You currently get:
-
-/home/thomas/projets/buildroot/output/host/usr/bin/lzip -d -c /home/thomas/dl/ddrescue-1.22.tar.lz | tar --strip-components=1 -C /home/thomas/projets/buildroot/output/build/ddrescue-1.22  -xf -
-/bin/bash: /home/thomas/projets/buildroot/output/host/usr/bin/lzip: No such file or directory
-tar: This does not look like a tar archive
-tar: Exiting with failure status due to previous errors
-
-So I believe this patch series should be applied on master, because it
-adds host-lzip to DEPENDENCIES_HOST_PREREQ, which is the only solution
-to guarantee it will be available to extract packages.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/ddrescue/0001-io.cc-add-stdio.h-include.patch b/package/ddrescue/0001-io.cc-add-stdio.h-include.patch
+new file mode 100644
+index 0000000..e719c70
+--- /dev/null
++++ b/package/ddrescue/0001-io.cc-add-stdio.h-include.patch
+@@ -0,0 +1,36 @@
++From 0f72787b922c53c33d497b17300a959b911e621f Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 14 Feb 2017 20:12:05 +0100
++Subject: [PATCH] io.cc: add stdio.h include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes buildroot compile failure with uclibc [1]:
++
++  In file included from io.cc:28:0:
++  block.h:219:22: error: ???FILE??? has not been declared
++     int write_mapfile( FILE * f = 0, const bool timestamp = false,
++
++[1] http://autobuild.buildroot.net/results/4ac0754f1cc5ea934d6437e89d1f4906fb3fd0a8
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ io.cc | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/io.cc b/io.cc
++index 36b8341..2d6a76e 100644
++--- a/io.cc
+++++ b/io.cc
++@@ -23,6 +23,7 @@
++ #include <string>
++ #include <vector>
++ #include <stdint.h>
+++#include <stdio.h>
++ #include <unistd.h>
++ 
++ #include "block.h"
++-- 
++2.11.0
++
