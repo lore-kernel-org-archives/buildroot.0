@@ -1,76 +1,42 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Tue, 14 Feb 2017 10:24:00 +0100
-Subject: [Buildroot] [PATCH v2] kmscube: Add new package
-In-Reply-To: <20170214091803.70ab8d9a@free-electrons.com>
-References: <1487011784-24966-1-git-send-email-festevam@gmail.com>
- <20170213223117.0125c14e@free-electrons.com>
- <CAOMZO5Dwdu5-+bV=TXA6=-wg+=W05BhE1eEYhzZk6zV71MUBdA@mail.gmail.com>
- <20170214091803.70ab8d9a@free-electrons.com>
-Message-ID: <20170214092400.4g7lp3xj5z5zgxo2@lukather>
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date: Tue, 14 Feb 2017 10:33:54 +0100
+Subject: [Buildroot] [PATCH] package/libgpiod: bump version to 0.1.3
+Message-ID: <1487064834-10378-1-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Release 0.1.2 claimed to fix an issue with requesting both types of
+line events, but actually didn't. This time it's really fixed.
 
-On Tue, Feb 14, 2017 at 09:18:03AM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 13 Feb 2017 20:03:29 -0200, Fabio Estevam wrote:
-> 
-> > > PKG_CHECK_MODULES(EGL, egl)
-> > > PKG_CHECK_MODULES(GLES2, glesv2)
-> 
-> This code means that kmscube will only build fine if the pkg-config
-> files egl.pc and glesv2.pc are available.
-> 
-> > checking for DRM... yes
-> > checking for GBM... yes
-> > checking for EGL... yes
-> > checking for GLES2... yes
-> > 
-> > BR2_PACKAGE_MESA3D_OPENGL_EGL is selected by the Etnaviv mesa driver:
-> > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV, which comes from a patch I
-> > sent today.
-> > 
-> > I don't have BR2_PACKAGE_MESA3D_OPENGL_ES option selected, but I do
-> > get "checking for GLES2... yes", so I am bit confused.
-> > 
-> > Is your suggestion to do something like this?
-> > 
-> > config BR2_PACKAGE_KMSCUBE
-> >  bool "kmscube"
-> >  depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM
-> >  depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-> >  select BR2_PACKAGE_MESA3D_OPENGL_ES
-> 
-> I would do just:
-> 
-> 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-> 	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Actually, it doesn't depend on a specific GLES / EGL implementation,
-but it does depend on Mesa for GBM. There are alternative
-implementation of GBM as well, so having something like:
-
-depends on BR2_PACKAGE_HAS_LIBEGL
-depends on BR2_PACKAGE_HAS_LIBGLES
-depends on BR2_PACKAGE_MESA3D # GBM implementation
-
-Seems more natural
-
-Maxime
-
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 9901be6..eee2a66 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 c9a60e1073aacb25b4ad06d513f31416335b5a710f869cb7e838d2abb62e1e00 libgpiod-v0.1.2.tar.gz
++sha256 670a13518fabf2a99f9e349c33d5421c2146eec15b73c5edef3f1981a7adaeda libgpiod-v0.1.3.tar.gz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index dbf9511..bc9c6ec 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = v0.1.2
++LIBGPIOD_VERSION = v0.1.3
+ LIBGPIOD_SITE = $(call github,brgl,libgpiod,$(LIBGPIOD_VERSION))
+ LIBGPIOD_LICENSE = GPLv3+
+ LIBGPIOD_LICENSE_FILES = COPYING
 -- 
-Maxime Ripard, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 801 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170214/fe5d8720/attachment.asc>
+2.9.3
