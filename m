@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 11:18:53 +0100
-Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
-In-Reply-To: <87fujhkrik.fsf@dell.be.48ers.dk>
-References: <20170213093502.26507-1-peter@korsgaard.com>
- <20170213132925.5324f141@free-electrons.com>
- <8760kema97.fsf@dell.be.48ers.dk>
- <20170213213713.GA12810@waldemar-brodkorb.de>
- <87fujhkrik.fsf@dell.be.48ers.dk>
-Message-ID: <20170214111853.11853a34@free-electrons.com>
+Date: Tue, 14 Feb 2017 11:20:54 +0100
+Subject: [Buildroot] [PATCH] bctoolbox: fix typos and logic error
+In-Reply-To: <20170214090132.GA5012@waldemar-brodkorb.de>
+References: <20170214090132.GA5012@waldemar-brodkorb.de>
+Message-ID: <20170214112054.3e092c84@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Feb 2017 11:15:15 +0100, Peter Korsgaard wrote:
+Thanks a lot for looking into this build issue and fixing it. Just one
+comment below.
 
-> We are again past rc1, so I think the safest approach for 2017.02 is to
-> not add it to the wrapper, but instead explicitly pass it in kmsxx.mk
-> (and any other package with the same problem). From my IRC history this
-> also seems to be what you discussed with Thomas yesterday.
+On Tue, 14 Feb 2017 10:01:32 +0100, Waldemar Brodkorb wrote:
 
-In addition, only 3 packages need it for the moment according to
-Waldemar, so I think for now a per-package fix is better. We'll see
-later if this needs to be generalized and put into the wrapper if
-really a large number of packages are affected.
+> diff --git a/package/bctoolbox/0001-fix-typo.patch b/package/bctoolbox/0001-fix-typo.patch
+> new file mode 100644
+> index 0000000..b94daee
+> --- /dev/null
+> +++ b/package/bctoolbox/0001-fix-typo.patch
+> @@ -0,0 +1,18 @@
+> +Fix a typo in the variable name. Only check path for a single library name.
+> +
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org> 
 
-Has this issue been reported upstream?
+When the upstream project uses Git, I really, really prefer when the
+patches are Git formatted. This way, they can easily be git am'ed by
+other people who need to create/rework patches for the same package.
+
+Thanks!
 
 Thomas
 -- 
