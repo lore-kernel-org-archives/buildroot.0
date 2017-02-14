@@ -1,47 +1,49 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 14 Feb 2017 21:10:54 +0100
-Subject: [Buildroot] [PATCH] bctoolbox: fix typos and logic error
-In-Reply-To: <878tp8k21w.fsf@dell.be.48ers.dk>
-References: <20170214090132.GA5012@waldemar-brodkorb.de>
- <1487085729.1684.3.camel@embedded.rocks>
- <20170214153958.GE12810@waldemar-brodkorb.de>
- <1487089783.1684.5.camel@embedded.rocks> <878tp8k21w.fsf@dell.be.48ers.dk>
-Message-ID: <1487103054.4255.1.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Feb 2017 21:14:43 +0100
+Subject: [Buildroot] [PATCH 1/1] bluez5_utils: Add config option to
+ install "bdaddr"
+In-Reply-To: <20170214160844.ts44yh2l4ghzwvad@tarshish>
+References: <1487084632-16396-1-git-send-email-vishalthanki@gmail.com>
+ <20170214160844.ts44yh2l4ghzwvad@tarshish>
+Message-ID: <20170214211443.00dc1a10@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2017-02-14 at 20:25 +0100, Peter Korsgaard wrote:
-> > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
-> 
-> Hi,
-> 
-> ?>> Do you have a chance to suggest a better fix and test with static
-> ?>> linking?
-> 
-> ?> From my understanding of pkg-config, 'Libs.private' should be:
-> 
-> ?> """
-> ?> Libs.private:??-lmbedtls -lmbedcrypto -lmbedx509
-> 
-> And possibly a -L to where these libraries are located (which is the
-> original issue).
+Hello,
 
-Is this necassary? I had a look at some pkg-config files and none of
-them used '-L' in 'Libs.private', only in 'Libs:'
+On Tue, 14 Feb 2017 18:08:44 +0200, Baruch Siach wrote:
 
-> ?> """
-> ?> -L/mnt/data/git/buildroot/output/host/usr/arm-buildroot-linux-
-> ?> uclibcgnueabi/sysroot/usr/lib -lbctoolbox -lmbedtls -lmbedcrypto
-> ?> -lmbedx509
-> ?> """
+> > +config BR2_PACKAGE_BLUEZ5_TOOLS_BDADDR
+> > +	bool "install bdaddr tool"
+> > +	depends on BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+> > +	help
+> > +	  The "bdaddr" tool is used for changing the Bluetooth device address.  
 > 
-> ?> .. which should be correct.
-> 
-> WIll you send a patch to do this?
+> bdaddr is less than 100KB. I don't think it's worth another config option. 
+> 100KB is negligible when you already have glib and dbus. I'd suggested to 
+> either install bdaddr unconditionally, or have a single option for all tools/ 
+> executables that are not covered by another config option already.
 
-Sure.
+I would tend to agree, but we already have options like
+BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL to install a single tool.
 
-J?rg
+How many tools are provided by bluez5_utils? If it's just a very small
+set of tools, it's OK to have one option for each. But if there are
+many small tools, we definitely don't want to have one option for each.
+
+In any case, we need to provide a better guideline to Vishal, because
+right now, we are not explaining how the patch should be fixed. If we
+introduce something like BR2_PACKAGE_BLUEZ5_UTILS_TOOLS, then what
+should be done with BR2_PACKAGE_BLUEZ5_UTILS_CLIENT or
+BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL for example ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
