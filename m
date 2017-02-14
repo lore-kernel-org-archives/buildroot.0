@@ -1,31 +1,43 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Feb 2017 20:02:32 +0200
-Subject: [Buildroot] Analysis of build results for 2017-02-13
-In-Reply-To: <20170214142725.1b9e98ae@free-electrons.com>
-References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
- <20170214142725.1b9e98ae@free-electrons.com>
-Message-ID: <20170214180232.u2m4hirisgquonui@tarshish>
+Date: Tue, 14 Feb 2017 21:17:56 +0200
+Subject: [Buildroot] uImage support for aarch64
+In-Reply-To: <CAJJmP9D0JFq8Wjbp2MX+mXdca6Up+3z0XJ1Xs3ojc8UcU2p11Q@mail.gmail.com>
+References: <CAJJmP9D0JFq8Wjbp2MX+mXdca6Up+3z0XJ1Xs3ojc8UcU2p11Q@mail.gmail.com>
+Message-ID: <20170214191756.s6huaepb46ocxni5@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Cris,
 
-On Tue, Feb 14, 2017 at 02:27:25PM +0100, Thomas Petazzoni wrote: 
-> >       x86_64 |                tcpreplay-4.1.2 | NOK | http://autobuild.buildroot.net/results/b3c31e803ff552a196ce5717372c09d6f64c91bf
+On Tue, Feb 14, 2017 at 08:00:47AM -0800, chris warth wrote:
+> Can anyone shed some light on why uImage with device tree is not a
+> supported format for the aarch64 architecture under Buildroot?  (see
+> the definition of BR2_LINUX_KERNEL_APPENDED_UIMAGE in linux/Config.in)
 > 
-> error: redefinition of 'struct ethhdr'
+> The appended uImage options in linux/Config.in seem to be dependent on
+> the BR2_arm or BR2_armeb.  In fact the base uImage format does not
+> appear to be supported for BR2_aarch64 at all.
 > 
-> I believe this has been fixed by the rebuild of the toolchains I
-> deployed yesterday, which has the improvements done by Baruch. Baruch,
-> could you confirm?
+> Is this an oversight or is there a technical challenge to supporting
+> AARCH64 images in uImage format?
 
-I confirmed the tcpreplay builds successfully with the newly built 2017.02-rc1 
-based x86-64-musl toolchain.
+uImage is deprecated on ARM 32bit as well. U-Boot added support for native 
+zImage a few years back.
 
-Thanks,
+The problem with uImage is that kernel load address is hard codes in the 
+uImage header. This prevents multi-platform compatibility, since RAM physical 
+location and size varies on different platforms. zImage is much more flexible 
+in this regard.
+
+As for BR2_LINUX_KERNEL_APPENDED_UIMAGE, this is only useful when the 
+bootloader is too old to support device tree. Being a relatively new 
+architecture, and DT based from the start, I'm pretty sure there is no such 
+bootloader for ARM64. Besides, ARM64 does not support the appended DTB trick 
+to begin with.
+
 baruch
 
 -- 
