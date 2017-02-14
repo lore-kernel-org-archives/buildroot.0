@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 22:44:17 +0100
-Subject: [Buildroot] [git commit] package/libgpiod: bump version to 0.1.3
-Message-ID: <20170214214426.8A3AC818BE@busybox.osuosl.org>
+Date: Tue, 14 Feb 2017 22:45:15 +0100
+Subject: [Buildroot] [PATCH] package/libgpiod: bump version to 0.1.3
+In-Reply-To: <1487064834-10378-1-git-send-email-bgolaszewski@baylibre.com>
+References: <1487064834-10378-1-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <20170214224515.64934fd1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5c22302f9d1a73d40e5f4748440b37b22da04f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Release 0.1.2 claimed to fix an issue with requesting both types of
-line events, but actually didn't. This time it's really fixed.
+On Tue, 14 Feb 2017 10:33:54 +0100, Bartosz Golaszewski wrote:
+> Release 0.1.2 claimed to fix an issue with requesting both types of
+> line events, but actually didn't. This time it's really fixed.
+> 
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> ---
+>  package/libgpiod/libgpiod.hash | 2 +-
+>  package/libgpiod/libgpiod.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+We normally don't apply version bumps to the master branch after -rc1
+has been released, but after looking at the git log between 0.1.2 and
+0.1.3 it's indeed just two commits, each one-liners, fixing bugs. So I
+think this qualifies for master, and applied your patch to the master
+branch.
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 9901be6..eee2a66 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 c9a60e1073aacb25b4ad06d513f31416335b5a710f869cb7e838d2abb62e1e00 libgpiod-v0.1.2.tar.gz
-+sha256 670a13518fabf2a99f9e349c33d5421c2146eec15b73c5edef3f1981a7adaeda libgpiod-v0.1.3.tar.gz
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index dbf9511..bc9c6ec 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPIOD_VERSION = v0.1.2
-+LIBGPIOD_VERSION = v0.1.3
- LIBGPIOD_SITE = $(call github,brgl,libgpiod,$(LIBGPIOD_VERSION))
- LIBGPIOD_LICENSE = GPLv3+
- LIBGPIOD_LICENSE_FILES = COPYING
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
