@@ -1,43 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 11:23:49 +0100
-Subject: [Buildroot] [PATCH v2] kmscube: Add new package
-In-Reply-To: <20170214092400.4g7lp3xj5z5zgxo2@lukather>
-References: <1487011784-24966-1-git-send-email-festevam@gmail.com>
- <20170213223117.0125c14e@free-electrons.com>
- <CAOMZO5Dwdu5-+bV=TXA6=-wg+=W05BhE1eEYhzZk6zV71MUBdA@mail.gmail.com>
- <20170214091803.70ab8d9a@free-electrons.com>
- <20170214092400.4g7lp3xj5z5zgxo2@lukather>
-Message-ID: <20170214112349.55c30c40@free-electrons.com>
+From: Erwan Gautron <erwan.gautron@yahoo.fr>
+Date: Tue, 14 Feb 2017 10:31:06 +0000 (UTC)
+Subject: [Buildroot] [PATCH 1/1] Install raptor package in staging
+In-Reply-To: <20170213155829.7663c0e4@free-electrons.com>
+References: <1182785180.5405440.1486972873694.ref@mail.yahoo.com>
+ <1182785180.5405440.1486972873694@mail.yahoo.com>
+ <20170213155829.7663c0e4@free-electrons.com>
+Message-ID: <1659837784.6968938.1487068266624@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+HelloI'll do 
+BR
+Erwan
+
+
+      De?: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ ??: Erwan Gautron <erwan.gautron@yahoo.fr> 
+Cc?: "buildroot at buildroot.org" <buildroot@buildroot.org>
+ Envoy? le : Lundi 13 f?vrier 2017 15h58
+ Objet?: Re: [Buildroot] [PATCH 1/1] Install raptor package in staging
+   
 Hello,
 
-On Tue, 14 Feb 2017 10:24:00 +0100, Maxime Ripard wrote:
+Thanks for your contribution! This looks mostly good, but I have a few
+comments below.
 
-> Actually, it doesn't depend on a specific GLES / EGL implementation,
-> but it does depend on Mesa for GBM. There are alternative
-> implementation of GBM as well, so having something like:
+The commit title should be:
+
+??? raptor: install package to staging
+
+indeed, for consistency reasons, we want all commit titles to follow
+the format:
+
+??? <package>: <short description>
+
+On Mon, 13 Feb 2017 08:01:13 +0000 (UTC), Erwan Gautron wrote:
+> Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
+
+Could you expand the commit log to explain *why* we want to install
+this package to staging?
+
+> ?package/raptor/raptor.mk | 2 +-
+> ?1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> depends on BR2_PACKAGE_HAS_LIBEGL
-> depends on BR2_PACKAGE_HAS_LIBGLES
-> depends on BR2_PACKAGE_MESA3D # GBM implementation
-> 
-> Seems more natural
+> diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+> index aea14e3..a2c2b23 100644
+> --- a/package/raptor/raptor.mk
+> +++ b/package/raptor/raptor.mk
+> @@ -13,7 +13,7 @@ RAPTOR_LICENSE_FILES = LICENSE.txt
+> ?
+> ?# Flag is added to make sure the patch is applied for the configure.ac of raptor.
+> ?RAPTOR_AUTORECONF = YES
+> -
+> +RAPTOR_INSTALL_STAGING=YES
 
-In principle, I would agree, but we pass --enable-gbm only when
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y. So with your proposal, we could end up
-in a situation where libgbm isn't.
+Missing spaces before and after the equal sign.
 
-Try a build with just BR2_PACKAGE_MESA3D=y, libgm isn't
-built/installed. So if we want to do this, perhaps we need a separate
-BR2_PACKAGE_MESA3D_LIBGBM option?
+I could have fixed this and the commit title myself, but I can't fix
+the reason why this patch is useful. So can you fix all three issues
+and submit an updated version of your patch?
+
+Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux and Kernel engineering
 http://free-electrons.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+   
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170214/f883c632/attachment.html>
