@@ -1,21 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 20:22:49 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2017.02.0
-In-Reply-To: <20170214164040.25057-1-fabio.porcedda@gmail.com> (Fabio
- Porcedda's message of "Tue, 14 Feb 2017 17:40:40 +0100")
-References: <20170214164040.25057-1-fabio.porcedda@gmail.com>
-Message-ID: <87d1ekk25y.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 Feb 2017 19:23:54 +0000
+Subject: [Buildroot] [Bug 9651] libxcb-1.12 built Error
+In-Reply-To: <bug-9651-163@https.bugs.busybox.net/>
+References: <bug-9651-163@https.bugs.busybox.net/>
+Message-ID: <bug-9651-163-KZTZf8ZKzc@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=9651
 
- > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Skamlinux <kalman.staudinger@gmail.com> changed:
 
-Committed to next, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |MOVED
+             Status|NEW                         |RESOLVED
+
+--- Comment #8 from Skamlinux <kalman.staudinger@gmail.com> ---
+One time i have deleted this directory and building will continue and finally
+libxcb will be the problem again.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
