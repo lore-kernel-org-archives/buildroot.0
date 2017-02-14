@@ -1,94 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 22:34:14 +0100
-Subject: [Buildroot] [git commit] libv4l/ir-ctl: fix musl compile
-Message-ID: <20170214213427.A5BF981979@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Feb 2017 22:36:07 +0100
+Subject: [Buildroot] [PATCH/autobuild] get_toolchain_configs: be robust
+	against network errors
+Message-ID: <20170214213607.21736-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41d8daa7e94c1b6a86c4d0cd50e712698c2c4571
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Once in a while some of my autobuilder instances hangs with an exception
+from urllib:
 
-- add copy of TEMP_FAILURE_RETRY macro
-- use strdup instead of strdupa
+Process Process-1:
+Traceback (most recent call last):
+  File "/home/peko/host/usr/lib/python2.7/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/home/peko/host/usr/lib/python2.7/multiprocessing/process.py", line 114, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/peko/buildroot-test/scripts/autobuild-run", line 804, in run_instance
+    ret = gen_config(**kwargs)
+  File "/home/peko/buildroot-test/scripts/autobuild-run", line 526, in gen_config
+    configs = get_toolchain_configs()
+  File "/home/peko/buildroot-test/scripts/autobuild-run", line 291, in get_toolchain_configs
+    with urlopen_closing(config["url"]) as r:
+  File "/home/peko/buildroot-test/scripts/autobuild-run", line 146, in <lambda>
+    urlopen_closing = lambda uri: contextlib.closing(urlopen(uri))
+  File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 127, in urlopen
+    return _opener.open(url, data, timeout)
+  File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 404, in open
+    response = self._open(req, data)
+  File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 422, in _open
+    '_open', req)
+  File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 382, in _call_chain
+    result = func(*args)
+  File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 1214, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 1184, in do_open
+    raise URLError(err)
+URLError: <urlopen error [Errno -2] Name or service not known>
 
-Fixes [1]:
+If this happens, simply ignore the configuration and try again.
 
-  ir-ctl.c:(.text+0xb06): undefined reference to `strndupa'
-  ir-ctl.c:(.text+0xe01): undefined reference to `TEMP_FAILURE_RETRY'
-
-[1] http://autobuild.buildroot.net/results/b8b96c7bbf2147dacac62485cbfdbcfd758271a5
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-ir-ctl-fixes-for-musl-compile.patch       | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ scripts/autobuild-run | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/libv4l/0002-ir-ctl-fixes-for-musl-compile.patch b/package/libv4l/0002-ir-ctl-fixes-for-musl-compile.patch
-new file mode 100644
-index 0000000..5bce2d9
---- /dev/null
-+++ b/package/libv4l/0002-ir-ctl-fixes-for-musl-compile.patch
-@@ -0,0 +1,59 @@
-+From 9908872aaa614a6c4bba80d7a5f1adea7ca7117e Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 14 Feb 2017 21:27:59 +0100
-+Subject: [PATCH] ir-ctl: fixes for musl compile
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index cf19735..37c2b12 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -528,7 +528,11 @@ def gen_config(**kwargs):
+     log_write(log, "INFO: generate the configuration")
+ 
+     # Select a random toolchain configuration
+-    configs = get_toolchain_configs(**kwargs)
++    try:
++        configs = get_toolchain_configs(**kwargs)
++    except:
++        return -1
 +
-+- add copy of TEMP_FAILURE_RETRY macro
-+- use strdup instead of strdupa
-+
-+Fixes [1]:
-+
-+  ir-ctl.c:(.text+0xb06): undefined reference to `strndupa'
-+  ir-ctl.c:(.text+0xe01): undefined reference to `TEMP_FAILURE_RETRY'
-+
-+[1] http://autobuild.buildroot.net/results/b8b96c7bbf2147dacac62485cbfdbcfd758271a5
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ utils/ir-ctl/ir-ctl.c | 13 ++++++++++++-
-+ 1 file changed, 12 insertions(+), 1 deletion(-)
-+
-+diff --git a/utils/ir-ctl/ir-ctl.c b/utils/ir-ctl/ir-ctl.c
-+index bc58cee..e9da777 100644
-+--- a/utils/ir-ctl/ir-ctl.c
-++++ b/utils/ir-ctl/ir-ctl.c
-+@@ -44,6 +44,15 @@
-+ 
-+ # define N_(string) string
-+ 
-++/* taken from glibc unistd.h */
-++#ifndef TEMP_FAILURE_RETRY
-++#define TEMP_FAILURE_RETRY(expression) \
-++  (__extension__                                                              \
-++    ({ long int __result;                                                     \
-++       do __result = (long int) (expression);                                 \
-++       while (__result == -1L && errno == EINTR);                             \
-++       __result; }))
-++#endif
-+ 
-+ /* See drivers/media/rc/ir-lirc-codec.c line 23 */
-+ #define LIRCBUF_SIZE	512
-+@@ -344,12 +353,14 @@ static struct file *read_scancode(const char *name)
-+ 		return NULL;
-+ 	}
-+ 
-+-	pstr = strndupa(name, p - name);
-++	pstr = strndup(name, p - name);
-+ 
-+ 	if (!protocol_match(pstr, &proto)) {
-+ 		fprintf(stderr, _("error: protocol '%s' not found\n"), pstr);
-++		free(pstr);
-+ 		return NULL;
-+ 	}
-++	free(pstr);
-+ 
-+ 	if (!strtoscancode(p + 1, &scancode)) {
-+ 		fprintf(stderr, _("error: invalid scancode '%s'\n"), p + 1);
-+-- 
-+2.11.0
-+
+     i = randint(0, len(configs) - 1)
+     config = configs[i]
+ 
+-- 
+2.11.0
