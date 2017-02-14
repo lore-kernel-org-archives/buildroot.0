@@ -1,92 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Feb 2017 23:09:03 +0100
-Subject: [Buildroot] [PATCH/autobuild] get_toolchain_configs: be robust
- against network errors
-In-Reply-To: <20170214213607.21736-1-peter@korsgaard.com>
-References: <20170214213607.21736-1-peter@korsgaard.com>
-Message-ID: <20170214220903.GE3624@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Feb 2017 23:29:12 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-13
+In-Reply-To: <20170214142725.1b9e98ae@free-electrons.com>
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+Message-ID: <20170214232912.42d8a2df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hello,
 
-On 2017-02-14 22:36 +0100, Peter Korsgaard spake thusly:
-> Once in a while some of my autobuilder instances hangs with an exception
-> from urllib:
-> 
-> Process Process-1:
-> Traceback (most recent call last):
->   File "/home/peko/host/usr/lib/python2.7/multiprocessing/process.py", line 258, in _bootstrap
->     self.run()
->   File "/home/peko/host/usr/lib/python2.7/multiprocessing/process.py", line 114, in run
->     self._target(*self._args, **self._kwargs)
->   File "/home/peko/buildroot-test/scripts/autobuild-run", line 804, in run_instance
->     ret = gen_config(**kwargs)
->   File "/home/peko/buildroot-test/scripts/autobuild-run", line 526, in gen_config
->     configs = get_toolchain_configs()
->   File "/home/peko/buildroot-test/scripts/autobuild-run", line 291, in get_toolchain_configs
->     with urlopen_closing(config["url"]) as r:
->   File "/home/peko/buildroot-test/scripts/autobuild-run", line 146, in <lambda>
->     urlopen_closing = lambda uri: contextlib.closing(urlopen(uri))
->   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 127, in urlopen
->     return _opener.open(url, data, timeout)
->   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 404, in open
->     response = self._open(req, data)
->   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 422, in _open
->     '_open', req)
->   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 382, in _call_chain
->     result = func(*args)
->   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 1214, in http_open
->     return self.do_open(httplib.HTTPConnection, req)
->   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 1184, in do_open
->     raise URLError(err)
-> URLError: <urlopen error [Errno -2] Name or service not known>
-> 
-> If this happens, simply ignore the configuration and try again.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On Tue, 14 Feb 2017 14:27:25 +0100, Thomas Petazzoni wrote:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  scripts/autobuild-run | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> >          arm |                cbootimage-v1.7 | NOK | http://autobuild.buildroot.net/results/61bdfb7e0ff9628190d9eb86e40c4c90e768b8e2
+> >          arm |                cbootimage-v1.7 | NOK | http://autobuild.buildroot.net/results/b78c03b85aef845ff57d499b40f52b476f8a760c  
 > 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index cf19735..37c2b12 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -528,7 +528,11 @@ def gen_config(**kwargs):
->      log_write(log, "INFO: generate the configuration")
->  
->      # Select a random toolchain configuration
-> -    configs = get_toolchain_configs(**kwargs)
-> +    try:
-> +        configs = get_toolchain_configs(**kwargs)
-> +    except:
-> +        return -1
-> +
->      i = randint(0, len(configs) - 1)
->      config = configs[i]
->  
-> -- 
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Musl compatibility issue.
 
+We merged a patch to disable cbootimage on musl.
+
+> >         i586 |                     cups-2.2.2 | NOK | http://autobuild.buildroot.net/results/486dea944d6ecba5c4e6e8ac664261c1909f4b4c  
+> 
+> The musl/i586/SSP issue.
+
+I'm testing to simply disable SSP support with musl on i386. Will send
+a patch shortly if that works.
+
+> >      powerpc |                  ddrescue-1.22 | NOK | http://autobuild.buildroot.net/results/4ac0754f1cc5ea934d6437e89d1f4906fb3fd0a8  
+> 
+> Missing <stdio.h> include in block.h I believe. Peter (Seiderer), could
+> you send a patch to fix this?
+
+Peter has sent a patch, and it was merged.
+
+> >         m68k | kmsxx-bd5f6471e619a6ba2987b... | NOK | http://autobuild.buildroot.net/results/2738e5fd446467b105f6dcca391500e3734e5a9b  
+> 
+> Missing magic gcc option, Waldemar will provide a fix.
+
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=82a935ae493b8159062c9c32b328c30ee130c5a8
+
+> >         sh4a |                  libraw-0.17.1 | NOK | http://autobuild.buildroot.net/results/908aef6c82d56060933713df217b6b2ba21a01b0  
+> 
+> error: 'SIZE_MAX' was not declared in this scope
+> 
+> Missing header include I believe.
+
+This one is annoying.
+
+So libraw optionally depends on jasper, and it's when both are enabled
+that the problem occurs.
+
+The issue is that the jas_math.h header uses SIZE_MAX and other
+definitions of <stdint.h>, but those definitions are not visible to C++
+code, unless you define __STDC_LIMIT_MACROS.
+
+So one would think "just define __STDC_LIMIT_MACROS before including
+<stdint.h> in jas_math.h". Expect that libraw, before including jasper
+headers, includes other headers that already include <stdint.h>. So by
+the time jas_math.h includes <stdint.h>, it has already been included,
+and therefore, the definition of __STDC_LIMIT_MACROS in jas_math.h has
+no effect.
+
+I'm not sure how to fix this. Adding __STDC_LIMIT_MACROS to the build
+of libraw would fix it, but it's rather weird to have this
+implementation "detail" of jasper creep in all the way to users of the
+library.
+
+> >         i586 |                  libv4l-1.12.2 | NOK | http://autobuild.buildroot.net/results/b8b96c7bbf2147dacac62485cbfdbcfd758271a5  
+> 
+> ir-ctl.o: In function `parse_opt':
+> ir-ctl.c:(.text+0xb06): undefined reference to `strndupa'
+> ir-ctl.o: In function `lirc_record':
+> ir-ctl.c:(.text+0xe01): undefined reference to `TEMP_FAILURE_RETRY'
+> ir-ctl.o: In function `main':
+> ir-ctl.c:(.text.startup+0x9a): undefined reference to `TEMP_FAILURE_RETRY'
+> ir-ctl.c:(.text.startup+0xd7): undefined reference to `TEMP_FAILURE_RETRY'
+> ir-ctl.c:(.text.startup+0x64a): undefined reference to `TEMP_FAILURE_RETRY'
+> 
+> Musl related, perhaps?
+
+Fixed by Peter Seiderer.
+
+
+> >          arm |             mesa3d-demos-8.3.0 | NOK | http://autobuild.buildroot.net/results/6f197c643972e92f0b27b3afac7da7b4b1115f7e  
+> 
+> BR2_PACKAGE_PROVIDES_LIBGL="mesa3d"
+> BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"
+> BR2_PACKAGE_PROVIDES_LIBGLES="rpi-userland"
+> 
+> This seems like a quite messy configuration: we have mesa3d as the
+> OpenGL provider, and rpi-userland as the OpenGLES/EGL provider. Yann,
+> what do you think about this?
+
+Yann has submitted a proposal to fix this.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
