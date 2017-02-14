@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 09:12:40 +0100
-Subject: [Buildroot] [git commit] wget: bump to 1.19.1 to fix build issue
-In-Reply-To: <56d19988-be8e-e7a7-a6a6-3fe613f5d73c@imgtec.com>
-References: <20170213211546.74209821DB@busybox.osuosl.org>
- <56d19988-be8e-e7a7-a6a6-3fe613f5d73c@imgtec.com>
-Message-ID: <20170214091240.104332b0@free-electrons.com>
+Date: Tue, 14 Feb 2017 09:18:03 +0100
+Subject: [Buildroot] [PATCH v2] kmscube: Add new package
+In-Reply-To: <CAOMZO5Dwdu5-+bV=TXA6=-wg+=W05BhE1eEYhzZk6zV71MUBdA@mail.gmail.com>
+References: <1487011784-24966-1-git-send-email-festevam@gmail.com>
+ <20170213223117.0125c14e@free-electrons.com>
+ <CAOMZO5Dwdu5-+bV=TXA6=-wg+=W05BhE1eEYhzZk6zV71MUBdA@mail.gmail.com>
+Message-ID: <20170214091803.70ab8d9a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Feb 2017 11:51:15 +0530, Rahul Bedarkar wrote:
+On Mon, 13 Feb 2017 20:03:29 -0200, Fabio Estevam wrote:
 
-> > In file included from str-two-way.h:44:0,
-> >                  from c-strcasestr.c:37:
-> > ./stdint.h:89:5: error: #if with no expression
-> >  #if  
+> > PKG_CHECK_MODULES(EGL, egl)
+> > PKG_CHECK_MODULES(GLES2, glesv2)
+
+This code means that kmscube will only build fine if the pkg-config
+files egl.pc and glesv2.pc are available.
+
+> checking for DRM... yes
+> checking for GBM... yes
+> checking for EGL... yes
+> checking for GLES2... yes
 > 
-> I was unable to reproduce these build failures at my end and also 
-> suspecting that it is side effect of autoreconf. Thanks for version bump.
+> BR2_PACKAGE_MESA3D_OPENGL_EGL is selected by the Etnaviv mesa driver:
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV, which comes from a patch I
+> sent today.
+> 
+> I don't have BR2_PACKAGE_MESA3D_OPENGL_ES option selected, but I do
+> get "checking for GLES2... yes", so I am bit confused.
+> 
+> Is your suggestion to do something like this?
+> 
+> config BR2_PACKAGE_KMSCUBE
+>  bool "kmscube"
+>  depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM
+>  depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+>  select BR2_PACKAGE_MESA3D_OPENGL_ES
 
-To reproduce the issue, you had to have host-gettext built before wget.
-So something like:
+I would do just:
 
-$ make host-gettext
-$ make gettext
+	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
 
-Would trigger the issue (I was able to reproduce it).
+that is sufficient, and it's what glmark2/Config.in is doing (except
+glmark2 is a bit more complicated since it also supports full OpenGL,
+not only OpenGL ES).
+
+The "depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM" are useless,
+because if BR2_PACKAGE_MESA3D_OPENGL_EGL and
+BR2_PACKAGE_MESA3D_OPENGL_ES are enabled, then surely mesa3d is
+enabled. And mesa3d selects libdrm, so we're good.
+
+Best regards,
 
 Thomas
 -- 
