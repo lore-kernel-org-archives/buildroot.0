@@ -1,46 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Feb 2017 21:17:56 +0200
-Subject: [Buildroot] uImage support for aarch64
-In-Reply-To: <CAJJmP9D0JFq8Wjbp2MX+mXdca6Up+3z0XJ1Xs3ojc8UcU2p11Q@mail.gmail.com>
-References: <CAJJmP9D0JFq8Wjbp2MX+mXdca6Up+3z0XJ1Xs3ojc8UcU2p11Q@mail.gmail.com>
-Message-ID: <20170214191756.s6huaepb46ocxni5@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Feb 2017 20:21:16 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-13
+In-Reply-To: <20170214161059.6a096f81@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 14 Feb 2017 16:10:59 +0100")
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+ <87lgt8kepo.fsf@dell.be.48ers.dk>
+ <20170214161059.6a096f81@free-electrons.com>
+Message-ID: <87h93wk28j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Cris,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, Feb 14, 2017 at 08:00:47AM -0800, chris warth wrote:
-> Can anyone shed some light on why uImage with device tree is not a
-> supported format for the aarch64 architecture under Buildroot?  (see
-> the definition of BR2_LINUX_KERNEL_APPENDED_UIMAGE in linux/Config.in)
-> 
-> The appended uImage options in linux/Config.in seem to be dependent on
-> the BR2_arm or BR2_armeb.  In fact the base uImage format does not
-> appear to be supported for BR2_aarch64 at all.
-> 
-> Is this an oversight or is there a technical challenge to supporting
-> AARCH64 images in uImage format?
+ > Hello,
+ > On Tue, 14 Feb 2017 15:51:47 +0100, Peter Korsgaard wrote:
 
-uImage is deprecated on ARM 32bit as well. U-Boot added support for native 
-zImage a few years back.
+ >> Yes, I believe so (this failures are with gcc 6.x). I had a quick look
+ >> yesterday, and our synergy package is ancient. It seems to have moved to
+ >> github and changed quite a bit since then.
+ >> 
+ >> https://github.com/symless/synergy/
+ >> 
+ >> The last release in the 1.3.x series is 1.3.8. I'll take a look and see
+ >> if that has fixed this issue.
 
-The problem with uImage is that kernel load address is hard codes in the 
-uImage header. This prevents multi-platform compatibility, since RAM physical 
-location and size varies on different platforms. zImage is much more flexible 
-in this regard.
+ > See:
 
-As for BR2_LINUX_KERNEL_APPENDED_UIMAGE, this is only useful when the 
-bootloader is too old to support device tree. Being a relatively new 
-architecture, and DT based from the start, I'm pretty sure there is no such 
-bootloader for ARM64. Besides, ARM64 does not support the appended DTB trick 
-to begin with.
+ >   [PATCH 1/1] package/synergy: bump to version 1.8.5
 
-baruch
+ > on the mailing list. But that's a rather big update, with somewhat
+ > scary things.
+
+Ahh yes. I was looking for something smaller/less risky for 2017.02
+though.
+
+I see this patch is marked as rejected. Do you know why/by who?
+
+https://patchwork.ozlabs.org/patch/703714/
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
