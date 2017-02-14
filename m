@@ -1,53 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Feb 2017 07:27:02 +0200
-Subject: [Buildroot] gcc 5.2.0 not supported?
-In-Reply-To: <e71f5729-1da1-eb07-67d1-4d99b795fd44@gmail.com>
-References: <e71f5729-1da1-eb07-67d1-4d99b795fd44@gmail.com>
-Message-ID: <20170214052702.sugb3oh6asnuq5xg@tarshish>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Tue, 14 Feb 2017 11:51:15 +0530
+Subject: [Buildroot] [git commit] wget: bump to 1.19.1 to fix build issue
+In-Reply-To: <20170213211546.74209821DB@busybox.osuosl.org>
+References: <20170213211546.74209821DB@busybox.osuosl.org>
+Message-ID: <56d19988-be8e-e7a7-a6a6-3fe613f5d73c@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ron,
+Hi,
 
-On Mon, Feb 13, 2017 at 07:38:36PM -0800, Ron Eggler wrote:
-> I've build a crosstoolchain for powerpc using crosstools-NG today and I
-> wanted to use buildroot to compile a kernel for my system.
-> Now, turns out I'm getting:
-> 
-> >>> toolchain-external Configuring Incorrect selection of gcc version:
-> expected 4.3.x, got 5.2.0
+On Tuesday 14 February 2017 02:43 AM, Thomas Petazzoni wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=c36f0d65ad63589f1b21833ef53d429c018b6f8a
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Due to the patches we have on wget 1.19, we need to
+> autoreconf. Unfortunately, when the autoreconfiguration process occurs
+> with host-gettext already built and installed, the build of wget fails
+> with a fairly weird error:
+>
+> In file included from str-two-way.h:44:0,
+>                  from c-strcasestr.c:37:
+> ./stdint.h:89:5: error: #if with no expression
+>  #if
 
-You need to select your external toolchain version in Toolchain -> External 
-toolchain gcc version. 4.3.x is the default, you need to change it to 5.x.
 
-> on make and when I started Googling around, I found this thread
-> http://lists.busybox.net/pipermail/buildroot/2015-July/133170.html from July
-> 2015 that essentially says that gcc 5.2.0 is not supported.
-> Now I'm wondering if this is this still the case?
+I was unable to reproduce these build failures at my end and also 
+suspecting that it is side effect of autoreconf. Thanks for version bump.
 
-The linked messages is about the Buildroot internal toolchain. It has noting 
-to do with you case.
-
-> Also, before I had set the kernel headers to 4.3.x in menu config, I would
-> get the same error but saying:
-> 
-> >>> toolchain-external Configuring Incorrect selection of kernel headers:
-> expected 2.6.x, got 4.3.x
-> 
-> Now as I've moved up the header version to match 4.3.x, I get the error
-> pasted above. How can that be? How can I get my kernel built using the
-> crosstools-NG toolchain?
-
-Here again you need to set 'External toolchain kernel headers series' to the 
-version of your toolchain kernel headers.
-
-Hope this helps,
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Regards,
+Rahul
