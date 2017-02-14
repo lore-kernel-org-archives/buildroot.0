@@ -1,40 +1,34 @@
-From: Ron Eggler <ron.eggler@gmail.com>
-Date: Tue, 14 Feb 2017 09:29:35 -0800
-Subject: [Buildroot] unrecognized command line option
-In-Reply-To: <1842521354.10376219.1487085734283.JavaMail.zimbra@datacom.ind.br>
-References: <CAHxBh_SM289CB32RrR8zOitn-LX0iVJLKcf0HpN1sV5JamV3+w@mail.gmail.com>
- <1842521354.10376219.1487085734283.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <CAHxBh_T5Z57brPqNPt551jFfpsXbnk_cQCSknwyV4vB-As_ZOQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 14 Feb 2017 20:02:32 +0200
+Subject: [Buildroot] Analysis of build results for 2017-02-13
+In-Reply-To: <20170214142725.1b9e98ae@free-electrons.com>
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+Message-ID: <20170214180232.u2m4hirisgquonui@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 14, 2017 at 7:22 AM, Carlos Santos <casantos@datacom.ind.br>
-wrote:
+Hi Thomas,
 
-> > From: "Ron Eggler" <ron.eggler@gmail.com>
-> > To: buildroot at busybox.net
-> > Sent: Tuesday, February 14, 2017 1:08:08 PM
-> > Subject: [Buildroot] unrecognized command line option
->
-> > Hi,
->
-> > I'm trying to compile using buildroot with my own x toolchain (created
-> for ppc
-> > with crosstool-ng) but I get the following error on make:
->
-> > powerpc-e500v2-linux-gnuspe-gcc: error: unrecognized command line
-> option '
-> > -march=i586 '
->
-> You must choose the suitable target options (first item in the main menu
-> when you run "make menuconfig") to match your target platform.
->
+On Tue, Feb 14, 2017 at 02:27:25PM +0100, Thomas Petazzoni wrote: 
+> >       x86_64 |                tcpreplay-4.1.2 | NOK | http://autobuild.buildroot.net/results/b3c31e803ff552a196ce5717372c09d6f64c91bf
+> 
+> error: redefinition of 'struct ethhdr'
+> 
+> I believe this has been fixed by the rebuild of the toolchains I
+> deployed yesterday, which has the improvements done by Baruch. Baruch,
+> could you confirm?
 
-Hoops, yes, that's it! I've accidentally skipped that.
-Thanks Carlos!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170214/567974ff/attachment.html>
+I confirmed the tcpreplay builds successfully with the newly built 2017.02-rc1 
+based x86-64-musl toolchain.
+
+Thanks,
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
