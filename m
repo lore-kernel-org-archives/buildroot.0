@@ -1,40 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 11:22:13 +0100
-Subject: [Buildroot] [git commit branch/next] gnutls: bump version to 3.5.9
-Message-ID: <20170214102315.DA1318041C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Feb 2017 11:23:49 +0100
+Subject: [Buildroot] [PATCH v2] kmscube: Add new package
+In-Reply-To: <20170214092400.4g7lp3xj5z5zgxo2@lukather>
+References: <1487011784-24966-1-git-send-email-festevam@gmail.com>
+ <20170213223117.0125c14e@free-electrons.com>
+ <CAOMZO5Dwdu5-+bV=TXA6=-wg+=W05BhE1eEYhzZk6zV71MUBdA@mail.gmail.com>
+ <20170214091803.70ab8d9a@free-electrons.com>
+ <20170214092400.4g7lp3xj5z5zgxo2@lukather>
+Message-ID: <20170214112349.55c30c40@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=743f5076df0a852f25d55c3bcb1d3e33eec07055
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 14 Feb 2017 10:24:00 +0100, Maxime Ripard wrote:
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 121f75a..156d2aa 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	0e97f243ae72b70307d684b84c7fe679385aa7a7a0e37e5be810193dcc17d4ff	gnutls-3.5.8.tar.xz
-+sha256	82b10f0c4ef18f4e64ad8cef5dbaf14be732f5095a41cf366b4ecb4050382951	gnutls-3.5.9.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 4fab812..932c0fa 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.5
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
+> Actually, it doesn't depend on a specific GLES / EGL implementation,
+> but it does depend on Mesa for GBM. There are alternative
+> implementation of GBM as well, so having something like:
+> 
+> depends on BR2_PACKAGE_HAS_LIBEGL
+> depends on BR2_PACKAGE_HAS_LIBGLES
+> depends on BR2_PACKAGE_MESA3D # GBM implementation
+> 
+> Seems more natural
+
+In principle, I would agree, but we pass --enable-gbm only when
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y. So with your proposal, we could end up
+in a situation where libgbm isn't.
+
+Try a build with just BR2_PACKAGE_MESA3D=y, libgm isn't
+built/installed. So if we want to do this, perhaps we need a separate
+BR2_PACKAGE_MESA3D_LIBGBM option?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
