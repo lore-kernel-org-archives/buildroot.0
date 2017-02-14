@@ -1,89 +1,68 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 14 Feb 2017 20:39:48 +0100
-Subject: [Buildroot] [PATCH v2 2/2] mesa3d: Add support for Etnaviv
- gallium driver
-In-Reply-To: <1486999762-4118-2-git-send-email-festevam@gmail.com>
-References: <1486999762-4118-1-git-send-email-festevam@gmail.com>
- <1486999762-4118-2-git-send-email-festevam@gmail.com>
-Message-ID: <20170214203948.0aa43a76@gmx.net>
+Date: Tue, 14 Feb 2017 20:45:08 +0100
+Subject: [Buildroot] [PATCH v1] ddrescue: fix uclibc compile
+Message-ID: <20170214194508.24384-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabio,
+Fixes compile failure with uclibc [1] because of missing stdio.h include:
 
-On Mon, 13 Feb 2017 13:29:22 -0200, Fabio Estevam <festevam@gmail.com> wrote:
+  In file included from io.cc:28:0:
+  block.h:219:22: error: ?FILE? has not been declared
+     int write_mapfile( FILE * f = 0, const bool timestamp = false,
 
-> Add support for Etnaviv gallium driver.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
-> Changes since v1:
-> - Also select BR2_PACKAGE_MESA3D_OPENGL_EGL
-> 
->  package/mesa3d/Config.in | 10 ++++++++++
->  package/mesa3d/mesa3d.mk |  4 ++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index bbab953..aba17fb 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -45,6 +45,16 @@ config BR2_PACKAGE_MESA3D_NEEDS_XA
->  
->  comment "Gallium drivers"
->  
-> +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
-> +	bool "Etnaviv driver"
+[1] http://autobuild.buildroot.net/results/4ac0754f1cc5ea934d6437e89d1f4906fb3fd0a8
 
-I would prefer "Gallium Etnaviv driver" (as all the other gallium driver are named)...
- 
-> +	depends on BR2_arm
-> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-> +	select BR2_PACKAGE_LIBDRM_ETNAVIV
-> +	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-> +	select BR2_PACKAGE_MESA3D_NEEDS_XA
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ .../ddrescue/0001-io.cc-add-stdio.h-include.patch  | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/ddrescue/0001-io.cc-add-stdio.h-include.patch
 
-Out of interest, for what is XA needed?
-
-> +	help
-> +	  Mesa driver for Vivante GPUs.
-> +
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
->  	bool "Gallium nouveau driver"
->  	depends on BR2_i386 || BR2_x86_64
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 3bfb005..eca1f53 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -67,6 +67,8 @@ endif
->  # Drivers
->  
->  #Gallium Drivers
-> +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
-> +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += imx
-
-Why not the one-liner '... += etnaviv imx'? Line length?
-
-With the nits fixed you can add my
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
-
-
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
->  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
-> @@ -151,6 +153,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
->  MESA3D_EGL_PLATFORMS = drm
->  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
->  MESA3D_EGL_PLATFORMS = drm
-> +else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
-> +MESA3D_EGL_PLATFORMS = drm
->  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
->  MESA3D_EGL_PLATFORMS = drm
->  endif
+diff --git a/package/ddrescue/0001-io.cc-add-stdio.h-include.patch b/package/ddrescue/0001-io.cc-add-stdio.h-include.patch
+new file mode 100644
+index 000000000..e719c708e
+--- /dev/null
++++ b/package/ddrescue/0001-io.cc-add-stdio.h-include.patch
+@@ -0,0 +1,36 @@
++From 0f72787b922c53c33d497b17300a959b911e621f Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 14 Feb 2017 20:12:05 +0100
++Subject: [PATCH] io.cc: add stdio.h include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes buildroot compile failure with uclibc [1]:
++
++  In file included from io.cc:28:0:
++  block.h:219:22: error: ?FILE? has not been declared
++     int write_mapfile( FILE * f = 0, const bool timestamp = false,
++
++[1] http://autobuild.buildroot.net/results/4ac0754f1cc5ea934d6437e89d1f4906fb3fd0a8
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ io.cc | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/io.cc b/io.cc
++index 36b8341..2d6a76e 100644
++--- a/io.cc
+++++ b/io.cc
++@@ -23,6 +23,7 @@
++ #include <string>
++ #include <vector>
++ #include <stdint.h>
+++#include <stdio.h>
++ #include <unistd.h>
++ 
++ #include "block.h"
++-- 
++2.11.0
++
+-- 
+2.11.0
