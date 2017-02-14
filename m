@@ -1,53 +1,45 @@
-From: LogiSch17 <logi.tss@hotmail.de>
-Date: Tue, 14 Feb 2017 02:06:59 -0800 (PST)
-Subject: [Buildroot] Shell scripts does not emit finished() to QProcess
-In-Reply-To: <ce6994a6-76f7-a075-51b6-e80dc306cdd8@gmail.com>
-References: <1486997512738-156891.post@n4.nabble.com>
- <ce6994a6-76f7-a075-51b6-e80dc306cdd8@gmail.com>
-Message-ID: <1487066819690-156977.post@n4.nabble.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Feb 2017 11:15:15 +0100
+Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
+In-Reply-To: <20170213213713.GA12810@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Mon, 13 Feb 2017 22:37:13 +0100")
+References: <20170213093502.26507-1-peter@korsgaard.com>
+ <20170213132925.5324f141@free-electrons.com>
+ <8760kema97.fsf@dell.be.48ers.dk>
+ <20170213213713.GA12810@waldemar-brodkorb.de>
+Message-ID: <87fujhkrik.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+
 Hi,
-in my code i have something like:
 
-void UpdateHandler::UpdateHandler(QObject* parent):QObject(parent){
+ >> That's also fine by me if somebody wants to do that. I personally don't
+ >> know/care enough about m68k, and it has been failing since October
+ >> without anything happening, so I think we should disable it.
 
-     copy  = new QProcess(this);
-     updEnc = new QFile("/media/upStick/update.enc"); //encrypt update file
-on stick
-     cpscript <<"/usr/bin/cpupdt.sh"; //shell script to copy the file to
-/usr
+ > It is not that nothing happened.
+ > I think this would be solved by my following patch:
+ > http://buildroot-busybox.2317881.n4.nabble.com/PATCH-m68k-add-special-gcc-flag-to-avoid-ICE-for-coldfire-td151151.html
 
-      QObject::connect(copy, SIGNAL(finished(int, QProcess::ExitStatus)),
-this, SLOT(fileCopied(int, QProcess::ExitStatus)));
-}
+Sorry, I forgot about the relation between this build issue and the
+"magic" compiler flag.
 
-void UpdateHandler::copyFile(){
+ > Did you had a chance to discuss the required changes with Arnout in
+ > the last developer meeting?
 
-    if(updEnc->exists()){
-        qDebug()<< "Updatefile found on Stick";
-        qDebug()<< "copying file to /usr";
+I could only join from Monday evening, but I don't think so.
 
-        copy->start("/bin/sh", cpscript);
-    }
-}
-void UpdateHandler::fileCopied(int status, QProcess::ExitStatus estatus){
+We are again past rc1, so I think the safest approach for 2017.02 is to
+not add it to the wrapper, but instead explicitly pass it in kmsxx.mk
+(and any other package with the same problem). From my IRC history this
+also seems to be what you discussed with Thomas yesterday.
 
-     QDebug()<< "File copied, Status: " << status << estatus ;
-.....
-}
+Will you send patches to do this?
 
-Have not tried strace -f yet.
-But i will test i now.
-
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Shell-scripts-does-not-emit-finished-to-QProcess-tp156891p156977.html
-Sent from the Buildroot (busybox) mailing list archive@Nabble.com.
+-- 
+Bye, Peter Korsgaard
