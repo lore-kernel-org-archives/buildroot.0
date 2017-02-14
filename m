@@ -1,65 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 09:18:03 +0100
-Subject: [Buildroot] [PATCH v2] kmscube: Add new package
-In-Reply-To: <CAOMZO5Dwdu5-+bV=TXA6=-wg+=W05BhE1eEYhzZk6zV71MUBdA@mail.gmail.com>
-References: <1487011784-24966-1-git-send-email-festevam@gmail.com>
- <20170213223117.0125c14e@free-electrons.com>
- <CAOMZO5Dwdu5-+bV=TXA6=-wg+=W05BhE1eEYhzZk6zV71MUBdA@mail.gmail.com>
-Message-ID: <20170214091803.70ab8d9a@free-electrons.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 14 Feb 2017 09:27:43 +0100
+Subject: [Buildroot] [PATCH] glmark2: bump version
+In-Reply-To: <20170213223900.7167f053@free-electrons.com>
+References: <20170213200619.10535-1-gary.bisson@boundarydevices.com>
+ <20170213223900.7167f053@free-electrons.com>
+Message-ID: <CAAMH-yt5ar=Y3zRR-Y3XRMSD-nWXGSfOLbY7WMj_+ZUR1+Eb+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 13 Feb 2017 20:03:29 -0200, Fabio Estevam wrote:
+On Mon, Feb 13, 2017 at 10:39 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon, 13 Feb 2017 21:06:19 +0100, Gary Bisson wrote:
+>> The package otherwise fails to build with a recent toolchain with GCC6
+>> (tested with Linaro ARM 2016.11).
+>>
+>> It used to fail at sqrt check during package configuration:
+>>  Checking for function sqrt               : not found
+>>  The configuration failed
+>>
+>> Bumping version to latest HEAD fixes the issue as explained in the
+>> following discussion:
+>> https://github.com/glmark2/glmark2/issues/15
+>>
+>> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+>> ---
+>>  package/glmark2/glmark2.hash | 2 +-
+>>  package/glmark2/glmark2.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> Applied to master, thanks. However, I had to add a reference to an
+> autobuilder issue (after checking that I could reproduce the issue, and
+> that it was indeed fixed by your patch). Next time, could you make sure
+> to include a reference to the autobuilder failure being fixed?
 
-> > PKG_CHECK_MODULES(EGL, egl)
-> > PKG_CHECK_MODULES(GLES2, glesv2)
+Sure, I didn't know there was an autobuilder issue about it actually.
+I just ran into it myself.
 
-This code means that kmscube will only build fine if the pkg-config
-files egl.pc and glesv2.pc are available.
+BTW, when we have such case, is it possible to drop the faulty
+defconfig somewhere so the autobuilder can try it later? Or is the
+best option is sending it on the ML or on IRC?
 
-> checking for DRM... yes
-> checking for GBM... yes
-> checking for EGL... yes
-> checking for GLES2... yes
-> 
-> BR2_PACKAGE_MESA3D_OPENGL_EGL is selected by the Etnaviv mesa driver:
-> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV, which comes from a patch I
-> sent today.
-> 
-> I don't have BR2_PACKAGE_MESA3D_OPENGL_ES option selected, but I do
-> get "checking for GLES2... yes", so I am bit confused.
-> 
-> Is your suggestion to do something like this?
-> 
-> config BR2_PACKAGE_KMSCUBE
->  bool "kmscube"
->  depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM
->  depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
->  select BR2_PACKAGE_MESA3D_OPENGL_ES
-
-I would do just:
-
-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
-
-that is sufficient, and it's what glmark2/Config.in is doing (except
-glmark2 is a bit more complicated since it also supports full OpenGL,
-not only OpenGL ES).
-
-The "depends on BR2_PACKAGE_MESA3D && BR2_PACKAGE_LIBDRM" are useless,
-because if BR2_PACKAGE_MESA3D_OPENGL_EGL and
-BR2_PACKAGE_MESA3D_OPENGL_ES are enabled, then surely mesa3d is
-enabled. And mesa3d selects libdrm, so we're good.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Thanks,
+Gary
