@@ -1,31 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 11:17:54 +0100
-Subject: [Buildroot] [PATCH] bctoolbox: fix typos and logic error
-In-Reply-To: <20170214090132.GA5012@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Tue, 14 Feb 2017 10:01:32 +0100")
-References: <20170214090132.GA5012@waldemar-brodkorb.de>
-Message-ID: <87bmu5kre5.fsf@dell.be.48ers.dk>
+Date: Tue, 14 Feb 2017 11:18:10 +0100
+Subject: [Buildroot] [PATCH] vim: security bump to version 8.0.0329
+In-Reply-To: <20170213220808.29540-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 13 Feb 2017 23:08:08 +0100")
+References: <20170213220808.29540-1-peter@korsgaard.com>
+Message-ID: <877f4tkrdp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
-
- > To get the directory path from the library name you need to
- > use a single filename. Fix typo in variable name.
-
- > This fixes the ortp autobuild errors which uses the broken pkgconfig file
- > from bctoolbox.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes:
- >   http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6e13d5f59fb52
- >   http://autobuild.buildroot.net/results/1999c841fae41f860f00747a362327cb2857e687
+ > - CVE-2016-1248: vim before patch 8.0.0056 does not properly validate values
+ >   for the 'filetype', 'syntax' and 'keymap' options, which may result in the
+ >   execution of arbitrary code if a file with a specially crafted modeline is
+ >   opened.
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > - CVE-2017-5953: vim before patch 8.0.0322 does not properly validate values
+ >   for tree length when handling a spell file, which may result in an integer
+ >   overflow at a memory allocation site and a resultant buffer overflow.
 
-Committed, thanks. Don't forget to send the patch upstream.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
