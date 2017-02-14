@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 22:14:15 +0100
-Subject: [Buildroot] [PATCH] cbootimage: disable on musl
-In-Reply-To: <1487104498-30443-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 14 Feb 2017 21:34:58 +0100")
-References: <1487104498-30443-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87efz0iifs.fsf@dell.be.48ers.dk>
+Date: Tue, 14 Feb 2017 22:14:22 +0100
+Subject: [Buildroot] [PATCH] cups: add host-pkgconf as a dependency
+In-Reply-To: <1487105279-25370-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 14 Feb 2017 21:47:59 +0100")
+References: <1487105279-25370-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87a89oiifl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,17 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > cbootimage uses non-standard u_intXX_t types instead of the C99 types
- > uintXX_t types, which prevents it from building with the musl C library.
+ > cups configure script checks for a pkg-config program. If host-pkgconf
+ > has not been built prior to cups, it uses the system pkg-config, which
+ > might potentially lead to bogus results:
 
- > A patch to fix this has been submitted upstream, but since there are
- > many many occurences of such types, the patch is a bit large to carry in
- > Buildroot, especially compared to the fact that having this package
- > building against musl is probably not a top priority.
+ > checking for i586-buildroot-linux-musl-pkg-config... no
+ > checking for pkg-config... /usr/bin/pkg-config
 
- > So for now, simply disable this package on musl, until upstream fixes
- > the issue and releases a new version.
+ > With this patch applied:
 
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/61bdfb7e0ff9628190d9eb86e40c4c90e768b8e2
+ > checking for i586-buildroot-linux-musl-pkg-config... no
+ > checking for pkg-config... /home/thomas/projets/buildroot/output/host/usr/bin/pkg-config
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
