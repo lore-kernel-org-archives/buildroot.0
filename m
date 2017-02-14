@@ -1,38 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 21:03:52 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Feb 2017 21:05:34 +0100
 Subject: [Buildroot] Analysis of build results for 2017-02-13
-In-Reply-To: <87h93wk28j.fsf@dell.be.48ers.dk>
+In-Reply-To: <20170214210224.7fb5c2a8@free-electrons.com>
 References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
  <20170214142725.1b9e98ae@free-electrons.com>
- <87lgt8kepo.fsf@dell.be.48ers.dk>
- <20170214161059.6a096f81@free-electrons.com>
- <87h93wk28j.fsf@dell.be.48ers.dk>
-Message-ID: <20170214210352.64aa0f18@free-electrons.com>
+ <20170214163927.GA3624@free.fr>
+ <20170214210224.7fb5c2a8@free-electrons.com>
+Message-ID: <20170214200534.GC3624@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Tue, 14 Feb 2017 20:21:16 +0100, Peter Korsgaard wrote:
-
-> Ahh yes. I was looking for something smaller/less risky for 2017.02
-> though.
-
-Yes, indeed something smaller/less risky would be nice.
-
-> I see this patch is marked as rejected. Do you know why/by who?
+On 2017-02-14 21:02 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 14 Feb 2017 17:39:27 +0100, Yann E. MORIN wrote:
 > 
-> https://patchwork.ozlabs.org/patch/703714/
+> > On 2017-02-14 14:27 +0100, Thomas Petazzoni spake thusly:
+> > > >          arm |             mesa3d-demos-8.3.0 | NOK | http://autobuild.buildroot.net/results/6f197c643972e92f0b27b3afac7da7b4b1115f7e  
+> > > 
+> > > BR2_PACKAGE_PROVIDES_LIBGL="mesa3d"
+> > > BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"
+> > > BR2_PACKAGE_PROVIDES_LIBGLES="rpi-userland"
+> > > 
+> > > This seems like a quite messy configuration: we have mesa3d as the
+> > > OpenGL provider, and rpi-userland as the OpenGLES/EGL provider. Yann,
+> > > what do you think about this?  
+> > 
+> > I believe this case does not make sense. We should protect against that.
+> 
+> Indeed. The question is how :-)
 
-I remember having a quick look at the patch, but since I didn't send a
-review, I don't see why I would have marked it as Rejected. Could have
-been just a mistake I guess.
+Working on it...
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
