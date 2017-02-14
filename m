@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 22:43:57 +0100
-Subject: [Buildroot] [PATCH v1] ddrescue: fix uclibc compile
-In-Reply-To: <20170214194508.24384-1-ps.report@gmx.net>
-References: <20170214194508.24384-1-ps.report@gmx.net>
-Message-ID: <20170214224357.44b973ad@free-electrons.com>
+Date: Tue, 14 Feb 2017 22:44:17 +0100
+Subject: [Buildroot] [git commit] package/libgpiod: bump version to 0.1.3
+Message-ID: <20170214214426.8A3AC818BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5c22302f9d1a73d40e5f4748440b37b22da04f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Feb 2017 20:45:08 +0100, Peter Seiderer wrote:
-> Fixes compile failure with uclibc [1] because of missing stdio.h include:
-> 
->   In file included from io.cc:28:0:
->   block.h:219:22: error: ?FILE? has not been declared
->      int write_mapfile( FILE * f = 0, const bool timestamp = false,
-> 
-> [1] http://autobuild.buildroot.net/results/4ac0754f1cc5ea934d6437e89d1f4906fb3fd0a8
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  .../ddrescue/0001-io.cc-add-stdio.h-include.patch  | 36 ++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/ddrescue/0001-io.cc-add-stdio.h-include.patch
+Release 0.1.2 claimed to fix an issue with requesting both types of
+line events, but actually didn't. This time it's really fixed.
 
-Applied to master, thanks. Please submit upstream as well. Thanks!
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 9901be6..eee2a66 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 c9a60e1073aacb25b4ad06d513f31416335b5a710f869cb7e838d2abb62e1e00 libgpiod-v0.1.2.tar.gz
++sha256 670a13518fabf2a99f9e349c33d5421c2146eec15b73c5edef3f1981a7adaeda libgpiod-v0.1.3.tar.gz
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index dbf9511..bc9c6ec 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = v0.1.2
++LIBGPIOD_VERSION = v0.1.3
+ LIBGPIOD_SITE = $(call github,brgl,libgpiod,$(LIBGPIOD_VERSION))
+ LIBGPIOD_LICENSE = GPLv3+
+ LIBGPIOD_LICENSE_FILES = COPYING
