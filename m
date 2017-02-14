@@ -1,45 +1,24 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Tue, 14 Feb 2017 10:44:39 -0500
-Subject: [Buildroot] Analysis of build results for 2017-02-13
-In-Reply-To: <20170214142725.1b9e98ae@free-electrons.com>
-References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
- <20170214142725.1b9e98ae@free-electrons.com>
-Message-ID: <CAB4xu_1h0-+VLkpP+3aLaQ4t1RKdAeijsHPhL7iNaoxjZ+J-+A@mail.gmail.com>
+From: chris warth <cswarth@gmail.com>
+Date: Tue, 14 Feb 2017 08:00:47 -0800
+Subject: [Buildroot] uImage support for aarch64
+Message-ID: <CAJJmP9D0JFq8Wjbp2MX+mXdca6Up+3z0XJ1Xs3ojc8UcU2p11Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 14, 2017 at 8:27 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Hello,
->
-> J?rg, Peter, Romain, Bernd, Gustavo, Carsten, Philippe, Yann, Fran?ois,
-> Dagg, Baruch and ARC/Synopsys developers, there are some questions for
-> you below.
->
-> Thanks!
->
+Can anyone shed some light on why uImage with device tree is not a
+supported format for the aarch64 architecture under Buildroot?  (see
+the definition of BR2_LINUX_KERNEL_APPENDED_UIMAGE in linux/Config.in)
 
-[...]
+The appended uImage options in linux/Config.in seem to be dependent on
+the BR2_arm or BR2_armeb.  In fact the base uImage format does not
+appear to be supported for BR2_aarch64 at all.
 
-> Philippe, could you have a look ?
->
-> >          arm |             lttng-libust-2.9.0 | NOK | http://autobuild.buildroot.net/results/72e9a6f39bb8e4da421926d5a73911760777e93b
->
-> Musl issue. Philippe, same thing :-)
+Is this an oversight or is there a technical challenge to supporting
+AARCH64 images in uImage format?
 
-Yes, I'll try to invest some time in BR this week.
+Thank you in advance,
 
-Phil
-
-[...]
-
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+- Chris
