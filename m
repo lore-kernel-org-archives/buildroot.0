@@ -1,34 +1,37 @@
-From: Mylene Josserand <mylene.josserand@free-electrons.com>
-Date: Tue, 14 Feb 2017 15:06:28 +0100
-Subject: [Buildroot] Issue with Vivante OpenGL driver and X11
-Message-ID: <16509520-1f05-41eb-8053-24716f1091d4@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 14 Feb 2017 15:08:31 +0100
+Subject: [Buildroot] [PATCH] lcdapi: fix build error for m68k/coldfire
+Message-ID: <20170214140831.GA12125@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone,
+Fixes:
+  http://autobuild.buildroot.net/results/d47/d47fa41aa860d82471b83ac90967d3a3dacd8611/
 
-I got an issue with OpenGL Vivante support with X11 on Nitrogen board 
-(nitrogen6max).
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/lcdapi/lcdapi.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-I am on Buildroot's Master branch, last commit:
-5bf12ad141f5de02c79c04a773e7709b87070229
-
-I tried Qt5 OpenGL examples and X is segfaulting. I tested with vivante 
-examples too (tutorial2) and same issue.
-
-You can find a log here:
-http://code.bulix.org/wfkcna-115447
-
-Any idea? Did I miss something or configured something wrong?
-
-Thank you very much for your help.
-
-Best regards,
-
+diff --git a/package/lcdapi/lcdapi.mk b/package/lcdapi/lcdapi.mk
+index 5d8c2ee..7539042 100644
+--- a/package/lcdapi/lcdapi.mk
++++ b/package/lcdapi/lcdapi.mk
+@@ -11,6 +11,12 @@ LCDAPI_LICENSE_FILES = COPYING
+ LCDAPI_AUTORECONF = YES
+ LCDAPI_INSTALL_STAGING = YES
+ 
++# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
++ifeq ($(BR2_m68k_cf),y)
++LCDAPI_CONF_OPTS += CXXFLAGS="$(TARGET_CXXFLAGS) -fno-dwarf2-cfi-asm"
++endif
++
+ define LCDAPI_CREATE_M4_DIR
+ 	mkdir -p $(@D)/m4
+ endef
 -- 
-Myl?ne Josserand, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
