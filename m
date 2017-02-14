@@ -1,51 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 11:18:04 +0100
-Subject: [Buildroot] [git commit] vim: security bump to version 8.0.0329
-Message-ID: <20170214101855.3225A8214B@busybox.osuosl.org>
+Date: Tue, 14 Feb 2017 11:18:38 +0100
+Subject: [Buildroot] [git commit] ntfs-3g: add security fix for CVE-2017-0358
+Message-ID: <20170214101855.3F7588214B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e76cde70f651b17e74681d17fb0afb16400102d
+commit: https://git.buildroot.net/buildroot/commit/?id=6f971f354c14a8948477a0936668b8baae8ec86e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Jann Horn, Project Zero (Google) discovered that ntfs-3g, a read-write
+NTFS driver for FUSE does not not scrub the environment before
+executing modprobe to load the fuse module. This influence the behavior
+of modprobe (MODPROBE_OPTIONS environment variable, --config and
+--dirname options) potentially allowing for local root privilege
+escalation if ntfs-3g is installed setuid.
 
-- CVE-2016-1248: vim before patch 8.0.0056 does not properly validate values
-  for the 'filetype', 'syntax' and 'keymap' options, which may result in the
-  execution of arbitrary code if a file with a specially crafted modeline is
-  opened.
+Notice that Buildroot does NOT install netfs-3g setuid root, but custom
+permission tables might be used, causing it to vulnerable to the above.
 
-- CVE-2017-5953: vim before patch 8.0.0322 does not properly validate values
-  for tree length when handling a spell file, which may result in an integer
-  overflow at a memory allocation site and a resultant buffer overflow.
+ntfs-3g does not seem to have a publicly available version control system
+and no new releases have been made, so instead grab the patch from Debian.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ntfs-3g/ntfs-3g.hash | 1 +
+ package/ntfs-3g/ntfs-3g.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index bc4a08e..28c6b97 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 9b4790dafc886537096a6e1953ee0424b8c308881b97151a7bfba1f9fd14e3f9  vim-v8.0.0001.tar.gz
-+sha256 6fbe0ec1228f951ba598b48ac8033f41ca4934cc34689a6008685e7c26477ae2  vim-v8.0.0329.tar.gz
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 308855e..ec49460 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VIM_VERSION = v8.0.0001
-+VIM_VERSION = v8.0.0329
- VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
- # Win over busybox vi since vim is more feature-rich
- VIM_DEPENDENCIES = \
+diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
+index 4875cc4..eaa3d98 100644
+--- a/package/ntfs-3g/ntfs-3g.hash
++++ b/package/ntfs-3g/ntfs-3g.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 d7b72c05e4b3493e6095be789a760c9f5f2b141812d5b885f3190c98802f1ea0 ntfs-3g_ntfsprogs-2016.2.22.tgz
++sha256 43deadaeade489934b0b45e2ed8aa5f853ad0364fbde7ad144211b80132ea041  0003-CVE-2017-0358.patch
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index b59e335..6e1a8f9 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -7,6 +7,7 @@
+ NTFS_3G_VERSION = 2016.2.22
+ NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
+ NTFS_3G_SITE = http://tuxera.com/opensource
++NTFS_3G_PATCH = https://sources.debian.net/data/main/n/ntfs-3g/1:2016.2.22AR.1-4/debian/patches/0003-CVE-2017-0358.patch
+ NTFS_3G_CONF_OPTS = --disable-ldconfig
+ NTFS_3G_INSTALL_STAGING = YES
+ NTFS_3G_DEPENDENCIES = host-pkgconf
