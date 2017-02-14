@@ -1,55 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Feb 2017 17:48:26 +0100
-Subject: [Buildroot] [PATCH v2] infra/ccache: avoid color diagnostics
- with GCC older than v4.9
-In-Reply-To: <1044520233.10180443.1487025689348.JavaMail.zimbra@datacom.ind.br>
-References: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
- <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
- <20170212141425.GE11105@free.fr>
- <1044520233.10180443.1487025689348.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20170214164826.GB3624@free.fr>
+Date: Tue, 14 Feb 2017 18:24:32 +0100
+Subject: [Buildroot] [PATCHv4] package/ccache: do not force colored
+	diagnostics
+Message-ID: <1487093072-4270-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+When GCC_COLORS is set, ccache passes '-fdiagnostics-color' to GCC but
+this flag requires GCC v4.9 or later. Older versions complain about the
+unrecognized command line option.
 
-On 2017-02-13 20:41 -0200, Carlos Santos spake thusly:
-> Sorry, I forgot so send this yesterday. Here is a reliable reproducer:
-> 
-> $ cat defconfig 
-> BR2_powerpc=y
-> BR2_powerpc_8548=y
-> BR2_CCACHE=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng_e500v2-linux-gnuspe.tar.xz"
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="powerpc-ctng_e500v2-linux-gnuspe"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_PACKAGE_OPENSSL=y
-> $ 
-> $ echo $GCC_COLORS 
-> error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01
-> $
-> $ make V=1 BR2_JLEVEL=1 openssl-dirclean openssl
+Using GCC_COLORS in the context of Buildroot is seldom useful, so we
+just unexport GCC_COLORS altogether.
 
-Indeed, I could reproduce. Thanks.
+Reported-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-So, I think Arnout is right in saying we should just globally unexport
-GCC_COLORS and be done with that.
+---
+This defconfig (provided by Carlos) helps reproduce the issue, during
+the build of openssl:
+    BR2_powerpc=y
+    BR2_powerpc_8548=y
+    BR2_CCACHE=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng_e500v2-linux-gnuspe.tar.xz"
+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="powerpc-ctng_e500v2-linux-gnuspe"
+    BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+    BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+    BR2_TOOLCHAIN_EXTERNAL_CXX=y
+    BR2_PACKAGE_OPENSSL=y
 
-Regards,
-Yann E. MORIN.
+---
+Changes v3 -> v4: (Yann)
+  - simply unexport GCC_COLORS  (Arnout)
 
+Changes v2 -> v3: (Yann)
+  - drop the environment variable override  (Yann)
+  - directly patch ccache  (Thomas)
+
+Changes v1->v2  (Carlos)
+  Fix indentation, use positive logic and improve the commit message,
+  acording to comments from Thomas Petazzoni and Yann E. MORIN.
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile b/Makefile
+index dcda8fe..4db971b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -402,6 +402,7 @@ unexport QMAKESPEC
+ unexport TERMINFO
+ unexport MACHINE
+ unexport O
++unexport GCC_COLORS
+ 
+ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
