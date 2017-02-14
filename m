@@ -1,145 +1,38 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 14 Feb 2017 17:29:43 +0100
-Subject: [Buildroot] [PATCH] bctoolbox: fix typos and logic error
-In-Reply-To: <20170214153958.GE12810@waldemar-brodkorb.de>
-References: <20170214090132.GA5012@waldemar-brodkorb.de>
- <1487085729.1684.3.camel@embedded.rocks>
- <20170214153958.GE12810@waldemar-brodkorb.de>
-Message-ID: <1487089783.1684.5.camel@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Feb 2017 17:39:27 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-13
+In-Reply-To: <20170214142725.1b9e98ae@free-electrons.com>
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+Message-ID: <20170214163927.GA3624@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2017-02-14 at 16:39 +0100, Waldemar Brodkorb wrote:
-> Hi,
-> J?rg Krause wrote,
+Thomas, All,
+
+On 2017-02-14 14:27 +0100, Thomas Petazzoni spake thusly:
+> >          arm |             mesa3d-demos-8.3.0 | NOK | http://autobuild.buildroot.net/results/6f197c643972e92f0b27b3afac7da7b4b1115f7e
 > 
-> > Hi Waldemar,
-> > 
-> > On Tue, 2017-02-14 at 10:01 +0100, Waldemar Brodkorb wrote:
-> > > To get the directory path from the library name you need to
-> > > use a single filename. Fix typo in variable name.
-> > > 
-> > > This fixes the ortp autobuild errors which uses the broken
-> > > pkgconfig
-> > > file
-> > > from bctoolbox.
-> > > 
-> > > Fixes:
-> > > ? http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871
-> > > e9f6
-> > > e13d5f59fb52
-> > > ? http://autobuild.buildroot.net/results/1999c841fae41f860f00747a
-> > > 3623
-> > > 27cb2857e687
-> > > 
-> > > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > > ---
-> > > ?package/bctoolbox/0001-fix-typo.patch | 18 ++++++++++++++++++
-> > > ?1 file changed, 18 insertions(+)
-> > > ?create mode 100644 package/bctoolbox/0001-fix-typo.patch
-> > > 
-> > > diff --git a/package/bctoolbox/0001-fix-typo.patch
-> > > b/package/bctoolbox/0001-fix-typo.patch
-> > > new file mode 100644
-> > > index 0000000..b94daee
-> > > --- /dev/null
-> > > +++ b/package/bctoolbox/0001-fix-typo.patch
-> > > @@ -0,0 +1,18 @@
-> > > +Fix a typo in the variable name. Only check path for a single
-> > > library name.
-> > > +
-> > > +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>?
-> > > +
-> > > +diff -Nur bctoolbox-0.4.0.orig/CMakeLists.txt bctoolbox-
-> > > 0.4.0/CMakeLists.txt
-> > > +--- bctoolbox-0.4.0.orig/CMakeLists.txt	2016-10-06
-> > > 17:30:41.000000000 +0200
-> > > ++++ bctoolbox-0.4.0/CMakeLists.txt	2017-02-13
-> > > 23:30:38.641288032 +0100
-> > > +@@ -103,8 +103,8 @@
-> > > + endif()
-> > > +?
-> > > + if(MBEDTLS_FOUND)
-> > > +-	get_filename_component(mbedtls_library_path
-> > > "${MBEDTLS_LIBRARIES}" PATH)
-> > > +-	set(LIBS_PRIVATE "${LIBS_PRIVATE}
-> > > -L${mbedlts_library_path}")
-> > > ++	get_filename_component(mbedtls_library_path
-> > > "${MBEDTLS_LIBRARY}" PATH)
-> > > ++	set(LIBS_PRIVATE "${LIBS_PRIVATE}
-> > > -L${mbedtls_library_path}")
-> > > + endif()
-> > > + if(POLARSSL_FOUND)
-> > > +?	get_filename_component(polarssl_library_path
-> > > "${POLARSSL_LIBRARIES}" PATH)
-> > 
-> > With this fix applied the bctoolbox pkg-config 'Libs.private:'
-> > value is
-> > set to:
-> > 
-> > """
-> > Libs.private:??-L/mnt/data/git/buildroot/output/host/usr/arm-
-> > buildroot-
-> > linux-uclibcgnueabi/sysroot/usr/lib32
-> > """
-> > 
-> > No mbedtls libraries are included here.
-> > 
-> > And the flag 'BCTOOLBOX_LIBS' in ortp is set to:
-> > 
-> > """
-> > -L/mnt/data/git/buildroot/output/host/usr/arm-buildroot-linux-
-> > uclibcgnueabi/sysroot/usr/lib -lbctoolbox
-> > -L/mnt/data/git/buildroot/output/host/usr/ar"\
-> > "m-buildroot-linux-uclibcgnueabi/sysroot/usr/lib32
-> > """
-> > 
-> > From my understanding, all the three mbedtls libraries
-> > libmbedcrypto,
-> > libmbedx509, and libmbedtls should be added to the linker flags and
-> > therefore to 'Libs.private' in the pkg-config file, right?
+> BR2_PACKAGE_PROVIDES_LIBGL="mesa3d"
+> BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"
+> BR2_PACKAGE_PROVIDES_LIBGLES="rpi-userland"
 > 
-> I was only looking into the ortp build errors with complete empty -L
-> . But you are right
-> actually we might need to add -lmbedx509 -lmbedtls -lmbedcrypto
-> to fix any static linking issues.
-> 
-> I think upstream does add some -l for the polarssl case.
-> I am not really using this packages, just want to minimize my
-> architecture related build errors :)
-> 
-> Do you have a chance to suggest a better fix and test with static
-> linking?
+> This seems like a quite messy configuration: we have mesa3d as the
+> OpenGL provider, and rpi-userland as the OpenGLES/EGL provider. Yann,
+> what do you think about this?
 
-From my understanding of pkg-config, 'Libs.private' should be:
+I believe this case does not make sense. We should protect against that.
 
-"""
-Libs.private:??-lmbedtls -lmbedcrypto -lmbedx509
-"""
+Regards,
+Yann E. MORIN.
 
-And how to set it in CMakeLists.txt:
-
-"""
-if(MBEDTLS_FOUND)
-	set(LIBS_PRIVATE "${LIBS_PRIVATE} -lmbedtls -lmbedcrypto
--lmbedx509")
-endif()
-if(POLARSSL_FOUND)
-	set(LIBS_PRIVATE "${LIBS_PRIVATE} -lpolarssl")
-endif()
-"""
-
-This way?pkg-config (used in ortp) sets 'BCTOOLBOX_LIBS' to:
-
-"""
--L/mnt/data/git/buildroot/output/host/usr/arm-buildroot-linux-
-uclibcgnueabi/sysroot/usr/lib -lbctoolbox -lmbedtls -lmbedcrypto
--lmbedx509
-"""
-
-.. which should be correct.
-
-J?rg
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
