@@ -1,34 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 11:18:27 +0100
-Subject: [Buildroot] [PATCH] ntfs-3g: add security fix for CVE-2017-0358
-In-Reply-To: <20170213225110.31788-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 13 Feb 2017 23:51:10 +0100")
-References: <20170213225110.31788-1-peter@korsgaard.com>
-Message-ID: <8737fhkrd8.fsf@dell.be.48ers.dk>
+Date: Tue, 14 Feb 2017 11:15:28 +0100
+Subject: [Buildroot] [git commit] bctoolbox: fix typos and logic error
+Message-ID: <20170214101855.214C58214B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5c4d3560b94c9cb8f1594c9200a632b89ddf7aa0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Jann Horn, Project Zero (Google) discovered that ntfs-3g, a read-write
- > NTFS driver for FUSE does not not scrub the environment before
- > executing modprobe to load the fuse module. This influence the behavior
- > of modprobe (MODPROBE_OPTIONS environment variable, --config and
- > --dirname options) potentially allowing for local root privilege
- > escalation if ntfs-3g is installed setuid.
+To get the directory path from the library name you need to
+use a single filename. Fix typo in variable name.
 
- > Notice that Buildroot does NOT install netfs-3g setuid root, but custom
- > permission tables might be used, causing it to vulnerable to the above.
+This fixes the ortp autobuild errors which uses the broken pkgconfig file
+from bctoolbox.
 
- > ntfs-3g does not seem to have a publicly available version control system
- > and no new releases have been made, so instead grab the patch from Debian.
+Fixes:
+  http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6e13d5f59fb52
+  http://autobuild.buildroot.net/results/1999c841fae41f860f00747a362327cb2857e687
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bctoolbox/0001-fix-typo.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bctoolbox/0001-fix-typo.patch b/package/bctoolbox/0001-fix-typo.patch
+new file mode 100644
+index 0000000..b94daee
+--- /dev/null
++++ b/package/bctoolbox/0001-fix-typo.patch
+@@ -0,0 +1,18 @@
++Fix a typo in the variable name. Only check path for a single library name.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org> 
++
++diff -Nur bctoolbox-0.4.0.orig/CMakeLists.txt bctoolbox-0.4.0/CMakeLists.txt
++--- bctoolbox-0.4.0.orig/CMakeLists.txt	2016-10-06 17:30:41.000000000 +0200
+++++ bctoolbox-0.4.0/CMakeLists.txt	2017-02-13 23:30:38.641288032 +0100
++@@ -103,8 +103,8 @@
++ endif()
++ 
++ if(MBEDTLS_FOUND)
++-	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARIES}" PATH)
++-	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedlts_library_path}")
+++	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARY}" PATH)
+++	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedtls_library_path}")
++ endif()
++ if(POLARSSL_FOUND)
++ 	get_filename_component(polarssl_library_path "${POLARSSL_LIBRARIES}" PATH)
