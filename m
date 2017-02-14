@@ -1,28 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 14 Feb 2017 19:23:54 +0000
-Subject: [Buildroot] [Bug 9651] libxcb-1.12 built Error
-In-Reply-To: <bug-9651-163@https.bugs.busybox.net/>
-References: <bug-9651-163@https.bugs.busybox.net/>
-Message-ID: <bug-9651-163-KZTZf8ZKzc@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Feb 2017 20:25:15 +0100
+Subject: [Buildroot] [PATCH] bctoolbox: fix typos and logic error
+In-Reply-To: <1487089783.1684.5.camel@embedded.rocks> (=?utf-8?Q?=22J?=
+ =?utf-8?Q?=C3=B6rg?= Krause"'s message
+ of "Tue, 14 Feb 2017 17:29:43 +0100")
+References: <20170214090132.GA5012@waldemar-brodkorb.de>
+ <1487085729.1684.3.camel@embedded.rocks>
+ <20170214153958.GE12810@waldemar-brodkorb.de>
+ <1487089783.1684.5.camel@embedded.rocks>
+Message-ID: <878tp8k21w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9651
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-Skamlinux <kalman.staudinger@gmail.com> changed:
+Hi,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |MOVED
-             Status|NEW                         |RESOLVED
+ >> Do you have a chance to suggest a better fix and test with static
+ >> linking?
 
---- Comment #8 from Skamlinux <kalman.staudinger@gmail.com> ---
-One time i have deleted this directory and building will continue and finally
-libxcb will be the problem again.
+ > From my understanding of pkg-config, 'Libs.private' should be:
+
+ > """
+ > Libs.private:??-lmbedtls -lmbedcrypto -lmbedx509
+
+And possibly a -L to where these libraries are located (which is the
+original issue).
+
+ > """
+ > -L/mnt/data/git/buildroot/output/host/usr/arm-buildroot-linux-
+ > uclibcgnueabi/sysroot/usr/lib -lbctoolbox -lmbedtls -lmbedcrypto
+ > -lmbedx509
+ > """
+
+ > .. which should be correct.
+
+WIll you send a patch to do this?
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
