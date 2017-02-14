@@ -1,44 +1,94 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 22:14:32 +0100
-Subject: [Buildroot] [git commit] cups: add host-pkgconf as a dependency
-Message-ID: <20170214211447.E5C5F7F894@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Feb 2017 22:34:14 +0100
+Subject: [Buildroot] [git commit] libv4l/ir-ctl: fix musl compile
+Message-ID: <20170214213427.A5BF981979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6ae70eba239054052da977920462f8bb40f3965
+commit: https://git.buildroot.net/buildroot/commit/?id=41d8daa7e94c1b6a86c4d0cd50e712698c2c4571
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cups configure script checks for a pkg-config program. If host-pkgconf
-has not been built prior to cups, it uses the system pkg-config, which
-might potentially lead to bogus results:
+- add copy of TEMP_FAILURE_RETRY macro
+- use strdup instead of strdupa
 
-checking for i586-buildroot-linux-musl-pkg-config... no
-checking for pkg-config... /usr/bin/pkg-config
+Fixes [1]:
 
-With this patch applied:
+  ir-ctl.c:(.text+0xb06): undefined reference to `strndupa'
+  ir-ctl.c:(.text+0xe01): undefined reference to `TEMP_FAILURE_RETRY'
 
-checking for i586-buildroot-linux-musl-pkg-config... no
-checking for pkg-config... /home/thomas/projets/buildroot/output/host/usr/bin/pkg-config
+[1] http://autobuild.buildroot.net/results/b8b96c7bbf2147dacac62485cbfdbcfd758271a5
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups/cups.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../0002-ir-ctl-fixes-for-musl-compile.patch       | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 0573776..7ef2f36 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -28,6 +28,7 @@ CUPS_CONF_OPTS = \
- CUPS_CONFIG_SCRIPTS = cups-config
- CUPS_DEPENDENCIES = \
- 	host-autoconf \
-+	host-pkgconf \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib)
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+diff --git a/package/libv4l/0002-ir-ctl-fixes-for-musl-compile.patch b/package/libv4l/0002-ir-ctl-fixes-for-musl-compile.patch
+new file mode 100644
+index 0000000..5bce2d9
+--- /dev/null
++++ b/package/libv4l/0002-ir-ctl-fixes-for-musl-compile.patch
+@@ -0,0 +1,59 @@
++From 9908872aaa614a6c4bba80d7a5f1adea7ca7117e Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 14 Feb 2017 21:27:59 +0100
++Subject: [PATCH] ir-ctl: fixes for musl compile
++
++- add copy of TEMP_FAILURE_RETRY macro
++- use strdup instead of strdupa
++
++Fixes [1]:
++
++  ir-ctl.c:(.text+0xb06): undefined reference to `strndupa'
++  ir-ctl.c:(.text+0xe01): undefined reference to `TEMP_FAILURE_RETRY'
++
++[1] http://autobuild.buildroot.net/results/b8b96c7bbf2147dacac62485cbfdbcfd758271a5
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ utils/ir-ctl/ir-ctl.c | 13 ++++++++++++-
++ 1 file changed, 12 insertions(+), 1 deletion(-)
++
++diff --git a/utils/ir-ctl/ir-ctl.c b/utils/ir-ctl/ir-ctl.c
++index bc58cee..e9da777 100644
++--- a/utils/ir-ctl/ir-ctl.c
+++++ b/utils/ir-ctl/ir-ctl.c
++@@ -44,6 +44,15 @@
++ 
++ # define N_(string) string
++ 
+++/* taken from glibc unistd.h */
+++#ifndef TEMP_FAILURE_RETRY
+++#define TEMP_FAILURE_RETRY(expression) \
+++  (__extension__                                                              \
+++    ({ long int __result;                                                     \
+++       do __result = (long int) (expression);                                 \
+++       while (__result == -1L && errno == EINTR);                             \
+++       __result; }))
+++#endif
++ 
++ /* See drivers/media/rc/ir-lirc-codec.c line 23 */
++ #define LIRCBUF_SIZE	512
++@@ -344,12 +353,14 @@ static struct file *read_scancode(const char *name)
++ 		return NULL;
++ 	}
++ 
++-	pstr = strndupa(name, p - name);
+++	pstr = strndup(name, p - name);
++ 
++ 	if (!protocol_match(pstr, &proto)) {
++ 		fprintf(stderr, _("error: protocol '%s' not found\n"), pstr);
+++		free(pstr);
++ 		return NULL;
++ 	}
+++	free(pstr);
++ 
++ 	if (!strtoscancode(p + 1, &scancode)) {
++ 		fprintf(stderr, _("error: invalid scancode '%s'\n"), p + 1);
++-- 
++2.11.0
++
