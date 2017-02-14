@@ -1,37 +1,43 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 14 Feb 2017 15:10:06 +0100
-Subject: [Buildroot] [PATCH] kmsxx: fix build error for m68k/coldfire
-Message-ID: <20170214141006.GA12260@waldemar-brodkorb.de>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 14 Feb 2017 15:21:13 +0100
+Subject: [Buildroot] Issue with Vivante OpenGL driver and X11
+In-Reply-To: <16509520-1f05-41eb-8053-24716f1091d4@free-electrons.com>
+References: <16509520-1f05-41eb-8053-24716f1091d4@free-electrons.com>
+Message-ID: <20170214142113.di4mod3zmnjc52gg@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.org/results/fc8/fc820e0b558537f771588b0e1291a8332427ff8d/
+Hi Mylene, All,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/kmsxx/kmsxx.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Tue, Feb 14, 2017 at 03:06:28PM +0100, Mylene Josserand wrote:
+> Hello everyone,
+> 
+> I got an issue with OpenGL Vivante support with X11 on Nitrogen board
+> (nitrogen6max).
+> 
+> I am on Buildroot's Master branch, last commit:
+> 5bf12ad141f5de02c79c04a773e7709b87070229
+> 
+> I tried Qt5 OpenGL examples and X is segfaulting. I tested with vivante
+> examples too (tutorial2) and same issue.
+> 
+> You can find a log here:
+> http://code.bulix.org/wfkcna-115447
+> 
+> Any idea? Did I miss something or configured something wrong?
 
-diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-index 730292e..c06d20b 100644
---- a/package/kmsxx/kmsxx.mk
-+++ b/package/kmsxx/kmsxx.mk
-@@ -12,6 +12,12 @@ KMSXX_INSTALL_STAGING = YES
- KMSXX_DEPENDENCIES = libdrm host-pkgconf
- KMSXX_CONF_OPTS = -DKMSXX_ENABLE_PYTHON=OFF
- 
-+# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
-+ifeq ($(BR2_m68k_cf),y)
-+KMSXX_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -fno-dwarf2-cfi-asm"
-+endif
-+
- ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
- KMSXX_TESTS = \
- 	fbtestpat kmsblank kmscapture \
--- 
-2.1.4
+No, you're just the first lucky user trying X 1.19 on i.MX6Q.
+
+Fortunately for us Yocto users already faced that actually:
+https://lists.yoctoproject.org/pipermail/meta-freescale/2017-January/020127.html
+
+It seems that this patch is required on xserver:
+https://patchwork.openembedded.org/patch/136696/
+
+Can you try it and let us know how it goes?
+
+Thanks,
+Gary
