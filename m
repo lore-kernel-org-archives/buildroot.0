@@ -1,45 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 10:03:04 +0100
-Subject: [Buildroot] [PATCH] glmark2: bump version
-In-Reply-To: <CAAMH-yvBA9gpFLNy1Tu+x4A2fFOetdGHgVeLkpnAweBqsUS8iQ@mail.gmail.com>
-References: <20170213200619.10535-1-gary.bisson@boundarydevices.com>
- <20170213223900.7167f053@free-electrons.com>
- <CAAMH-yt5ar=Y3zRR-Y3XRMSD-nWXGSfOLbY7WMj_+ZUR1+Eb+w@mail.gmail.com>
- <20170214094436.224c3db8@free-electrons.com>
- <CAAMH-yvBA9gpFLNy1Tu+x4A2fFOetdGHgVeLkpnAweBqsUS8iQ@mail.gmail.com>
-Message-ID: <20170214100304.4970a39f@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 Feb 2017 09:12:03 +0000
+Subject: [Buildroot] [Bug 9651] libxcb-1.12 built Error
+In-Reply-To: <bug-9651-163@https.bugs.busybox.net/>
+References: <bug-9651-163@https.bugs.busybox.net/>
+Message-ID: <bug-9651-163-HtGG4qge7r@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9651
 
-On Tue, 14 Feb 2017 09:49:09 +0100, Gary Bisson wrote:
+--- Comment #5 from Skamlinux <kalman.staudinger@gmail.com> ---
+Created attachment 6896
+  --> https://bugs.busybox.net/attachment.cgi?id=6896&action=edit
+xproto_xproto-7.0.31 error
 
-> No that is what I meant, "injecting" a defconfig so that a problem
-> that we see locally can be reproduced by a server and that we know
-> there will be a trace of that issue somewhere (with all the proper
-> information).
-> 
-> I understand it would be a mess to maintain such infrastructure, but
-> at least that would be a go-to response when someone says something is
-> broken: put your defconfig on the server and we'll see.
+Thank you for your job.
 
-Well, in practice this is not really useful. If a given problem has
-been produced by the autobuilders, it's really easy to find it. For
-example, for your glmark2 issue, I simply did:
+I made defconfig based on your config.
+Made make clean all and than make.
 
-  http://autobuild.buildroot.net/?reason=glmark2-fa71af2dfab711fac87b9504b6fc9862f44bf72a
+The new attached file xproto_xproto-7.0.31 error.
 
-And looked at the last few errors, and they were the ones your patch
-was fixing.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
