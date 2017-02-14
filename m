@@ -1,70 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Feb 2017 22:13:16 +0100
-Subject: [Buildroot] [PATCH] package/opengl: ensure consistency between the
-	various providers
-Message-ID: <1487106796-15403-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Feb 2017 22:14:15 +0100
+Subject: [Buildroot] [PATCH] cbootimage: disable on musl
+In-Reply-To: <1487104498-30443-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 14 Feb 2017 21:34:58 +0100")
+References: <1487104498-30443-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87efz0iifs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some GL providers will provide libegl and libgles, but not libgl, while
-other will provide libgl but not libegl not libgles. This can be the
-case with:
-  - mesa3d       -> libgl
-  - rpi-userland -> libegl and libgles
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Since we can not protect against this situation in the Config.in files
-(especially because providers may be out-of-tree), we can only check for
-the validity after the fact.
+ > cbootimage uses non-standard u_intXX_t types instead of the C99 types
+ > uintXX_t types, which prevents it from building with the musl C library.
 
-Fixes:
-    http://autobuild.buildroot.org/results/6f1/6f197c643972e92f0b27b3afac7da7b4b1115f7e/
-    http://autobuild.buildroot.org/results/6c6/6c6e0a236bde7b892a69119a49422119f3efaa97/
-    http://autobuild.buildroot.org/results/5a2/5a2a1503b7d19c0ca5b0e9093aa24ed9c020e812/
-    ...
+ > A patch to fix this has been submitted upstream, but since there are
+ > many many occurences of such types, the patch is a bit large to carry in
+ > Buildroot, especially compared to the fact that having this package
+ > building against musl is probably not a top priority.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/opengl/opengl.mk | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ > So for now, simply disable this package on musl, until upstream fixes
+ > the issue and releases a new version.
 
-diff --git a/package/opengl/opengl.mk b/package/opengl/opengl.mk
-index abf96d5..47902f2 100644
---- a/package/opengl/opengl.mk
-+++ b/package/opengl/opengl.mk
-@@ -1 +1,30 @@
- include $(sort $(wildcard package/opengl/*/*.mk))
-+
-+# Ensure consistency betwenn the various GL providers:
-+
-+# If we have a libgl provider, then the libegl provider must be the same
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_HAS_LIBEGL),yy)
-+# No need to qstrip, both are quoted
-+ifneq ($(BR2_PACKAGE_PROVIDES_LIBGL),$(BR2_PACKAGE_PROVIDES_LIBEGL))
-+$(error Provider for libgl ($(BR2_PACKAGE_PROVIDES_LIBGL)) is not the same \
-+	as for libegl ($(BR2_PACKAGE_PROVIDES_LIBEGL)))
-+endif
-+endif
-+
-+# If we have a libgl provider, then the libgles provider must be the same
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
-+# No need to qstrip, both are quoted
-+ifneq ($(BR2_PACKAGE_PROVIDES_LIBGL),$(BR2_PACKAGE_PROVIDES_LIBGLES))
-+$(error Provider for libgl ($(BR2_PACKAGE_PROVIDES_LIBGL)) is not the same \
-+	as for libgles ($(BR2_PACKAGE_PROVIDES_LIBGLES)))
-+endif
-+endif
-+
-+# If we have a libegl provider, then the libgles provider must be the same
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
-+# No need to qstrip, both are quoted
-+ifneq ($(BR2_PACKAGE_PROVIDES_LIBEGL),$(BR2_PACKAGE_PROVIDES_LIBGLES))
-+$(error Provider for libegl ($(BR2_PACKAGE_PROVIDES_LIBEGL)) is not the same \
-+	as for libgles ($(BR2_PACKAGE_PROVIDES_LIBGLES)))
-+endif
-+endif
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/61bdfb7e0ff9628190d9eb86e40c4c90e768b8e2
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
