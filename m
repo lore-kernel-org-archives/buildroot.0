@@ -1,39 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 20:38:49 +0100
-Subject: [Buildroot] [git commit] kmsxx: fix build error for m68k/coldfire
-Message-ID: <20170214193922.069447FED3@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 14 Feb 2017 20:39:48 +0100
+Subject: [Buildroot] [PATCH v2 2/2] mesa3d: Add support for Etnaviv
+ gallium driver
+In-Reply-To: <1486999762-4118-2-git-send-email-festevam@gmail.com>
+References: <1486999762-4118-1-git-send-email-festevam@gmail.com>
+ <1486999762-4118-2-git-send-email-festevam@gmail.com>
+Message-ID: <20170214203948.0aa43a76@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82a935ae493b8159062c9c32b328c30ee130c5a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fabio,
 
-Fixes:
-  http://autobuild.buildroot.org/results/fc8/fc820e0b558537f771588b0e1291a8332427ff8d/
+On Mon, 13 Feb 2017 13:29:22 -0200, Fabio Estevam <festevam@gmail.com> wrote:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kmsxx/kmsxx.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+> Add support for Etnaviv gallium driver.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> Changes since v1:
+> - Also select BR2_PACKAGE_MESA3D_OPENGL_EGL
+> 
+>  package/mesa3d/Config.in | 10 ++++++++++
+>  package/mesa3d/mesa3d.mk |  4 ++++
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index bbab953..aba17fb 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -45,6 +45,16 @@ config BR2_PACKAGE_MESA3D_NEEDS_XA
+>  
+>  comment "Gallium drivers"
+>  
+> +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+> +	bool "Etnaviv driver"
 
-diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-index 730292e..c06d20b 100644
---- a/package/kmsxx/kmsxx.mk
-+++ b/package/kmsxx/kmsxx.mk
-@@ -12,6 +12,12 @@ KMSXX_INSTALL_STAGING = YES
- KMSXX_DEPENDENCIES = libdrm host-pkgconf
- KMSXX_CONF_OPTS = -DKMSXX_ENABLE_PYTHON=OFF
+I would prefer "Gallium Etnaviv driver" (as all the other gallium driver are named)...
  
-+# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
-+ifeq ($(BR2_m68k_cf),y)
-+KMSXX_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -fno-dwarf2-cfi-asm"
-+endif
-+
- ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
- KMSXX_TESTS = \
- 	fbtestpat kmsblank kmscapture \
+> +	depends on BR2_arm
+> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_LIBDRM_ETNAVIV
+> +	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+> +	select BR2_PACKAGE_MESA3D_NEEDS_XA
+
+Out of interest, for what is XA needed?
+
+> +	help
+> +	  Mesa driver for Vivante GPUs.
+> +
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+>  	bool "Gallium nouveau driver"
+>  	depends on BR2_i386 || BR2_x86_64
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 3bfb005..eca1f53 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -67,6 +67,8 @@ endif
+>  # Drivers
+>  
+>  #Gallium Drivers
+> +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
+> +MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += imx
+
+Why not the one-liner '... += etnaviv imx'? Line length?
+
+With the nits fixed you can add my
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
+
+
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
+> @@ -151,6 +153,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+>  MESA3D_EGL_PLATFORMS = drm
+>  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
+>  MESA3D_EGL_PLATFORMS = drm
+> +else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
+> +MESA3D_EGL_PLATFORMS = drm
+>  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
+>  MESA3D_EGL_PLATFORMS = drm
+>  endif
