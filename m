@@ -1,53 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 11:15:28 +0100
-Subject: [Buildroot] [git commit] bctoolbox: fix typos and logic error
-Message-ID: <20170214101855.214C58214B@busybox.osuosl.org>
+Date: Tue, 14 Feb 2017 11:18:04 +0100
+Subject: [Buildroot] [git commit] vim: security bump to version 8.0.0329
+Message-ID: <20170214101855.3225A8214B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c4d3560b94c9cb8f1594c9200a632b89ddf7aa0
+commit: https://git.buildroot.net/buildroot/commit/?id=0e76cde70f651b17e74681d17fb0afb16400102d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To get the directory path from the library name you need to
-use a single filename. Fix typo in variable name.
-
-This fixes the ortp autobuild errors which uses the broken pkgconfig file
-from bctoolbox.
-
 Fixes:
-  http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6e13d5f59fb52
-  http://autobuild.buildroot.net/results/1999c841fae41f860f00747a362327cb2857e687
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+- CVE-2016-1248: vim before patch 8.0.0056 does not properly validate values
+  for the 'filetype', 'syntax' and 'keymap' options, which may result in the
+  execution of arbitrary code if a file with a specially crafted modeline is
+  opened.
+
+- CVE-2017-5953: vim before patch 8.0.0322 does not properly validate values
+  for tree length when handling a spell file, which may result in an integer
+  overflow at a memory allocation site and a resultant buffer overflow.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bctoolbox/0001-fix-typo.patch | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bctoolbox/0001-fix-typo.patch b/package/bctoolbox/0001-fix-typo.patch
-new file mode 100644
-index 0000000..b94daee
---- /dev/null
-+++ b/package/bctoolbox/0001-fix-typo.patch
-@@ -0,0 +1,18 @@
-+Fix a typo in the variable name. Only check path for a single library name.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org> 
-+
-+diff -Nur bctoolbox-0.4.0.orig/CMakeLists.txt bctoolbox-0.4.0/CMakeLists.txt
-+--- bctoolbox-0.4.0.orig/CMakeLists.txt	2016-10-06 17:30:41.000000000 +0200
-++++ bctoolbox-0.4.0/CMakeLists.txt	2017-02-13 23:30:38.641288032 +0100
-+@@ -103,8 +103,8 @@
-+ endif()
-+ 
-+ if(MBEDTLS_FOUND)
-+-	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARIES}" PATH)
-+-	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedlts_library_path}")
-++	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARY}" PATH)
-++	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedtls_library_path}")
-+ endif()
-+ if(POLARSSL_FOUND)
-+ 	get_filename_component(polarssl_library_path "${POLARSSL_LIBRARIES}" PATH)
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index bc4a08e..28c6b97 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 9b4790dafc886537096a6e1953ee0424b8c308881b97151a7bfba1f9fd14e3f9  vim-v8.0.0001.tar.gz
++sha256 6fbe0ec1228f951ba598b48ac8033f41ca4934cc34689a6008685e7c26477ae2  vim-v8.0.0329.tar.gz
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 308855e..ec49460 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = v8.0.0001
++VIM_VERSION = v8.0.0329
+ VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
+ # Win over busybox vi since vim is more feature-rich
+ VIM_DEPENDENCIES = \
