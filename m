@@ -1,13 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 11:15:15 +0100
-Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
-In-Reply-To: <20170213213713.GA12810@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Mon, 13 Feb 2017 22:37:13 +0100")
-References: <20170213093502.26507-1-peter@korsgaard.com>
- <20170213132925.5324f141@free-electrons.com>
- <8760kema97.fsf@dell.be.48ers.dk>
- <20170213213713.GA12810@waldemar-brodkorb.de>
-Message-ID: <87fujhkrik.fsf@dell.be.48ers.dk>
+Date: Tue, 14 Feb 2017 11:17:54 +0100
+Subject: [Buildroot] [PATCH] bctoolbox: fix typos and logic error
+In-Reply-To: <20170214090132.GA5012@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Tue, 14 Feb 2017 10:01:32 +0100")
+References: <20170214090132.GA5012@waldemar-brodkorb.de>
+Message-ID: <87bmu5kre5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,30 +13,19 @@ To: buildroot@busybox.net
 
 >>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-Hi,
+ > To get the directory path from the library name you need to
+ > use a single filename. Fix typo in variable name.
 
- >> That's also fine by me if somebody wants to do that. I personally don't
- >> know/care enough about m68k, and it has been failing since October
- >> without anything happening, so I think we should disable it.
+ > This fixes the ortp autobuild errors which uses the broken pkgconfig file
+ > from bctoolbox.
 
- > It is not that nothing happened.
- > I think this would be solved by my following patch:
- > http://buildroot-busybox.2317881.n4.nabble.com/PATCH-m68k-add-special-gcc-flag-to-avoid-ICE-for-coldfire-td151151.html
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6e13d5f59fb52
+ >   http://autobuild.buildroot.net/results/1999c841fae41f860f00747a362327cb2857e687
 
-Sorry, I forgot about the relation between this build issue and the
-"magic" compiler flag.
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
- > Did you had a chance to discuss the required changes with Arnout in
- > the last developer meeting?
-
-I could only join from Monday evening, but I don't think so.
-
-We are again past rc1, so I think the safest approach for 2017.02 is to
-not add it to the wrapper, but instead explicitly pass it in kmsxx.mk
-(and any other package with the same problem). From my IRC history this
-also seems to be what you discussed with Thomas yesterday.
-
-Will you send patches to do this?
+Committed, thanks. Don't forget to send the patch upstream.
 
 -- 
 Bye, Peter Korsgaard
