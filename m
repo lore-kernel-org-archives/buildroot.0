@@ -1,37 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Feb 2017 22:45:15 +0100
-Subject: [Buildroot] [PATCH] package/libgpiod: bump version to 0.1.3
-In-Reply-To: <1487064834-10378-1-git-send-email-bgolaszewski@baylibre.com>
-References: <1487064834-10378-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <20170214224515.64934fd1@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Feb 2017 23:09:03 +0100
+Subject: [Buildroot] [PATCH/autobuild] get_toolchain_configs: be robust
+ against network errors
+In-Reply-To: <20170214213607.21736-1-peter@korsgaard.com>
+References: <20170214213607.21736-1-peter@korsgaard.com>
+Message-ID: <20170214220903.GE3624@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Peter, All,
 
-On Tue, 14 Feb 2017 10:33:54 +0100, Bartosz Golaszewski wrote:
-> Release 0.1.2 claimed to fix an issue with requesting both types of
-> line events, but actually didn't. This time it's really fixed.
+On 2017-02-14 22:36 +0100, Peter Korsgaard spake thusly:
+> Once in a while some of my autobuilder instances hangs with an exception
+> from urllib:
 > 
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Process Process-1:
+> Traceback (most recent call last):
+>   File "/home/peko/host/usr/lib/python2.7/multiprocessing/process.py", line 258, in _bootstrap
+>     self.run()
+>   File "/home/peko/host/usr/lib/python2.7/multiprocessing/process.py", line 114, in run
+>     self._target(*self._args, **self._kwargs)
+>   File "/home/peko/buildroot-test/scripts/autobuild-run", line 804, in run_instance
+>     ret = gen_config(**kwargs)
+>   File "/home/peko/buildroot-test/scripts/autobuild-run", line 526, in gen_config
+>     configs = get_toolchain_configs()
+>   File "/home/peko/buildroot-test/scripts/autobuild-run", line 291, in get_toolchain_configs
+>     with urlopen_closing(config["url"]) as r:
+>   File "/home/peko/buildroot-test/scripts/autobuild-run", line 146, in <lambda>
+>     urlopen_closing = lambda uri: contextlib.closing(urlopen(uri))
+>   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 127, in urlopen
+>     return _opener.open(url, data, timeout)
+>   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 404, in open
+>     response = self._open(req, data)
+>   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 422, in _open
+>     '_open', req)
+>   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 382, in _call_chain
+>     result = func(*args)
+>   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 1214, in http_open
+>     return self.do_open(httplib.HTTPConnection, req)
+>   File "/home/peko/host/usr/lib/python2.7/urllib2.py", line 1184, in do_open
+>     raise URLError(err)
+> URLError: <urlopen error [Errno -2] Name or service not known>
+> 
+> If this happens, simply ignore the configuration and try again.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  package/libgpiod/libgpiod.hash | 2 +-
->  package/libgpiod/libgpiod.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  scripts/autobuild-run | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index cf19735..37c2b12 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -528,7 +528,11 @@ def gen_config(**kwargs):
+>      log_write(log, "INFO: generate the configuration")
+>  
+>      # Select a random toolchain configuration
+> -    configs = get_toolchain_configs(**kwargs)
+> +    try:
+> +        configs = get_toolchain_configs(**kwargs)
+> +    except:
+> +        return -1
+> +
+>      i = randint(0, len(configs) - 1)
+>      config = configs[i]
+>  
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-We normally don't apply version bumps to the master branch after -rc1
-has been released, but after looking at the git log between 0.1.2 and
-0.1.3 it's indeed just two commits, each one-liners, fixing bugs. So I
-think this qualifies for master, and applied your patch to the master
-branch.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
