@@ -1,52 +1,45 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 14 Feb 2017 10:01:32 +0100
-Subject: [Buildroot] [PATCH] bctoolbox: fix typos and logic error
-Message-ID: <20170214090132.GA5012@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Feb 2017 10:03:04 +0100
+Subject: [Buildroot] [PATCH] glmark2: bump version
+In-Reply-To: <CAAMH-yvBA9gpFLNy1Tu+x4A2fFOetdGHgVeLkpnAweBqsUS8iQ@mail.gmail.com>
+References: <20170213200619.10535-1-gary.bisson@boundarydevices.com>
+ <20170213223900.7167f053@free-electrons.com>
+ <CAAMH-yt5ar=Y3zRR-Y3XRMSD-nWXGSfOLbY7WMj_+ZUR1+Eb+w@mail.gmail.com>
+ <20170214094436.224c3db8@free-electrons.com>
+ <CAAMH-yvBA9gpFLNy1Tu+x4A2fFOetdGHgVeLkpnAweBqsUS8iQ@mail.gmail.com>
+Message-ID: <20170214100304.4970a39f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To get the directory path from the library name you need to
-use a single filename. Fix typo in variable name.
+Hello,
 
-This fixes the ortp autobuild errors which uses the broken pkgconfig file
-from bctoolbox.
+On Tue, 14 Feb 2017 09:49:09 +0100, Gary Bisson wrote:
 
-Fixes:
-  http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6e13d5f59fb52
-  http://autobuild.buildroot.net/results/1999c841fae41f860f00747a362327cb2857e687
+> No that is what I meant, "injecting" a defconfig so that a problem
+> that we see locally can be reproduced by a server and that we know
+> there will be a trace of that issue somewhere (with all the proper
+> information).
+> 
+> I understand it would be a mess to maintain such infrastructure, but
+> at least that would be a go-to response when someone says something is
+> broken: put your defconfig on the server and we'll see.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/bctoolbox/0001-fix-typo.patch | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 package/bctoolbox/0001-fix-typo.patch
+Well, in practice this is not really useful. If a given problem has
+been produced by the autobuilders, it's really easy to find it. For
+example, for your glmark2 issue, I simply did:
 
-diff --git a/package/bctoolbox/0001-fix-typo.patch b/package/bctoolbox/0001-fix-typo.patch
-new file mode 100644
-index 0000000..b94daee
---- /dev/null
-+++ b/package/bctoolbox/0001-fix-typo.patch
-@@ -0,0 +1,18 @@
-+Fix a typo in the variable name. Only check path for a single library name.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org> 
-+
-+diff -Nur bctoolbox-0.4.0.orig/CMakeLists.txt bctoolbox-0.4.0/CMakeLists.txt
-+--- bctoolbox-0.4.0.orig/CMakeLists.txt	2016-10-06 17:30:41.000000000 +0200
-++++ bctoolbox-0.4.0/CMakeLists.txt	2017-02-13 23:30:38.641288032 +0100
-+@@ -103,8 +103,8 @@
-+ endif()
-+ 
-+ if(MBEDTLS_FOUND)
-+-	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARIES}" PATH)
-+-	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedlts_library_path}")
-++	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARY}" PATH)
-++	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedtls_library_path}")
-+ endif()
-+ if(POLARSSL_FOUND)
-+ 	get_filename_component(polarssl_library_path "${POLARSSL_LIBRARIES}" PATH)
+  http://autobuild.buildroot.net/?reason=glmark2-fa71af2dfab711fac87b9504b6fc9862f44bf72a
+
+And looked at the last few errors, and they were the ones your patch
+was fixing.
+
+Best regards,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
