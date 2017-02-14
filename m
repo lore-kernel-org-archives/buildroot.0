@@ -1,52 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Feb 2017 11:18:38 +0100
-Subject: [Buildroot] [git commit] ntfs-3g: add security fix for CVE-2017-0358
-Message-ID: <20170214101855.3F7588214B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Feb 2017 11:18:53 +0100
+Subject: [Buildroot] [PATCH] kmsxx: not available on m68k
+In-Reply-To: <87fujhkrik.fsf@dell.be.48ers.dk>
+References: <20170213093502.26507-1-peter@korsgaard.com>
+ <20170213132925.5324f141@free-electrons.com>
+ <8760kema97.fsf@dell.be.48ers.dk>
+ <20170213213713.GA12810@waldemar-brodkorb.de>
+ <87fujhkrik.fsf@dell.be.48ers.dk>
+Message-ID: <20170214111853.11853a34@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f971f354c14a8948477a0936668b8baae8ec86e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Jann Horn, Project Zero (Google) discovered that ntfs-3g, a read-write
-NTFS driver for FUSE does not not scrub the environment before
-executing modprobe to load the fuse module. This influence the behavior
-of modprobe (MODPROBE_OPTIONS environment variable, --config and
---dirname options) potentially allowing for local root privilege
-escalation if ntfs-3g is installed setuid.
+On Tue, 14 Feb 2017 11:15:15 +0100, Peter Korsgaard wrote:
 
-Notice that Buildroot does NOT install netfs-3g setuid root, but custom
-permission tables might be used, causing it to vulnerable to the above.
+> We are again past rc1, so I think the safest approach for 2017.02 is to
+> not add it to the wrapper, but instead explicitly pass it in kmsxx.mk
+> (and any other package with the same problem). From my IRC history this
+> also seems to be what you discussed with Thomas yesterday.
 
-ntfs-3g does not seem to have a publicly available version control system
-and no new releases have been made, so instead grab the patch from Debian.
+In addition, only 3 packages need it for the moment according to
+Waldemar, so I think for now a per-package fix is better. We'll see
+later if this needs to be generalized and put into the wrapper if
+really a large number of packages are affected.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ntfs-3g/ntfs-3g.hash | 1 +
- package/ntfs-3g/ntfs-3g.mk   | 1 +
- 2 files changed, 2 insertions(+)
+Has this issue been reported upstream?
 
-diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
-index 4875cc4..eaa3d98 100644
---- a/package/ntfs-3g/ntfs-3g.hash
-+++ b/package/ntfs-3g/ntfs-3g.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 d7b72c05e4b3493e6095be789a760c9f5f2b141812d5b885f3190c98802f1ea0 ntfs-3g_ntfsprogs-2016.2.22.tgz
-+sha256 43deadaeade489934b0b45e2ed8aa5f853ad0364fbde7ad144211b80132ea041  0003-CVE-2017-0358.patch
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index b59e335..6e1a8f9 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -7,6 +7,7 @@
- NTFS_3G_VERSION = 2016.2.22
- NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
- NTFS_3G_SITE = http://tuxera.com/opensource
-+NTFS_3G_PATCH = https://sources.debian.net/data/main/n/ntfs-3g/1:2016.2.22AR.1-4/debian/patches/0003-CVE-2017-0358.patch
- NTFS_3G_CONF_OPTS = --disable-ldconfig
- NTFS_3G_INSTALL_STAGING = YES
- NTFS_3G_DEPENDENCIES = host-pkgconf
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
