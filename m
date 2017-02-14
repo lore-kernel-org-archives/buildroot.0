@@ -1,53 +1,55 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 14 Feb 2017 17:40:40 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2017.02.0
-Message-ID: <20170214164040.25057-1-fabio.porcedda@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Feb 2017 17:48:26 +0100
+Subject: [Buildroot] [PATCH v2] infra/ccache: avoid color diagnostics
+ with GCC older than v4.9
+In-Reply-To: <1044520233.10180443.1487025689348.JavaMail.zimbra@datacom.ind.br>
+References: <1486733648-14658-1-git-send-email-casantos@datacom.ind.br>
+ <1486899181-8210-1-git-send-email-casantos@datacom.ind.br>
+ <20170212141425.GE11105@free.fr>
+ <1044520233.10180443.1487025689348.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20170214164826.GB3624@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Carlos, All,
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index e6ecd821f..85956d655 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2017.01.0"
-+	bool "2017.02.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2017.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2017.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index f769c1d80..575059706 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2017.01.0.tar.bz2.md5
--md5 d2933437885497b09d69d6e6f4beeffc  barebox-2017.01.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2017.02.0.tar.bz2.md5
-+md5 4651f5fa5e794a9739dd71eece0fe702  barebox-2017.02.0.tar.bz2
- 
- # Locally calculated
--sha256 ca4cc06bdc7183e3fcb4bed300f1e820df1e022a7b86fdcf64205ddb6a103567  barebox-2017.01.0.tar.bz2
-+sha256 d65d864fe598d61ed9c6712e32d50742e6996aae02acaae5955c3b22166344cb  barebox-2017.02.0.tar.bz2
+On 2017-02-13 20:41 -0200, Carlos Santos spake thusly:
+> Sorry, I forgot so send this yesterday. Here is a reliable reproducer:
+> 
+> $ cat defconfig 
+> BR2_powerpc=y
+> BR2_powerpc_8548=y
+> BR2_CCACHE=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng_e500v2-linux-gnuspe.tar.xz"
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="powerpc-ctng_e500v2-linux-gnuspe"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_PACKAGE_OPENSSL=y
+> $ 
+> $ echo $GCC_COLORS 
+> error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01
+> $
+> $ make V=1 BR2_JLEVEL=1 openssl-dirclean openssl
+
+Indeed, I could reproduce. Thanks.
+
+So, I think Arnout is right in saying we should just globally unexport
+GCC_COLORS and be done with that.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
