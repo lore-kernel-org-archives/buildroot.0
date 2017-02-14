@@ -1,36 +1,93 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 14 Feb 2017 15:17:46 +0000 (UTC)
-Subject: [Buildroot] [BUILDROOT] Add a text file on "/tmp" directory
- during img compilation
-References: <288390896.7283593.1487081370913.ref@mail.yahoo.com>
- <288390896.7283593.1487081370913@mail.yahoo.com>
-Message-ID: <o7v72q$48j$1@blaine.gmane.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 14 Feb 2017 16:22:09 +0100
+Subject: [Buildroot] [PATCH] bctoolbox: fix typos and logic error
+In-Reply-To: <20170214090132.GA5012@waldemar-brodkorb.de>
+References: <20170214090132.GA5012@waldemar-brodkorb.de>
+Message-ID: <1487085729.1684.3.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-02-14, <thierry.xenomai43@yahoo.com> <thierry.xenomai43@yahoo.com> wrote:
+Hi Waldemar,
 
-> I would like to add a text files and bin?files on "/tmp" directory
-> during the image making.
+On Tue, 2017-02-14 at 10:01 +0100, Waldemar Brodkorb wrote:
+> To get the directory path from the library name you need to
+> use a single filename. Fix typo in variable name.
+> 
+> This fixes the ortp autobuild errors which uses the broken pkgconfig
+> file
+> from bctoolbox.
+> 
+> Fixes:
+> ? http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6
+> e13d5f59fb52
+> ? http://autobuild.buildroot.net/results/1999c841fae41f860f00747a3623
+> 27cb2857e687
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> ?package/bctoolbox/0001-fix-typo.patch | 18 ++++++++++++++++++
+> ?1 file changed, 18 insertions(+)
+> ?create mode 100644 package/bctoolbox/0001-fix-typo.patch
+> 
+> diff --git a/package/bctoolbox/0001-fix-typo.patch
+> b/package/bctoolbox/0001-fix-typo.patch
+> new file mode 100644
+> index 0000000..b94daee
+> --- /dev/null
+> +++ b/package/bctoolbox/0001-fix-typo.patch
+> @@ -0,0 +1,18 @@
+> +Fix a typo in the variable name. Only check path for a single
+> library name.
+> +
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>?
+> +
+> +diff -Nur bctoolbox-0.4.0.orig/CMakeLists.txt bctoolbox-
+> 0.4.0/CMakeLists.txt
+> +--- bctoolbox-0.4.0.orig/CMakeLists.txt	2016-10-06
+> 17:30:41.000000000 +0200
+> ++++ bctoolbox-0.4.0/CMakeLists.txt	2017-02-13
+> 23:30:38.641288032 +0100
+> +@@ -103,8 +103,8 @@
+> + endif()
+> +?
+> + if(MBEDTLS_FOUND)
+> +-	get_filename_component(mbedtls_library_path
+> "${MBEDTLS_LIBRARIES}" PATH)
+> +-	set(LIBS_PRIVATE "${LIBS_PRIVATE}
+> -L${mbedlts_library_path}")
+> ++	get_filename_component(mbedtls_library_path
+> "${MBEDTLS_LIBRARY}" PATH)
+> ++	set(LIBS_PRIVATE "${LIBS_PRIVATE}
+> -L${mbedtls_library_path}")
+> + endif()
+> + if(POLARSSL_FOUND)
+> +?	get_filename_component(polarssl_library_path
+> "${POLARSSL_LIBRARIES}" PATH)
 
-https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+With this fix applied the bctoolbox pkg-config 'Libs.private:' value is
+set to:
 
-You can configure buildroot to run a script after the root tree is
-done but but before the final image is created by setting the
-BR2_ROOTFS_POST_BUILD_SCRIPT option. Look under
+"""
+Libs.private:??-L/mnt/data/git/buildroot/output/host/usr/arm-buildroot-
+linux-uclibcgnueabi/sysroot/usr/lib32
+"""
 
-  System Configuration
-    Custom scripts to run before creating filesystem images
+No mbedtls libraries are included here.
 
-In that script you can add/delete/remove files from the tree.
+And the flag 'BCTOOLBOX_LIBS' in ortp is set to:
 
-If all you want to do is add files, you can use the BR2_ROOTFS_OVERLAY
-option to point to a tree that is copied on top of the target tree.
+"""
+-L/mnt/data/git/buildroot/output/host/usr/arm-buildroot-linux-
+uclibcgnueabi/sysroot/usr/lib -lbctoolbox
+-L/mnt/data/git/buildroot/output/host/usr/ar"\
+"m-buildroot-linux-uclibcgnueabi/sysroot/usr/lib32
+"""
 
--- 
-Grant Edwards               grant.b.edwards        Yow! An Italian is COMBING
-                                  at               his hair in suburban DES
-                              gmail.com            MOINES!
+From my understanding, all the three mbedtls libraries libmbedcrypto,
+libmbedx509, and libmbedtls should be added to the linker flags and
+therefore to 'Libs.private' in the pkg-config file, right?
+
+J?rg
