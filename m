@@ -1,45 +1,52 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 14 Feb 2017 10:00:40 +0100
-Subject: [Buildroot] [PATCH] openswan: fix autobuild failures with
- uClibc-ng
-In-Reply-To: <20170213225416.73d2521f@free-electrons.com>
-References: <20170213213045.GA13499@waldemar-brodkorb.de>
- <20170213225416.73d2521f@free-electrons.com>
-Message-ID: <20170214090040.GC12810@waldemar-brodkorb.de>
+Date: Tue, 14 Feb 2017 10:01:32 +0100
+Subject: [Buildroot] [PATCH] bctoolbox: fix typos and logic error
+Message-ID: <20170214090132.GA5012@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+To get the directory path from the library name you need to
+use a single filename. Fix typo in variable name.
 
-> Hello,
-> 
-> On Mon, 13 Feb 2017 22:30:45 +0100, Waldemar Brodkorb wrote:
-> > Add patch to fix following autobuild failures:
-> > 
-> > Fixes:
-> >   http://autobuild.buildroot.net/results/31cf680c48bec8ba4450a6fe2156cb441c4dd660
-> >   http://autobuild.buildroot.net/results/95220f231810cb12ba97a6b44af79f84af706c82
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > ---
-> >  .../0001-uClibc-ng-is-compatible-to-glibc.patch    | 39 ++++++++++++++++++++++
-> >  1 file changed, 39 insertions(+)
-> >  create mode 100644 package/openswan/0001-uClibc-ng-is-compatible-to-glibc.patch
-> 
-> Thanks for the patch. While it is nice to fix this warning, there are
-> plenty of other warnings spit out by the openswan build process. I
-> believe the real thing to fix is the usage of -Werror by openswan.
-> Maybe passing WERROR=' ' on the command line is enough?
+This fixes the ortp autobuild errors which uses the broken pkgconfig file
+from bctoolbox.
 
-But the warning is wrong in case of uClibc-ng, because the symbol is
-removed for a while and malloc(0) is compatible to glibc behaviour.
-Furthermore it is the only warning with breaks the compilation with
--Werror. So at the moment this should be enough. Maybe -Werror can
-be disabled in a second patch later, if any trouble occurs.
+Fixes:
+  http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6e13d5f59fb52
+  http://autobuild.buildroot.net/results/1999c841fae41f860f00747a362327cb2857e687
 
-best regards
- Waldemar
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/bctoolbox/0001-fix-typo.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/bctoolbox/0001-fix-typo.patch
+
+diff --git a/package/bctoolbox/0001-fix-typo.patch b/package/bctoolbox/0001-fix-typo.patch
+new file mode 100644
+index 0000000..b94daee
+--- /dev/null
++++ b/package/bctoolbox/0001-fix-typo.patch
+@@ -0,0 +1,18 @@
++Fix a typo in the variable name. Only check path for a single library name.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org> 
++
++diff -Nur bctoolbox-0.4.0.orig/CMakeLists.txt bctoolbox-0.4.0/CMakeLists.txt
++--- bctoolbox-0.4.0.orig/CMakeLists.txt	2016-10-06 17:30:41.000000000 +0200
+++++ bctoolbox-0.4.0/CMakeLists.txt	2017-02-13 23:30:38.641288032 +0100
++@@ -103,8 +103,8 @@
++ endif()
++ 
++ if(MBEDTLS_FOUND)
++-	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARIES}" PATH)
++-	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedlts_library_path}")
+++	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARY}" PATH)
+++	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedtls_library_path}")
++ endif()
++ if(POLARSSL_FOUND)
++ 	get_filename_component(polarssl_library_path "${POLARSSL_LIBRARIES}" PATH)
+-- 
+2.1.4
