@@ -1,44 +1,102 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 14 Feb 2017 23:44:02 +0100
-Subject: [Buildroot] [PATCH 4/4] bctoolbox: disable rpath
+Date: Tue, 14 Feb 2017 23:44:00 +0100
+Subject: [Buildroot] [PATCH 2/4] bctoolbox: add patch to fix static linking
 In-Reply-To: <20170214224402.8785-1-joerg.krause@embedded.rocks>
 References: <20170214224402.8785-1-joerg.krause@embedded.rocks>
-Message-ID: <20170214224402.8785-4-joerg.krause@embedded.rocks>
+Message-ID: <20170214224402.8785-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, bctoolbox adds the rpath to the shared library. Prevent this
-by setting `CMAKE_SKIP_RPATH` [1] to a true value.
+Static linking with bctoolbox fails when using pkg-config as the
+generated bctoolbox.pc file only consists of an '-L' string without any
+search path or libraries flags:
 
-[1] https://cmake.org/cmake/help/latest/variable/CMAKE_SKIP_RPATH.html
+```
+libtool: link: need path for `-L' option
+```
+
+That's because of an typo in mbedtls_library_path. However,
+mbedtls_library_path contains a string of the mbedtls libraries
+concatenated by an ';' which cannot be parsed by pkg-config.
+
+Therefore, use MBEDTLS_LIBRARY instead of MBEDTLS_LIBRARIES to get
+the library path.
+
+Furthermore, add the three mbedtls libraries mbedtls, mbedcrypto, and
+mbedx509 to LIBS_PRIVATE so these libraries are added to the
+Libs.private field of bctoolbox.pc.
+
+Fixes:
+http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6e13d5f59fb52
+http://autobuild.buildroot.net/results/1999c841fae41f860f00747a362327cb2857e687
+.. and many more.
+
+Upstream status: Pending
+https://github.com/BelledonneCommunications/bctoolbox/pull/4
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/bctoolbox/bctoolbox.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../0001-Fix-Libs.private-flags-for-mbedtls.patch  | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
 
-diff --git a/package/bctoolbox/bctoolbox.mk b/package/bctoolbox/bctoolbox.mk
-index 5eea0575f..76737aa3c 100644
---- a/package/bctoolbox/bctoolbox.mk
-+++ b/package/bctoolbox/bctoolbox.mk
-@@ -11,11 +11,14 @@ BCTOOLBOX_LICENSE_FILES = COPYING
- BCTOOLBOX_DEPENDENCIES = mbedtls
- BCTOOLBOX_INSTALL_STAGING = YES
- 
-+# Set CMAKE_SKIP_RPATH to prevent bctoolbox from adding the rpath to
-+# shared library.
- BCTOOLBOX_CONF_OPTS = \
- 	-DENABLE_STRICT=OFF \
- 	-DENABLE_TESTS_COMPONENT=OFF \
- 	-DENABLE_TESTS=OFF \
--	-DGIT_EXECUTABLE=OFF
-+	-DGIT_EXECUTABLE=OFF \
-+	-DCMAKE_SKIP_RPATH=ON
- 
- # bctoolbox can be build with mbedTLS or PolarSSL support. If both
- # libraries are present, mbedTLS is preferred over PolarSSL.
+diff --git a/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch b/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
+new file mode 100644
+index 000000000..a70c7c633
+--- /dev/null
++++ b/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
+@@ -0,0 +1,49 @@
++From c0b3dbb43aa3a38c47311556c85eadc6072e2d68 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Tue, 14 Feb 2017 22:02:26 +0100
++Subject: [PATCH] Fix Libs.private flags for mbedtls
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Static linking with bctoolbox fails when using pkg-config as the
++generated bctoolbox.pc file only consists of an '-L' string without any
++search path or libraries flags.
++
++That's because of an typo in `mbedtls_library_path`. However,
++`mbedtls_library_path` contains a string of the mbedtls libraries
++concatenated by an ';' which cannot be parsed by pkg-config.
++
++Therefore, use `MBEDTLS_LIBRARY` instead of `MBEDTLS_LIBRARIES` to get
++the library path.
++
++Furthermore, add the three mbedtls libraries *mbedtls*, *mbedcrypto*, and
++*mbedx509* to `LIBS_PRIVATE` so these libraries are added to the
++`Libs.private` field of bctoolbox.pc.
++
++Upstream status: Pending
++https://github.com/BelledonneCommunications/bctoolbox/pull/4
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index ed7aa00..4127f0e 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -103,8 +103,8 @@ else()
++ endif()
++ 
++ if(MBEDTLS_FOUND)
++-	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARIES}" PATH)
++-	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedlts_library_path}")
+++	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARY}" PATH)
+++	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedtls_library_path} -lmbedtls -lmbedcrypto -lmbedx509")
++ endif()
++ if(POLARSSL_FOUND)
++ 	get_filename_component(polarssl_library_path "${POLARSSL_LIBRARIES}" PATH)
++-- 
++2.11.1
++
 -- 
 2.11.1
