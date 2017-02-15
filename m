@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 23:35:01 +0100
-Subject: [Buildroot] [git commit] raptor: install package to staging
-Message-ID: <20170301170421.804657FB5C@busybox.osuosl.org>
+Date: Wed, 15 Feb 2017 22:15:31 +0100
+Subject: [Buildroot] [git commit] libinput: bump to version 1.6.1
+Message-ID: <20170301170421.74D0A7FB5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4f54a98a38905fb4ca5413e174263913e20c9c3
+commit: https://git.buildroot.net/buildroot/commit/?id=84ca4704ac757016182e2abb5b6e4336e1eeb982
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The raptor package installs some libraries, which will be useful for
-upcoming packages parts of librdf.org, such as rasqal and redland.
-
-Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/raptor/raptor.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
-index aea14e3..2653663 100644
---- a/package/raptor/raptor.mk
-+++ b/package/raptor/raptor.mk
-@@ -10,6 +10,7 @@ RAPTOR_SITE = http://download.librdf.org/source
- RAPTOR_DEPENDENCIES = libxml2 libxslt
- RAPTOR_LICENSE = GPLv2+ or LGPLv2.1+ or Apache-2.0+
- RAPTOR_LICENSE_FILES = LICENSE.txt
-+RAPTOR_INSTALL_STAGING = YES
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index dd3573f..7dd4c04 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032746.html
+-sha256 b7534f518d735c643aedca2fb4694683dfddc8d0600cfb628c87a18e65255832  libinput-1.6.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-February/032940.html
++sha256 9d816f13eee63bcca0e9c3bb652c52ab55f39be4d1b90b54e4bfd1dc92ef55a8  libinput-1.6.1.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 52aca9a..776e1af 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Flag is added to make sure the patch is applied for the configure.ac of raptor.
- RAPTOR_AUTORECONF = YES
+-LIBINPUT_VERSION = 1.6.0
++LIBINPUT_VERSION = 1.6.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
