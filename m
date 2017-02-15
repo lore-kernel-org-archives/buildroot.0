@@ -1,71 +1,45 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 14 Feb 2017 22:13:52 -0200
-Subject: [Buildroot] [PATCH v3 2/2] mesa3d: Add support for the Etnaviv
-	gallium driver
-In-Reply-To: <1487117632-32365-1-git-send-email-festevam@gmail.com>
-References: <1487117632-32365-1-git-send-email-festevam@gmail.com>
-Message-ID: <1487117632-32365-2-git-send-email-festevam@gmail.com>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Wed, 15 Feb 2017 13:45:49 +1100
+Subject: [Buildroot] Analysis of build results for 2017-02-13
+In-Reply-To: <20170214142725.1b9e98ae@free-electrons.com>
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+Message-ID: <20170215024549.GA25646@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for the Etnaviv gallium driver.
+On Tue, Feb 14, 2017 at 02:27:25PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> J?rg, Peter, Romain, Bernd, Gustavo, Carsten, Philippe, Yann, Fran?ois,
+> Dagg, Baruch and ARC/Synopsys developers, there are some questions for
+> you below.
+> 
+> Thanks!
+> 
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes since v2:
-- Improve the Kconfig text menu
-- Pass '+= etnaviv imx' on a single line
-- Remove the unneeded BR2_PACKAGE_MESA3D_NEEDS_XA option
+[snip]
 
- package/mesa3d/Config.in | 9 +++++++++
- package/mesa3d/mesa3d.mk | 3 +++
- 2 files changed, 12 insertions(+)
+> >    powerpc64 |                   libsvg-0.1.4 | NOK | http://autobuild.buildroot.net/results/f2d5b2459080bf9c67906b8b240150303bb61461
+> 
+> /usr/lib64/libexpat.so: error adding symbols: File in wrong format
+> collect2: error: ld returned 1 exit status
+> 
+> It's picking some host library, which is wrong. Carsten, you're listed
+> in the DEVELOPERS file for libsvg, could you have a look?
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index bbab953..2b085ab 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -45,6 +45,15 @@ config BR2_PACKAGE_MESA3D_NEEDS_XA
- 
- comment "Gallium drivers"
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
-+	bool "Gallium Etnaviv driver"
-+	depends on BR2_arm
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_ETNAVIV
-+	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	help
-+	  Mesa driver for Vivante GPUs.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	bool "Gallium nouveau driver"
- 	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 3bfb005..e174868 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -67,6 +67,7 @@ endif
- # Drivers
- 
- #Gallium Drivers
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv imx
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
-@@ -151,6 +152,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
- MESA3D_EGL_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
- MESA3D_EGL_PLATFORMS = drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
-+MESA3D_EGL_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
- MESA3D_EGL_PLATFORMS = drm
- endif
--- 
-2.7.4
+I've had a look at this, it seems to be that pkg-config is used to
+locate libxml, but when expat is used instead it just adds '-lexpat' --
+which can find the host library.
+
+Unfortunately, the change needs to be in configure.in and AUTORECONF
+fails. I've experimented with creating a patch to configure that does
+what I believe autoreconf should do (adds a copy of the libxml
+pkg-config code adjusted for expat). Does that seem a reasonable fix?
+If so, I'll post it.
+
+Cheers,
+Sam.
