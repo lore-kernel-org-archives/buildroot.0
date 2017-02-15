@@ -1,62 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Feb 2017 22:37:27 +0100
-Subject: [Buildroot] [git commit] package/libva-intel-driver: project moved
-	to github
-Message-ID: <20170301170422.65ACB822A8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Feb 2017 21:18:22 +0100
+Subject: [Buildroot] [git commit] grep: bump to version 3.0
+Message-ID: <20170301170421.4C5637FB5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8cd8eff93c918196092a7fba812d6b8367a77b2
+commit: https://git.buildroot.net/buildroot/commit/?id=89f837c977aca3a273b184e9a0932544b45b4cf0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details read
-https://lists.01.org/pipermail/intel-vaapi-media/2017-January/000001.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libva-intel-driver/Config.in               | 2 +-
- package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
- package/libva-intel-driver/libva-intel-driver.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/grep/grep.hash | 2 +-
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-index 0f5b656..a39e554 100644
---- a/package/libva-intel-driver/Config.in
-+++ b/package/libva-intel-driver/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
- 	help
- 	  VA-API back-end driver for Intel graphics chips
- 
--	  https://01.org/linuxgraphics/community/vaapi
-+	  https://01.org/linuxmedia/vaapi
- 
- comment "libva intel driver needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index 10664d0..a968876 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index 326737a..77420ad 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/libva/2016-November/004731.html
--sha1 5100f187afc4e39fce5664b96fe11a38faa9afaa  libva-intel-driver-1.7.3.tar.bz2
-+# Locally computed
-+sha256 c1f02cbdf0398f096ddc91096fac6ee62267a54955f6d235d73a8ff2ea888118  libva-intel-driver-1.7.3.tar.gz
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index 86f6eaa..e2f855b 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -5,8 +5,8 @@
+ # Locally calculated after checking signature
+-sha256 ad4cc44d23074a1c3a8baae8fbafff2a8c60f38a9a6108f985eef6fbee6dcaeb  grep-2.27.tar.xz
++sha256 e2c81db5056e3e8c5995f0bb5d0d0e1cad1f6f45c3b2fc77b6e81435aed48ab5  grep-3.0.tar.xz
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 7615f30..7468831 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBVA_INTEL_DRIVER_VERSION = 1.7.3
--LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
--LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
-+LIBVA_INTEL_DRIVER_SITE = \
-+	$(call github,01org,intel-vaapi-driver,$(LIBVA_INTEL_DRIVER_VERSION))
- LIBVA_INTEL_DRIVER_LICENSE = MIT
- LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
- # needed to work around https://bugs.freedesktop.org/show_bug.cgi?id=79478
+-GREP_VERSION = 2.27
++GREP_VERSION = 3.0
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPLv3+
