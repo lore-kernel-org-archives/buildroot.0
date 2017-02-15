@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 23:35:01 +0100
-Subject: [Buildroot] [git commit branch/next] raptor: install package to
-	staging
-Message-ID: <20170215224234.516EE8023B@busybox.osuosl.org>
+Date: Wed, 15 Feb 2017 23:43:13 +0100
+Subject: [Buildroot] [PATCH 1/1] raptor: install package to staging
+In-Reply-To: <287040233.7034245.1487068674711@mail.yahoo.com>
+References: <287040233.7034245.1487068674711.ref@mail.yahoo.com>
+ <287040233.7034245.1487068674711@mail.yahoo.com>
+Message-ID: <20170215234313.032eb488@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4f54a98a38905fb4ca5413e174263913e20c9c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-The raptor package installs some libraries, which will be useful for
-upcoming packages parts of librdf.org, such as rasqal and redland.
+On Tue, 14 Feb 2017 10:37:54 +0000 (UTC), Erwan Gautron wrote:
+> Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
+> ??? Need raptor in staging for building rasqal, redland.
+> ??? raptor, rasqal and redland are all parts of librdf.org??? (rasqal and redland packages intregration will come later)
+> ??? 
+> Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
+> ---
+> ?package/raptor/raptor.mk | 2 +-
+> ?1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/raptor/raptor.mk | 1 +
- 1 file changed, 1 insertion(+)
+Applied to next, thanks. However, your patch was corrupted, so I had to
+fix it up. Please use "git send-email" to send your next patches.
 
-diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
-index aea14e3..2653663 100644
---- a/package/raptor/raptor.mk
-+++ b/package/raptor/raptor.mk
-@@ -10,6 +10,7 @@ RAPTOR_SITE = http://download.librdf.org/source
- RAPTOR_DEPENDENCIES = libxml2 libxslt
- RAPTOR_LICENSE = GPLv2+ or LGPLv2.1+ or Apache-2.0+
- RAPTOR_LICENSE_FILES = LICENSE.txt
-+RAPTOR_INSTALL_STAGING = YES
- 
- # Flag is added to make sure the patch is applied for the configure.ac of raptor.
- RAPTOR_AUTORECONF = YES
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
