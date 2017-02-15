@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 21:27:04 +0100
-Subject: [Buildroot] [PATCH 1/2] mesa3d-headers: fix installation of
- dri.pc
-In-Reply-To: <1487172648-5292-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Feb 2017 21:27:06 +0100
+Subject: [Buildroot] [PATCH 2/2] mesa3d-headers: remove installation of
+ OpenVG headers
+In-Reply-To: <1487172648-5292-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1487172648-5292-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170215212704.4a12941a@free-electrons.com>
+ <1487172648-5292-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170215212706.4904d504@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +14,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 Feb 2017 16:30:47 +0100, Thomas Petazzoni wrote:
-> /usr/lib/pkg-config/ is not the correct installation path for .pc files,
-> it should be in /usr/lib/pkgconfig/
+On Wed, 15 Feb 2017 16:30:48 +0100, Thomas Petazzoni wrote:
+> OpenVG support has been completely removed from mesa3d in commit
+> 3acd7a34ab05b87521b74f626ec637e7fdcc6595, merged in mesa-10.6.0.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/mesa3d-headers/mesa3d-headers.mk | 4 ----
+>  1 file changed, 4 deletions(-)
 
 Applied to master, thanks.
 
