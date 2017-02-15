@@ -1,12 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 09:58:00 +0100
-Subject: [Buildroot] [PATCH 4/4] bctoolbox: disable rpath
-In-Reply-To: <CAHXCMM+6jsq4k6p4Wcun5OhjUZVoL7nVjjEymHup4p5Kg1MkQw@mail.gmail.com>
-References: <20170214224402.8785-1-joerg.krause@embedded.rocks>
- <20170214224402.8785-4-joerg.krause@embedded.rocks>
- <20170215052846.yxjzvhmsgdc3hy57@tarshish>
- <CAHXCMM+6jsq4k6p4Wcun5OhjUZVoL7nVjjEymHup4p5Kg1MkQw@mail.gmail.com>
-Message-ID: <20170215095800.411ddf31@free-electrons.com>
+Date: Wed, 15 Feb 2017 10:04:22 +0100
+Subject: [Buildroot] [PATCH v2] kmscube: Add new package
+In-Reply-To: <20170215085551.w5a33zivzcpo4t3w@lukather>
+References: <1487011784-24966-1-git-send-email-festevam@gmail.com>
+ <20170213223117.0125c14e@free-electrons.com>
+ <CAOMZO5Dwdu5-+bV=TXA6=-wg+=W05BhE1eEYhzZk6zV71MUBdA@mail.gmail.com>
+ <20170214091803.70ab8d9a@free-electrons.com>
+ <20170214092400.4g7lp3xj5z5zgxo2@lukather>
+ <20170214112349.55c30c40@free-electrons.com>
+ <20170215085551.w5a33zivzcpo4t3w@lukather>
+Message-ID: <20170215100422.01a48874@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +18,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 Feb 2017 07:12:28 +0100, Samuel Martin wrote:
+On Wed, 15 Feb 2017 09:55:51 +0100, Maxime Ripard wrote:
 
-> For target package, I think we should not set/force this option by the
-> infra because some packages may install some kind-of private libraries
-> elsewhere than in /usr/lib and set RPATH to in their binaries to find
-> them (e.g.: sudo or iptables, though they are cmake-based packages.).
+> Moving gbm to a virtual package is quite far from now, but still
+> having something to grep for when we move to that would be great.
 
-Hum, I didn't think about this, and you're probably right. If
-CMAKE_SKIP_RPATH skips *all* rpath information, including some custom
-one like pointing to /usr/lib/<foo>/, then we have to keep it indeed.
+To solve that, I think a simple comment is quite good, like:
+
+package/efl/Config.in:  depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
+package/qt5/qt5base/qt5base.mk:# Uses libgbm from mesa3d
+package/weston/Config.in:# Uses libgbm from mesa3d
+package/x11r7/xdriver_xf86-video-amdgpu/Config.in:      depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
 
 Thomas
 -- 
