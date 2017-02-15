@@ -1,55 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 21:55:55 +0100
-Subject: [Buildroot] [git commit] toolchain: add 4.10.x choice for headers
-Message-ID: <20170301170422.DAE3480279@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Feb 2017 14:13:41 +0100
+Subject: [Buildroot] [git commit] libgtk3: bump to version 3.22.8
+Message-ID: <20170301170421.0A0AF800CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=369b66fc366e3841ffb4dd2d35696f27799ae374
+commit: https://git.buildroot.net/buildroot/commit/?id=90be2119321089e4e7442b2b89ace93174c309f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-common.in                                        | 5 +++++
- .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
- 2 files changed, 9 insertions(+)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 96d5709..379006d 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -243,10 +243,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 12a25c9..07c2db1 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.7.sha256sum
+-sha256 a3a27564bfb1679ebbc75c37cd2bcd6e727c8bdfbcd3984d29305bf9ee60d432  gtk+-3.22.7.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.8.sha256sum
++sha256 c7254a88df5c17e9609cee9e848c3d0104512707edad4c3b4f256b131f8d3af1  gtk+-3.22.8.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index a1b8fc6..852987d 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "4.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 	default "4.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	default "4.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
- 	default "4.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index ed2b082..668ea3d 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -89,6 +89,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10
-+	bool "4.10.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9
- 	bool "4.9.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+ LIBGTK3_VERSION_MAJOR = 3.22
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).7
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).8
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
