@@ -1,84 +1,124 @@
-From: =?UTF-8?q?Myl=C3=A8ne=20Josserand?= <mylene.josserand@free-electrons.com>
-Date: Wed, 15 Feb 2017 10:16:51 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: Add patch to
-	fix v1.19.1 with SIGIO
-Message-ID: <20170215091651.14484-1-mylene.josserand@free-electrons.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 15 Feb 2017 10:33:31 +0100
+Subject: [Buildroot] [PATCH v2] package/mpd: add choice between version 0.19
+	and 0.20
+Message-ID: <20170215093331.31040-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The commit 6a5a4e60373c from xserver v1.19.1 removes SIGIO support for
-input [1].
+MPD version 0.20 being affected by GCC PR libstdc++/64735 means no mpd package
+available in Buildroot for the architectures NIOSII, ARMv4, ARMv5 and SPARCv8
+until GCC 7 is released.
 
-The current patch coming from Open Embedded [2] removes a check of
-'useSIGIO'. This check was producing a segfault error while using
-X11 and Vivante driver [3]. Thanks to Gary Bisson to point out this
-patch!
+As the next Buildroot release is in 2017.02, which is before GCC 7 is expected
+to be finished we add hidden config symbols to select the version branch to use.
 
-[1] https://cgit.freedesktop.org/xorg/xserver/commit/?id=6a5a4e60373c1386b311b2a8bb666c32d68a9d99
-[2] https://patchwork.openembedded.org/patch/136696/
-[3] http://lists.busybox.net/pipermail/buildroot/2017-February/183994.html
+Note, that we bumped the version from 0.19 to 0.20 quite recently within the
+current Buildroot release cycle. This way we can keep the support for mpd on
+the affected architectures, like ARMv5, until GCC 7 is out.
 
-Signed-off-by: Myl?ne Josserand <mylene.josserand@free-electrons.com>
+Note, that version 0.19 requires libglib2.
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0003-Remove-check-for-useSIGIO-option.patch    | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/x11r7/xserver_xorg-server/1.19.1/0003-Remove-check-for-useSIGIO-option.patch
+Changes v2:
+ * add missing hash for version 0.19.21
+ * remove of visible options (suggested by Thomas)
+---
+ package/mpd/Config.in | 26 +++++++++++++++++++++-----
+ package/mpd/mpd.hash  |  1 +
+ package/mpd/mpd.mk    | 10 +++++++++-
+ 3 files changed, 31 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.19.1/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.19.1/0003-Remove-check-for-useSIGIO-option.patch
-new file mode 100644
-index 000000000..beed6cb4a
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.19.1/0003-Remove-check-for-useSIGIO-option.patch
-@@ -0,0 +1,47 @@
-+From cf407b16cd65ad6e26a9c8e5984e163409a5c0f7 Mon Sep 17 00:00:00 2001
-+From: Prabhu Sundararaj <prabhu.sundararaj@nxp.com>
-+Date: Mon, 30 Jan 2017 16:32:06 -0600
-+Subject: [PATCH] Remove check for useSIGIO option
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 8a28b4f1a..8eabbbc79 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -4,9 +4,10 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on BR2_USE_WCHAR # flac
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	# 0.19.x could be built with GCC 4.6, but for simplicity we require
++	# the same toolchain dependencies for all versions.
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
+@@ -20,6 +21,24 @@ menuconfig BR2_PACKAGE_MPD
+ 
+ if BR2_PACKAGE_MPD
+ 
++# Hidden config symbols to select the branch 0.20 by default and fallback
++# to branch 0.19 for toolchains affected by GCC bug PR 64735. This way we
++# keep support for mpd on some architectures, like ARMv5, until GCC 7 is
++# released, which will fix this issue.
++config BR2_PACKAGE_MPD_VERSION_STRING
++	string
++	default "0.20" if !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++	default "0.19"
 +
-+Commit 6a5a4e60373c1386b311b2a8bb666c32d68a9d99 removes the configure of useSIGIO
-+option.
++config BR2_PACKAGE_MPD_VERSION_0_20
++	bool
++	default y if BR2_PACKAGE_MPD_VERSION_STRING = "0.20"
 +
-+As the xfree86 SIGIO support is reworked to use internal versions of OsBlockSIGIO
-+and OsReleaseSIGIO.
++config BR2_PACKAGE_MPD_VERSION_0_19
++	bool
++	default y if BR2_PACKAGE_MPD_VERSION_STRING = "0.19"
++	select BR2_PACKAGE_LIBGLIB2
 +
-+No longer the check for useSIGIO is needed
+ comment "Archive plugins"
+ 
+ config BR2_PACKAGE_MPD_BZIP2
+@@ -320,6 +339,3 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-
+-comment "mpd needs a toolchain not affected by GCC bug 64735"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index ee46f3cc5..ecd78e97c 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+ sha256  712b25351c12616630c580204e1c3dcba3ae2993a56cff1c346c87e334d69728  mpd-0.20.4.tar.xz
++sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 0efc8685f..74f966c9f 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -4,8 +4,12 @@
+ #
+ ################################################################################
+ 
+-MPD_VERSION_MAJOR = 0.20
++MPD_VERSION_MAJOR = $(BR2_PACKAGE_MPD_VERSION_STRING)
++ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
+ MPD_VERSION = $(MPD_VERSION_MAJOR).4
++else
++MPD_VERSION = $(MPD_VERSION_MAJOR).21
++endif
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
+@@ -13,6 +17,10 @@ MPD_LICENSE = GPLv2+
+ MPD_LICENSE_FILES = COPYING
+ MPD_AUTORECONF = YES
+ 
++ifeq ($(BR2_MPD_VERSION_0_19),y)
++MPD_DEPENDENCIES += libglib2
++endif
 +
-+Upstream-Status: Pending
-+
-+Signed-off-by: Prabhu Sundararaj <prabhu.sundararaj@nxp.com>
-+---
-+ hw/xfree86/os-support/shared/sigio.c | 6 ------
-+ 1 file changed, 6 deletions(-)
-+
-+diff --git a/hw/xfree86/os-support/shared/sigio.c b/hw/xfree86/os-support/shared/sigio.c
-+index 884a71c..be76498 100644
-+--- a/hw/xfree86/os-support/shared/sigio.c
-++++ b/hw/xfree86/os-support/shared/sigio.c
-+@@ -185,9 +185,6 @@ xf86InstallSIGIOHandler(int fd, void (*f) (int, void *), void *closure)
-+     int i;
-+     int installed = FALSE;
-+ 
-+-    if (!xf86Info.useSIGIO)
-+-        return 0;
-+-
-+     for (i = 0; i < MAX_FUNCS; i++) {
-+         if (!xf86SigIOFuncs[i].f) {
-+             if (xf86IsPipe(fd))
-+@@ -256,9 +253,6 @@ xf86RemoveSIGIOHandler(int fd)
-+     int max;
-+     int ret;
-+ 
-+-    if (!xf86Info.useSIGIO)
-+-        return 0;
-+-
-+     max = 0;
-+     ret = 0;
-+     for (i = 0; i < MAX_FUNCS; i++) {
-+-- 
-+2.7.4
-+
+ # Some options need an explicit --disable or --enable
+ 
+ # Zeroconf support depends on libdns_sd from avahi.
 -- 
 2.11.0
