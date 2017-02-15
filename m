@@ -1,60 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 21:18:31 +0100
-Subject: [Buildroot] [git commit branch/next] sed: bump to version 4.4
-Message-ID: <20170215201838.2E0E082217@busybox.osuosl.org>
+Date: Wed, 15 Feb 2017 21:18:26 +0100
+Subject: [Buildroot] [git commit branch/next] fping: bump to version 3.16
+Message-ID: <20170215201838.20B3282214@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71c56ecc0a720d727deb2aaa6e778405752f1c29
+commit: https://git.buildroot.net/buildroot/commit/?id=1445c78ded351e6dd9265e5be1299d1f2bae93b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sed/Config.in | 5 +++--
- package/sed/sed.hash  | 2 +-
- package/sed/sed.mk    | 3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/fping/fping.hash | 2 +-
+ package/fping/fping.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sed/Config.in b/package/sed/Config.in
-index 6adebf2..b8d182a 100644
---- a/package/sed/Config.in
-+++ b/package/sed/Config.in
-@@ -3,9 +3,10 @@ config BR2_PACKAGE_SED
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
--	  Super-useful stream editor.
-+	  sed (stream editor) is a non-interactive command-line text
-+	  editor.
- 
--	  http://sed.sourceforge.net/
-+	  https://www.gnu.org/software/sed/
- 
- comment "sed needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/sed/sed.hash b/package/sed/sed.hash
-index e7f2db5..652c573 100644
---- a/package/sed/sed.hash
-+++ b/package/sed/sed.hash
+diff --git a/package/fping/fping.hash b/package/fping/fping.hash
+index 99c01cf..8c1909e 100644
+--- a/package/fping/fping.hash
++++ b/package/fping/fping.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	fea0a94d4b605894f3e2d5572e3f96e4413bcad3a085aae7367c2cf07908b2ff	sed-4.2.2.tar.gz
-+sha256	cbd6ebc5aaf080ed60d0162d7f6aeae58211a1ee9ba9bb25623daa6cd942683b	sed-4.4.tar.xz
-diff --git a/package/sed/sed.mk b/package/sed/sed.mk
-index 71c62d0..68bcb98 100644
---- a/package/sed/sed.mk
-+++ b/package/sed/sed.mk
-@@ -4,7 +4,8 @@
+ # Locally calculated
+-sha256	d86f2281bda4653c7049e6ba8fce24ba67edbf9193b7bb1cf6219b0c8ddce4e6	fping-3.12.tar.gz
++sha256	2f753094e4df3cdb1d99be1687c0fb7d2f14c0d526ebf03158c8c5519bc78f54	fping-3.16.tar.gz
+diff --git a/package/fping/fping.mk b/package/fping/fping.mk
+index c576dd1..5970d63 100644
+--- a/package/fping/fping.mk
++++ b/package/fping/fping.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SED_VERSION = 4.2.2
-+SED_VERSION = 4.4
-+SED_SOURCE = sed-$(SED_VERSION).tar.xz
- SED_SITE = $(BR2_GNU_MIRROR)/sed
- SED_LICENSE = GPLv3
- SED_LICENSE_FILES = COPYING
+-FPING_VERSION = 3.12
++FPING_VERSION = 3.16
+ FPING_SITE = http://fping.org/dist
+ FPING_LICENSE = BSD-like
+ FPING_LICENSE_FILES = COPYING
