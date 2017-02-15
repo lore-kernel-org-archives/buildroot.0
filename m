@@ -1,32 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 21:27:06 +0100
-Subject: [Buildroot] [PATCH 2/2] mesa3d-headers: remove installation of
- OpenVG headers
-In-Reply-To: <1487172648-5292-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1487172648-5292-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1487172648-5292-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170215212706.4904d504@free-electrons.com>
+Date: Wed, 15 Feb 2017 21:27:01 +0100
+Subject: [Buildroot] [git commit] mesa3d-headers: remove installation of
+	OpenVG headers
+Message-ID: <20170215202740.3F75F821D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8988e43dc19d5a42f1d8bf606df596ae5b928ecf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 15 Feb 2017 16:30:48 +0100, Thomas Petazzoni wrote:
-> OpenVG support has been completely removed from mesa3d in commit
-> 3acd7a34ab05b87521b74f626ec637e7fdcc6595, merged in mesa-10.6.0.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/mesa3d-headers/mesa3d-headers.mk | 4 ----
->  1 file changed, 4 deletions(-)
+OpenVG support has been completely removed from mesa3d in commit
+3acd7a34ab05b87521b74f626ec637e7fdcc6595, merged in mesa-10.6.0.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 7ae5966..35b1a71 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -62,10 +62,6 @@ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+ MESA3D_HEADERS_DIRS += GLES GLES2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
+-MESA3D_HEADERS_DIRS += VG
+-endif
+-
+ define MESA3D_HEADERS_BUILD_CMDS
+ 	$(MESA3D_HEADERS_BUILD_DRI_PC)
+ endef
