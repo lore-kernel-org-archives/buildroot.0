@@ -1,45 +1,52 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Wed, 15 Feb 2017 13:45:49 +1100
-Subject: [Buildroot] Analysis of build results for 2017-02-13
-In-Reply-To: <20170214142725.1b9e98ae@free-electrons.com>
-References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
- <20170214142725.1b9e98ae@free-electrons.com>
-Message-ID: <20170215024549.GA25646@tungsten.ozlabs.ibm.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 15 Feb 2017 07:28:46 +0200
+Subject: [Buildroot] [PATCH 4/4] bctoolbox: disable rpath
+In-Reply-To: <20170214224402.8785-4-joerg.krause@embedded.rocks>
+References: <20170214224402.8785-1-joerg.krause@embedded.rocks>
+ <20170214224402.8785-4-joerg.krause@embedded.rocks>
+Message-ID: <20170215052846.yxjzvhmsgdc3hy57@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 14, 2017 at 02:27:25PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> J?rg, Peter, Romain, Bernd, Gustavo, Carsten, Philippe, Yann, Fran?ois,
-> Dagg, Baruch and ARC/Synopsys developers, there are some questions for
-> you below.
-> 
-> Thanks!
-> 
+Hi J?rg,
 
-[snip]
-
-> >    powerpc64 |                   libsvg-0.1.4 | NOK | http://autobuild.buildroot.net/results/f2d5b2459080bf9c67906b8b240150303bb61461
+On Tue, Feb 14, 2017 at 11:44:02PM +0100, J?rg Krause wrote:
+> By default, bctoolbox adds the rpath to the shared library. Prevent this
+> by setting `CMAKE_SKIP_RPATH` [1] to a true value.
 > 
-> /usr/lib64/libexpat.so: error adding symbols: File in wrong format
-> collect2: error: ld returned 1 exit status
+> [1] https://cmake.org/cmake/help/latest/variable/CMAKE_SKIP_RPATH.html
 > 
-> It's picking some host library, which is wrong. Carsten, you're listed
-> in the DEVELOPERS file for libsvg, could you have a look?
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/bctoolbox/bctoolbox.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/bctoolbox/bctoolbox.mk b/package/bctoolbox/bctoolbox.mk
+> index 5eea0575f..76737aa3c 100644
+> --- a/package/bctoolbox/bctoolbox.mk
+> +++ b/package/bctoolbox/bctoolbox.mk
+> @@ -11,11 +11,14 @@ BCTOOLBOX_LICENSE_FILES = COPYING
+>  BCTOOLBOX_DEPENDENCIES = mbedtls
+>  BCTOOLBOX_INSTALL_STAGING = YES
+>  
+> +# Set CMAKE_SKIP_RPATH to prevent bctoolbox from adding the rpath to
+> +# shared library.
+>  BCTOOLBOX_CONF_OPTS = \
+>  	-DENABLE_STRICT=OFF \
+>  	-DENABLE_TESTS_COMPONENT=OFF \
+>  	-DENABLE_TESTS=OFF \
+> -	-DGIT_EXECUTABLE=OFF
+> +	-DGIT_EXECUTABLE=OFF \
+> +	-DCMAKE_SKIP_RPATH=ON
 
-I've had a look at this, it seems to be that pkg-config is used to
-locate libxml, but when expat is used instead it just adds '-lexpat' --
-which can find the host library.
+Shouldn't we have this in package/pkg-cmake.mk? Samuel?
 
-Unfortunately, the change needs to be in configure.in and AUTORECONF
-fails. I've experimented with creating a patch to configure that does
-what I believe autoreconf should do (adds a copy of the libxml
-pkg-config code adjusted for expat). Does that seem a reasonable fix?
-If so, I'll post it.
+baruch
 
-Cheers,
-Sam.
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
