@@ -1,40 +1,102 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Feb 2017 18:02:39 -0300
-Subject: [Buildroot] [PATCH next] libinput: bump to version 1.6.1
-Message-ID: <20170215210239.3107-1-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Feb 2017 22:11:11 +0100
+Subject: [Buildroot] [git commit] package: add generic support for lz
+	archives
+Message-ID: <20170215211147.6DD0280118@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=f165032e4f01aa46b43cc8136bac1c5b47aa8545
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index dd3573f..7dd4c04 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032746.html
--sha256 b7534f518d735c643aedca2fb4694683dfddc8d0600cfb628c87a18e65255832  libinput-1.6.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-February/032940.html
-+sha256 9d816f13eee63bcca0e9c3bb652c52ab55f39be4d1b90b54e4bfd1dc92ef55a8  libinput-1.6.1.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 52aca9a..776e1af 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+This commit teaches the generic package handling code how to extract .tar.lz
+archives. When lzip is not installed on the host, host-lzip gets built
+automatically.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in                               |  7 +++++++
+ Makefile                                |  1 +
+ package/pkg-utils.mk                    |  1 +
+ support/dependencies/check-host-lzip.mk |  5 +++++
+ support/dependencies/check-host-lzip.sh | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
+
+diff --git a/Config.in b/Config.in
+index ccd777e..bd8f0d1 100644
+--- a/Config.in
++++ b/Config.in
+@@ -158,6 +158,13 @@ config BR2_XZCAT
+ 	  Command to be used to extract a xz'ed file to stdout.
+ 	  Default is "xzcat"
  
--LIBINPUT_VERSION = 1.6.0
-+LIBINPUT_VERSION = 1.6.1
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
--- 
-2.10.2
++config BR2_LZCAT
++	string "lzcat command"
++	default "lzip -d -c"
++	help
++	  Command to be used to extract a lzip'ed file to stdout.
++	  Default is "lzip -d -c"
++
+ config BR2_TAR_OPTIONS
+ 	string "Tar options"
+ 	default ""
+diff --git a/Makefile b/Makefile
+index 4db971b..9663d15 100644
+--- a/Makefile
++++ b/Makefile
+@@ -432,6 +432,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ ZCAT := $(call qstrip,$(BR2_ZCAT))
+ BZCAT := $(call qstrip,$(BR2_BZCAT))
+ XZCAT := $(call qstrip,$(BR2_XZCAT))
++LZCAT := $(call qstrip,$(BR2_LZCAT))
+ TAR_OPTIONS = $(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ 
+ # packages compiled for the host go here
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 38d00db..c95e779 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -36,6 +36,7 @@ pkgname = $(lastword $(subst /, ,$(pkgdir)))
+ # Define extractors for different archive suffixes
+ INFLATE.bz2  = $(BZCAT)
+ INFLATE.gz   = $(ZCAT)
++INFLATE.lz   = $(LZCAT)
+ INFLATE.lzma = $(XZCAT)
+ INFLATE.tbz  = $(BZCAT)
+ INFLATE.tbz2 = $(BZCAT)
+diff --git a/support/dependencies/check-host-lzip.mk b/support/dependencies/check-host-lzip.mk
+new file mode 100644
+index 0000000..6acfdc6
+--- /dev/null
++++ b/support/dependencies/check-host-lzip.mk
+@@ -0,0 +1,5 @@
++ifeq (,$(call suitable-host-package,lzip,$(LZCAT)))
++DEPENDENCIES_HOST_PREREQ += host-lzip
++EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .lz
++LZCAT = $(HOST_DIR)/usr/bin/lzip -d -c
++endif
+diff --git a/support/dependencies/check-host-lzip.sh b/support/dependencies/check-host-lzip.sh
+new file mode 100755
+index 0000000..4f8a2ba
+--- /dev/null
++++ b/support/dependencies/check-host-lzip.sh
+@@ -0,0 +1,14 @@
++#!/bin/sh
++
++candidate="$1"
++
++lzip=`which $candidate 2>/dev/null`
++if [ ! -x "$lzip" ]; then
++	lzip=`which lzip 2>/dev/null`
++	if [ ! -x "$lzip" ]; then
++		# echo nothing: no suitable lzip found
++		exit 1
++	fi
++fi
++
++echo $lzip
