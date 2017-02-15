@@ -1,62 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 23:20:41 +0100
-Subject: [Buildroot] [PATCH] trousers: disable on ARC
-Message-ID: <1487197241-31996-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Feb 2017 23:25:47 +0100
+Subject: [Buildroot] [PATCH 1/7 v4] docs/manual: document the test-pkg
+ script
+In-Reply-To: <85dd7875a12e1ceb9dab2f006dd34a8259836729.1487195062.git.yann.morin.1998@free.fr>
+References: <cover.1487195062.git.yann.morin.1998@free.fr>
+ <85dd7875a12e1ceb9dab2f006dd34a8259836729.1487195062.git.yann.morin.1998@free.fr>
+Message-ID: <20170215232547.24a6cb92@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package has been failing to build on ARC due to a toolchain bug
-since December 2015, causing a total of 168 build failures. Therefore,
-let's disable this package for now, until the toolchain issue gets
-resolved.
+Hello,
 
-Fixes^Wavoids:
+Thanks for this update!
 
-  http://autobuild.buildroot.net/results/e65d1d7c5a4dd4616167cfe2aa938be6af139602/
+On Wed, 15 Feb 2017 22:44:29 +0100, Yann E. MORIN wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tpm-tools/Config.in | 2 ++
- package/trousers/Config.in  | 3 +++
- 2 files changed, 5 insertions(+)
+> +First, create a config snippet that contains all the necessary options
+> +needed to enabel your package, but without any architecture or toolchain
 
-diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
-index dd59aaa..83b65f3 100644
---- a/package/tpm-tools/Config.in
-+++ b/package/tpm-tools/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_TPM_TOOLS
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # trousers
- 	depends on !BR2_STATIC_LIBS # trousers
-+	depends on !BR2_arc # trousers
- 	help
- 	  Tools to manage and diagnose a TPM
- 
-@@ -12,3 +13,4 @@ config BR2_PACKAGE_TPM_TOOLS
- 
- comment "tpm-tools needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_arc
-diff --git a/package/trousers/Config.in b/package/trousers/Config.in
-index 6ab74bf..11ab874 100644
---- a/package/trousers/Config.in
-+++ b/package/trousers/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_TROUSERS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# doesn't build properly in static only configurations
- 	depends on !BR2_STATIC_LIBS
-+	# broken toolchain
-+	depends on !BR2_arc
- 	help
- 	  The open-source TCG Software Stack (TSS).
- 
-@@ -16,3 +18,4 @@ config BR2_PACKAGE_TROUSERS
- 
- comment "trousers needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_arc
+enable
+
+> +The results mean:
+> +
+> +* `OK`: the build was successful
+> +* `SKIPPED`: one or more config options from the config snippet were
+> +  missing in the resulting configuration; inspect the file +config.missing+
+> +  in the output build directory (+~/br-test-pkg/TOOLCHAIN_NAME/+ by
+> +  default)
+
+I would expand this explanation a bit here. As you wrote it might seem
+like it is not normal for a toolchain to be skipped. What about instead:
+
+ `SKIPPED`: one or more configuration options listed in the config
+ snipped were not present in the final configuration. This is due to
+ options having dependencies not satisfied by the toolchain, such as
+ for example a package that +depends on BR2_USE_MMU+ with a noMMU
+ toolchain.
+
+> +When there are failures, you can just re-run the script with the same
+> +options (after you fixed your package); the script will attempt to re-build
+> +the package for all toolchains, without the need to re-build all the
+> +dependencies of that package (but it requires the +-p+ optiopn, see below).
+
+"see below" ? but there's nothing below.
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
