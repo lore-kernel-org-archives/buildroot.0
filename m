@@ -1,35 +1,24 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Wed, 15 Feb 2017 10:27:36 -0200
-Subject: [Buildroot] [PATCH] udoo/neo: Pass the rootfs offset
-Message-ID: <1487161656-15772-1-git-send-email-fabio.estevam@nxp.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Feb 2017 14:14:37 +0100
+Subject: [Buildroot] [PATCH next] libepoxy: bump to version 1.4.0
+In-Reply-To: <20170215103850.9257-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Wed, 15 Feb 2017 07:38:50 -0300")
+References: <20170215103850.9257-1-gustavo@zacarias.com.ar>
+Message-ID: <87wpcrh9z6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When manually writing SPL and u-boot.img to the SD card the rootfs
-gets corrupted.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Fix this issue by passing a 1MB offset for the rootfs.
+ > Drop all patches since they're upstream, yay!
+ > Switch to the gnome mirror since it's more handy than github, and it
+ > also allows to drop autoreconf since it's a distribution tarball with
+ > the configure script is already generated.
 
-Reported-by: Breno Lima <breno.lima@nxp.com>
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- board/udoo/neo/genimage.cfg | 1 +
- 1 file changed, 1 insertion(+)
+Nice - Committed to next, thanks.
 
-diff --git a/board/udoo/neo/genimage.cfg b/board/udoo/neo/genimage.cfg
-index 1f7edf4..4620912 100644
---- a/board/udoo/neo/genimage.cfg
-+++ b/board/udoo/neo/genimage.cfg
-@@ -26,6 +26,7 @@ image sdcard.img {
-   partition rootfs {
-     partition-type = 0x83
-     image = "rootfs.ext4"
-+    offset = 1M
-     size = 512M
-   }
- }
 -- 
-2.7.4
+Bye, Peter Korsgaard
