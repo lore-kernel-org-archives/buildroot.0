@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 21:26:39 +0100
-Subject: [Buildroot] [PATCH v2] package/x11r7/xserver_xorg-server: Add
- patch to fix v1.19.1 with SIGIO
-In-Reply-To: <20170215171216.18479-1-mylene.josserand@free-electrons.com>
-References: <20170215171216.18479-1-mylene.josserand@free-electrons.com>
-Message-ID: <20170215212639.78e0759a@free-electrons.com>
+Date: Wed, 15 Feb 2017 21:27:04 +0100
+Subject: [Buildroot] [PATCH 1/2] mesa3d-headers: fix installation of
+ dri.pc
+In-Reply-To: <1487172648-5292-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1487172648-5292-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170215212704.4a12941a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 Feb 2017 18:12:16 +0100, Myl?ne Josserand wrote:
-> The commit 6a5a4e60373c from xserver v1.19.1 removes SIGIO support for
-> input [1].
+On Wed, 15 Feb 2017 16:30:47 +0100, Thomas Petazzoni wrote:
+> /usr/lib/pkg-config/ is not the correct installation path for .pc files,
+> it should be in /usr/lib/pkgconfig/
 > 
-> The current patch coming from Open Embedded [2] removes a check of
-> 'useSIGIO'. This check was producing a segfault error while using
-> X11 and Vivante driver [3]. Thanks to Gary Bisson to point out this
-> patch!
-> 
-> [1] https://cgit.freedesktop.org/xorg/xserver/commit/?id=6a5a4e60373c1386b311b2a8bb666c32d68a9d99
-> [2] https://patchwork.openembedded.org/patch/136696/
-> [3] http://lists.busybox.net/pipermail/buildroot/2017-February/183994.html
-> 
-> Signed-off-by: Myl?ne Josserand <mylene.josserand@free-electrons.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  .../0003-Remove-check-for-useSIGIO-option.patch    | 53 ++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 package/x11r7/xserver_xorg-server/1.19.1/0003-Remove-check-for-useSIGIO-option.patch
+>  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
