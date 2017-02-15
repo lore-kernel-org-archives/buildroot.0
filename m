@@ -1,12 +1,11 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 15 Feb 2017 08:39:11 +0200
-Subject: [Buildroot] [PATCH 1/1] bluez5_utils: Add config option to
- install "bdaddr"
-In-Reply-To: <20170214211443.00dc1a10@free-electrons.com>
-References: <1487084632-16396-1-git-send-email-vishalthanki@gmail.com>
- <20170214160844.ts44yh2l4ghzwvad@tarshish>
- <20170214211443.00dc1a10@free-electrons.com>
-Message-ID: <20170215063911.ojfnao67fbpsojy7@tarshish>
+Date: Wed, 15 Feb 2017 09:04:22 +0200
+Subject: [Buildroot] [PATCH v3 1/5] package: refactor listing of
+ extractor dependencies
+In-Reply-To: <20170214223938.5dc7c382@free-electrons.com>
+References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
+ <20170214223938.5dc7c382@free-electrons.com>
+Message-ID: <20170215070422.gbqixmnlkremc6hz@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +14,57 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Tue, Feb 14, 2017 at 09:14:43PM +0100, Thomas Petazzoni wrote:
-> On Tue, 14 Feb 2017 18:08:44 +0200, Baruch Siach wrote:
-> > > +config BR2_PACKAGE_BLUEZ5_TOOLS_BDADDR
-> > > +	bool "install bdaddr tool"
-> > > +	depends on BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
-> > > +	help
-> > > +	  The "bdaddr" tool is used for changing the Bluetooth device address.  
+On Tue, Feb 14, 2017 at 10:39:38PM +0100, Thomas Petazzoni wrote:
+> On Sun, 12 Feb 2017 22:15:38 +0200, Baruch Siach wrote:
+> > Don't special case $(XZCAT) when constructing DL_TOOLS_DEPENDENCIES. The next
+> > commit will introduce another extractor that automatically builds when not
+> > installed. Introduce EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS that lists
+> > archive extensions for which the extractor is already checked in
+> > support/dependencies/check-host-foo.mk. Use this in the newly introduced
+> > extractor-dependency to populate DL_TOOLS_DEPENDENCIES.
 > > 
-> > bdaddr is less than 100KB. I don't think it's worth another config option. 
-> > 100KB is negligible when you already have glib and dbus. I'd suggested to 
-> > either install bdaddr unconditionally, or have a single option for all tools/ 
-> > executables that are not covered by another config option already.
+> > Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > 
-> I would tend to agree, but we already have options like
-> BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL to install a single tool.
+> I thought this patch series would be material for the next branch, as
+> to me it was just an improvement/cleanup.
 > 
-> How many tools are provided by bluez5_utils? If it's just a very small
-> set of tools, it's OK to have one option for each. But if there are
-> many small tools, we definitely don't want to have one option for each.
+> But in fact, it is actually a fix: all packages that depend on
+> host-lzip today are broken. Take ddrescue for example (but ed and ocrad
+> are doing the same):
+> 
+> DDRESCUE_DEPENDENCIES = host-lzip
+> 
+> define DDRESCUE_EXTRACT_CMDS
+>         $(HOST_DIR)/usr/bin/lzip -d -c $(DL_DIR)/$(DDRESCUE_SOURCE) | \
+>                 tar --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
+> endef
+> 
+> So they put host-lzip in <pkg>_DEPENDENCIES, and use
+> $(HOST_DIR)/usr/bin/lzip in the extract step.
+> 
+> The problem is that the dependencies in <pkg>_DEPENDENCIES are only
+> guaranteed to be available before the *configure* step of the package,
+> not before the extract step. So if you run:
+> 
+> $ make ddrescue-patch
+> 
+> You currently get:
+> 
+> /home/thomas/projets/buildroot/output/host/usr/bin/lzip -d -c /home/thomas/dl/ddrescue-1.22.tar.lz | tar --strip-components=1 -C /home/thomas/projets/buildroot/output/build/ddrescue-1.22  -xf -
+> /bin/bash: /home/thomas/projets/buildroot/output/host/usr/bin/lzip: No such file or directory
+> tar: This does not look like a tar archive
+> tar: Exiting with failure status due to previous errors
+> 
+> So I believe this patch series should be applied on master, because it
+> adds host-lzip to DEPENDENCIES_HOST_PREREQ, which is the only solution
+> to guarantee it will be available to extract packages.
 
-The bluez5_utils-5.43 tools/ subdirectory has 56 executables, totaling 5.7MB. 
-Some are covered by covered by --enable-tools which we enable unconditionally, 
-some other are installed by --enable-experimental, and yet others are only 
-built by --enable-experimental. bdaddr falls in the last category.
+To be on the safe side we might replace <pkg>_DEPENDENCIES with 
+DEPENDENCIES_HOST_PREREQ for master, and apply this series to next. Not sure 
+it's worth it though.
 
-> In any case, we need to provide a better guideline to Vishal, because
-> right now, we are not explaining how the patch should be fixed. If we
-> introduce something like BR2_PACKAGE_BLUEZ5_UTILS_TOOLS, then what
-> should be done with BR2_PACKAGE_BLUEZ5_UTILS_CLIENT or
-> BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL for example ?
-
-All should go under BR2_PACKAGE_BLUEZ5_UTILS_TOOLS, as well as --enable-tools, 
-IMO.
+Should I resend the series to fix the issue that Thomas DS spotted?
 
 baruch
 
