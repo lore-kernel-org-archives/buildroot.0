@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Feb 2017 14:14:42 +0100
-Subject: [Buildroot] [PATCH next] libgtk3: bump to version 3.22.8
-In-Reply-To: <20170215103837.9212-1-gustavo@zacarias.com.ar> (Gustavo
- Zacarias's message of "Wed, 15 Feb 2017 07:38:37 -0300")
-References: <20170215103837.9212-1-gustavo@zacarias.com.ar>
-Message-ID: <87shnfh9z1.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Feb 2017 14:14:46 +0100
+Subject: [Buildroot] [PATCH next] libglib2: bump to version 2.50.3
+In-Reply-To: <20170215103749.9163-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Wed, 15 Feb 2017 07:37:49 -0300")
+References: <20170215103749.9163-1-gustavo@zacarias.com.ar>
+Message-ID: <87o9y3h9yx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
