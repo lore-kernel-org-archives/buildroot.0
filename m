@@ -1,58 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Feb 2017 16:49:42 -0300
-Subject: [Buildroot] [PATCH next] sed: bump to version 4.4
-Message-ID: <20170215194942.1863-1-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Feb 2017 21:18:22 +0100
+Subject: [Buildroot] [git commit branch/next] grep: bump to version 3.0
+Message-ID: <20170215201838.1222E82215@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sed/Config.in | 5 +++--
- package/sed/sed.hash  | 2 +-
- package/sed/sed.mk    | 3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=89f837c977aca3a273b184e9a0932544b45b4cf0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/sed/Config.in b/package/sed/Config.in
-index 6adebf2..b8d182a 100644
---- a/package/sed/Config.in
-+++ b/package/sed/Config.in
-@@ -3,9 +3,10 @@ config BR2_PACKAGE_SED
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
--	  Super-useful stream editor.
-+	  sed (stream editor) is a non-interactive command-line text
-+	  editor.
- 
--	  http://sed.sourceforge.net/
-+	  https://www.gnu.org/software/sed/
- 
- comment "sed needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/sed/sed.hash b/package/sed/sed.hash
-index e7f2db5..652c573 100644
---- a/package/sed/sed.hash
-+++ b/package/sed/sed.hash
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/grep/grep.hash | 2 +-
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index 326737a..77420ad 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	fea0a94d4b605894f3e2d5572e3f96e4413bcad3a085aae7367c2cf07908b2ff	sed-4.2.2.tar.gz
-+sha256	cbd6ebc5aaf080ed60d0162d7f6aeae58211a1ee9ba9bb25623daa6cd942683b	sed-4.4.tar.xz
-diff --git a/package/sed/sed.mk b/package/sed/sed.mk
-index 71c62d0..68bcb98 100644
---- a/package/sed/sed.mk
-+++ b/package/sed/sed.mk
-@@ -4,7 +4,8 @@
+ # Locally calculated after checking signature
+-sha256 ad4cc44d23074a1c3a8baae8fbafff2a8c60f38a9a6108f985eef6fbee6dcaeb  grep-2.27.tar.xz
++sha256 e2c81db5056e3e8c5995f0bb5d0d0e1cad1f6f45c3b2fc77b6e81435aed48ab5  grep-3.0.tar.xz
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 7615f30..7468831 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SED_VERSION = 4.2.2
-+SED_VERSION = 4.4
-+SED_SOURCE = sed-$(SED_VERSION).tar.xz
- SED_SITE = $(BR2_GNU_MIRROR)/sed
- SED_LICENSE = GPLv3
- SED_LICENSE_FILES = COPYING
--- 
-2.10.2
+-GREP_VERSION = 2.27
++GREP_VERSION = 3.0
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPLv3+
