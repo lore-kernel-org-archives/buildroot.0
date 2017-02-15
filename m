@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 22:34:44 +0100
-Subject: [Buildroot] [git commit] postgresql: disable spinlocks on openrisc
-Message-ID: <20170215213527.2D4ED82227@busybox.osuosl.org>
+Date: Wed, 15 Feb 2017 22:39:50 +0100
+Subject: [Buildroot] [PATCH] perl-gd: fix build of native part
+In-Reply-To: <1487144532-1818-1-git-send-email-francois.perrad@gadz.org>
+References: <1487144532-1818-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20170215223950.3432ecaf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ae3dce5275915a1784b00bf145af907827fed0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Just like all non-mainstream architectures, postgresql doesn't provide
-its internal spinlock implementation on OpenRISC, so disable it.
+On Wed, 15 Feb 2017 08:42:12 +0100, Francois Perrad wrote:
+> EUMM don't find .xs file in subdirectory (only .pm files are handled)
+> So, let move lib/GD.xs in the root directory.
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Fixes:
+What is this fixing?
 
-  http://autobuild.buildroot.net/results/e9de750e34f10c4a2403696936260ad1547d0d15/
+Here, the following defconfig builds just fine:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/postgresql/postgresql.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_PERL=y
+BR2_PACKAGE_PERL_GD=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 786ef48..bc2bf47 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -29,7 +29,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- POSTGRESQL_CONF_OPTS += --disable-thread-safety
- endif
- 
--ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
-+ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_xtensa),y)
- POSTGRESQL_CONF_OPTS += --disable-spinlocks
- endif
- 
+Is it just that the build succeeds, but it fails at runtime because the
+native part has been built/installed ?
+
+Isn't moving GD.xs a dirty hack ? How was it working before ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
