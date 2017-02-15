@@ -1,54 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 23:25:47 +0100
-Subject: [Buildroot] [PATCH 1/7 v4] docs/manual: document the test-pkg
- script
-In-Reply-To: <85dd7875a12e1ceb9dab2f006dd34a8259836729.1487195062.git.yann.morin.1998@free.fr>
-References: <cover.1487195062.git.yann.morin.1998@free.fr>
- <85dd7875a12e1ceb9dab2f006dd34a8259836729.1487195062.git.yann.morin.1998@free.fr>
-Message-ID: <20170215232547.24a6cb92@free-electrons.com>
+Date: Wed, 15 Feb 2017 23:35:01 +0100
+Subject: [Buildroot] [git commit branch/next] raptor: install package to
+	staging
+Message-ID: <20170215224234.516EE8023B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b4f54a98a38905fb4ca5413e174263913e20c9c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thanks for this update!
+The raptor package installs some libraries, which will be useful for
+upcoming packages parts of librdf.org, such as rasqal and redland.
 
-On Wed, 15 Feb 2017 22:44:29 +0100, Yann E. MORIN wrote:
+Signed-off-by: Erwan Gautron <erwan.gautron@yahoo.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/raptor/raptor.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +First, create a config snippet that contains all the necessary options
-> +needed to enabel your package, but without any architecture or toolchain
-
-enable
-
-> +The results mean:
-> +
-> +* `OK`: the build was successful
-> +* `SKIPPED`: one or more config options from the config snippet were
-> +  missing in the resulting configuration; inspect the file +config.missing+
-> +  in the output build directory (+~/br-test-pkg/TOOLCHAIN_NAME/+ by
-> +  default)
-
-I would expand this explanation a bit here. As you wrote it might seem
-like it is not normal for a toolchain to be skipped. What about instead:
-
- `SKIPPED`: one or more configuration options listed in the config
- snipped were not present in the final configuration. This is due to
- options having dependencies not satisfied by the toolchain, such as
- for example a package that +depends on BR2_USE_MMU+ with a noMMU
- toolchain.
-
-> +When there are failures, you can just re-run the script with the same
-> +options (after you fixed your package); the script will attempt to re-build
-> +the package for all toolchains, without the need to re-build all the
-> +dependencies of that package (but it requires the +-p+ optiopn, see below).
-
-"see below" ? but there's nothing below.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+index aea14e3..2653663 100644
+--- a/package/raptor/raptor.mk
++++ b/package/raptor/raptor.mk
+@@ -10,6 +10,7 @@ RAPTOR_SITE = http://download.librdf.org/source
+ RAPTOR_DEPENDENCIES = libxml2 libxslt
+ RAPTOR_LICENSE = GPLv2+ or LGPLv2.1+ or Apache-2.0+
+ RAPTOR_LICENSE_FILES = LICENSE.txt
++RAPTOR_INSTALL_STAGING = YES
+ 
+ # Flag is added to make sure the patch is applied for the configure.ac of raptor.
+ RAPTOR_AUTORECONF = YES
