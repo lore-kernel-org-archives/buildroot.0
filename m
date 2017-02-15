@@ -1,102 +1,59 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 14 Feb 2017 23:44:00 +0100
-Subject: [Buildroot] [PATCH 2/4] bctoolbox: add patch to fix static linking
-In-Reply-To: <20170214224402.8785-1-joerg.krause@embedded.rocks>
-References: <20170214224402.8785-1-joerg.krause@embedded.rocks>
-Message-ID: <20170214224402.8785-2-joerg.krause@embedded.rocks>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 14 Feb 2017 22:13:51 -0200
+Subject: [Buildroot] [PATCH v3 1/2] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.0.0
+Message-ID: <1487117632-32365-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Static linking with bctoolbox fails when using pkg-config as the
-generated bctoolbox.pc file only consists of an '-L' string without any
-search path or libraries flags:
-
-```
-libtool: link: need path for `-L' option
-```
-
-That's because of an typo in mbedtls_library_path. However,
-mbedtls_library_path contains a string of the mbedtls libraries
-concatenated by an ';' which cannot be parsed by pkg-config.
-
-Therefore, use MBEDTLS_LIBRARY instead of MBEDTLS_LIBRARIES to get
-the library path.
-
-Furthermore, add the three mbedtls libraries mbedtls, mbedcrypto, and
-mbedx509 to LIBS_PRIVATE so these libraries are added to the
-Libs.private field of bctoolbox.pc.
-
-Fixes:
-http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6e13d5f59fb52
-http://autobuild.buildroot.net/results/1999c841fae41f860f00747a362327cb2857e687
-.. and many more.
-
-Upstream status: Pending
-https://github.com/BelledonneCommunications/bctoolbox/pull/4
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-Fix-Libs.private-flags-for-mbedtls.patch  | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
+Changes since v2:
+- None
 
-diff --git a/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch b/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
-new file mode 100644
-index 000000000..a70c7c633
---- /dev/null
-+++ b/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
-@@ -0,0 +1,49 @@
-+From c0b3dbb43aa3a38c47311556c85eadc6072e2d68 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Tue, 14 Feb 2017 22:02:26 +0100
-+Subject: [PATCH] Fix Libs.private flags for mbedtls
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Static linking with bctoolbox fails when using pkg-config as the
-+generated bctoolbox.pc file only consists of an '-L' string without any
-+search path or libraries flags.
-+
-+That's because of an typo in `mbedtls_library_path`. However,
-+`mbedtls_library_path` contains a string of the mbedtls libraries
-+concatenated by an ';' which cannot be parsed by pkg-config.
-+
-+Therefore, use `MBEDTLS_LIBRARY` instead of `MBEDTLS_LIBRARIES` to get
-+the library path.
-+
-+Furthermore, add the three mbedtls libraries *mbedtls*, *mbedcrypto*, and
-+*mbedx509* to `LIBS_PRIVATE` so these libraries are added to the
-+`Libs.private` field of bctoolbox.pc.
-+
-+Upstream status: Pending
-+https://github.com/BelledonneCommunications/bctoolbox/pull/4
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ CMakeLists.txt | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index ed7aa00..4127f0e 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -103,8 +103,8 @@ else()
-+ endif()
-+ 
-+ if(MBEDTLS_FOUND)
-+-	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARIES}" PATH)
-+-	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedlts_library_path}")
-++	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARY}" PATH)
-++	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedtls_library_path} -lmbedtls -lmbedcrypto -lmbedx509")
-+ endif()
-+ if(POLARSSL_FOUND)
-+ 	get_filename_component(polarssl_library_path "${POLARSSL_LIBRARIES}" PATH)
-+-- 
-+2.11.1
-+
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 2c62c48..1ff72f7 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 13.0.4
++MESA3D_HEADERS_VERSION = 17.0.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index b3c4b77..09d3ef8 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-February/000294.html
+-sha256 a95d7ce8f7bd5f88585e4be3144a341236d8c0fc91f6feaec59bb8ba3120e726  mesa-13.0.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-dev/2017-February/144115.html
++sha256 39db3d59700159add7f977307d12a7dfe016363e760ad82280ac4168ea668481  mesa-17.0.0.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 0c68ded..3bfb005 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 13.0.4
++MESA3D_VERSION = 17.0.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.11.1
+2.7.4
