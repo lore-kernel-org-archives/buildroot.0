@@ -1,49 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 22:48:25 +0100
-Subject: [Buildroot] [git commit] tcping: fix upstream location
-Message-ID: <20170215214907.94E8C8167F@busybox.osuosl.org>
+Date: Wed, 15 Feb 2017 23:20:41 +0100
+Subject: [Buildroot] [PATCH] trousers: disable on ARC
+Message-ID: <1487197241-31996-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd6893adad3693cd3440d0ced10e67b296a08c47
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This package has been failing to build on ARC due to a toolchain bug
+since December 2015, causing a total of 168 build failures. Therefore,
+let's disable this package for now, until the toolchain issue gets
+resolved.
 
-The upstream site is no longer available from http://www.linuxco.de,
-but only from http://linuxco.de.
+Fixes^Wavoids:
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/03caf8403c31e2424c338de4df636dd900408b14/
+  http://autobuild.buildroot.net/results/e65d1d7c5a4dd4616167cfe2aa938be6af139602/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tcping/Config.in | 2 +-
- package/tcping/tcping.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tpm-tools/Config.in | 2 ++
+ package/trousers/Config.in  | 3 +++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/tcping/Config.in b/package/tcping/Config.in
-index 6677b58..e72df09 100644
---- a/package/tcping/Config.in
-+++ b/package/tcping/Config.in
-@@ -11,4 +11,4 @@ config BR2_PACKAGE_TCPING
- 	  desired port is reachable and then start connection
- 	  establishment.
+diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
+index dd59aaa..83b65f3 100644
+--- a/package/tpm-tools/Config.in
++++ b/package/tpm-tools/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_TPM_TOOLS
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # trousers
+ 	depends on !BR2_STATIC_LIBS # trousers
++	depends on !BR2_arc # trousers
+ 	help
+ 	  Tools to manage and diagnose a TPM
  
--	  http://www.linuxco.de/tcping/tcping.html
-+	  http://linuxco.de/tcping/tcping.html
-diff --git a/package/tcping/tcping.mk b/package/tcping/tcping.mk
-index 4633b98..f5919bb 100644
---- a/package/tcping/tcping.mk
-+++ b/package/tcping/tcping.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -12,3 +13,4 @@ config BR2_PACKAGE_TPM_TOOLS
  
- TCPING_VERSION = 1.3.5
--TCPING_SITE = http://www.linuxco.de/tcping
-+TCPING_SITE = http://linuxco.de/tcping
- TCPING_LICENSE = GPLv3+
- TCPING_LICENSE_FILES = LICENSE
+ comment "tpm-tools needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_arc
+diff --git a/package/trousers/Config.in b/package/trousers/Config.in
+index 6ab74bf..11ab874 100644
+--- a/package/trousers/Config.in
++++ b/package/trousers/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_TROUSERS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# doesn't build properly in static only configurations
+ 	depends on !BR2_STATIC_LIBS
++	# broken toolchain
++	depends on !BR2_arc
+ 	help
+ 	  The open-source TCG Software Stack (TSS).
  
+@@ -16,3 +18,4 @@ config BR2_PACKAGE_TROUSERS
+ 
+ comment "trousers needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_arc
+-- 
+2.7.4
