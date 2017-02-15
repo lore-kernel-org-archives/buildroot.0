@@ -1,63 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 22:15:20 +0100
-Subject: [Buildroot] [PATCH v3 2/5] package: add generic support for lz
- archives
-In-Reply-To: <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
-References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
- <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
-Message-ID: <20170215221520.41e4c66e@free-electrons.com>
+Date: Wed, 15 Feb 2017 22:15:31 +0100
+Subject: [Buildroot] [git commit branch/next] libinput: bump to version 1.6.1
+Message-ID: <20170215211547.B86CF821D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=84ca4704ac757016182e2abb5b6e4336e1eeb982
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 12 Feb 2017 22:15:39 +0200, Baruch Siach wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> diff --git a/Makefile b/Makefile
-> index df3b64eb03ec..b4550e098958 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -431,6 +431,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
->  ZCAT := $(call qstrip,$(BR2_ZCAT))
->  BZCAT := $(call qstrip,$(BR2_BZCAT))
->  XZCAT := $(call qstrip,$(BR2_XZCAT))
-> +LZCAT := $(call qstrip,$(BR2_LZCAT))
-
-So here, we use the value of the config option BR2_LZCAT.
-
-> diff --git a/support/dependencies/check-host-lzip.mk b/support/dependencies/check-host-lzip.mk
-> new file mode 100644
-> index 000000000000..708105acd892
-> --- /dev/null
-> +++ b/support/dependencies/check-host-lzip.mk
-> @@ -0,0 +1,5 @@
-> +ifeq (,$(call suitable-host-package,lzip,$(LZCAT)))
-> +DEPENDENCIES_HOST_PREREQ += host-lzip
-> ++EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .lz
-> +LZCAT = $(HOST_DIR)/usr/bin/lzip -d -c
-
-But here in the case where we are building our own host-lzip, we
-completely ignore BR2_LZCAT, and use a hardcoded
-$(HOST_DIR)/usr/bin/lzip -d -c.
-
-Since there is already the exact same pattern for XZCAT, I decided to
-apply your patch anyway. I also don't really understand the use case
-for all those BR2_ZCAT, BR2_BZCAT, BR2_XZCAT, etc. config options.
-Peter, maybe you can shed some light on why we have these?
-
-Also Baruch: there was one too many "+" at the beginning of:
-
-> ++EXTRACTOR_DEPENDENCY_PRECHECKED_EXTENSIONS += .lz
-
-so I've fixed that before applying.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index dd3573f..7dd4c04 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032746.html
+-sha256 b7534f518d735c643aedca2fb4694683dfddc8d0600cfb628c87a18e65255832  libinput-1.6.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-February/032940.html
++sha256 9d816f13eee63bcca0e9c3bb652c52ab55f39be4d1b90b54e4bfd1dc92ef55a8  libinput-1.6.1.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 52aca9a..776e1af 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.6.0
++LIBINPUT_VERSION = 1.6.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
