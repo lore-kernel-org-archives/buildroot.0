@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 21:55:33 +0100
-Subject: [Buildroot] [PATCH v3] package/mpd: add choice between version
- 0.19 and 0.20
-In-Reply-To: <20170215145102.14664-1-joerg.krause@embedded.rocks>
-References: <20170215145102.14664-1-joerg.krause@embedded.rocks>
-Message-ID: <20170215215533.72835dbf@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Feb 2017 18:02:39 -0300
+Subject: [Buildroot] [PATCH next] libinput: bump to version 1.6.1
+Message-ID: <20170215210239.3107-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Wed, 15 Feb 2017 15:51:02 +0100, J?rg Krause wrote:
-> MPD version 0.20 being affected by GCC PR libstdc++/64735 means no mpd package
-> available in Buildroot for the architectures NIOSII, ARMv4, ARMv5 and SPARCv8
-> until GCC 7 is released.
-> 
-> As the next Buildroot release is in 2017.02, which is before GCC 7 is expected
-> to be finished we add hidden config symbols to select the version branch to use.
-> 
-> Note, that we bumped the version from 0.19 to 0.20 quite recently within the
-> current Buildroot release cycle. This way we can keep the support for mpd on
-> the affected architectures, like ARMv5, until GCC 7 is out.
-> 
-> Note, that for the version 0.19 MPD requires libglib2.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Note that this patch is targeted for the master branch.
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index dd3573f..7dd4c04 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032746.html
+-sha256 b7534f518d735c643aedca2fb4694683dfddc8d0600cfb628c87a18e65255832  libinput-1.6.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-February/032940.html
++sha256 9d816f13eee63bcca0e9c3bb652c52ab55f39be4d1b90b54e4bfd1dc92ef55a8  libinput-1.6.1.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 52aca9a..776e1af 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.6.0
++LIBINPUT_VERSION = 1.6.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.10.2
