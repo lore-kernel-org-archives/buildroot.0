@@ -1,124 +1,144 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 15 Feb 2017 10:33:31 +0100
-Subject: [Buildroot] [PATCH v2] package/mpd: add choice between version 0.19
-	and 0.20
-Message-ID: <20170215093331.31040-1-joerg.krause@embedded.rocks>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 15 Feb 2017 08:00:28 -0200
+Subject: [Buildroot] [PATCH v3] kmscube: Add new package
+Message-ID: <1487152829-13115-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MPD version 0.20 being affected by GCC PR libstdc++/64735 means no mpd package
-available in Buildroot for the architectures NIOSII, ARMv4, ARMv5 and SPARCv8
-until GCC 7 is released.
+Add support for kmscube application, which is helpful for testing
+kms/drm drivers.
 
-As the next Buildroot release is in 2017.02, which is before GCC 7 is expected
-to be finished we add hidden config symbols to select the version branch to use.
-
-Note, that we bumped the version from 0.19 to 0.20 quite recently within the
-current Buildroot release cycle. This way we can keep the support for mpd on
-the affected architectures, like ARMv5, until GCC 7 is out.
-
-Note, that version 0.19 requires libglib2.
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
-Changes v2:
- * add missing hash for version 0.19.21
- * remove of visible options (suggested by Thomas)
----
- package/mpd/Config.in | 26 +++++++++++++++++++++-----
- package/mpd/mpd.hash  |  1 +
- package/mpd/mpd.mk    | 10 +++++++++-
- 3 files changed, 31 insertions(+), 6 deletions(-)
+Changes since v2:
+- Removed space at the end of the line
+- Provided project URL
+- Added usual comment header
+- Removed KMSCUBE_INSTALL_TARGET
+- Removed KMSCUBE_INSTALL_STAGING
+- Added license information
+- Added myself to the DEVELOPERS file 
+- Fixed dependencies
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 8a28b4f1a..8eabbbc79 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -4,9 +4,10 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_USE_WCHAR # flac
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	# 0.19.x could be built with GCC 4.6, but for simplicity we require
-+	# the same toolchain dependencies for all versions.
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
-@@ -20,6 +21,24 @@ menuconfig BR2_PACKAGE_MPD
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/kmscube/0001-addimxdrm.patch | 28 ++++++++++++++++++++++++++++
+ package/kmscube/Config.in            |  8 ++++++++
+ package/kmscube/kmscube.hash         |  2 ++
+ package/kmscube/kmscube.mk           | 19 +++++++++++++++++++
+ 6 files changed, 59 insertions(+)
+ create mode 100644 package/kmscube/0001-addimxdrm.patch
+ create mode 100644 package/kmscube/Config.in
+ create mode 100644 package/kmscube/kmscube.hash
+ create mode 100644 package/kmscube/kmscube.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7f65909..21ab935 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -479,6 +479,7 @@ F:	configs/mx6sx_udoo_neo_defconfig
+ F:	configs/mx6udoo_defconfig
+ F:	configs/wandboard_defconfig
+ F:	configs/warp7_defconfig
++F:	package/kmscube/
  
- if BR2_PACKAGE_MPD
- 
-+# Hidden config symbols to select the branch 0.20 by default and fallback
-+# to branch 0.19 for toolchains affected by GCC bug PR 64735. This way we
-+# keep support for mpd on some architectures, like ARMv5, until GCC 7 is
-+# released, which will fix this issue.
-+config BR2_PACKAGE_MPD_VERSION_STRING
-+	string
-+	default "0.20" if !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+	default "0.19"
+ N:	Fabio Porcedda <fabio.porcedda@gmail.com>
+ F:	package/netsurf-buildsystem/
+diff --git a/package/Config.in b/package/Config.in
+index deff0fe..af52e1a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -239,6 +239,7 @@ comment "Graphic applications"
+ 	source "package/glmark2/Config.in"
+ 	source "package/gnuplot/Config.in"
+ 	source "package/jhead/Config.in"
++	source "package/kmscube/Config.in"
+ 	source "package/mesa3d-demos/Config.in"
+ 	source "package/qt5cinex/Config.in"
+ 	source "package/rrdtool/Config.in"
+diff --git a/package/kmscube/0001-addimxdrm.patch b/package/kmscube/0001-addimxdrm.patch
+new file mode 100644
+index 0000000..0cfcd9a
+--- /dev/null
++++ b/package/kmscube/0001-addimxdrm.patch
+@@ -0,0 +1,28 @@
++From 23186149100dd9c871f65132edce67db0b1ce3c3 Mon Sep 17 00:00:00 2001
++From: XoD <xoddark@gmail.com>
++Date: Mon, 13 Feb 2017 16:43:35 -0200
++Subject: [PATCH] Add imx-drm management
 +
-+config BR2_PACKAGE_MPD_VERSION_0_20
-+	bool
-+	default y if BR2_PACKAGE_MPD_VERSION_STRING = "0.20"
++Add imx-drm in the list of kms modules.
 +
-+config BR2_PACKAGE_MPD_VERSION_0_19
-+	bool
-+	default y if BR2_PACKAGE_MPD_VERSION_STRING = "0.19"
-+	select BR2_PACKAGE_LIBGLIB2
++Signed-off-by: XoD <xoddark@gmail.com>
++Signed-off-by: Fabio Estevam <festevam@gmail.com>
++---
++ kmscube.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
- comment "Archive plugins"
- 
- config BR2_PACKAGE_MPD_BZIP2
-@@ -320,6 +339,3 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--
--comment "mpd needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index ee46f3cc5..ecd78e97c 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
- sha256  712b25351c12616630c580204e1c3dcba3ae2993a56cff1c346c87e334d69728  mpd-0.20.4.tar.xz
-+sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 0efc8685f..74f966c9f 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -4,8 +4,12 @@
- #
- ################################################################################
- 
--MPD_VERSION_MAJOR = 0.20
-+MPD_VERSION_MAJOR = $(BR2_PACKAGE_MPD_VERSION_STRING)
-+ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
- MPD_VERSION = $(MPD_VERSION_MAJOR).4
-+else
-+MPD_VERSION = $(MPD_VERSION_MAJOR).21
-+endif
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
-@@ -13,6 +17,10 @@ MPD_LICENSE = GPLv2+
- MPD_LICENSE_FILES = COPYING
- MPD_AUTORECONF = YES
- 
-+ifeq ($(BR2_MPD_VERSION_0_19),y)
-+MPD_DEPENDENCIES += libglib2
-+endif
++diff --git a/kmscube.c b/kmscube.c
++index ca2c266..95bd77f 100644
++--- a/kmscube.c
+++++ b/kmscube.c
++@@ -122,6 +122,7 @@ static int init_drm(void)
++ 	static const char *modules[] = {
++ 		"exynos",
++ 		"i915",
+++		"imx-drm",
++ 		"msm",
++ 		"nouveau",
++ 		"omapdrm",
++-- 
++2.7.4
 +
- # Some options need an explicit --disable or --enable
- 
- # Zeroconf support depends on libdns_sd from avahi.
+diff --git a/package/kmscube/Config.in b/package/kmscube/Config.in
+new file mode 100644
+index 0000000..72393e4
+--- /dev/null
++++ b/package/kmscube/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KMSCUBE
++	bool "kmscube"
++	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # require libgbm from mesa3d
++	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
++	help
++	  kmscube is an application to test kms/drm drivers.
++
++	  https://github.com/robclark/kmscube/  
+diff --git a/package/kmscube/kmscube.hash b/package/kmscube/kmscube.hash
+new file mode 100644
+index 0000000..d3e9858
+--- /dev/null
++++ b/package/kmscube/kmscube.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 73cf923f915f9f7ee46f9f03bd24254fc04b5f166270c0d37c6f2bc3881186ec kmscube-8c6a20901f95e1b465bbca127f9d47fcfb8762e6.tar.gz
+diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+new file mode 100644
+index 0000000..8c18015
+--- /dev/null
++++ b/package/kmscube/kmscube.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# kmscube
++#
++################################################################################
++
++KMSCUBE_VERSION = 8c6a20901f95e1b465bbca127f9d47fcfb8762e6
++KMSCUBE_SITE = $(call github,robclark,kmscube,$(KMSCUBE_VERSION))
++KMSCUBE_LICENSE = MIT
++KMSCUBE_DEPENDENCIES = host-pkgconf
++KMSCUBE_AUTORECONF = YES
++
++# Autoreconf requires an existing m4 directory
++define KMSCUBE_PATCH_M4
++	mkdir -p $(@D)/m4
++endef
++KMSCUBE_POST_PATCH_HOOKS += KMSCUBE_PATCH_M4
++
++$(eval $(autotools-package))
 -- 
-2.11.0
+2.7.4
