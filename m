@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Feb 2017 14:14:46 +0100
-Subject: [Buildroot] [PATCH next] libglib2: bump to version 2.50.3
-In-Reply-To: <20170215103749.9163-1-gustavo@zacarias.com.ar> (Gustavo
- Zacarias's message of "Wed, 15 Feb 2017 07:37:49 -0300")
-References: <20170215103749.9163-1-gustavo@zacarias.com.ar>
-Message-ID: <87o9y3h9yx.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Feb 2017 14:14:50 +0100
+Subject: [Buildroot] [PATCH next] sqlite: bump to version 3.17.0
+In-Reply-To: <20170215103725.9117-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Wed, 15 Feb 2017 07:37:25 -0300")
+References: <20170215103725.9117-1-gustavo@zacarias.com.ar>
+Message-ID: <87k28rh9yt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
