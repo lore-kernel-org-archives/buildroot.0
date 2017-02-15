@@ -1,51 +1,53 @@
-From: Ilias Apalodimas <apalos@gmail.com>
-Date: Wed, 15 Feb 2017 10:29:40 +0200
-Subject: [Buildroot] [PATCH 2/2] keepalived: new package
-In-Reply-To: <20170215082231.vl6wa72kiebgmh65@tarshish>
-References: <1487146735-12418-1-git-send-email-apalos@gmail.com>
- <1487146735-12418-2-git-send-email-apalos@gmail.com>
- <20170215082231.vl6wa72kiebgmh65@tarshish>
-Message-ID: <CADvJCoeX-zcAz_XpTzUSahr4P3Zv1n0-H73OVH1pHFiXDvL4Tw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Feb 2017 09:33:51 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-13
+In-Reply-To: <8760kbj44g.fsf@dell.be.48ers.dk>
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+ <20170214232912.42d8a2df@free-electrons.com>
+ <8760kbj44g.fsf@dell.be.48ers.dk>
+Message-ID: <20170215093351.46cf9b57@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes you are right,
+Hello,
 
-There is an older patch posted 2 days ago that had the dependencies :(.
-I think i messed up one of my diffs.
-I'll fix it and report.
+On Wed, 15 Feb 2017 08:38:07 +0100, Peter Korsgaard wrote:
 
-On Wed, Feb 15, 2017 at 10:22 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Ilias,
->
-> On Wed, Feb 15, 2017 at 10:18:55AM +0200, Ilias Apalodimas wrote:
->> +ifeq ($(BR2_PACKAGE_IPSET),y)
->> +KEEPALIVED_CONF_OPTS += --enable-libipset
->
-> You need to add ipset to KEEPALIVED_DEPENDENCIES to make sure it builds before
-> keepalived.
->
->> +else
->> +KEEPALIVED_CONF_OPTS += --disable-libipset
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_IPTABLES),y)
->> +KEEPALIVED_CONF_OPTS += --enable-libiptc
->
-> Ditto.
->
->> +else
->> +KEEPALIVED_CONF_OPTS += --disable-libiptc
->> +endif
->> +
->> +$(eval $(autotools-package))
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>  > I'm not sure how to fix this. Adding __STDC_LIMIT_MACROS to the build
+>  > of libraw would fix it, but it's rather weird to have this
+>  > implementation "detail" of jasper creep in all the way to users of the
+>  > library.  
+> 
+> I didn't look at libraw yet, but couldn't the jasper include just be
+> moved to the top of the file?
+
+Haven't tried that. Could be an option, but it still seems weird.
+
+However, I had a second thought about this: according to
+http://autobuild.buildroot.net/?reason=libraw-0.17.1, we only have this
+issue with toolchains using rather old gcc versions:
+
+ - SH4 toolchain is using 4.7
+ - the Buildroot i686/pentium4 toolchain is using gcc 4.5
+ - the older build results on Blackfin were with the Analog Devices
+   toolchain, gcc 4.3 based
+
+With more recent toolchains (starting with gcc 4.8) this issue does not
+occur. Is it something that has changed in the C/C++ standard
+implemented starting from 4.8 ? Or is it C library version related ?
+
+Indeed in the SH4 toolchain, the stdint.h header only provides the
+SIZE_MAX and related definitions if you're *not* in C++ *or*
+__STDC_LIMIT_MACROS is defined. But on my system, stdint.h doesn't have
+anything like that: SIZE_MAX and related macros are unconditionally
+defined.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
