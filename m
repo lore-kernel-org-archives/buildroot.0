@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 21:55:30 +0100
-Subject: [Buildroot] [PATCH] cannelloni: fix build failure caused by
- missing include
-In-Reply-To: <1487158690-2977-1-git-send-email-yegorslists@googlemail.com>
-References: <1487158690-2977-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20170215215530.522e373a@free-electrons.com>
+Date: Wed, 15 Feb 2017 21:55:33 +0100
+Subject: [Buildroot] [PATCH v3] package/mpd: add choice between version
+ 0.19 and 0.20
+In-Reply-To: <20170215145102.14664-1-joerg.krause@embedded.rocks>
+References: <20170215145102.14664-1-joerg.krause@embedded.rocks>
+Message-ID: <20170215215533.72835dbf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 Feb 2017 12:38:10 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed, 15 Feb 2017 15:51:02 +0100, J?rg Krause wrote:
+> MPD version 0.20 being affected by GCC PR libstdc++/64735 means no mpd package
+> available in Buildroot for the architectures NIOSII, ARMv4, ARMv5 and SPARCv8
+> until GCC 7 is released.
 > 
-> Add a patch, that explicitly includes cstdio header.
+> As the next Buildroot release is in 2017.02, which is before GCC 7 is expected
+> to be finished we add hidden config symbols to select the version branch to use.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/82d/82d1dca3aa7ee9189baae985db59464d95696ed7/
+> Note, that we bumped the version from 0.19 to 0.20 quite recently within the
+> current Buildroot release cycle. This way we can keep the support for mpd on
+> the affected architectures, like ARMv5, until GCC 7 is out.
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Note, that for the version 0.19 MPD requires libglib2.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  .../0001-Add-missing-cstdio-include.patch          | 29 ++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/cannelloni/0001-Add-missing-cstdio-include.patch
+> Note that this patch is targeted for the master branch.
 
 Applied to master, thanks.
 
