@@ -1,39 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 21:27:01 +0100
-Subject: [Buildroot] [git commit] mesa3d-headers: remove installation of
-	OpenVG headers
-Message-ID: <20170215202740.3F75F821D9@busybox.osuosl.org>
+Date: Wed, 15 Feb 2017 21:27:34 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9}.x series
+Message-ID: <20170215202740.540518215B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8988e43dc19d5a42f1d8bf606df596ae5b928ecf
+commit: https://git.buildroot.net/buildroot/commit/?id=cd2826c183c5d4ce356aabd319e49cfab9bba889
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OpenVG support has been completely removed from mesa3d in commit
-3acd7a34ab05b87521b74f626ec637e7fdcc6595, merged in mesa-10.6.0.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 7ae5966..35b1a71 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -62,10 +62,6 @@ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
- MESA3D_HEADERS_DIRS += GLES GLES2
- endif
- 
--ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
--MESA3D_HEADERS_DIRS += VG
--endif
--
- define MESA3D_HEADERS_BUILD_CMDS
- 	$(MESA3D_HEADERS_BUILD_DRI_PC)
- endef
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 73420d6..6485025 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.48"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.49"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.9"		if BR2_KERNEL_HEADERS_4_9
++	default "4.9.10"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
