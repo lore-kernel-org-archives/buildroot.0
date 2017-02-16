@@ -1,42 +1,125 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Feb 2017 14:13:35 +0100
-Subject: [Buildroot] [git commit] libglib2: bump to version 2.50.3
-Message-ID: <20170301170420.F1FE4800CE@busybox.osuosl.org>
+Date: Thu, 16 Feb 2017 21:15:51 +0100
+Subject: [Buildroot] [git commit] unionfs: bump to version 2.0
+Message-ID: <20170301170421.8C6A77FB5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1a986e81d144cbddfcbbc06fff77f6d7cf2c06d
+commit: https://git.buildroot.net/buildroot/commit/?id=434c9777bea905afde2c5cbc21ac8d2b7f8186a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop upstream patch.
+Update ioctl patch since it's still required to build for musl.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...0001-Revert-to-old-pre-1.0-meta-directory.patch | 36 ----------------------
+ .../0001-include-asm-ioctl.h-for-_IOC_SIZE.patch   | 26 ++++++++++++++++
+ package/unionfs/unionfs.hash                       |  4 +--
+ package/unionfs/unionfs.mk                         |  4 +--
+ 4 files changed, 29 insertions(+), 41 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 94bf870..b31c212 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.50/glib-2.50.2.sha256sum
--sha256  be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5  glib-2.50.2.tar.xz
-+# https://download.gnome.org/sources/glib/2.50/glib-2.50.3.sha256sum
-+sha256  82ee94bf4c01459b6b00cb9db0545c2237921e3060c0b74cff13fbc020cfd999  glib-2.50.3.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index ddd1f39..faf6b3c 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/unionfs/0001-Revert-to-old-pre-1.0-meta-directory.patch b/package/unionfs/0001-Revert-to-old-pre-1.0-meta-directory.patch
+deleted file mode 100644
+index 228441b..0000000
+--- a/package/unionfs/0001-Revert-to-old-pre-1.0-meta-directory.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 93c2f9bd8b058b28016e6db2421e5b38eac0606c Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <peter@korsgaard.com>
+-Date: Thu, 17 Dec 2015 15:06:38 +0100
+-Subject: [PATCH] Revert to old pre-1.0 meta directory
+-
+-Unionfs changed its meta directory from .unionfs to .unionfs-fuse with the
+-unionfs -> unionfs-fuse rename.  The rename later got reverted everywhere
+-but the meta directory, so now unionfs doesn't find the whiteout files from
+-older releases.
+-
+-Revert back to the pre-1.0 behaviour to fix this.
+-
+-Committed upstream:
+-https://github.com/rpodgorny/unionfs-fuse/commit/93c2f9bd8b058b28016e6db2421e5b38eac0606c
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/unionfs.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/unionfs.h b/src/unionfs.h
+-index c2b5ee3..74b824f 100644
+---- a/src/unionfs.h
+-+++ b/src/unionfs.h
+-@@ -10,7 +10,7 @@
+- #define PATHLEN_MAX 1024
+- #define HIDETAG "_HIDDEN~"
+- 
+--#define METANAME ".unionfs-fuse"
+-+#define METANAME ".unionfs"
+- #define METADIR (METANAME  "/") // string concetanation!
+- 
+- // fuse meta files, we might want to hide those
+--- 
+-2.1.4
+-
+diff --git a/package/unionfs/0001-include-asm-ioctl.h-for-_IOC_SIZE.patch b/package/unionfs/0001-include-asm-ioctl.h-for-_IOC_SIZE.patch
+new file mode 100644
+index 0000000..f3d8fa1
+--- /dev/null
++++ b/package/unionfs/0001-include-asm-ioctl.h-for-_IOC_SIZE.patch
+@@ -0,0 +1,26 @@
++From d33635fe940ff898e026d3fb77446e52f8f2bd3f Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Thu, 16 Feb 2017 14:59:30 -0300
++Subject: [PATCH] include asm/ioctl.h for _IOC_SIZE
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ src/unionfs.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/unionfs.c b/src/unionfs.c
++index 5aed5ce..f6cd368 100644
++--- a/src/unionfs.c
+++++ b/src/unionfs.c
++@@ -32,7 +32,7 @@
++ #include <sys/types.h>
++ #include <sys/time.h>
++ #include <inttypes.h>
++-#include <sys/ioctl.h>
+++#include <asm/ioctl.h>
++ 
++ #ifdef linux
++ 	#include <sys/vfs.h>
++-- 
++2.10.2
++
+diff --git a/package/unionfs/unionfs.hash b/package/unionfs/unionfs.hash
+index c843a0e..fcc1d58 100644
+--- a/package/unionfs/unionfs.hash
++++ b/package/unionfs/unionfs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	2ee80bd0634a61adb2159212e155d607a0a82ad659214ae6edb3530396cccc09	unionfs-1.0.tar.gz
+-sha256	c8526f80448f344fba0100e5510793b6de985b24a8b526d9a6803bcd713d9de2	0001-include-asm-ioctl.h-for-_IOC_SIZE.patch
++sha256	f24d7dd64c678cefacbebf2727b61e3127b8ecb6bb9176d7117dd31503455643	unionfs-2.0.tar.gz
++sha256	976ca25b7706911f1a6e981c0fd236b607f497aa0b23d407825b0aad41f7c896	0001-include-asm-ioctl.h-for-_IOC_SIZE.patch
+diff --git a/package/unionfs/unionfs.mk b/package/unionfs/unionfs.mk
+index 0fa9c94..4281e84 100644
+--- a/package/unionfs/unionfs.mk
++++ b/package/unionfs/unionfs.mk
+@@ -4,10 +4,8 @@
+ #
  ################################################################################
  
- LIBGLIB2_VERSION_MAJOR = 2.50
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPLv2+
+-UNIONFS_VERSION = 1.0
++UNIONFS_VERSION = 2.0
+ UNIONFS_SITE = $(call github,rpodgorny,unionfs-fuse,v$(UNIONFS_VERSION))
+-UNIONFS_PATCH = \
+-	http://git.alpinelinux.org/cgit/aports/plain/main/unionfs-fuse/0001-include-asm-ioctl.h-for-_IOC_SIZE.patch
+ UNIONFS_DEPENDENCIES = libfuse host-pkgconf
+ UNIONFS_LICENSE = BSD-3c
+ UNIONFS_LICENSE_FILES = LICENSE
