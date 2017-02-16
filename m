@@ -1,92 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 09:05:06 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] tcpdump: security bump to
-	version 4.9.0
-Message-ID: <20170216090645.7BD7E81D49@busybox.osuosl.org>
+Date: Thu, 16 Feb 2017 09:08:05 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] quagga: security bump to
+	version 1.1.1
+Message-ID: <20170216090645.96BF1818D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf6a402f77b8046c8840297690f9e8e661c12c84
+commit: https://git.buildroot.net/buildroot/commit/?id=4b4b74b0562383a2eab4da8df284ae20055ca4f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Security fixes in this release (from the Debian changelog):
+Fixes CVE-2017-5495: Telnet interface input buffer allocates unbounded amounts
+of memory, leading to DoS.
 
-    + CVE-2016-7922: buffer overflow in print-ah.c:ah_print().
-    + CVE-2016-7923: buffer overflow in print-arp.c:arp_print().
-    + CVE-2016-7924: buffer overflow in print-atm.c:oam_print().
-    + CVE-2016-7925: buffer overflow in print-sl.c:sl_if_print().
-    + CVE-2016-7926: buffer overflow in print-ether.c:ethertype_print().
-    + CVE-2016-7927: buffer overflow in print-802_11.c:ieee802_11_radio_print().
-    + CVE-2016-7928: buffer overflow in print-ipcomp.c:ipcomp_print().
-    + CVE-2016-7929: buffer overflow in print-juniper.c:juniper_parse_header().
-    + CVE-2016-7930: buffer overflow in print-llc.c:llc_print().
-    + CVE-2016-7931: buffer overflow in print-mpls.c:mpls_print().
-    + CVE-2016-7932: buffer overflow in print-pim.c:pimv2_check_checksum().
-    + CVE-2016-7933: buffer overflow in print-ppp.c:ppp_hdlc_if_print().
-    + CVE-2016-7934: buffer overflow in print-udp.c:rtcp_print().
-    + CVE-2016-7935: buffer overflow in print-udp.c:rtp_print().
-    + CVE-2016-7936: buffer overflow in print-udp.c:udp_print().
-    + CVE-2016-7937: buffer overflow in print-udp.c:vat_print().
-    + CVE-2016-7938: integer overflow in print-zeromq.c:zmtp1_print_frame().
-    + CVE-2016-7939: buffer overflow in print-gre.c, multiple functions.
-    + CVE-2016-7940: buffer overflow in print-stp.c, multiple functions.
-    + CVE-2016-7973: buffer overflow in print-atalk.c, multiple functions.
-    + CVE-2016-7974: buffer overflow in print-ip.c, multiple functions.
-    + CVE-2016-7975: buffer overflow in print-tcp.c:tcp_print().
-    + CVE-2016-7983: buffer overflow in print-bootp.c:bootp_print().
-    + CVE-2016-7984: buffer overflow in print-tftp.c:tftp_print().
-    + CVE-2016-7985: buffer overflow in print-calm-fast.c:calm_fast_print().
-    + CVE-2016-7986: buffer overflow in print-geonet.c, multiple functions.
-    + CVE-2016-7992: buffer overflow in print-cip.c:cip_if_print().
-    + CVE-2016-7993: a bug in util-print.c:relts_print() could cause a
-      buffer overflow in multiple protocol parsers (DNS, DVMRP, HSRP, IGMP,
-      lightweight resolver protocol, PIM).
-    + CVE-2016-8574: buffer overflow in print-fr.c:frf15_print().
-    + CVE-2016-8575: buffer overflow in print-fr.c:q933_print().
-    + CVE-2017-5202: buffer overflow in print-isoclns.c:clnp_print().
-    + CVE-2017-5203: buffer overflow in print-bootp.c:bootp_print().
-    + CVE-2017-5204: buffer overflow in print-ip6.c:ip6_print().
-    + CVE-2017-5205: buffer overflow in print-isakmp.c:ikev2_e_print().
-    + CVE-2017-5341: buffer overflow in print-otv.c:otv_print().
-    + CVE-2017-5342: a bug in multiple protocol parsers (Geneve, GRE, NSH,
-      OTV, VXLAN and VXLAN GPE) could cause a buffer overflow in
-      print-ether.c:ether_print().
-    + CVE-2017-5482: buffer overflow in print-fr.c:q933_print().
-    + CVE-2017-5483: buffer overflow in print-snmp.c:asn1_parse().
-    + CVE-2017-5484: buffer overflow in print-atm.c:sig_print().
-    + CVE-2017-5485: buffer overflow in addrtoname.c:lookup_nsap().
-    + CVE-2017-5486: buffer overflow in print-isoclns.c:clnp_print().
+Add optional dependency on protobuf-c.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 183b443e579b31b14bd95f98ecd95b2efc0554f7)
+(cherry picked from commit ae73226476e5ca449cf0b312aa03a18dfe31d3a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpdump/tcpdump.hash | 2 +-
- package/tcpdump/tcpdump.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/quagga/quagga.hash |  2 +-
+ package/quagga/quagga.mk   | 12 +++++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 21fb83f..966db1f 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
+diff --git a/package/quagga/quagga.hash b/package/quagga/quagga.hash
+index 23a0a82..6da37cf 100644
+--- a/package/quagga/quagga.hash
++++ b/package/quagga/quagga.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256 20e4341ec48fcf72abcae312ea913e6ba6b958617b2f3fb496d51f0ae88d831c  tcpdump-4.8.1.tar.gz
-+sha256 eae98121cbb1c9adbedd9a777bf2eae9fa1c1c676424a54740311c8abcee5a5e  tcpdump-4.9.0.tar.gz
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 3773fcb..e71f9c1 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
+-sha256	d284af5dd875dbba90ab875d40db5d68fdc9ede17a76f2af525f85344be56767	quagga-1.0.20160315.tar.xz
++sha256	b5a94e5bdad3062e04595a5692b8cc435f0a85102f75dfdca0a06d093b4ef63f	quagga-1.1.1.tar.gz
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index ad2aff4..c17ceaa 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,10 +4,9 @@
  #
  ################################################################################
  
--TCPDUMP_VERSION = 4.8.1
-+TCPDUMP_VERSION = 4.9.0
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3c
- TCPDUMP_LICENSE_FILES = LICENSE
+-QUAGGA_VERSION = 1.0.20160315
+-QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
++QUAGGA_VERSION = 1.1.1
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+-QUAGGA_DEPENDENCIES = host-gawk
++QUAGGA_DEPENDENCIES = host-gawk host-pkgconf
+ QUAGGA_LICENSE = GPLv2+
+ QUAGGA_LICENSE_FILES = COPYING
+ 
+@@ -29,6 +28,13 @@ else
+ QUAGGA_CONF_OPTS += --disable-capabilities
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PROTOBUF_C),y)
++QUAGGA_CONF_OPTS += --enable-protobuf
++QUAGGA_DEPENDENCIES += protobuf-c
++else
++QUAGGA_CONF_OPTS += --disable-protobuf
++endif
++
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ZEBRA),--enable-zebra,--disable-zebra)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGPD),--enable-bgpd,--disable-bgpd)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_RIPD),--enable-ripd,--disable-ripd)
