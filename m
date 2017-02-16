@@ -1,43 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 16 Feb 2017 16:14:36 -0300
-Subject: [Buildroot] [PATCH master] dbus: security bump to version 1.10.16
-Message-ID: <20170216191436.18244-1-gustavo@zacarias.com.ar>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 16 Feb 2017 20:14:45 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-02-15
+In-Reply-To: <20170216111120.107a7a61@free-electrons.com>
+References: <20170216072900.AAE4920BC6@mail.free-electrons.com>
+ <CALdGskKtWsQOyKehenpwZHyaMuYHQ600kiMr4w080DNYGRcBKQ@mail.gmail.com>
+ <20170216102154.4f896bea@free-electrons.com>
+ <20170216111120.107a7a61@free-electrons.com>
+Message-ID: <20170216191445.GI12810@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-* Symlink attack in nonce-tcp transport.
-* Symlink attack in unit tests.
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dbus/dbus.hash | 2 +-
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Hello,
+> 
+> On Thu, 16 Feb 2017 10:21:54 +0100, Thomas Petazzoni wrote:
+> 
+> > commit a44d7f2dbb19a54a8f2beb5c0f0adb0680999319
+> > Author: Waldemar Brodkorb <wbx@openadk.org>
+> > Date:   Sun Dec 4 12:20:27 2016 +0100
+> > 
+> >     uclibc: update to 1.0.20
+> >     
+> >     The test suite is removed from the package and is already a separate
+> >     package in buildroot. All patches are upstream, so remove them.
+> >     The UCLIBC_HAS_LFS option is removed upstream.
+> >     
+> >     Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> >     [Thomas: remove BR2_UCLIBC_INSTALL_TEST_SUITE option, add it to
+> >     Config.in.legacy.]
+> >     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> Seems like the story is more complicated. I did a build of czmq right
+> before the uClibc bump to 1.0.20, and right after, and both builds were
+> successful.
+> 
+> Two options:
+> 
+>  - This commit is not the culprit.
+> 
+>  - My simple configuration with just czmq doesn't trigger the problem,
+>    and it's only czmq with some optional dependencies that triggers the
+>    problem.
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 14bee20..af8143d 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	23238f70353e38ce5ca183ebc9525c0d97ac00ef640ad29cf794782af6e6a083  dbus-1.10.14.tar.gz
-+sha256	a7b0ba6ea3e8d0e08afec5e3030d0245614268276620c536726f8fa6e5c43388  dbus-1.10.16.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index c765e0a..2d1583e 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.10.14
-+DBUS_VERSION = 1.10.16
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
- DBUS_LICENSE_FILES = COPYING
--- 
-2.10.2
+I have a clear idea what is the problem in uClibc-ng. It is arm
+specific. But I have trouble to reproduce the czmq issue with the
+internal static arm toolchain. (simple config, not the autobuild
+config).
+
+Is there any difference between internal and external static
+toolchains, when both created with buildroot?
+
+best regards
+ Waldemar  
