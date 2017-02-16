@@ -1,33 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 21:18:52 +0100
-Subject: [Buildroot] [git commit branch/next] f2fs-tools: bump to version
-	1.8.0
-Message-ID: <20170216201955.1E1F67F894@busybox.osuosl.org>
+Date: Thu, 16 Feb 2017 21:21:19 +0100
+Subject: [Buildroot] [PATCH] dbus: security bump to version 1.10.16
+In-Reply-To: <20170216183846.14328-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 16 Feb 2017 19:38:46 +0100")
+References: <20170216183846.14328-1-peter@korsgaard.com>
+Message-ID: <87vas9ga4g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6440a5f72f610aadf3320a04143531a95b2db563
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/f2fs-tools/f2fs-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > From http://www.openwall.com/lists/oss-security/2017/02/16/4
+ > The latest dbus release 1.10.16 fixes two symlink attacks in
+ > non-production-suitable configurations. I am treating these as bugs
+ > rather than practical vulnerabilities, and very much hope neither of
+ > these is going to affect any real users, but I'm reporting them to
+ > oss-security in case there's an attack vector that I've missed.
 
-diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
-index d3956c4..ac8bd39 100644
---- a/package/f2fs-tools/f2fs-tools.mk
-+++ b/package/f2fs-tools/f2fs-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--F2FS_TOOLS_VERSION = v1.6.1
-+F2FS_TOOLS_VERSION = v1.8.0
- F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
- F2FS_TOOLS_SITE_METHOD = git
- F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
+ > No CVEs assigned so far.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
