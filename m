@@ -1,48 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 09:09:04 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] bind: security bump to
-	version 9.11.0-P3
-Message-ID: <20170216090645.A3E1581D49@busybox.osuosl.org>
+Date: Thu, 16 Feb 2017 09:10:22 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] redis: bump to version
+	3.2.8
+Message-ID: <20170216090645.CCBAB81D49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c2eff408c1c6900e2f7b09f32c75af90365b793
+commit: https://git.buildroot.net/buildroot/commit/?id=e10d8f3cf226f12b1960e739f16224d3f491f99e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Fixes CVE-2017-3135: Combination of DNS64 and RPZ Can Lead to Crash:
+It fixes a regression in the 3.2.7 security release that can cause server
+deadlocks.
 
-https://kb.isc.org/article/AA-01453
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b9141fc88b24b6e0d565f84ee768f3199f31a6cd)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit f4cb8f2d4a9805ccdd084f16a25990e88da463c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
+ package/redis/redis.hash | 4 ++--
+ package/redis/redis.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index dc472b1..780e43b 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P2/bind-9.11.0-P2.tar.gz.sha256.asc
--sha256 d651f83ce1c08c83d6ac8201685c4f2b5fdb79794f3a4f93c3948e0ef439c1e5  bind-9.11.0-P2.tar.gz
-+# Verified from http://ftp.isc.org/isc/bind9/9.11.0-P3/bind-9.11.0-P3.tar.gz.sha256.asc
-+sha256 0feee0374bcbdee73a9d4277f3c5007622279572d520d7c27a4b64015d8ca9e9  bind-9.11.0-P3.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 7143089..860ee9d 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index d4ac7c3..3cd8647 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha1 6889af053020cd72ebb16805ead0ce9b3a69a9ef  redis-3.2.7.tar.gz
++sha1 6780d1abb66f33a97aad0edbe020403d0a15b67f  redis-3.2.8.tar.gz
+ # Calculated based on the hash above
+-sha256 bf9df3e5374bfe7bfc3386380f9df13d94990011504ef07632b3609bb2836fa9  redis-3.2.7.tar.gz
++sha256 61b373c23d18e6cc752a69d5ab7f676c6216dc2853e46750a8c4ed791d68482c  redis-3.2.8.tar.gz
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 63964b5..8ab6e72 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.11.0-P2
-+BIND_VERSION = 9.11.0-P3
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-REDIS_VERSION = 3.2.7
++REDIS_VERSION = 3.2.8
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
