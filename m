@@ -1,50 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 09:10:22 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] redis: bump to version
-	3.2.8
-Message-ID: <20170216090645.CCBAB81D49@busybox.osuosl.org>
+Date: Thu, 16 Feb 2017 09:10:12 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] ntfs-3g: add security fix
+	for CVE-2017-0358
+Message-ID: <20170216090645.BEB9D81D49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e10d8f3cf226f12b1960e739f16224d3f491f99e
+commit: https://git.buildroot.net/buildroot/commit/?id=f2da4a526ff8d62ff45e3024f5fed28f03aab30b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-It fixes a regression in the 3.2.7 security release that can cause server
-deadlocks.
+Jann Horn, Project Zero (Google) discovered that ntfs-3g, a read-write
+NTFS driver for FUSE does not not scrub the environment before
+executing modprobe to load the fuse module. This influence the behavior
+of modprobe (MODPROBE_OPTIONS environment variable, --config and
+--dirname options) potentially allowing for local root privilege
+escalation if ntfs-3g is installed setuid.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit f4cb8f2d4a9805ccdd084f16a25990e88da463c1)
+Notice that Buildroot does NOT install netfs-3g setuid root, but custom
+permission tables might be used, causing it to vulnerable to the above.
+
+ntfs-3g does not seem to have a publicly available version control system
+and no new releases have been made, so instead grab the patch from Debian.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6f971f354c14a8948477a0936668b8baae8ec86e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/redis.hash | 4 ++--
- package/redis/redis.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ntfs-3g/ntfs-3g.hash | 1 +
+ package/ntfs-3g/ntfs-3g.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index d4ac7c3..3cd8647 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1 6889af053020cd72ebb16805ead0ce9b3a69a9ef  redis-3.2.7.tar.gz
-+sha1 6780d1abb66f33a97aad0edbe020403d0a15b67f  redis-3.2.8.tar.gz
- # Calculated based on the hash above
--sha256 bf9df3e5374bfe7bfc3386380f9df13d94990011504ef07632b3609bb2836fa9  redis-3.2.7.tar.gz
-+sha256 61b373c23d18e6cc752a69d5ab7f676c6216dc2853e46750a8c4ed791d68482c  redis-3.2.8.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 63964b5..8ab6e72 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 3.2.7
-+REDIS_VERSION = 3.2.8
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
+index 4875cc4..eaa3d98 100644
+--- a/package/ntfs-3g/ntfs-3g.hash
++++ b/package/ntfs-3g/ntfs-3g.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 d7b72c05e4b3493e6095be789a760c9f5f2b141812d5b885f3190c98802f1ea0 ntfs-3g_ntfsprogs-2016.2.22.tgz
++sha256 43deadaeade489934b0b45e2ed8aa5f853ad0364fbde7ad144211b80132ea041  0003-CVE-2017-0358.patch
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index b59e335..6e1a8f9 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -7,6 +7,7 @@
+ NTFS_3G_VERSION = 2016.2.22
+ NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
+ NTFS_3G_SITE = http://tuxera.com/opensource
++NTFS_3G_PATCH = https://sources.debian.net/data/main/n/ntfs-3g/1:2016.2.22AR.1-4/debian/patches/0003-CVE-2017-0358.patch
+ NTFS_3G_CONF_OPTS = --disable-ldconfig
+ NTFS_3G_INSTALL_STAGING = YES
+ NTFS_3G_DEPENDENCIES = host-pkgconf
