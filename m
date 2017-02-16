@@ -1,55 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 09:10:12 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] ntfs-3g: add security fix
-	for CVE-2017-0358
-Message-ID: <20170216090645.BEB9D81D49@busybox.osuosl.org>
+Date: Thu, 16 Feb 2017 09:05:06 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] tcpdump: security bump to
+	version 4.9.0
+Message-ID: <20170216090645.7BD7E81D49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2da4a526ff8d62ff45e3024f5fed28f03aab30b
+commit: https://git.buildroot.net/buildroot/commit/?id=bf6a402f77b8046c8840297690f9e8e661c12c84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-Jann Horn, Project Zero (Google) discovered that ntfs-3g, a read-write
-NTFS driver for FUSE does not not scrub the environment before
-executing modprobe to load the fuse module. This influence the behavior
-of modprobe (MODPROBE_OPTIONS environment variable, --config and
---dirname options) potentially allowing for local root privilege
-escalation if ntfs-3g is installed setuid.
+Security fixes in this release (from the Debian changelog):
 
-Notice that Buildroot does NOT install netfs-3g setuid root, but custom
-permission tables might be used, causing it to vulnerable to the above.
+    + CVE-2016-7922: buffer overflow in print-ah.c:ah_print().
+    + CVE-2016-7923: buffer overflow in print-arp.c:arp_print().
+    + CVE-2016-7924: buffer overflow in print-atm.c:oam_print().
+    + CVE-2016-7925: buffer overflow in print-sl.c:sl_if_print().
+    + CVE-2016-7926: buffer overflow in print-ether.c:ethertype_print().
+    + CVE-2016-7927: buffer overflow in print-802_11.c:ieee802_11_radio_print().
+    + CVE-2016-7928: buffer overflow in print-ipcomp.c:ipcomp_print().
+    + CVE-2016-7929: buffer overflow in print-juniper.c:juniper_parse_header().
+    + CVE-2016-7930: buffer overflow in print-llc.c:llc_print().
+    + CVE-2016-7931: buffer overflow in print-mpls.c:mpls_print().
+    + CVE-2016-7932: buffer overflow in print-pim.c:pimv2_check_checksum().
+    + CVE-2016-7933: buffer overflow in print-ppp.c:ppp_hdlc_if_print().
+    + CVE-2016-7934: buffer overflow in print-udp.c:rtcp_print().
+    + CVE-2016-7935: buffer overflow in print-udp.c:rtp_print().
+    + CVE-2016-7936: buffer overflow in print-udp.c:udp_print().
+    + CVE-2016-7937: buffer overflow in print-udp.c:vat_print().
+    + CVE-2016-7938: integer overflow in print-zeromq.c:zmtp1_print_frame().
+    + CVE-2016-7939: buffer overflow in print-gre.c, multiple functions.
+    + CVE-2016-7940: buffer overflow in print-stp.c, multiple functions.
+    + CVE-2016-7973: buffer overflow in print-atalk.c, multiple functions.
+    + CVE-2016-7974: buffer overflow in print-ip.c, multiple functions.
+    + CVE-2016-7975: buffer overflow in print-tcp.c:tcp_print().
+    + CVE-2016-7983: buffer overflow in print-bootp.c:bootp_print().
+    + CVE-2016-7984: buffer overflow in print-tftp.c:tftp_print().
+    + CVE-2016-7985: buffer overflow in print-calm-fast.c:calm_fast_print().
+    + CVE-2016-7986: buffer overflow in print-geonet.c, multiple functions.
+    + CVE-2016-7992: buffer overflow in print-cip.c:cip_if_print().
+    + CVE-2016-7993: a bug in util-print.c:relts_print() could cause a
+      buffer overflow in multiple protocol parsers (DNS, DVMRP, HSRP, IGMP,
+      lightweight resolver protocol, PIM).
+    + CVE-2016-8574: buffer overflow in print-fr.c:frf15_print().
+    + CVE-2016-8575: buffer overflow in print-fr.c:q933_print().
+    + CVE-2017-5202: buffer overflow in print-isoclns.c:clnp_print().
+    + CVE-2017-5203: buffer overflow in print-bootp.c:bootp_print().
+    + CVE-2017-5204: buffer overflow in print-ip6.c:ip6_print().
+    + CVE-2017-5205: buffer overflow in print-isakmp.c:ikev2_e_print().
+    + CVE-2017-5341: buffer overflow in print-otv.c:otv_print().
+    + CVE-2017-5342: a bug in multiple protocol parsers (Geneve, GRE, NSH,
+      OTV, VXLAN and VXLAN GPE) could cause a buffer overflow in
+      print-ether.c:ether_print().
+    + CVE-2017-5482: buffer overflow in print-fr.c:q933_print().
+    + CVE-2017-5483: buffer overflow in print-snmp.c:asn1_parse().
+    + CVE-2017-5484: buffer overflow in print-atm.c:sig_print().
+    + CVE-2017-5485: buffer overflow in addrtoname.c:lookup_nsap().
+    + CVE-2017-5486: buffer overflow in print-isoclns.c:clnp_print().
 
-ntfs-3g does not seem to have a publicly available version control system
-and no new releases have been made, so instead grab the patch from Debian.
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6f971f354c14a8948477a0936668b8baae8ec86e)
+(cherry picked from commit 183b443e579b31b14bd95f98ecd95b2efc0554f7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntfs-3g/ntfs-3g.hash | 1 +
- package/ntfs-3g/ntfs-3g.mk   | 1 +
- 2 files changed, 2 insertions(+)
+ package/tcpdump/tcpdump.hash | 2 +-
+ package/tcpdump/tcpdump.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ntfs-3g/ntfs-3g.hash b/package/ntfs-3g/ntfs-3g.hash
-index 4875cc4..eaa3d98 100644
---- a/package/ntfs-3g/ntfs-3g.hash
-+++ b/package/ntfs-3g/ntfs-3g.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 d7b72c05e4b3493e6095be789a760c9f5f2b141812d5b885f3190c98802f1ea0 ntfs-3g_ntfsprogs-2016.2.22.tgz
-+sha256 43deadaeade489934b0b45e2ed8aa5f853ad0364fbde7ad144211b80132ea041  0003-CVE-2017-0358.patch
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index b59e335..6e1a8f9 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -7,6 +7,7 @@
- NTFS_3G_VERSION = 2016.2.22
- NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
- NTFS_3G_SITE = http://tuxera.com/opensource
-+NTFS_3G_PATCH = https://sources.debian.net/data/main/n/ntfs-3g/1:2016.2.22AR.1-4/debian/patches/0003-CVE-2017-0358.patch
- NTFS_3G_CONF_OPTS = --disable-ldconfig
- NTFS_3G_INSTALL_STAGING = YES
- NTFS_3G_DEPENDENCIES = host-pkgconf
+diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
+index 21fb83f..966db1f 100644
+--- a/package/tcpdump/tcpdump.hash
++++ b/package/tcpdump/tcpdump.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 20e4341ec48fcf72abcae312ea913e6ba6b958617b2f3fb496d51f0ae88d831c  tcpdump-4.8.1.tar.gz
++sha256 eae98121cbb1c9adbedd9a777bf2eae9fa1c1c676424a54740311c8abcee5a5e  tcpdump-4.9.0.tar.gz
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 3773fcb..e71f9c1 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TCPDUMP_VERSION = 4.8.1
++TCPDUMP_VERSION = 4.9.0
+ TCPDUMP_SITE = http://www.tcpdump.org/release
+ TCPDUMP_LICENSE = BSD-3c
+ TCPDUMP_LICENSE_FILES = LICENSE
