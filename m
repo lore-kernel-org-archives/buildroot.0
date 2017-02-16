@@ -1,46 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Feb 2017 22:20:26 +0100
-Subject: [Buildroot] How to force AUTORECONF for everything
-In-Reply-To: <20170216174538.GC4986@free.fr>
-References: <089f01d28877$aa0cff70$fe26fe50$@codeaurora.org>
- <20170216174538.GC4986@free.fr>
-Message-ID: <20170216222026.788ee7b3@free-electrons.com>
+Date: Thu, 16 Feb 2017 22:31:02 +0100
+Subject: [Buildroot] [git commit] package/mpd: use proper
+	BR2_PACKAGE_MPD_VERSION_0_19 symbol
+Message-ID: <20170216213332.5DCAC8215A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=426ffbe9522fe7e8d140c70747be28e369b3f7aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 16 Feb 2017 18:45:38 +0100, Yann E. MORIN wrote:
+Commit 9244ad854 [1] adds a hidden choice between version 0.19 and 0.20. The
+Makefile now uses a wrong symbol introduced by this commit. Fix by:
+s/BR2_MPD_VERSION_0_19/BR2_PACKAGE_MPD_VERSION_0_19.
 
-> No, there is no global setting that forces that behaviour.
-> 
-> You'll have to hack the autotools infra. See in package/pkg-autotools.mk at 143:
-> 
->   139 ifndef $(2)_AUTORECONF
->   140  ifdef $(3)_AUTORECONF
->   141   $(2)_AUTORECONF = $$($(3)_AUTORECONF)
->   142  else
->   143   $(2)_AUTORECONF ?= NO
->   144  endif
->   145 endif
-> 
-> You may want to change that "NO" to a "YES"
-> 
-> But beware, here be dragins...
+[1] https://git.buildroot.net/buildroot/commit/?id=9244ad854d30e8c942460646ef6f6194ee44942d
 
-In theory, there should be no dragons.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpd/mpd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In practice, lots and lots of package to not autoreconf properly, so
-you're going to face a *lot* of build failures by forcing autoreconf on
-all packages.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 8869176..8e71ae2 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -17,7 +17,7 @@ MPD_LICENSE = GPLv2+
+ MPD_LICENSE_FILES = COPYING
+ MPD_AUTORECONF = YES
+ 
+-ifeq ($(BR2_MPD_VERSION_0_19),y)
++ifeq ($(BR2_PACKAGE_MPD_VERSION_0_19),y)
+ MPD_DEPENDENCIES += libglib2
+ endif
+ 
