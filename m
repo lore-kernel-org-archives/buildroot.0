@@ -1,54 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Feb 2017 09:26:43 +0100
-Subject: [Buildroot] [git commit] libraw: fix build with old glibc versions
-Message-ID: <20170216082712.7D7E17FC3A@busybox.osuosl.org>
+Date: Thu, 16 Feb 2017 09:34:05 +0100
+Subject: [Buildroot] [PATCH v3 2/5] package: add generic support for lz
+ archives
+In-Reply-To: <19a785a4-beaf-92dd-c53b-6e81dde24c7d@mind.be>
+References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
+ <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
+ <20170215221520.41e4c66e@free-electrons.com>
+ <83572997-616f-8bec-fadb-0a59bbf847ed@mind.be>
+ <20170216083206.2064b783@free-electrons.com>
+ <19a785a4-beaf-92dd-c53b-6e81dde24c7d@mind.be>
+Message-ID: <20170216093405.24f25e54@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d246cf5fd01bb0d20a0e64194ffed514ea8dd0aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Prior to glibc 2.18, definitions like SIZE_MAX or INT_FAST32_MAX from
-<stdint.h> were only made available for C code, or in C++ if
-__STDC_LIMIT_MACROS was defined.
+On Thu, 16 Feb 2017 09:25:55 +0100, Arnout Vandecappelle wrote:
 
-The code from jasper uses such definitions, without defining
-__STDC_LIMIT_MACROS. Unfortunately, defining __STDC_LIMIT_MACROS in
-the jasper headers doesn't work, since <stdint.h> has already been
-included before, at a point where __STDC_LIMIT_MACROS was not defined.
+> > BR2_LZCAT does not specify only the path to the lzcat program, but also
+> > its options. And we completely ignore those custom options if the
+> > lzcat built by Buildroot is used.  
+> 
+>  It is possible to provide extra options, but these are completely useless.
+> Well, actually, lzcat is the first one with an option that could be useful:
+> --threads, to decompress over several cores. Except that --threads isn't
+> implemented yet for decompression. So, although it is possible to add extra
+> options in BR2_LZCAT, it just makes no sense.
 
-So to solve this problem, we simply pass -D__STDC_LIMIT_MACROS in
-CXXFLAGS when building libraw with jasper support.
+My point is not whether it makes sense or not to be able to pass
+options to lzip. My point is that we provide a Config.in option to
+allow the user to pass additional options, but we don't actually take
+into account the value of this option when we build our own host-lzip or
+host-xz.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/908aef6c82d56060933713df217b6b2ba21a01b0/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libraw/libraw.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index d76a180..f78ce1e 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -21,10 +21,15 @@ LIBRAW_CONF_OPTS += \
- LIBRAW_LICENSE = LGPLv2.1 or CDDL 1.0 or LibRaw Software License 27032010
- LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL LICENSE.LibRaw.pdf README
- LIBRAW_DEPENDENCIES = host-pkgconf
-+LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
-+LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
- 
- ifeq ($(BR2_PACKAGE_JASPER),y)
- LIBRAW_CONF_OPTS += --enable-jasper
- LIBRAW_DEPENDENCIES += jasper
-+# glibc prior to 2.18 only defines constants such as SIZE_MAX or
-+# INT_FAST32_MAX for C++ code if __STDC_LIMIT_MACROS is defined
-+LIBRAW_CXXFLAGS += -D__STDC_LIMIT_MACROS
- else
- LIBRAW_CONF_OPTS += --disable-jasper
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
