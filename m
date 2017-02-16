@@ -1,30 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 21:21:19 +0100
-Subject: [Buildroot] [PATCH] dbus: security bump to version 1.10.16
-In-Reply-To: <20170216183846.14328-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 16 Feb 2017 19:38:46 +0100")
-References: <20170216183846.14328-1-peter@korsgaard.com>
-Message-ID: <87vas9ga4g.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Feb 2017 21:21:54 +0100
+Subject: [Buildroot] [PATCH master] dbus: security bump to version
+	1.10.16
+In-Reply-To: <20170216191436.18244-1-gustavo@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Thu, 16 Feb 2017 16:14:36 -0300")
+References: <20170216191436.18244-1-gustavo@zacarias.com.ar>
+Message-ID: <87r32xga3h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > From http://www.openwall.com/lists/oss-security/2017/02/16/4
- > The latest dbus release 1.10.16 fixes two symlink attacks in
- > non-production-suitable configurations. I am treating these as bugs
- > rather than practical vulnerabilities, and very much hope neither of
- > these is going to affect any real users, but I'm reporting them to
- > oss-security in case there's an attack vector that I've missed.
+ > Fixes:
+ > * Symlink attack in nonce-tcp transport.
+ > * Symlink attack in unit tests.
 
- > No CVEs assigned so far.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
+I've committed my patch doing the same as it had a more detailed commit
+message, thanks.
 
 -- 
 Bye, Peter Korsgaard
