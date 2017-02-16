@@ -1,50 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 21:20:55 +0100
-Subject: [Buildroot] [git commit] dbus: security bump to version 1.10.16
-Message-ID: <20170216202209.ECE2881F9E@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 16 Feb 2017 21:34:14 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-13
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+Message-ID: <6vehndx4lc.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9556ed90f22185b3abf822f0fe07afea661938a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-From http://www.openwall.com/lists/oss-security/2017/02/16/4
+Am Tue, 14 Feb 2017 14:27:25 +0100 schrieb Thomas Petazzoni:
 
-The latest dbus release 1.10.16 fixes two symlink attacks in
-non-production-suitable configurations. I am treating these as bugs
-rather than practical vulnerabilities, and very much hope neither of
-these is going to affect any real users, but I'm reporting them to
-oss-security in case there's an attack vector that I've missed.
+>>         i586 |                   libcec-4.0.2 | NOK | http://
+autobuild.buildroot.net/results/95bbcebc8768d1be026a83d9437a9b206b94df20
+> 
+> /usr/lib32/libstdc++.so.6: undefined reference to 
+`__towlower_l at GLIBC_2.1'
+> /usr/lib32/libstdc++.so.6: undefined reference to `wmemchr at GLIBC_2.0'
+> /usr/lib32/libstdc++.so.6: undefined reference to `fputs at GLIBC_2.0'
+> 
+> It's incorrectly picking some host libraries, which is wrong. Bernd,
+> you did the bump of libcec, could you fix this?
 
-No CVEs assigned so far.
+I think I found the reason but I have no idea to fix it, sorry.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dbus/dbus.hash | 2 +-
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+libcec-4.0.2/CMakeCache.txt contains these lines:
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 14bee20..af8143d 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	23238f70353e38ce5ca183ebc9525c0d97ac00ef640ad29cf794782af6e6a083  dbus-1.10.14.tar.gz
-+sha256	a7b0ba6ea3e8d0e08afec5e3030d0245614268276620c536726f8fa6e5c43388  dbus-1.10.16.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index c765e0a..2d1583e 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.10.14
-+DBUS_VERSION = 1.10.16
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
- DBUS_LICENSE_FILES = COPYING
+p8-platform_DIR:PATH=/home/bernd/buildroot/buildroot/output/host/usr/i586-
+buildroot-linux-musl/sysroot/usr/lib32/p8-platform
+
+This CMake build step
+
+[ 97%] Linking C executable cecc-client
+
+is done by using these commands:
+
+/home/buildroot/buildroot/output/host/usr/bin/i586-linux-gcc  --sysroot=/
+home/buildroot/buildroot/output/host/usr/i586-buildroot-linux-musl/
+sysroot -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -
+Os  -DNDEBUG   CMakeFiles/cecc-client.dir/cecc-client.c.o  -o cecc-
+client-4.0.2 -Wl,-rpath,/usr/lib32: -rdynamic /home/bernd/buildroot/
+buildroot/output/host/usr/i586-buildroot-linux-musl/sysroot/usr/lib32/
+libp8-platform.so -ldl 
+
+"-Wl,-rpath,/usr/lib32" is the reason for the linking error, imho.
+
+Now the interesting solution:
+
+$ cd /home/buildroot/buildroot/output/host/usr/i586-buildroot-linux-musl/
+sysroot/usr/
+
+$ LC_ALL=C ls -la
+total 24
+drwxr-xr-x  6 buildroot buildroot 4096 Feb 16 21:27 .
+drwxr-xr-x  6 buildroot buildroot 4096 Feb 16 21:24 ..
+drwxr-xr-x  2 buildroot buildroot 4096 Dec  3 16:55 bin
+drwxr-xr-x 20 buildroot buildroot 4096 Feb 16 21:24 include
+drwxr-xr-x  4 buildroot buildroot 4096 Feb 16 21:24 lib
+lrwxrwxrwx  1 buildroot buildroot    3 Dec  3 16:55 lib32 -> lib
+drwxr-xr-x  2 buildroot buildroot 4096 Dec  3 16:55 sbin
+
+$ rm lib32
+
+Now building libcec will work, most likely because the value of p8-
+platform_DIR changed:
+
+p8-platform_DIR:PATH=/home/bernd/buildroot/buildroot/output/host/usr/i586-
+buildroot-linux-musl/sysroot/usr/lib/p8-platform
+
+Regards, Bernd
