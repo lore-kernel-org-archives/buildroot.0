@@ -1,14 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Feb 2017 22:15:56 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-02-15
-In-Reply-To: <20170216191445.GI12810@waldemar-brodkorb.de>
-References: <20170216072900.AAE4920BC6@mail.free-electrons.com>
- <CALdGskKtWsQOyKehenpwZHyaMuYHQ600kiMr4w080DNYGRcBKQ@mail.gmail.com>
- <20170216102154.4f896bea@free-electrons.com>
- <20170216111120.107a7a61@free-electrons.com>
- <20170216191445.GI12810@waldemar-brodkorb.de>
-Message-ID: <20170216221556.59616853@free-electrons.com>
+Date: Thu, 16 Feb 2017 22:19:07 +0100
+Subject: [Buildroot] [PATCH 1/2] wavpack: needs wchar support
+In-Reply-To: <20170216204116.2212-1-joerg.krause@embedded.rocks>
+References: <20170216204116.2212-1-joerg.krause@embedded.rocks>
+Message-ID: <20170216221907.57ac4b8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,36 +12,51 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 16 Feb 2017 20:14:45 +0100, Waldemar Brodkorb wrote:
+On Thu, 16 Feb 2017 21:41:15 +0100, J?rg Krause wrote:
+> Building wavpack using a toolchain without wchar support fails:
+> 
+> ```
+> import_id3.c:37:34: error: unknown type name 'wchar_t'
+> ```
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/9a6/9a693f5b798571917f36cfb7661e2f2638aac550/
+> http://autobuild.buildroot.net/results/44c/44c8227043045baf4f043da44b8129e43dfff687/
+> http://autobuild.buildroot.net/results/a80/a80221dcc0860046ebdf0bbf454e056b1e20df83/
+> .. and more.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-> I have a clear idea what is the problem in uClibc-ng. It is arm
-> specific. But I have trouble to reproduce the czmq issue with the
-> internal static arm toolchain. (simple config, not the autobuild
-> config).
+This dependency is only needed for one specific tool in wavpack added
+by the recent bump to 5.1.0. So I've reported this issue upstream:
 
-You can try to reproduce this build failure:
+  https://github.com/dbry/WavPack/issues/19
 
-  http://autobuild.buildroot.net/results/704/7041b34327b0752d3f4294a5541c785dd9989d51/
+But OK, I agree we don't really care if wavpack needs wchar support, so
+we certainly don't need to wait for the answer to this upstream bug
+report.
 
-It occurs with the internal toolchain. Steps to reproduce:
+> diff --git a/package/wavpack/Config.in b/package/wavpack/Config.in
+> index 1ef3e420d..5a27b2e15 100644
+> --- a/package/wavpack/Config.in
+> +++ b/package/wavpack/Config.in
+> @@ -1,8 +1,12 @@
+>  config BR2_PACKAGE_WAVPACK
+>  	bool "wavpack"
+> +	depends on BR2_USE_WCHAR
 
- mkdir foobar
- cd foobar
- wget http://git.buildroot.net/buildroot-test/plain/utils/br-reproduce-build
- chmod +x br-reproduce-build
- BASE_GIT=/path/to/local/buildroot/git/repository ./br-reproduce-build 7041b34327b0752d3f4294a5541c785dd9989d51
+None of the places that select wavpack need to be fixed for the wchar
+dependency?
 
-> Is there any difference between internal and external static
-> toolchains, when both created with buildroot?
+package/gstreamer/gst-plugins-good/Config.in:   select BR2_PACKAGE_WAVPACK
+package/gstreamer1/gst1-plugins-good/Config.in: select BR2_PACKAGE_WAVPACK
+package/mpd/Config.in:  select BR2_PACKAGE_WAVPACK
 
-The only differences are:
+From a quick look, it seems to be OK, but it would have been to
+indicate it in the commit log (and maybe update the comments in those
+packages to explain why we have the wchar dependency).
 
- 1. host-mpc, host-mpfr and host-gmp are linked statically inside gcc,
-    so that we don't have rpath issues
-
- 2. the toolchain wrapper is tweak to support the moving of files
-    outside of the usr/ subdir that I'm doing as part of the toolchain
-    "packaging"
+Thanks!
 
 Thomas
 -- 
