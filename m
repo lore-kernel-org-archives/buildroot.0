@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Feb 2017 23:14:56 +0100
-Subject: [Buildroot] [PATCH v2 2/2] qt5base: make harfbuzz support
- selectable
-In-Reply-To: <20170213223455.9915-2-ps.report@gmx.net>
+Date: Thu, 16 Feb 2017 23:18:21 +0100
+Subject: [Buildroot] [PATCH v2 1/2] qt5base: use system/buildroot
+ provided freetype
+In-Reply-To: <20170213223455.9915-1-ps.report@gmx.net>
 References: <20170213223455.9915-1-ps.report@gmx.net>
- <20170213223455.9915-2-ps.report@gmx.net>
-Message-ID: <ec4e538c-bd56-a509-7550-fe8d20c401e2@mind.be>
+Message-ID: <e0b026c4-b61d-b294-ab08-fceab41733c3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,81 +14,71 @@ To: buildroot@busybox.net
 
 
 On 13-02-17 23:34, Peter Seiderer wrote:
-> If selected use:
+> Select (and use) builroot provided freetype in case qt5base gui is
+> selected (gui without freetype/font support makes not much sense
+> and gives compile errors).
 > 
->  - system/buildroot harfbuzz in case __sync for 4 bytes is supported
->  - qt harfbuzz otherwise (using QAtomic instead)
+> Qt 5.6 needs some support to find the include headers, 5.8 is
+> clever enough inherently.
+> 
+> Fixes [1] (by avoiding the build-in freetype library which depends
+> on avtivated libpng support):
+     ^^^^^^^^^activated, I guess?
+
+> 
+>   Project ERROR: Library 'libpng' is not defined.
+>   make[3]: *** [sub-3rdparty-freetype-make_first] Error 3
+> 
+> [1] http://autobuild.buildroot.net/results/219162ba616289f799a5053c4dcc6b8574284283
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
 > Changes v1 -> v2:
->  - make harfbuzz support selectable, preferre the system provided
->    one, but fall back to qt provided one
+>  - updated patch description
+>  - checked and fixed for Qt 5.6
 > ---
->  package/qt5/qt5base/Config.in  |  9 +++++++++
->  package/qt5/qt5base/qt5base.mk | 14 ++++++++++++++
->  2 files changed, 23 insertions(+)
+>  package/qt5/qt5base/Config.in  | 1 +
+>  package/qt5/qt5base/qt5base.mk | 5 +++++
+>  2 files changed, 6 insertions(+)
 > 
 > diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-> index 337dcf245..27f225026 100644
+> index f22e034b3..337dcf245 100644
 > --- a/package/qt5/qt5base/Config.in
 > +++ b/package/qt5/qt5base/Config.in
-> @@ -239,6 +239,15 @@ config BR2_PACKAGE_QT5BASE_FONTCONFIG
->  	  This option enables Fontconfig and Freetype support using
->  	  the system fontconfig and freetype2 libraries.
+> @@ -128,6 +128,7 @@ config BR2_PACKAGE_QT5BASE_XML
 >  
-> +config BR2_PACKAGE_QT5BASE_HARFBUZZ
-> +	bool "harfbuzz support"
-> +	select BR2_PACKAGE_HARFBUZZ if BR2_TOOLCHAIN_HAS_SYNC_4
-
- I think we should automatically use system harfbuzz if it is selected, and only
-offer this option if system harfbuzz is not available. So here 'depends on
-!SYNC_4'...
-
-> +	help
-> +	  This option enables HarfBuzz support (either system
-> +	  harfbuzz if the toolchain supports __sync for 4 bytes
-> +	  or qt provided one which avoids this dependenc by using
-> +	  QAtomic).
-> +
->  config BR2_PACKAGE_QT5BASE_GIF
->  	bool "GIF support"
->  	help
+>  config BR2_PACKAGE_QT5BASE_GUI
+>  	bool "gui module"
+> +	select BR2_PACKAGE_FREETYPE
+>  	# At least one graphic backend must be enabled, so enable
+>  	# linuxfb if nothing is enabled.
+>  	select BR2_PACKAGE_QT5BASE_LINUXFB if \
 > diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 3825f5bcc..187388e19 100644
+> index 09bf5cf7b..3825f5bcc 100644
 > --- a/package/qt5/qt5base/qt5base.mk
 > +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -105,6 +105,20 @@ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->  QT5BASE_CONFIGURE_OPTS += -I$(STAGING_DIR)/usr/include/freetype2
->  endif
->  QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_GUI),freetype)
-> +ifeq ($(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_HARFBUZZ),yy)
-> +ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),y)
-> +# system harfbuzz in case __sync for 4 bytes is supported
+> @@ -100,6 +100,11 @@ endif
+>  # We have to use --enable-linuxfb, otherwise Qt thinks that -linuxfb
+>  # is to add a link against the "inuxfb" library.
+>  QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-gui,-no-gui)
+> +QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_GUI),-system-freetype,-no-freetype)
+> +ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
 
- ... and here 'ifeq ($(BR2_PACKAGE_HARFBUZZ),y) ...
+ This should also only be enabled if BR2_PACKAGE_QT5BASE_GUI is y.
 
-> +QT5BASE_CONFIGURE_OPTS += -system-harfbuzz
-> +QT5BASE_DEPENDENCIES   += harfbuzz
-> +else
-
- ... and here 'else ifeq ($(BR2_PACKAGE_QT5BASE_HARFBUZZ),y) ...
-
-> +# qt harfbuzz otherwise (using QAtomic instead)
-> +QT5BASE_CONFIGURE_OPTS += -qt-harfbuzz
-> +QT5BASE_LICENSE := $(QT5BASE_LICENSE), MIT (harfbuzz)
-> +QT5BASE_LICENSE_FILES += src/3rdparty/harfbuzz-ng/COPYING
+> +QT5BASE_CONFIGURE_OPTS += -I$(STAGING_DIR)/usr/include/freetype2
 > +endif
-> +else
-> +QT5BASE_CONFIGURE_OPTS   += -no-harfbuzz
-> +endif
+> +QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_GUI),freetype)
 
- Leave an empty line below and above this conditional block.
+ Since the condition becomes a bit complicated I'd use an ifeq instead of inline
+condition.
 
- Also, it would be more logical IMHO to put it close to openssl.
+ With those small nits fixed you can add my
+ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
+
 
 >  QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_WIDGETS),-widgets,-no-widgets)
 >  QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_LINUXFB),--enable-linuxfb,-no-linuxfb)
