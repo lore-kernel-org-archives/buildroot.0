@@ -1,31 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 19:38:46 +0100
-Subject: [Buildroot] [PATCH] dbus: security bump to version 1.10.16
-Message-ID: <20170216183846.14328-1-peter@korsgaard.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 16 Feb 2017 16:14:36 -0300
+Subject: [Buildroot] [PATCH master] dbus: security bump to version 1.10.16
+Message-ID: <20170216191436.18244-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From http://www.openwall.com/lists/oss-security/2017/02/16/4
+Fixes:
+* Symlink attack in nonce-tcp transport.
+* Symlink attack in unit tests.
 
-The latest dbus release 1.10.16 fixes two symlink attacks in
-non-production-suitable configurations. I am treating these as bugs
-rather than practical vulnerabilities, and very much hope neither of
-these is going to affect any real users, but I'm reporting them to
-oss-security in case there's an attack vector that I've missed.
-
-No CVEs assigned so far.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
  package/dbus/dbus.hash | 2 +-
  package/dbus/dbus.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 14bee2045..af8143d31 100644
+index 14bee20..af8143d 100644
 --- a/package/dbus/dbus.hash
 +++ b/package/dbus/dbus.hash
 @@ -1,2 +1,2 @@
@@ -33,7 +27,7 @@ index 14bee2045..af8143d31 100644
 -sha256	23238f70353e38ce5ca183ebc9525c0d97ac00ef640ad29cf794782af6e6a083  dbus-1.10.14.tar.gz
 +sha256	a7b0ba6ea3e8d0e08afec5e3030d0245614268276620c536726f8fa6e5c43388  dbus-1.10.16.tar.gz
 diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index c765e0ae2..2d1583e55 100644
+index c765e0a..2d1583e 100644
 --- a/package/dbus/dbus.mk
 +++ b/package/dbus/dbus.mk
 @@ -4,7 +4,7 @@
@@ -46,4 +40,4 @@ index c765e0ae2..2d1583e55 100644
  DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
  DBUS_LICENSE_FILES = COPYING
 -- 
-2.11.0
+2.10.2
