@@ -1,108 +1,111 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 09:06:02 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] ntp: security bump to
-	verserion 4.2.8p9
-Message-ID: <20170216090645.89376818D2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Feb 2017 10:21:54 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-02-15
+In-Reply-To: <CALdGskKtWsQOyKehenpwZHyaMuYHQ600kiMr4w080DNYGRcBKQ@mail.gmail.com>
+References: <20170216072900.AAE4920BC6@mail.free-electrons.com>
+ <CALdGskKtWsQOyKehenpwZHyaMuYHQ600kiMr4w080DNYGRcBKQ@mail.gmail.com>
+Message-ID: <20170216102154.4f896bea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d74852e6d8c7d534115d5b977d688f7105c1c45
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
+Hello,
 
-This version of ntp fixes several vulnerabilities.
+Adding the Buildroot mailing list in Cc, as well as Waldemar (uClibc-ng
+maintainer).
 
-CVE-2016-9311
-CVE-2016-9310
-CVE-2016-7427
-CVE-2016-7428
-CVE-2016-9312
-CVE-2016-7431
-CVE-2016-7434
-CVE-2016-7429
-CVE-2016-7426
-CVE-2016-7433
+On Thu, 16 Feb 2017 09:44:39 +0200, Olivier Schonken wrote:
+> Hi Thomas
+> 
+> This looks like it might be a uclibc toolchain issue. Maybe the sequence of
+> including/linking? Looks like a function declaration and definition mixup...
+> 
+> /home/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.4.0/libgcc.a(libunwind.o):
+> In function `_Unwind_Resume':
+> /opt/toolchain-build/build/host-gcc-final-5.4.0/build/arm-buildroot-linux-uclibcgnueabi/libgcc/../../../libgcc/config/arm/libunwind.S:357:
+> multiple definition of `_Unwind_Resume'
+> /home/buildroot/buildroot-test/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(pt-arm-unwind-resume.os):pt-arm-unwind-resume.c:(.text+0x0):
+> first defined here
+> /home/buildroot/buildroot-test/instance-0/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(pt-arm-unwind-resume.os):
+> In function `_Unwind_Resume':
+> pt-arm-unwind-resume.c:(.text+0x2c): undefined reference to
+> `pthread_cancel_init'
+> pt-arm-unwind-resume.c:(.text+0x3c): undefined reference to `__libgcc_s_resume'
+> collect2: error: ld returned 1 exit status
+> make[4]: *** [pdftocairo] Error 1
+> make[3]: *** [all-recursive] Error 1
+> make[2]: *** [all] Error 2
+> make[1]: *** [/home/buildroot/buildroot-test/instance-0/output/build/poppler-0.51.0/.stamp_built]
+> Error 2
+> make: *** [_all] Error 2
+> make: Leaving directory `/home/buildroot/buildroot-test/instance-0/buildroot'
 
-http://www.kb.cert.org/vuls/id/633847
+The exact same build error occurs for czmq:
 
-In addition, libssl_compat.h is now included in many files, which
-references openssl/evp.h, openssl/dsa.h, and openssl/rsa.h.
-Even if a you pass --disable-ssl as a configuration option, these
-files are now required.
+  http://autobuild.buildroot.net/results/517/5179aade1ddfe3975b17f49b534e84ba1a55bdab/build-end.log
 
-As such, I have also added openssl as a dependency, and it is now
-automatically selected when you select ntp.
+/opt/toolchain-build/build/host-gcc-final-5.4.0/build/arm-buildroot-linux-uclibcgnueabi/libgcc/../../../libgcc/config/arm/libunwind.S:357: multiple definition of `_Unwind_Resume'
+/home/test/autobuild/run/instance-3/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(pt-arm-unwind-resume.os):pt-arm-unwind-resume.c:(.text+0x0): first defined here
+/home/test/autobuild/run/instance-3/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(pt-arm-unwind-resume.os): In function `_Unwind_Resume':
+pt-arm-unwind-resume.c:(.text+0x2c): undefined reference to `pthread_cancel_init'
+pt-arm-unwind-resume.c:(.text+0x3c): undefined reference to `__libgcc_s_resume'
 
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ebf6f64b76059e31a85f982cb04f80ad5982dac3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ntp/Config.in |  1 +
- package/ntp/ntp.hash  |  6 +++---
- package/ntp/ntp.mk    | 15 +++++----------
- 3 files changed, 9 insertions(+), 13 deletions(-)
+We have the same issue for glibmm:
 
-diff --git a/package/ntp/Config.in b/package/ntp/Config.in
-index 8ce9a5b..1af02db 100644
---- a/package/ntp/Config.in
-+++ b/package/ntp/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_NTP
- 	bool "ntp"
- 	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Network Time Protocol suite/programs.
- 	  Provides things like ntpd, ntpdate, ntpq, etc...
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index 2a1155b..c6838d8 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,4 +1,4 @@
--# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p8.tar.gz.md5
--md5	4a8636260435b230636f053ffd070e34	ntp-4.2.8p8.tar.gz
-+# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p9.tar.gz.md5
-+md5	857452b05f5f2e033786f77ade1974ed	ntp-4.2.8p9.tar.gz
- # Calculated based on the hash above
--sha256	2ab3d0b5f0456e6311dda1cc27ab75da108762773a19e46abd938bd9407b97ee	ntp-4.2.8p8.tar.gz
-+sha256	b724287778e1bac625b447327c9851eedef020517a3545625e9f652a90f30b72	ntp-4.2.8p9.tar.gz
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 7f9e0d6..edbf1c8 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8p8
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p9
- NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
--NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+NTP_DEPENDENCIES = host-pkgconf libevent openssl $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- NTP_LICENSE = ntp license
- NTP_LICENSE_FILES = COPYRIGHT
- NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
-@@ -17,17 +17,12 @@ NTP_CONF_OPTS = \
- 	--disable-tickadj \
- 	--disable-debugging \
- 	--with-yielding-select=yes \
--	--disable-local-libevent
-+	--disable-local-libevent \
-+	--with-crypto
-+
- # 0002-ntp-syscalls-fallback.patch
- NTP_AUTORECONF = YES
- 
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--NTP_CONF_OPTS += --with-crypto
--NTP_DEPENDENCIES += openssl
--else
--NTP_CONF_OPTS += --without-crypto --disable-openssl-random
--endif
--
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- NTP_CONF_OPTS += --enable-linuxcaps
- NTP_DEPENDENCIES += libcap
+  http://autobuild.buildroot.net/results/fb1/fb14e37aaf453874d1c33e5ed73b9c751ace5ae3/build-end.log
+
+For enchant:
+
+  http://autobuild.buildroot.net/results/70d/70d72b5e767965726a1e5eca437f3efc4af92c86/build-end.log
+
+so that would indeed suggest a toolchain issue rather than a package
+issue. Waldemar, do you understand what's going on here?
+
+Looking at the glibmm failures:
+
+  http://autobuild.buildroot.net/?reason=glibmm-2.50.0
+
+it happens only with the fully static ARM toolchain, and since December
+25, 2016. Enchant started failing on December, 10, and czmq on December
+6. Looking more precisely at the build failures, we can see  that:
+
+ * The earlier build failures from December/January all take place with
+   an internal toolchain configuration, for which BR2_STATIC_LIBS was
+   added.
+
+ * Some of the newer build failures are using a pre-built ARM
+   static-only external toolchain. It's only since my rebuild a few
+   days ago that we started seeing those.
+
+Bottom line: a toolchain change around early December started to cause
+those build failures, and we are now seeing more of them because of the
+recent rebuild of the Buildroot toolchains.
+
+With all those informations at end, I would suspect the following
+commit to be the culprit:
+
+commit a44d7f2dbb19a54a8f2beb5c0f0adb0680999319
+Author: Waldemar Brodkorb <wbx@openadk.org>
+Date:   Sun Dec 4 12:20:27 2016 +0100
+
+    uclibc: update to 1.0.20
+    
+    The test suite is removed from the package and is already a separate
+    package in buildroot. All patches are upstream, so remove them.
+    The UCLIBC_HAS_LFS option is removed upstream.
+    
+    Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+    [Thomas: remove BR2_UCLIBC_INSTALL_TEST_SUITE option, add it to
+    Config.in.legacy.]
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
