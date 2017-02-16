@@ -1,39 +1,54 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 16 Feb 2017 09:26:29 +0100
-Subject: [Buildroot] [PATCH] package/mpd: use proper
-	BR2_PACKAGE_MPD_VERSION_0_19 symbol
-Message-ID: <20170216082629.2296-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Feb 2017 09:26:43 +0100
+Subject: [Buildroot] [git commit] libraw: fix build with old glibc versions
+Message-ID: <20170216082712.7D7E17FC3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 9244ad854 [1] adds a hidden choice between version 0.19 and 0.20. The
-Makefile now uses a wrong symbol introduced by this commit. Fix by:
-s/BR2_MPD_VERSION_0_19/BR2_PACKAGE_MPD_VERSION_0_19.
+commit: https://git.buildroot.net/buildroot/commit/?id=d246cf5fd01bb0d20a0e64194ffed514ea8dd0aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[1] https://git.buildroot.net/buildroot/commit/?id=9244ad854d30e8c942460646ef6f6194ee44942d
+Prior to glibc 2.18, definitions like SIZE_MAX or INT_FAST32_MAX from
+<stdint.h> were only made available for C code, or in C++ if
+__STDC_LIMIT_MACROS was defined.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+The code from jasper uses such definitions, without defining
+__STDC_LIMIT_MACROS. Unfortunately, defining __STDC_LIMIT_MACROS in
+the jasper headers doesn't work, since <stdint.h> has already been
+included before, at a point where __STDC_LIMIT_MACROS was not defined.
+
+So to solve this problem, we simply pass -D__STDC_LIMIT_MACROS in
+CXXFLAGS when building libraw with jasper support.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/908aef6c82d56060933713df217b6b2ba21a01b0/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Note, that this patch is targeted for the master branch.
----
- package/mpd/mpd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libraw/libraw.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 8869176d2..8e71ae214 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -17,7 +17,7 @@ MPD_LICENSE = GPLv2+
- MPD_LICENSE_FILES = COPYING
- MPD_AUTORECONF = YES
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index d76a180..f78ce1e 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -21,10 +21,15 @@ LIBRAW_CONF_OPTS += \
+ LIBRAW_LICENSE = LGPLv2.1 or CDDL 1.0 or LibRaw Software License 27032010
+ LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL LICENSE.LibRaw.pdf README
+ LIBRAW_DEPENDENCIES = host-pkgconf
++LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
++LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
  
--ifeq ($(BR2_MPD_VERSION_0_19),y)
-+ifeq ($(BR2_PACKAGE_MPD_VERSION_0_19),y)
- MPD_DEPENDENCIES += libglib2
+ ifeq ($(BR2_PACKAGE_JASPER),y)
+ LIBRAW_CONF_OPTS += --enable-jasper
+ LIBRAW_DEPENDENCIES += jasper
++# glibc prior to 2.18 only defines constants such as SIZE_MAX or
++# INT_FAST32_MAX for C++ code if __STDC_LIMIT_MACROS is defined
++LIBRAW_CXXFLAGS += -D__STDC_LIMIT_MACROS
+ else
+ LIBRAW_CONF_OPTS += --disable-jasper
  endif
- 
--- 
-2.11.1
