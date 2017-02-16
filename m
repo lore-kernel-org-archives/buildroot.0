@@ -1,176 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Feb 2017 22:57:52 +0100
-Subject: [Buildroot] [PATCH v2 2/2] Add defconfig for MIPS Creator ci40
-In-Reply-To: <1487144021-27808-2-git-send-email-abhimanyu.vishwakarma@imgtec.com>
-References: <1487144021-27808-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
- <1487144021-27808-2-git-send-email-abhimanyu.vishwakarma@imgtec.com>
-Message-ID: <cf739e74-b2a0-f7b9-a2c3-a1406c1392ad@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Feb 2017 23:03:56 +0100
+Subject: [Buildroot] [PATCH v3 2/5] package: add generic support for lz
+	archives
+In-Reply-To: <20170216174124.GB4986@free.fr> (Yann E. MORIN's message of "Thu, 
+ 16 Feb 2017 18:41:24 +0100")
+References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
+ <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
+ <20170215221520.41e4c66e@free-electrons.com>
+ <83572997-616f-8bec-fadb-0a59bbf847ed@mind.be>
+ <20170216174124.GB4986@free.fr>
+Message-ID: <87efyxg5df.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
+Hi,
 
-On 15-02-17 08:33, Abhimanyu V wrote:
-> From: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-> 
-> Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-> Reviewed-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-> ---
->  Changes v1 -> v2
->   - No change
-> 
->  board/ci40/readme.txt  | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
->  configs/ci40_defconfig | 27 +++++++++++++++++++++++++++
->  2 files changed, 76 insertions(+)
->  create mode 100644 board/ci40/readme.txt
->  create mode 100644 configs/ci40_defconfig
-> 
-> diff --git a/board/ci40/readme.txt b/board/ci40/readme.txt
-> new file mode 100644
-> index 0000000..8ce7ed8
-> --- /dev/null
-> +++ b/board/ci40/readme.txt
-> @@ -0,0 +1,49 @@
-> +*********************
-> +* MIPS Creator CI40 *
-> +*********************
-> +
-> +The 'ci40_defconfig' will create a root filesystem and a kernel image
-> +under the 'output/images/' directory. This document will try to explain how
-> +to use them in order to run Buildroot in the MIPS Creator CI40 board.
-> +
-> +The current bootloader by default boot fitImage, so we would need to create
-                                     ^^^^boots a fitImage
+ > Actually, there is a use-case for being able to specify some of those,
+ > at least the downloaders: git, wget, svn, scp...
 
-> +command to be able to boot from uImage. Assuming you are at the U-Boot prompt
-> +of the MIPS Creator CI40, you can use following way to boot.
+ > I use a script that is called in lieue of each downloader:
 
- Why don't you just create a FIT image instead of a legacy uImage? It's a bit
-more involved but not that difficult, is it?
+ >     BR2_WGET="/path/to/wrapper wget --passive-ftp -nd -t 3"
+ >     BR2_GIT="/path/to/wrapper git"
+ >     and so on...
 
- Alternatively, it would be convenient to patch the default U-Boot environment
-to boot a uImage, from SD or USB.
+ > That script is responsible for memorising, for each package, whether it
+ > was downloaded from the primary mirror, the official site, or the backup
+ > mirror, then acts according to where the package was downloaded:
 
-> +
-> +Booting from network (nfsboot)
-> +------------------------------
-> +  pistachio # setenv netboot_legacy 'sf probe 1:0;mtdparts default;setenv bootargs $console $earlycon $netroot nfsroot=$serverip:$rootpath $bootextra $mtdparts;dhcp $loadaddr  $legacy_bootfile; dhcp $fdtaddr $fdtfile;'
-> +
-> +  pistachio # run netboot_legacy
-> +
-> +  It will set variable to boot from tftp server and uses nfsroot
-> +
-> +Booting from USB/MMC
-> +--------------------
-> +Extract the generated root filesystem, uImage and dtb file into a USB drive
-> +or SD-Card. Here you have the instructions to boot from the two of them.
+ >   - from the primary mirror, nothing is done,
 
- It would be a lot more convenient if you would create either of these images
-with genimage.
+ >   - from the official site: it sends the archive to the primary mirror,
+ >     and add it to a report,
 
-> +You have to choose the one your prefer:
-> +
-> +From USB
-> +  pistachio # setenv usbboot_legacy 'sf probe 1:0;mtdparts default;setenv bootargs $console $earlycon $usbroot $bootextra $mtdparts;usb start;ext4load usb $usbdev $fdtaddr $bootdir$fdtfile;ext4load usb $usbdev $loadaddr $bootdir$legacy_bootfile;'
-> +
-> +  pistachio # run usbboot_legacy
-> +
-> +From SD-Card
-> +  pistachio # setenv mmcboot_legacy 'sf probe 1:0;mtdparts default;setenv bootargs $console $earlycon $mmcroot $bootextra $mtdparts;setenv verify n;mmcinfo; mmc dev $mmcdev;ext4load mmc $mmcdev $fdtaddr $bootdir$fdtfile;ext4load mmc $mmcdev $loadaddr $bootdir$legacy_bootfile;'
-> +
-> +  pistachio # run mmcboot_legacy
-> +
-> +Finally boot from the loaded file:
-> +
-> +  pistachio # bootm $loadaddr - $fdtaddr;
+ >   - from the backup site: it sends the archive to the primary mirror,
+ >     and adds it to a report.
 
+ > This is done by a Jenkins job, which gets both reports as the result. If
+ > any of the reports is non-empty, the build is marked failed.
 
- The instructions don't mention what to do with the U-Boot binary that was
-generated by the defconfig. It's a bit useless to build U-Boot if you then don't
-use it.
+ > This allows us to:
 
-> +
-> +
-> +Online docs
-> +-----------
-> +mostly for openwrt but it also applicable on buildroot
-> +https://docs.creatordev.io/ci40/guides/openwrt-platform/#overview
-> +
-> +Prebuilt uboot
-> +--------------
-> +http://downloads.creatordev.io/?q=u-boot/
-> diff --git a/configs/ci40_defconfig b/configs/ci40_defconfig
-> new file mode 100644
-> index 0000000..5363347
-> --- /dev/null
-> +++ b/configs/ci40_defconfig
-> @@ -0,0 +1,27 @@
-> +BR2_mipsel=y
-> +BR2_mips_32r2=y
-> +# BR2_MIPS_SOFT_FLOAT is not set
-> +BR2_TOOLCHAIN_EXTERNAL=y
-> +BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS=y
+ >   - automatically track new dependencies added by Joe Random Developer,
+ >     especially transitive dependencies he might not be aware of,
 
- We normally use uClibc toolchains, unless when there is a *very* good reason
-not to. We *never* use external toolchains in the defconfigs.
+ >   - automatically feed our local mirror so we are not dependent on
+ >     upstream or s.b.o.
 
-> +BR2_TARGET_GENERIC_HOSTNAME="Ci40"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Ci40"
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
-> +BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-
- Since the bootargs you set in the instructions above include a setting of a
-console, this shouldn't be needed, the default /dev/console should work.
-
-> +BR2_SYSTEM_DHCP="eth0"
-> +BR2_ENABLE_LOCALE_WHITELIST="C en_US en_GB"
-
- We normally don't change the default for this.
-
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/CreatorDev/linux.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2319a2476a2bc0c582a9811cd45a6fa3c0beba37"
-
- You can use a custom tarball and $(github-helper). Much more efficient to download.
-
- Admittedly, we currently don't use github-helper anywhere in the defconfigs,
-but we probably should.
-
-> +BR2_LINUX_KERNEL_DEFCONFIG="pistachio"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="img/pistachio_marduk"
-> +BR2_PACKAGE_LINUX_FIRMWARE=y
-
- If you don't select any firmware blob, then this package does nothing. Or am I
-missing something?
-
-> +BR2_PACKAGE_UCCP420WLAN=y
-
- If you include a Wifi driver/firmware, it makes sense to also include the
-minimal toolset to use it. See e.g. imx6ulpico_defconfig.
-
- BTW, it's also nice to insert comment lines like in that defconfig.
-
- Regards,
- Arnout
-
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARDNAME="pistachio_marduk"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/CreatorDev/u-boot/archive/v1.0.4.tar.gz"
-> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-pistachio_marduk-2015.10-v1.0.4.img"
-> 
+Nice, but presumably you could also simply create a directory with
+wget/git/svn/.. symlinks to your wrapper and prepend that to your path
+before running buildroot, and then change the wrapper to do its stuff
+and call further in the path for the real tool, similar to the recently
+added date wrapper for reproducable builds?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
