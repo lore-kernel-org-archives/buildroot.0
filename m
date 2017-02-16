@@ -1,82 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 16 Feb 2017 18:21:11 +0100
-Subject: [Buildroot] [PATCH 1/7 v4] docs/manual: document the test-pkg
- script
-In-Reply-To: <20170215232547.24a6cb92@free-electrons.com>
-References: <cover.1487195062.git.yann.morin.1998@free.fr>
- <85dd7875a12e1ceb9dab2f006dd34a8259836729.1487195062.git.yann.morin.1998@free.fr>
- <20170215232547.24a6cb92@free-electrons.com>
-Message-ID: <20170216172111.GA4986@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 16 Feb 2017 18:24:56 +0100
+Subject: [Buildroot] [PATCH v3 2/5] package: add generic support for lz
+ archives
+In-Reply-To: <20170216093405.24f25e54@free-electrons.com>
+References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
+ <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
+ <20170215221520.41e4c66e@free-electrons.com>
+ <83572997-616f-8bec-fadb-0a59bbf847ed@mind.be>
+ <20170216083206.2064b783@free-electrons.com>
+ <19a785a4-beaf-92dd-c53b-6e81dde24c7d@mind.be>
+ <20170216093405.24f25e54@free-electrons.com>
+Message-ID: <cb714032-ddc6-ca8b-9879-f570f028f7b7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On 2017-02-15 23:25 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 15 Feb 2017 22:44:29 +0100, Yann E. MORIN wrote:
-[--SNIP--]
-> > +The results mean:
-> > +
-> > +* `OK`: the build was successful
-> > +* `SKIPPED`: one or more config options from the config snippet were
-> > +  missing in the resulting configuration; inspect the file +config.missing+
-> > +  in the output build directory (+~/br-test-pkg/TOOLCHAIN_NAME/+ by
-> > +  default)
+
+On 16-02-17 09:34, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I would expand this explanation a bit here. As you wrote it might seem
-> like it is not normal for a toolchain to be skipped. What about instead:
+> On Thu, 16 Feb 2017 09:25:55 +0100, Arnout Vandecappelle wrote:
 > 
->  `SKIPPED`: one or more configuration options listed in the config
->  snipped were not present in the final configuration. This is due to
->  options having dependencies not satisfied by the toolchain, such as
->  for example a package that +depends on BR2_USE_MMU+ with a noMMU
->  toolchain.
-
-Very good, thanks! :-)
-
-I'll keep the part that says where such missing options are stored,
-though.
-
-> > +When there are failures, you can just re-run the script with the same
-> > +options (after you fixed your package); the script will attempt to re-build
-> > +the package for all toolchains, without the need to re-build all the
-> > +dependencies of that package (but it requires the +-p+ optiopn, see below).
+>>> BR2_LZCAT does not specify only the path to the lzcat program, but also
+>>> its options. And we completely ignore those custom options if the
+>>> lzcat built by Buildroot is used.  
+>>
+>>  It is possible to provide extra options, but these are completely useless.
+>> Well, actually, lzcat is the first one with an option that could be useful:
+>> --threads, to decompress over several cores. Except that --threads isn't
+>> implemented yet for decompression. So, although it is possible to add extra
+>> options in BR2_LZCAT, it just makes no sense.
 > 
-> "see below" ? but there's nothing below.
+> My point is not whether it makes sense or not to be able to pass
+> options to lzip. My point is that we provide a Config.in option to
+> allow the user to pass additional options, but we don't actually take
+> into account the value of this option when we build our own host-lzip or
+> host-xz.
 
-Doh... I initially listed all the options in a paragraph below, but
-decided against, because it was duplicating the help text of the script
-and instead just instructed the user to run the script with -h.
+ My point is that we *don't* have an option to be able to pass options to lzip.
+We have an option to be able to provide an alternative path to lzip, and when
+you use that option you have to remember to add the correct arguments as well.
 
-And I forgot to remove that blurb here. Will fix.
-
-Actually, I think that running the script without specifying the package
-is incorrect. One can not expect to restart correctly in this case.
-
-For example, say package A has a dependency on package B, but the user
-forgot to add it in A_DEPEDENCIES. The buildsystem of the package if
-foobared enough that it incorrectly checks at configure time, but uses
-configure-time variables to link with a lib (this situation does happen).
-
-The build fails, the user fixes the dependencies, and rstart the build.
-But then, configure is not run, and the build still fails, which leaves
-the user in the dark...
-
-While specifying the package ensures the build wil start afresh for that
-package thanks to the dirclean.
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
