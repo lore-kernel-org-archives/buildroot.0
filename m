@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 17 Feb 2017 21:48:25 +0100
-Subject: [Buildroot] CPU allocation for a thread with CPU_SET, CPU_ZERO
-In-Reply-To: <1953704638.2126656.1487343023965@mail.yahoo.com>
-References: <1953704638.2126656.1487343023965.ref@mail.yahoo.com>
- <1953704638.2126656.1487343023965@mail.yahoo.com>
-Message-ID: <01640808-a298-6079-675c-0ab53297971a@mind.be>
+Date: Fri, 17 Feb 2017 22:00:45 +0100
+Subject: [Buildroot] [RFC] host-packages debugging config
+In-Reply-To: <CAGszK3i=BkQKFMdbmH+_-oxVWh=i3LDXvZf=7nScrPP4Zg2deA@mail.gmail.com>
+References: <CAGszK3i=BkQKFMdbmH+_-oxVWh=i3LDXvZf=7nScrPP4Zg2deA@mail.gmail.com>
+Message-ID: <218e349f-6b7b-de1b-2220-39011ccd54ac@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,78 +12,63 @@ To: buildroot@busybox.net
 
 
 
-On 17-02-17 15:50, thierry.xenomai43 at yahoo.com wrote:
-> My target is a RaspberryPi 3 and I use Buildroot 2016.11.2RT + uclib 1.0.19 + PREEMPT_RT patch.
+On 13-02-17 08:09, Jan Heylen wrote:
+> Hi,
+> 
+> I was debugging a tool on 'host', and therefore I enabled BR2_ENABLE_DEBUG.
+> Although the documentation doesn't explicitly mention it is only for target
+> packages, it is only for target packages ;-) ...  it does already mention 'all
+> libs and bins in the staging' where host packages don't go.
+> 
+> So either I propose to explicitly state it in the documentation:
+> 
+> diff --git a/Config.in b/Config.in
+> index ccd777e..e9d54a2 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -368,7 +368,7 @@ config BR2_CCACHE_USE_BASEDIR
+>  endif
+>  
+>  config BR2_ENABLE_DEBUG
+> -       bool "build packages with debugging symbols"
+> +       bool "build target packages with debugging symbols"
+>         help
+>           Build packages with debugging symbols enabled. All libraries
+                 ^ here as well.
 
- I assume you do have threads enabled?
+>           and binaries in the 'staging' directory will have debugging
+> 
+> or to avoid confusion with 'stripped' target:
+> 
+> diff --git a/Config.in b/Config.in
+> index ccd777e..e9d54a2 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -368,7 +368,7 @@ config BR2_CCACHE_USE_BASEDIR
+>  endif
+>  
+>  config BR2_ENABLE_DEBUG
+> -       bool "build packages with debugging symbols"
+> +       bool "build target (staging) packages with debugging symbols"
 
-[snip]
->>>> My source code is the next:
-> -----------------------------------------------------------------------
-> #ifndef __USE_GNU
-> #define __USE_GNU
-> #endif
-> #ifndef __UCLIBC_LINUX_SPECIFIC__
-> #define __UCLIBC_LINUX_SPECIFIC__
-> #endif
+ No, it's really target packages that are built with debugging symbols, and as
+explained in the help text the target directory will get stripped.
 
- As explained in the man page, you should define _GNU_SOURCE instead of these.
+>         help
+>           Build packages with debugging symbols enabled. All libraries
+>           and binaries in the 'staging' directory will have debugging
+> 
+> 
+> Or (e.g. for Makefile.in here) I change the facts and also enable debugging on
+> host packages with that option enabled: (and mention it in the documentation)
 
-> /*
-> #include
-> "/home/thierry/MesProgrammes/C/buildroot/buildroot-2016.11.2RT_PREEMPT/output/build/uclibc-1.0.19/include/sched.h"
-
- What gets used is .../output/staging/usr/include/sched.h, but that should just
-be a copy of this file.
-
-> */
-> #include <sched.h>
-
- This *should* actually be sufficient. You don't pass something like
--I/usr/include, do you?
-
- You can compile with -E instead of -c to see what exactly gets #included and
-where the symbols get defined (or not).
-
+ For the host packages, I'd always build them with debugging symbols. That
+rarely makes a huge difference. Adding options isn't much use.
 
  Regards,
  Arnout
 
-> #include <stdio.h>
-> #include <pthread.h>
-> #include <semaphore.h>
-> #include <time.h>
-> #include <stdlib.h>
-> #include <unistd.h>
-> [...]
-> int main ()
-> {
-> pthread_t tid1, tid2, tid3;
-> cpu_set_t thecpus;
-> CPU_ZERO(&thecpus);
-> CPU_SET(0, &thecpus);
-> if (sched_setaffinity(getpid(), sizeof(cpu_set_t), &thecpus)< 0)
->    perror("set affinity");
-> [...]
-> }
-> -----------------------------------------------------------------------
-> 
-> When I put a volontary syntax error on
-> ?<Buildroot>/output/build/uclib-1.0.19/include/sched.h? I never get error when I
-> make.
-> I think that the compilator don't watch a good 'sched.h' file
-> Do you think that is a bad path configuration?
-> 
-> Regard,
-> Thierry
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
