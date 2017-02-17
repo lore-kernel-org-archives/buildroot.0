@@ -1,24 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Feb 2017 23:23:34 +0000
-Subject: [Buildroot] [Bug 9456] mkusers script bash errors
-In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
-References: <bug-9456-163@https.bugs.busybox.net/>
-Message-ID: <bug-9456-163-X1e7nlEwfc@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 17 Feb 2017 16:25:48 +0100
+Subject: [Buildroot] [git commit] ffmpeg: remove example source code from
+	target
+Message-ID: <20170301170421.D85A182297@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9456
+commit: https://git.buildroot.net/buildroot/commit/?id=194cb3f32087736581b02813dcb549a83c90910e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #13 from paulstewartis at gmail.com <paulstewartis@gmail.com> ---
-(In reply to Yann E. MORIN from comment #12)
+There does not appear to be a way to configure the example code
+installation, so this mod gets rid of it with a post-install hook.
 
-"Wild guess: your users table file does not have CR-LF endings, does it?"
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ffmpeg/ffmpeg.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-LF only.  I tried both by the way.  No difference either way.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 4447b72..449cca2 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -496,4 +496,9 @@ define FFMPEG_CONFIGURE_CMDS
+ 	)
+ endef
+ 
++define FFMPEG_REMOVE_EXAMPLE_SRC_FILES
++	rm -rf $(TARGET_DIR)/usr/share/ffmpeg/examples
++endef
++FFMPEG_POST_INSTALL_TARGET_HOOKS += FFMPEG_REMOVE_EXAMPLE_SRC_FILES
++
+ $(eval $(autotools-package))
