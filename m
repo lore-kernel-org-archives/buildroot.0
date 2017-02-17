@@ -1,62 +1,62 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 17 Feb 2017 22:48:49 +0100
-Subject: [Buildroot] [PATCH] uclibc: define struct ucontext for or1k
-Message-ID: <20170217214849.GA29072@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Feb 2017 22:52:31 +0100
+Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
+ Kodi-specific patches
+In-Reply-To: <p1ujndxbuq.ln2@ID-313208.user.individual.net>
+References: <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20170205212408.GC3562@free.fr>
+ <i6vmmdxipi.ln2@ID-313208.user.individual.net>
+ <rk5nmdxipi.ln2@ID-313208.user.individual.net>
+ <20170209232937.2a071f11@free-electrons.com>
+ <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
+ <20170212135110.61e55c66@free-electrons.com>
+ <XnsA71FC7BAC87A6ID313208userindividu@bernd-kuhls.de>
+ <20170217185434.GB3470@free.fr>
+ <p1ujndxbuq.ln2@ID-313208.user.individual.net>
+Message-ID: <20170217215231.GD3470@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add missing define for struct ucontext for OpenRISC.
+Bernd,
 
-Fixes:
-  http://autobuild.buildroot.net/results/d8715a2b3783d877edf91bb14a80d36eac749b36
+On 2017-02-17 20:03 +0100, Bernd Kuhls spake thusly:
+> Am Fri, 17 Feb 2017 19:54:34 +0100 schrieb Yann E. MORIN:
+> 
+> > Except that those managed by Kodi would be downloaded at configure or
+> > build time, not when doing 'make source', so we could not do an off-line
+> > build. That alone would warrant they be separate packages, IMHO.
+> 
+> 'make source' just downloaded
+> 
+>  https://github.com/xbmc/libdvdcss/archive/2f12236.tar.gz
+>  https://github.com/xbmc/libdvdnav/archive/43b5f81.tar.gz
+>  https://github.com/xbmc/libdvdread/archive/17d99db.tar.gz
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- ...3-or1k-add-missing-definition-of-ucontext.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/uclibc/0003-or1k-add-missing-definition-of-ucontext.patch
+That's supposing that we do patch the existing libdvd* packages with the
+kodi patches.
 
-diff --git a/package/uclibc/0003-or1k-add-missing-definition-of-ucontext.patch b/package/uclibc/0003-or1k-add-missing-definition-of-ucontext.patch
-new file mode 100644
-index 0000000..7c60228
---- /dev/null
-+++ b/package/uclibc/0003-or1k-add-missing-definition-of-ucontext.patch
-@@ -0,0 +1,33 @@
-+From 228d03bf0032e5799e9bf04810170c0653ca846d Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Fri, 17 Feb 2017 22:33:49 +0100
-+Subject: [PATCH] or1k: add missing definition of ucontext
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ libc/sysdeps/linux/or1k/sys/ucontext.h | 10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/libc/sysdeps/linux/or1k/sys/ucontext.h b/libc/sysdeps/linux/or1k/sys/ucontext.h
-+index b11928e..dd97b60 100644
-+--- a/libc/sysdeps/linux/or1k/sys/ucontext.h
-++++ b/libc/sysdeps/linux/or1k/sys/ucontext.h
-+@@ -20,6 +20,14 @@
-+ 
-+ #include <features.h>
-+ #include <signal.h>
-+-#include <asm/ucontext.h>
-++#include <bits/sigcontext.h>
-++
-++typedef struct ucontext {
-++	unsigned long	  uc_flags;
-++	struct ucontext  *uc_link;
-++	stack_t		  uc_stack;
-++	struct sigcontext uc_mcontext;
-++	sigset_t	  uc_sigmask;	/* mask last for extensibility */
-++} ucontext_t;
-+ 
-+ #endif /* sys/ucontext.h */
-+-- 
-+2.1.4
-+
+Which I am not too fond of to start with, hence all the discussion we're
+having about it...
+
+But...
+
+If the patched version are still compatible with the unpatched version
+(i.e. it offers a superset of the API), then that could probably be
+acceptable (and thus forget about that case in my previous table).
+
+Damned, can't the Kodi folks work with upstream to add features rather
+than fork? Sigh...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
