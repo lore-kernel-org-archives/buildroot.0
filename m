@@ -1,212 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Feb 2017 17:33:10 +0100
-Subject: [Buildroot] [PATCH next] board: add support for nexbox a95x
-Message-ID: <20170217163310.6929-1-peter@korsgaard.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Fri, 17 Feb 2017 18:06:30 +0100
+Subject: [Buildroot] [PATCH] package/opengl: ensure consistency between
+	the various providers
+In-Reply-To: <20170217110436.0366d6f8@free-electrons.com>
+References: <1487106796-15403-1-git-send-email-yann.morin.1998@free.fr>
+ <20684119.X7ZmMtA3r5@sagittae> <20170217110436.0366d6f8@free-electrons.com>
+Message-ID: <1840733.CQJu1ZPUIS@sagittae>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nexbox A95X is a low cost Android STB based around an Amlogic s905(x) SoC
-(quad A53), 8/16GB eMMC and 1/2GB RAM.
+On Friday 17 February 2017 11:04:36 CET Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 17 Feb 2017 09:34:38 +0100, J?r?me Pouiller wrote:
+> 
+> > On Thursday 16 February 2017 18:46:10 CET Arnout Vandecappelle wrote:
+> > > 
+> > > On 14-02-17 22:13, Yann E. MORIN wrote:  
+> > > > Some GL providers will provide libegl and libgles, but not libgl, while
+> > > > other will provide libgl but not libegl not libgles. This can be the
+> > > > case with:
+> > > >   - mesa3d       -> libgl
+> > > >   - rpi-userland -> libegl and libgles  
+> > 
+> > Unfortunately, as far as I remember, this kind of configuration is
+> > necessary to build xdriver_xf86-video-imx-viv. Mesa is necessary to
+> > build GLX support but, EGL/GLes have to be provided by imx-gpu-viv.
+> 
+> Nope, it's not actually needed. Even with xdriver_xf86-video-imx-viv,
+> the OpenGL provider is imx-gpu-viv, as it's ultimately the one that
+> provides libGL.so.
 
-Both the s905 (gxbb) and s905x (gxl) variant is supported.
+Yes, replace "necessary" by "currently used" in my sentence.
 
-This defconfig uses mainline Linux.  As the mainline support for s905 is
-quite young, use the latest release candidate.  There is currently no
-support for this board in U-Boot or sources available for the vendor U-Boot,
-so the defconfig doesn't build a u-boot and instead uses the existing U-Boot
-available in the eMMC.  This also means that we need to wrap the kernel as
-uImage, which isn't suppported for aarch64.  Instead this is done in the
-post-build script.
+> However, it is true that imx-gpu-viv is a special case as it provides a
+> libGL.so that itself uses libraries provided by Mesa.
+> 
+> So the hack I've done so far is:
+> 
+> -	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7 && !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+> 
+> and:
+> 
+> -	default "mesa3d" if BR2_PACKAGE_XORG7
+> +	default "mesa3d" if BR2_PACKAGE_XORG7 && !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+>  
+> This is a quick hack, but it allows mesa3d to *NOT* be seen as an
+> OpenGL provider if imx-gpu-viv X11 support is enabled.
+> 
+> So I still think the rule should be: we support only one OpenGL
+> provider. And the rest should be solved by exposing mesa3d as an OpenGL
+> provider or not depending on Config.in options.
 
-Mainline aarch64 defconfig builds most drivers modular, so add mdev for
-module autoloading.
+I agree. Give me a few days to prepare a patch that do that.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/nexbox/a95x/boot.txt      | 11 ++++++++++
- board/nexbox/a95x/genimage.cfg  | 28 ++++++++++++++++++++++++
- board/nexbox/a95x/post-build.sh | 12 +++++++++++
- board/nexbox/a95x/post-image.sh | 14 ++++++++++++
- board/nexbox/a95x/readme.txt    | 48 +++++++++++++++++++++++++++++++++++++++++
- configs/nexbox_a95x_defconfig   | 19 ++++++++++++++++
- 6 files changed, 132 insertions(+)
- create mode 100644 board/nexbox/a95x/boot.txt
- create mode 100644 board/nexbox/a95x/genimage.cfg
- create mode 100755 board/nexbox/a95x/post-build.sh
- create mode 100755 board/nexbox/a95x/post-image.sh
- create mode 100644 board/nexbox/a95x/readme.txt
- create mode 100644 configs/nexbox_a95x_defconfig
 
-diff --git a/board/nexbox/a95x/boot.txt b/board/nexbox/a95x/boot.txt
-new file mode 100644
-index 000000000..b538b4a9a
---- /dev/null
-+++ b/board/nexbox/a95x/boot.txt
-@@ -0,0 +1,11 @@
-+setenv bootargs console=ttyAML0,115200 earlyprintk root=/dev/mmcblk1p2 rootwait
-+
-+fatload mmc 0:1 0x01080000 uImage
-+
-+if itest.s "${aml_dt}" == "gxl_p212_2g"; then
-+	fatload mmc 0:1 $dtb_mem_addr meson-gxl-nexbox-a95x.dtb
-+else
-+	fatload mmc 0:1 $dtb_mem_addr meson-gxbb-nexbox-a95x.dtb
-+fi
-+
-+bootm 0x1080000 - $dtb_mem_addr
-diff --git a/board/nexbox/a95x/genimage.cfg b/board/nexbox/a95x/genimage.cfg
-new file mode 100644
-index 000000000..c6c80f860
---- /dev/null
-+++ b/board/nexbox/a95x/genimage.cfg
-@@ -0,0 +1,28 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"uImage",
-+			"meson-gxbb-nexbox-a95x.dtb",
-+			"meson-gxl-nexbox-a95x.dtb",
-+			"boot.scr"
-+		}
-+	}
-+	size = 32M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/nexbox/a95x/post-build.sh b/board/nexbox/a95x/post-build.sh
-new file mode 100755
-index 000000000..9f4cc0451
---- /dev/null
-+++ b/board/nexbox/a95x/post-build.sh
-@@ -0,0 +1,12 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+MKIMAGE=$HOST_DIR/usr/bin/mkimage
-+
-+$MKIMAGE -C none -A arm64 -T script -d $BOARD_DIR/boot.txt $BINARIES_DIR/boot.scr
-+
-+# vendor u-boot uses uImage
-+if [ -e $BINARIES_DIR/Image ]; then
-+    $MKIMAGE -A arm64 -O linux -T kernel -C none -a 0x1080000 -e 0x1080000 \
-+	     -n linux -d $BINARIES_DIR/Image $BINARIES_DIR/uImage
-+fi
-diff --git a/board/nexbox/a95x/post-image.sh b/board/nexbox/a95x/post-image.sh
-new file mode 100755
-index 000000000..359b4c9e7
---- /dev/null
-+++ b/board/nexbox/a95x/post-image.sh
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                               \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-diff --git a/board/nexbox/a95x/readme.txt b/board/nexbox/a95x/readme.txt
-new file mode 100644
-index 000000000..e08b4e4e6
---- /dev/null
-+++ b/board/nexbox/a95x/readme.txt
-@@ -0,0 +1,48 @@
-+Nexbox A95X
-+
-+Intro
-+=====
-+
-+Nexbox A95X is a low cost Android STB based around an Amlogic s905(x) SoC
-+(quad A53), 8/16GB eMMC and 1/2GB RAM.  To use this defconfig, wires to the
-+internal UART solder pads must be added.  See the linux-meson page for
-+details:
-+
-+http://linux-meson.com/doku.php?id=nexbox_a95x_s905
-+
-+Both the s905 (gxbb) and s905x (gxl) variant is supported.
-+
-+This default configuration will allow you to start experimenting with the
-+buildroot environment for the A95X.  With the current configuration it will
-+bring-up the board from microSD, and allow access through the serial
-+console.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot:
-+
-+    $ make nexbox_a95x_defconfig
-+
-+Compile everything and build the SD card image:
-+
-+    $ make
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto a microSD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+How to boot
-+===========
-+
-+Insert microSD card and connect serial cable. Power board and stop
-+U-Boot by pressing any key. Boot the system by typing:
-+
-+fatload mmc 0:1 0x1070000 boot.scr
-+autoscr 0x1070000
-diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
-new file mode 100644
-index 000000000..fe02efd8e
---- /dev/null
-+++ b/configs/nexbox_a95x_defconfig
-@@ -0,0 +1,19 @@
-+BR2_aarch64=y
-+BR2_KERNEL_HEADERS_4_9=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10-rc8"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-nexbox-a95x"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
-2.11.0
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
