@@ -1,44 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 21:55:50 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.10
-Message-ID: <20170301170422.CBBA980279@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 17 Feb 2017 16:49:50 +0100
+Subject: [Buildroot] [git commit] poppler: bump to version 0.52.0
+Message-ID: <20170301170422.19F3E82297@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=400eaa3452e9380ec77ac62266530055506ea6e7
+commit: https://git.buildroot.net/buildroot/commit/?id=897f7f124245f95fca334acfa77ffd7aaadb5f88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/poppler/poppler.hash | 2 +-
+ package/poppler/poppler.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 740dd39..7f18219 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index af597e0..1c57ef3 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	e997c9ad81a8372f2dd03a02b00692b8cc479c220340c8881edaca540f402c1f	poppler-0.51.0.tar.xz
++sha256	528b661738839f9a25f6e580fcd2d5db007e0a1948580c6489f0062798ca1992	poppler-0.52.0.tar.xz
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index fda8284..5c2d096 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.9.9)"
-+	bool "Latest version (4.10)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,11 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
-+<<<<<<< a1e02440f3035cfbe5119c00457b3e1c2f7ac4d1
- 	default "4.9.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+=======
-+	default "4.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+>>>>>>> linux: bump default to version 4.10
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-POPPLER_VERSION = 0.51.0
++POPPLER_VERSION = 0.52.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = http://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
