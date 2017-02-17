@@ -1,61 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 21:56:41 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump to 4.10 kernel version
-Message-ID: <20170301170422.EA26B80279@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 17 Feb 2017 23:42:29 +0100
+Subject: [Buildroot] [git commit] boards/nanopi-neo: update defconfig
+Message-ID: <20170301170422.359698229D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cc0c0dc82b62433d697f8dc811ed8ce3b51daea
+commit: https://git.buildroot.net/buildroot/commit/?id=217d68bdf543f14853cda2675d005206a9ce2f83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-headers/Config.in.host | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+- update to released kernel and U-Boot,
+- move the headers config closer to the kernel ones,
+- update readme.txt.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b1d117a..3610426 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_4_9
-+	default BR2_KERNEL_HEADERS_4_10
- 	help
- 	  Select the kernel version to get headers from.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/nanopi-neo/readme.txt  |  7 +++----
+ configs/nanopi_neo_defconfig | 11 +++++------
+ 2 files changed, 8 insertions(+), 10 deletions(-)
+
+diff --git a/board/nanopi-neo/readme.txt b/board/nanopi-neo/readme.txt
+index 95fc628..539df54 100644
+--- a/board/nanopi-neo/readme.txt
++++ b/board/nanopi-neo/readme.txt
+@@ -2,7 +2,7 @@ Intro
+ =====
  
-@@ -67,6 +67,10 @@ choice
- 		bool "Linux 4.9.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+ The instructions herein are valid for the FriendlyARM NanoPi NEO,
+-both the 256MiB and 512MiB versions. They should also work the the
++both the 256MiB and 512MiB versions. They should also work for the
+ NanoPi NEO Air, but this is untested so far.
  
-+	config BR2_KERNEL_HEADERS_4_10
-+		bool "Linux 4.10.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+ The FriendlyARM Nanopi NEO is a 4x4cm?? board with an Allwiner H3 SoC:
+@@ -14,9 +14,8 @@ The FriendlyARM Nanopi NEO is a 4x4cm?? board with an Allwiner H3 SoC:
+   - 10/100 ethernet MAC
+   - GPIOs, SPI, I2c...
+ 
+-Support for the Nanopi NEO in U-Boot and Linux is very recent, so
+-much so that we have to use an -rc tag for U-Boot and a special
+-Linux tree.
++Support for the Nanopi NEO in U-Boot and Linux is very recent, so only
++core, basic features are available.
+ 
+ Unfortunately, support for the ethernet MAC and the USB OTG are not
+ yet upstream, but are being actively worked on.
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index ba4534a..958c976 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -2,19 +2,18 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-# Cannot use same headers as the kernel, because kernel is 4.9
+-# and we only know 4.8 at best so far
+-BR2_KERNEL_HEADERS_4_8=y
+-
+ BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/nanopi-neo/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nanopi-neo/post-image.sh"
+ 
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
 +
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- endchoice
-@@ -87,6 +91,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10
-+	bool "4.10.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9
- 	bool "4.9.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-@@ -224,5 +232,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.48"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.9"		if BR2_KERNEL_HEADERS_4_9
-+	default "4.10"		if BR2_KERNEL_HEADERS_4_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ # Use a -rc kernel to get the DTS
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9-rc3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.10"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
+@@ -23,7 +22,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.11-rc3"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
