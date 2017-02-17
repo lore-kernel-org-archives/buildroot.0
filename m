@@ -1,54 +1,30 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Feb 2017 22:52:31 +0100
-Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
- Kodi-specific patches
-In-Reply-To: <p1ujndxbuq.ln2@ID-313208.user.individual.net>
-References: <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20170205212408.GC3562@free.fr>
- <i6vmmdxipi.ln2@ID-313208.user.individual.net>
- <rk5nmdxipi.ln2@ID-313208.user.individual.net>
- <20170209232937.2a071f11@free-electrons.com>
- <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
- <20170212135110.61e55c66@free-electrons.com>
- <XnsA71FC7BAC87A6ID313208userindividu@bernd-kuhls.de>
- <20170217185434.GB3470@free.fr>
- <p1ujndxbuq.ln2@ID-313208.user.individual.net>
-Message-ID: <20170217215231.GD3470@free.fr>
+Date: Fri, 17 Feb 2017 23:01:00 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-02-16
+In-Reply-To: <20170217211242.GC3470@free.fr>
+References: <20170217072852.8329420B82@mail.free-electrons.com>
+ <20170217211242.GC3470@free.fr>
+Message-ID: <20170217220100.GE3470@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+All,
 
-On 2017-02-17 20:03 +0100, Bernd Kuhls spake thusly:
-> Am Fri, 17 Feb 2017 19:54:34 +0100 schrieb Yann E. MORIN:
-> 
-> > Except that those managed by Kodi would be downloaded at configure or
-> > build time, not when doing 'make source', so we could not do an off-line
-> > build. That alone would warrant they be separate packages, IMHO.
-> 
-> 'make source' just downloaded
-> 
->  https://github.com/xbmc/libdvdcss/archive/2f12236.tar.gz
->  https://github.com/xbmc/libdvdnav/archive/43b5f81.tar.gz
->  https://github.com/xbmc/libdvdread/archive/17d99db.tar.gz
+On 2017-02-17 22:12 +0100, Yann E. MORIN spake thusly:
+> >         i686 | freerdp-17834af7bb378f85a3b... | NOK | http://autobuild.buildroot.net/results/b7f95e39d5b6984594fbf1e7549ddb3cf281600c
+> Tries to link with host libraries. I'll take it.
 
-That's supposing that we do patch the existing libdvd* packages with the
-kodi patches.
+I was not able to reproduce... :-(
 
-Which I am not too fond of to start with, hence all the discussion we're
-having about it...
+> >         or1k |                      gpsd-3.16 | NOK | http://autobuild.buildroot.net/results/c24dd55e773167be182f40ae723e82d3f71c6eba
+>     error: field 'uc_mcontext' has incomplete type
 
-But...
-
-If the patched version are still compatible with the unpatched version
-(i.e. it offers a superset of the API), then that could probably be
-acceptable (and thus forget about that case in my previous table).
-
-Damned, can't the Kodi folks work with upstream to add features rather
-than fork? Sigh...
+Waldemar has sent a patch to fix all those ucontext issues on or1k:
+    https://patchwork.ozlabs.org/patch/729373/
 
 Regards,
 Yann E. MORIN.
