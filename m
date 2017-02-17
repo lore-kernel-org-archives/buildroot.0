@@ -1,42 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Feb 2017 21:59:52 +0100
-Subject: [Buildroot] [git commit] json-c: bump to version 0.12.1-20160607
-Message-ID: <20170301170421.A917F7FB5C@busybox.osuosl.org>
+Date: Fri, 17 Feb 2017 16:13:12 +0100
+Subject: [Buildroot] [git commit] package/python-psutil: bump to version
+	5.1.3
+Message-ID: <20170301170421.C579082288@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1674fe0515c31bb546796ee1ed40f2e7600c694
+commit: https://git.buildroot.net/buildroot/commit/?id=7ab3cdaa34ff7e2b2adb403907337d415f68b2f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: stick to the github helper]
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Lionel Flandrin <lionel@svkt.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/json-c/json-c.hash | 2 +-
- package/json-c/json-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
-index 6550895..1868d75 100644
---- a/package/json-c/json-c.hash
-+++ b/package/json-c/json-c.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 99304a4a633f1ee281d6a521155a182824dd995139d5ed6ee5c93093c281092b  json-c-json-c-0.12-20140410.tar.gz
-+sha256 989e09b99ded277a0a651cd18b81fcb76885fea08769d7a21b6da39fb8a34816  json-c-json-c-0.12.1-20160607.tar.gz
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index 35243f1..7adbcaf 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index ead2d9c..c0b795b 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/psutil/json, sha256 locally computed
+-md5	199a366dba829c88bddaf5b41d19ddc0  psutil-4.3.1.tar.gz
+-sha256  38f74182fb9e15cafd0cdf0821098a95cc17301807aed25634a18b66537ba51b  psutil-4.3.1.tar.gz
++md5	3090e32d42761086ae82036cadb95ba3  psutil-5.1.3.tar.gz
++sha256  959bd58bdc8152b0a143cb3bd822d4a1b8f7230617b0e3eb2ff6e63812120f2b  psutil-5.1.3.tar.gz
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 1032318..2bb865d 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--JSON_C_VERSION = json-c-0.12-20140410
-+JSON_C_VERSION = json-c-0.12.1-20160607
- JSON_C_SITE = $(call github,json-c,json-c,$(JSON_C_VERSION))
- JSON_C_INSTALL_STAGING = YES
- JSON_C_MAKE = $(MAKE1)
+-PYTHON_PSUTIL_VERSION = 4.3.1
++PYTHON_PSUTIL_VERSION = 5.1.3
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/78/cc/f267a1371f229bf16db6a4e604428c3b032b823b83155bd33cef45e49a53
++PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/78/0a/aa90434c6337dd50d182a81fe4ae4822c953e166a163d1bf5f06abb1ac0b
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3c
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
