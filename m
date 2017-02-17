@@ -1,43 +1,63 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 17 Feb 2017 12:20:01 +0100
-Subject: [Buildroot] [PATCH] perl-cross: bump to version 1.1.4
-Message-ID: <1487330401-9247-1-git-send-email-francois.perrad@gadz.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 17 Feb 2017 10:59:05 +0000
+Subject: [Buildroot] [PATCH] linux-tools/perf: fix build for MIPS by using
+	the right emulation on LD
+Message-ID: <20170217105905.32151-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.hash | 4 ++--
- package/perl/perl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Passing just the endianness flag to LD is not enough. We need to pass
+the right emulation flag which will set everything for us, not only the
+endianness.
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 41c1ce8..b815295 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -3,5 +3,5 @@ md5    af6a84c7c3e2b8b269c105a5db2f6d53                                 perl-5.2
- sha1   5bec25d8821b81a5939ee220997f4c8ab1c13e31                         perl-5.24.1.tar.xz
- sha256 03a77bac4505c270f1890ece75afc7d4b555090b41aa41ea478747e23b2afb3f perl-5.24.1.tar.xz
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/linux-tools/linux-tool-perf.mk | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/package/linux-tools/linux-tool-perf.mk b/package/linux-tools/linux-tool-perf.mk
+index 16f3a58..69492ba 100644
+--- a/package/linux-tools/linux-tool-perf.mk
++++ b/package/linux-tools/linux-tool-perf.mk
+@@ -28,17 +28,25 @@ PERF_MAKE_FLAGS = \
+ 	NO_LIBPYTHON=1 \
+ 	NO_LIBBIONIC=1
  
--# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.3/perl-cross-1.1.3.hash
--sha256 181b24ff71815fb2c8065e6ea139d106796eee0964aebfd8081f0b7f69e0696d perl-cross-1.1.3.tar.gz
-+# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.4/perl-cross-1.1.4.hash
-+sha256 c840a327d5464ca271cac40d52e2d199330875527bf1003c28a6e550fb7bcc57 perl-cross-1.1.4.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 224b4cb..b407e05 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -13,7 +13,7 @@ PERL_LICENSE = Artistic or GPLv1+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
+-# We need to pass an argument to ld for setting the endianness when
+-# building it for MIPS architecture, otherwise the default one will
+-# always be used (which is big endian) and the compilation for little
+-# endian will always fail showing an error like this one:
+-#  LD    foo.o
+-# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
+-# target is big endian
+-ifeq ($(BR2_mips)$(BR2_mips64),y)
+-PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EB"
+-else ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
+-PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EL"
++# We need to pass an argument to ld for setting the emulation when
++# building for MIPS architecture, otherwise the default one will always
++# be used and the compilation for most variants will fail.
++ifeq ($(BR2_mips),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32btsmip"
++else ifeq ($(BR2_mipsel),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32ltsmip"
++else ifeq ($(BR2_mips64),y)
++ifeq ($(BR2_MIPS_NABI32),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32btsmipn32"
++else
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf64btsmip"
++endif
++else ifeq ($(BR2_mips64el),y)
++ifeq ($(BR2_MIPS_NABI32),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf32ltsmipn32"
++else
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -m elf64ltsmip"
++endif
+ endif
  
--PERL_CROSS_VERSION = 1.1.3
-+PERL_CROSS_VERSION = 1.1.4
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+ # The call to backtrace() function fails for ARC, because for some
 -- 
-2.7.4
+2.10.2
