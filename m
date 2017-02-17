@@ -1,23 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Feb 2017 16:32:23 +0100
-Subject: [Buildroot] [PATCH 1/1] ffmpeg: remove example source code from
-	target
-In-Reply-To: <1487214809-2929-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Wed, 15 Feb 2017 22:13:29 -0500")
-References: <1487214809-2929-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <874lzsvnnc.fsf@dell.be.48ers.dk>
+Date: Fri, 17 Feb 2017 16:32:46 +0100
+Subject: [Buildroot] [PATCH] ebtables: enable for musl
+In-Reply-To: <aef23c96402b62802ee358bad4296cbca3afa928.1487249456.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 16 Feb 2017 14:50:56 +0200")
+References: <aef23c96402b62802ee358bad4296cbca3afa928.1487249456.git.baruch@tkos.co.il>
+Message-ID: <87zihku929.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > There does not appear to be a way to configure the example code
- > installation, so this mod gets rid of it with a post-install hook.
+ > Add two patches that fix build with musl. The first patch is upstream. The
+ > second patch uses the Buildroot workaround to suppress conflicting struct
+ > ethhdr definitions.
 
- > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to next, thanks.
 
