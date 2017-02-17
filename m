@@ -1,128 +1,67 @@
-From: Abhimanyu V <abhimanyu.v@imgtec.com>
-Date: Fri, 17 Feb 2017 12:14:45 +0530
-Subject: [Buildroot] [PATCH v2 1/2] uccp420wlan: new package
-In-Reply-To: <dd619e68-7b48-716c-e492-37220a51f9c9@mind.be>
-References: <1487144021-27808-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
- <dd619e68-7b48-716c-e492-37220a51f9c9@mind.be>
-Message-ID: <bbd11de9-60da-b5ef-603b-5d4c150298ff@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 17 Feb 2017 08:02:25 +0100
+Subject: [Buildroot] [RFC] optional automated unit-test execution with
+ qemu user mode
+In-Reply-To: <CAAkeqgXY8Xok9uz=nUZOcaSehbcSESxqrfCa43FV+5ZyG-EU6g@mail.gmail.com>
+References: <CAAkeqgXY8Xok9uz=nUZOcaSehbcSESxqrfCa43FV+5ZyG-EU6g@mail.gmail.com>
+Message-ID: <c9e34fda-65ac-47d3-39a9-3581b683108a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Arnout!
 
 
-On Friday 17 February 2017 03:04 AM, Arnout Vandecappelle wrote:
->
-> On 15-02-17 08:33, Abhimanyu V wrote:
->> From: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
->>
->> Wifi kernel module and firmware for Imagination explorer RPU
->>
->> Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
->> Reviewed-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-> [snip]
->
->> diff --git a/package/uccp420wlan/0001-fix-compilation-error-with-kernel-4.4.patch b/package/uccp420wlan/0001-fix-compilation-error-with-kernel-4.4.patch
->> new file mode 100644
->> index 0000000..43026b8
->> --- /dev/null
->> +++ b/package/uccp420wlan/0001-fix-compilation-error-with-kernel-4.4.patch
->> @@ -0,0 +1,90 @@
->> +commit b5f449a2c48d2fe7c9341b32fea5a62dd6699e38
->> +Author: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
->> +Date:   Mon Jan 2 16:15:22 2017 +0530
->> +
->> +    Fix compilation error with kernel 4.4
->> +
->> +    Revert "Fix errors/warnings while compiling against kmod-mac80211"
->> +
->> +    This reverts commit e62baef655898526c69250bc63723241f3f4c46d.
->   Is this patch submitted upstream? Or if it is not for upstream, please specify
-> why not.
-I have been speaking to team maintaining the repo and they agreed that 
-this patch should not be part of this repo, i have posted pull request 
-for the same.
-This repo was mostly used with openwrt till now so the reason for this 
-patch.
->> +
->> +    Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-> [snip]
->> diff --git a/package/uccp420wlan/Config.in b/package/uccp420wlan/Config.in
->> new file mode 100644
->> index 0000000..8f0df12
->> --- /dev/null
->> +++ b/package/uccp420wlan/Config.in
->> @@ -0,0 +1,13 @@
->> +config BR2_PACKAGE_UCCP420WLAN
->> +	bool "uccp420wlan"
->> +	depends on BR2_LINUX_KERNEL
->> +	help
->> +	  SoftMAC (mac80211) based WiFi driver for Imagination's Explorer RPU uccp420.
->> +	  This supports Dual Band WiFi with 2.4GHz - 2x2 b/g/n 40MHz, 5GHz - 2x2 a/n/11ac 80MHz modes
->   Help text should be indented at 72 columns, where the tab counts as 8 (so 62
-> actual characters).
-Will fix it.
->
->> +
->> +	  Used in creator ci40 board.
->> +
->> +	  https://github.com/CreatorDev/uccp420wlan
->> +
->> +comment "uccp420wlan needs a Linux kernel to be built"
->> +	depends on !BR2_LINUX_KERNEL
->> diff --git a/package/uccp420wlan/uccp420wlan.hash b/package/uccp420wlan/uccp420wlan.hash
->> new file mode 100644
->> index 0000000..9e54f21
->> --- /dev/null
->> +++ b/package/uccp420wlan/uccp420wlan.hash
->> @@ -0,0 +1,2 @@
->> +# locally computed hash
->> +sha256 c5b1194cb9fae049169b261548eaf18d87afce1c7388f7a0366bb5dd2a56cdb2  uccp420wlan-v6.9.tar.gz
->> diff --git a/package/uccp420wlan/uccp420wlan.mk b/package/uccp420wlan/uccp420wlan.mk
->> new file mode 100644
->> index 0000000..f3c8064
->> --- /dev/null
->> +++ b/package/uccp420wlan/uccp420wlan.mk
->> @@ -0,0 +1,20 @@
->> +################################################################################
->> +#
->> +# uccp420wlan
->> +#
->> +################################################################################
->> +
->> +UCCP420WLAN_VERSION = v6.9
->> +UCCP420WLAN_SITE = $(call github,CreatorDev,uccp420wlan,$(UCCP420WLAN_VERSION))
->> +UCCP420WLAN_LICENSE = GPLv2 (kernel module), proprietary (firmware blob)
->   This is annoying. Proprietary means that no license is given here. So basically
-> we're not allowed to use it. I suppose you're fairly close to upstream, is there
-> a chance to get an actual license text for the firmware blob so people can
-> determine if they're allowed to use it or not?
->
->> +UCCP420WLAN_LICENSE_FILES = COPYING
->   For the record: the COPYING file only has GPLv2 + Linus explanation. There is
-> no license text for the firmware blob.
-Yes firmware blob license text got missed when we moved this repo from 
-internal to github. I have raised PR for the same.
->
->   Regards,
->   Arnout
->
->> +
->> +define UCCP420WLAN_INSTALL_FIRMWARE
->> +	mkdir -p $(TARGET_DIR)/lib/firmware/img/uccp420wlan
->> +	cp $(@D)/firmware/*.ldr $(TARGET_DIR)/lib/firmware/img/uccp420wlan
->> +endef
->> +
->> +UCCP420WLAN_POST_INSTALL_TARGET_HOOKS += UCCP420WLAN_INSTALL_FIRMWARE
->> +
->> +$(eval $(kernel-module))
->> +$(eval $(generic-package))
->>
-I will wait for new release with the above fixes to post new version of 
-this patch.
+On 13-02-17 19:31, Andrey Yurovsky wrote:
+> I wanted to share something with the buildroot community in case it's
+> interesting. Basically, buildroot as it stands has all the infrastructure in
+> place to optionally execute cross-compiled unit tests for "customer" (external)
+> applications via qemu's user mode, this in turn may simplify and speed up your
+> continuous integration workflow (though obviously it's of little use for
+> packages that buildroot itself provides).
+> 
+> I wrote up my approach in this blog
+> post: http://yurovsky.github.io/2017/01/20/qemu-unit-tests/ focusing on ARM only
+> (though anything will work, barring one more thing to overcome if endianness
+> doesn't match between host and target, but there's a good workaround) and I'm
+> successfully using this for my own projects.
+> 
+> I think the implementation treads very lightly on the normal package recipe
+> process but basically:
+> - we add a trivial wrapper script that executes qemu-<cpu> with knowledge of the
+> staging directory
+> - recipes optionally add a hook to run, essentially, "make check" with that
+> wrapper. In my blog post I focused on automake which makes this easy via its
+> LOG_COMPILER but I'm sure other build systems can be integrated
+> - buildroot builds your package, runs "make check", and your unit tests are
+> executed as if they're native applications
 
-Thanks and Regards,
-Abhimanyu V
+ I think this will fail as soon as you try to exec something, no? So if your
+tests are implemented as scripts that call into executables, it's not going to
+work...
+
+ A much more generic approach is to rely on binfmt-misc and chroot into the
+rootfs. Of course, this does require root access to set up.
+
+ Also, I don't think the overhead of qemu-system is that big for running unit
+tests, is it?
+
+ Regards,
+ Arnout
+
+> 
+> I have a simple patch set implementing what's described in the blog post if
+> anyone is interested and I don't think it would take much work to make it more
+> generic (ie: not just ARM, not just automake) and I'd be happy to do that if
+> this is an (optional) feature that would be of interest to buildroot.
+
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
