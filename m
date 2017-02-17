@@ -1,63 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Feb 2017 11:04:36 +0100
-Subject: [Buildroot] [PATCH] package/opengl: ensure consistency between
- the various providers
-In-Reply-To: <20684119.X7ZmMtA3r5@sagittae>
-References: <1487106796-15403-1-git-send-email-yann.morin.1998@free.fr>
- <681a6c09-1976-193c-a738-ff948ff86567@mind.be>
- <20684119.X7ZmMtA3r5@sagittae>
-Message-ID: <20170217110436.0366d6f8@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 17 Feb 2017 12:20:01 +0100
+Subject: [Buildroot] [PATCH] perl-cross: bump to version 1.1.4
+Message-ID: <1487330401-9247-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl/perl.hash | 4 ++--
+ package/perl/perl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, 17 Feb 2017 09:34:38 +0100, J?r?me Pouiller wrote:
-
-> On Thursday 16 February 2017 18:46:10 CET Arnout Vandecappelle wrote:
-> > 
-> > On 14-02-17 22:13, Yann E. MORIN wrote:  
-> > > Some GL providers will provide libegl and libgles, but not libgl, while
-> > > other will provide libgl but not libegl not libgles. This can be the
-> > > case with:
-> > >   - mesa3d       -> libgl
-> > >   - rpi-userland -> libegl and libgles  
-> 
-> Unfortunately, as far as I remember, this kind of configuration is
-> necessary to build xdriver_xf86-video-imx-viv. Mesa is necessary to
-> build GLX support but, EGL/GLes have to be provided by imx-gpu-viv.
-
-Nope, it's not actually needed. Even with xdriver_xf86-video-imx-viv,
-the OpenGL provider is imx-gpu-viv, as it's ultimately the one that
-provides libGL.so.
-
-However, it is true that imx-gpu-viv is a special case as it provides a
-libGL.so that itself uses libraries provided by Mesa.
-
-So the hack I've done so far is:
-
--	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7 && !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
-
-and:
-
--	default "mesa3d" if BR2_PACKAGE_XORG7
-+	default "mesa3d" if BR2_PACKAGE_XORG7 && !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 41c1ce8..b815295 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -3,5 +3,5 @@ md5    af6a84c7c3e2b8b269c105a5db2f6d53                                 perl-5.2
+ sha1   5bec25d8821b81a5939ee220997f4c8ab1c13e31                         perl-5.24.1.tar.xz
+ sha256 03a77bac4505c270f1890ece75afc7d4b555090b41aa41ea478747e23b2afb3f perl-5.24.1.tar.xz
  
-This is a quick hack, but it allows mesa3d to *NOT* be seen as an
-OpenGL provider if imx-gpu-viv X11 support is enabled.
-
-So I still think the rule should be: we support only one OpenGL
-provider. And the rest should be solved by exposing mesa3d as an OpenGL
-provider or not depending on Config.in options.
-
-Best regards,
-
-Thomas
+-# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.3/perl-cross-1.1.3.hash
+-sha256 181b24ff71815fb2c8065e6ea139d106796eee0964aebfd8081f0b7f69e0696d perl-cross-1.1.3.tar.gz
++# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.4/perl-cross-1.1.4.hash
++sha256 c840a327d5464ca271cac40d52e2d199330875527bf1003c28a6e550fb7bcc57 perl-cross-1.1.4.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 224b4cb..b407e05 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -13,7 +13,7 @@ PERL_LICENSE = Artistic or GPLv1+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.1.3
++PERL_CROSS_VERSION = 1.1.4
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
