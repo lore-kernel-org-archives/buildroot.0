@@ -1,65 +1,85 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Fri, 17 Feb 2017 18:06:30 +0100
-Subject: [Buildroot] [PATCH] package/opengl: ensure consistency between
-	the various providers
-In-Reply-To: <20170217110436.0366d6f8@free-electrons.com>
-References: <1487106796-15403-1-git-send-email-yann.morin.1998@free.fr>
- <20684119.X7ZmMtA3r5@sagittae> <20170217110436.0366d6f8@free-electrons.com>
-Message-ID: <1840733.CQJu1ZPUIS@sagittae>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Feb 2017 18:07:22 +0100
+Subject: [Buildroot] [PATCH v3 2/5] package: add generic support for lz
+	archives
+In-Reply-To: <c885b432-86b6-860a-c020-cd73f05ff581@mind.be>
+References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
+ <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
+ <20170215221520.41e4c66e@free-electrons.com>
+ <83572997-616f-8bec-fadb-0a59bbf847ed@mind.be>
+ <20170216174124.GB4986@free.fr> <87efyxg5df.fsf@dell.be.48ers.dk>
+ <20170216221119.GE4986@free.fr>
+ <c885b432-86b6-860a-c020-cd73f05ff581@mind.be>
+Message-ID: <20170217170722.GA3470@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 17 February 2017 11:04:36 CET Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 17 Feb 2017 09:34:38 +0100, J?r?me Pouiller wrote:
-> 
-> > On Thursday 16 February 2017 18:46:10 CET Arnout Vandecappelle wrote:
-> > > 
-> > > On 14-02-17 22:13, Yann E. MORIN wrote:  
-> > > > Some GL providers will provide libegl and libgles, but not libgl, while
-> > > > other will provide libgl but not libegl not libgles. This can be the
-> > > > case with:
-> > > >   - mesa3d       -> libgl
-> > > >   - rpi-userland -> libegl and libgles  
+Arnout, All,
+
+On 2017-02-17 08:43 +0100, Arnout Vandecappelle spake thusly:
+> On 16-02-17 23:11, Yann E. MORIN wrote:
+> > Peter, All,
 > > 
-> > Unfortunately, as far as I remember, this kind of configuration is
-> > necessary to build xdriver_xf86-video-imx-viv. Mesa is necessary to
-> > build GLX support but, EGL/GLes have to be provided by imx-gpu-viv.
+> > On 2017-02-16 23:03 +0100, Peter Korsgaard spake thusly:
+> >>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> >>  > Actually, there is a use-case for being able to specify some of those,
+> >>  > at least the downloaders: git, wget, svn, scp...
+> >>
+> >>  > I use a script that is called in lieue of each downloader:
+> >>
+> >>  >     BR2_WGET="/path/to/wrapper wget --passive-ftp -nd -t 3"
+> >>  >     BR2_GIT="/path/to/wrapper git"
+> >>  >     and so on...
+> >>
+> >>  > That script is responsible for memorising, for each package, whether it
+> >>  > was downloaded from the primary mirror, the official site, or the backup
+> >>  > mirror, then acts according to where the package was downloaded:
+> > [--SNIP--]
+> >> Nice, but presumably you could also simply create a directory with
+> >> wget/git/svn/.. symlinks to your wrapper and prepend that to your path
+> >> before running buildroot, and then change the wrapper to do its stuff
+> >> and call further in the path for the real tool, similar to the recently
+> >> added date wrapper for reproducable builds?
+> > 
+> > Indeed, that would be doable, if a little bit more involved in the
+> > wrapper. But not something overly complex either.
+> > 
+> > So, overriding the downloaders is in fact not strictly required.
 > 
-> Nope, it's not actually needed. Even with xdriver_xf86-video-imx-viv,
-> the OpenGL provider is imx-gpu-viv, as it's ultimately the one that
-> provides libGL.so.
+>  Actually, for the downloaders there *are* useful options to override, e.g.
+> proxies, authentication, certificate stores, ... The configuration variables are
+> not the most convenient way to use those (especially since you may need to use
+> different options for different packages, e.g. internal vs. external),
 
-Yes, replace "necessary" by "currently used" in my sentence.
+Besides, options valid in a location may well be invalid in another. For
+example, proxies can be different, even in an enterprise network (i.e.
+location- or destination-based proxies). So those should be in the
+environment of the user doing the build, not in the configuration.
 
-> However, it is true that imx-gpu-viv is a special case as it provides a
-> libGL.so that itself uses libraries provided by Mesa.
-> 
-> So the hack I've done so far is:
-> 
-> -	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7 && !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
-> 
-> and:
-> 
-> -	default "mesa3d" if BR2_PACKAGE_XORG7
-> +	default "mesa3d" if BR2_PACKAGE_XORG7 && !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
->  
-> This is a quick hack, but it allows mesa3d to *NOT* be seen as an
-> OpenGL provider if imx-gpu-viv X11 support is enabled.
-> 
-> So I still think the rule should be: we support only one OpenGL
-> provider. And the rest should be solved by exposing mesa3d as an OpenGL
-> provider or not depending on Config.in options.
+Sme goes for the certificate stores (just to re-use your examples): an
+enterprise proxy could well be an MITM proxy, so would need its certs to
+be used. Or as you said, an internal server may require a set of certs
+and another server another set, so that would need different options
+per-package. Which we already offer, by the way...
 
-I agree. Give me a few days to prepare a patch that do that.
+> but it's
+> the only thing we have now. Apart from wrapper scripts, of course.
 
+I come to believe that using wrappers in those conditions is the best
+answer we can suggest.
+
+IMHO, setting site-local options in the config is toxic.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
