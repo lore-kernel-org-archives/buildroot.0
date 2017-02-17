@@ -1,43 +1,36 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Fri, 17 Feb 2017 09:34:38 +0100
-Subject: [Buildroot] [PATCH] package/opengl: ensure consistency between
-	the various providers
-In-Reply-To: <681a6c09-1976-193c-a738-ff948ff86567@mind.be>
-References: <1487106796-15403-1-git-send-email-yann.morin.1998@free.fr>
- <681a6c09-1976-193c-a738-ff948ff86567@mind.be>
-Message-ID: <20684119.X7ZmMtA3r5@sagittae>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Feb 2017 10:32:14 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-02-15
+In-Reply-To: <76065848-61AA-4769-A457-B2432BDB3D70@openadk.org>
+References: <20170216072900.AAE4920BC6@mail.free-electrons.com>
+ <CALdGskKtWsQOyKehenpwZHyaMuYHQ600kiMr4w080DNYGRcBKQ@mail.gmail.com>
+ <20170216102154.4f896bea@free-electrons.com>
+ <20170216111120.107a7a61@free-electrons.com>
+ <20170216191445.GI12810@waldemar-brodkorb.de>
+ <20170216221556.59616853@free-electrons.com>
+ <76065848-61AA-4769-A457-B2432BDB3D70@openadk.org>
+Message-ID: <20170217103214.31d6e487@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hello,
 
-On Thursday 16 February 2017 18:46:10 CET Arnout Vandecappelle wrote:
-> 
-> On 14-02-17 22:13, Yann E. MORIN wrote:
-> > Some GL providers will provide libegl and libgles, but not libgl, while
-> > other will provide libgl but not libegl not libgles. This can be the
-> > case with:
-> >   - mesa3d       -> libgl
-> >   - rpi-userland -> libegl and libgles
+On Fri, 17 Feb 2017 08:13:59 +0100, Waldemar Brodkorb wrote:
 
-Unfortunately, as far as I remember, this kind of configuration is
-necessary to build xdriver_xf86-video-imx-viv. Mesa is necessary to
-build GLX support but, EGL/GLes have to be provided by imx-gpu-viv.
+> I could reproduce it with the glibmm package and have a tested patch ready.
+> I will sent it in the evening.
 
-However, maybe your idea is correct and xdriver_xf86-video-imx-viv should be 
-reworked (but it is not a trivial work).
+Excellent thanks!
 
+I think the next big toolchain related issue is all the or1k failures
+due to missing structure definitions in ucontext.h :-)
 
->  The commit message is missing an explanation of why this is bad... Something
-> like "Such a situation leads to conflicting headers and libraries when building
-> a package that uses both libgl and libegl."
-
-
-
+Thomas
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
