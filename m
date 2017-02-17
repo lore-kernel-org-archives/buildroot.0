@@ -1,51 +1,60 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 17 Feb 2017 08:12:02 +0100
-Subject: [Buildroot] [PATCH 1/2] wavpack: needs wchar support
-In-Reply-To: <f0dindxjng.ln2@ID-313208.user.individual.net>
-References: <20170216204116.2212-1-joerg.krause@embedded.rocks>
- <20170216221907.57ac4b8d@free-electrons.com>
- <f0dindxjng.ln2@ID-313208.user.individual.net>
-Message-ID: <1487315522.2111.1.camel@embedded.rocks>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 17 Feb 2017 08:13:59 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-02-15
+In-Reply-To: <20170216221556.59616853@free-electrons.com>
+References: <20170216072900.AAE4920BC6@mail.free-electrons.com>
+ <CALdGskKtWsQOyKehenpwZHyaMuYHQ600kiMr4w080DNYGRcBKQ@mail.gmail.com>
+ <20170216102154.4f896bea@free-electrons.com>
+ <20170216111120.107a7a61@free-electrons.com>
+ <20170216191445.GI12810@waldemar-brodkorb.de>
+ <20170216221556.59616853@free-electrons.com>
+Message-ID: <76065848-61AA-4769-A457-B2432BDB3D70@openadk.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Hi Bernd,
+Hi,
 
-On Fri, 2017-02-17 at 06:06 +0100, Bernd Kuhls wrote:
-> Hi Thomas,
+> Am 16.02.2017 um 22:15 schrieb Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 > 
-> Am Thu, 16 Feb 2017 22:19:07 +0100 schrieb Thomas Petazzoni:
+> Hello,
 > 
-> > None of the places that select wavpack need to be fixed for the
-> > wchar
-> > dependency?
-> > 
-> > package/gstreamer/gst-plugins-good/Config.in:???select
-> > BR2_PACKAGE_WAVPACK
+>> On Thu, 16 Feb 2017 20:14:45 +0100, Waldemar Brodkorb wrote:
+>> 
+>> I have a clear idea what is the problem in uClibc-ng. It is arm
+>> specific. But I have trouble to reproduce the czmq issue with the
+>> internal static arm toolchain. (simple config, not the autobuild
+>> config).
 > 
-> "depends on BR2_USE_WCHAR" needs to be backported, same was valid
-> for BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC.
+> You can try to reproduce this build failure:
 > 
-> > package/gstreamer1/gst1-plugins-good/Config.in: select
-> > BR2_PACKAGE_WAVPACK
+>  http://autobuild.buildroot.net/results/704/7041b34327b0752d3f4294a5541c785dd9989d51/
 > 
-> "depends on BR2_USE_WCHAR" needs to be backported, same was valid
-> for BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TAGLIB.
+> It occurs with the internal toolchain. Steps to reproduce:
 > 
-> > package/mpd/Config.in:??select BR2_PACKAGE_WAVPACK
+> mkdir foobar
+> cd foobar
+> wget http://git.buildroot.net/buildroot-test/plain/utils/br-reproduce-build
+> chmod +x br-reproduce-build
+> BASE_GIT=/path/to/local/buildroot/git/repository ./br-reproduce-build 7041b34327b0752d3f4294a5541c785dd9989d51
 > 
-> mpd itself depends on BR2_USE_WCHAR, no backport needed.
+>> Is there any difference between internal and external static
+>> toolchains, when both created with buildroot?
 > 
+> The only differences are:
+> 
+> 1. host-mpc, host-mpfr and host-gmp are linked statically inside gcc,
+>    so that we don't have rpath issues
+> 
+> 2. the toolchain wrapper is tweak to support the moving of files
+>    outside of the usr/ subdir that I'm doing as part of the toolchain
+>    "packaging"
 
-Upstream committed a fix [1] (thanks to Thomas for reporting the issue)
-which drops the dependency on wchar. Maybe we should apply this to
-remove BR2_USE_WCHAR?
+I could reproduce it with the glibmm package and have a tested patch ready.
+I will sent it in the evening.
 
-[1] https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c52
-52f5f31abd1f
-
-J?rg
+best regards
+ Waldemar 
