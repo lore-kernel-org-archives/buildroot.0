@@ -1,72 +1,48 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 17 Feb 2017 20:24:04 +0100
-Subject: [Buildroot] [PATCH] uclibc: add fix for ARM specific static linking
-	issues
-Message-ID: <20170217192404.GA13561@waldemar-brodkorb.de>
+Date: Fri, 17 Feb 2017 21:24:03 +0100
+Subject: [Buildroot] [PATCH] samba4: requires NPTL
+Message-ID: <20170217202403.GA13945@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/fb14e37aaf453874d1c33e5ed73b9c751ace5ae3
-  http://autobuild.buildroot.net/results/774a8dd489760bc213ac7cf3e8040cee6a4e2437
+With OpenRISC there is a uClibc-ng based toolchain for an
+architecture with MMU support, but with only Linuxthreads
+and no NPTL. Samba4 uses pthread_mutexattr_setrobust which
+is not implemented in uClibc-ng Linuxthreads.
 
-And hopefully all other static ARM issues with uClibc-ng.
+Fixes:
+  http://autobuild.buildroot.net/results/ec8f078046c92ae23dc973c88ac0fef136ad1535
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
-It would be nice if the autobuild ARM toolchains could be rebuild,
-if the patch is accepted and applied.
----
- .../0002-arm-fix-static-linking-issues.patch       | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/uclibc/0002-arm-fix-static-linking-issues.patch
+ package/samba4/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/0002-arm-fix-static-linking-issues.patch b/package/uclibc/0002-arm-fix-static-linking-issues.patch
-new file mode 100644
-index 0000000..5480b0d
---- /dev/null
-+++ b/package/uclibc/0002-arm-fix-static-linking-issues.patch
-@@ -0,0 +1,38 @@
-+From 94810a91c48ac62daed55b4aec70d04a44c10795 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Thu, 16 Feb 2017 20:22:21 +0100
-+Subject: [PATCH] arm: fix static linking issues
-+
-+As reported by Buildroot developers these files causing static
-+linking issues. The original contribution with the ARM unwind-resume
-+rework and GNU libc sync was made before the combined libc change.
-+But the patch was applied later, after the libc change and
-+it seems the test coverage for static linking didn't catch it in
-+the regression testing. Remove the files.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c | 2 --
-+ libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c | 1 -
-+ 2 files changed, 3 deletions(-)
-+ delete mode 100644 libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c
-+ delete mode 100644 libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c
-+
-+diff --git a/libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c b/libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c
-+deleted file mode 100644
-+index fd0cec4..0000000
-+--- a/libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c
-++++ /dev/null
-+@@ -1,2 +0,0 @@
-+-__asm__ (".set __libgcc_s_init, pthread_cancel_init");
-+-#include <arm-unwind-resume.c>
-+diff --git a/libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c b/libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c
-+deleted file mode 100644
-+index 2641dc5..0000000
-+--- a/libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c
-++++ /dev/null
-+@@ -1 +0,0 @@
-+-#include <arm-unwind-resume.c>
-+-- 
-+2.1.4
-+
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index ce97bea..4474185 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -1,7 +1,7 @@
+-comment "samba4 needs a toolchain w/ RPC, wchar, dynamic library, threads"
++comment "samba4 needs a toolchain w/ RPC, wchar, dynamic library, NPTL"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_NATIVE_RPC \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_SAMBA4
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_SAMBA4
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR # python
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # python -> libffi
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # python -> libffi
+ 	depends on !BR2_STATIC_LIBS # python
+ 	depends on !BR2_nios2 # binary too large, relocations don't fit
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 -- 
 2.1.4
