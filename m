@@ -1,9 +1,9 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 17 Feb 2017 19:38:03 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Feb 2017 19:54:34 +0100
 Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
-	Kodi-specific patches
-References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
- <20170204114451.20935-2-bernd.kuhls@t-online.de>
+ Kodi-specific patches
+In-Reply-To: <XnsA71FC7BAC87A6ID313208userindividu@bernd-kuhls.de>
+References: <20170204114451.20935-2-bernd.kuhls@t-online.de>
  <20170204230821.GA3805@free.fr>
  <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
  <20170205212408.GC3562@free.fr>
@@ -12,87 +12,57 @@ References: <20170204114451.20935-1-bernd.kuhls@t-online.de>
  <20170209232937.2a071f11@free-electrons.com>
  <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
  <20170212135110.61e55c66@free-electrons.com>
-Message-ID: <XnsA71FC7BAC87A6ID313208userindividu@bernd-kuhls.de>
+ <XnsA71FC7BAC87A6ID313208userindividu@bernd-kuhls.de>
+Message-ID: <20170217185434.GB3470@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Bernd, Thomas, All,
 
-Hi Thomas,
+On 2017-02-17 19:38 +0100, Bernd Kuhls spake thusly:
+> Thomas Petazzoni <thomas.petazzoni-
+> wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8 at public.gmane.org> wrote in 
+> news:20170212135110.61e55c66 at free-electrons.com:
+> 
+> > Except that we definitely don't want this thing. Kodi should use the
+> > libdvd* libraries built by Buildroot. Not download/build its own.
+> 
+> in this case we need to
+> - apply the Kodi-specific patches, or
+> - switch libdvd* upstream to the Kodi repos
 
-Thomas Petazzoni <thomas.petazzoni-
-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
-news:20170212135110.61e55c66 at free-electrons.com:
+Or:
 
-> Except that we definitely don't want this thing. Kodi should use the
-> libdvd* libraries built by Buildroot. Not download/build its own.
+  - add new pacakges, kodi-libdvdnav, kodi-libdvdread, kodi-libdvdcss
 
-in this case we need to
-- apply the Kodi-specific patches, or
-- switch libdvd* upstream to the Kodi repos
+Not that it is much better than having them managed by Kodi.
 
-The packages were all forked by Kodi:
+Except that those managed by Kodi would be downloaded at configure or
+build time, not when doing 'make source', so we could not do an off-line
+build. That alone would warrant they be separate packages, IMHO.
 
-https://github.com/xbmc/libdvdnav/commits/master
-https://github.com/xbmc/libdvdread/commits/master
-https://github.com/xbmc/libdvdcss/commits/master
+Of course, this then raises the questions:
 
-to add functions for supporting iso images by their internal VFS 
-implementation, for example dvdnav_get_vm:
+ 1- can they replace the existing ones for other applications?
+ 2- would they conflict (filenames) with the pristine versions?
 
-https://github.com/xbmc/xbmc/search?utf8=%E2%9C%93&q=dvdnav_get_vm
+     1 | 2 | Solution
+    ---+---+--------------------------------------------
+     N | N | separate, unrelated packages with no "depends on !the-others"
+     N | Y | dunno...
+     Y | N | virtual packages for each, like libjpeg?
+     Y | Y | official ones "depends on !the-others"
 
-This function is not defined in upstream libdvdnav, but added by
-https://github.com/xbmc/libdvdnav/commit/8305696be79fe650d3d9eee29b2a88e020d7
-c58f, guarded with ifdef _XBMC...
+Regards,
+Yann E. MORIN.
 
-You can however link kodi.bin successfully with an unpatched libdvdnav, but 
-be warned: Kodi will crash during runtime like this:
-
-http://www.vdr-portal.de/board16-video-disk-recorder/board99-
-distributionen/board96-yavdr/p1279428-yavdr-0-6-kodi-amazon-prime-instant-
-video-addon-kein-ton/#post1279428
-
-10:51:04 T:140165711784000 WARNING: Unable to resolve: /libdvdnav-x86_64-
-linux.so dvdnav_get_vm, reason: /usr/lib/x86_64-linux-
-gnu/kodi/system/players/VideoPlayer/libdvdnav-x86_64-linux.so: undefined 
-symbol: dvdnav_get_vm
-10:51:04 T:140165711784000 ERROR: Unable to resolve exports from dll 
-special://xbmcbin/system/players/VideoPlayer/libdvdnav-x86_64-linux.so
-
-because libdvd* is wrapped with a dllwrapper:
-https://github.com/xbmc/xbmc/blob/Krypton/project/cmake/modules/FindLibDvd.cm
-ake#L194
-
-Currently I am using
-
-KODI_LIBDVDCSS_VERSION = 2f12236
-KODI_LIBDVDNAV_VERSION = 43b5f81
-KODI_LIBDVDREAD_VERSION = 17d99db
- 
-KODI_EXTRA_DOWNLOADS = \
-        https://github.com/xbmc/libdvdcss/archive/
-$(KODI_LIBDVDCSS_VERSION).tar.gz \
-        https://github.com/xbmc/libdvdnav/archive/
-$(KODI_LIBDVDNAV_VERSION).tar.gz \
-        https://github.com/xbmc/libdvdread/archive/
-$(KODI_LIBDVDREAD_VERSION).tar.gz
-        
-KODI_CONF_OPTS += \
-        -DLIBDVDCSS_URL=$(BR2_DL_DIR)/$(KODI_LIBDVDCSS_VERSION).tar.gz \
-        -DLIBDVDNAV_URL=$(BR2_DL_DIR)/$(KODI_LIBDVDNAV_VERSION).tar.gz \
-        -DLIBDVDREAD_URL=$(BR2_DL_DIR)/$(KODI_LIBDVDREAD_VERSION).tar.gz
-
-to provide the libdvd* source to be compiled during Kodi build. With them I 
-can play iso dvd images without problems.
-
-> I leave it up to you when it is a good time to switch to the CMake
-> based build system.
-
-This week I switched my production system to a CMake-build Kodi created by 
-buildroot so the next iteration of my patch series is not far away :)
-
-Regards, Bernd
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
