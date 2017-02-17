@@ -1,22 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Feb 2017 16:36:15 +0100
-Subject: [Buildroot] [PATCH] poppler: bump to version 0.52.0
-In-Reply-To: <20170217152116.11708-1-gustavo@zacarias.com.ar> (Gustavo
- Zacarias's message of "Fri, 17 Feb 2017 12:21:16 -0300")
-References: <20170217152116.11708-1-gustavo@zacarias.com.ar>
-Message-ID: <87vas8u8wg.fsf@dell.be.48ers.dk>
+Date: Fri, 17 Feb 2017 16:25:48 +0100
+Subject: [Buildroot] [git commit branch/next] ffmpeg: remove example source
+	code from target
+Message-ID: <20170217153631.8C3998223D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=194cb3f32087736581b02813dcb549a83c90910e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+There does not appear to be a way to configure the example code
+installation, so this mod gets rid of it with a post-install hook.
 
-You didn't tag this as being for next. Is there any reason
-(E.G. security/critical fixes) to add this on master?
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ffmpeg/ffmpeg.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 4447b72..449cca2 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -496,4 +496,9 @@ define FFMPEG_CONFIGURE_CMDS
+ 	)
+ endef
+ 
++define FFMPEG_REMOVE_EXAMPLE_SRC_FILES
++	rm -rf $(TARGET_DIR)/usr/share/ffmpeg/examples
++endef
++FFMPEG_POST_INSTALL_TARGET_HOOKS += FFMPEG_REMOVE_EXAMPLE_SRC_FILES
++
+ $(eval $(autotools-package))
