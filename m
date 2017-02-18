@@ -1,50 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Feb 2017 10:38:12 +0100
-Subject: [Buildroot] [git commit] samba4: requires NPTL
-Message-ID: <20170218093932.3BCFB82134@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Feb 2017 10:42:42 +0100
+Subject: [Buildroot] [PATCH 3/3] gstreamer1: drop unused configure time
+ unaligned access handling logic
+In-Reply-To: <20170218092550.29810-3-peter@korsgaard.com>
+References: <20170218092550.29810-1-peter@korsgaard.com>
+ <20170218092550.29810-3-peter@korsgaard.com>
+Message-ID: <20170218094242.GA3632@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b2175c40d440ccad34e3aa3379214adda8c9f4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-With OpenRISC there is a uClibc-ng based toolchain for an
-architecture with MMU support, but with only Linuxthreads
-and no NPTL. Samba4 uses pthread_mutexattr_setrobust which
-is not implemented in uClibc-ng Linuxthreads.
+On 2017-02-18 10:25 +0100, Peter Korsgaard spake thusly:
+> gstreamer has moved to build time unaligned access support detection using
+> ifdefs in gstconfig.h since 1.9.2:
+> 
+> commit 6ef601367e0f5adb7a8b02cec94dec04fccf701a
+> Author: Nirbheek Chauhan <nirbheek@centricular.com>
+> Date:   Tue Jun 21 18:59:49 2016 +0530
+> 
+>     gstconfig.h: Detect unaligned access support at compile-time
+> 
+>     This makes gstconfig.h completely arch-independent. Should cover all
+>     compilers that gstreamer is known to build on, and all architectures
+>     that I could find information on. People are encouraged to file bugs if
+>     their platform/arch is missing.
+> 
+> So ac_cv_unaligned_access is no longer used and our logic can be removed.
 
-Fixes:
-  http://autobuild.buildroot.net/results/ec8f078046c92ae23dc973c88ac0fef136ad1535
+In the previous patch, you add the or1k conditions to the if-block, but
+it is unused and you remove it here.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+So I think this patch should come before you fix or1k, i.e. swap patches
+2 and 3, no?
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index ce97bea..4474185 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -1,7 +1,7 @@
--comment "samba4 needs a toolchain w/ RPC, wchar, dynamic library, threads"
-+comment "samba4 needs a toolchain w/ RPC, wchar, dynamic library, NPTL"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_NATIVE_RPC \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_SAMBA4
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_SAMBA4
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR # python
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	depends on BR2_TOOLCHAIN_HAS_THREADS # python -> libffi
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # python -> libffi
- 	depends on !BR2_STATIC_LIBS # python
- 	depends on !BR2_nios2 # binary too large, relocations don't fit
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/gstreamer1/gstreamer1/gstreamer1.mk | 10 ----------
+>  1 file changed, 10 deletions(-)
+> 
+> diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+> index 7872ba13f..e110dee7d 100644
+> --- a/package/gstreamer1/gstreamer1/gstreamer1.mk
+> +++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+> @@ -11,16 +11,6 @@ GSTREAMER1_INSTALL_STAGING = YES
+>  GSTREAMER1_LICENSE_FILES = COPYING
+>  GSTREAMER1_LICENSE = LGPLv2+, LGPLv2.1+
+>  
+> -# Checking if unaligned memory access works correctly cannot be done when cross
+> -# compiling. For the following architectures there is no information available
+> -# in the configure script.
+> -ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2)$(BR2_or1k),y)
+> -GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
+> -endif
+> -ifeq ($(BR2_aarch64),y)
+> -GSTREAMER1_CONF_ENV = as_cv_unaligned_access=yes
+> -endif
+> -
+>  GSTREAMER1_CONF_OPTS = \
+>  	--disable-examples \
+>  	--disable-tests \
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
