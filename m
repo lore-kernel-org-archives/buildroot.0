@@ -1,33 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Feb 2017 15:48:02 +0100
-Subject: [Buildroot] [git commit] gstreamer: fix unaligned detection for or1k
-Message-ID: <20170218145007.DC2A78041D@busybox.osuosl.org>
+Date: Sat, 18 Feb 2017 15:48:06 +0100
+Subject: [Buildroot] [git commit] gstreamer1: fix unaligned detection for
+	or1k
+Message-ID: <20170218145007.EEB787FD5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a97307259343fe6f0b94d04fb345a69a8008bc37
+commit: https://git.buildroot.net/buildroot/commit/?id=87c89c041aa60e6ab652ec8256905718057fc53c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Similar to how we do it for the other niche/new architectures.
+Fixes:
+http://autobuild.buildroot.net/results/717/717d78ce0935749f477bdf3133b6f20057a28c01/
+
+Add patch to fix unaligned detection for or1k.  Patch submitted upstream:
+
+https://bugzilla.gnome.org/show_bug.cgi?id=778866
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer/gstreamer/gstreamer.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ....in-Fix-unaligned-access-support-for-the-.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
-index f2bde30..cde7f8f 100644
---- a/package/gstreamer/gstreamer/gstreamer.mk
-+++ b/package/gstreamer/gstreamer/gstreamer.mk
-@@ -15,7 +15,7 @@ GSTREAMER_LICENSE_FILES = COPYING
- # Checking if unaligned memory access works correctly cannot be done when cross
- # compiling. For the following architectures there is no information available
- # in the configure script.
--ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2),y)
-+ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2)$(BR2_or1k),y)
- GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
- endif
- ifeq ($(BR2_aarch64),y)
+diff --git a/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch b/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch
+new file mode 100644
+index 0000000..88f3373
+--- /dev/null
++++ b/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch
+@@ -0,0 +1,33 @@
++From 437b3e38d9127ae021ca8510709c2e6be3e6b819 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sat, 18 Feb 2017 10:03:24 +0100
++Subject: [PATCH] gstconfig.h.in: Fix unaligned access support for the openrisc
++ architecture
++
++Teach gstconfig.h.in about the openrisc (or1k) architecture.  Fixes
++buildroot autobuild failure:
++
++http://autobuild.buildroot.net/results/717/717d78ce0935749f477bdf3133b6f20057a28c01/build-end.log
++
++Submitted-upstream: https://bugzilla.gnome.org/show_bug.cgi?id=778866
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ gst/gstconfig.h.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gst/gstconfig.h.in b/gst/gstconfig.h.in
++index cf95f61ab..1b2ca64ac 100644
++--- a/gst/gstconfig.h.in
+++++ b/gst/gstconfig.h.in
++@@ -104,7 +104,7 @@
++  * http://docs.oracle.com/cd/E19205-01/820-4155/c++_faq.html#Vers6
++  * https://software.intel.com/en-us/node/583402
++  */
++-#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__)
+++#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__or1k__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__)
++ #  define GST_HAVE_UNALIGNED_ACCESS 0
++ #elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
++ #  define GST_HAVE_UNALIGNED_ACCESS 1
++-- 
++2.11.0
++
