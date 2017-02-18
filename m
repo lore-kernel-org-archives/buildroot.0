@@ -1,39 +1,24 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sat, 18 Feb 2017 16:01:11 -0500
-Subject: [Buildroot] [PATCH] erlang: set ERL_TOP to avoid using user's
-	version
-Message-ID: <1487451671-2066-1-git-send-email-fhunleth@troodon-software.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 18 Feb 2017 22:09:20 +0100
+Subject: [Buildroot] [PATCH] DEVELOPPERS: adopt freerdp
+In-Reply-To: <1487428384-25118-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 18 Feb 2017 15:33:04 +0100")
+References: <1487428384-25118-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87o9xzrytb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Explicitly set the ERL_TOP environment variable to override values set
-on a user's system. This prevents Erlang's configure scripts from
-using source files outside of the ones that Buildroot downloaded.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/erlang/erlang.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ > Julian only ever sent one patch to freerdp, the one adding it, in 2012.
+ > I'm somewhat interested in this package, so I'll adopt it.
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 3200c38..364085c 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -30,6 +30,12 @@ ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
- 
- ERLANG_CONF_OPTS = --without-javac
- 
-+# Force ERL_TOP to the downloaded source directory. This prevents
-+# Erlang's configure script from inadvertantly using files from
-+# a version of Erlang installed on the host.
-+ERLANG_CONF_ENV += ERL_TOP=$(@D)
-+HOST_ERLANG_CONF_ENV += ERL_TOP=$(@D)
-+
- # erlang uses openssl for all things crypto. Since the host tools (such as
- # rebar) uses crypto, we need to build host-erlang with support for openssl.
- HOST_ERLANG_DEPENDENCIES = host-openssl
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Committed after fixing subject, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
