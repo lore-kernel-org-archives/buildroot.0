@@ -1,37 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Feb 2017 13:35:33 +0100
-Subject: [Buildroot] [PATCH 3/3] gstreamer1: drop unused configure time
-	unaligned access handling logic
-In-Reply-To: <20170218110616.GC3632@free.fr> (Yann E. MORIN's message of "Sat, 
- 18 Feb 2017 12:06:16 +0100")
-References: <20170218092550.29810-1-peter@korsgaard.com>
- <20170218092550.29810-3-peter@korsgaard.com>
- <20170218094242.GA3632@free.fr> <87a89ju5r1.fsf@dell.be.48ers.dk>
- <20170218110616.GC3632@free.fr>
-Message-ID: <8760k7u162.fsf@dell.be.48ers.dk>
+Date: Sat, 18 Feb 2017 14:18:04 +0100
+Subject: [Buildroot] [PATCHv2 2/3] gstreamer1: fix unaligned detection for
+	or1k
+In-Reply-To: <20170218131805.20242-1-peter@korsgaard.com>
+References: <20170218131805.20242-1-peter@korsgaard.com>
+Message-ID: <20170218131805.20242-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Fixes:
+http://autobuild.buildroot.net/results/717/717d78ce0935749f477bdf3133b6f20057a28c01/
 
- >> > So I think this patch should come before you fix or1k, i.e. swap patches
- >> > 2 and 3, no?
- >> 
- >> No, I think you are mixing up gstreamer and gstreamer1.
+Add patch to fix unaligned detection for or1k.  Patch submitted upstream:
 
- > No, I don't think so...
+https://bugzilla.gnome.org/show_bug.cgi?id=778866
 
- >> Patch 1 fixes gstreamer by adding or1k to the configure handling
- >> Patch 2 fixes gstreamer1 by adding a patch fixing gst/gstconfig.h
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ....in-Fix-unaligned-access-support-for-the-.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch
 
- > Here you patch package/gstreamer1/gstreamer1/gstreamer1.mk to also
- > apply the as_cv_unaligned_access=no in the or1k case, but...
-
-Gaah, you are right - I apparently ended up doing a commit -a. I'll fix
-that.
-
+diff --git a/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch b/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch
+new file mode 100644
+index 000000000..88f337328
+--- /dev/null
++++ b/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch
+@@ -0,0 +1,33 @@
++From 437b3e38d9127ae021ca8510709c2e6be3e6b819 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sat, 18 Feb 2017 10:03:24 +0100
++Subject: [PATCH] gstconfig.h.in: Fix unaligned access support for the openrisc
++ architecture
++
++Teach gstconfig.h.in about the openrisc (or1k) architecture.  Fixes
++buildroot autobuild failure:
++
++http://autobuild.buildroot.net/results/717/717d78ce0935749f477bdf3133b6f20057a28c01/build-end.log
++
++Submitted-upstream: https://bugzilla.gnome.org/show_bug.cgi?id=778866
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ gst/gstconfig.h.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gst/gstconfig.h.in b/gst/gstconfig.h.in
++index cf95f61ab..1b2ca64ac 100644
++--- a/gst/gstconfig.h.in
+++++ b/gst/gstconfig.h.in
++@@ -104,7 +104,7 @@
++  * http://docs.oracle.com/cd/E19205-01/820-4155/c++_faq.html#Vers6
++  * https://software.intel.com/en-us/node/583402
++  */
++-#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__)
+++#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__or1k__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__)
++ #  define GST_HAVE_UNALIGNED_ACCESS 0
++ #elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
++ #  define GST_HAVE_UNALIGNED_ACCESS 1
++-- 
++2.11.0
++
 -- 
-Bye, Peter Korsgaard
+2.11.0
