@@ -1,41 +1,44 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 18 Feb 2017 22:25:16 +0100
-Subject: [Buildroot] package/sngrep: add missing ncurses dependencies
-In-Reply-To: <D8DCF0E7-A90B-41CE-A5D4-AB7707C14C39@abelbeck.com>
-References: <D8DCF0E7-A90B-41CE-A5D4-AB7707C14C39@abelbeck.com>
-Message-ID: <b130a614-511a-fdcd-357b-05ae36935d00@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 18 Feb 2017 22:40:02 +0100
+Subject: [Buildroot] [PATCH] libnss: workaround for microblaze ld bug
+Message-ID: <20170218214001.GA342@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Lonnie,
+Add a workaround for a microblaze specific ld bug to avoid
+segfault.
 
-Please keep the mailing list in Cc
+Fixes:
+  http://autobuild.buildroot.net/results/638a65453879777a0d5bdb29231034cd261b41c0
 
-Le 18/02/2017 ? 20:58, Lonnie Abelbeck a ?crit :
-> Romain,
-> 
-> You also need to select ...
-> 
-> +	select BR2_PACKAGE_NCURSES_TARGET_MENU
-> 
-> All three are needed as a runtime dependency.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/libnss/libnss.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Actually it's checked by the configure script:
-
-AC_CHECK_LIB([menu], [new_item], [], [
-AC_MSG_ERROR([ You need to have ncurses menu library installed to compile sngrep.])
-])
-
-I missed it because it was already selected by the config I used... I'll fix it.
-
-Thanks for review!
-
-Best regards,
-Romain
-
-> 
-> Lonnie
-> 
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 4a40b0a..5683ffc 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -13,6 +13,16 @@ LIBNSS_DEPENDENCIES = libnspr sqlite zlib
+ LIBNSS_LICENSE = MPLv2.0
+ LIBNSS_LICENSE_FILES = nss/COPYING
+ 
++# --gc-sections triggers binutils ld segfault
++# https://sourceware.org/bugzilla/show_bug.cgi?id=21180
++ifeq ($(BR2_microblaze),y)
++define LIBNSS_PRECONFIGURE
++	sed -i 's:-Wl,--gc-sections::g' $(@D)/nss/coreconf/Linux.mk
++endef
++
++LIBNSS_PRE_CONFIGURE_HOOKS += LIBNSS_PRECONFIGURE
++endif
++
+ LIBNSS_BUILD_VARS = \
+ 	MOZILLA_CLIENT=1 \
+ 	NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
+-- 
+2.1.4
