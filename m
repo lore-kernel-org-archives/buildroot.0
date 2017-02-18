@@ -1,28 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Feb 2017 17:53:01 +0000
-Subject: [Buildroot] [Bug 9656] util-linux: schedutils doesn't build on
- target w/o enabling basic binaries
-In-Reply-To: <bug-9656-163@https.bugs.busybox.net/>
-References: <bug-9656-163@https.bugs.busybox.net/>
-Message-ID: <bug-9656-163-C3UQuZPERn@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 18 Feb 2017 19:21:29 +0100
+Subject: [Buildroot] [PATCH] package/sngrep: add missing ncurses
+	dependencies
+References: <20170218154333.24496-1-romain.naour@gmail.com>
+ <20170218164928.59e0f1c5@free-electrons.com>
+Message-ID: <XnsA720C4EB5F912berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9656
+Hi Thomas,
 
-Carlos Santos <casantos@datacom.ind.br> changed:
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20170218164928.59e0f1c5 at free-electrons.com:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+> However, I still don't understand how it can fail on the autobuilders.
 
---- Comment #1 from Carlos Santos <casantos@datacom.ind.br> ---
-I confirmed that this is an autoconf bug, so let's move the discussion to the
-util-linux forum.
+because the autobuilders fail with BR2_PACKAGE_NCURSES_WCHAR=y:
+http://lists.busybox.net/pipermail/buildroot/2017-January/182468.html
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards, Bernd
