@@ -1,80 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Feb 2017 10:25:49 +0100
-Subject: [Buildroot] [PATCH 2/3] gstreamer1: fix unaligned detection for or1k
+Date: Sat, 18 Feb 2017 10:25:50 +0100
+Subject: [Buildroot] [PATCH 3/3] gstreamer1: drop unused configure time
+	unaligned access handling logic
 In-Reply-To: <20170218092550.29810-1-peter@korsgaard.com>
 References: <20170218092550.29810-1-peter@korsgaard.com>
-Message-ID: <20170218092550.29810-2-peter@korsgaard.com>
+Message-ID: <20170218092550.29810-3-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/717/717d78ce0935749f477bdf3133b6f20057a28c01/
+gstreamer has moved to build time unaligned access support detection using
+ifdefs in gstconfig.h since 1.9.2:
 
-Add patch to fix unaligned detection for or1k.  Patch submitted upstream:
+commit 6ef601367e0f5adb7a8b02cec94dec04fccf701a
+Author: Nirbheek Chauhan <nirbheek@centricular.com>
+Date:   Tue Jun 21 18:59:49 2016 +0530
 
-https://bugzilla.gnome.org/show_bug.cgi?id=778866
+    gstconfig.h: Detect unaligned access support at compile-time
+
+    This makes gstconfig.h completely arch-independent. Should cover all
+    compilers that gstreamer is known to build on, and all architectures
+    that I could find information on. People are encouraged to file bugs if
+    their platform/arch is missing.
+
+So ac_cv_unaligned_access is no longer used and our logic can be removed.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ....in-Fix-unaligned-access-support-for-the-.patch | 33 ++++++++++++++++++++++
- package/gstreamer1/gstreamer1/gstreamer1.mk        |  2 +-
- 2 files changed, 34 insertions(+), 1 deletion(-)
- create mode 100644 package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch b/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch
-new file mode 100644
-index 000000000..88f337328
---- /dev/null
-+++ b/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-Fix-unaligned-access-support-for-the-.patch
-@@ -0,0 +1,33 @@
-+From 437b3e38d9127ae021ca8510709c2e6be3e6b819 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Sat, 18 Feb 2017 10:03:24 +0100
-+Subject: [PATCH] gstconfig.h.in: Fix unaligned access support for the openrisc
-+ architecture
-+
-+Teach gstconfig.h.in about the openrisc (or1k) architecture.  Fixes
-+buildroot autobuild failure:
-+
-+http://autobuild.buildroot.net/results/717/717d78ce0935749f477bdf3133b6f20057a28c01/build-end.log
-+
-+Submitted-upstream: https://bugzilla.gnome.org/show_bug.cgi?id=778866
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ gst/gstconfig.h.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gst/gstconfig.h.in b/gst/gstconfig.h.in
-+index cf95f61ab..1b2ca64ac 100644
-+--- a/gst/gstconfig.h.in
-++++ b/gst/gstconfig.h.in
-+@@ -104,7 +104,7 @@
-+  * http://docs.oracle.com/cd/E19205-01/820-4155/c++_faq.html#Vers6
-+  * https://software.intel.com/en-us/node/583402
-+  */
-+-#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__)
-++#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__or1k__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__)
-+ #  define GST_HAVE_UNALIGNED_ACCESS 0
-+ #elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
-+ #  define GST_HAVE_UNALIGNED_ACCESS 1
-+-- 
-+2.11.0
-+
 diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index ac2c98870..7872ba13f 100644
+index 7872ba13f..e110dee7d 100644
 --- a/package/gstreamer1/gstreamer1/gstreamer1.mk
 +++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -14,7 +14,7 @@ GSTREAMER1_LICENSE = LGPLv2+, LGPLv2.1+
- # Checking if unaligned memory access works correctly cannot be done when cross
- # compiling. For the following architectures there is no information available
- # in the configure script.
--ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2),y)
-+ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2)$(BR2_or1k),y)
- GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
- endif
- ifeq ($(BR2_aarch64),y)
+@@ -11,16 +11,6 @@ GSTREAMER1_INSTALL_STAGING = YES
+ GSTREAMER1_LICENSE_FILES = COPYING
+ GSTREAMER1_LICENSE = LGPLv2+, LGPLv2.1+
+ 
+-# Checking if unaligned memory access works correctly cannot be done when cross
+-# compiling. For the following architectures there is no information available
+-# in the configure script.
+-ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2)$(BR2_or1k),y)
+-GSTREAMER1_CONF_ENV = as_cv_unaligned_access=no
+-endif
+-ifeq ($(BR2_aarch64),y)
+-GSTREAMER1_CONF_ENV = as_cv_unaligned_access=yes
+-endif
+-
+ GSTREAMER1_CONF_OPTS = \
+ 	--disable-examples \
+ 	--disable-tests \
 -- 
 2.11.0
