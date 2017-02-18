@@ -1,42 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Feb 2017 09:49:48 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-02-16
-In-Reply-To: <20170217211242.GC3470@free.fr> (Yann E. MORIN's message of "Fri, 
- 17 Feb 2017 22:12:42 +0100")
-References: <20170217072852.8329420B82@mail.free-electrons.com>
- <20170217211242.GC3470@free.fr>
-Message-ID: <87ino7ubmb.fsf@dell.be.48ers.dk>
+Date: Sat, 18 Feb 2017 10:25:48 +0100
+Subject: [Buildroot] [PATCH 1/3] gstreamer: fix unaligned detection for or1k
+Message-ID: <20170218092550.29810-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Similar to how we do it for the other niche/new architectures.
 
-Hi,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer/gstreamer/gstreamer.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for the big review!
-
- >> or1k | gstreamer1-1.10.3 | NOK |
- >> http://autobuild.buildroot.net/results/717d78ce0935749f477bdf3133b6f20057a28c01
-
- >     error "Could not detect architecture; don't know whether it supports
- >     unaligned access! Please file a bug."
-
- > Not available on or1k? Gustavo?
-
-Gstreamer just needs to be told if or1k support unaligned access or
-not. I don't know much about openrisc, but as it is mips like I would
-think not.
-
-Same issue for gstreamer 0.10. We already have logic in gstreamer1.mk to
-handle this, but from a quick look it seems upstream no longer detects
-this in the configure script but instead using a bunch of ifdefs in
-gstconfig.h.
-
-I will send patches to fix both gstreamer versions.
-
+diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
+index f2bde30d2..cde7f8f62 100644
+--- a/package/gstreamer/gstreamer/gstreamer.mk
++++ b/package/gstreamer/gstreamer/gstreamer.mk
+@@ -15,7 +15,7 @@ GSTREAMER_LICENSE_FILES = COPYING
+ # Checking if unaligned memory access works correctly cannot be done when cross
+ # compiling. For the following architectures there is no information available
+ # in the configure script.
+-ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2),y)
++ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2)$(BR2_or1k),y)
+ GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
+ endif
+ ifeq ($(BR2_aarch64),y)
 -- 
-Bye, Peter Korsgaard
+2.11.0
