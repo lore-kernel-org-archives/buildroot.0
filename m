@@ -1,62 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Feb 2017 09:16:06 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libva-intel-driver: project moved
-	to github
-In-Reply-To: <20170219081606.7085-1-bernd.kuhls@t-online.de>
-References: <20170219081606.7085-1-bernd.kuhls@t-online.de>
-Message-ID: <20170219081606.7085-2-bernd.kuhls@t-online.de>
+Date: Sun, 19 Feb 2017 09:43:22 +0100
+Subject: [Buildroot] [PATCH v3 01/38] package/libdvdcss: add
+	Kodi-specific patches
+References: <XnsA7135B7CF93B2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20170205212408.GC3562@free.fr>
+ <i6vmmdxipi.ln2@ID-313208.user.individual.net>
+ <rk5nmdxipi.ln2@ID-313208.user.individual.net>
+ <20170209232937.2a071f11@free-electrons.com>
+ <XnsA719AD8F76801ID313208userindividu@bernd-kuhls.de>
+ <20170212135110.61e55c66@free-electrons.com>
+ <XnsA71FC7BAC87A6ID313208userindividu@bernd-kuhls.de>
+ <20170217185434.GB3470@free.fr>
+ <p1ujndxbuq.ln2@ID-313208.user.individual.net>
+ <20170217215231.GD3470@free.fr>
+Message-ID: <ae2ondx2h3.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details read
-https://lists.01.org/pipermail/intel-vaapi-media/2017-January/000001.html
+Am Fri, 17 Feb 2017 22:52:31 +0100 schrieb Yann E. MORIN:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva-intel-driver/Config.in               | 2 +-
- package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
- package/libva-intel-driver/libva-intel-driver.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+> If the patched version are still compatible with the unpatched version
+> (i.e. it offers a superset of the API), then that could probably be
+> acceptable (and thus forget about that case in my previous table).
 
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-index 0f5b656b12..a39e554984 100644
---- a/package/libva-intel-driver/Config.in
-+++ b/package/libva-intel-driver/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
- 	help
- 	  VA-API back-end driver for Intel graphics chips
- 
--	  https://01.org/linuxgraphics/community/vaapi
-+	  https://01.org/linuxmedia/vaapi
- 
- comment "libva intel driver needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index 10664d051b..a9688763a9 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/libva/2016-November/004731.html
--sha1 5100f187afc4e39fce5664b96fe11a38faa9afaa  libva-intel-driver-1.7.3.tar.bz2
-+# Locally computed
-+sha256 c1f02cbdf0398f096ddc91096fac6ee62267a54955f6d235d73a8ff2ea888118  libva-intel-driver-1.7.3.tar.gz
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index 86f6eaa60e..e2f855bb33 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- LIBVA_INTEL_DRIVER_VERSION = 1.7.3
--LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
--LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
-+LIBVA_INTEL_DRIVER_SITE = \
-+	$(call github,01org,intel-vaapi-driver,$(LIBVA_INTEL_DRIVER_VERSION))
- LIBVA_INTEL_DRIVER_LICENSE = MIT
- LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
- # needed to work around https://bugs.freedesktop.org/show_bug.cgi?id=79478
--- 
-2.11.0
+Hi,
+
+I tried to patch the existing buildroot libdvd* packages with the Kodi-
+specific stuff and did a successful runtime test, building static libs is 
+not necessary anymore with the CMake build system :)
+
+You can find the current patch series here as RFC:
+https://github.com/bkuhls/buildroot/commits/kodi_cmake_libdvd
+
+Please note that I am using HEAD of the Krypton branch because one of my 
+patches needed for cross-compiling already got merged upstream, the iconv 
+one is pending.
+
+Regards, Bernd
