@@ -1,210 +1,310 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Feb 2017 23:22:31 +0100
-Subject: [Buildroot] [git commit branch/next] board: add support for nexbox
-	a95x
-Message-ID: <20170219222338.C9BB1821DB@busybox.osuosl.org>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 19 Feb 2017 19:17:21 -0300
+Subject: [Buildroot] [PATCH v2 6/9] check-package: check *.mk files
+In-Reply-To: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
+References: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
+Message-ID: <20170219221724.27298-7-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=688c9aab75c740919ddab80dff769986846c8f6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Warn when there are obvious indentation errors:
+- the number of expect tabs is not yet checked since it is more complex
+  to achieve;
+- the content inside define ... endef should be indented with tab(s),
+  see [1];
+- line just after a backslash should be indented with tab(s), see [2];
+- other lines should not be indented, see [3];
+- ignore empty lines and comments.
+Warn when there is no well-formatted header in the file:
+- 80 hashes at lines 1 and 5;
+- 1 hash at lines 2 and 4;
+- empty line at line 6;
+- see [4];
+- ignore files that only include other mk files.
+Warn when there are more than one space before backslash, see [5].
+Warn when there is a trailing backslash [6].
+Warn for flags set to default value YES or NO, see [7], [8], [9].
 
-Nexbox A95X is a low cost Android STB based around an Amlogic s905(x) SoC
-(quad A53), 8/16GB eMMC and 1/2GB RAM.
+[1] http://patchwork.ozlabs.org/patch/681429/
+[2] http://patchwork.ozlabs.org/patch/681430/
+[3] http://patchwork.ozlabs.org/patch/559209/
+[4] http://nightly.buildroot.org/#writing-rules-mk
+[5] http://patchwork.ozlabs.org/patch/649084/
+[6] http://patchwork.ozlabs.org/patch/535550/
+[7] http://patchwork.ozlabs.org/patch/704718/
+[8] http://nightly.buildroot.org/#_infrastructure_for_packages_with_specific_build_systems
+[9] http://nightly.buildroot.org/#_infrastructure_for_autotools_based_packages
 
-Both the s905 (gxbb) and s905x (gxl) variant is supported.
-
-This defconfig uses mainline Linux.  As the mainline support for s905 is
-quite young, use the latest release candidate.  There is currently no
-support for this board in U-Boot or sources available for the vendor U-Boot,
-so the defconfig doesn't build a u-boot and instead uses the existing U-Boot
-available in the eMMC.  This also means that we need to wrap the kernel as
-uImage, which isn't suppported for aarch64.  Instead this is done in the
-post-build script.
-
-Mainline aarch64 defconfig builds most drivers modular, so add mdev for
-module autoloading.
-
-[Peter: explicitly set BR2_cortex_a53=y]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- board/nexbox/a95x/boot.txt      | 11 ++++++++++
- board/nexbox/a95x/genimage.cfg  | 28 ++++++++++++++++++++++++
- board/nexbox/a95x/post-build.sh | 12 +++++++++++
- board/nexbox/a95x/post-image.sh | 14 ++++++++++++
- board/nexbox/a95x/readme.txt    | 48 +++++++++++++++++++++++++++++++++++++++++
- configs/nexbox_a95x_defconfig   | 20 +++++++++++++++++
- 6 files changed, 133 insertions(+)
+Changes v1 -> v2:
+  - use classes instead of functions to declare each check (Thomas DS);
+---
 
-diff --git a/board/nexbox/a95x/boot.txt b/board/nexbox/a95x/boot.txt
-new file mode 100644
-index 0000000..b538b4a
---- /dev/null
-+++ b/board/nexbox/a95x/boot.txt
-@@ -0,0 +1,11 @@
-+setenv bootargs console=ttyAML0,115200 earlyprintk root=/dev/mmcblk1p2 rootwait
+Notes:
+    $ time support/scripts/check-package $(find package -type f) >/dev/null 2>/dev/null
+    
+    real	0m1.865s
+    user	0m1.836s
+    sys	0m0.028s
+    
+    Indent:
+     support/scripts/check-package --include-only Indent \
+     $(find package -name '*.mk') 2>/dev/null | wc -l
+      24
+     (cd support/scripts/check-package-example && \
+     ../check-package --include-only Indent -vv package/*/*)
+      package/package1/package1.mk:22: unexpected indent with tabs
+      < tab  >PACKAGE1_INSTALL_STAGING = NO
+      package/package1/package1.mk:27: expected indent with tabs
+                             depend3
+      package/package1/package1.mk:42: expected indent with tabs
+              mkdir -p $(TARGET_DIR)/var/lib
+      package/package1/package1.mk:51: expected indent with tabs
+              $(PACKAGE1_INSTALL_SOMETHING_ELSE)
+      180 lines processed
+      4 warnings generated
+    
+    PackageHeader:
+     support/scripts/check-package --include-only PackageHeader \
+     $(find package -name '*.mk') 2>/dev/null | wc -l
+      22
+     (cd support/scripts/check-package-example && \
+     ../check-package --include-only PackageHeader -vv package/*/*)
+      package/package1/package1.mk:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)
+      ########################################
+      ################################################################################
+      package/package1/package1.mk:5: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)
+      ########################################################################################################################
+      ################################################################################
+      package/package1/package1.mk:6: should be a blank line (http://nightly.buildroot.org/#writing-rules-mk)
+      PACKAGE1_VERSION=1.0
+      180 lines processed
+      3 warnings generated
+    
+    SpaceBeforeBackslash:
+     support/scripts/check-package --include-only SpaceBeforeBackslash \
+     $(find package -name '*.mk') 2>/dev/null | wc -l
+      342
+     (cd support/scripts/check-package-example && \
+     ../check-package --include-only SpaceBeforeBackslash -vv package/*/*)
+      package/package1/package1.mk:26: use only one space before backslash
+      PACKAGE1_DEPENDENCIES = depend1 depend2  \
+      package/package1/package1.mk:28: use only one space before backslash
+      PACKAGE1_DEPENDENCIES += depend5< tab  >\
+      180 lines processed
+      2 warnings generated
+    
+    TrailingBackslash:
+     support/scripts/check-package --include-only TrailingBackslash \
+     $(find package -name '*.mk') 2>/dev/null | wc -l
+      20
+     (cd support/scripts/check-package-example && \
+     ../check-package --include-only TrailingBackslash -vv package/*/*)
+      package/package1/package1.mk:29: remove trailing backslash
+      < tab  >depend4 \
+      180 lines processed
+      1 warnings generated
+    
+    UselessFlag:
+     support/scripts/check-package --include-only UselessFlag \
+     $(find package -name '*.mk') 2>/dev/null | wc -l
+      0
+     (cd support/scripts/check-package-example && \
+     ../check-package --include-only UselessFlag -vv package/*/*)
+      package/package1/package1.mk:14: useless default value (http://nightly.buildroot.org/#_infrastructure_for_packages_with_specific_build_systems)
+      PACKAGE1_INSTALL_STAGING=NO
+      package/package1/package1.mk:15: useless default value (http://nightly.buildroot.org/#_infrastructure_for_packages_with_specific_build_systems)
+      PACKAGE1_INSTALL_TARGET = YES< tab  >
+      package/package1/package1.mk:16: useless default value (http://nightly.buildroot.org/#_infrastructure_for_packages_with_specific_build_systems)
+      PACKAGE1_INSTALL_IMAGES  =  NO
+      package/package1/package1.mk:17: useless default value (http://nightly.buildroot.org/#_infrastructure_for_packages_with_specific_build_systems)
+       PACKAGE1_INSTALL_REDISTRIBUTE = YES
+      package/package1/package1.mk:18: useless default value (http://nightly.buildroot.org/#_infrastructure_for_autotools_based_packages)
+      PACKAGE1_AUTORECONF = NO
+      package/package1/package1.mk:19: useless default value (http://nightly.buildroot.org/#_infrastructure_for_autotools_based_packages)
+      PACKAGE1_LIBTOOL_PATCH< tab  >=< tab  >YES
+      180 lines processed
+      6 warnings generated
+
+ support/scripts/checkpackagelib_mk.py | 160 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 160 insertions(+)
+
+diff --git a/support/scripts/checkpackagelib_mk.py b/support/scripts/checkpackagelib_mk.py
+index a37304b6d..f66888d21 100644
+--- a/support/scripts/checkpackagelib_mk.py
++++ b/support/scripts/checkpackagelib_mk.py
+@@ -4,8 +4,168 @@
+ # menu options using "make menuconfig" and by running "make" with appropriate
+ # packages enabled.
+ 
++import re
 +
-+fatload mmc 0:1 0x01080000 uImage
++from checkpackagebase import _CheckFunction
+ # Notice: ignore 'imported but unused' from pyflakes for check functions.
+ from checkpackagelib import ConsecutiveEmptyLines
+ from checkpackagelib import EmptyLastLine
+ from checkpackagelib import NewlineAtEof
+ from checkpackagelib import TrailingSpace
 +
-+if itest.s "${aml_dt}" == "gxl_p212_2g"; then
-+	fatload mmc 0:1 $dtb_mem_addr meson-gxl-nexbox-a95x.dtb
-+else
-+	fatload mmc 0:1 $dtb_mem_addr meson-gxbb-nexbox-a95x.dtb
-+fi
 +
-+bootm 0x1080000 - $dtb_mem_addr
-diff --git a/board/nexbox/a95x/genimage.cfg b/board/nexbox/a95x/genimage.cfg
-new file mode 100644
-index 0000000..c6c80f8
---- /dev/null
-+++ b/board/nexbox/a95x/genimage.cfg
-@@ -0,0 +1,28 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"uImage",
-+			"meson-gxbb-nexbox-a95x.dtb",
-+			"meson-gxl-nexbox-a95x.dtb",
-+			"boot.scr"
-+		}
-+	}
-+	size = 32M
-+}
++class Indent(_CheckFunction):
++    COMMENT = re.compile("^\s*#")
++    CONDITIONAL = re.compile("^\s*(ifeq|ifneq|endif)\s")
++    ENDS_WITH_BACKSLASH = re.compile(r"^[^#].*\\$")
++    END_DEFINE = re.compile("^\s*endef\s")
++    MAKEFILE_TARGET = re.compile("^[^# \t]+:\s")
++    START_DEFINE = re.compile("^\s*define\s")
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++    def before(self):
++        self.define = False
++        self.backslash = False
++        self.makefile_target = False
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
++    def check_line(self, lineno, text):
++        if self.START_DEFINE.search(text):
++            self.define = True
++            return
++        if self.END_DEFINE.search(text):
++            self.define = False
++            return
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/nexbox/a95x/post-build.sh b/board/nexbox/a95x/post-build.sh
-new file mode 100755
-index 0000000..9f4cc04
---- /dev/null
-+++ b/board/nexbox/a95x/post-build.sh
-@@ -0,0 +1,12 @@
-+#!/bin/sh
++        expect_tabs = False
++        if self.define or self.backslash or self.makefile_target:
++            expect_tabs = True
++        if self.CONDITIONAL.search(text):
++            expect_tabs = False
 +
-+BOARD_DIR="$(dirname $0)"
-+MKIMAGE=$HOST_DIR/usr/bin/mkimage
++        # calculate for next line
++        if self.ENDS_WITH_BACKSLASH.search(text):
++            self.backslash = True
++        else:
++            self.backslash = False
 +
-+$MKIMAGE -C none -A arm64 -T script -d $BOARD_DIR/boot.txt $BINARIES_DIR/boot.scr
++        if self.MAKEFILE_TARGET.search(text):
++            self.makefile_target = True
++            return
++        if text.strip() == "":
++            self.makefile_target = False
++            return
 +
-+# vendor u-boot uses uImage
-+if [ -e $BINARIES_DIR/Image ]; then
-+    $MKIMAGE -A arm64 -O linux -T kernel -C none -a 0x1080000 -e 0x1080000 \
-+	     -n linux -d $BINARIES_DIR/Image $BINARIES_DIR/uImage
-+fi
-diff --git a/board/nexbox/a95x/post-image.sh b/board/nexbox/a95x/post-image.sh
-new file mode 100755
-index 0000000..359b4c9
---- /dev/null
-+++ b/board/nexbox/a95x/post-image.sh
-@@ -0,0 +1,14 @@
-+#!/bin/sh
++        # comment can be indented or not inside define ... endef, so ignore it
++        if self.define and self.COMMENT.search(text):
++            return
 +
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++        if expect_tabs:
++            if not text.startswith("\t"):
++                return ["{}:{}: expected indent with tabs"
++                        .format(self.filename, lineno),
++                        text]
++        else:
++            if text.startswith("\t"):
++                return ["{}:{}: unexpected indent with tabs"
++                        .format(self.filename, lineno),
++                        text]
 +
-+rm -rf "${GENIMAGE_TMP}"
 +
-+genimage                               \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-diff --git a/board/nexbox/a95x/readme.txt b/board/nexbox/a95x/readme.txt
-new file mode 100644
-index 0000000..e08b4e4
---- /dev/null
-+++ b/board/nexbox/a95x/readme.txt
-@@ -0,0 +1,48 @@
-+Nexbox A95X
++class PackageHeader(_CheckFunction):
++    def before(self):
++        self.skip = False
 +
-+Intro
-+=====
++    def check_line(self, lineno, text):
++        if self.skip or lineno > 6:
++            return
 +
-+Nexbox A95X is a low cost Android STB based around an Amlogic s905(x) SoC
-+(quad A53), 8/16GB eMMC and 1/2GB RAM.  To use this defconfig, wires to the
-+internal UART solder pads must be added.  See the linux-meson page for
-+details:
++        if lineno in [1, 5]:
++            if lineno == 1 and text.startswith("include "):
++                self.skip = True
++                return
++            if text.rstrip() != "#" * 80:
++                return ["{}:{}: should be 80 hashes ({}#writing-rules-mk)"
++                        .format(self.filename, lineno, self.url_to_manual),
++                        text,
++                        "#" * 80]
++        elif lineno in [2, 4]:
++            if text.rstrip() != "#":
++                return ["{}:{}: should be 1 hash ({}#writing-rules-mk)"
++                        .format(self.filename, lineno, self.url_to_manual),
++                        text]
++        elif lineno == 6:
++            if text.rstrip() != "":
++                return ["{}:{}: should be a blank line ({}#writing-rules-mk)"
++                        .format(self.filename, lineno, self.url_to_manual),
++                        text]
 +
-+http://linux-meson.com/doku.php?id=nexbox_a95x_s905
 +
-+Both the s905 (gxbb) and s905x (gxl) variant is supported.
++class SpaceBeforeBackslash(_CheckFunction):
++    TAB_OR_MULTIPLE_SPACES_BEFORE_BACKSLASH = re.compile(r"^.*(  |\t)\\$")
 +
-+This default configuration will allow you to start experimenting with the
-+buildroot environment for the A95X.  With the current configuration it will
-+bring-up the board from microSD, and allow access through the serial
-+console.
++    def check_line(self, lineno, text):
++        if self.TAB_OR_MULTIPLE_SPACES_BEFORE_BACKSLASH.match(text.rstrip()):
++            return ["{}:{}: use only one space before backslash"
++                    .format(self.filename, lineno),
++                    text]
 +
-+How to build it
-+===============
 +
-+Configure Buildroot:
++class TrailingBackslash(_CheckFunction):
++    ENDS_WITH_BACKSLASH = re.compile(r"^[^#].*\\$")
 +
-+    $ make nexbox_a95x_defconfig
++    def before(self):
++        self.backslash = False
 +
-+Compile everything and build the SD card image:
++    def check_line(self, lineno, text):
++        last_line_ends_in_backslash = self.backslash
 +
-+    $ make
++        # calculate for next line
++        if self.ENDS_WITH_BACKSLASH.search(text):
++            self.backslash = True
++            self.lastline = text
++            return
++        self.backslash = False
 +
-+How to write the SD card
-+========================
++        if last_line_ends_in_backslash and text.strip() == "":
++            return ["{}:{}: remove trailing backslash"
++                    .format(self.filename, lineno - 1),
++                    self.lastline]
 +
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
 +
-+Copy the bootable "sdcard.img" onto a microSD card with "dd":
++class UselessFlag(_CheckFunction):
++    DEFAULT_AUTOTOOLS_FLAG = re.compile("^.*{}".format("|".join([
++        "_AUTORECONF\s*=\s*NO",
++        "_LIBTOOL_PATCH\s*=\s*YES"])))
++    DEFAULT_GENERIC_FLAG = re.compile("^.*{}".format("|".join([
++        "_INSTALL_IMAGES\s*=\s*NO",
++        "_INSTALL_REDISTRIBUTE\s*=\s*YES",
++        "_INSTALL_STAGING\s*=\s*NO",
++        "_INSTALL_TARGET\s*=\s*YES"])))
++    END_CONDITIONAL = re.compile("^\s*(endif)")
++    START_CONDITIONAL = re.compile("^\s*(ifeq|ifneq)")
 +
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++    def before(self):
++        self.conditional = 0
 +
-+How to boot
-+===========
++    def check_line(self, lineno, text):
++        if self.START_CONDITIONAL.search(text):
++            self.conditional += 1
++            return
++        if self.END_CONDITIONAL.search(text):
++            self.conditional -= 1
++            return
 +
-+Insert microSD card and connect serial cable. Power board and stop
-+U-Boot by pressing any key. Boot the system by typing:
++        # allow non-default conditionally overridden by default
++        if self.conditional > 0:
++            return
 +
-+fatload mmc 0:1 0x1070000 boot.scr
-+autoscr 0x1070000
-diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
-new file mode 100644
-index 0000000..906a22b
---- /dev/null
-+++ b/configs/nexbox_a95x_defconfig
-@@ -0,0 +1,20 @@
-+BR2_aarch64=y
-+BR2_cortex_a53=y
-+BR2_KERNEL_HEADERS_4_9=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10-rc8"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-nexbox-a95x"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++        if self.DEFAULT_GENERIC_FLAG.search(text):
++            return ["{}:{}: useless default value ({}#"
++                    "_infrastructure_for_packages_with_specific_build_systems)"
++                    .format(self.filename, lineno, self.url_to_manual),
++                    text]
++
++        if self.DEFAULT_AUTOTOOLS_FLAG.search(text):
++            return ["{}:{}: useless default value "
++                    "({}#_infrastructure_for_autotools_based_packages)"
++                    .format(self.filename, lineno, self.url_to_manual),
++                    text]
+-- 
+2.11.0
