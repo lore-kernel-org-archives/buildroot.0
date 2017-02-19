@@ -1,64 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Feb 2017 23:03:54 +0100
-Subject: [Buildroot] [git commit] wavpack: fetch upstream patch to remove
-	wchar dependency
-Message-ID: <20170219220625.5F913821DD@busybox.osuosl.org>
+Date: Sun, 19 Feb 2017 23:05:10 +0100
+Subject: [Buildroot] [git commit] wavpack: properly wrap help text
+Message-ID: <20170219220625.6ED5B81E3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bb5e380f07f21c48cb315cc385fb60f5d3c0a46
+commit: https://git.buildroot.net/buildroot/commit/?id=90ef9a24bce917f8d2e9619c1ebeda92633be251
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The recent bump to version 5.1.0 added a dependency on wchar:
-
-```
-import_id3.c:37:34: error: unknown type name 'wchar_t'
-```
-
-This issue has been reported upstream [1] and a fix was commited by
-upstream to remove the wchar dependency [2].
-
-Fixes:
-http://autobuild.buildroot.net/results/9a6/9a693f5b798571917f36cfb7661e2f2638aac550/
-http://autobuild.buildroot.net/results/44c/44c8227043045baf4f043da44b8129e43dfff687/
-http://autobuild.buildroot.net/results/a80/a80221dcc0860046ebdf0bbf454e056b1e20df83/
-.. and more.
-
-The build was successfully tested with the 'br-arm-basic-2017.02-rc1-2-g133c5ac'
-toolchain.
-
-[1] https://github.com/dbry/WavPack/issues/19
-[2] https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f
+Wrap help text to fit 72 columns.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wavpack/wavpack.hash | 1 +
- package/wavpack/wavpack.mk   | 3 +++
- 2 files changed, 4 insertions(+)
+ package/wavpack/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
-index 56ba7d8..16ff08c 100644
---- a/package/wavpack/wavpack.hash
-+++ b/package/wavpack/wavpack.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
- sha256  1939627d5358d1da62bc6158d63f7ed12905552f3a799c799ee90296a7612944  wavpack-5.1.0.tar.bz2
-+sha256  3890ab081dc6f8ee02161ace180381327031cc24cc6c3d71668367b7e5f6e4be  876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
-diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
-index daa0888..a613506 100644
---- a/package/wavpack/wavpack.mk
-+++ b/package/wavpack/wavpack.mk
-@@ -12,6 +12,9 @@ WAVPACK_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),,libiconv)
- WAVPACK_LICENSE = BSD-3c
- WAVPACK_LICENSE_FILES = COPYING
+diff --git a/package/wavpack/Config.in b/package/wavpack/Config.in
+index 1ef3e42..db7b893 100644
+--- a/package/wavpack/Config.in
++++ b/package/wavpack/Config.in
+@@ -2,7 +2,8 @@ config BR2_PACKAGE_WAVPACK
+ 	bool "wavpack"
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+-	  WavPack is a completely open audio compression format providing
+-	  lossless, high-quality lossy, and a unique hybrid compression mode.
++	  WavPack is a completely open audio compression format
++	  providing lossless, high-quality lossy, and a unique
++	  hybrid compression mode.
  
-+# Fetch patch from upstream to remove wchar dependency
-+WAVPACK_PATCH = https://github.com/dbry/WavPack/commit/876fc3f3907e871d0938ac6c8c5252f5f31abd1f.patch
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- WAVPACK_CONF_OPTS += LIBS=-liconv
- endif
+ 	  http://www.wavpack.com/
