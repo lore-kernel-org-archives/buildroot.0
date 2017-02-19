@@ -1,36 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Feb 2017 23:05:10 +0100
-Subject: [Buildroot] [git commit] wavpack: properly wrap help text
-Message-ID: <20170219220625.6ED5B81E3F@busybox.osuosl.org>
+Date: Sun, 19 Feb 2017 23:08:25 +0100
+Subject: [Buildroot] [PATCH] package/crudini: upgrade to 0.9
+In-Reply-To: <1487510348-18251-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ (Zoltan Gyarmati's message of "Sun, 19 Feb 2017 14:19:08 +0100")
+References: <1487510348-18251-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <87d1edrfza.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90ef9a24bce917f8d2e9619c1ebeda92633be251
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Zoltan" == Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com> writes:
 
-Wrap help text to fit 72 columns.
+ > Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wavpack/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Committed to next, thanks.
 
-diff --git a/package/wavpack/Config.in b/package/wavpack/Config.in
-index 1ef3e42..db7b893 100644
---- a/package/wavpack/Config.in
-+++ b/package/wavpack/Config.in
-@@ -2,7 +2,8 @@ config BR2_PACKAGE_WAVPACK
- 	bool "wavpack"
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
--	  WavPack is a completely open audio compression format providing
--	  lossless, high-quality lossy, and a unique hybrid compression mode.
-+	  WavPack is a completely open audio compression format
-+	  providing lossless, high-quality lossy, and a unique
-+	  hybrid compression mode.
- 
- 	  http://www.wavpack.com/
+-- 
+Bye, Peter Korsgaard
