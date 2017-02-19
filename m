@@ -1,41 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 21:18:22 +0100
-Subject: [Buildroot] [git commit] grep: bump to version 3.0
-Message-ID: <20170301170421.4C5637FB5C@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 19 Feb 2017 23:01:20 +0100
+Subject: [Buildroot] [git commit] cjson: bump to version 1.3.0
+Message-ID: <20170301170422.7973B822A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89f837c977aca3a273b184e9a0932544b45b4cf0
+commit: https://git.buildroot.net/buildroot/commit/?id=5e5219b84dff676257f8ad32816e760c733bdcec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/grep/grep.hash | 2 +-
- package/grep/grep.mk   | 2 +-
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-index 326737a..77420ad 100644
---- a/package/grep/grep.hash
-+++ b/package/grep/grep.hash
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 903880f..0072725 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking signature
--sha256 ad4cc44d23074a1c3a8baae8fbafff2a8c60f38a9a6108f985eef6fbee6dcaeb  grep-2.27.tar.xz
-+sha256 e2c81db5056e3e8c5995f0bb5d0d0e1cad1f6f45c3b2fc77b6e81435aed48ab5  grep-3.0.tar.xz
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 7615f30..7468831 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
+ # Locally computed:
+-sha256 1d976ca423d714b7e836cfbc1980b56f49962d0dfe654edb3c2ffa5c713af242  cjson-v1.2.1.tar.gz
++sha256	f1c528103844ffb992e17625ac8a3e8ee742021b1c2478e53cee4b085c0f413d	cjson-v1.3.0.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 11c34c5..5ff990e 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GREP_VERSION = 2.27
-+GREP_VERSION = 3.0
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPLv3+
+-CJSON_VERSION = v1.2.1
++CJSON_VERSION = v1.3.0
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
