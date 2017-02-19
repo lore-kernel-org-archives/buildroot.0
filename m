@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:12:15 -0500
-Subject: [Buildroot] [PATCH 18/58] python-ipaddress: bump to version 1.0.18
+Date: Sun, 19 Feb 2017 14:12:16 -0500
+Subject: [Buildroot] [PATCH 19/58] python-ipython: bump to version 5.2.2
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-19-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-20-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-ipaddress/python-ipaddress.hash | 4 ++--
- package/python-ipaddress/python-ipaddress.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-ipython/python-ipython.hash | 5 +++--
+ package/python-ipython/python-ipython.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ipaddress/python-ipaddress.hash b/package/python-ipaddress/python-ipaddress.hash
-index a7c3803..c4fdf6d 100644
---- a/package/python-ipaddress/python-ipaddress.hash
-+++ b/package/python-ipaddress/python-ipaddress.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/ipaddress/json, sha256 locally computed
--md5	8bbf0326719fafb1f453921ef96729fe  ipaddress-1.0.17.tar.gz
--sha256	3a21c5a15f433710aaa26f1ae174b615973a25182006ae7f9c26de151cd51716  ipaddress-1.0.17.tar.gz
-+md5 310c2dfd64eb6f0df44aa8c59f2334a7 ipaddress-1.0.18.tar.gz
-+sha256 5d8534c8e185f2d8a1fda1ef73f2c8f4b23264e8e30063feeb9511d492a413e1 ipaddress-1.0.18.tar.gz
-diff --git a/package/python-ipaddress/python-ipaddress.mk b/package/python-ipaddress/python-ipaddress.mk
-index 5ff70d4..10ab77a 100644
---- a/package/python-ipaddress/python-ipaddress.mk
-+++ b/package/python-ipaddress/python-ipaddress.mk
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index 250a022..a223408 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,2 +1,3 @@
+-# locally computed
+-sha256  ca86a6308c4b53ea8a040ba776066dc9a7af4ac738ad43ab2059a016c09b0c2d  ipython-2.1.0.tar.gz
++# md5 from https://pypi.python.org/pypi/ipython/json, sha256 locally computed
++md5 19e4a46ec7d7a32d068de4c253c9b459 ipython-5.2.2.tar.gz
++sha256 6ee1c89f6031e0c86727820ad394c6eb4d3ac28de48e0df3b9367ccf92e212e2 ipython-5.2.2.tar.gz
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index 236462a..07b682b 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPADDRESS_VERSION = 1.0.17
-+PYTHON_IPADDRESS_VERSION = 1.0.18
- PYTHON_IPADDRESS_SOURCE = ipaddress-$(PYTHON_IPADDRESS_VERSION).tar.gz
--PYTHON_IPADDRESS_SITE = https://pypi.python.org/packages/bb/26/3b64955ff73f9e3155079b9ed31812afdfa5333b5c76387454d651ef593a
-+PYTHON_IPADDRESS_SITE = https://pypi.python.org/packages/4e/13/774faf38b445d0b3a844b65747175b2e0500164b7c28d78e34987a5bfe06
- PYTHON_IPADDRESS_LICENSE = Python software foundation license
- PYTHON_IPADDRESS_LICENSE_FILES = LICENSE
- PYTHON_IPADDRESS_SETUP_TYPE = setuptools
+-PYTHON_IPYTHON_VERSION = 2.1.0
++PYTHON_IPYTHON_VERSION = 5.2.2
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/source/i/ipython
++PYTHON_IPYTHON_SITE = https://pypi.python.org/packages/6e/cf/c2a3ca5942e2d8084574157a8f818efafb7218204cd9e41166c92c452e07
+ PYTHON_IPYTHON_LICENSE = BSD-3c
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst
+ PYTHON_IPYTHON_SETUP_TYPE = distutils
 -- 
 2.9.3
