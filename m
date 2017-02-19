@@ -1,47 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Feb 2017 22:58:46 +0100
-Subject: [Buildroot] [git commit] package/glmark2: needs gcc >= 4.9 for C++14
-Message-ID: <20170219220107.205AE82116@busybox.osuosl.org>
+Date: Sun, 19 Feb 2017 23:01:38 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.3.0
+In-Reply-To: <1487503035-48843-1-git-send-email-fontaine.fabrice@gmail.com>
+ (Fabrice Fontaine's message of "Sun, 19 Feb 2017 12:17:15 +0100")
+References: <1487503035-48843-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <87tw7prgal.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbdf1ae69eb91b2d1d19c93fff530c62849cb778
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
-    http://autobuild.buildroot.org/results/511/51162285d197deabb63727c19cdf5512b0e68f29/
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-[Peter: also add libstdcpp dependency]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Spenser Gilliland <spenser@gillilanding.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/glmark2/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+Committed to next, thanks.
 
-diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
-index c8380b1..addd7a9 100644
---- a/package/glmark2/Config.in
-+++ b/package/glmark2/Config.in
-@@ -10,11 +10,17 @@ config BR2_PACKAGE_GLMARK2_GL
- 	depends on BR2_PACKAGE_HAS_LIBGL
- 	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
- 
-+comment "glmark2 needs a toolchain w/ C++, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+
- comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_PACKAGE_GLMARK2_GL && !BR2_PACKAGE_GLMARK2_EGL_GLES
- 
- config BR2_PACKAGE_GLMARK2
- 	bool "glmark2"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on BR2_PACKAGE_GLMARK2_GL || BR2_PACKAGE_GLMARK2_EGL_GLES
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBPNG
+-- 
+Bye, Peter Korsgaard
