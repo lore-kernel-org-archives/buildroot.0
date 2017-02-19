@@ -1,46 +1,156 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Feb 2017 23:08:06 +0100
-Subject: [Buildroot] [git commit branch/next] package/crudini: upgrade to 0.9
-Message-ID: <20170219220845.F326581E08@busybox.osuosl.org>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 19 Feb 2017 19:17:15 -0300
+Subject: [Buildroot] [PATCH v2 0/9] A checkpackage script that verifies a
+	package coding style
+In-Reply-To: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
+References: <20161231032110.11573-1-ricardo.martincoski@gmail.com>
+Message-ID: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3ddd1c1f3304423e7143b99aad151355a3baada
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+I started this patch series out of curiosity.
+Later on, I saw that something similar was in the todo list [1].
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+It probably could be achieved using flex + bison, or pyacc, or perl, or
+something else.
+But I implemented using python and non-strict checks, trying to:
+- reduce the chance of problems related to differences between host machines;
+- allow incremental development based on feedback from patch reviews;
+- keep the maintenance easy;
+- generate low number of false warnings.
+
+The first patch is an example package to be used to test the output of the
+script for all patches in the series.
+
+The second patch includes a txt file with an overall description and some hints,
+the main engine that calls check functions for each type of file, the first
+check function, and also many comments in the library files that reflect what I
+attempted to accomplish. Of course, the comments can be cut if you disagree with
+any of them.
+
+Remaining patches include check functions for each type of file. I put the
+patches that I think are most likely to be rejected in the end.
+
+Also in the series there is a blob for the manual trying to clarify the expected
+format for help text.
+
+For each patch I include using 'git notes':
+- the time it takes to run for all current packages;
+- for each check function:
+  - the number of warnings it generates for all current packages;
+  - sample output running on the (bad) example package.
+
+Here is the list of check functions implemented in this series:
+
+*.patch:
+- ApplyOrder
+- NewlineAtEof
+- NumberedSubject
+- Sob
+
+Config.*:
+- AttributesOrder
+- ConsecutiveEmptyLines
+- EmptyLastLine
+- HelpText
+- Indent
+- NewlineAtEof
+- TrailingSpace
+
+*.hash:
+- ConsecutiveEmptyLines
+- EmptyLastLine
+- HashFilename
+- HashNumberOfFields
+- HashType
+- NewlineAtEof
+- TrailingSpace
+
+*.mk:
+- ConsecutiveEmptyLines
+- EmptyLastLine
+- Indent
+- NewlineAtEof
+- PackageHeader
+- SpaceBeforeBackslash
+- TrailingBackslash
+- TrailingSpace
+- TypoInPackageVariable
+- UselessFlag
+
+[1] http://elinux.org/Buildroot#Todo_list
+
+Regards,
+Ricardo
 ---
- package/crudini/crudini.hash | 6 +++---
- package/crudini/crudini.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Changes v1 -> v2:
+  - avoid false positive for variable of virtual package the package
+    under analysis provides (e.g. MYSQL_SOCKET) (Romain);
+  - do not warn for numbered subject if the patch was not generated with
+    git (based on comments from Thomas DS and Thomas P);
+  - support packages with different config filenames (Thomas DS);
+  - add sample in the example patch for above cases;
+  - use classes instead of functions to declare each check (Thomas DS);
+  - update some commit messages;
+  - do not use regex when a simple 'in' is enough (Thomas DS);
+  - define named constants instead of magic '3' (Thomas DS);
+  - assign to self (using classes) instead of using static variables
+    (Thomas DS);
+  - use a custom function as predicate to inspect.getmembers
+    (Thomas DS);
+  - rework how the command lines are passed to functions;
+  - add entry do DEVELOPERS file;
+  - remove the useless "check" prefix from all check functions;
 
-diff --git a/package/crudini/crudini.hash b/package/crudini/crudini.hash
-index 2796e7a..9279847 100644
---- a/package/crudini/crudini.hash
-+++ b/package/crudini/crudini.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0664fa2f9d36e411e839b5394d8c2951, sha256 locally computed
--md5    0664fa2f9d36e411e839b5394d8c2951 crudini-0.8.tar.gz
--sha256 effdf8feb7efe252af87143c8756bbc69e2679afb6173083d38be02284385e5f  crudini-0.8.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9b8500c90467f0a61c714fbe852c2a66, sha256 locally computed
-+md5    9b8500c90467f0a61c714fbe852c2a66 crudini-0.9.tar.gz
-+sha256 10512a5a2f7b54b42e48a1d00f0c6398947c2ba6c264b9fdef86677f0e949fd3  crudini-0.9.tar.gz
-diff --git a/package/crudini/crudini.mk b/package/crudini/crudini.mk
-index 501c9e0..8fe3232 100644
---- a/package/crudini/crudini.mk
-+++ b/package/crudini/crudini.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CRUDINI_VERSION = 0.8
--CRUDINI_SITE = https://pypi.python.org/packages/23/4a/934b05bbe5af4fd390207c5e935efbae6439809aad65ab0702e236c1b5f5
-+CRUDINI_VERSION = 0.9
-+CRUDINI_SITE = https://pypi.python.org/packages/b5/65/5588903472f30fa01ca4951be00c03a317b27bac4cd1e945bd16b2c1b6d3
- CRUDINI_SETUP_TYPE = setuptools
- CRUDINI_LICENSE = GPLv2
- CRUDINI_LICENSE_FILES = COPYING
+
+Ricardo Martincoski (9):
+  support/scripts/check-package: example
+  support/scripts/check-package: new script
+  check-package: check whitespace and empty lines
+  check-package: check *.hash files
+  check-package: check *.patch files
+  check-package: check *.mk files
+  docs/manual: size of tab in package description
+  check-package: check Config.* files
+  check-package: check *.mk for typo in variable
+
+ DEVELOPERS                                         |   3 +
+ docs/manual/adding-packages-directory.txt          |   8 +-
+ docs/manual/writing-rules.txt                      |   6 +-
+ support/scripts/check-package                      | 144 +++++++++++++
+ .../package/package1/0001-do-something.patch       |  24 +++
+ .../package/package1/0002-do-something-else.patch  |  24 +++
+ .../package/package1/Config.in                     |  45 +++++
+ .../package/package1/Config.something              |  10 +
+ .../package/package1/package1.hash                 |   8 +
+ .../package/package1/package1.mk                   |  55 +++++
+ .../package/package1/wrong-name.patch              |  14 ++
+ support/scripts/check-package.txt                  |  76 +++++++
+ support/scripts/checkpackagebase.py                |  16 ++
+ support/scripts/checkpackagelib.py                 |  54 +++++
+ support/scripts/checkpackagelib_config.py          | 138 +++++++++++++
+ support/scripts/checkpackagelib_hash.py            |  72 +++++++
+ support/scripts/checkpackagelib_mk.py              | 223 +++++++++++++++++++++
+ support/scripts/checkpackagelib_patch.py           |  62 ++++++
+ 18 files changed, 977 insertions(+), 5 deletions(-)
+ create mode 100755 support/scripts/check-package
+ create mode 100644 support/scripts/check-package-example/package/package1/0001-do-something.patch
+ create mode 100644 support/scripts/check-package-example/package/package1/0002-do-something-else.patch
+ create mode 100644 support/scripts/check-package-example/package/package1/Config.in
+ create mode 100644 support/scripts/check-package-example/package/package1/Config.something
+ create mode 100644 support/scripts/check-package-example/package/package1/package1.hash
+ create mode 100644 support/scripts/check-package-example/package/package1/package1.mk
+ create mode 100644 support/scripts/check-package-example/package/package1/wrong-name.patch
+ create mode 100644 support/scripts/check-package.txt
+ create mode 100644 support/scripts/checkpackagebase.py
+ create mode 100644 support/scripts/checkpackagelib.py
+ create mode 100644 support/scripts/checkpackagelib_config.py
+ create mode 100644 support/scripts/checkpackagelib_hash.py
+ create mode 100644 support/scripts/checkpackagelib_mk.py
+ create mode 100644 support/scripts/checkpackagelib_patch.py
+
+-- 
+2.11.0
