@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:12:37 -0500
-Subject: [Buildroot] [PATCH 40/58] python-pyroute2: bump to version 0.4.13
+Date: Sun, 19 Feb 2017 14:12:45 -0500
+Subject: [Buildroot] [PATCH 48/58] python-rpi-gpio: bump to version 0.6.3
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-41-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-49-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-pyroute2/python-pyroute2.hash | 4 ++--
- package/python-pyroute2/python-pyroute2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-rpi-gpio/python-rpi-gpio.hash | 6 +++---
+ package/python-rpi-gpio/python-rpi-gpio.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
-index ff680fc..dbf09c9 100644
---- a/package/python-pyroute2/python-pyroute2.hash
-+++ b/package/python-pyroute2/python-pyroute2.hash
+diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
+index a502972..e8d390d 100644
+--- a/package/python-rpi-gpio/python-rpi-gpio.hash
++++ b/package/python-rpi-gpio/python-rpi-gpio.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pyroute2/json, sha256 locally computed
--md5	317303ba8a5e3d55b4f918fd1b7e186d  pyroute2-0.4.8.tar.gz
--sha256	a59907d2c5756f188b5f8aa48e3060e31c6f40e076f8143b99240fe0108a48d6  pyroute2-0.4.8.tar.gz
-+md5 ef4282b1401bcd07a9cf4ec0696aba24 pyroute2-0.4.13.tar.gz
-+sha256 93f3d72f58b3627036427b5571f8e27c93dbb6d01372dc4c452707d6610c0a39 pyroute2-0.4.13.tar.gz
-diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
-index 5ea4f54..f026b7f 100644
---- a/package/python-pyroute2/python-pyroute2.mk
-+++ b/package/python-pyroute2/python-pyroute2.mk
+-# md5 from https://pypi.python.org/pypi/rpi-gpio/json, sha256 locally computed
+-md5	9db86fd5f3bae872de9dbb068ee0b096  RPi.GPIO-0.6.2.tar.gz
+-sha256	82acff0ef6bbe3cdf6f4dbdd73d96add5294bb94baf7f51c1d901861af3c2392  RPi.GPIO-0.6.2.tar.gz
++# md5 from https://pypi.python.org/pypi/rpi_gpio/json, sha256 locally computed
++md5 e4abe1cfb5eacebe53078032256eb837 RPi.GPIO-0.6.3.tar.gz
++sha256 a5fc0eb5e401963b6c0a03650da6b42c4005f02d962b81241d96c98d0a578516 RPi.GPIO-0.6.3.tar.gz
+diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
+index 8f02d16..fd32674 100644
+--- a/package/python-rpi-gpio/python-rpi-gpio.mk
++++ b/package/python-rpi-gpio/python-rpi-gpio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYROUTE2_VERSION = 0.4.8
-+PYTHON_PYROUTE2_VERSION = 0.4.13
- PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
--PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/fb/c1/2cbd9d3f91c663be7168ee2d8d6e919006ffeef57cac76bdd9e6cba7f468
-+PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/91/e7/814f60e355078dc51625cd2e7e715ed4a06111ddf2ac5580f2f10e79c94a
- PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPLv2+
- PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
- PYTHON_PYROUTE2_SETUP_TYPE = distutils
+-PYTHON_RPI_GPIO_VERSION = 0.6.2
++PYTHON_RPI_GPIO_VERSION = 0.6.3
+ PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
+-PYTHON_RPI_GPIO_SITE = https://pypi.python.org/packages/c1/a8/de92cf6d04376f541ce250de420f4fe7cbb2b32a7128929a600bc89aede5
++PYTHON_RPI_GPIO_SITE = https://pypi.python.org/packages/e2/58/6e1b775606da6439fa3fd1550e7f714ac62aa75e162eed29dbec684ecb3e
+ PYTHON_RPI_GPIO_LICENSE = MIT
+ PYTHON_RPI_GPIO_LICENSE_FILES = LICENCE.txt
+ PYTHON_RPI_GPIO_SETUP_TYPE = distutils
 -- 
 2.9.3
