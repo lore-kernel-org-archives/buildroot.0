@@ -1,74 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Feb 2017 11:52:01 +0100
-Subject: [Buildroot] [PATCHv2] package/mosquito: needs sync_4
-Message-ID: <1487501521-14145-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Feb 2017 12:08:53 +0100
+Subject: [Buildroot] [PATCH] package/mpv: fix build on ppc64
+In-Reply-To: <1487498952-30688-1-git-send-email-yann.morin.1998@free.fr>
+References: <1487498952-30688-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170219120853.0210ac15@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/2bc/2bc84ba2d1167018e2d48e5183ead22b6425dcf5/
-    http://autobuild.buildroot.org/results/445/445f377ae70397b5f675f541977900e8986b79a4/
-    http://autobuild.buildroot.org/results/57e/57e6984427f8c5d906a93884cc461b8f93cf5ce0/
-    ...
+Hello,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Baruch Siach <baruch@tkos.co.il>
+On Sun, 19 Feb 2017 11:09:12 +0100, Yann E. MORIN wrote:
+> Our current patch was done on a previous version of mpv. Since then, the
+> include-path has changed, and stdbool is already included earlier. So,
+> including it again will serve no purpose...
+> 
+> So, the bool type defined in the altivec case is back to bite, and it is
+> not any happier than before.
+> 
+> We fix our patch to simply redefine bool to the correct type, but just
+> in the altivec case.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/e91/e914bc0f955e4ba740614f93cbfa401b673b754b/
+>     http://autobuild.buildroot.org/results/4c1/4c150fedc74530d09e8ecd678dcf5664251606e7/
+>     and countless others...
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
----
-Changes v1 -> v2:
-  - propagate dependencies  (Baruch)
----
- package/collectd/Config.in  | 1 +
- package/domoticz/Config.in  | 2 ++
- package/mosquitto/Config.in | 1 +
- 3 files changed, 4 insertions(+)
+We have a different proposal from Sam:
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 683141b..47bfe95 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -526,6 +526,7 @@ config BR2_PACKAGE_COLLECTD_GRAPHITE
- 
- config BR2_PACKAGE_COLLECTD_MQTT
- 	bool "mqtt"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
- 	select BR2_PACKAGE_MOSQUITTO
- 	help
- 	  Sends metrics to and/or receives metrics from an MQTT broker.
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index f128e6f..c6550d2 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_DOMOTICZ
- 	bool "domoticz"
- 	depends on BR2_USE_MMU # mosquitto
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
- 	depends on !BR2_STATIC_LIBS # mosquitto
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -28,6 +29,7 @@ config BR2_PACKAGE_DOMOTICZ
- 
- comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 50937d0..bc2ab35 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_MOSQUITTO
- 	bool "mosquitto"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_STATIC_LIBS # builds .so
- 	help
- 	  Mosquitto is an open source message broker that implements
+  https://patchwork.ozlabs.org/patch/706869/
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
