@@ -1,52 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Feb 2017 12:24:34 +0100
-Subject: [Buildroot] [PATCH] package/mpv: fix build on ppc64
-In-Reply-To: <20170219120853.0210ac15@free-electrons.com>
-References: <1487498952-30688-1-git-send-email-yann.morin.1998@free.fr>
- <20170219120853.0210ac15@free-electrons.com>
-Message-ID: <20170219112434.GB3450@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 19 Feb 2017 12:29:22 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: do not build tests
+Message-ID: <1487503762-52200-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cjson/cjson.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On 2017-02-19 12:08 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 19 Feb 2017 11:09:12 +0100, Yann E. MORIN wrote:
-> > Our current patch was done on a previous version of mpv. Since then, the
-> > include-path has changed, and stdbool is already included earlier. So,
-> > including it again will serve no purpose...
-> > 
-> > So, the bool type defined in the altivec case is back to bite, and it is
-> > not any happier than before.
-> > 
-> > We fix our patch to simply redefine bool to the correct type, but just
-> > in the altivec case.
-> > 
-> > Fixes:
-> >     http://autobuild.buildroot.org/results/e91/e914bc0f955e4ba740614f93cbfa401b673b754b/
-> >     http://autobuild.buildroot.org/results/4c1/4c150fedc74530d09e8ecd678dcf5664251606e7/
-> >     and countless others...
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> 
-> We have a different proposal from Sam:
->   https://patchwork.ozlabs.org/patch/706869/
-
-Bizarely enough, I missed it...
-
-Indeed, Sam's patch is better. I'lll withdraw mine.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 5ff990e..aea9578 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -9,5 +9,7 @@ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
+ CJSON_LICENSE_FILES = LICENSE
++CJSON_CONF_OPTS += \
++	-DENABLE_CJSON_TEST=OFF
+ 
+ $(eval $(cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.0
