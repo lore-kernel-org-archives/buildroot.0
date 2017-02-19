@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:12:03 -0500
-Subject: [Buildroot] [PATCH 06/58] python-cherrypy: bump to version 10.1.1
+Date: Sun, 19 Feb 2017 14:12:04 -0500
+Subject: [Buildroot] [PATCH 07/58] python-click: bump to version 6.7
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-7-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-8-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-cherrypy/python-cherrypy.hash | 6 +++---
- package/python-cherrypy/python-cherrypy.mk   | 4 ++--
+ package/python-click/python-click.hash | 6 +++---
+ package/python-click/python-click.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
-index 6befa45..64d556d 100644
---- a/package/python-cherrypy/python-cherrypy.hash
-+++ b/package/python-cherrypy/python-cherrypy.hash
+diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
+index c0d0568..cae03c7 100644
+--- a/package/python-click/python-click.hash
++++ b/package/python-click/python-click.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=4b765329b0b4b65ec25811e3febb6c93, sha256 locally computed
--md5	4b765329b0b4b65ec25811e3febb6c93  CherryPy-4.0.0.tar.gz
--sha256	73ad4f8870b5a3e9988a7778b5d3003a390d440527ec3458a0c7e58865d2611a  CherryPy-4.0.0.tar.gz
-+# md5 from https://pypi.python.org/pypi/cherrypy/json, sha256 locally computed
-+md5 4957d9f40c7a0772ad4f2e3fbb5a627f CherryPy-10.1.1.tar.gz
-+sha256 a78a604e3afb0074cafa9c15c4ca25af0db4e52b2931e4a2c4b7df09151aa032 CherryPy-10.1.1.tar.gz
-diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-index 754e0a2..ef19b54 100644
---- a/package/python-cherrypy/python-cherrypy.mk
-+++ b/package/python-cherrypy/python-cherrypy.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=d0b09582123605220ad6977175f3e51d, sha256 locally computed.
+-md5	d0b09582123605220ad6977175f3e51d  click-6.6.tar.gz
+-sha256	cc6a19da8ebff6e7074f731447ef7e112bd23adf3de5c597cf9989f2fd8defe9  click-6.6.tar.gz
++# md5 from https://pypi.python.org/pypi/click/json, sha256 locally computed
++md5 fc4cc00c4863833230d3af92af48abd4 click-6.7.tar.gz
++sha256 f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b click-6.7.tar.gz
+diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
+index 839a467..e869dd5 100644
+--- a/package/python-click/python-click.mk
++++ b/package/python-click/python-click.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CHERRYPY_VERSION = 4.0.0
-+PYTHON_CHERRYPY_VERSION = 10.1.1
- PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
--PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
-+PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/da/e2/6ed242ebfe96912e0866cc01139027d342d52c35ad33ee182bfb671c177d
- PYTHON_CHERRYPY_LICENSE = BSD-3c
- PYTHON_CHERRYPY_LICENSE_FILES = cherrypy/LICENSE.txt
- PYTHON_CHERRYPY_SETUP_TYPE = distutils
+-PYTHON_CLICK_VERSION = 6.6
++PYTHON_CLICK_VERSION = 6.7
+ PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
+-PYTHON_CLICK_SITE = http://pypi.python.org/packages/source/c/click
++PYTHON_CLICK_SITE = https://pypi.python.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897
+ PYTHON_CLICK_LICENSE = BSD-3c
+ PYTHON_CLICK_LICENSE_FILES = LICENSE
+ PYTHON_CLICK_SETUP_TYPE = setuptools
 -- 
 2.9.3
