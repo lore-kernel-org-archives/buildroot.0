@@ -1,141 +1,210 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 19 Feb 2017 19:17:20 -0300
-Subject: [Buildroot] [PATCH v2 5/9] check-package: check *.patch files
-In-Reply-To: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
-References: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170219221724.27298-6-ricardo.martincoski@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 19 Feb 2017 23:22:31 +0100
+Subject: [Buildroot] [git commit branch/next] board: add support for nexbox
+	a95x
+Message-ID: <20170219222338.C9BB1821DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Warn when the name of the patch file does not start with number (apply
-order), see [1].
-Warn when the patch was generated using git format-patch without -N, see
-[2].
-Warn when the patch file has no SoB, see [3].
+commit: https://git.buildroot.net/buildroot/commit/?id=688c9aab75c740919ddab80dff769986846c8f6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[1] http://nightly.buildroot.org/#_providing_patches
-[2] http://patchwork.ozlabs.org/patch/704753/
-[3] http://nightly.buildroot.org/#_format_and_licensing_of_the_package_patches
+Nexbox A95X is a low cost Android STB based around an Amlogic s905(x) SoC
+(quad A53), 8/16GB eMMC and 1/2GB RAM.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Both the s905 (gxbb) and s905x (gxl) variant is supported.
+
+This defconfig uses mainline Linux.  As the mainline support for s905 is
+quite young, use the latest release candidate.  There is currently no
+support for this board in U-Boot or sources available for the vendor U-Boot,
+so the defconfig doesn't build a u-boot and instead uses the existing U-Boot
+available in the eMMC.  This also means that we need to wrap the kernel as
+uImage, which isn't suppported for aarch64.  Instead this is done in the
+post-build script.
+
+Mainline aarch64 defconfig builds most drivers modular, so add mdev for
+module autoloading.
+
+[Peter: explicitly set BR2_cortex_a53=y]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
-  - do not warn for numbered subject if the patch was not generated with
-    git (based on comments from Thomas DS and Thomas P);
-  - use classes instead of functions to declare each check (Thomas DS);
----
+ board/nexbox/a95x/boot.txt      | 11 ++++++++++
+ board/nexbox/a95x/genimage.cfg  | 28 ++++++++++++++++++++++++
+ board/nexbox/a95x/post-build.sh | 12 +++++++++++
+ board/nexbox/a95x/post-image.sh | 14 ++++++++++++
+ board/nexbox/a95x/readme.txt    | 48 +++++++++++++++++++++++++++++++++++++++++
+ configs/nexbox_a95x_defconfig   | 20 +++++++++++++++++
+ 6 files changed, 133 insertions(+)
 
-Notes:
-    $ time support/scripts/check-package $(find package -type f) >/dev/null 2>/dev/null
-    
-    real	0m0.935s
-    user	0m0.904s
-    sys	0m0.028s
-    
-    ApplyOrder:
-     support/scripts/check-package --include-only ApplyOrder \
-     $(find package -name '*.patch') 2>/dev/null | wc -l
-      16
-     (cd support/scripts/check-package-example && \
-     ../check-package --include-only ApplyOrder -vv package/*/*)
-      package/package1/wrong-name.patch:0: use name <number>-<description>.patch (http://nightly.buildroot.org/#_providing_patches)
-      180 lines processed
-      1 warnings generated
-    
-    NumberedSubject:
-     support/scripts/check-package --include-only NumberedSubject \
-     $(find package -name '*.patch') 2>/dev/null | wc -l
-      139
-     (cd support/scripts/check-package-example && \
-     ../check-package --include-only NumberedSubject -vv package/*/*)
-      package/package1/0001-do-something.patch:4: generate your patches with 'git format-patch -N'
-      Subject: [PATCH 25/39] do something
-      180 lines processed
-      1 warnings generated
-    
-    Sob:
-     support/scripts/check-package --include-only Sob \
-     $(find package -name '*.patch') 2>/dev/null | wc -l
-      143
-     (cd support/scripts/check-package-example && \
-     ../check-package --include-only Sob -vv package/*/*)
-      package/package1/0001-do-something.patch:0: missing Signed-off-by in the header (http://nightly.buildroot.org/#_format_and_licensing_of_the_package_patches)
-      package/package1/wrong-name.patch:0: missing Signed-off-by in the header (http://nightly.buildroot.org/#_format_and_licensing_of_the_package_patches)
-      180 lines processed
-      2 warnings generated
-
- support/scripts/checkpackagelib_patch.py | 55 ++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
-
-diff --git a/support/scripts/checkpackagelib_patch.py b/support/scripts/checkpackagelib_patch.py
-index 131e42347..ee46efb70 100644
---- a/support/scripts/checkpackagelib_patch.py
-+++ b/support/scripts/checkpackagelib_patch.py
-@@ -3,5 +3,60 @@
- # functions don't need to check for things already checked by running
- # "make package-dirclean package-patch".
- 
-+import re
+diff --git a/board/nexbox/a95x/boot.txt b/board/nexbox/a95x/boot.txt
+new file mode 100644
+index 0000000..b538b4a
+--- /dev/null
++++ b/board/nexbox/a95x/boot.txt
+@@ -0,0 +1,11 @@
++setenv bootargs console=ttyAML0,115200 earlyprintk root=/dev/mmcblk1p2 rootwait
 +
-+from checkpackagebase import _CheckFunction
- # Notice: ignore 'imported but unused' from pyflakes for check functions.
- from checkpackagelib import NewlineAtEof
++fatload mmc 0:1 0x01080000 uImage
 +
++if itest.s "${aml_dt}" == "gxl_p212_2g"; then
++	fatload mmc 0:1 $dtb_mem_addr meson-gxl-nexbox-a95x.dtb
++else
++	fatload mmc 0:1 $dtb_mem_addr meson-gxbb-nexbox-a95x.dtb
++fi
 +
-+class ApplyOrder(_CheckFunction):
-+    APPLY_ORDER = re.compile("/\d{1,4}-[^/]*$")
++bootm 0x1080000 - $dtb_mem_addr
+diff --git a/board/nexbox/a95x/genimage.cfg b/board/nexbox/a95x/genimage.cfg
+new file mode 100644
+index 0000000..c6c80f8
+--- /dev/null
++++ b/board/nexbox/a95x/genimage.cfg
+@@ -0,0 +1,28 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"uImage",
++			"meson-gxbb-nexbox-a95x.dtb",
++			"meson-gxl-nexbox-a95x.dtb",
++			"boot.scr"
++		}
++	}
++	size = 32M
++}
 +
-+    def before(self):
-+        if not self.APPLY_ORDER.search(self.filename):
-+            return ["{}:0: use name <number>-<description>.patch "
-+                    "({}#_providing_patches)"
-+                    .format(self.filename, self.url_to_manual)]
++image sdcard.img {
++	hdimage {
++	}
 +
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
 +
-+class NumberedSubject(_CheckFunction):
-+    NUMBERED_PATCH = re.compile("Subject:\s*\[PATCH\s*\d+/\d+\]")
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/nexbox/a95x/post-build.sh b/board/nexbox/a95x/post-build.sh
+new file mode 100755
+index 0000000..9f4cc04
+--- /dev/null
++++ b/board/nexbox/a95x/post-build.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
 +
-+    def before(self):
-+        self.git_patch = False
-+        self.lineno = 0
-+        self.text = None
++BOARD_DIR="$(dirname $0)"
++MKIMAGE=$HOST_DIR/usr/bin/mkimage
 +
-+    def check_line(self, lineno, text):
-+        if text.startswith("diff --git"):
-+            self.git_patch = True
-+            return
-+        if self.NUMBERED_PATCH.search(text):
-+            self.lineno = lineno
-+            self.text = text
++$MKIMAGE -C none -A arm64 -T script -d $BOARD_DIR/boot.txt $BINARIES_DIR/boot.scr
 +
-+    def after(self):
-+        if self.git_patch and self.text:
-+            return ["{}:{}: generate your patches with 'git format-patch -N'"
-+                    .format(self.filename, self.lineno),
-+                    self.text]
++# vendor u-boot uses uImage
++if [ -e $BINARIES_DIR/Image ]; then
++    $MKIMAGE -A arm64 -O linux -T kernel -C none -a 0x1080000 -e 0x1080000 \
++	     -n linux -d $BINARIES_DIR/Image $BINARIES_DIR/uImage
++fi
+diff --git a/board/nexbox/a95x/post-image.sh b/board/nexbox/a95x/post-image.sh
+new file mode 100755
+index 0000000..359b4c9
+--- /dev/null
++++ b/board/nexbox/a95x/post-image.sh
+@@ -0,0 +1,14 @@
++#!/bin/sh
 +
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 +
-+class Sob(_CheckFunction):
-+    SOB_ENTRY = re.compile("^Signed-off-by: .*$")
++rm -rf "${GENIMAGE_TMP}"
 +
-+    def before(self):
-+        self.found = False
++genimage                               \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
+diff --git a/board/nexbox/a95x/readme.txt b/board/nexbox/a95x/readme.txt
+new file mode 100644
+index 0000000..e08b4e4
+--- /dev/null
++++ b/board/nexbox/a95x/readme.txt
+@@ -0,0 +1,48 @@
++Nexbox A95X
 +
-+    def check_line(self, lineno, text):
-+        if self.found:
-+            return
-+        if self.SOB_ENTRY.search(text):
-+            self.found = True
++Intro
++=====
 +
-+    def after(self):
-+        if not self.found:
-+            return ["{}:0: missing Signed-off-by in the header "
-+                    "({}#_format_and_licensing_of_the_package_patches)"
-+                    .format(self.filename, self.url_to_manual)]
--- 
-2.11.0
++Nexbox A95X is a low cost Android STB based around an Amlogic s905(x) SoC
++(quad A53), 8/16GB eMMC and 1/2GB RAM.  To use this defconfig, wires to the
++internal UART solder pads must be added.  See the linux-meson page for
++details:
++
++http://linux-meson.com/doku.php?id=nexbox_a95x_s905
++
++Both the s905 (gxbb) and s905x (gxl) variant is supported.
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the A95X.  With the current configuration it will
++bring-up the board from microSD, and allow access through the serial
++console.
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make nexbox_a95x_defconfig
++
++Compile everything and build the SD card image:
++
++    $ make
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto a microSD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++How to boot
++===========
++
++Insert microSD card and connect serial cable. Power board and stop
++U-Boot by pressing any key. Boot the system by typing:
++
++fatload mmc 0:1 0x1070000 boot.scr
++autoscr 0x1070000
+diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
+new file mode 100644
+index 0000000..906a22b
+--- /dev/null
++++ b/configs/nexbox_a95x_defconfig
+@@ -0,0 +1,20 @@
++BR2_aarch64=y
++BR2_cortex_a53=y
++BR2_KERNEL_HEADERS_4_9=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10-rc8"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-nexbox-a95x"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
