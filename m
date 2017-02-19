@@ -1,9 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:12:42 -0500
-Subject: [Buildroot] [PATCH 45/58] python-pyudev: bump to version 0.21.0
+Date: Sun, 19 Feb 2017 14:12:44 -0500
+Subject: [Buildroot] [PATCH 47/58] python-requests-toolbelt: bump to version
+	0.7.1
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-46-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-48-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-pyudev/python-pyudev.hash | 6 +++---
- package/python-pyudev/python-pyudev.mk   | 4 ++--
+ package/python-requests-toolbelt/python-requests-toolbelt.hash | 6 +++---
+ package/python-requests-toolbelt/python-requests-toolbelt.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyudev/python-pyudev.hash b/package/python-pyudev/python-pyudev.hash
-index adda9a4..feeb313 100644
---- a/package/python-pyudev/python-pyudev.hash
-+++ b/package/python-pyudev/python-pyudev.hash
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
+index 89f5ca1..75343b0 100644
+--- a/package/python-requests-toolbelt/python-requests-toolbelt.hash
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=07a60f5f7a6028e83725f759a1b9490a, sha256 locally computed
--md5     07a60f5f7a6028e83725f759a1b9490a  pyudev-0.18.tar.gz
--sha256  83b315f74e29c3a4aa6ea38b6cf73b0bb7e37066d7a5d70972ac418a80aed62a  pyudev-0.18.tar.gz
-+# md5 from https://pypi.python.org/pypi/pyudev/json, sha256 locally computed
-+md5 cf4d9db7d772622144ca1be6b5d9353b pyudev-0.21.0.tar.gz
-+sha256 094b7a100150114748aaa3b70663485dd360457a709bfaaafe5a977371033f2b pyudev-0.21.0.tar.gz
-diff --git a/package/python-pyudev/python-pyudev.mk b/package/python-pyudev/python-pyudev.mk
-index 70c4faf..a3e07b1 100644
---- a/package/python-pyudev/python-pyudev.mk
-+++ b/package/python-pyudev/python-pyudev.mk
+-# md5 from https://pypi.python.org/pypi/requests-toolbelt/json, sha256 locally computed
+-md5	bfe2009905f460f4764c32cfbbf4205f  requests-toolbelt-0.7.0.tar.gz
+-sha256	33899d4a559c3f0f5e9fbc115d337c4236febdc083755a160a4132d92fc3c91a  requests-toolbelt-0.7.0.tar.gz
++# md5 from https://pypi.python.org/pypi/requests_toolbelt/json, sha256 locally computed
++md5 be245e2093a9610fb2eb399afc063ad2 requests-toolbelt-0.7.1.tar.gz
++sha256 c3843884269d79e492522f3e9f490917e074c1ddbb80111968970e721fe36eaf requests-toolbelt-0.7.1.tar.gz
+diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
+index 2e944c0..ce1d958 100644
+--- a/package/python-requests-toolbelt/python-requests-toolbelt.mk
++++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYUDEV_VERSION = 0.18
-+PYTHON_PYUDEV_VERSION = 0.21.0
- PYTHON_PYUDEV_SOURCE = pyudev-$(PYTHON_PYUDEV_VERSION).tar.gz
--PYTHON_PYUDEV_SITE = https://pypi.python.org/packages/source/p/pyudev
-+PYTHON_PYUDEV_SITE = https://pypi.python.org/packages/bc/a2/31a07829acea8e70a28c247f43fa5d981229ae0f9edfeddedf52de00709b
- PYTHON_PYUDEV_LICENSE = LGPLv2.1+
- PYTHON_PYUDEV_LICENSE_FILES = COPYING
- PYTHON_PYUDEV_SETUP_TYPE = setuptools
+-PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.0
++PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.1
+ PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
+-PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/59/78/1d391d30ebf74079a8e4de6ab66fdca5362903ef2df64496f4697e9bb626
++PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/ab/bf/2af6b25f880e2d529a524f98837d33b1048a2a15703fc4806185b54e9672
+ PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
 -- 
 2.9.3
