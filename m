@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:12:31 -0500
-Subject: [Buildroot] [PATCH 34/58] python-pycparser: bump to version 2.17
+Date: Sun, 19 Feb 2017 14:12:32 -0500
+Subject: [Buildroot] [PATCH 35/58] python-pydal: bump to version 17.1
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-35-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-36-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-pycparser/python-pycparser.hash | 6 +++---
- package/python-pycparser/python-pycparser.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pydal/python-pydal.hash | 4 ++--
+ package/python-pydal/python-pydal.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pycparser/python-pycparser.hash b/package/python-pycparser/python-pycparser.hash
-index a87bfd4..25747c3 100644
---- a/package/python-pycparser/python-pycparser.hash
-+++ b/package/python-pycparser/python-pycparser.hash
+diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+index ad17c33..8e20215 100644
+--- a/package/python-pydal/python-pydal.hash
++++ b/package/python-pydal/python-pydal.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=a2bc8d28c923b4fe2b2c3b4b51a4f935, sha256 locally computed
--md5     a2bc8d28c923b4fe2b2c3b4b51a4f935  pycparser-2.14.tar.gz
--sha256  7959b4a74abdc27b312fed1c21e6caf9309ce0b29ea86b591fd2e99ecdf27f73  pycparser-2.14.tar.gz
-+# md5 from https://pypi.python.org/pypi/pycparser/json, sha256 locally computed
-+md5 ca98dcb50bc1276f230118f6af5a40c7 pycparser-2.17.tar.gz
-+sha256 0aac31e917c24cb3357f5a4d5566f2cc91a19ca41862f6c3c22dc60a629673b6 pycparser-2.17.tar.gz
-diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
-index a32f1aa..e66c80b 100644
---- a/package/python-pycparser/python-pycparser.mk
-+++ b/package/python-pycparser/python-pycparser.mk
+ # md5 from https://pypi.python.org/pypi/pydal/json, sha256 locally computed
+-md5	74c6cc43d5ee57bcffa804c1204030d8  pyDAL-16.9.tar.gz
+-sha256	e5e18b10df044c4328a5a2fe0400793a8f643fe3526daee8c99103fc5589476e  pyDAL-16.9.tar.gz
++md5 f544da78cd4980d3a13024bc79065cf0 pyDAL-17.1.tar.gz
++sha256 ae33e903725133c051df3cd0712cc1967997f56fc480a90ab6a7c50df265f9d1 pyDAL-17.1.tar.gz
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+index a0e9729..7492357 100644
+--- a/package/python-pydal/python-pydal.mk
++++ b/package/python-pydal/python-pydal.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCPARSER_VERSION = 2.14
-+PYTHON_PYCPARSER_VERSION = 2.17
- PYTHON_PYCPARSER_SOURCE = pycparser-$(PYTHON_PYCPARSER_VERSION).tar.gz
--PYTHON_PYCPARSER_SITE = https://pypi.python.org/packages/source/p/pycparser
-+PYTHON_PYCPARSER_SITE = https://pypi.python.org/packages/be/64/1bb257ffb17d01f4a38d7ce686809a736837ad4371bcc5c42ba7a715c3ac
- PYTHON_PYCPARSER_SETUP_TYPE = setuptools
- PYTHON_PYCPARSER_LICENSE = BSD-3c
- PYTHON_PYCPARSER_LICENSE_FILES = LICENSE
+-PYTHON_PYDAL_VERSION = 16.9
++PYTHON_PYDAL_VERSION = 17.1
+ PYTHON_PYDAL_SOURCE = pyDAL-$(PYTHON_PYDAL_VERSION).tar.gz
+-PYTHON_PYDAL_SITE = https://pypi.python.org/packages/31/cb/7537f8d848106e3e4b4063955395a5dc3177c32c2cd2cc0a1938a486d4fa
++PYTHON_PYDAL_SITE = https://pypi.python.org/packages/64/9a/4fc08f6078b3a3019a9e33c8383bb023e064405dc5e16c273b8ec6d430cd
+ PYTHON_PYDAL_LICENSE = BSD-3c
+ PYTHON_PYDAL_LICENSE_FILES = LICENSE
+ PYTHON_PYDAL_SETUP_TYPE = setuptools
 -- 
 2.9.3
