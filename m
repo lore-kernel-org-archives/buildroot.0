@@ -1,7 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Feb 2017 09:16:05 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libva: project moved to github
-Message-ID: <20170219081606.7085-1-bernd.kuhls@t-online.de>
+Date: Sun, 19 Feb 2017 09:16:06 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libva-intel-driver: project moved
+	to github
+In-Reply-To: <20170219081606.7085-1-bernd.kuhls@t-online.de>
+References: <20170219081606.7085-1-bernd.kuhls@t-online.de>
+Message-ID: <20170219081606.7085-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +16,47 @@ https://lists.01.org/pipermail/intel-vaapi-media/2017-January/000001.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libva/Config.in  | 2 +-
- package/libva/libva.hash | 4 ++--
- package/libva/libva.mk   | 3 +--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/libva-intel-driver/Config.in               | 2 +-
+ package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
+ package/libva-intel-driver/libva-intel-driver.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libva/Config.in b/package/libva/Config.in
-index 467b9d2fa4..75692f2ece 100644
---- a/package/libva/Config.in
-+++ b/package/libva/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBVA
- 	  IDCT, Motion Compensation etc.) for the prevailing coding standards
- 	  today (MPEG-2, MPEG-4 ASP/H.263, MPEG-4 AVC/H.264, and VC-1/VMW3).
+diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
+index 0f5b656b12..a39e554984 100644
+--- a/package/libva-intel-driver/Config.in
++++ b/package/libva-intel-driver/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
+ 	help
+ 	  VA-API back-end driver for Intel graphics chips
  
--	  http://www.freedesktop.org/wiki/Software/vaapi/
+-	  https://01.org/linuxgraphics/community/vaapi
 +	  https://01.org/linuxmedia/vaapi
  
- comment "libva needs a toolchain w/ threads, dynamic library"
+ comment "libva intel driver needs a toolchain w/ threads, dynamic library"
  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index e63f4dbd83..1f248f8b67 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
+diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
+index 10664d051b..a9688763a9 100644
+--- a/package/libva-intel-driver/libva-intel-driver.hash
++++ b/package/libva-intel-driver/libva-intel-driver.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/libva/2016-November/004730.html
--sha1 18e46f3d5a0e971eb0ec9fe14bc021e69eb13fb8  libva-1.7.3.tar.bz2
+-# From https://lists.freedesktop.org/archives/libva/2016-November/004731.html
+-sha1 5100f187afc4e39fce5664b96fe11a38faa9afaa  libva-intel-driver-1.7.3.tar.bz2
 +# Locally computed
-+sha256 f0f816a725007fbf3c7ed816ff71ba420696bec63ff49045e9b23d9b34ac73c8  libva-1.7.3.tar.gz
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index cf42b70e84..bce69072e4 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -5,8 +5,7 @@
++sha256 c1f02cbdf0398f096ddc91096fac6ee62267a54955f6d235d73a8ff2ea888118  libva-intel-driver-1.7.3.tar.gz
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+index 86f6eaa60e..e2f855bb33 100644
+--- a/package/libva-intel-driver/libva-intel-driver.mk
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
- LIBVA_VERSION = 1.7.3
--LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
--LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
-+LIBVA_SITE = $(call github,01org,libva,libva-$(LIBVA_VERSION))
- LIBVA_LICENSE = MIT
- LIBVA_LICENSE_FILES = COPYING
- LIBVA_AUTORECONF = YES
+ LIBVA_INTEL_DRIVER_VERSION = 1.7.3
+-LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
+-LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
++LIBVA_INTEL_DRIVER_SITE = \
++	$(call github,01org,intel-vaapi-driver,$(LIBVA_INTEL_DRIVER_VERSION))
+ LIBVA_INTEL_DRIVER_LICENSE = MIT
+ LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
+ # needed to work around https://bugs.freedesktop.org/show_bug.cgi?id=79478
 -- 
 2.11.0
