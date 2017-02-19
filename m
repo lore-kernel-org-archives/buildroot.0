@@ -1,44 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Feb 2017 22:27:14 +0100
-Subject: [Buildroot] [git commit] kmod: workaround for microblaze ld bug
-Message-ID: <20170219212848.4394A82138@busybox.osuosl.org>
+Date: Sun, 19 Feb 2017 22:43:00 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libva: project moved to github
+In-Reply-To: <20170219081606.7085-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 19 Feb 2017 09:16:05 +0100")
+References: <20170219081606.7085-1-bernd.kuhls@t-online.de>
+Message-ID: <87bmtxsvq3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d81107f021bf2a663f102bace1e3f9590641170
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Add a workaround for a microblaze specific ld bug to avoid
-segfault.
+ > For details read
+ > https://lists.01.org/pipermail/intel-vaapi-media/2017-January/000001.html
 
-Fixes:
-  http://autobuild.buildroot.net/results/aef1b915ffd3e5678af8682727c22c5618edfd89
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-[Peter: force --gc-sections configure check to false instead of patching
- 	configure]
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kmod/kmod.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+The existing release is still available on the old location, so
+committed both to next, thanks.
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 7492b92..407d90d 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -15,6 +15,12 @@ HOST_KMOD_DEPENDENCIES = host-pkgconf
- KMOD_LICENSE = LGPLv2.1+ (library)
- KMOD_LICENSE_FILES = libkmod/COPYING
- 
-+# --gc-sections triggers binutils ld segfault
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=21180
-+ifeq ($(BR2_microblaze),y)
-+KMOD_CONF_ENV += cc_cv_LDFLAGS__Wl___gc_sections=false
-+endif
-+
- # static linking not supported, see
- # https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
- KMOD_CONF_OPTS = --disable-static --enable-shared
+-- 
+Bye, Peter Korsgaard
