@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:12:06 -0500
-Subject: [Buildroot] [PATCH 09/58] python-cryptography: bump to version 1.7.2
+Date: Sun, 19 Feb 2017 14:12:20 -0500
+Subject: [Buildroot] [PATCH 23/58] python-markdown: bump to version 2.6.8
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-10-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-24-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-cryptography/python-cryptography.hash | 4 ++--
- package/python-cryptography/python-cryptography.mk   | 4 ++--
+ package/python-markdown/python-markdown.hash | 4 ++--
+ package/python-markdown/python-markdown.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 7738d23..a1162cf 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
+diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
+index d30faae..f2131ed 100644
+--- a/package/python-markdown/python-markdown.hash
++++ b/package/python-markdown/python-markdown.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
--md5	2f63dee6ace602d1d20d1995f8538015  cryptography-1.7.1.tar.gz
--sha256	953fef7d40a49a795f4d955c5ce4338abcec5dea822ed0414ed30348303fdb4c  cryptography-1.7.1.tar.gz
-+md5 fade66de437392ed1ba6980768626204 cryptography-1.7.2.tar.gz
-+sha256 878cb68b3da3d493ffd68f36db11c29deee623671d3287c3f8d685117ffda9a9 cryptography-1.7.2.tar.gz
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index d4e18ec..9e2b86f 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
+ # md5 from https://pypi.python.org/pypi/markdown/json, sha256 locally computed
+-md5	a06f1c5d462b32e0e8da014e9eebb0d9  Markdown-2.6.7.tar.gz
+-sha256	daebf24846efa7ff269cfde8c41a48bb2303920c7b2c7c5e04fa82e6282d05c0  Markdown-2.6.7.tar.gz
++md5 d9ef057a5bd185f6f536400a31fc5d45 Markdown-2.6.8.tar.gz
++sha256 0ac8a81e658167da95d063a9279c9c1b2699f37c7c4153256a458b3a43860e33 Markdown-2.6.8.tar.gz
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index fb87ada..6968366 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 1.7.1
-+PYTHON_CRYPTOGRAPHY_VERSION = 1.7.2
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/82/f7/d6dfd7595910a20a563a83a762bf79a253c4df71759c3b228accb3d7e5e4
-+PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/99/df/71c7260003f5c469cec3db4c547115df39e9ce6c719a99e067ba0e78fd8a
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3c
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_MARKDOWN_VERSION = 2.6.7
++PYTHON_MARKDOWN_VERSION = 2.6.8
+ PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+-PYTHON_MARKDOWN_SITE = https://pypi.python.org/packages/d4/32/642bd580c577af37b00a1eb59b0eaa996f2d11dfe394f3dd0c7a8a2de81a
++PYTHON_MARKDOWN_SITE = https://pypi.python.org/packages/1d/25/3f6d2cb31ec42ca5bd3bfbea99b63892b735d76e26f20dd2dcc34ffe4f0d
+ PYTHON_MARKDOWN_LICENSE = BSD-3c
+ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+ PYTHON_MARKDOWN_SETUP_TYPE = distutils
 -- 
 2.9.3
