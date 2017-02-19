@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:11:58 -0500
-Subject: [Buildroot] [PATCH 01/58] python-autobahn: bump to version 0.17.1
+Date: Sun, 19 Feb 2017 14:12:01 -0500
+Subject: [Buildroot] [PATCH 04/58] python-certifi: bump to version 2017.1.23
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-2-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-5-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-autobahn/python-autobahn.hash | 4 ++--
- package/python-autobahn/python-autobahn.mk   | 4 ++--
+ package/python-certifi/python-certifi.hash | 4 ++--
+ package/python-certifi/python-certifi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index cae9160..0bcb2d9 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index 443cc6d..ab0e373 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/autobahn/json, sha256 locally computed
--md5	9850702d0078c5a4aa17170afe2f233c  autobahn-0.16.0.tar.gz
--sha256	a1dcb4315a0914da56ec484659816de72dfad229be4ac19fa61bbc0111ada884  autobahn-0.16.0.tar.gz
-+md5 f6b3c2684b873ae29111385b695b28fb autobahn-0.17.1.tar.gz
-+sha256 4b8667375161f9a3516b71d7fd47aa31ba100bb822d1a235baaf9185ea252959 autobahn-0.17.1.tar.gz
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index a5e9aee..3009755 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
+ # md5 from https://pypi.python.org/pypi/certifi/json, sha256 locally computed
+-md5	baa81e951a29958563689d868ef1064d  certifi-2016.9.26.tar.gz
+-sha256	8275aef1bbeaf05c53715bfc5d8569bd1e04ca1e8e69608cc52bcaac2604eb19  certifi-2016.9.26.tar.gz
++md5 b72521a8badff5e89a8eabea586d79ab certifi-2017.1.23.tar.gz
++sha256 81877fb7ac126e9215dfb15bfef7115fdc30e798e0013065158eed0707fd99ce certifi-2017.1.23.tar.gz
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index f69e7c1..3f83194 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 0.16.0
-+PYTHON_AUTOBAHN_VERSION = 0.17.1
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://pypi.python.org/packages/68/37/2523309412f0fb93a7784c65e5c5639b4b5d7a84f91374ad6c3c2d5af60b
-+PYTHON_AUTOBAHN_SITE = https://pypi.python.org/packages/28/36/c146415f70f62ae678c4b6dae64872eb7d55661dbb8830a5fa594143478c
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-PYTHON_CERTIFI_VERSION = 2016.9.26
++PYTHON_CERTIFI_VERSION = 2017.1.23
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/4f/75/e1bc6e363a2c76f8d7e754c27c437dbe4086414e1d6d2f6b2a3e7846f22b
++PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/b6/fa/ca682d5ace0700008d246664e50db8d095d23750bb212c0086305450c276
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
 -- 
 2.9.3
