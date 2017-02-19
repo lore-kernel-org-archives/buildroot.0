@@ -1,70 +1,50 @@
-From: Lionel Flandrin <lionel@svkt.org>
-Date: Sun, 19 Feb 2017 22:20:54 +0100
-Subject: [Buildroot] [PATCH 00/58] python pypi library mass version bump.
-In-Reply-To: <20170219211718.42744cc8@free-electrons.com>
-References: <20170219191255.1503-1-Adamduskett@outlook.com>
- <20170219211718.42744cc8@free-electrons.com>
-Message-ID: <20170219212054.2x6hosogfxbztldl@localhost.localdomain>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 19 Feb 2017 22:27:06 +0100
+Subject: [Buildroot] [PATCH] kmod: workaround for microblaze ld bug
+In-Reply-To: <20170218214054.GA361@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Sat, 18 Feb 2017 22:40:54 +0100")
+References: <20170218214054.GA361@waldemar-brodkorb.de>
+Message-ID: <87fuj9swgl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 19, 2017 at 09:17:18PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 19 Feb 2017 14:11:57 -0500, Adam Duskett wrote:
-> 
-> > I personally tested to make sure that all of these changes build properly on my
-> > machine before submitting.
-> 
-> The one problem I have with such a mass version bump is precisely that
-> a build test for Python modules is completely insufficient. Only a
-> runtime test can determine whether the bump is OK or not. As Yegor
-> said, a number of those modules gain new dependencies between one
-> version and another, and those can sometimes only be noticed by doing a
-> runtime test.
-> 
-> Thomas
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-Could we automate that somehow? Would simply importing the package be
-sufficient for a basic runtime test? Alternatively could we run the
-package-provided tests (if they exist)?
+ > Add a workaround for a microblaze specific ld bug to avoid
+ > segfault.
 
-In general I wonder if this python package situation is going to be
-maintainable in buildroot in the long run. There are nearly 200 python
-packages at the moment on the master branch, more than 10% of all
-buildroot packages.
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/aef1b915ffd3e5678af8682727c22c5618edfd89
 
-There are more than 20 thousand packages on pypi.python.org.
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > ---
+ >  package/kmod/kmod.mk | 10 ++++++++++
+ >  1 file changed, 10 insertions(+)
 
-If you're writing any non-trivial python application with buildroot
-you're almost certain to hit missing and/or outdated packages. It's
-been my experience in the past few weeks, almost all the python
-packages I've wanted to use were either missing or outdated, some of
-them quite severely.
+ > diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+ > index 7492b92..2524bcd 100644
+ > --- a/package/kmod/kmod.mk
+ > +++ b/package/kmod/kmod.mk
+ > @@ -15,6 +15,16 @@ HOST_KMOD_DEPENDENCIES = host-pkgconf
+ >  KMOD_LICENSE = LGPLv2.1+ (library)
+ >  KMOD_LICENSE_FILES = libkmod/COPYING
+ 
+ > +# --gc-sections triggers binutils ld segfault
+ > +# https://sourceware.org/bugzilla/show_bug.cgi?id=21180
+ > +ifeq ($(BR2_microblaze),y)
+ > +define KMOD_PRECONFIGURE
+ > +	sed -i 's:-Wl,--gc-sections::g' $(@D)/configure
 
-Furthermore as "embedded" platforms become less and less constrained
-more and more people will want to move to higher level languages like
-python.
+Patching the generated configure script is quite icky. We can just tell
+the configure script that --gc-sections aren't supported, so I've
+changed it to do:
 
-In this situation how can buildroot integrate *and* maintain
-potentially thousands of python packages "by hand"?
+KMOD_CONF_ENV += cc_cv_LDFLAGS__Wl___gc_sections=false
 
-I hope this doesn't come off as whiny, I'm extremely thankful for all
-the work people have put building and maintaining the current
-infrastructure, and once all the packages you want to use are in there
-it's a pleasure to use. I just wanted to offer a piece of constructive
-criticism.
+And committed, thanks.
 
-Cheers,
 -- 
-Lionel Flandrin
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170219/e0aeefc8/attachment.asc>
+Bye, Peter Korsgaard
