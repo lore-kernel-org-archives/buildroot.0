@@ -1,44 +1,22 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 18 Feb 2017 22:40:54 +0100
-Subject: [Buildroot] [PATCH] kmod: workaround for microblaze ld bug
-Message-ID: <20170218214054.GA361@waldemar-brodkorb.de>
+From: jjman04 at icloud.com <jjman04@icloud.com>
+Date: Sat, 18 Feb 2017 21:03:30 -0700
+Subject: [Buildroot] CHIP Pro OS?
+Message-ID: <c2ae5f05-3a98-49db-b8f7-42b5ae37fe0d@Spark>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a workaround for a microblaze specific ld bug to avoid
-segfault.
+Hi guys, I'm Josh. I wasn't sure which email to sent to, so I sent to both of the email addresses that I found.
 
-Fixes:
-  http://autobuild.buildroot.net/results/aef1b915ffd3e5678af8682727c22c5618edfd89
+Here's my question:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/kmod/kmod.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+How hard would it be for me to program a (very lean) OS for CHIP Pro (https://getchip.com/pages/chippro) using Buildroot? Keep in mind that I'm only 12, so I don't know many programming languages. I know a bit of Python and HTML5. I'm also learning C++ as soon as I find an online course. Would knowing those languages be enough?
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 7492b92..2524bcd 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -15,6 +15,16 @@ HOST_KMOD_DEPENDENCIES = host-pkgconf
- KMOD_LICENSE = LGPLv2.1+ (library)
- KMOD_LICENSE_FILES = libkmod/COPYING
- 
-+# --gc-sections triggers binutils ld segfault
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=21180
-+ifeq ($(BR2_microblaze),y)
-+define KMOD_PRECONFIGURE
-+	sed -i 's:-Wl,--gc-sections::g' $(@D)/configure
-+endef
-+
-+KMOD_PRE_CONFIGURE_HOOKS += KMOD_PRECONFIGURE
-+endif
-+
- # static linking not supported, see
- # https://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=b7016153ec8
- KMOD_CONF_OPTS = --disable-static --enable-shared
--- 
-2.1.4
+Thank you,
+
+Josh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170218/815ee0a8/attachment.html>
