@@ -1,43 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Feb 2017 11:35:38 +0100
-Subject: [Buildroot] [PATCH] package/glmark2: needs gcc >= 4.9 for C++14
-Message-ID: <1487500538-4627-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 19 Feb 2017 11:40:44 +0100
+Subject: [Buildroot] [PATCH] package/mosquito: needs sync_4
+In-Reply-To: <20170219103516.ibi5c644ysdx6bkn@tarshish>
+References: <1487499795-2205-1-git-send-email-yann.morin.1998@free.fr>
+ <20170219103516.ibi5c644ysdx6bkn@tarshish>
+Message-ID: <20170219104044.GA3450@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/511/51162285d197deabb63727c19cdf5512b0e68f29/
+Baruch, All,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Spenser Gilliland <spenser@gillilanding.com>
----
- package/glmark2/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+On 2017-02-19 12:35 +0200, Baruch Siach spake thusly:
+> On Sun, Feb 19, 2017 at 11:23:15AM +0100, Yann E. MORIN wrote:
+> > Fixes:
+> >     http://autobuild.buildroot.org/results/2bc/2bc84ba2d1167018e2d48e5183ead22b6425dcf5/
+> >     http://autobuild.buildroot.org/results/445/445f377ae70397b5f675f541977900e8986b79a4/
+> >     http://autobuild.buildroot.org/results/57e/57e6984427f8c5d906a93884cc461b8f93cf5ce0/
+> >     ...
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/mosquitto/Config.in | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+> > index 50937d0..bc2ab35 100644
+> > --- a/package/mosquitto/Config.in
+> > +++ b/package/mosquitto/Config.in
+> > @@ -1,6 +1,7 @@
+> >  config BR2_PACKAGE_MOSQUITTO
+> >  	bool "mosquitto"
+> >  	depends on BR2_USE_MMU # fork()
+> > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> 
+> What about symbols that select BR2_PACKAGE_MOSQUITTO 
+> (BR2_PACKAGE_COLLECTD_MQTT, BR2_PACKAGE_DOMOTICZ)?
 
-diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
-index c8380b1..9f0f9fb 100644
---- a/package/glmark2/Config.in
-+++ b/package/glmark2/Config.in
-@@ -10,11 +10,16 @@ config BR2_PACKAGE_GLMARK2_GL
- 	depends on BR2_PACKAGE_HAS_LIBGL
- 	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
- 
-+comment "glmark2 needs a toolchain w/ gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+
- comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on !BR2_PACKAGE_GLMARK2_GL && !BR2_PACKAGE_GLMARK2_EGL_GLES
- 
- config BR2_PACKAGE_GLMARK2
- 	bool "glmark2"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
- 	depends on BR2_PACKAGE_GLMARK2_GL || BR2_PACKAGE_GLMARK2_EGL_GLES
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBPNG
+Damn right you are. I'll fix. Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
