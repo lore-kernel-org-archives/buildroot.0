@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:12:55 -0500
-Subject: [Buildroot] [PATCH 58/58] python-xlwt: bump to version 1.2.0
+Date: Sun, 19 Feb 2017 14:12:30 -0500
+Subject: [Buildroot] [PATCH 33/58] python-pycli: bump to version 2.0.3
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-59-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-34-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-xlwt/python-xlwt.hash | 7 +++----
- package/python-xlwt/python-xlwt.mk   | 4 ++--
+ package/python-pycli/python-pycli.hash | 7 +++----
+ package/python-pycli/python-pycli.mk   | 4 ++--
  2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-xlwt/python-xlwt.hash b/package/python-xlwt/python-xlwt.hash
-index 4cacf2b..4523887 100644
---- a/package/python-xlwt/python-xlwt.hash
-+++ b/package/python-xlwt/python-xlwt.hash
+diff --git a/package/python-pycli/python-pycli.hash b/package/python-pycli/python-pycli.hash
+index 8be3178..46a297e 100644
+--- a/package/python-pycli/python-pycli.hash
++++ b/package/python-pycli/python-pycli.hash
 @@ -1,4 +1,3 @@
--# md5 from https://pypi.python.org/pypi/xlwt/json
--md5	fadf8d1be8c5f071561c4145ed5f5b89  xlwt-1.1.2.tar.gz
--# sha256 calculated by scanpypi
--sha256	aed648c17731f40f84550dd2a1aaa53569f0cbcaf5610ba895cd2632587b723c  xlwt-1.1.2.tar.gz
-+# md5 from https://pypi.python.org/pypi/xlwt/json, sha256 locally computed
-+md5 1f2673a93c221f0195f342c578f04968 xlwt-1.2.0.tar.gz
-+sha256 505669c1eb6a60823fd3e2e723b60eea95f2c56254113bf163091ed2bedb4ac9 xlwt-1.2.0.tar.gz
-diff --git a/package/python-xlwt/python-xlwt.mk b/package/python-xlwt/python-xlwt.mk
-index 38d5f09..27901f9 100644
---- a/package/python-xlwt/python-xlwt.mk
-+++ b/package/python-xlwt/python-xlwt.mk
+-# From https://pypi.python.org/pypi?:action=show_md5&digest=5cad880168f3423a1235b396735c1360
+-md5 5cad880168f3423a1235b396735c1360 pyCLI-devel.tar.gz
+-# Locally calculated
+-sha256 d7dc3245d79ef00ba5c0d6b008eb3d1a519c0df4cfa4467eee5160a80c6ddc0a pyCLI-devel.tar.gz
++# md5 from https://pypi.python.org/pypi/pycli/json, sha256 locally computed
++md5 89c487e7c8068ce05d63394d2ae7ebad pyCLI-2.0.3.tar.gz
++sha256 bc53e6c5db031ae1c05d131641f153d22a201c5e82cc8c9324a945752efbb622 pyCLI-2.0.3.tar.gz
+diff --git a/package/python-pycli/python-pycli.mk b/package/python-pycli/python-pycli.mk
+index 8e48a06..7aff1c6 100644
+--- a/package/python-pycli/python-pycli.mk
++++ b/package/python-pycli/python-pycli.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_XLWT_VERSION = 1.1.2
-+PYTHON_XLWT_VERSION = 1.2.0
- PYTHON_XLWT_SOURCE = xlwt-$(PYTHON_XLWT_VERSION).tar.gz
--PYTHON_XLWT_SITE = https://pypi.python.org/packages/0b/69/644313df86e6375ec2c6b34ec8ac544b9cc7803b7d943223d32811860f3d
-+PYTHON_XLWT_SITE = https://pypi.python.org/packages/5b/8d/22b9ec552a1d7865de39f54bd15f9db09c72a6bf8ab77b11dcce4ae336bb
- PYTHON_XLWT_SETUP_TYPE = setuptools
- PYTHON_XLWT_LICENSE = BSD-3c, BSD-4c
- PYTHON_XLWT_LICENSE_FILES = docs/licenses.rst
+-PYTHON_PYCLI_VERSION = devel
++PYTHON_PYCLI_VERSION = 2.0.3
+ PYTHON_PYCLI_SOURCE = pyCLI-$(PYTHON_PYCLI_VERSION).tar.gz
+-PYTHON_PYCLI_SITE = https://pypi.python.org/packages/source/p/pyCLI
++PYTHON_PYCLI_SITE = https://pypi.python.org/packages/95/fc/b2d86a5fbdac4072bcf70b01674b612e1a13026f54962c878fe3eca36fd1
+ PYTHON_PYCLI_LICENSE = ISC-like
+ PYTHON_PYCLI_LICENSE_FILES = lib/cli/__init__.py
+ PYTHON_PYCLI_SETUP_TYPE = setuptools
 -- 
 2.9.3
