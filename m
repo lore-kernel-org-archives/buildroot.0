@@ -1,10 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:12:44 -0500
-Subject: [Buildroot] [PATCH 47/58] python-requests-toolbelt: bump to version
-	0.7.1
+Date: Sun, 19 Feb 2017 14:12:37 -0500
+Subject: [Buildroot] [PATCH 40/58] python-pyroute2: bump to version 0.4.13
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-48-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-41-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-requests-toolbelt/python-requests-toolbelt.hash | 6 +++---
- package/python-requests-toolbelt/python-requests-toolbelt.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pyroute2/python-pyroute2.hash | 4 ++--
+ package/python-pyroute2/python-pyroute2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.hash b/package/python-requests-toolbelt/python-requests-toolbelt.hash
-index 89f5ca1..75343b0 100644
---- a/package/python-requests-toolbelt/python-requests-toolbelt.hash
-+++ b/package/python-requests-toolbelt/python-requests-toolbelt.hash
+diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
+index ff680fc..dbf09c9 100644
+--- a/package/python-pyroute2/python-pyroute2.hash
++++ b/package/python-pyroute2/python-pyroute2.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/requests-toolbelt/json, sha256 locally computed
--md5	bfe2009905f460f4764c32cfbbf4205f  requests-toolbelt-0.7.0.tar.gz
--sha256	33899d4a559c3f0f5e9fbc115d337c4236febdc083755a160a4132d92fc3c91a  requests-toolbelt-0.7.0.tar.gz
-+# md5 from https://pypi.python.org/pypi/requests_toolbelt/json, sha256 locally computed
-+md5 be245e2093a9610fb2eb399afc063ad2 requests-toolbelt-0.7.1.tar.gz
-+sha256 c3843884269d79e492522f3e9f490917e074c1ddbb80111968970e721fe36eaf requests-toolbelt-0.7.1.tar.gz
-diff --git a/package/python-requests-toolbelt/python-requests-toolbelt.mk b/package/python-requests-toolbelt/python-requests-toolbelt.mk
-index 2e944c0..ce1d958 100644
---- a/package/python-requests-toolbelt/python-requests-toolbelt.mk
-+++ b/package/python-requests-toolbelt/python-requests-toolbelt.mk
+ # md5 from https://pypi.python.org/pypi/pyroute2/json, sha256 locally computed
+-md5	317303ba8a5e3d55b4f918fd1b7e186d  pyroute2-0.4.8.tar.gz
+-sha256	a59907d2c5756f188b5f8aa48e3060e31c6f40e076f8143b99240fe0108a48d6  pyroute2-0.4.8.tar.gz
++md5 ef4282b1401bcd07a9cf4ec0696aba24 pyroute2-0.4.13.tar.gz
++sha256 93f3d72f58b3627036427b5571f8e27c93dbb6d01372dc4c452707d6610c0a39 pyroute2-0.4.13.tar.gz
+diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
+index 5ea4f54..f026b7f 100644
+--- a/package/python-pyroute2/python-pyroute2.mk
++++ b/package/python-pyroute2/python-pyroute2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.0
-+PYTHON_REQUESTS_TOOLBELT_VERSION = 0.7.1
- PYTHON_REQUESTS_TOOLBELT_SOURCE = requests-toolbelt-$(PYTHON_REQUESTS_TOOLBELT_VERSION).tar.gz
--PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/59/78/1d391d30ebf74079a8e4de6ab66fdca5362903ef2df64496f4697e9bb626
-+PYTHON_REQUESTS_TOOLBELT_SITE = https://pypi.python.org/packages/ab/bf/2af6b25f880e2d529a524f98837d33b1048a2a15703fc4806185b54e9672
- PYTHON_REQUESTS_TOOLBELT_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_TOOLBELT_LICENSE = Apache-2.0
- PYTHON_REQUESTS_TOOLBELT_LICENSE_FILES = LICENSE
+-PYTHON_PYROUTE2_VERSION = 0.4.8
++PYTHON_PYROUTE2_VERSION = 0.4.13
+ PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
+-PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/fb/c1/2cbd9d3f91c663be7168ee2d8d6e919006ffeef57cac76bdd9e6cba7f468
++PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/91/e7/814f60e355078dc51625cd2e7e715ed4a06111ddf2ac5580f2f10e79c94a
+ PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPLv2+
+ PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
+ PYTHON_PYROUTE2_SETUP_TYPE = distutils
 -- 
 2.9.3
