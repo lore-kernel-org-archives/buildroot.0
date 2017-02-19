@@ -1,43 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Feb 2017 16:10:22 +0100
-Subject: [Buildroot] [git commit] nexbox_a95x_defconfig: bump kernel to
-	final 4.10
-Message-ID: <20170301170423.99A937FBDB@busybox.osuosl.org>
+Date: Sun, 19 Feb 2017 22:37:24 +0100
+Subject: [Buildroot] [git commit] package/libva: project moved to github
+Message-ID: <20170301170422.51567822A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a17be324e53fc596aec4dea079972ae004cf5d32
+commit: https://git.buildroot.net/buildroot/commit/?id=8557294fd189e27a5a9adc421fbd5006285a0c47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And use same version for header headers as well.
+For details read
+https://lists.01.org/pipermail/intel-vaapi-media/2017-January/000001.html
 
-[Peter: explicitly set BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10 as pointed
-	out by Thomas]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/nexbox_a95x_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libva/Config.in  | 2 +-
+ package/libva/libva.hash | 4 ++--
+ package/libva/libva.mk   | 3 +--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
-index 906a22b..375b4d3 100644
---- a/configs/nexbox_a95x_defconfig
-+++ b/configs/nexbox_a95x_defconfig
-@@ -1,13 +1,13 @@
- BR2_aarch64=y
- BR2_cortex_a53=y
--BR2_KERNEL_HEADERS_4_9=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10-rc8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-nexbox-a95x"
+diff --git a/package/libva/Config.in b/package/libva/Config.in
+index 467b9d2..75692f2 100644
+--- a/package/libva/Config.in
++++ b/package/libva/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBVA
+ 	  IDCT, Motion Compensation etc.) for the prevailing coding standards
+ 	  today (MPEG-2, MPEG-4 ASP/H.263, MPEG-4 AVC/H.264, and VC-1/VMW3).
+ 
+-	  http://www.freedesktop.org/wiki/Software/vaapi/
++	  https://01.org/linuxmedia/vaapi
+ 
+ comment "libva needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index e63f4db..1f248f8 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/libva/2016-November/004730.html
+-sha1 18e46f3d5a0e971eb0ec9fe14bc021e69eb13fb8  libva-1.7.3.tar.bz2
++# Locally computed
++sha256 f0f816a725007fbf3c7ed816ff71ba420696bec63ff49045e9b23d9b34ac73c8  libva-1.7.3.tar.gz
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index cf42b70..bce6907 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBVA_VERSION = 1.7.3
+-LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+-LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
++LIBVA_SITE = $(call github,01org,libva,libva-$(LIBVA_VERSION))
+ LIBVA_LICENSE = MIT
+ LIBVA_LICENSE_FILES = COPYING
+ LIBVA_AUTORECONF = YES
