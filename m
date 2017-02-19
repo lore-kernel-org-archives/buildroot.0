@@ -1,42 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Feb 2017 12:08:53 +0100
-Subject: [Buildroot] [PATCH] package/mpv: fix build on ppc64
-In-Reply-To: <1487498952-30688-1-git-send-email-yann.morin.1998@free.fr>
-References: <1487498952-30688-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170219120853.0210ac15@free-electrons.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 19 Feb 2017 12:17:15 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.3.0
+Message-ID: <1487503035-48843-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sun, 19 Feb 2017 11:09:12 +0100, Yann E. MORIN wrote:
-> Our current patch was done on a previous version of mpv. Since then, the
-> include-path has changed, and stdbool is already included earlier. So,
-> including it again will serve no purpose...
-> 
-> So, the bool type defined in the altivec case is back to bite, and it is
-> not any happier than before.
-> 
-> We fix our patch to simply redefine bool to the correct type, but just
-> in the altivec case.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/e91/e914bc0f955e4ba740614f93cbfa401b673b754b/
->     http://autobuild.buildroot.org/results/4c1/4c150fedc74530d09e8ecd678dcf5664251606e7/
->     and countless others...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-We have a different proposal from Sam:
-
-  https://patchwork.ozlabs.org/patch/706869/
-
-Thomas
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 903880f..0072725 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 1d976ca423d714b7e836cfbc1980b56f49962d0dfe654edb3c2ffa5c713af242  cjson-v1.2.1.tar.gz
++sha256	f1c528103844ffb992e17625ac8a3e8ee742021b1c2478e53cee4b085c0f413d	cjson-v1.3.0.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 11c34c5..5ff990e 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.2.1
++CJSON_VERSION = v1.3.0
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.5.0
