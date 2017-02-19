@@ -1,252 +1,141 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 19 Feb 2017 19:17:23 -0300
-Subject: [Buildroot] [PATCH v2 8/9] check-package: check Config.* files
+Date: Sun, 19 Feb 2017 19:17:24 -0300
+Subject: [Buildroot] [PATCH v2 9/9] check-package: check *.mk for typo in
+	variable
 In-Reply-To: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
 References: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170219221724.27298-9-ricardo.martincoski@gmail.com>
+Message-ID: <20170219221724.27298-10-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Warn when help text is larger than 72 columns, see [1].
-Warn for wrongly indented attributes, see [1].
-Warn when the convention of attributes order is not followed, see [2].
+Warn when a variable is defined in a .mk file and it don't start with
+the package name.
 
-[1] http://nightly.buildroot.org/#writing-rules-config-in
-[2] http://nightly.buildroot.org/#_config_files
+This function generates false warnings and the maintenance of the
+whitelist can be an extra burden, but it catches some typos really hard
+to see:
+- POPLER_CONF_OPTS [1]
+- BALELD_LICENSE [2]
+- DRDB_UTILS_DEPENDENCIES [3]
+- PERL_LIBWWW_LICENSE_FILES [4]
+- AVRDUDR_LICENSE_FILES [5]
+- GST1_PLUGINS_ULGY_HAS_GPL_LICENSE [6]
+- ON2_8170_LICENSE [7]
+- LIBFDTI_CONF_OPTS [8][9]
+- IPSEC_DEPENDENCIES [10]
+
+[1] http://patchwork.ozlabs.org/patch/681533
+[2] http://patchwork.ozlabs.org/patch/643293
+[3] http://patchwork.ozlabs.org/patch/449589
+[4] http://patchwork.ozlabs.org/patch/464545
+[5] http://patchwork.ozlabs.org/patch/305060
+[6] http://patchwork.ozlabs.org/patch/253089
+[7] http://patchwork.ozlabs.org/patch/250523
+[8] http://patchwork.ozlabs.org/patch/394125
+[9] https://github.com/buildroot/buildroot/commit/fe7a4b524b72bcb448f7e723873d8244620cb2f1
+[10] https://github.com/buildroot/buildroot/commit/dff1d590b2a0fadf58b6eed60029b2ecbab7c710
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 ---
 Changes v1 -> v2:
-  - update commit subject since now Config.* are tested;
+  - avoid false positive for variable of virtual package the package
+    under analysis provides (e.g. MYSQL_SOCKET) (Romain);
   - use classes instead of functions to declare each check (Thomas DS);
+  - I kept the examples of typos it catches, but Peter Korsgaard already
+    fixed the typos listed above;
 ---
 
 Notes:
     $ time support/scripts/check-package $(find package -type f) >/dev/null 2>/dev/null
     
-    real	0m2.196s
-    user	0m2.116s
-    sys	0m0.044s
+    real	0m3.205s
+    user	0m3.140s
+    sys	0m0.064s
     
-    AttributesOrder:
-     support/scripts/check-package --include-only AttributesOrder \
-     $(find package -name 'Config.*') 2>/dev/null | wc -l
-      369
+    TypoInPackageVariable:
+     support/scripts/check-package --include-only TypoInPackageVariable \
+     $(find package -name '*.mk') 2>/dev/null | wc -l
+      3
      (cd support/scripts/check-package-example && \
-     ../check-package --include-only AttributesOrder -vv package/*/*)
-      package/package1/Config.in:3: attributes order: type, default, depends on, select, help (http://nightly.buildroot.org/#_config_files)
-      < tab  >bool "pAcKaGe"
-      package/package1/Config.in:6: attributes order: type, default, depends on, select, help (http://nightly.buildroot.org/#_config_files)
-      < tab  >depends on BR2_USE_WCHAR
-      package/package1/Config.something:6: attributes order: type, default, depends on, select, help (http://nightly.buildroot.org/#_config_files)
-      < tab  >bool "Extension 1"
+     ../check-package --include-only TypoInPackageVariable -vv package/*/*)
+      package/package1/package1.mk:33: possible typo: LINUX_DEPENDENCIES -> *PACKAGE1*
+      LINUX_DEPENDENCIES = messing with others
+      package/package1/package1.mk:34: possible typo: PACKACE1_DEPENDENCIES -> *PACKAGE1*
+      PACKACE1_DEPENDENCIES = typo
+      package/package1/package1.mk:39: possible typo: NOT_PROVIDED4_LOCK -> *PACKAGE1*
+      NOT_PROVIDED4_LOCK = lock4
       180 lines processed
       3 warnings generated
-    
-    HelpText:
-     support/scripts/check-package --include-only HelpText \
-     $(find package -name 'Config.*') 2>/dev/null | wc -l
-      987
-     (cd support/scripts/check-package-example && \
-     ../check-package --include-only HelpText -vv package/*/*)
-      package/package1/Config.in:8: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-      < tab  >  package1 is a bad stylized package. Its only purpose is to exemplify
-      < tab  >  123456789 123456789 123456789 123456789 123456789 123456789 12
-      package/package1/Config.in:9: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-                common style mistakes
-      < tab  >  123456789 123456789 123456789 123456789 123456789 123456789 12
-      package/package1/Config.in:10: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-      < tab  >some more help text but no url
-      < tab  >  123456789 123456789 123456789 123456789 123456789 123456789 12
-      package/package1/Config.in:23: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-      < tab  >  Another paragraph. - But this time we cross the column 72 by 1.
-      < tab  >  123456789 123456789 123456789 123456789 123456789 123456789 12
-      package/package1/Config.in:24: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-      < tab  > wrong_line_with_single_word
-      < tab  >  123456789 123456789 123456789 123456789 123456789 123456789 12
-      package/package1/Config.in:25: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-      < tab  >  http://www.example.com/ urls do not have spaces and this line is too long.
-      < tab  >  123456789 123456789 123456789 123456789 123456789 123456789 12
-      180 lines processed
-      6 warnings generated
-    
-    Indent:
-     support/scripts/check-package --include-only Indent \
-     $(find package -name 'Config.*') 2>/dev/null | wc -l
-      501
-     (cd support/scripts/check-package-example && \
-     ../check-package --include-only Indent -vv package/*/*)
-      package/package1/Config.in:13: should not be indented
-       config BR2_PACKAGE_PACKAGE1_OPTION
-      package/package1/Config.in:14: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-              bool "package1 option"
-      package/package1/Config.in:15: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-              depends on BR2_USE_MMU
-      package/package1/Config.in:16: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-              select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-      package/package1/Config.in:17: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-              help
-      package/package1/Config.in:37: continuation line should be indented using tabs
-                      if BR2_aarch64
-      package/package1/Config.in:44: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-              depends on BR2_USE_MMU
-      package/package1/package1.mk:22: unexpected indent with tabs
-      < tab  >PACKAGE1_INSTALL_STAGING = NO
-      package/package1/package1.mk:27: expected indent with tabs
-                             depend3
-      package/package1/package1.mk:42: expected indent with tabs
-              mkdir -p $(TARGET_DIR)/var/lib
-      package/package1/package1.mk:51: expected indent with tabs
-              $(PACKAGE1_INSTALL_SOMETHING_ELSE)
-      180 lines processed
-      11 warnings generated
 
- support/scripts/checkpackagelib_config.py | 128 ++++++++++++++++++++++++++++++
- 1 file changed, 128 insertions(+)
+ support/scripts/checkpackagelib_mk.py | 52 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/support/scripts/checkpackagelib_config.py b/support/scripts/checkpackagelib_config.py
-index ee5981e64..be52d9432 100644
---- a/support/scripts/checkpackagelib_config.py
-+++ b/support/scripts/checkpackagelib_config.py
-@@ -3,8 +3,136 @@
- # "bool", so below check functions don't need to check for things already
- # checked by running "make menuconfig".
+diff --git a/support/scripts/checkpackagelib_mk.py b/support/scripts/checkpackagelib_mk.py
+index f66888d21..0740a37f7 100644
+--- a/support/scripts/checkpackagelib_mk.py
++++ b/support/scripts/checkpackagelib_mk.py
+@@ -131,6 +131,58 @@ class TrailingBackslash(_CheckFunction):
+                     self.lastline]
  
-+import re
-+
-+from checkpackagebase import _CheckFunction
- # Notice: ignore 'imported but unused' from pyflakes for check functions.
- from checkpackagelib import ConsecutiveEmptyLines
- from checkpackagelib import EmptyLastLine
- from checkpackagelib import NewlineAtEof
- from checkpackagelib import TrailingSpace
-+
-+
-+def _empty_or_comment(text):
-+    line = text.strip()
-+    # ignore empty lines and comment lines indented or not
-+    return line == "" or line.startswith("#")
-+
-+
-+def _part_of_help_text(text):
-+    return text.startswith("\t  ")
-+
-+
-+# used in more than one check
-+entries_that_should_not_be_indented = [
-+    "choice", "comment", "config", "endchoice", "endif", "endmenu", "if",
-+    "menu", "menuconfig", "source"]
-+
-+
-+class AttributesOrder(_CheckFunction):
-+    attributes_order_convention = {
-+        "bool": 1, "prompt": 1, "string": 1, "default": 2, "depends": 3,
-+        "select": 4, "help": 5}
+ 
++class TypoInPackageVariable(_CheckFunction):
++    ALLOWED = re.compile("|".join([
++        "ACLOCAL_DIR",
++        "ACLOCAL_HOST_DIR",
++        "BR_CCACHE_INITIAL_SETUP",
++        "BR_NO_CHECK_HASH_FOR",
++        "LINUX_POST_PATCH_HOOKS",
++        "LINUX_TOOLS",
++        "LUA_RUN",
++        "MKFS_JFFS2",
++        "MKIMAGE_ARCH",
++        "PKG_CONFIG_HOST_BINARY",
++        "TARGET_FINALIZE_HOOKS",
++        "XTENSA_CORE_NAME"]))
++    PACKAGE_NAME = re.compile("/([^/]+)\.mk")
++    VARIABLE = re.compile("^([A-Z0-9_]+_[A-Z0-9_]+)\s*(\+|)=")
 +
 +    def before(self):
-+        self.state = 0
++        package = self.PACKAGE_NAME.search(self.filename).group(1)
++        package = package.replace("-", "_").upper()
++        # linux tools do not use LINUX_TOOL_ prefix for variables
++        package = package.replace("LINUX_TOOL_", "")
++        self.package = package
++        self.REGEX = re.compile("^(HOST_)?({}_[A-Z0-9_]+)".format(package))
++        self.FIND_VIRTUAL = re.compile(
++            "^{}_PROVIDES\s*(\+|)=\s*(.*)".format(package))
++        self.virtual = []
 +
 +    def check_line(self, lineno, text):
-+        if _empty_or_comment(text) or _part_of_help_text(text):
++        m = self.VARIABLE.search(text)
++        if m is None:
 +            return
 +
-+        attribute = text.split()[0]
++        variable = m.group(1)
 +
-+        if attribute in entries_that_should_not_be_indented:
-+            self.state = 0
++        # allow to set variables for virtual package this package provides
++        v = self.FIND_VIRTUAL.search(text)
++        if v:
++            self.virtual += v.group(2).upper().split()
 +            return
-+        if attribute not in self.attributes_order_convention.keys():
-+            return
-+        new_state = self.attributes_order_convention[attribute]
-+        wrong_order = self.state > new_state
-+
-+        # save to process next line
-+        self.state = new_state
-+
-+        if wrong_order:
-+            return ["{}:{}: attributes order: type, default, depends on,"
-+                    " select, help ({}#_config_files)"
-+                    .format(self.filename, lineno, self.url_to_manual),
-+                    text]
-+
-+
-+class HelpText(_CheckFunction):
-+    HELP_TEXT_FORMAT = re.compile("^\t  .{,62}$")
-+    URL_ONLY = re.compile("^(http|https|git)://\S*$")
-+
-+    def before(self):
-+        self.help_text = False
-+
-+    def check_line(self, lineno, text):
-+        if _empty_or_comment(text):
-+            return
-+
-+        entry = text.split()[0]
-+
-+        if entry in entries_that_should_not_be_indented:
-+            self.help_text = False
-+            return
-+        if text.strip() == "help":
-+            self.help_text = True
-+            return
-+
-+        if not self.help_text:
-+            return
-+
-+        if self.HELP_TEXT_FORMAT.match(text.rstrip()):
-+            return
-+        if self.URL_ONLY.match(text.strip()):
-+            return
-+        return ["{}:{}: help text: <tab><2 spaces><62 chars>"
-+                " ({}#writing-rules-config-in)"
-+                .format(self.filename, lineno, self.url_to_manual),
-+                text,
-+                "\t  " + "123456789 " * 6 + "12"]
-+
-+
-+class Indent(_CheckFunction):
-+    ENDS_WITH_BACKSLASH = re.compile(r"^[^#].*\\$")
-+    entries_that_should_be_indented = [
-+        "bool", "default", "depends", "help", "prompt", "select", "string"]
-+
-+    def before(self):
-+        self.backslash = False
-+
-+    def check_line(self, lineno, text):
-+        if _empty_or_comment(text) or _part_of_help_text(text):
-+            self.backslash = False
-+            return
-+
-+        entry = text.split()[0]
-+
-+        last_line_ends_in_backslash = self.backslash
-+
-+        # calculate for next line
-+        if self.ENDS_WITH_BACKSLASH.search(text):
-+            self.backslash = True
-+        else:
-+            self.backslash = False
-+
-+        if last_line_ends_in_backslash:
-+            if text.startswith("\t"):
++        for virtual in self.virtual:
++            if variable.startswith("{}_".format(virtual)):
 +                return
-+            return ["{}:{}: continuation line should be indented using tabs"
-+                    .format(self.filename, lineno),
++
++        if self.ALLOWED.match(variable):
++            return
++        if self.REGEX.search(text) is None:
++            return ["{}:{}: possible typo: {} -> *{}*"
++                    .format(self.filename, lineno, variable, self.package),
 +                    text]
 +
-+        if entry in self.entries_that_should_be_indented:
-+            if not text.startswith("\t{}".format(entry)):
-+                return ["{}:{}: should be indented with one tab"
-+                        " ({}#_config_files)"
-+                        .format(self.filename, lineno, self.url_to_manual),
-+                        text]
-+        elif entry in entries_that_should_not_be_indented:
-+            if not text.startswith(entry):
-+                return ["{}:{}: should not be indented"
-+                        .format(self.filename, lineno),
-+                        text]
++
+ class UselessFlag(_CheckFunction):
+     DEFAULT_AUTOTOOLS_FLAG = re.compile("^.*{}".format("|".join([
+         "_AUTORECONF\s*=\s*NO",
 -- 
 2.11.0
