@@ -1,9 +1,9 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Feb 2017 14:12:34 -0500
-Subject: [Buildroot] [PATCH 37/58] python-pymysql: bump to version 0.7.10
+Date: Sun, 19 Feb 2017 14:12:35 -0500
+Subject: [Buildroot] [PATCH 38/58] python-pyparsing: bump to version 2.1.10
 In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
 References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170219191255.1503-38-Adamduskett@outlook.com>
+Message-ID: <20170219191255.1503-39-Adamduskett@outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 ---
- package/python-pymysql/python-pymysql.hash | 4 ++--
- package/python-pymysql/python-pymysql.mk   | 4 ++--
+ package/python-pyparsing/python-pyparsing.hash | 4 ++--
+ package/python-pyparsing/python-pyparsing.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-index 9e058ab..429ed5a 100644
---- a/package/python-pymysql/python-pymysql.hash
-+++ b/package/python-pymysql/python-pymysql.hash
+diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
+index 6cf686a..6138580 100644
+--- a/package/python-pyparsing/python-pyparsing.hash
++++ b/package/python-pyparsing/python-pyparsing.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pymysql/json, sha256 locally computed
--md5	bf82311ac2df4c43adad003a8c805b90  PyMySQL-0.7.9.tar.gz
--sha256	2331f82b7b85d407c8d9d7a8d7901a6abbeb420533e5d5d64ded5009b5c6dcc3  PyMySQL-0.7.9.tar.gz
-+md5 fc96ba7c76c01ff0613b0cca9c40df75 PyMySQL-0.7.10.tar.gz
-+sha256 9468bd7d54df68e49c39e91d7c223d13dedf9e4284173cb5d761673e6275024e PyMySQL-0.7.10.tar.gz
-diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-index 94a93a2..863eb8b 100644
---- a/package/python-pymysql/python-pymysql.mk
-+++ b/package/python-pymysql/python-pymysql.mk
+ # md5 from https://pypi.python.org/pypi/pyparsing/json, sha256 locally computed
+-md5	ee943c354eac79526533c58342f322c7  pyparsing-2.1.9.tar.gz
+-sha256	93326f5490bcfe7069806ff342692e75f72529cfa82f20683b5fceeb5d4a7fc2  pyparsing-2.1.9.tar.gz
++md5 065908b92904e0d3634eb156f44cc80e pyparsing-2.1.10.tar.gz
++sha256 811c3e7b0031021137fc83e051795025fcb98674d07eb8fe922ba4de53d39188 pyparsing-2.1.10.tar.gz
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
+index 652345d..4a4b1bb 100644
+--- a/package/python-pyparsing/python-pyparsing.mk
++++ b/package/python-pyparsing/python-pyparsing.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYMYSQL_VERSION = 0.7.9
-+PYTHON_PYMYSQL_VERSION = 0.7.10
- PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
--PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/a4/c4/c15457f261fda9839637de044eca9b6da8f55503183fe887523801b85701
-+PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/90/c2/d81638491baa572d6e79b78bde42c7449d2e45b578c919c0df1a76cb859b
- PYTHON_PYMYSQL_LICENSE = MIT
- PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
- PYTHON_PYMYSQL_SETUP_TYPE = setuptools
+-PYTHON_PYPARSING_VERSION = 2.1.9
++PYTHON_PYPARSING_VERSION = 2.1.10
+ PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
+-PYTHON_PYPARSING_SITE = https://pypi.python.org/packages/87/ee/6f3a94d834c82a5c1a74f2fc77775ff05b5fbbf7d97f844e6fff5e2ff94b
++PYTHON_PYPARSING_SITE = https://pypi.python.org/packages/38/bb/bf325351dd8ab6eb3c3b7c07c3978f38b2103e2ab48d59726916907cd6fb
+ PYTHON_PYPARSING_LICENSE = MIT
+ PYTHON_PYPARSING_LICENSE_FILES = LICENSE
+ PYTHON_PYPARSING_SETUP_TYPE = setuptools
 -- 
 2.9.3
