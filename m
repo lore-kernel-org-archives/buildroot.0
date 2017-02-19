@@ -1,154 +1,38 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 19 Feb 2017 19:17:19 -0300
-Subject: [Buildroot] [PATCH v2 4/9] check-package: check *.hash files
-In-Reply-To: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
-References: <20170219221724.27298-1-ricardo.martincoski@gmail.com>
-Message-ID: <20170219221724.27298-5-ricardo.martincoski@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 19 Feb 2017 23:23:15 +0100
+Subject: [Buildroot] [PATCH next] board: add support for nexbox a95x
+In-Reply-To: <20170217163310.6929-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 17 Feb 2017 17:33:10 +0100")
+References: <20170217163310.6929-1-peter@korsgaard.com>
+Message-ID: <874lzprfak.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Check each hash entry (see [1]) and warn when:
-- it does not have three fields;
-- its type is unknown;
-- its length does not match its type;
-- the name of the file contains a directory component.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-[1] http://nightly.buildroot.org/#adding-packages-hash
+ > Nexbox A95X is a low cost Android STB based around an Amlogic s905(x) SoC
+ > (quad A53), 8/16GB eMMC and 1/2GB RAM.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
-Changes v1 -> v2:
-  - do not use regex when a simple 'in' is enough (Thomas DS);
-  - use classes instead of functions to declare each check (Thomas DS);
----
+ > Both the s905 (gxbb) and s905x (gxl) variant is supported.
 
-Notes:
-    $ time support/scripts/check-package $(find package -type f) >/dev/null 2>/dev/null
-    
-    real	0m0.684s
-    user	0m0.656s
-    sys	0m0.024s
-    
-    HashFilename:
-     support/scripts/check-package --include-only HashFilename \
-     $(find package -name '*.hash') 2>/dev/null | wc -l
-      0
-     (cd support/scripts/check-package-example && \
-     ../check-package --include-only HashFilename -vv package/*/*)
-      package/package1/package1.hash:5: use filename without directory component (http://nightly.buildroot.org/#adding-packages-hash)
-      sha256< tab  >12345678901234567890123456789012345678901234567890123456789012345< tab  >dl/package1-1.0.tar.gz
-      180 lines processed
-      1 warnings generated
-    
-    HashNumberOfFields:
-     support/scripts/check-package --include-only HashNumberOfFields \
-     $(find package -name '*.hash') 2>/dev/null | wc -l
-      0
-     (cd support/scripts/check-package-example && \
-     ../check-package --include-only HashNumberOfFields -vv package/*/*)
-      package/package1/package1.hash:6: expected three fields (http://nightly.buildroot.org/#adding-packages-hash)
-      sha256 1234567890123456789012345678901234567890123456789012345678901234
-      180 lines processed
-      1 warnings generated
-    
-    HashType:
-     support/scripts/check-package --include-only HashType \
-     $(find package -name '*.hash') 2>/dev/null | wc -l
-      1
-     (cd support/scripts/check-package-example && \
-     ../check-package --include-only HashType -vv package/*/*)
-      package/package1/package1.hash:3: hash size does not match type (http://nightly.buildroot.org/#adding-packages-hash)
-      sha256 123456789 package1-1.0.tar.gz
-      expected 64 hex digits
-      package/package1/package1.hash:4: unexpected type of hash (http://nightly.buildroot.org/#adding-packages-hash)
-      crc16< tab  >123456789< tab  >package1-1.0.tar.gz
-      package/package1/package1.hash:5: hash size does not match type (http://nightly.buildroot.org/#adding-packages-hash)
-      sha256< tab  >12345678901234567890123456789012345678901234567890123456789012345< tab  >dl/package1-1.0.tar.gz
-      expected 64 hex digits
-      180 lines processed
-      3 warnings generated
+ > This defconfig uses mainline Linux.  As the mainline support for s905 is
+ > quite young, use the latest release candidate.  There is currently no
+ > support for this board in U-Boot or sources available for the vendor U-Boot,
+ > so the defconfig doesn't build a u-boot and instead uses the existing U-Boot
+ > available in the eMMC.  This also means that we need to wrap the kernel as
+ > uImage, which isn't suppported for aarch64.  Instead this is done in the
+ > post-build script.
 
- support/scripts/checkpackagelib_hash.py | 62 +++++++++++++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ > Mainline aarch64 defconfig builds most drivers modular, so add mdev for
+ > module autoloading.
 
-diff --git a/support/scripts/checkpackagelib_hash.py b/support/scripts/checkpackagelib_hash.py
-index 1f268838f..47fe18756 100644
---- a/support/scripts/checkpackagelib_hash.py
-+++ b/support/scripts/checkpackagelib_hash.py
-@@ -3,8 +3,70 @@
- # functions don't need to check for things already checked by running
- # "make package-dirclean package-source".
- 
-+import re
-+
-+from checkpackagebase import _CheckFunction
- # Notice: ignore 'imported but unused' from pyflakes for check functions.
- from checkpackagelib import ConsecutiveEmptyLines
- from checkpackagelib import EmptyLastLine
- from checkpackagelib import NewlineAtEof
- from checkpackagelib import TrailingSpace
-+
-+
-+def _empty_line_or_comment(text):
-+    return text.strip() == "" or text.startswith("#")
-+
-+
-+class HashFilename(_CheckFunction):
-+    def check_line(self, lineno, text):
-+        if _empty_line_or_comment(text):
-+            return
-+
-+        fields = text.split()
-+        if len(fields) < 3:
-+            return
-+
-+        if '/' in fields[2]:
-+            return ["{}:{}: use filename without directory component"
-+                    " ({}#adding-packages-hash)"
-+                    .format(self.filename, lineno, self.url_to_manual),
-+                    text]
-+
-+
-+class HashNumberOfFields(_CheckFunction):
-+    def check_line(self, lineno, text):
-+        if _empty_line_or_comment(text):
-+            return
-+
-+        fields = text.split()
-+        if len(fields) != 3:
-+            return ["{}:{}: expected three fields ({}#adding-packages-hash)"
-+                    .format(self.filename, lineno, self.url_to_manual),
-+                    text]
-+
-+
-+class HashType(_CheckFunction):
-+    len_of_hash = {"md5": 32, "sha1": 40, "sha224": 56, "sha256": 64,
-+                   "sha384": 96, "sha512": 128}
-+
-+    def check_line(self, lineno, text):
-+        if _empty_line_or_comment(text):
-+            return
-+
-+        fields = text.split()
-+        if len(fields) < 2:
-+            return
-+
-+        htype, hexa = fields[:2]
-+        if htype == "none":
-+            return
-+        if htype not in self.len_of_hash.keys():
-+            return ["{}:{}: unexpected type of hash ({}#adding-packages-hash)"
-+                    .format(self.filename, lineno, self.url_to_manual),
-+                    text]
-+        if not re.match("^[0-9A-Fa-f]{%s}$" % self.len_of_hash[htype], hexa):
-+            return ["{}:{}: hash size does not match type "
-+                    "({}#adding-packages-hash)"
-+                    .format(self.filename, lineno, self.url_to_manual),
-+                    text,
-+                    "expected {} hex digits".format(self.len_of_hash[htype])]
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to next after explicitly setting BR2_cortex_a53=y in the
+defconfig.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
