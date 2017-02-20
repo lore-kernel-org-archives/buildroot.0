@@ -1,59 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Feb 2017 00:25:40 +0100
-Subject: [Buildroot] Buildroot 2017.02-rc2 released
-Message-ID: <87wpcko363.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 21 Feb 2017 00:46:06 +0100
+Subject: [Buildroot] [PATCH 00/58] python pypi library mass version bump.
+In-Reply-To: <20170220094443.01a75e76@free-electrons.com>
+References: <20170219191255.1503-1-Adamduskett@outlook.com>
+ <20170219211718.42744cc8@free-electrons.com>
+ <20170219212054.2x6hosogfxbztldl@localhost.localdomain>
+ <CAFSsvmrv9m80RA+tc5YMwgbLpHs8-R0hw4ivmxHiNo++Nnyujg@mail.gmail.com>
+ <20170220094443.01a75e76@free-electrons.com>
+Message-ID: <bb41bc83-c67e-0407-4847-3a004c4827e1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Buildroot 2017.02-rc2 is released - Go download it at:
 
-http://buildroot.net/downloads/buildroot-2017.02-rc2.tar.gz
+On 20-02-17 09:44, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 19 Feb 2017 17:41:07 -0500, Adam Duskett wrote:
+[snip]
+>> I was thinking, would it be possible to run pypi as a host?
+> 
+> Because:
+> 
+>  - No reproducibility (pypi downloads the latest available versions of
+>    the modules, as far as I know)
+> 
+>  - No integration with our download logic: use of a primary mirror, use
+>    of a backup mirror, local cache of downloads.
+> 
+>  - No integration with our legal information tooling.
 
-or
+ Note that none of these issues are unsolvable. If we would be able to make
+direct use of pypi while overcoming these issues, I think that would be great.
+However, there are a few other important things to consider:
 
-http://buildroot.net/downloads/buildroot-2017.02-rc2.tar.bz2
+- The infra should deal with dependencies, i.e. download all dependencies when
+doing 'make source'.
 
-Or get it from Git:
+- The infra should deal with non-python dependencies, i.e. select the
+corresponding Buildroot package in .config and make sure it is built before.
 
-git://git.buildroot.net/buildroot
+- The infra should make sure that any C extensions contained in the package are
+built with the proper cross-compiler and build option.
 
-Another week, another release candidate.
 
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
+ I think it practice this will mean that the infra is going to be limited to
+pure Python packages, and any package which has C code needs an explicit
+Buildroot package.
 
-git shortlog -sn 2017.02-rc1..
-    14  Thomas Petazzoni
-    11  Yann E. MORIN
-    10  Peter Korsgaard
-    10  Waldemar Brodkorb
-     8  J?rg Krause
-     7  Peter Seiderer
-     5  Baruch Siach
-     3  Fabio Estevam
-     2  Gustavo Zacarias
-     2  Romain Naour
-     1  Bartosz Golaszewski
-     1  Carlos Santos
-     1  Danomi Manchego
-     1  Frank Hunleth
-     1  Gary Bisson
-     1  Marcus Hoffmann
-     1  Mylene JOSSERAND
-     1  Philippe Reynes
-     1  Sam bobroff
-     1  Yegor Yefremov
+ But even then, it's not easy because the PyPI metadata doesn't encode
+dependencies by itself - this is only in the setup file. So the download step
+has to extract the downloaded file to find out about dependencies and download
+those as well...
 
-For more details, see the CHANGES file:
+ Bottom line: it's not simple :-)
 
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02-rc2
+ Note that
 
-Expect the final 2017.02 release by the end of the month.
+- the same story applies to other "language" package managers (luarocks, CPAN,
+rebar, cargo, npm, ...);
+
+- other distros are struggling with the similar issues, and for them it's easier
+because they actually _can_ download and build on the target.
+
+
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
