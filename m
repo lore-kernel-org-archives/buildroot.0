@@ -1,56 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 21:55:55 +0100
-Subject: [Buildroot] [git commit branch/next] toolchain: add 4.10.x choice
-	for headers
-Message-ID: <20170220205659.69AA380E58@busybox.osuosl.org>
+Date: Mon, 20 Feb 2017 21:56:41 +0100
+Subject: [Buildroot] [git commit branch/next] linux-headers: bump to 4.10
+	kernel version
+Message-ID: <20170220205659.77C5B80E58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=369b66fc366e3841ffb4dd2d35696f27799ae374
+commit: https://git.buildroot.net/buildroot/commit/?id=1cc0c0dc82b62433d697f8dc811ed8ce3b51daea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-common.in                                        | 5 +++++
- .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
- 2 files changed, 9 insertions(+)
+ package/linux-headers/Config.in.host | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 96d5709..379006d 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -243,10 +243,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b1d117a..3610426 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_9
++	default BR2_KERNEL_HEADERS_4_10
+ 	help
+ 	  Select the kernel version to get headers from.
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+@@ -67,6 +67,10 @@ choice
+ 		bool "Linux 4.9.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+ 
++	config BR2_KERNEL_HEADERS_4_10
++		bool "Linux 4.10.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
 +
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "4.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
- 	default "4.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 	default "4.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
- 	default "4.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index ed2b082..668ea3d 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -89,6 +89,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ endchoice
+@@ -87,6 +91,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
  
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10
 +	bool "4.10.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
 +
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9
  	bool "4.9.x"
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+@@ -224,5 +232,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.48"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.9"		if BR2_KERNEL_HEADERS_4_9
++	default "4.10"		if BR2_KERNEL_HEADERS_4_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
