@@ -1,55 +1,47 @@
-From: Brent Sink <brents_3@hotmail.com>
-Date: Mon, 20 Feb 2017 17:59:38 +0000
-Subject: [Buildroot] No GPS data on ttymxc1 with busybox,
- but it works with systemd
-In-Reply-To: <20170220095026.7150a532@free-electrons.com>
-References: <BY2PR03MB314CD45BE8ACFAD060BF954BF5E0@BY2PR03MB314.namprd03.prod.outlook.com>,
- <20170220095026.7150a532@free-electrons.com>
-Message-ID: <BY2PR03MB31431BC964FD7F0A71C5021BF5E0@BY2PR03MB314.namprd03.prod.outlook.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 20 Feb 2017 19:14:59 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2017-02-16
+References: <20170217072852.8329420B82@mail.free-electrons.com>
+ <20170217211242.GC3470@free.fr> <20170220134111.1bc02a9f@free-electrons.com>
+Message-ID: <XnsA722C3D2282F8ID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hello,
+Hi Thomas,
 
->
-> Perhaps systemd is automatically initializing the serial ports to some
-> given speed/configuration.
->
-> Make sure you configure your serial port to the right
-> speed/configuration using the "stty" program.
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20170220134111.1bc02a9f at free-electrons.com: 
 
-I did verify that the speed is set correctly and everything appears to be the same between the two images, so I'm not sure what else to check?  Here is the output from stty and setserial which is identical on both images:
+>> >       x86_64 |                   libcec-4.0.2 | NOK |
+>> >       http://autobuild.buildroot.net/results/e7505f36d7c2cfaf7527515b2
+>> >       e3014c2e8e2c5ca  
+>> 
+>>     undefined reference to `std::__cxx11::basic_string<char,
+>>     std::char_traits<char>, std::allocator<char> >::basic_string
+>>     (std::__cxx11::basic_string<char, std::char_traits<char>,
+>>     std::allocator<char> >&&)@GLIBCXX_3.4.21'
+>> 
+>> Some ugly C++11 issue? Bernd?
+> This one has been there for a long time, since we bumped libcec to
+> 4.0.2. I will revert the version bump in the next days if no fix is
+> proposed.
 
-# stty -F /dev/ttymxc1 speed
-9600
+Afaics there are two different build failures with libcec-4.0.2.
 
-# setserial -g /dev/ttymxc* -a
-/dev/ttymxc1, Line 1, UART: undefined, Port: 0x0000, IRQ: 72
-        Baud_base: 5000000, close_delay: 50, divisor: 0
-        closing_wait: 3000
-        Flags: spd_normal
+I could not reproduce the one you mentioned here using this defconfig:
+http://autobuild.buildroot.net/results/38b/38ba94fe0db1544e78fd69dcbd77a452e1
+21deba/
 
-One difference i noticed are the permissions.  On the busybox image (not working), it's permissions are:
-# ls -l /dev/ttymxc1
-crw--w----    1 root     root      207,  17 Jan  1 00:00 /dev/ttymxc1
+I could however reproduce the other build failure, like this one:
+http://autobuild.buildroot.net/results/faa/faa5270be0a54043891db9baf50a217eae
+2c575f/
 
-...and on the systemd image (is working), it's permissions are:
-# ls -l /dev/ttymxc1
-crw-------    1 root     root      207,  17 Jan  1 00:00 /dev/ttymxc1
+I posted my findings here: http://lists.busybox.net/pipermail/buildroot/2017-
+February/184248.html
 
-Anything else that I should check?
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com<http://free-electrons.com/>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170220/6e969a22/attachment.html>
+Regards, Bernd
