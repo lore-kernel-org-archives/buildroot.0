@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 21:36:17 +0100
-Subject: [Buildroot] [PATCH] uclibc: add fix for ARM specific static
- linking issues
-In-Reply-To: <20170217192404.GA13561@waldemar-brodkorb.de>
-References: <20170217192404.GA13561@waldemar-brodkorb.de>
-Message-ID: <20170220213617.3266eaf2@free-electrons.com>
+Date: Mon, 20 Feb 2017 21:36:20 +0100
+Subject: [Buildroot] [PATCH] uclibc: define struct ucontext for or1k
+In-Reply-To: <20170217214849.GA29072@waldemar-brodkorb.de>
+References: <20170217214849.GA29072@waldemar-brodkorb.de>
+Message-ID: <20170220213620.7b0b3d7e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 17 Feb 2017 20:24:04 +0100, Waldemar Brodkorb wrote:
-> Fixes:
->   http://autobuild.buildroot.net/results/fb14e37aaf453874d1c33e5ed73b9c751ace5ae3
->   http://autobuild.buildroot.net/results/774a8dd489760bc213ac7cf3e8040cee6a4e2437
+On Fri, 17 Feb 2017 22:48:49 +0100, Waldemar Brodkorb wrote:
+> Add missing define for struct ucontext for OpenRISC.
 > 
-> And hopefully all other static ARM issues with uClibc-ng.
+> Fixes:
+>   http://autobuild.buildroot.net/results/d8715a2b3783d877edf91bb14a80d36eac749b36
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
-> It would be nice if the autobuild ARM toolchains could be rebuild,
-> if the patch is accepted and applied.
-> ---
->  .../0002-arm-fix-static-linking-issues.patch       | 38 ++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/uclibc/0002-arm-fix-static-linking-issues.patch
+>  ...3-or1k-add-missing-definition-of-ucontext.patch | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/uclibc/0003-or1k-add-missing-definition-of-ucontext.patch
 
 Applied to master, thanks.
 
