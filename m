@@ -1,105 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Feb 2017 23:32:00 +0100
-Subject: [Buildroot] CHIP Pro OS?
-In-Reply-To: <20170219054019.2pithfjy3yw4ujxg@tarshish>
-References: <c2ae5f05-3a98-49db-b8f7-42b5ae37fe0d@Spark>
- <20170219054019.2pithfjy3yw4ujxg@tarshish>
-Message-ID: <41b15d22-f79c-3110-052f-53edfee96944@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 Feb 2017 23:31:27 +0100
+Subject: [Buildroot] [git commit] qt5quickcontrols: fix LTS (5.6) qml file
+	install
+Message-ID: <20170220223309.AB2C082229@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Josh,
+commit: https://git.buildroot.net/buildroot/commit/?id=e482ebf51d9e8e00c3e58eb65af0dfb70d05d8cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 19-02-17 06:40, Baruch Siach wrote:
-> Hi Josh,
-> 
-> On Sat, Feb 18, 2017 at 09:03:30PM -0700, jjman04 at icloud.com wrote:
->> Hi guys, I'm Josh. I wasn't sure which email to sent to, so I sent to both 
->> of the email addresses that I found.
-> 
-> Please use the buildroot@ address only.
-> 
->> Here's my question:
->>
->> How hard would it be for me to program a (very lean) OS for CHIP Pro 
->> (https://getchip.com/pages/chippro) using Buildroot?
-> 
-> Buildroot is not about programming new OSes. It builds existing OS kernels 
-> (only the Linux kernel is currently supported) and some other software 
-> packages to something you can run on various boards. If you are into OS 
-> development check http://wiki.osdev.org/Main_Page.
+Fixes #9666 [1]
 
- If you want to program an OS from scratch, you're probably better off targeting
-a much simpler CPU than the CHIP Pro. The Arduino is a classic example. The CPU
-of the CHIP Pro is pretty complicated to program, with an MMU and supervisor
-mode etc.
+  cp -dpfr .../host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/qml/QtQuick/PrivateWidgets .../target/usr/qml/QtQuick
+  cp: cannot stat ???.../host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/qml/QtQuick/PrivateWidgets???: No such file or directory
 
+[1] https://bugs.busybox.net/show_bug.cgi?id=9666
 
- That said, if you're rather looking for a cool project on the CHIP Pro, maybe
-you want to develop a lean, basic Linux distro for the CHIP Pro. That's
-something where Buildroot can help. We don't have support for the CHIP Pro at
-the moment, but the Next Thing Co people seem to have a fork with support for
-it: https://github.com/NextThingCo/CHIP-buildroot
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
- If you're going to experiment with Buildroot and you need help, you can also
-join on IRC, #buildroot.
-
-
->> Keep in mind that I'm only 12, so I don't know many programming languages. I 
->> know a bit of Python and HTML5. I'm also learning C++ as soon as I find an 
->> online course. Would knowing those languages be enough?
-> 
-> Python, HTML and C++ are not so good for OS development since their 
-> implementations depend on OS provided services. You need something like C,
-> Rust, or assembly.
-
- Indeed, Python and HTML5 are interpreted languages, so you already need
-something running on your system (the interpreter) to be able to use these
-languages.
-
- Rust and C are compiled into machine code so can be executed directly by the
-CPU, without an interpreter. However, even those need a bit of setup. A C
-program needs, for example, a stack [1], and in an OS you need interrupt
-handlers [2]. For these, you have to program in assembly.
-
-
- Come to think, however, there is one option. You can start from an existing
-bootloader (e.g. U-Boot), and write a stand-alone program from there [3]. U-Boot
-will already have set up a stack etc. when it calls the program. But the program
-can do anything, so it can indeed implement a full OS. And it should be possible
-to write a stand-alone program in Rust or C++. The nice thing about this
-approach is that you can start out using some of the U-Boot functionality, for
-example to have some output. So you can get something up and running pretty
-quickly, and make it more complicated and advanced over time.
-
-
- By the way, if you still have to learn a low-level programming language, I
-think Rust is a really good option. Even if Rust never becomes popular, I think
-it's a great experience. I hope I'll get the chance to learn it myself some time :-)
-
-
-> You also need a very good understanding of your target hardware. This kind of 
-> information is unfortunately not so easy to come by when dealing with 
-> Allwinner based products like the CHIP Pro.
-
- True, Allwinner and documentation are not best friends :-)
-
-
- Regards,
- Arnout
-
-
-[1] https://en.wikipedia.org/wiki/Call_stack
-[2] https://en.wikipedia.org/wiki/Interrupt
-[3] http://www.denx.de/wiki/view/DULG/UBootStandalone
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+index c2946bc..8a63629 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+@@ -30,11 +30,20 @@ define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
+ endef
++else
++define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Layouts $(TARGET_DIR)/usr/qml/QtQuick
++endef
++endif
+ 
+ $(eval $(generic-package))
