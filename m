@@ -1,158 +1,157 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 20 Feb 2017 14:05:35 -0300
-Subject: [Buildroot] [PATCH v3] util-linux: build schedutils without
-	enabling basic binaries
-In-Reply-To: <bug-9656-163-MVhQ2W5IfX@https.bugs.busybox.net/>
-References: <bug-9656-163-MVhQ2W5IfX@https.bugs.busybox.net/>
-Message-ID: <1487610335-7149-1-git-send-email-casantos@datacom.ind.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Feb 2017 18:16:31 +0100
+Subject: [Buildroot] [PATCH] Revert "reproducible: fix DATE/TIME macros in
+	toolchain-wrapper"
+Message-ID: <1487610991-12814-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pull an upstream fix to allow building schedutils (ionice, taskset,
-chrt) when util-linux is configured with
+This reverts commit 76838f63412a30a358210e457dda4b79f7730624.
 
-  $ configure --disable-all-programs --enable-schedutils
+The commit referenced above explicitly states that the function was
+copied as-is from the gcc source code at the time. And indeed that is
+exactly how the function appeared in gcc in commit
+e3e8c48c4a494d9da741c1c8ea6c4c0b7c4ff934.
 
-Fixes:
-  https://bugs.busybox.net/show_bug.cgi?id=9656
+However, our toolchain wrapper is "GPLv2 only", while the file this
+function was copied from is "GPLv3 or later". As such we can't get that
+function.
 
-Reported-by: Aaron Holtzman <aholtzma@gmail.com>
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Furthermore, the code is far from optimum.
+
+Since this feature is not release-critical, revert it until we do
+re-implement it.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: J?r?me Pouiller <jezz@sysmic.org>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
-Changes v1->v2
-  Update comment explaining why we need UTIL_LINUX_AUTORECONF = YES
+ toolchain/toolchain-wrapper.c | 72 +------------------------------------------
+ 1 file changed, 1 insertion(+), 71 deletions(-)
 
-Changes v2->v3
-  Pull full patch, as applied upstream by Karel Zak
-  Clean-up commit message
----
- ...ix-disable-all-programs-enable-schedutils.patch | 99 ++++++++++++++++++++++
- package/util-linux/util-linux.mk                   |  4 +-
- 2 files changed, 101 insertions(+), 2 deletions(-)
- create mode 100644 package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
-
-diff --git a/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch b/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
-new file mode 100644
-index 0000000..bf19e10
---- /dev/null
-+++ b/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
-@@ -0,0 +1,99 @@
-+From 6f2eb03433bcb2d3c351efed848a1f8554a7ff78 Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Mon, 20 Feb 2017 14:17:37 +0100
-+Subject: [PATCH] build-sys: fix --disable-all-programs --enable-schedutils
-+
-+* add UL_ENABLE_ALIAS(NAME, MASTERNAME) to initialize $enable_<name>
-+  according to MASTERNAME. Note that we have to use $build_<mastername>,
-+  the $enable_<mastername> is just AC_ARG_ENABLE() stuff only. The
-+  $build_ is evaluated and modified by our UL_...() functions.
-+
-+* add enable-schedutils.conf to have build-system regression test for
-+  this use-case
-+
-+Addresses: https://github.com/karelzak/util-linux/issues/415
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+---
-+ configure.ac                              | 14 ++++++++------
-+ m4/ul.m4                                  | 15 +++++++++++++++
-+ tools/config-gen.d/enable-schedutils.conf |  3 +++
-+ 3 files changed, 26 insertions(+), 6 deletions(-)
-+ create mode 100644 tools/config-gen.d/enable-schedutils.conf
-+
-+diff --git a/configure.ac b/configure.ac
-+index ad241fe..be282f0 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1909,8 +1909,9 @@ AC_ARG_ENABLE([schedutils],
-+ )
-+ UL_BUILD_INIT([schedutils])
-+ 
-+-UL_BUILD_INIT([ionice], [check])
-+-UL_REQUIRES_BUILD([ionice], [schedutils])
-++
-++UL_ENABLE_ALIAS([ionice], [schedutils])
-++UL_BUILD_INIT([ionice])
-+ UL_REQUIRES_SYSCALL_CHECK([ionice],
-+ 	[UL_CHECK_SYSCALL([ioprio_set],
-+ 	  [alpha],	[442],
-+@@ -1937,8 +1938,9 @@ UL_REQUIRES_SYSCALL_CHECK([ionice],
-+ 
-+ AM_CONDITIONAL([BUILD_IONICE], [test "x$build_ionice" = xyes])
-+ 
-+-UL_BUILD_INIT([taskset], [check])
-+-UL_REQUIRES_BUILD([taskset], [schedutils])
-++
-++UL_ENABLE_ALIAS([taskset], [schedutils])
-++UL_BUILD_INIT([taskset])
-+ UL_REQUIRES_HAVE([taskset], [cpu_set_t], [cpu_set_t type])
-+ UL_REQUIRES_SYSCALL_CHECK([taskset],
-+ 	[UL_CHECK_SYSCALL([sched_getaffinity])],
-+@@ -1950,8 +1952,8 @@ have_schedsetter=no
-+ AS_IF([test "x$ac_cv_func_sched_setscheduler" = xyes], [have_schedsetter=yes],
-+       [test "x$ac_cv_func_sched_setattr" = xyes], [have_schedsetter=yes])
-+ 
-+-UL_BUILD_INIT([chrt], [check])
-+-UL_REQUIRES_BUILD([chrt], [schedutils])
-++UL_ENABLE_ALIAS([chrt], [schedutils])
-++UL_BUILD_INIT([chrt])
-+ UL_REQUIRES_HAVE([chrt], [schedsetter], [sched_set functions])
-+ AM_CONDITIONAL([BUILD_CHRT], [test "x$build_chrt" = xyes])
-+ 
-+diff --git a/m4/ul.m4 b/m4/ul.m4
-+index f8a0dd7..ed7227c 100644
-+--- a/m4/ul.m4
-++++ b/m4/ul.m4
-+@@ -429,6 +429,21 @@ AC_DEFUN([UL_DEFAULT_ENABLE], [
-+   fi
-+ ])
-+ 
-++
-++dnl UL_ENABLE_ALIAS(NAME, MASTERNAME)
-++dnl
-++dnl Initializes $enable_<name> variable according to $build_<mastername>.  This
-++dnl is usefull for example if you want to use one --enable-mastername option
-++dnl for group of programs.
-++dnl
-++AC_DEFUN([UL_ENABLE_ALIAS], [
-++  m4_define([suffix], $1)
-++  m4_define([mastersuffix], $2)
-++
-++  enable_[]suffix=$build_[]mastersuffix
-++])
-++
-++
-+ dnl UL_NCURSES_CHECK(NAME)
-+ dnl
-+ dnl Initializes $have_<name>, NCURSES_LIBS and NCURSES_CFLAGS variables according to
-+diff --git a/tools/config-gen.d/enable-schedutils.conf b/tools/config-gen.d/enable-schedutils.conf
-+new file mode 100644
-+index 0000000..08deee4
-+--- /dev/null
-++++ b/tools/config-gen.d/enable-schedutils.conf
-+@@ -0,0 +1,3 @@
-++include:disable-all.conf
-++
-++--enable-schedutils
-+-- 
-+2.7.4
-+
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 441c252..f991b44 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -8,8 +8,8 @@ UTIL_LINUX_VERSION_MAJOR = 2.29
- UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
--# For 0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch and
--# 0002-build-sys-improve-detection-of-the-isnan-function-in.patch
-+
-+# Required because of the patches for configure.ac.
- UTIL_LINUX_AUTORECONF = YES
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index eb4ee8d..100aa18 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -22,15 +22,12 @@
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <errno.h>
+-#include <time.h>
  
- # README.licensing claims that some files are GPLv2-only, but this is not true.
+ #ifdef BR_CCACHE
+ static char ccache_path[PATH_MAX];
+ #endif
+ static char path[PATH_MAX];
+ static char sysroot[PATH_MAX];
+-static char source_time[sizeof("-D__TIME__=\"HH:MM:SS\"")];
+-static char source_date[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
+ 
+ /**
+  * GCC errors out with certain combinations of arguments (examples are
+@@ -42,11 +39,8 @@ static char source_date[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
+  * 	-mfloat-abi=
+  * 	-march=
+  * 	-mcpu=
+- * 	-D__TIME__=
+- * 	-D__DATE__=
+- * 	-Wno-builtin-macro-redefined
+  */
+-#define EXCLUSIVE_ARGS	6
++#define EXCLUSIVE_ARGS	3
+ 
+ static char *predef_args[] = {
+ #ifdef BR_CCACHE
+@@ -163,47 +157,6 @@ static void check_unsafe_path(const char *arg,
+ 	}
+ }
+ 
+-/* Read SOURCE_DATE_EPOCH from environment to have a deterministic
+- * timestamp to replace embedded current dates to get reproducible
+- * results.  Returns -1 if SOURCE_DATE_EPOCH is not defined.
+- */
+-static time_t get_source_date_epoch()
+-{
+-	char *source_date_epoch;
+-	long long epoch;
+-	char *endptr;
+-
+-	source_date_epoch = getenv("SOURCE_DATE_EPOCH");
+-	if (!source_date_epoch)
+-		return (time_t) -1;
+-
+-	errno = 0;
+-	epoch = strtoll(source_date_epoch, &endptr, 10);
+-	if ((errno == ERANGE && (epoch == LLONG_MAX || epoch == LLONG_MIN))
+-			|| (errno != 0 && epoch == 0)) {
+-		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
+-				"strtoll: %s\n", strerror(errno));
+-		exit(2);
+-	}
+-	if (endptr == source_date_epoch) {
+-		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
+-				"no digits were found: %s\n", endptr);
+-		exit(2);
+-	}
+-	if (*endptr != '\0') {
+-		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
+-				"trailing garbage: %s\n", endptr);
+-		exit(2);
+-	}
+-	if (epoch < 0) {
+-		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
+-				"value must be nonnegative: %lld \n", epoch);
+-		exit(2);
+-	}
+-
+-	return (time_t) epoch;
+-}
+-
+ int main(int argc, char **argv)
+ {
+ 	char **args, **cur, **exec_args;
+@@ -214,7 +167,6 @@ int main(int argc, char **argv)
+ 	char *paranoid_wrapper;
+ 	int paranoid;
+ 	int ret, i, count = 0, debug;
+-	time_t source_date_epoch;
+ 
+ 	/* Calculate the relative paths */
+ 	basename = strrchr(progpath, '/');
+@@ -320,28 +272,6 @@ int main(int argc, char **argv)
+ 	}
+ #endif /* ARCH || CPU */
+ 
+-	source_date_epoch = get_source_date_epoch();
+-	if (source_date_epoch != -1) {
+-		struct tm *tm = localtime(&source_date_epoch);
+-		if (!tm) {
+-			perror("__FILE__: localtime");
+-			return 3;
+-		}
+-		ret = strftime(source_time, sizeof(source_time), "-D__TIME__=\"%T\"", tm);
+-		if (!ret) {
+-			perror("__FILE__: overflow");
+-			return 3;
+-		}
+-		*cur++ = source_time;
+-		ret = strftime(source_date, sizeof(source_date), "-D__DATE__=\"%b %e %Y\"", tm);
+-		if (!ret) {
+-			perror("__FILE__: overflow");
+-			return 3;
+-		}
+-		*cur++ = source_date;
+-		*cur++ = "-Wno-builtin-macro-redefined";
+-	}
+-
+ 	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+ 	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
+ 		paranoid = 1;
 -- 
 2.7.4
