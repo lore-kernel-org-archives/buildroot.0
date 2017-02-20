@@ -1,46 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 22:22:12 +0100
-Subject: [Buildroot] [PATCH v3 3/3] qt5base: make harfbuzz support
- selectable
-In-Reply-To: <20170220221444.4792d09a@gmx.net>
-References: <20170218113202.14213-1-ps.report@gmx.net>
- <20170218113202.14213-3-ps.report@gmx.net>
- <20170220220434.728a8a89@free-electrons.com>
- <20170220221444.4792d09a@gmx.net>
-Message-ID: <20170220222212.458f5c7d@free-electrons.com>
+Date: Mon, 20 Feb 2017 22:18:15 +0100
+Subject: [Buildroot] [git commit] Revert "bctoolbox: fix typos and logic
+	error"
+Message-ID: <20170220212444.E072282203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7dd52cabc3eb43fc477af53bd7a817bac081e962
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Feb 2017 22:14:44 +0100, Peter Seiderer wrote:
+This reverts commit 5c4d3560b94c9cb8f1594c9200a632b89ddf7aa0.
 
-> This patch is a follow up on your (and Arnout's) suggestion to prefer
-> system libraries, freetype first, harzbuzz second..., so logically it
-> belongs to the freetype patch...
-> 
-> But no mandatory need for this patch to be applied to master, maybe
-> next is enough...
-> 
-> At the moment always the qt built-in harfbuzz is used...
+Although the patch fixes the build error it does not set the flags for
+Libs.private properly. A follow-up patch will provide a better solution
+for this issue.
 
-OK. The freetype one was really needed in master as it was fixing a
-build issue.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bctoolbox/0001-fix-typo.patch | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-However, I'll keep the harfbuzz patch around until next gets merged
-back into master after the release. We've been building Qt with the
-internal harfbuzz so far, so let's keep it this way for the release.
-
-Are you also looking at the other qt5 failures on various
-architectures?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/bctoolbox/0001-fix-typo.patch b/package/bctoolbox/0001-fix-typo.patch
+deleted file mode 100644
+index b94daee..0000000
+--- a/package/bctoolbox/0001-fix-typo.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Fix a typo in the variable name. Only check path for a single library name.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org> 
+-
+-diff -Nur bctoolbox-0.4.0.orig/CMakeLists.txt bctoolbox-0.4.0/CMakeLists.txt
+---- bctoolbox-0.4.0.orig/CMakeLists.txt	2016-10-06 17:30:41.000000000 +0200
+-+++ bctoolbox-0.4.0/CMakeLists.txt	2017-02-13 23:30:38.641288032 +0100
+-@@ -103,8 +103,8 @@
+- endif()
+- 
+- if(MBEDTLS_FOUND)
+--	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARIES}" PATH)
+--	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedlts_library_path}")
+-+	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARY}" PATH)
+-+	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedtls_library_path}")
+- endif()
+- if(POLARSSL_FOUND)
+- 	get_filename_component(polarssl_library_path "${POLARSSL_LIBRARIES}" PATH)
