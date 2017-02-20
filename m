@@ -1,63 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 13:21:31 +0100
-Subject: [Buildroot] [git commit] uclibc: define struct ucontext for or1k
-Message-ID: <20170220122219.8F3FE819DC@busybox.osuosl.org>
+Date: Mon, 20 Feb 2017 13:21:46 +0100
+Subject: [Buildroot] [git commit] uclibc: add fix for ARM specific static
+	linking issues
+Message-ID: <20170220122219.9FD3A80DCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a24a7b3c2f0fed2cd51f7e1340ec67cb5ca0cb49
+commit: https://git.buildroot.net/buildroot/commit/?id=5cb4b3f2cae802913b88443fa0f268fd40c7e70a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add missing define for struct ucontext for OpenRISC.
-
 Fixes:
-  http://autobuild.buildroot.net/results/d8715a2b3783d877edf91bb14a80d36eac749b36
+  http://autobuild.buildroot.net/results/fb14e37aaf453874d1c33e5ed73b9c751ace5ae3
+  http://autobuild.buildroot.net/results/774a8dd489760bc213ac7cf3e8040cee6a4e2437
+
+And hopefully all other static ARM issues with uClibc-ng.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...3-or1k-add-missing-definition-of-ucontext.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ .../0002-arm-fix-static-linking-issues.patch       | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/uclibc/0003-or1k-add-missing-definition-of-ucontext.patch b/package/uclibc/0003-or1k-add-missing-definition-of-ucontext.patch
+diff --git a/package/uclibc/0002-arm-fix-static-linking-issues.patch b/package/uclibc/0002-arm-fix-static-linking-issues.patch
 new file mode 100644
-index 0000000..7c60228
+index 0000000..5480b0d
 --- /dev/null
-+++ b/package/uclibc/0003-or1k-add-missing-definition-of-ucontext.patch
-@@ -0,0 +1,33 @@
-+From 228d03bf0032e5799e9bf04810170c0653ca846d Mon Sep 17 00:00:00 2001
++++ b/package/uclibc/0002-arm-fix-static-linking-issues.patch
+@@ -0,0 +1,38 @@
++From 94810a91c48ac62daed55b4aec70d04a44c10795 Mon Sep 17 00:00:00 2001
 +From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Fri, 17 Feb 2017 22:33:49 +0100
-+Subject: [PATCH] or1k: add missing definition of ucontext
++Date: Thu, 16 Feb 2017 20:22:21 +0100
++Subject: [PATCH] arm: fix static linking issues
++
++As reported by Buildroot developers these files causing static
++linking issues. The original contribution with the ARM unwind-resume
++rework and GNU libc sync was made before the combined libc change.
++But the patch was applied later, after the libc change and
++it seems the test coverage for static linking didn't catch it in
++the regression testing. Remove the files.
 +
 +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +---
-+ libc/sysdeps/linux/or1k/sys/ucontext.h | 10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
++ libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c | 2 --
++ libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c | 1 -
++ 2 files changed, 3 deletions(-)
++ delete mode 100644 libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c
++ delete mode 100644 libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c
 +
-+diff --git a/libc/sysdeps/linux/or1k/sys/ucontext.h b/libc/sysdeps/linux/or1k/sys/ucontext.h
-+index b11928e..dd97b60 100644
-+--- a/libc/sysdeps/linux/or1k/sys/ucontext.h
-++++ b/libc/sysdeps/linux/or1k/sys/ucontext.h
-+@@ -20,6 +20,14 @@
-+ 
-+ #include <features.h>
-+ #include <signal.h>
-+-#include <asm/ucontext.h>
-++#include <bits/sigcontext.h>
-++
-++typedef struct ucontext {
-++	unsigned long	  uc_flags;
-++	struct ucontext  *uc_link;
-++	stack_t		  uc_stack;
-++	struct sigcontext uc_mcontext;
-++	sigset_t	  uc_sigmask;	/* mask last for extensibility */
-++} ucontext_t;
-+ 
-+ #endif /* sys/ucontext.h */
++diff --git a/libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c b/libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c
++deleted file mode 100644
++index fd0cec4..0000000
++--- a/libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c
+++++ /dev/null
++@@ -1,2 +0,0 @@
++-__asm__ (".set __libgcc_s_init, pthread_cancel_init");
++-#include <arm-unwind-resume.c>
++diff --git a/libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c b/libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c
++deleted file mode 100644
++index 2641dc5..0000000
++--- a/libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c
+++++ /dev/null
++@@ -1 +0,0 @@
++-#include <arm-unwind-resume.c>
 +-- 
 +2.1.4
 +
