@@ -1,44 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Feb 2017 14:13:24 +0100
-Subject: [Buildroot] [git commit] sqlite: bump to version 3.17.0
-Message-ID: <20170301170420.E5174800CE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Feb 2017 21:55:50 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.10
+Message-ID: <20170301170422.CBBA980279@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c11883d18048474f6ed74c30b885659935b825b0
+commit: https://git.buildroot.net/buildroot/commit/?id=400eaa3452e9380ec77ac62266530055506ea6e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index bb3707d..5c5b8ec 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1 64ca578ad44a94115b1db0406740e14288f74bb8  sqlite-autoconf-3160200.tar.gz
-+sha1 7bcff1c158ed9e2c0e159c1b4b6c36d4d65dff8c  sqlite-autoconf-3170000.tar.gz
- # Calculated based on the hash above
--sha256 65cc0c3e9366f50c0679c5ccd31432cea894bc4a3e8947dabab88c8693263615  sqlite-autoconf-3160200.tar.gz
-+sha256 a4e485ad3a16e054765baf6371826b5000beed07e626510896069c0bf013874c  sqlite-autoconf-3170000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 790caaf..76babd3 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 740dd39..7f18219 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
  
--SQLITE_VERSION = 3160200
-+SQLITE_VERSION = 3170000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2017
- SQLITE_LICENSE = Public domain
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.9)"
++	bool "Latest version (4.10)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,11 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
++<<<<<<< a1e02440f3035cfbe5119c00457b3e1c2f7ac4d1
+ 	default "4.9.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++=======
++	default "4.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++>>>>>>> linux: bump default to version 4.10
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
