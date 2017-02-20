@@ -1,48 +1,62 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Feb 2017 21:52:42 +0100
-Subject: [Buildroot] [PATCH v1] libv4l/ir-ctl: fix musl compile
-In-Reply-To: <20170214224346.152cb954@free-electrons.com>
-References: <20170214203450.7449-1-ps.report@gmx.net>
- <20170214224346.152cb954@free-electrons.com>
-Message-ID: <20170220215242.33f75058@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Feb 2017 21:54:26 +0100
+Subject: [Buildroot] [PATCH 1/1] nfs-utils: bump to version 2.1.1
+In-Reply-To: <20170220154452.22935-1-aduskett@codeblue.com>
+References: <20170220154452.22935-1-aduskett@codeblue.com>
+Message-ID: <20170220215426.085a560d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-On Tue, 14 Feb 2017 22:43:46 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On Mon, 20 Feb 2017 10:44:52 -0500, Adam Duskett wrote:
+> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+> ---
+>  package/nfs-utils/nfs-utils.hash | 4 ++--
+>  package/nfs-utils/nfs-utils.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Hello,
-> 
-> On Tue, 14 Feb 2017 21:34:50 +0100, Peter Seiderer wrote:
-> > - add copy of TEMP_FAILURE_RETRY macro
-> > - use strdup instead of strdupa
-> > 
-> > Fixes [1]:
-> > 
-> >   ir-ctl.c:(.text+0xb06): undefined reference to `strndupa'
-> >   ir-ctl.c:(.text+0xe01): undefined reference to `TEMP_FAILURE_RETRY'
-> > 
-> > [1] http://autobuild.buildroot.net/results/b8b96c7bbf2147dacac62485cbfdbcfd758271a5
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  .../0002-ir-ctl-fixes-for-musl-compile.patch       | 59 ++++++++++++++++++++++
-> >  1 file changed, 59 insertions(+)
-> >  create mode 100644 package/libv4l/0002-ir-ctl-fixes-for-musl-compile.patch
-> 
-> Applied to master, thanks. Please submit the patch upstream. Thanks!
+This patch breaks the build with a regular ARM/uClibc configuration:
 
-O.k., submitted upstream (see [1], [2])...
+In file included from network.c:41:0:
+/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/linux/in6.h:30:8: error: redefinition of ?struct in6_addr?
+ struct in6_addr {
+        ^
+In file included from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netdb.h:27:0,
+                 from network.c:34:
+/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/in.h:197:8: note: originally defined here
+ struct in6_addr
+        ^
+In file included from network.c:41:0:
+/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/linux/in6.h:41:8: error: redefinition of ?struct sockaddr_in6?
+ struct sockaddr_in6 {
+        ^
+In file included from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/in.h:24:0,
+                 from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netdb.h:27,
+                 from network.c:34:
+/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/socket.h:91:17: note: originally defined here
+ typedef union { __SOCKADDR_ALLTYPES
+                 ^
+In file included from network.c:41:0:
+/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/linux/in6.h:49:8: error: redefinition of ?struct ipv6_mreq?
+ struct ipv6_mreq {
+        ^
+In file included from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netdb.h:27:0,
+                 from network.c:34:
+/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/in.h:278:8: note: originally defined here
+ struct ipv6_mreq
+        ^
 
-Regards,
-Peter
+Please at least test the build with an ARM/uClibc toolchain before
+submitting patches. See also support/scripts/test-pkg.
 
-[1] http://www.mail-archive.com/linux-media at vger.kernel.org/msg108551.html
-[2] http://www.mail-archive.com/linux-media at vger.kernel.org/msg108552.html
+Thanks,
 
-> 
-> Thomas
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
