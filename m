@@ -1,31 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 20 Feb 2017 20:43:28 +0000
-Subject: [Buildroot] [Bug 9656] util-linux: schedutils doesn't build on
- target w/o enabling basic binaries
-In-Reply-To: <bug-9656-163@https.bugs.busybox.net/>
-References: <bug-9656-163@https.bugs.busybox.net/>
-Message-ID: <bug-9656-163-oZI0VLoQie@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Feb 2017 21:43:41 +0100
+Subject: [Buildroot] [PATCH v3] util-linux: build schedutils without
+ enabling basic binaries
+In-Reply-To: <1487610335-7149-1-git-send-email-casantos@datacom.ind.br>
+References: <bug-9656-163-MVhQ2W5IfX@https.bugs.busybox.net/>
+ <1487610335-7149-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20170220214341.1155737d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9656
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Mon, 20 Feb 2017 14:05:35 -0300, Carlos Santos wrote:
+> Pull an upstream fix to allow building schedutils (ionice, taskset,
+> chrt) when util-linux is configured with
+> 
+>   $ configure --disable-all-programs --enable-schedutils
+> 
+> Fixes:
+>   https://bugs.busybox.net/show_bug.cgi?id=9656
+> 
+> Reported-by: Aaron Holtzman <aholtzma@gmail.com>
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+> Changes v1->v2
+>   Update comment explaining why we need UTIL_LINUX_AUTORECONF = YES
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|---                         |FIXED
+Applied to master, thanks.
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=125213d6164a395f7d0bfb136f3a873a02630ebc.
-
-Thanks Carlos for having investigated and fixed the issue!
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
