@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 09:44:43 +0100
-Subject: [Buildroot] [PATCH 00/58] python pypi library mass version bump.
-In-Reply-To: <CAFSsvmrv9m80RA+tc5YMwgbLpHs8-R0hw4ivmxHiNo++Nnyujg@mail.gmail.com>
-References: <20170219191255.1503-1-Adamduskett@outlook.com>
- <20170219211718.42744cc8@free-electrons.com>
- <20170219212054.2x6hosogfxbztldl@localhost.localdomain>
- <CAFSsvmrv9m80RA+tc5YMwgbLpHs8-R0hw4ivmxHiNo++Nnyujg@mail.gmail.com>
-Message-ID: <20170220094443.01a75e76@free-electrons.com>
+Date: Mon, 20 Feb 2017 09:50:26 +0100
+Subject: [Buildroot] No GPS data on ttymxc1 with busybox,
+ but it works with systemd
+In-Reply-To: <BY2PR03MB314CD45BE8ACFAD060BF954BF5E0@BY2PR03MB314.namprd03.prod.outlook.com>
+References: <BY2PR03MB314CD45BE8ACFAD060BF954BF5E0@BY2PR03MB314.namprd03.prod.outlook.com>
+Message-ID: <20170220095026.7150a532@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,43 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 19 Feb 2017 17:41:07 -0500, Adam Duskett wrote:
+On Mon, 20 Feb 2017 03:08:34 +0000, Brent Sink wrote:
 
-> Fair enough; I ran through and imported every single package I updated, and
-> if there was an example I ran the example as well.
+> I have GPS device that is connected to a uart port on my processor.
+> I have ttymxc0 which is the console output, and ttymxc1 which is the
+> GPS interface.  I have build an image using buildroot that uses the
+> busybox init system.  When I boot from this image and execute
+> "cat /dev/ttymxc1", I see no output on the terminal and my gpsd
+> service also sees nothing from the GPS receiver.
 > 
-> I rejected any of them that didn't work in the set.  Hopefully that's enough!
+> However, if I change my buildroot image to use the systemd init
+> system, and boot from this image, everything is working.  When I
+> execute "cat /dev/ttymxc1" I see output from the GPS receiver.
+> 
+> I'm trying to minimize the boot time so I would like use the busybox
+> init system since it boots quicker.  Any thoughts why I'm not seeing
+> any output on the ttymxc1 port when using the busybox init system?
 
-OK, thanks.
+Perhaps systemd is automatically initializing the serial ports to some
+given speed/configuration.
 
-> > In general I wonder if this python package situation is going to be
-> > maintainable in buildroot in the long run. There are nearly 200 python
-> > packages at the moment on the master branch, more than 10% of all
-> > buildroot packages.
-> >  
-> I agree, it's also a nightmare looking at the packages/ folder when such
-> a large amount are prefixed with python-.
-
-Why is that a "nightmare" ? Since when a list of directories is a
-"nightmare" ?
-
-> I noticed this as well while writing this small utility.  Some of these packages
-> are outdated by 5+ point revisions!
-
-Just like many other non-Python packages, so this point is not at all
-Python specific.
-
-> I was thinking, would it be possible to run pypi as a host?
-
-Because:
-
- - No reproducibility (pypi downloads the latest available versions of
-   the modules, as far as I know)
-
- - No integration with our download logic: use of a primary mirror, use
-   of a backup mirror, local cache of downloads.
-
- - No integration with our legal information tooling.
+Make sure you configure your serial port to the right
+speed/configuration using the "stty" program.
 
 Best regards,
 
