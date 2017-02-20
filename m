@@ -1,29 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 22:32:21 +0100
-Subject: [Buildroot] [PATCH v5 1/2] ipset: install libraries
-In-Reply-To: <1487147932-17148-1-git-send-email-apalos@gmail.com>
-References: <1487147932-17148-1-git-send-email-apalos@gmail.com>
-Message-ID: <20170220223221.29ae9398@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 20 Feb 2017 22:41:05 +0100
+Subject: [Buildroot] [PATCH v1] qt5quickcontrols: fix LTS (5.6) qml file
+	install
+Message-ID: <20170220214105.8106-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes [1]:
 
-On Wed, 15 Feb 2017 10:38:51 +0200, Ilias Apalodimas wrote:
-> Some packages may require libipset(i.e keepalived introduced in this patch).
-> 
-> Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
-> ---
->  package/ipset/ipset.mk | 1 +
->  1 file changed, 1 insertion(+)
+  cp -dpfr .../host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/qml/QtQuick/PrivateWidgets .../target/usr/qml/QtQuick
+  cp: cannot stat ?.../host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/qml/QtQuick/PrivateWidgets?: No such file or directory
 
-Applied to next, thanks.
+[1] https://bugs.busybox.net/show_bug.cgi?id=9666
 
-Thomas
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+index c2946bc75..8a63629c3 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+@@ -30,11 +30,20 @@ define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
+ endef
++else
++define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Layouts $(TARGET_DIR)/usr/qml/QtQuick
++endef
++endif
+ 
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
