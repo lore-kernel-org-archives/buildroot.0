@@ -1,28 +1,150 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 21:39:10 +0100
-Subject: [Buildroot] [PATCH] package/quazip: update to 0.7.3
-In-Reply-To: <1487544860-10947-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1487544860-10947-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20170220213910.288a945a@free-electrons.com>
+Date: Mon, 20 Feb 2017 21:39:28 +0100
+Subject: [Buildroot] [git commit] util-linux: build schedutils without
+	enabling basic binaries
+Message-ID: <20170220204244.9BA7B821E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=125213d6164a395f7d0bfb136f3a873a02630ebc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 19 Feb 2017 23:54:20 +0100, Zoltan Gyarmati wrote:
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> ---
->  package/quazip/quazip.hash | 2 +-
->  package/quazip/quazip.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Pull an upstream fix to allow building schedutils (ionice, taskset,
+chrt) when util-linux is configured with
 
-Applied to next, thanks.
+  $ configure --disable-all-programs --enable-schedutils
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+  https://bugs.busybox.net/show_bug.cgi?id=9656
+
+Reported-by: Aaron Holtzman <aholtzma@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ix-disable-all-programs-enable-schedutils.patch | 99 ++++++++++++++++++++++
+ package/util-linux/util-linux.mk                   |  4 +-
+ 2 files changed, 101 insertions(+), 2 deletions(-)
+
+diff --git a/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch b/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
+new file mode 100644
+index 0000000..bf19e10
+--- /dev/null
++++ b/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
+@@ -0,0 +1,99 @@
++From 6f2eb03433bcb2d3c351efed848a1f8554a7ff78 Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Mon, 20 Feb 2017 14:17:37 +0100
++Subject: [PATCH] build-sys: fix --disable-all-programs --enable-schedutils
++
++* add UL_ENABLE_ALIAS(NAME, MASTERNAME) to initialize $enable_<name>
++  according to MASTERNAME. Note that we have to use $build_<mastername>,
++  the $enable_<mastername> is just AC_ARG_ENABLE() stuff only. The
++  $build_ is evaluated and modified by our UL_...() functions.
++
++* add enable-schedutils.conf to have build-system regression test for
++  this use-case
++
++Addresses: https://github.com/karelzak/util-linux/issues/415
++Signed-off-by: Karel Zak <kzak@redhat.com>
++---
++ configure.ac                              | 14 ++++++++------
++ m4/ul.m4                                  | 15 +++++++++++++++
++ tools/config-gen.d/enable-schedutils.conf |  3 +++
++ 3 files changed, 26 insertions(+), 6 deletions(-)
++ create mode 100644 tools/config-gen.d/enable-schedutils.conf
++
++diff --git a/configure.ac b/configure.ac
++index ad241fe..be282f0 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1909,8 +1909,9 @@ AC_ARG_ENABLE([schedutils],
++ )
++ UL_BUILD_INIT([schedutils])
++ 
++-UL_BUILD_INIT([ionice], [check])
++-UL_REQUIRES_BUILD([ionice], [schedutils])
+++
+++UL_ENABLE_ALIAS([ionice], [schedutils])
+++UL_BUILD_INIT([ionice])
++ UL_REQUIRES_SYSCALL_CHECK([ionice],
++ 	[UL_CHECK_SYSCALL([ioprio_set],
++ 	  [alpha],	[442],
++@@ -1937,8 +1938,9 @@ UL_REQUIRES_SYSCALL_CHECK([ionice],
++ 
++ AM_CONDITIONAL([BUILD_IONICE], [test "x$build_ionice" = xyes])
++ 
++-UL_BUILD_INIT([taskset], [check])
++-UL_REQUIRES_BUILD([taskset], [schedutils])
+++
+++UL_ENABLE_ALIAS([taskset], [schedutils])
+++UL_BUILD_INIT([taskset])
++ UL_REQUIRES_HAVE([taskset], [cpu_set_t], [cpu_set_t type])
++ UL_REQUIRES_SYSCALL_CHECK([taskset],
++ 	[UL_CHECK_SYSCALL([sched_getaffinity])],
++@@ -1950,8 +1952,8 @@ have_schedsetter=no
++ AS_IF([test "x$ac_cv_func_sched_setscheduler" = xyes], [have_schedsetter=yes],
++       [test "x$ac_cv_func_sched_setattr" = xyes], [have_schedsetter=yes])
++ 
++-UL_BUILD_INIT([chrt], [check])
++-UL_REQUIRES_BUILD([chrt], [schedutils])
+++UL_ENABLE_ALIAS([chrt], [schedutils])
+++UL_BUILD_INIT([chrt])
++ UL_REQUIRES_HAVE([chrt], [schedsetter], [sched_set functions])
++ AM_CONDITIONAL([BUILD_CHRT], [test "x$build_chrt" = xyes])
++ 
++diff --git a/m4/ul.m4 b/m4/ul.m4
++index f8a0dd7..ed7227c 100644
++--- a/m4/ul.m4
+++++ b/m4/ul.m4
++@@ -429,6 +429,21 @@ AC_DEFUN([UL_DEFAULT_ENABLE], [
++   fi
++ ])
++ 
+++
+++dnl UL_ENABLE_ALIAS(NAME, MASTERNAME)
+++dnl
+++dnl Initializes $enable_<name> variable according to $build_<mastername>.  This
+++dnl is usefull for example if you want to use one --enable-mastername option
+++dnl for group of programs.
+++dnl
+++AC_DEFUN([UL_ENABLE_ALIAS], [
+++  m4_define([suffix], $1)
+++  m4_define([mastersuffix], $2)
+++
+++  enable_[]suffix=$build_[]mastersuffix
+++])
+++
+++
++ dnl UL_NCURSES_CHECK(NAME)
++ dnl
++ dnl Initializes $have_<name>, NCURSES_LIBS and NCURSES_CFLAGS variables according to
++diff --git a/tools/config-gen.d/enable-schedutils.conf b/tools/config-gen.d/enable-schedutils.conf
++new file mode 100644
++index 0000000..08deee4
++--- /dev/null
+++++ b/tools/config-gen.d/enable-schedutils.conf
++@@ -0,0 +1,3 @@
+++include:disable-all.conf
+++
+++--enable-schedutils
++-- 
++2.7.4
++
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 441c252..f991b44 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -8,8 +8,8 @@ UTIL_LINUX_VERSION_MAJOR = 2.29
+ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+-# For 0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch and
+-# 0002-build-sys-improve-detection-of-the-isnan-function-in.patch
++
++# Required because of the patches for configure.ac.
+ UTIL_LINUX_AUTORECONF = YES
+ 
+ # README.licensing claims that some files are GPLv2-only, but this is not true.
