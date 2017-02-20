@@ -1,60 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 21:18:31 +0100
-Subject: [Buildroot] [git commit] sed: bump to version 4.4
-Message-ID: <20170301170421.680F47FB5C@busybox.osuosl.org>
+Date: Mon, 20 Feb 2017 21:58:40 +0100
+Subject: [Buildroot] [git commit] toolchain-external: bump Linaro ARM
+	toolchain to 2017.02
+Message-ID: <20170301170423.19C8A80279@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71c56ecc0a720d727deb2aaa6e778405752f1c29
+commit: https://git.buildroot.net/buildroot/commit/?id=075d26900b4fdd4994831fc66e26682bacb5a90a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested with qemu-2.7.1-2.fc25 and the qemu_arm_vexpress_defconfig
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sed/Config.in | 5 +++--
- package/sed/sed.hash  | 2 +-
- package/sed/sed.mk    | 3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ .../toolchain-external/toolchain-external-linaro-arm/Config.in    | 6 +++---
+ .../toolchain-external-linaro-arm.hash                            | 4 ++--
+ .../toolchain-external-linaro-arm.mk                              | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/sed/Config.in b/package/sed/Config.in
-index 6adebf2..b8d182a 100644
---- a/package/sed/Config.in
-+++ b/package/sed/Config.in
-@@ -3,9 +3,10 @@ config BR2_PACKAGE_SED
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+index 78aeb8e..f538eb7 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+@@ -4,7 +4,7 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on !BR2_STATIC_LIBS
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+-	bool "Linaro ARM 2016.11"
++	bool "Linaro ARM 2017.02"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -19,8 +19,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
  	help
--	  Super-useful stream editor.
-+	  sed (stream editor) is a non-interactive command-line text
-+	  editor.
- 
--	  http://sed.sourceforge.net/
-+	  https://www.gnu.org/software/sed/
- 
- comment "sed needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/sed/sed.hash b/package/sed/sed.hash
-index e7f2db5..652c573 100644
---- a/package/sed/sed.hash
-+++ b/package/sed/sed.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	fea0a94d4b605894f3e2d5572e3f96e4413bcad3a085aae7367c2cf07908b2ff	sed-4.2.2.tar.gz
-+sha256	cbd6ebc5aaf080ed60d0162d7f6aeae58211a1ee9ba9bb25623daa6cd942683b	sed-4.4.tar.xz
-diff --git a/package/sed/sed.mk b/package/sed/sed.mk
-index 71c62d0..68bcb98 100644
---- a/package/sed/sed.mk
-+++ b/package/sed/sed.mk
-@@ -4,7 +4,8 @@
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2016.11 (based on gcc 6.2.1), Linaro GDB 2016.11 (based on
+-	  GDB 7.12), glibc 2.23, Binutils 2016.11 (based on 2.27). It
++	  GCC 2017.02 (based on gcc 6.3.1), Linaro GDB 2017.02 (based on
++	  GDB 7.12), glibc 2.23, Binutils 2017.02 (based on 2.27). It
+ 	  generates code that runs on all Cortex-A profile devices,
+ 	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+ 	  with the hard floating point calling convention, and uses
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+index d4452c3..ec861ec 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 a2a4968bfb8537c1b3280b4f475d90d53a1a0f05f7afc7b43efed266cc4de446  gcc-linaro-6.2.1-2016.11-i686_arm-linux-gnueabihf.tar.xz
+-sha256 5eb7ab2f8a0b4b960900321505cd6923a072cb3e2412102f5f72a6e74c2f0a55  gcc-linaro-6.2.1-2016.11-x86_64_arm-linux-gnueabihf.tar.xz
++sha256 2505348d30fd3f67544b8915ad7a557e643fbf987f3113e092463b37577c9b95  gcc-linaro-6.3.1-2017.02-i686_arm-linux-gnueabihf.tar.xz
++sha256 fe1cae02e0734665487b9b642171a5685a6e91416cea869bb22590f6dc7260c3  gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+index e098f47..b8ba43c 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/toolchain-external-linaro-arm.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--SED_VERSION = 4.2.2
-+SED_VERSION = 4.4
-+SED_SOURCE = sed-$(SED_VERSION).tar.xz
- SED_SITE = $(BR2_GNU_MIRROR)/sed
- SED_LICENSE = GPLv3
- SED_LICENSE_FILES = COPYING
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2016.11
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.2-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
++TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION = 2017.02
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SITE = https://releases.linaro.org/components/toolchain/binaries/6.3-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)/arm-linux-gnueabihf
+ 
+ ifeq ($(HOSTARCH),x86)
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.2.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-i686_arm-linux-gnueabihf.tar.xz
+ else
+-TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.2.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_LINARO_ARM_SOURCE = gcc-linaro-6.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_ARM_VERSION)-x86_64_arm-linux-gnueabihf.tar.xz
+ endif
+ 
+ $(eval $(toolchain-external-package))
