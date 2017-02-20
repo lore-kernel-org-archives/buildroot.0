@@ -1,62 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 21:54:26 +0100
-Subject: [Buildroot] [PATCH 1/1] nfs-utils: bump to version 2.1.1
-In-Reply-To: <20170220154452.22935-1-aduskett@codeblue.com>
-References: <20170220154452.22935-1-aduskett@codeblue.com>
-Message-ID: <20170220215426.085a560d@free-electrons.com>
+Date: Mon, 20 Feb 2017 21:55:50 +0100
+Subject: [Buildroot] [git commit branch/next] linux: bump default to version
+	4.10
+Message-ID: <20170220205659.5D64181945@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=400eaa3452e9380ec77ac62266530055506ea6e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 20 Feb 2017 10:44:52 -0500, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-> ---
->  package/nfs-utils/nfs-utils.hash | 4 ++--
->  package/nfs-utils/nfs-utils.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-This patch breaks the build with a regular ARM/uClibc configuration:
-
-In file included from network.c:41:0:
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/linux/in6.h:30:8: error: redefinition of ?struct in6_addr?
- struct in6_addr {
-        ^
-In file included from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netdb.h:27:0,
-                 from network.c:34:
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/in.h:197:8: note: originally defined here
- struct in6_addr
-        ^
-In file included from network.c:41:0:
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/linux/in6.h:41:8: error: redefinition of ?struct sockaddr_in6?
- struct sockaddr_in6 {
-        ^
-In file included from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/in.h:24:0,
-                 from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netdb.h:27,
-                 from network.c:34:
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/socket.h:91:17: note: originally defined here
- typedef union { __SOCKADDR_ALLTYPES
-                 ^
-In file included from network.c:41:0:
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/linux/in6.h:49:8: error: redefinition of ?struct ipv6_mreq?
- struct ipv6_mreq {
-        ^
-In file included from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netdb.h:27:0,
-                 from network.c:34:
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/netinet/in.h:278:8: note: originally defined here
- struct ipv6_mreq
-        ^
-
-Please at least test the build with an ARM/uClibc toolchain before
-submitting patches. See also support/scripts/test-pkg.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 740dd39..7f18219 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.9)"
++	bool "Latest version (4.10)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,11 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
++<<<<<<< a1e02440f3035cfbe5119c00457b3e1c2f7ac4d1
+ 	default "4.9.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++=======
++	default "4.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++>>>>>>> linux: bump default to version 4.10
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
