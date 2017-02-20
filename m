@@ -1,70 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 13:21:46 +0100
-Subject: [Buildroot] [git commit] uclibc: add fix for ARM specific static
-	linking issues
-Message-ID: <20170220122219.9FD3A80DCE@busybox.osuosl.org>
+From: Vishal Thanki <vishalthanki@gmail.com>
+Date: Mon, 20 Feb 2017 13:39:04 +0100
+Subject: [Buildroot] [PATCH 1/1] bluez5_utils: Add config option to
+ install "bdaddr"
+In-Reply-To: <20170215094204.22df2cb5@free-electrons.com>
+References: <1487084632-16396-1-git-send-email-vishalthanki@gmail.com>
+ <20170214160844.ts44yh2l4ghzwvad@tarshish>
+ <20170214211443.00dc1a10@free-electrons.com>
+ <20170215063911.ojfnao67fbpsojy7@tarshish>
+ <20170215094204.22df2cb5@free-electrons.com>
+Message-ID: <CAC3a_SAqi27AMqk3CngKosbM5qius2bqv_5+qmyRS17i_xAZHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cb4b3f2cae802913b88443fa0f268fd40c7e70a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas, Baruch,
 
-Fixes:
-  http://autobuild.buildroot.net/results/fb14e37aaf453874d1c33e5ed73b9c751ace5ae3
-  http://autobuild.buildroot.net/results/774a8dd489760bc213ac7cf3e8040cee6a4e2437
+Thanks for your comments.
 
-And hopefully all other static ARM issues with uClibc-ng.
+>> All should go under BR2_PACKAGE_BLUEZ5_UTILS_TOOLS, as well as --enable-tools,
+>> IMO.
+>
+> Well, 5.7 MB and 56 executables is definitely not a small amount, so I
+> would tend to instead accept a more fine-grained selection of the tools.
+>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0002-arm-fix-static-linking-issues.patch       | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+Does this mean that "bdaddr" should be enabled with a separate option
+as done in this patch? OR this patch should also provide options for
+all other tools which do not get installed by default?
 
-diff --git a/package/uclibc/0002-arm-fix-static-linking-issues.patch b/package/uclibc/0002-arm-fix-static-linking-issues.patch
-new file mode 100644
-index 0000000..5480b0d
---- /dev/null
-+++ b/package/uclibc/0002-arm-fix-static-linking-issues.patch
-@@ -0,0 +1,38 @@
-+From 94810a91c48ac62daed55b4aec70d04a44c10795 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Thu, 16 Feb 2017 20:22:21 +0100
-+Subject: [PATCH] arm: fix static linking issues
-+
-+As reported by Buildroot developers these files causing static
-+linking issues. The original contribution with the ARM unwind-resume
-+rework and GNU libc sync was made before the combined libc change.
-+But the patch was applied later, after the libc change and
-+it seems the test coverage for static linking didn't catch it in
-+the regression testing. Remove the files.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c | 2 --
-+ libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c | 1 -
-+ 2 files changed, 3 deletions(-)
-+ delete mode 100644 libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c
-+ delete mode 100644 libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c
-+
-+diff --git a/libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c b/libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c
-+deleted file mode 100644
-+index fd0cec4..0000000
-+--- a/libpthread/nptl/sysdeps/arm/pt-arm-unwind-resume.c
-++++ /dev/null
-+@@ -1,2 +0,0 @@
-+-__asm__ (".set __libgcc_s_init, pthread_cancel_init");
-+-#include <arm-unwind-resume.c>
-+diff --git a/libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c b/libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c
-+deleted file mode 100644
-+index 2641dc5..0000000
-+--- a/libpthread/nptl/sysdeps/arm/rt-arm-unwind-resume.c
-++++ /dev/null
-+@@ -1 +0,0 @@
-+-#include <arm-unwind-resume.c>
-+-- 
-+2.1.4
-+
+> However, if indeed --enable-tools is optional, we shouldn't enable it
+> unconditional, but have an option for that.
+>
+
+Should "--enable-tools" option in buildroot be handled in this patch
+or in a separate patch?
+
+Thanks,
+Vishal
