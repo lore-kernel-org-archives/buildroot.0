@@ -1,157 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Feb 2017 18:16:31 +0100
-Subject: [Buildroot] [PATCH] Revert "reproducible: fix DATE/TIME macros in
-	toolchain-wrapper"
-Message-ID: <1487610991-12814-1-git-send-email-yann.morin.1998@free.fr>
+From: Brent Sink <brents_3@hotmail.com>
+Date: Mon, 20 Feb 2017 17:59:38 +0000
+Subject: [Buildroot] No GPS data on ttymxc1 with busybox,
+ but it works with systemd
+In-Reply-To: <20170220095026.7150a532@free-electrons.com>
+References: <BY2PR03MB314CD45BE8ACFAD060BF954BF5E0@BY2PR03MB314.namprd03.prod.outlook.com>,
+ <20170220095026.7150a532@free-electrons.com>
+Message-ID: <BY2PR03MB31431BC964FD7F0A71C5021BF5E0@BY2PR03MB314.namprd03.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 76838f63412a30a358210e457dda4b79f7730624.
+> Hello,
 
-The commit referenced above explicitly states that the function was
-copied as-is from the gcc source code at the time. And indeed that is
-exactly how the function appeared in gcc in commit
-e3e8c48c4a494d9da741c1c8ea6c4c0b7c4ff934.
+>
+> Perhaps systemd is automatically initializing the serial ports to some
+> given speed/configuration.
+>
+> Make sure you configure your serial port to the right
+> speed/configuration using the "stty" program.
 
-However, our toolchain wrapper is "GPLv2 only", while the file this
-function was copied from is "GPLv3 or later". As such we can't get that
-function.
+I did verify that the speed is set correctly and everything appears to be the same between the two images, so I'm not sure what else to check?  Here is the output from stty and setserial which is identical on both images:
 
-Furthermore, the code is far from optimum.
+# stty -F /dev/ttymxc1 speed
+9600
 
-Since this feature is not release-critical, revert it until we do
-re-implement it.
+# setserial -g /dev/ttymxc* -a
+/dev/ttymxc1, Line 1, UART: undefined, Port: 0x0000, IRQ: 72
+        Baud_base: 5000000, close_delay: 50, divisor: 0
+        closing_wait: 3000
+        Flags: spd_normal
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: J?r?me Pouiller <jezz@sysmic.org>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- toolchain/toolchain-wrapper.c | 72 +------------------------------------------
- 1 file changed, 1 insertion(+), 71 deletions(-)
+One difference i noticed are the permissions.  On the busybox image (not working), it's permissions are:
+# ls -l /dev/ttymxc1
+crw--w----    1 root     root      207,  17 Jan  1 00:00 /dev/ttymxc1
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index eb4ee8d..100aa18 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -22,15 +22,12 @@
- #include <unistd.h>
- #include <stdlib.h>
- #include <errno.h>
--#include <time.h>
- 
- #ifdef BR_CCACHE
- static char ccache_path[PATH_MAX];
- #endif
- static char path[PATH_MAX];
- static char sysroot[PATH_MAX];
--static char source_time[sizeof("-D__TIME__=\"HH:MM:SS\"")];
--static char source_date[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
- 
- /**
-  * GCC errors out with certain combinations of arguments (examples are
-@@ -42,11 +39,8 @@ static char source_date[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
-  * 	-mfloat-abi=
-  * 	-march=
-  * 	-mcpu=
-- * 	-D__TIME__=
-- * 	-D__DATE__=
-- * 	-Wno-builtin-macro-redefined
-  */
--#define EXCLUSIVE_ARGS	6
-+#define EXCLUSIVE_ARGS	3
- 
- static char *predef_args[] = {
- #ifdef BR_CCACHE
-@@ -163,47 +157,6 @@ static void check_unsafe_path(const char *arg,
- 	}
- }
- 
--/* Read SOURCE_DATE_EPOCH from environment to have a deterministic
-- * timestamp to replace embedded current dates to get reproducible
-- * results.  Returns -1 if SOURCE_DATE_EPOCH is not defined.
-- */
--static time_t get_source_date_epoch()
--{
--	char *source_date_epoch;
--	long long epoch;
--	char *endptr;
--
--	source_date_epoch = getenv("SOURCE_DATE_EPOCH");
--	if (!source_date_epoch)
--		return (time_t) -1;
--
--	errno = 0;
--	epoch = strtoll(source_date_epoch, &endptr, 10);
--	if ((errno == ERANGE && (epoch == LLONG_MAX || epoch == LLONG_MIN))
--			|| (errno != 0 && epoch == 0)) {
--		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
--				"strtoll: %s\n", strerror(errno));
--		exit(2);
--	}
--	if (endptr == source_date_epoch) {
--		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
--				"no digits were found: %s\n", endptr);
--		exit(2);
--	}
--	if (*endptr != '\0') {
--		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
--				"trailing garbage: %s\n", endptr);
--		exit(2);
--	}
--	if (epoch < 0) {
--		fprintf(stderr, "environment variable $SOURCE_DATE_EPOCH: "
--				"value must be nonnegative: %lld \n", epoch);
--		exit(2);
--	}
--
--	return (time_t) epoch;
--}
--
- int main(int argc, char **argv)
- {
- 	char **args, **cur, **exec_args;
-@@ -214,7 +167,6 @@ int main(int argc, char **argv)
- 	char *paranoid_wrapper;
- 	int paranoid;
- 	int ret, i, count = 0, debug;
--	time_t source_date_epoch;
- 
- 	/* Calculate the relative paths */
- 	basename = strrchr(progpath, '/');
-@@ -320,28 +272,6 @@ int main(int argc, char **argv)
- 	}
- #endif /* ARCH || CPU */
- 
--	source_date_epoch = get_source_date_epoch();
--	if (source_date_epoch != -1) {
--		struct tm *tm = localtime(&source_date_epoch);
--		if (!tm) {
--			perror("__FILE__: localtime");
--			return 3;
--		}
--		ret = strftime(source_time, sizeof(source_time), "-D__TIME__=\"%T\"", tm);
--		if (!ret) {
--			perror("__FILE__: overflow");
--			return 3;
--		}
--		*cur++ = source_time;
--		ret = strftime(source_date, sizeof(source_date), "-D__DATE__=\"%b %e %Y\"", tm);
--		if (!ret) {
--			perror("__FILE__: overflow");
--			return 3;
--		}
--		*cur++ = source_date;
--		*cur++ = "-Wno-builtin-macro-redefined";
--	}
--
- 	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
- 	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
- 		paranoid = 1;
--- 
-2.7.4
+...and on the systemd image (is working), it's permissions are:
+# ls -l /dev/ttymxc1
+crw-------    1 root     root      207,  17 Jan  1 00:00 /dev/ttymxc1
+
+Anything else that I should check?
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com<http://free-electrons.com/>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170220/6e969a22/attachment.html>
