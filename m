@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 22:26:23 +0100
-Subject: [Buildroot] [PATCH] Revert "package/iptables: nfsynproxy not
- available on musl"
-In-Reply-To: <e55813c866d7c063a694ed54240c65ff73c87ae0.1487250853.git.baruch@tkos.co.il>
-References: <e55813c866d7c063a694ed54240c65ff73c87ae0.1487250853.git.baruch@tkos.co.il>
-Message-ID: <20170220222623.7cb3f8cd@free-electrons.com>
+Date: Mon, 20 Feb 2017 22:26:40 +0100
+Subject: [Buildroot] [git commit branch/next] ipset: install libraries to
+	staging
+Message-ID: <20170220213213.A1F3B8220A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0c05b2f6b731ca802f6c7a6fc5fd39693793e48d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 16 Feb 2017 15:14:13 +0200, Baruch Siach wrote:
-> This reverts commit 497f15b301273cd81e54b4fcc5da6ab90e27796c.
-> 
-> As the comment says, musl version 1.1.13 contains commit 53f41fb568ae4.
-> Buildroot now ships musl version 1.1.16, so enable build with musl.
-> 
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/iptables/Config.in | 4 ----
->  1 file changed, 4 deletions(-)
+Some packages may require libipset, for example keepalived.
 
-Applied to next, thanks.
+Signed-off-by: Ilias Apalodimas <apalos@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ipset/ipset.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index db4952b..bb40fee 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -13,5 +13,6 @@ IPSET_CONF_OPTS = --with-kmod=no
+ IPSET_AUTORECONF = YES
+ IPSET_LICENSE = GPLv2
+ IPSET_LICENSE_FILES = COPYING
++IPSET_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
