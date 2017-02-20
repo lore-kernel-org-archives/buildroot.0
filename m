@@ -1,60 +1,617 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 20 Feb 2017 08:43:38 -0300
-Subject: [Buildroot] [PATCH 3/4] linux-headers: bump to 4.10 kernel version
+Date: Mon, 20 Feb 2017 08:43:39 -0300
+Subject: [Buildroot] [PATCH 4/4] configs/mx6sx_udoo_neo: Bump to kernel 4.10
 In-Reply-To: <1487591019-22587-1-git-send-email-festevam@gmail.com>
 References: <1487591019-22587-1-git-send-email-festevam@gmail.com>
-Message-ID: <1487591019-22587-3-git-send-email-festevam@gmail.com>
+Message-ID: <1487591019-22587-4-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The imx6sx-udoo-neo dts patches have been upstreamed in kernel 4.10,
+so bump to this version and remove the local patches.
+
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/linux-headers/Config.in.host | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ .../neo/patches/linux/0001-udoo_neo_support.patch  | 560 ---------------------
+ configs/mx6sx_udoo_neo_defconfig                   |   7 +-
+ 2 files changed, 3 insertions(+), 564 deletions(-)
+ delete mode 100644 board/udoo/neo/patches/linux/0001-udoo_neo_support.patch
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6485025..8f79ed6 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_4_9
-+	default BR2_KERNEL_HEADERS_4_10
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -67,6 +67,10 @@ choice
- 		bool "Linux 4.9.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 
-+	config BR2_KERNEL_HEADERS_4_10
-+		bool "Linux 4.10.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- endchoice
-@@ -87,6 +91,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10
-+	bool "4.10.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9
- 	bool "4.9.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-@@ -225,4 +233,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.4.49"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
- 	default "4.9.10"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.10"		if BR2_KERNEL_HEADERS_4_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/board/udoo/neo/patches/linux/0001-udoo_neo_support.patch b/board/udoo/neo/patches/linux/0001-udoo_neo_support.patch
+deleted file mode 100644
+index 2e8cea5..0000000
+--- a/board/udoo/neo/patches/linux/0001-udoo_neo_support.patch
++++ /dev/null
+@@ -1,560 +0,0 @@
+-From 76e691fc7653b85d390e58710e5c7db73ca49367 Mon Sep 17 00:00:00 2001
+-From: Andreas F?rber <afaerber@suse.de>
+-Date: Sun, 16 Oct 2016 16:44:23 +0200
+-Subject: ARM: dts: imx6sx: Add UDOO Neo support
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Add initial device trees for UDOO Neo Basic, Extended and Full boards:
+-* Serial console is enabled, other serial ports are prepared.
+-* I2C based PMIC is enabled.
+-* Ethernet is enabled for Basic and Full.
+-* SDHC is enabled, with the SDIO_PWR GPIO modeled as a regulator.
+-* Both user LEDs are enabled, with the orange one reserved for the M4
+-  and with the SD card as default trigger for the red LED.
+-
+-The decision on a board compatible string is deferred to later.
+-
+-Cc: Ettore Chimenti <ettore.chimenti@udoo.org>
+-Signed-off-by: Andreas F?rber <afaerber@suse.de>
+-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+----
+- arch/arm/boot/dts/Makefile                     |   5 +-
+- arch/arm/boot/dts/imx6sx-udoo-neo-basic.dts    |  69 ++++++
+- arch/arm/boot/dts/imx6sx-udoo-neo-extended.dts |  54 +++++
+- arch/arm/boot/dts/imx6sx-udoo-neo-full.dts     |  69 ++++++
+- arch/arm/boot/dts/imx6sx-udoo-neo.dtsi         | 293 +++++++++++++++++++++++++
+- 5 files changed, 489 insertions(+), 1 deletion(-)
+- create mode 100644 arch/arm/boot/dts/imx6sx-udoo-neo-basic.dts
+- create mode 100644 arch/arm/boot/dts/imx6sx-udoo-neo-extended.dts
+- create mode 100644 arch/arm/boot/dts/imx6sx-udoo-neo-full.dts
+- create mode 100644 arch/arm/boot/dts/imx6sx-udoo-neo.dtsi
+-
+-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+-index 019976b..da0197d 100644
+---- a/arch/arm/boot/dts/Makefile
+-+++ b/arch/arm/boot/dts/Makefile
+-@@ -417,7 +417,10 @@ dtb-$(CONFIG_SOC_IMX6SX) += \
+- 	imx6sx-sabreauto.dtb \
+- 	imx6sx-sdb-reva.dtb \
+- 	imx6sx-sdb-sai.dtb \
+--	imx6sx-sdb.dtb
+-+	imx6sx-sdb.dtb \
+-+	imx6sx-udoo-neo-basic.dtb \
+-+	imx6sx-udoo-neo-extended.dtb \
+-+	imx6sx-udoo-neo-full.dtb
+- dtb-$(CONFIG_SOC_IMX6UL) += \
+- 	imx6ul-14x14-evk.dtb \
+- 	imx6ul-geam-kit.dtb \
+-diff --git a/arch/arm/boot/dts/imx6sx-udoo-neo-basic.dts b/arch/arm/boot/dts/imx6sx-udoo-neo-basic.dts
+-new file mode 100644
+-index 0000000..0b88878
+---- /dev/null
+-+++ b/arch/arm/boot/dts/imx6sx-udoo-neo-basic.dts
+-@@ -0,0 +1,69 @@
+-+/*
+-+ * Copyright (c) 2016 Andreas F?rber
+-+ *
+-+ * This file is dual-licensed: you can use it either under the terms
+-+ * of the GPL or the X11 license, at your option. Note that this dual
+-+ * licensing only applies to this file, and not this project as a
+-+ * whole.
+-+ *
+-+ *  a) This library is free software; you can redistribute it and/or
+-+ *     modify it under the terms of the GNU General Public License as
+-+ *     published by the Free Software Foundation; either version 2 of the
+-+ *     License, or (at your option) any later version.
+-+ *
+-+ *     This library is distributed in the hope that it will be useful,
+-+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-+ *     GNU General Public License for more details.
+-+ *
+-+ * Or, alternatively,
+-+ *
+-+ *  b) Permission is hereby granted, free of charge, to any person
+-+ *     obtaining a copy of this software and associated documentation
+-+ *     files (the "Software"), to deal in the Software without
+-+ *     restriction, including without limitation the rights to use,
+-+ *     copy, modify, merge, publish, distribute, sublicense, and/or
+-+ *     sell copies of the Software, and to permit persons to whom the
+-+ *     Software is furnished to do so, subject to the following
+-+ *     conditions:
+-+ *
+-+ *     The above copyright notice and this permission notice shall be
+-+ *     included in all copies or substantial portions of the Software.
+-+ *
+-+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+-+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+-+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+-+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+-+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+-+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+-+ *     OTHER DEALINGS IN THE SOFTWARE.
+-+ */
+-+
+-+/dts-v1/;
+-+
+-+#include "imx6sx-udoo-neo.dtsi"
+-+
+-+/ {
+-+	model = "UDOO Neo Basic";
+-+	compatible = "fsl,imx6sx";
+-+
+-+	memory {
+-+		reg = <0x80000000 0x20000000>;
+-+	};
+-+};
+-+
+-+&fec1 {
+-+	phy-handle = <&ethphy1>;
+-+	status = "okay";
+-+
+-+	mdio {
+-+		#address-cells = <1>;
+-+		#size-cells = <0>;
+-+
+-+		ethphy1: ethernet-phy at 0 {
+-+			compatible = "ethernet-phy-ieee802.3-c22";
+-+			reg = <0>;
+-+		};
+-+	};
+-+};
+-diff --git a/arch/arm/boot/dts/imx6sx-udoo-neo-extended.dts b/arch/arm/boot/dts/imx6sx-udoo-neo-extended.dts
+-new file mode 100644
+-index 0000000..d6fdd17
+---- /dev/null
+-+++ b/arch/arm/boot/dts/imx6sx-udoo-neo-extended.dts
+-@@ -0,0 +1,54 @@
+-+/*
+-+ * Copyright (c) 2016 Andreas F?rber
+-+ *
+-+ * This file is dual-licensed: you can use it either under the terms
+-+ * of the GPL or the X11 license, at your option. Note that this dual
+-+ * licensing only applies to this file, and not this project as a
+-+ * whole.
+-+ *
+-+ *  a) This library is free software; you can redistribute it and/or
+-+ *     modify it under the terms of the GNU General Public License as
+-+ *     published by the Free Software Foundation; either version 2 of the
+-+ *     License, or (at your option) any later version.
+-+ *
+-+ *     This library is distributed in the hope that it will be useful,
+-+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-+ *     GNU General Public License for more details.
+-+ *
+-+ * Or, alternatively,
+-+ *
+-+ *  b) Permission is hereby granted, free of charge, to any person
+-+ *     obtaining a copy of this software and associated documentation
+-+ *     files (the "Software"), to deal in the Software without
+-+ *     restriction, including without limitation the rights to use,
+-+ *     copy, modify, merge, publish, distribute, sublicense, and/or
+-+ *     sell copies of the Software, and to permit persons to whom the
+-+ *     Software is furnished to do so, subject to the following
+-+ *     conditions:
+-+ *
+-+ *     The above copyright notice and this permission notice shall be
+-+ *     included in all copies or substantial portions of the Software.
+-+ *
+-+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+-+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+-+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+-+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+-+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+-+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+-+ *     OTHER DEALINGS IN THE SOFTWARE.
+-+ */
+-+
+-+/dts-v1/;
+-+
+-+#include "imx6sx-udoo-neo.dtsi"
+-+
+-+/ {
+-+	model = "UDOO Neo Extended";
+-+	compatible = "fsl,imx6sx";
+-+
+-+	memory {
+-+		reg = <0x80000000 0x40000000>;
+-+	};
+-+};
+-diff --git a/arch/arm/boot/dts/imx6sx-udoo-neo-full.dts b/arch/arm/boot/dts/imx6sx-udoo-neo-full.dts
+-new file mode 100644
+-index 0000000..d8c3577
+---- /dev/null
+-+++ b/arch/arm/boot/dts/imx6sx-udoo-neo-full.dts
+-@@ -0,0 +1,69 @@
+-+/*
+-+ * Copyright (c) 2016 Andreas F?rber
+-+ *
+-+ * This file is dual-licensed: you can use it either under the terms
+-+ * of the GPL or the X11 license, at your option. Note that this dual
+-+ * licensing only applies to this file, and not this project as a
+-+ * whole.
+-+ *
+-+ *  a) This library is free software; you can redistribute it and/or
+-+ *     modify it under the terms of the GNU General Public License as
+-+ *     published by the Free Software Foundation; either version 2 of the
+-+ *     License, or (at your option) any later version.
+-+ *
+-+ *     This library is distributed in the hope that it will be useful,
+-+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-+ *     GNU General Public License for more details.
+-+ *
+-+ * Or, alternatively,
+-+ *
+-+ *  b) Permission is hereby granted, free of charge, to any person
+-+ *     obtaining a copy of this software and associated documentation
+-+ *     files (the "Software"), to deal in the Software without
+-+ *     restriction, including without limitation the rights to use,
+-+ *     copy, modify, merge, publish, distribute, sublicense, and/or
+-+ *     sell copies of the Software, and to permit persons to whom the
+-+ *     Software is furnished to do so, subject to the following
+-+ *     conditions:
+-+ *
+-+ *     The above copyright notice and this permission notice shall be
+-+ *     included in all copies or substantial portions of the Software.
+-+ *
+-+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+-+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+-+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+-+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+-+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+-+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+-+ *     OTHER DEALINGS IN THE SOFTWARE.
+-+ */
+-+
+-+/dts-v1/;
+-+
+-+#include "imx6sx-udoo-neo.dtsi"
+-+
+-+/ {
+-+	model = "UDOO Neo Full";
+-+	compatible = "fsl,imx6sx";
+-+
+-+	memory {
+-+		reg = <0x80000000 0x40000000>;
+-+	};
+-+};
+-+
+-+&fec1 {
+-+	phy-handle = <&ethphy1>;
+-+	status = "okay";
+-+
+-+	mdio {
+-+		#address-cells = <1>;
+-+		#size-cells = <0>;
+-+
+-+		ethphy1: ethernet-phy at 0 {
+-+			compatible = "ethernet-phy-ieee802.3-c22";
+-+			reg = <0>;
+-+		};
+-+	};
+-+};
+-diff --git a/arch/arm/boot/dts/imx6sx-udoo-neo.dtsi b/arch/arm/boot/dts/imx6sx-udoo-neo.dtsi
+-new file mode 100644
+-index 0000000..2b65d26
+---- /dev/null
+-+++ b/arch/arm/boot/dts/imx6sx-udoo-neo.dtsi
+-@@ -0,0 +1,293 @@
+-+/*
+-+ * Copyright (c) 2016 Andreas F?rber
+-+ *
+-+ * This file is dual-licensed: you can use it either under the terms
+-+ * of the GPL or the X11 license, at your option. Note that this dual
+-+ * licensing only applies to this file, and not this project as a
+-+ * whole.
+-+ *
+-+ *  a) This library is free software; you can redistribute it and/or
+-+ *     modify it under the terms of the GNU General Public License as
+-+ *     published by the Free Software Foundation; either version 2 of the
+-+ *     License, or (at your option) any later version.
+-+ *
+-+ *     This library is distributed in the hope that it will be useful,
+-+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-+ *     GNU General Public License for more details.
+-+ *
+-+ * Or, alternatively,
+-+ *
+-+ *  b) Permission is hereby granted, free of charge, to any person
+-+ *     obtaining a copy of this software and associated documentation
+-+ *     files (the "Software"), to deal in the Software without
+-+ *     restriction, including without limitation the rights to use,
+-+ *     copy, modify, merge, publish, distribute, sublicense, and/or
+-+ *     sell copies of the Software, and to permit persons to whom the
+-+ *     Software is furnished to do so, subject to the following
+-+ *     conditions:
+-+ *
+-+ *     The above copyright notice and this permission notice shall be
+-+ *     included in all copies or substantial portions of the Software.
+-+ *
+-+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+-+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+-+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+-+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+-+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+-+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+-+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+-+ *     OTHER DEALINGS IN THE SOFTWARE.
+-+ */
+-+
+-+#include "imx6sx.dtsi"
+-+
+-+/ {
+-+	compatible = "fsl,imx6sx";
+-+
+-+	chosen {
+-+		stdout-path = "serial0:115200n8";
+-+	};
+-+
+-+	leds {
+-+		compatible = "gpio-leds";
+-+
+-+		red {
+-+			label = "udoo-neo:red:mmc";
+-+			gpios = <&gpio6 0 GPIO_ACTIVE_HIGH>;
+-+			default-state = "off";
+-+			linux,default-trigger = "mmc0";
+-+		};
+-+
+-+		orange {
+-+			label = "udoo-neo:orange:user";
+-+			gpios = <&gpio4 6 GPIO_ACTIVE_HIGH>;
+-+			default-state = "keep";
+-+		};
+-+	};
+-+
+-+	reg_sdio_pwr: regulator-sdio-pwr {
+-+		compatible = "regulator-fixed";
+-+		gpio = <&gpio6 1 GPIO_ACTIVE_HIGH>;
+-+		enable-active-high;
+-+		regulator-name = "SDIO_PWR";
+-+		regulator-min-microvolt = <3300000>;
+-+		regulator-max-microvolt = <3300000>;
+-+		regulator-boot-on;
+-+	};
+-+};
+-+
+-+&cpu0 {
+-+	arm-supply = <&sw1a_reg>;
+-+	soc-supply = <&sw1c_reg>;
+-+};
+-+
+-+&fec1 {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&pinctrl_enet1>;
+-+	phy-mode = "rmii";
+-+	phy-reset-gpios = <&gpio2 1 GPIO_ACTIVE_LOW>;
+-+};
+-+
+-+&i2c1 {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&pinctrl_i2c1>;
+-+	clock-frequency = <100000>;
+-+	status = "okay";
+-+
+-+	pmic: pmic at 08 {
+-+		compatible = "fsl,pfuze3000";
+-+		reg = <0x08>;
+-+
+-+		regulators {
+-+			sw1a_reg: sw1a {
+-+				regulator-min-microvolt = <700000>;
+-+				regulator-max-microvolt = <1475000>;
+-+				regulator-boot-on;
+-+				regulator-always-on;
+-+				regulator-ramp-delay = <6250>;
+-+			};
+-+
+-+			sw1c_reg: sw1b {
+-+				regulator-min-microvolt = <700000>;
+-+				regulator-max-microvolt = <1475000>;
+-+				regulator-boot-on;
+-+				regulator-always-on;
+-+				regulator-ramp-delay = <6250>;
+-+			};
+-+
+-+			sw2_reg: sw2 {
+-+				regulator-min-microvolt = <1500000>;
+-+				regulator-max-microvolt = <1850000>;
+-+				regulator-boot-on;
+-+				regulator-always-on;
+-+			};
+-+
+-+			sw3a_reg: sw3 {
+-+				regulator-min-microvolt = <900000>;
+-+				regulator-max-microvolt = <1650000>;
+-+				regulator-boot-on;
+-+				regulator-always-on;
+-+			};
+-+
+-+			swbst_reg: swbst {
+-+				regulator-min-microvolt = <5000000>;
+-+				regulator-max-microvolt = <5150000>;
+-+			};
+-+
+-+			snvs_reg: vsnvs {
+-+				regulator-min-microvolt = <1000000>;
+-+				regulator-max-microvolt = <3000000>;
+-+				regulator-boot-on;
+-+				regulator-always-on;
+-+			};
+-+
+-+			vref_reg: vrefddr {
+-+				regulator-boot-on;
+-+				regulator-always-on;
+-+			};
+-+
+-+			vgen1_reg: vldo1 {
+-+				regulator-min-microvolt = <1800000>;
+-+				regulator-max-microvolt = <3300000>;
+-+				regulator-always-on;
+-+			};
+-+
+-+			vgen2_reg: vldo2 {
+-+				regulator-min-microvolt = <800000>;
+-+				regulator-max-microvolt = <1550000>;
+-+			};
+-+
+-+			vgen3_reg: vccsd {
+-+				regulator-min-microvolt = <2850000>;
+-+				regulator-max-microvolt = <3300000>;
+-+				regulator-always-on;
+-+			};
+-+
+-+			vgen4_reg: v33 {
+-+				regulator-min-microvolt = <2850000>;
+-+				regulator-max-microvolt = <3300000>;
+-+				regulator-always-on;
+-+			};
+-+
+-+			vgen5_reg: vldo3 {
+-+				regulator-min-microvolt = <1800000>;
+-+				regulator-max-microvolt = <3300000>;
+-+				regulator-always-on;
+-+			};
+-+
+-+			vgen6_reg: vldo4 {
+-+				regulator-min-microvolt = <1800000>;
+-+				regulator-max-microvolt = <3300000>;
+-+				regulator-always-on;
+-+			};
+-+		};
+-+	};
+-+};
+-+
+-+&iomuxc {
+-+	pinctrl_enet1: enet1grp {
+-+		fsl,pins =
+-+			<MX6SX_PAD_ENET1_CRS__GPIO2_IO_1	0xa0b1>,
+-+			<MX6SX_PAD_ENET1_MDC__ENET1_MDC		0xa0b1>,
+-+			<MX6SX_PAD_ENET1_MDIO__ENET1_MDIO	0xa0b1>,
+-+			<MX6SX_PAD_RGMII1_TD0__ENET1_TX_DATA_0	0xa0b1>,
+-+			<MX6SX_PAD_RGMII1_TD1__ENET1_TX_DATA_1	0xa0b1>,
+-+			<MX6SX_PAD_RGMII1_TX_CTL__ENET1_TX_EN	0xa0b1>,
+-+
+-+			<MX6SX_PAD_ENET1_TX_CLK__ENET1_REF_CLK1	0x3081>,
+-+			<MX6SX_PAD_ENET2_TX_CLK__GPIO2_IO_9	0x3081>,
+-+			<MX6SX_PAD_RGMII1_RD0__ENET1_RX_DATA_0	0x3081>,
+-+			<MX6SX_PAD_RGMII1_RD1__ENET1_RX_DATA_1	0x3081>,
+-+			<MX6SX_PAD_RGMII1_RX_CTL__ENET1_RX_EN	0x3081>,
+-+			<MX6SX_PAD_RGMII1_RXC__ENET1_RX_ER	0x3081>,
+-+
+-+			<MX6SX_PAD_ENET2_RX_CLK__ENET2_REF_CLK_25M	0x91>;
+-+	};
+-+
+-+	pinctrl_i2c1: i2c1grp {
+-+		fsl,pins =
+-+			<MX6SX_PAD_GPIO1_IO00__I2C1_SCL		0x4001b8b1>,
+-+			<MX6SX_PAD_GPIO1_IO01__I2C1_SDA		0x4001b8b1>;
+-+	};
+-+
+-+	pinctrl_uart1: uart1grp {
+-+		fsl,pins =
+-+			<MX6SX_PAD_GPIO1_IO04__UART1_TX		0x1b0b1>,
+-+			<MX6SX_PAD_GPIO1_IO05__UART1_RX		0x1b0b1>;
+-+	};
+-+
+-+	pinctrl_uart2: uart2grp {
+-+		fsl,pins =
+-+			<MX6SX_PAD_GPIO1_IO06__UART2_TX		0x1b0b1>,
+-+			<MX6SX_PAD_GPIO1_IO07__UART2_RX		0x1b0b1>;
+-+	};
+-+
+-+	pinctrl_uart5: uart5grp {
+-+		fsl,pins =
+-+			<MX6SX_PAD_SD4_DATA4__UART5_RX		0x1b0b1>,
+-+			<MX6SX_PAD_SD4_DATA5__UART5_TX		0x1b0b1>;
+-+	};
+-+
+-+	pinctrl_uart6: uart6grp {
+-+		fsl,pins =
+-+			<MX6SX_PAD_CSI_DATA00__UART6_RI_B	0x1b0b1>,
+-+			<MX6SX_PAD_CSI_DATA01__UART6_DSR_B	0x1b0b1>,
+-+			<MX6SX_PAD_CSI_DATA02__UART6_DTR_B	0x1b0b1>,
+-+			<MX6SX_PAD_CSI_DATA03__UART6_DCD_B	0x1b0b1>,
+-+			<MX6SX_PAD_CSI_DATA04__UART6_RX		0x1b0b1>,
+-+			<MX6SX_PAD_CSI_DATA05__UART6_TX		0x1b0b1>,
+-+			<MX6SX_PAD_CSI_DATA06__UART6_RTS_B	0x1b0b1>,
+-+			<MX6SX_PAD_CSI_DATA07__UART6_CTS_B	0x1b0b1>;
+-+	};
+-+
+-+	pinctrl_usdhc2: usdhc2grp {
+-+		fsl,pins =
+-+			<MX6SX_PAD_SD2_CMD__USDHC2_CMD		0x17059>,
+-+			<MX6SX_PAD_SD2_CLK__USDHC2_CLK		0x10059>,
+-+			<MX6SX_PAD_SD2_DATA0__USDHC2_DATA0	0x17059>,
+-+			<MX6SX_PAD_SD2_DATA1__USDHC2_DATA1	0x17059>,
+-+			<MX6SX_PAD_SD2_DATA2__USDHC2_DATA2	0x17059>,
+-+			<MX6SX_PAD_SD2_DATA3__USDHC2_DATA3	0x17059>,
+-+			<MX6SX_PAD_SD1_DATA0__GPIO6_IO_2	0x17059>; /* CD */
+-+	};
+-+};
+-+
+-+&uart1 {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&pinctrl_uart1>;
+-+	status = "okay";
+-+};
+-+
+-+/* Cortex-M4 serial */
+-+&uart2 {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&pinctrl_uart2>;
+-+	status = "disabled";
+-+};
+-+
+-+/* Arduino serial */
+-+&uart5 {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&pinctrl_uart5>;
+-+	status = "disabled";
+-+};
+-+
+-+&uart6 {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&pinctrl_uart6>;
+-+	uart-has-rtscts;
+-+	status = "disabled";
+-+};
+-+
+-+&usdhc2 {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&pinctrl_usdhc2>;
+-+	vmmc-supply = <&reg_sdio_pwr>;
+-+	bus-width = <4>;
+-+	cd-gpios = <&gpio6 2 GPIO_ACTIVE_LOW>;
+-+	no-1-8-v;
+-+	keep-power-in-suspend;
+-+	wakeup-source;
+-+	status = "okay";
+-+};
+--- 
+-cgit v0.12
+diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
+index a465eb9..53f0ee8 100644
+--- a/configs/mx6sx_udoo_neo_defconfig
++++ b/configs/mx6sx_udoo_neo_defconfig
+@@ -3,11 +3,10 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/udoo/neo/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/neo/post-image.sh"
+-BR2_GLOBAL_PATCH_DIR="board/udoo/neo/patches"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+@@ -19,7 +18,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-udoo-neo-basic imx6sx-udoo-neo-full imx6sx-udoo-neo-extended"
 -- 
 2.7.4
