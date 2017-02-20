@@ -1,35 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 22:25:22 +0100
-Subject: [Buildroot] [PATCH 1/4] Revert "bctoolbox: fix typos and logic
- error"
-In-Reply-To: <20170214224402.8785-1-joerg.krause@embedded.rocks>
-References: <20170214224402.8785-1-joerg.krause@embedded.rocks>
-Message-ID: <20170220222522.7a759369@free-electrons.com>
+Date: Mon, 20 Feb 2017 22:25:44 +0100
+Subject: [Buildroot] [git commit branch/next] Revert "package/iptables:
+	nfsynproxy not available on musl"
+Message-ID: <20170220212617.C23E082123@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6a27508ffb2c9d4821e5ec08c5f616a62b669001
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 14 Feb 2017 23:43:59 +0100, J?rg Krause wrote:
-> This reverts commit 5c4d3560b94c9cb8f1594c9200a632b89ddf7aa0.
-> 
-> Although the patch fixes the build error it does not set the flags for
-> Libs.private properly. A fellow-up patch will provide a better solution
-> for this issue.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/bctoolbox/0001-fix-typo.patch | 18 ------------------
->  1 file changed, 18 deletions(-)
->  delete mode 100644 package/bctoolbox/0001-fix-typo.patch
+This reverts commit 497f15b301273cd81e54b4fcc5da6ab90e27796c.
 
-Series applied to master. Thanks!
+As the comment says, musl version 1.1.13 contains commit 53f41fb568ae4.
+Buildroot now ships musl version 1.1.16, so enable build with musl.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/iptables/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/package/iptables/Config.in b/package/iptables/Config.in
+index cdcd1c2..e6b1260 100644
+--- a/package/iptables/Config.in
++++ b/package/iptables/Config.in
+@@ -9,10 +9,6 @@ if BR2_PACKAGE_IPTABLES
+ 
+ config BR2_PACKAGE_IPTABLES_BPF_NFSYNPROXY
+ 	bool "bpfc and nfsynproxy"
+-	# this dependency can be removed when using a musl version
+-	# containing this commit:
+-	# http://git.musl-libc.org/cgit/musl/commit/?id=53f41fb568ae43034c9876cc9bd3961fd6d13671
+-	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_LIBPCAP
+ 	help
+ 	  Build bpf compiler and nfsynproxy configuration tool.
