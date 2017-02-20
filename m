@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2017 22:15:31 +0100
-Subject: [Buildroot] [git commit] libinput: bump to version 1.6.1
-Message-ID: <20170301170421.74D0A7FB5C@busybox.osuosl.org>
+Date: Mon, 20 Feb 2017 21:39:00 +0100
+Subject: [Buildroot] [git commit] package/quazip: update to 0.7.3
+Message-ID: <20170301170422.BD3FC80279@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84ca4704ac757016182e2abb5b6e4336e1eeb982
+commit: https://git.buildroot.net/buildroot/commit/?id=a1e02440f3035cfbe5119c00457b3e1c2f7ac4d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/quazip/quazip.hash | 2 +-
+ package/quazip/quazip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index dd3573f..7dd4c04 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
+diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
+index 2f73c45..87bf7c2 100644
+--- a/package/quazip/quazip.hash
++++ b/package/quazip/quazip.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032746.html
--sha256 b7534f518d735c643aedca2fb4694683dfddc8d0600cfb628c87a18e65255832  libinput-1.6.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2017-February/032940.html
-+sha256 9d816f13eee63bcca0e9c3bb652c52ab55f39be4d1b90b54e4bfd1dc92ef55a8  libinput-1.6.1.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 52aca9a..776e1af 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+ # Locally computed:
+-sha256 91d827fbcafd099ae814cc18a8dd3bb709da6b8a27c918ee1c6c03b3f29440f4 quazip-0.7.2.tar.gz
++sha256 2ad4f354746e8260d46036cde1496c223ec79765041ea28eb920ced015e269b5 quazip-0.7.3.tar.gz
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+index 91b2f56..caf112e 100644
+--- a/package/quazip/quazip.mk
++++ b/package/quazip/quazip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.6.0
-+LIBINPUT_VERSION = 1.6.1
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-QUAZIP_VERSION = 0.7.2
++QUAZIP_VERSION = 0.7.3
+ QUAZIP_SITE = http://sourceforge.net/projects/quazip/files/quazip/$(QUAZIP_VERSION)
+ QUAZIP_INSTALL_STAGING = YES
+ QUAZIP_DEPENDENCIES = \
