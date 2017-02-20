@@ -1,47 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Feb 2017 22:14:44 +0100
-Subject: [Buildroot] [PATCH v3 3/3] qt5base: make harfbuzz support
- selectable
-In-Reply-To: <20170220220434.728a8a89@free-electrons.com>
-References: <20170218113202.14213-1-ps.report@gmx.net>
- <20170218113202.14213-3-ps.report@gmx.net>
- <20170220220434.728a8a89@free-electrons.com>
-Message-ID: <20170220221444.4792d09a@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Feb 2017 22:15:00 +0100
+Subject: [Buildroot] [git commit branch/next] madplay: workaround not needed
+	anymore
+Message-ID: <20170220211517.1687A82207@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=e36f0881bd8aa4b3889c9b68b2976ca873603b20
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 20 Feb 2017 22:04:34 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+The patches for uClibc-ng are upstream and added to buildroot.
 
-> Hello,
-> 
-> On Sat, 18 Feb 2017 12:32:02 +0100, Peter Seiderer wrote:
-> > If selected use:
-> > 
-> >  - system/buildroot harfbuzz in case __sync for 4 bytes is supported
-> >  - qt harfbuzz otherwise (using QAtomic instead)
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> From this description, it is not clear whether this is material for
-> master or for next. What happens currently with Harfbuzz? Qt is always
-> using its internal version?
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/madplay/madplay.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-This patch is a follow up on your (and Arnout's) suggestion to prefer
-system libraries, freetype first, harzbuzz second..., so logically it
-belongs to the freetype patch...
-
-But no mandatory need for this patch to be applied to master, maybe
-next is enough...
-
-At the moment always the qt built-in harfbuzz is used...
-
-Regards,
-Peter
-
-> 
-> Thomas
+diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
+index 6b13819..2606ac8 100644
+--- a/package/madplay/madplay.mk
++++ b/package/madplay/madplay.mk
+@@ -11,14 +11,6 @@ MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
+ MADPLAY_LIBTOOL_PATCH = NO
+ MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
+ 
+-# Workaround a bug in uClibc-ng, which exposes madvise() but doesn't
+-# provide the corresponding MADV_* definitions. Bug reported at
+-# http://mailman.uclibc-ng.org/pipermail/devel/2016-December/001306.html. madvise()
+-# is anyway useless on noMMU.
+-ifeq ($(BR2_USE_MMU),)
+-MADPLAY_CONF_ENV += ac_cv_func_madvise=no
+-endif
+-
+ # Check if ALSA is built, then we should configure after alsa-lib so
+ # ./configure can find alsa-lib.
+ ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
