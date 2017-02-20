@@ -1,7 +1,7 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 20 Feb 2017 10:43:50 -0500
-Subject: [Buildroot] [PATCH 38/38] nfs-utils: bump to version 2.1.1
-Message-ID: <20170220154350.22780-1-aduskett@codeblue.com>
+Date: Mon, 20 Feb 2017 10:44:52 -0500
+Subject: [Buildroot] [PATCH 1/1] nfs-utils: bump to version 2.1.1
+Message-ID: <20170220154452.22935-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
