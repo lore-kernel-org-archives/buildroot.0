@@ -1,45 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 21:55:50 +0100
-Subject: [Buildroot] [git commit branch/next] linux: bump default to version
-	4.10
-Message-ID: <20170220205659.5D64181945@busybox.osuosl.org>
+Date: Mon, 20 Feb 2017 21:55:55 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain: add 4.10.x choice
+	for headers
+Message-ID: <20170220205659.69AA380E58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=400eaa3452e9380ec77ac62266530055506ea6e7
+commit: https://git.buildroot.net/buildroot/commit/?id=369b66fc366e3841ffb4dd2d35696f27799ae374
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ toolchain/toolchain-common.in                                        | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 740dd39..7f18219 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 96d5709..379006d 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -243,10 +243,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.9.9)"
-+	bool "Latest version (4.10)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,11 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
  	string
-+<<<<<<< a1e02440f3035cfbe5119c00457b3e1c2f7ac4d1
- 	default "4.9.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+=======
-+	default "4.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+>>>>>>> linux: bump default to version 4.10
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
++	default "4.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+ 	default "4.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+ 	default "4.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+ 	default "4.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index ed2b082..668ea3d 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -89,6 +89,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10
++	bool "4.10.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9
+ 	bool "4.9.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
