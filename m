@@ -1,40 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Feb 2017 23:40:39 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-02-16
-In-Reply-To: <20170220134111.1bc02a9f@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 20 Feb 2017 13:41:11 +0100")
-References: <20170217072852.8329420B82@mail.free-electrons.com>
- <20170217211242.GC3470@free.fr>
- <20170220134111.1bc02a9f@free-electrons.com>
-Message-ID: <87a89gpjtk.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Feb 2017 23:43:55 +0100
+Subject: [Buildroot] [PATCH] btrfs-progs: don't use <execinfo.h> with uClibc
+Message-ID: <1487630635-28388-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+This commit adds a patch to btrfs-progs that fixes the build of
+docker-engine, and possibly other packages including kerncompat.h from
+btrfs-progs.
 
-Hi,
+For the btrfs-progs build itself, a --disable-backtrace option allows to
+indicate whether backtrace()/<execinfo.h> support should be used or
+not. However, once btrfs-progs is installed, it simply looks at whether
+__GLIBC__ is defined or not to decide to use backtrace() or not.
 
- >> >       x86_64 | oracle-mysql-5.1.73 | NOK |
- >> > http://autobuild.buildroot.net/results/e9ff38bea523df79331de3004939ee39b446d723
- >> 
- >> error: narrowing conversion [...] from 'char' to 'uchar...'
- >> 
- >> Damn gcc6... ;-) Should be easy; any taker?
+However, uClibc defines __GLIBC__ but does not provide backtrace()
+functionality. The additional patch tweaks the kerncompat.h to look at
+__UCLIBC__ and not use backtrace() functionality in this case.
 
- > I had a quick look, it's not that trivial if you want the correct fix.
- > And of course, mysql 5.1.73 is very very old, upstream is now at 5.7.17
- > (https://dev.mysql.com/downloads/mysql/). So I would like to suggest
- > that we mark oracle-mysql as BR2_BROKEN, and wait to see if anyone is
- > interested to fix this during the next release cycle.
+Fixes:
 
-I agree. There has also recently been some security issues, but like you
-say our package is ancient.
+  http://autobuild.buildroot.net/results/9dc9370a79c5c44e6c92be6a44334842c211d923/
 
-Will you send a patch?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/btrfs-progs/0002-kerncompat.h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch
 
+diff --git a/package/btrfs-progs/0002-kerncompat.h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch b/package/btrfs-progs/0002-kerncompat.h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch
+new file mode 100644
+index 0000000..9c1173b
+--- /dev/null
++++ b/package/btrfs-progs/0002-kerncompat.h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch
+@@ -0,0 +1,42 @@
++From 1fc5444f5620670bb9d293be4f92df59661e1810 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 20 Feb 2017 23:31:24 +0100
++Subject: [PATCH] kerncompat.h: define BTRFS_DISABLE_BACKTRACE when building
++ with uClibc
++
++uClibc does not provide backtrace() nor <execinfo.h>. When building
++btrfs-progs, passing --disable-backtrace is enough to make it build with
++uClibc. But once btrfs-progs is installed and another program/library
++includes kerncompat.h, it fails to build with uClibc, because
++BTRFS_DISABLE_BACKTRACE is not defined.
++
++The most correct fix for this would be to have kerncompat.h generated
++from kerncompat.h.in during the btrfs-progs build process, and tuned
++depending on autoconf/automake variables. But as a quick fix that
++follows the current strategy, we simply tweak the existing __GLIBC__
++conditional. Indeed, uClibc pretends to be glibc and defines __GLIBC__,
++but it does not replace it completely, hence the need to define
++BTRFS_DISABLE_BACKTRACE when __GLIBC__ is not defined *or* when
++__UCLIBC__ is defined.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ kerncompat.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/kerncompat.h b/kerncompat.h
++index 0f207b7..e47d164 100644
++--- a/kerncompat.h
+++++ b/kerncompat.h
++@@ -32,7 +32,7 @@
++ 
++ #include <features.h>
++ 
++-#ifndef __GLIBC__
+++#if !defined(__GLIBC__) || defined(__UCLIBC__)
++ #ifndef BTRFS_DISABLE_BACKTRACE
++ #define BTRFS_DISABLE_BACKTRACE
++ #endif
++-- 
++2.7.4
++
 -- 
-Bye, Peter Korsgaard
+2.7.4
