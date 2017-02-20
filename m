@@ -1,71 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Feb 2017 08:35:29 +0100
-Subject: [Buildroot] luaposix not working with luajit/lua5.1
-Message-ID: <257db515-cfda-4122-55e9-b7783b28dfcf@mind.be>
+From: ren_guo <ren_guo@c-sky.com>
+Date: Mon, 20 Feb 2017 16:14:28 +0800
+Subject: [Buildroot] [PATCH 1/1] toolchain/helpers.mk: fixup gcc version
+	check
+Message-ID: <1487578468-8080-1-git-send-email-ren_guo@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Francois,
+some gcc --version ouput like this:
 
- Three years ago you submitted a patch that was supposed to fix luaposix by
-adding the bitop module. However, with this defconfig:
+$ csky-linux-gcc --version
+csky-linux-gcc (C-SKY Tools V2.8.08(Beta1)(Glibc,Linux 4.8.4), ABIV1,
+B20161118) 4.5.1
 
-BR2_x86_64=y
-BR2_x86_core2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2017.02-rc1-2-g133c5ac.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LUA=y
-BR2_PACKAGE_LUA_5_1=y
-BR2_PACKAGE_LUAPOSIX=y
+current script just find first ')', but we need find last ')' to get
+correct version number.
 
- I get:
-# chroot output/target /usr/bin/lua -e 'require "posix"'
-[sudo] password for arnout:
-/usr/bin/lua: /usr/share/lua/5.1/posix/init.lua:17: module 'bit32' not found:
-        no field package.preload['bit32']
-        no file './bit32.lua'
-        no file '/usr/share/luajit-2.0.4/bit32.lua'
-        no file '/usr/local/share/lua/5.1/bit32.lua'
-        no file '/usr/local/share/lua/5.1/bit32/init.lua'
-        no file '/usr/share/lua/5.1/bit32.lua'
-        no file '/usr/share/lua/5.1/bit32/init.lua'
-        no file './bit32.so'
-        no file '/usr/local/lib/lua/5.1/bit32.so'
-        no file '/usr/lib/lua/5.1/bit32.so'
-        no file '/usr/local/lib/lua/5.1/loadall.so'
-stack traceback:
-        [C]: in function 'require'
-        /usr/share/lua/5.1/posix/init.lua:17: in main chunk
-        [C]: in function 'require'
-        (command line):1: in main chunk
-        [C]: at 0x00402068
+Signed-off-by: ren_guo <ren_guo@c-sky.com>
+---
+ toolchain/helpers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Am I missing something?
-
-
- I've worked around this by using the bit32 module instead of the bitop module.
-I can submit this patch but I first wanted to check if I just did something wrong.
-
- Regards,
- Arnout
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 72e7292..60347ea 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -147,7 +147,7 @@ check_gcc_version = \
+ 	if [ -z "$${expected_version}" ]; then \
+ 		exit 0 ; \
+ 	fi; \
+-	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
++	real_version=`$(1) --version | sed -r -e '1!d; s/^.+\) ([^[:space:]]+).*/\1/;'` ; \
+ 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
+ 		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
+ 			"$${expected_version}" "$${real_version}" ; \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
