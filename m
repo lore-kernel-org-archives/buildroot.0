@@ -1,35 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 16:10:52 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-02-16
-In-Reply-To: <20170220145933.GQ12810@waldemar-brodkorb.de>
-References: <20170217072852.8329420B82@mail.free-electrons.com>
- <20170217211242.GC3470@free.fr>
- <20170220134111.1bc02a9f@free-electrons.com>
- <20170220145933.GQ12810@waldemar-brodkorb.de>
-Message-ID: <20170220161052.48208eac@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 20 Feb 2017 16:33:25 +0100
+Subject: [Buildroot] luaposix not working with luajit/lua5.1
+In-Reply-To: <CAB0FRsvqj=1EQrHKH2Zzn8DLtCbF3q+8_WvcUJxrwLuN-QBE1w@mail.gmail.com>
+References: <257db515-cfda-4122-55e9-b7783b28dfcf@mind.be>
+ <CAB0FRsvL0pR974ur0v9b5R=wphQSJStxfJ6YkiECVX4DLoAkdg@mail.gmail.com>
+ <270d2a5f-178d-9937-988c-01791cb15dba@mind.be>
+ <CAB0FRsvqj=1EQrHKH2Zzn8DLtCbF3q+8_WvcUJxrwLuN-QBE1w@mail.gmail.com>
+Message-ID: <97696395-f4b0-a39a-7b6d-ba5aa68105c2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Mon, 20 Feb 2017 15:59:33 +0100, Waldemar Brodkorb wrote:
 
-> I am not entirely sure, but can the reason for this be this patch we
-> apply on top of gcc 5.4.x
-> package/gcc/5.4.0/850-libstdcxx-uclibc-c99.patch?
+On 20-02-17 12:01, Fran?ois Perrad wrote:
+> 2017-02-20 11:47 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+[snip]
+>>  Integrating this package is not trivial, because our luarocks infra assumes
+>> that the upstream name is the same as the Buildroot name. That's not the case
+>> for bit32, however: in Buildroot, we really want to call it "lua-bit32". So it
+>> requires a bit of infra change to clean it up. Therefore, it'll take me a couple
+>> of days before I can submit.
+>>
 > 
-> I think all failures relate to some C++ header failures. Can anybody
-> try with this patch applied?
+> We have already luarock packages which name is not prefixed by 'lua-'
+> : copas, cosmo, dado, orbit, rings, ...
 
-Indeed could be the reason. Worth checking before we apply tons of
-patches to individual packages.
+ These are really separate projects that happen to be using Lua, while bit32 is
+really a Lua support module like luaposix.
 
-Thomas
+ Although, now you mention it, copas and coxpcall are Lua support modules as
+well. For Python and Perl, we always add a prefix for them. Is there a good
+reason why we don't do this for Lua?
+
+ Peter (and others), any opinion: should a module like coxpcall rather be called
+lua-coxpcall? We actually have a lot of those. Things like "argparse"...
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
