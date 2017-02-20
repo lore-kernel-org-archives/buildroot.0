@@ -1,72 +1,158 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 20 Feb 2017 17:18:42 +0100
-Subject: [Buildroot] luaposix not working with luajit/lua5.1
-In-Reply-To: <97696395-f4b0-a39a-7b6d-ba5aa68105c2@mind.be>
-References: <257db515-cfda-4122-55e9-b7783b28dfcf@mind.be>
- <CAB0FRsvL0pR974ur0v9b5R=wphQSJStxfJ6YkiECVX4DLoAkdg@mail.gmail.com>
- <270d2a5f-178d-9937-988c-01791cb15dba@mind.be>
- <CAB0FRsvqj=1EQrHKH2Zzn8DLtCbF3q+8_WvcUJxrwLuN-QBE1w@mail.gmail.com>
- <97696395-f4b0-a39a-7b6d-ba5aa68105c2@mind.be>
-Message-ID: <CAB0FRsuWEZm4BETMoCWjO5SUEDVjPyGWL_Rt5gfzhjMw0+SNPA@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 20 Feb 2017 14:05:35 -0300
+Subject: [Buildroot] [PATCH v3] util-linux: build schedutils without
+	enabling basic binaries
+In-Reply-To: <bug-9656-163-MVhQ2W5IfX@https.bugs.busybox.net/>
+References: <bug-9656-163-MVhQ2W5IfX@https.bugs.busybox.net/>
+Message-ID: <1487610335-7149-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-02-20 16:33 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
->
->
-> On 20-02-17 12:01, Fran?ois Perrad wrote:
->> 2017-02-20 11:47 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
-> [snip]
->>>  Integrating this package is not trivial, because our luarocks infra assumes
->>> that the upstream name is the same as the Buildroot name. That's not the case
->>> for bit32, however: in Buildroot, we really want to call it "lua-bit32". So it
->>> requires a bit of infra change to clean it up. Therefore, it'll take me a couple
->>> of days before I can submit.
->>>
->>
->> We have already luarock packages which name is not prefixed by 'lua-'
->> : copas, cosmo, dado, orbit, rings, ...
->
->  These are really separate projects that happen to be using Lua, while bit32 is
-> really a Lua support module like luaposix.
->
->  Although, now you mention it, copas and coxpcall are Lua support modules as
-> well. For Python and Perl, we always add a prefix for them. Is there a good
-> reason why we don't do this for Lua?
->
+Pull an upstream fix to allow building schedutils (ionice, taskset,
+chrt) when util-linux is configured with
 
-History in BR:
-- lua was added in 2007
-- xavante and its dependencies (cgilua, copas, coxpcall,
-luafilesystem, luasocket, wsapi) were added in 2010 as first Lua
-modules
-- luarocks infrastructure was added in 2014
-- currently, we have 34 Lua modules (see
-https://git.busybox.net/buildroot/tree/package/Config.in#n524)
+  $ configure --disable-all-programs --enable-schedutils
 
-The Lua ecosystem has no strict naming convention, you could use:
-  - foo
-  - luafoo
-  - lua-foo
-  - lfoo
-  - ljfoo (LuaJIT only)
-See the whole at https://luarocks.org/modules
+Fixes:
+  https://bugs.busybox.net/show_bug.cgi?id=9656
 
-Fran?ois
+Reported-by: Aaron Holtzman <aholtzma@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+Changes v1->v2
+  Update comment explaining why we need UTIL_LINUX_AUTORECONF = YES
 
->  Peter (and others), any opinion: should a module like coxpcall rather be called
-> lua-coxpcall? We actually have a lot of those. Things like "argparse"...
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Changes v2->v3
+  Pull full patch, as applied upstream by Karel Zak
+  Clean-up commit message
+---
+ ...ix-disable-all-programs-enable-schedutils.patch | 99 ++++++++++++++++++++++
+ package/util-linux/util-linux.mk                   |  4 +-
+ 2 files changed, 101 insertions(+), 2 deletions(-)
+ create mode 100644 package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
+
+diff --git a/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch b/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
+new file mode 100644
+index 0000000..bf19e10
+--- /dev/null
++++ b/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
+@@ -0,0 +1,99 @@
++From 6f2eb03433bcb2d3c351efed848a1f8554a7ff78 Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Mon, 20 Feb 2017 14:17:37 +0100
++Subject: [PATCH] build-sys: fix --disable-all-programs --enable-schedutils
++
++* add UL_ENABLE_ALIAS(NAME, MASTERNAME) to initialize $enable_<name>
++  according to MASTERNAME. Note that we have to use $build_<mastername>,
++  the $enable_<mastername> is just AC_ARG_ENABLE() stuff only. The
++  $build_ is evaluated and modified by our UL_...() functions.
++
++* add enable-schedutils.conf to have build-system regression test for
++  this use-case
++
++Addresses: https://github.com/karelzak/util-linux/issues/415
++Signed-off-by: Karel Zak <kzak@redhat.com>
++---
++ configure.ac                              | 14 ++++++++------
++ m4/ul.m4                                  | 15 +++++++++++++++
++ tools/config-gen.d/enable-schedutils.conf |  3 +++
++ 3 files changed, 26 insertions(+), 6 deletions(-)
++ create mode 100644 tools/config-gen.d/enable-schedutils.conf
++
++diff --git a/configure.ac b/configure.ac
++index ad241fe..be282f0 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1909,8 +1909,9 @@ AC_ARG_ENABLE([schedutils],
++ )
++ UL_BUILD_INIT([schedutils])
++ 
++-UL_BUILD_INIT([ionice], [check])
++-UL_REQUIRES_BUILD([ionice], [schedutils])
+++
+++UL_ENABLE_ALIAS([ionice], [schedutils])
+++UL_BUILD_INIT([ionice])
++ UL_REQUIRES_SYSCALL_CHECK([ionice],
++ 	[UL_CHECK_SYSCALL([ioprio_set],
++ 	  [alpha],	[442],
++@@ -1937,8 +1938,9 @@ UL_REQUIRES_SYSCALL_CHECK([ionice],
++ 
++ AM_CONDITIONAL([BUILD_IONICE], [test "x$build_ionice" = xyes])
++ 
++-UL_BUILD_INIT([taskset], [check])
++-UL_REQUIRES_BUILD([taskset], [schedutils])
+++
+++UL_ENABLE_ALIAS([taskset], [schedutils])
+++UL_BUILD_INIT([taskset])
++ UL_REQUIRES_HAVE([taskset], [cpu_set_t], [cpu_set_t type])
++ UL_REQUIRES_SYSCALL_CHECK([taskset],
++ 	[UL_CHECK_SYSCALL([sched_getaffinity])],
++@@ -1950,8 +1952,8 @@ have_schedsetter=no
++ AS_IF([test "x$ac_cv_func_sched_setscheduler" = xyes], [have_schedsetter=yes],
++       [test "x$ac_cv_func_sched_setattr" = xyes], [have_schedsetter=yes])
++ 
++-UL_BUILD_INIT([chrt], [check])
++-UL_REQUIRES_BUILD([chrt], [schedutils])
+++UL_ENABLE_ALIAS([chrt], [schedutils])
+++UL_BUILD_INIT([chrt])
++ UL_REQUIRES_HAVE([chrt], [schedsetter], [sched_set functions])
++ AM_CONDITIONAL([BUILD_CHRT], [test "x$build_chrt" = xyes])
++ 
++diff --git a/m4/ul.m4 b/m4/ul.m4
++index f8a0dd7..ed7227c 100644
++--- a/m4/ul.m4
+++++ b/m4/ul.m4
++@@ -429,6 +429,21 @@ AC_DEFUN([UL_DEFAULT_ENABLE], [
++   fi
++ ])
++ 
+++
+++dnl UL_ENABLE_ALIAS(NAME, MASTERNAME)
+++dnl
+++dnl Initializes $enable_<name> variable according to $build_<mastername>.  This
+++dnl is usefull for example if you want to use one --enable-mastername option
+++dnl for group of programs.
+++dnl
+++AC_DEFUN([UL_ENABLE_ALIAS], [
+++  m4_define([suffix], $1)
+++  m4_define([mastersuffix], $2)
+++
+++  enable_[]suffix=$build_[]mastersuffix
+++])
+++
+++
++ dnl UL_NCURSES_CHECK(NAME)
++ dnl
++ dnl Initializes $have_<name>, NCURSES_LIBS and NCURSES_CFLAGS variables according to
++diff --git a/tools/config-gen.d/enable-schedutils.conf b/tools/config-gen.d/enable-schedutils.conf
++new file mode 100644
++index 0000000..08deee4
++--- /dev/null
+++++ b/tools/config-gen.d/enable-schedutils.conf
++@@ -0,0 +1,3 @@
+++include:disable-all.conf
+++
+++--enable-schedutils
++-- 
++2.7.4
++
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 441c252..f991b44 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -8,8 +8,8 @@ UTIL_LINUX_VERSION_MAJOR = 2.29
+ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+-# For 0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch and
+-# 0002-build-sys-improve-detection-of-the-isnan-function-in.patch
++
++# Required because of the patches for configure.ac.
+ UTIL_LINUX_AUTORECONF = YES
+ 
+ # README.licensing claims that some files are GPLv2-only, but this is not true.
+-- 
+2.7.4
