@@ -1,9 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 22:16:42 +0100
-Subject: [Buildroot] [PATCH] packages: improve license type lists
-In-Reply-To: <1487396332-20370-1-git-send-email-danomimanchego123@gmail.com>
-References: <1487396332-20370-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20170220221642.1cf14742@free-electrons.com>
+Date: Mon, 20 Feb 2017 22:22:12 +0100
+Subject: [Buildroot] [PATCH v3 3/3] qt5base: make harfbuzz support
+ selectable
+In-Reply-To: <20170220221444.4792d09a@gmx.net>
+References: <20170218113202.14213-1-ps.report@gmx.net>
+ <20170218113202.14213-3-ps.report@gmx.net>
+ <20170220220434.728a8a89@free-electrons.com>
+ <20170220221444.4792d09a@gmx.net>
+Message-ID: <20170220222212.458f5c7d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +16,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 18 Feb 2017 00:38:52 -0500, Danomi Manchego wrote:
-> Make license type lists more uniform:
-> 
-> * put content license applies to in parenthesis; ex: "GPLv2+ (programs)"
-> * use commas to separate types listed without conjuction; ex: "GPLv2, LGPLv2"
-> 
-> No attempt was made to validate the claimed licenses.  This is just a tweak
-> to increase uniformity of the _LICENSE variables.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
->  package/cups/cups.mk                                    | 2 +-
->  package/duma/duma.mk                                    | 2 +-
->  package/e2fsprogs/e2fsprogs.mk                          | 2 +-
->  package/file/file.mk                                    | 2 +-
->  package/git/git.mk                                      | 2 +-
->  package/glmark2/glmark2.mk                              | 2 +-
->  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
->  package/hplip/hplip.mk                                  | 2 +-
->  package/liblockfile/liblockfile.mk                      | 2 +-
->  package/liburcu/liburcu.mk                              | 2 +-
->  package/lm-sensors/lm-sensors.mk                        | 2 +-
->  package/openssh/openssh.mk                              | 2 +-
->  package/procps-ng/procps-ng.mk                          | 2 +-
->  package/slirp/slirp.mk                                  | 2 +-
->  package/sudo/sudo.mk                                    | 2 +-
->  package/valgrind/valgrind.mk                            | 2 +-
->  package/vlc/vlc.mk                                      | 2 +-
->  package/xenomai/xenomai.mk                              | 2 +-
->  package/xscreensaver/xscreensaver.mk                    | 2 +-
->  19 files changed, 19 insertions(+), 19 deletions(-)
+On Mon, 20 Feb 2017 22:14:44 +0100, Peter Seiderer wrote:
 
-Applied to master after fixing LIBURCU_LICENSE, as I said in my earlier
-review.
+> This patch is a follow up on your (and Arnout's) suggestion to prefer
+> system libraries, freetype first, harzbuzz second..., so logically it
+> belongs to the freetype patch...
+> 
+> But no mandatory need for this patch to be applied to master, maybe
+> next is enough...
+> 
+> At the moment always the qt built-in harfbuzz is used...
+
+OK. The freetype one was really needed in master as it was fixing a
+build issue.
+
+However, I'll keep the harfbuzz patch around until next gets merged
+back into master after the release. We've been building Qt with the
+internal harfbuzz so far, so let's keep it this way for the release.
+
+Are you also looking at the other qt5 failures on various
+architectures?
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
