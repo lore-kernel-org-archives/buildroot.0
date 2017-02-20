@@ -1,40 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 22:02:52 +0100
-Subject: [Buildroot] [git commit branch/next] linux: fix up bad merge
-	conflict
-Message-ID: <20170220210349.3AC2E82156@busybox.osuosl.org>
+Date: Mon, 20 Feb 2017 22:04:02 +0100
+Subject: [Buildroot] [PATCH v3 1/3] qt5base: move linuxfb configure
+ option comment
+In-Reply-To: <20170218113202.14213-1-ps.report@gmx.net>
+References: <20170218113202.14213-1-ps.report@gmx.net>
+Message-ID: <20170220220402.68b968cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09c989420db1599c7650ae614c672ea5e699d641
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Fix commit 400eaa3452e9380ec77ac62266530055506ea6e7 ("linux: bump
-default to version 4.10") in which a conflict was not correctly
-resolved.
+On Sat, 18 Feb 2017 12:32:00 +0100, Peter Seiderer wrote:
+> Move the two comment lines to where they apply.
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/qt5/qt5base/qt5base.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reported-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 7f18219..890b848 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -97,11 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--<<<<<<< a1e02440f3035cfbe5119c00457b3e1c2f7ac4d1
--	default "4.9.9" if BR2_LINUX_KERNEL_LATEST_VERSION
--=======
- 	default "4.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-->>>>>>> linux: bump default to version 4.10
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
