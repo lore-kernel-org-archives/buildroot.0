@@ -1,60 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Feb 2017 22:37:24 +0100
-Subject: [Buildroot] [git commit] package/libva: project moved to github
-Message-ID: <20170301170422.51567822A7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Feb 2017 22:02:52 +0100
+Subject: [Buildroot] [git commit] linux: fix up bad merge conflict
+Message-ID: <20170301170423.5370C80279@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8557294fd189e27a5a9adc421fbd5006285a0c47
+commit: https://git.buildroot.net/buildroot/commit/?id=09c989420db1599c7650ae614c672ea5e699d641
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details read
-https://lists.01.org/pipermail/intel-vaapi-media/2017-January/000001.html
+Fix commit 400eaa3452e9380ec77ac62266530055506ea6e7 ("linux: bump
+default to version 4.10") in which a conflict was not correctly
+resolved.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reported-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libva/Config.in  | 2 +-
- package/libva/libva.hash | 4 ++--
- package/libva/libva.mk   | 3 +--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ linux/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/libva/Config.in b/package/libva/Config.in
-index 467b9d2..75692f2 100644
---- a/package/libva/Config.in
-+++ b/package/libva/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBVA
- 	  IDCT, Motion Compensation etc.) for the prevailing coding standards
- 	  today (MPEG-2, MPEG-4 ASP/H.263, MPEG-4 AVC/H.264, and VC-1/VMW3).
+diff --git a/linux/Config.in b/linux/Config.in
+index 7f18219..890b848 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -97,11 +97,7 @@ endif
  
--	  http://www.freedesktop.org/wiki/Software/vaapi/
-+	  https://01.org/linuxmedia/vaapi
- 
- comment "libva needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index e63f4db..1f248f8 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/libva/2016-November/004730.html
--sha1 18e46f3d5a0e971eb0ec9fe14bc021e69eb13fb8  libva-1.7.3.tar.bz2
-+# Locally computed
-+sha256 f0f816a725007fbf3c7ed816ff71ba420696bec63ff49045e9b23d9b34ac73c8  libva-1.7.3.tar.gz
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index cf42b70..bce6907 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- LIBVA_VERSION = 1.7.3
--LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
--LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
-+LIBVA_SITE = $(call github,01org,libva,libva-$(LIBVA_VERSION))
- LIBVA_LICENSE = MIT
- LIBVA_LICENSE_FILES = COPYING
- LIBVA_AUTORECONF = YES
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-<<<<<<< a1e02440f3035cfbe5119c00457b3e1c2f7ac4d1
+-	default "4.9.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+-=======
+ 	default "4.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+->>>>>>> linux: bump default to version 4.10
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
