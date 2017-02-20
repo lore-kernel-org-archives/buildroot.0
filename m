@@ -1,54 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 23:23:28 +0100
-Subject: [Buildroot] [PATCH v1] qt5quickcontrols: fix LTS (5.6) qml file
- install
-In-Reply-To: <20170220214105.8106-1-ps.report@gmx.net>
-References: <20170220214105.8106-1-ps.report@gmx.net>
-Message-ID: <20170220232328.65ea63b8@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 20 Feb 2017 22:25:24 +0000
+Subject: [Buildroot] [Bug 9666] qt5quickcontrols install fails
+In-Reply-To: <bug-9666-163@https.bugs.busybox.net/>
+References: <bug-9666-163@https.bugs.busybox.net/>
+Message-ID: <bug-9666-163-5fYGdb6hbO@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9666
 
-On Mon, 20 Feb 2017 22:41:05 +0100, Peter Seiderer wrote:
+Peter Seiderer <ps.report@gmx.net> changed:
 
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->  define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
->  	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
->  	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
->  	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
->  	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
->  endef
-> +else
-> +define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Layouts $(TARGET_DIR)/usr/qml/QtQuick
-> +endef
-> +endif
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+           Assignee|unassigned at buildroot.uclibc |ps.report at gmx.net
+                   |.org                        |
 
-Perhaps it's time to:
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+Should be fixed with (suggested) patch:
 
-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-QT5QUICKCONTROLS_INSTALL_QML_DIRS = Controls Dialogs Extras PrivateWidgets
-else
-QT5QUICKCONTROLS_INSTALL_QML_DIRS = Controls Dialogs Extras Layouts
-endif
+https://patchwork.ozlabs.org/patch/730222/
 
-define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
-	$(foreach d,$(QT5QUICKCONTROLS_INSTALL_QML_DIRS), \
-		cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/$(d) $(TARGET_DIR)/usr/qml/QtQuick
-	)
-endef
+Thanks for reporting!
 
-Best regards,
+Regards,
+Peter
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
