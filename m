@@ -1,101 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 22:18:23 +0100
-Subject: [Buildroot] [git commit] bctoolbox: add patch to fix static linking
-Message-ID: <20170220212444.EDF368006A@busybox.osuosl.org>
+Date: Mon, 20 Feb 2017 22:19:18 +0100
+Subject: [Buildroot] [git commit] bctoolbox: fix mbedtls/polarssl dependency
+Message-ID: <20170220212445.040558006A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec52c7427f1a122250a883996c2377e311864542
+commit: https://git.buildroot.net/buildroot/commit/?id=2c3be02dfb16a39f9cd494f8215a4b1c4d4d8a70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Static linking with bctoolbox fails when using pkg-config as the
-generated bctoolbox.pc file only consists of an '-L' string without any
-search path or libraries flags:
+Currently we force selection on mbedtls for bctoolbox. If, for whatever
+reason, mbedTLS is not found, bctoolbox searches for PolarSSL and, if
+not present, fails with:
 
 ```
-libtool: link: need path for `-L' option
+  Could NOT find PolarSSL (missing: POLARSSL_INCLUDE_DIRS
+  HAVE_POLARSSL_SSL_H)
 ```
 
-That's because of an typo in mbedtls_library_path. However,
-mbedtls_library_path contains a string of the mbedtls libraries
-concatenated by an ';' which cannot be parsed by pkg-config.
+This happens because bctoolbox enables support for mbedTLS and PolarSSL
+by default, whereas, if both are enabled, mbedTLS is preferred over
+PolarSSL.
 
-Therefore, use MBEDTLS_LIBRARY instead of MBEDTLS_LIBRARIES to get
-the library path.
+However, crypto support is not mandatory and support for both libraries
+can be turned off. Therefore, optionally depend on mbedTLS or PolarSSL
+and enable/disable the library support explicitly.
 
-Furthermore, add the three mbedtls libraries mbedtls, mbedcrypto, and
-mbedx509 to LIBS_PRIVATE so these libraries are added to the
-Libs.private field of bctoolbox.pc.
+This fixes the issue of searching for PolarSSL altough the dependency is
+not declared in the bctoolbox package.
+
+Note, that this does not fix the issue why mbedtls is not found although
+it is enabled. This issue is address in this thread [1].
 
 Fixes:
-http://autobuild.buildroot.net/results/37d5625df4be11ccdc063871e9f6e13d5f59fb52
-http://autobuild.buildroot.net/results/1999c841fae41f860f00747a362327cb2857e687
-.. and many more.
+http://autobuild.buildroot.net/results/cfe/cfeb2f542598e5d450b332fb51a6d79bae24158c/
+.. and more.
 
-Upstream status: Pending
-https://github.com/BelledonneCommunications/bctoolbox/pull/4
+[1] http://lists.busybox.net/pipermail/buildroot/2017-February/183055.html
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Fix-Libs.private-flags-for-mbedtls.patch  | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ package/bctoolbox/Config.in    |  4 +++-
+ package/bctoolbox/bctoolbox.mk | 16 ++++++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch b/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
-new file mode 100644
-index 0000000..a70c7c6
---- /dev/null
-+++ b/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
-@@ -0,0 +1,49 @@
-+From c0b3dbb43aa3a38c47311556c85eadc6072e2d68 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Tue, 14 Feb 2017 22:02:26 +0100
-+Subject: [PATCH] Fix Libs.private flags for mbedtls
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/bctoolbox/Config.in b/package/bctoolbox/Config.in
+index 834f6e2..e9e6920 100644
+--- a/package/bctoolbox/Config.in
++++ b/package/bctoolbox/Config.in
+@@ -2,11 +2,13 @@ config BR2_PACKAGE_BCTOOLBOX
+ 	bool "bctoolbox"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_MBEDTLS # mbedtls is preferred over polarssl
+ 	help
+ 	  Utilities library used by Belledonne Communications
+ 	  softwares like belle-sip, mediastreamer2 and linphone.
+ 
++	  Select BR2_PACKAGE_MBEDTLS (preferred) or
++	  BR2_PACKAGE_POLARSSL for crypto support.
 +
-+Static linking with bctoolbox fails when using pkg-config as the
-+generated bctoolbox.pc file only consists of an '-L' string without any
-+search path or libraries flags.
+ 	  https://github.com/BelledonneCommunications/bctoolbox
+ 
+ comment "bctoolbox needs a toolchain w/ C++, threads"
+diff --git a/package/bctoolbox/bctoolbox.mk b/package/bctoolbox/bctoolbox.mk
+index 64c6779..5eea057 100644
+--- a/package/bctoolbox/bctoolbox.mk
++++ b/package/bctoolbox/bctoolbox.mk
+@@ -17,6 +17,22 @@ BCTOOLBOX_CONF_OPTS = \
+ 	-DENABLE_TESTS=OFF \
+ 	-DGIT_EXECUTABLE=OFF
+ 
++# bctoolbox can be build with mbedTLS or PolarSSL support. If both
++# libraries are present, mbedTLS is preferred over PolarSSL.
++ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++BCTOOLBOX_DEPENDENCIES += mbedtls
++BCTOOLBOX_CONF_OPTS += -DENABLE_MBEDTLS=ON
++else
++BCTOOLBOX_CONF_OPTS += -DENABLE_MBEDTLS=OFF
++endif
 +
-+That's because of an typo in `mbedtls_library_path`. However,
-+`mbedtls_library_path` contains a string of the mbedtls libraries
-+concatenated by an ';' which cannot be parsed by pkg-config.
++ifeq ($(BR2_PACKAGE_POLARSSL),y)
++BCTOOLBOX_DEPENDENCIES += polarssl
++BCTOOLBOX_CONF_OPTS += -DENABLE_POLARSSL=ON
++else
++BCTOOLBOX_CONF_OPTS += -DENABLE_POLARSSL=OFF
++endif
 +
-+Therefore, use `MBEDTLS_LIBRARY` instead of `MBEDTLS_LIBRARIES` to get
-+the library path.
-+
-+Furthermore, add the three mbedtls libraries *mbedtls*, *mbedcrypto*, and
-+*mbedx509* to `LIBS_PRIVATE` so these libraries are added to the
-+`Libs.private` field of bctoolbox.pc.
-+
-+Upstream status: Pending
-+https://github.com/BelledonneCommunications/bctoolbox/pull/4
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ CMakeLists.txt | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index ed7aa00..4127f0e 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -103,8 +103,8 @@ else()
-+ endif()
-+ 
-+ if(MBEDTLS_FOUND)
-+-	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARIES}" PATH)
-+-	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedlts_library_path}")
-++	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARY}" PATH)
-++	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedtls_library_path} -lmbedtls -lmbedcrypto -lmbedx509")
-+ endif()
-+ if(POLARSSL_FOUND)
-+ 	get_filename_component(polarssl_library_path "${POLARSSL_LIBRARIES}" PATH)
-+-- 
-+2.11.1
-+
+ ifeq ($(BR2_STATIC_LIBS),y)
+ BCTOOLBOX_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
+ else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
