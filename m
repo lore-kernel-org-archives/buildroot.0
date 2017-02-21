@@ -1,62 +1,60 @@
-From: Guo Ren <ren_guo@c-sky.com>
-Date: Tue, 21 Feb 2017 17:04:36 +0800
-Subject: [Buildroot] [PATCH 1/1] toolchain/helpers.mk: fixup
-	check_gcc_version.
-Message-ID: <1487667876-27245-1-git-send-email-ren_guo@c-sky.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Feb 2017 10:08:04 +0100
+Subject: [Buildroot] [PATCH] lttng-libust: disable on musl
+Message-ID: <1487668084-7078-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-some gcc --version ouput like this:
-$ csky-linux-gcc --version
-csky-linux-gcc (C-SKY Tools V2.8.08(Beta1)(Glibc,Linux 4.8.4), ABIV1,
-B20161118) 4.5.1
+Since version v2.9.0, lttng-libust has a tracepoint for the C library
+dlmopen() function, and uses some types such as Lmid_t, related to
+dlmopen(). However, musl doesn't provide dlmopen(), which causes a build
+failure.
 
-current script just find first ')', but we need find last ')' to get
-correct version number.
+The Alpine Linux distribution has a patch [1] to remove this code
+completely, but while this is a reasonable solution for a musl-only
+distribution, it is not for a build system that also supports glibc and
+uClibc. Therefore, we instead disable lttng-libust for the musl C
+library.
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+The problem has been reported upstream (no mailing list archive link
+available at the time of this commit).
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/113fa95a054df183014b43ec36b329f9c59bd356/
+
+[1] http://git.alpinelinux.org/cgit/aports/tree/testing/lttng-ust/musl-has-no-dlmopen.patch
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ package/lttng-libust/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 72e7292..2d695ed 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -136,18 +136,26 @@ check_kernel_headers_version = \
- # - 1!d
- #   - delete if not line 1
- #
--# - s/^[^)]+\) ([^[:space:]]+).*/\1/
--#   - eat all until the first ')' character followed by a space
--#   - match as many non-space chars as possible
--#   - eat all the remaining chars on the line
-+# - s/^.+\)[[:space:]]*([^[:space:]]+)/\1/
-+#   - eat all until the last ')' character
-+#   - match the first non-space sequence
- #   - replace by the matched expression
- #
-+# The GCC version string is built up as follows:
-+# GCC (PKGVERSION) BASEVER DATESTAMP DEVPHASE REVISION
-+# PKGVERSION can be anything, it's a string provided at configure time.
-+# BASEVER is what we need.
-+# DATESTAMP is YYYYMMDD or empty
-+# DEVPHASE is experimental, pre-release or empty
-+# REVISION is [svn revision info] or empty
-+# Therefore, we need the first non-space sequence after the last ')' character
-+#
- check_gcc_version = \
- 	expected_version="$(strip $2)" ; \
- 	if [ -z "$${expected_version}" ]; then \
- 		exit 0 ; \
- 	fi; \
--	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
-+	real_version=`$(1) --version | sed -r -e '1!d; s/^.+\)[[:space:]]*([^[:space:]]+)/\1/;'` ; \
- 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
- 		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
- 			"$${expected_version}" "$${real_version}" ; \
+diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
+index 4aba188..8600888 100644
+--- a/package/lttng-libust/Config.in
++++ b/package/lttng-libust/Config.in
+@@ -8,6 +8,8 @@ config BR2_PACKAGE_LTTNG_LIBUST
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
++	# musl doesn't provide dlmopen() functionality
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  Userspace tracing library for the LTTng 2.x tracing
+ 	  infrastructure. It allows userspace programs to create
+@@ -16,6 +18,7 @@ config BR2_PACKAGE_LTTNG_LIBUST
+ 
+ 	  http://lttng.org
+ 
+-comment "lttng-libust needs a toolchain w/ dynamic library, wchar, threads"
++comment "lttng-libust needs a glibc or uClibc toolchain w/ dynamic library, wchar, threads"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_TOOLCHAIN_USES_MUSL
 -- 
-1.9.1
+2.7.4
