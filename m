@@ -1,53 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 21 Feb 2017 17:42:20 +0200
-Subject: [Buildroot] GObject introspection
-In-Reply-To: <e4a16f6891f6c1215cfb87b5743762b1@zacarias.com.ar>
-References: <20170221111505.n57qgjfzkfynlesw@tarshish>
- <e4a16f6891f6c1215cfb87b5743762b1@zacarias.com.ar>
-Message-ID: <20170221154220.obb3u3t2edwnzbux@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Feb 2017 17:18:07 +0100
+Subject: [Buildroot] [PATCH] lttng-libust: disable on musl
+In-Reply-To: <1487668084-7078-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 21 Feb 2017 10:08:04 +0100")
+References: <1487668084-7078-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <877f4jo6v4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, Feb 21, 2017 at 09:26:40AM -0300, Gustavo Zacarias wrote:
-> On 2017-02-21 08:15, Baruch Siach wrote:
-> > GObject introspection[1] is not currently packaged for Buildroot. Quite a 
-> > few packages disable introspection support at build time. If fact, we go
-> > into great trouble to disable introspection in libgtk3. Is there a reason 
-> > why we don't package GObject introspection other than "nobody felt the 
-> > need"? Does introspection require special build time handling?
-> > 
-> > My goal is to package pydbus[2] that depends on a newer version of
-> > python-gobject (latest is 3.22, we currently package 2.28), which in
-> > turn depends on GObject introspection.
-> > 
-> > The current Buildroot option for dbus Python binding is dbus-python, but
-> > it is based on dbus-glib which is "obsolete and unmaintained"[3].
-> > 
-> > Any other option or suggestion?
-> > 
-> > [1] https://wiki.gnome.org/Projects/GObjectIntrospection
-> > 
-> > [2] https://github.com/LEW21/pydbus
-> > 
-> > [3] https://www.freedesktop.org/wiki/Software/DBusBindings/
-> 
-> Last time i checked introspection required some nasty tricks to cross
-> compile.
-> Just google around and you might find an update.
-> I have/had some WIP somewhere, just need to see if that work is still
-> relevant, but first i need to find it :)
-> But other than "it needs some trickery" i see no other reason to avoid it.
+ > Since version v2.9.0, lttng-libust has a tracepoint for the C library
+ > dlmopen() function, and uses some types such as Lmid_t, related to
+ > dlmopen(). However, musl doesn't provide dlmopen(), which causes a build
+ > failure.
 
-Thanks. This is quite tricky indeed. Let me know if you find anything.
+ > The Alpine Linux distribution has a patch [1] to remove this code
+ > completely, but while this is a reasonable solution for a musl-only
+ > distribution, it is not for a build system that also supports glibc and
+ > uClibc. Therefore, we instead disable lttng-libust for the musl C
+ > library.
 
-baruch
+ > The problem has been reported upstream (no mailing list archive link
+ > available at the time of this commit).
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/113fa95a054df183014b43ec36b329f9c59bd356/
+
+I was confused why it worked on uclibc-ng which also doesn't provide
+dlmopen / the Lmid_t type (well it does, but it is inside and #if 0) -
+And it turns out that the dlmopen tracepoint doesn't get built when
+building against uclibc-ng as dlfcn.h doesn't provide RTLD_DI_LINKMAP.
+
+So an alternative is to convince the configure script that musl doesn't
+have RTLD_DI_LINKMAP.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
