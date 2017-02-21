@@ -1,39 +1,66 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Tue, 21 Feb 2017 19:31:27 +0530
-Subject: [Buildroot] [PATCH next] gflags: bump to version v2.2.0
-Message-ID: <1487685687-18867-1-git-send-email-rahul.bedarkar@imgtec.com>
+From: Guo Ren <ren_guo@c-sky.com>
+Date: Tue, 21 Feb 2017 22:04:51 +0800
+Subject: [Buildroot] [PATCH v2 1/1] toolchain/helpers.mk: fixup
+	check_gcc_version.
+Message-ID: <1487685891-29747-1-git-send-email-ren_guo@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
- package/gflags/gflags.hash | 2 +-
- package/gflags/gflags.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+some gcc --version ouput like this:
+$ csky-linux-gcc --version
+csky-linux-gcc (C-SKY Tools V2.8.08(Beta1)(Glibc,Linux 4.8.4), ABIV1,
+B20161118) 4.5.1
 
-diff --git a/package/gflags/gflags.hash b/package/gflags/gflags.hash
-index 5b22411..b9eeb57 100644
---- a/package/gflags/gflags.hash
-+++ b/package/gflags/gflags.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	d8331bd0f7367c8afd5fcb5f5e85e96868a00fd24b7276fa5fcee1e5575c2662	gflags-v2.1.2.tar.gz
-+sha256	466c36c6508a451734e4f4d76825cf9cd9b8716d2b70ef36479ae40f08271f88	gflags-v2.2.0.tar.gz
-diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
-index 89111ed..94f2210 100644
---- a/package/gflags/gflags.mk
-+++ b/package/gflags/gflags.mk
-@@ -4,7 +4,7 @@
+current script just find first ')', but we need find last ')' to get
+correct version number.
+
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+---
+
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+---
+ toolchain/helpers.mk | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 72e7292..ede9b53 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -136,18 +136,27 @@ check_kernel_headers_version = \
+ # - 1!d
+ #   - delete if not line 1
  #
- ################################################################################
- 
--GFLAGS_VERSION = v2.1.2
-+GFLAGS_VERSION = v2.2.0
- GFLAGS_SITE = $(call github,gflags,gflags,$(GFLAGS_VERSION))
- GFLAGS_INSTALL_STAGING = YES
- GFLAGS_LICENSE = BSD-3c
+-# - s/^[^)]+\) ([^[:space:]]+).*/\1/
+-#   - eat all until the first ')' character followed by a space
+-#   - match as many non-space chars as possible
+-#   - eat all the remaining chars on the line
++# - s/^.+\)[[:space:]]*([^[:space:]]+).*/\1/
++#   - eat all until the last ')' character
++#   - eat any following spaces
++#   - match the following non-space sequence
+ #   - replace by the matched expression
+ #
++# The GCC version string is built up as follows:
++# GCC (PKGVERSION) BASEVER DATESTAMP DEVPHASE REVISION
++# PKGVERSION can be anything, it's a string provided at configure time.
++# BASEVER is what we need.
++# DATESTAMP is YYYYMMDD or empty
++# DEVPHASE is (experimental), (pre-release) or empty
++# REVISION is [svn revision info] or empty
++# Therefore, we need the first non-space sequence after the last ')' character
++#
+ check_gcc_version = \
+ 	expected_version="$(strip $2)" ; \
+ 	if [ -z "$${expected_version}" ]; then \
+ 		exit 0 ; \
+ 	fi; \
+-	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
++	real_version=`$(1) --version | sed -r -e '1!d; s/^.+\)[[:space:]]*([^[:space:]]+).*/\1/;'` ; \
+ 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
+ 		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
+ 			"$${expected_version}" "$${real_version}" ; \
 -- 
-2.6.2
+1.9.1
