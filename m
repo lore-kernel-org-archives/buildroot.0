@@ -1,43 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Feb 2017 16:10:22 +0100
-Subject: [Buildroot] [git commit branch/next] nexbox_a95x_defconfig: bump
-	kernel to final 4.10
-Message-ID: <20170221151146.5E265802B5@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 21 Feb 2017 17:42:20 +0200
+Subject: [Buildroot] GObject introspection
+In-Reply-To: <e4a16f6891f6c1215cfb87b5743762b1@zacarias.com.ar>
+References: <20170221111505.n57qgjfzkfynlesw@tarshish>
+ <e4a16f6891f6c1215cfb87b5743762b1@zacarias.com.ar>
+Message-ID: <20170221154220.obb3u3t2edwnzbux@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a17be324e53fc596aec4dea079972ae004cf5d32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Gustavo,
 
-And use same version for header headers as well.
+On Tue, Feb 21, 2017 at 09:26:40AM -0300, Gustavo Zacarias wrote:
+> On 2017-02-21 08:15, Baruch Siach wrote:
+> > GObject introspection[1] is not currently packaged for Buildroot. Quite a 
+> > few packages disable introspection support at build time. If fact, we go
+> > into great trouble to disable introspection in libgtk3. Is there a reason 
+> > why we don't package GObject introspection other than "nobody felt the 
+> > need"? Does introspection require special build time handling?
+> > 
+> > My goal is to package pydbus[2] that depends on a newer version of
+> > python-gobject (latest is 3.22, we currently package 2.28), which in
+> > turn depends on GObject introspection.
+> > 
+> > The current Buildroot option for dbus Python binding is dbus-python, but
+> > it is based on dbus-glib which is "obsolete and unmaintained"[3].
+> > 
+> > Any other option or suggestion?
+> > 
+> > [1] https://wiki.gnome.org/Projects/GObjectIntrospection
+> > 
+> > [2] https://github.com/LEW21/pydbus
+> > 
+> > [3] https://www.freedesktop.org/wiki/Software/DBusBindings/
+> 
+> Last time i checked introspection required some nasty tricks to cross
+> compile.
+> Just google around and you might find an update.
+> I have/had some WIP somewhere, just need to see if that work is still
+> relevant, but first i need to find it :)
+> But other than "it needs some trickery" i see no other reason to avoid it.
 
-[Peter: explicitly set BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10 as pointed
-	out by Thomas]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/nexbox_a95x_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks. This is quite tricky indeed. Let me know if you find anything.
 
-diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
-index 906a22b..375b4d3 100644
---- a/configs/nexbox_a95x_defconfig
-+++ b/configs/nexbox_a95x_defconfig
-@@ -1,13 +1,13 @@
- BR2_aarch64=y
- BR2_cortex_a53=y
--BR2_KERNEL_HEADERS_4_9=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10-rc8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-nexbox-a95x"
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
