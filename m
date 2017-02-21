@@ -1,64 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Feb 2017 09:07:47 +0100
-Subject: [Buildroot] luaposix not working with luajit/lua5.1
-In-Reply-To: <87r32spq2b.fsf@dell.be.48ers.dk>
-References: <257db515-cfda-4122-55e9-b7783b28dfcf@mind.be>
- <CAB0FRsvL0pR974ur0v9b5R=wphQSJStxfJ6YkiECVX4DLoAkdg@mail.gmail.com>
- <270d2a5f-178d-9937-988c-01791cb15dba@mind.be>
- <CAB0FRsvqj=1EQrHKH2Zzn8DLtCbF3q+8_WvcUJxrwLuN-QBE1w@mail.gmail.com>
- <97696395-f4b0-a39a-7b6d-ba5aa68105c2@mind.be>
- <87r32spq2b.fsf@dell.be.48ers.dk>
-Message-ID: <68b6cf23-7e53-265e-95c1-708f7454c69e@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Feb 2017 09:12:41 +0100
+Subject: [Buildroot] [PATCH v1] qt5quickcontrols: fix LTS (5.6) qml file
+	install
+In-Reply-To: <87efyspjzn.fsf@dell.be.48ers.dk>
+References: <20170220214105.8106-1-ps.report@gmx.net>
+ <20170220232328.65ea63b8@free-electrons.com>
+ <87efyspjzn.fsf@dell.be.48ers.dk>
+Message-ID: <20170221091241.431c354e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Mon, 20 Feb 2017 23:37:00 +0100, Peter Korsgaard wrote:
 
-On 20-02-17 21:25, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  > On 20-02-17 12:01, Fran?ois Perrad wrote:
->  >> 2017-02-20 11:47 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
->  > [snip]
->  >>> Integrating this package is not trivial, because our luarocks infra assumes
->  >>> that the upstream name is the same as the Buildroot name. That's not the case
->  >>> for bit32, however: in Buildroot, we really want to call it "lua-bit32". So it
->  >>> requires a bit of infra change to clean it up. Therefore, it'll take me a couple
->  >>> of days before I can submit.
->  >>> 
->  >> 
->  >> We have already luarock packages which name is not prefixed by 'lua-'
->  >> : copas, cosmo, dado, orbit, rings, ...
-> 
->  >  These are really separate projects that happen to be using Lua, while bit32 is
->  > really a Lua support module like luaposix.
-> 
->  >  Although, now you mention it, copas and coxpcall are Lua support modules as
->  > well. For Python and Perl, we always add a prefix for them. Is there a good
->  > reason why we don't do this for Lua?
-> 
->  >  Peter (and others), any opinion: should a module like coxpcall rather be called
->  > lua-coxpcall? We actually have a lot of those. Things like "argparse"...
-> 
-> It would be nice from a consistency POV, but as Fran?ois says, renaming
-> stuff is a bit painful for existing users. Perhaps we can just make sure
-> new lua packages are prefixed with lua-?
+> Yeah, I also didn't really like the repeated lines - But this way is
+> atleast very minimal/safe.
 
- I wasn't actually considering renaming all those packages :-)
+Agreed. So will you apply Peter's patch?
 
- How about adding a comment in package/Config.in that explains that all new
-packages should start with lua- ? I'll do that as part of submitting lua-bit32.
+> Alternatively the loop could be extended to check if the directory
+> exists and otherwise skip it, then we wouldn't need the version check.
 
- Regards,
- Arnout
+That's an option. It has the drawback of not failing if a directory
+supposed to be there isn't, but OK.
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
