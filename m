@@ -1,65 +1,70 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 21 Feb 2017 22:51:12 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-02-20
-In-Reply-To: <20170221224804.5f901ab5@free-electrons.com>
-References: <20170221072902.80C59207F9@mail.free-electrons.com>
- <20170221224230.245a035a@gmx.net>
- <20170221224804.5f901ab5@free-electrons.com>
-Message-ID: <0e77354c-b09c-a852-bbf1-9b7e656263cf@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Feb 2017 22:55:09 +0100
+Subject: [Buildroot] Bug in "package: add generic support for lz archives" ?
+In-Reply-To: <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
+References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
+ <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
+Message-ID: <20170221225509.28773ef3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Peter, All,
+Hello,
 
-Le 21/02/2017 ? 22:48, Thomas Petazzoni a ?crit :
-> Hello,
+On Sun, 12 Feb 2017 22:15:39 +0200, Baruch Siach wrote:
+> This commit teaches the generic package handling code how to extract .tar.lz
+> archives. When lzip is not installed on the host, host-lzip gets built
+> automatically.
 > 
-> On Tue, 21 Feb 2017 22:42:30 +0100, Peter Seiderer wrote:
-> 
->>>       xtensa |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/ce6f506f610434dff1d0eb64644be0200d7c52f6  
->>
->> ../3rdparty/double-conversion/include/double-conversion/utils.h:81:2: error: #error Target architecture was not detected as supported by Double-Conversion.
->>  #error Target architecture was not detected as supported by Double-Conversion.
->>
->> Tried to compile with 'QT5BASE_CONFIGURE_OPTS += -no-doubleconversion', but gives:
->>
->> Qt Core:
->>   DoubleConversion ....................... no
->>     Using system DoubleConversion ........ no
->>
->> [...]
->>
->> ERROR: Your C library does not provide sscanf_l or snprintf_l.
->> You need to use libdouble-conversion for double/string conversion.
->>
->> Disable BR2_PACKAGE_QT5_VERSION_LATEST for xtensa (or xtensa/uClibc combination)?
->>
->>
->> Similare failure for arc:
->>
->>>          arc |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/fda8a5165cc599adfa4b3cb012916fa4dc38aeca  
-> 
-> Or add support to the double-conversion code?
-> 
-> For example, m68k support was contributed upstream:
-> 
->   https://github.com/google/double-conversion/commit/da11179623145f53b204105a93b8bbca431141da
-> 
-> But indeed, for the release, disabling unsupported architectures is
-> probably best. Can you send a patch?
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Same for nios2:
-http://autobuild.buildroot.net/results/779/779fd562c28f3a47f9caea7d0e0cb1dcda7fe489/build-end.log
+This patch causes a regression: it seems to build host-lzip
+unconditionally on systems that lack it, even if host-lzip is not
+needed at all to uncompress some tarballs.
 
-Best regards,
-Romain
+Take for example:
 
-> 
-> Thanks,
-> 
-> Thomas
-> 
+BR2_x86_64=y
+BR2_x86_atom=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2017.02-rc1-2-g133c5ac.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_TCL=y
+BR2_PACKAGE_EXPECT=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+Nothing is .lz compressed in there, and still, it builds host-lzip at
+the beginning of the build:
+
+>>> host-lzip 1.18 Extracting
+>>> host-lzip 1.18 Patching
+>>> host-lzip 1.18 Configuring
+>>> host-lzip 1.18 Building
+>>> host-lzip 1.18 Installing to host directory
+>>> skeleton  Extracting
+>>> skeleton  Patching
+>>> skeleton  Configuring
+>>> skeleton  Building
+>>> skeleton  Installing to staging directory
+>>> skeleton  Fixing libtool files
+>>> skeleton  Installing to target
+
+Could you have a look ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
