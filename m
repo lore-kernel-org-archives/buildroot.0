@@ -1,60 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Feb 2017 21:18:23 +0100
-Subject: [Buildroot] [PATCH v2] sslh: new package
-In-Reply-To: <1485423636-8104-1-git-send-email-david.bachelart@bbright.com>
-References: <1485423636-8104-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20170221211823.4137d10f@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Feb 2017 21:32:32 +0100
+Subject: [Buildroot] [PATCH 0/2 next] toolchain/wrapper: adhere to
+	SOURCE_DATE_EPOCH
+Message-ID: <cover.1487709136.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello All!
 
-On Thu, 26 Jan 2017 10:40:36 +0100, David Bachelart wrote:
-> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> ---
-> Changes v1 -> v2:
->   - rewrite patch (suggested by Thomas Petazzoni). sslh version is 
->     extracted from git, but this version is corrupted if we use git 
->     as VCS for buildroot. This new patch is a more flexible way to 
->     handle this : the version is now extracted from git only if the
->     sslh directory is handled by git
->   - fix comment in Config.in file (suggested by Thomas Petazzoni)
->   - rewrite init script (suggested by Thomas Petazzoni)
->   - remove sslh.default file (suggested by Thomas Petazzoni)
->   - fix sslh.mk file (suggested by Thomas Petazzoni)
->     - indentation
->     - version now includes "v" prefix
->     - fix license
->     - use install target of upstream makefile
->   - register myself as developer for sslh in DEVELOPERS file
-> ---
->  DEVELOPERS                                         |  1 +
->  package/Config.in                                  |  1 +
->  ...ion-while-building-sslh-in-a-larger-git-t.patch | 43 +++++++++++++++++++
->  package/sslh/Config.in                             | 14 +++++++
->  package/sslh/S35sslh                               | 48 ++++++++++++++++++++++
->  package/sslh/sslh.hash                             |  4 ++
->  package/sslh/sslh.mk                               | 28 +++++++++++++
->  7 files changed, 139 insertions(+)
->  create mode 100644 package/sslh/0001-secure-version-while-building-sslh-in-a-larger-git-t.patch
->  create mode 100644 package/sslh/Config.in
->  create mode 100644 package/sslh/S35sslh
->  create mode 100644 package/sslh/sslh.hash
->  create mode 100644 package/sslh/sslh.mk
+This series, for the next branch, re-introduces conformance with
+SOURCE_DATE_EPOCH, with a clean-room re-implementation.
 
-This package is causing some build failures:
+The first patch is cherry-picked from master, to remove the previous
+implementation, while the second patch actually provides the new
+implementation.
 
-  http://autobuild.buildroot.net/?reason=sslh-v1.18
 
-Could you investigate and provide a fix for this issue ?
+Regards,
+Yann E. MORIN.
 
-Thanks a lot!
 
-Thomas
+The following changes since commit 9a7ac39605e1bf416db033b009e6c09f54f44fdf
+
+  keepalived: new package (2017-02-20 22:44:08 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 3c4084fc0c3cf518c6fe170bebd83124730eba00
+
+  toolchain/wrapper: fake __DATE_ and __TIME__ for older gcc (2017-02-21 21:31:44 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      Revert "reproducible: fix DATE/TIME macros in toolchain-wrapper"
+      toolchain/wrapper: fake __DATE_ and __TIME__ for older gcc
+
+ toolchain/toolchain-wrapper.c | 109 +++++++++++++++++++++---------------------
+ 1 file changed, 55 insertions(+), 54 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
