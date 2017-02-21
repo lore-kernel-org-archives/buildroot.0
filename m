@@ -1,51 +1,71 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 21 Feb 2017 22:16:27 +0100
-Subject: [Buildroot] [PATCH v1] bctoolbox: remove redundant mbedtls
-	dependency
-In-Reply-To: <20170221210436.11040-1-ps.report@gmx.net>
-References: <20170221210436.11040-1-ps.report@gmx.net>
-Message-ID: <1487711787.23591.5.camel@embedded.rocks>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 21 Feb 2017 22:17:33 +0100
+Subject: [Buildroot] [PATCH] package/sslh: fix script,
+ does not build in parallel
+In-Reply-To: <1487711542-31294-1-git-send-email-yann.morin.1998@free.fr>
+References: <1487711542-31294-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170221221733.1f162fb2@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello Yann,
 
-On Tue, 2017-02-21 at 22:04 +0100, Peter Seiderer wrote:
+On Tue, 21 Feb 2017 22:12:22 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> The Makefile is not parallel-safe, so we build with MAKE1. Since the
+> source is very small, this has minor impact on perforance.
+
+Second minor typo s/perforance/performance/...
+Regards,
+Peter
+
+> 
+> The genver.sh script conaains a troll character U+c2a0 (non-break space)
+> which is refused by some versions of /bin/sh. Patch it away.
+> 
 > Fixes:
+>     http://autobuild.buildroot.net/results/867/867c74ed74fd04ab06d1a10ff34ca177fe005fd2/
+>     http://autobuild.buildroot.net/results/f97/f971629bc99147f9014e52c6ef71c3417faa6b67/
 > 
-> ? Makefile:532: *** mbedtls is in the dependency chain of bctoolbox
-> that
-> ? has added it to its _DEPENDENCIES variable without selecting it or
-> ? depending on it from Config.in.??Stop.
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: David Bachelart <david.bachelart@bbright.com>
 > ---
-> ?package/bctoolbox/bctoolbox.mk | 1 -
-> ?1 file changed, 1 deletion(-)
+>  package/sslh/0002-replace-U+c2a0.patch | 12 ++++++++++++
+>  package/sslh/sslh.mk                   |  2 +-
+>  2 files changed, 13 insertions(+), 1 deletion(-)
+>  create mode 100644 package/sslh/0002-replace-U+c2a0.patch
 > 
-> diff --git a/package/bctoolbox/bctoolbox.mk
-> b/package/bctoolbox/bctoolbox.mk
-> index 76737aa3c..78269751e 100644
-> --- a/package/bctoolbox/bctoolbox.mk
-> +++ b/package/bctoolbox/bctoolbox.mk
-> @@ -8,7 +8,6 @@ BCTOOLBOX_VERSION = 0.4.0
-> ?BCTOOLBOX_SITE = $(call
-> github,BelledonneCommunications,bctoolbox,$(BCTOOLBOX_VERSION))
-> ?BCTOOLBOX_LICENSE = GPLv2+
-> ?BCTOOLBOX_LICENSE_FILES = COPYING
-> -BCTOOLBOX_DEPENDENCIES = mbedtls
-> ?BCTOOLBOX_INSTALL_STAGING = YES
-> ?
-> ?# Set CMAKE_SKIP_RPATH to prevent bctoolbox from adding the rpath to
-
-I somehow missed to remove this in [1]. Thanks for fixing!
-
-Note, that this should be committed to the master branch.
-
-Acked-by: J?rg Krause <joerg.krause@embedded.rocks>
-
-[1] https://git.buildroot.net/buildroot/commit/package/bctoolbox/bctool
-box.mk?id=2c3be02dfb16a39f9cd494f8215a4b1c4d4d8a70
+> diff --git a/package/sslh/0002-replace-U+c2a0.patch b/package/sslh/0002-replace-U+c2a0.patch
+> new file mode 100644
+> index 0000000..38093fa
+> --- /dev/null
+> +++ b/package/sslh/0002-replace-U+c2a0.patch
+> @@ -0,0 +1,12 @@
+> +diff -durN sslh-v1.18.orig/genver.sh sslh-v1.18/genver.sh
+> +--- sslh-v1.18.orig/genver.sh	2017-02-21 22:03:40.849161283 +0100
+> ++++ sslh-v1.18/genver.sh	2017-02-21 22:03:59.173402356 +0100
+> +@@ -25,7 +25,7 @@
+> +         fi
+> + fi
+> + 
+> +-if [ -d .git ]?&& head=`git rev-parse --verify HEAD 2>/dev/null`; then
+> ++if [ -d .git ] && head=`git rev-parse --verify HEAD 2>/dev/null`; then
+> + 	# generate the version info based on the tag
+> + 	release=`(git describe --tags || git --describe || git describe --all --long) \
+> + 		2>/dev/null | tr -d '\n'`
+> diff --git a/package/sslh/sslh.mk b/package/sslh/sslh.mk
+> index 3177444..17aafd1 100644
+> --- a/package/sslh/sslh.mk
+> +++ b/package/sslh/sslh.mk
+> @@ -12,7 +12,7 @@ SSLH_LICENSE_FILES = COPYING
+>  SSLH_DEPENDENCIES = libconfig
+>  
+>  define SSLH_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+>  endef
+>  
+>  define SSLH_INSTALL_TARGET_CMDS
