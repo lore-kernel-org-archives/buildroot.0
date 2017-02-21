@@ -1,11 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Feb 2017 09:05:01 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-02-16
-In-Reply-To: <20170220134111.1bc02a9f@free-electrons.com>
-References: <20170217072852.8329420B82@mail.free-electrons.com>
- <20170217211242.GC3470@free.fr> <20170220134111.1bc02a9f@free-electrons.com>
-Message-ID: <b94b135b-35c2-ad80-9a99-f14ebfea1e06@mind.be>
+Date: Tue, 21 Feb 2017 09:07:47 +0100
+Subject: [Buildroot] luaposix not working with luajit/lua5.1
+In-Reply-To: <87r32spq2b.fsf@dell.be.48ers.dk>
+References: <257db515-cfda-4122-55e9-b7783b28dfcf@mind.be>
+ <CAB0FRsvL0pR974ur0v9b5R=wphQSJStxfJ6YkiECVX4DLoAkdg@mail.gmail.com>
+ <270d2a5f-178d-9937-988c-01791cb15dba@mind.be>
+ <CAB0FRsvqj=1EQrHKH2Zzn8DLtCbF3q+8_WvcUJxrwLuN-QBE1w@mail.gmail.com>
+ <97696395-f4b0-a39a-7b6d-ba5aa68105c2@mind.be>
+ <87r32spq2b.fsf@dell.be.48ers.dk>
+Message-ID: <68b6cf23-7e53-265e-95c1-708f7454c69e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +17,40 @@ To: buildroot@busybox.net
 
 
 
-On 20-02-17 13:41, Thomas Petazzoni wrote:
-> Hello,
+On 20-02-17 21:25, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 > 
-> Thanks a lot for doing this analysis. A few comments below.
+>  > On 20-02-17 12:01, Fran?ois Perrad wrote:
+>  >> 2017-02-20 11:47 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+>  > [snip]
+>  >>> Integrating this package is not trivial, because our luarocks infra assumes
+>  >>> that the upstream name is the same as the Buildroot name. That's not the case
+>  >>> for bit32, however: in Buildroot, we really want to call it "lua-bit32". So it
+>  >>> requires a bit of infra change to clean it up. Therefore, it'll take me a couple
+>  >>> of days before I can submit.
+>  >>> 
+>  >> 
+>  >> We have already luarock packages which name is not prefixed by 'lua-'
+>  >> : copas, cosmo, dado, orbit, rings, ...
 > 
-> On Fri, 17 Feb 2017 22:12:42 +0100, Yann E. MORIN wrote:
+>  >  These are really separate projects that happen to be using Lua, while bit32 is
+>  > really a Lua support module like luaposix.
 > 
->> On 2017-02-17 08:28 +0100, Thomas Petazzoni spake thusly:
-[snip]
->>> microblazeel | make[4]: *** [all-recursive... | TIM | http://autobuild.buildroot.net/results/92c165a970b9d8912c5ca50ed3567478cd2a2b3d  
->>
->> Timeout, but weird: the ffmpeg build started at 3850 seconds (a bit more
->> than one hour) and the timeout is supposed to be 8h, so the ffmpeg build
->> did not finish after about 7h...
+>  >  Although, now you mention it, copas and coxpcall are Lua support modules as
+>  > well. For Python and Perl, we always add a prefix for them. Is there a good
+>  > reason why we don't do this for Lua?
 > 
-> Perhaps an infinite loop in the compiler. Happens sometimes on complex
-> code such as ffmpeg, and not very widely used architectures such as
-> microblaze.
+>  >  Peter (and others), any opinion: should a module like coxpcall rather be called
+>  > lua-coxpcall? We actually have a lot of those. Things like "argparse"...
+> 
+> It would be nice from a consistency POV, but as Fran?ois says, renaming
+> stuff is a bit painful for existing users. Perhaps we can just make sure
+> new lua packages are prefixed with lua-?
 
- Perhaps for the timeout, it would make sense to do a setrlimit(RLIMIT_CPU) in
-addition to the monitor. That way you avoid that a single compile stays stuck
-for 7 hours. Though admittedly at the moment it happens sufficiently rarely to
-not be too much of a waste.
+ I wasn't actually considering renaming all those packages :-)
 
->>>         sh4a |                  opencv-2.4.13 | NOK | http://autobuild.buildroot.net/results/2944568f9623f1377e987a1dadde5ea8cc428c5f  
->>
->>     error: 'SIZE_MAX' was not declared in this scope
->>
->> Missing header? Samuel?
-> 
-> This is the same issue as the one fixed for libraw in
-> d246cf5fd01bb0d20a0e64194ffed514ea8dd0aa. It's annoying that the issue
-> is in the jasper package, but we have to fix it in all packages using
-> jasper. Not sure what can be done about it though.
-
- Actually, only the packages that use C++. AFAICS that's just kodi, libraw,
-opencv and opencv3.
-
+ How about adding a comment in package/Config.in that explains that all new
+packages should start with lua- ? I'll do that as part of submitting lua-bit32.
 
  Regards,
  Arnout
