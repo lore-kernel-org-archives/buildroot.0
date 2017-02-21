@@ -1,34 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Feb 2017 15:59:20 +0100
-Subject: [Buildroot] [PATCH 1/1] toolchain/helpers.mk: fixup
-	check_gcc_version.
-In-Reply-To: <b3b253af-7154-237b-704f-5544ed602fcb@c-sky.com> (ren guo's
- message of "Tue, 21 Feb 2017 22:15:49 +0800")
-References: <1487667876-27245-1-git-send-email-ren_guo@c-sky.com>
- <20170221102615.526d9bce@free-electrons.com>
- <b3b253af-7154-237b-704f-5544ed602fcb@c-sky.com>
-Message-ID: <87k28joaif.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Feb 2017 16:09:50 +0100
+Subject: [Buildroot] [PATCH next] nexbox_a95x_defconfig: bump kernel to
+	final 4.10
+In-Reply-To: <20170221153441.6f85e157@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 21 Feb 2017 15:34:41 +0100")
+References: <20170221133446.22019-1-peter@korsgaard.com>
+ <20170221153441.6f85e157@free-electrons.com>
+Message-ID: <87fuj7oa0x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ren" == ren guo <ren_guo@c-sky.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Thx Thomas,
- > Cool Idea! but it need be retested.
+ > Hello,
+ > On Tue, 21 Feb 2017 14:34:46 +0100, Peter Korsgaard wrote:
+ >> And use same version for header headers as well.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> configs/nexbox_a95x_defconfig | 3 +--
+ >> 1 file changed, 1 insertion(+), 2 deletions(-)
+ >> 
+ >> diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
+ >> index 906a22b0f..b9328f83b 100644
+ >> --- a/configs/nexbox_a95x_defconfig
+ >> +++ b/configs/nexbox_a95x_defconfig
+ >> @@ -1,13 +1,12 @@
+ >> BR2_aarch64=y
+ >> BR2_cortex_a53=y
+ >> -BR2_KERNEL_HEADERS_4_9=y
 
- > I couldn't find a proper way to avoid the spaces around the ".", and i
- > think sed is ok :)
+ > Doesn't this needs an explicit:
 
-Alternatively we could drop the . and use the shell or awk or whatever
-to convert from space separated to .-separated:
+ > BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
 
-echo "__GNUC__ __GNUC_MINOR__" | gcc -P -E - | \
-     { read MAJOR MINOR; echo $MAJOR.$MINOR ; }
+To be robust against us bumping the default kernel version, yes.
 
-Not that this is so much prettier.
+I'll fix while I apply - Thanks!
 
 -- 
 Bye, Peter Korsgaard
