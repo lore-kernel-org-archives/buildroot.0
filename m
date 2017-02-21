@@ -1,45 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Feb 2017 16:09:50 +0100
-Subject: [Buildroot] [PATCH next] nexbox_a95x_defconfig: bump kernel to
-	final 4.10
-In-Reply-To: <20170221153441.6f85e157@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 21 Feb 2017 15:34:41 +0100")
-References: <20170221133446.22019-1-peter@korsgaard.com>
- <20170221153441.6f85e157@free-electrons.com>
-Message-ID: <87fuj7oa0x.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Feb 2017 16:11:25 +0100
+Subject: [Buildroot] [PATCH] configs/liteboard: Bump to kernel 4.10
+In-Reply-To: <1487681685-26572-1-git-send-email-fabio.estevam@nxp.com> (Fabio
+ Estevam's message of "Tue, 21 Feb 2017 09:54:45 -0300")
+References: <1487681685-26572-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <87bmtvo9ya.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Fabio" == Fabio Estevam <fabio.estevam@nxp.com> writes:
 
- > Hello,
- > On Tue, 21 Feb 2017 14:34:46 +0100, Peter Korsgaard wrote:
- >> And use same version for header headers as well.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> configs/nexbox_a95x_defconfig | 3 +--
- >> 1 file changed, 1 insertion(+), 2 deletions(-)
- >> 
- >> diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
- >> index 906a22b0f..b9328f83b 100644
- >> --- a/configs/nexbox_a95x_defconfig
- >> +++ b/configs/nexbox_a95x_defconfig
- >> @@ -1,13 +1,12 @@
- >> BR2_aarch64=y
- >> BR2_cortex_a53=y
- >> -BR2_KERNEL_HEADERS_4_9=y
+ > The imx6ul-liteboard dts patches have been upstreamed in kernel 4.10,
+ > so bump to this version and remove the local patches
 
- > Doesn't this needs an explicit:
+ > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 
- > BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
-
-To be robust against us bumping the default kernel version, yes.
-
-I'll fix while I apply - Thanks!
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
