@@ -1,55 +1,46 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Tue, 21 Feb 2017 09:53:32 +0100
-Subject: [Buildroot] Relocatable internal toolchain
-In-Reply-To: <CAHXCMML2HKsOgxZRLpcMbCY8Lci6-N_s1+qVTRxCHqyvP+rzgg@mail.gmail.com>
-References: <57c96cfd-7d0c-c9de-04d2-2da8f5dd7f7c@grandegger.com>
- <CAHXCMML2HKsOgxZRLpcMbCY8Lci6-N_s1+qVTRxCHqyvP+rzgg@mail.gmail.com>
-Message-ID: <40e82fc5-e730-7ced-d6da-ccf61652507a@grandegger.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Feb 2017 09:55:03 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-02-16
+In-Reply-To: <05d32cf1-16bf-98c5-a62a-d1ea4ea8ad11@mind.be>
+References: <20170217072852.8329420B82@mail.free-electrons.com>
+ <20170217211242.GC3470@free.fr>
+ <20170220134111.1bc02a9f@free-electrons.com>
+ <b94b135b-35c2-ad80-9a99-f14ebfea1e06@mind.be>
+ <20170221092754.3dd7bc65@free-electrons.com>
+ <05d32cf1-16bf-98c5-a62a-d1ea4ea8ad11@mind.be>
+Message-ID: <20170221095503.4b8d9d5f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Samuel, all
+Hello,
 
-more on that topic...
+On Tue, 21 Feb 2017 09:46:03 +0100, Arnout Vandecappelle wrote:
 
-Am 26.01.2017 um 11:47 schrieb Samuel Martin:
-> Hi Wolfgang, all,
-> 
-> On Thu, Jan 26, 2017 at 9:25 AM, Wolfgang Grandegger <wg@grandegger.com> wrote:
->> Hello,
->>
->> I prefer a relocatable (internal) toolchain and before digging deeper... Are
->> there any plans in that direction? I realized some attempts (patches) to
->> make the buildroot toolchain relocatable but they have not (yet) been
->> accepted. What are the pros and cons? Are there principle problems?
-> 
-> Yes, there are plans for this.
-> 
-> There had been a couple of the series posted on this topic (the latest one [1]).
-> And we talked about this during the last Buildroot Meeting, you can
-> check the report [2] for detailed conclusions.
-> To sum-up:
-> - Producing the relocatable host tools will be addressed step-by-step;
-> - Preparatory changes making buildroot using absolute canonical paths
-> are already merged [4];
-> - Next step: fixing RPATH in host tools binaries thanks to some
-> patchelf [3] features to be implemented and upstreamed (this should be
-> enough to meet Buildroot needs);
+>  An alternative would be to patch jasper itself to define __STDC_LIMIT_MACROS in
+> its headers. Far-reaching, but probably harmless. Not sure if such a patch would
+> be upstreamable though.
 
-I have now implemented "patchelf --make-rpath-relative ROOTDIR ..:"
-following closely your related patches. Before starting the up-streaming
-process, I first want to get some feedback here. Does it fit our needs?
-Any other ideas or comments?
+I tried that, but that doesn't work. If you sneak into jas_math.h a:
 
-It would be nice to get rid of the "readelf" scripts as well. We could
-call "patchelf" on any regular file and simply ignore the errors (not
-an ELF file, not dynamic or not shared). That's fast but maybe a bit
-too hackish. Having an extra option for that purpose might be
-better/cleaner.
+#define __STDC_LIMIT_MACROS
 
-Below is the preliminary patchelf patch.
+before it includes <stdint.h>
 
-Wolfgang.
+then in fact it's too late, because for example libraw has already
+included <stdint.h> *before* including jas_math.h. And at the time of
+this first <stdint.h> include, __STDC_LIMIT_MACROS was not defined.
+
+A nicer option would be for jasper to provide a pkg-config file that
+tells its consumers how to compile/link against it.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
