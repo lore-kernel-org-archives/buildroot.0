@@ -1,37 +1,136 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Feb 2017 10:26:15 +0100
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 21 Feb 2017 11:05:19 +0100
 Subject: [Buildroot] [PATCH 1/1] toolchain/helpers.mk: fixup
 	check_gcc_version.
 In-Reply-To: <1487667876-27245-1-git-send-email-ren_guo@c-sky.com>
 References: <1487667876-27245-1-git-send-email-ren_guo@c-sky.com>
-Message-ID: <20170221102615.526d9bce@free-electrons.com>
+Message-ID: <f18e301f-6a8a-9ce4-6047-7b35e61fdcdf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ Hi guoren,
 
-On Tue, 21 Feb 2017 17:04:36 +0800, Guo Ren wrote:
+ We like to have a version log in the patch. Under the Signed-off-by, add a line
+with --- and then a log of what changed compared to your first submission. Also
+put "[PATCH v2]" in the Subject (which you can do with
+"git format-patch -v2").
 
+On 21-02-17 10:04, Guo Ren wrote:
+> some gcc --version ouput like this:
+> $ csky-linux-gcc --version
+> csky-linux-gcc (C-SKY Tools V2.8.08(Beta1)(Glibc,Linux 4.8.4), ABIV1,
+> B20161118) 4.5.1
+> 
+> current script just find first ')', but we need find last ')' to get
+> correct version number.
+> 
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+
+ I've tested this on about 300 gcc binaries I have available, and it gives the
+same results as before on all of them (I don't have anything like the C-SKY
+version string). However, not exactly the same, see below.
+
+ However, this made me realize that there is still a potential issue, see below.
+
+> ---
+>  toolchain/helpers.mk | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 72e7292..2d695ed 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -136,18 +136,26 @@ check_kernel_headers_version = \
+>  # - 1!d
+>  #   - delete if not line 1
+>  #
+> -# - s/^[^)]+\) ([^[:space:]]+).*/\1/
+> -#   - eat all until the first ')' character followed by a space
+> -#   - match as many non-space chars as possible
+> -#   - eat all the remaining chars on the line
+
+ Why did you remove this part of the regex? I think the regex should be:
+
+> +# - s/^.+\)[[:space:]]*([^[:space:]]+)/\1/
+       s/^.+\)[[:space:]]*([^[:space:]]+).*/\1/
+
+so keep on eating the part that comes after BASEVER.
+
+> +#   - eat all until the last ')' character
+> +#   - match the first non-space sequence
+
+ You removed the "eat spaces" part. So:
+
+#   - eat all until the last ')' character
+#   - eat any following spaces
+#   - match the following non-space sequence
+#   - replace by the matched expression
+
+>  #   - replace by the matched expression
+>  #
+> +# The GCC version string is built up as follows:
+> +# GCC (PKGVERSION) BASEVER DATESTAMP DEVPHASE REVISION
+> +# PKGVERSION can be anything, it's a string provided at configure time.
+> +# BASEVER is what we need.
+> +# DATESTAMP is YYYYMMDD or empty
+> +# DEVPHASE is experimental, pre-release or empty
+
+ Turns out that this is wrong. It should be:
+
+# DEVPHASE is (experimental), (prerelease) or empty
+
+Which brings us to the first potential problem that I found in these 300
+toolchains: your new pattern will extract the wrong version when DEVPHASE is
+non-empty and REVISION is also non-empty. It worked for the toolchains I have,
+because they had an empty REVISION and the regex requires a non-space character
+after the last ). But it may not always work.
+
+ So this patch fixes one practical case and breaks another theoretical case -
+still a net improvement I'd say, so I'm OK with leaving it as is.
+
+ To improve this, we could probably require the match part to start with a
+digit. However, I don't have any toolchain with non-empty REVISION so I'm not
+sure if that one doesn't start with a digit either. From the code, it *looks*
+like the REVISION part always starts with [ but I can't be 100% sure.
+
+
+> +# REVISION is [svn revision info] or empty
+> +# Therefore, we need the first non-space sequence after the last ')' character
+> +#
+>  check_gcc_version = \
+>  	expected_version="$(strip $2)" ; \
+>  	if [ -z "$${expected_version}" ]; then \
+>  		exit 0 ; \
+>  	fi; \
 > -	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
 > +	real_version=`$(1) --version | sed -r -e '1!d; s/^.+\)[[:space:]]*([^[:space:]]+)/\1/;'` ; \
+>  	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
 
-At some point, isn't something like:
+ By not eating the DATESTAMP DEVPHASE REVISION part, nothing really changes
+because it will still match this pattern. Still, it's cleaner to have the actual
+BASEVER in real_version and not the entire version string.
 
-	echo "__GNUC__.__GNUC_MINOR__" | gcc -P -E - | sed 's/ //g'
+ Here is the second problem I found while going through all my toolchains: I
+have some toolchains that report BASEVER as 4.8 instead of 4.8.x. This will NOT
+match the expected_version because of the missing . after it. Not sure how to
+fix that, and if we really need to fix it - it was an Android toolchain :-)
 
-simpler, more readable and probably more robust?
+ But anyway, that would be for a separate patch.
 
-Bonus points if you find a way to not have the spaces around the "." in
-the output generated by the preprocessor, which would avoid the need to
-call sed.
+ Regards,
+ Arnout
 
-Best regards,
+>  		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
+>  			"$${expected_version}" "$${real_version}" ; \
+> 
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
