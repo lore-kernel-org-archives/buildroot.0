@@ -1,33 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Feb 2017 11:23:08 +0100
-Subject: [Buildroot] [PATCH 1/1] alljoyn: fix build on or1k
-In-Reply-To: <20170217145942.28eed5ff@free-electrons.com>
-References: <1487339732-29587-1-git-send-email-fabrice.fontaine@orange.com>
- <20170217145942.28eed5ff@free-electrons.com>
-Message-ID: <20170221112308.17a07a16@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 21 Feb 2017 13:15:05 +0200
+Subject: [Buildroot] GObject introspection
+Message-ID: <20170221111505.n57qgjfzkfynlesw@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Buildroot list,
 
-On Fri, 17 Feb 2017 14:59:42 +0100, Thomas Petazzoni wrote:
+GObject introspection[1] is not currently packaged for Buildroot. Quite a few 
+packages disable introspection support at build time. If fact, we go into 
+great trouble to disable introspection in libgtk3. Is there a reason why we 
+don't package GObject introspection other than "nobody felt the need"? Does 
+introspection require special build time handling?
 
-> Do we understand why it's happening only on or1k ?
-> 
-> or1k is using some gcc 5.x compiler, so we should see the same problem
-> with other gcc 5.x toolchains, no ?
+My goal is to package pydbus[2] that depends on a newer version of 
+python-gobject (latest is 3.22, we currently package 2.28), which in turn 
+depends on GObject introspection.
 
-As I suspected, patching alljoyn is not necessary, it was a missing
-patch in the gcc version for or1k. This has been fixed in commit
-https://git.buildroot.org/buildroot/commit/?id=e7c7a8bf5481e898e7591442b0d924c2952797ef.
+The current Buildroot option for dbus Python binding is dbus-python, but it is 
+based on dbus-glib which is "obsolete and unmaintained"[3].
+
+Any other option or suggestion?
 
 Thanks,
+baruch
 
-Thomas
+[1] https://wiki.gnome.org/Projects/GObjectIntrospection
+
+[2] https://github.com/LEW21/pydbus
+
+[3] https://www.freedesktop.org/wiki/Software/DBusBindings/
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
