@@ -1,32 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Feb 2017 14:24:31 +0100
-Subject: [Buildroot] Enabling GLX without mesa DRI driver
-In-Reply-To: <1900547.3QhRXtFmCM@sagittae>
-References: <1674359.6j3vDXU7qK@sagittae>
- <20170221094034.27409318@free-electrons.com>
- <1900547.3QhRXtFmCM@sagittae>
-Message-ID: <20170221142431.61d6e058@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Feb 2017 14:34:46 +0100
+Subject: [Buildroot] [PATCH next] nexbox_a95x_defconfig: bump kernel to
+	final 4.10
+Message-ID: <20170221133446.22019-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+And use same version for header headers as well.
 
-On Tue, 21 Feb 2017 14:21:21 +0100, J?r?me Pouiller wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/nexbox_a95x_defconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU selects
-> > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER, and
-> > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER selects BR2_PACKAGE_MESA3D_DRIVER, so
-> > I think it's good, no?  
-> 
-> You confuse BR2_PACKAGE_MESA3D_DRIVER and BR2_PACKAGE_MESA3D_DRI_DRIVER, no?
-
-Yes, indeed. Sorry about the confusion :-/
-
-Thomas
+diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
+index 906a22b0f..b9328f83b 100644
+--- a/configs/nexbox_a95x_defconfig
++++ b/configs/nexbox_a95x_defconfig
+@@ -1,13 +1,12 @@
+ BR2_aarch64=y
+ BR2_cortex_a53=y
+-BR2_KERNEL_HEADERS_4_9=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10-rc8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-nexbox-a95x"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
