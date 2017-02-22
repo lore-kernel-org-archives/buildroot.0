@@ -1,49 +1,52 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 22 Feb 2017 16:36:54 +0000
-Subject: [Buildroot] [PATCH] qt5webkit: disable for MIPS soft-float
-Message-ID: <20170222163654.305-1-Vincent.Riera@imgtec.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 22 Feb 2017 17:56:46 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-02-21
+In-Reply-To: <20170222072902.D25702294C@mail.free-electrons.com>
+References: <20170222072902.D25702294C@mail.free-electrons.com>
+Message-ID: <20170222165645.GA12810@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It assumes the MIPS target has an FPU and uses FPU assembler
-instructions which cause the compilation to fail when building it for
-soft-float.
+Hi,
+Thomas Petazzoni wrote,
 
-Fixes:
-  http://autobuild.buildroot.net/results/f40/f407ca9245e2445619420a9dfd595856729a2b2b/
+> Hello,
+> 
+> This is the list of Buildroot build failures that occured on
+> 2017-02-21, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
+> 
+> Build failures related to your architectures:
+> 
+>         m68k |              berkeleydb-5.3.28 | http://autobuild.buildroot.net/results/f894e906ee1360da1fba7ca09c9d8837ea420011
+>         m68k |              berkeleydb-5.3.28 | http://autobuild.buildroot.net/results/40423aa6c8f6fe66c771cca3e09b21e15525eb5f
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/qt-webkit-kiosk/Config.in | 1 +
- package/qt5/qt5webkit/Config.in   | 1 +
- 2 files changed, 2 insertions(+)
+Patch sent.
 
-diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
-index 32952d7..1b0e0de 100644
---- a/package/qt-webkit-kiosk/Config.in
-+++ b/package/qt-webkit-kiosk/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
- 	depends on !BR2_STATIC_LIBS # qt5webkit
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5webkit
- 	depends on !BR2_BINFMT_FLAT # qt5webkit
-+	depends on !BR2_MIPS_SOFT_FLOAT # qt5webkit
- 	help
- 	  Simple kiosk-mode browser powered by Qt5Webkit
+>         or1k |                 xfsprogs-4.8.0 | http://autobuild.buildroot.net/results/3fe0d96cf13af12b0051a95f7865d4e38f4a78af
+
+I do not think this is particular specific to or1k.
+Xfsprogs is linked statically. BR2_PACKAGE_GETTEXT is enabled.
+Util-linux and libblkid/libuuid enable libintl functionality.
+When xfsprogs statically link libblkid/libuuid references to libintl
+are not resolved and the linking fails. Xfsprogs does not use
+pkg-config so the Libs.private entries for uuid.pc/blkid.pc are
+ignored. I tried to convince the xfsprogs buildsystem to add -lintl 
+in this case.
+LIBS="-lintl" helps to get through the configure phase, but not to
+finally link all xfsprogs applications.
+
+I have no clue how to manage this in a elegant way without patching
+the Makefiles/buildrules/buildmacros :(
+
+Any ideas?
+
+best regards
+ Waldemar 
  
-diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
-index e9c11fb..4613550 100644
---- a/package/qt5/qt5webkit/Config.in
-+++ b/package/qt5/qt5webkit/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_QT5WEBKIT
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on !BR2_BINFMT_FLAT # icu
-+	depends on !BR2_MIPS_SOFT_FLOAT
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
--- 
-2.10.2
