@@ -1,62 +1,42 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 22 Feb 2017 16:11:24 +0100
-Subject: [Buildroot] GObject introspection
-In-Reply-To: <20170221154220.obb3u3t2edwnzbux@tarshish>
-References: <20170221111505.n57qgjfzkfynlesw@tarshish>
- <e4a16f6891f6c1215cfb87b5743762b1@zacarias.com.ar>
- <20170221154220.obb3u3t2edwnzbux@tarshish>
-Message-ID: <1502654.pABbHeZYPZ@sagittae>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 22 Feb 2017 16:46:23 +0100
+Subject: [Buildroot] [PATCH 1/3] runc: bump to version
+	9df8b306d01f59d3a8029be411de015b7304dd8f
+Message-ID: <1487778385-98470-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+Version bump as a dependency of docker-engine v1.13.1
 
-On Tuesday 21 February 2017 17:42:20 CET Baruch Siach wrote:
-> Hi Gustavo,
-> 
-> On Tue, Feb 21, 2017 at 09:26:40AM -0300, Gustavo Zacarias wrote:
-> > On 2017-02-21 08:15, Baruch Siach wrote:
-> > > GObject introspection[1] is not currently packaged for Buildroot. Quite a 
-> > > few packages disable introspection support at build time. If fact, we go
-> > > into great trouble to disable introspection in libgtk3. Is there a reason 
-> > > why we don't package GObject introspection other than "nobody felt the 
-> > > need"? Does introspection require special build time handling?
-> > > 
-> > > My goal is to package pydbus[2] that depends on a newer version of
-> > > python-gobject (latest is 3.22, we currently package 2.28), which in
-> > > turn depends on GObject introspection.
-> > > 
-> > > The current Buildroot option for dbus Python binding is dbus-python, but
-> > > it is based on dbus-glib which is "obsolete and unmaintained"[3].
-> > > 
-> > > Any other option or suggestion?
-> > > 
-> > > [1] https://wiki.gnome.org/Projects/GObjectIntrospection
-> > > 
-> > > [2] https://github.com/LEW21/pydbus
-> > > 
-> > > [3] https://www.freedesktop.org/wiki/Software/DBusBindings/
-> > 
-> > Last time i checked introspection required some nasty tricks to cross
-> > compile.
-> > Just google around and you might find an update.
-> > I have/had some WIP somewhere, just need to see if that work is still
-> > relevant, but first i need to find it :)
-> > But other than "it needs some trickery" i see no other reason to avoid it.
-> 
-> Thanks. This is quite tricky indeed. Let me know if you find anything.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-If you are Yocto fluent, you can check:
-
-  http://git.yoctoproject.org/cgit/cgit.cgi/poky/tree/meta/recipes-gnome/gobject-introspection
-
-
-Regards,
-
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 0b6a24f..a053b6f 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 374822cc2895ed3899b7a3a03b566413ea782fccec1307231f27894e9c6d5bea  runc-50a19c6ff828c58e5dab13830bd3dacde268afe5.tar.gz
++sha256	11f69923a786efb82b65d9f1eec0ac665a985e631a67f3f4d466dac720efacdd	runc-9df8b306d01f59d3a8029be411de015b7304dd8f.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 95afcaa..5862733 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = 50a19c6ff828c58e5dab13830bd3dacde268afe5
++RUNC_VERSION = 9df8b306d01f59d3a8029be411de015b7304dd8f
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+2.5.0
