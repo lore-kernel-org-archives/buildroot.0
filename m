@@ -1,43 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Feb 2017 12:50:36 +0100
-Subject: [Buildroot] [PATCH 1/2 next] Revert "reproducible: fix
- DATE/TIME macros in toolchain-wrapper"
-In-Reply-To: <20170221220121.049d38a6@free-electrons.com>
-References: <cover.1487709136.git.yann.morin.1998@free.fr>
- <0db12adda90ffa9bf7a3925cf1563aea4591c5ef.1487709136.git.yann.morin.1998@free.fr>
- <20170221214750.4c057f08@free-electrons.com> <20170221205435.GA3347@free.fr>
- <20170221220121.049d38a6@free-electrons.com>
-Message-ID: <6881dd6c-140a-9cb3-a948-8cb7d0a4a8a4@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Feb 2017 13:48:28 +0100
+Subject: [Buildroot] [arc-buildroot] Analysis of build results for
+ 2017-02-13
+In-Reply-To: <1487762759.25108.60.camel@synopsys.com>
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+ <1487762759.25108.60.camel@synopsys.com>
+Message-ID: <20170222134828.17a6bcb0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Wed, 22 Feb 2017 11:26:00 +0000, Vlad Zakharov wrote:
+> We are looking at the issue. I hope it will be solved rather wool but unfortunately I am sure fix will be ready before
+> BR release.
 
-On 21-02-17 22:01, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 21 Feb 2017 21:54:35 +0100, Yann E. MORIN wrote:
-> 
->> It is needed to revert this patch in next before applying the following
->> patch.
-> 
-> Since it has already been reverted in master, I believe we will wait
-> for the release, and next to be merged in master before applying.
+I guess you meant "not sure" ?
 
- Alternatively, merge master into next now and apply patch 2 to next.
+> So I can turn off this package now and then provide fix and turn the
+> package on again. What do you think about it?
 
- Is there any reason not to regularly merge master into next?
+That's OK for me. Can you send a patch doing so?
 
- Regards,
- Arnout
+We also recently disabled the "trousers" package on ARC, also for a
+toolchain reason.
 
+Will you remember all the packages that we disabled due to an ARC
+toolchain issue? Should we mark them with a special comment, so that
+you can grep for it, like:
+
+	# ARC toolchain issue
+	depends on !BR2_arc
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
