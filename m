@@ -1,13 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Feb 2017 09:03:56 +0100
-Subject: [Buildroot] Bug in "package: add generic support for lz
-	archives" ?
-In-Reply-To: <20170222053219.lwceb3yg7r4ymazr@tarshish>
-References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
- <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
- <20170221225509.28773ef3@free-electrons.com>
- <20170222053219.lwceb3yg7r4ymazr@tarshish>
-Message-ID: <20170222090356.590da224@free-electrons.com>
+Date: Wed, 22 Feb 2017 09:23:07 +0100
+Subject: [Buildroot] [PATCH v1] qt5: disable qt-5.8.0 support for arc,
+ nios2 and xtensa
+In-Reply-To: <20170221223950.23314-1-ps.report@gmx.net>
+References: <20170221223950.23314-1-ps.report@gmx.net>
+Message-ID: <20170222092307.22ca917a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +13,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Feb 2017 07:32:19 +0200, Baruch Siach wrote:
+On Tue, 21 Feb 2017 23:39:50 +0100, Peter Seiderer wrote:
 
-> The xzcat and tar checks behave the same way. There is no logic to determine 
-> whether a given dependency is actually needed in this particular build.
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index 8de248139..1648b1c74 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -39,6 +39,8 @@ config BR2_PACKAGE_QT5_VERSION_LATEST
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+>  	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
+>  	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
+> +	# no built-in double-conversion support
+> +	depends on !BR2_arcle && !BR2_arceb && !BR2_nios2 && !BR2_xtensa
 
-Hm, OK. But then it doesn't happen that often that tar or xzcat is not
-available, while it does happen a lot for lzip, and we have only a few
-packages that use .lz archives.
+	!BR2_arcle && !BR2_arceb
 
-Hence, to me, it is really against the Buildroot principle of "build
-only what's necessary".
+can be simplified to:
 
-What about doing like we do for other download dependencies (like git,
-svn, cvs, etc.) and only check them if they are actually needed by one
-of the packages that are enabled?
+	!BR2_arc
+
+See arch/Config.in.arc:
+
+config BR2_arc
+        bool
+        default y if BR2_arcle || BR2_arceb
 
 Thanks,
 
