@@ -1,50 +1,50 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 21 Feb 2017 21:56:59 -0500
-Subject: [Buildroot] [PATCH 1/1] libimxvpuapi: bump to version 0.10.3
-Message-ID: <1487732219-2215-1-git-send-email-danomimanchego123@gmail.com>
+From: Chris Smart <mail@csmart.io>
+Date: Wed, 22 Feb 2017 14:14:23 +1100
+Subject: [Buildroot] [PATCH] package/python: apply unicode config to host
+	build
+Message-ID: <20170222031423.GA2574@csmart.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because with libimxvpuapi older than 0.10.3, the gst1-imx-0.12.3 "imxvpu"
-plugin will not build:
+Currently the host build of Python 2 defaults to narrow unicode (UCS2),
+ignoring the BR2_PACKAGE_PYTHON_UCS4 configuration option which may be
+set to wide (UCS4).
 
-Checking for 'libimxvpuapi >= 0.10.3'                            : not found
-could not find installed imxvpuapi library - VPU elements will not be built
+This results in host and target Python packages which are incompatible
+in subtle ways.
 
-After this mod:
+For example, installing wheels into the target fails when they are made
+with the host python, citing incompatibility (as can be seen by the
+package tags which may be "cp27u-manylinux1" instead of
+"cp27mu-manylinux1").
 
-Checking for 'libimxvpuapi >= 0.10.3'                            : yes
-found installed imxvpuapi library - VPU elements will be built
+Compiling the host Python 2 with the same UCS configuration as the
+target ensures that the packages are compatible (and the tags match).
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+This does not affect Python 3 as support for narrow unicode was
+deprecated in version 3.3, see https://www.python.org/dev/peps/pep-0393/
+
+Thanks to Tony Breeds <tony@bakeyournoodle.com> for reporting this.
+
+Signed-off-by: Chris Smart <mail@csmart.io>
 ---
- package/libimxvpuapi/libimxvpuapi.hash | 2 +-
- package/libimxvpuapi/libimxvpuapi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python/python.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libimxvpuapi/libimxvpuapi.hash b/package/libimxvpuapi/libimxvpuapi.hash
-index c8cabcf..cd0c8f1 100644
---- a/package/libimxvpuapi/libimxvpuapi.hash
-+++ b/package/libimxvpuapi/libimxvpuapi.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 8e6dc4105db6164c0de72fd60eb73f4ba1632f7ba5052b1abc834b462b566da2  libimxvpuapi-0.10.2.tar.gz
-+sha256 7151e10a24929935bada1d3d87626f17e411575b3a4ac0d86440999ad0100a55  libimxvpuapi-0.10.3.tar.gz
-diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
-index fde4429..d368d3d 100644
---- a/package/libimxvpuapi/libimxvpuapi.mk
-+++ b/package/libimxvpuapi/libimxvpuapi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 7b20434c94c2b8b8..330716d57f3712f1 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -105,6 +105,7 @@ endif
  
--LIBIMXVPUAPI_VERSION = 0.10.2
-+LIBIMXVPUAPI_VERSION = 0.10.3
- LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
- LIBIMXVPUAPI_LICENSE = LGPLv2.1+
- LIBIMXVPUAPI_LICENSE_FILES = LICENSE
+ # Default is UCS2 w/o a conf opt
+ ifeq ($(BR2_PACKAGE_PYTHON_UCS4),y)
++HOST_PYTHON_CONF_OPTS += --enable-unicode=ucs4
+ PYTHON_CONF_OPTS += --enable-unicode=ucs4
+ endif
+ 
 -- 
-2.7.4
+2.9.3
