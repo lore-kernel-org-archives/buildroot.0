@@ -1,43 +1,59 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 22 Feb 2017 13:51:10 +0100
-Subject: [Buildroot] [PATCH] berkeleydb: workaround m68k/coldfire issue
-Message-ID: <20170222125110.GA27092@waldemar-brodkorb.de>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Wed, 22 Feb 2017 13:01:13 +0000
+Subject: [Buildroot] [arc-buildroot] Analysis of build results for
+ 2017-02-13
+In-Reply-To: <20170222134828.17a6bcb0@free-electrons.com>
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+ <1487762759.25108.60.camel@synopsys.com>
+ <20170222134828.17a6bcb0@free-electrons.com>
+Message-ID: <1487768472.25108.68.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- http://autobuild.buildroot.net/results/40423aa6c8f6fe66c771cca3e09b21e15525eb5f
+Hi Thomas,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/berkeleydb/berkeleydb.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Wed, 2017-02-22 at 13:48 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 22 Feb 2017 11:26:00 +0000, Vlad Zakharov wrote:
+> > 
+> > We are looking at the issue. I hope it will be solved rather wool but unfortunately I am sure fix will be ready
+> > before
+> > BR release.
+> 
+> I guess you meant "not sure" ?
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index e5c11bd..fdc64a8 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -20,11 +20,18 @@ BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
- 	db_hotbackup db_load db_log_verify db_printlog db_recover db_replicate \
- 	db_stat db_tuner db_upgrade db_verify
- 
-+# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
-+ifeq ($(BR2_m68k_cf),y)
-+BERKELEYDB_CONF_OPTS += CXXFLAGS="$(TARGET_CXXFLAGS) -fno-dwarf2-cfi-asm"
-+endif
-+
- # build directory can't be the directory where configure are there, so..
- define BERKELEYDB_CONFIGURE_CMDS
- 	(cd $(@D)/build_unix; rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-+		$(BERKELEYDB_CONF_OPTS) \
- 		../dist/configure $(QUIET) \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
+You are right, it was a typo, I'm sorry.
+
+> 
+> > 
+> > So I can turn off this package now and then provide fix and turn the
+> > package on again. What do you think about it?
+> 
+> That's OK for me. Can you send a patch doing so?
+
+Sure, I will send it soon.
+
+> 
+> We also recently disabled the "trousers" package on ARC, also for a
+> toolchain reason.
+> 
+> Will you remember all the packages that we disabled due to an ARC
+> toolchain issue? Should we mark them with a special comment, so that
+> you can grep for it, like:
+> 
+> 	# ARC toolchain issue
+> 	depends on !BR2_arc
+
+We are trying to keep the list of packages disabled due to ARC toolchain failures.?
+Nevertheless it sounds like a good idea - we won't miss anything.
+
+> 
+> Thomas
 -- 
-2.1.4
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
