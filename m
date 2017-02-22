@@ -1,39 +1,50 @@
-From: ren_guo <ren_guo@c-sky.com>
-Date: Wed, 22 Feb 2017 10:16:36 +0800
-Subject: [Buildroot] [PATCH 1/1] toolchain/helpers.mk: fixup
-	check_gcc_version.
-In-Reply-To: <87k28joaif.fsf@dell.be.48ers.dk>
-References: <1487667876-27245-1-git-send-email-ren_guo@c-sky.com>
- <20170221102615.526d9bce@free-electrons.com>
- <b3b253af-7154-237b-704f-5544ed602fcb@c-sky.com>
- <87k28joaif.fsf@dell.be.48ers.dk>
-Message-ID: <0b005880-a592-c35e-66d0-3b438f95cc18@c-sky.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 21 Feb 2017 21:56:59 -0500
+Subject: [Buildroot] [PATCH 1/1] libimxvpuapi: bump to version 0.10.3
+Message-ID: <1487732219-2215-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017?02?21? 22:59, Peter Korsgaard wrote:
+Because with libimxvpuapi older than 0.10.3, the gst1-imx-0.12.3 "imxvpu"
+plugin will not build:
 
->   > Thx Thomas,
->   > Cool Idea! but it need be retested.
->
->   > I couldn't find a proper way to avoid the spaces around the ".", and i
->   > think sed is ok :)
->
-> Alternatively we could drop the . and use the shell or awk or whatever
-> to convert from space separated to .-separated:
->
-> echo "__GNUC__ __GNUC_MINOR__" | gcc -P -E - | \
->       { read MAJOR MINOR; echo $MAJOR.$MINOR ; }
->
-> Not that this is so much prettier.
->
-Thx Peter,
+Checking for 'libimxvpuapi >= 0.10.3'                            : not found
+could not find installed imxvpuapi library - VPU elements will not be built
 
-"bash read" seems not bad :) ... But I like 'sed' a little more?
+After this mod:
 
-Best Regards
+Checking for 'libimxvpuapi >= 0.10.3'                            : yes
+found installed imxvpuapi library - VPU elements will be built
 
-guoren
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/libimxvpuapi/libimxvpuapi.hash | 2 +-
+ package/libimxvpuapi/libimxvpuapi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libimxvpuapi/libimxvpuapi.hash b/package/libimxvpuapi/libimxvpuapi.hash
+index c8cabcf..cd0c8f1 100644
+--- a/package/libimxvpuapi/libimxvpuapi.hash
++++ b/package/libimxvpuapi/libimxvpuapi.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 8e6dc4105db6164c0de72fd60eb73f4ba1632f7ba5052b1abc834b462b566da2  libimxvpuapi-0.10.2.tar.gz
++sha256 7151e10a24929935bada1d3d87626f17e411575b3a4ac0d86440999ad0100a55  libimxvpuapi-0.10.3.tar.gz
+diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
+index fde4429..d368d3d 100644
+--- a/package/libimxvpuapi/libimxvpuapi.mk
++++ b/package/libimxvpuapi/libimxvpuapi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIMXVPUAPI_VERSION = 0.10.2
++LIBIMXVPUAPI_VERSION = 0.10.3
+ LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
+ LIBIMXVPUAPI_LICENSE = LGPLv2.1+
+ LIBIMXVPUAPI_LICENSE_FILES = LICENSE
+-- 
+2.7.4
