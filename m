@@ -1,75 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 22 Feb 2017 07:32:19 +0200
-Subject: [Buildroot] Bug in "package: add generic support for lz
-	archives" ?
-In-Reply-To: <20170221225509.28773ef3@free-electrons.com>
-References: <0f0805c9d18137c555b446d6b6e7dd2c68d6e770.1486930542.git.baruch@tkos.co.il>
- <1e78e6f82883e4ba95766459a39cbd2d49934152.1486930542.git.baruch@tkos.co.il>
- <20170221225509.28773ef3@free-electrons.com>
-Message-ID: <20170222053219.lwceb3yg7r4ymazr@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 22 Feb 2017 08:25:05 +0100
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.30.0
+Message-ID: <20170222072505.19514-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes CVE-2017-2629 - curl SSL_VERIFYSTATUS ignored
 
-On Tue, Feb 21, 2017 at 10:55:09PM +0100, Thomas Petazzoni wrote:
-> On Sun, 12 Feb 2017 22:15:39 +0200, Baruch Siach wrote:
-> > This commit teaches the generic package handling code how to extract .tar.lz
-> > archives. When lzip is not installed on the host, host-lzip gets built
-> > automatically.
-> > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> This patch causes a regression: it seems to build host-lzip
-> unconditionally on systems that lack it, even if host-lzip is not
-> needed at all to uncompress some tarballs.
-> 
-> Take for example:
-> 
-> BR2_x86_64=y
-> BR2_x86_atom=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2017.02-rc1-2-g133c5ac.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_TCL=y
-> BR2_PACKAGE_EXPECT=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> Nothing is .lz compressed in there, and still, it builds host-lzip at
-> the beginning of the build:
-> 
-> >>> host-lzip 1.18 Extracting
-> >>> host-lzip 1.18 Patching
-> >>> host-lzip 1.18 Configuring
-> >>> host-lzip 1.18 Building
-> >>> host-lzip 1.18 Installing to host directory
-> >>> skeleton  Extracting
-> >>> skeleton  Patching
-> >>> skeleton  Configuring
-> >>> skeleton  Building
-> >>> skeleton  Installing to staging directory
-> >>> skeleton  Fixing libtool files
-> >>> skeleton  Installing to target
-> 
-> Could you have a look ?
+From the advisory (http://www.openwall.com/lists/oss-security/2017/02/21/6):
 
-The xzcat and tar checks behave the same way. There is no logic to determine 
-whether a given dependency is actually needed in this particular build.
+Curl and libcurl support "OCSP stapling", also known as the TLS Certificate
+Status Request extension (using the `CURLOPT_SSL_VERIFYSTATUS` option). When
+telling curl to use this feature, it uses that TLS extension to ask for a
+fresh proof of the server's certificate's validity. If the server doesn't
+support the extension, or fails to provide said proof, curl is expected to
+return an error.
 
-baruch
+Due to a coding mistake, the code that checks for a test success or failure,
+ends up always thinking there's valid proof, even when there is none or if the
+server doesn't support the TLS extension in question. Contrary to how it used
+to function and contrary to how this feature is documented to work.
 
+This could lead to users not detecting when a server's certificate goes
+invalid or otherwise be mislead that the server is in a better shape than it
+is in reality.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 7a942f238..72cae81c0 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 d16185a767cb2c1ba3d5b9096ec54e5ec198b213f45864a38b3bda4bbf87389b  curl-7.52.1.tar.bz2
++sha256 b2345a8bef87b4c229dedf637cb203b5e21db05e20277c8e1094f0d4da180801  curl-7.53.0.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index a9fba2662..b5dcb377b 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.52.1
++LIBCURL_VERSION = 7.53.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
