@@ -1,39 +1,33 @@
-From: Wojciech Nizinski <niziak@spox.org>
-Date: Wed, 22 Feb 2017 11:19:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/turbolua: bump version to v2.1.0
-Message-ID: <1487758746-22935-1-git-send-email-niziak@spox.org>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Wed, 22 Feb 2017 11:26:00 +0000
+Subject: [Buildroot] [arc-buildroot] Analysis of build results for
+	2017-02-13
+In-Reply-To: <20170214142725.1b9e98ae@free-electrons.com>
+References: <20170214072856.3AE8320B8C@mail.free-electrons.com>
+ <20170214142725.1b9e98ae@free-electrons.com>
+Message-ID: <1487762759.25108.60.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Wojciech Nizinski <niziak@spox.org>
----
- package/turbolua/turbolua.hash | 2 +-
- package/turbolua/turbolua.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi all,?
+sorry for the delay,
 
-diff --git a/package/turbolua/turbolua.hash b/package/turbolua/turbolua.hash
-index d460b4f66..40917ef27 100644
---- a/package/turbolua/turbolua.hash
-+++ b/package/turbolua/turbolua.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 bff771b6a670f764366eff50e1644f1c5d8d526324e0b6adfda42d9f69791833 turbolua-6fbc5cbfed1cc8c3820d4c1bfb55258c764040f0.tar.gz
-+sha256 c03ec98b6b12ae8620a24fa8cc116a0ada4260bfaa1094fcfe8be42f678f7a86 turbolua-ee71ef081254c38ecb0f5cd8ea5eeea9a7aa23cb.tar.gz
-diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
-index bf9e27f16..de3344b1a 100644
---- a/package/turbolua/turbolua.mk
-+++ b/package/turbolua/turbolua.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TURBOLUA_VERSION = 6fbc5cbfed1cc8c3820d4c1bfb55258c764040f0
-+TURBOLUA_VERSION = ee71ef081254c38ecb0f5cd8ea5eeea9a7aa23cb
- TURBOLUA_SITE = $(call github,kernelsauce,turbo,$(TURBOLUA_VERSION))
- TURBOLUA_DEPENDENCIES = luajit
- TURBOLUA_LICENSE = Apache-2.0
+On Tue, 2017-02-14 at 14:27 +0100, Thomas Petazzoni wrote:
+> >????????? arc |????????????????????? vlc-2.2.4 | NOK | http://autobuild.buildroot.net/results/b74/b7405a67745b68dcde9
+> 07c1d8259851d68984694/?
+> 
+> ARC toolchain issue. Developers from Synopsys, do you know when/if this
+> is going to be fixed?
+
+We are looking at the issue. I hope it will be solved rather wool but unfortunately I am sure fix will be ready before
+BR release. So I can turn off this package now and then provide fix and turn the package on again. What do you think
+about it?
+
+Thanks.
+
 -- 
-2.11.0
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
