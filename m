@@ -1,33 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Feb 2017 21:32:57 +0100
-Subject: [Buildroot] [PATCH] uclibc-ng-test: pass LDFLAGS while building
-In-Reply-To: <20170222182743.GA16529@waldemar-brodkorb.de>
-References: <20170222182743.GA16529@waldemar-brodkorb.de>
-Message-ID: <20170222213257.5ea4b813@free-electrons.com>
+Date: Wed, 22 Feb 2017 21:33:21 +0100
+Subject: [Buildroot] [git commit] berkeleydb: workaround m68k/coldfire issue
+Message-ID: <20170222203346.DC2FD80401@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ac8912579f469273b7163577ef71b5f76d7dba9b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Feb 2017 19:27:43 +0100, Waldemar Brodkorb wrote:
-> When static linking is in use we need to pass -static while
-> linking.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/37ca35854a36fab1690f6ae789e338a1e55307f6
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/uclibc-ng-test/uclibc-ng-test.mk | 1 +
->  1 file changed, 1 insertion(+)
+Fixes:
+ http://autobuild.buildroot.net/results/40423aa6c8f6fe66c771cca3e09b21e15525eb5f
 
-Applied to master, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Thomas: rename BERKELEYDB_CONF_OPTS to BERKELEYDB_CONF_ENV.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/berkeleydb/berkeleydb.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index e5c11bd..a315943 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -20,11 +20,18 @@ BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
+ 	db_hotbackup db_load db_log_verify db_printlog db_recover db_replicate \
+ 	db_stat db_tuner db_upgrade db_verify
+ 
++# Internal error, aborting at dw2gencfi.c:214 in emit_expr_encoded
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
++ifeq ($(BR2_m68k_cf),y)
++BERKELEYDB_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -fno-dwarf2-cfi-asm"
++endif
++
+ # build directory can't be the directory where configure are there, so..
+ define BERKELEYDB_CONFIGURE_CMDS
+ 	(cd $(@D)/build_unix; rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
++		$(BERKELEYDB_CONF_ENV) \
+ 		../dist/configure $(QUIET) \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
