@@ -1,47 +1,29 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 21 Feb 2017 23:39:50 +0100
-Subject: [Buildroot] [PATCH v1] qt5: disable qt-5.8.0 support for arc,
-	nios2 and xtensa
-Message-ID: <20170221223950.23314-1-ps.report@gmx.net>
+From: ren_guo <ren_guo@c-sky.com>
+Date: Wed, 22 Feb 2017 10:11:09 +0800
+Subject: [Buildroot] [PATCH 1/1] toolchain/helpers.mk: fixup
+	check_gcc_version.
+In-Reply-To: <1cd3c769-5372-28d6-a2f4-b120cb1e3864@mind.be>
+References: <1487667876-27245-1-git-send-email-ren_guo@c-sky.com>
+ <20170221102615.526d9bce@free-electrons.com>
+ <1cd3c769-5372-28d6-a2f4-b120cb1e3864@mind.be>
+Message-ID: <6bb82def-c23f-272a-b145-4eaffbdc1ced@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1], [2], [3]:
+Hi Arnout,
 
-  ../3rdparty/double-conversion/include/double-conversion/utils.h:81:2: error: #error Target architecture was not detected as supported by Double-Conversion.
+>   Sounds good to me. I ran that on my 300 toolchains and it seems to work. One
+> thing however: some of them generate a few empty lines at the beginning, so the
+> sed expression should also have /^$/d.
+>
+>   Regards,
+>   Arnout
+>
+Good Test! Do you need I patch mail ? Or just fixup by yourself?
 
-[1] http://autobuild.buildroot.net/results/ce6/ce6f506f610434dff1d0eb64644be0200d7c52f6
-[2] http://autobuild.buildroot.net/results/fda/fda8a5165cc599adfa4b3cb012916fa4dc38aeca
-[3] http://autobuild.buildroot.net/results/779/779fd562c28f3a47f9caea7d0e0cb1dcda7fe489
+Best Regards
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 8de248139..1648b1c74 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -39,6 +39,8 @@ config BR2_PACKAGE_QT5_VERSION_LATEST
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
- 	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
-+	# no built-in double-conversion support
-+	depends on !BR2_arcle && !BR2_arceb && !BR2_nios2 && !BR2_xtensa
- 	help
- 	  This option builds Qt 5.8, which is licensed under
- 	  (L)GPLv3+.
-@@ -46,6 +48,7 @@ config BR2_PACKAGE_QT5_VERSION_LATEST
- comment "Latest Qt version needs host/toolchain w/ gcc >= 4.8"
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_HOST_GCC_AT_LEAST_4_8
- 	depends on !BR2_ARM_CPU_ARMV4
-+	depends on !BR2_arcle && !BR2_arceb && !BR2_nios2 && !BR2_xtensa
- 
- config BR2_PACKAGE_QT5_VERSION_5_6
- 	bool "LTS (5.6)"
--- 
-2.11.0
+guoren
