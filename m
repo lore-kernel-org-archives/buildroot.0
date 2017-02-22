@@ -1,52 +1,31 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 22 Feb 2017 17:56:46 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Feb 2017 18:25:15 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-02-21
-In-Reply-To: <20170222072902.D25702294C@mail.free-electrons.com>
-References: <20170222072902.D25702294C@mail.free-electrons.com>
-Message-ID: <20170222165645.GA12810@waldemar-brodkorb.de>
+	2017-02-20
+In-Reply-To: <20170221072902.457E0206E2@mail.free-electrons.com>
+References: <20170221072902.457E0206E2@mail.free-electrons.com>
+Message-ID: <20170222172515.GA3569@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Thomas Petazzoni wrote,
-
-> Hello,
+On 2017-02-21 08:29 +0100, Thomas Petazzoni spake thusly:
+> Build failures related to your packages:
 > 
-> This is the list of Buildroot build failures that occured on
-> 2017-02-21, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
-> 
-> Build failures related to your architectures:
-> 
->         m68k |              berkeleydb-5.3.28 | http://autobuild.buildroot.net/results/f894e906ee1360da1fba7ca09c9d8837ea420011
->         m68k |              berkeleydb-5.3.28 | http://autobuild.buildroot.net/results/40423aa6c8f6fe66c771cca3e09b21e15525eb5f
+>         i686 | freerdp-17834af7bb378f85a3b... | http://autobuild.buildroot.net/results/5d429d0e288754a541ee5d8be515454c5fccd28b
 
-Patch sent.
+Somehow, there is a /usr/lib32 that sneaked into a -Wl,-rpath option at
+some point. I'm trying to find the culprit...
 
->         or1k |                 xfsprogs-4.8.0 | http://autobuild.buildroot.net/results/3fe0d96cf13af12b0051a95f7865d4e38f4a78af
+Regards,
+Yann E. MORIN.
 
-I do not think this is particular specific to or1k.
-Xfsprogs is linked statically. BR2_PACKAGE_GETTEXT is enabled.
-Util-linux and libblkid/libuuid enable libintl functionality.
-When xfsprogs statically link libblkid/libuuid references to libintl
-are not resolved and the linking fails. Xfsprogs does not use
-pkg-config so the Libs.private entries for uuid.pc/blkid.pc are
-ignored. I tried to convince the xfsprogs buildsystem to add -lintl 
-in this case.
-LIBS="-lintl" helps to get through the configure phase, but not to
-finally link all xfsprogs applications.
-
-I have no clue how to manage this in a elegant way without patching
-the Makefiles/buildrules/buildmacros :(
-
-Any ideas?
-
-best regards
- Waldemar 
- 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
