@@ -1,93 +1,72 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 22 Feb 2017 23:52:36 +0100
-Subject: [Buildroot] [PATCH] docs/website: Improving website speed
-Message-ID: <1487803956-24668-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Thu, 23 Feb 2017 10:38:02 +1100
+Subject: [Buildroot] GObject introspection
+In-Reply-To: <e4a16f6891f6c1215cfb87b5743762b1@zacarias.com.ar>
+References: <20170221111505.n57qgjfzkfynlesw@tarshish>
+ <e4a16f6891f6c1215cfb87b5743762b1@zacarias.com.ar>
+Message-ID: <20170222233802.GA3058@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently the buildroot website is not leveraging common
-techniques to have a better loading speed (browser caching,
-gzip compression, deflating).
-This commit provides an .htaccess files with all the needed to
-enable mentioned features. This .htaccess only works if the
-webserver has deflate, expires and headers modules enabled.
+On Tue, Feb 21, 2017 at 09:26:40AM -0300, Gustavo Zacarias wrote:
+> On 2017-02-21 08:15, Baruch Siach wrote:
+> 
+> >Hi Buildroot list,
+> >
+> >GObject introspection[1] is not currently packaged for Buildroot. Quite a
+> >few
+> >packages disable introspection support at build time. If fact, we go into
+> >great trouble to disable introspection in libgtk3. Is there a reason why
+> >we
+> >don't package GObject introspection other than "nobody felt the need"?
+> >Does
+> >introspection require special build time handling?
+> >
+> >My goal is to package pydbus[2] that depends on a newer version of
+> >python-gobject (latest is 3.22, we currently package 2.28), which in turn
+> >depends on GObject introspection.
+> >
+> >The current Buildroot option for dbus Python binding is dbus-python, but
+> >it is
+> >based on dbus-glib which is "obsolete and unmaintained"[3].
+> >
+> >Any other option or suggestion?
+> >
+> >Thanks,
+> >baruch
+> >
+> >[1] https://wiki.gnome.org/Projects/GObjectIntrospection
+> >
+> >[2] https://github.com/LEW21/pydbus
+> >
+> >[3] https://www.freedesktop.org/wiki/Software/DBusBindings/
+> 
+> Hi Baruch.
+> Last time i checked introspection required some nasty tricks to cross
+> compile.
+> Just google around and you might find an update.
+> I have/had some WIP somewhere, just need to see if that work is still
+> relevant, but first i need to find it :)
+> But other than "it needs some trickery" i see no other reason to avoid it.
+> Regards.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- docs/website/.htaccess | 62 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
- create mode 100644 docs/website/.htaccess
+Hi,
 
-diff --git a/docs/website/.htaccess b/docs/website/.htaccess
-new file mode 100644
-index 0000000..b02beb8
---- /dev/null
-+++ b/docs/website/.htaccess
-@@ -0,0 +1,62 @@
-+# BEGIN Compress text files
-+<ifModule mod_deflate.c>
-+  <filesMatch ".(css|js|x?html?|php)$">
-+    SetOutputFilter DEFLATE
-+  </filesMatch>
-+</ifModule>
-+# END Compress text files
-+
-+# BEGIN Expire headers
-+<ifModule mod_expires.c>
-+  ExpiresActive On
-+  ExpiresDefault "access plus 1 seconds"
-+  ExpiresByType image/x-icon "access plus 2592000 seconds"
-+  ExpiresByType image/jpeg "access plus 2592000 seconds"
-+  ExpiresByType image/png "access plus 2592000 seconds"
-+  ExpiresByType image/gif "access plus 2592000 seconds"
-+  ExpiresByType application/x-shockwave-flash "access plus 2592000 seconds"
-+  ExpiresByType text/css "access plus 604800 seconds"
-+  ExpiresByType text/javascript "access plus 216000 seconds"
-+  ExpiresByType application/javascript "access plus 216000 seconds"
-+  ExpiresByType application/x-javascript "access plus 216000 seconds"
-+  ExpiresByType text/html "access plus 600 seconds"
-+  ExpiresByType application/xhtml+xml "access plus 600 seconds"
-+</ifModule>
-+# END Expire headers
-+
-+# BEGIN Cache-Control Headers
-+<ifModule mod_headers.c>
-+  <filesMatch ".(ico|jpe?g|png|gif|swf)$">
-+    Header set Cache-Control "max-age=2592000, public"
-+  </filesMatch>
-+  <filesMatch ".(css)$">
-+    Header set Cache-Control "max-age=604800, public"
-+  </filesMatch>
-+  <filesMatch ".(js)$">
-+    Header set Cache-Control "max-age=216000, private"
-+  </filesMatch>
-+  <filesMatch ".(x?html?|php)$">
-+    Header set Cache-Control "max-age=600, private, must-revalidate"
-+  </filesMatch>
-+</ifModule>
-+# END Cache-Control Headers
-+
-+# BEGIN Turn ETags Off
-+<ifModule mod_headers.c>
-+  Header unset ETag
-+</ifModule>
-+FileETag None
-+# END Turn ETags Off
-+
-+# BEGIN gzip
-+<ifModule mod_gzip.c>
-+mod_gzip_on Yes
-+mod_gzip_dechunk Yes
-+mod_gzip_item_include file .(html?|txt|css|js)$
-+mod_gzip_item_include handler ^cgi-script$
-+mod_gzip_item_include mime ^text/.*
-+mod_gzip_item_include mime ^application/x-javascript.*
-+mod_gzip_item_exclude mime ^image/.*
-+mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
-+</ifModule>
-+# END gzip
--- 
-2.7.4
+I've been working on this too, on and off, for a while and it's working
+fairly well (for me anyway) if you're willing to accept the restriction
+that the kernel on your target must not be newer than your host (this is
+actually quite annoying for me, but it's a hard requirement of QEMU
+usermode), and that it's a bit difficult to debug if there are problems
+because it does indeed require a lot of trickery :-(
+
+(I've had to be careful with the exact version of QEMU I use, as well,
+because some versions have had problems with usermode.)
+
+Anyway, I'm happy to share what I've got so far, so I'll post it
+after I dust it off and see that it's actually still working ;-)
+
+Cheers,
+Sam.
