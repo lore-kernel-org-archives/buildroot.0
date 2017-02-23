@@ -1,65 +1,64 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Feb 2017 18:00:38 +0100
-Subject: [Buildroot] [PATCH 16/25] luarocks-package: rework extraction
+Date: Thu, 23 Feb 2017 18:00:42 +0100
+Subject: [Buildroot] [PATCH 20/25] luarocks-package: lowercase the upstream
+	name for LuaRocks
 In-Reply-To: <20170223170047.24417-1-arnout@mind.be>
 References: <20170223170047.24417-1-arnout@mind.be>
-Message-ID: <20170223170047.24417-17-arnout@mind.be>
+Message-ID: <20170223170047.24417-21-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The luarocks package infra extracts the package directly under
-$(BUILD_DIR), because the contents are always in a subdirectory name
-<pkg>-<version>. However, this only works when the upstream package name
-is the same as the Buildroot package name.
-
-Instead, we can rely on the fixed structure of a .src.rock: it always
-contains the source subdirectory in a directory called foo, where foo
-is the basename of the .src.rock file. Therefore, we can extract into
-a subdirectory of $($(PKG)_DIR), then move its contents up two
-directory levels.
-
-Note, we can't extract directly into $($(PKG)_DIR) because it's
-possible that $($(PKG)_SUBDIR) == <pkg>-<version>. In that case, we
-would try to move the directory unto itself and get "Directory not
-empty". This is the case e.g. for the lpty package.
-
-Two alternatives were considered but are more complicated:
-- instead of using wildcards for the move, we could have used
-  <.src.rock basename>/$($(PKG)_SUBDIR);
-- instead of extracting with luarocks, we could use unzip to extract
-  (the .src.rock is a ZIP file), but then we also have to move the
-  .rockspec into the subdir. In addition, sometimes the ZIP file
-  contains a tarball instead of the extracted source.
+LuaRocks has a policy that the rockspec and rock filenames are lower
+case. However, the upstream name may contain uppercase characters.
+We have several packages like that in Buildroot. To simplify the
+package .mk files, apply the lowercase from within the infra.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pkg-luarocks.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-luarocks.txt | 5 +++--
+ package/pkg-luarocks.mk                  | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
+diff --git a/docs/manual/adding-packages-luarocks.txt b/docs/manual/adding-packages-luarocks.txt
+index 4965a209ae..ec3d4e7ccd 100644
+--- a/docs/manual/adding-packages-luarocks.txt
++++ b/docs/manual/adding-packages-luarocks.txt
+@@ -82,7 +82,8 @@ Two of them are populated by the LuaRocks infrastructure (for the
+ 
+ * +LUA_FOO_SITE+, which defaults to +$(BR2_LUAROCKS_MIRROR)+
+ 
+-* +LUA_FOO_SOURCE+, which defaults to +$(LUA_FOO_NAME_UPSTREAM)-$(LUA_FOO_VERSION).src.rock+
++* +LUA_FOO_SOURCE+, which defaults to
++  +$(lowercase LUA_FOO_NAME_UPSTREAM)-$(LUA_FOO_VERSION).src.rock+
+ 
+ A few additional variables, specific to the LuaRocks infrastructure, are
+ also defined. They can be overridden in specific cases.
+@@ -91,7 +92,7 @@ also defined. They can be overridden in specific cases.
+   package name
+ 
+ * +LUA_FOO_ROCKSPEC+, which defaults to
+-  +$(LUA_FOO_NAME_UPSTREAM)-$(LUA_FOO_VERSION).rockspec+
++  +$(lowercase LUA_FOO_NAME_UPSTREAM)-$(LUA_FOO_VERSION).rockspec+
+ 
+ * +LUA_FOO_SUBDIR+, which defaults to
+   +$(LUA_FOO_NAME_UPSTREAM)-$(LUA_FOO_VERSION_WITHOUT_ROCKSPEC_REVISION)+
 diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-index aa83e74a0e..08ea9b801a 100644
+index 2689035cdc..d762867111 100644
 --- a/package/pkg-luarocks.mk
 +++ b/package/pkg-luarocks.mk
-@@ -44,12 +44,15 @@ $(2)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
- $(2)_DEPENDENCIES	+= host-luarocks luainterpreter
+@@ -36,8 +36,8 @@ define inner-luarocks-package
+ $(2)_BUILD_OPTS		?=
+ $(2)_NAME_UPSTREAM	?= $(1)
+ $(2)_SUBDIR		?= $$($(2)_NAME_UPSTREAM)-$$(shell echo "$$($(2)_VERSION)" | sed -e "s/-[0-9]$$$$//")
+-$(2)_ROCKSPEC		?= $$($(2)_NAME_UPSTREAM)-$$($(2)_VERSION).rockspec
+-$(2)_SOURCE		?= $$($(2)_NAME_UPSTREAM)-$$($(2)_VERSION).src.rock
++$(2)_ROCKSPEC		?= $$(call LOWERCASE,$$($(2)_NAME_UPSTREAM))-$$($(2)_VERSION).rockspec
++$(2)_SOURCE		?= $$(call LOWERCASE,$$($(2)_NAME_UPSTREAM))-$$($(2)_VERSION).src.rock
+ $(2)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
  
- #
--# Extract step
-+# Extract step. Extract into a temporary dir and move the relevant part to the
-+# source dir.
- #
- ifndef $(2)_EXTRACT_CMDS
- define $(2)_EXTRACT_CMDS
--	cd $$($(2)_DIR)/.. && \
-+	mkdir -p $$($(2)_DIR)/luarocks-extract
-+	cd $$($(2)_DIR)/luarocks-extract && \
- 		$$(LUAROCKS_RUN_ENV) $$(LUAROCKS_RUN_CMD) unpack --force $$(DL_DIR)/$$($(2)_SOURCE)
-+	mv $$($(2)_DIR)/luarocks-extract/*/* $$($(2)_DIR)
- endef
- endif
- 
+ # Since we do not support host-luarocks-package, we know this is
 -- 
 2.11.0
