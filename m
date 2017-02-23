@@ -1,30 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 21:45:16 +0100
-Subject: [Buildroot] [PATCH] poco: doesn't support openrisc
-In-Reply-To: <22bb5cb1c7427067810ea1b834475fe482c0d799.1487846255.git.baruch@tkos.co.il>
-References: <22bb5cb1c7427067810ea1b834475fe482c0d799.1487846255.git.baruch@tkos.co.il>
-Message-ID: <20170223214516.733e1170@free-electrons.com>
+Date: Thu, 23 Feb 2017 21:46:09 +0100
+Subject: [Buildroot] [git commit] libimxvpuapi: bump to version 0.10.3
+Message-ID: <20170223204648.BF5B6818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3b1f2c7719da847c3a5f9b8f54225212cc399da2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Feb 2017 12:37:35 +0200, Baruch Siach wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/5b3/5b3fd6d4a7bdefadba89fdb53de4ba786f4df9e2/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/poco/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Because with libimxvpuapi older than 0.10.3, the gst1-imx-0.12.3 "imxvpu"
+plugin will not build.
 
-Applied to master, thanks.
+Changelog:
+* properly pass on color format in simplified JPEG encoder interface
+* add alternative write-callback-style encoding mode
+  also add encode example variant which uses write-callback style output
+* add support for "fake grayscale mode" in encoders
+  this is done by using I420 internally and filling the U and V planes
+  with 0x80 bytes
+* make sure JPEG quantization table is copied in standardized zig zag order
+  the VPU does not, so this has to be done explicitely
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libimxvpuapi/libimxvpuapi.hash | 2 +-
+ package/libimxvpuapi/libimxvpuapi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libimxvpuapi/libimxvpuapi.hash b/package/libimxvpuapi/libimxvpuapi.hash
+index c8cabcf..cd0c8f1 100644
+--- a/package/libimxvpuapi/libimxvpuapi.hash
++++ b/package/libimxvpuapi/libimxvpuapi.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 8e6dc4105db6164c0de72fd60eb73f4ba1632f7ba5052b1abc834b462b566da2  libimxvpuapi-0.10.2.tar.gz
++sha256 7151e10a24929935bada1d3d87626f17e411575b3a4ac0d86440999ad0100a55  libimxvpuapi-0.10.3.tar.gz
+diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
+index fde4429..d368d3d 100644
+--- a/package/libimxvpuapi/libimxvpuapi.mk
++++ b/package/libimxvpuapi/libimxvpuapi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIMXVPUAPI_VERSION = 0.10.2
++LIBIMXVPUAPI_VERSION = 0.10.3
+ LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
+ LIBIMXVPUAPI_LICENSE = LGPLv2.1+
+ LIBIMXVPUAPI_LICENSE_FILES = LICENSE
