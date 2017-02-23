@@ -1,54 +1,60 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Thu, 23 Feb 2017 11:54:55 +1100
-Subject: [Buildroot] [RFC PATCH 2/2] package/libvips: enable introspection
-In-Reply-To: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
-Message-ID: <bc187a133185f0bf07a8fe9368dee4ffb8c785d6.1487811280.git.sam.bobroff@au1.ibm.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 22 Feb 2017 21:43:39 -0500
+Subject: [Buildroot] [PATCH v2] libimxvpuapi: bump to version 0.10.3
+Message-ID: <1487817819-2928-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Demonstrate working gobject-introspection!
----
- package/libvips/Config.in  | 1 +
- package/libvips/libvips.mk | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Because with libimxvpuapi older than 0.10.3, the gst1-imx-0.12.3 "imxvpu"
+plugin will not build.
 
-diff --git a/package/libvips/Config.in b/package/libvips/Config.in
-index 87ada513d..4380f2d1a 100644
---- a/package/libvips/Config.in
-+++ b/package/libvips/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_LIBVIPS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_GOBJECT_INTROSPECTION
- 	help
- 	  libvips is a 2D image processing library. Compared to
- 	  similar libraries, libvips runs quickly and uses little
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 5f80b2d64..54af517f3 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
-@@ -23,7 +23,6 @@ endif
- LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)"
+Changelog:
+* properly pass on color format in simplified JPEG encoder interface
+* add alternative write-callback-style encoding mode
+  also add encode example variant which uses write-callback style output
+* add support for "fake grayscale mode" in encoders
+  this is done by using I420 internally and filling the U and V planes
+  with 0x80 bytes
+* make sure JPEG quantization table is copied in standardized zig zag order
+  the VPU does not, so this has to be done explicitely
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+
+---
+
+v1->v2
+- Tweak commit log per suggestions by Gary Bisson.
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/libimxvpuapi/libimxvpuapi.hash | 2 +-
+ package/libimxvpuapi/libimxvpuapi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libimxvpuapi/libimxvpuapi.hash b/package/libimxvpuapi/libimxvpuapi.hash
+index c8cabcf..cd0c8f1 100644
+--- a/package/libimxvpuapi/libimxvpuapi.hash
++++ b/package/libimxvpuapi/libimxvpuapi.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256 8e6dc4105db6164c0de72fd60eb73f4ba1632f7ba5052b1abc834b462b566da2  libimxvpuapi-0.10.2.tar.gz
++sha256 7151e10a24929935bada1d3d87626f17e411575b3a4ac0d86440999ad0100a55  libimxvpuapi-0.10.3.tar.gz
+diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
+index fde4429..d368d3d 100644
+--- a/package/libimxvpuapi/libimxvpuapi.mk
++++ b/package/libimxvpuapi/libimxvpuapi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LIBVIPS_CONF_OPTS = \
--	--disable-introspection \
- 	--without-dmalloc \
- 	--without-gsf \
- 	--without-magick \
-@@ -41,7 +40,8 @@ LIBVIPS_CONF_OPTS = \
- LIBVIPS_INSTALL_STAGING = YES
- LIBVIPS_DEPENDENCIES = \
- 	host-pkgconf libglib2 \
--	libxml2 $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+	libxml2 $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
-+	gobject-introspection
- 
- # --disable-cxx is broken upstream
- # https://github.com/jcupitt/libvips/issues/231
+-LIBIMXVPUAPI_VERSION = 0.10.2
++LIBIMXVPUAPI_VERSION = 0.10.3
+ LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
+ LIBIMXVPUAPI_LICENSE = LGPLv2.1+
+ LIBIMXVPUAPI_LICENSE_FILES = LICENSE
 -- 
-2.11.0
+2.7.4
