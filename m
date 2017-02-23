@@ -1,65 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Feb 2017 23:17:13 +0100
-Subject: [Buildroot] [PATCHv2] package/directfb: disable for static builds
-Message-ID: <1487888233-20523-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Feb 2017 23:39:05 +0100
+Subject: [Buildroot] libuv dependency in cmake ?
+Message-ID: <20170223233905.244d6c74@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DirectFB is written in C++, but can be linked to by a C library or
-program.
+Vicente,
 
-When doing shared link, this is fine because the linker gets help from
-the DT_NEEDED flags and knows what libraries to pull in during the link.
+In commit 1ffcf364b6e9894a876dc581a090f87685945412, you bumped cmake to
+3.7.0, and in the process added a dependency on libuv.
 
-However, during a static link, the linker does not get such help.
+However, our target cmake package only builds the ctest program, which
+apparently doesn't use the libuv library:
 
-Properly fixing this would require that there is support in pkg-config
-and autotools to specify that the C++ runtime must be linked. Alas there
-is no sush support. The only option is to add -lstdc++ to the
-Libs.Private field in directfb.pc. But this is not upstreamable, because
-there are other C++ runtimes in the wild (e.g. -lc++ from llvm/clang).
+$ readelf -d output/target/usr/bin/ctest 
 
-However, DirectFB in a static scenario is probably not a very common
-scenario.
+Dynamic section at offset 0x3684a4 contains 27 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libarchive.so.13]
+ 0x00000001 (NEEDED)                     Shared library: [libjsoncpp.so.11]
+ 0x00000001 (NEEDED)                     Shared library: [libcurl.so.4]
+ 0x00000001 (NEEDED)                     Shared library: [libstdc++.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
 
-Disable DirectFB for static builds.
+So it seems like we are building libuv for no reason. Is there
+something we can do about this?
 
-Fixes:
-    http://autobuild.buildroot.org/results/3d3/3d3036d40ddad71d872d910aae7a24975706d2e9/
-    http://autobuild.buildroot.org/results/d1c/d1c35a6003396942b584f2f2a5e8bf4ac2fbe370/
-    http://autobuild.buildroot.org/results/d45/d4504871bd47930e8363032d380cdfcc5bb8aee7/
-    [...]
+This is particularly annoying because I'm going to add a
+BR2_TOOLCHAIN_HAS_SYNC_4 dependency on BR2_PACKAGE_LIBUV, which I would
+have to propagate to the target cmake package for consistency... but
+actually it's useless because the target cmake package doesn't really
+use libuv.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/directfb/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+I've CC'ed Samuel, who knows the CMake build system quite well I believe.
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index b552164..6a3d718 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DIRECTFB
- 	bool "directfb"
-+	depends on !BR2_STATIC_LIBS # static link issues
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-@@ -161,7 +162,8 @@ config BR2_PACKAGE_DIRECTFB_TESTS
- 
- endif # BR2_PACKAGE_DIRECTFB
- 
--comment "directfb needs a glibc or uClibc toolchain w/ C++, NPTL, gcc >= 4.5"
-+comment "directfb needs a glibc or uClibc toolchain w/ C++, NPTL, gcc >= 4.5, dynamic library"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || BR2_TOOLCHAIN_USES_MUSL
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || BR2_TOOLCHAIN_USES_MUSL || \
-+		BR2_STATIC_LIBS
+Thanks,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
