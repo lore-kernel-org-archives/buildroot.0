@@ -1,44 +1,40 @@
-From: Taceant Omnes <taceant@gmail.com>
-Date: Thu, 23 Feb 2017 14:30:54 +0000
-Subject: [Buildroot] Ethernet not working with imx6ulevk
-Message-ID: <CAKkGsYK+WPvgH-SQ9L_cbBkjCOOXK9YE4ty6L5wQDhJOmYR==Q@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu, 23 Feb 2017 12:42:54 -0300 (BRT)
+Subject: [Buildroot] [git commit] util-linux: security bump to version
+ 2.29.2
+In-Reply-To: <20170223085742.C646982235@busybox.osuosl.org>
+References: <20170223085742.C646982235@busybox.osuosl.org>
+Message-ID: <595202195.11970979.1487864574446.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+> From: "Peter Korsgaard" <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Sent: Thursday, February 23, 2017 5:55:57 AM
+> Subject: [Buildroot] [git commit] util-linux: security bump to version 2.29.2
 
-Has anybody got Ethernet working with imx6ulevk?
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=a5015f1025a1aee173c2c2ab39ccac5ce38f30c3
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> From
+> https://www.kernel.org/pub/linux/utils/util-linux/v2.29/v2.29.2-ReleaseNotes
+> 
+> This release fixes su(1) security issue CVE-2017-2616:
+> 
+>  It is possible for any local user to send SIGKILL to other processes with root
+>  privileges.  To exploit this, the user must be able to perform su with a
+>  successful login.  SIGKILL can only be sent to processes which were executed
+>  after the su process.  It is not possible to send SIGKILL to processes which
+>  were already running.
 
-Some context. Ethernet does not work (out of the box) with the imx6ul
-evaluation kit.
+Should not this go to next too, since it is a security fix?
 
-# does not work
-$ uname -a
-Linux imx6ulevk 4.1.15-1.1.0+ga4d2a08 #1 SMP PREEMPT Fri Apr 1
-06:06:13 CST 2016 armv7l GNU/Linux
-
-I downloaded the most recent card image for this kit from the NXP
-website, and with it Ethernet works out of the box.
-
-# works for both Ethernet ports, though both have the same MAC
-address, which is odd.
-$ uname -a
-Linux imx6ulevk 4.1.15-2.0.1+gb63f3f5 #1 SMP PREEMPT Fri Nov 11
-03:52:53 CST 2016 armv7l armv7l armv7l GNU/Linux
-
-According to the SRC-4.1.15-2.0.1 file that comes in the NXP
-4.1.15-2.0.1 tar file, the kernel and u-boot versions (
-4.1.15_2.0.0_ga) are the same as those in the BR defconfig for this
-kit. One would expect BR to work.
-
-What I mean by ?Ethernet working? is that the ports state is down and
-I cannot make it go up, and DHCP fails.
-
-I looked at the BR 2017.02-rc2 defconfig and there are no changes as
-compared to the version I am using (2016.11.2) (except for the
-location of post-image.sh).
-
-Any ideas?
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
