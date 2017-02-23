@@ -1,210 +1,157 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Feb 2017 09:55:57 +0100
-Subject: [Buildroot] [git commit] util-linux: security bump to version 2.29.2
-Message-ID: <20170223085742.C646982235@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Feb 2017 10:18:20 +0100
+Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
+ package
+In-Reply-To: <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
+References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
+ <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20170223101820.127d5700@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5015f1025a1aee173c2c2ab39ccac5ce38f30c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-From https://www.kernel.org/pub/linux/utils/util-linux/v2.29/v2.29.2-ReleaseNotes
+On Thu, 23 Feb 2017 11:54:54 +1100, Sam Bobroff wrote:
+> Add gobject-introspection, built using host-qemu.
 
-This release fixes su(1) security issue CVE-2017-2616:
+Ouch, this is complicated dependency. Have you taken into account that
+it's only available for some architectures? Also there's the major
+issue of kernel headers version between host and target. See the
+comment in qemu.mk:
 
-  It is possible for any local user to send SIGKILL to other processes with root
-  privileges.  To exploit this, the user must be able to perform su with a
-  successful login.  SIGKILL can only be sent to processes which were executed
-  after the su process.  It is not possible to send SIGKILL to processes which
-  were already running.
+# The principle of qemu-user is that it emulates the instructions of
+# the target architecture when running the binary, and then when this
+# binary does a system call, it converts this system call into a
+# system call on the host machine. This mechanism makes an assumption:
+# that the target binary will not do system calls that do not exist on
+# the host. This basically requires that the target binary should be
+# built with kernel headers that are older or the same as the kernel
+# version running on the host machine.
 
-Drop upstream patches and autoreconf since it's no longer required.
+This makes using host-qemu user mode emulation very unpractical,
+because you must have target kernel headers older than the host kernel
+headers, which is frequently not true.
 
-[Peter: extend commit message with CVE info / description]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...mprove-detection-of-the-isnan-function-in.patch | 37 --------
- ...ix-disable-all-programs-enable-schedutils.patch | 99 ----------------------
- package/util-linux/util-linux.hash                 |  2 +-
- package/util-linux/util-linux.mk                   |  5 +-
- 4 files changed, 2 insertions(+), 141 deletions(-)
+> Also updates libglib2 to a more recent version to satasify a dependency.
 
-diff --git a/package/util-linux/0002-build-sys-improve-detection-of-the-isnan-function-in.patch b/package/util-linux/0002-build-sys-improve-detection-of-the-isnan-function-in.patch
-deleted file mode 100644
-index 5395104..0000000
---- a/package/util-linux/0002-build-sys-improve-detection-of-the-isnan-function-in.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 064a0445f33a67e5498d492dabe0dfc687859756 Mon Sep 17 00:00:00 2001
--From: Carlos Santos <casantos@datacom.ind.br>
--Date: Wed, 8 Feb 2017 09:29:30 -0200
--Subject: [PATCH] build-sys: improve detection of the "isnan" function in
-- uClibc
--
--Since commit beceb14b450ded6560ed743634a5e80604a8edf3, MATH_LIBS is set
--to "-lm" when the isnan function is detected. In uClibc, however, isnan
--is a macro that calls __isnan, __isnanf, or __isnanl, depending on the
--size of the argument (double, float or long double).
--
--Fixes:
--  http://autobuild.buildroot.net/results/2c2/2c29a78ed81ca844a87dcd076ab3e14ea080296d/
--  http://autobuild.buildroot.net/results/404/404b10f359b2ae8a7216729fa1bab37fed2d3d4c/
--
--Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-----
-- configure.ac | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index cc0563b..d03469c 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -428,7 +428,8 @@ AC_CHECK_FUNCS([reboot], [have_reboot=yes],[have_reboot=no])
-- AM_CONDITIONAL([HAVE_OPENAT], [test "x$have_openat" = xyes])
-- 
-- AC_CHECK_FUNCS([isnan], [],
---       [AC_CHECK_LIB([m], [isnan], [MATH_LIBS="-lm"])]
--+	[AC_CHECK_LIB([m], [isnan], [MATH_LIBS="-lm"])]
--+	[AC_CHECK_LIB([m], [__isnan], [MATH_LIBS="-lm"])]
-- )
-- AC_SUBST([MATH_LIBS])
-- 
---- 
--2.7.4
--
-diff --git a/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch b/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
-deleted file mode 100644
-index bf19e10..0000000
---- a/package/util-linux/0003-build-sys-fix-disable-all-programs-enable-schedutils.patch
-+++ /dev/null
-@@ -1,99 +0,0 @@
--From 6f2eb03433bcb2d3c351efed848a1f8554a7ff78 Mon Sep 17 00:00:00 2001
--From: Karel Zak <kzak@redhat.com>
--Date: Mon, 20 Feb 2017 14:17:37 +0100
--Subject: [PATCH] build-sys: fix --disable-all-programs --enable-schedutils
--
--* add UL_ENABLE_ALIAS(NAME, MASTERNAME) to initialize $enable_<name>
--  according to MASTERNAME. Note that we have to use $build_<mastername>,
--  the $enable_<mastername> is just AC_ARG_ENABLE() stuff only. The
--  $build_ is evaluated and modified by our UL_...() functions.
--
--* add enable-schedutils.conf to have build-system regression test for
--  this use-case
--
--Addresses: https://github.com/karelzak/util-linux/issues/415
--Signed-off-by: Karel Zak <kzak@redhat.com>
-----
-- configure.ac                              | 14 ++++++++------
-- m4/ul.m4                                  | 15 +++++++++++++++
-- tools/config-gen.d/enable-schedutils.conf |  3 +++
-- 3 files changed, 26 insertions(+), 6 deletions(-)
-- create mode 100644 tools/config-gen.d/enable-schedutils.conf
--
--diff --git a/configure.ac b/configure.ac
--index ad241fe..be282f0 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1909,8 +1909,9 @@ AC_ARG_ENABLE([schedutils],
-- )
-- UL_BUILD_INIT([schedutils])
-- 
---UL_BUILD_INIT([ionice], [check])
---UL_REQUIRES_BUILD([ionice], [schedutils])
--+
--+UL_ENABLE_ALIAS([ionice], [schedutils])
--+UL_BUILD_INIT([ionice])
-- UL_REQUIRES_SYSCALL_CHECK([ionice],
-- 	[UL_CHECK_SYSCALL([ioprio_set],
-- 	  [alpha],	[442],
--@@ -1937,8 +1938,9 @@ UL_REQUIRES_SYSCALL_CHECK([ionice],
-- 
-- AM_CONDITIONAL([BUILD_IONICE], [test "x$build_ionice" = xyes])
-- 
---UL_BUILD_INIT([taskset], [check])
---UL_REQUIRES_BUILD([taskset], [schedutils])
--+
--+UL_ENABLE_ALIAS([taskset], [schedutils])
--+UL_BUILD_INIT([taskset])
-- UL_REQUIRES_HAVE([taskset], [cpu_set_t], [cpu_set_t type])
-- UL_REQUIRES_SYSCALL_CHECK([taskset],
-- 	[UL_CHECK_SYSCALL([sched_getaffinity])],
--@@ -1950,8 +1952,8 @@ have_schedsetter=no
-- AS_IF([test "x$ac_cv_func_sched_setscheduler" = xyes], [have_schedsetter=yes],
--       [test "x$ac_cv_func_sched_setattr" = xyes], [have_schedsetter=yes])
-- 
---UL_BUILD_INIT([chrt], [check])
---UL_REQUIRES_BUILD([chrt], [schedutils])
--+UL_ENABLE_ALIAS([chrt], [schedutils])
--+UL_BUILD_INIT([chrt])
-- UL_REQUIRES_HAVE([chrt], [schedsetter], [sched_set functions])
-- AM_CONDITIONAL([BUILD_CHRT], [test "x$build_chrt" = xyes])
-- 
--diff --git a/m4/ul.m4 b/m4/ul.m4
--index f8a0dd7..ed7227c 100644
----- a/m4/ul.m4
--+++ b/m4/ul.m4
--@@ -429,6 +429,21 @@ AC_DEFUN([UL_DEFAULT_ENABLE], [
--   fi
-- ])
-- 
--+
--+dnl UL_ENABLE_ALIAS(NAME, MASTERNAME)
--+dnl
--+dnl Initializes $enable_<name> variable according to $build_<mastername>.  This
--+dnl is usefull for example if you want to use one --enable-mastername option
--+dnl for group of programs.
--+dnl
--+AC_DEFUN([UL_ENABLE_ALIAS], [
--+  m4_define([suffix], $1)
--+  m4_define([mastersuffix], $2)
--+
--+  enable_[]suffix=$build_[]mastersuffix
--+])
--+
--+
-- dnl UL_NCURSES_CHECK(NAME)
-- dnl
-- dnl Initializes $have_<name>, NCURSES_LIBS and NCURSES_CFLAGS variables according to
--diff --git a/tools/config-gen.d/enable-schedutils.conf b/tools/config-gen.d/enable-schedutils.conf
--new file mode 100644
--index 0000000..08deee4
----- /dev/null
--+++ b/tools/config-gen.d/enable-schedutils.conf
--@@ -0,0 +1,3 @@
--+include:disable-all.conf
--+
--+--enable-schedutils
---- 
--2.7.4
--
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index ec6cc8e..71b4982 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/util-linux/v2.29/sha256sums.asc
--sha256 0ce40600b934ec2fecfa6bfc4efe6982d051ba96c2832b05201347aec582f54f  util-linux-2.29.1.tar.xz
-+sha256 accea4d678209f97f634f40a93b7e9fcad5915d1f4749f6c47bee6bf110fe8e3  util-linux-2.29.2.tar.xz
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index f991b44..0fc46d4 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -5,13 +5,10 @@
- ################################################################################
- 
- UTIL_LINUX_VERSION_MAJOR = 2.29
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
--# Required because of the patches for configure.ac.
--UTIL_LINUX_AUTORECONF = YES
--
- # README.licensing claims that some files are GPLv2-only, but this is not true.
- # Some files are GPLv3+ but only in tests.
- UTIL_LINUX_LICENSE = GPLv2+, BSD-4c, LGPLv2.1+ (libblkid, libfdisk, libmount), BSD-3c (libuuid)
+Which dependency?
+
+Your SoB line is missing.
+
+> diff --git a/package/gobject-introspection/0001-ldd-cross-launcher.patch b/package/gobject-introspection/0001-ldd-cross-launcher.patch
+> new file mode 100644
+> index 000000000..9129431cb
+> --- /dev/null
+> +++ b/package/gobject-introspection/0001-ldd-cross-launcher.patch
+> @@ -0,0 +1,22 @@
+> +*** a/giscanner/shlibs.py	2016-06-01 13:42:52.559661299 +1000
+> +--- b/giscanner/shlibs.py	2016-06-01 13:44:43.028025807 +1000
+> +***************
+> +*** 103,109 ****
+> +          if platform_system == 'Darwin':
+> +              args.extend(['otool', '-L', binary.args[0]])
+> +          else:
+> +!             args.extend(['ldd', binary.args[0]])
+> +          proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+> +          patterns = {}
+> +          for library in libraries:
+> +--- 103,112 ----
+> +          if platform_system == 'Darwin':
+> +              args.extend(['otool', '-L', binary.args[0]])
+> +          else:
+> +!             ldd = os.getenv('GI_LDD')
+> +!             if not ldd:
+> +!                 ldd = 'ldd'
+> +!             args.extend([ldd, binary.args[0]])
+> +          proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+> +          patterns = {}
+> +          for library in libraries:
+
+Please use "diff -u" to generate patches. And more precisely, for
+projects using Git as their version control system, we want a Git
+formatted patch, i.e the result of "git format-patch".
+
+> diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+> new file mode 100644
+> index 000000000..253c20b30
+> --- /dev/null
+> +++ b/package/gobject-introspection/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_GOBJECT_INTROSPECTION
+> +    bool "gobject-introspection"
+
+Indentation with tabs.
+
+> +    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_3 # ldd
+
+Not sure to see the relationship between ldd, which is provided by the
+C library, and the version of the compiler.
+
+> +    select BR2_PACKAGE_HOST_QEMU
+> +    select BR2_PACKAGE_PKGCONF
+
+You really need pkgconf on the target? Seems unlikely.
+
+> +    select BR2_PACKAGE_LIBGLIB2
+> +    select BR2_PACKAGE_PYTHON
+> +
+
+Unneeded empty line.
+
+> +    help
+> +      gobject-introspection
+
+We want a better description here.
+
+> +
+> +      http://wiki.gnome.org/
+
+And a better upstream URL here.
+
+> +GOBJECT_INTROSPECTION_VERSION         = 1.51.1
+
+Only one space before and after '=' sign.
+
+> +GOBJECT_INTROSPECTION_SITE            = $(call github,GNOME,gobject-introspection,$(GOBJECT_INTROSPECTION_VERSION))
+
+Not tarball releases?
+
+> +GOBJECT_INTROSPECTION_LICENSE         = GPLv2+ LGPLv2.1
+
+Licenses should be comma separated, and you should preferably indicate
+what is under LGPLv2.1 and what is under GPLv2+.
+
+> +GOBJECT_INTROSPECTION_LICENSE_FILES   = COPYING COPYING.GPL COPYING.LGPL COPYING.lib COPYING.tools
+> +GOBJECT_INTROSPECTION_INSTALL_STAGING = YES
+> +GOBJECT_INTROSPECTION_MAKE_OPTS       = GI_CROSS_LAUNCHER="$(HOST_DIR)/usr/bin/qemu-$(HOST_QEMU_ARCH)" GI_LDD=$(STAGING_DIR)/usr/bin/ldd-cross INTROSPECTION_SCANNER=g-ir-scanner INTROSPECTION_COMPILER=g-ir-compiler
+
+Please split long lines.
+
+> +GOBJECT_INTROSPECTION_DEPENDENCIES    = pkgconf python libglib2 host-qemu host-gobject-introspection
+> +HOST_GOBJECT_INTROSPECTION_DEPENDENCIES = host-pkgconf host-python host-libglib2 toolchain
+> +
+> +define GOBJECT_INTROSPECTION_BOOTSTRAP
+> +	cd $(GOBJECT_INTROSPECTION_DIR) && env NOCONFIGURE=1 ./autogen.sh --host=$(GNU_TARGET_NAME)
+
+Please use <pkg>_AUTORECONF = YES. What you did is not correct because
+you will use autoconf/automake from the host machine instead of ones
+built by Buildroot.
+
+[... I did not yet review the rest of the .mk file....]
+
+> -LIBGLIB2_VERSION_MAJOR = 2.50
+> -LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
+> +LIBGLIB2_VERSION_MAJOR = 2.51
+
+This is a development/unstable version, so we typically don't package it in Buildroot.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
