@@ -1,59 +1,47 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 23 Feb 2017 19:32:21 +0100
-Subject: [Buildroot] [PATCH] poco: disable for or1k, not supported
-In-Reply-To: <20170223182152.GA14039@waldemar-brodkorb.de>
-References: <20170223182152.GA14039@waldemar-brodkorb.de>
-Message-ID: <20170223183221.GC12810@waldemar-brodkorb.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 23 Feb 2017 15:55:20 -0300
+Subject: [Buildroot] [PATCH master 0/9] Gstreamer security bump
+Message-ID: <20170223185529.14129-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The latest gstreamer release fixes security bugs in at least gst-libav,
+gst1-plugins-bad and gst1-plugins-ugly.
+However for consistency commiting the whole series would be recommended.
 
-drop this, haven't seen Baruch's patch :/
+Gustavo Zacarias (9):
+  gstreamer1: bump to version 1.10.4
+  gst1-plugins-base: bump to version 1.10.4
+  gst1-plugins-good: bump to version 1.10.4
+  gst1-plugins-bad: security bump to version 1.10.4
+  gst1-plugins-ugly: security bump to version 1.10.4
+  gst1-libav: security bump to version 1.10.4
+  gst1-rtsp-server: bump to version 1.10.4
+  gst1-validate: bump to version 1.10.4
+  gst-omx: bump to version 1.10.4
 
-Note to myself, first check mailinglist, then start looking into
-autobuild errors ;)
+ package/gstreamer1/gst-omx/gst-omx.hash                     | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk                       | 2 +-
+ package/gstreamer1/gst1-libav/gst1-libav.hash               | 4 ++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk                 | 2 +-
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash   | 4 ++--
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk     | 2 +-
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash   | 4 ++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk     | 2 +-
+ package/gstreamer1/gst1-validate/gst1-validate.hash         | 4 ++--
+ package/gstreamer1/gst1-validate/gst1-validate.mk           | 2 +-
+ package/gstreamer1/gstreamer1/gstreamer1.hash               | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk                 | 2 +-
+ 18 files changed, 27 insertions(+), 27 deletions(-)
 
-best regards
- Waldemar
-
-Waldemar Brodkorb wrote,
-
-> Fixes:
->   http://autobuild.buildroot.net/results/5b3fd6d4a7bdefadba89fdb53de4ba786f4df9e2
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/poco/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/poco/Config.in b/package/poco/Config.in
-> index dfdc8d1..b3b247f 100644
-> --- a/package/poco/Config.in
-> +++ b/package/poco/Config.in
-> @@ -5,7 +5,7 @@ config BR2_PACKAGE_POCO
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on !BR2_STATIC_LIBS # dlopen()
->  	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
-> -		|| BR2_xtensa)
-> +		|| BR2_or1k || BR2_xtensa)
->  	select BR2_PACKAGE_ZLIB
->  	select BR2_PACKAGE_PCRE
->  	help
-> @@ -65,4 +65,4 @@ comment "poco needs a toolchain w/ wchar, threads, C++, dynamic library"
->  	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
->  		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
->  	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
-> -		|| BR2_xtensa)
-> +		|| BR2_or1k || BR2_xtensa)
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+2.10.2
