@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 22:52:06 +0100
-Subject: [Buildroot] [PATCH] package/sslh: fix a patch, drop the other
-In-Reply-To: <1487886188-29023-1-git-send-email-yann.morin.1998@free.fr>
-References: <1487886188-29023-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170223225206.05bfc774@free-electrons.com>
+Date: Thu, 23 Feb 2017 22:53:28 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-good: bump to version 1.10.4
+Message-ID: <20170223215424.2F58182257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=268a8bab9e8c92dbbdd42bbffca83e85ab59ef17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Feb 2017 22:43:08 +0100, Yann E. MORIN wrote:
-> It turned out that the troll character U+c2a0 was added by our own
-> patch.
-> 
-> So fix it amd drop our second patch.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  ...ecure-version-while-building-sslh-in-a-larger-git-t.patch |  4 +++-
->  package/sslh/0002-replace-U+c2a0.patch                       | 12 ------------
->  2 files changed, 3 insertions(+), 13 deletions(-)
->  delete mode 100644 package/sslh/0002-replace-U+c2a0.patch
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 90578a2..21ee18d 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.10.3.tar.xz.sha256sum
+-sha256 4e07e93e34d4b93208f1579c21e7d91a236577b36f128a5332ffee85b4465955  gst-plugins-good-1.10.3.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.10.4.tar.xz.sha256sum
++sha256 8a86c61434a8c44665365bd0b3557a040937d1f44bf69caee4e9ea816ce74d7e  gst-plugins-good-1.10.4.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 6fe9221..e25149a 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_GOOD_VERSION = 1.10.3
++GST1_PLUGINS_GOOD_VERSION = 1.10.4
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
