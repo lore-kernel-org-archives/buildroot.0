@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 23 Feb 2017 15:55:24 -0300
-Subject: [Buildroot] [PATCH master 4/9] gst1-plugins-bad: security bump to
+Date: Thu, 23 Feb 2017 15:55:25 -0300
+Subject: [Buildroot] [PATCH master 5/9] gst1-plugins-ugly: security bump to
 	version 1.10.4
 In-Reply-To: <20170223185529.14129-1-gustavo@zacarias.com.ar>
 References: <20170223185529.14129-1-gustavo@zacarias.com.ar>
-Message-ID: <20170223185529.14129-5-gustavo@zacarias.com.ar>
+Message-ID: <20170223185529.14129-6-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-CVE-2017-5848 - The gst_ps_demux_parse_psm function in
-gst/mpegdemux/gstmpegdemux.c in gst-plugins-bad in GStreamer allows
-remote attackers to cause a denial of service (invalid memory read and
-crash) via vectors involving PSM parsing.
+CVE-2017-5847 - The gst_asf_demux_process_ext_content_desc function in
+gst/asfdemux/gstasfdemux.c in gst-plugins-ugly in GStreamer allows remote
+attackers to cause a denial of service (out-of-bounds heap read) via vectors
+involving extended content descriptors.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-index 2d0f913..441afa2 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index 6b4f0c7..9567d9c 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.10.3.tar.xz.sha256sum
--sha256 24099351fb6984c9e7560de06e072ff2e33d0b2db38b8fcc7afefb536e5094e7  gst-plugins-bad-1.10.3.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.10.4.tar.xz.sha256sum
-+sha256 23ddae506b3a223b94869a0d3eea3e9a12e847f94d2d0e0b97102ce13ecd6966  gst-plugins-bad-1.10.4.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index b96bfe9..00add02 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.10.3.tar.xz.sha256sum
+-sha256 c91597d03abff9df435ad4892eae44df1ee14159c7cc7317ac9d2766ff446bd2  gst-plugins-ugly-1.10.3.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.10.4.tar.xz.sha256sum
++sha256 6386c77ca8459cba431ed0b63da780c7062c7cc48055d222024d8eaf198ffa59  gst-plugins-ugly-1.10.4.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 2f68145..d503555 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BAD_VERSION = 1.10.3
-+GST1_PLUGINS_BAD_VERSION = 1.10.4
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+-GST1_PLUGINS_UGLY_VERSION = 1.10.3
++GST1_PLUGINS_UGLY_VERSION = 1.10.4
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
 -- 
 2.10.2
