@@ -1,40 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Feb 2017 22:15:00 +0100
-Subject: [Buildroot] [git commit] madplay: workaround not needed anymore
-Message-ID: <20170301170423.612D380279@busybox.osuosl.org>
+Date: Thu, 23 Feb 2017 22:18:22 +0100
+Subject: [Buildroot] [git commit] package/turbolua: bump version to v2.1.0
+Message-ID: <20170301170423.C22AE7FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e36f0881bd8aa4b3889c9b68b2976ca873603b20
+commit: https://git.buildroot.net/buildroot/commit/?id=81ea69036e92825e6de633fd373f5963b0bd2f54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patches for uClibc-ng are upstream and added to buildroot.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Wojciech Nizinski <niziak@spox.org>
+[Thomas: use the v2.1.0 tag rather than a full commit sha1.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/madplay/madplay.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ package/turbolua/turbolua.hash | 2 +-
+ package/turbolua/turbolua.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
-index 6b13819..2606ac8 100644
---- a/package/madplay/madplay.mk
-+++ b/package/madplay/madplay.mk
-@@ -11,14 +11,6 @@ MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
- MADPLAY_LIBTOOL_PATCH = NO
- MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
+diff --git a/package/turbolua/turbolua.hash b/package/turbolua/turbolua.hash
+index d460b4f..dc718f8 100644
+--- a/package/turbolua/turbolua.hash
++++ b/package/turbolua/turbolua.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 bff771b6a670f764366eff50e1644f1c5d8d526324e0b6adfda42d9f69791833 turbolua-6fbc5cbfed1cc8c3820d4c1bfb55258c764040f0.tar.gz
++sha256 8b810aa531fcaf05020531fe904d449742fd0da85c31e925a7efa9816d1f8f88 turbolua-v2.1.0.tar.gz
+diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
+index bf9e27f..49877fa 100644
+--- a/package/turbolua/turbolua.mk
++++ b/package/turbolua/turbolua.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Workaround a bug in uClibc-ng, which exposes madvise() but doesn't
--# provide the corresponding MADV_* definitions. Bug reported at
--# http://mailman.uclibc-ng.org/pipermail/devel/2016-December/001306.html. madvise()
--# is anyway useless on noMMU.
--ifeq ($(BR2_USE_MMU),)
--MADPLAY_CONF_ENV += ac_cv_func_madvise=no
--endif
--
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
- ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+-TURBOLUA_VERSION = 6fbc5cbfed1cc8c3820d4c1bfb55258c764040f0
++TURBOLUA_VERSION = v2.1.0
+ TURBOLUA_SITE = $(call github,kernelsauce,turbo,$(TURBOLUA_VERSION))
+ TURBOLUA_DEPENDENCIES = luajit
+ TURBOLUA_LICENSE = Apache-2.0
