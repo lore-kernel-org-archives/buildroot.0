@@ -1,45 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 10:19:37 +0100
-Subject: [Buildroot] [RFC PATCH 2/2] package/libvips: enable
- introspection
-In-Reply-To: <bc187a133185f0bf07a8fe9368dee4ffb8c785d6.1487811280.git.sam.bobroff@au1.ibm.com>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
- <bc187a133185f0bf07a8fe9368dee4ffb8c785d6.1487811280.git.sam.bobroff@au1.ibm.com>
-Message-ID: <20170223101937.5e705932@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 23 Feb 2017 12:37:35 +0200
+Subject: [Buildroot] [PATCH] poco: doesn't support openrisc
+Message-ID: <22bb5cb1c7427067810ea1b834475fe482c0d799.1487846255.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+http://autobuild.buildroot.net/results/5b3/5b3fd6d4a7bdefadba89fdb53de4ba786f4df9e2/
 
-On Thu, 23 Feb 2017 11:54:55 +1100, Sam Bobroff wrote:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/poco/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> diff --git a/package/libvips/Config.in b/package/libvips/Config.in
-> index 87ada513d..4380f2d1a 100644
-> --- a/package/libvips/Config.in
-> +++ b/package/libvips/Config.in
-> @@ -9,6 +9,7 @@ config BR2_PACKAGE_LIBVIPS
->  	select BR2_PACKAGE_LIBGLIB2
->  	select BR2_PACKAGE_LIBXML2
->  	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-> +	select BR2_PACKAGE_GOBJECT_INTROSPECTION
-
-Clearly, seeing how gobject-introspection is complicated and brings
-build dependencies, we want to keep this optional. So please do just:
-
-ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-LIBVIPS_CONF_OPTS += --enable-introspection
-LIBVIPS_DEPENDENCIES += gobject-introspection
-else
-LIBVIPS_CONF_OPTS += --disable-introspection
-endif
-
-Thanks,
-
-Thomas
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index dfdc8d17c394..b3b247f906ba 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_POCO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+ 	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
+-		|| BR2_xtensa)
++		|| BR2_or1k || BR2_xtensa)
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_PCRE
+ 	help
+@@ -65,4 +65,4 @@ comment "poco needs a toolchain w/ wchar, threads, C++, dynamic library"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
+-		|| BR2_xtensa)
++		|| BR2_or1k || BR2_xtensa)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
