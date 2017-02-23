@@ -1,55 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Feb 2017 21:56:16 +0100
-Subject: [Buildroot] [PATCH] package/sslh: fix script,
- does not build in parallel
-In-Reply-To: <20170223215215.5e201a82@free-electrons.com>
-References: <1487711542-31294-1-git-send-email-yann.morin.1998@free.fr>
- <20170223215215.5e201a82@free-electrons.com>
-Message-ID: <20170223205615.GE3910@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Feb 2017 22:01:41 +0100
+Subject: [Buildroot] [git commit] qt5webkit: disable for MIPS soft-float
+Message-ID: <20170223210231.D4ADA82219@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d2f7b4f8883a5a837fb1d23a1da2fe662a0c0e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-02-23 21:52 +0100, Thomas Petazzoni spake thusly:
-> On Tue, 21 Feb 2017 22:12:22 +0100, Yann E. MORIN wrote:
-> > The Makefile is not parallel-safe, so we build with MAKE1. Since the
-> > source is very small, this has minor impact on perforance.
-> > 
-> > The genver.sh script conaains a troll character U+c2a0 (non-break space)
-> > which is refused by some versions of /bin/sh. Patch it away.
-> > 
-> > Fixes:
-> >     http://autobuild.buildroot.net/results/867/867c74ed74fd04ab06d1a10ff34ca177fe005fd2/
-> >     http://autobuild.buildroot.net/results/f97/f971629bc99147f9014e52c6ef71c3417faa6b67/
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: David Bachelart <david.bachelart@bbright.com>
-> > ---
-> >  package/sslh/0002-replace-U+c2a0.patch | 12 ++++++++++++
-> >  package/sslh/sslh.mk                   |  2 +-
-> >  2 files changed, 13 insertions(+), 1 deletion(-)
-> >  create mode 100644 package/sslh/0002-replace-U+c2a0.patch
-> 
-> Applied to master after fixing the typoes, thanks!
+It assumes the MIPS target has an FPU and uses FPU assembler
+instructions which cause the compilation to fail when building it for
+soft-float.
 
-Thanks!
+Fixes:
+  http://autobuild.buildroot.net/results/f40/f407ca9245e2445619420a9dfd595856729a2b2b/
 
-> Did you submit the
-> patch to the upstream project, and report the parallel build issue?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Thomas:
+ - propagate dependency to Config.in comment
+ - add comment above the "depends on" to explain why.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt-webkit-kiosk/Config.in | 1 +
+ package/qt5/qt5webkit/Config.in   | 3 +++
+ 2 files changed, 4 insertions(+)
 
-I was about to do that, yes.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
+index 32952d7..1b0e0de 100644
+--- a/package/qt-webkit-kiosk/Config.in
++++ b/package/qt-webkit-kiosk/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
+ 	depends on !BR2_STATIC_LIBS # qt5webkit
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5webkit
+ 	depends on !BR2_BINFMT_FLAT # qt5webkit
++	depends on !BR2_MIPS_SOFT_FLOAT # qt5webkit
+ 	help
+ 	  Simple kiosk-mode browser powered by Qt5Webkit
+ 
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index e9c11fb..2534360 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -9,6 +9,8 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	depends on !BR2_BINFMT_FLAT # icu
++	# assumes a FPU is available on MIPS
++	depends on !BR2_MIPS_SOFT_FLOAT
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+@@ -28,3 +30,4 @@ comment "qt5webkit needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	depends on !BR2_BINFMT_FLAT
++	depends on !BR2_MIPS_SOFT_FLOAT
