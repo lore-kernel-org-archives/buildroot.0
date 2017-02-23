@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Feb 2017 18:00:27 +0100
-Subject: [Buildroot] [PATCH 05/25] lpty: remove LPTY_VERSION_UPSTREAM
+Date: Thu, 23 Feb 2017 18:00:29 +0100
+Subject: [Buildroot] [PATCH 07/25] luasec: remove LUASEC_VERSION_UPSTREAM
 In-Reply-To: <20170223170047.24417-1-arnout@mind.be>
 References: <20170223170047.24417-1-arnout@mind.be>
-Message-ID: <20170223170047.24417-6-arnout@mind.be>
+Message-ID: <20170223170047.24417-8-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,24 @@ To: buildroot@busybox.net
 
 It is not used for anything.
 
-Note that the SUBDIR is NOT the usual lpty-$(LPTY_VERSION_UPSTREAM);
-it *does* have the rockspec version in its name.
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lpty/lpty.mk | 3 +--
+ package/luasec/luasec.mk | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/lpty/lpty.mk b/package/lpty/lpty.mk
-index 963ab61103..5a691256c1 100644
---- a/package/lpty/lpty.mk
-+++ b/package/lpty/lpty.mk
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index fd1f1cdbb7..b059e1c6ee 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
 @@ -4,8 +4,7 @@
  #
  ################################################################################
  
--LPTY_VERSION_UPSTREAM = 1.0.1
--LPTY_VERSION = $(LPTY_VERSION_UPSTREAM)-1
-+LPTY_VERSION = 1.0.1-1
- LPTY_SUBDIR = lpty-$(LPTY_VERSION)
- LPTY_LICENSE = MIT
- LPTY_LICENSE_FILES = $(LPTY_SUBDIR)/doc/LICENSE
+-LUASEC_VERSION_UPSTREAM = 0.5
+-LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-2
++LUASEC_VERSION = 0.5-2
+ LUASEC_SUBDIR = luasec
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
 -- 
 2.11.0
