@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 09:17:59 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-02-20
-In-Reply-To: <20170222213900.4ba95a1f@gmx.net>
-References: <20170221072902.80C59207F9@mail.free-electrons.com>
- <20170222213900.4ba95a1f@gmx.net>
-Message-ID: <20170223091759.3b1cd434@free-electrons.com>
+Date: Thu, 23 Feb 2017 09:43:42 +0100
+Subject: [Buildroot] [PATCH] ncurses: remove
+ BR2_PACKAGE_NCURSES_TARGET_{FORM, MENU, PANEL} options
+In-Reply-To: <20170222211702.GB3569@free.fr>
+References: <1487713193-3469-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20170222211702.GB3569@free.fr>
+Message-ID: <20170223094342.2072de65@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +14,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Feb 2017 21:39:00 +0100, Peter Seiderer wrote:
-> On Tue, 21 Feb 2017 08:29:02 +0100 (CET), Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> >        sparc |                  libv4l-1.12.2 | NOK | http://autobuild.buildroot.net/results/3f13042565df20087e007949f653942c0462e334  
-> 
-> 
-> From build-end.log:
-> 
->   CXXLD    qv4l2
-> 
-> qv4l2-qv4l2.o: In function `QtPrivate::RefCount::deref()':
-> qv4l2.cpp:(.text._ZN9QtPrivate8RefCount5derefEv[_ZN9QtPrivate8RefCount5derefEv]+0x24): undefined reference to `__sync_fetch_and_add_4'
-> qv4l2-qv4l2.o: In function `QString::QString(QString const&)':
-> qv4l2.cpp:(.text._ZN7QStringC2ERKS_[_ZN7QStringC5ERKS_]+0x54): undefined reference to `__sync_fetch_and_add_4'
-> qv4l2-vbi-tab.o: In function `QtPrivate::RefCount::ref()':
-> vbi-tab.cpp:(.text._ZN9QtPrivate8RefCount3refEv[_ZN9QtPrivate8RefCount3refEv]+0x24): undefined reference to `__sync_fetch_and_add_4'
+On Wed, 22 Feb 2017 22:17:02 +0100, Yann E. MORIN wrote:
 
-This normally indicates that a dependency on BR2_TOOLCHAIN_HAS_SYNC_4
-is missing.
+> Impressive xommit log. Great! :-)
 
-> This can be fixed by adding the following two lines to package/libv4l/libv4l.mk:
+Thanks!
+
+> >  NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
+> >  NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
+> > +NCURSES_POST_INSTALL_TARGET_HOOKS += NCURSES_LINK_TARGET_LIBS  
 > 
-> LIBV4L_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++0x"
-> LIBV4L_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
+> Would do you need to create the symlinks in target/ ?
+> 
+> When a program (or lib) is linked to a library, its DT_SONAME is used,
+> not the filename.
+> 
+> So if you have this chain of symlink, with the last element being an
+> actual file:
+> 
+>     libform.so -> libformw.so -> libformw.so.6 -> libformw.so.6.0
+> 
+> Then 'ld -lform' will in fact use the file libformw.so.6.0, extract its
+> DT_SONAME, and use that as a DT_NEEDED in the executable.
+> 
+> In this case, the DT_SONAME is libformw.so.6
 
-Hum, so using gnu++0x forces to use __atomic built-ins instead of
-__sync built-ins ?
+Hum, that's right. Those symlinks are not needd. They were here before,
+so I just kept them, but you are indeed right.
+
+> Ditto the syminks about the static libs: they are totally useless in
+> target/
+
+Well, static libs are not installed at all on the target, so indeed,
+symlinks are useless.
+
+Thanks,
 
 Thomas
 -- 
