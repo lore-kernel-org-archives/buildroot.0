@@ -1,90 +1,44 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Thu, 23 Feb 2017 14:44:13 +0100
-Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
-	package
-In-Reply-To: <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
- <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
-Message-ID: <20107548.7MX6vXLLbF@sagittae>
+From: Taceant Omnes <taceant@gmail.com>
+Date: Thu, 23 Feb 2017 14:30:54 +0000
+Subject: [Buildroot] Ethernet not working with imx6ulevk
+Message-ID: <CAKkGsYK+WPvgH-SQ9L_cbBkjCOOXK9YE4ty6L5wQDhJOmYR==Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sam,
+Hi all,
 
-On Thursday 23 February 2017 11:54:54 CET Sam Bobroff wrote:
-[...]
-> diff --git a/package/gobject-introspection/create-ldd-cross.sh b/package/
-gobject-introspection/create-ldd-cross.sh
-> new file mode 100755
-> index 000000000..58d4281e8
-> --- /dev/null
-> +++ b/package/gobject-introspection/create-ldd-cross.sh
-> @@ -0,0 +1,46 @@
-> +#!/bin/bash
-> +set -e
-> +
-> +if [ $# -ne 2 ]; then
-> +	echo "Usage: <full qemu path> <staging dir>"
-> +	exit 2
-> +fi
-> +
-> +QEMU="$1"
-> +STAGING_DIR="$2"
-> +OUT="$STAGING_DIR/usr/bin/ldd-cross"
-> +cat > "$OUT"<<'EOF'
-> +#! /bin/bash
-> +
-> +set -e
-> +
-> +EOF
-> +echo "QEMU=\"$QEMU\"" >> "$OUT"
-> +eval "$(grep ^RTLDLIST= $STAGING_DIR/usr/bin/ldd)"
-> +
-> +echo -n 'RTLDLIST="' >> "$OUT"
-> +for RTLD in $RTLDLIST; do
-> +	echo -n "$STAGING_DIR$RTLD " >> "$OUT"
-> +done
-> +echo '"' >> "$OUT"
-> +echo >> "$OUT"
-> +
-> +cat >> "$OUT"<<'EOF'
-> +for file do
-> +  case $file in
-> +  */*) :
-> +       ;;
-> +  *) file=./$file
-> +     ;;
-> +  esac
-> +  for RTLD in ${RTLDLIST}; do
-> +    if test -x $RTLD; then
-> +      "$QEMU" "$RTLD" --list "$file"
+Has anybody got Ethernet working with imx6ulevk?
 
-Why do not call directly ldd? It does not give same result?
+Some context. Ethernet does not work (out of the box) with the imx6ul
+evaluation kit.
 
-In add, do uclibc and musl provide ldd?
+# does not work
+$ uname -a
+Linux imx6ulevk 4.1.15-1.1.0+ga4d2a08 #1 SMP PREEMPT Fri Apr 1
+06:06:13 CST 2016 armv7l GNU/Linux
 
-If you are looking for a cross-ldd, you can take a look to this script:
+I downloaded the most recent card image for this kit from the NXP
+website, and with it Ethernet works out of the box.
 
-  https://gist.github.com/jerome-pouiller/c403786c1394f53f44a3b61214489e6f
+# works for both Ethernet ports, though both have the same MAC
+address, which is odd.
+$ uname -a
+Linux imx6ulevk 4.1.15-2.0.1+gb63f3f5 #1 SMP PREEMPT Fri Nov 11
+03:52:53 CST 2016 armv7l armv7l armv7l GNU/Linux
 
-It come from crosstool-ng project (and written by Yann Morin).
+According to the SRC-4.1.15-2.0.1 file that comes in the NXP
+4.1.15-2.0.1 tar file, the kernel and u-boot versions (
+4.1.15_2.0.0_ga) are the same as those in the BR defconfig for this
+kit. One would expect BR to work.
 
-You may also have noticed that Yocto use "prelink"[1]. However, it seems 
-overkill for our usage.
+What I mean by ?Ethernet working? is that the ports state is down and
+I cannot make it go up, and DHCP fails.
 
-[1] http://git.yoctoproject.org/cgit/cgit.cgi/prelink-cross/
+I looked at the BR 2017.02-rc2 defconfig and there are no changes as
+compared to the version I am using (2016.11.2) (except for the
+location of post-image.sh).
 
-
-> +    fi
-> +  done
-> +done
-> +EOF
-
-
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Any ideas?
