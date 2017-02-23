@@ -1,63 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 21:50:38 +0100
-Subject: [Buildroot] [git commit] package/sslh: fix script,
-	does not build in parallel
-Message-ID: <20170223205107.7AEB27FB30@busybox.osuosl.org>
+Date: Thu, 23 Feb 2017 21:52:15 +0100
+Subject: [Buildroot] [PATCH] package/sslh: fix script,
+ does not build in parallel
+In-Reply-To: <1487711542-31294-1-git-send-email-yann.morin.1998@free.fr>
+References: <1487711542-31294-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170223215215.5e201a82@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d436ac5a6271ed08774c7110e4569c6b4484c4e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The Makefile is not parallel-safe, so we build with MAKE1. Since the
-source is very small, this has minor impact on performance.
+On Tue, 21 Feb 2017 22:12:22 +0100, Yann E. MORIN wrote:
+> The Makefile is not parallel-safe, so we build with MAKE1. Since the
+> source is very small, this has minor impact on perforance.
+> 
+> The genver.sh script conaains a troll character U+c2a0 (non-break space)
+> which is refused by some versions of /bin/sh. Patch it away.
+> 
+> Fixes:
+>     http://autobuild.buildroot.net/results/867/867c74ed74fd04ab06d1a10ff34ca177fe005fd2/
+>     http://autobuild.buildroot.net/results/f97/f971629bc99147f9014e52c6ef71c3417faa6b67/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: David Bachelart <david.bachelart@bbright.com>
+> ---
+>  package/sslh/0002-replace-U+c2a0.patch | 12 ++++++++++++
+>  package/sslh/sslh.mk                   |  2 +-
+>  2 files changed, 13 insertions(+), 1 deletion(-)
+>  create mode 100644 package/sslh/0002-replace-U+c2a0.patch
 
-The genver.sh script contains a troll character U+c2a0 (non-break space)
-which is refused by some versions of /bin/sh. Patch it away.
+Applied to master after fixing the typoes, thanks! Did you submit the
+patch to the upstream project, and report the parallel build issue?
 
-Fixes:
-    http://autobuild.buildroot.net/results/867/867c74ed74fd04ab06d1a10ff34ca177fe005fd2/
-    http://autobuild.buildroot.net/results/f97/f971629bc99147f9014e52c6ef71c3417faa6b67/
+Thanks!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: David Bachelart <david.bachelart@bbright.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sslh/0002-replace-U+c2a0.patch | 12 ++++++++++++
- package/sslh/sslh.mk                   |  2 +-
- 2 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/package/sslh/0002-replace-U+c2a0.patch b/package/sslh/0002-replace-U+c2a0.patch
-new file mode 100644
-index 0000000..38093fa
---- /dev/null
-+++ b/package/sslh/0002-replace-U+c2a0.patch
-@@ -0,0 +1,12 @@
-+diff -durN sslh-v1.18.orig/genver.sh sslh-v1.18/genver.sh
-+--- sslh-v1.18.orig/genver.sh	2017-02-21 22:03:40.849161283 +0100
-++++ sslh-v1.18/genver.sh	2017-02-21 22:03:59.173402356 +0100
-+@@ -25,7 +25,7 @@
-+         fi
-+ fi
-+ 
-+-if [ -d .git ]??&& head=`git rev-parse --verify HEAD 2>/dev/null`; then
-++if [ -d .git ] && head=`git rev-parse --verify HEAD 2>/dev/null`; then
-+ 	# generate the version info based on the tag
-+ 	release=`(git describe --tags || git --describe || git describe --all --long) \
-+ 		2>/dev/null | tr -d '\n'`
-diff --git a/package/sslh/sslh.mk b/package/sslh/sslh.mk
-index 3177444..17aafd1 100644
---- a/package/sslh/sslh.mk
-+++ b/package/sslh/sslh.mk
-@@ -12,7 +12,7 @@ SSLH_LICENSE_FILES = COPYING
- SSLH_DEPENDENCIES = libconfig
- 
- define SSLH_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
- endef
- 
- define SSLH_INSTALL_TARGET_CMDS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
