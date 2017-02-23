@@ -1,40 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 21:46:57 +0100
-Subject: [Buildroot] [PATCH v2] libimxvpuapi: bump to version 0.10.3
-In-Reply-To: <1487817819-2928-1-git-send-email-danomimanchego123@gmail.com>
-References: <1487817819-2928-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20170223214657.587cd201@free-electrons.com>
+Date: Thu, 23 Feb 2017 21:50:38 +0100
+Subject: [Buildroot] [git commit] package/sslh: fix script,
+	does not build in parallel
+Message-ID: <20170223205107.7AEB27FB30@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5d436ac5a6271ed08774c7110e4569c6b4484c4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Feb 2017 21:43:39 -0500, Danomi Manchego wrote:
-> Because with libimxvpuapi older than 0.10.3, the gst1-imx-0.12.3 "imxvpu"
-> plugin will not build.
-> 
-> Changelog:
-> * properly pass on color format in simplified JPEG encoder interface
-> * add alternative write-callback-style encoding mode
->   also add encode example variant which uses write-callback style output
-> * add support for "fake grayscale mode" in encoders
->   this is done by using I420 internally and filling the U and V planes
->   with 0x80 bytes
-> * make sure JPEG quantization table is copied in standardized zig zag order
->   the VPU does not, so this has to be done explicitely
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> 
-> ---
+The Makefile is not parallel-safe, so we build with MAKE1. Since the
+source is very small, this has minor impact on performance.
 
-Applied to master, thanks.
+The genver.sh script contains a troll character U+c2a0 (non-break space)
+which is refused by some versions of /bin/sh. Patch it away.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+    http://autobuild.buildroot.net/results/867/867c74ed74fd04ab06d1a10ff34ca177fe005fd2/
+    http://autobuild.buildroot.net/results/f97/f971629bc99147f9014e52c6ef71c3417faa6b67/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: David Bachelart <david.bachelart@bbright.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sslh/0002-replace-U+c2a0.patch | 12 ++++++++++++
+ package/sslh/sslh.mk                   |  2 +-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/package/sslh/0002-replace-U+c2a0.patch b/package/sslh/0002-replace-U+c2a0.patch
+new file mode 100644
+index 0000000..38093fa
+--- /dev/null
++++ b/package/sslh/0002-replace-U+c2a0.patch
+@@ -0,0 +1,12 @@
++diff -durN sslh-v1.18.orig/genver.sh sslh-v1.18/genver.sh
++--- sslh-v1.18.orig/genver.sh	2017-02-21 22:03:40.849161283 +0100
+++++ sslh-v1.18/genver.sh	2017-02-21 22:03:59.173402356 +0100
++@@ -25,7 +25,7 @@
++         fi
++ fi
++ 
++-if [ -d .git ]??&& head=`git rev-parse --verify HEAD 2>/dev/null`; then
+++if [ -d .git ] && head=`git rev-parse --verify HEAD 2>/dev/null`; then
++ 	# generate the version info based on the tag
++ 	release=`(git describe --tags || git --describe || git describe --all --long) \
++ 		2>/dev/null | tr -d '\n'`
+diff --git a/package/sslh/sslh.mk b/package/sslh/sslh.mk
+index 3177444..17aafd1 100644
+--- a/package/sslh/sslh.mk
++++ b/package/sslh/sslh.mk
+@@ -12,7 +12,7 @@ SSLH_LICENSE_FILES = COPYING
+ SSLH_DEPENDENCIES = libconfig
+ 
+ define SSLH_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
+ define SSLH_INSTALL_TARGET_CMDS
