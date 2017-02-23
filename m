@@ -1,41 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 21:44:02 +0100
-Subject: [Buildroot] [git commit] nano: bump to version 2.7.5
-Message-ID: <20170301170424.AF1907FBDB@busybox.osuosl.org>
+Date: Thu, 23 Feb 2017 22:20:38 +0100
+Subject: [Buildroot] [git commit] gdk-pixbuf: bump to version 2.36.5
+Message-ID: <20170301170423.D03317FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0035543432edddee4dcb017ac4dd74832133e89
+commit: https://git.buildroot.net/buildroot/commit/?id=487b419cc647da18f04a98ee69c160705f0c44e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This release needs a new tweak regarding loaders.cache - it's now used
+to build the thumbnailer.
+Since we already generate it using the host variant for the target we
+can re-use this for the build step.
+It's not necessary to used the tweaked version since the build one is
+only used to account for mime types, not the plugins/loaders themselves.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.hash |  4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index aa3e27b..6264faa 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 827b386..e92f498 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 752170643039e2c95a433de357f0c70a8c4c4c561a90a7e7259a63e225b659b9  nano-2.7.4.tar.xz
-+sha256 a64d24e6bc4fc448376d038f9a755af77f8e748c9051b6f45bf85e783a7e67e4  nano-2.7.5.tar.xz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 4632bed..dc6aa13 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
+-# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.4.sha256sum
+-sha256	0b19901c3eb0596141d2d48ddb9dac79ad1524bdf59366af58ab38fcb9ee7463	gdk-pixbuf-2.36.4.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.5.sha256sum
++sha256	7ace06170291a1f21771552768bace072ecdea9bd4a02f7658939b9a314c40fc	gdk-pixbuf-2.36.5.tar.xz
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 4fe6bd7..e4d3658 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- NANO_VERSION_MAJOR = 2.7
--NANO_VERSION = $(NANO_VERSION_MAJOR).4
-+NANO_VERSION = $(NANO_VERSION_MAJOR).5
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPLv3+
+ GDK_PIXBUF_VERSION_MAJOR = 2.36
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).4
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).5
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPLv2+
+@@ -73,5 +73,14 @@ define GDK_PIXBUF_DISABLE_TESTS
+ endef
+ GDK_PIXBUF_POST_PATCH_HOOKS += GDK_PIXBUF_DISABLE_TESTS
+ 
++# Target gdk-pixbuf needs loaders.cache populated to build for the
++# thumbnailer. Use the host-built since it matches the target options
++# regarding mime types (which is the used information).
++define GDK_PIXBUF_COPY_LOADERS_CACHE
++	cp -f $(HOST_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
++		$(@D)/gdk-pixbuf
++endef
++GDK_PIXBUF_POST_PATCH_HOOKS += GDK_PIXBUF_COPY_LOADERS_CACHE
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
