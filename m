@@ -1,35 +1,44 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Feb 2017 18:00:45 +0100
-Subject: [Buildroot] [PATCH 23/25] lua-testmore: use PKG_NAME_UPSTREAM
+Date: Thu, 23 Feb 2017 18:00:47 +0100
+Subject: [Buildroot] [PATCH 25/25] lua: remove documentation from target
 In-Reply-To: <20170223170047.24417-1-arnout@mind.be>
 References: <20170223170047.24417-1-arnout@mind.be>
-Message-ID: <20170223170047.24417-24-arnout@mind.be>
+Message-ID: <20170223170047.24417-26-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Many packages install documentation under /usr/share/lua/.../doc. Add
+a TARGET_FINALIZE_HOOK to remove it.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lua-testmore/lua-testmore.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/luainterpreter/luainterpreter.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/lua-testmore/lua-testmore.mk b/package/lua-testmore/lua-testmore.mk
-index 771b97f000..04482e2586 100644
---- a/package/lua-testmore/lua-testmore.mk
-+++ b/package/lua-testmore/lua-testmore.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
+diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
+index a6c98ab992..90382fa78f 100644
+--- a/package/luainterpreter/luainterpreter.mk
++++ b/package/luainterpreter/luainterpreter.mk
+@@ -6,6 +6,17 @@
  
--LUA_TESTMORE_VERSION_UPSTREAM = 0.3.2
--LUA_TESTMORE_VERSION = $(LUA_TESTMORE_VERSION_UPSTREAM)-1
--LUA_TESTMORE_SUBDIR = lua-TestMore-$(LUA_TESTMORE_VERSION_UPSTREAM)
-+LUA_TESTMORE_VERSION = 0.3.2-1
-+LUA_TESTMORE_NAME_UPSTREAM = lua-TestMore
- LUA_TESTMORE_LICENSE = MIT
- LUA_TESTMORE_LICENSE_FILES = $(LUA_TESTMORE_SUBDIR)/COPYRIGHT
+ LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
+ 
++# Lua packages often install documentation, clean that up globally
++# Since luainterpreter is a virtual package, we can't use
++# LUAINTERPRETER_TARGET_FINALIZE_HOOKS
++ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
++define LUAINTERPRETER_REMOVE_DOC
++	rm -rf $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/doc
++endef
++
++TARGET_FINALIZE_HOOKS += LUAINTERPRETER_REMOVE_DOC
++endif
++
+ $(eval $(virtual-package))
+ $(eval $(host-virtual-package))
  
 -- 
 2.11.0
