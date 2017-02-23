@@ -1,73 +1,65 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 23 Feb 2017 22:20:22 +0100
-Subject: [Buildroot] [PATCH] docs/website: Improving website speed
-In-Reply-To: <20170223221556.5e152293@free-electrons.com>
-References: <1487803956-24668-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170223215442.368ece35@free-electrons.com>
- <CA+TH9VkW5hdUHCU26w0bswKspdN-geT5me_2_pPOF=a=jzTKXw@mail.gmail.com>
- <20170223221556.5e152293@free-electrons.com>
-Message-ID: <CA+TH9VnMP3iN_0sM0=3B19ZPGonAmnoe93SKBpOiYX0e=V3kSg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Feb 2017 22:20:38 +0100
+Subject: [Buildroot] [git commit branch/next] gdk-pixbuf: bump to version
+	2.36.5
+Message-ID: <20170223212205.B060D8222F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+commit: https://git.buildroot.net/buildroot/commit/?id=487b419cc647da18f04a98ee69c160705f0c44e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-2017-02-23 22:15 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Thu, 23 Feb 2017 22:08:05 +0100, Angelo Compagnucci wrote:
->
->> My patch doesn't necessary requires a server side configuration
->> change, usually the module I used in htaccess are enabled in common
->> apache configuration. BTW the use of the modules by a virtualhost is
->> not enabled by default and .htaccess simply enables it.
->> On a shared webserver with hundres of websites for example, changing
->> the cache control setting doesn't require the server sysadmin
->> intervention, cause the htaccess is used to accomodate user
->> preferences on a per site base.
->> Buildroot is probably served by a shared webserver with the required
->> modules enabled, but they are not correctly configured for the
->> buildroot.org virtualhost.
->> So simply dropping the .htaccess in the buildroot virtualhost root
->> directory should do the trick and enable that configuraion.
->
-> Right. I want to see what the admins of the webserver have to say
-> though.
->
->> Pngcrush is a software for reducing the size of png images without
->> affecting quality. That means that we have to use less bandwidth to
->> serve the same content as before.
->
-> I'm OK with what pngcrush does, but in your commit log, you said "The
-> images resized to ~60% of the original size.". To me it means that you
-> have reduced the size (in pixel) of the images to make them smaller in
-> size (in bytes).
->
-> Or is the 60% number just the saving (in bytes) thanks to using
-> pngcrush?
+This release needs a new tweak regarding loaders.cache - it's now used
+to build the thumbnailer.
+Since we already generate it using the host variant for the target we
+can re-use this for the build step.
+It's not necessary to used the tweaked version since the build one is
+only used to account for mime types, not the plugins/loaders themselves.
 
-Yes, of course. I saved ~40% byte size from the original files. I'm
-resending a version 2 directly to Peter, using another software
-(pngquant) I obtained a better compression of pngs, in that commit
-I'll reword the message to be more explicit on bytes saving than on
-resizing.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdk-pixbuf/gdk-pixbuf.hash |  4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-Sincerely, Angelo.
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 827b386..e92f498 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.4.sha256sum
+-sha256	0b19901c3eb0596141d2d48ddb9dac79ad1524bdf59366af58ab38fcb9ee7463	gdk-pixbuf-2.36.4.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.5.sha256sum
++sha256	7ace06170291a1f21771552768bace072ecdea9bd4a02f7658939b9a314c40fc	gdk-pixbuf-2.36.5.tar.xz
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 4fe6bd7..e4d3658 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GDK_PIXBUF_VERSION_MAJOR = 2.36
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).4
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).5
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPLv2+
+@@ -73,5 +73,14 @@ define GDK_PIXBUF_DISABLE_TESTS
+ endef
+ GDK_PIXBUF_POST_PATCH_HOOKS += GDK_PIXBUF_DISABLE_TESTS
+ 
++# Target gdk-pixbuf needs loaders.cache populated to build for the
++# thumbnailer. Use the host-built since it matches the target options
++# regarding mime types (which is the used information).
++define GDK_PIXBUF_COPY_LOADERS_CACHE
++	cp -f $(HOST_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
++		$(@D)/gdk-pixbuf
++endef
++GDK_PIXBUF_POST_PATCH_HOOKS += GDK_PIXBUF_COPY_LOADERS_CACHE
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
