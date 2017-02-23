@@ -1,34 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 22:34:17 +0100
-Subject: [Buildroot] [PATCH 1/3] runc: bump to version
- 9df8b306d01f59d3a8029be411de015b7304dd8f
-In-Reply-To: <1487778385-98470-1-git-send-email-fontaine.fabrice@gmail.com>
-References: <1487778385-98470-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <20170223223417.207e170a@free-electrons.com>
+Date: Thu, 23 Feb 2017 22:35:05 +0100
+Subject: [Buildroot] [PATCH] btrfs-progs: don't use <execinfo.h> with
+ uClibc
+In-Reply-To: <1487630635-28388-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1487630635-28388-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170223223505.6f9ab5ca@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
+Hello,
 
-On Wed, 22 Feb 2017 16:46:23 +0100, Fabrice Fontaine wrote:
-> Version bump as a dependency of docker-engine v1.13.1
+On Mon, 20 Feb 2017 23:43:55 +0100, Thomas Petazzoni wrote:
+> This commit adds a patch to btrfs-progs that fixes the build of
+> docker-engine, and possibly other packages including kerncompat.h from
+> btrfs-progs.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> For the btrfs-progs build itself, a --disable-backtrace option allows to
+> indicate whether backtrace()/<execinfo.h> support should be used or
+> not. However, once btrfs-progs is installed, it simply looks at whether
+> __GLIBC__ is defined or not to decide to use backtrace() or not.
+> 
+> However, uClibc defines __GLIBC__ but does not provide backtrace()
+> functionality. The additional patch tweaks the kerncompat.h to look at
+> __UCLIBC__ and not use backtrace() functionality in this case.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/9dc9370a79c5c44e6c92be6a44334842c211d923/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  ...h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch | 42 ++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/btrfs-progs/0002-kerncompat.h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch
 
-Could you review this set of three patches from Fabrice? I'm especially
-interested in your review on PATCH 3/3. See:
-
-  https://patchwork.ozlabs.org/patch/731181/
-  https://patchwork.ozlabs.org/patch/731182/
-  https://patchwork.ozlabs.org/patch/731183/
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
