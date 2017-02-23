@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 21:52:15 +0100
-Subject: [Buildroot] [PATCH] package/sslh: fix script,
- does not build in parallel
-In-Reply-To: <1487711542-31294-1-git-send-email-yann.morin.1998@free.fr>
-References: <1487711542-31294-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170223215215.5e201a82@free-electrons.com>
+Date: Thu, 23 Feb 2017 21:54:42 +0100
+Subject: [Buildroot] [PATCH] docs/website: Improving website speed
+In-Reply-To: <1487803956-24668-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1487803956-24668-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20170223215442.368ece35@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 21 Feb 2017 22:12:22 +0100, Yann E. MORIN wrote:
-> The Makefile is not parallel-safe, so we build with MAKE1. Since the
-> source is very small, this has minor impact on perforance.
+On Wed, 22 Feb 2017 23:52:36 +0100, Angelo Compagnucci wrote:
+> Currently the buildroot website is not leveraging common
+> techniques to have a better loading speed (browser caching,
+> gzip compression, deflating).
+> This commit provides an .htaccess files with all the needed to
+> enable mentioned features. This .htaccess only works if the
+> webserver has deflate, expires and headers modules enabled.
 > 
-> The genver.sh script conaains a troll character U+c2a0 (non-break space)
-> which is refused by some versions of /bin/sh. Patch it away.
-> 
-> Fixes:
->     http://autobuild.buildroot.net/results/867/867c74ed74fd04ab06d1a10ff34ca177fe005fd2/
->     http://autobuild.buildroot.net/results/f97/f971629bc99147f9014e52c6ef71c3417faa6b67/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: David Bachelart <david.bachelart@bbright.com>
-> ---
->  package/sslh/0002-replace-U+c2a0.patch | 12 ++++++++++++
->  package/sslh/sslh.mk                   |  2 +-
->  2 files changed, 13 insertions(+), 1 deletion(-)
->  create mode 100644 package/sslh/0002-replace-U+c2a0.patch
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-Applied to master after fixing the typoes, thanks! Did you submit the
-patch to the upstream project, and report the parallel build issue?
+Thanks for your proposal. Since this needs to work with the Apache
+configuration on the server side, I've mailed the OSUOSL folks to ask
+them if this is going to work. You are in Cc to this e-mail.
+
+Regarding your other patch crunching and resizing the PNG files, it
+didn't make it to the list because of the size of the patch. However,
+while I understand the crunching, I do not understand why you
+arbitrarily reduced the size of the pictures by 60%. Could you explain
+the reasoning behind this?
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
