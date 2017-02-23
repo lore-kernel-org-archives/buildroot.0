@@ -1,40 +1,41 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Feb 2017 18:00:33 +0100
-Subject: [Buildroot] [PATCH 11/25] luacrypto: remove default definition of
-	PKG_SUBDIR
+Date: Thu, 23 Feb 2017 18:00:35 +0100
+Subject: [Buildroot] [PATCH 13/25] package/Config.in: explain that lua
+	package names should start with lua
 In-Reply-To: <20170223170047.24417-1-arnout@mind.be>
 References: <20170223170047.24417-1-arnout@mind.be>
-Message-ID: <20170223170047.24417-12-arnout@mind.be>
+Message-ID: <20170223170047.24417-14-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The luarocks infra already provides the correct default value for
-PKG_SUBDIR, so it doesn't have to be defined in the .mk file.
+We have decided that lua packages should have a name that starts with
+lua (like is the case for python and perl). However, we're not going to
+rename all the existing lua packages that don't start with lua. This
+makes it unclear for people adding packages how they should name the
+package, so add a comment to package/Config.in to explain it.
 
-Therefore, _VERSION_UPSTREAM doesn't need to be defined either.
+It's rather terse but it gets the message across.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/luacrypto/luacrypto.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/luacrypto/luacrypto.mk b/package/luacrypto/luacrypto.mk
-index b0e972c629..b6dbb9999f 100644
---- a/package/luacrypto/luacrypto.mk
-+++ b/package/luacrypto/luacrypto.mk
-@@ -4,9 +4,7 @@
- #
- ################################################################################
- 
--LUACRYPTO_VERSION_UPSTREAM = 0.3.2
--LUACRYPTO_VERSION = $(LUACRYPTO_VERSION_UPSTREAM)-1
--LUACRYPTO_SUBDIR = luacrypto-$(LUACRYPTO_VERSION_UPSTREAM)
-+LUACRYPTO_VERSION = 0.3.2-1
- LUACRYPTO_LICENSE = MIT
- LUACRYPTO_LICENSE_FILES = $(LUACRYPTO_SUBDIR)/COPYING
- LUACRYPTO_DEPENDENCIES = openssl
+diff --git a/package/Config.in b/package/Config.in
+index cf9c401af0..efcde1fdd2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -521,6 +521,8 @@ endif
+ if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
+ # lua modules are dynamically loaded, so not available on static builds
+ menu "Lua libraries/modules"
++# When adding lua packages, make sure the name start with "lua".
++# Many packages currently don't, but that's historical accident.
+ 	source "package/argparse/Config.in"
+ 	source "package/cgilua/Config.in"
+ 	source "package/copas/Config.in"
 -- 
 2.11.0
