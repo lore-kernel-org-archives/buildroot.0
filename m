@@ -1,54 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 22:15:56 +0100
-Subject: [Buildroot] [PATCH] docs/website: Improving website speed
-In-Reply-To: <CA+TH9VkW5hdUHCU26w0bswKspdN-geT5me_2_pPOF=a=jzTKXw@mail.gmail.com>
-References: <1487803956-24668-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170223215442.368ece35@free-electrons.com>
- <CA+TH9VkW5hdUHCU26w0bswKspdN-geT5me_2_pPOF=a=jzTKXw@mail.gmail.com>
-Message-ID: <20170223221556.5e152293@free-electrons.com>
+Date: Thu, 23 Feb 2017 22:18:22 +0100
+Subject: [Buildroot] [git commit branch/next] package/turbolua: bump version
+	to v2.1.0
+Message-ID: <20170223211923.764977F919@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=81ea69036e92825e6de633fd373f5963b0bd2f54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 23 Feb 2017 22:08:05 +0100, Angelo Compagnucci wrote:
+Signed-off-by: Wojciech Nizinski <niziak@spox.org>
+[Thomas: use the v2.1.0 tag rather than a full commit sha1.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/turbolua/turbolua.hash | 2 +-
+ package/turbolua/turbolua.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> My patch doesn't necessary requires a server side configuration
-> change, usually the module I used in htaccess are enabled in common
-> apache configuration. BTW the use of the modules by a virtualhost is
-> not enabled by default and .htaccess simply enables it.
-> On a shared webserver with hundres of websites for example, changing
-> the cache control setting doesn't require the server sysadmin
-> intervention, cause the htaccess is used to accomodate user
-> preferences on a per site base.
-> Buildroot is probably served by a shared webserver with the required
-> modules enabled, but they are not correctly configured for the
-> buildroot.org virtualhost.
-> So simply dropping the .htaccess in the buildroot virtualhost root
-> directory should do the trick and enable that configuraion.
-
-Right. I want to see what the admins of the webserver have to say
-though.
-
-> Pngcrush is a software for reducing the size of png images without
-> affecting quality. That means that we have to use less bandwidth to
-> serve the same content as before.
-
-I'm OK with what pngcrush does, but in your commit log, you said "The
-images resized to ~60% of the original size.". To me it means that you
-have reduced the size (in pixel) of the images to make them smaller in
-size (in bytes).
-
-Or is the 60% number just the saving (in bytes) thanks to using
-pngcrush?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/turbolua/turbolua.hash b/package/turbolua/turbolua.hash
+index d460b4f..dc718f8 100644
+--- a/package/turbolua/turbolua.hash
++++ b/package/turbolua/turbolua.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 bff771b6a670f764366eff50e1644f1c5d8d526324e0b6adfda42d9f69791833 turbolua-6fbc5cbfed1cc8c3820d4c1bfb55258c764040f0.tar.gz
++sha256 8b810aa531fcaf05020531fe904d449742fd0da85c31e925a7efa9816d1f8f88 turbolua-v2.1.0.tar.gz
+diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
+index bf9e27f..49877fa 100644
+--- a/package/turbolua/turbolua.mk
++++ b/package/turbolua/turbolua.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TURBOLUA_VERSION = 6fbc5cbfed1cc8c3820d4c1bfb55258c764040f0
++TURBOLUA_VERSION = v2.1.0
+ TURBOLUA_SITE = $(call github,kernelsauce,turbo,$(TURBOLUA_VERSION))
+ TURBOLUA_DEPENDENCIES = luajit
+ TURBOLUA_LICENSE = Apache-2.0
