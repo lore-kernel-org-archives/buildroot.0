@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 22:18:22 +0100
-Subject: [Buildroot] [git commit branch/next] package/hiredis: fix makefile
-	code
-Message-ID: <20170223211923.5F453801E2@busybox.osuosl.org>
+Date: Thu, 23 Feb 2017 22:19:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/turbolua: bump version to v2.1.0
+In-Reply-To: <1487758746-22935-1-git-send-email-niziak@spox.org>
+References: <1487758746-22935-1-git-send-email-niziak@spox.org>
+Message-ID: <20170223221953.60ee6d27@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cc28355f591089c636c7f94d7ec0f5498d290ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/hiredis/hiredis.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 22 Feb 2017 11:19:06 +0100, Wojciech Nizinski wrote:
+> Signed-off-by: Wojciech Nizinski <niziak@spox.org>
+> ---
+>  package/turbolua/turbolua.hash | 2 +-
+>  package/turbolua/turbolua.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
-index eb96711..cd406f1 100644
---- a/package/hiredis/hiredis.mk
-+++ b/package/hiredis/hiredis.mk
-@@ -19,7 +19,7 @@ ifeq ($(BR2_STATIC_LIBS),y)
- HIREDIS_TARGETS += static
- else ifeq ($(BR2_SHARED_LIBS),y)
- HIREDIS_TARGETS += dynamic
--else ifeq $(BR2_SHARED_STATIC_LIBS),y)
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- HIREDIS_TARGETS += dynamic static
- endif
- 
+Applied to next, but after changing the patch to use the v2.1.0 tag
+rather than a full commit sha1.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
