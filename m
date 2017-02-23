@@ -1,72 +1,64 @@
 From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Thu, 23 Feb 2017 10:38:02 +1100
-Subject: [Buildroot] GObject introspection
-In-Reply-To: <e4a16f6891f6c1215cfb87b5743762b1@zacarias.com.ar>
-References: <20170221111505.n57qgjfzkfynlesw@tarshish>
- <e4a16f6891f6c1215cfb87b5743762b1@zacarias.com.ar>
-Message-ID: <20170222233802.GA3058@tungsten.ozlabs.ibm.com>
+Date: Thu, 23 Feb 2017 11:54:53 +1100
+Subject: [Buildroot] [RFC PATCH 0/2] add gobject-introspection
+Message-ID: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 21, 2017 at 09:26:40AM -0300, Gustavo Zacarias wrote:
-> On 2017-02-21 08:15, Baruch Siach wrote:
-> 
-> >Hi Buildroot list,
-> >
-> >GObject introspection[1] is not currently packaged for Buildroot. Quite a
-> >few
-> >packages disable introspection support at build time. If fact, we go into
-> >great trouble to disable introspection in libgtk3. Is there a reason why
-> >we
-> >don't package GObject introspection other than "nobody felt the need"?
-> >Does
-> >introspection require special build time handling?
-> >
-> >My goal is to package pydbus[2] that depends on a newer version of
-> >python-gobject (latest is 3.22, we currently package 2.28), which in turn
-> >depends on GObject introspection.
-> >
-> >The current Buildroot option for dbus Python binding is dbus-python, but
-> >it is
-> >based on dbus-glib which is "obsolete and unmaintained"[3].
-> >
-> >Any other option or suggestion?
-> >
-> >Thanks,
-> >baruch
-> >
-> >[1] https://wiki.gnome.org/Projects/GObjectIntrospection
-> >
-> >[2] https://github.com/LEW21/pydbus
-> >
-> >[3] https://www.freedesktop.org/wiki/Software/DBusBindings/
-> 
-> Hi Baruch.
-> Last time i checked introspection required some nasty tricks to cross
-> compile.
-> Just google around and you might find an update.
-> I have/had some WIP somewhere, just need to see if that work is still
-> relevant, but first i need to find it :)
-> But other than "it needs some trickery" i see no other reason to avoid it.
-> Regards.
 
-Hi,
+Hi Buildroot,
 
-I've been working on this too, on and off, for a while and it's working
-fairly well (for me anyway) if you're willing to accept the restriction
-that the kernel on your target must not be newer than your host (this is
-actually quite annoying for me, but it's a hard requirement of QEMU
-usermode), and that it's a bit difficult to debug if there are problems
-because it does indeed require a lot of trickery :-(
+Here's my attempt at the gobject-introspection package, presented for comments.
 
-(I've had to be careful with the exact version of QEMU I use, as well,
-because some versions have had problems with usermode.)
+The basic design is:
 
-Anyway, I'm happy to share what I've got so far, so I'll post it
-after I dust it off and see that it's actually still working ;-)
+* Build host-gobject-introspection normally, but slightly patched to allow an
+  alternate "ldd" to be used (this handles it's use of "ldd", it already has a
+  way to add a wrapper when it directly executes binaries).
+* Manually construct some wrappers in the staging
+  directories so that it can be used from there on target packages (via QEMU
+  usermode).
+* Build the target packages that use gobject-introspection using the wrappers
+  in staging.
+* Build the target version of gobject-introspection (I think this is necessary
+  at run time, but I can't remember for sure).
+
+The part I'm least happy with is the ldd-cross script, and the way it has to
+scrape information out of "/usr/bin/ldd" to find the target's dynamic linker.
+Is there a better way to find the dynamic linker in the target?
+
+Note: ldd-cross can be useful separately, as it lets you easily inspect target
+binaries from the host. Perhaps it should be it's own package?
+
+I've included a patch to a random package (libvips) that uses
+gobject-introspection to enable it's use and exercise build dependencies.
+
+I'm sure it needs more cleanup, but at least it works.
 
 Cheers,
 Sam.
+
+Sam Bobroff (2):
+  package/gobject-introspection: add package
+  package/libvips: enable introspection
+
+ package/Config.in                                  |  1 +
+ .../0001-ldd-cross-launcher.patch                  | 22 +++++++++
+ package/gobject-introspection/Config.in            | 12 +++++
+ package/gobject-introspection/create-ldd-cross.sh  | 46 ++++++++++++++++++
+ .../gobject-introspection/gobject-introspection.mk | 55 ++++++++++++++++++++++
+ package/libglib2/libglib2.hash                     |  4 +-
+ package/libglib2/libglib2.mk                       |  4 +-
+ package/libvips/Config.in                          |  1 +
+ package/libvips/libvips.mk                         |  4 +-
+ 9 files changed, 143 insertions(+), 6 deletions(-)
+ create mode 100644 package/gobject-introspection/0001-ldd-cross-launcher.patch
+ create mode 100644 package/gobject-introspection/Config.in
+ create mode 100755 package/gobject-introspection/create-ldd-cross.sh
+ create mode 100644 package/gobject-introspection/gobject-introspection.mk
+
+-- 
+2.11.0
