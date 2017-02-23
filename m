@@ -1,84 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 22:34:55 +0100
-Subject: [Buildroot] [git commit] btrfs-progs: don't use <execinfo.h> with
-	uClibc
-Message-ID: <20170223213512.0A2B682245@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 23 Feb 2017 22:43:08 +0100
+Subject: [Buildroot] [PATCH] package/sslh: fix a patch, drop the other
+Message-ID: <1487886188-29023-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06b555b6d5baadb6fe73e5d8a9fd640602908251
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+It turned out that the troll character U+c2a0 was added by our own
+patch.
 
-This commit adds a patch to btrfs-progs that fixes the build of
-docker-engine, and possibly other packages including kerncompat.h from
-btrfs-progs.
+So fix it amd drop our second patch.
 
-For the btrfs-progs build itself, a --disable-backtrace option allows to
-indicate whether backtrace()/<execinfo.h> support should be used or
-not. However, once btrfs-progs is installed, it simply looks at whether
-__GLIBC__ is defined or not to decide to use backtrace() or not.
-
-However, uClibc defines __GLIBC__ but does not provide backtrace()
-functionality. The additional patch tweaks the kerncompat.h to look at
-__UCLIBC__ and not use backtrace() functionality in this case.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/9dc9370a79c5c44e6c92be6a44334842c211d923/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- ...h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ ...ecure-version-while-building-sslh-in-a-larger-git-t.patch |  4 +++-
+ package/sslh/0002-replace-U+c2a0.patch                       | 12 ------------
+ 2 files changed, 3 insertions(+), 13 deletions(-)
+ delete mode 100644 package/sslh/0002-replace-U+c2a0.patch
 
-diff --git a/package/btrfs-progs/0002-kerncompat.h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch b/package/btrfs-progs/0002-kerncompat.h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch
-new file mode 100644
-index 0000000..9c1173b
---- /dev/null
-+++ b/package/btrfs-progs/0002-kerncompat.h-define-BTRFS_DISABLE_BACKTRACE-when-bui.patch
-@@ -0,0 +1,42 @@
-+From 1fc5444f5620670bb9d293be4f92df59661e1810 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 20 Feb 2017 23:31:24 +0100
-+Subject: [PATCH] kerncompat.h: define BTRFS_DISABLE_BACKTRACE when building
-+ with uClibc
-+
-+uClibc does not provide backtrace() nor <execinfo.h>. When building
-+btrfs-progs, passing --disable-backtrace is enough to make it build with
-+uClibc. But once btrfs-progs is installed and another program/library
-+includes kerncompat.h, it fails to build with uClibc, because
-+BTRFS_DISABLE_BACKTRACE is not defined.
-+
-+The most correct fix for this would be to have kerncompat.h generated
-+from kerncompat.h.in during the btrfs-progs build process, and tuned
-+depending on autoconf/automake variables. But as a quick fix that
-+follows the current strategy, we simply tweak the existing __GLIBC__
-+conditional. Indeed, uClibc pretends to be glibc and defines __GLIBC__,
-+but it does not replace it completely, hence the need to define
-+BTRFS_DISABLE_BACKTRACE when __GLIBC__ is not defined *or* when
-+__UCLIBC__ is defined.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ kerncompat.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/kerncompat.h b/kerncompat.h
-+index 0f207b7..e47d164 100644
-+--- a/kerncompat.h
-++++ b/kerncompat.h
-+@@ -32,7 +32,7 @@
-+ 
-+ #include <features.h>
-+ 
-+-#ifndef __GLIBC__
-++#if !defined(__GLIBC__) || defined(__UCLIBC__)
-+ #ifndef BTRFS_DISABLE_BACKTRACE
-+ #define BTRFS_DISABLE_BACKTRACE
-+ #endif
-+-- 
-+2.7.4
-+
+diff --git a/package/sslh/0001-secure-version-while-building-sslh-in-a-larger-git-t.patch b/package/sslh/0001-secure-version-while-building-sslh-in-a-larger-git-t.patch
+index 5cb8ce2..d23bc9f 100644
+--- a/package/sslh/0001-secure-version-while-building-sslh-in-a-larger-git-t.patch
++++ b/package/sslh/0001-secure-version-while-building-sslh-in-a-larger-git-t.patch
+@@ -12,6 +12,8 @@ subtree only, this patch adds a check : a .git directory has to exist at
+ the root of the project to enable git-extracted version string.
+ 
+ Signed-off-by: David Bachelart <david.bachelart@bbright.com>
++[yann.morin.1998 at free.fr: fix troll character U+c2a0]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+  genver.sh | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -34,7 +36,7 @@ index 79fd0a0..051e57b 100755
+  fi
+  
+ -if head=`git rev-parse --verify HEAD 2>/dev/null`; then
+-+if [ -d .git ]?&& head=`git rev-parse --verify HEAD 2>/dev/null`; then
+++if [ -d .git ] && head=`git rev-parse --verify HEAD 2>/dev/null`; then
+  	# generate the version info based on the tag
+  	release=`(git describe --tags || git --describe || git describe --all --long) \
+  		2>/dev/null | tr -d '\n'`
+diff --git a/package/sslh/0002-replace-U+c2a0.patch b/package/sslh/0002-replace-U+c2a0.patch
+deleted file mode 100644
+index 38093fa..0000000
+--- a/package/sslh/0002-replace-U+c2a0.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+-diff -durN sslh-v1.18.orig/genver.sh sslh-v1.18/genver.sh
+---- sslh-v1.18.orig/genver.sh	2017-02-21 22:03:40.849161283 +0100
+-+++ sslh-v1.18/genver.sh	2017-02-21 22:03:59.173402356 +0100
+-@@ -25,7 +25,7 @@
+-         fi
+- fi
+- 
+--if [ -d .git ]?&& head=`git rev-parse --verify HEAD 2>/dev/null`; then
+-+if [ -d .git ] && head=`git rev-parse --verify HEAD 2>/dev/null`; then
+- 	# generate the version info based on the tag
+- 	release=`(git describe --tags || git --describe || git describe --all --long) \
+- 		2>/dev/null | tr -d '\n'`
+-- 
+2.7.4
