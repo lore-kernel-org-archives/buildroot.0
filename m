@@ -1,35 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 22:08:39 +0100
-Subject: [Buildroot] [git commit] trousers: update ARC comment
-Message-ID: <20170223210927.314C882244@busybox.osuosl.org>
+Date: Thu, 23 Feb 2017 22:15:56 +0100
+Subject: [Buildroot] [PATCH] docs/website: Improving website speed
+In-Reply-To: <CA+TH9VkW5hdUHCU26w0bswKspdN-geT5me_2_pPOF=a=jzTKXw@mail.gmail.com>
+References: <1487803956-24668-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20170223215442.368ece35@free-electrons.com>
+ <CA+TH9VkW5hdUHCU26w0bswKspdN-geT5me_2_pPOF=a=jzTKXw@mail.gmail.com>
+Message-ID: <20170223221556.5e152293@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8b2bd81a1a5401c10287f2d5c6c8b4a14994764
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Update the comment about the ARC exception to match the one used in VLC,
-so that a 'git grep "ARC toolchain issue"' returns the list of packages
-to re-evaluate on ARC when the ARC toolchain gets upgraded.
+On Thu, 23 Feb 2017 22:08:05 +0100, Angelo Compagnucci wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/trousers/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> My patch doesn't necessary requires a server side configuration
+> change, usually the module I used in htaccess are enabled in common
+> apache configuration. BTW the use of the modules by a virtualhost is
+> not enabled by default and .htaccess simply enables it.
+> On a shared webserver with hundres of websites for example, changing
+> the cache control setting doesn't require the server sysadmin
+> intervention, cause the htaccess is used to accomodate user
+> preferences on a per site base.
+> Buildroot is probably served by a shared webserver with the required
+> modules enabled, but they are not correctly configured for the
+> buildroot.org virtualhost.
+> So simply dropping the .htaccess in the buildroot virtualhost root
+> directory should do the trick and enable that configuraion.
 
-diff --git a/package/trousers/Config.in b/package/trousers/Config.in
-index 11ab874..de3b951 100644
---- a/package/trousers/Config.in
-+++ b/package/trousers/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_TROUSERS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# doesn't build properly in static only configurations
- 	depends on !BR2_STATIC_LIBS
--	# broken toolchain
-+	# ARC toolchain issue
- 	depends on !BR2_arc
- 	help
- 	  The open-source TCG Software Stack (TSS).
+Right. I want to see what the admins of the webserver have to say
+though.
+
+> Pngcrush is a software for reducing the size of png images without
+> affecting quality. That means that we have to use less bandwidth to
+> serve the same content as before.
+
+I'm OK with what pngcrush does, but in your commit log, you said "The
+images resized to ~60% of the original size.". To me it means that you
+have reduced the size (in pixel) of the images to make them smaller in
+size (in bytes).
+
+Or is the 60% number just the saving (in bytes) thanks to using
+pngcrush?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
