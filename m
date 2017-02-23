@@ -1,40 +1,35 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 23 Feb 2017 18:00:44 +0100
-Subject: [Buildroot] [PATCH 22/25] lua-cjson: use LUA_CJSON_SUBDIR
+Date: Thu, 23 Feb 2017 18:00:46 +0100
+Subject: [Buildroot] [PATCH 24/25] luabitop: use PKG_NAME_UPSTREAM
 In-Reply-To: <20170223170047.24417-1-arnout@mind.be>
 References: <20170223170047.24417-1-arnout@mind.be>
-Message-ID: <20170223170047.24417-23-arnout@mind.be>
+Message-ID: <20170223170047.24417-25-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The infra sets _SUBDIR to the correct value, so we can use it to define
-_LICENSE_FILES.
-
-This removes the need for LUA_CJSON_VERSION_UPSTREAM.
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/lua-cjson/lua-cjson.mk | 5 ++---
+ package/luabitop/luabitop.mk | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
-index 16cb97412a..1823aa50de 100644
---- a/package/lua-cjson/lua-cjson.mk
-+++ b/package/lua-cjson/lua-cjson.mk
+diff --git a/package/luabitop/luabitop.mk b/package/luabitop/luabitop.mk
+index 5ced99b327..a36a2feaf1 100644
+--- a/package/luabitop/luabitop.mk
++++ b/package/luabitop/luabitop.mk
 @@ -4,9 +4,8 @@
  #
  ################################################################################
  
--LUA_CJSON_VERSION_UPSTREAM = 2.1.0
--LUA_CJSON_VERSION = $(LUA_CJSON_VERSION_UPSTREAM)-1
-+LUA_CJSON_VERSION = 2.1.0-1
- LUA_CJSON_LICENSE = MIT
--LUA_CJSON_LICENSE_FILES = lua-cjson-$(LUA_CJSON_VERSION_UPSTREAM)/LICENSE
-+LUA_CJSON_LICENSE_FILES = $(LUA_CJSON_SUBDIR)/LICENSE
+-LUABITOP_VERSION_UPSTREAM = 1.0.2
+-LUABITOP_VERSION = $(LUABITOP_VERSION_UPSTREAM)-1
+-LUABITOP_SUBDIR = LuaBitOp-$(LUABITOP_VERSION_UPSTREAM)
++LUABITOP_VERSION = 1.0.2-1
++LUABITOP_NAME_UPSTREAM = LuaBitOp
+ LUABITOP_LICENSE = MIT
+ LUABITOP_LICENSE_FILES = $(LUABITOP_SUBDIR)/README
  
- $(eval $(luarocks-package))
 -- 
 2.11.0
