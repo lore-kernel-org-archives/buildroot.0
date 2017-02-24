@@ -1,49 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 24 Feb 2017 23:03:45 +0100
-Subject: [Buildroot] No GPS data on ttymxc1 with busybox,
- but it works with systemd
-In-Reply-To: <BY2PR03MB314570B07617BEF30F0C0A3BF520@BY2PR03MB314.namprd03.prod.outlook.com>
-References: <BY2PR03MB314CD45BE8ACFAD060BF954BF5E0@BY2PR03MB314.namprd03.prod.outlook.com>
- <20170220095026.7150a532@free-electrons.com>
- <BY2PR03MB31431BC964FD7F0A71C5021BF5E0@BY2PR03MB314.namprd03.prod.outlook.com>
- <BY2PR03MB314570B07617BEF30F0C0A3BF520@BY2PR03MB314.namprd03.prod.outlook.com>
-Message-ID: <ddb155aa-391a-58d5-f11f-7c6f554f8b0d@mind.be>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 24 Feb 2017 17:24:27 -0500
+Subject: [Buildroot] [PATCH 1/3] runc: bump to version
+	9df8b306d01f59d3a8029be411de015b7304dd8f
+In-Reply-To: <20170223223417.207e170a@free-electrons.com>
+References: <1487778385-98470-1-git-send-email-fontaine.fabrice@gmail.com>
+ <20170223223417.207e170a@free-electrons.com>
+Message-ID: <CA+h8R2pTCALHiS5gtDUH-SLYFb7pCdZaguM7TEhM0WTW6CFh4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas, Fabrice,
+
+On Thu, Feb 23, 2017 at 4:34 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+>
+> Could you review this set of three patches from Fabrice? I'm especially
+> interested in your review on PATCH 3/3. See:
+>
+>   https://patchwork.ozlabs.org/patch/731181/
+>   https://patchwork.ozlabs.org/patch/731182/
+>   https://patchwork.ozlabs.org/patch/731183/
 
 
-On 24-02-17 22:40, Brent Sink wrote:
->> Hello,
-> 
->> 
->> Perhaps systemd is automatically initializing the serial ports to some
->> given speed/configuration.
->> 
->> Make sure you configure your serial port to the right
->> speed/configuration using the "stty" program.
-> 
-> I'm still trying to figure how systemd configures the serial ports, but I can't
-> seem to find out where it does anything at all to the serial ports?  Does anyone
-> have any ideas where systemd would configure the serial ports?  The only thing I
-> found is where it sets up the console, which is ttymxc0 in my case.  Other than
-> that, I don't see where it configures the remaining serial ports.
+It's a shame we have to commit-pin docker-containerd, but it seems
+necessary as they haven't cut another release yet.
 
- Perhaps systemd has a .service file to start gpsd and that is configuring your
-GPS to output something? Or gpsd is started differently or configured differently?
+Patch 3/3 looks fine to me. I can't compile-test at the moment - I will be
+able to Monday, but I'm willing to bet you've got that covered already. I
+examined the changes to Docker in this release and they have changed the
+structure of their vendor tree a bit, making the changes in patch 3
+necessary.
 
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Best,
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170224/71e2ac97/attachment.html>
