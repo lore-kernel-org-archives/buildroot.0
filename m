@@ -1,48 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Feb 2017 15:31:23 +0100
-Subject: [Buildroot] [PATCH] package/oracle-mysql: fix path to systemd
-	service file
-Message-ID: <1488033083-7295-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Feb 2017 12:02:29 +0100
+Subject: [Buildroot] [git commit] toolchain-external: install libanl.so for
+	glibc
+Message-ID: <20170225154244.60171804A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The path is a remnant from before the rename of the package.
+commit: https://git.buildroot.net/buildroot/commit/?id=e9abb4a8b4d9498a8eb4e0fdd3a625534adc9382
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rather than hard-code the path, use the available variable. Also use
-that variable when copying the Sys-V init script.
+libanl.so is needed for asynchronous network address and service
+translation, declared in netdb.h
 
-Fixes:
-    http://autobuild.buildroot.org/results/767/767f0be3894c45c1e6d18bc4528d0da7b50e3757/
-    http://autobuild.buildroot.org/results/e93/e934683ebcb33c9cc8fe9de7b1d5dcd7866f3bce/
-    http://autobuild.buildroot.org/results/5d0/5d04163de80f7900d4aed14cff75b2e0761f101d/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Jesper B??kdahl <jbb@gamblify.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/oracle-mysql/oracle-mysql.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
-index ed3c0ea..f0f0649 100644
---- a/package/oracle-mysql/oracle-mysql.mk
-+++ b/package/oracle-mysql/oracle-mysql.mk
-@@ -108,12 +108,12 @@ endef
- ORACLE_MYSQL_POST_INSTALL_TARGET_HOOKS += ORACLE_MYSQL_ADD_FOLDER
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 6658875..11a1bf5 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -124,7 +124,7 @@ endif # ! no threads
+ endif
  
- define ORACLE_MYSQL_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 package/oracle-mysql/S97mysqld \
-+	$(INSTALL) -D -m 0755 $(ORACLE_MYSQL_PKGDIR)/S97mysqld \
- 		$(TARGET_DIR)/etc/init.d/S97mysqld
- endef
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.* libmvec.so.*
++TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.* libmvec.so.* libanl.so.*
+ endif
  
- define ORACLE_MYSQL_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 package/mysql/mysqld.service \
-+	$(INSTALL) -D -m 644 $(ORACLE_MYSQL_PKGDIR)/mysqld.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/mysqld.service
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -sf ../../../../usr/lib/systemd/system/mysqld.service \
--- 
-2.7.4
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
