@@ -1,7 +1,7 @@
 From: Cam Mannett <camden.mannett@protonmail.ch>
-Date: Fri, 24 Feb 2017 11:37:01 -0500
-Subject: [Buildroot] [PATCH 2/2] ti-cgt-pru: bump version to 2.1.4
-Message-ID: <ufQrfAHyF4y9LTbgiwj83-D0goNEkM6InucWv6QSLWrtydwpF09fcHBXKuRNPh0tHl0lkarODF96sEiuPaBAm7QuQu9VDjYrk9sF8QBCUKA=@protonmail.ch>
+Date: Fri, 24 Feb 2017 11:36:00 -0500
+Subject: [Buildroot] [PATCH 1/2] pru-software-support: bump version to v5.1.0
+Message-ID: <v876CxL3ex-BtugJbekKoJbWXsHAngjnGCZdxMw6pmIrZrJdYmCOp5gWgjmDazOIanKjZhCok9Zp5GHyXXCWYD_ZfU89WjpVHISmaVUnD60=@protonmail.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Camden Mannett <camden.mannett@protonmail.ch>
 ---
-package/ti-cgt-pru/ti-cgt-pru.hash | 2 +-
-package/ti-cgt-pru/ti-cgt-pru.mk | 4 ++--
-2 files changed, 3 insertions(+), 3 deletions(-)
+package/pru-software-support/pru-software-support.hash | 2 --
+package/pru-software-support/pru-software-support.mk | 4 ++--
+2 files changed, 2 insertions(+), 4 deletions(-)
+delete mode 100644 package/pru-software-support/pru-software-support.hash
 
-diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
-index 1c19b33..3ff08ac 100644
---- a/package/ti-cgt-pru/ti-cgt-pru.hash
-+++ b/package/ti-cgt-pru/ti-cgt-pru.hash
-@@ -1,2 +1,2 @@
-# Locally calculated
--sha256 df85cd1ed3aea12d577854ece11bf5f2af6ace8c39959eea4cf2fa5973924e0e ti_cgt_pru_2.1.3_linux_installer_x86.bin
-+sha256 c80dbf35e7401f4c122ff25cc2f6b5db496607782fb4583cee8663a2763f4472 ti_cgt_pru_2.1.4_linux_installer_x86.bin
-diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
-index d94f091..d6de05e 100644
---- a/package/ti-cgt-pru/ti-cgt-pru.mk
-+++ b/package/ti-cgt-pru/ti-cgt-pru.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
+deleted file mode 100644
+index 8f624da..0000000
+--- a/package/pru-software-support/pru-software-support.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally-calculated hash
+-sha256 b257535ca9b1641d1a238795f3c7004064c573a91cf4a1fa566e3f7c2360c38f pru-software-support-804b548e69ef9fdf44445f6d0968d81cb8a1e7b4.tar.gz
+diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+index 06983c2..412abdb 100644
+--- a/package/pru-software-support/pru-software-support.mk
++++ b/package/pru-software-support/pru-software-support.mk
+@@ -4,10 +4,10 @@
 #
 ################################################################################
 
--TI_CGT_PRU_VERSION = 2.1.3
-+TI_CGT_PRU_VERSION = 2.1.4
-TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
--TI_CGT_PRU_SITE = http://software-dl.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
-+TI_CGT_PRU_SITE = http://downloads.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
-TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
-Boost Software License 1.0 (compiler), \
-BSD-2c, BSD-3c, MIT, Academic Free License 3.0, Hewlett-Packard (PRU library)
+-PRU_SOFTWARE_SUPPORT_VERSION = 804b548e69ef9fdf44445f6d0968d81cb8a1e7b4
++PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
+PRU_SOFTWARE_SUPPORT_SITE = git://git.ti.com/pru-software-support-package/pru-software-support-package.git
+PRU_SOFTWARE_SUPPORT_LICENSE = BSD-3c, GPLv2, Public Domain
+-PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v4.0-Manifest.html
++PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
+PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+HOST_PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
+
 --
 2.9.3
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170224/995d711a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170224/e3341ca5/attachment.html>
