@@ -1,47 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Feb 2017 12:00:02 +0100
-Subject: [Buildroot] [git commit] util-linux: re-add <pkg>_AUTORECONF = YES
-Message-ID: <20170224110156.3B32282280@busybox.osuosl.org>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 24 Feb 2017 08:01:00 -0300 (BRT)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-02-23
+In-Reply-To: <20170224072852.CAF2822947@mail.free-electrons.com>
+References: <20170224072852.CAF2822947@mail.free-electrons.com>
+Message-ID: <901801527.12088604.1487934060090.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3c07d08eae55deeb1b1731174309750bb0ea628
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> Build statistics for 2017-02-23
+[...]
+>        host-util-linux-2.29.2 | 1
 
-Commit a5015f1025a1aee173c2c2ab39ccac5ce38f30c3 ("util-linux: security
-bump to version 2.29.2") incorrectly removed <pkg>_AUTORECONF = YES.
+ERROR: certificate common name `k.ssl.fastly.net' doesn't match requested host name `cdn.kernel.org'.
 
-While the patches touching configure.ac have indeed been removed, there
-is still a patch touching a Makemodule.am file, which triggers an
-autoreconf a build time, which itself fails because autoconf/automake
-are not available.
+Well-known problem of outdated wget on the autobuilders:
 
-So re-add <pkg>_AUTORECONF, with a comment pointing specifically at the
-patch that makes it necessary.
+    http://lists.busybox.net/pipermail/buildroot/2016-September/171353.html
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/309127a532eed00e406bbaf0b1a51b7241a10505/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/util-linux/util-linux.mk | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 0fc46d4..05e1398 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -9,6 +9,9 @@ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
- 
-+# 0001-build-sys-use-lm-for-scriptreplay-if-necessary.patch
-+UTIL_LINUX_AUTORECONF = YES
-+
- # README.licensing claims that some files are GPLv2-only, but this is not true.
- # Some files are GPLv3+ but only in tests.
- UTIL_LINUX_LICENSE = GPLv2+, BSD-4c, LGPLv2.1+ (libblkid, libfdisk, libmount), BSD-3c (libuuid)
+-- 
+Carlos Santos (Casantos) - DATACOM, P&D
+?The greatest triumph that modern PR can offer is the transcendent 
+success of having your words and actions judged by your reputation, 
+rather than the other way about.? ? Christopher Hitchens
