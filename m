@@ -1,142 +1,62 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 24 Feb 2017 07:59:24 +0100
-Subject: [Buildroot] [PATCH for-next 0/25] Lua(Rocks) improvements
-In-Reply-To: <20170223170047.24417-1-arnout@mind.be>
-References: <20170223170047.24417-1-arnout@mind.be>
-Message-ID: <CAB0FRsuq8rkSUOR93MOo-Q89xjFPR-UUe_Vd8fUBp0+TwU+3XA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Feb 2017 08:28:52 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-02-23
+Message-ID: <20170224072852.CAF2822947@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2017-02-23 18:00 GMT+01:00 Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be>:
->  This is a collection of fixes and improvements for the Lua and LuaRocks
-> infrastructure.
->
->  It was triggered by luaposix, which fails to load at runtime with luajit
-> and lua 5.1 (cfr. [1]). As is typically the case, this one fix lead to a
-> whole lot of other changes.
->
->  The first patches can be applied independently of each other. They are
-> small issues that I noticed while implementing the PKG_NAME_UPSTREAM
-> feature. See the individual commit messages for details.
->
->  We decided that new Lua packages should have a name starting with lua
-> (I guess both lua, like luaposix, and lua-, like lua-iconv, are OK).
-> Patch 13 documents that in package/Config.in.
->
->  A new package lua-bit32 is added in patch 14. This package is used to
-> fix luaposix in patch 15. Subsequent patches generalize the hacks that
-> are needed for lua-bit32 because of the added lua- prefix. Patch 16
-> reworks the extraction so it doesn't rely on specific naming of the
-> subdirectory in which luarocks extracts stuff. Patch 18 introduces
-> a _NAME_UPSTREAM variable so that the automatically derived variable
-> names from the luarocks infra are correct when the Buildroot name is
-> different. Patch 20 extends that concept to the typical situation that
-> the Lua name has camel case, while the Buildroot name (as well as the
-> LuaRocks name) is lower case.
->
->  Patch 25 is again independent of the rest. It removes documentation from
-> the target that is installed there by some Lua (not LuaRocks) packages.
-> For example, luaposix does that.
->
->  Patches 18 to 24 are somewhat controversial because they introduce
-> "magic automation" just to save a few lines in the package .mk file. The
-> amount of savings from those isn't impressive either, they have a
-> diffstat of 13 insertions(+), 17 deletions(-) (discounting the
-> documentation change). Still, I believe it makes creation of LuaRocks
-> packages a bit easier so I included them.
->
->  I did a runtime test after all patches applied by doing a
-> require "foo"
-> for each luarocks package with a Lua 5.1 interpreter. I am also using the
-> fixed luaposix on an actual customer device.
->
->  Obviously, this entire series is for next.
->
+Hello,
 
-Great job.
+Build statistics for 2017-02-23
+================================
 
-Fran?ois
+      successes : 189
+       failures : 18 
+       timeouts : 0  
+          TOTAL : 207
 
->  Regards,
->  Arnout
->
-> [1] https://lists.osuosl.org/pipermail/buildroot/2017-February/184511.html
->
-> ----------------------------------------------------------------
-> The following changes since commit c75f0a4d69db655bb523fbab30e0f4656bc5fb71:
->
->   configs/liteboard: Bump to kernel 4.10 (2017-02-21 16:11:05 +0100)
->
-> are available in the git repository at:
->
->   https://gitlab.com/arnout/buildroot lua
->
-> for you to fetch changes up to a5dfafeb82c2a91f51908110beafe7389015ca75:
->
->   lua: remove documentation from target (2017-02-23 16:48:06 +0100)
->
-> ----------------------------------------------------------------
-> Arnout Vandecappelle (25):
->       lutok: move to Lua libraries menu
->       cosmo: remove broken package
->       luarocks-package: use $(HOST_PKG_VERSION) instead of $(PKG_VERSION)
->       manual: luarocks: improve tutorial example
->       lpty: remove LPTY_VERSION_UPSTREAM
->       lua-periphery: remove LUA_PERIPHERY_VERSION_UPSTREAM
->       luasec: remove LUASEC_VERSION_UPSTREAM
->       ljlinenoise: remove default definition of PKG_SUBDIR
->       lua-csnappy: remove default definition of PKG_SUBDIR
->       lua-iconv: remove default definition of PKG_SUBDIR
->       luacrypto: remove default definition of PKG_SUBDIR
->       lunit: remove default definition of PKG_SUBDIR
->       package/Config.in: explain that lua package names should start with lua
->       lua-bit32: new package
->       luaposix: fix runtime by selecting "bit32" instead of "bitop"
->       luarocks-package: rework extraction
->       lua-bit32: remove custom extract commands
->       luarocks-package: introduce PKG_NAME_UPSTREAM
->       lua-bit32: use PKG_NAME_UPSTREAM
->       luarocks-package: lowercase the upstream name for LuaRocks
->       lua-coat: use PKG_NAME_UPSTREAM
->       lua-cjson: use LUA_CJSON_SUBDIR
->       lua-testmore: use PKG_NAME_UPSTREAM
->       luabitop: use PKG_NAME_UPSTREAM
->       lua: remove documentation from target
->
->  docs/manual/adding-packages-luarocks.txt           | 55 +++++++++++++---------
->  package/Config.in                                  |  6 ++-
->  package/cosmo/Config.in                            | 10 ----
->  package/cosmo/cosmo.hash                           |  2 -
->  package/ljlinenoise/ljlinenoise.mk                 |  4 +-
->  package/lpty/lpty.mk                               |  3 +-
->  package/lua-bit32/Config.in                        |  9 ++++
->  package/lua-bit32/lua-bit32.hash                   |  2 +
->  package/{cosmo/cosmo.mk => lua-bit32/lua-bit32.mk} |  9 ++--
->  package/lua-cjson/lua-cjson.mk                     |  5 +-
->  package/lua-coat/lua-coat.mk                       |  5 +-
->  package/lua-csnappy/lua-csnappy.mk                 |  4 +-
->  package/lua-iconv/lua-iconv.mk                     |  4 +-
->  package/lua-periphery/lua-periphery.mk             |  3 +-
->  package/lua-testmore/lua-testmore.mk               |  5 +-
->  package/luabitop/luabitop.mk                       |  5 +-
->  package/luacrypto/luacrypto.mk                     |  4 +-
->  package/luainterpreter/luainterpreter.mk           | 11 +++++
->  package/luaposix/Config.in                         |  6 ++-
->  package/luasec/luasec.mk                           |  3 +-
->  package/lunit/lunit.mk                             |  4 +-
->  package/lutok/Config.in                            |  1 -
->  package/pkg-luarocks.mk                            | 14 ++++--
->  23 files changed, 94 insertions(+), 80 deletions(-)
->  delete mode 100644 package/cosmo/Config.in
->  delete mode 100644 package/cosmo/cosmo.hash
->  create mode 100644 package/lua-bit32/Config.in
->  create mode 100644 package/lua-bit32/lua-bit32.hash
->  rename package/{cosmo/cosmo.mk => lua-bit32/lua-bit32.mk} (51%)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Classification of failures by reason
+====================================
+
+                 sngrep-v1.4.2 | 6 
+                  cppcms-1.0.5 | 1 
+         docker-engine-v1.12.6 | 1 
+               domoticz-3.5877 | 1 
+        host-util-linux-2.29.2 | 1 
+          janus-gateway-v0.2.1 | 1 
+                   lite-0.8.10 | 1 
+                    mpd-0.20.4 | 1 
+                 mplayer-1.3.0 | 1 
+                rsyslog-8.22.0 | 1 
+                 synergy-1.3.1 | 1 
+                     vlc-2.2.4 | 1 
+                xfsprogs-4.8.0 | 1 
+
+
+Detail of failures
+===================
+
+      x86_64 |                   cppcms-1.0.5 | NOK | http://autobuild.buildroot.net/results/1e415b0c5a401213d1011b84aa31915677e18282
+        i686 |          docker-engine-v1.12.6 | NOK | http://autobuild.buildroot.net/results/b7d0ed6ca6034f76e6e96397858ce56f8015a1b1
+        i686 |                domoticz-3.5877 | NOK | http://autobuild.buildroot.net/results/fd0ba54c7abf973691b39a0ca1bb4e07d749593a
+        mips |         host-util-linux-2.29.2 | NOK | http://autobuild.buildroot.net/results/b0786c9502f9e36f25591f011b7024d69a7d8c0a
+       sparc |           janus-gateway-v0.2.1 | NOK | http://autobuild.buildroot.net/results/bdaa67d763c0d8d377a04529c74f73bee7d4ccef
+    mips64el |                    lite-0.8.10 | NOK | http://autobuild.buildroot.net/results/68503f3e45504536cf61111d69b5d370e9f004dd
+         arc |                     mpd-0.20.4 | NOK | http://autobuild.buildroot.net/results/d2bc76c7a7b7b050087abb1a951798d6d511f707
+        or1k |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/483249550b4cc5cbfea9c5cfa05d05323046950b
+         arc |                 rsyslog-8.22.0 | NOK | http://autobuild.buildroot.net/results/bc98621c26ce42ddf8b0596eab5a4764b2d8c6d5
+        m68k |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/47c3a2a902463394429b3d836d57875edf8bcb8a
+      x86_64 |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/ee08d3d4fdece00b1294affeffd4448891ededd0
+        i686 |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/81ea9b9e12efc1ce3df90dd15c6059ac43b86b0a
+         arm |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/11165a7d84728789187567bee01ddebe00e61eaf
+      x86_64 |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/7a7b5944fde30bff4dcfee82163cb90783c69881
+         sh4 |                  sngrep-v1.4.2 | NOK | http://autobuild.buildroot.net/results/9818653c31bc664d14319f52b6ae6dc11154f999
+     aarch64 |                  synergy-1.3.1 | NOK | http://autobuild.buildroot.net/results/edfe58749d1b7a1bb2e0184a6824a74b9d38ddb9
+microblazeel |                      vlc-2.2.4 | NOK | http://autobuild.buildroot.net/results/834b013c163dc739c00d756089a86131f8c8d068
+        i686 |                 xfsprogs-4.8.0 | NOK | http://autobuild.buildroot.net/results/253a024698b55dece992b2631e30edf4ff9092f7
+
+-- 
+http://autobuild.buildroot.net
