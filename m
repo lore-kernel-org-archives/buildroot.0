@@ -1,45 +1,53 @@
-From: =?UTF-8?q?Jesper=20B=C3=A6kdahl?= <jbb@gamblify.com>
-Date: Fri, 24 Feb 2017 10:03:07 +0100
-Subject: [Buildroot] [PATCH v2 1/2] glibc: install libanl.so to target
-In-Reply-To: <1487848270-32609-1-git-send-email-jbb@gamblify.com>
-References: <1487848270-32609-1-git-send-email-jbb@gamblify.com>
-Message-ID: <1487926988-32495-1-git-send-email-jbb@gamblify.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 24 Feb 2017 10:12:08 +0100
+Subject: [Buildroot] [PATCH] docs/website: Improving website speed
+In-Reply-To: <20170223221556.5e152293@free-electrons.com>
+References: <1487803956-24668-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20170223215442.368ece35@free-electrons.com>
+ <CA+TH9VkW5hdUHCU26w0bswKspdN-geT5me_2_pPOF=a=jzTKXw@mail.gmail.com>
+ <20170223221556.5e152293@free-electrons.com>
+Message-ID: <9678efaa-0621-fc45-de15-1f2f0fc534a1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libanl.so is needed for asynchronous network address and service
-translation, declared in netdb.h
 
-Signed-off-by: Jesper B?kdahl <jbb@gamblify.com>
 
----
-Changes v1 -> v2:
- - Added info on libanl.so usage
+On 23-02-17 22:15, Thomas Petazzoni wrote:
+> On Thu, 23 Feb 2017 22:08:05 +0100, Angelo Compagnucci wrote:
+> 
+>> My patch doesn't necessary requires a server side configuration
+>> change, usually the module I used in htaccess are enabled in common
+>> apache configuration. BTW the use of the modules by a virtualhost is
+>> not enabled by default and .htaccess simply enables it.
+>> On a shared webserver with hundres of websites for example, changing
+>> the cache control setting doesn't require the server sysadmin
+>> intervention, cause the htaccess is used to accomodate user
+>> preferences on a per site base.
+>> Buildroot is probably served by a shared webserver with the required
+>> modules enabled, but they are not correctly configured for the
+>> buildroot.org virtualhost.
+>> So simply dropping the .htaccess in the buildroot virtualhost root
+>> directory should do the trick and enable that configuraion.
+> Right. I want to see what the admins of the webserver have to say
+> though.
 
-Signed-off-by: Jesper B?kdahl <jbb@gamblify.com>
----
- package/glibc/glibc.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Angelo is right though: this .htaccess file basically checks what the server
+supports and enables features in the webserver if they are available. So even if
+the osuosl webserver currently doesn't have one of these modules installed, it
+still makes sense to have it in the .htaccess file so it will be used when they
+do install the module.
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index c11f7cd..ee52539 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -101,9 +101,9 @@ endef
- #
- 
- GLIBC_LIBS_LIB = \
--	ld*.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.*        \
--	libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* libutil.so.*   \
--	libnss_files.so.* libnss_dns.so.* libmvec.so.*
-+	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
-+	libm.so.* libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* \
-+	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
- 
- ifeq ($(BR2_PACKAGE_GDB),y)
- GLIBC_LIBS_LIB += libthread_db.so.*
+ Regards,
+ Arnout
+
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
