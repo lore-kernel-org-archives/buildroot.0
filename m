@@ -1,147 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 24 Feb 2017 18:15:12 +0100
-Subject: [Buildroot] [PATCH] docs/website: Improving website speed
-In-Reply-To: <1487803956-24668-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1487803956-24668-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <04b78ad5-5689-26e8-357e-1624d4bbbca7@mind.be>
+Date: Fri, 24 Feb 2017 18:20:24 +0100
+Subject: [Buildroot] [PATCH 1/2] pru-software-support: bump version to
+ v5.1.0
+In-Reply-To: <v876CxL3ex-BtugJbekKoJbWXsHAngjnGCZdxMw6pmIrZrJdYmCOp5gWgjmDazOIanKjZhCok9Zp5GHyXXCWYD_ZfU89WjpVHISmaVUnD60=@protonmail.ch>
+References: <v876CxL3ex-BtugJbekKoJbWXsHAngjnGCZdxMw6pmIrZrJdYmCOp5gWgjmDazOIanKjZhCok9Zp5GHyXXCWYD_ZfU89WjpVHISmaVUnD60=@protonmail.ch>
+Message-ID: <d7700b0f-d96b-9d38-4d74-4aecc0e4b041@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Angelo,
+ Hi Cam,
 
-On 22-02-17 23:52, Angelo Compagnucci wrote:
-> Currently the buildroot website is not leveraging common
-> techniques to have a better loading speed (browser caching,
-> gzip compression, deflating).
+ Please use git send-email to send patches - your mailer has removed the
+whitespace, so it is no longer a valid patch.
 
- Sounds like a great idea. I had my doubts about the usefulness of
-deflate/compress - most of our pages are relatively small, and the big ones
-(e.g. bootstrap) come from a cdn. However, the news page for example is more
-than 100K and that compresses nicely.
-
-> This commit provides an .htaccess files with all the needed to
-> enable mentioned features. This .htaccess only works if the
-> webserver has deflate, expires and headers modules enabled.
-
- This is not phrased very well. It should be:
-
- This .htaccess file checks the modules that are available on
-the webserver, and configures them appropriately if they are.
-
-
- The best way to test this, IMHO, is to just deploy it and run some timing
-experiments on the server. Perhaps it would be nice if you could do a
-measurement now, and then one after deployment, to see the improvement?
-
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+On 24-02-17 17:36, Cam Mannett wrote:
+> Signed-off-by: Camden Mannett <camden.mannett@protonmail.ch>
 > ---
->  docs/website/.htaccess | 62 ++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 docs/website/.htaccess
+> package/pru-software-support/pru-software-support.hash | 2 --
+> package/pru-software-support/pru-software-support.mk   | 4 ++--
+> 2 files changed, 2 insertions(+), 4 deletions(-)
+> delete mode 100644 package/pru-software-support/pru-software-support.hash
 > 
-> diff --git a/docs/website/.htaccess b/docs/website/.htaccess
-> new file mode 100644
-> index 0000000..b02beb8
-> --- /dev/null
-> +++ b/docs/website/.htaccess
-> @@ -0,0 +1,62 @@
-> +# BEGIN Compress text files
-> +<ifModule mod_deflate.c>
-> +  <filesMatch ".(css|js|x?html?|php)$">
-> +    SetOutputFilter DEFLATE
-> +  </filesMatch>
-> +</ifModule>
-> +# END Compress text files
+> diff --git a/package/pru-software-support/pru-software-support.hash
+> b/package/pru-software-support/pru-software-support.hash
+> deleted file mode 100644
+> index 8f624da..0000000
+> --- a/package/pru-software-support/pru-software-support.hash
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -# Locally-calculated hash
+> -sha256 b257535ca9b1641d1a238795f3c7004064c573a91cf4a1fa566e3f7c2360c38f
+> pru-software-support-804b548e69ef9fdf44445f6d0968d81cb8a1e7b4.tar.gz
 
- What happens when the server has both deflate and gzip enabled?
+ Don't remove the hash file. Instead, calculate the new hash and replace it.
 
-> +
-> +# BEGIN Expire headers
-> +<ifModule mod_expires.c>
-> +  ExpiresActive On
-> +  ExpiresDefault "access plus 1 seconds"
-> +  ExpiresByType image/x-icon "access plus 2592000 seconds"
+> diff --git a/package/pru-software-support/pru-software-support.mk
+> b/package/pru-software-support/pru-software-support.mk
+> index 06983c2..412abdb 100644
+> --- a/package/pru-software-support/pru-software-support.mk
+> +++ b/package/pru-software-support/pru-software-support.mk
+> @@ -4,10 +4,10 @@
+> #
+> ################################################################################
+> 
+> -PRU_SOFTWARE_SUPPORT_VERSION = 804b548e69ef9fdf44445f6d0968d81cb8a1e7b4
+> +PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
+> PRU_SOFTWARE_SUPPORT_SITE =
+> git://git.ti.com/pru-software-support-package/pru-software-support-package.git
 
- Please use "1 week" instead of "2592000 seconds". Or is the idea to use the
-same numbers as in the Cache-Control headers?
-
-> +  ExpiresByType image/jpeg "access plus 2592000 seconds"
-> +  ExpiresByType image/png "access plus 2592000 seconds"
-> +  ExpiresByType image/gif "access plus 2592000 seconds"
-
- So we have to make sure, if we ever update an image, that we give it a
-different name. Which is a good idea anyway :-)
-
-> +  ExpiresByType application/x-shockwave-flash "access plus 2592000 seconds"
-> +  ExpiresByType text/css "access plus 604800 seconds"
-> +  ExpiresByType text/javascript "access plus 216000 seconds"
-> +  ExpiresByType application/javascript "access plus 216000 seconds"
-> +  ExpiresByType application/x-javascript "access plus 216000 seconds"
-
- Hm, the only javascript we serve is js/buildroot.js, which is only 3507 bytes.
-We would also have to change its name if we ever modify it, otherwise clients
-are going to see inconsistent results for up to two days... I think it's better
-to align this with the html time. Same goes for the css, we only have a total of
-7KB of css.
-
-> +  ExpiresByType text/html "access plus 600 seconds"
-> +  ExpiresByType application/xhtml+xml "access plus 600 seconds"
-
- So, if the news page gets updated, it can take up to 10 hours before clients
-see it. Seems OK.
-
-> +</ifModule>
-> +# END Expire headers
-> +
-> +# BEGIN Cache-Control Headers
-> +<ifModule mod_headers.c>
-> +  <filesMatch ".(ico|jpe?g|png|gif|swf)$">
-> +    Header set Cache-Control "max-age=2592000, public"
-> +  </filesMatch>
-> +  <filesMatch ".(css)$">
-> +    Header set Cache-Control "max-age=604800, public"
-> +  </filesMatch>
-> +  <filesMatch ".(js)$">
-> +    Header set Cache-Control "max-age=216000, private"
-> +  </filesMatch>
-> +  <filesMatch ".(x?html?|php)$">
-> +    Header set Cache-Control "max-age=600, private, must-revalidate"
-> +  </filesMatch>
-> +</ifModule>
-> +# END Cache-Control Headers
-> +
-> +# BEGIN Turn ETags Off
-> +<ifModule mod_headers.c>
-> +  Header unset ETag
-
- Why turn etags off? Anyway, it is currently not turned on so this makes no
-difference. But the way that we use our web pages, the best option would be to
-use the Last-Modified header. It's currently not setting that. Do you know how
-to enable it?
+ Is there by any chance a release tarball that can be downloaded, rather than
+doing a git clone? That would be convenient...
 
  Regards,
  Arnout
 
-> +</ifModule>
-> +FileETag None
-> +# END Turn ETags Off
-> +
-> +# BEGIN gzip
-> +<ifModule mod_gzip.c>
-> +mod_gzip_on Yes
-> +mod_gzip_dechunk Yes
-> +mod_gzip_item_include file .(html?|txt|css|js)$
-> +mod_gzip_item_include handler ^cgi-script$
-> +mod_gzip_item_include mime ^text/.*
-> +mod_gzip_item_include mime ^application/x-javascript.*
-> +mod_gzip_item_exclude mime ^image/.*
-> +mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
-> +</ifModule>
-> +# END gzip
+> PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3c, GPLv2, Public Domain
+> -PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v4.0-Manifest.html
+> +PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
+> PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+> HOST_PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
+> 
+> --
+> 2.9.3
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 -- 
