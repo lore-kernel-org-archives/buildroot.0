@@ -1,63 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Feb 2017 09:25:49 +0100
-Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
- package
-In-Reply-To: <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
- <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
- <20170223101820.127d5700@free-electrons.com>
- <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
-Message-ID: <20170224092549.2c560db3@free-electrons.com>
+From: =?UTF-8?q?Jesper=20B=C3=A6kdahl?= <jbb@gamblify.com>
+Date: Fri, 24 Feb 2017 10:03:08 +0100
+Subject: [Buildroot] [PATCH v2 2/2] toolchain-external: install libanl.so
+	for glibc
+In-Reply-To: <1487926988-32495-1-git-send-email-jbb@gamblify.com>
+References: <1487848270-32609-1-git-send-email-jbb@gamblify.com>
+ <1487926988-32495-1-git-send-email-jbb@gamblify.com>
+Message-ID: <1487926988-32495-2-git-send-email-jbb@gamblify.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+libanl.so is needed for asynchronous network address and service
+translation, declared in netdb.h
 
-On Fri, 24 Feb 2017 15:07:13 +1100, Sam Bobroff wrote:
+Signed-off-by: Jesper B?kdahl <jbb@gamblify.com>
+---
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Yes, absolutely, and I really don't know how we should handle it. I
-> searched fairly hard for another solution but the only other one seems
-> to be to rewrite gobject-introspection completely and the other
-> projects that have attempted this have used the same host-qemu approach
-> (that's yocto and cygwin).
-
-Can you summarize what is Qemu used for in the context of building
-gobject-introspection ?
-
-If it's to generate some architecture-specific file, can we
-pre-generate it, and bundle it with Buildroot ?
-
-> Would a comment in the menuconfig section for gobject-introspection be
-> any better? It's more likely to be seen but it's not really the "right"
-> place -- you can run into the kernel version issue with QEMU usermode
-> without using gobject-introspection (although not during the build!).
-> 
-> But more generally, should buildroot accept this kind of solution at
-> all? It works and is useful but it significantly more complex and
-> therefore problem-prone than normal...
-
-I'd really like to avoid a qemu-based solution if possible. But of
-course, if there's really no other option and people want
-gobject-introspection, we won't have much choice :/
-
-> > Please use <pkg>_AUTORECONF = YES. What you did is not correct because
-> > you will use autoconf/automake from the host machine instead of ones
-> > built by Buildroot.  
-> 
-> Ah, good point but AUTORECONF fails, or as least it did. I'll
-> re-investigate and see if I can get it working.
-
-OK. Depending on what their autogen script is doing, you might be able
-to fix it by using some kind of POST_PATCH_HOOKS. It really depends on
-what the actual issue is.
-
-Thanks,
-
-Thomas
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 6658875..11a1bf5 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -124,7 +124,7 @@ endif # ! no threads
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+-TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.* libmvec.so.*
++TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.* libmvec.so.* libanl.so.*
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
