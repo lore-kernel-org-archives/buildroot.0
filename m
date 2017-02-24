@@ -1,47 +1,48 @@
-From: Cam Mannett <camden.mannett@protonmail.ch>
-Date: Fri, 24 Feb 2017 11:36:00 -0500
-Subject: [Buildroot] [PATCH 1/2] pru-software-support: bump version to v5.1.0
-Message-ID: <v876CxL3ex-BtugJbekKoJbWXsHAngjnGCZdxMw6pmIrZrJdYmCOp5gWgjmDazOIanKjZhCok9Zp5GHyXXCWYD_ZfU89WjpVHISmaVUnD60=@protonmail.ch>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 24 Feb 2017 17:48:15 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-02-23
+In-Reply-To: <20170224164608.147242c0@free-electrons.com>
+References: <20170224072852.CAF2822947@mail.free-electrons.com>
+ <901801527.12088604.1487934060090.JavaMail.zimbra@datacom.ind.br>
+ <20170224141245.71bf2eb5@free-electrons.com>
+ <3d3ce3ae-32b1-fbd2-0b27-585f600f3e31@mind.be>
+ <20170224164608.147242c0@free-electrons.com>
+Message-ID: <b9bba8e7-e680-92b8-b85f-a9da352cd557@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Camden Mannett <camden.mannett@protonmail.ch>
----
-package/pru-software-support/pru-software-support.hash | 2 --
-package/pru-software-support/pru-software-support.mk | 4 ++--
-2 files changed, 2 insertions(+), 4 deletions(-)
-delete mode 100644 package/pru-software-support/pru-software-support.hash
 
-diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
-deleted file mode 100644
-index 8f624da..0000000
---- a/package/pru-software-support/pru-software-support.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally-calculated hash
--sha256 b257535ca9b1641d1a238795f3c7004064c573a91cf4a1fa566e3f7c2360c38f pru-software-support-804b548e69ef9fdf44445f6d0968d81cb8a1e7b4.tar.gz
-diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
-index 06983c2..412abdb 100644
---- a/package/pru-software-support/pru-software-support.mk
-+++ b/package/pru-software-support/pru-software-support.mk
-@@ -4,10 +4,10 @@
-#
-################################################################################
 
--PRU_SOFTWARE_SUPPORT_VERSION = 804b548e69ef9fdf44445f6d0968d81cb8a1e7b4
-+PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
-PRU_SOFTWARE_SUPPORT_SITE = git://git.ti.com/pru-software-support-package/pru-software-support-package.git
-PRU_SOFTWARE_SUPPORT_LICENSE = BSD-3c, GPLv2, Public Domain
--PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v4.0-Manifest.html
-+PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
-PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
-HOST_PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
+On 24-02-17 16:46, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 24 Feb 2017 16:41:13 +0100, Arnout Vandecappelle wrote:
+> 
+>>  I wonder though, which distro is that autobuilder running? Debian oldstable
+>> (wheezy) already has an updated wget.
+> 
+> I'm not sure which exact autobuilder failure Carlos was pointing to,
+> but my autobuilder runs a very old squeeze Debian distro, that has this
+> wget problem.
+> 
+> And yes, running very old squeeze Debian on my autobuilder is
+> intentional :)
 
---
-2.9.3
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170224/e3341ca5/attachment.html>
+ Hm, squeeze was supposed to be an LTS, it got maintained until February 2016.
+But it looks like wget didn't get any updates since 2010, except for a fix for
+CVE-2014-4877. So bummer.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
