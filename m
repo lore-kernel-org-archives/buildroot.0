@@ -1,233 +1,142 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Fri, 24 Feb 2017 15:07:13 +1100
-Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
- package
-In-Reply-To: <20170223101820.127d5700@free-electrons.com>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
- <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
- <20170223101820.127d5700@free-electrons.com>
-Message-ID: <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 24 Feb 2017 07:59:24 +0100
+Subject: [Buildroot] [PATCH for-next 0/25] Lua(Rocks) improvements
+In-Reply-To: <20170223170047.24417-1-arnout@mind.be>
+References: <20170223170047.24417-1-arnout@mind.be>
+Message-ID: <CAB0FRsuq8rkSUOR93MOo-Q89xjFPR-UUe_Vd8fUBp0+TwU+3XA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 23, 2017 at 10:18:20AM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 23 Feb 2017 11:54:54 +1100, Sam Bobroff wrote:
-> > Add gobject-introspection, built using host-qemu.
-> 
-> Ouch, this is complicated dependency. Have you taken into account that
-> it's only available for some architectures? Also there's the major
-> issue of kernel headers version between host and target. See the
-> comment in qemu.mk:
-> 
-> # The principle of qemu-user is that it emulates the instructions of
-> # the target architecture when running the binary, and then when this
-> # binary does a system call, it converts this system call into a
-> # system call on the host machine. This mechanism makes an assumption:
-> # that the target binary will not do system calls that do not exist on
-> # the host. This basically requires that the target binary should be
-> # built with kernel headers that are older or the same as the kernel
-> # version running on the host machine.
-> 
-> This makes using host-qemu user mode emulation very unpractical,
-> because you must have target kernel headers older than the host kernel
-> headers, which is frequently not true.
+2017-02-23 18:00 GMT+01:00 Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be>:
+>  This is a collection of fixes and improvements for the Lua and LuaRocks
+> infrastructure.
+>
+>  It was triggered by luaposix, which fails to load at runtime with luajit
+> and lua 5.1 (cfr. [1]). As is typically the case, this one fix lead to a
+> whole lot of other changes.
+>
+>  The first patches can be applied independently of each other. They are
+> small issues that I noticed while implementing the PKG_NAME_UPSTREAM
+> feature. See the individual commit messages for details.
+>
+>  We decided that new Lua packages should have a name starting with lua
+> (I guess both lua, like luaposix, and lua-, like lua-iconv, are OK).
+> Patch 13 documents that in package/Config.in.
+>
+>  A new package lua-bit32 is added in patch 14. This package is used to
+> fix luaposix in patch 15. Subsequent patches generalize the hacks that
+> are needed for lua-bit32 because of the added lua- prefix. Patch 16
+> reworks the extraction so it doesn't rely on specific naming of the
+> subdirectory in which luarocks extracts stuff. Patch 18 introduces
+> a _NAME_UPSTREAM variable so that the automatically derived variable
+> names from the luarocks infra are correct when the Buildroot name is
+> different. Patch 20 extends that concept to the typical situation that
+> the Lua name has camel case, while the Buildroot name (as well as the
+> LuaRocks name) is lower case.
+>
+>  Patch 25 is again independent of the rest. It removes documentation from
+> the target that is installed there by some Lua (not LuaRocks) packages.
+> For example, luaposix does that.
+>
+>  Patches 18 to 24 are somewhat controversial because they introduce
+> "magic automation" just to save a few lines in the package .mk file. The
+> amount of savings from those isn't impressive either, they have a
+> diffstat of 13 insertions(+), 17 deletions(-) (discounting the
+> documentation change). Still, I believe it makes creation of LuaRocks
+> packages a bit easier so I included them.
+>
+>  I did a runtime test after all patches applied by doing a
+> require "foo"
+> for each luarocks package with a Lua 5.1 interpreter. I am also using the
+> fixed luaposix on an actual customer device.
+>
+>  Obviously, this entire series is for next.
+>
 
-Yes, absolutely, and I really don't know how we should handle it. I
-searched fairly hard for another solution but the only other one seems
-to be to rewrite gobject-introspection completely and the other
-projects that have attempted this have used the same host-qemu approach
-(that's yocto and cygwin).
+Great job.
 
-I suppose what we want is to make this available but to make the
-constraints obvious so that noone is confused when it doesn't work.
+Fran?ois
 
-I thought about adding some text to the QEMU section of the menuconfig
-to explain the constraint but I couldn't work out how to make it useful,
-because gobject-introspection will select host-QEMU usermode by
-dependency so a user may never go to the QEMU section. I suppose we
-could remove the auto-selection and force users to go select QEMU
-manually. Maybe?
-
-Would a comment in the menuconfig section for gobject-introspection be
-any better? It's more likely to be seen but it's not really the "right"
-place -- you can run into the kernel version issue with QEMU usermode
-without using gobject-introspection (although not during the build!).
-
-But more generally, should buildroot accept this kind of solution at
-all? It works and is useful but it significantly more complex and
-therefore problem-prone than normal...
-
-> > Also updates libglib2 to a more recent version to satasify a dependency.
-> 
-> Which dependency?
-
-Oh right, good point. It's gobject-introspection itself but I'll fix the
-comment.
-
-> Your SoB line is missing.
-
-Yes, and I also posted it as an RFC. I didn't want to misrepresent this
-as ready for inclusion, or even that it will ever be included, given
-what we're discussing up above about usermode QEMU.
-
-> > diff --git a/package/gobject-introspection/0001-ldd-cross-launcher.patch b/package/gobject-introspection/0001-ldd-cross-launcher.patch
-> > new file mode 100644
-> > index 000000000..9129431cb
-> > --- /dev/null
-> > +++ b/package/gobject-introspection/0001-ldd-cross-launcher.patch
-> > @@ -0,0 +1,22 @@
-> > +*** a/giscanner/shlibs.py	2016-06-01 13:42:52.559661299 +1000
-> > +--- b/giscanner/shlibs.py	2016-06-01 13:44:43.028025807 +1000
-> > +***************
-> > +*** 103,109 ****
-> > +          if platform_system == 'Darwin':
-> > +              args.extend(['otool', '-L', binary.args[0]])
-> > +          else:
-> > +!             args.extend(['ldd', binary.args[0]])
-> > +          proc = subprocess.Popen(args, stdout=subprocess.PIPE)
-> > +          patterns = {}
-> > +          for library in libraries:
-> > +--- 103,112 ----
-> > +          if platform_system == 'Darwin':
-> > +              args.extend(['otool', '-L', binary.args[0]])
-> > +          else:
-> > +!             ldd = os.getenv('GI_LDD')
-> > +!             if not ldd:
-> > +!                 ldd = 'ldd'
-> > +!             args.extend([ldd, binary.args[0]])
-> > +          proc = subprocess.Popen(args, stdout=subprocess.PIPE)
-> > +          patterns = {}
-> > +          for library in libraries:
-> 
-> Please use "diff -u" to generate patches. And more precisely, for
-> projects using Git as their version control system, we want a Git
-> formatted patch, i.e the result of "git format-patch".
-
-Sorry I'll fix it for v2! (I generated that patch a long time ago). If
-we're able to get this to a point where we think we'll include it in
-buildroot, I'll try upstreaming it. It's upstream seems to be at least
-somewhat active.
-
-> > diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-> > new file mode 100644
-> > index 000000000..253c20b30
-> > --- /dev/null
-> > +++ b/package/gobject-introspection/Config.in
-> > @@ -0,0 +1,12 @@
-> > +config BR2_PACKAGE_GOBJECT_INTROSPECTION
-> > +    bool "gobject-introspection"
-> 
-> Indentation with tabs.
-
-Done.
-
-> > +    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_3 # ldd
-> 
-> Not sure to see the relationship between ldd, which is provided by the
-> C library, and the version of the compiler.
-
-I'll remove this. It is cruft from an earlier version where I was trying
-to pull ldd in from the toolchain (I think it's distributed with glibc)
-but I gave up on that approach because it's not installed when buildroot
-builds toolchains.
-
-> > +    select BR2_PACKAGE_HOST_QEMU
-> > +    select BR2_PACKAGE_PKGCONF
-> 
-> You really need pkgconf on the target? Seems unlikely.
-
-Removed.
-
-> 
-> > +    select BR2_PACKAGE_LIBGLIB2
-> > +    select BR2_PACKAGE_PYTHON
-> > +
-> 
-
-> Unneeded empty line.
-
-Removed.
-
-> 
-> > +    help
-> > +      gobject-introspection
-> 
-> We want a better description here.
-
-Will do.
-
-> 
-> > +
-> > +      http://wiki.gnome.org/
-> 
-> And a better upstream URL here.
-
-OK.
-
-> 
-> > +GOBJECT_INTROSPECTION_VERSION         = 1.51.1
-> 
-> Only one space before and after '=' sign.
-> 
-> > +GOBJECT_INTROSPECTION_SITE            = $(call github,GNOME,gobject-introspection,$(GOBJECT_INTROSPECTION_VERSION))
-> 
-> Not tarball releases?
-
-There wasn't one I could find, but I re-checked (since you asked) and it
-looks like there is one now!
-
-I'll switch it over.
-
-> > +GOBJECT_INTROSPECTION_LICENSE         = GPLv2+ LGPLv2.1
-> 
-> Licenses should be comma separated, and you should preferably indicate
-> what is under LGPLv2.1 and what is under GPLv2+.
-
-Ah, OK. Will do (I think I can do it correctly now).
-
-> > +GOBJECT_INTROSPECTION_LICENSE_FILES   = COPYING COPYING.GPL COPYING.LGPL COPYING.lib COPYING.tools
-> > +GOBJECT_INTROSPECTION_INSTALL_STAGING = YES
-> > +GOBJECT_INTROSPECTION_MAKE_OPTS       = GI_CROSS_LAUNCHER="$(HOST_DIR)/usr/bin/qemu-$(HOST_QEMU_ARCH)" GI_LDD=$(STAGING_DIR)/usr/bin/ldd-cross INTROSPECTION_SCANNER=g-ir-scanner INTROSPECTION_COMPILER=g-ir-compiler
-> 
-> Please split long lines.
-
-Done.
-
-> > +GOBJECT_INTROSPECTION_DEPENDENCIES    = pkgconf python libglib2 host-qemu host-gobject-introspection
-> > +HOST_GOBJECT_INTROSPECTION_DEPENDENCIES = host-pkgconf host-python host-libglib2 toolchain
-> > +
-> > +define GOBJECT_INTROSPECTION_BOOTSTRAP
-> > +	cd $(GOBJECT_INTROSPECTION_DIR) && env NOCONFIGURE=1 ./autogen.sh --host=$(GNU_TARGET_NAME)
-> 
-> Please use <pkg>_AUTORECONF = YES. What you did is not correct because
-> you will use autoconf/automake from the host machine instead of ones
-> built by Buildroot.
-
-Ah, good point but AUTORECONF fails, or as least it did. I'll
-re-investigate and see if I can get it working.
-
-If I can't, I'll document it properly so that we know what the actual
-reason is.
-
-> [... I did not yet review the rest of the .mk file....]
-> 
-> > -LIBGLIB2_VERSION_MAJOR = 2.50
-> > -LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
-> > +LIBGLIB2_VERSION_MAJOR = 2.51
-> 
-> This is a development/unstable version, so we typically don't package it in Buildroot.
-
-Hmm, it may be the only version that can work but I'll see if I can get
-a proper release one working.
-
-> Best regards,
-> 
-> Thomas
-
-Thanks!
-Sam.
+>  Regards,
+>  Arnout
+>
+> [1] https://lists.osuosl.org/pipermail/buildroot/2017-February/184511.html
+>
+> ----------------------------------------------------------------
+> The following changes since commit c75f0a4d69db655bb523fbab30e0f4656bc5fb71:
+>
+>   configs/liteboard: Bump to kernel 4.10 (2017-02-21 16:11:05 +0100)
+>
+> are available in the git repository at:
+>
+>   https://gitlab.com/arnout/buildroot lua
+>
+> for you to fetch changes up to a5dfafeb82c2a91f51908110beafe7389015ca75:
+>
+>   lua: remove documentation from target (2017-02-23 16:48:06 +0100)
+>
+> ----------------------------------------------------------------
+> Arnout Vandecappelle (25):
+>       lutok: move to Lua libraries menu
+>       cosmo: remove broken package
+>       luarocks-package: use $(HOST_PKG_VERSION) instead of $(PKG_VERSION)
+>       manual: luarocks: improve tutorial example
+>       lpty: remove LPTY_VERSION_UPSTREAM
+>       lua-periphery: remove LUA_PERIPHERY_VERSION_UPSTREAM
+>       luasec: remove LUASEC_VERSION_UPSTREAM
+>       ljlinenoise: remove default definition of PKG_SUBDIR
+>       lua-csnappy: remove default definition of PKG_SUBDIR
+>       lua-iconv: remove default definition of PKG_SUBDIR
+>       luacrypto: remove default definition of PKG_SUBDIR
+>       lunit: remove default definition of PKG_SUBDIR
+>       package/Config.in: explain that lua package names should start with lua
+>       lua-bit32: new package
+>       luaposix: fix runtime by selecting "bit32" instead of "bitop"
+>       luarocks-package: rework extraction
+>       lua-bit32: remove custom extract commands
+>       luarocks-package: introduce PKG_NAME_UPSTREAM
+>       lua-bit32: use PKG_NAME_UPSTREAM
+>       luarocks-package: lowercase the upstream name for LuaRocks
+>       lua-coat: use PKG_NAME_UPSTREAM
+>       lua-cjson: use LUA_CJSON_SUBDIR
+>       lua-testmore: use PKG_NAME_UPSTREAM
+>       luabitop: use PKG_NAME_UPSTREAM
+>       lua: remove documentation from target
+>
+>  docs/manual/adding-packages-luarocks.txt           | 55 +++++++++++++---------
+>  package/Config.in                                  |  6 ++-
+>  package/cosmo/Config.in                            | 10 ----
+>  package/cosmo/cosmo.hash                           |  2 -
+>  package/ljlinenoise/ljlinenoise.mk                 |  4 +-
+>  package/lpty/lpty.mk                               |  3 +-
+>  package/lua-bit32/Config.in                        |  9 ++++
+>  package/lua-bit32/lua-bit32.hash                   |  2 +
+>  package/{cosmo/cosmo.mk => lua-bit32/lua-bit32.mk} |  9 ++--
+>  package/lua-cjson/lua-cjson.mk                     |  5 +-
+>  package/lua-coat/lua-coat.mk                       |  5 +-
+>  package/lua-csnappy/lua-csnappy.mk                 |  4 +-
+>  package/lua-iconv/lua-iconv.mk                     |  4 +-
+>  package/lua-periphery/lua-periphery.mk             |  3 +-
+>  package/lua-testmore/lua-testmore.mk               |  5 +-
+>  package/luabitop/luabitop.mk                       |  5 +-
+>  package/luacrypto/luacrypto.mk                     |  4 +-
+>  package/luainterpreter/luainterpreter.mk           | 11 +++++
+>  package/luaposix/Config.in                         |  6 ++-
+>  package/luasec/luasec.mk                           |  3 +-
+>  package/lunit/lunit.mk                             |  4 +-
+>  package/lutok/Config.in                            |  1 -
+>  package/pkg-luarocks.mk                            | 14 ++++--
+>  23 files changed, 94 insertions(+), 80 deletions(-)
+>  delete mode 100644 package/cosmo/Config.in
+>  delete mode 100644 package/cosmo/cosmo.hash
+>  create mode 100644 package/lua-bit32/Config.in
+>  create mode 100644 package/lua-bit32/lua-bit32.hash
+>  rename package/{cosmo/cosmo.mk => lua-bit32/lua-bit32.mk} (51%)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
