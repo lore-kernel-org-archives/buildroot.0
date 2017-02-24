@@ -1,30 +1,35 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 24 Feb 2017 11:47:53 +0100
-Subject: [Buildroot] [PATCH] board/atmel/readme.txt: fix typo
-Message-ID: <1487933273-9542-1-git-send-email-luca@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Feb 2017 11:57:08 +0100
+Subject: [Buildroot] [git commit] package/libepoxy: needs host-pkgconf
+Message-ID: <20170224105714.DCA3B81975@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=6cda6506ad9c0505c8a154b12daf1c71551977f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+configure.ac uses PKG_CHECK_MODULES() so it needs host-pkgconf.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/atmel/readme.txt | 2 +-
+ package/libepoxy/libepoxy.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
-index 0b6634687e3e..ab7f2ba281e2 100644
---- a/board/atmel/readme.txt
-+++ b/board/atmel/readme.txt
-@@ -44,7 +44,7 @@ using SAM-BA" section below.
- For the Xplained boards, an alternative Buildroot configuration is
- provided to boot from an SD card. Those configurations are labeled as
- 'mmc'. In this case, after building Buildroot, follow the instructions
--in the "Preparting the SD card" sction.
-+in the "Preparting the SD card" section.
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index 7436e8f..1dd583e 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -9,7 +9,7 @@ LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
+ LIBEPOXY_INSTALL_STAGING = YES
+ # For patches 0001-0006:
+ LIBEPOXY_AUTORECONF = YES
+-LIBEPOXY_DEPENDENCIES = xutil_util-macros
++LIBEPOXY_DEPENDENCIES = host-pkgconf xutil_util-macros
+ LIBEPOXY_LICENSE = MIT
+ LIBEPOXY_LICENSE_FILES = COPYING
  
- To configure and build Buildroot, run:
- 
--- 
-2.7.4
