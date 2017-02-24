@@ -1,11 +1,12 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Fri, 24 Feb 2017 15:37:00 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Feb 2017 15:48:57 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2017-02-16
-In-Reply-To: <20170217211242.GC3470@free.fr>
+In-Reply-To: <c5d029d5-f610-6709-852a-b84c7ad6313d@free.fr>
 References: <20170217072852.8329420B82@mail.free-electrons.com>
  <20170217211242.GC3470@free.fr>
-Message-ID: <c5d029d5-f610-6709-852a-b84c7ad6313d@free.fr>
+ <c5d029d5-f610-6709-852a-b84c7ad6313d@free.fr>
+Message-ID: <20170224154857.61f03dfd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +15,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-Yann,
-sorry for my late analysis.
+On Fri, 24 Feb 2017 15:37:00 +0100, Julien Boibessot wrote:
 
-On 17/02/2017 22:12, Yann E. MORIN wrote:
-> <cut>....
->>          arc |        opentyrian-9c9f0ec3532b | NOK | http://autobuild.buildroot.net/results/89864a1cf0d8b27b3efdf3c36ccb3244e88a6746
->     undefined reference to `dl_iterate_phdr'
->     ld: GOT and PLT relocations cannot be fixed with a non dynamic linker
->
-> Static linking issue. Julien B.?
+> > Static linking issue. Julien B.?  
+> 
+> It seems that adding "-static" to final linking command solves the
+> problem. It's strange that other static builds on other ARCH are working ?
 
-It seems that adding "-static" to final linking command solves the
-problem. It's strange that other static builds on other ARCH are working ?
-Should I add a ~ "LDGLAGS += -static" in opentyrian.mk ?
+Waldemar can answer this question I believe.
 
-Regards,
-Julien
+> Should I add a ~ "LDGLAGS += -static" in opentyrian.mk ?
+
+-static is already in TARGET_LDFLAGS, so the problem is that you are
+not passing TARGET_LDFLAGS properly. You should do:
+
+	LDFLAGS="$(TARGET_LDFLAGS) -lm"
+
+instead of just:
+
+	LDFLAGS="-lm"
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
