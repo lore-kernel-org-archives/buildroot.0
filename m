@@ -1,39 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 24 Feb 2017 10:09:19 +0100
-Subject: [Buildroot] [PATCH for-next 0/25] Lua(Rocks) improvements
-In-Reply-To: <CAB0FRsuq8rkSUOR93MOo-Q89xjFPR-UUe_Vd8fUBp0+TwU+3XA@mail.gmail.com>
-References: <20170223170047.24417-1-arnout@mind.be>
- <CAB0FRsuq8rkSUOR93MOo-Q89xjFPR-UUe_Vd8fUBp0+TwU+3XA@mail.gmail.com>
-Message-ID: <a8a1315c-7ecc-5dde-adbd-780233c17355@mind.be>
+From: =?UTF-8?q?Jesper=20B=C3=A6kdahl?= <jbb@gamblify.com>
+Date: Fri, 24 Feb 2017 10:03:07 +0100
+Subject: [Buildroot] [PATCH v2 1/2] glibc: install libanl.so to target
+In-Reply-To: <1487848270-32609-1-git-send-email-jbb@gamblify.com>
+References: <1487848270-32609-1-git-send-email-jbb@gamblify.com>
+Message-ID: <1487926988-32495-1-git-send-email-jbb@gamblify.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+libanl.so is needed for asynchronous network address and service
+translation, declared in netdb.h
 
+Signed-off-by: Jesper B?kdahl <jbb@gamblify.com>
 
-On 24-02-17 07:59, Fran?ois Perrad wrote:
-> 2017-02-23 18:00 GMT+01:00 Arnout Vandecappelle (Essensium/Mind)
-> <arnout@mind.be>:
->>  This is a collection of fixes and improvements for the Lua and LuaRocks
->> infrastructure.
-[snip]
-> 
-> Great job.
+---
+Changes v1 -> v2:
+ - Added info on libanl.so usage
 
- Do you mean to say "Reviewed-by: " ? :-)
+Signed-off-by: Jesper B?kdahl <jbb@gamblify.com>
+---
+ package/glibc/glibc.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- Regards,
- Arnout
-
-
-[snip]
-
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index c11f7cd..ee52539 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -101,9 +101,9 @@ endef
+ #
+ 
+ GLIBC_LIBS_LIB = \
+-	ld*.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.*        \
+-	libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* libutil.so.*   \
+-	libnss_files.so.* libnss_dns.so.* libmvec.so.*
++	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
++	libm.so.* libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* \
++	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
+ 
+ ifeq ($(BR2_PACKAGE_GDB),y)
+ GLIBC_LIBS_LIB += libthread_db.so.*
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
