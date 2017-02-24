@@ -1,15 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Feb 2017 12:02:29 +0100
-Subject: [Buildroot] [git commit] toolchain-external: install libanl.so for
-	glibc
-Message-ID: <20170225154244.60171804A7@busybox.osuosl.org>
+Date: Fri, 24 Feb 2017 12:02:25 +0100
+Subject: [Buildroot] [git commit] glibc: install libanl.so to target
+Message-ID: <20170225154244.58875821DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9abb4a8b4d9498a8eb4e0fdd3a625534adc9382
+commit: https://git.buildroot.net/buildroot/commit/?id=ba684f0a128e33b24b7c4a4bce0d0d557887f8df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 libanl.so is needed for asynchronous network address and service
@@ -18,19 +17,23 @@ translation, declared in netdb.h
 Signed-off-by: Jesper B??kdahl <jbb@gamblify.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/glibc/glibc.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 6658875..11a1bf5 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -124,7 +124,7 @@ endif # ! no threads
- endif
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index c11f7cd..ee52539 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -101,9 +101,9 @@ endef
+ #
  
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
--TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.* libmvec.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.* libmvec.so.* libanl.so.*
- endif
+ GLIBC_LIBS_LIB = \
+-	ld*.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.*        \
+-	libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* libutil.so.*   \
+-	libnss_files.so.* libnss_dns.so.* libmvec.so.*
++	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
++	libm.so.* libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* \
++	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
  
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+ ifeq ($(BR2_PACKAGE_GDB),y)
+ GLIBC_LIBS_LIB += libthread_db.so.*
