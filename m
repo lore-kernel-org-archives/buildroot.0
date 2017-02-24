@@ -1,82 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Feb 2017 16:36:01 +0100
-Subject: [Buildroot] [PATCH] package/htop: not available for uClibc static
-	builds
-Message-ID: <1487950561-29105-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 24 Feb 2017 16:41:13 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-02-23
+In-Reply-To: <20170224141245.71bf2eb5@free-electrons.com>
+References: <20170224072852.CAF2822947@mail.free-electrons.com>
+ <901801527.12088604.1487934060090.JavaMail.zimbra@datacom.ind.br>
+ <20170224141245.71bf2eb5@free-electrons.com>
+Message-ID: <3d3ce3ae-32b1-fbd2-0b27-585f600f3e31@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-htop wants to use backtrace() when available.
 
-However, on uClibc this causes two problems:
 
-  - backtrace() is not in libc but in a separate library, libubacktrace
-  - backtrace() uses dladdr() which is not available for static builds
+On 24-02-17 14:12, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 24 Feb 2017 08:01:00 -0300 (BRT), Carlos Santos wrote:
+>>> Build statistics for 2017-02-23  
+>> [...]
+>>>        host-util-linux-2.29.2 | 1  
+>>
+>> ERROR: certificate common name `k.ssl.fastly.net' doesn't match requested host name `cdn.kernel.org'.
+> 
+> This gets automatically solved by sources.buildroot.net caching the
+> tarball. However, since I agree that it happens quite regularly,
+> perhaps we could add some logic in autobuild-run to detect such build
+> failures and ignore them?
 
-The first point is easy to solve with a bit of hackery in configure.ac,
-with AC_SEARCH_LIBS([backtrace], [ubacktrace] ...).
+ I wonder though, which distro is that autobuilder running? Debian oldstable
+(wheezy) already has an updated wget.
 
-The second point is more tricky, as this can not easily be solved with
-simple autotools macros. Instead, we just shoehorn -ldl in the LIBS
-variable from htop.mk when doing a uClibc static build.
+ Since this problem will resolve itself pretty quickly by the updated
+sources.buildroot.net, I don't think it's worth spending time in writing an
+exception in the autobuild-run script.
 
-Fixes:
-    http://autobuild.buildroot.org/results/cde/cdea351fad7a0f61ddec3e6a141da8da0523a902/
+ Regards,
+ Arnout
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
----
-It is to be noted that a dynamic build does not need -lubacktrace.
-Weird...
----
- package/htop/0001-check-backtrace-lib.patch | 18 ++++++++++++++++++
- package/htop/htop.mk                        |  6 ++++++
- 2 files changed, 24 insertions(+)
- create mode 100644 package/htop/0001-check-backtrace-lib.patch
-
-diff --git a/package/htop/0001-check-backtrace-lib.patch b/package/htop/0001-check-backtrace-lib.patch
-new file mode 100644
-index 0000000..f019d2a
---- /dev/null
-+++ b/package/htop/0001-check-backtrace-lib.patch
-@@ -0,0 +1,18 @@
-+diff --git a/configure.ac b/configure.ac
-+index eb055b5..2864e91 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -59,7 +59,12 @@ AC_HEADER_STDC
-+ AC_CHECK_HEADERS([stdlib.h string.h strings.h sys/param.h sys/time.h unistd.h],[:],[
-+   missing_headers="$missing_headers $ac_header"
-+ ])
-+-AC_CHECK_HEADERS([execinfo.h],[:],[:])
-++AC_CHECK_HEADERS([execinfo.h],
-++    # Some libces (e.g. uClibc) may have backtrace() in a helper library
-++    [AC_SEARCH_LIBS([backtrace], [ubacktrace],
-++        [], [AC_MSG_ERROR([cannot find a library providing backtrace()])])],
-++    [:])
-++
-+ 
-+ # Checks for typedefs, structures, and compiler characteristics.
-+ # ----------------------------------------------------------------------
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index adc5090..42daa68 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -12,6 +12,12 @@ HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/ncurses5-confi
- HTOP_LICENSE = GPLv2
- HTOP_LICENSE_FILES = COPYING
- 
-+HTOP_AUTORECONF = YES
-+
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_STATIC_LIBS),yy)
-+HTOP_CONF_OPTS += LIBS=-ldl
-+endif
-+
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- HTOP_CONF_OPTS += --enable-unicode
- else
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
