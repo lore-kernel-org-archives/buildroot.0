@@ -1,44 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Feb 2017 15:48:57 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-02-16
-In-Reply-To: <c5d029d5-f610-6709-852a-b84c7ad6313d@free.fr>
-References: <20170217072852.8329420B82@mail.free-electrons.com>
- <20170217211242.GC3470@free.fr>
- <c5d029d5-f610-6709-852a-b84c7ad6313d@free.fr>
-Message-ID: <20170224154857.61f03dfd@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Feb 2017 16:36:01 +0100
+Subject: [Buildroot] [PATCH] package/htop: not available for uClibc static
+	builds
+Message-ID: <1487950561-29105-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+htop wants to use backtrace() when available.
 
-On Fri, 24 Feb 2017 15:37:00 +0100, Julien Boibessot wrote:
+However, on uClibc this causes two problems:
 
-> > Static linking issue. Julien B.?  
-> 
-> It seems that adding "-static" to final linking command solves the
-> problem. It's strange that other static builds on other ARCH are working ?
+  - backtrace() is not in libc but in a separate library, libubacktrace
+  - backtrace() uses dladdr() which is not available for static builds
 
-Waldemar can answer this question I believe.
+The first point is easy to solve with a bit of hackery in configure.ac,
+with AC_SEARCH_LIBS([backtrace], [ubacktrace] ...).
 
-> Should I add a ~ "LDGLAGS += -static" in opentyrian.mk ?
+The second point is more tricky, as this can not easily be solved with
+simple autotools macros. Instead, we just shoehorn -ldl in the LIBS
+variable from htop.mk when doing a uClibc static build.
 
--static is already in TARGET_LDFLAGS, so the problem is that you are
-not passing TARGET_LDFLAGS properly. You should do:
+Fixes:
+    http://autobuild.buildroot.org/results/cde/cdea351fad7a0f61ddec3e6a141da8da0523a902/
 
-	LDFLAGS="$(TARGET_LDFLAGS) -lm"
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-instead of just:
+---
+It is to be noted that a dynamic build does not need -lubacktrace.
+Weird...
+---
+ package/htop/0001-check-backtrace-lib.patch | 18 ++++++++++++++++++
+ package/htop/htop.mk                        |  6 ++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 package/htop/0001-check-backtrace-lib.patch
 
-	LDFLAGS="-lm"
-
-Thanks,
-
-Thomas
+diff --git a/package/htop/0001-check-backtrace-lib.patch b/package/htop/0001-check-backtrace-lib.patch
+new file mode 100644
+index 0000000..f019d2a
+--- /dev/null
++++ b/package/htop/0001-check-backtrace-lib.patch
+@@ -0,0 +1,18 @@
++diff --git a/configure.ac b/configure.ac
++index eb055b5..2864e91 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -59,7 +59,12 @@ AC_HEADER_STDC
++ AC_CHECK_HEADERS([stdlib.h string.h strings.h sys/param.h sys/time.h unistd.h],[:],[
++   missing_headers="$missing_headers $ac_header"
++ ])
++-AC_CHECK_HEADERS([execinfo.h],[:],[:])
+++AC_CHECK_HEADERS([execinfo.h],
+++    # Some libces (e.g. uClibc) may have backtrace() in a helper library
+++    [AC_SEARCH_LIBS([backtrace], [ubacktrace],
+++        [], [AC_MSG_ERROR([cannot find a library providing backtrace()])])],
+++    [:])
+++
++ 
++ # Checks for typedefs, structures, and compiler characteristics.
++ # ----------------------------------------------------------------------
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index adc5090..42daa68 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -12,6 +12,12 @@ HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/ncurses5-confi
+ HTOP_LICENSE = GPLv2
+ HTOP_LICENSE_FILES = COPYING
+ 
++HTOP_AUTORECONF = YES
++
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_STATIC_LIBS),yy)
++HTOP_CONF_OPTS += LIBS=-ldl
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+ HTOP_CONF_OPTS += --enable-unicode
+ else
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
