@@ -1,75 +1,45 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 24 Feb 2017 17:38:48 +0100
-Subject: [Buildroot] [PATCH/next] linux: preserve VCS info when using
-	OVERRIDE_SRCDIR
-Message-ID: <20170224163848.15842-1-arnout@mind.be>
+From: Cam Mannett <camden.mannett@protonmail.ch>
+Date: Fri, 24 Feb 2017 11:37:01 -0500
+Subject: [Buildroot] [PATCH 2/2] ti-cgt-pru: bump version to 2.1.4
+Message-ID: <ufQrfAHyF4y9LTbgiwj83-D0goNEkM6InucWv6QSLWrtydwpF09fcHBXKuRNPh0tHl0lkarODF96sEiuPaBAm7QuQu9VDjYrk9sF8QBCUKA=@protonmail.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Linux build system will try to include VCS information into the
-kernel version. This is very convenient when developing to be sure
-you're looking at the right kernel.
-
-However, since Buildroot rsyncs everything to the build directory,
-but leaves the .git directory behind, this version information is
-lost.
-
-Fortunately, the kernel's setlocalversion script supports this kind
-of situation: it can save the VCS info in a file ".scmversion" and
-use that during the build. Calling the script with --save-scmversion
-will create .scmversion.
-
-The --save-scmversion option exists since v2.6.35. On older kernels,
-we just ignore the error. It can be assumed that people using older
-kernel don't do a lot of development anymore :-)
-
-We can just unconditionally run this in a POST_RSYNC_HOOK - it will
-only get executed when LINUX_OVERRIDE_SRCDIR is used.
-
-Note that in kernels before v3.14, the Buildroot git commit would be
-used, which is even more confusing.
-
-Note that if we ever support out-of-tree builds for the kernel, this
-patch will no longer be needed.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Camden Mannett <camden.mannett@protonmail.ch>
 ---
-In a similar vein, it would be useful to save some version information
-for the normal kernel builds. Currently, for v3.14+ kernels, we just
-get the upstream kernel version even if it is a vendor/local kernel.
-And for older kernels, we get the Buildroot VCS info.
+package/ti-cgt-pru/ti-cgt-pru.hash | 2 +-
+package/ti-cgt-pru/ti-cgt-pru.mk | 4 ++--
+2 files changed, 3 insertions(+), 3 deletions(-)
 
-However, it turns out to be quite complicated to get this version info.
-For CUSTOM_TARBALL it's plain impossible. For CUSTOM_VERSION it's not
-necessary, because (at least for v3.14+ kernels) setlocalversion
-already produces the correct value. For CUSTOM_GIT/HG/SVN, we do have
-version info, but it's not nicely formatted like the results of
-setlocalversion. In those cases we should run setlocalversion from
-within the download helper script...
----
- linux/linux.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
+index 1c19b33..3ff08ac 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.hash
++++ b/package/ti-cgt-pru/ti-cgt-pru.hash
+@@ -1,2 +1,2 @@
+# Locally calculated
+-sha256 df85cd1ed3aea12d577854ece11bf5f2af6ace8c39959eea4cf2fa5973924e0e ti_cgt_pru_2.1.3_linux_installer_x86.bin
++sha256 c80dbf35e7401f4c122ff25cc2f6b5db496607782fb4583cee8663a2763f4472 ti_cgt_pru_2.1.4_linux_installer_x86.bin
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+index d94f091..d6de05e 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.mk
++++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+@@ -4,9 +4,9 @@
+#
+################################################################################
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7f4432e7b1..b330d20007 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -51,6 +51,13 @@ LINUX_SITE := $(LINUX_SITE)/testing
- endif # -rc
- endif
- 
-+# Conserve VCS information for override srcdir
-+define LINUX_ADD_LOCALVERSION
-+        cd $(@D); \
-+        ./scripts/setlocalversion --save-scmversion $(LINUX_OVERRIDE_SRCDIR)
-+endef
-+LINUX_POST_RSYNC_HOOKS += LINUX_ADD_LOCALVERSION
-+
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
- # We rely on the generic package infrastructure to download and apply
--- 
-2.11.0
+-TI_CGT_PRU_VERSION = 2.1.3
++TI_CGT_PRU_VERSION = 2.1.4
+TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
+-TI_CGT_PRU_SITE = http://software-dl.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
++TI_CGT_PRU_SITE = http://downloads.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
+TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
+Boost Software License 1.0 (compiler), \
+BSD-2c, BSD-3c, MIT, Academic Free License 3.0, Hewlett-Packard (PRU library)
+--
+2.9.3
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170224/995d711a/attachment.html>
