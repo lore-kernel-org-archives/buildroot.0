@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Feb 2017 12:02:25 +0100
-Subject: [Buildroot] [git commit] glibc: install libanl.so to target
-Message-ID: <20170225154244.58875821DE@busybox.osuosl.org>
+Date: Sat, 25 Feb 2017 16:44:50 +0100
+Subject: [Buildroot] [PATCH v2 1/2] glibc: install libanl.so to target
+In-Reply-To: <1487926988-32495-1-git-send-email-jbb@gamblify.com>
+References: <1487848270-32609-1-git-send-email-jbb@gamblify.com>
+ <1487926988-32495-1-git-send-email-jbb@gamblify.com>
+Message-ID: <20170225164450.213b15c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba684f0a128e33b24b7c4a4bce0d0d557887f8df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libanl.so is needed for asynchronous network address and service
-translation, declared in netdb.h
+On Fri, 24 Feb 2017 10:03:07 +0100, Jesper B?kdahl wrote:
+> libanl.so is needed for asynchronous network address and service
+> translation, declared in netdb.h
+> 
+> Signed-off-by: Jesper B?kdahl <jbb@gamblify.com>
+> 
+> ---
+> Changes v1 -> v2:
+>  - Added info on libanl.so usage
 
-Signed-off-by: Jesper B??kdahl <jbb@gamblify.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/glibc/glibc.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index c11f7cd..ee52539 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -101,9 +101,9 @@ endef
- #
- 
- GLIBC_LIBS_LIB = \
--	ld*.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.*        \
--	libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* libutil.so.*   \
--	libnss_files.so.* libnss_dns.so.* libmvec.so.*
-+	ld*.so.* libanl.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* \
-+	libm.so.* libnsl.so.* libpthread.so.* libresolv.so.* librt.so.* \
-+	libutil.so.* libnss_files.so.* libnss_dns.so.* libmvec.so.*
- 
- ifeq ($(BR2_PACKAGE_GDB),y)
- GLIBC_LIBS_LIB += libthread_db.so.*
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
