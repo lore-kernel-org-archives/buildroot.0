@@ -1,44 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 24 Feb 2017 21:24:00 -0300
-Subject: [Buildroot] [PATCH next] ccache: bump to version 3.3.4
-Message-ID: <20170225002400.32371-1-gustavo@zacarias.com.ar>
+Date: Fri, 24 Feb 2017 21:34:45 -0300
+Subject: [Buildroot] [PATCH next 1/4] glibc: bump default to version 2.24
+Message-ID: <20170225003448.32459-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch download URL to avoid a redirect.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ccache/ccache.hash | 4 ++--
- package/ccache/ccache.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/glibc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index bde53f7..5354572 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,2 +1,2 @@
--# Verified key https://samba.org/ftp/ccache/ccache-3.3.3.tar.xz.asc - sha256 computed locally
--sha256  3b02a745da1cfa9eb438af7147e0fd3545e2f6163de9e5b07da86f58859f04ec  ccache-3.3.3.tar.xz
-+# Verified key https://samba.org/ftp/ccache/ccache-3.3.4.tar.xz.asc - sha256 computed locally
-+sha256  24f15bf389e38c41548c9c259532187774ec0cb9686c3497bbb75504c8dc404f  ccache-3.3.4.tar.xz
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index f174a5d..6a20ee8 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 85aace6..0442626 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_GLIBC
  
--CCACHE_VERSION = 3.3.3
--CCACHE_SITE = https://samba.org/ftp/ccache
-+CCACHE_VERSION = 3.3.4
-+CCACHE_SITE = https://www.samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPLv3+, others
- CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
+ choice
+ 	prompt "glibc version"
+-	default BR2_GLIBC_VERSION_2_23
++	default BR2_GLIBC_VERSION_2_24
+ 
+ config BR2_GLIBC_VERSION_2_22
+ 	bool "2.22"
 -- 
 2.10.2
