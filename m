@@ -1,78 +1,44 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 25 Feb 2017 00:06:10 +0100
-Subject: [Buildroot] [PATCH/next v2] linux: preserve VCS info when using
-	OVERRIDE_SRCDIR
-Message-ID: <20170224230610.23747-1-arnout@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 24 Feb 2017 21:24:00 -0300
+Subject: [Buildroot] [PATCH next] ccache: bump to version 3.3.4
+Message-ID: <20170225002400.32371-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Linux build system will try to include VCS information into the
-kernel version. This is very convenient when developing to be sure
-you're looking at the right kernel.
+Switch download URL to avoid a redirect.
 
-However, since Buildroot rsyncs everything to the build directory,
-but leaves the .git directory behind, this version information is
-lost.
-
-Fortunately, the kernel's setlocalversion script supports this kind
-of situation: it can save the VCS info in a file ".scmversion" and
-use that during the build. Calling the script with --save-scmversion
-will create .scmversion.
-
-The --save-scmversion option exists since v2.6.35. On older kernels,
-we just ignore the error. It can be assumed that people using older
-kernel don't do a lot of development anymore :-)
-
-We can just unconditionally run this in a POST_RSYNC_HOOK - it will
-only get executed when LINUX_OVERRIDE_SRCDIR is used.
-
-Note that in kernels before v3.14, the Buildroot git commit would be
-used, which is even more confusing.
-
-Note that if we ever support out-of-tree builds for the kernel, this
-patch will no longer be needed.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-In a similar vein, it would be useful to save some version information
-for the normal kernel builds. Currently, for v3.14+ kernels, we just
-get the upstream kernel version even if it is a vendor/local kernel.
-And for older kernels, we get the Buildroot VCS info.
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-However, it turns out to be quite complicated to get this version info.
-For CUSTOM_TARBALL it's plain impossible. For CUSTOM_VERSION it's not
-necessary, because (at least for v3.14+ kernels) setlocalversion
-already produces the correct value. For CUSTOM_GIT/HG/SVN, we do have
-version info, but it's not nicely formatted like the results of
-setlocalversion. In those cases we should run setlocalversion from
-within the download helper script...
-
-Changes v2: actually added the || true - forgot to commit --amend,
-            a skill I learned from Yann :-P
----
- linux/linux.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7f4432e7b1..b5b27aac2f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -51,6 +51,13 @@ LINUX_SITE := $(LINUX_SITE)/testing
- endif # -rc
- endif
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index bde53f7..5354572 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,2 +1,2 @@
+-# Verified key https://samba.org/ftp/ccache/ccache-3.3.3.tar.xz.asc - sha256 computed locally
+-sha256  3b02a745da1cfa9eb438af7147e0fd3545e2f6163de9e5b07da86f58859f04ec  ccache-3.3.3.tar.xz
++# Verified key https://samba.org/ftp/ccache/ccache-3.3.4.tar.xz.asc - sha256 computed locally
++sha256  24f15bf389e38c41548c9c259532187774ec0cb9686c3497bbb75504c8dc404f  ccache-3.3.4.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index f174a5d..6a20ee8 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+# Conserve VCS information for override srcdir
-+define LINUX_ADD_LOCALVERSION
-+	cd $(@D); \
-+	./scripts/setlocalversion --save-scmversion $(LINUX_OVERRIDE_SRCDIR) || true
-+endef
-+LINUX_POST_RSYNC_HOOKS += LINUX_ADD_LOCALVERSION
-+
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
- # We rely on the generic package infrastructure to download and apply
+-CCACHE_VERSION = 3.3.3
+-CCACHE_SITE = https://samba.org/ftp/ccache
++CCACHE_VERSION = 3.3.4
++CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
+ CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
 -- 
-2.11.0
+2.10.2
