@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 24 Feb 2017 21:34:45 -0300
-Subject: [Buildroot] [PATCH next 1/4] glibc: bump default to version 2.24
-Message-ID: <20170225003448.32459-1-gustavo@zacarias.com.ar>
+Date: Fri, 24 Feb 2017 21:34:46 -0300
+Subject: [Buildroot] [PATCH next 2/4] glibc: add version 2.25
+In-Reply-To: <20170225003448.32459-1-gustavo@zacarias.com.ar>
+References: <20170225003448.32459-1-gustavo@zacarias.com.ar>
+Message-ID: <20170225003448.32459-2-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/glibc/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/glibc/Config.in  | 7 ++++++-
+ package/glibc/glibc.hash | 1 +
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 85aace6..0442626 100644
+index 0442626..f92cdf3 100644
 --- a/package/glibc/Config.in
 +++ b/package/glibc/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_GLIBC
+@@ -24,7 +24,11 @@ config BR2_GLIBC_VERSION_2_24
+ 	# See: https://sourceware.org/ml/libc-alpha/2016-08/msg00212.html
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
  
- choice
- 	prompt "glibc version"
--	default BR2_GLIBC_VERSION_2_23
-+	default BR2_GLIBC_VERSION_2_24
+-comment "glibc-2.24 needs kernel headers >= 3.2"
++config BR2_GLIBC_VERSION_2_25
++	bool "2.25"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++
++comment "glibc-2.24+ needs kernel headers >= 3.2"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
  
- config BR2_GLIBC_VERSION_2_22
- 	bool "2.22"
+ endchoice
+@@ -36,3 +40,4 @@ config BR2_GLIBC_VERSION_STRING
+ 	default "2.22" if BR2_GLIBC_VERSION_2_22
+ 	default "2.23" if BR2_GLIBC_VERSION_2_23
+ 	default "2.24" if BR2_GLIBC_VERSION_2_24
++	default "2.25" if BR2_GLIBC_VERSION_2_25
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index befe80c..863c9b4 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -2,3 +2,4 @@
+ sha256	eb731406903befef1d8f878a46be75ef862b9056ab0cde1626d08a7a05328948	glibc-2.22.tar.xz
+ sha256	94efeb00e4603c8546209cefb3e1a50a5315c86fa9b078b6fad758e187ce13e9	glibc-2.23.tar.xz
+ sha256	99d4a3e8efd144d71488e478f62587578c0f4e1fa0b4eed47ee3d4975ebeb5d3	glibc-2.24.tar.xz
++sha256	067bd9bb3390e79aa45911537d13c3721f1d9d3769931a30c2681bfee66f23a0	glibc-2.25.tar.xz
 -- 
 2.10.2
