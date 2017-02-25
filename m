@@ -1,49 +1,59 @@
-From: camden.mannett at gmail.com <camden.mannett@gmail.com>
-Date: Sat, 25 Feb 2017 11:43:21 +0000
-Subject: [Buildroot] [PATCHv3 1/1] pru-software-support: bump version to
-	5.1.0
-Message-ID: <20170225114321.5844-1-camden.mannett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Feb 2017 13:52:11 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-02-24
+In-Reply-To: <20170225104929.GC3627@free.fr>
+References: <20170225072908.E590E20E2C@mail.free-electrons.com>
+ <20170225104929.GC3627@free.fr>
+Message-ID: <20170225125211.GD3627@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Cam Mannett <camden.mannett@gmail.com>
+All,
 
-Third time lucky.
+On 2017-02-25 11:49 +0100, Yann E. MORIN spake thusly:
+> On 2017-02-25 08:29 +0100, Thomas Petazzoni spake thusly:
+> > Detail of failures
+> >         i686 |                   libcec-4.0.2 | NOK | http://autobuild.buildroot.net/results/dfb708172afa7dbe785ef1f5d177f745939e18e7
+> 
+> This build tries to link with host libraries, which is definitely not a
+> good thing...
+> 
+> I reverted all changes to cmake back to when it was cmake 3.6 and this
+> fixes the problem. I still have to investigate whether it is the bump to
+> 3.7 that causes the failure, or the pkg-config fix we added in 0904b80.
 
-Signed-off-by: Cam Mannett <camden.mannett@gmail.com>
----
- package/pru-software-support/pru-software-support.hash | 2 +-
- package/pru-software-support/pru-software-support.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+So here is the results of the investigations.
 
-diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
-index 8f624da..f4ce8e4 100644
---- a/package/pru-software-support/pru-software-support.hash
-+++ b/package/pru-software-support/pru-software-support.hash
-@@ -1,2 +1,2 @@
- # Locally-calculated hash
--sha256	b257535ca9b1641d1a238795f3c7004064c573a91cf4a1fa566e3f7c2360c38f	pru-software-support-804b548e69ef9fdf44445f6d0968d81cb8a1e7b4.tar.gz
-+sha256	1e880d74f9a1d04324e6255cb7a0e3d40f92e08809dc81dc6c714447bac5c335	pru-software-support-v5.1.0.tar.gz
-diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
-index 06983c2..adaa4ac 100644
---- a/package/pru-software-support/pru-software-support.mk
-+++ b/package/pru-software-support/pru-software-support.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PRU_SOFTWARE_SUPPORT_VERSION = 804b548e69ef9fdf44445f6d0968d81cb8a1e7b4
--PRU_SOFTWARE_SUPPORT_SITE = git://git.ti.com/pru-software-support-package/pru-software-support-package.git
-+PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
-+PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)?
- PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3c, GPLv2, Public Domain
--PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v4.0-Manifest.html
-+PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
- PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
- HOST_PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
- 
+First, here are the cmake-related changes we've had recently:
+
+    f8a6990 cmake: bump version to 3.7.2
+    b754237 cmake: adjust dependencies added for libuv
+    0904b80 cmake: pass HOST_CONFIGURE_OPTS at configure time
+    d96fafc cmake: bump version to 3.7.1
+    1ffcf36 cmake: bump version to 3.7.0
+
+1- Reverting all five of them fixes the build failure of libcec (adn
+   freerdp?)
+
+2- Reverting all but 0904b80 fixes the problem
+
+3- Reverting only 0904b80 does not fix the problem
+
+So, cmake 3.7 broke the biuld of some cmake-based packages.
+
+Samuel, Vicente, any idea?
+
+Cordialement,
+Yann E. MORIN.
+
 -- 
-2.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
