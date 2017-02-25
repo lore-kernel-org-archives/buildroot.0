@@ -1,30 +1,146 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 25 Feb 2017 02:22:49 +0100
-Subject: [Buildroot] [PATCH] package/htop: not available for uClibc
- static builds
-In-Reply-To: <1487950561-29105-1-git-send-email-yann.morin.1998@free.fr>
-References: <1487950561-29105-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170225012249.GE12810@waldemar-brodkorb.de>
+Date: Sat, 25 Feb 2017 02:37:14 +0100
+Subject: [Buildroot] [PATCH] binutils: fix for ld segfault for microblaze
+ when --gc-sections is used
+Message-ID: <20170225013714.GA18541@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Yann E. MORIN wrote,
+The workarounds for kmod/libnss can be removed when the patch is
+applied and the autobuilder toolchains got rebuild.
 
-> htop wants to use backtrace() when available.
-> 
-> However, on uClibc this causes two problems:
-> 
->   - backtrace() is not in libc but in a separate library, libubacktrace
+kmod: 0d81107f021bf2a663f102bace1e3f9590641170
+libnss: fceb1afd5dda45cf180f22877a6ab0e51d1b3dac
 
-Not in the version Buildroot's internal toolchain uses now.
-But it is only available when UCLIBC_HAS_BACKTRACE is enabled.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ .../binutils/2.25.1/916-microblaze-pr21180.patch   | 33 ++++++++++++++++++++++
+ .../binutils/2.26.1/0906-microblaze-pr21180.patch  | 33 ++++++++++++++++++++++
+ .../binutils/2.27/0906-microblaze-pr21180.patch    | 33 ++++++++++++++++++++++
+ 3 files changed, 99 insertions(+)
+ create mode 100644 package/binutils/2.25.1/916-microblaze-pr21180.patch
+ create mode 100644 package/binutils/2.26.1/0906-microblaze-pr21180.patch
+ create mode 100644 package/binutils/2.27/0906-microblaze-pr21180.patch
 
-It seems Synopsis external toolchain uses an old uClibc-ng version
-before extra libubacktrace library was included in libc.a/libc.so.
-
-best regards
- Waldemar
+diff --git a/package/binutils/2.25.1/916-microblaze-pr21180.patch b/package/binutils/2.25.1/916-microblaze-pr21180.patch
+new file mode 100644
+index 0000000..2ffae49
+--- /dev/null
++++ b/package/binutils/2.25.1/916-microblaze-pr21180.patch
+@@ -0,0 +1,33 @@
++Fix ld segfault for microblaze when --gc-sections is used
++Upstream: pending
++https://sourceware.org/bugzilla/show_bug.cgi?id=21180
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur binutils-2.25.1.orig/bfd/elf32-microblaze.c binutils-2.25.1/bfd/elf32-microblaze.c
++--- binutils-2.25.1.orig/bfd/elf32-microblaze.c	2015-07-21 10:20:58.000000000 +0200
+++++ binutils-2.25.1/bfd/elf32-microblaze.c	2017-02-23 19:43:24.560776208 +0100
++@@ -3297,13 +3297,20 @@
++           && h->def_regular)
++         {
++           asection *sec = h->root.u.def.section;
+++	  bfd_vma value;
+++
+++	  value = h->root.u.def.value;
+++	  if (sec->output_section != NULL)
+++	    /* PR 21180: If the output section is NULL, then the symbol is no
+++	       longer needed, and in theory the GOT entry is redundant.  But
+++	       it is too late to change our minds now...  */
+++	    value += sec->output_section->vma + sec->output_offset;
+++
++           microblaze_elf_output_dynamic_relocation (output_bfd,
++                                                     srela, srela->reloc_count++,
++                                                     /* symindex= */ 0,
++                                                     R_MICROBLAZE_REL, offset,
++-                                                    h->root.u.def.value
++-                                                    + sec->output_section->vma
++-                                                    + sec->output_offset);
+++                                                    value);
++         }
++       else
++         {
+diff --git a/package/binutils/2.26.1/0906-microblaze-pr21180.patch b/package/binutils/2.26.1/0906-microblaze-pr21180.patch
+new file mode 100644
+index 0000000..8104db3
+--- /dev/null
++++ b/package/binutils/2.26.1/0906-microblaze-pr21180.patch
+@@ -0,0 +1,33 @@
++Fix ld segfault for microblaze when --gc-sections is used
++Upstream: pending
++https://sourceware.org/bugzilla/show_bug.cgi?id=21180
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur binutils-2.26.1.orig/bfd/elf32-microblaze.c binutils-2.26.1/bfd/elf32-microblaze.c
++--- binutils-2.26.1.orig/bfd/elf32-microblaze.c	2015-11-13 09:27:40.000000000 +0100
+++++ binutils-2.26.1/bfd/elf32-microblaze.c	2017-02-23 19:43:18.536542964 +0100
++@@ -3300,13 +3300,20 @@
++           && h->def_regular)
++         {
++           asection *sec = h->root.u.def.section;
+++	  bfd_vma value;
+++
+++	  value = h->root.u.def.value;
+++	  if (sec->output_section != NULL)
+++	    /* PR 21180: If the output section is NULL, then the symbol is no
+++	       longer needed, and in theory the GOT entry is redundant.  But
+++	       it is too late to change our minds now...  */
+++	    value += sec->output_section->vma + sec->output_offset;
+++
++           microblaze_elf_output_dynamic_relocation (output_bfd,
++                                                     srela, srela->reloc_count++,
++                                                     /* symindex= */ 0,
++                                                     R_MICROBLAZE_REL, offset,
++-                                                    h->root.u.def.value
++-                                                    + sec->output_section->vma
++-                                                    + sec->output_offset);
+++                                                    value);
++         }
++       else
++         {
+diff --git a/package/binutils/2.27/0906-microblaze-pr21180.patch b/package/binutils/2.27/0906-microblaze-pr21180.patch
+new file mode 100644
+index 0000000..48e5e14
+--- /dev/null
++++ b/package/binutils/2.27/0906-microblaze-pr21180.patch
+@@ -0,0 +1,33 @@
++Fix ld segfault for microblaze when --gc-sections is used
++Upstream: pending
++https://sourceware.org/bugzilla/show_bug.cgi?id=21180
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur binutils-2.27.orig/bfd/elf32-microblaze.c binutils-2.27/bfd/elf32-microblaze.c
++--- binutils-2.27.orig/bfd/elf32-microblaze.c	2016-08-03 09:36:50.000000000 +0200
+++++ binutils-2.27/bfd/elf32-microblaze.c	2017-02-23 19:43:12.612313590 +0100
++@@ -3297,13 +3297,20 @@
++ 	      || h->dynindx == -1))
++         {
++           asection *sec = h->root.u.def.section;
+++	  bfd_vma value;
+++
+++	  value = h->root.u.def.value;
+++	  if (sec->output_section != NULL)
+++	    /* PR 21180: If the output section is NULL, then the symbol is no
+++	       longer needed, and in theory the GOT entry is redundant.  But
+++	       it is too late to change our minds now...  */
+++	    value += sec->output_section->vma + sec->output_offset;
+++
++           microblaze_elf_output_dynamic_relocation (output_bfd,
++                                                     srela, srela->reloc_count++,
++                                                     /* symindex= */ 0,
++                                                     R_MICROBLAZE_REL, offset,
++-                                                    h->root.u.def.value
++-                                                    + sec->output_section->vma
++-                                                    + sec->output_offset);
+++                                                    value);
++         }
++       else
++         {
+-- 
+2.1.4
