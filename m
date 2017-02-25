@@ -1,37 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 Feb 2017 15:16:27 +0100
-Subject: [Buildroot] [PATCH 1/2] pru-software-support: bump version to
- 5.1.0
-In-Reply-To: <20170225091424.GA3627@free.fr>
-References: <20170224224408.8647-1-camden.mannett@protonmail.ch>
- <20170225091424.GA3627@free.fr>
-Message-ID: <f75d656d-0276-7638-b4ee-637e8912a2d5@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Feb 2017 15:31:23 +0100
+Subject: [Buildroot] [PATCH] package/oracle-mysql: fix path to systemd
+	service file
+Message-ID: <1488033083-7295-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The path is a remnant from before the rename of the package.
 
+Rather than hard-code the path, use the available variable. Also use
+that variable when copying the Sys-V init script.
 
-On 25-02-17 10:14, Yann E. MORIN wrote:
-[snip]
-> Also, it seems that gitorious is generating reproducible archives, so
-> please do provide a hash. You can check if it is reproducible, the sha1
-> I got here was:
->     f23e64c9adf0739a7dc73a31e5d7bb798c9e5dd0  pru-software-support-v5.1.0.tar.gz
+Fixes:
+    http://autobuild.buildroot.org/results/767/767f0be3894c45c1e6d18bc4528d0da7b50e3757/
+    http://autobuild.buildroot.org/results/e93/e934683ebcb33c9cc8fe9de7b1d5dcd7866f3bce/
+    http://autobuild.buildroot.org/results/5d0/5d04163de80f7900d4aed14cff75b2e0761f101d/
 
- That's actually not telling much, since gitorious caches the archive for some
-time. However, what you can see is that the tarball is sorted and that the
-mtimes are those of the v5.1.0 commit, so indeed reproducible.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ryan Coe <bluemrp9@gmail.com>
+---
+ package/oracle-mysql/oracle-mysql.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- Regards,
- Arnout
-
+diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
+index ed3c0ea..f0f0649 100644
+--- a/package/oracle-mysql/oracle-mysql.mk
++++ b/package/oracle-mysql/oracle-mysql.mk
+@@ -108,12 +108,12 @@ endef
+ ORACLE_MYSQL_POST_INSTALL_TARGET_HOOKS += ORACLE_MYSQL_ADD_FOLDER
+ 
+ define ORACLE_MYSQL_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 package/oracle-mysql/S97mysqld \
++	$(INSTALL) -D -m 0755 $(ORACLE_MYSQL_PKGDIR)/S97mysqld \
+ 		$(TARGET_DIR)/etc/init.d/S97mysqld
+ endef
+ 
+ define ORACLE_MYSQL_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/mysql/mysqld.service \
++	$(INSTALL) -D -m 644 $(ORACLE_MYSQL_PKGDIR)/mysqld.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/mysqld.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../usr/lib/systemd/system/mysqld.service \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
