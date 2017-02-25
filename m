@@ -1,66 +1,194 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 25 Feb 2017 14:35:59 +0100
-Subject: [Buildroot] [PATCH v2 2/3] package/sdl2: enable OpenGL ES support
+Date: Sat, 25 Feb 2017 14:36:00 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/lugaru: new package
 In-Reply-To: <20170225133600.15637-1-romain.naour@gmail.com>
 References: <20170225133600.15637-1-romain.naour@gmail.com>
-Message-ID: <20170225133600.15637-2-romain.naour@gmail.com>
+Message-ID: <20170225133600.15637-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Lugaru needs SDL2 library with OpenGL support which require X11 support.
+Otherwise Lugaru error out with "No dynamic GL support in video driver"
+message.
+
+https://osslugaru.gitlab.io/
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-v2: no change
+v2: bump to v1.2
+    fix build issue due an invalid conversion
+    fix musl issue on x86 x86_64 with incompatible posix_memalign
+    declaration (pkg-test).
+    Build tested with pkg-test and coding style verified by
+    check-package (v1).
 ---
- package/sdl2/Config.in | 7 +++++++
- package/sdl2/sdl2.mk   | 8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-ImageIO-fix-invalid-conversion.patch      | 35 +++++++++++++++++++++
+ package/lugaru/Config.in                           | 36 ++++++++++++++++++++++
+ package/lugaru/lugaru.hash                         |  2 ++
+ package/lugaru/lugaru.mk                           | 32 +++++++++++++++++++
+ 6 files changed, 107 insertions(+)
+ create mode 100644 package/lugaru/0001-ImageIO-fix-invalid-conversion.patch
+ create mode 100644 package/lugaru/Config.in
+ create mode 100644 package/lugaru/lugaru.hash
+ create mode 100644 package/lugaru/lugaru.mk
 
-diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
-index 25704f3..66a77a1 100644
---- a/package/sdl2/Config.in
-+++ b/package/sdl2/Config.in
-@@ -37,6 +37,13 @@ config BR2_PACKAGE_SDL2_OPENGL
- comment "OpenGL support needs X11 and an OpenGL provider"
- 	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
- 
-+config BR2_PACKAGE_SDL2_OPENGLES
-+	bool "OpenGL ES"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 09a0a6e..c80fdb4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1282,6 +1282,7 @@ F:	package/expedite/
+ F:	package/iqvlinux/
+ F:	package/liblinear/
+ F:	package/linux-syscall-support/
++F:	package/lugaru/
+ F:	package/mcelog/
+ F:	package/openpowerlink/
+ F:	package/stress-ng/
+diff --git a/package/Config.in b/package/Config.in
+index deff0fe..aad0842 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -222,6 +222,7 @@ menu "Games"
+ 	source "package/gnuchess/Config.in"
+ 	source "package/lbreakout2/Config.in"
+ 	source "package/ltris/Config.in"
++	source "package/lugaru/Config.in"
+ 	source "package/opentyrian/Config.in"
+ 	source "package/opentyrian-data/Config.in"
+ 	source "package/prboom/Config.in"
+diff --git a/package/lugaru/0001-ImageIO-fix-invalid-conversion.patch b/package/lugaru/0001-ImageIO-fix-invalid-conversion.patch
+new file mode 100644
+index 0000000..6096477
+--- /dev/null
++++ b/package/lugaru/0001-ImageIO-fix-invalid-conversion.patch
+@@ -0,0 +1,35 @@
++From 73e56ba8e91b6bae59220e6f25c1b7c15817edb5 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 12 Feb 2017 21:17:44 +0100
++Subject: [PATCH] ImageIO: fix invalid conversion
 +
-+comment "OpenGL ES support needs an OpenGL ES provider"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES
++Fixes:
++Source/Utils/ImageIO.cpp:125:27: error: invalid conversion from 'int' to 'boolean' [-fpermissive]
++     cinfo.quantize_colors = 0;
++                           ^
 +
- endif
- 
- comment "sdl2 needs a toolchain w/ dynamic library"
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 3f210f8..d2ee50d 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -18,7 +18,6 @@ SDL2_CONF_OPTS += \
- 	--disable-esd \
- 	--disable-dbus \
- 	--disable-pulseaudio \
--	--disable-video-opengles \
- 	--disable-video-wayland
- 
- # We must enable static build to get compilation successful.
-@@ -105,6 +104,13 @@ else
- SDL2_CONF_OPTS += --disable-video-opengl
- endif
- 
-+ifeq ($(BR2_PACKAGE_SDL2_OPENGLES),y)
-+SDL2_CONF_OPTS += --enable-video-opengles
-+SDL2_DEPENDENCIES += libgles
-+else
-+SDL2_CONF_OPTS += --disable-video-opengles
++quantize_colors type is bool, so it must be initialized to TRUE or FALSE.
++
++Patch status: upsteam
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ Source/Utils/ImageIO.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Source/Utils/ImageIO.cpp b/Source/Utils/ImageIO.cpp
++index 706c201..c19a63e 100644
++--- a/Source/Utils/ImageIO.cpp
+++++ b/Source/Utils/ImageIO.cpp
++@@ -122,7 +122,7 @@ static bool load_jpg(const char* file_name, ImageRec& tex)
++     (void)jpeg_read_header(&cinfo, TRUE);
++ 
++     cinfo.out_color_space = JCS_RGB;
++-    cinfo.quantize_colors = 0;
+++    cinfo.quantize_colors = FALSE;
++     (void)jpeg_calc_output_dimensions(&cinfo);
++     (void)jpeg_start_decompress(&cinfo);
++ 
++-- 
++2.9.3
++
+diff --git a/package/lugaru/Config.in b/package/lugaru/Config.in
+new file mode 100644
+index 0000000..6da8601
+--- /dev/null
++++ b/package/lugaru/Config.in
+@@ -0,0 +1,36 @@
++config BR2_PACKAGE_LUGARU
++	bool "lugaru"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LIBGL # libglu
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_XORG7 # SDL2 OpenGL (GLX)
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
++	depends on !BR2_STATIC_LIBS # SDL2
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBGLU # GL/glu.h
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_LIBVORBIS
++	select BR2_PACKAGE_OPENAL
++	select BR2_PACKAGE_SDL2
++	select BR2_PACKAGE_SDL2_OPENGL
++	select BR2_PACKAGE_ZLIB
++	help
++	  Lugaru (pronounced Loo-GAH-roo) is a cross-platform
++	  third-person action game. The main character, Turner, is an
++	  anthropomorphic rebel bunny rabbit with impressive combat
++	  skills. In his quest to find those responsible for
++	  slaughtering his village, he uncovers a far-reaching
++	  conspiracy involving the corrupt leaders of the rabbit
++	  republic and the starving wolves from a nearby den. Turner
++	  takes it upon himself to fight against their plot and save
++	  his fellow rabbits from slavery.
++
++	  https://osslugaru.gitlab.io/
++
++comment "lugaru needs X11 and a toolchain w/ C++, OpenGL backend, gcc >= 4.7, NPTL, dynamic library"
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_XORG7
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_LIBGL || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
++		BR2_STATIC_LIBS
+diff --git a/package/lugaru/lugaru.hash b/package/lugaru/lugaru.hash
+new file mode 100644
+index 0000000..6ba2bca
+--- /dev/null
++++ b/package/lugaru/lugaru.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 f3ea477caf78911c69939fbdc163f9f6517c7ef2267e716a0e050be1a166ef97 lugaru-1.2.tar.xz
+diff --git a/package/lugaru/lugaru.mk b/package/lugaru/lugaru.mk
+new file mode 100644
+index 0000000..d2b18fb
+--- /dev/null
++++ b/package/lugaru/lugaru.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# lugaru
++#
++################################################################################
++
++LUGARU_VERSION = 1.2
++LUGARU_SITE = https://bitbucket.org/osslugaru/lugaru/downloads
++LUGARU_SOURCE = lugaru-$(LUGARU_VERSION).tar.xz
++
++LUGARU_LICENSE = GPLv2+, CC-BY-SA-3.0 (Wolfire and Slib assets), \
++	CC-BY-SA-4.0 (OSS Lugaru, Jendraz and Philtron R. assets)
++LUGARU_LICENSE_FILES = COPYING.txt CONTENT-LICENSE.txt
++
++LUGARU_DEPENDENCIES = host-pkgconf jpeg libgl libglu libpng libvorbis \
++	openal sdl2 zlib
++
++# Avoid incompatible posix_memalign declaration on x86 and x86_64 with
++# musl.
++# https://gcc.gnu.org/ml/gcc-patches/2015-05/msg01425.html
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL):$(BR2_i386)$(BR2_x86_64),y:y)
++define LUGARU_REMOVE_PEDANTIC
++	$(SED) 's% -pedantic%%' $(@D)/CMakeLists.txt
++endef
++LUGARU_POST_PATCH_HOOKS += LUGARU_REMOVE_PEDANTIC
 +endif
 +
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- SDL2_DEPENDENCIES += tslib
- SDL2_CONF_OPTS += --enable-input-tslib
++LUGARU_CONF_OPTS = -DSYSTEM_INSTALL=ON \
++	-DCMAKE_INSTALL_BINDIR=games \
++	-DCMAKE_INSTALL_DATADIR=share/games
++
++$(eval $(cmake-package))
 -- 
 2.9.3
