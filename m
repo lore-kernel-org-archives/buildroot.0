@@ -1,12 +1,14 @@
-From: Cam Mannett <camden.mannett@gmail.com>
-Date: Fri, 24 Feb 2017 22:44:08 +0000
+From: camden.mannett at gmail.com <camden.mannett@gmail.com>
+Date: Sat, 25 Feb 2017 08:23:39 +0000
 Subject: [Buildroot] [PATCH 1/2] pru-software-support: bump version to 5.1.0
-Message-ID: <20170224224408.8647-1-camden.mannett@protonmail.ch>
+Message-ID: <20170225082339.15964-1-camden.mannett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+From: Cam Mannett <camden.mannett@protonmail.ch>
 
 Signed-off-by: Cam Mannett <camden.mannett@protonmail.ch>
 ---
