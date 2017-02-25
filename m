@@ -1,59 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Feb 2017 13:52:11 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-02-24
-In-Reply-To: <20170225104929.GC3627@free.fr>
-References: <20170225072908.E590E20E2C@mail.free-electrons.com>
- <20170225104929.GC3627@free.fr>
-Message-ID: <20170225125211.GD3627@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 25 Feb 2017 14:35:58 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/sdl2: enable opengl support
+Message-ID: <20170225133600.15637-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+OpenGl support mean GLX so it require X11 support.
 
-On 2017-02-25 11:49 +0100, Yann E. MORIN spake thusly:
-> On 2017-02-25 08:29 +0100, Thomas Petazzoni spake thusly:
-> > Detail of failures
-> >         i686 |                   libcec-4.0.2 | NOK | http://autobuild.buildroot.net/results/dfb708172afa7dbe785ef1f5d177f745939e18e7
-> 
-> This build tries to link with host libraries, which is definitely not a
-> good thing...
-> 
-> I reverted all changes to cmake back to when it was cmake 3.6 and this
-> fixes the problem. I still have to investigate whether it is the bump to
-> 3.7 that causes the failure, or the pkg-config fix we added in 0904b80.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+v2: no change
+---
+ package/sdl2/Config.in | 8 ++++++++
+ package/sdl2/sdl2.mk   | 8 +++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-So here is the results of the investigations.
-
-First, here are the cmake-related changes we've had recently:
-
-    f8a6990 cmake: bump version to 3.7.2
-    b754237 cmake: adjust dependencies added for libuv
-    0904b80 cmake: pass HOST_CONFIGURE_OPTS at configure time
-    d96fafc cmake: bump version to 3.7.1
-    1ffcf36 cmake: bump version to 3.7.0
-
-1- Reverting all five of them fixes the build failure of libcec (adn
-   freerdp?)
-
-2- Reverting all but 0904b80 fixes the problem
-
-3- Reverting only 0904b80 does not fix the problem
-
-So, cmake 3.7 broke the biuld of some cmake-based packages.
-
-Samuel, Vicente, any idea?
-
-Cordialement,
-Yann E. MORIN.
-
+diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
+index 8fc14ee..25704f3 100644
+--- a/package/sdl2/Config.in
++++ b/package/sdl2/Config.in
+@@ -29,6 +29,14 @@ comment "X11 video driver needs X.org"
+ 	depends on !BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
+ 
++config BR2_PACKAGE_SDL2_OPENGL
++	bool "OpenGL (GLX)"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_PACKAGE_XORG7
++
++comment "OpenGL support needs X11 and an OpenGL provider"
++	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
++
+ endif
+ 
+ comment "sdl2 needs a toolchain w/ dynamic library"
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 2ec12e6..3f210f8 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -18,7 +18,6 @@ SDL2_CONF_OPTS += \
+ 	--disable-esd \
+ 	--disable-dbus \
+ 	--disable-pulseaudio \
+-	--disable-video-opengl \
+ 	--disable-video-opengles \
+ 	--disable-video-wayland
+ 
+@@ -99,6 +98,13 @@ else
+ SDL2_CONF_OPTS += --disable-video-x11 --without-x
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SDL2_OPENGL),y)
++SDL2_CONF_OPTS += --enable-video-opengl
++SDL2_DEPENDENCIES += libgl
++else
++SDL2_CONF_OPTS += --disable-video-opengl
++endif
++
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ SDL2_DEPENDENCIES += tslib
+ SDL2_CONF_OPTS += --enable-input-tslib
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
