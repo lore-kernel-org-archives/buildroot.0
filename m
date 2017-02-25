@@ -1,73 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Feb 2017 16:45:39 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-02-24
-In-Reply-To: <20170225125211.GD3627@free.fr>
-References: <20170225072908.E590E20E2C@mail.free-electrons.com>
- <20170225104929.GC3627@free.fr> <20170225125211.GD3627@free.fr>
-Message-ID: <20170225154539.GE3627@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Feb 2017 16:46:09 +0100
+Subject: [Buildroot] [git commit] package/oracle-mysql: fix path to systemd
+	service file
+Message-ID: <20170225154613.CA4A28213A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7e4c99b95012881aacbc686e952b26e38422b389
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2017-02-25 13:52 +0100, Yann E. MORIN spake thusly:
-> On 2017-02-25 11:49 +0100, Yann E. MORIN spake thusly:
-> > On 2017-02-25 08:29 +0100, Thomas Petazzoni spake thusly:
-> > > Detail of failures
-> > >         i686 |                   libcec-4.0.2 | NOK | http://autobuild.buildroot.net/results/dfb708172afa7dbe785ef1f5d177f745939e18e7
-> > 
-> > This build tries to link with host libraries, which is definitely not a
-> > good thing...
-> > 
-> > I reverted all changes to cmake back to when it was cmake 3.6 and this
-> > fixes the problem. I still have to investigate whether it is the bump to
-> > 3.7 that causes the failure, or the pkg-config fix we added in 0904b80.
-> 
-> So here is the results of the investigations.
-> 
-> First, here are the cmake-related changes we've had recently:
-> 
->     f8a6990 cmake: bump version to 3.7.2
->     b754237 cmake: adjust dependencies added for libuv
->     0904b80 cmake: pass HOST_CONFIGURE_OPTS at configure time
->     d96fafc cmake: bump version to 3.7.1
->     1ffcf36 cmake: bump version to 3.7.0
-> 
-> 1- Reverting all five of them fixes the build failure of libcec (adn
->    freerdp?)
-> 
-> 2- Reverting all but 0904b80 fixes the problem
-> 
-> 3- Reverting only 0904b80 does not fix the problem
-> 
-> So, cmake 3.7 broke the biuld of some cmake-based packages.
+The path is a remnant from before the rename of the package.
 
-So far, I have identified three packages that suffer from the problem:
+Rather than hard-code the path, use the available variable. Also use
+that variable when copying the Sys-V init script.
 
-  - libcec
-    http://autobuild.buildroot.org/results/3f3/3f3593bab7734dd274faf5b5690895e9424cbb89/
+Fixes:
+    http://autobuild.buildroot.org/results/767/767f0be3894c45c1e6d18bc4528d0da7b50e3757/
+    http://autobuild.buildroot.org/results/e93/e934683ebcb33c9cc8fe9de7b1d5dcd7866f3bce/
+    http://autobuild.buildroot.org/results/5d0/5d04163de80f7900d4aed14cff75b2e0761f101d/
 
-  - freerdp
-    http://autobuild.buildroot.org/results/5d4/5d429d0e288754a541ee5d8be515454c5fccd28b/
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/oracle-mysql/oracle-mysql.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  - domoticz
-    http://autobuild.buildroot.org/results/fd0/fd0ba54c7abf973691b39a0ca1bb4e07d749593a/
-
-(only one failure listed per package, there are many more...)
-
-What do we do about that cmake bump?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
+index ed3c0ea..f0f0649 100644
+--- a/package/oracle-mysql/oracle-mysql.mk
++++ b/package/oracle-mysql/oracle-mysql.mk
+@@ -108,12 +108,12 @@ endef
+ ORACLE_MYSQL_POST_INSTALL_TARGET_HOOKS += ORACLE_MYSQL_ADD_FOLDER
+ 
+ define ORACLE_MYSQL_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 package/oracle-mysql/S97mysqld \
++	$(INSTALL) -D -m 0755 $(ORACLE_MYSQL_PKGDIR)/S97mysqld \
+ 		$(TARGET_DIR)/etc/init.d/S97mysqld
+ endef
+ 
+ define ORACLE_MYSQL_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/mysql/mysqld.service \
++	$(INSTALL) -D -m 644 $(ORACLE_MYSQL_PKGDIR)/mysqld.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/mysqld.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../usr/lib/systemd/system/mysqld.service \
