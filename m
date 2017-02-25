@@ -1,50 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Feb 2017 16:46:09 +0100
-Subject: [Buildroot] [git commit] package/oracle-mysql: fix path to systemd
-	service file
-Message-ID: <20170225154613.CA4A28213A@busybox.osuosl.org>
+Date: Sat, 25 Feb 2017 16:46:19 +0100
+Subject: [Buildroot] [PATCH] package/oracle-mysql: fix path to systemd
+ service file
+In-Reply-To: <1488033083-7295-1-git-send-email-yann.morin.1998@free.fr>
+References: <1488033083-7295-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170225164619.76a0728d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e4c99b95012881aacbc686e952b26e38422b389
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The path is a remnant from before the rename of the package.
+On Sat, 25 Feb 2017 15:31:23 +0100, Yann E. MORIN wrote:
+> The path is a remnant from before the rename of the package.
+> 
+> Rather than hard-code the path, use the available variable. Also use
+> that variable when copying the Sys-V init script.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/767/767f0be3894c45c1e6d18bc4528d0da7b50e3757/
+>     http://autobuild.buildroot.org/results/e93/e934683ebcb33c9cc8fe9de7b1d5dcd7866f3bce/
+>     http://autobuild.buildroot.org/results/5d0/5d04163de80f7900d4aed14cff75b2e0761f101d/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ryan Coe <bluemrp9@gmail.com>
+> ---
+>  package/oracle-mysql/oracle-mysql.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Rather than hard-code the path, use the available variable. Also use
-that variable when copying the Sys-V init script.
+Applied to master, thanks.
 
-Fixes:
-    http://autobuild.buildroot.org/results/767/767f0be3894c45c1e6d18bc4528d0da7b50e3757/
-    http://autobuild.buildroot.org/results/e93/e934683ebcb33c9cc8fe9de7b1d5dcd7866f3bce/
-    http://autobuild.buildroot.org/results/5d0/5d04163de80f7900d4aed14cff75b2e0761f101d/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/oracle-mysql/oracle-mysql.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
-index ed3c0ea..f0f0649 100644
---- a/package/oracle-mysql/oracle-mysql.mk
-+++ b/package/oracle-mysql/oracle-mysql.mk
-@@ -108,12 +108,12 @@ endef
- ORACLE_MYSQL_POST_INSTALL_TARGET_HOOKS += ORACLE_MYSQL_ADD_FOLDER
- 
- define ORACLE_MYSQL_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 package/oracle-mysql/S97mysqld \
-+	$(INSTALL) -D -m 0755 $(ORACLE_MYSQL_PKGDIR)/S97mysqld \
- 		$(TARGET_DIR)/etc/init.d/S97mysqld
- endef
- 
- define ORACLE_MYSQL_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 package/mysql/mysqld.service \
-+	$(INSTALL) -D -m 644 $(ORACLE_MYSQL_PKGDIR)/mysqld.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/mysqld.service
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -sf ../../../../usr/lib/systemd/system/mysqld.service \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
