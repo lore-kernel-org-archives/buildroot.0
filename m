@@ -1,95 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Feb 2017 19:51:33 +0100
-Subject: [Buildroot] [PATCH 4/4] Revert "cmake: bump version to 3.7.0"
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 25 Feb 2017 22:44:39 +0200
+Subject: [Buildroot] [PATCH 0/4] package/cmake: revert the bump to 3.7
 In-Reply-To: <cover.1488048682.git.yann.morin.1998@free.fr>
 References: <cover.1488048682.git.yann.morin.1998@free.fr>
-Message-ID: <df3990e80996775534d5d823ea9bb772836b945d.1488048682.git.yann.morin.1998@free.fr>
+Message-ID: <20170225204439.2gqs2rnnmlrck22s@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cmake 3.7 causes serious regressions in some cmake-based packages,
-related to how RPATH is handled.
+Hi Yann,
 
-This reverts commit 1ffcf364b6e9894a876dc581a090f87685945412.
+On Sat, Feb 25, 2017 at 07:51:29PM +0100, Yann E. MORIN wrote:
+> cmake 3.7 causes serious regressions in some cmake-based packages,
+> related to how RPATH is handled.
+> 
+> See for example:
+> 
+>   - domoticz : http://autobuild.buildroot.org/results/fd0/fd0ba54c7abf973691b39a0ca1bb4e07d749593a/
+>   - freerdp  : http://autobuild.buildroot.org/results/5d4/5d429d0e288754a541ee5d8be515454c5fccd28b/
+>   - libcec   : http://autobuild.buildroot.org/results/3f3/3f3593bab7734dd274faf5b5690895e9424cbb89/
+> 
+> (and many others)
+> 
+> All causes the link to be attemped against host libraries, which is
+> definitely not appropriate...
+> 
+> Properly fixing this so close to the release is problematic; we'd risk
+> having to hunt down packages one by one.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: J?rg Krause <joerg.krause@embedded.rocks>
-Cc: Baruch Siach <baruch@tkos.co.il>
----
- package/cmake/Config.in  | 9 ++-------
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 12 deletions(-)
+What about host installed cmake? Maybe do something like the following 
+(untested) to blacklist version 3.7.x?
 
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-index 716d80e..6f04a4a 100644
---- a/package/cmake/Config.in
-+++ b/package/cmake/Config.in
-@@ -20,14 +20,11 @@ config BR2_PACKAGE_CMAKE_CTEST
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_XZ
--	select BR2_PACKAGE_LIBUV
- 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # from jsoncpp
- 	depends on BR2_USE_WCHAR # libarchive
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
--	depends on BR2_USE_MMU # libuv
- 	help
- 	  CTest is a testing tool distributed as a part of CMake. It
- 	  can be used to automate updating (using CVS for example),
-@@ -37,9 +34,7 @@ config BR2_PACKAGE_CMAKE_CTEST
+diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+index 9b63b0648d97..1c4fec8cae41 100755
+--- a/support/dependencies/check-host-cmake.sh
++++ b/support/dependencies/check-host-cmake.sh
+@@ -27,6 +27,10 @@ version="$(${cmake} --version \
+ major="${version%.*}"
+ minor="${version#*.}"
  
- 	  http://www.cmake.org/
- 
--comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, threads"
-+comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7"
- 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
--	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 687e5a4..f846dc9 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.7/cmake-3.7.0-SHA-256.txt
--sha256 ed63e05c41aeb6c036e503114ab15847f29c312f9f21f5f1a7060a4b4ec2fb31  cmake-3.7.0.tar.gz
-+# From http://www.cmake.org/files/v3.6/cmake-3.6.3-SHA-256.txt
-+sha256 7d73ee4fae572eb2d7cd3feb48971aea903bb30a20ea5ae8b4da826d8ccad5fe  cmake-3.6.3.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index e4904fc..bc55509 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--CMAKE_VERSION_MAJOR = 3.7
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
-+CMAKE_VERSION_MAJOR = 3.6
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
-@@ -22,7 +22,7 @@ CMAKE_LICENSE_FILES = Copyright.txt
- #   the system-wide libraries instead of rebuilding and statically
- #   linking with the ones bundled into the CMake sources.
- 
--CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz libuv
-+CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz
- 
- CMAKE_CONF_OPTS = \
- 	-DKWSYS_LFS_WORKS=TRUE \
++if [ ${version} = 3.7 ]; then
++	exit 1
++fi
++
+ if [ ${major} -gt ${major_min} ]; then
+     echo "${cmake}"
+ else
+
+baruch
+
 -- 
-2.7.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
