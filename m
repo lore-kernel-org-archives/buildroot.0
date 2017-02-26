@@ -1,83 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Feb 2017 15:36:39 +0100
-Subject: [Buildroot] [PATCH v2] package/xfsprogs: fix static build
-In-Reply-To: <20170226143311.1a60f588@free-electrons.com>
-References: <1488107943-17075-1-git-send-email-yann.morin.1998@free.fr>
- <20170226143311.1a60f588@free-electrons.com>
-Message-ID: <20170226143639.GB4043@free.fr>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 26 Feb 2017 16:08:49 +0100
+Subject: [Buildroot] [PATCH] support/misc/Vagrantfile: reorgainzing
+	provisioining
+Message-ID: <1488121729-29214-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+* Removed distribution upgrade cause it slows down the first boot
+  and presents a bug when executeted non interactively.
+* Reorganized provsion scripts to be in privileged and
+  non privileged sections
+* Added ubuntu mirror automatic hadling for apt packages
+  sources
 
-On 2017-02-26 14:33 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 26 Feb 2017 12:19:03 +0100, Yann E. MORIN wrote:
-> > xfsprogs links to some libraries from util-linux. Those in turn may use
-> > i18n functions when locales are enabled.
-> > 
-> > When doing a uClibc build, those i18n functions are provided by the
-> > libintl library from the gettext package.
-> > 
-> > xfsprogs does not use pkgconfig to find the util-linux libraries, so it
-> > misses the Requires.private field from libblkid, and thus misses the
-> > Libs.private field from libuid.
-> > 
-> > And so a static link fails because of undefined references to i18n
-> > symbols.
-> > 
-> > Furthermore, xfsprogs does not use automake; the hand-made Makefiles do
-> > not make use of the LIBS variable set by configure.
-> > 
-> > We fix that in two ways:
-> > 
-> >   - pass LIBS=-lintl to configure, so that the configure step has a
-> >     chance to succeed  (as suggested by Waldemar)
-> > 
-> >   - patch a Makefile to link with EXTRALIBS, and pass EXTRALIBS via
-> >     XFSPROGS_MAKE_OPTS
-> > 
-> > Fixes:
-> >     http://autobuild.buildroot.org/results/503/50314716a9f72e8bb238e52e9dc342c68f7e0b8b/
-> >     http://autobuild.buildroot.org/results/253/253a024698b55dece992b2631e30edf4ff9092f7/
-> >     http://autobuild.buildroot.org/results/3fe/3fe0d96cf13af12b0051a95f7865d4e38f4a78af/
-> >     http://autobuild.buildroot.org/results/d48/d48e61785d25d33106b7dab1b5cb200cf27d4044/
-> >     ...
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Waldemar Brodkorb <wbx@openadk.org>
-> > 
-> > ---
-> > Changs v1 -> v2:
-> >   - add commit log to patch itself
-> > ---
-> >  .../0004-build-add-EXTRALIBS-to-link-with.patch    | 53 ++++++++++++++++++++++
-> >  package/xfsprogs/xfsprogs.mk                       | 17 +++++++
-> >  2 files changed, 70 insertions(+)
-> >  create mode 100644 package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch
-> 
-> I've applied to master, because it fixes a build issue, but I'm not
-> super happy with the proposed solution. I think xfsprogs should be
-> using pkg-config instead (at least if available). This would be much
-> better.
+Fixes: http://bugs.busybox.net/show_bug.cgi?id=9581
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ support/misc/Vagrantfile | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-Indeed, but this is a much bigger endeavour... :-/
-
-> Maybe this issue can be reported upstream, and we can explain them the
-> value of using pkg-config in such a situation?
-
-I've sent the patch as-is to upstream. Let's see what they have to say
-(URL not yet available on their archive page).
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index dc4c15d..89973ce 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -41,19 +41,20 @@ Vagrant.configure('2') do |config|
+ 		end
+ 	end
+ 
+-	config.vm.provision 'shell', inline:
+-		"sudo dpkg --add-architecture i386
+-		sudo apt-get -q update
+-		sudo apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
+-		sudo apt-get -q -y upgrade
+-		sudo apt-get -q -y install build-essential libncurses5-dev \
++	config.vm.provision 'shell', privileged: true, inline:
++		"sed -i 's|deb http://us.archive.ubuntu.com/ubuntu/|deb mirror://mirrors.ubuntu.com/mirrors.txt|g' /etc/apt/sources.list
++		dpkg --add-architecture i386
++		apt-get -q update
++		apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
++		apt-get -q -y install build-essential libncurses5-dev \
+ 			git bzr cvs mercurial subversion libc6:i386 unzip bc
+-		sudo apt-get -q -y autoremove
+-		sudo apt-get -q -y clean
+-		sudo update-locale LC_ALL=C"
++		apt-get -q -y autoremove
++		apt-get -q -y clean
++		update-locale LC_ALL=C"
+ 
+ 	config.vm.provision 'shell', privileged: false, inline:
+ 		"echo 'Downloading and extracting buildroot #{RELEASE}'
+ 		wget -q -c http://buildroot.org/downloads/buildroot-#{RELEASE}.tar.gz
+ 		tar axf buildroot-#{RELEASE}.tar.gz"
++
+ end
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
