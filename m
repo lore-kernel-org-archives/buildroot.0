@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 23:21:41 +0100
-Subject: [Buildroot] [PATCH] openocd: avoid documentation to fix build issues
-Message-ID: <1488147701-9697-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Feb 2017 23:22:16 +0100
+Subject: [Buildroot] [PATCHv2] openocd: avoid documentation rebuild to fix
+	build issues
+Message-ID: <1488147736-9778-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,6 +25,8 @@ Fixes:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+Changes since v1: fix commit title
+
 This is an alternative proposal to:
 
   https://patchwork.ozlabs.org/patch/724932/
