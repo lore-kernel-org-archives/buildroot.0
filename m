@@ -1,64 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 21:05:42 +0100
-Subject: [Buildroot] [git commit] package/sdl2: enable OpenGL ES support
-Message-ID: <20170301170424.4DA197FBDB@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 15:00:08 +0100
+Subject: [Buildroot] [git commit] ccache: bump to version 3.3.4
+Message-ID: <20170301170424.078A27FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cdf3f7bcd4495c2932455141de8aa7ae66a849b
+commit: https://git.buildroot.net/buildroot/commit/?id=64da2fd2594ac05f84ef04376745dff1d32a8f09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Switch download URL to avoid a redirect.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sdl2/Config.in | 7 +++++++
- package/sdl2/sdl2.mk   | 8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
-index 6345133..a2971ed 100644
---- a/package/sdl2/Config.in
-+++ b/package/sdl2/Config.in
-@@ -40,6 +40,13 @@ comment "OpenGL support needs X11 and an OpenGL provider"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index bde53f7..5354572 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,2 +1,2 @@
+-# Verified key https://samba.org/ftp/ccache/ccache-3.3.3.tar.xz.asc - sha256 computed locally
+-sha256  3b02a745da1cfa9eb438af7147e0fd3545e2f6163de9e5b07da86f58859f04ec  ccache-3.3.3.tar.xz
++# Verified key https://samba.org/ftp/ccache/ccache-3.3.4.tar.xz.asc - sha256 computed locally
++sha256  24f15bf389e38c41548c9c259532187774ec0cb9686c3497bbb75504c8dc404f  ccache-3.3.4.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index f174a5d..6a20ee8 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_SDL2_OPENGLES
-+	bool "OpenGL ES"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "OpenGL ES support needs an OpenGL ES provider"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES
-+
- endif
- 
- comment "sdl2 needs a toolchain w/ dynamic library"
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 3f210f8..d2ee50d 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -18,7 +18,6 @@ SDL2_CONF_OPTS += \
- 	--disable-esd \
- 	--disable-dbus \
- 	--disable-pulseaudio \
--	--disable-video-opengles \
- 	--disable-video-wayland
- 
- # We must enable static build to get compilation successful.
-@@ -105,6 +104,13 @@ else
- SDL2_CONF_OPTS += --disable-video-opengl
- endif
- 
-+ifeq ($(BR2_PACKAGE_SDL2_OPENGLES),y)
-+SDL2_CONF_OPTS += --enable-video-opengles
-+SDL2_DEPENDENCIES += libgles
-+else
-+SDL2_CONF_OPTS += --disable-video-opengles
-+endif
-+
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- SDL2_DEPENDENCIES += tslib
- SDL2_CONF_OPTS += --enable-input-tslib
+-CCACHE_VERSION = 3.3.3
+-CCACHE_SITE = https://samba.org/ftp/ccache
++CCACHE_VERSION = 3.3.4
++CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
+ CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
