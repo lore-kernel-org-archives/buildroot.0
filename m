@@ -1,32 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 14:59:47 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/lugaru: new package
-In-Reply-To: <20170225133600.15637-3-romain.naour@gmail.com>
-References: <20170225133600.15637-1-romain.naour@gmail.com>
- <20170225133600.15637-3-romain.naour@gmail.com>
-Message-ID: <20170226145947.57dd33ca@free-electrons.com>
+Date: Sun, 26 Feb 2017 15:00:08 +0100
+Subject: [Buildroot] [git commit branch/next] ccache: bump to version 3.3.4
+Message-ID: <20170226140015.8827A821DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=64da2fd2594ac05f84ef04376745dff1d32a8f09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 25 Feb 2017 14:36:00 +0100, Romain Naour wrote:
+Switch download URL to avoid a redirect.
 
-> +LUGARU_CONF_OPTS = -DSYSTEM_INSTALL=ON \
-> +	-DCMAKE_INSTALL_BINDIR=games \
-> +	-DCMAKE_INSTALL_DATADIR=share/games
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ccache/ccache.hash | 4 ++--
+ package/ccache/ccache.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Why are we passing custom CMAKE_INSTALL_<foo>DIR here?
-
-The rest of the patch looks good to me.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index bde53f7..5354572 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,2 +1,2 @@
+-# Verified key https://samba.org/ftp/ccache/ccache-3.3.3.tar.xz.asc - sha256 computed locally
+-sha256  3b02a745da1cfa9eb438af7147e0fd3545e2f6163de9e5b07da86f58859f04ec  ccache-3.3.3.tar.xz
++# Verified key https://samba.org/ftp/ccache/ccache-3.3.4.tar.xz.asc - sha256 computed locally
++sha256  24f15bf389e38c41548c9c259532187774ec0cb9686c3497bbb75504c8dc404f  ccache-3.3.4.tar.xz
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index f174a5d..6a20ee8 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CCACHE_VERSION = 3.3.3
+-CCACHE_SITE = https://samba.org/ftp/ccache
++CCACHE_VERSION = 3.3.4
++CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
+ CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
