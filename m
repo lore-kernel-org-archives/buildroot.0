@@ -1,45 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Feb 2017 15:56:53 +0000
-Subject: [Buildroot] [Bug 9596] KODI: --enable-lirc needs "HAVE_LIRC"
- compiler definition to use the lirc subsystem
-In-Reply-To: <bug-9596-163@https.bugs.busybox.net/>
-References: <bug-9596-163@https.bugs.busybox.net/>
-Message-ID: <bug-9596-163-eZiHYFCP31@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Feb 2017 16:59:49 +0100
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.9.13
+In-Reply-To: <1488116428-8237-1-git-send-email-festevam@gmail.com>
+References: <1488116428-8237-1-git-send-email-festevam@gmail.com>
+Message-ID: <20170226165949.6692a0c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9596
+Hello,
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Ok, so I had a closer look, and the configure.ac code is completely wrong:
+On Sun, 26 Feb 2017 10:40:27 -0300, Fabio Estevam wrote:
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  linux/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-AC_ARG_ENABLE([lirc],
-  [AS_HELP_STRING([--disable-lirc],
-  [disable lirc support (default is enabled)])],
-  [AC_MSG_RESULT("Lirc disabled")],
-  [AC_DEFINE([HAVE_LIRC], [1], ["Lirc enabled"])])
+Both applied to master, thanks.
 
-So what this does is:
-
- * If a --enable-lirc or --disable-lirc option is passed, prints "Lirc
-disabled"
-
- * If none of --enable-lirc or --disable-lirc is passed, it defines HAVE_LIRC.
-
-As you can see, this is completely bogus. It should instead be something like:
-
-AC_ARG_ENABLE([lirc],
-  [AS_HELP_STRING([--disable-lirc],
-  [disable lirc support (default is enabled)])],
-  [use_lirc=$enableval])
-
-if "${use_lirc}" = "yes" ; then
-  AC_DEFINE([HAVE_LIRC], [1], ["Lirc enabled"])]
-fi
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
