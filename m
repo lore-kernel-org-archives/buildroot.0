@@ -1,33 +1,64 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Feb 2017 20:15:10 +0000
-Subject: [Buildroot] [Bug 9251] Shared C++ libraries for Microblaze results
- in Segmentation Fault
-In-Reply-To: <bug-9251-163@https.bugs.busybox.net/>
-References: <bug-9251-163@https.bugs.busybox.net/>
-Message-ID: <bug-9251-163-pyOn59Ivd0@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Feb 2017 21:15:13 +0100
+Subject: [Buildroot] [git commit] support/misc/Vagrantfile: reorganize
+	provisioning
+Message-ID: <20170226201826.7BB0E81E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9251
+commit: https://git.buildroot.net/buildroot/commit/?id=410082e1d980668385ffd2993920785e0fffd2c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mail at waldemar-brodkorb.de changed:
+* Remove distribution upgrade cause it slows down the first boot and
+  presents a bug when executed non interactively.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WORKSFORME
+* Reorganize provision scripts to be in privileged and non privileged
+  sections
 
---- Comment #5 from mail at waldemar-brodkorb.de ---
-I checked with master on x86_64 host.
-With gcc 5.x and binutils 2.25.1/2.26.1/2.27.
-I couldn't reproduce the segfault anymore.
+* Add Ubuntu mirror automatic handling for apt packages sources
 
-So may be reopen it with exact version of buildroot, gcc, binutils and
-C library used. And if it is happening on x86 or x86_64 host.
+Fixes bug #9581
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/misc/Vagrantfile | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index dc4c15d..89973ce 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -41,19 +41,20 @@ Vagrant.configure('2') do |config|
+ 		end
+ 	end
+ 
+-	config.vm.provision 'shell', inline:
+-		"sudo dpkg --add-architecture i386
+-		sudo apt-get -q update
+-		sudo apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
+-		sudo apt-get -q -y upgrade
+-		sudo apt-get -q -y install build-essential libncurses5-dev \
++	config.vm.provision 'shell', privileged: true, inline:
++		"sed -i 's|deb http://us.archive.ubuntu.com/ubuntu/|deb mirror://mirrors.ubuntu.com/mirrors.txt|g' /etc/apt/sources.list
++		dpkg --add-architecture i386
++		apt-get -q update
++		apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
++		apt-get -q -y install build-essential libncurses5-dev \
+ 			git bzr cvs mercurial subversion libc6:i386 unzip bc
+-		sudo apt-get -q -y autoremove
+-		sudo apt-get -q -y clean
+-		sudo update-locale LC_ALL=C"
++		apt-get -q -y autoremove
++		apt-get -q -y clean
++		update-locale LC_ALL=C"
+ 
+ 	config.vm.provision 'shell', privileged: false, inline:
+ 		"echo 'Downloading and extracting buildroot #{RELEASE}'
+ 		wget -q -c http://buildroot.org/downloads/buildroot-#{RELEASE}.tar.gz
+ 		tar axf buildroot-#{RELEASE}.tar.gz"
++
+ end
