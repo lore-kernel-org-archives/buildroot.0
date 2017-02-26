@@ -1,32 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 14:38:07 +0100
-Subject: [Buildroot] [PATCH] openssh: Move key generation to the start
- function of init script.
-In-Reply-To: <20170224142623.yldyeed3aif3w6de@zenon.in.qult.net>
-References: <20170224142623.yldyeed3aif3w6de@zenon.in.qult.net>
-Message-ID: <20170226143807.7b56f73e@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 26 Feb 2017 10:40:27 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.9.13
+Message-ID: <1488116428-8237-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, 24 Feb 2017 15:26:24 +0100, Ignacy Gaw?dzki wrote:
-> Since there's not much point in generating missing host keys when the
-> init script is called with "stop", the call to ssh-keygen should not
-> be done inconditionally, but in the start function instead.
-> 
-> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
-> ---
->  package/openssh/S50sshd | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index ddaaff3..1967dcc 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.9.12)"
++	bool "Latest version (4.9.13)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.9.12" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.9.13" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
