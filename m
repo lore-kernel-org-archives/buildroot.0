@@ -1,38 +1,71 @@
-From: Ben Boeckel <mathstuf@gmail.com>
-Date: Sun, 26 Feb 2017 16:32:12 +0000 (UTC)
-Subject: [Buildroot] [PATCH 0/4] package/cmake: revert the bump to 3.7
-References: <cover.1488048682.git.yann.morin.1998@free.fr>
-Message-ID: <o8uvu7$rgc$1@blaine.gmane.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Feb 2017 17:42:49 +0100
+Subject: [Buildroot] [PATCH] synergy: Fix build with gcc 6
+In-Reply-To: <20170226141620.3449f4c9@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 26 Feb 2017 14:16:20 +0100")
+References: <20170225211701.6357-1-peter@korsgaard.com>
+ <20170226141620.3449f4c9@free-electrons.com>
+Message-ID: <8737f0nbsm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Feb, 2017 at 18:51:29 GMT, Yann E. MORIN wrote:
-> cmake 3.7 causes serious regressions in some cmake-based packages,
-> related to how RPATH is handled.
->
-> See for example:
->
->   - domoticz : http://autobuild.buildroot.org/results/fd0/fd0ba54c7abf973691b39a0ca1bb4e07d749593a/
->   - freerdp  : http://autobuild.buildroot.org/results/5d4/5d429d0e288754a541ee5d8be515454c5fccd28b/
->   - libcec   : http://autobuild.buildroot.org/results/3f3/3f3593bab7734dd274faf5b5690895e9424cbb89/
->
-> (and many others)
->
-> All causes the link to be attemped against host libraries, which is
-> definitely not appropriate...
->
-> Properly fixing this so close to the release is problematic; we'd risk
-> having to hunt down packages one by one.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Could you please submit a report to CMake's issue tracker? Regressions
-are taken seriously and it'd be nice to have this fixed for 3.8.0 (which
-is currently in its RC cycle).
+Hi,
 
-    https://gitlab.kitware.com/cmake/cmake/issues
+ > Applied to master, thanks. However, did you notice that the hash we
+ > have in Buildroot for synergy-1.3.1.tar.gz does not patch the tarball
+ > available from Sourceforge, and therefore we always fallback to
+ > downloading from sources.b.n ?
 
-Thanks,
+Hmm, no - I didn't. I must have had the tarball locally from earlier.
 
---Ben
+ > See:
+
+ > Location: https://sourceforge.net/publish/ [following]
+ > --2017-02-26 14:15:18--  https://sourceforge.net/publish/
+
+That /publish thing is afaik a new change on sourceforge.
+
+
+> Connecting to sourceforge.net (sourceforge.net)|216.34.181.60|:443... connected.
+ > HTTP request sent, awaiting response... 200 OK
+ > Length: 43482 (42K) [text/html]
+ > Saving to: ?/home/thomas/projets/buildroot/output/build/.synergy-1.3.1.tar.gz.LebFB4/output?
+
+ > /home/thomas/projets/buildroot/output/build/.synergy
+ > 100%[===================================================================================================================>]
+ > 42,46K 172KB/s in 0,2s
+
+ > 2017-02-26 14:15:19 (172 KB/s) -
+ > ?/home/thomas/projets/buildroot/output/build/.synergy-1.3.1.tar.gz.LebFB4/output?
+ > saved [43482/43482]
+
+ > ERROR: synergy-1.3.1.tar.gz has wrong sha256 hash:
+ > ERROR: expected: 4a15e26456498dda5f3aa7d688a4892e0c50394a2f01685136fbc954bacc9691
+ > ERROR: got     : 062a0b0841486719a474df96c42381910dbc75447ce41e4a2059bef36829b259
+
+It isn't just upstream who have uploaded a new tarball. Apparently there
+are some recent changes to sourceforge that causes it to return a HTML
+page instead:
+
+file synergy-1.3.1.tar.gz
+synergy-1.3.1.tar.gz: HTML document, UTF-8 Unicode text, with very long lines
+
+I checked with another package from sourceforge (c-icap), and that one
+is OK.
+
+It seems like synergy is no longer hosted on sourceforge. Accessing the
+project page just redirects to symless.com.
+
+It looks like the tarball on github has identical content (but the
+tarball doesn't have the same sha256sum), so perhaps we should move to
+that:
+
+https://github.com/symless/synergy/releases/tag/1.3.1
+
+-- 
+Bye, Peter Korsgaard
