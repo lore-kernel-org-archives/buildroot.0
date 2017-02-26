@@ -1,72 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 21:05:09 +0100
-Subject: [Buildroot] [git commit] package/sdl2: enable opengl support
-Message-ID: <20170301170424.4053A7FBDB@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 15:05:51 +0100
+Subject: [Buildroot] [git commit] runc: bump to version
+	9df8b306d01f59d3a8029be411de015b7304dd8f
+Message-ID: <20170301170424.148E57FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=739b66e8d9c5c1e228486c8b4ed2be2fb1e8559d
+commit: https://git.buildroot.net/buildroot/commit/?id=f07f07241ec413687a38eccdfd335698425ba0db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OpenGl support mean GLX so it require X11 support.
-Select automatically BR2_PACKAGE_SDL2_X11 to enable minimal X11
-libraries support (libx11 and libxext).
+Version bump as a dependency of docker-engine v1.13.1
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sdl2/Config.in | 11 +++++++++++
- package/sdl2/sdl2.mk   |  8 +++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
-index 8fc14ee..6345133 100644
---- a/package/sdl2/Config.in
-+++ b/package/sdl2/Config.in
-@@ -29,6 +29,17 @@ comment "X11 video driver needs X.org"
- 	depends on !BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 0b6a24f..a053b6f 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 374822cc2895ed3899b7a3a03b566413ea782fccec1307231f27894e9c6d5bea  runc-50a19c6ff828c58e5dab13830bd3dacde268afe5.tar.gz
++sha256	11f69923a786efb82b65d9f1eec0ac665a985e631a67f3f4d466dac720efacdd	runc-9df8b306d01f59d3a8029be411de015b7304dd8f.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 95afcaa..5862733 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_SDL2_OPENGL
-+	bool "OpenGL (GLX)"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_MMU # X11 video driver
-+	select BR2_PACKAGE_SDL2_X11
-+
-+comment "OpenGL support needs X11 and an OpenGL provider"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
-+
- endif
- 
- comment "sdl2 needs a toolchain w/ dynamic library"
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 2ec12e6..3f210f8 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -18,7 +18,6 @@ SDL2_CONF_OPTS += \
- 	--disable-esd \
- 	--disable-dbus \
- 	--disable-pulseaudio \
--	--disable-video-opengl \
- 	--disable-video-opengles \
- 	--disable-video-wayland
- 
-@@ -99,6 +98,13 @@ else
- SDL2_CONF_OPTS += --disable-video-x11 --without-x
- endif
- 
-+ifeq ($(BR2_PACKAGE_SDL2_OPENGL),y)
-+SDL2_CONF_OPTS += --enable-video-opengl
-+SDL2_DEPENDENCIES += libgl
-+else
-+SDL2_CONF_OPTS += --disable-video-opengl
-+endif
-+
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- SDL2_DEPENDENCIES += tslib
- SDL2_CONF_OPTS += --enable-input-tslib
+-RUNC_VERSION = 50a19c6ff828c58e5dab13830bd3dacde268afe5
++RUNC_VERSION = 9df8b306d01f59d3a8029be411de015b7304dd8f
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
