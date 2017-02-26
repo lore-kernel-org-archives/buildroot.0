@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 21:42:55 +0100
-Subject: [Buildroot] [git commit branch/next] kmod: bump to version 24
-Message-ID: <20170226204326.932E180296@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 21:32:40 +0100
+Subject: [Buildroot] [git commit branch/next] ti-cgt-pru: bump version to
+	2.1.4
+Message-ID: <20170226204326.5823282229@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63565627884d2e69488688438203aece13b0786b
+commit: https://git.buildroot.net/buildroot/commit/?id=82bc0222e793b10763d5cc20ec26cd6822f96677
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Cam Mannett <camden.mannett@protonmail.ch>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kmod/kmod.hash | 2 +-
- package/kmod/kmod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ti-cgt-pru/ti-cgt-pru.hash | 2 +-
+ package/ti-cgt-pru/ti-cgt-pru.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
-index 8220fd4..be350c4 100644
---- a/package/kmod/kmod.hash
-+++ b/package/kmod/kmod.hash
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.hash b/package/ti-cgt-pru/ti-cgt-pru.hash
+index 1c19b33..3ff08ac 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.hash
++++ b/package/ti-cgt-pru/ti-cgt-pru.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
--sha256 d303d5519faec9d69e1132f6b37db2579db17a7fb5c1517da0115d03ba168155  kmod-23.tar.xz
-+sha256 610b8d1df172acc39a4fdf1eaa47a57b04873c82f32152e7a62e29b6ff9cb397  kmod-24.tar.xz
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 7492b92..61cc0b8 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256	df85cd1ed3aea12d577854ece11bf5f2af6ace8c39959eea4cf2fa5973924e0e	ti_cgt_pru_2.1.3_linux_installer_x86.bin
++sha256	c80dbf35e7401f4c122ff25cc2f6b5db496607782fb4583cee8663a2763f4472	ti_cgt_pru_2.1.4_linux_installer_x86.bin
+diff --git a/package/ti-cgt-pru/ti-cgt-pru.mk b/package/ti-cgt-pru/ti-cgt-pru.mk
+index d94f091..d6de05e 100644
+--- a/package/ti-cgt-pru/ti-cgt-pru.mk
++++ b/package/ti-cgt-pru/ti-cgt-pru.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--KMOD_VERSION = 23
-+KMOD_VERSION = 24
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
- KMOD_INSTALL_STAGING = YES
+-TI_CGT_PRU_VERSION = 2.1.3
++TI_CGT_PRU_VERSION = 2.1.4
+ TI_CGT_PRU_SOURCE = ti_cgt_pru_$(TI_CGT_PRU_VERSION)_linux_installer_x86.bin
+-TI_CGT_PRU_SITE = http://software-dl.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
++TI_CGT_PRU_SITE = http://downloads.ti.com/codegen/esd/cgt_public_sw/PRU/$(TI_CGT_PRU_VERSION)
+ TI_CGT_PRU_LICENSE = TI Technology and Software Publicly Available License (compiler + PRU library), \
+ 	Boost Software License 1.0 (compiler), \
+ 	BSD-2c, BSD-3c, MIT, Academic Free License 3.0, Hewlett-Packard (PRU library)
