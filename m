@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 21:41:56 +0100
-Subject: [Buildroot] [PATCH 2/2] ti-cgt-pru: bump version to 2.1.4
-In-Reply-To: <20170225082616.16177-1-camden.mannett@gmail.com>
-References: <20170225082616.16177-1-camden.mannett@gmail.com>
-Message-ID: <20170226214156.7be52414@free-electrons.com>
+Date: Sun, 26 Feb 2017 21:43:14 +0100
+Subject: [Buildroot] [PATCH next] kmod: bump to version 24
+In-Reply-To: <1487944262-31790-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1487944262-31790-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20170226214314.59043596@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 25 Feb 2017 08:26:16 +0000, camden.mannett at gmail.com wrote:
-> From: Cam Mannett <camden.mannett@protonmail.ch>
-> 
-> Signed-off-by: Cam Mannett <camden.mannett@protonmail.ch>
+On Fri, 24 Feb 2017 19:21:02 +0530, Rahul Bedarkar wrote:
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 > ---
->  package/ti-cgt-pru/ti-cgt-pru.hash | 2 +-
->  package/ti-cgt-pru/ti-cgt-pru.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/kmod/kmod.hash | 2 +-
+>  package/kmod/kmod.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
