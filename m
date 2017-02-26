@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 21:31:54 +0100
-Subject: [Buildroot] [git commit] pru-software-support: bump version to 5.1.0
-Message-ID: <20170301170424.6F84A7FBDB@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 21:44:02 +0100
+Subject: [Buildroot] [git commit] nano: bump to version 2.7.5
+Message-ID: <20170301170424.AF1907FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8477c6ffcb0cf56aa9878398f4ef5ddc3c25409e
+commit: https://git.buildroot.net/buildroot/commit/?id=d0035543432edddee4dcb017ac4dd74832133e89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Cam Mannett <camden.mannett@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pru-software-support/pru-software-support.hash | 2 +-
- package/pru-software-support/pru-software-support.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
-index 8f624da..f4ce8e4 100644
---- a/package/pru-software-support/pru-software-support.hash
-+++ b/package/pru-software-support/pru-software-support.hash
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index aa3e27b..6264faa 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
 @@ -1,2 +1,2 @@
- # Locally-calculated hash
--sha256	b257535ca9b1641d1a238795f3c7004064c573a91cf4a1fa566e3f7c2360c38f	pru-software-support-804b548e69ef9fdf44445f6d0968d81cb8a1e7b4.tar.gz
-+sha256	1e880d74f9a1d04324e6255cb7a0e3d40f92e08809dc81dc6c714447bac5c335	pru-software-support-v5.1.0.tar.gz
-diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
-index 06983c2..adaa4ac 100644
---- a/package/pru-software-support/pru-software-support.mk
-+++ b/package/pru-software-support/pru-software-support.mk
-@@ -4,10 +4,10 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256 752170643039e2c95a433de357f0c70a8c4c4c561a90a7e7259a63e225b659b9  nano-2.7.4.tar.xz
++sha256 a64d24e6bc4fc448376d038f9a755af77f8e748c9051b6f45bf85e783a7e67e4  nano-2.7.5.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 4632bed..dc6aa13 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PRU_SOFTWARE_SUPPORT_VERSION = 804b548e69ef9fdf44445f6d0968d81cb8a1e7b4
--PRU_SOFTWARE_SUPPORT_SITE = git://git.ti.com/pru-software-support-package/pru-software-support-package.git
-+PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
-+PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)?
- PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3c, GPLv2, Public Domain
--PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v4.0-Manifest.html
-+PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
- PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
- HOST_PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
- 
+ NANO_VERSION_MAJOR = 2.7
+-NANO_VERSION = $(NANO_VERSION_MAJOR).4
++NANO_VERSION = $(NANO_VERSION_MAJOR).5
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPLv3+
