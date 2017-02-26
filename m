@@ -1,56 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Feb 2017 23:22:25 +0100
-Subject: [Buildroot] Buildroot 2017.02-rc3 released
-Message-ID: <87d1e4lhi6.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Feb 2017 23:22:28 +0100
+Subject: [Buildroot] [PATCH] assimp: remove dead "depends on" dependency
+Message-ID: <1488147748-9833-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX has been removed in commit
+311bc137da2952445683413794f3ebc8e477c9ef ("toolchain: kill ADI
+Blackfin toolchain"), so this "depends on" is useless.
 
-Buildroot 2017.02-rc3 is released - Go download it at:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/assimp/Config.in | 5 -----
+ 1 file changed, 5 deletions(-)
 
-http://buildroot.net/downloads/buildroot-2017.02-rc3.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2017.02-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2017.02-rc2..
-    12  Gustavo Zacarias
-    10  Yann E. MORIN
-     7  Thomas Petazzoni
-     5  Waldemar Brodkorb
-     4  Fabio Estevam
-     3  Peter Korsgaard
-     2  Angelo Compagnucci
-     2  Jesper Baekdahl
-     2  Peter Seiderer
-     1  Baruch Siach
-     1  Chris Smart
-     1  Danomi Manchego
-     1  Ignacy Gaw?dzki
-     1  Luca Ceresoli
-     1  Vicente Olivert Riera
-     1  Zakharov Vlad
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02-rc3
-
-Expect the final 2017.02 release by the end of the month (E.G. early
-next week).
-
+diff --git a/package/assimp/Config.in b/package/assimp/Config.in
+index 8fa6429..93020f7 100644
+--- a/package/assimp/Config.in
++++ b/package/assimp/Config.in
+@@ -4,11 +4,6 @@ config BR2_PACKAGE_ASSIMP
+ 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71124, that
+ 	# cause an infinite loop in gcc when building this package.
+ 	depends on !BR2_microblaze
+-	# The ADI Blackfin toolchain does not build assimp properly,
+-	# fails with "internal compiler error: in simplify_subreg, at
+-	# simplify-rtx.c:5001". It builds fine with a mainline gcc for
+-	# Blackfin.
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ZLIB
+ 	help
 -- 
-Bye, Peter Korsgaard
+2.7.4
