@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 23:43:28 +0100
-Subject: [Buildroot] [git commit] mplayer: not supported on or1k
-Message-ID: <20170227203649.C64387FC1E@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 23:41:22 +0100
+Subject: [Buildroot] [git commit] python-libconfig: disable on musl
+Message-ID: <20170227203649.BA303800EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=076095a860ba24a4bc8302e5bfa5c753c00d228a
+commit: https://git.buildroot.net/buildroot/commit/?id=2c2920c457bfe75756942a1185c575b17c5459b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-MPlayer doesn't support OpenRISC:
-
-The architecture of your CPU (or1k) is not supported by this configure script
-It seems nobody has ported MPlayer to your OS or CPU type yet.
-
-so disable it on this architecture.
+The python-libconfig package fails to build with musl with very weird
+errors coming all the way from Boost Python, which nobody ever
+bothered to fix. It's time to disable this package on musl to avoid
+the repetitive build failures.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/47207dfd10ff6e5ec4ccdcf8454aaf5f408ad1e3/
+  http://autobuild.buildroot.net/results/f0f6cdc8c38c024772615d5e677b0f4ad63ef7ec
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mplayer/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-libconfig/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
-index 8474b0e..a10ad26 100644
---- a/package/mplayer/Config.in
-+++ b/package/mplayer/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
- 	default y
- 	# Those architectures are not supported by MPlayer
- 	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
--		|| BR2_m68k || BR2_microblaze || BR2_nios2)
-+		|| BR2_m68k || BR2_microblaze || BR2_nios2 || BR2_or1k)
- 	# Broken support for <ARMv5
- 	depends on !BR2_ARM_CPU_ARMV4
- 	# configure script barfs on the -Wl,-elf2flt we add in the toolchain
+diff --git a/package/python-libconfig/Config.in b/package/python-libconfig/Config.in
+index 7cc5f8a..a222f9a 100644
+--- a/package/python-libconfig/Config.in
++++ b/package/python-libconfig/Config.in
+@@ -1,5 +1,6 @@
+-comment "python-libconfig needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "python-libconfig needs a glibc or uClibc toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_PYTHON_LIBCONFIG
+ 	bool "python-libconfig"
+@@ -8,6 +9,8 @@ config BR2_PACKAGE_PYTHON_LIBCONFIG
+ 	select BR2_PACKAGE_LIBCONFIG
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# error: invalid use of incomplete type 'struct _IO_FILE'
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  Python bindings to the C++ library libconfig
+ 
