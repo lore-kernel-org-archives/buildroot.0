@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 15:05:51 +0100
-Subject: [Buildroot] [git commit branch/next] runc: bump to version
-	9df8b306d01f59d3a8029be411de015b7304dd8f
-Message-ID: <20170226140716.41B6981F6C@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 15:05:56 +0100
+Subject: [Buildroot] [git commit branch/next] docker-containerd: bump to
+	version aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1
+Message-ID: <20170226140716.636A881EBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f07f07241ec413687a38eccdfd335698425ba0db
+commit: https://git.buildroot.net/buildroot/commit/?id=d0d6b5f9e4f3771b0f7eaa7b01ff7d6770c16d6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Version bump as a dependency of docker-engine v1.13.1
@@ -17,28 +17,28 @@ Version bump as a dependency of docker-engine v1.13.1
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
+ package/docker-containerd/docker-containerd.hash | 2 +-
+ package/docker-containerd/docker-containerd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 0b6a24f..a053b6f 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index f27e38e..0505ab1 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256 374822cc2895ed3899b7a3a03b566413ea782fccec1307231f27894e9c6d5bea  runc-50a19c6ff828c58e5dab13830bd3dacde268afe5.tar.gz
-+sha256	11f69923a786efb82b65d9f1eec0ac665a985e631a67f3f4d466dac720efacdd	runc-9df8b306d01f59d3a8029be411de015b7304dd8f.tar.gz
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 95afcaa..5862733 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+ # Computed locally
+-sha256 88e099af66b50abe7f2159f13bdab793fa5199d8d5b9a9ef7a68171abb4359be  docker-containerd-v0.2.5.tar.gz
++sha256	77ea44af1531d46b22f0444eb506590d1b7e5a9fe891cc6f8e36db5c2aef2d80	docker-containerd-aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1.tar.gz
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index c04552a..1430387 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 50a19c6ff828c58e5dab13830bd3dacde268afe5
-+RUNC_VERSION = 9df8b306d01f59d3a8029be411de015b7304dd8f
- RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+-DOCKER_CONTAINERD_VERSION = v0.2.5
++DOCKER_CONTAINERD_VERSION = aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1
+ DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
