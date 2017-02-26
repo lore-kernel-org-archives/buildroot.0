@@ -1,69 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 23:22:16 +0100
-Subject: [Buildroot] [PATCHv2] openocd: avoid documentation rebuild to fix
-	build issues
-Message-ID: <1488147736-9778-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Feb 2017 23:22:25 +0100
+Subject: [Buildroot] Buildroot 2017.02-rc3 released
+Message-ID: <87d1e4lhi6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On PowerPC64(le), we patch all configure scripts. Due to this, the
-version.texi in OpenOCD files gets regenerated, and then since it has
-a newer date than openocd.info, openocd build system rebuilds the
-documentation. Unfortunately, this documentation rebuild fails on old
-machines.
+Hi,
 
-We work around this by faking the date of the generated version.texi
-file, to make the build system believe the documentation doesn't need
-to be regenerated.
+Buildroot 2017.02-rc3 is released - Go download it at:
 
-Fixes:
+http://buildroot.net/downloads/buildroot-2017.02-rc3.tar.gz
 
-  http://autobuild.buildroot.net/results/3cbe65a46e75b8e67846d593884c96df97dec7a4
+or
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Changes since v1: fix commit title
+http://buildroot.net/downloads/buildroot-2017.02-rc3.tar.bz2
 
-This is an alternative proposal to:
+Or get it from Git:
 
-  https://patchwork.ozlabs.org/patch/724932/
+git://git.buildroot.net/buildroot
 
-and to:
+Another week, another release candidate.
 
-  https://github.com/ntfreak/openocd/pull/4/commits/2c0cc66d5388e07679ac9f07c1ce0f8469931f02
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
 
-which was submitted upstream but not accepted.
----
- package/openocd/openocd.mk | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+git shortlog -sn 2017.02-rc2..
+    12  Gustavo Zacarias
+    10  Yann E. MORIN
+     7  Thomas Petazzoni
+     5  Waldemar Brodkorb
+     4  Fabio Estevam
+     3  Peter Korsgaard
+     2  Angelo Compagnucci
+     2  Jesper Baekdahl
+     2  Peter Seiderer
+     1  Baruch Siach
+     1  Chris Smart
+     1  Danomi Manchego
+     1  Ignacy Gaw?dzki
+     1  Luca Ceresoli
+     1  Vicente Olivert Riera
+     1  Zakharov Vlad
 
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 21a302f..0d18365 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -99,5 +99,20 @@ HOST_OPENOCD_CONF_OPTS = \
- 
- HOST_OPENOCD_DEPENDENCIES = host-libftdi host-libusb host-libusb-compat
- 
-+# Avoid documentation rebuild. On PowerPC64(le), we patch the
-+# configure script. Due to this, the version.texi files gets
-+# regenerated, and then since it has a newer date than openocd.info,
-+# openocd build system rebuilds the documentation. Unfortunately, this
-+# documentation rebuild fails on old machines. We work around this by
-+# faking the date of the generated version.texi file, to make the
-+# build system believe the documentation doesn't need to be
-+# regenerated.
-+define OPENOCD_FIX_VERSION_TEXI
-+       touch -r $(@D)/doc/openocd.info $(@D)/doc/version.texi
-+endef
-+OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
-+HOST_OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
-+
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02-rc3
+
+Expect the final 2017.02 release by the end of the month (E.G. early
+next week).
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
