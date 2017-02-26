@@ -1,59 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Feb 2017 17:45:09 +0100
-Subject: [Buildroot] [PATCH 0/4] package/cmake: revert the bump to 3.7
-In-Reply-To: <o8uvu7$rgc$1@blaine.gmane.org>
-References: <cover.1488048682.git.yann.morin.1998@free.fr>
- <o8uvu7$rgc$1@blaine.gmane.org>
-Message-ID: <20170226164509.GC4043@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 26 Feb 2017 17:48:53 +0100
+Subject: [Buildroot] [PATCH v3 1/3] package/sdl2: enable opengl support
+Message-ID: <20170226164855.10834-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ben, All,
+OpenGl support mean GLX so it require X11 support.
+Select automatically BR2_PACKAGE_SDL2_X11 to enable minimal X11
+libraries support (libx11 and libxext).
 
-On 2017-02-26 16:32 +0000, Ben Boeckel spake thusly:
-> On Sat, 25 Feb, 2017 at 18:51:29 GMT, Yann E. MORIN wrote:
-> > cmake 3.7 causes serious regressions in some cmake-based packages,
-> > related to how RPATH is handled.
-> >
-> > See for example:
-> >
-> >   - domoticz : http://autobuild.buildroot.org/results/fd0/fd0ba54c7abf973691b39a0ca1bb4e07d749593a/
-> >   - freerdp  : http://autobuild.buildroot.org/results/5d4/5d429d0e288754a541ee5d8be515454c5fccd28b/
-> >   - libcec   : http://autobuild.buildroot.org/results/3f3/3f3593bab7734dd274faf5b5690895e9424cbb89/
-> >
-> > (and many others)
-> >
-> > All causes the link to be attemped against host libraries, which is
-> > definitely not appropriate...
-> >
-> > Properly fixing this so close to the release is problematic; we'd risk
-> > having to hunt down packages one by one.
-> 
-> Could you please submit a report to CMake's issue tracker? Regressions
-> are taken seriously and it'd be nice to have this fixed for 3.8.0 (which
-> is currently in its RC cycle).
->     https://gitlab.kitware.com/cmake/cmake/issues
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+v3: select BR2_PACKAGE_SDL2_X11 (ThomasP)
+---
+ package/sdl2/Config.in | 11 +++++++++++
+ package/sdl2/sdl2.mk   |  8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-Yes, that would be awesome.
-
-However, I don't know how to caracterise the bug with a minimal reproducer.
-Nor am I able to explain exactly what happens in details...
-
-Maybe J?rg (which has already made an extensive analyis of the problem)
-or you (if you are knowledgeable about cmake) could do it? ;-)
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
+index 8fc14ee..6345133 100644
+--- a/package/sdl2/Config.in
++++ b/package/sdl2/Config.in
+@@ -29,6 +29,17 @@ comment "X11 video driver needs X.org"
+ 	depends on !BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
+ 
++config BR2_PACKAGE_SDL2_OPENGL
++	bool "OpenGL (GLX)"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_USE_MMU # X11 video driver
++	select BR2_PACKAGE_SDL2_X11
++
++comment "OpenGL support needs X11 and an OpenGL provider"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
++
+ endif
+ 
+ comment "sdl2 needs a toolchain w/ dynamic library"
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 2ec12e6..3f210f8 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -18,7 +18,6 @@ SDL2_CONF_OPTS += \
+ 	--disable-esd \
+ 	--disable-dbus \
+ 	--disable-pulseaudio \
+-	--disable-video-opengl \
+ 	--disable-video-opengles \
+ 	--disable-video-wayland
+ 
+@@ -99,6 +98,13 @@ else
+ SDL2_CONF_OPTS += --disable-video-x11 --without-x
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SDL2_OPENGL),y)
++SDL2_CONF_OPTS += --enable-video-opengl
++SDL2_DEPENDENCIES += libgl
++else
++SDL2_CONF_OPTS += --disable-video-opengl
++endif
++
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ SDL2_DEPENDENCIES += tslib
+ SDL2_CONF_OPTS += --enable-input-tslib
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.3
