@@ -1,32 +1,42 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 26 Feb 2017 12:19:48 +0100
-Subject: [Buildroot] [PATCH] build: add EXTRALIBS to link with
-In-Reply-To: <1488107722-15022-1-git-send-email-yann.morin.1998@free.fr>
-References: <1488107722-15022-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170226111948.GH12810@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Feb 2017 14:14:16 +0100
+Subject: [Buildroot] [PATCH] binutils: fix for ld segfault for
+ microblaze when --gc-sections is used
+In-Reply-To: <20170225013714.GA18541@waldemar-brodkorb.de>
+References: <20170225013714.GA18541@waldemar-brodkorb.de>
+Message-ID: <20170226141416.6c52bf28@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-Yann E. MORIN wrote,
+Hello,
 
-> When doing a uClibc static build, the build fails to link:
->     http://autobuild.buildroot.org/results/503/50314716a9f72e8bb238e52e9dc342c68f7e0b8b/build-end.log
+On Sat, 25 Feb 2017 02:37:14 +0100, Waldemar Brodkorb wrote:
+> The workarounds for kmod/libnss can be removed when the patch is
+> applied and the autobuilder toolchains got rebuild.
 > 
-> The cause is due to:
->   - xfsprogs links dome programs with util-linux' libblkid
->   - util-linux' libblkid is linked to util-linux' libuuid
->   - util-linux' libuuid uses i18n functions when locales are enabled
->   - uClibc does not provide i18n functions
+> kmod: 0d81107f021bf2a663f102bace1e3f9590641170
+> libnss: fceb1afd5dda45cf180f22877a6ab0e51d1b3dac
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  .../binutils/2.25.1/916-microblaze-pr21180.patch   | 33 ++++++++++++++++++++++
+>  .../binutils/2.26.1/0906-microblaze-pr21180.patch  | 33 ++++++++++++++++++++++
+>  .../binutils/2.27/0906-microblaze-pr21180.patch    | 33 ++++++++++++++++++++++
+>  3 files changed, 99 insertions(+)
+>  create mode 100644 package/binutils/2.25.1/916-microblaze-pr21180.patch
+>  create mode 100644 package/binutils/2.26.1/0906-microblaze-pr21180.patch
+>  create mode 100644 package/binutils/2.27/0906-microblaze-pr21180.patch
 
-One minor issue. uClibc-ng provides i18n functions when
-UCLIBC_HAS_LIBINTL is set. That was added recently, but is available
-in the uClibc-ng release used in buildroot.
-A better testing of this would be cool. It was imported from
-gettext-tiny project from Sabotage linux distribution.
+Applied to master, thanks. Rebuild of the pre-built toolchain in
+progress.
 
-best regards 
- Waldemar
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
