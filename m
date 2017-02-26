@@ -1,33 +1,28 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 26 Feb 2017 10:40:28 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9}.x series
-In-Reply-To: <1488116428-8237-1-git-send-email-festevam@gmail.com>
-References: <1488116428-8237-1-git-send-email-festevam@gmail.com>
-Message-ID: <1488116428-8237-2-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Feb 2017 14:49:40 +0100
+Subject: [Buildroot] [PATCH] binutils: fix for ld segfault for
+ microblaze when --gc-sections is used
+In-Reply-To: <20170226141416.6c52bf28@free-electrons.com>
+References: <20170225013714.GA18541@waldemar-brodkorb.de>
+ <20170226141416.6c52bf28@free-electrons.com>
+Message-ID: <20170226144940.31f9b804@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 84778f2..ee02a45 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.51"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.52"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
--	default "4.9.12"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.13"	if BR2_KERNEL_HEADERS_4_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+On Sun, 26 Feb 2017 14:14:16 +0100, Thomas Petazzoni wrote:
+
+> Applied to master, thanks. Rebuild of the pre-built toolchain in
+> progress.
+
+Toolchain rebuilt and deployed.
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
