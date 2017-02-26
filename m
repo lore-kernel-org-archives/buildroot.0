@@ -1,21 +1,25 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 26 Feb 2017 20:30:47 +0100
-Subject: [Buildroot] [PATCH] classpath: add patch to fix or1k compile error
-Message-ID: <20170226193047.GA29453@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Feb 2017 21:04:21 +0100
+Subject: [Buildroot] [git commit] classpath: add patch to fix or1k compile
+	error
+Message-ID: <20170226200440.A48A481EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=f12a146f817c8ef07a7d41a31a5336b5ef6a96e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes:
   http://autobuild.buildroot.net/results/a0bb5535fd197b9dd1607a5f0bca477c9575c99f
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/classpath/0003-add-or1k-endian.patch | 18 ++++++++++++++++++
  1 file changed, 18 insertions(+)
- create mode 100644 package/classpath/0003-add-or1k-endian.patch
 
 diff --git a/package/classpath/0003-add-or1k-endian.patch b/package/classpath/0003-add-or1k-endian.patch
 new file mode 100644
@@ -41,5 +45,3 @@ index 0000000..8bc8784
 + #ifdef __v800
 + #define __IEEE_LITTLE_ENDIAN
 + #endif
--- 
-2.1.4
