@@ -1,41 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Feb 2017 23:15:39 +0100
-Subject: [Buildroot] [git commit] gflags: bump to version v2.2.0
-Message-ID: <20170301170423.ECDFD7FBDB@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 21:05:09 +0100
+Subject: [Buildroot] [git commit] package/sdl2: enable opengl support
+Message-ID: <20170301170424.4053A7FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9190cb61fd15a3d92d84e473bd94146396a7dea2
+commit: https://git.buildroot.net/buildroot/commit/?id=739b66e8d9c5c1e228486c8b4ed2be2fb1e8559d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+OpenGl support mean GLX so it require X11 support.
+Select automatically BR2_PACKAGE_SDL2_X11 to enable minimal X11
+libraries support (libx11 and libxext).
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gflags/gflags.hash | 2 +-
- package/gflags/gflags.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sdl2/Config.in | 11 +++++++++++
+ package/sdl2/sdl2.mk   |  8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/package/gflags/gflags.hash b/package/gflags/gflags.hash
-index 5b22411..b9eeb57 100644
---- a/package/gflags/gflags.hash
-+++ b/package/gflags/gflags.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	d8331bd0f7367c8afd5fcb5f5e85e96868a00fd24b7276fa5fcee1e5575c2662	gflags-v2.1.2.tar.gz
-+sha256	466c36c6508a451734e4f4d76825cf9cd9b8716d2b70ef36479ae40f08271f88	gflags-v2.2.0.tar.gz
-diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
-index 89111ed..94f2210 100644
---- a/package/gflags/gflags.mk
-+++ b/package/gflags/gflags.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
+index 8fc14ee..6345133 100644
+--- a/package/sdl2/Config.in
++++ b/package/sdl2/Config.in
+@@ -29,6 +29,17 @@ comment "X11 video driver needs X.org"
+ 	depends on !BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
  
--GFLAGS_VERSION = v2.1.2
-+GFLAGS_VERSION = v2.2.0
- GFLAGS_SITE = $(call github,gflags,gflags,$(GFLAGS_VERSION))
- GFLAGS_INSTALL_STAGING = YES
- GFLAGS_LICENSE = BSD-3c
++config BR2_PACKAGE_SDL2_OPENGL
++	bool "OpenGL (GLX)"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_USE_MMU # X11 video driver
++	select BR2_PACKAGE_SDL2_X11
++
++comment "OpenGL support needs X11 and an OpenGL provider"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_XORG7
++
+ endif
+ 
+ comment "sdl2 needs a toolchain w/ dynamic library"
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 2ec12e6..3f210f8 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -18,7 +18,6 @@ SDL2_CONF_OPTS += \
+ 	--disable-esd \
+ 	--disable-dbus \
+ 	--disable-pulseaudio \
+-	--disable-video-opengl \
+ 	--disable-video-opengles \
+ 	--disable-video-wayland
+ 
+@@ -99,6 +98,13 @@ else
+ SDL2_CONF_OPTS += --disable-video-x11 --without-x
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SDL2_OPENGL),y)
++SDL2_CONF_OPTS += --enable-video-opengl
++SDL2_DEPENDENCIES += libgl
++else
++SDL2_CONF_OPTS += --disable-video-opengl
++endif
++
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ SDL2_DEPENDENCIES += tslib
+ SDL2_CONF_OPTS += --enable-input-tslib
