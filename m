@@ -1,48 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 16:54:52 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/sdl2: enable opengl support
-In-Reply-To: <ad5c77a3-693f-49b6-6dfc-d4e4758cad68@gmail.com>
-References: <20170225133600.15637-1-romain.naour@gmail.com>
- <20170226145732.00e59efb@free-electrons.com>
- <ad5c77a3-693f-49b6-6dfc-d4e4758cad68@gmail.com>
-Message-ID: <20170226165452.26868669@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 Feb 2017 15:56:53 +0000
+Subject: [Buildroot] [Bug 9596] KODI: --enable-lirc needs "HAVE_LIRC"
+ compiler definition to use the lirc subsystem
+In-Reply-To: <bug-9596-163@https.bugs.busybox.net/>
+References: <bug-9596-163@https.bugs.busybox.net/>
+Message-ID: <bug-9596-163-eZiHYFCP31@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9596
 
-On Sun, 26 Feb 2017 16:32:40 +0100, Romain Naour wrote:
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Ok, so I had a closer look, and the configure.ac code is completely wrong:
 
-> So, SDL2 build fine even without BR2_PACKAGE_SDL2_X11.
-> However you're probably right since GLX mean OpenGL with X11 support and
-> selecting BR2_PACKAGE_SDL2_X11 allow to enable additional X11 libraries support.
-> I'll add a select BR2_PACKAGE_SDL2_X11 since it was enabled for my runtime test.
+AC_ARG_ENABLE([lirc],
+  [AS_HELP_STRING([--disable-lirc],
+  [disable lirc support (default is enabled)])],
+  [AC_MSG_RESULT("Lirc disabled")],
+  [AC_DEFINE([HAVE_LIRC], [1], ["Lirc enabled"])])
 
-OK.
+So what this does is:
 
-> > Also, is libgl sufficient here? What happens if you select
-> > nvidia-driver as the OpenGL provider for example? It doesn't depend on
-> > any X.org package, so are you sure by the time SDL2 runs its configure
-> > script, enough things have been built?  
-> 
-> nvidia-driver is an libgl provider only if BR2_PACKAGE_NVIDIA_DRIVER_XORG=y,
-> so the libgl provider select a minimal set of X11 libraries that are already
-> build when sdl2 build start.
+ * If a --enable-lirc or --disable-lirc option is passed, prints "Lirc
+disabled"
 
-Selects yes, but it doesn't not have a <pkg>_DEPENDENCIES on them, so
-you are not guaranteed they are available before sdl2 is built.
+ * If none of --enable-lirc or --disable-lirc is passed, it defines HAVE_LIRC.
 
-Obvisouly, if BR2_PACKAGE_SDL2_X11 is now selected by
-BR2_PACKAGE_SDL2_OPENGL, then you're sure the X11 libs will be built
-before sdl2.
+As you can see, this is completely bogus. It should instead be something like:
 
-Thanks!
+AC_ARG_ENABLE([lirc],
+  [AS_HELP_STRING([--disable-lirc],
+  [disable lirc support (default is enabled)])],
+  [use_lirc=$enableval])
 
-Thomas
+if "${use_lirc}" = "yes" ; then
+  AC_DEFINE([HAVE_LIRC], [1], ["Lirc enabled"])]
+fi
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
