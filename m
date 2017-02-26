@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 14:57:32 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/sdl2: enable opengl support
-In-Reply-To: <20170225133600.15637-1-romain.naour@gmail.com>
+Date: Sun, 26 Feb 2017 14:59:47 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/lugaru: new package
+In-Reply-To: <20170225133600.15637-3-romain.naour@gmail.com>
 References: <20170225133600.15637-1-romain.naour@gmail.com>
-Message-ID: <20170226145732.00e59efb@free-electrons.com>
+ <20170225133600.15637-3-romain.naour@gmail.com>
+Message-ID: <20170226145947.57dd33ca@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 25 Feb 2017 14:35:58 +0100, Romain Naour wrote:
+On Sat, 25 Feb 2017 14:36:00 +0100, Romain Naour wrote:
 
-> +config BR2_PACKAGE_SDL2_OPENGL
-> +	bool "OpenGL (GLX)"
-> +	depends on BR2_PACKAGE_HAS_LIBGL
-> +	depends on BR2_PACKAGE_XORG7
+> +LUGARU_CONF_OPTS = -DSYSTEM_INSTALL=ON \
+> +	-DCMAKE_INSTALL_BINDIR=games \
+> +	-DCMAKE_INSTALL_DATADIR=share/games
 
-Are you sure this doesn't need BR2_PACKAGE_SDL2_X11 ? I.e what happens
-if you build SDL2 with BR2_PACKAGE_SDL2_OPENGL=y but
-BR2_PACKAGE_SDL2_X11 disabled ?
+Why are we passing custom CMAKE_INSTALL_<foo>DIR here?
 
-> +ifeq ($(BR2_PACKAGE_SDL2_OPENGL),y)
-> +SDL2_CONF_OPTS += --enable-video-opengl
-> +SDL2_DEPENDENCIES += libgl
+The rest of the patch looks good to me.
 
-Also, is libgl sufficient here? What happens if you select
-nvidia-driver as the OpenGL provider for example? It doesn't depend on
-any X.org package, so are you sure by the time SDL2 runs its configure
-script, enough things have been built?
-
-Can you verify by enabling nvidia-driver, and then running "make sdl2" ?
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
