@@ -1,368 +1,215 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 15:06:57 +0100
-Subject: [Buildroot] [git commit] docker-engine: bump to version 1.13.1
-Message-ID: <20170301170424.3161E7FBDB@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 21:43:52 +0100
+Subject: [Buildroot] [git commit] libsigsegv: bump to version 2.11
+Message-ID: <20170301170424.A1A037FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8d4c34b542c70aa922fcc6db0d26c99654cf14a
+commit: https://git.buildroot.net/buildroot/commit/?id=3e89311e42e34251daaae70cfb5d20f3dfdd245b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove patch as it has been applied upstream since 1.13
- - go packages are now in vendor instead of vendor/src so update
-slightly the configure and build commands
+Drop all patches, they're upstream.
+And match that by dropping autoreconf as well.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-issues-with-tailing-rotated-jsonlog-file.patch | 297 ---------------------
- package/docker-engine/docker-engine.hash           |   2 +-
- package/docker-engine/docker-engine.mk             |   7 +-
- 3 files changed, 5 insertions(+), 301 deletions(-)
+ ...ck-direction-for-the-AArch64-architecture.patch | 28 -------------------
+ ...direction-for-the-Microblaze-architecture.patch | 26 ------------------
+ ...k-direction-for-the-Blackfin-architecture.patch | 29 --------------------
+ ...ck-direction-for-the-Nios-II-architecture.patch | 31 ----------------------
+ .../libsigsegv/0005-fix-sparc64-stackpointer.patch | 16 -----------
+ package/libsigsegv/libsigsegv.hash                 |  2 +-
+ package/libsigsegv/libsigsegv.mk                   |  4 +--
+ 7 files changed, 2 insertions(+), 134 deletions(-)
 
-diff --git a/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch b/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
+diff --git a/package/libsigsegv/0001-Add-stack-direction-for-the-AArch64-architecture.patch b/package/libsigsegv/0001-Add-stack-direction-for-the-AArch64-architecture.patch
 deleted file mode 100644
-index 413cfd6..0000000
---- a/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
+index a3b03a0..0000000
+--- a/package/libsigsegv/0001-Add-stack-direction-for-the-AArch64-architecture.patch
 +++ /dev/null
-@@ -1,297 +0,0 @@
--From 8d6f2e3fe8851b581309da25fc4c32f8be675932 Mon Sep 17 00:00:00 2001
--From: Brian Goff <cpuguy83@gmail.com>
--Date: Mon, 11 Jul 2016 16:31:42 -0400
--Subject: [PATCH] Fix issues with tailing rotated jsonlog file
+@@ -1,28 +0,0 @@
+-From 790e8f620f06834f3fd03c310cbecd1416536987 Mon Sep 17 00:00:00 2001
+-From: Will Newton <will.newton@linaro.org>
+-Date: Tue, 28 May 2013 18:31:46 +0100
+-Subject: [PATCH 2/5] Add stack direction for the AArch64 architecture
 -
--Fixes a race where the log reader would get events for both an actual
--rotation as we from fsnotify (`fsnotify.Rename`).
--This issue becomes extremely apparent when rotations are fast, for
--example:
+-On this architecture, the stack grows downward.
 -
--```
--$ docker run -d --name test --log-opt max-size=1 --log-opt max-file=2
--busybox sh -c 'while true; do echo hello; usleep 100000; done'
--```
--
--With this change the log reader for jsonlogs can handle rotations that
--happen as above.
--
--Instead of listening for both fs events AND rotation events
--simultaneously, potentially meaning we see 2 rotations for only a single
--rotation due to channel buffering, only listen for fs events (like
--`Rename`) and then wait to be notified about rotation by the logger.
--This makes sure that we don't see 2 rotations for 1, and that we don't
--start trying to read until the logger is actually ready for us to.
--
--Signed-off-by: Brian Goff <cpuguy83@gmail.com>
--
--This commit is pending upstream commit fixing broken log tailing. The
--original commit can be found in the PR here:
--
--  - https://github.com/docker/docker/pull/24514
--
--Signed-off-by: Christian Stewart <christian@paral.in>
+-Signed-off-by: Will Newton <will.newton@linaro.org>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- daemon/logger/jsonfilelog/read.go | 180 +++++++++++++++++++++++++-------------
-- 1 file changed, 119 insertions(+), 61 deletions(-)
+- m4/stack-direction.m4 | 1 +
+- 1 file changed, 1 insertion(+)
 -
--diff --git a/daemon/logger/jsonfilelog/read.go b/daemon/logger/jsonfilelog/read.go
--index bea83dd..0cb44af 100644
----- a/daemon/logger/jsonfilelog/read.go
--+++ b/daemon/logger/jsonfilelog/read.go
--@@ -3,11 +3,14 @@ package jsonfilelog
-- import (
-- 	"bytes"
-- 	"encoding/json"
--+	"errors"
-- 	"fmt"
-- 	"io"
-- 	"os"
-- 	"time"
-- 
--+	"gopkg.in/fsnotify.v1"
--+
-- 	"github.com/Sirupsen/logrus"
-- 	"github.com/docker/docker/daemon/logger"
-- 	"github.com/docker/docker/pkg/filenotify"
--@@ -44,6 +47,10 @@ func (l *JSONFileLogger) ReadLogs(config logger.ReadConfig) *logger.LogWatcher {
-- func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.ReadConfig) {
-- 	defer close(logWatcher.Msg)
-- 
--+	// lock so the read stream doesn't get corrupted do to rotations or other log data written while we read
--+	// This will block writes!!!
--+	l.mu.Lock()
--+
-- 	pth := l.writer.LogPath()
-- 	var files []io.ReadSeeker
-- 	for i := l.writer.MaxFiles(); i > 1; i-- {
--@@ -61,6 +68,7 @@ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.R
-- 	latestFile, err := os.Open(pth)
-- 	if err != nil {
-- 		logWatcher.Err <- err
--+		l.mu.Unlock()
-- 		return
-- 	}
-- 
--@@ -80,6 +88,7 @@ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.R
-- 		if err := latestFile.Close(); err != nil {
-- 			logrus.Errorf("Error closing file: %v", err)
-- 		}
--+		l.mu.Unlock()
-- 		return
-- 	}
-- 
--@@ -87,7 +96,6 @@ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.R
-- 		latestFile.Seek(0, os.SEEK_END)
-- 	}
-- 
---	l.mu.Lock()
-- 	l.readers[logWatcher] = struct{}{}
-- 	l.mu.Unlock()
-- 
--@@ -128,92 +136,142 @@ func tailFile(f io.ReadSeeker, logWatcher *logger.LogWatcher, tail int, since ti
-- 	}
-- }
-- 
--+func watchFile(name string) (filenotify.FileWatcher, error) {
--+	fileWatcher, err := filenotify.New()
--+	if err != nil {
--+		return nil, err
--+	}
--+
--+	if err := fileWatcher.Add(name); err != nil {
--+		logrus.WithField("logger", "json-file").Warnf("falling back to file poller due to error: %v", err)
--+		fileWatcher.Close()
--+		fileWatcher = filenotify.NewPollingWatcher()
--+
--+		if err := fileWatcher.Add(name); err != nil {
--+			fileWatcher.Close()
--+			logrus.Debugf("error watching log file for modifications: %v", err)
--+			return nil, err
--+		}
--+	}
--+	return fileWatcher, nil
--+}
--+
-- func followLogs(f *os.File, logWatcher *logger.LogWatcher, notifyRotate chan interface{}, since time.Time) {
-- 	dec := json.NewDecoder(f)
-- 	l := &jsonlog.JSONLog{}
-- 
---	fileWatcher, err := filenotify.New()
--+	name := f.Name()
--+	fileWatcher, err := watchFile(name)
-- 	if err != nil {
-- 		logWatcher.Err <- err
--+		return
-- 	}
-- 	defer func() {
-- 		f.Close()
-- 		fileWatcher.Close()
-- 	}()
---	name := f.Name()
-- 
---	if err := fileWatcher.Add(name); err != nil {
---		logrus.WithField("logger", "json-file").Warnf("falling back to file poller due to error: %v", err)
---		fileWatcher.Close()
---		fileWatcher = filenotify.NewPollingWatcher()
--+	var retries int
--+	handleRotate := func() error {
--+		f.Close()
--+		fileWatcher.Remove(name)
-- 
--+		// retry when the file doesn't exist
--+		for retries := 0; retries <= 5; retries++ {
--+			f, err = os.Open(name)
--+			if err == nil || !os.IsNotExist(err) {
--+				break
--+			}
--+		}
--+		if err != nil {
--+			return err
--+		}
-- 		if err := fileWatcher.Add(name); err != nil {
---			logrus.Debugf("error watching log file for modifications: %v", err)
---			logWatcher.Err <- err
---			return
--+			return err
-- 		}
--+		dec = json.NewDecoder(f)
--+		return nil
-- 	}
-- 
---	var retries int
---	for {
---		msg, err := decodeLogLine(dec, l)
---		if err != nil {
---			if err != io.EOF {
---				// try again because this shouldn't happen
---				if _, ok := err.(*json.SyntaxError); ok && retries <= maxJSONDecodeRetry {
---					dec = json.NewDecoder(f)
---					retries++
---					continue
--+	errRetry := errors.New("retry")
--+	errDone := errors.New("done")
--+	waitRead := func() error {
--+		select {
--+		case e := <-fileWatcher.Events():
--+			switch e.Op {
--+			case fsnotify.Write:
--+				dec = json.NewDecoder(f)
--+				return nil
--+			case fsnotify.Rename, fsnotify.Remove:
--+				<-notifyRotate
--+				if err := handleRotate(); err != nil {
--+					return err
-- 				}
---
---				// io.ErrUnexpectedEOF is returned from json.Decoder when there is
---				// remaining data in the parser's buffer while an io.EOF occurs.
---				// If the json logger writes a partial json log entry to the disk
---				// while at the same time the decoder tries to decode it, the race condition happens.
---				if err == io.ErrUnexpectedEOF && retries <= maxJSONDecodeRetry {
---					reader := io.MultiReader(dec.Buffered(), f)
---					dec = json.NewDecoder(reader)
---					retries++
---					continue
--+				return nil
--+			}
--+			return errRetry
--+		case err := <-fileWatcher.Errors():
--+			logrus.Debug("logger got error watching file: %v", err)
--+			// Something happened, let's try and stay alive and create a new watcher
--+			if retries <= 5 {
--+				fileWatcher, err = watchFile(name)
--+				if err != nil {
--+					return err
-- 				}
---
---				return
--+				retries++
--+				return errRetry
-- 			}
--+			return err
--+		case <-logWatcher.WatchClose():
--+			fileWatcher.Remove(name)
--+			return errDone
--+		}
--+	}
-- 
---			select {
---			case <-fileWatcher.Events():
---				dec = json.NewDecoder(f)
---				continue
---			case <-fileWatcher.Errors():
---				logWatcher.Err <- err
---				return
---			case <-logWatcher.WatchClose():
---				fileWatcher.Remove(name)
---				return
---			case <-notifyRotate:
---				f.Close()
---				fileWatcher.Remove(name)
---
---				// retry when the file doesn't exist
---				for retries := 0; retries <= 5; retries++ {
---					f, err = os.Open(name)
---					if err == nil || !os.IsNotExist(err) {
---						break
---					}
--+	handleDecodeErr := func(err error) error {
--+		if err == io.EOF {
--+			for err := waitRead(); err != nil; {
--+				if err == errRetry {
--+					// retry the waitRead
--+					continue
-- 				}
--+				return err
--+			}
--+			return nil
--+		}
--+		// try again because this shouldn't happen
--+		if _, ok := err.(*json.SyntaxError); ok && retries <= maxJSONDecodeRetry {
--+			dec = json.NewDecoder(f)
--+			retries++
--+			return nil
--+		}
--+		// io.ErrUnexpectedEOF is returned from json.Decoder when there is
--+		// remaining data in the parser's buffer while an io.EOF occurs.
--+		// If the json logger writes a partial json log entry to the disk
--+		// while@the same time the decoder tries to decode it, the race condition happens.
--+		if err == io.ErrUnexpectedEOF && retries <= maxJSONDecodeRetry {
--+			reader := io.MultiReader(dec.Buffered(), f)
--+			dec = json.NewDecoder(reader)
--+			retries++
--+			return nil
--+		}
--+		return err
--+	}
-- 
---				if err = fileWatcher.Add(name); err != nil {
---					logWatcher.Err <- err
---					return
---				}
---				if err != nil {
---					logWatcher.Err <- err
--+	// main loop
--+	for {
--+		msg, err := decodeLogLine(dec, l)
--+		if err != nil {
--+			if err := handleDecodeErr(err); err != nil {
--+				if err == errDone {
-- 					return
-- 				}
---
---				dec = json.NewDecoder(f)
---				continue
--+				// we got an unrecoverable error, so return
--+				logWatcher.Err <- err
--+				return
-- 			}
--+			// ready to try again
--+			continue
-- 		}
-- 
-- 		retries = 0 // reset retries since we've succeeded
+-diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
+-index 39c1a28..3f70530 100644
+---- a/m4/stack-direction.m4
+-+++ b/m4/stack-direction.m4
+-@@ -13,6 +13,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
+-     case "$host_cpu" in
+-       dnl See the #define STACK_GROWS_DOWNWARD in gcc-3.1/gcc/config/*/*.h.
+-       a29k | \
+-+      aarch64* | \
+-       alpha* | \
+-       arc | \
+-       arm* | strongarm* | xscale* | \
 --- 
--2.7.3
+-2.1.0
 -
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 5e09453..bc1b846 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/libsigsegv/0002-Add-stack-direction-for-the-Microblaze-architecture.patch b/package/libsigsegv/0002-Add-stack-direction-for-the-Microblaze-architecture.patch
+deleted file mode 100644
+index d3795d3..0000000
+--- a/package/libsigsegv/0002-Add-stack-direction-for-the-Microblaze-architecture.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From f4395ff932758884416753f88f5d98f33ec67479 Mon Sep 17 00:00:00 2001
+-From: Spenser Gilliland <spenser@gillilanding.com>
+-Date: Mon, 29 Dec 2014 13:54:54 +0100
+-Subject: [PATCH 3/5] Add stack direction for the Microblaze architecture
+-
+-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- m4/stack-direction.m4 | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
+-index 3f70530..53f4216 100644
+---- a/m4/stack-direction.m4
+-+++ b/m4/stack-direction.m4
+-@@ -32,6 +32,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
+-       m68* | \
+-       m88k | \
+-       mcore | \
+-+      microblaze | \
+-       mips* | \
+-       mmix | \
+-       mn10200 | \
+--- 
+-2.1.0
+-
+diff --git a/package/libsigsegv/0003-Add-stack-direction-for-the-Blackfin-architecture.patch b/package/libsigsegv/0003-Add-stack-direction-for-the-Blackfin-architecture.patch
+deleted file mode 100644
+index 5d8232a..0000000
+--- a/package/libsigsegv/0003-Add-stack-direction-for-the-Blackfin-architecture.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 55a707283dbb3b2fdcaaa4e177d050e122cfc2a0 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 29 Dec 2014 13:55:16 +0100
+-Subject: [PATCH 4/5] Add stack direction for the Blackfin architecture
+-
+-The stack grows downward on Blackfin, see
+-https://sourceware.org/binutils/docs/as/Blackfin-Syntax.html: "The
+-stack grows by decrementing the stack pointer.".
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- m4/stack-direction.m4 | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
+-index 53f4216..1a97d5a 100644
+---- a/m4/stack-direction.m4
+-+++ b/m4/stack-direction.m4
+-@@ -18,6 +18,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
+-       arc | \
+-       arm* | strongarm* | xscale* | \
+-       avr | \
+-+      bfin | \
+-       c1 | c2 | c32 | c34 | c38 | \
+-       clipper | \
+-       cris | \
+--- 
+-2.1.0
+-
+diff --git a/package/libsigsegv/0004-Add-stack-direction-for-the-Nios-II-architecture.patch b/package/libsigsegv/0004-Add-stack-direction-for-the-Nios-II-architecture.patch
+deleted file mode 100644
+index ee4778e..0000000
+--- a/package/libsigsegv/0004-Add-stack-direction-for-the-Nios-II-architecture.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 24bac122bf4ffe437bb4f6ca633ad08f31a23d73 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 29 Dec 2014 13:56:54 +0100
+-Subject: [PATCH 5/5] Add stack direction for the Nios II architecture
+-
+-According to Altera Application Binary Interface document for the Nios
+-II architecture
+-(http://www.altera.com/literature/hb/nios2/n2cpu_nii51016.pdf):
+-
+- "The stack grows downward (i.e. towards lower addresses). ".
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- m4/stack-direction.m4 | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
+-index 1a97d5a..d9c5157 100644
+---- a/m4/stack-direction.m4
+-+++ b/m4/stack-direction.m4
+-@@ -38,6 +38,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
+-       mmix | \
+-       mn10200 | \
+-       mn10300 | \
+-+      nios2 | \
+-       ns32k | \
+-       pdp11 | \
+-       pj* | \
+--- 
+-2.1.0
+-
+diff --git a/package/libsigsegv/0005-fix-sparc64-stackpointer.patch b/package/libsigsegv/0005-fix-sparc64-stackpointer.patch
+deleted file mode 100644
+index 62de35f..0000000
+--- a/package/libsigsegv/0005-fix-sparc64-stackpointer.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-Fix sparc64 build.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-
+-diff -Nur libsigsegv-2.10.orig/src/fault-linux-sparc.h libsigsegv-2.10/src/fault-linux-sparc.h
+---- libsigsegv-2.10.orig/src/fault-linux-sparc.h	2009-08-01 17:06:49.000000000 +0200
+-+++ libsigsegv-2.10/src/fault-linux-sparc.h	2015-11-29 11:55:29.000000000 +0100
+-@@ -27,4 +27,8 @@
+-    (see also <asm/sigcontext.h>)
+-    are quite different types.  */
+- 
+-+#if __WORDSIZE == 64
+-+#define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.mc_gregs[REG_O6]
+-+#else
+- #define SIGSEGV_FAULT_STACKPOINTER  ((ucontext_t *) ucp)->uc_mcontext.gregs[REG_O6]
+-+#endif
+diff --git a/package/libsigsegv/libsigsegv.hash b/package/libsigsegv/libsigsegv.hash
+index 0151105..e937259 100644
+--- a/package/libsigsegv/libsigsegv.hash
++++ b/package/libsigsegv/libsigsegv.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 0413f3513c2a6842ed9cf837154c8a722e9b34cb36b33430348489baa183707e  docker-engine-v1.12.6.tar.gz
-+sha256	2730e7cc15492de8f1d6f9510c64620fc9004c8afc1410bf3ebac9fc3f9f83c6	docker-engine-v1.13.1.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index d575662..0701dce 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated after checking pgp signature
+-sha256	8460a4a3dd4954c3d96d7a4f5dd5bc4d9b76f5754196aa245287553b26d2199a	libsigsegv-2.10.tar.gz
++sha256	dd7c2eb2ef6c47189406d562c1dc0f96f2fc808036834d596075d58377e37a18	libsigsegv-2.11.tar.gz
+diff --git a/package/libsigsegv/libsigsegv.mk b/package/libsigsegv/libsigsegv.mk
+index a5bb31c..1473369 100644
+--- a/package/libsigsegv/libsigsegv.mk
++++ b/package/libsigsegv/libsigsegv.mk
+@@ -4,13 +4,11 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = v1.12.6
--DOCKER_ENGINE_COMMIT = 78d18021ecba00c00730dec9d56de6896f9e708d
-+DOCKER_ENGINE_VERSION = v1.13.1
-+DOCKER_ENGINE_COMMIT = 092cba3727bb9b4a2f0e922cd6c0f93ea270e363
- DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+-LIBSIGSEGV_VERSION = 2.10
++LIBSIGSEGV_VERSION = 2.11
+ LIBSIGSEGV_SITE = $(BR2_GNU_MIRROR)/libsigsegv
+ LIBSIGSEGV_INSTALL_STAGING = YES
+ LIBSIGSEGV_CONF_ENV = sv_cv_fault_posix=yes
+ LIBSIGSEGV_LICENSE = GPLv2+
+ LIBSIGSEGV_LICENSE_FILES = COPYING
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
-@@ -66,6 +66,7 @@ DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
- endif
- 
- define DOCKER_ENGINE_CONFIGURE_CMDS
-+	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
- 	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
- 	cd $(@D) && \
- 		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
-@@ -100,7 +101,7 @@ define DOCKER_ENGINE_BUILD_CMDS
- 			-o $(@D)/bin/$(target) \
- 			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
- 			-ldflags "$(DOCKER_ENGINE_GLDFLAGS)" \
--			./cmd/$(target)
-+			github.com/docker/docker/cmd/$(target)
- 	)
- endef
- 
+-LIBSIGSEGV_AUTORECONF = YES
+-
+ $(eval $(autotools-package))
