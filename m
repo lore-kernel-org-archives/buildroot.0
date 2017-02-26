@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 21:44:02 +0100
-Subject: [Buildroot] [git commit branch/next] nano: bump to version 2.7.5
-Message-ID: <20170226204407.2EAF1807AA@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 21:44:26 +0100
+Subject: [Buildroot] [PATCH next] libsigsegv: bump to version 2.11
+In-Reply-To: <20170223235833.15578-1-gustavo@zacarias.com.ar>
+References: <20170223235833.15578-1-gustavo@zacarias.com.ar>
+Message-ID: <20170226214426.7a4b3513@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0035543432edddee4dcb017ac4dd74832133e89
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, 23 Feb 2017 20:58:33 -0300, Gustavo Zacarias wrote:
+> Drop all patches, they're upstream.
+> And match that by dropping autoreconf as well.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  ...ck-direction-for-the-AArch64-architecture.patch | 28 -------------------
+>  ...direction-for-the-Microblaze-architecture.patch | 26 ------------------
+>  ...k-direction-for-the-Blackfin-architecture.patch | 29 --------------------
+>  ...ck-direction-for-the-Nios-II-architecture.patch | 31 ----------------------
+>  .../libsigsegv/0005-fix-sparc64-stackpointer.patch | 16 -----------
+>  package/libsigsegv/libsigsegv.hash                 |  2 +-
+>  package/libsigsegv/libsigsegv.mk                   |  4 +--
+>  7 files changed, 2 insertions(+), 134 deletions(-)
+>  delete mode 100644 package/libsigsegv/0001-Add-stack-direction-for-the-AArch64-architecture.patch
+>  delete mode 100644 package/libsigsegv/0002-Add-stack-direction-for-the-Microblaze-architecture.patch
+>  delete mode 100644 package/libsigsegv/0003-Add-stack-direction-for-the-Blackfin-architecture.patch
+>  delete mode 100644 package/libsigsegv/0004-Add-stack-direction-for-the-Nios-II-architecture.patch
+>  delete mode 100644 package/libsigsegv/0005-fix-sparc64-stackpointer.patch
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index aa3e27b..6264faa 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 752170643039e2c95a433de357f0c70a8c4c4c561a90a7e7259a63e225b659b9  nano-2.7.4.tar.xz
-+sha256 a64d24e6bc4fc448376d038f9a755af77f8e748c9051b6f45bf85e783a7e67e4  nano-2.7.5.tar.xz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 4632bed..dc6aa13 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NANO_VERSION_MAJOR = 2.7
--NANO_VERSION = $(NANO_VERSION_MAJOR).4
-+NANO_VERSION = $(NANO_VERSION_MAJOR).5
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPLv3+
+Applied to next, thanks. Nice to see that we can drop all those patches!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
