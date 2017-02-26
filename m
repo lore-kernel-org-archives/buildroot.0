@@ -1,30 +1,29 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Feb 2017 14:14:47 +0000
-Subject: [Buildroot] [Bug 9671] stunnel build error
-In-Reply-To: <bug-9671-163@https.bugs.busybox.net/>
-References: <bug-9671-163@https.bugs.busybox.net/>
-Message-ID: <bug-9671-163-PREknU6mue@https.bugs.busybox.net/>
+Date: Sun, 26 Feb 2017 14:16:00 +0000
+Subject: [Buildroot] [Bug 9641] Need raptor package installed in staging
+In-Reply-To: <bug-9641-163@https.bugs.busybox.net/>
+References: <bug-9641-163@https.bugs.busybox.net/>
+Message-ID: <bug-9641-163-XDvRH5bJ8I@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9671
+https://bugs.busybox.net/show_bug.cgi?id=9641
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
              Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks for the bug report. This has already been fixed in commit
-https://git.buildroot.org/buildroot/commit/package/stunnel?id=b575baeb1ad787dac1ce31343adfd6ee3415ca41,
-which will be part of the upcoming 2017.02 release.
-
-In the mean time, you can cherry-pick this commit in your tree.
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+This has been fixed in the next branch in commit
+https://git.buildroot.org/buildroot/commit/package/raptor?h=next&id=b4f54a98a38905fb4ca5413e174263913e20c9c3.
+The next branch will be merged in master right after 2017.02 is released, and
+therefore this change will be part of the 2017.05 release. Thanks!
 
 -- 
 You are receiving this mail because:
