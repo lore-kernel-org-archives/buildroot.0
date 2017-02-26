@@ -1,49 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 21:40:12 +0100
-Subject: [Buildroot] [git commit] systemd: enable optional PAM support
-Message-ID: <20170301170424.E37B57FBDB@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 21:31:54 +0100
+Subject: [Buildroot] [git commit] pru-software-support: bump version to 5.1.0
+Message-ID: <20170301170424.6F84A7FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a6c03a390872d7ce91b619fdaf1d674491ad8cb
+commit: https://git.buildroot.net/buildroot/commit/?id=8477c6ffcb0cf56aa9878398f4ef5ddc3c25409e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit enables PAM support in systemd if BR2_PACKAGE_LINUX_PAM is
-set. Some essential config files are not installed without the
---enable-pam option.
-
-Signed-off-by: James Balean <james@balean.com.au>
+Signed-off-by: Cam Mannett <camden.mannett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/systemd.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/pru-software-support/pru-software-support.hash | 2 +-
+ package/pru-software-support/pru-software-support.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index fce5d84..0d2f416 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -30,7 +30,6 @@ SYSTEMD_CONF_OPTS += \
- 	--enable-blkid \
- 	--enable-static=no \
- 	--disable-manpages \
--	--disable-pam \
- 	--disable-ima \
- 	--disable-libcryptsetup \
- 	--disable-efi \
-@@ -108,6 +107,13 @@ else
- SYSTEMD_CONF_OPTS += --disable-lz4
- endif
+diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
+index 8f624da..f4ce8e4 100644
+--- a/package/pru-software-support/pru-software-support.hash
++++ b/package/pru-software-support/pru-software-support.hash
+@@ -1,2 +1,2 @@
+ # Locally-calculated hash
+-sha256	b257535ca9b1641d1a238795f3c7004064c573a91cf4a1fa566e3f7c2360c38f	pru-software-support-804b548e69ef9fdf44445f6d0968d81cb8a1e7b4.tar.gz
++sha256	1e880d74f9a1d04324e6255cb7a0e3d40f92e08809dc81dc6c714447bac5c335	pru-software-support-v5.1.0.tar.gz
+diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+index 06983c2..adaa4ac 100644
+--- a/package/pru-software-support/pru-software-support.mk
++++ b/package/pru-software-support/pru-software-support.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+SYSTEMD_DEPENDENCIES += linux-pam
-+SYSTEMD_CONF_OPTS += --enable-pam
-+else
-+SYSTEMD_CONF_OPTS += --disable-pam
-+endif
-+
- ifeq ($(BR2_PACKAGE_XZ),y)
- SYSTEMD_DEPENDENCIES += xz
- SYSTEMD_CONF_OPTS += --enable-xz
+-PRU_SOFTWARE_SUPPORT_VERSION = 804b548e69ef9fdf44445f6d0968d81cb8a1e7b4
+-PRU_SOFTWARE_SUPPORT_SITE = git://git.ti.com/pru-software-support-package/pru-software-support-package.git
++PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
++PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)?
+ PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3c, GPLv2, Public Domain
+-PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v4.0-Manifest.html
++PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
+ PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+ HOST_PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
+ 
