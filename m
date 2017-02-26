@@ -1,42 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 21:19:24 +0100
-Subject: [Buildroot] [PATCH] support/misc/Vagrantfile: reorgainzing
- provisioining
-In-Reply-To: <1488121729-29214-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1488121729-29214-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20170226211924.76e09088@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 Feb 2017 20:19:55 +0000
+Subject: [Buildroot] [Bug 9581] VagrantFile provisioning step fails due to
+ issue with grub-pc update
+In-Reply-To: <bug-9581-163@https.bugs.busybox.net/>
+References: <bug-9581-163@https.bugs.busybox.net/>
+Message-ID: <bug-9581-163-yqvSOqve45@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9581
 
-On Sun, 26 Feb 2017 16:08:49 +0100, Angelo Compagnucci wrote:
-> * Removed distribution upgrade cause it slows down the first boot
->   and presents a bug when executeted non interactively.
-> * Reorganized provsion scripts to be in privileged and
->   non privileged sections
-> * Added ubuntu mirror automatic hadling for apt packages
->   sources
-> 
-> Fixes: http://bugs.busybox.net/show_bug.cgi?id=9581
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Thanks, I've applied to master.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-However, as usual, your commit should have been split. It should be
-clear from your commit log: you list three points that are completely
-independent from each other. Hence, they should have been in three
-separate commits.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=410082e1d980668385ffd2993920785e0fffd2c1.
 
-Could you try to split your contributions more carefully in the future?
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
