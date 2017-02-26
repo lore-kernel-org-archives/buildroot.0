@@ -1,44 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 19:02:36 +0100
-Subject: [Buildroot] [PATCH] pkg-cmake: pass <pkg>_CONF_ENV for the
- target configure step
-In-Reply-To: <20170226175848.GD4043@free.fr>
-References: <1488130968-20114-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170226175848.GD4043@free.fr>
-Message-ID: <20170226190236.3889bf4c@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 26 Feb 2017 20:30:47 +0100
+Subject: [Buildroot] [PATCH] classpath: add patch to fix or1k compile error
+Message-ID: <20170226193047.GA29453@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+  http://autobuild.buildroot.net/results/a0bb5535fd197b9dd1607a5f0bca477c9575c99f
 
-On Sun, 26 Feb 2017 18:58:48 +0100, Yann E. MORIN wrote:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/classpath/0003-add-or1k-endian.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/classpath/0003-add-or1k-endian.patch
 
-> > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> > index 4e0e838..a7c8dc3 100644
-> > --- a/package/pkg-cmake.mk
-> > +++ b/package/pkg-cmake.mk
-> > @@ -109,7 +109,7 @@ define $(2)_CONFIGURE_CMDS
-> >  	cd $$($$(PKG)_BUILDDIR) && \
-> >  	rm -f CMakeCache.txt && \
-> >  	PATH=$$(BR_PATH) \
-> > -	$$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-> > +	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \  
-> 
-> I would have written the extra env on its own line, like is done in e.g.
-> pkg-autotools:
-
-Expect that's not how it's done currently for the host variant of
-pkg-cmake, i.e it's done like I'm proposing in my patch. So for
-consistency, I prefer my option (and possibly a follow-up patch making
-both the host and target variant consistent with pkg-autotools.mk).
-
-Thanks!
-
-Thomas
+diff --git a/package/classpath/0003-add-or1k-endian.patch b/package/classpath/0003-add-or1k-endian.patch
+new file mode 100644
+index 0000000..8bc8784
+--- /dev/null
++++ b/package/classpath/0003-add-or1k-endian.patch
+@@ -0,0 +1,18 @@
++Set endianess for or1k
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur classpath-0.98.orig/native/fdlibm/ieeefp.h classpath-0.98/native/fdlibm/ieeefp.h
++--- classpath-0.98.orig/native/fdlibm/ieeefp.h	2008-01-13 18:33:50.000000000 +0100
+++++ classpath-0.98/native/fdlibm/ieeefp.h	2017-02-26 12:39:12.316327363 +0100
++@@ -123,6 +123,10 @@
++ #define __IEEE_BIG_ENDIAN
++ #endif
++ 
+++#ifdef __or1k__
+++#define __IEEE_BIG_ENDIAN
+++#endif
+++
++ #ifdef __v800
++ #define __IEEE_LITTLE_ENDIAN
++ #endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
