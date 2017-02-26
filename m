@@ -1,36 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Feb 2017 22:43:03 +0100
-Subject: [Buildroot] [PATCH] htop: work-around old uClibc issue when
-	static linking
-In-Reply-To: <1488143524-11408-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 26 Feb 2017 22:12:04 +0100")
-References: <1488143524-11408-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87lgssljbs.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 Feb 2017 21:50:31 +0000
+Subject: [Buildroot] [Bug 9616] CMake host packages cannot provide CONF_ENV
+In-Reply-To: <bug-9616-163@https.bugs.busybox.net/>
+References: <bug-9616-163@https.bugs.busybox.net/>
+Message-ID: <bug-9616-163-zaLTIU58uF@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=9616
 
- > htop wants to use backtrace() support from the C
- > library. Unfortunately, with old uClibc versions such as the one we
- > use for the ARC architecture, the backtrace() implementation is in
- > libubacktrace. In addition, this implementation needs dladdr()
- > support, which is in libdl, not available when static linking.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- > Since this problem no longer exists in more recent versions of uClibc,
- > we simply special case the ARC+static linking case, and make the
- > configure script believe that <execinfo.h> is not available.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|---                         |FIXED
 
- > Fixes:
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed in git by Thomas, thanks:
 
- >   http://autobuild.buildroot.net/results/cdea351fad7a0f61ddec3e6a141da8da0523a902/
+https://git.buildroot.org/buildroot/commit/?id=fc4250119582043bf57a6296ae0264aa95f97fac
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+Notice that the description is backwards, this in fact is adding it for host
+packages.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
