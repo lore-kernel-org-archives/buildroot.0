@@ -1,39 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Feb 2017 22:40:06 +0100
-Subject: [Buildroot] [PATCH] pkg-cmake: pass <pkg>_CONF_ENV for the
-	target configure step
-In-Reply-To: <1488130968-20114-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 26 Feb 2017 18:42:48 +0100")
-References: <1488130968-20114-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87tw7gljgp.fsf@dell.be.48ers.dk>
+Date: Sun, 26 Feb 2017 22:41:53 +0100
+Subject: [Buildroot] [PATCH 0/4] package/cmake: revert the bump to 3.7
+In-Reply-To: <cover.1488048682.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 25 Feb 2017 19:51:29 +0100")
+References: <cover.1488048682.git.yann.morin.1998@free.fr>
+Message-ID: <87poi4ljdq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > The Buildroot manual documents that <pkg>_CONF_ENV is passed in the
- > environment when calling cmake during the configure step. However, the
- > actual implementation in pkg-cmake passes HOST_<pkg>_CONF_ENV when
- > configuring the host variant of a cmake package, but does not pass
- > <pkg>_CONF_ENV when configuring the target variant of a cmake package.
+ > Hello All!
+ > cmake 3.7 causes serious regressions in some cmake-based packages,
+ > related to how RPATH is handled.
 
- > This commit fixes that by passing <pkg>_CONF_ENV in the environment as
- > expected. It should not cause any behavior change, because this
- > feature is in fact not used by any package in upstream Buildroot:
+ > See for example:
 
- > $ grep CONF_ENV $(git grep -l cmake-package package/)
- > package/pkg-cmake.mk:$(2)_CONF_ENV			?=
- > package/pkg-cmake.mk:	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
- > package/pkg-cmake.mk:	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ >   - domoticz : http://autobuild.buildroot.org/results/fd0/fd0ba54c7abf973691b39a0ca1bb4e07d749593a/
+ >   - freerdp  : http://autobuild.buildroot.org/results/5d4/5d429d0e288754a541ee5d8be515454c5fccd28b/
+ >   - libcec   : http://autobuild.buildroot.org/results/3f3/3f3593bab7734dd274faf5b5690895e9424cbb89/
 
- > This issue was reported by Olivier <ovalentin@awox.com> as bug #9616.
+ > (and many others)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > All causes the link to be attemped against host libraries, which is
+ > definitely not appropriate...
+
+ > Properly fixing this so close to the release is problematic; we'd risk
+ > having to hunt down packages one by one.
 
 Committed, thanks.
+
+Will you send an update to check-host-cmake.sh as well?
 
 -- 
 Bye, Peter Korsgaard
