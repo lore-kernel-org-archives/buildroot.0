@@ -1,41 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Feb 2017 22:59:07 +0100
-Subject: [Buildroot] [PATCH] libuv: add dependency on
-	BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <1487890185-32361-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 23 Feb 2017 23:49:45 +0100")
-References: <1487890185-32361-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87h93glil0.fsf@dell.be.48ers.dk>
+Date: Sun, 26 Feb 2017 22:42:53 +0100
+Subject: [Buildroot] [git commit] htop: work-around old uClibc issue when
+	static linking
+Message-ID: <20170226215951.58D74821F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a4b7bdd469e3d37ae7bd755db35bd52c2b0cce40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The libuv library uses __sync atomic built-ins:
- > $ readelf -a -W output/target/usr/lib/libuv.so.1.0.0 | grep __sync
- >    122: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __sync_val_compare_and_swap_4
+htop wants to use backtrace() support from the C
+library. Unfortunately, with old uClibc versions such as the one we
+use for the ARC architecture, the backtrace() implementation is in
+libubacktrace. In addition, this implementation needs dladdr()
+support, which is in libdl, not available when static linking.
 
- > but this is not currently taken into account in the libuv package,
- > causing some build failures in packages using libuv as an optional
- > dependency, such as janus-gateway and mosquitto.
+Since this problem no longer exists in more recent versions of uClibc,
+we simply special case the ARC+static linking case, and make the
+configure script believe that <execinfo.h> is not available.
 
- > Therefore, this commit updates the libuv package with this additional
- > dependency. The reverse dependencies of libuv are also updated: cmake,
- > luv, luvi and moarvm.
+Fixes:
 
- > Fixes:
+  http://autobuild.buildroot.net/results/cdea351fad7a0f61ddec3e6a141da8da0523a902/
 
- >  - http://autobuild.buildroot.net/results/bdaa67d763c0d8d377a04529c74f73bee7d4ccef/
- >    (janus-gateway)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/htop/htop.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- >  - http://autobuild.buildroot.net/results/2bc84ba2d1167018e2d48e5183ead22b6425dcf5/
- >    (mosquitto)
-
-Committed after removing the cmake reference/changes after we reverted
-cmake, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index adc5090..9451d15 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -18,4 +18,11 @@ else
+ HTOP_CONF_OPTS += --disable-unicode
+ endif
+ 
++# ARC uses an old uClibc that needs dladdr() for backtrace support,
++# which doesn't work for static only scenario, so as a workaround, we
++# pretend that execinfo.h is not available.
++ifeq ($(BR2_arc)$(BR2_STATIC_LIBS),yy)
++HTOP_CONF_ENV += ac_cv_header_execinfo_h=no
++endif
++
+ $(eval $(autotools-package))
