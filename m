@@ -1,73 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 14:33:11 +0100
-Subject: [Buildroot] [PATCH v2] package/xfsprogs: fix static build
-In-Reply-To: <1488107943-17075-1-git-send-email-yann.morin.1998@free.fr>
-References: <1488107943-17075-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170226143311.1a60f588@free-electrons.com>
+Date: Sun, 26 Feb 2017 14:33:44 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9}.x series
+Message-ID: <20170226133353.9F7E482156@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=be4d3ff6fcfcb1f2800df2ab25d2061ff05a3cb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Feb 2017 12:19:03 +0100, Yann E. MORIN wrote:
-> xfsprogs links to some libraries from util-linux. Those in turn may use
-> i18n functions when locales are enabled.
-> 
-> When doing a uClibc build, those i18n functions are provided by the
-> libintl library from the gettext package.
-> 
-> xfsprogs does not use pkgconfig to find the util-linux libraries, so it
-> misses the Requires.private field from libblkid, and thus misses the
-> Libs.private field from libuid.
-> 
-> And so a static link fails because of undefined references to i18n
-> symbols.
-> 
-> Furthermore, xfsprogs does not use automake; the hand-made Makefiles do
-> not make use of the LIBS variable set by configure.
-> 
-> We fix that in two ways:
-> 
->   - pass LIBS=-lintl to configure, so that the configure step has a
->     chance to succeed  (as suggested by Waldemar)
-> 
->   - patch a Makefile to link with EXTRALIBS, and pass EXTRALIBS via
->     XFSPROGS_MAKE_OPTS
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/503/50314716a9f72e8bb238e52e9dc342c68f7e0b8b/
->     http://autobuild.buildroot.org/results/253/253a024698b55dece992b2631e30edf4ff9092f7/
->     http://autobuild.buildroot.org/results/3fe/3fe0d96cf13af12b0051a95f7865d4e38f4a78af/
->     http://autobuild.buildroot.org/results/d48/d48e61785d25d33106b7dab1b5cb200cf27d4044/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Waldemar Brodkorb <wbx@openadk.org>
-> 
-> ---
-> Changs v1 -> v2:
->   - add commit log to patch itself
-> ---
->  .../0004-build-add-EXTRALIBS-to-link-with.patch    | 53 ++++++++++++++++++++++
->  package/xfsprogs/xfsprogs.mk                       | 17 +++++++
->  2 files changed, 70 insertions(+)
->  create mode 100644 package/xfsprogs/0004-build-add-EXTRALIBS-to-link-with.patch
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I've applied to master, because it fixes a build issue, but I'm not
-super happy with the proposed solution. I think xfsprogs should be
-using pkg-config instead (at least if available). This would be much
-better.
-
-Maybe this issue can be reported upstream, and we can explain them the
-value of using pkg-config in such a situation?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8f7c2bb..84778f2 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.50"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.51"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+-	default "4.9.11"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.12"	if BR2_KERNEL_HEADERS_4_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
