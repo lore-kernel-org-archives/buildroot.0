@@ -1,64 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 21:15:13 +0100
-Subject: [Buildroot] [git commit] support/misc/Vagrantfile: reorganize
-	provisioning
-Message-ID: <20170226201826.7BB0E81E16@busybox.osuosl.org>
+Date: Sun, 26 Feb 2017 21:19:24 +0100
+Subject: [Buildroot] [PATCH] support/misc/Vagrantfile: reorgainzing
+ provisioining
+In-Reply-To: <1488121729-29214-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1488121729-29214-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20170226211924.76e09088@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=410082e1d980668385ffd2993920785e0fffd2c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-* Remove distribution upgrade cause it slows down the first boot and
-  presents a bug when executed non interactively.
+On Sun, 26 Feb 2017 16:08:49 +0100, Angelo Compagnucci wrote:
+> * Removed distribution upgrade cause it slows down the first boot
+>   and presents a bug when executeted non interactively.
+> * Reorganized provsion scripts to be in privileged and
+>   non privileged sections
+> * Added ubuntu mirror automatic hadling for apt packages
+>   sources
+> 
+> Fixes: http://bugs.busybox.net/show_bug.cgi?id=9581
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-* Reorganize provision scripts to be in privileged and non privileged
-  sections
+Thanks, I've applied to master.
 
-* Add Ubuntu mirror automatic handling for apt packages sources
+However, as usual, your commit should have been split. It should be
+clear from your commit log: you list three points that are completely
+independent from each other. Hence, they should have been in three
+separate commits.
 
-Fixes bug #9581
+Could you try to split your contributions more carefully in the future?
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/misc/Vagrantfile | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+Thanks a lot!
 
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index dc4c15d..89973ce 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -41,19 +41,20 @@ Vagrant.configure('2') do |config|
- 		end
- 	end
- 
--	config.vm.provision 'shell', inline:
--		"sudo dpkg --add-architecture i386
--		sudo apt-get -q update
--		sudo apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
--		sudo apt-get -q -y upgrade
--		sudo apt-get -q -y install build-essential libncurses5-dev \
-+	config.vm.provision 'shell', privileged: true, inline:
-+		"sed -i 's|deb http://us.archive.ubuntu.com/ubuntu/|deb mirror://mirrors.ubuntu.com/mirrors.txt|g' /etc/apt/sources.list
-+		dpkg --add-architecture i386
-+		apt-get -q update
-+		apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
-+		apt-get -q -y install build-essential libncurses5-dev \
- 			git bzr cvs mercurial subversion libc6:i386 unzip bc
--		sudo apt-get -q -y autoremove
--		sudo apt-get -q -y clean
--		sudo update-locale LC_ALL=C"
-+		apt-get -q -y autoremove
-+		apt-get -q -y clean
-+		update-locale LC_ALL=C"
- 
- 	config.vm.provision 'shell', privileged: false, inline:
- 		"echo 'Downloading and extracting buildroot #{RELEASE}'
- 		wget -q -c http://buildroot.org/downloads/buildroot-#{RELEASE}.tar.gz
- 		tar axf buildroot-#{RELEASE}.tar.gz"
-+
- end
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
