@@ -1,40 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 21:38:12 +0100
-Subject: [Buildroot] [PATCH] vlc: workaround microblaze gcc internal
- compiler error
-In-Reply-To: <20170227060725.GA27933@waldemar-brodkorb.de>
-References: <20170227060725.GA27933@waldemar-brodkorb.de>
-Message-ID: <20170227213812.6b5b5f77@free-electrons.com>
+Date: Mon, 27 Feb 2017 21:38:49 +0100
+Subject: [Buildroot] [git commit] assimp: work around gcc bug on SuperH
+Message-ID: <20170227203901.6122181861@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=68cebedeb977396f64f5f591f5e93f34fab8e0a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 27 Feb 2017 07:07:25 +0100, Waldemar Brodkorb wrote:
-> Override gcc optimization flags with -O0.
-> 
-> The workaround is not required for gcc6 anymore, but
-> gcc6 is disabled for microblaze, because it breaks startup 
-> of the system somehow. So the bug is not reported upstream.
-> 
-> Fixes:
->  http://autobuild.buildroot.net/results/a318f0838a6a602046e719103ac81965c0084d52
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/vlc/vlc.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+gcc versions earlier than gcc 6.x fail to build assimp on SuperH when
+static linking:
 
-Applied to master after tweaking the condition so that it applies only
-to gcc < 6.x.
+  AssxmlExporter.cpp:623:1: error: unable to find a register to spill in class 'GENERAL_REGS'
 
-Thanks!
+It's the combination of -Os and *not* having -fPIC that makes gcc
+fail, which explains why configurations with dynamic linking work
+fine.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ -Os -fPIC -> works
+ -Os       -> fails
+ -O2 -fPIC -> works
+ -O2       -> works
+
+Therefore, as a workaround, we are forcing the use of -O2 on SuperH
+when the gcc version is older than gcc 6.x and we're statically
+linking.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ec88aa8118179e30e24603cc45292047dca19216/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/assimp/assimp.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 08893ff..298e121 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -16,6 +16,14 @@ ifeq ($(BR2_m68k),y)
+ ASSIMP_CXXFLAGS += -mxgot
+ endif
+ 
++# workaround SuperH compiler failure when static linking (i.e -fPIC is
++# not passed) in gcc versions 5.x or older. The -Os optimization level
++# causes a "unable to find a register to spill in class
++# ???GENERAL_REGS???" error. -O2 works fine.
++ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_HOST_GCC_AT_LEAST_6),y:y:)
++ASSIMP_CXXFLAGS += -O2
++endif
++
+ ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF \
+ 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
+ 
