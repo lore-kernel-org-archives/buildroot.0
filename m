@@ -1,76 +1,39 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 27 Feb 2017 22:13:13 +0100
-Subject: [Buildroot] [PATCH] dependencies/cmake: blacklist cmake 3.7
-In-Reply-To: <20170227205923.GE17670@free.fr>
-References: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
- <1488215544.31837.9.camel@embedded.rocks> <20170227172540.GA17670@free.fr>
- <20170227183016.GC17670@free.fr> <20170227183547.GA1242@megas.kitware.com>
- <20170227205923.GE17670@free.fr>
-Message-ID: <1488229993.14030.12.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Feb 2017 22:53:24 +0100
+Subject: [Buildroot] [git commit] assimp: fix gcc version condition
+Message-ID: <20170227215431.4CE1A81952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Ben,
+commit: https://git.buildroot.net/buildroot/commit/?id=35e02aeb7b493d61bbc3e90903337b4964e0213c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 2017-02-27 at 21:59 +0100, Yann E. MORIN wrote:
-> Ben, All,
-> 
-> On 2017-02-27 13:35 -0500, Ben Boeckel spake thusly:
-> > On Mon, Feb 27, 2017 at 19:30:16 +0100, Yann E. MORIN wrote:
-> > > Of course, this is only for when we build out own cmake, not when
-> > > we use
-> > > the host pre-installed one. I'll try to see tonight if we can do
-> > > similar
-> > > for it, too.
-> > 
-> > It may make sense to support this upstream. CMake already has
-> > platform
-> > files for things such as Cray and Android (among others) which are
-> > just
-> > special kinds of Linux, like Buildroot.
-> > 
-> > How often does that toolchain file change? Or does it depend on
-> > Buildroot settings?
-> 
-> The toolchainfile.cmake is really specific to one build: it contains
-> the
-> path to the compiler, linker... It contains place-holders that get
-> replaced by a sed invocation:
-> 
-> ????https://git.buildroot.org/buildroot/tree/package/pkg-cmake.mk#n23
-> 6
-> 
-> However, the Modules/Platform/Buildroot.cmake would be just as simple
-> as (which is what I use currently):
-> 
-> ????include(Platform/Linux)
-> ????set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS FALSE)
-> ????set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
-> 
-> I don;t see that changing anytime soon. So, if that would be
-> aceptable
-> for upstream, then we could submit it, yes.
-> 
-> However, I wonder if that's worth the effort...
-> 
-> After all, this is a setting specific to us. I would have a hard time
-> arguing that upstream cmake should carry all such files for all
-> imaginable buildsystems.
+In commit 68cebedeb977396f64f5f591f5e93f34fab8e0a8 ("assimp: work around
+gcc bug on SuperH"), a work around was added to make the package build
+with gcc on SuperH. The condition included a test on the gcc version,
+which was mistakenly done on the host gcc version, while a test on the
+target gcc version was intended.
 
-I replied to Bard King on the CMake mailing list [1]. From my view,
-there is an issue that /sysroot/usr/lib32 is not reported by the linker
-or not treated by CMake as an implicit runtime search path. However, I
-am neither a CMake nor a toolchain expert...
+Thanks to Peter Korsgaard for spotting the issue.
 
-> And if the solution is that simple and also works for host pre-
-> installed
-> cmake, then we can carry that ourselves, I believe.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/assimp/assimp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sounds reasonable!
-
-[1] https://cmake.org/pipermail/cmake/2017-February/065064.html
-
-J?rg
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 298e121..acd3701 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -20,7 +20,7 @@ endif
+ # not passed) in gcc versions 5.x or older. The -Os optimization level
+ # causes a "unable to find a register to spill in class
+ # ???GENERAL_REGS???" error. -O2 works fine.
+-ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_HOST_GCC_AT_LEAST_6),y:y:)
++ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:y:)
+ ASSIMP_CXXFLAGS += -O2
+ endif
+ 
