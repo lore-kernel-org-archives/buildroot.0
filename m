@@ -1,49 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Feb 2017 23:41:22 +0100
-Subject: [Buildroot] [git commit] python-libconfig: disable on musl
-Message-ID: <20170227203649.BA303800EC@busybox.osuosl.org>
+Date: Mon, 27 Feb 2017 21:35:46 +0100
+Subject: [Buildroot] [git commit] vlc: workaround microblaze gcc internal
+	compiler error
+Message-ID: <20170227203649.D6E07821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c2920c457bfe75756942a1185c575b17c5459b0
+commit: https://git.buildroot.net/buildroot/commit/?id=ba1dd18a4963cb0e63fbc93bb5e108c4d1f137b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The python-libconfig package fails to build with musl with very weird
-errors coming all the way from Boost Python, which nobody ever
-bothered to fix. It's time to disable this package on musl to avoid
-the repetitive build failures.
+Override gcc optimization flags with -O0. The workaround is not required
+for gcc6 anymore, so we take this into account into our condition.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/f0f6cdc8c38c024772615d5e677b0f4ad63ef7ec
+  http://autobuild.buildroot.net/results/a318f0838a6a602046e719103ac81965c0084d52
 
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Thomas: add gcc 6.x condition.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-libconfig/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/python-libconfig/Config.in b/package/python-libconfig/Config.in
-index 7cc5f8a..a222f9a 100644
---- a/package/python-libconfig/Config.in
-+++ b/package/python-libconfig/Config.in
-@@ -1,5 +1,6 @@
--comment "python-libconfig needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "python-libconfig needs a glibc or uClibc toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 666b8d4..583edf3 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -15,6 +15,13 @@ VLC_AUTORECONF = YES
+ # Install vlc libraries in staging.
+ VLC_INSTALL_STAGING = YES
  
- config BR2_PACKAGE_PYTHON_LIBCONFIG
- 	bool "python-libconfig"
-@@ -8,6 +9,8 @@ config BR2_PACKAGE_PYTHON_LIBCONFIG
- 	select BR2_PACKAGE_LIBCONFIG
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# error: invalid use of incomplete type 'struct _IO_FILE'
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  Python bindings to the C++ library libconfig
- 
++# gcc bug internal compiler error: in merge_overlapping_regs, at
++# regrename.c:304. This bug is fixed since gcc 6.
++ifeq ($(BR2_microblaze):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
++VLC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
++VLC_CONF_OPTS += --disable-optimizations
++endif
++
+ # VLC defines two autoconf functions which are also defined by our own pkg.m4
+ # from pkgconf. Unfortunately, they are defined in a different way: VLC adds
+ # --enable- options, but pkg.m4 adds --with- options. To make sure we use
