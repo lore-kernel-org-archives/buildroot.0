@@ -1,11 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 16:57:03 +0100
-Subject: [Buildroot] Analysis of build results for 2017-02-26
-In-Reply-To: <20170227155403.GB3655@free.fr>
-References: <20170227072848.7BD45207F5@mail.free-electrons.com>
- <20170227142854.34d3fb86@free-electrons.com>
- <20170227155403.GB3655@free.fr>
-Message-ID: <20170227165703.65cf5408@free-electrons.com>
+Date: Mon, 27 Feb 2017 16:58:59 +0100
+Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
+ package
+In-Reply-To: <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
+References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
+ <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
+ <20170223101820.127d5700@free-electrons.com>
+ <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
+ <20170224092549.2c560db3@free-electrons.com>
+ <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
+Message-ID: <20170227165859.51c786a8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +18,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 27 Feb 2017 16:54:03 +0100, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2017-02-27 14:28 +0100, Thomas Petazzoni spake thusly:
-> [--SNIP--]
-> > >          arc |                     mpv-0.23.0 | NOK | http://autobuild.buildroot.net/results/fb677a917545adee321bdcd2c2519c81326448c4  
-> > 
-> > ../video/out/filter_kernels.c: In function 'jinc':
-> > ../video/out/filter_kernels.c:318:18: error: implicit declaration of function 'j1' [-Werror=implicit-function-declaration]
-> >      return 2.0 * j1(x) / x;
-> > 
-> > Vlad, this is only occurring on ARC, could you have a look?  
-> 
-> That's again because of the Synopsys toolchain, whise uClibc has been
-> configured without the "Bessel functions of the first kind".
+On Mon, 27 Feb 2017 15:58:54 +0100, Arnout Vandecappelle wrote:
 
-Let's add yet another "depends on !..." then.
+>  At least, if we do go the qemu-user way, it should always work, so also with
+> musl and uClibc, also if host headers are older than target...
 
-Thanks for the investigation!
+It simply cannot work with host headers older than the target headers,
+by principle.
+
+> But really, cross-compilation doesn't work at all (i.e. qemu is
+> needed), and anyway doesn't work on the unusual architectures where
+> Debian is not available, then I don't think Buildroot is the right
+> way.
+
+Do you meant "*if* cross-compilation doesn't work at all" ?
 
 Thomas
 -- 
