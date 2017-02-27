@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 09:21:43 +0100
-Subject: [Buildroot] Analysis of build results for 2017-02-25
-In-Reply-To: <20170227022344.GA6762@tungsten.ozlabs.ibm.com>
-References: <20170226072845.0954E20755@mail.free-electrons.com>
- <20170226223353.39284983@free-electrons.com>
- <20170227022344.GA6762@tungsten.ozlabs.ibm.com>
-Message-ID: <20170227092143.67dc37b6@free-electrons.com>
+Date: Mon, 27 Feb 2017 09:29:13 +0100
+Subject: [Buildroot] [PATCH] vlc: workaround microblaze gcc internal
+ compiler error
+In-Reply-To: <20170227060725.GA27933@waldemar-brodkorb.de>
+References: <20170227060725.GA27933@waldemar-brodkorb.de>
+Message-ID: <20170227092913.55b940f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 27 Feb 2017 13:23:44 +1100, Sam Bobroff wrote:
-
-> > unresolvable R_PPC64_ADDR64 against `rand@@GLIBC_2.17'
-> > 
-> > Sam, could you have a look ?  
+On Mon, 27 Feb 2017 07:07:25 +0100, Waldemar Brodkorb wrote:
+> Override gcc optimization flags with -O0.
 > 
-> Yes. No idea yet what this problem is but trying to reproduce it now.
+> The workaround is not required for gcc6 anymore, but
+> gcc6 is disabled for microblaze, because it breaks startup 
+> of the system somehow. So the bug is not reported upstream.
 
-Apparently, the patch https://patchwork.ozlabs.org/patch/727430/ is
-meant to solve this issue.
+If it's not required for gcc6, then perhaps we should add a
+BR2_TOOLCHAIN_GCC_AT_LEAST_6 condition, so that this chunk gets a
+chance to be removed at some point in the future.
 
-> > Would be fixed by https://patchwork.ozlabs.org/patch/724932/, but a
-> > better patch was suggested, but never submitted.  
-> 
-> It looks like there is an active upstream and all we need to do is jump
-> through enough hoops, so I'll try pushing Samuel Martin's patch or one
-> like it when I have a bit of time.
+> +# gcc bug internal compiler error: in merge_overlapping_regs, at regrename.c:304
+> +ifeq ($(BR2_microblaze),y)
 
-I've proposed an alternative solution here:
+I.e.:
 
-  https://patchwork.ozlabs.org/patch/732614/
+ifeq ($(BR2_microblaze):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
+
+> +VLC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
+> +VLC_CONF_OPTS += --disable-optimizations
+> +endif
+
+Thanks,
 
 Thomas
 -- 
