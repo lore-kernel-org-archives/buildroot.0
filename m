@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 21:32:03 +0100
-Subject: [Buildroot] [PATCH next] modem-manager: bump to version 1.6.4
-In-Reply-To: <f68c804ebee3927daa7eed5987c4d454fca39f68.1488205933.git.baruch@tkos.co.il>
-References: <f68c804ebee3927daa7eed5987c4d454fca39f68.1488205933.git.baruch@tkos.co.il>
-Message-ID: <20170227213203.3919753c@free-electrons.com>
+Date: Mon, 27 Feb 2017 21:32:13 +0100
+Subject: [Buildroot] [PATCH next 1/2] usb_modeswitch: bump to version
+ 2.5.0
+In-Reply-To: <a328be860a55e9fbce938ca984eaa63ae522d9e0.1488215346.git.baruch@tkos.co.il>
+References: <a328be860a55e9fbce938ca984eaa63ae522d9e0.1488215346.git.baruch@tkos.co.il>
+Message-ID: <20170227213213.55183b3f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 27 Feb 2017 16:32:13 +0200, Baruch Siach wrote:
+On Mon, 27 Feb 2017 19:09:05 +0200, Baruch Siach wrote:
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/modem-manager/modem-manager.hash | 2 +-
->  package/modem-manager/modem-manager.mk   | 2 +-
+>  package/usb_modeswitch/usb_modeswitch.hash | 2 +-
+>  package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
+Both patches applied to next, thanks.
 
 Thomas
 -- 
