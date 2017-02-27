@@ -1,41 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 21:31:08 +0100
-Subject: [Buildroot] [git commit] modem-manager: bump to version 1.6.4
-Message-ID: <20170301170424.BD0007FBDB@busybox.osuosl.org>
+Date: Mon, 27 Feb 2017 21:40:12 +0100
+Subject: [Buildroot] [git commit] systemd: enable optional PAM support
+Message-ID: <20170301170424.E37B57FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9905f5344f4fd329ba819ba966c5adc29367166c
+commit: https://git.buildroot.net/buildroot/commit/?id=9a6c03a390872d7ce91b619fdaf1d674491ad8cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This commit enables PAM support in systemd if BR2_PACKAGE_LINUX_PAM is
+set. Some essential config files are not installed without the
+--enable-pam option.
+
+Signed-off-by: James Balean <james@balean.com.au>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/systemd/systemd.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 481f7dd..2a2b96d 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  e4544398d9c166f8e13fe7c97149f262ad1fb48af980e0d4f9c34013920c6393  ModemManager-1.6.2.tar.xz
-+sha256  cdd5b4cb1e4d7643643a28ccbfc4bb354bfa9cb89a77ea160ebdf7926171c668  ModemManager-1.6.4.tar.xz
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index c74c224..6a9b6a0 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index fce5d84..0d2f416 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -30,7 +30,6 @@ SYSTEMD_CONF_OPTS += \
+ 	--enable-blkid \
+ 	--enable-static=no \
+ 	--disable-manpages \
+-	--disable-pam \
+ 	--disable-ima \
+ 	--disable-libcryptsetup \
+ 	--disable-efi \
+@@ -108,6 +107,13 @@ else
+ SYSTEMD_CONF_OPTS += --disable-lz4
+ endif
  
--MODEM_MANAGER_VERSION = 1.6.2
-+MODEM_MANAGER_VERSION = 1.6.4
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++SYSTEMD_DEPENDENCIES += linux-pam
++SYSTEMD_CONF_OPTS += --enable-pam
++else
++SYSTEMD_CONF_OPTS += --disable-pam
++endif
++
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ SYSTEMD_DEPENDENCIES += xz
+ SYSTEMD_CONF_OPTS += --enable-xz
