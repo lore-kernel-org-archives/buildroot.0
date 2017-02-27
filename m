@@ -1,57 +1,72 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 27 Feb 2017 05:29:50 +0100
-Subject: [Buildroot] Analysis of build results for 2017-02-25
-In-Reply-To: <20170227022344.GA6762@tungsten.ozlabs.ibm.com>
-References: <20170226072845.0954E20755@mail.free-electrons.com>
- <20170226223353.39284983@free-electrons.com>
- <20170227022344.GA6762@tungsten.ozlabs.ibm.com>
-Message-ID: <CAHXCMMKNh6b22szVQtpmYUvgWgTLWMGW7T5DXCvx=XDaPDdzzQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 27 Feb 2017 06:43:40 +0200
+Subject: [Buildroot] [PATCH] dependencies/cmake: blacklist cmake 3.7
+In-Reply-To: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
+References: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170227044340.mtawtne7hzbpt25o@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi Yann,
 
-On Mon, Feb 27, 2017 at 3:23 AM, Sam Bobroff <sam.bobroff@au1.ibm.com> wrote:
-> On Sun, Feb 26, 2017 at 10:33:53PM +0100, Thomas Petazzoni wrote:
->> Hello,
->>
->> Sam, Cyril, Frank, Gustavo, Waldemar, Vicente, see below.
->>
->> On Sun, 26 Feb 2017 08:28:45 +0100 (CET), Thomas Petazzoni wrote:
->
-> [snip]
->
->> >  powerpc64le |                domoticz-3.5877 | NOK | http://autobuild.buildroot.net/results/8789303587f693d5104506a7db361e1322091fd1
->>
->> unresolvable R_PPC64_ADDR64 against `rand@@GLIBC_2.17'
->>
->> Sam, could you have a look ?
->
-> Yes. No idea yet what this problem is but trying to reproduce it now.
->
-> [snip]
->
->> >  powerpc64le |                  openocd-0.9.0 | NOK | http://autobuild.buildroot.net/results/3cbe65a46e75b8e67846d593884c96df97dec7a4
->>
->> Would be fixed by https://patchwork.ozlabs.org/patch/724932/, but a
->> better patch was suggested, but never submitted.
->
-> It looks like there is an active upstream and all we need to do is jump
-> through enough hoops, so I'll try pushing Samuel Martin's patch or one
-> like it when I have a bit of time.
+On Sun, Feb 26, 2017 at 11:42:47PM +0100, Yann E. MORIN wrote:
+> cmake-3.7 has a bug in how it handles rpath, linking with libraries from
+> the host.
+> 
+> Until we completely understand the issue, just blacklist cmake-3.7.
+> 
+> The issue has been reported upstream:
+>     http://public.kitware.com/pipermail/cmake/2017-February/064970.html
+> 
+> Reported-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: J?rg Krause <joerg.krause@embedded.rocks>
+> Cc: Ben Boeckel <mathstuf@gmail.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  support/dependencies/check-host-cmake.sh | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+> index 9b63b06..84c26c2 100755
+> --- a/support/dependencies/check-host-cmake.sh
+> +++ b/support/dependencies/check-host-cmake.sh
+> @@ -6,6 +6,9 @@ version_min="${2}"
+>  major_min="${version_min%.*}"
+>  minor_min="${version_min#*.}"
+>  
+> +# cmake-3.7 incorrectly handles rpath, linking to host libraries
+> +blacklist_version="3.7"
+> +
+>  cmake=`which ${candidate}`
+>  if [ ! -x "${cmake}" ]; then
+>      # echo nothing: no suitable cmake found
+> @@ -27,6 +30,11 @@ version="$(${cmake} --version \
+>  major="${version%.*}"
+>  minor="${version#*.}"
+>  
+> +if [ "${version}" = "${blacklist_version}" ]; then
 
+Minor nit: there are no quotes around version variables in the rest of this 
+file.
 
-Sorry for not reporting it back earlier.
-I've submit [1] upstream, but it is still pending for review in
-openocd's gerrit.
+> +    # echo nothing: no suitable cmake found
+> +    exit 1
+> +fi
+> +
+>  if [ ${major} -gt ${major_min} ]; then
 
-[1] http://openocd.zylin.com/#/c/3976/
+E.g., here.
 
-Regards,
+>      echo "${cmake}"
+>  else
 
+baruch
 
 -- 
-Samuel
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
