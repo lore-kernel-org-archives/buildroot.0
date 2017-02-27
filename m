@@ -1,32 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 22:00:37 +0100
-Subject: [Buildroot] [PATCH 1/1] Enable PAM functionality within systemd.
-In-Reply-To: <1488164986-2871-1-git-send-email-james@balean.com.au>
-References: <1488164986-2871-1-git-send-email-james@balean.com.au>
-Message-ID: <20170227220037.54524a2b@free-electrons.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 27 Feb 2017 22:02:07 +0100
+Subject: [Buildroot] [PATCH] dependencies/cmake: blacklist cmake 3.7
+In-Reply-To: <20170227205349.GD17670@free.fr>
+References: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
+ <1488215544.31837.9.camel@embedded.rocks> <20170227172540.GA17670@free.fr>
+ <20170227183016.GC17670@free.fr> <20170227205349.GD17670@free.fr>
+Message-ID: <1488229327.14030.10.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Sun, 26 Feb 2017 21:09:46 -0600, James Balean wrote:
-> Enables systemd PAM support if BR2_PACKAGE_LINUX_PAM is set.
-> Some essential config files are not installed without the --enable-pam option.
+On Mon, 2017-02-27 at 21:53 +0100, Yann E. MORIN wrote:
+> J?rg, All,
 > 
-> Signed-off-by: James Balean <james@balean.com.au>
-> ---
->  package/systemd/systemd.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> On 2017-02-27 19:30 +0100, Yann E. MORIN spake thusly:
+> > On 2017-02-27 18:25 +0100, Yann E. MORIN spake thusly:
+> > > On 2017-02-27 18:12 +0100, J?rg Krause spake thusly:
+> > > > On Sun, 2017-02-26 at 23:42 +0100, Yann E. MORIN wrote:
+> > > > > cmake-3.7 has a bug in how it handles rpath, linking with
+> > > > > libraries
+> > > > > from
+> > > > > the host.
+> > > > > 
+> > > > > Until we completely understand the issue, just blacklist
+> > > > > cmake-3.7.
+> > > > > 
+> > > > > The issue has been reported upstream:
+> > > > > ????http://public.kitware.com/pipermail/cmake/2017-February/0
+> > > > > 64970.ht
+> > > > > ml
+> > > > 
+> > > > Brad King from Kitware replied today [1]. In short, Brad does
+> > > > not think
+> > > > there anything wrong about handling the rpath and supposes to
+> > > > load a
+> > > > custom platform cmake file instead of the Linux one.
+> > > > 
+> > > > [1] http://public.kitware.com/pipermail/cmake/2017-February/065
+> > > > 063.html
+> > > 
+> > > OK, so what we would have to do (basically):
+> > > 
+> > > ? - copy Modules/Platform/Linux.cmake to
+> > > Modules/Platform/Buildroot.cmake
+> > > 
+> > > ? - tweak that file so that the two settings (lib32 and lib64)
+> > > are now
+> > > ????FALSE in that file
+> > > 
+> > > ? - tweak our support/misc/toolchain.cmake to
+> > > set(CMAKE_SYSTEM_NAME Buildroot)
+> > > 
+> > > and we'd be all good?
+> > > 
+> > > Or alternatively:
+> > > 
+> > > ? - add Modules/Platform/Buildroot.cmake, which:
+> > > ????- includes Modules/Platform/Linux.cmake
+> > > ????- sets the the two settings (lib32 and lib64) to FALSE
+> > > 
+> > > ? - tweak our support/misc/toolchain.cmake to
+> > > set(CMAKE_SYSTEM_NAME Buildroot)
+> > 
+> > So I tested that last solution, and it indeed fixes the build.
+> > Woot!
+> > 
+> > Of course, this is only for when we build out own cmake, not when
+> > we use
+> > the host pre-installed one. I'll try to see tonight if we can do
+> > similar
+> > for it, too.
+> 
+> It seems that we could set CMAKE_MODULE_PATH to that effect.
 
-Applied to next, after tweaking a bit the commit title.
+Sounds promising!
+
+> More testing under way...
 
 Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
