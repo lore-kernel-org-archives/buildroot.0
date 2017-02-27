@@ -1,49 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 21:39:14 +0100
-Subject: [Buildroot] [PATCH] assimp: work around gcc bug on SuperH
-In-Reply-To: <1488148706-15109-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1488148706-15109-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170227213914.290462bb@free-electrons.com>
+From: Ben Boeckel <mathstuf@gmail.com>
+Date: Mon, 27 Feb 2017 15:40:13 -0500
+Subject: [Buildroot] [PATCH] dependencies/cmake: blacklist cmake 3.7
+In-Reply-To: <1488227076.14030.5.camel@embedded.rocks>
+References: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
+ <1488215544.31837.9.camel@embedded.rocks>
+ <20170227172540.GA17670@free.fr>
+ <1488225846.14030.1.camel@embedded.rocks>
+ <20170227200827.GA14356@megas.kitware.com>
+ <1488227076.14030.5.camel@embedded.rocks>
+Message-ID: <20170227204013.GA1783@megas.kitware.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, Feb 27, 2017 at 21:24:36 +0100, J?rg Krause wrote:
+> For a detailed description, please have a look at my post [1] on the
+> Buildroot mailing list some weeks ago.
 
-On Sun, 26 Feb 2017 23:38:26 +0100, Thomas Petazzoni wrote:
-> gcc versions earlier than gcc 6.x fail to build assimp on SuperH when
-> static linking:
-> 
->   AssxmlExporter.cpp:623:1: error: unable to find a register to spill in class 'GENERAL_REGS'
-> 
-> It's the combination of -Os and *not* having -fPIC that makes gcc
-> fail, which explains why configurations with dynamic linking work
-> fine.
-> 
->  -Os -fPIC -> works
->  -Os       -> fails
->  -O2 -fPIC -> works
->  -O2       -> works
-> 
-> Therefore, as a workaround, we are forcing the use of -O2 on SuperH
-> when the gcc version is older than gcc 6.x and we're statically
-> linking.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/ec88aa8118179e30e24603cc45292047dca19216/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/assimp/assimp.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+Hmm. Is /usr/lib32 supposed to be an implicit runtime path? If so, why
+is the compiler not indicating that?
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+--Ben
