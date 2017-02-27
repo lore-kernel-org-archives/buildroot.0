@@ -1,65 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Feb 2017 21:59:23 +0100
-Subject: [Buildroot] [PATCH] dependencies/cmake: blacklist cmake 3.7
-In-Reply-To: <20170227183547.GA1242@megas.kitware.com>
-References: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
- <1488215544.31837.9.camel@embedded.rocks>
- <20170227172540.GA17670@free.fr> <20170227183016.GC17670@free.fr>
- <20170227183547.GA1242@megas.kitware.com>
-Message-ID: <20170227205923.GE17670@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Feb 2017 22:00:03 +0100
+Subject: [Buildroot] [git commit] assimp: work around gcc bug on SuperH
+In-Reply-To: <20170227203901.6122181861@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Mon, 27 Feb 2017 21:38:49 +0100")
+References: <20170227203901.6122181861@busybox.osuosl.org>
+Message-ID: <878torl57w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ben, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 2017-02-27 13:35 -0500, Ben Boeckel spake thusly:
-> On Mon, Feb 27, 2017 at 19:30:16 +0100, Yann E. MORIN wrote:
-> > Of course, this is only for when we build out own cmake, not when we use
-> > the host pre-installed one. I'll try to see tonight if we can do similar
-> > for it, too.
-> 
-> It may make sense to support this upstream. CMake already has platform
-> files for things such as Cray and Android (among others) which are just
-> special kinds of Linux, like Buildroot.
-> 
-> How often does that toolchain file change? Or does it depend on
-> Buildroot settings?
+ > commit: https://git.buildroot.net/buildroot/commit/?id=68cebedeb977396f64f5f591f5e93f34fab8e0a8
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The toolchainfile.cmake is really specific to one build: it contains the
-path to the compiler, linker... It contains place-holders that get
-replaced by a sed invocation:
+ > gcc versions earlier than gcc 6.x fail to build assimp on SuperH when
+ > static linking:
 
-    https://git.buildroot.org/buildroot/tree/package/pkg-cmake.mk#n236
+ >   AssxmlExporter.cpp:623:1: error: unable to find a register to spill in class 'GENERAL_REGS'
 
-However, the Modules/Platform/Buildroot.cmake would be just as simple
-as (which is what I use currently):
+ > It's the combination of -Os and *not* having -fPIC that makes gcc
+ > fail, which explains why configurations with dynamic linking work
+ > fine.
 
-    include(Platform/Linux)
-    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS FALSE)
-    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+ >  -Os -fPIC -> works
+ >  -Os       -> fails
+ >  -O2 -fPIC -> works
+ >  -O2       -> works
 
-I don;t see that changing anytime soon. So, if that would be aceptable
-for upstream, then we could submit it, yes.
+ > Therefore, as a workaround, we are forcing the use of -O2 on SuperH
+ > when the gcc version is older than gcc 6.x and we're statically
+ > linking.
 
-However, I wonder if that's worth the effort...
+ > Fixes:
 
-After all, this is a setting specific to us. I would have a hard time
-arguing that upstream cmake should carry all such files for all
-imaginable buildsystems.
+ >   http://autobuild.buildroot.net/results/ec88aa8118179e30e24603cc45292047dca19216/
 
-And if the solution is that simple and also works for host pre-installed
-cmake, then we can carry that ourselves, I believe.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  package/assimp/assimp.mk | 8 ++++++++
+ >  1 file changed, 8 insertions(+)
 
-Regards,
-Yann E. MORIN.
+ > diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+ > index 08893ff..298e121 100644
+ > --- a/package/assimp/assimp.mk
+ > +++ b/package/assimp/assimp.mk
+ > @@ -16,6 +16,14 @@ ifeq ($(BR2_m68k),y)
+ >  ASSIMP_CXXFLAGS += -mxgot
+ >  endif
+ 
+ > +# workaround SuperH compiler failure when static linking (i.e -fPIC is
+ > +# not passed) in gcc versions 5.x or older. The -Os optimization level
+ > +# causes a "unable to find a register to spill in class
+ > +# ??GENERAL_REGS??" error. -O2 works fine.
+
+Any specific reason for the unicode quotes?
+
+> +ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_HOST_GCC_AT_LEAST_6),y:y:)
+
+HOST_GCC? Don't you mean BR2_TOOLCHAIN_GCC_AT_LEAST_6?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
