@@ -1,15 +1,10 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 16:58:59 +0100
-Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
- package
-In-Reply-To: <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
- <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
- <20170223101820.127d5700@free-electrons.com>
- <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
- <20170224092549.2c560db3@free-electrons.com>
- <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
-Message-ID: <20170227165859.51c786a8@free-electrons.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 27 Feb 2017 11:54:19 -0500
+Subject: [Buildroot] Analysis of build results for 2017-02-26
+In-Reply-To: <20170227142854.34d3fb86@free-electrons.com>
+References: <20170227072848.7BD45207F5@mail.free-electrons.com>
+ <20170227142854.34d3fb86@free-electrons.com>
+Message-ID: <CA+-urNQUEmsQy2_8UcL5FQqq10O-nQjNUY_nxwcD8mHxCtW2tw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,23 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 27 Feb 2017 15:58:54 +0100, Arnout Vandecappelle wrote:
+On Mon, Feb 27, 2017 at 8:28 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+>>         i686 |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/92f9a6b804072a521ad0b25086a0a5ed33eaf53e
+>>          arc |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/a04ba24c6cd61bf6f2128a0e869f679cb3f2eac3
+>
+> Static linking issues, with a CMake based package. Frank, Samuel, could
+> you have a look?
+>
 
->  At least, if we do go the qemu-user way, it should always work, so also with
-> musl and uClibc, also if host headers are older than target...
+I took a quick look. The issue is due to a transitive dependency on
+zlib not being added to the linker invocation. The rabbitmq utilities
+make calls to libcrypto.a which has calls to zlib. I don't use cmake
+enough to know how this is normally fixed with that tool. If there's
+another example somewhere that I can copy, I don't mind submitting a
+fix.
 
-It simply cannot work with host headers older than the target headers,
-by principle.
+Frank
 
-> But really, cross-compilation doesn't work at all (i.e. qemu is
-> needed), and anyway doesn't work on the unusual architectures where
-> Debian is not available, then I don't think Buildroot is the right
-> way.
-
-Do you meant "*if* cross-compilation doesn't work at all" ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+p.s. Fwiw, rabbitmq-c is actually maintained by Joris Lijssens, so I'm
+adding him to the cc list in case he has run into this. My rabbitmq
+package is rabbitmq-server, but my project with rabbit also uses
+rabbitmq-c.
