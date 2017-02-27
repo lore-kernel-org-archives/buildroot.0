@@ -1,62 +1,91 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 27 Feb 2017 17:06:37 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] package/gobject-introspection: add
- package
-In-Reply-To: <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
-References: <cover.1487811280.git.sam.bobroff@au1.ibm.com>
- <b5cbc35d4d8e4457563fdf5b8dfd04360c6616a5.1487811280.git.sam.bobroff@au1.ibm.com>
- <20170223101820.127d5700@free-electrons.com>
- <20170224040713.GA4446@tungsten.ozlabs.ibm.com>
- <20170224092549.2c560db3@free-electrons.com>
- <8eeadd56-4c2b-94ff-c182-50e18e81f749@mind.be>
-Message-ID: <20170227150637.ljo2c6dv3izstddn@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Feb 2017 16:51:34 +0100
+Subject: [Buildroot] [PATCH] dependencies/cmake: blacklist cmake 3.7
+In-Reply-To: <20170227044340.mtawtne7hzbpt25o@tarshish>
+References: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
+ <20170227044340.mtawtne7hzbpt25o@tarshish>
+Message-ID: <20170227155134.GA3655@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Baruch, All,
 
-On Mon, Feb 27, 2017 at 03:58:54PM +0100, Arnout Vandecappelle wrote:
-> On 24-02-17 09:25, Thomas Petazzoni wrote:
-> > On Fri, 24 Feb 2017 15:07:13 +1100, Sam Bobroff wrote:
-> > 
-> >> Yes, absolutely, and I really don't know how we should handle it. I
-> >> searched fairly hard for another solution but the only other one seems
-> >> to be to rewrite gobject-introspection completely and the other
-> >> projects that have attempted this have used the same host-qemu approach
-> >> (that's yocto and cygwin).
-> > Can you summarize what is Qemu used for in the context of building
-> > gobject-introspection ?
-> > 
-> > If it's to generate some architecture-specific file, can we
-> > pre-generate it, and bundle it with Buildroot ?
+On 2017-02-27 06:43 +0200, Baruch Siach spake thusly:
+> Hi Yann,
 > 
->  As far as I can see, it just runs ldd under qemu, to find the paths to the
-> libraries that will actually be used (i.e., the libraries that have to be
-> introspected, I guess). That's why Jerome suggested to use his cross-ldd
-> scriptlet [1], which would also work with musl and uClibc.
+> On Sun, Feb 26, 2017 at 11:42:47PM +0100, Yann E. MORIN wrote:
+> > cmake-3.7 has a bug in how it handles rpath, linking with libraries from
+> > the host.
+> > 
+> > Until we completely understand the issue, just blacklist cmake-3.7.
+> > 
+> > The issue has been reported upstream:
+> >     http://public.kitware.com/pipermail/cmake/2017-February/064970.html
+> > 
+> > Reported-by: Baruch Siach <baruch@tkos.co.il>
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: J?rg Krause <joerg.krause@embedded.rocks>
+> > Cc: Ben Boeckel <mathstuf@gmail.com>
+> > Cc: Samuel Martin <s.martin49@gmail.com>
+> > ---
+> >  support/dependencies/check-host-cmake.sh | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+> > index 9b63b06..84c26c2 100755
+> > --- a/support/dependencies/check-host-cmake.sh
+> > +++ b/support/dependencies/check-host-cmake.sh
+> > @@ -6,6 +6,9 @@ version_min="${2}"
+> >  major_min="${version_min%.*}"
+> >  minor_min="${version_min#*.}"
+> >  
+> > +# cmake-3.7 incorrectly handles rpath, linking to host libraries
+> > +blacklist_version="3.7"
+> > +
+> >  cmake=`which ${candidate}`
+> >  if [ ! -x "${cmake}" ]; then
+> >      # echo nothing: no suitable cmake found
+> > @@ -27,6 +30,11 @@ version="$(${cmake} --version \
+> >  major="${version%.*}"
+> >  minor="${version#*.}"
+> >  
+> > +if [ "${version}" = "${blacklist_version}" ]; then
 > 
->  However, as far as I understand, it really only needs to find a list of shared
-> libraries used by a program. In our case, instead of going through ldd, we can
-> just use readelf because there is normally only a single instance of each SONAME
-> in the target.
+> Minor nit: there are no quotes around version variables in the rest of this 
+> file.
 
-My understanding is that the process is more involved than that. Quoting the 
-Yocto summary[1]:
+That's because here we are testing strings, while...
 
-  The data is generated when building such a library, by linking the library 
-  with a small executable binary that asks the library to describe itself, 
-  then executing the binary and processing its output.
+> > +    # echo nothing: no suitable cmake found
+> > +    exit 1
+> > +fi
+> > +
+> >  if [ ${major} -gt ${major_min} ]; then
+> 
+> E.g., here.
 
-I didn't verify this myself yet.
+... here we are testing numbers.
 
-[1] https://lists.yoctoproject.org/pipermail/yocto/2016-April/029579.html
+Regards,
+Yann E. MORIN.
 
-baruch
+> >      echo "${cmake}"
+> >  else
+> 
+> baruch
+> 
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
