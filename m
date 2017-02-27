@@ -1,72 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 27 Feb 2017 06:43:40 +0200
-Subject: [Buildroot] [PATCH] dependencies/cmake: blacklist cmake 3.7
-In-Reply-To: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
-References: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170227044340.mtawtne7hzbpt25o@tarshish>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 27 Feb 2017 07:07:25 +0100
+Subject: [Buildroot] [PATCH] vlc: workaround microblaze gcc internal
+	compiler error
+Message-ID: <20170227060725.GA27933@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Override gcc optimization flags with -O0.
 
-On Sun, Feb 26, 2017 at 11:42:47PM +0100, Yann E. MORIN wrote:
-> cmake-3.7 has a bug in how it handles rpath, linking with libraries from
-> the host.
-> 
-> Until we completely understand the issue, just blacklist cmake-3.7.
-> 
-> The issue has been reported upstream:
->     http://public.kitware.com/pipermail/cmake/2017-February/064970.html
-> 
-> Reported-by: Baruch Siach <baruch@tkos.co.il>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: J?rg Krause <joerg.krause@embedded.rocks>
-> Cc: Ben Boeckel <mathstuf@gmail.com>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> ---
->  support/dependencies/check-host-cmake.sh | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
-> index 9b63b06..84c26c2 100755
-> --- a/support/dependencies/check-host-cmake.sh
-> +++ b/support/dependencies/check-host-cmake.sh
-> @@ -6,6 +6,9 @@ version_min="${2}"
->  major_min="${version_min%.*}"
->  minor_min="${version_min#*.}"
->  
-> +# cmake-3.7 incorrectly handles rpath, linking to host libraries
-> +blacklist_version="3.7"
-> +
->  cmake=`which ${candidate}`
->  if [ ! -x "${cmake}" ]; then
->      # echo nothing: no suitable cmake found
-> @@ -27,6 +30,11 @@ version="$(${cmake} --version \
->  major="${version%.*}"
->  minor="${version#*.}"
->  
-> +if [ "${version}" = "${blacklist_version}" ]; then
+The workaround is not required for gcc6 anymore, but
+gcc6 is disabled for microblaze, because it breaks startup 
+of the system somehow. So the bug is not reported upstream.
 
-Minor nit: there are no quotes around version variables in the rest of this 
-file.
+Fixes:
+ http://autobuild.buildroot.net/results/a318f0838a6a602046e719103ac81965c0084d52
 
-> +    # echo nothing: no suitable cmake found
-> +    exit 1
-> +fi
-> +
->  if [ ${major} -gt ${major_min} ]; then
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/vlc/vlc.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-E.g., here.
-
->      echo "${cmake}"
->  else
-
-baruch
-
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 666b8d4..a523f8f 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -15,6 +15,12 @@ VLC_AUTORECONF = YES
+ # Install vlc libraries in staging.
+ VLC_INSTALL_STAGING = YES
+ 
++# gcc bug internal compiler error: in merge_overlapping_regs, at regrename.c:304
++ifeq ($(BR2_microblaze),y)
++VLC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
++VLC_CONF_OPTS += --disable-optimizations
++endif
++
+ # VLC defines two autoconf functions which are also defined by our own pkg.m4
+ # from pkgconf. Unfortunately, they are defined in a different way: VLC adds
+ # --enable- options, but pkg.m4 adds --with- options. To make sure we use
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.1.4
