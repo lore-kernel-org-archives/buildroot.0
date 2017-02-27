@@ -1,108 +1,101 @@
-From: Christian Kellermann <christian.kellermann@solectrix.de>
-Date: Mon, 27 Feb 2017 14:26:01 +0100
-Subject: [Buildroot] [PATCH 1/1] libftdi: new package
-In-Reply-To: <1488201961-15539-1-git-send-email-christian.kellermann@solectrix.de>
-References: <1488201961-15539-1-git-send-email-christian.kellermann@solectrix.de>
-Message-ID: <1488201961-15539-2-git-send-email-christian.kellermann@solectrix.de>
+From: Abhimanyu V <abhimanyu.vishwakarma@imgtec.com>
+Date: Mon, 27 Feb 2017 19:07:59 +0530
+Subject: [Buildroot] [PATCH v3 1/3] uccp420wlan: new package
+Message-ID: <1488202681-9744-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
+From: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+
+Wifi kernel module and firmware for Imagination explorer RPU
+
+Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+Reviewed-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
 ---
- package/Config.in                                         |  1 +
- .../python-pylibftdi/0001-do-not-use-find-library.patch   | 14 ++++++++++++++
- package/python-pylibftdi/Config.in                        | 13 +++++++++++++
- package/python-pylibftdi/python-libftdi.hash              |  3 +++
- package/python-pylibftdi/python-libftdi.mk                | 15 +++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 package/python-pylibftdi/0001-do-not-use-find-library.patch
- create mode 100644 package/python-pylibftdi/Config.in
- create mode 100644 package/python-pylibftdi/python-libftdi.hash
- create mode 100644 package/python-pylibftdi/python-libftdi.mk
+ Changes v1->v2
+  - add hash file
+ Changes v2->v3 (Suggested by Arnout)
+  - remove patch and bump version
+  - add proprietary license file to LICENSE_FILES
+  - Fix help text indentation to below 72 columns
+
+ package/Config.in                    |  1 +
+ package/uccp420wlan/Config.in        | 14 ++++++++++++++
+ package/uccp420wlan/uccp420wlan.hash |  2 ++
+ package/uccp420wlan/uccp420wlan.mk   | 20 ++++++++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/uccp420wlan/Config.in
+ create mode 100644 package/uccp420wlan/uccp420wlan.hash
+ create mode 100644 package/uccp420wlan/uccp420wlan.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index deff0fe..452ff0d 100644
+index deff0fe..955f310 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -765,6 +765,7 @@ menu "External python modules"
- 	source "package/python-pygments/Config.in"
- 	source "package/python-pyicu/Config.in"
- 	source "package/python-pyinotify/Config.in"
-+        source "package/python-pylibftdi/Config.in"
- 	source "package/python-pylru/Config.in"
- 	source "package/python-pymysql/Config.in"
- 	source "package/python-pynacl/Config.in"
-diff --git a/package/python-pylibftdi/0001-do-not-use-find-library.patch b/package/python-pylibftdi/0001-do-not-use-find-library.patch
+@@ -476,6 +476,7 @@ endmenu
+ 	source "package/triggerhappy/Config.in"
+ 	source "package/uboot-tools/Config.in"
+ 	source "package/ubus/Config.in"
++	source "package/uccp420wlan/Config.in"
+ 	source "package/udev/Config.in"
+ 	source "package/udisks/Config.in"
+ 	source "package/upower/Config.in"
+diff --git a/package/uccp420wlan/Config.in b/package/uccp420wlan/Config.in
 new file mode 100644
-index 0000000..2f17dc6
+index 0000000..40abc8e
 --- /dev/null
-+++ b/package/python-pylibftdi/0001-do-not-use-find-library.patch
++++ b/package/uccp420wlan/Config.in
 @@ -0,0 +1,14 @@
-+diff -purN pylibftdi-0.15.0.orig/pylibftdi/driver.py pylibftdi-0.15.0/pylibftdi/driver.py
-+--- pylibftdi-0.15.0.orig/pylibftdi/driver.py	2015-04-26 22:41:39.000000000 +0200
-++++ pylibftdi-0.15.0/pylibftdi/driver.py	2017-02-27 13:08:56.502958000 +0100
-+@@ -121,8 +121,8 @@ class Driver(object):
-+                     lib = getattr(cdll, lib_path)
-+                     break
-+         if lib is None:
-+-            raise LibraryMissingError('{} library not found (search: {})'.format(
-+-                name, search_list))
-++		return cdll.LoadLibrary(name + '.so')
-++
-+         return lib
-+ 
-+     @property
-diff --git a/package/python-pylibftdi/Config.in b/package/python-pylibftdi/Config.in
-new file mode 100644
-index 0000000..36e3fac
---- /dev/null
-+++ b/package/python-pylibftdi/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_PYLIBFTDI
-+	bool "python-pylibftdi"
-+	select BR2_PACKAGE_LIBFTDI
-+        depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+
++config BR2_PACKAGE_UCCP420WLAN
++	bool "uccp420wlan"
++	depends on BR2_LINUX_KERNEL
 +	help
-+	  This package contains the python language binding libftdi.
++	  SoftMAC (mac80211) based WiFi driver for Imagination's
++	  Explorer RPU uccp420. This supports Dual Band WiFi with
++	  2.4GHz - 2x2 b/g/n 40MHz, 5GHz - 2x2 a/n/11ac 80MHz modes
 +
-+	  https://pypi.python.org/pypi/pylibftdi
++	  Used in creator ci40 board.
 +
-+comment "python-pylibftdi needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_PYTHON
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/python-pylibftdi/python-libftdi.hash b/package/python-pylibftdi/python-libftdi.hash
++	  https://github.com/CreatorDev/uccp420wlan
++
++comment "uccp420wlan needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/uccp420wlan/uccp420wlan.hash b/package/uccp420wlan/uccp420wlan.hash
 new file mode 100644
-index 0000000..54b33a1
+index 0000000..41f60a4
 --- /dev/null
-+++ b/package/python-pylibftdi/python-libftdi.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/pylibftdi/json, sha256 locally computed
-+md5  eaee7fb3a67f33a35a164a9628daaafe pylibftdi-0.15.0.tar.gz
-+sha256  51ef08ebcc4ec3eaec2366e9648d3f8fa1b737ea507a7f3a374ac58abf148e77 pylibftdi-0.15.0.tar.gz
-diff --git a/package/python-pylibftdi/python-libftdi.mk b/package/python-pylibftdi/python-libftdi.mk
++++ b/package/uccp420wlan/uccp420wlan.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 1d4de62fc842dbab739708cf0d9ebce270fcdf63c1c13ac676cbc253acdaa3bb uccp420wlan-v6.9.1.tar.gz
+diff --git a/package/uccp420wlan/uccp420wlan.mk b/package/uccp420wlan/uccp420wlan.mk
 new file mode 100644
-index 0000000..b934c03
+index 0000000..4676ef3
 --- /dev/null
-+++ b/package/python-pylibftdi/python-libftdi.mk
-@@ -0,0 +1,15 @@
++++ b/package/uccp420wlan/uccp420wlan.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# python-libftdi
++# uccp420wlan
 +#
 +################################################################################
 +
-+PYTHON_PYLIBFTDI_VERSION = 0.15.0
-+PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
-+PYTHON_PYLIBFTDI_SITE = https://pypi.python.org/packages/e5/bb/d7a86dbd7685e3866ea75d21c6c726d01706fdc0aa5dc9051ce18ae65693
-+PYTHON_PYLIBFTDI_LICENSE = MIT
-+PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
-+PYTHON_PYLIBFTDI_DEPENDENCIES =libftdi
-+PYTHON_PYLIBFTDI_SETUP_TYPE = distutils
++UCCP420WLAN_VERSION = v6.9.1
++UCCP420WLAN_SITE = $(call github,CreatorDev,uccp420wlan,$(UCCP420WLAN_VERSION))
++UCCP420WLAN_LICENSE = GPLv2 (kernel module), proprietary (firmware blob)
++UCCP420WLAN_LICENSE_FILES = COPYING firmware/LICENSE.imagination
 +
-+$(eval $(python-package))
++define UCCP420WLAN_INSTALL_FIRMWARE
++	mkdir -p $(TARGET_DIR)/lib/firmware/img/uccp420wlan
++	cp $(@D)/firmware/*.ldr $(TARGET_DIR)/lib/firmware/img/uccp420wlan
++endef
++
++UCCP420WLAN_POST_INSTALL_TARGET_HOOKS += UCCP420WLAN_INSTALL_FIRMWARE
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
-2.1.4
+2.7.4
