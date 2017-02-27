@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Feb 2017 21:37:57 +0100
-Subject: [Buildroot] [PATCH] mplayer: not supported on or1k
-In-Reply-To: <1488149043-15973-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1488149043-15973-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170227213757.0a900016@free-electrons.com>
+Date: Mon, 27 Feb 2017 21:38:12 +0100
+Subject: [Buildroot] [PATCH] vlc: workaround microblaze gcc internal
+ compiler error
+In-Reply-To: <20170227060725.GA27933@waldemar-brodkorb.de>
+References: <20170227060725.GA27933@waldemar-brodkorb.de>
+Message-ID: <20170227213812.6b5b5f77@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Feb 2017 23:44:03 +0100, Thomas Petazzoni wrote:
-> MPlayer doesn't support OpenRISC:
+On Mon, 27 Feb 2017 07:07:25 +0100, Waldemar Brodkorb wrote:
+> Override gcc optimization flags with -O0.
 > 
-> The architecture of your CPU (or1k) is not supported by this configure script
-> It seems nobody has ported MPlayer to your OS or CPU type yet.
-> 
-> so disable it on this architecture.
+> The workaround is not required for gcc6 anymore, but
+> gcc6 is disabled for microblaze, because it breaks startup 
+> of the system somehow. So the bug is not reported upstream.
 > 
 > Fixes:
+>  http://autobuild.buildroot.net/results/a318f0838a6a602046e719103ac81965c0084d52
 > 
->   http://autobuild.buildroot.net/results/47207dfd10ff6e5ec4ccdcf8454aaf5f408ad1e3/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  package/mplayer/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/vlc/vlc.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Applied to master, thanks.
+Applied to master after tweaking the condition so that it applies only
+to gcc < 6.x.
+
+Thanks!
 
 Thomas
 -- 
