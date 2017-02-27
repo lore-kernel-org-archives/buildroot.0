@@ -1,38 +1,39 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 27 Feb 2017 11:54:19 -0500
-Subject: [Buildroot] Analysis of build results for 2017-02-26
-In-Reply-To: <20170227142854.34d3fb86@free-electrons.com>
-References: <20170227072848.7BD45207F5@mail.free-electrons.com>
- <20170227142854.34d3fb86@free-electrons.com>
-Message-ID: <CA+-urNQUEmsQy2_8UcL5FQqq10O-nQjNUY_nxwcD8mHxCtW2tw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 27 Feb 2017 19:09:05 +0200
+Subject: [Buildroot] [PATCH next 1/2] usb_modeswitch: bump to version 2.5.0
+Message-ID: <a328be860a55e9fbce938ca984eaa63ae522d9e0.1488215346.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/usb_modeswitch/usb_modeswitch.hash | 2 +-
+ package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Feb 27, 2017 at 8:28 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
->>         i686 |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/92f9a6b804072a521ad0b25086a0a5ed33eaf53e
->>          arc |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/a04ba24c6cd61bf6f2128a0e869f679cb3f2eac3
->
-> Static linking issues, with a CMake based package. Frank, Samuel, could
-> you have a look?
->
-
-I took a quick look. The issue is due to a transitive dependency on
-zlib not being added to the linker invocation. The rabbitmq utilities
-make calls to libcrypto.a which has calls to zlib. I don't use cmake
-enough to know how this is normally fixed with that tool. If there's
-another example somewhere that I can copy, I don't mind submitting a
-fix.
-
-Frank
-
-p.s. Fwiw, rabbitmq-c is actually maintained by Joris Lijssens, so I'm
-adding him to the cc list in case he has run into this. My rabbitmq
-package is rabbitmq-server, but my project with rabbit also uses
-rabbitmq-c.
+diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
+index 807b63f02310..b202e6353afd 100644
+--- a/package/usb_modeswitch/usb_modeswitch.hash
++++ b/package/usb_modeswitch/usb_modeswitch.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	17dc32bf10df8e370f2369b5137d34dfd8f2347faaa51524c5f21c922f42e212	usb-modeswitch-2.4.0.tar.bz2
++sha256	31c0be280d49a99ec3dc0be3325bef320d9c04b50714ef0ce1e36a614d687633	usb-modeswitch-2.5.0.tar.bz2
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index e196db582de5..57996ab5f95e 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_VERSION = 2.4.0
++USB_MODESWITCH_VERSION = 2.5.0
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
+-- 
+2.11.0
