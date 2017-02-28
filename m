@@ -1,85 +1,124 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 28 Feb 2017 12:02:52 +0100
-Subject: [Buildroot] [PATCH for-master] qt5quickcontrols: fix installation
-	of PrivateWidgets
-Message-ID: <20170228110252.5695-1-arnout@mind.be>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Tue, 28 Feb 2017 12:13:17 +0100
+Subject: [Buildroot] [PATCH] classpath: only allow on supported
+ architectures
+In-Reply-To: <1488233771-5322-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1488233771-5322-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <65126b15-56dc-b768-0e4b-cbec92708e0d@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit e482ebf51d9e8e00c3e58eb65af0dfb70d05d8cc attempted to fix the
-installation of qt5quickcontrols by only installing the PrivateWidgets
-directory for the 5.8.0 version.
+Hello Thomas,
 
-However, the availability of PrivateWidgets has nothing to do with the
-version; in both 5.6.2 and 5.8.0, the installation is gated by the
-following statement in src/src.pro:
+On 27.02.2017 23:16, Thomas Petazzoni wrote:
+> In commit a75ab1fc1dcc7eee8668b1c3c19b703f1390b2cd ("package/classpath:
+> Don't depend on jamvm"), we removed the dependency of classpath on
+> jamvm. Since jamvm is only available for a reduced set of architectures,
+> classpath could until this commit until be built on those architectures.
+> 
+> However, now that this dependency has been removed, classpath can
+> potentially be built for all architectures supported by Buildroot, even
+> though it doesn't support all of them.
+> 
+> Since adding support for additional architectures in classpath doesn't
+> make much sense, because classpath is in Buildroot only usable with
+> JamVM anyway, and JamVM is only available for a small set of
+> architectures, this commit simply makes classpath available on the
+> architectures that it supports.
+> 
+> By doing so, it also removes the or1k support patch which was added by
+> commit f12a146f817c8ef07a7d41a31a5336b5ef6a96e8, since anyway or1k is
+> not supported by JamVM.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/55eb89f89e96b94a821778bc18ed844af08b7460/
+>   (classpath on microblaze)
+> 
+>   http://autobuild.buildroot.net/results/279dd731bd9ecf5f9d54bda3715caeaa7cbcdbb3/
+>   (classpath on nios2)
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/classpath/0003-add-or1k-endian.patch | 18 ------------------
+>  package/classpath/Config.in                  |  8 ++++++++
+>  package/jamvm/Config.in                      |  2 ++
+>  3 files changed, 10 insertions(+), 18 deletions(-)
+>  delete mode 100644 package/classpath/0003-add-or1k-endian.patch
+> 
+> diff --git a/package/classpath/0003-add-or1k-endian.patch b/package/classpath/0003-add-or1k-endian.patch
+> deleted file mode 100644
+> index 8bc8784..0000000
+> --- a/package/classpath/0003-add-or1k-endian.patch
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -Set endianess for or1k
+> -
+> -Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> -
+> -diff -Nur classpath-0.98.orig/native/fdlibm/ieeefp.h classpath-0.98/native/fdlibm/ieeefp.h
+> ---- classpath-0.98.orig/native/fdlibm/ieeefp.h	2008-01-13 18:33:50.000000000 +0100
+> -+++ classpath-0.98/native/fdlibm/ieeefp.h	2017-02-26 12:39:12.316327363 +0100
+> -@@ -123,6 +123,10 @@
+> - #define __IEEE_BIG_ENDIAN
+> - #endif
+> - 
+> -+#ifdef __or1k__
+> -+#define __IEEE_BIG_ENDIAN
+> -+#endif
+> -+
+> - #ifdef __v800
+> - #define __IEEE_LITTLE_ENDIAN
+> - #endif
+> diff --git a/package/classpath/Config.in b/package/classpath/Config.in
+> index caab619..c49ff7a 100644
+> --- a/package/classpath/Config.in
+> +++ b/package/classpath/Config.in
+> @@ -1,7 +1,15 @@
+> +config BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k \
+> +		|| BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el \
+> +		|| BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le \
+> +		|| BR2_sh || BR2_x86_64
 
-qtHaveModule(quick):qtHaveModule(widgets): SUBDIRS += widgets
+I just tested with the test-pkg script and I also get successful sparc
+and sparc64 builds. Any particular reason to not enable it there?
 
-i.e. it is installed when both the Quick and the Widgets module are
-available. The Widgets module is controlled by Buildroot's
-BR2_PACKAGE_QT5BASE_WIDGETS symbol, the Quick module is controlled by
-Buildroot's BR2_PACKAGE_QT5DECLARATIVE_QUICK. The qt5quickcontrols
-package selects BR2_PACKAGE_QT5DECLARATIVE_QUICK so it is not really
-needed to include it in the condition. However, it is theoretically
-possible to build this package without QtQuick. Also, adding this
-condition makes it consistent with src.pro.
+I'll also test again if there is any change for the bumped 0.99 version.
 
-Note that commit e482ebf51d9e8e00c3e58eb65af0dfb70d05d8cc introduces a
-second fix (not mentioned in the commit message): for version 5.6.2, the
-Layouts directory is installed, but in 5.8.0 this directory doesn't
-exist any more. Therefore, a separate condition on the version is still
-needed.
+> +
+>  config BR2_PACKAGE_CLASSPATH
+>  	bool "classpath"
+>  	select BR2_NEEDS_HOST_JAR
+>  	select BR2_NEEDS_HOST_JAVAC
+> +	depends on BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
+>  	help
+>  	  GNU Classpath, Essential Libraries for Java, is a GNU
+>  	  project to create free core class libraries for use with
+> diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+> index 2cc97a1..57e1a8e 100644
+> --- a/package/jamvm/Config.in
+> +++ b/package/jamvm/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_JAMVM
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+>  		|| BR2_mips || BR2_mipsel || BR2_powerpc
+> +	depends on BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_ZLIB
+>  	select BR2_PACKAGE_CLASSPATH
+>  	help
+> @@ -15,4 +16,5 @@ config BR2_PACKAGE_JAMVM
+>  comment "jamvm needs a toolchain w/ threads, dynamic library"
+>  	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+>  		|| BR2_mips || BR2_mipsel || BR2_powerpc
+> +	depends on BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> 
 
-Fixes:
-http://autobuild.buildroot.net/results/1ff3e9ad4ba518d0a37f9fc12038bf9020f28094
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/qt5/qt5quickcontrols/qt5quickcontrols.mk | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-index 8a63629c35..43254ba06b 100644
---- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-+++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-@@ -30,20 +30,25 @@ define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
- 
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
--define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
--	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
--	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
--	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
-+
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5BASE_WIDGETS),yy)
-+define QT5QUICKCONTROLS_INSTALL_TARGET_PRIVATEWIDGETS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
- endef
--else
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
-+define QT5QUICKCONTROLS_INSTALL_TARGET_LAYOUTS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Layouts $(TARGET_DIR)/usr/qml/QtQuick
-+endef
-+endif
-+
- define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
--	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Layouts $(TARGET_DIR)/usr/qml/QtQuick
-+	$(QT5QUICKCONTROLS_INSTALL_TARGET_PRIVATEWIDGETS)
-+	$(QT5QUICKCONTROLS_INSTALL_TARGET_LAYOUTS)
- endef
--endif
- 
- $(eval $(generic-package))
--- 
-2.11.0
+Best wishes,
+Marcus
