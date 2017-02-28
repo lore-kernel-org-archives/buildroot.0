@@ -1,34 +1,68 @@
-From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Date: Tue, 28 Feb 2017 21:13:02 +0100
-Subject: [Buildroot] [PATCH 1/1] classpath: enable on sparc and sparc64.
-Message-ID: <20170228201302.12168-1-m.hoffmann@cartelsol.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Feb 2017 21:23:55 +0100
+Subject: [Buildroot] [PATCH 0/7] gcc5 fixes for defconfigs
+In-Reply-To: <20170228174001.23830-1-arnout@mind.be>
+References: <20170228174001.23830-1-arnout@mind.be>
+Message-ID: <20170228212355.36a91c98@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GNU classpath builds fine on sparc and sparc64 architectures. So
-we allow building it there to be consistent with the naming of
-BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS.
+Hello,
 
-Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
----
- package/classpath/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 28 Feb 2017 18:39:54 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+>  Ever since we switched to gcc5 as default, a number of defconfigs have
+> been failing. Since we currently don't test the defconfigs this went
+> largely unnoticed.
+> 
+>  This series fixes the remaining defconfigs. Since I don't have access
+> to most of the boards, I couldn't test the changes, so I've opted for
+> the safe fix: apply the patch that adds gcc5 support to kernel and boot
+> loader.
+> 
+>  To avoid repeating the same exercise when we switch to gcc6 as default,
+> I've opted for the patch that removes the version-specific
+> compiler-gcc[345].h.
+> 
+>  Since the same kernel patch is used by a number of defconfigs, I've
+> put it in a common directory under board/, and use BR2_GLOBAL_PATCH_DIR
+> to refer to it. For U-Boot that wasn't possible because the context is
+> always slightly different. Therefore the patches are in board-specific
+> directories. The two Altera platforms can still share some of the
+> patches.
+> 
+>  This series has only been build-tested, not runtime tested. However,
+> the compiler-gcc.h change should be safe (if it breaks something, it
+> would be compilation itself because a definition is missing).
+> 
+>  Note: the yocto repository used by minnowboard_defconfig seems to be
+> either broken or unreliable. AFAIK minnowboard should be fully supported
+> by the upstream kernel, so it would be nice if someone who has the board
+> could try that.
 
-diff --git a/package/classpath/Config.in b/package/classpath/Config.in
-index c49ff7a..8051523 100644
---- a/package/classpath/Config.in
-+++ b/package/classpath/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
- 	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k \
- 		|| BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el \
- 		|| BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le \
--		|| BR2_sh || BR2_x86_64
-+		|| BR2_sparc || BR2_sparc64 || BR2_sh || BR2_x86_64
- 
- config BR2_PACKAGE_CLASSPATH
- 	bool "classpath"
+Thanks for all this work.
+
+However, it has already been noticed a while ago that these defconfigs
+were broken, I did a build test of all defconfigs some time ago, and
+reported the issue to the developers who contributed the defconfig
+originally. Peter also helped in this effort. See e-mails like:
+
+   [Buildroot] Altera socdk defconfig no longer builds
+   [Buildroot] Altera sockit defconfig no longer builds
+   [Buildroot] via_imx6_vab820_defconfig fails to build
+   etc.
+
+For all the boards you are fixing now, Peter or me contacted the
+original submitters. If they haven't been fixed by now, then I would
+instead suggest to simply drop support for those boards.
+
+Best regards,
+
+Thomas
 -- 
-2.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
