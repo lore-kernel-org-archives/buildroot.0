@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Feb 2017 21:00:33 +0100
-Subject: [Buildroot] [PATCH] mpv: disable with ARC external toolchain
-In-Reply-To: <1488295294-27834-1-git-send-email-vzakhar@synopsys.com> (Vlad
- Zakharov's message of "Tue, 28 Feb 2017 18:21:34 +0300")
-References: <1488295294-27834-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <87poi2hyqm.fsf@dell.be.48ers.dk>
+Date: Tue, 28 Feb 2017 21:00:39 +0100
+Subject: [Buildroot] [PATCH] xterm: disable with ARC external toolchain
+In-Reply-To: <1488295216-26882-1-git-send-email-vzakhar@synopsys.com> (Vlad
+ Zakharov's message of "Tue, 28 Feb 2017 18:20:16 +0300")
+References: <1488295216-26882-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <87lgsqhyqg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,7 +19,7 @@ To: buildroot@busybox.net
  > resolved.
 
  > Fixes:
- >   http://autobuild.buildroot.net/results/fb6/fb677a917545adee321bdcd2c2519c81326448c4//
+ >   http://autobuild.buildroot.net/results/28a/28a92049a6ceef005787c5779f77ecf3fe8ad642//
 
  > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 
