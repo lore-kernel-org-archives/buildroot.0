@@ -1,33 +1,38 @@
-From: Taceant Omnes <taceant@gmail.com>
-Date: Tue, 28 Feb 2017 15:40:09 +0000
-Subject: [Buildroot] Ethernet not working with imx6ulevk
-In-Reply-To: <CAKkGsYK+WPvgH-SQ9L_cbBkjCOOXK9YE4ty6L5wQDhJOmYR==Q@mail.gmail.com>
-References: <CAKkGsYK+WPvgH-SQ9L_cbBkjCOOXK9YE4ty6L5wQDhJOmYR==Q@mail.gmail.com>
-Message-ID: <CAKkGsYLpW+bU-SihBgRFgyi4cmzJhgah1ZDpjQf0m2ksEmKP_A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Feb 2017 17:02:49 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-26
+In-Reply-To: <1488296096.2557.13.camel@synopsys.com>
+References: <20170227072848.7BD45207F5@mail.free-electrons.com>
+ <20170227142854.34d3fb86@free-electrons.com>
+ <1488296096.2557.13.camel@synopsys.com>
+Message-ID: <20170228170249.6c4911a0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23 February 2017 at 14:30, Taceant Omnes <taceant@gmail.com> wrote:
-> Hi all,
->
-> Has anybody got Ethernet working with imx6ulevk?
+Hello,
 
-Yes.
+On Tue, 28 Feb 2017 15:34:56 +0000, Vlad Zakharov wrote:
 
-Here is how to get Ethernet working with imx6ulevk with
-buildroot-2016.11.2 (as well as with the buildroot git master at the
-time of writing this email).
+> > Vlad, could you have a look into this? We have
+> > package/gcc/6.3.0/895-bfin-define-REENTRANT.patch for Blackfin in the
+> > tree, but we don't have the corresponding patch for ARC.  
+> 
+> The patch you have provided in gcc bugzilla solves the issue, thanks.
+> I am going to send it to Buildroot soon.
 
-1. Download the attachment (zipped patch file) listed towards the end
-of this page: https://community.nxp.com/docs/DOC-333163
-2. Unzip the patch file to some folder.
-3. 'make nconfig' to set BR2_LINUX_KERNEL_PATCH to the full path of
-the patch file.
-4. make
+Great, thanks for checking!
 
-That is it.
+> If you want to upstream your patch to gcc please send it to GCC mailing list. And please don't forget to include Claudiu
+> Zissulescu <claziss@synopsys.com>?in CC as he is co-maintainer of GCC port for ARC.
 
-Cheers.
+I received some feedback from Claudio through the gcc bug tracker. I'll
+try to get my gcc patch submitted upstream. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
