@@ -1,44 +1,56 @@
 From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Tue, 28 Feb 2017 18:21:34 +0300
-Subject: [Buildroot] [PATCH] mpv: disable with ARC external toolchain
-Message-ID: <1488295294-27834-1-git-send-email-vzakhar@synopsys.com>
+Date: Tue, 28 Feb 2017 15:34:56 +0000
+Subject: [Buildroot] Analysis of build results for 2017-02-26
+In-Reply-To: <20170227142854.34d3fb86@free-electrons.com>
+References: <20170227072848.7BD45207F5@mail.free-electrons.com>
+ <20170227142854.34d3fb86@free-electrons.com>
+Message-ID: <1488296096.2557.13.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package fails when building with ARC external toolchain
+Hi Thomas,
 
-Marking this with special comment "# ARC toolchain issue" as the package
-is to be enabled as soon as the issue with the ARC toolchain is
-resolved.
+On Mon, 2017-02-27 at 14:28 +0100, Thomas Petazzoni wrote:
+> >????????? arc |???????????????????? mpd-0.20.4 | NOK ?
+> 
+> Lacks a -lpthread apparently:
+> 
+> /home/peko/autobuild/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/arc-snps-linux-
+> uclibc/6.2.1/../../../../arc-snps-linux-uclibc/bin/ld: libthread.a(Thread.o): undefined reference to symbol
+> 'pthread_create'
+> /home/peko/autobuild/instance-1/output/host/usr/arc-buildroot-linux-uclibc/sysroot/lib/libpthread.so.0: error adding
+> symbols: DSO missing from command line
+> 
+> but the configure script fails to detect thread support:
+> 
+> checking for the pthreads library -lpthread... no
+> 
+> Aah, they test if the compiler defines _REENTRANT:
+> 
+> conftest.c:15:26: error: #error "_REENTRANT must be defined"
+> ?#??????????????????????? error "_REENTRANT must be defined"
+> 
+> and I know some architectures forget to do so.
+> 
+> I already reported this bug to gcc upstream:
+> 
+> ?https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71749?
+> 
+> Vlad, could you have a look into this? We have
+> package/gcc/6.3.0/895-bfin-define-REENTRANT.patch for Blackfin in the
+> tree, but we don't have the corresponding patch for ARC.
 
-Fixes:
-  http://autobuild.buildroot.net/results/fb6/fb677a917545adee321bdcd2c2519c81326448c4//
+The patch you have provided in gcc bugzilla solves the issue, thanks.
+I am going to send it to Buildroot soon.
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
----
- package/mpv/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+If you want to upstream your patch to gcc please send it to GCC mailing list. And please don't forget to include Claudiu
+Zissulescu <claziss@synopsys.com>?in CC as he is co-maintainer of GCC port for ARC.
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 2719981..6e115ae 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_MPV
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
-+	# ARC toolchain issue
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
-@@ -21,3 +23,4 @@ comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+Thanks!
+
 -- 
-2.7.4
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
