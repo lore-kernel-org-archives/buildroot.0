@@ -1,78 +1,116 @@
-From: arnaud.miche at orange.com <arnaud.miche@orange.com>
-Date: Tue, 28 Feb 2017 17:14:45 +0000
-Subject: [Buildroot] fs/iso9660,
- grub2 : grub-eltorito.img not found during the generation of
- rootfs.iso9660
-Message-ID: <23372_1488302086_58B5B006_23372_4885_1_1E64607C4DE75747B52CBCF583F1D21F0C7B4C3C@OPEXCNORM54.corporate.adroot.infra.ftgroup>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 28 Feb 2017 18:39:54 +0100
+Subject: [Buildroot] [PATCH 0/7] gcc5 fixes for defconfigs
+Message-ID: <20170228174001.23830-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everybody,
+ Ever since we switched to gcc5 as default, a number of defconfigs have
+been failing. Since we currently don't test the defconfigs this went
+largely unnoticed.
 
-I am trying Buildroot_2016.11.2 and I have an issue during the generation of an iso rootfs.
+ This series fixes the remaining defconfigs. Since I don't have access
+to most of the boards, I couldn't test the changes, so I've opted for
+the safe fix: apply the patch that adds gcc5 support to kernel and boot
+loader.
 
-My target is an "x86-64-efi" system.
+ To avoid repeating the same exercise when we switch to gcc6 as default,
+I've opted for the patch that removes the version-specific
+compiler-gcc[345].h.
 
-The error is the following one :
-===================
+ Since the same kernel patch is used by a number of defconfigs, I've
+put it in a common directory under board/, and use BR2_GLOBAL_PATCH_DIR
+to refer to it. For U-Boot that wasn't possible because the context is
+always slightly different. Therefore the patches are in board-specific
+directories. The two Altera platforms can still share some of the
+patches.
 
->>>   Generating root filesystem image rootfs.iso9660
-/usr/bin/install -D -m 0644 fs/iso9660/grub.cfg /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/build/rootfs.iso9660.tmp/boot/grub/grub.cfg
-/bin/sed -i -e "s%__KERNEL_PATH__%/boot/bzImage%" /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/build/rootfs.iso9660.tmp/boot/grub/grub.cfg
-/usr/bin/install -D -m 0644 /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/images/grub-eltorito.img /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/build/rootfs.iso9660.tmp/boot/grub/grub-eltorito.img
-/usr/bin/install: impossible d'?valuer ? /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/images/grub-eltorito.img ?: Aucun fichier ou dossier de ce type
-fs/iso9660/iso9660.mk:160: recipe for target '/home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/images/rootfs.iso9660' failed
-make: *** [/home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/images/rootfs.iso9660] Error 1
+ This series has only been build-tested, not runtime tested. However,
+the compiler-gcc.h change should be safe (if it breaks something, it
+would be compilation itself because a definition is missing).
 
-If I check the makefile for Grub2, I find that the grub-eltorito.img file is created for only i386_pc target. See boot/grub2.mk, lines 80 to 85.
+ Note: the yocto repository used by minnowboard_defconfig seems to be
+either broken or unreliable. AFAIK minnowboard should be fully supported
+by the upstream kernel, so it would be nice if someone who has the board
+could try that.
 
-ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
-define GRUB2_IMAGE_INSTALL_ELTORITO
-    cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img $(GRUB2_IMAGE) > \
-        $(BINARIES_DIR)/grub-eltorito.img
-endef
-endif
+ Regards,
+ Arnout
 
-But in iso9660.mk, the only condition for installing grub-eltorito.img is the use of rootfs_iso9660_grub2 as seen lines 56 to 64 :
+----------------------------------------------------------------
+The following changes since commit 35e02aeb7b493d61bbc3e90903337b4964e0213c:
 
-else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2),y)
-ROOTFS_ISO9660_DEPENDENCIES += grub2
-ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
-    $(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub.cfg
-ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/grub-eltorito.img
-define ROOTFS_ISO9660_INSTALL_BOOTLOADER
-    $(INSTALL) -D -m 0644 $(BINARIES_DIR)/grub-eltorito.img \
-        $(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub-eltorito.img
-endef
+  assimp: fix gcc version condition (2017-02-27 22:53:24 +0100)
 
-Is it a bug ? Or I misunderstood anything ?
+are available in the git repository at:
 
-If it is a bug, I lack some informations for patching my own installation with a convenient manner :
+  http://gitlab.com/arnout/buildroot fix-defconfigs-gcc5
 
-Is grub-eltorito.img still relevant when using Grub2 ?
-If yes, should grub-eltorito.img be just built with i386_pc ? Must I have to add x86_64_efi target ?
+for you to fetch changes up to 70688c47309c7e5bfde7a835c5af5670e8c6c942:
 
-Thank you a lot for your responses.
+  altera_sockit_defconfig: fix build with gcc5 (2017-02-28 18:27:38 +0100)
 
-Arnaud
+----------------------------------------------------------------
+Arnout Vandecappelle (7):
+      board: add shared patch to fix linux gcc5 issues
+      minnowboard_defconfig: fix build with gcc5
+      telit_evk_pro3_defconfig: fix build with gcc5
+      roseapplepi_defconfig: use common kernel patch for gcc5
+      via_imx6_vab820_defconfig: fix build with gcc5
+      altera_socdk_defconfig: fix build with gcc5
+      altera_sockit_defconfig: fix build with gcc5
 
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170228/96df862e/attachment.html>
+ ...ux-Change-extern-inline-to-static-inline-.patch |  62 ++
+ ...c.h-remove-dependency-on-compiler-gcc-345.patch | 191 +++++++
+ .../0002-ARM-asm-io.h-use-static-inline.patch      |  81 +++
+ ...mon-main.c-make-show_boot_progress-__weak.patch |  43 ++
+ .../patches/uboot/0004-arm-board-use-__weak.patch  |  88 +++
+ .../patches/uboot/0004-arm-board-use-__weak.patch  |  80 +++
+ ...socfpga-don-t-use-extern-inline-functions.patch | 161 ++++++
+ ...add-to-sockit-a-working-preloader-design.patch} |  20 +-
+ ...c-integrate-the-various-compiler-gcc-345-.patch | 173 ++++++
+ ...LVMLinux-use-static-inline-in-ARM-ftrace.patch} |  17 +-
+ ...ove-inline-keyword-for-exported-functions.patch | 159 ++++++
+ .../linux/0002-kernel-add-support-for-gcc-5.patch  |  99 ----
+ .../0001-watchdog-add-keep-alive-support.patch}    |  12 +-
+ ...2-watchdog-add-at91sam9-watchdog-support.patch} |  14 +-
+ ...003-at91sam9260-9g20-add-wathdog-support.patch} |   8 +-
+ ...004-at91sam9260-9g20-fix-wathdog-support.patch} |   8 +-
+ .../0005-watchdog-enable-for-evk-pro3.patch}       |   8 +-
+ ...ild-update-compiler-.h-to-newest-versions.patch | 632 +++++++++++++++++++++
+ ...c.h-remove-dependency-on-compiler-gcc-345.patch | 191 +++++++
+ .../0002-ARM-asm-io.h-use-static-inline.patch      |  81 +++
+ ...mon-main.c-make-show_boot_progress-__weak.patch |  35 ++
+ .../patches/uboot/0004-arm-board-use-__weak.patch  |  88 +++
+ configs/altera_socdk_defconfig                     |   3 +
+ configs/altera_sockit_defconfig                    |   4 +-
+ configs/minnowboard_defconfig                      |   3 +
+ configs/roseapplepi_defconfig                      |   2 +-
+ configs/telit_evk_pro3_defconfig                   |   4 +-
+ configs/via_imx6_vab820_defconfig                  |   3 +
+ 28 files changed, 2125 insertions(+), 145 deletions(-)
+ create mode 100644 board/altera/patches/linux/0003-ARM-LLVMLinux-Change-extern-inline-to-static-inline-.patch
+ create mode 100644 board/altera/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
+ create mode 100644 board/altera/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
+ create mode 100644 board/altera/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
+ create mode 100644 board/altera/socdk/patches/uboot/0004-arm-board-use-__weak.patch
+ create mode 100644 board/altera/sockit/patches/uboot/0004-arm-board-use-__weak.patch
+ create mode 100644 board/altera/sockit/patches/uboot/0005-socfpga-don-t-use-extern-inline-functions.patch
+ rename board/altera/sockit/{uboot-sockit-preloader-sample-design.patch => patches/uboot/0006-board-add-to-sockit-a-working-preloader-design.patch} (98%)
+ create mode 100644 board/linux-gcc-patches/linux/0001-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch
+ rename board/{roseapplepi/patches/linux/0003-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch => linux-gcc-patches/linux/0002-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch} (82%)
+ create mode 100644 board/minnowboard/patches/linux/0001-pch_gbe-remove-inline-keyword-for-exported-functions.patch
+ delete mode 100644 board/roseapplepi/patches/linux/0002-kernel-add-support-for-gcc-5.patch
+ rename board/telit/evk-pro3/{barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch => patches/barebox/0001-watchdog-add-keep-alive-support.patch} (89%)
+ rename board/telit/evk-pro3/{barebox-2013.04.0-0002-watchdog-add-at91sam9-watchdog-support.patch => patches/barebox/0002-watchdog-add-at91sam9-watchdog-support.patch} (96%)
+ rename board/telit/evk-pro3/{barebox-2013.04.0-0003-at91sam9260-9g20-add-wathdog-support.patch => patches/barebox/0003-at91sam9260-9g20-add-wathdog-support.patch} (87%)
+ rename board/telit/evk-pro3/{barebox-2013.04.0-0004-at91sam9260-9g20-fix-wathdog-support.patch => patches/barebox/0004-at91sam9260-9g20-fix-wathdog-support.patch} (82%)
+ rename board/telit/evk-pro3/{barebox-2013.04.0-0005-watchdog-enable-for-evk-pro3.patch => patches/barebox/0005-watchdog-enable-for-evk-pro3.patch} (80%)
+ create mode 100644 board/telit/evk-pro3/patches/barebox/0006-build-update-compiler-.h-to-newest-versions.patch
+ create mode 100644 board/via/imx6_vab820/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
+ create mode 100644 board/via/imx6_vab820/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
+ create mode 100644 board/via/imx6_vab820/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
+ create mode 100644 board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch
