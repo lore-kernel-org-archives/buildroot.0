@@ -1,37 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 28 Feb 2017 23:26:07 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: fix build for toolchains without ssp
-Message-ID: <1488320767-63856-1-git-send-email-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Feb 2017 23:40:37 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: fix build for toolchains without
+ ssp
+In-Reply-To: <1488320767-63856-1-git-send-email-fontaine.fabrice@gmail.com>
+References: <1488320767-63856-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <20170228234037.12107729@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF to disable custom flags, in
-particular -fstack-protector-strong which depends on
-BR2_TOOLCHAIN_HAS_SSP
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cjson/cjson.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On Tue, 28 Feb 2017 23:26:07 +0100, Fabrice Fontaine wrote:
+> Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF to disable custom flags, in
+> particular -fstack-protector-strong which depends on
+> BR2_TOOLCHAIN_HAS_SSP
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index aea9578..c554654 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -9,7 +9,10 @@ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
- CJSON_LICENSE_FILES = LICENSE
-+# Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF in particular to disable
-+# -fstack-protector-strong which depends on BR2_TOOLCHAIN_HAS_SSP
- CJSON_CONF_OPTS += \
--	-DENABLE_CJSON_TEST=OFF
-+	-DENABLE_CJSON_TEST=OFF \
-+	-DENABLE_CUSTOM_COMPILER_FLAGS=OFF
- 
- $(eval $(cmake-package))
+Is this necessary for the 1.3.2 bump to work fine, or is it a separate
+build fix that applies to the version of cjson currently packaged in
+Buildroot?
+
+Thanks,
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
