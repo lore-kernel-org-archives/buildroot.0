@@ -1,92 +1,78 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Tue, 28 Feb 2017 20:10:53 +0300
-Subject: [Buildroot] [PATCH] mpd: fix build for ARC
-Message-ID: <1488301853-24154-1-git-send-email-vzakhar@synopsys.com>
+From: arnaud.miche at orange.com <arnaud.miche@orange.com>
+Date: Tue, 28 Feb 2017 17:14:45 +0000
+Subject: [Buildroot] fs/iso9660,
+ grub2 : grub-eltorito.img not found during the generation of
+ rootfs.iso9660
+Message-ID: <23372_1488302086_58B5B006_23372_4885_1_1E64607C4DE75747B52CBCF583F1D21F0C7B4C3C@OPEXCNORM54.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mpd package fails for both internal and external ARC toolchain as check
-for pthread support fails. Such checks fails because _REENTRANT flag is
-not defined in gcc even when -pthread is passed.
+Hi everybody,
 
-So we add patch to gcc that defines _REENTRANT  on ARC when -pthread is
-passed.
+I am trying Buildroot_2016.11.2 and I have an issue during the generation of an iso rootfs.
 
-Also it disables mpd package for external ARC toolchain as it fails due
-to the same issue.
+My target is an "x86-64-efi" system.
 
-This patch should be reverted as soon as the patch for GCC becomes a
-part of ARC toolchain.
+The error is the following one :
+===================
 
-Fixes:
-  http://autobuild.buildroot.net/results/7d7/7d70b62ad996830fbeca46dffcc7a1dc030e575d//
+>>>   Generating root filesystem image rootfs.iso9660
+/usr/bin/install -D -m 0644 fs/iso9660/grub.cfg /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/build/rootfs.iso9660.tmp/boot/grub/grub.cfg
+/bin/sed -i -e "s%__KERNEL_PATH__%/boot/bzImage%" /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/build/rootfs.iso9660.tmp/boot/grub/grub.cfg
+/usr/bin/install -D -m 0644 /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/images/grub-eltorito.img /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/build/rootfs.iso9660.tmp/boot/grub/grub-eltorito.img
+/usr/bin/install: impossible d'?valuer ? /home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/images/grub-eltorito.img ?: Aucun fichier ou dossier de ce type
+fs/iso9660/iso9660.mk:160: recipe for target '/home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/images/rootfs.iso9660' failed
+make: *** [/home/arnaud/Developments/Projects/Linux_Firmware/Buildroot_2016.11.2/buildroot-2016.11.2/output/images/rootfs.iso9660] Error 1
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
----
- ...-define-_REENTRANT-when-pthread-is-passed.patch | 33 ++++++++++++++++++++++
- package/mpd/Config.in                              |  3 ++
- 2 files changed, 36 insertions(+)
- create mode 100644 package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch
+If I check the makefile for Grub2, I find that the grub-eltorito.img file is created for only i386_pc target. See boot/grub2.mk, lines 80 to 85.
 
-diff --git a/package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch b/package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch
-new file mode 100644
-index 0000000..28e6a2d
---- /dev/null
-+++ b/package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch
-@@ -0,0 +1,33 @@
-+From 4c6367c99461fdd7bd5613483f2582d7f08fba87 Mon Sep 17 00:00:00 2001
-+From: Vlad Zakharov <vzakhar@synopsys.com>
-+Date: Tue, 28 Feb 2017 17:41:11 +0300
-+Subject: [PATCH] arc: define _REENTRANT when -pthread is passed
-+
-+The compiler is supposed to have the builtin defined _REENTRANT defined
-+when -pthread is passed, which wasn't done on the ARC architecture.
-+
-+When _REENTRANT is not passed, the C library will not use reentrant
-+functions, and the latest version of ax_pthread.m4 from the
-+autoconf-archive will no longer detect that thread support is
-+available (see https://savannah.gnu.org/patch/?8186).
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ gcc/config/arc/arc.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gcc/config/arc/arc.h b/gcc/config/arc/arc.h
-+index 611ef54..fdd4b5d 100644
-+--- a/gcc/config/arc/arc.h
-++++ b/gcc/config/arc/arc.h
-+@@ -93,6 +93,7 @@ along with GCC; see the file COPYING3.  If not see
-+ %{mdsp-packa:-D__Xdsp_packa} %{mcrc:-D__Xcrc} %{mdvbf:-D__Xdvbf} \
-+ %{mtelephony:-D__Xtelephony} %{mxy:-D__Xxy} %{mmul64: -D__Xmult32} \
-+ %{mlock:-D__Xlock} %{mswape:-D__Xswape} %{mrtsc:-D__Xrtsc} \
-++%{pthread:-D_REENTRANT} \
-+ %{mcpu=nps400:-D__NPS400__}"
-+
-+ #define CC1_SPEC "\
-+--
-+2.7.4
-+
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 8eabbbc..0c73548 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -8,6 +8,8 @@ menuconfig BR2_PACKAGE_MPD
- 	# 0.19.x could be built with GCC 4.6, but for simplicity we require
- 	# the same toolchain dependencies for all versions.
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	# ARC toolchain issue
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
-@@ -339,3 +341,4 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
--- 
-2.7.4
+ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
+define GRUB2_IMAGE_INSTALL_ELTORITO
+    cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img $(GRUB2_IMAGE) > \
+        $(BINARIES_DIR)/grub-eltorito.img
+endef
+endif
+
+But in iso9660.mk, the only condition for installing grub-eltorito.img is the use of rootfs_iso9660_grub2 as seen lines 56 to 64 :
+
+else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2),y)
+ROOTFS_ISO9660_DEPENDENCIES += grub2
+ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+    $(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub.cfg
+ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/grub-eltorito.img
+define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+    $(INSTALL) -D -m 0644 $(BINARIES_DIR)/grub-eltorito.img \
+        $(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub-eltorito.img
+endef
+
+Is it a bug ? Or I misunderstood anything ?
+
+If it is a bug, I lack some informations for patching my own installation with a convenient manner :
+
+Is grub-eltorito.img still relevant when using Grub2 ?
+If yes, should grub-eltorito.img be just built with i386_pc ? Must I have to add x86_64_efi target ?
+
+Thank you a lot for your responses.
+
+Arnaud
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170228/96df862e/attachment.html>
