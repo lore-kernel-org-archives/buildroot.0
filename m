@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 28 Feb 2017 18:39:59 +0100
-Subject: [Buildroot] [PATCH 5/7] via_imx6_vab820_defconfig: fix build with
-	gcc5
+Date: Tue, 28 Feb 2017 18:40:01 +0100
+Subject: [Buildroot] [PATCH 7/7] altera_sockit_defconfig: fix build with gcc5
 In-Reply-To: <20170228174001.23830-1-arnout@mind.be>
 References: <20170228174001.23830-1-arnout@mind.be>
-Message-ID: <20170228174001.23830-6-arnout@mind.be>
+Message-ID: <20170228174001.23830-8-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,389 +11,377 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Kernel doesn't have the compiler-gcc5.h header, so include the universal
-patch that fixes this issue.
+patch that fixes this issue. A third patch is needed to fix static
+inline issues.
 
 U-Boot doesn't have the compiler-gcc5.h header and has several other
 problems. Get upstream patches to fix those.
 
-U-Boot patches are needed for several defconfigs, but they differ
-slightly in the context. However, the patches have been written in a
-generic way so they are almost identicat between boards.
+Most patches are shared between the two Altera platforms, so they go
+in board/altera/patches. The 4th U-Boot patch, however, needs a
+slightly different context so we put it in board/altera/sockit/patches.
+A 5th patch is needed for more static inline issues; this is done by
+simply taking the code from the socdk version of U-Boot. The existing
+U-Boot preloader patch is also moved to board/altera/sockit/patches.
 
-Cc: Gergely Imreh <imrehg@gmail.com>
+The patches are numbered taking into account the more global ones that
+precede them. Therefore, the linux patch starts at 0003 (since
+board/linux-gcc-patches already has 0001 and 0002), and the
+sockit-specific U-Boot patch starts at 0004.
+
+Cc: Charles Manning <cdhmanning@gmail.com>
+Cc: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ....h-remove-dependency-on-compiler-gcc-345.patch} | 84 +++++++++++++--------
- .../0002-ARM-asm-io.h-use-static-inline.patch      | 81 ++++++++++++++++++++
- ...mon-main.c-make-show_boot_progress-__weak.patch | 35 +++++++++
- .../patches/uboot/0004-arm-board-use-__weak.patch  | 88 ++++++++++++++++++++++
- configs/via_imx6_vab820_defconfig                  |  3 +
- 5 files changed, 258 insertions(+), 33 deletions(-)
- copy board/{linux-gcc-patches/linux/0001-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch => via/imx6_vab820/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch} (63%)
- create mode 100644 board/via/imx6_vab820/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
- create mode 100644 board/via/imx6_vab820/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
- create mode 100644 board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch
+ .../patches/uboot/0004-arm-board-use-__weak.patch  |  24 +--
+ ...socfpga-don-t-use-extern-inline-functions.patch | 161 +++++++++++++++++++++
+ ...add-to-sockit-a-working-preloader-design.patch} |  20 +--
+ configs/altera_sockit_defconfig                    |   4 +-
+ 4 files changed, 182 insertions(+), 27 deletions(-)
+ copy board/{via/imx6_vab820 => altera/sockit}/patches/uboot/0004-arm-board-use-__weak.patch (80%)
+ create mode 100644 board/altera/sockit/patches/uboot/0005-socfpga-don-t-use-extern-inline-functions.patch
+ rename board/altera/sockit/{uboot-sockit-preloader-sample-design.patch => patches/uboot/0006-board-add-to-sockit-a-working-preloader-design.patch} (98%)
 
-diff --git a/board/linux-gcc-patches/linux/0001-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch b/board/via/imx6_vab820/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
-similarity index 63%
-copy from board/linux-gcc-patches/linux/0001-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch
-copy to board/via/imx6_vab820/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
-index 2435d21be0..867cbf2126 100644
---- a/board/linux-gcc-patches/linux/0001-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch
-+++ b/board/via/imx6_vab820/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
-@@ -1,43 +1,35 @@
--From cb984d101b30eb7478d32df56a0023e4603cba7f Mon Sep 17 00:00:00 2001
--From: Joe Perches <joe@perches.com>
--Date: Thu, 25 Jun 2015 15:01:02 -0700
--Subject: [PATCH] compiler-gcc: integrate the various compiler-gcc[345].h files
-+From 1ed5595fc67a19ccd1503659e3845452369c96ae Mon Sep 17 00:00:00 2001
-+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-+Date: Tue, 28 Feb 2017 13:32:48 +0100
-+Subject: [PATCH] compiler-gcc.h: remove dependency on compiler-gcc[345].h
- 
--As gcc major version numbers are going to advance rather rapidly in the
--future, there's no real value in separate files for each compiler
--version.
-+This is based on commit 9b2c282b348dfe966bbba967dc7a45ce817cce50 upstream.
- 
--Deduplicate some of the macros #defined in each file too.
-+Copy these from Linux v4.5-rc6 tag.
- 
--Neaten comments using normal kernel commenting style.
-+This is needed so that we can keep up with newer gcc versions.  Note
-+that we don't have the uapi/ hierarchy from the kernel so continue to
-+use <linux/types.h>
- 
--[Arnout: don't remove compiler-gcc[345].h to make the patch more universal.
--         These headers are not used anymore, but it doesn't hurt if the files
--         still exist.
--         Also, add GCC_VERSION definition (introduced in v3.9) so the same
--         patch can be applied to pre- and post-v3.9 kernels.]
-+[Arnout: limit the changes to purely what is needed to get rid of
-+         compiler-gcc[345].h. This gives us the best chance that the
-+         patch applies to some random U-Boot version. Also, don't
-+         remove compiler-gcc[345].h, in case they have changed or don't
-+         exist yet.]
- 
--Signed-off-by: Joe Perches <joe@perches.com>
--Cc: Andi Kleen <andi@firstfloor.org>
--Cc: Michal Marek <mmarek@suse.cz>
--Cc: Segher Boessenkool <segher@kernel.crashing.org>
--Cc: Sasha Levin <levinsasha928@gmail.com>
--Cc: Anton Blanchard <anton@samba.org>
--Cc: Alan Modra <amodra@gmail.com>
--Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
--Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-+Signed-off-by: Tom Rini <trini@konsulko.com>
+diff --git a/board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch b/board/altera/sockit/patches/uboot/0004-arm-board-use-__weak.patch
+similarity index 80%
+copy from board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch
+copy to board/altera/sockit/patches/uboot/0004-arm-board-use-__weak.patch
+index 7a96183af3..7e41c6fed4 100644
+--- a/board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch
++++ b/board/altera/sockit/patches/uboot/0004-arm-board-use-__weak.patch
+@@ -1,4 +1,4 @@
+-From 99bd7b7fb4d58092f020a808bb57be3b4d4cfc51 Mon Sep 17 00:00:00 2001
++From 96b09bb60980d996fd2267912e23db621fa32e5e Mon Sep 17 00:00:00 2001
+ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Date: Tue, 28 Feb 2017 14:07:30 +0100
+ Subject: [PATCH] arm: board: use __weak
+@@ -10,14 +10,14 @@ Acked-by: Albert ARIBAUD <albert.u.boot@aribaud.net>
+ (cherry picked from commit 8590c800ee60e46f15d6085e3c1fed0d6881fc62)
  Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  ---
-- include/linux/compiler-gcc.h  | 120 ++++++++++++++++++++++++++++++++++++++++--
-- 4 files changed, 116 insertions(+), 185 deletions(-)
-+ include/linux/compiler-gcc.h | 155 +++++++++++++++++++++++++++++++++++++++++--
-+ 1 file changed, 151 insertions(+), 4 deletions(-)
+- arch/arm/lib/board.c | 40 ++++++++++++----------------------------
+- 1 file changed, 12 insertions(+), 28 deletions(-)
++ arch/arm/lib/board.c | 36 +++++++++++-------------------------
++ 1 file changed, 11 insertions(+), 25 deletions(-)
  
- diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
--index 5c2c14e3c647..dfaa7b3e9ae9 100644
-+index 73dcf804bc..1ad6c64b47 100644
- --- a/include/linux/compiler-gcc.h
- +++ b/include/linux/compiler-gcc.h
--@@ -122,10 +122,128 @@
-- #define __maybe_unused		__attribute__((unused))
-- #define __always_unused		__attribute__((unused))
-+@@ -81,7 +81,154 @@
-+ #define __maybe_unused			__attribute__((unused))
-+ #define __always_unused			__attribute__((unused))
+ diff --git a/arch/arm/lib/board.c b/arch/arm/lib/board.c
+-index 51b8628b3f..3685e65134 100644
++index 109a1ac752..6515f01380 100644
+ --- a/arch/arm/lib/board.c
+ +++ b/arch/arm/lib/board.c
+-@@ -82,25 +82,15 @@ extern void dataflash_print_info(void);
++@@ -83,25 +83,15 @@ extern void dataflash_print_info(void);
+   ************************************************************************
+   * May be supplied by boards if desired
+   */
+@@ -52,7 +52,7 @@ index 51b8628b3f..3685e65134 100644
   
- -#define __gcc_header(x) #x
- -#define _gcc_header(x) __gcc_header(linux/compiler-gcc##x.h)
-@@ -132,11 +124,31 @@ index 5c2c14e3c647..dfaa7b3e9ae9 100644
- +
- +#if GCC_VERSION >= 40600
- +/*
--+ * Tell the optimizer that something else uses this function or variable.
-++ * When used with Link Time Optimization, gcc can optimize away C functions or
-++ * variables which are referenced only from assembly code.  __visible tells the
-++ * optimizer that something else uses this function or variable, thus preventing
-++ * this.
- + */
- +#define __visible	__attribute__((externally_visible))
- +#endif
- +
-++
-++#if GCC_VERSION >= 40900 && !defined(__CHECKER__)
-++/*
-++ * __assume_aligned(n, k): Tell the optimizer that the returned
-++ * pointer can be assumed to be k modulo n. The second argument is
-++ * optional (default 0), so we use a variadic macro to make the
-++ * shorthand.
-++ *
-++ * Beware: Do not apply this to functions which may return
-++ * ERR_PTRs. Also, it is probably unwise to apply it to functions
-++ * returning extra information in the low bits (but in that case the
-++ * compiler should see some alignment anyway, when the return value is
-++ * massaged by 'flags = ptr & 3; ptr &= ~3;').
-++ */
-++#define __assume_aligned(a, ...) __attribute__((__assume_aligned__(a, ## __VA_ARGS__)))
-++#endif
-++
- +/*
- + * GCC 'asm goto' miscompiles certain code sequences:
- + *
-@@ -164,10 +176,16 @@ index 5c2c14e3c647..dfaa7b3e9ae9 100644
- +#define KASAN_ABI_VERSION 3
- +#endif
- +
-++#if GCC_VERSION >= 40902
-++/*
-++ * Tell the compiler that address safety instrumentation (KASAN)
-++ * should not be applied to that function.
-++ * Conflicts with inlining: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67368
-++ */
-++#define __no_sanitize_address __attribute__((no_sanitize_address))
-++#endif
-++
- +#endif	/* gcc version >= 40000 specific checks */
+  /*
+   ************************************************************************
+-@@ -215,27 +205,21 @@ typedef int (init_fnc_t) (void);
++@@ -216,20 +206,16 @@ typedef int (init_fnc_t) (void);
+  
+  int print_cpuinfo(void);
+  
+@@ -73,16 +73,8 @@ index 51b8628b3f..3685e65134 100644
+ -int arch_cpu_init(void)
+ -	__attribute__((weak, alias("__arch_cpu_init")));
+  
+--int __power_init_board(void)
+-+__weak int power_init_board(void)
+- {
+- 	return 0;
+- }
+--int power_init_board(void)
+--	__attribute__((weak, alias("__power_init_board")));
 - 
-- #if !defined(__noclone)
-- #define __noclone	/* not needed */
+- 	/* Record the board_init_f() bootstage (after arch_cpu_init()) */
+- static int mark_bootstage(void)
++ init_fnc_t *init_sequence[] = {
++ 	arch_cpu_init,		/* basic arch cpu dependent setup */
  -- 
  2.11.0
  
-diff --git a/board/via/imx6_vab820/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch b/board/via/imx6_vab820/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
+diff --git a/board/altera/sockit/patches/uboot/0005-socfpga-don-t-use-extern-inline-functions.patch b/board/altera/sockit/patches/uboot/0005-socfpga-don-t-use-extern-inline-functions.patch
 new file mode 100644
-index 0000000000..9eb42d6c31
+index 0000000000..66aa1181f2
 --- /dev/null
-+++ b/board/via/imx6_vab820/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
-@@ -0,0 +1,81 @@
-+From 158ec652dcd8ae228eeae3ae92a3d6ba48ca228e Mon Sep 17 00:00:00 2001
-+From: Jeroen Hofstee <jeroen@myspectrum.nl>
-+Date: Sun, 22 Jun 2014 23:10:39 +0200
-+Subject: [PATCH] ARM:asm:io.h use static inline
-+
-+When compiling u-boot with W=1 the extern inline void for
-+read* is likely causing the most noise. gcc / clang will
-+warn there is never a actual declaration for these functions.
-+Instead of declaring these extern make them static inline so
-+it is actually declared.
-+
-+[Arnout: rewrite for U-Boot < v2014.01
-+         This patch is needed for gcc5]
-+
-+cc: Albert ARIBAUD <albert.u.boot@aribaud.net>
-+Signed-off-by: Jeroen Hofstee <jeroen@myspectrum.nl>
-+(cherry picked from commit 8863aa5c984460ce1112d8db895cbf8b13a6ac9d)
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ arch/arm/include/asm/io.h | 15 +++++++++------
-+ 1 file changed, 9 insertions(+), 6 deletions(-)
-+
-+diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
-+index 1fbc531a08..2f6925b78c 100644
-+--- a/arch/arm/include/asm/io.h
-++++ b/arch/arm/include/asm/io.h
-+@@ -75,42 +75,45 @@ static inline phys_addr_t virt_to_phys(void * vaddr)
-+ #define __arch_putw(v,a)		(*(volatile unsigned short *)(a) = (v))
-+ #define __arch_putl(v,a)		(*(volatile unsigned int *)(a) = (v))
-+ 
-+-extern inline void __raw_writesb(unsigned int addr, const void *data, int bytelen)
-++static inline void __raw_writesb(unsigned long addr, const void *data,
-++				 int bytelen)
-+ {
-+ 	uint8_t *buf = (uint8_t *)data;
-+ 	while(bytelen--)
-+ 		__arch_putb(*buf++, addr);
-+ }
-+ 
-+-extern inline void __raw_writesw(unsigned int addr, const void *data, int wordlen)
-++static inline void __raw_writesw(unsigned long addr, const void *data,
-++				 int wordlen)
-+ {
-+ 	uint16_t *buf = (uint16_t *)data;
-+ 	while(wordlen--)
-+ 		__arch_putw(*buf++, addr);
-+ }
-+ 
-+-extern inline void __raw_writesl(unsigned int addr, const void *data, int longlen)
-++static inline void __raw_writesl(unsigned long addr, const void *data,
-++				 int longlen)
-+ {
-+ 	uint32_t *buf = (uint32_t *)data;
-+ 	while(longlen--)
-+ 		__arch_putl(*buf++, addr);
-+ }
-+ 
-+-extern inline void __raw_readsb(unsigned int addr, void *data, int bytelen)
-++static inline void __raw_readsb(unsigned long addr, void *data, int bytelen)
-+ {
-+ 	uint8_t *buf = (uint8_t *)data;
-+ 	while(bytelen--)
-+ 		*buf++ = __arch_getb(addr);
-+ }
-+ 
-+-extern inline void __raw_readsw(unsigned int addr, void *data, int wordlen)
-++static inline void __raw_readsw(unsigned long addr, void *data, int wordlen)
-+ {
-+ 	uint16_t *buf = (uint16_t *)data;
-+ 	while(wordlen--)
-+ 		*buf++ = __arch_getw(addr);
-+ }
-+ 
-+-extern inline void __raw_readsl(unsigned int addr, void *data, int longlen)
-++static inline void __raw_readsl(unsigned long addr, void *data, int longlen)
-+ {
-+ 	uint32_t *buf = (uint32_t *)data;
-+ 	while(longlen--)
-+-- 
-+2.11.0
-+
-diff --git a/board/via/imx6_vab820/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch b/board/via/imx6_vab820/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
-new file mode 100644
-index 0000000000..686d448661
---- /dev/null
-+++ b/board/via/imx6_vab820/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
-@@ -0,0 +1,35 @@
-+From 9cc7a26c35be56cd3f8fa3e3990b9b7e69aed031 Mon Sep 17 00:00:00 2001
-+From: Jeroen Hofstee <jeroen@myspectrum.nl>
-+Date: Thu, 26 Jun 2014 20:18:31 +0200
-+Subject: [PATCH] common: main.c: make show_boot_progress __weak
-+
-+This not only looks a bit better it also prevents a
-+warning with W=1 (no previous prototype).
-+
-+[Arnout: this patch is needed to fix the build with gcc5]
-+
-+Signed-off-by: Jeroen Hofstee <jeroen@myspectrum.nl>
-+Acked-by: Simon Glass <sjg@chromium.org>
-+(cherry picked from commit 3422299dc28fa8257677d03cc1253e3c9bf17e9f)
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ common/main.c | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/common/main.c b/common/main.c
-+index 145ded1fc9..b5c9bb0f35 100644
-+--- a/common/main.c
-++++ b/common/main.c
-+@@ -62,8 +62,7 @@ DECLARE_GLOBAL_DATA_PTR;
-+ /*
-+  * Board-specific Platform code can reimplement show_boot_progress () if needed
-+  */
-+-void inline __show_boot_progress (int val) {}
-+-void show_boot_progress (int val) __attribute__((weak, alias("__show_boot_progress")));
-++__weak void show_boot_progress(int val) {}
-+ 
-+ #if defined(CONFIG_UPDATE_TFTP)
-+ int update_tftp (ulong addr);
-+-- 
-+2.11.0
-+
-diff --git a/board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch b/board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch
-new file mode 100644
-index 0000000000..7a96183af3
---- /dev/null
-+++ b/board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch
-@@ -0,0 +1,88 @@
-+From 99bd7b7fb4d58092f020a808bb57be3b4d4cfc51 Mon Sep 17 00:00:00 2001
++++ b/board/altera/sockit/patches/uboot/0005-socfpga-don-t-use-extern-inline-functions.patch
+@@ -0,0 +1,161 @@
++From 678b44d8ee5b5e8adba81df354a1af3d3d676fb2 Mon Sep 17 00:00:00 2001
 +From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-+Date: Tue, 28 Feb 2017 14:07:30 +0100
-+Subject: [PATCH] arm: board: use __weak
++Date: Tue, 28 Feb 2017 18:14:00 +0100
++Subject: [PATCH] socfpga: don't use extern inline functions
 +
-+[Arnout: this patch is needed to fix the build with gcc5]
++gcc5 doesn't like extern inline functions. Make them static inline
++instead.
 +
-+Signed-off-by: Jeroen Hofstee <jeroen@myspectrum.nl>
-+Acked-by: Albert ARIBAUD <albert.u.boot@aribaud.net>
-+(cherry picked from commit 8590c800ee60e46f15d6085e3c1fed0d6881fc62)
++The code is taken from the Altera socdk U-Boot version
++(rel_socfpga_v2013.01.01_14.02.02).
++
 +Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 +---
-+ arch/arm/lib/board.c | 40 ++++++++++++----------------------------
-+ 1 file changed, 12 insertions(+), 28 deletions(-)
++ arch/arm/cpu/armv7/socfpga/gic.c        | 45 ---------------------------
++ arch/arm/include/asm/arch-socfpga/gic.h | 55 +++++++++++++++++++++++++++------
++ 2 files changed, 46 insertions(+), 54 deletions(-)
 +
-+diff --git a/arch/arm/lib/board.c b/arch/arm/lib/board.c
-+index 51b8628b3f..3685e65134 100644
-+--- a/arch/arm/lib/board.c
-++++ b/arch/arm/lib/board.c
-+@@ -82,25 +82,15 @@ extern void dataflash_print_info(void);
-+  ************************************************************************
-+  * May be supplied by boards if desired
-+  */
-+-inline void __coloured_LED_init(void) {}
-+-void coloured_LED_init(void)
-+-	__attribute__((weak, alias("__coloured_LED_init")));
-+-inline void __red_led_on(void) {}
-+-void red_led_on(void) __attribute__((weak, alias("__red_led_on")));
-+-inline void __red_led_off(void) {}
-+-void red_led_off(void) __attribute__((weak, alias("__red_led_off")));
-+-inline void __green_led_on(void) {}
-+-void green_led_on(void) __attribute__((weak, alias("__green_led_on")));
-+-inline void __green_led_off(void) {}
-+-void green_led_off(void) __attribute__((weak, alias("__green_led_off")));
-+-inline void __yellow_led_on(void) {}
-+-void yellow_led_on(void) __attribute__((weak, alias("__yellow_led_on")));
-+-inline void __yellow_led_off(void) {}
-+-void yellow_led_off(void) __attribute__((weak, alias("__yellow_led_off")));
-+-inline void __blue_led_on(void) {}
-+-void blue_led_on(void) __attribute__((weak, alias("__blue_led_on")));
-+-inline void __blue_led_off(void) {}
-+-void blue_led_off(void) __attribute__((weak, alias("__blue_led_off")));
-++__weak void coloured_LED_init(void) {}
-++__weak void red_led_on(void) {}
-++__weak void red_led_off(void) {}
-++__weak void green_led_on(void) {}
-++__weak void green_led_off(void) {}
-++__weak void yellow_led_on(void) {}
-++__weak void yellow_led_off(void) {}
-++__weak void blue_led_on(void) {}
-++__weak void blue_led_off(void) {}
++diff --git a/arch/arm/cpu/armv7/socfpga/gic.c b/arch/arm/cpu/armv7/socfpga/gic.c
++index 3b1eb5b6f1..dab1f11f63 100644
++--- a/arch/arm/cpu/armv7/socfpga/gic.c
+++++ b/arch/arm/cpu/armv7/socfpga/gic.c
++@@ -22,28 +22,6 @@
 + 
-+ /*
-+  ************************************************************************
-+@@ -215,27 +205,21 @@ typedef int (init_fnc_t) (void);
++ DECLARE_GLOBAL_DATA_PTR;
 + 
-+ int print_cpuinfo(void);
-+ 
-+-void __dram_init_banksize(void)
-++__weak void dram_init_banksize(void)
++-static const struct gic_cpu_if *gic_cpu_if_base = (void *)SOCFPGA_GIC_CPU_IF;
++-
++-inline void gic_dic_disable_secure (void)
++-{
++-	clrbits_le32(CONFIG_GIC_DIC_CONTROL,0x1);
++-}
++-
++-inline void gic_dic_disable_nonsecure (void)
++-{
++-	clrbits_le32(CONFIG_GIC_DIC_CONTROL,0x2);
++-}
++-
++-inline void gic_dic_enable_secure (void)
++-{
++-	setbits_le32(CONFIG_GIC_DIC_CONTROL,0x1);
++-}
++-
++-inline void gic_dic_enable_nonsecure (void)
++-{
++-	setbits_le32(CONFIG_GIC_DIC_CONTROL,0x2);
++-}
++-
++ void gic_dic_clear_enable_all_intr (void)
 + {
-+ 	gd->bd->bi_dram[0].start = CONFIG_SYS_SDRAM_BASE;
-+ 	gd->bd->bi_dram[0].size =  gd->ram_size;
++ 	/* disable SGI and PPI */
++@@ -132,28 +110,5 @@ void gic_dic_clear_pending (unsigned char intrID)
++ 		(1 << mod));
 + }
-+-void dram_init_banksize(void)
-+-	__attribute__((weak, alias("__dram_init_banksize")));
 + 
-+-int __arch_cpu_init(void)
-++__weak int arch_cpu_init(void)
-+ {
-+ 	return 0;
-+ }
-+-int arch_cpu_init(void)
-+-	__attribute__((weak, alias("__arch_cpu_init")));
++-inline void gic_cpu_disable (void)
++-{
++-	writel(0x0,&gic_cpu_if_base->ICCICR);
++-}
 + 
-+-int __power_init_board(void)
-++__weak int power_init_board(void)
-+ {
-+ 	return 0;
-+ }
-+-int power_init_board(void)
-+-	__attribute__((weak, alias("__power_init_board")));
++-inline void gic_cpu_enable (void)
++-{
++-	writel(0x1,&gic_cpu_if_base->ICCICR);
++-}
++-
++-inline void gic_cpu_set_priority_mask (unsigned char priority_mask)
++-{
++-	writel(priority_mask,&gic_cpu_if_base->ICCPMR);
++-}
++-
++-inline unsigned long gic_cpu_get_pending_intr (void)
++-{
++-	return readl(&gic_cpu_if_base->ICCHPIR);
++-}
++-
++-inline void gic_cpu_end_of_intr (unsigned char intrID)
++-{
++-	writel(intrID,&gic_cpu_if_base->ICCEOIR);
++-}
 + 
-+ 	/* Record the board_init_f() bootstage (after arch_cpu_init()) */
-+ static int mark_bootstage(void)
++diff --git a/arch/arm/include/asm/arch-socfpga/gic.h b/arch/arm/include/asm/arch-socfpga/gic.h
++index a1588acb88..6243d5b2b0 100644
++--- a/arch/arm/include/asm/arch-socfpga/gic.h
+++++ b/arch/arm/include/asm/arch-socfpga/gic.h
++@@ -18,6 +18,8 @@
++ #ifndef	_GIC_H_
++ #define	_GIC_H_
++ 
+++static const struct gic_cpu_if *gic_cpu_if_base = (void *)SOCFPGA_GIC_CPU_IF;
+++
++ void nic301_slave_ns(void);
++ 
++ struct gic_cpu_if {
++@@ -42,10 +44,6 @@ struct gic_cpu_if {
++ #define CONFIG_GIC_DIC_PPI_STATUS	(SOCFPGA_GIC_DIC + 0xd00)
++ #define CONFIG_GIC_DIC_SPI_STATUS	(SOCFPGA_GIC_DIC + 0xd04)
++ 
++-inline void gic_dic_disable_secure (void);
++-inline void gic_dic_disable_nonsecure (void);
++-inline void gic_dic_enable_secure (void);
++-inline void gic_dic_enable_nonsecure (void);
++ void gic_dic_clear_enable_all_intr (void);
++ void gic_dic_clear_pending_all_intr (void);
++ void gic_dic_set_enable (unsigned char intrID);
++@@ -56,10 +54,49 @@ void gic_dic_set_config (unsigned char intrID,
++ void gic_dic_set_pending (unsigned char intrID);
++ void gic_dic_clear_pending (unsigned char intrID);
++ 
++-inline void gic_cpu_disable (void);
++-inline void gic_cpu_enable (void);
++-inline void gic_cpu_set_priority_mask (unsigned char priority_mask);
++-inline unsigned long gic_cpu_get_pending_intr (void);
++-inline void gic_cpu_end_of_intr (unsigned char intrID);
+++static inline void gic_cpu_disable(void)
+++{
+++	writel(0x0, &gic_cpu_if_base->ICCICR);
+++}
+++
+++static inline void gic_cpu_enable(void)
+++{
+++	writel(0x1, &gic_cpu_if_base->ICCICR);
+++}
+++
+++static inline void gic_cpu_set_priority_mask(unsigned char priority_mask)
+++{
+++	writel(priority_mask, &gic_cpu_if_base->ICCPMR);
+++}
+++
+++static inline unsigned long gic_cpu_get_pending_intr(void)
+++{
+++	return readl(&gic_cpu_if_base->ICCHPIR);
+++}
+++
+++static inline void gic_cpu_end_of_intr(unsigned char intrID)
+++{
+++	writel(intrID, &gic_cpu_if_base->ICCEOIR);
+++}
+++
+++static inline void gic_dic_disable_secure(void)
+++{
+++	clrbits_le32(CONFIG_GIC_DIC_CONTROL, 0x1);
+++}
+++
+++static inline void gic_dic_disable_nonsecure(void)
+++{
+++	clrbits_le32(CONFIG_GIC_DIC_CONTROL, 0x2);
+++}
+++
+++static inline void gic_dic_enable_secure(void)
+++{
+++	setbits_le32(CONFIG_GIC_DIC_CONTROL, 0x1);
+++}
+++
+++static inline void gic_dic_enable_nonsecure(void)
+++{
+++	setbits_le32(CONFIG_GIC_DIC_CONTROL, 0x2);
+++}
++ 
++ #endif /* _GIC_H_ */
 +-- 
 +2.11.0
 +
-diff --git a/configs/via_imx6_vab820_defconfig b/configs/via_imx6_vab820_defconfig
-index fa646f07dc..d7ebeef62c 100644
---- a/configs/via_imx6_vab820_defconfig
-+++ b/configs/via_imx6_vab820_defconfig
-@@ -3,6 +3,9 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_VFP=y
+diff --git a/board/altera/sockit/uboot-sockit-preloader-sample-design.patch b/board/altera/sockit/patches/uboot/0006-board-add-to-sockit-a-working-preloader-design.patch
+similarity index 98%
+rename from board/altera/sockit/uboot-sockit-preloader-sample-design.patch
+rename to board/altera/sockit/patches/uboot/0006-board-add-to-sockit-a-working-preloader-design.patch
+index ddf0abce77..7bc168cc1a 100644
+--- a/board/altera/sockit/uboot-sockit-preloader-sample-design.patch
++++ b/board/altera/sockit/patches/uboot/0006-board-add-to-sockit-a-working-preloader-design.patch
+@@ -1,4 +1,4 @@
+-From c70f2ebb350da20af1a0ed4b7960b8e5a1952713 Mon Sep 17 00:00:00 2001
++From 7e075b45cab6bedf78e4dbcee6b453a23bd3a5e4 Mon Sep 17 00:00:00 2001
+ From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+ Date: Thu, 20 Feb 2014 11:51:31 -0500
+ Subject: [PATCH] board: add to sockit a working preloader design
+@@ -15,7 +15,7 @@ Subject: [PATCH] board: add to sockit a working preloader design
+  8 files changed, 218 insertions(+), 218 deletions(-)
+ 
+ diff --git a/board/altera/socfpga_cyclone5/build.h b/board/altera/socfpga_cyclone5/build.h
+-index e5d9c3c..a369015 100644
++index e5d9c3ce30..a369015bfc 100644
+ --- a/board/altera/socfpga_cyclone5/build.h
+ +++ b/board/altera/socfpga_cyclone5/build.h
+ @@ -29,7 +29,7 @@
+@@ -28,7 +28,7 @@ index e5d9c3c..a369015 100644
+  /*
+   * Handoff files must provide user option whether to enable
+ diff --git a/board/altera/socfpga_cyclone5/iocsr_config.c b/board/altera/socfpga_cyclone5/iocsr_config.c
+-index fa663e1..90fc154 100644
++index fa663e1304..90fc154d0b 100644
+ --- a/board/altera/socfpga_cyclone5/iocsr_config.c
+ +++ b/board/altera/socfpga_cyclone5/iocsr_config.c
+ @@ -7,113 +7,113 @@ const unsigned long iocsr_scan_chain0_table[((CONFIG_HPS_IOCSR_SCANCHAIN0_LENGTH
+@@ -543,7 +543,7 @@ index fa663e1..90fc154 100644
+  };
+  
+ diff --git a/board/altera/socfpga_cyclone5/pinmux_config.c b/board/altera/socfpga_cyclone5/pinmux_config.c
+-index 730067e..cfd74cd 100644
++index 730067e696..cfd74cd7c7 100644
+ --- a/board/altera/socfpga_cyclone5/pinmux_config.c
+ +++ b/board/altera/socfpga_cyclone5/pinmux_config.c
+ @@ -23,7 +23,7 @@ unsigned long sys_mgr_init_table[CONFIG_HPS_PINMUX_NUM] = {
+@@ -597,7 +597,7 @@ index 730067e..cfd74cd 100644
+  	0, /* GENERALIO20 */
+  	0, /* GENERALIO21 */
+ diff --git a/board/altera/socfpga_cyclone5/pinmux_config.h b/board/altera/socfpga_cyclone5/pinmux_config.h
+-index fb483ab..64c750a 100644
++index fb483ab57e..64c750a24d 100644
+ --- a/board/altera/socfpga_cyclone5/pinmux_config.h
+ +++ b/board/altera/socfpga_cyclone5/pinmux_config.h
+ @@ -11,15 +11,15 @@
+@@ -621,7 +621,7 @@ index fb483ab..64c750a 100644
+  
+  #define CONFIG_HPS_SDMMC_BUSWIDTH (4)
+ diff --git a/board/altera/socfpga_cyclone5/sdram/sdram_config.h b/board/altera/socfpga_cyclone5/sdram/sdram_config.h
+-index b90d6f3..dd027ef 100755
++index b90d6f30ff..dd027efbf8 100755
+ --- a/board/altera/socfpga_cyclone5/sdram/sdram_config.h
+ +++ b/board/altera/socfpga_cyclone5/sdram/sdram_config.h
+ @@ -4,16 +4,16 @@
+@@ -665,7 +665,7 @@ index b90d6f3..dd027ef 100755
+  #define CONFIG_HPS_SDR_CTRLCFG_DRAMINTR_INTREN			(0)
+  #define CONFIG_HPS_SDR_CTRLCFG_STATICCFG_MEMBL			(2)
+ diff --git a/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h b/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h
+-index e8c5484..919676d 100644
++index e8c548446a..919676d895 100644
+ --- a/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h
+ +++ b/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h
+ @@ -34,7 +34,7 @@
+@@ -716,7 +716,7 @@ index e8c5484..919676d 100644
+  #define __RW_MGR_READ_B2B_WAIT2 0x6A
+  #define __RW_MGR_LFSR_WR_RD_BANK_0_WAIT 0x31
+ diff --git a/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c b/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c
+-index e16efa1..20b4ca1 100644
++index e16efa1ab6..20b4ca14b8 100644
+ --- a/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c
+ +++ b/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c
+ @@ -6,16 +6,16 @@ const alt_u32 ac_rom_init[36] =
+@@ -745,7 +745,7 @@ index e16efa1..20b4ca1 100644
+  	0x30780000,
+  	0x38780000,
+ diff --git a/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h b/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h
+-index 52faf3f..b85b85c 100644
++index 52faf3f6d0..b85b85cacd 100644
+ --- a/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h
+ +++ b/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h
+ @@ -1,28 +1,28 @@
+@@ -816,5 +816,5 @@ index 52faf3f..b85b85c 100644
+  #define SKEW_CALIBRATION 0
+  #define STATIC_FULL_CALIBRATION 1
+ -- 
+-1.9.0
++2.11.0
+ 
+diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+index 0addbde1e5..48c1264338 100644
+--- a/configs/altera_sockit_defconfig
++++ b/configs/altera_sockit_defconfig
+@@ -6,6 +6,9 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_FPU_NEON=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
  
 +# Older Linux and U-Boot require the gcc5 patch
-+BR2_GLOBAL_PATCH_DIR="board/linux-gcc-patches board/via/imx6_vab820/patches"
++BR2_GLOBAL_PATCH_DIR="board/linux-gcc-patches board/altera/patches board/altera/sockit/patches"
 +
- # Linux headers same as kernel, a 3.10 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ # Linux headers same as kernel, a 3.13 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
  
+@@ -31,7 +34,6 @@ BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
+-BR2_TARGET_UBOOT_PATCH="board/altera/sockit"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
 -- 
 2.11.0
