@@ -1,164 +1,132 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Feb 2017 22:00:23 +0100
-Subject: [Buildroot] [git commit] Update for 2017.02
-Message-ID: <20170228210226.64393820FB@busybox.osuosl.org>
+Date: Tue, 28 Feb 2017 22:00:00 +0100
+Subject: [Buildroot] [git commit] qt5base: fix VNC platform plugin build on
+	big-endian machines
+Message-ID: <20170228210226.51CF2820FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=083c0735e924e0d534328095a944ae159f661219
+commit: https://git.buildroot.net/buildroot/commit/?id=962d1530841336d64d0843de9826a199cb07405a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes [1], [2]:
+
+  In file included from qvncintegration.cpp:38:0:
+  qvncscreen.h:76:22: error: expected ';' at end of member declaration
+       bool swapBytes() const
+
+[1] http://autobuild.buildroot.net/results/718/7180ad7d7e78f1c3ce6a1f83a5a8fcc5e0ac03a2
+[2] http://autobuild.buildroot.net/results/14f/14f8c436b184192681fb79c7f0c0d0daa35f867b
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES                    | 12 ++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 18 ++++++++++++++++++
- support/misc/Vagrantfile   |  2 +-
- 5 files changed, 44 insertions(+), 14 deletions(-)
+ ...tform-plugin-build-on-big-endian-machines.patch | 97 ++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 7c9add7..5fedca1 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,15 @@
-+2017.02, Released February 28th, 2017
+diff --git a/package/qt5/qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch b/package/qt5/qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch
+new file mode 100644
+index 0000000..e7d7ee3
+--- /dev/null
++++ b/package/qt5/qt5base/5.8.0/0002-fix-VNC-platform-plugin-build-on-big-endian-machines.patch
+@@ -0,0 +1,97 @@
++From 35ee8b53549fab6ebffe289417e1d94298447af7 Mon Sep 17 00:00:00 2001
++From: Shawn Rutledge <shawn.rutledge@digia.com>
++Date: Fri, 10 Feb 2017 13:56:58 +0100
++Subject: [PATCH] fix VNC platform plugin build on big-endian machines
 +
-+	Minor fixes, mainly fixing autobuilder issues.
++Task-number: QTBUG-58734
++Change-Id: I3e44ee4be5003acaba2f1b8ed2658a3ff1bd700e
++Reviewed-by: Lars Knoll <lars.knoll@qt.io>
++Reviewed-by: Dmitry Shachnev <mitya57@gmail.com>
 +
-+	Don't use cmake 3.7.x from the build host as it is also
-+	affected by the RPATH handling issues, and instead build our
-+	own if needed.
++Upstream: http://code.qt.io/cgit/qt/qtbase.git/patch/?id=6f64bfa654fb7e20bb75ec3b0544b81482babb44
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/plugins/platforms/vnc/qvncclient.cpp | 6 +++---
++ src/plugins/platforms/vnc/qvncscreen.cpp | 7 ++++++-
++ src/plugins/platforms/vnc/qvncscreen.h   | 2 +-
++ 3 files changed, 10 insertions(+), 5 deletions(-)
 +
-+	Updated/fixed packages: assimp, classpath, genimage, mplayer,
-+	mpv, openocd, python-libconfig, qt5base, qt5quickcontrols,
-+	vlc, xterm
++diff --git a/src/plugins/platforms/vnc/qvncclient.cpp b/src/plugins/platforms/vnc/qvncclient.cpp
++index dae3e83f..58dcfc9b 100644
++--- a/src/plugins/platforms/vnc/qvncclient.cpp
+++++ b/src/plugins/platforms/vnc/qvncclient.cpp
++@@ -142,7 +142,7 @@ void QVncClient::convertPixels(char *dst, const char *src, int count) const
++         case 16: {
++             quint16 p = *reinterpret_cast<const quint16*>(src);
++ #if Q_BYTE_ORDER == Q_BIG_ENDIAN
++-            if (swapBytes)
+++            if (m_swapBytes)
++                 p = ((p & 0xff) << 8) | ((p & 0xff00) >> 8);
++ #endif
++             r = (p >> 11) & 0x1f;
++@@ -484,7 +484,7 @@ void QVncClient::setPixelFormat()
++         m_sameEndian = (QSysInfo::ByteOrder == QSysInfo::BigEndian) == !!m_pixelFormat.bigEndian;
++         m_needConversion = pixelConversionNeeded();
++ #if Q_BYTE_ORDER == Q_BIG_ENDIAN
++-        m_swapBytes = qvnc_screen->swapBytes();
+++        m_swapBytes = server()->screen()->swapBytes();
++ #endif
++     }
++ }
++@@ -639,7 +639,7 @@ bool QVncClient::pixelConversionNeeded() const
++         return true;
++ 
++ #if Q_BYTE_ORDER == Q_BIG_ENDIAN
++-    if (qvnc_screen->swapBytes())
+++    if (server()->screen()->swapBytes())
++         return true;
++ #endif
++ 
++diff --git a/src/plugins/platforms/vnc/qvncscreen.cpp b/src/plugins/platforms/vnc/qvncscreen.cpp
++index 34def457..64f1bc0b 100644
++--- a/src/plugins/platforms/vnc/qvncscreen.cpp
+++++ b/src/plugins/platforms/vnc/qvncscreen.cpp
++@@ -43,6 +43,7 @@
++ #include <QtFbSupport/private/qfbcursor_p.h>
++ 
++ #include <QtGui/QPainter>
+++#include <QtGui/QScreen>
++ #include <QtCore/QRegularExpression>
++ 
++ 
++@@ -172,14 +173,18 @@ QPixmap QVncScreen::grabWindow(WId wid, int x, int y, int width, int height) con
++ }
++ 
++ #if Q_BYTE_ORDER == Q_BIG_ENDIAN
++-bool QVNCScreen::swapBytes() const
+++bool QVncScreen::swapBytes() const
++ {
+++    return false;
+++
+++    /* TODO
++     if (depth() != 16)
++         return false;
++ 
++     if (screen())
++         return screen()->frameBufferLittleEndian();
++     return frameBufferLittleEndian();
+++    */
++ }
++ #endif
++ 
++diff --git a/src/plugins/platforms/vnc/qvncscreen.h b/src/plugins/platforms/vnc/qvncscreen.h
++index 785abd6d..0b42c3c7 100644
++--- a/src/plugins/platforms/vnc/qvncscreen.h
+++++ b/src/plugins/platforms/vnc/qvncscreen.h
++@@ -73,7 +73,7 @@ public:
++     void clearDirty() { dirtyRegion = QRegion(); }
++ 
++ #if Q_BYTE_ORDER == Q_BIG_ENDIAN
++-    bool swapBytes() const
+++    bool swapBytes() const;
++ #endif
++ 
++     QStringList mArgs;
++-- 
++2.11.0
 +
- 2017.02-rc3, Released February 26th, 2017
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 68b2d47..0308f9b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -86,9 +86,9 @@ else # umask / $(CURDIR) / $(O)
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2017.02-rc3
-+export BR2_VERSION := 2017.02
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1488147000
-+BR2_VERSION_EPOCH = 1488315000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 83d618c..929557f 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,40 +8,40 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2016.11.2</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2017.02</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2016.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2016.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2016.11.2.tar.gz">buildroot-2016.11.2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2016.11.2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.tar.gz">buildroot-2017.02.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2016.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2016.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2017.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2016.11.2.tar.bz2">buildroot-2016.11.2.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2016.11.2.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2017.02.tar.bz2">buildroot-2017.02.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2017.02.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+<!--
-       <h3 style="text-align: center;">Latest release candidate: <b>2017.02-rc3</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
-@@ -75,7 +75,7 @@
- 	  <p><a href="/downloads/buildroot-2017.02-rc3.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+-->
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 25d6bce..6b32a80 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,24 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2017.02 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>28 February 2017</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The stable 2017.02 release is out - Thanks to everyone
-+	  contributing and testing the release candidates. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2017.02">CHANGES</a>
-+	  file for more details
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2017.02.tar.bz2">2017.02 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 89973ce..33ca6b8 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2016.11.2'
-+RELEASE='2017.02'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
