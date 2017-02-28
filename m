@@ -1,48 +1,81 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Feb 2017 07:37:45 +0200
-Subject: [Buildroot] [PATCH next] usb_modeswitch_data: install packed
-	database
-Message-ID: <fbab82af999db5392fe2ae2f671531ff91f801b9.1488260265.git.baruch@tkos.co.il>
+From: Michael Walle <michael@walle.cc>
+Date: Tue, 28 Feb 2017 06:41:22 +0100
+Subject: [Buildroot] [PATCH for-rc] openocd: fix build on older hosts
+Message-ID: <1488260482-30511-1-git-send-email-michael@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The packed databased is significantly smaller than the unpacked. The unpacked
-database is made of hundreds of small files. So the benefit is larger
-filesystems that allocate a minimum of block per file. Database packing adds
-some overhead to every invocation of usb_modeswitch. This added overhead
-should not be noticeable in practice since usb_modeswitch normally runs only
-once per USB device insert event.
+OpenOCD fails to generate the documentation because older host systems may
+have an old texinfo.
 
-Before:
+This patch is taken from upstream commit 79fdeb37f486f74658f1 which is
+included in version 0.10.0. Therefore, it can be dropped when the version
+is bumped.
 
-  du -h output/target/usr/share/usb_modeswitch/
-  1.9M	output/target/usr/share/usb_modeswitch/
-
-After:
-
-  du -h output/target/usr/share/usb_modeswitch/
-  20K	output/target/usr/share/usb_modeswitch/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- package/usb_modeswitch_data/usb_modeswitch_data.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please include this patch in the 2017.02 release. Without the patch,
+openocd won't build on older build hosts. There is no functional change.
 
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-index 6d75b3198310..8373b6e2ca20 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-@@ -14,7 +14,7 @@ USB_MODESWITCH_DATA_LICENSE_FILES = COPYING
- # Nothing to build, it is a pure data package
- 
- define USB_MODESWITCH_DATA_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-packed
- endef
- 
- $(eval $(generic-package))
+ ...-it-compatible-with-ancient-texinfo-versi.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/openocd/0003-manual-make-it-compatible-with-ancient-texinfo-versi.patch
+
+diff --git a/package/openocd/0003-manual-make-it-compatible-with-ancient-texinfo-versi.patch b/package/openocd/0003-manual-make-it-compatible-with-ancient-texinfo-versi.patch
+new file mode 100644
+index 0000000..01eddd2
+--- /dev/null
++++ b/package/openocd/0003-manual-make-it-compatible-with-ancient-texinfo-versi.patch
+@@ -0,0 +1,47 @@
++From 79fdeb37f486f74658f1eaf658abac8efb3eba6a Mon Sep 17 00:00:00 2001
++From: Paul Fertser <fercerpav@gmail.com>
++Date: Mon, 25 May 2015 11:59:25 +0300
++Subject: [PATCH] manual: make it compatible with ancient texinfo versions that
++ lack @raggedright
++
++This is needed to unbreak build on systems that ship texinfo version
++4.x.
++
++Change-Id: Ie665d29b02bb65da7e8ed0d48d17fa56e231bd0d
++Signed-off-by: Paul Fertser <fercerpav@gmail.com>
++Reviewed-on: http://openocd.zylin.com/2781
++Tested-by: jenkins
++Reviewed-by: David Ung <davidu@nvidia.com>
++Reviewed-by: Spencer Oliver <spen@spen-soft.co.uk>
++Reviewed-by: Oleksij Rempel
++---
++ doc/openocd.texi | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/doc/openocd.texi b/doc/openocd.texi
++index 511bc6c..0208fcf 100644
++--- a/doc/openocd.texi
+++++ b/doc/openocd.texi
++@@ -8460,11 +8460,17 @@ Cyg_Thread::thread_list, Cyg_Scheduler_Base::current_thread.
++ @item ThreadX symbols
++ _tx_thread_current_ptr, _tx_thread_created_ptr, _tx_thread_created_count.
++ @item FreeRTOS symbols
++- at raggedright
+++ at c The following is taken from recent texinfo to provide compatibility
+++ at c with ancient versions that do not support @raggedright
+++ at tex
+++\begingroup
+++\rightskip0pt plus2em \spaceskip.3333em \xspaceskip.5em\relax
++ pxCurrentTCB, pxReadyTasksLists, xDelayedTaskList1, xDelayedTaskList2,
++ pxDelayedTaskList, pxOverflowDelayedTaskList, xPendingReadyList,
++ uxCurrentNumberOfTasks, uxTopUsedPriority.
++- at end raggedright
+++\par
+++\endgroup
+++ at end tex
++ @item linux symbols
++ init_task.
++ @item ChibiOS symbols
++-- 
++2.1.4
++
 -- 
-2.11.0
+2.1.4
