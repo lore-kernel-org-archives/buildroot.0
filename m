@@ -1,60 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Feb 2017 09:51:42 +0100
-Subject: [Buildroot] [git commit] openocd: avoid documentation rebuild to
-	fix build issues
-Message-ID: <20170228085709.9E2D07FB14@busybox.osuosl.org>
+Date: Tue, 28 Feb 2017 09:40:27 +0100
+Subject: [Buildroot] [git commit] dependencies/cmake: blacklist cmake 3.7
+Message-ID: <20170228085709.6E6048226A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84617352f3c0508b3f14b526318048b5629e23b6
+commit: https://git.buildroot.net/buildroot/commit/?id=4422eca2d418e2b817b419ff6c4c62f7f4cb7871
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On PowerPC64(le), we patch all configure scripts. Due to this, the
-version.texi in OpenOCD files gets regenerated, and then since it has
-a newer date than openocd.info, openocd build system rebuilds the
-documentation. Unfortunately, this documentation rebuild fails on old
-machines.
+cmake-3.7 has a bug in how it handles rpath, linking with libraries from
+the host.
 
-We work around this by faking the date of the generated version.texi
-file, to make the build system believe the documentation doesn't need
-to be regenerated.
+Until we completely understand the issue, just blacklist cmake-3.7.
 
-Fixes:
+The issue has been reported upstream:
+    http://public.kitware.com/pipermail/cmake/2017-February/064970.html
 
-  http://autobuild.buildroot.net/results/3cbe65a46e75b8e67846d593884c96df97dec7a4
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Reported-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: J??rg Krause <joerg.krause@embedded.rocks>
+Cc: Ben Boeckel <mathstuf@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openocd/openocd.mk | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ support/dependencies/check-host-cmake.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 21a302f..0d18365 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -99,5 +99,20 @@ HOST_OPENOCD_CONF_OPTS = \
+diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+index 9b63b06..84c26c2 100755
+--- a/support/dependencies/check-host-cmake.sh
++++ b/support/dependencies/check-host-cmake.sh
+@@ -6,6 +6,9 @@ version_min="${2}"
+ major_min="${version_min%.*}"
+ minor_min="${version_min#*.}"
  
- HOST_OPENOCD_DEPENDENCIES = host-libftdi host-libusb host-libusb-compat
++# cmake-3.7 incorrectly handles rpath, linking to host libraries
++blacklist_version="3.7"
++
+ cmake=`which ${candidate}`
+ if [ ! -x "${cmake}" ]; then
+     # echo nothing: no suitable cmake found
+@@ -27,6 +30,11 @@ version="$(${cmake} --version \
+ major="${version%.*}"
+ minor="${version#*.}"
  
-+# Avoid documentation rebuild. On PowerPC64(le), we patch the
-+# configure script. Due to this, the version.texi files gets
-+# regenerated, and then since it has a newer date than openocd.info,
-+# openocd build system rebuilds the documentation. Unfortunately, this
-+# documentation rebuild fails on old machines. We work around this by
-+# faking the date of the generated version.texi file, to make the
-+# build system believe the documentation doesn't need to be
-+# regenerated.
-+define OPENOCD_FIX_VERSION_TEXI
-+       touch -r $(@D)/doc/openocd.info $(@D)/doc/version.texi
-+endef
-+OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
-+HOST_OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
++if [ "${version}" = "${blacklist_version}" ]; then
++    # echo nothing: no suitable cmake found
++    exit 1
++fi
 +
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ if [ ${major} -gt ${major_min} ]; then
+     echo "${cmake}"
+ else
