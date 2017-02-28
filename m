@@ -1,205 +1,230 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 28 Feb 2017 18:39:58 +0100
-Subject: [Buildroot] [PATCH 4/7] roseapplepi_defconfig: use common kernel
-	patch for gcc5
+Date: Tue, 28 Feb 2017 18:40:00 +0100
+Subject: [Buildroot] [PATCH 6/7] altera_socdk_defconfig: fix build with gcc5
 In-Reply-To: <20170228174001.23830-1-arnout@mind.be>
 References: <20170228174001.23830-1-arnout@mind.be>
-Message-ID: <20170228174001.23830-5-arnout@mind.be>
+Message-ID: <20170228174001.23830-7-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We now have a universal patch for the missing compiler-gcc5.h, so this
-patch can be used instead of a patch specific for roseapplepi.
+Kernel doesn't have the compiler-gcc5.h header, so include the universal
+patch that fixes this issue. A third patch is needed to fix static
+inline issues.
 
+U-Boot doesn't have the compiler-gcc5.h header and has several other
+problems. Get upstream patches to fix those.
+
+Most patches are shared between the two Altera platforms, so they go
+in board/altera/patches. The 4th U-Boot patch, however, needs a
+slightly different context so we put it in board/altera/socdk/patches.
+
+The patches are numbered taking into account the more global ones that
+precede them. Therefore, the linux patch starts at 0003 (since
+board/linux-gcc-patches already has 0001 and 0002), and the
+socdk-specific U-Boot patch starts at 0004.
+
+Cc: Charles Manning <cdhmanning@gmail.com>
+Cc: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../linux/0002-kernel-add-support-for-gcc-5.patch  | 99 ----------------------
- ...LLVMLinux-use-static-inline-in-ARM-ftrace.patch | 54 ------------
- configs/roseapplepi_defconfig                      |  2 +-
- 3 files changed, 1 insertion(+), 154 deletions(-)
- delete mode 100644 board/roseapplepi/patches/linux/0002-kernel-add-support-for-gcc-5.patch
- delete mode 100644 board/roseapplepi/patches/linux/0003-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch
+ ...ux-Change-extern-inline-to-static-inline-.patch | 62 ++++++++++++++++++++++
+ ...c.h-remove-dependency-on-compiler-gcc-345.patch |  2 +-
+ .../0002-ARM-asm-io.h-use-static-inline.patch      |  2 +-
+ ...mon-main.c-make-show_boot_progress-__weak.patch | 18 +++++--
+ .../patches/uboot/0004-arm-board-use-__weak.patch  |  8 +--
+ configs/altera_socdk_defconfig                     |  3 ++
+ 6 files changed, 84 insertions(+), 11 deletions(-)
+ create mode 100644 board/altera/patches/linux/0003-ARM-LLVMLinux-Change-extern-inline-to-static-inline-.patch
+ copy board/{via/imx6_vab820 => altera}/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch (99%)
+ copy board/{via/imx6_vab820 => altera}/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch (97%)
+ copy board/{via/imx6_vab820 => altera}/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch (69%)
+ copy board/{via/imx6_vab820 => altera/socdk}/patches/uboot/0004-arm-board-use-__weak.patch (93%)
 
-diff --git a/board/roseapplepi/patches/linux/0002-kernel-add-support-for-gcc-5.patch b/board/roseapplepi/patches/linux/0002-kernel-add-support-for-gcc-5.patch
-deleted file mode 100644
-index 8d3c703e3a..0000000000
---- a/board/roseapplepi/patches/linux/0002-kernel-add-support-for-gcc-5.patch
-+++ /dev/null
-@@ -1,99 +0,0 @@
--From 96b4fb75d15be65edc5494579e4a944534042f99 Mon Sep 17 00:00:00 2001
--From: Sasha Levin <sasha.levin@oracle.com>
--Date: Mon, 13 Oct 2014 15:51:05 -0700
--Subject: [PATCH] kernel: add support for gcc 5
--
--We're missing include/linux/compiler-gcc5.h which is required now
--because gcc branched off to v5 in trunk.
--
--Just copy the relevant bits out of include/linux/compiler-gcc4.h,
--no new code is added as of now.
--
--This fixes a build error when using gcc 5.
--
--Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
--Cc: <stable@vger.kernel.org>
--Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
--Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
--(cherry picked from commit 71458cfc782eafe4b27656e078d379a34e472adf)
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- include/linux/compiler-gcc5.h | 66 +++++++++++++++++++++++++++++++++++++++++++
-- 1 file changed, 66 insertions(+)
-- create mode 100644 include/linux/compiler-gcc5.h
--
--diff --git a/include/linux/compiler-gcc5.h b/include/linux/compiler-gcc5.h
--new file mode 100644
--index 0000000..cdd1cc2
----- /dev/null
--+++ b/include/linux/compiler-gcc5.h
--@@ -0,0 +1,66 @@
--+#ifndef __LINUX_COMPILER_H
--+#error "Please don't include <linux/compiler-gcc5.h> directly, include <linux/compiler.h> instead."
--+#endif
--+
--+#define __used				__attribute__((__used__))
--+#define __must_check			__attribute__((warn_unused_result))
--+#define __compiler_offsetof(a, b)	__builtin_offsetof(a, b)
--+
--+/* Mark functions as cold. gcc will assume any path leading to a call
--+   to them will be unlikely.  This means a lot of manual unlikely()s
--+   are unnecessary now for any paths leading to the usual suspects
--+   like BUG(), printk(), panic() etc. [but let's keep them for now for
--+   older compilers]
--+
--+   Early snapshots of gcc 4.3 don't support this and we can't detect this
--+   in the preprocessor, but we can live with this because they're unreleased.
--+   Maketime probing would be overkill here.
--+
--+   gcc also has a __attribute__((__hot__)) to move hot functions into
--+   a special section, but I don't see any sense in this right now in
--+   the kernel context */
--+#define __cold			__attribute__((__cold__))
--+
--+#define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
--+
--+#ifndef __CHECKER__
--+# define __compiletime_warning(message) __attribute__((warning(message)))
--+# define __compiletime_error(message) __attribute__((error(message)))
--+#endif /* __CHECKER__ */
--+
--+/*
--+ * Mark a position in code as unreachable.  This can be used to
--+ * suppress control flow warnings after asm blocks that transfer
--+ * control elsewhere.
--+ *
--+ * Early snapshots of gcc 4.5 don't support this and we can't detect
--+ * this in the preprocessor, but we can live with this because they're
--+ * unreleased.  Really, we need to have autoconf for the kernel.
--+ */
--+#define unreachable() __builtin_unreachable()
--+
--+/* Mark a function definition as prohibited from being cloned. */
--+#define __noclone	__attribute__((__noclone__))
--+
--+/*
--+ * Tell the optimizer that something else uses this function or variable.
--+ */
--+#define __visible __attribute__((externally_visible))
--+
--+/*
--+ * GCC 'asm goto' miscompiles certain code sequences:
--+ *
--+ *   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58670
--+ *
--+ * Work it around via a compiler barrier quirk suggested by Jakub Jelinek.
--+ * Fixed in GCC 4.8.2 and later versions.
--+ *
--+ * (asm goto is automatically volatile - the naming reflects this.)
--+ */
--+#define asm_volatile_goto(x...)	do { asm goto(x); asm (""); } while (0)
--+
--+#ifdef CONFIG_ARCH_USE_BUILTIN_BSWAP
--+#define __HAVE_BUILTIN_BSWAP32__
--+#define __HAVE_BUILTIN_BSWAP64__
--+#define __HAVE_BUILTIN_BSWAP16__
--+#endif /* CONFIG_ARCH_USE_BUILTIN_BSWAP */
---- 
--2.10.2
--
-diff --git a/board/roseapplepi/patches/linux/0003-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch b/board/roseapplepi/patches/linux/0003-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch
-deleted file mode 100644
-index da38f26679..0000000000
---- a/board/roseapplepi/patches/linux/0003-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From 8ac9a3f6dbf00d861134bea3f2c930defed6311a Mon Sep 17 00:00:00 2001
--From: Behan Webster <behanw@converseincode.com>
--Date: Wed, 24 Sep 2014 01:06:46 +0100
--Subject: [PATCH] ARM: 8158/1: LLVMLinux: use static inline in ARM ftrace.h
--
--With compilers which follow the C99 standard (like modern versions of gcc and
--clang), "extern inline" does the wrong thing (emits code for an externally
--linkable version of the inline function). In this case using static inline
--and removing the NULL version of return_address in return_address.c does
--the right thing.
--
--Signed-off-by: Behan Webster <behanw@converseincode.com>
--Reviewed-by: Mark Charlebois <charlebm@gmail.com>
--Acked-by: Steven Rostedt <rostedt@goodmis.org>
--Signed-off-by: Russell King <rmk+kernel@arm.linux.org.uk>
--(cherry picked from commit aeea3592a13bf12861943e44fc48f1f270941f8d)
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- arch/arm/include/asm/ftrace.h    | 2 +-
-- arch/arm/kernel/return_address.c | 5 -----
-- 2 files changed, 1 insertion(+), 6 deletions(-)
--
--diff --git a/arch/arm/include/asm/ftrace.h b/arch/arm/include/asm/ftrace.h
--index f89515a..2bb8cac 100644
----- a/arch/arm/include/asm/ftrace.h
--+++ b/arch/arm/include/asm/ftrace.h
--@@ -45,7 +45,7 @@ void *return_address(unsigned int);
-- 
-- #else
-- 
---extern inline void *return_address(unsigned int level)
--+static inline void *return_address(unsigned int level)
-- {
-- 	return NULL;
-- }
--diff --git a/arch/arm/kernel/return_address.c b/arch/arm/kernel/return_address.c
--index 2f8f523..a3b587f 100755
----- a/arch/arm/kernel/return_address.c
--+++ b/arch/arm/kernel/return_address.c
--@@ -63,11 +63,6 @@ void *return_address(unsigned int level)
-- //#warning "TODO: return_address should use unwind tables"
-- //#endif
-- 
---void *return_address(unsigned int level)
---{
---	return NULL;
---}
---
-- #endif /* if defined(CONFIG_FRAME_POINTER) && !defined(CONFIG_ARM_UNWIND) / else */
-- 
-- EXPORT_SYMBOL_GPL(return_address);
---- 
--2.10.2
--
-diff --git a/configs/roseapplepi_defconfig b/configs/roseapplepi_defconfig
-index 6627ff4711..10f778a174 100644
---- a/configs/roseapplepi_defconfig
-+++ b/configs/roseapplepi_defconfig
-@@ -3,7 +3,7 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
+diff --git a/board/altera/patches/linux/0003-ARM-LLVMLinux-Change-extern-inline-to-static-inline-.patch b/board/altera/patches/linux/0003-ARM-LLVMLinux-Change-extern-inline-to-static-inline-.patch
+new file mode 100644
+index 0000000000..6043d8f65d
+--- /dev/null
++++ b/board/altera/patches/linux/0003-ARM-LLVMLinux-Change-extern-inline-to-static-inline-.patch
+@@ -0,0 +1,62 @@
++From 76ae03828756bac2c1fa2c7eff7485e5f815dbdb Mon Sep 17 00:00:00 2001
++From: Behan Webster <behanw@converseincode.com>
++Date: Tue, 3 Sep 2013 22:27:26 -0400
++Subject: [PATCH] ARM: LLVMLinux: Change "extern inline" to "static inline" in
++ glue-cache.h
++
++With compilers which follow the C99 standard (like modern versions of gcc and
++clang), "extern inline" does the wrong thing (emits code for an externally
++linkable version of the inline function). "static inline" is the correct choice
++instead.
++
++[Arnout: this patch is needed to fix the build with gcc5]
++
++Author: Behan Webster <behanw@converseincode.com>
++Signed-off-by: Behan Webster <behanw@converseincode.com>
++Reviewed-by: Mark Charlebois <charlebm@gmail.com>
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ arch/arm/include/asm/glue-cache.h | 22 +++++++++++-----------
++ 1 file changed, 11 insertions(+), 11 deletions(-)
++
++diff --git a/arch/arm/include/asm/glue-cache.h b/arch/arm/include/asm/glue-cache.h
++index c81adc08b3fb..a3c24cd5b7c8 100644
++--- a/arch/arm/include/asm/glue-cache.h
+++++ b/arch/arm/include/asm/glue-cache.h
++@@ -130,22 +130,22 @@
++ #endif
++ 
++ #ifndef __ASSEMBLER__
++-extern inline void nop_flush_icache_all(void) { }
++-extern inline void nop_flush_kern_cache_all(void) { }
++-extern inline void nop_flush_kern_cache_louis(void) { }
++-extern inline void nop_flush_user_cache_all(void) { }
++-extern inline void nop_flush_user_cache_range(unsigned long a,
+++static inline void nop_flush_icache_all(void) { }
+++static inline void nop_flush_kern_cache_all(void) { }
+++static inline void nop_flush_kern_cache_louis(void) { }
+++static inline void nop_flush_user_cache_all(void) { }
+++static inline void nop_flush_user_cache_range(unsigned long a,
++ 		unsigned long b, unsigned int c) { }
++ 
++-extern inline void nop_coherent_kern_range(unsigned long a, unsigned long b) { }
++-extern inline int nop_coherent_user_range(unsigned long a,
+++static inline void nop_coherent_kern_range(unsigned long a, unsigned long b) { }
+++static inline int nop_coherent_user_range(unsigned long a,
++ 		unsigned long b) { return 0; }
++-extern inline void nop_flush_kern_dcache_area(void *a, size_t s) { }
+++static inline void nop_flush_kern_dcache_area(void *a, size_t s) { }
++ 
++-extern inline void nop_dma_flush_range(const void *a, const void *b) { }
+++static inline void nop_dma_flush_range(const void *a, const void *b) { }
++ 
++-extern inline void nop_dma_map_area(const void *s, size_t l, int f) { }
++-extern inline void nop_dma_unmap_area(const void *s, size_t l, int f) { }
+++static inline void nop_dma_map_area(const void *s, size_t l, int f) { }
+++static inline void nop_dma_unmap_area(const void *s, size_t l, int f) { }
++ #endif
++ 
++ #ifndef MULTI_CACHE
++-- 
++2.11.0
++
+diff --git a/board/via/imx6_vab820/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch b/board/altera/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
+similarity index 99%
+copy from board/via/imx6_vab820/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
+copy to board/altera/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
+index 867cbf2126..0da784cb02 100644
+--- a/board/via/imx6_vab820/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
++++ b/board/altera/patches/uboot/0001-compiler-gcc.h-remove-dependency-on-compiler-gcc-345.patch
+@@ -1,4 +1,4 @@
+-From 1ed5595fc67a19ccd1503659e3845452369c96ae Mon Sep 17 00:00:00 2001
++From ef827a0768ad9c1683f49db312f8f1823b112811 Mon Sep 17 00:00:00 2001
+ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Date: Tue, 28 Feb 2017 13:32:48 +0100
+ Subject: [PATCH] compiler-gcc.h: remove dependency on compiler-gcc[345].h
+diff --git a/board/via/imx6_vab820/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch b/board/altera/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
+similarity index 97%
+copy from board/via/imx6_vab820/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
+copy to board/altera/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
+index 9eb42d6c31..6d6c243097 100644
+--- a/board/via/imx6_vab820/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
++++ b/board/altera/patches/uboot/0002-ARM-asm-io.h-use-static-inline.patch
+@@ -1,4 +1,4 @@
+-From 158ec652dcd8ae228eeae3ae92a3d6ba48ca228e Mon Sep 17 00:00:00 2001
++From cfdf9ef7db99c9d8bb768d334c687195f7153270 Mon Sep 17 00:00:00 2001
+ From: Jeroen Hofstee <jeroen@myspectrum.nl>
+ Date: Sun, 22 Jun 2014 23:10:39 +0200
+ Subject: [PATCH] ARM:asm:io.h use static inline
+diff --git a/board/via/imx6_vab820/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch b/board/altera/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
+similarity index 69%
+copy from board/via/imx6_vab820/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
+copy to board/altera/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
+index 686d448661..7d75ef204c 100644
+--- a/board/via/imx6_vab820/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
++++ b/board/altera/patches/uboot/0003-common-main.c-make-show_boot_progress-__weak.patch
+@@ -1,4 +1,4 @@
+-From 9cc7a26c35be56cd3f8fa3e3990b9b7e69aed031 Mon Sep 17 00:00:00 2001
++From f87d5ac472f4a9e67730eed8cbdf8fcd71c56075 Mon Sep 17 00:00:00 2001
+ From: Jeroen Hofstee <jeroen@myspectrum.nl>
+ Date: Thu, 26 Jun 2014 20:18:31 +0200
+ Subject: [PATCH] common: main.c: make show_boot_progress __weak
+@@ -13,14 +13,22 @@ Acked-by: Simon Glass <sjg@chromium.org>
+ (cherry picked from commit 3422299dc28fa8257677d03cc1253e3c9bf17e9f)
+ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ ---
+- common/main.c | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
++ common/main.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
  
--BR2_GLOBAL_PATCH_DIR="board/roseapplepi/patches"
-+BR2_GLOBAL_PATCH_DIR="board/linux-gcc-patches board/roseapplepi/patches"
- # Linux headers same as kernel, a 3.10 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/roseapplepi/post-image.sh"
+ diff --git a/common/main.c b/common/main.c
+-index 145ded1fc9..b5c9bb0f35 100644
++index 9507cec88b..7bdbc4b6b5 100644
+ --- a/common/main.c
+ +++ b/common/main.c
+-@@ -62,8 +62,7 @@ DECLARE_GLOBAL_DATA_PTR;
++@@ -42,6 +42,7 @@
++ 
++ #include <post.h>
++ #include <linux/ctype.h>
+++#include <linux/compiler.h>
++ #include <menu.h>
++ 
++ #if defined(CONFIG_SILENT_CONSOLE) || defined(CONFIG_POST) || defined(CONFIG_CMDLINE_EDITING)
++@@ -51,8 +52,7 @@ DECLARE_GLOBAL_DATA_PTR;
+  /*
+   * Board-specific Platform code can reimplement show_boot_progress () if needed
+   */
+diff --git a/board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch b/board/altera/socdk/patches/uboot/0004-arm-board-use-__weak.patch
+similarity index 93%
+copy from board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch
+copy to board/altera/socdk/patches/uboot/0004-arm-board-use-__weak.patch
+index 7a96183af3..03af699153 100644
+--- a/board/via/imx6_vab820/patches/uboot/0004-arm-board-use-__weak.patch
++++ b/board/altera/socdk/patches/uboot/0004-arm-board-use-__weak.patch
+@@ -1,4 +1,4 @@
+-From 99bd7b7fb4d58092f020a808bb57be3b4d4cfc51 Mon Sep 17 00:00:00 2001
++From 2c27dbf181337d2d2176cdc84e4706062a79628e Mon Sep 17 00:00:00 2001
+ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Date: Tue, 28 Feb 2017 14:07:30 +0100
+ Subject: [PATCH] arm: board: use __weak
+@@ -14,10 +14,10 @@ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  1 file changed, 12 insertions(+), 28 deletions(-)
+ 
+ diff --git a/arch/arm/lib/board.c b/arch/arm/lib/board.c
+-index 51b8628b3f..3685e65134 100644
++index 9f861ccaf6..d939189e1b 100644
+ --- a/arch/arm/lib/board.c
+ +++ b/arch/arm/lib/board.c
+-@@ -82,25 +82,15 @@ extern void dataflash_print_info(void);
++@@ -77,25 +77,15 @@ extern void dataflash_print_info(void);
+   ************************************************************************
+   * May be supplied by boards if desired
+   */
+@@ -52,7 +52,7 @@ index 51b8628b3f..3685e65134 100644
+  
+  /*
+   ************************************************************************
+-@@ -215,27 +205,21 @@ typedef int (init_fnc_t) (void);
++@@ -210,27 +200,21 @@ typedef int (init_fnc_t) (void);
+  
+  int print_cpuinfo(void);
+  
+diff --git a/configs/altera_socdk_defconfig b/configs/altera_socdk_defconfig
+index f5a2fc7fd0..5cae199b9e 100644
+--- a/configs/altera_socdk_defconfig
++++ b/configs/altera_socdk_defconfig
+@@ -6,6 +6,9 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_FPU_NEON=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+ 
++# Older Linux and U-Boot require the gcc5 patch
++BR2_GLOBAL_PATCH_DIR="board/linux-gcc-patches board/altera/patches board/altera/socdk/patches"
++
+ # Linux headers same as kernel, a 3.13 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
+ 
 -- 
 2.11.0
