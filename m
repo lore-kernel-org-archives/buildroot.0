@@ -1,62 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Feb 2017 21:03:52 +0100
-Subject: [Buildroot] [PATCH] mpd: fix build for ARC
-In-Reply-To: <1488301853-24154-1-git-send-email-vzakhar@synopsys.com> (Vlad
- Zakharov's message of "Tue, 28 Feb 2017 20:10:53 +0300")
-References: <1488301853-24154-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <87h93ehyl3.fsf@dell.be.48ers.dk>
+Date: Tue, 28 Feb 2017 20:59:45 +0100
+Subject: [Buildroot] [git commit] mpv: disable with ARC external toolchain
+Message-ID: <20170228200410.AEF0B7FAC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1a8b1eac87ede3cee48669efe95cb27df8f673a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > mpd package fails for both internal and external ARC toolchain as check
- > for pthread support fails. Such checks fails because _REENTRANT flag is
- > not defined in gcc even when -pthread is passed.
+This package fails when building with ARC external toolchain
 
- > So we add patch to gcc that defines _REENTRANT  on ARC when -pthread is
- > passed.
+Marking this with special comment "# ARC toolchain issue" as the package
+is to be enabled as soon as the issue with the ARC toolchain is
+resolved.
 
- > Also it disables mpd package for external ARC toolchain as it fails due
- > to the same issue.
+Fixes:
+  http://autobuild.buildroot.net/results/fb6/fb677a917545adee321bdcd2c2519c81326448c4//
 
- > This patch should be reverted as soon as the patch for GCC becomes a
- > part of ARC toolchain.
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpv/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/7d7/7d70b62ad996830fbeca46dffcc7a1dc030e575d//
-
- > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
- > ---
- >  ...-define-_REENTRANT-when-pthread-is-passed.patch | 33 ++++++++++++++++++++++
- >  package/mpd/Config.in                              |  3 ++
- >  2 files changed, 36 insertions(+)
- >  create mode 100644 package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch
-
- > diff --git a/package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch b/package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch
- > new file mode 100644
- > index 0000000..28e6a2d
- > --- /dev/null
- > +++ b/package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch
- > @@ -0,0 +1,33 @@
- > +From 4c6367c99461fdd7bd5613483f2582d7f08fba87 Mon Sep 17 00:00:00 2001
- > +From: Vlad Zakharov <vzakhar@synopsys.com>
- > +Date: Tue, 28 Feb 2017 17:41:11 +0300
- > +Subject: [PATCH] arc: define _REENTRANT when -pthread is passed
- > +
- > +The compiler is supposed to have the builtin defined _REENTRANT defined
- > +when -pthread is passed, which wasn't done on the ARC architecture.
- > +
- > +When _REENTRANT is not passed, the C library will not use reentrant
- > +functions, and the latest version of ax_pthread.m4 from the
- > +autoconf-archive will no longer detect that thread support is
- > +available (see https://savannah.gnu.org/patch/?8186).
-
-Hmm, who is the author of this? You or Thomas? In any case you should
-also sign off on it.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 2719981..6e115ae 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_MPV
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
++	# ARC toolchain issue
++	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+@@ -21,3 +23,4 @@ comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
