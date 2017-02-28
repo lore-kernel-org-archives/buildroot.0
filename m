@@ -1,38 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Feb 2017 17:02:49 +0100
-Subject: [Buildroot] Analysis of build results for 2017-02-26
-In-Reply-To: <1488296096.2557.13.camel@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Feb 2017 17:10:34 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-26: librsvg
+	failure
+In-Reply-To: <20170228163701.345645b1@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 28 Feb 2017 16:37:01 +0100")
 References: <20170227072848.7BD45207F5@mail.free-electrons.com>
  <20170227142854.34d3fb86@free-electrons.com>
- <1488296096.2557.13.camel@synopsys.com>
-Message-ID: <20170228170249.6c4911a0@free-electrons.com>
+ <20170228000123.66658172@free-electrons.com>
+ <87r32ik7vl.fsf@dell.be.48ers.dk>
+ <20170228100542.2536f1d0@free-electrons.com>
+ <87innujrrr.fsf@dell.be.48ers.dk>
+ <20170228163701.345645b1@free-electrons.com>
+Message-ID: <87y3wqi9dx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 28 Feb 2017 15:34:56 +0000, Vlad Zakharov wrote:
+Hi,
 
-> > Vlad, could you have a look into this? We have
-> > package/gcc/6.3.0/895-bfin-define-REENTRANT.patch for Blackfin in the
-> > tree, but we don't have the corresponding patch for ARC.  
-> 
-> The patch you have provided in gcc bugzilla solves the issue, thanks.
-> I am going to send it to Buildroot soon.
+ > Wow, indeed!
 
-Great, thanks for checking!
+ > But how does this fit with my findings with gdb, which were pointing at
+ > a faulty instruction in the host libpixman?
 
-> If you want to upstream your patch to gcc please send it to GCC mailing list. And please don't forget to include Claudiu
-> Zissulescu <claziss@synopsys.com>?in CC as he is co-maintainer of GCC port for ARC.
+Target libpixman, not host-pixman. From the log:
 
-I received some feedback from Claudio through the gcc bug tracker. I'll
-try to get my gcc patch submitted upstream. Thanks!
+open("/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libpixman-1.so.0", O_RDONLY|O_CLOEXEC) = 3
 
-Thomas
+So I guess it is all caused by host/target mismatch and the specific
+optimization options selected.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
