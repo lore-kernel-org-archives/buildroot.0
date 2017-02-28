@@ -1,56 +1,47 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Tue, 28 Feb 2017 15:34:56 +0000
-Subject: [Buildroot] Analysis of build results for 2017-02-26
-In-Reply-To: <20170227142854.34d3fb86@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Feb 2017 16:37:01 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-26: librsvg
+	failure
+In-Reply-To: <87innujrrr.fsf@dell.be.48ers.dk>
 References: <20170227072848.7BD45207F5@mail.free-electrons.com>
  <20170227142854.34d3fb86@free-electrons.com>
-Message-ID: <1488296096.2557.13.camel@synopsys.com>
+ <20170228000123.66658172@free-electrons.com>
+ <87r32ik7vl.fsf@dell.be.48ers.dk>
+ <20170228100542.2536f1d0@free-electrons.com>
+ <87innujrrr.fsf@dell.be.48ers.dk>
+Message-ID: <20170228163701.345645b1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Mon, 2017-02-27 at 14:28 +0100, Thomas Petazzoni wrote:
-> >????????? arc |???????????????????? mpd-0.20.4 | NOK ?
-> 
-> Lacks a -lpthread apparently:
-> 
-> /home/peko/autobuild/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/arc-snps-linux-
-> uclibc/6.2.1/../../../../arc-snps-linux-uclibc/bin/ld: libthread.a(Thread.o): undefined reference to symbol
-> 'pthread_create'
-> /home/peko/autobuild/instance-1/output/host/usr/arc-buildroot-linux-uclibc/sysroot/lib/libpthread.so.0: error adding
-> symbols: DSO missing from command line
-> 
-> but the configure script fails to detect thread support:
-> 
-> checking for the pthreads library -lpthread... no
-> 
-> Aah, they test if the compiler defines _REENTRANT:
-> 
-> conftest.c:15:26: error: #error "_REENTRANT must be defined"
-> ?#??????????????????????? error "_REENTRANT must be defined"
-> 
-> and I know some architectures forget to do so.
-> 
-> I already reported this bug to gcc upstream:
-> 
-> ?https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71749?
-> 
-> Vlad, could you have a look into this? We have
-> package/gcc/6.3.0/895-bfin-define-REENTRANT.patch for Blackfin in the
-> tree, but we don't have the corresponding patch for ARC.
+On Tue, 28 Feb 2017 15:48:08 +0100, Peter Korsgaard wrote:
 
-The patch you have provided in gcc bugzilla solves the issue, thanks.
-I am going to send it to Buildroot soon.
+>  > Which looks correct to me, when running a host binary on the host machine.  
+> 
+> Yes, but the part where it loads a library from the target-librsvg
+> doesn't:
+> 
+> stat("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+> stat("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la", {st_mode=S_IFREG|0644, st_size=3987, ...}) = 0
+> open("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la", O_RDONLY) = 3
+> read(3, "# libpixbufloader-svg.la - a lib"..., 4000) = 3987
+> futex(0x7fb04bc20488, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+> read(3, "", 4000)                       = 0
+> close(3)                                = 0
+> futex(0x7fb04b3480a8, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+> open("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader/./.libs/libpixbufloader-svg.so", O_RDONLY|O_CLOEXEC) = 3
 
-If you want to upstream your patch to gcc please send it to GCC mailing list. And please don't forget to include Claudiu
-Zissulescu <claziss@synopsys.com>?in CC as he is co-maintainer of GCC port for ARC.
+Wow, indeed!
 
-Thanks!
+But how does this fit with my findings with gdb, which were pointing at
+a faulty instruction in the host libpixman?
 
+Thomas
 -- 
-Best regards,
-Vlad Zakharov <vzakhar@synopsys.com>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
