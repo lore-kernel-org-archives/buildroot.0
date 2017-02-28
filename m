@@ -1,131 +1,91 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Feb 2017 19:07:22 +0100
-Subject: [Buildroot] [PATCH 1/5] core/pkg-cmake: provide our own platform
-	description
+Date: Tue, 28 Feb 2017 19:07:23 +0100
+Subject: [Buildroot] [PATCH 2/5] cmake: bump version to 3.7.0
 In-Reply-To: <cover.1488305206.git.yann.morin.1998@free.fr>
 References: <cover.1488305206.git.yann.morin.1998@free.fr>
-Message-ID: <f25e9ff7873418c0b323528d6a9c2482c752cd31.1488305206.git.yann.morin.1998@free.fr>
+Message-ID: <1b3b4b85a1ea24d17f8a33729d956a2bdcffb14a.1488305206.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The handling of RPATH in cmake-3.7 has changed drastically, causing a
-slew of build failures dues to libraries from the host being pulled in:
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-  - domoticz : http://autobuild.buildroot.org/results/fd0/fd0ba54c7abf973691b39a0ca1bb4e07d749593a/
-  - freerdp  : http://autobuild.buildroot.org/results/5d4/5d429d0e288754a541ee5d8be515454c5fccd28b/
-  - libcec   : http://autobuild.buildroot.org/results/3f3/3f3593bab7734dd274faf5b5690895e9424cbb89/
-  - and so on...
+libuv is now a required dependency.
 
-The bug was reported upstream [0], which dismissed it altogether [1] as
-being expected behaviour, quoting:
-
-    I don't think there is anything wrong with that change on its own.
-    It merely exposed some existing behavior in a new case.
-
-Instead, upstream suggested in that same message that a platform
-definition be used instead, quoting:
-
-    If a toolchain file specifies CMAKE_SYSTEM_NAME such that a custom
-    `Platform/MySystem.cmake` file is loaded then the latter can set
-    them as needed for the target platform.
-
-So here we are doing so:
-
-  - we add a new platfom definitions that inherits from the Linux one,
-    then overrides the problematic settings;
-
-  - we change our toolchain file to use that platform instead;
-
-  - we tell cmake where to find additional modules, so that it can find
-    our custom platform file.
-
-This has been tested to work in the following conditions:
-
- - pre-installed host cmake, versions 3.5.1 (Ubuntu 16.04) and 3.7.2
-   (manually built)
-
-  - internal cmake, versions 3.6.3 (the current version as of this
-    patch) and 3.7.2 (with the followup patches).
-
-Thanks to J?rg, Ben and Baruch for the help investigating the issue.
-Special thanks to J?rg for handling the discussion with upstream and
-pointing to the relevant messages! :-)
-
-[0] http://public.kitware.com/pipermail/cmake/2017-February/064970.html
-[1] http://public.kitware.com/pipermail/cmake/2017-February/065063.html
-
-To be noted: Thomas suggested we set these directly in the toolchain
-file. Unfortunately, wherever we put those settings in the toolchain
-file, this does not work.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: J?rg Krause <joerg.krause@embedded.rocks>
-Cc: Ben Boeckel <mathstuf@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-cmake.mk                | 4 ++++
- support/misc/Buildroot.cmake        | 3 +++
- support/misc/toolchainfile.cmake.in | 2 +-
- toolchain/toolchain/toolchain.mk    | 1 +
- 4 files changed, 9 insertions(+), 1 deletion(-)
- create mode 100644 support/misc/Buildroot.cmake
+ package/cmake/Config.in  | 9 +++++++--
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 6 +++---
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index a7c8dc3..77fa1dc 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -87,6 +87,7 @@ define $(2)_CONFIGURE_CMDS
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
-+		-DCMAKE_MODULE_PATH="$$(HOST_DIR)/usr/share/buildroot" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_DOC=OFF \
-@@ -249,3 +250,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
- 		> $@
-+
-+$(HOST_DIR)/usr/share/buildroot/Platform/Buildroot.cmake:
-+	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake $(@)
-diff --git a/support/misc/Buildroot.cmake b/support/misc/Buildroot.cmake
-new file mode 100644
-index 0000000..b0046b3
---- /dev/null
-+++ b/support/misc/Buildroot.cmake
-@@ -0,0 +1,3 @@
-+include(Platform/Linux)
-+set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS FALSE)
-+set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index d4252dd..5a42644 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -10,7 +10,7 @@
- # RELOCATED_HOST_DIR variable.
- string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index 6f04a4a..716d80e 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -20,11 +20,14 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_XZ
++	select BR2_PACKAGE_LIBUV
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # from jsoncpp
+ 	depends on BR2_USE_WCHAR # libarchive
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
++	depends on BR2_USE_MMU # libuv
+ 	help
+ 	  CTest is a testing tool distributed as a part of CMake. It
+ 	  can be used to automate updating (using CVS for example),
+@@ -34,7 +37,9 @@ config BR2_PACKAGE_CMAKE_CTEST
  
--set(CMAKE_SYSTEM_NAME Linux)
-+set(CMAKE_SYSTEM_NAME Buildroot)
- set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+ 	  http://www.cmake.org/
  
- # Set the {C,CXX}FLAGS appended by CMake depending on the build type
-diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-index b16db01..e298373 100644
---- a/toolchain/toolchain/toolchain.mk
-+++ b/toolchain/toolchain/toolchain.mk
-@@ -38,3 +38,4 @@ endif
- $(eval $(virtual-package))
+-comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7"
++comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, threads"
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index f846dc9..687e5a4 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.6/cmake-3.6.3-SHA-256.txt
+-sha256 7d73ee4fae572eb2d7cd3feb48971aea903bb30a20ea5ae8b4da826d8ccad5fe  cmake-3.6.3.tar.gz
++# From http://www.cmake.org/files/v3.7/cmake-3.7.0-SHA-256.txt
++sha256 ed63e05c41aeb6c036e503114ab15847f29c312f9f21f5f1a7060a4b4ec2fb31  cmake-3.7.0.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index bc55509..e4904fc 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-+toolchain: $(HOST_DIR)/usr/share/buildroot/Platform/Buildroot.cmake
+-CMAKE_VERSION_MAJOR = 3.6
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
++CMAKE_VERSION_MAJOR = 3.7
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+@@ -22,7 +22,7 @@ CMAKE_LICENSE_FILES = Copyright.txt
+ #   the system-wide libraries instead of rebuilding and statically
+ #   linking with the ones bundled into the CMake sources.
+ 
+-CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz
++CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz libuv
+ 
+ CMAKE_CONF_OPTS = \
+ 	-DKWSYS_LFS_WORKS=TRUE \
 -- 
 2.7.4
