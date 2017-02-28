@@ -1,46 +1,85 @@
-From: Michael Walle <michael@walle.cc>
-Date: Tue, 28 Feb 2017 10:39:07 +0100
-Subject: [Buildroot] [PATCH for-rc] openocd: fix build on older hosts
-In-Reply-To: <87zih6k81v.fsf@dell.be.48ers.dk>
-References: <1488260482-30511-1-git-send-email-michael@walle.cc>
- <87zih6k81v.fsf@dell.be.48ers.dk>
-Message-ID: <4476d05cffab67f429a842baa7dc9974@walle.cc>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 28 Feb 2017 12:02:52 +0100
+Subject: [Buildroot] [PATCH for-master] qt5quickcontrols: fix installation
+	of PrivateWidgets
+Message-ID: <20170228110252.5695-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Commit e482ebf51d9e8e00c3e58eb65af0dfb70d05d8cc attempted to fix the
+installation of qt5quickcontrols by only installing the PrivateWidgets
+directory for the 5.8.0 version.
 
-Am 2017-02-28 09:56, schrieb Peter Korsgaard:
->>>>>> "Michael" == Michael Walle <michael@walle.cc> writes:
-> 
->  > OpenOCD fails to generate the documentation because older host 
-> systems may
->  > have an old texinfo.
-> 
->  > This patch is taken from upstream commit 79fdeb37f486f74658f1 which 
-> is
->  > included in version 0.10.0. Therefore, it can be dropped when the 
-> version
->  > is bumped.
-> 
->  > Signed-off-by: Michael Walle <michael@walle.cc>
->  > ---
->  > Please include this patch in the 2017.02 release. Without the patch,
->  > openocd won't build on older build hosts. There is no functional 
-> change.
-> 
-> It would IMHO be better to not generate the documentation in the first
-> place. I've committed Thomas' timestamp workaround, so it should no
-> longer get generated:
-> 
-> https://patchwork.ozlabs.org/patch/732614/
-> 
-> Can you please verify that the above fixes it for you?
+However, the availability of PrivateWidgets has nothing to do with the
+version; in both 5.6.2 and 5.8.0, the installation is gated by the
+following statement in src/src.pro:
 
+qtHaveModule(quick):qtHaveModule(widgets): SUBDIRS += widgets
 
-works for me. So drop my patch ;)
+i.e. it is installed when both the Quick and the Widgets module are
+available. The Widgets module is controlled by Buildroot's
+BR2_PACKAGE_QT5BASE_WIDGETS symbol, the Quick module is controlled by
+Buildroot's BR2_PACKAGE_QT5DECLARATIVE_QUICK. The qt5quickcontrols
+package selects BR2_PACKAGE_QT5DECLARATIVE_QUICK so it is not really
+needed to include it in the condition. However, it is theoretically
+possible to build this package without QtQuick. Also, adding this
+condition makes it consistent with src.pro.
 
--michael
+Note that commit e482ebf51d9e8e00c3e58eb65af0dfb70d05d8cc introduces a
+second fix (not mentioned in the commit message): for version 5.6.2, the
+Layouts directory is installed, but in 5.8.0 this directory doesn't
+exist any more. Therefore, a separate condition on the version is still
+needed.
+
+Fixes:
+http://autobuild.buildroot.net/results/1ff3e9ad4ba518d0a37f9fc12038bf9020f28094
+
+Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
+
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+index 8a63629c35..43254ba06b 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+@@ -30,20 +30,25 @@ define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
+-	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
+-	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
+-	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
++
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5BASE_WIDGETS),yy)
++define QT5QUICKCONTROLS_INSTALL_TARGET_PRIVATEWIDGETS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
+ endef
+-else
++endif
++
++ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
++define QT5QUICKCONTROLS_INSTALL_TARGET_LAYOUTS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Layouts $(TARGET_DIR)/usr/qml/QtQuick
++endef
++endif
++
+ define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Controls $(TARGET_DIR)/usr/qml/QtQuick
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Dialogs $(TARGET_DIR)/usr/qml/QtQuick
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
+-	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Layouts $(TARGET_DIR)/usr/qml/QtQuick
++	$(QT5QUICKCONTROLS_INSTALL_TARGET_PRIVATEWIDGETS)
++	$(QT5QUICKCONTROLS_INSTALL_TARGET_LAYOUTS)
+ endef
+-endif
+ 
+ $(eval $(generic-package))
+-- 
+2.11.0
