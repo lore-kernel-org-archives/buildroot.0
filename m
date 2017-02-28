@@ -1,90 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Feb 2017 15:16:13 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Feb 2017 15:48:08 +0100
 Subject: [Buildroot] Analysis of build results for 2017-02-26: librsvg
- failure
-In-Reply-To: <20170228100542.2536f1d0@free-electrons.com>
+	failure
+In-Reply-To: <20170228100542.2536f1d0@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 28 Feb 2017 10:05:42 +0100")
 References: <20170227072848.7BD45207F5@mail.free-electrons.com>
  <20170227142854.34d3fb86@free-electrons.com>
  <20170228000123.66658172@free-electrons.com>
  <87r32ik7vl.fsf@dell.be.48ers.dk>
  <20170228100542.2536f1d0@free-electrons.com>
-Message-ID: <20170228151613.4f376c77@free-electrons.com>
+Message-ID: <87innujrrr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 28 Feb 2017 10:05:42 +0100, Thomas Petazzoni wrote:
+ > Hello,
+ > On Tue, 28 Feb 2017 10:00:14 +0100, Peter Korsgaard wrote:
 
-> No, that's only the end of the strace output. I've posted the full
-> strace output at:
-> 
->   http://code.bulix.org/elused-120071
-> 
-> File descriptor 3 is:
-> 
-> open("/lib/x86_64-linux-gnu/libm.so.6", O_RDONLY|O_CLOEXEC) = 3
-> 
-> Which looks correct to me, when running a host binary on the host machine.
+ >> Is that the complete strace output? Where is fd 3 getting opened? I
+ >> would imagine the problem is caused by some kind of host/target
+ >> libraries mixup.
 
-Ok, so I went through the next stage: running the program under gdb, so
-now I know exactly the instruction that faulted, in which function, etc.
+ > No, that's only the end of the strace output. I've posted the full
+ > strace output at:
 
-Program received signal SIGILL, Illegal instruction.
-0x00007ffff4869f02 in have_feature ()
-   from target:/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libpixman-1.so.0
-(gdb) bt
-#0  0x00007ffff4869f02 in have_feature ()
-   from target:/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libpixman-1.so.0
+ >   http://code.bulix.org/elused-120071
 
-So we're crashing in libpixman, in the have_feature() function, whose
-goal is precisely to determine the capabilities of the CPU we are
-running on.
+ > File descriptor 3 is:
 
-The faulty instruction is:
+ > open("/lib/x86_64-linux-gnu/libm.so.6", O_RDONLY|O_CLOEXEC) = 3
 
-(gdb) disassemble
-Dump of assembler code for function have_feature:
-   0x00007ffff4869ee1 <+0>:	push   %r13
-   0x00007ffff4869ee3 <+2>:	push   %r12
-   0x00007ffff4869ee5 <+4>:	mov    %edi,%r12d
-   0x00007ffff4869ee8 <+7>:	push   %rbp
-   0x00007ffff4869ee9 <+8>:	push   %rbx
-   0x00007ffff4869eea <+9>:	sub    $0x18,%rsp
-   0x00007ffff4869eee <+13>:	cmpl   $0x0,0x25e85f(%rip)        # 0x7ffff4ac8754 <initialized.4467>
-   0x00007ffff4869ef5 <+20>:	jne    0x7ffff4869fc6 <have_feature+229>
-   0x00007ffff4869efb <+26>:	mov    $0x1,%eax
-   0x00007ffff4869f00 <+31>:	cpuid  
-=> 0x00007ffff4869f02 <+33>:	bextr  $0x10f,%edx,%ebp
-   0x00007ffff4869f0b <+42>:	shl    $0x4,%ebp
-   0x00007ffff4869f0e <+45>:	mov    %ebp,%eax
-   0x00007ffff4869f10 <+47>:	or     $0x1,%eax
+ > Which looks correct to me, when running a host binary on the host machine.
 
-This bextr instruction is indeed a somewhat new instruction: it was
-introduced in the Haswell micro-architecture, but my i7-4600U is a
-Haswell one. I'm not a big expert in Intel architecture, but I believe
-this instruction should therefore be valid on my CPU.
+Yes, but the part where it loads a library from the target-librsvg
+doesn't:
 
-What is very weird is that if I run this program outside of the build
-process, it runs fine. It's only when it's run within the overall build
-process that it crashes on this instruction. To get the above gdb
-stuff, I had to hack the package Makefile to run the program under
-gdbserver, and connect to it.
+stat("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
+stat("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la", {st_mode=S_IFREG|0644, st_size=3987, ...}) = 0
+open("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la", O_RDONLY) = 3
+read(3, "# libpixbufloader-svg.la - a lib"..., 4000) = 3987
+futex(0x7fb04bc20488, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+read(3, "", 4000)                       = 0
+close(3)                                = 0
+futex(0x7fb04b3480a8, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+open("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader/./.libs/libpixbufloader-svg.so", O_RDONLY|O_CLOEXEC) = 3
 
-Looking at the pixman code, I don't see any place where a bextr
-instruction is explicitly used, so it seems like it's generated by gcc.
-
-Another weird thing: this only happens if the target is x86-64, with a
-specific toolchain. Now, the question is: why a host package crash can
-be related to the target architecture/toolchain...
-
-/me calling Mulder and Scully :)
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
