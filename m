@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Feb 2017 10:03:46 +0100
-Subject: [Buildroot] [PATCHv2] openocd: avoid documentation rebuild to
- fix build issues
-In-Reply-To: <20170228002625.GC2535@tungsten.ozlabs.ibm.com>
-References: <1488147736-9778-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170228002625.GC2535@tungsten.ozlabs.ibm.com>
-Message-ID: <20170228100346.5c550404@free-electrons.com>
+Date: Tue, 28 Feb 2017 10:05:42 +0100
+Subject: [Buildroot] Analysis of build results for 2017-02-26: librsvg
+	failure
+In-Reply-To: <87r32ik7vl.fsf@dell.be.48ers.dk>
+References: <20170227072848.7BD45207F5@mail.free-electrons.com>
+ <20170227142854.34d3fb86@free-electrons.com>
+ <20170228000123.66658172@free-electrons.com>
+ <87r32ik7vl.fsf@dell.be.48ers.dk>
+Message-ID: <20170228100542.2536f1d0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +16,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 28 Feb 2017 11:26:25 +1100, Sam Bobroff wrote:
+On Tue, 28 Feb 2017 10:00:14 +0100, Peter Korsgaard wrote:
 
-> i.e. This causes a doc rebuild on my system (with freshly unpacked
-> source):
-> touch configure && ./configure && env TZ="US/Eastern" make -C doc
-> 
-> But this doesn't:
-> touch configure && ./configure && env TZ="Australia/Sydney" make -C doc
-> 
-> (So it's actually a bug in their build system, maybe they'd fix it
-> upstream? ;-))
+> Is that the complete strace output? Where is fd 3 getting opened? I
+> would imagine the problem is caused by some kind of host/target
+> libraries mixup.
 
-I'm not sure it's really a bug.
+No, that's only the end of the strace output. I've posted the full
+strace output at:
 
-The version.texi file contains a date, which will be 17 May 2015 or 18
-May 2015 depending on your time zone.
+  http://code.bulix.org/elused-120071
 
-In one case, the version.texi file generated will be the same as the
-one in the tarball, and in this case, it is careful not to change the
-timestamp. In other case, the version.texi file really has changed, and
-therefore its timestamp is updated, causing the rebuild.
+File descriptor 3 is:
 
-That's my explanation of the issue. Of course, there's always the
-possibility that I did not fully understand the origin of the issue.
+open("/lib/x86_64-linux-gnu/libm.so.6", O_RDONLY|O_CLOEXEC) = 3
 
-Best regards,
+Which looks correct to me, when running a host binary on the host machine.
 
 Thomas
 -- 
