@@ -1,38 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Feb 2017 17:10:34 +0100
-Subject: [Buildroot] Analysis of build results for 2017-02-26: librsvg
-	failure
-In-Reply-To: <20170228163701.345645b1@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 28 Feb 2017 16:37:01 +0100")
-References: <20170227072848.7BD45207F5@mail.free-electrons.com>
- <20170227142854.34d3fb86@free-electrons.com>
- <20170228000123.66658172@free-electrons.com>
- <87r32ik7vl.fsf@dell.be.48ers.dk>
- <20170228100542.2536f1d0@free-electrons.com>
- <87innujrrr.fsf@dell.be.48ers.dk>
- <20170228163701.345645b1@free-electrons.com>
-Message-ID: <87y3wqi9dx.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Feb 2017 17:16:21 +0100
+Subject: [Buildroot] [PATCH] dependencies/cmake: blacklist cmake 3.7
+In-Reply-To: <874lzelmv9.fsf@dell.be.48ers.dk>
+References: <1488148967-8055-1-git-send-email-yann.morin.1998@free.fr>
+ <874lzelmv9.fsf@dell.be.48ers.dk>
+Message-ID: <20170228161621.GA3533@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Peter, All,
 
-Hi,
+On 2017-02-28 09:51 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > cmake-3.7 has a bug in how it handles rpath, linking with libraries from
+>  > the host.
+> 
+>  > Until we completely understand the issue, just blacklist cmake-3.7.
+> 
+>  > The issue has been reported upstream:
+>  >     http://public.kitware.com/pipermail/cmake/2017-February/064970.html
+> 
+> It is a bit painful that we are back to always building cmake on modern
+> distributions, but OK - Correctness is more important.
 
- > Wow, indeed!
+To be noted: I have a branch that re-introduces cmake-3.7 (and later
+versions, I hope) and fixes this rpath issue.
 
- > But how does this fit with my findings with gdb, which were pointing at
- > a faulty instruction in the host libpixman?
+It works for all types of cmake:
 
-Target libpixman, not host-pixman. From the log:
+  - pre-installed host cmake, tested with 3.1 and 3.7
 
-open("/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libpixman-1.so.0", O_RDONLY|O_CLOEXEC) = 3
+  - built cmake, tested with 3.6 and 3.7
 
-So I guess it is all caused by host/target mismatch and the specific
-optimization options selected.
+I still need to do more testing, as well as proper commit logs. ;-)
+Expect it Real Soon Now (TM)! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
