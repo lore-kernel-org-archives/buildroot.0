@@ -1,7 +1,7 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Feb 2017 19:40:29 +0200
-Subject: [Buildroot] [PATCH next] putty: bump to version 0.68
-Message-ID: <dd7aaa6481a0e373e72c5c03ac5c73d6916da1ce.1488303629.git.baruch@tkos.co.il>
+Date: Tue, 28 Feb 2017 19:48:15 +0200
+Subject: [Buildroot] [PATCH next v2] putty: bump to version 0.68
+Message-ID: <a7007f64e9741df5fd8750fc5fb9533b9f7ee559.1488304095.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,13 @@ Drop upstream patches.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
+v2: update hash URL
+---
  package/putty/0001-uxcons-Fix-on-musl-libc.patch   | 29 ---------------------
  ...02-Fix-__uint128_t-compile-error-on-MinGW.patch | 30 ----------------------
- package/putty/putty.hash                           |  4 +--
+ package/putty/putty.hash                           |  6 ++---
  package/putty/putty.mk                             |  2 +-
- 4 files changed, 3 insertions(+), 62 deletions(-)
+ 4 files changed, 4 insertions(+), 63 deletions(-)
  delete mode 100644 package/putty/0001-uxcons-Fix-on-musl-libc.patch
  delete mode 100644 package/putty/0002-Fix-__uint128_t-compile-error-on-MinGW.patch
 
@@ -92,13 +94,14 @@ index 514b6298d93c..000000000000
 -2.8.1
 -
 diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index 75990e417664..5aea4f308cd9 100644
+index 75990e417664..23c6b3d0ede7 100644
 --- a/package/putty/putty.hash
 +++ b/package/putty/putty.hash
 @@ -1,3 +1,3 @@
- # Hashes from: http://the.earth.li/~sgtatham/putty/0.67/{sha256,sha512}sums
+-# Hashes from: http://the.earth.li/~sgtatham/putty/0.67/{sha256,sha512}sums
 -sha256 80192458e8a46229de512afeca5c757dd8fce09606b3c992fbaeeee29b994a47                                                                 putty-0.67.tar.gz
 -sha512 c2b17da46b8db3fe3837a10cb9cf5dd4b3ef6bfa15cadab83f3b87cf1479ed31fced90b774297ae53bdcbbdf230fc80d5c73d5ff3be6916fb591fd7ce3d35eca putty-0.67.tar.gz
++# Hashes from: http://the.earth.li/~sgtatham/putty/0.68/{sha256,sha512}sums
 +sha256 7ba256f46e5a353cafe811ce7914d0e22a52bdfc0e6e2d183ad28b5af44cd09c                                                                 putty-0.68.tar.gz
 +sha512 e3a6e4f45e1fce70d4cbb6d4769ab72b23c10920e48a88bba95b3f4c225b0193ddc1444e69d572bdec5e505d2c56fed365f07d990c156b35f272b56f978ef5d3 putty-0.68.tar.gz
 diff --git a/package/putty/putty.mk b/package/putty/putty.mk
