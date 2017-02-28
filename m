@@ -1,40 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Feb 2017 10:05:42 +0100
-Subject: [Buildroot] Analysis of build results for 2017-02-26: librsvg
-	failure
-In-Reply-To: <87r32ik7vl.fsf@dell.be.48ers.dk>
-References: <20170227072848.7BD45207F5@mail.free-electrons.com>
- <20170227142854.34d3fb86@free-electrons.com>
- <20170228000123.66658172@free-electrons.com>
- <87r32ik7vl.fsf@dell.be.48ers.dk>
-Message-ID: <20170228100542.2536f1d0@free-electrons.com>
+From: Michael Walle <michael@walle.cc>
+Date: Tue, 28 Feb 2017 10:39:07 +0100
+Subject: [Buildroot] [PATCH for-rc] openocd: fix build on older hosts
+In-Reply-To: <87zih6k81v.fsf@dell.be.48ers.dk>
+References: <1488260482-30511-1-git-send-email-michael@walle.cc>
+ <87zih6k81v.fsf@dell.be.48ers.dk>
+Message-ID: <4476d05cffab67f429a842baa7dc9974@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Tue, 28 Feb 2017 10:00:14 +0100, Peter Korsgaard wrote:
+Am 2017-02-28 09:56, schrieb Peter Korsgaard:
+>>>>>> "Michael" == Michael Walle <michael@walle.cc> writes:
+> 
+>  > OpenOCD fails to generate the documentation because older host 
+> systems may
+>  > have an old texinfo.
+> 
+>  > This patch is taken from upstream commit 79fdeb37f486f74658f1 which 
+> is
+>  > included in version 0.10.0. Therefore, it can be dropped when the 
+> version
+>  > is bumped.
+> 
+>  > Signed-off-by: Michael Walle <michael@walle.cc>
+>  > ---
+>  > Please include this patch in the 2017.02 release. Without the patch,
+>  > openocd won't build on older build hosts. There is no functional 
+> change.
+> 
+> It would IMHO be better to not generate the documentation in the first
+> place. I've committed Thomas' timestamp workaround, so it should no
+> longer get generated:
+> 
+> https://patchwork.ozlabs.org/patch/732614/
+> 
+> Can you please verify that the above fixes it for you?
 
-> Is that the complete strace output? Where is fd 3 getting opened? I
-> would imagine the problem is caused by some kind of host/target
-> libraries mixup.
 
-No, that's only the end of the strace output. I've posted the full
-strace output at:
+works for me. So drop my patch ;)
 
-  http://code.bulix.org/elused-120071
-
-File descriptor 3 is:
-
-open("/lib/x86_64-linux-gnu/libm.so.6", O_RDONLY|O_CLOEXEC) = 3
-
-Which looks correct to me, when running a host binary on the host machine.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+-michael
