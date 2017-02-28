@@ -1,7 +1,7 @@
 From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Tue, 28 Feb 2017 18:20:16 +0300
-Subject: [Buildroot] [PATCH] xterm: disable with ARC external toolchain
-Message-ID: <1488295216-26882-1-git-send-email-vzakhar@synopsys.com>
+Date: Tue, 28 Feb 2017 18:21:34 +0300
+Subject: [Buildroot] [PATCH] mpv: disable with ARC external toolchain
+Message-ID: <1488295294-27834-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,30 @@ is to be enabled as soon as the issue with the ARC toolchain is
 resolved.
 
 Fixes:
-  http://autobuild.buildroot.net/results/28a/28a92049a6ceef005787c5779f77ecf3fe8ad642//
+  http://autobuild.buildroot.net/results/fb6/fb677a917545adee321bdcd2c2519c81326448c4//
 
 Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 ---
- package/xterm/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mpv/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/xterm/Config.in b/package/xterm/Config.in
-index e17d2c6..f11aafa 100644
---- a/package/xterm/Config.in
-+++ b/package/xterm/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_XTERM
- 	select BR2_PACKAGE_XLIB_LIBXAW
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU # fork()
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 2719981..6e115ae 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_MPV
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
 +	# ARC toolchain issue
 +	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 	help
- 	  xterm terminal emulator
- 
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+@@ -21,3 +23,4 @@ comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
 -- 
 2.7.4
