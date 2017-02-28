@@ -1,47 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Feb 2017 16:37:01 +0100
-Subject: [Buildroot] Analysis of build results for 2017-02-26: librsvg
-	failure
-In-Reply-To: <87innujrrr.fsf@dell.be.48ers.dk>
-References: <20170227072848.7BD45207F5@mail.free-electrons.com>
- <20170227142854.34d3fb86@free-electrons.com>
- <20170228000123.66658172@free-electrons.com>
- <87r32ik7vl.fsf@dell.be.48ers.dk>
- <20170228100542.2536f1d0@free-electrons.com>
- <87innujrrr.fsf@dell.be.48ers.dk>
-Message-ID: <20170228163701.345645b1@free-electrons.com>
+From: Taceant Omnes <taceant@gmail.com>
+Date: Tue, 28 Feb 2017 15:40:09 +0000
+Subject: [Buildroot] Ethernet not working with imx6ulevk
+In-Reply-To: <CAKkGsYK+WPvgH-SQ9L_cbBkjCOOXK9YE4ty6L5wQDhJOmYR==Q@mail.gmail.com>
+References: <CAKkGsYK+WPvgH-SQ9L_cbBkjCOOXK9YE4ty6L5wQDhJOmYR==Q@mail.gmail.com>
+Message-ID: <CAKkGsYLpW+bU-SihBgRFgyi4cmzJhgah1ZDpjQf0m2ksEmKP_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 23 February 2017 at 14:30, Taceant Omnes <taceant@gmail.com> wrote:
+> Hi all,
+>
+> Has anybody got Ethernet working with imx6ulevk?
 
-On Tue, 28 Feb 2017 15:48:08 +0100, Peter Korsgaard wrote:
+Yes.
 
->  > Which looks correct to me, when running a host binary on the host machine.  
-> 
-> Yes, but the part where it loads a library from the target-librsvg
-> doesn't:
-> 
-> stat("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader", {st_mode=S_IFDIR|0755, st_size=4096, ...}) = 0
-> stat("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la", {st_mode=S_IFREG|0644, st_size=3987, ...}) = 0
-> open("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la", O_RDONLY) = 3
-> read(3, "# libpixbufloader-svg.la - a lib"..., 4000) = 3987
-> futex(0x7fb04bc20488, FUTEX_WAKE_PRIVATE, 2147483647) = 0
-> read(3, "", 4000)                       = 0
-> close(3)                                = 0
-> futex(0x7fb04b3480a8, FUTEX_WAKE_PRIVATE, 2147483647) = 0
-> open("/home/thomas/projets/buildroot/output/build/librsvg-2.40.16/gdk-pixbuf-loader/./.libs/libpixbufloader-svg.so", O_RDONLY|O_CLOEXEC) = 3
+Here is how to get Ethernet working with imx6ulevk with
+buildroot-2016.11.2 (as well as with the buildroot git master at the
+time of writing this email).
 
-Wow, indeed!
+1. Download the attachment (zipped patch file) listed towards the end
+of this page: https://community.nxp.com/docs/DOC-333163
+2. Unzip the patch file to some folder.
+3. 'make nconfig' to set BR2_LINUX_KERNEL_PATCH to the full path of
+the patch file.
+4. make
 
-But how does this fit with my findings with gdb, which were pointing at
-a faulty instruction in the host libpixman?
+That is it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Cheers.
