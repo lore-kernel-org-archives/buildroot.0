@@ -1,53 +1,48 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Wed, 1 Mar 2017 10:09:36 +1100
-Subject: [Buildroot] [PATCH] libsidplay2: disable on powerpc64le
-In-Reply-To: <1488319173-18452-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1488319173-18452-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170228230936.GA3484@tungsten.ozlabs.ibm.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed,  1 Mar 2017 00:11:49 +0100
+Subject: [Buildroot] [PATCH 1/2] package/sdl2: disable altivec built-in
+	function for PowerPC
+Message-ID: <20170228231150.24089-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 28, 2017 at 10:59:33PM +0100, Thomas Petazzoni wrote:
-> The libsidplay2 package build system is completely broken. It is made
-> of a top-level configure script, which calls into sub-configure
-> scripts in sub-directories. However, since it doesn't use the autoconf
-> provided AC_CONFIG_SUBDIRS() mechanism, an "autoreconf" doesn't
-> recurse into the subdirectories.
-> 
-> Due to this, the aclocal.m4 in the libsidplay/ subdirectory doesn't
-> get re-generated when Buildroot autoreconfs the package. However,
-> since we patch one of the .m4 files in this subdirectory, when build
-> time comes, the package notices its aclocal.m4 is older than one of
-> the .m4 file, and triggers an automatic autoreconf.
-> 
-> Since <pkg>_AUTORECONF = YES is enabled, this automatic autoreconf
-> works fine: host-autoconf and host-automake are available.
-> 
-> Expect that on powerpc64le, we patch the configure script itself to
-> make it recognize powerpc64le. But this patching of the configure
-> script itself gets overwritten by the automatic autoreconf at the
-> beginning of the build step, causing the build to fail on powerpc64le.
-> 
-> Switching to AC_CONFIG_SUBDIRS() would allow to fix this, but
-> libsidplay2 needs to pass custom configure options to each of the
-> sub-configure scripts, something that AC_CONFIG_SUBDIRS() doesn't
-> support. And since libsidplay2 upstream looks completely dead, the
-> incentive to fix the whole thing is very limited.
-> 
-> Hence, even though powerpc64le is not to blame here, we take the
-> simple solution of disabling this package on powerpc64le.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/1f6a42bfece24e09c9c7f4078d549ec5c099c89d/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+As reported in this bug report [1], altivec support in SDL break
+arbitrary C++ code.
 
-I tried a few other approaches and all were dead ends too. I agree with
-this fix!
+Issue reported by test-pkg script while testing supertux package:
+    error: could not convert 'true' from 'bool' to '__vector(4) __bool int'
 
-Cheers,
-Sam.
+[1] https://bugs.debian.org/cgi-bin/bugreport.cgi/?bug=770670
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Sam Bobroff <sam.bobroff@au1.ibm.com>
+---
+ package/sdl2/sdl2.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index d2ee50d..628d906 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -23,6 +23,16 @@ SDL2_CONF_OPTS += \
+ # We must enable static build to get compilation successful.
+ SDL2_CONF_OPTS += --enable-static
+ 
++# From https://bugs.debian.org/cgi-bin/bugreport.cgi/?bug=770670
++# "The problem lies within SDL_cpuinfo.h.  It includes altivec.h, which by
++# definition provides an unconditional vector, pixel and bool define in
++# standard-c++ mode.  In GNU-c++ mode this names are only defined
++# context-sensitive by cpp.  SDL_cpuinfo.h is included by SDL.h.
++# Including altivec.h makes arbitrary code break."
++ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
++SDL2_CONF_OPTS += --disable-altivec
++endif
++
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ SDL2_DEPENDENCIES += udev
+ SDL2_CONF_OPTS += --enable-libudev
+-- 
+2.9.3
