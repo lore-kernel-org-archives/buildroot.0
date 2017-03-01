@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 22:23:52 +0100
-Subject: [Buildroot] [PATCH 2/2] package/cwiid: add optional dependency
- to bluez5_utils
-In-Reply-To: <20170219131834.27844-2-bernd.kuhls@t-online.de>
-References: <20170219131834.27844-1-bernd.kuhls@t-online.de>
- <20170219131834.27844-2-bernd.kuhls@t-online.de>
-Message-ID: <20170301222352.1f97ef44@free-electrons.com>
+Date: Wed, 1 Mar 2017 22:25:32 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump to 4.10 kernel
+ version
+In-Reply-To: <20170301220859.7de79d6a@gmx.net>
+References: <20170301170422.EA26B80279@busybox.osuosl.org>
+ <20170301220859.7de79d6a@gmx.net>
+Message-ID: <20170301222532.3b34a5b1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 19 Feb 2017 14:18:34 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/cwiid/Config.in | 2 +-
->  package/cwiid/cwiid.mk  | 8 +++++++-
->  2 files changed, 8 insertions(+), 2 deletions(-)
+On Wed, 1 Mar 2017 22:08:59 +0100, Peter Seiderer wrote:
+
+> >  config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9
+> >  	bool "4.9.x"
+> >  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+> > @@ -224,5 +232,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+> >  	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
+> >  	default "4.4.48"	if BR2_KERNEL_HEADERS_4_4
+> >  	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+> > -	default "4.9.9"		if BR2_KERNEL_HEADERS_4_9
+> > +	default "4.10"		if BR2_KERNEL_HEADERS_4_10  
 > 
-> diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
-> index 03b7dbbcd..69e54f5b7 100644
-> --- a/package/cwiid/Config.in
-> +++ b/package/cwiid/Config.in
-> @@ -4,7 +4,7 @@ config BR2_PACKAGE_CWIID
->  	depends on BR2_USE_WCHAR # bluez_utils -> libglib2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> dbus, alsa-lib, libglib2
->  	depends on BR2_USE_MMU # bluez_utils -> dbus, libglib2
-> -	select BR2_PACKAGE_BLUEZ_UTILS
-> +	select BR2_PACKAGE_BLUEZ_UTILS if !BR2_PACKAGE_BLUEZ5_UTILS
+> Is the removing of the 4.9.9. line intended? Would have expected only the
+> added 4.10 line...
 
-This causes a circular dependency:
+Doh, indeed, this seems like a mistake. Fabio, can you send a fixup
+patch?
 
-package/bluez_utils/Config.in:1:error: recursive dependency detected!
-package/bluez_utils/Config.in:1:	symbol BR2_PACKAGE_BLUEZ_UTILS is selected by BR2_PACKAGE_BLUEZ5_UTILS
-package/bluez5_utils/Config.in:1:	symbol BR2_PACKAGE_BLUEZ5_UTILS depends on BR2_PACKAGE_BLUEZ_UTILS
+Thanks Peter for spotting this!
 
 Thomas
 -- 
