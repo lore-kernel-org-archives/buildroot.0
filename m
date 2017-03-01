@@ -1,76 +1,48 @@
-From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
-Date: Wed, 1 Mar 2017 12:09:28 +0100
-Subject: [Buildroot] test-pkg script can't handle captive portals. etc.
-In-Reply-To: <401e8b88-6d8b-5dea-65c1-dfb0d53cf1ed@mind.be>
-References: <f327db96-a9ce-800a-2419-79166eb9d019@cartelsol.com>
- <401e8b88-6d8b-5dea-65c1-dfb0d53cf1ed@mind.be>
-Message-ID: <748b2ae6-6357-f7da-5b2d-6a102916c4bb@cartelsol.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 1 Mar 2017 12:47:11 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: fix build for toolchains without
+	ssp
+In-Reply-To: <20170301090503.47ecd52e@free-electrons.com>
+References: <1488320767-63856-1-git-send-email-fontaine.fabrice@gmail.com>
+ <20170228234037.12107729@free-electrons.com>
+ <AB6B30E9-21A6-499E-927B-401E5A94682A@gmail.com>
+ <20170301090503.47ecd52e@free-electrons.com>
+Message-ID: <CAPi7W83e_EVmkzaLZPZk3v9omHQLfTWD=fo1xD2nzR8Xv7naDQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+2017-03-01 9:05 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-On 01.03.2017 09:46, Arnout Vandecappelle wrote:
-> 
-> 
-> On 28-02-17 21:30, Marcus Hoffmann wrote:
->> Hey,
->>
->> I just ran into an issue with the test-pkg script.
->> When the TOOLCHAINS_URL returns an unexpected result,
->> (A router login page, when the Internet got disconnected, a captive
->> portal login page, a MITM attack, etc.) the script does weird things and
->> outputs something like this:
->>
->>     html>: FAILED
->> <!DOCTYPE: FAILED
->>      HTML: FAILED
->>      HTML: ^[ORFAILED
->>      EN">:
->> [...]
->>
->> It also creates the corresponding folders inside the test-dir.
->>
->> You can test this when pointing the TOOLCHAINS_URL var to any html page.
->>
->> This it not a very nice way to fail and may lead to harm when parsing
->> untrusted input from the web.
->>
->> What would be the best way to handle this case? Can the Toolchain URL be
->> switched to https? This would eliminate the problem.
-> 
->  I don't think a.b.o has https at the moment, though I guess it would be easy to
-> add a Let's Encrypt certificate.
-> 
->  Still, a captive portal with an accepted certificate could still play tricks.
+> Hello,
+>
+> Please keep the mailing list in CC, thanks!
+>
+> On Wed, 1 Mar 2017 07:04:53 +0100, Fabrice Fontaine wrote:
+>
+> > This is a separate build fix that applies to the version of cjson
+> > currently packaged in buildroot. I found this issue on 1.3.2 and was
+> > able to reproduce it on 1.3.0.
+>
+> Ah, ok, it's probably new in 1.3.0, which we only have in the next
+> branch. Our master branch, and the 2017.02 release, only have 1.2.1,
+> which I guess doesn't have this issue since the autobuilders didn't
+> catch it.
+>
+Yes, -fstack-protector-strong was introduced in 1.3.0.
 
-But it wouldn't be valid for the buildroot url, so I don't think it can(?).
-
-> It's probably better to validate the result.
-> 
->  However, I think it would be much nicer if we could just have the toolchain
-> defconfigs inside of Buildroot instead of using this CSV file.
-
-I don't know how often they change, but if this makes sense this would
-be a good solution I think.
-
-> 
-> 
->> Otherwise we should do some sanity checking that no stray html page is
->> returned by the curl call. But this still doesn't solve the problem of a
->> malicious actor.
-> 
->  I don't think a malicious actor is really something we should worry about here,
-> is it?
-
-Probably not terribly so. But if we can easily solve such problems (have
-them locally or pull over https) we should!
-
-> 
->  Regards,
->  Arnout
-> 
-> 
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170301/4cca661a/attachment.html>
