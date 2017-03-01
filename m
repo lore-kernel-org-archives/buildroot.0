@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 21:54:00 +0100
-Subject: [Buildroot] [PATCH] fs/iso9660: doesn't support (grub2) EFI
-In-Reply-To: <20170301200542.19418-1-arnout@mind.be>
-References: <73760f82-95af-ba23-7f23-3e2e79136ca4@mind.be>
- <20170301200542.19418-1-arnout@mind.be>
-Message-ID: <20170301215400.5f184cac@free-electrons.com>
+Date: Wed, 1 Mar 2017 21:54:33 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/sdl2: disable altivec
+ built-in function for PowerPC
+In-Reply-To: <20170228232453.3550-1-romain.naour@gmail.com>
+References: <20170228232453.3550-1-romain.naour@gmail.com>
+Message-ID: <20170301215433.23f5bb41@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 1 Mar 2017 21:05:42 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The iso9660 generation for grub2 assumes that grub-eltorito.img is
-> available. However, this image is only available for the i386-pc target
-> (i.e. legacy BIOS). An EFI-bootable iso9660 requires a different layout.
+On Wed,  1 Mar 2017 00:24:52 +0100, Romain Naour wrote:
+> As reported in this bug report [1], altivec support in SDL break
+> arbitrary C++ code.
 > 
-> Since we currently can't generate the EFI-bootable iso9660 layout,
-> require the i386-pc target to be selected in grub.
+> Issue reported by test-pkg script while testing supertux package:
+>     error: could not convert 'true' from 'bool' to '__vector(4) __bool int'
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Reported-by: arnaud.miche at orange.com
+> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi/?bug=770670
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Sam Bobroff <sam.bobroff@au1.ibm.com>
 > ---
->  fs/iso9660/Config.in | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  package/sdl2/sdl2.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-Applied to master, thanks. Peter, I believe this one qualifies for the
-LTS branch.
+Applied to master, thanks.
 
 Thomas
 -- 
