@@ -1,64 +1,291 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 1 Mar 2017 11:21:34 +0200
-Subject: [Buildroot] [PATCH next] usb_modeswitch_data: install packed
-	database
-In-Reply-To: <fbab82af999db5392fe2ae2f671531ff91f801b9.1488260265.git.baruch@tkos.co.il>
-References: <fbab82af999db5392fe2ae2f671531ff91f801b9.1488260265.git.baruch@tkos.co.il>
-Message-ID: <20170301092134.kmrpdhrq5e3vf3q2@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Mar 2017 10:22:08 +0100
+Subject: [Buildroot] [PATCH 1/1] csky: Add new architecture
+In-Reply-To: <1488357224-5141-1-git-send-email-ren_guo@c-sky.com>
+References: <1488357224-5141-1-git-send-email-ren_guo@c-sky.com>
+Message-ID: <20170301102208.79668e6f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot list,
+Hello,
 
-On Tue, Feb 28, 2017 at 07:37:45AM +0200, Baruch Siach wrote:
-> The packed databased is significantly smaller than the unpacked. The unpacked
-> database is made of hundreds of small files. So the benefit is larger
-> filesystems that allocate a minimum of block per file. Database packing adds
-> some overhead to every invocation of usb_modeswitch. This added overhead
-> should not be noticeable in practice since usb_modeswitch normally runs only
-> once per USB device insert event.
+On Wed,  1 Mar 2017 16:33:44 +0800, Guo Ren wrote:
+> C-SKY is a CPU architecture from http://en.c-sky.com
+> 
+> 1. This commit has been tested by C-SKY.
+> 
+> 2. All changes in this commit are related for building csky dev board.
+> 
+> 3. We currently use pre-build-toolchain from url. and csky-toolchain opensource is
+> on going.
+> 
+> 4. See more info in board/csky/readme.txt
+> 
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 
-This turns out to be not such a great idea, since our Busybox tar build does 
-not support the 'z' command line option. The tcl script embedded in  
-usb_modeswitch_dispatcher relies on this option to extract device information 
-entries from the packed database.
+Thanks for submitting the support for this new architecture. I'll
+review your patch below. However, I have one question: if you add a new
+architecture like this in Buildroot, then we will need your help to fix
+the build issues that will arise on this architecture. Indeed, the
+Buildroot community does a significant build testing effort (see
+http://autobuild.buildroot.org). Can you comment on whether you will
+have some time to investigate and fix the build issues that will occur
+on this CPU architecture ?
 
-baruch
+Could you summarize the upstreaming status of the binutils, gcc, glibc
+and Linux kernel support for csky ?
 
-> 
-> Before:
-> 
->   du -h output/target/usr/share/usb_modeswitch/
->   1.9M	output/target/usr/share/usb_modeswitch/
-> 
-> After:
-> 
->   du -h output/target/usr/share/usb_modeswitch/
->   20K	output/target/usr/share/usb_modeswitch/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/usb_modeswitch_data/usb_modeswitch_data.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-> index 6d75b3198310..8373b6e2ca20 100644
-> --- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
-> +++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-> @@ -14,7 +14,7 @@ USB_MODESWITCH_DATA_LICENSE_FILES = COPYING
->  # Nothing to build, it is a pure data package
+> diff --git a/arch/Config.in b/arch/Config.in
+> index 7149b2c..ea81c4c 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -240,6 +240,14 @@ config BR2_xtensa
+>  	  http://en.wikipedia.org/wiki/Xtensa
+>  	  http://www.tensilica.com/
 >  
->  define USB_MODESWITCH_DATA_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-packed
->  endef
->  
->  $(eval $(generic-package))
+> +config BR2_csky
+> +	bool "csky"
+> +	select BR2_ARCH_HAS_MMU_MANDATORY
+> +	help
+> +	  csky is processor IP from china.
+> +	  http://www.c-sky.com/
+> +	  http://www.github.com/c-sky
 
+Please keep this file sorted alphabetically.
+
+>  # The following string values are defined by the individual
+> @@ -409,4 +417,8 @@ if BR2_xtensa
+>  source "arch/Config.in.xtensa"
+>  endif
+>  
+> +if BR2_csky
+> +source "arch/Config.in.csky"
+> +endif
+
+Same, please keep the includes alphabetically sorted.
+
+> diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+> new file mode 100644
+> index 0000000..f400388
+> --- /dev/null
+> +++ b/arch/Config.in.csky
+> @@ -0,0 +1,57 @@
+> +choice
+> +	prompt "Target Architecture Variant"
+> +	depends on BR2_csky
+
+This "depends on" is not needed, as the file is anyway only included
+when BR2_csky=y.
+
+> +	default BR2_ck810
+> +	help
+> +	  Specific CPU variant to use
+> +
+> +config BR2_ck810
+> +	bool "ck810"
+> +config BR2_ck807
+> +	bool "ck807"
+> +config BR2_ck610
+> +	bool "ck610"
+
+Any reason to not sort them by order of increasing numbers? 610, then
+807, then 810 ?
+
+> +config BR2_CSKY_FPU
+> +	bool "Enable FPU coprocessor"
+> +	depends on BR2_ck810 || BR2_ck807
+> +	default n
+
+"default n" not needed: being not selected is the default for an option.
+
+> +	help
+> +	  You can say N here if you C-SKY CPU don't have Floating-Point Coprocessor
+> +	  or the user program need not to support FPU.
+> +
+> +	  You'll have say N here if you C-SKY CPU have Floating-Point Coprocessor
+> +	  and the user program need to support FPU. Floating-Point Coprocessor (FPC)
+> +	  is a coprocessor of CK serial processor. The function of FPC is to provide
+> +	  low-cost high-speed float point computation, which is full compliance with
+> +	  ANSI/IEEE Std 754, IEEE Standard for Binary Floating-Point Arithmetic.
+
+Lines are too long, please wrap at 72 characters.
+
+> +config BR2_CSKY_DSP
+> +	bool "CPU support DSP enhanced instruction"
+> +	depends on BR2_ck810 || BR2_ck807
+> +	default n
+
+"default n" not needed. To be more consistent with the FPU option,
+please use something like:
+
+	"Enable DSP enhance instructions"
+
+as the option prompt.
+
+> +# From Config.in requirement
+
+Comment not really useful.
+
+> +config BR2_ARCH
+> +	default "csky"
+> +
+> +config BR2_ENDIAN
+> +	default "LITTLE"
+> +
+> +config BR2_GCC_TARGET_ARCH
+> +	default "ck610"	if BR2_ck610
+> +	default "ck807"	if BR2_ck807
+> +	default "ck810"	if BR2_ck810
+
+Since you're setting BR2_GCC_TARGET_CPU below, I believe this
+BR2_GCC_TARGET_ARCH is useless. Indeed, when you pass -mcpu to gcc, gcc
+can automatically derive the corresponding -march.
+
+> +config BR2_GCC_TARGET_CPU
+> +	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> +	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> +	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> +	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> +	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> +	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> +	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> +	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> +	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> +
+> diff --git a/board/csky/gx6605s/gdbinit b/board/csky/gx6605s/gdbinit
+> new file mode 100644
+> index 0000000..0a6d8ab
+> --- /dev/null
+> +++ b/board/csky/gx6605s/gdbinit
+
+This file should be part of a separate patch, adding support for c-sky
+boards. Indeed, we want one patch adding the architecture support
+itself, and then other patches for the boards.
+
+> diff --git a/board/csky/gx6605s/gx6605s.dts b/board/csky/gx6605s/gx6605s.dts
+> new file mode 100644
+> index 0000000..195b0df
+> --- /dev/null
+> +++ b/board/csky/gx6605s/gx6605s.dts
+
+Could you please put this in your Linux kernel repository instead? We
+really don't want to keep complete Device Tree files in Buildroot.
+
+> diff --git a/board/csky/gx6605s/gx66xx_defconfig b/board/csky/gx6605s/gx66xx_defconfig
+> new file mode 100644
+> index 0000000..94eac2c
+> --- /dev/null
+> +++ b/board/csky/gx6605s/gx66xx_defconfig
+
+Could you instead add a defconfig in your Linux kernel repository, so
+that we don't have to keep this one in Buildroot? Especially one per
+board seems very excessive.
+
+> diff --git a/board/csky/post-image.sh b/board/csky/post-image.sh
+> new file mode 100755
+> index 0000000..7bead4f
+> --- /dev/null
+> +++ b/board/csky/post-image.sh
+> @@ -0,0 +1,4 @@
+> +#!/bin/sh
+> +# copy board/csky/xxx/gdbinit to images/.gdbinit for
+> +BOARD_DIR="$(dirname $0)"
+> +cp -af $BOARD_DIR/${2}/gdbinit $BINARIES_DIR/.gdbinit
+
+Please move this to the patch adding support for the board.
+
+> diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
+> new file mode 100644
+> index 0000000..75226a5
+> --- /dev/null
+> +++ b/configs/csky_gx6605s_defconfig
+> @@ -0,0 +1,26 @@
+> +BR2_csky=y
+> +BR2_ck610=y
+> +BR2_OPTIMIZE_2=y
+
+Please leave the default optimization level.
+
+> +BR2_SHARED_STATIC_LIBS=y
+
+Please keep the default option here as well.
+
+> +# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
+
+And here as well.
+
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> +BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.2-20170227.tar.gz"
+> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
+> +BR2_TOOLCHAIN_EXTERNAL_GCC_4_5=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> +BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> +BR2_SYSTEM_DHCP="eth0"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/csky/post-image.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="gx6605s"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/csky/gx6605s/gx66xx_defconfig"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+> +BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/csky/gx6605s/gx6605s.dts"
+> +BR2_LINUX_KERNEL_EXT_CSKY_ARCH=y
+> +BR2_LINUX_KERNEL_EXT_CSKY_ADDONS=y
+> +BR2_PACKAGE_HOST_MKE2IMG=y
+
+Why do you need mke2img ?
+
+
+> diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+> index 011dffb..3729849 100644
+> --- a/linux/Config.ext.in
+> +++ b/linux/Config.ext.in
+
+Your whole kernel handling is way too complicated ad completely not
+standard. So instead of having your csky-linux repository with just
+arch/csky, and your csky-addons repository with the SoC drivers, please
+put on Github a regular Linux kernel repository with the csky
+architecture support.
+
+This will be beneficial for multiple reasons:
+
+ 1. That is how everybody expects the kernel source tree to be
+    versioned control, so it will help new developers arriving on your
+    new architecture.
+
+ 2. This is how all build systems expect the kernel source code to be
+    organized.
+
+So please remove package/csky-addons, package/csky-arch and your
+changes to the linux/ package, and use a regular Linux kernel tree.
+
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 91cddc2..db073a6 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -47,7 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>  		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
+>  		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+>  		   BR2_sh          || BR2_sparc64    || BR2_x86_64 || \
+> -		   BR2_microblaze || BR2_nios2
+> +		   BR2_microblaze || BR2_nios2 || BR2_csky
+
+If you do this, then you allow people to build a toolchain for csky
+using Buildroot. Do you really have upstream support in binutils, gcc
+and glibc ?
+
+If not, then this chunk shouldn't be here.
+
+Best regards,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
