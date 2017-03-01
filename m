@@ -1,179 +1,810 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 01 Mar 2017 17:04:21 -0000
-Subject: [Buildroot] [git commit] gqrx: new package
-Message-ID: <20170301170420.A764A800CE@busybox.osuosl.org>
+Date: Wed, 01 Mar 2017 17:04:22 -0000
+Subject: [Buildroot] [git commit] classpath: bump to version 0.99
+Message-ID: <20170301170420.74F5E80268@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=193d83ebd8e334ff6760ff50e0da8dfd4bc12cab
+commit: https://git.buildroot.net/buildroot/commit/?id=8f8c02e596e781df77b8cd7d5e7b3c33ae5e36b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Gqrx is an open source software defined radio (SDR) receiver implemented
-using GNU Radio and the Qt GUI toolkit. Currently it works on Linux
-and Mac with hardware supported by gr-osmosdr, including Funcube Dongle,
-RTL-SDR, Airspy, HackRF, BladeRF, RFSpace, USRP and SoapySDR.
+Drop both patches since they are included upstream.
+We don't need to autoreconf now.
 
-Gqrx can operate as an AM/FM/SSB receiver with audio output or as an
-FFT-only instrument. There are also various hooks for interacting
-with external application using network sockets.
+Note: classpath 0.99 has a bug in it's autoconf scripts, such that
+configure always fails when specifying --disable-tools[1].
+We enable these for now.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[Thomas:
- - remove unneeded dependency from Config.in, inherited from Qt5
- - add entry to DEVELOPERS file.]
+Also explicitly disable GJDoc generation, as this defaults to on now.
+--disable-plugin is not needed any more, since this is now the default.
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70660
+
+Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/gqrx/0001-fix_compilation_in_gcc-6.patch | 34 +++++++++++++++++++
- package/gqrx/Config.in                           | 43 ++++++++++++++++++++++++
- package/gqrx/gqrx.hash                           |  2 ++
- package/gqrx/gqrx.mk                             | 15 +++++++++
- 6 files changed, 96 insertions(+)
+ package/classpath/0001-fix-gmp-include.patch  |  46 --
+ package/classpath/0002-add-config-rpath.patch | 680 --------------------------
+ package/classpath/classpath.hash              |   4 +-
+ package/classpath/classpath.mk                |   7 +-
+ 4 files changed, 5 insertions(+), 732 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 94f6804..ef96145 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -744,6 +744,7 @@ F:	package/zd1211-firmware/
+diff --git a/package/classpath/0001-fix-gmp-include.patch b/package/classpath/0001-fix-gmp-include.patch
+deleted file mode 100644
+index f7a3920..0000000
+--- a/package/classpath/0001-fix-gmp-include.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-The GMP include is hardcoded to /usr/include causing obvious problems.
+-
+-From classpath CVS:
+-http://cvs.savannah.gnu.org/viewvc/classpath/configure.ac?root=classpath&r1=1.245&r2=1.246
+-
+-[Gustavo: ditch -L or libtool complains loudly]
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+---- a/configure.ac	2010/01/30 01:33:50	1.245
+-+++ b/configure.ac	2010/05/04 12:29:23	1.246
+-@@ -752,10 +752,32 @@
+-   dnl __gmpz_mul_si for earlier versions (>= 3.1).
+-   dnl IMPORTANT: if you decide to look for __gmpz_combit, don't forget to
+-   dnl change the name of the corresponding ac_ variable on lines 860...
+-+  AC_ARG_WITH(gmp, [  --with-gmp=PATH         specify prefix directory for the installed GMP package.
+-+                          Equivalent to --with-gmp-include=PATH/include
+-+                          plus --with-gmp-lib=PATH/lib])
+-+  AC_ARG_WITH(gmp_include, [  --with-gmp-include=PATH specify directory for installed GMP include files])
+-+  AC_ARG_WITH(gmp_lib, [  --with-gmp-lib=PATH     specify directory for the installed GMP library])
+-+
+-   if test "x${COMPILE_GMP}" = xyes; then
+-+    AC_MSG_CHECKING([for GMP directories])
+-+    if test "x$with_gmp" != x; then
+-+       gmplibs="-lgmp"
+-+       gmpinc="-I$with_gmp/include"
+-+       if test "x$with_gmp_include" != x; then
+-+       	  gmpinc="-I$with_gmp_include $gmpinc"
+-+       fi
+-+       if test "x$with_gmp_lib" != x; then
+-+       	  gmplibs="$gmplibs"
+-+       fi
+-+    else
+-+        with_gmp="/usr"
+-+	gmplibs="-lgmp"
+-+    	gmpinc="-I/usr/include"
+-+    fi
+-+    AC_MSG_RESULT([prefix=$with_gmp, libs=$gmplibs, inc=$gmpinc])
+-     AC_CHECK_LIB(gmp, __gmpz_mul_si,
+--      [GMP_CFLAGS=-I/usr/include
+--       GMP_LIBS=-lgmp ],
+-+      [GMP_CFLAGS="$gmpinc"
+-+       GMP_LIBS="$gmplibs" ],
+-       [GMP_CFLAGS=
+-        GMP_LIBS= ])
+-     AC_SUBST(GMP_CFLAGS)
+diff --git a/package/classpath/0002-add-config-rpath.patch b/package/classpath/0002-add-config-rpath.patch
+deleted file mode 100644
+index 3a8a7d0..0000000
+--- a/package/classpath/0002-add-config-rpath.patch
++++ /dev/null
+@@ -1,680 +0,0 @@
+-Add config.rpath from upstream CVS to avoid (re)autoconfiguring errors.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura classpath-0.98.orig/config.rpath classpath-0.98/config.rpath
+---- classpath-0.98.orig/config.rpath	1969-12-31 21:00:00.000000000 -0300
+-+++ classpath-0.98/config.rpath	2013-07-10 09:36:51.894281025 -0300
+-@@ -0,0 +1,672 @@
+-+#! /bin/sh
+-+# Output a system dependent set of variables, describing how to set the
+-+# run time search path of shared libraries in an executable.
+-+#
+-+#   Copyright 1996-2010 Free Software Foundation, Inc.
+-+#   Taken from GNU libtool, 2001
+-+#   Originally by Gordon Matzigkeit <gord@gnu.ai.mit.edu>, 1996
+-+#
+-+#   This file is free software; the Free Software Foundation gives
+-+#   unlimited permission to copy and/or distribute it, with or without
+-+#   modifications, as long as this notice is preserved.
+-+#
+-+# The first argument passed to this file is the canonical host specification,
+-+#    CPU_TYPE-MANUFACTURER-OPERATING_SYSTEM
+-+# or
+-+#    CPU_TYPE-MANUFACTURER-KERNEL-OPERATING_SYSTEM
+-+# The environment variables CC, GCC, LDFLAGS, LD, with_gnu_ld
+-+# should be set by the caller.
+-+#
+-+# The set of defined variables is at the end of this script.
+-+
+-+# Known limitations:
+-+# - On IRIX 6.5 with CC="cc", the run time search patch must not be longer
+-+#   than 256 bytes, otherwise the compiler driver will dump core. The only
+-+#   known workaround is to choose shorter directory names for the build
+-+#   directory and/or the installation directory.
+-+
+-+# All known linkers require a `.a' archive for static linking (except MSVC,
+-+# which needs '.lib').
+-+libext=a
+-+shrext=.so
+-+
+-+host="$1"
+-+host_cpu=`echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+-+host_vendor=`echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+-+host_os=`echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+-+
+-+# Code taken from libtool.m4's _LT_CC_BASENAME.
+-+
+-+for cc_temp in $CC""; do
+-+  case $cc_temp in
+-+    compile | *[\\/]compile | ccache | *[\\/]ccache ) ;;
+-+    distcc | *[\\/]distcc | purify | *[\\/]purify ) ;;
+-+    \-*) ;;
+-+    *) break;;
+-+  esac
+-+done
+-+cc_basename=`echo "$cc_temp" | sed -e 's%^.*/%%'`
+-+
+-+# Code taken from libtool.m4's _LT_COMPILER_PIC.
+-+
+-+wl=
+-+if test "$GCC" = yes; then
+-+  wl='-Wl,'
+-+else
+-+  case "$host_os" in
+-+    aix*)
+-+      wl='-Wl,'
+-+      ;;
+-+    darwin*)
+-+      case $cc_basename in
+-+        xlc*)
+-+          wl='-Wl,'
+-+          ;;
+-+      esac
+-+      ;;
+-+    mingw* | cygwin* | pw32* | os2* | cegcc*)
+-+      ;;
+-+    hpux9* | hpux10* | hpux11*)
+-+      wl='-Wl,'
+-+      ;;
+-+    irix5* | irix6* | nonstopux*)
+-+      wl='-Wl,'
+-+      ;;
+-+    newsos6)
+-+      ;;
+-+    linux* | k*bsd*-gnu)
+-+      case $cc_basename in
+-+        ecc*)
+-+          wl='-Wl,'
+-+          ;;
+-+        icc* | ifort*)
+-+          wl='-Wl,'
+-+          ;;
+-+        lf95*)
+-+          wl='-Wl,'
+-+          ;;
+-+        pgcc | pgf77 | pgf90)
+-+          wl='-Wl,'
+-+          ;;
+-+        ccc*)
+-+          wl='-Wl,'
+-+          ;;
+-+        como)
+-+          wl='-lopt='
+-+          ;;
+-+        *)
+-+          case `$CC -V 2>&1 | sed 5q` in
+-+            *Sun\ C*)
+-+              wl='-Wl,'
+-+              ;;
+-+          esac
+-+          ;;
+-+      esac
+-+      ;;
+-+    osf3* | osf4* | osf5*)
+-+      wl='-Wl,'
+-+      ;;
+-+    rdos*)
+-+      ;;
+-+    solaris*)
+-+      wl='-Wl,'
+-+      ;;
+-+    sunos4*)
+-+      wl='-Qoption ld '
+-+      ;;
+-+    sysv4 | sysv4.2uw2* | sysv4.3*)
+-+      wl='-Wl,'
+-+      ;;
+-+    sysv4*MP*)
+-+      ;;
+-+    sysv5* | unixware* | sco3.2v5* | sco5v6* | OpenUNIX*)
+-+      wl='-Wl,'
+-+      ;;
+-+    unicos*)
+-+      wl='-Wl,'
+-+      ;;
+-+    uts4*)
+-+      ;;
+-+  esac
+-+fi
+-+
+-+# Code taken from libtool.m4's _LT_LINKER_SHLIBS.
+-+
+-+hardcode_libdir_flag_spec=
+-+hardcode_libdir_separator=
+-+hardcode_direct=no
+-+hardcode_minus_L=no
+-+
+-+case "$host_os" in
+-+  cygwin* | mingw* | pw32* | cegcc*)
+-+    # FIXME: the MSVC++ port hasn't been tested in a loooong time
+-+    # When not using gcc, we currently assume that we are using
+-+    # Microsoft Visual C++.
+-+    if test "$GCC" != yes; then
+-+      with_gnu_ld=no
+-+    fi
+-+    ;;
+-+  interix*)
+-+    # we just hope/assume this is gcc and not c89 (= MSVC++)
+-+    with_gnu_ld=yes
+-+    ;;
+-+  openbsd*)
+-+    with_gnu_ld=no
+-+    ;;
+-+esac
+-+
+-+ld_shlibs=yes
+-+if test "$with_gnu_ld" = yes; then
+-+  # Set some defaults for GNU ld with shared library support. These
+-+  # are reset later if shared libraries are not supported. Putting them
+-+  # here allows them to be overridden if necessary.
+-+  # Unlike libtool, we use -rpath here, not --rpath, since the documented
+-+  # option of GNU ld is called -rpath, not --rpath.
+-+  hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+  case "$host_os" in
+-+    aix[3-9]*)
+-+      # On AIX/PPC, the GNU linker is very broken
+-+      if test "$host_cpu" != ia64; then
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    amigaos*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      hardcode_minus_L=yes
+-+      # Samuel A. Falvo II <kc5tja@dolphin.openprojects.net> reports
+-+      # that the semantics of dynamic libraries on AmigaOS, at least up
+-+      # to version 4, is to share data among multiple programs linked
+-+      # with the same dynamic library.  Since this doesn't match the
+-+      # behavior of shared libraries on other platforms, we cannot use
+-+      # them.
+-+      ld_shlibs=no
+-+      ;;
+-+    beos*)
+-+      if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    cygwin* | mingw* | pw32* | cegcc*)
+-+      # hardcode_libdir_flag_spec is actually meaningless, as there is
+-+      # no search path for DLLs.
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    interix[3-9]*)
+-+      hardcode_direct=no
+-+      hardcode_libdir_flag_spec='${wl}-rpath,$libdir'
+-+      ;;
+-+    gnu* | linux* | k*bsd*-gnu)
+-+      if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    netbsd*)
+-+      ;;
+-+    solaris*)
+-+      if $LD -v 2>&1 | grep 'BFD 2\.8' > /dev/null; then
+-+        ld_shlibs=no
+-+      elif $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    sysv5* | sco3.2v5* | sco5v6* | unixware* | OpenUNIX*)
+-+      case `$LD -v 2>&1` in
+-+        *\ [01].* | *\ 2.[0-9].* | *\ 2.1[0-5].*)
+-+          ld_shlibs=no
+-+          ;;
+-+        *)
+-+          if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+            hardcode_libdir_flag_spec='`test -z "$SCOABSPATH" && echo ${wl}-rpath,$libdir`'
+-+          else
+-+            ld_shlibs=no
+-+          fi
+-+          ;;
+-+      esac
+-+      ;;
+-+    sunos4*)
+-+      hardcode_direct=yes
+-+      ;;
+-+    *)
+-+      if $LD --help 2>&1 | grep ': supported targets:.* elf' > /dev/null; then
+-+        :
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+  esac
+-+  if test "$ld_shlibs" = no; then
+-+    hardcode_libdir_flag_spec=
+-+  fi
+-+else
+-+  case "$host_os" in
+-+    aix3*)
+-+      # Note: this linker hardcodes the directories in LIBPATH if there
+-+      # are no directories specified by -L.
+-+      hardcode_minus_L=yes
+-+      if test "$GCC" = yes; then
+-+        # Neither direct hardcoding nor static linking is supported with a
+-+        # broken collect2.
+-+        hardcode_direct=unsupported
+-+      fi
+-+      ;;
+-+    aix[4-9]*)
+-+      if test "$host_cpu" = ia64; then
+-+        # On IA64, the linker does run time linking by default, so we don't
+-+        # have to do anything special.
+-+        aix_use_runtimelinking=no
+-+      else
+-+        aix_use_runtimelinking=no
+-+        # Test if we are trying to use run time linking or normal
+-+        # AIX style linking. If -brtl is somewhere in LDFLAGS, we
+-+        # need to do runtime linking.
+-+        case $host_os in aix4.[23]|aix4.[23].*|aix[5-9]*)
+-+          for ld_flag in $LDFLAGS; do
+-+            if (test $ld_flag = "-brtl" || test $ld_flag = "-Wl,-brtl"); then
+-+              aix_use_runtimelinking=yes
+-+              break
+-+            fi
+-+          done
+-+          ;;
+-+        esac
+-+      fi
+-+      hardcode_direct=yes
+-+      hardcode_libdir_separator=':'
+-+      if test "$GCC" = yes; then
+-+        case $host_os in aix4.[012]|aix4.[012].*)
+-+          collect2name=`${CC} -print-prog-name=collect2`
+-+          if test -f "$collect2name" && \
+-+            strings "$collect2name" | grep resolve_lib_name >/dev/null
+-+          then
+-+            # We have reworked collect2
+-+            :
+-+          else
+-+            # We have old collect2
+-+            hardcode_direct=unsupported
+-+            hardcode_minus_L=yes
+-+            hardcode_libdir_flag_spec='-L$libdir'
+-+            hardcode_libdir_separator=
+-+          fi
+-+          ;;
+-+        esac
+-+      fi
+-+      # Begin _LT_AC_SYS_LIBPATH_AIX.
+-+      echo 'int main () { return 0; }' > conftest.c
+-+      ${CC} ${LDFLAGS} conftest.c -o conftest
+-+      aix_libpath=`dump -H conftest 2>/dev/null | sed -n -e '/Import File Strings/,/^$/ { /^0/ { s/^0  *\(.*\)$/\1/; p; }
+-+}'`
+-+      if test -z "$aix_libpath"; then
+-+        aix_libpath=`dump -HX64 conftest 2>/dev/null | sed -n -e '/Import File Strings/,/^$/ { /^0/ { s/^0  *\(.*\)$/\1/; p; }
+-+}'`
+-+      fi
+-+      if test -z "$aix_libpath"; then
+-+        aix_libpath="/usr/lib:/lib"
+-+      fi
+-+      rm -f conftest.c conftest
+-+      # End _LT_AC_SYS_LIBPATH_AIX.
+-+      if test "$aix_use_runtimelinking" = yes; then
+-+        hardcode_libdir_flag_spec='${wl}-blibpath:$libdir:'"$aix_libpath"
+-+      else
+-+        if test "$host_cpu" = ia64; then
+-+          hardcode_libdir_flag_spec='${wl}-R $libdir:/usr/lib:/lib'
+-+        else
+-+          hardcode_libdir_flag_spec='${wl}-blibpath:$libdir:'"$aix_libpath"
+-+        fi
+-+      fi
+-+      ;;
+-+    amigaos*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      hardcode_minus_L=yes
+-+      # see comment about different semantics on the GNU ld section
+-+      ld_shlibs=no
+-+      ;;
+-+    bsdi[45]*)
+-+      ;;
+-+    cygwin* | mingw* | pw32* | cegcc*)
+-+      # When not using gcc, we currently assume that we are using
+-+      # Microsoft Visual C++.
+-+      # hardcode_libdir_flag_spec is actually meaningless, as there is
+-+      # no search path for DLLs.
+-+      hardcode_libdir_flag_spec=' '
+-+      libext=lib
+-+      ;;
+-+    darwin* | rhapsody*)
+-+      hardcode_direct=no
+-+      if test "$GCC" = yes ; then
+-+        :
+-+      else
+-+        case $cc_basename in
+-+          xlc*)
+-+            ;;
+-+          *)
+-+            ld_shlibs=no
+-+            ;;
+-+        esac
+-+      fi
+-+      ;;
+-+    dgux*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      ;;
+-+    freebsd1*)
+-+      ld_shlibs=no
+-+      ;;
+-+    freebsd2.2*)
+-+      hardcode_libdir_flag_spec='-R$libdir'
+-+      hardcode_direct=yes
+-+      ;;
+-+    freebsd2*)
+-+      hardcode_direct=yes
+-+      hardcode_minus_L=yes
+-+      ;;
+-+    freebsd* | dragonfly*)
+-+      hardcode_libdir_flag_spec='-R$libdir'
+-+      hardcode_direct=yes
+-+      ;;
+-+    hpux9*)
+-+      hardcode_libdir_flag_spec='${wl}+b ${wl}$libdir'
+-+      hardcode_libdir_separator=:
+-+      hardcode_direct=yes
+-+      # hardcode_minus_L: Not really in the search PATH,
+-+      # but as the default location of the library.
+-+      hardcode_minus_L=yes
+-+      ;;
+-+    hpux10*)
+-+      if test "$with_gnu_ld" = no; then
+-+        hardcode_libdir_flag_spec='${wl}+b ${wl}$libdir'
+-+        hardcode_libdir_separator=:
+-+        hardcode_direct=yes
+-+        # hardcode_minus_L: Not really in the search PATH,
+-+        # but as the default location of the library.
+-+        hardcode_minus_L=yes
+-+      fi
+-+      ;;
+-+    hpux11*)
+-+      if test "$with_gnu_ld" = no; then
+-+        hardcode_libdir_flag_spec='${wl}+b ${wl}$libdir'
+-+        hardcode_libdir_separator=:
+-+        case $host_cpu in
+-+          hppa*64*|ia64*)
+-+            hardcode_direct=no
+-+            ;;
+-+          *)
+-+            hardcode_direct=yes
+-+            # hardcode_minus_L: Not really in the search PATH,
+-+            # but as the default location of the library.
+-+            hardcode_minus_L=yes
+-+            ;;
+-+        esac
+-+      fi
+-+      ;;
+-+    irix5* | irix6* | nonstopux*)
+-+      hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+      hardcode_libdir_separator=:
+-+      ;;
+-+    netbsd*)
+-+      hardcode_libdir_flag_spec='-R$libdir'
+-+      hardcode_direct=yes
+-+      ;;
+-+    newsos6)
+-+      hardcode_direct=yes
+-+      hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+      hardcode_libdir_separator=:
+-+      ;;
+-+    openbsd*)
+-+      if test -f /usr/libexec/ld.so; then
+-+        hardcode_direct=yes
+-+        if test -z "`echo __ELF__ | $CC -E - | grep __ELF__`" || test "$host_os-$host_cpu" = "openbsd2.8-powerpc"; then
+-+          hardcode_libdir_flag_spec='${wl}-rpath,$libdir'
+-+        else
+-+          case "$host_os" in
+-+            openbsd[01].* | openbsd2.[0-7] | openbsd2.[0-7].*)
+-+              hardcode_libdir_flag_spec='-R$libdir'
+-+              ;;
+-+            *)
+-+              hardcode_libdir_flag_spec='${wl}-rpath,$libdir'
+-+              ;;
+-+          esac
+-+        fi
+-+      else
+-+        ld_shlibs=no
+-+      fi
+-+      ;;
+-+    os2*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      hardcode_minus_L=yes
+-+      ;;
+-+    osf3*)
+-+      hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+      hardcode_libdir_separator=:
+-+      ;;
+-+    osf4* | osf5*)
+-+      if test "$GCC" = yes; then
+-+        hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
+-+      else
+-+        # Both cc and cxx compiler support -rpath directly
+-+        hardcode_libdir_flag_spec='-rpath $libdir'
+-+      fi
+-+      hardcode_libdir_separator=:
+-+      ;;
+-+    solaris*)
+-+      hardcode_libdir_flag_spec='-R$libdir'
+-+      ;;
+-+    sunos4*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      hardcode_direct=yes
+-+      hardcode_minus_L=yes
+-+      ;;
+-+    sysv4)
+-+      case $host_vendor in
+-+        sni)
+-+          hardcode_direct=yes # is this really true???
+-+          ;;
+-+        siemens)
+-+          hardcode_direct=no
+-+          ;;
+-+        motorola)
+-+          hardcode_direct=no #Motorola manual says yes, but my tests say they lie
+-+          ;;
+-+      esac
+-+      ;;
+-+    sysv4.3*)
+-+      ;;
+-+    sysv4*MP*)
+-+      if test -d /usr/nec; then
+-+        ld_shlibs=yes
+-+      fi
+-+      ;;
+-+    sysv4*uw2* | sysv5OpenUNIX* | sysv5UnixWare7.[01].[10]* | unixware7* | sco3.2v5.0.[024]*)
+-+      ;;
+-+    sysv5* | sco3.2v5* | sco5v6*)
+-+      hardcode_libdir_flag_spec='`test -z "$SCOABSPATH" && echo ${wl}-R,$libdir`'
+-+      hardcode_libdir_separator=':'
+-+      ;;
+-+    uts4*)
+-+      hardcode_libdir_flag_spec='-L$libdir'
+-+      ;;
+-+    *)
+-+      ld_shlibs=no
+-+      ;;
+-+  esac
+-+fi
+-+
+-+# Check dynamic linker characteristics
+-+# Code taken from libtool.m4's _LT_SYS_DYNAMIC_LINKER.
+-+# Unlike libtool.m4, here we don't care about _all_ names of the library, but
+-+# only about the one the linker finds when passed -lNAME. This is the last
+-+# element of library_names_spec in libtool.m4, or possibly two of them if the
+-+# linker has special search rules.
+-+library_names_spec=      # the last element of library_names_spec in libtool.m4
+-+libname_spec='lib$name'
+-+case "$host_os" in
+-+  aix3*)
+-+    library_names_spec='$libname.a'
+-+    ;;
+-+  aix[4-9]*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  amigaos*)
+-+    library_names_spec='$libname.a'
+-+    ;;
+-+  beos*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  bsdi[45]*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  cygwin* | mingw* | pw32* | cegcc*)
+-+    shrext=.dll
+-+    library_names_spec='$libname.dll.a $libname.lib'
+-+    ;;
+-+  darwin* | rhapsody*)
+-+    shrext=.dylib
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  dgux*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  freebsd1*)
+-+    ;;
+-+  freebsd* | dragonfly*)
+-+    case "$host_os" in
+-+      freebsd[123]*)
+-+        library_names_spec='$libname$shrext$versuffix' ;;
+-+      *)
+-+        library_names_spec='$libname$shrext' ;;
+-+    esac
+-+    ;;
+-+  gnu*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  hpux9* | hpux10* | hpux11*)
+-+    case $host_cpu in
+-+      ia64*)
+-+        shrext=.so
+-+        ;;
+-+      hppa*64*)
+-+        shrext=.sl
+-+        ;;
+-+      *)
+-+        shrext=.sl
+-+        ;;
+-+    esac
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  interix[3-9]*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  irix5* | irix6* | nonstopux*)
+-+    library_names_spec='$libname$shrext'
+-+    case "$host_os" in
+-+      irix5* | nonstopux*)
+-+        libsuff= shlibsuff=
+-+        ;;
+-+      *)
+-+        case $LD in
+-+          *-32|*"-32 "|*-melf32bsmip|*"-melf32bsmip ") libsuff= shlibsuff= ;;
+-+          *-n32|*"-n32 "|*-melf32bmipn32|*"-melf32bmipn32 ") libsuff=32 shlibsuff=N32 ;;
+-+          *-64|*"-64 "|*-melf64bmip|*"-melf64bmip ") libsuff=64 shlibsuff=64 ;;
+-+          *) libsuff= shlibsuff= ;;
+-+        esac
+-+        ;;
+-+    esac
+-+    ;;
+-+  linux*oldld* | linux*aout* | linux*coff*)
+-+    ;;
+-+  linux* | k*bsd*-gnu)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  knetbsd*-gnu)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  netbsd*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  newsos6)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  nto-qnx*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  openbsd*)
+-+    library_names_spec='$libname$shrext$versuffix'
+-+    ;;
+-+  os2*)
+-+    libname_spec='$name'
+-+    shrext=.dll
+-+    library_names_spec='$libname.a'
+-+    ;;
+-+  osf3* | osf4* | osf5*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  rdos*)
+-+    ;;
+-+  solaris*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  sunos4*)
+-+    library_names_spec='$libname$shrext$versuffix'
+-+    ;;
+-+  sysv4 | sysv4.3*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  sysv4*MP*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  sysv5* | sco3.2v5* | sco5v6* | unixware* | OpenUNIX* | sysv4*uw2*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+  uts4*)
+-+    library_names_spec='$libname$shrext'
+-+    ;;
+-+esac
+-+
+-+sed_quote_subst='s/\(["`$\\]\)/\\\1/g'
+-+escaped_wl=`echo "X$wl" | sed -e 's/^X//' -e "$sed_quote_subst"`
+-+shlibext=`echo "$shrext" | sed -e 's,^\.,,'`
+-+escaped_libname_spec=`echo "X$libname_spec" | sed -e 's/^X//' -e "$sed_quote_subst"`
+-+escaped_library_names_spec=`echo "X$library_names_spec" | sed -e 's/^X//' -e "$sed_quote_subst"`
+-+escaped_hardcode_libdir_flag_spec=`echo "X$hardcode_libdir_flag_spec" | sed -e 's/^X//' -e "$sed_quote_subst"`
+-+
+-+LC_ALL=C sed -e 's/^\([a-zA-Z0-9_]*\)=/acl_cv_\1=/' <<EOF
+-+
+-+# How to pass a linker flag through the compiler.
+-+wl="$escaped_wl"
+-+
+-+# Static library suffix (normally "a").
+-+libext="$libext"
+-+
+-+# Shared library suffix (normally "so").
+-+shlibext="$shlibext"
+-+
+-+# Format of library name prefix.
+-+libname_spec="$escaped_libname_spec"
+-+
+-+# Library names that the linker finds when passed -lNAME.
+-+library_names_spec="$escaped_library_names_spec"
+-+
+-+# Flag to hardcode \$libdir into a binary during linking.
+-+# This must work even if \$libdir does not exist.
+-+hardcode_libdir_flag_spec="$escaped_hardcode_libdir_flag_spec"
+-+
+-+# Whether we need a single -rpath flag with a separated argument.
+-+hardcode_libdir_separator="$hardcode_libdir_separator"
+-+
+-+# Set to yes if using DIR/libNAME.so during linking hardcodes DIR into the
+-+# resulting binary.
+-+hardcode_direct="$hardcode_direct"
+-+
+-+# Set to yes if using the -LDIR flag during linking hardcodes DIR into the
+-+# resulting binary.
+-+hardcode_minus_L="$hardcode_minus_L"
+-+
+-+EOF
+diff --git a/package/classpath/classpath.hash b/package/classpath/classpath.hash
+index 25d3e8c..d1c5b5c 100644
+--- a/package/classpath/classpath.hash
++++ b/package/classpath/classpath.hash
+@@ -1,2 +1,2 @@
+-# From http://www.gnu.org/software/classpath/announce/20090205.html
+-sha1	1d6e8d1b3542a35bbd1013c61fab3cfae083decb	classpath-0.98.tar.gz
++# From https://www.gnu.org/software/classpath/announce/20120307.html
++sha256	f929297f8ae9b613a1a167e231566861893260651d913ad9b6c11933895fecc8	classpath-0.99.tar.gz
+diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
+index 3825c76..97b7f0d 100644
+--- a/package/classpath/classpath.mk
++++ b/package/classpath/classpath.mk
+@@ -4,21 +4,20 @@
+ #
+ ################################################################################
  
- N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
- F:	package/gnuradio/
-+F:	package/gqrx/
- F:	package/gr-osmosdr/
- F:	package/libusbgx/
- F:	package/python-cheetah/
-diff --git a/package/Config.in b/package/Config.in
-index deff0fe..e78fb75 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1451,6 +1451,7 @@ menu "Miscellaneous"
- 	source "package/empty/Config.in"
- 	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
-+	source "package/gqrx/Config.in"
- 	source "package/gr-osmosdr/Config.in"
- 	source "package/gsettings-desktop-schemas/Config.in"
- 	source "package/haveged/Config.in"
-diff --git a/package/gqrx/0001-fix_compilation_in_gcc-6.patch b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-new file mode 100644
-index 0000000..22ec1ef
---- /dev/null
-+++ b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-@@ -0,0 +1,34 @@
-+From e6baaee4968345a53e977f593362267a91041cff Mon Sep 17 00:00:00 2001
-+From: Valentin Ochs <a@0au.de>
-+Date: Fri, 21 Oct 2016 20:12:50 +0200
-+Subject: [PATCH] Cosmetic & readability changes
-+
-+Backport patch from
-+https://github.com/csete/gqrx/commit/e6baaee4968345a53e977f593362267a91041cff
-+
-+Fix compilation in gcc-6
-+
-+Signed-off-by: Valentin Ochs <a@0au.de>
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+diff --git a/src/qtgui/plotter.cpp b/src/qtgui/plotter.cpp
-+index e491632..b877546 100644
-+--- a/src/qtgui/plotter.cpp
-++++ b/src/qtgui/plotter.cpp
-+@@ -1336,8 +1336,11 @@ void CPlotter::drawOverlay()
-+ #endif
-+ 
-+             int level = 0;
-+-            for (; level < nLevels && tagEnd[level] > x; level++);
-+-                level %= nLevels;
-++            while(level < nLevels && tagEnd[level] > x)
-++                level++;
-++            
-++            if(level == nLevels)
-++                level = 0;
-+ 
-+             tagEnd[level] = x + nameWidth + slant - 1;
-+             m_BookmarkTags.append(qMakePair<QRect, qint64>(QRect(x, level * levelHeight, nameWidth + slant, fontHeight), bookmarks[i].frequency));
-+-- 
-+2.10.2
-+
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-new file mode 100644
-index 0000000..5f7a561
---- /dev/null
-+++ b/package/gqrx/Config.in
-@@ -0,0 +1,43 @@
-+comment "gqrx needs a toolchain w/ C++, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
-+
-+comment "gqrx needs qt5, gnuradio, fftw's single precision, alsa-lib or portaudio"
-+	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
-+		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO) || !BR2_PACKAGE_QT5
-+
-+config BR2_PACKAGE_GQRX
-+	bool "gqrx"
-+	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO # gr-audio
-+	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
-+	depends on BR2_PACKAGE_GNURADIO
-+	depends on BR2_PACKAGE_QT5
-+	depends on BR2_INSTALL_LIBSTDCPP # boost
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
-+	depends on BR2_USE_WCHAR # boost
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_GNURADIO_ANALOG
-+	select BR2_PACKAGE_GNURADIO_AUDIO
-+	select BR2_PACKAGE_GNURADIO_BLOCKS
-+	select BR2_PACKAGE_GNURADIO_DIGITAL
-+	select BR2_PACKAGE_GNURADIO_FFT
-+	select BR2_PACKAGE_GNURADIO_FILTER
-+	select BR2_PACKAGE_GR_OSMOSDR
-+	select BR2_PACKAGE_QT5BASE_GUI
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5SVG
-+	help
-+	  Gqrx is an open source software defined radio (SDR) receiver
-+	  implemented using GNU Radio and the Qt GUI
-+	  toolkit. Currently it works on Linux and Mac with hardware
-+	  supported by gr-osmosdr, including Funcube Dongle, RTL-SDR,
-+	  Airspy, HackRF, BladeRF, RFSpace, USRP and SoapySDR.
-+
-+	  Gqrx can operate as an AM/FM/SSB receiver with audio output
-+	  or as an FFT-only instrument. There are also various hooks
-+	  for interacting with external application using network
-+	  sockets.
-+
-+	  http://gqrx.dk/
-diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-new file mode 100644
-index 0000000..2d126aa
---- /dev/null
-+++ b/package/gqrx/gqrx.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated:
-+sha256 53d25db8d987a41ccccaf6fd85262bd7770cdfab5539b5901c4558756483c9db  gqrx-v2.6.tar.gz
-diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-new file mode 100644
-index 0000000..b591e60
---- /dev/null
-+++ b/package/gqrx/gqrx.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# gqrx
-+#
-+################################################################################
-+
-+GQRX_VERSION = v2.6
-+GQRX_SITE = $(call github,csete,gqrx,$(GQRX_VERSION))
-+GQRX_LICENSE = GPLv3+, Apache-2.0
-+GQRX_LICENSE_FILES = COPYING LICENSE-CTK
-+GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr qt5base qt5svg
-+
-+GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
-+
-+$(eval $(cmake-package))
+-CLASSPATH_VERSION = 0.98
++CLASSPATH_VERSION = 0.99
+ CLASSPATH_SITE = $(BR2_GNU_MIRROR)/classpath
+ CLASSPATH_CONF_OPTS = \
+ 	--disable-examples \
+-	--disable-plugin \
+ 	--disable-rpath \
+ 	--disable-Werror \
+ 	--disable-gconf-peer \
+-	--disable-tools
++	--disable-gjdoc
++	--enable-tools
+ 
+ # classpath assumes qt runs on top of X11, but we
+ # don't support qt4 on X11
+ CLASSPATH_CONF_OPTS += --disable-qt-peer
+ CLASSPATH_DEPENDENCIES = host-pkgconf
+-CLASSPATH_AUTORECONF = YES
+ CLASSPATH_LICENSE = GPLv2+ with exception
+ CLASSPATH_LICENSE_FILES = COPYING
+ 
