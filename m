@@ -1,43 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 21:48:41 +0100
-Subject: [Buildroot] [git commit] cjson: fix build for toolchains without ssp
-Message-ID: <20170301204904.5BF2A8228B@busybox.osuosl.org>
+Date: Wed, 1 Mar 2017 21:49:41 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: fix build for toolchains without
+ ssp
+In-Reply-To: <1488320767-63856-1-git-send-email-fontaine.fabrice@gmail.com>
+References: <1488320767-63856-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <20170301214941.4611d6f4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e01248c4cfd34a66517dc2c57d4478e3ce31ba43
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF to disable custom flags, in
-particular -fstack-protector-strong which depends on
-BR2_TOOLCHAIN_HAS_SSP
+On Tue, 28 Feb 2017 23:26:07 +0100, Fabrice Fontaine wrote:
+> Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF to disable custom flags, in
+> particular -fstack-protector-strong which depends on
+> BR2_TOOLCHAIN_HAS_SSP
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/cjson/cjson.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Fixes:
+Applied to master, thanks. Peter: even though this is a build fix, this
+one is not needed on the LTS branch, because it is only needed after
+the 1.3.0 bump, which was done post 2017.02.
 
-  http://autobuild.buildroot.net/results/cfcf3bc8066159dfddd1786954d78e8527858f2f/
+Best regards,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cjson/cjson.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index aea9578..c554654 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -9,7 +9,10 @@ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
- CJSON_LICENSE_FILES = LICENSE
-+# Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF in particular to disable
-+# -fstack-protector-strong which depends on BR2_TOOLCHAIN_HAS_SSP
- CJSON_CONF_OPTS += \
--	-DENABLE_CJSON_TEST=OFF
-+	-DENABLE_CJSON_TEST=OFF \
-+	-DENABLE_CUSTOM_COMPILER_FLAGS=OFF
- 
- $(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
