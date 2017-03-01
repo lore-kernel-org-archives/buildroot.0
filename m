@@ -1,21 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 01 Mar 2017 17:04:21 -0000
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 3.2.4
-Message-ID: <20170301170420.44269821E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lxc: enable selinux if package is selected
+Message-ID: <20170301170420.52F6B80268@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03f9ce54630c3fdc7b3f227ef24f3c6ddea95051
+commit: https://git.buildroot.net/buildroot/commit/?id=25707b2fd63abbf93417d7d878c29d7585914ea9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lxc/lxc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Patch is too large, so refusing to show it
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 455814b..b79197f 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -29,6 +29,13 @@ else
+ LXC_CONF_OPTS += --disable-seccomp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++LXC_CONF_OPTS += --enable-selinux
++LXC_DEPENDENCIES += libselinux
++else
++LXC_CONF_OPTS += --disable-selinux
++endif
++
+ ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
+ LXC_CONF_OPTS += --enable-lua
+ LXC_DEPENDENCIES += luainterpreter
