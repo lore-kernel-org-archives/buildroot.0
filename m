@@ -1,37 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Mar 2017 17:04:21 -0000
-Subject: [Buildroot] [git commit] gnuradio: make gr-audio select alsa-lib if
-	no backend selected
-Message-ID: <20170301170420.B387F800CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gnutls: bump version to 3.5.9
+Message-ID: <20170301170420.CCAEA800CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e528ed77401f2a62b0284c289deab8a3c1d5d76f
+commit: https://git.buildroot.net/buildroot/commit/?id=743f5076df0a852f25d55c3bcb1d3e33eec07055
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gr-audio may be built with alsa-lib or portaudio support. To simplify
-dependencies if no backend is selected, we automatically select alsa-lib
-as the default audio backend if portaudio is not enabled.
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnuradio/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 8301afe..0291d70 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -32,7 +32,7 @@ if BR2_PACKAGE_GNURADIO
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 121f75a..156d2aa 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	0e97f243ae72b70307d684b84c7fe679385aa7a7a0e37e5be810193dcc17d4ff	gnutls-3.5.8.tar.xz
++sha256	82b10f0c4ef18f4e64ad8cef5dbaf14be732f5095a41cf366b4ecb4050382951	gnutls-3.5.9.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 4fab812..932c0fa 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_PACKAGE_GNURADIO_AUDIO
- 	bool "gr-audio"
--	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO
-+	select BR2_PACKAGE_ALSA_LIB if !BR2_PACKAGE_PORTAUDIO
- 	help
- 	  Add audio source/sink to GNU Radio
- 
+ GNUTLS_VERSION_MAJOR = 3.5
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
