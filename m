@@ -1,55 +1,1893 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 Mar 2017 09:35:20 +0100
-Subject: [Buildroot] [PATCH 1/5] core/pkg-cmake: provide our own
- platform description
-In-Reply-To: <20170301091731.5102e061@free-electrons.com>
-References: <cover.1488305206.git.yann.morin.1998@free.fr>
- <f25e9ff7873418c0b323528d6a9c2482c752cd31.1488305206.git.yann.morin.1998@free.fr>
- <e36f8ee2-22d1-318b-178a-9ce84f31a03a@mind.be>
- <20170301091731.5102e061@free-electrons.com>
-Message-ID: <19fbcec2-68a4-a287-a20f-522c94ede5e7@mind.be>
+From: Guo Ren <ren_guo@c-sky.com>
+Date: Wed,  1 Mar 2017 16:33:44 +0800
+Subject: [Buildroot] [PATCH 1/1] csky: Add new architecture
+Message-ID: <1488357224-5141-1-git-send-email-ren_guo@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+C-SKY is a CPU architecture from http://en.c-sky.com
 
+1. This commit has been tested by C-SKY.
 
-On 01-03-17 09:17, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 1 Mar 2017 08:58:31 +0100, Arnout Vandecappelle wrote:
-> 
->>  Since you don't do any processing on the file, you could just use
->>
->> 		-DCMAKE_MODULE_PATH="$$(TOPDIR)/support/misc" \
-> 
-> I think the idea is that since the Buildroot.cmake platform files gets
-> referenced by the toolchainfile.cmake, then Buildroot.cmake anyway
-> needs to be installed in $(HOST_DIR)/usr/share/buildroot, so we can
-> just as well point CMake to this place.
-> 
->> and avoid copying the file around. Of course, in that case, support/cmake is
->> probably a better place to put the file :-)
-> 
-> No: copying the file is needed, otherwise our toolchainfile.cmake file
-> no longer works for people using it outside of Buildroot.
+2. All changes in this commit are related for building csky dev board.
 
- Good point. I still think it should be in staging rather than host, but for
-sure it's more important to keep them together.
+3. We currently use pre-build-toolchain from url. and csky-toolchain opensource is
+on going.
 
- Therefore:
+4. See more info in board/csky/readme.txt
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+---
+ arch/Config.in                          |  12 +
+ arch/Config.in.csky                     |  57 ++++
+ board/csky/gx6605s/gdbinit              |  25 ++
+ board/csky/gx6605s/gx6605s.dts          |  56 ++++
+ board/csky/gx6605s/gx6622.dts           |  56 ++++
+ board/csky/gx6605s/gx66xx_defconfig     | 525 +++++++++++++++++++++++++++++++
+ board/csky/post-image.sh                |   4 +
+ board/csky/readme.txt                   | 113 +++++++
+ board/csky/sc8925/gdbinit               |  15 +
+ board/csky/sc8925/sc8925.dts            |  57 ++++
+ board/csky/sc8925/sc8925_defconfig      | 541 ++++++++++++++++++++++++++++++++
+ configs/csky_gx6605s_defconfig          |  26 ++
+ configs/csky_sc8925_defconfig           |  27 ++
+ linux/Config.ext.in                     |  75 +++++
+ linux/linux-ext-csky-addons.mk          |  12 +
+ linux/linux-ext-csky-arch.mk            |  12 +
+ package/Config.in                       |   2 +
+ package/csky-addons/Config.in           |  12 +
+ package/csky-addons/csky-addons.mk      |  15 +
+ package/csky-arch/Config.in             |  12 +
+ package/csky-arch/csky-arch.mk          |  15 +
+ toolchain/toolchain-buildroot/Config.in |   2 +-
+ 22 files changed, 1670 insertions(+), 1 deletion(-)
+ create mode 100644 arch/Config.in.csky
+ create mode 100644 board/csky/gx6605s/gdbinit
+ create mode 100644 board/csky/gx6605s/gx6605s.dts
+ create mode 100644 board/csky/gx6605s/gx6622.dts
+ create mode 100644 board/csky/gx6605s/gx66xx_defconfig
+ create mode 100755 board/csky/post-image.sh
+ create mode 100644 board/csky/readme.txt
+ create mode 100644 board/csky/sc8925/gdbinit
+ create mode 100644 board/csky/sc8925/sc8925.dts
+ create mode 100644 board/csky/sc8925/sc8925_defconfig
+ create mode 100644 configs/csky_gx6605s_defconfig
+ create mode 100644 configs/csky_sc8925_defconfig
+ create mode 100644 linux/linux-ext-csky-addons.mk
+ create mode 100644 linux/linux-ext-csky-arch.mk
+ create mode 100644 package/csky-addons/Config.in
+ create mode 100644 package/csky-addons/csky-addons.mk
+ create mode 100644 package/csky-arch/Config.in
+ create mode 100644 package/csky-arch/csky-arch.mk
 
- Regards,
- Arnout
-
+diff --git a/arch/Config.in b/arch/Config.in
+index 7149b2c..ea81c4c 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -240,6 +240,14 @@ config BR2_xtensa
+ 	  http://en.wikipedia.org/wiki/Xtensa
+ 	  http://www.tensilica.com/
+ 
++config BR2_csky
++	bool "csky"
++	select BR2_ARCH_HAS_MMU_MANDATORY
++	help
++	  csky is processor IP from china.
++	  http://www.c-sky.com/
++	  http://www.github.com/c-sky
++
+ endchoice
+ 
+ # The following string values are defined by the individual
+@@ -409,4 +417,8 @@ if BR2_xtensa
+ source "arch/Config.in.xtensa"
+ endif
+ 
++if BR2_csky
++source "arch/Config.in.csky"
++endif
++
+ endmenu # Target options
+diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+new file mode 100644
+index 0000000..f400388
+--- /dev/null
++++ b/arch/Config.in.csky
+@@ -0,0 +1,57 @@
++choice
++	prompt "Target Architecture Variant"
++	depends on BR2_csky
++	default BR2_ck810
++	help
++	  Specific CPU variant to use
++
++config BR2_ck810
++	bool "ck810"
++config BR2_ck807
++	bool "ck807"
++config BR2_ck610
++	bool "ck610"
++endchoice
++
++config BR2_CSKY_FPU
++	bool "Enable FPU coprocessor"
++	depends on BR2_ck810 || BR2_ck807
++	default n
++	help
++	  You can say N here if you C-SKY CPU don't have Floating-Point Coprocessor
++	  or the user program need not to support FPU.
++
++	  You'll have say N here if you C-SKY CPU have Floating-Point Coprocessor
++	  and the user program need to support FPU. Floating-Point Coprocessor (FPC)
++	  is a coprocessor of CK serial processor. The function of FPC is to provide
++	  low-cost high-speed float point computation, which is full compliance with
++	  ANSI/IEEE Std 754, IEEE Standard for Binary Floating-Point Arithmetic.
++
++config BR2_CSKY_DSP
++	bool "CPU support DSP enhanced instruction"
++	depends on BR2_ck810 || BR2_ck807
++	default n
++
++# From Config.in requirement
++config BR2_ARCH
++	default "csky"
++
++config BR2_ENDIAN
++	default "LITTLE"
++
++config BR2_GCC_TARGET_ARCH
++	default "ck610"	if BR2_ck610
++	default "ck807"	if BR2_ck807
++	default "ck810"	if BR2_ck810
++
++config BR2_GCC_TARGET_CPU
++	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
++	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
++	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
++	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
++
+diff --git a/board/csky/gx6605s/gdbinit b/board/csky/gx6605s/gdbinit
+new file mode 100644
+index 0000000..0a6d8ab
+--- /dev/null
++++ b/board/csky/gx6605s/gdbinit
+@@ -0,0 +1,25 @@
++tar jtag jtag://127.0.0.1:1025
++reset
++
++# setup CCR (Cache Config Reg)
++# 0-1:MP,2:IE,3:DE,4:WB,5:RS,6:Z,7:BE 
++set $cr18 = 0x7d
++
++# vendor custom setup, double cache line & preload
++set $cr30 = 0xc
++
++# pin mux for serial8250
++set *(unsigned int *) 0xa030a14c |= (1 << 22) | (1 << 23)
++
++# pass devicetree blob
++# r2 is magic
++# r3 is address
++set $r2 = 0x20150401
++set $r3 = 0x92000000
++restore gx6605s.dtb binary 0x92000000
++
++# flush cache
++set $cr17 = 0x33
++
++load
++
+diff --git a/board/csky/gx6605s/gx6605s.dts b/board/csky/gx6605s/gx6605s.dts
+new file mode 100644
+index 0000000..195b0df
+--- /dev/null
++++ b/board/csky/gx6605s/gx6605s.dts
+@@ -0,0 +1,56 @@
++/dts-v1/;
++/ {
++	model = "Nationalchip csky gx6605s";
++	compatible = "csky,nationalchip-gx6605s";
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	memory {
++		device_type = "memory";
++		reg = <0x10000000 0x04000000>;
++	};
++
++	soc {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "simple-bus";
++		ranges;
++
++		intc: interrupt-controller {
++			compatible = "nationalchip,intc-v1,ave";
++			reg = <0x00500000 0x400>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++		};
++
++		timer0 {
++			compatible = "nationalchip,timer-v1";
++			reg = <0x0020a000 0x400>;
++			clock-frequency = <1000000>;
++			interrupts = <10>;
++			interrupt-parent = <&intc>;
++		};
++
++		ehci: ehci-hcd {
++			compatible = "generic-ehci";
++			reg = <0x00900000 0x400>;
++			interrupt-parent = <&intc>;
++			interrupts = <59>;
++		};
++
++		uart0: serial at 403000 {
++			compatible = "ns16550a";
++			reg = <0x00403000 0x400>;
++			interrupt-parent = <&intc>;
++			interrupts = <15>;
++			clock-frequency = <29491200>;
++			baud = <115200>;
++			reg-shift = <2>;
++			reg-io-width = <1>;
++		};
++	};
++
++	chosen {
++		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/nfs rw nfsroot=192.168.101.230:/opt/nfs/test,v3,tcp,nolock ip=192.168.101.25";
++	};
++};
+diff --git a/board/csky/gx6605s/gx6622.dts b/board/csky/gx6605s/gx6622.dts
+new file mode 100644
+index 0000000..6f2aae3
+--- /dev/null
++++ b/board/csky/gx6605s/gx6622.dts
+@@ -0,0 +1,56 @@
++/dts-v1/;
++/ {
++	model = "Nationalchip csky gx6605s";
++	compatible = "csky,nationalchip-gx6605s";
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	memory {
++		device_type = "memory";
++		reg = <0x10000000 0x08000000>;
++	};
++
++	soc {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "simple-bus";
++		ranges;
++
++		intc: interrupt-controller {
++			compatible = "nationalchip,intc-v1,ave";
++			reg = <0x00500000 0x400>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++		};
++
++		timer0 {
++			compatible = "nationalchip,timer-v1";
++			reg = <0x0020a000 0x400>;
++			clock-frequency = <1000000>;
++			interrupts = <10>;
++			interrupt-parent = <&intc>;
++		};
++
++		ehci: ehci-hcd {
++			compatible = "generic-ehci";
++			reg = <0x00900000 0x400>;
++			interrupt-parent = <&intc>;
++			interrupts = <59>;
++		};
++
++		uart0: serial at 403000 {
++			compatible = "ns16550a";
++			reg = <0x00403000 0x400>;
++			interrupt-parent = <&intc>;
++			interrupts = <15>;
++			clock-frequency = <29491200>;
++			baud = <115200>;
++			reg-shift = <2>;
++			reg-io-width = <1>;
++		};
++	};
++
++	chosen {
++		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/nfs rw nfsroot=192.168.101.230:/opt/nfs/test,v3,tcp,nolock ip=192.168.101.23";
++	};
++};
+diff --git a/board/csky/gx6605s/gx66xx_defconfig b/board/csky/gx6605s/gx66xx_defconfig
+new file mode 100644
+index 0000000..94eac2c
+--- /dev/null
++++ b/board/csky/gx6605s/gx66xx_defconfig
+@@ -0,0 +1,525 @@
++CONFIG_CROSS_COMPILE="csky-linux-"
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_DEFAULT_HOSTNAME="github.com/c-sky"
++# CONFIG_SWAP is not set
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++# CONFIG_FHANDLE is not set
++CONFIG_USELIB=y
++CONFIG_AUDIT=y
++CONFIG_IRQ_DOMAIN_DEBUG=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_BSD_PROCESS_ACCT_V3=y
++CONFIG_RELAY=y
++CONFIG_SYSCTL_SYSCALL=y
++CONFIG_KALLSYMS_ALL=y
++# CONFIG_AIO is not set
++CONFIG_USERFAULTFD=y
++CONFIG_EMBEDDED=y
++# CONFIG_PERF_EVENTS is not set
++# CONFIG_SLUB_DEBUG is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_BLK_DEV_BSGLIB=y
++CONFIG_BLK_DEV_INTEGRITY=y
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_ACORN_PARTITION=y
++CONFIG_ACORN_PARTITION_ICS=y
++CONFIG_ACORN_PARTITION_RISCIX=y
++CONFIG_AIX_PARTITION=y
++CONFIG_OSF_PARTITION=y
++CONFIG_AMIGA_PARTITION=y
++CONFIG_ATARI_PARTITION=y
++CONFIG_MAC_PARTITION=y
++CONFIG_BSD_DISKLABEL=y
++CONFIG_MINIX_SUBPARTITION=y
++CONFIG_SOLARIS_X86_PARTITION=y
++CONFIG_UNIXWARE_DISKLABEL=y
++CONFIG_LDM_PARTITION=y
++CONFIG_SGI_PARTITION=y
++CONFIG_ULTRIX_PARTITION=y
++CONFIG_SUN_PARTITION=y
++CONFIG_KARMA_PARTITION=y
++CONFIG_SYSV68_PARTITION=y
++CONFIG_CMDLINE_PARTITION=y
++CONFIG_DEFAULT_DEADLINE=y
++CONFIG_NATIONALCHIP_TIMER=y
++CONFIG_NATIONALCHIP_IRQ=y
++CONFIG_CSKY_IRQ=y
++# CONFIG_MMU_HARD_REFILL is not set
++CONFIG_RAM_BASE=0x10000000
++# CONFIG_SUSPEND is not set
++# CONFIG_COMPACTION is not set
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IP_PNP_RARP=y
++# CONFIG_IPV6 is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_STANDALONE is not set
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=65536
++CONFIG_VIRTIO_BLK=y
++CONFIG_AD525X_DPOT=m
++CONFIG_AD525X_DPOT_I2C=m
++CONFIG_DUMMY_IRQ=m
++CONFIG_ICS932S401=m
++CONFIG_ENCLOSURE_SERVICES=m
++CONFIG_APDS9802ALS=m
++CONFIG_ISL29003=m
++CONFIG_ISL29020=m
++CONFIG_SENSORS_TSL2550=m
++CONFIG_SENSORS_BH1770=m
++CONFIG_SENSORS_APDS990X=m
++CONFIG_HMC6352=m
++CONFIG_DS1682=m
++CONFIG_USB_SWITCH_FSA9480=m
++CONFIG_SRAM=y
++CONFIG_C2PORT=m
++CONFIG_EEPROM_AT24=m
++CONFIG_EEPROM_LEGACY=m
++CONFIG_EEPROM_MAX6875=m
++CONFIG_EEPROM_93CX6=m
++CONFIG_SENSORS_LIS3_I2C=m
++CONFIG_ALTERA_STAPL=m
++CONFIG_ECHO=m
++CONFIG_SCSI=y
++# CONFIG_SCSI_PROC_FS is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_SPI_ATTRS=y
++CONFIG_SCSI_SAS_LIBSAS=m
++CONFIG_SCSI_SRP_ATTRS=m
++# CONFIG_SCSI_LOWLEVEL is not set
++CONFIG_NETDEVICES=y
++CONFIG_USB_RTL8150=y
++CONFIG_USB_RTL8152=y
++CONFIG_USB_USBNET=y
++CONFIG_INPUT_SPARSEKMAP=m
++CONFIG_INPUT_JOYDEV=m
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_EVBUG=m
++CONFIG_KEYBOARD_ADP5588=m
++CONFIG_KEYBOARD_ADP5589=m
++CONFIG_KEYBOARD_QT1070=m
++CONFIG_KEYBOARD_QT2160=m
++CONFIG_KEYBOARD_LKKBD=m
++CONFIG_KEYBOARD_TCA6416=m
++CONFIG_KEYBOARD_TCA8418=m
++CONFIG_KEYBOARD_LM8323=m
++CONFIG_KEYBOARD_LM8333=m
++CONFIG_KEYBOARD_MAX7359=m
++CONFIG_KEYBOARD_MCS=m
++CONFIG_KEYBOARD_MPR121=m
++CONFIG_KEYBOARD_NEWTON=m
++CONFIG_KEYBOARD_OPENCORES=m
++CONFIG_KEYBOARD_STOWAWAY=m
++CONFIG_KEYBOARD_SUNKBD=m
++CONFIG_KEYBOARD_XTKBD=m
++CONFIG_MOUSE_PS2=m
++CONFIG_MOUSE_PS2_ELANTECH=y
++CONFIG_MOUSE_PS2_SENTELIC=y
++CONFIG_MOUSE_PS2_TOUCHKIT=y
++CONFIG_MOUSE_SERIAL=m
++CONFIG_MOUSE_CYAPA=m
++CONFIG_MOUSE_VSXXXAA=m
++CONFIG_MOUSE_SYNAPTICS_I2C=m
++CONFIG_INPUT_JOYSTICK=y
++CONFIG_JOYSTICK_ANALOG=m
++CONFIG_JOYSTICK_A3D=m
++CONFIG_JOYSTICK_ADI=m
++CONFIG_JOYSTICK_COBRA=m
++CONFIG_JOYSTICK_GF2K=m
++CONFIG_JOYSTICK_GRIP=m
++CONFIG_JOYSTICK_GRIP_MP=m
++CONFIG_JOYSTICK_GUILLEMOT=m
++CONFIG_JOYSTICK_INTERACT=m
++CONFIG_JOYSTICK_SIDEWINDER=m
++CONFIG_JOYSTICK_TMDC=m
++CONFIG_JOYSTICK_IFORCE=m
++CONFIG_JOYSTICK_IFORCE_232=y
++CONFIG_JOYSTICK_WARRIOR=m
++CONFIG_JOYSTICK_MAGELLAN=m
++CONFIG_JOYSTICK_SPACEORB=m
++CONFIG_JOYSTICK_SPACEBALL=m
++CONFIG_JOYSTICK_STINGER=m
++CONFIG_JOYSTICK_TWIDJOY=m
++CONFIG_JOYSTICK_ZHENHUA=m
++CONFIG_JOYSTICK_AS5011=m
++CONFIG_JOYSTICK_JOYDUMP=m
++CONFIG_INPUT_TABLET=y
++CONFIG_INPUT_TOUCHSCREEN=y
++CONFIG_TOUCHSCREEN_AD7879=m
++CONFIG_TOUCHSCREEN_AD7879_I2C=m
++CONFIG_TOUCHSCREEN_ATMEL_MXT=m
++CONFIG_TOUCHSCREEN_BU21013=m
++CONFIG_TOUCHSCREEN_CYTTSP_CORE=m
++CONFIG_TOUCHSCREEN_CYTTSP_I2C=m
++CONFIG_TOUCHSCREEN_CYTTSP4_CORE=m
++CONFIG_TOUCHSCREEN_CYTTSP4_I2C=m
++CONFIG_TOUCHSCREEN_DYNAPRO=m
++CONFIG_TOUCHSCREEN_HAMPSHIRE=m
++CONFIG_TOUCHSCREEN_EETI=m
++CONFIG_TOUCHSCREEN_FUJITSU=m
++CONFIG_TOUCHSCREEN_ILI210X=m
++CONFIG_TOUCHSCREEN_GUNZE=m
++CONFIG_TOUCHSCREEN_ELO=m
++CONFIG_TOUCHSCREEN_WACOM_W8001=m
++CONFIG_TOUCHSCREEN_WACOM_I2C=m
++CONFIG_TOUCHSCREEN_MAX11801=m
++CONFIG_TOUCHSCREEN_MCS5000=m
++CONFIG_TOUCHSCREEN_MMS114=m
++CONFIG_TOUCHSCREEN_MTOUCH=m
++CONFIG_TOUCHSCREEN_INEXIO=m
++CONFIG_TOUCHSCREEN_MK712=m
++CONFIG_TOUCHSCREEN_PENMOUNT=m
++CONFIG_TOUCHSCREEN_EDT_FT5X06=m
++CONFIG_TOUCHSCREEN_TOUCHRIGHT=m
++CONFIG_TOUCHSCREEN_TOUCHWIN=m
++CONFIG_TOUCHSCREEN_PIXCIR=m
++CONFIG_TOUCHSCREEN_TOUCHIT213=m
++CONFIG_TOUCHSCREEN_TSC_SERIO=m
++CONFIG_TOUCHSCREEN_TSC2007=m
++CONFIG_TOUCHSCREEN_ST1232=m
++CONFIG_TOUCHSCREEN_TPS6507X=m
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_AD714X=m
++CONFIG_INPUT_BMA150=m
++CONFIG_INPUT_MMA8450=m
++CONFIG_INPUT_MPU3050=m
++CONFIG_INPUT_KXTJ9=m
++CONFIG_INPUT_UINPUT=y
++CONFIG_INPUT_PCF8574=m
++CONFIG_INPUT_ADXL34X=m
++CONFIG_INPUT_CMA3000=m
++CONFIG_INPUT_CMA3000_I2C=m
++CONFIG_SERIO_SERPORT=m
++CONFIG_SERIO_RAW=m
++CONFIG_SERIO_ALTERA_PS2=m
++CONFIG_SERIO_PS2MULT=m
++CONFIG_SERIO_ARC_PS2=m
++CONFIG_GAMEPORT_NS558=m
++CONFIG_GAMEPORT_L4=m
++CONFIG_VT_HW_CONSOLE_BINDING=y
++CONFIG_SERIAL_NONSTANDARD=y
++# CONFIG_DEVKMEM is not set
++CONFIG_SERIAL_8250=y
++# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_NR_UARTS=2
++CONFIG_SERIAL_8250_RUNTIME_UARTS=2
++CONFIG_SERIAL_8250_DW=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_TTY_PRINTK=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_IPMI_HANDLER=y
++CONFIG_IPMI_DEVICE_INTERFACE=m
++CONFIG_IPMI_SI=m
++CONFIG_IPMI_WATCHDOG=m
++CONFIG_IPMI_POWEROFF=m
++CONFIG_HW_RANDOM=y
++CONFIG_HW_RANDOM_TIMERIOMEM=m
++CONFIG_HW_RANDOM_VIRTIO=m
++CONFIG_HW_RANDOM_TPM=m
++CONFIG_TCG_TIS_I2C_ATMEL=m
++CONFIG_TCG_TIS_I2C_INFINEON=m
++CONFIG_TCG_TIS_I2C_NUVOTON=m
++CONFIG_TCG_ATMEL=m
++CONFIG_I2C_CHARDEV=m
++CONFIG_I2C_MUX_PCA9541=m
++CONFIG_I2C_DESIGNWARE_PLATFORM=m
++CONFIG_I2C_OCORES=m
++CONFIG_I2C_PCA_PLATFORM=m
++CONFIG_I2C_SIMTEC=m
++CONFIG_I2C_XILINX=m
++CONFIG_I2C_PARPORT_LIGHT=m
++CONFIG_I2C_TAOS_EVM=m
++CONFIG_I2C_STUB=m
++CONFIG_PPS=m
++CONFIG_PPS_CLIENT_LDISC=m
++CONFIG_PPS_CLIENT_GPIO=m
++CONFIG_POWER_RESET=y
++# CONFIG_HWMON is not set
++CONFIG_SSB=m
++CONFIG_BCMA=m
++CONFIG_BCMA_HOST_SOC=y
++CONFIG_BCMA_DRIVER_GMAC_CMN=y
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=y
++# CONFIG_USB_GSPCA is not set
++CONFIG_BACKLIGHT_LCD_SUPPORT=y
++CONFIG_LCD_PLATFORM=m
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++CONFIG_BACKLIGHT_GENERIC=m
++CONFIG_BACKLIGHT_ADP8860=m
++CONFIG_BACKLIGHT_ADP8870=m
++CONFIG_BACKLIGHT_LM3639=m
++CONFIG_BACKLIGHT_LV5207LP=m
++CONFIG_BACKLIGHT_BD6107=m
++# CONFIG_VGA_CONSOLE is not set
++# CONFIG_HID_GENERIC is not set
++CONFIG_HID_A4TECH=m
++CONFIG_HID_ACRUX=m
++CONFIG_HID_ACRUX_FF=y
++CONFIG_HID_APPLE=m
++CONFIG_HID_AUREAL=m
++CONFIG_HID_BELKIN=m
++CONFIG_HID_CHERRY=m
++CONFIG_HID_CHICONY=m
++CONFIG_HID_CYPRESS=m
++CONFIG_HID_DRAGONRISE=m
++CONFIG_DRAGONRISE_FF=y
++CONFIG_HID_EMS_FF=m
++CONFIG_HID_ELECOM=m
++CONFIG_HID_EZKEY=m
++CONFIG_HID_KEYTOUCH=m
++CONFIG_HID_KYE=m
++CONFIG_HID_WALTOP=m
++CONFIG_HID_GYRATION=m
++CONFIG_HID_ICADE=m
++CONFIG_HID_TWINHAN=m
++CONFIG_HID_KENSINGTON=m
++CONFIG_HID_LCPOWER=m
++CONFIG_HID_LOGITECH=m
++CONFIG_HID_LOGITECH_HIDPP=m
++CONFIG_LOGITECH_FF=y
++CONFIG_LOGIRUMBLEPAD2_FF=y
++CONFIG_LOGIG940_FF=y
++CONFIG_HID_MAGICMOUSE=m
++CONFIG_HID_MICROSOFT=m
++CONFIG_HID_MONTEREY=m
++CONFIG_HID_MULTITOUCH=m
++CONFIG_HID_ORTEK=m
++CONFIG_HID_PANTHERLORD=m
++CONFIG_PANTHERLORD_FF=y
++CONFIG_HID_PETALYNX=m
++CONFIG_HID_PICOLCD=m
++CONFIG_HID_PICOLCD_BACKLIGHT=y
++CONFIG_HID_PICOLCD_LCD=y
++CONFIG_HID_PICOLCD_LEDS=y
++CONFIG_HID_PRIMAX=m
++CONFIG_HID_SAITEK=m
++CONFIG_HID_SAMSUNG=m
++CONFIG_HID_SPEEDLINK=m
++CONFIG_HID_STEELSERIES=m
++CONFIG_HID_SUNPLUS=m
++CONFIG_HID_RMI=m
++CONFIG_HID_GREENASIA=m
++CONFIG_GREENASIA_FF=y
++CONFIG_HID_SMARTJOYPLUS=m
++CONFIG_SMARTJOYPLUS_FF=y
++CONFIG_HID_TIVO=m
++CONFIG_HID_TOPSEED=m
++CONFIG_HID_THINGM=m
++CONFIG_HID_THRUSTMASTER=m
++CONFIG_THRUSTMASTER_FF=y
++CONFIG_HID_WACOM=m
++CONFIG_HID_WIIMOTE=m
++CONFIG_HID_XINMO=m
++CONFIG_HID_ZEROPLUS=m
++CONFIG_ZEROPLUS_FF=y
++CONFIG_HID_ZYDACRON=m
++CONFIG_HID_SENSOR_HUB=m
++CONFIG_I2C_HID=m
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_LM3530=m
++CONFIG_LEDS_LM3642=m
++CONFIG_LEDS_PCA9532=m
++CONFIG_LEDS_LP3944=m
++CONFIG_LEDS_LP5521=m
++CONFIG_LEDS_LP5523=m
++CONFIG_LEDS_LP5562=m
++CONFIG_LEDS_LP8501=m
++CONFIG_LEDS_PCA955X=m
++CONFIG_LEDS_PCA963X=m
++CONFIG_LEDS_BD2802=m
++CONFIG_LEDS_TCA6507=m
++CONFIG_LEDS_LM355x=m
++CONFIG_LEDS_BLINKM=m
++CONFIG_LEDS_TRIGGER_TIMER=m
++CONFIG_LEDS_TRIGGER_ONESHOT=m
++CONFIG_LEDS_TRIGGER_HEARTBEAT=m
++CONFIG_LEDS_TRIGGER_BACKLIGHT=m
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
++CONFIG_LEDS_TRIGGER_TRANSIENT=m
++CONFIG_LEDS_TRIGGER_CAMERA=m
++CONFIG_VIRTIO_BALLOON=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
++# CONFIG_IOMMU_SUPPORT is not set
++CONFIG_STE_MODEM_RPROC=m
++CONFIG_PM_DEVFREQ=y
++CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
++CONFIG_DEVFREQ_GOV_PERFORMANCE=y
++CONFIG_DEVFREQ_GOV_POWERSAVE=y
++CONFIG_DEVFREQ_GOV_USERSPACE=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_FANOTIFY=y
++CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
++CONFIG_QUOTA=y
++# CONFIG_PRINT_QUOTA_WARNING is not set
++CONFIG_FSCACHE=m
++CONFIG_FSCACHE_STATS=y
++CONFIG_CACHEFILES=m
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_FAT_DEFAULT_UTF8=y
++CONFIG_NTFS_FS=y
++CONFIG_PROC_KCORE=y
++CONFIG_PROC_CHILDREN=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_CONFIGFS_FS=y
++CONFIG_CRAMFS=y
++CONFIG_ROMFS_FS=y
++CONFIG_NFS_FS=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_DEFAULT="utf8"
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_CODEPAGE_737=y
++CONFIG_NLS_CODEPAGE_775=y
++CONFIG_NLS_CODEPAGE_850=y
++CONFIG_NLS_CODEPAGE_852=y
++CONFIG_NLS_CODEPAGE_855=y
++CONFIG_NLS_CODEPAGE_857=y
++CONFIG_NLS_CODEPAGE_860=y
++CONFIG_NLS_CODEPAGE_861=y
++CONFIG_NLS_CODEPAGE_863=y
++CONFIG_NLS_CODEPAGE_864=y
++CONFIG_NLS_CODEPAGE_865=y
++CONFIG_NLS_CODEPAGE_866=y
++CONFIG_NLS_CODEPAGE_869=y
++CONFIG_NLS_CODEPAGE_936=y
++CONFIG_NLS_CODEPAGE_950=y
++CONFIG_NLS_CODEPAGE_932=y
++CONFIG_NLS_CODEPAGE_949=m
++CONFIG_NLS_CODEPAGE_874=m
++CONFIG_NLS_ISO8859_8=m
++CONFIG_NLS_CODEPAGE_1250=y
++CONFIG_NLS_CODEPAGE_1251=y
++CONFIG_NLS_ASCII=m
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_ISO8859_2=m
++CONFIG_NLS_ISO8859_3=m
++CONFIG_NLS_ISO8859_4=m
++CONFIG_NLS_ISO8859_5=m
++CONFIG_NLS_ISO8859_6=m
++CONFIG_NLS_ISO8859_7=m
++CONFIG_NLS_ISO8859_9=m
++CONFIG_NLS_ISO8859_13=m
++CONFIG_NLS_ISO8859_14=m
++CONFIG_NLS_ISO8859_15=m
++CONFIG_NLS_KOI8_R=m
++CONFIG_NLS_KOI8_U=m
++CONFIG_NLS_MAC_ROMAN=m
++CONFIG_NLS_MAC_CELTIC=m
++CONFIG_NLS_MAC_CENTEURO=m
++CONFIG_NLS_MAC_CROATIAN=m
++CONFIG_NLS_MAC_CYRILLIC=m
++CONFIG_NLS_MAC_GAELIC=m
++CONFIG_NLS_MAC_GREEK=m
++CONFIG_NLS_MAC_ICELAND=m
++CONFIG_NLS_MAC_INUIT=m
++CONFIG_NLS_MAC_ROMANIAN=m
++CONFIG_NLS_MAC_TURKISH=m
++CONFIG_NLS_UTF8=y
++CONFIG_PRINTK_TIME=y
++CONFIG_DEBUG_INFO=y
++# CONFIG_ENABLE_WARN_DEPRECATED is not set
++# CONFIG_ENABLE_MUST_CHECK is not set
++CONFIG_UNUSED_SYMBOLS=y
++CONFIG_DEBUG_FS=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_LOCKUP_DETECTOR=y
++# CONFIG_SCHED_DEBUG is not set
++CONFIG_RBTREE_TEST=m
++CONFIG_INTERVAL_TREE_TEST=m
++CONFIG_PERCPU_TEST=m
++CONFIG_TEST_STRING_HELPERS=m
++CONFIG_TEST_KSTRTOX=m
++CONFIG_PERSISTENT_KEYRINGS=y
++CONFIG_TRUSTED_KEYS=y
++CONFIG_SECURITY=y
++CONFIG_SECURITY_NETWORK=y
++CONFIG_SECURITY_PATH=y
++CONFIG_SECURITY_YAMA=y
++CONFIG_INTEGRITY_SIGNATURE=y
++CONFIG_INTEGRITY_ASYMMETRIC_KEYS=y
++CONFIG_IMA=y
++CONFIG_IMA_APPRAISE=y
++CONFIG_EVM=y
++CONFIG_CRYPTO_CRYPTD=m
++CONFIG_CRYPTO_AUTHENC=m
++CONFIG_CRYPTO_TEST=m
++CONFIG_CRYPTO_CCM=m
++CONFIG_CRYPTO_GCM=m
++CONFIG_CRYPTO_CTS=m
++CONFIG_CRYPTO_ECB=y
++CONFIG_CRYPTO_LRW=m
++CONFIG_CRYPTO_PCBC=m
++CONFIG_CRYPTO_XTS=m
++CONFIG_CRYPTO_CMAC=m
++CONFIG_CRYPTO_XCBC=m
++CONFIG_CRYPTO_VMAC=m
++CONFIG_CRYPTO_CRC32=m
++CONFIG_CRYPTO_MD4=m
++CONFIG_CRYPTO_MICHAEL_MIC=m
++CONFIG_CRYPTO_RMD128=m
++CONFIG_CRYPTO_RMD160=m
++CONFIG_CRYPTO_RMD256=m
++CONFIG_CRYPTO_RMD320=m
++CONFIG_CRYPTO_SHA512=y
++CONFIG_CRYPTO_TGR192=m
++CONFIG_CRYPTO_WP512=m
++CONFIG_CRYPTO_ANUBIS=m
++CONFIG_CRYPTO_ARC4=m
++CONFIG_CRYPTO_BLOWFISH=m
++CONFIG_CRYPTO_CAMELLIA=m
++CONFIG_CRYPTO_CAST5=m
++CONFIG_CRYPTO_CAST6=m
++CONFIG_CRYPTO_DES=m
++CONFIG_CRYPTO_FCRYPT=m
++CONFIG_CRYPTO_KHAZAD=m
++CONFIG_CRYPTO_SALSA20=m
++CONFIG_CRYPTO_SEED=m
++CONFIG_CRYPTO_SERPENT=m
++CONFIG_CRYPTO_TEA=m
++CONFIG_CRYPTO_TWOFISH=m
++CONFIG_CRYPTO_DEFLATE=m
++CONFIG_CRYPTO_LZO=y
++CONFIG_CRYPTO_LZ4=m
++CONFIG_CRYPTO_LZ4HC=m
++CONFIG_CRYPTO_ANSI_CPRNG=m
++CONFIG_CRC_CCITT=m
++CONFIG_CRC7=m
++CONFIG_LIBCRC32C=m
++CONFIG_CRC8=m
++CONFIG_XZ_DEC=y
++CONFIG_XZ_DEC_TEST=m
++CONFIG_CORDIC=m
++CONFIG_DDR=y
+diff --git a/board/csky/post-image.sh b/board/csky/post-image.sh
+new file mode 100755
+index 0000000..7bead4f
+--- /dev/null
++++ b/board/csky/post-image.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# copy board/csky/xxx/gdbinit to images/.gdbinit for
++BOARD_DIR="$(dirname $0)"
++cp -af $BOARD_DIR/${2}/gdbinit $BINARIES_DIR/.gdbinit
+diff --git a/board/csky/readme.txt b/board/csky/readme.txt
+new file mode 100644
+index 0000000..7d96a6c
+--- /dev/null
++++ b/board/csky/readme.txt
+@@ -0,0 +1,113 @@
++C-SKY Development Kit
++
++Intro
++=====
++
++C-SKY is a CPU Architecture from www.c-sky.com and has it own instruction set.
++Just like arm and mips in linux/arch, it named as 'csky'.
++
++For C-SKY linux kernel it's made up of three components:
++1. linux/arch/csky contains the CPU related linux arch implement, eg: mmu,
++   task-switch, cache control, ... default git repo is here:
++
++   http://github.com/c-sky/csky-linux
++
++2. linux/addons contains the SOC's drivers which haven't committed in official
++   linux source code, but we really need them to make the board run.
++   Here is the default addons git repo:
++
++   http://github.com/c-sky/csky-addons
++
++   Some C-SKY soc vendor has it own addons git repo. And you can specify
++   the git-repo in buildroot configuration.
++
++3. Official Linux kernel source from www.kernel.org :)
++
++Buildroot will download cross compiler tools and make them together building,
++finally setup the rootfs with the packages which spicified in buildroot 
++configuration.
++
++How to build it
++===============
++
++Configure Buildroot
++-------------------
++
++The csky_gx6605s_defconfig configuration is a sample configuration with
++all that is required to bring the gx6605s Development Board:
++
++  $ make csky_gx6605s_defconfig
++
++and for the sc8925 Development Board:
++
++  $ make csky_sc8925_defconfig
++
++Build everything
++----------------
++
++Note: you will need to have access to the network, since Buildroot will
++download the packages' sources.
++
++  $ make # All will be done, just wait :)
++
++Result of the build
++-------------------
++
++After building, you should obtain this tree:
++
++    output/images/
++    ??? vmlinux
++    ??? rootfs.tar
++    ??? <board name>.dtb
++    ??? .gdbinit
++
++How to run it
++=============
++
++1. Download the Jtag-Server here:
++
++   https://pan.baidu.com/s/1o7VEPbO
++
++   install it and run it:
++
++   $ DebugServerConsole -ddc -rstwait 1000 -prereset -port 1025
++
++2. Prepare the nfs-server in your linux PC. You can get the step in google, we
++   don't mention it here.
++
++   Then extract output/images/rootfs.tar to your nfsroot.
++
++3. Modified the bootargs in board/csky/<board>/<board>.dts'. You should
++   specify the correct nfsroot= and ip=, for example in gx6605s.dts:
++
++	chosen {
++   		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/nfs\
++rw nfsroot=192.168.101.230:/opt/nfs/test,v3,tcp,nolock ip=192.168.101.25";
++	}
++
++   You need cd to buildroot dir and '$ make' again to update the dts in
++   output/images
++
++
++4. Setup the Console with the rate 115200/8-N-1.
++
++5. cd to the output/images and run.
++
++   For gx6605s, you need plug a usb ethernet card:
++   $csky-linux-gdb vmlinux
++
++   For sc8925:
++   $csky-abiv2-linux-gdb vmlinux
++
++Finish
++======
++
++Any question contact me here:
++
++ren_guo at c-sky.com
++
++-----------
++Best Regards
++
++Guo Ren
++
+diff --git a/board/csky/sc8925/gdbinit b/board/csky/sc8925/gdbinit
+new file mode 100644
+index 0000000..a97eefc
+--- /dev/null
++++ b/board/csky/sc8925/gdbinit
+@@ -0,0 +1,15 @@
++tar jtag jtag://127.0.0.1:1025
++
++set $cr18=0x7d
++# pass devicetree blob
++# r2 is magic
++# r3 is address
++set $r0 = 0x20150401
++set $r1 = 0x82000000
++restore sc8925.dtb binary 0x82000000
++
++# flush cache
++set $cr17 = 0x33
++
++load
++
+diff --git a/board/csky/sc8925/sc8925.dts b/board/csky/sc8925/sc8925.dts
+new file mode 100644
+index 0000000..931a35a
+--- /dev/null
++++ b/board/csky/sc8925/sc8925.dts
+@@ -0,0 +1,57 @@
++/dts-v1/;
++
++/ {
++	model = "silan sc8925";
++	compatible = "csky,silan-sc8925";
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	memory {
++		device_type = "memory";
++		reg = <0x00000000 0x8000000>;
++	};
++
++	soc {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "simple-bus";
++		ranges;
++
++		silan_clk0: silan-clock0 {
++			compatible = "silan,sc8925-clk";
++			#clock-cells = <1>;
++		};
++
++		intc: interrupt-controller {
++			compatible = "csky,intc-v1";
++			reg = <0x1fcb0000 0x400>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++		};
++
++		timer0: timer at 1fcb1000 {
++			compatible = "arm,sp804";
++			reg = <0x1fcb1000 0x1000>;
++			clocks = <&silan_clk0 34>;
++			interrupts = <63>;
++			interrupt-parent = <&intc>;
++		};
++
++		pinctrl: pinctrl {
++			compatible = "silan,sc8925-pinctrl";
++		};
++
++		uart0: serial at 1fbc0000 {
++			compatible = "arm,sbsa-uart";
++			reg = <0x1fbc0000 0x1000>;
++			current-speed = <115200>;
++			clocks = <&silan_clk0 9>;
++			interrupts = <11>;
++			interrupt-parent = <&intc>;
++		};
++	};
++
++	chosen {
++		bootargs = "console=ttyAMA0,115200 init=/sbin/init root=/dev/nfs rw nfsroot=192.168.101.230:/opt/nfs/test_abiv2_new/,v3,tcp,nolock ip=192.168.101.23";
++	};
++};
+diff --git a/board/csky/sc8925/sc8925_defconfig b/board/csky/sc8925/sc8925_defconfig
+new file mode 100644
+index 0000000..481c3ca
+--- /dev/null
++++ b/board/csky/sc8925/sc8925_defconfig
+@@ -0,0 +1,541 @@
++CONFIG_CROSS_COMPILE="csky-abiv2-linux-"
++CONFIG_COMPILE_TEST=y
++CONFIG_DEFAULT_HOSTNAME="github.com/c-sky"
++# CONFIG_SWAP is not set
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++# CONFIG_FHANDLE is not set
++CONFIG_USELIB=y
++CONFIG_AUDIT=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_BSD_PROCESS_ACCT_V3=y
++CONFIG_RELAY=y
++CONFIG_SYSCTL_SYSCALL=y
++CONFIG_KALLSYMS_ALL=y
++# CONFIG_AIO is not set
++CONFIG_USERFAULTFD=y
++CONFIG_EMBEDDED=y
++# CONFIG_PERF_EVENTS is not set
++# CONFIG_SLUB_DEBUG is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_BLK_DEV_BSGLIB=y
++CONFIG_BLK_DEV_INTEGRITY=y
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_ACORN_PARTITION=y
++CONFIG_ACORN_PARTITION_ICS=y
++CONFIG_ACORN_PARTITION_RISCIX=y
++CONFIG_AIX_PARTITION=y
++CONFIG_OSF_PARTITION=y
++CONFIG_AMIGA_PARTITION=y
++CONFIG_ATARI_PARTITION=y
++CONFIG_MAC_PARTITION=y
++CONFIG_BSD_DISKLABEL=y
++CONFIG_MINIX_SUBPARTITION=y
++CONFIG_SOLARIS_X86_PARTITION=y
++CONFIG_UNIXWARE_DISKLABEL=y
++CONFIG_LDM_PARTITION=y
++CONFIG_SGI_PARTITION=y
++CONFIG_ULTRIX_PARTITION=y
++CONFIG_SUN_PARTITION=y
++CONFIG_KARMA_PARTITION=y
++CONFIG_SYSV68_PARTITION=y
++CONFIG_CMDLINE_PARTITION=y
++CONFIG_DEFAULT_DEADLINE=y
++CONFIG_NATIONALCHIP_TIMER=y
++CONFIG_NATIONALCHIP_IRQ=y
++CONFIG_CSKY_IRQ=y
++CONFIG_PINCTRL_SILAN=y
++CONFIG_CLK_SILAN=y
++CONFIG_SILAN_STMMAC_ETH=y
++CONFIG_SILAN_ETH0=y
++CONFIG_CSKY_DEBUG_INFO=y
++CONFIG_CPU_CK810=y
++CONFIG_RAM_BASE=0x0
++# CONFIG_SUSPEND is not set
++# CONFIG_COMPACTION is not set
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IP_PNP_RARP=y
++# CONFIG_IPV6 is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_STANDALONE is not set
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=65536
++CONFIG_VIRTIO_BLK=y
++CONFIG_AD525X_DPOT=m
++CONFIG_AD525X_DPOT_I2C=m
++CONFIG_DUMMY_IRQ=m
++CONFIG_ICS932S401=m
++CONFIG_ENCLOSURE_SERVICES=m
++CONFIG_APDS9802ALS=m
++CONFIG_ISL29003=m
++CONFIG_ISL29020=m
++CONFIG_SENSORS_TSL2550=m
++CONFIG_SENSORS_BH1770=m
++CONFIG_SENSORS_APDS990X=m
++CONFIG_HMC6352=m
++CONFIG_DS1682=m
++CONFIG_USB_SWITCH_FSA9480=m
++CONFIG_SRAM=y
++CONFIG_C2PORT=m
++CONFIG_EEPROM_AT24=m
++CONFIG_EEPROM_LEGACY=m
++CONFIG_EEPROM_MAX6875=m
++CONFIG_EEPROM_93CX6=m
++CONFIG_SENSORS_LIS3_I2C=m
++CONFIG_ALTERA_STAPL=m
++CONFIG_ECHO=m
++CONFIG_SCSI=y
++# CONFIG_SCSI_PROC_FS is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_SPI_ATTRS=y
++CONFIG_SCSI_SAS_LIBSAS=m
++CONFIG_SCSI_SRP_ATTRS=m
++# CONFIG_SCSI_LOWLEVEL is not set
++CONFIG_NETDEVICES=y
++# CONFIG_NET_VENDOR_AMAZON is not set
++# CONFIG_NET_VENDOR_ARC is not set
++# CONFIG_NET_CADENCE is not set
++# CONFIG_NET_VENDOR_BROADCOM is not set
++# CONFIG_NET_VENDOR_EZCHIP is not set
++# CONFIG_NET_VENDOR_HISILICON is not set
++# CONFIG_NET_VENDOR_INTEL is not set
++# CONFIG_NET_VENDOR_MARVELL is not set
++# CONFIG_NET_VENDOR_MICREL is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_NETRONOME is not set
++# CONFIG_NET_VENDOR_QUALCOMM is not set
++# CONFIG_NET_VENDOR_RENESAS is not set
++# CONFIG_NET_VENDOR_ROCKER is not set
++# CONFIG_NET_VENDOR_SAMSUNG is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++# CONFIG_NET_VENDOR_STMICRO is not set
++# CONFIG_NET_VENDOR_SYNOPSYS is not set
++# CONFIG_NET_VENDOR_VIA is not set
++# CONFIG_NET_VENDOR_WIZNET is not set
++CONFIG_INPUT_SPARSEKMAP=m
++CONFIG_INPUT_JOYDEV=m
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_EVBUG=m
++CONFIG_KEYBOARD_ADP5588=m
++CONFIG_KEYBOARD_ADP5589=m
++CONFIG_KEYBOARD_QT1070=m
++CONFIG_KEYBOARD_QT2160=m
++CONFIG_KEYBOARD_LKKBD=m
++CONFIG_KEYBOARD_TCA6416=m
++CONFIG_KEYBOARD_TCA8418=m
++CONFIG_KEYBOARD_LM8323=m
++CONFIG_KEYBOARD_LM8333=m
++CONFIG_KEYBOARD_MAX7359=m
++CONFIG_KEYBOARD_MCS=m
++CONFIG_KEYBOARD_MPR121=m
++CONFIG_KEYBOARD_NEWTON=m
++CONFIG_KEYBOARD_OPENCORES=m
++CONFIG_KEYBOARD_STOWAWAY=m
++CONFIG_KEYBOARD_SUNKBD=m
++CONFIG_KEYBOARD_XTKBD=m
++CONFIG_MOUSE_PS2=m
++CONFIG_MOUSE_PS2_ELANTECH=y
++CONFIG_MOUSE_PS2_SENTELIC=y
++CONFIG_MOUSE_PS2_TOUCHKIT=y
++CONFIG_MOUSE_SERIAL=m
++CONFIG_MOUSE_CYAPA=m
++CONFIG_MOUSE_VSXXXAA=m
++CONFIG_MOUSE_SYNAPTICS_I2C=m
++CONFIG_INPUT_JOYSTICK=y
++CONFIG_JOYSTICK_ANALOG=m
++CONFIG_JOYSTICK_A3D=m
++CONFIG_JOYSTICK_ADI=m
++CONFIG_JOYSTICK_COBRA=m
++CONFIG_JOYSTICK_GF2K=m
++CONFIG_JOYSTICK_GRIP=m
++CONFIG_JOYSTICK_GRIP_MP=m
++CONFIG_JOYSTICK_GUILLEMOT=m
++CONFIG_JOYSTICK_INTERACT=m
++CONFIG_JOYSTICK_SIDEWINDER=m
++CONFIG_JOYSTICK_TMDC=m
++CONFIG_JOYSTICK_IFORCE=m
++CONFIG_JOYSTICK_IFORCE_232=y
++CONFIG_JOYSTICK_WARRIOR=m
++CONFIG_JOYSTICK_MAGELLAN=m
++CONFIG_JOYSTICK_SPACEORB=m
++CONFIG_JOYSTICK_SPACEBALL=m
++CONFIG_JOYSTICK_STINGER=m
++CONFIG_JOYSTICK_TWIDJOY=m
++CONFIG_JOYSTICK_ZHENHUA=m
++CONFIG_JOYSTICK_AS5011=m
++CONFIG_JOYSTICK_JOYDUMP=m
++CONFIG_INPUT_TABLET=y
++CONFIG_INPUT_TOUCHSCREEN=y
++CONFIG_TOUCHSCREEN_AD7879=m
++CONFIG_TOUCHSCREEN_AD7879_I2C=m
++CONFIG_TOUCHSCREEN_ATMEL_MXT=m
++CONFIG_TOUCHSCREEN_BU21013=m
++CONFIG_TOUCHSCREEN_CYTTSP_CORE=m
++CONFIG_TOUCHSCREEN_CYTTSP_I2C=m
++CONFIG_TOUCHSCREEN_CYTTSP4_CORE=m
++CONFIG_TOUCHSCREEN_CYTTSP4_I2C=m
++CONFIG_TOUCHSCREEN_DYNAPRO=m
++CONFIG_TOUCHSCREEN_HAMPSHIRE=m
++CONFIG_TOUCHSCREEN_EETI=m
++CONFIG_TOUCHSCREEN_FUJITSU=m
++CONFIG_TOUCHSCREEN_ILI210X=m
++CONFIG_TOUCHSCREEN_GUNZE=m
++CONFIG_TOUCHSCREEN_ELO=m
++CONFIG_TOUCHSCREEN_WACOM_W8001=m
++CONFIG_TOUCHSCREEN_WACOM_I2C=m
++CONFIG_TOUCHSCREEN_MAX11801=m
++CONFIG_TOUCHSCREEN_MCS5000=m
++CONFIG_TOUCHSCREEN_MMS114=m
++CONFIG_TOUCHSCREEN_MTOUCH=m
++CONFIG_TOUCHSCREEN_INEXIO=m
++CONFIG_TOUCHSCREEN_MK712=m
++CONFIG_TOUCHSCREEN_PENMOUNT=m
++CONFIG_TOUCHSCREEN_EDT_FT5X06=m
++CONFIG_TOUCHSCREEN_TOUCHRIGHT=m
++CONFIG_TOUCHSCREEN_TOUCHWIN=m
++CONFIG_TOUCHSCREEN_PIXCIR=m
++CONFIG_TOUCHSCREEN_TOUCHIT213=m
++CONFIG_TOUCHSCREEN_TSC_SERIO=m
++CONFIG_TOUCHSCREEN_TSC2007=m
++CONFIG_TOUCHSCREEN_ST1232=m
++CONFIG_TOUCHSCREEN_TPS6507X=m
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_AD714X=m
++CONFIG_INPUT_BMA150=m
++CONFIG_INPUT_MMA8450=m
++CONFIG_INPUT_MPU3050=m
++CONFIG_INPUT_KXTJ9=m
++CONFIG_INPUT_UINPUT=y
++CONFIG_INPUT_PCF8574=m
++CONFIG_INPUT_ADXL34X=m
++CONFIG_INPUT_CMA3000=m
++CONFIG_INPUT_CMA3000_I2C=m
++CONFIG_SERIO_SERPORT=m
++CONFIG_SERIO_RAW=m
++CONFIG_SERIO_ALTERA_PS2=m
++CONFIG_SERIO_PS2MULT=m
++CONFIG_SERIO_ARC_PS2=m
++CONFIG_GAMEPORT_NS558=m
++CONFIG_GAMEPORT_L4=m
++CONFIG_VT_HW_CONSOLE_BINDING=y
++CONFIG_SERIAL_NONSTANDARD=y
++# CONFIG_DEVKMEM is not set
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_TTY_PRINTK=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_IPMI_HANDLER=y
++CONFIG_IPMI_DEVICE_INTERFACE=m
++CONFIG_IPMI_SI=m
++CONFIG_IPMI_WATCHDOG=m
++CONFIG_IPMI_POWEROFF=m
++CONFIG_HW_RANDOM=y
++CONFIG_HW_RANDOM_TIMERIOMEM=m
++CONFIG_HW_RANDOM_VIRTIO=m
++CONFIG_HW_RANDOM_TPM=m
++CONFIG_TCG_TIS_I2C_ATMEL=m
++CONFIG_TCG_TIS_I2C_INFINEON=m
++CONFIG_TCG_TIS_I2C_NUVOTON=m
++CONFIG_TCG_ATMEL=m
++CONFIG_I2C_CHARDEV=m
++CONFIG_I2C_MUX_PCA9541=m
++CONFIG_I2C_DESIGNWARE_PLATFORM=m
++CONFIG_I2C_OCORES=m
++CONFIG_I2C_PCA_PLATFORM=m
++CONFIG_I2C_SIMTEC=m
++CONFIG_I2C_XILINX=m
++CONFIG_I2C_PARPORT_LIGHT=m
++CONFIG_I2C_TAOS_EVM=m
++CONFIG_I2C_STUB=m
++CONFIG_PPS_CLIENT_LDISC=m
++CONFIG_PPS_CLIENT_GPIO=m
++CONFIG_PTP_1588_CLOCK=y
++CONFIG_POWER_RESET=y
++# CONFIG_HWMON is not set
++CONFIG_SSB=m
++CONFIG_BCMA=m
++CONFIG_BCMA_HOST_SOC=y
++CONFIG_BCMA_DRIVER_GMAC_CMN=y
++CONFIG_MFD_SYSCON=y
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=y
++# CONFIG_USB_GSPCA is not set
++CONFIG_BACKLIGHT_LCD_SUPPORT=y
++CONFIG_LCD_PLATFORM=m
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++CONFIG_BACKLIGHT_GENERIC=m
++CONFIG_BACKLIGHT_ADP8860=m
++CONFIG_BACKLIGHT_ADP8870=m
++CONFIG_BACKLIGHT_LM3639=m
++CONFIG_BACKLIGHT_LV5207LP=m
++CONFIG_BACKLIGHT_BD6107=m
++# CONFIG_VGA_CONSOLE is not set
++# CONFIG_HID_GENERIC is not set
++CONFIG_HID_A4TECH=m
++CONFIG_HID_ACRUX=m
++CONFIG_HID_ACRUX_FF=y
++CONFIG_HID_APPLE=m
++CONFIG_HID_AUREAL=m
++CONFIG_HID_BELKIN=m
++CONFIG_HID_CHERRY=m
++CONFIG_HID_CHICONY=m
++CONFIG_HID_CYPRESS=m
++CONFIG_HID_DRAGONRISE=m
++CONFIG_DRAGONRISE_FF=y
++CONFIG_HID_EMS_FF=m
++CONFIG_HID_ELECOM=m
++CONFIG_HID_EZKEY=m
++CONFIG_HID_KEYTOUCH=m
++CONFIG_HID_KYE=m
++CONFIG_HID_WALTOP=m
++CONFIG_HID_GYRATION=m
++CONFIG_HID_ICADE=m
++CONFIG_HID_TWINHAN=m
++CONFIG_HID_KENSINGTON=m
++CONFIG_HID_LCPOWER=m
++CONFIG_HID_LOGITECH=m
++CONFIG_HID_LOGITECH_HIDPP=m
++CONFIG_LOGITECH_FF=y
++CONFIG_LOGIRUMBLEPAD2_FF=y
++CONFIG_LOGIG940_FF=y
++CONFIG_HID_MAGICMOUSE=m
++CONFIG_HID_MICROSOFT=m
++CONFIG_HID_MONTEREY=m
++CONFIG_HID_MULTITOUCH=m
++CONFIG_HID_ORTEK=m
++CONFIG_HID_PANTHERLORD=m
++CONFIG_PANTHERLORD_FF=y
++CONFIG_HID_PETALYNX=m
++CONFIG_HID_PICOLCD=m
++CONFIG_HID_PICOLCD_BACKLIGHT=y
++CONFIG_HID_PICOLCD_LCD=y
++CONFIG_HID_PICOLCD_LEDS=y
++CONFIG_HID_PRIMAX=m
++CONFIG_HID_SAITEK=m
++CONFIG_HID_SAMSUNG=m
++CONFIG_HID_SPEEDLINK=m
++CONFIG_HID_STEELSERIES=m
++CONFIG_HID_SUNPLUS=m
++CONFIG_HID_RMI=m
++CONFIG_HID_GREENASIA=m
++CONFIG_GREENASIA_FF=y
++CONFIG_HID_SMARTJOYPLUS=m
++CONFIG_SMARTJOYPLUS_FF=y
++CONFIG_HID_TIVO=m
++CONFIG_HID_TOPSEED=m
++CONFIG_HID_THINGM=m
++CONFIG_HID_THRUSTMASTER=m
++CONFIG_THRUSTMASTER_FF=y
++CONFIG_HID_WACOM=m
++CONFIG_HID_WIIMOTE=m
++CONFIG_HID_XINMO=m
++CONFIG_HID_ZEROPLUS=m
++CONFIG_ZEROPLUS_FF=y
++CONFIG_HID_ZYDACRON=m
++CONFIG_HID_SENSOR_HUB=m
++CONFIG_I2C_HID=m
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_LM3530=m
++CONFIG_LEDS_LM3642=m
++CONFIG_LEDS_PCA9532=m
++CONFIG_LEDS_LP3944=m
++CONFIG_LEDS_LP5521=m
++CONFIG_LEDS_LP5523=m
++CONFIG_LEDS_LP5562=m
++CONFIG_LEDS_LP8501=m
++CONFIG_LEDS_PCA955X=m
++CONFIG_LEDS_PCA963X=m
++CONFIG_LEDS_BD2802=m
++CONFIG_LEDS_TCA6507=m
++CONFIG_LEDS_LM355x=m
++CONFIG_LEDS_BLINKM=m
++CONFIG_LEDS_TRIGGER_TIMER=m
++CONFIG_LEDS_TRIGGER_ONESHOT=m
++CONFIG_LEDS_TRIGGER_HEARTBEAT=m
++CONFIG_LEDS_TRIGGER_BACKLIGHT=m
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
++CONFIG_LEDS_TRIGGER_TRANSIENT=m
++CONFIG_LEDS_TRIGGER_CAMERA=m
++CONFIG_VIRTIO_BALLOON=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
++CONFIG_ARM_TIMER_SP804=y
++# CONFIG_IOMMU_SUPPORT is not set
++CONFIG_STE_MODEM_RPROC=m
++CONFIG_PM_DEVFREQ=y
++CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
++CONFIG_DEVFREQ_GOV_PERFORMANCE=y
++CONFIG_DEVFREQ_GOV_POWERSAVE=y
++CONFIG_DEVFREQ_GOV_USERSPACE=y
++CONFIG_RESET_CONTROLLER=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_FANOTIFY=y
++CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
++CONFIG_QUOTA=y
++# CONFIG_PRINT_QUOTA_WARNING is not set
++CONFIG_FSCACHE=m
++CONFIG_FSCACHE_STATS=y
++CONFIG_CACHEFILES=m
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_FAT_DEFAULT_UTF8=y
++CONFIG_NTFS_FS=y
++CONFIG_PROC_KCORE=y
++CONFIG_PROC_CHILDREN=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_CONFIGFS_FS=y
++CONFIG_CRAMFS=y
++CONFIG_ROMFS_FS=y
++CONFIG_NFS_FS=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_DEFAULT="utf8"
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_CODEPAGE_737=y
++CONFIG_NLS_CODEPAGE_775=y
++CONFIG_NLS_CODEPAGE_850=y
++CONFIG_NLS_CODEPAGE_852=y
++CONFIG_NLS_CODEPAGE_855=y
++CONFIG_NLS_CODEPAGE_857=y
++CONFIG_NLS_CODEPAGE_860=y
++CONFIG_NLS_CODEPAGE_861=y
++CONFIG_NLS_CODEPAGE_863=y
++CONFIG_NLS_CODEPAGE_864=y
++CONFIG_NLS_CODEPAGE_865=y
++CONFIG_NLS_CODEPAGE_866=y
++CONFIG_NLS_CODEPAGE_869=y
++CONFIG_NLS_CODEPAGE_936=y
++CONFIG_NLS_CODEPAGE_950=y
++CONFIG_NLS_CODEPAGE_932=y
++CONFIG_NLS_CODEPAGE_949=m
++CONFIG_NLS_CODEPAGE_874=m
++CONFIG_NLS_ISO8859_8=m
++CONFIG_NLS_CODEPAGE_1250=y
++CONFIG_NLS_CODEPAGE_1251=y
++CONFIG_NLS_ASCII=m
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_ISO8859_2=m
++CONFIG_NLS_ISO8859_3=m
++CONFIG_NLS_ISO8859_4=m
++CONFIG_NLS_ISO8859_5=m
++CONFIG_NLS_ISO8859_6=m
++CONFIG_NLS_ISO8859_7=m
++CONFIG_NLS_ISO8859_9=m
++CONFIG_NLS_ISO8859_13=m
++CONFIG_NLS_ISO8859_14=m
++CONFIG_NLS_ISO8859_15=m
++CONFIG_NLS_KOI8_R=m
++CONFIG_NLS_KOI8_U=m
++CONFIG_NLS_MAC_ROMAN=m
++CONFIG_NLS_MAC_CELTIC=m
++CONFIG_NLS_MAC_CENTEURO=m
++CONFIG_NLS_MAC_CROATIAN=m
++CONFIG_NLS_MAC_CYRILLIC=m
++CONFIG_NLS_MAC_GAELIC=m
++CONFIG_NLS_MAC_GREEK=m
++CONFIG_NLS_MAC_ICELAND=m
++CONFIG_NLS_MAC_INUIT=m
++CONFIG_NLS_MAC_ROMANIAN=m
++CONFIG_NLS_MAC_TURKISH=m
++CONFIG_NLS_UTF8=y
++CONFIG_PRINTK_TIME=y
++# CONFIG_ENABLE_WARN_DEPRECATED is not set
++# CONFIG_ENABLE_MUST_CHECK is not set
++CONFIG_UNUSED_SYMBOLS=y
++CONFIG_DEBUG_FS=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_LOCKUP_DETECTOR=y
++# CONFIG_SCHED_DEBUG is not set
++CONFIG_RBTREE_TEST=m
++CONFIG_INTERVAL_TREE_TEST=m
++CONFIG_PERCPU_TEST=m
++CONFIG_TEST_STRING_HELPERS=m
++CONFIG_TEST_KSTRTOX=m
++CONFIG_PERSISTENT_KEYRINGS=y
++CONFIG_TRUSTED_KEYS=y
++CONFIG_SECURITY=y
++CONFIG_SECURITY_NETWORK=y
++CONFIG_SECURITY_PATH=y
++CONFIG_SECURITY_YAMA=y
++CONFIG_INTEGRITY_SIGNATURE=y
++CONFIG_INTEGRITY_ASYMMETRIC_KEYS=y
++CONFIG_IMA=y
++CONFIG_IMA_APPRAISE=y
++CONFIG_EVM=y
++CONFIG_CRYPTO_CRYPTD=m
++CONFIG_CRYPTO_AUTHENC=m
++CONFIG_CRYPTO_TEST=m
++CONFIG_CRYPTO_CCM=m
++CONFIG_CRYPTO_GCM=m
++CONFIG_CRYPTO_CTS=m
++CONFIG_CRYPTO_ECB=y
++CONFIG_CRYPTO_LRW=m
++CONFIG_CRYPTO_PCBC=m
++CONFIG_CRYPTO_XTS=m
++CONFIG_CRYPTO_CMAC=m
++CONFIG_CRYPTO_XCBC=m
++CONFIG_CRYPTO_VMAC=m
++CONFIG_CRYPTO_CRC32=m
++CONFIG_CRYPTO_MD4=m
++CONFIG_CRYPTO_MICHAEL_MIC=m
++CONFIG_CRYPTO_RMD128=m
++CONFIG_CRYPTO_RMD160=m
++CONFIG_CRYPTO_RMD256=m
++CONFIG_CRYPTO_RMD320=m
++CONFIG_CRYPTO_SHA512=y
++CONFIG_CRYPTO_TGR192=m
++CONFIG_CRYPTO_WP512=m
++CONFIG_CRYPTO_ANUBIS=m
++CONFIG_CRYPTO_ARC4=m
++CONFIG_CRYPTO_BLOWFISH=m
++CONFIG_CRYPTO_CAMELLIA=m
++CONFIG_CRYPTO_CAST5=m
++CONFIG_CRYPTO_CAST6=m
++CONFIG_CRYPTO_DES=m
++CONFIG_CRYPTO_FCRYPT=m
++CONFIG_CRYPTO_KHAZAD=m
++CONFIG_CRYPTO_SALSA20=m
++CONFIG_CRYPTO_SEED=m
++CONFIG_CRYPTO_SERPENT=m
++CONFIG_CRYPTO_TEA=m
++CONFIG_CRYPTO_TWOFISH=m
++CONFIG_CRYPTO_DEFLATE=m
++CONFIG_CRYPTO_LZO=y
++CONFIG_CRYPTO_LZ4=m
++CONFIG_CRYPTO_LZ4HC=m
++CONFIG_CRYPTO_ANSI_CPRNG=m
++CONFIG_CRC_CCITT=m
++CONFIG_CRC7=m
++CONFIG_LIBCRC32C=m
++CONFIG_CRC8=m
++CONFIG_XZ_DEC=y
++CONFIG_XZ_DEC_TEST=m
++CONFIG_CORDIC=m
++CONFIG_DDR=y
+diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
+new file mode 100644
+index 0000000..75226a5
+--- /dev/null
++++ b/configs/csky_gx6605s_defconfig
+@@ -0,0 +1,26 @@
++BR2_csky=y
++BR2_ck610=y
++BR2_OPTIMIZE_2=y
++BR2_SHARED_STATIC_LIBS=y
++# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.2-20170227.tar.gz"
++BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
++BR2_TOOLCHAIN_EXTERNAL_GCC_4_5=y
++BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
++BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++BR2_TOOLCHAIN_EXTERNAL_CXX=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/csky/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="gx6605s"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/csky/gx6605s/gx66xx_defconfig"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
++BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/csky/gx6605s/gx6605s.dts"
++BR2_LINUX_KERNEL_EXT_CSKY_ARCH=y
++BR2_LINUX_KERNEL_EXT_CSKY_ADDONS=y
++BR2_PACKAGE_HOST_MKE2IMG=y
+diff --git a/configs/csky_sc8925_defconfig b/configs/csky_sc8925_defconfig
+new file mode 100644
+index 0000000..08f0550
+--- /dev/null
++++ b/configs/csky_sc8925_defconfig
+@@ -0,0 +1,27 @@
++BR2_csky=y
++BR2_OPTIMIZE_2=y
++BR2_SHARED_STATIC_LIBS=y
++# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-abiv2-linux-tools-x86_64-glibc-linux-4.9.2-20170228.tar.gz"
++BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-abiv2-linux"
++BR2_TOOLCHAIN_EXTERNAL_GCC_4_5=y
++BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
++BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++BR2_TOOLCHAIN_EXTERNAL_CXX=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/csky/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="sc8925"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/csky/sc8925/sc8925_defconfig"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
++BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/csky/sc8925/sc8925.dts"
++BR2_LINUX_KERNEL_EXT_CSKY_ARCH=y
++BR2_LINUX_KERNEL_EXT_CSKY_ADDONS=y
++BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_GIT=y
++BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_GIT_URL="git at git.coding.net:c-sky/addons-linux.git"
++BR2_PACKAGE_HOST_MKE2IMG=y
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 011dffb..3729849 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -128,4 +128,79 @@ config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
+ 
+ endif # aufs
+ 
++#-------------------------------------------------------------------------------
++# csky arch for linux
++config BR2_LINUX_KERNEL_EXT_CSKY_ARCH
++	bool "C-SKY Linux arch"
++	select BR2_PACKAGE_CSKY_ARCH
++	help
++	  Linux arch for C-SKY from the www.c-sky.com
++
++	  https://github.com/c-sky/csky-linux
++
++if BR2_LINUX_KERNEL_EXT_CSKY_ARCH
++
++choice
++	bool "Arch version"
++	help
++	  Select method to get code, github or custom git repo. And you
++	  can define the version for github.
++
++config BR2_LINUX_KERNEL_EXT_CSKY_ARCH_GITHUB
++	bool "Github"
++
++config BR2_LINUX_KERNEL_EXT_CSKY_ARCH_GIT
++	bool "Custom git repo"
++
++endchoice
++
++config BR2_LINUX_KERNEL_EXT_CSKY_ARCH_VERSION
++	string "Github version"
++	default "HEAD"
++
++config BR2_LINUX_KERNEL_EXT_CSKY_ARCH_GIT_URL
++	string "Git url"
++	depends on BR2_LINUX_KERNEL_EXT_CSKY_ARCH_GIT
++	default ""
++
++endif # csky arch
++
++#-------------------------------------------------------------------------------
++# csky addons for linux
++config BR2_LINUX_KERNEL_EXT_CSKY_ADDONS
++	bool "C-SKY Linux addons"
++	select BR2_PACKAGE_CSKY_ADDONS
++	help
++	  Linux addons for C-SKY from the www.c-sky.com
++
++	  https://github.com/c-sky/csky-addons
++
++if BR2_LINUX_KERNEL_EXT_CSKY_ADDONS
++
++choice
++	bool "Addons version"
++	help
++	  Select method to get code, github or custom git repo. And you
++	  can define the version for github.
++
++config BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_GITHUB
++	bool "Github"
++
++config BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_GIT
++	bool "Custom git repo"
++
++endchoice
++
++config BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_VERSION
++	string "Github version"
++	default "HEAD"
++
++config BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_GIT_URL
++	string "Git url"
++	depends on BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_GIT
++	default ""
++
++endif # csky addons
++
+ endmenu
++
+diff --git a/linux/linux-ext-csky-addons.mk b/linux/linux-ext-csky-addons.mk
+new file mode 100644
+index 0000000..9ee1ac6
+--- /dev/null
++++ b/linux/linux-ext-csky-addons.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# Linux kernel csky addons
++#
++################################################################################
++
++LINUX_EXTENSIONS += csky-addons
++
++define CSKY_ADDONS_PREPARE_KERNEL
++	cp -raf $(CSKY_ADDONS_DIR) $(LINUX_DIR)/addons
++endef
++
+diff --git a/linux/linux-ext-csky-arch.mk b/linux/linux-ext-csky-arch.mk
+new file mode 100644
+index 0000000..1b95bdb
+--- /dev/null
++++ b/linux/linux-ext-csky-arch.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# Linux kernel csky arch
++#
++################################################################################
++
++LINUX_EXTENSIONS += csky-arch
++
++define CSKY_ARCH_PREPARE_KERNEL
++	cp -raf $(CSKY_ARCH_DIR)/arch/csky $(LINUX_DIR)/arch/
++endef
++
+diff --git a/package/Config.in b/package/Config.in
+index deff0fe..83cc390 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -374,6 +374,8 @@ endmenu
+ 	source "package/eeprog/Config.in"
+ 	source "package/eudev/Config.in"
+ 	source "package/ev3dev-linux-drivers/Config.in"
++	source "package/csky-arch/Config.in"
++	source "package/csky-addons/Config.in"
+ 	source "package/evemu/Config.in"
+ 	source "package/evtest/Config.in"
+ 	source "package/fan-ctrl/Config.in"
+diff --git a/package/csky-addons/Config.in b/package/csky-addons/Config.in
+new file mode 100644
+index 0000000..5f94c56
+--- /dev/null
++++ b/package/csky-addons/Config.in
+@@ -0,0 +1,12 @@
++# Prompt-less option, because this package is not doing anything except
++# downloading source. The real work is done by a Linux
++# extension.
++config BR2_PACKAGE_CSKY_ADDONS
++	bool
++	depends on BR2_LINUX_KERNEL
++	help
++	  Linux addons for C-CSKY CPU
++
++	  This is only the download helper for the kernel patch.
++
++	  https://github.com/c-sky/addons-linux
+diff --git a/package/csky-addons/csky-addons.mk b/package/csky-addons/csky-addons.mk
+new file mode 100644
+index 0000000..64db15a
+--- /dev/null
++++ b/package/csky-addons/csky-addons.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# csky addons
++#
++################################################################################
++
++CSKY_ADDONS_VERSION = $(BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_VERSION)
++ifeq ($(BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_GITHUB),y)
++CSKY_ADDONS_SITE = $(call github,c-sky,addons-linux,$(CSKY_ADDONS_VERSION))
++else
++CSKY_ADDONS_SITE = $(BR2_LINUX_KERNEL_EXT_CSKY_ADDONS_GIT_URL)
++CSKY_ADDONS_SITE_METHOD = git
++endif
++
++$(eval $(generic-package))
+diff --git a/package/csky-arch/Config.in b/package/csky-arch/Config.in
+new file mode 100644
+index 0000000..0f47c98
+--- /dev/null
++++ b/package/csky-arch/Config.in
+@@ -0,0 +1,12 @@
++# Prompt-less option, because this package is not doing anything except
++# downloading source. The real work is done by a Linux
++# extension.
++config BR2_PACKAGE_CSKY_ARCH
++	bool
++	depends on BR2_LINUX_KERNEL
++	help
++	  Linux arch for C-CSKY CPU
++
++	  This is only the download helper for the kernel patch.
++
++	  https://github.com/c-sky/csky-linux
+diff --git a/package/csky-arch/csky-arch.mk b/package/csky-arch/csky-arch.mk
+new file mode 100644
+index 0000000..72efbc1
+--- /dev/null
++++ b/package/csky-arch/csky-arch.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# csky arch
++#
++################################################################################
++
++CSKY_ARCH_VERSION = $(BR2_LINUX_KERNEL_EXT_CSKY_ARCH_VERSION)
++ifeq ($(BR2_LINUX_KERNEL_EXT_CSKY_ARCH_GITHUB),y)
++CSKY_ARCH_SITE = $(call github,c-sky,csky-linux,$(CSKY_ARCH_VERSION))
++else
++CSKY_ARCH_SITE = $(BR2_LINUX_KERNEL_EXT_CSKY_ARCH_GIT_URL)
++CSKY_ARCH_SITE_METHOD = git
++endif
++
++$(eval $(generic-package))
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 91cddc2..db073a6 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -47,7 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
+ 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+ 		   BR2_sh          || BR2_sparc64    || BR2_x86_64 || \
+-		   BR2_microblaze || BR2_nios2
++		   BR2_microblaze || BR2_nios2 || BR2_csky
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_powerpc_SPE
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
