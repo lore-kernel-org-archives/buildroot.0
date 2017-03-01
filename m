@@ -1,36 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 01 Mar 2017 17:32:11 +0100
-Subject: [Buildroot] Buildroot 2017.02 released
-In-Reply-To: <871suihv2t.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 28 Feb 2017 22:19:38 +0100")
-References: <871suihv2t.fsf@dell.be.48ers.dk>
-Message-ID: <87wpc9gdpw.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 01 Mar 2017 16:38:45 +0000
+Subject: [Buildroot] [Bug 9456] mkusers script bash errors
+In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
+References: <bug-9456-163@https.bugs.busybox.net/>
+Message-ID: <bug-9456-163-DkDv1IxKo4@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=9456
 
- > Hi,
- > Buildroot 2017.02 is released - Go download it at:
+--- Comment #16 from Paul Stewart <paulstewartis@gmail.com> ---
+(In reply to Arnout Vandecappelle from comment #14)
 
-...
+Looking at the Hexdump, it looks like 0x20 for the spaces:
 
- > The next developers meeting will take place just after FOSDEM in
- > Brussels, Belgium:
-
- > http://elinux.org/Buildroot:DeveloperDaysFOSDEM2017
-
- > Many thanks to Google for sponsoring the meeting location! We are still
- > looking for a sponsor for the dinner Monday evening. Contact us if you
- > are interested.
-
-Ehh, that was obviously cut'n'paste from the 2016.11 release notes,
-sorry about that. The next developers meeting will take place close to
-the Embedded Linux Conference Europe in Prague, Czech Republic in
-October - But more about that later.
+00000000  64 75 6d 6d 79 20 2d 31  20 75 73 65 72 73 20 2d  |dummy -1 users -|
+00000010  31 20 2a 20 2d 20 2d 20  2d 20 44 75 6d 6d 79 20  |1 * - - - Dummy |
+<snip>
+00000110  72 2f 62 69 6e 2f 67 69  74 2d 73 68 65 6c 6c 20  |r/bin/git-shell |
+00000120  73 73 68 2d 75 73 65 72  0a                       |ssh-user.|
+00000129
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
