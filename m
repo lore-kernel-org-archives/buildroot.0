@@ -1,43 +1,144 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 23:54:35 +0100
-Subject: [Buildroot] [Patch v3 2/9] execline: new package
-In-Reply-To: <1482182955-23916-3-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1482182955-23916-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20170301235435.7694731c@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed,  1 Mar 2017 23:56:10 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/physfs: new package
+Message-ID: <20170301225611.11494-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Backport a patch from SuperTux project:
+https://github.com/SuperTux/physfs/commit/61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8
 
-On Mon, 19 Dec 2016 22:29:08 +0100, Eric Le Bihan wrote:
-> This package provides execline, a (non-interactive) scripting language,
-> like sh, used in the s6 supervision system.
-> 
-> The host variant is provided as it is required to build and run the host
-> variants of s6 and s6-rc.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/Config.in              |  1 +
->  package/execline/Config.in     | 12 ++++++++
->  package/execline/execline.hash |  2 ++
->  package/execline/execline.mk   | 70 ++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 85 insertions(+)
->  create mode 100644 package/execline/Config.in
->  create mode 100644 package/execline/execline.hash
->  create mode 100644 package/execline/execline.mk
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../physfs/0001-Fix-builds-with-modern-GCC.patch   | 38 ++++++++++++++++++++++
+ package/physfs/Config.in                           | 10 ++++++
+ package/physfs/physfs.mk                           | 27 +++++++++++++++
+ 5 files changed, 77 insertions(+)
+ create mode 100644 package/physfs/0001-Fix-builds-with-modern-GCC.patch
+ create mode 100644 package/physfs/Config.in
+ create mode 100644 package/physfs/physfs.mk
 
-Applied to master, after adding an entry to the DEVELOPERS file for
-this package.
-
-Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ee2300b..2cc2401 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1290,6 +1290,7 @@ F:	package/linux-syscall-support/
+ F:	package/lugaru/
+ F:	package/mcelog/
+ F:	package/openpowerlink/
++F:	package/physfs/
+ F:	package/stress-ng/
+ F:	package/terminology/
+ F:	package/upower/
+diff --git a/package/Config.in b/package/Config.in
+index fa7e5cb..b15e064 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -972,6 +972,7 @@ menu "Filesystem"
+ 	source "package/libnfs/Config.in"
+ 	source "package/libsysfs/Config.in"
+ 	source "package/lockdev/Config.in"
++	source "package/physfs/Config.in"
+ endmenu
+ 
+ menu "Graphics"
+diff --git a/package/physfs/0001-Fix-builds-with-modern-GCC.patch b/package/physfs/0001-Fix-builds-with-modern-GCC.patch
+new file mode 100644
+index 0000000..710b4ff
+--- /dev/null
++++ b/package/physfs/0001-Fix-builds-with-modern-GCC.patch
+@@ -0,0 +1,38 @@
++From 61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8 Mon Sep 17 00:00:00 2001
++From: Jacob Burroughs <jburroughs@trustwave.com>
++Date: Thu, 23 Jun 2016 13:03:47 -0500
++Subject: [PATCH] Fix builds with modern GCC
++
++From SuperTux project:
++https://github.com/SuperTux/physfs/commit/61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 2a371af..94c4844 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -50,7 +50,7 @@ endif()
++ # Add some gcc-specific command lines.
++ if(CMAKE_COMPILER_IS_GNUCC)
++     # Always build with debug symbols...you can strip it later.
++-    add_definitions(-g -pipe -Werror -fsigned-char)
+++    add_definitions(-g -pipe -fsigned-char)
++ 
++     # Stupid BeOS generates warnings in the system headers.
++     if(NOT BEOS)
++@@ -304,7 +304,7 @@ if(PHYSFS_BUILD_TEST)
++         if(READLINE_LIBRARY)
++             set(HAVE_SYSTEM_READLINE TRUE)
++             set(TEST_PHYSFS_LIBS ${TEST_PHYSFS_LIBS} ${READLINE_LIBRARY} ${CURSES_LIBRARY})
++-            include_directories(${READLINE_H} ${HISTORY_H})
+++            include_directories(SYSTEM ${READLINE_H} ${HISTORY_H})
++             add_definitions(-DPHYSFS_HAVE_READLINE=1)
++         endif()
++     endif()
++-- 
++2.9.3
++
+diff --git a/package/physfs/Config.in b/package/physfs/Config.in
+new file mode 100644
+index 0000000..dad3ab4
+--- /dev/null
++++ b/package/physfs/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PHYSFS
++	bool "physfs"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  PhysicsFS; a portable, flexible file i/o abstraction.
++
++	  http://icculus.org/physfs
++
++comment "physfs needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/physfs/physfs.mk b/package/physfs/physfs.mk
+new file mode 100644
+index 0000000..ff76035
+--- /dev/null
++++ b/package/physfs/physfs.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# physfs
++#
++################################################################################
++
++PHYSFS_VERSION = be27dfd07d97336145e7f49d3fd200a6e902f85e
++PHYSFS_SITE = https://hg.icculus.org/icculus/physfs
++PHYSFS_SITE_METHOD = hg
++
++PHYSFS_INSTALL_STAGING = YES
++
++PHYSFS_CONF_OPTS = -DPHYSFS_BUILD_TEST=OFF
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_SHARED=ON
++else
++PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_SHARED=OFF
++endif
++
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_STATIC=ON
++else
++PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_STATIC=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.9.3
