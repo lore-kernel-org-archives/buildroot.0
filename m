@@ -1,53 +1,74 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 01 Mar 2017 17:46:04 +0000
-Subject: [Buildroot] [Bug 9456] mkusers script bash errors
-In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
-References: <bug-9456-163@https.bugs.busybox.net/>
-Message-ID: <bug-9456-163-0sVvMpoRzy@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 1 Mar 2017 19:43:43 +0100
+Subject: [Buildroot] [PATCH 1/5] core/pkg-cmake: provide our own
+ platform description
+In-Reply-To: <19fbcec2-68a4-a287-a20f-522c94ede5e7@mind.be>
+References: <cover.1488305206.git.yann.morin.1998@free.fr>
+ <f25e9ff7873418c0b323528d6a9c2482c752cd31.1488305206.git.yann.morin.1998@free.fr>
+ <e36f8ee2-22d1-318b-178a-9ce84f31a03a@mind.be>
+ <20170301091731.5102e061@free-electrons.com>
+ <19fbcec2-68a4-a287-a20f-522c94ede5e7@mind.be>
+Message-ID: <20170301184343.GB3578@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9456
+Arnout, All,
 
---- Comment #18 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Created attachment 6911
-  --> https://bugs.busybox.net/attachment.cgi?id=6911&action=edit
-Debug mkusers
+On 2017-03-01 09:35 +0100, Arnout Vandecappelle spake thusly:
+> On 01-03-17 09:17, Thomas Petazzoni wrote:
+> > Hello,
+> > 
+> > On Wed, 1 Mar 2017 08:58:31 +0100, Arnout Vandecappelle wrote:
+> > 
+> >>  Since you don't do any processing on the file, you could just use
+> >>
+> >> 		-DCMAKE_MODULE_PATH="$$(TOPDIR)/support/misc" \
+> > 
+> > I think the idea is that since the Buildroot.cmake platform files gets
+> > referenced by the toolchainfile.cmake, then Buildroot.cmake anyway
+> > needs to be installed in $(HOST_DIR)/usr/share/buildroot, so we can
+> > just as well point CMake to this place.
+> > 
+> >> and avoid copying the file around. Of course, in that case, support/cmake is
+> >> probably a better place to put the file :-)
+> > 
+> > No: copying the file is needed, otherwise our toolchainfile.cmake file
+> > no longer works for people using it outside of Buildroot.
+> 
+>  Good point. I still think it should be in staging rather than host, but for
+> sure it's more important to keep them together.
 
-Paul,
+Why would you want it in staging? When we build our own internal cmake,
+the moduels it installs are so installed in host, not staging. They are
+build-description files, not target files.
 
-Could you test with the attched patch and report the result, please?
+Ergo, they should be in host, not staging.
 
-Here is what I got:
+Regards,
+Yann E. MORIN.
 
-line='paul 1000 users 100
-=21248f7aac088184a7c9dd3a3cd8bd1bafecc5718174e9025bab7053756a013a /home/paul
-/bin/sh ssh-user'
-  username='paul'
-  uid     ='1000'
-  group   ='users'
-  gid     ='100'
-  paswd   ='=21248f7aac088184a7c9dd3a3cd8bd1bafecc5718174e9025bab7053756a013a'
-  home    ='/home/paul'
-  shell   ='/bin/sh'
-  groups  ='ssh-user'
-  comment =''
-line='git 1001 users 100
-=de5d4f76680ec42ff304682eebeaec1c4756e3d5de3e4ce6db747cb223d6037c /home/git
-/usr/bin/git-shell ssh-user'
-  username='git'
-  uid     ='1001'
-  group   ='users'
-  gid     ='100'
-  paswd   ='=de5d4f76680ec42ff304682eebeaec1c4756e3d5de3e4ce6db747cb223d6037c'
-  home    ='/home/git'
-  shell   ='/usr/bin/git-shell'
-  groups  ='ssh-user'
-  comment =''
+>  Therefore:
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  Regards,
+>  Arnout
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
