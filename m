@@ -1,754 +1,1134 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 1 Mar 2017 09:30:44 +0100
-Subject: [Buildroot] [PATCH 3/5] telit_evk_pro3_defconfig: remove broken
-	defconfig
+Date: Wed, 1 Mar 2017 09:30:46 +0100
+Subject: [Buildroot] [PATCH 5/5] altera_*_defconfig: remove broken defconfigs
 In-Reply-To: <20170301083046.13226-1-arnout@mind.be>
 References: <20170301083046.13226-1-arnout@mind.be>
-Message-ID: <20170301083046.13226-3-arnout@mind.be>
+Message-ID: <20170301083046.13226-5-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This defconfig has been broken due to gcc5 for more than half a year,
-and nobody stepped up to fix it. Remove it, as well as it board
-directory.
+These defconfigs have been broken due to gcc5 for more than half a year,
+and nobody stepped up to fix it. In addition, the rocketboards git
+repository used by these defconfigs hasn't been reachable for more than
+half a year. Finally, these defconfigs don't even use the
+BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC option so they are not a
+great example for this family of targets.
+
+Remove these defconfigs, as well as the board directory. Both are
+removed in a single commit to avoid having an inconsistent readme.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Jan Viktorin <viktorin@rehivetech.com>
+Cc: Charles Manning <cdhmanning@gmail.com>
+Cc: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 ---
- ...04.0-0001-watchdog-add-keep-alive-support.patch |  88 --------
- ...02-watchdog-add-at91sam9-watchdog-support.patch | 228 ---------------------
- ...0003-at91sam9260-9g20-add-wathdog-support.patch |  40 ----
- ...0004-at91sam9260-9g20-fix-wathdog-support.patch |  26 ---
- ...13.04.0-0005-watchdog-enable-for-evk-pro3.patch |  26 ---
- board/telit/evk-pro3/linux-3.9.config              | 201 ------------------
- board/telit/evk-pro3/readme.txt                    |  28 ---
- configs/telit_evk_pro3_defconfig                   |  29 ---
- 8 files changed, 666 deletions(-)
- delete mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch
- delete mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0002-watchdog-add-at91sam9-watchdog-support.patch
- delete mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0003-at91sam9260-9g20-add-wathdog-support.patch
- delete mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0004-at91sam9260-9g20-fix-wathdog-support.patch
- delete mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0005-watchdog-enable-for-evk-pro3.patch
- delete mode 100644 board/telit/evk-pro3/linux-3.9.config
- delete mode 100644 board/telit/evk-pro3/readme.txt
- delete mode 100644 configs/telit_evk_pro3_defconfig
+ board/altera/post-image.sh                         |   8 -
+ board/altera/readme.txt                            | 165 -----
+ .../uboot-sockit-preloader-sample-design.patch     | 820 ---------------------
+ configs/altera_socdk_defconfig                     |  33 -
+ configs/altera_sockit_defconfig                    |  37 -
+ 5 files changed, 1063 deletions(-)
+ delete mode 100755 board/altera/post-image.sh
+ delete mode 100644 board/altera/readme.txt
+ delete mode 100644 board/altera/sockit/uboot-sockit-preloader-sample-design.patch
+ delete mode 100644 configs/altera_socdk_defconfig
+ delete mode 100644 configs/altera_sockit_defconfig
 
-diff --git a/board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch b/board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch
-deleted file mode 100644
-index 1551546031..0000000000
---- a/board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch
+diff --git a/board/altera/post-image.sh b/board/altera/post-image.sh
+deleted file mode 100755
+index 03e7819aa6..0000000000
+--- a/board/altera/post-image.sh
 +++ /dev/null
-@@ -1,88 +0,0 @@
--From b5e57a9f158a293b1151638336478af8a5aad0f0 Mon Sep 17 00:00:00 2001
--From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
--Date: Wed, 14 Nov 2012 19:16:35 +0800
--Subject: [PATCH 1/5] watchdog: add keep alive support
+@@ -1,8 +0,0 @@
+-#!/bin/sh
+-# post-image.sh for SoCkit/SoCDK
+-# 2014, "Roman Diouskine" <roman.diouskine@savoirfairelinux.com>
+-# 2014, "Sebastien Bourdelin" <sebastien.bourdelin@savoirfairelinux.com>
 -
--this will allow to ping the watchdog via poller
+-# create a DTB file copy with the name expected by the u-boot config
+-# Name of the DTB is passed as the second argument to the script.
+-cp -af $BINARIES_DIR/${2}.dtb  $BINARIES_DIR/socfpga.dtb
+diff --git a/board/altera/readme.txt b/board/altera/readme.txt
+deleted file mode 100644
+index 1894a7907d..0000000000
+--- a/board/altera/readme.txt
++++ /dev/null
+@@ -1,165 +0,0 @@
+-SoCkit, SoC Development Kit
 -
--Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+-Intro
+-=====
+-
+-This is the buildroot board support for the Arrow SoCkit Evaluation Board
+-and the Altera Cyclone 5 Development Board.
+-
+-A good source of information for Arrow SoCkit:
+-http://www.rocketboards.org/foswiki/Documentation/ArrowSoCKitEvaluationBoard
+-
+-More information about SoC DK:
+-https://www.altera.com/products/boards_and_kits/dev-kits/altera/kit-cyclone-v-soc.html
+-
+-How it works
+-============
+-
+-Boot process:
+--------------
+-
+-In summary, the bootloader has multiple stages, an hardcoded boot routine is
+-loaded from an on-chip ROM.
+-
+-  - That first stage is scanning the SD card's partition table to find
+-    partition having the 0xA2 type.
+-  - This partition is expected to contain a boot image on its first 60 Kb,
+-    because u-boot is bigger, we must fill it with a preloader (u-boot-spl)
+-    which will load the u-boot image.
+-  - Then the u-boot image will load the Linux kernel.
+-
+-A good source of information for the boot process is:
+-http://xillybus.com/tutorials/u-boot-image-altera-soc
+-
+-Note for the SPL:
+-The SPL generated by the u-boot from Rocketboards doesn't seems to work,
+-therefore we provide a patch for {uboot-PKG}/board/altera/socfpga_cyclone5/*
+-based on the files generated with the Altera example design.
+-
+-For more information about this files please look at:
+-http://www.rocketboards.org/foswiki/Documentation/PreloaderUbootCustomization#Common_Source_Code
+-
+-How to build it
+-===============
+-
+-Configure Buildroot
+--------------------
+-
+-The altera_sockit_defconfig configuration is a minimal configuration with
+-all that is required to bring the SoCkit:
+-
+-  $ make altera_sockit_defconfig
+-
+-and for the SoC Development Board:
+-
+-  $ make altera_sockdk_defconfig
+-
+-Build everything
+-----------------
+-
+-Note: you will need to have access to the network, since Buildroot will
+-download the packages' sources.
+-
+-  $ make
+-
+-Result of the build
+--------------------
+-
+-After building, you should obtain this tree:
+-
+-    output/images/
+-    ??? rootfs.ext2
+-    ??? rootfs.ext3 -> rootfs.ext2
+-    ??? rootfs.tar
+-    ??? socfpga_cyclone5_sockit.dtb or socfpga_cyclone5_socdk.dtb
+-    ??? socfpga.dtb
+-    ??? u-boot.img
+-    ??? u-boot-spl.bin
+-    ??? uImage
+-
+-
+-Signing the Preloader
+----------------------
+-
+-*** BEWARE ****
+-The u-boot-spl.bin must be signed using the Altera's tool "mkpimage".
+-This tool comes as a part of the Altera development environnment (SoC EDS).
+-A fork of this tool have been done by Maxime Hadjinlian and can be found here:
+-https://github.com/maximeh/mkpimage
+-
+-Remember that without signing the u-boot-spl.bin, the board will not boot !!!
+-
+-  $ mkpimage u-boot-spl.bin -o u-boot-spl-signed.bin
+-
+-Prepare your SDcard
+-===================
+-
+-A good source of information for the partitioning process is:
+-http://www.rocketboards.org/foswiki/view/Projects/SoCKitLinaroLinuxDesktop#Partition_the_SD_Card
+-
+-Create the SDcard partition table
+-----------------------------------
+-
+-Determine the device associated to the SD card:
+-
+-  $ cat /proc/partitions
+-
+-let's assume it is /dev/mmcblk0:
+-
+-  $ sudo fdisk /dev/mmcblk0
+-
+-Delete all previous partitions with 'd' then create the new partition table,
+-using these options, pressing enter after each one:
+-
+-  * n p 1 9000000 +20480K t 1 b
+-  * n p 2 4096 +4496384K t 83
+-  * n p 3 2048 +1024K t 3 a2
+-
+-Using the 'p' option, the SD card's partition must look like this:
+-
+-Device         Boot     Start       End  Blocks  Id System
+-/dev/mmcblk0p1        9000000   9041919   20960   b W95 FAT32
+-/dev/mmcblk0p2           4096   8996863 4496384  83 Linux
+-/dev/mmcblk0p3           2048      4095    1024  a2 Unknown
+-
+-Then write the partition table using 'w' and exit.
+-
+-Make partition one a DOS partition:
+-
+-  $ sudo mkdosfs /dev/mmcblk0p1
+-
+-Install the binaries to the SDcard
+-----------------------------------
+-
+-Remember your binaries are located in output/images/, go inside that directory:
+-
+-  $ cd output/images
+-
+-The partition with type a2 is the partition scan by the first bootloader stage
+-in the SoCkit ROM to find the next bootloader stage so we must write the signed
+-preloader and the u-boot binaries in that partition:
+-
+-  $ sudo dd if=u-boot-spl-signed.bin of=/dev/mmcblk0p3 bs=64k seek=0
+-  $ sudo dd if=u-boot.img of=/dev/mmcblk0p3 bs=64k seek=4
+-
+-Copy the Linux kernel and its Device tree:
+-
+-  $ sudo mkdir /mnt/sdcard
+-  $ sudo mount /dev/mmcblk0p1 /mnt/sdcard
+-  $ sudo cp socfpga.dtb uImage /mnt/sdcard
+-  $ sudo umount /mnt/sdcard
+-
+-Copy the rootfs:
+-
+-  $ sudo dd if=rootfs.ext2 of=/dev/mmcblk0p2 bs=64k
+-  $ sudo sync
+-
+-It's Done!
+-
+-Finish
+-======
+-
+-Eject your SDcard, insert it in your SoCkit, and power it up.
+-
+-if you want a serial console, you can plug a micro B USB cable on the USB-UART
+-port, the serial port config to used is 57600/8-N-1.
+diff --git a/board/altera/sockit/uboot-sockit-preloader-sample-design.patch b/board/altera/sockit/uboot-sockit-preloader-sample-design.patch
+deleted file mode 100644
+index ddf0abce77..0000000000
+--- a/board/altera/sockit/uboot-sockit-preloader-sample-design.patch
++++ /dev/null
+@@ -1,820 +0,0 @@
+-From c70f2ebb350da20af1a0ed4b7960b8e5a1952713 Mon Sep 17 00:00:00 2001
+-From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+-Date: Thu, 20 Feb 2014 11:51:31 -0500
+-Subject: [PATCH] board: add to sockit a working preloader design
+-
 ----
-- drivers/watchdog/Kconfig   |  1 +
-- drivers/watchdog/wd_core.c | 21 +++++++++++++++++++++
-- include/watchdog.h         |  2 ++
-- 3 files changed, 24 insertions(+)
+- board/altera/socfpga_cyclone5/build.h              |   2 +-
+- board/altera/socfpga_cyclone5/iocsr_config.c       | 314 ++++++++++-----------
+- board/altera/socfpga_cyclone5/pinmux_config.c      |  32 +--
+- board/altera/socfpga_cyclone5/pinmux_config.h      |   8 +-
+- board/altera/socfpga_cyclone5/sdram/sdram_config.h |  14 +-
+- .../altera/socfpga_cyclone5/sdram/sequencer_auto.h |  16 +-
+- .../sdram/sequencer_auto_ac_init.c                 |  16 +-
+- .../socfpga_cyclone5/sdram/sequencer_defines.h     |  34 +--
+- 8 files changed, 218 insertions(+), 218 deletions(-)
 -
--diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
--index 2e2900c..0b4dc84 100644
----- a/drivers/watchdog/Kconfig
--+++ b/drivers/watchdog/Kconfig
--@@ -4,6 +4,7 @@ config WATCHDOG_IMX_RESET_SOURCE
-- 
-- menuconfig WATCHDOG
-- 	bool "Watchdog support"
--+	select GENERIC_POLLER
-- 	help
-- 	  Many platforms support a watchdog to keep track of a working machine.
-- 	  This framework provides routines to handle these watchdogs.
--diff --git a/drivers/watchdog/wd_core.c b/drivers/watchdog/wd_core.c
--index 3d0cfc6..a1b9e28 100644
----- a/drivers/watchdog/wd_core.c
--+++ b/drivers/watchdog/wd_core.c
--@@ -17,18 +17,39 @@
-- #include <errno.h>
-- #include <linux/ctype.h>
-- #include <watchdog.h>
--+#include <poller.h>
+-diff --git a/board/altera/socfpga_cyclone5/build.h b/board/altera/socfpga_cyclone5/build.h
+-index e5d9c3c..a369015 100644
+---- a/board/altera/socfpga_cyclone5/build.h
+-+++ b/board/altera/socfpga_cyclone5/build.h
+-@@ -29,7 +29,7 @@
+-  * Handoff files must provide user option whether to
+-  * enable watchdog during preloader execution phase
+-  */
+--#define CONFIG_PRELOADER_WATCHDOG_ENABLE	(0)
+-+#define CONFIG_PRELOADER_WATCHDOG_ENABLE	(1)
 - 
 - /*
--  * Note: this simple framework supports one watchdog only.
--  */
-- static struct watchdog *watchdog;
-- 
--+static void watchdog_poller_func(struct poller_struct *poller)
--+{
--+	watchdog->keep_alive(watchdog);
--+}
--+
--+static struct poller_struct watchdog_poller = {
--+	.func = watchdog_poller_func,
--+};
--+
-- int watchdog_register(struct watchdog *wd)
-- {
-- 	if (watchdog != NULL)
-- 		return -EBUSY;
-- 
-- 	watchdog = wd;
--+
--+	if (watchdog->keep_alive) {
--+		int ret;
--+
--+		ret = poller_register(&watchdog_poller);
--+		if (ret) {
--+			watchdog = NULL;
--+			return ret;
--+		}
--+	}
--+
-- 	return 0;
-- }
-- EXPORT_SYMBOL(watchdog_register);
--diff --git a/include/watchdog.h b/include/watchdog.h
--index 3e2d08e..d5ecf2f 100644
----- a/include/watchdog.h
--+++ b/include/watchdog.h
--@@ -13,8 +13,10 @@
-- #ifndef INCLUDE_WATCHDOG_H
-- # define INCLUDE_WATCHDOG_H
-- 
--+
-- struct watchdog {
-- 	int (*set_timeout)(struct watchdog *, unsigned);
--+	void (*keep_alive)(struct watchdog *);
+-  * Handoff files must provide user option whether to enable
+-diff --git a/board/altera/socfpga_cyclone5/iocsr_config.c b/board/altera/socfpga_cyclone5/iocsr_config.c
+-index fa663e1..90fc154 100644
+---- a/board/altera/socfpga_cyclone5/iocsr_config.c
+-+++ b/board/altera/socfpga_cyclone5/iocsr_config.c
+-@@ -7,113 +7,113 @@ const unsigned long iocsr_scan_chain0_table[((CONFIG_HPS_IOCSR_SCANCHAIN0_LENGTH
+- 	0xC0000000,
+- 	0x0000003F,
+- 	0x00008000,
+--	0x00020080,
+--	0x08020000,
+--	0x08000000,
+--	0x00018020,
+-+	0x00060180,
+-+	0x18060000,
+-+	0x18000000,
+-+	0x00018060,
+- 	0x00000000,
+- 	0x00004000,
+--	0x00010040,
+--	0x04010000,
+--	0x04000000,
+--	0x00000010,
+--	0x00004010,
+-+	0x000300C0,
+-+	0x0C030000,
+-+	0x0C000000,
+-+	0x00000030,
+-+	0x0000C030,
+- 	0x00002000,
+--	0x00020000,
+--	0x02008000,
+--	0x02000000,
+--	0x00000008,
+--	0x00002008,
+-+	0x00018060,
+-+	0x06018000,
+-+	0x06000000,
+-+	0x00000018,
+-+	0x00006018,
+- 	0x00001000,
 - };
 - 
-- int watchdog_register(struct watchdog *);
---- 
--1.8.1.4
--
-diff --git a/board/telit/evk-pro3/barebox-2013.04.0-0002-watchdog-add-at91sam9-watchdog-support.patch b/board/telit/evk-pro3/barebox-2013.04.0-0002-watchdog-add-at91sam9-watchdog-support.patch
-deleted file mode 100644
-index 1ca87695a4..0000000000
---- a/board/telit/evk-pro3/barebox-2013.04.0-0002-watchdog-add-at91sam9-watchdog-support.patch
-+++ /dev/null
-@@ -1,228 +0,0 @@
--From e1d54ffb987c346c45c20968be34c50c62a91c07 Mon Sep 17 00:00:00 2001
--From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
--Date: Wed, 14 Nov 2012 19:17:47 +0800
--Subject: [PATCH 2/5] watchdog: add at91sam9 watchdog support
--
--with keep alive support
--
--Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-----
-- drivers/watchdog/Kconfig        |   7 +++
-- drivers/watchdog/Makefile       |   1 +
-- drivers/watchdog/at91sam9_wdt.c | 131 ++++++++++++++++++++++++++++++++++++++++
-- drivers/watchdog/at91sam9_wdt.h |  38 ++++++++++++
-- 4 files changed, 177 insertions(+)
-- create mode 100644 drivers/watchdog/at91sam9_wdt.c
-- create mode 100644 drivers/watchdog/at91sam9_wdt.h
--
--diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
--index 0b4dc84..98a21d7 100644
----- a/drivers/watchdog/Kconfig
--+++ b/drivers/watchdog/Kconfig
--@@ -11,6 +11,13 @@ menuconfig WATCHDOG
+- const unsigned long iocsr_scan_chain1_table[((CONFIG_HPS_IOCSR_SCANCHAIN1_LENGTH / 32) + 1)] = {
+--	0x000C0300,
+--	0x10040000,
+--	0x100000C0,
+--	0x00000040,
+--	0x00010040,
+-+	0x00100000,
+-+	0x300C0000,
+-+	0x300000C0,
+-+	0x000000C0,
+-+	0x000300C0,
+- 	0x00008000,
+- 	0x00080000,
+--	0x18060000,
+--	0x18000000,
+--	0x00000060,
+--	0x00018060,
+-+	0x20000000,
+-+	0x00000000,
+-+	0x00000080,
+-+	0x00020000,
+- 	0x00004000,
+--	0x00010040,
+-+	0x000300C0,
+- 	0x10000000,
+--	0x04000000,
+--	0x00000010,
+--	0x00004010,
+-+	0x0C000000,
+-+	0x00000030,
+-+	0x0000C030,
+- 	0x00002000,
+--	0x06008020,
+--	0x02008000,
+-+	0x06018060,
+-+	0x06018000,
+- 	0x01FE0000,
+- 	0xF8000000,
+- 	0x00000007,
+- 	0x00001000,
+--	0x00004010,
+--	0x01004000,
+--	0x01000000,
+--	0x00003004,
+--	0x00001004,
+-+	0x0000C030,
+-+	0x0300C000,
+-+	0x03000000,
+-+	0x0000300C,
+-+	0x0000300C,
+- 	0x00000800,
+- 	0x00000000,
+- 	0x00000000,
+--	0x00800000,
+--	0x00000002,
+-+	0x01800000,
+-+	0x00000006,
+- 	0x00002000,
+- 	0x00000400,
+- 	0x00000000,
+--	0x00401000,
+-+	0x00C03000,
+- 	0x00000003,
+- 	0x00000000,
+- 	0x00000000,
+- 	0x00000200,
+--	0x00600802,
+-+	0x00601806,
+- 	0x00000000,
+--	0x80200000,
+--	0x80000600,
+--	0x00000200,
+-+	0x80600000,
+-+	0x80000601,
+-+	0x00000601,
+- 	0x00000100,
+--	0x00300401,
+--	0xC0100400,
+--	0x40100000,
+--	0x40000300,
+--	0x000C0100,
+-+	0x00300C03,
+-+	0xC0300C00,
+-+	0xC0300000,
+-+	0xC0000300,
+-+	0x000C0300,
+- 	0x00000080,
+- };
 - 
-- if WATCHDOG
+- const unsigned long iocsr_scan_chain2_table[((CONFIG_HPS_IOCSR_SCANCHAIN2_LENGTH / 32) + 1)] = {
+--	0x80040100,
+-+	0x300C0300,
+- 	0x00000000,
+- 	0x0FF00000,
+- 	0x00000000,
+--	0x0C010040,
+-+	0x0C0300C0,
+- 	0x00008000,
+--	0x18020080,
+--	0x00000000,
+--	0x08000000,
+--	0x00040020,
+--	0x06018060,
+-+	0x18060180,
+-+	0x18060000,
+-+	0x18000000,
+-+	0x00018060,
+-+	0x00018060,
+- 	0x00004000,
+--	0x0C010040,
+--	0x04010000,
+-+	0x000300C0,
+-+	0x0C030000,
+- 	0x00000030,
+- 	0x00000000,
+--	0x03004010,
+-+	0x0300C030,
+- 	0x00002000,
+--	0x06008020,
+--	0x02008000,
+--	0x02000018,
+--	0x00006008,
+--	0x01802008,
+-+	0x00018060,
+-+	0x06018000,
+-+	0x06000000,
+-+	0x00000018,
+-+	0x00006018,
+- 	0x00001000,
+--	0x03004010,
+--	0x01004000,
+--	0x0100000C,
+--	0x00003004,
+--	0x00C01004,
+-+	0x0000C030,
+-+	0x00000000,
+-+	0x03000000,
+-+	0x0000000C,
+-+	0x00C0300C,
+- 	0x00000800,
+- };
 - 
--+config WATCHDOG_AT91SAM9X
--+	tristate "AT91SAM9X / AT91CAP9 watchdog"
--+	depends on ARCH_AT91
--+	help
--+	  Watchdog timer embedded into AT91SAM9X and AT91CAP9 chips. This will
--+	  reboot your system when the timeout is reached.
--+
-- config WATCHDOG_MXS28
-- 	bool "i.MX28"
-- 	depends on ARCH_IMX28
--diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
--index f522b88..3d15d52 100644
----- a/drivers/watchdog/Makefile
--+++ b/drivers/watchdog/Makefile
--@@ -1,3 +1,4 @@
-- obj-$(CONFIG_WATCHDOG) += wd_core.o
--+obj-$(CONFIG_WATCHDOG_AT91SAM9X) += at91sam9_wdt.o
-- obj-$(CONFIG_WATCHDOG_MXS28) += im28wd.o
-- obj-$(CONFIG_WATCHDOG_IMX_RESET_SOURCE) += imxwd.o
--diff --git a/drivers/watchdog/at91sam9_wdt.c b/drivers/watchdog/at91sam9_wdt.c
--new file mode 100644
--index 0000000..203d83a
----- /dev/null
--+++ b/drivers/watchdog/at91sam9_wdt.c
--@@ -0,0 +1,131 @@
--+/*
--+ * (c) 2012 Juergen Beisert <kernel@pengutronix.de>
--+ *
--+ * This program is free software; you can redistribute it and/or modify
--+ * it under the terms of the GNU General Public License as published by
--+ * the Free Software Foundation; either version 2 of the License, or
--+ * (at your option) any later version.
--+ *
--+ * This program is distributed in the hope that it will be useful,
--+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
--+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--+ * GNU General Public License for more details.
--+ *
--+ * Note: this driver works for the i.MX28 SoC. It might work for the
--+ * i.MX23 Soc as well, but is not tested yet.
--+ */
--+
--+#include <common.h>
--+#include <init.h>
--+#include <io.h>
--+#include <errno.h>
--+#include <malloc.h>
--+#include <watchdog.h>
--+
--+#include "at91sam9_wdt.h"
--+
--+struct at91sam9_wdt {
--+	struct watchdog wdt;
--+	void __iomem *base;
--+};
--+
--+#define to_at91sam9_wdt(h) container_of(h, struct at91sam9_wdt, wdt)
--+
--+#define wdt_read(at91wdt, field) \
--+	__raw_readl(at91wdt->base + field)
--+#define wdt_write(at91wdt, field, val) \
--+	__raw_writel((val), at91wdt->base + field)
--+
--+static void at91sam9_wdt_keep_alive(struct watchdog *wdt)
--+{
--+	struct at91sam9_wdt *at91wdt = to_at91sam9_wdt(wdt);
--+
--+	wdt_write(at91wdt, AT91_WDT_CR, AT91_WDT_KEY | AT91_WDT_WDRSTT);
--+}
--+
--+static int at91sam9_wdt_settimeout(struct watchdog *wdt, unsigned int timeout)
--+{
--+	struct at91sam9_wdt *at91wdt = to_at91sam9_wdt(wdt);
--+	unsigned int reg;
--+	unsigned int mr;
--+
--+	/* Check if disabled */
--+	mr = wdt_read(at91wdt, AT91_WDT_MR);
--+	if (mr & AT91_WDT_WDDIS) {
--+		pr_err("sorry, watchdog is disabled\n");
--+		return -EIO;
--+	}
--+
--+	if (!timeout) {
--+		wdt_write(at91wdt, AT91_WDT_MR, AT91_WDT_WDDIS);
--+		return 0;
--+	}
--+
--+	/*
--+	 * All counting occurs at SLOW_CLOCK / 128 = 256 Hz
--+	 *
--+	 * Since WDV is a 12-bit counter, the maximum period is
--+	 * 4096 / 256 = 16 seconds.
--+	 */
--+	reg = AT91_WDT_WDRSTEN	/* causes watchdog reset */
--+		/* | AT91_WDT_WDRPROC	causes processor reset only */
--+		| AT91_WDT_WDDBGHLT	/* disabled in debug mode */
--+		| AT91_WDT_WDD		/* restart at any time */
--+		| (timeout & AT91_WDT_WDV);  /* timer value */
--+	wdt_write(at91wdt, AT91_WDT_MR, reg);
--+
--+	return 0;
--+}
--+
--+static int at91sam9_wdt_probe(struct device_d *dev)
--+{
--+	struct at91sam9_wdt *priv;
--+	struct watchdog *wdt;
--+	int ret;
--+	unsigned int mr;
--+
--+	priv = xzalloc(sizeof(struct at91sam9_wdt));
--+	priv->base = dev_request_mem_region(dev, 0);
--+	wdt = &priv->wdt;
--+
--+	wdt->set_timeout = at91sam9_wdt_settimeout;
--+	wdt->keep_alive = at91sam9_wdt_keep_alive;
--+
--+	/* Check if disabled */
--+	mr = wdt_read(priv, AT91_WDT_MR);
--+	if (mr & AT91_WDT_WDDIS) {
--+		dev_err(dev, "sorry, watchdog is disabled\n");
--+		ret = -EIO;
--+		goto err;
--+	}
--+
--+	ret = watchdog_register(wdt);
--+	if (ret != 0)
--+		goto err;
--+
--+	dev->priv = priv;
--+	return 0;
--+
--+err:
--+	free(priv);
--+	return ret;
--+}
--+
--+static void at91sam9_wdt_remove(struct device_d *dev)
--+{
--+	struct at91sam9_wdt *priv= dev->priv;
--+	watchdog_deregister(&priv->wdt);
--+	free(priv);
--+}
--+
--+static struct driver_d at91sam9_wdt_driver = {
--+	.name	= "at91sam9_wdt",
--+	.probe	= at91sam9_wdt_probe,
--+	.remove = at91sam9_wdt_remove,
--+};
--+
--+static int at91sam9_wdt_init(void)
--+{
--+	return platform_driver_register(&at91sam9_wdt_driver);
--+}
--+coredevice_initcall(at91sam9_wdt_init);
--diff --git a/drivers/watchdog/at91sam9_wdt.h b/drivers/watchdog/at91sam9_wdt.h
--new file mode 100644
--index 0000000..2b68c1a
----- /dev/null
--+++ b/drivers/watchdog/at91sam9_wdt.h
--@@ -0,0 +1,38 @@
--+/*
--+ * drivers/watchdog/at91sam9_wdt.h
--+ *
--+ * Copyright (C) 2007 Andrew Victor
--+ * Copyright (C) 2007 Atmel Corporation.
--+ *
--+ * Watchdog Timer (WDT) - System peripherals regsters.
--+ * Based on AT91SAM9261 datasheet revision D.
--+ *
--+ * This program is free software; you can redistribute it and/or modify
--+ * it under the terms of the GNU General Public License as published by
--+ * the Free Software Foundation; either version 2 of the License, or
--+ * (at your option) any later version.
--+ */
--+
--+#ifndef AT91_WDT_H
--+#define AT91_WDT_H
--+
--+#define AT91_WDT_CR		0x00			/* Watchdog Control Register */
--+#define		AT91_WDT_WDRSTT		(1    << 0)		/* Restart */
--+#define		AT91_WDT_KEY		(0xa5 << 24)		/* KEY Password */
--+
--+#define AT91_WDT_MR		0x04			/* Watchdog Mode Register */
--+#define		AT91_WDT_WDV		(0xfff << 0)		/* Counter Value */
--+#define		AT91_WDT_WDFIEN		(1     << 12)		/* Fault Interrupt Enable */
--+#define		AT91_WDT_WDRSTEN	(1     << 13)		/* Reset Processor */
--+#define		AT91_WDT_WDRPROC	(1     << 14)		/* Timer Restart */
--+#define		AT91_WDT_WDDIS		(1     << 15)		/* Watchdog Disable */
--+#define		AT91_WDT_WDD		(0xfff << 16)		/* Delta Value */
--+#define		AT91_WDT_WDDBGHLT	(1     << 28)		/* Debug Halt */
--+#define		AT91_WDT_WDIDLEHLT	(1     << 29)		/* Idle Halt */
--+
--+#define AT91_WDT_SR		0x08			/* Watchdog Status Register */
--+#define		AT91_WDT_WDUNF		(1 << 0)		/* Watchdog Underflow */
--+#define		AT91_WDT_WDERR		(1 << 1)		/* Watchdog Error */
--+
--+
--+#endif
---- 
--1.8.1.4
--
-diff --git a/board/telit/evk-pro3/barebox-2013.04.0-0003-at91sam9260-9g20-add-wathdog-support.patch b/board/telit/evk-pro3/barebox-2013.04.0-0003-at91sam9260-9g20-add-wathdog-support.patch
-deleted file mode 100644
-index bf97200308..0000000000
---- a/board/telit/evk-pro3/barebox-2013.04.0-0003-at91sam9260-9g20-add-wathdog-support.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 3338bcb05479f1149420d4a0ea3904cb9e42eef5 Mon Sep 17 00:00:00 2001
--From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
--Date: Wed, 14 Nov 2012 19:18:22 +0800
--Subject: [PATCH 3/5] at91sam9260/9g20: add wathdog support
--
--Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-----
-- arch/arm/mach-at91/at91sam9260_devices.c | 12 ++++++++++++
-- 1 file changed, 12 insertions(+)
--
--diff --git a/arch/arm/mach-at91/at91sam9260_devices.c b/arch/arm/mach-at91/at91sam9260_devices.c
--index 1c375ee..5885f91 100644
----- a/arch/arm/mach-at91/at91sam9260_devices.c
--+++ b/arch/arm/mach-at91/at91sam9260_devices.c
--@@ -10,6 +10,7 @@
--  *
--  */
-- #include <common.h>
--+#include <init.h>
-- #include <sizes.h>
-- #include <asm/armlinux.h>
-- #include <asm/hardware.h>
--@@ -397,3 +398,14 @@ void at91_add_device_mci(short mmc_id, struct atmel_mci_platform_data *data)
-- #else
-- void at91_add_device_mci(short mmc_id, struct atmel_mci_platform_data *data) {}
-- #endif
--+
--+#ifdef CONFIG_WATCHDOG_AT91SAM9X
--+static int at91_add_device_watchdog(void)
--+{
--+	add_generic_device("at91sam9_wdt", DEVICE_ID_SINGLE, NULL,
--+		AT91_WDT + AT91_BASE_SYS, 16, IORESOURCE_MEM, NULL);
--+
--+	return 0;
--+}
--+coredevice_initcall(at91_add_device_watchdog);
--+#endif
---- 
--1.8.1.4
--
-diff --git a/board/telit/evk-pro3/barebox-2013.04.0-0004-at91sam9260-9g20-fix-wathdog-support.patch b/board/telit/evk-pro3/barebox-2013.04.0-0004-at91sam9260-9g20-fix-wathdog-support.patch
-deleted file mode 100644
-index cdfd026adf..0000000000
---- a/board/telit/evk-pro3/barebox-2013.04.0-0004-at91sam9260-9g20-fix-wathdog-support.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From e03bf0e3ad24898019b89eb9a6935d159c60268f Mon Sep 17 00:00:00 2001
--From: Fabio Porcedda <fabio.porcedda@gmail.com>
--Date: Thu, 17 Jan 2013 11:32:35 +0100
--Subject: [PATCH 4/5] at91sam9260/9g20: fix wathdog support
--
--Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-----
-- arch/arm/mach-at91/at91sam9260_devices.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/arch/arm/mach-at91/at91sam9260_devices.c b/arch/arm/mach-at91/at91sam9260_devices.c
--index 5885f91..df675d2 100644
----- a/arch/arm/mach-at91/at91sam9260_devices.c
--+++ b/arch/arm/mach-at91/at91sam9260_devices.c
--@@ -403,7 +403,7 @@ void at91_add_device_mci(short mmc_id, struct atmel_mci_platform_data *data) {}
-- static int at91_add_device_watchdog(void)
+-@@ -170,14 +170,14 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0xA0000034,
+- 	0x0D000001,
+- 	0x6068030C,
+--	0xC7034018,
+--	0x0E381A01,
+-+	0xCF034059,
+-+	0x1E781A03,
+- 	0x8030C0D0,
+--	0x34018606,
+--	0x01A01C70,
+-+	0x34059606,
+-+	0x01A03CF0,
+- 	0x0C0D0000,
+--	0x18606803,
+--	0x01C70340,
+-+	0x59606803,
+-+	0x03CF0340,
+- 	0xD000001A,
+- 	0x068030C0,
+- 	0x10040000,
+-@@ -244,15 +244,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0xA0000034,
+- 	0x0D000001,
+- 	0x6068030C,
+--	0xC7034018,
+--	0x0E381A01,
+-+	0xCF034059,
+-+	0x1E781A03,
+- 	0x8030C0D0,
+--	0x34018606,
+-+	0x34059606,
+- 	0x01A00000,
+- 	0x0C0D0000,
+--	0x18606803,
+--	0x01C70340,
+--	0xD00E381A,
+-+	0x59606803,
+-+	0x03CF0340,
+-+	0xD01E781A,
+- 	0x068030C0,
+- 	0x10040000,
+- 	0x00200000,
+-@@ -273,7 +273,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0xAA0D4000,
+- 	0x01C3A810,
+- 	0xAA0D4000,
+--	0x01C3A808,
+-+	0x01C3A810,
+- 	0xAA0D4000,
+- 	0x01C3A810,
+- 	0x00040100,
+-@@ -301,7 +301,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0x2A835000,
+- 	0x0070EA04,
+- 	0x2A835000,
+--	0x0070EA02,
+-+	0x0070EA04,
+- 	0x2A835000,
+- 	0x0070EA04,
+- 	0x00010040,
+-@@ -321,15 +321,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0x14864000,
+- 	0x69A47A05,
+- 	0xCBCF23D7,
+--	0xF41E791E,
+--	0x034ED348,
+-+	0xF5DE791E,
+-+	0x0356D348,
+- 	0x821A0000,
+- 	0x0000D000,
+- 	0x01860680,
+- 	0xD769A47A,
+- 	0x1ECBCF23,
+--	0x48F41E79,
+--	0x00034ED3,
+-+	0x48F5DE79,
+-+	0x000356D3,
+- 	0x00080200,
+- 	0x00001000,
+- 	0x00080200,
+-@@ -347,7 +347,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0xAA0D4000,
+- 	0x01C3A810,
+- 	0xAA0D4000,
+--	0x01C3A808,
+-+	0x01C3A810,
+- 	0xAA0D4000,
+- 	0x01C3A810,
+- 	0x00040100,
+-@@ -375,7 +375,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0x2A835000,
+- 	0x0070EA04,
+- 	0x2A835000,
+--	0x0070EA02,
+-+	0x0070EA04,
+- 	0x2A835000,
+- 	0x0070EA04,
+- 	0x00015000,
+-@@ -395,15 +395,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0x14864000,
+- 	0x69A47A05,
+- 	0xCBCF23D7,
+--	0xF41E791E,
+--	0x034ED348,
+--	0x821A00C3,
+-+	0xF5DE791E,
+-+	0x0356D348,
+-+	0x821A02CB,
+- 	0x0000D000,
+- 	0x00000680,
+- 	0xD769A47A,
+- 	0x1ECBCF23,
+--	0x48F41E79,
+--	0x00034ED3,
+-+	0x48F5DE79,
+-+	0x000356D3,
+- 	0x00080200,
+- 	0x00001000,
+- 	0x00080200,
+-@@ -421,7 +421,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0xAA0D4000,
+- 	0x01C3A810,
+- 	0xAA0D4000,
+--	0x01C3A808,
+-+	0x01C3A810,
+- 	0xAA0D4000,
+- 	0x01C3A810,
+- 	0x00040100,
+-@@ -449,7 +449,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0x2A835000,
+- 	0x0070EA04,
+- 	0x2A835000,
+--	0x0070EA02,
+-+	0x0070EA04,
+- 	0x2A835000,
+- 	0x0070EA04,
+- 	0x00010040,
+-@@ -469,15 +469,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0x14864000,
+- 	0x69A47A05,
+- 	0xCBCF23D7,
+--	0xF41E791E,
+--	0x034ED348,
+-+	0xF5DE791E,
+-+	0x0356D348,
+- 	0x821A0000,
+- 	0x0000D000,
+- 	0x00000680,
+- 	0xD769A47A,
+- 	0x1ECBCF23,
+--	0x48F41E79,
+--	0x00034ED3,
+-+	0x48F5DE79,
+-+	0x000356D3,
+- 	0x00080200,
+- 	0x00001000,
+- 	0x00080200,
+-@@ -495,7 +495,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0xAA0D4000,
+- 	0x01C3A810,
+- 	0xAA0D4000,
+--	0x01C3A808,
+-+	0x01C3A810,
+- 	0xAA0D4000,
+- 	0x01C3A810,
+- 	0x00040100,
+-@@ -523,7 +523,7 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0x2A835000,
+- 	0x0070EA04,
+- 	0x2A835000,
+--	0x0070EA02,
+-+	0x0070EA04,
+- 	0x2A835000,
+- 	0x0070EA04,
+- 	0x00010040,
+-@@ -543,15 +543,15 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0x14864000,
+- 	0x69A47A05,
+- 	0xCBCF23D7,
+--	0xF41E791E,
+--	0x034ED348,
+-+	0xF5DE791E,
+-+	0x0356D348,
+- 	0x821A0000,
+- 	0x0000D000,
+- 	0x00000680,
+- 	0xD769A47A,
+- 	0x1ECBCF23,
+--	0x48F41E79,
+--	0x00034ED3,
+-+	0x48F5DE79,
+-+	0x000356D3,
+- 	0x00080200,
+- 	0x00001000,
+- 	0x00080200,
+-@@ -567,80 +567,80 @@ const unsigned long iocsr_scan_chain3_table[((CONFIG_HPS_IOCSR_SCANCHAIN3_LENGTH
+- 	0x04000002,
+- 	0x00820000,
+- 	0x00489000,
+--	0x001A1A1A,
+--	0x085506A0,
+--	0x0000E1D4,
+--	0x045506A0,
+--	0x0000E1D4,
+--	0x085506A0,
+--	0x8000E1D4,
+-+	0x801A1A1A,
+-+	0x00000200,
+-+	0x80000004,
+-+	0x00000200,
+-+	0x80000004,
+-+	0x00000200,
+-+	0x80000004,
+- 	0x00000200,
+- 	0x00000004,
+--	0x04000000,
+--	0x00000009,
+--	0x00002410,
+-+	0x00040000,
+-+	0x10000000,
+-+	0x00000000,
+- 	0x00000040,
+--	0x41000000,
+--	0x00002082,
+--	0x00000350,
+--	0x000000DA,
+-+	0x00010000,
+-+	0x40002000,
+-+	0x00000100,
+-+	0x40000002,
+-+	0x00000100,
+-+	0x40000002,
+- 	0x00000100,
+- 	0x40000002,
+- 	0x00000100,
+- 	0x00000002,
+--	0x042A8350,
+--	0x000070EA,
+--	0x86000000,
+--	0x08000004,
+-+	0x00020000,
+-+	0x08000000,
+- 	0x00000000,
+--	0x00482000,
+--	0x21800000,
+--	0x00101061,
+--	0x021541A8,
+--	0x00003875,
+--	0x011541A8,
+--	0x00003875,
+--	0x021541A8,
+--	0x20003875,
+-+	0x00000020,
+-+	0x00008000,
+-+	0x20001000,
+-+	0x00000080,
+-+	0x20000001,
+-+	0x00000080,
+-+	0x20000001,
+-+	0x00000080,
+-+	0x20000001,
+- 	0x00000080,
+- 	0x00000001,
+--	0x41000000,
+--	0x00000002,
+--	0x00FF0904,
+-+	0x00010000,
+-+	0x04000000,
+-+	0x00FF0000,
+- 	0x00000000,
+--	0x90400000,
+--	0x00000820,
+-+	0x00004000,
+-+	0x00000800,
+- 	0x80000001,
+--	0x38D612AF,
+--	0x86F8E38E,
+--	0x0A0A78B4,
+--	0x000D020A,
+-+	0x00041419,
+-+	0x40000000,
+-+	0x04000816,
+-+	0x000D0000,
+- 	0x00006800,
+--	0x028A4320,
+--	0xEBB4D23D,
+--	0x8F65E791,
+--	0xA47A0F3C,
+--	0x0001A769,
+--	0x00410D00,
+-+	0x00000340,
+-+	0xD000001A,
+-+	0x06800000,
+-+	0x00340000,
+-+	0x0001A000,
+-+	0x00000D00,
+- 	0x40000068,
+--	0x3D000003,
+--	0x91EBB4D2,
+--	0x3C8F65E7,
+--	0x69A47A0F,
+--	0x000001A7,
+-+	0x1A000003,
+-+	0x00D00000,
+-+	0x00068000,
+-+	0x00003400,
+-+	0x000001A0,
+-+	0x00000401,
+-+	0x00000008,
+- 	0x00000401,
+- 	0x00000008,
+- 	0x00000401,
+- 	0x00000008,
+--	0x00000540,
+--	0x000003A8,
+--	0x10AA0D40,
+--	0x8001C3A8,
+-+	0x00000401,
+-+	0x80000008,
+- 	0x0000007F,
+-+	0x20000000,
+- 	0x00000000,
+--	0x00004060,
+--	0xE1208000,
+-+	0xE0000080,
+- 	0x0000001F,
+--	0x00004100,
+-+	0x00004000,
+- };
+- 
+-diff --git a/board/altera/socfpga_cyclone5/pinmux_config.c b/board/altera/socfpga_cyclone5/pinmux_config.c
+-index 730067e..cfd74cd 100644
+---- a/board/altera/socfpga_cyclone5/pinmux_config.c
+-+++ b/board/altera/socfpga_cyclone5/pinmux_config.c
+-@@ -23,7 +23,7 @@ unsigned long sys_mgr_init_table[CONFIG_HPS_PINMUX_NUM] = {
+- 	0, /* EMACIO18 */
+- 	0, /* EMACIO19 */
+- 	3, /* FLASHIO0 */
+--	3, /* FLASHIO1 */
+-+	0, /* FLASHIO1 */
+- 	3, /* FLASHIO2 */
+- 	3, /* FLASHIO3 */
+- 	0, /* FLASHIO4 */
+-@@ -34,25 +34,25 @@ unsigned long sys_mgr_init_table[CONFIG_HPS_PINMUX_NUM] = {
+- 	3, /* FLASHIO9 */
+- 	3, /* FLASHIO10 */
+- 	3, /* FLASHIO11 */
+--	3, /* GENERALIO0 */
+--	3, /* GENERALIO1 */
+--	3, /* GENERALIO2 */
+--	3, /* GENERALIO3 */
+--	3, /* GENERALIO4 */
+--	3, /* GENERALIO5 */
+--	3, /* GENERALIO6 */
+--	3, /* GENERALIO7 */
+--	3, /* GENERALIO8 */
+-+	0, /* GENERALIO0 */
+-+	1, /* GENERALIO1 */
+-+	1, /* GENERALIO2 */
+-+	1, /* GENERALIO3 */
+-+	1, /* GENERALIO4 */
+-+	0, /* GENERALIO5 */
+-+	0, /* GENERALIO6 */
+-+	0, /* GENERALIO7 */
+-+	0, /* GENERALIO8 */
+- 	3, /* GENERALIO9 */
+- 	3, /* GENERALIO10 */
+- 	3, /* GENERALIO11 */
+- 	3, /* GENERALIO12 */
+--	2, /* GENERALIO13 */
+--	2, /* GENERALIO14 */
+--	3, /* GENERALIO15 */
+--	3, /* GENERALIO16 */
+--	2, /* GENERALIO17 */
+--	2, /* GENERALIO18 */
+-+	0, /* GENERALIO13 */
+-+	0, /* GENERALIO14 */
+-+	1, /* GENERALIO15 */
+-+	1, /* GENERALIO16 */
+-+	1, /* GENERALIO17 */
+-+	1, /* GENERALIO18 */
+- 	0, /* GENERALIO19 */
+- 	0, /* GENERALIO20 */
+- 	0, /* GENERALIO21 */
+-diff --git a/board/altera/socfpga_cyclone5/pinmux_config.h b/board/altera/socfpga_cyclone5/pinmux_config.h
+-index fb483ab..64c750a 100644
+---- a/board/altera/socfpga_cyclone5/pinmux_config.h
+-+++ b/board/altera/socfpga_cyclone5/pinmux_config.h
+-@@ -11,15 +11,15 @@
+- #define CONFIG_HPS_UART0 (1)
+- #define CONFIG_HPS_UART1 (0)
+- #define CONFIG_HPS_TRACE (0)
+--#define CONFIG_HPS_I2C0 (1)
+--#define CONFIG_HPS_I2C1 (0)
+-+#define CONFIG_HPS_I2C0 (0)
+-+#define CONFIG_HPS_I2C1 (1)
+- #define CONFIG_HPS_I2C2 (0)
+- #define CONFIG_HPS_I2C3 (0)
+- #define CONFIG_HPS_SPIM0 (1)
+--#define CONFIG_HPS_SPIM1 (0)
+-+#define CONFIG_HPS_SPIM1 (1)
+- #define CONFIG_HPS_SPIS0 (0)
+- #define CONFIG_HPS_SPIS1 (0)
+--#define CONFIG_HPS_CAN0 (1)
+-+#define CONFIG_HPS_CAN0 (0)
+- #define CONFIG_HPS_CAN1 (0)
+- 
+- #define CONFIG_HPS_SDMMC_BUSWIDTH (4)
+-diff --git a/board/altera/socfpga_cyclone5/sdram/sdram_config.h b/board/altera/socfpga_cyclone5/sdram/sdram_config.h
+-index b90d6f3..dd027ef 100755
+---- a/board/altera/socfpga_cyclone5/sdram/sdram_config.h
+-+++ b/board/altera/socfpga_cyclone5/sdram/sdram_config.h
+-@@ -4,16 +4,16 @@
+- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_MEMTYPE			(2)
+- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_MEMBL			(8)
+- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ADDRORDER		(0)
+--#define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ECCEN			(1)
+--#define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ECCCORREN		(1)
+-+#define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ECCEN			(0)
+-+#define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_ECCCORREN		(0)
+- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_REORDEREN		(1)
+- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_STARVELIMIT		(10)
+- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_DQSTRKEN			(0)
+- #define CONFIG_HPS_SDR_CTRLCFG_CTRLCFG_NODMPINS			(0)
+--#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TCWL			(6)
+-+#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TCWL			(8)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_AL			(0)
+--#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TCL			(7)
+--#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TRRD			(4)
+-+#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TCL			(11)
+-+#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TRRD			(3)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TFAW			(12)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING1_TRFC			(104)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING2_IF_TREFI		(3120)
+-@@ -21,7 +21,7 @@
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING2_IF_TRP		(6)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING2_IF_TWR		(6)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING2_IF_TWTR		(4)
+--#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TRTP			(4)
+-+#define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TRTP			(3)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TRAS			(14)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TRC			(20)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMTIMING3_TMRD			(4)
+-@@ -33,7 +33,7 @@
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMADDRW_ROWBITS		(15)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMADDRW_BANKBITS		(3)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMADDRW_CSBITS			(1)
+--#define CONFIG_HPS_SDR_CTRLCFG_DRAMIFWIDTH_IFWIDTH		(40)
+-+#define CONFIG_HPS_SDR_CTRLCFG_DRAMIFWIDTH_IFWIDTH		(32)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMDEVWIDTH_DEVWIDTH		(8)
+- #define CONFIG_HPS_SDR_CTRLCFG_DRAMINTR_INTREN			(0)
+- #define CONFIG_HPS_SDR_CTRLCFG_STATICCFG_MEMBL			(2)
+-diff --git a/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h b/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h
+-index e8c5484..919676d 100644
+---- a/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h
+-+++ b/board/altera/socfpga_cyclone5/sdram/sequencer_auto.h
+-@@ -34,7 +34,7 @@
+- #define __RW_MGR_ac_read_en 0x21
+- #define __RW_MGR_ac_mrs3_mirr 0x0C
+- #define __RW_MGR_ac_mrs2 0x05
+--#define __RW_MGR_CONTENT_ac_mrs1 0x10090044
+-+#define __RW_MGR_CONTENT_ac_mrs1 0x10090006
+- #define __RW_MGR_CONTENT_ac_mrs3 0x100B0000
+- #define __RW_MGR_CONTENT_ac_write_bank_0_col_0_nodata_wl_1 0x18980000
+- #define __RW_MGR_CONTENT_ac_act_1 0x106B0000
+-@@ -46,8 +46,8 @@
+- #define __RW_MGR_CONTENT_ac_init_reset_0_cke_0 0x20700000
+- #define __RW_MGR_CONTENT_ac_read_bank_0_1_norden 0x10580008
+- #define __RW_MGR_CONTENT_ac_pre_all 0x10280400
+--#define __RW_MGR_CONTENT_ac_mrs0_user 0x10080431
+--#define __RW_MGR_CONTENT_ac_mrs0_dll_reset 0x10080530
+-+#define __RW_MGR_CONTENT_ac_mrs0_user 0x10080471
+-+#define __RW_MGR_CONTENT_ac_mrs0_dll_reset 0x10080570
+- #define __RW_MGR_CONTENT_ac_read_bank_0_0 0x13580000
+- #define __RW_MGR_CONTENT_ac_write_bank_0_col_1 0x1C980008
+- #define __RW_MGR_CONTENT_ac_read_bank_0_1 0x13580008
+-@@ -55,21 +55,21 @@
+- #define __RW_MGR_CONTENT_ac_write_bank_1_col_1 0x1C9B0008
+- #define __RW_MGR_CONTENT_ac_write_bank_0_col_0 0x1C980000
+- #define __RW_MGR_CONTENT_ac_read_bank_1_0 0x135B0000
+--#define __RW_MGR_CONTENT_ac_mrs1_mirr 0x100A0024
+-+#define __RW_MGR_CONTENT_ac_mrs1_mirr 0x100A0006
+- #define __RW_MGR_CONTENT_ac_read_bank_1_1 0x135B0008
+- #define __RW_MGR_CONTENT_ac_des_odt_1 0x38780000
+--#define __RW_MGR_CONTENT_ac_mrs0_dll_reset_mirr 0x100804C8
+-+#define __RW_MGR_CONTENT_ac_mrs0_dll_reset_mirr 0x100804E8
+- #define __RW_MGR_CONTENT_ac_zqcl 0x10380400
+- #define __RW_MGR_CONTENT_ac_write_predata 0x38F80000
+--#define __RW_MGR_CONTENT_ac_mrs0_user_mirr 0x10080449
+-+#define __RW_MGR_CONTENT_ac_mrs0_user_mirr 0x10080469
+- #define __RW_MGR_CONTENT_ac_ref 0x10480000
+- #define __RW_MGR_CONTENT_ac_nop 0x30780000
+- #define __RW_MGR_CONTENT_ac_rdimm 0x10780000
+--#define __RW_MGR_CONTENT_ac_mrs2_mirr 0x10090010
+-+#define __RW_MGR_CONTENT_ac_mrs2_mirr 0x10090218
+- #define __RW_MGR_CONTENT_ac_write_bank_0_col_0_nodata 0x18180000
+- #define __RW_MGR_CONTENT_ac_read_en 0x33780000
+- #define __RW_MGR_CONTENT_ac_mrs3_mirr 0x100B0000
+--#define __RW_MGR_CONTENT_ac_mrs2 0x100A0008
+-+#define __RW_MGR_CONTENT_ac_mrs2 0x100A0218
+- 
+- #define __RW_MGR_READ_B2B_WAIT2 0x6A
+- #define __RW_MGR_LFSR_WR_RD_BANK_0_WAIT 0x31
+-diff --git a/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c b/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c
+-index e16efa1..20b4ca1 100644
+---- a/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c
+-+++ b/board/altera/socfpga_cyclone5/sdram/sequencer_auto_ac_init.c
+-@@ -6,16 +6,16 @@ const alt_u32 ac_rom_init[36] =
 - {
-- 	add_generic_device("at91sam9_wdt", DEVICE_ID_SINGLE, NULL,
---		AT91_WDT + AT91_BASE_SYS, 16, IORESOURCE_MEM, NULL);
--+		AT91_BASE_WDT, 16, IORESOURCE_MEM, NULL);
+- 	0x20700000,
+- 	0x20780000,
+--	0x10080431,
+--	0x10080530,
+--	0x10090044,
+--	0x100a0008,
+-+	0x10080471,
+-+	0x10080570,
+-+	0x10090006,
+-+	0x100a0218,
+- 	0x100b0000,
+- 	0x10380400,
+--	0x10080449,
+--	0x100804c8,
+--	0x100a0024,
+--	0x10090010,
+-+	0x10080469,
+-+	0x100804e8,
+-+	0x100a0006,
+-+	0x10090218,
+- 	0x100b0000,
+- 	0x30780000,
+- 	0x38780000,
+-diff --git a/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h b/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h
+-index 52faf3f..b85b85c 100644
+---- a/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h
+-+++ b/board/altera/socfpga_cyclone5/sdram/sequencer_defines.h
+-@@ -1,28 +1,28 @@
+- #ifndef _SEQUENCER_DEFINES_H_
+- #define _SEQUENCER_DEFINES_H_
 - 
-- 	return 0;
-- }
+--#define AC_ROM_MR1_MIRR 0000000100100
+-+#define AC_ROM_MR1_MIRR 0000000000110
+- #define AC_ROM_MR1_OCD_ENABLE
+--#define AC_ROM_MR2_MIRR 0000000010000
+-+#define AC_ROM_MR2_MIRR 0001000011000
+- #define AC_ROM_MR3_MIRR 0000000000000
+- #define AC_ROM_MR0_CALIB
+--#define AC_ROM_MR0_DLL_RESET_MIRR 0010011001000
+--#define AC_ROM_MR0_DLL_RESET 0010100110000
+--#define AC_ROM_MR0_MIRR 0010001001001
+--#define AC_ROM_MR0 0010000110001
+--#define AC_ROM_MR1 0000001000100
+--#define AC_ROM_MR2 0000000001000
+-+#define AC_ROM_MR0_DLL_RESET_MIRR 0010011101000
+-+#define AC_ROM_MR0_DLL_RESET 0010101110000
+-+#define AC_ROM_MR0_MIRR 0010001101001
+-+#define AC_ROM_MR0 0010001110001
+-+#define AC_ROM_MR1 0000000000110
+-+#define AC_ROM_MR2 0001000011000
+- #define AC_ROM_MR3 0000000000000
+- #define AFI_CLK_FREQ 401
+- #define AFI_RATE_RATIO 1
+- #define ARRIAVGZ 0
+- #define ARRIAV 0
+--#define AVL_CLK_FREQ 67
+-+#define AVL_CLK_FREQ 81
+- #define BFM_MODE 0
+- #define BURST2 0
+- #define CALIBRATE_BIT_SLIPS 0
+--#define CALIB_LFIFO_OFFSET 7
+--#define CALIB_VFIFO_OFFSET 5
+-+#define CALIB_LFIFO_OFFSET 11
+-+#define CALIB_VFIFO_OFFSET 9
+- #define CYCLONEV 1
+- #define DDR2 0
+- #define DDR3 1
+-@@ -89,20 +89,20 @@
+- #define RW_MGR_MEM_CHIP_SELECT_WIDTH 1
+- #define RW_MGR_MEM_CLK_EN_WIDTH 1
+- #define RW_MGR_MEM_CONTROL_WIDTH 1
+--#define RW_MGR_MEM_DATA_MASK_WIDTH 5
+--#define RW_MGR_MEM_DATA_WIDTH 40
+-+#define RW_MGR_MEM_DATA_MASK_WIDTH 4
+-+#define RW_MGR_MEM_DATA_WIDTH 32
+- #define RW_MGR_MEM_DQ_PER_READ_DQS 8
+- #define RW_MGR_MEM_DQ_PER_WRITE_DQS 8
+--#define RW_MGR_MEM_IF_READ_DQS_WIDTH 5
+--#define RW_MGR_MEM_IF_WRITE_DQS_WIDTH 5
+-+#define RW_MGR_MEM_IF_READ_DQS_WIDTH 4
+-+#define RW_MGR_MEM_IF_WRITE_DQS_WIDTH 4
+- #define RW_MGR_MEM_NUMBER_OF_CS_PER_DIMM 1
+- #define RW_MGR_MEM_NUMBER_OF_RANKS 1
+- #define RW_MGR_MEM_ODT_WIDTH 1
+- #define RW_MGR_MEM_VIRTUAL_GROUPS_PER_READ_DQS 1
+- #define RW_MGR_MEM_VIRTUAL_GROUPS_PER_WRITE_DQS 1
+- #define RW_MGR_MR0_BL 1
+--#define RW_MGR_MR0_CAS_LATENCY 3
+--#define RW_MGR_TRUE_MEM_DATA_MASK_WIDTH 5
+-+#define RW_MGR_MR0_CAS_LATENCY 7
+-+#define RW_MGR_TRUE_MEM_DATA_MASK_WIDTH 4
+- #define RW_MGR_WRITE_TO_DEBUG_READ 1.0
+- #define SKEW_CALIBRATION 0
+- #define STATIC_FULL_CALIBRATION 1
 --- 
--1.8.1.4
+-1.9.0
 -
-diff --git a/board/telit/evk-pro3/barebox-2013.04.0-0005-watchdog-enable-for-evk-pro3.patch b/board/telit/evk-pro3/barebox-2013.04.0-0005-watchdog-enable-for-evk-pro3.patch
+diff --git a/configs/altera_socdk_defconfig b/configs/altera_socdk_defconfig
 deleted file mode 100644
-index 837e8c632a..0000000000
---- a/board/telit/evk-pro3/barebox-2013.04.0-0005-watchdog-enable-for-evk-pro3.patch
+index f5a2fc7fd0..0000000000
+--- a/configs/altera_socdk_defconfig
 +++ /dev/null
-@@ -1,26 +0,0 @@
--From 98c96ea36a4b3bb9b92dde849db5e8d6918b5168 Mon Sep 17 00:00:00 2001
--From: Fabio Porcedda <fabio.porcedda@gmail.com>
--Date: Thu, 17 Jan 2013 11:32:59 +0100
--Subject: [PATCH 5/5] watchdog: enable for evk-pro3
--
--Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-----
-- arch/arm/configs/telit_evk_pro3_defconfig | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/arch/arm/configs/telit_evk_pro3_defconfig b/arch/arm/configs/telit_evk_pro3_defconfig
--index 050d176..436cecf 100644
----- a/arch/arm/configs/telit_evk_pro3_defconfig
--+++ b/arch/arm/configs/telit_evk_pro3_defconfig
--@@ -68,6 +68,8 @@ CONFIG_MCI_ATMEL=y
-- CONFIG_LED=y
-- CONFIG_LED_GPIO=y
-- CONFIG_LED_TRIGGERS=y
--+CONFIG_WATCHDOG=y
--+CONFIG_WATCHDOG_AT91SAM9X=y
-- CONFIG_FS_TFTP=y
-- CONFIG_FS_FAT=y
-- CONFIG_FS_FAT_LFN=y
---- 
--1.8.1.4
--
-diff --git a/board/telit/evk-pro3/linux-3.9.config b/board/telit/evk-pro3/linux-3.9.config
-deleted file mode 100644
-index 99c2f2d2b6..0000000000
---- a/board/telit/evk-pro3/linux-3.9.config
-+++ /dev/null
-@@ -1,201 +0,0 @@
--CONFIG_EXPERIMENTAL=y
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_KERNEL_LZO=y
--# CONFIG_SWAP is not set
--CONFIG_SYSVIPC=y
--CONFIG_LOG_BUF_SHIFT=14
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_CC_OPTIMIZE_FOR_SIZE=y
--CONFIG_KALLSYMS_ALL=y
--CONFIG_EMBEDDED=y
--CONFIG_SLAB=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--# CONFIG_LBDAF is not set
--# CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
--CONFIG_ARCH_AT91=y
--CONFIG_SOC_AT91SAM9260=y
--CONFIG_SOC_AT91SAM9263=y
--CONFIG_SOC_AT91SAM9G45=y
--CONFIG_SOC_AT91SAM9X5=y
--CONFIG_SOC_AT91SAM9N12=y
--CONFIG_MACH_AT91SAM_DT=y
--CONFIG_AT91_PROGRAMMABLE_CLOCKS=y
--CONFIG_AT91_TIMER_HZ=128
--CONFIG_AEABI=y
--# CONFIG_OABI_COMPAT is not set
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
--CONFIG_UACCESS_WITH_MEMCPY=y
--CONFIG_ZBOOT_ROM_TEXT=0x0
--CONFIG_ZBOOT_ROM_BSS=0x0
--CONFIG_ARM_APPENDED_DTB=y
--CONFIG_ARM_ATAG_DTB_COMPAT=y
--CONFIG_CMDLINE="console=ttyS0,115200 initrd=0x21100000,25165824 root=/dev/ram0 rw"
--CONFIG_KEXEC=y
--CONFIG_AUTO_ZRELADDR=y
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_PNP=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_DIAG is not set
--CONFIG_IPV6=y
--# CONFIG_INET6_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET6_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET6_XFRM_MODE_BEET is not set
--CONFIG_IPV6_SIT_6RD=y
--# CONFIG_WIRELESS is not set
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--# CONFIG_STANDALONE is not set
--# CONFIG_PREVENT_FIRMWARE_BUILD is not set
--CONFIG_MTD=y
--CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_CHAR=y
--CONFIG_MTD_BLOCK=y
--CONFIG_MTD_NAND=y
--CONFIG_MTD_NAND_ATMEL=y
--CONFIG_MTD_UBI=y
--CONFIG_MTD_UBI_GLUEBI=y
--CONFIG_PROC_DEVICETREE=y
--CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_RAM=y
--CONFIG_BLK_DEV_RAM_COUNT=4
--CONFIG_BLK_DEV_RAM_SIZE=8192
--CONFIG_ATMEL_PWM=y
--CONFIG_ATMEL_TCLIB=y
--CONFIG_EEPROM_93CX6=m
--CONFIG_SCSI=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_SCSI_MULTI_LUN=y
--# CONFIG_SCSI_LOWLEVEL is not set
--CONFIG_NETDEVICES=y
--CONFIG_MII=y
--CONFIG_MACB=y
--# CONFIG_NET_VENDOR_BROADCOM is not set
--# CONFIG_NET_VENDOR_CHELSIO is not set
--# CONFIG_NET_VENDOR_FARADAY is not set
--# CONFIG_NET_VENDOR_INTEL is not set
--# CONFIG_NET_VENDOR_MARVELL is not set
--# CONFIG_NET_VENDOR_MICREL is not set
--# CONFIG_NET_VENDOR_NATSEMI is not set
--# CONFIG_NET_VENDOR_SEEQ is not set
--# CONFIG_NET_VENDOR_SMSC is not set
--# CONFIG_NET_VENDOR_STMICRO is not set
--CONFIG_DAVICOM_PHY=y
--CONFIG_MICREL_PHY=y
--# CONFIG_WLAN is not set
--CONFIG_INPUT_POLLDEV=y
--# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
--CONFIG_INPUT_MOUSEDEV_SCREEN_X=480
--CONFIG_INPUT_MOUSEDEV_SCREEN_Y=272
--CONFIG_INPUT_JOYDEV=y
--CONFIG_INPUT_EVDEV=y
--# CONFIG_KEYBOARD_ATKBD is not set
--CONFIG_KEYBOARD_GPIO=y
--# CONFIG_INPUT_MOUSE is not set
--CONFIG_INPUT_TOUCHSCREEN=y
--# CONFIG_SERIO is not set
--CONFIG_LEGACY_PTY_COUNT=4
--CONFIG_SERIAL_ATMEL=y
--CONFIG_SERIAL_ATMEL_CONSOLE=y
--CONFIG_HW_RANDOM=y
--CONFIG_I2C=y
--CONFIG_I2C_GPIO=y
--CONFIG_SPI=y
--CONFIG_SPI_ATMEL=y
--CONFIG_PINCTRL_AT91=y
--CONFIG_GPIO_SYSFS=y
--# CONFIG_HWMON is not set
--CONFIG_WATCHDOG=y
--CONFIG_AT91SAM9X_WATCHDOG=y
--CONFIG_SSB=m
--CONFIG_FB=y
--CONFIG_FB_MODE_HELPERS=y
--CONFIG_FB_ATMEL=y
--CONFIG_BACKLIGHT_LCD_SUPPORT=y
--# CONFIG_LCD_CLASS_DEVICE is not set
--CONFIG_BACKLIGHT_CLASS_DEVICE=y
--CONFIG_BACKLIGHT_ATMEL_LCDC=y
--# CONFIG_BACKLIGHT_GENERIC is not set
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
--CONFIG_FONTS=y
--CONFIG_FONT_8x8=y
--CONFIG_FONT_ACORN_8x8=y
--CONFIG_FONT_MINI_4x6=y
--CONFIG_LOGO=y
--# CONFIG_HID_SUPPORT is not set
--CONFIG_USB=y
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
--CONFIG_USB_DEVICEFS=y
--# CONFIG_USB_DEVICE_CLASS is not set
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_ACM=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_SERIAL=y
--CONFIG_USB_SERIAL_GENERIC=y
--CONFIG_USB_SERIAL_FTDI_SIO=y
--CONFIG_USB_SERIAL_PL2303=y
--CONFIG_USB_GADGET=y
--CONFIG_USB_AT91=m
--CONFIG_USB_ATMEL_USBA=m
--CONFIG_USB_ETH=m
--CONFIG_USB_GADGETFS=m
--CONFIG_USB_CDC_COMPOSITE=m
--CONFIG_USB_G_ACM_MS=m
--CONFIG_USB_G_MULTI=m
--CONFIG_USB_G_MULTI_CDC=y
--CONFIG_MMC=y
--CONFIG_MMC_ATMELMCI=y
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_GPIO=y
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_LEDS_TRIGGER_GPIO=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_AT91RM9200=y
--CONFIG_RTC_DRV_AT91SAM9=y
--CONFIG_DMADEVICES=y
--# CONFIG_IOMMU_SUPPORT is not set
--CONFIG_EXT2_FS=y
--CONFIG_FANOTIFY=y
--CONFIG_VFAT_FS=y
--CONFIG_TMPFS=y
--CONFIG_UBIFS_FS=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V3=y
--CONFIG_ROOT_NFS=y
--CONFIG_NLS_CODEPAGE_437=y
--CONFIG_NLS_CODEPAGE_850=y
--CONFIG_NLS_ISO8859_1=y
--CONFIG_STRIP_ASM_SYMS=y
--CONFIG_DEBUG_FS=y
--# CONFIG_SCHED_DEBUG is not set
--# CONFIG_DEBUG_BUGVERBOSE is not set
--# CONFIG_FTRACE is not set
--CONFIG_DEBUG_USER=y
--CONFIG_CRYPTO=y
--CONFIG_CRYPTO_ECB=y
--CONFIG_CRYPTO_AES=y
--CONFIG_CRYPTO_ARC4=y
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRYPTO_USER_API_HASH=m
--CONFIG_CRYPTO_USER_API_SKCIPHER=m
--# CONFIG_CRYPTO_HW is not set
--CONFIG_CRC_CCITT=m
--CONFIG_CRC_ITU_T=m
--CONFIG_CRC7=m
--CONFIG_AVERAGE=y
-diff --git a/board/telit/evk-pro3/readme.txt b/board/telit/evk-pro3/readme.txt
-deleted file mode 100644
-index ace9dd4c17..0000000000
---- a/board/telit/evk-pro3/readme.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Buildroot board support for Telit EVK-PRO3 with Telit GE863-PRO3
--
--Official site:
--  http://www.telit.com/en/products.php?p_id=3&p_ac=show&p=10
--
--Build images:
--    make telit_evk_pro3_defconfig
--    make
--
--  images built:
--  - output/images/barebox.bin
--  - output/images/zImage
--  - output/images/rootfs.ubi
--
--
--Flash built images:
--  The first time you need to bootstrap from Telit Official Release 221.07.1007,
--  at the U-Boot prompt type:
--    U-Boot> loadb
--  send buildroot/output/images/barebox.bin
--    U-Boot> go 0x20200000
--
--  flash updated images using barebox through tftp:
--    barebox:/ erase dev/self0; cp /mnt/tftp/barebox.bin /dev/self0
--    barebox:/ erase /dev/nand0.kernel.bb; cp /mnt/tftp/zImage /dev/nand0.kernel.bb
--    barebox:/ erase /dev/nand0.rootfs.bb; cp /mnt/tftp/rootfs.ubi /dev/nand0.rootfs.bb
--    barebox:/ erase dev/env0
--    barebox:/ reset
-diff --git a/configs/telit_evk_pro3_defconfig b/configs/telit_evk_pro3_defconfig
-deleted file mode 100644
-index 946c2f04a6..0000000000
---- a/configs/telit_evk_pro3_defconfig
-+++ /dev/null
-@@ -1,29 +0,0 @@
--# Architecture
+@@ -1,33 +0,0 @@
 -BR2_arm=y
--BR2_arm926t=y
+-BR2_cortex_a9=y
 -
--# Linux headers same as kernel, a 3.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_FPU_NEON=y
+-BR2_ARM_INSTRUCTIONS_THUMB2=y
 -
--# Watchdog is armed by the first stage bootloader
--BR2_PACKAGE_BUSYBOX_WATCHDOG=y
+-# Linux headers same as kernel, a 3.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
 -
--# Filesystem
--BR2_TARGET_ROOTFS_UBIFS=y
--BR2_TARGET_ROOTFS_UBI=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
 -
--# Bootloader
--BR2_TARGET_BAREBOX=y
--BR2_TARGET_BAREBOX_CUSTOM_VERSION=y
--BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE="2013.04.0"
--BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR="board/telit/evk-pro3"
--BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="telit_evk_pro3"
--
--# Kernel
 -BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.1"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/telit/evk-pro3/linux-3.9.config"
--BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="evk-pro3"
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.rocketboards.org/linux-socfpga.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
+-BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_socdk"
+-
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_3=y
+-
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_socfpga_v2013.01.01_14.02.02"
+-BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
+diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+deleted file mode 100644
+index 0addbde1e5..0000000000
+--- a/configs/altera_sockit_defconfig
++++ /dev/null
+@@ -1,37 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a9=y
+-
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_FPU_NEON=y
+-BR2_ARM_INSTRUCTIONS_THUMB2=y
+-
+-# Linux headers same as kernel, a 3.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
+-
+-BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
+-
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.rocketboards.org/linux-socfpga.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
+-BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_sockit"
+-
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_3=y
+-
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
+-BR2_TARGET_UBOOT_PATCH="board/altera/sockit"
+-BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
 -- 
 2.11.0
