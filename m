@@ -1,58 +1,131 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 21:57:14 +0100
-Subject: [Buildroot] [git commit] cmake: adjust dependencies added for libuv
-Message-ID: <20170301205731.8C73D82275@busybox.osuosl.org>
+Date: Wed, 1 Mar 2017 21:56:24 +0100
+Subject: [Buildroot] [git commit] core/pkg-cmake: provide our own platform
+	description
+Message-ID: <20170301205731.609B882275@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90f6ad4292fabbd777ca8ee2dde17dd280b236c9
+commit: https://git.buildroot.net/buildroot/commit/?id=c69b14fe2f72d8134057b115884c04a2bf27d410
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 1ffcf364b6e9894a876dc581a090f87685945412 updated cmake to 3.7.0,
-which requires selecting the libuv package. At the time, the libuv
-package only depended on BR2_TOOLCHAIN_HAS_THREADS. However, later on,
-it was changed in master to depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL, a
-change which was not taken into account in the cmake 3.7.0 bump that was
-merged in the next branch.
+The handling of RPATH in cmake-3.7 has changed drastically, causing a
+slew of build failures dues to libraries from the host being pulled in:
 
-Due to this, builds of cmake is attempted on architectures that don't
-provide NPTL thread support, causing a build failure. This commit fixes
-that by adjusting the dependency.
+  - domoticz : http://autobuild.buildroot.org/results/fd0/fd0ba54c7abf973691b39a0ca1bb4e07d749593a/
+  - freerdp  : http://autobuild.buildroot.org/results/5d4/5d429d0e288754a541ee5d8be515454c5fccd28b/
+  - libcec   : http://autobuild.buildroot.org/results/3f3/3f3593bab7734dd274faf5b5690895e9424cbb89/
+  - and so on...
 
-Fixes:
+The bug was reported upstream [0], which dismissed it altogether [1] as
+being expected behaviour, quoting:
 
-  http://autobuild.buildroot.net/results/16a5e1cbb57c0124537c4f3dc0807ba1eaa975ec/
+    I don't think there is anything wrong with that change on its own.
+    It merely exposed some existing behavior in a new case.
 
+Instead, upstream suggested in that same message that a platform
+definition be used instead, quoting:
+
+    If a toolchain file specifies CMAKE_SYSTEM_NAME such that a custom
+    `Platform/MySystem.cmake` file is loaded then the latter can set
+    them as needed for the target platform.
+
+So here we are doing so:
+
+  - we add a new platfom definitions that inherits from the Linux one,
+    then overrides the problematic settings;
+
+  - we change our toolchain file to use that platform instead;
+
+  - we tell cmake where to find additional modules, so that it can find
+    our custom platform file.
+
+This has been tested to work in the following conditions:
+
+ - pre-installed host cmake, versions 3.5.1 (Ubuntu 16.04) and 3.7.2
+   (manually built)
+
+  - internal cmake, versions 3.6.3 (the current version as of this
+    patch) and 3.7.2 (with the followup patches).
+
+Thanks to J??rg, Ben and Baruch for the help investigating the issue.
+Special thanks to J??rg for handling the discussion with upstream and
+pointing to the relevant messages! :-)
+
+[0] http://public.kitware.com/pipermail/cmake/2017-February/064970.html
+[1] http://public.kitware.com/pipermail/cmake/2017-February/065063.html
+
+To be noted: Thomas suggested we set these directly in the toolchain
+file. Unfortunately, wherever we put those settings in the toolchain
+file, this does not work.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: J??rg Krause <joerg.krause@embedded.rocks>
+Cc: Ben Boeckel <mathstuf@gmail.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cmake/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-cmake.mk                | 4 ++++
+ support/misc/Buildroot.cmake        | 3 +++
+ support/misc/toolchainfile.cmake.in | 2 +-
+ toolchain/toolchain/toolchain.mk    | 1 +
+ 4 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-index 716d80e..2706db5 100644
---- a/package/cmake/Config.in
-+++ b/package/cmake/Config.in
-@@ -26,7 +26,7 @@ config BR2_PACKAGE_CMAKE_CTEST
- 	depends on BR2_USE_WCHAR # libarchive
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on BR2_USE_MMU # libuv
- 	help
- 	  CTest is a testing tool distributed as a part of CMake. It
-@@ -37,9 +37,9 @@ config BR2_PACKAGE_CMAKE_CTEST
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index a7c8dc3..77fa1dc 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -87,6 +87,7 @@ define $(2)_CONFIGURE_CMDS
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
++		-DCMAKE_MODULE_PATH="$$(HOST_DIR)/usr/share/buildroot" \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
+@@ -249,3 +250,6 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+ 		> $@
++
++$(HOST_DIR)/usr/share/buildroot/Platform/Buildroot.cmake:
++	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake $(@)
+diff --git a/support/misc/Buildroot.cmake b/support/misc/Buildroot.cmake
+new file mode 100644
+index 0000000..b0046b3
+--- /dev/null
++++ b/support/misc/Buildroot.cmake
+@@ -0,0 +1,3 @@
++include(Platform/Linux)
++set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS FALSE)
++set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index d4252dd..5a42644 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -10,7 +10,7 @@
+ # RELOCATED_HOST_DIR variable.
+ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
  
- 	  http://www.cmake.org/
+-set(CMAKE_SYSTEM_NAME Linux)
++set(CMAKE_SYSTEM_NAME Buildroot)
+ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
  
--comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, threads"
-+comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, NPTL"
- 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ # Set the {C,CXX}FLAGS appended by CMake depending on the build type
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index b16db01..e298373 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -38,3 +38,4 @@ endif
+ $(eval $(virtual-package))
+ 
+ toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
++toolchain: $(HOST_DIR)/usr/share/buildroot/Platform/Buildroot.cmake
