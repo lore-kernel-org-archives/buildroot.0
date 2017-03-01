@@ -1,68 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 Mar 2017 09:46:28 +0100
-Subject: [Buildroot] test-pkg script can't handle captive portals. etc.
-In-Reply-To: <f327db96-a9ce-800a-2419-79166eb9d019@cartelsol.com>
-References: <f327db96-a9ce-800a-2419-79166eb9d019@cartelsol.com>
-Message-ID: <401e8b88-6d8b-5dea-65c1-dfb0d53cf1ed@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 1 Mar 2017 11:21:34 +0200
+Subject: [Buildroot] [PATCH next] usb_modeswitch_data: install packed
+	database
+In-Reply-To: <fbab82af999db5392fe2ae2f671531ff91f801b9.1488260265.git.baruch@tkos.co.il>
+References: <fbab82af999db5392fe2ae2f671531ff91f801b9.1488260265.git.baruch@tkos.co.il>
+Message-ID: <20170301092134.kmrpdhrq5e3vf3q2@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Buildroot list,
 
+On Tue, Feb 28, 2017 at 07:37:45AM +0200, Baruch Siach wrote:
+> The packed databased is significantly smaller than the unpacked. The unpacked
+> database is made of hundreds of small files. So the benefit is larger
+> filesystems that allocate a minimum of block per file. Database packing adds
+> some overhead to every invocation of usb_modeswitch. This added overhead
+> should not be noticeable in practice since usb_modeswitch normally runs only
+> once per USB device insert event.
 
-On 28-02-17 21:30, Marcus Hoffmann wrote:
-> Hey,
+This turns out to be not such a great idea, since our Busybox tar build does 
+not support the 'z' command line option. The tcl script embedded in  
+usb_modeswitch_dispatcher relies on this option to extract device information 
+entries from the packed database.
+
+baruch
+
 > 
-> I just ran into an issue with the test-pkg script.
-> When the TOOLCHAINS_URL returns an unexpected result,
-> (A router login page, when the Internet got disconnected, a captive
-> portal login page, a MITM attack, etc.) the script does weird things and
-> outputs something like this:
+> Before:
 > 
->     html>: FAILED
-> <!DOCTYPE: FAILED
->      HTML: FAILED
->      HTML: ^[ORFAILED
->      EN">:
-> [...]
+>   du -h output/target/usr/share/usb_modeswitch/
+>   1.9M	output/target/usr/share/usb_modeswitch/
 > 
-> It also creates the corresponding folders inside the test-dir.
+> After:
 > 
-> You can test this when pointing the TOOLCHAINS_URL var to any html page.
+>   du -h output/target/usr/share/usb_modeswitch/
+>   20K	output/target/usr/share/usb_modeswitch/
 > 
-> This it not a very nice way to fail and may lead to harm when parsing
-> untrusted input from the web.
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/usb_modeswitch_data/usb_modeswitch_data.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> What would be the best way to handle this case? Can the Toolchain URL be
-> switched to https? This would eliminate the problem.
-
- I don't think a.b.o has https at the moment, though I guess it would be easy to
-add a Let's Encrypt certificate.
-
- Still, a captive portal with an accepted certificate could still play tricks.
-It's probably better to validate the result.
-
- However, I think it would be much nicer if we could just have the toolchain
-defconfigs inside of Buildroot instead of using this CSV file.
-
-
-> Otherwise we should do some sanity checking that no stray html page is
-> returned by the curl call. But this still doesn't solve the problem of a
-> malicious actor.
-
- I don't think a malicious actor is really something we should worry about here,
-is it?
-
- Regards,
- Arnout
-
+> diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+> index 6d75b3198310..8373b6e2ca20 100644
+> --- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
+> +++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+> @@ -14,7 +14,7 @@ USB_MODESWITCH_DATA_LICENSE_FILES = COPYING
+>  # Nothing to build, it is a pure data package
+>  
+>  define USB_MODESWITCH_DATA_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-packed
+>  endef
+>  
+>  $(eval $(generic-package))
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
