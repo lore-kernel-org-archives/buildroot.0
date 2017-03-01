@@ -1,58 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 21:48:00 +0100
-Subject: [Buildroot] [PATCH] ncftp: fix host/target confusion
-In-Reply-To: <1488322477-25447-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1488322477-25447-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170301214800.1a6c3405@free-electrons.com>
+Date: Wed, 1 Mar 2017 21:48:41 +0100
+Subject: [Buildroot] [git commit] cjson: fix build for toolchains without ssp
+Message-ID: <20170301204904.5BF2A8228B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e01248c4cfd34a66517dc2c57d4478e3ce31ba43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Feb 2017 23:54:37 +0100, Thomas Petazzoni wrote:
-> The ncftp build process tries to build and run a small program called
-> ccdv to beautify the build process output. If it manages to build and
-> run it, then it uses it.
-> 
-> Unfortunately, this doesn't work well when the target architecture is
-> close to the host architecture, but not exactly the same. Because both
-> architectures are close to each other, the test run of ccdv succeeds,
-> but real use of ccdv during ncftp build process causes an Illegal
-> instruction issue.
-> 
-> This for example happens with the CodeSourcery AMD64 toolchain, on a
-> build machine running an i7-4600U, and has been detected in the
-> autobuilders since the CodeSourcery AMD64 toolchain was upgraded at
-> the end of January:
-> 
->   http://autobuild.buildroot.net/?reason=ncftp-3.2.6
-> 
-> The issue was also reported by Christopher Arguin back in July 2016:
-> 
->   http://lists.busybox.net/pipermail/buildroot/2016-July/168026.html
-> 
-> and at the time, we identified that simply disabling the ccdv tool, by
-> passing --disable-ccdv, was enough to solve the issue. But Christopher
-> never submitted the patch, so the problem remained unfixed.
-> 
-> Therefore, we pass --disable-ccdv to the configure script, which
-> fixes:
-> 
->   http://autobuild.buildroot.net/results/6eadad0e879ca70bb07b13b4196d42c64b11699f/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/ncftp/ncftp.mk | 1 +
->  1 file changed, 1 insertion(+)
+Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF to disable custom flags, in
+particular -fstack-protector-strong which depends on
+BR2_TOOLCHAIN_HAS_SSP
 
-Applied to master, thanks. Peter, I believe this one qualifies for the
-LTS branch.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  http://autobuild.buildroot.net/results/cfcf3bc8066159dfddd1786954d78e8527858f2f/
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cjson/cjson.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index aea9578..c554654 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -9,7 +9,10 @@ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
+ CJSON_LICENSE_FILES = LICENSE
++# Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF in particular to disable
++# -fstack-protector-strong which depends on BR2_TOOLCHAIN_HAS_SSP
+ CJSON_CONF_OPTS += \
+-	-DENABLE_CJSON_TEST=OFF
++	-DENABLE_CJSON_TEST=OFF \
++	-DENABLE_CUSTOM_COMPILER_FLAGS=OFF
+ 
+ $(eval $(cmake-package))
