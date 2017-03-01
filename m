@@ -1,142 +1,166 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed,  1 Mar 2017 23:56:10 +0100
-Subject: [Buildroot] [PATCH v3 1/2] package/physfs: new package
-Message-ID: <20170301225611.11494-1-romain.naour@gmail.com>
+Date: Wed,  1 Mar 2017 23:56:11 +0100
+Subject: [Buildroot] [PATCH v3 2/2] package/supertux: new package
+In-Reply-To: <20170301225611.11494-1-romain.naour@gmail.com>
+References: <20170301225611.11494-1-romain.naour@gmail.com>
+Message-ID: <20170301225611.11494-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport a patch from SuperTux project:
-https://github.com/SuperTux/physfs/commit/61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8
+Checked that libphysfs.so.1 is used by supertux2 binary.
+$ LD_TRACE_LOADED_OBJECTS=1 /usr/bin/supertux2
+	...
+	libphysfs.so.1 => /usr/lib64/libphysfs.so.1
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../physfs/0001-Fix-builds-with-modern-GCC.patch   | 38 ++++++++++++++++++++++
- package/physfs/Config.in                           | 10 ++++++
- package/physfs/physfs.mk                           | 27 +++++++++++++++
- 5 files changed, 77 insertions(+)
- create mode 100644 package/physfs/0001-Fix-builds-with-modern-GCC.patch
- create mode 100644 package/physfs/Config.in
- create mode 100644 package/physfs/physfs.mk
+v3: add physfs package dependency
+    upate license list
+v2: update GCC minimal version to 4.8
+Coding style checked with check-package script (v1) and build tested
+with test-pkg script.
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/supertux/Config.in     | 38 ++++++++++++++++++++++++++++++++
+ package/supertux/supertux.hash |  2 ++
+ package/supertux/supertux.mk   | 49 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 91 insertions(+)
+ create mode 100644 package/supertux/Config.in
+ create mode 100644 package/supertux/supertux.hash
+ create mode 100644 package/supertux/supertux.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ee2300b..2cc2401 100644
+index 2cc2401..21991b9 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1290,6 +1290,7 @@ F:	package/linux-syscall-support/
- F:	package/lugaru/
- F:	package/mcelog/
+@@ -1292,6 +1292,7 @@ F:	package/mcelog/
  F:	package/openpowerlink/
-+F:	package/physfs/
+ F:	package/physfs/
  F:	package/stress-ng/
++F:	package/supertux/
  F:	package/terminology/
  F:	package/upower/
+ F:	package/xenomai/
 diff --git a/package/Config.in b/package/Config.in
-index fa7e5cb..b15e064 100644
+index b15e064..1a9172e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -972,6 +972,7 @@ menu "Filesystem"
- 	source "package/libnfs/Config.in"
- 	source "package/libsysfs/Config.in"
- 	source "package/lockdev/Config.in"
-+	source "package/physfs/Config.in"
+@@ -229,6 +229,7 @@ menu "Games"
+ 	source "package/rubix/Config.in"
+ 	source "package/sl/Config.in"
+ 	source "package/stella/Config.in"
++	source "package/supertux/Config.in"
+ 	source "package/supertuxkart/Config.in"
  endmenu
  
- menu "Graphics"
-diff --git a/package/physfs/0001-Fix-builds-with-modern-GCC.patch b/package/physfs/0001-Fix-builds-with-modern-GCC.patch
+diff --git a/package/supertux/Config.in b/package/supertux/Config.in
 new file mode 100644
-index 0000000..710b4ff
+index 0000000..43f0e3a
 --- /dev/null
-+++ b/package/physfs/0001-Fix-builds-with-modern-GCC.patch
++++ b/package/supertux/Config.in
 @@ -0,0 +1,38 @@
-+From 61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8 Mon Sep 17 00:00:00 2001
-+From: Jacob Burroughs <jburroughs@trustwave.com>
-+Date: Thu, 23 Jun 2016 13:03:47 -0500
-+Subject: [PATCH] Fix builds with modern GCC
-+
-+From SuperTux project:
-+https://github.com/SuperTux/physfs/commit/61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ CMakeLists.txt | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 2a371af..94c4844 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -50,7 +50,7 @@ endif()
-+ # Add some gcc-specific command lines.
-+ if(CMAKE_COMPILER_IS_GNUCC)
-+     # Always build with debug symbols...you can strip it later.
-+-    add_definitions(-g -pipe -Werror -fsigned-char)
-++    add_definitions(-g -pipe -fsigned-char)
-+ 
-+     # Stupid BeOS generates warnings in the system headers.
-+     if(NOT BEOS)
-+@@ -304,7 +304,7 @@ if(PHYSFS_BUILD_TEST)
-+         if(READLINE_LIBRARY)
-+             set(HAVE_SYSTEM_READLINE TRUE)
-+             set(TEST_PHYSFS_LIBS ${TEST_PHYSFS_LIBS} ${READLINE_LIBRARY} ${CURSES_LIBRARY})
-+-            include_directories(${READLINE_H} ${HISTORY_H})
-++            include_directories(SYSTEM ${READLINE_H} ${HISTORY_H})
-+             add_definitions(-DPHYSFS_HAVE_READLINE=1)
-+         endif()
-+     endif()
-+-- 
-+2.9.3
-+
-diff --git a/package/physfs/Config.in b/package/physfs/Config.in
-new file mode 100644
-index 0000000..dad3ab4
---- /dev/null
-+++ b/package/physfs/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PHYSFS
-+	bool "physfs"
++config BR2_PACKAGE_SUPERTUX
++	bool "supertux"
 +	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LIBGL # libglew
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_XORG7 # libglew, SDL2 OpenGL (GLX)
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11 gcc attributes noreturn
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
++	depends on BR2_USE_MMU # SDL2 OpenGL (GLX)
++	depends on !BR2_STATIC_LIBS # SDL2
++	depends on BR2_USE_WCHAR # Boost
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_FILESYSTEM
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_LIBGLEW
++	select BR2_PACKAGE_LIBGLU # GL/glu.h
++	select BR2_PACKAGE_LIBOGG
++	select BR2_PACKAGE_LIBVORBIS
++	select BR2_PACKAGE_OPENAL
++	select BR2_PACKAGE_PHYSFS
++	select BR2_PACKAGE_SDL2
++	select BR2_PACKAGE_SDL2_IMAGE
++	select BR2_PACKAGE_SDL2_OPENGL
 +	help
-+	  PhysicsFS; a portable, flexible file i/o abstraction.
++	  SuperTux is a free classic 2D jump'n run sidescroller game in
++	  a style similar to the original Super Mario games covered
++	  under the GNU GPL.
 +
-+	  http://icculus.org/physfs
++	  http://supertux.github.io/
 +
-+comment "physfs needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/physfs/physfs.mk b/package/physfs/physfs.mk
++comment "supertux needs X11 and a toolchain w/ C++, OpenGL backend, gcc >= 4.8, NPTL, dynamic library, wchar"
++	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_LIBGL || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
++		BR2_STATIC_LIBS || !BR2_USE_WCHAR
+diff --git a/package/supertux/supertux.hash b/package/supertux/supertux.hash
 new file mode 100644
-index 0000000..ff76035
+index 0000000..c56f608
 --- /dev/null
-+++ b/package/physfs/physfs.mk
-@@ -0,0 +1,27 @@
++++ b/package/supertux/supertux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 c9dc3b42991ce5c5d0d0cb94e44c4ec2373ad09029940f0e92331e7e9ada0ac5 SuperTux-v0.5.1-Source.tar.gz
+diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
+new file mode 100644
+index 0000000..6a409e3
+--- /dev/null
++++ b/package/supertux/supertux.mk
+@@ -0,0 +1,49 @@
 +################################################################################
 +#
-+# physfs
++# supertux
 +#
 +################################################################################
 +
-+PHYSFS_VERSION = be27dfd07d97336145e7f49d3fd200a6e902f85e
-+PHYSFS_SITE = https://hg.icculus.org/icculus/physfs
-+PHYSFS_SITE_METHOD = hg
++SUPERTUX_VERSION = 0.5.1
++SUPERTUX_SITE = https://github.com/SuperTux/supertux/releases/download/v$(SUPERTUX_VERSION)
++SUPERTUX_SOURCE = SuperTux-v$(SUPERTUX_VERSION)-Source.tar.gz
 +
-+PHYSFS_INSTALL_STAGING = YES
++# Supertux itself is GPLv3+, but it bundles a few libraries with different
++# licenses (sexp-cpp, squirrel, tinygettext) which are linked statically.
++SUPERTUX_LICENSE = GPLv3+ (code), CC-BY-SA 2.0, CC-BY-SA 3.0, GPLv2+ (images music sounds)
++SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
 +
-+PHYSFS_CONF_OPTS = -DPHYSFS_BUILD_TEST=OFF
++# Use bundled squirrel, tinygettext sexp-cpp packages which are hardcoded in
++# the CMake build system.
++SUPERTUX_DEPENDENCIES = host-pkgconf boost libcurl libgl libglew libglu \
++	libogg libvorbis openal physfs sdl2 sdl2_image
 +
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_SHARED=ON
-+else
-+PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_SHARED=OFF
-+endif
++# ENABLE_BOOST_STATIC_LIBS=OFF: use boost shared libraries since supertux
++# depends on !BR2_STATIC_LIBS and boost provide only shared libraries with
++# BR2_SHARED_LIBS.
++# ENABLE_OPENGL=ON: Can be disabled but will make SuperTux unplayable slow.
++# GLBINDING_ENABLED=OFF: use GLEW (default) instead of glbinding.
++# Install the game directly in /usr/bin and game data in /usr/share/supertux2.
++# Force using physfs.so from staging since the check on PHYSFS_getPrefDir symbol
++# in physfs.h (CHECK_SYMBOL_EXISTS) doesn't work.
++SUPERTUX_CONF_OPTS += \
++	-DENABLE_BOOST_STATIC_LIBS=OFF \
++	-DBUILD_DOCUMENTATION=OFF \
++	-DENABLE_OPENGL=ON \
++	-DGLBINDING_ENABLED=OFF \
++	-DINSTALL_SUBDIR_BIN="bin" \
++	-DINSTALL_SUBDIR_SHARE="share/supertux2" \
++	-DUSE_SYSTEM_PHYSFS=ON
 +
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_STATIC=ON
-+else
-+PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_STATIC=OFF
++# Avoid incompatible posix_memalign declaration on x86 and x86_64 with
++# musl.
++# https://gcc.gnu.org/ml/gcc-patches/2015-05/msg01425.html
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL):$(BR2_i386)$(BR2_x86_64),y:y)
++define SUPERTUX_REMOVE_PEDANTIC
++	$(SED) 's% -pedantic%%' $(@D)/CMakeLists.txt
++	$(SED) 's%CHECK_CXX_FLAG(pedantic)%%' $(@D)/external/tinygettext/CMakeLists.txt
++endef
++SUPERTUX_POST_PATCH_HOOKS += SUPERTUX_REMOVE_PEDANTIC
 +endif
 +
 +$(eval $(cmake-package))
