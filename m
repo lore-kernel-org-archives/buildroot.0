@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 22:14:17 +0100
-Subject: [Buildroot] [PATCH] Revert "dependencies/cmake: blacklist cmake
- 3.7"
-In-Reply-To: <1488401984-30053-1-git-send-email-yann.morin.1998@free.fr>
-References: <1488401984-30053-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170301221417.25a61f9e@free-electrons.com>
+Date: Wed, 1 Mar 2017 22:14:59 +0100
+Subject: [Buildroot] [PATCH next v2] putty: bump to version 0.68
+In-Reply-To: <a7007f64e9741df5fd8750fc5fb9533b9f7ee559.1488304095.git.baruch@tkos.co.il>
+References: <a7007f64e9741df5fd8750fc5fb9533b9f7ee559.1488304095.git.baruch@tkos.co.il>
+Message-ID: <20170301221459.22edcef1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  1 Mar 2017 21:59:44 +0100, Yann E. MORIN wrote:
-> This reverts commit 4422eca2d418e2b817b419ff6c4c62f7f4cb7871.
+On Tue, 28 Feb 2017 19:48:15 +0200, Baruch Siach wrote:
+> Drop upstream patches.
 > 
-> We now have a workaround for the RPATH issue introduced in 3.7, so we
-> can use it again.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  support/dependencies/check-host-cmake.sh | 8 --------
->  1 file changed, 8 deletions(-)
+> v2: update hash URL
+> ---
+>  package/putty/0001-uxcons-Fix-on-musl-libc.patch   | 29 ---------------------
+>  ...02-Fix-__uint128_t-compile-error-on-MinGW.patch | 30 ----------------------
+>  package/putty/putty.hash                           |  6 ++---
+>  package/putty/putty.mk                             |  2 +-
+>  4 files changed, 4 insertions(+), 63 deletions(-)
+>  delete mode 100644 package/putty/0001-uxcons-Fix-on-musl-libc.patch
+>  delete mode 100644 package/putty/0002-Fix-__uint128_t-compile-error-on-MinGW.patch
 
 Applied to master, thanks.
 
