@@ -1,38 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 23:12:32 +0100
-Subject: [Buildroot] [PATCH 2/2 next] toolchain/wrapper: fake __DATE_
- and __TIME__ for older gcc
-In-Reply-To: <3c4084fc0c3cf518c6fe170bebd83124730eba00.1487709136.git.yann.morin.1998@free.fr>
-References: <cover.1487709136.git.yann.morin.1998@free.fr>
- <3c4084fc0c3cf518c6fe170bebd83124730eba00.1487709136.git.yann.morin.1998@free.fr>
-Message-ID: <20170301231232.2bb432dc@free-electrons.com>
+Date: Wed, 1 Mar 2017 23:13:08 +0100
+Subject: [Buildroot] [git commit] perl-gd: fix build of native part
+Message-ID: <20170301221312.C70F4822A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9475997b247a21b654ebad2f41c1d9a16a3bd751
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Feb 2017 21:32:36 +0100, Yann E. MORIN wrote:
-> +/* Returns false if SOURCE_DATE_EPOCH was not defined in the environment.
-> + *
-> + * Returns true if SOURCE_DATE_EPOCH is in the environment and represent
-> + * a valid timestamp, in which case the timestamp is formatted into the
-> + * global variables _source_ and _date_.
+EUMM don't find .xs file in subdirectory (only .pm files are handled)
+So, let move lib/GD.xs in the root directory.
 
-Shouldn't this be:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl-gd/perl-gd.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-	"global variables _date_ and _time_"
-
-instead ?
-
-If you confirm, then I can fixup this when applying.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+index ea8fd5c..2ad966c 100644
+--- a/package/perl-gd/perl-gd.mk
++++ b/package/perl-gd/perl-gd.mk
+@@ -12,6 +12,11 @@ PERL_GD_LICENSE = Artistic or GPLv1+
+ PERL_GD_LICENSE_FILES = LICENSE
+ PERL_GD_PREFER_INSTALLER = EUMM
+ 
++define PERL_GD_MOVE_XS
++	mv $(@D)/lib/GD.xs $(@D)/GD.xs
++endef
++PERL_GD_POST_PATCH_HOOKS += PERL_GD_MOVE_XS
++
+ PERL_GD_CONF_OPTS = \
+ 	-options=FT,PNG \
+ 	-lib_gd_path=$(STAGING_DIR)/usr \
