@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 14:14:43 +0100
-Subject: [Buildroot] [PATCH 1/1] csky: Add new architecture
-In-Reply-To: <1174d987-9327-9109-8fd5-f369977cb437@c-sky.com>
-References: <1488357224-5141-1-git-send-email-ren_guo@c-sky.com>
- <20170301102208.79668e6f@free-electrons.com>
- <1174d987-9327-9109-8fd5-f369977cb437@c-sky.com>
-Message-ID: <20170301141443.62263c29@free-electrons.com>
+Date: Wed, 1 Mar 2017 15:34:28 +0100
+Subject: [Buildroot] [PATCH v2] python-pylibftdi: new package
+In-Reply-To: <1488373403-30766-1-git-send-email-christian.kellermann@solectrix.de>
+References: <1488201961-15539-2-git-send-email-christian.kellermann@solectrix.de>
+ <1488373403-30766-1-git-send-email-christian.kellermann@solectrix.de>
+Message-ID: <20170301153428.00513b95@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,81 +13,64 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 1 Mar 2017 20:37:45 +0800, ren_guo wrote:
+On Wed,  1 Mar 2017 14:03:23 +0100, Christian Kellermann wrote:
 
-> > Thanks for submitting the support for this new architecture. I'll
-> > review your patch below. However, I have one question: if you add a new
-> > architecture like this in Buildroot, then we will need your help to fix
-> > the build issues that will arise on this architecture. Indeed, the
-> > Buildroot community does a significant build testing effort (see
-> > http://autobuild.buildroot.org). Can you comment on whether you will
-> > have some time to investigate and fix the build issues that will occur
-> > on this CPU architecture ?  
-> 
-> Yes, I will help to fix the build issues in autobuild as soon as possible.
-> I'm preparing my next patch-mail under your guidance and try my best to
-> test it.
+>  package/Config.in                                         |  1 +
+>  .../python-pylibftdi/0001-do-not-use-find-library.patch   | 14 ++++++++++++++
+>  package/python-pylibftdi/Config.in                        | 11 +++++++++++
+>  package/python-pylibftdi/python-libftdi.hash              |  3 +++
+>  package/python-pylibftdi/python-libftdi.mk                | 15 +++++++++++++++
 
-Great. Then please add an entry for yourself in the DEVELOPERS file,
-like:
+Please add yourself to the DEVELOPERS file for this package.
 
-N:      ren_guo <ren_guo@c-sky.com>
-F:      arch/Config.in.csky
+> diff --git a/package/python-pylibftdi/0001-do-not-use-find-library.patch b/package/python-pylibftdi/0001-do-not-use-find-library.patch
+> new file mode 100644
+> index 0000000..2f17dc6
+> --- /dev/null
+> +++ b/package/python-pylibftdi/0001-do-not-use-find-library.patch
+> @@ -0,0 +1,14 @@
+> +diff -purN pylibftdi-0.15.0.orig/pylibftdi/driver.py pylibftdi-0.15.0/pylibftdi/driver.py
+> +--- pylibftdi-0.15.0.orig/pylibftdi/driver.py	2015-04-26 22:41:39.000000000 +0200
+> ++++ pylibftdi-0.15.0/pylibftdi/driver.py	2017-02-27 13:08:56.502958000 +0100
 
-You can also add other F: entries for files that you contributed. But
-the arch/Config.in.csky is particularly important: by assigning this
-file to yourself, you will receive e-mail notifications when there are
-build failures for your architecture.
+I think Yegor mentioned it in his review of your previous iteration:
+there must be a description of the patch here + a Signed-off-by. See
+the Buildroot manual for details, and other patches in the tree. See
+for
+example ./package/lttng-libust/0001-lttng-ust-elf.c-define-NT_GNU_BUILD_ID-if-not-define.patch.
 
-One package that contains architecture-specific code and that often
-causes problems is libffi. So if you haven't yet looked at implementing
-support for csky in libffi, I would recommend you to have a look.
+If this project is using Git as its version control system, then we
+really prefer if the patch is produced by "git format-patch".
 
-> > Could you summarize the upstreaming status of the binutils, gcc, glibc
-> > and Linux kernel support for csky ?  
-> 
-> I just put a prebuild toolchain on the https://github.com/c-sky/tools, this has
-> been tested by ourserlf.
-> 
-> binutils: current is 2.20 and we are preparing 2.27
-> gcc: current is 4.5.1 and we are preparing 6.3
-> glibc: current is 2.17 and we also plan to update it
-> kernel: current is 4.9.13 and it can be built with the last stable version,
-> I will update it as soon as possible.
+> diff --git a/package/python-pylibftdi/Config.in b/package/python-pylibftdi/Config.in
+> new file mode 100644
+> index 0000000..2ab066c
+> --- /dev/null
+> +++ b/package/python-pylibftdi/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_PYTHON_PYLIBFTDI
+> +	bool "python-pylibftdi"
+> +	select BR2_PACKAGE_LIBFTDI
+> +        depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
 
-OK, thanks.
+Indentation should be one tab.
 
-> All of above source code will be put on the https://github.com/c-sky first, and next
-> we will merge them into their own organizations' repo.
+> +	help
+> +	  This package contains the python language binding libftdi.
+> +
+> +	  https://pypi.python.org/pypi/pylibftdi
+> +
+> +comment "python-pylibftdi needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-Good.
+> +PYTHON_PYLIBFTDI_VERSION = 0.15.0
+> +PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
+> +PYTHON_PYLIBFTDI_SITE = https://pypi.python.org/packages/e5/bb/d7a86dbd7685e3866ea75d21c6c726d01706fdc0aa5dc9051ce18ae65693
+> +PYTHON_PYLIBFTDI_LICENSE = MIT
+> +PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
+> +PYTHON_PYLIBFTDI_DEPENDENCIES =libftdi
 
-> >> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> >> index 91cddc2..db073a6 100644
-> >> --- a/toolchain/toolchain-buildroot/Config.in
-> >> +++ b/toolchain/toolchain-buildroot/Config.in
-> >> @@ -47,7 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
-> >>   		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
-> >>   		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
-> >>   		   BR2_sh          || BR2_sparc64    || BR2_x86_64 || \
-> >> -		   BR2_microblaze || BR2_nios2
-> >> +		   BR2_microblaze || BR2_nios2 || BR2_csky  
-> > If you do this, then you allow people to build a toolchain for csky
-> > using Buildroot. Do you really have upstream support in binutils, gcc
-> > and glibc ?
-> >
-> > If not, then this chunk shouldn't be here.  
-> 
-> ok, it's unnecessary and ? finished the build without this.
-
-However, since initially you will not support the "internal toolchain
-backend" (i.e when Buildroot builds the toolchain from scratch), then
-you should change the definition of BR2_TOOLCHAIN_BUILDROOT with:
-
-	depends on !BR2_csky
-
-So that on the csky architecture, only the external toolchain option is
-available.
+Missing space after = sign.
 
 Thanks,
 
