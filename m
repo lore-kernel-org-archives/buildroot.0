@@ -1,39 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 22:16:45 +0100
-Subject: [Buildroot] [PATCH next] memtool: new package
-In-Reply-To: <20170226204427.31044-1-peter@korsgaard.com>
-References: <20170226204427.31044-1-peter@korsgaard.com>
-Message-ID: <20170301221645.6e1120af@free-electrons.com>
+Date: Wed, 1 Mar 2017 22:17:31 +0100
+Subject: [Buildroot] [git commit] docs/website: improve website speed
+Message-ID: <20170301211745.5400A82280@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bfad6ea9b1f58f2ff98643dd1d4a7f2fb97c7049
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Feb 2017 21:44:27 +0100, Peter Korsgaard wrote:
-> memtool allows one to read and write memory mapped registers via /dev/mem.
-> The commands are inspired by the respective commands of the barebox
-> bootloader.  This is handy during driver development to inspect and modify
-> register settings.  It can also be used to modify regular files and
-> character devices (e.g. to paint to /dev/fb0).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/Config.in            |  1 +
->  package/memtool/Config.in    | 13 +++++++++++++
->  package/memtool/memtool.hash |  2 ++
->  package/memtool/memtool.mk   | 13 +++++++++++++
->  4 files changed, 29 insertions(+)
->  create mode 100644 package/memtool/Config.in
->  create mode 100644 package/memtool/memtool.hash
->  create mode 100644 package/memtool/memtool.mk
+Currently the buildroot website is not leveraging common
+techniques to have a better loading speed (browser caching,
+gzip compression, deflating).
+This commit provides an .htaccess files with all the needed to
+enable mentioned features. This .htaccess only works if the
+webserver has deflate, expires and headers modules enabled.
 
-Applied to master with an entry added to the DEVELOPERS file. Thanks!
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/website/.htaccess | 62 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/website/.htaccess b/docs/website/.htaccess
+new file mode 100644
+index 0000000..b02beb8
+--- /dev/null
++++ b/docs/website/.htaccess
+@@ -0,0 +1,62 @@
++# BEGIN Compress text files
++<ifModule mod_deflate.c>
++  <filesMatch ".(css|js|x?html?|php)$">
++    SetOutputFilter DEFLATE
++  </filesMatch>
++</ifModule>
++# END Compress text files
++
++# BEGIN Expire headers
++<ifModule mod_expires.c>
++  ExpiresActive On
++  ExpiresDefault "access plus 1 seconds"
++  ExpiresByType image/x-icon "access plus 2592000 seconds"
++  ExpiresByType image/jpeg "access plus 2592000 seconds"
++  ExpiresByType image/png "access plus 2592000 seconds"
++  ExpiresByType image/gif "access plus 2592000 seconds"
++  ExpiresByType application/x-shockwave-flash "access plus 2592000 seconds"
++  ExpiresByType text/css "access plus 604800 seconds"
++  ExpiresByType text/javascript "access plus 216000 seconds"
++  ExpiresByType application/javascript "access plus 216000 seconds"
++  ExpiresByType application/x-javascript "access plus 216000 seconds"
++  ExpiresByType text/html "access plus 600 seconds"
++  ExpiresByType application/xhtml+xml "access plus 600 seconds"
++</ifModule>
++# END Expire headers
++
++# BEGIN Cache-Control Headers
++<ifModule mod_headers.c>
++  <filesMatch ".(ico|jpe?g|png|gif|swf)$">
++    Header set Cache-Control "max-age=2592000, public"
++  </filesMatch>
++  <filesMatch ".(css)$">
++    Header set Cache-Control "max-age=604800, public"
++  </filesMatch>
++  <filesMatch ".(js)$">
++    Header set Cache-Control "max-age=216000, private"
++  </filesMatch>
++  <filesMatch ".(x?html?|php)$">
++    Header set Cache-Control "max-age=600, private, must-revalidate"
++  </filesMatch>
++</ifModule>
++# END Cache-Control Headers
++
++# BEGIN Turn ETags Off
++<ifModule mod_headers.c>
++  Header unset ETag
++</ifModule>
++FileETag None
++# END Turn ETags Off
++
++# BEGIN gzip
++<ifModule mod_gzip.c>
++mod_gzip_on Yes
++mod_gzip_dechunk Yes
++mod_gzip_item_include file .(html?|txt|css|js)$
++mod_gzip_item_include handler ^cgi-script$
++mod_gzip_item_include mime ^text/.*
++mod_gzip_item_include mime ^application/x-javascript.*
++mod_gzip_item_exclude mime ^image/.*
++mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
++</ifModule>
++# END gzip
