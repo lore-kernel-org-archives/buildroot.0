@@ -1,8 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 1 Mar 2017 09:30:42 +0100
-Subject: [Buildroot] [PATCH 1/5] minnowboard_defconfig: remove broken
+Date: Wed, 1 Mar 2017 09:30:45 +0100
+Subject: [Buildroot] [PATCH 4/5] via_imx6_vab820_defconfig: remove broken
 	defconfig
-Message-ID: <20170301083046.13226-1-arnout@mind.be>
+In-Reply-To: <20170301083046.13226-1-arnout@mind.be>
+References: <20170301083046.13226-1-arnout@mind.be>
+Message-ID: <20170301083046.13226-4-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,277 +12,255 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 This defconfig has been broken due to gcc5 for more than half a year,
-and nobody stepped up to fix it. Remove it, as well as the files it
-references. Update the readme to remove references to MinnowBoard.
+and nobody stepped up to fix it. Remove it, as well as it board
+directory.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Gergely Imreh <imrehg@gmail.com>
+Cc: Fabio Estevam <fabio.estevam@nxp.com>
 ---
- board/minnowboard/grub-minnowboard.cfg |   6 --
- board/minnowboard/linux-3.8.config     | 172 ---------------------------------
- board/minnowboard/readme.txt           |  10 +-
- configs/minnowboard_defconfig          |  32 ------
- 4 files changed, 3 insertions(+), 217 deletions(-)
- delete mode 100644 board/minnowboard/grub-minnowboard.cfg
- delete mode 100644 board/minnowboard/linux-3.8.config
- delete mode 100644 configs/minnowboard_defconfig
+ board/via/imx6_vab820/genimage.cfg  |  38 ------------
+ board/via/imx6_vab820/post-image.sh |  17 -----
+ board/via/imx6_vab820/readme.txt    | 120 ------------------------------------
+ configs/via_imx6_vab820_defconfig   |  34 ----------
+ 4 files changed, 209 deletions(-)
+ delete mode 100644 board/via/imx6_vab820/genimage.cfg
+ delete mode 100755 board/via/imx6_vab820/post-image.sh
+ delete mode 100644 board/via/imx6_vab820/readme.txt
+ delete mode 100644 configs/via_imx6_vab820_defconfig
 
-diff --git a/board/minnowboard/grub-minnowboard.cfg b/board/minnowboard/grub-minnowboard.cfg
+diff --git a/board/via/imx6_vab820/genimage.cfg b/board/via/imx6_vab820/genimage.cfg
 deleted file mode 100644
-index 33a0f4aa8d..0000000000
---- a/board/minnowboard/grub-minnowboard.cfg
+index 54acaa791b..0000000000
+--- a/board/via/imx6_vab820/genimage.cfg
 +++ /dev/null
-@@ -1,6 +0,0 @@
--set default="0"
--set timeout="5"
+@@ -1,38 +0,0 @@
+-# Minimal SD card image for the VIA VAB-820 / AMOS-820
+-#
+-# The SD card must have at least 1 MB free at the beginning.
+-# U-Boot is added before the filesystem partitions as is.
+-# A FAT boot partition and an Ext4 root filesystem partition are required.
 -
--menuentry "Buildroot" {
--	linux /bzImage root=/dev/mmcblk0p2 rootwait console=ttyPCH0,115200
+-image boot.vfat {
+-  vfat {
+-    files = {
+-      "imx6q-vab820.dtb",
+-      "uImage"
+-    }
+-  }
+-  size = 10M
 -}
-diff --git a/board/minnowboard/linux-3.8.config b/board/minnowboard/linux-3.8.config
-deleted file mode 100644
-index 460aa2d0da..0000000000
---- a/board/minnowboard/linux-3.8.config
-+++ /dev/null
-@@ -1,172 +0,0 @@
--CONFIG_EXPERIMENTAL=y
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_SYSVIPC=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_NO_HZ=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_BSD_PROCESS_ACCT=y
--CONFIG_BSD_PROCESS_ACCT_V3=y
--CONFIG_RCU_FANOUT=32
--CONFIG_IKCONFIG=y
--CONFIG_IKCONFIG_PROC=y
--CONFIG_CGROUPS=y
--CONFIG_CGROUP_DEBUG=y
--CONFIG_CGROUP_FREEZER=y
--CONFIG_CGROUP_DEVICE=y
--CONFIG_CPUSETS=y
--CONFIG_CGROUP_CPUACCT=y
--CONFIG_RESOURCE_COUNTERS=y
--CONFIG_MEMCG=y
--CONFIG_MEMCG_SWAP=y
--CONFIG_MEMCG_KMEM=y
--CONFIG_CGROUP_SCHED=y
--CONFIG_RT_GROUP_SCHED=y
--CONFIG_BLK_CGROUP=y
--CONFIG_NAMESPACES=y
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_EMBEDDED=y
--CONFIG_PROFILING=y
--CONFIG_OPROFILE=y
--CONFIG_KPROBES=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_PARTITION_ADVANCED=y
--CONFIG_SMP=y
--CONFIG_MATOM=y
--CONFIG_SCHED_SMT=y
--CONFIG_PREEMPT=y
--CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS=y
--CONFIG_X86_CHECK_BIOS_CORRUPTION=y
--# CONFIG_MTRR_SANITIZER is not set
--CONFIG_EFI=y
--CONFIG_EFI_STUB=y
--CONFIG_HZ_1000=y
--CONFIG_PM_RUNTIME=y
--CONFIG_PM_DEBUG=y
--CONFIG_PM_ADVANCED_DEBUG=y
--CONFIG_CPU_FREQ=y
--CONFIG_CPU_FREQ_GOV_ONDEMAND=y
--CONFIG_X86_ACPI_CPUFREQ=y
--CONFIG_INTEL_IDLE=y
--CONFIG_PCI_MMCONFIG=y
--CONFIG_PCIEPORTBUS=y
--CONFIG_PCI_MSI=y
--CONFIG_HOTPLUG_PCI=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_XFRM_SUB_POLICY=y
--CONFIG_NET_KEY_MIGRATE=y
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_IP_MULTIPLE_TABLES=y
--CONFIG_IP_ROUTE_MULTIPATH=y
--CONFIG_IP_ROUTE_VERBOSE=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--CONFIG_IP_PNP_BOOTP=y
--CONFIG_IP_PNP_RARP=y
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--CONFIG_FW_LOADER=m
--CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_CRYPTOLOOP=m
--CONFIG_BLK_DEV_RAM=y
--CONFIG_PCH_PHUB=m
--CONFIG_BLK_DEV_SD=y
--CONFIG_BLK_DEV_SR=y
--CONFIG_CHR_DEV_SG=y
--CONFIG_ATA=y
--CONFIG_SATA_AHCI=y
--CONFIG_NETDEVICES=y
--CONFIG_DUMMY=m
--CONFIG_NETCONSOLE=y
--CONFIG_TUN=m
--CONFIG_PCH_GBE=m
--CONFIG_INPUT_EVDEV=y
--# CONFIG_KEYBOARD_ATKBD is not set
--CONFIG_KEYBOARD_GPIO_POLLED=y
--# CONFIG_MOUSE_PS2 is not set
--# CONFIG_SERIO_I8042 is not set
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--CONFIG_SERIAL_PCH_UART=y
--CONFIG_SERIAL_PCH_UART_CONSOLE=y
--CONFIG_GEN_RTC=y
--CONFIG_GEN_RTC_X=y
--CONFIG_HPET=y
--CONFIG_I2C=y
--CONFIG_I2C_CHARDEV=m
--CONFIG_I2C_EG20T=m
--CONFIG_SPI=y
--CONFIG_SPI_GPIO=m
--CONFIG_SPI_TOPCLIFF_PCH=m
--CONFIG_SPI_SPIDEV=m
--CONFIG_GPIOLIB=y
--CONFIG_DEBUG_GPIO=y
--CONFIG_GPIO_SYSFS=y
--CONFIG_GPIO_GENERIC_PLATFORM=y
--CONFIG_GPIO_SCH=y
--CONFIG_GPIO_PCH=y
--CONFIG_WATCHDOG=y
--CONFIG_SOFT_WATCHDOG=m
--CONFIG_AGP=m
--CONFIG_DRM=m
--CONFIG_FB=y
--CONFIG_FB_EFI=y
--CONFIG_BACKLIGHT_LCD_SUPPORT=y
--CONFIG_BACKLIGHT_CLASS_DEVICE=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
--CONFIG_SOUND=m
--CONFIG_SND=m
--CONFIG_SND_HDA_INTEL=m
--CONFIG_USB=y
--CONFIG_USB_SUSPEND=y
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_EHCI_ROOT_HUB_TT=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_GADGET=m
--CONFIG_USB_EG20T=m
--CONFIG_MMC=y
--CONFIG_MMC_SDHCI=y
--CONFIG_MMC_SDHCI_PCI=y
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_GPIO=y
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_ONESHOT=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_LEDS_TRIGGER_BACKLIGHT=y
--CONFIG_LEDS_TRIGGER_CPU=y
--CONFIG_LEDS_TRIGGER_GPIO=y
--CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
--CONFIG_DMADEVICES=y
--CONFIG_PCH_DMA=y
--CONFIG_MINNOWBOARD=y
--CONFIG_MINNOWBOARD_GPIO=m
--CONFIG_MINNOWBOARD_KEYS=m
--CONFIG_EFI_VARS=y
--CONFIG_EXT4_FS=y
--CONFIG_EXT4_FS_POSIX_ACL=y
--CONFIG_EXT4_FS_SECURITY=y
--CONFIG_FANOTIFY=y
--CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
--CONFIG_ISO9660_FS=y
--CONFIG_MSDOS_FS=y
--CONFIG_VFAT_FS=y
--CONFIG_PROC_KCORE=y
--CONFIG_TMPFS=y
--CONFIG_TMPFS_POSIX_ACL=y
--CONFIG_CONFIGFS_FS=m
--CONFIG_NFS_FS=y
--CONFIG_NFS_V4=y
--CONFIG_ROOT_NFS=y
--CONFIG_PRINTK_TIME=y
--CONFIG_FRAME_WARN=1024
--CONFIG_TIMER_STATS=y
--CONFIG_LATENCYTOP=y
--CONFIG_BLK_DEV_IO_TRACE=y
-diff --git a/board/minnowboard/readme.txt b/board/minnowboard/readme.txt
-index f76cd77c34..fdbb81e3aa 100644
---- a/board/minnowboard/readme.txt
-+++ b/board/minnowboard/readme.txt
-@@ -1,14 +1,10 @@
--How to get started with the MinnowBoard (MAX)
--=============================================
-+How to get started with the MinnowBoard MAX
-+===========================================
- 
- 1. Build
- 
-   Apply the defconfig:
- 
--  $ make minnowboard_defconfig
 -
--  Or, for the Minnowboard MAX board:
+-image sdcard.img {
+-  hdimage {
+-  }
 -
-   $ make minnowboard_max_defconfig
- 
-   Add any additional packages required and build:
-@@ -18,7 +14,7 @@ How to get started with the MinnowBoard (MAX)
- 2. Write the SD card
- 
-   The build process will create a SD card image in output/images.
--  Write the image to an mSD card, insert into the MinnowBoard
-+  Write the image to an mSD card, insert into the MinnowBoard MAX
-   and power the board on.
- 
-   $ dd if=output/images/sdcard.img of=/dev/mmcblk0; sync
-diff --git a/configs/minnowboard_defconfig b/configs/minnowboard_defconfig
-deleted file mode 100644
-index f4afc86bf8..0000000000
---- a/configs/minnowboard_defconfig
+-  partition u-boot {
+-    in-partition-table = "no"
+-    image = "u-boot.imx"
+-    offset = 1024
+-  }
+-
+-  partition boot {
+-    partition-type = 0xC
+-    bootable = "true"
+-    image = "boot.vfat"
+-  }
+-
+-  partition rootfs {
+-    partition-type = 0x83
+-    image = "rootfs.ext4"
+-    size = 512M
+-  }
+-}
+diff --git a/board/via/imx6_vab820/post-image.sh b/board/via/imx6_vab820/post-image.sh
+deleted file mode 100755
+index 00de33b01d..0000000000
+--- a/board/via/imx6_vab820/post-image.sh
 +++ /dev/null
-@@ -1,32 +0,0 @@
+@@ -1,17 +0,0 @@
+-#!/bin/bash
+-
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage \
+-  --rootpath "${TARGET_DIR}" \
+-  --tmppath "${GENIMAGE_TMP}" \
+-  --inputpath "${BINARIES_DIR}" \
+-  --outputpath "${BINARIES_DIR}" \
+-  --config "${GENIMAGE_CFG}"
+-
+-RET=${?}
+-exit ${RET}
+diff --git a/board/via/imx6_vab820/readme.txt b/board/via/imx6_vab820/readme.txt
+deleted file mode 100644
+index 908441f7b2..0000000000
+--- a/board/via/imx6_vab820/readme.txt
++++ /dev/null
+@@ -1,120 +0,0 @@
+-VIA VAB-820/AMOS-820
+-====================
+-
+-This file documents the Buildroot support for the VIA VAB-820 board and
+-VIA AMOS-820 system, which are built around a Freescale i.MX6 Quad/Dual SoC.
+-The kernel and u-boot is based on the official VIA BSP, which is in turn
+-based on the Freescale Linux 3.10.17_1.0.0_ga BSP.
+-
+-
+-Configuring and building Buildroot
+-----------------------------------
+-
+-Start from the defconfig:
+-
+-  $ make via_imx6_vab820_defconfig
+-
+-You can edit build options the usual way:
+-
+-  $ make menuconfig
+-
+-When you are happy with the setup, run:
+-
+-  $ make
+-
+-The result of the build with the default settings should be these files:
+-
+-  output/images
+-  ??? boot.vfat
+-  ??? imx6q-vab820.dtb
+-  ??? rootfs.ext2
+-  ??? rootfs.ext4 -> rootfs.ext2
+-  ??? rootfs.tar
+-  ??? sdcard.img
+-  ??? u-boot.imx
+-  ??? uImage
+-
+-Copy the bootable `sdcard.img` onto an SD card with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=1M conv=fsync
+-
+-where "sdX" is the appropriate partition of your card.
+-
+-For details about the medium image layout, see the definition in
+-`board/via/imx6_vab820/genimage.cfg`.
+-
+-
+-Setting up your SD card manually
+---------------------------------
+-
+-*Important*: pay attention which partition you are modifying so you don't
+-accidentally erase the wrong file system, e.g your host computer or your
+-external storage!
+-
+-In the default setup you need to create 2 partitions on your SD card:
+-a boot partition and a root partition. In this guide and in the default u-boot
+-settings the boot partition is vfat, while the root partition is ext4.
+-
+-You also need to leave space for u-boot at the beginning of the card, before
+-all the partitions.
+-
+-For example, if your SD card is at /dev/sdX, using fdisk, and starting from
+-an empty card, the steps are along these lines:
+-
+-  # fdisk /dev/sdX
+-  n         (new partition)
+-  p         (primary partition)
+-  1	    (first partition)
+-  <return>  (default first sector, should be at least 1MB from the beginning
+-             which is 2048 sectors if the sector size is 512KB)
+-  +50M      (50MB size, as an example)
+-  t         (switch partition type)
+-  b         (select "W95 FAT32" type)
+-  n         (the second partition)
+-  p         (primary partition)
+-  2	    (second partition)
+-  <return>  (default first sector)
+-  <return>  (use all remaining space)
+-  p         (print so the partition looks something like this below)
+-    Device     Boot  Start      End  Sectors  Size Id Type
+-    /dev/sdX1         2048   104447   102400   50M  b W95 FAT32
+-    /dev/sdX2       104448 15564799 15460352  7.4G 83 Linux
+-  w         (save changes)
+-
+-After this you need to format the newly created file system:
+-
+-  # mkfs.vfat -L boot /dev/sdX1
+-  # mkfs.ext4 -L rootfs /dev/sdX2
+-
+-Now the system can be copied onto the card. First copy the u-boot onto
+-the region of the card before the first partition (starting from the
+-root directory of buildroot):
+-
+-  # dd if=output/images/u-boot.imx of=/dev/sdX bs=512 seek=2
+-
+-Mount the first partition /dev/sdX1, and copy the kernel and the
+-compiled device tree:
+-
+-  # cp output/images/uImage /mnt/<BOOT-PARTITION>
+-  # cp output/images/imx6q-vab820.dtb /mnt/<BOOT-PARTITION>
+-
+-Finally, copy the root file system onto the mounted (empty) /dev/sdX2
+-rootfs partition:
+-
+-  # tar xf output/images/rootfs.tar -C /mnt/<ROOTFS-PARTITION>
+-
+-
+-Booting
+--------
+-
+-To use the on-card u-boot, you need adjust jumper J11 located just next to
+-the SD card slot on the VAB-820 board. The correct position for SD card
+-boot is jumping the two pins towards the inside of the board.
+-
+-To modify the default boot parameters compiled into u-boot, you can create
+-a boot script with the file name `boot.scr` and place it onto the boot
+-partition (same directory as `uImage`).
+-
+-If you want to have the login prompt on the serial debug line instead of
+-the console, adjust the buildroot settings as:
+-"System Configuration > getty options > TTY port > ttymxc1"
+diff --git a/configs/via_imx6_vab820_defconfig b/configs/via_imx6_vab820_defconfig
+deleted file mode 100644
+index fa646f07dc..0000000000
+--- a/configs/via_imx6_vab820_defconfig
++++ /dev/null
+@@ -1,34 +0,0 @@
 -# Architecture
--BR2_x86_64=y
--BR2_x86_atom=y
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_VFP=y
 -
--# Misc
--BR2_TARGET_GENERIC_GETTY_PORT="ttyPCH0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="minnowboard"
+-# Linux headers same as kernel, a 3.10 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
 -
--# Linux headers same as kernel, a 3.8 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8=y
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/viaembedded/vab820-kernel-bsp.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="via_3.10.17_2.0.6"
+-BR2_LINUX_KERNEL_DEFCONFIG="via_vab820"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-vab820"
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="mx6qvab820"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/viaembedded/vab820-uboot-bsp.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="via_3.10.17_2.0.6"
+-BR2_TARGET_UBOOT_FORMAT_IMX=y
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
 -BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -BR2_PACKAGE_HOST_GENIMAGE=y
 -BR2_PACKAGE_HOST_MTOOLS=y
--
--# Linux kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.yoctoproject.org/linux-yocto-3.8"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ba1587b9b62c801d161897303aa6d22809485f9b"
--BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-3.8.config"
--
--# Bootloader
--BR2_TARGET_GRUB2=y
--BR2_TARGET_GRUB2_I386_EFI=y
--
--# Filesystem image
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--# BR2_TARGET_ROOTFS_TAR is not set
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/via/imx6_vab820/post-image.sh"
 -- 
 2.11.0
