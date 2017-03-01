@@ -1,66 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 23:18:59 +0100
-Subject: [Buildroot] [git commit] mesa3d: Add support for the Etnaviv
-	gallium driver
-Message-ID: <20170301221916.BB8AF821F9@busybox.osuosl.org>
+Date: Wed, 1 Mar 2017 23:14:46 +0100
+Subject: [Buildroot] [git commit] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.0.0
+Message-ID: <20170301221916.AEEB8821F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5252d50b68d1af2f3d8afdec53e1417a4d8be4ee
+commit: https://git.buildroot.net/buildroot/commit/?id=a5a649cd8d5ac184b6ba7a6289dbaa71d1220619
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support for the Etnaviv gallium driver.
-
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/Config.in | 9 +++++++++
- package/mesa3d/mesa3d.mk | 3 +++
- 2 files changed, 12 insertions(+)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index bbab953..2b085ab 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -45,6 +45,15 @@ config BR2_PACKAGE_MESA3D_NEEDS_XA
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 35b1a71..35b242e 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- comment "Gallium drivers"
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
-+	bool "Gallium Etnaviv driver"
-+	depends on BR2_arm
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_ETNAVIV
-+	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	help
-+	  Mesa driver for Vivante GPUs.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	bool "Gallium nouveau driver"
- 	depends on BR2_i386 || BR2_x86_64
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 13.0.4
++MESA3D_HEADERS_VERSION = 17.0.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index b3c4b77..09d3ef8 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2017-February/000294.html
+-sha256 a95d7ce8f7bd5f88585e4be3144a341236d8c0fc91f6feaec59bb8ba3120e726  mesa-13.0.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-dev/2017-February/144115.html
++sha256 39db3d59700159add7f977307d12a7dfe016363e760ad82280ac4168ea668481  mesa-17.0.0.tar.xz
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 3bfb005..e174868 100644
+index 0c68ded..3bfb005 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -67,6 +67,7 @@ endif
- # Drivers
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- #Gallium Drivers
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv imx
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
-@@ -151,6 +152,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
- MESA3D_EGL_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
- MESA3D_EGL_PLATFORMS = drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
-+MESA3D_EGL_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
- MESA3D_EGL_PLATFORMS = drm
- endif
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 13.0.4
++MESA3D_VERSION = 17.0.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
