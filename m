@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Mar 2017 09:05:03 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: fix build for toolchains without
- ssp
-In-Reply-To: <AB6B30E9-21A6-499E-927B-401E5A94682A@gmail.com>
-References: <1488320767-63856-1-git-send-email-fontaine.fabrice@gmail.com>
- <20170228234037.12107729@free-electrons.com>
- <AB6B30E9-21A6-499E-927B-401E5A94682A@gmail.com>
-Message-ID: <20170301090503.47ecd52e@free-electrons.com>
+Date: Wed, 1 Mar 2017 09:17:31 +0100
+Subject: [Buildroot] [PATCH 1/5] core/pkg-cmake: provide our own
+ platform description
+In-Reply-To: <e36f8ee2-22d1-318b-178a-9ce84f31a03a@mind.be>
+References: <cover.1488305206.git.yann.morin.1998@free.fr>
+ <f25e9ff7873418c0b323528d6a9c2482c752cd31.1488305206.git.yann.morin.1998@free.fr>
+ <e36f8ee2-22d1-318b-178a-9ce84f31a03a@mind.be>
+Message-ID: <20170301091731.5102e061@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +15,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-Please keep the mailing list in CC, thanks!
+On Wed, 1 Mar 2017 08:58:31 +0100, Arnout Vandecappelle wrote:
 
-On Wed, 1 Mar 2017 07:04:53 +0100, Fabrice Fontaine wrote:
+>  Since you don't do any processing on the file, you could just use
+> 
+> 		-DCMAKE_MODULE_PATH="$$(TOPDIR)/support/misc" \
 
-> This is a separate build fix that applies to the version of cjson
-> currently packaged in buildroot. I found this issue on 1.3.2 and was
-> able to reproduce it on 1.3.0.
+I think the idea is that since the Buildroot.cmake platform files gets
+referenced by the toolchainfile.cmake, then Buildroot.cmake anyway
+needs to be installed in $(HOST_DIR)/usr/share/buildroot, so we can
+just as well point CMake to this place.
 
-Ah, ok, it's probably new in 1.3.0, which we only have in the next
-branch. Our master branch, and the 2017.02 release, only have 1.2.1,
-which I guess doesn't have this issue since the autobuilders didn't
-catch it.
+> and avoid copying the file around. Of course, in that case, support/cmake is
+> probably a better place to put the file :-)
 
-Thanks,
+No: copying the file is needed, otherwise our toolchainfile.cmake file
+no longer works for people using it outside of Buildroot.
 
 Thomas
 -- 
