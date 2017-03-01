@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 01 Mar 2017 17:04:21 -0000
-Subject: [Buildroot] [git commit] package: qemu: bump version to 2.8.0
-Message-ID: <20170301170420.6248080268@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gqrx: remove audio backend dependencies
+Message-ID: <20170301170420.BFF02800CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f56b13897b9f30c78d7ccd78a25b1e985179d2ab
+commit: https://git.buildroot.net/buildroot/commit/?id=af0cc55f322f40a93655f9688993d8397acd6da2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This adds a CPU definition for the Cortex A7 along with improvements described
-here: http://wiki.qemu-project.org/ChangeLog/2.8
+Now that the gnuradio gr-audio option selects an audio backend by
+default, it is no longer needed to depends on BR2_PACKAGE_ALSA_LIB or
+BR2_PACKAGE_PORTAUDIO in the qgrx package.
 
-Tested on an ARM Cortex A7 target (both target and host builds). The change log
-does not describe any incompatible changes that would affect buildroot targets
-as far as I am aware.
-
-Signed-off-by: Andrey Yurovsky <yurovsky@gmail.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gqrx/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 572a5c9..19cb306 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,2 +1,2 @@
- # Locally computed, tarball verified with GPG signature
--sha256 326e739506ba690daf69fc17bd3913a6c313d9928d743bd8eddb82f403f81e53  qemu-2.7.0.tar.bz2
-+sha256 dafd5d7f649907b6b617b822692f4c82e60cf29bc0fc58bc2036219b591e5e62  qemu-2.8.0.tar.bz2
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 66efcba..e744556 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+index 5f7a561..1dc40c6 100644
+--- a/package/gqrx/Config.in
++++ b/package/gqrx/Config.in
+@@ -2,13 +2,12 @@ comment "gqrx needs a toolchain w/ C++, threads, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR
  
--QEMU_VERSION = 2.7.0
-+QEMU_VERSION = 2.8.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
- QEMU_SITE = http://wiki.qemu.org/download
- QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
+-comment "gqrx needs qt5, gnuradio, fftw's single precision, alsa-lib or portaudio"
++comment "gqrx needs qt5, gnuradio, fftw's single precision"
+ 	depends on !BR2_PACKAGE_GNURADIO || !BR2_PACKAGE_FFTW_PRECISION_SINGLE || \
+-		!(BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO) || !BR2_PACKAGE_QT5
++		!BR2_PACKAGE_QT5
+ 
+ config BR2_PACKAGE_GQRX
+ 	bool "gqrx"
+-	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO # gr-audio
+ 	depends on BR2_PACKAGE_FFTW_PRECISION_SINGLE # gnuradio
+ 	depends on BR2_PACKAGE_GNURADIO
+ 	depends on BR2_PACKAGE_QT5
