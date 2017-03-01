@@ -1,53 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 Mar 2017 20:09:30 +0100
-Subject: [Buildroot] Ethernet not working with imx6ulevk
-In-Reply-To: <CAKkGsYLnkPh=c2ZU=m2ju04oxvZsX-OT8PaAMtywL65TDvCNzQ@mail.gmail.com>
-References: <CAKkGsYK+WPvgH-SQ9L_cbBkjCOOXK9YE4ty6L5wQDhJOmYR==Q@mail.gmail.com>
- <CAKkGsYLpW+bU-SihBgRFgyi4cmzJhgah1ZDpjQf0m2ksEmKP_A@mail.gmail.com>
- <f974facb-71d8-5498-cfc5-df451a58d27a@mind.be>
- <CAKkGsYLnkPh=c2ZU=m2ju04oxvZsX-OT8PaAMtywL65TDvCNzQ@mail.gmail.com>
-Message-ID: <e07c7dd0-4871-302e-0fc6-fffb8c12e005@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 1 Mar 2017 20:52:27 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/sdl2: disable altivec
+ built-in function for PowerPC
+In-Reply-To: <20170301021311.GA13728@tungsten.ozlabs.ibm.com>
+References: <20170228232453.3550-1-romain.naour@gmail.com>
+ <20170301021311.GA13728@tungsten.ozlabs.ibm.com>
+Message-ID: <82dda896-2811-a049-ff52-23b06ce2015a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Sam,
 
-
-On 01-03-17 12:53, Taceant Omnes wrote:
-> On 28 February 2017 at 22:42, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  Note that this patch is apparently included in rel_imx_4.1.15_2.0.1_ga. So, can
->> you update configs/freescale_imx6ulevk_defconfig to 2.0.1, verify that it works,
->> and send a patch to Buildroot?
+Le 01/03/2017 ? 03:13, Sam Bobroff a ?crit :
+> On Wed, Mar 01, 2017 at 12:24:52AM +0100, Romain Naour wrote:
+>> As reported in this bug report [1], altivec support in SDL break
+>> arbitrary C++ code.
+>>
+>> Issue reported by test-pkg script while testing supertux package:
+>>     error: could not convert 'true' from 'bool' to '__vector(4) __bool int'
+>>
+>> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi/?bug=770670
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Sam Bobroff <sam.bobroff@au1.ibm.com>
 > 
-> Hi Arnout,
+> Hi Romain,
 > 
-> Just replacing 2.0.0 with 2.0.1 for the kernel and u-boot in the BR
-> defconfig will not work. I am not an expert neither on BR nor on git,
-> nevertheless my guess is that it does not work because there is no
-> rel_imx_4.1.15_2.0.1_ga tag for the kernel nor for u-boot.
+> If you want to keep alitvec support on you can probably work around this
+> problem by using -std=gnu99 (which I used for mpv, see
+> package/mpv/0002-fix-powerpc64-altivec.patch).
 
- D'oh, I don't know what I've been smoking... I *checked* it, I can even find
-the 'git ls-remote' in my command history...
+Thanks for the help!
 
- So never mind :-)
+But the error come from a C++ build :
+In file included from
+output/build/supertux-0.5.1/external/tinygettext/src/dictionary_manager.cpp:30:0:
+output/build/supertux-0.5.1/external/tinygettext/include/tinygettext/po_parser.hpp:50:96:
+error: could not convert ?true? from ?bool? to ?__vector(4) __bool int?
+   POParser(const std::string& filename, std::istream& in_, Dictionary& dict_,
+bool use_fuzzy = true);
 
+What do you think about removing altivec.h from SDL_cpuinfo.h as suggested in
+the bug report ?
 
- Regards,
- Arnout
+Otherwise, I'm not using a powerpc so we can keep altivec support disabled for
+now...
+
+Best regards,
+Romain
 
 > 
-> http://git.freescale.com/git/cgit.cgi/imx/linux-imx.git/
-> http://git.freescale.com/git/cgit.cgi/imx/uboot-imx.git/
+> Cheers,
+> Sam.
 > 
-> Cheers.
+>> ---
+>>  package/sdl2/sdl2.mk | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+>> index d2ee50d..628d906 100644
+>> --- a/package/sdl2/sdl2.mk
+>> +++ b/package/sdl2/sdl2.mk
+>> @@ -23,6 +23,16 @@ SDL2_CONF_OPTS += \
+>>  # We must enable static build to get compilation successful.
+>>  SDL2_CONF_OPTS += --enable-static
+>>  
+>> +# From https://bugs.debian.org/cgi-bin/bugreport.cgi/?bug=770670
+>> +# "The problem lies within SDL_cpuinfo.h.  It includes altivec.h, which by
+>> +# definition provides an unconditional vector, pixel and bool define in
+>> +# standard-c++ mode.  In GNU-c++ mode this names are only defined
+>> +# context-sensitive by cpp.  SDL_cpuinfo.h is included by SDL.h.
+>> +# Including altivec.h makes arbitrary code break."
+>> +ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+>> +SDL2_CONF_OPTS += --disable-altivec
+>> +endif
+>> +
+>>  ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+>>  SDL2_DEPENDENCIES += udev
+>>  SDL2_CONF_OPTS += --enable-libudev
+>> -- 
+>> 2.9.3
 > 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
