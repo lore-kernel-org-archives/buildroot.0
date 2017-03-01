@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 01 Mar 2017 17:30:07 +0000
+Date: Wed, 01 Mar 2017 17:46:04 +0000
 Subject: [Buildroot] [Bug 9456] mkusers script bash errors
 In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
 References: <bug-9456-163@https.bugs.busybox.net/>
-Message-ID: <bug-9456-163-PPfebUmnA5@https.bugs.busybox.net/>
+Message-ID: <bug-9456-163-0sVvMpoRzy@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,41 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=9456
 
---- Comment #17 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-(In reply to Paul Stewart from comment #15)
+--- Comment #18 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Created attachment 6911
+  --> https://bugs.busybox.net/attachment.cgi?id=6911&action=edit
+Debug mkusers
 
-So I downloaded that file and uses it:
+Paul,
 
-  - as-is, and it creates the three users: dummy, paul and git;
-  - without the dummy user, and it creates paul and git.
+Could you test with the attched patch and report the result, please?
 
-I'll try to instrument the script and attach a patch so that you can report the
-output. Give me a moment...
+Here is what I got:
 
-Regards,
-Yann E. MORIN.
+line='paul 1000 users 100
+=21248f7aac088184a7c9dd3a3cd8bd1bafecc5718174e9025bab7053756a013a /home/paul
+/bin/sh ssh-user'
+  username='paul'
+  uid     ='1000'
+  group   ='users'
+  gid     ='100'
+  paswd   ='=21248f7aac088184a7c9dd3a3cd8bd1bafecc5718174e9025bab7053756a013a'
+  home    ='/home/paul'
+  shell   ='/bin/sh'
+  groups  ='ssh-user'
+  comment =''
+line='git 1001 users 100
+=de5d4f76680ec42ff304682eebeaec1c4756e3d5de3e4ce6db747cb223d6037c /home/git
+/usr/bin/git-shell ssh-user'
+  username='git'
+  uid     ='1001'
+  group   ='users'
+  gid     ='100'
+  paswd   ='=de5d4f76680ec42ff304682eebeaec1c4756e3d5de3e4ce6db747cb223d6037c'
+  home    ='/home/git'
+  shell   ='/usr/bin/git-shell'
+  groups  ='ssh-user'
+  comment =''
 
 -- 
 You are receiving this mail because:
