@@ -1,65 +1,156 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 01 Mar 2017 22:41:15 +0000
-Subject: [Buildroot] [Bug 9456] mkusers script bash errors
-In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
-References: <bug-9456-163@https.bugs.busybox.net/>
-Message-ID: <bug-9456-163-YgrWSPnUsa@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Mar 2017 23:53:44 +0100
+Subject: [Buildroot] [git commit] execline: new package
+Message-ID: <20170301225400.63A8D81F77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9456
+commit: https://git.buildroot.net/buildroot/commit/?id=ece98adf1ea17dc48bcb7fb4a9782094d4eb8003
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #19 from Paul Stewart <paulstewartis@gmail.com> ---
-(In reply to Yann E. MORIN from comment #18)
+This package provides execline, a (non-interactive) scripting language,
+like sh, used in the s6 supervision system.
 
-line='paul 1000 users 100
-=21248f7aac088184a7c9dd3a3cd8bd1bafecc5718174e9025bab7053756a013a /home/paul
-/bin/sh ssh-user'
-  username='paul'
-  uid     ='1000'
-  group   ='users'
-  gid     ='100'
-  paswd   ='=21248f7aac088184a7c9dd3a3cd8bd1bafecc5718174e9025bab7053756a013a'
-  home    ='/home/paul'
-  shell   ='/bin/sh'
-  groups  ='ssh-user'
-  comment =''
-line='git 1001 users 100
-=de5d4f76680ec42ff304682eebeaec1c4756e3d5de3e4ce6db747cb223d6037c /home/git
-/usr/bin/git-shell ssh-user'
-  username='git'
-  uid     ='1001'
-  group   ='users'
-  gid     ='100'
-  paswd   ='=de5d4f76680ec42ff304682eebeaec1c4756e3d5de3e4ce6db747cb223d6037c'
-  home    ='/home/git'
-  shell   ='/usr/bin/git-shell'
-  groups  ='ssh-user'
-  comment =''
-line='sshd -1 sshd -1 * - - - SSH drop priv user'
-  username='sshd'
-  uid     ='-1'
-  group   ='sshd'
-  gid     ='-1'
-  paswd   ='*'
-  home    ='-'
-  shell   ='-'
-  groups  ='-'
-  comment ='SSH drop priv user'
+The host variant is provided as it is required to build and run the host
+variants of s6 and s6-rc.
 
-This is immediately followed by:
-/home/paul/src/buildroot/support/scripts/mkusers: line 407: [: -eq: unary
-operator expected
-/home/paul/src/buildroot/support/scripts/mkusers: line 432: [: -ge: unary
-operator expected
-/home/paul/src/buildroot/support/scripts/mkusers: line 441: [: -eq: unary
-operator expected
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+[Thomas: add entry to DEVELOPERS file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/execline/Config.in     | 12 ++++++++
+ package/execline/execline.hash |  2 ++
+ package/execline/execline.mk   | 70 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 86 insertions(+)
 
-And the paul user is not created.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ee2300b..1bf07c3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -430,6 +430,7 @@ N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ F:	package/adwaita-icon-theme/
+ F:	package/darkhttpd/
+ F:	package/eudev/
++F:	package/execline/
+ F:	package/hicolor-icon-theme/
+ F:	package/jemalloc/
+ F:	package/ninja/
+diff --git a/package/Config.in b/package/Config.in
+index fa7e5cb..921a06c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -511,6 +511,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
++	source "package/execline/Config.in"
+ 	source "package/ficl/Config.in"
+ 	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+diff --git a/package/execline/Config.in b/package/execline/Config.in
+new file mode 100644
+index 0000000..556f9a5
+--- /dev/null
++++ b/package/execline/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_EXECLINE
++	bool "execline"
++	select BR2_PACKAGE_SKALIBS
++	depends on BR2_USE_MMU # skalibs
++	help
++	  execline is a (non-interactive) scripting language, like sh;
++	  but its syntax is quite different from a traditional shell
++	  syntax. The execlineb program is meant to be used as an
++	  interpreter for a text file; the other commands are
++	  essentially useful inside an execlineb script.
++
++	  http://skarnet.org/software/execline/
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+new file mode 100644
+index 0000000..61fc99c
+--- /dev/null
++++ b/package/execline/execline.hash
+@@ -0,0 +1,2 @@
++# Locally generated
++sha256 93bd744f2e3ad204cb89f147efdc6ca4e622f9c6bfc9895e0b2cb8b0480029de execline-2.2.0.0.tar.gz
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+new file mode 100644
+index 0000000..ca7c73e
+--- /dev/null
++++ b/package/execline/execline.mk
+@@ -0,0 +1,70 @@
++################################################################################
++#
++# execline
++#
++################################################################################
++
++EXECLINE_VERSION = 2.2.0.0
++EXECLINE_SITE = http://skarnet.org/software/execline
++EXECLINE_LICENSE = ISC
++EXECLINE_LICENSE_FILES = COPYING
++EXECLINE_INSTALL_STAGING = YES
++EXECLINE_DEPENDENCIES = skalibs
++
++EXECLINE_CONF_OPTS = \
++	--prefix=/usr \
++	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
++	--with-include=$(STAGING_DIR)/usr/include \
++	--with-dynlib=$(STAGING_DIR)/usr/lib \
++	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
++	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
++	$(SHARED_STATIC_LIBS_OPTS)
++
++define EXECLINE_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(EXECLINE_CONF_OPTS))
++endef
++
++define EXECLINE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define EXECLINE_REMOVE_STATIC_LIB_DIR
++	rm -rf $(TARGET_DIR)/usr/lib/execline
++endef
++
++EXECLINE_POST_INSTALL_TARGET_HOOKS += EXECLINE_REMOVE_STATIC_LIB_DIR
++
++define EXECLINE_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define EXECLINE_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++HOST_EXECLINE_DEPENDENCIES = host-skalibs
++
++HOST_EXECLINE_CONF_OPTS = \
++	--prefix=$(HOST_DIR)/usr \
++	--shebangdir=/usr/bin \
++	--with-sysdeps=$(HOST_DIR)/usr/lib/skalibs/sysdeps \
++	--with-include=$(HOST_DIR)/usr/include \
++	--with-dynlib=$(HOST_DIR)/usr/lib \
++	--disable-static \
++	--enable-shared \
++	--disable-allstatic
++
++define HOST_EXECLINE_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_EXECLINE_CONF_OPTS))
++endef
++
++define HOST_EXECLINE_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_EXECLINE_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
