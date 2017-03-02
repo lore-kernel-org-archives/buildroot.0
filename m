@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:58:17 +0100
-Subject: [Buildroot] [git commit] python-rpi-gpio: bump to version 0.6.3
-Message-ID: <20170302205924.A02407FECB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-setuptools-scm: bump to version
+	1.15.1rc1
+Message-ID: <20170302205924.AA0497FECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15861d7fd6cfe1386d3b16d0d89ea50031652b65
+commit: https://git.buildroot.net/buildroot/commit/?id=758e98af8bafbd2fdf47dcbf182b49cd25db8f6e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-rpi-gpio/python-rpi-gpio.hash | 6 +++---
- package/python-rpi-gpio/python-rpi-gpio.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
+ package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-rpi-gpio/python-rpi-gpio.hash b/package/python-rpi-gpio/python-rpi-gpio.hash
-index a502972..e8d390d 100644
---- a/package/python-rpi-gpio/python-rpi-gpio.hash
-+++ b/package/python-rpi-gpio/python-rpi-gpio.hash
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
+index 734fc5a..075e70d 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.hash
++++ b/package/python-setuptools-scm/python-setuptools-scm.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/rpi-gpio/json, sha256 locally computed
--md5	9db86fd5f3bae872de9dbb068ee0b096  RPi.GPIO-0.6.2.tar.gz
--sha256	82acff0ef6bbe3cdf6f4dbdd73d96add5294bb94baf7f51c1d901861af3c2392  RPi.GPIO-0.6.2.tar.gz
-+# md5 from https://pypi.python.org/pypi/rpi_gpio/json, sha256 locally computed
-+md5 e4abe1cfb5eacebe53078032256eb837 RPi.GPIO-0.6.3.tar.gz
-+sha256 a5fc0eb5e401963b6c0a03650da6b42c4005f02d962b81241d96c98d0a578516 RPi.GPIO-0.6.3.tar.gz
-diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
-index 8f02d16..fd32674 100644
---- a/package/python-rpi-gpio/python-rpi-gpio.mk
-+++ b/package/python-rpi-gpio/python-rpi-gpio.mk
+ # md5 from https://pypi.python.org/pypi/setuptools_scm/json, sha256 locally computed
+-md5	b6916c78ed6253d6602444fad4279c5b  setuptools_scm-1.15.0.tar.gz
+-sha256	daf12d05aa2155a46aa357453757ffdc47d87f839e62114f042bceac6a619e2f  setuptools_scm-1.15.0.tar.gz
++md5 d91e17693598d8ba84c5b4fed48b015d setuptools_scm-1.15.1rc1.tar.gz
++sha256 24007d8a43c4b43c7ad6c8725cbdfb94212c30f6ab849f21f7bb3809333f105a setuptools_scm-1.15.1rc1.tar.gz
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
+index 993fbb9..5fb48fd 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-setuptools-scm/python-setuptools-scm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_RPI_GPIO_VERSION = 0.6.2
-+PYTHON_RPI_GPIO_VERSION = 0.6.3
- PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
--PYTHON_RPI_GPIO_SITE = https://pypi.python.org/packages/c1/a8/de92cf6d04376f541ce250de420f4fe7cbb2b32a7128929a600bc89aede5
-+PYTHON_RPI_GPIO_SITE = https://pypi.python.org/packages/e2/58/6e1b775606da6439fa3fd1550e7f714ac62aa75e162eed29dbec684ecb3e
- PYTHON_RPI_GPIO_LICENSE = MIT
- PYTHON_RPI_GPIO_LICENSE_FILES = LICENCE.txt
- PYTHON_RPI_GPIO_SETUP_TYPE = distutils
+-PYTHON_SETUPTOOLS_SCM_VERSION = 1.15.0
++PYTHON_SETUPTOOLS_SCM_VERSION = 1.15.1rc1
+ PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SCM_SITE = https://pypi.python.org/packages/80/b7/31b6ae5fcb188e37f7e31abe75f9be90490a5456a72860fa6e643f8a3cbc
++PYTHON_SETUPTOOLS_SCM_SITE = https://pypi.python.org/packages/b8/4b/c7370d3c54a74ee8abb3c7e0792c6c95f1e9658e959211b5b86eebe4677a
+ PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
+ PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
