@@ -1,37 +1,40 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu,  2 Mar 2017 14:58:53 +0100
-Subject: [Buildroot] [PATCH] python-crossbar: add a warning comment
-	concerning version bump
-Message-ID: <20170302135853.3111-1-yegorslists@googlemail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  2 Mar 2017 12:26:29 -0300
+Subject: [Buildroot] [PATCH 1/2] wayland: bump to version 1.13.0
+Message-ID: <20170302152630.28568-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-The latest crossbar needs a rather recent setuptools package, that
-has circular dependencies. Until this issue is not resolved, it is
-not safe to bump crossbar version.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/python-crossbar/python-crossbar.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/wayland/wayland.hash | 4 ++--
+ package/wayland/wayland.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
-index 3d82d7704..9c543e6cc 100644
---- a/package/python-crossbar/python-crossbar.mk
-+++ b/package/python-crossbar/python-crossbar.mk
-@@ -4,6 +4,8 @@
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 9a58c56..9b2c01d 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-September/031121.html
+-sha256  d6b4135cba0188abcb7275513c72dede751d6194f6edc5b82183a3ba8b821ab1	wayland-1.12.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2017-February/033193.html
++sha256  69b052c031a61e89af7cc8780893d0da1e301492352aa449dee9345043e6fe51	wayland-1.13.0.tar.xz
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index a862394..286871e 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+# don't bump version as newer setuptools package is needed,
-+# that still didn't make its way into BR
- PYTHON_CROSSBAR_VERSION = 0.14.0
- PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
- PYTHON_CROSSBAR_SITE = https://pypi.python.org/packages/f0/9a/e0b77e15698c47b6293655bc0e1996dd8e87bd8af7bc7434a5c8281a024e
+-WAYLAND_VERSION = 1.12.0
++WAYLAND_VERSION = 1.13.0
+ WAYLAND_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
 -- 
-2.11.0
+2.10.2
