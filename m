@@ -1,54 +1,105 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 11:34:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mke2img: use mkfs to generate
- rootfs image
-In-Reply-To: <1488445576-12857-1-git-send-email-sebastien.szymanski@armadeus.com>
-References: <1488445576-12857-1-git-send-email-sebastien.szymanski@armadeus.com>
-Message-ID: <20170302113411.26bd85f5@free-electrons.com>
+From: Guo Ren <ren_guo@c-sky.com>
+Date: Thu,  2 Mar 2017 18:34:00 +0800
+Subject: [Buildroot] [PATCH 2/4] csky: Add new architecture
+In-Reply-To: <1488450842-29100-1-git-send-email-ren_guo@c-sky.com>
+References: <1488450842-29100-1-git-send-email-ren_guo@c-sky.com>
+Message-ID: <1488450842-29100-2-git-send-email-ren_guo@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This is a basic implement for C-SKY, we use pre-build-toolchain from
+url, and csky-toolchain open-source is on going.
 
-On Thu,  2 Mar 2017 10:06:16 +0100, S?bastien Szymanski wrote:
-> mkfs is now capable of generating rootfs images. Use mkfs intead of
-> genext2fs.
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
->  package/mke2img/Config.in.host |  1 -
->  package/mke2img/mke2img        | 58 +++++++++++++++++-------------------------
->  package/mke2img/mke2img.mk     |  2 +-
->  3 files changed, 25 insertions(+), 36 deletions(-)
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+---
+ arch/Config.in      | 12 ++++++++++++
+ arch/Config.in.csky | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 57 insertions(+)
+ create mode 100644 arch/Config.in.csky
 
-Thanks for working on this, definitely very useful.
-
-Do we still need the mke2img wrapper script? The only reason why this
-wrapper script was created is because genext2fs was too stupid, and
-many things had to be done "by hand" (like calling tune2fs, etc.) and
-it became too nasty to do in fs/ext2/ext2.mk.
-
-Now that we use mkfs, is it possible to get rid of mke2img entirely?
-
-> +    # Disable some defaults features
-> +    mkfs_O_opts+=",^ext_attr,^64bit,^flex_bg,^large_file,^huge_file,^dir_nlink,^extra_isize"
-
-Why would we disable these default features
-
-> +    # Running e2fsck will ensure coherency of the filesystem,
-> +    # although it is not required.
-
-If we use mkfs, I don't think calling e2fsck. It was really needed
-between genext2fs and tune2fs, but I don't think it's needed anymore
-now.
-
-Thanks,
-
-Thomas
+diff --git a/arch/Config.in b/arch/Config.in
+index 7149b2c..65a33fb 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -85,6 +85,14 @@ config BR2_bfin
+ 	  http://www.analog.com/
+ 	  http://en.wikipedia.org/wiki/Blackfin
+ 
++config BR2_csky
++	bool "csky"
++	select BR2_ARCH_HAS_MMU_MANDATORY
++	help
++	  csky is processor IP from china.
++	  http://www.c-sky.com/
++	  http://www.github.com/c-sky
++
+ config BR2_i386
+ 	bool "i386"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+@@ -369,6 +377,10 @@ if BR2_bfin
+ source "arch/Config.in.bfin"
+ endif
+ 
++if BR2_csky
++source "arch/Config.in.csky"
++endif
++
+ if BR2_m68k
+ source "arch/Config.in.m68k"
+ endif
+diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+new file mode 100644
+index 0000000..6e086fb
+--- /dev/null
++++ b/arch/Config.in.csky
+@@ -0,0 +1,45 @@
++choice
++	prompt "Target Architecture Variant"
++	default BR2_ck610
++	help
++	  Specific CPU variant to use
++
++config BR2_ck610
++	bool "ck610"
++
++config BR2_ck807
++	bool "ck807"
++
++config BR2_ck810
++	bool "ck810"
++
++endchoice
++
++config BR2_CSKY_FPU
++	bool "Enable FPU coprocessor"
++	depends on BR2_ck810 || BR2_ck807
++	help
++	  You can say N here if you C-SKY CPU don't have Floating-Point
++	  Coprocessor or the user program need not to support FPU.
++
++config BR2_CSKY_DSP
++	bool "Enable DSP enhanced instruction"
++	depends on BR2_ck810 || BR2_ck807
++
++config BR2_ARCH
++	default "csky"
++
++config BR2_ENDIAN
++	default "LITTLE"
++
++config BR2_GCC_TARGET_CPU
++	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
++	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
++	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
++	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
++	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+1.9.1
