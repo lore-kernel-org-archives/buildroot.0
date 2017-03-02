@@ -1,74 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 2 Mar 2017 18:39:45 +0100
-Subject: [Buildroot] [PATCH 0/5] package/cmake: re-introduce cmake-3.7
-In-Reply-To: <20170302094107.0f66f2c0@free-electrons.com>
-References: <cover.1488305206.git.yann.morin.1998@free.fr>
- <20170301221413.6cb8f56d@free-electrons.com>
- <20170302094107.0f66f2c0@free-electrons.com>
-Message-ID: <20170302173945.GB3637@free.fr>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Thu, 2 Mar 2017 18:46:21 +0100
+Subject: [Buildroot] [PATCH] package/can-utils: add license information
+In-Reply-To: <20170302171918.2294335e@free-electrons.com>
+References: <58b30e3e-a64e-a608-ee0e-7d616d4c9932@grandegger.com>
+ <20170302171918.2294335e@free-electrons.com>
+Message-ID: <fc2ff6d9-9f6e-b878-9f48-d48f73913a19@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Thomas,
 
-On 2017-03-02 09:41 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 1 Mar 2017 22:14:13 +0100, Thomas Petazzoni wrote:
-> 
-> > > Thomas Petazzoni (1):
-> > >       cmake: adjust dependencies added for libuv
-> > > 
-> > > Vicente Olivert Riera (3):
-> > >       cmake: bump version to 3.7.0
-> > >       cmake: bump version to 3.7.1
-> > >       cmake: bump version to 3.7.2
-> > > 
-> > > Yann E. MORIN (1):
-> > >       core/pkg-cmake: provide our own platform description  
-> > 
-> > All applied to master. Thanks!
-> 
-> Well, it seems like this introduced some issues.
-> 
-> Look for example at:
-> 
->   http://autobuild.buildroot.net/?reason=paho-mqtt-c-v1.1.0
+Am 02.03.2017 um 17:19 schrieb Thomas Petazzoni:
+> Hello,
+>
+> On Thu, 2 Mar 2017 17:06:33 +0100, Wolfgang Grandegger wrote:
+>
+>>  CAN_UTILS_VERSION = c3305fdd515464153d20199db232b6124bc962c0
+>>  CAN_UTILS_SITE = $(call github,linux-can,can-utils,$(CAN_UTILS_VERSION))
+>> +CAN_UTILS_LICENSE = GPLv2, GPLv2+, BSD-3c
+>
+> I think it's actually: some parts are under GPLv2+ only, while some
+> other parts are under BSD-3c or GPLv2. So this would be:
+>
+> CAN_UTILS_LICENSE = GPLv2+, GPLv2 or BSD-3c
 
-This package is wrong: it checks the system type to decide whether it
-should link with -ldld or not:
+Yes:
 
-    https://github.com/eclipse/paho.mqtt.c/blob/master/src/CMakeLists.txt#L50
+$ grep -l  "version 2" *.c | xargs grep -l "any later version"
+can-calc-bit-timing.c
+canfdtest.c
+slcand.c
+slcanpty.c
 
-This is stupid.
+The 21 remaining utilities use GPLv2 or BSD-3c.
 
-Instead, it should check if the lib is needed or not, and available or
-mot, like any other lib, and then decide to fail or deactivate features.
+> but it would be nice to indicate what is under what license, like this:
+>
+> CAN_UTILS_LICENSE = GPLv2+ (this), GPLv2 or BSD-3c (that)
+>
+> I haven't looked in details as to what license applies to what part. I
+> would suppose that the "library" parts are under GPLv2 or BSD-3c, while
+> the programs are under GPLv2+, but this remains to be verified.
 
-> The fastd problems could also be related, but I haven't checked, see
-> http://autobuild.buildroot.net/?reason=fastd-18.
+There is no libraries.
 
-Similarly broken:
-
-    https://git.universe-factory.net/fastd/tree/cmake/config.cmake#n1
-    https://git.universe-factory.net/fastd/tree/cmake/config.cmake#n14
-
-
-I'll try a hack on it, by adding:
-
-    # Impersonate the Linux system, which we really are in fact...
-    set(CMAKE_SYSTEM_NAME Linux)
-
-in Buildroot.cmake and see if that fixes the build....
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Wolfgang.
