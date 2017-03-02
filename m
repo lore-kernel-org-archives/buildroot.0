@@ -1,70 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 2 Mar 2017 23:24:31 +0100
-Subject: [Buildroot] [PATCH 14/25] lua-bit32: new package
-In-Reply-To: <20170302225441.5adee9f6@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Mar 2017 23:24:07 +0100
+Subject: [Buildroot] [PATCH 16/25] luarocks-package: rework extraction
+In-Reply-To: <20170223170047.24417-17-arnout@mind.be>
 References: <20170223170047.24417-1-arnout@mind.be>
- <20170223170047.24417-15-arnout@mind.be>
- <20170302225441.5adee9f6@free-electrons.com>
-Message-ID: <55bf7d15-ebeb-6bbd-1eaf-c8657c5821fb@mind.be>
+ <20170223170047.24417-17-arnout@mind.be>
+Message-ID: <20170302232407.64d240cb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 02-03-17 22:54, Thomas Petazzoni wrote:
-> Hello,
+On Thu, 23 Feb 2017 18:00:38 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> The luarocks package infra extracts the package directly under
+> $(BUILD_DIR), because the contents are always in a subdirectory name
+> <pkg>-<version>. However, this only works when the upstream package name
+> is the same as the Buildroot package name.
 > 
-> On Thu, 23 Feb 2017 18:00:36 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> This package is needed to make luaposix work.
->>
->> The upstream name is just "bit32", but the luarocks infra doesn't
->> support an upstream name different from the Buildroot name. We therefore
->> have to explicitly set all variables and we need custom extract
->> commands.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->>  package/Config.in                |  1 +
->>  package/lua-bit32/Config.in      |  9 +++++++++
->>  package/lua-bit32/lua-bit32.hash |  2 ++
->>  package/lua-bit32/lua-bit32.mk   | 20 ++++++++++++++++++++
+> Instead, we can rely on the fixed structure of a .src.rock: it always
+> contains the source subdirectory in a directory called foo, where foo
+> is the basename of the .src.rock file. Therefore, we can extract into
+> a subdirectory of $($(PKG)_DIR), then move its contents up two
+> directory levels.
 > 
-> You forgot to add yourself to the DEVELOPERS file, so I did this
-> addition.
-
- Well, like most of my packages it's a one-shot rather than something I actively
-use, so I tend not to add myself to the DEVELOPERS file. If you do that, you
-could instead just add me for all orphaned packages. Hm, would that be a useful
-feature? A last-resort developer?
-
-
->> +config BR2_PACKAGE_LUA_BIT32
->> +	bool "lua-bit32"
->> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+> Note, we can't extract directly into $($(PKG)_DIR) because it's
+> possible that $($(PKG)_SUBDIR) == <pkg>-<version>. In that case, we
+> would try to move the directory unto itself and get "Directory not
+> empty". This is the case e.g. for the lpty package.
 > 
-> This "depends on" is not needed, since lua-bit32/Config.in is anyway
-> only included if BR2_PACKAGE_HAS_LUAINTERPRETER=y.
-
- Oops, I just copied it from a BR2_EXTERNAL :-)
-
-
- Regards,
- Arnout
-
-
-> I've fixed up those two issues and applied to master. Thanks!
+> Two alternatives were considered but are more complicated:
+> - instead of using wildcards for the move, we could have used
+>   <.src.rock basename>/$($(PKG)_SUBDIR);
+> - instead of extracting with luarocks, we could use unzip to extract
+>   (the .src.rock is a ZIP file), but then we also have to move the
+>   .rockspec into the subdir. In addition, sometimes the ZIP file
+>   contains a tarball instead of the extracted source.
 > 
-> Thomas
-> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/pkg-luarocks.mk | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
+Applied to master, thanks.
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
