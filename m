@@ -1,8 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 01 Mar 2017 22:53:08 -0300
-Subject: [Buildroot] [PATCH 4/5] support/testing: add package tests
-References: <1486467363-19881-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <58b77b04d1511_1c373ff16a9c4f1492552@ultri3.mail>
+Date: Wed, 01 Mar 2017 22:54:24 -0300
+Subject: [Buildroot] [PATCH 5/5] support/testing: add toolchain tests
+References: <1486467363-19881-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <58b77b501a321_1c373ff16aa2fe54927a@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,39 @@ Thomas,
 On Tue, Feb 07, 2017 at 09:36 AM, Thomas Petazzoni wrote:
 
 [snip]
-> +++ b/support/testing/tests/package/test_dropbear.py
+> +++ b/support/testing/tests/toolchain/test_external.py
+> @@ -0,0 +1,77 @@
+> +import os
+> +
+> +import infra
+> +
+> +class TestExternalToolchainSourceryArmv4(infra.basetest.BRTest):
+> +    config = \
+> +"""
+> +BR2_arm=y
+> +BR2_arm920t=y
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
+> +BR2_TARGET_ROOTFS_CPIO=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +"""
 [snip]
-> +        cmd = "netstat -ltn 2>/dev/null | grep -q 0.0.0.0:22"
+> +        self.emulator.login("root")
 
-You could drop the '-q' here.
-Since the log is sent to a file it will not bother the user.
-And when a testcase fails a verbose log helps to locate the problem.
+Shouldn't it be like this?
+        self.emulator.login()
 
-Also it will be consistent to the use of 'grep' in all other testcases.
+> +
+> +class TestExternalToolchainSourceryArmv5(infra.basetest.BRTest):
+[snip]
+> +        self.emulator.login("root")
 
+Same here.
+
+> +
+> +class TestExternalToolchainSourceryArmv7(infra.basetest.BRTest):
 [snip]
-> +++ b/support/testing/tests/package/test_python.py
-[snip]
-> +        cmd = "python --version 2>&1 | grep -q '^Python 2'"
-[snip]
+> +        self.emulator.login("root")
 
 Same here.
 
