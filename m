@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-cffi: bump to version 1.9.1
-Message-ID: <20170302205922.E9B4F7FBE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-click: bump to version 6.7
+Message-ID: <20170302205923.09D1082298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf15e8c80fb2e009010e920299b50ab8e637de69
+commit: https://git.buildroot.net/buildroot/commit/?id=6a1517c733010e8f648a930153e0e2f0e831c18d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-cffi/python-cffi.hash | 4 ++--
- package/python-cffi/python-cffi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-click/python-click.hash | 6 +++---
+ package/python-click/python-click.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
-index 39065bc..f65c9e7 100644
---- a/package/python-cffi/python-cffi.hash
-+++ b/package/python-cffi/python-cffi.hash
+diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
+index c0d0568..cae03c7 100644
+--- a/package/python-click/python-click.hash
++++ b/package/python-click/python-click.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/cffi/json, sha256 locally computed
--md5  c8e877fe0426a99d0cf5872cf2f95b27  cffi-1.8.3.tar.gz
--sha256	 c321bd46faa7847261b89c0469569530cad5a41976bb6dba8202c0159f476568  cffi-1.8.3.tar.gz
-+md5 b8fa7ccb87790531db3316ab17aa8244 cffi-1.9.1.tar.gz
-+sha256 563e0bd53fda03c151573217b3a49b3abad8813de9dd0632e10090f6190fdaf8 cffi-1.9.1.tar.gz
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index d348695..8683665 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=d0b09582123605220ad6977175f3e51d, sha256 locally computed.
+-md5	d0b09582123605220ad6977175f3e51d  click-6.6.tar.gz
+-sha256	cc6a19da8ebff6e7074f731447ef7e112bd23adf3de5c597cf9989f2fd8defe9  click-6.6.tar.gz
++# md5 from https://pypi.python.org/pypi/click/json, sha256 locally computed
++md5 fc4cc00c4863833230d3af92af48abd4 click-6.7.tar.gz
++sha256 f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b click-6.7.tar.gz
+diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
+index 839a467..e869dd5 100644
+--- a/package/python-click/python-click.mk
++++ b/package/python-click/python-click.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CFFI_VERSION = 1.8.3
-+PYTHON_CFFI_VERSION = 1.9.1
- PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
--PYTHON_CFFI_SITE = https://pypi.python.org/packages/0a/f3/686af8873b70028fccf67b15c78fd4e4667a3da995007afc71e786d61b0a
-+PYTHON_CFFI_SITE = https://pypi.python.org/packages/a1/32/e3d6c3a8b5461b903651dd6ce958ed03c093d2e00128e3f33ea69f1d7965
- PYTHON_CFFI_SETUP_TYPE = setuptools
- PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
- PYTHON_CFFI_LICENSE = MIT
+-PYTHON_CLICK_VERSION = 6.6
++PYTHON_CLICK_VERSION = 6.7
+ PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
+-PYTHON_CLICK_SITE = http://pypi.python.org/packages/source/c/click
++PYTHON_CLICK_SITE = https://pypi.python.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897
+ PYTHON_CLICK_LICENSE = BSD-3c
+ PYTHON_CLICK_LICENSE_FILES = LICENSE
+ PYTHON_CLICK_SETUP_TYPE = setuptools
