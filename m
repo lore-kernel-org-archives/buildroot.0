@@ -1,29 +1,23 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 02 Mar 2017 15:52:37 +0000
-Subject: [Buildroot] [Bug 9696] Wrong cryptsetup package include files
+Date: Thu, 02 Mar 2017 15:53:24 +0000
+Subject: [Buildroot] [Bug 9691] Wrong cryptsetup package include files
 	location
-In-Reply-To: <bug-9696-163@https.bugs.busybox.net/>
-References: <bug-9696-163@https.bugs.busybox.net/>
-Message-ID: <bug-9696-163-2DloLncTDd@https.bugs.busybox.net/>
+In-Reply-To: <bug-9691-163@https.bugs.busybox.net/>
+References: <bug-9691-163@https.bugs.busybox.net/>
+Message-ID: <bug-9691-163-Fg1Is6kliq@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9696
+https://bugs.busybox.net/show_bug.cgi?id=9691
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+We just need to add CRYPTSETUP_INSTALL_STAGING = YES in cryptsetup.mk.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |DUPLICATE
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-
-
-*** This bug has been marked as a duplicate of bug 9691 ***
+Just curious, what other package might use this header file provided by
+crypsetup?
 
 -- 
 You are receiving this mail because:
