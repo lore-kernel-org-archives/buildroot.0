@@ -1,50 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 22:58:29 +0100
-Subject: [Buildroot] [PATCH 15/25] luaposix: fix runtime by selecting
- "bit32" instead of "bitop"
-In-Reply-To: <20170223170047.24417-16-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 2 Mar 2017 23:19:50 +0100
+Subject: [Buildroot] [PATCH 13/25] package/Config.in: explain that lua
+ package names should start with lua
+In-Reply-To: <20170302225033.4c38fbab@free-electrons.com>
 References: <20170223170047.24417-1-arnout@mind.be>
- <20170223170047.24417-16-arnout@mind.be>
-Message-ID: <20170302225829.6c1d1660@free-electrons.com>
+ <20170223170047.24417-14-arnout@mind.be>
+ <20170302225033.4c38fbab@free-electrons.com>
+Message-ID: <a9a0a363-1c91-c50a-6f5d-a058c8fd4e4b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Thu, 23 Feb 2017 18:00:37 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Since the bump of luaposix to 33.4.0, it doesn't work anymore at
-> runtime with LuaJIT or Lua 5.1. This can be tested with the following
-> defconfig:
+
+On 02-03-17 22:50, Thomas Petazzoni wrote:
+> Hello,
 > 
-> BR2_x86_64=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_LUA=y
-> BR2_PACKAGE_LUA_5_1=y
-> BR2_PACKAGE_LUAPOSIX=y
+> On Thu, 23 Feb 2017 18:00:35 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> We have decided that lua packages should have a name that starts with
+>> lua (like is the case for python and perl). However, we're not going to
+>> rename all the existing lua packages that don't start with lua. This
+>> makes it unclear for people adding packages how they should name the
+>> package, so add a comment to package/Config.in to explain it.
 > 
-> /usr/bin/lua: /usr/share/lua/5.1/posix/init.lua:17: module 'bit32' not found:
-> ...
-
-This smells like an excellent candidate for a runtime test in the test
-infrastructure, no? :-)
-
-> In older luaposix versions, it would try to load the 'bit' instead of
-> 'bit32' module if LUAVER == 5.1. However, this feature was removed in
-> 33.4.0.
+> Should we require "lua" as a prefix or "lua-" ? For Perl and Python, we
+> use "perl-" and "python-" respectively.
 > 
-> So instead of adding a runtime dependency on luabitop, depend on
-> lua-bit32.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> We currently have 10 packages that start with "lua-", and 12 that start
+> with just "lua".
 
-Applied, thanks!
+ The problem is that we want to use upstream names. The upstream name of
+luaposix is luaposix. We certainly don't want to change that into lua-posix, and
+making it lua-luaposix would be weird as well. Note that Debian does call it
+lua-posix. So to use the lua-posix package, you have to do 'require "luaposix"',
+which makes little sense IMHO.
 
-Thomas
+ For me, the important thing is that I can see in the package directory which
+packages are lua-related. I'm not really bothered with seeing a mix of lua-foo
+and luabar.
+
+ Perl is different because module names (almost?) never start with Perl. Python
+is different because package names sometimes are like pyfoo, but never
+python-foo, and we have indeed chosen to make it python-pyfoo.
+
+ If people think it would be better for consistency to have lua-luafoo, I can
+live with that (just 3 letters more). But do keep in mind that we have already
+forsaken consistency because of the historical discrepancy.
+
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
