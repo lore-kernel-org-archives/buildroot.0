@@ -1,46 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Mar 2017 21:46:10 +0100
-Subject: [Buildroot] [PATCH v2] mpd: fix build for ARC
-In-Reply-To: <20170301221230.0ef8e330@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 1 Mar 2017 22:12:30 +0100")
-References: <1488366214-19802-1-git-send-email-vzakhar@synopsys.com>
- <20170301221230.0ef8e330@free-electrons.com>
-Message-ID: <87y3wnflv1.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Mar 2017 21:54:15 +0100
+Subject: [Buildroot] [git commit] python-cryptography: bump to version 1.7.2
+Message-ID: <20170302205923.136FF82298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3ae2697ea9286db32fb6752e132dc2ffbd027f79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > On Wed,  1 Mar 2017 14:03:34 +0300, Vlad Zakharov wrote:
- >> mpd package fails for both internal and external ARC toolchain as check
- >> for pthread support fails. Such checks fails because _REENTRANT flag is
- >> not defined in gcc even when -pthread is passed.
- >> 
- >> So we add patch to gcc that defines _REENTRANT  on ARC when -pthread is
- >> passed.
- >> 
- >> Also it disables mpd package for external ARC toolchain as it fails due
- >> to the same issue.
- >> 
- >> This patch should be reverted as soon as the patch for GCC becomes a
- >> part of ARC toolchain.
- >> 
- >> Fixes:
- >> http://autobuild.buildroot.net/results/7d7/7d70b62ad996830fbeca46dffcc7a1dc030e575d//
- >> 
- >> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
- >> ---
- >> Changes v1..v2:
- >> - Sign off on gcc patch
+Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-cryptography/python-cryptography.hash | 4 ++--
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > Applied to master, thanks. Peter, I think this one qualifies for the
- > LTS branch.
-
-Committed to 2017.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index 7738d23..a1162cf 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/cryptography/json, sha256 locally computed
+-md5	2f63dee6ace602d1d20d1995f8538015  cryptography-1.7.1.tar.gz
+-sha256	953fef7d40a49a795f4d955c5ce4338abcec5dea822ed0414ed30348303fdb4c  cryptography-1.7.1.tar.gz
++md5 fade66de437392ed1ba6980768626204 cryptography-1.7.2.tar.gz
++sha256 878cb68b3da3d493ffd68f36db11c29deee623671d3287c3f8d685117ffda9a9 cryptography-1.7.2.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index d4e18ec..9e2b86f 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CRYPTOGRAPHY_VERSION = 1.7.1
++PYTHON_CRYPTOGRAPHY_VERSION = 1.7.2
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/82/f7/d6dfd7595910a20a563a83a762bf79a253c4df71759c3b228accb3d7e5e4
++PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/99/df/71c7260003f5c469cec3db4c547115df39e9ce6c719a99e067ba0e78fd8a
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3c
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
