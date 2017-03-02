@@ -1,48 +1,57 @@
-From: ren_guo <ren_guo@c-sky.com>
-Date: Thu, 2 Mar 2017 09:04:41 +0800
-Subject: [Buildroot] [PATCH 1/1] csky: Add new architecture
-In-Reply-To: <20170301141443.62263c29@free-electrons.com>
-References: <1488357224-5141-1-git-send-email-ren_guo@c-sky.com>
- <20170301102208.79668e6f@free-electrons.com>
- <1174d987-9327-9109-8fd5-f369977cb437@c-sky.com>
- <20170301141443.62263c29@free-electrons.com>
-Message-ID: <5244ae45-3f9c-e84d-0d12-5354d8d64519@c-sky.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Wed, 01 Mar 2017 22:45:00 -0300
+Subject: [Buildroot] [PATCH 0/5] Runtime testing infrastructure
+References: <1486467363-19881-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <58b7791cc5bc9_1c3714b27dc91758@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi, Thomas
+Thomas,
 
-> Great. Then please add an entry for yourself in the DEVELOPERS file,
-> like:
->
-> N:      ren_guo <ren_guo@c-sky.com>
-> F:      arch/Config.in.csky
->
-> You can also add other F: entries for files that you contributed. But
-> the arch/Config.in.csky is particularly important: by assigning this
-> file to yourself, you will receive e-mail notifications when there are
-> build failures for your architecture.
->
-> One package that contains architecture-specific code and that often
-> causes problems is libffi. So if you haven't yet looked at implementing
-> support for csky in libffi, I would recommend you to have a look.
->
-ok, got it.
+On Tue, Feb 07, 2017 at 09:35 AM, Thomas Petazzoni wrote:
 
-> However, since initially you will not support the "internal toolchain
-> backend" (i.e when Buildroot builds the toolchain from scratch), then
-> you should change the definition of BR2_TOOLCHAIN_BUILDROOT with:
->
-> 	depends on !BR2_csky
->
-> So that on the csky architecture, only the external toolchain option is
-> available.
+> At last, here is a first version of a small runtime testing
+> infrastructure for Buildroot. The first patch introduces the
+> infrastructure itself, the other 4 patches just add a few patches.
 
-ok, I will be care of it.
+Thank you very much for this series.
 
-Best Regards
+In overall, the infra works very well.
 
-guoren
+I tested it and I will reply to each patch.
+Here is a summary of what I found:
+1) emulator supports only arm, making test_iso9660 testcases to fail;
+2) testcases using i386 emulated system can fail occasionally due to a message
+   from the kernel;
+3) the testcases *Internal from test_iso9660 expect the rootfs to be read-only,
+   I am not sure this is correct or not, but it makes the tests fail and it is
+   different from your previous iteration (before the stylistic rework);
+4) output dir needs to be an absolute path;
+5) there are some emulator.login("root") that I think should be .login()
+   because BR2_TARGET_GENERIC_ROOT_PASSWD it not set, except for dropbear;
+6) using "-q" with commands to the emulated system is unnecessary and make
+   debug harder when a testcase fails;
+7) the code is not compatible to python 3
+   - print without parenthesis
+   - exception handling using comma
+   - importing urllib2 (split in libraries in python3)
+   - probably will need .encode() and .decode() when using telnetlib because of
+     the bytes vs. string introduced in python 3
+
+This is what I think about this list:
+(1) and (2) should be fixed;
+(3) should be checked and fixed if it is not correct;
+(4), (5) and (6) can wait;
+(7) should *not* be fixed now, but in a followup patch (it can be postponed
+    until 2020, when python 2 probably will retire);
+
+>     ./support/testing/run-tests -d ~/dl/ -o ../outputs/ tests.fs.test_ubi.TestUbi
+
+Using relative path for output dir seems to cause problems with few testcases,
+as tests.core.test_post_scripts.TestPostScripts .
+
+Regards,
+Ricardo
