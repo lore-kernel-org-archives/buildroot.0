@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Mar 2017 08:14:49 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: fix build for toolchains without
-	ssp
-In-Reply-To: <20170301214941.4611d6f4@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 1 Mar 2017 21:49:41 +0100")
-References: <1488320767-63856-1-git-send-email-fontaine.fabrice@gmail.com>
- <20170301214941.4611d6f4@free-electrons.com>
-Message-ID: <87o9xkgnfa.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Mar 2017 08:16:52 +0100
+Subject: [Buildroot] [PATCH] perl-gd: fix build of native part
+In-Reply-To: <20170301231328.26100366@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 1 Mar 2017 23:13:28 +0100")
+References: <1487144532-1818-1-git-send-email-francois.perrad@gadz.org>
+ <20170301231328.26100366@free-electrons.com>
+Message-ID: <87k288gnbv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +15,19 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  > Hello,
- > On Tue, 28 Feb 2017 23:26:07 +0100, Fabrice Fontaine wrote:
- >> Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF to disable custom flags, in
- >> particular -fstack-protector-strong which depends on
- >> BR2_TOOLCHAIN_HAS_SSP
+ > On Wed, 15 Feb 2017 08:42:12 +0100, Francois Perrad wrote:
+ >> EUMM don't find .xs file in subdirectory (only .pm files are handled)
+ >> So, let move lib/GD.xs in the root directory.
  >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
  >> ---
- >> package/cjson/cjson.mk | 5 ++++-
- >> 1 file changed, 4 insertions(+), 1 deletion(-)
+ >> package/perl-gd/perl-gd.mk | 5 +++++
+ >> 1 file changed, 5 insertions(+)
 
- > Applied to master, thanks. Peter: even though this is a build fix, this
- > one is not needed on the LTS branch, because it is only needed after
- > the 1.3.0 bump, which was done post 2017.02.
+ > Applied to master, thanks. Peter, I believe this one should go to the
+ > LTS branch. Thanks!
 
-Ok, thanks for the heads up!
+Committed to 2017.02.x, thanks!
 
 -- 
 Bye, Peter Korsgaard
