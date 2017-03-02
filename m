@@ -1,46 +1,42 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Fri, 3 Mar 2017 00:11:25 +0530
-Subject: [Buildroot] libqeglfs.so not found on imx6
-In-Reply-To: <CAOMZO5CBQVEMBLNgWRL947_uRpCDbyy5tTUVBfNjMkiwjyoA4Q@mail.gmail.com>
-References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
- <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
- <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
- <CAAMH-ys=MpSuBvT=weVPKhyu5_bz4feq7ePmMN4LgHKubG_9vQ@mail.gmail.com>
- <CAD6G_RR5fC2n_JA=M1p3=0MeOwDXRVg2hQbhKDwHYmjyddu1SA@mail.gmail.com>
- <CAOMZO5B_d9-oq9R1NciG7F3A-HKhHVWP8uXzM=Crx2YB+zFVnw@mail.gmail.com>
- <CAD6G_RQZuqQphZqB0QwLKBC2Ox5G_tp06WTfUMEuOL6=LA2UvQ@mail.gmail.com>
- <CAOMZO5BWQvPFNevSp8Hjz4knfQ7kTYGmgXutoyzvb_ejq5AhpA@mail.gmail.com>
- <CAD6G_RSC9+NwdQP3qRA=wLWm2SaVNeN=zJXVR6P6dk8i+xLbxg@mail.gmail.com>
- <CAOMZO5BGTbB8WM-+oS9CoC8_3TPsZhyq1t-3=SJk1uAms8jBmQ@mail.gmail.com>
- <CAD6G_RRfwho6qwBU=QtyR6AsuNtGgWvvSFbTjwLwzv+9dqA6-Q@mail.gmail.com>
- <CAOMZO5Acb8RJZdf95uGj8w5LyhnjCh=sZoj=NE24wN_K2nO_OQ@mail.gmail.com>
- <CAD6G_RQNzT_yQfQeHW-VNE3vAhSnCRStc1R2NHrbkJwtHD=mzA@mail.gmail.com>
- <CAD6G_RSOBrZvE-4O_6uTj+0pBvsrM56p-48Rxd2hQZHtq8XkGw@mail.gmail.com>
- <CAOMZO5CBQVEMBLNgWRL947_uRpCDbyy5tTUVBfNjMkiwjyoA4Q@mail.gmail.com>
-Message-ID: <CAD6G_RQ3bLbJGi2jdRB-mafn4s=iHpvscjP+ggdBQG7_570ECA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  2 Mar 2017 19:58:25 +0100
+Subject: [Buildroot] [PATCH 1/3] runc: bump to version
+	a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70
+Message-ID: <1488481107-97917-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mar 3, 2017 12:06 AM, "Fabio Estevam" <festevam@gmail.com> wrote:
+This is a runtime dependency of docker-engine in version 17.03.0-ce
 
-On Thu, Mar 2, 2017 at 3:32 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> [   87.631131] ------------[ cut here ]------------
-> [   87.635799] WARNING: CPU: 2 PID: 275 at
-> drivers/gpu/drm/drm_atomic_helper.c:1149
-> drm_atomic_helper_wait_for_vblanks+0x218/0x228
-> [   87.647319] [CRTC:26] vblank wait timed out
-
-I think Phillip Zabel posted a recent series to address this issue 4.10
-issue.
-
-Does kmscube work on 4.9.13 for you?
-
-
-Will check and let you know.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170303/cbfe8359/attachment.html>
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index a053b6f..a6fc983 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	11f69923a786efb82b65d9f1eec0ac665a985e631a67f3f4d466dac720efacdd	runc-9df8b306d01f59d3a8029be411de015b7304dd8f.tar.gz
++sha256	ab7913b8062f77c0a2b16ae335d74eb78aa85e8d4dcccbf0793b14caf1a3f0b2	runc-a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 5862733..47de700 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = 9df8b306d01f59d3a8029be411de015b7304dd8f
++RUNC_VERSION = a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
+-- 
+2.5.0
