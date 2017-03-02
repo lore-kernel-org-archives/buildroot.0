@@ -1,29 +1,40 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 2 Mar 2017 17:06:33 +0100
-Subject: [Buildroot] [PATCH] package/can-utils: add license information
-Message-ID: <58b30e3e-a64e-a608-ee0e-7d616d4c9932@grandegger.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Mar 2017 17:16:32 +0100
+Subject: [Buildroot] [PATCH] package/alsamixergui: add license
+ information
+In-Reply-To: <a0915233-820b-2622-ed75-4ec3ef8e0e7c@grandegger.com>
+References: <a0915233-820b-2622-ed75-4ec3ef8e0e7c@grandegger.com>
+Message-ID: <20170302171632.0b2fa9b5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
----
- package/can-utils/can-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+Hello,
 
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 6be41a6..bdc311d 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -6,6 +6,7 @@
- 
- CAN_UTILS_VERSION = c3305fdd515464153d20199db232b6124bc962c0
- CAN_UTILS_SITE = $(call github,linux-can,can-utils,$(CAN_UTILS_VERSION))
-+CAN_UTILS_LICENSE = GPLv2, GPLv2+, BSD-3c
- CAN_UTILS_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+On Thu, 2 Mar 2017 17:06:10 +0100, Wolfgang Grandegger wrote:
+
+>  ALSAMIXERGUI_VERSION = 0.9.0rc2-1
+>  ALSAMIXERGUI_SOURCE = alsamixergui_$(ALSAMIXERGUI_VERSION).orig.tar.gz
+>  ALSAMIXERGUI_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/a/alsamixergui
+> +ALSAMIXERGUI_LICENSE = GPLv3+
+
+Where did you get this GPLv3+ information? I'm seeing GPLv2+, not
+GPLv3+.
+
+> +ALSAMIXERGUI_LICENSE_FILES = COPYING
+
+There is no COPYING file in the alsamixergui source code, so I don't
+see how this can work. Did you test "make legal-info" after adding this?
+
+Since there is no COPYING file, I would suggest to use debian/copyright
+as a license file.
+
+Thanks,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
