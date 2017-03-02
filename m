@@ -1,33 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Mar 2017 08:16:52 +0100
-Subject: [Buildroot] [PATCH] perl-gd: fix build of native part
-In-Reply-To: <20170301231328.26100366@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 1 Mar 2017 23:13:28 +0100")
-References: <1487144532-1818-1-git-send-email-francois.perrad@gadz.org>
- <20170301231328.26100366@free-electrons.com>
-Message-ID: <87k288gnbv.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Mar 2017 08:19:06 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump to 4.10 kernel
+	version
+In-Reply-To: <CAOMZO5AvgFcX0Ed5B+ah8-UpgG2aM-CDFjPZiFSKNPW1=7TPrg@mail.gmail.com>
+ (Fabio Estevam's message of "Wed, 1 Mar 2017 18:34:14 -0300")
+References: <20170301170422.EA26B80279@busybox.osuosl.org>
+ <20170301220859.7de79d6a@gmx.net>
+ <20170301222532.3b34a5b1@free-electrons.com>
+ <CAOMZO5CU4uoJ4EYr5zN0ER8xaQBqdhbfp0kEiMio9tRrbSmr5Q@mail.gmail.com>
+ <CAOMZO5AvgFcX0Ed5B+ah8-UpgG2aM-CDFjPZiFSKNPW1=7TPrg@mail.gmail.com>
+Message-ID: <87fuiwgn85.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > Hello,
- > On Wed, 15 Feb 2017 08:42:12 +0100, Francois Perrad wrote:
- >> EUMM don't find .xs file in subdirectory (only .pm files are handled)
- >> So, let move lib/GD.xs in the root directory.
+ > On Wed, Mar 1, 2017 at 6:28 PM, Fabio Estevam <festevam@gmail.com> wrote:
+ >>> Doh, indeed, this seems like a mistake. Fabio, can you send a fixup
+ >>> patch?
  >> 
- >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- >> ---
- >> package/perl-gd/perl-gd.mk | 5 +++++
- >> 1 file changed, 5 insertions(+)
+ >> Sorry about that. I will send a fix.
 
- > Applied to master, thanks. Peter, I believe this one should go to the
- > LTS branch. Thanks!
+ > Just looked at master and the kernel 4.9 is at 4.9.13, so no issues there.
 
-Committed to 2017.02.x, thanks!
+Yes, there was a merge conflict when merging next into master, and I
+kept both the 4.9 and 4.10 line.
 
 -- 
 Bye, Peter Korsgaard
