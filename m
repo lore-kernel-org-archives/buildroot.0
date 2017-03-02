@@ -1,112 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 21:43:46 +0100
-Subject: [Buildroot] [PATCH] ncftp: fix host/target confusion
-In-Reply-To: <CANxTyt6tGknGoHc2swaeqh-h6L740Ny79UwgH4AqQH2SfjQYnQ@mail.gmail.com>
-References: <1488322477-25447-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170301214800.1a6c3405@free-electrons.com>
- <877f47hccp.fsf@dell.be.48ers.dk>
- <CANxTyt6tGknGoHc2swaeqh-h6L740Ny79UwgH4AqQH2SfjQYnQ@mail.gmail.com>
-Message-ID: <20170302214346.1157dda6@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 2 Mar 2017 21:44:45 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] mpd: fix build for ARC
+Message-ID: <20170302204501.5E671822BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5015443f1f7b508439512a91c22d7fd83decccd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-On Thu, 2 Mar 2017 11:07:55 -0800, Danomi Manchego wrote:
+mpd package fails for both internal and external ARC toolchain as check
+for pthread support fails. Such checks fails because _REENTRANT flag is
+not defined in gcc even when -pthread is passed.
 
-> Are you able to download this tarball with the hash indicated in
-> ncftp.hash?  I keep getting an error:
-> 
-> ERROR: ncftp-3.2.6-src.tar.xz has wrong sha256 hash:
-> ERROR: expected:
-> 7abd3e8f848f0efb4bb6a4bc5da58a59524d4378fc8d70a52adb0fe1fd00b89d
-> ERROR: got     :
-> 5f200687c05d0807690d9fb770327b226f02dd86155b49e750853fce4e31098d
-> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+So we add patch to gcc that defines _REENTRANT  on ARC when -pthread is
+passed.
 
-It seems like the tarball has been re-generated and republished by
-upstream.
+Also it disables mpd package for external ARC toolchain as it fails due
+to the same issue.
 
-Indeed, a diff between the two shows:
+This patch should be reverted as soon as the patch for GCC becomes a
+part of ARC toolchain.
 
--3.2.6, 2016-12-04
-+3.2.6, 2016-09-23
+Fixes:
+  http://autobuild.buildroot.net/results/7d7/7d70b62ad996830fbeca46dffcc7a1dc030e575d//
 
-(where the - lines are the tarball from the upstream site, which is
-newer, and the + lines are the tarball from sources.buildroot.net). And
-interestingly, the web page at
-http://www.ncftp.com/ncftp/doc/changelog.html pretends that the 3.2.6
-version has been released on 2016-11-27...
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 4d3556662deba0014d9368a84344a59b5e167fac)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-define-_REENTRANT-when-pthread-is-passed.patch | 34 ++++++++++++++++++++++
+ package/mpd/Config.in                              |  3 ++
+ 2 files changed, 37 insertions(+)
 
-And the diffstat is actually not that small:
-
- Strn/DStrInternal.h       |    4 
- Strn/Strn.h               |    2 
- autoconf_local/acconfig.h |    8 
- autoconf_local/aclocal.m4 |  116 ---
- config.h.in               |    8 
- configure                 | 1701 ++++++++++++++++++++--------------------------
- configure.in              |    9 
- doc/CHANGELOG.txt         |    2 
- libncftp/c_opennologin.c  |    4 
- libncftp/ftp.c            |   31 
- libncftp/ftw.c            |    2 
- libncftp/io_getmem.c      |    2 
- libncftp/io_list.c        |    6 
- libncftp/io_sendfile.c    |    4 
- libncftp/io_util.c        |    4 
- libncftp/ncftp.h          |    2 
- libncftp/open.c           |    4 
- libncftp/rftw.c           |    2 
- libncftp/rglobr.c         |    2 
- libncftp/u_decodehost.c   |    2 
- libncftp/u_decodeurl.c    |    2 
- libncftp/u_getpass.c      |    2 
- libncftp/u_misc.c         |    2 
- libncftp/u_pathcat.c      |    4 
- libncftp/u_scram.c        |    2 
- libncftp/wincfg.h         |    1 
- ncftp/cmds.c              |   38 -
- ncftp/gl_getline.c        |   26 
- ncftp/ls.c                |    9 
- ncftp/ls.h                |    9 
- ncftp/progress.c          |    9 
- ncftp/readln.c            |    4 
- ncftp/shell.h             |   10 
- ncftp/spoolutil.c         |    8 
- ncftp/version.c           |    2 
- sh/mksrctar.sh            |    1 
- sh_util/gpshare.c         |   12 
- sh_util/ncftpbatch.c      |  110 --
- sh_util/ncftpget.c        |    6 
- sh_util/ncftpls.c         |    5 
- sh_util/ncftpput.c        |   14 
- sio/DNSUtil.c             |    4 
- sio/Makefile.in           |   16 
- sio/SBind.c               |   35 
- sio/SConnect.c            |    9 
- sio/SNew.c                |  115 ---
- sio/SRead.c               |    6 
- sio/StrAddr.c             |    6 
- sio/config.h.in           |   24 
- sio/configure.in          |    8 
- sio/sio.h                 |   18 
- sio/wincfg.h              |    1 
- vis/bmed.c                |   13 
- vis/wgets.c               |   12 
- vis/wgets.h               |    7 
- vis/wutil.c               |    6 
- vis/wutil.h               |    6 
- win/bmed/bmed.vcproj      |    4 
-
-I'm not sure what to do in this case? Blindly take the new upstream
-version? Complain to upstream?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch b/package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch
+new file mode 100644
+index 0000000..ee9add5
+--- /dev/null
++++ b/package/gcc/arc-2016.09-release/895-arc-define-_REENTRANT-when-pthread-is-passed.patch
+@@ -0,0 +1,34 @@
++From 4c6367c99461fdd7bd5613483f2582d7f08fba87 Mon Sep 17 00:00:00 2001
++From: Vlad Zakharov <vzakhar@synopsys.com>
++Date: Tue, 28 Feb 2017 17:41:11 +0300
++Subject: [PATCH] arc: define _REENTRANT when -pthread is passed
++
++The compiler is supposed to have the builtin defined _REENTRANT defined
++when -pthread is passed, which wasn't done on the ARC architecture.
++
++When _REENTRANT is not passed, the C library will not use reentrant
++functions, and the latest version of ax_pthread.m4 from the
++autoconf-archive will no longer detect that thread support is
++available (see https://savannah.gnu.org/patch/?8186).
++
++Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ gcc/config/arc/arc.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/gcc/config/arc/arc.h b/gcc/config/arc/arc.h
++index 611ef54..fdd4b5d 100644
++--- a/gcc/config/arc/arc.h
+++++ b/gcc/config/arc/arc.h
++@@ -93,6 +93,7 @@ along with GCC; see the file COPYING3.  If not see
++ %{mdsp-packa:-D__Xdsp_packa} %{mcrc:-D__Xcrc} %{mdvbf:-D__Xdvbf} \
++ %{mtelephony:-D__Xtelephony} %{mxy:-D__Xxy} %{mmul64: -D__Xmult32} \
++ %{mlock:-D__Xlock} %{mswape:-D__Xswape} %{mrtsc:-D__Xrtsc} \
+++%{pthread:-D_REENTRANT} \
++ %{mcpu=nps400:-D__NPS400__}"
++
++ #define CC1_SPEC "\
++--
++2.7.4
++
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 8eabbbc..0c73548 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -8,6 +8,8 @@ menuconfig BR2_PACKAGE_MPD
+ 	# 0.19.x could be built with GCC 4.6, but for simplicity we require
+ 	# the same toolchain dependencies for all versions.
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
++	# ARC toolchain issue
++	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
+@@ -339,3 +341,4 @@ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
