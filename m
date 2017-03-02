@@ -1,47 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 2 Mar 2017 14:29:40 +0200
-Subject: [Buildroot] [PATCH 1/5] core/pkg-cmake: provide our own
-	platform description
-In-Reply-To: <f25e9ff7873418c0b323528d6a9c2482c752cd31.1488305206.git.yann.morin.1998@free.fr>
-References: <cover.1488305206.git.yann.morin.1998@free.fr>
- <f25e9ff7873418c0b323528d6a9c2482c752cd31.1488305206.git.yann.morin.1998@free.fr>
-Message-ID: <20170302122940.xhkdgbz6sj3zfqsb@tarshish>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  2 Mar 2017 09:33:56 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.10.x and 3.2.x series
+Message-ID: <20170302123357.1274-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Feb 28, 2017 at 07:07:22PM +0100, Yann E. MORIN wrote:
-> -set(CMAKE_SYSTEM_NAME Linux)
-> +set(CMAKE_SYSTEM_NAME Buildroot)
->  set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
-
-This breaks libiio.
-
-http://autobuild.buildroot.net/results/281/2812b008a0ab6bab5fe4d45eb9ffe4e9496a8cb4/
-
-/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libiio-0.9/local.c: In function 'local_open':
-/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libiio-0.9/local.c:856:33: error: 'O_CLOEXEC' undeclared (first use in this function)
-
-That is because the libiio CMakeLists.txt has the following code:
-
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-
-		[...]
-
-        set(CMAKE_REQUIRED_DEFINITIONS "-D_GNU_SOURCE=1")
-        add_definitions(-D_GNU_SOURCE=1)
-endif()
-
-Now cmake skips this code, thus omitting _GNU_SOURCE which leads to the build 
-failure.
-
-baruch
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 01fc9f7..7c36e17 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -222,7 +222,7 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.85"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.86"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.70"	if BR2_KERNEL_HEADERS_3_12
+@@ -233,5 +233,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.4.52"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
+ 	default "4.9.13"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.10"		if BR2_KERNEL_HEADERS_4_10
++	default "4.10.1"	if BR2_KERNEL_HEADERS_4_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.10.2
