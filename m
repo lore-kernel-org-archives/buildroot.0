@@ -1,44 +1,42 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 2 Mar 2017 11:07:55 -0800
-Subject: [Buildroot] [PATCH] ncftp: fix host/target confusion
-In-Reply-To: <877f47hccp.fsf@dell.be.48ers.dk>
-References: <1488322477-25447-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170301214800.1a6c3405@free-electrons.com> <877f47hccp.fsf@dell.be.48ers.dk>
-Message-ID: <CANxTyt6tGknGoHc2swaeqh-h6L740Ny79UwgH4AqQH2SfjQYnQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  2 Mar 2017 21:08:26 +0200
+Subject: [Buildroot] [PATCH] ed: bump to version 1.14.2
+Message-ID: <4945269f33484cc0e6dfd14aad409c4cddbc7f4a.1488481706.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ed/ed.hash | 6 ++----
+ package/ed/ed.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-On Thu, Mar 2, 2017 at 8:28 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->
-> Hi,
->
->  > Applied to master, thanks. Peter, I believe this one qualifies for the
->  > LTS branch.
->
-> Committed to 2017.02.x, thanks.
-
-Are you able to download this tarball with the hash indicated in
-ncftp.hash?  I keep getting an error:
-
-ERROR: ncftp-3.2.6-src.tar.xz has wrong sha256 hash:
-ERROR: expected:
-7abd3e8f848f0efb4bb6a4bc5da58a59524d4378fc8d70a52adb0fe1fd00b89d
-ERROR: got     :
-5f200687c05d0807690d9fb770327b226f02dd86155b49e750853fce4e31098d
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-Danomi -
-
-
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/ed/ed.hash b/package/ed/ed.hash
+index 22c1e671dc14..1aa00c0486d9 100644
+--- a/package/ed/ed.hash
++++ b/package/ed/ed.hash
+@@ -1,4 +1,2 @@
+-# From http://lists.gnu.org/archive/html/bug-ed/2017-01/msg00002.html
+-sha1	a91f785f7e16dc68e1c9c86d532ebd9698171ba0	ed-1.14.1.tar.lz
+-# Locally computed
+-sha256	ffb97eb8f2a2b5a71a9b97e3872adce953aa1b8958e04c5b7bf11d556f32552a	ed-1.14.1.tar.lz
++# From http://lists.gnu.org/archive/html/bug-ed/2017-02/msg00005.html
++sha256	f57962ba930d70d02fc71d6be5c5f2346b16992a455ab9c43be7061dec9810db	ed-1.14.2.tar.lz
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 6b9f65ec5280..33323beda87c 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ED_VERSION = 1.14.1
++ED_VERSION = 1.14.2
+ ED_SITE = $(BR2_GNU_MIRROR)/ed
+ ED_SOURCE = ed-$(ED_VERSION).tar.lz
+ ED_CONF_OPTS = \
+-- 
+2.11.0
