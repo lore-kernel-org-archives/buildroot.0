@@ -1,46 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-mbstrdecoder: bump to version 0.2.2
-Message-ID: <20170302205923.AF6397FECB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-cffi: bump to version 1.9.1
+Message-ID: <20170302205922.E9B4F7FBE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff2bf5da66abb0b7a294f21e5d8242cb3d393292
+commit: https://git.buildroot.net/buildroot/commit/?id=bf15e8c80fb2e009010e920299b50ab8e637de69
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-mbstrdecoder/python-mbstrdecoder.hash | 4 ++--
- package/python-mbstrdecoder/python-mbstrdecoder.mk   | 4 ++--
+ package/python-cffi/python-cffi.hash | 4 ++--
+ package/python-cffi/python-cffi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
-index 1389ac3..389bc49 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+index 39065bc..f65c9e7 100644
+--- a/package/python-cffi/python-cffi.hash
++++ b/package/python-cffi/python-cffi.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/mbstrdecoder/json, sha256 locally computed
--md5	5548c4748cf0bc16befcf7ef848f95ff  mbstrdecoder-0.1.0.tar.gz
--sha256	7c65c4ea6681729ddfdb7612ac39f5accb10abb4e838ca810d810931ec023aad  mbstrdecoder-0.1.0.tar.gz
-+md5 f528c26e537fe5c6987d5c5ccf6ab6e0 mbstrdecoder-0.2.2.tar.gz
-+sha256 fe6412d8f796fc86c90a5d394a2c93adc05a3e4225986494665a43c65dcc9312 mbstrdecoder-0.2.2.tar.gz
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
-index f64bde9..8eb36e7 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+ # md5 from https://pypi.python.org/pypi/cffi/json, sha256 locally computed
+-md5  c8e877fe0426a99d0cf5872cf2f95b27  cffi-1.8.3.tar.gz
+-sha256	 c321bd46faa7847261b89c0469569530cad5a41976bb6dba8202c0159f476568  cffi-1.8.3.tar.gz
++md5 b8fa7ccb87790531db3316ab17aa8244 cffi-1.9.1.tar.gz
++sha256 563e0bd53fda03c151573217b3a49b3abad8813de9dd0632e10090f6190fdaf8 cffi-1.9.1.tar.gz
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index d348695..8683665 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MBSTRDECODER_VERSION = 0.1.0
-+PYTHON_MBSTRDECODER_VERSION = 0.2.2
- PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
--PYTHON_MBSTRDECODER_SITE = https://pypi.python.org/packages/e4/10/fa3d8716b28e2b37eba1edab1c6831a56b805032328279c14fc99d37c391
-+PYTHON_MBSTRDECODER_SITE = https://pypi.python.org/packages/40/17/ea4f3a4c844e3e5a112408879c02a1c0517ab07f97a070afe992d98d1a1a
- PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
- PYTHON_MBSTRDECODER_LICENSE = MIT
- PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
+-PYTHON_CFFI_VERSION = 1.8.3
++PYTHON_CFFI_VERSION = 1.9.1
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+-PYTHON_CFFI_SITE = https://pypi.python.org/packages/0a/f3/686af8873b70028fccf67b15c78fd4e4667a3da995007afc71e786d61b0a
++PYTHON_CFFI_SITE = https://pypi.python.org/packages/a1/32/e3d6c3a8b5461b903651dd6ce958ed03c093d2e00128e3f33ea69f1d7965
+ PYTHON_CFFI_SETUP_TYPE = setuptools
+ PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+ PYTHON_CFFI_LICENSE = MIT
