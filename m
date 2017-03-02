@@ -1,19 +1,30 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 2 Mar 2017 13:00:58 -0300
-Subject: [Buildroot] [PATCH 1/1] dc3dd: new package
-In-Reply-To: <20170302165819.26df0924@armant.office.greenbone.net>
-References: <20170302152704.AiJSy0RHm%benoit.allard@greenbone.net>
- <20170302165819.26df0924@armant.office.greenbone.net>
-Message-ID: <CAOMZO5AgHrGzts8nzyrhAjb_4PA09kwRLsq1+S6PoLQemHwVwQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 02 Mar 2017 16:03:15 +0000
+Subject: [Buildroot] [Bug 9691] Wrong cryptsetup package include files
+	location
+In-Reply-To: <bug-9691-163@https.bugs.busybox.net/>
+References: <bug-9691-163@https.bugs.busybox.net/>
+Message-ID: <bug-9691-163-ZRNTudQCEi@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 2, 2017 at 12:58 PM, Beno?t Allard
-<benoit.allard@greenbone.net> wrote:
-> Looks like I mis-configured my mail client ... Want me to send it
-> again ?
+https://bugs.busybox.net/show_bug.cgi?id=9691
 
-Please try again with 'git send-email'.
+--- Comment #3 from Jean-pierre Cartal <jpcartal@free.fr> ---
+Thanks for your quick answer.
+
+Adding CRYPTSETUP_INSTALL_STAGING = YES does indeed solves the issue
+
+Regarding which package would use this header, it's an internal C package that
+uses libcryptsetup to mount encrypted partitions. I thought it might be of
+interest for others, but if you think that this is a corner case, I'll
+understand.
+
+Regards
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
