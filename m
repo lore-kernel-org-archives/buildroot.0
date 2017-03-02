@@ -1,11 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 23:28:26 +0100
-Subject: [Buildroot] [PATCH 15/25] luaposix: fix runtime by selecting
- "bit32" instead of "bitop"
-In-Reply-To: <20170223170047.24417-16-arnout@mind.be>
+Date: Thu, 2 Mar 2017 23:38:31 +0100
+Subject: [Buildroot] [PATCH 13/25] package/Config.in: explain that lua
+ package names should start with lua
+In-Reply-To: <ee995d97-dc1e-41c1-a828-3bee82d30b4b@mind.be>
 References: <20170223170047.24417-1-arnout@mind.be>
- <20170223170047.24417-16-arnout@mind.be>
-Message-ID: <20170302232826.55b1db07@free-electrons.com>
+ <20170223170047.24417-14-arnout@mind.be>
+ <20170302225033.4c38fbab@free-electrons.com>
+ <a9a0a363-1c91-c50a-6f5d-a058c8fd4e4b@mind.be>
+ <20170302232226.7566b105@free-electrons.com>
+ <ee995d97-dc1e-41c1-a828-3bee82d30b4b@mind.be>
+Message-ID: <20170302233831.21c0b34e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +18,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 23 Feb 2017 18:00:37 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Since the bump of luaposix to 33.4.0, it doesn't work anymore at
-> runtime with LuaJIT or Lua 5.1. This can be tested with the following
-> defconfig:
-> 
-> BR2_x86_64=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_LUA=y
-> BR2_PACKAGE_LUA_5_1=y
-> BR2_PACKAGE_LUAPOSIX=y
-> 
-> /usr/bin/lua: /usr/share/lua/5.1/posix/init.lua:17: module 'bit32' not found:
-> ...
-> 
-> In older luaposix versions, it would try to load the 'bit' instead of
-> 'bit32' module if LUAVER == 5.1. However, this feature was removed in
-> 33.4.0.
-> 
-> So instead of adding a runtime dependency on luabitop, depend on
-> lua-bit32.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Thu, 2 Mar 2017 23:26:16 +0100, Arnout Vandecappelle wrote:
 
-Now that I think more about this, I believe PATCH 14/25 and 15/25
-should be merged into the LTS branch, since they fix a runtime issue
-with Lua.
+> > Fair enough, but then I'd like that the rule be:
+> > 
+> >  * If the upstream package name is luafoo, then it should be luafoo in
+> >    Buildroot.
+> > 
+> >  * If the upstream package name is foo, then it should be lua-foo in
+> >    Buildroot.
+> > 
+> > Does that sound OK?  
+> 
+>  That's exactly what I meant. Should I update the Config.in?
 
-I believe even though they show up as patches 14 and 15 in the series,
-they don't depend on any of the previous patches.
-
-Peter, what do you think?
+Yes, would be nice. Thanks!
 
 Thomas
 -- 
