@@ -1,12 +1,15 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  2 Mar 2017 09:54:00 +0200
-Subject: [Buildroot] [PATCH] iptables: fix build with musl
-Message-ID: <045cb32775a51576353bc4aa73dcc5fa8b554864.1488441240.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Mar 2017 09:21:51 +0100
+Subject: [Buildroot] [git commit] iptables: fix build with musl
+Message-ID: <20170302082211.50A3C80DBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=1db6c46fd2e31dda7aed4eb0ce441fb5c98ba588
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add a patch that defines _GNU_SOURCE to expose some struct tcphdr fields.
 
@@ -14,14 +17,14 @@ Fixes:
 http://autobuild.buildroot.net/results/bee/bee20b689345b593378cfd91e0abc48bf381d3f9/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  ...utils-nfsynproxy-fix-build-with-musl-libc.patch | 44 ++++++++++++++++++++++
  1 file changed, 44 insertions(+)
- create mode 100644 package/iptables/0001-utils-nfsynproxy-fix-build-with-musl-libc.patch
 
 diff --git a/package/iptables/0001-utils-nfsynproxy-fix-build-with-musl-libc.patch b/package/iptables/0001-utils-nfsynproxy-fix-build-with-musl-libc.patch
 new file mode 100644
-index 000000000000..1f86ad135490
+index 0000000..1f86ad1
 --- /dev/null
 +++ b/package/iptables/0001-utils-nfsynproxy-fix-build-with-musl-libc.patch
 @@ -0,0 +1,44 @@
@@ -33,17 +36,17 @@ index 000000000000..1f86ad135490
 +The musl libc exposes some struct tcphdr field only when _GNU_SOURCE is
 +defined. Fix the following build failure:
 +
-+nfsynproxy.c: In function ?parse_packet?:
-+nfsynproxy.c:34:9: error: ?const struct tcphdr? has no member named ?syn?
++nfsynproxy.c: In function ???parse_packet???:
++nfsynproxy.c:34:9: error: ???const struct tcphdr??? has no member named ???syn???
 +  if (!th->syn || !th->ack)
 +         ^
-+nfsynproxy.c:34:21: error: ?const struct tcphdr? has no member named ?ack?
++nfsynproxy.c:34:21: error: ???const struct tcphdr??? has no member named ???ack???
 +  if (!th->syn || !th->ack)
 +                     ^
-+nfsynproxy.c:42:8: error: ?const struct tcphdr? has no member named ?res2?
++nfsynproxy.c:42:8: error: ???const struct tcphdr??? has no member named ???res2???
 +  if (th->res2 == 0x1)
 +        ^
-+nfsynproxy.c:45:13: error: ?const struct tcphdr? has no member named ?doff?
++nfsynproxy.c:45:13: error: ???const struct tcphdr??? has no member named ???doff???
 +  length = th->doff * 4 - sizeof(*th);
 +             ^
 +
@@ -69,5 +72,3 @@ index 000000000000..1f86ad135490
 +-- 
 +2.11.0
 +
--- 
-2.11.0
