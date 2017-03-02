@@ -1,121 +1,40 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Thu, 2 Mar 2017 23:34:38 +0100
-Subject: [Buildroot] [PATCH 2/2] package/fastd: do not overwrite the
-	cmake module path
-In-Reply-To: <dd2c4dbd9c75ecc8838363ff3b21651b6aa55373.1488488581.git.yann.morin.1998@free.fr>
-References: <cover.1488488581.git.yann.morin.1998@free.fr>
- <dd2c4dbd9c75ecc8838363ff3b21651b6aa55373.1488488581.git.yann.morin.1998@free.fr>
-Message-ID: <20170302223437.GT17911@falbala.home.lespocky.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  2 Mar 2017 19:47:18 -0300
+Subject: [Buildroot] [PATCH] libepoxy: bump to version 1.4.1
+Message-ID: <20170302224718.17265-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Already applied upstream:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libepoxy/libepoxy.hash | 4 ++--
+ package/libepoxy/libepoxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-https://git.universe-factory.net/fastd/commit/?id=a925a4cab1b722a2a24b0c1d2a1925f3b766de61
-
-Thanks. :-)
-
-Alex
-
-On Thu, Mar 02, 2017 at 10:03:16PM +0100, Yann E. MORIN wrote:
-> fastd's CMakeList.txt completely overwrites CMAKE_MODULE_PATH with its
-> own, thus causing cmake to not find our own custom one.
-> 
-> We fix fastd by appending its custom value, rather than replacing.
-> 
-> Fixes;
->     http://autobuild.buildroot.net/results/69f/69fb2e3b549a069e2898506db918423e6742c589/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Alexander Dahl <post@lespocky.de>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> Cc: Ben Boeckel <mathstuf@gmail.com>
-> Cc: J?rg Krause <joerg.krause@embedded.rocks>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> ---
->  ...02-CMakeList-do-not-overwrite-module-path.patch | 56 ++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 package/fastd/0002-CMakeList-do-not-overwrite-module-path.patch
-> 
-> diff --git a/package/fastd/0002-CMakeList-do-not-overwrite-module-path.patch b/package/fastd/0002-CMakeList-do-not-overwrite-module-path.patch
-> new file mode 100644
-> index 0000000..88c1953
-> --- /dev/null
-> +++ b/package/fastd/0002-CMakeList-do-not-overwrite-module-path.patch
-> @@ -0,0 +1,56 @@
-> +From a925a4cab1b722a2a24b0c1d2a1925f3b766de61 Mon Sep 17 00:00:00 2001
-> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +Date: Thu, 2 Mar 2017 21:43:39 +0100
-> +Subject: [PATCH] CMakeList: do not overwrite module path
-> +
-> +Currently, the CMakeList.txt completely overwrites the CMAKE_MODULE_PATH
-> +variable.
-> +
-> +This is problematic when an upper-layer buildsystem wants to set its own
-> +module path to use custom modules.
-> +
-> +For example, Buldroot [0] provides a custom platform description [1] to fix
-> +cross-compilation issue. Overwriting the module path means that this
-> +custom platform description is not found [2].
-> +
-> +Providing such a custom platform description is what the upstream cmake
-> +devs suggest [3], quoting:
-> +
-> +    If a toolchain file specifies CMAKE_SYSTEM_NAME such that a custom
-> +    `Platform/MySystem.cmake` file is loaded then the latter can set
-> +    them [*] as needed for the target platform.
-> +
-> +[*] offending settings causing RPATH issues during cross-compilation.
-> +
-> +So we need to append our source tree to the module path, not replace it
-> +blindly.
-> +
-> +[0] https://buildroot.org/
-> +[1] https://git.buildroot.org/buildroot/tree/support/misc/Buildroot.cmake
-> +[2] http://autobuild.buildroot.net/results/69f/69fb2e3b549a069e2898506db918423e6742c589/build-end.log
-> +[3] http://public.kitware.com/pipermail/cmake/2017-February/065063.html
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +---
-> +Patch applied upstream:
-> +https://git.universe-factory.net/fastd/commit/?id=a925a4cab1b722a2a24b0c1d2a1925f3b766de61
-> +
-> +---
-> + CMakeLists.txt | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 61689b1..2c9c61a 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -1,6 +1,6 @@
-> + cmake_minimum_required(VERSION 2.8.8)
-> + 
-> +-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-> ++list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-> + cmake_policy(SET CMP0017 OLD) # Prefer modules in our module directory
-> + 
-> + project(FASTD C ASM)
-> +-- 
-> +2.7.4
-> +
-> -- 
-> 2.7.4
-
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index eec1363..7d2ade8 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,2 +1,2 @@
+-# From ftp://ftp.gnome.org/pub/gnome/sources/libepoxy/1.4/libepoxy-1.4.0.sha256sum
+-sha256 25a906b14a921bc2b488cfeaa21a00486fe92630e4a9dd346e4ecabeae52ab41  libepoxy-1.4.0.tar.xz
++# From ftp://ftp.gnome.org/pub/gnome/sources/libepoxy/1.4/libepoxy-1.4.1.sha256sum
++sha256 88c6abf5522fc29bab7d6c555fd51a855cbd9253c4315f8ea44e832baef21aa6  libepoxy-1.4.1.tar.xz
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index 1b0f52f..be8c55e 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBEPOXY_VERSION_MAJOR = 1.4
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).0
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).1
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
 -- 
-?With the first link, the chain is forged. The first speech censured, 
-the first thought forbidden, the first freedom denied, chains us all 
-irrevocably.? (Jean-Luc Picard, quoting Judge Aaron Satie)
-*** GnuPG-FP: C28E E6B9 0263 95CF 8FAF  08FA 34AD CD00 7221 5CC6 ***
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170302/6565b769/attachment.asc>
+2.10.2
