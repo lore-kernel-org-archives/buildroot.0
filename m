@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:58:17 +0100
-Subject: [Buildroot] [git commit] python-setuptools-scm: bump to version
-	1.15.1rc1
-Message-ID: <20170302205924.AA0497FECB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-requests: bump to version 2.13.0
+Message-ID: <20170302205924.89E0F7FECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=758e98af8bafbd2fdf47dcbf182b49cd25db8f6e
+commit: https://git.buildroot.net/buildroot/commit/?id=be935b54bdeaea10c46a61f81ab511d13f0d6a86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
- package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
-index 734fc5a..075e70d 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.hash
-+++ b/package/python-setuptools-scm/python-setuptools-scm.hash
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index e441c00..8faa9d0 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/setuptools_scm/json, sha256 locally computed
--md5	b6916c78ed6253d6602444fad4279c5b  setuptools_scm-1.15.0.tar.gz
--sha256	daf12d05aa2155a46aa357453757ffdc47d87f839e62114f042bceac6a619e2f  setuptools_scm-1.15.0.tar.gz
-+md5 d91e17693598d8ba84c5b4fed48b015d setuptools_scm-1.15.1rc1.tar.gz
-+sha256 24007d8a43c4b43c7ad6c8725cbdfb94212c30f6ab849f21f7bb3809333f105a setuptools_scm-1.15.1rc1.tar.gz
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
-index 993fbb9..5fb48fd 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.mk
-+++ b/package/python-setuptools-scm/python-setuptools-scm.mk
+ # md5 from https://pypi.python.org/pypi/requests/json, sha256 locally computed
+-md5	ad5f9c47b5c5dfdb28363ad7546b0763  requests-2.11.1.tar.gz
+-sha256	5acf980358283faba0b897c73959cecf8b841205bb4b2ad3ef545f46eae1a133  requests-2.11.1.tar.gz
++md5 921ec6b48f2ddafc8bb6160957baf444 requests-2.13.0.tar.gz
++sha256 5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8 requests-2.13.0.tar.gz
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 49980bf..13bbdfb 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_SCM_VERSION = 1.15.0
-+PYTHON_SETUPTOOLS_SCM_VERSION = 1.15.1rc1
- PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SCM_SITE = https://pypi.python.org/packages/80/b7/31b6ae5fcb188e37f7e31abe75f9be90490a5456a72860fa6e643f8a3cbc
-+PYTHON_SETUPTOOLS_SCM_SITE = https://pypi.python.org/packages/b8/4b/c7370d3c54a74ee8abb3c7e0792c6c95f1e9658e959211b5b86eebe4677a
- PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
- PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
+-PYTHON_REQUESTS_VERSION = 2.11.1
++PYTHON_REQUESTS_VERSION = 2.13.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/2e/ad/e627446492cc374c284e82381215dcd9a0a87c4f6e90e9789afefe6da0ad
++PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/16/09/37b69de7c924d318e51ece1c4ceb679bf93be9d05973bb30c35babd596e2
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
