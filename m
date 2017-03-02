@@ -1,32 +1,43 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 2 Mar 2017 14:22:09 -0300
-Subject: [Buildroot] libqeglfs.so not found on imx6
-In-Reply-To: <CAD6G_RR5fC2n_JA=M1p3=0MeOwDXRVg2hQbhKDwHYmjyddu1SA@mail.gmail.com>
-References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
- <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
- <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
- <CAAMH-ys=MpSuBvT=weVPKhyu5_bz4feq7ePmMN4LgHKubG_9vQ@mail.gmail.com>
- <CAD6G_RR5fC2n_JA=M1p3=0MeOwDXRVg2hQbhKDwHYmjyddu1SA@mail.gmail.com>
-Message-ID: <CAOMZO5B_d9-oq9R1NciG7F3A-HKhHVWP8uXzM=Crx2YB+zFVnw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 02 Mar 2017 17:28:24 +0000
+Subject: [Buildroot] [Bug 9456] mkusers script bash errors
+In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
+References: <bug-9456-163@https.bugs.busybox.net/>
+Message-ID: <bug-9456-163-k9rH5elbJj@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 2, 2017 at 2:15 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=9456
 
-> I've built GPU drivers as well, please see below kernel dmesg.
->
-> dmesg:
-> ---------
-> [    1.002652] console [ttymxc3] enabled
-> [    1.016395] etnaviv gpu-subsystem: bound 134000.gpu (ops gpu_ops)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-I see you are using the mainline kernel.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #6911|0                           |1
+        is obsolete|                            |
+           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
 
-You need to install mesa 17.0.0 and etnaviv gallium drivers (they are
-available in the master branch now).
+--- Comment #21 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Created attachment 6916
+  --> https://bugs.busybox.net/attachment.cgi?id=6916&action=edit
+Debug mkusers - paranoid
 
-Then you can use kmscube for a quick test to check everything was
-properly installed.
+(In reply to Paul Stewart from comment #19)
+
+Damn, that's uterly weird...
+
+OK, so let's be a little bit more paranoiac. Can you test with the attached
+patch, please?
+
+The expected output is described in that patch, too.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
