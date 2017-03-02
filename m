@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-pudb: bump to version 2017.1.1
-Message-ID: <20170302205923.F26297FECB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-flask-login: bump to version 0.4.0
+Message-ID: <20170302205923.4B6DA82298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cd1f34bb6b036a10c0ae56a1904717d9d342a99
+commit: https://git.buildroot.net/buildroot/commit/?id=f76e7e67353e17acefc7865ca814a93ff23e1781
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pudb/python-pudb.hash | 4 ++--
- package/python-pudb/python-pudb.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-flask-login/python-flask-login.hash | 6 +++---
+ package/python-flask-login/python-flask-login.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pudb/python-pudb.hash b/package/python-pudb/python-pudb.hash
-index b06d5e8..4313af0 100644
---- a/package/python-pudb/python-pudb.hash
-+++ b/package/python-pudb/python-pudb.hash
+diff --git a/package/python-flask-login/python-flask-login.hash b/package/python-flask-login/python-flask-login.hash
+index c488a35..cd73b3f 100644
+--- a/package/python-flask-login/python-flask-login.hash
++++ b/package/python-flask-login/python-flask-login.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pudb/json, sha256 locally computed
--md5	4573b70163329c1cb59836a357bfdf7c  pudb-2016.2.tar.gz
--sha256	e958d7f7b1771cf297714e95054075df3b2a47455d7a740be4abbbd41289505a  pudb-2016.2.tar.gz
-+md5 4ec3302ef90f22b13c60db16b3557c56 pudb-2017.1.1.tar.gz
-+sha256 87117640902c5f602c8517d0167eb5c953a5bdede97975ba29ff17e3d570442c pudb-2017.1.1.tar.gz
-diff --git a/package/python-pudb/python-pudb.mk b/package/python-pudb/python-pudb.mk
-index 5349c1e..e192877 100644
---- a/package/python-pudb/python-pudb.mk
-+++ b/package/python-pudb/python-pudb.mk
+-# md5 from https://pypi.python.org/pypi/Flask-Login/0.3.2, sha256 locally computed:
+-md5    d95c2275d3e1c755145910077366dc45                                 Flask-Login-0.3.2.tar.gz
+-sha256 e72eff5c35e5a31db1aeca1db5d2501be702674ea88e8f223b5d2b11644beee6 Flask-Login-0.3.2.tar.gz
++# md5 from https://pypi.python.org/pypi/flask_login/json, sha256 locally computed
++md5 e050efaa2c4dbc2d97f480a70f4d44aa Flask-Login-0.4.0.tar.gz
++sha256 d25e356b14a59f52da0ab30c31c2ad285fa23a840f0f6971df7ed247c77082a7 Flask-Login-0.4.0.tar.gz
+diff --git a/package/python-flask-login/python-flask-login.mk b/package/python-flask-login/python-flask-login.mk
+index aa6d8e3..5037413 100644
+--- a/package/python-flask-login/python-flask-login.mk
++++ b/package/python-flask-login/python-flask-login.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PUDB_VERSION = 2016.2
-+PYTHON_PUDB_VERSION = 2017.1.1
- PYTHON_PUDB_SOURCE = pudb-$(PYTHON_PUDB_VERSION).tar.gz
--PYTHON_PUDB_SITE = https://pypi.python.org/packages/50/1a/d9b692e32afff09ccb5aa33c3d51c6d5a80efbb59de90307b33601e7fa62
-+PYTHON_PUDB_SITE = https://pypi.python.org/packages/3f/ab/a8e103f329460696bb74e3c5cef4060313be3fe0f6fceae866900cb2033c
- PYTHON_PUDB_SETUP_TYPE = setuptools
- PYTHON_PUDB_LICENSE = MIT
- PYTHON_PUDB_LICENSE_FILES = LICENSE
+-PYTHON_FLASK_LOGIN_VERSION = 0.3.2
++PYTHON_FLASK_LOGIN_VERSION = 0.4.0
+ PYTHON_FLASK_LOGIN_SOURCE = Flask-Login-$(PYTHON_FLASK_LOGIN_VERSION).tar.gz
+-PYTHON_FLASK_LOGIN_SITE = http://pypi.python.org/packages/source/F/Flask-Login
++PYTHON_FLASK_LOGIN_SITE = https://pypi.python.org/packages/70/96/20cae731ef27084dcb183f3a6e3073d0232f10c1fd7be76729bd7bd4b994
+ PYTHON_FLASK_LOGIN_LICENSE = MIT
+ PYTHON_FLASK_LOGIN_LICENSE_FILES = LICENSE
+ PYTHON_FLASK_LOGIN_SETUP_TYPE = setuptools
