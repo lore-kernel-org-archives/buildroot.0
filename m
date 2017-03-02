@@ -1,43 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  2 Mar 2017 19:58:27 +0100
-Subject: [Buildroot] [PATCH 3/3] docker-engine: bump to version 17.03.0-ce
-In-Reply-To: <1488481107-97917-1-git-send-email-fontaine.fabrice@gmail.com>
-References: <1488481107-97917-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <1488481107-97917-3-git-send-email-fontaine.fabrice@gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 2 Mar 2017 11:07:55 -0800
+Subject: [Buildroot] [PATCH] ncftp: fix host/target confusion
+In-Reply-To: <877f47hccp.fsf@dell.be.48ers.dk>
+References: <1488322477-25447-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20170301214800.1a6c3405@free-electrons.com> <877f47hccp.fsf@dell.be.48ers.dk>
+Message-ID: <CANxTyt6tGknGoHc2swaeqh-h6L740Ny79UwgH4AqQH2SfjQYnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Peter,
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index bc1b846..127d2b9 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	2730e7cc15492de8f1d6f9510c64620fc9004c8afc1410bf3ebac9fc3f9f83c6	docker-engine-v1.13.1.tar.gz
-+sha256	d8e91af5b2799cafac113a400d4db9c6abe01ae823f378d2f4d3d3e55e48eaf6	docker-engine-v17.03.0-ce.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 0701dce..7f7840b 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = v1.13.1
--DOCKER_ENGINE_COMMIT = 092cba3727bb9b4a2f0e922cd6c0f93ea270e363
-+DOCKER_ENGINE_VERSION = v17.03.0-ce
-+DOCKER_ENGINE_COMMIT = 60ccb2265b0574d6c1c1090876a1d1ab32bed60e
- DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
--- 
-2.5.0
+On Thu, Mar 2, 2017 at 8:28 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>
+> Hi,
+>
+>  > Applied to master, thanks. Peter, I believe this one qualifies for the
+>  > LTS branch.
+>
+> Committed to 2017.02.x, thanks.
+
+Are you able to download this tarball with the hash indicated in
+ncftp.hash?  I keep getting an error:
+
+ERROR: ncftp-3.2.6-src.tar.xz has wrong sha256 hash:
+ERROR: expected:
+7abd3e8f848f0efb4bb6a4bc5da58a59524d4378fc8d70a52adb0fe1fd00b89d
+ERROR: got     :
+5f200687c05d0807690d9fb770327b226f02dd86155b49e750853fce4e31098d
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+Danomi -
+
+
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
