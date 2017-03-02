@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-pysmb: bump to version 1.1.19
-Message-ID: <20170302205924.5E5DA7FECB@busybox.osuosl.org>
+Date: Thu, 2 Mar 2017 21:58:17 +0100
+Subject: [Buildroot] [git commit] python-sh: bump to version 1.12.9
+Message-ID: <20170302205924.B3C867FECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18c90437e9834b870d3bba9db439949a130d5d06
+commit: https://git.buildroot.net/buildroot/commit/?id=3e584a10cb9aff571de4e7fb13c848f75f4b0bbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pysmb/python-pysmb.hash | 6 +++---
- package/python-pysmb/python-pysmb.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-sh/python-sh.hash | 4 ++--
+ package/python-sh/python-sh.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pysmb/python-pysmb.hash b/package/python-pysmb/python-pysmb.hash
-index 4c41068..9524667 100644
---- a/package/python-pysmb/python-pysmb.hash
-+++ b/package/python-pysmb/python-pysmb.hash
+diff --git a/package/python-sh/python-sh.hash b/package/python-sh/python-sh.hash
+index 0445fa6..ab3c4e0 100644
+--- a/package/python-sh/python-sh.hash
++++ b/package/python-sh/python-sh.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9fe70cbc812b2e789915bedea7e45b1a, sha256 locally computed
--md5     9fe70cbc812b2e789915bedea7e45b1a  pysmb-1.1.18.tar.gz
--sha256  580f7dcf8048656d2924c2f78731feaeaf6f9fa8ef5c251fc6964d39bfd3a6b9  pysmb-1.1.18.tar.gz
-+# md5 from https://pypi.python.org/pypi/pysmb/json, sha256 locally computed
-+md5 e6f9ce0032db528aae060f7019bd409c pysmb-1.1.19.tar.gz
-+sha256 fa4e6b4a4f2afbfbd71e9179c491f8c77bc2ad19e0bc866d7c6cbfa9ae272602 pysmb-1.1.19.tar.gz
-diff --git a/package/python-pysmb/python-pysmb.mk b/package/python-pysmb/python-pysmb.mk
-index 51df91d..49d7c30 100644
---- a/package/python-pysmb/python-pysmb.mk
-+++ b/package/python-pysmb/python-pysmb.mk
+ # md5 from https://pypi.python.org/pypi/sh/json, sha256 locally computed
+-md5	89d46b1dba32713b7df74b1bc59d74a1  sh-1.12.7.tar.gz
+-sha256	5a07373657a1a704a34ea1bf73b2e55c42388c5d449634d6d7c96147f5660086  sh-1.12.7.tar.gz
++md5 ddc128a8d943d25afa6e01af11e0063b sh-1.12.9.tar.gz
++sha256 579aa19bae7fe86b607df1afaf4e8537c453d2ce3d84e1d3957e099359a51677 sh-1.12.9.tar.gz
+diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
+index 1aa6bb9..ed171cb 100644
+--- a/package/python-sh/python-sh.mk
++++ b/package/python-sh/python-sh.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSMB_VERSION = 1.1.18
-+PYTHON_PYSMB_VERSION = 1.1.19
- PYTHON_PYSMB_SOURCE = pysmb-$(PYTHON_PYSMB_VERSION).tar.gz
--PYTHON_PYSMB_SITE = https://pypi.python.org/packages/source/p/pysmb
-+PYTHON_PYSMB_SITE = https://pypi.python.org/packages/f9/e7/1fd7faaa946cc6b43ce85bb7a177b75a4718d9c5e291201fec00112b497c
- PYTHON_PYSMB_LICENSE = libpng license
- PYTHON_PYSMB_LICENSE_FILES = LICENSE
- PYTHON_PYSMB_SETUP_TYPE = setuptools
+-PYTHON_SH_VERSION = 1.12.7
++PYTHON_SH_VERSION = 1.12.9
+ PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
+-PYTHON_SH_SITE = https://pypi.python.org/packages/c2/98/565d9b566b3153607336ae9e91c1c467896f7f786c2d5d8e50fef7d75b08
++PYTHON_SH_SITE = https://pypi.python.org/packages/fd/14/6deb4e89cc237ee4bc1c0b0485c77d7868477f96c47962366bc5fabc31fd
+ PYTHON_SH_SETUP_TYPE = setuptools
+ PYTHON_SH_LICENSE = MIT
+ PYTHON_SH_LICENSE_FILES = LICENSE.txt
