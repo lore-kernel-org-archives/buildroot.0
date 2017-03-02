@@ -1,47 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-httplib2: bump to version 0.10.3
-Message-ID: <20170302205923.6162082298@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  2 Mar 2017 22:03:13 +0100
+Subject: [Buildroot] [PATCH 0/2] core/cmake: better impersonate a Linux
+	system
+Message-ID: <cover.1488488581.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f13b35b5f094fa0801b6bb884b9ed7375221075
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-httplib2/python-httplib2.hash | 6 +++---
- package/python-httplib2/python-httplib2.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Some packages rely on the system name to decide whether to
+enable/disable features and/or link/not link with some libraries, rather
+than using detection... :-(
 
-diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
-index 879f18b..9a075b6 100644
---- a/package/python-httplib2/python-httplib2.hash
-+++ b/package/python-httplib2/python-httplib2.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=bd1b1445b3b2dfa7276b09b1a07b7f0e, sha256 locally computed
--md5	bd1b1445b3b2dfa7276b09b1a07b7f0e  httplib2-0.9.2.tar.gz
--sha256	c3aba1c9539711551f4d83e857b316b5134a1c4ddce98a875b7027be7dd6d988  httplib2-0.9.2.tar.gz
-+# md5 from https://pypi.python.org/pypi/httplib2/json, sha256 locally computed
-+md5 709c305e1b00e9c0af49ee816429569c httplib2-0.10.3.tar.gz
-+sha256 e404d3b7bd86c1bc931906098e7c1305d6a3a6dcef141b8bb1059903abb3ceeb httplib2-0.10.3.tar.gz
-diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
-index adeddd3..7c14e24 100644
---- a/package/python-httplib2/python-httplib2.mk
-+++ b/package/python-httplib2/python-httplib2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_HTTPLIB2_VERSION = 0.9.2
-+PYTHON_HTTPLIB2_VERSION = 0.10.3
- PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
--PYTHON_HTTPLIB2_SITE = http://pypi.python.org/packages/source/h/httplib2
-+PYTHON_HTTPLIB2_SITE = https://pypi.python.org/packages/e4/2e/a7e27d2c36076efeb8c0e519758968b20389adf57a9ce3af139891af2696
- PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
- PYTHON_HTTPLIB2_LICENSE = MIT
- PYTHON_HTTPLIB2_LICENSE_FILES = PKG-INFO
+However, the system name is now Buildroot, because we provide our own
+platform description, as was suggested by upstream cmake.
+
+So, we tweak our platform description to change the system name back to
+"Linux", so that those packages believe they are on Linux (which is
+inherently true!)
+
+Secondly, some packages completely overwrite the module path, like
+fastd, rather than appending to it. For now, only fastd is handled;
+other offenders will be dealt with as they are detected.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 8d1128e8a898e32348618721473b82b09f4a6975
+
+  fontconfig: needs host-gperf (2017-03-02 09:24:35 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to dd2c4dbd9c75ecc8838363ff3b21651b6aa55373
+
+  package/fastd: do not overwrite the cmake module path (2017-03-02 22:01:02 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      support/cmake: impersonate a Linux system even more
+      package/fastd: do not overwrite the cmake module path
+
+ ...02-CMakeList-do-not-overwrite-module-path.patch | 56 ++++++++++++++++++++++
+ support/misc/Buildroot.cmake                       |  4 ++
+ 2 files changed, 60 insertions(+)
+ create mode 100644 package/fastd/0002-CMakeList-do-not-overwrite-module-path.patch
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
