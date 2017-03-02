@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 22:45:17 +0100
-Subject: [Buildroot] [git commit] luasec: remove LUASEC_VERSION_UPSTREAM
-Message-ID: <20170302214521.D953880641@busybox.osuosl.org>
+Date: Thu, 2 Mar 2017 22:45:33 +0100
+Subject: [Buildroot] [PATCH 05/25] lpty: remove LPTY_VERSION_UPSTREAM
+In-Reply-To: <20170223170047.24417-6-arnout@mind.be>
+References: <20170223170047.24417-1-arnout@mind.be>
+ <20170223170047.24417-6-arnout@mind.be>
+Message-ID: <20170302224533.3f21eb78@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac476821f1e006f3a2a7af1a1e6e597d380b8885
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-It is not used for anything.
+On Thu, 23 Feb 2017 18:00:27 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> It is not used for anything.
+> 
+> Note that the SUBDIR is NOT the usual lpty-$(LPTY_VERSION_UPSTREAM);
+> it *does* have the rockspec version in its name.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/lpty/lpty.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luasec/luasec.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index fd1f1cd..b059e1c 100644
---- a/package/luasec/luasec.mk
-+++ b/package/luasec/luasec.mk
-@@ -4,8 +4,7 @@
- #
- ################################################################################
- 
--LUASEC_VERSION_UPSTREAM = 0.5
--LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-2
-+LUASEC_VERSION = 0.5-2
- LUASEC_SUBDIR = luasec
- LUASEC_LICENSE = MIT
- LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
