@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-backports-abc: bump to version 0.5
-Message-ID: <20170302205922.CB2BB82298@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-beautifulsoup4: bump to version
+	4.5.3
+Message-ID: <20170302205922.D4376822D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1527a69dc0f23beee927808842eba6e05b4529b8
+commit: https://git.buildroot.net/buildroot/commit/?id=3787e80e4e1e6bfa0b5f556aed2dc007bfc82b70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-backports-abc/python-backports-abc.hash | 6 +++---
- package/python-backports-abc/python-backports-abc.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-beautifulsoup4/python-beautifulsoup4.hash | 4 ++--
+ package/python-beautifulsoup4/python-beautifulsoup4.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-backports-abc/python-backports-abc.hash b/package/python-backports-abc/python-backports-abc.hash
-index 07e954e..f638527 100644
---- a/package/python-backports-abc/python-backports-abc.hash
-+++ b/package/python-backports-abc/python-backports-abc.hash
+diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.hash b/package/python-beautifulsoup4/python-beautifulsoup4.hash
+index c86879f..dd0c3e4 100644
+--- a/package/python-beautifulsoup4/python-beautifulsoup4.hash
++++ b/package/python-beautifulsoup4/python-beautifulsoup4.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0b65a216ce9dc9c1a7e20a729dd7c05b, sha256 locally computed
--md5     0b65a216ce9dc9c1a7e20a729dd7c05b backports_abc-0.4.tar.gz
--sha256  8b3e4092ba3d541c7a2f9b7d0d9c0275b21c6a01c53a61c731eba6686939d0a5  backports_abc-0.4.tar.gz
-+# md5 from https://pypi.python.org/pypi/backports_abc/json, sha256 locally computed
-+md5 7d1936ec183a3586290adf60f6f96764 backports_abc-0.5.tar.gz
-+sha256 033be54514a03e255df75c5aee8f9e672f663f93abb723444caec8fe43437bde backports_abc-0.5.tar.gz
-diff --git a/package/python-backports-abc/python-backports-abc.mk b/package/python-backports-abc/python-backports-abc.mk
-index 1e3a9a6..f84318b 100644
---- a/package/python-backports-abc/python-backports-abc.mk
-+++ b/package/python-backports-abc/python-backports-abc.mk
+ # md5 from https://pypi.python.org/pypi/beautifulsoup4/json, sha256 locally computed
+-md5	994abd90e691beaf7d42c00ffb2f3a67  beautifulsoup4-4.5.1.tar.gz
+-sha256	3c9474036afda9136aac6463def733f81017bf9ef3510d25634f335b0c87f5e1  beautifulsoup4-4.5.1.tar.gz
++md5 937e0df0d699a1237646f38fd567f0c6 beautifulsoup4-4.5.3.tar.gz
++sha256 b21ca09366fa596043578fd4188b052b46634d22059e68dd0077d9ee77e08a3e beautifulsoup4-4.5.3.tar.gz
+diff --git a/package/python-beautifulsoup4/python-beautifulsoup4.mk b/package/python-beautifulsoup4/python-beautifulsoup4.mk
+index e2fa9b3..ccec30f 100644
+--- a/package/python-beautifulsoup4/python-beautifulsoup4.mk
++++ b/package/python-beautifulsoup4/python-beautifulsoup4.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BACKPORTS_ABC_VERSION = 0.4
-+PYTHON_BACKPORTS_ABC_VERSION = 0.5
- PYTHON_BACKPORTS_ABC_SOURCE = backports_abc-$(PYTHON_BACKPORTS_ABC_VERSION).tar.gz
--PYTHON_BACKPORTS_ABC_SITE = https://pypi.python.org/packages/source/b/backports_abc
-+PYTHON_BACKPORTS_ABC_SITE = https://pypi.python.org/packages/68/3c/1317a9113c377d1e33711ca8de1e80afbaf4a3c950dd0edfaf61f9bfe6d8
- PYTHON_BACKPORTS_ABC_LICENSE = Python Software Foundation License
- PYTHON_BACKPORTS_ABC_SETUP_TYPE = setuptools
- 
+-PYTHON_BEAUTIFULSOUP4_VERSION = 4.5.1
++PYTHON_BEAUTIFULSOUP4_VERSION = 4.5.3
+ PYTHON_BEAUTIFULSOUP4_SOURCE = beautifulsoup4-$(PYTHON_BEAUTIFULSOUP4_VERSION).tar.gz
+-PYTHON_BEAUTIFULSOUP4_SITE = https://pypi.python.org/packages/86/ea/8e9fbce5c8405b9614f1fd304f7109d9169a3516a493ce4f7f77c39435b7
++PYTHON_BEAUTIFULSOUP4_SITE = https://pypi.python.org/packages/9b/a5/c6fa2d08e6c671103f9508816588e0fb9cec40444e8e72993f3d4c325936
+ PYTHON_BEAUTIFULSOUP4_SETUP_TYPE = setuptools
+ PYTHON_BEAUTIFULSOUP4_LICENSE = MIT
+ PYTHON_BEAUTIFULSOUP4_LICENSE_FILES = COPYING.txt
