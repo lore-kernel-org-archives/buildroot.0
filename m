@@ -1,13 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Mar 2017 08:12:50 +0100
-Subject: [Buildroot] [PATCH 1/1]
-	package/x11r7/xdriver_xf86-video-vmware: fix compilation
-	without udev
-In-Reply-To: <20170301234014.319ba007@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 1 Mar 2017 23:40:14 +0100")
-References: <20161218143246.30156-1-bernd.kuhls@t-online.de>
- <20170301234014.319ba007@free-electrons.com>
-Message-ID: <87shmwgnil.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Mar 2017 08:14:49 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: fix build for toolchains without
+	ssp
+In-Reply-To: <20170301214941.4611d6f4@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 1 Mar 2017 21:49:41 +0100")
+References: <1488320767-63856-1-git-send-email-fontaine.fabrice@gmail.com>
+ <20170301214941.4611d6f4@free-electrons.com>
+Message-ID: <87o9xkgnfa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,21 +16,21 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  > Hello,
- > On Sun, 18 Dec 2016 15:32:46 +0100, Bernd Kuhls wrote:
- >> https://cgit.freedesktop.org/xorg/driver/xf86-video-vmware/commit/configure.ac?id=755e38f373a511bd774a61c9420a67f630f71037
- >> added a check for libudev which fails if the check is not disabled.
+ > On Tue, 28 Feb 2017 23:26:07 +0100, Fabrice Fontaine wrote:
+ >> Set ENABLE_CUSTOM_COMPILER_FLAGS to OFF to disable custom flags, in
+ >> particular -fstack-protector-strong which depends on
+ >> BR2_TOOLCHAIN_HAS_SSP
  >> 
- >> Fixes
- >> http://autobuild.buildroot.net/results/7b3/7b38105dd1115ac622964cf243ac137b7624fb43/
- >> 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  >> ---
- >> .../x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk   | 7 +++++++
- >> 1 file changed, 7 insertions(+)
+ >> package/cjson/cjson.mk | 5 ++++-
+ >> 1 file changed, 4 insertions(+), 1 deletion(-)
 
- > Applied to master, thanks. Peter, this one could go to the LTS branch.
+ > Applied to master, thanks. Peter: even though this is a build fix, this
+ > one is not needed on the LTS branch, because it is only needed after
+ > the 1.3.0 bump, which was done post 2017.02.
 
-Thanks, applied to 2017.02.x.
+Ok, thanks for the heads up!
 
 -- 
 Bye, Peter Korsgaard
