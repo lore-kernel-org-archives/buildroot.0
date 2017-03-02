@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-ipaddress: bump to version 1.0.18
-Message-ID: <20170302205923.758EA7FECB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-enum: bump to version 0.4.6
+Message-ID: <20170302205923.344D082298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91c2cf9c47989a3bd8305d8b9c22752742ca7cec
+commit: https://git.buildroot.net/buildroot/commit/?id=636df89872c7b6a6bed2c679cf65da41309ac652
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-ipaddress/python-ipaddress.hash | 4 ++--
- package/python-ipaddress/python-ipaddress.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-enum/python-enum.hash | 6 +++---
+ package/python-enum/python-enum.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-ipaddress/python-ipaddress.hash b/package/python-ipaddress/python-ipaddress.hash
-index a7c3803..c4fdf6d 100644
---- a/package/python-ipaddress/python-ipaddress.hash
-+++ b/package/python-ipaddress/python-ipaddress.hash
+diff --git a/package/python-enum/python-enum.hash b/package/python-enum/python-enum.hash
+index c7c1924..6f1daa0 100644
+--- a/package/python-enum/python-enum.hash
++++ b/package/python-enum/python-enum.hash
 @@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/ipaddress/json, sha256 locally computed
--md5	8bbf0326719fafb1f453921ef96729fe  ipaddress-1.0.17.tar.gz
--sha256	3a21c5a15f433710aaa26f1ae174b615973a25182006ae7f9c26de151cd51716  ipaddress-1.0.17.tar.gz
-+md5 310c2dfd64eb6f0df44aa8c59f2334a7 ipaddress-1.0.18.tar.gz
-+sha256 5d8534c8e185f2d8a1fda1ef73f2c8f4b23264e8e30063feeb9511d492a413e1 ipaddress-1.0.18.tar.gz
-diff --git a/package/python-ipaddress/python-ipaddress.mk b/package/python-ipaddress/python-ipaddress.mk
-index 5ff70d4..10ab77a 100644
---- a/package/python-ipaddress/python-ipaddress.mk
-+++ b/package/python-ipaddress/python-ipaddress.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ce75c7c3c86741175a84456cc5bd531e, sha256 locally computed
+-md5	ce75c7c3c86741175a84456cc5bd531e  enum-0.4.4.tar.gz
+-sha256	9bdfacf543baf2350df7613eb37f598a802f346985ca0dc1548be6494140fdff  enum-0.4.4.tar.gz
++# md5 from https://pypi.python.org/pypi/enum/json, sha256 locally computed
++md5 173d468112cfa13a149b2c8af3e8fd52 enum-0.4.6.tar.gz
++sha256 54e78526b166982b36884613f35a76d9a6711c49810d3ec1a05b10c9b31f938e enum-0.4.6.tar.gz
+diff --git a/package/python-enum/python-enum.mk b/package/python-enum/python-enum.mk
+index 0131be3..e1a55c3 100644
+--- a/package/python-enum/python-enum.mk
++++ b/package/python-enum/python-enum.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IPADDRESS_VERSION = 1.0.17
-+PYTHON_IPADDRESS_VERSION = 1.0.18
- PYTHON_IPADDRESS_SOURCE = ipaddress-$(PYTHON_IPADDRESS_VERSION).tar.gz
--PYTHON_IPADDRESS_SITE = https://pypi.python.org/packages/bb/26/3b64955ff73f9e3155079b9ed31812afdfa5333b5c76387454d651ef593a
-+PYTHON_IPADDRESS_SITE = https://pypi.python.org/packages/4e/13/774faf38b445d0b3a844b65747175b2e0500164b7c28d78e34987a5bfe06
- PYTHON_IPADDRESS_LICENSE = Python software foundation license
- PYTHON_IPADDRESS_LICENSE_FILES = LICENSE
- PYTHON_IPADDRESS_SETUP_TYPE = setuptools
+-PYTHON_ENUM_VERSION = 0.4.4
++PYTHON_ENUM_VERSION = 0.4.6
+ PYTHON_ENUM_SOURCE = enum-$(PYTHON_ENUM_VERSION).tar.gz
+-PYTHON_ENUM_SITE = http://pypi.python.org/packages/source/e/enum
++PYTHON_ENUM_SITE = https://pypi.python.org/packages/0c/4e/1ea357e7783c756bb579333c1e4a026fb331371ee771f616ffedc781e531
+ PYTHON_ENUM_SETUP_TYPE = setuptools
+ PYTHON_ENUM_LICENSE = GPLv2+ or Python software foundation license v2
+ PYTHON_ENUM_LICENSE_FILES = LICENSE.GPL LICENSE.PSF
