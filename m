@@ -1,38 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 09:23:04 +0100
-Subject: [Buildroot] [PATCH] iptables: fix build with musl
-In-Reply-To: <045cb32775a51576353bc4aa73dcc5fa8b554864.1488441240.git.baruch@tkos.co.il>
-References: <045cb32775a51576353bc4aa73dcc5fa8b554864.1488441240.git.baruch@tkos.co.il>
-Message-ID: <20170302092304.0f16c801@free-electrons.com>
+Date: Thu, 2 Mar 2017 09:24:35 +0100
+Subject: [Buildroot] [git commit] fontconfig: needs host-gperf
+Message-ID: <20170302082453.D0E7E822BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8d1128e8a898e32348618721473b82b09f4a6975
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  2 Mar 2017 09:54:00 +0200, Baruch Siach wrote:
-> Add a patch that defines _GNU_SOURCE to expose some struct tcphdr fields.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/bee/bee20b689345b593378cfd91e0abc48bf381d3f9/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...utils-nfsynproxy-fix-build-with-musl-libc.patch | 44 ++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 package/iptables/0001-utils-nfsynproxy-fix-build-with-musl-libc.patch
+Commit 701380c53b4d("fontconfig: add build fix for glibc 2.25") added
+a patch that touches src/fcobjs.h. Package build system detects change
+in timestamp and tries to regenerate fcobjshash.gperf which requires
+gperf tool. So this commit adds dependency on host-gperf.
 
-Applied to master, thanks. Peter: I believe this one is *not* needed
-for the LTS branch, because it fixes a problem with the iptables 1.6.1
-bump, which was merged after the 2017.02 release. Baruch, could you
-confirm?
+Since the patch is in upstream fontconfig, we can get rid of this
+dependency once version is bumped next time.
 
-Thanks,
+Fixes:
+  http://autobuild.buildroot.net/results/174/17471088b26ebc840d1922d7f2aa9e69b4b49ced
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+[Thomas: improve comment in the code.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fontconfig/fontconfig.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index 93f2a15..8d395bc 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -8,8 +8,12 @@ FONTCONFIG_VERSION = 2.12.1
+ FONTCONFIG_SITE = http://fontconfig.org/release
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.bz2
+ FONTCONFIG_INSTALL_STAGING = YES
+-FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf
+-HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf
++
++# When
++# 0001-Avoid-conflicts-with-integer-width-macros-from-TS-1866.patch is
++# removed, the host-gperf dependency should be removed.
++FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf
++HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf host-gperf
+ FONTCONFIG_LICENSE = fontconfig license
+ FONTCONFIG_LICENSE_FILES = COPYING
+ 
