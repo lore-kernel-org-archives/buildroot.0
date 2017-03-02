@@ -1,47 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-netaddr: bump to version 0.7.19
-Message-ID: <20170302205923.DC92A7FECB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-pycli: bump to version 2.0.3
+Message-ID: <20170302205924.12DFD7FECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c34c2d59fcf67fedda2874574afbe13fef1d9d44
+commit: https://git.buildroot.net/buildroot/commit/?id=c66975f3460caa21eddab520b0fd6beeebd508d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-netaddr/python-netaddr.hash | 6 +++---
- package/python-netaddr/python-netaddr.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pycli/python-pycli.hash | 7 +++----
+ package/python-pycli/python-pycli.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
-index 5fcdda4..59628db 100644
---- a/package/python-netaddr/python-netaddr.hash
-+++ b/package/python-netaddr/python-netaddr.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c65bb34f8bedfbbca0b316c490cd13a0, sha256 locally computed.
--md5	c65bb34f8bedfbbca0b316c490cd13a0  netaddr-0.7.18.tar.gz
--sha256	a1f5c9fcf75ac2579b9995c843dade33009543c04f218ff7c007b3c81695bd19  netaddr-0.7.18.tar.gz
-+# md5 from https://pypi.python.org/pypi/netaddr/json, sha256 locally computed
-+md5 51019ef59c93f3979bcb37d3b8527e07 netaddr-0.7.19.tar.gz
-+sha256 38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd netaddr-0.7.19.tar.gz
-diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
-index c68b24f..69ad3cc 100644
---- a/package/python-netaddr/python-netaddr.mk
-+++ b/package/python-netaddr/python-netaddr.mk
+diff --git a/package/python-pycli/python-pycli.hash b/package/python-pycli/python-pycli.hash
+index 8be3178..46a297e 100644
+--- a/package/python-pycli/python-pycli.hash
++++ b/package/python-pycli/python-pycli.hash
+@@ -1,4 +1,3 @@
+-# From https://pypi.python.org/pypi?:action=show_md5&digest=5cad880168f3423a1235b396735c1360
+-md5 5cad880168f3423a1235b396735c1360 pyCLI-devel.tar.gz
+-# Locally calculated
+-sha256 d7dc3245d79ef00ba5c0d6b008eb3d1a519c0df4cfa4467eee5160a80c6ddc0a pyCLI-devel.tar.gz
++# md5 from https://pypi.python.org/pypi/pycli/json, sha256 locally computed
++md5 89c487e7c8068ce05d63394d2ae7ebad pyCLI-2.0.3.tar.gz
++sha256 bc53e6c5db031ae1c05d131641f153d22a201c5e82cc8c9324a945752efbb622 pyCLI-2.0.3.tar.gz
+diff --git a/package/python-pycli/python-pycli.mk b/package/python-pycli/python-pycli.mk
+index 8e48a06..7aff1c6 100644
+--- a/package/python-pycli/python-pycli.mk
++++ b/package/python-pycli/python-pycli.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_NETADDR_VERSION = 0.7.18
-+PYTHON_NETADDR_VERSION = 0.7.19
- PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
--PYTHON_NETADDR_SITE = http://pypi.python.org/packages/source/n/netaddr
-+PYTHON_NETADDR_SITE = https://pypi.python.org/packages/0c/13/7cbb180b52201c07c796243eeff4c256b053656da5cfe3916c3f5b57b3a0
- PYTHON_NETADDR_LICENSE = BSD-3c
- PYTHON_NETADDR_LICENSE_FILES = LICENSE
- PYTHON_NETADDR_SETUP_TYPE = distutils
+-PYTHON_PYCLI_VERSION = devel
++PYTHON_PYCLI_VERSION = 2.0.3
+ PYTHON_PYCLI_SOURCE = pyCLI-$(PYTHON_PYCLI_VERSION).tar.gz
+-PYTHON_PYCLI_SITE = https://pypi.python.org/packages/source/p/pyCLI
++PYTHON_PYCLI_SITE = https://pypi.python.org/packages/95/fc/b2d86a5fbdac4072bcf70b01674b612e1a13026f54962c878fe3eca36fd1
+ PYTHON_PYCLI_LICENSE = ISC-like
+ PYTHON_PYCLI_LICENSE_FILES = lib/cli/__init__.py
+ PYTHON_PYCLI_SETUP_TYPE = setuptools
