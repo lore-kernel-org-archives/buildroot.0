@@ -1,33 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Mar 2017 08:19:06 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump to 4.10 kernel
-	version
-In-Reply-To: <CAOMZO5AvgFcX0Ed5B+ah8-UpgG2aM-CDFjPZiFSKNPW1=7TPrg@mail.gmail.com>
- (Fabio Estevam's message of "Wed, 1 Mar 2017 18:34:14 -0300")
-References: <20170301170422.EA26B80279@busybox.osuosl.org>
- <20170301220859.7de79d6a@gmx.net>
- <20170301222532.3b34a5b1@free-electrons.com>
- <CAOMZO5CU4uoJ4EYr5zN0ER8xaQBqdhbfp0kEiMio9tRrbSmr5Q@mail.gmail.com>
- <CAOMZO5AvgFcX0Ed5B+ah8-UpgG2aM-CDFjPZiFSKNPW1=7TPrg@mail.gmail.com>
-Message-ID: <87fuiwgn85.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Mar 2017 08:20:54 +0100
+Subject: [Buildroot] [PATCH] fs/iso9660: doesn't support (grub2) EFI
+In-Reply-To: <20170301215400.5f184cac@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 1 Mar 2017 21:54:00 +0100")
+References: <73760f82-95af-ba23-7f23-3e2e79136ca4@mind.be>
+ <20170301200542.19418-1-arnout@mind.be>
+ <20170301215400.5f184cac@free-electrons.com>
+Message-ID: <87bmtkgn55.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > On Wed, Mar 1, 2017 at 6:28 PM, Fabio Estevam <festevam@gmail.com> wrote:
- >>> Doh, indeed, this seems like a mistake. Fabio, can you send a fixup
- >>> patch?
+ > Hello,
+ > On Wed, 1 Mar 2017 21:05:42 +0100, Arnout Vandecappelle
+ > (Essensium/Mind) wrote:
+ >> The iso9660 generation for grub2 assumes that grub-eltorito.img is
+ >> available. However, this image is only available for the i386-pc target
+ >> (i.e. legacy BIOS). An EFI-bootable iso9660 requires a different layout.
  >> 
- >> Sorry about that. I will send a fix.
+ >> Since we currently can't generate the EFI-bootable iso9660 layout,
+ >> require the i386-pc target to be selected in grub.
+ >> 
+ >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ >> Reported-by: arnaud.miche at orange.com
+ >> ---
+ >> fs/iso9660/Config.in | 8 ++++----
+ >> 1 file changed, 4 insertions(+), 4 deletions(-)
 
- > Just looked at master and the kernel 4.9 is at 4.9.13, so no issues there.
+ > Applied to master, thanks. Peter, I believe this one qualifies for the
+ > LTS branch.
 
-Yes, there was a merge conflict when merging next into master, and I
-kept both the 4.9 and 4.10 line.
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
