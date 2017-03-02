@@ -1,49 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 11:42:20 +0100
-Subject: [Buildroot] [PATCH 4/4] DEVELOPERS: add csky developer
-In-Reply-To: <1488450842-29100-4-git-send-email-ren_guo@c-sky.com>
-References: <1488450842-29100-1-git-send-email-ren_guo@c-sky.com>
- <1488450842-29100-4-git-send-email-ren_guo@c-sky.com>
-Message-ID: <20170302114220.141a883c@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 2 Mar 2017 12:57:16 +0200
+Subject: [Buildroot] [PATCH] iptables: fix build with musl
+In-Reply-To: <20170302092304.0f16c801@free-electrons.com>
+References: <045cb32775a51576353bc4aa73dcc5fa8b554864.1488441240.git.baruch@tkos.co.il>
+ <20170302092304.0f16c801@free-electrons.com>
+Message-ID: <20170302105716.zjqthvskb4bqvml5@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu,  2 Mar 2017 18:34:02 +0800, Guo Ren wrote:
-> You can get more info from github.com/c-sky.
+On Thu, Mar 02, 2017 at 09:23:04AM +0100, Thomas Petazzoni wrote:
+> On Thu,  2 Mar 2017 09:54:00 +0200, Baruch Siach wrote:
+> > Add a patch that defines _GNU_SOURCE to expose some struct tcphdr fields.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/bee/bee20b689345b593378cfd91e0abc48bf381d3f9/
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >  ...utils-nfsynproxy-fix-build-with-musl-libc.patch | 44 ++++++++++++++++++++++
+> >  1 file changed, 44 insertions(+)
+> >  create mode 100644 package/iptables/0001-utils-nfsynproxy-fix-build-with-musl-libc.patch
 > 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> ---
->  DEVELOPERS | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 1bf07c3..cd4402f 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -592,6 +592,11 @@ F:	package/sdl2/
->  N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
->  F:	package/liquid-dsp/
->  
-> +N:	Guo Ren <ren_guo@c-sky.com>
-> +F:	arch/Config.in.csky
+> Applied to master, thanks. Peter: I believe this one is *not* needed
+> for the LTS branch, because it fixes a problem with the iptables 1.6.1
+> bump, which was merged after the 2017.02 release. Baruch, could you
+> confirm?
 
-This should be part of the patch adding the architecture.
+It's true that this issue does not effect 2017.02, but not because of the 
+iptables version. In 2017.02 iptables is disabled for musl build. Commit 
+6a27508ffb (Revert "package/iptables: nfsynproxy not available on musl") that 
+enabled musl was applied to next.
 
-> +F:	board/csky
-> +F:	configs/csky_*
+baruch
 
-And this of the patch adding the board.
-
-But overall: this series looks almost good to go. I think the next
-iteration will be OK. Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
