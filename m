@@ -1,53 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 23:22:26 +0100
-Subject: [Buildroot] [PATCH 13/25] package/Config.in: explain that lua
- package names should start with lua
-In-Reply-To: <a9a0a363-1c91-c50a-6f5d-a058c8fd4e4b@mind.be>
-References: <20170223170047.24417-1-arnout@mind.be>
- <20170223170047.24417-14-arnout@mind.be>
- <20170302225033.4c38fbab@free-electrons.com>
- <a9a0a363-1c91-c50a-6f5d-a058c8fd4e4b@mind.be>
-Message-ID: <20170302232226.7566b105@free-electrons.com>
+Date: Thu, 2 Mar 2017 22:57:11 +0100
+Subject: [Buildroot] [git commit] luaposix: fix runtime by selecting "bit32"
+	instead of "bitop"
+Message-ID: <20170302222355.B032982275@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8bd2e2f3194b5e73680dc16555a7a77b73e2c3ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 2 Mar 2017 23:19:50 +0100, Arnout Vandecappelle wrote:
+Since the bump of luaposix to 33.4.0, it doesn't work anymore at
+runtime with LuaJIT or Lua 5.1. This can be tested with the following
+defconfig:
 
->  The problem is that we want to use upstream names. The upstream name of
-> luaposix is luaposix. We certainly don't want to change that into lua-posix, and
-> making it lua-luaposix would be weird as well. Note that Debian does call it
-> lua-posix. So to use the lua-posix package, you have to do 'require "luaposix"',
-> which makes little sense IMHO.
-> 
->  For me, the important thing is that I can see in the package directory which
-> packages are lua-related. I'm not really bothered with seeing a mix of lua-foo
-> and luabar.
-> 
->  Perl is different because module names (almost?) never start with Perl. Python
-> is different because package names sometimes are like pyfoo, but never
-> python-foo, and we have indeed chosen to make it python-pyfoo.
-> 
->  If people think it would be better for consistency to have lua-luafoo, I can
-> live with that (just 3 letters more). But do keep in mind that we have already
-> forsaken consistency because of the historical discrepancy.
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_LUA=y
+BR2_PACKAGE_LUA_5_1=y
+BR2_PACKAGE_LUAPOSIX=y
 
-Fair enough, but then I'd like that the rule be:
+/usr/bin/lua: /usr/share/lua/5.1/posix/init.lua:17: module 'bit32' not found:
+...
 
- * If the upstream package name is luafoo, then it should be luafoo in
-   Buildroot.
+In older luaposix versions, it would try to load the 'bit' instead of
+'bit32' module if LUAVER == 5.1. However, this feature was removed in
+33.4.0.
 
- * If the upstream package name is foo, then it should be lua-foo in
-   Buildroot.
+So instead of adding a runtime dependency on luabitop, depend on
+lua-bit32.
 
-Does that sound OK?
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/luaposix/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index 9707cde..91abcb9 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -1,8 +1,10 @@
+ config BR2_PACKAGE_LUAPOSIX
+ 	bool "luaposix"
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+-	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA_5_1
+-	# LuaBitOp is already included in LuaJIT
++	# "bit32" is included in Lua 5.2+. luajit has an equivalent
++	# "bit" module, but since it has a different name, luaposix
++	# doesn't find it.
++	select BR2_PACKAGE_LUA_BIT32 if BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
+ 	help
+ 	  This is a POSIX binding for LuaJIT, Lua 5.1, 5.2 and 5.3;
+ 	  like most libraries it simply binds to C APIs on the
