@@ -1,123 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  2 Mar 2017 17:18:29 -0300
-Subject: [Buildroot] [PATCH] linux-headers: remove 3.18.x and 4.8.x series
-Message-ID: <20170302201829.22674-1-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Mar 2017 21:37:41 +0100
+Subject: [Buildroot] [PATCH] package/alsamixergui: add license
+ information
+In-Reply-To: <c6240c78-d0ee-a3c8-681a-b041f963f72c@grandegger.com>
+References: <a0915233-820b-2622-ed75-4ec3ef8e0e7c@grandegger.com>
+ <20170302171632.0b2fa9b5@free-electrons.com>
+ <c6240c78-d0ee-a3c8-681a-b041f963f72c@grandegger.com>
+Message-ID: <20170302213741.63b86f2a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These aren't supported upstream any more so remove the options and add
-them to legacy handling.
+Hello,
 
-Switch older deprecations that used 3.18.x to 3.12.x
+Please keep the Buildroot mailing list in Cc. Thanks!
 
-Remove stray version strings as well.
+On Thu, 2 Mar 2017 18:28:08 +0100, Wolfgang Grandegger wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- Config.in.legacy                     | 28 ++++++++++++++++++++++++----
- package/linux-headers/Config.in.host | 13 -------------
- 2 files changed, 24 insertions(+), 17 deletions(-)
+> "make legal-info" did report that the license is unkown.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1777603..f05c409 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,26 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2017.05"
- 
-+config BR2_KERNEL_HEADERS_4_8
-+	bool "kernel headers version 4.8.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_4
-+	select BR2_LEGACY
-+	help
-+	  Version 4.8.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.4.x of the headers have been automatically
-+	  selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_3_18
-+	bool "kernel headers version 3.18.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_12
-+	select BR2_LEGACY
-+	help
-+	  Version 3.18.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 3.12.x of the headers have been automatically
-+	  selected in your configuration.
-+
- config BR2_GLIBC_VERSION_2_22
- 	bool "glibc 2.22 removed"
- 	select BR2_LEGACY
-@@ -432,22 +452,22 @@ config BR2_GCC_VERSION_4_8_ARC
- 
- config BR2_KERNEL_HEADERS_4_0
- 	bool "kernel headers version 4.0.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_18
-+	select BR2_KERNEL_HEADERS_3_12
- 	select BR2_LEGACY
- 	help
- 	  Version 4.0.x of the Linux kernel headers have been deprecated
- 	  for more than four buildroot releases and are now removed.
--	  As an alternative, version 3.18.x of the headers have been
-+	  As an alternative, version 3.12.x of the headers have been
- 	  automatically selected in your configuration.
- 
- config BR2_KERNEL_HEADERS_3_19
- 	bool "kernel headers version 3.19.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_18
-+	select BR2_KERNEL_HEADERS_3_12
- 	select BR2_LEGACY
- 	help
- 	  Version 3.19.x of the Linux kernel headers have been deprecated
- 	  for more than four buildroot releases and are now removed.
--	  As an alternative, version 3.18.x of the headers have been
-+	  As an alternative, version 3.12.x of the headers have been
- 	  automatically selected in your configuration.
- 
- config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7c36e17..57e690e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -46,11 +46,6 @@ choice
- 		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 
--	config BR2_KERNEL_HEADERS_3_18
--		bool "Linux 3.18.x kernel headers"
--		depends on !BR2_nios2
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
--
- 	config BR2_KERNEL_HEADERS_4_1
- 		bool "Linux 4.1.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
-@@ -59,10 +54,6 @@ choice
- 		bool "Linux 4.4.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
- 
--	config BR2_KERNEL_HEADERS_4_8
--		bool "Linux 4.8.x kernel headers"
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
--
- 	config BR2_KERNEL_HEADERS_4_9
- 		bool "Linux 4.9.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-@@ -226,12 +217,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.70"	if BR2_KERNEL_HEADERS_3_12
--	default "3.18.48"	if BR2_KERNEL_HEADERS_3_18
--	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
--	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.52"	if BR2_KERNEL_HEADERS_4_4
--	default "4.8.17"	if BR2_KERNEL_HEADERS_4_8
- 	default "4.9.13"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.1"	if BR2_KERNEL_HEADERS_4_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Yes, before your patch. What I suggested is that you should run "make
+legal-info" after your patch.
+
+> Then I looked
+> into "build/alsamixergui...". The COPYING file seems to be generated by make:
+> 
+> $ make alsamixergui-dirclean
+> $ make alsamixergui-extract
+> $ head build/alsamixergui-0.9.0rc2-1/COPYING 
+> head: cannot open 'build/alsamixergui/COPYING' for reading: No such file or directory
+> $ make alsamixergui
+> $ head build/alsamixergui-0.9.0rc2-1/COPYING 
+
+OK, but that doesn't work, because you have no guarantee that the
+package has been built when "make legal-info" runs. "make legal-info"
+only ensures that packages have been: 1. downloaded, 2. extracted, 3.
+patched.
+
+So, with your patch applied, if you run:
+
+ $ make clean
+ $ make legal-info
+
+then you will see that it fails, because the COPYING file doesn't exist.
+
+Best regards,
+
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
