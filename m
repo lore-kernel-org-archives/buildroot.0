@@ -1,29 +1,47 @@
 From: ren_guo <ren_guo@c-sky.com>
-Date: Thu, 2 Mar 2017 09:00:27 +0800
+Date: Thu, 2 Mar 2017 09:04:41 +0800
 Subject: [Buildroot] [PATCH 1/1] csky: Add new architecture
-In-Reply-To: <1b4215f6-b664-8778-9ffb-e9b9739743d5@mind.be>
+In-Reply-To: <20170301141443.62263c29@free-electrons.com>
 References: <1488357224-5141-1-git-send-email-ren_guo@c-sky.com>
- <1b4215f6-b664-8778-9ffb-e9b9739743d5@mind.be>
-Message-ID: <527c7844-c673-e0c9-0824-ce94c7957a2c@c-sky.com>
+ <20170301102208.79668e6f@free-electrons.com>
+ <1174d987-9327-9109-8fd5-f369977cb437@c-sky.com>
+ <20170301141443.62263c29@free-electrons.com>
+Message-ID: <5244ae45-3f9c-e84d-0d12-5354d8d64519@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi, Arnout
+hi, Thomas
 
->   If the toolchain you pull from github is more or less stable, you could also
-> opt to add it to toolchain/toolchain-external, so it is easier to fetch it.
+> Great. Then please add an entry for yourself in the DEVELOPERS file,
+> like:
+>
+> N:      ren_guo <ren_guo@c-sky.com>
+> F:      arch/Config.in.csky
+>
+> You can also add other F: entries for files that you contributed. But
+> the arch/Config.in.csky is particularly important: by assigning this
+> file to yourself, you will receive e-mail notifications when there are
+> build failures for your architecture.
+>
+> One package that contains architecture-specific code and that often
+> causes problems is libffi. So if you haven't yet looked at implementing
+> support for csky in libffi, I would recommend you to have a look.
+>
+ok, got it.
 
-Currently I just use BR2_TOOLCHAIN_EXTERNAL_URL, and I will do this next time.
+> However, since initially you will not support the "internal toolchain
+> backend" (i.e when Buildroot builds the toolchain from scratch), then
+> you should change the definition of BR2_TOOLCHAIN_BUILDROOT with:
+>
+> 	depends on !BR2_csky
+>
+> So that on the csky architecture, only the external toolchain option is
+> available.
 
->   BTW, note that you will need to depend on BR2_HOSTARCH = "x86_64" for these
-> external toolchains.
-
-BR2_HOSTARCH is important for me, thx :)
-
-BTW, I've changed gcc PKGVERSION to match the regax in helper.mk, it solved :)
+ok, I will be care of it.
 
 Best Regards
 
