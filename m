@@ -1,36 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 23:24:17 +0100
-Subject: [Buildroot] [git commit] lua-bit32: remove custom extract commands
-Message-ID: <20170302222420.D8B3782284@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 2 Mar 2017 23:24:31 +0100
+Subject: [Buildroot] [PATCH 14/25] lua-bit32: new package
+In-Reply-To: <20170302225441.5adee9f6@free-electrons.com>
+References: <20170223170047.24417-1-arnout@mind.be>
+ <20170223170047.24417-15-arnout@mind.be>
+ <20170302225441.5adee9f6@free-electrons.com>
+Message-ID: <55bf7d15-ebeb-6bbd-1eaf-c8657c5821fb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d4f519246505520d77fc1ddb827df2fe10c790c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With the reworked luarocks extraction, they are no longer needed.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lua-bit32/lua-bit32.mk | 6 ------
- 1 file changed, 6 deletions(-)
+On 02-03-17 22:54, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 23 Feb 2017 18:00:36 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> This package is needed to make luaposix work.
+>>
+>> The upstream name is just "bit32", but the luarocks infra doesn't
+>> support an upstream name different from the Buildroot name. We therefore
+>> have to explicitly set all variables and we need custom extract
+>> commands.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> ---
+>>  package/Config.in                |  1 +
+>>  package/lua-bit32/Config.in      |  9 +++++++++
+>>  package/lua-bit32/lua-bit32.hash |  2 ++
+>>  package/lua-bit32/lua-bit32.mk   | 20 ++++++++++++++++++++
+> 
+> You forgot to add yourself to the DEVELOPERS file, so I did this
+> addition.
 
-diff --git a/package/lua-bit32/lua-bit32.mk b/package/lua-bit32/lua-bit32.mk
-index 8304d6e..f4090c7 100644
---- a/package/lua-bit32/lua-bit32.mk
-+++ b/package/lua-bit32/lua-bit32.mk
-@@ -11,10 +11,4 @@ LUA_BIT32_SOURCE = bit32-$(LUA_BIT32_VERSION).src.rock
- LUA_BIT32_LICENSE = MIT
- LUA_BIT32_LICENSE_FILES = $(LUA_BIT32_SUBDIR)/LICENSE
- 
--define LUA_BIT32_EXTRACT_CMDS
--        cd $(LUA_BIT32_DIR) && \
--                $(LUAROCKS_RUN_ENV) $(LUAROCKS_RUN_CMD) unpack --force $(DL_DIR)/$(LUA_BIT32_SOURCE) && \
--		mv bit32-$(LUA_BIT32_VERSION)/* .
--endef
--
- $(eval $(luarocks-package))
+ Well, like most of my packages it's a one-shot rather than something I actively
+use, so I tend not to add myself to the DEVELOPERS file. If you do that, you
+could instead just add me for all orphaned packages. Hm, would that be a useful
+feature? A last-resort developer?
+
+
+>> +config BR2_PACKAGE_LUA_BIT32
+>> +	bool "lua-bit32"
+>> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+> 
+> This "depends on" is not needed, since lua-bit32/Config.in is anyway
+> only included if BR2_PACKAGE_HAS_LUAINTERPRETER=y.
+
+ Oops, I just copied it from a BR2_EXTERNAL :-)
+
+
+ Regards,
+ Arnout
+
+
+> I've fixed up those two issues and applied to master. Thanks!
+> 
+> Thomas
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
