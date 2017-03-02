@@ -1,54 +1,47 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 2 Mar 2017 08:34:24 -0300 (BRT)
-Subject: [Buildroot] [PATCH v7] gtest/gmock: bump to version 1.8.0
-In-Reply-To: <20170301230927.11de82b6@free-electrons.com>
-References: <1487070316-12583-1-git-send-email-casantos@datacom.ind.br>
- <1487784452-7424-1-git-send-email-casantos@datacom.ind.br>
- <20170226150525.359a21cf@free-electrons.com>
- <802529421.12331306.1488198710194.JavaMail.zimbra@datacom.ind.br>
- <20170301230927.11de82b6@free-electrons.com>
-Message-ID: <201605192.12649135.1488454464199.JavaMail.zimbra@datacom.ind.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 2 Mar 2017 14:29:40 +0200
+Subject: [Buildroot] [PATCH 1/5] core/pkg-cmake: provide our own
+	platform description
+In-Reply-To: <f25e9ff7873418c0b323528d6a9c2482c752cd31.1488305206.git.yann.morin.1998@free.fr>
+References: <cover.1488305206.git.yann.morin.1998@free.fr>
+ <f25e9ff7873418c0b323528d6a9c2482c752cd31.1488305206.git.yann.morin.1998@free.fr>
+Message-ID: <20170302122940.xhkdgbz6sj3zfqsb@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "Fabrice Fontaine" <fabrice.fontaine@orange.com>, "Romain Naour" <romain.naour@gmail.com>, "Yann E. MORIN"
-> <yann.morin.1998@free.fr>, buildroot at buildroot.org
-> Sent: Wednesday, March 1, 2017 7:09:27 PM
-> Subject: Re: [Buildroot] [PATCH v7] gtest/gmock: bump to version 1.8.0
+Hi Yann,
 
-> Hello,
-> 
-> On Mon, 27 Feb 2017 09:31:50 -0300 (BRT), Carlos Santos wrote:
-> 
->> Because it does not work (try http://patchwork.ozlabs.org/patch/727786/).
-> 
-> Could you define "does not work" ? Indeed, I applied this version of
-> your patch (v6), and built it with the following configurations:
-> 
-> BR2_PACKAGE_GTEST=y
-> # BR2_PACKAGE_GTEST_GMOCK is not set
-> 
-> and:
-> 
-> BR2_PACKAGE_GTEST=y
-> BR2_PACKAGE_GTEST_GMOCK=y
-> 
-> and both built successfully.
+On Tue, Feb 28, 2017 at 07:07:22PM +0100, Yann E. MORIN wrote:
+> -set(CMAKE_SYSTEM_NAME Linux)
+> +set(CMAKE_SYSTEM_NAME Buildroot)
+>  set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
 
-Hum, that's correct. I'm at work now, without access to the machine in
-which I was running my tests, at home, and can't reproduce the problem
-that led me to believe that v7 was necessary. Looks like it was just a
-mistake.
+This breaks libiio.
 
-Please apply v6 and discard v7. Sorry for the noise.
+http://autobuild.buildroot.net/results/281/2812b008a0ab6bab5fe4d45eb9ffe4e9496a8cb4/
+
+/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libiio-0.9/local.c: In function 'local_open':
+/home/dawncrow/buildroot-test/scripts/instance-0/output/build/libiio-0.9/local.c:856:33: error: 'O_CLOEXEC' undeclared (first use in this function)
+
+That is because the libiio CMakeLists.txt has the following code:
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+		[...]
+
+        set(CMAKE_REQUIRED_DEFINITIONS "-D_GNU_SOURCE=1")
+        add_definitions(-D_GNU_SOURCE=1)
+endif()
+
+Now cmake skips this code, thus omitting _GNU_SOURCE which leads to the build 
+failure.
+
+baruch
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
