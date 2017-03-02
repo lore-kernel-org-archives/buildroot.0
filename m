@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 11:41:34 +0100
-Subject: [Buildroot] [PATCH 3/4] toolchain: only external toolchain
-	option displayed
-In-Reply-To: <1488450842-29100-3-git-send-email-ren_guo@c-sky.com>
+Date: Thu, 2 Mar 2017 11:42:20 +0100
+Subject: [Buildroot] [PATCH 4/4] DEVELOPERS: add csky developer
+In-Reply-To: <1488450842-29100-4-git-send-email-ren_guo@c-sky.com>
 References: <1488450842-29100-1-git-send-email-ren_guo@c-sky.com>
- <1488450842-29100-3-git-send-email-ren_guo@c-sky.com>
-Message-ID: <20170302114134.404deb94@free-electrons.com>
+ <1488450842-29100-4-git-send-email-ren_guo@c-sky.com>
+Message-ID: <20170302114220.141a883c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  2 Mar 2017 18:34:01 +0800, Guo Ren wrote:
-> Currently csky architecture isn't support the "internal toolchain
-> backend", so we disable it in config.
+On Thu,  2 Mar 2017 18:34:02 +0800, Guo Ren wrote:
+> You can get more info from github.com/c-sky.
 > 
 > Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> ---
+>  DEVELOPERS | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 1bf07c3..cd4402f 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -592,6 +592,11 @@ F:	package/sdl2/
+>  N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
+>  F:	package/liquid-dsp/
+>  
+> +N:	Guo Ren <ren_guo@c-sky.com>
+> +F:	arch/Config.in.csky
 
-This patch should be squashed into PATCH 2/4. If you don't do that and
-I commit only PATCH 2/4, then things are broken, because the csky
-architecture is added, but we don't prevent users from trying to build
-an internal toolchain.
+This should be part of the patch adding the architecture.
 
-Thanks,
+> +F:	board/csky
+> +F:	configs/csky_*
+
+And this of the patch adding the board.
+
+But overall: this series looks almost good to go. I think the next
+iteration will be OK. Thanks a lot!
 
 Thomas
 -- 
