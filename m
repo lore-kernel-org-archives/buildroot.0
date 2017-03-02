@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-pycparser: bump to version 2.17
-Message-ID: <20170302205924.1BDF67FECB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-pysocks: bump to version 1.6.6
+Message-ID: <20170302205924.74DB57FECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=744153b1af35d37835478dfd51646599a7ef06a3
+commit: https://git.buildroot.net/buildroot/commit/?id=e7b8484eef2a2d069f906636307866964ac4976d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pycparser/python-pycparser.hash | 6 +++---
- package/python-pycparser/python-pycparser.mk   | 4 ++--
+ package/python-pysocks/python-pysocks.hash | 6 +++---
+ package/python-pysocks/python-pysocks.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pycparser/python-pycparser.hash b/package/python-pycparser/python-pycparser.hash
-index a87bfd4..25747c3 100644
---- a/package/python-pycparser/python-pycparser.hash
-+++ b/package/python-pycparser/python-pycparser.hash
+diff --git a/package/python-pysocks/python-pysocks.hash b/package/python-pysocks/python-pysocks.hash
+index 556996a..ac0b63a 100644
+--- a/package/python-pysocks/python-pysocks.hash
++++ b/package/python-pysocks/python-pysocks.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=a2bc8d28c923b4fe2b2c3b4b51a4f935, sha256 locally computed
--md5     a2bc8d28c923b4fe2b2c3b4b51a4f935  pycparser-2.14.tar.gz
--sha256  7959b4a74abdc27b312fed1c21e6caf9309ce0b29ea86b591fd2e99ecdf27f73  pycparser-2.14.tar.gz
-+# md5 from https://pypi.python.org/pypi/pycparser/json, sha256 locally computed
-+md5 ca98dcb50bc1276f230118f6af5a40c7 pycparser-2.17.tar.gz
-+sha256 0aac31e917c24cb3357f5a4d5566f2cc91a19ca41862f6c3c22dc60a629673b6 pycparser-2.17.tar.gz
-diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
-index a32f1aa..e66c80b 100644
---- a/package/python-pycparser/python-pycparser.mk
-+++ b/package/python-pycparser/python-pycparser.mk
+-# md5 from https://pypi.python.org/pypi/PySocks/json, sha256 locally computed
+-md5     68f4ad7a8d4fa725656ae3e9dd142d29  PySocks-1.5.7.tar.gz
+-sha256  e51c7694b10288e6fd9a28e15c0bcce9aca0327e7b32ebcd9af05fcd56f38b88  PySocks-1.5.7.tar.gz
++# md5 from https://pypi.python.org/pypi/pysocks/json, sha256 locally computed
++md5 571f4c23982fa86bf0e7a441f1b6c881 PySocks-1.6.6.tar.gz
++sha256 02419a225ff5dcfc3c9695ef8fc9b4d8cc99658e650c6d4718d4c8f451e63f41 PySocks-1.6.6.tar.gz
+diff --git a/package/python-pysocks/python-pysocks.mk b/package/python-pysocks/python-pysocks.mk
+index a99a399..0fa8c1d 100644
+--- a/package/python-pysocks/python-pysocks.mk
++++ b/package/python-pysocks/python-pysocks.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCPARSER_VERSION = 2.14
-+PYTHON_PYCPARSER_VERSION = 2.17
- PYTHON_PYCPARSER_SOURCE = pycparser-$(PYTHON_PYCPARSER_VERSION).tar.gz
--PYTHON_PYCPARSER_SITE = https://pypi.python.org/packages/source/p/pycparser
-+PYTHON_PYCPARSER_SITE = https://pypi.python.org/packages/be/64/1bb257ffb17d01f4a38d7ce686809a736837ad4371bcc5c42ba7a715c3ac
- PYTHON_PYCPARSER_SETUP_TYPE = setuptools
- PYTHON_PYCPARSER_LICENSE = BSD-3c
- PYTHON_PYCPARSER_LICENSE_FILES = LICENSE
+-PYTHON_PYSOCKS_VERSION = 1.5.7
++PYTHON_PYSOCKS_VERSION = 1.6.6
+ PYTHON_PYSOCKS_SOURCE = PySocks-$(PYTHON_PYSOCKS_VERSION).tar.gz
+-PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/16/56/9b3513078f837fa8cb88ee01ec1cd805ed8104a37bc02ca8c2588ae8fe5a
++PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/fd/70/ba9982cedc9b3ed3c06934f1f46a609e0f23c7bfdf567c52a09f1296b8cb
+ PYTHON_PYSOCKS_LICENSE = BSD-3c
+ PYTHON_PYSOCKS_LICENSE_FILES = socks.py
+ PYTHON_PYSOCKS_SETUP_TYPE = distutils
