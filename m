@@ -1,17 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 02 Mar 2017 15:45:51 +0000
-Subject: [Buildroot] [Bug 9691] New: Wrong cryptsetup package include files
+Date: Thu, 02 Mar 2017 15:46:27 +0000
+Subject: [Buildroot] [Bug 9696] New: Wrong cryptsetup package include files
 	location
-Message-ID: <bug-9691-163@https.bugs.busybox.net/>
+Message-ID: <bug-9696-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9691
+https://bugs.busybox.net/show_bug.cgi?id=9696
 
-            Bug ID: 9691
+            Bug ID: 9696
            Summary: Wrong cryptsetup package include files location
            Product: buildroot
            Version: 2016.08
