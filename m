@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 22:43:27 +0100
-Subject: [Buildroot] [PATCH 04/25] manual: luarocks: improve tutorial
- example
-In-Reply-To: <20170223170047.24417-5-arnout@mind.be>
-References: <20170223170047.24417-1-arnout@mind.be>
- <20170223170047.24417-5-arnout@mind.be>
-Message-ID: <20170302224327.4db77848@free-electrons.com>
+Date: Thu, 2 Mar 2017 22:45:10 +0100
+Subject: [Buildroot] [git commit] lpty: remove LPTY_VERSION_UPSTREAM
+Message-ID: <20170302214521.B822A8213B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=97b723685aae570d897d81b22187e28a464839b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Feb 2017 18:00:26 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The license file in a luarocks package is always inside the subdir, so the
-> example should reflect this.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  docs/manual/adding-packages-luarocks.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+It is not used for anything.
 
-Applied to master, thanks.
+Note that the SUBDIR is NOT the usual lpty-$(LPTY_VERSION_UPSTREAM);
+it *does* have the rockspec version in its name.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lpty/lpty.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/lpty/lpty.mk b/package/lpty/lpty.mk
+index 963ab61..5a69125 100644
+--- a/package/lpty/lpty.mk
++++ b/package/lpty/lpty.mk
+@@ -4,8 +4,7 @@
+ #
+ ################################################################################
+ 
+-LPTY_VERSION_UPSTREAM = 1.0.1
+-LPTY_VERSION = $(LPTY_VERSION_UPSTREAM)-1
++LPTY_VERSION = 1.0.1-1
+ LPTY_SUBDIR = lpty-$(LPTY_VERSION)
+ LPTY_LICENSE = MIT
+ LPTY_LICENSE_FILES = $(LPTY_SUBDIR)/doc/LICENSE
