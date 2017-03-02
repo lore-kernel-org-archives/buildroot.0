@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  2 Mar 2017 09:33:57 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.10.1
-In-Reply-To: <20170302123357.1274-1-gustavo@zacarias.com.ar>
-References: <20170302123357.1274-1-gustavo@zacarias.com.ar>
-Message-ID: <20170302123357.1274-2-gustavo@zacarias.com.ar>
+Date: Thu,  2 Mar 2017 09:36:50 -0300
+Subject: [Buildroot] [PATCH] libgtk3: bump to version 3.22.9
+Message-ID: <20170302123650.1827-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 890b848..1707f7d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,7 +26,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 07c2db1..395d460 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.8.sha256sum
+-sha256 c7254a88df5c17e9609cee9e848c3d0104512707edad4c3b4f256b131f8d3af1  gtk+-3.22.8.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.9.sha256sum
++sha256 e414542c96dc9966d40774451331bd8f73f77b6670226a5bbd057973a0c6a3e1  gtk+-3.22.9.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 852987d..048029d 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.10)"
-+	bool "Latest version (4.10.1)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -97,7 +97,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.10.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ LIBGTK3_VERSION_MAJOR = 3.22
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).8
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).9
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
 -- 
 2.10.2
