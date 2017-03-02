@@ -1,65 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 23:15:51 +0100
-Subject: [Buildroot] [git commit] luarocks-package: rework extraction
-Message-ID: <20170302222355.B9E0782248@busybox.osuosl.org>
+Date: Thu, 2 Mar 2017 23:24:17 +0100
+Subject: [Buildroot] [git commit] lua-bit32: remove custom extract commands
+Message-ID: <20170302222420.D8B3782284@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55d74b88d6d9e6b20645234f3a166a1173502853
+commit: https://git.buildroot.net/buildroot/commit/?id=0d4f519246505520d77fc1ddb827df2fe10c790c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The luarocks package infra extracts the package directly under
-$(BUILD_DIR), because the contents are always in a subdirectory name
-<pkg>-<version>. However, this only works when the upstream package name
-is the same as the Buildroot package name.
-
-Instead, we can rely on the fixed structure of a .src.rock: it always
-contains the source subdirectory in a directory called foo, where foo
-is the basename of the .src.rock file. Therefore, we can extract into
-a subdirectory of $($(PKG)_DIR), then move its contents up two
-directory levels.
-
-Note, we can't extract directly into $($(PKG)_DIR) because it's
-possible that $($(PKG)_SUBDIR) == <pkg>-<version>. In that case, we
-would try to move the directory unto itself and get "Directory not
-empty". This is the case e.g. for the lpty package.
-
-Two alternatives were considered but are more complicated:
-- instead of using wildcards for the move, we could have used
-  <.src.rock basename>/$($(PKG)_SUBDIR);
-- instead of extracting with luarocks, we could use unzip to extract
-  (the .src.rock is a ZIP file), but then we also have to move the
-  .rockspec into the subdir. In addition, sometimes the ZIP file
-  contains a tarball instead of the extracted source.
+With the reworked luarocks extraction, they are no longer needed.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-luarocks.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/lua-bit32/lua-bit32.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-index aa83e74..08ea9b8 100644
---- a/package/pkg-luarocks.mk
-+++ b/package/pkg-luarocks.mk
-@@ -44,12 +44,15 @@ $(2)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
- $(2)_DEPENDENCIES	+= host-luarocks luainterpreter
+diff --git a/package/lua-bit32/lua-bit32.mk b/package/lua-bit32/lua-bit32.mk
+index 8304d6e..f4090c7 100644
+--- a/package/lua-bit32/lua-bit32.mk
++++ b/package/lua-bit32/lua-bit32.mk
+@@ -11,10 +11,4 @@ LUA_BIT32_SOURCE = bit32-$(LUA_BIT32_VERSION).src.rock
+ LUA_BIT32_LICENSE = MIT
+ LUA_BIT32_LICENSE_FILES = $(LUA_BIT32_SUBDIR)/LICENSE
  
- #
--# Extract step
-+# Extract step. Extract into a temporary dir and move the relevant part to the
-+# source dir.
- #
- ifndef $(2)_EXTRACT_CMDS
- define $(2)_EXTRACT_CMDS
--	cd $$($(2)_DIR)/.. && \
-+	mkdir -p $$($(2)_DIR)/luarocks-extract
-+	cd $$($(2)_DIR)/luarocks-extract && \
- 		$$(LUAROCKS_RUN_ENV) $$(LUAROCKS_RUN_CMD) unpack --force $$(DL_DIR)/$$($(2)_SOURCE)
-+	mv $$($(2)_DIR)/luarocks-extract/*/* $$($(2)_DIR)
- endef
- endif
- 
+-define LUA_BIT32_EXTRACT_CMDS
+-        cd $(LUA_BIT32_DIR) && \
+-                $(LUAROCKS_RUN_ENV) $(LUAROCKS_RUN_CMD) unpack --force $(DL_DIR)/$(LUA_BIT32_SOURCE) && \
+-		mv bit32-$(LUA_BIT32_VERSION)/* .
+-endef
+-
+ $(eval $(luarocks-package))
