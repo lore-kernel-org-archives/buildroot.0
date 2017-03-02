@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-pysocks: bump to version 1.6.6
-Message-ID: <20170302205924.74DB57FECB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-pyroute2: bump to version 0.4.13
+Message-ID: <20170302205924.54B5F7FECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7b8484eef2a2d069f906636307866964ac4976d
+commit: https://git.buildroot.net/buildroot/commit/?id=ed27ecb18737c6c1115ecd9679dbf67ae124f411
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pysocks/python-pysocks.hash | 6 +++---
- package/python-pysocks/python-pysocks.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pyroute2/python-pyroute2.hash | 4 ++--
+ package/python-pyroute2/python-pyroute2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pysocks/python-pysocks.hash b/package/python-pysocks/python-pysocks.hash
-index 556996a..ac0b63a 100644
---- a/package/python-pysocks/python-pysocks.hash
-+++ b/package/python-pysocks/python-pysocks.hash
+diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
+index ff680fc..dbf09c9 100644
+--- a/package/python-pyroute2/python-pyroute2.hash
++++ b/package/python-pyroute2/python-pyroute2.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/PySocks/json, sha256 locally computed
--md5     68f4ad7a8d4fa725656ae3e9dd142d29  PySocks-1.5.7.tar.gz
--sha256  e51c7694b10288e6fd9a28e15c0bcce9aca0327e7b32ebcd9af05fcd56f38b88  PySocks-1.5.7.tar.gz
-+# md5 from https://pypi.python.org/pypi/pysocks/json, sha256 locally computed
-+md5 571f4c23982fa86bf0e7a441f1b6c881 PySocks-1.6.6.tar.gz
-+sha256 02419a225ff5dcfc3c9695ef8fc9b4d8cc99658e650c6d4718d4c8f451e63f41 PySocks-1.6.6.tar.gz
-diff --git a/package/python-pysocks/python-pysocks.mk b/package/python-pysocks/python-pysocks.mk
-index a99a399..0fa8c1d 100644
---- a/package/python-pysocks/python-pysocks.mk
-+++ b/package/python-pysocks/python-pysocks.mk
+ # md5 from https://pypi.python.org/pypi/pyroute2/json, sha256 locally computed
+-md5	317303ba8a5e3d55b4f918fd1b7e186d  pyroute2-0.4.8.tar.gz
+-sha256	a59907d2c5756f188b5f8aa48e3060e31c6f40e076f8143b99240fe0108a48d6  pyroute2-0.4.8.tar.gz
++md5 ef4282b1401bcd07a9cf4ec0696aba24 pyroute2-0.4.13.tar.gz
++sha256 93f3d72f58b3627036427b5571f8e27c93dbb6d01372dc4c452707d6610c0a39 pyroute2-0.4.13.tar.gz
+diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
+index 5ea4f54..f026b7f 100644
+--- a/package/python-pyroute2/python-pyroute2.mk
++++ b/package/python-pyroute2/python-pyroute2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSOCKS_VERSION = 1.5.7
-+PYTHON_PYSOCKS_VERSION = 1.6.6
- PYTHON_PYSOCKS_SOURCE = PySocks-$(PYTHON_PYSOCKS_VERSION).tar.gz
--PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/16/56/9b3513078f837fa8cb88ee01ec1cd805ed8104a37bc02ca8c2588ae8fe5a
-+PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/fd/70/ba9982cedc9b3ed3c06934f1f46a609e0f23c7bfdf567c52a09f1296b8cb
- PYTHON_PYSOCKS_LICENSE = BSD-3c
- PYTHON_PYSOCKS_LICENSE_FILES = socks.py
- PYTHON_PYSOCKS_SETUP_TYPE = distutils
+-PYTHON_PYROUTE2_VERSION = 0.4.8
++PYTHON_PYROUTE2_VERSION = 0.4.13
+ PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
+-PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/fb/c1/2cbd9d3f91c663be7168ee2d8d6e919006ffeef57cac76bdd9e6cba7f468
++PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/91/e7/814f60e355078dc51625cd2e7e715ed4a06111ddf2ac5580f2f10e79c94a
+ PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPLv2+
+ PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2 LICENSE.GPL.v2 README.license.md
+ PYTHON_PYROUTE2_SETUP_TYPE = distutils
