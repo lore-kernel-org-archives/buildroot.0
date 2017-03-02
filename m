@@ -1,46 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 2 Mar 2017 21:54:15 +0100
-Subject: [Buildroot] [git commit] python-pytrie: bump to version 0.3
-Message-ID: <20170302205924.7EA467FECB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-pydal: bump to version 17.1
+Message-ID: <20170302205924.24EA07FECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0c7bd34286b39192dc8958dcf2140b240032b19
+commit: https://git.buildroot.net/buildroot/commit/?id=03d6dd770a1ac17500ee7216d70633a1d51e2180
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pytrie/python-pytrie.hash | 6 +++---
- package/python-pytrie/python-pytrie.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pydal/python-pydal.hash | 4 ++--
+ package/python-pydal/python-pydal.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
-index 88d2542..a8db914 100644
---- a/package/python-pytrie/python-pytrie.hash
-+++ b/package/python-pytrie/python-pytrie.hash
+diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+index ad17c33..8e20215 100644
+--- a/package/python-pydal/python-pydal.hash
++++ b/package/python-pydal/python-pydal.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5997b46c854a68bc588f4527c987663a, sha256 locally computed.
--md5	5997b46c854a68bc588f4527c987663a  PyTrie-0.2.tar.gz
--sha256	b272021351efadc6757591aac03ed4794bdfd091122204a4673e94bfb66cc500  PyTrie-0.2.tar.gz
-+# md5 from https://pypi.python.org/pypi/pytrie/json, sha256 locally computed
-+md5 32d824476a5beab2bc79620fb5871cd2 PyTrie-0.3.tar.gz
-+sha256 0c1bd0cb7c301b193da4bcf31bdf68bbdbea88be4bea5f680caecc56d9b74020 PyTrie-0.3.tar.gz
-diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
-index e3bea4f..0869710 100644
---- a/package/python-pytrie/python-pytrie.mk
-+++ b/package/python-pytrie/python-pytrie.mk
-@@ -4,8 +4,8 @@
+ # md5 from https://pypi.python.org/pypi/pydal/json, sha256 locally computed
+-md5	74c6cc43d5ee57bcffa804c1204030d8  pyDAL-16.9.tar.gz
+-sha256	e5e18b10df044c4328a5a2fe0400793a8f643fe3526daee8c99103fc5589476e  pyDAL-16.9.tar.gz
++md5 f544da78cd4980d3a13024bc79065cf0 pyDAL-17.1.tar.gz
++sha256 ae33e903725133c051df3cd0712cc1967997f56fc480a90ab6a7c50df265f9d1 pyDAL-17.1.tar.gz
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+index a0e9729..7492357 100644
+--- a/package/python-pydal/python-pydal.mk
++++ b/package/python-pydal/python-pydal.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTRIE_VERSION = 0.2
--PYTHON_PYTRIE_SITE = http://pypi.python.org/packages/source/P/PyTrie
-+PYTHON_PYTRIE_VERSION = 0.3
-+PYTHON_PYTRIE_SITE = https://pypi.python.org/packages/aa/4a/3a3e7e95cb6202192c268043bed586f299e5b72b2650ece4614f60aecf2b
- PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
- PYTHON_PYTRIE_LICENSE = BSD-3c
- PYTHON_PYTRIE_LICENSE_FILES = LICENSE
+-PYTHON_PYDAL_VERSION = 16.9
++PYTHON_PYDAL_VERSION = 17.1
+ PYTHON_PYDAL_SOURCE = pyDAL-$(PYTHON_PYDAL_VERSION).tar.gz
+-PYTHON_PYDAL_SITE = https://pypi.python.org/packages/31/cb/7537f8d848106e3e4b4063955395a5dc3177c32c2cd2cc0a1938a486d4fa
++PYTHON_PYDAL_SITE = https://pypi.python.org/packages/64/9a/4fc08f6078b3a3019a9e33c8383bb023e064405dc5e16c273b8ec6d430cd
+ PYTHON_PYDAL_LICENSE = BSD-3c
+ PYTHON_PYDAL_LICENSE_FILES = LICENSE
+ PYTHON_PYDAL_SETUP_TYPE = setuptools
