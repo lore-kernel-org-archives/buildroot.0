@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Mar 2017 22:48:28 +0100
-Subject: [Buildroot] [PATCH 08/25] ljlinenoise: remove default
- definition of PKG_SUBDIR
-In-Reply-To: <20170223170047.24417-9-arnout@mind.be>
+Date: Thu, 2 Mar 2017 22:50:33 +0100
+Subject: [Buildroot] [PATCH 13/25] package/Config.in: explain that lua
+ package names should start with lua
+In-Reply-To: <20170223170047.24417-14-arnout@mind.be>
 References: <20170223170047.24417-1-arnout@mind.be>
- <20170223170047.24417-9-arnout@mind.be>
-Message-ID: <20170302224828.5c520b5a@free-electrons.com>
+ <20170223170047.24417-14-arnout@mind.be>
+Message-ID: <20170302225033.4c38fbab@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 23 Feb 2017 18:00:30 +0100, Arnout Vandecappelle
+On Thu, 23 Feb 2017 18:00:35 +0100, Arnout Vandecappelle
 (Essensium/Mind) wrote:
-> The luarocks infra already provides the correct default value for
-> PKG_SUBDIR, so it doesn't have to be defined in the .mk file.
-> 
-> Therefore, _VERSION_UPSTREAM doesn't need to be defined either.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/ljlinenoise/ljlinenoise.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> We have decided that lua packages should have a name that starts with
+> lua (like is the case for python and perl). However, we're not going to
+> rename all the existing lua packages that don't start with lua. This
+> makes it unclear for people adding packages how they should name the
+> package, so add a comment to package/Config.in to explain it.
 
-Patches 08/25 to 12/25 included applied to master. Thanks!
+Should we require "lua" as a prefix or "lua-" ? For Perl and Python, we
+use "perl-" and "python-" respectively.
+
+We currently have 10 packages that start with "lua-", and 12 that start
+with just "lua".
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
