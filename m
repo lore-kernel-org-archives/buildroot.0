@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 23:53:31 +0100
-Subject: [Buildroot] [git commit] vala: bump to version 0.34.5
-Message-ID: <20170303225406.97CF282288@busybox.osuosl.org>
+Date: Fri, 3 Mar 2017 23:53:27 +0100
+Subject: [Buildroot] [git commit] ed: bump to version 1.14.2
+Message-ID: <20170303225406.8C78E82288@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e378119f6021f8d0dcb0fc506e235f635eff538d
+commit: https://git.buildroot.net/buildroot/commit/?id=d6ae34e2db6238007154ea89ef44f02c056d159b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ed/ed.hash | 6 ++----
+ package/ed/ed.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index ca5873c..36cc3ab 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.34/vala-0.34.4.sha256sum
--sha256 6b17bd339414563ebc51f64b0b837919ea7552d8a8ffa71cdc837d25c9696b83  vala-0.34.4.tar.xz
-+# From https://download.gnome.org/sources/vala/0.34/vala-0.34.5.sha256sum
-+sha256 3fd4ba371778bc87da42827b8d23f1f42b0629759a9a1c40c9683dfb7e73fae5  vala-0.34.5.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index dadfdfc..f3a4de4 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/ed/ed.hash b/package/ed/ed.hash
+index 22c1e67..1aa00c0 100644
+--- a/package/ed/ed.hash
++++ b/package/ed/ed.hash
+@@ -1,4 +1,2 @@
+-# From http://lists.gnu.org/archive/html/bug-ed/2017-01/msg00002.html
+-sha1	a91f785f7e16dc68e1c9c86d532ebd9698171ba0	ed-1.14.1.tar.lz
+-# Locally computed
+-sha256	ffb97eb8f2a2b5a71a9b97e3872adce953aa1b8958e04c5b7bf11d556f32552a	ed-1.14.1.tar.lz
++# From http://lists.gnu.org/archive/html/bug-ed/2017-02/msg00005.html
++sha256	f57962ba930d70d02fc71d6be5c5f2346b16992a455ab9c43be7061dec9810db	ed-1.14.2.tar.lz
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 6b9f65e..33323be 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- VALA_VERSION_MAJOR = 0.34
--VALA_VERSION = $(VALA_VERSION_MAJOR).4
-+VALA_VERSION = $(VALA_VERSION_MAJOR).5
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+-ED_VERSION = 1.14.1
++ED_VERSION = 1.14.2
+ ED_SITE = $(BR2_GNU_MIRROR)/ed
+ ED_SOURCE = ed-$(ED_VERSION).tar.lz
+ ED_CONF_OPTS = \
