@@ -1,67 +1,141 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 3 Mar 2017 18:07:20 +0100
-Subject: [Buildroot] libqeglfs.so not found on imx6
-In-Reply-To: <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
-References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
- <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
- <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
- <CAAMH-ys=MpSuBvT=weVPKhyu5_bz4feq7ePmMN4LgHKubG_9vQ@mail.gmail.com>
- <CAD6G_RR5fC2n_JA=M1p3=0MeOwDXRVg2hQbhKDwHYmjyddu1SA@mail.gmail.com>
- <CAOMZO5B_d9-oq9R1NciG7F3A-HKhHVWP8uXzM=Crx2YB+zFVnw@mail.gmail.com>
- <CAD6G_RQZuqQphZqB0QwLKBC2Ox5G_tp06WTfUMEuOL6=LA2UvQ@mail.gmail.com>
- <CAOMZO5BWQvPFNevSp8Hjz4knfQ7kTYGmgXutoyzvb_ejq5AhpA@mail.gmail.com>
- <CAD6G_RSC9+NwdQP3qRA=wLWm2SaVNeN=zJXVR6P6dk8i+xLbxg@mail.gmail.com>
- <CAOMZO5BGTbB8WM-+oS9CoC8_3TPsZhyq1t-3=SJk1uAms8jBmQ@mail.gmail.com>
- <CAD6G_RRfwho6qwBU=QtyR6AsuNtGgWvvSFbTjwLwzv+9dqA6-Q@mail.gmail.com>
- <CAOMZO5Acb8RJZdf95uGj8w5LyhnjCh=sZoj=NE24wN_K2nO_OQ@mail.gmail.com>
- <CAD6G_RQNzT_yQfQeHW-VNE3vAhSnCRStc1R2NHrbkJwtHD=mzA@mail.gmail.com>
- <CAD6G_RSOBrZvE-4O_6uTj+0pBvsrM56p-48Rxd2hQZHtq8XkGw@mail.gmail.com>
- <CAOMZO5CBQVEMBLNgWRL947_uRpCDbyy5tTUVBfNjMkiwjyoA4Q@mail.gmail.com>
- <CAD6G_RQ3bLbJGi2jdRB-mafn4s=iHpvscjP+ggdBQG7_570ECA@mail.gmail.com>
- <CAD6G_RT58-HC8mi2g7Aq0x72uac0mUTA=HgoMAd1uAB-BWrXEQ@mail.gmail.com>
- <CAD6G_RQ_00ozMXZJ4GaTR5ETny-wJk6GkHbPSHLGQjiHUJR9dg@mail.gmail.com>
- <CAOMZO5AB2xYjvjQkvYp8y++M=95SnJSPbkPsv-sqs0VciYDd-w@mail.gmail.com>
- <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
-Message-ID: <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 3 Mar 2017 18:08:32 +0100
+Subject: [Buildroot] [PATCH] configs/telit_evk_pro3: bump barebox to
+	2017.01.0
+In-Reply-To: <96704fd2-3a09-5149-96cd-665e7523291e@mind.be>
+References: <20170301162345.22300-1-fabio.porcedda@gmail.com>
+ <96704fd2-3a09-5149-96cd-665e7523291e@mind.be>
+Message-ID: <CAHkwnC8bYHCSv9BPpQVdGZD-uhRFrxVS5aFk_ksOd1ntq0j2tg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
-
-On Fri, Mar 3, 2017 at 5:20 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+2017-03-01 20:04 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+>  Hi Fabio,
 >
-> Hi Fabio,
+>  Thanks for the update.
 >
-> On Fri, Mar 3, 2017 at 5:17 PM, Fabio Estevam <festevam@gmail.com> wrote:
-> > Hi Jagan,
-> >
-> > On Fri, Mar 3, 2017 at 8:19 AM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
-> >
-> >> Got the cube running..
-> >
-> > Excellent. If you manage to get QT working accelerated by Etnaviv,
-> > please let us know.
+> On 01-03-17 17:23, Fabio Porcedda wrote:
+>> This fix the build failure with gcc5 for barebox.
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> ---
+>>  ...13.04.0-0005-watchdog-enable-for-evk-pro3.patch | 26 ---------
+>>  ...1.0-0001-watchdog-add-keep-alive-support.patch} | 36 +++++++------
+>>  ...2-watchdog-add-at91sam9-watchdog-support.patch} | 36 ++++++++-----
+>>  ...003-at91sam9260-9g20-add-wathdog-support.patch} | 27 ++++------
+>>  ...004-at91sam9260-9g20-fix-wathdog-support.patch} |  8 +--
+>>  ...17.01.0-0005-watchdog-enable-for-evk-pro3.patch | 61 ++++++++++++++++++++++
+>>  configs/telit_evk_pro3_defconfig                   |  2 +-
+>>  7 files changed, 120 insertions(+), 76 deletions(-)
+>>  delete mode 100644 board/telit/evk-pro3/barebox-2013.04.0-0005-watchdog-enable-for-evk-pro3.patch
+>>  rename board/telit/evk-pro3/{barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch => barebox-2017.01.0-0001-watchdog-add-keep-alive-support.patch} (73%)
+>>  rename board/telit/evk-pro3/{barebox-2013.04.0-0002-watchdog-add-at91sam9-watchdog-support.patch => barebox-2017.01.0-0002-watchdog-add-at91sam9-watchdog-support.patch} (90%)
+>>  rename board/telit/evk-pro3/{barebox-2013.04.0-0003-at91sam9260-9g20-add-wathdog-support.patch => barebox-2017.01.0-0003-at91sam9260-9g20-add-wathdog-support.patch} (67%)
+>>  rename board/telit/evk-pro3/{barebox-2013.04.0-0004-at91sam9260-9g20-fix-wathdog-support.patch => barebox-2017.01.0-0004-at91sam9260-9g20-fix-wathdog-support.patch} (81%)
 >
-> Sure, I'm trying to play some graphic video like CinematicExperience
-> but look like some issue on eglfs.
+>  Since you anyway have to rename the patches, could you move them to
+> board/telit/evk-pro3/patches/barebox (and remove the barebox and version part)?
+> Basically you can regenerate them directly with 'git format-patch -o ...'
+> without need to rename.
+
+Done.
+
+>  And also use BR2_GLOBAL_PATCH_DIR instead of
+> BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR, of course. We're phasing out the
+> package-specific PATCH_DIR configs.
+
+Done.
+
 >
-> # /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
-> qt.qpa.egldeviceintegration: Failed to load EGL device integration "eglfs_kms"
-> qt.qpa.egldeviceintegration: Failed to load EGL device integration
-> "eglfs_kms_egldevice"
-> Could not open display
-> Aborted
+>>  create mode 100644 board/telit/evk-pro3/barebox-2017.01.0-0005-watchdog-enable-for-evk-pro3.patch
+>>
+> [snip]
+>> diff --git a/board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch b/board/telit/evk-pro3/barebox-2017.01.0-0001-watchdog-add-keep-alive-support.patch
+>> similarity index 73%
+>> rename from board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch
+>> rename to board/telit/evk-pro3/barebox-2017.01.0-0001-watchdog-add-keep-alive-support.patch
+>> index 155154603..4465298f5 100644
+>> --- a/board/telit/evk-pro3/barebox-2013.04.0-0001-watchdog-add-keep-alive-support.patch
+>> +++ b/board/telit/evk-pro3/barebox-2017.01.0-0001-watchdog-add-keep-alive-support.patch
+>> @@ -1,4 +1,4 @@
+>> -From b5e57a9f158a293b1151638336478af8a5aad0f0 Mon Sep 17 00:00:00 2001
+>> +From 1ae2a27187d1123ff9daca60f86810d6b3a25943 Mon Sep 17 00:00:00 2001
+>>  From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+>>  Date: Wed, 14 Nov 2012 19:16:35 +0800
+>>  Subject: [PATCH 1/5] watchdog: add keep alive support
+>> @@ -13,7 +13,7 @@ Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+>
+>  Since you refresh this patch, it makes sense to add your Sob. By the way, is
 
-I've had Qt5 and EGLFS running on Etnaviv before (an image is
-available on our website).
+Done.
 
-Here was the buildroot defconfig:
-http://linode.boundarydevices.com/buildroot_gst1_etnaviv_qt5_defconfig
+> there any chance of upstreaming those patches?
+The original creator of this patch set said that it will do that,
+maybe i can ask him another time if is still interested in doing it.
 
-Note that the cinematics demo doesn't show great performances.
+> [snip]
+>> diff --git a/board/telit/evk-pro3/barebox-2017.01.0-0005-watchdog-enable-for-evk-pro3.patch b/board/telit/evk-pro3/barebox-2017.01.0-0005-watchdog-enable-for-evk-pro3.patch
+>> new file mode 100644
+>> index 000000000..6735e3887
+>> --- /dev/null
+>> +++ b/board/telit/evk-pro3/barebox-2017.01.0-0005-watchdog-enable-for-evk-pro3.patch
+>> @@ -0,0 +1,61 @@
+>> +From 705a6b6add1dd60a862c3a677eac4efeefb3bd0b Mon Sep 17 00:00:00 2001
+>> +From: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> +Date: Thu, 17 Jan 2013 11:32:59 +0100
+>> +Subject: [PATCH 5/5] watchdog: enable for evk-pro3
+>> +
+>> +Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> +---
+>> + arch/arm/configs/telit_evk_pro3_defconfig |  2 ++
+>> + drivers/watchdog/wd_core.c                | 10 +++++++---
+>> + 2 files changed, 9 insertions(+), 3 deletions(-)
+>> +
+>> +diff --git a/arch/arm/configs/telit_evk_pro3_defconfig b/arch/arm/configs/telit_evk_pro3_defconfig
+>> +index 3bf5968bf..7a47fb951 100644
+>> +--- a/arch/arm/configs/telit_evk_pro3_defconfig
+>> ++++ b/arch/arm/configs/telit_evk_pro3_defconfig
+>> +@@ -64,6 +64,8 @@ CONFIG_MCI_ATMEL=y
+>> + CONFIG_LED=y
+>> + CONFIG_LED_GPIO=y
+>> + CONFIG_LED_TRIGGERS=y
+>> ++CONFIG_WATCHDOG=y
+>> ++CONFIG_WATCHDOG_AT91SAM9X=y
+>
+>  Instead of this, it would make sense to use
+> BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
 
-Regards,
-Gary
+Done.
+
+>> + CONFIG_FS_TFTP=y
+>> + CONFIG_FS_FAT=y
+>> + CONFIG_FS_FAT_LFN=y
+>> +diff --git a/drivers/watchdog/wd_core.c b/drivers/watchdog/wd_core.c
+>> +index 38251ee96..52537afef 100644
+>> +--- a/drivers/watchdog/wd_core.c
+>> ++++ b/drivers/watchdog/wd_core.c
+>> +@@ -32,9 +32,14 @@ static const char *watchdog_name(struct watchdog *wd)
+>> +     return "unknown";
+>> + }
+>> +
+>> ++static struct watchdog *watchdog_get_default(void);
+>> ++
+>> + static void watchdog_poller_func(struct poller_struct *poller)
+>> + {
+>> +-    watchdog->keep_alive(watchdog);
+>> ++    struct watchdog *wd = watchdog_get_default();
+>> ++
+>> ++    if (wd)
+>> ++                wd->keep_alive(wd);
+>
+>  I think you should update the log message of this patch, this change is not
+> explained. Actually, this change should be part of patch 0001, no?
+
+Done, merged with the first patch.
+
+Thanks for reviewing
+-- 
+Fabio Porcedda
