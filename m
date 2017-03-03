@@ -1,31 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  3 Mar 2017 19:13:54 +0100
-Subject: [Buildroot] [PATCH] package/memtool: fix trailing /
-Message-ID: <1488564834-27671-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 03 Mar 2017 20:32:27 +0100
+Subject: [Buildroot] [PATCH 1/1]
+	package/x11r7/xdriver_xf86-video-vmware: fix compilation
+	without udev
+In-Reply-To: <20170302113244.kjszgkgdmcn3xtmu@tarshish> (Baruch Siach's
+ message of "Thu, 2 Mar 2017 13:32:44 +0200")
+References: <20161218143246.30156-1-bernd.kuhls@t-online.de>
+ <20170301234014.319ba007@free-electrons.com>
+ <87shmwgnil.fsf@dell.be.48ers.dk>
+ <20170302113244.kjszgkgdmcn3xtmu@tarshish>
+Message-ID: <87tw7af96c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- package/memtool/memtool.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-diff --git a/package/memtool/memtool.mk b/package/memtool/memtool.mk
-index 59b864c..f641627 100644
---- a/package/memtool/memtool.mk
-+++ b/package/memtool/memtool.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MEMTOOL_VERSION = 2016.10.0
--MEMTOOL_SITE = http://public.pengutronix.de/software/memtool/
-+MEMTOOL_SITE = http://public.pengutronix.de/software/memtool
- MEMTOOL_SOURCE = memtool-$(MEMTOOL_VERSION).tar.xz
- MEMTOOL_LICENSE = GPLv2
- MEMTOOL_LICENSE_FILES = COPYING
+ > Hi Peter,
+ > On Thu, Mar 02, 2017 at 08:12:50AM +0100, Peter Korsgaard wrote:
+ >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+ >> > Applied to master, thanks. Peter, this one could go to the LTS branch.
+ >> 
+ >> Thanks, applied to 2017.02.x.
+
+ > Is there a reason why 2017.02.x branch commits are not posted to the list? 
+ > Commits to the 2016.11.x branch used to appear on the list.
+
+They are (I see them at least). I think the issue is just that the
+send-mail script has a minor bug when a new branch is pushed. In that
+case it sends a small mail saying 'new branch created', and forgets to
+send a notification mail for the individual commits added in that push.
+
+I did my initial push with 3 commits, that is why no notification is
+sent for those 3 commits.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
