@@ -1,40 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 03 Mar 2017 20:32:27 +0100
-Subject: [Buildroot] [PATCH 1/1]
-	package/x11r7/xdriver_xf86-video-vmware: fix compilation
-	without udev
-In-Reply-To: <20170302113244.kjszgkgdmcn3xtmu@tarshish> (Baruch Siach's
- message of "Thu, 2 Mar 2017 13:32:44 +0200")
-References: <20161218143246.30156-1-bernd.kuhls@t-online.de>
- <20170301234014.319ba007@free-electrons.com>
- <87shmwgnil.fsf@dell.be.48ers.dk>
- <20170302113244.kjszgkgdmcn3xtmu@tarshish>
-Message-ID: <87tw7af96c.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 03 Mar 2017 19:44:10 +0000
+Subject: [Buildroot] [Bug 9706] New: Can't download newer revisions of
+	package from PyPI
+Message-ID: <bug-9706-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+https://bugs.busybox.net/show_bug.cgi?id=9706
 
- > Hi Peter,
- > On Thu, Mar 02, 2017 at 08:12:50AM +0100, Peter Korsgaard wrote:
- >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
- >> > Applied to master, thanks. Peter, this one could go to the LTS branch.
- >> 
- >> Thanks, applied to 2017.02.x.
+            Bug ID: 9706
+           Summary: Can't download newer revisions of package from PyPI
+           Product: buildroot
+           Version: 2016.11
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jem at kamama.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
- > Is there a reason why 2017.02.x branch commits are not posted to the list? 
- > Commits to the 2016.11.x branch used to appear on the list.
+Newer versions of python projects (in my case I was attempting to update
+supervisor to supervisor-3.3.1) don't download with the URL scheme currently
+used. Not sure if this is only a supervisor problem or might affect other
+modules from PyPI. Recommendation from PyPI is to use their API
 
-They are (I see them at least). I think the issue is just that the
-send-mail script has a minor bug when a new branch is pushed. In that
-case it sends a small mail saying 'new branch created', and forgets to
-send a notification mail for the individual commits added in that push.
+  API documentation is at https://warehouse.pypa.io/api-reference/legacy/
+  It looks like buildroot should first make a request against
+/simple/supervisor/ and fetch links from the response.
 
-I did my initial push with 3 commits, that is why no notification is
-sent for those 3 commits.
+For example if I hit https://pypi.python.org/simple/supervisor/ I get:
+
+<!DOCTYPE html><html><head><title>Links for
+supervisor</title></head><body><h1>Links for supervisor</h1><a
+href="../../packages/2e/3b/f28afd29920be27c948923b276d1f131276880f6b4f9391323064b87b15b/supervisor-3.0a7.tar.gz#md5=d2e6c491fcb2606e4fd0afe4ebfd4b13"
+rel="internal">supervisor-3.0a7.tar.gz</a><br/>
+<a
+href="../../packages/44/80/d28047d120bfcc8158b4e41127706731ee6a3419c661e0a858fb0e7c4b2d/supervisor-3.3.0.tar.gz#md5=46bac00378d1eddb616752b990c67416"
+rel="internal">supervisor-3.3.0.tar.gz</a><br/>
+<a
+href="../../packages/4b/7d/cb3d91d6c65f73fd253c376fc0dbbc48b83e6606f61d9961d9ac7cf293f5/supervisor-3.0a9.tar.gz#md5=81d192acab20eef3578856651af7e851"
+rel="internal">supervisor-3.0a9.tar.gz</a><br/>
+
+...etc.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
