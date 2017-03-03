@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 23:53:09 +0100
-Subject: [Buildroot] [PATCH 1/3] runc: bump to version
- a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70
-In-Reply-To: <1488481107-97917-1-git-send-email-fontaine.fabrice@gmail.com>
-References: <1488481107-97917-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <20170303235309.53941afd@free-electrons.com>
+Date: Fri, 3 Mar 2017 23:53:45 +0100
+Subject: [Buildroot] [PATCH] vala: bump to version 0.34.5
+In-Reply-To: <20170302191718.1364-1-gustavo@zacarias.com.ar>
+References: <20170302191718.1364-1-gustavo@zacarias.com.ar>
+Message-ID: <20170303235345.67414eb1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  2 Mar 2017 19:58:25 +0100, Fabrice Fontaine wrote:
-> This is a runtime dependency of docker-engine in version 17.03.0-ce
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Thu,  2 Mar 2017 16:17:18 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/runc/runc.hash | 2 +-
->  package/runc/runc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/vala/vala.hash | 4 ++--
+>  package/vala/vala.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-All three patches applied, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
