@@ -1,12 +1,15 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  3 Mar 2017 06:54:41 -0300
-Subject: [Buildroot] [PATCH] Revert "nano: bump to version 2.7.5"
-Message-ID: <20170303095441.20062-1-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Mar 2017 11:01:22 +0100
+Subject: [Buildroot] [git commit] Revert "nano: bump to version 2.7.5"
+Message-ID: <20170303100135.5BEC380386@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=850722fc68a16bd7d4a29a3745a9920150671c03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The bump causes build failure with musl, this new version uses with
 undefined REG_STARTEND which is a glibc-ism that isn't available for
@@ -18,6 +21,7 @@ to fix.
 This reverts commit d0035543432edddee4dcb017ac4dd74832133e89.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/nano/nano.hash | 2 +-
  package/nano/nano.mk   | 2 +-
@@ -44,5 +48,3 @@ index dc6aa13..4632bed 100644
  NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
  NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
  NANO_LICENSE = GPLv3+
--- 
-2.10.2
