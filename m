@@ -1,35 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 03 Mar 2017 22:10:58 +0000
-Subject: [Buildroot] [Bug 9456] mkusers script bash errors
-In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
-References: <bug-9456-163@https.bugs.busybox.net/>
-Message-ID: <bug-9456-163-mN0tkl3EMm@https.bugs.busybox.net/>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 3 Mar 2017 23:20:15 +0100
+Subject: [Buildroot] [Bug 9706] Can't download newer revisions of
+ package from PyPI
+In-Reply-To: <bug-9706-163-8oFTRdRjiE@https.bugs.busybox.net/>
+References: <bug-9706-163@https.bugs.busybox.net/>
+ <bug-9706-163-8oFTRdRjiE@https.bugs.busybox.net/>
+Message-ID: <CAGm1_kuqjGpsnY9aAQHp+P-FvFCqFEMsPaYKuYp2UM7xissctg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9456
+Hi Arnout,
 
---- Comment #28 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-(In reply to Paul Stewart from comment #27)
+On Fri, Mar 3, 2017 at 11:00 PM,  <bugzilla@busybox.net> wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=9706
+>
+> Arnout Vandecappelle <arnout@mind.be> changed:
+>
+>            What    |Removed                     |Added
+> ----------------------------------------------------------------------------
+>              Status|NEW                         |RESOLVED
+>          Resolution|---                         |INVALID
+>
+> --- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+> When bumping the package, SUPERVISOR_SITE should change from the current
+>
+> http://pypi.python.org/packages/source/s/supervisor
+>
+> to
+>
+> https://pypi.python.org/packages/44/80/d28047d120bfcc8158b4e41127706731ee6a3419c661e0a858fb0e7c4b2d
+>
+> but it's not unusual for the _SITE to change when the version is bumped.
+>
+> I don't see how this is a bug, so I'm closing as invalid. If you disagree, feel
+> free to reopen.
+>
+> PS if you do bump the package, don't forget to send the patch to the Buildroot
+> mailing list for upstream inclusion.
 
-Thanks a lot for all the testing you did! :-)
+I've posted an RFC [1] concerning this issue.
 
-This is really weird that your shell does have checkwinsize on. It
-should be off by default in a non-interactive shell, and shell script
-are running in non-interactive shells...
+[1] https://patchwork.ozlabs.org/patch/708384/
 
-Anyway... I just sent the patch:
-
-    http://lists.busybox.net/pipermail/buildroot/2017-March/185755.html
-
-Thanks again!
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Yegor
