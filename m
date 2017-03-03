@@ -1,40 +1,36 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Fri, 3 Mar 2017 08:43:54 +0100
-Subject: [Buildroot] [PATCH] tslib: bump to version 1.6
-Message-ID: <1488527034-23249-1-git-send-email-martin.kepplinger@ginzinger.com>
+From: ren_guo <ren_guo@c-sky.com>
+Date: Fri, 3 Mar 2017 15:50:50 +0800
+Subject: [Buildroot] [PATCH 2/2] configs: add defconfig for Nationalchip
+ gx6605s dev board.
+In-Reply-To: <20170303030029.GI14124@waldemar-brodkorb.de>
+References: <1488504021-598-1-git-send-email-ren_guo@c-sky.com>
+ <1488504021-598-2-git-send-email-ren_guo@c-sky.com>
+ <20170303030029.GI14124@waldemar-brodkorb.de>
+Message-ID: <0f757835-a439-5b47-b523-384c4fbae158@c-sky.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
----
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thx, Waldemar
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index d7ae4dc..649822e 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,2 +1,2 @@
--# https://github.com/kergoth/tslib/releases/download/1.5/tslib-1.5.tar.xz.sha256
--sha256  94874fe72c5af5c9be642a2ce524f014eb1d59d15cf852f2d3b2cf380f04252d  tslib-1.5.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.6/tslib-1.6.tar.xz.sha256
-+sha256  b9fbb93984d02506c5a944d475d0bf7f19473a111e547f523328138ed5c6e02b  tslib-1.6.tar.xz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 08b1d26..0940d0d 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.5
-+TSLIB_VERSION = 1.6
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL, LGPL
--- 
-2.1.4
+> I tried your patchset, the toolchain is not downloadable, empty
+> files in github.
+
+Thx for your feedback, the reason of this is our git-lfs out of bandwith.
+
+We've purchased 2-data-packs/month about 100GB/month.
+
+Now It've been solved, and I've tested it again.
+Please have a another try, and sorry for that.
+
+> Can the c-sky devboards be bought anywhere in Europe?
+
+Now we just sold it on taobao in china.
+
+But we are preparing the csky-qemu instead.
+
+Best Regards
+
+guoren
