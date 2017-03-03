@@ -1,66 +1,48 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Fri, 3 Mar 2017 13:41:11 +0530
-Subject: [Buildroot]  Qt5 CinematicExperience demo error on i.MX6Q
-Message-ID: <CAD6G_RT4EY2zz3bFo8pUwHDN6fnWgG9CcXjUDuZEmAShRMmzhA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  3 Mar 2017 06:54:41 -0300
+Subject: [Buildroot] [PATCH] Revert "nano: bump to version 2.7.5"
+Message-ID: <20170303095441.20062-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The bump causes build failure with musl, this new version uses with
+undefined REG_STARTEND which is a glibc-ism that isn't available for
+musl-based toolchains.
+The introduction of this is to address
+https://savannah.gnu.org/bugs/?50030 so it's not quite straightforward
+to fix.
 
-Doe anyone tried Qt5 CinematicExperience demo? I've tried it on i.MX6Q
-with 4.9.13 Mainline kernel but seems like egl surface issue.
+This reverts commit d0035543432edddee4dcb017ac4dd74832133e89.
 
-Log:
-----
-# /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience -platform eglfs
-MESA-LOADER: device is not located on the PCI bus
-MESA-LOADER: device is not located on the PCI bus
-MESA-LOADER: device is not located on the PCI bus
-libpng warning: iCCP: known incorrect sRGB profile
-libpng warning: iCCP: known incorrect sRGB profile
-EGL Error : Could not create the egl surface: error = 0x300b
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Aborted
-
-I'm using Mainline GPU drivers and enabled mesa 17.0.0 and etnaviv
-gallium drivers on buildroot.
-
-Kernel dmesg:
-[    1.191267] [drm] Initialized
-[    1.202685] etnaviv gpu-subsystem: bound 134000.gpu (ops gpu_ops)
-[    1.208861] etnaviv gpu-subsystem: bound 130000.gpu (ops gpu_ops)
-[    1.215055] etnaviv gpu-subsystem: bound 2204000.gpu (ops gpu_ops)
-[    1.221284] etnaviv-gpu 134000.gpu: model: GC320, revision: 5007
-[    1.276225] etnaviv-gpu 130000.gpu: model: GC2000, revision: 5108
-[    1.336244] etnaviv-gpu 2204000.gpu: model: GC355, revision: 1215
-[    1.342387] etnaviv-gpu 2204000.gpu: Ignoring GPU with VG and FE2.0
-[    1.353868] imx-ipuv3 2400000.ipu: IPUv3H probed
-[    1.361442] [drm] Supports vblank timestamp caching Rev 2 (21.10.2013).
-[    1.368068] [drm] No driver support for vblank timestamp query.
-[    1.374738] imx-drm display-subsystem: bound imx-ipuv3-crtc.2 (ops
-ipu_crtc_ops)
-[    1.382470] imx-drm display-subsystem: bound imx-ipuv3-crtc.3 (ops
-ipu_crtc_ops)
-[    1.390299] imx-drm display-subsystem: bound imx-ipuv3-crtc.6 (ops
-ipu_crtc_ops)
-[    1.397993] imx-drm display-subsystem: bound imx-ipuv3-crtc.7 (ops
-ipu_crtc_ops)
-[    1.406215] imx-drm display-subsystem: bound 2000000.aips-bus:ldb
-(ops imx_ldb_ops)
-[    1.428173] imx-ipuv3 2400000.ipu: videomode adapted for IPU restrictions
-[    1.428191] imx-ipuv3 2400000.ipu: videomode adapted for IPU restrictions
-[    1.487123] Console: switching to colour frame buffer device 160x50
-[    1.523393] imx-drm display-subsystem: fb0:  frame buffer device
-[    1.561809] imx-ipuv3 2800000.ipu: IPUv3H probed
-
-Please let me know your inputs.
-
-thanks!
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 6264faa..aa3e27b 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 a64d24e6bc4fc448376d038f9a755af77f8e748c9051b6f45bf85e783a7e67e4  nano-2.7.5.tar.xz
++sha256 752170643039e2c95a433de357f0c70a8c4c4c561a90a7e7259a63e225b659b9  nano-2.7.4.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index dc6aa13..4632bed 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 2.7
+-NANO_VERSION = $(NANO_VERSION_MAJOR).5
++NANO_VERSION = $(NANO_VERSION_MAJOR).4
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPLv3+
 -- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+2.10.2
