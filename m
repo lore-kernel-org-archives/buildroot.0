@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 23:53:42 +0100
-Subject: [Buildroot] [PATCH] ed: bump to version 1.14.2
-In-Reply-To: <4945269f33484cc0e6dfd14aad409c4cddbc7f4a.1488481706.git.baruch@tkos.co.il>
-References: <4945269f33484cc0e6dfd14aad409c4cddbc7f4a.1488481706.git.baruch@tkos.co.il>
-Message-ID: <20170303235342.36279e64@free-electrons.com>
+Date: Fri, 3 Mar 2017 23:53:59 +0100
+Subject: [Buildroot] [PATCH] configs/mx51evk: Bump U-Boot and kernel
+ versions
+In-Reply-To: <1488493218-15070-1-git-send-email-festevam@gmail.com>
+References: <1488493218-15070-1-git-send-email-festevam@gmail.com>
+Message-ID: <20170303235359.0bca2015@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  2 Mar 2017 21:08:26 +0200, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Thu,  2 Mar 2017 19:20:18 -0300, Fabio Estevam wrote:
+> Bump U-Boot to 2017.01 version and kernel to 4.9.13.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 > ---
->  package/ed/ed.hash | 6 ++----
->  package/ed/ed.mk   | 2 +-
->  2 files changed, 3 insertions(+), 5 deletions(-)
+>  configs/mx51evk_defconfig | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
