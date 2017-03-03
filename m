@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 23:53:39 +0100
-Subject: [Buildroot] [git commit] configs/mx51evk: Bump U-Boot and kernel
-	versions
-Message-ID: <20170303225406.A34DD82288@busybox.osuosl.org>
+Date: Fri, 3 Mar 2017 23:53:31 +0100
+Subject: [Buildroot] [git commit] vala: bump to version 0.34.5
+Message-ID: <20170303225406.97CF282288@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=183e44fe642ce68ab5f30d1cdf5b7ebf296353aa
+commit: https://git.buildroot.net/buildroot/commit/?id=e378119f6021f8d0dcb0fc506e235f635eff538d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot to 2017.01 version and kernel to 4.9.13.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/mx51evk_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/mx51evk_defconfig b/configs/mx51evk_defconfig
-index db82a36..479eac3 100644
---- a/configs/mx51evk_defconfig
-+++ b/configs/mx51evk_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index ca5873c..36cc3ab 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,2 +1,2 @@
+-# From https://download.gnome.org/sources/vala/0.34/vala-0.34.4.sha256sum
+-sha256 6b17bd339414563ebc51f64b0b837919ea7552d8a8ffa71cdc837d25c9696b83  vala-0.34.4.tar.xz
++# From https://download.gnome.org/sources/vala/0.34/vala-0.34.5.sha256sum
++sha256 3fd4ba371778bc87da42827b8d23f1f42b0629759a9a1c40c9683dfb7e73fae5  vala-0.34.5.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index dadfdfc..f3a4de4 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--# Linux headers same as kernel, a 4.6 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx51evk"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.13"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-babbage"
+ VALA_VERSION_MAJOR = 0.34
+-VALA_VERSION = $(VALA_VERSION_MAJOR).4
++VALA_VERSION = $(VALA_VERSION_MAJOR).5
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
