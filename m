@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 08:42:03 +0100
-Subject: [Buildroot] [PATCH] qextserialport: update homepage link
-In-Reply-To: <ed5d97009ad0b38d95424f9b839d22b9ee42be03.1488519433.git.baruch@tkos.co.il>
-References: <ed5d97009ad0b38d95424f9b839d22b9ee42be03.1488519433.git.baruch@tkos.co.il>
-Message-ID: <20170303084203.5bfbe66f@free-electrons.com>
+Date: Fri, 3 Mar 2017 08:42:07 +0100
+Subject: [Buildroot] [PATCH] snappy: update homepage link
+In-Reply-To: <8610903991e28635308c9c32d0111d1395df38e9.1488519639.git.baruch@tkos.co.il>
+References: <8610903991e28635308c9c32d0111d1395df38e9.1488519639.git.baruch@tkos.co.il>
+Message-ID: <20170303084207.4d433c6f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  3 Mar 2017 07:37:13 +0200, Baruch Siach wrote:
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Fri,  3 Mar 2017 07:40:39 +0200, Baruch Siach wrote:
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/qextserialport/Config.in | 2 +-
+>  package/snappy/Config.in | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
