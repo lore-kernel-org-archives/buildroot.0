@@ -1,32 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Mar 2017 00:02:43 +0100
-Subject: [Buildroot] [PATCH] linux: Add CIP SLTS easy selection option
-In-Reply-To: <7663394e-1ac6-07ae-a226-159605ac4011@mind.be>
-References: <1488577816-19047-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170303234636.0dbf4fd6@free-electrons.com>
- <7663394e-1ac6-07ae-a226-159605ac4011@mind.be>
-Message-ID: <20170304000243.35b8b146@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 03 Mar 2017 23:06:11 +0000
+Subject: [Buildroot] [Bug 9456] mkusers script bash errors
+In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
+References: <bug-9456-163@https.bugs.busybox.net/>
+Message-ID: <bug-9456-163-DsZwS6hBJ6@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9456
 
-On Fri, 3 Mar 2017 23:50:54 +0100, Arnout Vandecappelle wrote:
+--- Comment #29 from Paul Stewart <paulstewartis@gmail.com> ---
+(In reply to Yann E. MORIN from comment #28)
 
->  In addition, I have yet to meet an actual embedded system product that uses an
-> unpatched kernel. In practice, the CIP kernel is going to be the _base_ of a
-> product, and not used directly.
-> 
->  That said, it would be useful to add a defconfig that makes use of that kernel.
+You're welcome.  Thank you for the fix!  Will this go into a 2017.02.1 bugfix
+or will it wait for the 2017.05 release?
 
-I don't really see how that would be useful. What would it bring
-exactly?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
