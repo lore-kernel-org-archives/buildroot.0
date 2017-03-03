@@ -1,44 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 23:53:27 +0100
-Subject: [Buildroot] [git commit] ed: bump to version 1.14.2
-Message-ID: <20170303225406.8C78E82288@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 3 Mar 2017 20:00:27 -0300
+Subject: [Buildroot] libqeglfs.so not found on imx6
+In-Reply-To: <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
+References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
+ <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
+ <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
+ <CAAMH-ys=MpSuBvT=weVPKhyu5_bz4feq7ePmMN4LgHKubG_9vQ@mail.gmail.com>
+ <CAD6G_RR5fC2n_JA=M1p3=0MeOwDXRVg2hQbhKDwHYmjyddu1SA@mail.gmail.com>
+ <CAOMZO5B_d9-oq9R1NciG7F3A-HKhHVWP8uXzM=Crx2YB+zFVnw@mail.gmail.com>
+ <CAD6G_RQZuqQphZqB0QwLKBC2Ox5G_tp06WTfUMEuOL6=LA2UvQ@mail.gmail.com>
+ <CAOMZO5BWQvPFNevSp8Hjz4knfQ7kTYGmgXutoyzvb_ejq5AhpA@mail.gmail.com>
+ <CAD6G_RSC9+NwdQP3qRA=wLWm2SaVNeN=zJXVR6P6dk8i+xLbxg@mail.gmail.com>
+ <CAOMZO5BGTbB8WM-+oS9CoC8_3TPsZhyq1t-3=SJk1uAms8jBmQ@mail.gmail.com>
+ <CAD6G_RRfwho6qwBU=QtyR6AsuNtGgWvvSFbTjwLwzv+9dqA6-Q@mail.gmail.com>
+ <CAOMZO5Acb8RJZdf95uGj8w5LyhnjCh=sZoj=NE24wN_K2nO_OQ@mail.gmail.com>
+ <CAD6G_RQNzT_yQfQeHW-VNE3vAhSnCRStc1R2NHrbkJwtHD=mzA@mail.gmail.com>
+ <CAD6G_RSOBrZvE-4O_6uTj+0pBvsrM56p-48Rxd2hQZHtq8XkGw@mail.gmail.com>
+ <CAOMZO5CBQVEMBLNgWRL947_uRpCDbyy5tTUVBfNjMkiwjyoA4Q@mail.gmail.com>
+ <CAD6G_RQ3bLbJGi2jdRB-mafn4s=iHpvscjP+ggdBQG7_570ECA@mail.gmail.com>
+ <CAD6G_RT58-HC8mi2g7Aq0x72uac0mUTA=HgoMAd1uAB-BWrXEQ@mail.gmail.com>
+ <CAD6G_RQ_00ozMXZJ4GaTR5ETny-wJk6GkHbPSHLGQjiHUJR9dg@mail.gmail.com>
+ <CAOMZO5AB2xYjvjQkvYp8y++M=95SnJSPbkPsv-sqs0VciYDd-w@mail.gmail.com>
+ <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
+ <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
+Message-ID: <CAOMZO5CufYJ7vqRw_7LxKpWtJe3Z-1U3=8SOubJXLgvNfO3Rew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6ae34e2db6238007154ea89ef44f02c056d159b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Gary,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ed/ed.hash | 6 ++----
- package/ed/ed.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+On Fri, Mar 3, 2017 at 2:07 PM, Gary Bisson
+<gary.bisson@boundarydevices.com> wrote:
 
-diff --git a/package/ed/ed.hash b/package/ed/ed.hash
-index 22c1e67..1aa00c0 100644
---- a/package/ed/ed.hash
-+++ b/package/ed/ed.hash
-@@ -1,4 +1,2 @@
--# From http://lists.gnu.org/archive/html/bug-ed/2017-01/msg00002.html
--sha1	a91f785f7e16dc68e1c9c86d532ebd9698171ba0	ed-1.14.1.tar.lz
--# Locally computed
--sha256	ffb97eb8f2a2b5a71a9b97e3872adce953aa1b8958e04c5b7bf11d556f32552a	ed-1.14.1.tar.lz
-+# From http://lists.gnu.org/archive/html/bug-ed/2017-02/msg00005.html
-+sha256	f57962ba930d70d02fc71d6be5c5f2346b16992a455ab9c43be7061dec9810db	ed-1.14.2.tar.lz
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index 6b9f65e..33323be 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ED_VERSION = 1.14.1
-+ED_VERSION = 1.14.2
- ED_SITE = $(BR2_GNU_MIRROR)/ed
- ED_SOURCE = ed-$(ED_VERSION).tar.lz
- ED_CONF_OPTS = \
+> Here was the buildroot defconfig:
+> http://linode.boundarydevices.com/buildroot_gst1_etnaviv_qt5_defconfig
+>
+> Note that the cinematics demo doesn't show great performances.
+
+Just tried your defconfig on top of master. Could not get Qt5.8 to
+build, so I switched to Qt5.6.
+
+Here is my defconfig:
+http://pastebin.com/Fy4rZCHY
+
+When I try to run the demo:
+
+#  /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
+MESA-LOADER: device is not located on the PCI bus
+MESA-LOADER: device is not located on the PCI bus
+MESA-LOADER: device is not located on the PCI bus
+drmModeGetResources failed
+Segmentation fault
+#
+
+Any ideas?
+
+Thanks
