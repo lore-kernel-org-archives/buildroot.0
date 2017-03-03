@@ -1,77 +1,60 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Fri,  3 Mar 2017 15:18:47 +0100
-Subject: [Buildroot] [RFC PATCH 3/9] core: sanitize HOST_DIR at the very end
-	of the build
+Date: Fri,  3 Mar 2017 15:18:51 +0100
+Subject: [Buildroot] [RFC PATCH 7/9] external-toolchain: check if a
+	buildroot toolchain has already been relocated
 In-Reply-To: <1488550733-3956-1-git-send-email-wg@grandegger.com>
 References: <1488550733-3956-1-git-send-email-wg@grandegger.com>
-Message-ID: <1488550733-3956-4-git-send-email-wg@grandegger.com>
+Message-ID: <1488550733-3956-8-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
+The location of the buildroot toolchain is stored in the file
+"share/buildroot/toolchain-location". If it's contents does not match
+the current toolchain location, ask the user to run the script
+"relocate-toolchain.sh" in the top directory once.
 
-This patch adds host-patchelf to the list of package to build, and use
-it in the SANITIZE_RPATH_HOST helper.
-
-This SANITIZE_RPATH_HOST helper is executed in the world target, which
-ensure:
-- to be built after the target-post-image target (because of the
-  dependency);
-- to always be built since it is the only dependency of the all (and
-  default) target.
-
-The SANITIZE_RPATH_HOST helper calls patchelf to fix the ELF files'
-RPATH from the HOST_DIR location (excluding the sysroot).
-
-After running this helper is run, the RPATH from any host ELF files is
-relative to the binary location itself.
-
-Notes:
-- we avoid to fix RPATH in the sysroot.
-- we do not try to fix RPATH in the external toolchain installation
-  location as they may have been built in a way, this is already
-  correct; furthermore, attempting to fix RPATH in those programs may
-  result in breaking them.
-- the whole host directory is processed because a number of
-  host-package install programs that could be useful in places
-  different from $(HOST_DIR)/{bin,sbin,usr/bin,usr/sbin}.
-- the shared libraries are also processed in case they have a 'main'
-  function.
-
-As a step toward a fully relocatable SDK, this change allows to get the
-toolchain relocatable, but not yet the whole SDK.
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 ---
- Makefile | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ toolchain/helpers.mk                                   | 14 ++++++++++++++
+ toolchain/toolchain-external/pkg-toolchain-external.mk |  1 +
+ 2 files changed, 15 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 0308f9b..54c815b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -543,7 +543,19 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
- 
- prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- 
-+# RPATH fixing
-+# - The host hook sets RPATH in host ELF binaries, using relative paths to the
-+#   library locations.
-+PACKAGES += host-patchelf
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 72e7292..d037391 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -403,3 +403,17 @@ check_toolchain_ssp = \
+ gen_gdbinit_file = \
+ 	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
+ 	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
 +
-+define SANITIZE_RPATH_HOST
-+	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
-+	$(TOPDIR)/support/scripts/fix-rpath host $(HOST_DIR)
-+endef
-+
- world: target-post-image
-+	@$(call MESSAGE,"Rendering the SDK relocatable")
-+	$(SANITIZE_RPATH_HOST)
- 
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars help \
++#
++# Check if it's a buildroot toolchain and if it's already relocatable by
++# reading and testing the toolchain location file
++#
++# $1: toolchain installation directory
++#
++check_buildroot_toolchain_relocated = \
++	if [ -r $(1)/share/buildroot/toolchain-location ]; then \
++		if [ "`cat $(1)/share/buildroot/toolchain-location`" != "$(1)" ]; then \
++			echo "Please relocate the buildroot toolchain at \"$(1)\" by executing \"$(1)/reloacte-toolchain.sh\" once!" ; \
++			exit 1 ; \
++		fi \
++	fi
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 11a1bf5..1cc7922 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -543,6 +543,7 @@ endif
+ # matches the configuration provided in Buildroot: ABI, C++ support,
+ # kernel headers version, type of C library and all C library features.
+ define $(2)_CONFIGURE_CMDS
++	$$(Q)$$(call check_buildroot_toolchain_relocated,$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR))
+ 	$$(Q)$$(call check_cross_compiler_exists,$$(TOOLCHAIN_EXTERNAL_CC))
+ 	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
+ 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
 -- 
 1.9.1
