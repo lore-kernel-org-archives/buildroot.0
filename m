@@ -1,28 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 21:49:21 +0100
-Subject: [Buildroot] [PATCH] package/memtool: fix trailing /
-In-Reply-To: <1488564834-27671-1-git-send-email-yann.morin.1998@free.fr>
-References: <1488564834-27671-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170303214921.61ee1075@free-electrons.com>
+Date: Fri, 3 Mar 2017 21:49:34 +0100
+Subject: [Buildroot] [git commit] package/alsamixergui: add license
+	information
+Message-ID: <20170303204940.0AF0C822F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e87650a198448afe1675015e69c0ef086400e7f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  3 Mar 2017 19:13:54 +0100, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/memtool/memtool.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/alsamixergui/alsamixergui.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/alsamixergui/alsamixergui.mk b/package/alsamixergui/alsamixergui.mk
+index dba3ddd..0d37c8c 100644
+--- a/package/alsamixergui/alsamixergui.mk
++++ b/package/alsamixergui/alsamixergui.mk
+@@ -7,6 +7,8 @@
+ ALSAMIXERGUI_VERSION = 0.9.0rc2-1
+ ALSAMIXERGUI_SOURCE = alsamixergui_$(ALSAMIXERGUI_VERSION).orig.tar.gz
+ ALSAMIXERGUI_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/a/alsamixergui
++ALSAMIXERGUI_LICENSE = GPLv2+
++ALSAMIXERGUI_LICENSE_FILES = debian/copyright
+ ALSAMIXERGUI_AUTORECONF = YES
+ 
+ ALSAMIXERGUI_CONF_ENV = \
