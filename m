@@ -1,34 +1,31 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  3 Mar 2017 07:51:07 +0200
-Subject: [Buildroot] [PATCH] libyuv: update homepage link
-Message-ID: <9c0da5fc267b53d99487b7315aeedfb6405a465f.1488520267.git.baruch@tkos.co.il>
+Date: Fri,  3 Mar 2017 07:53:57 +0200
+Subject: [Buildroot] [PATCH] yaml-cpp: update homepage link
+Message-ID: <d4333dd8579d629200b06cbaad8fee4362ab212f.1488520437.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The original google code link redirects to the libyuv bug tracker. Use libyuv
-git repo as a better sort of a homepage.
-
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libyuv/Config.in | 2 +-
+ package/yaml-cpp/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libyuv/Config.in b/package/libyuv/Config.in
-index 29dcaa44edb3..355ceb0f4711 100644
---- a/package/libyuv/Config.in
-+++ b/package/libyuv/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBYUV
- 	  libyuv is an open source project that includes YUV scaling
- 	  and conversion functionality.
+diff --git a/package/yaml-cpp/Config.in b/package/yaml-cpp/Config.in
+index c1ba410a6b2e..6d34f4210e00 100644
+--- a/package/yaml-cpp/Config.in
++++ b/package/yaml-cpp/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_YAML_CPP
+ 	  yaml-cpp is a YAML parser and emitter in C++ matching
+ 	  the YAML 1.2 spec.
  
--	  https://code.google.com/p/libyuv
-+	  https://chromium.googlesource.com/libyuv/libyuv/
+-	  https://code.google.com/p/yaml-cpp/
++	  https://github.com/jbeder/yaml-cpp
  
- comment "libyuv needs a toolchain w/ C++, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+ comment "yaml-cpp needs a toolchain w/ C++, threads, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 -- 
 2.11.0
