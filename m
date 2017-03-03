@@ -1,28 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 21:51:16 +0100
-Subject: [Buildroot] [PATCH] tslib: bump to version 1.6
-In-Reply-To: <1488527034-23249-1-git-send-email-martin.kepplinger@ginzinger.com>
-References: <1488527034-23249-1-git-send-email-martin.kepplinger@ginzinger.com>
-Message-ID: <20170303215116.526c6a84@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 03 Mar 2017 21:50:13 +0000
+Subject: [Buildroot] [Bug 9456] mkusers script bash errors
+In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
+References: <bug-9456-163@https.bugs.busybox.net/>
+Message-ID: <bug-9456-163-XijuaxUpOF@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9456
 
-On Fri, 3 Mar 2017 08:43:54 +0100, Martin Kepplinger wrote:
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-> ---
->  package/tslib/tslib.hash | 4 ++--
->  package/tslib/tslib.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+--- Comment #26 from Paul Stewart <paulstewartis@gmail.com> ---
+(In reply to Yann E. MORIN from comment #25)
 
-Applied to master, thanks.
+That produced the correct output.  The passwd, group and shadow files were all
+created properly.  Yay!  Will post the output file momentarily.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
