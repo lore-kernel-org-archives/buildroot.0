@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 08:39:30 +0100
-Subject: [Buildroot] [PATCH 06/58] python-cherrypy: bump to version
- 10.1.1
-In-Reply-To: <20170219191255.1503-7-Adamduskett@outlook.com>
-References: <20170219191255.1503-1-Adamduskett@outlook.com>
- <20170219191255.1503-7-Adamduskett@outlook.com>
-Message-ID: <20170303083930.028e09dc@free-electrons.com>
+Date: Fri, 3 Mar 2017 08:40:04 +0100
+Subject: [Buildroot] [git commit] python-pyasn: update homepage link
+Message-ID: <20170303074059.C62EB81D4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9bdeb115f480ab6c7be603a8450b992978cf4e34
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 19 Feb 2017 14:12:03 -0500, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-> ---
->  package/python-cherrypy/python-cherrypy.hash | 6 +++---
->  package/python-cherrypy/python-cherrypy.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-pyasn/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This breaks the build:
-
-  http://autobuild.buildroot.net/?reason=python-cherrypy-10.1.1
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/python-pyasn/Config.in b/package/python-pyasn/Config.in
+index 997b737..2396194 100644
+--- a/package/python-pyasn/Config.in
++++ b/package/python-pyasn/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_PYTHON_PYASN
+ 	  perform very fast IP address to Autonomous System Number
+ 	  lookups.
+ 
+-	  https://code.google.com/p/pyasn/
++	  https://github.com/hadiasghari/pyasn
+ 
+ comment "python-pyasn needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
