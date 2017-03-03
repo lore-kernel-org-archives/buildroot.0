@@ -1,30 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 23:50:15 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.10.x and 3.2.x
- series
-In-Reply-To: <20170302123357.1274-1-gustavo@zacarias.com.ar>
-References: <20170302123357.1274-1-gustavo@zacarias.com.ar>
-Message-ID: <20170303235015.39cde563@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 3 Mar 2017 23:50:54 +0100
+Subject: [Buildroot] [PATCH] linux: Add CIP SLTS easy selection option
+In-Reply-To: <20170303234636.0dbf4fd6@free-electrons.com>
+References: <1488577816-19047-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20170303234636.0dbf4fd6@free-electrons.com>
+Message-ID: <7663394e-1ac6-07ae-a226-159605ac4011@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Thu,  2 Mar 2017 09:33:56 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks. Peter: I'm not sure which policy you want to have
-in the LTS with regard to bumping kernel/kernel-headers versions, for
-already supported branches.
+On 03-03-17 23:46, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri,  3 Mar 2017 22:50:16 +0100, Angelo Compagnucci wrote:
+>> This patch adds an easy way to select the CIP project SLTS
+>> kernel within the kernel menu.
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> 
+> I personally don't think we should have explicit support for kernels
+> other than the vanilla Linux kernel. Our kernel options already allow
+> to select any arbitrary tarball or Git repository, which makes it
+> possible to use this linux-cip Git repository as your kernel source if
+> you like it.
+> 
+> Supporting explicitly additional kernel trees is a never-ending story.
+> Everyone will want its own kernel tree listed in Buildroot.
+> 
+> And this linux-cip thing is in fact probably a lot less popular than
+> other non-vanilla kernel trees (like the one for RaspberryPi, for
+> BeagleoBone, the PREEMPT_RT tree, etc.).
 
-Thomas
+ In addition, I have yet to meet an actual embedded system product that uses an
+unpatched kernel. In practice, the CIP kernel is going to be the _base_ of a
+product, and not used directly.
+
+ That said, it would be useful to add a defconfig that makes use of that kernel.
+I guess they must have some kind of flagship board to run on, no?
+
+ Regards,
+ Arnout
+
+> 
+> So I apologize, but I'm personally not in favor of this patch.
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
