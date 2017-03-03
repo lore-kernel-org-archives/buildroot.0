@@ -1,28 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Mar 2017 21:50:12 +0100
-Subject: [Buildroot] [PATCH] libepoxy: bump to version 1.4.1
-In-Reply-To: <20170302224718.17265-1-gustavo@zacarias.com.ar>
-References: <20170302224718.17265-1-gustavo@zacarias.com.ar>
-Message-ID: <20170303215012.34e0f884@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 03 Mar 2017 21:50:26 +0100
+Subject: [Buildroot] [PATCH] ncftp: fix host/target confusion
+In-Reply-To: <20170302214346.1157dda6@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 2 Mar 2017 21:43:46 +0100")
+References: <1488322477-25447-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20170301214800.1a6c3405@free-electrons.com>
+ <877f47hccp.fsf@dell.be.48ers.dk>
+ <CANxTyt6tGknGoHc2swaeqh-h6L740Ny79UwgH4AqQH2SfjQYnQ@mail.gmail.com>
+ <20170302214346.1157dda6@free-electrons.com>
+Message-ID: <87innqf5kd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu,  2 Mar 2017 19:47:18 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libepoxy/libepoxy.hash | 4 ++--
->  package/libepoxy/libepoxy.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-Applied to master, thanks.
+ > I'm not sure what to do in this case? Blindly take the new upstream
+ > version? Complain to upstream?
 
-Thomas
+We should probably update. I have mailed support at ncftp.com asking them
+what happened.
+
+I will let you know when/if I hear back from them.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
