@@ -1,36 +1,66 @@
-From: ren_guo <ren_guo@c-sky.com>
-Date: Fri, 3 Mar 2017 15:50:50 +0800
-Subject: [Buildroot] [PATCH 2/2] configs: add defconfig for Nationalchip
- gx6605s dev board.
-In-Reply-To: <20170303030029.GI14124@waldemar-brodkorb.de>
-References: <1488504021-598-1-git-send-email-ren_guo@c-sky.com>
- <1488504021-598-2-git-send-email-ren_guo@c-sky.com>
- <20170303030029.GI14124@waldemar-brodkorb.de>
-Message-ID: <0f757835-a439-5b47-b523-384c4fbae158@c-sky.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Fri, 3 Mar 2017 13:41:11 +0530
+Subject: [Buildroot]  Qt5 CinematicExperience demo error on i.MX6Q
+Message-ID: <CAD6G_RT4EY2zz3bFo8pUwHDN6fnWgG9CcXjUDuZEmAShRMmzhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thx, Waldemar
+Hi,
 
-> I tried your patchset, the toolchain is not downloadable, empty
-> files in github.
+Doe anyone tried Qt5 CinematicExperience demo? I've tried it on i.MX6Q
+with 4.9.13 Mainline kernel but seems like egl surface issue.
 
-Thx for your feedback, the reason of this is our git-lfs out of bandwith.
+Log:
+----
+# /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience -platform eglfs
+MESA-LOADER: device is not located on the PCI bus
+MESA-LOADER: device is not located on the PCI bus
+MESA-LOADER: device is not located on the PCI bus
+libpng warning: iCCP: known incorrect sRGB profile
+libpng warning: iCCP: known incorrect sRGB profile
+EGL Error : Could not create the egl surface: error = 0x300b
 
-We've purchased 2-data-packs/month about 100GB/month.
+Aborted
 
-Now It've been solved, and I've tested it again.
-Please have a another try, and sorry for that.
+I'm using Mainline GPU drivers and enabled mesa 17.0.0 and etnaviv
+gallium drivers on buildroot.
 
-> Can the c-sky devboards be bought anywhere in Europe?
+Kernel dmesg:
+[    1.191267] [drm] Initialized
+[    1.202685] etnaviv gpu-subsystem: bound 134000.gpu (ops gpu_ops)
+[    1.208861] etnaviv gpu-subsystem: bound 130000.gpu (ops gpu_ops)
+[    1.215055] etnaviv gpu-subsystem: bound 2204000.gpu (ops gpu_ops)
+[    1.221284] etnaviv-gpu 134000.gpu: model: GC320, revision: 5007
+[    1.276225] etnaviv-gpu 130000.gpu: model: GC2000, revision: 5108
+[    1.336244] etnaviv-gpu 2204000.gpu: model: GC355, revision: 1215
+[    1.342387] etnaviv-gpu 2204000.gpu: Ignoring GPU with VG and FE2.0
+[    1.353868] imx-ipuv3 2400000.ipu: IPUv3H probed
+[    1.361442] [drm] Supports vblank timestamp caching Rev 2 (21.10.2013).
+[    1.368068] [drm] No driver support for vblank timestamp query.
+[    1.374738] imx-drm display-subsystem: bound imx-ipuv3-crtc.2 (ops
+ipu_crtc_ops)
+[    1.382470] imx-drm display-subsystem: bound imx-ipuv3-crtc.3 (ops
+ipu_crtc_ops)
+[    1.390299] imx-drm display-subsystem: bound imx-ipuv3-crtc.6 (ops
+ipu_crtc_ops)
+[    1.397993] imx-drm display-subsystem: bound imx-ipuv3-crtc.7 (ops
+ipu_crtc_ops)
+[    1.406215] imx-drm display-subsystem: bound 2000000.aips-bus:ldb
+(ops imx_ldb_ops)
+[    1.428173] imx-ipuv3 2400000.ipu: videomode adapted for IPU restrictions
+[    1.428191] imx-ipuv3 2400000.ipu: videomode adapted for IPU restrictions
+[    1.487123] Console: switching to colour frame buffer device 160x50
+[    1.523393] imx-drm display-subsystem: fb0:  frame buffer device
+[    1.561809] imx-ipuv3 2800000.ipu: IPUv3H probed
 
-Now we just sold it on taobao in china.
+Please let me know your inputs.
 
-But we are preparing the csky-qemu instead.
-
-Best Regards
-
-guoren
+thanks!
+-- 
+Jagan Teki
+Free Software Engineer | www.openedev.com
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
