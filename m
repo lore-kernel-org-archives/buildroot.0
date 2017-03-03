@@ -1,7 +1,7 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Fri, 3 Mar 2017 23:07:08 +0530
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Fri, 3 Mar 2017 18:38:48 +0100
 Subject: [Buildroot] libqeglfs.so not found on imx6
-In-Reply-To: <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
+In-Reply-To: <CAD6G_RTKa+QZxM6-MHF0LxUz2m7WVjcZF7d7HtPAXrdr+rMTqg@mail.gmail.com>
 References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
  <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
  <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
@@ -23,59 +23,56 @@ References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
  <CAOMZO5AB2xYjvjQkvYp8y++M=95SnJSPbkPsv-sqs0VciYDd-w@mail.gmail.com>
  <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
  <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
-Message-ID: <CAD6G_RTKa+QZxM6-MHF0LxUz2m7WVjcZF7d7HtPAXrdr+rMTqg@mail.gmail.com>
+ <CAD6G_RTKa+QZxM6-MHF0LxUz2m7WVjcZF7d7HtPAXrdr+rMTqg@mail.gmail.com>
+Message-ID: <CAAMH-yuJwMEFkHRxZSAtQBtCV=YmXaJuZ-+6zx7xvK5mSmCU+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+Hi,
 
-On Fri, Mar 3, 2017 at 10:37 PM, Gary Bisson
-<gary.bisson@boundarydevices.com> wrote:
-> Hi
+On Fri, Mar 3, 2017 at 6:37 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+> Hi Gary,
 >
-> On Fri, Mar 3, 2017 at 5:20 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+> On Fri, Mar 3, 2017 at 10:37 PM, Gary Bisson
+> <gary.bisson@boundarydevices.com> wrote:
+>> Hi
 >>
->> Hi Fabio,
+>> On Fri, Mar 3, 2017 at 5:20 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+>>>
+>>> Hi Fabio,
+>>>
+>>> On Fri, Mar 3, 2017 at 5:17 PM, Fabio Estevam <festevam@gmail.com> wrote:
+>>> > Hi Jagan,
+>>> >
+>>> > On Fri, Mar 3, 2017 at 8:19 AM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+>>> >
+>>> >> Got the cube running..
+>>> >
+>>> > Excellent. If you manage to get QT working accelerated by Etnaviv,
+>>> > please let us know.
+>>>
+>>> Sure, I'm trying to play some graphic video like CinematicExperience
+>>> but look like some issue on eglfs.
+>>>
+>>> # /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
+>>> qt.qpa.egldeviceintegration: Failed to load EGL device integration "eglfs_kms"
+>>> qt.qpa.egldeviceintegration: Failed to load EGL device integration
+>>> "eglfs_kms_egldevice"
+>>> Could not open display
+>>> Aborted
 >>
->> On Fri, Mar 3, 2017 at 5:17 PM, Fabio Estevam <festevam@gmail.com> wrote:
->> > Hi Jagan,
->> >
->> > On Fri, Mar 3, 2017 at 8:19 AM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
->> >
->> >> Got the cube running..
->> >
->> > Excellent. If you manage to get QT working accelerated by Etnaviv,
->> > please let us know.
->>
->> Sure, I'm trying to play some graphic video like CinematicExperience
->> but look like some issue on eglfs.
->>
->> # /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
->> qt.qpa.egldeviceintegration: Failed to load EGL device integration "eglfs_kms"
->> qt.qpa.egldeviceintegration: Failed to load EGL device integration
->> "eglfs_kms_egldevice"
->> Could not open display
->> Aborted
+>> I've had Qt5 and EGLFS running on Etnaviv before (an image is
+>> available on our website).
 >
-> I've had Qt5 and EGLFS running on Etnaviv before (an image is
-> available on our website).
+> Oh., thanks for the info. Can you point me demo link that you tried?
 
-Oh., thanks for the info. Can you point me demo link that you tried?
+https://boundarydevices.com/pengutronix-etnaviv-demo-nitrogen6x/
 
->
-> Here was the buildroot defconfig:
-> http://linode.boundarydevices.com/buildroot_gst1_etnaviv_qt5_defconfig
+At the end of the article is a link to the image. Works on all BD
+Nitrogen platforms (and SabreLite).
 
-Sure, I will take this reference.
-
-> Note that the cinematics demo doesn't show great performances.
-
-thanks!
--- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+Regards,
+Gary
