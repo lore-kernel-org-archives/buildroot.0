@@ -1,35 +1,26 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Fri, 3 Mar 2017 12:48:57 +0100
-Subject: [Buildroot] [PATCH v2] package/can-utils: add license
-	information
-In-Reply-To: <20170303123100.6ce4254a@free-electrons.com>
-References: <68ff344f-81de-b4a4-9762-b117154cd751@grandegger.com>
- <20170303123100.6ce4254a@free-electrons.com>
-Message-ID: <698e2ecb-9110-8e9e-6c4b-7847aead0d5a@grandegger.com>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Fri, 3 Mar 2017 17:23:46 +0530
+Subject: [Buildroot] [PATCH v4] kmscube: Add new package
+In-Reply-To: <1487154702-21899-1-git-send-email-festevam@gmail.com>
+References: <1487154702-21899-1-git-send-email-festevam@gmail.com>
+Message-ID: <CAD6G_RRR9t-D-FVQczxzsPbrdLjAd9eh=jRBqEfMYOZx+Oum+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Am 03.03.2017 um 12:31 schrieb Thomas Petazzoni:
-> Hello,
+On Wed, Feb 15, 2017 at 4:01 PM, Fabio Estevam <festevam@gmail.com> wrote:
+> Add support for kmscube application, which is helpful for testing
+> kms/drm drivers.
 >
-> On Fri, 3 Mar 2017 12:26:01 +0100, Wolfgang Grandegger wrote:
->
->>  CAN_UTILS_VERSION = c3305fdd515464153d20199db232b6124bc962c0
->>  CAN_UTILS_SITE = $(call github,linux-can,can-utils,$(CAN_UTILS_VERSION))
->> +CAN_UTILS_LICENSE = BSD-3c or GPLv2, GPLv2+
->
-> As I said in my previous review, could you identify which parts are
-> under which license?
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-I already answered! Unfortunately just to the ml, sorry.
+Tested-by: Jagan Teki <jagan@amarulasolutions.com>
 
-http://lists.busybox.net/pipermail/buildroot/2017-March/185530.html
-
-Should I list each utility using on of the two licences?
-
-Wolfgang
+thanks!
+-- 
+Jagan Teki
+Free Software Engineer | www.openedev.com
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
