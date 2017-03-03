@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 03 Mar 2017 17:31:53 +0000
+Date: Fri, 03 Mar 2017 17:37:10 +0000
 Subject: [Buildroot] [Bug 9456] mkusers script bash errors
 In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
 References: <bug-9456-163@https.bugs.busybox.net/>
-Message-ID: <bug-9456-163-MHT1S4y0SQ@https.bugs.busybox.net/>
+Message-ID: <bug-9456-163-wGvhM4vYFx@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,27 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=9456
 
---- Comment #24 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-(In reply to Arnout Vandecappelle from comment #23)
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-I'll do the change, for sanity sake.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #6916|0                           |1
+        is obsolete|                            |
+   Attachment #6921|0                           |1
+        is obsolete|                            |
 
-However:
-  - the checkwinsize option is disabled by default in a non interactive shell,
-  - this is not interactive shell, so SIGWINCH should be ignored.
+--- Comment #25 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Created attachment 6926
+  --> https://bugs.busybox.net/attachment.cgi?id=6926&action=edit
+Rename variable, paranoid debug
 
-I'll paste a patch in a moment...
+Paul,
+
+Could you please test this patch and report the output, please?
+
+For the record, the output here contains:
+
+    checkwinsize    off
 
 Regards,
 Yann E. MORIN.
