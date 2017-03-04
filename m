@@ -1,188 +1,94 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Sat, 4 Mar 2017 16:29:03 +0100
-Subject: [Buildroot] [RFC PATCH 2/9] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <d27f25a7-8a02-1da3-d9c6-8935ad01ad21@mind.be>
-References: <1488550733-3956-1-git-send-email-wg@grandegger.com>
- <1488550733-3956-3-git-send-email-wg@grandegger.com>
- <d27f25a7-8a02-1da3-d9c6-8935ad01ad21@mind.be>
-Message-ID: <369a0cbc-0837-fe1a-c94f-bd1d6fe19883@grandegger.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 4 Mar 2017 17:41:59 +0100
+Subject: [Buildroot] [PATCH 1/1] boinc: new package
+In-Reply-To: <20170304154824.54623667@free-electrons.com>
+References: <1488638270-20784-1-git-send-email-fontaine.fabrice@gmail.com>
+ <20170304154824.54623667@free-electrons.com>
+Message-ID: <CAPi7W829SyEHhpb9CoSYK+fC1XDuOec-5TcJtwSU71_dSZY_eg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Dear Thomas,
 
-Am 04.03.2017 um 12:39 schrieb Arnout Vandecappelle:
->  Hi Wolfgang,
+Thanks for your quick review.
+
+2017-03-04 15:48 GMT+01:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Hello,
 >
->  I realize that this patch is going to be dropped because it is going to be done
-> directly from the makefiles, but I have some hopefully useful comments still.
-
-If the logic is not too complex.
-
+> On Sat,  4 Mar 2017 15:37:50 +0100, Fabrice Fontaine wrote:
 >
->  First of all: make sure the original author is explicitly in Cc. git send-email
-> normally does that automatically so I'm surprised Samuel isn't there.
-
-I think the mailing-list is stripping the CC. On the mail I got, Samuel 
-is on CC. I did use "git send-email" with an "-cc" to Samuel.
-
-> On 03-03-17 15:18, Wolfgang Grandegger wrote:
->> From: Samuel Martin <s.martin49@gmail.com>
->>
->> This commit introduces a fix-rpath script able to scan a tree,
->> detect ELF files, check their RPATH and fix it in a proper way.
->> The RPATH fixup is done by the patchelf utility using the option
->> "--make-rpath-relative".
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->> ---
->>  support/scripts/fix-rpath | 106 ++++++++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 106 insertions(+)
->>  create mode 100755 support/scripts/fix-rpath
->>
->> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
->> new file mode 100755
->> index 0000000..bde2c17
->> --- /dev/null
->> +++ b/support/scripts/fix-rpath
->> @@ -0,0 +1,106 @@
->> +#!/usr/bin/env bash
->> +
->> +# Copyright (C) 2016 Samuel Martin <s.martin49@gmail.com>
->> +#
->> +# This program is free software; you can redistribute it and/or modify
->> +# it under the terms of the GNU General Public License as published by
->> +# the Free Software Foundation; either version 2 of the License, or
->> +# (at your option) any later version.
->> +#
->> +# This program is distributed in the hope that it will be useful,
->> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
->> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
->> +# General Public License for more details.
->> +#
->> +# You should have received a copy of the GNU General Public License
->> +# along with this program; if not, write to the Free Software
->> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
->> +
->> +#set -e
->> +#set -v
+> > + lib_LTLIBRARIES = libboinc_api.la
+> > + libboinc_api_la_SOURCES = $(api_files)
+> > +-libboinc_api_la_LDFLAGS = -L$(libdir) -rpath $(libdir) -version-number
+> $(LIBBOINC_VERSION)
+> > ++libboinc_api_la_LDFLAGS = -rpath $(libdir) -version-number
+> $(LIBBOINC_VERSION)
 >
->  Don't include debugging cruft in the final patch.
-
-I agree!
-
->> +
->> +usage() {
->> +  cat <<EOF >&2
->> +Usage:  ${0} TREE_KIND TREE_ROOT
->> +
->> +Description:
->> +
->> +        This script scans a tree and sanitize ELF files' RPATH found in there.
->> +
->> +        Sanitization behaves the same whatever the kindd of the processed tree, but
->> +        the resulting RPATH differs.
->> +
->> +        Sanitization action:
->> +        - remove RPATH pointing outside of the tree
->> +        - for RPATH pointing in the tree:
->> +          - if they point to standard location (/lib, /usr/lib): remove them
->> +          - otherwise: make them relative using \$ORIGIN
->> +
->> +        For the target tree:
->> +        - scan the whole tree for sanitization
->> +
->> +        For the staging tree :
->> +        - scan the whole tree for sanitization
->> +
->> +        For the host tree:
->> +        - skip the staging tree for sanitization
->> +        - add \$HOST_DIR/{lib,usr/lib} to RPATH (as relative pathes)
->> +
->> +Arguments:
->> +
->> +        TREE_KIND   Kind of tree to be processed.
->> +                    Allowed values: host, target, staging
->> +
->> +        TREE_ROOT   Path to the root of the tree to be scaned
->> +
->> +Environment:
->> +
->> +        PATCHELF        patchelf program to use
->> +                        (default: patchelf)
->> +EOF
->> +}
->> +
->> +: ${PATCHELF:=patchelf}
->> +
->> +main() {
->> +    local tree="${1}"
->> +    local basedir="$(readlink -f "${2}")"
->> +
->> +    local find_args=( "${basedir}" )
->> +    local sanitize_extra_args=( )
->> +
->> +    case "${tree}" in
->> +        host)
->> +            # do not process the sysroot (only contains target binaries)
->> +            find_args+=( "-name" "sysroot" "-prune" "-o" )
+> You should also remove the -rpath $(libdir) variable, because the
+> -rpath option also causes the linker to look into $(libdir) during the
+> build process:
 >
->  I believe we should specify a full path here. If there is any other directory
-> in the tree that happens to be called 'sysroot' for whatever reason, it
-> shouldn't be pruned. When this is done directly from make, it's pretty easy:
-> -path $(STAGING_DIR) -prune
+> '-rpath=DIR'
+>      Add a directory to the runtime library search path.  This is used
+>      when linking an ELF executable with shared objects.  All '-rpath'
+>      arguments are concatenated and passed to the runtime linker, which
+>      uses them to locate shared objects at runtime.  The '-rpath' option
+>      is also used when locating shared objects which are needed by
+>      shared objects explicitly included in the link; see the description
+>      of the '-rpath-link' option.  If '-rpath' is not used when linking
+>      an ELF executable, the contents of the environment variable
+>      'LD_RUN_PATH' will be used if it is defined.
+>
+> OK done
 
-OK.
+> > +BOINC_VERSION = 26198
+> > +BOINC_SITE = $(call github,BOINC,boinc,vboxwrapper/$(BOINC_VERSION))
+>
+> What is this vboxwrapper/<xyz> version?
+>
+> All github releases since July 2016 starts with vboxwrapper. I suppose
+that's becaue the "standard" way of installing boinc is through virtual
+box. vboxwrapper is the name of the boinc package installed inside virtual
+box. This package can contain the client, the server, the manager, ...
+
+> > +BOINC_LICENSE = LGPLv3
+> > +BOINC_LICENSE_FILES = COPYING COPYING.LESSER
+>
+> COPYING contains the text of the GPLv3, so are you sure the entire project
+> is under LGPLv3 ?
+>
+I made a quick search and I found only LGPL in source files, moreover
+README.md, wikipedia and https://boinc.berkeley.edu also mention only LGPL.
+Should I remove COPYING from the list?
 
 >
->> +
->> +            # do not process the external toolchain installation directory to
->> +            # to avoid breaking it.
->> +            find_args+=( "-path" "*/opt/ext-toolchain" "-prune" "-o" )
+> > +ifeq ($(BR2_PACKAGE_LIBCURL)$(BR2_PACKAGE_OPENSSL),yy)
+> > +BOINC_DEPENDENCIES += \
+> > +     libcurl \
+> > +     openssl
 >
->  Same here: $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR) which has the full path.
-
-OK.
+> One line is enough for this assignment.
+>
+OK done
 
 >
->  Regards,
->  Arnout
+> Thanks!
 >
->> +
->> +            ;;
->> +        staging|target)
->> +            # discard ${hostdir}/lib and ${hostdir}/usr/lib
->> +            sanitize_extra_args+=( "--no-standard-lib-dirs" )
->> +
->> +            ;;
->> +        *)
->> +            usage
->> +            exit 1
->> +            ;;
->> +    esac
->> +
->> +    find_args+=( "-type" "f" "-print" )
->> +
->> +    while read file ; do
->> +        # some files are not writable
->> +        chmod u+w $file
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
 
-This is just a hack because some elf files are not writable. To make all 
-regular file writable is wrong. We may also want to reset the original 
-permission. It needs more logic, unfortunately.
+Best Regards,
 
->> +        # call patchelf for each regular file; error will silently be ignored.
->> +        ${PATCHELF} --debug --make-rpath-relative "${basedir}" ${sanitize_extra_args[@]} "${file}" >> /dev/null 2>&1
->> +    done < <(find ${find_args[@]})
->> +
->> +    # ignore errors
-
-Simply ignoring errors here is fast, but it also does not allow to print 
-warnings.
-
-Wolfgang.
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170304/c5978e95/attachment.html>
