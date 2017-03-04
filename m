@@ -1,88 +1,175 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 4 Mar 2017 12:31:00 +0100
-Subject: [Buildroot] [PATCH] linux: Add CIP SLTS easy selection option
-In-Reply-To: <20170304111105.03e2ffe2@free-electrons.com>
-References: <1488577816-19047-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170303234636.0dbf4fd6@free-electrons.com>
- <7663394e-1ac6-07ae-a226-159605ac4011@mind.be>
- <20170304000243.35b8b146@free-electrons.com>
- <ecfd4a44-a1b8-19c9-f6c0-ba7998be2c85@mind.be>
- <20170304111105.03e2ffe2@free-electrons.com>
-Message-ID: <CA+TH9Vkxm4VdeBrTWAzWX6YGxrHT2-+OsMpGO0HaNeAHmQAYaw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 4 Mar 2017 12:39:28 +0100
+Subject: [Buildroot] [RFC PATCH 2/9] support/scripts: add fix-rpath
+ script to sanitize the rpath
+In-Reply-To: <1488550733-3956-3-git-send-email-wg@grandegger.com>
+References: <1488550733-3956-1-git-send-email-wg@grandegger.com>
+ <1488550733-3956-3-git-send-email-wg@grandegger.com>
+Message-ID: <d27f25a7-8a02-1da3-d9c6-8935ad01ad21@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni, Arnout Vandecappelle
+ Hi Wolfgang,
 
-2017-03-04 11:11 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Sat, 4 Mar 2017 00:43:20 +0100, Arnout Vandecappelle wrote:
->
->> > I don't really see how that would be useful. What would it bring
->> > exactly?
->>
->>  Advertising that this repository exists and show how it can be used with
->> Buildroot. The latter part is of course trivial for us but still useful for
->> newcomers I think.
->
-> But is this repository any more useful than hundreds of other vendor
-> kernel trees? Why would this one have a defconfig, while it's not tied
-> to handling a particular HW platform?
+ I realize that this patch is going to be dropped because it is going to be done
+directly from the makefiles, but I have some hopefully useful comments still.
 
-Probably there's some missing informations here ...
+ First of all: make sure the original author is explicitly in Cc. git send-email
+normally does that automatically so I'm surprised Samuel isn't there.
 
-From the CIP website:
+On 03-03-17 15:18, Wolfgang Grandegger wrote:
+> From: Samuel Martin <s.martin49@gmail.com>
+> 
+> This commit introduces a fix-rpath script able to scan a tree,
+> detect ELF files, check their RPATH and fix it in a proper way.
+> The RPATH fixup is done by the patchelf utility using the option
+> "--make-rpath-relative".
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
+> ---
+>  support/scripts/fix-rpath | 106 ++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 106 insertions(+)
+>  create mode 100755 support/scripts/fix-rpath
+> 
+> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+> new file mode 100755
+> index 0000000..bde2c17
+> --- /dev/null
+> +++ b/support/scripts/fix-rpath
+> @@ -0,0 +1,106 @@
+> +#!/usr/bin/env bash
+> +
+> +# Copyright (C) 2016 Samuel Martin <s.martin49@gmail.com>
+> +#
+> +# This program is free software; you can redistribute it and/or modify
+> +# it under the terms of the GNU General Public License as published by
+> +# the Free Software Foundation; either version 2 of the License, or
+> +# (at your option) any later version.
+> +#
+> +# This program is distributed in the hope that it will be useful,
+> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
+> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+> +# General Public License for more details.
+> +#
+> +# You should have received a copy of the GNU General Public License
+> +# along with this program; if not, write to the Free Software
+> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+> +
+> +#set -e
+> +#set -v
 
-"Development will begin shortly on SLTS kernel version 4.4. Until the
-announcement of the next version of the SLTS kernel, which the CIP
-community anticipates will happen in two to three years, feature
-backports from the upstream Linux kernel may be merged with the CIP
-kernel. The CIP community plans to maintain 4.4 for security and bug
-fixes for more than 10 years."
+ Don't include debugging cruft in the final patch.
 
-So, it's a vanilla kernel? Yes
-It's security patched? Yes
-It's a join effort project from the Linux Foundation and other big
-players? Yes [1]
-It's tied to a special development platform or board? No, it's a
-vanilla kernel after all.
+> +
+> +usage() {
+> +  cat <<EOF >&2
+> +Usage:  ${0} TREE_KIND TREE_ROOT
+> +
+> +Description:
+> +
+> +        This script scans a tree and sanitize ELF files' RPATH found in there.
+> +
+> +        Sanitization behaves the same whatever the kindd of the processed tree, but
+> +        the resulting RPATH differs.
+> +
+> +        Sanitization action:
+> +        - remove RPATH pointing outside of the tree
+> +        - for RPATH pointing in the tree:
+> +          - if they point to standard location (/lib, /usr/lib): remove them
+> +          - otherwise: make them relative using \$ORIGIN
+> +
+> +        For the target tree:
+> +        - scan the whole tree for sanitization
+> +
+> +        For the staging tree :
+> +        - scan the whole tree for sanitization
+> +
+> +        For the host tree:
+> +        - skip the staging tree for sanitization
+> +        - add \$HOST_DIR/{lib,usr/lib} to RPATH (as relative pathes)
+> +
+> +Arguments:
+> +
+> +        TREE_KIND   Kind of tree to be processed.
+> +                    Allowed values: host, target, staging
+> +
+> +        TREE_ROOT   Path to the root of the tree to be scaned
+> +
+> +Environment:
+> +
+> +        PATCHELF        patchelf program to use
+> +                        (default: patchelf)
+> +EOF
+> +}
+> +
+> +: ${PATCHELF:=patchelf}
+> +
+> +main() {
+> +    local tree="${1}"
+> +    local basedir="$(readlink -f "${2}")"
+> +
+> +    local find_args=( "${basedir}" )
+> +    local sanitize_extra_args=( )
+> +
+> +    case "${tree}" in
+> +        host)
+> +            # do not process the sysroot (only contains target binaries)
+> +            find_args+=( "-name" "sysroot" "-prune" "-o" )
 
-So in the end I think this kernel should have a mention in buildroot.
-
-Buildroot users are usually corporations that want to build software
-for their products.
-If I were a corp right now, I will base my Linux product on an SLTS
-kernel, because it assures me that I don't have to rewrite all my
-kernel code for at least 10 years and the testing I do isn't trashed
-every time a new kernel revision is out [2].
-
-Ironically, we could base most of our configs (the ones that use a
-vanilla kernel) on CIP SLTS kernel and never think again to kernel
-bumps for another 10 years!
-
-I think that we should support this vanilla super long term support
-kernel for the benefits of our users. Choosing the right kernel for a
-product is a tough decision and knowing that there is a kernel I can
-trust for 10 years is surely something to not underestimate.
-
-Sincerely, Angelo
+ I believe we should specify a full path here. If there is any other directory
+in the tree that happens to be called 'sysroot' for whatever reason, it
+shouldn't be pruned. When this is done directly from make, it's pretty easy:
+-path $(STAGING_DIR) -prune
 
 
-[1] https://www.linuxfoundation.org/news-media/announcements/2016/04/linux-foundation-launches-first-linux-based-civil-infrastructure
-[2] https://wiki.linuxfoundation.org/civilinfrastructureplatform/cipkernelmaintenance
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+> +
+> +            # do not process the external toolchain installation directory to
+> +            # to avoid breaking it.
+> +            find_args+=( "-path" "*/opt/ext-toolchain" "-prune" "-o" )
+
+ Same here: $(TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR) which has the full path.
 
 
+ Regards,
+ Arnout
+
+> +
+> +            ;;
+> +        staging|target)
+> +            # discard ${hostdir}/lib and ${hostdir}/usr/lib
+> +            sanitize_extra_args+=( "--no-standard-lib-dirs" )
+> +
+> +            ;;
+> +        *)
+> +            usage
+> +            exit 1
+> +            ;;
+> +    esac
+> +
+> +    find_args+=( "-type" "f" "-print" )
+> +
+> +    while read file ; do
+> +        # some files are not writable
+> +        chmod u+w $file
+> +        # call patchelf for each regular file; error will silently be ignored.
+> +        ${PATCHELF} --debug --make-rpath-relative "${basedir}" ${sanitize_extra_args[@]} "${file}" >> /dev/null 2>&1
+> +    done < <(find ${find_args[@]})
+> +
+> +    # ignore errors
+> +    return 0
+> +}
+> +
+> +main ${@}
+> 
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
