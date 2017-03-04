@@ -1,34 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 04 Mar 2017 23:02:53 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.10.x and 3.2.x
-	series
-In-Reply-To: <20170303235015.39cde563@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 3 Mar 2017 23:50:15 +0100")
-References: <20170302123357.1274-1-gustavo@zacarias.com.ar>
- <20170303235015.39cde563@free-electrons.com>
-Message-ID: <877f44g0oi.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 Mar 2017 23:42:01 +0100
+Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: waylandsink needs
+ wayland-protocols
+In-Reply-To: <20170304213125.13321-1-ps.report@gmx.net>
+References: <20170304213125.13321-1-ps.report@gmx.net>
+Message-ID: <20170304234201.34e48ed4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > Hello,
- > On Thu,  2 Mar 2017 09:33:56 -0300, Gustavo Zacarias wrote:
- >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- >> ---
- >> package/linux-headers/Config.in.host | 4 ++--
- >> 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sat,  4 Mar 2017 22:31:25 +0100, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++--
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index 6bec362db..923ed2cfc 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -112,11 +112,12 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
+>  	default y
+>  	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
+>  	depends on BR2_PACKAGE_WAYLAND
+> +	depends on BR2_PACKAGE_WAYLAND_PROTOCOLS
 
- > Both applied, thanks. Peter: I'm not sure which policy you want to have
- > in the LTS with regard to bumping kernel/kernel-headers versions, for
- > already supported branches.
+Did you try if a "select BR2_PACKAGE_WAYLAND_PROTOCOLS" works here?
+That would be a bit nicer IMO.
 
-I'm also not sure what the best approach is. If we do bump the version,
-then what about other packages doing bugfix-only version bumps
-(E.G. busybox, ..)
+Double check the output of "make menuconfig", to make sure this doesn't
+cause any recursive dependency.
 
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
