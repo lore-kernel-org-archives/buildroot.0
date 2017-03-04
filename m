@@ -1,36 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Mar 2017 11:56:50 +0100
-Subject: [Buildroot] [PATCH 1/2] package/wayland: drop non-existing
-	configure option
-In-Reply-To: <cover.1488711390.git.yann.morin.1998@free.fr>
-References: <cover.1488711390.git.yann.morin.1998@free.fr>
-Message-ID: <2450068b8a4272d6f47d3fec39d0893910e4c955.1488711390.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 Mar 2017 23:42:46 +0100
+Subject: [Buildroot] [git commit] putty: needs wchar support
+Message-ID: <20170305110726.A5F6A82293@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---disable-scanner was removed back in 2015, so drop it.
+commit: https://git.buildroot.net/buildroot/commit/?id=18275a0420fd39817ea01e30f5d815c78dc72cc0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+putty uses mbstate_t, which is a wchar related definition, so wchar
+support is needed in the toolchain.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/0e3f4306513b79306d43338eced890205632c395/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wayland/wayland.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/putty/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 286871e..11fbce3 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
-@@ -14,7 +14,7 @@ WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
- HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
+diff --git a/package/putty/Config.in b/package/putty/Config.in
+index fe5b9eb..420a753 100644
+--- a/package/putty/Config.in
++++ b/package/putty/Config.in
+@@ -1,9 +1,14 @@
+ config BR2_PACKAGE_PUTTY
+ 	bool "putty"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  PuTTY is a free SSH and Telnet client. Without GTK2 activated,
+ 	  only the commandline tools plink, pscp, psftp, and puttygen are
+ 	  built; enable GTK2 for the graphical client.
  
- # wayland-scanner is only needed for building, not on the target
--WAYLAND_CONF_OPTS = --disable-scanner --with-host-scanner
-+WAYLAND_CONF_OPTS = --with-host-scanner
- 
- # Remove the DTD from the target, it's not needed at runtime
- define WAYLAND_TARGET_CLEANUP
--- 
-2.7.4
+ 	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
++
++comment "putty needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR
