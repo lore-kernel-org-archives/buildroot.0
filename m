@@ -1,51 +1,49 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  4 Mar 2017 11:35:03 +0100
-Subject: [Buildroot] [PATCH] package/librsvg: disable gdk-pixbuf-loader
-Message-ID: <20170304103503.18877-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 Mar 2017 11:36:26 +0100
+Subject: [Buildroot] [git commit] python-enum: fix license information
+Message-ID: <20170304103820.41C858222B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gdk-pixbuf-loader support is enabled by default but it silently fail to
-generate gdk-pixbuf.loaders file when host != target.
+commit: https://git.buildroot.net/buildroot/commit/?id=d4235a8372ccaa54bc8322361a41003837d005a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For exemple on ARM target:
-output/host/usr/bin/gdk-pixbuf-query-loaders ./libpixbufloader-svg.la
-g_module_open() failed for output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la: output/build/librsvg-2.40.16/gdk-pixbuf-loader/./.libs/libpixbufloader-svg.so: wrong ELF class: ELFCLASS32
+The bump of python-enum to version 0.4.6 in commit
+636df89872c7b6a6bed2c679cf65da41309ac652 forgot to update the license
+information. Even though the PKG-INFO file still pretends it's GPLv2
+or Python license, the only license file available is LICENSE.GPL-3
+(which indicates a GPLv3 license), and the comment header in the
+source code is pretty clear:
 
-But it doesn't break the build.
-
-When host = target using the Sourcery CodeBench AMD64 2016.11 toolchain
-optimized for x86_68 AMD Puma/Jaguar or AMD Steamroller, it break the
-build due to "Illegal instruction".
-
-output/host/usr/bin/gdk-pixbuf-query-loaders libpixbufloader-svg.la
-Illegal instruction (core dumped)
-
-Since this option is broken for cross-compilation, disable it.
+    This is free software: you may copy, modify, and/or distribute
+    this work under the terms of the GNU General Public License as
+    published by the Free Software Foundation; version 3 of that
+    license or any later version.  No warranty expressed or
+    implied. See the file ???LICENSE.GPL-3??? for details.
 
 Fixes:
-http://autobuild.buildroot.net/results/393/393145bc9bcb93d6df55ec8c63725c3d9a299957
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+   http://autobuild.buildroot.net/results/7fec1c7cde710f523263e74b1849f1f4488b7d26/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/librsvg/librsvg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-enum/python-enum.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index b711de4..db57193 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -9,7 +9,7 @@ LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).16
- LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
--LIBRSVG_CONF_OPTS = --disable-tools --enable-introspection=no
-+LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
- HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
- LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
- 	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3)
--- 
-2.9.3
+diff --git a/package/python-enum/python-enum.mk b/package/python-enum/python-enum.mk
+index e1a55c3..aac9328 100644
+--- a/package/python-enum/python-enum.mk
++++ b/package/python-enum/python-enum.mk
+@@ -8,7 +8,7 @@ PYTHON_ENUM_VERSION = 0.4.6
+ PYTHON_ENUM_SOURCE = enum-$(PYTHON_ENUM_VERSION).tar.gz
+ PYTHON_ENUM_SITE = https://pypi.python.org/packages/0c/4e/1ea357e7783c756bb579333c1e4a026fb331371ee771f616ffedc781e531
+ PYTHON_ENUM_SETUP_TYPE = setuptools
+-PYTHON_ENUM_LICENSE = GPLv2+ or Python software foundation license v2
+-PYTHON_ENUM_LICENSE_FILES = LICENSE.GPL LICENSE.PSF
++PYTHON_ENUM_LICENSE = GPLv3+
++PYTHON_ENUM_LICENSE_FILES = LICENSE.GPL-3
+ 
+ $(eval $(python-package))
