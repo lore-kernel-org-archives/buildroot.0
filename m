@@ -1,23 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 04 Mar 2017 10:05:06 +0000
-Subject: [Buildroot] [Bug 9456] mkusers script bash errors
-In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
-References: <bug-9456-163@https.bugs.busybox.net/>
-Message-ID: <bug-9456-163-eLDtNDz3ER@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 4 Mar 2017 11:11:05 +0100
+Subject: [Buildroot] [PATCH] linux: Add CIP SLTS easy selection option
+In-Reply-To: <ecfd4a44-a1b8-19c9-f6c0-ba7998be2c85@mind.be>
+References: <1488577816-19047-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20170303234636.0dbf4fd6@free-electrons.com>
+ <7663394e-1ac6-07ae-a226-159605ac4011@mind.be>
+ <20170304000243.35b8b146@free-electrons.com>
+ <ecfd4a44-a1b8-19c9-f6c0-ba7998be2c85@mind.be>
+Message-ID: <20170304111105.03e2ffe2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9456
+Hello,
 
---- Comment #30 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-(In reply to Paul Stewart from comment #29)
+On Sat, 4 Mar 2017 00:43:20 +0100, Arnout Vandecappelle wrote:
 
-Since we decided to have 2017.02 be our first long-term maintainance branch,
-I believe this will go in, yes.
+> > I don't really see how that would be useful. What would it bring
+> > exactly?  
+> 
+>  Advertising that this repository exists and show how it can be used with
+> Buildroot. The latter part is of course trivial for us but still useful for
+> newcomers I think.
 
+But is this repository any more useful than hundreds of other vendor
+kernel trees? Why would this one have a defconfig, while it's not tied
+to handling a particular HW platform?
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
