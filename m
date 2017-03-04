@@ -1,110 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 4 Mar 2017 13:17:28 +0100
-Subject: [Buildroot] [PATCH] linux: Add CIP SLTS easy selection option
-In-Reply-To: <CA+TH9Vkxm4VdeBrTWAzWX6YGxrHT2-+OsMpGO0HaNeAHmQAYaw@mail.gmail.com>
-References: <1488577816-19047-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170303234636.0dbf4fd6@free-electrons.com>
- <7663394e-1ac6-07ae-a226-159605ac4011@mind.be>
- <20170304000243.35b8b146@free-electrons.com>
- <ecfd4a44-a1b8-19c9-f6c0-ba7998be2c85@mind.be>
- <20170304111105.03e2ffe2@free-electrons.com>
- <CA+TH9Vkxm4VdeBrTWAzWX6YGxrHT2-+OsMpGO0HaNeAHmQAYaw@mail.gmail.com>
-Message-ID: <f66ec9e0-6465-d2b8-eb02-5ada90dcbc75@mind.be>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Sat, 4 Mar 2017 13:27:59 +0100
+Subject: [Buildroot] libqeglfs.so not found on imx6
+In-Reply-To: <CAOMZO5D5FB68ZWCqLd0HB14g3AQQRC556bgSXT-RznGB-xjqdA@mail.gmail.com>
+References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
+ <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
+ <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
+ <CAAMH-ys=MpSuBvT=weVPKhyu5_bz4feq7ePmMN4LgHKubG_9vQ@mail.gmail.com>
+ <CAD6G_RR5fC2n_JA=M1p3=0MeOwDXRVg2hQbhKDwHYmjyddu1SA@mail.gmail.com>
+ <CAOMZO5B_d9-oq9R1NciG7F3A-HKhHVWP8uXzM=Crx2YB+zFVnw@mail.gmail.com>
+ <CAD6G_RQZuqQphZqB0QwLKBC2Ox5G_tp06WTfUMEuOL6=LA2UvQ@mail.gmail.com>
+ <CAOMZO5BWQvPFNevSp8Hjz4knfQ7kTYGmgXutoyzvb_ejq5AhpA@mail.gmail.com>
+ <CAD6G_RSC9+NwdQP3qRA=wLWm2SaVNeN=zJXVR6P6dk8i+xLbxg@mail.gmail.com>
+ <CAOMZO5BGTbB8WM-+oS9CoC8_3TPsZhyq1t-3=SJk1uAms8jBmQ@mail.gmail.com>
+ <CAD6G_RRfwho6qwBU=QtyR6AsuNtGgWvvSFbTjwLwzv+9dqA6-Q@mail.gmail.com>
+ <CAOMZO5Acb8RJZdf95uGj8w5LyhnjCh=sZoj=NE24wN_K2nO_OQ@mail.gmail.com>
+ <CAD6G_RQNzT_yQfQeHW-VNE3vAhSnCRStc1R2NHrbkJwtHD=mzA@mail.gmail.com>
+ <CAD6G_RSOBrZvE-4O_6uTj+0pBvsrM56p-48Rxd2hQZHtq8XkGw@mail.gmail.com>
+ <CAOMZO5CBQVEMBLNgWRL947_uRpCDbyy5tTUVBfNjMkiwjyoA4Q@mail.gmail.com>
+ <CAD6G_RQ3bLbJGi2jdRB-mafn4s=iHpvscjP+ggdBQG7_570ECA@mail.gmail.com>
+ <CAD6G_RT58-HC8mi2g7Aq0x72uac0mUTA=HgoMAd1uAB-BWrXEQ@mail.gmail.com>
+ <CAD6G_RQ_00ozMXZJ4GaTR5ETny-wJk6GkHbPSHLGQjiHUJR9dg@mail.gmail.com>
+ <CAOMZO5AB2xYjvjQkvYp8y++M=95SnJSPbkPsv-sqs0VciYDd-w@mail.gmail.com>
+ <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
+ <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
+ <CAOMZO5CufYJ7vqRw_7LxKpWtJe3Z-1U3=8SOubJXLgvNfO3Rew@mail.gmail.com>
+ <CAOMZO5D5FB68ZWCqLd0HB14g3AQQRC556bgSXT-RznGB-xjqdA@mail.gmail.com>
+Message-ID: <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Fabio,
 
+On Sat, Mar 4, 2017 at 2:48 AM, Fabio Estevam <festevam@gmail.com> wrote:
+> On Fri, Mar 3, 2017 at 8:00 PM, Fabio Estevam <festevam@gmail.com> wrote:
+>
+>> Just tried your defconfig on top of master. Could not get Qt5.8 to
+>> build, so I switched to Qt5.6.
 
-On 04-03-17 12:31, Angelo Compagnucci wrote:
-> Dear Thomas Petazzoni, Arnout Vandecappelle
-> 
-> 2017-03-04 11:11 GMT+01:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
->> Hello,
+I've seen that issue too actually when testing mesa17.0, qtbase 5.8
+wouldn't build. Didn't have time to investigate yet.
+
+>> Here is my defconfig:
+>> http://pastebin.com/Fy4rZCHY
 >>
->> On Sat, 4 Mar 2017 00:43:20 +0100, Arnout Vandecappelle wrote:
+>> When I try to run the demo:
 >>
->>>> I don't really see how that would be useful. What would it bring
->>>> exactly?
->>>
->>>  Advertising that this repository exists and show how it can be used with
->>> Buildroot. The latter part is of course trivial for us but still useful for
->>> newcomers I think.
+>> #  /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
+>> MESA-LOADER: device is not located on the PCI bus
+>> MESA-LOADER: device is not located on the PCI bus
+>> MESA-LOADER: device is not located on the PCI bus
+>> drmModeGetResources failed
+>> Segmentation fault
+>> #
 >>
->> But is this repository any more useful than hundreds of other vendor
->> kernel trees? Why would this one have a defconfig, while it's not tied
->> to handling a particular HW platform?
-> 
-> Probably there's some missing informations here ...
-> 
-> From the CIP website:
-> 
-> "Development will begin shortly on SLTS kernel version 4.4. Until the
-> announcement of the next version of the SLTS kernel, which the CIP
-> community anticipates will happen in two to three years, feature
-> backports from the upstream Linux kernel may be merged with the CIP
-> kernel. The CIP community plans to maintain 4.4 for security and bug
-> fixes for more than 10 years."
-> 
-> So, it's a vanilla kernel? Yes
-> It's security patched? Yes
-> It's a join effort project from the Linux Foundation and other big
-> players? Yes [1]
-> It's tied to a special development platform or board? No, it's a
-> vanilla kernel after all.
-> 
-> So in the end I think this kernel should have a mention in buildroot.
-> 
-> Buildroot users are usually corporations that want to build software
-> for their products.
-> If I were a corp right now, I will base my Linux product on an SLTS
-> kernel, because it assures me that I don't have to rewrite all my
-> kernel code for at least 10 years and the testing I do isn't trashed
-> every time a new kernel revision is out [2].
-> 
-> Ironically, we could base most of our configs (the ones that use a
-> vanilla kernel) on CIP SLTS kernel and never think again to kernel
-> bumps for another 10 years!
+>> Any ideas?
+>
+> Here is the strace output:
+> http://pastebin.com/dgjFA3Dm
 
- Well, we still would have to bump the kernel of course. If the code doesn't
-change, there is no point to use that repository over any other!
+I actually got pretty lucky I guess, when I tried (before mesa17, with
+Christian's tree) it just worked out of the box.
 
-> 
-> I think that we should support this vanilla super long term support
-> kernel for the benefits of our users. Choosing the right kernel for a
-> product is a tough decision and knowing that there is a kernel I can
-> trust for 10 years is surely something to not underestimate.
+Have you made any progress?
 
- And this is indeed what I meant: this project is useful for our users, so it
-would be nice if we advertised it somehow.
-
- Actually, looking back to the original patch, I'm kind of warming up to it. We
-currently have a version selection for all maintained stable versions for
-linux-headers, but not for linux itself - why not? Probably because it is too
-much work to maintain that and most people will anyway not use an upstream
-kernel directly in their product. But with the SLTS kernel there is in fact a
-higher chance that you can use it directly in your product.
-
- Note that the original patch did have a few issues:
-- It should use a tag/sha rather than a branch;
-- It should use a tarball from https://gitlab.com/cip-project/cip-kernel-4.4
-rather than a git clone.
-- Configuration of BR2_CIP_KERNEL_REPO_URL is pointless, since anything else is
-wrong.
-
-
- Regards,
- Arnout
-
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Regards,
+Gary
