@@ -1,54 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Mar 2017 11:56:06 +0100
-Subject: [Buildroot] [PATCH] package/librsvg: disable gdk-pixbuf-loader
-In-Reply-To: <20170304103503.18877-1-romain.naour@gmail.com>
-References: <20170304103503.18877-1-romain.naour@gmail.com>
-Message-ID: <20170304115606.76da14f6@free-electrons.com>
+Date: Sat, 4 Mar 2017 11:56:51 +0100
+Subject: [Buildroot] [git commit] support/mkusers: rename variable to avoid
+	name clashing
+Message-ID: <20170304105705.D076B82270@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=00d34e8a6f378653a384c66d68f9a65e13b8034f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  4 Mar 2017 11:35:03 +0100, Romain Naour wrote:
-> gdk-pixbuf-loader support is enabled by default but it silently fail to
-> generate gdk-pixbuf.loaders file when host != target.
-> 
-> For exemple on ARM target:
-> output/host/usr/bin/gdk-pixbuf-query-loaders ./libpixbufloader-svg.la
-> g_module_open() failed for output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la: output/build/librsvg-2.40.16/gdk-pixbuf-loader/./.libs/libpixbufloader-svg.so: wrong ELF class: ELFCLASS32
-> 
-> But it doesn't break the build.
-> 
-> When host = target using the Sourcery CodeBench AMD64 2016.11 toolchain
-> optimized for x86_68 AMD Puma/Jaguar or AMD Steamroller, it break the
-> build due to "Illegal instruction".
-> 
-> output/host/usr/bin/gdk-pixbuf-query-loaders libpixbufloader-svg.la
-> Illegal instruction (core dumped)
-> 
-> Since this option is broken for cross-compilation, disable it.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/393/393145bc9bcb93d6df55ec8c63725c3d9a299957
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/librsvg/librsvg.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The LINES variable is automatically set by bash to represent the number
+of lines in the terminal. That variable can be set when the shell
+receives SIGWINCH.
 
-Applied to master, thanks. Peter: I believe this should go in the LTS
-branch.
+If the shell does receive SIGWINCH after our LINES array is filled, the
+content of the array is mangled.
 
-Gustavo: let me know if you're happy with this solution. If not, don't
-hesitate to provide an alternative solution.
+Rename the variable to avoid that.
 
-Thanks!
+Fixes #9456
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Reported-by: George Y. <georgebrmz@oss3d.com>
+Reported-by: Paul Stewart <paulstewartis@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/mkusers | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index d834578..2ac76f9 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -359,7 +359,7 @@ add_one_user() {
+ main() {
+     local username uid group gid passwd home shell groups comment
+     local line
+-    local -a LINES
++    local -a ENTRIES
+ 
+     # Some sanity checks
+     if [ ${MIN_UID} -le 0 ]; then
+@@ -371,7 +371,7 @@ main() {
+ 
+     # Read in all the file in memory, exclude empty lines and comments
+     while read line; do
+-        LINES+=( "${line}" )
++        ENTRIES+=( "${line}" )
+     done < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
+ 
+     # We first create groups whose gid is not -1, and then we create groups
+@@ -380,14 +380,14 @@ main() {
+     # used, rather than a different automatic gid is computed.
+ 
+     # First, create all the main groups which gid is *not* automatic
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         [ ${gid} -ge 0 ] || continue    # Automatic gid
+         add_one_group "${group}" "${gid}"
+     done
+ 
+     # Then, create all the main groups which gid *is* automatic
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         [ ${gid} -eq -1 ] || continue    # Non-automatic gid
+         add_one_group "${group}" "${gid}"
+@@ -396,7 +396,7 @@ main() {
+     # Then, create all the additional groups
+     # If any additional group is already a main group, we should use
+     # the gid of that main group; otherwise, we can use any gid
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         if [ "${groups}" != "-" ]; then
+             for g in ${groups//,/ }; do
+@@ -411,7 +411,7 @@ main() {
+     # uid be generated.
+ 
+     # Now, add users whose uid is *not* automatic
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         [ "${username}" != "-" ] || continue # Magic string to skip user creation
+         [ ${uid} -ge 0         ] || continue # Automatic uid
+@@ -420,7 +420,7 @@ main() {
+     done
+ 
+     # Finally, add users whose uid *is* automatic
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         [ "${username}" != "-" ] || continue # Magic string to skip user creation
+         [ ${uid} -eq -1        ] || continue # Non-automatic uid
