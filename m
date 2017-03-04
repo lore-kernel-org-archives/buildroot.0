@@ -1,94 +1,98 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 4 Mar 2017 17:41:59 +0100
-Subject: [Buildroot] [PATCH 1/1] boinc: new package
-In-Reply-To: <20170304154824.54623667@free-electrons.com>
-References: <1488638270-20784-1-git-send-email-fontaine.fabrice@gmail.com>
- <20170304154824.54623667@free-electrons.com>
-Message-ID: <CAPi7W829SyEHhpb9CoSYK+fC1XDuOec-5TcJtwSU71_dSZY_eg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  4 Mar 2017 18:24:26 +0100
+Subject: [Buildroot] [PATCH] core/pkg-cmake: better way to ass our
+	CMAKE_MODULE_PATH
+Message-ID: <1488648266-22642-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Currently, we tell cmake where to look for our own custom platform
+description by passing the path to the moduls directory on the command
+line.
 
-Thanks for your quick review.
+However, this causes two different problems.
 
-2017-03-04 15:48 GMT+01:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+First, some packages simply set CMAKE_MODULE_PATH in their
+CMakeList.txt, thus overriding our own path, and then our platform
+description is not found.
 
-> Hello,
->
-> On Sat,  4 Mar 2017 15:37:50 +0100, Fabrice Fontaine wrote:
->
-> > + lib_LTLIBRARIES = libboinc_api.la
-> > + libboinc_api_la_SOURCES = $(api_files)
-> > +-libboinc_api_la_LDFLAGS = -L$(libdir) -rpath $(libdir) -version-number
-> $(LIBBOINC_VERSION)
-> > ++libboinc_api_la_LDFLAGS = -rpath $(libdir) -version-number
-> $(LIBBOINC_VERSION)
->
-> You should also remove the -rpath $(libdir) variable, because the
-> -rpath option also causes the linker to look into $(libdir) during the
-> build process:
->
-> '-rpath=DIR'
->      Add a directory to the runtime library search path.  This is used
->      when linking an ELF executable with shared objects.  All '-rpath'
->      arguments are concatenated and passed to the runtime linker, which
->      uses them to locate shared objects at runtime.  The '-rpath' option
->      is also used when locating shared objects which are needed by
->      shared objects explicitly included in the link; see the description
->      of the '-rpath-link' option.  If '-rpath' is not used when linking
->      an ELF executable, the contents of the environment variable
->      'LD_RUN_PATH' will be used if it is defined.
->
-> OK done
+Second, cmake may internally call sub-cmake (e.g. in the try_compile
+macro), but the CMAKE_MODULE_PATH is not automatically passed down in
+this case.
 
-> > +BOINC_VERSION = 26198
-> > +BOINC_SITE = $(call github,BOINC,boinc,vboxwrapper/$(BOINC_VERSION))
->
-> What is this vboxwrapper/<xyz> version?
->
-> All github releases since July 2016 starts with vboxwrapper. I suppose
-that's becaue the "standard" way of installing boinc is through virtual
-box. vboxwrapper is the name of the boinc package installed inside virtual
-box. This package can contain the client, the server, the manager, ...
+For the first problem, we could hunt down and fix all offenders, but
+this is an endless endeavour, especially since packagers are told to do
+so on the cmake wiki [0]:
 
-> > +BOINC_LICENSE = LGPLv3
-> > +BOINC_LICENSE_FILES = COPYING COPYING.LESSER
->
-> COPYING contains the text of the GPLv3, so are you sure the entire project
-> is under LGPLv3 ?
->
-I made a quick search and I found only LGPL in source files, moreover
-README.md, wikipedia and https://boinc.berkeley.edu also mention only LGPL.
-Should I remove COPYING from the list?
+    CMAKE_MODULE_PATH
+        tell CMake to search first in directories listed in
+        CMAKE_MODULE_PATH when you use FIND_PACKAGE() or INCLUDE()
+        SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/MyCMakeScripts)
+        FIND_PACKAGE(HelloWorld)
 
->
-> > +ifeq ($(BR2_PACKAGE_LIBCURL)$(BR2_PACKAGE_OPENSSL),yy)
-> > +BOINC_DEPENDENCIES += \
-> > +     libcurl \
-> > +     openssl
->
-> One line is enough for this assignment.
->
-OK done
+The second problem could be solved by passing yet another variable on
+the command line, that tells cmake to explicitly pass arbitrary
+variables down to sub-cmake calls:
 
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
+    -DCMAKE_TRY_COMPILE_PLATFORM_VARIABLES=CMAKE_MODULE_PATH
 
-Best Regards,
+However, this only covers the case of try_compile. Even though no other
+case is known yet, we'd still risk missing locations where we would need
+to propagate CMAKE_MODULE_PATH, even some where we'd have no solution
+like for try_compile.
 
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170304/c5978e95/attachment.html>
+Instead, ngladitz on IRC suggested that CMAKE_MODULE_PATH be set
+directly from the toolchain file.
+
+And indeed this fixes both problems explained above.
+
+So be it.
+
+[0] https://cmake.org/Wiki/CMake_Useful_Variables
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: J?rg Krause <joerg.krause@embedded.rocks>
+Cc: Ben Boeckel <mathstuf@gmail.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-cmake.mk                | 1 -
+ support/misc/toolchainfile.cmake.in | 4 ++++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 77fa1dc..5d0a455 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -87,7 +87,6 @@ define $(2)_CONFIGURE_CMDS
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+-		-DCMAKE_MODULE_PATH="$$(HOST_DIR)/usr/share/buildroot" \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 5a42644..c38800e 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -10,6 +10,10 @@
+ # RELOCATED_HOST_DIR variable.
+ string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
+ 
++# Point cmake to the location where we have our custom modules,
++# so that it can find our custom platform description.
++list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
++
+ set(CMAKE_SYSTEM_NAME Buildroot)
+ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+ 
+-- 
+2.7.4
