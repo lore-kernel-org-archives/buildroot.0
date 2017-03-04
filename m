@@ -1,55 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Mar 2017 11:40:44 +0100
-Subject: [Buildroot] [git commit] Revert "python-pyasn: bump to version
-	1.6.0b1"
-Message-ID: <20170304104146.E045F8226D@busybox.osuosl.org>
+Date: Sat, 4 Mar 2017 11:38:49 +0100
+Subject: [Buildroot] [git commit] Revert "python-cherrypy: bump to version
+	10.1.1"
+Message-ID: <20170304104146.CC5788223A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c2ef1eafd398faf7223828165e4757ff2991383
+commit: https://git.buildroot.net/buildroot/commit/?id=17fc9162648e0d76e007e557fc3225d138ae85ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 98c9b1bec6fd511889f38c72bc4aa5aba89e264d, which
-causes build failures.
+This reverts commit 98c0bb2324ab8a2eb2bacaa497f11f773af771cd, which
+causes some build failures.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/27e1c6cdf330bd2009bf8895d8c72a7c4f5186af/
+  http://autobuild.buildroot.net/results/b66/b66f8fbce3a5127b69a09bdc91a460a3c107e29d/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pyasn/python-pyasn.hash | 6 +++---
- package/python-pyasn/python-pyasn.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-cherrypy/python-cherrypy.hash | 6 +++---
+ package/python-cherrypy/python-cherrypy.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyasn/python-pyasn.hash b/package/python-pyasn/python-pyasn.hash
-index 90924ff..59c90a8 100644
---- a/package/python-pyasn/python-pyasn.hash
-+++ b/package/python-pyasn/python-pyasn.hash
+diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
+index 64d556d..6befa45 100644
+--- a/package/python-cherrypy/python-cherrypy.hash
++++ b/package/python-cherrypy/python-cherrypy.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/pyasn/json, sha256 locally computed
--md5 f4556a3bcc6eb25eace37030202e3d90 pyasn-1.6.0b1.tar.gz
--sha256 d947900be23b073949b321c37d640b5ad86955704b7533b6f0519f550a5fa446 pyasn-1.6.0b1.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f00a02a631d4016818659d1cc38d229a, sha256 locally computed
-+md5     f00a02a631d4016818659d1cc38d229a  pyasn1-0.1.9.tar.gz
-+sha256  853cacd96d1f701ddd67aa03ecc05f51890135b7262e922710112f12a2ed2a7f  pyasn1-0.1.9.tar.gz
-diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
-index 20b2630..80d18cd 100644
---- a/package/python-pyasn/python-pyasn.mk
-+++ b/package/python-pyasn/python-pyasn.mk
+-# md5 from https://pypi.python.org/pypi/cherrypy/json, sha256 locally computed
+-md5 4957d9f40c7a0772ad4f2e3fbb5a627f CherryPy-10.1.1.tar.gz
+-sha256 a78a604e3afb0074cafa9c15c4ca25af0db4e52b2931e4a2c4b7df09151aa032 CherryPy-10.1.1.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=4b765329b0b4b65ec25811e3febb6c93, sha256 locally computed
++md5	4b765329b0b4b65ec25811e3febb6c93  CherryPy-4.0.0.tar.gz
++sha256	73ad4f8870b5a3e9988a7778b5d3003a390d440527ec3458a0c7e58865d2611a  CherryPy-4.0.0.tar.gz
+diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
+index ef19b54..754e0a2 100644
+--- a/package/python-cherrypy/python-cherrypy.mk
++++ b/package/python-cherrypy/python-cherrypy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYASN_VERSION = 1.6.0b1
--PYTHON_PYASN_SOURCE = pyasn-$(PYTHON_PYASN_VERSION).tar.gz
--PYTHON_PYASN_SITE = https://pypi.python.org/packages/31/da/c8338545be0ee7a727c977113e75888e4f1f2b2e10f9284fdfa31dab29bc
-+PYTHON_PYASN_VERSION = 0.1.9
-+PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
-+PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1
- PYTHON_PYASN_LICENSE = BSD-2c
- PYTHON_PYASN_LICENSE_FILES = LICENSE.txt
- PYTHON_PYASN_SETUP_TYPE = distutils
+-PYTHON_CHERRYPY_VERSION = 10.1.1
++PYTHON_CHERRYPY_VERSION = 4.0.0
+ PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
+-PYTHON_CHERRYPY_SITE = https://pypi.python.org/packages/da/e2/6ed242ebfe96912e0866cc01139027d342d52c35ad33ee182bfb671c177d
++PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
+ PYTHON_CHERRYPY_LICENSE = BSD-3c
+ PYTHON_CHERRYPY_LICENSE_FILES = cherrypy/LICENSE.txt
+ PYTHON_CHERRYPY_SETUP_TYPE = distutils
