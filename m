@@ -1,98 +1,65 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Mar 2017 20:54:55 +0100
-Subject: [Buildroot] [PATCH 3/4] package/x11r7/xapp_sessreg: bump version to
-	1.1.1
+Date: Sat,  4 Mar 2017 20:54:56 +0100
+Subject: [Buildroot] [PATCH 4/4] package/{mesa3d,
+	mesa3d-headers}: bump version to 17.0.1
 In-Reply-To: <20170304195456.9726-1-bernd.kuhls@t-online.de>
 References: <20170304195456.9726-1-bernd.kuhls@t-online.de>
-Message-ID: <20170304195456.9726-3-bernd.kuhls@t-online.de>
+Message-ID: <20170304195456.9726-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream:
-https://cgit.freedesktop.org/xorg/app/sessreg/commit/?id=93f5d5abf6b214a4b36e00cd09174d24b2ed0a6d
-
-Renumbered remaining patch.
 Changed _SITE according to URL mentioned in upstream release note.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...he-preprocessor-when-generating-filenames.patch | 32 ----------------------
- ...h_wtmpx.patch => 0001-missing_path_wtmpx.patch} |  0
- package/x11r7/xapp_sessreg/xapp_sessreg.hash       |  4 +--
- package/x11r7/xapp_sessreg/xapp_sessreg.mk         |  4 +--
- 4 files changed, 4 insertions(+), 36 deletions(-)
- delete mode 100644 package/x11r7/xapp_sessreg/0001-Pass-P-to-the-preprocessor-when-generating-filenames.patch
- rename package/x11r7/xapp_sessreg/{0002-missing_path_wtmpx.patch => 0001-missing_path_wtmpx.patch} (100%)
+ package/mesa3d-headers/mesa3d-headers.mk | 4 ++--
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xapp_sessreg/0001-Pass-P-to-the-preprocessor-when-generating-filenames.patch b/package/x11r7/xapp_sessreg/0001-Pass-P-to-the-preprocessor-when-generating-filenames.patch
-deleted file mode 100644
-index 5c3e91a49..000000000
---- a/package/x11r7/xapp_sessreg/0001-Pass-P-to-the-preprocessor-when-generating-filenames.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 93f5d5abf6b214a4b36e00cd09174d24b2ed0a6d Mon Sep 17 00:00:00 2001
--From: Stefan Dirsch <sndirsch@suse.de>
--Date: Wed, 9 Sep 2015 23:44:06 +0200
--Subject: [PATCH] Pass -P to the preprocessor when generating filenames for the
-- manpage.
--
--Fixes build with GCC 5. Patch by Richard Biener <rguenther@suse.com>
--
--Tested-by: Matt Turner <mattst88@gmail.com>
--Signed-off-by: Matt Turner <mattst88@gmail.com>
--[Thomas: backport from upstream commit 93f5d5abf6b214a4b36e00cd09174d24b2ed0a6d]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- man/Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/man/Makefile.am b/man/Makefile.am
--index 665ace5..2e5f146 100644
----- a/man/Makefile.am
--+++ b/man/Makefile.am
--@@ -9,7 +9,7 @@ SUFFIXES = .$(APP_MAN_SUFFIX) .man
-- 
-- AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir)
-- filenames.sed: filenames.sed.c
---	$(AM_V_GEN)$(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
--+	$(AM_V_GEN)$(CPP) -P $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-- 	    $(AM_CPPFLAGS) $(CPPFLAGS) $(srcdir)/filenames.sed.c | \
-- 	    $(SED) -n -e '/s|__/ p' -e '/^\/__/ p' > $@
-- 
---- 
--2.6.3
--
-diff --git a/package/x11r7/xapp_sessreg/0002-missing_path_wtmpx.patch b/package/x11r7/xapp_sessreg/0001-missing_path_wtmpx.patch
-similarity index 100%
-rename from package/x11r7/xapp_sessreg/0002-missing_path_wtmpx.patch
-rename to package/x11r7/xapp_sessreg/0001-missing_path_wtmpx.patch
-diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.hash b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
-index 9c1a8029b..47495b23d 100644
---- a/package/x11r7/xapp_sessreg/xapp_sessreg.hash
-+++ b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 35b242ea9..b55554964 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,9 +12,9 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 17.0.0
++MESA3D_HEADERS_VERSION = 17.0.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+-MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
++MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+ MESA3D_HEADERS_LICENSE_FILES = docs/license.html
+ 
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 09d3ef8e7..e50b648fc 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-January/002522.html
--sha256	551177657835e0902b5eee7b19713035beaa1581bbd3c6506baa553e751e017c	sessreg-1.1.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2017-February/002778.html
-+sha256 78a76ae3f3f6a26547a34630d1b740f42344848b5fb6d7c9c7f7da255e35a6e1  sessreg-1.1.1.tar.bz2
-diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.mk b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
-index 08811c015..c6e9463d3 100644
---- a/package/x11r7/xapp_sessreg/xapp_sessreg.mk
-+++ b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
-@@ -4,9 +4,9 @@
- #
+-# From https://lists.freedesktop.org/archives/mesa-dev/2017-February/144115.html
+-sha256 39db3d59700159add7f977307d12a7dfe016363e760ad82280ac4168ea668481  mesa-17.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2017-March/000305.html
++sha256 96fd70ef5f31d276a17e424e7e1bb79447ccbbe822b56844213ef932e7ad1b0c  mesa-17.0.1.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e17486879..d29a04349 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,9 +5,9 @@
  ################################################################################
  
--XAPP_SESSREG_VERSION = 1.1.0
-+XAPP_SESSREG_VERSION = 1.1.1
- XAPP_SESSREG_SOURCE = sessreg-$(XAPP_SESSREG_VERSION).tar.bz2
--XAPP_SESSREG_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_SESSREG_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_SESSREG_LICENSE = MIT
- XAPP_SESSREG_LICENSE_FILES = COPYING
- XAPP_SESSREG_DEPENDENCIES = xlib_libX11 xproto_xproto
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 17.0.0
++MESA3D_VERSION = 17.0.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+-MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
++MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.html
+ MESA3D_AUTORECONF = YES
 -- 
 2.11.0
