@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Mar 2017 23:42:01 +0100
-Subject: [Buildroot] [PATCH v1] gst1-plugins-bad: waylandsink needs
- wayland-protocols
-In-Reply-To: <20170304213125.13321-1-ps.report@gmx.net>
-References: <20170304213125.13321-1-ps.report@gmx.net>
-Message-ID: <20170304234201.34e48ed4@free-electrons.com>
+Date: Sat,  4 Mar 2017 23:43:22 +0100
+Subject: [Buildroot] [PATCH] putty: needs wchar support
+Message-ID: <1488667402-13906-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+putty uses mbstate_t, which is a wchar related definition, so wchar
+support is needed in the toolchain.
 
-On Sat,  4 Mar 2017 22:31:25 +0100, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++--
->  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-> index 6bec362db..923ed2cfc 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-> @@ -112,11 +112,12 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
->  	default y
->  	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
->  	depends on BR2_PACKAGE_WAYLAND
-> +	depends on BR2_PACKAGE_WAYLAND_PROTOCOLS
+Fixes:
 
-Did you try if a "select BR2_PACKAGE_WAYLAND_PROTOCOLS" works here?
-That would be a bit nicer IMO.
+  http://autobuild.buildroot.net/results/0e3f4306513b79306d43338eced890205632c395/
 
-Double check the output of "make menuconfig", to make sure this doesn't
-cause any recursive dependency.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/putty/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks!
-
-Thomas
+diff --git a/package/putty/Config.in b/package/putty/Config.in
+index fe5b9eb..420a753 100644
+--- a/package/putty/Config.in
++++ b/package/putty/Config.in
+@@ -1,9 +1,14 @@
+ config BR2_PACKAGE_PUTTY
+ 	bool "putty"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  PuTTY is a free SSH and Telnet client. Without GTK2 activated,
+ 	  only the commandline tools plink, pscp, psftp, and puttygen are
+ 	  built; enable GTK2 for the graphical client.
+ 
+ 	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
++
++comment "putty needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
