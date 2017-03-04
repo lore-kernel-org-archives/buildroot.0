@@ -1,342 +1,250 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 5 Mar 2017 00:26:56 +0100
-Subject: [Buildroot] [PATCH 1/5] support/testing: core testing
- infrastructure
-In-Reply-To: <1486467363-19881-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1486467363-19881-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1486467363-19881-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <00b34c21-2baa-6f93-9032-e3946481af68@lucaceresoli.net>
+From: Martin Bark <martin@barkynet.com>
+Date: Sat,  4 Mar 2017 23:48:29 +0000
+Subject: [Buildroot] [PATCH 2/3] package/nodejs: bump version to 7.7.1
+In-Reply-To: <1488671310-27378-1-git-send-email-martin@barkynet.com>
+References: <1488671310-27378-1-git-send-email-martin@barkynet.com>
+Message-ID: <1488671310-27378-2-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+See https://nodejs.org/en/blog/release/v7.7.1/
 
-On 07/02/2017 12:35, Thomas Petazzoni wrote:
-> This commit adds the core of a new testing infrastructure that allows to
-> perform runtime testing of Buildroot generated systems. This
-> infrastructure uses the Python unittest logic as its foundation.
-> 
-> This core infrastructure commit includes the following aspects:
-> 
->  - A base test class, called BRTest, defined in
->    support/testing/infra/basetest.py. This base test class inherited
->    from the Python provided unittest.TestCase, and must be subclassed by
->    all Buildroot test cases.
-> 
->    Its main purpose is to provide the Python unittest setUp() and
->    tearDown() methods. In our case, setUp() takes care of building the
->    Buildroot system described in the test case, and instantiate the
->    Emulator object in case runtime testing is needed. The tearDown()
->    method simply cleans things up (stop the emulator, remove the output
->    directory).
-> 
->  - A Builder class, defined in support/testing/infra/builder.py, simply
->    responsible for building the Buildroot system in each test case.
-> 
->  - An Emulator class, defined in support/testing/infra/emulator.py,
->    responsible for running the generated system under Qemu, allowing
->    each test case to run arbitrary commands inside the emulated system.
-> 
->  - A run-tests script, which is the entry point to start the tests.
-> 
-> Even though I wrote the original version of this small infrastructure, a
-> huge amount of rework and improvement has been done by Maxime
-> Hadjinlian, and squashed into this patch. So many thanks to Maxime for
-> cleaning up and improving my Python code!
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 
-I finally had a closer look to this work, and generally speaking the
-infrastructure quite straightforward. I have several remarks (see
-below), but most of them are minor, coding style and the like.
+---
 
-Disclaimer: I know python only at a very very basic level.
+Note: 0002-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+was cherry-picked upstream from master so should go in a future release
 
-And since it's likely that several Buildroot users have little python
-experience, I think documenting the code here is more important than in
-most make and kconfig code. So I propose a few lines of documentation
-below. I'd propose more, but for that I'll wait for a consensus on the
-general approach.
+0001-check-if-uclibc-has-backtrace-support.patch is against files in v8
+so will be around until a new major version of nodejs
+---
+ .../0001-gyp-force-link-command-to-use-CXX.patch   | 29 -------------
+ ...-don-t-build-when-ssl-support-is-disabled.patch | 35 ----------------
+ ...001-check-if-uclibc-has-backtrace-support.patch | 26 ++++++++++++
+ ...-HAVE_OPENSSL-directive-to-openssl_config.patch | 49 ++++++++++++++++++++++
+ package/nodejs/Config.in                           |  2 +-
+ package/nodejs/nodejs.hash                         |  4 +-
+ package/nodejs/nodejs.mk                           |  5 +++
+ 7 files changed, 83 insertions(+), 67 deletions(-)
+ delete mode 100644 package/nodejs/6.9.4/0001-gyp-force-link-command-to-use-CXX.patch
+ delete mode 100644 package/nodejs/6.9.4/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+ create mode 100644 package/nodejs/7.7.1/0001-check-if-uclibc-has-backtrace-support.patch
+ create mode 100644 package/nodejs/7.7.1/0002-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
 
-The only thing I don't like very much is the output format. It's very
-unpleasant and I'd like it to be nicer. But since we are using a testing
-framework I guess this is non trivial. In this case I'll gladly accept
-what we have: runtime testing with unpleasant output is _a lot_ better
-that no runtime testing.
-
-> +++ b/support/testing/infra/__init__.py
-> @@ -0,0 +1,61 @@
-> +import contextlib
-> +import os
-> +import sys
-> +import tempfile
-> +import subprocess
-> +from urllib2 import urlopen, HTTPError, URLError
-> +
-> +ARTEFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
-
-I think the usual spelling is "artifacts".
-
-> + at contextlib.contextmanager
-> +def smart_open(filename=None):
-> +    if filename and filename != '-':
-> +        fhandle = open(filename, 'a+')
-> +    else:
-> +        fhandle = sys.stdout
-> +
-> +    try:
-> +        yield fhandle
-> +    finally:
-> +        if fhandle is not sys.stdout:
-> +            fhandle.close()
-
-contextmanager and yield took me some time and research to understand
-what this function is. For non-pythonists, I'd add a comment such as:
-
-"""
-Return a file-like object that can be written to using the 'with'
-keyword, as in the example:
-  with infra.smart_open("test.log") as outfile:
-    outfile.write("Hello, world!\n")
-"""
-
-Also, since it creates a writable thing (not a readable one), a name
-like open_for_writing() would be more understandable.
-
-> +def filepath(relpath):
-> +    return os.path.join(os.getcwd(), "support/testing", relpath)
-> +
-> +def download(dldir, filename):
-> +    finalpath = os.path.join(dldir, filename)
-> +    if os.path.exists(finalpath):
-> +        return finalpath
-> +
-> +    if not os.path.exists(dldir):
-> +        os.makedirs(dldir)
-> +
-> +    tmpfile = tempfile.mktemp(dir=dldir)
-> +    print "Downloading to {}".format(tmpfile)
-> +
-> +    try:
-> +        url_fh = urlopen(os.path.join(ARTEFACTS_URL, filename))
-> +        with open(tmpfile, "w+") as tmpfile_fh:
-> +            tmpfile_fh.write(url_fh.read())
-
-I think this code read()s the whole file in RAM, then writes it all out.
-This might be a problem if we download large files. Is there any
-pythonic way to read-and-write in chunks without much added code? Come
-on pythonists, I'm sure you can do it with at most one extra line... :)
-
-> +def get_elf_arch_tag(builddir, prefix, fpath, tag):
-> +    cmd = ["host/usr/bin/{}-readelf".format(prefix),
-> +           "-A", os.path.join("target", fpath)]
-> +    out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
-> +    for line in out.splitlines():
-> +        line = line.strip()
-> +        if not line.startswith(tag):
-> +            continue
-> +        return line.split(":")[1].strip()
-> +    return None
-
-A small example as documentation would help. Draft proposal:
-
-"""
-Runs the cross readelf on 'fpath', then extracts the value of tag 'tag'.
-Example:
-  >>> get_elf_arch_tag('output', 'arm-none-linux-gnueabi-',
-                       'bin/busybox', 'Tag_CPU_arch')
-  v5TEJ
-  >>>
-"""
-
-> diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-> new file mode 100644
-> index 0000000..4f72e2f
-> --- /dev/null
-> +++ b/support/testing/infra/builder.py
-> @@ -0,0 +1,50 @@
-> +import os
-> +import shutil
-> +import subprocess
-> +
-> +import infra
-> +
-> +class Builder(object):
-> +    def __init__(self, config, builddir, logtofile):
-> +        self.config = config
-> +        self.builddir = builddir
-> +        self.logtofile = logtofile
-> +
-> +    def build(self):
-> +        if not os.path.isdir(self.builddir):
-> +            os.makedirs(self.builddir)
-> +
-> +        log = "{}-build.log".format(self.builddir)
-> +        if self.logtofile is None:
-> +            log = None
-
-I think there's a bug here. The 'logtofile' variable in BRTest is always
-assigned to True or False, then passed to Builder. So self.logfile here
-is never None, and this if never matches.
-
-> +
-> +        config_file = os.path.join(self.builddir, ".config")
-> +        with open(config_file, "w+") as cfd:
-> +            cfd.write(self.config)
-
-I wonder what the 'd' in "cfd" means...
-
-> +        cmd = ["make",
-> +               "-C", os.getcwd(),
-> +               "O={}".format(self.builddir),
-> +               "olddefconfig"]
-
-Why do we need to add "-C" + os.getcwd()? I think this is equivalent to
-"-C ." in shell, which is the default make behaviour.
-
-> +# TODO: Most of the telnet stuff need to be replaced by stdio/pexpect to discuss
-> +# with the qemu machine.
-> +class Emulator(object):
-> +
-> +    def __init__(self, builddir, downloaddir, logtofile):
-> +        self.qemu = None
-> +        self.__tn = None
-> +        self.downloaddir = downloaddir
-> +        self.log = ""
-> +        self.log_file = "{}-run.log".format(builddir)
-> +        if logtofile is None:
-> +            self.log_file = None
-> +
-> +    # Start Qemu to boot the system
-> +    #
-> +    # arch: Qemu architecture to use
-> +    #
-> +    # kernel: path to the kernel image, or the special string
-> +    # 'builtin' in which case a pre-built kernel image will be used
-> +    # (so far only armv5 and armv7 kernels are available). If None,
-> +    # then no kernel is used, and we assume a bootable device will be
-> +    # specified.
-
-When first reading this, I understood that the 'builtin' kernels are
-provided by qemu. Instead, they are provided by some server that is
-related to the Buildroot project (currently free-electrons.com).
-
-So I'd rephrase as:
-
-    # kernel: path to the kernel image, or the special string
-    # 'builtin'.
-    # 'builtin' means a pre-built kernel image will be
-    # downloaded from <BASEURL> and suitable options are automatically
-    # passed to qemu and added to the kernel cmdline. So far only armv5
-    # and armv7 builtin kernels are available.
-    # If None, then no kernel is used, and we assume a bootable device
-    # will be specified.
-
-> +    #
-> +    # kernel_cmdline: array of kernel arguments to pass to Qemu -append option
-> +    #
-> +    # options: array of command line options to pass to Qemu
-> +    #
-> +    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None):
-> +        if arch in ["armv7", "armv5"]:
-> +            qemu_arch = "arm"
-> +
-> +        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
-> +                    "-serial", "telnet::1234,server",
-> +                    "-display", "none"]
-> +
-> +        if options:
-> +            qemu_cmd += options
-
-If the default value for 'options' were '[]', the if would not be
-needed. Not it is because 'None' is not iterable.
-
-> +
-> +        if kernel_cmdline is None:
-> +            kernel_cmdline = []
-
-If the default value for 'kernel_cmdline' were '[]', these two lines
-could be removed entrely.
-
-> +    # Wait for the login prompt to appear, and then login as root with
-> +    # the provided password, or no password if not specified.
-> +    def login(self, password=None):
-> +        with infra.smart_open(self.log_file) as lfh:
-> +            lfh.write("> waiting for login\n")
-> +
-> +        self.__read_until("buildroot login:", 10)
-> +        if "buildroot login:" not in self.log:
-> +            with infra.smart_open(self.log_file) as lfh:
-> +                lfh.write("==> System does not boot")
-> +            raise SystemError("System does not boot")
-> +
-> +        with infra.smart_open(self.log_file) as lfh:
-> +            lfh.write("> log in\n")
-
-smart_open() is called 3 times in login(), 2 in run() and a few more
-timer elsewhere in this class. Can't we open the file once in the
-constructor and the just write to it?
-
-> +    # Run the given 'cmd' on the target
-> +    # return a tuple (output, exit_code)
-> +    def run(self, cmd):
-> +        with infra.smart_open(self.log_file) as lfh:
-> +            lfh.write("> running '{}'\n".format(cmd))
-> +
-> +        self.__write("{}\n".format(cmd))
-
-I think this simpler form is equally legal:
-
-  self.__write(cmd + "\n")
-
-> +    def showlog(self):
-> +        print "=== Full log ==="
-> +        print self.log
-> +        print "================"
-
-Unused function.
-
-> +def main():
-> +    parser = argparse.ArgumentParser(description='Run Buildroot tests')
-[...]
-> +    if args.download is None:
-> +        print "Missing download directory, please use -d/--download"
-> +        return 1
-
-It would be nice to use an environment variable as a default for the
-download dir. It might be BR2_DL_DIR itself, i.e. sharing the existing
-Buildroot package download dir. I bet most people set BR2_DL_DIR in
-their ~/.bashrc.
-
-> +    if not os.path.exists(args.output):
-> +        print "The selected output directory does not exist"
-> +        return 1
-
-If the download directory does not exist is is created. Why is the
-output directory handled differently?
-
-And again, it would be nice to default to an environment variable, e.g.
-BR2_RUNTIME_TESTS_OUTPUT_DIR.
-
-> +    BRTest.outputdir = args.output
-> +
-> +    if args.all is False and len(args.testname) == 0:
-> +        print "No test selected"
-> +        return 1
-
-I like programs that print their usage whenever the command line has
-errors (in addition to telling what the error is).
-
-IOW (untested):
-
-    if args.all is False and len(args.testname) == 0:
-        print "No test selected"
-+       print ""
-+       parser.print_help()
-        return 1
-
+diff --git a/package/nodejs/6.9.4/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.9.4/0001-gyp-force-link-command-to-use-CXX.patch
+deleted file mode 100644
+index 5746582..0000000
+--- a/package/nodejs/6.9.4/0001-gyp-force-link-command-to-use-CXX.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 90a3c113c19ec615249ab880c45c6c0a8d369098 Mon Sep 17 00:00:00 2001
+-From: Martin Bark <martin@barkynet.com>
+-Date: Tue, 30 Jun 2015 09:43:47 +0100
+-Subject: [PATCH 2/4] gyp: force link command to use CXX
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-Signed-off-by: Martin Bark <martin@barkynet.com>
+-[yann.morin.1998 at free.fr: adapt to 4.1.2]
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+- tools/gyp/pylib/gyp/generator/make.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/tools/gyp/pylib/gyp/generator/make.py b/tools/gyp/pylib/gyp/generator/make.py
+-index b88a433..0a1f2e0 100644
+---- a/tools/gyp/pylib/gyp/generator/make.py
+-+++ b/tools/gyp/pylib/gyp/generator/make.py
+-@@ -142,7 +142,7 @@ cmd_alink_thin = rm -f $@ && $(AR.$(TOOLSET)) crsT $@ $(filter %.o,$^)
+- # special "figure out circular dependencies" flags around the entire
+- # input list during linking.
+- quiet_cmd_link = LINK($(TOOLSET)) $@
+--cmd_link = $(LINK.$(TOOLSET)) $(GYP_LDFLAGS) $(LDFLAGS.$(TOOLSET)) -o $@ -Wl,--start-group $(LD_INPUTS) -Wl,--end-group $(LIBS)
+-+cmd_link = $(CXX.$(TOOLSET)) $(GYP_LDFLAGS) $(LDFLAGS.$(TOOLSET)) -o $@ -Wl,--start-group $(LD_INPUTS) -Wl,--end-group $(LIBS)
+- 
+- # We support two kinds of shared objects (.so):
+- # 1) shared_library, which is just bundling together many dependent libraries
+--- 
+-2.1.4
+-
+diff --git a/package/nodejs/6.9.4/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch b/package/nodejs/6.9.4/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
+deleted file mode 100644
+index c07cbf8..0000000
+--- a/package/nodejs/6.9.4/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 7fa541f6c0a31e3ddcab6ea85040b531bbaa4651 Mon Sep 17 00:00:00 2001
+-From: Martin Bark <martin@barkynet.com>
+-Date: Tue, 12 Jul 2016 19:03:28 +0100
+-Subject: [PATCH] inspector: don't build when ssl support is disabled
+-
+-Signed-off-by: Martin Bark <martin@barkynet.com>
+----
+- node.gyp | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/node.gyp b/node.gyp
+-index 8a8bd00..fdccd60 100644
+---- a/node.gyp
+-+++ b/node.gyp
+-@@ -302,7 +302,7 @@
+-             'deps/v8/src/third_party/vtune/v8vtune.gyp:v8_vtune'
+-           ],
+-         }],
+--        [ 'v8_inspector=="true"', {
+-+        [ 'v8_inspector=="true" and node_use_openssl =="true"', {
+-           'defines': [
+-             'HAVE_INSPECTOR=1',
+-             'V8_INSPECTOR_USE_STL=1',
+-@@ -828,7 +828,7 @@
+-       ],
+- 
+-       'conditions': [
+--        ['v8_inspector=="true"', {
+-+        ['v8_inspector=="true" and node_use_openssl =="true"', {
+-           'sources': [
+-             'src/inspector_socket.cc',
+-             'test/cctest/test_inspector_socket.cc'
+--- 
+-2.7.4
+-
+diff --git a/package/nodejs/7.7.1/0001-check-if-uclibc-has-backtrace-support.patch b/package/nodejs/7.7.1/0001-check-if-uclibc-has-backtrace-support.patch
+new file mode 100644
+index 0000000..079bbb4
+--- /dev/null
++++ b/package/nodejs/7.7.1/0001-check-if-uclibc-has-backtrace-support.patch
+@@ -0,0 +1,26 @@
++From 7c69553d7275bbcaa88fada8ccd0d2d9f787e1ad Mon Sep 17 00:00:00 2001
++From: Martin Bark <martin@barkynet.com>
++Date: Sat, 4 Mar 2017 20:41:40 +0000
++Subject: [PATCH] check if uclibc has backtrace support
++
++Signed-off-by: Martin Bark <martin@barkynet.com>
++---
++ deps/v8/src/base/debug/stack_trace_posix.cc | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/deps/v8/src/base/debug/stack_trace_posix.cc b/deps/v8/src/base/debug/stack_trace_posix.cc
++index 87c0a73..d2c182a 100644
++--- a/deps/v8/src/base/debug/stack_trace_posix.cc
+++++ b/deps/v8/src/base/debug/stack_trace_posix.cc
++@@ -25,7 +25,7 @@
++ #include <string>
++ #include <vector>
++ 
++-#if V8_LIBC_GLIBC || V8_LIBC_BSD || V8_LIBC_UCLIBC || V8_OS_SOLARIS
+++#if V8_LIBC_GLIBC || V8_LIBC_BSD || ( V8_LIBC_UCLIBC && __UCLIBC_HAS_BACKTRACE__ ) || V8_OS_SOLARIS
++ #define HAVE_EXECINFO_H 1
++ #endif
++ 
++-- 
++2.7.4
++
+diff --git a/package/nodejs/7.7.1/0002-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch b/package/nodejs/7.7.1/0002-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+new file mode 100644
+index 0000000..2508979
+--- /dev/null
++++ b/package/nodejs/7.7.1/0002-src-add-HAVE_OPENSSL-directive-to-openssl_config.patch
+@@ -0,0 +1,49 @@
++From 93808be147688a276037008e23520ac480fce29e Mon Sep 17 00:00:00 2001
++From: Martin Bark <martin@barkynet.com>
++Date: Sat, 4 Mar 2017 20:37:21 +0000
++Subject: [PATCH] src: add HAVE_OPENSSL directive to openssl_config
++
++Currently when building with the following configuration options:
++$ ./configure --without-ssl && make
++
++The following link error is reported:
++
++Undefined symbols for architecture x86_64:
++  "node::openssl_config", referenced from:
++      node::Init(int*, char const**, int*, char const***) in node.o
++ld: symbol(s) not found for architecture x86_64
++clang: error: linker command failed with exit code 1 (use -v to see
++invocation)
++
++Adding an HAVE_OPENSSL directive around this code allows the build to
++pass.
++
++PR-URL: https://github.com/nodejs/node/pull/11618
++Reviewed-By: Anna Henningsen <anna@addaleax.net>
++Reviewed-By: James M Snell <jasnell@gmail.com>
++Reviewed-By: Colin Ihrig <cjihrig@gmail.com>
++Reviewed-By: Ben Noordhuis <info@bnoordhuis.nl>
++Reviewed-By: Sam Roberts <vieuxtech@gmail.com>
++Signed-off-by: Martin Bark <martin@barkynet.com>
++---
++ src/node.cc | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/node.cc b/src/node.cc
++index 25cd87d..7bc8266 100644
++--- a/src/node.cc
+++++ b/src/node.cc
++@@ -4203,8 +4203,10 @@ void Init(int* argc,
++         SafeGetenv("NODE_PRESERVE_SYMLINKS", &text) && text[0] == '1';
++   }
++ 
+++#if HAVE_OPENSSL
++   if (openssl_config.empty())
++     SafeGetenv("OPENSSL_CONF", &openssl_config);
+++#endif
++ 
++   // Parse a few arguments which are specific to Node.
++   int v8_argc;
++-- 
++2.7.4
++
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index b8c45f5..6f78390 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "6.9.4"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	default "7.7.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.48"
+ 
+ config BR2_PACKAGE_NODEJS_NPM
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 8c8c5a3..16e2575 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+ # From upstream URL: http://nodejs.org/dist/v0.10.48/SHASUMS256.txt
+ sha256  365a93d9acc076a0d93f087d269f376abeebccad599a9dab72f2f6ed96c8ae6e  node-v0.10.48.tar.xz
+ 
+-# From upstream URL: http://nodejs.org/dist/v6.9.4/SHASUMS256.txt
+-sha256  c51d7c61db40455d57428abcadc7eb0f0a08a8878cb1d8ea3c1e211c54532c35  node-v6.9.4.tar.xz
++# From upstream URL: http://nodejs.org/dist/v7.7.1/SHASUMS256.txt
++sha256  965fc82aa767223be574e41d7f78ec4bd2ab3da619cef1256e46c30d053b7611  node-v7.7.1.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 042cc3f..7aca99c 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -79,6 +79,8 @@ define HOST_NODEJS_INSTALL_CMDS
+ 		$(MAKE) -C $(@D) install \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		PATH=$(@D)/bin:$(BR_PATH)
++
++	$(INSTALL) -m755 -D $(@D)/out/Release/mkpeephole $(HOST_DIR)/usr/bin/mkpeephole
+ endef
+ 
+ ifeq ($(BR2_i386),y)
+@@ -126,6 +128,9 @@ define NODEJS_CONFIGURE_CMDS
+ 		$(if $(NODEJS_MIPS_FPU_MODE),--with-mips-fpu-mode=$(NODEJS_MIPS_FPU_MODE)) \
+ 		$(NODEJS_CONF_OPTS) \
+ 	)
++
++	# use host version of mkpeephole
++	sed "s#<(mkpeephole_exec)#$(HOST_DIR)/usr/bin/mkpeephole#g" -i $(@D)/deps/v8/src/v8.gyp
+ endef
+ 
+ define NODEJS_BUILD_CMDS
 -- 
-Luca
+2.7.4
