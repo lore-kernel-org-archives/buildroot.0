@@ -1,36 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Mar 2017 11:11:05 +0100
-Subject: [Buildroot] [PATCH] linux: Add CIP SLTS easy selection option
-In-Reply-To: <ecfd4a44-a1b8-19c9-f6c0-ba7998be2c85@mind.be>
-References: <1488577816-19047-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170303234636.0dbf4fd6@free-electrons.com>
- <7663394e-1ac6-07ae-a226-159605ac4011@mind.be>
- <20170304000243.35b8b146@free-electrons.com>
- <ecfd4a44-a1b8-19c9-f6c0-ba7998be2c85@mind.be>
-Message-ID: <20170304111105.03e2ffe2@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  4 Mar 2017 11:35:03 +0100
+Subject: [Buildroot] [PATCH] package/librsvg: disable gdk-pixbuf-loader
+Message-ID: <20170304103503.18877-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+gdk-pixbuf-loader support is enabled by default but it silently fail to
+generate gdk-pixbuf.loaders file when host != target.
 
-On Sat, 4 Mar 2017 00:43:20 +0100, Arnout Vandecappelle wrote:
+For exemple on ARM target:
+output/host/usr/bin/gdk-pixbuf-query-loaders ./libpixbufloader-svg.la
+g_module_open() failed for output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la: output/build/librsvg-2.40.16/gdk-pixbuf-loader/./.libs/libpixbufloader-svg.so: wrong ELF class: ELFCLASS32
 
-> > I don't really see how that would be useful. What would it bring
-> > exactly?  
-> 
->  Advertising that this repository exists and show how it can be used with
-> Buildroot. The latter part is of course trivial for us but still useful for
-> newcomers I think.
+But it doesn't break the build.
 
-But is this repository any more useful than hundreds of other vendor
-kernel trees? Why would this one have a defconfig, while it's not tied
-to handling a particular HW platform?
+When host = target using the Sourcery CodeBench AMD64 2016.11 toolchain
+optimized for x86_68 AMD Puma/Jaguar or AMD Steamroller, it break the
+build due to "Illegal instruction".
 
-Thomas
+output/host/usr/bin/gdk-pixbuf-query-loaders libpixbufloader-svg.la
+Illegal instruction (core dumped)
+
+Since this option is broken for cross-compilation, disable it.
+
+Fixes:
+http://autobuild.buildroot.net/results/393/393145bc9bcb93d6df55ec8c63725c3d9a299957
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/librsvg/librsvg.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index b711de4..db57193 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -9,7 +9,7 @@ LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).16
+ LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
+-LIBRSVG_CONF_OPTS = --disable-tools --enable-introspection=no
++LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
+ HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
+ LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
+ 	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
