@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Mar 2017 11:48:49 +0100
-Subject: [Buildroot] [PATCH 00/58] python pypi library mass version bump.
-In-Reply-To: <20170219191255.1503-1-Adamduskett@outlook.com>
-References: <20170219191255.1503-1-Adamduskett@outlook.com>
-Message-ID: <20170304114849.299197c6@free-electrons.com>
+Date: Sat, 4 Mar 2017 11:54:09 +0100
+Subject: [Buildroot] [PATCH] qemu: disable Qemu user-land emulation for
+ uClibc toolchains
+In-Reply-To: <1488619059-1499-1-git-send-email-francois.perrad@gadz.org>
+References: <1488619059-1499-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20170304115409.0e798143@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +13,33 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 19 Feb 2017 14:11:57 -0500, Adam Duskett wrote:
+On Sat,  4 Mar 2017 10:17:39 +0100, Francois Perrad wrote:
+> fixes:
+> http://autobuild.buildroot.org/results/69c/69c66f1876f0d8dba1bd71ee109df371577d8dda
 
-> These python libraries updated using a tool I created that scanned every
-> python package with a pypi url, checked if there was a update, and if there
-> was automatically generated a patch.  It also checks to see if there is any
-> patches in the patch directory, and if so checks to see if those patches were
-> applied upstream.
+This error happens in ARM only code, so I believe disabling it on all
+architectures is probably a bit too much. In addition, the fix is most
+likely trivial, and probably looks like this:
 
-So I was already skeptical with such a massive version bump, but you
-said you had tested all of the packages. Clearly, the autobuilders have
-spoken: it was insufficiently tested, and such massive version bumps
-are a bad idea.
+diff --git a/user-exec.c b/user-exec.c
+index 6db0758..2b3d116 100644
+--- a/user-exec.c
++++ b/user-exec.c
+@@ -409,7 +409,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
+ 
+ #if defined(__NetBSD__)
+     pc = uc->uc_mcontext.__gregs[_REG_R15];
+-#elif defined(__GLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
++#elif defined(__GLIBC__) && !defined(__UCLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
+     pc = uc->uc_mcontext.gregs[R15];
+ #else
+     pc = uc->uc_mcontext.arm_pc;
 
-First of all, you didn't test "make legal-info", so it was broken for a
-number of packages. We had to fix at least:
+Could you have a try with this?
 
-  python-pyasn
-  https://git.buildroot.net/buildroot/commit/?id=aca82a056b04f1bc1d2578e414d8a8d1eaf66207
+Adding Waldemar in Cc: since it's a uClibc related issue.
 
-  python-enum
-  https://git.buildroot.net/buildroot/commit/?id=d4235a8372ccaa54bc8322361a41003837d005a4
-
-Then, a number of packages are missing new dependencies, and cause
-build failures:
-
-  python-cherrypy
-  http://autobuild.buildroot.net/results/b66/b66f8fbce3a5127b69a09bdc91a460a3c107e29d/build-end.log
-
-  python-pyasn
-  http://autobuild.buildroot.net/results/27e1c6cdf330bd2009bf8895d8c72a7c4f5186af/
-
-  python-pytrie
-  http://autobuild.buildroot.net/results/e4209a2209bba769c264f8c4c6dfe2995443c243/
-
-While I agree it is perfectly acceptable to have a few issues here, so
-many issues clearly indicate a lack of testing, and confirm that such
-massive bumps are a bad idea.
-
-So I've reverted the bump of python-cherrypy, python-pyasn and
-python-pytrie.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
