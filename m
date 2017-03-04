@@ -1,42 +1,23 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  4 Mar 2017 10:17:39 +0100
-Subject: [Buildroot] [PATCH] qemu: disable Qemu user-land emulation for
-	uClibc toolchains
-Message-ID: <1488619059-1499-1-git-send-email-francois.perrad@gadz.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 04 Mar 2017 10:05:06 +0000
+Subject: [Buildroot] [Bug 9456] mkusers script bash errors
+In-Reply-To: <bug-9456-163@https.bugs.busybox.net/>
+References: <bug-9456-163@https.bugs.busybox.net/>
+Message-ID: <bug-9456-163-eLDtNDz3ER@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fixes:
-http://autobuild.buildroot.org/results/69c/69c66f1876f0d8dba1bd71ee109df371577d8dda
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/qemu/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=9456
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index f4a75fc..3036743 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -72,13 +72,15 @@ config BR2_PACKAGE_QEMU_LINUX_USER
- 	bool "Enable all Linux user-land emulation"
- 	# Incompatible "struct sigevent" definition on musl
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	# Incompatible "struct sigcontext" definition on uClibc
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	help
- 	  Say 'y' to build all Linux user-land emulators that QEMU supports.
- 
- # Note: bsd-user can not be build on Linux
- 
--comment "Linux user-land emulation needs a glibc or uClibc toolchain"
--	depends on BR2_TOOLCHAIN_USES_MUSL
-+comment "Linux user-land emulation needs a glibc toolchain"
-+	depends on BR2_TOOLCHAIN_USES_MUSL ||?BR2_TOOLCHAIN_USES_UCLIBC
- 
- endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
- 
+--- Comment #30 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+(In reply to Paul Stewart from comment #29)
+
+Since we decided to have 2017.02 be our first long-term maintainance branch,
+I believe this will go in, yes.
+
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
