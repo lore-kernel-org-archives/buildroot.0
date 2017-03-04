@@ -1,48 +1,67 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 4 Mar 2017 09:33:15 -0300
-Subject: [Buildroot] libqeglfs.so not found on imx6
-In-Reply-To: <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
-References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
- <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
- <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
- <CAAMH-ys=MpSuBvT=weVPKhyu5_bz4feq7ePmMN4LgHKubG_9vQ@mail.gmail.com>
- <CAD6G_RR5fC2n_JA=M1p3=0MeOwDXRVg2hQbhKDwHYmjyddu1SA@mail.gmail.com>
- <CAOMZO5B_d9-oq9R1NciG7F3A-HKhHVWP8uXzM=Crx2YB+zFVnw@mail.gmail.com>
- <CAD6G_RQZuqQphZqB0QwLKBC2Ox5G_tp06WTfUMEuOL6=LA2UvQ@mail.gmail.com>
- <CAOMZO5BWQvPFNevSp8Hjz4knfQ7kTYGmgXutoyzvb_ejq5AhpA@mail.gmail.com>
- <CAD6G_RSC9+NwdQP3qRA=wLWm2SaVNeN=zJXVR6P6dk8i+xLbxg@mail.gmail.com>
- <CAOMZO5BGTbB8WM-+oS9CoC8_3TPsZhyq1t-3=SJk1uAms8jBmQ@mail.gmail.com>
- <CAD6G_RRfwho6qwBU=QtyR6AsuNtGgWvvSFbTjwLwzv+9dqA6-Q@mail.gmail.com>
- <CAOMZO5Acb8RJZdf95uGj8w5LyhnjCh=sZoj=NE24wN_K2nO_OQ@mail.gmail.com>
- <CAD6G_RQNzT_yQfQeHW-VNE3vAhSnCRStc1R2NHrbkJwtHD=mzA@mail.gmail.com>
- <CAD6G_RSOBrZvE-4O_6uTj+0pBvsrM56p-48Rxd2hQZHtq8XkGw@mail.gmail.com>
- <CAOMZO5CBQVEMBLNgWRL947_uRpCDbyy5tTUVBfNjMkiwjyoA4Q@mail.gmail.com>
- <CAD6G_RQ3bLbJGi2jdRB-mafn4s=iHpvscjP+ggdBQG7_570ECA@mail.gmail.com>
- <CAD6G_RT58-HC8mi2g7Aq0x72uac0mUTA=HgoMAd1uAB-BWrXEQ@mail.gmail.com>
- <CAD6G_RQ_00ozMXZJ4GaTR5ETny-wJk6GkHbPSHLGQjiHUJR9dg@mail.gmail.com>
- <CAOMZO5AB2xYjvjQkvYp8y++M=95SnJSPbkPsv-sqs0VciYDd-w@mail.gmail.com>
- <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
- <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
- <CAOMZO5CufYJ7vqRw_7LxKpWtJe3Z-1U3=8SOubJXLgvNfO3Rew@mail.gmail.com>
- <CAOMZO5D5FB68ZWCqLd0HB14g3AQQRC556bgSXT-RznGB-xjqdA@mail.gmail.com>
- <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
-Message-ID: <CAOMZO5DtKGj3O_9p8H7ewbdq7ahTW=ZRCsVNcMZSGyz8Gxypyg@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 4 Mar 2017 13:48:13 +0100
+Subject: [Buildroot] [PATCH] qemu: disable Qemu user-land emulation for
+ uClibc toolchains
+In-Reply-To: <20170304115409.0e798143@free-electrons.com>
+References: <1488619059-1499-1-git-send-email-francois.perrad@gadz.org>
+ <20170304115409.0e798143@free-electrons.com>
+Message-ID: <CAB0FRsv9jWu7fJe+XU4gb9OTBeywNU=WGsrhrMise+wOBxB=DQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
-
-On Sat, Mar 4, 2017 at 9:27 AM, Gary Bisson
-<gary.bisson@boundarydevices.com> wrote:
-
-> I actually got pretty lucky I guess, when I tried (before mesa17, with
-> Christian's tree) it just worked out of the box.
+2017-03-04 11:54 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
 >
-> Have you made any progress?
+> On Sat,  4 Mar 2017 10:17:39 +0100, Francois Perrad wrote:
+>> fixes:
+>> http://autobuild.buildroot.org/results/69c/69c66f1876f0d8dba1bd71ee109df371577d8dda
+>
+> This error happens in ARM only code, so I believe disabling it on all
+> architectures is probably a bit too much. In addition, the fix is most
+> likely trivial, and probably looks like this:
+>
+> diff --git a/user-exec.c b/user-exec.c
+> index 6db0758..2b3d116 100644
+> --- a/user-exec.c
+> +++ b/user-exec.c
+> @@ -409,7 +409,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
+>
+>  #if defined(__NetBSD__)
+>      pc = uc->uc_mcontext.__gregs[_REG_R15];
+> -#elif defined(__GLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
+> +#elif defined(__GLIBC__) && !defined(__UCLIBC__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 3))
+>      pc = uc->uc_mcontext.gregs[R15];
+>  #else
+>      pc = uc->uc_mcontext.arm_pc;
+>
+> Could you have a try with this?
+>
+> Adding Waldemar in Cc: since it's a uClibc related issue.
+>
 
-Not yet, still stuck at the "drmModeGetResources failed" error.
+When the issue with 'struct sigcontext' is fixed, another one occurs:
+build/qemu-2.8.0/linux-user/syscall.c:6865:23: error: 'struct timex'
+has no member named 'tai'
+     __put_user(host_tx->tai, &target_tx->tai);
+                       ^
+The member 'tai' exists in linux/timex.h but not in sys/timex.h
+with the toolchain from
+http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2017.02-rc1-70-g7612a7d.tar.bz2
 
-Thanks
+Fran?ois
+
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
