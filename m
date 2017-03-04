@@ -1,7 +1,7 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Sat, 4 Mar 2017 13:27:59 +0100
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 4 Mar 2017 09:33:15 -0300
 Subject: [Buildroot] libqeglfs.so not found on imx6
-In-Reply-To: <CAOMZO5D5FB68ZWCqLd0HB14g3AQQRC556bgSXT-RznGB-xjqdA@mail.gmail.com>
+In-Reply-To: <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
 References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
  <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
  <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
@@ -25,46 +25,24 @@ References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
  <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
  <CAOMZO5CufYJ7vqRw_7LxKpWtJe3Z-1U3=8SOubJXLgvNfO3Rew@mail.gmail.com>
  <CAOMZO5D5FB68ZWCqLd0HB14g3AQQRC556bgSXT-RznGB-xjqdA@mail.gmail.com>
-Message-ID: <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
+ <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
+Message-ID: <CAOMZO5DtKGj3O_9p8H7ewbdq7ahTW=ZRCsVNcMZSGyz8Gxypyg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+Hi Gary,
 
-On Sat, Mar 4, 2017 at 2:48 AM, Fabio Estevam <festevam@gmail.com> wrote:
-> On Fri, Mar 3, 2017 at 8:00 PM, Fabio Estevam <festevam@gmail.com> wrote:
+On Sat, Mar 4, 2017 at 9:27 AM, Gary Bisson
+<gary.bisson@boundarydevices.com> wrote:
+
+> I actually got pretty lucky I guess, when I tried (before mesa17, with
+> Christian's tree) it just worked out of the box.
 >
->> Just tried your defconfig on top of master. Could not get Qt5.8 to
->> build, so I switched to Qt5.6.
+> Have you made any progress?
 
-I've seen that issue too actually when testing mesa17.0, qtbase 5.8
-wouldn't build. Didn't have time to investigate yet.
+Not yet, still stuck at the "drmModeGetResources failed" error.
 
->> Here is my defconfig:
->> http://pastebin.com/Fy4rZCHY
->>
->> When I try to run the demo:
->>
->> #  /usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience
->> MESA-LOADER: device is not located on the PCI bus
->> MESA-LOADER: device is not located on the PCI bus
->> MESA-LOADER: device is not located on the PCI bus
->> drmModeGetResources failed
->> Segmentation fault
->> #
->>
->> Any ideas?
->
-> Here is the strace output:
-> http://pastebin.com/dgjFA3Dm
-
-I actually got pretty lucky I guess, when I tried (before mesa17, with
-Christian's tree) it just worked out of the box.
-
-Have you made any progress?
-
-Regards,
-Gary
+Thanks
