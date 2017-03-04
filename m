@@ -1,80 +1,55 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 4 Mar 2017 15:38:13 +0100
-Subject: [Buildroot] [PATCH] linux: Add CIP SLTS easy selection option
-In-Reply-To: <20170304151228.3de59a5c@free-electrons.com>
-References: <1488577816-19047-1-git-send-email-angelo.compagnucci@gmail.com>
- <20170303234636.0dbf4fd6@free-electrons.com>
- <7663394e-1ac6-07ae-a226-159605ac4011@mind.be>
- <20170304000243.35b8b146@free-electrons.com>
- <ecfd4a44-a1b8-19c9-f6c0-ba7998be2c85@mind.be>
- <20170304111105.03e2ffe2@free-electrons.com>
- <CA+TH9Vkxm4VdeBrTWAzWX6YGxrHT2-+OsMpGO0HaNeAHmQAYaw@mail.gmail.com>
- <f66ec9e0-6465-d2b8-eb02-5ada90dcbc75@mind.be>
- <CA+TH9VkMUTq7sFR9ED9aLgwUCbnnkXyO5uS7fwTyb5CynW2=bg@mail.gmail.com>
- <20170304151228.3de59a5c@free-electrons.com>
-Message-ID: <CA+TH9Vmp+wu4hXw+P_8E=GNBTAM0MGD1n4Gp_VNGEz0dZrZHpg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  4 Mar 2017 15:34:19 +0100
+Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
+Message-ID: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+The version of the khrplatform.h header bundled with odroid-mali has a
+definition of the khronos_intptr_t and khronos_ssize_t that doesn't
+match the official Khronos registry headers or the Mesa3D headers. Due
+to this, it causes conflicts with some packages that redefines those
+types (with the correct definitions), such as libepoxy.
 
-2017-03-04 15:12 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Sat, 4 Mar 2017 15:08:06 +0100, Angelo Compagnucci wrote:
->> >  Note that the original patch did have a few issues:
->> > - It should use a tag/sha rather than a branch;
->>
->> Using a tag/sha will defeat the purpose of using this kernel. A
->> developer should ever use the latest release of this kernel each time
->> he compiles a buildroot image.
->
-> Clearly *NOT*. We want Buildroot builds to be reproducible. So if you
-> take a given Buildroot version and configuration, it should *always*
-> provide exactly the same output. So we need to use fixed versions of
-> all the components.
+Issue reported upstream at: https://github.com/mdrjr/c2_mali/issues/1
 
-Obviously, I know. We could exclude the CIP kernel from the
-reproducibility thing.
+Since nobody bothered fixing the issue even though it has been happening
+since July 2016 (first build failure at
+http://autobuild.buildroot.net/results/ed8d562ae5fdb472a83f9a07b2f755c80c972c34/),
+let's mark this package as BROKEN.
 
-> Doing otherwise would be absolutely horrible. You do a build one day,
-> it works. The next day, your colleague takes your Buildroot version and
-> configuration, does a build, and the build fails? Or the build works,
-> but it no longer boots/works on the target?
+Fixes:
 
-This should not happens, or if this happens, there's fault in the CIP
-project. Btw the project doesn't involves only a Linux kernel but all
-the necessary infrastructure to be sure that a new minor release
-doesn't brake everything.
+  http://autobuild.buildroot.net/results/ca48bb6291ca16e410edb83b5cdeb24847b6eaee/
 
-> So no, we clearly do not want this to use the "latest release each time
-> a Buildroot image is compiled".
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/odroid-mali/Config.in | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-This is plain wrong with CIP. What an CIP user wants is to have the
-latest patched version without thinking. It doesn't have any sense to
-say to a developer "hey, we provide CIP but our setting is useless
-cause it points to an older unpatched release. If you want to use it,
-you should manually change to the latest release."
-
-Yes, it's thinking in another way, like a super long term support
-rolling release.
-
-Sincerely, Angelo
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
-
-
+diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
+index e5c07f2..5a6af75 100644
+--- a/package/odroid-mali/Config.in
++++ b/package/odroid-mali/Config.in
+@@ -5,6 +5,16 @@ config BR2_PACKAGE_ODROID_MALI
+ 	select BR2_PACKAGE_ODROID_SCRIPTS # runtime
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_aarch64 || BR2_ARM_EABIHF
++	# The version of the khrplatform.h header bundled with
++	# odroid-mali has a definition of the khronos_intptr_t and
++	# khronos_ssize_t that doesn't match the official Khronos
++	# registry headers or the Mesa3D headers. Due to this, it
++	# causes conflicts with some packages that redefines those
++	# types (with the correct definitions), such as libepoxy.
++	#
++	# Issue reported upstream at:
++	# https://github.com/mdrjr/c2_mali/issues/1
++	depends on BROKEN
+ 	help
+ 	  Install the ARM Mali drivers for odroidc2 based systems.
+ 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.7.4
