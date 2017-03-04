@@ -1,102 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  4 Mar 2017 18:28:44 +0100
-Subject: [Buildroot] [PATCH v2] core/pkg-cmake: better way to pass our
-	CMAKE_MODULE_PATH
-Message-ID: <1488648524-23368-1-git-send-email-yann.morin.1998@free.fr>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sat, 4 Mar 2017 19:12:44 +0100
+Subject: [Buildroot] [PATCH 1/5] support/testing: core testing
+ infrastructure
+In-Reply-To: <CAAXf6LWp4w+1J5MqYp6uOXWvXG3s0+V1qRt0p8jFM4pTv-qatg@mail.gmail.com>
+References: <1486467363-19881-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1486467363-19881-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LXnRWvi3i0B2q1r_gRjgTkyNjXhdSasMLyYiFrr3=RTWg@mail.gmail.com>
+ <20170208110556.6a3ed63a@free-electrons.com>
+ <CAAXf6LWp4w+1J5MqYp6uOXWvXG3s0+V1qRt0p8jFM4pTv-qatg@mail.gmail.com>
+Message-ID: <dfb7a87b-6580-384d-81fb-e79f97e6b897@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we tell cmake where to look for our own custom platform
-description by passing the path to the moduls directory on the command
-line.
+Hi,
 
-However, this causes two different problems.
+On 08/02/2017 12:42, Thomas De Schampheleire wrote:
+> On Wed, Feb 8, 2017 at 11:05 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Wed, 8 Feb 2017 10:50:13 +0100, Thomas De Schampheleire wrote:
+>>
+>>> Is there a particular reason why you use unittest and nose2, rather
+>>> than the popular pytest ?
+>>
+>> First because I'm not a Pythonist, so I have no idea what is "popular"
+>> in the Python world.
+>>
+>> What lead me to use nose2 is because it is capable of executing tests
+>> in parallel. In practice, this currently doesn't work due to how the
+>> Qemu emulation is started (I use a fixed TCP port for the telnet
+>> connection used for the serial port), but if we fix that, tests can be
+>> executed in parallel, this is something I had tested when choosing
+>> nose2.
+>>
+>> Apparently, pytest can also run tests in parallel, according to
+>> http://pytest.org/dev/xdist.html.
+>>
+>> I honestly don't care which Python testing infrastructure is used, as
+>> long as there is one. If you think pytest is better (and indeed its
+>> website seems to be nicely documented and it seems to offer lots of
+>> features), then patches are welcome :-)
+>>
+> 
+> We have switched from nose (1) to pytest in Kallithea a while ago.
+> We are not using xdist at the moment though, because our setup code is
+> not ready for it.
+> 
+> To switch to pytest now shouldn't be complex, it can off-the-shelve
+> continue to support unittest-style tests. However, pytest 'fixtures'
+> are the alternative to such setup/teardown methods and are more
+> powerful. But you don't _have_ to use them.
+> 
+> Anyway, I agree that it is not crucial at all, and the actual impact
+> of nose on the code is currently minimal, so switching can be done at
+> a later time.
 
-First, some packages simply set CMAKE_MODULE_PATH in their
-CMakeList.txt, thus overriding our own path, and then our platform
-description is not found.
+I'm no pythonist at all, so I don't know any of the mentioned
+infrastructures. But one thing I dislike in the current implementation
+is the unpleasant way failures are reported.
 
-Second, cmake may internally call sub-cmake (e.g. in the try_compile
-macro), but the CMAKE_MODULE_PATH is not automatically passed down in
-this case.
+ThomasDS, MaximeH, Do you think another infrastructure allows better
+reporting? Or that nose2 allows it with small changes?
 
-For the first problem, we could hunt down and fix all offenders, but
-this is an endless endeavour, especially since packagers are told to do
-so on the cmake wiki [0]:
-
-    CMAKE_MODULE_PATH
-        tell CMake to search first in directories listed in
-        CMAKE_MODULE_PATH when you use FIND_PACKAGE() or INCLUDE()
-        SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/MyCMakeScripts)
-        FIND_PACKAGE(HelloWorld)
-
-The second problem could be solved by passing yet another variable on
-the command line, that tells cmake to explicitly pass arbitrary
-variables down to sub-cmake calls:
-
-    -DCMAKE_TRY_COMPILE_PLATFORM_VARIABLES=CMAKE_MODULE_PATH
-
-However, this only covers the case of try_compile. Even though no other
-case is known yet, we'd still risk missing locations where we would need
-to propagate CMAKE_MODULE_PATH, even some where we'd have no solution
-like for try_compile.
-
-Instead, ngladitz on IRC suggested that CMAKE_MODULE_PATH be set
-directly from the toolchain file.
-
-And indeed this fixes both problems explained above.
-
-So be it.
-
-[0] https://cmake.org/Wiki/CMake_Useful_Variables
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: J?rg Krause <joerg.krause@embedded.rocks>
-Cc: Ben Boeckel <mathstuf@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
-Changes v1 -> v2:
-  - fix really bad typo in title
-
----
- package/pkg-cmake.mk                | 1 -
- support/misc/toolchainfile.cmake.in | 4 ++++
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 77fa1dc..5d0a455 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -87,7 +87,6 @@ define $(2)_CONFIGURE_CMDS
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
--		-DCMAKE_MODULE_PATH="$$(HOST_DIR)/usr/share/buildroot" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_DOC=OFF \
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 5a42644..c38800e 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -10,6 +10,10 @@
- # RELOCATED_HOST_DIR variable.
- string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
- 
-+# Point cmake to the location where we have our custom modules,
-+# so that it can find our custom platform description.
-+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
-+
- set(CMAKE_SYSTEM_NAME Buildroot)
- set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
- 
 -- 
-2.7.4
+Luca
