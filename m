@@ -1,127 +1,312 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 22:17:16 +0100
-Subject: [Buildroot] [PATCH v6] gtest/gmock: bump to version 1.8.0
-In-Reply-To: <1487070316-12583-1-git-send-email-casantos@datacom.ind.br>
-References: <1473290219-27701-1-git-send-email-casantos@datacom.ind.br>
- <1487070316-12583-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20170305221716.4bffa10f@free-electrons.com>
+Date: Sun, 5 Mar 2017 22:21:50 +0100
+Subject: [Buildroot] [git commit] Add gitlab-CI support
+Message-ID: <20170305212302.D83898221F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4f863d77a666f976a1096c9c9f979047d9995f94
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Feb 2017 09:05:16 -0200, Carlos Santos wrote:
-> GTest version 1.8.0 includes gmock so merge both packages inside gtest
-> 
-> In this merge:
-> 
-> - Add gmock as a suboption of gtest (BR2_PACKAGE_GTEST_GMOCK)
->   following advice from Arnout Vandecappelle
-> - Add BR2_PACKAGE_GMOCK as a legacy entry, selecting BR2_PACKAGE_GTEST
->   and BR2_PACKAGE_GTEST_GMOCK.
-> - Use cmake to install libraries and headers and add missing files
->   (gtest.pc, gtest-config, gmock.pc) in
->   GTEST_POST_INSTALL_STAGING_HOOKS instead of redefining
->   GTEST_INSTALL_STAGING_CMDS
-> - Remove patch on Python as gmock/gtest now supports python 3.0
->   (commit 456fc2b5c4e9ebf05a5987dfe1ff0ac9ffeb53cc)
-> - Add the correct license in HOST_GTEST_LICENSE as all python code in
->   googlemock/scripts/generator is licensed under Apache-2.0 and not
->   BSD-3c
-> - Fix URL of gtest project in Config.in
-> - Remove the gmock entry from DEVELOPERS
-> - Install gmock_gen directly, instead of as a symlink to gmock_gen.py
-> 
-> Notice that any external package that depends on gmock will cause an
-> immediate build termination because make doesn't know how to build
-> gmock. Since the user has just removed gmock from the legacy menu, it
-> should be quite obvious what needs to be done.
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+The buildroot repository is now mirrored on
+https://gitlab.com/buildroot.org/buildroot so we can use Gitlab-CI to
+test Buildroot. Gitlab-CI is controlled by a .gitlab-ci.yml file
+that exists in the repository.
 
-As we discussed, I have applied this v6, with a few changes, see below.
+For now, the only test is building all defconfigs (inspired on
+https://travis-ci.org/buildroot/buildroot-defconfig-testing/). Since
+all the defconfigs have to be specified in the .gitlab-ci.yml file,
+we generate the file based on .gitlab-ci.yml.in. The generated
+.gitlab-ci.yml file has to be committed into the repository, though,
+otherwise Gitlab-CI doesn't see it. So there is also a test to verify
+that .gitlab-ci.yml is up-to-date.
 
+Building all the defconfigs takes a long time. Gitlab-CI will do that
+every time it pulls from git.buildroot.org, which is once per hour.
+That is way too often. Therefore, the defconfigs are not built on pull,
+but only on explicit trigger through the API or when a tag is added.
 
-> +config BR2_PACKAGE_GMOCK
-> +	bool "gmock removed"
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas:
+ - fix typo not -> no
+ - add LC_ALL=C when calling 'ls -1' to get a predictable order of the
+   defconfigs
+ - regenerate .gitlab-ci.yml.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .gitlab-ci.yml    | 190 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ .gitlab-ci.yml.in |  52 +++++++++++++++
+ Makefile          |   3 +
+ 3 files changed, 245 insertions(+)
 
-It's not exactly removed, but merged into gtest, so I've changed the
-prompt slightly here.
-
-
-> +ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
-> +GTEST_DEPENDENCIES = host-gtest
-
-Using a '=' here is not a good idea, += should be used instead. I agree
-'=' works fine, but if someone else adds another GTEST_DEPENDENCIES =
-above, then it will not be taken into account.
-
-Generally speaking, for conditional assignments to <pkg>_DEPENDENCIES,
-I really prefer when += is used.
-
-> +endif
-> +
-> +HOST_GTEST_LICENSE = Apache-2.0
-> +HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +HOST_GTEST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
-> +HOST_GTEST_DEPENDENCIES = host-python3
-
-Ditto.
-
-> +else
-> +HOST_GTEST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
-> +HOST_GTEST_DEPENDENCIES = host-python
-
-Ditto.
-
-
-> +# GTest's CMakeLists.txt uses a tricky logic:
-> +# - by default sets BUILD_GMOCK to ON and BUILD_GTEST to OFF
-> +# - if BUILD_GMOCK is ON then builds gmock, which in its turn builds gtest,
-> +#   regardless the value of BUILD_GTEST
-> +# - otherwise, if BUILD_GTEST is ON then build gtest, only
-> +# So, to build only gtest we must set BUILD_GTEST to ON and BUILD_GMOCK to OFF
-> +# to revert the default values. Setting both to ON is not really necessary but
-> +# describes clearly what we intend to do.
-
-I really don't see what's tricky in the need to enable what you want to
-build, and disable what you don't want, which is exactly what the
-following piece of code does. So I've dropped this comment.
-
-> +GTEST_CONF_OPTS += -DBUILD_GTEST=ON
-> +ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
-> +GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
-> +else
-> +GTEST_CONF_OPTS += -DBUILD_GMOCK=OFF
-> +endif
-> +
-> +define GTEST_GMOCK_INSTALL_MISSING_FILE
-> +	$(INSTALL) -D -m 0644 package/gtest/gmock.pc \
-> +		$(STAGING_DIR)/usr/lib/pkgconfig/gmock.pc
-> +endef
-
-I've moved this...
-
-> +
-> +GTEST_POST_INSTALL_STAGING_HOOKS = GTEST_INSTALL_MISSING_FILES
-> +ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
-
-... inside the condition where it is actually used.
-
-> +GTEST_POST_INSTALL_STAGING_HOOKS += GTEST_GMOCK_INSTALL_MISSING_FILE
-> +endif
-
-Thanks a lot for having worked on this, and going through the numerous
-iterations!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+new file mode 100644
+index 0000000..4cfe9df
+--- /dev/null
++++ b/.gitlab-ci.yml
+@@ -0,0 +1,190 @@
++# Configuration for Gitlab-CI.
++# Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
++# The .gitlab-ci.yml file is generated from .gitlab-ci.yml.in.
++# It needs to be regenerated every time a defconfig is added, using
++# "make .gitlab-ci.yml".
++
++image: debian:stable
++
++before_script:
++    - dpkg --add-architecture i386
++    # The container has no package lists, so need to update first
++    - apt-get update -qq
++    - apt-get install -y -qq --no-install-recommends
++        build-essential locales bc ca-certificates file rsync
++        git bzr cvs mercurial subversion libc6:i386 unzip wget cpio
++    # To be able to generate a toolchain with locales, enable one UTF-8 locale
++    - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
++    - /usr/sbin/locale-gen
++
++.defconfig_script: &defconfig_script
++    - echo 'Configure Buildroot'
++    - make ${CI_BUILD_NAME}
++    - echo 'Build buildroot'
++    - |
++        make > >(tee build.log |grep '>>>') 2>&1 || {
++            echo 'Failed build last output'
++            tail -200 build.log
++            exit 1
++        }
++
++check-gitlab-ci.yml:
++    script:
++        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
++        - make .gitlab-ci.yml
++        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
++
++.defconfig: &defconfig
++    # Running the defconfigs for every push is too much, so limit to
++    # explicit triggers through the API.
++    only:
++        - triggers
++        - tags
++    script: *defconfig_script
++    artifacts:
++        when: always
++        expire_in: 2 weeks
++        paths:
++            - build.log
++            - output/images/
++            - output/build/build-time.log
++            - output/build/packages-file-list.txt
++
++acmesystems_aria_g25_128mb_defconfig: *defconfig
++acmesystems_aria_g25_256mb_defconfig: *defconfig
++acmesystems_arietta_g25_128mb_defconfig: *defconfig
++acmesystems_arietta_g25_256mb_defconfig: *defconfig
++arcturus_ucp1020_defconfig: *defconfig
++arm_foundationv8_defconfig: *defconfig
++arm_juno_defconfig: *defconfig
++armadeus_apf27_defconfig: *defconfig
++armadeus_apf28_defconfig: *defconfig
++armadeus_apf51_defconfig: *defconfig
++armadeus_apf9328_defconfig: *defconfig
++at91sam9260eknf_defconfig: *defconfig
++at91sam9g20dfc_defconfig: *defconfig
++at91sam9g45m10ek_defconfig: *defconfig
++at91sam9rlek_defconfig: *defconfig
++at91sam9x5ek_defconfig: *defconfig
++atmel_sama5d2_xplained_mmc_defconfig: *defconfig
++atmel_sama5d2_xplained_mmc_dev_defconfig: *defconfig
++atmel_sama5d3_xplained_defconfig: *defconfig
++atmel_sama5d3_xplained_dev_defconfig: *defconfig
++atmel_sama5d3_xplained_mmc_defconfig: *defconfig
++atmel_sama5d3_xplained_mmc_dev_defconfig: *defconfig
++atmel_sama5d3xek_defconfig: *defconfig
++atmel_sama5d4_xplained_defconfig: *defconfig
++atmel_sama5d4_xplained_dev_defconfig: *defconfig
++atmel_sama5d4_xplained_mmc_defconfig: *defconfig
++atmel_sama5d4_xplained_mmc_dev_defconfig: *defconfig
++beagleboardx15_defconfig: *defconfig
++beaglebone_defconfig: *defconfig
++beaglebone_qt5_defconfig: *defconfig
++chromebook_snow_defconfig: *defconfig
++ci20_defconfig: *defconfig
++cubieboard2_defconfig: *defconfig
++firefly_rk3288_defconfig: *defconfig
++firefly_rk3288_demo_defconfig: *defconfig
++freescale_imx28evk_defconfig: *defconfig
++freescale_imx31_3stack_defconfig: *defconfig
++freescale_imx6dlsabreauto_defconfig: *defconfig
++freescale_imx6dlsabresd_defconfig: *defconfig
++freescale_imx6qsabreauto_defconfig: *defconfig
++freescale_imx6qsabresd_defconfig: *defconfig
++freescale_imx6sololiteevk_defconfig: *defconfig
++freescale_imx6sxsabresd_defconfig: *defconfig
++freescale_imx6ulevk_defconfig: *defconfig
++freescale_imx7dsabresd_defconfig: *defconfig
++freescale_mpc8315erdb_defconfig: *defconfig
++freescale_p1010rdb_pa_defconfig: *defconfig
++galileo_defconfig: *defconfig
++gdb_bfin_bf512_defconfig: *defconfig
++grinn_chiliboard_defconfig: *defconfig
++grinn_liteboard_defconfig: *defconfig
++imx23evk_defconfig: *defconfig
++imx6q-sabresd_defconfig: *defconfig
++imx6ulpico_defconfig: *defconfig
++lego_ev3_defconfig: *defconfig
++linksprite_pcduino_defconfig: *defconfig
++minnowboard_max-graphical_defconfig: *defconfig
++minnowboard_max_defconfig: *defconfig
++mx25pdk_defconfig: *defconfig
++mx51evk_defconfig: *defconfig
++mx53loco_defconfig: *defconfig
++mx6cubox_defconfig: *defconfig
++mx6sx_udoo_neo_defconfig: *defconfig
++mx6udoo_defconfig: *defconfig
++nanopi_neo_defconfig: *defconfig
++nexbox_a95x_defconfig: *defconfig
++nitrogen6sx_defconfig: *defconfig
++nitrogen6x_defconfig: *defconfig
++nitrogen7_defconfig: *defconfig
++odroidc2_defconfig: *defconfig
++olimex_a20_olinuxino_lime2_defconfig: *defconfig
++olimex_a20_olinuxino_lime_defconfig: *defconfig
++olimex_a20_olinuxino_lime_mali_defconfig: *defconfig
++olimex_a20_olinuxino_micro_defconfig: *defconfig
++olimex_imx233_olinuxino_defconfig: *defconfig
++openblocks_a6_defconfig: *defconfig
++orangepi_one_defconfig: *defconfig
++orangepi_pc_defconfig: *defconfig
++pandaboard_defconfig: *defconfig
++pc_x86_64_bios_defconfig: *defconfig
++pc_x86_64_efi_defconfig: *defconfig
++qemu_aarch64_virt_defconfig: *defconfig
++qemu_arm_versatile_defconfig: *defconfig
++qemu_arm_versatile_nommu_defconfig: *defconfig
++qemu_arm_vexpress_defconfig: *defconfig
++qemu_m68k_mcf5208_defconfig: *defconfig
++qemu_m68k_q800_defconfig: *defconfig
++qemu_microblazebe_mmu_defconfig: *defconfig
++qemu_microblazeel_mmu_defconfig: *defconfig
++qemu_mips32r2_malta_defconfig: *defconfig
++qemu_mips32r2el_malta_defconfig: *defconfig
++qemu_mips32r6_malta_defconfig: *defconfig
++qemu_mips32r6el_malta_defconfig: *defconfig
++qemu_mips64_malta_defconfig: *defconfig
++qemu_mips64el_malta_defconfig: *defconfig
++qemu_mips64r6_malta_defconfig: *defconfig
++qemu_mips64r6el_malta_defconfig: *defconfig
++qemu_nios2_10m50_defconfig: *defconfig
++qemu_or1k_defconfig: *defconfig
++qemu_ppc64_pseries_defconfig: *defconfig
++qemu_ppc_g3beige_defconfig: *defconfig
++qemu_ppc_mpc8544ds_defconfig: *defconfig
++qemu_ppc_virtex_ml507_defconfig: *defconfig
++qemu_sh4_r2d_defconfig: *defconfig
++qemu_sh4eb_r2d_defconfig: *defconfig
++qemu_sparc64_sun4u_defconfig: *defconfig
++qemu_sparc_ss10_defconfig: *defconfig
++qemu_x86_64_defconfig: *defconfig
++qemu_x86_defconfig: *defconfig
++qemu_xtensa_lx60_defconfig: *defconfig
++qemu_xtensa_lx60_nommu_defconfig: *defconfig
++raspberrypi0_defconfig: *defconfig
++raspberrypi2_defconfig: *defconfig
++raspberrypi3_defconfig: *defconfig
++raspberrypi_defconfig: *defconfig
++riotboard_defconfig: *defconfig
++roseapplepi_defconfig: *defconfig
++s6lx9_microboard_defconfig: *defconfig
++sheevaplug_defconfig: *defconfig
++snps_aarch64_vdk_defconfig: *defconfig
++snps_archs38_vdk_defconfig: *defconfig
++snps_archs38_zebu_defconfig: *defconfig
++snps_axs101_defconfig: *defconfig
++snps_axs103_defconfig: *defconfig
++stm32f429_disco_defconfig: *defconfig
++stm32f469_disco_defconfig: *defconfig
++telit_evk_pro3_defconfig: *defconfig
++toradex_apalis_imx6_defconfig: *defconfig
++ts4800_defconfig: *defconfig
++ts4900_defconfig: *defconfig
++ts5x00_defconfig: *defconfig
++wandboard_defconfig: *defconfig
++warp7_defconfig: *defconfig
++warpboard_defconfig: *defconfig
++zynq_microzed_defconfig: *defconfig
++zynq_zc706_defconfig: *defconfig
++zynq_zed_defconfig: *defconfig
++zynq_zybo_defconfig: *defconfig
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+new file mode 100644
+index 0000000..b4a6a3f
+--- /dev/null
++++ b/.gitlab-ci.yml.in
+@@ -0,0 +1,52 @@
++# Configuration for Gitlab-CI.
++# Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
++# The .gitlab-ci.yml file is generated from .gitlab-ci.yml.in.
++# It needs to be regenerated every time a defconfig is added, using
++# "make .gitlab-ci.yml".
++
++image: debian:stable
++
++before_script:
++    - dpkg --add-architecture i386
++    # The container has no package lists, so need to update first
++    - apt-get update -qq
++    - apt-get install -y -qq --no-install-recommends
++        build-essential locales bc ca-certificates file rsync
++        git bzr cvs mercurial subversion libc6:i386 unzip wget cpio
++    # To be able to generate a toolchain with locales, enable one UTF-8 locale
++    - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
++    - /usr/sbin/locale-gen
++
++.defconfig_script: &defconfig_script
++    - echo 'Configure Buildroot'
++    - make ${CI_BUILD_NAME}
++    - echo 'Build buildroot'
++    - |
++        make > >(tee build.log |grep '>>>') 2>&1 || {
++            echo 'Failed build last output'
++            tail -200 build.log
++            exit 1
++        }
++
++check-gitlab-ci.yml:
++    script:
++        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
++        - make .gitlab-ci.yml
++        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
++
++.defconfig: &defconfig
++    # Running the defconfigs for every push is too much, so limit to
++    # explicit triggers through the API.
++    only:
++        - triggers
++        - tags
++    script: *defconfig_script
++    artifacts:
++        when: always
++        expire_in: 2 weeks
++        paths:
++            - build.log
++            - output/images/
++            - output/build/build-time.log
++            - output/build/packages-file-list.txt
++
+diff --git a/Makefile b/Makefile
+index da1d7d2..fb2c235 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1068,6 +1068,9 @@ release:
+ print-version:
+ 	@echo $(BR2_VERSION_FULL)
+ 
++.gitlab-ci.yml: .gitlab-ci.yml.in configs/*_defconfig
++	(cd configs; LC_ALL=C ls -1 *_defconfig) | sed 's/$$/: *defconfig/' | cat $< - > $@
++
+ include docs/manual/manual.mk
+ -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(dir)/docs/*/*.mk)
+ 
