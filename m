@@ -1,29 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 22:46:06 +0100
-Subject: [Buildroot] [PATCH 43/44] linux-firmware: t5fw bump to version
- 1.16.26.0
-In-Reply-To: <20170206202457.31527-44-aduskett@codeblue.com>
-References: <20170206202457.31527-1-aduskett@codeblue.com>
- <20170206202457.31527-44-aduskett@codeblue.com>
-Message-ID: <20170305224606.5763344a@free-electrons.com>
+Date: Sun, 5 Mar 2017 22:48:04 +0100
+Subject: [Buildroot] [git commit] pkg-autotools: don't disable dependency
+	tracking if using <pkg>_OVERRIDE_SRCDIR
+Message-ID: <20170305214814.40D1881E44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=630c335868dac137157e4821d465f61323baba22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  6 Feb 2017 15:24:56 -0500, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-> ---
->  package/linux-firmware/linux-firmware.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Include the --disable-dependency-tracking option in <pkg>_CONFIGURE_CMDS
+only on the condition that <pkg>_OVERRIDE_SRCDIR is empty. Dependency
+tracking is very welcome while developing in order to properly rebuild
+when calling make <pkg>-rebuild for instance.
 
-Applied to master, thanks.
+Signed-off-by: Ignacy Gaw??dzki <ignacy.gawedzki@green-communications.fr>
+---
+ package/pkg-autotools.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index f7b8488..e215382 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -199,7 +199,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--disable-documentation \
+ 		--with-xmlto=no \
+ 		--with-fop=no \
+-		--disable-dependency-tracking \
++		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
+ 		--enable-ipv6 \
+ 		$$(DISABLE_NLS) \
+ 		$$(SHARED_STATIC_LIBS_OPTS) \
+@@ -232,7 +232,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--disable-debug \
+ 		--with-xmlto=no \
+ 		--with-fop=no \
+-		--disable-dependency-tracking \
++		$$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
+ 		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
+ 	)
+ endef
