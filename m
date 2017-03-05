@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 21:57:18 +0100
-Subject: [Buildroot] [PATCH 1/5] minnowboard_defconfig: remove broken
- defconfig
-In-Reply-To: <20170301083046.13226-1-arnout@mind.be>
-References: <20170301083046.13226-1-arnout@mind.be>
-Message-ID: <20170305215718.76b5a2ca@free-electrons.com>
+Date: Sun, 5 Mar 2017 21:58:03 +0100
+Subject: [Buildroot] [PATCH] lttng-libust: fix build on musl
+In-Reply-To: <1488319770-6933-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1488319770-6933-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170305215803.32b9b53b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 1 Mar 2017 09:30:42 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> This defconfig has been broken due to gcc5 for more than half a year,
-> and nobody stepped up to fix it. Remove it, as well as the files it
-> references. Update the readme to remove references to MinnowBoard.
+On Tue, 28 Feb 2017 23:09:30 +0100, Thomas Petazzoni wrote:
+> This commit backports two upstream patches in lttng-libust, that fix
+> the build with the musl C library.
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/8bbcac9f9debf76cd1f56734bfd494677f2acd21/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  board/minnowboard/grub-minnowboard.cfg |   6 --
->  board/minnowboard/linux-3.8.config     | 172 ---------------------------------
->  board/minnowboard/readme.txt           |  10 +-
->  configs/minnowboard_defconfig          |  32 ------
->  4 files changed, 3 insertions(+), 217 deletions(-)
->  delete mode 100644 board/minnowboard/grub-minnowboard.cfg
->  delete mode 100644 board/minnowboard/linux-3.8.config
->  delete mode 100644 configs/minnowboard_defconfig
+>  ...the-presence-of-dlmopen-at-configure-time.patch | 130 +++++++++++++++++++++
+>  ...-include-config.h-to-resolve-HAVE_DLMOPEN.patch |  30 +++++
+>  package/lttng-libust/lttng-libust.mk               |   1 +
+>  3 files changed, 161 insertions(+)
+>  create mode 100644 package/lttng-libust/0003-Validate-the-presence-of-dlmopen-at-configure-time.patch
+>  create mode 100644 package/lttng-libust/0004-Fix-include-config.h-to-resolve-HAVE_DLMOPEN.patch
 
 Applied to master, thanks.
 
