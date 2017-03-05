@@ -1,9 +1,9 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Sun,  5 Mar 2017 16:06:13 +0000
-Subject: [Buildroot] [PATCH 5/8] package/rpi-firmware: bump version
+Date: Sun,  5 Mar 2017 16:06:14 +0000
+Subject: [Buildroot] [PATCH 6/8] package/rpi-userland: bump version
 In-Reply-To: <1488729976-7116-1-git-send-email-martin@barkynet.com>
 References: <1488729976-7116-1-git-send-email-martin@barkynet.com>
-Message-ID: <1488729976-7116-5-git-send-email-martin@barkynet.com>
+Message-ID: <1488729976-7116-6-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ package/rpi-userland/rpi-userland.hash | 2 +-
+ package/rpi-userland/rpi-userland.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index 8161d7a..f6dd03a 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
+diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
+index 24b6584..3e0dbfa 100644
+--- a/package/rpi-userland/rpi-userland.hash
++++ b/package/rpi-userland/rpi-userland.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 144de63ee1999155fc1ff597630f1a13f798e597e7c4d144b8b625fa774c1f9b rpi-firmware-7f8ac8dac0b80291cbf5e56580139034a0a42070.tar.gz
-+sha256 0797a034b33a0218fd6fb3c5bb1473959e209a8fe676f3c215f954806601aa78 rpi-firmware-78c4983379de0537f49a97fb37ceaaf42632b28c.tar.gz
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index d2cd481..b73ef53 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
+-sha256 f229c29ceae611101bf4716b112251b2f2a33cfbb6636d736deda4e1314bb9d9 rpi-userland-c139376e9bc6fbd93f777c7fc3c7d7cf2cc35122.tar.gz
++sha256 9f7caa5fee77cef034551b23a7c12d78792ebd2feca7bcbc677da4daf2a98cf7 rpi-userland-f410ec051a3724934e3671315474d4b81424b0ef.tar.gz
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 4e3b4ec..aec721d 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 7f8ac8dac0b80291cbf5e56580139034a0a42070
-+RPI_FIRMWARE_VERSION = 78c4983379de0537f49a97fb37ceaaf42632b28c
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-RPI_USERLAND_VERSION = c139376e9bc6fbd93f777c7fc3c7d7cf2cc35122
++RPI_USERLAND_VERSION = f410ec051a3724934e3671315474d4b81424b0ef
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
 -- 
 2.7.4
