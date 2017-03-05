@@ -1,32 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 12:13:29 +0100
-Subject: [Buildroot] [PATCH 1/3] DEVELOPERS: add Martin Bark for
- package/nodejs
-In-Reply-To: <1488671310-27378-1-git-send-email-martin@barkynet.com>
-References: <1488671310-27378-1-git-send-email-martin@barkynet.com>
-Message-ID: <20170305121329.639183c8@free-electrons.com>
+Date: Sun, 5 Mar 2017 12:13:57 +0100
+Subject: [Buildroot] [git commit] lpeg: bump to version 1.0.1
+Message-ID: <20170305111401.382C68211A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8498c45e6339c8f930f5922d1dd0857bd1eb4274
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  4 Mar 2017 23:48:28 +0000, Martin Bark wrote:
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lpeg/lpeg.hash | 2 +-
+ package/lpeg/lpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks. I don't remember, did I point you to the bug
-https://bugs.busybox.net/show_bug.cgi?id=9531 ? If not, could you have
-a look ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lpeg/lpeg.hash b/package/lpeg/lpeg.hash
+index 50e66d1..9261674 100644
+--- a/package/lpeg/lpeg.hash
++++ b/package/lpeg/lpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	e70c7cf8d7b8feddd8a41235d0ebb27bb60fbe7f31c8364ad23ee30a7f0cc26e  lpeg-1.0.0-1.src.rock
++sha256	149be31e0155c4694f77ea7264d9b398dd134eca0d00ff03358d91a6cfb2ea9d  lpeg-1.0.1-1.src.rock
+diff --git a/package/lpeg/lpeg.mk b/package/lpeg/lpeg.mk
+index 0754f00..1541f33 100644
+--- a/package/lpeg/lpeg.mk
++++ b/package/lpeg/lpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LPEG_VERSION = 1.0.0-1
++LPEG_VERSION = 1.0.1-1
+ LPEG_LICENSE = MIT
+ 
+ $(eval $(luarocks-package))
