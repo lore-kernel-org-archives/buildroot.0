@@ -1,44 +1,78 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 5 Mar 2017 23:24:42 +0100
-Subject: [Buildroot] [PATCH v2] package/Config.in: explain that lua package
-	names should start with lua
-Message-ID: <20170305222442.27768-1-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Mar 2017 23:26:31 +0100
+Subject: [Buildroot] [PATCH] mkusers: create system users/groups below
+ UID/GID 1000
+In-Reply-To: <1486647783-6622-1-git-send-email-p.debruijn@unilogic.nl>
+References: <1486647783-6622-1-git-send-email-p.debruijn@unilogic.nl>
+Message-ID: <20170305222631.GL3671@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have decided that lua packages should have a name that starts with
-lua (like is the case for python and perl). However, we're not going to
-rename all the existing lua packages that don't start with lua. This
-makes it unclear for people adding packages how they should name the
-package, so add a comment to package/Config.in to explain it.
+Pascal, All,
 
-It's rather terse but it gets the message across.
+On 2017-02-09 14:43 +0100, Pascal de Bruijn spake thusly:
+> Try not to create users/groups past UID/GID 1000, as this space
+> is usually reserved for proper user/group accounts.
+> 
+> Change buildroot behaviour to be similar to distros (like Debian)
+> where UID/GID 101-999 are used for dynamic allocation to system
+> service accounts.
+> 
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> ---
+>  support/scripts/mkusers | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+> index d834578..c9f31fc 100755
+> --- a/support/scripts/mkusers
+> +++ b/support/scripts/mkusers
+> @@ -4,10 +4,10 @@ myname="${0##*/}"
+>  
+>  #----------------------------------------------------------------------------
+>  # Configurable items
+> -MIN_UID=1000
+> -MAX_UID=1999
+> -MIN_GID=1000
+> -MAX_GID=1999
+> +MIN_UID=101
+> +MAX_UID=999
+> +MIN_GID=101
+> +MAX_GID=999
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v2: clarify that lua- should be added if upstream doesn't have a lua
-    prefix
----
- package/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Although I don't have any hard conviction for a specific range or
+another, I don't like the rationale.
 
-diff --git a/package/Config.in b/package/Config.in
-index 536b5512f7..407dc238ee 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -524,6 +524,10 @@ endif
- if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
- # lua modules are dynamically loaded, so not available on static builds
- menu "Lua libraries/modules"
-+# When adding lua packages, make sure the name start with "lua". If the
-+# upstream package is "luafoo", call it "luafoo" in Buildroot; if the upstream
-+# package is "foo", call it "lua-foo". Many packages currently don't follow
-+# this convention, but that's historical accident.
- 	source "package/argparse/Config.in"
- 	source "package/cgilua/Config.in"
- 	source "package/copas/Config.in"
+For one, why would we need to stick to similar numbering as standard
+distros to begin with? as far as I know, nothing mandates any UID:GID
+range for anything, except that 0:0 is for root:root.
+
+Second, this script does not create only so-called "service accounts";
+it is perfectly legit to use that script to create "normal" users.
+
+If you need to guarantee a numbering for specific users, then you should
+pass your own user tables with the uids and gids you care about;
+Buildroot will happily use the UIDs/GIDs used therein, even outside the
+range here.
+
+However...
+
+I would love to see that range being configurable in the menuconfig,
+instead of having to edit the file to change the range.
+
+I believe this would be much more user-friendly and would cover your
+use-case as well. I believe. ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
