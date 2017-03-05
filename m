@@ -1,78 +1,92 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 5 Mar 2017 23:13:01 +0100
-Subject: [Buildroot] [PATCH v3 1/2] package/physfs: new package
-In-Reply-To: <c341646a-fe08-f349-cb46-aed8d0430639@mind.be>
-References: <20170301225611.11494-1-romain.naour@gmail.com>
- <4328635a-2687-59f6-a192-4af579aafb58@gmail.com>
- <20170305215137.1600833e@free-electrons.com>
- <755ee979-57de-4718-9fa0-5f7de1f05289@gmail.com>
- <20170305223749.3567d0af@free-electrons.com>
- <c341646a-fe08-f349-cb46-aed8d0430639@mind.be>
-Message-ID: <b370e822-a293-56ec-f151-69882e8b1786@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 5 Mar 2017 23:17:10 +0100
+Subject: [Buildroot] [PATCH v3] Add gitlab-CI support
+In-Reply-To: <20170305222516.78689464@free-electrons.com>
+References: <20170213232303.7053-1-arnout@mind.be>
+ <20170305222516.78689464@free-electrons.com>
+Message-ID: <a3424329-0e91-9106-9130-e1f7daa9eec9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, all,
 
-Le 05/03/2017 ? 23:06, Arnout Vandecappelle a ?crit :
-> 
-> 
-> On 05-03-17 22:37, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Sun, 5 Mar 2017 22:14:02 +0100, Romain Naour wrote:
->>>> zlib license (physfs), LGPv2.1+ or CPL or special license (lzma)
->>>>
->>>>  ?  
->>>
->>> It seems some files are under public domain when the special license is used.
->>>
->>> SPECIAL EXCEPTION #3: Igor Pavlov, as the author of this code, expressly permits
->>> you to use code of the following files:
->>> BranchTypes.h, LzmaTypes.h, LzmaTest.c, LzmaStateTest.c, LzmaAlone.cpp,
->>> LzmaAlone.cs, LzmaAlone.java
->>> as public domain code.
->>>
->>> Maybe "special license" is enough ?
->>
->> My understanding of lzma.txt is that you really have the choice between
->> those different licensing options, so I believe encoding all of them in
->> <pkg>_LICENSE is probably better.
->>
->> Cc'ing Arnout and Yann to get their insight.
-> 
->  I was just about to reply :-)
-> 
->  First of all, I don't see any 'or later' language, so it's LGPL2.1 (the version
-> mentioned in src/lzma/LGPL.txt).
 
-Try with "any later version"
+On 05-03-17 22:25, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 14 Feb 2017 00:23:03 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> The buildroot repository is now mirrored on
+>> https://gitlab.com/buildroot.org/buildroot so we can use Gitlab-CI to
+>> test Buildroot. Gitlab-CI is controlled by a .gitlab-ci.yml file
+>> that exists in the repository.
+> 
+> I've applied with some minor changes (see below).
+> 
+>> Building all the defconfigs takes a long time. Gitlab-CI will do that
+>> every time it pulls from git.buildroot.org, which is once per hour.
 
-> 
->  I think the special cases are not interesting enough to warrant mentioning - we
-> should consider the LICENSE as a strong hint, not as a definitive assertion (it
-> is not entirely accurate in most packages). In addition, the CPL.html file which
-> is supposed to be there, is missing. The top-level README also says "It uses the
-> LGPL license, with exceptions for closed-source programs." This leads me to
-> conclude that the physfs authors, when redistributint lzma, have decided to do
-> so under LGPL and to drop the other license options.
-> 
->  So I'd say:
-> 
-> PHYSFS_LICENSE = zlib license (physfs), LGPLv2.1 with exceptions (lzma)
-> PHYSFS_LICENSE_FILES = LICENSE.txt src/lzma/lzma.txt src/lzma/LGPL.txt
+ Note that I reduced that from once per hour to once per day. Unfortunately I
+forgot why I did that :-)
 
-Ok, thanks for the help!
+>> That is way too often. Therefore, the defconfigs are not built on pull,
+>> but only on explicit trigger through the API or when a tag is added.
+> 
+> What is the next step now? Who is going to run in a cronjob the thing
+> that triggers the build? 
 
-Best regards,
-Romain
+ I think you have better access to machines that can do such a thing, so could
+you set it up? Go to the triggers section on
+https://gitlab.com/buildroot.org/buildroot/settings/ci_cd, create a trigger
+token, and use it in
 
+curl -X POST \
+     -F token=TOKEN \
+     -F ref=master \
+     https://gitlab.com/api/v3/projects/2648174/trigger/builds
+
+
+> Can we setup a notification on the mailing
+> list and/or IRC when there is a failure?
+
+ I would wait a bit with that until any remaining issues on the gitlab side have
+been ironed out. One issue I found already is that there seems to be some
+throttling going on in the git.freescale.org repositories, and our 12 parallel
+freescale defconfigs are hit by it.
+
+ Also, it turns out that the "free runners" have become a lot slower since I
+first tried it, it now takes something like a day for all the defconfigs to
+build. So maybe we should consider setting up our own runner after all...
+
+
+ Regards,
+ Arnout
+
+
+>> +    # The container has not package lists, so need to update first
 > 
+> I've fixed the typo not -> no, as noticed by Marcus.
 > 
->  Regards,
->  Arnout
+>> +.gitlab-ci.yml: .gitlab-ci.yml.in configs/*_defconfig
+>> +	(cd configs; ls -1 *_defconfig) | sed 's/$$/: *defconfig/' | cat $< - > $@
 > 
+> I've added LC_ALL=C when calling ls -1, because I did not had the same
+> order as yours when regenerating the list of defconfigs. Apparently,
+> depending on the locales armadeus is before or after arm_.
 > 
+> And I've regenerated the list of defconfigs before pushing, of course.
+> 
+> Thanks!
+> 
+> Thomas
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
