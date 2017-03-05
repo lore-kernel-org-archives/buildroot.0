@@ -1,45 +1,81 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  5 Mar 2017 21:33:37 +0200
-Subject: [Buildroot] [PATCH 2/2] ipset: bump to version 6.31
-In-Reply-To: <4dccce88a1f69b1ce62739e89b050382df056626.1488742417.git.baruch@tkos.co.il>
-References: <4dccce88a1f69b1ce62739e89b050382df056626.1488742417.git.baruch@tkos.co.il>
-Message-ID: <3efa27a6756ef56c806f9b83adbe718829b0fb19.1488742417.git.baruch@tkos.co.il>
+Date: Sun,  5 Mar 2017 21:33:36 +0200
+Subject: [Buildroot] [PATCH 1/2] ipset: drop obsolete patch
+Message-ID: <4dccce88a1f69b1ce62739e89b050382df056626.1488742417.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since commit 0552a367dbd ("Remove --{enable, disable}-debug configure flags.")
+we do not pass --enable-debug to configure script. The patch to remove -Werror
+in this case is thus no longer needed.
+
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/ipset/ipset.hash | 6 +++---
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...not-pass-Werror-when-enable-debug-is-used.patch | 39 ----------------------
+ package/ipset/ipset.mk                             |  2 --
+ 2 files changed, 41 deletions(-)
+ delete mode 100644 package/ipset/0001-Do-not-pass-Werror-when-enable-debug-is-used.patch
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index da860e8d0562..2337c8a3659b 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,4 +1,4 @@
--# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.30.tar.bz2.md5sum.txt
--md5	41c32e3b884ec714f0aac95e7675f9d1	ipset-6.30.tar.bz2
-+# From http://ftp.netfilter.org/pub/ipset/ipset-6.31.tar.bz2.md5sum.txt
-+md5	231790be940438287438df1f33857376	ipset-6.31.tar.bz2
- # Calculated based on the hash above
--sha256	65bfa43fec3d51a6b4012f3d7e4b93a748df9b71b6cd6c53adbec8083e804a31	ipset-6.30.tar.bz2
-+sha256	498e411cc1d134201a31a56def6c0936c642958c2d4b4ce7d9955240047a45fe	ipset-6.31.tar.bz2
+diff --git a/package/ipset/0001-Do-not-pass-Werror-when-enable-debug-is-used.patch b/package/ipset/0001-Do-not-pass-Werror-when-enable-debug-is-used.patch
+deleted file mode 100644
+index c115f6337d6d..000000000000
+--- a/package/ipset/0001-Do-not-pass-Werror-when-enable-debug-is-used.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From f31bb2561776ad2ce4b77339da6fbfc9e3b2ffbb Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 26 Oct 2014 14:18:29 +0100
+-Subject: [PATCH] Do not pass -Werror when --enable-debug is used
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Make_global.am | 2 +-
+- configure.ac   | 1 -
+- 2 files changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/Make_global.am b/Make_global.am
+-index 7953451..25c4d64 100644
+---- a/Make_global.am
+-+++ b/Make_global.am
+-@@ -77,7 +77,7 @@ AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include \
+- AM_CFLAGS = -std=gnu99
+- 
+- if ENABLE_DEBUG
+--AM_CFLAGS += -g -g3 -ggdb -gdwarf-2 -DIPSET_DEBUG -Wall -Werror
+-+AM_CFLAGS += -g -g3 -ggdb -gdwarf-2 -DIPSET_DEBUG -Wall
+- else
+- AM_CFLAGS += -O2 -DNDEBUG
+- endif
+-diff --git a/configure.ac b/configure.ac
+-index 8fdac15..ee3b147 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -345,7 +345,6 @@ AX_CFLAGS_GCC_OPTION(-Waggregate-return)
+- AX_CFLAGS_GCC_OPTION(-Wbad-function-cast)
+- AX_CFLAGS_GCC_OPTION(-Wcast-align)
+- AX_CFLAGS_GCC_OPTION(-Wcast-qual)
+--AX_CFLAGS_GCC_OPTION(-Werror)
+- AX_CFLAGS_GCC_OPTION(-Wextra)
+- AX_CFLAGS_GCC_OPTION(-Wfloat-equal)
+- AX_CFLAGS_GCC_OPTION(-Wformat=2)
+--- 
+-2.0.0
+-
 diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 5d7955f7ea81..7d16629f7afc 100644
+index bb40fee3d147..5d7955f7ea81 100644
 --- a/package/ipset/ipset.mk
 +++ b/package/ipset/ipset.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPSET_VERSION = 6.30
-+IPSET_VERSION = 6.31
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+@@ -9,8 +9,6 @@ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
  IPSET_SITE = http://ipset.netfilter.org
  IPSET_DEPENDENCIES = libmnl host-pkgconf
+ IPSET_CONF_OPTS = --with-kmod=no
+-# For 0001-Do-not-pass-Werror-when-enable-debug-is-used.patch
+-IPSET_AUTORECONF = YES
+ IPSET_LICENSE = GPLv2
+ IPSET_LICENSE_FILES = COPYING
+ IPSET_INSTALL_STAGING = YES
 -- 
 2.11.0
