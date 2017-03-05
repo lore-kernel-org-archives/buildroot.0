@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 22:03:13 +0100
-Subject: [Buildroot] [git commit] luabitop: use PKG_NAME_UPSTREAM
-Message-ID: <20170305210519.AA94A7FCAC@busybox.osuosl.org>
+Date: Sun, 5 Mar 2017 22:03:55 +0100
+Subject: [Buildroot] [git commit] lua: remove documentation from target
+Message-ID: <20170305210519.C17F1821E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffffc0e84a85105bf2a82bec39c88a21710f725d
+commit: https://git.buildroot.net/buildroot/commit/?id=cf38fa8338db7d9ec98e4c03c75661cfb88eb7e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Many packages install documentation under /usr/share/lua/.../doc. Add
+a TARGET_FINALIZE_HOOK to remove it.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luabitop/luabitop.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/luainterpreter/luainterpreter.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/luabitop/luabitop.mk b/package/luabitop/luabitop.mk
-index 5ced99b..a36a2fe 100644
---- a/package/luabitop/luabitop.mk
-+++ b/package/luabitop/luabitop.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
+diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
+index a6c98ab..90382fa 100644
+--- a/package/luainterpreter/luainterpreter.mk
++++ b/package/luainterpreter/luainterpreter.mk
+@@ -6,6 +6,17 @@
  
--LUABITOP_VERSION_UPSTREAM = 1.0.2
--LUABITOP_VERSION = $(LUABITOP_VERSION_UPSTREAM)-1
--LUABITOP_SUBDIR = LuaBitOp-$(LUABITOP_VERSION_UPSTREAM)
-+LUABITOP_VERSION = 1.0.2-1
-+LUABITOP_NAME_UPSTREAM = LuaBitOp
- LUABITOP_LICENSE = MIT
- LUABITOP_LICENSE_FILES = $(LUABITOP_SUBDIR)/README
+ LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
+ 
++# Lua packages often install documentation, clean that up globally
++# Since luainterpreter is a virtual package, we can't use
++# LUAINTERPRETER_TARGET_FINALIZE_HOOKS
++ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
++define LUAINTERPRETER_REMOVE_DOC
++	rm -rf $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/doc
++endef
++
++TARGET_FINALIZE_HOOKS += LUAINTERPRETER_REMOVE_DOC
++endif
++
+ $(eval $(virtual-package))
+ $(eval $(host-virtual-package))
  
