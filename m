@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 22:00:50 +0100
-Subject: [Buildroot] [PATCH] chocolate-doom: bump to version 2.3.0
-In-Reply-To: <1488739214-32676-1-git-send-email-rprebello@gmail.com>
-References: <1488739214-32676-1-git-send-email-rprebello@gmail.com>
-Message-ID: <20170305220050.7f2732f7@free-electrons.com>
+Date: Sun, 5 Mar 2017 22:05:08 +0100
+Subject: [Buildroot] [PATCH for-next 0/25] Lua(Rocks) improvements
+In-Reply-To: <20170223170047.24417-1-arnout@mind.be>
+References: <20170223170047.24417-1-arnout@mind.be>
+Message-ID: <20170305220508.5b4d8e67@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  5 Mar 2017 15:40:14 -0300, Rodrigo Rebello wrote:
-> Also remove patches that have been merged upstream.
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-> ---
->  ...ruct-attribute-directive-ignored-warnings.patch | 49 -------------
->  ...-configure-fix-with-PACKAGE-option-checks.patch | 67 ------------------
->  ...se-of-ioperm-inb-outb-to-x86-architecture.patch | 80 ----------------------
->  package/chocolate-doom/chocolate-doom.hash         |  2 +-
->  package/chocolate-doom/chocolate-doom.mk           |  2 +-
->  5 files changed, 2 insertions(+), 198 deletions(-)
->  delete mode 100644 package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch
->  delete mode 100644 package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch
->  delete mode 100644 package/chocolate-doom/0003-opl-limit-use-of-ioperm-inb-outb-to-x86-architecture.patch
+On Thu, 23 Feb 2017 18:00:22 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-Applied to master, thanks.
+>       package/Config.in: explain that lua package names should start with lua
+
+As we discussed, I marked this one as Changes Requested. Don't forget
+to send an updated version :-)
+
+>       luarocks-package: lowercase the upstream name for LuaRocks
+>       lua-coat: use PKG_NAME_UPSTREAM
+>       lua-cjson: use LUA_CJSON_SUBDIR
+>       lua-testmore: use PKG_NAME_UPSTREAM
+>       luabitop: use PKG_NAME_UPSTREAM
+>       lua: remove documentation from target
+
+I've applied all those remaining patches.
+
+Thanks a lot for the nice cleanup!
+
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
