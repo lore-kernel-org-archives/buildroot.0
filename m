@@ -1,260 +1,211 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 21:58:30 +0100
-Subject: [Buildroot] [git commit] chocolate-doom: bump to version 2.3.0
-Message-ID: <20170305210038.2F0E2805F0@busybox.osuosl.org>
+Date: Sun, 5 Mar 2017 21:57:59 +0100
+Subject: [Buildroot] [git commit] lttng-libust: fix build on musl
+Message-ID: <20170305210038.218CB820F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26eca9c055f43d9749aab8ff92a61967f1b821cb
+commit: https://git.buildroot.net/buildroot/commit/?id=0f67757f699e60cde568696cee516d34acf8963c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also remove patches that have been merged upstream.
+This commit backports two upstream patches in lttng-libust, that fix
+the build with the musl C library.
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/8bbcac9f9debf76cd1f56734bfd494677f2acd21/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ruct-attribute-directive-ignored-warnings.patch | 49 -------------
- ...-configure-fix-with-PACKAGE-option-checks.patch | 67 ------------------
- ...se-of-ioperm-inb-outb-to-x86-architecture.patch | 80 ----------------------
- package/chocolate-doom/chocolate-doom.hash         |  2 +-
- package/chocolate-doom/chocolate-doom.mk           |  2 +-
- 5 files changed, 2 insertions(+), 198 deletions(-)
+ ...the-presence-of-dlmopen-at-configure-time.patch | 130 +++++++++++++++++++++
+ ...-include-config.h-to-resolve-HAVE_DLMOPEN.patch |  30 +++++
+ package/lttng-libust/lttng-libust.mk               |   1 +
+ 3 files changed, 161 insertions(+)
 
-diff --git a/package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch b/package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch
-deleted file mode 100644
-index bff8e3e..0000000
---- a/package/chocolate-doom/0001-Fix-gcc_struct-attribute-directive-ignored-warnings.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From d9c517d9a4e168c1f7ed28ad0eb9365d69f5ceb2 Mon Sep 17 00:00:00 2001
--From: Rodrigo Rebello <rprebello@gmail.com>
--Date: Thu, 22 Oct 2015 11:29:55 -0200
--Subject: [PATCH] Fix "`gcc_struct' attribute directive ignored" warnings
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Compilation for target architectures other than i386, x86_64 or PowerPC
--(e.g. ARM) caused multiple warnings like the following to appear:
--
--  doomdata.h:75:1: warning: ???gcc_struct??? attribute directive ignored
--   } PACKEDATTR mapsidedef_t;
--   ^
--
--This was due to 'gcc_struct' being undefined for these architectures.
--Since that attribute was actually introduced by commit 87db726b9a9ae61ca
--to address the fact that -mms-bitfields became the default for GCC on
--Windows, limit it to that case.
--
--Upstream-status: accepted, not yet released.
--https://github.com/chocolate-doom/chocolate-doom/pull/629
--
--Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-----
-- src/doomtype.h | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/src/doomtype.h b/src/doomtype.h
--index bf0a40e..77c026c 100644
----- a/src/doomtype.h
--+++ b/src/doomtype.h
--@@ -52,10 +52,10 @@
-- 
-- #ifdef __GNUC__
-- 
---#ifdef __clang__
---#define PACKEDATTR __attribute__((packed))
---#else
--+#if defined(_WIN32) && !defined(__clang__)
-- #define PACKEDATTR __attribute__((packed,gcc_struct))
--+#else
--+#define PACKEDATTR __attribute__((packed))
-- #endif
-- 
-- #else
---- 
--2.1.4
--
-diff --git a/package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch b/package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch
-deleted file mode 100644
-index f4d09f5..0000000
---- a/package/chocolate-doom/0002-configure-fix-with-PACKAGE-option-checks.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From fd12fa91aa8e35dbd3ffa5bfe055baf6bde0cd63 Mon Sep 17 00:00:00 2001
--From: Rodrigo Rebello <rprebello@gmail.com>
--Date: Thu, 22 Oct 2015 15:28:11 -0200
--Subject: [PATCH] configure: fix --with-PACKAGE option checks
--
--Options of the form --with-PACKAGE[=yes] (e.g. --with-libpng), when
--passed to configure, were being treated as though --without-PACKAGE had
--been given.
--
--Although the intention is to have configure check and use PACKAGE by
--default if it's available, thus requiring the user to pass an option
--only if PACKAGE must NOT be used, there are times when the opposite
--might be desired (i.e. the user wants to indicate PACKAGE MUST be used).
--Moreover, allowing --with-PACKAGE and behaving as if --without-PACKAGE
--had been specified is in itself quite confusing.
--
--Fix that by testing the result of 'with_PACKAGE' in configure.ac and
--acting accordingly instead of blindly assuming a 'no'.
--
--Upstream-status: accepted, not yet released.
--https://github.com/chocolate-doom/chocolate-doom/pull/630
--
--Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-----
-- configure.ac | 18 ++++++++++++++++--
-- 1 file changed, 16 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index ee97fe2..7b03485 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -80,7 +80,14 @@ AC_SDL_MAIN_WORKAROUND([
--         [Build without libsamplerate @<:@default=check@:>@]),
--     [],
--     [
---        AC_CHECK_LIB(samplerate, src_new)
--+        [with_libsamplerate=check]
--+    ])
--+    AS_IF([test "x$with_libsamplerate" != xno], [
--+        AC_CHECK_LIB(samplerate, src_new, [], [
--+            AS_IF([test "x$with_libsamplerate" != xcheck], [AC_MSG_FAILURE(
--+                [--with-libsamplerate was given, but test for libsamplerate failed])
--+            ])
--+        ])
--     ])
--     # Check for libpng.
--     AC_ARG_WITH([libpng],
--@@ -88,8 +95,15 @@ AC_SDL_MAIN_WORKAROUND([
--         [Build without libpng @<:@default=check@:>@]),
--     [],
--     [
--+        [with_libpng=check]
--+    ])
--+    AS_IF([test "x$with_libpng" != xno], [
--         AC_CHECK_LIB(z, zlibVersion)
---        AC_CHECK_LIB(png, png_get_io_ptr)
--+        AC_CHECK_LIB(png, png_get_io_ptr, [], [
--+            AS_IF([test "x$with_libpng" != xcheck], [AC_MSG_FAILURE(
--+                [--with-libpng was given, but test for libpng failed])
--+            ])
--+        ])
--     ])
--     AC_CHECK_LIB(m, log)
-- 
---- 
--2.1.4
--
-diff --git a/package/chocolate-doom/0003-opl-limit-use-of-ioperm-inb-outb-to-x86-architecture.patch b/package/chocolate-doom/0003-opl-limit-use-of-ioperm-inb-outb-to-x86-architecture.patch
-deleted file mode 100644
-index 860f563..0000000
---- a/package/chocolate-doom/0003-opl-limit-use-of-ioperm-inb-outb-to-x86-architecture.patch
-+++ /dev/null
-@@ -1,80 +0,0 @@
--From 87c7399305b30045a856d737bbfd8f59b8f52392 Mon Sep 17 00:00:00 2001
--From: Rodrigo Rebello <rprebello@gmail.com>
--Date: Fri, 6 Nov 2015 12:14:01 -0200
--Subject: [PATCH] opl: limit use of ioperm/inb/outb to x86 architecture
--
--The use of I/O ports in the Linux driver to directly control OPL chips
--is x86 specific and only really makes sense for x86-based PC's with
--compatible hardware.
--
--For some architectures (e.g. ARM), ioperm, inb and outb do exist and are
--detected by the configure script (via AC_CHECK_FUNCS(ioperm)), but their
--use is inappropriate in these cases and should be avoided.
--
--In some other scenarios, like when using a GNU toolchain + uClibc for
--PowerPC, the build even fails with the following error:
--
--  opl_linux.c:26:20: fatal error: sys/io.h: No such file or directory
--
--That is so because ioperm() is exported by uClibc and gets detected by
--configure, which enables the "Linux" driver via definition of
--HAVE_IOPERM, but in practice 'sys/io.h' is missing for ppc (inb/outb is
--not implemented, and the call to ioperm() would return EIO anyway).
--
--So, besides testing for HAVE_IOPERM, also test if either __i386__ or
--__x86_64__ are defined before enabling this OPL driver.
--
--Upstream-status: accepted, not yet released.
--https://github.com/chocolate-doom/chocolate-doom/pull/638
--
--Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-----
-- opl/opl.c       | 4 ++--
-- opl/opl_linux.c | 4 ++--
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/opl/opl.c b/opl/opl.c
--index 60f027d..0d25689 100644
----- a/opl/opl.c
--+++ b/opl/opl.c
--@@ -27,7 +27,7 @@
-- 
-- //#define OPL_DEBUG_TRACE
-- 
---#ifdef HAVE_IOPERM
--+#if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM)
-- extern opl_driver_t opl_linux_driver;
-- #endif
-- #if defined(HAVE_LIBI386) || defined(HAVE_LIBAMD64)
--@@ -40,7 +40,7 @@ extern opl_driver_t opl_sdl_driver;
-- 
-- static opl_driver_t *drivers[] =
-- {
---#ifdef HAVE_IOPERM
--+#if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM)
--     &opl_linux_driver,
-- #endif
-- #if defined(HAVE_LIBI386) || defined(HAVE_LIBAMD64)
--diff --git a/opl/opl_linux.c b/opl/opl_linux.c
--index 5df5d46..19e4c3e 100644
----- a/opl/opl_linux.c
--+++ b/opl/opl_linux.c
--@@ -17,7 +17,7 @@
-- 
-- #include "config.h"
-- 
---#ifdef HAVE_IOPERM
--+#if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM)
-- 
-- #include <stdio.h>
-- #include <string.h>
--@@ -99,5 +99,5 @@ opl_driver_t opl_linux_driver =
--     OPL_Timer_AdjustCallbacks,
-- };
-- 
---#endif /* #ifdef HAVE_IOPERM */
--+#endif /* #if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM) */
-- 
---- 
--2.1.4
--
-diff --git a/package/chocolate-doom/chocolate-doom.hash b/package/chocolate-doom/chocolate-doom.hash
-index bdf5698..6751c7d 100644
---- a/package/chocolate-doom/chocolate-doom.hash
-+++ b/package/chocolate-doom/chocolate-doom.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	ad11e2871667c6fa0658abf2dcba0cd9b26fbd651ee8df55adfdc18ad8fd674a	chocolate-doom-2.2.1.tar.gz
-+sha256	3e6d1a82ac5c8b025a9695ce1e47d0dc6ed142ebb1129b1e4a70e2740f79150c	chocolate-doom-2.3.0.tar.gz
-diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
-index dad7352..7283092 100644
---- a/package/chocolate-doom/chocolate-doom.mk
-+++ b/package/chocolate-doom/chocolate-doom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lttng-libust/0003-Validate-the-presence-of-dlmopen-at-configure-time.patch b/package/lttng-libust/0003-Validate-the-presence-of-dlmopen-at-configure-time.patch
+new file mode 100644
+index 0000000..699f1e0
+--- /dev/null
++++ b/package/lttng-libust/0003-Validate-the-presence-of-dlmopen-at-configure-time.patch
+@@ -0,0 +1,130 @@
++From 42330adcefcd1830dad89e2a960c93d8dd1da125 Mon Sep 17 00:00:00 2001
++From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
++Date: Tue, 21 Feb 2017 16:00:27 -0500
++Subject: [PATCH] Validate the presence of dlmopen at configure time
++
++Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
++Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
++Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++[Backport from upstream commit 42330adcefcd1830dad89e2a960c93d8dd1da125.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac                   | 8 ++++++++
++ liblttng-ust-dl/lttng-ust-dl.c | 8 ++++++++
++ liblttng-ust-dl/ust_dl.h       | 2 ++
++ 3 files changed, 18 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 450b43b..023cfd4 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -125,15 +125,23 @@ AS_IF([test "x${ax_cv_sys_weak_alias}" = "xno"], [
++ # Checks for libraries.
++ AC_CHECK_LIB([dl], [dlopen], [
++ 	have_libdl=yes
+++	libdl_name=dl
++ ], [
++ 	#libdl not found, check for dlopen in libc.
++ 	AC_CHECK_LIB([c], [dlopen], [
++ 		have_libc_dl=yes
+++		libdl_name=c
++ 	], [
++ 		AC_MSG_ERROR([Cannot find dlopen in libdl nor libc. Use [LDFLAGS]=-Ldir to specify their location.])
++ 	])
++ ])
++ 
+++# Check if libdl has dlmopen support.
+++AH_TEMPLATE([HAVE_DLMOPEN], ["Define to 1 if dlmopen is available."])
+++AC_CHECK_LIB([$libdl_name], [dlmopen],
+++	[AC_DEFINE([HAVE_DLMOPEN], [1])]
+++)
+++
++ AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBDL], [test "x$have_libdl" = "xyes"])
++ AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBC_DL], [test "x$have_libc_dl" = "xyes"])
++ 
++diff --git a/liblttng-ust-dl/lttng-ust-dl.c b/liblttng-ust-dl/lttng-ust-dl.c
++index b0737b6..ce2ae0e 100644
++--- a/liblttng-ust-dl/lttng-ust-dl.c
+++++ b/liblttng-ust-dl/lttng-ust-dl.c
++@@ -38,8 +38,10 @@
++ #include "ust_dl.h"
++ 
++ static void *(*__lttng_ust_plibc_dlopen)(const char *filename, int flags);
+++#ifdef HAVE_DLMOPEN
++ static void *(*__lttng_ust_plibc_dlmopen)(Lmid_t nsid, const char *filename,
++ 		int flags);
+++#endif
++ static int (*__lttng_ust_plibc_dlclose)(void *handle);
++ 
++ static
++@@ -55,6 +57,7 @@ void *_lttng_ust_dl_libc_dlopen(const char *filename, int flags)
++ 	return __lttng_ust_plibc_dlopen(filename, flags);
++ }
++ 
+++#ifdef HAVE_DLMOPEN
++ static
++ void *_lttng_ust_dl_libc_dlmopen(Lmid_t nsid, const char *filename,
++ 		int flags)
++@@ -68,6 +71,7 @@ void *_lttng_ust_dl_libc_dlmopen(Lmid_t nsid, const char *filename,
++ 	}
++ 	return __lttng_ust_plibc_dlmopen(nsid, filename, flags);
++ }
+++#endif
++ 
++ static
++ int _lttng_ust_dl_libc_dlclose(void *handle)
++@@ -143,6 +147,7 @@ end:
++ 	return;
++ }
++ 
+++#ifdef HAVE_DLMOPEN
++ static
++ void lttng_ust_dl_dlmopen(void *so_base, Lmid_t nsid, const char *so_name,
++ 		int flags, void *ip)
++@@ -203,6 +208,7 @@ end:
++ 	lttng_ust_elf_destroy(elf);
++ 	return;
++ }
+++#endif
++ 
++ void *dlopen(const char *filename, int flags)
++ {
++@@ -223,6 +229,7 @@ void *dlopen(const char *filename, int flags)
++ 	return handle;
++ }
++ 
+++#ifdef HAVE_DLMOPEN
++ void *dlmopen(Lmid_t nsid, const char *filename, int flags)
++ {
++ 	void *handle;
++@@ -243,6 +250,7 @@ void *dlmopen(Lmid_t nsid, const char *filename, int flags)
++ 	return handle;
++ 
++ }
+++#endif
++ 
++ int dlclose(void *handle)
++ {
++diff --git a/liblttng-ust-dl/ust_dl.h b/liblttng-ust-dl/ust_dl.h
++index b8cfe82..afa8e84 100644
++--- a/liblttng-ust-dl/ust_dl.h
+++++ b/liblttng-ust-dl/ust_dl.h
++@@ -51,6 +51,7 @@ TRACEPOINT_EVENT(lttng_ust_dl, dlopen,
++ 	)
++ )
++ 
+++#ifdef HAVE_DLMOPEN
++ TRACEPOINT_EVENT(lttng_ust_dl, dlmopen,
++ 	TP_ARGS(void *, ip, void *, baddr, Lmid_t, nsid,
++ 		const char *, path, int, flags,
++@@ -66,6 +67,7 @@ TRACEPOINT_EVENT(lttng_ust_dl, dlmopen,
++ 		ctf_integer(uint8_t, has_debug_link, has_debug_link)
++ 	)
++ )
+++#endif
++ 
++ TRACEPOINT_EVENT(lttng_ust_dl, build_id,
++ 	TP_ARGS(
++-- 
++2.7.4
++
+diff --git a/package/lttng-libust/0004-Fix-include-config.h-to-resolve-HAVE_DLMOPEN.patch b/package/lttng-libust/0004-Fix-include-config.h-to-resolve-HAVE_DLMOPEN.patch
+new file mode 100644
+index 0000000..734d3c4
+--- /dev/null
++++ b/package/lttng-libust/0004-Fix-include-config.h-to-resolve-HAVE_DLMOPEN.patch
+@@ -0,0 +1,30 @@
++From 0b2253f5c9af73904d49da32085036c16b9d2d75 Mon Sep 17 00:00:00 2001
++From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
++Date: Tue, 21 Feb 2017 18:10:11 -0500
++Subject: [PATCH] Fix: include config.h to resolve HAVE_DLMOPEN
++
++Fixes commit 42330adcefcd1830dad89e2a960c93d8dd1da125
++
++Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
++Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++[Backported from upstream commit 0b2253f5c9af73904d49da32085036c16b9d2d75.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ liblttng-ust-dl/ust_dl.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/liblttng-ust-dl/ust_dl.h b/liblttng-ust-dl/ust_dl.h
++index afa8e84..c8a0695 100644
++--- a/liblttng-ust-dl/ust_dl.h
+++++ b/liblttng-ust-dl/ust_dl.h
++@@ -33,6 +33,7 @@ extern "C" {
++ 
++ #include <stdint.h>
++ #include <unistd.h>
+++#include <config.h>
++ 
++ #define LTTNG_UST_DL_PROVIDER
++ #include <lttng/tracepoint.h>
++-- 
++2.7.4
++
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index 5667abb..f8c4c11 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -13,6 +13,7 @@ LTTNG_LIBUST_INSTALL_STAGING = YES
+ LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
+ LTTNG_LIBUST_CONF_OPTS += --disable-man-pages
+ # 0002-doc-examples-Makefile.am-define-C-and-C-compilers-fo.patch
++# 0003-Validate-the-presence-of-dlmopen-at-configure-time.patch
+ LTTNG_LIBUST_AUTORECONF = YES
  
--CHOCOLATE_DOOM_VERSION = 2.2.1
-+CHOCOLATE_DOOM_VERSION = 2.3.0
- CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
- CHOCOLATE_DOOM_LICENSE = GPLv2+
- CHOCOLATE_DOOM_LICENSE_FILES = COPYING
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
