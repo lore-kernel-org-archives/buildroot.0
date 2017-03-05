@@ -1,48 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Mar 2017 10:09:53 +0100
-Subject: [Buildroot] Analysis of build results for 2017-03-04
-In-Reply-To: <20170305094814.7fd9ae85@free-electrons.com>
-References: <20170305072847.53355206EF@mail.free-electrons.com>
- <20170305094814.7fd9ae85@free-electrons.com>
-Message-ID: <20170305090953.GA3671@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Mar 2017 10:43:08 +0100
+Subject: [Buildroot] Pre-built Buildroot toolchains updated
+Message-ID: <20170305104308.2650e30b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-03-05 09:48 +0100, Thomas Petazzoni spake thusly:
-> On Sun,  5 Mar 2017 08:28:47 +0100 (CET), Thomas Petazzoni wrote:
-> >       x86_64 |                    cmake-3.7.2 | NOK | http://autobuild.buildroot.net/results/f30228e1885e7292957528158d0fb74cb51e2330
-> 
-> Not sure:
-> 
-> [ 77%] Building CXX object Source/CMakeFiles/CPackLib.dir/CPack/IFW/cmCPackIFWInstaller.cxx.o
-> /home/test/autobuild/run/instance-1/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libcurl.so: undefined reference to `libssh2_scp_recv2'
-> /home/test/autobuild/run/instance-1/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libcurl.so: undefined reference to `libssh2_session_handshake'
-> 
-> Samuel, Yann, Vicente?
+I have deployed a new set of Buildroot toolchains, not all of them, but
+a few ones that needed to be rebuilt:
 
-Dang, cmake again... :-(  I'll be looking at it.
+     - br-arcle-hs38
+    
+       Rebuilt to benefit from the
+       895-arc-define-_REENTRANT-when-pthread-is-passed.patch patch, to have
+       _REENTRANT defined.
+    
+     - br-arm-cortex-a9-glibc
+    
+       Built with the new glibc 2.25
+    
+     - br-aarch64-glibc
+       br-mips32r6-el-hf-glibc
+       br-mips64r6-el-hf-glibc
+       br-nios2-glibc
+       br-powerpc64-power7-glibc
+       br-powerpc64le-power8-glibc
+       br-sparc64-glibc
+    
+       Rebuilt with glibc 2.24, the new default glibc version
 
-> > microblazeel |                 wayland-1.13.0 | NOK | http://autobuild.buildroot.net/results/291e0f1ea18004190ae5acd9bec147cacc3e4bda
-> 
-> Reported to Gustavo already: Wayland normally doesn't need C++, except
-> to build one of its tests.
+The new toolchain based on glibc 2.25 might cause some build issues, as
+it's the first toolchain that uses this glibc version.
 
-I have a patch here that I'm testing, that adds a --disable-tests
-configure option. It should be ready before the end of the day...
-
-Regards,
-Yann E. MORIN.
-
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
