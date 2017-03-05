@@ -1,83 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Mar 2017 14:20:25 +0100
-Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
-In-Reply-To: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170305132025.GD3671@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Mar 2017 14:21:02 +0100
+Subject: [Buildroot] [PATCH 2/2] package/wayland: don't build tests
+In-Reply-To: <59483ee76c501ec78cfbb2250c3fbcf02f6f7a85.1488711390.git.yann.morin.1998@free.fr>
+References: <cover.1488711390.git.yann.morin.1998@free.fr>
+ <59483ee76c501ec78cfbb2250c3fbcf02f6f7a85.1488711390.git.yann.morin.1998@free.fr>
+Message-ID: <20170305142102.0faed242@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-03-04 15:34 +0100, Thomas Petazzoni spake thusly:
-> The version of the khrplatform.h header bundled with odroid-mali has a
-> definition of the khronos_intptr_t and khronos_ssize_t that doesn't
-> match the official Khronos registry headers or the Mesa3D headers. Due
-> to this, it causes conflicts with some packages that redefines those
-> types (with the correct definitions), such as libepoxy.
+On Sun,  5 Mar 2017 11:56:51 +0100, Yann E. MORIN wrote:
+> wayland is entirely written in C, except for a single test that is
+> written in C++.
 > 
-> Issue reported upstream at: https://github.com/mdrjr/c2_mali/issues/1
-> 
-> Since nobody bothered fixing the issue even though it has been happening
-> since July 2016 (first build failure at
-> http://autobuild.buildroot.net/results/ed8d562ae5fdb472a83f9a07b2f755c80c972c34/),
-> let's mark this package as BROKEN.
+> Since we are not interested in running the tests on the target, add an
+> option to configure to disable tests altogether.
 > 
 > Fixes:
+>     http://autobuild.buildroot.org/results/291/291e0f1ea18004190ae5acd9bec147cacc3e4bda/
 > 
->   http://autobuild.buildroot.net/results/ca48bb6291ca16e410edb83b5cdeb24847b6eaee/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Upstream does not really exist: a single one-shot drop of binary blobs,
-with hsitory limited to no more than two months and 7 comits, all one
-year ago...
+I think this solves our (Buildroot) immediate problem, but is not the
+completely correct fix for upstream. Indeed, if Wayland is trying to
+build some C++ code, it should use AC_PROG_CXX and then only try to
+build the C++ code if it found a C++ compiler.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+But well, this --disable-tests thing is definitely good enough for us,
+so I'll apply this.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/odroid-mali/Config.in | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
-> index e5c07f2..5a6af75 100644
-> --- a/package/odroid-mali/Config.in
-> +++ b/package/odroid-mali/Config.in
-> @@ -5,6 +5,16 @@ config BR2_PACKAGE_ODROID_MALI
->  	select BR2_PACKAGE_ODROID_SCRIPTS # runtime
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
->  	depends on BR2_aarch64 || BR2_ARM_EABIHF
-> +	# The version of the khrplatform.h header bundled with
-> +	# odroid-mali has a definition of the khronos_intptr_t and
-> +	# khronos_ssize_t that doesn't match the official Khronos
-> +	# registry headers or the Mesa3D headers. Due to this, it
-> +	# causes conflicts with some packages that redefines those
-> +	# types (with the correct definitions), such as libepoxy.
-> +	#
-> +	# Issue reported upstream at:
-> +	# https://github.com/mdrjr/c2_mali/issues/1
-> +	depends on BROKEN
->  	help
->  	  Install the ARM Mali drivers for odroidc2 based systems.
->  
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
