@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 15:08:37 +0100
-Subject: [Buildroot] [PATCH 0/5] Runtime testing infrastructure
-In-Reply-To: <58b7791cc5bc9_1c3714b27dc91758@ultri3.mail>
-References: <1486467363-19881-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <58b7791cc5bc9_1c3714b27dc91758@ultri3.mail>
-Message-ID: <20170305150837.379f0e90@free-electrons.com>
+Date: Sun, 5 Mar 2017 15:09:46 +0100
+Subject: [Buildroot] [PATCH 1/5] support/testing: core testing
+ infrastructure
+In-Reply-To: <58b7796915aa8_1c373ff168005f0c91983@ultri3.mail>
+References: <1486467363-19881-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <58b7796915aa8_1c373ff168005f0c91983@ultri3.mail>
+Message-ID: <20170305150946.56cab1cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +14,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 01 Mar 2017 22:45:00 -0300, Ricardo Martincoski wrote:
+On Wed, 01 Mar 2017 22:46:17 -0300, Ricardo Martincoski wrote:
 
-> On Tue, Feb 07, 2017 at 09:35 AM, Thomas Petazzoni wrote:
+> Support for arch="i386" from test_iso9660 is missing here:
+>         else:
+>             qemu_arch = arch
+
+Re-added this. I guess it had been lost during one of the cleanup
+sessions. I've retested one of the iso9660 test cases, and it now
+passes correctly.
+
+> Maybe we can do for now as scanpypi does:
+> #!/usr/bin/python2
+
+Fixed.
+
+> > +import string  
 > 
-> > At last, here is a first version of a small runtime testing
-> > infrastructure for Buildroot. The first patch introduces the
-> > infrastructure itself, the other 4 patches just add a few patches.  
+> Not used.
+
+Ditto.
+
+> > +    if not os.path.exists(args.output):
+> > +        print "The selected output directory does not exist"
+> > +        return 1
+> > +
+> > +    BRTest.outputdir = args.output  
 > 
-> Thank you very much for this series.
+> Maybe changing this line to:
+>     BRTest.outputdir = os.path.abspath(args.output)
+> would fix the use of relative path with some testcases.
 
-And thanks a lot to you for taking the time to test and review it! I'll
-reply to all your comments in the individual patches.
+Indeed, this fixes the problem you mentioned.
 
-Thanks!
+All of this will be in v2. Thanks!
 
 Thomas
 -- 
