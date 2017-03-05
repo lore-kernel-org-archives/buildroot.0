@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Mar 2017 00:35:54 +0100
-Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
-In-Reply-To: <20170305234052.2515068d@free-electrons.com>
-References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170305213723.021d4678@free-electrons.com>
- <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
- <20170305234052.2515068d@free-electrons.com>
-Message-ID: <746ac932-fe6d-bbe0-0b87-b17fc76810af@mind.be>
+Date: Mon, 6 Mar 2017 00:37:38 +0100
+Subject: [Buildroot] [PATCH 2/2] package/cwiid: add optional dependency
+ to bluez5_utils
+In-Reply-To: <20170301222352.1f97ef44@free-electrons.com>
+References: <20170219131834.27844-1-bernd.kuhls@t-online.de>
+ <20170219131834.27844-2-bernd.kuhls@t-online.de>
+ <20170301222352.1f97ef44@free-electrons.com>
+Message-ID: <c592221b-1de8-f298-2628-c346f443c9a2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,37 @@ To: buildroot@busybox.net
 
 
 
-On 05-03-17 23:40, Thomas Petazzoni wrote:
+On 01-03-17 22:23, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Sun, 5 Mar 2017 23:33:56 +0100, Arnout Vandecappelle wrote:
-> 
->>  I'm obviously late with commenting on this, but I think marking things as
->> BROKEN is wrong. It bypasses the legacy mechanism so it disappears without
->> notice. Also, BROKEN packages languish there for years without ever anyone
->> taking a look. Sometimes things do get repaired, but re-adding the package is
->> not much more complicated than
+> On Sun, 19 Feb 2017 14:18:34 +0100, Bernd Kuhls wrote:
+>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>> ---
+>>  package/cwiid/Config.in | 2 +-
+>>  package/cwiid/cwiid.mk  | 8 +++++++-
+>>  2 files changed, 8 insertions(+), 2 deletions(-)
 >>
->>  So, I propose to remove all broken packages.
->>
->>  [I have the feeling we discussed this kind of thing at some BR devel meeting at
->> some point, but I can't find it.]
+>> diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
+>> index 03b7dbbcd..69e54f5b7 100644
+>> --- a/package/cwiid/Config.in
+>> +++ b/package/cwiid/Config.in
+>> @@ -4,7 +4,7 @@ config BR2_PACKAGE_CWIID
+>>  	depends on BR2_USE_WCHAR # bluez_utils -> libglib2
+>>  	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> dbus, alsa-lib, libglib2
+>>  	depends on BR2_USE_MMU # bluez_utils -> dbus, libglib2
+>> -	select BR2_PACKAGE_BLUEZ_UTILS
+>> +	select BR2_PACKAGE_BLUEZ_UTILS if !BR2_PACKAGE_BLUEZ5_UTILS
 > 
-> True. But for this one case, the developer contributing the package is
-> still active, submitting patches for other things from time to time. So
-> I was hoping that a stronger hint at "please fix your packages
-> otherwise they'll get removed" was in order.
-
- I think an outright removal (with the original contributors in Cc) is an
-equally strong incentive.
-
+> This causes a circular dependency:
 > 
-> Let's say that we'll remove this package before the 2017.05 release if
-> nobody unbreaks it?
+> package/bluez_utils/Config.in:1:error: recursive dependency detected!
+> package/bluez_utils/Config.in:1:	symbol BR2_PACKAGE_BLUEZ_UTILS is selected by BR2_PACKAGE_BLUEZ5_UTILS
+> package/bluez5_utils/Config.in:1:	symbol BR2_PACKAGE_BLUEZ5_UTILS depends on BR2_PACKAGE_BLUEZ_UTILS
 
- And what with the 6 other packages (or package options) marked as broken? Can
-we kill it?
+ I think it's just a matter of swapping them:
+
+select BR2_PACKAGE_BLUEZ5_UTILS if !BR2_PACKAGE_BLUEZ_UTILS
+
 
  Regards,
  Arnout
