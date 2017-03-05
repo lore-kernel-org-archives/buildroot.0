@@ -1,34 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Mar 2017 16:19:11 +0100
-Subject: [Buildroot] [PATCH] cryptsetup: install to staging
-Message-ID: <1488727151-7633-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 05 Mar 2017 15:22:25 +0000
+Subject: [Buildroot] [Bug 9711] Recent libCEC version bump seems to break
+	kodi package
+In-Reply-To: <bug-9711-163@https.bugs.busybox.net/>
+References: <bug-9711-163@https.bugs.busybox.net/>
+Message-ID: <bug-9711-163-Brmk81AgvT@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cryptsetup installs a library and a header file, so it makes sense to
-install it to staging.
+https://bugs.busybox.net/show_bug.cgi?id=9711
 
-Fixes bug #9691.
+--- Comment #2 from RiZom-91 <rizom91@openaliasbox.org> ---
+Hum... There is something I'm missing with buildroot... Here is what I did.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cryptsetup/cryptsetup.mk | 1 +
- 1 file changed, 1 insertion(+)
+1) clone the GitHub repo
+2) did some minor changes and commit each change to my local repo
+3) add kodi, kodi-cec packages, commit
+4) make -> error with libCEC
+5) revert libCEC version bump
+6) make -> ok
+7) did some changes in the devices_table_dev.txt
+8) rm -Rf the output folder
+9) make -> error with libCEC
+10) revert the revert commit to get back to the original configuration (and get
+the error message by the way)
+11) make -> OK now
 
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 50bf5f2..6081009 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -12,6 +12,7 @@ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
-+CRYPTSETUP_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
+Could someone explain to me what I did wrong please ? Maybe the 'rm -Rf" part ?
+
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
