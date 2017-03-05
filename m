@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 12:11:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: bump version to
- 5.44
-In-Reply-To: <20170305094928.21040-1-bernd.kuhls@t-online.de>
-References: <20170305094928.21040-1-bernd.kuhls@t-online.de>
-Message-ID: <20170305121152.09c0d3bc@free-electrons.com>
+Date: Sun, 5 Mar 2017 12:12:28 +0100
+Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2017a
+In-Reply-To: <1488672624-21405-1-git-send-email-martin@barkynet.com>
+References: <1488672624-21405-1-git-send-email-martin@barkynet.com>
+Message-ID: <20170305121228.47544208@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  5 Mar 2017 10:49:28 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Sun,  5 Mar 2017 00:10:23 +0000, Martin Bark wrote:
+> Signed-off-by: Martin Bark <martin@barkynet.com>
 > ---
->  package/bluez5_utils/bluez5_utils.hash | 2 +-
->  package/bluez5_utils/bluez5_utils.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/zic/zic.hash | 4 ++--
+>  package/zic/zic.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks.
 
 Thomas
 -- 
