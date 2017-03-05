@@ -1,58 +1,137 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 21:36:58 +0100
-Subject: [Buildroot] [git commit] odroid-mali: mark package as BROKEN
-Message-ID: <20170305203732.C44747FFB4@busybox.osuosl.org>
+Date: Sun, 5 Mar 2017 21:38:45 +0100
+Subject: [Buildroot] [git commit] python-pylibftdi: new package
+Message-ID: <20170305203851.CEC7E81D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2ac546c1951ba8a3e88965d3023eb38a9493f28
+commit: https://git.buildroot.net/buildroot/commit/?id=5b7a53ab8cbe6949f8878aff8b25e5ef589b9eff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The version of the khrplatform.h header bundled with odroid-mali has a
-definition of the khronos_intptr_t and khronos_ssize_t that doesn't
-match the official Khronos registry headers or the Mesa3D headers. Due
-to this, it causes conflicts with some packages that redefines those
-types (with the correct definitions), such as libepoxy.
+Adds the python binding for libftdi to buildroot.
 
-Issue reported upstream at: https://github.com/mdrjr/c2_mali/issues/1
-
-Since nobody bothered fixing the issue even though it has been happening
-since July 2016 (first build failure at
-http://autobuild.buildroot.net/results/ed8d562ae5fdb472a83f9a07b2f755c80c972c34/),
-let's mark this package as BROKEN.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ca48bb6291ca16e410edb83b5cdeb24847b6eaee/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/odroid-mali/Config.in | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ DEVELOPERS                                         |  3 +++
+ package/Config.in                                  |  1 +
+ .../0001-do-not-use-find-library.patch             | 31 ++++++++++++++++++++++
+ package/python-pylibftdi/Config.in                 | 11 ++++++++
+ package/python-pylibftdi/python-libftdi.hash       |  3 +++
+ package/python-pylibftdi/python-libftdi.mk         | 15 +++++++++++
+ 6 files changed, 64 insertions(+)
 
-diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
-index e5c07f2..5a6af75 100644
---- a/package/odroid-mali/Config.in
-+++ b/package/odroid-mali/Config.in
-@@ -5,6 +5,16 @@ config BR2_PACKAGE_ODROID_MALI
- 	select BR2_PACKAGE_ODROID_SCRIPTS # runtime
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_aarch64 || BR2_ARM_EABIHF
-+	# The version of the khrplatform.h header bundled with
-+	# odroid-mali has a definition of the khronos_intptr_t and
-+	# khronos_ssize_t that doesn't match the official Khronos
-+	# registry headers or the Mesa3D headers. Due to this, it
-+	# causes conflicts with some packages that redefines those
-+	# types (with the correct definitions), such as libepoxy.
-+	#
-+	# Issue reported upstream at:
-+	# https://github.com/mdrjr/c2_mali/issues/1
-+	depends on BROKEN
- 	help
- 	  Install the ARM Mali drivers for odroidc2 based systems.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index de76a58..16f05fb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -306,6 +306,9 @@ F:	package/micropython/
+ F:	package/micropython-lib/
+ F:	package/syslog-ng/
  
++N:	Christian Kellermann <christian.kellermann@solectrix.de>
++F:	package/python-pylibftdi/
++
+ N:	Christian Stewart <christian@paral.in>
+ F:	linux/linux-ext-aufs.mk
+ F:	package/aufs/
+diff --git a/package/Config.in b/package/Config.in
+index ff79fdf..e1f0823 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -768,6 +768,7 @@ menu "External python modules"
+ 	source "package/python-pygments/Config.in"
+ 	source "package/python-pyicu/Config.in"
+ 	source "package/python-pyinotify/Config.in"
++	source "package/python-pylibftdi/Config.in"
+ 	source "package/python-pylru/Config.in"
+ 	source "package/python-pymysql/Config.in"
+ 	source "package/python-pynacl/Config.in"
+diff --git a/package/python-pylibftdi/0001-do-not-use-find-library.patch b/package/python-pylibftdi/0001-do-not-use-find-library.patch
+new file mode 100644
+index 0000000..ae8fe2d
+--- /dev/null
++++ b/package/python-pylibftdi/0001-do-not-use-find-library.patch
+@@ -0,0 +1,31 @@
++Hard code library loading
++
++Shortcut the search for the libraries in case the built in
++find_library is broken.
++
++As buildroot does not ship any of the external programs that the core
++procedure use to find libraries use the canonical name of the shared
++object and load it.
++
++In this case this affects loading libftdi and libusb.
++
++This should be reliable as we specify said libs as dependencies of
++this package.
++
++Signed-off-by: Christian Kellermann <christian.kellermann@solectrix.de>
++
++---
++diff -purN pylibftdi-0.15.0.orig/pylibftdi/driver.py pylibftdi-0.15.0/pylibftdi/driver.py
++--- pylibftdi-0.15.0.orig/pylibftdi/driver.py	2015-04-26 22:41:39.000000000 +0200
+++++ pylibftdi-0.15.0/pylibftdi/driver.py	2017-02-27 13:08:56.502958000 +0100
++@@ -121,8 +121,8 @@ class Driver(object):
++                     lib = getattr(cdll, lib_path)
++                     break
++         if lib is None:
++-            raise LibraryMissingError('{} library not found (search: {})'.format(
++-                name, search_list))
+++		return cdll.LoadLibrary(name + '.so')
+++
++         return lib
++ 
++     @property
+diff --git a/package/python-pylibftdi/Config.in b/package/python-pylibftdi/Config.in
+new file mode 100644
+index 0000000..f829071
+--- /dev/null
++++ b/package/python-pylibftdi/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_PYLIBFTDI
++	bool "python-pylibftdi"
++	select BR2_PACKAGE_LIBFTDI
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	help
++	  This package contains the python language binding libftdi.
++
++	  https://pypi.python.org/pypi/pylibftdi
++
++comment "python-pylibftdi needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/python-pylibftdi/python-libftdi.hash b/package/python-pylibftdi/python-libftdi.hash
+new file mode 100644
+index 0000000..54b33a1
+--- /dev/null
++++ b/package/python-pylibftdi/python-libftdi.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/pylibftdi/json, sha256 locally computed
++md5  eaee7fb3a67f33a35a164a9628daaafe pylibftdi-0.15.0.tar.gz
++sha256  51ef08ebcc4ec3eaec2366e9648d3f8fa1b737ea507a7f3a374ac58abf148e77 pylibftdi-0.15.0.tar.gz
+diff --git a/package/python-pylibftdi/python-libftdi.mk b/package/python-pylibftdi/python-libftdi.mk
+new file mode 100644
+index 0000000..b375abb
+--- /dev/null
++++ b/package/python-pylibftdi/python-libftdi.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-libftdi
++#
++################################################################################
++
++PYTHON_PYLIBFTDI_VERSION = 0.15.0
++PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
++PYTHON_PYLIBFTDI_SITE = https://pypi.python.org/packages/e5/bb/d7a86dbd7685e3866ea75d21c6c726d01706fdc0aa5dc9051ce18ae65693
++PYTHON_PYLIBFTDI_LICENSE = MIT
++PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
++PYTHON_PYLIBFTDI_DEPENDENCIES = libftdi
++PYTHON_PYLIBFTDI_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
