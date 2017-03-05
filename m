@@ -1,68 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Mar 2017 23:37:27 +0100
-Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
-In-Reply-To: <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
-References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170305213723.021d4678@free-electrons.com>
- <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
-Message-ID: <20170305223726.GM3671@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Mar 2017 23:38:59 +0100
+Subject: [Buildroot] [PATCH 1/1] board: add support for Banana Pro
+In-Reply-To: <20170113185424.7031-1-joerg.krause@embedded.rocks>
+References: <20170113185424.7031-1-joerg.krause@embedded.rocks>
+Message-ID: <20170305233859.0885f887@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello,
 
-On 2017-03-05 23:33 +0100, Arnout Vandecappelle spake thusly:
-> On 05-03-17 21:37, Thomas Petazzoni wrote:
-> > On Sat,  4 Mar 2017 15:34:19 +0100, Thomas Petazzoni wrote:
-> >> The version of the khrplatform.h header bundled with odroid-mali has a
-> >> definition of the khronos_intptr_t and khronos_ssize_t that doesn't
-> >> match the official Khronos registry headers or the Mesa3D headers. Due
-> >> to this, it causes conflicts with some packages that redefines those
-> >> types (with the correct definitions), such as libepoxy.
-> >>
-> >> Issue reported upstream at: https://github.com/mdrjr/c2_mali/issues/1
-> >>
-> >> Since nobody bothered fixing the issue even though it has been happening
-> >> since July 2016 (first build failure at
-> >> http://autobuild.buildroot.net/results/ed8d562ae5fdb472a83f9a07b2f755c80c972c34/),
-> >> let's mark this package as BROKEN.
-> >>
-> >> Fixes:
-> >>
-> >>   http://autobuild.buildroot.net/results/ca48bb6291ca16e410edb83b5cdeb24847b6eaee/
-> >>
-> >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >> ---
-> >>  package/odroid-mali/Config.in | 10 ++++++++++
-> >>  1 file changed, 10 insertions(+)
-> > 
-> > Applied to master, thanks.
-> 
->  I'm obviously late with commenting on this, but I think marking things as
-> BROKEN is wrong. It bypasses the legacy mechanism so it disappears without
-> notice. Also, BROKEN packages languish there for years without ever anyone
-> taking a look. Sometimes things do get repaired, but re-adding the package is
-> not much more complicated than
-> 
->  So, I propose to remove all broken packages.
+On Fri, 13 Jan 2017 19:54:24 +0100, J?rg Krause wrote:
+> The board support package includes the following components:
+>  - U-Boot 2016.11
+>  - Linux 4.9.3
+>  - packages:
+>    - resize2fs to expand the minimal rootfs
 
-Agreed.
+We're not doing this in other defconfigs, so I've removed this. Note
+that the ext2 options allow you to request the filesystem to be larger
+than the amount of files to store in it (but we also don't use that in
+our defconfigs).
 
->  [I have the feeling we discussed this kind of thing at some BR devel meeting at
-> some point, but I can't find it.]
+>  board/lemaker/bananapro/boot.cmd                   |  5 ++
+>  board/lemaker/bananapro/genimage.cfg               | 37 ++++++++++
+>  board/lemaker/bananapro/linux-wifi.fragment        | 23 ++++++
+>  ...ts-sun7i-Enable-audio-codec-on-Banana-Pro.patch | 35 +++++++++
+>  ...-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch | 85 ++++++++++++++++++++++
+>  board/lemaker/bananapro/post-build.sh              | 12 +++
+>  board/lemaker/bananapro/post-image.sh              | 16 ++++
+>  board/lemaker/bananapro/readme.txt                 | 71 ++++++++++++++++++
+>  .../lib/firmware/brcm/brcmfmac43362-sdio.txt       | 56 ++++++++++++++
+>  configs/bananapro_defconfig                        | 80 ++++++++++++++++++++
+>  10 files changed, 420 insertions(+)
 
-Yes we did. And IIRC we agreed to get rid of BROKEN altogether.
+You forgot to add yourself in the DEVELOPERS file, so I've added that.
 
-Regards,
-Yann E. MORIN.
+>  create mode 100644 board/lemaker/bananapro/patches/linux/0001-ARM-dts-sun7i-Enable-audio-codec-on-Banana-Pro.patch
+>  create mode 100644 board/lemaker/bananapro/patches/linux/0002-ARM-dts-sun7i-Add-wifi-dt-node-on-Banana-Pro.patch
 
+Don't forget to send a follow-up patch when those are merged upstream,
+and available in a stable kernel release :)
+
+
+> +Resizing the roof filesystem
+> +============================
+> +
+> +By default Buildroot creates a minimal root file system with very
+> +little free space. You can expand the filesystem using the resize2fs
+> +tool on the target:
+> +
+> +  # resize2fs /dev/mmcblk0p2
+
+I've dropped this paragraph.
+
+> +# Toolchain
+> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+I didn't see why C++ was needed, so I dropped it. wchar is indeed
+needed for alsa.
+
+> +# For expanding the root filesystem
+> +BR2_PACKAGE_E2FSPROGS=y
+> +BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
+
+And I've dropped this.
+
+Applied with those fixes. Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
