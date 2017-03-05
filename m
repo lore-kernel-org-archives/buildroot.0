@@ -1,10 +1,10 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Sun,  5 Mar 2017 16:06:10 +0000
-Subject: [Buildroot] [PATCH 2/8] configs/raspberrypi0_defconfig: bump kernel
-	version to 4.9.13
+Date: Sun,  5 Mar 2017 16:06:15 +0000
+Subject: [Buildroot] [PATCH 7/8] configs/raspberrypi0_defconfig: add
+	raspberry pi zero w support
 In-Reply-To: <1488729976-7116-1-git-send-email-martin@barkynet.com>
 References: <1488729976-7116-1-git-send-email-martin@barkynet.com>
-Message-ID: <1488729976-7116-2-git-send-email-martin@barkynet.com>
+Message-ID: <1488729976-7116-7-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- configs/raspberrypi0_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ board/raspberrypi/genimage-raspberrypi0.cfg | 1 +
+ configs/raspberrypi0_defconfig              | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/board/raspberrypi/genimage-raspberrypi0.cfg b/board/raspberrypi/genimage-raspberrypi0.cfg
+index a9d4c45..212c306 100644
+--- a/board/raspberrypi/genimage-raspberrypi0.cfg
++++ b/board/raspberrypi/genimage-raspberrypi0.cfg
+@@ -2,6 +2,7 @@ image boot.vfat {
+   vfat {
+     files = {
+       "bcm2708-rpi-b-plus.dtb",
++      "bcm2708-rpi-0-w.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+       "rpi-firmware/config.txt",
 diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index 736143f..d93484f 100644
+index d93484f..75b189a 100644
 --- a/configs/raspberrypi0_defconfig
 +++ b/configs/raspberrypi0_defconfig
-@@ -2,15 +2,15 @@ BR2_arm=y
- BR2_arm1176jzf_s=y
- BR2_ARM_EABIHF=y
- 
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1ebe8d4a4c96cd6a90805c74233a468854960f67"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="935c7ce84c982a26f567a03a58a1537424569938"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
+@@ -16,7 +16,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
  # Build the DTBs for A/B from the kernel sources: the zero is the same
+ # as the A+ model, just in a different form-factor
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b-plus"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b-plus bcm2708-rpi-0-w"
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+ # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
 -- 
 2.7.4
