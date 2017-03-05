@@ -1,113 +1,76 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 5 Mar 2017 02:05:28 +0100
-Subject: [Buildroot] [PATCH] uclibc: add patch to sync sys/timex.h
-Message-ID: <20170305010528.GA5983@waldemar-brodkorb.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 5 Mar 2017 08:27:26 +0100
+Subject: [Buildroot] [PATCH 1/5] support/testing: core testing
+	infrastructure
+In-Reply-To: <dfb7a87b-6580-384d-81fb-e79f97e6b897@lucaceresoli.net>
+References: <1486467363-19881-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1486467363-19881-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAXf6LXnRWvi3i0B2q1r_gRjgTkyNjXhdSasMLyYiFrr3=RTWg@mail.gmail.com>
+ <20170208110556.6a3ed63a@free-electrons.com>
+ <CAAXf6LWp4w+1J5MqYp6uOXWvXG3s0+V1qRt0p8jFM4pTv-qatg@mail.gmail.com>
+ <dfb7a87b-6580-384d-81fb-e79f97e6b897@lucaceresoli.net>
+Message-ID: <CAAXf6LVidRgf9gXTFzVWTbRieyikhztYkgLbW1q1_TdbaqBMRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes a qemu-user compile error.
+On Mar 4, 2017 19:12, "Luca Ceresoli" <luca@lucaceresoli.net> wrote:
 
-Reported-by: Fran?ois Perrad <francois.perrad@gadz.org>
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- .../0004-sync-header-with-GNU-libc-kernel.patch    | 85 ++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 package/uclibc/0004-sync-header-with-GNU-libc-kernel.patch
+Hi,
 
-diff --git a/package/uclibc/0004-sync-header-with-GNU-libc-kernel.patch b/package/uclibc/0004-sync-header-with-GNU-libc-kernel.patch
-new file mode 100644
-index 0000000..41a35f6
---- /dev/null
-+++ b/package/uclibc/0004-sync-header-with-GNU-libc-kernel.patch
-@@ -0,0 +1,85 @@
-+From bf2fd9c0c451a83aa729394255394744fc81d8a3 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sun, 5 Mar 2017 01:58:17 +0100
-+Subject: [PATCH] sync header with GNU libc / kernel
-+
-+The header is not in sync with GNU libc and Linux kernel and
-+therefore produces compile errors with qemu-user (2.8.0).
-+
-+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ include/sys/timex.h | 17 ++++++++++++-----
-+ 1 file changed, 12 insertions(+), 5 deletions(-)
-+
-+diff --git a/include/sys/timex.h b/include/sys/timex.h
-+index 4cb81d2..76fefa7 100644
-+--- a/include/sys/timex.h
-++++ b/include/sys/timex.h
-+@@ -1,5 +1,4 @@
-+-/* Copyright (C) 1995, 1996, 1997, 1999 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-++/* Copyright (C) 1995-2017 Free Software Foundation, Inc.
-+ 
-+    The GNU C Library is free software; you can redistribute it and/or
-+    modify it under the terms of the GNU Lesser General Public
-+@@ -22,13 +21,14 @@
-+ #include <sys/time.h>
-+ #include <time.h>
-+ 
-+-/* These definitions from linux/timex.h as of 2.2.0.  */
-++/* These definitions from linux/timex.h as of 3.18.  */
-+ 
-+ struct ntptimeval
-+ {
-+   struct timeval time;	/* current time (ro) */
-+   long int maxerror;	/* maximum error (us) (ro) */
-+   long int esterror;	/* estimated error (us) (ro) */
-++  long int tai;		/* TAI offset (ro) */
-+ };
-+ 
-+ struct timex
-+@@ -44,7 +44,6 @@ struct timex
-+   long int tolerance;	/* clock frequency tolerance (ppm) (read only) */
-+   struct timeval time;	/* (read only) */
-+   long int tick;	/* (modified) usecs between clock ticks */
-+-
-+   long int ppsfreq;	/* pps frequency (scaled ppm) (ro) */
-+   long int jitter;	/* pps jitter (us) (ro) */
-+   int shift;		/* interval duration (s) (shift) (ro) */
-+@@ -54,6 +53,8 @@ struct timex
-+   long int errcnt;	/* calibration errors (ro) */
-+   long int stbcnt;	/* stability limit exceeded (ro) */
-+ 
-++  int tai;		/* TAI offset (ro) */
-++
-+   /* ??? */
-+   int  :32; int  :32; int  :32; int  :32;
-+   int  :32; int  :32; int  :32; int  :32;
-+@@ -83,6 +84,9 @@ struct timex
-+ #define MOD_TIMECONST	ADJ_TIMECONST
-+ #define MOD_CLKB	ADJ_TICK
-+ #define MOD_CLKA	ADJ_OFFSET_SINGLESHOT /* 0x8000 in original */
-++#define MOD_TAI		ADJ_TAI
-++#define MOD_MICRO	ADJ_MICRO
-++#define MOD_NANO	ADJ_NANO
-+ 
-+ 
-+ /* Status codes (timex.status) */
-+@@ -102,9 +106,12 @@ struct timex
-+ #define STA_PPSERROR	0x0800	/* PPS signal calibration error (ro) */
-+ 
-+ #define STA_CLOCKERR	0x1000	/* clock hardware fault (ro) */
-++#define STA_NANO	0x2000	/* resolution (0 = us, 1 = ns) (ro) */
-++#define STA_MODE	0x4000	/* mode (0 = PLL, 1 = FLL) (ro) */
-++#define STA_CLK		0x8000	/* clock source (0 = A, 1 = B) (ro) */
-+ 
-+ #define STA_RONLY (STA_PPSSIGNAL | STA_PPSJITTER | STA_PPSWANDER | \
-+-    STA_PPSERROR | STA_CLOCKERR) /* read-only bits */
-++    STA_PPSERROR | STA_CLOCKERR | STA_NANO | STA_MODE | STA_CLK)
-+ 
-+ /* Clock states (time_state) */
-+ #define TIME_OK		0	/* clock synchronized, no leap second */
-+-- 
-+2.1.4
-+
--- 
-2.1.4
+On 08/02/2017 12:42, Thomas De Schampheleire wrote:
+> On Wed, Feb 8, 2017 at 11:05 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Wed, 8 Feb 2017 10:50:13 +0100, Thomas De Schampheleire wrote:
+>>
+>>> Is there a particular reason why you use unittest and nose2, rather
+>>> than the popular pytest ?
+>>
+>> First because I'm not a Pythonist, so I have no idea what is "popular"
+>> in the Python world.
+>>
+>> What lead me to use nose2 is because it is capable of executing tests
+>> in parallel. In practice, this currently doesn't work due to how the
+>> Qemu emulation is started (I use a fixed TCP port for the telnet
+>> connection used for the serial port), but if we fix that, tests can be
+>> executed in parallel, this is something I had tested when choosing
+>> nose2.
+>>
+>> Apparently, pytest can also run tests in parallel, according to
+>> http://pytest.org/dev/xdist.html.
+>>
+>> I honestly don't care which Python testing infrastructure is used, as
+>> long as there is one. If you think pytest is better (and indeed its
+>> website seems to be nicely documented and it seems to offer lots of
+>> features), then patches are welcome :-)
+>>
+>
+> We have switched from nose (1) to pytest in Kallithea a while ago.
+> We are not using xdist at the moment though, because our setup code is
+> not ready for it.
+>
+> To switch to pytest now shouldn't be complex, it can off-the-shelve
+> continue to support unittest-style tests. However, pytest 'fixtures'
+> are the alternative to such setup/teardown methods and are more
+> powerful. But you don't _have_ to use them.
+>
+> Anyway, I agree that it is not crucial at all, and the actual impact
+> of nose on the code is currently minimal, so switching can be done at
+> a later time.
+
+I'm no pythonist at all, so I don't know any of the mentioned
+infrastructures. But one thing I dislike in the current implementation
+is the unpleasant way failures are reported.
+
+ThomasDS, MaximeH, Do you think another infrastructure allows better
+reporting? Or that nose2 allows it with small changes?
+
+
+Could you give some example of the output you get now?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170305/f0cd0c07/attachment.html>
