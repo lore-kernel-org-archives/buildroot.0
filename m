@@ -1,39 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Mar 2017 10:49:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: bump version to 5.44
-Message-ID: <20170305094928.21040-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  5 Mar 2017 11:56:48 +0100
+Subject: [Buildroot] [PATCH 0/2] package/wayland: disable building tests
+Message-ID: <cover.1488711390.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/bluez5_utils/bluez5_utils.hash | 2 +-
- package/bluez5_utils/bluez5_utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello All!
 
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index b030f1a08..75fb5d555 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256 16c9c05d2a1da644ce3570d975ada3643d2e60c007a955bac09c0a0efeb58d15  bluez-5.43.tar.xz
-+sha256 0c321e291f8b45e6a78e379dfe80592b65955a0f0ab191f1cca0edd8ec356c85  bluez-5.44.tar.xz
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 66c3eab1e..4d31a187b 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BLUEZ5_UTILS_VERSION = 5.43
-+BLUEZ5_UTILS_VERSION = 5.44
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+Building tests require a C++ compiler, while the rest of wayland is
+entirely written in C.
+
+This series adds an option to configure to disable building tests.
+It also gets rid of an option that was removed back in 2015.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 1558a93484b8f95153d64f90a688707f5aeb747f
+
+  DEVELOPERS: remove cosmo package (2017-03-04 15:35:01 +0100)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 59483ee76c501ec78cfbb2250c3fbcf02f6f7a85
+
+  package/wayland: don't build tests (2017-03-05 11:56:08 +0100)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/wayland: drop non-existing configure option
+      package/wayland: don't build tests
+
+ ...002-configure-add-option-to-disable-tests.patch | 68 ++++++++++++++++++++++
+ package/wayland/wayland.mk                         |  6 +-
+ 2 files changed, 73 insertions(+), 1 deletion(-)
+ create mode 100644 package/wayland/0002-configure-add-option-to-disable-tests.patch
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
