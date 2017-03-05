@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 21:37:17 +0100
-Subject: [Buildroot] [PATCH] sngrep: use pkg-config to discover OpenSSL
- to fix static linking
-In-Reply-To: <1488636958-5291-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1488636958-5291-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170305213717.2ae92fcc@free-electrons.com>
+Date: Sun, 5 Mar 2017 21:37:23 +0100
+Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
+In-Reply-To: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170305213723.021d4678@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  4 Mar 2017 15:15:58 +0100, Thomas Petazzoni wrote:
-> Building sngrep with OpenSSL support in static linking configurations
-> currently fails due to undefined symbols in the OpenSSL library. It's
-> the usual problem with using AC_CHECK_LIB() to discover libraries
-> instead of the pkg-config based PKG_CHECK_MODULES().
+On Sat,  4 Mar 2017 15:34:19 +0100, Thomas Petazzoni wrote:
+> The version of the khrplatform.h header bundled with odroid-mali has a
+> definition of the khronos_intptr_t and khronos_ssize_t that doesn't
+> match the official Khronos registry headers or the Mesa3D headers. Due
+> to this, it causes conflicts with some packages that redefines those
+> types (with the correct definitions), such as libepoxy.
 > 
-> Therefore, this commit introduces a patch that switches to using
-> pkg-config to discover OpenSSL. A preliminary patch is needed, without
-> which appending to LIBS/CFLAGS doesn't work. Both patches have been
-> submitted upstream.
+> Issue reported upstream at: https://github.com/mdrjr/c2_mali/issues/1
+> 
+> Since nobody bothered fixing the issue even though it has been happening
+> since July 2016 (first build failure at
+> http://autobuild.buildroot.net/results/ed8d562ae5fdb472a83f9a07b2f755c80c972c34/),
+> let's mark this package as BROKEN.
 > 
 > Fixes:
 > 
->   http://autobuild.buildroot.net/results/911143de823b2c749ac0a59dfa06adb6ddd3de50/
+>   http://autobuild.buildroot.net/results/ca48bb6291ca16e410edb83b5cdeb24847b6eaee/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  .../0001-src-Makefile.am-don-t-use-VPATH.patch     | 43 +++++++++++++
->  ...e.ac-switch-to-pkg-config-to-find-openssl.patch | 75 ++++++++++++++++++++++
->  package/sngrep/sngrep.mk                           |  2 +-
->  3 files changed, 119 insertions(+), 1 deletion(-)
->  create mode 100644 package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch
->  create mode 100644 package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch
+>  package/odroid-mali/Config.in | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
 Applied to master, thanks.
 
