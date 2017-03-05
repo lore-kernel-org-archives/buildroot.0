@@ -1,51 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Mar 2017 00:37:38 +0100
-Subject: [Buildroot] [PATCH 2/2] package/cwiid: add optional dependency
- to bluez5_utils
-In-Reply-To: <20170301222352.1f97ef44@free-electrons.com>
-References: <20170219131834.27844-1-bernd.kuhls@t-online.de>
- <20170219131834.27844-2-bernd.kuhls@t-online.de>
- <20170301222352.1f97ef44@free-electrons.com>
-Message-ID: <c592221b-1de8-f298-2628-c346f443c9a2@mind.be>
+Date: Mon, 6 Mar 2017 00:52:46 +0100
+Subject: [Buildroot] How to organize build into multiple target
+ filesystems?
+In-Reply-To: <CABKRrCWcWO3MNBnFK9fAoaYoGQBNn2eN=ZvZYovHvV1jwYQbSw@mail.gmail.com>
+References: <CABKRrCWcWO3MNBnFK9fAoaYoGQBNn2eN=ZvZYovHvV1jwYQbSw@mail.gmail.com>
+Message-ID: <fa8d21ca-56d4-9561-bc25-333c238abfb5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Dave,
 
+ A bit late to answer this, but perhaps still relevant.
 
-On 01-03-17 22:23, Thomas Petazzoni wrote:
-> Hello,
+On 21-02-17 20:08, David Wuertele wrote:
+> I would like my target to have a small initramfs, and a large-ish /usr
+> filesystem mounted at runtime.  The initramfs will be populated with some of my
+> packages, the usr fs will be populated with the rest.  I don't want the
+> initramfs to contain anything under usr except for the /usr mountpoint
+> directory.
 > 
-> On Sun, 19 Feb 2017 14:18:34 +0100, Bernd Kuhls wrote:
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->> ---
->>  package/cwiid/Config.in | 2 +-
->>  package/cwiid/cwiid.mk  | 8 +++++++-
->>  2 files changed, 8 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
->> index 03b7dbbcd..69e54f5b7 100644
->> --- a/package/cwiid/Config.in
->> +++ b/package/cwiid/Config.in
->> @@ -4,7 +4,7 @@ config BR2_PACKAGE_CWIID
->>  	depends on BR2_USE_WCHAR # bluez_utils -> libglib2
->>  	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> dbus, alsa-lib, libglib2
->>  	depends on BR2_USE_MMU # bluez_utils -> dbus, libglib2
->> -	select BR2_PACKAGE_BLUEZ_UTILS
->> +	select BR2_PACKAGE_BLUEZ_UTILS if !BR2_PACKAGE_BLUEZ5_UTILS
+> In general, I'm looking for a way to divert my package outputs into an
+> arbitrary number of filesystems, which I then package in various ways,
+> including but not limited to bundling into a kernel initramfs.
 > 
-> This causes a circular dependency:
-> 
-> package/bluez_utils/Config.in:1:error: recursive dependency detected!
-> package/bluez_utils/Config.in:1:	symbol BR2_PACKAGE_BLUEZ_UTILS is selected by BR2_PACKAGE_BLUEZ5_UTILS
-> package/bluez5_utils/Config.in:1:	symbol BR2_PACKAGE_BLUEZ5_UTILS depends on BR2_PACKAGE_BLUEZ_UTILS
+> Is there a way to specify such an organization in buildroot?
 
- I think it's just a matter of swapping them:
+ Not directly. The Buildroot Way is to keep things simple, preferably without
+blocking real use cases. For your use case, you need specific treatment in a
+fakeroot script.
 
-select BR2_PACKAGE_BLUEZ5_UTILS if !BR2_PACKAGE_BLUEZ_UTILS
+ Buildroot will still build a monolithic filesystem, and your fakeroot script
+can extract parts that need special treatment. For example, you can make a
+tarball of $TARGET_DIR/usr, then remove the /usr tree, or remove the part that
+you don't need. You can also use $BUILD_DIR/packages-file-list.txt to find out
+which file comes from which package, to do this on a per-package basis.
 
+ You will also need to add the necessary scripts (or systemd units) in a rootfs
+overlay to stitch things back together.
+
+ I'm adding Thomas DS in Cc, he described a somewhat similar setup in the last
+BR developer meeting.
 
  Regards,
  Arnout
