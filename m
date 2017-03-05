@@ -1,15 +1,15 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 Mar 2017 00:27:47 +0100
-Subject: [Buildroot] [PATCH 1/5] core/pkg-cmake: provide our own
- platform description
-In-Reply-To: <20170301184343.GB3578@free.fr>
-References: <cover.1488305206.git.yann.morin.1998@free.fr>
- <f25e9ff7873418c0b323528d6a9c2482c752cd31.1488305206.git.yann.morin.1998@free.fr>
- <e36f8ee2-22d1-318b-178a-9ce84f31a03a@mind.be>
- <20170301091731.5102e061@free-electrons.com>
- <19fbcec2-68a4-a287-a20f-522c94ede5e7@mind.be>
- <20170301184343.GB3578@free.fr>
-Message-ID: <618fb94d-0c2a-c634-3529-5a9ad5737e03@mind.be>
+Date: Mon, 6 Mar 2017 00:31:14 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/physfs: new package
+In-Reply-To: <b370e822-a293-56ec-f151-69882e8b1786@gmail.com>
+References: <20170301225611.11494-1-romain.naour@gmail.com>
+ <4328635a-2687-59f6-a192-4af579aafb58@gmail.com>
+ <20170305215137.1600833e@free-electrons.com>
+ <755ee979-57de-4718-9fa0-5f7de1f05289@gmail.com>
+ <20170305223749.3567d0af@free-electrons.com>
+ <c341646a-fe08-f349-cb46-aed8d0430639@mind.be>
+ <b370e822-a293-56ec-f151-69882e8b1786@gmail.com>
+Message-ID: <3f6177f1-6dd4-119c-e6a1-fadc9faf483a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,82 +18,75 @@ To: buildroot@busybox.net
 
 
 
-On 01-03-17 19:43, Yann E. MORIN wrote:
-> Arnout, All,
+On 05-03-17 23:13, Romain Naour wrote:
+> Hi Arnout, all,
 > 
-> On 2017-03-01 09:35 +0100, Arnout Vandecappelle spake thusly:
->> On 01-03-17 09:17, Thomas Petazzoni wrote:
+> Le 05/03/2017 ? 23:06, Arnout Vandecappelle a ?crit :
+>>
+>>
+>> On 05-03-17 22:37, Thomas Petazzoni wrote:
 >>> Hello,
 >>>
->>> On Wed, 1 Mar 2017 08:58:31 +0100, Arnout Vandecappelle wrote:
->>>
->>>>  Since you don't do any processing on the file, you could just use
+>>> On Sun, 5 Mar 2017 22:14:02 +0100, Romain Naour wrote:
+>>>>> zlib license (physfs), LGPv2.1+ or CPL or special license (lzma)
+>>>>>
+>>>>>  ?  
 >>>>
->>>> 		-DCMAKE_MODULE_PATH="$$(TOPDIR)/support/misc" \
+>>>> It seems some files are under public domain when the special license is used.
+>>>>
+>>>> SPECIAL EXCEPTION #3: Igor Pavlov, as the author of this code, expressly permits
+>>>> you to use code of the following files:
+>>>> BranchTypes.h, LzmaTypes.h, LzmaTest.c, LzmaStateTest.c, LzmaAlone.cpp,
+>>>> LzmaAlone.cs, LzmaAlone.java
+>>>> as public domain code.
+>>>>
+>>>> Maybe "special license" is enough ?
 >>>
->>> I think the idea is that since the Buildroot.cmake platform files gets
->>> referenced by the toolchainfile.cmake, then Buildroot.cmake anyway
->>> needs to be installed in $(HOST_DIR)/usr/share/buildroot, so we can
->>> just as well point CMake to this place.
+>>> My understanding of lzma.txt is that you really have the choice between
+>>> those different licensing options, so I believe encoding all of them in
+>>> <pkg>_LICENSE is probably better.
 >>>
->>>> and avoid copying the file around. Of course, in that case, support/cmake is
->>>> probably a better place to put the file :-)
->>>
->>> No: copying the file is needed, otherwise our toolchainfile.cmake file
->>> no longer works for people using it outside of Buildroot.
+>>> Cc'ing Arnout and Yann to get their insight.
 >>
->>  Good point. I still think it should be in staging rather than host, but for
->> sure it's more important to keep them together.
+>>  I was just about to reply :-)
+>>
+>>  First of all, I don't see any 'or later' language, so it's LGPL2.1 (the version
+>> mentioned in src/lzma/LGPL.txt).
 > 
-> Why would you want it in staging? When we build our own internal cmake,
-> the moduels it installs are so installed in host, not staging. They are
-> build-description files, not target files.
-> 
-> Ergo, they should be in host, not staging.
+> Try with "any later version"
 
- I was looking at it like the .pc files, which are in staging because they talk
-about the target.
-
- About the modules: in fact, packages that install .cmake files will do that in
-staging, not in host. So I do hope that cmake looks for them in staging as
-well... That's what CMAKE_FIND_ROOT_PATH is for, isn't it?
-
- In fact, the only .cmake files I see installed in the host dir are:
-
-- the Modules from CMake itself, but these are more related to the CMake
-language, e.g. CheckIncludeFiles.cmake;
-
-- the CMake files added by *host* packages;
-
-- the CMake files added by buildroot which talk about *target* packages.
-
- So I stand by my original statement: I think the cmake files should move from
-HOST/usr/share/buildroot to STAGING/usr/lib/cmake.
-
- Adding Samuel and Luca, our CMake "experts", to Cc.
+ Still don't see it, except in LGPL.txt where they explain that the library
+should specify "any later version" if they want it to apply to a later version.
 
  Regards,
  Arnout
 
-
 > 
-> Regards,
-> Yann E. MORIN.
-> 
->>  Therefore:
 >>
->> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>  I think the special cases are not interesting enough to warrant mentioning - we
+>> should consider the LICENSE as a strong hint, not as a definitive assertion (it
+>> is not entirely accurate in most packages). In addition, the CPL.html file which
+>> is supposed to be there, is missing. The top-level README also says "It uses the
+>> LGPL license, with exceptions for closed-source programs." This leads me to
+>> conclude that the physfs authors, when redistributint lzma, have decided to do
+>> so under LGPL and to drop the other license options.
+>>
+>>  So I'd say:
+>>
+>> PHYSFS_LICENSE = zlib license (physfs), LGPLv2.1 with exceptions (lzma)
+>> PHYSFS_LICENSE_FILES = LICENSE.txt src/lzma/lzma.txt src/lzma/LGPL.txt
+> 
+> Ok, thanks for the help!
+> 
+> Best regards,
+> Romain
+> 
+>>
 >>
 >>  Regards,
 >>  Arnout
 >>
->> -- 
->> Arnout Vandecappelle                          arnout at mind be
->> Senior Embedded Software Architect            +32-16-286500
->> Essensium/Mind                                http://www.mind.be
->> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>>
 > 
 
 -- 
