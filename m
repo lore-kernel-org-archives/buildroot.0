@@ -1,40 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 05 Mar 2017 15:38:17 +0000
-Subject: [Buildroot] [Bug 9531] NPM fails to build embedded modules
-In-Reply-To: <bug-9531-163@https.bugs.busybox.net/>
-References: <bug-9531-163@https.bugs.busybox.net/>
-Message-ID: <bug-9531-163-O9FMJXzNXf@https.bugs.busybox.net/>
+From: Martin Bark <martin@barkynet.com>
+Date: Sun, 5 Mar 2017 15:35:51 +0000
+Subject: [Buildroot] [PATCH 1/3] DEVELOPERS: add Martin Bark for
+	package/nodejs
+In-Reply-To: <20170305121329.639183c8@free-electrons.com>
+References: <1488671310-27378-1-git-send-email-martin@barkynet.com>
+ <20170305121329.639183c8@free-electrons.com>
+Message-ID: <CAFGQKxc5RR3rYRg6paLUhcnL-dL3Zo-XT+6JZDby6sKNwTY4JQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9531
+Thomas,
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+On 5 March 2017 at 11:13, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
+> Hello,
+>
+> On Sat,  4 Mar 2017 23:48:28 +0000, Martin Bark wrote:
+> > Signed-off-by: Martin Bark <martin@barkynet.com>
+> > ---
+> >  DEVELOPERS | 1 +
+> >  1 file changed, 1 insertion(+)
+>
+> Applied to master, thanks. I don't remember, did I point you to the bug
+> https://bugs.busybox.net/show_bug.cgi?id=9531 ? If not, could you have
+> a look ?
+>
 
---- Comment #14 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-(In reply to Martin from comment #13)
+Yes i just commented on the bug.  I think this bug can be closed.
 
-There is already a blurb in the manual that says that running as root is not
-recommended:
+Thanks
 
-    https://buildroot.org/downloads/manual/manual.html#_buildroot_quick_start
+Martin
 
-Closing this bug, as it is not a bug in Buildroot but in the environment.
 
-Thanks!
 
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170305/da2f6e89/attachment.html>
