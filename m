@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Mar 2017 10:48:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/chrony: bump version to 3.1
-Message-ID: <20170305094852.20985-1-bernd.kuhls@t-online.de>
+Date: Sun,  5 Mar 2017 10:49:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: bump version to 5.44
+Message-ID: <20170305094928.21040-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/chrony/chrony.hash | 6 +++---
- package/chrony/chrony.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/bluez5_utils/bluez5_utils.hash | 2 +-
+ package/bluez5_utils/bluez5_utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-index 66ec0603f..850180883 100644
---- a/package/chrony/chrony.hash
-+++ b/package/chrony/chrony.hash
-@@ -1,3 +1,3 @@
--# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2016/11/msg00000.html
--md5  d08dd5a7d79a89891d119adcccb4397d  chrony-2.4.1.tar.gz
--sha1 b412375ca90dbef653ad00534f8b73b825e396d4  chrony-2.4.1.tar.gz
-+# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2017/01/msg00003.html
-+md5 f8d2ee78c55548bfbe95582c6a855cee  chrony-3.1.tar.gz
-+sha1 564dd010a10fbdcc7c177337115ccffa43fe0f95  chrony-3.1.tar.gz
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index 0dca2eef5..c3d48a78f 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index b030f1a08..75fb5d555 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256 16c9c05d2a1da644ce3570d975ada3643d2e60c007a955bac09c0a0efeb58d15  bluez-5.43.tar.xz
++sha256 0c321e291f8b45e6a78e379dfe80592b65955a0f0ab191f1cca0edd8ec356c85  bluez-5.44.tar.xz
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 66c3eab1e..4d31a187b 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CHRONY_VERSION = 2.4.1
-+CHRONY_VERSION = 3.1
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPLv2
- CHRONY_LICENSE_FILES = COPYING
+-BLUEZ5_UTILS_VERSION = 5.43
++BLUEZ5_UTILS_VERSION = 5.44
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
 -- 
 2.11.0
