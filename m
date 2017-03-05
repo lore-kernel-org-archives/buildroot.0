@@ -1,42 +1,113 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sun,  5 Mar 2017 00:10:24 +0000
-Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2017a
-In-Reply-To: <1488672624-21405-1-git-send-email-martin@barkynet.com>
-References: <1488672624-21405-1-git-send-email-martin@barkynet.com>
-Message-ID: <1488672624-21405-2-git-send-email-martin@barkynet.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 5 Mar 2017 02:05:28 +0100
+Subject: [Buildroot] [PATCH] uclibc: add patch to sync sys/timex.h
+Message-ID: <20170305010528.GA5983@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This fixes a qemu-user compile error.
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index b98e579..b49eb3c 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,2 +1,2 @@
--# From http://mm.icann.org/pipermail/tz-announce/2016-November/000044.html
--sha512 ce0b9958b764479fac7df6b5ba0933fc4c6d815ebccc2537c75c4be105691cd58054704eebfb50ca755d7d48504480d4925ce8836eb499ae4798e3d5503d7e0e	tzdata2016j.tar.gz
-+# From http://mm.icann.org/pipermail/tz-announce/2017-February/000045.html
-+sha512 fe57930711998a0755749a2bf1b32fdbc9e6ee249762017beea52eae7e521236396300fe2d79298fd81eb6d73fb7567884c35995ed248be06188329d937e3873	tzdata2017a.tar.gz
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index d628514..7e63bac 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TZDATA_VERSION = 2016j
-+TZDATA_VERSION = 2017a
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
- TZDATA_STRIP_COMPONENTS = 0
+Reported-by: Fran?ois Perrad <francois.perrad@gadz.org>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ .../0004-sync-header-with-GNU-libc-kernel.patch    | 85 ++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 package/uclibc/0004-sync-header-with-GNU-libc-kernel.patch
+
+diff --git a/package/uclibc/0004-sync-header-with-GNU-libc-kernel.patch b/package/uclibc/0004-sync-header-with-GNU-libc-kernel.patch
+new file mode 100644
+index 0000000..41a35f6
+--- /dev/null
++++ b/package/uclibc/0004-sync-header-with-GNU-libc-kernel.patch
+@@ -0,0 +1,85 @@
++From bf2fd9c0c451a83aa729394255394744fc81d8a3 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Sun, 5 Mar 2017 01:58:17 +0100
++Subject: [PATCH] sync header with GNU libc / kernel
++
++The header is not in sync with GNU libc and Linux kernel and
++therefore produces compile errors with qemu-user (2.8.0).
++
++Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ include/sys/timex.h | 17 ++++++++++++-----
++ 1 file changed, 12 insertions(+), 5 deletions(-)
++
++diff --git a/include/sys/timex.h b/include/sys/timex.h
++index 4cb81d2..76fefa7 100644
++--- a/include/sys/timex.h
+++++ b/include/sys/timex.h
++@@ -1,5 +1,4 @@
++-/* Copyright (C) 1995, 1996, 1997, 1999 Free Software Foundation, Inc.
++-   This file is part of the GNU C Library.
+++/* Copyright (C) 1995-2017 Free Software Foundation, Inc.
++ 
++    The GNU C Library is free software; you can redistribute it and/or
++    modify it under the terms of the GNU Lesser General Public
++@@ -22,13 +21,14 @@
++ #include <sys/time.h>
++ #include <time.h>
++ 
++-/* These definitions from linux/timex.h as of 2.2.0.  */
+++/* These definitions from linux/timex.h as of 3.18.  */
++ 
++ struct ntptimeval
++ {
++   struct timeval time;	/* current time (ro) */
++   long int maxerror;	/* maximum error (us) (ro) */
++   long int esterror;	/* estimated error (us) (ro) */
+++  long int tai;		/* TAI offset (ro) */
++ };
++ 
++ struct timex
++@@ -44,7 +44,6 @@ struct timex
++   long int tolerance;	/* clock frequency tolerance (ppm) (read only) */
++   struct timeval time;	/* (read only) */
++   long int tick;	/* (modified) usecs between clock ticks */
++-
++   long int ppsfreq;	/* pps frequency (scaled ppm) (ro) */
++   long int jitter;	/* pps jitter (us) (ro) */
++   int shift;		/* interval duration (s) (shift) (ro) */
++@@ -54,6 +53,8 @@ struct timex
++   long int errcnt;	/* calibration errors (ro) */
++   long int stbcnt;	/* stability limit exceeded (ro) */
++ 
+++  int tai;		/* TAI offset (ro) */
+++
++   /* ??? */
++   int  :32; int  :32; int  :32; int  :32;
++   int  :32; int  :32; int  :32; int  :32;
++@@ -83,6 +84,9 @@ struct timex
++ #define MOD_TIMECONST	ADJ_TIMECONST
++ #define MOD_CLKB	ADJ_TICK
++ #define MOD_CLKA	ADJ_OFFSET_SINGLESHOT /* 0x8000 in original */
+++#define MOD_TAI		ADJ_TAI
+++#define MOD_MICRO	ADJ_MICRO
+++#define MOD_NANO	ADJ_NANO
++ 
++ 
++ /* Status codes (timex.status) */
++@@ -102,9 +106,12 @@ struct timex
++ #define STA_PPSERROR	0x0800	/* PPS signal calibration error (ro) */
++ 
++ #define STA_CLOCKERR	0x1000	/* clock hardware fault (ro) */
+++#define STA_NANO	0x2000	/* resolution (0 = us, 1 = ns) (ro) */
+++#define STA_MODE	0x4000	/* mode (0 = PLL, 1 = FLL) (ro) */
+++#define STA_CLK		0x8000	/* clock source (0 = A, 1 = B) (ro) */
++ 
++ #define STA_RONLY (STA_PPSSIGNAL | STA_PPSJITTER | STA_PPSWANDER | \
++-    STA_PPSERROR | STA_CLOCKERR) /* read-only bits */
+++    STA_PPSERROR | STA_CLOCKERR | STA_NANO | STA_MODE | STA_CLK)
++ 
++ /* Clock states (time_state) */
++ #define TIME_OK		0	/* clock synchronized, no leap second */
++-- 
++2.1.4
++
 -- 
-2.7.4
+2.1.4
