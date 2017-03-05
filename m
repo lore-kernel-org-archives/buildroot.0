@@ -1,48 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 5 Mar 2017 17:42:56 +0100
-Subject: [Buildroot] [PATCH 1/9] package/lensfun: new package
-In-Reply-To: <20170305163758.wasshg7tnjfmdnmq@tarshish>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 5 Mar 2017 18:44:33 +0200
+Subject: [Buildroot] [PATCH 2/9] package/darktable: new package
+In-Reply-To: <20170305151004.2815-2-romain.naour@gmail.com>
 References: <20170305151004.2815-1-romain.naour@gmail.com>
- <20170305163758.wasshg7tnjfmdnmq@tarshish>
-Message-ID: <358621be-833f-c5b4-714b-13993530b9a0@gmail.com>
+ <20170305151004.2815-2-romain.naour@gmail.com>
+Message-ID: <20170305164433.d4qztfsrop5agq3a@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hi Romain,
 
-Le 05/03/2017 ? 17:37, Baruch Siach a ?crit :
-> Hi Romain,
+On Sun, Mar 05, 2017 at 04:09:57PM +0100, Romain Naour wrote:
+> Add a small note about adwaita icon to avoid a Gtk warning:
 > 
-> On Sun, Mar 05, 2017 at 04:09:56PM +0100, Romain Naour wrote:
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Jeremy Rosen <jeremy.rosen@enst-bretagne.fr>
+> Gtk-WARNING **: Could not find the icon 'pan-down-symbolic-ltr'. The 'hicolor' theme
+> was not found either, perhaps you need to install it.
+> You can get a copy from:
+>         http://icon-theme.freedesktop.org/releases
 > 
-> [...]
-> 
->> diff --git a/package/lensfun/Config.in b/package/lensfun/Config.in
->> new file mode 100644
->> index 0000000..3095238
->> --- /dev/null
->> +++ b/package/lensfun/Config.in
->> @@ -0,0 +1,28 @@
->> +config BR2_PACKAGE_LENSFUN
->> +	bool "lensfun"
->> +	depends on BR2_INSTALL_LIBSTDCPP
->> +	depends on BR2_USE_WCHAR # libglib2
->> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
->> +	depends on BR2_USE_MMU # libglib2
-> 
-> Missing 'select BR2_PACKAGE_LIBGLIB2'.
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Jeremy Rosen <jeremy.rosen@enst-bretagne.fr>
 
-Thanks, fixed.
-I'm waiting for more review on darktable package before sending v2.
+[...]
 
-Best regards,
-Romain
+> +# Darktable is only available for x86_64 or aarch64 little endian system only.
+> +# Experimental support for i386 (not recommended).
+> +# Building without SSE2 on x86_64 is highly experimental.
+> +# See src/is_supported_platform.h
+> +config BR2_PACKAGE_DARKTABLE_ARCH_SUPPORTS
+> +	bool
+> +	default y if (BR2_x86_64 && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2) || \
+> +		BR2_aarch64
 
-> 
-> baruch
-> 
+BR2_X86_CPU_HAS_SSE2=y implies BR2_X86_CPU_HAS_SSE=y. So this is equivalent to 
+(BR2_x86_64 && BR2_X86_CPU_HAS_SSE2) || BR2_aarch64.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
