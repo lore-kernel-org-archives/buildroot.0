@@ -1,83 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Mar 2017 14:46:18 +0100
-Subject: [Buildroot] [PATCH 2/2] package/wayland: don't build tests
-In-Reply-To: <20170305142102.0faed242@free-electrons.com>
-References: <cover.1488711390.git.yann.morin.1998@free.fr>
- <59483ee76c501ec78cfbb2250c3fbcf02f6f7a85.1488711390.git.yann.morin.1998@free.fr>
- <20170305142102.0faed242@free-electrons.com>
-Message-ID: <20170305134618.GE3671@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Mar 2017 15:08:37 +0100
+Subject: [Buildroot] [PATCH 0/5] Runtime testing infrastructure
+In-Reply-To: <58b7791cc5bc9_1c3714b27dc91758@ultri3.mail>
+References: <1486467363-19881-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <58b7791cc5bc9_1c3714b27dc91758@ultri3.mail>
+Message-ID: <20170305150837.379f0e90@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-03-05 14:21 +0100, Thomas Petazzoni spake thusly:
-> Hello,
+On Wed, 01 Mar 2017 22:45:00 -0300, Ricardo Martincoski wrote:
+
+> On Tue, Feb 07, 2017 at 09:35 AM, Thomas Petazzoni wrote:
 > 
-> On Sun,  5 Mar 2017 11:56:51 +0100, Yann E. MORIN wrote:
-> > wayland is entirely written in C, except for a single test that is
-> > written in C++.
-> > 
-> > Since we are not interested in running the tests on the target, add an
-> > option to configure to disable tests altogether.
-> > 
-> > Fixes:
-> >     http://autobuild.buildroot.org/results/291/291e0f1ea18004190ae5acd9bec147cacc3e4bda/
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > At last, here is a first version of a small runtime testing
+> > infrastructure for Buildroot. The first patch introduces the
+> > infrastructure itself, the other 4 patches just add a few patches.  
 > 
-> I think this solves our (Buildroot) immediate problem, but is not the
-> completely correct fix for upstream. Indeed, if Wayland is trying to
-> build some C++ code, it should use AC_PROG_CXX and then only try to
-> build the C++ code if it found a C++ compiler.
+> Thank you very much for this series.
 
-They do use AC_PROG_CXX:
+And thanks a lot to you for taking the time to test and review it! I'll
+reply to all your comments in the individual patches.
 
-    https://cgit.freedesktop.org/wayland/wayland/tree/configure.ac#n29
+Thanks!
 
-But please note the comment just a few lines below:
-
-    https://cgit.freedesktop.org/wayland/wayland/tree/configure.ac#n33
-
-    # check if we have C++ compiler. This is hacky workaround,
-    # for a reason why it is this way see
-    # http://lists.gnu.org/archive/html/bug-autoconf/2010-05/msg00001.html
-    have_cpp_compiler=yes
-
-    if ! which "$CXX" &>/dev/null; then
-        have_cpp_compiler=no
-    fi
-
-    AM_CONDITIONAL(ENABLE_CPP_TEST, test "x$have_cpp_compiler" = "xyes")
-
-Alas, this does not work, because CXX is set to 'false' so the which
-actually succeeds. One would need to actually call $CXX to see if it is
-working.
-
-I'll see to send another patch to this effect.
-
-Yet, I think this --disable-tests is also good to upstream.
-
-Regards,
-Yann E. MORIN.
-
-> But well, this --disable-tests thing is definitely good enough for us,
-> so I'll apply this.
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
