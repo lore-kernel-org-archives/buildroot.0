@@ -1,45 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 15:14:26 +0100
-Subject: [Buildroot] [PATCH 4/5] support/testing: add package tests
-In-Reply-To: <58b77b04d1511_1c373ff16a9c4f1492552@ultri3.mail>
-References: <1486467363-19881-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <58b77b04d1511_1c373ff16a9c4f1492552@ultri3.mail>
-Message-ID: <20170305151426.72306b19@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 05 Mar 2017 14:20:18 +0000
+Subject: [Buildroot] [Bug 9711] New: Recent libCEC version bump seems to
+ break kodi package
+Message-ID: <bug-9711-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9711
 
-On Wed, 01 Mar 2017 22:53:08 -0300, Ricardo Martincoski wrote:
+            Bug ID: 9711
+           Summary: Recent libCEC version bump seems to break kodi package
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: rizom91 at openaliasbox.org
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> On Tue, Feb 07, 2017 at 09:36 AM, Thomas Petazzoni wrote:
-> 
-> [snip]
-> > +++ b/support/testing/tests/package/test_dropbear.py  
-> [snip]
-> > +        cmd = "netstat -ltn 2>/dev/null | grep -q 0.0.0.0:22"  
-> 
-> You could drop the '-q' here.
-> Since the log is sent to a file it will not bother the user.
-> And when a testcase fails a verbose log helps to locate the problem.
-> 
-> Also it will be consistent to the use of 'grep' in all other testcases.
-> 
-> [snip]
-> > +++ b/support/testing/tests/package/test_python.py  
-> [snip]
-> > +        cmd = "python --version 2>&1 | grep -q '^Python 2'"  
-> [snip]
-> 
-> Same here.
+As requested on the GitHub page (see
+https://github.com/buildroot/buildroot/commit/bf1c9828f2c7ef37a0af4da5532472fb7e03ba67),
+I'm moving my issue/bug report to this bugtracker.
 
-Agreed, I've fixed both.
+The last libCEC version bump (commit bf1c9828f2c7ef37a0af4da5532472fb7e03ba67)
+seems to broke kodi-cec. Reverting this commit fixes the issue.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
