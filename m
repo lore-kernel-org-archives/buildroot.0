@@ -1,20 +1,35 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 05 Mar 2017 15:26:04 +0000
-Subject: [Buildroot] [Bug 9691] Wrong cryptsetup package include files
-	location
-In-Reply-To: <bug-9691-163@https.bugs.busybox.net/>
-References: <bug-9691-163@https.bugs.busybox.net/>
-Message-ID: <bug-9691-163-w0XlOUO3rb@https.bugs.busybox.net/>
+Date: Sun, 05 Mar 2017 15:29:37 +0000
+Subject: [Buildroot] [Bug 9711] Recent libCEC version bump seems to break
+	kodi package
+In-Reply-To: <bug-9711-163@https.bugs.busybox.net/>
+References: <bug-9711-163@https.bugs.busybox.net/>
+Message-ID: <bug-9711-163-AtlZD7I1zs@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9691
+https://bugs.busybox.net/show_bug.cgi?id=9711
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Patch submitted at https://patchwork.ozlabs.org/patch/735450/.
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+
+--- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+(In reply to RiZom-91 from comment #2)
+
+First, can you reproduce without your "minor changes"?
+
+Second, what do you meant by "add kodi"? kodi is already in Buildroot.
+
+Third, what is "kodi-cec"? Why do you need to add it?
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
