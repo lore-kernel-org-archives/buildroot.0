@@ -1,30 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 05 Mar 2017 20:32:22 +0000
-Subject: [Buildroot] [Bug 9691] Wrong cryptsetup package include files
-	location
-In-Reply-To: <bug-9691-163@https.bugs.busybox.net/>
-References: <bug-9691-163@https.bugs.busybox.net/>
-Message-ID: <bug-9691-163-jxcMYpeVPR@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Mar 2017 21:32:50 +0100
+Subject: [Buildroot] [git commit] libwebsockets: bump to version 2.1.1
+Message-ID: <20170305203328.7447F82103@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9691
+commit: https://git.buildroot.net/buildroot/commit/?id=71d54786a325e9c1af3352f87434e0a8eab4c726
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Mosquitto combined with version 2.1.0 of libwebsockets yields a failing
+system. Version 2.1.1 restores the websocket interface again.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libwebsockets/libwebsockets.hash | 2 +-
+ package/libwebsockets/libwebsockets.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed in
-https://git.buildroot.org/buildroot/commit/?id=d51a951435a6871ac088ba8c4498cc1c2fc4e87a.
-Thanks!
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index cbd1101..df7221e 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  bcc96aaa609daae4d3f7ab1ee480126709ef4f6a8bf9c85de40aae48e38cce66  libwebsockets-v2.1.0.tar.gz
++sha256	96183cbdfcd6e6a3d9465e854a924b7bfde6c8c6d3384d6159ad797c2e823b4d  libwebsockets-v2.1.1.tar.gz
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index bf46291..983ffce 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWEBSOCKETS_VERSION = v2.1.0
++LIBWEBSOCKETS_VERSION = v2.1.1
+ LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,$(LIBWEBSOCKETS_VERSION))
+ LIBWEBSOCKETS_LICENSE = LGPLv2.1 with exceptions
+ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
