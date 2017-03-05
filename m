@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 22:36:50 +0100
-Subject: [Buildroot] [PATCH v2 5/5] support/testing: add toolchain tests
-In-Reply-To: <58bc8359882ea_6832a0cfd06544b@ultri3.mail>
-References: <1488726201-6507-6-git-send-email-thomas.petazzoni@free-electrons.com>
- <58bc8359882ea_6832a0cfd06544b@ultri3.mail>
-Message-ID: <20170305223650.296c7225@free-electrons.com>
+Date: Sun, 5 Mar 2017 22:37:49 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/physfs: new package
+In-Reply-To: <755ee979-57de-4718-9fa0-5f7de1f05289@gmail.com>
+References: <20170301225611.11494-1-romain.naour@gmail.com>
+ <4328635a-2687-59f6-a192-4af579aafb58@gmail.com>
+ <20170305215137.1600833e@free-electrons.com>
+ <755ee979-57de-4718-9fa0-5f7de1f05289@gmail.com>
+Message-ID: <20170305223749.3567d0af@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +15,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 05 Mar 2017 18:30:01 -0300, Ricardo Martincoski wrote:
-
-> and it tries to run it when --all is used:
-> ======================================================================
-> ERROR: test_run (tests.toolchain.test_external.TestExternalToolchain)
-> ----------------------------------------------------------------------
-> Traceback (most recent call last):
->   File "/tmp/testing-v2/support/testing/infra/basetest.py", line 56, in setUp
->     self.b.build()
->   File "/tmp/testing-v2/support/testing/infra/builder.py", line 23, in build
->     cf.write(self.config)
-> TypeError: expected a string or other character buffer object
+On Sun, 5 Mar 2017 22:14:02 +0100, Romain Naour wrote:
+> > zlib license (physfs), LGPv2.1+ or CPL or special license (lzma)
+> > 
+> >  ?  
 > 
-> > +    def test_run(self):  
+> It seems some files are under public domain when the special license is used.
 > 
-> I think you could avoid this by renaming this method ...
+> SPECIAL EXCEPTION #3: Igor Pavlov, as the author of this code, expressly permits
+> you to use code of the following files:
+> BranchTypes.h, LzmaTypes.h, LzmaTest.c, LzmaStateTest.c, LzmaAlone.cpp,
+> LzmaAlone.cs, LzmaAlone.java
+> as public domain code.
 > 
-> https://nose2.readthedocs.io/en/latest/usage.html#naming-tests
-> 'Within test modules, nose2 will load tests from unittest.TestCase subclasses,
-> and from test functions (functions whose names begin with "test").'
-> 
-> ... to something like this:
->     def common_check(self):
-> ...
+> Maybe "special license" is enough ?
 
-Ah, yes, indeed.
+My understanding of lzma.txt is that you really have the choice between
+those different licensing options, so I believe encoding all of them in
+<pkg>_LICENSE is probably better.
 
-Speaking of this, there is one thing I am not entirely happy with: it
-would be much nicer if we could split some test cases in multiple
-test_<foo>() methods, especially the external toolchain tests.
-
-However, the setUp() and tearDown() methods are called before and after
-running *each* test_<foo>() method of the current unit test class. This
-is clearly not what we want, as we don't want to rebuild/clean up the
-whole Buildroot build for each test_<foo>() method.
-
-I saw we have setUpClass() and tearDownClass(), but these being class
-methods, I guess you don't have access to members of the object
-instance that will be used. And we access a lot of these through
-"self." in setUp() and tearDown().
-
-Do you have an idea?
-
-In addition to this, we will at some point need to allow a test case to
-do something special before the build is started, i.e in the middle of
-the setUp() logic. Should the specific test case override setUp() in
-this case, do its own stuff, and call the parent class setUp() method?
-
-Thanks,
+Cc'ing Arnout and Yann to get their insight.
 
 Thomas
 -- 
