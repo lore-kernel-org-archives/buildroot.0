@@ -1,80 +1,30 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 05 Mar 2017 18:30:01 -0300
-Subject: [Buildroot] [PATCH v2 5/5] support/testing: add toolchain tests
-References: <1488726201-6507-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <58bc8359882ea_6832a0cfd06544b@ultri3.mail>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Mar 2017 22:30:41 +0100
+Subject: [Buildroot] [PATCH 1/2] u-boot: add an option to generate
+ u-boot-dtb.bin
+In-Reply-To: <20170213135934.32014-1-lionel@svkt.org>
+References: <20170130103326.14427-2-lionel@svkt.org>
+ <20170213135934.32014-1-lionel@svkt.org>
+Message-ID: <20170305223041.5900b6a3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni,
+Hello,
 
-On Sun, Mar 05, 2017 at 12:03 PM, Thomas Petazzoni wrote:
+On Mon, 13 Feb 2017 14:59:33 +0100, Lionel Flandrin wrote:
+> Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+> ---
+>  boot/uboot/Config.in | 3 +++
+>  boot/uboot/uboot.mk  | 5 +++++
+>  2 files changed, 8 insertions(+)
 
-[snip]
-> +class TestExternalToolchain(infra.basetest.BRTest):
+Applied to master, thanks.
 
-nose2 recognizes this as a test:
-$ support/testing/run-tests --list 2>&1 | grep Toolchain | head -n1
-test_run (tests.toolchain.test_external.TestExternalToolchain) ... ok
-
-and it tries to run it when --all is used:
-======================================================================
-ERROR: test_run (tests.toolchain.test_external.TestExternalToolchain)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/tmp/testing-v2/support/testing/infra/basetest.py", line 56, in setUp
-    self.b.build()
-  File "/tmp/testing-v2/support/testing/infra/builder.py", line 23, in build
-    cf.write(self.config)
-TypeError: expected a string or other character buffer object
-
-> +    def test_run(self):
-
-I think you could avoid this by renaming this method ...
-
-https://nose2.readthedocs.io/en/latest/usage.html#naming-tests
-'Within test modules, nose2 will load tests from unittest.TestCase subclasses,
-and from test functions (functions whose names begin with "test").'
-
-... to something like this:
-    def common_check(self):
-...
-
-> +        # Check for broken symlinks
-> +        for d in ["lib", "usr/lib"]:
-> +            path = os.path.join(self.builddir, "staging", d)
-> +            self.assertFalse(check_broken_links(path))
-> +            path = os.path.join(self.builddir, "target", d)
-> +            self.assertFalse(check_broken_links(path))
-> +
-> +        interp = infra.get_elf_prog_interpreter(self.builddir,
-> +                                                self.toolchain_prefix,
-> +                                                "bin/busybox")
-> +        interp_path = os.path.join(self.builddir, "target", interp[1:])
-> +        self.assertTrue(os.path.exists(interp_path))
-> +
-> +class TestExternalToolchainSourceryArmv4(TestExternalToolchain):
-> +    config = BASIC_CONFIG + \
-> +"""
-> +BR2_arm=y
-> +BR2_arm920t=y
-> +BR2_TOOLCHAIN_EXTERNAL=y
-> +BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-> +"""
-> +    toolchain_prefix = "arm-none-linux-gnueabi"
-> +
-> +    def test_run(self):
-> +        TestExternalToolchain.test_run(self)
-
-... and changing all calls to something like this:
-        self.common_check()
-
-> +
-> +        # Check the architecture variant
-[snip]
-
-Regards,
-Ricardo
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
