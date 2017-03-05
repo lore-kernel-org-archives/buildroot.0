@@ -1,52 +1,151 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 22:25:16 +0100
-Subject: [Buildroot] [PATCH v3] Add gitlab-CI support
-In-Reply-To: <20170213232303.7053-1-arnout@mind.be>
-References: <20170213232303.7053-1-arnout@mind.be>
-Message-ID: <20170305222516.78689464@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  5 Mar 2017 22:28:17 +0100
+Subject: [Buildroot] [PATCH v4 1/2] package/physfs: new package
+Message-ID: <20170305212818.12594-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Backport a patch from SuperTux project:
+https://github.com/SuperTux/physfs/commit/61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8
 
-On Tue, 14 Feb 2017 00:23:03 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The buildroot repository is now mirrored on
-> https://gitlab.com/buildroot.org/buildroot so we can use Gitlab-CI to
-> test Buildroot. Gitlab-CI is controlled by a .gitlab-ci.yml file
-> that exists in the repository.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+v4: add missing license infos
+    Complete lzma license infos (ThomasP)
+v3: new patch
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../physfs/0001-Fix-builds-with-modern-GCC.patch   | 38 ++++++++++++++++++++++
+ package/physfs/Config.in                           | 10 ++++++
+ package/physfs/physfs.mk                           | 30 +++++++++++++++++
+ 5 files changed, 80 insertions(+)
+ create mode 100644 package/physfs/0001-Fix-builds-with-modern-GCC.patch
+ create mode 100644 package/physfs/Config.in
+ create mode 100644 package/physfs/physfs.mk
 
-I've applied with some minor changes (see below).
-
-> Building all the defconfigs takes a long time. Gitlab-CI will do that
-> every time it pulls from git.buildroot.org, which is once per hour.
-> That is way too often. Therefore, the defconfigs are not built on pull,
-> but only on explicit trigger through the API or when a tag is added.
-
-What is the next step now? Who is going to run in a cronjob the thing
-that triggers the build? Can we setup a notification on the mailing
-list and/or IRC when there is a failure?
-
-> +    # The container has not package lists, so need to update first
-
-I've fixed the typo not -> no, as noticed by Marcus.
-
-> +.gitlab-ci.yml: .gitlab-ci.yml.in configs/*_defconfig
-> +	(cd configs; ls -1 *_defconfig) | sed 's/$$/: *defconfig/' | cat $< - > $@
-
-I've added LC_ALL=C when calling ls -1, because I did not had the same
-order as yours when regenerating the list of defconfigs. Apparently,
-depending on the locales armadeus is before or after arm_.
-
-And I've regenerated the list of defconfigs before pushing, of course.
-
-Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ed530e2..2cb1c51 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1301,6 +1301,7 @@ F:	package/linux-syscall-support/
+ F:	package/lugaru/
+ F:	package/mcelog/
+ F:	package/openpowerlink/
++F:	package/physfs/
+ F:	package/stress-ng/
+ F:	package/terminology/
+ F:	package/upower/
+diff --git a/package/Config.in b/package/Config.in
+index 4e39bfb..6ecf04f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -975,6 +975,7 @@ menu "Filesystem"
+ 	source "package/libnfs/Config.in"
+ 	source "package/libsysfs/Config.in"
+ 	source "package/lockdev/Config.in"
++	source "package/physfs/Config.in"
+ endmenu
+ 
+ menu "Graphics"
+diff --git a/package/physfs/0001-Fix-builds-with-modern-GCC.patch b/package/physfs/0001-Fix-builds-with-modern-GCC.patch
+new file mode 100644
+index 0000000..710b4ff
+--- /dev/null
++++ b/package/physfs/0001-Fix-builds-with-modern-GCC.patch
+@@ -0,0 +1,38 @@
++From 61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8 Mon Sep 17 00:00:00 2001
++From: Jacob Burroughs <jburroughs@trustwave.com>
++Date: Thu, 23 Jun 2016 13:03:47 -0500
++Subject: [PATCH] Fix builds with modern GCC
++
++From SuperTux project:
++https://github.com/SuperTux/physfs/commit/61d3b63abcba8e9615dcb8a3d1fc026bf7f8d5f8
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 2a371af..94c4844 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -50,7 +50,7 @@ endif()
++ # Add some gcc-specific command lines.
++ if(CMAKE_COMPILER_IS_GNUCC)
++     # Always build with debug symbols...you can strip it later.
++-    add_definitions(-g -pipe -Werror -fsigned-char)
+++    add_definitions(-g -pipe -fsigned-char)
++ 
++     # Stupid BeOS generates warnings in the system headers.
++     if(NOT BEOS)
++@@ -304,7 +304,7 @@ if(PHYSFS_BUILD_TEST)
++         if(READLINE_LIBRARY)
++             set(HAVE_SYSTEM_READLINE TRUE)
++             set(TEST_PHYSFS_LIBS ${TEST_PHYSFS_LIBS} ${READLINE_LIBRARY} ${CURSES_LIBRARY})
++-            include_directories(${READLINE_H} ${HISTORY_H})
+++            include_directories(SYSTEM ${READLINE_H} ${HISTORY_H})
++             add_definitions(-DPHYSFS_HAVE_READLINE=1)
++         endif()
++     endif()
++-- 
++2.9.3
++
+diff --git a/package/physfs/Config.in b/package/physfs/Config.in
+new file mode 100644
+index 0000000..dad3ab4
+--- /dev/null
++++ b/package/physfs/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PHYSFS
++	bool "physfs"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  PhysicsFS; a portable, flexible file i/o abstraction.
++
++	  http://icculus.org/physfs
++
++comment "physfs needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/physfs/physfs.mk b/package/physfs/physfs.mk
+new file mode 100644
+index 0000000..0765a6f
+--- /dev/null
++++ b/package/physfs/physfs.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# physfs
++#
++################################################################################
++
++PHYSFS_VERSION = be27dfd07d97336145e7f49d3fd200a6e902f85e
++PHYSFS_SITE = https://hg.icculus.org/icculus/physfs
++PHYSFS_SITE_METHOD = hg
++
++PHYSFS_LICENSE = zlib license (physfs), LGPLv2.1+ or CPL or special license (lzma)
++PHYSFS_LICENSE_FILES = LICENSE.txt src/lzma/LGPL.txt
++
++PHYSFS_INSTALL_STAGING = YES
++
++PHYSFS_CONF_OPTS = -DPHYSFS_BUILD_TEST=OFF
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_SHARED=ON
++else
++PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_SHARED=OFF
++endif
++
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_STATIC=ON
++else
++PHYSFS_CONF_OPTS += -DPHYSFS_BUILD_STATIC=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.9.3
