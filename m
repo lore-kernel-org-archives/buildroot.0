@@ -1,11 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 23:40:52 +0100
-Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
-In-Reply-To: <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
-References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170305213723.021d4678@free-electrons.com>
- <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
-Message-ID: <20170305234052.2515068d@free-electrons.com>
+Date: Sun, 5 Mar 2017 23:41:48 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/physfs: new package
+In-Reply-To: <c341646a-fe08-f349-cb46-aed8d0430639@mind.be>
+References: <20170301225611.11494-1-romain.naour@gmail.com>
+ <4328635a-2687-59f6-a192-4af579aafb58@gmail.com>
+ <20170305215137.1600833e@free-electrons.com>
+ <755ee979-57de-4718-9fa0-5f7de1f05289@gmail.com>
+ <20170305223749.3567d0af@free-electrons.com>
+ <c341646a-fe08-f349-cb46-aed8d0430639@mind.be>
+Message-ID: <20170305234148.6e52939f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +17,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 5 Mar 2017 23:33:56 +0100, Arnout Vandecappelle wrote:
+On Sun, 5 Mar 2017 23:06:21 +0100, Arnout Vandecappelle wrote:
 
->  I'm obviously late with commenting on this, but I think marking things as
-> BROKEN is wrong. It bypasses the legacy mechanism so it disappears without
-> notice. Also, BROKEN packages languish there for years without ever anyone
-> taking a look. Sometimes things do get repaired, but re-adding the package is
-> not much more complicated than
+>  First of all, I don't see any 'or later' language, so it's LGPL2.1 (the version
+> mentioned in src/lzma/LGPL.txt).
 > 
->  So, I propose to remove all broken packages.
-> 
->  [I have the feeling we discussed this kind of thing at some BR devel meeting at
-> some point, but I can't find it.]
+>  I think the special cases are not interesting enough to warrant mentioning
 
-True. But for this one case, the developer contributing the package is
-still active, submitting patches for other things from time to time. So
-I was hoping that a stronger hint at "please fix your packages
-otherwise they'll get removed" was in order.
-
-Let's say that we'll remove this package before the 2017.05 release if
-nobody unbreaks it?
+Don't the special cases allow static linking more easily than what
+LGPL2.1 allows to do?
 
 Thomas
 -- 
