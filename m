@@ -1,8 +1,10 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Sun,  5 Mar 2017 16:06:09 +0000
-Subject: [Buildroot] [PATCH 1/8] configs/raspberrypi_defconfig: bump kernel
+Date: Sun,  5 Mar 2017 16:06:10 +0000
+Subject: [Buildroot] [PATCH 2/8] configs/raspberrypi0_defconfig: bump kernel
 	version to 4.9.13
-Message-ID: <1488729976-7116-1-git-send-email-martin@barkynet.com>
+In-Reply-To: <1488729976-7116-1-git-send-email-martin@barkynet.com>
+References: <1488729976-7116-1-git-send-email-martin@barkynet.com>
+Message-ID: <1488729976-7116-2-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,16 +13,16 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- configs/raspberrypi_defconfig | 6 +++---
+ configs/raspberrypi0_defconfig | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 6af9fb3..8c9635f 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -4,15 +4,15 @@ BR2_ARM_EABIHF=y
- 
- BR2_SYSTEM_DHCP="eth0"
+diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+index 736143f..d93484f 100644
+--- a/configs/raspberrypi0_defconfig
++++ b/configs/raspberrypi0_defconfig
+@@ -2,15 +2,15 @@ BR2_arm=y
+ BR2_arm1176jzf_s=y
+ BR2_ARM_EABIHF=y
  
 -# Linux headers same as kernel, a 4.4 series
 -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
@@ -36,6 +38,6 @@ index 6af9fb3..8c9635f 100644
 +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="935c7ce84c982a26f567a03a58a1537424569938"
  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
  
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+ # Build the DTBs for A/B from the kernel sources: the zero is the same
 -- 
 2.7.4
