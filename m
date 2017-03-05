@@ -1,32 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 05 Mar 2017 15:34:52 +0000
-Subject: [Buildroot] [Bug 9531] NPM fails to build embedded modules
-In-Reply-To: <bug-9531-163@https.bugs.busybox.net/>
-References: <bug-9531-163@https.bugs.busybox.net/>
-Message-ID: <bug-9531-163-Z4u4yNblFP@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Mar 2017 16:34:13 +0100
+Subject: [Buildroot] [git commit] package/wayland: drop non-existing
+	configure option
+Message-ID: <20170305153505.E83618012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9531
+commit: https://git.buildroot.net/buildroot/commit/?id=ed207dbc1c8d8e4dfef0deaabfb3c875378ffda4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #13 from Martin <martin@barkynet.com> ---
-I tested this and setting BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="ghost at 0.11.3"
-builds fine when building as a non-root user.
+--disable-scanner was removed back in 2015, so drop it.
 
-What is happening here is npm is dropping it's root privileges before running
-node-pre-gyp which is why you see "node-pre-gyp: Permission denied" because it
-can't access the files under /root.  --unsafe-perm stops this behaviour which
-is why it then works.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wayland/wayland.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I agree with Peter, building as root should be avoided.  I would recommend you
-modify your Dockerfile to build as a non-root user.
-
-The one change which might be worth making is a recommendation against building
-as root in the manual and/or the Makefile.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 286871e..11fbce3 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -14,7 +14,7 @@ WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
+ HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
+ 
+ # wayland-scanner is only needed for building, not on the target
+-WAYLAND_CONF_OPTS = --disable-scanner --with-host-scanner
++WAYLAND_CONF_OPTS = --with-host-scanner
+ 
+ # Remove the DTD from the target, it's not needed at runtime
+ define WAYLAND_TARGET_CLEANUP
