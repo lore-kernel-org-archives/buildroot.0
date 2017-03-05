@@ -1,43 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 10:43:08 +0100
-Subject: [Buildroot] Pre-built Buildroot toolchains updated
-Message-ID: <20170305104308.2650e30b@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  5 Mar 2017 10:48:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/chrony: bump version to 3.1
+Message-ID: <20170305094852.20985-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/chrony/chrony.hash | 6 +++---
+ package/chrony/chrony.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I have deployed a new set of Buildroot toolchains, not all of them, but
-a few ones that needed to be rebuilt:
-
-     - br-arcle-hs38
-    
-       Rebuilt to benefit from the
-       895-arc-define-_REENTRANT-when-pthread-is-passed.patch patch, to have
-       _REENTRANT defined.
-    
-     - br-arm-cortex-a9-glibc
-    
-       Built with the new glibc 2.25
-    
-     - br-aarch64-glibc
-       br-mips32r6-el-hf-glibc
-       br-mips64r6-el-hf-glibc
-       br-nios2-glibc
-       br-powerpc64-power7-glibc
-       br-powerpc64le-power8-glibc
-       br-sparc64-glibc
-    
-       Rebuilt with glibc 2.24, the new default glibc version
-
-The new toolchain based on glibc 2.25 might cause some build issues, as
-it's the first toolchain that uses this glibc version.
-
-Thomas
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index 66ec0603f..850180883 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,3 +1,3 @@
+-# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2016/11/msg00000.html
+-md5  d08dd5a7d79a89891d119adcccb4397d  chrony-2.4.1.tar.gz
+-sha1 b412375ca90dbef653ad00534f8b73b825e396d4  chrony-2.4.1.tar.gz
++# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2017/01/msg00003.html
++md5 f8d2ee78c55548bfbe95582c6a855cee  chrony-3.1.tar.gz
++sha1 564dd010a10fbdcc7c177337115ccffa43fe0f95  chrony-3.1.tar.gz
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index 0dca2eef5..c3d48a78f 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CHRONY_VERSION = 2.4.1
++CHRONY_VERSION = 3.1
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPLv2
+ CHRONY_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
