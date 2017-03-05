@@ -1,27 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 16:35:09 +0100
-Subject: [Buildroot] [PATCH 0/2] package/wayland: disable building tests
-In-Reply-To: <cover.1488711390.git.yann.morin.1998@free.fr>
-References: <cover.1488711390.git.yann.morin.1998@free.fr>
-Message-ID: <20170305163509.47e8c737@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 05 Mar 2017 15:38:17 +0000
+Subject: [Buildroot] [Bug 9531] NPM fails to build embedded modules
+In-Reply-To: <bug-9531-163@https.bugs.busybox.net/>
+References: <bug-9531-163@https.bugs.busybox.net/>
+Message-ID: <bug-9531-163-O9FMJXzNXf@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9531
 
-On Sun,  5 Mar 2017 11:56:48 +0100, Yann E. MORIN wrote:
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-> Yann E. MORIN (2):
->       package/wayland: drop non-existing configure option
->       package/wayland: don't build tests
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
 
-Applied, thanks!
+--- Comment #14 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+(In reply to Martin from comment #13)
 
-Thomas
+There is already a blurb in the manual that says that running as root is not
+recommended:
+
+    https://buildroot.org/downloads/manual/manual.html#_buildroot_quick_start
+
+Closing this bug, as it is not a bug in Buildroot but in the environment.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
