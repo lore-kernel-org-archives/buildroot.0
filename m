@@ -1,41 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Mar 2017 21:25:51 +0100
-Subject: [Buildroot] [git commit] configs/raspberrypi3_defconfig: bump
-	kernel version to 4.9.13
-Message-ID: <20170305202606.9F6C981945@busybox.osuosl.org>
+From: Martin Bark <martin@barkynet.com>
+Date: Sun, 5 Mar 2017 20:28:23 +0000
+Subject: [Buildroot] [PATCH 1/3] DEVELOPERS: add Martin Bark for
+	package/nodejs
+In-Reply-To: <20170305185124.4825f40c@free-electrons.com>
+References: <1488671310-27378-1-git-send-email-martin@barkynet.com>
+ <20170305121329.639183c8@free-electrons.com>
+ <CAFGQKxc5RR3rYRg6paLUhcnL-dL3Zo-XT+6JZDby6sKNwTY4JQ@mail.gmail.com>
+ <20170305185124.4825f40c@free-electrons.com>
+Message-ID: <CAFGQKxdtAgTjpfW5Qz_LJXfCZX_WTbgxNXC_FD5_6C2+Qjnb=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6332c880def86731c6d283b920ef170ebb21c74e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 5 March 2017 at 17:51, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/raspberrypi3_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> Hello,
+>
 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 6fceaa0..0d8c079 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -7,13 +7,13 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1ebe8d4a4c96cd6a90805c74233a468854960f67"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="935c7ce84c982a26f567a03a58a1537424569938"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
+Hi,  sorry i've been AWOL for a while, been really busy lately.  I finally
+got round to submitting a bunch of patches including bumping nodejs to 7.x
+which turned out to be a right pain :)
+
+
+>
+> On Sun, 5 Mar 2017 15:35:51 +0000, Martin Bark wrote:
+>
+> > Yes i just commented on the bug.  I think this bug can be closed.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux and Kernel engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170305/6851a33c/attachment.html>
