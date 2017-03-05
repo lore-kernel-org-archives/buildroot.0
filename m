@@ -1,41 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Mar 2017 15:10:19 +0100
-Subject: [Buildroot] Analysis of build results for 2017-03-04
-In-Reply-To: <20170305090953.GA3671@free.fr>
-References: <20170305072847.53355206EF@mail.free-electrons.com>
- <20170305094814.7fd9ae85@free-electrons.com>
- <20170305090953.GA3671@free.fr>
-Message-ID: <20170305141019.GF3671@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Mar 2017 15:11:25 +0100
+Subject: [Buildroot] [PATCH 2/5] support/testing: add core tests
+In-Reply-To: <58b779b582a46_1c373ff16a8e2ec09216c@ultri3.mail>
+References: <1486467363-19881-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <58b779b582a46_1c373ff16a8e2ec09216c@ultri3.mail>
+Message-ID: <20170305151125.13a32242@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-03-05 10:09 +0100, Yann E. MORIN spake thusly:
-> On 2017-03-05 09:48 +0100, Thomas Petazzoni spake thusly:
-> > On Sun,  5 Mar 2017 08:28:47 +0100 (CET), Thomas Petazzoni wrote:
-> > >       x86_64 |                    cmake-3.7.2 | NOK | http://autobuild.buildroot.net/results/f30228e1885e7292957528158d0fb74cb51e2330
-> > 
-> > Not sure:
-> > 
-> > [ 77%] Building CXX object Source/CMakeFiles/CPackLib.dir/CPack/IFW/cmCPackIFWInstaller.cxx.o
-> > /home/test/autobuild/run/instance-1/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libcurl.so: undefined reference to `libssh2_scp_recv2'
-> > /home/test/autobuild/run/instance-1/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libcurl.so: undefined reference to `libssh2_session_handshake'
-> > 
-> > Samuel, Yann, Vicente?
+On Wed, 01 Mar 2017 22:47:33 -0300, Ricardo Martincoski wrote:
+> Thomas,
+> 
+> On Tue, Feb 07, 2017 at 09:36 AM, Thomas Petazzoni wrote:
+> 
+> [snip]
+> > +++ b/support/testing/tests/core/test_post_scripts.py  
+> [snip]
+> > +    # TODO  
+> 
+> This comment can be removed. The method is already implemented.
 
-I am unable to reproduce... :-(
+Indeed.
 
-Regards,
-Yann E. MORIN.
+> > +        emulator.login("root")  
+> 
+> Shouldn't it be like this?
+>         emulator.login()
 
+Correct. I did the mistake in a number of places. I guess the fact that
+I chose "root" as the root password for the Dropbear test confused me
+into thinking that the argument was the user name, and not the
+password. So I've also changed the root password of the Dropbear test
+case to be "testpwd" instead.
+
+I've fixed all instances of emulator.login("root") that should have
+been emulator.login().
+
+While doing this, I also noticed that the emulator.login() method did
+not ensure we reached the shell prompt. So I've changed it to make sure
+we reached the prompt, and if not, abort.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
