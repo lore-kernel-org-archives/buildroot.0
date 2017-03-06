@@ -1,100 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Mar 2017 22:13:22 +0100
-Subject: [Buildroot] [PATCH 3/3] package/nodejs: remove 0.10.x support
-In-Reply-To: <4a35c4cc-f487-84c5-e2cc-80655f0e53eb@mind.be>
-References: <1488671310-27378-1-git-send-email-martin@barkynet.com>
- <1488671310-27378-3-git-send-email-martin@barkynet.com>
- <8fcfeb3e-38c3-3fa7-99fd-feca53e7160f@mind.be>
- <CAFGQKxeAv8j=vAO5TrcZT8r0a8kCneTR4qa9rhz=daHbwnavkQ@mail.gmail.com>
- <4a35c4cc-f487-84c5-e2cc-80655f0e53eb@mind.be>
-Message-ID: <20170306211322.GD3976@free.fr>
+Date: Mon, 6 Mar 2017 22:43:37 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/physfs: new package
+In-Reply-To: <c341646a-fe08-f349-cb46-aed8d0430639@mind.be>
+References: <20170301225611.11494-1-romain.naour@gmail.com>
+ <4328635a-2687-59f6-a192-4af579aafb58@gmail.com>
+ <20170305215137.1600833e@free-electrons.com>
+ <755ee979-57de-4718-9fa0-5f7de1f05289@gmail.com>
+ <20170305223749.3567d0af@free-electrons.com>
+ <c341646a-fe08-f349-cb46-aed8d0430639@mind.be>
+Message-ID: <20170306214337.GE3976@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Arnout, Romain, Thomas, All,
 
-On 2017-03-06 13:23 +0100, Arnout Vandecappelle spake thusly:
-> On 06-03-17 11:08, Martin Bark wrote:
-> > On 5 March 2017 at 22:40, Arnout Vandecappelle <arnout@mind.be
-> > <mailto:arnout@mind.be>> wrote:
+On 2017-03-05 23:06 +0100, Arnout Vandecappelle spake thusly:
+> On 05-03-17 22:37, Thomas Petazzoni wrote:
+> > Hello,
 > > 
+> > On Sun, 5 Mar 2017 22:14:02 +0100, Romain Naour wrote:
+> >>> zlib license (physfs), LGPv2.1+ or CPL or special license (lzma)
+> >>>
+> >>>  ?  
+> >>
+> >> It seems some files are under public domain when the special license is used.
+> >>
+> >> SPECIAL EXCEPTION #3: Igor Pavlov, as the author of this code, expressly permits
+> >> you to use code of the following files:
+> >> BranchTypes.h, LzmaTypes.h, LzmaTest.c, LzmaStateTest.c, LzmaAlone.cpp,
+> >> LzmaAlone.cs, LzmaAlone.java
+> >> as public domain code.
+> >>
+> >> Maybe "special license" is enough ?
 > > 
+> > My understanding of lzma.txt is that you really have the choice between
+> > those different licensing options, so I believe encoding all of them in
+> > <pkg>_LICENSE is probably better.
 > > 
-> >     On 05-03-17 00:48, Martin Bark wrote:
-> >     > nodejs 0.10.x is now end of life and is no longer maintained so remove it.
-> >     > See https://github.com/nodejs/LTS
-> > 
-> >      As mentioned in the Config.in:
-> > 
-> >     # Starting with 0.12.x, on ARM, V8 (the JS engine)
-> >     # now requires an armv6+ and a VFPv2+.
-> > 
-> >      Some people opposed the removal of 0.10 because it would make nodejs
-> >     unavailable on ARM9, while it is really still useful there. So the idea is that
-> >     we keep it around in frozen state.
-> > 
-> > 
-> > We have discussed this a few times.  The last email exchange i had on this
-> > subject was back on 27th September 2016 where Thomas said
-> > 
-> > "It is fine to support 0.10.x in Buildroot to support ARMv5 while 0.10.x
-> > is still maintained upstream. But as Peter mentioned, the support for
-> > 0.10.x upstream will stop soon, so we should also remove it from
-> > Buildroot."
-> > 
-> > I purposefully held off submitting these patches until after the 2017.02 release
-> > so that it included nodejs 0.10.x.  Personally i would like to see 0.10.x
-> > dropped from buildroot.
+> > Cc'ing Arnout and Yann to get their insight.
 > 
->  Ah, OK, I forgot about that bit :-)
+>  I was just about to reply :-)
 > 
->  Peter/Thomas, perhaps add a link to
-> http://lists.busybox.net/pipermail/buildroot/2016-September/173060.html and
-> http://lists.busybox.net/pipermail/buildroot/2015-December/147109.html
-> when committing?
+>  First of all, I don't see any 'or later' language, so it's LGPL2.1 (the version
+> mentioned in src/lzma/LGPL.txt).
+
+That's a little bit more complicated, I think... :-(
+
+The fact that COPYING contains the text of LGPLv2.1 is a strong
+indication that this would be the only version that should apply.
+
+However, the lzma.txt file, which contains legal blurbs, does not state
+any version of the LGPL. As such, one may argue that any version may
+apply, as stated in COPYING itself, quoting:
+
+    If the Library does not specify a license version number, you may
+    choose any version ever published by the Free Software Foundation.
+
+So I would just say "LGPL".
+
+>  I think the special cases are not interesting enough to warrant mentioning - we
+> should consider the LICENSE as a strong hint, not as a definitive assertion (it
+> is not entirely accurate in most packages). In addition, the CPL.html file which
+> is supposed to be there, is missing. The top-level README also says "It uses the
+> LGPL license, with exceptions for closed-source programs." This leads me to
+> conclude that the physfs authors, when redistributint lzma, have decided to do
+> so under LGPL and to drop the other license options.
 > 
->  Note that in that December 2015 thread, Yann suggested to keep 0.10
-> indefinitely, but everybody else seemed to agree with Martin's suggestion to
-> drop it.
+>  So I'd say:
+> 
+> PHYSFS_LICENSE = zlib license (physfs), LGPLv2.1 with exceptions (lzma)
 
-Well, my position at the time wwas that "As long as it builds and still
-works fine, we should just keep it."
+Almost. I'd say:
 
-But now, 0.10.x is only for armv5. Do we really expect such a low-end
-system to run nodejs?
+    PHYSFS_LICENSE = zlib license (physfs), LGPL with exceptions (lzma)
 
-I don't care much about maintaining 0.10.x, especially now since
-upstream compleely dropped support.
+> PHYSFS_LICENSE_FILES = LICENSE.txt src/lzma/lzma.txt src/lzma/LGPL.txt
+
+Yup.
 
 Regards,
 Yann E. MORIN.
-
->  I have one remaining gripe, however: ideally there should be a Config.in.legacy
-> entry. But of course that's impossible because the BR2_PACKAGE_NODEJS symbol
-> still exists... One extremely hacky solution would be to add
-> BR2_PACKAGE_NODEJS_VERSION_STRING to Config.in.legacy, *with* a prompt and
-> without the dependency on BR2_PACKAGE_NODEJS. Then, if someone updates with an
-> existing .config, the previously-hidden VERSION_STRING will appear in the legacy
-> menu. But that solution looks pretty hairy, and I'm sure that people will notice
-> in other ways that nodejs has vanished, so it's probably not so important.
-> 
->  Regards,
->  Arnout
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
