@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 06 Mar 2017 18:49:03 +0000
+Date: Mon, 06 Mar 2017 19:34:46 +0000
 Subject: [Buildroot] [Bug 9711] Recent libCEC version bump seems to break
 	kodi package
 In-Reply-To: <bug-9711-163@https.bugs.busybox.net/>
 References: <bug-9711-163@https.bugs.busybox.net/>
-Message-ID: <bug-9711-163-0rwmKHf1LL@https.bugs.busybox.net/>
+Message-ID: <bug-9711-163-ypKwLJuq88@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,12 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=9711
 
---- Comment #10 from RiZom-91 <rizom91@openaliasbox.org> ---
-Compilation is fine now. I don't know if those changes were needed for other
-packages, but it may be simpler to bump kodi to version 17 no ? I saw you did
-some patches for that.
+--- Comment #11 from Bernd Kuhls <bernd.kuhls@t-online.de> ---
+I am waiting for the release of Kodi 17.1 because Kodi 17.0 needs some patching
+to get it compiled with buildroot, most of my PRs were committed already
+upstream.
+Until then you can try my github repo:
+https://github.com/bkuhls/buildroot/tree/kodi_cmake_libdvd
 
 -- 
 You are receiving this mail because:
