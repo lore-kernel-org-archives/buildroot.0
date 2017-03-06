@@ -1,35 +1,126 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 Mar 2017 22:02:18 +0100
-Subject: [Buildroot] [PATCH] package/cairo: improve license information
-Message-ID: <20170306210218.28867-1-romain.naour@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 6 Mar 2017 22:05:00 +0100
+Subject: [Buildroot] libqeglfs.so not found on imx6
+In-Reply-To: <CAD6G_RTkmybL1PSc_sMPSZHkoSquV5D+9wvCervaJFbj9R2_1w@mail.gmail.com>
+References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
+ <CAD6G_RQ_00ozMXZJ4GaTR5ETny-wJk6GkHbPSHLGQjiHUJR9dg@mail.gmail.com>
+ <CAOMZO5AB2xYjvjQkvYp8y++M=95SnJSPbkPsv-sqs0VciYDd-w@mail.gmail.com>
+ <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
+ <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
+ <CAOMZO5CufYJ7vqRw_7LxKpWtJe3Z-1U3=8SOubJXLgvNfO3Rew@mail.gmail.com>
+ <CAOMZO5D5FB68ZWCqLd0HB14g3AQQRC556bgSXT-RznGB-xjqdA@mail.gmail.com>
+ <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
+ <CAOMZO5DtKGj3O_9p8H7ewbdq7ahTW=ZRCsVNcMZSGyz8Gxypyg@mail.gmail.com>
+ <CAOMZO5DdsuQ29+KyMmvE8Ye5W2_a=-SZaCYKMP_MNoCHb07zaQ@mail.gmail.com>
+ <CAOMZO5Be5Y_81g8F1to4kRX7e3TgOqRa6-kVXti0C5pchzCW1w@mail.gmail.com>
+ <CAAMH-ysZ-QBLyRy3krifSj5p98d=Aw5pEih07x6cHGHW4bFpWQ@mail.gmail.com>
+ <CAD6G_RQ5FB9gJYvfz8Z0cRLhUSrjjXUaG13YdbbGdJJ-8E=BCw@mail.gmail.com>
+ <CAD6G_RTkmybL1PSc_sMPSZHkoSquV5D+9wvCervaJFbj9R2_1w@mail.gmail.com>
+Message-ID: <20170306220500.71a188f0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cairo can be licenced under MPL and license copy are in COPYING-LGPL-2.1
-and COPYING-MPL-1.1.
+Hello Jagan,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/cairo/cairo.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Mon, 6 Mar 2017 17:14:23 +0530, Jagan Teki <jagannadh.teki@gmail.com> wrote:
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 761c6f4..137d348 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -6,8 +6,8 @@
- 
- CAIRO_VERSION = 1.14.8
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
--CAIRO_LICENSE = LGPLv2.1+
--CAIRO_LICENSE_FILES = COPYING
-+CAIRO_LICENSE = LGPLv2.1+ or MPL
-+CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
- CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
- CAIRO_AUTORECONF = YES
--- 
-2.9.3
+> On Mon, Mar 6, 2017 at 4:33 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+> > On Mon, Mar 6, 2017 at 3:49 PM, Gary Bisson
+> > <gary.bisson@boundarydevices.com> wrote:
+> >> Hi Fabio,
+> >>
+> >> On Sat, Mar 4, 2017 at 8:41 PM, Fabio Estevam <festevam@gmail.com> wrote:
+> >>> On Sat, Mar 4, 2017 at 11:47 AM, Fabio Estevam <festevam@gmail.com> wrote:
+> >>>> Hi Gary,
+> >>>>
+> >>>> On Sat, Mar 4, 2017 at 9:33 AM, Fabio Estevam <festevam@gmail.com> wrote:
+> >>>>
+> >>>>> Not yet, still stuck at the "drmModeGetResources failed" error.
+> >>>>
+> >>>> I can also get this same error with the new kmscube package from:
+> >>>> https://cgit.freedesktop.org/mesa/kmscube/log/
+> >>>>
+> >>>> # kmscube
+> >>>> drmModeGetResources failed: Invalid argument
+> >>>> failed to initialize legacy DRM
+> >>>>
+> >>>> It works if I explicitly pass the /dev/dri device:
+> >>>>
+> >>>> kmscube -D /dev/dri/card1
+> >>>>
+> >>>> I think QT5 is trying to access /dev/dri/card0, but it should be using
+> >>>> /dev/dri/card1 instead.
+> >>>
+> >>> Yes, this is the problem.
+> >>>
+> >>> If I do an ugly hack like this:
+> >>>
+> >>> --- a/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsdevice.cpp
+> >>> +++ b/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsdevice.cpp
+> >>> @@ -344,7 +344,7 @@ bool QEglFSKmsDevice::open()
+> >>>      Q_ASSERT(m_gbm_device == Q_NULLPTR);
+> >>>
+> >>>      qCDebug(qLcEglfsKmsDebug) << "Opening device" << m_path;
+> >>> -    m_dri_fd = qt_safe_open(m_path.toLocal8Bit().constData(), O_RDWR
+> >>> | O_CLOEXEC);
+> >>> +    m_dri_fd = qt_safe_open("/dev/dri/card1", O_RDWR | O_CLOEXEC);
+> >>>      if (m_dri_fd == -1) {
+> >>>          qErrnoWarning("Could not open DRM device %s", qPrintable(m_path));
+> >>>          return false;
+> >>> --
+> >>> 2.7.4
+> >>>
+> >>> Then the demo is launched. It still do not run very well, but at least
+> >>> it starts.
+> >>>
+> >>> Does anyone have an idea on what would be a proper fix?
+> >>
+> >> That's strange I didn't have to do that. Worst part is that my demo
+> >> image is using Qt5.6.2 (same as your image) and that I checked no
+> >> special env variable is set.
+> >>
+> >> Maybe you can try your kernel on my image, see if that works.
+> >
+> > I just used rootfs, from the link, and kernel 4.9.13 mainline.
+> >
+> > Able to see the demo nicely.
+> >
+> > Order:
+> > - kmscube
+> > - Boundary devices Tux
+> > - jellyfish
+> > - ideas in motion
+> > - 28 fps (1. Lord of the Rings)
+> >
+> > So, I'm investigating config options on buildroot will let you know
+> > for further update.
+> 
+> And by the way, did anyone find this issue.
+> 
+> In file included from
+> /workspace/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
+>                  from
+> ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
+>                  from
+> ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
+>                  from api/qeglfsglobal_p.h:56,
+>                  from api/qeglfsintegration_p.h:54,
+>                  from qeglfsmain.cpp:41:
+> /workspace/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22:
+> fatal error: X11/Xlib.h: No such file or directory
+>  #include <X11/Xlib.h>
+>                       ^
+> compilation terminated.
+> 
+> Look like Qt5.8.0 is unable to build with current tool-chain, 5.6.2 succeeded
+
+Should not happen ;-), mind to share the .config file?
+
+Regards,
+Peter
+
+> 
+> thanks!
