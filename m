@@ -1,126 +1,105 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 6 Mar 2017 22:05:00 +0100
-Subject: [Buildroot] libqeglfs.so not found on imx6
-In-Reply-To: <CAD6G_RTkmybL1PSc_sMPSZHkoSquV5D+9wvCervaJFbj9R2_1w@mail.gmail.com>
-References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
- <CAD6G_RQ_00ozMXZJ4GaTR5ETny-wJk6GkHbPSHLGQjiHUJR9dg@mail.gmail.com>
- <CAOMZO5AB2xYjvjQkvYp8y++M=95SnJSPbkPsv-sqs0VciYDd-w@mail.gmail.com>
- <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
- <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
- <CAOMZO5CufYJ7vqRw_7LxKpWtJe3Z-1U3=8SOubJXLgvNfO3Rew@mail.gmail.com>
- <CAOMZO5D5FB68ZWCqLd0HB14g3AQQRC556bgSXT-RznGB-xjqdA@mail.gmail.com>
- <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
- <CAOMZO5DtKGj3O_9p8H7ewbdq7ahTW=ZRCsVNcMZSGyz8Gxypyg@mail.gmail.com>
- <CAOMZO5DdsuQ29+KyMmvE8Ye5W2_a=-SZaCYKMP_MNoCHb07zaQ@mail.gmail.com>
- <CAOMZO5Be5Y_81g8F1to4kRX7e3TgOqRa6-kVXti0C5pchzCW1w@mail.gmail.com>
- <CAAMH-ysZ-QBLyRy3krifSj5p98d=Aw5pEih07x6cHGHW4bFpWQ@mail.gmail.com>
- <CAD6G_RQ5FB9gJYvfz8Z0cRLhUSrjjXUaG13YdbbGdJJ-8E=BCw@mail.gmail.com>
- <CAD6G_RTkmybL1PSc_sMPSZHkoSquV5D+9wvCervaJFbj9R2_1w@mail.gmail.com>
-Message-ID: <20170306220500.71a188f0@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 6 Mar 2017 22:13:22 +0100
+Subject: [Buildroot] [PATCH 3/3] package/nodejs: remove 0.10.x support
+In-Reply-To: <4a35c4cc-f487-84c5-e2cc-80655f0e53eb@mind.be>
+References: <1488671310-27378-1-git-send-email-martin@barkynet.com>
+ <1488671310-27378-3-git-send-email-martin@barkynet.com>
+ <8fcfeb3e-38c3-3fa7-99fd-feca53e7160f@mind.be>
+ <CAFGQKxeAv8j=vAO5TrcZT8r0a8kCneTR4qa9rhz=daHbwnavkQ@mail.gmail.com>
+ <4a35c4cc-f487-84c5-e2cc-80655f0e53eb@mind.be>
+Message-ID: <20170306211322.GD3976@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jagan,
+Arnout, All,
 
-On Mon, 6 Mar 2017 17:14:23 +0530, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+On 2017-03-06 13:23 +0100, Arnout Vandecappelle spake thusly:
+> On 06-03-17 11:08, Martin Bark wrote:
+> > On 5 March 2017 at 22:40, Arnout Vandecappelle <arnout@mind.be
+> > <mailto:arnout@mind.be>> wrote:
+> > 
+> > 
+> > 
+> >     On 05-03-17 00:48, Martin Bark wrote:
+> >     > nodejs 0.10.x is now end of life and is no longer maintained so remove it.
+> >     > See https://github.com/nodejs/LTS
+> > 
+> >      As mentioned in the Config.in:
+> > 
+> >     # Starting with 0.12.x, on ARM, V8 (the JS engine)
+> >     # now requires an armv6+ and a VFPv2+.
+> > 
+> >      Some people opposed the removal of 0.10 because it would make nodejs
+> >     unavailable on ARM9, while it is really still useful there. So the idea is that
+> >     we keep it around in frozen state.
+> > 
+> > 
+> > We have discussed this a few times.  The last email exchange i had on this
+> > subject was back on 27th September 2016 where Thomas said
+> > 
+> > "It is fine to support 0.10.x in Buildroot to support ARMv5 while 0.10.x
+> > is still maintained upstream. But as Peter mentioned, the support for
+> > 0.10.x upstream will stop soon, so we should also remove it from
+> > Buildroot."
+> > 
+> > I purposefully held off submitting these patches until after the 2017.02 release
+> > so that it included nodejs 0.10.x.  Personally i would like to see 0.10.x
+> > dropped from buildroot.
+> 
+>  Ah, OK, I forgot about that bit :-)
+> 
+>  Peter/Thomas, perhaps add a link to
+> http://lists.busybox.net/pipermail/buildroot/2016-September/173060.html and
+> http://lists.busybox.net/pipermail/buildroot/2015-December/147109.html
+> when committing?
+> 
+>  Note that in that December 2015 thread, Yann suggested to keep 0.10
+> indefinitely, but everybody else seemed to agree with Martin's suggestion to
+> drop it.
 
-> On Mon, Mar 6, 2017 at 4:33 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
-> > On Mon, Mar 6, 2017 at 3:49 PM, Gary Bisson
-> > <gary.bisson@boundarydevices.com> wrote:
-> >> Hi Fabio,
-> >>
-> >> On Sat, Mar 4, 2017 at 8:41 PM, Fabio Estevam <festevam@gmail.com> wrote:
-> >>> On Sat, Mar 4, 2017 at 11:47 AM, Fabio Estevam <festevam@gmail.com> wrote:
-> >>>> Hi Gary,
-> >>>>
-> >>>> On Sat, Mar 4, 2017 at 9:33 AM, Fabio Estevam <festevam@gmail.com> wrote:
-> >>>>
-> >>>>> Not yet, still stuck at the "drmModeGetResources failed" error.
-> >>>>
-> >>>> I can also get this same error with the new kmscube package from:
-> >>>> https://cgit.freedesktop.org/mesa/kmscube/log/
-> >>>>
-> >>>> # kmscube
-> >>>> drmModeGetResources failed: Invalid argument
-> >>>> failed to initialize legacy DRM
-> >>>>
-> >>>> It works if I explicitly pass the /dev/dri device:
-> >>>>
-> >>>> kmscube -D /dev/dri/card1
-> >>>>
-> >>>> I think QT5 is trying to access /dev/dri/card0, but it should be using
-> >>>> /dev/dri/card1 instead.
-> >>>
-> >>> Yes, this is the problem.
-> >>>
-> >>> If I do an ugly hack like this:
-> >>>
-> >>> --- a/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsdevice.cpp
-> >>> +++ b/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsdevice.cpp
-> >>> @@ -344,7 +344,7 @@ bool QEglFSKmsDevice::open()
-> >>>      Q_ASSERT(m_gbm_device == Q_NULLPTR);
-> >>>
-> >>>      qCDebug(qLcEglfsKmsDebug) << "Opening device" << m_path;
-> >>> -    m_dri_fd = qt_safe_open(m_path.toLocal8Bit().constData(), O_RDWR
-> >>> | O_CLOEXEC);
-> >>> +    m_dri_fd = qt_safe_open("/dev/dri/card1", O_RDWR | O_CLOEXEC);
-> >>>      if (m_dri_fd == -1) {
-> >>>          qErrnoWarning("Could not open DRM device %s", qPrintable(m_path));
-> >>>          return false;
-> >>> --
-> >>> 2.7.4
-> >>>
-> >>> Then the demo is launched. It still do not run very well, but at least
-> >>> it starts.
-> >>>
-> >>> Does anyone have an idea on what would be a proper fix?
-> >>
-> >> That's strange I didn't have to do that. Worst part is that my demo
-> >> image is using Qt5.6.2 (same as your image) and that I checked no
-> >> special env variable is set.
-> >>
-> >> Maybe you can try your kernel on my image, see if that works.
-> >
-> > I just used rootfs, from the link, and kernel 4.9.13 mainline.
-> >
-> > Able to see the demo nicely.
-> >
-> > Order:
-> > - kmscube
-> > - Boundary devices Tux
-> > - jellyfish
-> > - ideas in motion
-> > - 28 fps (1. Lord of the Rings)
-> >
-> > So, I'm investigating config options on buildroot will let you know
-> > for further update.
-> 
-> And by the way, did anyone find this issue.
-> 
-> In file included from
-> /workspace/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
->                  from
-> ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
->                  from
-> ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
->                  from api/qeglfsglobal_p.h:56,
->                  from api/qeglfsintegration_p.h:54,
->                  from qeglfsmain.cpp:41:
-> /workspace/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22:
-> fatal error: X11/Xlib.h: No such file or directory
->  #include <X11/Xlib.h>
->                       ^
-> compilation terminated.
-> 
-> Look like Qt5.8.0 is unable to build with current tool-chain, 5.6.2 succeeded
+Well, my position at the time wwas that "As long as it builds and still
+works fine, we should just keep it."
 
-Should not happen ;-), mind to share the .config file?
+But now, 0.10.x is only for armv5. Do we really expect such a low-end
+system to run nodejs?
+
+I don't care much about maintaining 0.10.x, especially now since
+upstream compleely dropped support.
 
 Regards,
-Peter
+Yann E. MORIN.
 
+>  I have one remaining gripe, however: ideally there should be a Config.in.legacy
+> entry. But of course that's impossible because the BR2_PACKAGE_NODEJS symbol
+> still exists... One extremely hacky solution would be to add
+> BR2_PACKAGE_NODEJS_VERSION_STRING to Config.in.legacy, *with* a prompt and
+> without the dependency on BR2_PACKAGE_NODEJS. Then, if someone updates with an
+> existing .config, the previously-hidden VERSION_STRING will appear in the legacy
+> menu. But that solution looks pretty hairy, and I'm sure that people will notice
+> in other ways that nodejs has vanished, so it's probably not so important.
 > 
-> thanks!
+>  Regards,
+>  Arnout
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
