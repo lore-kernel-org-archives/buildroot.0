@@ -1,127 +1,416 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Mar 2017 11:59:04 -0300
-Subject: [Buildroot] [PATCH] pango: bump to version 1.40.4
-Message-ID: <20170306145904.4784-1-gustavo@zacarias.com.ar>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon,  6 Mar 2017 10:01:01 -0500
+Subject: [Buildroot] [PATCH v2 1/1] ncurses: bump to 6.0
+Message-ID: <20170306150101.4374-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update test-disabling patch for new version, and git format it.
+ncurses 6.0 has been out for a while now (August 8th 2015!)  This
+patch brings us up to the latest version.  Not too many changes had
+to occure to get this working well.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+- The first patch is no longer needed as it was fixed in the new release.
+- The other two packages are still applicable, however I did have to change
+  the line numbers.  Because that is the only thing I had to change, I didn't
+  put my signature on them.  If this is needed I will gladly do so.
+- A new option: --with-pkg-config-libdir has been added. Without it
+  pkg files wouldn't install to the correct location.
+- NCURSES_ABI_VERSION is no longer needed, as there is only 6.
+
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
- .../0001-build-disable-tests-from-building.patch   | 39 ++++++++++++++++++++++
- package/pango/0001-no-tests.patch                  | 30 -----------------
- package/pango/pango.hash                           |  4 +--
- package/pango/pango.mk                             |  2 +-
- 4 files changed, 42 insertions(+), 33 deletions(-)
- create mode 100644 package/pango/0001-build-disable-tests-from-building.patch
- delete mode 100644 package/pango/0001-no-tests.patch
+v1 -> v2:
+  - Updated to work with Thomas Petazzoni's changes.
 
-diff --git a/package/pango/0001-build-disable-tests-from-building.patch b/package/pango/0001-build-disable-tests-from-building.patch
-new file mode 100644
-index 0000000..c518a34
---- /dev/null
-+++ b/package/pango/0001-build-disable-tests-from-building.patch
-@@ -0,0 +1,39 @@
-+From cde9a78711e8eaed0aefb9e36288f22918e8d4b2 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Thu, 2 Mar 2017 09:41:41 -0300
-+Subject: [PATCH] build: disable tests from building
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ Makefile.am | 2 +-
-+ Makefile.in | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 9e31b34..32e5c29 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,6 +1,6 @@
-+ ## Process this file with automake to create Makefile.in.
-+ 
-+-SUBDIRS= pango pango-view examples docs tools tests win32
-++SUBDIRS= pango pango-view examples docs tools win32
-+ 
-+ EXTRA_DIST = 			\
-+ 	autogen.sh		\
-+diff --git a/Makefile.in b/Makefile.in
-+index 6b6f6c7..ed0cfa2 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -418,7 +418,7 @@ target_alias = @target_alias@
-+ top_build_prefix = @top_build_prefix@
-+ top_builddir = @top_builddir@
-+ top_srcdir = @top_srcdir@
-+-SUBDIRS = pango pango-view examples docs tools tests win32
-++SUBDIRS = pango pango-view examples docs tools win32
-+ EXTRA_DIST = \
-+ 	autogen.sh		\
-+ 	pango.pc.in		\
-+-- 
-+2.10.2
-+
-diff --git a/package/pango/0001-no-tests.patch b/package/pango/0001-no-tests.patch
+ .../ncurses/0001-fixup-pkg-config-handling.patch   | 89 ----------------------
+ ...Klib_gen.patch => 0001-gcc-5.x-MKlib_gen.patch} |  7 +-
+ package/ncurses/0002-recognise-uclinux.patch       | 28 +++++++
+ package/ncurses/0003-recognise-uclinux.patch       | 30 --------
+ package/ncurses/Config.in                          | 15 ----
+ package/ncurses/ncurses.hash                       |  2 +-
+ package/ncurses/ncurses.mk                         | 73 ++++++------------
+ 7 files changed, 57 insertions(+), 187 deletions(-)
+ delete mode 100644 package/ncurses/0001-fixup-pkg-config-handling.patch
+ rename package/ncurses/{0002-gcc-5.x-MKlib_gen.patch => 0001-gcc-5.x-MKlib_gen.patch} (87%)
+ create mode 100644 package/ncurses/0002-recognise-uclinux.patch
+ delete mode 100644 package/ncurses/0003-recognise-uclinux.patch
+
+diff --git a/package/ncurses/0001-fixup-pkg-config-handling.patch b/package/ncurses/0001-fixup-pkg-config-handling.patch
 deleted file mode 100644
-index 734409d..0000000
---- a/package/pango/0001-no-tests.patch
+index e1cfc75..0000000
+--- a/package/ncurses/0001-fixup-pkg-config-handling.patch
++++ /dev/null
+@@ -1,89 +0,0 @@
+-Change handling of PKG_CONFIG_LIBDIR
+-
+-When PKG_CONFIG_LIBDIR was unset in the environment, the configure
+-script was deducing the PKG_CONFIG_LIBDIR from the location of the
+-pkg-config binary, which doesn't make a lot of sense, and isn't done
+-by other autotools based packages.
+-
+-Also, the configure script was checking that the directory really
+-exists. This forced to create the directory *and* provide an absolute
+-path in PKG_CONFIG_LIBDIR, which didn't play well with the fact that
+-at installation time, PKG_CONFIG_LIBDIR is suffixed to DESTDIR, which
+-means that we got two times the staging directory location.
+-
+-This patch fixes both of those issues. Also, since ncurses uses a fork
+-of autoconf 2.13, we can't simply use _AUTORECONF=YES, so we also fix
+-the configure script in this patch.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/configure
+-===================================================================
+---- a/configure
+-+++ b/configure
+-@@ -3623,27 +3623,20 @@
+- 
+- 	# Leave this as something that can be overridden in the environment.
+- 	if test -z "$PKG_CONFIG_LIBDIR" ; then
+--		PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG" | sed -e 's,/[^/]*/[^/]*$,,'`/lib/pkgconfig
+-+		PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig"
+- 	fi
+-+
+- 	PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG_LIBDIR" | sed -e 's/^://' -e 's/:.*//'`
+--	if test -n "$PKG_CONFIG_LIBDIR" && test -d "$PKG_CONFIG_LIBDIR" ; then
+- 
+--# Check whether --enable-pc-files or --disable-pc-files was given.
+--if test "${enable_pc_files+set}" = set; then
+--  enableval="$enable_pc_files"
+--  enable_pc_files=$enableval
+--else
+--  enable_pc_files=no
+--fi;
+--		echo "$as_me:3638: result: $enable_pc_files" >&5
+--echo "${ECHO_T}$enable_pc_files" >&6
+-+        # Check whether --enable-pc-files or --disable-pc-files was given.
+-+	if test "${enable_pc_files+set}" = set; then
+-+	    enableval="$enable_pc_files"
+-+	    enable_pc_files=$enableval
+- 	else
+--		echo "$as_me:3641: result: no" >&5
+--echo "${ECHO_T}no" >&6
+--		{ echo "$as_me:3643: WARNING: did not find library $PKG_CONFIG_LIBDIR" >&5
+--echo "$as_me: WARNING: did not find library $PKG_CONFIG_LIBDIR" >&2;}
+--		enable_pc_files=no
+--	fi
+-+	    enable_pc_files=no
+-+	fi;
+-+	echo "$as_me:3638: result: $enable_pc_files" >&5
+-+	echo "${ECHO_T}$enable_pc_files" >&6
+- fi
+- 
+- echo "$as_me:3649: checking if we should assume mixed-case filenames" >&5
+-Index: b/configure.in
+-===================================================================
+---- a/configure.in
+-+++ b/configure.in
+-@@ -174,20 +174,14 @@
+- 
+- 	# Leave this as something that can be overridden in the environment.
+- 	if test -z "$PKG_CONFIG_LIBDIR" ; then
+--		PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG" | sed -e 's,/[[^/]]*/[[^/]]*$,,'`/lib/pkgconfig
+-+		PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig"
+- 	fi
+- 	PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG_LIBDIR" | sed -e 's/^://' -e 's/:.*//'`
+--	if test -n "$PKG_CONFIG_LIBDIR" && test -d "$PKG_CONFIG_LIBDIR" ; then
+--		AC_ARG_ENABLE(pc-files,
+-+	AC_ARG_ENABLE(pc-files,
+- 			[  --enable-pc-files       generate and install .pc files for pkg-config],
+- 			[enable_pc_files=$enableval],
+- 			[enable_pc_files=no])
+--		AC_MSG_RESULT($enable_pc_files)
+--	else
+--		AC_MSG_RESULT(no)
+--		AC_MSG_WARN(did not find library $PKG_CONFIG_LIBDIR)
+--		enable_pc_files=no
+--	fi
+-+	AC_MSG_RESULT($enable_pc_files)
+- fi
+- AC_SUBST(PKG_CONFIG_LIBDIR)
+- 
+diff --git a/package/ncurses/0002-gcc-5.x-MKlib_gen.patch b/package/ncurses/0001-gcc-5.x-MKlib_gen.patch
+similarity index 87%
+rename from package/ncurses/0002-gcc-5.x-MKlib_gen.patch
+rename to package/ncurses/0001-gcc-5.x-MKlib_gen.patch
+index 25c2bd0..958621a 100644
+--- a/package/ncurses/0002-gcc-5.x-MKlib_gen.patch
++++ b/package/ncurses/0001-gcc-5.x-MKlib_gen.patch
+@@ -12,9 +12,9 @@ http://ncurses.scripts.mit.edu/?p=ncurses.git;a=commit;h=97bb4678dc03e753290b39b
+ Original author: Thomas E. Dickey <dickey@invisible-island.net>
+ Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
+ 
+---- a/ncurses/base/MKlib_gen.sh.orig	2015-07-23 21:52:32.239481505 +0300
+-+++ b/ncurses/base/MKlib_gen.sh	2015-07-23 21:53:20.772966587 +0300
+-@@ -437,11 +437,22 @@
++--- a/ncurses/base/MKlib_gen.sh	2015-08-06 20:48:24.000000000 -0400
+++++ b/ncurses/base/MKlib_gen.sh	2017-02-07 10:09:01.293962392 -0500
++@@ -491,11 +491,22 @@
+  	-e 's/gen_$//' \
+  	-e 's/  / /g' >>$TMP
+  
+@@ -41,3 +41,4 @@ Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
+  | $AWK -f $AW2 \
+  | sed -f $ED3 \
+  | sed \
++
+diff --git a/package/ncurses/0002-recognise-uclinux.patch b/package/ncurses/0002-recognise-uclinux.patch
+new file mode 100644
+index 0000000..502d3c8
+--- /dev/null
++++ b/package/ncurses/0002-recognise-uclinux.patch
+@@ -0,0 +1,28 @@
++aclocal: fix detection for uclinux hosts
++
++uclinux is just a linux like the others...
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++--- a/aclocal.m4	2015-08-05 20:46:34.000000000 -0400
+++++ b/aclocal.m4	2017-02-07 09:58:17.770056849 -0500
++@@ -7656,7 +7656,7 @@
++ 	cf_xopen_source="-D_SGI_SOURCE"
++ 	cf_XOPEN_SOURCE=
++ 	;;
++-(linux*|gnu*|mint*|k*bsd*-gnu)
+++(linux*|uclinux*|gnu*|mint*|k*bsd*-gnu)
++ 	CF_GNU_SOURCE
++ 	;;
++ (minix*)
++diff -durN a/configure b/configure
++--- a/configure	2015-08-05 05:20:32.000000000 -0400
+++++ b/configure	2017-02-07 09:58:52.883886426 -0500
++@@ -7869,7 +7869,7 @@
++ 	cf_xopen_source="-D_SGI_SOURCE"
++ 	cf_XOPEN_SOURCE=
++ 	;;
++-(linux*|gnu*|mint*|k*bsd*-gnu)
+++(linux*|uclinux*|gnu*|mint*|k*bsd*-gnu)
++ 
++ echo "$as_me:7874: checking if we must define _GNU_SOURCE" >&5
++ echo $ECHO_N "checking if we must define _GNU_SOURCE... $ECHO_C" >&6
+diff --git a/package/ncurses/0003-recognise-uclinux.patch b/package/ncurses/0003-recognise-uclinux.patch
+deleted file mode 100644
+index e86546c..0000000
+--- a/package/ncurses/0003-recognise-uclinux.patch
 +++ /dev/null
 @@ -1,30 +0,0 @@
--Prevent Pango to build tests.
+-aclocal: fix detection for uclinux hosts
 -
--Updated to Pango 1.36.3 by Hadrien Boutteville.
+-uclinux is just a linux like the others...
 -
--Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
--[Gustavo: update for 1.38.1]
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 -
--diff -Nura pango-1.38.1.orig/Makefile.am pango-1.38.1/Makefile.am
----- pango-1.38.1.orig/Makefile.am	2015-10-14 15:41:27.620016974 +0000
--+++ pango-1.38.1/Makefile.am	2015-10-14 15:41:54.431240793 +0000
--@@ -1,6 +1,6 @@
-- ## Process this file with automake to create Makefile.in.
+-diff -durN ncurses-5.9.orig/aclocal.m4 ncurses-5.9/aclocal.m4
+---- ncurses-5.9.orig/aclocal.m4	2011-04-01 01:35:38.000000000 +0200
+-+++ ncurses-5.9/aclocal.m4	2016-08-21 15:24:47.003620029 +0200
+-@@ -6531,7 +6531,7 @@
+- irix[[56]].*) #(vi
+- 	cf_xopen_source="-D_SGI_SOURCE"
+- 	;;
+--linux*|gnu*|mint*|k*bsd*-gnu) #(vi
+-+linux*|uclinux*|gnu*|mint*|k*bsd*-gnu) #(vi
+- 	CF_GNU_SOURCE
+- 	;;
+- mirbsd*) #(vi
+-diff -durN ncurses-5.9.orig/configure ncurses-5.9/configure
+---- ncurses-5.9.orig/configure	2016-08-21 15:21:50.789285661 +0200
+-+++ ncurses-5.9/configure	2016-08-21 15:24:35.187463625 +0200
+-@@ -6984,7 +6984,7 @@
+- irix[56].*) #(vi
+- 	cf_xopen_source="-D_SGI_SOURCE"
+- 	;;
+--linux*|gnu*|mint*|k*bsd*-gnu) #(vi
+-+linux*|uclinux*|gnu*|mint*|k*bsd*-gnu) #(vi
 - 
---SUBDIRS= pango pango-view examples docs tools tests build
--+SUBDIRS= pango pango-view examples docs tools build
-- 
-- EXTRA_DIST = 			\
-- 	autogen.sh		\
--diff -Nura pango-1.38.1.orig/Makefile.in pango-1.38.1/Makefile.in
----- pango-1.38.1.orig/Makefile.in	2015-10-14 15:41:27.630016685 +0000
--+++ pango-1.38.1/Makefile.in	2015-10-14 15:41:58.753115676 +0000
--@@ -417,7 +417,7 @@
-- top_build_prefix = @top_build_prefix@
-- top_builddir = @top_builddir@
-- top_srcdir = @top_srcdir@
---SUBDIRS = pango pango-view examples docs tools tests build
--+SUBDIRS = pango pango-view examples docs tools build
-- EXTRA_DIST = \
-- 	autogen.sh		\
-- 	pango.pc.in		\
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 1ea9f6b..9908c4a 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
+- echo "$as_me:6996: checking if we must define _GNU_SOURCE" >&5
+- echo $ECHO_N "checking if we must define _GNU_SOURCE... $ECHO_C" >&6
+diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
+index 44713f9..92be164 100644
+--- a/package/ncurses/Config.in
++++ b/package/ncurses/Config.in
+@@ -18,21 +18,6 @@ config BR2_PACKAGE_NCURSES_WCHAR
+ 	help
+ 	  Enable wide char & UTF-8 support in ncurses libraries
+ 
+-config BR2_PACKAGE_NCURSES_TARGET_PANEL
+-	bool "ncurses libpanel in target"
+-	help
+-	  Includes ncurses dynamic libpanel in target
+-
+-config BR2_PACKAGE_NCURSES_TARGET_FORM
+-	bool "ncurses libform in target"
+-	help
+-	  Includes ncurses dynamic libform in target
+-
+-config BR2_PACKAGE_NCURSES_TARGET_MENU
+-	bool "ncurses libmenu in target"
+-	help
+-	  Includes ncurses dynamic libmenu in target
+-
+ config BR2_PACKAGE_NCURSES_TARGET_PROGS
+ 	bool "ncurses programs"
+ 	help
+diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
+index 482b2d4..6bca143 100644
+--- a/package/ncurses/ncurses.hash
++++ b/package/ncurses/ncurses.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.3.sha256sum
--sha256	abba8b5ce728520c3a0f1535eab19eac3c14aeef7faa5aded90017ceac2711d3	pango-1.40.3.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.40/pango-1.40.4.sha256sum
-+sha256	f8fdc5fc66356dc4edf915048cceeee065a0e0cb70b3b2598f62bda320129a3e	pango-1.40.4.tar.xz
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index b45bf9a..d4957f9 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated after checking pgp signature
+-sha256	9046298fb440324c9d4135ecea7879ffed8546dd1b58e59430ea07a4633f563b	ncurses-5.9.tar.gz
++sha256	f551c24b30ce8bfb6e96d9f59b42fbea30fa3a6123384172f9e7284bcf647260	ncurses-6.0.tar.gz
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 343909f..1e83188 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -4,14 +4,13 @@
+ #
  ################################################################################
  
- PANGO_VERSION_MAJOR = 1.40
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).3
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_AUTORECONF = YES
+-NCURSES_VERSION = 5.9
++NCURSES_VERSION = 6.0
+ NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
+ NCURSES_INSTALL_STAGING = YES
+ NCURSES_DEPENDENCIES = host-ncurses
+-NCURSES_PROGS = clear infocmp tabs tic toe tput tset
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = README
+-NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)$(NCURSES_ABI_VERSION)-config
++NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)6-config
+ 
+ NCURSES_CONF_OPTS = \
+ 	--without-cxx \
+@@ -26,6 +25,7 @@ NCURSES_CONF_OPTS = \
+ 	--enable-const \
+ 	--enable-overwrite \
+ 	--enable-pc-files \
++	--with-pkg-config-libdir="/usr/lib/pkgconfig" \
+ 	$(if $(BR2_PACKAGE_NCURSES_TARGET_PROGS),,--without-progs) \
+ 	--without-manpages
+ 
+@@ -50,11 +50,6 @@ else
+ NCURSES_CONF_OPTS += --without-gpm
+ endif
+ 
+-NCURSES_LIBS-y = ncurses
+-NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += menu
+-NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += panel
+-NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
+-
+ NCURSES_TERMINFO_FILES = \
+ 	a/ansi \
+ 	l/linux \
+@@ -73,41 +68,38 @@ NCURSES_TERMINFO_FILES = \
+ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+ NCURSES_CONF_OPTS += --enable-widec
+ NCURSES_LIB_SUFFIX = w
++NCURSES_LIBS = ncurses menu panel form
+ 
+ define NCURSES_LINK_LIBS_STATIC
+-	$(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
+-		ln -sf $(lib)$(NCURSES_LIB_SUFFIX).a $(1)/usr/lib/$(lib).a
++	$(foreach lib,$(NCURSES_LIBS:%=lib%), \
++		ln -sf $(lib)$(NCURSES_LIB_SUFFIX).a $(STAGING_DIR)/usr/lib/$(lib).a
+ 	)
+ 	ln -sf libncurses$(NCURSES_LIB_SUFFIX).a \
+-		$(1)/usr/lib/libcurses.a
++		$(STAGING_DIR)/usr/lib/libcurses.a
+ endef
+ 
+ define NCURSES_LINK_LIBS_SHARED
+-	$(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
+-		ln -sf $(lib)$(NCURSES_LIB_SUFFIX).so $(1)/usr/lib/$(lib).so
++	$(foreach lib,$(NCURSES_LIBS:%=lib%), \
++		ln -sf $(lib)$(NCURSES_LIB_SUFFIX).so $(STAGING_DIR)/usr/lib/$(lib).so
+ 	)
+ 	ln -sf libncurses$(NCURSES_LIB_SUFFIX).so \
+-		$(1)/usr/lib/libcurses.so
++		$(STAGING_DIR)/usr/lib/libcurses.so
+ endef
+ 
+ define NCURSES_LINK_PC
+-	$(foreach pc,$(NCURSES_LIBS-y), \
++	$(foreach pc,$(NCURSES_LIBS), \
+ 		ln -sf $(pc)$(NCURSES_LIB_SUFFIX).pc \
+-			$(1)/usr/lib/pkgconfig/$(pc).pc
++			$(STAGING_DIR)/usr/lib/pkgconfig/$(pc).pc
+ 	)
+ endef
+ 
+-NCURSES_LINK_TARGET_LIBS = \
+-	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(TARGET_DIR));) \
+-	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(TARGET_DIR)))
+ NCURSES_LINK_STAGING_LIBS = \
+-	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(STAGING_DIR));) \
+-	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(STAGING_DIR)))
++	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC);) \
++	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED))
+ 
+-NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
++NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC)
+ 
+ NCURSES_CONF_OPTS += --enable-ext-colors
+-NCURSES_ABI_VERSION = 6
+ NCURSES_TERMINFO_FILES += \
+ 	p/putty-256color \
+ 	x/xterm+256color \
+@@ -116,8 +108,6 @@ NCURSES_TERMINFO_FILES += \
+ NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
+ NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
+ 
+-else # BR2_PACKAGE_NCURSES_WCHAR
+-NCURSES_ABI_VERSION = 5
+ endif # BR2_PACKAGE_NCURSES_WCHAR
+ 
+ ifneq ($(BR2_ENABLE_DEBUG),y)
+@@ -132,36 +122,21 @@ define NCURSES_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR)
+ endef
+ 
+-ifneq ($(BR2_STATIC_LIBS),y)
+-define NCURSES_INSTALL_TARGET_LIBS
+-	$(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
+-		cp -dpf $(NCURSES_DIR)/lib/$(lib)$(NCURSES_LIB_SUFFIX).so* \
+-			$(TARGET_DIR)/usr/lib/
+-	)
+-endef
+-endif
+-
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
+-define NCURSES_INSTALL_TARGET_PROGS
+-	$(foreach prog,$(NCURSES_PROGS), \
+-		$(INSTALL) -m 0755 $(NCURSES_DIR)/progs/$(prog) \
+-			$(TARGET_DIR)/usr/bin/$(prog)
+-	)
++define NCURSES_TARGET_SYMLINK_RESET
+ 	ln -sf tset $(TARGET_DIR)/usr/bin/reset
+ endef
++NCURSES_POST_INSTALL_TARGET_HOOKS += NCURSES_TARGET_SYMLINK_RESET
+ endif
+ 
+-define NCURSES_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	$(NCURSES_INSTALL_TARGET_LIBS)
+-	$(NCURSES_LINK_TARGET_LIBS)
+-	$(NCURSES_INSTALL_TARGET_PROGS)
+-	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+-	$(foreach terminfo,$(NCURSES_TERMINFO_FILES),\
+-		$(INSTALL) -D -m 0644 $(STAGING_DIR)/usr/share/terminfo/$(terminfo) \
+-			$(TARGET_DIR)/usr/share/terminfo/$(terminfo)
++define NCURSES_TARGET_CLEANUP_TERMINFO
++	$(RM) -rf $(TARGET_DIR)/usr/share/terminfo $(TARGET_DIR)/usr/share/tabset
++	$(foreach t,$(NCURSES_TERMINFO_FILES), \
++		$(INSTALL) -D -m 0644 $(STAGING_DIR)/usr/share/terminfo/$(t) \
++			$(TARGET_DIR)/usr/share/terminfo/$(t)
+ 	)
+-endef # NCURSES_INSTALL_TARGET_CMDS
++endef
++NCURSES_POST_INSTALL_TARGET_HOOKS += NCURSES_TARGET_CLEANUP_TERMINFO
+ 
+ #
+ # On systems with an older version of tic, the installation of ncurses hangs
 -- 
-2.10.2
+2.9.3
