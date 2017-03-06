@@ -1,39 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  6 Mar 2017 20:35:11 +0100
-Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.2.28
-Message-ID: <20170306193512.4916-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Mar 2017 21:14:14 +0100
+Subject: [Buildroot] [git commit] package/python-pyliftdi: fix patch
+Message-ID: <20170306201422.9DB72822A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=0025e7961df22dfc5761561b67756ec49680e4f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index e7b9c3375..b52ea8dc0 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,2 +1,2 @@
- # Locally computed after checking signature
--sha256 897f92a87cda4b27b243f8149ce0ba7b7e71a2be8fb7994eb0a025e54cde18e9  dovecot-2.2.27.tar.gz
-+sha256 e0288f59e326ab87cb3881fdabadafe542f4dc7ab9996db13863a439ebbc1f25  dovecot-2.2.28.tar.gz
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index fe0afa506..caa6bbaee 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).27
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).28
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPLv2.1
--- 
-2.11.0
+The 0001 patch introduces leading tabs, when the rest of the file is
+using leading spaces, and python3 does not like that.
+
+Fixes:
+    http://autobuild.buildroot.org/results/e24/e24a8e6f62139ab0efbce7a32c3d88c2cba839c6/
+    http://autobuild.buildroot.org/results/7b1/7b14c4bb4cac3ff006e77330cbd7b839ad80192a/
+    http://autobuild.buildroot.org/results/67c/67cddfdb801e83acfd9f197f5661fd43fa38a092/
+    [...]
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Christian Kellermann <christian.kellermann@solectrix.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-pylibftdi/0001-do-not-use-find-library.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-pylibftdi/0001-do-not-use-find-library.patch b/package/python-pylibftdi/0001-do-not-use-find-library.patch
+index ae8fe2d..192ed43 100644
+--- a/package/python-pylibftdi/0001-do-not-use-find-library.patch
++++ b/package/python-pylibftdi/0001-do-not-use-find-library.patch
+@@ -24,7 +24,7 @@ diff -purN pylibftdi-0.15.0.orig/pylibftdi/driver.py pylibftdi-0.15.0/pylibftdi/
+          if lib is None:
+ -            raise LibraryMissingError('{} library not found (search: {})'.format(
+ -                name, search_list))
+-+		return cdll.LoadLibrary(name + '.so')
+++            return cdll.LoadLibrary(name + '.so')
+ +
+          return lib
+  
