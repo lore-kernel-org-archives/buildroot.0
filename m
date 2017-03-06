@@ -1,37 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Mar 2017 09:04:02 +0100
-Subject: [Buildroot] [git commit] libsidplay2: fix build on ppc64le by
- not autoreconfiguring
-In-Reply-To: <20170306005257.GA13970@tungsten.ozlabs.ibm.com>
-References: <20170301215040.A63AC8225E@busybox.osuosl.org>
- <20170306005257.GA13970@tungsten.ozlabs.ibm.com>
-Message-ID: <20170306090402.5adffd56@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 06 Mar 2017 08:07:09 +0000
+Subject: [Buildroot] [Bug 9711] Recent libCEC version bump seems to break
+	kodi package
+In-Reply-To: <bug-9711-163@https.bugs.busybox.net/>
+References: <bug-9711-163@https.bugs.busybox.net/>
+Message-ID: <bug-9711-163-l7cV5IbPG6@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9711
 
-On Mon, 6 Mar 2017 11:52:57 +1100, Sam Bobroff wrote:
+--- Comment #8 from RiZom-91 <rizom91@openaliasbox.org> ---
+Created attachment 6946
+  --> https://bugs.busybox.net/attachment.cgi?id=6946&action=edit
+Error trace after patch
 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
-> 
-> Works for me.
-> Tested-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Here is the trace I got after applying the patch. It seems that this is the
+same error that I had yesterday after reverting the version bump. Unfortunately
+I did not get the trace at this time...
 
-Thanks for the testing. It has already been applied since a few days,
-though:
-https://git.buildroot.org/buildroot/commit/package/libsidplay2?id=df1b6d8cb2063c7a6f961cc2319879e50b3530a3.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
