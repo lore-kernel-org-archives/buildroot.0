@@ -1,79 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Mar 2017 14:24:25 +0100
+From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Mon, 6 Mar 2017 14:20:56 +0100
 Subject: [Buildroot] [PATCH 1/1] package/mke2img: use mkfs to generate
  rootfs image
-In-Reply-To: <9ba789cc-143e-2102-56be-90793313af23@armadeus.com>
+In-Reply-To: <20170302134714.29b75bed@free-electrons.com>
 References: <1488445576-12857-1-git-send-email-sebastien.szymanski@armadeus.com>
  <20170302113411.26bd85f5@free-electrons.com>
  <1da03de6-08c6-93fd-3c2d-ec1bd6fabe1f@armadeus.com>
  <20170302134714.29b75bed@free-electrons.com>
- <9ba789cc-143e-2102-56be-90793313af23@armadeus.com>
-Message-ID: <20170306142425.670ab5ab@free-electrons.com>
+Message-ID: <9ba789cc-143e-2102-56be-90793313af23@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Mon, 6 Mar 2017 14:20:56 +0100, S?bastien Szymanski wrote:
-
-> I copied the target/ directory on a xfs filesystem and looked the
-> differences. On ext4, the size of a directory is at least the size of
-> block. With find, we can get the number of directories with a size less
-> than the size of a block:
+On 03/02/2017 01:47 PM, Thomas Petazzoni wrote:
+> Hello,
 > 
-> XFS fs
-> $ du -s -k /mnt/target
-> 16032
+> On Thu, 2 Mar 2017 13:45:06 +0100, S?bastien Szymanski wrote:
 > 
-> Ext4 fs (4K block size):
-> $ du -s -k output/target
-> 16320
+>>> Now that we use mkfs, is it possible to get rid of mke2img entirely?  
+>>
+>> We still have to calculate the number of blocks needed. I guess we can
+>> do that in the .mk file, can't we?
 > 
-> $ find /mnt/target/ -type d -size -1024c | wc -l
-> 72
+> Do we still need to do this calculation? Can't mkfs create an image of
+> an arbitrary size in MBs ?
 > 
-> 16032 + 72*4 = 16320
+> Indeed, the current code that calculates the number of blocks needed is
+> completely bogus, and breaks as soon as the host filesystem is not
+> ext2/3/4. We have two bug reports that says it doesn't work, one one
+> ZFS, another on NTFS, and I remember it also broke on XFS.
 > 
-> I didn't check if this is true with other filesystems.
-
-I'm wondering if XFS also doesn't store very small files, and possibly
-symbolic links, in a different way.
-
-In any case, I believe we agree that looking at the size of files
-stored in filesystem A doesn't give an accurate idea of how much space
-they will consume once stored with filesystem B.
-
-> > Therefore, I would suggest that we get rid of this, and instead add an
-> > option "Filesystem size" in Config.in, default to some reasonable value
-> > like 64M or 128M, and it would be up to the user to define it to a
-> > value that is large enough to host the package selection he has done.  
+> See:
 > 
-> Can't we automate this? I mean depending of the size of the target
-> directory, we use one of the following size: 64M, 128M, 256M,
+>   https://bugs.busybox.net/show_bug.cgi?id=8831 (ZFS)
+>   https://bugs.busybox.net/show_bug.cgi?id=9496 (NTFS)
+>   https://github.com/buildroot/buildroot-defconfig-testing/blob/master/.travis.yml#L158 (XFS)
+> 
+> So the whole "let's calculate how many blocks are needed" logic we have
+> simply cannot work, because the number of blocks needed completely
+> depends on the internal architecture of the filesystem.
 
-How do you know which one to choose? If you look at the target
-directory size, then you end up doing what you do today, and which is
-broken. Or you have to take some really really big margin. But OK, we
-can try with even margin (like 20% or 30% margin).
+I copied the target/ directory on a xfs filesystem and looked the
+differences. On ext4, the size of a directory is at least the size of
+block. With find, we can get the number of directories with a size less
+than the size of a block:
 
-> and then we shrink the filesystem with resize2fs -M ?
+XFS fs
+$ du -s -k /mnt/target
+16032
 
-Why would you shrink it down? The fact that our filesystem images today
-are really just the size of the files they contain is most of time
-annoying, and you have to increase the size of the filesystem
-afterwards to make the system usable. So it'd be great to instead have
-images of 64 MB, 128 MB, 256 MB, with some free space.
+Ext4 fs (4K block size):
+$ du -s -k output/target
+16320
 
-Of course, we should have options to allow the user to indicate the
-size he wants, and comply with this size exactly.
+$ find /mnt/target/ -type d -size -1024c | wc -l
+72
 
-Best regards,
+16032 + 72*4 = 16320
 
-Thomas
+I didn't check if this is true with other filesystems.
+
+> 
+> Therefore, I would suggest that we get rid of this, and instead add an
+> option "Filesystem size" in Config.in, default to some reasonable value
+> like 64M or 128M, and it would be up to the user to define it to a
+> value that is large enough to host the package selection he has done.
+
+Can't we automate this? I mean depending of the size of the target
+directory, we use one of the following size: 64M, 128M, 256M,
+and then we shrink the filesystem with resize2fs -M ?
+
+Regards,
+
+> 
+>>>> +    # Disable some defaults features
+>>>> +    mkfs_O_opts+=",^ext_attr,^64bit,^flex_bg,^large_file,^huge_file,^dir_nlink,^extra_isize"  
+>>>
+>>> Why would we disable these default features  
+>>
+>> I disable these default features, to generate a rootfs as similar as
+>> possible the one generated by genext2fs.
+> 
+> OK.
+> 
+>> U-boot had some issues with rootfs with the 64bit flags, but this has
+>> been fixed
+>>
+>> http://git.denx.de/?p=u-boot.git;a=commit;h=b4976b49a01ac68f7dbb33657a44dcffe584fa4a
+> 
+> Then, I think we want to disable it by default indeed, since we want to
+> remain compatible with old U-Boot versions that may not have this fix.
+> 
+> Thomas
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+S?bastien Szymanski
+Software Engineer, Armadeus Systems
+sebastien.szymanski at armadeus.com
+Tel: +33 (0)9 72 29 41 44
+Fax: +33 (0)9 72 28 79 26
