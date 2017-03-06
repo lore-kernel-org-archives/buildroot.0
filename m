@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Mar 2017 17:48:09 +0100
-Subject: [Buildroot] [PATCH] pango: bump to version 1.40.4
-In-Reply-To: <20170306145904.4784-1-gustavo@zacarias.com.ar>
-References: <20170306145904.4784-1-gustavo@zacarias.com.ar>
-Message-ID: <20170306174809.56a6a314@free-electrons.com>
+Date: Mon, 6 Mar 2017 17:49:40 +0100
+Subject: [Buildroot] [PATCH 1/1] lzlib: add LuaJIT support
+In-Reply-To: <4dc526ef-e8a2-9f9c-bf3a-3b4aa3c47d62@spox.org>
+References: <1487753715-21961-1-git-send-email-niziak@spox.org>
+ <20170222110813.76e8d38c@free-electrons.com>
+ <4dc526ef-e8a2-9f9c-bf3a-3b4aa3c47d62@spox.org>
+Message-ID: <20170306174940.28f5aaaf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  6 Mar 2017 11:59:04 -0300, Gustavo Zacarias wrote:
-> Update test-disabling patch for new version, and git format it.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  .../0001-build-disable-tests-from-building.patch   | 39 ++++++++++++++++++++++
->  package/pango/0001-no-tests.patch                  | 30 -----------------
->  package/pango/pango.hash                           |  4 +--
->  package/pango/pango.mk                             |  2 +-
->  4 files changed, 42 insertions(+), 33 deletions(-)
->  create mode 100644 package/pango/0001-build-disable-tests-from-building.patch
->  delete mode 100644 package/pango/0001-no-tests.patch
+On Mon, 6 Mar 2017 09:47:17 +0100, Wojciech Nizinski wrote:
 
-Applied to master, thanks. However, could you improve the test
-disabling patch to introduce a --disable-tests option and send it
-upstream? It'd be nice to be able to get rid of this patch.
+> I've created pull request on GitHub project on the same day.
+> https://github.com/LuaDist/lzlib/pull/7)
+
+Thanks for doing this! Can you wait until upstream gives some feedback
+and merges the patch, and then submit it again to Buildroot?
+
+> Here is patch with SoB line:
+
+This patch cannot be applied, it's completely line wrapped. Please
+always send your patches with "git send-email".
 
 Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
