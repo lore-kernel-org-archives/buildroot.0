@@ -1,72 +1,81 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 6 Mar 2017 09:18:29 -0300
-Subject: [Buildroot] libqeglfs.so not found on imx6
-In-Reply-To: <CAD6G_RTiZFhEVenFUCY1-EPmHq2ahnaXeE9oe9uQavzcXjpWNQ@mail.gmail.com>
-References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
- <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
- <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
- <CAAMH-ys=MpSuBvT=weVPKhyu5_bz4feq7ePmMN4LgHKubG_9vQ@mail.gmail.com>
- <CAD6G_RR5fC2n_JA=M1p3=0MeOwDXRVg2hQbhKDwHYmjyddu1SA@mail.gmail.com>
- <CAOMZO5B_d9-oq9R1NciG7F3A-HKhHVWP8uXzM=Crx2YB+zFVnw@mail.gmail.com>
- <CAD6G_RQZuqQphZqB0QwLKBC2Ox5G_tp06WTfUMEuOL6=LA2UvQ@mail.gmail.com>
- <CAOMZO5BWQvPFNevSp8Hjz4knfQ7kTYGmgXutoyzvb_ejq5AhpA@mail.gmail.com>
- <CAD6G_RSC9+NwdQP3qRA=wLWm2SaVNeN=zJXVR6P6dk8i+xLbxg@mail.gmail.com>
- <CAOMZO5BGTbB8WM-+oS9CoC8_3TPsZhyq1t-3=SJk1uAms8jBmQ@mail.gmail.com>
- <CAD6G_RRfwho6qwBU=QtyR6AsuNtGgWvvSFbTjwLwzv+9dqA6-Q@mail.gmail.com>
- <CAOMZO5Acb8RJZdf95uGj8w5LyhnjCh=sZoj=NE24wN_K2nO_OQ@mail.gmail.com>
- <CAD6G_RQNzT_yQfQeHW-VNE3vAhSnCRStc1R2NHrbkJwtHD=mzA@mail.gmail.com>
- <CAD6G_RSOBrZvE-4O_6uTj+0pBvsrM56p-48Rxd2hQZHtq8XkGw@mail.gmail.com>
- <CAOMZO5CBQVEMBLNgWRL947_uRpCDbyy5tTUVBfNjMkiwjyoA4Q@mail.gmail.com>
- <CAD6G_RQ3bLbJGi2jdRB-mafn4s=iHpvscjP+ggdBQG7_570ECA@mail.gmail.com>
- <CAD6G_RT58-HC8mi2g7Aq0x72uac0mUTA=HgoMAd1uAB-BWrXEQ@mail.gmail.com>
- <CAD6G_RQ_00ozMXZJ4GaTR5ETny-wJk6GkHbPSHLGQjiHUJR9dg@mail.gmail.com>
- <CAOMZO5AB2xYjvjQkvYp8y++M=95SnJSPbkPsv-sqs0VciYDd-w@mail.gmail.com>
- <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
- <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
- <CAOMZO5CufYJ7vqRw_7LxKpWtJe3Z-1U3=8SOubJXLgvNfO3Rew@mail.gmail.com>
- <CAOMZO5D5FB68ZWCqLd0HB14g3AQQRC556bgSXT-RznGB-xjqdA@mail.gmail.com>
- <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
- <CAOMZO5DtKGj3O_9p8H7ewbdq7ahTW=ZRCsVNcMZSGyz8Gxypyg@mail.gmail.com>
- <CAOMZO5DdsuQ29+KyMmvE8Ye5W2_a=-SZaCYKMP_MNoCHb07zaQ@mail.gmail.com>
- <CAOMZO5Be5Y_81g8F1to4kRX7e3TgOqRa6-kVXti0C5pchzCW1w@mail.gmail.com>
- <CAAMH-ysZ-QBLyRy3krifSj5p98d=Aw5pEih07x6cHGHW4bFpWQ@mail.gmail.com>
- <CAD6G_RQ5FB9gJYvfz8Z0cRLhUSrjjXUaG13YdbbGdJJ-8E=BCw@mail.gmail.com>
- <CAD6G_RTkmybL1PSc_sMPSZHkoSquV5D+9wvCervaJFbj9R2_1w@mail.gmail.com>
- <CAOMZO5BA-0Yp4ToB-ALHdu5HoOGCjKy6PELuPZDcmYXCsnQJdg@mail.gmail.com>
- <CAD6G_RTiZFhEVenFUCY1-EPmHq2ahnaXeE9oe9uQavzcXjpWNQ@mail.gmail.com>
-Message-ID: <CAOMZO5Dt4ybMPMErTH3kk73sKBprCxvxCONCG=7HzGZu+AYsYw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 6 Mar 2017 13:23:49 +0100
+Subject: [Buildroot] [PATCH 3/3] package/nodejs: remove 0.10.x support
+In-Reply-To: <CAFGQKxeAv8j=vAO5TrcZT8r0a8kCneTR4qa9rhz=daHbwnavkQ@mail.gmail.com>
+References: <1488671310-27378-1-git-send-email-martin@barkynet.com>
+ <1488671310-27378-3-git-send-email-martin@barkynet.com>
+ <8fcfeb3e-38c3-3fa7-99fd-feca53e7160f@mind.be>
+ <CAFGQKxeAv8j=vAO5TrcZT8r0a8kCneTR4qa9rhz=daHbwnavkQ@mail.gmail.com>
+Message-ID: <4a35c4cc-f487-84c5-e2cc-80655f0e53eb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 6, 2017 at 9:08 AM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
 
-> - CinematicExperience:
-> -----------------------------
-> - demo launched but 'Black' object on list like 'Lord of the Rings' etc
->
-> # CinematicExperience-demo
-> MESA-LOADER: device is not located on the PCI bus
-> MESA-LOADER: device is not located on the PCI bus
-> MESA-LOADER: device is not located on the PCI bus
-> Failed to move cursor on screen LVDS1: -14
-> libpng warning: iCCP: known incorrect sRGB profile
-> libpng warning: iCCP: known incorrect sRGB profile
-> QOpenGLFramebufferObject: Unsupported framebuffer format.
-> QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
-> QOpenGLFramebufferObject: Unsupported framebuffer format.
-> QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
-> QOpenGLFramebufferObject: Unsupported framebuffer format.
-> QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
-> QOpenGLFramebufferObject: Unsupported framebuffer format.
-> QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
 
-I also saw this defect here. Would be nice to understand where it comes from.
+On 06-03-17 11:08, Martin Bark wrote:
+> Arnout,
+> 
+> On 5 March 2017 at 22:40, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> wrote:
+> 
+> 
+> 
+>     On 05-03-17 00:48, Martin Bark wrote:
+>     > nodejs 0.10.x is now end of life and is no longer maintained so remove it.
+>     > See https://github.com/nodejs/LTS
+> 
+>      As mentioned in the Config.in:
+> 
+>     # Starting with 0.12.x, on ARM, V8 (the JS engine)
+>     # now requires an armv6+ and a VFPv2+.
+> 
+>      Some people opposed the removal of 0.10 because it would make nodejs
+>     unavailable on ARM9, while it is really still useful there. So the idea is that
+>     we keep it around in frozen state.
+> 
+> 
+> We have discussed this a few times.  The last email exchange i had on this
+> subject was back on 27th September 2016 where Thomas said
+> 
+> "It is fine to support 0.10.x in Buildroot to support ARMv5 while 0.10.x
+> is still maintained upstream. But as Peter mentioned, the support for
+> 0.10.x upstream will stop soon, so we should also remove it from
+> Buildroot."
+> 
+> I purposefully held off submitting these patches until after the 2017.02 release
+> so that it included nodejs 0.10.x.  Personally i would like to see 0.10.x
+> dropped from buildroot.
 
-Gary,
+ Ah, OK, I forgot about that bit :-)
 
-Do you have the Buildroot hash that your demo was generated from?
+ Peter/Thomas, perhaps add a link to
+http://lists.busybox.net/pipermail/buildroot/2016-September/173060.html and
+http://lists.busybox.net/pipermail/buildroot/2015-December/147109.html
+when committing?
 
-Thanks
+ Note that in that December 2015 thread, Yann suggested to keep 0.10
+indefinitely, but everybody else seemed to agree with Martin's suggestion to
+drop it.
+
+ I have one remaining gripe, however: ideally there should be a Config.in.legacy
+entry. But of course that's impossible because the BR2_PACKAGE_NODEJS symbol
+still exists... One extremely hacky solution would be to add
+BR2_PACKAGE_NODEJS_VERSION_STRING to Config.in.legacy, *with* a prompt and
+without the dependency on BR2_PACKAGE_NODEJS. Then, if someone updates with an
+existing .config, the previously-hidden VERSION_STRING will appear in the legacy
+menu. But that solution looks pretty hairy, and I'm sure that people will notice
+in other ways that nodejs has vanished, so it's probably not so important.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
