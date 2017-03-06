@@ -1,27 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 06 Mar 2017 08:07:09 +0000
-Subject: [Buildroot] [Bug 9711] Recent libCEC version bump seems to break
-	kodi package
-In-Reply-To: <bug-9711-163@https.bugs.busybox.net/>
-References: <bug-9711-163@https.bugs.busybox.net/>
-Message-ID: <bug-9711-163-l7cV5IbPG6@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Mar 2017 09:13:53 +0100
+Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
+In-Reply-To: <746ac932-fe6d-bbe0-0b87-b17fc76810af@mind.be>
+References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20170305213723.021d4678@free-electrons.com>
+ <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
+ <20170305234052.2515068d@free-electrons.com>
+ <746ac932-fe6d-bbe0-0b87-b17fc76810af@mind.be>
+Message-ID: <20170306091353.3a1e60aa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9711
+Hello,
 
---- Comment #8 from RiZom-91 <rizom91@openaliasbox.org> ---
-Created attachment 6946
-  --> https://bugs.busybox.net/attachment.cgi?id=6946&action=edit
-Error trace after patch
+On Mon, 6 Mar 2017 00:35:54 +0100, Arnout Vandecappelle wrote:
 
-Here is the trace I got after applying the patch. It seems that this is the
-same error that I had yesterday after reverting the version bump. Unfortunately
-I did not get the trace at this time...
+>  I think an outright removal (with the original contributors in Cc) is an
+> equally strong incentive.
 
+Agreed :-)
+
+> > Let's say that we'll remove this package before the 2017.05 release if
+> > nobody unbreaks it?  
+> 
+>  And what with the 6 other packages (or package options) marked as broken? Can
+> we kill it?
+
+Those ones have been marked as BROKEN since even longer, so I'm all for
+removing them.
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
