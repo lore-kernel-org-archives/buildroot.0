@@ -1,7 +1,7 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Mon, 6 Mar 2017 17:38:41 +0530
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 6 Mar 2017 09:18:29 -0300
 Subject: [Buildroot] libqeglfs.so not found on imx6
-In-Reply-To: <CAOMZO5BA-0Yp4ToB-ALHdu5HoOGCjKy6PELuPZDcmYXCsnQJdg@mail.gmail.com>
+In-Reply-To: <CAD6G_RTiZFhEVenFUCY1-EPmHq2ahnaXeE9oe9uQavzcXjpWNQ@mail.gmail.com>
 References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
  <CAAMH-yvFAXjR1z_R4_+FRec2k=MEmg85hPvBLY4UT5mty7NKUg@mail.gmail.com>
  <CAD6G_RQi8Gwk1hjqxtE=RtZoKpz30aJS1GX59JAGeUu02OP=1g@mail.gmail.com>
@@ -33,83 +33,40 @@ References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
  <CAD6G_RQ5FB9gJYvfz8Z0cRLhUSrjjXUaG13YdbbGdJJ-8E=BCw@mail.gmail.com>
  <CAD6G_RTkmybL1PSc_sMPSZHkoSquV5D+9wvCervaJFbj9R2_1w@mail.gmail.com>
  <CAOMZO5BA-0Yp4ToB-ALHdu5HoOGCjKy6PELuPZDcmYXCsnQJdg@mail.gmail.com>
-Message-ID: <CAD6G_RTiZFhEVenFUCY1-EPmHq2ahnaXeE9oe9uQavzcXjpWNQ@mail.gmail.com>
+ <CAD6G_RTiZFhEVenFUCY1-EPmHq2ahnaXeE9oe9uQavzcXjpWNQ@mail.gmail.com>
+Message-ID: <CAOMZO5Dt4ybMPMErTH3kk73sKBprCxvxCONCG=7HzGZu+AYsYw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 6, 2017 at 5:16 PM, Fabio Estevam <festevam@gmail.com> wrote:
-> On Mon, Mar 6, 2017 at 8:44 AM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
->>
->> And by the way, did anyone find this issue.
->>
->> In file included from
->> /workspace/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
->>                  from
->> ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
->>                  from
->> ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
->>                  from api/qeglfsglobal_p.h:56,
->>                  from api/qeglfsintegration_p.h:54,
->>                  from qeglfsmain.cpp:41:
->> /workspace/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22:
->> fatal error: X11/Xlib.h: No such file or directory
->>  #include <X11/Xlib.h>
->>                       ^
->> compilation terminated.
->>
->> Look like Qt5.8.0 is unable to build with current tool-chain, 5.6.2 succeeded
+On Mon, Mar 6, 2017 at 9:08 AM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+
+> - CinematicExperience:
+> -----------------------------
+> - demo launched but 'Black' object on list like 'Lord of the Rings' etc
 >
-> Yes, that's why I needed to switch to QT 5.6.2 on my tests.
->
-> I would be interested to know if you are able to run the Qt5 Cinematic
-> demo well when building it from Buildroot master.
+> # CinematicExperience-demo
+> MESA-LOADER: device is not located on the PCI bus
+> MESA-LOADER: device is not located on the PCI bus
+> MESA-LOADER: device is not located on the PCI bus
+> Failed to move cursor on screen LVDS1: -14
+> libpng warning: iCCP: known incorrect sRGB profile
+> libpng warning: iCCP: known incorrect sRGB profile
+> QOpenGLFramebufferObject: Unsupported framebuffer format.
+> QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
+> QOpenGLFramebufferObject: Unsupported framebuffer format.
+> QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
+> QOpenGLFramebufferObject: Unsupported framebuffer format.
+> QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
+> QOpenGLFramebufferObject: Unsupported framebuffer format.
+> QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
 
-- Jelly fish: working
--------------------------
-# glmark2-es2-drm -b jellyfish
-MESA-LOADER: device is not located on the PCI bus
-MESA-LOADER: device is not located on the PCI bus
-MESA-LOADER: device is not located on the PCI bus
-** Failed to set swap interval. Results may be bounded above by refresh rate.
-=======================================================
-    glmark2 2014.03
-=======================================================
-    OpenGL Information
-    GL_VENDOR:     etnaviv
-    GL_RENDERER:   Gallium 0.4 on Vivante GC2000 rev 5108
-    GL_VERSION:    OpenGL ES 2.0 Mesa 17.0.1
-=======================================================
-** Failed to set swap interval. Results may be bounded above by refresh rate.
-[jellyfish] <default>: FPS: 25 FrameTime: 40.000 ms
-================================
+I also saw this defect here. Would be nice to understand where it comes from.
 
-- CinematicExperience:
------------------------------
-- demo launched but 'Black' object on list like 'Lord of the Rings' etc
+Gary,
 
-# CinematicExperience-demo
-MESA-LOADER: device is not located on the PCI bus
-MESA-LOADER: device is not located on the PCI bus
-MESA-LOADER: device is not located on the PCI bus
-Failed to move cursor on screen LVDS1: -14
-libpng warning: iCCP: known incorrect sRGB profile
-libpng warning: iCCP: known incorrect sRGB profile
-QOpenGLFramebufferObject: Unsupported framebuffer format.
-QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
-QOpenGLFramebufferObject: Unsupported framebuffer format.
-QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
-QOpenGLFramebufferObject: Unsupported framebuffer format.
-QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
-QOpenGLFramebufferObject: Unsupported framebuffer format.
-QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
+Do you have the Buildroot hash that your demo was generated from?
 
-
-thanks!
--- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+Thanks
