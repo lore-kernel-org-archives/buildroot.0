@@ -1,63 +1,36 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 6 Mar 2017 19:41:03 -0300
-Subject: [Buildroot] QT5.8 buid failure on master
-Message-ID: <CAOMZO5D_R7_zEzL-X2zPViU+-SZ060JA3hpnE9S01x2PRazUsQ@mail.gmail.com>
+Date: Mon, 6 Mar 2017 19:41:26 -0300
+Subject: [Buildroot] libqeglfs.so not found on imx6
+In-Reply-To: <20170306220500.71a188f0@gmx.net>
+References: <CAD6G_RRX2RA3KDJyayDicTL-XbSNdHWK8z7JN-_HR3T9YD=oPw@mail.gmail.com>
+ <CAD6G_RQ_00ozMXZJ4GaTR5ETny-wJk6GkHbPSHLGQjiHUJR9dg@mail.gmail.com>
+ <CAOMZO5AB2xYjvjQkvYp8y++M=95SnJSPbkPsv-sqs0VciYDd-w@mail.gmail.com>
+ <CAD6G_RTyUUwWdMOy-9Tmam+uc=0UEJi9SjRBNypRw+x5UTgywg@mail.gmail.com>
+ <CAAMH-ytkp7TDYwN12GJ=D-BXsyQg5ThD=3LCwyYwby-Rk+Vxig@mail.gmail.com>
+ <CAOMZO5CufYJ7vqRw_7LxKpWtJe3Z-1U3=8SOubJXLgvNfO3Rew@mail.gmail.com>
+ <CAOMZO5D5FB68ZWCqLd0HB14g3AQQRC556bgSXT-RznGB-xjqdA@mail.gmail.com>
+ <CAAMH-yv5Ty14joyypR2oYOT+fYqi+VBtZWb7ES1ZAF7FaBG_nw@mail.gmail.com>
+ <CAOMZO5DtKGj3O_9p8H7ewbdq7ahTW=ZRCsVNcMZSGyz8Gxypyg@mail.gmail.com>
+ <CAOMZO5DdsuQ29+KyMmvE8Ye5W2_a=-SZaCYKMP_MNoCHb07zaQ@mail.gmail.com>
+ <CAOMZO5Be5Y_81g8F1to4kRX7e3TgOqRa6-kVXti0C5pchzCW1w@mail.gmail.com>
+ <CAAMH-ysZ-QBLyRy3krifSj5p98d=Aw5pEih07x6cHGHW4bFpWQ@mail.gmail.com>
+ <CAD6G_RQ5FB9gJYvfz8Z0cRLhUSrjjXUaG13YdbbGdJJ-8E=BCw@mail.gmail.com>
+ <CAD6G_RTkmybL1PSc_sMPSZHkoSquV5D+9wvCervaJFbj9R2_1w@mail.gmail.com>
+ <20170306220500.71a188f0@gmx.net>
+Message-ID: <CAOMZO5CB9NqxJc20B8oFQ0a2B+emTHofJxeNQvyrncgSKdHG8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Peter,
 
-Trying to Build QT5.8 with Buildroot master tree causes the following error:
+On Mon, Mar 6, 2017 at 6:05 PM, Peter Seiderer <ps.report@gmx.net> wrote:
 
-/home/fabio/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-g++
--c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -Os
---sysroot=/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot
--O2 -O3 -std=c++1z -fvisibility=hidden -fvisibility-inlines-hidden
--fno-exceptions -Wall -W -Wvla -Wdate-time -D_REENTRANT -fPIC
--DQT_EGL_NO_X11 -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE
--D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_PLUGIN
--DQT_EVENTDISPATCHER_SUPPORT_LIB -DQT_FONTDATABASE_SUPPORT_LIB
--DQT_EGL_SUPPORT_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I.
--I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
--I../../../../include -I../../../../include/QtEventDispatcherSupport
--I../../../../include/QtEventDispatcherSupport/5.8.0
--I../../../../include/QtEventDispatcherSupport/5.8.0/QtEventDispatcherSupport
--I../../../../include/QtFontDatabaseSupport
--I../../../../include/QtFontDatabaseSupport/5.8.0
--I../../../../include/QtFontDatabaseSupport/5.8.0/QtFontDatabaseSupport
--I../../../../include/QtEglSupport
--I../../../../include/QtEglSupport/5.8.0
--I../../../../include/QtEglSupport/5.8.0/QtEglSupport
--I../../../../include/QtGui/5.8.0
--I../../../../include/QtGui/5.8.0/QtGui -I../../../../include/QtGui
--I../../../../include/QtCore/5.8.0
--I../../../../include/QtCore/5.8.0/QtCore -I../../../../include/QtCore
--I.moc -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
--I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/freetype2
--I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
--I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
--I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/freetype2
--I../../../../mkspecs/devices/linux-buildroot-g++ -o
-.obj/qminimaleglscreen.o qminimaleglscreen.cpp
-In file included from
-/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
-                 from
-../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
-                 from
-../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
-                 from api/qeglfsglobal_p.h:56,
-                 from api/qeglfsintegration_p.h:54,
-                 from qeglfsmain.cpp:41:
-/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22:
-fatal error: X11/Xlib.h: No such file or directory
+> Should not happen ;-), mind to share the .config file?
 
-The defconfig used to reproduce the problem is available at:
-http://pastebin.com/qmhnNQXs
+I am also able to reproduce this build error. Just shared my defconfig
+on a new thread, so that we can discuss about it.
 
-Thanks,
-
-Fabio Estevam
+Thanks
