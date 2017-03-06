@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Mar 2017 21:20:39 +0100
-Subject: [Buildroot] [PATCH 1/1] pcre: Change download location
-In-Reply-To: <5f582368-797e-10ad-1c19-a998496cabbf@ya.ru>
-References: <5f582368-797e-10ad-1c19-a998496cabbf@ya.ru>
-Message-ID: <20170306212039.4134ccee@free-electrons.com>
+Date: Mon, 6 Mar 2017 21:20:51 +0100
+Subject: [Buildroot] [git commit] package/Config.in: explain that lua
+	package names should start with lua
+Message-ID: <20170306202055.74357819C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=687a313179b07865a12e9a35bc4c506fb371d2d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 6 Mar 2017 03:02:02 +0300, Oleg Kitain wrote:
-> Subject: [PATCH 1/1] pcre: Change download location
-> 
-> The location at ftp.csx.cam.ac.uk only stores 2 latest versions of PCRE.
-> This results in old (2015.11 and older currently) buildroot versions
-> timing out on wget several times and having to retrieve the package
-> from sources.buildroot.org afterwards.
-> 
-> Signed-off-by: Oleg Kitain <okitain@ya.ru>
-> ---
->  package/pcre/pcre.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+We have decided that lua packages should have a name that starts with
+lua (like is the case for python and perl). However, we're not going to
+rename all the existing lua packages that don't start with lua. This
+makes it unclear for people adding packages how they should name the
+package, so add a comment to package/Config.in to explain it.
 
-Applied to master, thanks. Peter: do we want this sort of fix in the
-LTS release?
+It's rather terse but it gets the message across.
 
-Thanks,
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 78acc53..cfe7fc6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -525,6 +525,10 @@ endif
+ if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
+ # lua modules are dynamically loaded, so not available on static builds
+ menu "Lua libraries/modules"
++# When adding lua packages, make sure the name start with "lua". If the
++# upstream package is "luafoo", call it "luafoo" in Buildroot; if the upstream
++# package is "foo", call it "lua-foo". Many packages currently don't follow
++# this convention, but that's historical accident.
+ 	source "package/argparse/Config.in"
+ 	source "package/cgilua/Config.in"
+ 	source "package/copas/Config.in"
