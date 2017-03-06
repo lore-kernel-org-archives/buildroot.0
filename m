@@ -1,40 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  6 Mar 2017 18:17:23 +0100
-Subject: [Buildroot] [PATCH] package/python-pyliftdi: fix patch
-Message-ID: <1488820643-21912-1-git-send-email-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  6 Mar 2017 19:06:47 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.4.0
+Message-ID: <1488823607-38561-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 0001 patch introduces leading tabs, when the rest of the file is
-using leading spaces, and python3 does not like that.
-
-Fixes:
-    http://autobuild.buildroot.org/results/e24/e24a8e6f62139ab0efbce7a32c3d88c2cba839c6/
-    http://autobuild.buildroot.org/results/7b1/7b14c4bb4cac3ff006e77330cbd7b839ad80192a/
-    http://autobuild.buildroot.org/results/67c/67cddfdb801e83acfd9f197f5661fd43fa38a092/
-    [...]
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Christian Kellermann <christian.kellermann@solectrix.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pylibftdi/0001-do-not-use-find-library.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pylibftdi/0001-do-not-use-find-library.patch b/package/python-pylibftdi/0001-do-not-use-find-library.patch
-index ae8fe2d..192ed43 100644
---- a/package/python-pylibftdi/0001-do-not-use-find-library.patch
-+++ b/package/python-pylibftdi/0001-do-not-use-find-library.patch
-@@ -24,7 +24,7 @@ diff -purN pylibftdi-0.15.0.orig/pylibftdi/driver.py pylibftdi-0.15.0/pylibftdi/
-          if lib is None:
- -            raise LibraryMissingError('{} library not found (search: {})'.format(
- -                name, search_list))
--+		return cdll.LoadLibrary(name + '.so')
-++            return cdll.LoadLibrary(name + '.so')
- +
-          return lib
-  
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 1ea4103..2bcd5e2 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	b2f6ba7c6e7145409d698674a4fc883aa16b8b6a2265eacbb80720fe0a0b2603	cjson-v1.3.2.tar.gz
++sha256	8e1c389627c6275344000e063f2f3d8cb0c1354ca75cf95855e286f173d3bfb5	cjson-v1.4.0.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index b403a1d..4937821 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.3.2
++CJSON_VERSION = v1.4.0
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 -- 
-2.7.4
+2.5.0
