@@ -1,46 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Mar 2017 21:15:43 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "package/libplatform: bump
- version to 2.1.0"
-In-Reply-To: <20170306181200.381-1-bernd.kuhls@t-online.de>
-References: <20170306181200.381-1-bernd.kuhls@t-online.de>
-Message-ID: <20170306211543.6a601e2a@free-electrons.com>
+Date: Mon, 6 Mar 2017 21:16:06 +0100
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
+	to 0.4.17
+Message-ID: <20170306201620.9CAE88229C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9cca9bb0b55b9dc87df3c4b0730c1cfc55442e3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  6 Mar 2017 19:11:59 +0100, Bernd Kuhls wrote:
-> This reverts commit 2ac3045453d701b1fbea0d04333642a76fbfecc4.
-> 
-> This commit was part of the Kodi 17 series and was committed too early,
-> current Kodi 16 is incompatible with this bump and needs to be
-> reverted, fixes https://bugs.busybox.net/show_bug.cgi?id=9711
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0001-p8-platform-config-fix-lookup-paths.patch | 38 --------------------
->  ...nfig.cmake-fix-paths-for-cross-compilatio.patch | 40 ++++++++++++++++++++++
->  package/libplatform/libplatform.hash               |  2 +-
->  package/libplatform/libplatform.mk                 |  8 ++---
->  4 files changed, 45 insertions(+), 43 deletions(-)
->  delete mode 100644 package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
->  create mode 100644 package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks, both commits applied. Perhaps we need to apply them to the LTS
-version of Buildroot as well?
-
-Also, Bernd: what is the plan with Kodi 17 ? We still don't have a
-solution for the ugly patches needed on libraries that Kodi depends on.
-Would it be possible to make progress on this ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 95325a9..7898ff8 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,2 +1,2 @@
+ # Locally computed after checking signature
+-sha256 8f0b98f18062d6e241eef74ebe16cc167cd246361cbe6657d94f0ecc5d7d3234  dovecot-2.2-pigeonhole-0.4.16.tar.gz
++sha256 74d869c7532cbf4fe41e3cc95a1aa6ce32e98f4d423f0d099da1e0fba022dae3  dovecot-2.2-pigeonhole-0.4.17.tar.gz
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 846e7f9..1b5185f 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOVECOT_PIGEONHOLE_VERSION = 0.4.16
++DOVECOT_PIGEONHOLE_VERSION = 0.4.17
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
+ DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
