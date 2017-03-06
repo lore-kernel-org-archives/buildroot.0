@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Mar 2017 09:17:35 +0100
-Subject: [Buildroot] [PATCH 1/1] fwup: requires dynamic library support
-In-Reply-To: <1488786298-5737-1-git-send-email-niziak@spox.org>
-References: <1488786298-5737-1-git-send-email-niziak@spox.org>
-Message-ID: <20170306091735.0971c426@free-electrons.com>
+Date: Mon, 6 Mar 2017 09:19:11 +0100
+Subject: [Buildroot] [PATCH 1/1] libwebsockets: bump to version 2.1.1
+In-Reply-To: <20170305182748.GJ24886@airbook.vandijck-laurijssen.be>
+References: <20170305182748.GJ24886@airbook.vandijck-laurijssen.be>
+Message-ID: <20170306091911.05fb09c2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  6 Mar 2017 08:44:58 +0100, Wojciech Nizinski wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/7f1/7f127655ffeb45b8f49616a1ed16bb184d9d7abf/
-> Signed-off-by: Wojciech Nizinski <niziak@spox.org>
+On Sun, 5 Mar 2017 19:27:48 +0100, Kurt Van Dijck wrote:
+> Mosquitto combined with version 2.1.0 of libwebsockets yields a failing
+> system. Version 2.1.1 restores the websocket interface again.
+> 
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
-Well, in fact, it doesn't need dynamic library support, it's just that
-libintl uses pthread functions, but the link command doesn't include
--lpthread.
+This update causes a build failure:
 
-This will only happen with the ARC external toolchain, because it uses
-a uClibc version that predates the merging of all libraries into
-libc.so in the uClibc-ng project.
+/home/test/autobuild/run/instance-2/output/build/libwebsockets-v2.1.1/lib/libwebsockets.c: In function 'lws_get_addresses':
+/home/test/autobuild/run/instance-2/output/build/libwebsockets-v2.1.1/lib/libwebsockets.c:645:4: error: too many arguments for format [-Werror=format-extra-args]
+    lwsl_err("inet_ntop", strerror(LWS_ERRNO));
+    ^
+cc1: all warnings being treated as errors
 
-Therefore, I'm not really thrilled by the solution that consists in
-disabling fwup. I think I'd prefer to temporarily disable
-BR2_STATIC_LIBS with this toolchain.
+See http://autobuild.buildroot.net/results/bf0/bf04ea2c63562443dbe62934cd55f9f771fb3b3c/build-end.log
 
-Best regards,
+Could you have a look ?
+
+Thanks,
 
 Thomas
 -- 
