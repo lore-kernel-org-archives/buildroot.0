@@ -1,16 +1,24 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Mar 2017 08:21:20 -0500
+Date: Mon,  6 Mar 2017 08:23:59 -0500
 Subject: [Buildroot] [PATCH v2 1/1] automake: fix unescaped left brace
 	warning patch.
-Message-ID: <20170306132120.3797-1-aduskett@codeblue.com>
+Message-ID: <20170306132359.21768-1-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Automake currently has a unescaped left brace in it's automake.in folder
+that generates the warning:
+"Unescaped left brace in regex is deprecated, passed through in regex;"
+This patch, which is backported from upstream fixes this warning.
+
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
+v1 - v2:
+  - Added backport information.
+  
  .../0002-port-to-perl-5.22-and-later.patch         | 23 ++++++++++++++++++++++
  1 file changed, 23 insertions(+)
  create mode 100644 package/automake/0002-port-to-perl-5.22-and-later.patch
