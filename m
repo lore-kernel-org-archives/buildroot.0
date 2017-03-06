@@ -1,45 +1,48 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Mar 2017 11:54:49 -0300
-Subject: [Buildroot] [PATCH] harfbuzz: security bump to version 1.4.4
-Message-ID: <20170306145449.4627-1-gustavo@zacarias.com.ar>
+Date: Mon,  6 Mar 2017 11:55:06 -0300
+Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.5.10
+Message-ID: <20170306145506.4673-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a buffer-overrun in Bengali.
-Switch to https URL to avoid a small delay in protocol redirection.
+Fixes:
+GNUTLS-SA-2017-3A - Addressed integer overflow resulting to invalid
+memory write in OpenPGP certificate parsing.
+GNUTLS-SA-2017-3B - Addressed crashes in OpenPGP certificate parsing,
+related to private key parser. No longer allow OpenPGP certificates
+(public keys) to contain private key sub-packets.
+GNUTLS-SA-2017-3C - Addressed large allocation in OpenPGP certificate
+parsing, that could lead in out-of-memory condition.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 6bf5bee..b7da64b 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 156d2aa..64b86d7 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
 @@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.2.tar.bz2.sha256
--sha256	8f234dcfab000fdec24d43674fffa2fdbdbd654eb176afbde30e8826339cb7b3	harfbuzz-1.4.2.tar.bz2
-+# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.4.4.tar.bz2.sha256
-+sha256	35d2f8ca476cbbec64ee824eca6b0209ff8db0334990b9f5af893b94f119d255	harfbuzz-1.4.4.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 458b072..6464480 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,8 +4,8 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256	82b10f0c4ef18f4e64ad8cef5dbaf14be732f5095a41cf366b4ecb4050382951	gnutls-3.5.9.tar.xz
++sha256	af443e86ba538d4d3e37c4732c00101a492fe4b56a55f4112ff0ab39dbe6579d	gnutls-3.5.10.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 932c0fa..be1cf00 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--HARFBUZZ_VERSION = 1.4.2
--HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
-+HARFBUZZ_VERSION = 1.4.4
-+HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
- HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING
+ GNUTLS_VERSION_MAJOR = 3.5
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
 -- 
 2.10.2
