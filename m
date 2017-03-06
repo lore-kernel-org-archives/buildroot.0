@@ -1,168 +1,90 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  6 Mar 2017 21:56:01 +0100
-Subject: [Buildroot] [PATCH 1/1] tinycbor: bump to version 1.4.1
-Message-ID: <1488833761-41874-1-git-send-email-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 6 Mar 2017 22:00:32 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-03-05
+In-Reply-To: <20170306072844.3738B206EB@mail.free-electrons.com>
+References: <20170306072844.3738B206EB@mail.free-electrons.com>
+Message-ID: <20170306210032.GC3976@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Delete first patch as it has been integrated upstream
-Retrieve second patch upstream
+All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../tinycbor/0001-Update-cjson-include-path.patch  | 69 ----------------------
- .../0002-Fix-static-compilation-of-json2cbor.patch | 29 ---------
- package/tinycbor/tinycbor.hash                     |  3 +-
- package/tinycbor/tinycbor.mk                       |  6 +-
- 4 files changed, 7 insertions(+), 100 deletions(-)
- delete mode 100644 package/tinycbor/0001-Update-cjson-include-path.patch
- delete mode 100644 package/tinycbor/0002-Fix-static-compilation-of-json2cbor.patch
+On 2017-03-06 08:28 +0100, Thomas Petazzoni spake thusly:
+> Detail of failures
+> ===================
+> 
+>          arm |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/48c35bac7cf674e2bc55f9bd53b905ad5e212258
 
-diff --git a/package/tinycbor/0001-Update-cjson-include-path.patch b/package/tinycbor/0001-Update-cjson-include-path.patch
-deleted file mode 100644
-index 5eea937..0000000
---- a/package/tinycbor/0001-Update-cjson-include-path.patch
-+++ /dev/null
-@@ -1,69 +0,0 @@
--From 9aa79d8e9e38b31b34d9933a266c698e79808a79 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fabrice.fontaine@orange.com>
--Date: Sun, 13 Nov 2016 15:43:40 +0100
--Subject: [PATCH] Update cjson include path
--
--Since cjson-v1.0.0 (https://github.com/DaveGamble/cJSON/releases),
--cJSON.h is installed into cjson/cJSON.h and library has been renamed
--from cJSON to cjson
--
--Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-----
-- Makefile                    | 4 ++--
-- Makefile.configure          | 4 ++--
-- tools/json2cbor/json2cbor.c | 2 +-
-- 3 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index acd52eb..905fbdf 100644
----- a/Makefile
--+++ b/Makefile
--@@ -82,12 +82,12 @@ ifeq ($(open_memstream-pass),)
--   endif
-- endif
-- 
---# json2cbor depends on an external library (cJSON)
--+# json2cbor depends on an external library (cjson)
-- ifneq ($(cjson-pass)$(system-cjson-pass),)
--   JSON2CBOR_SOURCES = tools/json2cbor/json2cbor.c
--   INSTALL_TARGETS += $(bindir)/json2cbor
--   ifeq ($(system-cjson-pass),1)
---    LDFLAGS_CJSON = -lcJSON
--+    LDFLAGS_CJSON = -lcjson
--   else
--     JSON2CBOR_SOURCES += src/cjson/cJSON.c
--     json2cbor_CCFLAGS = -I$(SRCDIR)src/cjson
--diff --git a/Makefile.configure b/Makefile.configure
--index 28f4c92..424efb3 100644
----- a/Makefile.configure
--+++ b/Makefile.configure
--@@ -10,11 +10,11 @@ PROGRAM-gc_sections = int main() {}
-- CCFLAGS-gc_sections = -Wl,--gc-sections
-- 
-- PROGRAM-cjson  = \#include <stdlib.h>\n
---PROGRAM-cjson += \#include <cJSON.h>\n
--+PROGRAM-cjson += \#include <cjson/cJSON.h>\n
-- PROGRAM-cjson += int main() { return cJSON_False; }
-- CCFLAGS-cjson = -I$(dir $(MAKEFILE))src/cjson
-- PROGRAM-system-cjson = $(PROGRAM-cjson)
---CCFLAGS-system-cjson = -lcJSON
--+CCFLAGS-system-cjson = -lcjson
-- 
-- sink:
-- 	@echo >&2 Please run from the top-level Makefile.
--diff --git a/tools/json2cbor/json2cbor.c b/tools/json2cbor/json2cbor.c
--index 96d3ed1..e194299 100644
----- a/tools/json2cbor/json2cbor.c
--+++ b/tools/json2cbor/json2cbor.c
--@@ -27,7 +27,7 @@
-- #include "cbor.h"
-- #include "compilersupport_p.h"
-- 
---#include <cJSON.h>
--+#include <cjson/cJSON.h>
-- 
-- #include <errno.h>
-- #include <math.h>
---- 
--2.5.0
--
-diff --git a/package/tinycbor/0002-Fix-static-compilation-of-json2cbor.patch b/package/tinycbor/0002-Fix-static-compilation-of-json2cbor.patch
-deleted file mode 100644
-index dfea4ca..0000000
---- a/package/tinycbor/0002-Fix-static-compilation-of-json2cbor.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 1be7da8d81bbd52d722ec60250567ea876f6f4b5 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fabrice.fontaine@orange.com>
--Date: Sat, 3 Dec 2016 20:15:41 +0100
--Subject: [PATCH] Fix static compilation of json2cbor
--
--json2cbor depends on cjson so tools/json2cbor/json2cbor.o must before
---lcjson
--
--Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-----
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 905fbdf..7b5fefc 100644
----- a/Makefile
--+++ b/Makefile
--@@ -115,7 +115,7 @@ bin/cbordump: $(CBORDUMP_SOURCES:.c=.o) lib/libtinycbor.a | bin
-- 	$(CC) -o $@ $(LDFLAGS) $^ $(LDLIBS) -lm
-- 
-- bin/json2cbor: $(JSON2CBOR_SOURCES:.c=.o) lib/libtinycbor.a | bin
---	$(CC) -o $@ $(LDFLAGS) $(LDFLAGS_CJSON) $^ $(LDLIBS) -lm
--+	$(CC) -o $@ $(LDFLAGS) $^ $(LDFLAGS_CJSON) $(LDLIBS) -lm
-- 
-- tinycbor.pc: tinycbor.pc.in
-- 	$(SED) > $@ < $< \
---- 
--2.5.0
--
-diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
-index 88300e8..416dce6 100644
---- a/package/tinycbor/tinycbor.hash
-+++ b/package/tinycbor/tinycbor.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256	302ac9de66f1048725040ccc9a99e03c20529ac2b150ccf35cfd1e2dafa81c4b	tinycbor-v0.4.tar.gz
-+sha256	8e42984015d62e8323b7f2a439bde157d707e0d7ae57a6d8d5a2665247af6638	tinycbor-v0.4.1.tar.gz
-+sha256	1298b80ab23ae24e85515d9f06398236d087bc76dccd0a48757fcb7e54557175	ae608ea2735bd331ec7dcf9d89928c38f0e0c981.patch
-diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
-index 65deacd..1f13e7d 100644
---- a/package/tinycbor/tinycbor.mk
-+++ b/package/tinycbor/tinycbor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TINYCBOR_VERSION = v0.4
-+TINYCBOR_VERSION = v0.4.1
- TINYCBOR_SITE = $(call github,01org,tinycbor,$(TINYCBOR_VERSION))
- TINYCBOR_LICENSE = MIT
- TINYCBOR_LICENSE_FILES = LICENSE
-@@ -12,6 +12,10 @@ TINYCBOR_LICENSE_FILES = LICENSE
- TINYCBOR_DEPENDENCIES = host-pkgconf
- TINYCBOR_INSTALL_STAGING = YES
- 
-+# This patch fixes static build of json2cbor
-+TINYCBOR_PATCH = \
-+	https://github.com/01org/tinycbor/commit/ae608ea2735bd331ec7dcf9d89928c38f0e0c981.patch
-+
- ifeq ($(BR2_PACKAGE_CJSON),y)
- TINYCBOR_DEPENDENCIES += cjson
- endif
+This is again caused by a mismatch between types defined by Khronos and
+those in odroid-mali.
+
+>         i686 |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/e29a22a2d9c81c87d271c2a6e7d041d36c370adc
+>         sh4a |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/6cc1212728248d5443fe9a367b4aeb3807ce623e
+
+EGL not found...
+
+>      powerpc |                polarssl-1.2.19 | NOK | http://autobuild.buildroot.net/results/ab3565f6585e47573bcb62ef5e7250986c90d8e3
+
+Static linking issue: polarssl build a 'benchmark' utility that links
+with -lcrypto, which uses symbols fron libz, but libz is not pulled in
+in a static build.
+
+>          arm |                     putty-0.68 | NOK | http://autobuild.buildroot.net/results/3ade64119e327cc810282c1bcd89a8e7d229a73f
+>          arm |                     putty-0.68 | NOK | http://autobuild.buildroot.net/results/3c26267f46f0653f2d40e03e5e4212e58e7ce177
+
+Should be fixed by:
+    https://git.buildroot.org/buildroot/commit/?id=18275a0420fd39817ea01e30f5d815c78dc72cc0
+
+>         i686 |                     qemu-2.8.0 | NOK | http://autobuild.buildroot.net/results/5a685a307678bbcfd87c6f1bd44b5648b4d397f9
+
+error: 'struct timex' has no member named 'tai'
+
+uClibc toolchain: fields missing? Not available in uClibc?
+
+>          arm |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/29aa34c4e3b10739a13db6d86b3f0691668480e9
+
+error: failure memory model cannot be stronger than success memory model
+for '__atomic_compare_exchange'
+  return __atomic_compare_exchange_n(&_M_i, &__i1, __i2, 0, __m1, __m2);
+
+Some atomic issue?
+
+>      powerpc |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/8ac322af1293eb195f2eab80bdfe1b87931948b6
+
+Static linking issue, again missing -lz.
+
+>          arc |                   samba4-4.5.5 | NOK | http://autobuild.buildroot.net/results/2e214d6b2de1008858f4129e8000dd1202302117
+
+This is caused by the ARC Synopsys toolchain which has a uClibc without
+support for quota.
+
+>          arm |                    slang-2.3.0 | NOK | http://autobuild.buildroot.net/results/256ffb34fa890bae23ff39783006e0741e2abc49
+
+undefined reference to `tputs'
+
+Static linking issue, needs to link against ncurses.
+
+>          arm | vpnc-b1243d29e0c00312ead038... | NOK | http://autobuild.buildroot.net/results/16a7c30f0627c51b171ec71b2e7f24444e38526d
+
+undefined reference to `libintl_bindtextdomain'
+
+Static linking issue, needs -lintl.
+
+>          arm |     xserver_xorg-server-1.19.2 | NOK | http://autobuild.buildroot.net/results/4c24477f96c9eab8cfd8cce38eea630d738e29a5
+
+Download issue due to certificate error. Ignore.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.5.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
