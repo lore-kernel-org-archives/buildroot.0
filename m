@@ -1,97 +1,162 @@
-From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Mon, 6 Mar 2017 10:07:47 +0100
-Subject: [Buildroot] [RFC PATCH 2/9] support/scripts: add fix-rpath
- script to sanitize the rpath
-In-Reply-To: <c8a4d85e-ff1a-44ab-832b-bd4eff235a00@grandegger.com>
-References: <1488550733-3956-1-git-send-email-wg@grandegger.com>
- <1488550733-3956-3-git-send-email-wg@grandegger.com>
- <20170303154853.4eb15819@free-electrons.com>
- <c8a4d85e-ff1a-44ab-832b-bd4eff235a00@grandegger.com>
-Message-ID: <8122b244-b97f-e0fd-6d15-a33b8f44af25@grandegger.com>
+From: Wojciech Nizinski <niziak@spox.org>
+Date: Mon, 6 Mar 2017 09:47:17 +0100
+Subject: [Buildroot] [PATCH 1/1] lzlib: add LuaJIT support
+In-Reply-To: <20170222110813.76e8d38c@free-electrons.com>
+References: <1487753715-21961-1-git-send-email-niziak@spox.org>
+ <20170222110813.76e8d38c@free-electrons.com>
+Message-ID: <4dc526ef-e8a2-9f9c-bf3a-3b4aa3c47d62@spox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Am 03.03.2017 um 17:39 schrieb Wolfgang Grandegger:
-> Hello,
-> 
-> Am 03.03.2017 um 15:48 schrieb Thomas Petazzoni:
->> Hello,
->>
->> On Fri,  3 Mar 2017 15:18:46 +0100, Wolfgang Grandegger wrote:
->>> From: Samuel Martin <s.martin49@gmail.com>
->>>
->>> This commit introduces a fix-rpath script able to scan a tree,
->>> detect ELF files, check their RPATH and fix it in a proper way.
->>> The RPATH fixup is done by the patchelf utility using the option
->>> "--make-rpath-relative".
->>>
->>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->>> Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
->>> ---
->>>  support/scripts/fix-rpath | 106
->>> ++++++++++++++++++++++++++++++++++++++++++++++
->>>  1 file changed, 106 insertions(+)
->>>  create mode 100755 support/scripts/fix-rpath
->>
->> Now that patchelf is much smarter, I am wondering if we still really
->> need a utility script just to call patchelf. Have you tried bringing
->> this logic into the make logic?
-> 
-> Well, I think three magic "find" oneliners could do the job. I will try
-> and see.
-
-Here are my current oneliners in the Makefile. It mainly shows what needs
-to be done. Unfortunately, the scanning for ELF files may take rather
-long:
-
- >>>   Sanitizing RPATH in target and staging directory
- time find /opt/bdo/x86_host/target -type f -print0 | xargs -0 -I {} sh -c \
-	"if patchelf --print-rpath {} >/dev/null 2>&1; then chmod +w {}; \
-	/opt/bdo/x86_host/host/usr/bin/patchelf --make-rpath-relative /opt/bdo/x86_host/target \
-	--no-standard-lib-dirs {}; fi"
-
-  real	0m9.644s
-  user	0m0.032s
-  sys	0m0.360s
-
-  time find /opt/bdo/x86_host/host/usr/x86_64-buildroot-linux-gnu/sysroot -type f -print0 | xargs -0 -I {} sh -c \
-	"if patchelf --print-rpath {} >/dev/null 2>&1; then chmod +w {}; \
-	/opt/bdo/x86_host/host/usr/bin/patchelf --make-rpath-relative /opt/bdo/x86_host/host/usr/x86_64-buildroot-linux-gnu/sysroot \
-	--no-standard-lib-dirs {}; fi"
-
-  real	0m46.433s
-  user	0m0.240s
-  sys	0m1.980s
-
-  >>>   Rendering the SDK relocatable
-  cp /opt/bdo/x86_host/host/usr/bin/patchelf /opt/bdo/x86_host/host/usr/bin/patchelf.__copy__
-  time find /opt/bdo/x86_host/host -path /opt/bdo/x86_host/host/usr/x86_64-buildroot-linux-gnu/sysroot -prune -o \
-	-path /opt/bdo/x86_host/host/usr/bin/patchelf -prune -o -type f -print0 | xargs -0 -I {} sh -c \
-	"if patchelf --print-rpath {} >/dev/null 2>&1; then chmod +w {}; \
-	/opt/bdo/x86_host/host/usr/bin/patchelf --make-rpath-relative /opt/bdo/x86_host/host {}; \
-	fi"
-  mv /opt/bdo/dcu_host/host/usr/bin/patchelf.__copy__ /opt/bdo/dcu_host/host/usr/bin/patchelf
-
-  real	0m23.154s
-  user	0m0.144s
-  sys	0m1.124s
+On 22.02.2017 11:08, Thomas Petazzoni wrote:
+> Thanks for your contribution. See some comments below.
+>
+>> diff --git a/package/lzlib/0001-FindLua.cmake-support-for-LuaJIT.patch b/package/lzlib/0001-FindLua.cmake-support-for-LuaJIT.patch
+>> new file mode 100644
+>> index 000000000..30e29aae8
+>> --- /dev/null
+>> +++ b/package/lzlib/0001-FindLua.cmake-support-for-LuaJIT.patch
+>> @@ -0,0 +1,67 @@
+>> +From 4cedebed4746f1bcc3dc1a3e0c0bc7251153aeca Mon Sep 17 00:00:00 2001
+>> +From: Wojciech Nizinski <niziak@spox.org>
+>> +Date: Tue, 21 Feb 2017 12:51:31 +0100
+>> +Subject: [PATCH] FindLua.cmake: support for LuaJIT
+>> +
+> This patch needs your SoB line.
+>
+> Also, since this is kind of a feature patch, we will most likely not
+> accept it in Buildroot unless it is accepted upstream. Have you
+> submitted this patch to the upstream lzlib project?
+I've created pull request on GitHub project on the same day.
+https://github.com/LuaDist/lzlib/pull/7)
 
 
-Using "file" to test if it's an ELF files is much slower. Using
-"patchelf --print-rpath {} >/dev/null 2>&1" is much smarter and allows
-to run the path sanitation without ignoring errors.
+Here is patch with SoB line:
 
-Because some ELF files are not writeable, we need a chmod first. For the
-host tree, we also need special handling for patchelf to work around the
-"file in use" issue.
 
-"xargs" could be speedup using "-P NUM". Would that be an option?
-We could also introduce BR2_TOOLCHAIN_RELOCATABLE. Any other idea to
-speed up the scripts above?
+Signed-off-by: Wojciech Nizinski <niziak@spox.org>
+---
+  .../0001-FindLua.cmake-support-for-LuaJIT.patch    | 68 
+++++++++++++++++++++++
+  package/lzlib/Config.in                            |  2 +-
+  package/lzlib/lzlib.mk                             |  9 ++-
+  3 files changed, 77 insertions(+), 2 deletions(-)
+  create mode 100644 
+package/lzlib/0001-FindLua.cmake-support-for-LuaJIT.patch
 
-Wolfgang.
+diff --git a/package/lzlib/0001-FindLua.cmake-support-for-LuaJIT.patch 
+b/package/lzlib/0001-FindLua.cmake-support-for-LuaJIT.patch
+new file mode 100644
+index 000000000..883c0f81f
+--- /dev/null
++++ b/package/lzlib/0001-FindLua.cmake-support-for-LuaJIT.patch
+@@ -0,0 +1,68 @@
++From 4cedebed4746f1bcc3dc1a3e0c0bc7251153aeca Mon Sep 17 00:00:00 2001
++From: Wojciech Nizinski <w.nizinski@grinn-global.com>
++Date: Tue, 21 Feb 2017 12:51:31 +0100
++Subject: [PATCH 1/1] FindLua.cmake: support for LuaJIT
++
++Signed-off-by: Wojciech Nizinski <niziak@spox.org>
++---
++ cmake/FindLua.cmake | 12 +++++++++++-
++ 1 file changed, 11 insertions(+), 1 deletion(-)
++
++diff --git a/cmake/FindLua.cmake b/cmake/FindLua.cmake
++index 7fb7ca3..0fdf235 100644
++--- a/cmake/FindLua.cmake
+++++ b/cmake/FindLua.cmake
++@@ -34,7 +34,7 @@
++ # Always search for non-versioned lua first (recommended)
++ SET(_POSSIBLE_LUA_INCLUDE include include/lua)
++ SET(_POSSIBLE_LUA_EXECUTABLE lua)
++-SET(_POSSIBLE_LUA_LIBRARY lua)
+++SET(_POSSIBLE_LUA_LIBRARY lua luajit)
++
++ # Determine possible naming suffixes (there is no standard for this)
++ IF(Lua_FIND_VERSION_MAJOR AND Lua_FIND_VERSION_MINOR)
++@@ -43,17 +43,25 @@ ELSE(Lua_FIND_VERSION_MAJOR AND 
+Lua_FIND_VERSION_MINOR)
++   SET(_POSSIBLE_SUFFIXES "52" "5.2" "-5.2" "51" "5.1" "-5.1")
++ ENDIF(Lua_FIND_VERSION_MAJOR AND Lua_FIND_VERSION_MINOR)
++
+++MESSAGE(STATUS "Possible suffixes: ${_POSSIBLE_SUFFIXES}")
+++
++ # Set up possible search names and locations
++ FOREACH(_SUFFIX ${_POSSIBLE_SUFFIXES})
++   LIST(APPEND _POSSIBLE_LUA_INCLUDE "include/lua${_SUFFIX}")
++   LIST(APPEND _POSSIBLE_LUA_EXECUTABLE "lua${_SUFFIX}")
++   LIST(APPEND _POSSIBLE_LUA_LIBRARY "lua${_SUFFIX}")
+++  LIST(APPEND _POSSIBLE_LUA_LIBRARY "luajit${_SUFFIX}")
++ ENDFOREACH(_SUFFIX)
++
+++MESSAGE (STATUS "Possible LUA library names: ${_POSSIBLE_LUA_LIBRARY}")
+++MESSAGE (STATUS "Possible LUA include dirs: ${_POSSIBLE_LUA_INCLUDE}")
+++MESSAGE (STATUS "Possible LUA executable: ${_POSSIBLE_LUA_EXECUTABLE}")
+++
++ # Find the lua executable
++ FIND_PROGRAM(LUA_EXECUTABLE
++   NAMES ${_POSSIBLE_LUA_EXECUTABLE}
++ )
+++MESSAGE (STATUS "Found LUA executable: ${LUA_EXECUTABLE}")
++
++ # Find the lua header
++ FIND_PATH(LUA_INCLUDE_DIR lua.h
++@@ -70,6 +78,7 @@ FIND_PATH(LUA_INCLUDE_DIR lua.h
++   /opt/csw # Blastwave
++   /opt
++ )
+++MESSAGE (STATUS "Found LUA header: ${LUA_INCLUDE_DIR}")
++
++ # Find the lua library
++ FIND_LIBRARY(LUA_LIBRARY
++@@ -87,6 +96,7 @@ FIND_LIBRARY(LUA_LIBRARY
++   /opt/csw
++   /opt
++ )
+++MESSAGE (STATUS "Found LUA lib: ${LUA_LIBRARY}")
++
++ IF(LUA_LIBRARY)
++   # include the math library for Unix
++--
++2.11.0
++
+diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
+index 32328c5ec..f7fae1579 100644
+--- a/package/lzlib/Config.in
++++ b/package/lzlib/Config.in
+@@ -1,7 +1,7 @@
+  config BR2_PACKAGE_LZLIB
+      bool "lzlib"
+      select BR2_PACKAGE_ZLIB
+-    depends on BR2_PACKAGE_LUA
++    depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+      help
+        This package provides a library to access zlib library
+        functions and also to read/write gzip files using an
+diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+index f468a1c83..c3de5ccd7 100644
+--- a/package/lzlib/lzlib.mk
++++ b/package/lzlib/lzlib.mk
+@@ -6,7 +6,14 @@
+
+  LZLIB_VERSION = 0.4.3
+  LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+-LZLIB_DEPENDENCIES = lua zlib
++LZLIB_DEPENDENCIES = zlib
++
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++LZLIB_DEPENDENCIES += luajit
++else
++LZLIB_DEPENDENCIES += lua
++endif
++
+  LZLIB_LICENSE = MIT
+  LZLIB_CONF_OPTS = 
+-DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+      -DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+-- 
+2.11.0
