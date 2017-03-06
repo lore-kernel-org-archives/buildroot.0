@@ -1,36 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Mar 2017 17:49:40 +0100
-Subject: [Buildroot] [PATCH 1/1] lzlib: add LuaJIT support
-In-Reply-To: <4dc526ef-e8a2-9f9c-bf3a-3b4aa3c47d62@spox.org>
-References: <1487753715-21961-1-git-send-email-niziak@spox.org>
- <20170222110813.76e8d38c@free-electrons.com>
- <4dc526ef-e8a2-9f9c-bf3a-3b4aa3c47d62@spox.org>
-Message-ID: <20170306174940.28f5aaaf@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 6 Mar 2017 17:49:48 +0100
+Subject: [Buildroot] [PATCH v2] configs/telit_evk_pro3: bump barebox to
+	2017.01.0
+In-Reply-To: <20170306164504.10572-1-fabio.porcedda@gmail.com>
+References: <20170306164504.10572-1-fabio.porcedda@gmail.com>
+Message-ID: <CAHkwnC-zJUYA67znSwmnRE_JpNUdMG4YW_XtZobe-B3cnzu+pA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2017-03-06 17:45 GMT+01:00 Fabio Porcedda <fabio.porcedda@gmail.com>:
+> This bump fix the build failure with gcc5 for barebox.
+>
+> Some changes were made to the first patch to align to the latest
+> barebox api.
+>
+> Also done the following changes:
+> - Use "BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES" instead of patching
+>   the barebox sources.
+> - Use "BR2_GLOBAL_PATCH_DIR" instead of
+>   "BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR".
 
-On Mon, 6 Mar 2017 09:47:17 +0100, Wojciech Nizinski wrote:
+v2:
+- Use BR2_GLOBAL_PATCH_DIR
+- Use BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
+- Merge fifth patch to the first one
+- Add my sob line to all patches
+- Rename and move all barebox patches
 
-> I've created pull request on GitHub project on the same day.
-> https://github.com/LuaDist/lzlib/pull/7)
-
-Thanks for doing this! Can you wait until upstream gives some feedback
-and merges the patch, and then submit it again to Buildroot?
-
-> Here is patch with SoB line:
-
-This patch cannot be applied, it's completely line wrapped. Please
-always send your patches with "git send-email".
-
-Thanks!
-
-Thomas
+Best regards
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Fabio Porcedda
