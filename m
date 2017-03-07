@@ -1,214 +1,182 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Mar 2017 16:45:27 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] lttng-libust: fix build
-	on musl
-Message-ID: <20170307155609.96F50818F3@busybox.osuosl.org>
+Date: Tue, 7 Mar 2017 16:37:41 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] sngrep: use pkg-config to
+	discover OpenSSL to fix static linking
+Message-ID: <20170307155609.8DBCD81EA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fc41f884c4cc2b9774c341f61cca96f718b24c2
+commit: https://git.buildroot.net/buildroot/commit/?id=26e751617f279ef808f7b36c205fde907e06865a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This commit backports two upstream patches in lttng-libust, that fix
-the build with the musl C library.
+Building sngrep with OpenSSL support in static linking configurations
+currently fails due to undefined symbols in the OpenSSL library. It's
+the usual problem with using AC_CHECK_LIB() to discover libraries
+instead of the pkg-config based PKG_CHECK_MODULES().
+
+Therefore, this commit introduces a patch that switches to using
+pkg-config to discover OpenSSL. A preliminary patch is needed, without
+which appending to LIBS/CFLAGS doesn't work. Both patches have been
+submitted upstream.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/8bbcac9f9debf76cd1f56734bfd494677f2acd21/
+  http://autobuild.buildroot.net/results/911143de823b2c749ac0a59dfa06adb6ddd3de50/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 0f67757f699e60cde568696cee516d34acf8963c)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit bfd273d83ad02b96841d36a05916a12130b4f739)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...the-presence-of-dlmopen-at-configure-time.patch | 130 +++++++++++++++++++++
- ...-include-config.h-to-resolve-HAVE_DLMOPEN.patch |  30 +++++
- package/lttng-libust/lttng-libust.mk               |   1 +
- 3 files changed, 161 insertions(+)
+ .../0001-src-Makefile.am-don-t-use-VPATH.patch     | 43 +++++++++++++
+ ...e.ac-switch-to-pkg-config-to-find-openssl.patch | 75 ++++++++++++++++++++++
+ package/sngrep/sngrep.mk                           |  2 +-
+ 3 files changed, 119 insertions(+), 1 deletion(-)
 
-diff --git a/package/lttng-libust/0003-Validate-the-presence-of-dlmopen-at-configure-time.patch b/package/lttng-libust/0003-Validate-the-presence-of-dlmopen-at-configure-time.patch
+diff --git a/package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch b/package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch
 new file mode 100644
-index 0000000..699f1e0
+index 0000000..3d98203
 --- /dev/null
-+++ b/package/lttng-libust/0003-Validate-the-presence-of-dlmopen-at-configure-time.patch
-@@ -0,0 +1,130 @@
-+From 42330adcefcd1830dad89e2a960c93d8dd1da125 Mon Sep 17 00:00:00 2001
-+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-+Date: Tue, 21 Feb 2017 16:00:27 -0500
-+Subject: [PATCH] Validate the presence of dlmopen at configure time
++++ b/package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch
+@@ -0,0 +1,43 @@
++From b6dcae8ec4334e2436cfa19a8052c3473f57a586 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 4 Mar 2017 15:02:43 +0100
++Subject: [PATCH 1/2] src/Makefile.am: don't use VPATH
 +
-+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+[Backport from upstream commit 42330adcefcd1830dad89e2a960c93d8dd1da125.]
++VPATH is a mechanism used to allow out-of-tree build, not to use source
++code from a different directory. For this purpose, one should simply use
++the "subdir-objects" AUTOMAKE_OPTIONS, and reference the source code of
++the sub-directory in the <prog>_SOURCES variable.
++
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Upstream-status: https://github.com/irontec/sngrep/pull/176
 +---
-+ configure.ac                   | 8 ++++++++
-+ liblttng-ust-dl/lttng-ust-dl.c | 8 ++++++++
-+ liblttng-ust-dl/ust_dl.h       | 2 ++
-+ 3 files changed, 18 insertions(+)
++ src/Makefile.am | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 931ee06..961f4a0 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -1,5 +1,5 @@
+++AUTOMAKE_OPTIONS=subdir-objects
++ bin_PROGRAMS=sngrep
++-VPATH=curses
++ sngrep_SOURCES=capture.c
++ if USE_EEP
++ sngrep_SOURCES+=capture_eep.c
++@@ -12,8 +12,8 @@ sngrep_SOURCES+=capture_openssl.c
++ endif
++ sngrep_SOURCES+=address.c packet.c sip.c sip_call.c sip_msg.c sip_attr.c main.c
++ sngrep_SOURCES+=option.c group.c filter.c keybinding.c media.c setting.c rtp.c
++-sngrep_SOURCES+=util.c hash.c vector.c ui_panel.c scrollbar.c
++-sngrep_SOURCES+=ui_manager.c ui_call_list.c ui_call_flow.c ui_call_raw.c
++-sngrep_SOURCES+=ui_stats.c ui_filter.c ui_save.c ui_msg_diff.c
++-sngrep_SOURCES+=ui_column_select.c ui_settings.c
+++sngrep_SOURCES+=util.c hash.c vector.c curses/ui_panel.c curses/scrollbar.c
+++sngrep_SOURCES+=curses/ui_manager.c curses/ui_call_list.c curses/ui_call_flow.c curses/ui_call_raw.c
+++sngrep_SOURCES+=curses/ui_stats.c curses/ui_filter.c curses/ui_save.c curses/ui_msg_diff.c
+++sngrep_SOURCES+=curses/ui_column_select.c curses/ui_settings.c
++ 
++-- 
++2.7.4
++
+diff --git a/package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch b/package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch
+new file mode 100644
+index 0000000..b51581f
+--- /dev/null
++++ b/package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch
+@@ -0,0 +1,75 @@
++From 22b08ab1a45eb3773b3c90dc37a31a7574520daa Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 4 Mar 2017 14:56:53 +0100
++Subject: [PATCH 2/2] configure.ac: switch to pkg-config to find openssl
++
++Using AC_CHECK_LIB() doesn't work properly for static linking, because
++it doesn't return information on transitive dependencies of
++libraries. For example, if library A internally uses library B, then
++with dynamic linking, doing -lA is sufficient. However, with static
++linking, one must do -lA -lB, and AC_CHECK_LIB() will only give the -lA
++information. This for example causes a build failure when building
++sngrep statically with openssl enabled:
++
++checking for SSL_new in -lssl... no
++configure: error:  You need to have libssl installed to compile sngrep
++
++due to undefined symbols in the OpenSSL library.
++
++The proper solution for this is to discover the library using
++pkg-config, because pkg-config properly returns the list of necessary
++libraries, as it understands the concept of "list of libraries needed
++when dynamic linking" and "list of libraries needed for static linking".
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Upstream-status: https://github.com/irontec/sngrep/pull/176
++---
++ configure.ac    | 9 +--------
++ src/Makefile.am | 4 ++++
++ 2 files changed, 5 insertions(+), 8 deletions(-)
 +
 +diff --git a/configure.ac b/configure.ac
-+index 450b43b..023cfd4 100644
++index 42e00e9..9f8e6d2 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -125,15 +125,23 @@ AS_IF([test "x${ax_cv_sys_weak_alias}" = "xno"], [
-+ # Checks for libraries.
-+ AC_CHECK_LIB([dl], [dlopen], [
-+ 	have_libdl=yes
-++	libdl_name=dl
-+ ], [
-+ 	#libdl not found, check for dlopen in libc.
-+ 	AC_CHECK_LIB([c], [dlopen], [
-+ 		have_libc_dl=yes
-++		libdl_name=c
-+ 	], [
-+ 		AC_MSG_ERROR([Cannot find dlopen in libdl nor libc. Use [LDFLAGS]=-Ldir to specify their location.])
-+ 	])
-+ ])
++@@ -129,14 +129,7 @@ AS_IF([test "x$WITH_OPENSSL" == "xyes"], [
++ 	AS_IF([test "x$WITH_GNUTLS" == "xyes"], [
++ 	    AC_MSG_ERROR([ GnuTLS and OpenSSL can not be enabled at the same time ])
++ 	], [])
++-
++-	AC_CHECK_LIB([ssl], [SSL_new], [], [
++-	    AC_MSG_ERROR([ You need to have libssl installed to compile sngrep])
++-	])
++-
++-	AC_CHECK_LIB([crypto], [EVP_get_cipherbyname], [], [
++-	    AC_MSG_ERROR([ You need to have libcrypto installed to compile sngrep])
++-	])
+++	PKG_CHECK_MODULES([SSL], [libssl libcrypto])
++ 	AC_DEFINE([WITH_OPENSSL],[],[Compile With Openssl compatibility])
++ ], [])
 + 
-++# Check if libdl has dlmopen support.
-++AH_TEMPLATE([HAVE_DLMOPEN], ["Define to 1 if dlmopen is available."])
-++AC_CHECK_LIB([$libdl_name], [dlmopen],
-++	[AC_DEFINE([HAVE_DLMOPEN], [1])]
-++)
-++
-+ AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBDL], [test "x$have_libdl" = "xyes"])
-+ AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBC_DL], [test "x$have_libc_dl" = "xyes"])
-+ 
-+diff --git a/liblttng-ust-dl/lttng-ust-dl.c b/liblttng-ust-dl/lttng-ust-dl.c
-+index b0737b6..ce2ae0e 100644
-+--- a/liblttng-ust-dl/lttng-ust-dl.c
-++++ b/liblttng-ust-dl/lttng-ust-dl.c
-+@@ -38,8 +38,10 @@
-+ #include "ust_dl.h"
-+ 
-+ static void *(*__lttng_ust_plibc_dlopen)(const char *filename, int flags);
-++#ifdef HAVE_DLMOPEN
-+ static void *(*__lttng_ust_plibc_dlmopen)(Lmid_t nsid, const char *filename,
-+ 		int flags);
-++#endif
-+ static int (*__lttng_ust_plibc_dlclose)(void *handle);
-+ 
-+ static
-+@@ -55,6 +57,7 @@ void *_lttng_ust_dl_libc_dlopen(const char *filename, int flags)
-+ 	return __lttng_ust_plibc_dlopen(filename, flags);
-+ }
-+ 
-++#ifdef HAVE_DLMOPEN
-+ static
-+ void *_lttng_ust_dl_libc_dlmopen(Lmid_t nsid, const char *filename,
-+ 		int flags)
-+@@ -68,6 +71,7 @@ void *_lttng_ust_dl_libc_dlmopen(Lmid_t nsid, const char *filename,
-+ 	}
-+ 	return __lttng_ust_plibc_dlmopen(nsid, filename, flags);
-+ }
-++#endif
-+ 
-+ static
-+ int _lttng_ust_dl_libc_dlclose(void *handle)
-+@@ -143,6 +147,7 @@ end:
-+ 	return;
-+ }
-+ 
-++#ifdef HAVE_DLMOPEN
-+ static
-+ void lttng_ust_dl_dlmopen(void *so_base, Lmid_t nsid, const char *so_name,
-+ 		int flags, void *ip)
-+@@ -203,6 +208,7 @@ end:
-+ 	lttng_ust_elf_destroy(elf);
-+ 	return;
-+ }
-++#endif
-+ 
-+ void *dlopen(const char *filename, int flags)
-+ {
-+@@ -223,6 +229,7 @@ void *dlopen(const char *filename, int flags)
-+ 	return handle;
-+ }
-+ 
-++#ifdef HAVE_DLMOPEN
-+ void *dlmopen(Lmid_t nsid, const char *filename, int flags)
-+ {
-+ 	void *handle;
-+@@ -243,6 +250,7 @@ void *dlmopen(Lmid_t nsid, const char *filename, int flags)
-+ 	return handle;
-+ 
-+ }
-++#endif
-+ 
-+ int dlclose(void *handle)
-+ {
-+diff --git a/liblttng-ust-dl/ust_dl.h b/liblttng-ust-dl/ust_dl.h
-+index b8cfe82..afa8e84 100644
-+--- a/liblttng-ust-dl/ust_dl.h
-++++ b/liblttng-ust-dl/ust_dl.h
-+@@ -51,6 +51,7 @@ TRACEPOINT_EVENT(lttng_ust_dl, dlopen,
-+ 	)
-+ )
-+ 
-++#ifdef HAVE_DLMOPEN
-+ TRACEPOINT_EVENT(lttng_ust_dl, dlmopen,
-+ 	TP_ARGS(void *, ip, void *, baddr, Lmid_t, nsid,
-+ 		const char *, path, int, flags,
-+@@ -66,6 +67,7 @@ TRACEPOINT_EVENT(lttng_ust_dl, dlmopen,
-+ 		ctf_integer(uint8_t, has_debug_link, has_debug_link)
-+ 	)
-+ )
-++#endif
-+ 
-+ TRACEPOINT_EVENT(lttng_ust_dl, build_id,
-+ 	TP_ARGS(
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 961f4a0..3a471b7 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -1,6 +1,8 @@
++ AUTOMAKE_OPTIONS=subdir-objects
++ bin_PROGRAMS=sngrep
++ sngrep_SOURCES=capture.c
+++sngrep_CFLAGS=
+++sngrep_LDADD=
++ if USE_EEP
++ sngrep_SOURCES+=capture_eep.c
++ endif
++@@ -9,6 +11,8 @@ sngrep_SOURCES+=capture_gnutls.c
++ endif
++ if WITH_OPENSSL
++ sngrep_SOURCES+=capture_openssl.c
+++sngrep_CFLAGS+=$(SSL_CFLAGS)
+++sngrep_LDADD+=$(SSL_LIBS)
++ endif
++ sngrep_SOURCES+=address.c packet.c sip.c sip_call.c sip_msg.c sip_attr.c main.c
++ sngrep_SOURCES+=option.c group.c filter.c keybinding.c media.c setting.c rtp.c
 +-- 
 +2.7.4
 +
-diff --git a/package/lttng-libust/0004-Fix-include-config.h-to-resolve-HAVE_DLMOPEN.patch b/package/lttng-libust/0004-Fix-include-config.h-to-resolve-HAVE_DLMOPEN.patch
-new file mode 100644
-index 0000000..734d3c4
---- /dev/null
-+++ b/package/lttng-libust/0004-Fix-include-config.h-to-resolve-HAVE_DLMOPEN.patch
-@@ -0,0 +1,30 @@
-+From 0b2253f5c9af73904d49da32085036c16b9d2d75 Mon Sep 17 00:00:00 2001
-+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-+Date: Tue, 21 Feb 2017 18:10:11 -0500
-+Subject: [PATCH] Fix: include config.h to resolve HAVE_DLMOPEN
-+
-+Fixes commit 42330adcefcd1830dad89e2a960c93d8dd1da125
-+
-+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+[Backported from upstream commit 0b2253f5c9af73904d49da32085036c16b9d2d75.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ liblttng-ust-dl/ust_dl.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/liblttng-ust-dl/ust_dl.h b/liblttng-ust-dl/ust_dl.h
-+index afa8e84..c8a0695 100644
-+--- a/liblttng-ust-dl/ust_dl.h
-++++ b/liblttng-ust-dl/ust_dl.h
-+@@ -33,6 +33,7 @@ extern "C" {
-+ 
-+ #include <stdint.h>
-+ #include <unistd.h>
-++#include <config.h>
-+ 
-+ #define LTTNG_UST_DL_PROVIDER
-+ #include <lttng/tracepoint.h>
-+-- 
-+2.7.4
-+
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index 5667abb..f8c4c11 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -13,6 +13,7 @@ LTTNG_LIBUST_INSTALL_STAGING = YES
- LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
- LTTNG_LIBUST_CONF_OPTS += --disable-man-pages
- # 0002-doc-examples-Makefile.am-define-C-and-C-compilers-fo.patch
-+# 0003-Validate-the-presence-of-dlmopen-at-configure-time.patch
- LTTNG_LIBUST_AUTORECONF = YES
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index b82d8ce..1e0e051 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -9,7 +9,7 @@ SNGREP_SITE = $(call github,irontec,sngrep,$(SNGREP_VERSION))
+ SNGREP_LICENSE = GPLv3+
+ SNGREP_LICENSE_FILES = LICENSE
+ SNGREP_AUTORECONF = YES
+-SNGREP_DEPENDENCIES = libpcap ncurses
++SNGREP_DEPENDENCIES = libpcap ncurses host-pkgconf
  
- ifeq ($(BR2_PACKAGE_PYTHON),y)
+ SNGREP_CONF_ENV += \
+ 	$(if $(BR2_STATIC_LIBS),LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`")
