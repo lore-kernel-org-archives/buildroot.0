@@ -1,168 +1,103 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 7 Mar 2017 10:34:02 +0000
-Subject: [Buildroot] [PATCH] rpi-bt-firmware: new package
-In-Reply-To: <53c705753b20aca425aa8acb2af8d19a36cd6ac4.1485955423.git.baruch@tkos.co.il>
-References: <53c705753b20aca425aa8acb2af8d19a36cd6ac4.1485955423.git.baruch@tkos.co.il>
-Message-ID: <CAFGQKxeGBY2xbtsKOrdS5P-JN30FvZJqnDCthbZ9x9YfKwCXdQ@mail.gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 7 Mar 2017 12:48:26 +0100
+Subject: [Buildroot] QT5.8 buid failure on master
+In-Reply-To: <trinity-a4f8806b-d789-4dea-928a-2d7bb2fad531-1488871993989@3capp-gmx-bs12>
+References: <CAOMZO5D_R7_zEzL-X2zPViU+-SZ060JA3hpnE9S01x2PRazUsQ@mail.gmail.com>
+ <trinity-a4f8806b-d789-4dea-928a-2d7bb2fad531-1488871993989@3capp-gmx-bs12>
+Message-ID: <20170307114826.lend2f2evnob3lya@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Baruch Siach,
+Hi Peter,
 
-On 1 February 2017 at 13:23, Baruch Siach <baruch@tkos.co.il> wrote:
+On Tue, Mar 07, 2017 at 08:33:14AM +0100, Peter Seiderer wrote:
+> Hallo Fabio,
+> 
+> > Gesendet: Montag, 06. M?rz 2017 um 23:41 Uhr
+> > Von: "Fabio Estevam" <festevam@gmail.com>
+> > An: "Peter Seiderer" <ps.report@gmx.net>
+> > Cc: "Jagan Teki" <jagannadh.teki@gmail.com>, "Gary Bisson" <gary.bisson@boundarydevices.com>, buildroot at buildroot.org
+> > Betreff: QT5.8 buid failure on master
+> >
+> > Hi,
+> > 
+> > Trying to Build QT5.8 with Buildroot master tree causes the following error:
+> > 
+> > /home/fabio/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-g++
+> > -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> > -D_FILE_OFFSET_BITS=64 -Os
+> > --sysroot=/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot
+> > -O2 -O3 -std=c++1z -fvisibility=hidden -fvisibility-inlines-hidden
+> > -fno-exceptions -Wall -W -Wvla -Wdate-time -D_REENTRANT -fPIC
+> > -DQT_EGL_NO_X11 -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE
+> > -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_PLUGIN
+> > -DQT_EVENTDISPATCHER_SUPPORT_LIB -DQT_FONTDATABASE_SUPPORT_LIB
+> > -DQT_EGL_SUPPORT_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I.
+> > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> > -I../../../../include -I../../../../include/QtEventDispatcherSupport
+> > -I../../../../include/QtEventDispatcherSupport/5.8.0
+> > -I../../../../include/QtEventDispatcherSupport/5.8.0/QtEventDispatcherSupport
+> > -I../../../../include/QtFontDatabaseSupport
+> > -I../../../../include/QtFontDatabaseSupport/5.8.0
+> > -I../../../../include/QtFontDatabaseSupport/5.8.0/QtFontDatabaseSupport
+> > -I../../../../include/QtEglSupport
+> > -I../../../../include/QtEglSupport/5.8.0
+> > -I../../../../include/QtEglSupport/5.8.0/QtEglSupport
+> > -I../../../../include/QtGui/5.8.0
+> > -I../../../../include/QtGui/5.8.0/QtGui -I../../../../include/QtGui
+> > -I../../../../include/QtCore/5.8.0
+> > -I../../../../include/QtCore/5.8.0/QtCore -I../../../../include/QtCore
+> > -I.moc -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/freetype2
+> > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/freetype2
+> > -I../../../../mkspecs/devices/linux-buildroot-g++ -o
+> > .obj/qminimaleglscreen.o qminimaleglscreen.cpp
+> > In file included from
+> > /home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
+> >                  from
+> > ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
+> >                  from
+> > ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
+> >                  from api/qeglfsglobal_p.h:56,
+> >                  from api/qeglfsintegration_p.h:54,
+> >                  from qeglfsmain.cpp:41:
+> > /home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22:
+> > fatal error: X11/Xlib.h: No such file or directory
+> > 
+> > The defconfig used to reproduce the problem is available at:
+> > http://pastebin.com/qmhnNQXs
+> > 
+> 
+> Try to add (untested):
+> 
+> # Avoid X11 header collision, use generic EGL native types
+> DEFINES += QT_EGL_NO_X11
+> 
+> to src/plugins/platforms/eglfs/eglfs-plugin.pro (same as all/many other eglfs related
+> project files do, even eglfs_x11.pro ;-) )...
 
-> Add firmware file for the Raspberry Pi 3 Bluetooth module.
->
-> Note that to successfully download the firmware bluez5_utils needs a
-> patch[1].
->
-> [1] http://www.spinics.net/lists/linux-bluetooth/msg69470.html
+Adding that define to eglfs-plugin.pro is sufficient to get qtbase to
+build properly.
 
+However when I launch the Cinematic demo I get errors that it can't find
+the eglfs_kms device:
+# CinematicExperience-demo -platform eglfs
+qt.qpa.egldeviceintegration: Failed to load EGL device integration
+ "eglfs_kms"
+qt.qpa.egldeviceintegration: Failed to load EGL device integration
+ "eglfs_kms_egldevice"
+...
+EGL Error : Could not create the egl surface: error = 0x300b
 
-This seems a minor patch, is it safe it just add it to blue5_utils?
+(note that kmscube is working fine)
 
+I'm trying to understand how it works in Yocto but something definitely
+needs fixing.
 
->
->
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/Config.in                          |  1 +
->  package/rpi-bt-firmware/Config.in          |  7 +++++++
->  package/rpi-bt-firmware/rpi-bt-firmware.mk | 21 +++++++++++++++++++++
->  3 files changed, 29 insertions(+)
->  create mode 100644 package/rpi-bt-firmware/Config.in
->  create mode 100644 package/rpi-bt-firmware/rpi-bt-firmware.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 44aaf0887ede..8ad7d27e9de0 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -336,6 +336,7 @@ menu "Firmware"
->         source "package/b43-firmware/Config.in"
->         source "package/linux-firmware/Config.in"
->         source "package/rpi-firmware/Config.in"
-> +       source "package/rpi-bt-firmware/Config.in"
->         source "package/sunxi-boards/Config.in"
->         source "package/ts4900-fpga/Config.in"
->         source "package/ux500-firmware/Config.in"
-> diff --git a/package/rpi-bt-firmware/Config.in b/package/rpi-bt-firmware/
-> Config.in
-> new file mode 100644
-> index 000000000000..366ce9196941
-> --- /dev/null
-> +++ b/package/rpi-bt-firmware/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_RPI_BT_FIRMWARE
-> +       bool "rpi-bt-firmware"
-> +       depends on BR2_arm || BR2_aarch64
-> +       help
-> +         Raspberry Pi 3 Broadcom BCM43438 Bluetooth module firmware.
->
-
-I think this will also be needed on the raspberry pi zero w so might be
-worth updating the comment.
-
-
-> +
-> +         https://aur.archlinux.org/packages/pi-bluetooth
-> diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk
-> b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-> new file mode 100644
-> index 000000000000..255da1926211
-> --- /dev/null
-> +++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-> @@ -0,0 +1,21 @@
-> +###########################################################
-> #####################
-> +#
-> +# rpi-bt-firmware
-> +#
-> +###########################################################
-> #####################
-> +
-> +RPI_BT_FIRMWARE_VERSION = a439f892bf549ddfefa9ba7ad1999cc515f233bf
-> +RPI_BT_FIRMWARE_SITE = https://aur.archlinux.org/pi-bluetooth.git
-
-
-Is aur a good place to pull this from? Hopefully one day BCM43430A1.hcd
-will make it's way into linux-firmware but until then it seems like
-raspbian is the source of this file so i think it's better to get it from
-them.
-
-
->
-> +RPI_BT_FIRMWARE_SITE_METHOD = git
-> +RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
-> +RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
-> +
-> +# The BlueZ hciattach utility looks for firmware in /etc/firmware. Add a
-> +# compatibility symlink.
-> +define RPI_BT_FIRMWARE_INSTALL_TARGET_CMDS
-> +       ln -sf ../lib/firmware $(TARGET_DIR)/etc/firmware
-
-+       $(INSTALL) -D -m 0644 $(@D)/BCM43430A1.hcd \
-> +               $(TARGET_DIR)/lib/firmware/BCM43430A1.hcd
->
-
-Given you have to patch hciattach_bcm43xx.c to use this firmware why not
-also correct the path to the firmware? Assuming BCM43430A1.hcd ends up in
-linux-firmware then it would reside in /lib/firmware/brcm.  If you patch
-the correct path to BCM43430A1.hcd then there is no need for the symlink.
-
-
-> +endef
-> +
-> +$(eval $(generic-package))
->
-
-
-So i was thinking something more like this where we get the firmware from
-the raspbian package. what do you think?
-
-RPI_BT_FIRMWARE_VERSION = 1.2
-RPI_BT_FIRMWARE_SOURCE=bluez-firmware_$(RPI_BT_FIRMWARE_VERSION).orig.tar.gz
-RPI_BT_FIRMWARE_SITE =
-https://archive.raspberrypi.org/debian/pool/main/b/bluez-firmware
-RPI_BT_FIRMWARE_EXTRA_DOWNLOADS =
-bluez-firmware_$(RPI_BT_FIRMWARE_VERSION)-3+rpi1.debian.tar.xz
-RPI_BT_FIRMWARE_LICENSE = Proprietary
-RPI_BT_FIRMWARE_LICENSE_FILES = broadcom/BCM-LEGAL.txt
-
-# Extract the Debian tarball inside the sources
-define RPI_BT_FIRMWARE_DEBIAN_EXTRACT
-        $(call suitable-extractor,$(notdir
-$(RPI_BT_FIRMWARE_EXTRA_DOWNLOADS))) \
-                $(DL_DIR)/$(notdir $(RPI_BT_FIRMWARE_EXTRA_DOWNLOADS)) | \
-                $(TAR) -C $(@D) $(TAR_OPTIONS) -
-endef
-RPI_BT_FIRMWARE_POST_EXTRACT_HOOKS += RPI_BT_FIRMWARE_DEBIAN_EXTRACT
-
-define RPI_BT_FIRMWARE_INSTALL_TARGET_CMDS
-$(INSTALL) -D -m 0644 $(@D)/broadcom/BCM43430A1.hcd
-$(TARGET_DIR)/lib/firmware/brcm/BCM43430A1.hcd
-endef
-
-
-
-Finally for this firmware to be useful don't we also need sysv and systemd
-scripts to call hciattach?
-
-Thanks
-
-Martin
-
-
---
-> 2.11.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170307/e6299b20/attachment.html>
+Regards,
+Gary
