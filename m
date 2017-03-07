@@ -1,49 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 07 Mar 2017 21:41:01 +0000
-Subject: [Buildroot] [Bug 9716] New: exit, shutdown, reboot from kodi
-Message-ID: <bug-9716-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Mar 2017 22:46:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: bump version to
+ 5.44
+In-Reply-To: <20170305094928.21040-1-bernd.kuhls@t-online.de>
+References: <20170305094928.21040-1-bernd.kuhls@t-online.de>
+Message-ID: <20170307224629.55ad890f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9716
+Hello,
 
-            Bug ID: 9716
-           Summary: exit, shutdown, reboot from kodi
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: rizom91 at openaliasbox.org
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Sun,  5 Mar 2017 10:49:28 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/bluez5_utils/bluez5_utils.hash | 2 +-
+>  package/bluez5_utils/bluez5_utils.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-I'm not sure how this is supposed to work, but exiting, shutdown or reboot in
-Kodi has the same effect (black screen, cannot wake up with keyboard but not
-really shutdown I guess because the sdcard access led is still blinking).
+This update causes a build failure:
 
-I have to unplug/replug power source after these actions.
+  http://autobuild.buildroot.net/results/a0c/a0caac737848e7c4c97a8325fc29b11e69c1d70c/build-end.log
 
-I looked at the br-kodi script that seems to handle poweroff and reboot, but I
-could make it work properly.
+/usr/bin/install -D -m 0755 /home/buildroot/autobuild/run/instance-3/output/build/bluez5_utils-5.44/attrib/gatttool /home/buildroot/autobuild/run/instance-3/output/target/usr/bin/gatttool
+/usr/bin/install: cannot stat '/home/buildroot/autobuild/run/instance-3/output/build/bluez5_utils-5.44/attrib/gatttool': No such file or directory
 
-I'm running kodi as a non-root user (tried as root but it was the same). The
-system is a Raspberry Pi 3 with the buildroot master branch compiled (so Kodi
-16).
+Could you have a look ?
 
-Does anyone know how to make it work ? I would like to get back to tty for
-example after an exit.
-
-PS: This is more an help request than a real bug I guess, so I hope it is OK to
-post it like this.
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
