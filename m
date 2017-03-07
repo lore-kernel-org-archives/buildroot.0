@@ -1,84 +1,68 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue,  7 Mar 2017 23:23:48 +0100
-Subject: [Buildroot] [PATCH v2 2/2] linux: Add CIP SLTS easy selection option
-In-Reply-To: <1488925428-12805-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1488925428-12805-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1488925428-12805-3-git-send-email-angelo.compagnucci@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 7 Mar 2017 18:05:02 +0100
+Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
+In-Reply-To: <87a88xccuv.fsf@dell.be.48ers.dk>
+References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20170305213723.021d4678@free-electrons.com>
+ <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
+ <20170305223726.GM3671@free.fr> <87a88xccuv.fsf@dell.be.48ers.dk>
+Message-ID: <bb95fc23-ae23-3f4b-da4c-13bda8aa7e07@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds an easy way to select the CIP project SLTS
-kernel within the kernel menu.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- linux/Config.in | 25 +++++++++++++++++++++++++
- linux/linux.mk  |  4 ++++
- 2 files changed, 29 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1707f7d..76acece 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,6 +28,9 @@ choice
- config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.10.1)"
- 
-+config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	bool "Latest CIP SLTS (Super Long Term Support)"
-+
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
- 	help
-@@ -95,9 +98,31 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
- 
- endif
- 
-+if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+
-+choice
-+	prompt "CIP version"
-+	default BR2_LINUX_KERNEL_LATEST_CIP_VERSION_TAG
-+
-+	config BR2_LINUX_KERNEL_LATEST_CIP_VERSION_TAG
-+		bool "Latest tagged version (v4.4.48-cip2)"
-+		help
-+		  Use the latest tagged version
-+
-+	config BR2_LINUX_KERNEL_LATEST_CIP_VERSION_BRANCH
-+		bool "Latest released version"
-+		help
-+		  Always use the latest released version at the time of compiling
-+
-+endchoice
-+
-+endif
-+
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.10.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "v4.4.48-cip2" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION_TAG
-+	default "linux-4.4.y-cip" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION_BRANCH
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7f4432e..473a198 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -30,6 +30,10 @@ LINUX_SITE_METHOD = hg
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = svn
-+else ifeq ($(BR2_LINUX_KERNEL_LATEST_CIP_VERSION),y)
-+LINUX_SITE = $(call gitlab,cip-project,cip-kernel-4.4,$(LINUX_VERSION))
-+LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
-+BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
+On 07-03-17 16:42, Peter Korsgaard wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  >> I'm obviously late with commenting on this, but I think marking things as
+>  >> BROKEN is wrong. It bypasses the legacy mechanism so it disappears without
+>  >> notice. Also, BROKEN packages languish there for years without ever anyone
+>  >> taking a look. Sometimes things do get repaired, but re-adding the package is
+>  >> not much more complicated than
+>  >> 
+>  >> So, I propose to remove all broken packages.
+> 
+>  > Agreed.
+> 
+>  >> [I have the feeling we discussed this kind of thing at some BR devel meeting at
+>  >> some point, but I can't find it.]
+> 
+>  > Yes we did. And IIRC we agreed to get rid of BROKEN altogether.
+> 
+> I think you are mixing it up with BR2_DEPRECATED.
+
+ That's why I couldn't find it :-)
+
+
+> With that said, if nobody cares about fixing the package, then I'm OK
+> with removing it. Lets give it a bit of time and see what happens.
+
+ The problem with BROKEN is the same as with BR2_LEGACY: it doesn't appear in
+the legacy menu. You could argue that BROKEN is different because it simply
+can't be used at all. However, for the user there is no difference: it used to
+work (I hope we can assume that when a package is added, it has worked at least
+once on at least one platform...), and after a Buildroot update it suddenly
+vanishes.
+
+ So I propose the following: we can still mark things as BROKEN as a way to
+motivate people to fix them, but during the RC month we properly remove them and
+add a legacy entry.
+
+ Patches for removing the broken stuff are coming.
+
+
+ Regards,
+ Arnout
+
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
