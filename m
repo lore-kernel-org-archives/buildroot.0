@@ -1,102 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Mar 2017 13:18:49 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] support/mkusers: rename
-	variable to avoid name clashing
-Message-ID: <20170307124916.1692780359@busybox.osuosl.org>
+Date: Tue, 7 Mar 2017 13:25:26 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] Revert "package/libcec:
+	bump version to 4.0.2"
+Message-ID: <20170307124916.3CF9B818FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed5f5941f8185bbcf8f22404522238413ea807a3
+commit: https://git.buildroot.net/buildroot/commit/?id=45c871662fdd1b3592a9637c402f21704d9ace1d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The LINES variable is automatically set by bash to represent the number
-of lines in the terminal. That variable can be set when the shell
-receives SIGWINCH.
+This reverts commit bf1c9828f2c7ef37a0af4da5532472fb7e03ba67.
 
-If the shell does receive SIGWINCH after our LINES array is filled, the
-content of the array is mangled.
+This commit was part of the Kodi 17 series and was committed too early,
+current Kodi 16 is incompatible with this bump and needs to be
+reverted, fixes https://bugs.busybox.net/show_bug.cgi?id=9711
 
-Rename the variable to avoid that.
-
-Fixes #9456
-
-Reported-by: George Y. <georgebrmz@oss3d.com>
-Reported-by: Paul Stewart <paulstewartis@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 00d34e8a6f378653a384c66d68f9a65e13b8034f)
+(cherry picked from commit 9642d9589ce2c973340b391ddf0dd042b57025aa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/mkusers | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/libcec/libcec.hash | 2 +-
+ package/libcec/libcec.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-index d834578..2ac76f9 100755
---- a/support/scripts/mkusers
-+++ b/support/scripts/mkusers
-@@ -359,7 +359,7 @@ add_one_user() {
- main() {
-     local username uid group gid passwd home shell groups comment
-     local line
--    local -a LINES
-+    local -a ENTRIES
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index 5416c20..377f343 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
++sha256  0f29d5a2d155b507807ba896bc3b3e50a0ab56bf8f543a2bf5c2798c790292b5  libcec-2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd.tar.gz
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index f00e10f..c9a05a5 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-     # Some sanity checks
-     if [ ${MIN_UID} -le 0 ]; then
-@@ -371,7 +371,7 @@ main() {
+-LIBCEC_VERSION = 4.0.2
+-LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
++LIBCEC_VERSION = 2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd
++LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPLv2+
+ LIBCEC_LICENSE_FILES = COPYING
  
-     # Read in all the file in memory, exclude empty lines and comments
-     while read line; do
--        LINES+=( "${line}" )
-+        ENTRIES+=( "${line}" )
-     done < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
- 
-     # We first create groups whose gid is not -1, and then we create groups
-@@ -380,14 +380,14 @@ main() {
-     # used, rather than a different automatic gid is computed.
- 
-     # First, create all the main groups which gid is *not* automatic
--    for line in "${LINES[@]}"; do
-+    for line in "${ENTRIES[@]}"; do
-         read username uid group gid passwd home shell groups comment <<<"${line}"
-         [ ${gid} -ge 0 ] || continue    # Automatic gid
-         add_one_group "${group}" "${gid}"
-     done
- 
-     # Then, create all the main groups which gid *is* automatic
--    for line in "${LINES[@]}"; do
-+    for line in "${ENTRIES[@]}"; do
-         read username uid group gid passwd home shell groups comment <<<"${line}"
-         [ ${gid} -eq -1 ] || continue    # Non-automatic gid
-         add_one_group "${group}" "${gid}"
-@@ -396,7 +396,7 @@ main() {
-     # Then, create all the additional groups
-     # If any additional group is already a main group, we should use
-     # the gid of that main group; otherwise, we can use any gid
--    for line in "${LINES[@]}"; do
-+    for line in "${ENTRIES[@]}"; do
-         read username uid group gid passwd home shell groups comment <<<"${line}"
-         if [ "${groups}" != "-" ]; then
-             for g in ${groups//,/ }; do
-@@ -411,7 +411,7 @@ main() {
-     # uid be generated.
- 
-     # Now, add users whose uid is *not* automatic
--    for line in "${LINES[@]}"; do
-+    for line in "${ENTRIES[@]}"; do
-         read username uid group gid passwd home shell groups comment <<<"${line}"
-         [ "${username}" != "-" ] || continue # Magic string to skip user creation
-         [ ${uid} -ge 0         ] || continue # Automatic uid
-@@ -420,7 +420,7 @@ main() {
-     done
- 
-     # Finally, add users whose uid *is* automatic
--    for line in "${LINES[@]}"; do
-+    for line in "${ENTRIES[@]}"; do
-         read username uid group gid passwd home shell groups comment <<<"${line}"
-         [ "${username}" != "-" ] || continue # Magic string to skip user creation
-         [ ${uid} -eq -1        ] || continue # Non-automatic uid
