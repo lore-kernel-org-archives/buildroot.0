@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Mar 2017 13:25:49 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "package/libplatform: bump
-	version to 2.1.0"
-In-Reply-To: <20170306211543.6a601e2a@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 6 Mar 2017 21:15:43 +0100")
-References: <20170306181200.381-1-bernd.kuhls@t-online.de>
- <20170306211543.6a601e2a@free-electrons.com>
-Message-ID: <87lgshe0j6.fsf@dell.be.48ers.dk>
+Date: Tue, 07 Mar 2017 13:44:47 +0100
+Subject: [Buildroot] [PATCH 1/1] pcre: Change download location
+In-Reply-To: <5f582368-797e-10ad-1c19-a998496cabbf@ya.ru> (Oleg Kitain's
+ message of "Mon, 6 Mar 2017 03:02:02 +0300")
+References: <5f582368-797e-10ad-1c19-a998496cabbf@ya.ru>
+Message-ID: <87h935dznk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Oleg" == Oleg Kitain <okitain@ya.ru> writes:
 
- > Hello,
- > On Mon,  6 Mar 2017 19:11:59 +0100, Bernd Kuhls wrote:
- >> This reverts commit 2ac3045453d701b1fbea0d04333642a76fbfecc4.
- >> 
- >> This commit was part of the Kodi 17 series and was committed too early,
- >> current Kodi 16 is incompatible with this bump and needs to be
- >> reverted, fixes https://bugs.busybox.net/show_bug.cgi?id=9711
- >> 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- >> ---
- >> .../0001-p8-platform-config-fix-lookup-paths.patch | 38 --------------------
- >> ...nfig.cmake-fix-paths-for-cross-compilatio.patch | 40 ++++++++++++++++++++++
- >> package/libplatform/libplatform.hash               |  2 +-
- >> package/libplatform/libplatform.mk                 |  8 ++---
- >> 4 files changed, 45 insertions(+), 43 deletions(-)
- >> delete mode 100644 package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
- >> create mode 100644 package/libplatform/0001-platform-config.cmake-fix-paths-for-cross-compilatio.patch
+ > Subject: [PATCH 1/1] pcre: Change download location
+ > The location at ftp.csx.cam.ac.uk only stores 2 latest versions of PCRE.
+ > This results in old (2015.11 and older currently) buildroot versions
+ > timing out on wget several times and having to retrieve the package
+ > from sources.buildroot.org afterwards.
 
- > Thanks, both commits applied. Perhaps we need to apply them to the LTS
- > version of Buildroot as well?
+Timing out several times? Is ftp access blocked in your firewall?
 
-Yes - Committed both to 2017.02.x, thanks.
+A missing file should not cause any timeout, it should simply generate
+an error and fall back to sources.buildroot.net, E.G.:
+
+wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.37.tar.bz2
+--2017-03-07 13:43:28--  ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.37.tar.bz2
+           => ?pcre-8.37.tar.bz2?
+Resolving ftp.csx.cam.ac.uk (ftp.csx.cam.ac.uk)... 131.111.8.115
+Connecting to ftp.csx.cam.ac.uk (ftp.csx.cam.ac.uk)|131.111.8.115|:21... connected.
+Logging in as anonymous ... Logged in!
+==> SYST ... done.    ==> PWD ... done.
+==> TYPE I ... done.  ==> CWD (1) /pub/software/programming/pcre ... done.
+==> SIZE pcre-8.37.tar.bz2 ... done.
+
+==> PASV ... done.    ==> RETR pcre-8.37.tar.bz2 ...
+No such file ?pcre-8.37.tar.bz2?.
 
 -- 
 Bye, Peter Korsgaard
