@@ -1,49 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Mar 2017 16:24:55 +0100
-Subject: [Buildroot] [PATCH 1/1] libwebsockets: cherry-pick upstream
-	patch for v2.1.1
-In-Reply-To: <20170306144139.GA14390@airbook.vandijck-laurijssen.be> (Kurt Van
- Dijck's message of "Mon, 6 Mar 2017 15:41:39 +0100")
-References: <20170305182748.GJ24886@airbook.vandijck-laurijssen.be>
- <20170306091911.05fb09c2@free-electrons.com>
- <20170306104327.GC24367@airbook.vandijck-laurijssen.be>
- <20170306143901.0cb1e1f6@free-electrons.com>
- <20170306144139.GA14390@airbook.vandijck-laurijssen.be>
-Message-ID: <87mvcxcdo8.fsf@dell.be.48ers.dk>
+Date: Tue, 07 Mar 2017 16:32:11 +0100
+Subject: [Buildroot] [PATCH 3/3] package/nodejs: remove 0.10.x support
+In-Reply-To: <20170306211322.GD3976@free.fr> (Yann E. MORIN's message of "Mon, 
+ 6 Mar 2017 22:13:22 +0100")
+References: <1488671310-27378-1-git-send-email-martin@barkynet.com>
+ <1488671310-27378-3-git-send-email-martin@barkynet.com>
+ <8fcfeb3e-38c3-3fa7-99fd-feca53e7160f@mind.be>
+ <CAFGQKxeAv8j=vAO5TrcZT8r0a8kCneTR4qa9rhz=daHbwnavkQ@mail.gmail.com>
+ <4a35c4cc-f487-84c5-e2cc-80655f0e53eb@mind.be>
+ <20170306211322.GD3976@free.fr>
+Message-ID: <87innlcdc4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Kurt" == Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > This commit cherry-picks an upstream patch that fixes a compile error
- > that was introduced in v2.1.1
+ >> Note that in that December 2015 thread, Yann suggested to keep 0.10
+ >> indefinitely, but everybody else seemed to agree with Martin's suggestion to
+ >> drop it.
 
- > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+ > Well, my position at the time wwas that "As long as it builds and still
+ > works fine, we should just keep it."
 
- > diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
- > index df7221e..7976a69 100644
- > --- a/package/libwebsockets/libwebsockets.hash
- > +++ b/package/libwebsockets/libwebsockets.hash
- > @@ -1,2 +1,3 @@
- >  # Locally computed:
- >  sha256	96183cbdfcd6e6a3d9465e854a924b7bfde6c8c6d3384d6159ad797c2e823b4d  libwebsockets-v2.1.1.tar.gz
- > +sha256	49ae9f959394686d469f960951ece3ad1101655afe64df28ea5b1a61c1d124f0  f9f5a5760782b68fba190fb46d306f7c08f027c0.patch
- > diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
- > index 983ffce..e2e6bb2 100644
- > --- a/package/libwebsockets/libwebsockets.mk
- > +++ b/package/libwebsockets/libwebsockets.mk
- > @@ -12,6 +12,9 @@ LIBWEBSOCKETS_DEPENDENCIES = zlib
- >  LIBWEBSOCKETS_INSTALL_STAGING = YES
- >  LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON -DLWS_IPV6=ON
- 
- > +# patch specific for v2.1.1
- > +LIBWEBSOCKETS_PATCH = https://github.com/warmcat/libwebsockets/commit/f9f5a5760782b68fba190fb46d306f7c08f027c0.patch
- > +
+ > But now, 0.10.x is only for armv5. Do we really expect such a low-end
+ > system to run nodejs?
 
-Committed to 2017.02.x, thanks.
+ > I don't care much about maintaining 0.10.x, especially now since
+ > upstream compleely dropped support.
+
+I also don't think we can realisticly support it longer term going
+forward if upstream won't any more, so I'm ok with dropping it.
 
 -- 
 Bye, Peter Korsgaard
