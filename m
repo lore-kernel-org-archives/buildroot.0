@@ -1,38 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 07 Mar 2017 10:51:49 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-03-05
-In-Reply-To: <20170307000125.6516d2f9@free-electrons.com>
-References: <20170306072844.3738B206EB@mail.free-electrons.com>
- <20170306210032.GC3976@free.fr> <20170307000125.6516d2f9@free-electrons.com>
-Message-ID: <285f7992dab52d062324ef325dc2f503@zacarias.com.ar>
+From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
+Date: Tue, 7 Mar 2017 14:59:18 +0100
+Subject: [Buildroot] [PATCH 1/1] dc3dd: new package
+In-Reply-To: <47dd2cff-1296-4c41-20d0-738fcce26b6b@mind.be>
+References: <1488607456-30096-1-git-send-email-benoit.allard@greenbone.net>
+ <043238f2-3640-b9c7-c86b-28c31e8c44d5@mind.be>
+ <20170306165720.28face21@armant.office.greenbone.net>
+ <4dccae11-d7e8-1dd8-2797-1336326fa392@mind.be>
+ <20170307094050.3ee1650a@armant.office.greenbone.net>
+ <47dd2cff-1296-4c41-20d0-738fcce26b6b@mind.be>
+Message-ID: <20170307145918.397d5209@armant.office.greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2017-03-06 20:01, Thomas Petazzoni wrote:
+On Tue, 7 Mar 2017 11:31:48 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
->> >         i686 |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/e29a22a2d9c81c87d271c2a6e7d041d36c370adc
->> >         sh4a |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/6cc1212728248d5443fe9a367b4aeb3807ce623e
->> 
->> EGL not found...
 > 
-> Gustavo, could you have a look?
-
-Hi.
-It seems newer libepoxy requires egl even if you've got libgl.
-I'll check with upstream if that's really the case and adjust the 
-package or patch libepoxy (again) otherwise.
-
->> >      powerpc |                polarssl-1.2.19 | NOK | http://autobuild.buildroot.net/results/ab3565f6585e47573bcb62ef5e7250986c90d8e3
->> 
->> Static linking issue: polarssl build a 'benchmark' utility that links
->> with -lcrypto, which uses symbols fron libz, but libz is not pulled in
->> in a static build.
 > 
-> polarssl should use pkg-config to discover OpenSSL.
+> On 07-03-17 09:40, Beno?t Allard wrote:
+> 
+> > The following files are actually extracted from the GNU C library:
+> > ./lib/strcspn.c: GPL
+> > ./lib/stpcpy.c: GPL
+> > ./lib/strtoull.c: GPL
+> > ./lib/putenv.c: GPL
+> > ./lib/strtol.c: GPL
+> > ./lib/memcmp.c: GPL
+> > ./lib/stpncpy.c: GPL
+> > ./lib/memchr.c: GPL
+> > ./lib/utime.c: GPL
+> > ./lib/utimens.c: GPL
+> > ./lib/memchr2.c: GPL
+> 
+>  Something wrong with your version of licensecheck, because they
+> clearly state "version 3 or any later version". My licensecheck (sid,
+> 3.0.29-1) correctly identifies them as GPLv3+.
+> 
 
-polarssl should go down the drain, i'll refresh the patch to do so.
-Regards.
+Ok, great, thanks for checking ! I indeed used an older version of the
+script (jessie). With that cleared, please consider reviewing the v2 of
+my patch :)
+
+Regards,
+Ben.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170307/0d197aa7/attachment.asc>
