@@ -1,56 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Mar 2017 13:20:21 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/librsvg: disable
-	gdk-pixbuf-loader
-Message-ID: <20170307124916.22C5C818FE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Mar 2017 14:02:53 +0100
+Subject: [Buildroot] [PATCH 1/1] pcre: Change download location
+In-Reply-To: <87d1dtdzim.fsf@dell.be.48ers.dk>
+References: <5f582368-797e-10ad-1c19-a998496cabbf@ya.ru>
+ <20170306212039.4134ccee@free-electrons.com>
+ <87d1dtdzim.fsf@dell.be.48ers.dk>
+Message-ID: <20170307140253.60681b57@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e31990ea557f888f80ae5cd01079cc69a30b73f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Hello,
 
-gdk-pixbuf-loader support is enabled by default but it silently fail to
-generate gdk-pixbuf.loaders file when host != target.
+On Tue, 07 Mar 2017 13:47:45 +0100, Peter Korsgaard wrote:
 
-For exemple on ARM target:
-output/host/usr/bin/gdk-pixbuf-query-loaders ./libpixbufloader-svg.la
-g_module_open() failed for output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la: output/build/librsvg-2.40.16/gdk-pixbuf-loader/./.libs/libpixbufloader-svg.so: wrong ELF class: ELFCLASS32
+> I'm a bit confused about the description. To me it sounds like a local
+> firewall issue with ftp access instead, but OK - Others might have a
+> similar setup.
 
-But it doesn't break the build.
+If you look at Buildroot 2015.11, as point out in the commit log, it
+contains:
 
-When host = target using the Sourcery CodeBench AMD64 2016.11 toolchain
-optimized for x86_68 AMD Puma/Jaguar or AMD Steamroller, it break the
-build due to "Illegal instruction".
+PCRE_VERSION = 8.38
+PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
 
-output/host/usr/bin/gdk-pixbuf-query-loaders libpixbufloader-svg.la
-Illegal instruction (core dumped)
+However, the 8.38 version is no longer available at
+ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre, the oldest
+available version from this site is 8.39.
 
-Since this option is broken for cross-compilation, disable it.
+Hence, the fact that we have been using
+ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre in older
+Buildroot versions means that these older versions are now "broken" and
+have to fallback on sources.buildroot.net.
 
-Fixes:
-http://autobuild.buildroot.net/results/393/393145bc9bcb93d6df55ec8c63725c3d9a299957
+So, no: it's not a local issue due to a firewall.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 7372c80cc5b07b25d5ee5bc9909ed807a9e69fd7)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/librsvg/librsvg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+By using the https://ftp.pcre.org/pub/pcre/ location, which contains
+all previous versions, we increase our chances that 2017.02 will not be
+"broken" in 2 years.
 
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index b711de4..db57193 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -9,7 +9,7 @@ LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).16
- LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
--LIBRSVG_CONF_OPTS = --disable-tools --enable-introspection=no
-+LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
- HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
- LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
- 	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3)
+We could have also said that pcre.org looks a bit more
+official/upstream, and indeed https:// is better than ftp://.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
