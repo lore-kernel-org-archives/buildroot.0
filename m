@@ -1,41 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Mar 2017 13:47:45 +0100
-Subject: [Buildroot] [PATCH 1/1] pcre: Change download location
-In-Reply-To: <20170306212039.4134ccee@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 6 Mar 2017 21:20:39 +0100")
-References: <5f582368-797e-10ad-1c19-a998496cabbf@ya.ru>
- <20170306212039.4134ccee@free-electrons.com>
-Message-ID: <87d1dtdzim.fsf@dell.be.48ers.dk>
+Date: Tue, 7 Mar 2017 13:18:49 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] support/mkusers: rename
+	variable to avoid name clashing
+Message-ID: <20170307124916.1692780359@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ed5f5941f8185bbcf8f22404522238413ea807a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
- > Hello,
- > On Mon, 6 Mar 2017 03:02:02 +0300, Oleg Kitain wrote:
- >> Subject: [PATCH 1/1] pcre: Change download location
- >> 
- >> The location at ftp.csx.cam.ac.uk only stores 2 latest versions of PCRE.
- >> This results in old (2015.11 and older currently) buildroot versions
- >> timing out on wget several times and having to retrieve the package
- >> from sources.buildroot.org afterwards.
- >> 
- >> Signed-off-by: Oleg Kitain <okitain@ya.ru>
- >> ---
- >> package/pcre/pcre.mk | 2 +-
- >> 1 file changed, 1 insertion(+), 1 deletion(-)
+The LINES variable is automatically set by bash to represent the number
+of lines in the terminal. That variable can be set when the shell
+receives SIGWINCH.
 
- > Applied to master, thanks. Peter: do we want this sort of fix in the
- > LTS release?
+If the shell does receive SIGWINCH after our LINES array is filled, the
+content of the array is mangled.
 
-I'm a bit confused about the description. To me it sounds like a local
-firewall issue with ftp access instead, but OK - Others might have a
-similar setup.
+Rename the variable to avoid that.
 
-Committed to 2017.02.x, thanks.
+Fixes #9456
 
--- 
-Bye, Peter Korsgaard
+Reported-by: George Y. <georgebrmz@oss3d.com>
+Reported-by: Paul Stewart <paulstewartis@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 00d34e8a6f378653a384c66d68f9a65e13b8034f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/mkusers | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index d834578..2ac76f9 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -359,7 +359,7 @@ add_one_user() {
+ main() {
+     local username uid group gid passwd home shell groups comment
+     local line
+-    local -a LINES
++    local -a ENTRIES
+ 
+     # Some sanity checks
+     if [ ${MIN_UID} -le 0 ]; then
+@@ -371,7 +371,7 @@ main() {
+ 
+     # Read in all the file in memory, exclude empty lines and comments
+     while read line; do
+-        LINES+=( "${line}" )
++        ENTRIES+=( "${line}" )
+     done < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
+ 
+     # We first create groups whose gid is not -1, and then we create groups
+@@ -380,14 +380,14 @@ main() {
+     # used, rather than a different automatic gid is computed.
+ 
+     # First, create all the main groups which gid is *not* automatic
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         [ ${gid} -ge 0 ] || continue    # Automatic gid
+         add_one_group "${group}" "${gid}"
+     done
+ 
+     # Then, create all the main groups which gid *is* automatic
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         [ ${gid} -eq -1 ] || continue    # Non-automatic gid
+         add_one_group "${group}" "${gid}"
+@@ -396,7 +396,7 @@ main() {
+     # Then, create all the additional groups
+     # If any additional group is already a main group, we should use
+     # the gid of that main group; otherwise, we can use any gid
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         if [ "${groups}" != "-" ]; then
+             for g in ${groups//,/ }; do
+@@ -411,7 +411,7 @@ main() {
+     # uid be generated.
+ 
+     # Now, add users whose uid is *not* automatic
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         [ "${username}" != "-" ] || continue # Magic string to skip user creation
+         [ ${uid} -ge 0         ] || continue # Automatic uid
+@@ -420,7 +420,7 @@ main() {
+     done
+ 
+     # Finally, add users whose uid *is* automatic
+-    for line in "${LINES[@]}"; do
++    for line in "${ENTRIES[@]}"; do
+         read username uid group gid passwd home shell groups comment <<<"${line}"
+         [ "${username}" != "-" ] || continue # Magic string to skip user creation
+         [ ${uid} -eq -1        ] || continue # Non-automatic uid
