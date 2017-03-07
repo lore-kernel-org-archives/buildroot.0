@@ -1,40 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Mar 2017 13:45:36 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] pcre: change download
-	location
-Message-ID: <20170307124916.4687C80359@busybox.osuosl.org>
+Date: Tue, 7 Mar 2017 13:20:21 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/librsvg: disable
+	gdk-pixbuf-loader
+Message-ID: <20170307124916.22C5C818FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f2009a93621bea5103fc2eb92d8c20d562381f9
+commit: https://git.buildroot.net/buildroot/commit/?id=e31990ea557f888f80ae5cd01079cc69a30b73f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The location at ftp.csx.cam.ac.uk only stores 2 latest versions of PCRE.
-This results in old (2015.11 and older currently) buildroot versions
-timing out on wget several times and having to retrieve the package
-from sources.buildroot.org afterwards.
+gdk-pixbuf-loader support is enabled by default but it silently fail to
+generate gdk-pixbuf.loaders file when host != target.
 
-Signed-off-by: Oleg Kitain <okitain@ya.ru>
+For exemple on ARM target:
+output/host/usr/bin/gdk-pixbuf-query-loaders ./libpixbufloader-svg.la
+g_module_open() failed for output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la: output/build/librsvg-2.40.16/gdk-pixbuf-loader/./.libs/libpixbufloader-svg.so: wrong ELF class: ELFCLASS32
+
+But it doesn't break the build.
+
+When host = target using the Sourcery CodeBench AMD64 2016.11 toolchain
+optimized for x86_68 AMD Puma/Jaguar or AMD Steamroller, it break the
+build due to "Illegal instruction".
+
+output/host/usr/bin/gdk-pixbuf-query-loaders libpixbufloader-svg.la
+Illegal instruction (core dumped)
+
+Since this option is broken for cross-compilation, disable it.
+
+Fixes:
+http://autobuild.buildroot.net/results/393/393145bc9bcb93d6df55ec8c63725c3d9a299957
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 6d7644df7043706e455b06817abbe24da5613210)
+(cherry picked from commit 7372c80cc5b07b25d5ee5bc9909ed807a9e69fd7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre/pcre.mk | 2 +-
+ package/librsvg/librsvg.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 211e235..e302ed7 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PCRE_VERSION = 8.40
--PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
-+PCRE_SITE = https://ftp.pcre.org/pub/pcre
- PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
- PCRE_LICENSE = BSD-3c
- PCRE_LICENSE_FILES = LICENCE
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index b711de4..db57193 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -9,7 +9,7 @@ LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).16
+ LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
+-LIBRSVG_CONF_OPTS = --disable-tools --enable-introspection=no
++LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
+ HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
+ LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
+ 	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3)
