@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Mar 2017 16:12:30 +0100
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.5
-In-Reply-To: <20170306174649.02f1bf33@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 6 Mar 2017 17:46:49 +0100")
-References: <20170306145527.4718-1-gustavo@zacarias.com.ar>
- <20170306174649.02f1bf33@free-electrons.com>
-Message-ID: <87varlce8x.fsf@dell.be.48ers.dk>
+Date: Tue, 07 Mar 2017 16:24:35 +0100
+Subject: [Buildroot] [PATCH 1/1] libwebsockets: bump to version 2.1.1
+In-Reply-To: <20170305213430.1d486293@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 5 Mar 2017 21:34:30 +0100")
+References: <20170305182748.GJ24886@airbook.vandijck-laurijssen.be>
+ <20170305213430.1d486293@free-electrons.com>
+Message-ID: <87r329cdos.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,17 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  > Hello,
- > On Mon,  6 Mar 2017 11:55:27 -0300, Gustavo Zacarias wrote:
- >> Fixes:
- >> wnpa-sec-2017-03 - LDSS dissector crash
- >> wnpa-sec-2017-04 - RTMTP dissector infinite loop
- >> wnpa-sec-2017-05 - WSP dissector infinite loop
- >> wnpa-sec-2017-06 - STANAG 4607 file parser infinite loop
- >> wnpa-sec-2017-07 - NetScaler file parser infinite loop
- >> wnpa-sec-2017-08 - NetScaler file parser crash
- >> wnpa-sec-2017-09 - K12 file parser crash
- >> wnpa-sec-2017-10 - IAX2 dissector infinite loop
- >> wnpa-sec-2017-11 - NetScaler file parser infinite loop
+ > On Sun, 5 Mar 2017 19:27:48 +0100, Kurt Van Dijck wrote:
+ >> Mosquitto combined with version 2.1.0 of libwebsockets yields a failing
+ >> system. Version 2.1.1 restores the websocket interface again.
  >> 
- >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- >> ---
- >> package/wireshark/wireshark.hash | 4 ++--
- >> package/wireshark/wireshark.mk   | 2 +-
- >> 2 files changed, 3 insertions(+), 3 deletions(-)
+ >> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
- > Applied to master, thanks. Peter: we want this one for LTS I guess.
+ > Applied to master, thanks!
+
+ > Peter: even though this is a version bump, it seems like this one would
+ > be needed on the LTS branch, since it apparently fixes a runtime issue
+ > with Mosquitto.
 
 Committed to 2017.02.x, thanks.
 
