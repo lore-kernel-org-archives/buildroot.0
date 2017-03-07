@@ -1,31 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Mar 2017 16:24:35 +0100
-Subject: [Buildroot] [PATCH 1/1] libwebsockets: bump to version 2.1.1
-In-Reply-To: <20170305213430.1d486293@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 5 Mar 2017 21:34:30 +0100")
+Date: Tue, 07 Mar 2017 16:24:55 +0100
+Subject: [Buildroot] [PATCH 1/1] libwebsockets: cherry-pick upstream
+	patch for v2.1.1
+In-Reply-To: <20170306144139.GA14390@airbook.vandijck-laurijssen.be> (Kurt Van
+ Dijck's message of "Mon, 6 Mar 2017 15:41:39 +0100")
 References: <20170305182748.GJ24886@airbook.vandijck-laurijssen.be>
- <20170305213430.1d486293@free-electrons.com>
-Message-ID: <87r329cdos.fsf@dell.be.48ers.dk>
+ <20170306091911.05fb09c2@free-electrons.com>
+ <20170306104327.GC24367@airbook.vandijck-laurijssen.be>
+ <20170306143901.0cb1e1f6@free-electrons.com>
+ <20170306144139.GA14390@airbook.vandijck-laurijssen.be>
+Message-ID: <87mvcxcdo8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Kurt" == Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> writes:
 
- > Hello,
- > On Sun, 5 Mar 2017 19:27:48 +0100, Kurt Van Dijck wrote:
- >> Mosquitto combined with version 2.1.0 of libwebsockets yields a failing
- >> system. Version 2.1.1 restores the websocket interface again.
- >> 
- >> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+ > This commit cherry-picks an upstream patch that fixes a compile error
+ > that was introduced in v2.1.1
 
- > Applied to master, thanks!
+ > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
- > Peter: even though this is a version bump, it seems like this one would
- > be needed on the LTS branch, since it apparently fixes a runtime issue
- > with Mosquitto.
+ > diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+ > index df7221e..7976a69 100644
+ > --- a/package/libwebsockets/libwebsockets.hash
+ > +++ b/package/libwebsockets/libwebsockets.hash
+ > @@ -1,2 +1,3 @@
+ >  # Locally computed:
+ >  sha256	96183cbdfcd6e6a3d9465e854a924b7bfde6c8c6d3384d6159ad797c2e823b4d  libwebsockets-v2.1.1.tar.gz
+ > +sha256	49ae9f959394686d469f960951ece3ad1101655afe64df28ea5b1a61c1d124f0  f9f5a5760782b68fba190fb46d306f7c08f027c0.patch
+ > diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+ > index 983ffce..e2e6bb2 100644
+ > --- a/package/libwebsockets/libwebsockets.mk
+ > +++ b/package/libwebsockets/libwebsockets.mk
+ > @@ -12,6 +12,9 @@ LIBWEBSOCKETS_DEPENDENCIES = zlib
+ >  LIBWEBSOCKETS_INSTALL_STAGING = YES
+ >  LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON -DLWS_IPV6=ON
+ 
+ > +# patch specific for v2.1.1
+ > +LIBWEBSOCKETS_PATCH = https://github.com/warmcat/libwebsockets/commit/f9f5a5760782b68fba190fb46d306f7c08f027c0.patch
+ > +
 
 Committed to 2017.02.x, thanks.
 
