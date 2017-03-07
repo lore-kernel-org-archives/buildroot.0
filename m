@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Mar 2017 13:19:08 +0100
-Subject: [Buildroot] [PATCH] support/mkusers: rename variable to avoid
-	name clashing
-In-Reply-To: <20170304115724.119321f9@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 4 Mar 2017 11:57:24 +0100")
-References: <1488578840-11999-1-git-send-email-yann.morin.1998@free.fr>
- <20170304115724.119321f9@free-electrons.com>
-Message-ID: <87wpc1e0ub.fsf@dell.be.48ers.dk>
+Date: Tue, 07 Mar 2017 13:20:36 +0100
+Subject: [Buildroot] [PATCH] package/librsvg: disable gdk-pixbuf-loader
+In-Reply-To: <20170304115606.76da14f6@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 4 Mar 2017 11:56:06 +0100")
+References: <20170304103503.18877-1-romain.naour@gmail.com>
+ <20170304115606.76da14f6@free-electrons.com>
+Message-ID: <87shmpe0rv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,27 +15,38 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  > Hello,
- > On Fri,  3 Mar 2017 23:07:20 +0100, Yann E. MORIN wrote:
- >> The LINES variable is automatically set by bash to represent the number
- >> of lines in the terminal. That variable can be set when the shell
- >> receives SIGWINCH.
+ > On Sat,  4 Mar 2017 11:35:03 +0100, Romain Naour wrote:
+ >> gdk-pixbuf-loader support is enabled by default but it silently fail to
+ >> generate gdk-pixbuf.loaders file when host != target.
  >> 
- >> If the shell does receive SIGWINCH after our LINES array is filled, the
- >> content of the array is mangled.
+ >> For exemple on ARM target:
+ >> output/host/usr/bin/gdk-pixbuf-query-loaders ./libpixbufloader-svg.la
+ >> g_module_open() failed for
+ >> output/build/librsvg-2.40.16/gdk-pixbuf-loader/./libpixbufloader-svg.la:
+ >> output/build/librsvg-2.40.16/gdk-pixbuf-loader/./.libs/libpixbufloader-svg.so:
+ >> wrong ELF class: ELFCLASS32
  >> 
- >> Rename the variable to avoid that.
+ >> But it doesn't break the build.
  >> 
- >> Fixes #9456
+ >> When host = target using the Sourcery CodeBench AMD64 2016.11 toolchain
+ >> optimized for x86_68 AMD Puma/Jaguar or AMD Steamroller, it break the
+ >> build due to "Illegal instruction".
  >> 
- >> Reported-by: George Y. <georgebrmz@oss3d.com>
- >> Reported-by: Paul Stewart <paulstewartis@gmail.com>
- >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- >> Cc: Arnout Vandecappelle <arnout@mind.be>
+ >> output/host/usr/bin/gdk-pixbuf-query-loaders libpixbufloader-svg.la
+ >> Illegal instruction (core dumped)
+ >> 
+ >> Since this option is broken for cross-compilation, disable it.
+ >> 
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/393/393145bc9bcb93d6df55ec8c63725c3d9a299957
+ >> 
+ >> Signed-off-by: Romain Naour <romain.naour@gmail.com>
  >> ---
- >> support/scripts/mkusers | 14 +++++++-------
- >> 1 file changed, 7 insertions(+), 7 deletions(-)
+ >> package/librsvg/librsvg.mk | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Applied to master, thanks. Peter: we want this one for the LTS branch.
+ > Applied to master, thanks. Peter: I believe this should go in the LTS
+ > branch.
 
 Committed to 2017.02.x, thanks.
 
