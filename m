@@ -1,87 +1,96 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 8 Mar 2017 00:50:53 +0100
-Subject: [Buildroot] [PATCH 5/6] xdriver_xf86-video-v4l: remove broken
-	package
+Date: Wed, 8 Mar 2017 00:50:54 +0100
+Subject: [Buildroot] [PATCH 6/6] efl: remove broken JP2K loader
 In-Reply-To: <20170307235054.25149-1-arnout@mind.be>
 References: <20170307235054.25149-1-arnout@mind.be>
-Message-ID: <20170307235054.25149-5-arnout@mind.be>
+Message-ID: <20170307235054.25149-6-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package has been marked as broken since 2015.02. Since this was
-already unavailable without mention in Config.in.legacy for 9 Buildroot
-releases, legacy handling isn't very useful.
+This option has been marked as broken since 2016.08. Since nobody
+repaired it, we'll just remove it.
+
+Since technically it was already removed in 2016.08, it's added to the
+2016.08 section of the legacy menu.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
 ---
-Bernd, last chance to unbreak the package :-)
+Romain, Gustavo, last chance to unbreak the package :-)
 ---
- package/x11r7/Config.in                                    |  1 -
- package/x11r7/xdriver_xf86-video-v4l/Config.in             |  8 --------
- .../xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.hash     |  2 --
- .../x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.mk | 14 --------------
- 4 files changed, 25 deletions(-)
- delete mode 100644 package/x11r7/xdriver_xf86-video-v4l/Config.in
- delete mode 100644 package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.hash
- delete mode 100644 package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.mk
+ Config.in.legacy      |  7 +++++++
+ package/efl/Config.in | 10 ----------
+ package/efl/efl.mk    |  8 +-------
+ 3 files changed, 8 insertions(+), 17 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 4510871eee..ddceaa407f 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -183,7 +183,6 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xdriver_xf86-video-tdfx/Config.in
- 		source package/x11r7/xdriver_xf86-video-tga/Config.in
- 		source package/x11r7/xdriver_xf86-video-trident/Config.in
--		source package/x11r7/xdriver_xf86-video-v4l/Config.in
- 		source package/x11r7/xdriver_xf86-video-vesa/Config.in
- 		source package/x11r7/xdriver_xf86-video-vmware/Config.in
- 		source package/x11r7/xdriver_xf86-video-voodoo/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-v4l/Config.in b/package/x11r7/xdriver_xf86-video-v4l/Config.in
-deleted file mode 100644
-index 27ffd87113..0000000000
---- a/package/x11r7/xdriver_xf86-video-v4l/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_XDRIVER_XF86_VIDEO_V4L
--	bool "xf86-video-v4l"
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	depends on BROKEN # Fails to build with xorg xserver >= 1.17
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 1f3d09b389..67f6e4e3a0 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -475,6 +475,13 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ ###############################################################################
+ comment "Legacy options removed in 2016.08"
+ 
++config BR2_PACKAGE_EFL_JP2K
++	bool "libevas jp2k loader has been removed"
++	select BR2_LEGACY
++	  JP2K support in EFL requires openjpeg 1.x (libopenjpeg1.pc)
++	  while Buildroot only packages openjpeg 2.x. Therefore, the
++	  JP2K loader has been removed from EFL.
++
+ config BR2_PACKAGE_SYSTEMD_COMPAT
+ 	bool "systemd compatibility libraries have been removed"
+ 	select BR2_LEGACY
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 5e89af602c..960f2752c3 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -252,16 +252,6 @@ config BR2_PACKAGE_EFL_PNG
+ 	  This enables the loader code that loads png files using
+ 	  libpng.
+ 
+-# JP2K support require openjpeg 1.x (libopenjpeg1.pc) which is not
+-# available in Buildroot anymore.
+-config BR2_PACKAGE_EFL_JP2K
+-	bool "libevas jp2k loader"
+-	select BR2_PACKAGE_OPENJPEG
+-	depends on BROKEN # require openjpeg 1.x
 -	help
--	  video4linux driver
-diff --git a/package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.hash b/package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.hash
-deleted file mode 100644
-index c4bcfadc4b..0000000000
---- a/package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# From http://lists.x.org/archives/xorg-announce/2008-March/000504.html
--sha1	7f2212c529a5bcc34f67858a9d0167a0d4848aaa	xf86-video-v4l-0.2.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.mk b/package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.mk
-deleted file mode 100644
-index 607b605f80..0000000000
---- a/package/x11r7/xdriver_xf86-video-v4l/xdriver_xf86-video-v4l.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# xdriver_xf86-video-v4l
--#
--################################################################################
+-	  This enables the loader code that loads jp2k files using
+-	  openjpeg.
 -
--XDRIVER_XF86_VIDEO_V4L_VERSION = 0.2.0
--XDRIVER_XF86_VIDEO_V4L_SOURCE = xf86-video-v4l-$(XDRIVER_XF86_VIDEO_V4L_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_V4L_SITE = http://xorg.freedesktop.org/releases/individual/driver
--XDRIVER_XF86_VIDEO_V4L_LICENSE = MIT
--XDRIVER_XF86_VIDEO_V4L_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_V4L_DEPENDENCIES = xserver_xorg-server xproto_randrproto xproto_videoproto xproto_xproto
+ config BR2_PACKAGE_EFL_JPEG
+ 	bool "libevas jpeg loader"
+ 	help
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 1e54f72810..e0ec6d6bcc 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -38,6 +38,7 @@ EFL_CONF_OPTS = \
+ 	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
+ 	--with-elua=$(HOST_DIR)/usr/bin/elua \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
++	--disable-image-loader-jp2k \
+ 	--disable-lua-old \
+ 	--disable-poppler \
+ 	--disable-sdl \
+@@ -251,13 +252,6 @@ else
+ EFL_CONF_OPTS += --disable-image-loader-tiff
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_EFL_JP2K),y)
+-EFL_CONF_OPTS += --enable-image-loader-jp2k=yes
+-EFL_DEPENDENCIES += openjpeg
+-else
+-EFL_CONF_OPTS += --disable-image-loader-jp2k
+-endif
 -
--$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_EFL_WEBP),y)
+ EFL_CONF_OPTS += --enable-image-loader-webp=yes
+ EFL_DEPENDENCIES += webp
 -- 
 2.11.0
