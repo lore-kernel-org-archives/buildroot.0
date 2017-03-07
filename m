@@ -1,182 +1,166 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Mar 2017 16:37:41 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] sngrep: use pkg-config to
-	discover OpenSSL to fix static linking
-Message-ID: <20170307155609.8DBCD81EA5@busybox.osuosl.org>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Tue, 7 Mar 2017 21:45:56 +0530
+Subject: [Buildroot] QT5.8 buid failure on master
+In-Reply-To: <trinity-b0ce3807-d5c4-4ccf-9b54-628667f6d805-1488895453975@3capp-gmx-bs26>
+References: <CAOMZO5D_R7_zEzL-X2zPViU+-SZ060JA3hpnE9S01x2PRazUsQ@mail.gmail.com>
+ <trinity-a4f8806b-d789-4dea-928a-2d7bb2fad531-1488871993989@3capp-gmx-bs12>
+ <20170307114826.lend2f2evnob3lya@t450s.lan>
+ <trinity-b0ce3807-d5c4-4ccf-9b54-628667f6d805-1488895453975@3capp-gmx-bs26>
+Message-ID: <CAD6G_RQiqhvnYX3L9wh64K5inCSNr4G-vPDzU_9BbLqzrw=fyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26e751617f279ef808f7b36c205fde907e06865a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+On Tue, Mar 7, 2017 at 7:34 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+> Hello Gary,
+>
+>> Gesendet: Dienstag, 07. M?rz 2017 um 12:48 Uhr
+>> Von: "Gary Bisson" <gary.bisson@boundarydevices.com>
+>> An: "Peter Seiderer" <ps.report@gmx.net>
+>> Cc: "Fabio Estevam" <festevam@gmail.com>, "Jagan Teki" <jagannadh.teki@gmail.com>, buildroot at buildroot.org
+>> Betreff: Re: QT5.8 buid failure on master
+>>
+>> Hi Peter,
+>>
+>> On Tue, Mar 07, 2017 at 08:33:14AM +0100, Peter Seiderer wrote:
+>> > Hallo Fabio,
+>> >
+>> > > Gesendet: Montag, 06. M?rz 2017 um 23:41 Uhr
+>> > > Von: "Fabio Estevam" <festevam@gmail.com>
+>> > > An: "Peter Seiderer" <ps.report@gmx.net>
+>> > > Cc: "Jagan Teki" <jagannadh.teki@gmail.com>, "Gary Bisson" <gary.bisson@boundarydevices.com>, buildroot at buildroot.org
+>> > > Betreff: QT5.8 buid failure on master
+>> > >
+>> > > Hi,
+>> > >
+>> > > Trying to Build QT5.8 with Buildroot master tree causes the following error:
+>> > >
+>> > > /home/fabio/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-g++
+>> > > -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>> > > -D_FILE_OFFSET_BITS=64 -Os
+>> > > --sysroot=/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot
+>> > > -O2 -O3 -std=c++1z -fvisibility=hidden -fvisibility-inlines-hidden
+>> > > -fno-exceptions -Wall -W -Wvla -Wdate-time -D_REENTRANT -fPIC
+>> > > -DQT_EGL_NO_X11 -DQT_NO_EXCEPTIONS -D_LARGEFILE64_SOURCE
+>> > > -D_LARGEFILE_SOURCE -DQT_NO_DEBUG -DQT_PLUGIN
+>> > > -DQT_EVENTDISPATCHER_SUPPORT_LIB -DQT_FONTDATABASE_SUPPORT_LIB
+>> > > -DQT_EGL_SUPPORT_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I.
+>> > > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+>> > > -I../../../../include -I../../../../include/QtEventDispatcherSupport
+>> > > -I../../../../include/QtEventDispatcherSupport/5.8.0
+>> > > -I../../../../include/QtEventDispatcherSupport/5.8.0/QtEventDispatcherSupport
+>> > > -I../../../../include/QtFontDatabaseSupport
+>> > > -I../../../../include/QtFontDatabaseSupport/5.8.0
+>> > > -I../../../../include/QtFontDatabaseSupport/5.8.0/QtFontDatabaseSupport
+>> > > -I../../../../include/QtEglSupport
+>> > > -I../../../../include/QtEglSupport/5.8.0
+>> > > -I../../../../include/QtEglSupport/5.8.0/QtEglSupport
+>> > > -I../../../../include/QtGui/5.8.0
+>> > > -I../../../../include/QtGui/5.8.0/QtGui -I../../../../include/QtGui
+>> > > -I../../../../include/QtCore/5.8.0
+>> > > -I../../../../include/QtCore/5.8.0/QtCore -I../../../../include/QtCore
+>> > > -I.moc -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+>> > > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/freetype2
+>> > > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+>> > > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+>> > > -I/home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/freetype2
+>> > > -I../../../../mkspecs/devices/linux-buildroot-g++ -o
+>> > > .obj/qminimaleglscreen.o qminimaleglscreen.cpp
+>> > > In file included from
+>> > > /home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
+>> > >                  from
+>> > > ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
+>> > >                  from
+>> > > ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
+>> > >                  from api/qeglfsglobal_p.h:56,
+>> > >                  from api/qeglfsintegration_p.h:54,
+>> > >                  from qeglfsmain.cpp:41:
+>> > > /home/fabio/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22:
+>> > > fatal error: X11/Xlib.h: No such file or directory
+>> > >
+>> > > The defconfig used to reproduce the problem is available at:
+>> > > http://pastebin.com/qmhnNQXs
+>> > >
+>> >
+>> > Try to add (untested):
+>> >
+>> > # Avoid X11 header collision, use generic EGL native types
+>> > DEFINES += QT_EGL_NO_X11
+>> >
+>> > to src/plugins/platforms/eglfs/eglfs-plugin.pro (same as all/many other eglfs related
+>> > project files do, even eglfs_x11.pro ;-) )...
+>>
+>> Adding that define to eglfs-plugin.pro is sufficient to get qtbase to
+>> build properly.
+>>
+>> However when I launch the Cinematic demo I get errors that it can't find
+>> the eglfs_kms device:
+>> # CinematicExperience-demo -platform eglfs
+>> qt.qpa.egldeviceintegration: Failed to load EGL device integration
+>>  "eglfs_kms"
+>> qt.qpa.egldeviceintegration: Failed to load EGL device integration
+>>  "eglfs_kms_egldevice"
+>> ...
+>> EGL Error : Could not create the egl surface: error = 0x300b
+>>
+>
+> Something like the following (but untested with your .config):
+>
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 7a33573..d3c871c 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -200,6 +200,7 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XML)        += Qt5Xml
+>  QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_OPENGL_LIB) += Qt5OpenGL
+>  ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+>  QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5EglFSDeviceIntegration
+> +QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5EglFsKmsSupport
+>  else
+>  QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_EGLFS)      += Qt5EglDeviceIntegration
+>  endif
+>
+> Regards,
+> Peter
+>
+>> (note that kmscube is working fine)
+>>
+>> I'm trying to understand how it works in Yocto but something definitely
+>> needs fixing.
 
-Building sngrep with OpenSSL support in static linking configurations
-currently fails due to undefined symbols in the OpenSSL library. It's
-the usual problem with using AC_CHECK_LIB() to discover libraries
-instead of the pkg-config based PKG_CHECK_MODULES().
+Able to see the application but 'Black screen' on 'Lord of the Ring' widget
 
-Therefore, this commit introduces a patch that switches to using
-pkg-config to discover OpenSSL. A preliminary patch is needed, without
-which appending to LIBS/CFLAGS doesn't work. Both patches have been
-submitted upstream.
+# CinematicExperience-demo
+MESA-LOADER: device is not located on the PCI bus
+MESA-LOADER: device is not located on the PCI bus
+MESA-LOADER: device is not located on the PCI bus
+file:///usr/share/Qt5/CinematicExperience/content/InfoView.qml:193:21:
+QML Image: Cannot open:
+file:///usr/share/Qt5/CinematicExperience/content/images/
+qt_ambassador_logo.png
+file:///usr/share/Qt5/CinematicExperience/content/InfoViewItem.qml:13:5:
+QML Image: Cannot open:
+file:///usr/share/Qt5/CinematicExperience/content/image
+s/qt_logo2.png
+libpng warning: iCCP: known incorrect sRGB profile
+libpng warning: iCCP: known incorrect sRGB profile
+file:///usr/share/Qt5/CinematicExperience/content/MainView.qml:90:9:
+QML Image: Cannot open:
+file:///usr/share/Qt5/CinematicExperience/content/images/qt
+_logo.png
+QOpenGLFramebufferObject: Unsupported framebuffer format.
+QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
+QOpenGLFramebufferObject: Unsupported framebuffer format.
+QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
+QOpenGLFramebufferObject: Unsupported framebuffer format.
+QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
+QOpenGLFramebufferObject: Unsupported framebuffer format.
+QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/911143de823b2c749ac0a59dfa06adb6ddd3de50/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit bfd273d83ad02b96841d36a05916a12130b4f739)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-src-Makefile.am-don-t-use-VPATH.patch     | 43 +++++++++++++
- ...e.ac-switch-to-pkg-config-to-find-openssl.patch | 75 ++++++++++++++++++++++
- package/sngrep/sngrep.mk                           |  2 +-
- 3 files changed, 119 insertions(+), 1 deletion(-)
-
-diff --git a/package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch b/package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch
-new file mode 100644
-index 0000000..3d98203
---- /dev/null
-+++ b/package/sngrep/0001-src-Makefile.am-don-t-use-VPATH.patch
-@@ -0,0 +1,43 @@
-+From b6dcae8ec4334e2436cfa19a8052c3473f57a586 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 4 Mar 2017 15:02:43 +0100
-+Subject: [PATCH 1/2] src/Makefile.am: don't use VPATH
-+
-+VPATH is a mechanism used to allow out-of-tree build, not to use source
-+code from a different directory. For this purpose, one should simply use
-+the "subdir-objects" AUTOMAKE_OPTIONS, and reference the source code of
-+the sub-directory in the <prog>_SOURCES variable.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream-status: https://github.com/irontec/sngrep/pull/176
-+---
-+ src/Makefile.am | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 931ee06..961f4a0 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -1,5 +1,5 @@
-++AUTOMAKE_OPTIONS=subdir-objects
-+ bin_PROGRAMS=sngrep
-+-VPATH=curses
-+ sngrep_SOURCES=capture.c
-+ if USE_EEP
-+ sngrep_SOURCES+=capture_eep.c
-+@@ -12,8 +12,8 @@ sngrep_SOURCES+=capture_openssl.c
-+ endif
-+ sngrep_SOURCES+=address.c packet.c sip.c sip_call.c sip_msg.c sip_attr.c main.c
-+ sngrep_SOURCES+=option.c group.c filter.c keybinding.c media.c setting.c rtp.c
-+-sngrep_SOURCES+=util.c hash.c vector.c ui_panel.c scrollbar.c
-+-sngrep_SOURCES+=ui_manager.c ui_call_list.c ui_call_flow.c ui_call_raw.c
-+-sngrep_SOURCES+=ui_stats.c ui_filter.c ui_save.c ui_msg_diff.c
-+-sngrep_SOURCES+=ui_column_select.c ui_settings.c
-++sngrep_SOURCES+=util.c hash.c vector.c curses/ui_panel.c curses/scrollbar.c
-++sngrep_SOURCES+=curses/ui_manager.c curses/ui_call_list.c curses/ui_call_flow.c curses/ui_call_raw.c
-++sngrep_SOURCES+=curses/ui_stats.c curses/ui_filter.c curses/ui_save.c curses/ui_msg_diff.c
-++sngrep_SOURCES+=curses/ui_column_select.c curses/ui_settings.c
-+ 
-+-- 
-+2.7.4
-+
-diff --git a/package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch b/package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch
-new file mode 100644
-index 0000000..b51581f
---- /dev/null
-+++ b/package/sngrep/0002-configure.ac-switch-to-pkg-config-to-find-openssl.patch
-@@ -0,0 +1,75 @@
-+From 22b08ab1a45eb3773b3c90dc37a31a7574520daa Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 4 Mar 2017 14:56:53 +0100
-+Subject: [PATCH 2/2] configure.ac: switch to pkg-config to find openssl
-+
-+Using AC_CHECK_LIB() doesn't work properly for static linking, because
-+it doesn't return information on transitive dependencies of
-+libraries. For example, if library A internally uses library B, then
-+with dynamic linking, doing -lA is sufficient. However, with static
-+linking, one must do -lA -lB, and AC_CHECK_LIB() will only give the -lA
-+information. This for example causes a build failure when building
-+sngrep statically with openssl enabled:
-+
-+checking for SSL_new in -lssl... no
-+configure: error:  You need to have libssl installed to compile sngrep
-+
-+due to undefined symbols in the OpenSSL library.
-+
-+The proper solution for this is to discover the library using
-+pkg-config, because pkg-config properly returns the list of necessary
-+libraries, as it understands the concept of "list of libraries needed
-+when dynamic linking" and "list of libraries needed for static linking".
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Upstream-status: https://github.com/irontec/sngrep/pull/176
-+---
-+ configure.ac    | 9 +--------
-+ src/Makefile.am | 4 ++++
-+ 2 files changed, 5 insertions(+), 8 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 42e00e9..9f8e6d2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -129,14 +129,7 @@ AS_IF([test "x$WITH_OPENSSL" == "xyes"], [
-+ 	AS_IF([test "x$WITH_GNUTLS" == "xyes"], [
-+ 	    AC_MSG_ERROR([ GnuTLS and OpenSSL can not be enabled at the same time ])
-+ 	], [])
-+-
-+-	AC_CHECK_LIB([ssl], [SSL_new], [], [
-+-	    AC_MSG_ERROR([ You need to have libssl installed to compile sngrep])
-+-	])
-+-
-+-	AC_CHECK_LIB([crypto], [EVP_get_cipherbyname], [], [
-+-	    AC_MSG_ERROR([ You need to have libcrypto installed to compile sngrep])
-+-	])
-++	PKG_CHECK_MODULES([SSL], [libssl libcrypto])
-+ 	AC_DEFINE([WITH_OPENSSL],[],[Compile With Openssl compatibility])
-+ ], [])
-+ 
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 961f4a0..3a471b7 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -1,6 +1,8 @@
-+ AUTOMAKE_OPTIONS=subdir-objects
-+ bin_PROGRAMS=sngrep
-+ sngrep_SOURCES=capture.c
-++sngrep_CFLAGS=
-++sngrep_LDADD=
-+ if USE_EEP
-+ sngrep_SOURCES+=capture_eep.c
-+ endif
-+@@ -9,6 +11,8 @@ sngrep_SOURCES+=capture_gnutls.c
-+ endif
-+ if WITH_OPENSSL
-+ sngrep_SOURCES+=capture_openssl.c
-++sngrep_CFLAGS+=$(SSL_CFLAGS)
-++sngrep_LDADD+=$(SSL_LIBS)
-+ endif
-+ sngrep_SOURCES+=address.c packet.c sip.c sip_call.c sip_msg.c sip_attr.c main.c
-+ sngrep_SOURCES+=option.c group.c filter.c keybinding.c media.c setting.c rtp.c
-+-- 
-+2.7.4
-+
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index b82d8ce..1e0e051 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -9,7 +9,7 @@ SNGREP_SITE = $(call github,irontec,sngrep,$(SNGREP_VERSION))
- SNGREP_LICENSE = GPLv3+
- SNGREP_LICENSE_FILES = LICENSE
- SNGREP_AUTORECONF = YES
--SNGREP_DEPENDENCIES = libpcap ncurses
-+SNGREP_DEPENDENCIES = libpcap ncurses host-pkgconf
- 
- SNGREP_CONF_ENV += \
- 	$(if $(BR2_STATIC_LIBS),LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --libs`")
+thanks!
+-- 
+Jagan Teki
+Free Software Engineer | www.openedev.com
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
