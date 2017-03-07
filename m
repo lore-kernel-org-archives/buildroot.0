@@ -1,40 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Mar 2017 16:42:32 +0100
-Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
-In-Reply-To: <20170305223726.GM3671@free.fr> (Yann E. MORIN's message of "Sun, 
- 5 Mar 2017 23:37:27 +0100")
-References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170305213723.021d4678@free-electrons.com>
- <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
- <20170305223726.GM3671@free.fr>
-Message-ID: <87a88xccuv.fsf@dell.be.48ers.dk>
+Date: Tue, 07 Mar 2017 16:45:19 +0100
+Subject: [Buildroot] [PATCH] lttng-libust: fix build on musl
+In-Reply-To: <1488319770-6933-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 28 Feb 2017 23:09:30 +0100")
+References: <1488319770-6933-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8760jlccq8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- >> I'm obviously late with commenting on this, but I think marking things as
- >> BROKEN is wrong. It bypasses the legacy mechanism so it disappears without
- >> notice. Also, BROKEN packages languish there for years without ever anyone
- >> taking a look. Sometimes things do get repaired, but re-adding the package is
- >> not much more complicated than
- >> 
- >> So, I propose to remove all broken packages.
+ > This commit backports two upstream patches in lttng-libust, that fix
+ > the build with the musl C library.
 
- > Agreed.
+ > Fixes:
 
- >> [I have the feeling we discussed this kind of thing at some BR devel meeting at
- >> some point, but I can't find it.]
+ >   http://autobuild.buildroot.net/results/8bbcac9f9debf76cd1f56734bfd494677f2acd21/
 
- > Yes we did. And IIRC we agreed to get rid of BROKEN altogether.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-I think you are mixing it up with BR2_DEPRECATED.
-
-With that said, if nobody cares about fixing the package, then I'm OK
-with removing it. Lets give it a bit of time and see what happens.
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
