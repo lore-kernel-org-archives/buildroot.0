@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Mar 2017 23:56:52 +0100
-Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
-In-Reply-To: <bb95fc23-ae23-3f4b-da4c-13bda8aa7e07@mind.be>
-References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170305213723.021d4678@free-electrons.com>
- <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
- <20170305223726.GM3671@free.fr> <87a88xccuv.fsf@dell.be.48ers.dk>
- <bb95fc23-ae23-3f4b-da4c-13bda8aa7e07@mind.be>
-Message-ID: <20170307235652.10fefb7b@free-electrons.com>
+Date: Wed,  8 Mar 2017 00:00:30 +0100
+Subject: [Buildroot] [PATCH 5/6] python3: explicitly disable OpenSSL support
+	for the target
+In-Reply-To: <1488927631-21945-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1488927631-21945-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1488927631-21945-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Commit fa627738266e ("python3: do not use the system OpenSSL in the host
+variant") added a patch that allows to disable building the OpenSSL
+related modules in Python, even if OpenSSL is found.
 
-On Tue, 7 Mar 2017 18:05:02 +0100, Arnout Vandecappelle wrote:
+But in this commit, it was only used to unconditionally disable OpenSSL
+support for the host python3.
 
->  The problem with BROKEN is the same as with BR2_LEGACY: it doesn't appear in
-> the legacy menu. You could argue that BROKEN is different because it simply
-> can't be used at all. However, for the user there is no difference: it used to
-> work (I hope we can assume that when a package is added, it has worked at least
-> once on at least one platform...), and after a Buildroot update it suddenly
-> vanishes.
+This commit extends that to use the --disable-openssl option also for
+the target python3, when BR2_PACKAGE_PYTHON3_SSL. This ensures that if
+BR2_PACKAGE_PYTHON3_SSL is disabled, but BR2_PACKAGE_OPENSSL is enabled,
+we still don't get the OpenSSL modules built, as the user would expect.
 
-Agreed. In this specific case, I believe odroid-mali definitely works
-for some situations, so there are certainly valid use cases for the
-package as it is today, i.e it is not *completely* broken. But it
-causes some build failures, which nobody has taken care of, and
-upstream is unlikely to be responsive/
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python3/python3.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
->  So I propose the following: we can still mark things as BROKEN as a way to
-> motivate people to fix them, but during the RC month we properly remove them and
-> add a legacy entry.
-
-Full ACK.
-
-Thomas
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 8bfae79..4ca049c 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -90,6 +90,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_SSL),y)
+ PYTHON3_DEPENDENCIES += openssl
++else
++PYTHON3_CONF_OPTS += --disable-openssl
+ endif
+ 
+ ifneq ($(BR2_PACKAGE_PYTHON3_CODECSCJK),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
