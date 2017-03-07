@@ -1,53 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Mar 2017 14:02:53 +0100
-Subject: [Buildroot] [PATCH 1/1] pcre: Change download location
-In-Reply-To: <87d1dtdzim.fsf@dell.be.48ers.dk>
-References: <5f582368-797e-10ad-1c19-a998496cabbf@ya.ru>
- <20170306212039.4134ccee@free-electrons.com>
- <87d1dtdzim.fsf@dell.be.48ers.dk>
-Message-ID: <20170307140253.60681b57@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 07 Mar 2017 10:51:49 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-03-05
+In-Reply-To: <20170307000125.6516d2f9@free-electrons.com>
+References: <20170306072844.3738B206EB@mail.free-electrons.com>
+ <20170306210032.GC3976@free.fr> <20170307000125.6516d2f9@free-electrons.com>
+Message-ID: <285f7992dab52d062324ef325dc2f503@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2017-03-06 20:01, Thomas Petazzoni wrote:
 
-On Tue, 07 Mar 2017 13:47:45 +0100, Peter Korsgaard wrote:
+>> >         i686 |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/e29a22a2d9c81c87d271c2a6e7d041d36c370adc
+>> >         sh4a |                 libepoxy-1.4.1 | NOK | http://autobuild.buildroot.net/results/6cc1212728248d5443fe9a367b4aeb3807ce623e
+>> 
+>> EGL not found...
+> 
+> Gustavo, could you have a look?
 
-> I'm a bit confused about the description. To me it sounds like a local
-> firewall issue with ftp access instead, but OK - Others might have a
-> similar setup.
+Hi.
+It seems newer libepoxy requires egl even if you've got libgl.
+I'll check with upstream if that's really the case and adjust the 
+package or patch libepoxy (again) otherwise.
 
-If you look at Buildroot 2015.11, as point out in the commit log, it
-contains:
+>> >      powerpc |                polarssl-1.2.19 | NOK | http://autobuild.buildroot.net/results/ab3565f6585e47573bcb62ef5e7250986c90d8e3
+>> 
+>> Static linking issue: polarssl build a 'benchmark' utility that links
+>> with -lcrypto, which uses symbols fron libz, but libz is not pulled in
+>> in a static build.
+> 
+> polarssl should use pkg-config to discover OpenSSL.
 
-PCRE_VERSION = 8.38
-PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
-
-However, the 8.38 version is no longer available at
-ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre, the oldest
-available version from this site is 8.39.
-
-Hence, the fact that we have been using
-ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre in older
-Buildroot versions means that these older versions are now "broken" and
-have to fallback on sources.buildroot.net.
-
-So, no: it's not a local issue due to a firewall.
-
-By using the https://ftp.pcre.org/pub/pcre/ location, which contains
-all previous versions, we increase our chances that 2017.02 will not be
-"broken" in 2 years.
-
-We could have also said that pcre.org looks a bit more
-official/upstream, and indeed https:// is better than ftp://.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+polarssl should go down the drain, i'll refresh the patch to do so.
+Regards.
