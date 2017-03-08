@@ -1,44 +1,69 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Wed, 8 Mar 2017 22:43:00 +0530
-Subject: [Buildroot]  libglu config error, while X.Org enabled
-Message-ID: <CAD6G_RTkov1OJatw14LDVTNodndDav5JSeqgPF0FajGKg=4J7A@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 8 Mar 2017 19:34:20 +0200
+Subject: [Buildroot] [PATCH 1/1] lighttpd: source default file from
+ startup script
+In-Reply-To: <20170308152114.14851-1-philipp.skadorov@savoirfairelinux.com>
+References: <20170308152114.14851-1-philipp.skadorov@savoirfairelinux.com>
+Message-ID: <20170308173420.525msvchrmgpajia@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Philipp,
 
-Any idea about below error while configuring libglu
+On Wed, Mar 08, 2017 at 10:21:14AM -0500, Philipp Skadorov wrote:
+> lighttpd server runs cgi application that has no way to get environment
+> variables that are set up for it.
+> 
+> S50lighttpd is changed to source /etc/default/lighttpd file where these
+> environment variables can be set up.
+> 
+> Signed-off-by: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
+> ---
+>  package/lighttpd/S50lighttpd | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
+> index 44ac257c1..b3518cd27 100644
+> --- a/package/lighttpd/S50lighttpd
+> +++ b/package/lighttpd/S50lighttpd
+> @@ -2,15 +2,21 @@
+>  #
+>  # Starts lighttpd.
+>  #
+> +NAME=lighttpd
+> +DAEMON=/usr/sbin/$NAME
+> +PID_FILE="/var/run/$NAME.pid"
+> +CONF_FILE="/etc/$NAME/$NAME.conf"
 
-Log:
-----
-checking dynamic linker characteristics... (cached) GNU/Linux ld.so
-checking how to hardcode library paths into programs... immediate
-checking whether make supports nested variables... (cached) yes
-checking pkg-config is at least version 0.9.0... yes
-checking for GL... no
-checking GL/gl.h usability... no
-checking GL/gl.h presence... no
-checking for GL/gl.h... no
-configure: error: GL not found
-make: *** [/workspace/buildroot/output/build/libglu-9.0.0/.stamp_configured]
-Error 1
+Should be
 
-I did see this when I enable X.org X Window System, I've mesa3d, Qt5.8 enabled.
-and even host have required packages installed.
+  CONF_FILE="/etc/default/$NAME.conf"
 
-sudo apt-get install libgl1-mesa-dev
-sudo apt-get install libopenal-dev
-sudo apt-get install libsdl-mixer1.2-dev
-sudo apt-get install libsdl-net1.2-dev
+to mach the commit log text.
 
-Please let me know for any help?
+> +
+> +[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+>  
+>  start() {
+>  	printf "Starting lighttpd: "
+> -	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
+> +	start-stop-daemon -S -q -p $PID_FILE --exec $DAEMON -- -f $CONF_FILE
+>  	echo "OK"
+>  }
+>  stop() {
+>  	printf "Stopping lighttpd: "
+> -	start-stop-daemon -K -q -p /var/run/lighttpd.pid
+> +	start-stop-daemon -K -q -p $PID_FILE
+>  	echo "OK"
+>  }
+>  restart() {
 
-thanks!
+baruch
+
 -- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
