@@ -1,64 +1,55 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 8 Mar 2017 08:19:19 +0100
-Subject: [Buildroot] [PATCH 3/6] qt: remove broken iBase driver
-In-Reply-To: <20170307235054.25149-3-arnout@mind.be>
-References: <20170307235054.25149-1-arnout@mind.be>,
- <20170307235054.25149-3-arnout@mind.be>
-Message-ID: <trinity-f8215723-32a4-44fc-8031-333c19751e54-1488957559946@3capp-gmx-bs66>
+From: Ludovic Desroches <ludovic.desroches@microchip.com>
+Date: Wed, 8 Mar 2017 08:22:30 +0100
+Subject: [Buildroot] [PATCH 1/4] configs: at91sam9x5ek: add development
+ rootfs
+In-Reply-To: <20170307215944.20dfa0e3@free-electrons.com>
+References: <20161103140841.28789-1-ludovic.desroches@atmel.com>
+ <20170307215944.20dfa0e3@free-electrons.com>
+Message-ID: <b4e99492-e82e-4267-dbfa-ec2cf8f14467@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Hi,
 
-> Gesendet: Mittwoch, 08. M?rz 2017 um 00:50 Uhr
-> Von: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-> An: buildroot at buildroot.org
-> Betreff: [Buildroot] [PATCH 3/6] qt: remove broken iBase driver
+On 03/07/2017 09:59 PM, Thomas Petazzoni wrote:
+> Hello,
 >
-> This option has been marked as broken since 2010. No need for legacy
-> handling.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/qt/Config.sql.in | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
-> index 452edd5133..5bd63d27a0 100644
-> --- a/package/qt/Config.sql.in
-> +++ b/package/qt/Config.sql.in
-> @@ -14,13 +14,6 @@ config BR2_PACKAGE_QT_MYSQL
->  	  Build MySQL driver
->  	  If unsure, say n.
->  
-> -config BR2_PACKAGE_QT_IBASE
-> -	bool "iBase Driver"
-> -	depends on BROKEN # libfbclient not in BR
-> -	help
-> -	  Build iBase driver
-> -	  If unsure, say n.
-> -
->  config BR2_PACKAGE_QT_ODBC
->  	bool "ODBC Driver"
->  	select BR2_PACKAGE_UNIXODBC
-> -- 
-> 2.11.0
-> 
+> On Thu, 3 Nov 2016 15:08:38 +0100, Ludovic Desroches wrote:
+>> Add development rootfs based on linux4sam_5.4 for at91sam9x5ek for both
+>> NAND flash and SD card.
+>>
+>> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+>> ---
+>>  board/atmel/at91sam9x5ek_mmc/genimage.cfg  |  34 ++++++++++
+>>  board/atmel/at91sam9x5ek_mmc/post-image.sh |  20 ++++++
+>>  configs/at91sam9x5ek_dev_defconfig         |  99 ++++++++++++++++++++++++++++
+>>  configs/at91sam9x5ek_mmc_dev_defconfig     | 102 +++++++++++++++++++++++++++++
+>>  4 files changed, 255 insertions(+)
+>>  create mode 100644 board/atmel/at91sam9x5ek_mmc/genimage.cfg
+>>  create mode 100755 board/atmel/at91sam9x5ek_mmc/post-image.sh
+>>  create mode 100644 configs/at91sam9x5ek_dev_defconfig
+>>  create mode 100644 configs/at91sam9x5ek_mmc_dev_defconfig
+>
+> In the end, I've applied your commit. But before doing so, I've added a
+> at91sam9x5ek_mmc_defconfig, i.e a minimal defconfig for the MMC
+> configuration.
 
-Missing some code deletion from package/qt/qt.mk file:
+Thanks to add it, it is in line with defconfigs provided for other boards.
 
-ifeq ($(BR2_PACKAGE_QT_IBASE),y)
-QT_CONFIGURE_OPTS += -qt-sql-ibase
-endif
+>
+> Please check that everything is still OK on your side.
+>
 
-Regards,
-Peter
+We have not release a new version of linux4sam yet, so it's ok.
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks
+
+Ludovic
+
+> Thanks!
+>
+> Thomas
 >
