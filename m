@@ -1,52 +1,38 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 8 Mar 2017 20:33:26 +0100
-Subject: [Buildroot] [PATCH 6/6] efl: remove broken JP2K loader
-In-Reply-To: <CAPdpN3AVrF=v3mJQdZUhB=DAqDwOf8kaVpc8Uqc0RWSQfvSurQ@mail.gmail.com>
-References: <20170307235054.25149-1-arnout@mind.be>
- <20170307235054.25149-6-arnout@mind.be>
- <CAPdpN3AVrF=v3mJQdZUhB=DAqDwOf8kaVpc8Uqc0RWSQfvSurQ@mail.gmail.com>
-Message-ID: <924c67c6-88be-ba6c-2098-1af06bdb5564@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Mar 2017 21:09:57 +0100
+Subject: [Buildroot] libglu config error, while X.Org enabled
+In-Reply-To: <CAOMZO5BrHBr8HkrC7hepcAMHE-sgE9MbhQmnWhybwKqqYuW9xQ@mail.gmail.com>
+References: <CAD6G_RTkov1OJatw14LDVTNodndDav5JSeqgPF0FajGKg=4J7A@mail.gmail.com>
+ <CAOMZO5BrHBr8HkrC7hepcAMHE-sgE9MbhQmnWhybwKqqYuW9xQ@mail.gmail.com>
+Message-ID: <20170308210957.44b05474@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, All,
+Hello,
 
-Le 08/03/2017 ? 13:49, Gustavo Sverzut Barbieri a ?crit :
-> On Tue, Mar 7, 2017 at 8:50 PM, Arnout Vandecappelle (Essensium/Mind)
-> <arnout@mind.be> wrote:
->>
->> This option has been marked as broken since 2016.08. Since nobody
->> repaired it, we'll just remove it.
->>
->> Since technically it was already removed in 2016.08, it's added to the
->> 2016.08 section of the legacy menu.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> Cc: Romain Naour <romain.naour@gmail.com>
->> Cc: Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+On Wed, 8 Mar 2017 14:35:31 -0300, Fabio Estevam wrote:
+
+> It seems you want to use X11 with mx6. In this case you would need to
+> use Russell's X11 driver:
 > 
-> Reviewed-By:  Gustavo Sverzut Barbieri <barbieri@profusion.mobi>
+> http://git.arm.linux.org.uk/cgit/xf86-video-armada.git/tree/README?h=unstable-devel
 > 
->> ---
->> Romain, Gustavo, last chance to unbreak the package :-)
+> Then you need to create support for it in Buildroot.
 
-I reported the issue upstream, see:
+Or you can also use package/x11r7/xdriver_xf86-video-imx-viv/, which is
+the X11 driver from Freescale, based on the proprietary Vivante OpenGL
+implementation.
 
-https://phab.enlightenment.org/T5255
-
-At the time when I tested this option openjpeg was still at 1.x version but it
-was bumped to 2.x after that.
-
-efl 1.19 will be released soon (1.19-beta2 right now) it may be fixed before the
-official release.
-
-Otherwise:
-Acked-by: Romain Naour <romain.naour@gmail.com>
-
-Because it's still broken :-/
+However, the full OpenGL support in Buildroot with Vivante is not
+completely correct, so it won't work out of the box.
 
 Best regards,
-Romain
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
