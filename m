@@ -1,40 +1,68 @@
-From: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
-Date: Wed,  8 Mar 2017 15:43:32 -0500
-Subject: [Buildroot] [PATCH v2 2/2] lighttpd: source default file from
-	startup script
-In-Reply-To: <20170308204332.11313-1-philipp.skadorov@savoirfairelinux.com>
-References: <20170308211124.50d94081@free-electrons.com>
- <20170308204332.11313-1-philipp.skadorov@savoirfairelinux.com>
-Message-ID: <20170308204332.11313-2-philipp.skadorov@savoirfairelinux.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 8 Mar 2017 21:44:08 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-03-07
+In-Reply-To: <2n66pdxrq3.ln2@ID-313208.user.individual.net>
+References: <20170308072845.2624A2076F@mail.free-electrons.com>
+ <2n66pdxrq3.ln2@ID-313208.user.individual.net>
+Message-ID: <acc992a4-d18d-981b-c991-7b23bc75106a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lighttpd server runs cgi application that has no way to get environment
-variables that are set up for it.
+Hi Bernd,
 
-S50lighttpd is changed to source /etc/default/lighttpd file where these
-environment variables can be set up.
+Le 08/03/2017 ? 21:38, Bernd Kuhls a ?crit :
+> Am Wed, 08 Mar 2017 08:28:45 +0100 schrieb Thomas Petazzoni:
+> 
+>>         i586 |     xserver_xorg-server-1.19.2 | NOK |
+>>         http://autobuild.buildroot.net/
+> results/5890c4b6397326faadecc49fdbe21875fbb20c65
+> 
+> Hi,
+> 
+> the build error
+> 
+> /home/peko/autobuild/instance-2/output/host/usr/i586-buildroot-linux-musl/
+> sysroot/usr/lib/libunwind.so: undefined reference to `setcontext'
+> /home/peko/autobuild/instance-2/output/host/usr/i586-buildroot-linux-musl/
+> sysroot/usr/lib/libunwind.so: undefined reference to `sigreturn'
+> 
+> comes from libunwind, which, according to package/libunwind/Config.in, is 
+> supported on musl at x86 contrary to
+> http://www.openwall.com/lists/musl/2012/12/31/11
+> http://wiki.musl-libc.org/wiki/Open_Issues#ucontext.h
+> 
+> I do not claim that I understand what libunwind is all about, therefore I 
+> will not send patches for libunwind, but it looks to me that the fix for 
+> the xserver_xorg-server build error should be made in 
+> BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS.
+> 
+> Patching package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> 
+> -ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_PACKAGE_LIBUNWIND),ny)
+> 
+> also worked, but it is only a workaround.
+> 
+> Btw, libunwind-1.2 was released Jan 13, 2017, a version bump did not fix 
+> the xserver_xorg-server build error.
 
-Signed-off-by: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
----
- package/lighttpd/S50lighttpd | 2 ++
- 1 file changed, 2 insertions(+)
+The same issue happened for efl package:
+http://autobuild.buildroot.net/results/ca296f42c9242a6b93957ac9a0437f37b5b4342d
 
-diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
-index 7a14ec8a9..b3518cd27 100644
---- a/package/lighttpd/S50lighttpd
-+++ b/package/lighttpd/S50lighttpd
-@@ -7,6 +7,8 @@ DAEMON=/usr/sbin/$NAME
- PID_FILE="/var/run/$NAME.pid"
- CONF_FILE="/etc/$NAME/$NAME.conf"
- 
-+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
-+
- start() {
- 	printf "Starting lighttpd: "
- 	start-stop-daemon -S -q -p $PID_FILE --exec $DAEMON -- -f $CONF_FILE
--- 
-2.11.0
+It seems a more general musl issue with libunwind...
+
+Best regards,
+Romain
+
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
