@@ -1,58 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Mar 2017 18:06:36 +0100
-Subject: [Buildroot] [git commit branch/2016.11.x] wireshark: security bump
-	to version 2.2.5
-Message-ID: <20170308170715.9F1A482551@busybox.osuosl.org>
+Date: Wed, 8 Mar 2017 18:05:01 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] gnutls: security bump to
+	version 3.5.10
+Message-ID: <20170308170715.9294282161@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40185d3bff7f501195d57a9ef66bc92f00d55af8
+commit: https://git.buildroot.net/buildroot/commit/?id=d51608ac63db3730df24ff1916cf58bc7239df03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
 Fixes:
-wnpa-sec-2017-03 - LDSS dissector crash
-wnpa-sec-2017-04 - RTMTP dissector infinite loop
-wnpa-sec-2017-05 - WSP dissector infinite loop
-wnpa-sec-2017-06 - STANAG 4607 file parser infinite loop
-wnpa-sec-2017-07 - NetScaler file parser infinite loop
-wnpa-sec-2017-08 - NetScaler file parser crash
-wnpa-sec-2017-09 - K12 file parser crash
-wnpa-sec-2017-10 - IAX2 dissector infinite loop
-wnpa-sec-2017-11 - NetScaler file parser infinite loop
+GNUTLS-SA-2017-3A - Addressed integer overflow resulting to invalid
+memory write in OpenPGP certificate parsing.
+GNUTLS-SA-2017-3B - Addressed crashes in OpenPGP certificate parsing,
+related to private key parser. No longer allow OpenPGP certificates
+(public keys) to contain private key sub-packets.
+GNUTLS-SA-2017-3C - Addressed large allocation in OpenPGP certificate
+parsing, that could lead in out-of-memory condition.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit e9e594d99add12ec2b10f79a351cdd8bae093d0e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 785d474cb4a11b50f9f8744889df10fe7f855eea)
+(cherry picked from commit 6fdb2b109bdec24ea426e0a6786ced7dbb591732)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index e3eeef3..3d1f7af 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 156d2aa..64b86d7 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
 @@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.4.txt
--sha256 42a7fb35eed5a32478153e24601a284bb50148b7ba919c3e8452652f4c2a3911  wireshark-2.2.4.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.5.txt
-+sha256 75dd88d3d6336559e5b0b72077d8a772a988197d571f00029986225fef609ac8  wireshark-2.2.5.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index edd830d..14c2943 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256	82b10f0c4ef18f4e64ad8cef5dbaf14be732f5095a41cf366b4ecb4050382951	gnutls-3.5.9.tar.xz
++sha256	af443e86ba538d4d3e37c4732c00101a492fe4b56a55f4112ff0ab39dbe6579d	gnutls-3.5.10.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 932c0fa..be1cf00 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--WIRESHARK_VERSION = 2.2.4
-+WIRESHARK_VERSION = 2.2.5
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ GNUTLS_VERSION_MAJOR = 3.5
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
