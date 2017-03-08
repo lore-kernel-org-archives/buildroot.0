@@ -1,55 +1,34 @@
-From: daggs <daggs@gmx.com>
-Date: Wed, 8 Mar 2017 07:55:14 +0100
-Subject: [Buildroot] [PATCH] odroid-mali: mark package as BROKEN
-In-Reply-To: <20170307235652.10fefb7b@free-electrons.com>
-References: <1488638059-6764-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170305213723.021d4678@free-electrons.com>
- <b81cad7b-504e-b927-3f62-844925aba881@mind.be>
- <20170305223726.GM3671@free.fr> <87a88xccuv.fsf@dell.be.48ers.dk>
- <bb95fc23-ae23-3f4b-da4c-13bda8aa7e07@mind.be>,
- <20170307235652.10fefb7b@free-electrons.com>
-Message-ID: <trinity-6d0d7438-8afb-4b2b-9ee4-5a85dd98759c-1488956114745@3capp-mailcom-bs02>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Wed, 8 Mar 2017 12:25:39 +0530
+Subject: [Buildroot] [PATCH] package/cairo: improve license information
+In-Reply-To: <20170307211711.348d28cb@free-electrons.com>
+References: <20170306210218.28867-1-romain.naour@gmail.com>
+ <a8c8c494-b69c-2d6b-b505-03f113097a38@imgtec.com>
+ <20170307211711.348d28cb@free-electrons.com>
+Message-ID: <cef36323-ec6c-48eb-8332-9ea2c86b6097@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Hello,
 
->
+On Wednesday 08 March 2017 01:47 AM, Thomas Petazzoni wrote:
 > Hello,
-> 
-> On Tue, 7 Mar 2017 18:05:02 +0100, Arnout Vandecappelle wrote:
-> 
-> >  The problem with BROKEN is the same as with BR2_LEGACY: it doesn't appear in
-> > the legacy menu. You could argue that BROKEN is different because it simply
-> > can't be used at all. However, for the user there is no difference: it used to
-> > work (I hope we can assume that when a package is added, it has worked at least
-> > once on at least one platform...), and after a Buildroot update it suddenly
-> > vanishes.
-> 
-> Agreed. In this specific case, I believe odroid-mali definitely works
-> for some situations, so there are certainly valid use cases for the
-> package as it is today, i.e it is not *completely* broken. But it
-> causes some build failures, which nobody has taken care of, and
-> upstream is unlikely to be responsive/
-> 
-> >  So I propose the following: we can still mark things as BROKEN as a way to
-> > motivate people to fix them, but during the RC month we properly remove them and
-> > add a legacy entry.
-> 
-> Full ACK.
-> 
-> Thomas
+>
+> On Tue, 7 Mar 2017 14:54:24 +0530, Rahul Bedarkar wrote:
+>
+>> License string for LGPL should be "LGPLv2.1" because license text
+>> doesn't have "or (at your option) any later version;" clause.
+>
+> The license file itself never says "or (at your option) any later
+> version". The license text of the GPL or LGPL is always the text of one
+> specific version of the license. To know whether "or later" applies or
+> not, you usually need to look at the comments in the code.
 
-my apologies, I've missed the initial mail with all the mails I'm getting.
-I have a more direct line of communication to upstream, I'll try contacting them. will update asap.
+Yes, I was referring to license text from source file header. But I 
+agree that my comment didn't make it clear.
 
-as there is no x11 driver for this board (still pending review, not that it matters now), the usage of this pkg is rather limited.
-the main usage is to run kodi, afaik kodi doesn't depends on libepoxy, so depending the pkg on kodi for now might be a valid solution.
-I have fairly recent img (built 2 weeks ago based on the synced kodi 17 branch) and it compiled well without any errors.
-
-thoughts?
-
-DAgg.
+Thanks,
+Rahul
