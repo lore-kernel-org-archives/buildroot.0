@@ -1,218 +1,162 @@
-From: ren_guo <ren_guo@c-sky.com>
-Date: Wed, 8 Mar 2017 08:54:08 +0800
-Subject: [Buildroot] [PATCH 1/1] configs: add defconfig for Nationalchip
- gx6605s dev board.
-In-Reply-To: <1488801152-13368-1-git-send-email-ren_guo@c-sky.com>
-References: <1488801152-13368-1-git-send-email-ren_guo@c-sky.com>
-Message-ID: <64439675-ef1c-dff7-5c11-befd4ab64c2b@c-sky.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 07 Mar 2017 22:48:21 -0300
+Subject: [Buildroot] [PATCH 1/5] support/testing: core testing
+ infrastructure
+References: <c49004fb-fb6a-6d25-dc69-030213e868a8@lucaceresoli.net>
+Message-ID: <58bf62e588b43_31cb3fbff494d60041725@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hello,
 
-Could you help to review the patch, thank you very much.
+On Tue, Mar 07, 2017 at 08:10 PM, Luca Ceresoli wrote:
 
-Best Regards
+> On 07/03/2017 23:09, Thomas Petazzoni wrote:
+>> Hello,
+>> 
+>> On Tue, 7 Mar 2017 22:59:35 +0100, Luca Ceresoli wrote:
+>> 
+>>>> Are you talking about:
+>>>>
+>>>>  * Failures because there is a syntax error in the test script
+>>>>
+>>>>  * Failures of the test itself, because the generated Buildroot system
+>>>>    doesn't behave as expected  
+>>>
+>>> Is there a way to understand which kind of failure we had?
+>> 
+>> Well the former will give you Python exceptions, the latter will give
+>> you a failure of the test itself.
+> 
+> Oh, sorry for misreading your original e-mail. Yeah, you're right, they
+> are clearly different.
+> 
+> I was speaking about the 2nd point. When a test is syntactically OK it
+> should stay so in the future until it's modified. But the test could
+> start failing later in time (which is why we want these tests).
+> 
+>> 
+>>> But my point was mostly about the first part of the process:
+>>>
+>>> $ ./support/testing/run-tests  -d ../br-test-dl -o ../br-test-out -a
+>>> [br-test-out/TestPythonBase/2017-03-03 23:22:46] Starting
+>>> [br-test-out/TestPythonBase/2017-03-03 23:22:46] Building
+>>> [br-test-out/TestPythonBase/2017-03-03 23:27:37] Building done
+>>> [br-test-out/TestPythonBase/2017-03-03 23:27:45] Cleaning up
+>>> .[br-test-out/TestDropbear/2017-03-03 23:27:46] Starting
+>>> [br-test-out/TestDropbear/2017-03-03 23:27:46] Building
+>>> [br-test-out/TestDropbear/2017-03-03 23:29:00] Building done
+>>> [br-test-out/TestDropbear/2017-03-03 23:29:06] Cleaning up
+>>> [...]
+>>> F[br-test-out/TestRootfsOverlay/2017-03-03 23:37:13] Starting
+>>> [br-test-out/TestRootfsOverlay/2017-03-03 23:37:13] Building
+>>> [br-test-out/TestRootfsOverlay/2017-03-03 23:37:27] Building done
+>>> [br-test-out/TestRootfsOverlay/2017-03-03 23:37:27] Cleaning up
+>>> .[br-test-out/TestSquashfs/2017-03-03 23:37:27] Starting
+>>> [br-test-out/TestSquashfs/2017-03-03 23:37:27] Building
+>>> [br-test-out/TestSquashfs/2017-03-03 23:39:38] Building done
+>>> [br-test-out/TestSquashfs/2017-03-03 23:39:41] Cleaning up
+>>> .[br-test-out/TestJffs2/2017-03-03 23:39:41] Starting
+>>> [br-test-out/TestJffs2/2017-03-03 23:39:41] Building
+>>> [br-test-out/TestJffs2/2017-03-03 23:42:40] Building done
+>>> open input file: No such file or directory
+>>> [br-test-out/TestJffs2/2017-03-03 23:42:40] Cleaning up
+>>>
+>>> There's a character before each "Starting" line, I guess it's nose2
+>>> reporting the test outcome. It seems to be a '.' for success, 'F' or 'E'
+>>> for failures. What's the difference between 'E' and 'F'? Can we remove
+>>> these characters, which interfere with the rest of the output?
+>> 
+>> Don't know, we would need to look at the internals of nose2/unittest to
+>> know what's possible. Not sure how much customization is possible here.
 
-guoren
+Here are some tests. Notice I forced the dropbear test to fail and also I
+previously ran the tests keeping the build (-k).
 
-On 2017?03?06? 19:52, Guo Ren wrote:
+The current output is
 
-> gx6605s is a nice SOC for dvbs2 DVB product, and C-SKY inside.
->
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> ---
->   DEVELOPERS                     |  2 +
->   board/csky/gx6605s/gdbinit     | 25 ++++++++++++
->   board/csky/post-image.sh       |  7 ++++
->   board/csky/readme.txt          | 92 ++++++++++++++++++++++++++++++++++++++++++
->   configs/csky_gx6605s_defconfig | 18 +++++++++
->   5 files changed, 144 insertions(+)
->   create mode 100644 board/csky/gx6605s/gdbinit
->   create mode 100755 board/csky/post-image.sh
->   create mode 100644 board/csky/readme.txt
->   create mode 100644 configs/csky_gx6605s_defconfig
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index ff72ca1..c1b181e 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -597,6 +597,8 @@ F:	package/liquid-dsp/
->   
->   N:	Guo Ren <ren_guo@c-sky.com>
->   F:	arch/Config.in.csky
-> +F:	board/csky/
-> +F:	configs/csky_*
->   
->   N:	Gustavo Zacarias <gustavo@zacarias.com.ar>
->   F:	arch/Config.in.powerpc
-> diff --git a/board/csky/gx6605s/gdbinit b/board/csky/gx6605s/gdbinit
-> new file mode 100644
-> index 0000000..0a6d8ab
-> --- /dev/null
-> +++ b/board/csky/gx6605s/gdbinit
-> @@ -0,0 +1,25 @@
-> +tar jtag jtag://127.0.0.1:1025
-> +reset
-> +
-> +# setup CCR (Cache Config Reg)
-> +# 0-1:MP,2:IE,3:DE,4:WB,5:RS,6:Z,7:BE
-> +set $cr18 = 0x7d
-> +
-> +# vendor custom setup, double cache line & preload
-> +set $cr30 = 0xc
-> +
-> +# pin mux for serial8250
-> +set *(unsigned int *) 0xa030a14c |= (1 << 22) | (1 << 23)
-> +
-> +# pass devicetree blob
-> +# r2 is magic
-> +# r3 is address
-> +set $r2 = 0x20150401
-> +set $r3 = 0x92000000
-> +restore gx6605s.dtb binary 0x92000000
-> +
-> +# flush cache
-> +set $cr17 = 0x33
-> +
-> +load
-> +
-> diff --git a/board/csky/post-image.sh b/board/csky/post-image.sh
-> new file mode 100755
-> index 0000000..be71f51
-> --- /dev/null
-> +++ b/board/csky/post-image.sh
-> @@ -0,0 +1,7 @@
-> +#!/bin/sh
-> +# .gdbinit is the csky-linux-gdb default init script. eg:
-> +# $ csky-linux-gdb vmlinux
-> +# Gdb will read .gdbinit to load vmlinux by default.
-> +# So, we need copy the gdbinit to the .gdbinit.
-> +
-> +install -D -m 0644 board/csky/gx6605s/gdbinit ${BINARIES_DIR}/.gdbinit
-> diff --git a/board/csky/readme.txt b/board/csky/readme.txt
-> new file mode 100644
-> index 0000000..764f565
-> --- /dev/null
-> +++ b/board/csky/readme.txt
-> @@ -0,0 +1,92 @@
-> +C-SKY Development Kit
-> +
-> +Intro
-> +=====
-> +
-> +C-SKY is a CPU Architecture from www.c-sky.com and has it own instruction set.
-> +Just like arm and mips in linux/arch, it named as 'csky'.
-> +
-> +gx6605s develop board is made by Hangzhou Nationalchip and C-SKY.
-> +
-> +Hardware Spec:
-> +  * CPU: ck610 up to 594Mhz
-> +  * Integrate with 64MB ddr2 in SOC.
-> +  * Integrate with hardware Jtag.
-> +  * Integrate with usb-to-serial chip.
-> +  * USB ehci controller in SOC.
-> +  * Power Supply: DC 5V from two micro-usb.
-> +
-> +How to build it
-> +===============
-> +
-> +Configure Buildroot
-> +-------------------
-> +
-> +The csky_gx6605s_defconfig configuration is a sample configuration with
-> +all that is required to bring the gx6605s Development Board:
-> +
-> +  $ make csky_gx6605s_defconfig
-> +
-> +Build everything
-> +----------------
-> +
-> +Note: you will need to have access to the network, since Buildroot will
-> +download the packages' sources.
-> +
-> +  $ make
-> +
-> +Result of the build
-> +-------------------
-> +
-> +After building, you should obtain this tree:
-> +
-> +    output/images/
-> +    ??? vmlinux
-> +    ??? rootfs.ext2
-> +    ??? <board name>.dtb
-> +    ??? .gdbinit
-> +
-> +How to run it
-> +=============
-> +
-> +Prepare Jtag-Server
-> +-------------------
-> +
-> +  Download the Jtag-Server here:
-> +
-> +  https://github.com/c-sky/tools/raw/master/DebugServerConsole-linux-x86_64-V4.2.00-20161213.tar.gz
-> +
-> +  Go to the unpacked directory:
-> +
-> +  $./DebugServerConsole -ddc -rstwait 1000 -prereset -port 1025
-> +
-> +  Perhaps you need to use "sudo", which need libusb to detect c510:b210
-> +
-> +  $ sudo ./DebugServerConsole -ddc -rstwait 1000 -prereset -port 1025
-> +
-> +Prepare USB drive
-> +-----------------
-> +
-> +  You sould determine which device associated to the usb drive
-> +  carefully. eg:
-> +
-> +  $ cat /proc/partitions
-> +   8       48    1971712 sdd
-> +   8       49     976720 sdd1
-> +
-> +  $ sudo dd if=rootfs.ext2 of=/dev/sdd1
-> +  $ sudo sync
-> +
-> +Run
-> +---
-> +
-> +  Plug the usb drive on gx6605s dev board.
-> +
-> +  Setup the Console with the rate 115200/8-N-1.
-> +
-> +  $ cd output/images
-> +
-> +  $ ../host/usr/bin/csky-linux-gdb vmlinux
-> +
-> +  (csky-linux-gdb use .gdbinit to load vmlinux)
-> +
-> diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
-> new file mode 100644
-> index 0000000..a509233
-> --- /dev/null
-> +++ b/configs/csky_gx6605s_defconfig
-> @@ -0,0 +1,18 @@
-> +BR2_csky=y
-> +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> +BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.2-20170227.tar.gz"
-> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
-> +BR2_TOOLCHAIN_EXTERNAL_GCC_4_5=y
-> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
-> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> +BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> +BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/csky/post-image.sh"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/c-sky/linux-4.9.y/archive/314c498ddc8c43a66ca96ff3af7da98e10fa1cc6.tar.gz"
-> +BR2_LINUX_KERNEL_DEFCONFIG="gx66xx"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="gx6605s"
-> +BR2_TARGET_ROOTFS_EXT2=y
->
+$ support/testing/run-tests -d dl -o output -k tests.package
+[output/TestPythonBase/2017-03-07 22:21:41] Starting
+[output/TestPythonBase/2017-03-07 22:21:47] Cleaning up
+.[output/TestDropbear/2017-03-07 22:21:47] Starting
+[output/TestDropbear/2017-03-07 22:21:52] Cleaning up
+F
+======================================================================
+FAIL: test_run (tests.package.test_dropbear.TestDropbear)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/testing-v2/support/testing/tests/package/test_dropbear.py", line 25, in test_run
+    self.assertEqual(exit_code, 1) # make it fail
+AssertionError: 0 != 1
+
+Now using 
+
++++ support/testing/conf/unittest.cfg
+@@ -1,5 +1,6 @@
+ [unittest]
+ plugins = nose2.plugins.mp
++exclude-plugins = nose2.plugins.result
+
+$ support/testing/run-tests -d dl -o output -k tests.package
+[output/TestPythonBase/2017-03-07 22:26:31] Starting
+[output/TestPythonBase/2017-03-07 22:26:37] Cleaning up
+[output/TestDropbear/2017-03-07 22:26:37] Starting
+[output/TestDropbear/2017-03-07 22:26:37] Cleaning up
+
+Notice this way we lose the results. But see at the end.
+
+>> 
+>>> Also, the rest of the output is a bit more verbose than I'd like to
+>>> have. Can we have something like:
+>>>
+>>> 23:37:13 TestRootfsOverlay           Starting
+>>> 23:37:13 TestRootfsOverlay           Building
+>>> 23:37:27 TestRootfsOverlay           Building done
+>>> 23:37:27 TestRootfsOverlay           Cleaning up
+>>> 23:37:13 TestFoo                     Starting
+>>> 23:37:13 TestFoo                     Building
+>>> 23:37:27 TestFoo                     Building done
+>>> 23:37:27 TestFoo                     *** FAILED! ***
+>> 
+>> Indeed, would be nice.
+
+The left part is straightforward:
++++ support/testing/infra/basetest.py
+@@ -38,6 +38,5 @@ class BRTest(unittest.TestCase):
+     def show_msg(self, msg):
+-        print "[%s/%s/%s] %s" % (os.path.basename(self.__class__.outputdir),
+-                                 self.testname,
+-                                 datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+-                                 msg)
++        print "{} {:20s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
++                                self.testname,
++                                msg)
+
+$ support/testing/run-tests -d dl -o output -k tests.package
+22:27:58 TestPythonBase       Starting
+22:28:04 TestPythonBase       Cleaning up
+22:28:04 TestDropbear         Starting
+22:28:04 TestDropbear         Cleaning up
+
+The result is the part I am not sure how to get working.
+
+>> 
+>> The more I think of it, the less I believe re-using the existing
+>> "runners" for Python unit tests is useful in our case. It doesn't bring
+>> much, and prevents doing the customizations we need.
+> 
+> I don't know how much effort it would be to write our own test runner.
+> It the effort is little, I agree with you.
+
+I use python mainly for tests together to Robot Framework, so I don't know much
+about nose2.
+I guess we need a plugin to replace the default one:
+https://nose2.readthedocs.io/en/latest/plugins/result.html
+
+Maybe there is some plugin out there that already does that.
+
+Regards,
+Ricardo
