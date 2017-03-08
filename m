@@ -1,11 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 8 Mar 2017 14:03:46 +0100
-Subject: [Buildroot] [PATCH 2/6] python: make hashlib and readline
-	modules really optional
-In-Reply-To: <1488927631-21945-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Mar 2017 14:03:58 +0100
+Subject: [Buildroot] [PATCH 3/6] python: fix disabling the SSL module
+In-Reply-To: <1488927631-21945-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1488927631-21945-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1488927631-21945-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAGm1_kt9r9rncqHx+yZOT3m4VuA=tq1ROghsbgP2HaMi2x_OTQ@mail.gmail.com>
+ <1488927631-21945-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAGm1_kuuj6x7_KG21Yt4qq_VyU43nr5CPMuLY_Z9TrkNgvJSXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,130 +13,46 @@ To: buildroot@busybox.net
 
 On Wed, Mar 8, 2017 at 12:00 AM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> The BR2_PACKAGE_PYTHON_{READLINE,HASHLIB} options were so far only
-> bringing in the necessary dependencies, relying on the Python build
-> system to automatically detect them.
->
-> However, this means that even if one of those option was disabled, if
-> their dependency was found, Python would build the corresponding module,
-> which is really not what the user would expect.
->
-> For example, if you have:
->
->    BR2_PACKAGE_READLINE=y
->    # BR2_PACKAGE_PYTHON_READLINE is not set
->
-> Then you would still get the readline Python module built and installed.
->
-> This commit fixes that by adding new --{enable,disable} options, and use
-> them in python.mk.
+> The Python extension is _ssl, not ssl. Due to this mistake in the patch,
+> even with --disable-ssl passed on the command line, the _ssl.so Python
+> extension would still be built.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  ...-Add-option-to-disable-the-hashlib-module.patch | 30 ++++++++++++++++++++++
->  ...-Add-an-option-to-disable-readline-module.patch | 30 ++++++++++++++++++++++
->  package/python/python.mk                           |  4 +++
->  3 files changed, 64 insertions(+)
->  create mode 100644 package/python/0032-Add-option-to-disable-the-hashlib-module.patch
->  create mode 100644 package/python/0033-Add-an-option-to-disable-readline-module.patch
+>  package/python/0027-Add-an-option-to-disable-the-ssl-module.patch | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/package/python/0032-Add-option-to-disable-the-hashlib-module.patch b/package/python/0032-Add-option-to-disable-the-hashlib-module.patch
-> new file mode 100644
-> index 0000000..bb3ccfa
-> --- /dev/null
-> +++ b/package/python/0032-Add-option-to-disable-the-hashlib-module.patch
-> @@ -0,0 +1,30 @@
-> +From f11dc326ae216911a67bd563b619f39522c14bf2 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Date: Tue, 7 Mar 2017 22:33:02 +0100
-> +Subject: [PATCH] Add option to disable the hashlib module
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +---
-> + configure.ac | 6 ++++++
-> + 1 file changed, 6 insertions(+)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 8dc573e..854724d 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -2840,6 +2840,12 @@ AC_ARG_ENABLE(ssl,
-> +            DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl"
-> +         fi])
-> +
-> ++AC_ARG_ENABLE(hashlib,
-> ++      AS_HELP_STRING([--disable-hashlib], [disable hashlib]),
-> ++      [ if test "$enableval" = "no"; then
-> ++           DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _hashlib"
-> ++        fi])
-> ++
-> + AC_ARG_ENABLE(bz2,
-> +        AS_HELP_STRING([--disable-bz2], [disable BZIP2]),
-> +        [ if test "$enableval" = "no"; then
-> +--
-> +2.7.4
-> +
-> diff --git a/package/python/0033-Add-an-option-to-disable-readline-module.patch b/package/python/0033-Add-an-option-to-disable-readline-module.patch
-> new file mode 100644
-> index 0000000..ade729f
-> --- /dev/null
-> +++ b/package/python/0033-Add-an-option-to-disable-readline-module.patch
-> @@ -0,0 +1,30 @@
-> +From 6b461f698bd33b3493207baf79f4ee02286be8e8 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Date: Tue, 7 Mar 2017 22:33:55 +0100
-> +Subject: [PATCH] Add an option to disable readline module
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +---
-> + configure.ac | 6 ++++++
-> + 1 file changed, 6 insertions(+)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 854724d..0a06497 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -2846,6 +2846,12 @@ AC_ARG_ENABLE(hashlib,
-> +            DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _hashlib"
-> +         fi])
-> +
-> ++AC_ARG_ENABLE(readline,
-> ++      AS_HELP_STRING([--disable-readline], [disable readline]),
-> ++      [ if test "$enableval" = "no"; then
-> ++           DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} readline"
-> ++        fi])
-> ++
-> + AC_ARG_ENABLE(bz2,
-> +        AS_HELP_STRING([--disable-bz2], [disable BZIP2]),
-> +        [ if test "$enableval" = "no"; then
-> +--
-> +2.7.4
-> +
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index 281130c..7541e0b 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -62,6 +62,8 @@ PYTHON_INSTALL_STAGING = YES
+> diff --git a/package/python/0027-Add-an-option-to-disable-the-ssl-module.patch b/package/python/0027-Add-an-option-to-disable-the-ssl-module.patch
+> index 3cb823b..5f2fb87 100644
+> --- a/package/python/0027-Add-an-option-to-disable-the-ssl-module.patch
+> +++ b/package/python/0027-Add-an-option-to-disable-the-ssl-module.patch
+> @@ -1,4 +1,4 @@
+> -From 45fcf92ec1e89e0afd0bf2bbc7a1008b56135ba3 Mon Sep 17 00:00:00 2001
+> +From fc16ab40e3e6a5b4deed2fa7c5475fa216ff8d17 Mon Sep 17 00:00:00 2001
+>  From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>  Date: Tue, 7 Mar 2017 22:30:22 +0100
+>  Subject: [PATCH] Add an option to disable the ssl module
+> @@ -9,7 +9,7 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>   1 file changed, 6 insertions(+)
 >
->  ifeq ($(BR2_PACKAGE_PYTHON_READLINE),y)
->  PYTHON_DEPENDENCIES += readline
-> +else
-> +PYTHON_CONF_OPTS += --disable-readline
->  endif
->
->  ifeq ($(BR2_PACKAGE_PYTHON_CURSES),y)
-> @@ -125,6 +127,8 @@ endif
->
->  ifeq ($(BR2_PACKAGE_PYTHON_HASHLIB),y)
->  PYTHON_DEPENDENCIES += openssl
-> +else
-> +PYTHON_CONF_OPTS += --disable-hashlib
->  endif
->
->  ifeq ($(BR2_PACKAGE_PYTHON_OSSAUDIODEV),y)
+>  diff --git a/configure.ac b/configure.ac
+> -index 524614c..743707a 100644
+> +index 524614c..cadac82 100644
+>  --- a/configure.ac
+>  +++ b/configure.ac
+>  @@ -2834,6 +2834,12 @@ AC_ARG_ENABLE(nis,
+> @@ -19,7 +19,7 @@ index 524614c..743707a 100644
+>  +AC_ARG_ENABLE(ssl,
+>  +      AS_HELP_STRING([--disable-ssl], [disable SSL]),
+>  +      [ if test "$enableval" = "no"; then
+> -+           DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl"
+> ++           DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _ssl"
+>  +        fi])
+>  +
+>   AC_ARG_ENABLE(dbm,
 > --
 > 2.7.4
 >
