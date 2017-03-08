@@ -1,52 +1,47 @@
-From: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
-Date: Wed,  8 Mar 2017 10:21:14 -0500
-Subject: [Buildroot] [PATCH 1/1] lighttpd: source default file from startup
-	script
-Message-ID: <20170308152114.14851-1-philipp.skadorov@savoirfairelinux.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 8 Mar 2017 12:47:14 -0300
+Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
+In-Reply-To: <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
+References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
+ <20170306212225.0819a97b@free-electrons.com>
+ <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
+ <20170306213121.203079d8@free-electrons.com>
+ <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
+ <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
+ <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
+ <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
+ <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
+Message-ID: <CAOMZO5BxKvub7SRbiwdDFc0W6Kxr=V8nj7uA=WYUc_iAGAQpNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lighttpd server runs cgi application that has no way to get environment
-variables that are set up for it.
+Hi Gary,
 
-S50lighttpd is changed to source /etc/default/lighttpd file where these
-environment variables can be set up.
+On Wed, Mar 8, 2017 at 12:17 PM, Gary Bisson
+<gary.bisson@boundarydevices.com> wrote:
 
-Signed-off-by: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
----
- package/lighttpd/S50lighttpd | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> Can you tell me where is DRM_MODE_OBJECT_PLANE defined in your case?
+>
+> Here is my output:
+> $ grep -rn DRM_MODE_OBJECT_PLANE output/host/usr/arm-buildroot-linux-gnueabihf/
+> output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm/drm_mode.h:336:#define
+> DRM_MODE_OBJECT_PLANE 0xeeeeeeee
 
-diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
-index 44ac257c1..b3518cd27 100644
---- a/package/lighttpd/S50lighttpd
-+++ b/package/lighttpd/S50lighttpd
-@@ -2,15 +2,21 @@
- #
- # Starts lighttpd.
- #
-+NAME=lighttpd
-+DAEMON=/usr/sbin/$NAME
-+PID_FILE="/var/run/$NAME.pid"
-+CONF_FILE="/etc/$NAME/$NAME.conf"
-+
-+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
- 
- start() {
- 	printf "Starting lighttpd: "
--	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
-+	start-stop-daemon -S -q -p $PID_FILE --exec $DAEMON -- -f $CONF_FILE
- 	echo "OK"
- }
- stop() {
- 	printf "Stopping lighttpd: "
--	start-stop-daemon -K -q -p /var/run/lighttpd.pid
-+	start-stop-daemon -K -q -p $PID_FILE
- 	echo "OK"
- }
- restart() {
--- 
-2.11.0
+I see them defined in two places here:
+
+$ grep -rn DRM_MODE_OBJECT_PLANE output/host/
+output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/drm/drm_mode.h:336:#define
+DRM_MODE_OBJECT_PLANE 0xeeeeeeee
+output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/libdrm/drm_mode.h:336:#define
+DRM_MODE_OBJECT_PLANE 0xeeeeeeee
+
+> Also, is adding my fix to your build bringing any issue?
+
+Just tried your patch and the build still succeeds with it.
+
+Regards,
+
+Fabio Estevam
