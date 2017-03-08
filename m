@@ -1,142 +1,86 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  8 Mar 2017 22:53:10 +0100
-Subject: [Buildroot] [PATCH v1] libxkbcommon: add support for
-	interactive-wayland test program
-Message-ID: <20170308215310.12819-1-ps.report@gmx.net>
+Date: Wed, 8 Mar 2017 23:02:11 +0100
+Subject: [Buildroot] [PATCH] package/rpi-userland: don't isntall file in
+ random location
+In-Reply-To: <1488921388-9691-1-git-send-email-yann.morin.1998@free.fr>
+References: <1488921388-9691-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170308230211.67576e85@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In case of enabled wayland support add an option for the
-interactive-wayland test program. Otherwise disable
-wayland support. This fixes a compile failure in case wayland
-support is autodetected:
+Hello Yann,
 
-    GEN      xdg-shell-unstable-v5-protocol.c
-  /bin/sh: /usr/bin/wayland-scanner: No such file or directory
-  Makefile:2426: recipe for target 'xdg-shell-unstable-v5-protocol.c' failed
-  make[3]: *** [xdg-shell-unstable-v5-protocol.c] Error 127
-  make[3]: *** Waiting for unfinished jobs....
-    GEN      xdg-shell-unstable-v5-client-protocol.h
-  /bin/sh: /usr/bin/wayland-scanner: No such file or directory
-  Makefile:2428: recipe for target 'xdg-shell-unstable-v5-client-protocol.h' failed
-  make[3]: *** [xdg-shell-unstable-v5-client-protocol.h] Error 127
+On Tue,  7 Mar 2017 22:16:28 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Patch 0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch
-is inspired from mesa3d/0005-configure.ac-invert-order-for-wayland-scanner-check.patch.
+> Currently, rpi-userland installs files in $(@D)/../../bin/ which is
+> entirely stupid, especially in cross-compilation.
+> 
+> Get rid of the dubious, broken, custom install command.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  ...toverlay-don-t-install-script-in-random-l.patch | 45 ++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
+> 
+> diff --git a/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch b/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
+> new file mode 100644
+> index 0000000..2900eb7
+> --- /dev/null
+> +++ b/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
+> @@ -0,0 +1,45 @@
+> +From a5a4e361c8116ca9228a896f672102c02be56bb7 Mon Sep 17 00:00:00 2001
+> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +Date: Tue, 7 Mar 2017 22:01:39 +0100
+> +Subject: [PATCH] host-apps/dtoverlay: don't install script in random location
+> +
+> +Currently, we add a custom command that installs the dtoverlay pre/post
+> +scripts in ${CMAKE_BINARY_DIR}/../../bin
+> +
+> +However:
+> +
+> +  - this points outside of the package directory.; it even points two
+> +    directories higher;
+> +
+> +  - when doing cross-compilation, this is definitely not the place where
+> +    the /bin directory really is;
+> +
+> +  - the scripts are already properly installed without this code.
+> +
+> +Remove that code, it serves no purpose and breaks for cross-compilation.
+> +
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +---
+> + host_applications/linux/apps/dtoverlay/CMakeLists.txt | 8 --------
+> + 1 file changed, 8 deletions(-)
+> +
+> +diff --git a/host_applications/linux/apps/dtoverlay/CMakeLists.txt b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
+> +index 9009200..dd48d83 100755
+> +--- a/host_applications/linux/apps/dtoverlay/CMakeLists.txt
+> ++++ b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
+> +@@ -22,12 +22,4 @@ add_custom_command(TARGET dtoverlay POST_BUILD COMMAND ln;-sf;dtoverlay;dtparam)
+> + install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dtparam DESTINATION bin)
+> + 
+> + set(DTOVERLAY_SCRIPTS dtoverlay-pre dtoverlay-post)
+> +-foreach(_script ${DTOVERLAY_SCRIPTS})
+> +-   add_custom_command(
+> +-     TARGET dtoverlay
+> +-     COMMAND ${CMAKE_COMMAND}
+> +-     -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${_script}
+> +-     ${CMAKE_BINARY_DIR}/../../bin/${_script}
+> +-   )
+> +-endforeach()
+> + install(PROGRAMS ${DTOVERLAY_SCRIPTS} DESTINATION bin)
+> +-- 
+> +2.7.4
+> +
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...c-prefere-AC_PATH_PROG-for-wayland-scanne.patch | 33 ++++++++++++++++++++++
- package/libxkbcommon/Config.in                     | 12 ++++++++
- package/libxkbcommon/libxkbcommon.mk               | 22 +++++++++++++++
- 3 files changed, 67 insertions(+)
- create mode 100644 package/libxkbcommon/0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch
-
-diff --git a/package/libxkbcommon/0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch b/package/libxkbcommon/0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch
-new file mode 100644
-index 000000000..630e45d3c
---- /dev/null
-+++ b/package/libxkbcommon/0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch
-@@ -0,0 +1,33 @@
-+From b44b0d5323985661b508948eac725048affd3221 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Wed, 8 Mar 2017 09:36:39 +0100
-+Subject: [PATCH] configure.ac: prefere AC_PATH_PROG for wayland-scanner
-+
-+Prefere AC_PATH_PROG result for wayland-scanner over the
-+pkg-config version (when cross-compiling the .pc file might
-+point to the wrong wayland-scanner binary (target rather than
-+host) resulting in a non-executable and wrong scanner).
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 725915b..e4ff9d2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -194,7 +194,9 @@ AS_IF([test "x$enable_wayland" = xyes], [
-+         [AC_MSG_ERROR([Wayland utilities require libwayland-client >= 1.2 which was not found. \
-+ You can disable Wayland support with --disable-wayland.])])
-+     AC_PATH_PROG([wayland_scanner], [wayland-scanner])
-+-    wayland_scanner=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`
-++    if test "x$wayland_scanner" = x; then
-++        wayland_scanner=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`
-++    fi
-+     ac_wayland_protocols_pkgdatadir=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols`
-+     AC_SUBST(WAYLAND_PROTOCOLS_DATADIR, $ac_wayland_protocols_pkgdatadir)
-+ ], [enable_wayland=no])
-+-- 
-+2.11.0
-+
-diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
-index 4da12897f..9c15d5d41 100644
---- a/package/libxkbcommon/Config.in
-+++ b/package/libxkbcommon/Config.in
-@@ -1,9 +1,21 @@
- config BR2_PACKAGE_LIBXKBCOMMON
- 	bool "libxkbcommon"
- 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
- 	help
- 	  xkbcommon is a keymap compiler and support library which
- 	  processes a reduced subset of keymaps as defined by the XKB
- 	  specification.
+No more spurious bin directory created...
  
- 	  http://xkbcommon.org/
-+
-+if BR2_PACKAGE_LIBXKBCOMMON && BR2_PACKAGE_WAYLAND
-+
-+config BR2_PACKAGE_LIBXKBCOMMON_INTERACTIVE_WAYLAND
-+	bool "interactive-wayland"
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	help
-+	  interactive-wayland is a wayland test application
-+	  for libxkbcommon.
-+
-+endif
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index c39a7c0c5..d1df7a678 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -11,6 +11,11 @@ LIBXKBCOMMON_LICENSE = MIT/X11
- LIBXKBCOMMON_LICENSE_FILES = LICENSE
- LIBXKBCOMMON_INSTALL_STAGING = YES
- LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
-+
-+# patch 0001-configure.ac-prefere-AC_PATH_PROG-for-wayland-scanne.patch
-+# touches configure.ac
-+LIBXKBCOMMON_AUTORECONF = YES
-+
- # uses C99 features
- LIBXKBCOMMON_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
- 
-@@ -21,4 +26,21 @@ else
- LIBXKBCOMMON_CONF_OPTS += --disable-x11
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBXKBCOMMON_INTERACTIVE_WAYLAND),y)
-+LIBXKBCOMMON_CONF_OPTS += --enable-wayland
-+LIBXKBCOMMON_DEPENDENCIES += wayland wayland-protocols
-+LIBXKBCOMMON_CONF_ENV += ac_cv_path_wayland_scanner=$(HOST_DIR)/usr/bin/wayland-scanner
-+define LIBXKBCOMMON_BUILD_INTERACTIVE_WAYLAND
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) test/interactive-wayland
-+endef
-+LIBXKBCOMMON_POST_BUILD_HOOKS = LIBXKBCOMMON_BUILD_INTERACTIVE_WAYLAND
-+define LIBXKBCOMMON_INSTALL_INTERACTIVE_WAYLAND
-+	$(INSTALL) -D -m 0755 $(@D)/test/interactive-wayland \
-+		$(TARGET_DIR)/usr/bin/interactive-wayland
-+endef
-+LIBXKBCOMMON_POST_INSTALL_TARGET_HOOKS = LIBXKBCOMMON_INSTALL_INTERACTIVE_WAYLAND
-+else
-+LIBXKBCOMMON_CONF_OPTS += --disable-wayland
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.11.0
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
