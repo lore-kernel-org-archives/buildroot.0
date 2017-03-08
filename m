@@ -1,34 +1,27 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Wed, 8 Mar 2017 12:25:39 +0530
-Subject: [Buildroot] [PATCH] package/cairo: improve license information
-In-Reply-To: <20170307211711.348d28cb@free-electrons.com>
-References: <20170306210218.28867-1-romain.naour@gmail.com>
- <a8c8c494-b69c-2d6b-b505-03f113097a38@imgtec.com>
- <20170307211711.348d28cb@free-electrons.com>
-Message-ID: <cef36323-ec6c-48eb-8332-9ea2c86b6097@imgtec.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 08 Mar 2017 07:57:06 +0100
+Subject: [Buildroot] [PATCH 5/6] xdriver_xf86-video-v4l: remove
+	broken	package
+References: <20170307235054.25149-1-arnout@mind.be>
+ <20170307235054.25149-5-arnout@mind.be>
+Message-ID: <2jm4pdxnha.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Wed, 08 Mar 2017 00:50:53 +0100 schrieb Arnout Vandecappelle
+(Essensium/Mind):
 
-On Wednesday 08 March 2017 01:47 AM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Tue, 7 Mar 2017 14:54:24 +0530, Rahul Bedarkar wrote:
->
->> License string for LGPL should be "LGPLv2.1" because license text
->> doesn't have "or (at your option) any later version;" clause.
->
-> The license file itself never says "or (at your option) any later
-> version". The license text of the GPL or LGPL is always the text of one
-> specific version of the license. To know whether "or later" applies or
-> not, you usually need to look at the comments in the code.
+> Bernd, last chance to unbreak the package :-)
 
-Yes, I was referring to license text from source file header. But I 
-agree that my comment didn't make it clear.
+Hi,
 
-Thanks,
-Rahul
+fine with me, even with current git HEAD the build is still broken.
+
+Gentoo also removed the package last month:
+https://gitweb.gentoo.org/repo/gentoo.git/commit/x11-drivers?
+id=5a4168b776026a520cdc5328f13840c42b24fb56
+
+Regards, Bernd
