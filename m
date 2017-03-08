@@ -1,48 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 08 Mar 2017 21:38:26 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-03-07
-References: <20170308072845.2624A2076F@mail.free-electrons.com>
-Message-ID: <2n66pdxrq3.ln2@ID-313208.user.individual.net>
+From: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
+Date: Wed,  8 Mar 2017 15:43:31 -0500
+Subject: [Buildroot] [PATCH v2 1/2] lighttpd: carry common keywords out to
+	variables
+In-Reply-To: <20170308211124.50d94081@free-electrons.com>
+References: <20170308211124.50d94081@free-electrons.com>
+Message-ID: <20170308204332.11313-1-philipp.skadorov@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 08 Mar 2017 08:28:45 +0100 schrieb Thomas Petazzoni:
+S50lighttpd contains repeating keywords that are worth carrying out as
+variables: pid file name, daemon name, config file name.
 
->         i586 |     xserver_xorg-server-1.19.2 | NOK |
->         http://autobuild.buildroot.net/
-results/5890c4b6397326faadecc49fdbe21875fbb20c65
+Signed-off-by: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
+---
+ package/lighttpd/S50lighttpd | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Hi,
-
-the build error
-
-/home/peko/autobuild/instance-2/output/host/usr/i586-buildroot-linux-musl/
-sysroot/usr/lib/libunwind.so: undefined reference to `setcontext'
-/home/peko/autobuild/instance-2/output/host/usr/i586-buildroot-linux-musl/
-sysroot/usr/lib/libunwind.so: undefined reference to `sigreturn'
-
-comes from libunwind, which, according to package/libunwind/Config.in, is 
-supported on musl at x86 contrary to
-http://www.openwall.com/lists/musl/2012/12/31/11
-http://wiki.musl-libc.org/wiki/Open_Issues#ucontext.h
-
-I do not claim that I understand what libunwind is all about, therefore I 
-will not send patches for libunwind, but it looks to me that the fix for 
-the xserver_xorg-server build error should be made in 
-BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS.
-
-Patching package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-
--ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_PACKAGE_LIBUNWIND),ny)
-
-also worked, but it is only a workaround.
-
-Btw, libunwind-1.2 was released Jan 13, 2017, a version bump did not fix 
-the xserver_xorg-server build error.
-
-Regards, Bernd
+diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
+index 44ac257c1..7a14ec8a9 100644
+--- a/package/lighttpd/S50lighttpd
++++ b/package/lighttpd/S50lighttpd
+@@ -2,15 +2,19 @@
+ #
+ # Starts lighttpd.
+ #
++NAME=lighttpd
++DAEMON=/usr/sbin/$NAME
++PID_FILE="/var/run/$NAME.pid"
++CONF_FILE="/etc/$NAME/$NAME.conf"
+ 
+ start() {
+ 	printf "Starting lighttpd: "
+-	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
++	start-stop-daemon -S -q -p $PID_FILE --exec $DAEMON -- -f $CONF_FILE
+ 	echo "OK"
+ }
+ stop() {
+ 	printf "Stopping lighttpd: "
+-	start-stop-daemon -K -q -p /var/run/lighttpd.pid
++	start-stop-daemon -K -q -p $PID_FILE
+ 	echo "OK"
+ }
+ restart() {
+-- 
+2.11.0
