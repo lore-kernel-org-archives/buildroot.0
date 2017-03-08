@@ -1,86 +1,66 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 8 Mar 2017 23:02:11 +0100
-Subject: [Buildroot] [PATCH] package/rpi-userland: don't isntall file in
- random location
-In-Reply-To: <1488921388-9691-1-git-send-email-yann.morin.1998@free.fr>
-References: <1488921388-9691-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170308230211.67576e85@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Mar 2017 23:32:30 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+	2017-03-07
+In-Reply-To: <e0aecdb6-c5b8-db8e-8113-9a76c7a466ba@cdf123.net>
+References: <20170308072845.15B9C207FC@mail.free-electrons.com>
+ <e0aecdb6-c5b8-db8e-8113-9a76c7a466ba@cdf123.net>
+Message-ID: <20170308233230.7c2a12f2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hello,
 
-On Tue,  7 Mar 2017 22:16:28 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Adding Vicente in Cc, since he is our mips(64) expert.
 
-> Currently, rpi-userland installs files in $(@D)/../../bin/ which is
-> entirely stupid, especially in cross-compilation.
+On Wed, 8 Mar 2017 16:04:57 -0600, Chris Frederick wrote:
+
+> I haven't tested firejail on other archs other than x86/x86_64.  We might want to add a build restriction on it.  Any preference as to how to do
+> that?
 > 
-> Get rid of the dubious, broken, custom install command.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  ...toverlay-don-t-install-script-in-random-l.patch | 45 ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
-> 
-> diff --git a/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch b/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
-> new file mode 100644
-> index 0000000..2900eb7
-> --- /dev/null
-> +++ b/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
-> @@ -0,0 +1,45 @@
-> +From a5a4e361c8116ca9228a896f672102c02be56bb7 Mon Sep 17 00:00:00 2001
-> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +Date: Tue, 7 Mar 2017 22:01:39 +0100
-> +Subject: [PATCH] host-apps/dtoverlay: don't install script in random location
-> +
-> +Currently, we add a custom command that installs the dtoverlay pre/post
-> +scripts in ${CMAKE_BINARY_DIR}/../../bin
-> +
-> +However:
-> +
-> +  - this points outside of the package directory.; it even points two
-> +    directories higher;
-> +
-> +  - when doing cross-compilation, this is definitely not the place where
-> +    the /bin directory really is;
-> +
-> +  - the scripts are already properly installed without this code.
-> +
-> +Remove that code, it serves no purpose and breaks for cross-compilation.
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +---
-> + host_applications/linux/apps/dtoverlay/CMakeLists.txt | 8 --------
-> + 1 file changed, 8 deletions(-)
-> +
-> +diff --git a/host_applications/linux/apps/dtoverlay/CMakeLists.txt b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
-> +index 9009200..dd48d83 100755
-> +--- a/host_applications/linux/apps/dtoverlay/CMakeLists.txt
-> ++++ b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
-> +@@ -22,12 +22,4 @@ add_custom_command(TARGET dtoverlay POST_BUILD COMMAND ln;-sf;dtoverlay;dtparam)
-> + install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dtparam DESTINATION bin)
-> + 
-> + set(DTOVERLAY_SCRIPTS dtoverlay-pre dtoverlay-post)
-> +-foreach(_script ${DTOVERLAY_SCRIPTS})
-> +-   add_custom_command(
-> +-     TARGET dtoverlay
-> +-     COMMAND ${CMAKE_COMMAND}
-> +-     -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${_script}
-> +-     ${CMAKE_BINARY_DIR}/../../bin/${_script}
-> +-   )
-> +-endforeach()
-> + install(PROGRAMS ${DTOVERLAY_SCRIPTS} DESTINATION bin)
-> +-- 
-> +2.7.4
-> +
+> depends on BR2_x86_64 || BR2_i386
+>  - or -
+> depends on BR2_ARCH = "x86_64" || BR2_ARCH = "i386"
 
-No more spurious bin directory created...
- 
-Tested-by: Peter Seiderer <ps.report@gmx.net>
+Is there something in firejail that is architecture specific? If not,
+then having architecture dependencies "just because" doesn't seem like
+a good idea.
 
-Regards,
-Peter
+> On 03/08/2017 01:28 AM, Thomas Petazzoni wrote:
+> > Hello,
+> > 
+> > This is the list of Buildroot build failures that occured on
+> > 2017-03-07, and for which you are a registered architecture developer
+> > or package developer. Please help us improving the quality of
+> > Buildroot by investigating those build failures and sending patches to
+> > fix them. Thanks!
+> > 
+> > Build failures related to your packages:
+> > 
+> >     mips64el |              firejail-0.9.44.8 | http://autobuild.buildroot.net/results/84d9b5dc955895e1a1c1074e3917c44c8fc00365
+
+I see two things here:
+
+common.c:48: error: '__NR_setns' undeclared (first use in this function)
+
+This *could* be related to too old kernel headers, I guess setns() is a
+fairly modern system call.
+
+libnetlink.c:110: error: 'RTEXT_FILTER_VF' undeclared (first use in this function)
+
+This one I looked in more details, it was introduced in Linux 3.3, and
+the toolchain is using kernel headers from Linux 3.9. So there is a
+different problem.
+
+Vicente, do you think you could have a look?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
