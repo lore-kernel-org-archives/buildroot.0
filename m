@@ -1,128 +1,40 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Wed, 8 Mar 2017 17:49:48 +0530
-Subject: [Buildroot] QT5.8 buid failure on master
-In-Reply-To: <CAAMH-yu_gKOiDXuQ6ko6U9EL0ZvT=NB0msNH+P5TGTJFP_-L5g@mail.gmail.com>
-References: <CAOMZO5D_R7_zEzL-X2zPViU+-SZ060JA3hpnE9S01x2PRazUsQ@mail.gmail.com>
- <trinity-a4f8806b-d789-4dea-928a-2d7bb2fad531-1488871993989@3capp-gmx-bs12>
- <20170307114826.lend2f2evnob3lya@t450s.lan>
- <trinity-b0ce3807-d5c4-4ccf-9b54-628667f6d805-1488895453975@3capp-gmx-bs26>
- <CAD6G_RQiqhvnYX3L9wh64K5inCSNr4G-vPDzU_9BbLqzrw=fyQ@mail.gmail.com>
- <CAOMZO5CPz7tLtLeLpC82koCrWx-gYRUGrZ-v-qjuZOZ3wbkaXw@mail.gmail.com>
- <20170307202950.61328dd5@gmx.net>
- <CAAMH-ytGnurAFt=BcfK53qJ8OR09o8LAZK2UdCH7nO-1Q=2aQg@mail.gmail.com>
- <CAD6G_RQGO966C1cxp6gG05xC0vu72uUDH56AJEoDi=R8wJMzOA@mail.gmail.com>
- <CAAMH-yu_gKOiDXuQ6ko6U9EL0ZvT=NB0msNH+P5TGTJFP_-L5g@mail.gmail.com>
-Message-ID: <CAD6G_RRE_uqHUpM=OOiTw3Zm6y2GrX4Ns6wFVZxg+BjiAXHMZg@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 8 Mar 2017 09:40:19 -0300
+Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
+In-Reply-To: <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
+References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
+ <20170306212225.0819a97b@free-electrons.com>
+ <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
+ <20170306213121.203079d8@free-electrons.com>
+ <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
+ <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
+ <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
+Message-ID: <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 8, 2017 at 4:58 PM, Gary Bisson
+Hi Gary,
+
+On Wed, Mar 8, 2017 at 7:06 AM, Gary Bisson
 <gary.bisson@boundarydevices.com> wrote:
-> Hi Jaggan,
->
-> On Wed, Mar 8, 2017 at 12:00 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
->> Hi Garry,
->>
->> On Wed, Mar 8, 2017 at 4:15 PM, Gary Bisson
->> <gary.bisson@boundarydevices.com> wrote:
->>> Hi Peter, Fabio, All,
->>>
->>> On Tue, Mar 7, 2017 at 8:29 PM, Peter Seiderer <ps.report@gmx.net> wrote:
->>>> Hello Fabio,
->>>>
->>>> On Tue, 7 Mar 2017 13:57:39 -0300, Fabio Estevam <festevam@gmail.com> wrote:
->>>>
->>>>> Hi Jagan,
->>>>>
->>>>> On Tue, Mar 7, 2017 at 1:15 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
->>>>>
->>>>> > Able to see the application but 'Black screen' on 'Lord of the Ring' widget
->>>>>
->>>>> Thanks for testing.
->>>>>
->>>>> I think we should treat this issue on a separate thread as I also see
->>>>> the same with Qt5.6.2.
->>>>>
->>>>> It seems we made progress with Qt5.8 with Peter's patches.
->>>>>
->>>>> Peter,
->>>>>
->>>>> Do you plan to submit your two patches formally?
->>>>
->>>> Yes can do. No problem with the first one, for the second one I need
->>>> to investigate first on which additional configure option the building
->>>> of libQt5EglFsKmsSupport.so depends...
->>>
->>> Actually I wonder why the first patch is needed in this case. How does
->>> the eglfs plugin build for Vivante for instance since the failure
->>> happens in a common file?
->>>
->>> Otherwise, I confirm I have "black picture" issues on Qt5.8 with the
->>> Cinematic demo.
->>>
->>> However, I've made a discovery regarding the DRI configuration (to
->>> avoid hardcoding the device). It is actually documented well on Qt
->>> website:
->>> http://doc.qt.io/qt-5/embedded-linux.html#eglfs-with-eglfs-kms-backend
->>> "The KMS/DRM backend also supports custom configurations via a JSON
->>> file. Set the environment variable QT_QPA_EGLFS_KMS_CONFIG to the name
->>> of the file to enable this."
->>>
->>> Here is my JSON file for Hannstar display:
->>> {
->>>   "device": "/dev/dri/card1",
->>>   "hwcursor": false,
->>>   "pbuffers": true,
->>>   "outputs": [
->>>     {
->>>       "name": "VGA-1",
->>>       "mode": "off"
->>>     },
->>>     {
->>>       "name": "HDMI-1",
->>>       "mode": "off"
->>>     },
->>>     {
->>>       "name": "LVDS-1",
->>>       "mode": "1024x768"
->>>     }
->>>   ]
->>> }
->>>
->>> This avoids the patch mentioned before:
->>> http://lists.busybox.net/pipermail/buildroot/2017-March/185842.html
->>
->> Don't know but I never find to explicitly mentioned the kmscube ran
->> w/o any device argument for 5.6.2 and 5.8
->
-> I'm not sure to understand your remark.
->
-> Note that here I'm only talking about Qt5.8 with Mesa17.0.1.
->
-> Yes my previous image with Qt5.6.2 and Mesa13.0 from Christian tree
-> didn't require to specify the node.
->
-> Also, kmscube, which has nothing to do with Qt, now requires you to
-> specify the device (using latest version on master).
->
-> Previously it was checking the drm name against an "approved" list of
-> devices. Specifying the device manually is therefore more flexible
-> since it doesn't require source code modification to get it working.
->
-> Finally, I've been able to see the covers of the Cinematic demo using
-> Qt5.8 + Mesa17.0.1 (Etnaviv) by disabling the "Show movies cover
-> lighting" option (bottom left corner). So I guess it's an Etnaviv
-> support issue in Mesa that makes the black rectangles.
 
-Yes, made the setting now the black widget show the picture and did
-you find Description on specific widget open doesn't show proper
-letters.
+> Before sending a patch I'd like to understand why the error only shows
+> up in my case and not yours. I also trust that Rob built his atomic
+> addition before pushing it.
+>
+> Can you send me the output of 'make kmscube-rebuild V=1' in your environment?
 
--- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+Sure, here is the log:
+http://pastebin.com/QBDVLFDq
+
+I just used the default toolchain from Buildroot.
+
+There is a warning in the log and I have sent a patch to fix it upstream:
+https://lists.freedesktop.org/archives/mesa-dev/2017-March/146581.html
+
+Regards,
+
+Fabio Estevam
