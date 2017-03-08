@@ -1,82 +1,51 @@
-From: Kevin JOLY <kevin.joly@sensefly.com>
-Date: Wed, 8 Mar 2017 14:38:06 +0100
-Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
-Message-ID: <1488980286-19036-1-git-send-email-kevin.joly@sensefly.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 8 Mar 2017 16:17:15 +0100
+Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
+In-Reply-To: <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
+References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
+ <20170306212225.0819a97b@free-electrons.com>
+ <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
+ <20170306213121.203079d8@free-electrons.com>
+ <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
+ <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
+ <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
+ <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
+Message-ID: <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for libgphoto2 core library designed to allow access to digital camera.
+Hi Fabio,
 
-Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
----
- package/Config.in                  |  1 +
- package/libgphoto2/Config.in       | 10 ++++++++++
- package/libgphoto2/libgphoto2.hash |  3 +++
- package/libgphoto2/libgphoto2.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/libgphoto2/Config.in
- create mode 100644 package/libgphoto2/libgphoto2.hash
- create mode 100644 package/libgphoto2/libgphoto2.mk
+On Wed, Mar 8, 2017 at 1:40 PM, Fabio Estevam <festevam@gmail.com> wrote:
+> Hi Gary,
+>
+> On Wed, Mar 8, 2017 at 7:06 AM, Gary Bisson
+> <gary.bisson@boundarydevices.com> wrote:
+>
+>> Before sending a patch I'd like to understand why the error only shows
+>> up in my case and not yours. I also trust that Rob built his atomic
+>> addition before pushing it.
+>>
+>> Can you send me the output of 'make kmscube-rebuild V=1' in your environment?
+>
+> Sure, here is the log:
+> http://pastebin.com/QBDVLFDq
 
-diff --git a/package/Config.in b/package/Config.in
-index 9eb6a22..69430c3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1073,6 +1073,7 @@ menu "Hardware handling"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
- 	source "package/libftdi1/Config.in"
-+	source "package/libgphoto2/Config.in"
- 	source "package/libgpiod/Config.in"
- 	source "package/libgudev/Config.in"
- 	source "package/libhid/Config.in"
-diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
-new file mode 100644
-index 0000000..ba1d535
---- /dev/null
-+++ b/package/libgphoto2/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBGPHOTO2
-+	select BR2_PACKAGE_LIBTOOL
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	select BR2_PACKAGE_LIBXML2
-+	bool "libgphoto2"
-+	help
-+	  libgphoto2 is the core library designed to allow access to digital camera by external programs.
-+
-+	  http://gphoto.org/
-diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
-new file mode 100644
-index 0000000..25de0bf
---- /dev/null
-+++ b/package/libgphoto2/libgphoto2.hash
-@@ -0,0 +1,3 @@
-+# Hashes from: https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.12/
-+sha1	4e1208a8a66d679b8b619b05915dbb0e684c5518	libgphoto2-2.5.12.tar.gz
-+md5	b3b5d36e583fc96eed0594dc414d70c9		libgphoto2-2.5.12.tar.gz
-diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
-new file mode 100644
-index 0000000..fc5be1b
---- /dev/null
-+++ b/package/libgphoto2/libgphoto2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# libgphoto2
-+#
-+################################################################################
-+
-+LIBGPHOTO2_VERSION = 2.5.12
-+LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.gz
-+LIBGPHOTO2_SITE = https://sourceforge.net/projects/gphoto/files/libgphoto/$(LIBGPHOTO2_VERSION)
-+LIBGPHOTO2_INSTALL_STAGING = YES
-+LIBGPHOTO2_INSTALL_TARGET = YES
-+LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libusb-compat libtool host-pkgconf
-+
-+$(eval $(autotools-package))
--- 
-2.7.4
+Thanks but I don't see anything obviously different between our configs.
+
+> I just used the default toolchain from Buildroot.
+
+Can you tell me where is DRM_MODE_OBJECT_PLANE defined in your case?
+
+Here is my output:
+$ grep -rn DRM_MODE_OBJECT_PLANE output/host/usr/arm-buildroot-linux-gnueabihf/
+output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm/drm_mode.h:336:#define
+DRM_MODE_OBJECT_PLANE 0xeeeeeeee
+
+Also, is adding my fix to your build bringing any issue?
+
+Regards,
+Gary
