@@ -1,39 +1,82 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Mar 2017 10:09:53 -0300
-Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2017.03.07
-Message-ID: <20170308130953.12604-1-gustavo@zacarias.com.ar>
+From: Kevin JOLY <kevin.joly@sensefly.com>
+Date: Wed, 8 Mar 2017 14:38:06 +0100
+Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
+Message-ID: <1488980286-19036-1-git-send-email-kevin.joly@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Add support for libgphoto2 core library designed to allow access to digital camera.
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index b8ca2e7..4163609 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	cfedf1c3521b3c8f32602f25ed796e96e687c3441a00e7c050fedf7fd4f1b8b7	wireless-regdb-2016.06.10.tar.xz
-+sha256	371eafa3b26ece916ef83aca02c4bed2e54099eb5b8c6d22d3a4358dce6535b9	wireless-regdb-2017.03.07.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 6ad4258..9d7a375 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2016.06.10
-+WIRELESS_REGDB_VERSION = 2017.03.07
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
+---
+ package/Config.in                  |  1 +
+ package/libgphoto2/Config.in       | 10 ++++++++++
+ package/libgphoto2/libgphoto2.hash |  3 +++
+ package/libgphoto2/libgphoto2.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/libgphoto2/Config.in
+ create mode 100644 package/libgphoto2/libgphoto2.hash
+ create mode 100644 package/libgphoto2/libgphoto2.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 9eb6a22..69430c3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1073,6 +1073,7 @@ menu "Hardware handling"
+ 	source "package/libfreefare/Config.in"
+ 	source "package/libftdi/Config.in"
+ 	source "package/libftdi1/Config.in"
++	source "package/libgphoto2/Config.in"
+ 	source "package/libgpiod/Config.in"
+ 	source "package/libgudev/Config.in"
+ 	source "package/libhid/Config.in"
+diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
+new file mode 100644
+index 0000000..ba1d535
+--- /dev/null
++++ b/package/libgphoto2/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBGPHOTO2
++	select BR2_PACKAGE_LIBTOOL
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	select BR2_PACKAGE_LIBXML2
++	bool "libgphoto2"
++	help
++	  libgphoto2 is the core library designed to allow access to digital camera by external programs.
++
++	  http://gphoto.org/
+diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
+new file mode 100644
+index 0000000..25de0bf
+--- /dev/null
++++ b/package/libgphoto2/libgphoto2.hash
+@@ -0,0 +1,3 @@
++# Hashes from: https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.12/
++sha1	4e1208a8a66d679b8b619b05915dbb0e684c5518	libgphoto2-2.5.12.tar.gz
++md5	b3b5d36e583fc96eed0594dc414d70c9		libgphoto2-2.5.12.tar.gz
+diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+new file mode 100644
+index 0000000..fc5be1b
+--- /dev/null
++++ b/package/libgphoto2/libgphoto2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libgphoto2
++#
++################################################################################
++
++LIBGPHOTO2_VERSION = 2.5.12
++LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.gz
++LIBGPHOTO2_SITE = https://sourceforge.net/projects/gphoto/files/libgphoto/$(LIBGPHOTO2_VERSION)
++LIBGPHOTO2_INSTALL_STAGING = YES
++LIBGPHOTO2_INSTALL_TARGET = YES
++LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libusb-compat libtool host-pkgconf
++
++$(eval $(autotools-package))
 -- 
-2.10.2
+2.7.4
