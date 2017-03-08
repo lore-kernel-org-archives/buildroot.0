@@ -1,47 +1,43 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 8 Mar 2017 12:47:14 -0300
-Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
-In-Reply-To: <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
-References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
- <20170306212225.0819a97b@free-electrons.com>
- <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
- <20170306213121.203079d8@free-electrons.com>
- <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
- <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
- <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
- <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
- <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
-Message-ID: <CAOMZO5BxKvub7SRbiwdDFc0W6Kxr=V8nj7uA=WYUc_iAGAQpNw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 8 Mar 2017 18:04:30 +0100
+Subject: [Buildroot] [git commit branch/2016.11.x] gnutls: bump version to
+	3.5.9
+Message-ID: <20170308170715.812CE82161@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+commit: https://git.buildroot.net/buildroot/commit/?id=411067de8a26fd06ff6d1baada4adf6002893fe0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2016.11.x
 
-On Wed, Mar 8, 2017 at 12:17 PM, Gary Bisson
-<gary.bisson@boundarydevices.com> wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 743f5076df0a852f25d55c3bcb1d3e33eec07055)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Can you tell me where is DRM_MODE_OBJECT_PLANE defined in your case?
->
-> Here is my output:
-> $ grep -rn DRM_MODE_OBJECT_PLANE output/host/usr/arm-buildroot-linux-gnueabihf/
-> output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm/drm_mode.h:336:#define
-> DRM_MODE_OBJECT_PLANE 0xeeeeeeee
-
-I see them defined in two places here:
-
-$ grep -rn DRM_MODE_OBJECT_PLANE output/host/
-output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/drm/drm_mode.h:336:#define
-DRM_MODE_OBJECT_PLANE 0xeeeeeeee
-output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/libdrm/drm_mode.h:336:#define
-DRM_MODE_OBJECT_PLANE 0xeeeeeeee
-
-> Also, is adding my fix to your build bringing any issue?
-
-Just tried your patch and the build still succeeds with it.
-
-Regards,
-
-Fabio Estevam
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 121f75a..156d2aa 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	0e97f243ae72b70307d684b84c7fe679385aa7a7a0e37e5be810193dcc17d4ff	gnutls-3.5.8.tar.xz
++sha256	82b10f0c4ef18f4e64ad8cef5dbaf14be732f5095a41cf366b4ecb4050382951	gnutls-3.5.9.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 4fab812..932c0fa 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.5
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
