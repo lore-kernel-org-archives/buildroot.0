@@ -1,51 +1,52 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 8 Mar 2017 16:17:15 +0100
-Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
-In-Reply-To: <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
-References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
- <20170306212225.0819a97b@free-electrons.com>
- <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
- <20170306213121.203079d8@free-electrons.com>
- <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
- <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
- <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
- <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
-Message-ID: <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
+From: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
+Date: Wed,  8 Mar 2017 10:21:14 -0500
+Subject: [Buildroot] [PATCH 1/1] lighttpd: source default file from startup
+	script
+Message-ID: <20170308152114.14851-1-philipp.skadorov@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+lighttpd server runs cgi application that has no way to get environment
+variables that are set up for it.
 
-On Wed, Mar 8, 2017 at 1:40 PM, Fabio Estevam <festevam@gmail.com> wrote:
-> Hi Gary,
->
-> On Wed, Mar 8, 2017 at 7:06 AM, Gary Bisson
-> <gary.bisson@boundarydevices.com> wrote:
->
->> Before sending a patch I'd like to understand why the error only shows
->> up in my case and not yours. I also trust that Rob built his atomic
->> addition before pushing it.
->>
->> Can you send me the output of 'make kmscube-rebuild V=1' in your environment?
->
-> Sure, here is the log:
-> http://pastebin.com/QBDVLFDq
+S50lighttpd is changed to source /etc/default/lighttpd file where these
+environment variables can be set up.
 
-Thanks but I don't see anything obviously different between our configs.
+Signed-off-by: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
+---
+ package/lighttpd/S50lighttpd | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-> I just used the default toolchain from Buildroot.
-
-Can you tell me where is DRM_MODE_OBJECT_PLANE defined in your case?
-
-Here is my output:
-$ grep -rn DRM_MODE_OBJECT_PLANE output/host/usr/arm-buildroot-linux-gnueabihf/
-output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm/drm_mode.h:336:#define
-DRM_MODE_OBJECT_PLANE 0xeeeeeeee
-
-Also, is adding my fix to your build bringing any issue?
-
-Regards,
-Gary
+diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
+index 44ac257c1..b3518cd27 100644
+--- a/package/lighttpd/S50lighttpd
++++ b/package/lighttpd/S50lighttpd
+@@ -2,15 +2,21 @@
+ #
+ # Starts lighttpd.
+ #
++NAME=lighttpd
++DAEMON=/usr/sbin/$NAME
++PID_FILE="/var/run/$NAME.pid"
++CONF_FILE="/etc/$NAME/$NAME.conf"
++
++[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+ 
+ start() {
+ 	printf "Starting lighttpd: "
+-	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
++	start-stop-daemon -S -q -p $PID_FILE --exec $DAEMON -- -f $CONF_FILE
+ 	echo "OK"
+ }
+ stop() {
+ 	printf "Stopping lighttpd: "
+-	start-stop-daemon -K -q -p /var/run/lighttpd.pid
++	start-stop-daemon -K -q -p $PID_FILE
+ 	echo "OK"
+ }
+ restart() {
+-- 
+2.11.0
