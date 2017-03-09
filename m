@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 22:10:28 +0100
-Subject: [Buildroot] [git commit] package/libaio: enable on powerpc64(le)
-Message-ID: <20170309211234.D5611822D0@busybox.osuosl.org>
+Date: Thu, 9 Mar 2017 22:13:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libaio: Power64 support AIO
+In-Reply-To: <a59aa9d1-5e8c-c6e1-e5ed-cc1ad1c4a6e8@au1.ibm.com>
+References: <a59aa9d1-5e8c-c6e1-e5ed-cc1ad1c4a6e8@au1.ibm.com>
+Message-ID: <20170309221324.065df8a7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1916f29e97e1bdb043f9cba17d203ba0843826f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libaio has support for powerpc64(le), so enable the corresponding
-package on those architectures.
+On Thu, 9 Mar 2017 11:56:47 +1100, Daniel Black wrote:
+> Power64{,le} architecture supports AIO.
+> 
+> Signed-off-by: Daniel Black <daniel.black@au.ibm.com>
+> Acked-by: Cyril Bur <cyrilbur@gmail.com>
+> ---
+>  package/libaio/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Daniel Black <daniel.black@au.ibm.com>
-Acked-by: Cyril Bur <cyrilbur@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libaio/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+For some reason, your patch didn't apply properly, most likely because
+you sent it with Thunderbird. Next time, could you send your patches
+using "git send-email"?
 
-diff --git a/package/libaio/Config.in b/package/libaio/Config.in
-index 3031c89..ea21a36 100644
---- a/package/libaio/Config.in
-+++ b/package/libaio/Config.in
-@@ -2,7 +2,8 @@ config BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
- 		BR2_m68k || BR2_mips || BR2_mipsel || BR2_powerpc || \
--		BR2_sparc || BR2_x86_64
-+		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc || \
-+		BR2_x86_64
- 
- config BR2_PACKAGE_LIBAIO
- 	bool "libaio"
+I've applied after fixing the patch, and tweaking a bit the commit log.
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
