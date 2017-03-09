@@ -1,20 +1,20 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 22:35:43 +0100
-Subject: [Buildroot] [git commit] python3: make readline, gzip,
-	bzip2 and xz really optional
-Message-ID: <20170309213619.BFFEA8227F@busybox.osuosl.org>
+Date: Thu, 9 Mar 2017 22:35:23 +0100
+Subject: [Buildroot] [git commit] python: make hashlib and readline modules
+	really optional
+Message-ID: <20170309213619.868C57F969@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdddc0195edff70f6906a540e8a1c84991923f23
+commit: https://git.buildroot.net/buildroot/commit/?id=bc3e1fb22ef641916938fff76bef10a1347ef0f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The BR2_PACKAGE_PYTHON3_{READLINE,ZLIB,BZIP2,XZ} options were so far
-only bringing in the necessary dependencies, relying on the Python
-build system to automatically detect them.
+The BR2_PACKAGE_PYTHON_{READLINE,HASHLIB} options were so far only
+bringing in the necessary dependencies, relying on the Python build
+system to automatically detect them.
 
 However, this means that even if one of those option was disabled, if
 their dependency was found, Python would build the corresponding module,
@@ -22,33 +22,33 @@ which is really not what the user would expect.
 
 For example, if you have:
 
-  BR2_PACKAGE_READLINE=y
-  # BR2_PACKAGE_PYTHON3_READLINE is not set
+   BR2_PACKAGE_READLINE=y
+   # BR2_PACKAGE_PYTHON_READLINE is not set
 
 Then you would still get the readline Python module built and installed.
 
 This commit fixes that by adding new --{enable,disable} options, and use
-them in python3.mk.
+them in python.mk.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-an-option-to-disable-the-readline-module.patch | 30 ++++++++++++++++
- ...ions-to-disable-zlib-bzip2-and-xz-modules.patch | 42 ++++++++++++++++++++++
- package/python3/python3.mk                         |  8 +++++
- 3 files changed, 80 insertions(+)
+ ...-Add-option-to-disable-the-hashlib-module.patch | 30 ++++++++++++++++++++++
+ ...-Add-an-option-to-disable-readline-module.patch | 30 ++++++++++++++++++++++
+ package/python/python.mk                           |  4 +++
+ 3 files changed, 64 insertions(+)
 
-diff --git a/package/python3/0032-Add-an-option-to-disable-the-readline-module.patch b/package/python3/0032-Add-an-option-to-disable-the-readline-module.patch
+diff --git a/package/python/0032-Add-option-to-disable-the-hashlib-module.patch b/package/python/0032-Add-option-to-disable-the-hashlib-module.patch
 new file mode 100644
-index 0000000..4d205ca
+index 0000000..bb3ccfa
 --- /dev/null
-+++ b/package/python3/0032-Add-an-option-to-disable-the-readline-module.patch
++++ b/package/python/0032-Add-option-to-disable-the-hashlib-module.patch
 @@ -0,0 +1,30 @@
-+From c01d039d96909a6f4df6fff5f6e7ffe7e3f1e7b2 Mon Sep 17 00:00:00 2001
++From f11dc326ae216911a67bd563b619f39522c14bf2 Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Tue, 7 Mar 2017 23:29:05 +0100
-+Subject: [PATCH] Add an option to disable the readline module
++Date: Tue, 7 Mar 2017 22:33:02 +0100
++Subject: [PATCH] Add option to disable the hashlib module
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
@@ -56,11 +56,47 @@ index 0000000..4d205ca
 + 1 file changed, 6 insertions(+)
 +
 +diff --git a/configure.ac b/configure.ac
-+index 65c0ce0..c274e13 100644
++index 8dc573e..854724d 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -3033,6 +3033,12 @@ AC_ARG_ENABLE(openssl,
-+ 	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl _ssl _hashlib"
++@@ -2840,6 +2840,12 @@ AC_ARG_ENABLE(ssl,
++     	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl"
++   	  fi])
++ 
+++AC_ARG_ENABLE(hashlib,
+++	AS_HELP_STRING([--disable-hashlib], [disable hashlib]),
+++	[ if test "$enableval" = "no"; then
+++	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _hashlib"
+++	  fi])
+++
++ AC_ARG_ENABLE(bz2,
++        AS_HELP_STRING([--disable-bz2], [disable BZIP2]),
++        [ if test "$enableval" = "no"; then
++-- 
++2.7.4
++
+diff --git a/package/python/0033-Add-an-option-to-disable-readline-module.patch b/package/python/0033-Add-an-option-to-disable-readline-module.patch
+new file mode 100644
+index 0000000..ade729f
+--- /dev/null
++++ b/package/python/0033-Add-an-option-to-disable-readline-module.patch
+@@ -0,0 +1,30 @@
++From 6b461f698bd33b3493207baf79f4ee02286be8e8 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Tue, 7 Mar 2017 22:33:55 +0100
++Subject: [PATCH] Add an option to disable readline module
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 854724d..0a06497 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2846,6 +2846,12 @@ AC_ARG_ENABLE(hashlib,
++ 	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _hashlib"
 + 	  fi])
 + 
 ++AC_ARG_ENABLE(readline,
@@ -69,91 +105,31 @@ index 0000000..4d205ca
 ++	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} readline"
 ++	  fi])
 ++
-+ AC_SUBST(TK)
-+ AC_ARG_ENABLE(tk,
-+ 	AS_HELP_STRING([--disable-tk], [disable tk]),
++ AC_ARG_ENABLE(bz2,
++        AS_HELP_STRING([--disable-bz2], [disable BZIP2]),
++        [ if test "$enableval" = "no"; then
 +-- 
 +2.7.4
 +
-diff --git a/package/python3/0033-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch b/package/python3/0033-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
-new file mode 100644
-index 0000000..a641a96
---- /dev/null
-+++ b/package/python3/0033-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
-@@ -0,0 +1,42 @@
-+From 69a5a3b7a0307476772943da70162dfe716c674f Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Tue, 7 Mar 2017 23:31:11 +0100
-+Subject: [PATCH] Add options to disable zlib, bzip2 and xz modules
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac | 18 ++++++++++++++++++
-+ 1 file changed, 18 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index c274e13..fac9c57 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -3039,6 +3039,24 @@ AC_ARG_ENABLE(readline,
-+ 	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} readline"
-+ 	  fi])
-+ 
-++AC_ARG_ENABLE(bzip2,
-++	AS_HELP_STRING([--disable-bzip2], [disable bzip2]),
-++	[ if test "$enableval" = "no"; then
-++	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _bz2"
-++	  fi])
-++
-++AC_ARG_ENABLE(zlib,
-++	AS_HELP_STRING([--disable-zlib], [disable zlib]),
-++	[ if test "$enableval" = "no"; then
-++	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} zlib"
-++	  fi])
-++
-++AC_ARG_ENABLE(xz,
-++	AS_HELP_STRING([--disable-xz], [disable xz]),
-++	[ if test "$enableval" = "no"; then
-++	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _lzma"
-++	  fi])
-++
-+ AC_SUBST(TK)
-+ AC_ARG_ENABLE(tk,
-+ 	AS_HELP_STRING([--disable-tk], [disable tk]),
-+-- 
-+2.7.4
-+
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 4ca049c..c8f8e1b 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -56,6 +56,8 @@ PYTHON3_INSTALL_STAGING = YES
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 281130c..7541e0b 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -62,6 +62,8 @@ PYTHON_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_PYTHON3_READLINE),y)
- PYTHON3_DEPENDENCIES += readline
+ ifeq ($(BR2_PACKAGE_PYTHON_READLINE),y)
+ PYTHON_DEPENDENCIES += readline
 +else
-+PYTHON3_CONF_OPTS += --disable-readline
++PYTHON_CONF_OPTS += --disable-readline
  endif
  
- ifeq ($(BR2_PACKAGE_PYTHON3_CURSES),y)
-@@ -104,14 +106,20 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON_CURSES),y)
+@@ -125,6 +127,8 @@ endif
  
- ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
- PYTHON3_DEPENDENCIES += bzip2
+ ifeq ($(BR2_PACKAGE_PYTHON_HASHLIB),y)
+ PYTHON_DEPENDENCIES += openssl
 +else
-+PYTHON3_CONF_OPTS += --disable-bzip2
++PYTHON_CONF_OPTS += --disable-hashlib
  endif
  
- ifeq ($(BR2_PACKAGE_PYTHON3_XZ),y)
- PYTHON3_DEPENDENCIES += xz
-+else
-+PYTHON3_CONF_OPTS += --disable-xz
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_ZLIB),y)
- PYTHON3_DEPENDENCIES += zlib
-+else
-+PYTHON3_CONF_OPTS += --disable-zlib
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_OSSAUDIODEV),y)
+ ifeq ($(BR2_PACKAGE_PYTHON_OSSAUDIODEV),y)
