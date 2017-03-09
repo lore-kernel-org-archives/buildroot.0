@@ -1,36 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 21:30:03 +0100
-Subject: [Buildroot] [PATCH v2 1/1] toolchain/helpers.mk: fixup
- check_gcc_version.
-In-Reply-To: <1487685891-29747-1-git-send-email-ren_guo@c-sky.com>
-References: <1487685891-29747-1-git-send-email-ren_guo@c-sky.com>
-Message-ID: <20170309213003.25a3b356@free-electrons.com>
+Date: Thu, 9 Mar 2017 21:31:08 +0100
+Subject: [Buildroot] [git commit] qt5base: fix compilation error with gcc-4.8
+Message-ID: <20170309203123.D8BBE82543@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=80fbef58533ad6b3ea7e24dbd1a7f165e9177e9d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Feb 2017 22:04:51 +0800, Guo Ren wrote:
-> some gcc --version ouput like this:
-> $ csky-linux-gcc --version
-> csky-linux-gcc (C-SKY Tools V2.8.08(Beta1)(Glibc,Linux 4.8.4), ABIV1,
-> B20161118) 4.5.1
-> 
-> current script just find first ')', but we need find last ')' to get
-> correct version number.
-> 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Add a patch to fix a compilation error when using gcc-4.8.
 
-A different, and much simpler fix was committed in
-https://git.buildroot.org/buildroot/commit/?id=06cd604ec6d34f25b436ab729543418042a87e1c.
+Bug report: https://bugreports.qt.io/browse/QTBUG-59399
+Patch sent upstream: https://codereview.qt-project.org/#/c/187980/
 
-Best regards,
+Fixes:
+  http://autobuild.buildroot.net/results/2ac/2ac16335d16cd53cceeabda8f963c9b288a9a1c8/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...s-explicit-failure-mode-to-std-atomic-com.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+
+diff --git a/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch b/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
+new file mode 100644
+index 0000000..3a43584
+--- /dev/null
++++ b/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
+@@ -0,0 +1,65 @@
++From c5d7425f8ad391112758db161e3e08f18dc9d299 Mon Sep 17 00:00:00 2001
++From: Marc Mutz <marc.mutz@kdab.com>
++Date: Thu, 26 May 2016 08:30:26 +0200
++Subject: [PATCH] QAtomic: pass explicit failure mode to
++ std::atomic::compare_exchange_strong
++
++... in an attempt to avoid GCC 4.8 errors such as
++
++  bits/atomic_base.h:577:70: error: failure memory model cannot be stronger than success memory model for '__atomic_compare_exchange'
++  return __atomic_compare_exchange_n(&_M_i, &__i1, __i2, 0, __m1, __m2);
++                                                                      ^
++
++as seen on Android.
++
++Change-Id: If046e735888cf331d2d6506d8d5ca9aa7402f9ad
++[Bug report: https://bugreports.qt.io/browse/QTBUG-59399
++ Patch sent upstream: https://codereview.qt-project.org/#/c/187980/]
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.org>
++---
++ src/corelib/arch/qatomic_cxx11.h |    8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/corelib/arch/qatomic_cxx11.h b/src/corelib/arch/qatomic_cxx11.h
++index bb49aae..d6731ec 100644
++--- a/src/corelib/arch/qatomic_cxx11.h
+++++ b/src/corelib/arch/qatomic_cxx11.h
++@@ -153,7 +153,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetRelaxed(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed, std::memory_order_relaxed);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++@@ -162,7 +162,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetAcquire(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire, std::memory_order_acquire);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++@@ -171,7 +171,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetRelease(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_release);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_release, std::memory_order_relaxed);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++@@ -180,7 +180,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetOrdered(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acq_rel);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acq_rel, std::memory_order_acquire);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++-- 
++1.7.10.4
++
