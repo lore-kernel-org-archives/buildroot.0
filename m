@@ -1,83 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 10:28:14 +0100
-Subject: [Buildroot] [git commit] netsniff-ng: fix build with kernel headers
-	v4.10+
-Message-ID: <20170310092852.58EED80E61@busybox.osuosl.org>
+Date: Thu, 9 Mar 2017 23:29:29 +0100
+Subject: [Buildroot] [git commit] s6-portable-utils: new package
+Message-ID: <20170310092852.4C12D8000A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d9161f863c8425dd6b0b4145a6f3ab6f83dfc27
+commit: https://git.buildroot.net/buildroot/commit/?id=401b8f9501411c5ed1db85d598661ac9e5b111b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream patch removing use of GENL_ID_GENERATE that was dropped in kernel
-version 4.10.
+This new package provides s6-portable-utils, a set of tiny general Unix
+utilities, often performing well-known tasks such as cut and grep, but
+optimized for simplicity and small size.
 
-Fixes:
-http://autobuild.buildroot.net/results/58d/58d7809cae739f728c58291f2111684d6c0578f3/
-http://autobuild.buildroot.net/results/65c/65ce9807116ca70908e0aabae59a36c7774dfa7a/
-http://autobuild.buildroot.net/results/64b/64b3f8af2ebc5a14ecbef72039ef527b5d71f12c/
-
-Cc: Joris Lijssens <joris.lijssens@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/s6-portable-utils/Config.in              | 12 +++++++++
+ package/s6-portable-utils/s6-portable-utils.hash |  2 ++
+ package/s6-portable-utils/s6-portable-utils.mk   | 34 ++++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
 
-diff --git a/package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch b/package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 19392e0..94827d2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -443,6 +443,7 @@ F:	package/ninja/
+ F:	package/s6/
+ F:	package/s6-dns/
+ F:	package/s6-networking/
++F:	package/s6-portable-utils/
+ F:	package/s6-rc/
+ F:	package/skalibs/
+ F:	package/smack/
+diff --git a/package/Config.in b/package/Config.in
+index d12649e..d47e38f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1803,6 +1803,7 @@ menu "System tools"
+ 	source "package/rsyslog/Config.in"
+ 	source "package/runc/Config.in"
+ 	source "package/s6/Config.in"
++	source "package/s6-portable-utils/Config.in"
+ 	source "package/s6-rc/Config.in"
+ 	source "package/scrub/Config.in"
+ 	source "package/scrypt/Config.in"
+diff --git a/package/s6-portable-utils/Config.in b/package/s6-portable-utils/Config.in
 new file mode 100644
-index 0000000..4ccf9d6
+index 0000000..86ebc4c
 --- /dev/null
-+++ b/package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch
-@@ -0,0 +1,48 @@
-+From 88ec2ad37cabb3d3b7ca0e8e5ea3d682c083618d Mon Sep 17 00:00:00 2001
-+From: Tobias Klauser <tklauser@distanz.ch>
-+Date: Mon, 6 Mar 2017 12:22:57 +0100
-+Subject: [PATCH] netsniff-ng: nlmsg: Drop dissection of GENL_ID_GENERATE type
++++ b/package/s6-portable-utils/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_S6_PORTABLE_UTILS
++	bool "s6-portable-utils"
++	select BR2_PACKAGE_SKALIBS
++	depends on BR2_USE_MMU # skalibs
++	help
++	  s6-portable-utils is a set of tiny general Unix utilities,
++	  often performing well-known tasks such as cut and grep, but
++	  optimized for simplicity and small size. They were designed
++	  for embedded systems and other constrained environments, but
++	  they work everywhere.
 +
-+After kernel commit a07ea4d9941a ("genetlink: no longer support using
-+static family IDs"), GENL_ID_GENERATE is no longer exposed to userspace
-+(and actually should never have been). Change the genl nlmsg dissector
-+to only consider the nlctrl family and the two other static family IDs
-+needed for workarounds. All other family IDs are considered dynamically
-+generated.
++	  http://skarnet.org/software/s6-portable-utils/
+diff --git a/package/s6-portable-utils/s6-portable-utils.hash b/package/s6-portable-utils/s6-portable-utils.hash
+new file mode 100644
+index 0000000..a03e6cd
+--- /dev/null
++++ b/package/s6-portable-utils/s6-portable-utils.hash
+@@ -0,0 +1,2 @@
++# Locally generated
++sha256 cde145b7b9d1f1685f271c45c8aed635e74221689bb8ec21a11b3e5a252d1c4e s6-portable-utils-2.1.0.0.tar.gz
+diff --git a/package/s6-portable-utils/s6-portable-utils.mk b/package/s6-portable-utils/s6-portable-utils.mk
+new file mode 100644
+index 0000000..7461450
+--- /dev/null
++++ b/package/s6-portable-utils/s6-portable-utils.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# s6-portable-utils
++#
++################################################################################
 +
-+Fixes #171
-+Reported-by: Jaroslav ??karvada <jskarvad@redhat.com>
-+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 88ec2ad37cabb
++S6_PORTABLE_UTILS_VERSION = 2.1.0.0
++S6_PORTABLE_UTILS_SITE = http://skarnet.org/software/s6-portable-utils
++S6_PORTABLE_UTILS_LICENSE = ISC
++S6_PORTABLE_UTILS_LICENSE_FILES = COPYING
++S6_PORTABLE_UTILS_DEPENDENCIES = skalibs
 +
-+ proto_nlmsg.c | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
++S6_PORTABLE_UTILS_CONF_OPTS = \
++	--prefix=/usr \
++	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
++	--with-include=$(STAGING_DIR)/usr/include \
++	--with-dynlib=$(STAGING_DIR)/usr/lib \
++	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
++	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
++	$(SHARED_STATIC_LIBS_OPTS)
 +
-+diff --git a/proto_nlmsg.c b/proto_nlmsg.c
-+index f8993e794a54..f2064059be08 100644
-+--- a/proto_nlmsg.c
-++++ b/proto_nlmsg.c
-+@@ -242,9 +242,15 @@ static const char *nlmsg_rtnl_type2str(uint16_t type)
-+ static const char *nlmsg_genl_type2str(uint16_t type)
-+ {
-+ 	switch (type) {
-+-	case GENL_ID_GENERATE:	return "id gen";
-+-	case GENL_ID_CTRL:	return "id ctrl";
-+-	default:		return NULL;
-++	case GENL_ID_CTRL:	return "nlctrl";
-++#if defined(GENL_ID_PCMRAID)
-++	case GENL_ID_PCMRAID:	return "pcmraid";
-++#endif
-++#if defined(GENL_ID_VFS_DQUOT)
-++	case GENL_ID_VFS_DQUOT:	return "vfs dquot";
-++#endif
-++	/* only dynamic family IDs should be used starting with Linux 4.10 */
-++	default:		return "dynamic";
-+ 	}
-+ }
-+ 
-+-- 
-+2.11.0
++define S6_PORTABLE_UTILS_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_PORTABLE_UTILS_CONF_OPTS))
++endef
 +
++define S6_PORTABLE_UTILS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define S6_PORTABLE_UTILS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
