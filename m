@@ -1,133 +1,66 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
-Date: Thu,  9 Mar 2017 15:20:59 +0100
-Subject: [Buildroot] [PATCH v3 1/1] dc3dd: new package
-In-Reply-To: <1488876138-19003-1-git-send-email-benoit.allard@greenbone.net>
-References: <1488876138-19003-1-git-send-email-benoit.allard@greenbone.net>
-Message-ID: <1489069259-4866-1-git-send-email-benoit.allard@greenbone.net>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 9 Mar 2017 15:53:37 +0100
+Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
+In-Reply-To: <CAOMZO5BxKvub7SRbiwdDFc0W6Kxr=V8nj7uA=WYUc_iAGAQpNw@mail.gmail.com>
+References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
+ <20170306212225.0819a97b@free-electrons.com>
+ <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
+ <20170306213121.203079d8@free-electrons.com>
+ <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
+ <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
+ <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
+ <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
+ <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
+ <CAOMZO5BxKvub7SRbiwdDFc0W6Kxr=V8nj7uA=WYUc_iAGAQpNw@mail.gmail.com>
+Message-ID: <CAAMH-ythsVpak9K2JqXG5qR3gXNOgWQ60vXxMwvRKPksbrVOnQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We actually prefer the version 7.2.641 (over 7.2.646) as the
-content of the release is identical and the 641 has the advantage
-of providing a proper .tar.xz file.
+Hi Fabio,
 
-Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
----
-Changes v1 -> v2 (Suggestions by Arnoud)
-  - Fix line lengths in Config.in
-  - Add a locally calculated sha256
-  - Use a version that has a proper tar.xz file
-  - Correct license to be GPLv3+
-  - Add patch to not build the manpage
-Changes v2 -> v3
-  - Add dependency on THREADS
-  - Add conflict with musl
+On Wed, Mar 8, 2017 at 4:47 PM, Fabio Estevam <festevam@gmail.com> wrote:
+> Hi Gary,
+>
+> On Wed, Mar 8, 2017 at 12:17 PM, Gary Bisson
+> <gary.bisson@boundarydevices.com> wrote:
+>
+>> Can you tell me where is DRM_MODE_OBJECT_PLANE defined in your case?
+>>
+>> Here is my output:
+>> $ grep -rn DRM_MODE_OBJECT_PLANE output/host/usr/arm-buildroot-linux-gnueabihf/
+>> output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/libdrm/drm_mode.h:336:#define
+>> DRM_MODE_OBJECT_PLANE 0xeeeeeeee
+>
+> I see them defined in two places here:
+>
+> $ grep -rn DRM_MODE_OBJECT_PLANE output/host/
+> output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/drm/drm_mode.h:336:#define
+> DRM_MODE_OBJECT_PLANE 0xeeeeeeee
+> output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/libdrm/drm_mode.h:336:#define
+> DRM_MODE_OBJECT_PLANE 0xeeeeeeee
 
----
- DEVELOPERS                      |  3 +++
- package/Config.in               |  1 +
- package/dc3dd/0001-no_man.patch | 12 ++++++++++++
- package/dc3dd/Config.in         | 11 +++++++++++
- package/dc3dd/dc3dd.hash        |  4 ++++
- package/dc3dd/dc3dd.mk          | 13 +++++++++++++
- 6 files changed, 44 insertions(+)
- create mode 100644 package/dc3dd/0001-no_man.patch
- create mode 100644 package/dc3dd/Config.in
- create mode 100644 package/dc3dd/dc3dd.hash
- create mode 100644 package/dc3dd/dc3dd.mk
+So it means your toolchain is using kernel headers >= 4.7.
+http://lxr.free-electrons.com/ident?v=4.6;i=DRM_MODE_OBJECT_PLANE
+http://lxr.free-electrons.com/ident?v=4.7;i=DRM_MODE_OBJECT_PLANE
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ff72ca1..e0a28a6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -147,6 +147,9 @@ F:	package/taskd/
- N:	Benjamin Kamath <kamath.ben@gmail.com>
- F:	package/lapack/
- 
-+N:	Beno?t Allard <benoit.allard@greenbone.net>
-+F:	package/dc3dd/
-+
- N:	Bernd Kuhls <bernd.kuhls@t-online.de>
- F:	package/apache/
- F:	package/apr/
-diff --git a/package/Config.in b/package/Config.in
-index cfe7fc6..d0fdca4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1767,6 +1767,7 @@ menu "System tools"
- 	source "package/cpuload/Config.in"
- 	source "package/dcron/Config.in"
- 	source "package/ddrescue/Config.in"
-+	source "package/dc3dd/Config.in"
- 	source "package/debianutils/Config.in"
- 	source "package/docker-containerd/Config.in"
- 	source "package/docker-engine/Config.in"
-diff --git a/package/dc3dd/0001-no_man.patch b/package/dc3dd/0001-no_man.patch
-new file mode 100644
-index 0000000..07bf713
---- /dev/null
-+++ b/package/dc3dd/0001-no_man.patch
-@@ -0,0 +1,12 @@
-+--- a/Makefile.in	2017-03-06 16:42:29.728814841 +0100
-++++ b/Makefile.in	2017-03-06 16:42:54.191899036 +0100
-+@@ -685,7 +685,7 @@
-+ target_alias = @target_alias@
-+ top_builddir = @top_builddir@
-+ top_srcdir = @top_srcdir@
-+-SUBDIRS = lib src man po
-++SUBDIRS = lib src po
-+ EXTRA_DIST = cfg.mk maint.mk \
-+   .prev-version THANKS-to-translators THANKStt.in \
-+   .version \
-+
-diff --git a/package/dc3dd/Config.in b/package/dc3dd/Config.in
-new file mode 100644
-index 0000000..63066f9
---- /dev/null
-+++ b/package/dc3dd/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_DC3DD
-+	bool "dc3dd"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	help
-+	  dc3dd is a patch to the GNU dd program, this version has
-+	  several features intended for forensic acquisition of data.
-+	  Highlights include hashing on-the-fly, split output files,
-+	  pattern writing, a progress meter, and file verification.
-+
-+	  https://sourceforge.net/projects/dc3dd/
-diff --git a/package/dc3dd/dc3dd.hash b/package/dc3dd/dc3dd.hash
-new file mode 100644
-index 0000000..5490d8d
---- /dev/null
-+++ b/package/dc3dd/dc3dd.hash
-@@ -0,0 +1,4 @@
-+# From https://sourceforge.net/projects/dc3dd/files/dc3dd/7.2/
-+sha1 1bfe81a921a8473a6ecb46f328ecaab761afb55d dc3dd-7.2.641.tar.xz
-+# Locally computed
-+sha256 7f50aadc38649845ab11014d11013928411c9d2128c941e9630939d4c28cae6d  dc3dd-7.2.641.tar.xz
-diff --git a/package/dc3dd/dc3dd.mk b/package/dc3dd/dc3dd.mk
-new file mode 100644
-index 0000000..3c2aebe
---- /dev/null
-+++ b/package/dc3dd/dc3dd.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# dc3dd
-+#
-+################################################################################
-+
-+DC3DD_VERSION = 7.2.641
-+DC3DD_SOURCE = dc3dd-$(DC3DD_VERSION).tar.xz
-+DC3DD_SITE = https://downloads.sourceforge.net/project/dc3dd/dc3dd/7.2
-+DC3DD_LICENSE = GPLv3+
-+DC3DD_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
--- 
-2.1.4
+Not sure which header version the Linaro toolchain is using but it's
+definitely older than 4.7.
+
+From the manifest we know the toolchain is build on a machine running
+a 4.4.x kernel:
+https://releases.linaro.org/components/toolchain/binaries/6.3-2017.02/arm-linux-gnueabihf/gcc-linaro-6.3.1-2017.02-linux-manifest.txt
+
+>> Also, is adding my fix to your build bringing any issue?
+>
+> Just tried your patch and the build still succeeds with it.
+
+Thanks for testing it out, good to here it works but I'm still not
+sure adding this libdrm/drm_mode.h is the best solution as-is.
+
+Thomas, do you have any advice on what's the best approach here.
+
+Regards,
+Gary
