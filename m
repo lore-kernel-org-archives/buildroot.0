@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 22:29:30 +0100
-Subject: [Buildroot] [PATCH 1/6] xdriver_xf86-video-glide: remove broken
- package
-In-Reply-To: <20170307235054.25149-1-arnout@mind.be>
+Date: Thu, 9 Mar 2017 22:30:05 +0100
+Subject: [Buildroot] [PATCH 3/6] qt: remove broken iBase driver
+In-Reply-To: <trinity-f8215723-32a4-44fc-8031-333c19751e54-1488957559946@3capp-gmx-bs66>
 References: <20170307235054.25149-1-arnout@mind.be>
-Message-ID: <20170309222930.62bc3492@free-electrons.com>
+ <20170307235054.25149-3-arnout@mind.be>
+ <trinity-f8215723-32a4-44fc-8031-333c19751e54-1488957559946@3capp-gmx-bs66>
+Message-ID: <20170309223005.3754bb93@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 8 Mar 2017 00:50:49 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> This package has been marked as broken since 2010. No need for legacy
-> handling.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/x11r7/Config.in                                    |  1 -
->  package/x11r7/xdriver_xf86-video-glide/Config.in           | 10 ----------
->  .../xdriver_xf86-video-glide/xdriver_xf86-video-glide.hash |  2 --
->  .../xdriver_xf86-video-glide/xdriver_xf86-video-glide.mk   | 14 --------------
->  4 files changed, 27 deletions(-)
->  delete mode 100644 package/x11r7/xdriver_xf86-video-glide/Config.in
->  delete mode 100644 package/x11r7/xdriver_xf86-video-glide/xdriver_xf86-video-glide.hash
->  delete mode 100644 package/x11r7/xdriver_xf86-video-glide/xdriver_xf86-video-glide.mk
+On Wed, 8 Mar 2017 08:19:19 +0100, Peter Seiderer wrote:
 
-All applied, thanks!
+> Missing some code deletion from package/qt/qt.mk file:
+> 
+> ifeq ($(BR2_PACKAGE_QT_IBASE),y)
+> QT_CONFIGURE_OPTS += -qt-sql-ibase
+> endif
+
+Well spotted, I've tweaked Arnout's patch when applying to remove this
+part of the code. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
