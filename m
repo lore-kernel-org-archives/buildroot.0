@@ -1,126 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 23:07:29 +0100
-Subject: [Buildroot] [git commit] s6-dns: new package
-Message-ID: <20170309220804.D962182560@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 9 Mar 2017 22:36:38 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] qt5base: fix compilation
+	error with gcc-4.8
+Message-ID: <20170309220808.5A7188211D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c3ed96d1ba5a334b9d78a7252404a1f811ad90e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=db30e441b4cd09b646f9d1883a43f144b7b64148
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-This new package provides s6-dns, a suite of DNS client programs and
-libraries for Unix systems, as an alternative to the BIND, djbdns or
-other DNS clients.
+Add a patch to fix a compilation error when using gcc-4.8.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Bug report: https://bugreports.qt.io/browse/QTBUG-59399
+Patch sent upstream: https://codereview.qt-project.org/#/c/187980/
+
+Fixes:
+  http://autobuild.buildroot.net/results/2ac/2ac16335d16cd53cceeabda8f963c9b288a9a1c8/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 80fbef58533ad6b3ea7e24dbd1a7f165e9177e9d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/s6-dns/Config.in   | 10 ++++++++++
- package/s6-dns/s6-dns.hash |  2 ++
- package/s6-dns/s6-dns.mk   | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 59 insertions(+)
+ ...s-explicit-failure-mode-to-std-atomic-com.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 73413eb..f67d416 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -441,6 +441,7 @@ F:	package/hicolor-icon-theme/
- F:	package/jemalloc/
- F:	package/ninja/
- F:	package/s6/
-+F:	package/s6-dns/
- F:	package/skalibs/
- F:	package/smack/
- F:	package/xvisor/
-diff --git a/package/Config.in b/package/Config.in
-index 1cb584c..bca190c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1640,6 +1640,7 @@ endif
- 	source "package/rsync/Config.in"
- 	source "package/rtorrent/Config.in"
- 	source "package/rtptools/Config.in"
-+	source "package/s6-dns/Config.in"
- 	source "package/samba4/Config.in"
- 	source "package/sconeserver/Config.in"
- 	source "package/ser2net/Config.in"
-diff --git a/package/s6-dns/Config.in b/package/s6-dns/Config.in
+diff --git a/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch b/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
 new file mode 100644
-index 0000000..75917f9
+index 0000000..3a43584
 --- /dev/null
-+++ b/package/s6-dns/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_S6_DNS
-+	bool "s6-dns"
-+	select BR2_PACKAGE_SKALIBS
-+	depends on BR2_USE_MMU # skalibs
-+	help
-+	  s6-dns is a suite of DNS client programs and libraries for
-+	  Unix systems, as an alternative to the BIND, djbdns or other
-+	  DNS clients.
++++ b/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
+@@ -0,0 +1,65 @@
++From c5d7425f8ad391112758db161e3e08f18dc9d299 Mon Sep 17 00:00:00 2001
++From: Marc Mutz <marc.mutz@kdab.com>
++Date: Thu, 26 May 2016 08:30:26 +0200
++Subject: [PATCH] QAtomic: pass explicit failure mode to
++ std::atomic::compare_exchange_strong
 +
-+	  http://skarnet.org/software/s6-dns/
-diff --git a/package/s6-dns/s6-dns.hash b/package/s6-dns/s6-dns.hash
-new file mode 100644
-index 0000000..7cfb9c3
---- /dev/null
-+++ b/package/s6-dns/s6-dns.hash
-@@ -0,0 +1,2 @@
-+# Locally generated
-+sha256 8455f3b1edad8f01a1340cb1242c141755729bfd5d71059739eced5c006539ad s6-dns-2.1.0.0.tar.gz
-diff --git a/package/s6-dns/s6-dns.mk b/package/s6-dns/s6-dns.mk
-new file mode 100644
-index 0000000..d77956f
---- /dev/null
-+++ b/package/s6-dns/s6-dns.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# s6-dns
-+#
-+################################################################################
++... in an attempt to avoid GCC 4.8 errors such as
 +
-+S6_DNS_VERSION = 2.1.0.0
-+S6_DNS_SITE = http://skarnet.org/software/s6-dns
-+S6_DNS_LICENSE = ISC
-+S6_DNS_LICENSE_FILES = COPYING
-+S6_DNS_INSTALL_STAGING = YES
-+S6_DNS_DEPENDENCIES = skalibs
++  bits/atomic_base.h:577:70: error: failure memory model cannot be stronger than success memory model for '__atomic_compare_exchange'
++  return __atomic_compare_exchange_n(&_M_i, &__i1, __i2, 0, __m1, __m2);
++                                                                      ^
 +
-+S6_DNS_CONF_OPTS = \
-+	--prefix=/usr \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
-+	--with-include=$(STAGING_DIR)/usr/include \
-+	--with-dynlib=$(STAGING_DIR)/usr/lib \
-+	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
-+	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
-+	$(SHARED_STATIC_LIBS_OPTS)
++as seen on Android.
 +
-+define S6_DNS_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_DNS_CONF_OPTS))
-+endef
++Change-Id: If046e735888cf331d2d6506d8d5ca9aa7402f9ad
++[Bug report: https://bugreports.qt.io/browse/QTBUG-59399
++ Patch sent upstream: https://codereview.qt-project.org/#/c/187980/]
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.org>
++---
++ src/corelib/arch/qatomic_cxx11.h |    8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
 +
-+define S6_DNS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
++diff --git a/src/corelib/arch/qatomic_cxx11.h b/src/corelib/arch/qatomic_cxx11.h
++index bb49aae..d6731ec 100644
++--- a/src/corelib/arch/qatomic_cxx11.h
+++++ b/src/corelib/arch/qatomic_cxx11.h
++@@ -153,7 +153,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetRelaxed(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed, std::memory_order_relaxed);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++@@ -162,7 +162,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetAcquire(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire, std::memory_order_acquire);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++@@ -171,7 +171,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetRelease(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_release);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_release, std::memory_order_relaxed);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++@@ -180,7 +180,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetOrdered(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acq_rel);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acq_rel, std::memory_order_acquire);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++-- 
++1.7.10.4
 +
-+define S6_DNS_REMOVE_STATIC_LIB_DIR
-+	rm -rf $(TARGET_DIR)/usr/lib/s6-dns
-+endef
-+
-+S6_DNS_POST_INSTALL_TARGET_HOOKS += S6_DNS_REMOVE_STATIC_LIB_DIR
-+
-+define S6_DNS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define S6_DNS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+$(eval $(generic-package))
