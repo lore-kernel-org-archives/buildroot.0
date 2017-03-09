@@ -1,32 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 21:53:08 +0100
-Subject: [Buildroot] [PATCH v2 1/2] lighttpd: carry common keywords out
- to variables
-In-Reply-To: <20170308204332.11313-1-philipp.skadorov@savoirfairelinux.com>
-References: <20170308211124.50d94081@free-electrons.com>
- <20170308204332.11313-1-philipp.skadorov@savoirfairelinux.com>
-Message-ID: <20170309215308.0e88efbe@free-electrons.com>
+Date: Thu, 9 Mar 2017 21:52:39 +0100
+Subject: [Buildroot] [git commit] lighttpd: source default file from startup
+	script
+Message-ID: <20170309205330.98C288179C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=61fb9bc3d696a48a09c0be63e29e1e28b706014e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  8 Mar 2017 15:43:31 -0500, Philipp Skadorov wrote:
-> S50lighttpd contains repeating keywords that are worth carrying out as
-> variables: pid file name, daemon name, config file name.
-> 
-> Signed-off-by: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
-> ---
->  package/lighttpd/S50lighttpd | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+lighttpd server runs cgi application that has no way to get environment
+variables that are set up for it.
 
-Both patches applied. Thanks!
+S50lighttpd is changed to source /etc/default/lighttpd file where these
+environment variables can be set up.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lighttpd/S50lighttpd | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
+index 7a14ec8..b3518cd 100644
+--- a/package/lighttpd/S50lighttpd
++++ b/package/lighttpd/S50lighttpd
+@@ -7,6 +7,8 @@ DAEMON=/usr/sbin/$NAME
+ PID_FILE="/var/run/$NAME.pid"
+ CONF_FILE="/etc/$NAME/$NAME.conf"
+ 
++[ -r /etc/default/$NAME ] && . /etc/default/$NAME
++
+ start() {
+ 	printf "Starting lighttpd: "
+ 	start-stop-daemon -S -q -p $PID_FILE --exec $DAEMON -- -f $CONF_FILE
