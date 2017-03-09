@@ -1,75 +1,43 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  9 Mar 2017 12:52:47 +0100
-Subject: [Buildroot] [PATCH v3] boot/uboot: fix build for sunxi targets
-Message-ID: <20170309115247.16981-1-joerg.krause@embedded.rocks>
+From: Jagan Teki <jagannadh.teki@gmail.com>
+Date: Thu, 9 Mar 2017 17:59:02 +0530
+Subject: [Buildroot] libglu config error, while X.Org enabled
+In-Reply-To: <20170308210957.44b05474@free-electrons.com>
+References: <CAD6G_RTkov1OJatw14LDVTNodndDav5JSeqgPF0FajGKg=4J7A@mail.gmail.com>
+ <CAOMZO5BrHBr8HkrC7hepcAMHE-sgE9MbhQmnWhybwKqqYuW9xQ@mail.gmail.com>
+ <20170308210957.44b05474@free-electrons.com>
+Message-ID: <CAD6G_RS9ZkHAhNW++=g34Jf5fU7uJnFMnf7aeCcazjZhgPySHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 2017.01 U-Boot needs to run the binman tool on the host machine
-for building the 'u-boot-sunxi-with-spl.bin' target. The binman tool is written
-in Python 2 and therefore needs a Python 2 interpreter. The python
-scripts sets the shebang to: `#!/usr/bin/env python`. For modern Linux
-distributions `python` is set to the Python 3 interpreter. In this
-case, building U-Boot for a sunxi-based target fails:
+On Thu, Mar 9, 2017 at 1:39 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Wed, 8 Mar 2017 14:35:31 -0300, Fabio Estevam wrote:
+>
+>> It seems you want to use X11 with mx6. In this case you would need to
+>> use Russell's X11 driver:
+>>
+>> http://git.arm.linux.org.uk/cgit/xf86-video-armada.git/tree/README?h=unstable-devel
+>>
+>> Then you need to create support for it in Buildroot.
+>
+> Or you can also use package/x11r7/xdriver_xf86-video-imx-viv/, which is
+> the X11 driver from Freescale, based on the proprietary Vivante OpenGL
+> implementation.
+>
+> However, the full OpenGL support in Buildroot with Vivante is not
+> completely correct, so it won't work out of the box.
 
-```
-  BINMAN  u-boot-sunxi-with-spl.bin
-  File "./tools/binman/binman", line 49
-    print result
-               ^
-SyntaxError: Missing parentheses in call to 'print'
-make[1]: *** [Makefile:1090: u-boot-sunxi-with-spl.bin] Error 1
-```
+I'm using Etnaviv, I think this is dealing with Vivante may not work
+for Etnaviv.
 
-Add a post patch hook to force the shebang to python2 in case the binman
-file exists.
-
-Reported upstream:
-https://lists.denx.de/pipermail/u-boot/2017-March/283164.html
-
-Tested for U-Boot versions:
- * 2016.07 (no binman tool, custom version)
- * 2017.01 (binman tool, latest version)
- * 2017.03-rc3 (binman tool, custom version)
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-v3:
- * use a post patch hook to support custom U-Boot versions (suggested by Thomas)
-v2:
- * add patch to fix shebang instead of adding a host dependency for
-   python (suggested by Peter Korsgaard)
----
- boot/uboot/uboot.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 1e22eaa8e..bbf61fca5 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -36,6 +36,18 @@ BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
- endif
- endif
- 
-+# The binman tool was introduced in version 2017.01. The tool is a set
-+# python scripts and requires a python2 interpreter. Force the shebang
-+# python2 to ensure the correct interpreter is used on host systems
-+# where python defaults to the python3 interpreter. 
-+define UBOOT_TRY_SED_SHEBANG_BINMAN
-+	if test -f $(@D)/tools/binman/binman; then \
-+		sed -i '1s_^\(#!/usr/bin/env \).*_\1python2_' \
-+			$(@D)/tools/binman/binman; \
-+	fi
-+endef
-+UBOOT_POST_PATCH_HOOKS += UBOOT_TRY_SED_SHEBANG_BINMAN
-+
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_BIN),y)
- UBOOT_BINS += u-boot.bin
- endif
+thanks!
 -- 
-2.12.0
+Jagan Teki
+Free Software Engineer | www.openedev.com
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
