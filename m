@@ -1,51 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 Mar 2017 23:17:54 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2017-03-07
-In-Reply-To: <874lz2ayub.fsf@dell.be.48ers.dk>
-References: <20170308072845.15B9C207FC@mail.free-electrons.com>
- <e0aecdb6-c5b8-db8e-8113-9a76c7a466ba@cdf123.net>
- <20170308233230.7c2a12f2@free-electrons.com>
- <874lz2ayub.fsf@dell.be.48ers.dk>
-Message-ID: <20170309221754.GC3785@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Mar 2017 23:33:12 +0100
+Subject: [Buildroot] [Patch v3 6/9] s6-rc: new package
+In-Reply-To: <1482182955-23916-7-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1482182955-23916-7-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20170309233312.2c10dee9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Chris, All,
+Hello,
 
-On 2017-03-09 23:07 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->  >> > Build failures related to your packages:
->  >> > 
->  >> >     mips64el | firejail-0.9.44.8 |
->  >> > http://autobuild.buildroot.net/results/84d9b5dc955895e1a1c1074e3917c44c8fc00365
+On Mon, 19 Dec 2016 22:29:12 +0100, Eric Le Bihan wrote:
+> This new package provides s6-rc, a service manager for s6-based systems,
+> i.e. a suite of programs that can start and stop services, both
+> long-running daemons and one-time initialization scripts, in the proper
+> order according to a dependency tree.
 > 
->  > I see two things here:
+> The host variant is provided so s6-rc-compile is available and can
+> be used to build the services database offline, either in a package
+> Makefile or a post-build script.
 > 
->  > common.c:48: error: '__NR_setns' undeclared (first use in this function)
-> 
->  > This *could* be related to too old kernel headers, I guess setns() is a
->  > fairly modern system call.
-> 
-> That was my thought as well, but it looks like setns was added in 3.7
-> for mips, and this toolchain is using 3.9.
-> 
-> I did a quick 'make firejail' with that defconfig, and I cannot
-> reproduce the issue here :/
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/Config.in        |  1 +
+>  package/s6-rc/Config.in  | 11 ++++++++
+>  package/s6-rc/s6-rc.hash |  2 ++
+>  package/s6-rc/s6-rc.mk   | 73 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 87 insertions(+)
+>  create mode 100644 package/s6-rc/Config.in
+>  create mode 100644 package/s6-rc/s6-rc.hash
+>  create mode 100644 package/s6-rc/s6-rc.mk
 
-Same here. I even rebuilt in my autobuilder chroot, and still no luck:
-it builds fine for me here... :-/
+Applied to master, thanks.
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
