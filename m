@@ -1,40 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 22:09:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake: set
- CMAKE_SYSTEM_PROCESSOR correctly on powerpc64{, le}
-In-Reply-To: <f05fe88f-a347-046d-2ab3-d4bd5529d938@au1.ibm.com>
-References: <f05fe88f-a347-046d-2ab3-d4bd5529d938@au1.ibm.com>
-Message-ID: <20170309220922.24ba50d9@free-electrons.com>
+Date: Thu, 9 Mar 2017 22:10:28 +0100
+Subject: [Buildroot] [git commit] package/libaio: enable on powerpc64(le)
+Message-ID: <20170309211234.D5611822D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1916f29e97e1bdb043f9cba17d203ba0843826f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 9 Mar 2017 11:57:10 +1100, Daniel Black wrote:
-> Like ARM, BR2_ARCH doesn't correspond to the uname -m. With cmake
-> CMAKE_SYSTEM_PROCESSOR is expected to contain the uname -m value.
-> 
-> So we change CMAKE_SYSTEM_PROCESSOR from powerpc64 -> ppc64 (big endian)
-> and powerpc64le -> ppc64le (little endian).
-> 
-> This corrects the cross compile to the powerpc64{,le} target
-> architecture for the mariadb (and possibly others) packages that
-> use the CMAKE_SYSTEM_PROCESSOR variable and compare it against
-> Power64 based architectures.
-> 
-> Signed-off-by: Daniel Black <daniel.black@au.ibm.com>
-> Acked-by: Cyril Bur <cyrilbur@gmail.com>
-> ---
->  package/pkg-cmake.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+libaio has support for powerpc64(le), so enable the corresponding
+package on those architectures.
 
-Applied to master, thanks.
+Signed-off-by: Daniel Black <daniel.black@au.ibm.com>
+Acked-by: Cyril Bur <cyrilbur@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libaio/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libaio/Config.in b/package/libaio/Config.in
+index 3031c89..ea21a36 100644
+--- a/package/libaio/Config.in
++++ b/package/libaio/Config.in
+@@ -2,7 +2,8 @@ config BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+ 		BR2_m68k || BR2_mips || BR2_mipsel || BR2_powerpc || \
+-		BR2_sparc || BR2_x86_64
++		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc || \
++		BR2_x86_64
+ 
+ config BR2_PACKAGE_LIBAIO
+ 	bool "libaio"
