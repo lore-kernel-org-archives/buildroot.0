@@ -1,50 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 21:36:05 +0100
-Subject: [Buildroot] [PATCH 1/1] test-pkg: Extend the logfile with the
- first command as well
-In-Reply-To: <1489072521-5514-1-git-send-email-benoit.allard@greenbone.net>
-References: <1489072521-5514-1-git-send-email-benoit.allard@greenbone.net>
-Message-ID: <20170309213605.20997679@free-electrons.com>
+Date: Thu, 9 Mar 2017 21:36:36 +0100
+Subject: [Buildroot] [git commit] firejail: fix logic for comment
+Message-ID: <20170309203641.402D88226B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bccf48634d58a0368667d0c58a17bbb0e6d331db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  9 Mar 2017 16:15:21 +0100, Beno?t Allard wrote:
-> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
-> ---
->  support/scripts/test-pkg | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+firejail depends on !uClibc, so the "firejail needs !uClibc" comment
+should be displayed when we do have uClibc. Right now the logic is just
+the other way around, so flip it.
 
-Thanks, applied.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/firejail/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
-> index a040ce1..0e7779d 100755
-> --- a/support/scripts/test-pkg
-> +++ b/support/scripts/test-pkg
-> @@ -108,7 +108,7 @@ build_one() {
->  	_EOF_
->      cat "${cfg}" >>"${dir}/.config"
->  
-> -    if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
-> +    if ! make O="${dir}" olddefconfig > "${dir}/logfile" 2>&1; then
-
-To be honest, I wasn't sure if we wanted > or >> here. It matters if
-you restart the test-pkg command after fixing issues. Do you want
-logfiles to contain the log of all previous builds, or just the current
-build?
-
-For now, I've applied your patch as-is, with just ">", which means the
-logfile will only contain the output of the last build. It seems better
-to me this way, but we'll see if other folks disagree.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/firejail/Config.in b/package/firejail/Config.in
+index 8c5338e..1742b65 100644
+--- a/package/firejail/Config.in
++++ b/package/firejail/Config.in
+@@ -16,4 +16,4 @@ config BR2_PACKAGE_FIREJAIL
+ 
+ comment "firejail needs a glibc or musl toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || !BR2_TOOLCHAIN_HAS_THREADS
