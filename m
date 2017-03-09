@@ -1,49 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 21:52:33 +0100
-Subject: [Buildroot] [git commit] lighttpd: carry common keywords out to
-	variables
-Message-ID: <20170309205330.8AF6F822CC@busybox.osuosl.org>
+Date: Thu, 9 Mar 2017 21:53:18 +0100
+Subject: [Buildroot] [git commit] ti-uim: moved to github
+Message-ID: <20170309205330.AFC478179C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bee455bd805d19f0b591dfecb87d90ff64af571
+commit: https://git.buildroot.net/buildroot/commit/?id=c63b4ab877f6c9cd1690a005c382400ff13dae7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-S50lighttpd contains repeating keywords that are worth carrying out as
-variables: pid file name, daemon name, config file name.
+gitorious.org is down. Use the github repo instead.
 
-Signed-off-by: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
+Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lighttpd/S50lighttpd | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/ti-uim/ti-uim.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
-index 44ac257..7a14ec8 100644
---- a/package/lighttpd/S50lighttpd
-+++ b/package/lighttpd/S50lighttpd
-@@ -2,15 +2,19 @@
- #
- # Starts lighttpd.
- #
-+NAME=lighttpd
-+DAEMON=/usr/sbin/$NAME
-+PID_FILE="/var/run/$NAME.pid"
-+CONF_FILE="/etc/$NAME/$NAME.conf"
+diff --git a/package/ti-uim/ti-uim.mk b/package/ti-uim/ti-uim.mk
+index b498180..1c78db0 100644
+--- a/package/ti-uim/ti-uim.mk
++++ b/package/ti-uim/ti-uim.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- start() {
- 	printf "Starting lighttpd: "
--	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
-+	start-stop-daemon -S -q -p $PID_FILE --exec $DAEMON -- -f $CONF_FILE
- 	echo "OK"
- }
- stop() {
- 	printf "Stopping lighttpd: "
--	start-stop-daemon -K -q -p /var/run/lighttpd.pid
-+	start-stop-daemon -K -q -p $PID_FILE
- 	echo "OK"
- }
- restart() {
+ TI_UIM_VERSION = c73894456df5def97111cb33d2106b684b8b7959
+-TI_UIM_SITE = git://gitorious.org/uim/uim.git
++TI_UIM_SITE = $(call github,96boards,uim,$(TI_UIM_VERSION))
+ TI_UIM_LICENSE = GPLv2+
+ 
+ define TI_UIM_BUILD_CMDS
