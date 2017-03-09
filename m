@@ -1,14 +1,14 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 9 Mar 2017 17:01:42 +0000
-Subject: [Buildroot] [PATCH] qt5base: fix compilation error with gcc-4.8
-Message-ID: <20170309170142.17703-1-Vincent.Riera@imgtec.com>
+Date: Thu, 9 Mar 2017 17:03:15 +0000
+Subject: [Buildroot] [PATCH v2] qt5base: fix compilation error with gcc-4.8
+Message-ID: <20170309170315.18299-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch for fix a compilation error when using gcc-4.8.
+Add a patch to fix a compilation error when using gcc-4.8.
 
 Bug report: https://bugreports.qt.io/browse/QTBUG-59399
 Patch sent upstream: https://codereview.qt-project.org/#/c/187980/
@@ -18,6 +18,8 @@ Fixes:
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
+Changes v1->v2: fix typo in commit message.
+
  ...s-explicit-failure-mode-to-std-atomic-com.patch | 71 ++++++++++++++++++++++
  1 file changed, 71 insertions(+)
  create mode 100644 package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
