@@ -1,58 +1,42 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Thu, 9 Mar 2017 08:53:30 +0100
-Subject: [Buildroot] [PATCH 2/2] ti-uim: bump to latest version
-In-Reply-To: <075bbc11df38f8280c99d15834ec461dad0d6654.1489038337.git.baruch@tkos.co.il>
-References: <af8528c725dbee3b80a8a99b2adba50a6ff4114d.1489038337.git.baruch@tkos.co.il>
- <075bbc11df38f8280c99d15834ec461dad0d6654.1489038337.git.baruch@tkos.co.il>
-Message-ID: <20170309075330.vauudriqhipx3cq2@piout.net>
+From: Krzysztof Konopko <kris@youview.com>
+Date: Thu, 9 Mar 2017 09:01:36 +0100
+Subject: [Buildroot] [PATCH] toolchain/external: use -dumpversion to check
+	gcc version
+Message-ID: <20170309080136.4799-1-kris@youview.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/03/2017 at 07:45:37 +0200, Baruch Siach wrote:
-> Also, add a hash file.
-> 
-> Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Currently, `--version` option is used and later matched with a regex to get
+the actual gcc version.  There's a dedicated gcc option to do exactly that:
+`-dumpversion`.
 
-BTW, I don't think this daemon is necessary anymore with recent kernel
-but I don't exactly remember all the details.
+Also `--version` may return a string customised by a vendor that provides
+the toolchain, which makes the current regex approach error prone.  In
+fact, this situation has been seen with a real customised toolchain.
 
-> ---
->  package/ti-uim/ti-uim.hash | 2 ++
->  package/ti-uim/ti-uim.mk   | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 package/ti-uim/ti-uim.hash
-> 
-> diff --git a/package/ti-uim/ti-uim.hash b/package/ti-uim/ti-uim.hash
-> new file mode 100644
-> index 000000000000..ea64540ba81f
-> --- /dev/null
-> +++ b/package/ti-uim/ti-uim.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 da8a66968f4bf99366ab2b63baf358d937a6b1a5636ef6179c3aa7c852cbd1b2 ti-uim-a0236bc252e6484835ce266ae4a50b361f6a902d.tar.gz
-> diff --git a/package/ti-uim/ti-uim.mk b/package/ti-uim/ti-uim.mk
-> index 1c78db0e6f01..a6e19b87ca9a 100644
-> --- a/package/ti-uim/ti-uim.mk
-> +++ b/package/ti-uim/ti-uim.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TI_UIM_VERSION = c73894456df5def97111cb33d2106b684b8b7959
-> +TI_UIM_VERSION = a0236bc252e6484835ce266ae4a50b361f6a902d
->  TI_UIM_SITE = $(call github,96boards,uim,$(TI_UIM_VERSION))
->  TI_UIM_LICENSE = GPLv2+
->  
-> -- 
-> 2.11.0
-> 
+Signed-off-by: Krzysztof Konopko <kris@youview.com>
+Signed-off-by: Tomasz Szkutkowski <tomasz.szkutkowski@youview.com>
+---
+ toolchain/helpers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Alexandre Belloni, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 6f8723079..6044b7e5f 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -148,7 +148,7 @@ check_gcc_version = \
+        if [ -z "$${expected_version}" ]; then \
+                exit 0 ; \
+        fi; \
+-       real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
++       real_version=`$(1) -dumpversion` ; \
+        if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
+                printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
+                        "$${expected_version}" "$${real_version}" ; \
+--
+2.11.0
+
+This transmission contains information that may be confidential and contain personal views which are not necessarily those of YouView TV Ltd. YouView TV Ltd (Co No:7308805) is a limited liability company registered in England and Wales with its registered address at YouView TV Ltd, 3rd Floor, 10 Lower Thames Street, London, EC3R 6YT. For details see our web site at http://www.youview.com
