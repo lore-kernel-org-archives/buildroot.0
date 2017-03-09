@@ -1,39 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 21:52:39 +0100
-Subject: [Buildroot] [git commit] lighttpd: source default file from startup
-	script
-Message-ID: <20170309205330.98C288179C@busybox.osuosl.org>
+Date: Thu, 9 Mar 2017 21:52:33 +0100
+Subject: [Buildroot] [git commit] lighttpd: carry common keywords out to
+	variables
+Message-ID: <20170309205330.8AF6F822CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61fb9bc3d696a48a09c0be63e29e1e28b706014e
+commit: https://git.buildroot.net/buildroot/commit/?id=7bee455bd805d19f0b591dfecb87d90ff64af571
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lighttpd server runs cgi application that has no way to get environment
-variables that are set up for it.
-
-S50lighttpd is changed to source /etc/default/lighttpd file where these
-environment variables can be set up.
+S50lighttpd contains repeating keywords that are worth carrying out as
+variables: pid file name, daemon name, config file name.
 
 Signed-off-by: Philipp Skadorov <philipp.skadorov@savoirfairelinux.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lighttpd/S50lighttpd | 2 ++
- 1 file changed, 2 insertions(+)
+ package/lighttpd/S50lighttpd | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
-index 7a14ec8..b3518cd 100644
+index 44ac257..7a14ec8 100644
 --- a/package/lighttpd/S50lighttpd
 +++ b/package/lighttpd/S50lighttpd
-@@ -7,6 +7,8 @@ DAEMON=/usr/sbin/$NAME
- PID_FILE="/var/run/$NAME.pid"
- CONF_FILE="/etc/$NAME/$NAME.conf"
+@@ -2,15 +2,19 @@
+ #
+ # Starts lighttpd.
+ #
++NAME=lighttpd
++DAEMON=/usr/sbin/$NAME
++PID_FILE="/var/run/$NAME.pid"
++CONF_FILE="/etc/$NAME/$NAME.conf"
  
-+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
-+
  start() {
  	printf "Starting lighttpd: "
- 	start-stop-daemon -S -q -p $PID_FILE --exec $DAEMON -- -f $CONF_FILE
+-	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
++	start-stop-daemon -S -q -p $PID_FILE --exec $DAEMON -- -f $CONF_FILE
+ 	echo "OK"
+ }
+ stop() {
+ 	printf "Stopping lighttpd: "
+-	start-stop-daemon -K -q -p /var/run/lighttpd.pid
++	start-stop-daemon -K -q -p $PID_FILE
+ 	echo "OK"
+ }
+ restart() {
