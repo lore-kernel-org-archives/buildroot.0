@@ -1,45 +1,33 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  9 Mar 2017 07:45:37 +0200
-Subject: [Buildroot] [PATCH 2/2] ti-uim: bump to latest version
-In-Reply-To: <af8528c725dbee3b80a8a99b2adba50a6ff4114d.1489038337.git.baruch@tkos.co.il>
-References: <af8528c725dbee3b80a8a99b2adba50a6ff4114d.1489038337.git.baruch@tkos.co.il>
-Message-ID: <075bbc11df38f8280c99d15834ec461dad0d6654.1489038337.git.baruch@tkos.co.il>
+Date: Thu,  9 Mar 2017 07:45:36 +0200
+Subject: [Buildroot] [PATCH 1/2] ti-uim: moved to github
+Message-ID: <af8528c725dbee3b80a8a99b2adba50a6ff4114d.1489038337.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, add a hash file.
+gitorious.org is down. Use the github repo instead.
 
 Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/ti-uim/ti-uim.hash | 2 ++
- package/ti-uim/ti-uim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/ti-uim/ti-uim.hash
+ package/ti-uim/ti-uim.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ti-uim/ti-uim.hash b/package/ti-uim/ti-uim.hash
-new file mode 100644
-index 000000000000..ea64540ba81f
---- /dev/null
-+++ b/package/ti-uim/ti-uim.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 da8a66968f4bf99366ab2b63baf358d937a6b1a5636ef6179c3aa7c852cbd1b2 ti-uim-a0236bc252e6484835ce266ae4a50b361f6a902d.tar.gz
 diff --git a/package/ti-uim/ti-uim.mk b/package/ti-uim/ti-uim.mk
-index 1c78db0e6f01..a6e19b87ca9a 100644
+index b49818004989..1c78db0e6f01 100644
 --- a/package/ti-uim/ti-uim.mk
 +++ b/package/ti-uim/ti-uim.mk
-@@ -4,7 +4,7 @@
- #
+@@ -5,7 +5,7 @@
  ################################################################################
  
--TI_UIM_VERSION = c73894456df5def97111cb33d2106b684b8b7959
-+TI_UIM_VERSION = a0236bc252e6484835ce266ae4a50b361f6a902d
- TI_UIM_SITE = $(call github,96boards,uim,$(TI_UIM_VERSION))
+ TI_UIM_VERSION = c73894456df5def97111cb33d2106b684b8b7959
+-TI_UIM_SITE = git://gitorious.org/uim/uim.git
++TI_UIM_SITE = $(call github,96boards,uim,$(TI_UIM_VERSION))
  TI_UIM_LICENSE = GPLv2+
  
+ define TI_UIM_BUILD_CMDS
 -- 
 2.11.0
