@@ -1,40 +1,103 @@
-From: John O'Sullivan <John.OSullivan@BlackBox.com>
-Date: Thu, 9 Mar 2017 16:05:34 +0000
-Subject: [Buildroot] Using  CFLAGS_MODULE in linux.mk
-Message-ID: <1489075532553.82021@BlackBox.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 9 Mar 2017 17:01:42 +0000
+Subject: [Buildroot] [PATCH] qt5base: fix compilation error with gcc-4.8
+Message-ID: <20170309170142.17703-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I am trying to build a kernel module that can have a number of conditional compile options depending on the product variant I am building.
-Outside of buildroot I can do
+Add a patch for fix a compilation error when using gcc-4.8.
 
+Bug report: https://bugreports.qt.io/browse/QTBUG-59399
+Patch sent upstream: https://codereview.qt-project.org/#/c/187980/
 
+Fixes:
+  http://autobuild.buildroot.net/results/2ac/2ac16335d16cd53cceeabda8f963c9b288a9a1c8/
 
-make ARCH=arm modules CFLAGS_MODULE=-DVARIANT_PPG
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ ...s-explicit-failure-mode-to-std-atomic-com.patch | 71 ++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
 
-
-The module picks up the VARIANT_PPG and I can conditionally build the module.
-I am trying to do something similar in buildroot (2013-05). To test this out I tried amending the linux.mk file as follows:
-
-
-LINUX_MAKE_FLAGS+=CFLAGS_MODULE=-DVARIANT_PPG
-
-
-
-
-However when I add this line to linux.mk the variable VARIANT_PPG never seems to be seen in the module.
-Has anyone any suggestions? Is there a reason its not working in the .mk file.
-Is there a better way of doing this?
-
-
-regards
-John
-
-
-________________________________
-
-This email and any files transmitted with it are confidential and are intended for the sole use of the individual to whom they are addressed. Black Box Corporation reserves the right to scan all e-mail traffic for restricted content and to monitor all e-mail in general. If you are not the intended recipient or you have received this email in error, any use, dissemination or forwarding of this email is strictly prohibited. If you have received this email in error, please notify the sender by replying to this email.
+diff --git a/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch b/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
+new file mode 100644
+index 0000000..c05388d
+--- /dev/null
++++ b/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
+@@ -0,0 +1,71 @@
++QAtomic: pass explicit failure mode to std::atomic::compare_exchange_strong
++
++This patch fixes a compilation error when building qt5base with gcc-4.8.
++
++Bug report: https://bugreports.qt.io/browse/QTBUG-59399
++Patch sent upstream: https://codereview.qt-project.org/#/c/187980/
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.org>
++
++From c5d7425f8ad391112758db161e3e08f18dc9d299 Mon Sep 17 00:00:00 2001
++From: Marc Mutz <marc.mutz@kdab.com>
++Date: Thu, 26 May 2016 08:30:26 +0200
++Subject: [PATCH] QAtomic: pass explicit failure mode to
++ std::atomic::compare_exchange_strong
++
++... in an attempt to avoid GCC 4.8 errors such as
++
++  bits/atomic_base.h:577:70: error: failure memory model cannot be stronger than success memory model for '__atomic_compare_exchange'
++  return __atomic_compare_exchange_n(&_M_i, &__i1, __i2, 0, __m1, __m2);
++                                                                      ^
++
++as seen on Android.
++
++Change-Id: If046e735888cf331d2d6506d8d5ca9aa7402f9ad
++---
++ src/corelib/arch/qatomic_cxx11.h |    8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/corelib/arch/qatomic_cxx11.h b/src/corelib/arch/qatomic_cxx11.h
++index bb49aae..d6731ec 100644
++--- a/src/corelib/arch/qatomic_cxx11.h
+++++ b/src/corelib/arch/qatomic_cxx11.h
++@@ -153,7 +153,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetRelaxed(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_relaxed, std::memory_order_relaxed);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++@@ -162,7 +162,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetAcquire(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acquire, std::memory_order_acquire);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++@@ -171,7 +171,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetRelease(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_release);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_release, std::memory_order_relaxed);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++@@ -180,7 +180,7 @@ template <typename X> struct QAtomicOps
++     template <typename T>
++     static bool testAndSetOrdered(std::atomic<T> &_q_value, T expectedValue, T newValue, T *currentValue = Q_NULLPTR) Q_DECL_NOTHROW
++     {
++-        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acq_rel);
+++        bool tmp = _q_value.compare_exchange_strong(expectedValue, newValue, std::memory_order_acq_rel, std::memory_order_acquire);
++         if (currentValue)
++             *currentValue = expectedValue;
++         return tmp;
++-- 
++1.7.10.4
++
+-- 
+2.10.2
