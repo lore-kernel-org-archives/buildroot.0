@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 22:13:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libaio: Power64 support AIO
-In-Reply-To: <a59aa9d1-5e8c-c6e1-e5ed-cc1ad1c4a6e8@au1.ibm.com>
-References: <a59aa9d1-5e8c-c6e1-e5ed-cc1ad1c4a6e8@au1.ibm.com>
-Message-ID: <20170309221324.065df8a7@free-electrons.com>
+Date: Thu, 9 Mar 2017 22:18:50 +0100
+Subject: [Buildroot] [PATCH v1] libxkbcommon: add support for
+ interactive-wayland test program
+In-Reply-To: <20170308215310.12819-1-ps.report@gmx.net>
+References: <20170308215310.12819-1-ps.report@gmx.net>
+Message-ID: <20170309221850.3a6ab20c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 9 Mar 2017 11:56:47 +1100, Daniel Black wrote:
-> Power64{,le} architecture supports AIO.
-> 
-> Signed-off-by: Daniel Black <daniel.black@au.ibm.com>
-> Acked-by: Cyril Bur <cyrilbur@gmail.com>
-> ---
->  package/libaio/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+On Wed,  8 Mar 2017 22:53:10 +0100, Peter Seiderer wrote:
 
-For some reason, your patch didn't apply properly, most likely because
-you sent it with Thunderbird. Next time, could you send your patches
-using "git send-email"?
+> +if BR2_PACKAGE_LIBXKBCOMMON && BR2_PACKAGE_WAYLAND
+> +
+> +config BR2_PACKAGE_LIBXKBCOMMON_INTERACTIVE_WAYLAND
+> +	bool "interactive-wayland"
+> +	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+> +	help
+> +	  interactive-wayland is a wayland test application
+> +	  for libxkbcommon.
+> +
+> +endif
 
-I've applied after fixing the patch, and tweaking a bit the commit log.
-Thanks!
+This looks like a very very specific option. Shouldn't this be instead
+BR2_PACKAGE_LIBXKBCOMMON_INSTALL_TESTS ?
+
+> +define LIBXKBCOMMON_BUILD_INTERACTIVE_WAYLAND
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) test/interactive-wayland
+> +endef
+> +LIBXKBCOMMON_POST_BUILD_HOOKS = LIBXKBCOMMON_BUILD_INTERACTIVE_WAYLAND
+
+There's already some logic in the build system to build tests. Can't we
+use it instead?
+
+Thanks,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
