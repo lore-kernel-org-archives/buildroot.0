@@ -1,52 +1,45 @@
-From: Daniel Black <daniel.black@au1.ibm.com>
-Date: Thu, 9 Mar 2017 16:12:56 +1100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake: Use
- CMAKE_<LANG>_COMPILER_LAUNCHER for ccache
-In-Reply-To: <20170309042720.or2hhr4zvgmrwcd2@tarshish>
-References: <20170309010911.1960-1-daniel.black@au.ibm.com>
- <20170309042720.or2hhr4zvgmrwcd2@tarshish>
-Message-ID: <d8c00c99-b7fc-3234-bba7-0e4a00bab102@au1.ibm.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  9 Mar 2017 07:45:37 +0200
+Subject: [Buildroot] [PATCH 2/2] ti-uim: bump to latest version
+In-Reply-To: <af8528c725dbee3b80a8a99b2adba50a6ff4114d.1489038337.git.baruch@tkos.co.il>
+References: <af8528c725dbee3b80a8a99b2adba50a6ff4114d.1489038337.git.baruch@tkos.co.il>
+Message-ID: <075bbc11df38f8280c99d15834ec461dad0d6654.1489038337.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also, add a hash file.
 
+Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ti-uim/ti-uim.hash | 2 ++
+ package/ti-uim/ti-uim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/ti-uim/ti-uim.hash
 
-On 09/03/17 15:27, Baruch Siach wrote:
-> Hi Daniel,
-> 
-> On Thu, Mar 09, 2017 at 12:09:11PM +1100, Daniel Black wrote:
->> Since cmake version 3.4.3 CMAKE_<LANG>_COMPILER_LAUNCHER is used as
->> the way to invoke things like ccache. We set this to ccache for
->> the host and for cross compilers in toolchain.cmake.in. This
->> leaves CMAKE_<C,CXX>_COMPILER pointing at the real compiler and
->> still uses ccache.
->>
->> ref: https://cmake.org/cmake/help/v3.4/variable/CMAKE_LANG_COMPILER_LAUNCHER.html
-> 
-> Currently the oldest version of host installed cmake version that Buildroot 
-> supports is 3.1. If the dependency checker finds cmake 3.1 and newer installed 
-> on the host, Buildroot will use it. For your patch to work, you need to bump 
-> the minimum to 3.4.3. See support/dependencies/check-host-cmake.mk.
-
-Thanks Baruch,
-
-Seems that this version can only handle one decimal place however
-looking closer at cmake it is in the 3.4.0 version and not in the
-earlier 3.3.1 release.
-
-~/repos/cmake ((v3.3.1))]$ git checkout v3.4.0
-Previous HEAD position was 4a6fe02... CMake 3.3.1
-HEAD is now at b4a2ada... CMake 3.4.0
-
-~/repos/cmake ((v3.4.0))]$ grep -r _COMPILER_LAUNCHER .
-...
-
-./Help/prop_tgt/LANG_COMPILER_LAUNCHER.rst:<LANG>_COMPILER_LAUNCHER
-...
-./Source/cmMakefileTargetGenerator.cxx:    std::string const
-clauncher_prop = lang + "_COMPILER_LAUNCHER";
-./Source/cmNinjaTargetGenerator.cxx:    std::string const clauncher_prop
-= lang + "_COMPILER_LAUNCHER";
+diff --git a/package/ti-uim/ti-uim.hash b/package/ti-uim/ti-uim.hash
+new file mode 100644
+index 000000000000..ea64540ba81f
+--- /dev/null
++++ b/package/ti-uim/ti-uim.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 da8a66968f4bf99366ab2b63baf358d937a6b1a5636ef6179c3aa7c852cbd1b2 ti-uim-a0236bc252e6484835ce266ae4a50b361f6a902d.tar.gz
+diff --git a/package/ti-uim/ti-uim.mk b/package/ti-uim/ti-uim.mk
+index 1c78db0e6f01..a6e19b87ca9a 100644
+--- a/package/ti-uim/ti-uim.mk
++++ b/package/ti-uim/ti-uim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TI_UIM_VERSION = c73894456df5def97111cb33d2106b684b8b7959
++TI_UIM_VERSION = a0236bc252e6484835ce266ae4a50b361f6a902d
+ TI_UIM_SITE = $(call github,96boards,uim,$(TI_UIM_VERSION))
+ TI_UIM_LICENSE = GPLv2+
+ 
+-- 
+2.11.0
