@@ -1,60 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 22:35:21 +0100
-Subject: [Buildroot] [git commit] python: move to Git formatted patches
-Message-ID: <20170309213619.7BE7B816C2@busybox.osuosl.org>
+Date: Thu, 9 Mar 2017 22:35:27 +0100
+Subject: [Buildroot] [git commit] python: fix disabling the SSL module
+Message-ID: <20170309213619.924F77F969@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=652076293235276e2f978fe377322a6cbd615455
+commit: https://git.buildroot.net/buildroot/commit/?id=3c98442669f173818a8cce9479ebb0806cb9f8a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that the cpython project has a nice Github repository, with tags,
-it's much nicer to handle the stack of Python patches with Git. The
-python3 package patches had already been converted, but not the python
-package patches. Therefore, this commit does the move.
-
-There is no functional change, only reformatting of the patches.
+The Python extension is _ssl, not ssl. Due to this mistake in the patch,
+even with --disable-ssl passed on the command line, the _ssl.so Python
+extension would still be built.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...p.py-do-not-add-invalid-header-locations.patch} |  18 ++-
- ...Fix-get_python_inc-for-cross-compilation.patch} |  18 ++-
- ...he-install-location-of-_sysconfigdata.py.patch} |  38 ++++---
- ...compilation-of-.pyc-and-.pyo-conditional.patch} |  29 ++++-
- ...st-getaddrinfo-test-for-cross-compilation.patch |  29 +++++
- ...infrastructure-to-be-able-to-disable-ext.patch} |  41 +++++--
- ...brary-header-paths-for-cross-compilation.patch} |  50 +++++----
- ...-t-look-in-usr-lib-termcap-for-libraries.patch} |  18 ++-
- ... 0009-Fix-python-config-for-cross-builds.patch} | 121 ++++++++++++---------
- ...-Remove-the-python-symlink-install-rules.patch} |  25 +++--
- ....patch => 0011-Don-t-add-multiarch-paths.patch} |  17 ++-
- ...tch => 0012-Abort-on-failed-module-build.patch} |  17 ++-
- ...build-when-threads-are-not-used-availabl.patch} |  17 ++-
- ...nd.patch => 0014-Serial-ioctl-workaround.patch} |  15 ++-
- ...t-the-shebang-of-Python-scripts-for-cros.patch} |  18 ++-
- ...n-to-disable-installation-of-test-module.patch} |  27 +++--
- ...h => 0017-Add-an-option-to-disable-pydoc.patch} |  37 ++++---
- ...=> 0018-Add-an-option-to-disable-lib2to3.patch} |  39 ++++---
- ...Add-option-to-disable-the-sqlite3-module.patch} |  65 ++++++-----
- ...0-Add-an-option-to-disable-the-tk-module.patch} |  31 +++---
- ...d-an-option-to-disable-the-curses-module.patch} |  27 +++--
- ...h => 0022-Add-an-option-to-disable-expat.patch} |  35 +++---
- ...0023-Add-an-option-to-disable-CJK-codecs.patch} |  17 ++-
- ...tch => 0024-Add-an-option-to-disable-NIS.patch} |  17 ++-
- ...025-Add-an-option-to-disable-unicodedata.patch} |  17 ++-
- ...h => 0026-Add-an-option-to-disable-bsddb.patch} |  31 +++---
- ...-Add-an-option-to-disable-the-ssl-module.patch} |  17 ++-
- ...-Add-an-option-to-disable-the-bz2-module.patch} |  16 ++-
- ...Add-an-option-to-disable-the-zlib-module.patch} |  16 ++-
- ...h => 0030-Do-not-install-the-idle-editor.patch} |  26 +++--
- ...option-to-disable-the-ossaudiodev-module.patch} |  15 ++-
- package/python/006-cross-compile-getaddrinfo.patch |  13 ---
- package/python/018-fix-add-gcc-paths-logic.patch   |  27 -----
- 33 files changed, 587 insertions(+), 357 deletions(-)
+ package/python/0027-Add-an-option-to-disable-the-ssl-module.patch | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/python/0027-Add-an-option-to-disable-the-ssl-module.patch b/package/python/0027-Add-an-option-to-disable-the-ssl-module.patch
+index 3cb823b..5f2fb87 100644
+--- a/package/python/0027-Add-an-option-to-disable-the-ssl-module.patch
++++ b/package/python/0027-Add-an-option-to-disable-the-ssl-module.patch
+@@ -1,4 +1,4 @@
+-From 45fcf92ec1e89e0afd0bf2bbc7a1008b56135ba3 Mon Sep 17 00:00:00 2001
++From fc16ab40e3e6a5b4deed2fa7c5475fa216ff8d17 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Tue, 7 Mar 2017 22:30:22 +0100
+ Subject: [PATCH] Add an option to disable the ssl module
+@@ -9,7 +9,7 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  1 file changed, 6 insertions(+)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 524614c..743707a 100644
++index 524614c..cadac82 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -2834,6 +2834,12 @@ AC_ARG_ENABLE(nis,
+@@ -19,7 +19,7 @@ index 524614c..743707a 100644
+ +AC_ARG_ENABLE(ssl,
+ +	AS_HELP_STRING([--disable-ssl], [disable SSL]),
+ +	[ if test "$enableval" = "no"; then
+-+    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl"
+++    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _ssl"
+ +  	  fi])
+ +
+  AC_ARG_ENABLE(dbm,
