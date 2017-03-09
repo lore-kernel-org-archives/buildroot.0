@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 21:27:54 +0100
-Subject: [Buildroot] [PATCH] toolchain/external: use -dumpversion to
- check gcc version
-In-Reply-To: <20170309080136.4799-1-kris@youview.com>
-References: <20170309080136.4799-1-kris@youview.com>
-Message-ID: <20170309212754.7118e5ac@free-electrons.com>
+Date: Thu, 9 Mar 2017 21:28:52 +0100
+Subject: [Buildroot] [git commit] toolchain: remove no longer relevant
+	comment
+Message-ID: <20170309202939.4A087821DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d9fee6b286798d27f45dd6ca6e4b5aabf0cc658d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 9 Mar 2017 09:01:36 +0100, Krzysztof Konopko wrote:
-> Currently, `--version` option is used and later matched with a regex to get
-> the actual gcc version.  There's a dedicated gcc option to do exactly that:
-> `-dumpversion`.
-> 
-> Also `--version` may return a string customised by a vendor that provides
-> the toolchain, which makes the current regex approach error prone.  In
-> fact, this situation has been seen with a real customised toolchain.
-> 
-> Signed-off-by: Krzysztof Konopko <kris@youview.com>
-> Signed-off-by: Tomasz Szkutkowski <tomasz.szkutkowski@youview.com>
-> ---
->  toolchain/helpers.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The somewhat complicated sed expression has been removed in commit
+06cd604ec6d34f25b436ab729543418042a87e1c ("toolchain/external: use
+-dumpversion to check gcc version"), so let's remove the comment that
+was explaining this sed expression.
 
-Applied to master, thanks. I was worried that -dumpversion might have
-been a recent gcc option, but I found it in gcc 3.4 documentation, so
-we're good.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/helpers.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 6044b7e..2f73ebb 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -133,16 +133,6 @@ check_kernel_headers_version = \
+ # $1: path to gcc
+ # $2: expected gcc version
+ #
+-# Some details about the sed expression:
+-# - 1!d
+-#   - delete if not line 1
+-#
+-# - s/^[^)]+\) ([^[:space:]]+).*/\1/
+-#   - eat all until the first ')' character followed by a space
+-#   - match as many non-space chars as possible
+-#   - eat all the remaining chars on the line
+-#   - replace by the matched expression
+-#
+ check_gcc_version = \
+ 	expected_version="$(strip $2)" ; \
+ 	if [ -z "$${expected_version}" ]; then \
