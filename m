@@ -1,40 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 9 Mar 2017 19:22:09 +0200
-Subject: [Buildroot] [PATCH 2/2] ti-uim: bump to latest version
-In-Reply-To: <20170309075330.vauudriqhipx3cq2@piout.net>
-References: <af8528c725dbee3b80a8a99b2adba50a6ff4114d.1489038337.git.baruch@tkos.co.il>
- <075bbc11df38f8280c99d15834ec461dad0d6654.1489038337.git.baruch@tkos.co.il>
- <20170309075330.vauudriqhipx3cq2@piout.net>
-Message-ID: <20170309172209.k76ucsihxbylnds6@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Mar 2017 21:25:24 +0100
+Subject: [Buildroot] [git commit] toolchain/external: use -dumpversion to
+	check gcc version
+Message-ID: <20170309202633.E85238255F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexandre,
+commit: https://git.buildroot.net/buildroot/commit/?id=06cd604ec6d34f25b436ab729543418042a87e1c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Mar 09, 2017 at 08:53:30AM +0100, Alexandre Belloni wrote:
-> On 09/03/2017 at 07:45:37 +0200, Baruch Siach wrote:
-> > Also, add a hash file.
-> > 
-> > Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> Acked-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Currently, `--version` option is used and later matched with a regex to get
+the actual gcc version.  There's a dedicated gcc option to do exactly that:
+`-dumpversion`.
 
-Thanks.
+Also `--version` may return a string customised by a vendor that provides
+the toolchain, which makes the current regex approach error prone.  In
+fact, this situation has been seen with a real customised toolchain.
 
-> BTW, I don't think this daemon is necessary anymore with recent kernel
-> but I don't exactly remember all the details.
+Signed-off-by: Krzysztof Konopko <kris@youview.com>
+Signed-off-by: Tomasz Szkutkowski <tomasz.szkutkowski@youview.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/helpers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It is unfortunately still needed. I just tested with kernel v4.10.1 on 
-SolidRun i.MX6 uSOM rev 1.5 with the TI WL1831 BT/WiFi combo. Hopefully the 
-newly introduced serdev bus (commit cd6484e1830b) would obviate the need for 
-such a horrible hack at some future point.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 6f87230..6044b7e 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -148,7 +148,7 @@ check_gcc_version = \
+ 	if [ -z "$${expected_version}" ]; then \
+ 		exit 0 ; \
+ 	fi; \
+-	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
++	real_version=`$(1) -dumpversion` ; \
+ 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
+ 		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
+ 			"$${expected_version}" "$${real_version}" ; \
