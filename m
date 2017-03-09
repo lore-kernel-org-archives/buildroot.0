@@ -1,45 +1,87 @@
 From: Daniel Black <daniel.black@au1.ibm.com>
-Date: Thu, 9 Mar 2017 11:57:10 +1100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake: set
- CMAKE_SYSTEM_PROCESSOR correctly on powerpc64{, le}
-Message-ID: <f05fe88f-a347-046d-2ab3-d4bd5529d938@au1.ibm.com>
+Date: Thu,  9 Mar 2017 12:09:11 +1100
+Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake: Use
+	CMAKE_<LANG>_COMPILER_LAUNCHER for ccache
+Message-ID: <20170309010911.1960-1-daniel.black@au.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like ARM, BR2_ARCH doesn't correspond to the uname -m. With cmake
-CMAKE_SYSTEM_PROCESSOR is expected to contain the uname -m value.
+Since cmake version 3.4.3 CMAKE_<LANG>_COMPILER_LAUNCHER is used as
+the way to invoke things like ccache. We set this to ccache for
+the host and for cross compilers in toolchain.cmake.in. This
+leaves CMAKE_<C,CXX>_COMPILER pointing at the real compiler and
+still uses ccache.
 
-So we change CMAKE_SYSTEM_PROCESSOR from powerpc64 -> ppc64 (big endian)
-and powerpc64le -> ppc64le (little endian).
-
-This corrects the cross compile to the powerpc64{,le} target
-architecture for the mariadb (and possibly others) packages that
-use the CMAKE_SYSTEM_PROCESSOR variable and compare it against
-Power64 based architectures.
+ref: https://cmake.org/cmake/help/v3.4/variable/CMAKE_LANG_COMPILER_LAUNCHER.html
 
 Signed-off-by: Daniel Black <daniel.black@au.ibm.com>
-Acked-by: Cyril Bur <cyrilbur@gmail.com>
 ---
- package/pkg-cmake.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/pkg-cmake.mk                | 22 ++++++----------------
+ support/misc/toolchainfile.cmake.in |  2 ++
+ 2 files changed, 8 insertions(+), 16 deletions(-)
 
 diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 5d0a455..0897430 100644
+index 5d0a455..e2590b7 100644
 --- a/package/pkg-cmake.mk
 +++ b/package/pkg-cmake.mk
-@@ -225,6 +225,10 @@ ifeq ($(BR2_arm),y)
- CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)l
- else ifeq ($(BR2_armeb),y)
- CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)b
-+else ifeq ($(call qstrip,$(BR2_ARCH)),powerpc64)
-+CMAKE_SYSTEM_PROCESSOR = ppc64
-+else ifeq ($(call qstrip,$(BR2_ARCH)),powerpc64le)
-+CMAKE_SYSTEM_PROCESSOR = ppc64le
- else
- CMAKE_SYSTEM_PROCESSOR = $(BR2_ARCH)
+@@ -20,17 +20,6 @@
+ #
+ ################################################################################
+ 
+-# Set compiler variables.
+-ifeq ($(BR2_CCACHE),y)
+-CMAKE_HOST_C_COMPILER = $(HOST_DIR)/usr/bin/ccache
+-CMAKE_HOST_CXX_COMPILER = $(HOST_DIR)/usr/bin/ccache
+-CMAKE_HOST_C_COMPILER_ARG1 = $(HOSTCC_NOCCACHE)
+-CMAKE_HOST_CXX_COMPILER_ARG1 = $(HOSTCXX_NOCCACHE)
+-else
+-CMAKE_HOST_C_COMPILER = $(HOSTCC)
+-CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
+-endif
+-
+ ifneq ($(QUIET),)
+ CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
  endif
+@@ -120,11 +109,11 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
+ 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
+ 		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
+-		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
+-		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
+-		$(if $$(CMAKE_HOST_C_COMPILER_ARG1),\
+-			-DCMAKE_C_COMPILER_ARG1="$$(CMAKE_HOST_C_COMPILER_ARG1)" \
+-			-DCMAKE_CXX_COMPILER_ARG1="$$(CMAKE_HOST_CXX_COMPILER_ARG1)" \
++		-DCMAKE_C_COMPILER="$$(HOSTCC_NOCCACHE)" \
++		-DCMAKE_CXX_COMPILER="$$(HOSTCXX_NOCCACHE)" \
++		$(if $(BR2_CCACHE),\
++			-DCMAKE_CXX_COMPILER_LAUNCHER="$$(HOST_DIR)/usr/bin/ccache" \
++			-DCMAKE_C_COMPILER_LAUNCHER="$$(HOST_DIR)/usr/bin/ccache" \
+ 		) \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
+@@ -247,6 +236,7 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+ 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+ 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
++		-e 's#\([^@]*\)@@CCACHE@@#$(if $(BR2_CCACHE),\1/usr/bin/ccache,\#\1)#g' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+ 		> $@
+ 
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index c38800e..c4086ab 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -60,6 +60,8 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+ # This toolchain file can be used both inside and outside Buildroot.
+ set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
+ set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
++set(CMAKE_C_COMPILER_LAUNCHER "${RELOCATED_HOST_DIR}/@@CCACHE@@")
++set(CMAKE_CXX_COMPILER_LAUNCHER "${RELOCATED_HOST_DIR}/@@CCACHE@@")
+ if(@@TOOLCHAIN_HAS_FORTRAN@@)
+   set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug Fortran FLAGS")
+   set(CMAKE_Fortran_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release Fortran FLAGS")
 -- 
 2.7.4
