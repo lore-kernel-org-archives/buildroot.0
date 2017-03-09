@@ -1,87 +1,63 @@
-From: Daniel Black <daniel.black@au1.ibm.com>
-Date: Thu,  9 Mar 2017 12:09:11 +1100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake: Use
-	CMAKE_<LANG>_COMPILER_LAUNCHER for ccache
-Message-ID: <20170309010911.1960-1-daniel.black@au.ibm.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed,  8 Mar 2017 20:35:48 -0500
+Subject: [Buildroot] [PATCH 1/1] qt: add enable for truetype font
+	installation
+Message-ID: <1489023348-1796-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since cmake version 3.4.3 CMAKE_<LANG>_COMPILER_LAUNCHER is used as
-the way to invoke things like ccache. We set this to ccache for
-the host and for cross compilers in toolchain.cmake.in. This
-leaves CMAKE_<C,CXX>_COMPILER pointing at the real compiler and
-still uses ccache.
+Currently, qt.mk installs DejaVu/Vera TrueType fonts if freetype
+support is available, either from Qt or from the system freetype.
+However, there are lots of fonts that can be used with Qt, both
+within Qt (the prerendered fonts) and outside of Qt (in buildroot's
+font area). So it seems appropriate to expose a switch to enable
+the installation of the TrueType fonts, conditioned on freetype
+availability. At least, it provides a similar level of selectability
+as already exists with the prerendered fonts (micro, fixed, helvetica,
+etc.), and in some cases may solve problems where setting fonts
+by family and attribute is complicated by DejaVu competing with
+fonts that were actually selected in the buildroot menu.
 
-ref: https://cmake.org/cmake/help/v3.4/variable/CMAKE_LANG_COMPILER_LAUNCHER.html
-
-Signed-off-by: Daniel Black <daniel.black@au.ibm.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/pkg-cmake.mk                | 22 ++++++----------------
- support/misc/toolchainfile.cmake.in |  2 ++
- 2 files changed, 8 insertions(+), 16 deletions(-)
+ package/qt/Config.in | 8 ++++++++
+ package/qt/qt.mk     | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 5d0a455..e2590b7 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -20,17 +20,6 @@
- #
- ################################################################################
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index fa5235d..ac9cd18 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -185,6 +185,14 @@ endmenu
  
--# Set compiler variables.
--ifeq ($(BR2_CCACHE),y)
--CMAKE_HOST_C_COMPILER = $(HOST_DIR)/usr/bin/ccache
--CMAKE_HOST_CXX_COMPILER = $(HOST_DIR)/usr/bin/ccache
--CMAKE_HOST_C_COMPILER_ARG1 = $(HOSTCC_NOCCACHE)
--CMAKE_HOST_CXX_COMPILER_ARG1 = $(HOSTCXX_NOCCACHE)
--else
--CMAKE_HOST_C_COMPILER = $(HOSTCC)
--CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
--endif
--
- ifneq ($(QUIET),)
- CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
+ menu "Fonts"
+ 
++config BR2_PACKAGE_QT_FONT_DEJAVU
++	bool "dejavu/vera"
++	depends on !BR2_PACKAGE_QT_NOFREETYPE
++	default y
++
++comment "dejavu/vera fonts need freetype support"
++	depends on BR2_PACKAGE_QT_NOFREETYPE
++
+ config BR2_PACKAGE_QT_FONT_MICRO
+ 	bool "micro"
+ 	default y
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 29dcc46..35f16b1 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -692,7 +692,7 @@ QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
  endif
-@@ -120,11 +109,11 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
- 		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
--		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
--		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
--		$(if $$(CMAKE_HOST_C_COMPILER_ARG1),\
--			-DCMAKE_C_COMPILER_ARG1="$$(CMAKE_HOST_C_COMPILER_ARG1)" \
--			-DCMAKE_CXX_COMPILER_ARG1="$$(CMAKE_HOST_CXX_COMPILER_ARG1)" \
-+		-DCMAKE_C_COMPILER="$$(HOSTCC_NOCCACHE)" \
-+		-DCMAKE_CXX_COMPILER="$$(HOSTCXX_NOCCACHE)" \
-+		$(if $(BR2_CCACHE),\
-+			-DCMAKE_CXX_COMPILER_LAUNCHER="$$(HOST_DIR)/usr/bin/ccache" \
-+			-DCMAKE_C_COMPILER_LAUNCHER="$$(HOST_DIR)/usr/bin/ccache" \
- 		) \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_DOC=OFF \
-@@ -247,6 +236,7 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
- 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
- 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
-+		-e 's#\([^@]*\)@@CCACHE@@#$(if $(BR2_CCACHE),\1/usr/bin/ccache,\#\1)#g' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
- 		> $@
+ endif # QT_FONTS
  
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index c38800e..c4086ab 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -60,6 +60,8 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- # This toolchain file can be used both inside and outside Buildroot.
- set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
- set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
-+set(CMAKE_C_COMPILER_LAUNCHER "${RELOCATED_HOST_DIR}/@@CCACHE@@")
-+set(CMAKE_CXX_COMPILER_LAUNCHER "${RELOCATED_HOST_DIR}/@@CCACHE@@")
- if(@@TOOLCHAIN_HAS_FORTRAN@@)
-   set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug Fortran FLAGS")
-   set(CMAKE_Fortran_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release Fortran FLAGS")
+-ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
++ifeq ($(BR2_PACKAGE_QT_FONT_DEJAVU),y)
+ define QT_INSTALL_TARGET_FONTS_TTF
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
 -- 
 2.7.4
