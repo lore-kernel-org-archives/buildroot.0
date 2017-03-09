@@ -1,63 +1,35 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed,  8 Mar 2017 20:35:48 -0500
-Subject: [Buildroot] [PATCH 1/1] qt: add enable for truetype font
-	installation
-Message-ID: <1489023348-1796-1-git-send-email-danomimanchego123@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 9 Mar 2017 06:27:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake: Use
+ CMAKE_<LANG>_COMPILER_LAUNCHER for ccache
+In-Reply-To: <20170309010911.1960-1-daniel.black@au.ibm.com>
+References: <20170309010911.1960-1-daniel.black@au.ibm.com>
+Message-ID: <20170309042720.or2hhr4zvgmrwcd2@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, qt.mk installs DejaVu/Vera TrueType fonts if freetype
-support is available, either from Qt or from the system freetype.
-However, there are lots of fonts that can be used with Qt, both
-within Qt (the prerendered fonts) and outside of Qt (in buildroot's
-font area). So it seems appropriate to expose a switch to enable
-the installation of the TrueType fonts, conditioned on freetype
-availability. At least, it provides a similar level of selectability
-as already exists with the prerendered fonts (micro, fixed, helvetica,
-etc.), and in some cases may solve problems where setting fonts
-by family and attribute is complicated by DejaVu competing with
-fonts that were actually selected in the buildroot menu.
+Hi Daniel,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/qt/Config.in | 8 ++++++++
- package/qt/qt.mk     | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+On Thu, Mar 09, 2017 at 12:09:11PM +1100, Daniel Black wrote:
+> Since cmake version 3.4.3 CMAKE_<LANG>_COMPILER_LAUNCHER is used as
+> the way to invoke things like ccache. We set this to ccache for
+> the host and for cross compilers in toolchain.cmake.in. This
+> leaves CMAKE_<C,CXX>_COMPILER pointing at the real compiler and
+> still uses ccache.
+> 
+> ref: https://cmake.org/cmake/help/v3.4/variable/CMAKE_LANG_COMPILER_LAUNCHER.html
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index fa5235d..ac9cd18 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -185,6 +185,14 @@ endmenu
- 
- menu "Fonts"
- 
-+config BR2_PACKAGE_QT_FONT_DEJAVU
-+	bool "dejavu/vera"
-+	depends on !BR2_PACKAGE_QT_NOFREETYPE
-+	default y
-+
-+comment "dejavu/vera fonts need freetype support"
-+	depends on BR2_PACKAGE_QT_NOFREETYPE
-+
- config BR2_PACKAGE_QT_FONT_MICRO
- 	bool "micro"
- 	default y
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 29dcc46..35f16b1 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -692,7 +692,7 @@ QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
- endif
- endif # QT_FONTS
- 
--ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
-+ifeq ($(BR2_PACKAGE_QT_FONT_DEJAVU),y)
- define QT_INSTALL_TARGET_FONTS_TTF
- 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
- 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+Currently the oldest version of host installed cmake version that Buildroot 
+supports is 3.1. If the dependency checker finds cmake 3.1 and newer installed 
+on the host, Buildroot will use it. For your patch to work, you need to bump 
+the minimum to 3.4.3. See support/dependencies/check-host-cmake.mk.
+
+baruch
+
 -- 
-2.7.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
