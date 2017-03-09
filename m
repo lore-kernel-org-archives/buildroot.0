@@ -1,29 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 09 Mar 2017 22:36:49 +0100
-Subject: [Buildroot] [PATCH v2] qt5base: fix compilation error with
-	gcc-4.8
-In-Reply-To: <20170309213952.4f1bfad1@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 9 Mar 2017 21:39:52 +0100")
-References: <20170309170315.18299-1-Vincent.Riera@imgtec.com>
- <20170309213242.44a74371@free-electrons.com>
- <20170309213952.4f1bfad1@free-electrons.com>
-Message-ID: <87d1dqb09a.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Mar 2017 22:37:34 +0100
+Subject: [Buildroot] [PATCH 0/6] python(3): fix optional modules
+In-Reply-To: <1488927631-21945-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1488927631-21945-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170309223734.6af7c350@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > Hello,
- > On Thu, 9 Mar 2017 21:32:42 +0100, Thomas Petazzoni wrote:
+On Wed,  8 Mar 2017 00:00:25 +0100, Thomas Petazzoni wrote:
 
- >> I've applied, but after changing the formatting of the patch, see below.
+> Thomas Petazzoni (6):
+>   python: move to Git formatted patches
+>   python: make hashlib and readline modules really optional
+>   python: fix disabling the SSL module
+>   python3: refresh Git formatted patches
+>   python3: explicitly disable OpenSSL support for the target
+>   python3: make readline, gzip, bzip2 and xz really optional
 
- > Peter, I forgot: this one should be applied to the LTS branch.
+All applied. Many thanks to Yegor for having looked at the patches!
 
-Committed to 2017.02.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
