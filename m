@@ -1,155 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 22:55:46 +0100
-Subject: [Buildroot] [git commit] s6: new package
-Message-ID: <20170309220234.0D717821DB@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 09 Mar 2017 23:03:20 +0100
+Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
+In-Reply-To: <CAAMH-ythsVpak9K2JqXG5qR3gXNOgWQ60vXxMwvRKPksbrVOnQ@mail.gmail.com>
+ (Gary Bisson's message of "Thu, 9 Mar 2017 15:53:37 +0100")
+References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
+ <20170306212225.0819a97b@free-electrons.com>
+ <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
+ <20170306213121.203079d8@free-electrons.com>
+ <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
+ <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
+ <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
+ <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
+ <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
+ <CAOMZO5BxKvub7SRbiwdDFc0W6Kxr=V8nj7uA=WYUc_iAGAQpNw@mail.gmail.com>
+ <CAAMH-ythsVpak9K2JqXG5qR3gXNOgWQ60vXxMwvRKPksbrVOnQ@mail.gmail.com>
+Message-ID: <878toeaz13.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae47ed449c7ff92b41533ca5a91538622c519e60
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
 
-This new package provides s6, a small suite of programs for UNIX,
-designed to allow process supervision (a.k.a service supervision), in
-the line of daemontools and runit.
+Hi,
 
-The host variant is provided as it is required to build the host
-variant of s6-rc. Only the libraries and headers are installed.
+ >> I see them defined in two places here:
+ >> 
+ >> $ grep -rn DRM_MODE_OBJECT_PLANE output/host/
+ >> output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/drm/drm_mode.h:336:#define
+ >> DRM_MODE_OBJECT_PLANE 0xeeeeeeee
+ >> output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/libdrm/drm_mode.h:336:#define
+ >> DRM_MODE_OBJECT_PLANE 0xeeeeeeee
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS           |  1 +
- package/Config.in    |  1 +
- package/s6/Config.in | 11 +++++++++
- package/s6/s6.hash   |  2 ++
- package/s6/s6.mk     | 70 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 85 insertions(+)
+ > So it means your toolchain is using kernel headers >= 4.7.
+ > http://lxr.free-electrons.com/ident?v=4.6;i=DRM_MODE_OBJECT_PLANE
+ > http://lxr.free-electrons.com/ident?v=4.7;i=DRM_MODE_OBJECT_PLANE
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6c74cac..73413eb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -440,6 +440,7 @@ F:	package/execline/
- F:	package/hicolor-icon-theme/
- F:	package/jemalloc/
- F:	package/ninja/
-+F:	package/s6/
- F:	package/skalibs/
- F:	package/smack/
- F:	package/xvisor/
-diff --git a/package/Config.in b/package/Config.in
-index 9eb6a22..1cb584c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1800,6 +1800,7 @@ menu "System tools"
- 	source "package/quota/Config.in"
- 	source "package/rsyslog/Config.in"
- 	source "package/runc/Config.in"
-+	source "package/s6/Config.in"
- 	source "package/scrub/Config.in"
- 	source "package/scrypt/Config.in"
- 	source "package/smack/Config.in"
-diff --git a/package/s6/Config.in b/package/s6/Config.in
-new file mode 100644
-index 0000000..7c192c1
---- /dev/null
-+++ b/package/s6/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_S6
-+	bool "s6"
-+	select BR2_PACKAGE_EXECLINE
-+	depends on BR2_USE_MMU # execline
-+	help
-+	  s6 is a small suite of programs for UNIX, designed to allow
-+	  process supervision (a.k.a service supervision), in the line
-+	  of daemontools and runit, as well as various operations on
-+	  processes and daemons.
-+
-+	  http://skarnet.org/software/s6/
-diff --git a/package/s6/s6.hash b/package/s6/s6.hash
-new file mode 100644
-index 0000000..36526de
---- /dev/null
-+++ b/package/s6/s6.hash
-@@ -0,0 +1,2 @@
-+# Locally generated
-+sha256 5e788d5935dbcce76ac9a99cfcf6ee46a2ffb84220c84225df7589e9a3585560 s6-2.4.0.0.tar.gz
-diff --git a/package/s6/s6.mk b/package/s6/s6.mk
-new file mode 100644
-index 0000000..de08f67
---- /dev/null
-+++ b/package/s6/s6.mk
-@@ -0,0 +1,70 @@
-+################################################################################
-+#
-+# s6
-+#
-+################################################################################
-+
-+S6_VERSION = 2.4.0.0
-+S6_SITE = http://skarnet.org/software/s6
-+S6_LICENSE = ISC
-+S6_LICENSE_FILES = COPYING
-+S6_INSTALL_STAGING = YES
-+S6_DEPENDENCIES = execline
-+
-+S6_CONF_OPTS = \
-+	--prefix=/usr \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
-+	--with-include=$(STAGING_DIR)/usr/include \
-+	--with-dynlib=$(STAGING_DIR)/usr/lib \
-+	--with-lib=$(STAGING_DIR)/usr/lib/execline \
-+	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
-+	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
-+	$(SHARED_STATIC_LIBS_OPTS)
-+
-+define S6_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_CONF_OPTS))
-+endef
-+
-+define S6_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define S6_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define S6_REMOVE_STATIC_LIB_DIR
-+	rm -rf $(TARGET_DIR)/usr/lib/s6
-+endef
-+
-+S6_POST_INSTALL_TARGET_HOOKS += S6_REMOVE_STATIC_LIB_DIR
-+
-+define S6_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+HOST_S6_DEPENDENCIES = host-execline
-+
-+HOST_S6_CONF_OPTS = \
-+	--prefix=$(HOST_DIR)/usr \
-+	--with-sysdeps=$(HOST_DIR)/usr/lib/skalibs/sysdeps \
-+	--with-include=$(HOST_DIR)/usr/include \
-+	--with-dynlib=$(HOST_DIR)/usr/lib \
-+	--disable-static \
-+	--enable-shared \
-+	--disable-allstatic
-+
-+define HOST_S6_CONFIGURE_CMDS
-+	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_S6_CONF_OPTS))
-+endef
-+
-+define HOST_S6_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_S6_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install-dynlib install-include
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
+ > Not sure which header version the Linaro toolchain is using but it's
+ > definitely older than 4.7.
+
+Based on
+toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in it
+is using 4.6.
+
+ > Thanks for testing it out, good to here it works but I'm still not
+ > sure adding this libdrm/drm_mode.h is the best solution as-is.
+
+The question is what happens if kmscube is run on a kernel that doesn't
+support DRM_MODE_OBJECT_PLANE (E.G. kernel < 4.7)? If it really needs
+support for this then we should simply make the package depend on >= 4.7
+headers, and if not we could add a patch to add the include.
+
+-- 
+Bye, Peter Korsgaard
