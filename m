@@ -1,43 +1,144 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Thu, 9 Mar 2017 17:59:02 +0530
-Subject: [Buildroot] libglu config error, while X.Org enabled
-In-Reply-To: <20170308210957.44b05474@free-electrons.com>
-References: <CAD6G_RTkov1OJatw14LDVTNodndDav5JSeqgPF0FajGKg=4J7A@mail.gmail.com>
- <CAOMZO5BrHBr8HkrC7hepcAMHE-sgE9MbhQmnWhybwKqqYuW9xQ@mail.gmail.com>
- <20170308210957.44b05474@free-electrons.com>
-Message-ID: <CAD6G_RS9ZkHAhNW++=g34Jf5fU7uJnFMnf7aeCcazjZhgPySHw@mail.gmail.com>
+From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
+Date: Thu, 9 Mar 2017 14:26:02 +0100
+Subject: [Buildroot] [PATCH v2 1/1] dc3dd: new package
+In-Reply-To: <1488876138-19003-1-git-send-email-benoit.allard@greenbone.net>
+References: <1488607456-30096-1-git-send-email-benoit.allard@greenbone.net>
+ <1488876138-19003-1-git-send-email-benoit.allard@greenbone.net>
+Message-ID: <20170309142602.67f4043a@armant.office.greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 9, 2017 at 1:39 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed, 8 Mar 2017 14:35:31 -0300, Fabio Estevam wrote:
->
->> It seems you want to use X11 with mx6. In this case you would need to
->> use Russell's X11 driver:
->>
->> http://git.arm.linux.org.uk/cgit/xf86-video-armada.git/tree/README?h=unstable-devel
->>
->> Then you need to create support for it in Buildroot.
->
-> Or you can also use package/x11r7/xdriver_xf86-video-imx-viv/, which is
-> the X11 driver from Freescale, based on the proprietary Vivante OpenGL
-> implementation.
->
-> However, the full OpenGL support in Buildroot with Vivante is not
-> completely correct, so it won't work out of the box.
+On Tue,  7 Mar 2017 09:42:18 +0100
+Beno?t Allard <benoit.allard@greenbone.net> wrote:
 
-I'm using Etnaviv, I think this is dealing with Vivante may not work
-for Etnaviv.
+> We actually prefer the version 7.2.641 (over 7.2.646) as the
+> content of the release is identical and the 641 has the advantage
+> of providing a proper .tar.xz file.
+> 
+> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+> ---
+> Changes v1 -> v2 (Suggestions by Arnoud)
+>   - Fix line lengths in Config.in
+>   - Add a locally calculated sha256
+>   - Use a version that has a proper tar.xz file
+>   - Correct license to be GPLv3+
+>   - Add dependency on THREADS
+>   - Add conflict with musl
+>   - Add patch to not build the manpage
+> 
+> ---
+>  DEVELOPERS                      |  3 +++
+>  package/Config.in               |  1 +
+>  package/dc3dd/0001-no_man.patch | 12 ++++++++++++
+>  package/dc3dd/Config.in         |  9 +++++++++
+>  package/dc3dd/dc3dd.hash        |  4 ++++
+>  package/dc3dd/dc3dd.mk          | 13 +++++++++++++
+>  6 files changed, 42 insertions(+)
+>  create mode 100644 package/dc3dd/0001-no_man.patch
+>  create mode 100644 package/dc3dd/Config.in
+>  create mode 100644 package/dc3dd/dc3dd.hash
+>  create mode 100644 package/dc3dd/dc3dd.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index ff72ca1..e0a28a6 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -147,6 +147,9 @@ F:	package/taskd/
+>  N:	Benjamin Kamath <kamath.ben@gmail.com>
+>  F:	package/lapack/
+>  
+> +N:	Beno?t Allard <benoit.allard@greenbone.net>
+> +F:	package/dc3dd/
+> +
+>  N:	Bernd Kuhls <bernd.kuhls@t-online.de>
+>  F:	package/apache/
+>  F:	package/apr/
+> diff --git a/package/Config.in b/package/Config.in
+> index cfe7fc6..d0fdca4 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1767,6 +1767,7 @@ menu "System tools"
+>  	source "package/cpuload/Config.in"
+>  	source "package/dcron/Config.in"
+>  	source "package/ddrescue/Config.in"
+> +	source "package/dc3dd/Config.in"
+>  	source "package/debianutils/Config.in"
+>  	source "package/docker-containerd/Config.in"
+>  	source "package/docker-engine/Config.in"
+> diff --git a/package/dc3dd/0001-no_man.patch
+> b/package/dc3dd/0001-no_man.patch new file mode 100644
+> index 0000000..07bf713
+> --- /dev/null
+> +++ b/package/dc3dd/0001-no_man.patch
+> @@ -0,0 +1,12 @@
+> +--- a/Makefile.in	2017-03-06 16:42:29.728814841 +0100
+> ++++ b/Makefile.in	2017-03-06 16:42:54.191899036 +0100
+> +@@ -685,7 +685,7 @@
+> + target_alias = @target_alias@
+> + top_builddir = @top_builddir@
+> + top_srcdir = @top_srcdir@
+> +-SUBDIRS = lib src man po
+> ++SUBDIRS = lib src po
+> + EXTRA_DIST = cfg.mk maint.mk \
+> +   .prev-version THANKS-to-translators THANKStt.in \
+> +   .version \
+> +
+> diff --git a/package/dc3dd/Config.in b/package/dc3dd/Config.in
+> new file mode 100644
+> index 0000000..de8fec1
+> --- /dev/null
+> +++ b/package/dc3dd/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_DC3DD
+> +	bool "dc3dd"
 
-thanks!
--- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+Somehow the "depends on" made it to the commit changelog, but not
+there ... I'll be sending a newer version soon.
+
+> +	help
+> +	  dc3dd is a patch to the GNU dd program, this version has
+> +	  several features intended for forensic acquisition of data.
+> +	  Highlights include hashing on-the-fly, split output files,
+> +	  pattern writing, a progress meter, and file verification.
+> +
+> +	  https://sourceforge.net/projects/dc3dd/
+> diff --git a/package/dc3dd/dc3dd.hash b/package/dc3dd/dc3dd.hash
+> new file mode 100644
+> index 0000000..5490d8d
+> --- /dev/null
+> +++ b/package/dc3dd/dc3dd.hash
+> @@ -0,0 +1,4 @@
+> +# From https://sourceforge.net/projects/dc3dd/files/dc3dd/7.2/
+> +sha1 1bfe81a921a8473a6ecb46f328ecaab761afb55d dc3dd-7.2.641.tar.xz
+> +# Locally computed
+> +sha256
+> 7f50aadc38649845ab11014d11013928411c9d2128c941e9630939d4c28cae6d
+> dc3dd-7.2.641.tar.xz diff --git a/package/dc3dd/dc3dd.mk
+> b/package/dc3dd/dc3dd.mk new file mode 100644 index 0000000..3c2aebe
+> --- /dev/null
+> +++ b/package/dc3dd/dc3dd.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# dc3dd
+> +#
+> +################################################################################
+> +
+> +DC3DD_VERSION = 7.2.641
+> +DC3DD_SOURCE = dc3dd-$(DC3DD_VERSION).tar.xz
+> +DC3DD_SITE =
+> https://downloads.sourceforge.net/project/dc3dd/dc3dd/7.2
+> +DC3DD_LICENSE = GPLv3+ +DC3DD_LICENSE_FILES = COPYING
+> +
+> +$(eval $(autotools-package))
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170309/3c1eca5b/attachment.asc>
