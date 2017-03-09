@@ -1,31 +1,45 @@
 From: Daniel Black <daniel.black@au1.ibm.com>
-Date: Thu, 9 Mar 2017 11:56:47 +1100
-Subject: [Buildroot] [PATCH 1/1] package/libaio: Power64 support AIO
-Message-ID: <a59aa9d1-5e8c-c6e1-e5ed-cc1ad1c4a6e8@au1.ibm.com>
+Date: Thu, 9 Mar 2017 11:57:10 +1100
+Subject: [Buildroot] [PATCH 1/1] package/pkg-cmake: set
+ CMAKE_SYSTEM_PROCESSOR correctly on powerpc64{, le}
+Message-ID: <f05fe88f-a347-046d-2ab3-d4bd5529d938@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Power64{,le} architecture supports AIO.
+Like ARM, BR2_ARCH doesn't correspond to the uname -m. With cmake
+CMAKE_SYSTEM_PROCESSOR is expected to contain the uname -m value.
+
+So we change CMAKE_SYSTEM_PROCESSOR from powerpc64 -> ppc64 (big endian)
+and powerpc64le -> ppc64le (little endian).
+
+This corrects the cross compile to the powerpc64{,le} target
+architecture for the mariadb (and possibly others) packages that
+use the CMAKE_SYSTEM_PROCESSOR variable and compare it against
+Power64 based architectures.
 
 Signed-off-by: Daniel Black <daniel.black@au.ibm.com>
 Acked-by: Cyril Bur <cyrilbur@gmail.com>
 ---
- package/libaio/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-cmake.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libaio/Config.in b/package/libaio/Config.in
-index 3031c89..d656697 100644
---- a/package/libaio/Config.in
-+++ b/package/libaio/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
- 		BR2_m68k || BR2_mips || BR2_mipsel || BR2_powerpc || \
-+		BR2_powerpc64 || BR2_powerpc64le || \
- 		BR2_sparc || BR2_x86_64
-  config BR2_PACKAGE_LIBAIO
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 5d0a455..0897430 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -225,6 +225,10 @@ ifeq ($(BR2_arm),y)
+ CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)l
+ else ifeq ($(BR2_armeb),y)
+ CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)b
++else ifeq ($(call qstrip,$(BR2_ARCH)),powerpc64)
++CMAKE_SYSTEM_PROCESSOR = ppc64
++else ifeq ($(call qstrip,$(BR2_ARCH)),powerpc64le)
++CMAKE_SYSTEM_PROCESSOR = ppc64le
+ else
+ CMAKE_SYSTEM_PROCESSOR = $(BR2_ARCH)
+ endif
 -- 
 2.7.4
