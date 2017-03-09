@@ -1,41 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 00:04:37 +0100
-Subject: [Buildroot] [PATCH 1/1] python: disable _ssl.c build when
- --disable-ssl
-In-Reply-To: <1484169742-28866-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1484169742-28866-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20170310000437.5513602a@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Mar 2017 00:10:52 +0100
+Subject: [Buildroot] Buildroot 2016.11.3 released
+Message-ID: <87zigu9hc3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Wed, 11 Jan 2017 15:22:22 -0600, Matt Weber wrote:
-> From: Adam <adam.allison@rockwellcollins.com>
-> 
-> When --disable-ssl is provided as an option,
-> prevent the building of _ssl.c.
-> Without this change, some GCC toolchains fail
-> to build the _ssl module depending on the
-> build configuration
-> (we observed 4.85 worked and 4.9.4).
-> 
-> Signed-off-by: Adam Allison <adam.allison@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.net).
 
-Thanks for this patch. However I fixed it in a different/simpler way in
-commit
-https://git.buildroot.org/buildroot/commit/package/python?id=3c98442669f173818a8cce9479ebb0806cb9f8a2
+Buildroot 2016.11.3 is released - Go download it at:
 
-Let me know if that works for you.
+http://buildroot.net/downloads/buildroot-2016.11.3.tar.gz
 
-Best regards,
+or
 
-Thomas
+http://buildroot.net/downloads/buildroot-2016.11.3.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Buildroot 2016.11.3 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2016.11.2 release.
+
+- Fixes for static compilation issue in stunnel.
+
+- Security fixes for gnutls, lcms2, libcurl, ntfs-3g, ntp, openssl,
+  php, quagga, redis, squid, tcpdump, vim, wavpack, wireshark and
+  xlib_libXpm.
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2016.11.2..
+     9  Peter Korsgaard
+     7  Gustavo Zacarias
+     5  Vicente Olivert Riera
+     3  Baruch Siach
+     2  J?rg Krause
+     1  Adam Duskett
+     1  Bernd Kuhls
+
+Notice that this is the final 2016.11.x release. Users are urged to
+migrate to the 2017.02.x series, which will be supported until February
+2018.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
