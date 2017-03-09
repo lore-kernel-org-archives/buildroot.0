@@ -1,34 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 09 Mar 2017 22:31:11 +0100
-Subject: [Buildroot] [PATCH] toolchain/external: use -dumpversion to
-	check gcc version
-In-Reply-To: <20170309214658.15ab76aa@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 9 Mar 2017 21:46:58 +0100")
-References: <20170309080136.4799-1-kris@youview.com>
- <20170309212754.7118e5ac@free-electrons.com>
- <20170309214658.15ab76aa@free-electrons.com>
-Message-ID: <87h932b0io.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Mar 2017 22:35:34 +0100
+Subject: [Buildroot] [git commit] python3: explicitly disable OpenSSL
+	support for the target
+Message-ID: <20170309213619.B37DC7F969@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5b17d9f5f7e7968e4eddebfd9d06b76027bc8ef4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Commit fa627738266e ("python3: do not use the system OpenSSL in the host
+variant") added a patch that allows to disable building the OpenSSL
+related modules in Python, even if OpenSSL is found.
 
- >> Applied to master, thanks. I was worried that -dumpversion might have
- >> been a recent gcc option, but I found it in gcc 3.4 documentation, so
- >> we're good.
+But in this commit, it was only used to unconditionally disable OpenSSL
+support for the host python3.
 
- > Peter: this commit might also be useful on the LTS, it allows the
- > external toolchain code to be more compatible with different
- > toolchains. Of course, you might want to wait a few days to see if we
- > get some feedback after it has been applied on master.
+This commit extends that to use the --disable-openssl option also for
+the target python3, when BR2_PACKAGE_PYTHON3_SSL. This ensures that if
+BR2_PACKAGE_PYTHON3_SSL is disabled, but BR2_PACKAGE_OPENSSL is enabled,
+we still don't get the OpenSSL modules built, as the user would expect.
 
-Yes, I've flagged it locally. I'll apply it this weekend if nothing
-blows up in the autobuilders.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python3/python3.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 8bfae79..4ca049c 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -90,6 +90,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_SSL),y)
+ PYTHON3_DEPENDENCIES += openssl
++else
++PYTHON3_CONF_OPTS += --disable-openssl
+ endif
+ 
+ ifneq ($(BR2_PACKAGE_PYTHON3_CODECSCJK),y)
