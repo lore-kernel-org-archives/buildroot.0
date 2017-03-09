@@ -1,31 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Mar 2017 22:37:34 +0100
-Subject: [Buildroot] [PATCH 0/6] python(3): fix optional modules
-In-Reply-To: <1488927631-21945-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1488927631-21945-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170309223734.6af7c350@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 9 Mar 2017 22:49:54 +0100
+Subject: [Buildroot] [git commit] libplayer: add back missing endif
+Message-ID: <20170309215101.D74A981D36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=72599de9fab4e7ed18c75bb3487797dd1b21f36b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  8 Mar 2017 00:00:25 +0100, Thomas Petazzoni wrote:
+Commit 0f5b3d0fd81 (libplayer: remove broken Python bindings) accidently
+removed an endif from Config.in, breaking menuconfig.
 
-> Thomas Petazzoni (6):
->   python: move to Git formatted patches
->   python: make hashlib and readline modules really optional
->   python: fix disabling the SSL module
->   python3: refresh Git formatted patches
->   python3: explicitly disable OpenSSL support for the target
->   python3: make readline, gzip, bzip2 and xz really optional
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libplayer/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-All applied. Many thanks to Yegor for having looked at the patches!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
+index 89809eb..1261c1e 100644
+--- a/package/libplayer/Config.in
++++ b/package/libplayer/Config.in
+@@ -25,6 +25,7 @@ config BR2_PACKAGE_LIBPLAYER_GSTREAMER
+ comment "gstreamer backend needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++endif
+ 
+ comment "libplayer needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
