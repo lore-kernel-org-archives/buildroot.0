@@ -1,39 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Mar 2017 22:52:47 +0100
-Subject: [Buildroot] [git commit] Config.in.legacy: add missing help keyword
-Message-ID: <20170309215445.F04DD82558@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 9 Mar 2017 23:00:44 +0100
+Subject: [Buildroot] [PATCH 1/1] test-pkg: Extend the logfile with the
+ first command as well
+In-Reply-To: <20170309213605.20997679@free-electrons.com>
+References: <1489072521-5514-1-git-send-email-benoit.allard@greenbone.net>
+ <20170309213605.20997679@free-electrons.com>
+Message-ID: <20170309220044.GA3785@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5354a75eb12009162dad0bc3fe5dc9d20fe8183b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, Beno?t, All,
 
-Commit ac1910713ce (efl: remove broken JP2K loader) added a legacy entry for
-BR2_PACKAGE_EFL_JP2K, but forgot to add the 'help' keyword before the help
-text, leading to confusing error messages from kconfig:
+On 2017-03-09 21:36 +0100, Thomas Petazzoni spake thusly:
+> On Thu,  9 Mar 2017 16:15:21 +0100, Beno?t Allard wrote:
+> > Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+> > ---
+> >  support/scripts/test-pkg | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Thanks, applied.
+> 
+> > diff --git a/support/scripts/test-pkg b/support/scripts/test-pkg
+> > index a040ce1..0e7779d 100755
+> > --- a/support/scripts/test-pkg
+> > +++ b/support/scripts/test-pkg
+> > @@ -108,7 +108,7 @@ build_one() {
+> >  	_EOF_
+> >      cat "${cfg}" >>"${dir}/.config"
+> >  
+> > -    if ! make O="${dir}" olddefconfig >/dev/null 2>&1; then
+> > +    if ! make O="${dir}" olddefconfig > "${dir}/logfile" 2>&1; then
+> 
+> To be honest, I wasn't sure if we wanted > or >> here. It matters if
+> you restart the test-pkg command after fixing issues. Do you want
+> logfiles to contain the log of all previous builds, or just the current
+> build?
+> 
+> For now, I've applied your patch as-is, with just ">", which means the
+> logfile will only contain the output of the last build. It seems better
+> to me this way, but we'll see if other folks disagree.
 
-Config.in.legacy:482: syntax error
-Config.in.legacy:481: unknown option "JP2K"
-Config.in.legacy:482: unknown option "while"
-Config.in.legacy:483: unknown option "JP2K"
+Using append-redirection is what we should have used here, because the
+logfile is already created a few lines above, for olddefconfig.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 67f6e4e..be4c953 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -478,6 +478,7 @@ comment "Legacy options removed in 2016.08"
- config BR2_PACKAGE_EFL_JP2K
- 	bool "libevas jp2k loader has been removed"
- 	select BR2_LEGACY
-+	help
- 	  JP2K support in EFL requires openjpeg 1.x (libopenjpeg1.pc)
- 	  while Buildroot only packages openjpeg 2.x. Therefore, the
- 	  JP2K loader has been removed from EFL.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
