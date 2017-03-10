@@ -1,49 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 21:42:09 +0100
-Subject: [Buildroot] [git commit] package/elfutils: change upstream site
-Message-ID: <20170310204738.C4AE882572@busybox.osuosl.org>
+Date: Fri, 10 Mar 2017 21:48:11 +0100
+Subject: [Buildroot] [PATCH] package/elfutils: fixes download site due
+ to recent fedorahosted.org closing
+In-Reply-To: <1489159013-11420-1-git-send-email-julien.boibessot@free.fr>
+References: <1489159013-11420-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20170310214811.3a5b0bf9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94fba6644e5e612befde675b18cc94c32ccc135b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-fedorahosted.org has been closed on March 1st, 2017, so use a
-different upstream location for the elfutils project.
+On Fri, 10 Mar 2017 16:16:53 +0100, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> 
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> ---
+>  package/elfutils/Config.in   | 2 +-
+>  package/elfutils/elfutils.mk | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/elfutils/Config.in   | 2 +-
- package/elfutils/elfutils.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master after tweaking the commit log, thanks!
 
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index 0419e27..7db8472 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_ELFUTILS
- 	  Note that this option only installs the libraries, and not
- 	  the programs.
- 
--	  https://fedorahosted.org/elfutils
-+	  https://sourceware.org/elfutils/
- 
- if BR2_PACKAGE_ELFUTILS
- 
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 566e0bf..0bf105e 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -6,7 +6,7 @@
- 
- ELFUTILS_VERSION = 0.166
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
--ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
-+ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
- ELFUTILS_LICENSE = GPLv2+ or LGPLv3+ (library)
- ELFUTILS_LICENSE_FILES = COPYING-GPLV2 COPYING-LGPLV3
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
