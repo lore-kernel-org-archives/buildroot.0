@@ -1,44 +1,57 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 10 Mar 2017 17:42:52 +0000
-Subject: [Buildroot] [PATCH 2/2] lttng-modules: bump version to 2.9.1
-In-Reply-To: <20170310174252.20236-1-Vincent.Riera@imgtec.com>
-References: <20170310174252.20236-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170310174252.20236-2-Vincent.Riera@imgtec.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 10 Mar 2017 12:15:18 -0600
+Subject: [Buildroot] [PATCH 1/1] python: disable _ssl.c build when
+	--disable-ssl
+In-Reply-To: <20170310000437.5513602a@free-electrons.com>
+References: <1484169742-28866-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20170310000437.5513602a@free-electrons.com>
+Message-ID: <CANQCQpa1Lp8hqpmaZREEoYbJEusrAerNQriQ_H4+ENped3DVAA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lttng-modules/lttng-modules.hash | 6 +++---
- package/lttng-modules/lttng-modules.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Adam
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index d8314f6..ec733ef 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
-@@ -1,3 +1,3 @@
--# From http://lttng.org/files/lttng-modules/lttng-modules-2.9.0.tar.bz2.{md5,sha1}
--md5 717df375ccb6f32bb297cc2f2e692bbf  lttng-modules-2.9.0.tar.bz2
--sha1 819ee1c2a5a821b7fdc1c2fc102ef3079c32aad7  lttng-modules-2.9.0.tar.bz2
-+# From http://lttng.org/files/lttng-modules/lttng-modules-2.9.1.tar.bz2.{md5,sha1}
-+md5 5a16bca52233cc2bdff572b1120a88f6  lttng-modules-2.9.1.tar.bz2
-+sha1 5b47e923a8d697b0f5799f0eb226a41c4957966c  lttng-modules-2.9.1.tar.bz2
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index aa0ac30..e77617e 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTTNG_MODULES_VERSION = 2.9.0
-+LTTNG_MODULES_VERSION = 2.9.1
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
--- 
-2.10.2
+
+On Mar 9, 2017 5:04 PM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+
+Hello,
+
+On Wed, 11 Jan 2017 15:22:22 -0600, Matt Weber wrote:
+> From: Adam <adam.allison@rockwellcollins.com>
+>
+> When --disable-ssl is provided as an option,
+> prevent the building of _ssl.c.
+> Without this change, some GCC toolchains fail
+> to build the _ssl module depending on the
+> build configuration
+> (we observed 4.85 worked and 4.9.4).
+>
+> Signed-off-by: Adam Allison <adam.allison@rockwellcollins.com>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
+Thanks for this patch. However I fixed it in a different/simpler way in
+commit
+https://git.buildroot.org/buildroot/commit/package/python?id=
+3c98442669f173818a8cce9479ebb0806cb9f8a2
+
+Let me know if that works for you.
+
+
+  Adam, do you have a test you could run?  It looks fine to me but I can't
+test.
+
+
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170310/9309ed6b/attachment.html>
