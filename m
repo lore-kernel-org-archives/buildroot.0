@@ -1,30 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 10 Mar 2017 06:57:10 -0300
-Subject: [Buildroot] [PATCH 2/2] libnl: bump to version 3.2.29
-In-Reply-To: <061cbb4c-8b53-4f32-9d03-344b1ff0c009@zacarias.com.ar>
-References: <e21edac8997da04d86a420d580120f5311734191.1489136084.git.baruch@tkos.co.il>
- <4ebba581b256855a7e36993f044ef2b6a6cdfd72.1489136084.git.baruch@tkos.co.il>
- <061cbb4c-8b53-4f32-9d03-344b1ff0c009@zacarias.com.ar>
-Message-ID: <1b9e911c-d7ee-dd96-383f-c28fee26353f@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 10 Mar 2017 09:59:52 +0000
+Subject: [Buildroot] [Bug 9721] New: version 2017.02: no acceptable m4 could
+ be found in $PATH
+Message-ID: <bug-9721-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/03/17 06:56, Gustavo Zacarias wrote:
+https://bugs.busybox.net/show_bug.cgi?id=9721
 
-> On 10/03/17 05:54, Baruch Siach wrote:
->
->> -LIBNL_VERSION = 3.2.27
->> +LIBNL_VERSION = 3.2.29
->
-> Hi Baruch.
-> Did you try with older headers?
-> Beacuse last time i tried 3.2.{28,29} weren't happy at least with 3.2.x
-> hence i refrained from bumping and carrying that dependency along a few
-> packages.
-> Regards.
+            Bug ID: 9721
+           Summary: version 2017.02: no acceptable m4 could be found in
+                    $PATH
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: louigi600 at yahoo.it
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-That's kernel headers at least 3.2.x, coffee isn't it yet, sorry.
-Regards.
+using buildroot on slackware 14.2_x86_64 I get this error:
+checking for GNU M4 that supports accurate traces... configure: error: no
+acceptable m4 could be found in $PATH.
+GNU M4 1.4.6 or later is required; 1.4.16 or newer is recommended.
+GNU M4 1.4.15 uses a buggy replacement strstr on some systems.
+Glibc 2.9 - 2.12 and GNU M4 1.4.11 - 1.4.15 have another strstr bug.
+package/pkg-generic.mk:206: recipe for target
+'/usr/src/buildroot-2017.02/output/build/host-libtool-2.4.6/.stamp_configured'
+failed
+make: ***
+[/usr/src/buildroot-2017.02/output/build/host-libtool-2.4.6/.stamp_configured]
+Error 1
+
+But I've m4 version 1.4.17 in path
+root at desktopdbsm:/usr/src/buildroot-2017.02# echo $PATH
+/usr/src/buildroot-2016.11.2/output/host/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/games:/usr/lib64/qt/bin:/usr/share/texmf/bin
+root at desktopdbsm:/usr/src/buildroot-2017.02# type m4
+m4 is /usr/bin/m4
+root at desktopdbsm:/usr/src/buildroot-2017.02# m4 --version
+m4 (GNU M4) 1.4.17
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Rene' Seindal.
+root at desktopdbsm:/usr/src/buildroot-2017.02#
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
