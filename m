@@ -1,33 +1,82 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 10 Mar 2017 10:30:55 +0200
-Subject: [Buildroot] [PATCH 2/2] netsniff-ng: add homepage link
-In-Reply-To: <65617ee3af4d36e520b84b77e643007e5c20e790.1489134655.git.baruch@tkos.co.il>
-References: <65617ee3af4d36e520b84b77e643007e5c20e790.1489134655.git.baruch@tkos.co.il>
-Message-ID: <780397d0b5e413e3dfc27f56b4adf613e8081489.1489134655.git.baruch@tkos.co.il>
+Date: Fri, 10 Mar 2017 10:30:54 +0200
+Subject: [Buildroot] [PATCH 1/2] netsniff-ng: fix build with kernel headers
+	v4.10+
+Message-ID: <65617ee3af4d36e520b84b77e643007e5c20e790.1489134655.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add upstream patch removing use of GENL_ID_GENERATE that was dropped in kernel
+version 4.10.
+
+Fixes:
+http://autobuild.buildroot.net/results/58d/58d7809cae739f728c58291f2111684d6c0578f3/
+http://autobuild.buildroot.net/results/65c/65ce9807116ca70908e0aabae59a36c7774dfa7a/
+http://autobuild.buildroot.net/results/64b/64b3f8af2ebc5a14ecbef72039ef527b5d71f12c/
+
 Cc: Joris Lijssens <joris.lijssens@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/netsniff-ng/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ ...-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch
 
-diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-index 00617e371921..b59c876a9927 100644
---- a/package/netsniff-ng/Config.in
-+++ b/package/netsniff-ng/Config.in
-@@ -16,6 +16,8 @@ config BR2_PACKAGE_NETSNIFF_NG
- 	  networking toolkit. If you will, the Swiss army knife for
- 	  network packets.
- 
-+	  http://netsniff-ng.org
+diff --git a/package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch b/package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch
+new file mode 100644
+index 000000000000..4ccf9d643c16
+--- /dev/null
++++ b/package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch
+@@ -0,0 +1,48 @@
++From 88ec2ad37cabb3d3b7ca0e8e5ea3d682c083618d Mon Sep 17 00:00:00 2001
++From: Tobias Klauser <tklauser@distanz.ch>
++Date: Mon, 6 Mar 2017 12:22:57 +0100
++Subject: [PATCH] netsniff-ng: nlmsg: Drop dissection of GENL_ID_GENERATE type
 +
- comment "netsniff-ng needs a glibc or musl toolchain w/ threads, headers >= 3.0"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC \
++After kernel commit a07ea4d9941a ("genetlink: no longer support using
++static family IDs"), GENL_ID_GENERATE is no longer exposed to userspace
++(and actually should never have been). Change the genl nlmsg dissector
++to only consider the nlctrl family and the two other static family IDs
++needed for workarounds. All other family IDs are considered dynamically
++generated.
++
++Fixes #171
++Reported-by: Jaroslav ?karvada <jskarvad@redhat.com>
++Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit 88ec2ad37cabb
++
++ proto_nlmsg.c | 12 +++++++++---
++ 1 file changed, 9 insertions(+), 3 deletions(-)
++
++diff --git a/proto_nlmsg.c b/proto_nlmsg.c
++index f8993e794a54..f2064059be08 100644
++--- a/proto_nlmsg.c
+++++ b/proto_nlmsg.c
++@@ -242,9 +242,15 @@ static const char *nlmsg_rtnl_type2str(uint16_t type)
++ static const char *nlmsg_genl_type2str(uint16_t type)
++ {
++ 	switch (type) {
++-	case GENL_ID_GENERATE:	return "id gen";
++-	case GENL_ID_CTRL:	return "id ctrl";
++-	default:		return NULL;
+++	case GENL_ID_CTRL:	return "nlctrl";
+++#if defined(GENL_ID_PCMRAID)
+++	case GENL_ID_PCMRAID:	return "pcmraid";
+++#endif
+++#if defined(GENL_ID_VFS_DQUOT)
+++	case GENL_ID_VFS_DQUOT:	return "vfs dquot";
+++#endif
+++	/* only dynamic family IDs should be used starting with Linux 4.10 */
+++	default:		return "dynamic";
++ 	}
++ }
++ 
++-- 
++2.11.0
++
 -- 
 2.11.0
