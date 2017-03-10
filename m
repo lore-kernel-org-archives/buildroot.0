@@ -1,44 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Mar 2017 17:19:02 +0100
-Subject: [Buildroot] [git commit] php: bump to version 7.1.2
-Message-ID: <20170310161946.3A1DE825B2@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 10 Mar 2017 17:05:18 +0000
+Subject: [Buildroot] [PATCH] jasper: bump version to 2.0.12
+Message-ID: <20170310170518.9210-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34d19a23ad8d46166a83da9cd84910ae1c5b2a43
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Remove 0001-Disable-C-compiler-check.patch since it's already included
+in this release. Upstream commit:
 
-7.1.2 is a bugfix release, fixing a number of issues:
+  https://github.com/mdadams/jasper/commit/4212e7e826e1f72c2f01391a80667c88fa2eb517
 
-http://www.php.net/ChangeLog-7.php#7.1.2
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/jasper/0001-Disable-C-compiler-check.patch | 28 ----------------------
+ package/jasper/jasper.hash                         |  2 +-
+ package/jasper/jasper.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 30 deletions(-)
+ delete mode 100644 package/jasper/0001-Disable-C-compiler-check.patch
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 9c94b9e..47e99d4 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/jasper/0001-Disable-C-compiler-check.patch b/package/jasper/0001-Disable-C-compiler-check.patch
+deleted file mode 100644
+index c1f7271..0000000
+--- a/package/jasper/0001-Disable-C-compiler-check.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From e4ed3e2c3fd5a859567f510deeb49a915d96700f Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Sat, 14 Jan 2017 21:06:25 +0200
+-Subject: [PATCH] Disable C++ compiler check
+-
+-jasper does not use C++ code. Allow use of toolchains without C++ support.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/mdadams/jasper/pull/110
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 6c99b3e7df31..3ac166b060ad 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,6 +1,6 @@
+- cmake_minimum_required (VERSION 2.8.11)
+- 
+--project(JasPer)
+-+project(JasPer C)
+- 
+- set(CMAKE_MODULE_PATH
+-   ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/build/cmake/modules/")
+--- 
+-2.11.0
+-
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index 6c3ab47..15e9829 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
 @@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256 b3565b0c1441064eba204821608df1ec7367abff881286898d900c2c2a5ffe70  php-7.1.1.tar.xz
-+sha256 d815a0c39fd57bab1434a77ff0610fb507c22f790c66cd6f26e27030c4b3e971  php-7.1.2.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 1379ad5..5b113d1 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+ # Locally calculated
+-sha256 54d85428e35263642358a11c312d61cbc054170546fae780e11271df5d1502e8 jasper-2.0.10.tar.gz
++sha256 5b24faf5ed38670d6286e45ab7516b26458d05e7929b435afe569176765f4dda  jasper-2.0.12.tar.gz
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index a243b9a..dbb3875 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.1.1
-+PHP_VERSION = 7.1.2
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-JASPER_VERSION = 2.0.10
++JASPER_VERSION = 2.0.12
+ JASPER_SITE = http://www.ece.uvic.ca/~frodo/jasper/software
+ JASPER_INSTALL_STAGING = YES
+ JASPER_LICENSE = JasPer License Version 2.0
+-- 
+2.10.2
