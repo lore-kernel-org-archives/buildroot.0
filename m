@@ -1,60 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 10 Mar 2017 09:59:52 +0000
-Subject: [Buildroot] [Bug 9721] New: version 2017.02: no acceptable m4 could
- be found in $PATH
-Message-ID: <bug-9721-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Mar 2017 10:59:52 +0100
+Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
+In-Reply-To: <CAAMH-yvbmyvqbRckOBm7UuMM8eNH2k6TQGS0mH0O4_B-iDBOnA@mail.gmail.com>
+ (Gary Bisson's message of "Fri, 10 Mar 2017 10:47:34 +0100")
+References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
+ <20170306212225.0819a97b@free-electrons.com>
+ <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
+ <20170306213121.203079d8@free-electrons.com>
+ <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
+ <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
+ <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
+ <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
+ <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
+ <CAOMZO5BxKvub7SRbiwdDFc0W6Kxr=V8nj7uA=WYUc_iAGAQpNw@mail.gmail.com>
+ <CAAMH-ythsVpak9K2JqXG5qR3gXNOgWQ60vXxMwvRKPksbrVOnQ@mail.gmail.com>
+ <878toeaz13.fsf@dell.be.48ers.dk>
+ <CAAMH-yvbmyvqbRckOBm7UuMM8eNH2k6TQGS0mH0O4_B-iDBOnA@mail.gmail.com>
+Message-ID: <87varha1uv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9721
+>>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
 
-            Bug ID: 9721
-           Summary: version 2017.02: no acceptable m4 could be found in
-                    $PATH
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: louigi600 at yahoo.it
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Hi,
 
-using buildroot on slackware 14.2_x86_64 I get this error:
-checking for GNU M4 that supports accurate traces... configure: error: no
-acceptable m4 could be found in $PATH.
-GNU M4 1.4.6 or later is required; 1.4.16 or newer is recommended.
-GNU M4 1.4.15 uses a buggy replacement strstr on some systems.
-Glibc 2.9 - 2.12 and GNU M4 1.4.11 - 1.4.15 have another strstr bug.
-package/pkg-generic.mk:206: recipe for target
-'/usr/src/buildroot-2017.02/output/build/host-libtool-2.4.6/.stamp_configured'
-failed
-make: ***
-[/usr/src/buildroot-2017.02/output/build/host-libtool-2.4.6/.stamp_configured]
-Error 1
+>> The question is what happens if kmscube is run on a kernel that doesn't
+ >> support DRM_MODE_OBJECT_PLANE (E.G. kernel < 4.7)?
 
-But I've m4 version 1.4.17 in path
-root at desktopdbsm:/usr/src/buildroot-2017.02# echo $PATH
-/usr/src/buildroot-2016.11.2/output/host/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/games:/usr/lib64/qt/bin:/usr/share/texmf/bin
-root at desktopdbsm:/usr/src/buildroot-2017.02# type m4
-m4 is /usr/bin/m4
-root at desktopdbsm:/usr/src/buildroot-2017.02# m4 --version
-m4 (GNU M4) 1.4.17
-Copyright (C) 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
+ > I believe it would work since the declaration was in the kernel
+ > already, just missing from the uapi header:
+ > http://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit/?id=8812f38141
 
-Written by Rene' Seindal.
-root at desktopdbsm:/usr/src/buildroot-2017.02#
+Ahh, ok - Good. And looking at the state before that, the drm plane
+stuff was added in 3.3 (8cf5c91771515).
+
+ >> If it really needs
+ >> support for this then we should simply make the package depend on >= 4.7
+ >> headers, and if not we could add a patch to add the include.
+
+ > Adding a dependency on headers >= 4.7 would definitely work and I
+ > think it's the easiest/cleanest option here.
+
+ > I'll just be sad not to be able to use the prebuilt (linaro) toolchain ;)
+
+It is indeed a bit stupid to not allow the Linaro toolchain when the fix
+is so easy. Have you tried to contact upstream about either adding the
+drm include and/or local definitions for this define?
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
