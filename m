@@ -1,45 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 10 Mar 2017 22:57:02 +0100
-Subject: [Buildroot] [PATCH] package/rpi-userland: don't isntall file in
- random location
-In-Reply-To: <20170310224628.12501d85@free-electrons.com>
-References: <1488921388-9691-1-git-send-email-yann.morin.1998@free.fr>
- <20170310224628.12501d85@free-electrons.com>
-Message-ID: <20170310215702.GA3674@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Mar 2017 22:57:34 +0100
+Subject: [Buildroot] [RFC: PATCH 3/3] system: enable predictable net
+ interface names
+In-Reply-To: <CACXmVibUnH38chTyOboc0fJMN2kn3NWm2Dnhg8xbi82ddPotZg@mail.gmail.com>
+References: <1474113519-24713-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1474113519-24713-4-git-send-email-eric.le.bihan.dev@free.fr>
+ <CACXmVibUnH38chTyOboc0fJMN2kn3NWm2Dnhg8xbi82ddPotZg@mail.gmail.com>
+Message-ID: <20170310225734.05223bda@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-03-10 22:46 +0100, Thomas Petazzoni spake thusly:
-> On Tue,  7 Mar 2017 22:16:28 +0100, Yann E. MORIN wrote:
-> > Currently, rpi-userland installs files in $(@D)/../../bin/ which is
-> > entirely stupid, especially in cross-compilation.
-> > 
-> > Get rid of the dubious, broken, custom install command.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  ...toverlay-don-t-install-script-in-random-l.patch | 45 ++++++++++++++++++++++
-> >  1 file changed, 45 insertions(+)
-> >  create mode 100644 package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
-> 
-> Applied to master after fixing the typo in the commit title. Please
-> don't forget to submit upstream.
+On Mon, 6 Feb 2017 21:07:00 +0100, Peter Korsgaard wrote:
 
-Already done 3 days ago:
-    https://github.com/raspberrypi/userland/pull/380
+> If it all boils down to it being a systemd specific option that can be
+> handled by a single symlink in an overlay/post-build script, then I
+> don't think it is worth to have it.
 
-Regards,
-Yann E. MORIN.
+Considering the lack of feedback from Eric on the topic, I've marked
+his patch as Rejected in patchwork.
 
+Please do not hesitate to resubmit with a better explanation that
+answers the questions asked during the review. Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
