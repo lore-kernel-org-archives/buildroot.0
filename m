@@ -1,51 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Mar 2017 14:22:25 +0100
-Subject: [Buildroot] [git commit] gitlab-ci: add gcc-multilib to the docker
-	image
-Message-ID: <20170310132314.8DD14804F9@busybox.osuosl.org>
+Date: Fri, 10 Mar 2017 14:38:39 +0100
+Subject: [Buildroot] [PATCH] package/liberation: fixes download site due
+	to recent fedorahosted.org closing
+In-Reply-To: <1489151966-972-1-git-send-email-julien.boibessot@free.fr>
+ (julien boibessot's message of "Fri, 10 Mar 2017 14:19:26 +0100")
+References: <1489151966-972-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <8760jh9rq8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=512a08309493ff34b13dcbca53c9915ce40b44e9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
-This is needed for defconfigs that use syslinux.
+ > From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-Fixes https://gitlab.com/buildroot.org/buildroot/builds/11701092
+Committed, thanks.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .gitlab-ci.yml    | 2 +-
- .gitlab-ci.yml.in | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+We have some other packages also using fedorahosted.org. Will you send
+fixes for those as well, please?
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 1954eaa..cb9e6fc 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -11,7 +11,7 @@ before_script:
-     # The container has no package lists, so need to update first
-     - apt-get update -qq
-     - apt-get install -y -qq --no-install-recommends
--        build-essential locales bc ca-certificates file rsync
-+        build-essential locales bc ca-certificates file rsync gcc-multilib
-         git bzr cvs mercurial subversion libc6:i386 unzip wget cpio
-     # To be able to generate a toolchain with locales, enable one UTF-8 locale
-     - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index b4a6a3f..0f9cbcb 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -11,7 +11,7 @@ before_script:
-     # The container has no package lists, so need to update first
-     - apt-get update -qq
-     - apt-get install -y -qq --no-install-recommends
--        build-essential locales bc ca-certificates file rsync
-+        build-essential locales bc ca-certificates file rsync gcc-multilib
-         git bzr cvs mercurial subversion libc6:i386 unzip wget cpio
-     # To be able to generate a toolchain with locales, enable one UTF-8 locale
-     - sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen
+git grep fedorahosted package/**/*.mk
+package/ding-libs/ding-libs.mk:DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot
+package/dropwatch/dropwatch.mk:DROPWATCH_SITE = https://git.fedorahosted.org/cgit/dropwatch.git/snapshot
+package/elfutils/elfutils.mk:ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
+package/iptraf-ng/iptraf-ng.mk:IPTRAF_NG_SITE = https://fedorahosted.org/releases/i/p/iptraf-ng
+
+Please also update the URLs in Config.in.
+
+-- 
+Bye, Peter Korsgaard
