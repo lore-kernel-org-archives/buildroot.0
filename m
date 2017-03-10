@@ -1,38 +1,36 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 10 Mar 2017 13:35:57 +0100
-Subject: [Buildroot] [PATCH 2/3] configs: snps_archs38_vdk: use same headers
-	as kernel
-In-Reply-To: <20170310123558.22033-1-arnout@mind.be>
-References: <20170310123558.22033-1-arnout@mind.be>
-Message-ID: <20170310123558.22033-2-arnout@mind.be>
+Date: Fri, 10 Mar 2017 13:35:56 +0100
+Subject: [Buildroot] [PATCH 1/3] configs: beaglebaordx15: fixate the header
+	series
+Message-ID: <20170310123558.22033-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of downloading a *different* version of the kernel for the
-headers as for the headers itself, use the same one.
-BR2_KERNEL_HEADERS_AS_KERNEL is the default, but we have to set the
-custom version.
+The kernel headers version used to be default when the default was
+still 4.9. Now, however, we switched the default headers version to
+4.10 but the beagleboardx15 kernel is still 4.9, so we have to set
+the kernel headers version explicitly.
+
+Fixes https://gitlab.com/buildroot.org/buildroot/builds/11700987
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- configs/snps_archs38_vdk_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/beagleboardx15_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
-index d13fcb2236..7cbd68ce14 100644
---- a/configs/snps_archs38_vdk_defconfig
-+++ b/configs/snps_archs38_vdk_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
- BR2_TARGET_ROOTFS_EXT2=y
- 
- # Linux headers same as kernel, a 4.9 series
--BR2_KERNEL_HEADERS_4_9=y
+diff --git a/configs/beagleboardx15_defconfig b/configs/beagleboardx15_defconfig
+index 25ee21b8f6..393b29eef0 100644
+--- a/configs/beagleboardx15_defconfig
++++ b/configs/beagleboardx15_defconfig
+@@ -1,5 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_a15=y
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- 
- # Kernel
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beagleboardx15/post-image.sh"
  BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -- 
 2.11.0
