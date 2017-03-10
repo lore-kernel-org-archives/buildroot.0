@@ -1,38 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 22:55:45 +0100
-Subject: [Buildroot] [Patch v3 9/9] s6-linux-init: new package
-In-Reply-To: <1482182955-23916-10-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1482182955-23916-10-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20170310225545.0c091e09@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 10 Mar 2017 22:57:02 +0100
+Subject: [Buildroot] [PATCH] package/rpi-userland: don't isntall file in
+ random location
+In-Reply-To: <20170310224628.12501d85@free-electrons.com>
+References: <1488921388-9691-1-git-send-email-yann.morin.1998@free.fr>
+ <20170310224628.12501d85@free-electrons.com>
+Message-ID: <20170310215702.GA3674@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Mon, 19 Dec 2016 22:29:15 +0100, Eric Le Bihan wrote:
-> This new package provides s6-linux-init, a set of minimalistic tools to
-> create a s6-based init system, including a /sbin/init program, on a
-> machine running a Linux kernel.
+On 2017-03-10 22:46 +0100, Thomas Petazzoni spake thusly:
+> On Tue,  7 Mar 2017 22:16:28 +0100, Yann E. MORIN wrote:
+> > Currently, rpi-userland installs files in $(@D)/../../bin/ which is
+> > entirely stupid, especially in cross-compilation.
+> > 
+> > Get rid of the dubious, broken, custom install command.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  ...toverlay-don-t-install-script-in-random-l.patch | 45 ++++++++++++++++++++++
+> >  1 file changed, 45 insertions(+)
+> >  create mode 100644 package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/Config.in                        |  1 +
->  package/s6-linux-init/Config.in          | 11 ++++++++++
->  package/s6-linux-init/s6-linux-init.hash |  2 ++
->  package/s6-linux-init/s6-linux-init.mk   | 36 ++++++++++++++++++++++++++++++++
->  4 files changed, 50 insertions(+)
->  create mode 100644 package/s6-linux-init/Config.in
->  create mode 100644 package/s6-linux-init/s6-linux-init.hash
->  create mode 100644 package/s6-linux-init/s6-linux-init.mk
+> Applied to master after fixing the typo in the commit title. Please
+> don't forget to submit upstream.
 
-Applied to master, thanks.
+Already done 3 days ago:
+    https://github.com/raspberrypi/userland/pull/380
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
