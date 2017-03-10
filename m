@@ -1,220 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Mar 2017 14:04:00 +0100
-Subject: [Buildroot] [PATCH] lxc: add upstream security fix for CVE-2017-5985
-Message-ID: <20170310130400.8425-1-peter@korsgaard.com>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Fri, 10 Mar 2017 14:05:52 +0100
+Subject: [Buildroot] [PATCH 2/2] libnl: bump to version 3.2.29
+In-Reply-To: <20170310125536.eoqglroq76kawtwv@tarshish>
+References: <e21edac8997da04d86a420d580120f5311734191.1489136084.git.baruch@tkos.co.il>
+ <4ebba581b256855a7e36993f044ef2b6a6cdfd72.1489136084.git.baruch@tkos.co.il>
+ <061cbb4c-8b53-4f32-9d03-344b1ff0c009@zacarias.com.ar>
+ <1b9e911c-d7ee-dd96-383f-c28fee26353f@zacarias.com.ar>
+ <20170310103407.mzk5azkvlr3jc2ok@tarshish>
+ <20170310125536.eoqglroq76kawtwv@tarshish>
+Message-ID: <CANCHnQrAipqMe=Y=t5vCkPhDhijFxz4_OZQgnSfVQ6PJeuGzkQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Before this commit, lxc-user-nic could potentially have been tricked into
-operating on a network namespace over which the caller did not hold
-privilege.
+You can use this:
 
-This commit ensures that the caller is privileged over the network namespace
-by temporarily dropping privilege.
+https://dev.gentoo.org/~jer/libnl-3.2.28-in6.patch.xz
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-5985-Ensure-target-netns-is-caller-owned.patch | 189 +++++++++++++++++++++
- 1 file changed, 189 insertions(+)
- create mode 100644 package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
-
-diff --git a/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch b/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
-new file mode 100644
-index 000000000..79d19b3af
---- /dev/null
-+++ b/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
-@@ -0,0 +1,189 @@
-+From 16af238036a5464ae8f2420ed3af214f0de875f9 Mon Sep 17 00:00:00 2001
-+From: Christian Brauner <christian.brauner@ubuntu.com>
-+Date: Sat, 28 Jan 2017 13:02:34 +0100
-+Subject: [PATCH] CVE-2017-5985: Ensure target netns is caller-owned
-+
-+Before this commit, lxc-user-nic could potentially have been tricked into
-+operating on a network namespace over which the caller did not hold privilege.
-+
-+This commit ensures that the caller is privileged over the network namespace by
-+temporarily dropping privilege.
-+
-+Launchpad: https://bugs.launchpad.net/ubuntu/+source/lxc/+bug/1654676
-+Reported-by: Jann Horn <jannh@google.com>
-+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/lxc/lxc_user_nic.c | 119 ++++++++++++++++++++++++++++++++++++-------------
-+ 1 file changed, 87 insertions(+), 32 deletions(-)
-+
-+diff --git a/src/lxc/lxc_user_nic.c b/src/lxc/lxc_user_nic.c
-+index 409a53a1..96dc3986 100644
-+--- a/src/lxc/lxc_user_nic.c
-++++ b/src/lxc/lxc_user_nic.c
-+@@ -50,6 +50,14 @@
-+ #include "utils.h"
-+ #include "network.h"
-+ 
-++#define usernic_debug_stream(stream, format, ...)                              \
-++	do {                                                                   \
-++		fprintf(stream, "%s: %d: %s: " format, __FILE__, __LINE__,     \
-++			__func__, __VA_ARGS__);                                \
-++	} while (false)
-++
-++#define usernic_error(format, ...) usernic_debug_stream(stderr, format, __VA_ARGS__)
-++
-+ static void usage(char *me, bool fail)
-+ {
-+ 	fprintf(stderr, "Usage: %s lxcpath name pid type bridge nicname\n", me);
-+@@ -670,68 +678,115 @@ again:
-+ }
-+ 
-+ #define VETH_DEF_NAME "eth%d"
-+-
-+ static int rename_in_ns(int pid, char *oldname, char **newnamep)
-+ {
-+-	int fd = -1, ofd = -1, ret, ifindex = -1;
-++	uid_t ruid, suid, euid;
-++	int fret = -1;
-++	int fd = -1, ifindex = -1, ofd = -1, ret;
-+ 	bool grab_newname = false;
-+ 
-+ 	ofd = lxc_preserve_ns(getpid(), "net");
-+ 	if (ofd < 0) {
-+-		fprintf(stderr, "Failed opening network namespace path for '%d'.", getpid());
-+-		return -1;
-++		usernic_error("Failed opening network namespace path for '%d'.", getpid());
-++		return fret;
-+ 	}
-+ 
-+ 	fd = lxc_preserve_ns(pid, "net");
-+ 	if (fd < 0) {
-+-		fprintf(stderr, "Failed opening network namespace path for '%d'.", pid);
-+-		return -1;
-++		usernic_error("Failed opening network namespace path for '%d'.", pid);
-++		goto do_partial_cleanup;
-++	}
-++
-++	ret = getresuid(&ruid, &euid, &suid);
-++	if (ret < 0) {
-++		usernic_error("Failed to retrieve real, effective, and saved "
-++			      "user IDs: %s\n",
-++			      strerror(errno));
-++		goto do_partial_cleanup;
-++	}
-++
-++	ret = setns(fd, CLONE_NEWNET);
-++	close(fd);
-++	fd = -1;
-++	if (ret < 0) {
-++		usernic_error("Failed to setns() to the network namespace of "
-++			      "the container with PID %d: %s.\n",
-++			      pid, strerror(errno));
-++		goto do_partial_cleanup;
-+ 	}
-+ 
-+-	if (setns(fd, 0) < 0) {
-+-		fprintf(stderr, "setns to container network namespace\n");
-+-		goto out_err;
-++	ret = setresuid(ruid, ruid, 0);
-++	if (ret < 0) {
-++		usernic_error("Failed to drop privilege by setting effective "
-++			      "user id and real user id to %d, and saved user "
-++			      "ID to 0: %s.\n",
-++			      ruid, strerror(errno));
-++		// COMMENT(brauner): It's ok to jump to do_full_cleanup here
-++		// since setresuid() will succeed when trying to set real,
-++		// effective, and saved to values they currently have.
-++		goto do_full_cleanup;
-+ 	}
-+-	close(fd); fd = -1;
-++
-+ 	if (!*newnamep) {
-+ 		grab_newname = true;
-+ 		*newnamep = VETH_DEF_NAME;
-+-		if (!(ifindex = if_nametoindex(oldname))) {
-+-			fprintf(stderr, "failed to get netdev index\n");
-+-			goto out_err;
-++
-++		ifindex = if_nametoindex(oldname);
-++		if (!ifindex) {
-++			usernic_error("Failed to get netdev index: %s.\n", strerror(errno));
-++			goto do_full_cleanup;
-+ 		}
-+ 	}
-+-	if ((ret = lxc_netdev_rename_by_name(oldname, *newnamep)) < 0) {
-+-		fprintf(stderr, "Error %d renaming netdev %s to %s in container\n", ret, oldname, *newnamep);
-+-		goto out_err;
-++
-++	ret = lxc_netdev_rename_by_name(oldname, *newnamep);
-++	if (ret < 0) {
-++		usernic_error("Error %d renaming netdev %s to %s in container.\n", ret, oldname, *newnamep);
-++		goto do_full_cleanup;
-+ 	}
-++
-+ 	if (grab_newname) {
-+-		char ifname[IFNAMSIZ], *namep = ifname;
-++		char ifname[IFNAMSIZ];
-++		char *namep = ifname;
-++
-+ 		if (!if_indextoname(ifindex, namep)) {
-+-			fprintf(stderr, "Failed to get new netdev name\n");
-+-			goto out_err;
-++			usernic_error("Failed to get new netdev name: %s.\n", strerror(errno));
-++			goto do_full_cleanup;
-+ 		}
-++
-+ 		*newnamep = strdup(namep);
-+ 		if (!*newnamep)
-+-			goto out_err;
-++			goto do_full_cleanup;
-+ 	}
-+-	if (setns(ofd, 0) < 0) {
-+-		fprintf(stderr, "Error returning to original netns\n");
-+-		close(ofd);
-+-		return -1;
-++
-++	fret = 0;
-++
-++do_full_cleanup:
-++	ret = setresuid(ruid, euid, suid);
-++	if (ret < 0) {
-++		usernic_error("Failed to restore privilege by setting effective "
-++			      "user id to %d, real user id to %d, and saved user "
-++			      "ID to %d: %s.\n",
-++			      ruid, euid, suid, strerror(errno));
-++		fret = -1;
-++		// COMMENT(brauner): setns() should fail if setresuid() doesn't
-++		// succeed but there's no harm in falling through; keeps the
-++		// code cleaner.
-+ 	}
-+-	close(ofd);
-+ 
-+-	return 0;
-++	ret = setns(ofd, CLONE_NEWNET);
-++	if (ret < 0) {
-++		usernic_error("Failed to setns() to original network namespace "
-++			      "of PID %d: %s.\n",
-++			      ofd, strerror(errno));
-++		fret = -1;
-++	}
-+ 
-+-out_err:
-+-	if (ofd >= 0)
-+-		close(ofd);
-+-	if (setns(ofd, 0) < 0)
-+-		fprintf(stderr, "Error returning to original network namespace\n");
-++do_partial_cleanup:
-+ 	if (fd >= 0)
-+ 		close(fd);
-+-	return -1;
-++	close(ofd);
-++
-++	return fret;
-+ }
-+ 
-+ /*
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+On 10 March 2017 at 13:55, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Gustavo,
+>
+> On Fri, Mar 10, 2017 at 12:34:07PM +0200, Baruch Siach wrote:
+>> On Fri, Mar 10, 2017 at 06:57:10AM -0300, Gustavo Zacarias wrote:
+>> > On 10/03/17 06:56, Gustavo Zacarias wrote:
+>> > > On 10/03/17 05:54, Baruch Siach wrote:
+>> > >
+>> > > > -LIBNL_VERSION = 3.2.27
+>> > > > +LIBNL_VERSION = 3.2.29
+>> > >
+>> > > Did you try with older headers?
+>> > > Beacuse last time i tried 3.2.{28,29} weren't happy at least with 3.2.x
+>> > > hence i refrained from bumping and carrying that dependency along a few
+>> > > packages.
+>> >
+>> > That's kernel headers at least 3.2.x, coffee isn't it yet, sorry.
+>> > Regards.
+>>
+>> Right. Build breaks with our 3.5 headers based CodeSourcery SH toolchain:
+>>
+>> In file included from ../include/linux-private/linux/ipv6.h:5:0,
+>>                  from ../include/netlink-private/netlink.h:55,
+>>                  from addr.c:30:
+>> .../output/host/usr/sh4a-buildroot-linux-gnu/sysroot/usr/include/linux/in6.h:30:8: error: redefinition of 'struct in6_addr'
+>>
+>> [... many more errors of this type]
+>>
+>> The x86_64 toolchain (also using 3.5 headers) is most likely also affected.
+>
+> Adding in6.h and libc-compat.h from the libnl git repo to the tarball seems to
+> fix this error. This has been fixed in upstream commit 6c7f4215003 ("build:
+> distribute in.h in6.h libc-compat.h").
+>
+> I don't have time for a proper patch at the moment, so either revert the bump
+> and I'll send a revised version later, or create an equivalent patch to
+> upstream fix.
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
