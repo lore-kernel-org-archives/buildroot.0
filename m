@@ -1,40 +1,45 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 10 Mar 2017 20:42:50 +0100
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.6
-Message-ID: <20170310194250.31210-1-joerg.krause@embedded.rocks>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 10 Mar 2017 19:53:04 +0000
+Subject: [Buildroot] [Bug 9721] version 2017.02: no acceptable m4 could be
+	found in $PATH
+In-Reply-To: <bug-9721-163@https.bugs.busybox.net/>
+References: <bug-9721-163@https.bugs.busybox.net/>
+Message-ID: <bug-9721-163-gGg09mIU4K@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=9721
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index ecd78e97c..37141971e 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  712b25351c12616630c580204e1c3dcba3ae2993a56cff1c346c87e334d69728  mpd-0.20.4.tar.xz
-+sha256  f4055e1189e5cc00e83706b2e0b5ead924ced0303e073d7802ee9f9a8eba4b47  mpd-0.20.6.tar.xz
- sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 8e71ae214..79cc995c8 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -6,7 +6,7 @@
- 
- MPD_VERSION_MAJOR = $(call qstrip,$(BR2_PACKAGE_MPD_VERSION_STRING))
- ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
--MPD_VERSION = $(MPD_VERSION_MAJOR).4
-+MPD_VERSION = $(MPD_VERSION_MAJOR).6
- else
- MPD_VERSION = $(MPD_VERSION_MAJOR).21
- endif
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+host-libtool in Buildroot has a dependency on host-m4, so you should have
+seen host-m4 build before host-libtool.
+
+Can you verify this is the case?
+
+Also, I see you are building as root. This is absolutely not necessary,
+and it is greatly suggested that you do not do that. Furthermore, this
+is known to cause build issues in some packages (at least nodejs is
+impacted). Can you retry running as non-root?
+
+Finally, I see that you are building in a sub-directory of /usr, which
+has caused issues in the past. Can you try bulding in your user's home
+instead?
+
+In the meantime, I'll try a local build in a sub-dir os /usr to check
+the issue has not resurfaced...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.12.0
+You are receiving this mail because:
+You are on the CC list for the bug.
