@@ -1,33 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 21:41:45 +0100
-Subject: [Buildroot] [PATCH 2/2] libnl: bump to version 3.2.29
-In-Reply-To: <4ebba581b256855a7e36993f044ef2b6a6cdfd72.1489136084.git.baruch@tkos.co.il>
-References: <e21edac8997da04d86a420d580120f5311734191.1489136084.git.baruch@tkos.co.il>
- <4ebba581b256855a7e36993f044ef2b6a6cdfd72.1489136084.git.baruch@tkos.co.il>
-Message-ID: <20170310214145.5477d6d2@free-electrons.com>
+Date: Fri, 10 Mar 2017 21:42:09 +0100
+Subject: [Buildroot] [git commit] package/elfutils: change upstream site
+Message-ID: <20170310204738.C4AE882572@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=94fba6644e5e612befde675b18cc94c32ccc135b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 10 Mar 2017 10:54:44 +0200, Baruch Siach wrote:
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libnl/libnl.hash | 4 ++--
->  package/libnl/libnl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+fedorahosted.org has been closed on March 1st, 2017, so use a
+different upstream location for the elfutils project.
 
-As discussed, I have reverted this commit, which causes too many
-autobuilder issues.
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/elfutils/Config.in   | 2 +-
+ package/elfutils/elfutils.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index 0419e27..7db8472 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -22,7 +22,7 @@ config BR2_PACKAGE_ELFUTILS
+ 	  Note that this option only installs the libraries, and not
+ 	  the programs.
+ 
+-	  https://fedorahosted.org/elfutils
++	  https://sourceware.org/elfutils/
+ 
+ if BR2_PACKAGE_ELFUTILS
+ 
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 566e0bf..0bf105e 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -6,7 +6,7 @@
+ 
+ ELFUTILS_VERSION = 0.166
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+-ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
++ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+ ELFUTILS_LICENSE = GPLv2+ or LGPLv3+ (library)
+ ELFUTILS_LICENSE_FILES = COPYING-GPLV2 COPYING-LGPLV3
