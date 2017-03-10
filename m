@@ -1,34 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Mar 2017 14:20:02 +0100
-Subject: [Buildroot] [5/8] package/rpi-firmware: bump version
-In-Reply-To: <f12fff71-bfbe-87cf-077a-52e2019dcc0e@je-eigen-domein.nl> (Floris
- Bos's message of "Fri, 10 Mar 2017 13:51:41 +0100")
-References: <1488729976-7116-5-git-send-email-martin@barkynet.com>
- <f12fff71-bfbe-87cf-077a-52e2019dcc0e@je-eigen-domein.nl>
-Message-ID: <87mvct9sl9.fsf@dell.be.48ers.dk>
+Date: Fri, 10 Mar 2017 14:21:31 +0100
+Subject: [Buildroot] [PATCH 1/3] configs: beaglebaordx15: fixate the
+	header series
+In-Reply-To: <20170310123558.22033-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Fri, 10 Mar 2017 13:35:56 +0100")
+References: <20170310123558.22033-1-arnout@mind.be>
+Message-ID: <87innh9sis.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Floris" == Floris Bos <bos@je-eigen-domein.nl> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Hi,
- > On 03/05/2017 05:06 PM, Martin Bark wrote:
- >> -RPI_FIRMWARE_VERSION = 7f8ac8dac0b80291cbf5e56580139034a0a42070
- >> +RPI_FIRMWARE_VERSION = 78c4983379de0537f49a97fb37ceaaf42632b28c
+ > The kernel headers version used to be default when the default was
+ > still 4.9. Now, however, we switched the default headers version to
+ > 4.10 but the beagleboardx15 kernel is still 4.9, so we have to set
+ > the kernel headers version explicitly.
 
- > New firmware version does not get along with projects that still use
- > 4.4.x kernel.
- > It seems that projects that still use 4.4.x are now supposed to use
- > the firmware branch called "stable"
+ > Fixes https://gitlab.com/buildroot.org/buildroot/builds/11700987
 
- > Perhaps we should introduce a config option for firmware version, like
- > we have for kernel version?
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Gaah :/ Have you brought this up with rpi upstream? What is their
-feedback?
+Committed after fixing the typo in $SUBJECT, thanks.
+
+> ---
+ >  configs/beagleboardx15_defconfig | 1 +
+ >  1 file changed, 1 insertion(+)
+
+ > diff --git a/configs/beagleboardx15_defconfig b/configs/beagleboardx15_defconfig
+ > index 25ee21b8f6..393b29eef0 100644
+ > --- a/configs/beagleboardx15_defconfig
+ > +++ b/configs/beagleboardx15_defconfig
+ > @@ -1,5 +1,6 @@
+ >  BR2_arm=y
+ >  BR2_cortex_a15=y
+ > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ >  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beagleboardx15/post-image.sh"
+ >  BR2_LINUX_KERNEL=y
+ >  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ > -- 
+ > 2.11.0
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
