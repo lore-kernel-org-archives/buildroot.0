@@ -1,45 +1,39 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Fri, 10 Mar 2017 17:00:57 +0530
-Subject: [Buildroot] Qt5.8 display screen rotation
-In-Reply-To: <CAAMH-yvvhnYxYm17w0vgkav==PGS3b9Z=NdqeyLEFKDMSdNwbA@mail.gmail.com>
-References: <CAD6G_RQS20T_YBu_5pkeH1vhey10WE63yEGu8sp70dbyP_VUYA@mail.gmail.com>
- <CAAMH-yvvhnYxYm17w0vgkav==PGS3b9Z=NdqeyLEFKDMSdNwbA@mail.gmail.com>
-Message-ID: <CAD6G_RQDRiKQw2GXHrqnvdE1a-vN97Pp38mQdvEXofo+E+nEkw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Mar 2017 12:37:14 +0100
+Subject: [Buildroot] [git commit] Update for 2016.11.3
+Message-ID: <20170310113721.5E1CD80251@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+commit: https://git.buildroot.net/buildroot/commit/?id=e77a5c881c463d399e35a215ab124a448a13e526
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Mar 10, 2017 at 4:47 PM, Gary Bisson
-<gary.bisson@boundarydevices.com> wrote:
-> Hi Jagan,
->
-> On Fri, Mar 10, 2017 at 11:00 AM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
->> Hi,
->>
->> I'm looking for display screen to move it Portrait(vertical), based on
->> the info from this thread [1] with qws we can make it, doe buildroot
->> have support for that is yes can you point me the config and related
->> info
->
-> qws doesn't exist in Qt5 any more. However rotation support has been
-> added back in Qt5.8:
-> http://doc.qt.io/qt-5/embedded-linux.html#eglfs
->
-> You need to set QT_QPA_EGLFS_ROTATION to 90/180/270.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Peter: drop Makefile changes]
+(cherry picked from commit cf01d69e1b7bf6b4e31d7f7bab646365f75394d5)
+---
+ CHANGES | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-I think this would require extra back-end support, couldn't see screen
-rotation after set.
-
-# export
-export PWD='/root'
-export QT_QPA_EGLFS_ROTATION='90'
-
--- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+diff --git a/CHANGES b/CHANGES
+index 5fedca1..64179a2 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -156,6 +156,14 @@
+ 	#9576: External tree with BR 2016.11 does not work anymore
+ 	#9606: xorg-server cannot build for ARM target
+ 
++2016.11.3, Released March 9th, 2017
++
++	Important / security related fixes.
++
++	Updated/fixed packages: bind, dbus, gnutls, imagemagick,
++	lcms2, libcurl, ntfs-3g, ntp, openssl, php, quagga, redis,
++	squid, stunnel, tcpdump, vim, wavpack, wireshark, xlib_libXpm
++
+ 2016.11.2, Released January 25th, 2017
+ 
+ 	Important / security related fixes.
