@@ -1,168 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 22:24:08 +0100
-Subject: [Buildroot] [git commit] tinycbor: bump to version 1.4.1
-Message-ID: <20170310213728.978F882286@busybox.osuosl.org>
+Date: Fri, 10 Mar 2017 22:45:44 +0100
+Subject: [Buildroot] [git commit] package/rpi-userland: don't install file
+	in random location
+Message-ID: <20170310214611.4059E82580@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1f86b39546e18f21d4605dbea549490b553e3e9
+commit: https://git.buildroot.net/buildroot/commit/?id=ffa39b23f7ece3a3d9ea914c2e385ce222bdf921
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Delete first patch as it has been integrated upstream
-Retrieve second patch upstream
+Currently, rpi-userland installs files in $(@D)/../../bin/ which is
+entirely stupid, especially in cross-compilation.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Get rid of the dubious, broken, custom install command.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../tinycbor/0001-Update-cjson-include-path.patch  | 69 ----------------------
- .../0002-Fix-static-compilation-of-json2cbor.patch | 29 ---------
- package/tinycbor/tinycbor.hash                     |  3 +-
- package/tinycbor/tinycbor.mk                       |  6 +-
- 4 files changed, 7 insertions(+), 100 deletions(-)
+ ...toverlay-don-t-install-script-in-random-l.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/tinycbor/0001-Update-cjson-include-path.patch b/package/tinycbor/0001-Update-cjson-include-path.patch
-deleted file mode 100644
-index 5eea937..0000000
---- a/package/tinycbor/0001-Update-cjson-include-path.patch
-+++ /dev/null
-@@ -1,69 +0,0 @@
--From 9aa79d8e9e38b31b34d9933a266c698e79808a79 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fabrice.fontaine@orange.com>
--Date: Sun, 13 Nov 2016 15:43:40 +0100
--Subject: [PATCH] Update cjson include path
--
--Since cjson-v1.0.0 (https://github.com/DaveGamble/cJSON/releases),
--cJSON.h is installed into cjson/cJSON.h and library has been renamed
--from cJSON to cjson
--
--Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-----
-- Makefile                    | 4 ++--
-- Makefile.configure          | 4 ++--
-- tools/json2cbor/json2cbor.c | 2 +-
-- 3 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index acd52eb..905fbdf 100644
----- a/Makefile
--+++ b/Makefile
--@@ -82,12 +82,12 @@ ifeq ($(open_memstream-pass),)
--   endif
-- endif
-- 
---# json2cbor depends on an external library (cJSON)
--+# json2cbor depends on an external library (cjson)
-- ifneq ($(cjson-pass)$(system-cjson-pass),)
--   JSON2CBOR_SOURCES = tools/json2cbor/json2cbor.c
--   INSTALL_TARGETS += $(bindir)/json2cbor
--   ifeq ($(system-cjson-pass),1)
---    LDFLAGS_CJSON = -lcJSON
--+    LDFLAGS_CJSON = -lcjson
--   else
--     JSON2CBOR_SOURCES += src/cjson/cJSON.c
--     json2cbor_CCFLAGS = -I$(SRCDIR)src/cjson
--diff --git a/Makefile.configure b/Makefile.configure
--index 28f4c92..424efb3 100644
----- a/Makefile.configure
--+++ b/Makefile.configure
--@@ -10,11 +10,11 @@ PROGRAM-gc_sections = int main() {}
-- CCFLAGS-gc_sections = -Wl,--gc-sections
-- 
-- PROGRAM-cjson  = \#include <stdlib.h>\n
---PROGRAM-cjson += \#include <cJSON.h>\n
--+PROGRAM-cjson += \#include <cjson/cJSON.h>\n
-- PROGRAM-cjson += int main() { return cJSON_False; }
-- CCFLAGS-cjson = -I$(dir $(MAKEFILE))src/cjson
-- PROGRAM-system-cjson = $(PROGRAM-cjson)
---CCFLAGS-system-cjson = -lcJSON
--+CCFLAGS-system-cjson = -lcjson
-- 
-- sink:
-- 	@echo >&2 Please run from the top-level Makefile.
--diff --git a/tools/json2cbor/json2cbor.c b/tools/json2cbor/json2cbor.c
--index 96d3ed1..e194299 100644
----- a/tools/json2cbor/json2cbor.c
--+++ b/tools/json2cbor/json2cbor.c
--@@ -27,7 +27,7 @@
-- #include "cbor.h"
-- #include "compilersupport_p.h"
-- 
---#include <cJSON.h>
--+#include <cjson/cJSON.h>
-- 
-- #include <errno.h>
-- #include <math.h>
---- 
--2.5.0
--
-diff --git a/package/tinycbor/0002-Fix-static-compilation-of-json2cbor.patch b/package/tinycbor/0002-Fix-static-compilation-of-json2cbor.patch
-deleted file mode 100644
-index dfea4ca..0000000
---- a/package/tinycbor/0002-Fix-static-compilation-of-json2cbor.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 1be7da8d81bbd52d722ec60250567ea876f6f4b5 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fabrice.fontaine@orange.com>
--Date: Sat, 3 Dec 2016 20:15:41 +0100
--Subject: [PATCH] Fix static compilation of json2cbor
--
--json2cbor depends on cjson so tools/json2cbor/json2cbor.o must before
---lcjson
--
--Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-----
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 905fbdf..7b5fefc 100644
----- a/Makefile
--+++ b/Makefile
--@@ -115,7 +115,7 @@ bin/cbordump: $(CBORDUMP_SOURCES:.c=.o) lib/libtinycbor.a | bin
-- 	$(CC) -o $@ $(LDFLAGS) $^ $(LDLIBS) -lm
-- 
-- bin/json2cbor: $(JSON2CBOR_SOURCES:.c=.o) lib/libtinycbor.a | bin
---	$(CC) -o $@ $(LDFLAGS) $(LDFLAGS_CJSON) $^ $(LDLIBS) -lm
--+	$(CC) -o $@ $(LDFLAGS) $^ $(LDFLAGS_CJSON) $(LDLIBS) -lm
-- 
-- tinycbor.pc: tinycbor.pc.in
-- 	$(SED) > $@ < $< \
---- 
--2.5.0
--
-diff --git a/package/tinycbor/tinycbor.hash b/package/tinycbor/tinycbor.hash
-index 88300e8..416dce6 100644
---- a/package/tinycbor/tinycbor.hash
-+++ b/package/tinycbor/tinycbor.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256	302ac9de66f1048725040ccc9a99e03c20529ac2b150ccf35cfd1e2dafa81c4b	tinycbor-v0.4.tar.gz
-+sha256	8e42984015d62e8323b7f2a439bde157d707e0d7ae57a6d8d5a2665247af6638	tinycbor-v0.4.1.tar.gz
-+sha256	1298b80ab23ae24e85515d9f06398236d087bc76dccd0a48757fcb7e54557175	ae608ea2735bd331ec7dcf9d89928c38f0e0c981.patch
-diff --git a/package/tinycbor/tinycbor.mk b/package/tinycbor/tinycbor.mk
-index 65deacd..1f13e7d 100644
---- a/package/tinycbor/tinycbor.mk
-+++ b/package/tinycbor/tinycbor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TINYCBOR_VERSION = v0.4
-+TINYCBOR_VERSION = v0.4.1
- TINYCBOR_SITE = $(call github,01org,tinycbor,$(TINYCBOR_VERSION))
- TINYCBOR_LICENSE = MIT
- TINYCBOR_LICENSE_FILES = LICENSE
-@@ -12,6 +12,10 @@ TINYCBOR_LICENSE_FILES = LICENSE
- TINYCBOR_DEPENDENCIES = host-pkgconf
- TINYCBOR_INSTALL_STAGING = YES
- 
-+# This patch fixes static build of json2cbor
-+TINYCBOR_PATCH = \
-+	https://github.com/01org/tinycbor/commit/ae608ea2735bd331ec7dcf9d89928c38f0e0c981.patch
+diff --git a/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch b/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
+new file mode 100644
+index 0000000..2900eb7
+--- /dev/null
++++ b/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
+@@ -0,0 +1,45 @@
++From a5a4e361c8116ca9228a896f672102c02be56bb7 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Tue, 7 Mar 2017 22:01:39 +0100
++Subject: [PATCH] host-apps/dtoverlay: don't install script in random location
 +
- ifeq ($(BR2_PACKAGE_CJSON),y)
- TINYCBOR_DEPENDENCIES += cjson
- endif
++Currently, we add a custom command that installs the dtoverlay pre/post
++scripts in ${CMAKE_BINARY_DIR}/../../bin
++
++However:
++
++  - this points outside of the package directory.; it even points two
++    directories higher;
++
++  - when doing cross-compilation, this is definitely not the place where
++    the /bin directory really is;
++
++  - the scripts are already properly installed without this code.
++
++Remove that code, it serves no purpose and breaks for cross-compilation.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ host_applications/linux/apps/dtoverlay/CMakeLists.txt | 8 --------
++ 1 file changed, 8 deletions(-)
++
++diff --git a/host_applications/linux/apps/dtoverlay/CMakeLists.txt b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
++index 9009200..dd48d83 100755
++--- a/host_applications/linux/apps/dtoverlay/CMakeLists.txt
+++++ b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
++@@ -22,12 +22,4 @@ add_custom_command(TARGET dtoverlay POST_BUILD COMMAND ln;-sf;dtoverlay;dtparam)
++ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dtparam DESTINATION bin)
++ 
++ set(DTOVERLAY_SCRIPTS dtoverlay-pre dtoverlay-post)
++-foreach(_script ${DTOVERLAY_SCRIPTS})
++-   add_custom_command(
++-     TARGET dtoverlay
++-     COMMAND ${CMAKE_COMMAND}
++-     -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${_script}
++-     ${CMAKE_BINARY_DIR}/../../bin/${_script}
++-   )
++-endforeach()
++ install(PROGRAMS ${DTOVERLAY_SCRIPTS} DESTINATION bin)
++-- 
++2.7.4
++
