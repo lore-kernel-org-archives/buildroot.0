@@ -1,24 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 10 Mar 2017 12:21:55 +0000
-Subject: [Buildroot] [Bug 9721] version 2017.02: no acceptable m4 could be
-	found in $PATH
-In-Reply-To: <bug-9721-163@https.bugs.busybox.net/>
-References: <bug-9721-163@https.bugs.busybox.net/>
-Message-ID: <bug-9721-163-Y1EnJt0pnX@https.bugs.busybox.net/>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 10 Mar 2017 13:35:57 +0100
+Subject: [Buildroot] [PATCH 2/3] configs: snps_archs38_vdk: use same headers
+	as kernel
+In-Reply-To: <20170310123558.22033-1-arnout@mind.be>
+References: <20170310123558.22033-1-arnout@mind.be>
+Message-ID: <20170310123558.22033-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9721
+Instead of downloading a *different* version of the kernel for the
+headers as for the headers itself, use the same one.
+BR2_KERNEL_HEADERS_AS_KERNEL is the default, but we have to set the
+custom version.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-Can you check in output/build/host-libtool-2.4.6/config.log to see why the m4
-check fails?
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ configs/snps_archs38_vdk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm using m4 1.4.18 here without issues.
-
+diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
+index d13fcb2236..7cbd68ce14 100644
+--- a/configs/snps_archs38_vdk_defconfig
++++ b/configs/snps_archs38_vdk_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Linux headers same as kernel, a 4.9 series
+-BR2_KERNEL_HEADERS_4_9=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
