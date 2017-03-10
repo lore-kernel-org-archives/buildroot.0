@@ -1,57 +1,40 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 10 Mar 2017 20:31:59 +0100
-Subject: [Buildroot] [PATCH v1] libxkbcommon: add support for
- interactive-wayland test program
-In-Reply-To: <20170309221850.3a6ab20c@free-electrons.com>
-References: <20170308215310.12819-1-ps.report@gmx.net>
- <20170309221850.3a6ab20c@free-electrons.com>
-Message-ID: <20170310203159.2c462296@gmx.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 10 Mar 2017 20:42:50 +0100
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.6
+Message-ID: <20170310194250.31210-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Thu, 9 Mar 2017 22:18:50 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello,
-> 
-> On Wed,  8 Mar 2017 22:53:10 +0100, Peter Seiderer wrote:
-> 
-> > +if BR2_PACKAGE_LIBXKBCOMMON && BR2_PACKAGE_WAYLAND
-> > +
-> > +config BR2_PACKAGE_LIBXKBCOMMON_INTERACTIVE_WAYLAND
-> > +	bool "interactive-wayland"
-> > +	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-> > +	help
-> > +	  interactive-wayland is a wayland test application
-> > +	  for libxkbcommon.
-> > +
-> > +endif
-> 
-> This looks like a very very specific option. Shouldn't this be instead
-> BR2_PACKAGE_LIBXKBCOMMON_INSTALL_TESTS ?
-
-It is specific, did not find a target to build all tests (see below)...
-
-> 
-> > +define LIBXKBCOMMON_BUILD_INTERACTIVE_WAYLAND
-> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) test/interactive-wayland
-> > +endef
-> > +LIBXKBCOMMON_POST_BUILD_HOOKS = LIBXKBCOMMON_BUILD_INTERACTIVE_WAYLAND
-> 
-> There's already some logic in the build system to build tests. Can't we
-> use it instead?
-
-'make test' does nothing, 'make check' builds the tests AND tries (and fails)
-to run the test programs...
-
-Regards,
-Peter
-
-> 
-> Thanks,
-> 
-> Thomas
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index ecd78e97c..37141971e 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  712b25351c12616630c580204e1c3dcba3ae2993a56cff1c346c87e334d69728  mpd-0.20.4.tar.xz
++sha256  f4055e1189e5cc00e83706b2e0b5ead924ced0303e073d7802ee9f9a8eba4b47  mpd-0.20.6.tar.xz
+ sha256  8305b8bc026f4b6bde28b8dd09bfdddbe5590acf36358eed4d083a396e301730  mpd-0.19.21.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 8e71ae214..79cc995c8 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -6,7 +6,7 @@
+ 
+ MPD_VERSION_MAJOR = $(call qstrip,$(BR2_PACKAGE_MPD_VERSION_STRING))
+ ifeq ($(BR2_PACKAGE_MPD_VERSION_0_20),y)
+-MPD_VERSION = $(MPD_VERSION_MAJOR).4
++MPD_VERSION = $(MPD_VERSION_MAJOR).6
+ else
+ MPD_VERSION = $(MPD_VERSION_MAJOR).21
+ endif
+-- 
+2.12.0
