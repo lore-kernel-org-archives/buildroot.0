@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 10:28:25 +0100
-Subject: [Buildroot] [git commit] libnl: update homepage link
-Message-ID: <20170310092852.94AA98256F@busybox.osuosl.org>
+Date: Fri, 10 Mar 2017 10:28:19 +0100
+Subject: [Buildroot] [git commit] netsniff-ng: add homepage link
+Message-ID: <20170310092852.6410682552@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d255ed499d874a19be552146f732efddbea57a31
+commit: https://git.buildroot.net/buildroot/commit/?id=e856095b17c67beeb41b39600f64b4d425274f3b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The old link is broken. Use the github repo instead.
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Joris Lijssens <joris.lijssens@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnl/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/netsniff-ng/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libnl/Config.in b/package/libnl/Config.in
-index 46877c3..1e29f57 100644
---- a/package/libnl/Config.in
-+++ b/package/libnl/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBNL
- 	help
- 	  A library for applications dealing with netlink socket.
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index 00617e3..b59c876 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -16,6 +16,8 @@ config BR2_PACKAGE_NETSNIFF_NG
+ 	  networking toolkit. If you will, the Swiss army knife for
+ 	  network packets.
  
--	  http://people.suug.ch/~tgr/libnl/
-+	  https://github.com/thom311/libnl
- 
- if BR2_PACKAGE_LIBNL
- 
++	  http://netsniff-ng.org
++
+ comment "netsniff-ng needs a glibc or musl toolchain w/ threads, headers >= 3.0"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC \
