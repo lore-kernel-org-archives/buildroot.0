@@ -1,45 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 21:30:03 +0100
-Subject: [Buildroot] [PATCH 1/1] python: disable _ssl.c build when
- --disable-ssl
-In-Reply-To: <CAO1odpzB59BT3cgh3AVznLzcWz+nShYsok1GqEv_SV9N3wXbLA@mail.gmail.com>
-References: <1484169742-28866-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20170310000437.5513602a@free-electrons.com>
- <CANQCQpa1Lp8hqpmaZREEoYbJEusrAerNQriQ_H4+ENped3DVAA@mail.gmail.com>
- <CAO1odpw8E=b2eTsVX8vCjhUF_vpg34WJvUxCKGCm+p0OSMsdkw@mail.gmail.com>
- <CAO1odpzng87mcYwEFs72B9bRTdLgewtGscH1GsuEAyndOVuntw@mail.gmail.com>
- <CAO1odpzB59BT3cgh3AVznLzcWz+nShYsok1GqEv_SV9N3wXbLA@mail.gmail.com>
-Message-ID: <20170310213003.5cd63c7f@free-electrons.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 10 Mar 2017 21:41:05 +0100
+Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.0
+Message-ID: <20170310204105.29179-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Support for PolarSSL is deprecated and the usage of mbedTLS is
+recommended, if not OpenSSL is used as crypto backend.
 
-On Fri, 10 Mar 2017 13:36:45 -0600, Adam Allison wrote:
-> Ok, I guess my browser took a dump, and send the message early.
-> 
-> In setup.py, it will pull in hashlib if 'have_any_openssl' and
-> 'have_usable_openssl' is true.
-> 
-> The old patch forced those to be false.
-> This one (cleaner), but the setup.py will have to change as well.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/Config.in           | 2 +-
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-Could you explain in more details what Buildroot configuration you're
-using, the problem you're seeing, and what you're expecting to see
-instead?
-
-Notice that there is a different option for hashlib,
-BR2_PACKAGE_PYTHON_HASHLIB, and it was very recently fixed to really
-disable hashlib when disabled (commit
-https://git.buildroot.org/buildroot/commit/?id=bc3e1fb22ef641916938fff76bef10a1347ef0f7).
-
-Best regards,
-
-Thomas
+diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+index c558a64c5..2213a9663 100644
+--- a/package/shairport-sync/Config.in
++++ b/package/shairport-sync/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER
+ 	select BR2_PACKAGE_LIBCONFIG
+ 	select BR2_PACKAGE_LIBDAEMON
+-	select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_MBEDTLS if !BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_POPT
+ 	help
+ 	  Shairport Sync emulates an AirPort Express for the purpose of
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 45bce1016..fb837a4ad 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2e73416ac8fdda1657034afaa143f1710852ebed06e0aa43dafc2b7dc5eb653d  shairport-sync-2.8.6.tar.gz
++sha256  d02697810da0a2c10d3b39e8c9e0795af1e81fff065db1e27514cdb5da696108  shairport-sync-3.0.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 00d6a695b..ab4fdaee2 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.8.6
++SHAIRPORT_SYNC_VERSION = 3.0
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+@@ -36,8 +36,8 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += openssl
+ SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=openssl
+ else
+-SHAIRPORT_SYNC_DEPENDENCIES += polarssl
+-SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=polarssl
++SHAIRPORT_SYNC_DEPENDENCIES += mbedtls
++SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=mbedtls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.12.0
