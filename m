@@ -1,32 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 22:14:40 +0100
-Subject: [Buildroot] [PATCH] btrfs-progs: bump version to 4.10
-In-Reply-To: <20170310150544.17394-1-Vincent.Riera@imgtec.com>
-References: <20170310150544.17394-1-Vincent.Riera@imgtec.com>
-Message-ID: <20170310221440.44305537@free-electrons.com>
+Date: Fri, 10 Mar 2017 22:14:50 +0100
+Subject: [Buildroot] [git commit] lttng-babeltrace: bump version to 1.5.2
+Message-ID: <20170310212037.082BB822F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=79be8d341ae702c3ec5092b32d8a40f9eb75e2e3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 10 Mar 2017 15:05:44 +0000, Vicente Olivert Riera wrote:
-> Rebase patch for this new release.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  ...tall-static-library-and-headers-in-insta.patch} | 32 ++++++++++++----------
->  package/btrfs-progs/btrfs-progs.hash               |  2 +-
->  package/btrfs-progs/btrfs-progs.mk                 |  2 +-
->  3 files changed, 19 insertions(+), 17 deletions(-)
->  rename package/btrfs-progs/{0001-Makefile.in-install-static-library-and-headers-in-in.patch => 0001-Makefile-install-static-library-and-headers-in-insta.patch} (63%)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lttng-babeltrace/lttng-babeltrace.hash | 6 +++---
+ package/lttng-babeltrace/lttng-babeltrace.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.hash b/package/lttng-babeltrace/lttng-babeltrace.hash
+index 8f29692..fafcd5e 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.hash
++++ b/package/lttng-babeltrace/lttng-babeltrace.hash
+@@ -1,3 +1,3 @@
+-# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.1.tar.bz2.{md5,sha1}
+-md5 3f7d29ba2821a966d24759a928a15cdf  babeltrace-1.5.1.tar.bz2
+-sha1 07bffefed8ef68317f26e043ae5f71be58fdb783  babeltrace-1.5.1.tar.bz2
++# From http://www.efficios.com/files/babeltrace/babeltrace-1.5.2.tar.bz2.{md5,sha1}
++md5 1176e7f69e128112d5f29fefec39c6ce  babeltrace-1.5.2.tar.bz2
++sha1 3316e8311ebbc9e8642ed399208c1846a6f0e0c3  babeltrace-1.5.2.tar.bz2
+diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+index abb3bba..6ac129a 100644
+--- a/package/lttng-babeltrace/lttng-babeltrace.mk
++++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LTTNG_BABELTRACE_SITE = http://www.efficios.com/files/babeltrace
+-LTTNG_BABELTRACE_VERSION = 1.5.1
++LTTNG_BABELTRACE_VERSION = 1.5.2
+ LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+ LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
+ LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
