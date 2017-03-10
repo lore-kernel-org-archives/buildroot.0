@@ -1,25 +1,25 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Fri, 10 Mar 2017 15:30:42 +0530
-Subject: [Buildroot]  Qt5.8 display screen rotation
-Message-ID: <CAD6G_RQS20T_YBu_5pkeH1vhey10WE63yEGu8sp70dbyP_VUYA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 10 Mar 2017 10:02:37 +0000
+Subject: [Buildroot] [Bug 9721] version 2017.02: no acceptable m4 could be
+	found in $PATH
+In-Reply-To: <bug-9721-163@https.bugs.busybox.net/>
+References: <bug-9721-163@https.bugs.busybox.net/>
+Message-ID: <bug-9721-163-MCVh3sij6w@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=9721
 
-I'm looking for display screen to move it Portrait(vertical), based on
-the info from this thread [1] with qws we can make it, doe buildroot
-have support for that is yes can you point me the config and related
-info
+louigi600 at yahoo.it changed:
 
-[1] https://forum.qt.io/topic/22852/qt-5-embedded-screen-rotation
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Target|                            |arm
+               Host|                            |x86_64
 
-thanks!
 -- 
-Jagan Teki
-Free Software Engineer | www.openedev.com
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+You are receiving this mail because:
+You are on the CC list for the bug.
