@@ -1,41 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 22:21:29 +0100
-Subject: [Buildroot] [git commit] swupdate: bump to version 2017.01
-Message-ID: <20170310212146.89C7180DAF@busybox.osuosl.org>
+Date: Fri, 10 Mar 2017 22:21:42 +0100
+Subject: [Buildroot] [git commit] shairport-sync: bump to version 3.0
+Message-ID: <20170310212146.98A808215B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd8e5b819ff31c96dbc7ad94c28a5ad2eb838631
+commit: https://git.buildroot.net/buildroot/commit/?id=7670dcc43e3b023b9bd613fa464533ecde7aca70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Support for PolarSSL is deprecated and the usage of mbedTLS is
+recommended, if not OpenSSL is used as crypto backend.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/swupdate/swupdate.hash | 2 +-
- package/swupdate/swupdate.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/shairport-sync/Config.in           | 2 +-
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 1ba10f6..d4e8833 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
+diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+index c558a64..2213a96 100644
+--- a/package/shairport-sync/Config.in
++++ b/package/shairport-sync/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER
+ 	select BR2_PACKAGE_LIBCONFIG
+ 	select BR2_PACKAGE_LIBDAEMON
+-	select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_MBEDTLS if !BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_POPT
+ 	help
+ 	  Shairport Sync emulates an AirPort Express for the purpose of
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 45bce10..fb837a4 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256  840d6287a41f7a42e08a74045ee40b7c2f82c1ecfedf8c915e3935d4f0084376  swupdate-2016.10.tar.gz
-+sha256  ce28348e98aa5657154d2eacc2e8a9b114ba50a937531b010872c8eb6fd72b23  swupdate-2017.01.tar.gz
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 688f4ee..7f2cb0a 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
+-sha256  2e73416ac8fdda1657034afaa143f1710852ebed06e0aa43dafc2b7dc5eb653d  shairport-sync-2.8.6.tar.gz
++sha256  d02697810da0a2c10d3b39e8c9e0795af1e81fff065db1e27514cdb5da696108  shairport-sync-3.0.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 00d6a69..ab4fdae 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SWUPDATE_VERSION = 2016.10
-+SWUPDATE_VERSION = 2017.01
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPLv2+, MIT, Public Domain
- SWUPDATE_LICENSE_FILES = COPYING
+-SHAIRPORT_SYNC_VERSION = 2.8.6
++SHAIRPORT_SYNC_VERSION = 3.0
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+@@ -36,8 +36,8 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += openssl
+ SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=openssl
+ else
+-SHAIRPORT_SYNC_DEPENDENCIES += polarssl
+-SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=polarssl
++SHAIRPORT_SYNC_DEPENDENCIES += mbedtls
++SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=mbedtls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
