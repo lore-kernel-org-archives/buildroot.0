@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 22:57:34 +0100
-Subject: [Buildroot] [RFC: PATCH 3/3] system: enable predictable net
- interface names
-In-Reply-To: <CACXmVibUnH38chTyOboc0fJMN2kn3NWm2Dnhg8xbi82ddPotZg@mail.gmail.com>
-References: <1474113519-24713-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1474113519-24713-4-git-send-email-eric.le.bihan.dev@free.fr>
- <CACXmVibUnH38chTyOboc0fJMN2kn3NWm2Dnhg8xbi82ddPotZg@mail.gmail.com>
-Message-ID: <20170310225734.05223bda@free-electrons.com>
+Date: Fri, 10 Mar 2017 22:59:24 +0100
+Subject: [Buildroot] [PATCH v13 4/8] util-linux: selinux, audit,
+ and pam support
+In-Reply-To: <1477423570-15694-4-git-send-email-bryce.ferguson@rockwellcollins.com>
+References: <1477423570-15694-1-git-send-email-bryce.ferguson@rockwellcollins.com>
+ <1477423570-15694-4-git-send-email-bryce.ferguson@rockwellcollins.com>
+Message-ID: <20170310225924.4a16eb48@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 6 Feb 2017 21:07:00 +0100, Peter Korsgaard wrote:
+On Tue, 25 Oct 2016 14:26:06 -0500, Bryce Ferguson wrote:
+> From: Matt Weber <matthew.weber@rockwellcollins.com>
+> 
+> This patch adds optional libselinux ,audit and pam support to linux utilities.
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
 
-> If it all boils down to it being a systemd specific option that can be
-> handled by a single symlink in an overlay/post-build script, then I
-> don't think it is worth to have it.
+Instead of this patch, we have applied commit
+373b7efdb308fcb7607cbef63ee4d2644b46136f, which serves the same
+purpose. So I've marked this patch as Rejected in patchwork.
 
-Considering the lack of feedback from Eric on the topic, I've marked
-his patch as Rejected in patchwork.
-
-Please do not hesitate to resubmit with a better explanation that
-answers the questions asked during the review. Thanks!
+Best regards,
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
