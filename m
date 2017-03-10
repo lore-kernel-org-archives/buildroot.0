@@ -1,51 +1,172 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Fri, 10 Mar 2017 21:05:43 +0100
-Subject: [Buildroot] [5/8] package/rpi-firmware: bump version
-In-Reply-To: <87mvct9sl9.fsf@dell.be.48ers.dk>
-References: <1488729976-7116-5-git-send-email-martin@barkynet.com>
- <f12fff71-bfbe-87cf-077a-52e2019dcc0e@je-eigen-domein.nl>
- <87mvct9sl9.fsf@dell.be.48ers.dk>
-Message-ID: <aad8e9df-86d4-cd00-4f77-da10624193b5@je-eigen-domein.nl>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 10 Mar 2017 21:15:12 +0100
+Subject: [Buildroot] [PATCH] boost: bump to version 1.63.0
+Message-ID: <20170310201512.12260-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/10/2017 02:20 PM, Peter Korsgaard wrote:
->   > On 03/05/2017 05:06 PM, Martin Bark wrote:
->   >> -RPI_FIRMWARE_VERSION = 7f8ac8dac0b80291cbf5e56580139034a0a42070
->   >> +RPI_FIRMWARE_VERSION = 78c4983379de0537f49a97fb37ceaaf42632b28c
->
->   > New firmware version does not get along with projects that still use
->   > 4.4.x kernel.
->   > It seems that projects that still use 4.4.x are now supposed to use
->   > the firmware branch called "stable"
->
->   > Perhaps we should introduce a config option for firmware version, like
->   > we have for kernel version?
->
-> Gaah :/ Have you brought this up with rpi upstream? What is their
-> feedback?
+Remove getchar() patch which has been applied upstream.
 
-Ok, turns out the new firmware can still boot 4.4.x, as long as you 
-compile the device tree files from kernel source.
-The bundled binary ones only work for 4.9.
+Add recommanded post-release patch from upstream to fix 64-bit atomic
+operations on 32-bit x86 with gcc versions older than 4.7.
 
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ ...ted-register-usage-in-x86-DCAS-asm-blocks.patch | 65 ++++++++++++++++++++++
+ ...fix-getchar-with-uclibc-and-gcc-bug-58952.patch | 45 ---------------
+ package/boost/boost.hash                           |  5 +-
+ package/boost/boost.mk                             |  2 +-
+ 4 files changed, 68 insertions(+), 49 deletions(-)
+ create mode 100644 package/boost/0004-Corrected-register-usage-in-x86-DCAS-asm-blocks.patch
+ delete mode 100644 package/boost/0004-fix-getchar-with-uclibc-and-gcc-bug-58952.patch
 
-Should have known that, as I had already been burned by that before...
-
-BTW is it possible to let buildroot compile dt overlays nowadays?
-As the overlays are now also starting to show changes between versions.
-
-E.g.:
-
-https://github.com/raspberrypi/linux/blob/rpi-4.4.y/arch/arm/boot/dts/overlays/vc4-kms-v3d-overlay.dts
-versus
-https://github.com/raspberrypi/linux/blob/rpi-4.9.y/arch/arm/boot/dts/overlays/vc4-kms-v3d-overlay.dts
-
-
-
-Yours sincerely,
-
-Floris Bos
+diff --git a/package/boost/0004-Corrected-register-usage-in-x86-DCAS-asm-blocks.patch b/package/boost/0004-Corrected-register-usage-in-x86-DCAS-asm-blocks.patch
+new file mode 100644
+index 000000000..8007d0b3f
+--- /dev/null
++++ b/package/boost/0004-Corrected-register-usage-in-x86-DCAS-asm-blocks.patch
+@@ -0,0 +1,65 @@
++From a67cc1b055cf09f371e2eca544884634a1ccc886 Mon Sep 17 00:00:00 2001
++From: Andrey Semashev <andrey.semashev@gmail.com>
++Date: Sun, 8 Jan 2017 18:09:12 +0300
++Subject: [PATCH] Corrected register usage in x86 DCAS asm blocks.
++
++In some of the asm blocks eax was modified as a result of cmpxchg8b but that
++was not reflected in the register constraints. This could cause incorrect code
++being generated.
++
++Fetch from:
++https://github.com/boostorg/atomic/commit/a67cc1b055cf09f371e2eca544884634a1ccc886
++
++[Adjust github patch to tarball release]
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ boost/atomic/detail/ops_gcc_x86_dcas.hpp | 14 ++++++++------
++ 1 file changed, 8 insertions(+), 6 deletions(-)
++
++diff --git a/boost/atomic/detail/ops_gcc_x86_dcas.hpp b/boost/atomic/detail/ops_gcc_x86_dcas.hpp
++index 2f51182..e356e8c 100644
++--- a/boost/atomic/detail/ops_gcc_x86_dcas.hpp
+++++ b/boost/atomic/detail/ops_gcc_x86_dcas.hpp
++@@ -73,6 +73,7 @@ struct gcc_dcas_x86
++         {
++ #if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
++ #if defined(__PIC__)
+++            uint32_t v_lo = (uint32_t)v;
++             uint32_t scratch;
++             __asm__ __volatile__
++             (
++@@ -84,8 +85,8 @@ struct gcc_dcas_x86
++                 "1: lock; cmpxchg8b %[dest]\n\t"
++                 "jne 1b\n\t"
++                 "movl %[scratch], %%ebx\n\t"
++-                : [scratch] "=m" (scratch), [dest] "=o" (storage)
++-                : [value_lo] "a" ((uint32_t)v), "c" ((uint32_t)(v >> 32))
+++                : [scratch] "=m" (scratch), [dest] "=o" (storage), [value_lo] "+a" (v_lo)
+++                : "c" ((uint32_t)(v >> 32))
++                 : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA "edx", "memory"
++             );
++ #else // defined(__PIC__)
++@@ -103,6 +104,7 @@ struct gcc_dcas_x86
++ #endif // defined(__PIC__)
++ #else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
++ #if defined(__PIC__)
+++            uint32_t v_lo = (uint32_t)v;
++             uint32_t scratch;
++             __asm__ __volatile__
++             (
++@@ -115,11 +117,11 @@ struct gcc_dcas_x86
++                 "jne 1b\n\t"
++                 "movl %[scratch], %%ebx\n\t"
++ #if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
++-                : [scratch] "=m,m" (scratch)
++-                : [value_lo] "a,a" ((uint32_t)v), "c,c" ((uint32_t)(v >> 32)), [dest] "D,S" (&storage)
+++                : [scratch] "=m,m" (scratch), [value_lo] "+a,a" (v_lo)
+++                : "c,c" ((uint32_t)(v >> 32)), [dest] "D,S" (&storage)
++ #else
++-                : [scratch] "=m" (scratch)
++-                : [value_lo] "a" ((uint32_t)v), "c" ((uint32_t)(v >> 32)), [dest] "D" (&storage)
+++                : [scratch] "=m" (scratch), [value_lo] "+a" (v_lo)
+++                : "c" ((uint32_t)(v >> 32)), [dest] "D" (&storage)
++ #endif
++                 : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA "edx", "memory"
++             );
+diff --git a/package/boost/0004-fix-getchar-with-uclibc-and-gcc-bug-58952.patch b/package/boost/0004-fix-getchar-with-uclibc-and-gcc-bug-58952.patch
+deleted file mode 100644
+index 960f0ea2f..000000000
+--- a/package/boost/0004-fix-getchar-with-uclibc-and-gcc-bug-58952.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 4f1c6784b37a11c78fe84bb238fb7cc377ce0d36 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Wed, 30 Mar 2016 23:28:33 +0200
+-Subject: [PATCH] Fix for uClibc and gcc <= 4.8.2
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-getchar() is defined as a macro in uClibc. This hits gcc bug 58952 [1] for all
+-gcc version <= 4.8.2 and building boost/test fails:
+-
+-./boost/test/impl/unit_test_main.ipp: In function 'int boost::unit_test::unit_test_main(boost::unit_test::init_unit_test_func, int, char**)':
+-./boost/test/impl/unit_test_main.ipp:194:18: error: expected unqualified-id before '(' token
+-
+-To allow building boost/test with uClibc based toolchains with gcc <= 4.8.2 use
+-parenthesis for std::getchar.
+-
+-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58952
+-
+-Upstream status: Pending
+-https://github.com/boostorg/test/pull/97
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- include/boost/test/impl/unit_test_main.ipp | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/boost/test/impl/unit_test_main.ipp b/boost/test/impl/unit_test_main.ipp
+-index 1f30c02..db61930 100644
+---- a/boost/test/impl/unit_test_main.ipp
+-+++ b/boost/test/impl/unit_test_main.ipp
+-@@ -191,7 +191,9 @@ unit_test_main( init_unit_test_func init_func, int argc, char* argv[] )
+-         if( runtime_config::get<bool>( runtime_config::WAIT_FOR_DEBUGGER ) ) {
+-             results_reporter::get_stream() << "Press any key to continue..." << std::endl;
+- 
+--            std::getchar();
+-+            // getchar is defined as a macro in uClibc. Use parenthesis to fix
+-+            // gcc bug 58952 for gcc <= 4.8.2.
+-+            (std::getchar)();
+-             results_reporter::get_stream() << "Continuing..." << std::endl;
+-         }
+- 
+--- 
+-2.7.4
+-
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+index c4af22e57..7acb059ba 100644
+--- a/package/boost/boost.hash
++++ b/package/boost/boost.hash
+@@ -1,3 +1,2 @@
+-# From http://sourceforge.net/projects/boost/files/boost/1.61.0/
+-md5	6095876341956f65f9d35939ccea1a9f	boost_1_61_0.tar.bz2
+-sha1	f84b1a1ce764108ec3c2b7bd7704cf8dfd3c9d01	boost_1_61_0.tar.bz2
++# From http://www.boost.org/users/history/version_1_63_0.html
++sha256  beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0  boost_1_63_0.tar.bz2
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index bb8d799c4..dbe0f09bc 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOOST_VERSION = 1.61.0
++BOOST_VERSION = 1.63.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+ BOOST_INSTALL_STAGING = YES
+-- 
+2.12.0
