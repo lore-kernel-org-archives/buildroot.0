@@ -1,33 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 10 Mar 2017 10:54:43 +0200
-Subject: [Buildroot] [PATCH 1/2] libnl: update homepage link
-Message-ID: <e21edac8997da04d86a420d580120f5311734191.1489136084.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Mar 2017 10:23:54 +0100
+Subject: [Buildroot] [PATCH] m68k: add special gcc flag to avoid ICE for
+ coldfire
+In-Reply-To: <20161126085144.GA23223@waldemar-brodkorb.de>
+References: <20161126085144.GA23223@waldemar-brodkorb.de>
+Message-ID: <20170310102354.6cb110c5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The old link is broken. Use the github repo instead.
+Hello,
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libnl/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 26 Nov 2016 09:51:44 +0100, Waldemar Brodkorb wrote:
+> Fixes:
+>   http://autobuild.buildroot.net/results/d47fa41aa860d82471b83ac90967d3a3dacd8611
+>   http://autobuild.buildroot.net/results/a21de4747f40a5ce93108c8979fbc0277d040e79
+> 
+> Requires this as prerequisite:
+> http://patchwork.ozlabs.org/patch/683830/
+> 
+> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+> Tested-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-diff --git a/package/libnl/Config.in b/package/libnl/Config.in
-index 46877c37a263..1e29f5740088 100644
---- a/package/libnl/Config.in
-+++ b/package/libnl/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBNL
- 	help
- 	  A library for applications dealing with netlink socket.
- 
--	  http://people.suug.ch/~tgr/libnl/
-+	  https://github.com/thom311/libnl
- 
- if BR2_PACKAGE_LIBNL
- 
+We've added -fno-dwarf2-cfi-asm to 4 packages so far, and it seems to
+have fixed the problem. So I would for now prefer to keep this as it is
+today, and not use the wrapper to pass this flag to all packages.
+
+I'll mark your patch as Rejected in patchwork, since it anyway cannot
+be applied because Arnout patches have not been merged.
+
+Let me know if you disagree, of course.
+
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
