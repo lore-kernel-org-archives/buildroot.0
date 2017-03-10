@@ -1,80 +1,58 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 10 Mar 2017 10:08:57 +0000
-Subject: [Buildroot] [PATCH v2] qt5base: fix compilation error with
- gcc-4.8
-In-Reply-To: <20170309213242.44a74371@free-electrons.com>
-References: <20170309170315.18299-1-Vincent.Riera@imgtec.com>
- <20170309213242.44a74371@free-electrons.com>
-Message-ID: <f9db6a2d-ad1c-ccac-a9db-48402107c71e@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 10 Mar 2017 12:34:07 +0200
+Subject: [Buildroot] [PATCH 2/2] libnl: bump to version 3.2.29
+In-Reply-To: <1b9e911c-d7ee-dd96-383f-c28fee26353f@zacarias.com.ar>
+References: <e21edac8997da04d86a420d580120f5311734191.1489136084.git.baruch@tkos.co.il>
+ <4ebba581b256855a7e36993f044ef2b6a6cdfd72.1489136084.git.baruch@tkos.co.il>
+ <061cbb4c-8b53-4f32-9d03-344b1ff0c009@zacarias.com.ar>
+ <1b9e911c-d7ee-dd96-383f-c28fee26353f@zacarias.com.ar>
+Message-ID: <20170310103407.mzk5azkvlr3jc2ok@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Gustavo,
 
-On 09/03/17 20:32, Thomas Petazzoni wrote:
-> Hello,
+On Fri, Mar 10, 2017 at 06:57:10AM -0300, Gustavo Zacarias wrote:
+> On 10/03/17 06:56, Gustavo Zacarias wrote:
+> > On 10/03/17 05:54, Baruch Siach wrote:
+> > 
+> > > -LIBNL_VERSION = 3.2.27
+> > > +LIBNL_VERSION = 3.2.29
+> > 
+> > Did you try with older headers?
+> > Beacuse last time i tried 3.2.{28,29} weren't happy at least with 3.2.x
+> > hence i refrained from bumping and carrying that dependency along a few
+> > packages.
 > 
-> On Thu, 9 Mar 2017 17:03:15 +0000, Vicente Olivert Riera wrote:
->> Add a patch to fix a compilation error when using gcc-4.8.
->>
->> Bug report: https://bugreports.qt.io/browse/QTBUG-59399
->> Patch sent upstream: https://codereview.qt-project.org/#/c/187980/
->>
->> Fixes:
->>   http://autobuild.buildroot.net/results/2ac/2ac16335d16cd53cceeabda8f963c9b288a9a1c8/
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> 
-> I've applied, but after changing the formatting of the patch, see below.
-> 
->> diff --git a/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch b/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
->> new file mode 100644
->> index 0000000..c05388d
->> --- /dev/null
->> +++ b/package/qt5/qt5base/5.8.0/0003-QAtomic-pass-explicit-failure-mode-to-std-atomic-com.patch
->> @@ -0,0 +1,71 @@
->> +QAtomic: pass explicit failure mode to std::atomic::compare_exchange_strong
->> +
->> +This patch fixes a compilation error when building qt5base with gcc-4.8.
->> +
->> +Bug report: https://bugreports.qt.io/browse/QTBUG-59399
->> +Patch sent upstream: https://codereview.qt-project.org/#/c/187980/
->> +
->> +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.org>
-> 
-> All this stuff should go...
-> 
->> +
->> +From c5d7425f8ad391112758db161e3e08f18dc9d299 Mon Sep 17 00:00:00 2001
->> +From: Marc Mutz <marc.mutz@kdab.com>
->> +Date: Thu, 26 May 2016 08:30:26 +0200
->> +Subject: [PATCH] QAtomic: pass explicit failure mode to
->> + std::atomic::compare_exchange_strong
->> +
->> +... in an attempt to avoid GCC 4.8 errors such as
->> +
->> +  bits/atomic_base.h:577:70: error: failure memory model cannot be stronger than success memory model for '__atomic_compare_exchange'
->> +  return __atomic_compare_exchange_n(&_M_i, &__i1, __i2, 0, __m1, __m2);
->> +                                                                      ^
->> +
->> +as seen on Android.
->> +
->> +Change-Id: If046e735888cf331d2d6506d8d5ca9aa7402f9ad
-> 
-> ... here.
-> 
-> Otherwise, the patch can no longer be applied by Git using git am,
-> which makes the fact of having Git formatted patches pretty useless.
+> That's kernel headers at least 3.2.x, coffee isn't it yet, sorry.
+> Regards.
 
-Oh, I see. Thanks, I'll remember that for the next time :-)
+Right. Build breaks with our 3.5 headers based CodeSourcery SH toolchain:
 
-Vincent
+In file included from ../include/linux-private/linux/ipv6.h:5:0,
+                 from ../include/netlink-private/netlink.h:55,
+                 from addr.c:30:
+.../output/host/usr/sh4a-buildroot-linux-gnu/sysroot/usr/include/linux/in6.h:30:8: error: redefinition of 'struct in6_addr'
 
-> 
-> Thanks a lot for chasing and fixing this issue!
-> 
-> Thomas
-> 
+[... many more errors of this type]
+
+The x86_64 toolchain (also using 3.5 headers) is most likely also affected.
+
+Have you investigated this issue any further? Do you know which libnl commit 
+introduced it?
+
+Adding kernel headers dependency to all reverse dependencies of libnl would 
+not be nice. So unless we find an acceptable solution we'll have to revert 
+this bump.
+
+Thanks for your input.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
