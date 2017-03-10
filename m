@@ -1,36 +1,39 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Fri, 10 Mar 2017 16:31:24 +0100
-Subject: [Buildroot] [PATCH] package/liberation: fixes download site due
- to recent fedorahosted.org closing
-In-Reply-To: <8760jh9rq8.fsf@dell.be.48ers.dk>
-References: <1489151966-972-1-git-send-email-julien.boibessot@free.fr>
- <8760jh9rq8.fsf@dell.be.48ers.dk>
-Message-ID: <6032b19a-5974-a699-bab2-b254356d3428@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 10 Mar 2017 15:36:46 +0000
+Subject: [Buildroot] [PATCH] git: bump version to 2.12.0
+Message-ID: <20170310153646.27711-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Re Peter,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 10/03/2017 14:38, Peter Korsgaard wrote:
->>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
->  > From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->
-> Committed, thanks.
->
-> We have some other packages also using fedorahosted.org. Will you send
-> fixes for those as well, please?
->
-> git grep fedorahosted package/**/*.mk
-> package/ding-libs/ding-libs.mk:DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot
-> package/dropwatch/dropwatch.mk:DROPWATCH_SITE = https://git.fedorahosted.org/cgit/dropwatch.git/snapshot
-> package/elfutils/elfutils.mk:ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
-> package/iptraf-ng/iptraf-ng.mk:IPTRAF_NG_SITE = https://fedorahosted.org/releases/i/p/iptraf-ng
-
-I wasn't able to find official websites/git repos for ding-libs,
-dropwatch nor iptraf-ng, sorry :-(
-
-Regards,
-Julien
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 07ed47b..71e340e 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 c0a779cae325d48a1d5ba08b6ee1febcc31d0657a6da01fd1dec1c6e10976415  git-2.11.1.tar.xz
++sha256 1821766479062d052cc1897d0ded95212e81e5c7f1039786bc4aec2225a32027  git-2.12.0.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 1c15740..1d70924 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.11.1
++GIT_VERSION = 2.12.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2, LGPLv2.1+
+-- 
+2.10.2
