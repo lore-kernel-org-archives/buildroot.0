@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Mar 2017 14:21:00 +0100
-Subject: [Buildroot] [git commit] configs: beagleboardx15: fixate the header
-	series
-Message-ID: <20170310132314.66C2481F77@busybox.osuosl.org>
+Date: Fri, 10 Mar 2017 14:21:58 +0100
+Subject: [Buildroot] [git commit] configs: snps_archs38_vdk: use same
+	headers as kernel
+Message-ID: <20170310132314.77A78804F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88090d98461d06c7b3ad9f6e3e2c7f2fdbf143af
+commit: https://git.buildroot.net/buildroot/commit/?id=fd0803d0f678dcd3404b2bbb2b73a28b0977875e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The kernel headers version used to be default when the default was
-still 4.9. Now, however, we switched the default headers version to
-4.10 but the beagleboardx15 kernel is still 4.9, so we have to set
-the kernel headers version explicitly.
-
-Fixes https://gitlab.com/buildroot.org/buildroot/builds/11700987
+Instead of downloading a *different* version of the kernel for the
+headers as for the headers itself, use the same one.
+BR2_KERNEL_HEADERS_AS_KERNEL is the default, but we have to set the
+custom version.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/beagleboardx15_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ configs/snps_archs38_vdk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/beagleboardx15_defconfig b/configs/beagleboardx15_defconfig
-index 25ee21b..393b29e 100644
---- a/configs/beagleboardx15_defconfig
-+++ b/configs/beagleboardx15_defconfig
-@@ -1,5 +1,6 @@
- BR2_arm=y
- BR2_cortex_a15=y
+diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
+index d13fcb2..7cbd68c 100644
+--- a/configs/snps_archs38_vdk_defconfig
++++ b/configs/snps_archs38_vdk_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Linux headers same as kernel, a 4.9 series
+-BR2_KERNEL_HEADERS_4_9=y
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beagleboardx15/post-image.sh"
+ 
+ # Kernel
  BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
