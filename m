@@ -1,43 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Mar 2017 13:11:06 +0100
-Subject: [Buildroot] [PATCH] php: bump to version 7.1.2
-Message-ID: <20170310121106.11034-1-peter@korsgaard.com>
+Date: Fri, 10 Mar 2017 13:19:31 +0100
+Subject: [Buildroot] [PATCH 1/2] netsniff-ng: fix build with kernel
+	headers v4.10+
+In-Reply-To: <20170310102946.66f1e321@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 10 Mar 2017 10:29:46 +0100")
+References: <65617ee3af4d36e520b84b77e643007e5c20e790.1489134655.git.baruch@tkos.co.il>
+ <20170310102946.66f1e321@free-electrons.com>
+Message-ID: <87r3259ve4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-7.1.2 is a bugfix release, fixing a number of issues:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-http://www.php.net/ChangeLog-7.php#7.1.2
+ > Hello,
+ > On Fri, 10 Mar 2017 10:30:54 +0200, Baruch Siach wrote:
+ >> Add upstream patch removing use of GENL_ID_GENERATE that was dropped in kernel
+ >> version 4.10.
+ >> 
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/58d/58d7809cae739f728c58291f2111684d6c0578f3/
+ >> http://autobuild.buildroot.net/results/65c/65ce9807116ca70908e0aabae59a36c7774dfa7a/
+ >> http://autobuild.buildroot.net/results/64b/64b3f8af2ebc5a14ecbef72039ef527b5d71f12c/
+ >> 
+ >> Cc: Joris Lijssens <joris.lijssens@gmail.com>
+ >> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ >> ---
+ >> ...-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch | 48 ++++++++++++++++++++++
+ >> 1 file changed, 48 insertions(+)
+ >> create mode 100644 package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Both applied to master, thanks!
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 9c94b9e4c..47e99d480 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256 b3565b0c1441064eba204821608df1ec7367abff881286898d900c2c2a5ffe70  php-7.1.1.tar.xz
-+sha256 d815a0c39fd57bab1434a77ff0610fb507c22f790c66cd6f26e27030c4b3e971  php-7.1.2.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 1379ad571..5b113d1b3 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.1.1
-+PHP_VERSION = 7.1.2
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ > Peter: do we want to fix a build issue related to 4.10 kernel headers
+ > in the LTS version? The LTS version did not have explicit support for
+ > 4.10 kernel headers, so I'm not sure it's really worth the effort.
+
+While the patch is quite small and safe looking, as we don't have
+official 4.10 headers support I don't think it makes sense to add it to
+2017.02.x.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
