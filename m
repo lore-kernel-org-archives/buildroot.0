@@ -1,82 +1,68 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 10 Mar 2017 23:15:46 +0100
-Subject: [Buildroot] [PATCH v1 1/2] qt5base: fix eglfs x11 header related
-	compile failure
-Message-ID: <20170310221547.32158-1-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 11 Mar 2017 00:08:15 +0100
+Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.0
+In-Reply-To: <20170310225434.45202999@free-electrons.com>
+References: <20170310204105.29179-1-joerg.krause@embedded.rocks>
+ <20170310222245.2494cd18@free-electrons.com>
+ <20170310225434.45202999@free-electrons.com>
+Message-ID: <c6059ca8-5bdd-4872-9871-2cf5e01230db@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add egl config and QT_EGL_NO_X11 define (as all other eglfs project
-files do) to src/plugins/platforms/eglfs/eglfs-plugin.pro.
 
-Fixes ([1]):
 
-  In file included from .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
-                   from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
-                   from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
-                   from api/qeglfsglobal_p.h:56,
-                   from api/qeglfsintegration_p.h:54,
-                   from qeglfsmain.cpp:41:
-  .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22: fatal error: X11/Xlib.h: No such file or directory
-  compilation terminated.
-  Makefile.eglfs-plugin:1024: recipe for target '.obj/qeglfsmain.o' failed
-  make[2]: *** [.obj/qeglfsmain.o] Error 1
-  make[2]: Leaving directory '.../qt5base-5.8.0/src/plugins/platforms/eglfs'
-  Makefile:71: recipe for target 'sub-eglfs-plugin-pro-make_first-ordered' failed
-  make[1]: *** [sub-eglfs-plugin-pro-make_first-ordered] Error 2
+On 10-03-17 22:54, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 10 Mar 2017 22:22:45 +0100, Thomas Petazzoni wrote:
+> 
+>> On Fri, 10 Mar 2017 21:41:05 +0100, J?rg Krause wrote:
+>>> Support for PolarSSL is deprecated and the usage of mbedTLS is
+>>> recommended, if not OpenSSL is used as crypto backend.
+>>>
+>>> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+>>> ---
+>>>  package/shairport-sync/Config.in           | 2 +-
+>>>  package/shairport-sync/shairport-sync.hash | 2 +-
+>>>  package/shairport-sync/shairport-sync.mk   | 6 +++---
+>>>  3 files changed, 5 insertions(+), 5 deletions(-)  
+>>
+>> Applied to master, thanks.
+> 
+> And I've reverted because it causes a Config.in circular dependency:
+> 
+> package/openssl/Config.in:1:error: recursive dependency detected!
+> package/openssl/Config.in:1:	symbol BR2_PACKAGE_OPENSSL is selected by BR2_PACKAGE_MBEDTLS
+> package/mbedtls/Config.in:1:	symbol BR2_PACKAGE_MBEDTLS is selected by BR2_PACKAGE_OPENSSL
 
-[1] http://lists.busybox.net/pipermail/buildroot/2017-March/186158.html
+ This is due to ustream-ssl:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...fs-fix-x11-header-related-compile-failure.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch
+select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
 
-diff --git a/package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch b/package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch
-new file mode 100644
-index 000000000..0e8bcffa2
---- /dev/null
-+++ b/package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch
-@@ -0,0 +1,36 @@
-+From 8902f4d7b7c532592d1a34ad117698d3e380e9e1 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Fri, 10 Mar 2017 22:23:06 +0100
-+Subject: [PATCH] eglfs: fix x11 header related compile failure
-+
-+Add egl config and QT_EGL_NO_X11 define (as all other eglfs project
-+files do).
-+
-+Task-number: QTBUG-59427
-+Change-Id: Ifbb11eae0fdf0e58c0b7feecb9a7914a889c8f77
-+
-+Upstream: https://codereview.qt-project.org/188158
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/plugins/platforms/eglfs/eglfs-plugin.pro | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/src/plugins/platforms/eglfs/eglfs-plugin.pro b/src/plugins/platforms/eglfs/eglfs-plugin.pro
-+index cf4863975a..ec229796e5 100644
-+--- a/src/plugins/platforms/eglfs/eglfs-plugin.pro
-++++ b/src/plugins/platforms/eglfs/eglfs-plugin.pro
-+@@ -2,6 +2,11 @@ TARGET = qeglfs
-+ 
-+ QT += eglfsdeviceintegration-private
-+ 
-++CONFIG += egl
-++
-++# Avoid X11 header collision, use generic EGL native types
-++DEFINES += QT_EGL_NO_X11
-++
-+ SOURCES += $$PWD/qeglfsmain.cpp
-+ 
-+ OTHER_FILES += $$PWD/eglfs.json
-+-- 
-+2.11.0
-+
+so either the direction in ustream-ssl has to be inverted, or the one in
+shairport-sync.
+
+ Regards,
+ Arnout
+
+> 
+> Try out yourself: no such warning right before your patch at commit
+> cd8e5b819ff31c96dbc7ad94c28a5ad2eb838631. And at commit
+> 7670dcc43e3b023b9bd613fa464533ecde7aca70, right after your patch is
+> applied, we have this Config.in warning.
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
 -- 
-2.11.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
