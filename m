@@ -1,82 +1,43 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 10 Mar 2017 10:30:54 +0200
-Subject: [Buildroot] [PATCH 1/2] netsniff-ng: fix build with kernel headers
-	v4.10+
-Message-ID: <65617ee3af4d36e520b84b77e643007e5c20e790.1489134655.git.baruch@tkos.co.il>
+Date: Fri, 10 Mar 2017 10:54:44 +0200
+Subject: [Buildroot] [PATCH 2/2] libnl: bump to version 3.2.29
+In-Reply-To: <e21edac8997da04d86a420d580120f5311734191.1489136084.git.baruch@tkos.co.il>
+References: <e21edac8997da04d86a420d580120f5311734191.1489136084.git.baruch@tkos.co.il>
+Message-ID: <4ebba581b256855a7e36993f044ef2b6a6cdfd72.1489136084.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch removing use of GENL_ID_GENERATE that was dropped in kernel
-version 4.10.
-
-Fixes:
-http://autobuild.buildroot.net/results/58d/58d7809cae739f728c58291f2111684d6c0578f3/
-http://autobuild.buildroot.net/results/65c/65ce9807116ca70908e0aabae59a36c7774dfa7a/
-http://autobuild.buildroot.net/results/64b/64b3f8af2ebc5a14ecbef72039ef527b5d71f12c/
-
-Cc: Joris Lijssens <joris.lijssens@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch
+ package/libnl/libnl.hash | 4 ++--
+ package/libnl/libnl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch b/package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch
-new file mode 100644
-index 000000000000..4ccf9d643c16
---- /dev/null
-+++ b/package/netsniff-ng/0001-netsniff-ng-nlmsg-Drop-dissection-of-GENL_ID_GENERAT.patch
-@@ -0,0 +1,48 @@
-+From 88ec2ad37cabb3d3b7ca0e8e5ea3d682c083618d Mon Sep 17 00:00:00 2001
-+From: Tobias Klauser <tklauser@distanz.ch>
-+Date: Mon, 6 Mar 2017 12:22:57 +0100
-+Subject: [PATCH] netsniff-ng: nlmsg: Drop dissection of GENL_ID_GENERATE type
-+
-+After kernel commit a07ea4d9941a ("genetlink: no longer support using
-+static family IDs"), GENL_ID_GENERATE is no longer exposed to userspace
-+(and actually should never have been). Change the genl nlmsg dissector
-+to only consider the nlctrl family and the two other static family IDs
-+needed for workarounds. All other family IDs are considered dynamically
-+generated.
-+
-+Fixes #171
-+Reported-by: Jaroslav ?karvada <jskarvad@redhat.com>
-+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 88ec2ad37cabb
-+
-+ proto_nlmsg.c | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
-+
-+diff --git a/proto_nlmsg.c b/proto_nlmsg.c
-+index f8993e794a54..f2064059be08 100644
-+--- a/proto_nlmsg.c
-++++ b/proto_nlmsg.c
-+@@ -242,9 +242,15 @@ static const char *nlmsg_rtnl_type2str(uint16_t type)
-+ static const char *nlmsg_genl_type2str(uint16_t type)
-+ {
-+ 	switch (type) {
-+-	case GENL_ID_GENERATE:	return "id gen";
-+-	case GENL_ID_CTRL:	return "id ctrl";
-+-	default:		return NULL;
-++	case GENL_ID_CTRL:	return "nlctrl";
-++#if defined(GENL_ID_PCMRAID)
-++	case GENL_ID_PCMRAID:	return "pcmraid";
-++#endif
-++#if defined(GENL_ID_VFS_DQUOT)
-++	case GENL_ID_VFS_DQUOT:	return "vfs dquot";
-++#endif
-++	/* only dynamic family IDs should be used starting with Linux 4.10 */
-++	default:		return "dynamic";
-+ 	}
-+ }
-+ 
-+-- 
-+2.11.0
-+
+diff --git a/package/libnl/libnl.hash b/package/libnl/libnl.hash
+index 2f1a3cb1b322..9761a9580cc9 100644
+--- a/package/libnl/libnl.hash
++++ b/package/libnl/libnl.hash
+@@ -1,2 +1,2 @@
+-# From https://github.com/thom311/libnl/releases/download/libnl3_2_27/libnl-3.2.27.tar.gz.sha256sum
+-sha256	4bbbf92b3c78a90f423cf96260bf419a28b75db8cced47051217a56795f58ec6	libnl-3.2.27.tar.gz
++# From https://github.com/thom311/libnl/releases/download/libnl3_2_29/libnl-3.2.29.tar.gz.sha256sum
++sha256	0beb593dc6abfffa18a5c787b27884979c1b7e7f1fd468c801e3cc938a685922	libnl-3.2.29.tar.gz
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 85c0db86f6cd..d168885560d9 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNL_VERSION = 3.2.27
++LIBNL_VERSION = 3.2.29
+ LIBNL_SITE = https://github.com/thom311/libnl/releases/download/libnl$(subst .,_,$(LIBNL_VERSION))
+ LIBNL_LICENSE = LGPLv2.1+
+ LIBNL_LICENSE_FILES = COPYING
 -- 
 2.11.0
