@@ -1,80 +1,105 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 10 Mar 2017 17:05:18 +0000
-Subject: [Buildroot] [PATCH] jasper: bump version to 2.0.12
-Message-ID: <20170310170518.9210-1-Vincent.Riera@imgtec.com>
+Date: Fri, 10 Mar 2017 17:06:18 +0000
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.5-0 (security)
+Message-ID: <20170310170618.18297-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove 0001-Disable-C-compiler-check.patch since it's already included
-in this release. Upstream commit:
+- Fixed memory leak when creating nested exceptions in Magick++
+  https://www.imagemagick.org/discourse-server/viewtopic.php?f=23&p=142634
 
-  https://github.com/mdadams/jasper/commit/4212e7e826e1f72c2f01391a80667c88fa2eb517
+- Fixed fd leak for webp coder
+  https://github.com/ImageMagick/ImageMagick/pull/382
+
+- Fixed Spurious memory allocation message
+  https://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=31438
+
+Full changelog: http://imagemagick.org/script/changelog.php
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/jasper/0001-Disable-C-compiler-check.patch | 28 ----------------------
- package/jasper/jasper.hash                         |  2 +-
- package/jasper/jasper.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 30 deletions(-)
- delete mode 100644 package/jasper/0001-Disable-C-compiler-check.patch
+ ...-png.c-unbreak-build-without-JPEG-support.patch | 47 ----------------------
+ package/imagemagick/imagemagick.hash               |  2 +-
+ package/imagemagick/imagemagick.mk                 |  2 +-
+ 3 files changed, 2 insertions(+), 49 deletions(-)
+ delete mode 100644 package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
 
-diff --git a/package/jasper/0001-Disable-C-compiler-check.patch b/package/jasper/0001-Disable-C-compiler-check.patch
+diff --git a/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch b/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
 deleted file mode 100644
-index c1f7271..0000000
---- a/package/jasper/0001-Disable-C-compiler-check.patch
+index 00a1045..0000000
+--- a/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
 +++ /dev/null
-@@ -1,28 +0,0 @@
--From e4ed3e2c3fd5a859567f510deeb49a915d96700f Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Sat, 14 Jan 2017 21:06:25 +0200
--Subject: [PATCH] Disable C++ compiler check
+@@ -1,47 +0,0 @@
+-From 5d0e9c53f49022df5154eb3c04900f48b1c6448e Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <peter@korsgaard.com>
+-Date: Mon, 6 Feb 2017 17:39:31 +0100
+-Subject: [PATCH] png.c: unbreak build without JPEG support
 -
--jasper does not use C++ code. Allow use of toolchains without C++ support.
+-Since commit a9e228f8ac26 (Implemented a private PNG caNv (canvas) chunk),
+-PNGsLong gets called unconditionally, but it is only defined if JPEG
+-support is enabled (which defines JNG_SUPPORTED), breaking the build:
 -
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-MagickCore/.libs/libMagickCore-7.Q16HDRI.a(MagickCore_libMagickCore_7_Q16HDRI_la-png.o): In function `WriteOnePNGImage':
+-png.c:(.text+0x748d): undefined reference to `PNGsLong'
+-png.c:(.text+0x74b7): undefined reference to `PNGsLong'
+-
+-For build log, see:
+-http://autobuild.buildroot.net/results/d20/d20eecec8e7b947759185f77a6c8e610dd7393f3/build-end.log
+-
+-Fix it by unconditionally defining the helper function.
+-
+-Submitted-upstream: https://github.com/ImageMagick/ImageMagick/pull/373
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ----
--Upstream status: https://github.com/mdadams/jasper/pull/110
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- coders/png.c | 2 --
+- 1 file changed, 2 deletions(-)
 -
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 6c99b3e7df31..3ac166b060ad 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,6 +1,6 @@
-- cmake_minimum_required (VERSION 2.8.11)
+-diff --git a/coders/png.c b/coders/png.c
+-index aebe59281..1328b1aab 100644
+---- a/coders/png.c
+-+++ b/coders/png.c
+-@@ -1229,7 +1229,6 @@ static void PNGLong(png_bytep p,png_uint_32 value)
+-   *p++=(png_byte) (value & 0xff);
+- }
 - 
---project(JasPer)
--+project(JasPer C)
+--#if defined(JNG_SUPPORTED)
+- static void PNGsLong(png_bytep p,png_int_32 value)
+- {
+-   *p++=(png_byte) ((value >> 24) & 0xff);
+-@@ -1237,7 +1236,6 @@ static void PNGsLong(png_bytep p,png_int_32 value)
+-   *p++=(png_byte) ((value >> 8) & 0xff);
+-   *p++=(png_byte) (value & 0xff);
+- }
+--#endif
 - 
-- set(CMAKE_MODULE_PATH
--   ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/build/cmake/modules/")
+- static void PNGShort(png_bytep p,png_uint_16 value)
+- {
 --- 
 -2.11.0
 -
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 6c3ab47..15e9829 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 90e1db5..75bc9a9 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 54d85428e35263642358a11c312d61cbc054170546fae780e11271df5d1502e8 jasper-2.0.10.tar.gz
-+sha256 5b24faf5ed38670d6286e45ab7516b26458d05e7929b435afe569176765f4dda  jasper-2.0.12.tar.gz
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index a243b9a..dbb3875 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 1ee004740b7ab47fff3c92ae4a89dcbd0181c4d5f31fcb7e3697412ea384a0da  ImageMagick-7.0.4-6.tar.xz
++sha256 7362805eaa9f9b90cdb67a1f8762782bef4a42ca44939629aecad3c40305bf4c  ImageMagick-7.0.5-0.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index a917297..d1cd608 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JASPER_VERSION = 2.0.10
-+JASPER_VERSION = 2.0.12
- JASPER_SITE = http://www.ece.uvic.ca/~frodo/jasper/software
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer License Version 2.0
+-IMAGEMAGICK_VERSION = 7.0.4-6
++IMAGEMAGICK_VERSION = 7.0.5-0
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
 2.10.2
