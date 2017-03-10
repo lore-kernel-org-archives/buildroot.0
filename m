@@ -1,30 +1,106 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 10:29:55 +0100
-Subject: [Buildroot] [PATCH 1/2] libnl: update homepage link
-In-Reply-To: <e21edac8997da04d86a420d580120f5311734191.1489136084.git.baruch@tkos.co.il>
-References: <e21edac8997da04d86a420d580120f5311734191.1489136084.git.baruch@tkos.co.il>
-Message-ID: <20170310102955.2fccc864@free-electrons.com>
+From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Date: Fri, 10 Mar 2017 10:31:22 +0100
+Subject: [Buildroot] [PATCH] libkcapi: new package
+Message-ID: <1489138282-28127-1-git-send-email-marcin.nowakowski@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This package provides a userspace library that allows easy use of crypto
+interfaces exposed by the kernel.
 
-On Fri, 10 Mar 2017 10:54:43 +0200, Baruch Siach wrote:
-> The old link is broken. Use the github repo instead.
-> 
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libnl/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+A git tip is used instead of the last official release, as autotools
+support and cross-compilation fixes have been added only very recently.
 
-Both applied, thanks!
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+---
+ DEVELOPERS                     |  3 +++
+ package/Config.in              |  1 +
+ package/libkcapi/Config.in     | 11 +++++++++++
+ package/libkcapi/libkcapi.hash |  2 ++
+ package/libkcapi/libkcapi.mk   | 19 +++++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/libkcapi/Config.in
+ create mode 100644 package/libkcapi/libkcapi.hash
+ create mode 100644 package/libkcapi/libkcapi.mk
 
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ff72ca1..cf24db8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -991,6 +991,9 @@ F:	package/easydbus/
+ F:	package/rs485conf/
+ F:	package/turbolua/
+ 
++N:	Marcin Nowakowski <marcin.nowakowski@imgtec.com>
++F:	package/libkcapi/
++
+ N:	Marek Belisko <marek.belisko@open-nandra.com>
+ F:	package/libatasmart/
+ F:	package/polkit/
+diff --git a/package/Config.in b/package/Config.in
+index cfe7fc6..2e605f0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -933,6 +933,7 @@ menu "Crypto"
+ 	source "package/libgcrypt/Config.in"
+ 	source "package/libgpg-error/Config.in"
+ 	source "package/libgpgme/Config.in"
++	source "package/libkcapi/Config.in"
+ 	source "package/libksba/Config.in"
+ 	source "package/libmcrypt/Config.in"
+ 	source "package/libmhash/Config.in"
+diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
+new file mode 100644
+index 0000000..91402dd
+--- /dev/null
++++ b/package/libkcapi/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBKCAPI
++	bool "libkcapi"
++	help
++	  Linux Kernel Crypto API userspace interface library
++
++	  http://www.chronox.de/libkcapi.html
++
++config BR2_PACKAGE_LIBKCAPI_APPS
++	bool "libkcapi test applications"
++	depends on BR2_PACKAGE_LIBKCAPI
++
+diff --git a/package/libkcapi/libkcapi.hash b/package/libkcapi/libkcapi.hash
+new file mode 100644
+index 0000000..3b08d3c
+--- /dev/null
++++ b/package/libkcapi/libkcapi.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	77b53b5bd2b1f11a6b4be68d7b1129aac4efe476400cca6bcb94577d4d8850f3	libkcapi-94f741aa1dc6af1b45945786c8cc378a86bc9538.tar.gz
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+new file mode 100644
+index 0000000..b656ebf
+--- /dev/null
++++ b/package/libkcapi/libkcapi.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# libkcapi
++#
++################################################################################
++
++LIBKCAPI_VERSION = 94f741aa1dc6af1b45945786c8cc378a86bc9538
++LIBKCAPI_SITE = $(call github,smuellerDD,libkcapi,$(LIBKCAPI_VERSION))
++LIBKCAPI_AUTORECONF = YES
++LIBKCAPI_AUTORECONF_OPTS = -i
++LIBKCAPI_INSTALL_STAGING = YES
++LIBKCAPI_LICENSE = BSD-3c or GPLv2
++LIBKCAPI_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_PACKAGE_LIBKCAPI_APPS),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-speed --enable-kcapi-test --enable-apps
++endif
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
