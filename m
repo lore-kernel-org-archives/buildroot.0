@@ -1,221 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Mar 2017 17:19:09 +0100
-Subject: [Buildroot] [git commit] lxc: add upstream security fix for
-	CVE-2017-5985
-Message-ID: <20170310161946.469517FECB@busybox.osuosl.org>
+Date: Fri, 10 Mar 2017 17:19:02 +0100
+Subject: [Buildroot] [git commit] php: bump to version 7.1.2
+Message-ID: <20170310161946.3A1DE825B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ed1bc6976625ca504ec5406f68fdb096ba424eb
+commit: https://git.buildroot.net/buildroot/commit/?id=34d19a23ad8d46166a83da9cd84910ae1c5b2a43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Before this commit, lxc-user-nic could potentially have been tricked into
-operating on a network namespace over which the caller did not hold
-privilege.
+7.1.2 is a bugfix release, fixing a number of issues:
 
-This commit ensures that the caller is privileged over the network namespace
-by temporarily dropping privilege.
+http://www.php.net/ChangeLog-7.php#7.1.2
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-5985-Ensure-target-netns-is-caller-owned.patch | 189 +++++++++++++++++++++
- 1 file changed, 189 insertions(+)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch b/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
-new file mode 100644
-index 0000000..79d19b3
---- /dev/null
-+++ b/package/lxc/0001-CVE-2017-5985-Ensure-target-netns-is-caller-owned.patch
-@@ -0,0 +1,189 @@
-+From 16af238036a5464ae8f2420ed3af214f0de875f9 Mon Sep 17 00:00:00 2001
-+From: Christian Brauner <christian.brauner@ubuntu.com>
-+Date: Sat, 28 Jan 2017 13:02:34 +0100
-+Subject: [PATCH] CVE-2017-5985: Ensure target netns is caller-owned
-+
-+Before this commit, lxc-user-nic could potentially have been tricked into
-+operating on a network namespace over which the caller did not hold privilege.
-+
-+This commit ensures that the caller is privileged over the network namespace by
-+temporarily dropping privilege.
-+
-+Launchpad: https://bugs.launchpad.net/ubuntu/+source/lxc/+bug/1654676
-+Reported-by: Jann Horn <jannh@google.com>
-+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/lxc/lxc_user_nic.c | 119 ++++++++++++++++++++++++++++++++++++-------------
-+ 1 file changed, 87 insertions(+), 32 deletions(-)
-+
-+diff --git a/src/lxc/lxc_user_nic.c b/src/lxc/lxc_user_nic.c
-+index 409a53a1..96dc3986 100644
-+--- a/src/lxc/lxc_user_nic.c
-++++ b/src/lxc/lxc_user_nic.c
-+@@ -50,6 +50,14 @@
-+ #include "utils.h"
-+ #include "network.h"
-+ 
-++#define usernic_debug_stream(stream, format, ...)                              \
-++	do {                                                                   \
-++		fprintf(stream, "%s: %d: %s: " format, __FILE__, __LINE__,     \
-++			__func__, __VA_ARGS__);                                \
-++	} while (false)
-++
-++#define usernic_error(format, ...) usernic_debug_stream(stderr, format, __VA_ARGS__)
-++
-+ static void usage(char *me, bool fail)
-+ {
-+ 	fprintf(stderr, "Usage: %s lxcpath name pid type bridge nicname\n", me);
-+@@ -670,68 +678,115 @@ again:
-+ }
-+ 
-+ #define VETH_DEF_NAME "eth%d"
-+-
-+ static int rename_in_ns(int pid, char *oldname, char **newnamep)
-+ {
-+-	int fd = -1, ofd = -1, ret, ifindex = -1;
-++	uid_t ruid, suid, euid;
-++	int fret = -1;
-++	int fd = -1, ifindex = -1, ofd = -1, ret;
-+ 	bool grab_newname = false;
-+ 
-+ 	ofd = lxc_preserve_ns(getpid(), "net");
-+ 	if (ofd < 0) {
-+-		fprintf(stderr, "Failed opening network namespace path for '%d'.", getpid());
-+-		return -1;
-++		usernic_error("Failed opening network namespace path for '%d'.", getpid());
-++		return fret;
-+ 	}
-+ 
-+ 	fd = lxc_preserve_ns(pid, "net");
-+ 	if (fd < 0) {
-+-		fprintf(stderr, "Failed opening network namespace path for '%d'.", pid);
-+-		return -1;
-++		usernic_error("Failed opening network namespace path for '%d'.", pid);
-++		goto do_partial_cleanup;
-++	}
-++
-++	ret = getresuid(&ruid, &euid, &suid);
-++	if (ret < 0) {
-++		usernic_error("Failed to retrieve real, effective, and saved "
-++			      "user IDs: %s\n",
-++			      strerror(errno));
-++		goto do_partial_cleanup;
-++	}
-++
-++	ret = setns(fd, CLONE_NEWNET);
-++	close(fd);
-++	fd = -1;
-++	if (ret < 0) {
-++		usernic_error("Failed to setns() to the network namespace of "
-++			      "the container with PID %d: %s.\n",
-++			      pid, strerror(errno));
-++		goto do_partial_cleanup;
-+ 	}
-+ 
-+-	if (setns(fd, 0) < 0) {
-+-		fprintf(stderr, "setns to container network namespace\n");
-+-		goto out_err;
-++	ret = setresuid(ruid, ruid, 0);
-++	if (ret < 0) {
-++		usernic_error("Failed to drop privilege by setting effective "
-++			      "user id and real user id to %d, and saved user "
-++			      "ID to 0: %s.\n",
-++			      ruid, strerror(errno));
-++		// COMMENT(brauner): It's ok to jump to do_full_cleanup here
-++		// since setresuid() will succeed when trying to set real,
-++		// effective, and saved to values they currently have.
-++		goto do_full_cleanup;
-+ 	}
-+-	close(fd); fd = -1;
-++
-+ 	if (!*newnamep) {
-+ 		grab_newname = true;
-+ 		*newnamep = VETH_DEF_NAME;
-+-		if (!(ifindex = if_nametoindex(oldname))) {
-+-			fprintf(stderr, "failed to get netdev index\n");
-+-			goto out_err;
-++
-++		ifindex = if_nametoindex(oldname);
-++		if (!ifindex) {
-++			usernic_error("Failed to get netdev index: %s.\n", strerror(errno));
-++			goto do_full_cleanup;
-+ 		}
-+ 	}
-+-	if ((ret = lxc_netdev_rename_by_name(oldname, *newnamep)) < 0) {
-+-		fprintf(stderr, "Error %d renaming netdev %s to %s in container\n", ret, oldname, *newnamep);
-+-		goto out_err;
-++
-++	ret = lxc_netdev_rename_by_name(oldname, *newnamep);
-++	if (ret < 0) {
-++		usernic_error("Error %d renaming netdev %s to %s in container.\n", ret, oldname, *newnamep);
-++		goto do_full_cleanup;
-+ 	}
-++
-+ 	if (grab_newname) {
-+-		char ifname[IFNAMSIZ], *namep = ifname;
-++		char ifname[IFNAMSIZ];
-++		char *namep = ifname;
-++
-+ 		if (!if_indextoname(ifindex, namep)) {
-+-			fprintf(stderr, "Failed to get new netdev name\n");
-+-			goto out_err;
-++			usernic_error("Failed to get new netdev name: %s.\n", strerror(errno));
-++			goto do_full_cleanup;
-+ 		}
-++
-+ 		*newnamep = strdup(namep);
-+ 		if (!*newnamep)
-+-			goto out_err;
-++			goto do_full_cleanup;
-+ 	}
-+-	if (setns(ofd, 0) < 0) {
-+-		fprintf(stderr, "Error returning to original netns\n");
-+-		close(ofd);
-+-		return -1;
-++
-++	fret = 0;
-++
-++do_full_cleanup:
-++	ret = setresuid(ruid, euid, suid);
-++	if (ret < 0) {
-++		usernic_error("Failed to restore privilege by setting effective "
-++			      "user id to %d, real user id to %d, and saved user "
-++			      "ID to %d: %s.\n",
-++			      ruid, euid, suid, strerror(errno));
-++		fret = -1;
-++		// COMMENT(brauner): setns() should fail if setresuid() doesn't
-++		// succeed but there's no harm in falling through; keeps the
-++		// code cleaner.
-+ 	}
-+-	close(ofd);
-+ 
-+-	return 0;
-++	ret = setns(ofd, CLONE_NEWNET);
-++	if (ret < 0) {
-++		usernic_error("Failed to setns() to original network namespace "
-++			      "of PID %d: %s.\n",
-++			      ofd, strerror(errno));
-++		fret = -1;
-++	}
-+ 
-+-out_err:
-+-	if (ofd >= 0)
-+-		close(ofd);
-+-	if (setns(ofd, 0) < 0)
-+-		fprintf(stderr, "Error returning to original network namespace\n");
-++do_partial_cleanup:
-+ 	if (fd >= 0)
-+ 		close(fd);
-+-	return -1;
-++	close(ofd);
-++
-++	return fret;
-+ }
-+ 
-+ /*
-+-- 
-+2.11.0
-+
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 9c94b9e..47e99d4 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256 b3565b0c1441064eba204821608df1ec7367abff881286898d900c2c2a5ffe70  php-7.1.1.tar.xz
++sha256 d815a0c39fd57bab1434a77ff0610fb507c22f790c66cd6f26e27030c4b3e971  php-7.1.2.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 1379ad5..5b113d1 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.1.1
++PHP_VERSION = 7.1.2
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
