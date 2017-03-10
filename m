@@ -1,38 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Mar 2017 21:48:51 +0100
-Subject: [Buildroot] [git commit] package/logrotate: update upstream site in
-	Config.in help
-Message-ID: <20170310204939.9423082561@busybox.osuosl.org>
+Date: Fri, 10 Mar 2017 21:50:06 +0100
+Subject: [Buildroot] [PATCH] package/logrotate: fixes website in help,
+ since logrotate is now hosted by github and fedorahosted.org has
+ closed
+In-Reply-To: <1489159330-11616-1-git-send-email-julien.boibessot@free.fr>
+References: <1489159330-11616-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20170310215006.2c3d64ad@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdb1ab8ca0f10782a2f5bba84a34294de18c7273
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-fedorahosted.org has closed on March 1st, 2017, and we were anyway
-already using github as a source for logrotate. This commit therefore
-updates the Config.in help text to also use github as the upstream
-site.
+On Fri, 10 Mar 2017 16:22:10 +0100, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> 
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> ---
+>  package/logrotate/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/logrotate/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Your commit title was *way* too long. Commit titles should be much
+shorter than that, and the long explanation move to the commit log. So
+I've reworded that and applied. Thanks!
 
-diff --git a/package/logrotate/Config.in b/package/logrotate/Config.in
-index 8528361..2b1ae64 100644
---- a/package/logrotate/Config.in
-+++ b/package/logrotate/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LOGROTATE
- 	help
- 	  A simple program to rotate logs.
- 
--	  https://fedorahosted.org/logrotate/
-+	  https://github.com/logrotate/logrotate
- 
- comment "logrotate needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
