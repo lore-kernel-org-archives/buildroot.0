@@ -1,76 +1,29 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat, 11 Mar 2017 09:00:24 +0100
-Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.0.1
-Message-ID: <20170311080024.24528-1-joerg.krause@embedded.rocks>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sat, 11 Mar 2017 10:23:25 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-03-10
+In-Reply-To: <20170311072845.949C8207F9@mail.free-electrons.com>
+References: <20170311072845.949C8207F9@mail.free-electrons.com>
+Message-ID: <1489224205.25573.0.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support for PolarSSL is deprecated and the usage of mbedTLS is
-recommended, if not OpenSSL is used as crypto backend.
+On Sat, 2017-03-11 at 08:28 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Build statistics for 2017-03-10
+> ================================
 
-Also change the direction of the OpenSSL/mbedTLS package selection to
-be the same as in ustream-ssl to prevent a circular dependency.
+> d.buildroot.net/results/21ca67aaf53c3c92e2e1a8ac75f062887c5dfe00
+> ?????????sh4 |???????????????????boost-1.63.0 | NOK | http://autobuil
+> d.buildroot.net/results/d362e7eee7f66768cfdf658effe749a702c50985
+> ????????or1k |???????????????????boost-1.63.0 | NOK | http://autobuil
+> d.buildroot.net/results/140e7211cbf4ccfcb37d6155d51f22e6213e6341
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/shairport-sync/Config.in           | 2 +-
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 8 ++++----
- 3 files changed, 6 insertions(+), 6 deletions(-)
+Reported upstream:
+https://svn.boost.org/trac/boost/ticket/11756#comment:45
 
-diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-index c558a64c5..d70121b9f 100644
---- a/package/shairport-sync/Config.in
-+++ b/package/shairport-sync/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
- 	select BR2_PACKAGE_ALSA_LIB_MIXER
- 	select BR2_PACKAGE_LIBCONFIG
- 	select BR2_PACKAGE_LIBDAEMON
--	select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
- 	select BR2_PACKAGE_POPT
- 	help
- 	  Shairport Sync emulates an AirPort Express for the purpose of
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 45bce1016..9e305dadd 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  2e73416ac8fdda1657034afaa143f1710852ebed06e0aa43dafc2b7dc5eb653d  shairport-sync-2.8.6.tar.gz
-+sha256  3fbde4f6e7f5cbc7200f782bd9faca25f7e91edf7dd7a3b514cd616e556a1fee  shairport-sync-3.0.1.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 00d6a695b..976aff6b0 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 2.8.6
-+SHAIRPORT_SYNC_VERSION = 3.0.1
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
-@@ -31,13 +31,13 @@ else
- SHAIRPORT_SYNC_CONF_OPTS += --with-tinysvcmdns
- endif
- 
--# OpenSSL or PolarSSL
-+# OpenSSL or mbedTLS
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SHAIRPORT_SYNC_DEPENDENCIES += openssl
- SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=openssl
- else
--SHAIRPORT_SYNC_DEPENDENCIES += polarssl
--SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=polarssl
-+SHAIRPORT_SYNC_DEPENDENCIES += mbedtls
-+SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=mbedtls
- endif
- 
- ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
--- 
-2.12.0
+J?rg
