@@ -1,72 +1,96 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 11 Mar 2017 22:26:45 +0100
-Subject: [Buildroot] [PATCH] package/gdb: fix gnulib issue with musl and
-	uClibc toolchains again
-Message-ID: <20170311212645.11896-1-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Mar 2017 23:32:23 +0100
+Subject: [Buildroot] [PATCH] package/nbd: rebname options
+Message-ID: <1489271543-21744-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The commit [1] doesn't fix this issue for all cases (it doesn't work
-when BR2_PACKAGE_GDB_DEBUGGER=y).
-So, leave the configure script alone and override
-gl_cv_func_gettimeofday_clobber from GDB_MAKE_ENV.
+... and add myelf to the DEVELOPERS for nbd.
 
-[1] 560334bb2a46a77081a3944d092df7732dfca432
-
-Fixes:
-http://autobuild.buildroot.net/results/719/719a441421030b79c0aa1bbfb707130f3ac87338
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-Note:
-AlpineLinux doesn't build gdbserver "gdb server does not compile with musl"
-http://git.alpinelinux.org/cgit/aports/tree/main/gdb/APKBUILD
----
- package/gdb/gdb.mk | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ Config.in.legacy      | 14 ++++++++++++++
+ DEVELOPERS            |  1 +
+ package/nbd/Config.in |  4 ++--
+ package/nbd/nbd.mk    |  4 ++--
+ 4 files changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 606f1f9..c589714 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -67,13 +67,6 @@ GDB_DISABLE_BINUTILS_CONF_OPTS = \
- 	--disable-ld \
- 	--disable-gas
+diff --git a/Config.in.legacy b/Config.in.legacy
+index be4c953..8bb3e2a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,20 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2017.05"
  
--# Starting with gdb 7.11, the bundled gnulib tries to use
--# rpl_gettimeofday (gettimeofday replacement) due to the code being
--# unable to determine if the replacement function should be used or
--# not when cross-compiling with uClibc or musl as C libraries. So use
--# gl_cv_func_gettimeofday_clobber=no to not use rpl_gettimeofday,
--# assuming musl and uClibc have a properly working gettimeofday
--# implementation.
- GDB_CONF_ENV = \
- 	ac_cv_type_uintptr_t=yes \
- 	gt_cv_func_gettext_libintl=yes \
-@@ -83,8 +76,18 @@ GDB_CONF_ENV = \
- 	bash_cv_must_reinstall_sighandlers=no \
- 	bash_cv_func_sigsetjmp=present \
- 	bash_cv_have_mbstate_t=yes \
--	gdb_cv_func_sigsetjmp=yes \
--	gl_cv_func_gettimeofday_clobber=no
-+	gdb_cv_func_sigsetjmp=yes
++config BR2_NBD_CLIENT
++	bool "nbd clioent option was renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_NBD_CLIENT
++	help
++	  The nbd client option has been renamed to BR2_PACKAGE_NBD_CLIENT.
 +
-+# Starting with gdb 7.11, the bundled gnulib tries to use
-+# rpl_gettimeofday (gettimeofday replacement) due to the code being
-+# unable to determine if the replacement function should be used or
-+# not when cross-compiling with uClibc or musl as C libraries. So use
-+# gl_cv_func_gettimeofday_clobber=no to not use rpl_gettimeofday,
-+# assuming musl and uClibc have a properly working gettimeofday
-+# implementation.
-+# Add gl_cv_func_gettimeofday_clobber=no to GDB_MAKE_ENV since it's
-+# lost when calling sub configure scripts.
-+GDB_MAKE_ENV = gl_cv_func_gettimeofday_clobber=no
++config BR2_NBD_SERVER
++	bool "nbd server option was renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_NBD_SERVER
++	help
++	  The nbd server option has been renamed to BR2_PACKAGE_NBD_SERVER.
++
+ config BR2_PACKAGE_GMOCK
+ 	bool "gmock merged into gtest package"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8daf670..268c2fb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1652,6 +1652,7 @@ F:	package/libseccomp/
+ F:	package/linux-tools/
+ F:	package/mesa3d-headers/
+ F:	package/mke2img/
++F:	package/nbd/
+ F:	package/nut/
+ F:	package/nvidia-driver/
+ F:	package/omxplayer/
+diff --git a/package/nbd/Config.in b/package/nbd/Config.in
+index a5ded29..b00bc40 100644
+--- a/package/nbd/Config.in
++++ b/package/nbd/Config.in
+@@ -12,13 +12,13 @@ config BR2_PACKAGE_NBD
  
- # The shared only build is not supported by gdb, so enable static build for
- # build-in libraries with --enable-static.
+ if BR2_PACKAGE_NBD
+ 
+-config BR2_NBD_CLIENT
++config BR2_PACKAGE_NBD_CLIENT
+ 	bool "nbd client"
+ 	default y
+ 	help
+ 	  the client part of NBD.
+ 
+-config BR2_NBD_SERVER
++config BR2_PACKAGE_NBD_SERVER
+ 	bool "nbd server"
+ 	help
+ 	  the server part of NBD.
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index d91c2d7..c7c327e 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -18,10 +18,10 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ NBD_CONF_ENV = ac_cv_header_linux_falloc_h=no
+ endif
+ 
+-ifneq ($(BR2_NBD_CLIENT),y)
++ifneq ($(BR2_PACKAGE_NBD_CLIENT),y)
+ NBD_TOREMOVE += nbd-client
+ endif
+-ifneq ($(BR2_NBD_SERVER),y)
++ifneq ($(BR2_PACKAGE_NBD_SERVER),y)
+ NBD_TOREMOVE += nbd-server
+ endif
+ 
 -- 
-2.9.3
+2.7.4
