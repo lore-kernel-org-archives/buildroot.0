@@ -1,110 +1,23 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Mar 2017 17:57:25 +0100
-Subject: [Buildroot] [PATCH v1 1/2] qt5base: fix eglfs x11 header
- related compile failure
-In-Reply-To: <20170310221547.32158-1-ps.report@gmx.net>
-References: <20170310221547.32158-1-ps.report@gmx.net>
-Message-ID: <9f3d8c65-3f0c-1805-515c-a458f109e452@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 11 Mar 2017 20:31:49 +0000
+Subject: [Buildroot] [Bug 9726] Raspberry Pi version B - Problems with UART
+ speed in Buildroot 2016.11.2 and 2017.2
+In-Reply-To: <bug-9726-163@https.bugs.busybox.net/>
+References: <bug-9726-163@https.bugs.busybox.net/>
+Message-ID: <bug-9726-163-OWXsiPyAgO@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=9726
 
-
-On 10-03-17 23:15, Peter Seiderer wrote:
-> Add egl config and QT_EGL_NO_X11 define (as all other eglfs project
-> files do) to src/plugins/platforms/eglfs/eglfs-plugin.pro.
-> 
-> Fixes ([1]):
-> 
->   In file included from .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
->                    from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
->                    from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
->                    from api/qeglfsglobal_p.h:56,
->                    from api/qeglfsintegration_p.h:54,
->                    from qeglfsmain.cpp:41:
->   .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22: fatal error: X11/Xlib.h: No such file or directory
->   compilation terminated.
->   Makefile.eglfs-plugin:1024: recipe for target '.obj/qeglfsmain.o' failed
->   make[2]: *** [.obj/qeglfsmain.o] Error 1
->   make[2]: Leaving directory '.../qt5base-5.8.0/src/plugins/platforms/eglfs'
->   Makefile:71: recipe for target 'sub-eglfs-plugin-pro-make_first-ordered' failed
->   make[1]: *** [sub-eglfs-plugin-pro-make_first-ordered] Error 2
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2017-March/186158.html
-
- Also fixes https://gitlab.com/buildroot.org/buildroot/builds/11700987
-
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
- Can't say I *really* understand the patch, but looks good to me.
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
-> ---
->  ...fs-fix-x11-header-related-compile-failure.patch | 36 ++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch
-> 
-> diff --git a/package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch b/package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch
-> new file mode 100644
-> index 000000000..0e8bcffa2
-> --- /dev/null
-> +++ b/package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch
-> @@ -0,0 +1,36 @@
-> +From 8902f4d7b7c532592d1a34ad117698d3e380e9e1 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Fri, 10 Mar 2017 22:23:06 +0100
-> +Subject: [PATCH] eglfs: fix x11 header related compile failure
-> +
-> +Add egl config and QT_EGL_NO_X11 define (as all other eglfs project
-> +files do).
-
- Well, not exactly all others, e.g. eglfs_viv doesn't. But eglfs_x11 *does*
-define this, strangely enough.
-
- Regards,
- Arnout
-
-> +
-> +Task-number: QTBUG-59427
-> +Change-Id: Ifbb11eae0fdf0e58c0b7feecb9a7914a889c8f77
-> +
-> +Upstream: https://codereview.qt-project.org/188158
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + src/plugins/platforms/eglfs/eglfs-plugin.pro | 5 +++++
-> + 1 file changed, 5 insertions(+)
-> +
-> +diff --git a/src/plugins/platforms/eglfs/eglfs-plugin.pro b/src/plugins/platforms/eglfs/eglfs-plugin.pro
-> +index cf4863975a..ec229796e5 100644
-> +--- a/src/plugins/platforms/eglfs/eglfs-plugin.pro
-> ++++ b/src/plugins/platforms/eglfs/eglfs-plugin.pro
-> +@@ -2,6 +2,11 @@ TARGET = qeglfs
-> + 
-> + QT += eglfsdeviceintegration-private
-> + 
-> ++CONFIG += egl
-> ++
-> ++# Avoid X11 header collision, use generic EGL native types
-> ++DEFINES += QT_EGL_NO_X11
-> ++
-> + SOURCES += $$PWD/qeglfsmain.cpp
-> + 
-> + OTHER_FILES += $$PWD/eglfs.json
-> +-- 
-> +2.11.0
-> +
-> 
+--- Comment #1 from WZab <wzab01@gmail.com> ---
+Created attachment 6951
+  --> https://bugs.busybox.net/attachment.cgi?id=6951&action=edit
+Buildroot configuration to generate the U-Boot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
