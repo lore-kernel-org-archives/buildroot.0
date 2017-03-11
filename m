@@ -1,82 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Mar 2017 08:28:45 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-03-10
-Message-ID: <20170311072845.949C8207F9@mail.free-electrons.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat, 11 Mar 2017 09:00:24 +0100
+Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.0.1
+Message-ID: <20170311080024.24528-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Support for PolarSSL is deprecated and the usage of mbedTLS is
+recommended, if not OpenSSL is used as crypto backend.
 
-Build statistics for 2017-03-10
-================================
+Also change the direction of the OpenSSL/mbedTLS package selection to
+be the same as in ustream-ssl to prevent a circular dependency.
 
-      successes : 114
-       failures : 36 
-       timeouts : 0  
-          TOTAL : 150
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/Config.in           | 2 +-
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 8 ++++----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Classification of failures by reason
-====================================
-
-                  libnl-3.2.29 | 18
-                 batctl-2016.1 | 2 
-                      bmon-4.0 | 2 
-                  boost-1.63.0 | 2 
-                 dropwatch-1.4 | 2 
-           aircrack-ng-1.2-rc1 | 1 
-              btrfs-progs-4.10 | 1 
-                   hostapd-2.6 | 1 
-            ibrdtn-tools-1.0.1 | 1 
-           linux-zigbee-v0.3.1 | 1 
-                lmbench-3.0-a9 | 1 
-                    neard-0.14 | 1 
-               polarssl-1.2.19 | 1 
-                  powertop-2.7 | 1 
-ti-utils-06dbdb2727354b5f3a... | 1 
-
-
-Detail of failures
-===================
-
-     powerpc |            aircrack-ng-1.2-rc1 | NOK | http://autobuild.buildroot.net/results/699f4bd687a2d93de2f851c9d101d26e32808608
-        m68k |                  batctl-2016.1 | NOK | http://autobuild.buildroot.net/results/b6a3bd1b0e5cb4a7c0eef88a566a319b8a8ad641
-      xtensa |                  batctl-2016.1 | NOK | http://autobuild.buildroot.net/results/911fe854b0453823fc257473f0681f908a3bbc42
-microblazeel |                       bmon-4.0 | NOK | http://autobuild.buildroot.net/results/91b80278e62de56406f0f3e5e5131be15d23e1c2
-      x86_64 |                       bmon-4.0 | NOK | http://autobuild.buildroot.net/results/21ca67aaf53c3c92e2e1a8ac75f062887c5dfe00
-         sh4 |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/d362e7eee7f66768cfdf658effe749a702c50985
-        or1k |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/140e7211cbf4ccfcb37d6155d51f22e6213e6341
-        i586 |               btrfs-progs-4.10 | NOK | http://autobuild.buildroot.net/results/ab12d07c73e3f8af102f00bd2e7124f6c6a076c3
-        bfin |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/baf80ee4c3586035d36a1922f09d84a43bd6afff
-     powerpc |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/b531f56e15cb8a5194973c38023960ce4568aca2
-      mipsel |                    hostapd-2.6 | NOK | http://autobuild.buildroot.net/results/16034c0b1a5917afeb86021f802b6d1433c43129
-        or1k |             ibrdtn-tools-1.0.1 | NOK | http://autobuild.buildroot.net/results/c1789a48114afb467b3974c2c3c3e8d159d52d78
-        sh4a |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/3b29bc3b5301483b997595f4610e024cee1dff5a
-         arm |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/563f46e9a11f9e3b174a4e1308444f284d1b3421
-         arm |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/03a4e629dd50de2bb009c3ee51993da7af7a1997
-    mips64el |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/ceea635a9d620398cbcd44ccb859b07bf6682780
-        sh4a |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/970463b628d9c81d5e217e92a455d2e05d0aa89e
-         arm |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/a071a71634db5d5dcb17d7b61af13754a92a78df
-      xtensa |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/dce5d21c27df57ac96d9302752dd1802e7a9786b
-         arm |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/fde486b548e11e3ed7bf9d9579916102fb61c92c
-    mips64el |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/2417157b35a155c427064f823f7e51595ca58941
-         arm |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/7cadb911eede56ac26e6eb224a0e69d58935601a
-     powerpc |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/e355d941de9af9919de83104ded27d953e66afda
-        m68k |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/44dd3db6cdda4646fa12ccf243d6aca16bed3c90
-       sparc |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/d9ca7d69f5c8a487808e79bbffeee1c4d5b8c099
-      x86_64 |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/17beaa70062e06268b4164eb1be3795c4bc55379
-      x86_64 |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/5aef057e1d70bda9e7d75cbeda948db644b018e7
-        i686 |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/0b905dd720f13f024601ada4738178f4c0b76a32
-      x86_64 |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/e0ac3d4417e4bf19ca26c6db8c1ef44aac8d7eb0
-        bfin |                   libnl-3.2.29 | NOK | http://autobuild.buildroot.net/results/c4b1c3f396ddd1d9242aed0953558606f929d57d
-         arc |            linux-zigbee-v0.3.1 | NOK | http://autobuild.buildroot.net/results/fb699ed6f47b340e0b1d0fc645646b3cd0ed4df8
-microblazeel |                 lmbench-3.0-a9 | NOK | http://autobuild.buildroot.net/results/261ff25a9db09654a4e77bffb9b2280465e522c7
-     powerpc |                     neard-0.14 | NOK | http://autobuild.buildroot.net/results/9955e23d3224e671e944dae9d40280e1ad2986de
-         arm |                polarssl-1.2.19 | NOK | http://autobuild.buildroot.net/results/06ef15a089283fcfaaaafcab7a161061b1189775
-     powerpc |                   powertop-2.7 | NOK | http://autobuild.buildroot.net/results/d487f9ee646ca3e913f4a4650c57bc5aacb45715
-      xtensa | ti-utils-06dbdb2727354b5f3a... | NOK | http://autobuild.buildroot.net/results/2caa7c0bc9372632ea680e1d21d226e54d4bb2fa
-
+diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
+index c558a64c5..d70121b9f 100644
+--- a/package/shairport-sync/Config.in
++++ b/package/shairport-sync/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER
+ 	select BR2_PACKAGE_LIBCONFIG
+ 	select BR2_PACKAGE_LIBDAEMON
+-	select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
+ 	select BR2_PACKAGE_POPT
+ 	help
+ 	  Shairport Sync emulates an AirPort Express for the purpose of
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 45bce1016..9e305dadd 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2e73416ac8fdda1657034afaa143f1710852ebed06e0aa43dafc2b7dc5eb653d  shairport-sync-2.8.6.tar.gz
++sha256  3fbde4f6e7f5cbc7200f782bd9faca25f7e91edf7dd7a3b514cd616e556a1fee  shairport-sync-3.0.1.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 00d6a695b..976aff6b0 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.8.6
++SHAIRPORT_SYNC_VERSION = 3.0.1
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+@@ -31,13 +31,13 @@ else
+ SHAIRPORT_SYNC_CONF_OPTS += --with-tinysvcmdns
+ endif
+ 
+-# OpenSSL or PolarSSL
++# OpenSSL or mbedTLS
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SHAIRPORT_SYNC_DEPENDENCIES += openssl
+ SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=openssl
+ else
+-SHAIRPORT_SYNC_DEPENDENCIES += polarssl
+-SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=polarssl
++SHAIRPORT_SYNC_DEPENDENCIES += mbedtls
++SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=mbedtls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_LIBSOXR),y)
 -- 
-http://autobuild.buildroot.net
+2.12.0
