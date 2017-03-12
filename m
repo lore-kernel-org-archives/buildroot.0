@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Mar 2017 14:21:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/exim: bump version to 4.89
-In-Reply-To: <20170311151205.16649-1-bernd.kuhls@t-online.de>
-References: <20170311151205.16649-1-bernd.kuhls@t-online.de>
-Message-ID: <20170312142120.4af2ca51@free-electrons.com>
+Date: Sun, 12 Mar 2017 14:21:38 +0100
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.2.9.10
+Message-ID: <20170312132534.EE51C8029F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=660651491ea2ff8fc82d503a8e28bbd54e8d9131
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 11 Mar 2017 16:12:05 +0100, Bernd Kuhls wrote:
-> Rebased patch #0003, added uClibc compatibility patch.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I've applied, but I have a request below.
-
-> -EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4/old
-> +EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
-
-Could you get in touch with upstream, and ask them to stop moving
-tarballs? This is *really* annoying for things like Buildroot.
-
-Currently, 4.89 is in ftp://ftp.exim.org/pub/exim/exim4, but as soon as
-they will release 4.90 (or whatever is the next version), they will
-move the 4.89 tarball to ftp://ftp.exim.org/pub/exim/exim4/old/. This
-is really really bad to make downloads reproducible on the long run.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 470fc48..d14db04 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 33325d2b250fd047ba2ddc5d11c2190c4e2951f4b03ec48ebd8bf0666e990d43  tor-0.2.9.9.tar.gz
++sha256 d611283e1fb284b5f884f8c07e7d3151016851848304f56cfdf3be2a88bd1341  tor-0.2.9.10.tar.gz
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index bb0fbb1..9ccde79 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.2.9.9
++TOR_VERSION = 0.2.9.10
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3c
+ TOR_LICENSE_FILES = LICENSE
