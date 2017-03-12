@@ -1,38 +1,48 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 12 Mar 2017 11:40:59 -0300
-Subject: [Buildroot] [PATCH v1 1/2] qt5base: fix eglfs x11 header
-	related compile failure
-In-Reply-To: <20170310221547.32158-1-ps.report@gmx.net>
-References: <20170310221547.32158-1-ps.report@gmx.net>
-Message-ID: <CAOMZO5CeFu3ex0nVN9reotdVL9YP9pcDnN0iUXkAXEgfR=NtLQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Mar 2017 15:41:13 +0100
+Subject: [Buildroot] [git commit] package/clamav: add optional dependency to
+	json-c
+Message-ID: <20170312144117.BE6BB81D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 10, 2017 at 7:15 PM, Peter Seiderer <ps.report@gmx.net> wrote:
-> Add egl config and QT_EGL_NO_X11 define (as all other eglfs project
-> files do) to src/plugins/platforms/eglfs/eglfs-plugin.pro.
->
-> Fixes ([1]):
->
->   In file included from .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
->                    from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
->                    from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
->                    from api/qeglfsglobal_p.h:56,
->                    from api/qeglfsintegration_p.h:54,
->                    from qeglfsmain.cpp:41:
->   .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22: fatal error: X11/Xlib.h: No such file or directory
->   compilation terminated.
->   Makefile.eglfs-plugin:1024: recipe for target '.obj/qeglfsmain.o' failed
->   make[2]: *** [.obj/qeglfsmain.o] Error 1
->   make[2]: Leaving directory '.../qt5base-5.8.0/src/plugins/platforms/eglfs'
->   Makefile:71: recipe for target 'sub-eglfs-plugin-pro-make_first-ordered' failed
->   make[1]: *** [sub-eglfs-plugin-pro-make_first-ordered] Error 2
->
-> [1] http://lists.busybox.net/pipermail/buildroot/2017-March/186158.html
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=013207f2e4997cb836914b6a9bc9dbc6ee87553c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks a lot for the fixes, Peter!
+clamav has optional support for json-c:
+
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libclamav.so.7.1.1 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libltdl.so.7]
+ 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libjson-c.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/clamav/clamav.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 86bdda4..5d57b8d 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -48,6 +48,13 @@ else
+ CLAMAV_CONF_OPTS += --disable-bzip2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_JSON_C),y)
++CLAMAV_CONF_OPTS += --with-libjson=$(STAGING_DIR)/usr
++CLAMAV_DEPENDENCIES += json-c
++else
++CLAMAV_CONF_OPTS += --without-libjson
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ CLAMAV_CONF_OPTS += --with-xml=$(STAGING_DIR)/usr
+ CLAMAV_DEPENDENCIES += libxml2
