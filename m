@@ -1,50 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Mar 2017 15:39:02 +0100
-Subject: [Buildroot] [PATCH v1 1/2] qt5base: fix eglfs x11 header
- related compile failure
-In-Reply-To: <20170310221547.32158-1-ps.report@gmx.net>
-References: <20170310221547.32158-1-ps.report@gmx.net>
-Message-ID: <20170312153902.126be826@free-electrons.com>
+Date: Sun, 12 Mar 2017 15:39:47 +0100
+Subject: [Buildroot] [git commit] configs/nanopi_neo: update kernel to 4.10
+Message-ID: <20170312143959.00F8081EDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=629ca3a1cc963a45e90142598e695bd5af0e4cae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 10 Mar 2017 23:15:46 +0100, Peter Seiderer wrote:
-> Add egl config and QT_EGL_NO_X11 define (as all other eglfs project
-> files do) to src/plugins/platforms/eglfs/eglfs-plugin.pro.
-> 
-> Fixes ([1]):
-> 
->   In file included from .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
->                    from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
->                    from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
->                    from api/qeglfsglobal_p.h:56,
->                    from api/qeglfsintegration_p.h:54,
->                    from qeglfsmain.cpp:41:
->   .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22: fatal error: X11/Xlib.h: No such file or directory
->   compilation terminated.
->   Makefile.eglfs-plugin:1024: recipe for target '.obj/qeglfsmain.o' failed
->   make[2]: *** [.obj/qeglfsmain.o] Error 1
->   make[2]: Leaving directory '.../qt5base-5.8.0/src/plugins/platforms/eglfs'
->   Makefile:71: recipe for target 'sub-eglfs-plugin-pro-make_first-ordered' failed
->   make[1]: *** [sub-eglfs-plugin-pro-make_first-ordered] Error 2
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2017-March/186158.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...fs-fix-x11-header-related-compile-failure.patch | 36 ++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/nanopi_neo_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Both applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/nanopi_neo_defconfig b/configs/nanopi_neo_defconfig
+index 958c976..fbc0902 100644
+--- a/configs/nanopi_neo_defconfig
++++ b/configs/nanopi_neo_defconfig
+@@ -7,13 +7,13 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/nanopi-neo/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nanopi-neo/post-image.sh"
+ 
+-# Linux headers same as kernel, a 4.9 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++# Linux headers same as kernel, a 4.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_10=y
+ 
+ # Use a -rc kernel to get the DTS
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.10.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
