@@ -1,80 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Mar 2017 21:42:51 +0100
-Subject: [Buildroot] [PATCH v2 2/2] Makefile: add check of binaries
- architecture
-In-Reply-To: <aa76136f-f6cb-0746-319c-c71f0812cc26@mind.be>
-References: <1489340983-11806-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1489340983-11806-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <aa76136f-f6cb-0746-319c-c71f0812cc26@mind.be>
-Message-ID: <20170312204251.GH3739@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Mar 2017 21:52:00 +0100
+Subject: [Buildroot] [PATCH 1/2] gst1-vaapi: new package.
+In-Reply-To: <20170201131854.3046-1-Adamduskett@outlook.com>
+References: <20170201131854.3046-1-Adamduskett@outlook.com>
+Message-ID: <20170312215200.45ee99c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello,
 
-On 2017-03-12 21:27 +0100, Arnout Vandecappelle spake thusly:
-> On 12-03-17 18:49, Thomas Petazzoni wrote:
+On Wed,  1 Feb 2017 08:18:53 -0500, Adam Duskett wrote:
+> gstreamer-vaapi consists in a collection of VA-API based plugins for
+> GStreamer and helper libraries.  These libraries are used for hardware
+> decoding and encoding of several video formats.
 > 
-> [snip]
-> > +READELF_ARCH_NAME = $(call qstrip,$(BR2_READELF_ARCH_NAME))
-> > +
-> > +ifneq ($(READELF_ARCH_NAME),)
+> decoding formats:
+> JPEG, MPEG-2, MPEG-4:2, H.264 AVC, H.264 MVC, VP8, VC-1, WMV3, and HEVC.
 > 
->  We set it for all arches, so this is never empty. Except when we forget to set
-> it, but in that case we probably want this thing to be executed so we notice.
+> encoding formats:
+> MPEG-2, H.264 AVC, H.264 MVC, JPEG, VP8, HEVC
 > 
-> > +define CHECK_BIN_ARCH
-> > +	support/scripts/check-bin-arch $(TARGET_DIR) \
-> > +		$(TARGET_CROSS) "$(READELF_ARCH_NAME)"
-> > +endef
-> > +TARGET_FINALIZE_HOOKS += CHECK_BIN_ARCH
-> > +endif
+> The package won't compile without at least one renderer enabled, so I
+> chose to enable DRM by default, as X11, GLX, and wayland are heavy
+> handed with the dependencies.  As such, I have disabled every option
+> defaulting to yes except for DRM for the first patch.
 > 
->  It would be nice to do it immediately after package install, so it becomes a
-> package error rather than some post-build error that is more difficult to
-> localise. Of course, with Yann's suggestion it would still report which package
-> was the culprit, but I don't think it would show up in the autobuild results
-> under the right package.
+> Also, these codecs are only for x86 and require a Intel CPU (See Hardware
+> Requirements on line 82 of the README file.)
 > 
->  To avoid too much overhead rechecking files all the time, it could be done as
-> part of step_pkg_size_end which iterates over the files installed in target for
-> that particular package. It would make the code a little more complicated,
-> though, and perhaps also slower.
+> Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
 
-Or it could be a step after the step_pkg_size_end, which would basically
-do:
+I've applied your patch, but after doing a number of fixes. The most
+important one is that your package was not building with the uClibc C
+library. uClibc is our default C library, so developers should *always*
+build test their packages with this C library before submitting patches.
 
-    sed -r -e "/^${pkg},(.+)$/!d; s//\1/;" "${BUILD_DIR}/packages-file-list.txt
+So, next time, please the test-pkg script to build test your package
+properly. Submitting something that doesn't even build with Buildroot
+default configuration is not nice at all.
 
-to get the list of file installed by the current package.
+> diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
+> new file mode 100644
+> index 0000000..44461e3
+> --- /dev/null
+> +++ b/package/gstreamer1/gst1-vaapi/Config.in
+> @@ -0,0 +1,39 @@
+> +config BR2_PACKAGE_GST1_VAAPI
+> +	bool "gst1-vaapi"
+> +	select BR2_PACKAGE_LIBVA
+> +	select BR2_PACKAGE_LIBDRM
+> +	select BR2_PACKAGE_GST1_PLUGINS_BASE
+> +	select BR2_PACKAGE_GST1_PLUGINS_BAD # gstreamer-codecparsers
 
-Of course, that would only really and cleanly work from a clean build.
+Your Config.in comment mentioned the udev and thread dependency, but
+I don't see them anywhere here... so I've added them.
 
-> > +    farchname=$(${TARGET_CROSS}readelf -h ${f} | \
+> +	depends on BR2_i386 || BR2_x86_64 # Only relevant for x86
 
-Please be sure to run it under the C locale, to be sure we can find what
-we are looking for.
+I don't really see why in fact. I've seen the README file, but I don't
+quite understand VA-API is a generic API, it can be used on other
+platforms than x86. And it builds fine on ARM, so for now, I've removed
+this.
 
-> > +		       grep '^  Machine:' | \
-> > +		       sed 's/^  Machine: *\(.*\)/\1/')
-> 
->  Why not the simpler sed -n '/^  Machine: *\(.*\)/s//\1/p' instead of the extra
-> grep?
+> +comment "gst1-vaapi needs udev /dev management and a toolchain w/ threads, dynamic library"
+> +	depends on BR2_i386 || BR2_x86_64
 
-Or a bit easier to read (at least for me):
+And removed this line.
 
-    readelf [..] |sed -r -e '/^  Machine: +(.+)/!d; s//\1/;'
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> +	!BR2_PACKAGE_HAS_UDEV
 
-Regards,
-Yann E. MORIN.
+This last line should have been intended with one more tab.
 
+Also, you missed adding yourself to the DEVELOPERS file, so I've done
+that as well. Finally, there were some trailing tabs, and spaces
+instead of tabs in the Config.in file.
+
+All in all, the list of changes:
+
+    [Thomas:
+     - Add entry to DEVELOPERS file.
+     - Add BR2_TOOLCHAIN_HAS_THREADS dependency to the main Config.in
+       option.
+     - Add BR2_PACKAGE_HAS_UDEV dependency to the main Config.in option.
+     - Add comments about the BR2_STATIC_LIBS config option.
+     - Rewrap Config.in help text and removing trailing tabs/spaces.
+     - Remove restriction to i386/x86-64
+     - Add patch to fix build with uClibc.]
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
