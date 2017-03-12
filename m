@@ -1,48 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Mar 2017 14:35:06 +0100
-Subject: [Buildroot] [PATCH 0/4] package/nbd: fixes and bump
-In-Reply-To: <20170312142915.27e2025b@free-electrons.com>
-References: <cover.1489312674.git.yann.morin.1998@free.fr>
- <20170312142915.27e2025b@free-electrons.com>
-Message-ID: <20170312133506.GB3739@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 12 Mar 2017 15:06:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python: add optional support for
+	libintl
+Message-ID: <20170312140605.28511-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter, All,
+Python links to gettext when available:
 
-On 2017-03-12 14:29 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 12 Mar 2017 10:58:15 +0100, Yann E. MORIN wrote:
-> > Yann E. MORIN (4):
-> >       package/nbd: rename options
-> >       package/nbd: fix utilities locations
-> >       package/nbd: add option for the trdump utility
-> >       package/nbd: bump version
-> 
-> Applied, thanks!
-> 
-> Peter: I believe we want to apply PATCH 2/4 to the LTS branch. However,
-> it will conflict a bit because Yann did the renaming of options before
-> the fix, but the conflicts should be trivial to resolve.
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/python2.7/lib-dynload/_locale.so | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libintl.so.8]
+ 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
 
-Hmm... To me, both were fixes, so I did not think that the order would
-be important.
+In comparison the same library compiled without gettext:
 
-But now I see that I should have thought about what could be backported,
-and clearly only 2/4 should, so it should have been the first in the
-series.
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/python2.7/lib-dynload/_locale.so | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
 
-I;ll try to think about this in the future. Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/python/python.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 7541e0bc4..8f4e298c4 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -60,6 +60,10 @@ HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
+ 
+ PYTHON_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PACKAGE_GETTEXT),y)
++PYTHON_DEPENDENCIES += gettext
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON_READLINE),y)
+ PYTHON_DEPENDENCIES += readline
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
