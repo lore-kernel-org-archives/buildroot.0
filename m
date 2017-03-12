@@ -1,35 +1,34 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Mar 2017 12:44:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: add optional support for
-	pulseaudio
-Message-ID: <20170312114457.19813-1-bernd.kuhls@t-online.de>
+Date: Sun, 12 Mar 2017 13:12:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/git: fix pcre support
+Message-ID: <20170312121203.8626-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The current code contains some obvious typos.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mplayer/mplayer.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/git/git.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 07307cede..8288dcb1e 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -224,6 +224,12 @@ else
- MPLAYER_CONF_OPTS += --disable-gif
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 1d70924ae..ec606a415 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -19,8 +19,8 @@ else
+ GIT_CONF_OPTS += --without-openssl
  endif
  
-+# We intentionally don't pass --enable-pulse, to let the
-+# autodetection find which library to link with.
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-+MPLAYER_DEPENDENCIES += pulseaudio
-+endif
-+
- # We intentionally don't pass --enable-librtmp to let autodetection
- # find which library to link with.
- ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
+-ifeq ($(BR2_PACKAGE_PERL),y)
+-GIT_DEPENDENCIES += perl
++ifeq ($(BR2_PACKAGE_PCRE),y)
++GIT_DEPENDENCIES += pcre
+ GIT_CONF_OPTS += --with-libpcre
+ else
+ GIT_CONF_OPTS += --without-libpcre
 -- 
 2.11.0
