@@ -1,61 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Mar 2017 21:32:23 +0100
-Subject: [Buildroot] [git commit] gst1-vaapi: add optional encoder support
-Message-ID: <20170312203334.E632982489@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Mar 2017 21:42:51 +0100
+Subject: [Buildroot] [PATCH v2 2/2] Makefile: add check of binaries
+ architecture
+In-Reply-To: <aa76136f-f6cb-0746-319c-c71f0812cc26@mind.be>
+References: <1489340983-11806-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1489340983-11806-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <aa76136f-f6cb-0746-319c-c71f0812cc26@mind.be>
+Message-ID: <20170312204251.GH3739@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5c7f009875683a2c310478f846ddeb12d862d0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnout, All,
 
-Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
-[Thomas: pass explicit --enable-encoders.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gst1-vaapi/Config.in     | 7 +++++++
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk | 7 ++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+On 2017-03-12 21:27 +0100, Arnout Vandecappelle spake thusly:
+> On 12-03-17 18:49, Thomas Petazzoni wrote:
+> 
+> [snip]
+> > +READELF_ARCH_NAME = $(call qstrip,$(BR2_READELF_ARCH_NAME))
+> > +
+> > +ifneq ($(READELF_ARCH_NAME),)
+> 
+>  We set it for all arches, so this is never empty. Except when we forget to set
+> it, but in that case we probably want this thing to be executed so we notice.
+> 
+> > +define CHECK_BIN_ARCH
+> > +	support/scripts/check-bin-arch $(TARGET_DIR) \
+> > +		$(TARGET_CROSS) "$(READELF_ARCH_NAME)"
+> > +endef
+> > +TARGET_FINALIZE_HOOKS += CHECK_BIN_ARCH
+> > +endif
+> 
+>  It would be nice to do it immediately after package install, so it becomes a
+> package error rather than some post-build error that is more difficult to
+> localise. Of course, with Yann's suggestion it would still report which package
+> was the culprit, but I don't think it would show up in the autobuild results
+> under the right package.
+> 
+>  To avoid too much overhead rechecking files all the time, it could be done as
+> part of step_pkg_size_end which iterates over the files installed in target for
+> that particular package. It would make the code a little more complicated,
+> though, and perhaps also slower.
 
-diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
-index 9a4d66c..0b8ae39 100644
---- a/package/gstreamer1/gst1-vaapi/Config.in
-+++ b/package/gstreamer1/gst1-vaapi/Config.in
-@@ -38,6 +38,13 @@ config BR2_PACKAGE_GST1_VAAPI
- 
- 	  https://cgit.freedesktop.org/gstreamer/gstreamer-vaapi
- 
-+if BR2_PACKAGE_GST1_VAAPI
-+
-+config BR2_PACKAGE_GST1_VAAPI_ENCODERS
-+	bool "enable encoders"
-+
-+endif
-+
- comment "gst1-vaapi needs udev /dev management and a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
- 		!BR2_PACKAGE_HAS_UDEV
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 370e281..11ad4c4 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-@@ -18,11 +18,16 @@ GST1_VAAPI_DEPENDENCIES += \
- 	libdrm
- 
- GST1_VAAPI_CONF_OPTS += \
--	--disable-encoders \
- 	--disable-x11 \
- 	--disable-glx \
- 	--disable-wayland \
- 	--disable-egl \
- 	--disable-gtk-doc-html
- 
-+ifeq ($(BR2_PACKAGE_GST1_VAAPI_ENCODERS),y)
-+GST1_VAAPI_CONF_OPTS += --enable-encoders
-+else
-+GST1_VAAPI_CONF_OPTS += --disable-encoders
-+endif
-+
- $(eval $(autotools-package))
+Or it could be a step after the step_pkg_size_end, which would basically
+do:
+
+    sed -r -e "/^${pkg},(.+)$/!d; s//\1/;" "${BUILD_DIR}/packages-file-list.txt
+
+to get the list of file installed by the current package.
+
+Of course, that would only really and cleanly work from a clean build.
+
+> > +    farchname=$(${TARGET_CROSS}readelf -h ${f} | \
+
+Please be sure to run it under the C locale, to be sure we can find what
+we are looking for.
+
+> > +		       grep '^  Machine:' | \
+> > +		       sed 's/^  Machine: *\(.*\)/\1/')
+> 
+>  Why not the simpler sed -n '/^  Machine: *\(.*\)/s//\1/p' instead of the extra
+> grep?
+
+Or a bit easier to read (at least for me):
+
+    readelf [..] |sed -r -e '/^  Machine: +(.+)/!d; s//\1/;'
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
