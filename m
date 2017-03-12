@@ -1,35 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Mar 2017 14:29:15 +0100
-Subject: [Buildroot] [PATCH 0/4] package/nbd: fixes and bump
-In-Reply-To: <cover.1489312674.git.yann.morin.1998@free.fr>
-References: <cover.1489312674.git.yann.morin.1998@free.fr>
-Message-ID: <20170312142915.27e2025b@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Mar 2017 14:32:50 +0100
+Subject: [Buildroot] [PATCH] package/firejail: mark as broken
+Message-ID: <1489325570-3550-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The firejail package does not cross-compile at all, because it is not
+using automake, but a hand-written Makefile.in. So it does not use the
+cross-compiler found by ./configure.
 
-On Sun, 12 Mar 2017 10:58:15 +0100, Yann E. MORIN wrote:
+But when we fix it by passing:
+    FIREJAIL_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
 
-> Yann E. MORIN (4):
->       package/nbd: rename options
->       package/nbd: fix utilities locations
->       package/nbd: add option for the trdump utility
->       package/nbd: bump version
+it then fails to build with symbols redefinitions:
 
-Applied, thanks!
+    /home/ymorin/dev/buildroot/O/host/usr/bin/arm-linux-gnueabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -ggdb  -O2 -DVERSION='"0.9.44.8"' -fstack-protector-all -D_FORTIFY_SOURCE=2 -fPIC -Wformat -Wformat-security  -c libtrace.c -o libtrace.o
+    /tmpfs/cckgOLVz.s: Assembler messages:
+    /tmpfs/cckgOLVz.s:1115: Error: symbol `stat64' is already defined
+    /tmpfs/cckgOLVz.s:1282: Error: symbol `lstat64' is already defined
+    /tmpfs/cckgOLVz.s:2296: Error: symbol `fopen64' is already defined
+    /tmpfs/cckgOLVz.s:2631: Error: symbol `freopen64' is already defined
+    Makefile:16: recipe for target 'libtrace.o' failed
 
-Peter: I believe we want to apply PATCH 2/4 to the LTS branch. However,
-it will conflict a bit because Yann did the renaming of options before
-the fix, but the conflicts should be trivial to resolve.
+(ditto for libtracelog)
 
-Best regards,
+Fixing this is not trivial, so we just mark the package as broken.
 
-Thomas
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Chris Frederick <chrisf@cdf123.net>
+
+---
+If the package is not fixed before 2017.05-rc1, we will remove it
+altogether (as it was never part of an official release so far).
+---
+ package/firejail/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/firejail/Config.in b/package/firejail/Config.in
+index 1742b65..c2404b4 100644
+--- a/package/firejail/Config.in
++++ b/package/firejail/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_FIREJAIL
+ 	bool "firejail"
++	depends on BROKEN # does not cross-compile at all
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# uClibc: error: ?EM_ARM? undeclared
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.7.4
