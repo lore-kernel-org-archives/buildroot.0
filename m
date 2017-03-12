@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Mar 2017 23:19:49 +0100
-Subject: [Buildroot] [PATCH] libnl: bump to version 3.2.29
-In-Reply-To: <ba0a3fc34ab165fa4434c71e4547811a078f70e1.1489339086.git.baruch@tkos.co.il>
-References: <ba0a3fc34ab165fa4434c71e4547811a078f70e1.1489339086.git.baruch@tkos.co.il>
-Message-ID: <20170312231949.2930200e@free-electrons.com>
+Date: Sun, 12 Mar 2017 23:21:46 +0100
+Subject: [Buildroot] [PATCH v2 1/1] ncurses: bump to 6.0
+In-Reply-To: <20170306150101.4374-1-aduskett@codeblue.com>
+References: <20170306150101.4374-1-aduskett@codeblue.com>
+Message-ID: <20170312232146.46571729@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,96 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 12 Mar 2017 19:18:06 +0200, Baruch Siach wrote:
-> Include upstream equivalent patch to fix build with older kernel headers. This
-> fixes build failures caused by the previous (reverted) version bump:
-> http://autobuild.buildroot.net/results/563/563f46e9a11f9e3b174a4e1308444f284d1b3421/
-> http://autobuild.buildroot.net/results/970/970463b628d9c81d5e217e92a455d2e05d0aa89e/
-> http://autobuild.buildroot.net/results/cee/ceea635a9d620398cbcd44ccb859b07bf6682780/
-> 
-> Add libc-compat.h patch to make it work for musl libc.
-> 
-> Add another upstream patch to fix both missing strerror_l() implementation,
-> and optionally missing locale support in uClibc-ng:
-> http://autobuild.buildroot.net/results/dce/dce5d21c27df57ac96d9302752dd1802e7a9786b/
-> http://autobuild.buildroot.net/results/c4b/c4b1c3f396ddd1d9242aed0953558606f929d57d/
-> http://autobuild.buildroot.net/results/44d/44dd3db6cdda4646fa12ccf243d6aca16bed3c90/
-> 
-> Add host-pkgconf dependency, since configure.ac uses PKG_CHECK_MODULES.
-> 
-> Add optional dependency on the 'check' package.
-> 
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../0001-fix-libc-kernel-headers-conflict.patch    | 756 +++++++++++++++++++++
->  ...musl-workaround-to-the-libc-compat.h-copy.patch |  37 +
->  ...usage-of-strerror_l-if-it-doesn-t-exist-i.patch | 106 +++
->  package/libnl/libnl.hash                           |   4 +-
->  package/libnl/libnl.mk                             |  13 +-
->  5 files changed, 912 insertions(+), 4 deletions(-)
->  create mode 100644 package/libnl/0001-fix-libc-kernel-headers-conflict.patch
->  create mode 100644 package/libnl/0003-Add-musl-workaround-to-the-libc-compat.h-copy.patch
->  create mode 100644 package/libnl/0004-lib-escape-usage-of-strerror_l-if-it-doesn-t-exist-i.patch
+On Mon,  6 Mar 2017 10:01:01 -0500, Adam Duskett wrote:
 
-Applied to master, thanks for reworking the patch with the appropriate
-build fixes. Hopefully, upstream will release a new tarball soon, so
-that we can get rid of those biggish patches.
+> v1 -> v2:
+>   - Updated to work with Thomas Petazzoni's changes.
 
-Thanks!
+Are you sure?
+
+
+> -config BR2_PACKAGE_NCURSES_TARGET_PANEL
+> -	bool "ncurses libpanel in target"
+> -	help
+> -	  Includes ncurses dynamic libpanel in target
+> -
+> -config BR2_PACKAGE_NCURSES_TARGET_FORM
+> -	bool "ncurses libform in target"
+> -	help
+> -	  Includes ncurses dynamic libform in target
+> -
+> -config BR2_PACKAGE_NCURSES_TARGET_MENU
+> -	bool "ncurses libmenu in target"
+> -	help
+> -	  Includes ncurses dynamic libmenu in target
+> -
+
+This repeats my commit.
+
+> -NCURSES_LIBS-y = ncurses
+> -NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += menu
+> -NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += panel
+> -NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
+> -
+>  NCURSES_TERMINFO_FILES = \
+>  	a/ansi \
+>  	l/linux \
+> @@ -73,41 +68,38 @@ NCURSES_TERMINFO_FILES = \
+>  ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+>  NCURSES_CONF_OPTS += --enable-widec
+>  NCURSES_LIB_SUFFIX = w
+> +NCURSES_LIBS = ncurses menu panel form
+>  
+>  define NCURSES_LINK_LIBS_STATIC
+> -	$(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
+> -		ln -sf $(lib)$(NCURSES_LIB_SUFFIX).a $(1)/usr/lib/$(lib).a
+> +	$(foreach lib,$(NCURSES_LIBS:%=lib%), \
+> +		ln -sf $(lib)$(NCURSES_LIB_SUFFIX).a $(STAGING_DIR)/usr/lib/$(lib).a
+>  	)
+>  	ln -sf libncurses$(NCURSES_LIB_SUFFIX).a \
+> -		$(1)/usr/lib/libcurses.a
+> +		$(STAGING_DIR)/usr/lib/libcurses.a
+>  endef
+>  
+>  define NCURSES_LINK_LIBS_SHARED
+> -	$(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
+> -		ln -sf $(lib)$(NCURSES_LIB_SUFFIX).so $(1)/usr/lib/$(lib).so
+> +	$(foreach lib,$(NCURSES_LIBS:%=lib%), \
+> +		ln -sf $(lib)$(NCURSES_LIB_SUFFIX).so $(STAGING_DIR)/usr/lib/$(lib).so
+>  	)
+>  	ln -sf libncurses$(NCURSES_LIB_SUFFIX).so \
+> -		$(1)/usr/lib/libcurses.so
+> +		$(STAGING_DIR)/usr/lib/libcurses.so
+>  endef
+>  
+>  define NCURSES_LINK_PC
+> -	$(foreach pc,$(NCURSES_LIBS-y), \
+> +	$(foreach pc,$(NCURSES_LIBS), \
+>  		ln -sf $(pc)$(NCURSES_LIB_SUFFIX).pc \
+> -			$(1)/usr/lib/pkgconfig/$(pc).pc
+> +			$(STAGING_DIR)/usr/lib/pkgconfig/$(pc).pc
+>  	)
+>  endef
+>  
+> -NCURSES_LINK_TARGET_LIBS = \
+> -	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(TARGET_DIR));) \
+> -	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(TARGET_DIR)))
+>  NCURSES_LINK_STAGING_LIBS = \
+> -	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(STAGING_DIR));) \
+> -	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(STAGING_DIR)))
+> +	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC);) \
+> +	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED))
+>  
+> -NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
+> +NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC)
+
+And all of this as well.
+
+So clearly, this patch does not apply on master. Please provide a patch
+that applies on master. Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
+Embedded Linux and Kernel engineering
 http://free-electrons.com
