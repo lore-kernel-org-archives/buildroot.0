@@ -1,92 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Mar 2017 19:21:50 +0100
-Subject: [Buildroot] [PATCH v2 2/2] Makefile: add check of binaries
- architecture
-In-Reply-To: <20170312180508.GE3739@free.fr>
-References: <1489340983-11806-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1489340983-11806-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170312180508.GE3739@free.fr>
-Message-ID: <20170312182150.GF3739@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 12 Mar 2017 20:49:32 +0200
+Subject: [Buildroot] [PATCH 1/2] python-psutil: bump to version 5.2.0
+Message-ID: <e713d348e9a896e71f8b203d84a81bc0fd7a8a8b.1489344573.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2017-03-12 19:05 +0100, Yann E. MORIN spake thusly:
-> On 2017-03-12 18:49 +0100, Thomas Petazzoni spake thusly:
-> > +for f in $(find ${TARGET_DIR}/{usr/,}{bin,lib,sbin} -type f) ; do
-
-So, as I said earlier:
-  - cd in TARGET_DIR first;
-  - exclude .lib/firmware and /usr/lib/firmware
-
-    cd "${TARGET_DIR}"
-    find ./{usr/,}{bin,lib,sbin} \
-        -type f \( \( -path './lib/firmware/*' -o -path './usr/lib/firmware*' \) \ 
-                    -prune -o -print \)
-
-Regards,
-Yann E. MORIN.
-
-> > +    # Skip non-ELF files
-> > +    if ! file -b ${f} | grep -q "ELF " ; then
-> > +	continue
-> 
-> You have a mix of space-and-tab indetation. Please use only one or
-> the other (I favour spaces, but I'm happy with tabs as long as it is
-> consistent).
-> 
-> > +    fi
-> > +
-> > +    # Get architecture using readelf
-> > +    farchname=$(${TARGET_CROSS}readelf -h ${f} | \
-> > +		       grep '^  Machine:' | \
-> > +		       sed 's/^  Machine: *\(.*\)/\1/')
-> > +
-> > +    if test "${farchname}" != "${READELF_ARCH_NAME}" ; then
-> 
-> [0] because we could then point to the offending package:
-> 
->         pkg="$( sed -r -e "\:^([^,]+),${f}$:!d; s//\1/;" "${BUILD_DIR}/packages-file-list.txt" )"
-> 
-> Of course, do not forget to pass BUILD_DIR when calling the script. ;-)
-> 
-> > +	echo "ERROR: ${f} architecture is '${farchname}', should be '${READELF_ARCH_NAME}'"
-> 
->     printf 'ERROR: %s (from %s) architecture is %s, should be %s\n' \
->         "${f}" "${pkg}" "${farchname}" "${READELF_ARCH_NAME}"
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > +	exitcode=1
-> > +    fi
-> > +done
-> > +
-> > +exit ${exitcode}
-> > -- 
-> > 2.7.4
-> > 
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index c0b795b855b7..19fb8a4fdb67 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/psutil/json, sha256 locally computed
+-md5	3090e32d42761086ae82036cadb95ba3  psutil-5.1.3.tar.gz
+-sha256  959bd58bdc8152b0a143cb3bd822d4a1b8f7230617b0e3eb2ff6e63812120f2b  psutil-5.1.3.tar.gz
++md5	c9aa2599dcd9e5b59d71b6660d396062  psutil-5.2.0.tar.gz
++sha256  2fc91d068faa5613c093335f0e758673ef8c722ad4bfa4aded64c13ae69089eb  psutil-5.2.0.tar.gz
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 2bb865d7419b..978373368a37 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PSUTIL_VERSION = 5.1.3
++PYTHON_PSUTIL_VERSION = 5.2.0
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/78/0a/aa90434c6337dd50d182a81fe4ae4822c953e166a163d1bf5f06abb1ac0b
++PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/3c/2f/f3ab91349c666f009077157b12057e613a3152a46a6c3be883777546b6de
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3c
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
