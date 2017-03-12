@@ -1,79 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Mar 2017 15:40:48 +0100
-Subject: [Buildroot] [git commit] package/clamav: needs libtool
-Message-ID: <20170312144053.D57AD82256@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 12 Mar 2017 11:40:59 -0300
+Subject: [Buildroot] [PATCH v1 1/2] qt5base: fix eglfs x11 header
+	related compile failure
+In-Reply-To: <20170310221547.32158-1-ps.report@gmx.net>
+References: <20170310221547.32158-1-ps.report@gmx.net>
+Message-ID: <CAOMZO5CeFu3ex0nVN9reotdVL9YP9pcDnN0iUXkAXEgfR=NtLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5b0607b4ab811d4cf55c760528093d439355bb7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, Mar 10, 2017 at 7:15 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+> Add egl config and QT_EGL_NO_X11 define (as all other eglfs project
+> files do) to src/plugins/platforms/eglfs/eglfs-plugin.pro.
+>
+> Fixes ([1]):
+>
+>   In file included from .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
+>                    from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
+>                    from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
+>                    from api/qeglfsglobal_p.h:56,
+>                    from api/qeglfsintegration_p.h:54,
+>                    from qeglfsmain.cpp:41:
+>   .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22: fatal error: X11/Xlib.h: No such file or directory
+>   compilation terminated.
+>   Makefile.eglfs-plugin:1024: recipe for target '.obj/qeglfsmain.o' failed
+>   make[2]: *** [.obj/qeglfsmain.o] Error 1
+>   make[2]: Leaving directory '.../qt5base-5.8.0/src/plugins/platforms/eglfs'
+>   Makefile:71: recipe for target 'sub-eglfs-plugin-pro-make_first-ordered' failed
+>   make[1]: *** [sub-eglfs-plugin-pro-make_first-ordered] Error 2
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2017-March/186158.html
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-clamav contains a copy of libltdl which is used when the libtool
-package is not present, this increases the filesize of the target libs:
-
-linked against libltdl.so:
-
--rwxr-xr-x 1 bernd bernd 1838528 M??r 11 13:21 output/target/usr/lib/libclamav.so.7.1.1
-
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libclamav.so.7.1.1 | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libltdl.so.7]
- 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
- 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
-
-not linked against libltdl.so:
-
--rwxr-xr-x 1 bernd bernd 1859548 M??r 11 13:21 output/target/usr/lib/libclamav.so.7.1.1
-
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libclamav.so.7.1.1 | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
- 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
-
-Therefore this patch adds libtool as hard dependency to clamav.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/clamav/Config.in | 1 +
- package/clamav/clamav.mk | 3 +++
- 2 files changed, 4 insertions(+)
-
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index 7ec402d..f832341 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CLAMAV
- 	bool "clamav"
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBTOOL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 36ab8be..86bdda4 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -12,6 +12,7 @@ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
- 	COPYING.unrar COPYING.zlib
- CLAMAV_DEPENDENCIES = \
- 	host-pkgconf \
-+	libtool \
- 	openssl \
- 	zlib \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-@@ -24,6 +25,8 @@ CLAMAV_CONF_ENV = \
- # UCLIBC_HAS_FTS is disabled, therefore disable fanotify (missing fts.h)
- CLAMAV_CONF_OPTS = \
- 	--with-dbdir=/var/lib/clamav \
-+	--with-ltdl-include=$(STAGING_DIR)/usr/include \
-+	--with-ltdl-lib=$(STAGING_DIR)/usr/lib \
- 	--with-openssl=$(STAGING_DIR)/usr \
- 	--with-zlib=$(STAGING_DIR)/usr \
- 	--disable-zlib-vcheck \
+Thanks a lot for the fixes, Peter!
