@@ -1,13 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Mar 2017 20:22:29 +0100
-Subject: [Buildroot] [PATCH 2/2] Makefile: add check of binaries
+Date: Sun, 12 Mar 2017 20:43:23 +0100
+Subject: [Buildroot] [PATCH v2 2/2] Makefile: add check of binaries
  architecture
-In-Reply-To: <20170312200340.4e0d356a@gmx.net>
-References: <1489331191-32663-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1489331191-32663-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170312151543.GC3739@free.fr> <20170312173119.qt6mcfxkalpzaeoj@tarshish>
- <20170312200340.4e0d356a@gmx.net>
-Message-ID: <239b5b9c-b595-ccdf-147c-192ed5958284@mind.be>
+In-Reply-To: <20170312182150.GF3739@free.fr>
+References: <1489340983-11806-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1489340983-11806-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20170312180508.GE3739@free.fr> <20170312182150.GF3739@free.fr>
+Message-ID: <992feb18-768a-dd03-4402-e01840158fbb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,45 +15,25 @@ To: buildroot@busybox.net
 
 
 
-On 12-03-17 20:03, Peter Seiderer wrote:
-> Hello *,
+On 12-03-17 19:21, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> On Sun, 12 Mar 2017 19:31:19 +0200, Baruch Siach <baruch@tkos.co.il> wrote:
+> On 2017-03-12 19:05 +0100, Yann E. MORIN spake thusly:
+>> On 2017-03-12 18:49 +0100, Thomas Petazzoni spake thusly:
+>>> +for f in $(find ${TARGET_DIR}/{usr/,}{bin,lib,sbin} -type f) ; do
+> So, as I said earlier:
+>   - cd in TARGET_DIR first;
+>   - exclude .lib/firmware and /usr/lib/firmware
 > 
->> Hi Yann,
->>
->> On Sun, Mar 12, 2017 at 04:15:43PM +0100, Yann E. MORIN wrote:
->>> On 2017-03-12 16:06 +0100, Thomas Petazzoni spake thusly:
->>>> As shown recently by the firejail example, it is easy to miss that a
->>>> package builds and installs binaries without actually cross-compiling
->>>> them: they are built for the host architecture instead of the target
->>>> architecture.
->>>>
->>>> This commit adds a small helper script, check-bin-arch, called from
->>>> the main Makefile as a TARGET_FINALIZE_HOOKS, to verify that all ELF
->>>> binaries have been built for the correct CPU architecture.
->>>
->>> That is not possible in all situations.
->>>
->>> For example, I have a board here with a kind of co-processor of a
->>> different architecture; the firmware for that co-processor is loaded
->>> at runtime. It is an ELF file, and it is in target/.
->>>
->>> So I don't think it is possible to check that all ELF files are for the
->>> Buildroot-known target.
->>>
->>> We already discussed this a while ago and came to the same conclusiong
->>> back then.
->>
->> Maybe limiting the check to well knows target binary directories like 
->> target/{bin,sbin,usr/bin,usr/sbin,...} would help. This check won't catch all 
->> possible locations of target ELF binaries, but it's still a significant 
->> improvement over the current situation.
-> 
-> ...or limit to executable binary files (for firmware files read rights should be enough)?
+>     cd "${TARGET_DIR}"
+>     find ./{usr/,}{bin,lib,sbin} \
+>         -type f \( \( -path './lib/firmware/*' -o -path './usr/lib/firmware*' \) \ 
+>                     -prune -o -print \)
 
- The problem is that not all binaries are executable. .so files don't need to be
-executable, some of them are not, and we probably still want to check them.
+
+ As I wrote in the older thread, there are also binaries in /usr/share. That
+basically leaves nothing except /etc, and a specific exclusion is anyway still
+needed for /lib/firmware, so I would just do "find .".
 
  Regards,
  Arnout
