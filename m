@@ -1,22 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Mar 2017 18:29:13 +0100
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 12 Mar 2017 19:31:19 +0200
 Subject: [Buildroot] [PATCH 2/2] Makefile: add check of binaries
-	architecture
+ architecture
 In-Reply-To: <20170312151543.GC3739@free.fr>
 References: <1489331191-32663-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <1489331191-32663-2-git-send-email-thomas.petazzoni@free-electrons.com>
  <20170312151543.GC3739@free.fr>
-Message-ID: <20170312182913.0c6dc2cd@free-electrons.com>
+Message-ID: <20170312173119.qt6mcfxkalpzaeoj@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann,
 
-On Sun, 12 Mar 2017 16:15:43 +0100, Yann E. MORIN wrote:
-
+On Sun, Mar 12, 2017 at 04:15:43PM +0100, Yann E. MORIN wrote:
+> On 2017-03-12 16:06 +0100, Thomas Petazzoni spake thusly:
+> > As shown recently by the firejail example, it is easy to miss that a
+> > package builds and installs binaries without actually cross-compiling
+> > them: they are built for the host architecture instead of the target
+> > architecture.
+> > 
+> > This commit adds a small helper script, check-bin-arch, called from
+> > the main Makefile as a TARGET_FINALIZE_HOOKS, to verify that all ELF
+> > binaries have been built for the correct CPU architecture.
+> 
 > That is not possible in all situations.
 > 
 > For example, I have a board here with a kind of co-processor of a
@@ -29,20 +38,14 @@ On Sun, 12 Mar 2017 16:15:43 +0100, Yann E. MORIN wrote:
 > We already discussed this a while ago and came to the same conclusiong
 > back then.
 
-I don't think I want to give up that easily on this, especially
-considering how many times we get submission for packages that are not
-actually cross-compiled.
+Maybe limiting the check to well knows target binary directories like 
+target/{bin,sbin,usr/bin,usr/sbin,...} would help. This check won't catch all 
+possible locations of target ELF binaries, but it's still a significant 
+improvement over the current situation.
 
-Could you be more specific about these firmware files? Where are they
-located?
+baruch
 
-Perhaps with a test restricted to {usr,}/{bin,sbin,lib}, we can avoid
-testing those firmware files.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
