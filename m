@@ -1,68 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Mar 2017 18:54:43 +0100
-Subject: [Buildroot] [PATCH 2/2] Makefile: add check of binaries
-	architecture
-In-Reply-To: <20170312182913.0c6dc2cd@free-electrons.com>
-References: <1489331191-32663-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1489331191-32663-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20170312151543.GC3739@free.fr>
- <20170312182913.0c6dc2cd@free-electrons.com>
-Message-ID: <20170312175443.GD3739@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 12 Mar 2017 19:57:31 +0200
+Subject: [Buildroot] [PATCH] btrfs-progs: fix build with musl
+Message-ID: <2de4e674599224ed047b62d71f6648bf7a9918b4.1489341451.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Add a patch adding the required limits headers.
 
-On 2017-03-12 18:29 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 12 Mar 2017 16:15:43 +0100, Yann E. MORIN wrote:
-> 
-> > That is not possible in all situations.
-> > 
-> > For example, I have a board here with a kind of co-processor of a
-> > different architecture; the firmware for that co-processor is loaded
-> > at runtime. It is an ELF file, and it is in target/.
-> > 
-> > So I don't think it is possible to check that all ELF files are for the
-> > Buildroot-known target.
-> > 
-> > We already discussed this a while ago and came to the same conclusiong
-> > back then.
-> 
-> I don't think I want to give up that easily on this, especially
-> considering how many times we get submission for packages that are not
-> actually cross-compiled.
+Fixes:
+http://autobuild.buildroot.net/results/dd5/dd556f2adc449c4961ff425c52fb78c5279bfae7/
+http://autobuild.buildroot.net/results/7b5/7b5ccd88cdedd02d7fe77d4a07dd88d4045f4284/
+http://autobuild.buildroot.net/results/ab1/ab12d07c73e3f8af102f00bd2e7124f6c6a076c3/
 
-I agree.
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...03-btrfs-progs-add-missing-limits-headers.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/btrfs-progs/0003-btrfs-progs-add-missing-limits-headers.patch
 
-> Could you be more specific about these firmware files? Where are they
-> located?
-
-In theory, those kind of files may be located anywhere, but in this
-specific case, it is in /lib/firmware.
-
-The firmware files could be moved elsewhere, of course, but:
-
- 1) /lib/firmware is the "standard" location for firmware files;
-
- 2) a binary-only tool can be used to load the firmware and could
-    expect it to be located there.
-
-> Perhaps with a test restricted to {usr,}/{bin,sbin,lib}, we can avoid
-> testing those firmware files.
-
-I think this would be sensible, as long as /lib/firmware is excluded, as
-well as /usr/lib/firmware (in case of merged /usr).
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/btrfs-progs/0003-btrfs-progs-add-missing-limits-headers.patch b/package/btrfs-progs/0003-btrfs-progs-add-missing-limits-headers.patch
+new file mode 100644
+index 000000000000..4b72287ac944
+--- /dev/null
++++ b/package/btrfs-progs/0003-btrfs-progs-add-missing-limits-headers.patch
+@@ -0,0 +1,43 @@
++From 6b5e0ad992750e81c8eb9118b52179b8fad4426b Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sun, 12 Mar 2017 19:46:52 +0200
++Subject: [PATCH] btrfs-progs: add missing limits headers
++
++Build under musl libc fails because of missing PATH_MAX and XATTR_NAME_MAX
++macro declarations. Add the required headers.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/kdave/btrfs-progs/pull/28
++
++ convert/source-ext2.c | 1 +
++ mkfs/common.c         | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/convert/source-ext2.c b/convert/source-ext2.c
++index 824d45d063d4..77ce0c66ac2a 100644
++--- a/convert/source-ext2.c
+++++ b/convert/source-ext2.c
++@@ -16,6 +16,7 @@
++ 
++ #if BTRFSCONVERT_EXT2
++ 
+++#include <linux/limits.h>
++ #include "kerncompat.h"
++ #include "disk-io.h"
++ #include "transaction.h"
++diff --git a/mkfs/common.c b/mkfs/common.c
++index 1e6a32419b68..1e8f26ea4dda 100644
++--- a/mkfs/common.c
+++++ b/mkfs/common.c
++@@ -18,6 +18,7 @@
++ #include <uuid/uuid.h>
++ #include <blkid/blkid.h>
++ #include <fcntl.h>
+++#include <limits.h>
++ #include "ctree.h"
++ #include "disk-io.h"
++ #include "volumes.h"
++-- 
++2.11.0
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
