@@ -1,117 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Mar 2017 00:34:15 +0100
-Subject: [Buildroot] [PATCH] package/nbd: rebname options
-In-Reply-To: <1489271543-21744-1-git-send-email-yann.morin.1998@free.fr>
-References: <1489271543-21744-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170311233415.GA3769@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Mar 2017 08:28:50 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-03-11
+Message-ID: <20170312072850.B4CA8207D4@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hello,
 
-On 2017-03-11 23:32 +0100, Yann E. MORIN spake thusly:
-> ... and add myelf to the DEVELOPERS for nbd.
+Build statistics for 2017-03-11
+================================
 
-The are some typoes in that patch...
+      successes : 109
+       failures : 17 
+       timeouts : 0  
+          TOTAL : 126
 
-I have further fixes for nbd, so I'll respin later.
+Classification of failures by reason
+====================================
 
-Regards,
-Yann E. MORIN.
+                  boost-1.63.0 | 8 
+              btrfs-progs-4.10 | 2 
+             firejail-0.9.44.8 | 1 
+              keepalived-1.3.2 | 1 
+              libarchive-3.2.1 | 1 
+             lttng-tools-2.9.3 | 1 
+                 qt5base-5.8.0 | 1 
+                      x265-2.2 | 1 
+              xmlstarlet-1.6.1 | 1 
 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  Config.in.legacy      | 14 ++++++++++++++
->  DEVELOPERS            |  1 +
->  package/nbd/Config.in |  4 ++--
->  package/nbd/nbd.mk    |  4 ++--
->  4 files changed, 19 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index be4c953..8bb3e2a 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,20 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2017.05"
->  
-> +config BR2_NBD_CLIENT
-> +	bool "nbd clioent option was renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_NBD_CLIENT
-> +	help
-> +	  The nbd client option has been renamed to BR2_PACKAGE_NBD_CLIENT.
-> +
-> +config BR2_NBD_SERVER
-> +	bool "nbd server option was renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_NBD_SERVER
-> +	help
-> +	  The nbd server option has been renamed to BR2_PACKAGE_NBD_SERVER.
-> +
->  config BR2_PACKAGE_GMOCK
->  	bool "gmock merged into gtest package"
->  	select BR2_LEGACY
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 8daf670..268c2fb 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1652,6 +1652,7 @@ F:	package/libseccomp/
->  F:	package/linux-tools/
->  F:	package/mesa3d-headers/
->  F:	package/mke2img/
-> +F:	package/nbd/
->  F:	package/nut/
->  F:	package/nvidia-driver/
->  F:	package/omxplayer/
-> diff --git a/package/nbd/Config.in b/package/nbd/Config.in
-> index a5ded29..b00bc40 100644
-> --- a/package/nbd/Config.in
-> +++ b/package/nbd/Config.in
-> @@ -12,13 +12,13 @@ config BR2_PACKAGE_NBD
->  
->  if BR2_PACKAGE_NBD
->  
-> -config BR2_NBD_CLIENT
-> +config BR2_PACKAGE_NBD_CLIENT
->  	bool "nbd client"
->  	default y
->  	help
->  	  the client part of NBD.
->  
-> -config BR2_NBD_SERVER
-> +config BR2_PACKAGE_NBD_SERVER
->  	bool "nbd server"
->  	help
->  	  the server part of NBD.
-> diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-> index d91c2d7..c7c327e 100644
-> --- a/package/nbd/nbd.mk
-> +++ b/package/nbd/nbd.mk
-> @@ -18,10 +18,10 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
->  NBD_CONF_ENV = ac_cv_header_linux_falloc_h=no
->  endif
->  
-> -ifneq ($(BR2_NBD_CLIENT),y)
-> +ifneq ($(BR2_PACKAGE_NBD_CLIENT),y)
->  NBD_TOREMOVE += nbd-client
->  endif
-> -ifneq ($(BR2_NBD_SERVER),y)
-> +ifneq ($(BR2_PACKAGE_NBD_SERVER),y)
->  NBD_TOREMOVE += nbd-server
->  endif
->  
-> -- 
-> 2.7.4
-> 
+
+Detail of failures
+===================
+
+      mipsel |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/959a15bb2023bbe7303b850e456875ef0f017b63
+      xtensa |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/d1f62e61484a5b77a7aad706635882cb84df6b55
+       nios2 |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/b567aa9ff711d7065ab7a2c884e6bf995c22818b
+microblazeel |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/76b116cf5a3fa12fd7a50618a36b2e59fd42fe04
+     powerpc |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/fc4612bab1667ac9967e5a8ef219fab7e61ca876
+     powerpc |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/1e08a5af9544275e6a62448f41da63a8684912e2
+        i686 |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/c3eaec1ecd1316d12dd87c28f63bb4218ad0a86f
+         arc |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/4129a3491de676995e19eee7e1f90e8a72ec7f4d
+        i586 |               btrfs-progs-4.10 | NOK | http://autobuild.buildroot.net/results/7b5ccd88cdedd02d7fe77d4a07dd88d4045f4284
+         arm |               btrfs-progs-4.10 | NOK | http://autobuild.buildroot.net/results/dd556f2adc449c4961ff425c52fb78c5279bfae7
+         arm |              firejail-0.9.44.8 | NOK | http://autobuild.buildroot.net/results/7449c5d8b36528749ab2df929cf6a08eb0bdc3b1
+      x86_64 |               keepalived-1.3.2 | NOK | http://autobuild.buildroot.net/results/6e9f5885de99847a24cc1c3a17adf0cd1606b316
+         arc |               libarchive-3.2.1 | NOK | http://autobuild.buildroot.net/results/94033125046d35fb55257d6da6753fb4e509eab9
+      x86_64 |              lttng-tools-2.9.3 | NOK | http://autobuild.buildroot.net/results/2bec7d43d203f5fb220a38197570a77bce0b3ee1
+       sparc |                  qt5base-5.8.0 | NOK | http://autobuild.buildroot.net/results/6731c323cd9b65049db847bbbde2212d08072d39
+         arm |                       x265-2.2 | NOK | http://autobuild.buildroot.net/results/a8d35b72adf49c4495b7943c6c00e67fd6773339
+         arm |               xmlstarlet-1.6.1 | NOK | http://autobuild.buildroot.net/results/7aed75af045d032038f8cbc38e86eb981357009b
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+http://autobuild.buildroot.net
