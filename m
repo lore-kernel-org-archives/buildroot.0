@@ -1,47 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Mar 2017 23:01:47 +0100
-Subject: [Buildroot] [git commit] python-psutil: bump to version 5.2.0
-Message-ID: <20170312220223.778B080DAF@busybox.osuosl.org>
+Date: Sun, 12 Mar 2017 23:02:15 +0100
+Subject: [Buildroot] [git commit] python-psutil: enable musl build
+Message-ID: <20170312220223.8E592802AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98a1ed7eba7b8a8f21ff3c81d05ae97a515d129a
+commit: https://git.buildroot.net/buildroot/commit/?id=79c01e73adf1a529ae4c17ce6f8e52a7dbf9d02b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The sysinfo.h header conflict issue is now fixed since upstream commit
+c414ecd9b9151 ("Fix build with musl libc"). Enable build with musl. Enable
+reverse dependencies as well.
 
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-psutil/python-psutil.hash | 4 ++--
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/circus/Config.in          | 4 +---
+ package/python-crossbar/Config.in | 5 ++---
+ package/python-psutil/Config.in   | 5 -----
+ 3 files changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index c0b795b..19fb8a4 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/psutil/json, sha256 locally computed
--md5	3090e32d42761086ae82036cadb95ba3  psutil-5.1.3.tar.gz
--sha256  959bd58bdc8152b0a143cb3bd822d4a1b8f7230617b0e3eb2ff6e63812120f2b  psutil-5.1.3.tar.gz
-+md5	c9aa2599dcd9e5b59d71b6660d396062  psutil-5.2.0.tar.gz
-+sha256  2fc91d068faa5613c093335f0e758673ef8c722ad4bfa4aded64c13ae69089eb  psutil-5.2.0.tar.gz
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 2bb865d..9783733 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/circus/Config.in b/package/circus/Config.in
+index 5276513..f1cd93c 100644
+--- a/package/circus/Config.in
++++ b/package/circus/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_CIRCUS
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	depends on BR2_INSTALL_LIBSTDCPP # pyzmq -> zeromq
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pyzmq -> zeromq
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # python-psutil
+ 	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
+ 	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
+ 	select BR2_PACKAGE_PYTHON_PYZMQ # runtime
+@@ -15,7 +14,6 @@ config BR2_PACKAGE_CIRCUS
  
--PYTHON_PSUTIL_VERSION = 5.1.3
-+PYTHON_PSUTIL_VERSION = 5.2.0
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/78/0a/aa90434c6337dd50d182a81fe4ae4822c953e166a163d1bf5f06abb1ac0b
-+PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/3c/2f/f3ab91349c666f009077157b12057e613a3152a46a6c3be883777546b6de
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3c
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+ 	  https://circus.readthedocs.org/en/latest/
+ 
+-comment "circus needs Python and a uClibc or glibc toolchain w/ C++, threads"
++comment "circus needs Python and a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_TOOLCHAIN_USES_MUSL || \
+ 		!(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+index 7ef1aad..be83325 100644
+--- a/package/python-crossbar/Config.in
++++ b/package/python-crossbar/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	bool "python-crossbar"
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # python-psutil
+ 	# All the following dependencies are runtime dependencies
+ 	select BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	select BR2_PACKAGE_PYTHON_CBOR
+@@ -40,5 +39,5 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 
+ 	  https://pypi.python.org/pypi/crossbar
+ 
+-comment "python-crossbar needs a uClibc or glibc toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_USES_MUSL
++comment "python-crossbar needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-psutil/Config.in b/package/python-psutil/Config.in
+index 1aec35d..c64eeee 100644
+--- a/package/python-psutil/Config.in
++++ b/package/python-psutil/Config.in
+@@ -1,13 +1,8 @@
+ config BR2_PACKAGE_PYTHON_PSUTIL
+ 	bool "python-psutil"
+-	# sys/sysinfo.h conflict with kernel headers
+-	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  psutil is a cross-platform library for retrieving
+ 	  information on running processes and system utilization
+ 	  (CPU, memory, disks, network) in Python.
+ 
+ 	  https://pypi.python.org/pypi/psutil
+-
+-comment "python-psutil needs a uClibc or glibc toolchain"
+-	depends on BR2_TOOLCHAIN_USES_MUSL
