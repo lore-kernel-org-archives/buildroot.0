@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 00:09:31 +0100
-Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.5-0
-	(security)
-In-Reply-To: <20170310215229.556a6431@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 10 Mar 2017 21:52:29 +0100")
-References: <20170310170618.18297-1-Vincent.Riera@imgtec.com>
- <20170310215229.556a6431@free-electrons.com>
-Message-ID: <8737egydsk.fsf@dell.be.48ers.dk>
+Date: Tue, 14 Mar 2017 00:14:11 +0100
+Subject: [Buildroot] [PATCH 1/1] domoticz: fix build on powerpc64le
+In-Reply-To: <20170312234757.074092cb@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 12 Mar 2017 23:47:57 +0100")
+References: <1487006691-34766-1-git-send-email-fontaine.fabrice@gmail.com>
+ <20170312234757.074092cb@free-electrons.com>
+Message-ID: <87y3w8wz0c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,30 +15,29 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  > Hello,
- > On Fri, 10 Mar 2017 17:06:18 +0000, Vicente Olivert Riera wrote:
- >> - Fixed memory leak when creating nested exceptions in Magick++
- >> https://www.imagemagick.org/discourse-server/viewtopic.php?f=23&p=142634
+ > On Mon, 13 Feb 2017 18:24:51 +0100, Fabrice Fontaine wrote:
+ >> There is an issue with powerpc64le and boost::uuids::random_generator on the
+ >> following line of code (from include/boost/uuid/seed_rng.hpp):
+ >> sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
+ >> This line "inspects the first couple bytes (here eight) of the std::rand
+ >> function to seed some rng. Due to the implementation of process_bytes and
+ >> inlining happening, it seems that one of the loops therein uses &rand-1 as
+ >> some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
+ >> the link will succeed."
+ >> See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
  >> 
- >> - Fixed fd leak for webp coder
- >> https://github.com/ImageMagick/ImageMagick/pull/382
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
  >> 
- >> - Fixed Spurious memory allocation message
- >> https://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=31438
- >> 
- >> Full changelog: http://imagemagick.org/script/changelog.php
- >> 
- >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  >> ---
- >> ...-png.c-unbreak-build-without-JPEG-support.patch | 47 ----------------------
- >> package/imagemagick/imagemagick.hash               |  2 +-
- >> package/imagemagick/imagemagick.mk                 |  2 +-
- >> 3 files changed, 2 insertions(+), 49 deletions(-)
- >> delete mode 100644 package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
+ >> package/domoticz/domoticz.mk | 18 +++++++++++++++++-
+ >> 1 file changed, 17 insertions(+), 1 deletion(-)
 
- > Applied to master, thanks. Peter: this one is needed for the LTS branch
- > I believe.
+ > I'm not a big fan of the fix, but nobody came up with a better
+ > solution, so I've applied your patch. Thanks!
 
-Agreed. Committed to 2017.02.x, thanks.
+Committed to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
