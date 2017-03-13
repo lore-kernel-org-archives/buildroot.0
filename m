@@ -1,68 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Mar 2017 18:28:34 +0100
-Subject: [Buildroot] [DEPEND] Dependency failed for Serial Getty on
-	ttyS0.
-In-Reply-To: <c3cba7c6739845276c207fcf05e970b8@webmail.pados.hu>
-References: <c3cba7c6739845276c207fcf05e970b8@webmail.pados.hu>
-Message-ID: <e977bf96-b7ac-3f5e-5a12-4a87f5a9d94e@mind.be>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 13 Mar 2017 20:41:45 +0300
+Subject: [Buildroot] [PATCH] toolchain: Disable PIE for ARC
+Message-ID: <20170313174145.40650-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Even though ARC's toolchain may build PIE binaries
+those binaries ane not really functional in runtime as of today.
+On ARC we don't expect text sections to be updated in run-time and
+so when dynamic loader attempts to patch text section we're getting
+access violation exception and application gets killed.
 
+So until we improve support of PIE in run-time let's force-disable PIE
+in Buildroot for ARC. Oherwise autotools will continue to detect PIE and
+build OpenSSH and friends with PIE which leads to completely unexpected
+"crashes" later on on the target.
 
-On 13-03-17 12:13, Karoly Pados wrote:
-> Hello!
-> 
-> I built a buildroot image, using systemd as the init system. The kernel is built using buildroot too, using a custom kernel-.config that is known to work on same hardware when used outside of buildroot.
-> 
-> Most of the booting process succeeds, but towards the end systemd repeatedly tries to stop and start getty, then after a minute or two outputs:
-> [DEPEND] Dependency failed for Serial Getty on ttyS0.
-> 
-> Booting then continues with UTMP, but no login prompt is shown. Not on UART and neither on VGA. I've found out that others who got this same phenomenon had to enable CONFIG_FHANDLE for the kernel, but for me it is already enabled.
-> 
-> Steps I used:
-> - clone buildroot from git
-> - checkout 2017.02.x branch
-> - make menuconfig (enabled systemd, disabled busybox, added a whole lot of other stuff)
-                                      ^^^^^^^^^^^^^^^^
- When you do this, you'll see the following warning appear:
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You may need to enable other packages to get a working system
-You better know what you're doing!
-
- From a quick look through your .config, I see that you don't have a getty
-package enabled. Without getty, systemd can't start getty. So you need to enable
-the agetty package.
-
- Also note that systemd isn't thoroughly tested in Buildroot, even if you do
-enable busybox. So it is possible that you may run into other issues. Starting a
-getty should work, however.
-
- Regards,
- Arnout
-
-> - make
-> - flashed/installed images from output/images/
-> 
-> Here is a link to my buildroot-config: http://pastebin.com/W8KnZccU
-> 
-> Any help is appreciated.
-> 
-> Greetings,
-> Karoly
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index de0158567..26b5e62f1 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -19,7 +19,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
+ 
+ config BR2_TOOLCHAIN_USES_UCLIBC
+ 	bool
+-	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_m68k && !BR2_microblaze && !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_arc && !BR2_m68k && !BR2_microblaze && !BR2_STATIC_LIBS
+ 
+ config BR2_TOOLCHAIN_USES_MUSL
+ 	bool
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
