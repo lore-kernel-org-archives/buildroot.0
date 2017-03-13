@@ -1,71 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 00:13:53 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] domoticz: fix build on
-	powerpc64le
-Message-ID: <20170313233002.798F07FDC7@busybox.osuosl.org>
+Date: Tue, 14 Mar 2017 00:19:34 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/nbd: fix
+	utilities locations
+Message-ID: <20170313233002.A35537FDC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e1b15a6fba60f077fad070738801b592c794038
+commit: https://git.buildroot.net/buildroot/commit/?id=b3442f2fe397bbd33f9ab745ff2601a8994a7153
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-There is an issue with powerpc64le and boost::uuids::random_generator on the
-following line of code (from include/boost/uuid/seed_rng.hpp):
-sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
-This line "inspects the first couple bytes (here eight) of the std::rand
-function to seed some rng. Due to the implementation of process_bytes and
-inlining happening, it seems that one of the loops therein uses &rand-1 as
-some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
-the link will succeed."
-See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
+Currently, the code expects both the client and server to be in
+/usr/bin, while the client is in /usr/sbin
 
-Fixes:
- - http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
+Fix that.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 00d2a3da72455213b87069af475173060750d50d)
+(cherry picked from commit 4aabbeb245794862e8434317e885d6d028d23679)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/domoticz/domoticz.mk | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ package/nbd/nbd.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index f43dbda..48cdbc4 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -18,6 +18,21 @@ DOMOTICZ_DEPENDENCIES = \
- 	sqlite \
- 	zlib
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index d91c2d7..a763d83 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -19,14 +19,14 @@ NBD_CONF_ENV = ac_cv_header_linux_falloc_h=no
+ endif
  
-+# Fixes:
-+# http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
-+# There is an issue with powerpc64le and boost::uuids::random_generator on the
-+# following line of code (from include/boost/uuid/seed_rng.hpp):
-+# sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
-+# This line "inspects the first couple bytes (here eight) of the std::rand
-+# function to seed some rng. Due to the implementation of process_bytes and
-+# inlining happening, it seems that one of the loops therein uses &rand-1 as
-+# some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
-+# the link will succeed."
-+# See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
-+ifeq ($(BR2_powerpc64le),y)
-+DOMOTICZ_CXXFLAGS += -O0
-+endif
-+
- # Due to the dependency on mosquitto, domoticz depends on
- # !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
- DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
-@@ -27,7 +42,8 @@ DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
- DOMOTICZ_CONF_OPTS += \
- 	-DUSE_BUILTIN_LUA=OFF \
- 	-DUSE_BUILTIN_SQLITE=OFF \
--	-DUSE_BUILTIN_MQTT=OFF
-+	-DUSE_BUILTIN_MQTT=OFF \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(DOMOTICZ_CXXFLAGS)"
+ ifneq ($(BR2_NBD_CLIENT),y)
+-NBD_TOREMOVE += nbd-client
++NBD_TOREMOVE += /usr/sbin/nbd-client
+ endif
+ ifneq ($(BR2_NBD_SERVER),y)
+-NBD_TOREMOVE += nbd-server
++NBD_TOREMOVE += /usr/bin/nbd-server
+ endif
  
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
- DOMOTICZ_DEPENDENCIES += libusb
+ define NBD_CLEANUP_AFTER_INSTALL
+-	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/, $(NBD_TOREMOVE))
++	rm -f $(addprefix $(TARGET_DIR), $(NBD_TOREMOVE))
+ endef
+ 
+ NBD_POST_INSTALL_TARGET_HOOKS += NBD_CLEANUP_AFTER_INSTALL
