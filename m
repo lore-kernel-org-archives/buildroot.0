@@ -1,44 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Mar 2017 23:58:30 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] toolchain/external: use
-	-dumpversion to check gcc version
-Message-ID: <20170313233002.1DBA182560@busybox.osuosl.org>
+Date: Mon, 13 Mar 2017 23:58:43 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] toolchain: remove no
+	longer relevant comment
+Message-ID: <20170313233002.2AA6F8044A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47793a94b50dc1f65bd1686c7973438c26fd2ce1
+commit: https://git.buildroot.net/buildroot/commit/?id=b4e0100cdb500ab0f23c8506e5975a3ca406aedb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Currently, `--version` option is used and later matched with a regex to get
-the actual gcc version.  There's a dedicated gcc option to do exactly that:
-`-dumpversion`.
+The somewhat complicated sed expression has been removed in commit
+06cd604ec6d34f25b436ab729543418042a87e1c ("toolchain/external: use
+-dumpversion to check gcc version"), so let's remove the comment that
+was explaining this sed expression.
 
-Also `--version` may return a string customised by a vendor that provides
-the toolchain, which makes the current regex approach error prone.  In
-fact, this situation has been seen with a real customised toolchain.
-
-Signed-off-by: Krzysztof Konopko <kris@youview.com>
-Signed-off-by: Tomasz Szkutkowski <tomasz.szkutkowski@youview.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 06cd604ec6d34f25b436ab729543418042a87e1c)
+(cherry picked from commit d9fee6b286798d27f45dd6ca6e4b5aabf0cc658d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/helpers.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 72e7292..0ed8fdc 100644
+index 0ed8fdc..922c821 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -147,7 +147,7 @@ check_gcc_version = \
+@@ -132,16 +132,6 @@ check_kernel_headers_version = \
+ # $1: path to gcc
+ # $2: expected gcc version
+ #
+-# Some details about the sed expression:
+-# - 1!d
+-#   - delete if not line 1
+-#
+-# - s/^[^)]+\) ([^[:space:]]+).*/\1/
+-#   - eat all until the first ')' character followed by a space
+-#   - match as many non-space chars as possible
+-#   - eat all the remaining chars on the line
+-#   - replace by the matched expression
+-#
+ check_gcc_version = \
+ 	expected_version="$(strip $2)" ; \
  	if [ -z "$${expected_version}" ]; then \
- 		exit 0 ; \
- 	fi; \
--	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
-+	real_version=`$(1) -dumpversion` ; \
- 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
- 		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
- 			"$${expected_version}" "$${real_version}" ; \
