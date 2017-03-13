@@ -1,43 +1,45 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Mon, 13 Mar 2017 11:08:33 +0200
-Subject: [Buildroot] [PATCH 1/2] odroid-mali: fix broken headers.
-Message-ID: <20170313090834.13715-1-daggs@gmx.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 13 Mar 2017 10:43:34 +0100
+Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
+In-Reply-To: <CAOMZO5CLtfsQHXT3QMy6bA1-=eSMg-uCHjuxRNYL8VrxB5v2qQ@mail.gmail.com>
+References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
+ <20170306212225.0819a97b@free-electrons.com>
+ <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
+ <20170306213121.203079d8@free-electrons.com>
+ <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
+ <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
+ <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
+ <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
+ <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
+ <CAOMZO5BxKvub7SRbiwdDFc0W6Kxr=V8nj7uA=WYUc_iAGAQpNw@mail.gmail.com>
+ <CAAMH-ythsVpak9K2JqXG5qR3gXNOgWQ60vXxMwvRKPksbrVOnQ@mail.gmail.com>
+ <878toeaz13.fsf@dell.be.48ers.dk>
+ <CAAMH-yvbmyvqbRckOBm7UuMM8eNH2k6TQGS0mH0O4_B-iDBOnA@mail.gmail.com>
+ <CAOMZO5CLtfsQHXT3QMy6bA1-=eSMg-uCHjuxRNYL8VrxB5v2qQ@mail.gmail.com>
+Message-ID: <CAAMH-ytNr+uhPaAthAPVykKc7njWH7d7PHHifeaAqKf1Bf8rOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-upstream has updated the headers, (https://github.com/mdrjr/c2_mali/issues/1)
-it should fix failures such as http://autobuild.buildroot.net/results/ed8/ed8d562ae5fdb472a83f9a07b2f755c80c972c34/
+Hi Fabio,
 
-Reported By: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
- package/odroid-mali/odroid-mali.hash | 2 +-
- package/odroid-mali/odroid-mali.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, Mar 10, 2017 at 4:45 PM, Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi Gary,
+>
+> On Fri, Mar 10, 2017 at 6:47 AM, Gary Bisson
+> <gary.bisson@boundarydevices.com> wrote:
+>
+> > Adding a dependency on headers >= 4.7 would definitely work and I
+> > think it's the easiest/cleanest option here.
+> >
+> > I'll just be sad not to be able to use the prebuilt (linaro) toolchain ;)
+>
+> What about sending the #include <libdrm/drm_mode.h> fix upstream?
 
-diff --git a/package/odroid-mali/odroid-mali.hash b/package/odroid-mali/odroid-mali.hash
-index 4d2482422..b71ebab13 100644
---- a/package/odroid-mali/odroid-mali.hash
-+++ b/package/odroid-mali/odroid-mali.hash
-@@ -1,2 +1,2 @@
- # Locally computed hash
--sha256 29d98ed4b8694b860d9289787c416faa847b0de26d36580a53add1752b4c2e9a  odroid-mali-46fe49f37e3506c6205ad8c50980eca9bfff11e3.tar.gz
-+sha256 6c85e96f3372c24c6497f2a1cbea867a8dbf3a7b3edd736802c762176006aec6  odroid-mali-4f8a541693fee5fdcaa162a7fd8922861a4ba0a9.tar.gz
-diff --git a/package/odroid-mali/odroid-mali.mk b/package/odroid-mali/odroid-mali.mk
-index 142fd97c6..d012c92ed 100644
---- a/package/odroid-mali/odroid-mali.mk
-+++ b/package/odroid-mali/odroid-mali.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ODROID_MALI_VERSION = 46fe49f37e3506c6205ad8c50980eca9bfff11e3
-+ODROID_MALI_VERSION = 4f8a541693fee5fdcaa162a7fd8922861a4ba0a9
- ODROID_MALI_SITE = $(call github,mdrjr,c2_mali,$(ODROID_MALI_VERSION))
- ODROID_MALI_LICENSE = Hardkernel EULA
- ODROID_MALI_LICENSE_FILES = README.md
--- 
-2.12.0
+I just sent the patch upstream, we'll see how it goes.
+
+Regards,
+Gary
