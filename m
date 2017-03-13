@@ -1,49 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 00:19:34 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/nbd: fix
-	utilities locations
-Message-ID: <20170313233002.A35537FDC7@busybox.osuosl.org>
+Date: Tue, 14 Mar 2017 00:21:16 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/tor: bump version
+	to 0.2.9.10
+Message-ID: <20170313233002.ACBBE7FB3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3442f2fe397bbd33f9ab745ff2601a8994a7153
+commit: https://git.buildroot.net/buildroot/commit/?id=c365c42ef371d948570a2b41b4f87af193a0eab6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Currently, the code expects both the client and server to be in
-/usr/bin, while the client is in /usr/sbin
-
-Fix that.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 4aabbeb245794862e8434317e885d6d028d23679)
+(cherry picked from commit 660651491ea2ff8fc82d503a8e28bbd54e8d9131)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nbd/nbd.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index d91c2d7..a763d83 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -19,14 +19,14 @@ NBD_CONF_ENV = ac_cv_header_linux_falloc_h=no
- endif
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 470fc48..d14db04 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 33325d2b250fd047ba2ddc5d11c2190c4e2951f4b03ec48ebd8bf0666e990d43  tor-0.2.9.9.tar.gz
++sha256 d611283e1fb284b5f884f8c07e7d3151016851848304f56cfdf3be2a88bd1341  tor-0.2.9.10.tar.gz
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index bb0fbb1..9ccde79 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifneq ($(BR2_NBD_CLIENT),y)
--NBD_TOREMOVE += nbd-client
-+NBD_TOREMOVE += /usr/sbin/nbd-client
- endif
- ifneq ($(BR2_NBD_SERVER),y)
--NBD_TOREMOVE += nbd-server
-+NBD_TOREMOVE += /usr/bin/nbd-server
- endif
- 
- define NBD_CLEANUP_AFTER_INSTALL
--	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/, $(NBD_TOREMOVE))
-+	rm -f $(addprefix $(TARGET_DIR), $(NBD_TOREMOVE))
- endef
- 
- NBD_POST_INSTALL_TARGET_HOOKS += NBD_CLEANUP_AFTER_INSTALL
+-TOR_VERSION = 0.2.9.9
++TOR_VERSION = 0.2.9.10
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3c
+ TOR_LICENSE_FILES = LICENSE
