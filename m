@@ -1,50 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 00:24:42 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/python: add
-	optional support for libintl
-Message-ID: <20170313233002.B637C7FB3A@busybox.osuosl.org>
+Date: Tue, 14 Mar 2017 00:01:28 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/logrotate: update
+	upstream site in Config.in help
+Message-ID: <20170313233002.41E808044A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=894a37c031cce0715d28f5003ccc58db07b1cce9
+commit: https://git.buildroot.net/buildroot/commit/?id=34345f1b033e338b1933381a992d9f92f4fe9ae5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Python links to gettext when available:
+fedorahosted.org has closed on March 1st, 2017, and we were anyway
+already using github as a source for logrotate. This commit therefore
+updates the Config.in help text to also use github as the upstream
+site.
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/python2.7/lib-dynload/_locale.so | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libintl.so.8]
- 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
-
-In comparison the same library compiled without gettext:
-
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/python2.7/lib-dynload/_locale.so | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit 70759f5359d6e5f7b868b74399e20d8ea7956769)
+(cherry picked from commit cdb1ab8ca0f10782a2f5bba84a34294de18c7273)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python/python.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/logrotate/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 281130c..8eb82b2 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -60,6 +60,10 @@ HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
+diff --git a/package/logrotate/Config.in b/package/logrotate/Config.in
+index 8528361..2b1ae64 100644
+--- a/package/logrotate/Config.in
++++ b/package/logrotate/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_LOGROTATE
+ 	help
+ 	  A simple program to rotate logs.
  
- PYTHON_INSTALL_STAGING = YES
+-	  https://fedorahosted.org/logrotate/
++	  https://github.com/logrotate/logrotate
  
-+ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+PYTHON_DEPENDENCIES += gettext
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON_READLINE),y)
- PYTHON_DEPENDENCIES += readline
- endif
+ comment "logrotate needs a toolchain w/ wchar"
+ 	depends on BR2_USE_MMU
