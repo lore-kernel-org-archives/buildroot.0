@@ -1,39 +1,48 @@
-From: Matthew Fornero <mfornero@mathworks.com>
-Date: Mon, 13 Mar 2017 15:35:02 -0400
-Subject: [Buildroot] [PATCH] libiio: Disable MATLAB Bindings on Target
-Message-ID: <1489433702-3044-1-git-send-email-mfornero@mathworks.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 13 Mar 2017 16:44:22 -0300
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: bump to version 2017.03
+Message-ID: <1489434263-2383-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If building on a machine with MATLAB installed, the MATLAB bindings will
-default to ON, which is not the desired behavior for a cross build.
-
-The bindings are designed to be called from within MATLAB, and we are
-not currently running MATLAB on buildroot-generated targets.
-
-This does not preclude the use of the bindings from a host connecting
-over the network backend (assuming libiio on the host has the bindings
-enabled).
-
-Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/libiio/libiio.mk | 1 +
- 1 file changed, 1 insertion(+)
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-index 8977610..aaa6c70 100644
---- a/package/libiio/libiio.mk
-+++ b/package/libiio/libiio.mk
-@@ -14,6 +14,7 @@ LIBIIO_CONF_OPTS = -DENABLE_IPV6=ON \
- 	-DWITH_LOCAL_BACKEND=$(if $(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),ON,OFF) \
- 	-DWITH_NETWORK_BACKEND=$(if $(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),ON,OFF) \
- 	-DWITH_MATLAB_BINDINGS_API=OFF \
-+	-DMATLAB_BINDINGS=OFF \
- 	-DINSTALL_UDEV_RULE=$(if $(BR2_PACKAGE_HAS_UDEV),ON,OFF) \
- 	-DWITH_TESTS=$(if $(BR2_PACKAGE_LIBIIO_TESTS),ON,OFF) \
- 	-DWITH_DOC=OFF
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 5601e01..7a73877 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -38,7 +38,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2017.01"
++	bool "2017.03"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -86,7 +86,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2017.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2017.03"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 5473cfe..9606d9f 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  6c425175f93a4bcf2ec9faf5658ef279633dbd7856a293d95bd1ff516528ecf2  u-boot-2017.01.tar.bz2
++sha256  f54baf3f9325bf444c7905f3a5b6f83680edb1e6e1a4d5f8a5ad80abe885113f  u-boot-2017.03.tar.bz2
 -- 
-2.1.4
+2.7.4
