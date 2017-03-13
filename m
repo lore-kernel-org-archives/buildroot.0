@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Mar 2017 13:32:20 +0100
-Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
-In-Reply-To: <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
-References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
- <20161004163555.7c8af28f@free-electrons.com>
- <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
- <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
-Message-ID: <20170313133220.62892a21@free-electrons.com>
+Date: Mon, 13 Mar 2017 13:33:45 +0100
+Subject: [Buildroot] [PATCH 1/2] odroid-mali: fix broken headers.
+In-Reply-To: <20170313090834.13715-1-daggs@gmx.com>
+References: <20170313090834.13715-1-daggs@gmx.com>
+Message-ID: <20170313133345.36d712f4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 13 Mar 2017 11:43:49 +0100, Andreas Naumann wrote:
+On Mon, 13 Mar 2017 11:08:33 +0200, Dagg Stompler wrote:
 
-> I have another reason to bump to 1.21, but experience the same 
-> difficulties in getting the configure step right. What would be a 
-> sensible way to avoid depending on autoconf/automake?
+> upstream has updated the headers, (https://github.com/mdrjr/c2_mali/issues/1)
+> it should fix failures such as http://autobuild.buildroot.net/results/ed8/ed8d562ae5fdb472a83f9a07b2f755c80c972c34/
 
-Is your reason to depend on automake/autoconf still the same as what it
-was in Maxime's patch? If so, then we can patch Makefile.in instead of
-Makefile.am. We normally don't like that very much, but I personally
-prefer this solution over having fakeroot depending on
-automake/autoconf.
+Did you actually test building libepoxy with this bump, to verify that
+not only it "should fix", but that it "really fixes".
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
