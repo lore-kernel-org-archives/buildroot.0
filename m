@@ -1,44 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 00:25:59 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/git: add optional
-	support for gettext
-Message-ID: <20170313233002.BF7A57FDC7@busybox.osuosl.org>
+Date: Tue, 14 Mar 2017 00:15:16 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] qt5base: fix eglfs x11
+	header related compile failure
+Message-ID: <20170313233002.83B248256D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32a9eb6e5abbc1787e0a82756d35aa8fb5b411cb
+commit: https://git.buildroot.net/buildroot/commit/?id=91bb73cb5a5a6764054a6f07eae1b6da12ed4086
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-git links to libintl if available:
+Add egl config and QT_EGL_NO_X11 define (as all other eglfs project
+files do) to src/plugins/platforms/eglfs/eglfs-plugin.pro.
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/git | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libintl.so.8]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+Fixes ([1]):
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  In file included from .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/egl.h:39:0,
+                   from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/../../../../../src/platformsupport/eglconvenience/qt_egl_p.h:63,
+                   from ../../../../include/QtEglSupport/5.8.0/QtEglSupport/private/qt_egl_p.h:1,
+                   from api/qeglfsglobal_p.h:56,
+                   from api/qeglfsintegration_p.h:54,
+                   from qeglfsmain.cpp:41:
+  .../host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/EGL/eglplatform.h:119:22: fatal error: X11/Xlib.h: No such file or directory
+  compilation terminated.
+  Makefile.eglfs-plugin:1024: recipe for target '.obj/qeglfsmain.o' failed
+  make[2]: *** [.obj/qeglfsmain.o] Error 1
+  make[2]: Leaving directory '.../qt5base-5.8.0/src/plugins/platforms/eglfs'
+  Makefile:71: recipe for target 'sub-eglfs-plugin-pro-make_first-ordered' failed
+  make[1]: *** [sub-eglfs-plugin-pro-make_first-ordered] Error 2
+
+[1] http://lists.busybox.net/pipermail/buildroot/2017-March/186158.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit aecab2f29c396a04d24e61479d7fc3f53149448f)
+(cherry picked from commit 5840e8bd505cef8846ed4f8fc769f306165ee174)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/git/git.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...fs-fix-x11-header-related-compile-failure.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 1c15740..d3a494f 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -11,6 +11,10 @@ GIT_LICENSE = GPLv2, LGPLv2.1+
- GIT_LICENSE_FILES = COPYING LGPL-2.1
- GIT_DEPENDENCIES = zlib host-gettext
- 
-+ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+GIT_DEPENDENCIES += gettext
-+endif
+diff --git a/package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch b/package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch
+new file mode 100644
+index 0000000..0e8bcff
+--- /dev/null
++++ b/package/qt5/qt5base/5.8.0/0003-eglfs-fix-x11-header-related-compile-failure.patch
+@@ -0,0 +1,36 @@
++From 8902f4d7b7c532592d1a34ad117698d3e380e9e1 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 10 Mar 2017 22:23:06 +0100
++Subject: [PATCH] eglfs: fix x11 header related compile failure
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- GIT_DEPENDENCIES += openssl
- GIT_CONF_OPTS += --with-openssl
++Add egl config and QT_EGL_NO_X11 define (as all other eglfs project
++files do).
++
++Task-number: QTBUG-59427
++Change-Id: Ifbb11eae0fdf0e58c0b7feecb9a7914a889c8f77
++
++Upstream: https://codereview.qt-project.org/188158
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/plugins/platforms/eglfs/eglfs-plugin.pro | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/src/plugins/platforms/eglfs/eglfs-plugin.pro b/src/plugins/platforms/eglfs/eglfs-plugin.pro
++index cf4863975a..ec229796e5 100644
++--- a/src/plugins/platforms/eglfs/eglfs-plugin.pro
+++++ b/src/plugins/platforms/eglfs/eglfs-plugin.pro
++@@ -2,6 +2,11 @@ TARGET = qeglfs
++ 
++ QT += eglfsdeviceintegration-private
++ 
+++CONFIG += egl
+++
+++# Avoid X11 header collision, use generic EGL native types
+++DEFINES += QT_EGL_NO_X11
+++
++ SOURCES += $$PWD/qeglfsmain.cpp
++ 
++ OTHER_FILES += $$PWD/eglfs.json
++-- 
++2.11.0
++
