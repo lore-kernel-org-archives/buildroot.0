@@ -1,51 +1,35 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Mon, 13 Mar 2017 16:23:24 +0100
-Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
-In-Reply-To: <20170313133220.62892a21@free-electrons.com>
-References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
- <20161004163555.7c8af28f@free-electrons.com>
- <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
- <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
- <20170313133220.62892a21@free-electrons.com>
-Message-ID: <216f6108-da26-92cc-8177-07117d20092c@andin.de>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Mon, 13 Mar 2017 17:54:44 +0200
+Subject: [Buildroot] cmake is not building anymore
+In-Reply-To: <1489417019.20145.214.camel@linux.intel.com>
+References: <1489417019.20145.214.camel@linux.intel.com>
+Message-ID: <1489420484.20145.218.camel@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Mon, 2017-03-13 at 16:56 +0200, Andy Shevchenko wrote:
+> Hi!
+> 
+> After update to 2017.02 followed by origin/2017.02.x cmake fails to
+> compile.
+> 
+> output/build/host-cmake-
+> 3.6.3/Utilities/cmlibarchive/libarchive/archive_hmac.c: In function
+> ?__hmac_sha1_cleanup?:
+> output/build/host-cmake-
+> 3.6.3/Utilities/cmlibarchive/libarchive/archive_hmac.c:203:24: error:
+> dereferencing pointer to incomplete type ?archive_hmac_sha1_ctx {aka
+> struct hmac_ctx_st}?
+> ? memset(ctx, 0, sizeof(*ctx));
+> ????????????????????????^~~~
+> 
+> Is it known issue?
 
-Am 13.03.2017 um 13:32 schrieb Thomas Petazzoni:
-> Hello,
->
-> On Mon, 13 Mar 2017 11:43:49 +0100, Andreas Naumann wrote:
->
->> I have another reason to bump to 1.21, but experience the same
->> difficulties in getting the configure step right. What would be a
->> sensible way to avoid depending on autoconf/automake?
->
-> Is your reason to depend on automake/autoconf still the same as what it
-> was in Maxime's patch?
-I think so, but in order test it I used FAKEROOT_AUTORECONF instead of 
-running the bootstrap script. However, that does create the same 
-dependency on automake/autoconf right?
+Just did a clean build. Issue still stays.
 
-  If so, then we can patch Makefile.in instead of
-> Makefile.am. We normally don't like that very much, but I personally
-> prefer this solution over having fakeroot depending on
-> automake/autoconf.
-There is no Makefile.in, only .am and a configure.ac. Wouldnt a patch 
-need to add configure + the contents of build-aux as well? Can you point 
-out a package that I can use as an example?
-
-
-regards,
-Andreas
-
-
->
-> Best regards,
->
-> Thomas
->
+-- 
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Intel Finland Oy
