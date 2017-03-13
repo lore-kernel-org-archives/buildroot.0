@@ -1,7 +1,8 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 13 Mar 2017 11:34:23 +0000
-Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.5-2
-Message-ID: <20170313113423.62856-1-Vincent.Riera@imgtec.com>
+Date: Mon, 13 Mar 2017 11:41:44 +0000
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9,
+	10}.x and 3.12.x series
+Message-ID: <20170313114145.33407-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +11,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 75bc9a9..5a281cf 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 7362805eaa9f9b90cdb67a1f8762782bef4a42ca44939629aecad3c40305bf4c  ImageMagick-7.0.5-0.tar.xz
-+sha256 a7c55f0fd5203cbff12bf4a8d9158c002fab8d4290859a8087c3d329013b1af8  ImageMagick-7.0.5-2.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index d1cd608..ac10cd6 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.5-0
-+IMAGEMAGICK_VERSION = 7.0.5-2
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 57e690e..57e67f4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -216,9 +216,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.86"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.113"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.105"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.70"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.71"	if BR2_KERNEL_HEADERS_3_12
+ 	default "4.1.38"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.52"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.13"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.10.1"	if BR2_KERNEL_HEADERS_4_10
++	default "4.4.53"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.14"	if BR2_KERNEL_HEADERS_4_9
++	default "4.10.2"	if BR2_KERNEL_HEADERS_4_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
 2.10.2
