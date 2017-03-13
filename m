@@ -1,26 +1,43 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Mon, 13 Mar 2017 15:12:26 +0100
-Subject: [Buildroot] [PATCH] tslib: update to 1.7
-Message-ID: <1489414346-403-1-git-send-email-martin.kepplinger@ginzinger.com>
+From: daggs <daggs@gmx.com>
+Date: Mon, 13 Mar 2017 15:17:00 +0100
+Subject: [Buildroot] [PATCH 1/2] odroid-mali: fix broken headers.
+In-Reply-To: <20170313133345.36d712f4@free-electrons.com>
+References: <20170313090834.13715-1-daggs@gmx.com>,
+ <20170313133345.36d712f4@free-electrons.com>
+Message-ID: <trinity-929fc1a7-02df-4b8f-b623-1a623d2a9f58-1489414620167@3capp-mailcom-bs04>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
----
- package/tslib/tslib.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Greetings,
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index 649822e..dea1f91 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,2 +1,2 @@
--# https://github.com/kergoth/tslib/releases/download/1.6/tslib-1.6.tar.xz.sha256
--sha256  b9fbb93984d02506c5a944d475d0bf7f19473a111e547f523328138ed5c6e02b  tslib-1.6.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.7/tslib-1.7.tar.xz.sha256
-+sha256  f2a4a416331dd2f38cea84cc526f23da1c342a2588cfae72fe070908f08b5ce8  tslib-1.7.tar.xz
--- 
-2.1.4
+> Hello,
+> 
+> On Mon, 13 Mar 2017 11:08:33 +0200, Dagg Stompler wrote:
+> 
+> > upstream has updated the headers, (https://github.com/mdrjr/c2_mali/issues/1)
+> > it should fix failures such as http://autobuild.buildroot.net/results/ed8/ed8d562ae5fdb472a83f9a07b2f755c80c972c34/
+> 
+> Did you actually test building libepoxy with this bump, to verify that
+> not only it "should fix", but that it "really fixes".
+> 
+> Thanks!
+> 
+> Thomas
+
+yes, I did verified.
+what I did encountered (not sure it is a bug), is the following:
+1. checkout a clean buildroot.
+2. run make odroidc2_defconfig.
+3. run make menuconfig
+    1. set libc to glibc.
+    2. select odroid-mali.
+    3. select libepoxy.
+4. run build.
+
+the above will fail libepoxy on Xlib.h no such file or directory found.
+for that xorg + libX11 needs to be enabled.
+
+Dagg.
