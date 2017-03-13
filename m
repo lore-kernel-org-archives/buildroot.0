@@ -1,56 +1,102 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Mar 2017 08:54:01 +0200
-Subject: [Buildroot] [PATCH 2/2] ti-uim: bump to latest version
-In-Reply-To: <20170309215203.ner2duo4ocnoiss5@piout.net>
-References: <af8528c725dbee3b80a8a99b2adba50a6ff4114d.1489038337.git.baruch@tkos.co.il>
- <075bbc11df38f8280c99d15834ec461dad0d6654.1489038337.git.baruch@tkos.co.il>
- <20170309075330.vauudriqhipx3cq2@piout.net>
- <20170309172209.k76ucsihxbylnds6@tarshish>
- <20170309215203.ner2duo4ocnoiss5@piout.net>
-Message-ID: <20170313065401.mc43t7k34qkwy7di@tarshish>
+From: Kevin JOLY <kevin.joly@sensefly.com>
+Date: Mon, 13 Mar 2017 08:26:20 +0100
+Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
+Message-ID: <1489389980-8677-1-git-send-email-kevin.joly@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexandre,
+Add support for libgphoto2 core library designed to allow access to digital camera.
 
-On Thu, Mar 09, 2017 at 10:52:03PM +0100, Alexandre Belloni wrote:
-> On 09/03/2017 at 19:22:09 +0200, Baruch Siach wrote:
-> > On Thu, Mar 09, 2017 at 08:53:30AM +0100, Alexandre Belloni wrote:
-> > > BTW, I don't think this daemon is necessary anymore with recent kernel
-> > > but I don't exactly remember all the details.
-> > 
-> > It is unfortunately still needed. I just tested with kernel v4.10.1 on 
-> > SolidRun i.MX6 uSOM rev 1.5 with the TI WL1831 BT/WiFi combo. Hopefully the 
-> > newly introduced serdev bus (commit cd6484e1830b) would obviate the need for 
-> > such a horrible hack at some future point.
-> 
-> I've checked my notes (from 2013, WL1271L) And I had two ways of making it work:
-> 
->      # modprobe st_drv; uim&
->      # modprobe btwilink
->      # hciconfig hci0 up
-> 
-> or
-> 
->      # hciattach /dev/ttyS2 texas 115200
->      # hciconfig hci0 up
-> 
-> I'm not sure it is still working though, I just wanted to let you know.
+Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
+---
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/libgphoto2/Config.in       | 11 +++++++++++
+ package/libgphoto2/libgphoto2.hash |  6 ++++++
+ package/libgphoto2/libgphoto2.mk   | 15 +++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/libgphoto2/Config.in
+ create mode 100644 package/libgphoto2/libgphoto2.hash
+ create mode 100644 package/libgphoto2/libgphoto2.mk
 
-Thanks for the tip. Unfortunately hciattach doesn't work for me here.
-
-Looking through the code I see that btwilink depends on st_drv. Both kernel 
-space st_drv and userspace hciattach_ti.c try to load the same .bts firmware 
-file. I can't see how that could work together.
-
-Did you use a different Bluetooth driver with hciattach?
-
-baruch
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 70a5428..7ad55b6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -935,6 +935,9 @@ F:	package/cpuload/
+ F:	package/bwm-ng/
+ F:	package/ramsmp/
+ 
++N:	Kevin Joly <kevin.joly@sensefly.com>
++F:	package/libgphoto2
++
+ N:	Laurent Cans <laurent.cans@gmail.com>
+ F:	package/aircrack-ng/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 85e4dee..96e03f4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1074,6 +1074,7 @@ menu "Hardware handling"
+ 	source "package/libfreefare/Config.in"
+ 	source "package/libftdi/Config.in"
+ 	source "package/libftdi1/Config.in"
++	source "package/libgphoto2/Config.in"
+ 	source "package/libgpiod/Config.in"
+ 	source "package/libgudev/Config.in"
+ 	source "package/libhid/Config.in"
+diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
+new file mode 100644
+index 0000000..a69231d
+--- /dev/null
++++ b/package/libgphoto2/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBGPHOTO2
++	select BR2_PACKAGE_LIBTOOL
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	select BR2_PACKAGE_LIBXML2
++	bool "libgphoto2"
++	help
++	  libgphoto2 is the core library designed to allow access to digital
++	  camera by external programs.
++
++	  http://gphoto.org/
+diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
+new file mode 100644
+index 0000000..2e659ab
+--- /dev/null
++++ b/package/libgphoto2/libgphoto2.hash
+@@ -0,0 +1,6 @@
++# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.12/
++md5 a5999acc204c31515a6ec8e517d2cd91 libgphoto2-2.5.12.tar.bz2
++sha1 4ded403b87d46ad49ba88b22b9410789ed3cef10 libgphoto2-2.5.12.tar.bz2
++
++# Locally calculated hash
++sha256 b9bb28990fde45ac385e4851a07dbad2e1250404b535b0a3a3b898bb431e4e2e	libgphoto2-2.5.12.tar.bz2
+diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
+new file mode 100644
+index 0000000..72996d4
+--- /dev/null
++++ b/package/libgphoto2/libgphoto2.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libgphoto2
++#
++################################################################################
++
++LIBGPHOTO2_VERSION = 2.5.12
++LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
++LIBGPHOTO2_SITE = https://sourceforge.net/projects/gphoto/files/libgphoto/$(LIBGPHOTO2_VERSION)
++LIBGPHOTO2_INSTALL_STAGING = YES
++LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libusb-compat libtool host-pkgconf
++LIBGPHOTO2_LICENSE = LGPLv2.1+
++LIBGPHOTO2_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
