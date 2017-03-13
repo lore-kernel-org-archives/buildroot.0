@@ -1,79 +1,109 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 00:07:25 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/rpi-userland:
-	don't install file in random location
-Message-ID: <20170313233002.572D782560@busybox.osuosl.org>
+Date: Tue, 14 Mar 2017 00:09:18 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] imagemagick: bump version
+	to 7.0.5-0 (security)
+Message-ID: <20170313233002.6694F82560@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d36b6d034ea07c9dbddd4f407f34f1d2d01ccd8
+commit: https://git.buildroot.net/buildroot/commit/?id=f63fab1bae878509a79219ebff634af208daab0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Currently, rpi-userland installs files in $(@D)/../../bin/ which is
-entirely stupid, especially in cross-compilation.
+- Fixed memory leak when creating nested exceptions in Magick++
+  https://www.imagemagick.org/discourse-server/viewtopic.php?f=23&p=142634
 
-Get rid of the dubious, broken, custom install command.
+- Fixed fd leak for webp coder
+  https://github.com/ImageMagick/ImageMagick/pull/382
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
+- Fixed Spurious memory allocation message
+  https://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=31438
+
+Full changelog: http://imagemagick.org/script/changelog.php
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit ffa39b23f7ece3a3d9ea914c2e385ce222bdf921)
+(cherry picked from commit d6cc5462535acf954abccd585efc3a07623cc416)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...toverlay-don-t-install-script-in-random-l.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ ...-png.c-unbreak-build-without-JPEG-support.patch | 47 ----------------------
+ package/imagemagick/imagemagick.hash               |  2 +-
+ package/imagemagick/imagemagick.mk                 |  2 +-
+ 3 files changed, 2 insertions(+), 49 deletions(-)
 
-diff --git a/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch b/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
-new file mode 100644
-index 0000000..2900eb7
---- /dev/null
-+++ b/package/rpi-userland/0006-host-apps-dtoverlay-don-t-install-script-in-random-l.patch
-@@ -0,0 +1,45 @@
-+From a5a4e361c8116ca9228a896f672102c02be56bb7 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Tue, 7 Mar 2017 22:01:39 +0100
-+Subject: [PATCH] host-apps/dtoverlay: don't install script in random location
-+
-+Currently, we add a custom command that installs the dtoverlay pre/post
-+scripts in ${CMAKE_BINARY_DIR}/../../bin
-+
-+However:
-+
-+  - this points outside of the package directory.; it even points two
-+    directories higher;
-+
-+  - when doing cross-compilation, this is definitely not the place where
-+    the /bin directory really is;
-+
-+  - the scripts are already properly installed without this code.
-+
-+Remove that code, it serves no purpose and breaks for cross-compilation.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ host_applications/linux/apps/dtoverlay/CMakeLists.txt | 8 --------
-+ 1 file changed, 8 deletions(-)
-+
-+diff --git a/host_applications/linux/apps/dtoverlay/CMakeLists.txt b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
-+index 9009200..dd48d83 100755
-+--- a/host_applications/linux/apps/dtoverlay/CMakeLists.txt
-++++ b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
-+@@ -22,12 +22,4 @@ add_custom_command(TARGET dtoverlay POST_BUILD COMMAND ln;-sf;dtoverlay;dtparam)
-+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dtparam DESTINATION bin)
-+ 
-+ set(DTOVERLAY_SCRIPTS dtoverlay-pre dtoverlay-post)
-+-foreach(_script ${DTOVERLAY_SCRIPTS})
-+-   add_custom_command(
-+-     TARGET dtoverlay
-+-     COMMAND ${CMAKE_COMMAND}
-+-     -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${_script}
-+-     ${CMAKE_BINARY_DIR}/../../bin/${_script}
-+-   )
-+-endforeach()
-+ install(PROGRAMS ${DTOVERLAY_SCRIPTS} DESTINATION bin)
-+-- 
-+2.7.4
-+
+diff --git a/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch b/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
+deleted file mode 100644
+index 00a1045..0000000
+--- a/package/imagemagick/0001-png.c-unbreak-build-without-JPEG-support.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 5d0e9c53f49022df5154eb3c04900f48b1c6448e Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <peter@korsgaard.com>
+-Date: Mon, 6 Feb 2017 17:39:31 +0100
+-Subject: [PATCH] png.c: unbreak build without JPEG support
+-
+-Since commit a9e228f8ac26 (Implemented a private PNG caNv (canvas) chunk),
+-PNGsLong gets called unconditionally, but it is only defined if JPEG
+-support is enabled (which defines JNG_SUPPORTED), breaking the build:
+-
+-MagickCore/.libs/libMagickCore-7.Q16HDRI.a(MagickCore_libMagickCore_7_Q16HDRI_la-png.o): In function `WriteOnePNGImage':
+-png.c:(.text+0x748d): undefined reference to `PNGsLong'
+-png.c:(.text+0x74b7): undefined reference to `PNGsLong'
+-
+-For build log, see:
+-http://autobuild.buildroot.net/results/d20/d20eecec8e7b947759185f77a6c8e610dd7393f3/build-end.log
+-
+-Fix it by unconditionally defining the helper function.
+-
+-Submitted-upstream: https://github.com/ImageMagick/ImageMagick/pull/373
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- coders/png.c | 2 --
+- 1 file changed, 2 deletions(-)
+-
+-diff --git a/coders/png.c b/coders/png.c
+-index aebe59281..1328b1aab 100644
+---- a/coders/png.c
+-+++ b/coders/png.c
+-@@ -1229,7 +1229,6 @@ static void PNGLong(png_bytep p,png_uint_32 value)
+-   *p++=(png_byte) (value & 0xff);
+- }
+- 
+--#if defined(JNG_SUPPORTED)
+- static void PNGsLong(png_bytep p,png_int_32 value)
+- {
+-   *p++=(png_byte) ((value >> 24) & 0xff);
+-@@ -1237,7 +1236,6 @@ static void PNGsLong(png_bytep p,png_int_32 value)
+-   *p++=(png_byte) ((value >> 8) & 0xff);
+-   *p++=(png_byte) (value & 0xff);
+- }
+--#endif
+- 
+- static void PNGShort(png_bytep p,png_uint_16 value)
+- {
+--- 
+-2.11.0
+-
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 90e1db5..75bc9a9 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 1ee004740b7ab47fff3c92ae4a89dcbd0181c4d5f31fcb7e3697412ea384a0da  ImageMagick-7.0.4-6.tar.xz
++sha256 7362805eaa9f9b90cdb67a1f8762782bef4a42ca44939629aecad3c40305bf4c  ImageMagick-7.0.5-0.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index a917297..d1cd608 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.4-6
++IMAGEMAGICK_VERSION = 7.0.5-0
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
