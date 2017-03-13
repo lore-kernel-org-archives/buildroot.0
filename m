@@ -1,29 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 00:15:56 +0100
-Subject: [Buildroot] [PATCH v1 2/2] qt5base: install
-	libQt5EglFsKmsSupport
-In-Reply-To: <20170310221547.32158-2-ps.report@gmx.net> (Peter Seiderer's
- message of "Fri, 10 Mar 2017 23:15:47 +0100")
-References: <20170310221547.32158-1-ps.report@gmx.net>
- <20170310221547.32158-2-ps.report@gmx.net>
-Message-ID: <87pohkwyxf.fsf@dell.be.48ers.dk>
+Date: Tue, 14 Mar 2017 00:20:10 +0100
+Subject: [Buildroot] [PATCH 0/4] package/nbd: fixes and bump
+In-Reply-To: <20170312142915.27e2025b@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 12 Mar 2017 14:29:15 +0100")
+References: <cover.1489312674.git.yann.morin.1998@free.fr>
+ <20170312142915.27e2025b@free-electrons.com>
+Message-ID: <87lgs8wyqd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > According to src/plugins/platforms/eglfs/deviceintegration/deviceintegration.pro
- > depends on eglfs_gbm which depends according to src/gui/configure.json
- > on features.eglfs and features.gbm and features.kms, so dependency
- > on BR2_PACKAGE_MESA3D_OPENGL_EGL which enables mesa3d gbm support
- > should be sufficient.
+ > Hello,
+ > On Sun, 12 Mar 2017 10:58:15 +0100, Yann E. MORIN wrote:
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ >> Yann E. MORIN (4):
+ >> package/nbd: rename options
+ >> package/nbd: fix utilities locations
+ >> package/nbd: add option for the trdump utility
+ >> package/nbd: bump version
 
-Committed to 2017.02.x, thanks.
+ > Applied, thanks!
+
+ > Peter: I believe we want to apply PATCH 2/4 to the LTS branch. However,
+ > it will conflict a bit because Yann did the renaming of options before
+ > the fix, but the conflicts should be trivial to resolve.
+
+Committed patch 2 to 2017.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
