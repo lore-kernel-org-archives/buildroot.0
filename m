@@ -1,102 +1,61 @@
-From: Kevin JOLY <kevin.joly@sensefly.com>
-Date: Mon, 13 Mar 2017 08:26:20 +0100
-Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
-Message-ID: <1489389980-8677-1-git-send-email-kevin.joly@sensefly.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Mar 2017 08:28:42 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-03-12
+Message-ID: <20170313072842.DEDBB20816@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for libgphoto2 core library designed to allow access to digital camera.
+Hello,
 
-Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
----
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/libgphoto2/Config.in       | 11 +++++++++++
- package/libgphoto2/libgphoto2.hash |  6 ++++++
- package/libgphoto2/libgphoto2.mk   | 15 +++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/libgphoto2/Config.in
- create mode 100644 package/libgphoto2/libgphoto2.hash
- create mode 100644 package/libgphoto2/libgphoto2.mk
+Build statistics for 2017-03-12
+================================
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 70a5428..7ad55b6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -935,6 +935,9 @@ F:	package/cpuload/
- F:	package/bwm-ng/
- F:	package/ramsmp/
- 
-+N:	Kevin Joly <kevin.joly@sensefly.com>
-+F:	package/libgphoto2
-+
- N:	Laurent Cans <laurent.cans@gmail.com>
- F:	package/aircrack-ng/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 85e4dee..96e03f4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1074,6 +1074,7 @@ menu "Hardware handling"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
- 	source "package/libftdi1/Config.in"
-+	source "package/libgphoto2/Config.in"
- 	source "package/libgpiod/Config.in"
- 	source "package/libgudev/Config.in"
- 	source "package/libhid/Config.in"
-diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
-new file mode 100644
-index 0000000..a69231d
---- /dev/null
-+++ b/package/libgphoto2/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBGPHOTO2
-+	select BR2_PACKAGE_LIBTOOL
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	select BR2_PACKAGE_LIBXML2
-+	bool "libgphoto2"
-+	help
-+	  libgphoto2 is the core library designed to allow access to digital
-+	  camera by external programs.
-+
-+	  http://gphoto.org/
-diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
-new file mode 100644
-index 0000000..2e659ab
---- /dev/null
-+++ b/package/libgphoto2/libgphoto2.hash
-@@ -0,0 +1,6 @@
-+# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.12/
-+md5 a5999acc204c31515a6ec8e517d2cd91 libgphoto2-2.5.12.tar.bz2
-+sha1 4ded403b87d46ad49ba88b22b9410789ed3cef10 libgphoto2-2.5.12.tar.bz2
-+
-+# Locally calculated hash
-+sha256 b9bb28990fde45ac385e4851a07dbad2e1250404b535b0a3a3b898bb431e4e2e	libgphoto2-2.5.12.tar.bz2
-diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
-new file mode 100644
-index 0000000..72996d4
---- /dev/null
-+++ b/package/libgphoto2/libgphoto2.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libgphoto2
-+#
-+################################################################################
-+
-+LIBGPHOTO2_VERSION = 2.5.12
-+LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
-+LIBGPHOTO2_SITE = https://sourceforge.net/projects/gphoto/files/libgphoto/$(LIBGPHOTO2_VERSION)
-+LIBGPHOTO2_INSTALL_STAGING = YES
-+LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libusb-compat libtool host-pkgconf
-+LIBGPHOTO2_LICENSE = LGPLv2.1+
-+LIBGPHOTO2_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+      successes : 141
+       failures : 18 
+       timeouts : 0  
+          TOTAL : 159
+
+Classification of failures by reason
+====================================
+
+                  boost-1.63.0 | 4 
+     docker-engine-v17.03.0-ce | 2 
+             firejail-0.9.44.8 | 2 
+             lttng-tools-2.9.3 | 2 
+               domoticz-3.5877 | 1 
+             fxload-2008_10_13 | 1 
+                    libiio-0.9 | 1 
+make[1]: *** wait: No child... | 1 
+                 opencv-2.4.13 | 1 
+           oracle-mysql-5.1.73 | 1 
+               polarssl-1.2.19 | 1 
+             rabbitmq-c-v0.8.0 | 1 
+
+
+Detail of failures
+===================
+
+         sh4 |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/8c79fa3e9d59a2557ff38dad4499ae713a08eebe
+       sparc |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/7f0ec2d249f7219c60979b9abb1eb3266d475012
+        or1k |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/5d918ddc0bad65b6990b773bfa15121a1b8e40c0
+      xtensa |                   boost-1.63.0 | NOK | http://autobuild.buildroot.net/results/31f6e4593cd59cdb8673141b90439b9c104c71d8
+      x86_64 |      docker-engine-v17.03.0-ce | NOK | http://autobuild.buildroot.net/results/c96671737ab8ebba55f5e7ee9c68f7a5edf12b0e
+         arm |      docker-engine-v17.03.0-ce | NOK | http://autobuild.buildroot.net/results/fd734f9d1922bd805b35dca484b36b92b02b7bd3
+ powerpc64le |                domoticz-3.5877 | NOK | http://autobuild.buildroot.net/results/dbd530ccfe6e84461e116a5968fb2c66e6fd97bf
+ powerpc64le |              firejail-0.9.44.8 | NOK | http://autobuild.buildroot.net/results/0848f44d185db3aa6fb1c350e7fecf819c14b22c
+        mips |              firejail-0.9.44.8 | NOK | http://autobuild.buildroot.net/results/0e52d9f211787f7b6e6ce7e3dc730f80396b5ba9
+microblazeel |              fxload-2008_10_13 | NOK | http://autobuild.buildroot.net/results/deb5a9be4186a002c12effe2e6d9114a7c12fcf8
+         arm |                     libiio-0.9 | NOK | http://autobuild.buildroot.net/results/78d218885986ac8172210596756f064a9c3ccf8d
+         arm |              lttng-tools-2.9.3 | NOK | http://autobuild.buildroot.net/results/7ed0c3d592e538417144178665b54a39d2e69ebf
+      x86_64 |              lttng-tools-2.9.3 | NOK | http://autobuild.buildroot.net/results/0897578de30f2eee4882b0a4e793c154ac171bb9
+         arm | make[1]: *** wait: No child... | NOK | http://autobuild.buildroot.net/results/a6e5ecd9016ba0a0da3885a1505b1843fc73a4c4
+        sh4a |                  opencv-2.4.13 | NOK | http://autobuild.buildroot.net/results/eee5c7fb7b3376b787c302c60c2510214d6e82ce
+       nios2 |            oracle-mysql-5.1.73 | NOK | http://autobuild.buildroot.net/results/fc58c3232febb78c2a910f61be27f9e3e43302ae
+         arm |                polarssl-1.2.19 | NOK | http://autobuild.buildroot.net/results/71050241b34d9e90820fbcd6d06e94dcec991542
+         arm |              rabbitmq-c-v0.8.0 | NOK | http://autobuild.buildroot.net/results/c621bec6d2e5917a713d12b163240eb1b866103f
+
 -- 
-2.7.4
+http://autobuild.buildroot.net
