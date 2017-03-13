@@ -1,40 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 00:01:28 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] package/logrotate: update
-	upstream site in Config.in help
-Message-ID: <20170313233002.41E808044A@busybox.osuosl.org>
+Date: Mon, 13 Mar 2017 23:58:30 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] toolchain/external: use
+	-dumpversion to check gcc version
+Message-ID: <20170313233002.1DBA182560@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34345f1b033e338b1933381a992d9f92f4fe9ae5
+commit: https://git.buildroot.net/buildroot/commit/?id=47793a94b50dc1f65bd1686c7973438c26fd2ce1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-fedorahosted.org has closed on March 1st, 2017, and we were anyway
-already using github as a source for logrotate. This commit therefore
-updates the Config.in help text to also use github as the upstream
-site.
+Currently, `--version` option is used and later matched with a regex to get
+the actual gcc version.  There's a dedicated gcc option to do exactly that:
+`-dumpversion`.
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Also `--version` may return a string customised by a vendor that provides
+the toolchain, which makes the current regex approach error prone.  In
+fact, this situation has been seen with a real customised toolchain.
+
+Signed-off-by: Krzysztof Konopko <kris@youview.com>
+Signed-off-by: Tomasz Szkutkowski <tomasz.szkutkowski@youview.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit cdb1ab8ca0f10782a2f5bba84a34294de18c7273)
+(cherry picked from commit 06cd604ec6d34f25b436ab729543418042a87e1c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/logrotate/Config.in | 2 +-
+ toolchain/helpers.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/logrotate/Config.in b/package/logrotate/Config.in
-index 8528361..2b1ae64 100644
---- a/package/logrotate/Config.in
-+++ b/package/logrotate/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LOGROTATE
- 	help
- 	  A simple program to rotate logs.
- 
--	  https://fedorahosted.org/logrotate/
-+	  https://github.com/logrotate/logrotate
- 
- comment "logrotate needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 72e7292..0ed8fdc 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -147,7 +147,7 @@ check_gcc_version = \
+ 	if [ -z "$${expected_version}" ]; then \
+ 		exit 0 ; \
+ 	fi; \
+-	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
++	real_version=`$(1) -dumpversion` ; \
+ 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
+ 		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
+ 			"$${expected_version}" "$${real_version}" ; \
