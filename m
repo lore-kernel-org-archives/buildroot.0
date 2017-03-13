@@ -1,49 +1,75 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Mon, 13 Mar 2017 18:00:07 +0100
-Subject: [Buildroot] [PATCH] ti-uim: add license file
-In-Reply-To: <1d2068673affad621671022ec3924a495d4a72b5.1489416133.git.baruch@tkos.co.il>
-References: <1d2068673affad621671022ec3924a495d4a72b5.1489416133.git.baruch@tkos.co.il>
-Message-ID: <20170313170007.rduotdnogt6b22hf@piout.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 13 Mar 2017 18:06:42 +0100
+Subject: [Buildroot] [PATCH v2 2/2] Makefile: add check of binaries
+ architecture
+In-Reply-To: <20170312201139.GG3739@free.fr>
+References: <1489340983-11806-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1489340983-11806-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20170312180508.GE3739@free.fr> <20170312182150.GF3739@free.fr>
+ <992feb18-768a-dd03-4402-e01840158fbb@mind.be>
+ <20170312201139.GG3739@free.fr>
+Message-ID: <21be17ec-d4f4-b645-cd03-e2470dd37a90@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/03/2017 at 16:42:13 +0200, Baruch Siach wrote:
-> In the absence of full license text file, take a short source file that
-> mentions the license in its comment header.
-> 
-> Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Seems good to me.
-Acked-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 
-As it seems you are really using it while I haven't in a while, I
-suggest you add uim to your DEVELOPERS entry.
+On 12-03-17 21:11, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2017-03-12 20:43 +0100, Arnout Vandecappelle spake thusly:
+>> On 12-03-17 19:21, Yann E. MORIN wrote:
+>>> Thomas, All,
+>>>
+>>> On 2017-03-12 19:05 +0100, Yann E. MORIN spake thusly:
+>>>> On 2017-03-12 18:49 +0100, Thomas Petazzoni spake thusly:
+>>>>> +for f in $(find ${TARGET_DIR}/{usr/,}{bin,lib,sbin} -type f) ; do
+>>> So, as I said earlier:
+>>>   - cd in TARGET_DIR first;
+>>>   - exclude .lib/firmware and /usr/lib/firmware
+>>>
+>>>     cd "${TARGET_DIR}"
+>>>     find ./{usr/,}{bin,lib,sbin} \
+>>>         -type f \( \( -path './lib/firmware/*' -o -path './usr/lib/firmware*' \) \ 
+>>>                     -prune -o -print \)
+>>
+>>
+>>  As I wrote in the older thread, there are also binaries in /usr/share.
+> 
+> What kind of binaries are in /usr/share? I've looked at my system
+> (Ubuntu 16.04, x86_64), and none of the 139615 files in there is an ELF
+> file.
 
-> ---
->  package/ti-uim/ti-uim.mk | 1 +
->  1 file changed, 1 insertion(+)
+ I found /usr/share/bash-completion/helpers/gst-completion-helper-1.0 in one of
+my build results. Wolfgang (now in Cc) also found something, I'm not sure if it
+was the same thing or something different.
+
+
+ Regards,
+ Arnout
+
 > 
-> diff --git a/package/ti-uim/ti-uim.mk b/package/ti-uim/ti-uim.mk
-> index a6e19b87ca9a..66b93e443091 100644
-> --- a/package/ti-uim/ti-uim.mk
-> +++ b/package/ti-uim/ti-uim.mk
-> @@ -7,6 +7,7 @@
->  TI_UIM_VERSION = a0236bc252e6484835ce266ae4a50b361f6a902d
->  TI_UIM_SITE = $(call github,96boards,uim,$(TI_UIM_VERSION))
->  TI_UIM_LICENSE = GPLv2+
-> +TI_UIM_LICENSE_FILES = uim.h
->  
->  define TI_UIM_BUILD_CMDS
->  	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-> -- 
-> 2.11.0
+>> That
+>> basically leaves nothing except /etc, and a specific exclusion is anyway still
+>> needed for /lib/firmware, so I would just do "find .".
 > 
+> To be clear, you would do 'find .' instead of 'find ./{usr/,}{bin,lib,sbin}',
+> but still do the exclusion as I suggested above, right?
+> 
+> I would be OK with that. Afterall, if one is smart enough to put an ELF
+> file for a co-proc somewhere else than in /lib/firmware, too bad for
+> them.
+> 
+> Regards,
+> Yann E. MORIN.
 
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
