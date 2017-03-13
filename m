@@ -1,45 +1,68 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Mon, 13 Mar 2017 18:09:27 +0100
-Subject: [Buildroot] [PATCH v2] tslib: update to 1.7
-In-Reply-To: <20170313142657.wva3dd6jx3b4wpgr@tarshish>
-References: <20170313142657.wva3dd6jx3b4wpgr@tarshish>
-Message-ID: <1489424967-29071-1-git-send-email-martin.kepplinger@ginzinger.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 13 Mar 2017 18:28:34 +0100
+Subject: [Buildroot] [DEPEND] Dependency failed for Serial Getty on
+	ttyS0.
+In-Reply-To: <c3cba7c6739845276c207fcf05e970b8@webmail.pados.hu>
+References: <c3cba7c6739845276c207fcf05e970b8@webmail.pados.hu>
+Message-ID: <e977bf96-b7ac-3f5e-5a12-4a87f5a9d94e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
----
-sorry. forgot to add tslib.mk previously.
 
 
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 13-03-17 12:13, Karoly Pados wrote:
+> Hello!
+> 
+> I built a buildroot image, using systemd as the init system. The kernel is built using buildroot too, using a custom kernel-.config that is known to work on same hardware when used outside of buildroot.
+> 
+> Most of the booting process succeeds, but towards the end systemd repeatedly tries to stop and start getty, then after a minute or two outputs:
+> [DEPEND] Dependency failed for Serial Getty on ttyS0.
+> 
+> Booting then continues with UTMP, but no login prompt is shown. Not on UART and neither on VGA. I've found out that others who got this same phenomenon had to enable CONFIG_FHANDLE for the kernel, but for me it is already enabled.
+> 
+> Steps I used:
+> - clone buildroot from git
+> - checkout 2017.02.x branch
+> - make menuconfig (enabled systemd, disabled busybox, added a whole lot of other stuff)
+                                      ^^^^^^^^^^^^^^^^
+ When you do this, you'll see the following warning appear:
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index 649822e..dea1f91 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,2 +1,2 @@
--# https://github.com/kergoth/tslib/releases/download/1.6/tslib-1.6.tar.xz.sha256
--sha256  b9fbb93984d02506c5a944d475d0bf7f19473a111e547f523328138ed5c6e02b  tslib-1.6.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.7/tslib-1.7.tar.xz.sha256
-+sha256  f2a4a416331dd2f38cea84cc526f23da1c342a2588cfae72fe070908f08b5ce8  tslib-1.7.tar.xz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 0940d0d..e19c8d2 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.6
-+TSLIB_VERSION = 1.7
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL, LGPL
+You may need to enable other packages to get a working system
+You better know what you're doing!
+
+ From a quick look through your .config, I see that you don't have a getty
+package enabled. Without getty, systemd can't start getty. So you need to enable
+the agetty package.
+
+ Also note that systemd isn't thoroughly tested in Buildroot, even if you do
+enable busybox. So it is possible that you may run into other issues. Starting a
+getty should work, however.
+
+ Regards,
+ Arnout
+
+> - make
+> - flashed/installed images from output/images/
+> 
+> Here is a link to my buildroot-config: http://pastebin.com/W8KnZccU
+> 
+> Any help is appreciated.
+> 
+> Greetings,
+> Karoly
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
