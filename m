@@ -1,35 +1,45 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 13 Mar 2017 17:54:44 +0200
-Subject: [Buildroot] cmake is not building anymore
-In-Reply-To: <1489417019.20145.214.camel@linux.intel.com>
-References: <1489417019.20145.214.camel@linux.intel.com>
-Message-ID: <1489420484.20145.218.camel@linux.intel.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon, 13 Mar 2017 13:26:21 -0300
+Subject: [Buildroot] [PATCH] kmscube: bump version to fix build failures
+Message-ID: <1489422381-6163-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2017-03-13 at 16:56 +0200, Andy Shevchenko wrote:
-> Hi!
-> 
-> After update to 2017.02 followed by origin/2017.02.x cmake fails to
-> compile.
-> 
-> output/build/host-cmake-
-> 3.6.3/Utilities/cmlibarchive/libarchive/archive_hmac.c: In function
-> ?__hmac_sha1_cleanup?:
-> output/build/host-cmake-
-> 3.6.3/Utilities/cmlibarchive/libarchive/archive_hmac.c:203:24: error:
-> dereferencing pointer to incomplete type ?archive_hmac_sha1_ctx {aka
-> struct hmac_ctx_st}?
-> ? memset(ctx, 0, sizeof(*ctx));
-> ????????????????????????^~~~
-> 
-> Is it known issue?
+Bump kmscube version to fix build failures such as this one seen on sparc64:
+http://autobuild.buildroot.net/results/d7e/d7e82c67e0b04b0aea990bfb19dd6e4fd914bebe/build-end.log
 
-Just did a clean build. Issue still stays.
+,and also the one reported by Gary Bisson with Linaro 2017.02 ARM
+gnueabihf toolchain.
 
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ package/kmscube/kmscube.hash | 2 +-
+ package/kmscube/kmscube.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/kmscube/kmscube.hash b/package/kmscube/kmscube.hash
+index 0c9e414..e88bff9 100644
+--- a/package/kmscube/kmscube.hash
++++ b/package/kmscube/kmscube.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 aee8375da730c2e59e8644d6bd5e011f06c88f723a8f8934bd5dac67d94a3b8a  kmscube-87e3ff5683ee54228b3e6e75f7d4de83901fadb0.tar.gz
++sha256 dbd3eedd7fa518e3fc8bbcd424e408846a67c2c57661db30b3f5adb25f7e1513  kmscube-db8c6fc0f625e3a3d36731363276c459661d4149.tar.gz
+diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+index 9d3074a..901c747 100644
+--- a/package/kmscube/kmscube.mk
++++ b/package/kmscube/kmscube.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KMSCUBE_VERSION = 87e3ff5683ee54228b3e6e75f7d4de83901fadb0
++KMSCUBE_VERSION = db8c6fc0f625e3a3d36731363276c459661d4149
+ KMSCUBE_SITE = https://cgit.freedesktop.org/mesa/kmscube/snapshot
+ KMSCUBE_LICENSE = MIT
+ KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
 -- 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+2.7.4
