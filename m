@@ -1,51 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 13 Mar 2017 15:17:14 +0000
-Subject: [Buildroot] [Bug 9721] version 2017.02: no acceptable m4 could be
-	found in $PATH
-In-Reply-To: <bug-9721-163@https.bugs.busybox.net/>
-References: <bug-9721-163@https.bugs.busybox.net/>
-Message-ID: <bug-9721-163-0rV7CTG8qt@https.bugs.busybox.net/>
+From: Andreas Naumann <dev@andin.de>
+Date: Mon, 13 Mar 2017 16:23:24 +0100
+Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
+In-Reply-To: <20170313133220.62892a21@free-electrons.com>
+References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
+ <20161004163555.7c8af28f@free-electrons.com>
+ <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
+ <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
+ <20170313133220.62892a21@free-electrons.com>
+Message-ID: <216f6108-da26-92cc-8177-07117d20092c@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9721
+Hi,
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Am 13.03.2017 um 13:32 schrieb Thomas Petazzoni:
+> Hello,
+>
+> On Mon, 13 Mar 2017 11:43:49 +0100, Andreas Naumann wrote:
+>
+>> I have another reason to bump to 1.21, but experience the same
+>> difficulties in getting the configure step right. What would be a
+>> sensible way to avoid depending on autoconf/automake?
+>
+> Is your reason to depend on automake/autoconf still the same as what it
+> was in Maxime's patch?
+I think so, but in order test it I used FAKEROOT_AUTORECONF instead of 
+running the bootstrap script. However, that does create the same 
+dependency on automake/autoconf right?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
+  If so, then we can patch Makefile.in instead of
+> Makefile.am. We normally don't like that very much, but I personally
+> prefer this solution over having fakeroot depending on
+> automake/autoconf.
+There is no Makefile.in, only .am and a configure.ac. Wouldnt a patch 
+need to add configure + the contents of build-aux as well? Can you point 
+out a package that I can use as an example?
 
---- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-> that may have been induced [...] by working chroot without /sys
-> /proc mountd on the chroot env.
 
-OK, so this was an environment problem. Closing the issue.
+regards,
+Andreas
 
-Thanks for the heads-up. :-)
 
-> but appart from being superuser, root is just like any other user
-> on the system.
-
-And it is causing build isues when building nodejs, because nodejs'
-buildsystem does not work correctly when running as root. This is a
-fact and an issue we do have encountered.
-
-> why should I not be able to build this from any folder I like to
-> choose on my system?
-
-Well, we try hard to make it work. However, we have had issues when
-building in a sub-dir of /usr, because some packages' buildsystems
-behave incorrectly in this case. That's not entirely Buikldroot's
-fault, although it should work now.
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+>
+> Best regards,
+>
+> Thomas
+>
