@@ -1,45 +1,65 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 13 Mar 2017 10:43:34 +0100
-Subject: [Buildroot] [PATCH] kmscube: Move to the new repository
-In-Reply-To: <CAOMZO5CLtfsQHXT3QMy6bA1-=eSMg-uCHjuxRNYL8VrxB5v2qQ@mail.gmail.com>
-References: <1488803273-25019-1-git-send-email-festevam@gmail.com>
- <20170306212225.0819a97b@free-electrons.com>
- <CAOMZO5Bpy6sBTTX1sHitL8mRsNDNF1_PWsvqRTrvfzhd2xG45A@mail.gmail.com>
- <20170306213121.203079d8@free-electrons.com>
- <CAAMH-yuhrg_CxW2YjdjBqrKExiHp57fsDyK_dWD3RXP0hhRWmA@mail.gmail.com>
- <CAOMZO5AGOE8tnKEokxRBww92xoARZLHnrtbaQD1udZGORUfKuQ@mail.gmail.com>
- <CAAMH-yuY=34_k46VPjhDVjLZCaopPsqDe8tRQ5MfqFeW5i+HQQ@mail.gmail.com>
- <CAOMZO5DS7SBwS+Arvb-7a=6B3=4Jo75QAdNh6toAwFsgzvUwdw@mail.gmail.com>
- <CAAMH-ys1J+wuKrEQ7dN=YbcbgTB+kjK0SJJV4Cvj2X9G0yf1pQ@mail.gmail.com>
- <CAOMZO5BxKvub7SRbiwdDFc0W6Kxr=V8nj7uA=WYUc_iAGAQpNw@mail.gmail.com>
- <CAAMH-ythsVpak9K2JqXG5qR3gXNOgWQ60vXxMwvRKPksbrVOnQ@mail.gmail.com>
- <878toeaz13.fsf@dell.be.48ers.dk>
- <CAAMH-yvbmyvqbRckOBm7UuMM8eNH2k6TQGS0mH0O4_B-iDBOnA@mail.gmail.com>
- <CAOMZO5CLtfsQHXT3QMy6bA1-=eSMg-uCHjuxRNYL8VrxB5v2qQ@mail.gmail.com>
-Message-ID: <CAAMH-ytNr+uhPaAthAPVykKc7njWH7d7PHHifeaAqKf1Bf8rOA@mail.gmail.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Mon, 13 Mar 2017 11:43:49 +0100
+Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
+In-Reply-To: <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
+References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
+ <20161004163555.7c8af28f@free-electrons.com>
+ <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
+Message-ID: <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+Hi,
 
-On Fri, Mar 10, 2017 at 4:45 PM, Fabio Estevam <festevam@gmail.com> wrote:
->
-> Hi Gary,
->
-> On Fri, Mar 10, 2017 at 6:47 AM, Gary Bisson
-> <gary.bisson@boundarydevices.com> wrote:
->
-> > Adding a dependency on headers >= 4.7 would definitely work and I
-> > think it's the easiest/cleanest option here.
-> >
-> > I'll just be sad not to be able to use the prebuilt (linaro) toolchain ;)
->
-> What about sending the #include <libdrm/drm_mode.h> fix upstream?
+I have another reason to bump to 1.21, but experience the same 
+difficulties in getting the configure step right. What would be a 
+sensible way to avoid depending on autoconf/automake?
 
-I just sent the patch upstream, we'll see how it goes.
+Background: I experience file ownership issues when doing a 'cp -a' 
+inside fakeroot 1.20.2. I tracked it down to the bump commit (from 
+1.18.4). Not sure what is causing it, but I just tried 1.21 and all is 
+well again.
 
-Regards,
-Gary
+
+regards,
+Andreas
+
+Am 04.10.2016 um 16:39 schrieb Maxime Hadjinlian:
+> On Tue, Oct 4, 2016 at 4:35 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Tue,  4 Oct 2016 13:53:20 +0200, Maxime Hadjinlian wrote:
+>>
+>>> In this version, the configure and Makefile are not provided so we need
+>>> to generate them using the 'bootstrap' script included in the source.
+>>
+>> This is super annoying.
+>>
+>> First, your patch is wrong because the bootstrap script most likely
+>> needs autoconf and automake, possibly libtool as well, and you haven't
+>> added these to the fakeroot dependencies.
+>>
+>> But above all, it means that you would now be adding the build of
+>> autoconf and automake to *every* Buildroot build (since essentially
+>> host-fakeroot is always built). This is really annoying.
+>>
+>> So I'd prefer if we just took the Debian patch that works around the
+>> original problem.
+> OK, will resend.
+>>
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux and Kernel engineering
+>> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
