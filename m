@@ -1,78 +1,38 @@
-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Tue, 14 Mar 2017 09:36:08 +0100
-Subject: [Buildroot] [PATCH] package/libscrypt: Allow the package makefile
-	to add -fPIC to CFLAGS
-Message-ID: <20170314083608.25519-1-stefan.sorensen@spectralink.com>
+From: Jagan Teki <jagan@openedev.com>
+Date: Tue, 14 Mar 2017 16:31:05 +0530
+Subject: [Buildroot] [PATCH 1/2] uboot: Config.in: Update
+	BR2_TARGET_UBOOT_SPL_NAME help text
+Message-ID: <1489489266-23161-1-git-send-email-jagan@openedev.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/b25/b256d003d841e492da073788198203e7cbc834cf/
+From: Jagan Teki <jagan@amarulasolutions.com>
 
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+SPL is the name used for spl on i.MX6, so update the
+same on BR2_TARGET_UBOOT_SPL_NAME help text.
+
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
- ...g-options-to-CFLAGS-and-LDFLAGS-variables.patch | 31 ++++++++++++++++++++++
- package/libscrypt/libscrypt.mk                     |  7 -----
- 2 files changed, 31 insertions(+), 7 deletions(-)
- create mode 100644 package/libscrypt/0001-Allow-adding-options-to-CFLAGS-and-LDFLAGS-variables.patch
+ boot/uboot/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libscrypt/0001-Allow-adding-options-to-CFLAGS-and-LDFLAGS-variables.patch b/package/libscrypt/0001-Allow-adding-options-to-CFLAGS-and-LDFLAGS-variables.patch
-new file mode 100644
-index 0000000..f6fe3ca
---- /dev/null
-+++ b/package/libscrypt/0001-Allow-adding-options-to-CFLAGS-and-LDFLAGS-variables.patch
-@@ -0,0 +1,31 @@
-+From c04c358bfaa506c47772740ed040be36a92d8a6f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-+Date: Tue, 14 Mar 2017 09:23:51 +0100
-+Subject: [PATCH] Allow adding options to CFLAGS and LDFLAGS variables.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-+---
-+ Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 7022a4a..3098a9a 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -5,8 +5,8 @@ MAKE_DIR     ?= install -d
-+ INSTALL_DATA ?= install
-+ 
-+ CC?=gcc
-+-CFLAGS?=-O2 -Wall -g -D_FORTIFY_SOURCE=2 -fstack-protector -fPIC
-+-LDFLAGS?=-Wl,-z,now -Wl,-z,relro -Wl,-soname,libscrypt.so.0 -Wl,--version-script=libscrypt.version
-++override CFLAGS+=-fPIC
-++override LDFLAGS+=-Wl,-z,now -Wl,-z,relro -Wl,-soname,libscrypt.so.0 -Wl,--version-script=libscrypt.version
-+ CFLAGS_EXTRA?=-Wl,-rpath=.
-+ 
-+ all: reference
-+-- 
-+2.9.3
-+
-diff --git a/package/libscrypt/libscrypt.mk b/package/libscrypt/libscrypt.mk
-index 8f72d67..5326b22 100644
---- a/package/libscrypt/libscrypt.mk
-+++ b/package/libscrypt/libscrypt.mk
-@@ -10,13 +10,6 @@ LIBSCRYPT_LICENSE = BSD-2c
- LIBSCRYPT_LICENSE_FILES = LICENSE
- LIBSCRYPT_INSTALL_STAGING = YES
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 7a73877..571c9b1 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -328,7 +328,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
+ 	help
+ 	  A space-separated list of SPL binaries, generated during
+ 	  u-boot build. For most platform it is spl/u-boot-spl.bin
+-	  but not always. It is MLO on OMAP for example.
++	  but not always. It is MLO on OMAP and SPL on i.MX6 for example.
  
--ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
--define LIBSCRYPT_DISABLE_STACK_PROTECTOR
--	$(SED) 's/-fstack-protector//g' $(@D)/Makefile
--endef
--LIBSCRYPT_POST_PATCH_HOOKS += LIBSCRYPT_DISABLE_STACK_PROTECTOR
--endif
--
- define LIBSCRYPT_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
- endef
+ config BR2_TARGET_UBOOT_ZYNQ_IMAGE
+ 	bool "Generate image for Xilinx Zynq"
 -- 
-2.9.3
+1.9.1
