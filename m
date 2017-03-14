@@ -1,69 +1,59 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 14 Mar 2017 16:07:12 -0700
-Subject: [Buildroot] [PATCH 00/23] xtensa overlay application rework
-In-Reply-To: <20170314212024.0585e0e8@free-electrons.com>
-References: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
- <20170314212024.0585e0e8@free-electrons.com>
-Message-ID: <CAMo8BfLC0QxVYj=SOB7cCW_B04uM13YVPZA5stq5-WmKrJjtEA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Mar 2017 00:20:28 +0100
+Subject: [Buildroot] [PATCH] pax-utils: bump version to 1.2.2
+Message-ID: <20170314232028.16119-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Now the code checks for PR_SET_NO_NEW_PRIVS before using it, so the kernel
+headers dependency can be removed.
 
-On Tue, Mar 14, 2017 at 1:20 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Tue, 14 Mar 2017 11:30:29 -0700, Max Filippov wrote:
->
->> This series cleans up xtensa overlay application code, making
->> it uniform across its users in the toolchain, reducing the number of
->> configuration variables and making it possible to use compressed
->> overlays and download overlays from network.
->> This is a subset of a series initially submitted by Yann E. MORIN
->> in 2015, I've forward-ported the original submission, addressed the
->> posted comments and added overlay application to linux and U-Boot.
->
-> A big question is: why do we have this weird overlay mechanism,
-> specifically for this CPU architecture? Why don't they use patches like
-> everybody else?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pax-utils/Config.in      | 4 ----
+ package/pax-utils/pax-utils.hash | 2 +-
+ package/pax-utils/pax-utils.mk   | 2 +-
+ 3 files changed, 2 insertions(+), 6 deletions(-)
 
-Primarily for historical reasons. There are two parts of the problem: both
-toolchain and user code need to be adjusted for the specific xtensa core.
-Toolchain needs to be able to generate code for it. User code needs a way
-to know core characteristics at compile time.
-
-So the part of a toolchain source that deals with xtensa ISA is isolated
-from the rest of the code by a stable API and its code is generated.
-Having a default code for this part in every toolchain component is good
-for toolchain testing. Copying this part over the toolchain source is a
-future-proof way of configuring the toolchain, because the default code
-present in the toolchain may change (and have changed) over time.
-A possible better way to configure the toolchain is moving
-configuration-specific part into a shared library loaded as plugin into
-the toolchain components. We're currently looking into this approach.
-
-For the user code we have a library, part of which is also generated.
-So far open source projects like linux kernel or U-Boot use parts of
-that library copied into their code. Configuration-specific parts of that
-code still need to be copied over from the generated source. The
-hardware itself does not provide any information about the configured
-features.
-A possible way to isolate software running on xtensa from the
-configuration specific properties is distribution of that library with the
-toolchain and removal of its copies from the projects that have them.
-That will replace the requirement of adjusting the software for specific
-xtensa core with the requirement of building it with additional external
-library.
-
-> It has always bothered me that we had this mechanism, and I'd like to
-> challenge the fact that we need this, and see if a better solution is
-> possible.
-
-Toolchain plugins and hardware abstraction library are the ways we're
-exploring. Do you have any suggestions?
-
+diff --git a/package/pax-utils/Config.in b/package/pax-utils/Config.in
+index e61d9b31f..58100e482 100644
+--- a/package/pax-utils/Config.in
++++ b/package/pax-utils/Config.in
+@@ -1,11 +1,7 @@
+ config BR2_PACKAGE_PAX_UTILS
+ 	bool "pax-utils"
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5 # needs PR_SET_NO_NEW_PRIVS
+ 	help
+ 	  ELF related utils for ELF 32/64 binaries that can check files
+ 	  for security relevant properties.
+ 
+ 	  http://www.gentoo.org/proj/en/hardened/pax-utils.xml
+-
+-comment "pax-utils needs a toolchain w/ headers >= 3.5"
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+diff --git a/package/pax-utils/pax-utils.hash b/package/pax-utils/pax-utils.hash
+index 399bae40d..c75589602 100644
+--- a/package/pax-utils/pax-utils.hash
++++ b/package/pax-utils/pax-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	796860fbd48c5f811e699e8492dc1110459bad0a62efa8d346b74a4f6f556414	pax-utils-1.1.4.tar.xz
++sha256	7f4a7f8db6b4743adde7582fa48992ad01776796fcde030683732f56221337d9	pax-utils-1.2.2.tar.xz
+diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
+index 8d5f3eea7..35ea8e8d8 100644
+--- a/package/pax-utils/pax-utils.mk
++++ b/package/pax-utils/pax-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PAX_UTILS_VERSION = 1.1.4
++PAX_UTILS_VERSION = 1.2.2
+ PAX_UTILS_SITE = http://distfiles.gentoo.org/distfiles
+ PAX_UTILS_SOURCE = pax-utils-$(PAX_UTILS_VERSION).tar.xz
+ PAX_UTILS_LICENSE = GPLv2
 -- 
-Thanks.
--- Max
+2.11.0
