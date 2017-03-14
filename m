@@ -1,42 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 07:24:09 +0100
-Subject: [Buildroot] [git commit] tslib: update to 1.7
-Message-ID: <20170314062533.9617F7F97A@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 14 Mar 2017 08:19:53 +0100
+Subject: [Buildroot] [PATCH 1/2] olimex_imx233_olinuxino: bump versions
+Message-ID: <1489475994-28540-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9738f31787c488ab195cc13d38a58a3f3236418
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/olimex_imx233_olinuxino_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index 649822e..dea1f91 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,2 +1,2 @@
--# https://github.com/kergoth/tslib/releases/download/1.6/tslib-1.6.tar.xz.sha256
--sha256  b9fbb93984d02506c5a944d475d0bf7f19473a111e547f523328138ed5c6e02b  tslib-1.6.tar.xz
-+# https://github.com/kergoth/tslib/releases/download/1.7/tslib-1.7.tar.xz.sha256
-+sha256  f2a4a416331dd2f38cea84cc526f23da1c342a2588cfae72fe070908f08b5ce8  tslib-1.7.tar.xz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 0940d0d..e19c8d2 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.6
-+TSLIB_VERSION = 1.7
- TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL, LGPL
+diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+index e5e6605..1b35b74 100644
+--- a/configs/olimex_imx233_olinuxino_defconfig
++++ b/configs/olimex_imx233_olinuxino_defconfig
+@@ -14,7 +14,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/imx233_olinuxino/linux-wifi.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -40,7 +40,7 @@ BR2_TARGET_ROOTFS_EXT4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.03"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
+ BR2_TARGET_UBOOT_FORMAT_SD=y
+  
+-- 
+2.7.4
