@@ -1,10 +1,10 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 14 Mar 2017 11:30:39 -0700
-Subject: [Buildroot] [PATCH 10/23] package/binutils: extract Xtensa overlay
-	as post-extract hook
+Date: Tue, 14 Mar 2017 11:30:40 -0700
+Subject: [Buildroot] [PATCH 11/23] package/gdb: extract Xtensa overlay as
+	post-extract hook
 In-Reply-To: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
 References: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1489516252-3803-11-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <1489516252-3803-12-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,27 +19,27 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- package/binutils/binutils.mk | 6 +++---
+ package/gdb/gdb.mk | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 5ab346c..7dfe4db 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -122,11 +122,11 @@ endef
- endif
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 8e37ade..e7e2289 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -45,11 +45,11 @@ HOST_GDB_INSTALL_OPTS += MAKEINFO=true install
  
+ # Apply the Xtensa specific patches
  ifneq ($(ARCH_XTENSA_CORE_NAME),)
--define BINUTILS_XTENSA_PRE_PATCH
-+define BINUTILS_XTENSA_OVERLAY_EXTRACT
- 	$(call arch-xtensa-overlay-extract,$(@D),binutils)
+-define GDB_XTENSA_PRE_PATCH
++define GDB_XTENSA_OVERLAY_EXTRACT
+ 	$(call arch-xtensa-overlay-extract,$(@D),gdb)
  endef
--BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
--HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
-+BINUTILS_POST_EXTRACT_HOOKS += BINUTILS_XTENSA_OVERLAY_EXTRACT
-+HOST_BINUTILS_POST_EXTRACT_HOOKS += BINUTILS_XTENSA_OVERLAY_EXTRACT
+-GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+-HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
++GDB_POST_EXTRACT_HOOKS += GDB_XTENSA_OVERLAY_EXTRACT
++HOST_GDB_POST_EXTRACT_HOOKS += GDB_XTENSA_OVERLAY_EXTRACT
  endif
  
- ifeq ($(BR2_BINUTILS_ENABLE_LTO),y)
+ ifeq ($(GDB_FROM_GIT),y)
 -- 
 2.1.4
