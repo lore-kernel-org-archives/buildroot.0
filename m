@@ -1,101 +1,40 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Tue, 14 Mar 2017 14:48:04 +0100
-Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
-In-Reply-To: <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
-References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
- <20161004163555.7c8af28f@free-electrons.com>
- <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
- <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
- <20170313133220.62892a21@free-electrons.com>
- <216f6108-da26-92cc-8177-07117d20092c@andin.de>
- <20170313163306.GA3680@free.fr> <20170314091615.2de4a05b@free-electrons.com>
- <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
-Message-ID: <180611cf-c61b-736d-c753-9df57bb29bc7@andin.de>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Tue, 14 Mar 2017 15:02:03 +0100
+Subject: [Buildroot] [PATCH v2] package/can-utils: add license
+	information
+In-Reply-To: <698e2ecb-9110-8e9e-6c4b-7847aead0d5a@grandegger.com>
+References: <68ff344f-81de-b4a4-9762-b117154cd751@grandegger.com>
+ <20170303123100.6ce4254a@free-electrons.com>
+ <698e2ecb-9110-8e9e-6c4b-7847aead0d5a@grandegger.com>
+Message-ID: <e9550469-f8d8-07b8-ba8a-548c9b3a611e@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again,
-
-I cannot confirm that fakeroot 1.21 solves the problem. What works is 
-going back to 1.18.4 or using the packaged fakeroot of my host 
-(1.20-3ubuntu2).
-
-To describe the issue again, the problem is doing 'cp -a' in the 
-fakeroot environment (genimage does this, so I cant easily change this).
-However, I'm not so sure if what so far worked is to be expected. After 
-all, -a means --preserve=all.
-
-I have a simple test, running the following script under fakeroot after 
-building a defconfig, which provides a rootfs.tar:
-  rm -rf .tmpdir* rootfs.2.tar
-  mkdir .tmpdir
-  tar -xzf output/images/rootfs.tar -C .tmpdir
-  cp -a .tmpdir .tmpdir2
-  tar -cf rootfs.2.tar -C .tmpdir2 .
-
-When done, a
-tar -tvf rootfs.2.tar
-shows changed permissions for everything and the original owner for files:
-
-drwx------ root/root         0 2017-03-14 13:37 ./
-drwx------ root/root         0 2016-10-06 09:03 ./mnt/
-drwxrwxrwt root/root         0 2017-03-10 14:44 ./tmp/
-drwx------ root/root         0 2017-03-14 13:37 ./tmp/ldconfig/
--rw------- joe/somegroup     33 2017-03-14 13:37 ./tmp/ldconfig/aux-cache
-drwx------ root/root             0 2017-03-10 14:35 ./tmp/fontconfig/
-...
-
-I tried to apply the patches that Ubuntu has for the host package, but 
-that doesnt help either. What else can I do? Can anybody shed some light 
-on this?
-
-
-thanks,
-Andreas
-
-
-
-
-
-
-Am 14.03.2017 um 12:04 schrieb Andreas Naumann:
-> Hi,
+Am 03.03.2017 um 12:48 schrieb Wolfgang Grandegger:
+> Hello,
 >
->
-> Am 14.03.2017 um 09:16 schrieb Thomas Petazzoni:
+> Am 03.03.2017 um 12:31 schrieb Thomas Petazzoni:
 >> Hello,
 >>
->> On Mon, 13 Mar 2017 17:33:06 +0100, Yann E. MORIN wrote:
+>> On Fri, 3 Mar 2017 12:26:01 +0100, Wolfgang Grandegger wrote:
 >>
->>> I had a look at the diff between 1.20.2 (which we have right now) and
->>> 1.21, and the only noticeable delta is the change of a bufgfer size in
->>> mesage.h, the rest of the delta being the removal of the generated
->>> autostuff.
->>>
->>> So we can quite safely backport that single change.
+>>>  CAN_UTILS_VERSION = c3305fdd515464153d20199db232b6124bc962c0
+>>>  CAN_UTILS_SITE = $(call
+>>> github,linux-can,can-utils,$(CAN_UTILS_VERSION))
+>>> +CAN_UTILS_LICENSE = BSD-3c or GPLv2, GPLv2+
 >>
->> Andreas, could you test Yann's patch? Does it fix your problem?
+>> As I said in my previous review, could you identify which parts are
+>> under which license?
 >
-> I just did, but unfortunately it does not help. However, even with plain
-> 1.21 I no longer get the correct behaviour. Only thing that helps is
-> going back to 1.18.4.
-> It was late Friday when I thought 1.21 was working, but I may have
-> tested an Ubuntu version of it (1.21-3.1 or so). I will try to track
-> that down.
+> I already answered! Unfortunately just to the ml, sorry.
 >
-> regards,
-> Andreas
+> http://lists.busybox.net/pipermail/buildroot/2017-March/185530.html
 >
->>
->> Thanks,
->>
->> Thomas
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+> Should I list each utility using on of the two licences?
+
+ping...
+
+Wolfgang.
