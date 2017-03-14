@@ -1,57 +1,44 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 14 Mar 2017 17:31:16 -0400
-Subject: [Buildroot] [PATCH v2] qt: add enable for truetype font installation
-Message-ID: <1489527076-12172-1-git-send-email-danomimanchego123@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Mar 2017 22:33:02 +0100
+Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.2
+In-Reply-To: <871stzv9jf.fsf@dell.be.48ers.dk>
+References: <20170314150039.9913-1-peter@korsgaard.com>
+ <20170314220145.664560df@free-electrons.com>
+ <871stzv9jf.fsf@dell.be.48ers.dk>
+Message-ID: <20170314223302.5630350f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Hello,
 
----
+On Tue, 14 Mar 2017 22:21:56 +0100, Peter Korsgaard wrote:
 
-Changes V1->V2:
-  - Drop detailed explanation from commit log.  (Peter Seiderer)
-  - Rename option from ..DEJAVU to ..TRUETYPE.  (Peter Seiderer)
-  - Replace depends-on test with equivalent but more verbose expression  (Peter Seiderer)
----
- package/qt/Config.in | 8 ++++++++
- package/qt/qt.mk     | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+> Well, it is both. 1.0.2 is a security fix for 1.0.1, but as we hadn't
+> moved to the 1.0.x series yet it isn't a pure security bump.
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index fa5235d..294df0e 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -185,6 +185,14 @@ endmenu
- 
- menu "Fonts"
- 
-+config BR2_PACAKGE_QT_FONT_TRUETYPE
-+	bool "dejavu/vera"
-+	depends on BR2_PACKAGE_QT_QTFREETYPE || BR2_PACKAGE_QT_SYSTEMFREETYPE
-+	default y
-+
-+comment "dejavu/vera fonts need freetype support"
-+	depends on !BR2_PACKAGE_QT_QTFREETYPE && !BR2_PACKAGE_QT_SYSTEMFREETYPE
-+
- config BR2_PACKAGE_QT_FONT_MICRO
- 	bool "micro"
- 	default y
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index e82bdfe8..cc478f1 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -689,7 +689,7 @@ QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
- endif
- endif # QT_FONTS
- 
--ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
-+ifeq ($(BR2_PACAKGE_QT_FONT_TRUETYPE),y)
- define QT_INSTALL_TARGET_FONTS_TTF
- 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
- 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+It isn't at all :)
+
+> I saw the alert so I started working on the update, and only at the end
+> noticed that the issue didn't actually affect the 0.8.x series. I could
+> have structured it as 2 separate patches, a bump from 0.8.21 -> 1.0.1 +
+> a security bump to 1.0.2, but that seemed a bit silly to me.
+
+Agreed, 2 patches seem silly.
+
+> I can reword the commit text if you have a good idea about how to
+> explain it?
+
+I would simply not indicate in the title that it is a security bump. If
+it were a security bump, we would have to apply it to the LTS branch,
+while considering what you explained, we do not need to apply this
+patch to the LTS branch, because the old 0.8.21 is unaffected. Unless
+of course, 0.8.21 is affected by other security issues.
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
