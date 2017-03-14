@@ -1,50 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 07:22:17 +0100
-Subject: [Buildroot] [git commit] ti-uim: add license file
-Message-ID: <20170314062357.D35967FEE6@busybox.osuosl.org>
+Date: Tue, 14 Mar 2017 07:23:06 +0100
+Subject: [Buildroot] [git commit] ser2net: bump version to 3.4
+Message-ID: <20170314062357.E671582586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=405f7ee89a9bc69d4c467ac68290b6dfb618eccc
+commit: https://git.buildroot.net/buildroot/commit/?id=5faabab594dba8d5b57ad712e55de55929e5386a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In the absence of full license text file, take a short source file that
-mentions the license in its comment header.
-
-[Peter: add DEVELOPERS entry]
-Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS               | 1 +
- package/ti-uim/ti-uim.mk | 1 +
- 2 files changed, 2 insertions(+)
+ package/ser2net/ser2net.hash | 2 +-
+ package/ser2net/ser2net.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 70a5428..e08b65d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -141,6 +141,7 @@ F:	package/sigrok-cli/
- N:	Baruch Siach <baruch@tkos.co.il>
- F:	package/ebtables/
- F:	package/openipmi/
-+F:	package/ti-uim/
+diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+index ae45e9c..6778235 100644
+--- a/package/ser2net/ser2net.hash
++++ b/package/ser2net/ser2net.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 3d1cef5f48df8291e57d4d7d4eac2fc809ae644a5524ffca4aebef0f4e4153dc  ser2net-3.3.tar.gz
++sha256 d846066e27c3072565990745d030357aa0c278f96b7d1d4f59023347c1db8824  ser2net-3.4.tar.gz
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index a786b1a..3d9002a 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Ben Boeckel <mathstuf@gmail.com>
- F:	package/taskd/
-diff --git a/package/ti-uim/ti-uim.mk b/package/ti-uim/ti-uim.mk
-index a6e19b8..66b93e4 100644
---- a/package/ti-uim/ti-uim.mk
-+++ b/package/ti-uim/ti-uim.mk
-@@ -7,6 +7,7 @@
- TI_UIM_VERSION = a0236bc252e6484835ce266ae4a50b361f6a902d
- TI_UIM_SITE = $(call github,96boards,uim,$(TI_UIM_VERSION))
- TI_UIM_LICENSE = GPLv2+
-+TI_UIM_LICENSE_FILES = uim.h
- 
- define TI_UIM_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
+-SER2NET_VERSION = 3.3
++SER2NET_VERSION = 3.4
+ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPLv2+
+ SER2NET_LICENSE_FILES = COPYING
