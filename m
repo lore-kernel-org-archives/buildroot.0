@@ -1,50 +1,56 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Tue, 14 Mar 2017 12:04:15 +0100
-Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
-In-Reply-To: <20170314091615.2de4a05b@free-electrons.com>
-References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
- <20161004163555.7c8af28f@free-electrons.com>
- <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
- <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
- <20170313133220.62892a21@free-electrons.com>
- <216f6108-da26-92cc-8177-07117d20092c@andin.de>
- <20170313163306.GA3680@free.fr> <20170314091615.2de4a05b@free-electrons.com>
-Message-ID: <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 14 Mar 2017 11:46:27 +0000
+Subject: [Buildroot] [PATCH 2/3] libgtk3: gdk-wayland backend depends on
+	libX11
+In-Reply-To: <20170314114628.10147-1-Vincent.Riera@imgtec.com>
+References: <20170314114628.10147-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170314114628.10147-2-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Otherwise it will fail to compile with an error like this one:
 
+[Vincent: paths shortened for readability]
 
-Am 14.03.2017 um 09:16 schrieb Thomas Petazzoni:
-> Hello,
->
-> On Mon, 13 Mar 2017 17:33:06 +0100, Yann E. MORIN wrote:
->
->> I had a look at the diff between 1.20.2 (which we have right now) and
->> 1.21, and the only noticeable delta is the change of a bufgfer size in
->> mesage.h, the rest of the delta being the removal of the generated
->> autostuff.
->>
->> So we can quite safely backport that single change.
->
-> Andreas, could you test Yann's patch? Does it fix your problem?
+  CC       gdkglcontext-wayland.lo
+In file included from /usr/include/epoxy/egl_generated.h:11:0,
+                 from /usr/include/epoxy/egl.h:44,
+                 from gdkglcontext-wayland.h:32,
+                 from gdkglcontext-wayland.c:24:
+/usr/include/EGL/eglplatform.h:119:22: fatal error: X11/Xlib.h: No such
+file or directory
+ #include <X11/Xlib.h>
+                      ^
+compilation terminated.
+make[6]: *** [Makefile:682: gdkglcontext-wayland.lo] Error 1
 
-I just did, but unfortunately it does not help. However, even with plain 
-1.21 I no longer get the correct behaviour. Only thing that helps is 
-going back to 1.18.4.
-It was late Friday when I thought 1.21 was working, but I may have 
-tested an Ubuntu version of it (1.21-3.1 or so). I will try to track 
-that down.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libgtk3/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-regards,
-Andreas
-
->
-> Thanks,
->
-> Thomas
->
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index 738f865..9e0721d 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -62,11 +62,15 @@ comment "Wayland GDK backend needs an OpenGL EGL backend provided by mesa3d w/ h
+ 	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 
++comment "Wayland GDK backend needs libX11 support"
++	depends on !BR2_PACKAGE_XLIB_LIBX11
++
+ config BR2_PACKAGE_LIBGTK3_WAYLAND
+ 	bool "Wayland GDK backend"
+ 	default y
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++	depends on BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+-- 
+2.10.2
