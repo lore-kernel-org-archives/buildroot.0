@@ -1,50 +1,120 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 14 Mar 2017 09:11:00 +0000
-Subject: [Buildroot] [PATCH 2/3] package/nodejs: bump version to 7.7.1
-In-Reply-To: <20170312233644.1006d0ef@free-electrons.com>
-References: <1488671310-27378-1-git-send-email-martin@barkynet.com>
- <1488671310-27378-2-git-send-email-martin@barkynet.com>
- <20170312233644.1006d0ef@free-electrons.com>
-Message-ID: <CAFGQKxdjvf2Vujy3e4BMn-ZZDOz_2cPJQvmkmFHcua-iUsa-Hw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Mar 2017 10:23:06 +0100
+Subject: [Buildroot] [DEPEND] Dependency failed for Serial Getty on
+	ttyS0.
+In-Reply-To: <01f09a9ec9040eecf2423e0349aa0cdc@webmail.pados.hu>
+References: <e977bf96-b7ac-3f5e-5a12-4a87f5a9d94e@mind.be>
+ <c3cba7c6739845276c207fcf05e970b8@webmail.pados.hu>
+ <01f09a9ec9040eecf2423e0349aa0cdc@webmail.pados.hu>
+Message-ID: <b99454a8-c887-7293-7a44-cdcf118e397a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+ [Please don't top-post, but reply inline like I do now.]
 
-On 12 March 2017 at 22:36, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
 
+On 13-03-17 21:22, Karoly Pados wrote:
 > Hello,
->
-> On Sat,  4 Mar 2017 23:48:29 +0000, Martin Bark wrote:
-> > See https://nodejs.org/en/blog/release/v7.7.1/
-> >
-> > Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> This patch breaks the build with nodejs 0.10, because nodejs 0.10 does
-> not have this mkpeephole binary. Therefore, your PATCH 3/3 should be
-> before PATCH 2/3.
->
+> 
+> The config I attached was without agetty, because I already tried enabling it without success (with
+> the same reasoning: I thought to myself "maybe buildroot has no getty if I don't enable agetty").
+> Unfortunately that didn't solve te problem, so my conclusion was missing agetty was the not the
+> cause of the problem, and I went back to my original config.
+> 
+> Based on what you say I do need agetty, but I am sure I also need something else, because even with
+> agetty, I got the same problem. Could you please advise what else could be missing?
 
-Good point.  I'll fix that and resubmit.
+ I've tried a build with a simple config with just systemd and agetty - but I
+didn't manage to boot it in qemu (unrelated reasons). However, in the resulting
+image I see no service request for ttyS0, only for tty1 (i.e. the one you set in
+the Buildroot config). So I don't understand how/why systemd tries to start a
+getty on ttyS0, and why it *doesn't* try to start one on tty1. Can you check in
+your rootfs in /etc/systemd/system where the ttyS0 could come from?
 
-Thanks
+ Regards,
+ Arnout
 
-Martin
+> 
+> Any help appreciated, 
+> 
+> Greetings,
+> K?roly Pados
+> 
+> This email and any associated attachment are confidential.
+> Unless you belong to the specified recipients, immediately notify the sender.
+> The content may not be copied and given to third parties.
+> ___________________________________________________________________
+> 
+> March 13, 2017 6:28 PM, "Arnout Vandecappelle" <arnout@mind.be> wrote:
+> 
+>> On 13-03-17 12:13, Karoly Pados wrote:
+>>
+>>> Hello!
+>>>
+>>> I built a buildroot image, using systemd as the init system. The kernel is built using buildroot
+>>> too, using a custom kernel-.config that is known to work on same hardware when used outside of
+>>> buildroot.
+>>>
+>>> Most of the booting process succeeds, but towards the end systemd repeatedly tries to stop and
+>>> start getty, then after a minute or two outputs:
+>>> [DEPEND] Dependency failed for Serial Getty on ttyS0.
+>>>
+>>> Booting then continues with UTMP, but no login prompt is shown. Not on UART and neither on VGA.
+>>> I've found out that others who got this same phenomenon had to enable CONFIG_FHANDLE for the
+>>> kernel, but for me it is already enabled.
+>>>
+>>> Steps I used:
+>>> - clone buildroot from git
+>>> - checkout 2017.02.x branch
+>>> - make menuconfig (enabled systemd, disabled busybox, added a whole lot of other stuff)
+>>
+>> ^^^^^^^^^^^^^^^^
+>> When you do this, you'll see the following warning appear:
+>>
+>> You may need to enable other packages to get a working system
+>> You better know what you're doing!
+>>
+>> From a quick look through your .config, I see that you don't have a getty
+>> package enabled. Without getty, systemd can't start getty. So you need to enable
+>> the agetty package.
+>>
+>> Also note that systemd isn't thoroughly tested in Buildroot, even if you do
+>> enable busybox. So it is possible that you may run into other issues. Starting a
+>> getty should work, however.
+>>
+>> Regards,
+>> Arnout
+>>
+>>> - make
+>>> - flashed/installed images from output/images/
+>>>
+>>> Here is a link to my buildroot-config: http://pastebin.com/W8KnZccU
+>>>
+>>> Any help is appreciated.
+>>>
+>>> Greetings,
+>>> Karoly
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>> --
+>> Arnout Vandecappelle arnout at mind be
+>> Senior Embedded Software Architect +32-16-286500
+>> Essensium/Mind http://www.mind.be
+>> G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>> GPG fingerprint: 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> 
 
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170314/f0b131c6/attachment.html>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
