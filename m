@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Mar 2017 22:01:45 +0100
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.2
-In-Reply-To: <20170314150039.9913-1-peter@korsgaard.com>
-References: <20170314150039.9913-1-peter@korsgaard.com>
-Message-ID: <20170314220145.664560df@free-electrons.com>
+Date: Tue, 14 Mar 2017 22:20:24 +0100
+Subject: [Buildroot] binutils now adds sysroot for ld -rpath search
+In-Reply-To: <1489484038.1572.7.camel@embedded.rocks>
+References: <1489484038.1572.7.camel@embedded.rocks>
+Message-ID: <20170314222024.7fe9af37@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +12,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Mar 2017 16:00:39 +0100, Peter Korsgaard wrote:
-> Fixes CWE-416 (use after free condition during netjoin processing). No CVE
-> assigned yet:
-> 
-> https://irssi.org/security/irssi_sa_2017_03.txt
-> 
-> Notice that the 0.8.x series is not believed to be vulnerable to this
-> specific issue. From the advisory:
-> 
-> Affected versions
-> -----------------
-> 
-> Irssi up to and including 1.0.1
-> 
-> We believe Irssi 0.8.21 and prior are not affected since a different
-> code path causes the netjoins to be flushed prior to reaching the use
-> after free condition.
+On Tue, 14 Mar 2017 10:33:58 +0100, J?rg Krause wrote:
 
-So why do you have "security bump" in the commit title ? We're using
-0.8.21, which is not affected by the issue, so this is not a security
-bump IMO, unless I missed something.
+> After a discussion with Brad King on the CMake issue tracker [1] about
+> how the linker should handle -rpath we agreed that ld should add the
+> sysroot when searching for files (but not when setting the RPATH header
+> value).
+> 
+> I picked up a five years old patch from the binutils mailing list [2]
+> which already proposed the change, but was not submitted then.
+> 
+> I resend the patch [3] and this time Alan Modra accepted the change. He
+> submitted two patches [4,5] which will add the sysroot to -rpath?for
+> absolute paths.
 
-Thanks,
+Aaah indeed. I also recently looked at some package that was failing to
+build because -rpath /usr/lib was passed. And then I realized that
+things were clunky: what if you really a RPATH to be encoded in the
+generated binary, but don't want this path to be looked at on the build
+machine during the cross-compilation.
+
+Your patch solves exactly that. I guess we'll have to integrate it in
+Buildroot as well, but we will still have issues with external
+toolchains, sadly :-/
+
+Thanks a lot for this work!
 
 Thomas
 -- 
