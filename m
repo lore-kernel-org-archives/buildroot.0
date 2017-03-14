@@ -1,36 +1,45 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 14 Mar 2017 10:33:58 +0100
-Subject: [Buildroot] binutils now adds sysroot for ld -rpath search
-Message-ID: <1489484038.1572.7.camel@embedded.rocks>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 14 Mar 2017 10:46:07 +0100
+Subject: [Buildroot] [PATCH 1/2] olimex_imx233_olinuxino: bump versions
+In-Reply-To: <87a88oux1g.fsf@dell.be.48ers.dk>
+References: <1489475994-28540-1-git-send-email-francois.perrad@gadz.org>
+ <87a88oux1g.fsf@dell.be.48ers.dk>
+Message-ID: <CAB0FRsty471rm=J2V=k-PvLtd1fTBKcL3T_WK-b-VFiiVayK1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+2017-03-14 8:39 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>
+>  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>  > ---
+>  >  configs/olimex_imx233_olinuxino_defconfig | 4 ++--
+>  >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+>  > diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+>  > index e5e6605..1b35b74 100644
+>  > --- a/configs/olimex_imx233_olinuxino_defconfig
+>  > +++ b/configs/olimex_imx233_olinuxino_defconfig
+>  > @@ -14,7 +14,7 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+>  >  # Kernel
+>  >  BR2_LINUX_KERNEL=y
+>  >  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  > -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.2"
+>  > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.14"
+>
+> Committed, thanks. Any specific reason to not use 4.10.x?
+>
 
-some news!
+4.9 is a LTS.
 
-After a discussion with Brad King on the CMake issue tracker [1] about
-how the linker should handle -rpath we agreed that ld should add the
-sysroot when searching for files (but not when setting the RPATH header
-value).
+Fran?ois
 
-I picked up a five years old patch from the binutils mailing list [2]
-which already proposed the change, but was not submitted then.
-
-I resend the patch [3] and this time Alan Modra accepted the change. He
-submitted two patches [4,5] which will add the sysroot to -rpath?for
-absolute paths.
-
-[1] https://gitlab.kitware.com/cmake/cmake/issues/16682
-[2] https://sourceware.org/ml/binutils/2012-09/msg00156.html
-[3] https://sourceware.org/ml/binutils/2017-03/msg00134.html
-[4] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h
-=316a1245fe31e327223ca66797b789eaf9544c2c
-[5] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h
-=118aa6cf395aec093fe12d7fb2d05441791a93fa
-
-Best regards,
-J?rg Krause
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
