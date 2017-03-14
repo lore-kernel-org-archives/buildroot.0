@@ -1,44 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Mar 2017 23:21:12 +0100
-Subject: [Buildroot] [git commit] libgtk3: remove non-existent configure
-	options
-Message-ID: <20170314222152.B79ED82232@busybox.osuosl.org>
+Date: Tue, 14 Mar 2017 23:22:40 +0100
+Subject: [Buildroot] [PATCH 1/3] libgtk3: remove non-existent configure
+ options
+In-Reply-To: <20170314114628.10147-1-Vincent.Riera@imgtec.com>
+References: <20170314114628.10147-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170314232240.4a614464@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efce7b65e3dc8aa476993148d62cb6dcfbe7bb81
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-From config.log:
+On Tue, 14 Mar 2017 11:46:26 +0000, Vicente Olivert Riera wrote:
+> From config.log:
+> 
+> configure: WARNING: unrecognized options: --disable-doc, --disable-docs,
+> --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6,
+> --enable-gtk2-dependency, --disable-introspection
+> 
+> Remove non-existent --enable-gtk2-dependency and --disable-introspection
+> configure options from libgtk3.mk.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/libgtk3/libgtk3.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-configure: WARNING: unrecognized options: --disable-doc, --disable-docs,
---disable-documentation, --with-xmlto, --with-fop, --enable-ipv6,
---enable-gtk2-dependency, --disable-introspection
+Applied to master, thanks.
 
-Remove non-existent --enable-gtk2-dependency and --disable-introspection
-configure options from libgtk3.mk.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libgtk3/libgtk3.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 048029d..210f3e5 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -20,9 +20,7 @@ LIBGTK3_CONF_ENV = \
- 
- LIBGTK3_CONF_OPTS = \
- 	--disable-glibtest \
--	--enable-explicit-deps=no \
--	--enable-gtk2-dependency \
--	--disable-introspection
-+	--enable-explicit-deps=no
- 
- # Override pkg-config pkgdatadir variable, it needs the prefix
- LIBGTK3_MAKE_OPTS = \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
