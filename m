@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Mar 2017 23:42:09 +0100
-Subject: [Buildroot] [PATCH] kmscube: update the project URL
-In-Reply-To: <1489431187-24725-1-git-send-email-festevam@gmail.com>
-References: <1489431187-24725-1-git-send-email-festevam@gmail.com>
-Message-ID: <20170314234209.4010eb62@free-electrons.com>
+Date: Tue, 14 Mar 2017 23:42:06 +0100
+Subject: [Buildroot] [PATCH] kmscube: Remove the manually creation of m4
+ directory
+In-Reply-To: <1489429465-19719-1-git-send-email-festevam@gmail.com>
+References: <1489429465-19719-1-git-send-email-festevam@gmail.com>
+Message-ID: <20170314234206.00c65fea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 13 Mar 2017 15:53:07 -0300, Fabio Estevam wrote:
-> kmscube repository has been moved to freedesktop.org, so
-> update the URL accordingly.
+On Mon, 13 Mar 2017 15:24:25 -0300, Fabio Estevam wrote:
+> Since kmscube upstream commit a2dc60cf05b704 ("Add m4/.gitignore")
+> there is no need to manually create the m4 directory anymore, so
+> simply remove KMSCUBE_POST_PATCH_HOOKS.
 > 
 > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 > ---
->  package/kmscube/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/kmscube/kmscube.mk | 6 ------
+>  1 file changed, 6 deletions(-)
 
 Applied to master, thanks.
 
