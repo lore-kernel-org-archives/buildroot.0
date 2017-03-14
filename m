@@ -1,66 +1,41 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 14 Mar 2017 18:30:07 -0400
-Subject: [Buildroot] [PATCH 1/1] qt: add enable for truetype font
-	installation
-In-Reply-To: <20170314225824.04ed09ed@free-electrons.com>
-References: <1489023348-1796-1-git-send-email-danomimanchego123@gmail.com>
- <20170310194327.489b9398@gmx.net> <20170314225824.04ed09ed@free-electrons.com>
-Message-ID: <CANxTyt4FijQ_wuZtc7aanE2rM9aCji59k1CVnBokTyHypOCRpg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Mar 2017 23:38:39 +0100
+Subject: [Buildroot] [git commit] uboot: improve BR2_TARGET_UBOOT_SPL_NAME
+	help text
+Message-ID: <20170314223901.B184781D38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 14, 2017 at 5:58 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 10 Mar 2017 19:43:27 +0100, Peter Seiderer wrote:
->
->> On Wed,  8 Mar 2017 20:35:48 -0500, Danomi Manchego <danomimanchego123@gmail.com> wrote:
->>
->> > Currently, qt.mk installs DejaVu/Vera TrueType fonts if freetype
->> > support is available, either from Qt or from the system freetype.
->> > However, there are lots of fonts that can be used with Qt, both
->> > within Qt (the prerendered fonts) and outside of Qt (in buildroot's
->> > font area). So it seems appropriate to expose a switch to enable
->> > the installation of the TrueType fonts, conditioned on freetype
->> > availability. At least, it provides a similar level of selectability
->> > as already exists with the prerendered fonts (micro, fixed, helvetica,
->> > etc.), and in some cases may solve problems where setting fonts
->> > by family and attribute is complicated by DejaVu competing with
->> > fonts that were actually selected in the buildroot menu.
->>
->> Very detailed explanation for your reasoning, maybe stuff for a
->> cover-letter?
->
-> I really disagree with this. The contents of cover letters disappear
-> in the dark caves of the mailing list archives, while commit logs can
-> very easily be found when looking at the history of the changes on a
-> package. So I very, very much prefer to have detailed commit logs
-> rather than everything in the cover letter and very terse commit logs.
+commit: https://git.buildroot.net/buildroot/commit/?id=ab1131d559543840fe366dcd4e4d66c320fdae7e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm inclined to agree, but I'm told that I'm long-winded sometimes, so
-I deferred to Peter.  I'll spin a v3 with a tweaked comment.
+SPL is the name used for spl on i.MX6, so update the same on
+BR2_TARGET_UBOOT_SPL_NAME help text.
 
-Danomi -
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+[Thomas: rewrap Config.in help text.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-> I've seen the v2 of Danomi, and now I'm like "why do we want this?".
->
->> Subject: qt: add truetype font installation option
->>
->> Make truetype font installation optional.
->>
->> is detailed enough?
->
-> No, it's not :)
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 7a73877..c33861b 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -327,8 +327,8 @@ config BR2_TARGET_UBOOT_SPL_NAME
+ 	depends on BR2_TARGET_UBOOT_SPL
+ 	help
+ 	  A space-separated list of SPL binaries, generated during
+-	  u-boot build. For most platform it is spl/u-boot-spl.bin
+-	  but not always. It is MLO on OMAP for example.
++	  u-boot build. For most platform it is spl/u-boot-spl.bin but
++	  not always. It is MLO on OMAP and SPL on i.MX6 for example.
+ 
+ config BR2_TARGET_UBOOT_ZYNQ_IMAGE
+ 	bool "Generate image for Xilinx Zynq"
