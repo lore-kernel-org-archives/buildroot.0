@@ -1,61 +1,45 @@
-From: Cercueil, Paul <Paul.Cercueil@analog.com>
-Date: Tue, 14 Mar 2017 15:05:10 +0000
-Subject: [Buildroot] [PATCH] libiio: Disable MATLAB Bindings on Target
-In-Reply-To: <1489433702-3044-1-git-send-email-mfornero@mathworks.com>
-References: <1489433702-3044-1-git-send-email-mfornero@mathworks.com>
-Message-ID: <1489503908.2565.7.camel@analog.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 14 Mar 2017 16:39:04 +0000
+Subject: [Buildroot] [PATCH 2/3] libgtk3: gdk-wayland backend depends on
+ libX11
+In-Reply-To: <20170314172254.367744f2@free-electrons.com>
+References: <20170314114628.10147-1-Vincent.Riera@imgtec.com>
+ <20170314114628.10147-2-Vincent.Riera@imgtec.com>
+ <20170314172254.367744f2@free-electrons.com>
+Message-ID: <0778ff37-bb18-3b1b-3666-77ca979a9958@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Makes sense.
+Hi Thomas,
 
-Acked-By: Paul Cercueil <paul.cercueil@analog.com>
+On 14/03/17 16:22, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 14 Mar 2017 11:46:27 +0000, Vicente Olivert Riera wrote:
+> 
+>>  config BR2_PACKAGE_LIBGTK3_WAYLAND
+>>  	bool "Wayland GDK backend"
+>>  	default y
+>>  	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+>>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+>> +	depends on BR2_PACKAGE_XLIB_LIBX11
+> 
+> This feels weird. Isn't the point of the Wayland backend specifically
+> to be used with Wayland, and therefore not to depend on anything X.org
+> related?
+> 
+> Isn't this a bug in Gtk, rather than something we should fix with an
+> additional dependency?
 
--- 
-???__????____??____
-? /__\??(??_ \(_??_)??| Paul Cercueil        paul.cercueil at analog.com
-?/(__)\??)(_) )_)(_???| Software Engineer    github.com/pcercuei
-(__)(__)(____/(____)??| Analog Devices, S.L. Paterna (Valencia) SPAIN
+maybe the gdk-wayland backend is necessary to run gtk3 apps on a Wayland
+display server, but it still needs some libX11 bits because the support
+is not complete. Just guessing :P
 
-Le lundi 13 mars 2017 ? 15:35 -0400, Matthew Fornero a ?crit?:
-> If building on a machine with MATLAB installed, the MATLAB bindings
-> will
-> default to ON, which is not the desired behavior for a cross build.
+Vincent
+
 > 
-> The bindings are designed to be called from within MATLAB, and we are
-> not currently running MATLAB on buildroot-generated targets.
+> Thomas
 > 
-> This does not preclude the use of the bindings from a host connecting
-> over the network backend (assuming libiio on the host has the
-> bindings
-> enabled).
-> 
-> Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
-> ---
-> ?package/libiio/libiio.mk | 1 +
-> ?1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-> index 8977610..aaa6c70 100644
-> --- a/package/libiio/libiio.mk
-> +++ b/package/libiio/libiio.mk
-> @@ -14,6 +14,7 @@ LIBIIO_CONF_OPTS = -DENABLE_IPV6=ON \
-> ?	-DWITH_LOCAL_BACKEND=$(if
-> $(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),ON,OFF) \
-> ?	-DWITH_NETWORK_BACKEND=$(if
-> $(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),ON,OFF) \
-> ?	-DWITH_MATLAB_BINDINGS_API=OFF \
-> +	-DMATLAB_BINDINGS=OFF \
-> ?	-DINSTALL_UDEV_RULE=$(if $(BR2_PACKAGE_HAS_UDEV),ON,OFF) \
-> ?	-DWITH_TESTS=$(if $(BR2_PACKAGE_LIBIIO_TESTS),ON,OFF) \
-> ?	-DWITH_DOC=OFF
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: This is a digitally signed message part
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170314/ce4dda88/attachment.asc>
