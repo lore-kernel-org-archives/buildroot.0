@@ -1,48 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Mar 2017 23:04:59 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/nodejs: remove 0.10.x support
-In-Reply-To: <1489493178-32646-1-git-send-email-martin@barkynet.com>
-References: <1489493178-32646-1-git-send-email-martin@barkynet.com>
-Message-ID: <20170314230459.6536c977@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Mar 2017 23:05:27 +0100
+Subject: [Buildroot] [PATCH] zmqpp: update license
+In-Reply-To: <20170314215936.4d3c12f3@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 14 Mar 2017 21:59:36 +0100")
+References: <1489501777-6548-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20170314215936.4d3c12f3@free-electrons.com>
+Message-ID: <87wpbrtsyg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 14 Mar 2017 12:06:17 +0000, Martin Bark wrote:
-> nodejs 0.10.x is now end of life and is no longer maintained so remove it.
-> See https://github.com/nodejs/LTS
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> 
-> ---
-> Changes v1 -> v2:
->  - reorder patch to be before bumping version to 7.7.2 (Thomas Petazzoni)
-> ---
->  .../0001-remove-python-bz2-dependency.patch        | 27 -------------
->  .../0002-gyp-force-link-command-to-use-CXX.patch   | 26 ------------
->  .../0003-fix-musl-USE-MISC-build-issue.patch       | 47 ----------------------
->  .../0.10.48/0004-Fix-support-for-uClibc-ng.patch   | 33 ---------------
->  .../0001-gyp-force-link-command-to-use-CXX.patch   |  0
->  ...-don-t-build-when-ssl-support-is-disabled.patch |  0
->  package/nodejs/Config.in                           | 32 +++++----------
->  package/nodejs/nodejs.hash                         |  3 --
->  package/nodejs/nodejs.mk                           |  7 +---
->  9 files changed, 11 insertions(+), 164 deletions(-)
->  delete mode 100644 package/nodejs/0.10.48/0001-remove-python-bz2-dependency.patch
->  delete mode 100644 package/nodejs/0.10.48/0002-gyp-force-link-command-to-use-CXX.patch
->  delete mode 100644 package/nodejs/0.10.48/0003-fix-musl-USE-MISC-build-issue.patch
->  delete mode 100644 package/nodejs/0.10.48/0004-Fix-support-for-uClibc-ng.patch
->  rename package/nodejs/{6.9.4 => }/0001-gyp-force-link-command-to-use-CXX.patch (100%)
->  rename package/nodejs/{6.9.4 => }/0002-inspector-don-t-build-when-ssl-support-is-disabled.patch (100%)
+ > Hello,
+ > On Tue, 14 Mar 2017 19:59:37 +0530, Rahul Bedarkar wrote:
+ >> Since version 4.1.2, zmqpp is provided under MPLv2.
+ >> 
+ >> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+ >> ---
+ >> package/zmqpp/zmqpp.mk | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> 
+ >> diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+ >> index 18da709..3e35fd7 100644
+ >> --- a/package/zmqpp/zmqpp.mk
+ >> +++ b/package/zmqpp/zmqpp.mk
+ >> @@ -8,7 +8,7 @@ ZMQPP_VERSION = 4.1.2
+ >> ZMQPP_SITE = $(call github,zeromq,zmqpp,$(ZMQPP_VERSION))
+ >> ZMQPP_INSTALL_STAGING = YES
+ >> ZMQPP_DEPENDENCIES = zeromq
+ >> -ZMQPP_LICENSE = MIT
+ >> +ZMQPP_LICENSE = MPLv2.0
 
-Both applied to master. Thanks!
+ > Wow, thanks, well noticed indeed! Patch applied to master.
 
-Thomas
+ > And the worst thing is that previous versions were not even under the
+ > MIT license: they were under LGPLv3 + static linking exception.
+
+Gaah :/
+
+ > Peter: we really want this one in the LTS branch, since 4.1.2 was
+ > already used in the LTS branch.
+
+Committed to 2017.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
