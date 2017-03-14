@@ -1,10 +1,10 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 14 Mar 2017 11:30:44 -0700
-Subject: [Buildroot] [PATCH 15/23] package/gcc: use the Xtensa macro
-	generators
+Date: Tue, 14 Mar 2017 11:30:45 -0700
+Subject: [Buildroot] [PATCH 16/23] arch/xtensa: get rid of an intermediate
+	blind kconfig option
 In-Reply-To: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
 References: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1489516252-3803-16-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <1489516252-3803-17-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,64 +13,116 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+It is not needed to have an intermediate blind option, we can just
+hide the prompt behind the same dependency as the non-blind symbol.
+
+Update our qemu-xtensa defconfig acordingly (note: it was using
+different values for both options, which is not possible; the blind
+option was just set to the non-blind one in the .config).
+
+Also remove an unneeded empty default for the BR2_XTENSA_OVERLAY_DIR
+string option (strings are empty by default).
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- package/gcc/gcc-final/gcc-final.mk     | 5 ++---
- package/gcc/gcc-initial/gcc-initial.mk | 5 ++---
- package/gcc/gcc.mk                     | 7 -------
- 3 files changed, 4 insertions(+), 13 deletions(-)
+ Config.in.legacy                         | 11 +++++++++++
+ arch/Config.in.xtensa                    | 16 ++++++----------
+ configs/qemu_xtensa_lx60_defconfig       |  3 +--
+ configs/qemu_xtensa_lx60_nommu_defconfig |  3 +--
+ 4 files changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index a15d837..8eaabb4 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -15,9 +15,8 @@ HOST_GCC_FINAL_DEPENDENCIES = \
- HOST_GCC_FINAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
- HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 090e60a..2261e0c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -194,6 +194,17 @@ config BR2_GLIBC_VERSION_2_22
+ 	  Support for glibc version 2.22 has been removed. The current
+ 	  default version has been selected instead.
  
--ifneq ($(ARCH_XTENSA_CORE_NAME),)
--HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
--endif
-+HOST_GCC_FINAL_ARCH_XTENSA_OVERLAY_COMPONENT = gcc
-+$(eval $(host-arch-xtensa-overlay))
++config BR2_XTENSA_CUSTOM_NAME
++	string "The BR2_XTENSA_CUSTOM_NAME option has been renamed"
++	help
++	  The BR2_XTENSA_CUSTOM_NAME option has been renamed
++	  to BR2_XTENSA_CORE_NAME.
++
++config BR2_XTENSA_CUSTOM_NAME_WRAP
++	bool
++	default y if BR2_XTENSA_CUSTOM_NAME != ""
++	select BR2_LEGACY
++
+ ###############################################################################
+ comment "Legacy options removed in 2017.02"
  
- HOST_GCC_FINAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index fcb3dc9..263af80 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -2,30 +2,26 @@ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_xtensa
+ 	default BR2_xtensa_fsf
++
+ config BR2_XTENSA_CUSTOM
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	bool "Custom Xtensa processor configuration"
++
+ config BR2_xtensa_fsf
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	bool "fsf - Default configuration"
++
+ endchoice
  
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index e1a2241..48492d7 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -13,9 +13,8 @@ HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
- HOST_GCC_INITIAL_EXCLUDES = $(HOST_GCC_EXCLUDES)
- HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
+-config BR2_XTENSA_CUSTOM_NAME
+-	string "Custom Xtensa processor configuration name"
+-	depends on BR2_XTENSA_CUSTOM
+-	default ""
++config BR2_XTENSA_CORE_NAME
++	string "Custom Xtensa processor configuration name" if BR2_XTENSA_CUSTOM
++	default BR2_XTENSA_CUSTOM_NAME if BR2_XTENSA_CUSTOM_NAME != "" # legacy
+ 	help
+ 	  Name given to a custom Xtensa processor configuration.
  
--ifneq ($(ARCH_XTENSA_CORE_NAME),)
--HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
--endif
-+HOST_GCC_INITIAL_ARCH_XTENSA_OVERLAY_COMPONENT = gcc
-+$(eval $(host-arch-xtensa-overlay))
- 
- HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_APPLY_PATCHES
- 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index b52f945..fc54247 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -22,13 +22,6 @@ GCC_SOURCE = gcc-$(GCC_VERSION).tar.bz2
- endif
- 
- #
--# Xtensa special hook
--#
--define HOST_GCC_XTENSA_OVERLAY_EXTRACT
--	$(call arch-xtensa-overlay-extract,$(@D),gcc)
--endef
+-config BR2_XTENSA_CORE_NAME
+-	string
+-	default BR2_XTENSA_CUSTOM_NAME	if BR2_XTENSA_CUSTOM
+-	default ""			if BR2_xtensa_fsf
 -
--#
- # Apply patches
- #
+ config BR2_XTENSA_OVERLAY_DIR
+ 	string "Overlay directory for custom configuration"
+ 	depends on BR2_XTENSA_CUSTOM
+-	default ""
+ 	help
+ 	  Provide the directory path that contains the overlay file
+ 	  for a custom processor configuration. The path is relative
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index 54d844d..5c0cf8c 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -1,8 +1,7 @@
+ # Architecture
+ BR2_xtensa=y
+ BR2_XTENSA_CUSTOM=y
+-BR2_XTENSA_CUSTOM_NAME="dc233c"
+-BR2_XTENSA_CORE_NAME="lx60"
++BR2_XTENSA_CORE_NAME="dc233c"
+ BR2_XTENSA_OVERLAY_DIR="board/qemu/xtensa-lx60"
  
+ # Patches
+diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
+index 256cbee..97e5c98 100644
+--- a/configs/qemu_xtensa_lx60_nommu_defconfig
++++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+@@ -1,8 +1,7 @@
+ # Architecture
+ BR2_xtensa=y
+ BR2_XTENSA_CUSTOM=y
+-BR2_XTENSA_CUSTOM_NAME="dc233c"
+-BR2_XTENSA_CORE_NAME="lx60"
++BR2_XTENSA_CORE_NAME="dc233c"
+ BR2_XTENSA_OVERLAY_DIR="board/qemu/xtensa-lx60"
+ 
+ # Toolchain
 -- 
 2.1.4
