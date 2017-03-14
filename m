@@ -1,62 +1,76 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 14 Mar 2017 11:30:50 -0700
-Subject: [Buildroot] [PATCH 21/23] linux: apply xtensa overlay
-In-Reply-To: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1489516252-3803-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1489516252-3803-22-git-send-email-jcmvbkbc@gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Tue, 14 Mar 2017 19:44:24 +0100
+Subject: [Buildroot] [PATCH 0/3] Introducing tesseract OCR engine package
+Message-ID: <1489517067-3155-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Xtensa core configuration must be added to linux before it can be
-built for that xtensa CPU variant. Extract configuration files from the
-xtensa overlay as is done for other packages that need to be configured
-for a specific xtensa core.
+This patch series introduces the tesseract OCR engine, some of its associated
+language data and the main library it depends on, leptonica.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- arch/arch.mk.xtensa | 5 +++--
- linux/linux.mk      | 3 +++
- 2 files changed, 6 insertions(+), 2 deletions(-)
+Gilles Talis (3):
+  leptonica: new package
+  tesseract-ocr: new package
+  DEVELOPERS: add leptonica and tesseract-ocr to my list
 
-diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
-index 9edbcfb..e09d487 100644
---- a/arch/arch.mk.xtensa
-+++ b/arch/arch.mk.xtensa
-@@ -23,7 +23,7 @@ endif
- # arch-xtensa-overlay-extract -- extract an extensa overlay
- #
- # argument 1 is the path in which to extract
--# argument 2 is the component to extract, one of: gcc, binutils, gdb
-+# argument 2 is the component to extract, one of: gcc, binutils, gdb, linux
- #
- # Example:
- #   $(call arch-xtensa-overlay-extract,/path/to/overlay.tar,$(@D),gcc)
-@@ -42,7 +42,8 @@ endef
- #            for host packages
- #
- # Packages that call that macro shall define FOO_ARCH_XTENSA_OVERLAY_COMPONENT
--# and set it to one of the component to extract, one of: binutils, gcc, gdb.
-+# and set it to one of the component to extract, one of: binutils, gcc, gdb,
-+# linux
- #
- ################################################################################
- define arch-xtensa-overlay-inner
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7f4432e..81f3d7e 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -82,6 +82,9 @@ ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
- LINUX_DEPENDENCIES += host-uboot-tools
- endif
- 
-+LINUX_ARCH_XTENSA_OVERLAY_COMPONENT = linux
-+$(eval $(arch-xtensa-overlay))
-+
- LINUX_MAKE_FLAGS = \
- 	HOSTCC="$(HOSTCC)" \
- 	HOSTCFLAGS="$(HOSTCFLAGS)" \
+ DEVELOPERS                                         |  2 +
+ package/Config.in                                  |  3 ++
+ package/leptonica/Config.in                        |  9 ++++
+ package/leptonica/leptonica.hash                   |  2 +
+ package/leptonica/leptonica.mk                     | 57 ++++++++++++++++++++++
+ package/tesseract-ocr-data/Config.in               | 15 ++++++
+ .../tesseract-ocr-data-chi-sim/Config.in           |  6 +++
+ .../tesseract-ocr-data-chi-sim.hash                |  2 +
+ .../tesseract-ocr-data-chi-sim.mk                  | 21 ++++++++
+ .../tesseract-ocr-data-chi-tra/Config.in           |  6 +++
+ .../tesseract-ocr-data-chi-tra.hash                |  2 +
+ .../tesseract-ocr-data-chi-tra.mk                  | 21 ++++++++
+ .../tesseract-ocr-data-eng/Config.in               |  6 +++
+ .../tesseract-ocr-data-eng.hash                    |  2 +
+ .../tesseract-ocr-data-eng.mk                      | 21 ++++++++
+ .../tesseract-ocr-data-fra/Config.in               |  5 ++
+ .../tesseract-ocr-data-fra.hash                    |  2 +
+ .../tesseract-ocr-data-fra.mk                      | 21 ++++++++
+ .../tesseract-ocr-data-ger/Config.in               |  5 ++
+ .../tesseract-ocr-data-ger.hash                    |  2 +
+ .../tesseract-ocr-data-ger.mk                      | 21 ++++++++
+ .../tesseract-ocr-data-spa/Config.in               |  5 ++
+ .../tesseract-ocr-data-spa.hash                    |  2 +
+ .../tesseract-ocr-data-spa.mk                      | 21 ++++++++
+ package/tesseract-ocr-data/tesseract-ocr-data.mk   | 10 ++++
+ package/tesseract-ocr/Config.in                    | 35 +++++++++++++
+ package/tesseract-ocr/tesseract-ocr.hash           |  3 ++
+ package/tesseract-ocr/tesseract-ocr.mk             | 31 ++++++++++++
+ 28 files changed, 338 insertions(+)
+ create mode 100644 package/leptonica/Config.in
+ create mode 100644 package/leptonica/leptonica.hash
+ create mode 100644 package/leptonica/leptonica.mk
+ create mode 100644 package/tesseract-ocr-data/Config.in
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-chi-sim/Config.in
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-chi-sim/tesseract-ocr-data-chi-sim.hash
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-chi-sim/tesseract-ocr-data-chi-sim.mk
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-chi-tra/Config.in
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-chi-tra/tesseract-ocr-data-chi-tra.hash
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-chi-tra/tesseract-ocr-data-chi-tra.mk
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-eng/Config.in
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-eng/tesseract-ocr-data-eng.hash
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-eng/tesseract-ocr-data-eng.mk
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-fra/Config.in
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-fra/tesseract-ocr-data-fra.hash
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-fra/tesseract-ocr-data-fra.mk
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-ger/Config.in
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-ger/tesseract-ocr-data-ger.hash
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-ger/tesseract-ocr-data-ger.mk
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-spa/Config.in
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-spa/tesseract-ocr-data-spa.hash
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data-spa/tesseract-ocr-data-spa.mk
+ create mode 100644 package/tesseract-ocr-data/tesseract-ocr-data.mk
+ create mode 100644 package/tesseract-ocr/Config.in
+ create mode 100644 package/tesseract-ocr/tesseract-ocr.hash
+ create mode 100644 package/tesseract-ocr/tesseract-ocr.mk
+
 -- 
-2.1.4
+2.5.0
