@@ -1,52 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 Mar 2017 22:21:56 +0100
-Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.2
-In-Reply-To: <20170314220145.664560df@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 14 Mar 2017 22:01:45 +0100")
-References: <20170314150039.9913-1-peter@korsgaard.com>
- <20170314220145.664560df@free-electrons.com>
-Message-ID: <871stzv9jf.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Mar 2017 22:25:45 +0100
+Subject: [Buildroot] [PATCH] package/fakeroot: backport patch
+In-Reply-To: <1489423473-2172-1-git-send-email-yann.morin.1998@free.fr>
+References: <1489423473-2172-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170314222545.648ff0c1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > Hello,
- > On Tue, 14 Mar 2017 16:00:39 +0100, Peter Korsgaard wrote:
- >> Fixes CWE-416 (use after free condition during netjoin processing). No CVE
- >> assigned yet:
- >> 
- >> https://irssi.org/security/irssi_sa_2017_03.txt
- >> 
- >> Notice that the 0.8.x series is not believed to be vulnerable to this
- >> specific issue. From the advisory:
- >> 
- >> Affected versions
- >> -----------------
- >> 
- >> Irssi up to and including 1.0.1
- >> 
- >> We believe Irssi 0.8.21 and prior are not affected since a different
- >> code path causes the netjoins to be flushed prior to reaching the use
- >> after free condition.
+On Mon, 13 Mar 2017 17:44:33 +0100, Yann E. MORIN wrote:
+> Backport the single change there is between 1.10.2 and 1.21.
+> 
+> We do not bump to 1.21 because the tarball for 1.21 does not contain the
+> generated autostuff, which would require we autoreconf fakeroot, but
+> that pulls in dependencies on host-autoconf, host-automake, host-m4 and
+> host-libtool, which is a little tiny-weeny bit too much.
+> 
+> So we just backport that single change.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Andreas Naumann <dev@andin.de>
 
- > So why do you have "security bump" in the commit title ? We're using
- > 0.8.21, which is not affected by the issue, so this is not a security
- > bump IMO, unless I missed something.
+Since this doesn't solve Andreas problem, what is the remaining
+motivation for this patch ?
 
-Well, it is both. 1.0.2 is a security fix for 1.0.1, but as we hadn't
-moved to the 1.0.x series yet it isn't a pure security bump.
+Thanks!
 
-I saw the alert so I started working on the update, and only at the end
-noticed that the issue didn't actually affect the 0.8.x series. I could
-have structured it as 2 separate patches, a bump from 0.8.21 -> 1.0.1 +
-a security bump to 1.0.2, but that seemed a bit silly to me.
-
-I can reword the commit text if you have a good idea about how to
-explain it?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
