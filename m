@@ -1,51 +1,37 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 14 Mar 2017 15:40:02 +0000
-Subject: [Buildroot] [PATCH] libscrypt: -fPIC is needed to build for MIPS
-Message-ID: <20170314154002.43673-1-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Mar 2017 17:22:54 +0100
+Subject: [Buildroot] [PATCH 2/3] libgtk3: gdk-wayland backend depends on
+ libX11
+In-Reply-To: <20170314114628.10147-2-Vincent.Riera@imgtec.com>
+References: <20170314114628.10147-1-Vincent.Riera@imgtec.com>
+ <20170314114628.10147-2-Vincent.Riera@imgtec.com>
+Message-ID: <20170314172254.367744f2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The error looks like this:
+Hello,
 
-ld: crypto_scrypt-nosse.o: relocation R_MIPS_26 against `a local symbol'
-can not be used when making a shared object; recompile with -fPIC
-crypto_scrypt-nosse.o: error adding symbols: Bad value
-collect2: error: ld returned 1 exit status
+On Tue, 14 Mar 2017 11:46:27 +0000, Vicente Olivert Riera wrote:
 
-Adding -fPIC to CFLAGS fixes the problem.
+>  config BR2_PACKAGE_LIBGTK3_WAYLAND
+>  	bool "Wayland GDK backend"
+>  	default y
+>  	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+> +	depends on BR2_PACKAGE_XLIB_LIBX11
 
-Fixes:
-  http://autobuild.buildroot.net/results/967ad7fae0137f64b165c986c251d143ac825147
+This feels weird. Isn't the point of the Wayland backend specifically
+to be used with Wayland, and therefore not to depend on anything X.org
+related?
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libscrypt/libscrypt.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Isn't this a bug in Gtk, rather than something we should fix with an
+additional dependency?
 
-diff --git a/package/libscrypt/libscrypt.mk b/package/libscrypt/libscrypt.mk
-index 8f72d67..cb3d69b 100644
---- a/package/libscrypt/libscrypt.mk
-+++ b/package/libscrypt/libscrypt.mk
-@@ -17,8 +17,16 @@ endef
- LIBSCRYPT_POST_PATCH_HOOKS += LIBSCRYPT_DISABLE_STACK_PROTECTOR
- endif
- 
-+LIBSCRYPT_CFLAGS = $(TARGET_CFLAGS)
-+
-+# -fPIC is needed to build for MIPS
-+ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-+LIBSCRYPT_CFLAGS += -fPIC
-+endif
-+
- define LIBSCRYPT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(LIBSCRYPT_CFLAGS)"
- endef
- 
- define LIBSCRYPT_INSTALL_STAGING_CMDS
+Thomas
 -- 
-2.10.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
