@@ -1,32 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Mar 2017 23:42:06 +0100
-Subject: [Buildroot] [PATCH] kmscube: Remove the manually creation of m4
- directory
-In-Reply-To: <1489429465-19719-1-git-send-email-festevam@gmail.com>
-References: <1489429465-19719-1-git-send-email-festevam@gmail.com>
-Message-ID: <20170314234206.00c65fea@free-electrons.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 14 Mar 2017 18:57:16 -0400
+Subject: [Buildroot] [PATCH v3] qt: add enable for truetype font installation
+Message-ID: <1489532236-21401-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Currently, qt.mk installs DejaVu/Vera TrueType fonts when Qt is configured for
+freetype support. However, some users may prefer to limit the installed fonts
+to only Qt's prerendered fonts (micro, fixed, helvetica, etc.). Or, there may
+be a preference to use seperately installed TrueType fonts. This commit adds
+a switch to explicitly control the installation of the TrueType fonts, similar
+to the existing prerendered font enables.
 
-On Mon, 13 Mar 2017 15:24:25 -0300, Fabio Estevam wrote:
-> Since kmscube upstream commit a2dc60cf05b704 ("Add m4/.gitignore")
-> there is no need to manually create the m4 directory anymore, so
-> simply remove KMSCUBE_POST_PATCH_HOOKS.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  package/kmscube/kmscube.mk | 6 ------
->  1 file changed, 6 deletions(-)
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Applied to master, thanks.
+---
 
-Thomas
+Changes V2->V3:
+  - Add back some detail to commit log. (Thomas Petazzoni)
+
+Changes V1->V2:
+  - Drop detailed explanation from commit log. (Peter Seiderer)
+  - Rename option from ..DEJAVU to ..TRUETYPE. (Peter Seiderer)
+  - Replace depends-on test with equivalent but more verbose expression. (Peter Seiderer)
+---
+ package/qt/Config.in | 8 ++++++++
+ package/qt/qt.mk     | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index fa5235d..294df0e 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -185,6 +185,14 @@ endmenu
+ 
+ menu "Fonts"
+ 
++config BR2_PACAKGE_QT_FONT_TRUETYPE
++	bool "dejavu/vera"
++	depends on BR2_PACKAGE_QT_QTFREETYPE || BR2_PACKAGE_QT_SYSTEMFREETYPE
++	default y
++
++comment "dejavu/vera fonts need freetype support"
++	depends on !BR2_PACKAGE_QT_QTFREETYPE && !BR2_PACKAGE_QT_SYSTEMFREETYPE
++
+ config BR2_PACKAGE_QT_FONT_MICRO
+ 	bool "micro"
+ 	default y
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index e82bdfe8..cc478f1 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -689,7 +689,7 @@ QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
+ endif
+ endif # QT_FONTS
+ 
+-ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
++ifeq ($(BR2_PACAKGE_QT_FONT_TRUETYPE),y)
+ define QT_INSTALL_TARGET_FONTS_TTF
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
