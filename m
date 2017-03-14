@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Mar 2017 22:20:24 +0100
-Subject: [Buildroot] binutils now adds sysroot for ld -rpath search
-In-Reply-To: <1489484038.1572.7.camel@embedded.rocks>
-References: <1489484038.1572.7.camel@embedded.rocks>
-Message-ID: <20170314222024.7fe9af37@free-electrons.com>
+Date: Tue, 14 Mar 2017 22:21:36 +0100
+Subject: [Buildroot] [PATCH] libscrypt: -fPIC is needed to build for MIPS
+In-Reply-To: <20170314154002.43673-1-Vincent.Riera@imgtec.com>
+References: <20170314154002.43673-1-Vincent.Riera@imgtec.com>
+Message-ID: <20170314222136.3c33c3dd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Mar 2017 10:33:58 +0100, J?rg Krause wrote:
+On Tue, 14 Mar 2017 15:40:02 +0000, Vicente Olivert Riera wrote:
 
-> After a discussion with Brad King on the CMake issue tracker [1] about
-> how the linker should handle -rpath we agreed that ld should add the
-> sysroot when searching for files (but not when setting the RPATH header
-> value).
-> 
-> I picked up a five years old patch from the binutils mailing list [2]
-> which already proposed the change, but was not submitted then.
-> 
-> I resend the patch [3] and this time Alan Modra accepted the change. He
-> submitted two patches [4,5] which will add the sysroot to -rpath?for
-> absolute paths.
+> +# -fPIC is needed to build for MIPS
+> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+> +LIBSCRYPT_CFLAGS += -fPIC
+> +endif
 
-Aaah indeed. I also recently looked at some package that was failing to
-build because -rpath /usr/lib was passed. And then I realized that
-things were clunky: what if you really a RPATH to be encoded in the
-generated binary, but don't want this path to be looked at on the build
-machine during the cross-compilation.
+This is not really the proper fix, because:
 
-Your patch solves exactly that. I guess we'll have to integrate it in
-Buildroot as well, but we will still have issues with external
-toolchains, sadly :-/
+ 1. -fPIC is not only needed for MIPS.
 
-Thanks a lot for this work!
+ 2. The Makefile already passes -fPIC, but it gets overridden because
+    Buildroot passes its own CFLAGS.
+
+So I believe the patch proposed by Stefan S?rensen at
+http://patchwork.ozlabs.org/patch/738605/ is a more appropriate
+solution.
+
+Thanks!
 
 Thomas
 -- 
