@@ -1,59 +1,101 @@
-From: Camden Mannett <camden.mannett@gmail.com>
-Date: Tue, 14 Mar 2017 13:02:48 +0000
-Subject: [Buildroot] journald broken
-In-Reply-To: <CAABucjseObERPwO_oKN9YwCKZ_bLzWspFXzj3WER7LR1FYtx+Q@mail.gmail.com>
-References: <CAABucjseObERPwO_oKN9YwCKZ_bLzWspFXzj3WER7LR1FYtx+Q@mail.gmail.com>
-Message-ID: <CAABucjtD72=rtgFLy7A6n2BwbxYsiiZuAaFprS94kqTRx0zm3g@mail.gmail.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Tue, 14 Mar 2017 14:48:04 +0100
+Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
+In-Reply-To: <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
+References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
+ <20161004163555.7c8af28f@free-electrons.com>
+ <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
+ <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
+ <20170313133220.62892a21@free-electrons.com>
+ <216f6108-da26-92cc-8177-07117d20092c@andin.de>
+ <20170313163306.GA3680@free.fr> <20170314091615.2de4a05b@free-electrons.com>
+ <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
+Message-ID: <180611cf-c61b-736d-c753-9df57bb29bc7@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My mistake, the 'Volatile' value should have been lower-case.  It works as
-expected now.
+Hi again,
 
----------- Forwarded message ---------
-From: Camden Mannett <camden.mannett@gmail.com>
-Date: Tue, 14 Mar 2017 at 12:16
-Subject: journald broken
-To: buildroot at busybox.net <buildroot@busybox.net>
+I cannot confirm that fakeroot 1.21 solves the problem. What works is 
+going back to 1.18.4 or using the packaged fakeroot of my host 
+(1.20-3ubuntu2).
+
+To describe the issue again, the problem is doing 'cp -a' in the 
+fakeroot environment (genimage does this, so I cant easily change this).
+However, I'm not so sure if what so far worked is to be expected. After 
+all, -a means --preserve=all.
+
+I have a simple test, running the following script under fakeroot after 
+building a defconfig, which provides a rootfs.tar:
+  rm -rf .tmpdir* rootfs.2.tar
+  mkdir .tmpdir
+  tar -xzf output/images/rootfs.tar -C .tmpdir
+  cp -a .tmpdir .tmpdir2
+  tar -cf rootfs.2.tar -C .tmpdir2 .
+
+When done, a
+tar -tvf rootfs.2.tar
+shows changed permissions for everything and the original owner for files:
+
+drwx------ root/root         0 2017-03-14 13:37 ./
+drwx------ root/root         0 2016-10-06 09:03 ./mnt/
+drwxrwxrwt root/root         0 2017-03-10 14:44 ./tmp/
+drwx------ root/root         0 2017-03-14 13:37 ./tmp/ldconfig/
+-rw------- joe/somegroup     33 2017-03-14 13:37 ./tmp/ldconfig/aux-cache
+drwx------ root/root             0 2017-03-10 14:35 ./tmp/fontconfig/
+...
+
+I tried to apply the patches that Ubuntu has for the host package, but 
+that doesnt help either. What else can I do? Can anybody shed some light 
+on this?
 
 
-Running journalctl results in:
+thanks,
+Andreas
 
-No journal files were found.
--- No entries --
 
-And there is indeed no /var/log/journal directory.  According to dmesg, the
-service seems to have started successfully:
 
-[    2.948694] systemd[1]: Listening on Journal Audit Socket.
-[  OK  ] Listening on Journal Audit Socket.
-[    3.096666] systemd[1]: Listening on Journal Socket.
-[  OK  ] Listening on Journal Socket.
-[    3.466715] systemd[1]: Listening on Journal Socket (/dev/log).
-[  OK  ] Listening on Journal Socket (/dev/log).
-[    3.553396] systemd[1]: Starting Journal Service...
-         Starting Journal Service...
-[    3.889843] systemd-journald[110]: File
-/var/log/journal/71cfe6ec9cf2479db13bf609826dd52d/system.journal corrupted
-or uncleanly shut down, renaming and replacing.
-[    4.278073] systemd[1]: Started Journal Service.
-[  OK  ] Started Journal Service.
-         Starting Flush Journal to Persistent Storage...
-[    4.739929] systemd-journald[110]: Received request to flush runtime
-journal from PID 1
-[  OK  ] Started Flush Journal to Persistent Storage.
 
-As you can see there is an error regarding a corrupted journal (this was
-the first boot, so there was unlikely to be a journal to load), but it was
-apparently replaced - where I don't know as there's no /var/log/journal
-directory.
 
-I've seen an old related bug #7892, and the solution was to set the
-'Storage' key to 'Volatile' in journald.conf.  However that has not worked
-for me.  Does anyone have any suggestions?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170314/180d35f2/attachment.html>
+
+Am 14.03.2017 um 12:04 schrieb Andreas Naumann:
+> Hi,
+>
+>
+> Am 14.03.2017 um 09:16 schrieb Thomas Petazzoni:
+>> Hello,
+>>
+>> On Mon, 13 Mar 2017 17:33:06 +0100, Yann E. MORIN wrote:
+>>
+>>> I had a look at the diff between 1.20.2 (which we have right now) and
+>>> 1.21, and the only noticeable delta is the change of a bufgfer size in
+>>> mesage.h, the rest of the delta being the removal of the generated
+>>> autostuff.
+>>>
+>>> So we can quite safely backport that single change.
+>>
+>> Andreas, could you test Yann's patch? Does it fix your problem?
+>
+> I just did, but unfortunately it does not help. However, even with plain
+> 1.21 I no longer get the correct behaviour. Only thing that helps is
+> going back to 1.18.4.
+> It was late Friday when I thought 1.21 was working, but I may have
+> tested an Ubuntu version of it (1.21-3.1 or so). I will try to track
+> that down.
+>
+> regards,
+> Andreas
+>
+>>
+>> Thanks,
+>>
+>> Thomas
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
