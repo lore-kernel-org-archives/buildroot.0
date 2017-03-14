@@ -1,34 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Mar 2017 23:20:57 +0100
-Subject: [Buildroot] [PATCH] package/libscrypt: Allow the package
- makefile to add -fPIC to CFLAGS
-In-Reply-To: <20170314083608.25519-1-stefan.sorensen@spectralink.com>
-References: <20170314083608.25519-1-stefan.sorensen@spectralink.com>
-Message-ID: <20170314232057.40fcd87a@free-electrons.com>
+Date: Tue, 14 Mar 2017 23:21:12 +0100
+Subject: [Buildroot] [git commit] libgtk3: remove non-existent configure
+	options
+Message-ID: <20170314222152.B79ED82232@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=efce7b65e3dc8aa476993148d62cb6dcfbe7bb81
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Mar 2017 09:36:08 +0100, Stefan S?rensen wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/b25/b256d003d841e492da073788198203e7cbc834cf/
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> ---
->  ...g-options-to-CFLAGS-and-LDFLAGS-variables.patch | 31 ++++++++++++++++++++++
->  package/libscrypt/libscrypt.mk                     |  7 -----
->  2 files changed, 31 insertions(+), 7 deletions(-)
->  create mode 100644 package/libscrypt/0001-Allow-adding-options-to-CFLAGS-and-LDFLAGS-variables.patch
+From config.log:
 
-I've extended the commit log and the patch description, and applied to
-master. Thanks a lot!
+configure: WARNING: unrecognized options: --disable-doc, --disable-docs,
+--disable-documentation, --with-xmlto, --with-fop, --enable-ipv6,
+--enable-gtk2-dependency, --disable-introspection
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Remove non-existent --enable-gtk2-dependency and --disable-introspection
+configure options from libgtk3.mk.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libgtk3/libgtk3.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 048029d..210f3e5 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -20,9 +20,7 @@ LIBGTK3_CONF_ENV = \
+ 
+ LIBGTK3_CONF_OPTS = \
+ 	--disable-glibtest \
+-	--enable-explicit-deps=no \
+-	--enable-gtk2-dependency \
+-	--disable-introspection
++	--enable-explicit-deps=no
+ 
+ # Override pkg-config pkgdatadir variable, it needs the prefix
+ LIBGTK3_MAKE_OPTS = \
