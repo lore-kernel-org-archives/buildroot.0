@@ -1,82 +1,88 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 14 Mar 2017 21:25:44 +0100
-Subject: [Buildroot] [PATCH 2/3] libgtk3: gdk-wayland backend depends on
- libX11
-In-Reply-To: <20170314114628.10147-2-Vincent.Riera@imgtec.com>
-References: <20170314114628.10147-1-Vincent.Riera@imgtec.com>
- <20170314114628.10147-2-Vincent.Riera@imgtec.com>
-Message-ID: <20170314212544.59e4eb22@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Mar 2017 21:34:31 +0100
+Subject: [Buildroot] [PATCH 1/3] leptonica: new package
+In-Reply-To: <1489517067-3155-2-git-send-email-gilles.talis@gmail.com>
+References: <1489517067-3155-1-git-send-email-gilles.talis@gmail.com>
+ <1489517067-3155-2-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20170314213431.53ef9c38@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vicente,
+Hello,
 
-On Tue, 14 Mar 2017 11:46:27 +0000, Vicente Olivert Riera <Vincent.Riera@imgtec.com> wrote:
-
-> Otherwise it will fail to compile with an error like this one:
-> 
-> [Vincent: paths shortened for readability]
-> 
->   CC       gdkglcontext-wayland.lo
-> In file included from /usr/include/epoxy/egl_generated.h:11:0,
->                  from /usr/include/epoxy/egl.h:44,
->                  from gdkglcontext-wayland.h:32,
->                  from gdkglcontext-wayland.c:24:
-> /usr/include/EGL/eglplatform.h:119:22: fatal error: X11/Xlib.h: No such
-> file or directory
->  #include <X11/Xlib.h>
->                       ^
-> compilation terminated.
-> make[6]: *** [Makefile:682: gdkglcontext-wayland.lo] Error 1
-> 
-
-Qt has a similare build failure solved by -DQT_EGL_NO_X11 which is used by
-qt5base-5.8.0/src/platformsupport/eglconvenience/qt_egl_p.h:
-
-#ifdef QT_EGL_NO_X11
-# define MESA_EGL_NO_X11_HEADERS // MESA
-# define WIN_INTERFACE_CUSTOM    // NV
-#endif // QT_EGL_NO_X11
-
-#ifdef QT_EGL_WAYLAND
-# define WAYLAND // NV
-#endif // QT_EGL_WAYLAND
-
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-
-Maybe something similare (define MESA_EGL_NO_X11_HEADERS) works for
-the gdk-wayland backend?
-
-Regards,
-Peter
-
-
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Tue, 14 Mar 2017 19:44:25 +0100, Gilles Talis wrote:
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 > ---
->  package/libgtk3/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-> index 738f865..9e0721d 100644
-> --- a/package/libgtk3/Config.in
-> +++ b/package/libgtk3/Config.in
-> @@ -62,11 +62,15 @@ comment "Wayland GDK backend needs an OpenGL EGL backend provided by mesa3d w/ h
->  	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
->  		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
->  
-> +comment "Wayland GDK backend needs libX11 support"
-> +	depends on !BR2_PACKAGE_XLIB_LIBX11
+>  package/Config.in                |  1 +
+>  package/leptonica/Config.in      |  9 +++++++
+>  package/leptonica/leptonica.hash |  2 ++
+>  package/leptonica/leptonica.mk   | 57 ++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 69 insertions(+)
+
+The change to the DEVELOPERS file for that specific package should be
+in this patch.
+
+I know we asked to do things differently in the past (i.e have the
+change to the DEVELOPERS in a separate commit), but we changed our
+mind, and now want the DEVELOPERS change with the patch adding the
+package.
+
+> diff --git a/package/leptonica/Config.in b/package/leptonica/Config.in
+> new file mode 100644
+> index 0000000..d485344
+> --- /dev/null
+> +++ b/package/leptonica/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_LEPTONICA
+> +	bool "leptonica"
 > +
->  config BR2_PACKAGE_LIBGTK3_WAYLAND
->  	bool "Wayland GDK backend"
->  	default y
->  	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-> +	depends on BR2_PACKAGE_XLIB_LIBX11
->  	select BR2_PACKAGE_WAYLAND
->  	select BR2_PACKAGE_WAYLAND_PROTOCOLS
->  	select BR2_PACKAGE_LIBXKBCOMMON
+
+Unneeded empty line.
+
+There is no toolchain dependency? It builds fine with
+uClibc/musl/glibc, noMMU, static libraries only, etc. ?
+
+Could you test this package with support/scripts/test-pkg ?
+
+> diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+> new file mode 100644
+> index 0000000..5f2da79
+> --- /dev/null
+> +++ b/package/leptonica/leptonica.mk
+> @@ -0,0 +1,57 @@
+> +################################################################################
+> +#
+> +# leptonica
+> +#
+> +################################################################################
+> +
+> +LEPTONICA_VERSION = 1.74.1
+> +LEPTONICA_SITE = http://www.leptonica.org/source
+> +LEPTONICA_LICENSE = BSD-2c
+> +LEPTONICA_LICENSE_FILES = leptonica-license.txt
+
+OK, license verified, looks good to me.
+
+> +LEPTONICA_INSTALL_STAGING = YES
+> +
+> +LEPTONICA_CONF_OPTS += --disable-programs
+> +
+> +ifeq ($(BR2_PACKAGE_GIFLIB),y)
+> +LEPTONICA_DEPENDENCIES += giflib
+
+Please explicitly pass:
+
+LEPTONICA_CONF_OPTS += --with-giflib
+
+here, and same for all other options below.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
