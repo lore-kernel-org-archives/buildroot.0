@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Mar 2017 21:59:36 +0100
-Subject: [Buildroot] [PATCH] zmqpp: update license
-In-Reply-To: <1489501777-6548-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1489501777-6548-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20170314215936.4d3c12f3@free-electrons.com>
+Date: Tue, 14 Mar 2017 22:01:45 +0100
+Subject: [Buildroot] [PATCH] irssi: security bump to version 1.0.2
+In-Reply-To: <20170314150039.9913-1-peter@korsgaard.com>
+References: <20170314150039.9913-1-peter@korsgaard.com>
+Message-ID: <20170314220145.664560df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Mar 2017 19:59:37 +0530, Rahul Bedarkar wrote:
-> Since version 4.1.2, zmqpp is provided under MPLv2.
+On Tue, 14 Mar 2017 16:00:39 +0100, Peter Korsgaard wrote:
+> Fixes CWE-416 (use after free condition during netjoin processing). No CVE
+> assigned yet:
 > 
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  package/zmqpp/zmqpp.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> https://irssi.org/security/irssi_sa_2017_03.txt
 > 
-> diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-> index 18da709..3e35fd7 100644
-> --- a/package/zmqpp/zmqpp.mk
-> +++ b/package/zmqpp/zmqpp.mk
-> @@ -8,7 +8,7 @@ ZMQPP_VERSION = 4.1.2
->  ZMQPP_SITE = $(call github,zeromq,zmqpp,$(ZMQPP_VERSION))
->  ZMQPP_INSTALL_STAGING = YES
->  ZMQPP_DEPENDENCIES = zeromq
-> -ZMQPP_LICENSE = MIT
-> +ZMQPP_LICENSE = MPLv2.0
+> Notice that the 0.8.x series is not believed to be vulnerable to this
+> specific issue. From the advisory:
+> 
+> Affected versions
+> -----------------
+> 
+> Irssi up to and including 1.0.1
+> 
+> We believe Irssi 0.8.21 and prior are not affected since a different
+> code path causes the netjoins to be flushed prior to reaching the use
+> after free condition.
 
-Wow, thanks, well noticed indeed! Patch applied to master.
+So why do you have "security bump" in the commit title ? We're using
+0.8.21, which is not affected by the issue, so this is not a security
+bump IMO, unless I missed something.
 
-And the worst thing is that previous versions were not even under the
-MIT license: they were under LGPLv3 + static linking exception.
-
-Peter: we really want this one in the LTS branch, since 4.1.2 was
-already used in the LTS branch.
-
-Thanks a lot!
+Thanks,
 
 Thomas
 -- 
