@@ -1,194 +1,73 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Wed, 15 Mar 2017 07:32:01 +0100
-Subject: [Buildroot] [PATCH 2/3] tesseract-ocr: new package
-In-Reply-To: <20170314214134.1e4f2fc1@free-electrons.com>
-References: <1489517067-3155-1-git-send-email-gilles.talis@gmail.com>
- <1489517067-3155-3-git-send-email-gilles.talis@gmail.com>
- <20170314214134.1e4f2fc1@free-electrons.com>
-Message-ID: <CAKcgs2zFbOTCtp=w=fE5E=-P9LKppHssU3h0aeG+LC=onTg96A@mail.gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Wed, 15 Mar 2017 07:37:14 +0100
+Subject: [Buildroot] [PATCH 1/2] odroid-mali: fix broken headers.
+In-Reply-To: <20170314225427.390c43ce@free-electrons.com>
+References: <20170313090834.13715-1-daggs@gmx.com>
+ <20170313133345.36d712f4@free-electrons.com>
+ <trinity-929fc1a7-02df-4b8f-b623-1a623d2a9f58-1489414620167@3capp-mailcom-bs04>,
+ <20170314225427.390c43ce@free-electrons.com>
+Message-ID: <trinity-fe2675f8-6575-4221-b2c0-58c922f95d24-1489559834487@3capp-mailcom-bs10>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Greetings,
 
-2017-03-14 21:41 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
+>
 > Hello,
->
-> On Tue, 14 Mar 2017 19:44:26 +0100, Gilles Talis wrote:
->> diff --git a/package/tesseract-ocr-data/Config.in b/package/tesseract-ocr-data/Config.in
->> new file mode 100644
->> index 0000000..6fba5bf
->> --- /dev/null
->> +++ b/package/tesseract-ocr-data/Config.in
->> @@ -0,0 +1,15 @@
->> +menuconfig BR2_PACKAGE_TESSERACT_OCR_DATA
->> +     bool "tesseract-ocr languages training data"
->> +     depends on BR2_PACKAGE_TESSERACT_OCR
->> +     help
->> +       This will install the language training data files for tesseract-ocr
->> +
->> +if BR2_PACKAGE_TESSERACT_OCR_DATA
->> +source "package/tesseract-ocr-data/tesseract-ocr-data-eng/Config.in"
->> +source "package/tesseract-ocr-data/tesseract-ocr-data-fra/Config.in"
->> +source "package/tesseract-ocr-data/tesseract-ocr-data-ger/Config.in"
->> +source "package/tesseract-ocr-data/tesseract-ocr-data-spa/Config.in"
->> +source "package/tesseract-ocr-data/tesseract-ocr-data-chi-sim/Config.in"
->> +source "package/tesseract-ocr-data/tesseract-ocr-data-chi-tra/Config.in"
->> +endif
->
-> I am not sure we want one package per language here, I'll propose a
-> different solution below.
->
->
->> diff --git a/package/tesseract-ocr/Config.in b/package/tesseract-ocr/Config.in
->> new file mode 100644
->> index 0000000..7aa4ca6
->> --- /dev/null
->> +++ b/package/tesseract-ocr/Config.in
->> @@ -0,0 +1,35 @@
->> +comment "tesseract-ocr needs a toolchain w/ threads, C++, gcc >= 4.8 (C++11)"
->
-> Remove the (C++11) comment, and put it like this:
->
-> # gcc 4.8 needed for C++11
-Understood.
-
->
->> +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
->> +        !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->> +
->> +menuconfig BR2_PACKAGE_TESSERACT_OCR
->> +     bool "tesseract-ocr"
->> +     depends on BR2_INSTALL_LIBSTDCPP
->> +     depends on BR2_TOOLCHAIN_HAS_THREADS
->> +     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
->> +     select BR2_PACKAGE_LEPTONICA
->> +     select BR2_PACKAGE_TESSERACT_OCR_DATA
->> +     help
->> +       Tesseract is an OCR (Optical Character Recognition) engine,
->> +       It can be used directly, or (for programmers) using an API.
->> +       It supports a wide variety of languages.
->> +
->> +       https://github.com/tesseract-ocr/tesseract
->> +
->> +if BR2_PACKAGE_TESSERACT_OCR
->> +
->> +config BR2_PACKAGE_TESSERACT_OCR_JPEG
->> +    bool "JPEG support"
->> +    select BR2_PACKAGE_JPEG
->> +    default y
->
-> Indentation of config properties should use one tab, not spaces (fix
-> this throughout the file).
-OK. I was quite sure I used tabs. I will be more cautious next time.
-
->
->> +
->> +config BR2_PACKAGE_TESSERACT_OCR_PNG
->> +    bool "PNG support"
->> +    select BR2_PACKAGE_LIBPNG
->> +    default y
->> +
->> +config BR2_PACKAGE_TESSERACT_OCR_TIFF
->> +    bool "TIFF support"
->> +    select BR2_PACKAGE_TIFF
->
-> Does it really make sense to have sub-options for these, instead of
-> just enabling jpeg, libpng, tiff support when the necessary packages
-> are available?
-OK. Will do it that way.
-
->
->> diff --git a/package/tesseract-ocr/tesseract-ocr.hash b/package/tesseract-ocr/tesseract-ocr.hash
->> new file mode 100644
->> index 0000000..84c5ad9
->> --- /dev/null
->> +++ b/package/tesseract-ocr/tesseract-ocr.hash
->> @@ -0,0 +1,3 @@
->> +# locally computed
->> +sha256  3fe83e06d0f73b39f6e92ed9fc7ccba3ef734877b76aa5ddaaa778fac095d996  tesseract-ocr-3.05.00.tar.gz
->> +
->
-> Useless empty line.
-OK.
-
->
->> diff --git a/package/tesseract-ocr/tesseract-ocr.mk b/package/tesseract-ocr/tesseract-ocr.mk
->> new file mode 100644
->> index 0000000..37ac72f
->> --- /dev/null
->> +++ b/package/tesseract-ocr/tesseract-ocr.mk
->> @@ -0,0 +1,31 @@
->> +################################################################################
->> +#
->> +# tesseract-ocr
->> +#
->> +################################################################################
->> +
->> +TESSERACT_OCR_VERSION = 3.05.00
->> +TESSERACT_OCR_SITE = $(call github,tesseract-ocr,tesseract,$(TESSERACT_OCR_VERSION))
->
-> Here is what you could do for the data files:
->
-> ifeq ($(BR2_PACKAGE_TESSERACT_OCR_DATA_FRENCH),y)
-> TESSERACT_OCR_DATA_FILES += fra.traineddata
-> endif
->
-> ifeq ($(BR2_PACKAGE_TESSERACT_OCR_DATA_SPANISH),y)
-> TESSERACT_OCR_DATA_FILES += spa.traineddata
-> endif
->
-> ...
->
-> TESSERACT_OCR_EXTRA_DOWNLOADS = \
->         $(addprefix https://github.com/tesseract-ocr/tessdata/raw/$(TESSERACT_OCR_DATA_VERSION),\
->                 $(TESSERACT_OCR_DATA_FILES))
->
-> and then use $(DL_DIR)/fra.traineddata the way you want to.
-Understood. Will do that
-
->
->> +TESSERACT_OCR_LICENSE = Apache-2.0
->> +TESSERACT_OCR_LICENSE_FILES = COPYING
->> +
->> +TESSERACT_OCR_AUTORECONF = YES
->
-> A comment that says "Source from github, no configure script provided"
-> would be nice.
-OK.
-
->
->> +
->> +TESSERACT_OCR_DEPENDENCIES += leptonica \
->> +     $(if $(BR2_PACKAGE_TESSERACT_OCR_JPEG),jpeg) \
->> +     $(if $(BR2_PACKAGE_TESSERACT_OCR_PNG),libpng) \
->> +     $(if $(BR2_PACKAGE_TESSERACT_OCR_TIFF),tiff)
->
-> Are libpng/jpeg really optional dependencies? I don't see them being
-> mentioned in configure.ac (but I only had a quick look).
->
->> +TESSERACT_OCR_INSTALL_STAGING = YES
->
-> It installs some libraries?
-Yes it does. It installs both a library and a program
-
->
->> +
->> +TESSERACT_OCR_CONF_ENV += \
->> +    LIBLEPT_HEADERSDIR=$(STAGING_DIR)/usr/include/leptonica
->> +
->> +define TESSERACT_OCR_PRECONFIGURE
->> +    # Autoreconf step fails due to missing m4 directory
->> +    mkdir -p $(@D)/m4
->> +endef
->> +
->> +TESSERACT_OCR_PRE_CONFIGURE_HOOKS += TESSERACT_OCR_PRECONFIGURE
->> +
->> +$(eval $(autotools-package))
->
+> 
+> On Mon, 13 Mar 2017 15:17:00 +0100, daggs wrote:
+> 
+> > yes, I did verified.
+> > what I did encountered (not sure it is a bug), is the following:
+> > 1. checkout a clean buildroot.
+> > 2. run make odroidc2_defconfig.
+> > 3. run make menuconfig
+> >     1. set libc to glibc.
+> >     2. select odroid-mali.
+> >     3. select libepoxy.
+> > 4. run build.
+> 
 > Thanks!
-Thanks for your review!
+> 
+> > the above will fail libepoxy on Xlib.h no such file or directory found.
+> > for that xorg + libX11 needs to be enabled.
+> 
+> Then there is still a problem with odroid-mali, because with the
+> rpi-userland OpenGL ES/EGL provider, libepoxy builds just fine. Try the
+> following defconfig:
+> 
+> BR2_arm=y
+> BR2_cortex_a8=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_RPI_USERLAND=y
+> BR2_PACKAGE_LIBEPOXY=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
+> I've tested your patches, and indeed I've been able to reproduce this
+> issue. It's because they have re-used the mesa3d headers as-is it
+> seems, and therefore MESA_EGL_NO_X11_HEADERS needs to be defined when
+> X11 is not used.
+> 
+> So I guess this would need to be adjust in the pkg-config files
+> installed by odroid-mali... even though that will only work with the
+> packages that then use pkg-config to detect OpenGL ES/EGL.
+> 
+> Adding in Cc Peter Seiderer, who also mentioned MESA_EGL_NO_X11_HEADERS
+> in another thread recently.
+> 
+> Best regards,
+> 
+> Thomas
+
+not sure I follow, I was able to compile libepoxy with odroid-mali without any problem, what issue have you encountered?
+how can I reproduce it?
+
+Thanks,
+
+Dagg.
