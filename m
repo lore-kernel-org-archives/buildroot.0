@@ -1,46 +1,65 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 15 Mar 2017 10:31:53 +0000
-Subject: [Buildroot] [PATCH 2/3] libgtk3: gdk-wayland backend depends on
- libX11
-In-Reply-To: <20170314232256.4dfd5f7d@free-electrons.com>
-References: <20170314114628.10147-1-Vincent.Riera@imgtec.com>
- <20170314114628.10147-2-Vincent.Riera@imgtec.com>
- <20170314172254.367744f2@free-electrons.com>
- <0778ff37-bb18-3b1b-3666-77ca979a9958@imgtec.com>
- <20170314232256.4dfd5f7d@free-electrons.com>
-Message-ID: <0304dc80-56c1-f22c-a5de-72759523ff1c@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Mar 2017 11:48:32 +0100
+Subject: [Buildroot] [PATCH] mariadb: security bump to version 10.1.22
+Message-ID: <20170315104832.6755-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes:
 
-On 14/03/17 22:22, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 14 Mar 2017 16:39:04 +0000, Vicente Olivert Riera wrote:
-> 
->>> This feels weird. Isn't the point of the Wayland backend specifically
->>> to be used with Wayland, and therefore not to depend on anything X.org
->>> related?
->>>
->>> Isn't this a bug in Gtk, rather than something we should fix with an
->>> additional dependency?  
->>
->> maybe the gdk-wayland backend is necessary to run gtk3 apps on a Wayland
->> display server, but it still needs some libX11 bits because the support
->> is not complete. Just guessing :P
-> 
-> With which OpenGL ES/EGL provider did you get this build failure?
+CVE-2017-3302 - C client library for MySQL (libmysqlclient.so) has
+use-after-free defect which can cause crash of applications using that MySQL
+client.
 
-BR2_PACKAGE_MESA3D_OPENGL_EGL
+CVE-2017-3313 - Difficult to exploit vulnerability allows low privileged
+attacker with logon to the infrastructure where MySQL Server executes to
+compromise MySQL Server.  Successful attacks of this vulnerability can
+result in unauthorized access to critical data or complete access to all
+MySQL Server accessible data.
 
-Vincent
+And a number of important, but non-security related fixes:
 
-> 
-> Thanks!
-> 
-> Thomas
-> 
+MDEV-11842: Fix a 10.1.21 regression with failed INSERT, BEFORE INSERT
+triggers, and columns with no default value
+
+MDEV-12075: Fix a 10.1.21 regression in the InnoDB data file extension code
+
+For details, see the release notes:
+https://mariadb.com/kb/en/mariadb/mariadb-10122-release-notes/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mariadb/mariadb.hash | 7 ++-----
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 3d6520f34..afcf37803 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,2 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.21/
+-sha1 f9ccaa9881b98eeef68f4dbcf5ab9653c903819f  mariadb-10.1.21.tar.gz
+-
+-# Locally computed
+-sha256 5a816355781ea22a6c65a436d8162f19bd292ec90e2b7d9499c031ae4a659490  mariadb-10.1.21.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.22/
++sha256 bcb0572e7ad32cea9740a21e9255f733bdf60a5561ffbda317c22dd12b3966ce  mariadb-10.1.22.tar.gz
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index aa4afc5b5..8c7375a3a 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.21
++MARIADB_VERSION = 10.1.22
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
+ MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
+-- 
+2.11.0
