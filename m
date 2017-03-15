@@ -1,79 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 15 Mar 2017 22:18:23 +0100
-Subject: [Buildroot] [PATCH v3] qt: add enable for truetype font
- installation
-In-Reply-To: <1489532236-21401-1-git-send-email-danomimanchego123@gmail.com>
-References: <1489532236-21401-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20170315221823.4c197ea4@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Mar 2017 23:35:49 +0100
+Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
+In-Reply-To: <877f3qs26k.fsf@dell.be.48ers.dk>
+References: <20170313133220.62892a21@free-electrons.com>
+ <216f6108-da26-92cc-8177-07117d20092c@andin.de>
+ <20170313163306.GA3680@free.fr>
+ <20170314091615.2de4a05b@free-electrons.com>
+ <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
+ <180611cf-c61b-736d-c753-9df57bb29bc7@andin.de>
+ <f785c386-075b-ac22-3114-d09a79dbeffc@mind.be>
+ <ece0d310-0f3d-9f1c-e045-70f0f5c4d777@andin.de>
+ <ca4c849a-caa1-05f5-a298-a066fc19591a@mind.be>
+ <651a8b7e-4910-445e-6613-404be75af105@mind.be>
+ <20170315200941.GA3683@free.fr> <877f3qs26k.fsf@dell.be.48ers.dk>
+Message-ID: <20170315233549.189748ec@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Danomi,
+Hello,
 
-On Tue, 14 Mar 2017 18:57:16 -0400, Danomi Manchego <danomimanchego123@gmail.com> wrote:
+On Wed, 15 Mar 2017 21:41:23 +0100, Peter Korsgaard wrote:
 
-> Currently, qt.mk installs DejaVu/Vera TrueType fonts when Qt is configured for
-> freetype support. However, some users may prefer to limit the installed fonts
-> to only Qt's prerendered fonts (micro, fixed, helvetica, etc.). Or, there may
-> be a preference to use seperately installed TrueType fonts. This commit adds
-> a switch to explicitly control the installation of the TrueType fonts, similar
-> to the existing prerendered font enables.
+>  > I know where my vote lies: correctness. ;-)  
 > 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> 
-> ---
-> 
-> Changes V2->V3:
->   - Add back some detail to commit log. (Thomas Petazzoni)
-> 
-> Changes V1->V2:
->   - Drop detailed explanation from commit log. (Peter Seiderer)
->   - Rename option from ..DEJAVU to ..TRUETYPE. (Peter Seiderer)
->   - Replace depends-on test with equivalent but more verbose expression. (Peter Seiderer)
-> ---
->  package/qt/Config.in | 8 ++++++++
->  package/qt/qt.mk     | 2 +-
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qt/Config.in b/package/qt/Config.in
-> index fa5235d..294df0e 100644
-> --- a/package/qt/Config.in
-> +++ b/package/qt/Config.in
-> @@ -185,6 +185,14 @@ endmenu
->  
->  menu "Fonts"
->  
-> +config BR2_PACAKGE_QT_FONT_TRUETYPE
-> +	bool "dejavu/vera"
-> +	depends on BR2_PACKAGE_QT_QTFREETYPE || BR2_PACKAGE_QT_SYSTEMFREETYPE
-> +	default y
-> +
-> +comment "dejavu/vera fonts need freetype support"
-> +	depends on !BR2_PACKAGE_QT_QTFREETYPE && !BR2_PACKAGE_QT_SYSTEMFREETYPE
-> +
->  config BR2_PACKAGE_QT_FONT_MICRO
->  	bool "micro"
->  	default y
-> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-> index e82bdfe8..cc478f1 100644
-> --- a/package/qt/qt.mk
-> +++ b/package/qt/qt.mk
-> @@ -689,7 +689,7 @@ QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
->  endif
->  endif # QT_FONTS
->  
-> -ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
-> +ifeq ($(BR2_PACAKGE_QT_FONT_TRUETYPE),y)
->  define QT_INSTALL_TARGET_FONTS_TTF
->  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
->  	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+> Yes, naturally. I vaguely remember something about an earlier discussion
+> related to host-acl/host-attr, but that was perhaps about pseudo?
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+I think it was about host-libcap, not host-acl/host-attr. See commit
+c994c3db1f7d76b5dfe79e3b1133d66fdd06212c.
 
-And thanks for the additional effort rewriting the commit message ;-)
-
-Regards,
-Peter
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
