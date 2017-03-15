@@ -1,46 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Mar 2017 21:41:58 +0100
-Subject: [Buildroot] [git commit] mbedtls: security bump to verison 2.4.2
-Message-ID: <20170315205804.86FB282556@busybox.osuosl.org>
+Date: Wed, 15 Mar 2017 21:43:54 +0100
+Subject: [Buildroot] [git commit] lttng-tools: bump version to 2.9.4
+Message-ID: <20170315205804.9ECE9825BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=465ce2ea73cc1d98972cde45114f7b0e35e32ff2
+commit: https://git.buildroot.net/buildroot/commit/?id=f3787aaf6bc356a32ef33268f8e6bd8bd85ec3c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2017-2784 - Freeing of memory allocated on stack when validating a
-public key with a secp224k1 curve.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lttng-tools/lttng-tools.hash | 6 +++---
+ package/lttng-tools/lttng-tools.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 5f9786c..70a0dc5 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,2 +1,2 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.3.0-2.1.5-and-1.3.17-released
--sha256	c1c3559ed39f7a1b1550c4cf4ccb918bf239301a3311d98dda92bed8a25b7f0d	mbedtls-2.4.0-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.4.2-2.1.7-and-1.3.19-released
-+sha256	17dd98af7478aadacc480c7e4159e447353b5b2037c1b6d48ed4fd157fb1b018	mbedtls-2.4.2-apache.tgz
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 198879d..a571ed0 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index 4f3d283..114bd0c 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,3 +1,3 @@
+-# From http://lttng.org/files/lttng-tools/lttng-tools-2.9.3.tar.bz2.{md5,sha1}
+-md5 19fdcc5e9c307ef66581a2743a08a541  lttng-tools-2.9.3.tar.bz2
+-sha1 78fdc9b7fd15f33ac60ea08320d679ce66e18bf7  lttng-tools-2.9.3.tar.bz2
++# From http://lttng.org/files/lttng-tools/lttng-tools-2.9.4.tar.bz2.{md5,sha1}
++md5 10f47abfa214b167580358388428770d  lttng-tools-2.9.4.tar.bz2
++sha1 ab1945fd36b30f445eb5c83f199b011d42525612  lttng-tools-2.9.4.tar.bz2
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 2df2dff..5af0ab3 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.4.0
-+MBEDTLS_VERSION = 2.4.2
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+-LTTNG_TOOLS_VERSION = 2.9.3
++LTTNG_TOOLS_VERSION = 2.9.4
+ LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_LICENSE = GPLv2+, LGPLv2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
