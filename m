@@ -1,44 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Mar 2017 21:43:54 +0100
-Subject: [Buildroot] [git commit] lttng-tools: bump version to 2.9.4
-Message-ID: <20170315205804.9ECE9825BF@busybox.osuosl.org>
+Date: Wed, 15 Mar 2017 21:57:44 +0100
+Subject: [Buildroot] [git commit] json-glib: bump version to 1.2.6
+Message-ID: <20170315205804.A95DA7FAF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3787aaf6bc356a32ef33268f8e6bd8bd85ec3c6
+commit: https://git.buildroot.net/buildroot/commit/?id=dde97d483278c2bca07af5467b6c477d00544cb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lttng-tools/lttng-tools.hash | 6 +++---
- package/lttng-tools/lttng-tools.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/json-glib/json-glib.hash | 4 ++--
+ package/json-glib/json-glib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
-index 4f3d283..114bd0c 100644
---- a/package/lttng-tools/lttng-tools.hash
-+++ b/package/lttng-tools/lttng-tools.hash
-@@ -1,3 +1,3 @@
--# From http://lttng.org/files/lttng-tools/lttng-tools-2.9.3.tar.bz2.{md5,sha1}
--md5 19fdcc5e9c307ef66581a2743a08a541  lttng-tools-2.9.3.tar.bz2
--sha1 78fdc9b7fd15f33ac60ea08320d679ce66e18bf7  lttng-tools-2.9.3.tar.bz2
-+# From http://lttng.org/files/lttng-tools/lttng-tools-2.9.4.tar.bz2.{md5,sha1}
-+md5 10f47abfa214b167580358388428770d  lttng-tools-2.9.4.tar.bz2
-+sha1 ab1945fd36b30f445eb5c83f199b011d42525612  lttng-tools-2.9.4.tar.bz2
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 2df2dff..5af0ab3 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
+index 2a56939..bf85770 100644
+--- a/package/json-glib/json-glib.hash
++++ b/package/json-glib/json-glib.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.2.sha256sum
+-sha256	ea128ab52a824fcd06e5448fbb2bd8d9a13740d51c66d445828edba71321a621	json-glib-1.2.2.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.6.sha256sum
++sha256 958fa59909ef28399c811aff29a5340b330b20660ca3586b4c5aa3a53997776c  json-glib-1.2.6.tar.xz
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index 305c9ac..8b8a3cf2 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LTTNG_TOOLS_VERSION = 2.9.3
-+LTTNG_TOOLS_VERSION = 2.9.4
- LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
- LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- LTTNG_TOOLS_LICENSE = GPLv2+, LGPLv2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
+ JSON_GLIB_VERSION_MAJOR = 1.2
+-JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).2
++JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
+ JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
+ JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
+ JSON_GLIB_LICENSE = LGPLv2.1+
