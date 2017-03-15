@@ -1,76 +1,44 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Wed, 15 Mar 2017 19:23:33 +0200
-Subject: [Buildroot] cmake is not building anymore
-In-Reply-To: <372249453.14780914.1489593932103.JavaMail.zimbra@datacom.ind.br>
-References: <1489417019.20145.214.camel@linux.intel.com>
- <1489420484.20145.218.camel@linux.intel.com>
- <544671010.14659188.1489539751977.JavaMail.zimbra@datacom.ind.br>
- <1489590657.19767.1.camel@linux.intel.com>
- <372249453.14780914.1489593932103.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <1489598613.19767.6.camel@linux.intel.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Mar 2017 15:08:36 -0300
+Subject: [Buildroot] [PATCH] mbedtls: security bump to verison 2.4.2
+Message-ID: <20170315180836.29157-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2017-03-15 at 13:05 -0300, Carlos Santos wrote:
-> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-> > To: "Carlos Santos" <casantos@datacom.ind.br>
-> > Cc: "buildroot" <buildroot@busybox.net>
-> > Sent: Wednesday, March 15, 2017 12:10:57 PM
-> > Subject: Re: [Buildroot] cmake is not building anymore
-> > On Tue, 2017-03-14 at 22:02 -0300, Carlos Santos wrote:
-> > $ git clean -xdf
-> > # I suppose you agree this is more stronger than make clean
-> > 
-> > $ make defconfig
-> > $ make
-> > 
-> > --- 8< --- 8< ---
-> > 
-> > [ 65%] Linking C static library libcmcurl.a
-> > 
-> > In file included from .../output/build/host-cmake-
-> > 3.6.3/Utilities/cmlibarchive/libarchive/archive_write_set_format_zip
-> > .c:5
-> > 2:0:
-> > .../output/build/host-cmake-
-> > 3.6.3/Utilities/cmlibarchive/libarchive/archive_cryptor_private.h:10
-> > 7:17
-> > : error: field ?ctx? has incomplete type
-> > ??EVP_CIPHER_CTX ctx;
-> > ?????????????????^~~
-> > --- 8< --- 8< ---
-> > 
-> > 100% reproducible
-> 
-> If you use "make BR2_JLEVEL=1" the compilation will stop at the first
-> error and it will be easier to identify the cause.
+Fixes:
+CVE-2017-2784 - Freeing of memory allocated on stack when validating a
+public key with a secp224k1 curve.
 
-This is *first* error.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->  I guess you don't have the openssl-dev package installed on the host
-> machine neither built host-openssl in buildroot, since EVP_CIPHER_CTX
-> is defined in openssl/ossl_typ.h.
-
-It is installed.
-
-$ dpkg -l \*ssl-dev
-Desired=Unknown/Install/Remove/Purge/Hold
-| Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-
-aWait/Trig-pend
-|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
-||/ Name???????????????????Version??????????Architecture?????Description
-+++-======================-================-================-
-==================================================
-...
-ii??libcurl4-openssl-dev:a 7.52.1-3?????????amd64????????????development 
-files and documentation for libcurl (O
-...
-ii??libssl-dev:amd64???????1.1.0e-1?????????amd64????????????Secure
-Sockets Layer toolkit - development files
-
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 5f9786c..70a0dc5 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,2 +1,2 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.3.0-2.1.5-and-1.3.17-released
+-sha256	c1c3559ed39f7a1b1550c4cf4ccb918bf239301a3311d98dda92bed8a25b7f0d	mbedtls-2.4.0-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.4.2-2.1.7-and-1.3.19-released
++sha256	17dd98af7478aadacc480c7e4159e447353b5b2037c1b6d48ed4fd157fb1b018	mbedtls-2.4.2-apache.tgz
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 198879d..a571ed0 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.4.0
++MBEDTLS_VERSION = 2.4.2
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
 -- 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+2.10.2
