@@ -1,62 +1,42 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 15 Mar 2017 08:45:00 +0100
-Subject: [Buildroot] binutils now adds sysroot for ld -rpath search
-In-Reply-To: <20170314222024.7fe9af37@free-electrons.com>
-References: <1489484038.1572.7.camel@embedded.rocks>
- <20170314222024.7fe9af37@free-electrons.com>
-Message-ID: <1489563900.12464.2.camel@embedded.rocks>
+From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Date: Wed, 15 Mar 2017 09:00:46 +0100
+Subject: [Buildroot] [PATCH v3 3/3] Add defconfig for MIPS Creator ci40
+In-Reply-To: <6fd775e5-93f9-5606-1701-5a3a0e48f14d@imgtec.com>
+References: <1488202681-9744-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
+ <1488202681-9744-3-git-send-email-abhimanyu.vishwakarma@imgtec.com>
+ <85ee8f03-2340-db12-593a-3914f3bac30e@mind.be>
+ <6fd775e5-93f9-5606-1701-5a3a0e48f14d@imgtec.com>
+Message-ID: <35a1983c-b746-e939-d694-6a63619a2760@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Abhi,
 
-On Tue, 2017-03-14 at 22:20 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 14 Mar 2017 10:33:58 +0100, J?rg Krause wrote:
-> 
-> > After a discussion with Brad King on the CMake issue tracker [1]
-> > about
-> > how the linker should handle -rpath we agreed that ld should add
-> > the
-> > sysroot when searching for files (but not when setting the RPATH
-> > header
-> > value).
-> > 
-> > I picked up a five years old patch from the binutils mailing list
-> > [2]
-> > which already proposed the change, but was not submitted then.
-> > 
-> > I resend the patch [3] and this time Alan Modra accepted the
-> > change. He
-> > submitted two patches [4,5] which will add the sysroot to
-> > -rpath?for
-> > absolute paths.
-> 
-> Aaah indeed. I also recently looked at some package that was failing
-> to
-> build because -rpath /usr/lib was passed. And then I realized that
-> things were clunky: what if you really a RPATH to be encoded in the
-> generated binary, but don't want this path to be looked at on the
-> build
-> machine during the cross-compilation.
-> 
-> Your patch solves exactly that. I guess we'll have to integrate it in
-> Buildroot as well, but we will still have issues with external
-> toolchains, sadly :-/
+On 15.03.2017 08:06, Abhimanyu V wrote:
+> On Tuesday 14 March 2017 02:27 PM, Arnout Vandecappelle wrote:
+>>
 
-For now! But someday in the future all toolchains will use binutils at
-least 2.29 (which will have the patch).
+>>
+>>   Another option is to ask your kernel developers to use a FIT image
+>> as the
+>> uImage in linux arch/mips/boot/Makefile. For now, however, your
+>> current solution
+>> is OK for Buildroot.
+> Yes this is something i also had in my mind, i will start the discussion
+> with the team which manage this
+> repo. Once we have this solution in place i will update it in follow up
+> patch.
 
-> Thanks a lot for this work!
-> 
 
-You're welcome! I just wanted to understand what the issue with rpath
-is. I'm glad it will cause less trouble (when all toolchains are
-updated).
+We've got fit image support available upstream now:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/arch/mips/boot?id=cf2a5e0bb4c66e8c43caf9f1be93a1bd7fd07b17
 
-Best regards,
-J?rg
+This patch should be easy to backport, and the patch below will be 
+useful as a reference on how to update your platform code:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/arch/mips/?id=eed0eabd12ef061821cbfa20d903476e07645320
+
+Marcin
