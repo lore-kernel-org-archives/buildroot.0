@@ -1,60 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Mar 2017 13:37:09 +0100
-Subject: [Buildroot] [git commit] pax-utils: bump version to 1.2.2
-Message-ID: <20170315123843.C7F15817D4@busybox.osuosl.org>
+Date: Wed, 15 Mar 2017 13:37:47 +0100
+Subject: [Buildroot] [git commit] jasper: add upstream security fix
+Message-ID: <20170315123843.E44F9817D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c96d7991ca39767c84472fb8875b236d89fb3e4
+commit: https://git.buildroot.net/buildroot/commit/?id=76da579431a78875afeaeda76e459aca69e85d36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now the code checks for PR_SET_NO_NEW_PRIVS before using it, so the kernel
-headers dependency can be removed.
+Fixes a NULL Pointer Dereference jp2_encode:
+
+https://github.com/mdadams/jasper/issues/120
+
+No CVE assigned yet.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pax-utils/Config.in      | 4 ----
- package/pax-utils/pax-utils.hash | 2 +-
- package/pax-utils/pax-utils.mk   | 2 +-
- 3 files changed, 2 insertions(+), 6 deletions(-)
+ ...ck-in-the-JP2-encoder-to-ensure-that-the-.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/pax-utils/Config.in b/package/pax-utils/Config.in
-index e61d9b3..58100e4 100644
---- a/package/pax-utils/Config.in
-+++ b/package/pax-utils/Config.in
-@@ -1,11 +1,7 @@
- config BR2_PACKAGE_PAX_UTILS
- 	bool "pax-utils"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5 # needs PR_SET_NO_NEW_PRIVS
- 	help
- 	  ELF related utils for ELF 32/64 binaries that can check files
- 	  for security relevant properties.
- 
- 	  http://www.gentoo.org/proj/en/hardened/pax-utils.xml
--
--comment "pax-utils needs a toolchain w/ headers >= 3.5"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-diff --git a/package/pax-utils/pax-utils.hash b/package/pax-utils/pax-utils.hash
-index 399bae4..c755896 100644
---- a/package/pax-utils/pax-utils.hash
-+++ b/package/pax-utils/pax-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	796860fbd48c5f811e699e8492dc1110459bad0a62efa8d346b74a4f6f556414	pax-utils-1.1.4.tar.xz
-+sha256	7f4a7f8db6b4743adde7582fa48992ad01776796fcde030683732f56221337d9	pax-utils-1.2.2.tar.xz
-diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
-index 8d5f3ee..35ea8e8 100644
---- a/package/pax-utils/pax-utils.mk
-+++ b/package/pax-utils/pax-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAX_UTILS_VERSION = 1.1.4
-+PAX_UTILS_VERSION = 1.2.2
- PAX_UTILS_SITE = http://distfiles.gentoo.org/distfiles
- PAX_UTILS_SOURCE = pax-utils-$(PAX_UTILS_VERSION).tar.xz
- PAX_UTILS_LICENSE = GPLv2
+diff --git a/package/jasper/0003-Added-a-check-in-the-JP2-encoder-to-ensure-that-the-.patch b/package/jasper/0003-Added-a-check-in-the-JP2-encoder-to-ensure-that-the-.patch
+new file mode 100644
+index 0000000..16a3e75
+--- /dev/null
++++ b/package/jasper/0003-Added-a-check-in-the-JP2-encoder-to-ensure-that-the-.patch
+@@ -0,0 +1,30 @@
++From 58ba0365d911b9f9dd68e9abf826682c0b4f2293 Mon Sep 17 00:00:00 2001
++From: Michael Adams <mdadams@ece.uvic.ca>
++Date: Mon, 6 Mar 2017 08:06:54 -0800
++Subject: [PATCH] Added a check in the JP2 encoder to ensure that the image to
++ be coded has at least one component.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/libjasper/jp2/jp2_enc.c | 5 +++++
++ 1 files changed, 1 insertions(+), 0 deletions(-)
++
++diff --git a/src/libjasper/jp2/jp2_enc.c b/src/libjasper/jp2/jp2_enc.c
++index 9a5e106..af4d9a4 100644
++--- a/src/libjasper/jp2/jp2_enc.c
+++++ b/src/libjasper/jp2/jp2_enc.c
++@@ -115,6 +115,11 @@ int jp2_encode(jas_image_t *image, jas_stream_t *out, const char *optstr)
++ 	iccstream = 0;
++ 	iccprof = 0;
++ 
+++	if (jas_image_numcmpts(image) < 1) {
+++		jas_eprintf("image must have@least one component\n");
+++		goto error;
+++	}
+++
++ 	allcmptssame = 1;
++ 	sgnd = jas_image_cmptsgnd(image, 0);
++ 	prec = jas_image_cmptprec(image, 0);
++-- 
++2.11.0
++
