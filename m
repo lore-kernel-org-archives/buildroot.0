@@ -1,91 +1,143 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 15 Mar 2017 15:55:08 -0300 (BRT)
-Subject: [Buildroot] cmake is not building anymore
-In-Reply-To: <1489598613.19767.6.camel@linux.intel.com>
-References: <1489417019.20145.214.camel@linux.intel.com>
- <1489420484.20145.218.camel@linux.intel.com>
- <544671010.14659188.1489539751977.JavaMail.zimbra@datacom.ind.br>
- <1489590657.19767.1.camel@linux.intel.com>
- <372249453.14780914.1489593932103.JavaMail.zimbra@datacom.ind.br>
- <1489598613.19767.6.camel@linux.intel.com>
-Message-ID: <744747071.14828951.1489604108907.JavaMail.zimbra@datacom.ind.br>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 15 Mar 2017 20:07:41 +0100
+Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
+In-Reply-To: <ece0d310-0f3d-9f1c-e045-70f0f5c4d777@andin.de>
+References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
+ <20161004163555.7c8af28f@free-electrons.com>
+ <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
+ <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
+ <20170313133220.62892a21@free-electrons.com>
+ <216f6108-da26-92cc-8177-07117d20092c@andin.de>
+ <20170313163306.GA3680@free.fr> <20170314091615.2de4a05b@free-electrons.com>
+ <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
+ <180611cf-c61b-736d-c753-9df57bb29bc7@andin.de>
+ <f785c386-075b-ac22-3114-d09a79dbeffc@mind.be>
+ <ece0d310-0f3d-9f1c-e045-70f0f5c4d777@andin.de>
+Message-ID: <ca4c849a-caa1-05f5-a298-a066fc19591a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "buildroot" <buildroot@busybox.net>
-> Sent: Wednesday, March 15, 2017 2:23:33 PM
-> Subject: Re: [Buildroot] cmake is not building anymore
 
-> On Wed, 2017-03-15 at 13:05 -0300, Carlos Santos wrote:
->> > From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
->> > To: "Carlos Santos" <casantos@datacom.ind.br>
->> > Cc: "buildroot" <buildroot@busybox.net>
->> > Sent: Wednesday, March 15, 2017 12:10:57 PM
->> > Subject: Re: [Buildroot] cmake is not building anymore
->> > On Tue, 2017-03-14 at 22:02 -0300, Carlos Santos wrote:
->> > $ git clean -xdf
->> > # I suppose you agree this is more stronger than make clean
->> > 
->> > $ make defconfig
->> > $ make
->> > 
->> > --- 8< --- 8< ---
->> > 
->> > [ 65%] Linking C static library libcmcurl.a
->> > 
->> > In file included from .../output/build/host-cmake-
->> > 3.6.3/Utilities/cmlibarchive/libarchive/archive_write_set_format_zip
->> > .c:5
->> > 2:0:
->> > .../output/build/host-cmake-
->> > 3.6.3/Utilities/cmlibarchive/libarchive/archive_cryptor_private.h:10
->> > 7:17
->> > : error: field ?ctx? has incomplete type
->> > ??EVP_CIPHER_CTX ctx;
->> > ?????????????????^~~
->> > --- 8< --- 8< ---
->> > 
->> > 100% reproducible
->> 
->> If you use "make BR2_JLEVEL=1" the compilation will stop at the first
->> error and it will be easier to identify the cause.
-> 
-> This is *first* error.
-> 
->>  I guess you don't have the openssl-dev package installed on the host
->> machine neither built host-openssl in buildroot, since EVP_CIPHER_CTX
->> is defined in openssl/ossl_typ.h.
-> 
-> It is installed.
-> 
-> $ dpkg -l \*ssl-dev
-> Desired=Unknown/Install/Remove/Purge/Hold
->| Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-
-> aWait/Trig-pend
->|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
->||/ Name???????????????????Version??????????Architecture?????Description
-> +++-======================-================-================-
-> ==================================================
-> ...
-> ii??libcurl4-openssl-dev:a 7.52.1-3?????????amd64????????????development
-> files and documentation for libcurl (O
-> ...
-> ii??libssl-dev:amd64???????1.1.0e-1?????????amd64????????????Secure
-> Sockets Layer toolkit - development files
-> 
-> --
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Intel Finland Oy
 
-Ouch! Does it build using host-openssl, instead?
+On 15-03-17 09:17, Andreas Naumann wrote:
+> Hi Arnout,
+> 
+> Am 15.03.2017 um 01:20 schrieb Arnout Vandecappelle:
+>>
+>>
+>>  For the record, I can reproduce this on my side. I just do "fakeroot
+>> /bin/bash", then do the commands from the shell. Even an ls -l of the copied
+>> files within the fakeroot shell already shows the "arnout" instead of "root"
+>> user. My host fakeroot (Debian 1.21-3.1).
+> So are you saying you see this behaviour with your host fakeroot?
+
+ That was only half a sentence, it should have been:
+
+My host fakeroot (Debian 1.21-3.1) doesn't show the problem.
+
+> 
+>>
+>>  I have also tried removing the ac_cv_header_sys_capability_h=y, that doesn't
+>> make a difference.
+>>
+>>  I have not yet tried applying the Debian patches to the Buildroot-built
+>> fakeroot.
+> I have done this with the Ubuntu patches for 1.20.2 and Debian patches for
+> 1.21-3.1 to no avail.
+
+ My point was to double-check these things, since sometimes issues like this are
+environment related.
+
+ Regards,
+ Arnout
+
+> 
+> 
+> thanks and regards,
+> Andreas
+> 
+> 
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>>
+>>> When done, a
+>>> tar -tvf rootfs.2.tar
+>>> shows changed permissions for everything and the original owner for files:
+>>>
+>>> drwx------ root/root         0 2017-03-14 13:37 ./
+>>> drwx------ root/root         0 2016-10-06 09:03 ./mnt/
+>>> drwxrwxrwt root/root         0 2017-03-10 14:44 ./tmp/
+>>> drwx------ root/root         0 2017-03-14 13:37 ./tmp/ldconfig/
+>>> -rw------- joe/somegroup     33 2017-03-14 13:37 ./tmp/ldconfig/aux-cache
+>>> drwx------ root/root             0 2017-03-10 14:35 ./tmp/fontconfig/
+>>> ...
+>>>
+>>> I tried to apply the patches that Ubuntu has for the host package, but that
+>>> doesnt help either. What else can I do? Can anybody shed some light on this?
+>>>
+>>>
+>>> thanks,
+>>> Andreas
+>>>
+>>>
+>>>
+>>>
+>>>
+>>>
+>>> Am 14.03.2017 um 12:04 schrieb Andreas Naumann:
+>>>> Hi,
+>>>>
+>>>>
+>>>> Am 14.03.2017 um 09:16 schrieb Thomas Petazzoni:
+>>>>> Hello,
+>>>>>
+>>>>> On Mon, 13 Mar 2017 17:33:06 +0100, Yann E. MORIN wrote:
+>>>>>
+>>>>>> I had a look at the diff between 1.20.2 (which we have right now) and
+>>>>>> 1.21, and the only noticeable delta is the change of a bufgfer size in
+>>>>>> mesage.h, the rest of the delta being the removal of the generated
+>>>>>> autostuff.
+>>>>>>
+>>>>>> So we can quite safely backport that single change.
+>>>>>
+>>>>> Andreas, could you test Yann's patch? Does it fix your problem?
+>>>>
+>>>> I just did, but unfortunately it does not help. However, even with plain
+>>>> 1.21 I no longer get the correct behaviour. Only thing that helps is
+>>>> going back to 1.18.4.
+>>>> It was late Friday when I thought 1.21 was working, but I may have
+>>>> tested an Ubuntu version of it (1.21-3.1 or so). I will try to track
+>>>> that down.
+>>>>
+>>>> regards,
+>>>> Andreas
+>>>>
+>>>>>
+>>>>> Thanks,
+>>>>>
+>>>>> Thomas
+>>>>>
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
