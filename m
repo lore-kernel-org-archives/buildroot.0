@@ -1,73 +1,77 @@
-From: daggs <daggs@gmx.com>
-Date: Wed, 15 Mar 2017 07:37:14 +0100
-Subject: [Buildroot] [PATCH 1/2] odroid-mali: fix broken headers.
-In-Reply-To: <20170314225427.390c43ce@free-electrons.com>
-References: <20170313090834.13715-1-daggs@gmx.com>
- <20170313133345.36d712f4@free-electrons.com>
- <trinity-929fc1a7-02df-4b8f-b623-1a623d2a9f58-1489414620167@3capp-mailcom-bs04>,
- <20170314225427.390c43ce@free-electrons.com>
-Message-ID: <trinity-fe2675f8-6575-4221-b2c0-58c922f95d24-1489559834487@3capp-mailcom-bs10>
+From: Abhimanyu V <abhimanyu.v@imgtec.com>
+Date: Wed, 15 Mar 2017 12:20:21 +0530
+Subject: [Buildroot] [PATCH v3 1/3] uccp420wlan: new package
+In-Reply-To: <47099025-ebf9-b9d5-f26e-5206b0ec93eb@mind.be>
+References: <1488202681-9744-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
+ <47099025-ebf9-b9d5-f26e-5206b0ec93eb@mind.be>
+Message-ID: <b3650736-85be-0003-157e-c3744adf4d39@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Thankyou Arnout for review!
 
+
+On Tuesday 14 March 2017 02:34 PM, Arnout Vandecappelle wrote:
 >
-> Hello,
-> 
-> On Mon, 13 Mar 2017 15:17:00 +0100, daggs wrote:
-> 
-> > yes, I did verified.
-> > what I did encountered (not sure it is a bug), is the following:
-> > 1. checkout a clean buildroot.
-> > 2. run make odroidc2_defconfig.
-> > 3. run make menuconfig
-> >     1. set libc to glibc.
-> >     2. select odroid-mali.
-> >     3. select libepoxy.
-> > 4. run build.
-> 
-> Thanks!
-> 
-> > the above will fail libepoxy on Xlib.h no such file or directory found.
-> > for that xorg + libX11 needs to be enabled.
-> 
-> Then there is still a problem with odroid-mali, because with the
-> rpi-userland OpenGL ES/EGL provider, libepoxy builds just fine. Try the
-> following defconfig:
-> 
-> BR2_arm=y
-> BR2_cortex_a8=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_RPI_USERLAND=y
-> BR2_PACKAGE_LIBEPOXY=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> I've tested your patches, and indeed I've been able to reproduce this
-> issue. It's because they have re-used the mesa3d headers as-is it
-> seems, and therefore MESA_EGL_NO_X11_HEADERS needs to be defined when
-> X11 is not used.
-> 
-> So I guess this would need to be adjust in the pkg-config files
-> installed by odroid-mali... even though that will only work with the
-> packages that then use pkg-config to detect OpenGL ES/EGL.
-> 
-> Adding in Cc Peter Seiderer, who also mentioned MESA_EGL_NO_X11_HEADERS
-> in another thread recently.
-> 
-> Best regards,
-> 
-> Thomas
-
-not sure I follow, I was able to compile libepoxy with odroid-mali without any problem, what issue have you encountered?
-how can I reproduce it?
-
-Thanks,
-
-Dagg.
+> On 27-02-17 14:37, Abhimanyu V wrote:
+>> From: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+>>
+>> Wifi kernel module and firmware for Imagination explorer RPU
+>>
+>> Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+>> Reviewed-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+>> ---
+>>   Changes v1->v2
+>>    - add hash file
+>>   Changes v2->v3 (Suggested by Arnout)
+>>    - remove patch and bump version
+>>    - add proprietary license file to LICENSE_FILES
+>>    - Fix help text indentation to below 72 columns
+> [snip]
+>> diff --git a/package/uccp420wlan/uccp420wlan.hash b/package/uccp420wlan/uccp420wlan.hash
+>> new file mode 100644
+>> index 0000000..41f60a4
+>> --- /dev/null
+>> +++ b/package/uccp420wlan/uccp420wlan.hash
+>> @@ -0,0 +1,2 @@
+>> +# locally computed hash
+>> +sha256 1d4de62fc842dbab739708cf0d9ebce270fcdf63c1c13ac676cbc253acdaa3bb uccp420wlan-v6.9.1.tar.gz
+>> diff --git a/package/uccp420wlan/uccp420wlan.mk b/package/uccp420wlan/uccp420wlan.mk
+>> new file mode 100644
+>> index 0000000..4676ef3
+>> --- /dev/null
+>> +++ b/package/uccp420wlan/uccp420wlan.mk
+>> @@ -0,0 +1,20 @@
+>> +################################################################################
+>> +#
+>> +# uccp420wlan
+>> +#
+>> +################################################################################
+>> +
+>> +UCCP420WLAN_VERSION = v6.9.1
+>> +UCCP420WLAN_SITE = $(call github,CreatorDev,uccp420wlan,$(UCCP420WLAN_VERSION))
+>> +UCCP420WLAN_LICENSE = GPLv2 (kernel module), proprietary (firmware blob)
+>> +UCCP420WLAN_LICENSE_FILES = COPYING firmware/LICENSE.imagination
+>> +
+>> +define UCCP420WLAN_INSTALL_FIRMWARE
+>> +	mkdir -p $(TARGET_DIR)/lib/firmware/img/uccp420wlan
+>> +	cp $(@D)/firmware/*.ldr $(TARGET_DIR)/lib/firmware/img/uccp420wlan
+>> +endef
+>> +
+>> +UCCP420WLAN_POST_INSTALL_TARGET_HOOKS += UCCP420WLAN_INSTALL_FIRMWARE
+>   Sorry I didn't notice this before: there is no need for a POST_INSTALL_HOOK
+> here, you can just
+>
+> define UCCP420WLAN_INSTALL_TARGET_CMDS
+Thanks, I will update in next patch.
+>
+>   Regards,
+>   Arnout
+>
+>> +
+>> +$(eval $(kernel-module))
+>> +$(eval $(generic-package))
+>>
