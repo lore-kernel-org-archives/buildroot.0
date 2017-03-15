@@ -1,11 +1,11 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Wed, 15 Mar 2017 07:24:38 +0100
-Subject: [Buildroot] [PATCH 1/3] leptonica: new package
-In-Reply-To: <20170314213431.53ef9c38@free-electrons.com>
+Date: Wed, 15 Mar 2017 07:32:01 +0100
+Subject: [Buildroot] [PATCH 2/3] tesseract-ocr: new package
+In-Reply-To: <20170314214134.1e4f2fc1@free-electrons.com>
 References: <1489517067-3155-1-git-send-email-gilles.talis@gmail.com>
- <1489517067-3155-2-git-send-email-gilles.talis@gmail.com>
- <20170314213431.53ef9c38@free-electrons.com>
-Message-ID: <CAKcgs2x1FphH8NHW_-4b-2LCU+2-3rwB8QDSPO01E2hRxuJqAg@mail.gmail.com>
+ <1489517067-3155-3-git-send-email-gilles.talis@gmail.com>
+ <20170314214134.1e4f2fc1@free-electrons.com>
+Message-ID: <CAKcgs2zFbOTCtp=w=fE5E=-P9LKppHssU3h0aeG+LC=onTg96A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,79 +14,181 @@ To: buildroot@busybox.net
 
 Hi Thomas, all,
 
-2017-03-14 21:34 GMT+01:00 Thomas Petazzoni
+2017-03-14 21:41 GMT+01:00 Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com>:
 > Hello,
 >
-> On Tue, 14 Mar 2017 19:44:25 +0100, Gilles Talis wrote:
->> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
->> ---
->>  package/Config.in                |  1 +
->>  package/leptonica/Config.in      |  9 +++++++
->>  package/leptonica/leptonica.hash |  2 ++
->>  package/leptonica/leptonica.mk   | 57 ++++++++++++++++++++++++++++++++++++++++
->>  4 files changed, 69 insertions(+)
+> On Tue, 14 Mar 2017 19:44:26 +0100, Gilles Talis wrote:
+>> diff --git a/package/tesseract-ocr-data/Config.in b/package/tesseract-ocr-data/Config.in
+>> new file mode 100644
+>> index 0000000..6fba5bf
+>> --- /dev/null
+>> +++ b/package/tesseract-ocr-data/Config.in
+>> @@ -0,0 +1,15 @@
+>> +menuconfig BR2_PACKAGE_TESSERACT_OCR_DATA
+>> +     bool "tesseract-ocr languages training data"
+>> +     depends on BR2_PACKAGE_TESSERACT_OCR
+>> +     help
+>> +       This will install the language training data files for tesseract-ocr
+>> +
+>> +if BR2_PACKAGE_TESSERACT_OCR_DATA
+>> +source "package/tesseract-ocr-data/tesseract-ocr-data-eng/Config.in"
+>> +source "package/tesseract-ocr-data/tesseract-ocr-data-fra/Config.in"
+>> +source "package/tesseract-ocr-data/tesseract-ocr-data-ger/Config.in"
+>> +source "package/tesseract-ocr-data/tesseract-ocr-data-spa/Config.in"
+>> +source "package/tesseract-ocr-data/tesseract-ocr-data-chi-sim/Config.in"
+>> +source "package/tesseract-ocr-data/tesseract-ocr-data-chi-tra/Config.in"
+>> +endif
 >
-> The change to the DEVELOPERS file for that specific package should be
-> in this patch.
+> I am not sure we want one package per language here, I'll propose a
+> different solution below.
 >
-> I know we asked to do things differently in the past (i.e have the
-> change to the DEVELOPERS in a separate commit), but we changed our
-> mind, and now want the DEVELOPERS change with the patch adding the
-> package.
-Understood. Will do.
+>
+>> diff --git a/package/tesseract-ocr/Config.in b/package/tesseract-ocr/Config.in
+>> new file mode 100644
+>> index 0000000..7aa4ca6
+>> --- /dev/null
+>> +++ b/package/tesseract-ocr/Config.in
+>> @@ -0,0 +1,35 @@
+>> +comment "tesseract-ocr needs a toolchain w/ threads, C++, gcc >= 4.8 (C++11)"
+>
+> Remove the (C++11) comment, and put it like this:
+>
+> # gcc 4.8 needed for C++11
+Understood.
 
 >
->> diff --git a/package/leptonica/Config.in b/package/leptonica/Config.in
+>> +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+>> +        !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>> +
+>> +menuconfig BR2_PACKAGE_TESSERACT_OCR
+>> +     bool "tesseract-ocr"
+>> +     depends on BR2_INSTALL_LIBSTDCPP
+>> +     depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+>> +     select BR2_PACKAGE_LEPTONICA
+>> +     select BR2_PACKAGE_TESSERACT_OCR_DATA
+>> +     help
+>> +       Tesseract is an OCR (Optical Character Recognition) engine,
+>> +       It can be used directly, or (for programmers) using an API.
+>> +       It supports a wide variety of languages.
+>> +
+>> +       https://github.com/tesseract-ocr/tesseract
+>> +
+>> +if BR2_PACKAGE_TESSERACT_OCR
+>> +
+>> +config BR2_PACKAGE_TESSERACT_OCR_JPEG
+>> +    bool "JPEG support"
+>> +    select BR2_PACKAGE_JPEG
+>> +    default y
+>
+> Indentation of config properties should use one tab, not spaces (fix
+> this throughout the file).
+OK. I was quite sure I used tabs. I will be more cautious next time.
+
+>
+>> +
+>> +config BR2_PACKAGE_TESSERACT_OCR_PNG
+>> +    bool "PNG support"
+>> +    select BR2_PACKAGE_LIBPNG
+>> +    default y
+>> +
+>> +config BR2_PACKAGE_TESSERACT_OCR_TIFF
+>> +    bool "TIFF support"
+>> +    select BR2_PACKAGE_TIFF
+>
+> Does it really make sense to have sub-options for these, instead of
+> just enabling jpeg, libpng, tiff support when the necessary packages
+> are available?
+OK. Will do it that way.
+
+>
+>> diff --git a/package/tesseract-ocr/tesseract-ocr.hash b/package/tesseract-ocr/tesseract-ocr.hash
 >> new file mode 100644
->> index 0000000..d485344
+>> index 0000000..84c5ad9
 >> --- /dev/null
->> +++ b/package/leptonica/Config.in
->> @@ -0,0 +1,9 @@
->> +config BR2_PACKAGE_LEPTONICA
->> +     bool "leptonica"
+>> +++ b/package/tesseract-ocr/tesseract-ocr.hash
+>> @@ -0,0 +1,3 @@
+>> +# locally computed
+>> +sha256  3fe83e06d0f73b39f6e92ed9fc7ccba3ef734877b76aa5ddaaa778fac095d996  tesseract-ocr-3.05.00.tar.gz
 >> +
 >
-> Unneeded empty line.
-OK
+> Useless empty line.
+OK.
 
 >
-> There is no toolchain dependency? It builds fine with
-> uClibc/musl/glibc, noMMU, static libraries only, etc. ?
->
-> Could you test this package with support/scripts/test-pkg ?
-OK. Will do.
-
->
->> diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+>> diff --git a/package/tesseract-ocr/tesseract-ocr.mk b/package/tesseract-ocr/tesseract-ocr.mk
 >> new file mode 100644
->> index 0000000..5f2da79
+>> index 0000000..37ac72f
 >> --- /dev/null
->> +++ b/package/leptonica/leptonica.mk
->> @@ -0,0 +1,57 @@
+>> +++ b/package/tesseract-ocr/tesseract-ocr.mk
+>> @@ -0,0 +1,31 @@
 >> +################################################################################
 >> +#
->> +# leptonica
+>> +# tesseract-ocr
 >> +#
 >> +################################################################################
 >> +
->> +LEPTONICA_VERSION = 1.74.1
->> +LEPTONICA_SITE = http://www.leptonica.org/source
->> +LEPTONICA_LICENSE = BSD-2c
->> +LEPTONICA_LICENSE_FILES = leptonica-license.txt
+>> +TESSERACT_OCR_VERSION = 3.05.00
+>> +TESSERACT_OCR_SITE = $(call github,tesseract-ocr,tesseract,$(TESSERACT_OCR_VERSION))
 >
-> OK, license verified, looks good to me.
+> Here is what you could do for the data files:
 >
->> +LEPTONICA_INSTALL_STAGING = YES
+> ifeq ($(BR2_PACKAGE_TESSERACT_OCR_DATA_FRENCH),y)
+> TESSERACT_OCR_DATA_FILES += fra.traineddata
+> endif
+>
+> ifeq ($(BR2_PACKAGE_TESSERACT_OCR_DATA_SPANISH),y)
+> TESSERACT_OCR_DATA_FILES += spa.traineddata
+> endif
+>
+> ...
+>
+> TESSERACT_OCR_EXTRA_DOWNLOADS = \
+>         $(addprefix https://github.com/tesseract-ocr/tessdata/raw/$(TESSERACT_OCR_DATA_VERSION),\
+>                 $(TESSERACT_OCR_DATA_FILES))
+>
+> and then use $(DL_DIR)/fra.traineddata the way you want to.
+Understood. Will do that
+
+>
+>> +TESSERACT_OCR_LICENSE = Apache-2.0
+>> +TESSERACT_OCR_LICENSE_FILES = COPYING
 >> +
->> +LEPTONICA_CONF_OPTS += --disable-programs
+>> +TESSERACT_OCR_AUTORECONF = YES
+>
+> A comment that says "Source from github, no configure script provided"
+> would be nice.
+OK.
+
+>
 >> +
->> +ifeq ($(BR2_PACKAGE_GIFLIB),y)
->> +LEPTONICA_DEPENDENCIES += giflib
+>> +TESSERACT_OCR_DEPENDENCIES += leptonica \
+>> +     $(if $(BR2_PACKAGE_TESSERACT_OCR_JPEG),jpeg) \
+>> +     $(if $(BR2_PACKAGE_TESSERACT_OCR_PNG),libpng) \
+>> +     $(if $(BR2_PACKAGE_TESSERACT_OCR_TIFF),tiff)
 >
-> Please explicitly pass:
+> Are libpng/jpeg really optional dependencies? I don't see them being
+> mentioned in configure.ac (but I only had a quick look).
 >
-> LEPTONICA_CONF_OPTS += --with-giflib
+>> +TESSERACT_OCR_INSTALL_STAGING = YES
 >
-> here, and same for all other options below.
-OK. Thanks a lot for the review!
+> It installs some libraries?
+Yes it does. It installs both a library and a program
+
+>
+>> +
+>> +TESSERACT_OCR_CONF_ENV += \
+>> +    LIBLEPT_HEADERSDIR=$(STAGING_DIR)/usr/include/leptonica
+>> +
+>> +define TESSERACT_OCR_PRECONFIGURE
+>> +    # Autoreconf step fails due to missing m4 directory
+>> +    mkdir -p $(@D)/m4
+>> +endef
+>> +
+>> +TESSERACT_OCR_PRE_CONFIGURE_HOOKS += TESSERACT_OCR_PRECONFIGURE
+>> +
+>> +$(eval $(autotools-package))
+>
+> Thanks!
+Thanks for your review!
