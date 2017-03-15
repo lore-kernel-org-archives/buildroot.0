@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Mar 2017 21:57:44 +0100
-Subject: [Buildroot] [git commit] json-glib: bump version to 1.2.6
-Message-ID: <20170315205804.A95DA7FAF3@busybox.osuosl.org>
+Date: Wed, 15 Mar 2017 21:42:12 +0100
+Subject: [Buildroot] [git commit] cryptsetup: bump version to 1.7.4
+Message-ID: <20170315205804.8FDD57FAF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dde97d483278c2bca07af5467b6c477d00544cb3
+commit: https://git.buildroot.net/buildroot/commit/?id=fa52abc0367fa07dcf6f4d690280808ff1cbefd4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/json-glib/json-glib.hash | 4 ++--
- package/json-glib/json-glib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
-index 2a56939..bf85770 100644
---- a/package/json-glib/json-glib.hash
-+++ b/package/json-glib/json-glib.hash
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index b8c0d2b..f328bc3 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.2.sha256sum
--sha256	ea128ab52a824fcd06e5448fbb2bd8d9a13740d51c66d445828edba71321a621	json-glib-1.2.2.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.6.sha256sum
-+sha256 958fa59909ef28399c811aff29a5340b330b20660ca3586b4c5aa3a53997776c  json-glib-1.2.6.tar.xz
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index 305c9ac..8b8a3cf2 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/sha256sums.asc
+-sha256 af2b04e8475cf40b8d9ffd97a1acfa73aa787c890430afd89804fb544d6adc02  cryptsetup-1.7.3.tar.xz
++sha256 7ccf893ef79a38fb92d61f03c17b964982119f5319cdaa85a1335b8558cca016  cryptsetup-1.7.4.tar.xz
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 6081009..8337bed 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- JSON_GLIB_VERSION_MAJOR = 1.2
--JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).2
-+JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
- JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
- JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
- JSON_GLIB_LICENSE = LGPLv2.1+
+ CRYPTSETUP_VERSION_MAJOR = 1.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
