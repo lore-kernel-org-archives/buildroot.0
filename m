@@ -1,75 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Mar 2017 20:46:22 +0100
-Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
-In-Reply-To: <ca4c849a-caa1-05f5-a298-a066fc19591a@mind.be>
-References: <20161004115320.647-1-maxime.hadjinlian@gmail.com>
- <20161004163555.7c8af28f@free-electrons.com>
- <CAGduivwqAtheOrr_J0XWXR-9rjWNwPC9Y0dFCqKyBua+bir0ww@mail.gmail.com>
- <d5b7097f-1af5-1130-21b2-fb3c1278a646@andin.de>
- <20170313133220.62892a21@free-electrons.com>
- <216f6108-da26-92cc-8177-07117d20092c@andin.de>
- <20170313163306.GA3680@free.fr> <20170314091615.2de4a05b@free-electrons.com>
- <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
- <180611cf-c61b-736d-c753-9df57bb29bc7@andin.de>
- <f785c386-075b-ac22-3114-d09a79dbeffc@mind.be>
- <ece0d310-0f3d-9f1c-e045-70f0f5c4d777@andin.de>
- <ca4c849a-caa1-05f5-a298-a066fc19591a@mind.be>
-Message-ID: <651a8b7e-4910-445e-6613-404be75af105@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 15 Mar 2017 21:49:10 +0200
+Subject: [Buildroot] cmake is not building anymore
+In-Reply-To: <1489607040.19767.9.camel@linux.intel.com>
+References: <1489417019.20145.214.camel@linux.intel.com>
+ <1489420484.20145.218.camel@linux.intel.com>
+ <544671010.14659188.1489539751977.JavaMail.zimbra@datacom.ind.br>
+ <1489590657.19767.1.camel@linux.intel.com>
+ <372249453.14780914.1489593932103.JavaMail.zimbra@datacom.ind.br>
+ <1489598613.19767.6.camel@linux.intel.com>
+ <744747071.14828951.1489604108907.JavaMail.zimbra@datacom.ind.br>
+ <1489607040.19767.9.camel@linux.intel.com>
+Message-ID: <20170315194910.d5bftkd7vtozqfid@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Andy,
 
-
-On 15-03-17 20:07, Arnout Vandecappelle wrote:
+On Wed, Mar 15, 2017 at 09:44:00PM +0200, Andy Shevchenko wrote:
+> On Wed, 2017-03-15 at 15:55 -0300, Carlos Santos wrote:
+> > Ouch! Does it build using host-openssl, instead?
 > 
+> At least I don't see any folder like that in output/.
 > 
-> On 15-03-17 09:17, Andreas Naumann wrote:
->> Hi Arnout,
->>
->> Am 15.03.2017 um 01:20 schrieb Arnout Vandecappelle:
->>>
->>>
->>>  For the record, I can reproduce this on my side. I just do "fakeroot
->>> /bin/bash", then do the commands from the shell. Even an ls -l of the copied
->>> files within the fakeroot shell already shows the "arnout" instead of "root"
->>> user. My host fakeroot (Debian 1.21-3.1).
->> So are you saying you see this behaviour with your host fakeroot?
-> 
->  That was only half a sentence, it should have been:
-> 
-> My host fakeroot (Debian 1.21-3.1) doesn't show the problem.
+> $ ls -1d output/build/*ssl*
+> ls: cannot access 'output/build/*ssl*': No such file or directory
 
- Buildroot fakeroot works fine when I have libacl1-dev installed on my system -
-the Debian package has a build dependency on libacl1-dev. So we would need to
-add host-acl to FAKEROOT_DEPENDENCIES. That also pulls in host-attr. On my
-system, it brings the time for 'make host-fakeroot' on a clean output from
+What Carlos suggests is to build host-openssl manually
 
-real    0m12.230s
-user    0m8.500s
-sys     0m1.132s
+  make host-openssl
 
-to
+and then rerun the cmake build
 
-real    0m21.945s
-user    0m17.724s
-sys     0m2.948s
+  rm -r output/build/host-cmake*
+  make host-cmake
 
-so a significant slowdown... Although in absolute numbers it is just 10 seconds,
-so maybe it is acceptable.
+Does that work?
 
- Anyway, I'll send a patch that does this, let's see if others consider this
-overhead acceptable.
-
- Regards,
- Arnout
+baruch
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
