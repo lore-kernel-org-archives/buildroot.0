@@ -1,66 +1,317 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Mar 2017 13:37:53 +0100
-Subject: [Buildroot] [git commit] mariadb: security bump to version 10.1.22
-Message-ID: <20170315123843.F2DA0817D4@busybox.osuosl.org>
+Date: Wed, 15 Mar 2017 13:37:42 +0100
+Subject: [Buildroot] [git commit] jasper: add upstream security fix for
+	CVE-2017-6850
+Message-ID: <20170315123843.D7983817D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=467b38892aa23927ad1140119f0f17c23e896e7e
+commit: https://git.buildroot.net/buildroot/commit/?id=a105443b24f7c75b10dab44c2916fc9f2b58363a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Fixes a NULL pointer dereference in jp2_cdef_destroy:
 
-CVE-2017-3302 - C client library for MySQL (libmysqlclient.so) has
-use-after-free defect which can cause crash of applications using that MySQL
-client.
+https://blogs.gentoo.org/ago/2017/01/25/jasper-null-pointer-dereference-in-jp2_cdef_destroy-jp2_cod-c/
 
-CVE-2017-3313 - Difficult to exploit vulnerability allows low privileged
-attacker with logon to the infrastructure where MySQL Server executes to
-compromise MySQL Server.  Successful attacks of this vulnerability can
-result in unauthorized access to critical data or complete access to all
-MySQL Server accessible data.
-
-And a number of important, but non-security related fixes:
-
-MDEV-11842: Fix a 10.1.21 regression with failed INSERT, BEFORE INSERT
-triggers, and columns with no default value
-
-MDEV-12075: Fix a 10.1.21 regression in the InnoDB data file extension code
-
-For details, see the release notes:
-https://mariadb.com/kb/en/mariadb/mariadb-10122-release-notes/
+https://github.com/mdadams/jasper/issues/112
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 7 ++-----
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ ...due-to-uninitialized-data-in-the-JP2-deco.patch | 286 +++++++++++++++++++++
+ 1 file changed, 286 insertions(+)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 3d6520f..afcf378 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,2 @@
--# From https://downloads.mariadb.org/mariadb/10.1.21/
--sha1 f9ccaa9881b98eeef68f4dbcf5ab9653c903819f  mariadb-10.1.21.tar.gz
--
--# Locally computed
--sha256 5a816355781ea22a6c65a436d8162f19bd292ec90e2b7d9499c031ae4a659490  mariadb-10.1.21.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.22/
-+sha256 bcb0572e7ad32cea9740a21e9255f733bdf60a5561ffbda317c22dd12b3966ce  mariadb-10.1.22.tar.gz
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index aa4afc5..8c7375a 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.21
-+MARIADB_VERSION = 10.1.22
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPLv2 (server), GPLv2 with FLOSS exception (GPL client library), LGPLv2 (LGPL client library)
- MARIADB_LICENSE_FILES = README COPYING COPYING.LESSER
+diff --git a/package/jasper/0002-Fixed-bugs-due-to-uninitialized-data-in-the-JP2-deco.patch b/package/jasper/0002-Fixed-bugs-due-to-uninitialized-data-in-the-JP2-deco.patch
+new file mode 100644
+index 0000000..be84720
+--- /dev/null
++++ b/package/jasper/0002-Fixed-bugs-due-to-uninitialized-data-in-the-JP2-deco.patch
+@@ -0,0 +1,286 @@
++From e96fc4fdd525fa0ede28074a7e2b1caf94b58b0d Mon Sep 17 00:00:00 2001
++From: Michael Adams <mdadams@ece.uvic.ca>
++Date: Sat, 4 Mar 2017 14:43:24 -0800
++Subject: [PATCH] Fixed bugs due to uninitialized data in the JP2 decoder.
++ Also, added some comments marking I/O stream interfaces that probably need to
++ be changed (in the long term) to fix integer overflow problems.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/libjasper/base/jas_stream.c | 18 +++++++++++++++++
++ src/libjasper/jp2/jp2_cod.c     | 44 ++++++++++++++++++++++++++++-------------
++ 2 files changed, 48 insertions(+), 14 deletions(-)
++
++diff --git a/src/libjasper/base/jas_stream.c b/src/libjasper/base/jas_stream.c
++index 327ee57..d70408f 100644
++--- a/src/libjasper/base/jas_stream.c
+++++ b/src/libjasper/base/jas_stream.c
++@@ -664,6 +664,7 @@ int jas_stream_ungetc(jas_stream_t *stream, int c)
++ 	return 0;
++ }
++ 
+++/* FIXME integral type */
++ int jas_stream_read(jas_stream_t *stream, void *buf, int cnt)
++ {
++ 	int n;
++@@ -690,6 +691,7 @@ int jas_stream_read(jas_stream_t *stream, void *buf, int cnt)
++ 	return n;
++ }
++ 
+++/* FIXME integral type */
++ int jas_stream_write(jas_stream_t *stream, const void *buf, int cnt)
++ {
++ 	int n;
++@@ -742,6 +744,7 @@ int jas_stream_puts(jas_stream_t *stream, const char *s)
++ 	return 0;
++ }
++ 
+++/* FIXME integral type */
++ char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize)
++ {
++ 	int c;
++@@ -765,6 +768,7 @@ char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize)
++ 	return buf;
++ }
++ 
+++/* FIXME integral type */
++ int jas_stream_gobble(jas_stream_t *stream, int n)
++ {
++ 	int m;
++@@ -783,6 +787,7 @@ int jas_stream_gobble(jas_stream_t *stream, int n)
++ 	return n;
++ }
++ 
+++/* FIXME integral type */
++ int jas_stream_pad(jas_stream_t *stream, int n, int c)
++ {
++ 	int m;
++@@ -885,6 +890,7 @@ long jas_stream_tell(jas_stream_t *stream)
++ * Buffer initialization code.
++ \******************************************************************************/
++ 
+++/* FIXME integral type */
++ static void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
++   int bufsize)
++ {
++@@ -1060,6 +1066,7 @@ static int jas_strtoopenmode(const char *s)
++ 	return openmode;
++ }
++ 
+++/* FIXME integral type */
++ int jas_stream_copy(jas_stream_t *out, jas_stream_t *in, int n)
++ {
++ 	int all;
++@@ -1085,6 +1092,7 @@ int jas_stream_copy(jas_stream_t *out, jas_stream_t *in, int n)
++ 	return 0;
++ }
++ 
+++/* FIXME integral type */
++ long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt)
++ {
++ 	int old;
++@@ -1094,6 +1102,7 @@ long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt)
++ 	return old;
++ }
++ 
+++/* FIXME integral type */
++ int jas_stream_display(jas_stream_t *stream, FILE *fp, int n)
++ {
++ 	unsigned char buf[16];
++@@ -1168,6 +1177,7 @@ long jas_stream_length(jas_stream_t *stream)
++ * Memory stream object.
++ \******************************************************************************/
++ 
+++/* FIXME integral type */
++ static int mem_read(jas_stream_obj_t *obj, char *buf, int cnt)
++ {
++ 	ssize_t n;
++@@ -1209,6 +1219,7 @@ static int mem_resize(jas_stream_memobj_t *m, size_t bufsize)
++ 	return 0;
++ }
++ 
+++/* FIXME integral type */
++ static int mem_write(jas_stream_obj_t *obj, char *buf, int cnt)
++ {
++ 	size_t n;
++@@ -1264,6 +1275,7 @@ static int mem_write(jas_stream_obj_t *obj, char *buf, int cnt)
++ 	return ret;
++ }
++ 
+++/* FIXME integral type */
++ static long mem_seek(jas_stream_obj_t *obj, long offset, int origin)
++ {
++ 	jas_stream_memobj_t *m = (jas_stream_memobj_t *)obj;
++@@ -1310,6 +1322,7 @@ static int mem_close(jas_stream_obj_t *obj)
++ * File stream object.
++ \******************************************************************************/
++ 
+++/* FIXME integral type */
++ static int file_read(jas_stream_obj_t *obj, char *buf, int cnt)
++ {
++ 	jas_stream_fileobj_t *fileobj;
++@@ -1318,6 +1331,7 @@ static int file_read(jas_stream_obj_t *obj, char *buf, int cnt)
++ 	return read(fileobj->fd, buf, cnt);
++ }
++ 
+++/* FIXME integral type */
++ static int file_write(jas_stream_obj_t *obj, char *buf, int cnt)
++ {
++ 	jas_stream_fileobj_t *fileobj;
++@@ -1326,6 +1340,7 @@ static int file_write(jas_stream_obj_t *obj, char *buf, int cnt)
++ 	return write(fileobj->fd, buf, cnt);
++ }
++ 
+++/* FIXME integral type */
++ static long file_seek(jas_stream_obj_t *obj, long offset, int origin)
++ {
++ 	jas_stream_fileobj_t *fileobj;
++@@ -1352,6 +1367,7 @@ static int file_close(jas_stream_obj_t *obj)
++ * Stdio file stream object.
++ \******************************************************************************/
++ 
+++/* FIXME integral type */
++ static int sfile_read(jas_stream_obj_t *obj, char *buf, int cnt)
++ {
++ 	FILE *fp;
++@@ -1367,6 +1383,7 @@ static int sfile_read(jas_stream_obj_t *obj, char *buf, int cnt)
++ 	return result;
++ }
++ 
+++/* FIXME integral type */
++ static int sfile_write(jas_stream_obj_t *obj, char *buf, int cnt)
++ {
++ 	FILE *fp;
++@@ -1377,6 +1394,7 @@ static int sfile_write(jas_stream_obj_t *obj, char *buf, int cnt)
++ 	return (n != JAS_CAST(size_t, cnt)) ? (-1) : cnt;
++ }
++ 
+++/* FIXME integral type */
++ static long sfile_seek(jas_stream_obj_t *obj, long offset, int origin)
++ {
++ 	FILE *fp;
++diff --git a/src/libjasper/jp2/jp2_cod.c b/src/libjasper/jp2/jp2_cod.c
++index 7f3608a..8d98a2c 100644
++--- a/src/libjasper/jp2/jp2_cod.c
+++++ b/src/libjasper/jp2/jp2_cod.c
++@@ -183,15 +183,28 @@ jp2_boxinfo_t jp2_boxinfo_unk = {
++ * Box constructor.
++ \******************************************************************************/
++ 
++-jp2_box_t *jp2_box_create(int type)
+++jp2_box_t *jp2_box_create0()
++ {
++ 	jp2_box_t *box;
++-	jp2_boxinfo_t *boxinfo;
++-
++ 	if (!(box = jas_malloc(sizeof(jp2_box_t)))) {
++ 		return 0;
++ 	}
++ 	memset(box, 0, sizeof(jp2_box_t));
+++	box->type = 0;
+++	box->len = 0;
+++	// Mark the box data as never having been constructed
+++	// so that we will not errantly attempt to destroy it later.
+++	box->ops = &jp2_boxinfo_unk.ops;
+++	return box;
+++}
+++
+++jp2_box_t *jp2_box_create(int type)
+++{
+++	jp2_box_t *box;
+++	jp2_boxinfo_t *boxinfo;
+++	if (!(box = jp2_box_create0())) {
+++		return 0;
+++	}
++ 	box->type = type;
++ 	box->len = 0;
++ 	if (!(boxinfo = jp2_boxinfolookup(type))) {
++@@ -248,14 +261,9 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
++ 	box = 0;
++ 	tmpstream = 0;
++ 
++-	if (!(box = jas_malloc(sizeof(jp2_box_t)))) {
+++	if (!(box = jp2_box_create0())) {
++ 		goto error;
++ 	}
++-
++-	// Mark the box data as never having been constructed
++-	// so that we will not errantly attempt to destroy it later.
++-	box->ops = &jp2_boxinfo_unk.ops;
++-
++ 	if (jp2_getuint32(in, &len) || jp2_getuint32(in, &box->type)) {
++ 		goto error;
++ 	}
++@@ -263,10 +271,12 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
++ 	box->info = boxinfo;
++ 	box->len = len;
++ 	JAS_DBGLOG(10, (
++-	  "preliminary processing of JP2 box: type=%c%s%c (0x%08x); length=%d\n",
+++	  "preliminary processing of JP2 box: "
+++	  "type=%c%s%c (0x%08x); length=%"PRIuFAST32"\n",
++ 	  '"', boxinfo->name, '"', box->type, box->len
++ 	  ));
++ 	if (box->len == 1) {
+++		JAS_DBGLOG(10, ("big length\n"));
++ 		if (jp2_getuint64(in, &extlen)) {
++ 			goto error;
++ 		}
++@@ -382,6 +392,7 @@ static int jp2_bpcc_getdata(jp2_box_t *box, jas_stream_t *in)
++ {
++ 	jp2_bpcc_t *bpcc = &box->data.bpcc;
++ 	unsigned int i;
+++	bpcc->bpcs = 0;
++ 	bpcc->numcmpts = box->datalen;
++ 	if (!(bpcc->bpcs = jas_alloc2(bpcc->numcmpts, sizeof(uint_fast8_t)))) {
++ 		return -1;
++@@ -462,6 +473,7 @@ static int jp2_cdef_getdata(jp2_box_t *box, jas_stream_t *in)
++ 	jp2_cdef_t *cdef = &box->data.cdef;
++ 	jp2_cdefchan_t *chan;
++ 	unsigned int channo;
+++	cdef->ents = 0;
++ 	if (jp2_getuint16(in, &cdef->numchans)) {
++ 		return -1;
++ 	}
++@@ -518,7 +530,9 @@ int jp2_box_put(jp2_box_t *box, jas_stream_t *out)
++ 	}
++ 
++ 	if (dataflag) {
++-		if (jas_stream_copy(out, tmpstream, box->len - JP2_BOX_HDRLEN(false))) {
+++		if (jas_stream_copy(out, tmpstream, box->len -
+++		  JP2_BOX_HDRLEN(false))) {
+++			jas_eprintf("cannot copy box data\n");
++ 			goto error;
++ 		}
++ 		jas_stream_close(tmpstream);
++@@ -777,6 +791,7 @@ static int jp2_cmap_getdata(jp2_box_t *box, jas_stream_t *in)
++ 	jp2_cmap_t *cmap = &box->data.cmap;
++ 	jp2_cmapent_t *ent;
++ 	unsigned int i;
+++	cmap->ents = 0;
++ 
++ 	cmap->numchans = (box->datalen) / 4;
++ 	if (!(cmap->ents = jas_alloc2(cmap->numchans, sizeof(jp2_cmapent_t)))) {
++@@ -835,6 +850,7 @@ static int jp2_pclr_getdata(jp2_box_t *box, jas_stream_t *in)
++ 	int_fast32_t x;
++ 
++ 	pclr->lutdata = 0;
+++	pclr->bpc = 0;
++ 
++ 	if (jp2_getuint16(in, &pclr->numlutents) ||
++ 	  jp2_getuint8(in, &pclr->numchans)) {
++@@ -869,9 +885,9 @@ static int jp2_pclr_putdata(jp2_box_t *box, jas_stream_t *out)
++ #if 0
++ 	jp2_pclr_t *pclr = &box->data.pclr;
++ #endif
++-/* Eliminate warning about unused variable. */
++-box = 0;
++-out = 0;
+++	/* Eliminate warning about unused variable. */
+++	box = 0;
+++	out = 0;
++ 	return -1;
++ }
++ 
++-- 
++2.11.0
++
