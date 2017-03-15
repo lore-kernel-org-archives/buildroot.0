@@ -1,317 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Mar 2017 13:37:42 +0100
-Subject: [Buildroot] [git commit] jasper: add upstream security fix for
-	CVE-2017-6850
-Message-ID: <20170315123843.D7983817D4@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Mar 2017 10:23:57 -0300
+Subject: [Buildroot] [PATCH] libepoxy: reinstate mesa egl cflags patch
+Message-ID: <20170315132357.2357-1-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a105443b24f7c75b10dab44c2916fc9f2b58363a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is still required when building libepoxy against mesa egl without
+x11 (GL).
 
-Fixes a NULL pointer dereference in jp2_cdef_destroy:
+Mesa needs a preprocessor define to avoid including X11 headers and
+since this is not forwarded into epoxy.pc for other
+libraries/applicatons that link against it it will fail.
 
-https://blogs.gentoo.org/ago/2017/01/25/jasper-null-pointer-dereference-in-jp2_cdef_destroy-jp2_cod-c/
-
-https://github.com/mdadams/jasper/issues/112
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...due-to-uninitialized-data-in-the-JP2-deco.patch | 286 +++++++++++++++++++++
- 1 file changed, 286 insertions(+)
+ .../0001-Forward-EGL-cflags-into-epoxy.pc.patch    | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
 
-diff --git a/package/jasper/0002-Fixed-bugs-due-to-uninitialized-data-in-the-JP2-deco.patch b/package/jasper/0002-Fixed-bugs-due-to-uninitialized-data-in-the-JP2-deco.patch
+diff --git a/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch b/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
 new file mode 100644
-index 0000000..be84720
+index 0000000..286f875
 --- /dev/null
-+++ b/package/jasper/0002-Fixed-bugs-due-to-uninitialized-data-in-the-JP2-deco.patch
-@@ -0,0 +1,286 @@
-+From e96fc4fdd525fa0ede28074a7e2b1caf94b58b0d Mon Sep 17 00:00:00 2001
-+From: Michael Adams <mdadams@ece.uvic.ca>
-+Date: Sat, 4 Mar 2017 14:43:24 -0800
-+Subject: [PATCH] Fixed bugs due to uninitialized data in the JP2 decoder.
-+ Also, added some comments marking I/O stream interfaces that probably need to
-+ be changed (in the long term) to fix integer overflow problems.
++++ b/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
+@@ -0,0 +1,32 @@
++From 99b8373dbe8fb3bac835ebad90f91cfd213e4acb Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Wed, 15 Mar 2017 10:02:54 -0300
++Subject: [PATCH] Forward EGL cflags into epoxy.pc
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++When building mesa egl without x11 and gles2 the headers need a
++MESA_EGL_NO_X11_HEADERS define to avoid including X11 headers.
++Forward EGL CFLAGS into epoxy.pc to avoid build failures when linking
++against libepoxy on this scenario.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +---
-+ src/libjasper/base/jas_stream.c | 18 +++++++++++++++++
-+ src/libjasper/jp2/jp2_cod.c     | 44 ++++++++++++++++++++++++++++-------------
-+ 2 files changed, 48 insertions(+), 14 deletions(-)
++Status: pull request https://github.com/anholt/libepoxy/pull/113
 +
-+diff --git a/src/libjasper/base/jas_stream.c b/src/libjasper/base/jas_stream.c
-+index 327ee57..d70408f 100644
-+--- a/src/libjasper/base/jas_stream.c
-++++ b/src/libjasper/base/jas_stream.c
-+@@ -664,6 +664,7 @@ int jas_stream_ungetc(jas_stream_t *stream, int c)
-+ 	return 0;
-+ }
-+ 
-++/* FIXME integral type */
-+ int jas_stream_read(jas_stream_t *stream, void *buf, int cnt)
-+ {
-+ 	int n;
-+@@ -690,6 +691,7 @@ int jas_stream_read(jas_stream_t *stream, void *buf, int cnt)
-+ 	return n;
-+ }
-+ 
-++/* FIXME integral type */
-+ int jas_stream_write(jas_stream_t *stream, const void *buf, int cnt)
-+ {
-+ 	int n;
-+@@ -742,6 +744,7 @@ int jas_stream_puts(jas_stream_t *stream, const char *s)
-+ 	return 0;
-+ }
-+ 
-++/* FIXME integral type */
-+ char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize)
-+ {
-+ 	int c;
-+@@ -765,6 +768,7 @@ char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize)
-+ 	return buf;
-+ }
-+ 
-++/* FIXME integral type */
-+ int jas_stream_gobble(jas_stream_t *stream, int n)
-+ {
-+ 	int m;
-+@@ -783,6 +787,7 @@ int jas_stream_gobble(jas_stream_t *stream, int n)
-+ 	return n;
-+ }
-+ 
-++/* FIXME integral type */
-+ int jas_stream_pad(jas_stream_t *stream, int n, int c)
-+ {
-+ 	int m;
-+@@ -885,6 +890,7 @@ long jas_stream_tell(jas_stream_t *stream)
-+ * Buffer initialization code.
-+ \******************************************************************************/
-+ 
-++/* FIXME integral type */
-+ static void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf,
-+   int bufsize)
-+ {
-+@@ -1060,6 +1066,7 @@ static int jas_strtoopenmode(const char *s)
-+ 	return openmode;
-+ }
-+ 
-++/* FIXME integral type */
-+ int jas_stream_copy(jas_stream_t *out, jas_stream_t *in, int n)
-+ {
-+ 	int all;
-+@@ -1085,6 +1092,7 @@ int jas_stream_copy(jas_stream_t *out, jas_stream_t *in, int n)
-+ 	return 0;
-+ }
-+ 
-++/* FIXME integral type */
-+ long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt)
-+ {
-+ 	int old;
-+@@ -1094,6 +1102,7 @@ long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt)
-+ 	return old;
-+ }
-+ 
-++/* FIXME integral type */
-+ int jas_stream_display(jas_stream_t *stream, FILE *fp, int n)
-+ {
-+ 	unsigned char buf[16];
-+@@ -1168,6 +1177,7 @@ long jas_stream_length(jas_stream_t *stream)
-+ * Memory stream object.
-+ \******************************************************************************/
-+ 
-++/* FIXME integral type */
-+ static int mem_read(jas_stream_obj_t *obj, char *buf, int cnt)
-+ {
-+ 	ssize_t n;
-+@@ -1209,6 +1219,7 @@ static int mem_resize(jas_stream_memobj_t *m, size_t bufsize)
-+ 	return 0;
-+ }
-+ 
-++/* FIXME integral type */
-+ static int mem_write(jas_stream_obj_t *obj, char *buf, int cnt)
-+ {
-+ 	size_t n;
-+@@ -1264,6 +1275,7 @@ static int mem_write(jas_stream_obj_t *obj, char *buf, int cnt)
-+ 	return ret;
-+ }
-+ 
-++/* FIXME integral type */
-+ static long mem_seek(jas_stream_obj_t *obj, long offset, int origin)
-+ {
-+ 	jas_stream_memobj_t *m = (jas_stream_memobj_t *)obj;
-+@@ -1310,6 +1322,7 @@ static int mem_close(jas_stream_obj_t *obj)
-+ * File stream object.
-+ \******************************************************************************/
-+ 
-++/* FIXME integral type */
-+ static int file_read(jas_stream_obj_t *obj, char *buf, int cnt)
-+ {
-+ 	jas_stream_fileobj_t *fileobj;
-+@@ -1318,6 +1331,7 @@ static int file_read(jas_stream_obj_t *obj, char *buf, int cnt)
-+ 	return read(fileobj->fd, buf, cnt);
-+ }
-+ 
-++/* FIXME integral type */
-+ static int file_write(jas_stream_obj_t *obj, char *buf, int cnt)
-+ {
-+ 	jas_stream_fileobj_t *fileobj;
-+@@ -1326,6 +1340,7 @@ static int file_write(jas_stream_obj_t *obj, char *buf, int cnt)
-+ 	return write(fileobj->fd, buf, cnt);
-+ }
-+ 
-++/* FIXME integral type */
-+ static long file_seek(jas_stream_obj_t *obj, long offset, int origin)
-+ {
-+ 	jas_stream_fileobj_t *fileobj;
-+@@ -1352,6 +1367,7 @@ static int file_close(jas_stream_obj_t *obj)
-+ * Stdio file stream object.
-+ \******************************************************************************/
-+ 
-++/* FIXME integral type */
-+ static int sfile_read(jas_stream_obj_t *obj, char *buf, int cnt)
-+ {
-+ 	FILE *fp;
-+@@ -1367,6 +1383,7 @@ static int sfile_read(jas_stream_obj_t *obj, char *buf, int cnt)
-+ 	return result;
-+ }
-+ 
-++/* FIXME integral type */
-+ static int sfile_write(jas_stream_obj_t *obj, char *buf, int cnt)
-+ {
-+ 	FILE *fp;
-+@@ -1377,6 +1394,7 @@ static int sfile_write(jas_stream_obj_t *obj, char *buf, int cnt)
-+ 	return (n != JAS_CAST(size_t, cnt)) ? (-1) : cnt;
-+ }
-+ 
-++/* FIXME integral type */
-+ static long sfile_seek(jas_stream_obj_t *obj, long offset, int origin)
-+ {
-+ 	FILE *fp;
-+diff --git a/src/libjasper/jp2/jp2_cod.c b/src/libjasper/jp2/jp2_cod.c
-+index 7f3608a..8d98a2c 100644
-+--- a/src/libjasper/jp2/jp2_cod.c
-++++ b/src/libjasper/jp2/jp2_cod.c
-+@@ -183,15 +183,28 @@ jp2_boxinfo_t jp2_boxinfo_unk = {
-+ * Box constructor.
-+ \******************************************************************************/
-+ 
-+-jp2_box_t *jp2_box_create(int type)
-++jp2_box_t *jp2_box_create0()
-+ {
-+ 	jp2_box_t *box;
-+-	jp2_boxinfo_t *boxinfo;
-+-
-+ 	if (!(box = jas_malloc(sizeof(jp2_box_t)))) {
-+ 		return 0;
-+ 	}
-+ 	memset(box, 0, sizeof(jp2_box_t));
-++	box->type = 0;
-++	box->len = 0;
-++	// Mark the box data as never having been constructed
-++	// so that we will not errantly attempt to destroy it later.
-++	box->ops = &jp2_boxinfo_unk.ops;
-++	return box;
-++}
-++
-++jp2_box_t *jp2_box_create(int type)
-++{
-++	jp2_box_t *box;
-++	jp2_boxinfo_t *boxinfo;
-++	if (!(box = jp2_box_create0())) {
-++		return 0;
-++	}
-+ 	box->type = type;
-+ 	box->len = 0;
-+ 	if (!(boxinfo = jp2_boxinfolookup(type))) {
-+@@ -248,14 +261,9 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
-+ 	box = 0;
-+ 	tmpstream = 0;
-+ 
-+-	if (!(box = jas_malloc(sizeof(jp2_box_t)))) {
-++	if (!(box = jp2_box_create0())) {
-+ 		goto error;
-+ 	}
-+-
-+-	// Mark the box data as never having been constructed
-+-	// so that we will not errantly attempt to destroy it later.
-+-	box->ops = &jp2_boxinfo_unk.ops;
-+-
-+ 	if (jp2_getuint32(in, &len) || jp2_getuint32(in, &box->type)) {
-+ 		goto error;
-+ 	}
-+@@ -263,10 +271,12 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
-+ 	box->info = boxinfo;
-+ 	box->len = len;
-+ 	JAS_DBGLOG(10, (
-+-	  "preliminary processing of JP2 box: type=%c%s%c (0x%08x); length=%d\n",
-++	  "preliminary processing of JP2 box: "
-++	  "type=%c%s%c (0x%08x); length=%"PRIuFAST32"\n",
-+ 	  '"', boxinfo->name, '"', box->type, box->len
-+ 	  ));
-+ 	if (box->len == 1) {
-++		JAS_DBGLOG(10, ("big length\n"));
-+ 		if (jp2_getuint64(in, &extlen)) {
-+ 			goto error;
-+ 		}
-+@@ -382,6 +392,7 @@ static int jp2_bpcc_getdata(jp2_box_t *box, jas_stream_t *in)
-+ {
-+ 	jp2_bpcc_t *bpcc = &box->data.bpcc;
-+ 	unsigned int i;
-++	bpcc->bpcs = 0;
-+ 	bpcc->numcmpts = box->datalen;
-+ 	if (!(bpcc->bpcs = jas_alloc2(bpcc->numcmpts, sizeof(uint_fast8_t)))) {
-+ 		return -1;
-+@@ -462,6 +473,7 @@ static int jp2_cdef_getdata(jp2_box_t *box, jas_stream_t *in)
-+ 	jp2_cdef_t *cdef = &box->data.cdef;
-+ 	jp2_cdefchan_t *chan;
-+ 	unsigned int channo;
-++	cdef->ents = 0;
-+ 	if (jp2_getuint16(in, &cdef->numchans)) {
-+ 		return -1;
-+ 	}
-+@@ -518,7 +530,9 @@ int jp2_box_put(jp2_box_t *box, jas_stream_t *out)
-+ 	}
-+ 
-+ 	if (dataflag) {
-+-		if (jas_stream_copy(out, tmpstream, box->len - JP2_BOX_HDRLEN(false))) {
-++		if (jas_stream_copy(out, tmpstream, box->len -
-++		  JP2_BOX_HDRLEN(false))) {
-++			jas_eprintf("cannot copy box data\n");
-+ 			goto error;
-+ 		}
-+ 		jas_stream_close(tmpstream);
-+@@ -777,6 +791,7 @@ static int jp2_cmap_getdata(jp2_box_t *box, jas_stream_t *in)
-+ 	jp2_cmap_t *cmap = &box->data.cmap;
-+ 	jp2_cmapent_t *ent;
-+ 	unsigned int i;
-++	cmap->ents = 0;
-+ 
-+ 	cmap->numchans = (box->datalen) / 4;
-+ 	if (!(cmap->ents = jas_alloc2(cmap->numchans, sizeof(jp2_cmapent_t)))) {
-+@@ -835,6 +850,7 @@ static int jp2_pclr_getdata(jp2_box_t *box, jas_stream_t *in)
-+ 	int_fast32_t x;
-+ 
-+ 	pclr->lutdata = 0;
-++	pclr->bpc = 0;
-+ 
-+ 	if (jp2_getuint16(in, &pclr->numlutents) ||
-+ 	  jp2_getuint8(in, &pclr->numchans)) {
-+@@ -869,9 +885,9 @@ static int jp2_pclr_putdata(jp2_box_t *box, jas_stream_t *out)
-+ #if 0
-+ 	jp2_pclr_t *pclr = &box->data.pclr;
-+ #endif
-+-/* Eliminate warning about unused variable. */
-+-box = 0;
-+-out = 0;
-++	/* Eliminate warning about unused variable. */
-++	box = 0;
-++	out = 0;
-+ 	return -1;
-+ }
-+ 
++ epoxy.pc.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/epoxy.pc.in b/epoxy.pc.in
++index 7828a77..8278b7d 100644
++--- a/epoxy.pc.in
+++++ b/epoxy.pc.in
++@@ -10,6 +10,6 @@ epoxy_has_wgl=@epoxy_has_wgl@
++ Name: epoxy
++ Description: epoxy GL dispatch Library
++ Version: @PACKAGE_VERSION@
++-Cflags: -I${includedir}
+++Cflags: -I${includedir} @EGL_CFLAGS@
++ Libs: -L${libdir} -lepoxy
++ Libs.private: @DLOPEN_LIBS@
 +-- 
-+2.11.0
++2.10.2
 +
+-- 
+2.10.2
