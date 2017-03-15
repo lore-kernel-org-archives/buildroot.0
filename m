@@ -1,40 +1,125 @@
-From: Andrey Yurovsky <yurovsky@gmail.com>
-Date: Wed, 15 Mar 2017 15:48:41 -0700
-Subject: [Buildroot] site and version vs. package names
-In-Reply-To: <CAAkeqgXK4roHSfoT1LHkOuY1O=VEK=it_okaO2mN=KPq07c9AQ@mail.gmail.com>
-References: <CAAkeqgXK4roHSfoT1LHkOuY1O=VEK=it_okaO2mN=KPq07c9AQ@mail.gmail.com>
-Message-ID: <CAAkeqgX_7=13_i4bq0TzSxTedngEx1F_n+xk1-wkgpCQJ+4iOQ@mail.gmail.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Thu, 16 Mar 2017 00:50:14 +0200
+Subject: [Buildroot] [PATCH v1] package/bluez5_utils: Allow user to enable
+	disabled plugins
+Message-ID: <20170315225014.6427-1-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, I figured it out, sorry for the noise.
+Disregard to increase just minor version BlueZ 5.44 is drastically different in
+a way what tools and plugins are enabled and installed by default.
 
-On Wed, Mar 15, 2017 at 3:39 PM, Andrey Yurovsky <yurovsky@gmail.com> wrote:
-> I'm working on packaging udisks2 and I'm running into a somewhat odd problem.
->
-> I want to create a package called "udisks2" since there's already a
-> package for the older "udisks" that has been abandoned upstream as I
-> understand it.  That means I have udisks2.mk and macros starting with
-> UDISKS2_ such as UDISKS2_VERSION and so on.
->
-> udisks2 releases look like this:
-> https://github.com/storaged-project/udisks/releases/tag/udisks-2.6.4
->
-> So unfortunately the string "udisks" is in the URL. I can't think of a
-> reasonable way to make the fetcher generate a URL like
-> https://github.com/storaged-project/udisks/archive/udisks-2.6.4.tar.gz
-> because the package is UDISKS2 but then it needs "udisks" in the URL
-> and the version number.
->
-> Is there a way for me to work around that? (sorry if it's a stupid
-> question, I feel like I'm missing something either way). I can simply
-> replace the udisks package for my needs but for buildroot itself I
-> suspect people want both (though I'm not sure that the old udisks has
-> much utility in a modern system).
->
-> Thanks,
->
->   -Andrey
+Extend Buildroot package to cover these changes.
+
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ package/bluez5_utils/Config.in       | 28 +++++++++++++++++++++++++++-
+ package/bluez5_utils/bluez5_utils.mk | 36 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+), 1 deletion(-)
+
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index a7c0ee4ba..e99f0f69f 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -48,6 +48,11 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ comment "bluez5-utils client needs a glibc or musl toolchain"
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
++	bool "build deprecated tools"
++	help
++	  Build BlueZ 5.x deprecated tools (hciattach, gatttool, ...).
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 	bool "install GATT tool"
+ 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+@@ -62,7 +67,28 @@ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+ 	bool "build experimental plugins"
+ 	help
+-	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
++	  Build BlueZ 5.x experimental plugins (PCSuite, ...).
++
++config BR2_PACKAGE_BLUEZ5_PLUGINS_HEALTH
++	bool "build health plugin"
++	help
++	  Build BlueZ 5.x health plugin
++
++config BR2_PACKAGE_BLUEZ5_PLUGINS_MIDI
++	bool "build midi plugin"
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  Build BlueZ 5.x midi plugin
++
++config BR2_PACKAGE_BLUEZ5_PLUGINS_NFC
++	bool "build nfc plugin"
++	help
++	  Build BlueZ 5.x nfc plugin
++
++config BR2_PACKAGE_BLUEZ5_PLUGINS_SAP
++	bool "build sap plugin"
++	help
++	  Build BlueZ 5.x sap plugin
+ 
+ config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
+ 	bool "build sixaxis plugin"
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 4d31a187b..4eae3d01d 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -38,6 +38,35 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+ endif
+ 
++# enable health plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_HEALTH),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-health
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-health
++endif
++
++# enable midi plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_MIDI),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-midi
++BLUEZ5_UTILS_DEPENDENCIES += alsa-lib
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-midi
++endif
++
++# enable nfc plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_NFC),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-nfc
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-nfc
++endif
++
++# enable sap plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SAP),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-sap
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-sap
++endif
++
+ # enable sixaxis plugin
+ ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
+@@ -45,6 +74,13 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
+ endif
+ 
++# build deprecated tools
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-deprecated
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-deprecated
++endif
++
+ # install gatttool (For some reason upstream choose not to do it by default)
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
+ define BLUEZ5_UTILS_INSTALL_GATTTOOL
+-- 
+2.11.0
