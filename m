@@ -1,51 +1,76 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 15 Mar 2017 13:05:32 -0300 (BRT)
-Subject: [Buildroot] cmake is not building anymore
-In-Reply-To: <1489590657.19767.1.camel@linux.intel.com>
-References: <1489417019.20145.214.camel@linux.intel.com>
- <1489420484.20145.218.camel@linux.intel.com>
- <544671010.14659188.1489539751977.JavaMail.zimbra@datacom.ind.br>
- <1489590657.19767.1.camel@linux.intel.com>
-Message-ID: <372249453.14780914.1489593932103.JavaMail.zimbra@datacom.ind.br>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 15 Mar 2017 16:58:12 +0000
+Subject: [Buildroot] [PATCH] libepoxy: reinstate mesa egl cflags patch
+In-Reply-To: <20170315132357.2357-1-gustavo@zacarias.com.ar>
+References: <20170315132357.2357-1-gustavo@zacarias.com.ar>
+Message-ID: <49696a6c-8a28-3c03-3718-4a043cfe17c4@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "buildroot" <buildroot@busybox.net>
-> Sent: Wednesday, March 15, 2017 12:10:57 PM
-> Subject: Re: [Buildroot] cmake is not building anymore
+Hi Gustavo,
 
-> On Tue, 2017-03-14 at 22:02 -0300, Carlos Santos wrote:
-> $ git clean -xdf
-> # I suppose you agree this is more stronger than make clean
+On 15/03/17 13:23, Gustavo Zacarias wrote:
+> This is still required when building libepoxy against mesa egl without
+> x11 (GL).
 > 
-> $ make defconfig
-> $ make
+> Mesa needs a preprocessor define to avoid including X11 headers and
+> since this is not forwarded into epoxy.pc for other
+> libraries/applicatons that link against it it will fail.
 > 
-> --- 8< --- 8< ---
-> 
-> [ 65%] Linking C static library libcmcurl.a
-> 
-> In file included from .../output/build/host-cmake-
-> 3.6.3/Utilities/cmlibarchive/libarchive/archive_write_set_format_zip.c:5
-> 2:0:
-> .../output/build/host-cmake-
-> 3.6.3/Utilities/cmlibarchive/libarchive/archive_cryptor_private.h:107:17
-> : error: field ?ctx? has incomplete type
->??EVP_CIPHER_CTX ctx;
->?????????????????^~~
-> --- 8< --- 8< ---
-> 
-> 100% reproducible
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-If you use "make BR2_JLEVEL=1" the compilation will stop at the first error and it will be easier to identify the cause. I guess you don't have the openssl-dev package installed on the host machine neither built host-openssl in buildroot, since EVP_CIPHER_CTX is defined in openssl/ossl_typ.h.
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?The greatest triumph that modern PR can offer is the transcendent 
-success of having your words and actions judged by your reputation, 
-rather than the other way about.? ? Christopher Hitchens
+I have checked that the compilation error is fixed by this patch.
+
+Regards,
+
+Vincent
+
+> ---
+>  .../0001-Forward-EGL-cflags-into-epoxy.pc.patch    | 32 ++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
+> 
+> diff --git a/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch b/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
+> new file mode 100644
+> index 0000000..286f875
+> --- /dev/null
+> +++ b/package/libepoxy/0001-Forward-EGL-cflags-into-epoxy.pc.patch
+> @@ -0,0 +1,32 @@
+> +From 99b8373dbe8fb3bac835ebad90f91cfd213e4acb Mon Sep 17 00:00:00 2001
+> +From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +Date: Wed, 15 Mar 2017 10:02:54 -0300
+> +Subject: [PATCH] Forward EGL cflags into epoxy.pc
+> +
+> +When building mesa egl without x11 and gles2 the headers need a
+> +MESA_EGL_NO_X11_HEADERS define to avoid including X11 headers.
+> +Forward EGL CFLAGS into epoxy.pc to avoid build failures when linking
+> +against libepoxy on this scenario.
+> +
+> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +---
+> +Status: pull request https://github.com/anholt/libepoxy/pull/113
+> +
+> + epoxy.pc.in | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/epoxy.pc.in b/epoxy.pc.in
+> +index 7828a77..8278b7d 100644
+> +--- a/epoxy.pc.in
+> ++++ b/epoxy.pc.in
+> +@@ -10,6 +10,6 @@ epoxy_has_wgl=@epoxy_has_wgl@
+> + Name: epoxy
+> + Description: epoxy GL dispatch Library
+> + Version: @PACKAGE_VERSION@
+> +-Cflags: -I${includedir}
+> ++Cflags: -I${includedir} @EGL_CFLAGS@
+> + Libs: -L${libdir} -lepoxy
+> + Libs.private: @DLOPEN_LIBS@
+> +-- 
+> +2.10.2
+> +
+> 
