@@ -1,125 +1,41 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Thu, 16 Mar 2017 00:50:14 +0200
-Subject: [Buildroot] [PATCH v1] package/bluez5_utils: Allow user to enable
-	disabled plugins
-Message-ID: <20170315225014.6427-1-andriy.shevchenko@linux.intel.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Mar 2017 23:55:50 +0100
+Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
+In-Reply-To: <20170315233549.189748ec@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 15 Mar 2017 23:35:49 +0100")
+References: <20170313133220.62892a21@free-electrons.com>
+ <216f6108-da26-92cc-8177-07117d20092c@andin.de>
+ <20170313163306.GA3680@free.fr>
+ <20170314091615.2de4a05b@free-electrons.com>
+ <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
+ <180611cf-c61b-736d-c753-9df57bb29bc7@andin.de>
+ <f785c386-075b-ac22-3114-d09a79dbeffc@mind.be>
+ <ece0d310-0f3d-9f1c-e045-70f0f5c4d777@andin.de>
+ <ca4c849a-caa1-05f5-a298-a066fc19591a@mind.be>
+ <651a8b7e-4910-445e-6613-404be75af105@mind.be>
+ <20170315200941.GA3683@free.fr> <877f3qs26k.fsf@dell.be.48ers.dk>
+ <20170315233549.189748ec@free-electrons.com>
+Message-ID: <87h92uqhe1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disregard to increase just minor version BlueZ 5.44 is drastically different in
-a way what tools and plugins are enabled and installed by default.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Extend Buildroot package to cover these changes.
+ > Hello,
+ > On Wed, 15 Mar 2017 21:41:23 +0100, Peter Korsgaard wrote:
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- package/bluez5_utils/Config.in       | 28 +++++++++++++++++++++++++++-
- package/bluez5_utils/bluez5_utils.mk | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 63 insertions(+), 1 deletion(-)
+ >> > I know where my vote lies: correctness. ;-)  
+ >> 
+ >> Yes, naturally. I vaguely remember something about an earlier discussion
+ >> related to host-acl/host-attr, but that was perhaps about pseudo?
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index a7c0ee4ba..e99f0f69f 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -48,6 +48,11 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
- comment "bluez5-utils client needs a glibc or musl toolchain"
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC
- 
-+config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
-+	bool "build deprecated tools"
-+	help
-+	  Build BlueZ 5.x deprecated tools (hciattach, gatttool, ...).
-+
- config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
- 	bool "install GATT tool"
- 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
-@@ -62,7 +67,28 @@ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
- config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
- 	bool "build experimental plugins"
- 	help
--	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
-+	  Build BlueZ 5.x experimental plugins (PCSuite, ...).
-+
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_HEALTH
-+	bool "build health plugin"
-+	help
-+	  Build BlueZ 5.x health plugin
-+
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_MIDI
-+	bool "build midi plugin"
-+	select BR2_PACKAGE_ALSA_LIB
-+	help
-+	  Build BlueZ 5.x midi plugin
-+
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_NFC
-+	bool "build nfc plugin"
-+	help
-+	  Build BlueZ 5.x nfc plugin
-+
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_SAP
-+	bool "build sap plugin"
-+	help
-+	  Build BlueZ 5.x sap plugin
- 
- config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
- 	bool "build sixaxis plugin"
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 4d31a187b..4eae3d01d 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -38,6 +38,35 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
- endif
- 
-+# enable health plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_HEALTH),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-health
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-health
-+endif
-+
-+# enable midi plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_MIDI),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-midi
-+BLUEZ5_UTILS_DEPENDENCIES += alsa-lib
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-midi
-+endif
-+
-+# enable nfc plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_NFC),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-nfc
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-nfc
-+endif
-+
-+# enable sap plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SAP),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-sap
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-sap
-+endif
-+
- # enable sixaxis plugin
- ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
- BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
-@@ -45,6 +74,13 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
- endif
- 
-+# build deprecated tools
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-deprecated
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-deprecated
-+endif
-+
- # install gatttool (For some reason upstream choose not to do it by default)
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
- define BLUEZ5_UTILS_INSTALL_GATTTOOL
+ > I think it was about host-libcap, not host-acl/host-attr. See commit
+ > c994c3db1f7d76b5dfe79e3b1133d66fdd06212c.
+
+Ahh yes, you're right.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
