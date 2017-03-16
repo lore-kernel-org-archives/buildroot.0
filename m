@@ -1,37 +1,34 @@
 From: Wolfgang Grandegger <wg@grandegger.com>
-Date: Thu, 16 Mar 2017 15:23:27 +0100
-Subject: [Buildroot] [RFC PATCH v2 9/9] support/scripts: check-host-rpath
-	now handles $ORIGIN as well
+Date: Thu, 16 Mar 2017 15:23:23 +0100
+Subject: [Buildroot] [RFC PATCH v2 5/9] core: sanitize RPATH in target tree
+	at the end of the target finalization
 In-Reply-To: <1489674207-6876-1-git-send-email-wg@grandegger.com>
 References: <1489674207-6876-1-git-send-email-wg@grandegger.com>
-Message-ID: <1489674207-6876-10-git-send-email-wg@grandegger.com>
+Message-ID: <1489674207-6876-6-git-send-email-wg@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"$ORIGIN/../../usr/lib" is also a valid RPATH for binaries in
-"$hostdir/usr/bin". After RPATH sanitation, all RPATH
-directories start with "$ORIGIN".
-
 Signed-off-by: Wolfgang Grandegger <wg@grandegger.com>
 ---
- support/scripts/check-host-rpath | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-index 6ce547c..020c123 100755
---- a/support/scripts/check-host-rpath
-+++ b/support/scripts/check-host-rpath
-@@ -58,7 +58,7 @@ check_elf_has_rpath() {
-         for dir in ${rpath//:/ }; do
-             # Remove duplicate and trailing '/' for proper match
-             dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
--            [ "${dir}" = "${hostdir}/usr/lib" ] && return 0
-+            [ "${dir}" = "${hostdir}/usr/lib" -o "${dir}" = "\$ORIGIN/../../usr/lib" ] && return 0
-         done
-     done < <( readelf -d "${file}"                                              \
-               |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
+diff --git a/Makefile b/Makefile
+index 41d100e..aea85c8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -716,6 +716,9 @@ endif
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
++	@$(call MESSAGE,"Sanitizing RPATH in target tree")
++	$(TOPDIR)/support/scripts/fix-rpath target
++
+ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
 -- 
 1.9.1
