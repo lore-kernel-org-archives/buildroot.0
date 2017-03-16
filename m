@@ -1,61 +1,42 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Thu, 16 Mar 2017 09:13:19 +0100
-Subject: [Buildroot] [PATCH] fakeroot: bump version to 1.21-2
-In-Reply-To: <20170315200941.GA3683@free.fr>
-References: <20170313133220.62892a21@free-electrons.com>
- <216f6108-da26-92cc-8177-07117d20092c@andin.de>
- <20170313163306.GA3680@free.fr> <20170314091615.2de4a05b@free-electrons.com>
- <adf0f72b-286b-e056-a2ed-24389f852472@andin.de>
- <180611cf-c61b-736d-c753-9df57bb29bc7@andin.de>
- <f785c386-075b-ac22-3114-d09a79dbeffc@mind.be>
- <ece0d310-0f3d-9f1c-e045-70f0f5c4d777@andin.de>
- <ca4c849a-caa1-05f5-a298-a066fc19591a@mind.be>
- <651a8b7e-4910-445e-6613-404be75af105@mind.be>
- <20170315200941.GA3683@free.fr>
-Message-ID: <2838d211-b211-c518-ba0a-0a2f0d284dbd@andin.de>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 16 Mar 2017 10:28:30 +0000
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 7.7.3
+Message-ID: <1489660110-8914-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+See https://nodejs.org/en/blog/release/v7.7.3/
 
-Am 15.03.2017 um 21:09 schrieb Yann E. MORIN:
-> Arnout, All,
->
-> On 2017-03-15 20:46 +0100, Arnout Vandecappelle spake thusly:
->> On 15-03-17 20:07, Arnout Vandecappelle wrote:
-> [--SNIP--]
->>  Buildroot fakeroot works fine when I have libacl1-dev installed on my system -
-This is great! And of course, I dont mind the 10 seconds :-)
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-[snip]
->
-> It's either correctness and a bit of overhead, or inconsistencies.
->
-> I know where my vote lies: correctness. ;-)
->
-> Regards,
-> Yann E. MORIN.
->
->>  Anyway, I'll send a patch that does this, let's see if others consider this
->> overhead acceptable.
-I'll test as soon as its there.
-
-
-Thanks and regards,
-Andreas
-
->>
->>  Regards,
->>  Arnout
->>
->> --
->> Arnout Vandecappelle                          arnout at mind be
->> Senior Embedded Software Architect            +32-16-286500
->> Essensium/Mind                                http://www.mind.be
->> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index f0a4968..e4f3815 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v7.7.2/SHASUMS256.txt
+-sha256  e7448d8e44d32c2c63347c822508cf5c87b9662c07db290056fec66d37c4f584  node-v7.7.2.tar.xz
++# From upstream URL: http://nodejs.org/dist/v7.7.3/SHASUMS256.txt
++sha256  5441daf11f743b5508ddf31a16b4f268835fbceb59ef709b44e85b03fece0edf  node-v7.7.3.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 0db97e8..ad0b26d 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 7.7.2
++NODEJS_VERSION = 7.7.3
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
+-- 
+2.7.4
