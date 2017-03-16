@@ -1,73 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 16 Mar 2017 20:41:23 +0200
-Subject: [Buildroot] [PATCH] tcpreplay: patch security issue
-Message-ID: <ca98f5adf97d81a7ae436c03567ac62f733698fe.1489689683.git.baruch@tkos.co.il>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Thu, 16 Mar 2017 19:15:31 +0000
+Subject: [Buildroot] [PATCH] xlib_libXv: correct license type
+In-Reply-To: <20170316153146.21715-1-peter@korsgaard.com>
+References: <20170316153146.21715-1-peter@korsgaard.com>
+Message-ID: <90B0A5D74F9D1542B45328A4E51B57F0DB36CE80@PUMAIL01.pu.imgtec.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch for CVE-2017-6429: Buffer overflow when reading crafted
-pcap file with large packets.
+Hello Peter,
 
-https://github.com/appneta/tcpreplay/issues/278
+> The license is actually closer to ICS than MIT, E.G.:
+> 
+> https://opensource.org/licenses/ISC
+> vs
+> https://opensource.org/licenses/MIT
+> 
+> From COPYING:
+> Permission to use, copy, modify, and distribute this software and its
+> documentation for any purpose and without fee is hereby granted,
+> provided that the above copyright notice appear in all copies and that
+> both that copyright notice and this permission notice appear in
+> supporting documentation, and that the names of Digital or MIT not be
+> used in advertising or publicity pertaining to distribution of the
+> software without specific, written prior permission.
+>
+> E.G.  this is the normal ICS text which has been extended with a BSD-3c
+> style advertisinc clause.  Both are permissive licenses, but it is more
+> correct to call it ICS-like.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/x11r7/xlib_libXv/xlib_libXv.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/x11r7/xlib_libXv/xlib_libXv.mk b/package/x11r7/xlib_libXv/xlib_libXv.mk
+> index 26f8badc5..d113741e0 100644
+> --- a/package/x11r7/xlib_libXv/xlib_libXv.mk
+> +++ b/package/x11r7/xlib_libXv/xlib_libXv.mk
+> @@ -7,7 +7,7 @@
+>  XLIB_LIBXV_VERSION = 1.0.11
+>  XLIB_LIBXV_SOURCE = libXv-$(XLIB_LIBXV_VERSION).tar.bz2
+>  XLIB_LIBXV_SITE = http://xorg.freedesktop.org/releases/individual/lib
+> -XLIB_LIBXV_LICENSE = MIT
+> +XLIB_LIBXV_LICENSE = ICS-like
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...-capture-has-a-packet-that-is-too-large-2.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
+I believe you mean ISC instead of ICS.
 
-diff --git a/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch b/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
-new file mode 100644
-index 000000000000..233b6d959f68
---- /dev/null
-+++ b/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
-@@ -0,0 +1,44 @@
-+From d689d14dbcd768c028eab2fb378d849e543dcfe9 Mon Sep 17 00:00:00 2001
-+From: Fred Klassen <fklassen@appneta.com>
-+Date: Sun, 26 Feb 2017 20:45:59 -0800
-+Subject: [PATCH] #278 fail if capture has a packet that is too large (#286)
-+
-+* #278 fail if capture has a packet that is too large
-+
-+[baruch: remove the CHANGELOG update]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: upstream commit d689d14db
-+
-+diff --git a/src/tcpcapinfo.c b/src/tcpcapinfo.c
-+index 775f1625b00f..96928820fe94 100644
-+--- a/src/tcpcapinfo.c
-++++ b/src/tcpcapinfo.c
-+@@ -281,6 +281,15 @@ main(int argc, char *argv[])
-+                 caplen = pcap_ph.caplen;
-+             }
-+ 
-++            if (caplentoobig) {
-++                printf("\n\nCapture file appears to be damaged or corrupt.\n"
-++                        "Contains packet of size %u, bigger than snap length %u\n",
-++                        caplen, pcap_fh.snaplen);
-++
-++                close(fd);
-++                break;
-++            }
-++
-+             /* check to make sure timestamps don't go backwards */
-+             if (last_sec > 0 && last_usec > 0) {
-+                 if ((pcap_ph.ts.tv_sec == last_sec) ? 
-+@@ -306,7 +315,7 @@ main(int argc, char *argv[])
-+                 }
-+ 
-+                 close(fd);
-+-                continue;
-++                break;
-+             }
-+ 
-+             /* print the frame checksum */
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+But to me, license for this package looks closer to OpenBSD template [1]
+because of "and distribute" wording in license text. In ISC license, it's
+"and/or distribute" [2]. This is just my view. May be it is better to check
+with upstream what license is it?
+
+Thanks,
+Rahul
+
+[1] - http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/share/misc/license.template?rev=HEAD
+[2] - https://en.wikipedia.org/wiki/ISC_license#History
