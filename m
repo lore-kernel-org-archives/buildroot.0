@@ -1,47 +1,49 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 16 Mar 2017 15:32:01 +0100
-Subject: [Buildroot] [PATCH] libsamplerate: bump to version 0.1.9
-Message-ID: <20170316143201.2159-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Mar 2017 16:31:46 +0100
+Subject: [Buildroot] [PATCH] xlib_libXv: correct license type
+Message-ID: <20170316153146.21715-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsamplerate is relicensed under the 2 clause BSD license.
+The license is actually closer to ICS than MIT, E.G.:
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+https://opensource.org/licenses/ISC
+vs
+https://opensource.org/licenses/MIT
+
+From COPYING:
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation, and that the names of Digital or MIT not be
+used in advertising or publicity pertaining to distribution of the
+software without specific, written prior permission.
+
+E.G.  this is the normal ICS text which has been extended with a BSD-3c
+style advertisinc clause.  Both are permissive licenses, but it is more
+correct to call it ICS-like.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsamplerate/libsamplerate.hash | 2 +-
- package/libsamplerate/libsamplerate.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xlib_libXv/xlib_libXv.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libsamplerate/libsamplerate.hash b/package/libsamplerate/libsamplerate.hash
-index a495108d3..a303f0bcf 100644
---- a/package/libsamplerate/libsamplerate.hash
-+++ b/package/libsamplerate/libsamplerate.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	93b54bdf46d5e6d2354b7034395fe329c222a966790de34520702bb9642f1c06	libsamplerate-0.1.8.tar.gz
-+sha256  0a7eb168e2f21353fb6d84da152e4512126f7dc48ccb0be80578c565413444c1  libsamplerate-0.1.9.tar.gz
-diff --git a/package/libsamplerate/libsamplerate.mk b/package/libsamplerate/libsamplerate.mk
-index 28fd644fa..802b5b14a 100644
---- a/package/libsamplerate/libsamplerate.mk
-+++ b/package/libsamplerate/libsamplerate.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--LIBSAMPLERATE_VERSION = 0.1.8
-+LIBSAMPLERATE_VERSION = 0.1.9
- LIBSAMPLERATE_SITE = http://www.mega-nerd.com/SRC
- LIBSAMPLERATE_INSTALL_STAGING = YES
- LIBSAMPLERATE_DEPENDENCIES = host-pkgconf
- LIBSAMPLERATE_CONF_OPTS = --disable-fftw --program-transform-name=''
--LIBSAMPLERATE_LICENSE = Dual GPLv2+ / libsamplerate commercial use license
-+LIBSAMPLERATE_LICENSE = BSD-2c
- LIBSAMPLERATE_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+diff --git a/package/x11r7/xlib_libXv/xlib_libXv.mk b/package/x11r7/xlib_libXv/xlib_libXv.mk
+index 26f8badc5..d113741e0 100644
+--- a/package/x11r7/xlib_libXv/xlib_libXv.mk
++++ b/package/x11r7/xlib_libXv/xlib_libXv.mk
+@@ -7,7 +7,7 @@
+ XLIB_LIBXV_VERSION = 1.0.11
+ XLIB_LIBXV_SOURCE = libXv-$(XLIB_LIBXV_VERSION).tar.bz2
+ XLIB_LIBXV_SITE = http://xorg.freedesktop.org/releases/individual/lib
+-XLIB_LIBXV_LICENSE = MIT
++XLIB_LIBXV_LICENSE = ICS-like
+ XLIB_LIBXV_LICENSE_FILES = COPYING
+ XLIB_LIBXV_INSTALL_STAGING = YES
+ XLIB_LIBXV_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_videoproto xproto_xproto
 -- 
-2.12.0
+2.11.0
