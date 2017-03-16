@@ -1,23 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Mar 2017 22:13:35 +0100
-Subject: [Buildroot] [PATCH] libsamplerate: bump to version 0.1.9
-In-Reply-To: <20170316143201.2159-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Thu, 16 Mar 2017 15:32:01 +0100")
-References: <20170316143201.2159-1-joerg.krause@embedded.rocks>
-Message-ID: <87tw6tncw0.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Mar 2017 22:10:55 +0100
+Subject: [Buildroot] [git commit] tcpreplay: patch security issue
+Message-ID: <20170316211402.1510A81E48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=62bf2bfd53885fbd62a8e9345c7f3d7a4d619342
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libsamplerate is relicensed under the 2 clause BSD license.
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Add upstream patch for CVE-2017-6429: Buffer overflow when reading crafted
+pcap file with large packets.
 
-Committed, thanks.
+https://github.com/appneta/tcpreplay/issues/278
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-capture-has-a-packet-that-is-too-large-2.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch b/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
+new file mode 100644
+index 0000000..233b6d9
+--- /dev/null
++++ b/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
+@@ -0,0 +1,44 @@
++From d689d14dbcd768c028eab2fb378d849e543dcfe9 Mon Sep 17 00:00:00 2001
++From: Fred Klassen <fklassen@appneta.com>
++Date: Sun, 26 Feb 2017 20:45:59 -0800
++Subject: [PATCH] #278 fail if capture has a packet that is too large (#286)
++
++* #278 fail if capture has a packet that is too large
++
++[baruch: remove the CHANGELOG update]
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: upstream commit d689d14db
++
++diff --git a/src/tcpcapinfo.c b/src/tcpcapinfo.c
++index 775f1625b00f..96928820fe94 100644
++--- a/src/tcpcapinfo.c
+++++ b/src/tcpcapinfo.c
++@@ -281,6 +281,15 @@ main(int argc, char *argv[])
++                 caplen = pcap_ph.caplen;
++             }
++ 
+++            if (caplentoobig) {
+++                printf("\n\nCapture file appears to be damaged or corrupt.\n"
+++                        "Contains packet of size %u, bigger than snap length %u\n",
+++                        caplen, pcap_fh.snaplen);
+++
+++                close(fd);
+++                break;
+++            }
+++
++             /* check to make sure timestamps don't go backwards */
++             if (last_sec > 0 && last_usec > 0) {
++                 if ((pcap_ph.ts.tv_sec == last_sec) ? 
++@@ -306,7 +315,7 @@ main(int argc, char *argv[])
++                 }
++ 
++                 close(fd);
++-                continue;
+++                break;
++             }
++ 
++             /* print the frame checksum */
++-- 
++2.11.0
++
