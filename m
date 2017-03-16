@@ -1,41 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Mar 2017 22:11:31 +0100
-Subject: [Buildroot] [git commit] dado: bump to version 1.8.0
-Message-ID: <20170316211402.24BFF7FE36@busybox.osuosl.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 16 Mar 2017 22:16:40 +0100
+Subject: [Buildroot] [Patch v3 9/9] s6-linux-init: new package
+In-Reply-To: <87shmgyeha.fsf@dell.be.48ers.dk>
+References: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1482182955-23916-10-git-send-email-eric.le.bihan.dev@free.fr>
+ <87shmgyeha.fsf@dell.be.48ers.dk>
+Message-ID: <20170316211640.GA4981@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf433c6efc231eaaee7d3a68232f5eef0d3bdd4e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi!
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dado/dado.hash | 2 +-
- package/dado/dado.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 17-03-13 23:54:41, Peter Korsgaard wrote:
+> >>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+>
+>  > This new package provides s6-linux-init, a set of minimalistic tools to
+>  > create a s6-based init system, including a /sbin/init program, on a
+>  > machine running a Linux kernel.
+>
+> Hmm, should this then be added as one of the available init options in
+> the system menu? Or if not, at least depend on BR2_INIT_NONE to ensure
+> no other init system overwrites /sbin/init?
 
-diff --git a/package/dado/dado.hash b/package/dado/dado.hash
-index 3f17f08..984ef3f 100644
---- a/package/dado/dado.hash
-+++ b/package/dado/dado.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	b7a68583c36643ad9040937d7e2b99230af7da83c7cbd13c9923881f1eb7490f  dado-1.6.0-1.src.rock
-+sha256	dea331051c92ef2fbb22025a4f02e84e63d63148a66589401404877727f59941  dado-1.8.0-1.src.rock
-diff --git a/package/dado/dado.mk b/package/dado/dado.mk
-index a09dd6d..7ae4edf 100644
---- a/package/dado/dado.mk
-+++ b/package/dado/dado.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DADO_VERSION = 1.6.0-1
-+DADO_VERSION = 1.8.0-1
- DADO_LICENSE = MIT
- 
- $(eval $(luarocks-package))
+s6-linux-init [1] does not provide a replacement for /sbin/init, but
+a tool to generate one FROM the target. So when this package is selected,
+there is no risk of messing up target/sbin/init at build time. Hence no
+need to make it depend on on BR2_INIT_NONE.
+
+The s6* packages provide the tools to build an init system with service
+supervision (as the author states it: "mechanism over policy"). It is up
+to the user to glue everything via post-build scripts or a custom
+skeleton. A basic example of such a skeleton [2] is available in a
+personal Buildroot external customization [3].
+
+Should some comments be added in s6-linux-init/Config.in to clarify
+this?
+
+[1] http://skarnet.org/software/s6-linux-init/
+[2] https://github.com/elebihan/s6-br2-init-skeleton/
+[3] https://github.com/elebihan/br2-ext-skarnet/blob/master/system/Config.in
+
+--
+ELB
