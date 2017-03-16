@@ -1,72 +1,38 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Thu, 16 Mar 2017 18:54:25 -0400
-Subject: [Buildroot] [PATCH] qt5declarative: build and install examples
-Message-ID: <20170316225425.26277-1-gael.portay@savoirfairelinux.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 17 Mar 2017 00:02:06 +0100
+Subject: [Buildroot] [PATCH v2] package/cairo: update license information
+Message-ID: <20170316230206.14685-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch builds and installs Qt examples for declarative module.
+As noticed by Rahul Bedarkar, the cairo library is LGPLv2.1 only
+(not LGPLv2.1+) or MPLv1.1.
 
-It proceeds the same way as others Qt5 modules. Samples are installed
-under /usr/lib/qt/examples/qml directory (/usr/lib/qt/examples/quick for
-quick).
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/qt5/qt5declarative/qt5declarative.mk | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+v2: remove LGPLv2.1+
+    Specify MPL version
+---
+ package/cairo/cairo.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-index fb546bd..d5b298c 100644
---- a/package/qt5/qt5declarative/qt5declarative.mk
-+++ b/package/qt5/qt5declarative/qt5declarative.mk
-@@ -28,14 +28,11 @@ define QT5DECLARATIVE_CONFIGURE_CMDS
- endef
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 761c6f4..ac91a56 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -6,8 +6,8 @@
  
- define QT5DECLARATIVE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		sub-src-all sub-tools-all
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
- define QT5DECLARATIVE_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		sub-src-install_subtargets \
--		sub-tools-install_subtargets
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
- 	$(QT5_LA_PRL_FILES_FIXUP)
- endef
- 
-@@ -45,6 +42,9 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
- define QT5DECLARATIVE_INSTALL_TARGET_QUICK_LIBS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Quick*.so.* $(TARGET_DIR)/usr/lib
- endef
-+define QT5DECLARATIVE_INSTALL_TARGET_QUICK_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/quick/ $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
- endif
- 
- define QT5DECLARATIVE_INSTALL_TARGET_LIBS
-@@ -55,9 +55,17 @@ endef
- 
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT5DECLARATIVE_INSTALL_TARGET_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/qml* $(TARGET_DIR)/usr/lib/qt/examples/
-+	$(QT5DECLARATIVE_INSTALL_TARGET_QUICK_EXAMPLES)
-+endef
-+endif
-+
- define QT5DECLARATIVE_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/bin/qml* $(TARGET_DIR)/usr/bin
- 	cp -dpfr $(STAGING_DIR)/usr/qml $(TARGET_DIR)/usr
-+	$(QT5DECLARATIVE_INSTALL_TARGET_EXAMPLES)
- 	$(QT5DECLARATIVE_INSTALL_TARGET_LIBS)
- endef
- 
+ CAIRO_VERSION = 1.14.8
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+-CAIRO_LICENSE = LGPLv2.1+
+-CAIRO_LICENSE_FILES = COPYING
++CAIRO_LICENSE = LGPLv2.1 or MPLv1.1 (library)
++CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+ CAIRO_SITE = http://cairographics.org/releases
+ CAIRO_INSTALL_STAGING = YES
+ CAIRO_AUTORECONF = YES
 -- 
-2.10.2
+2.9.3
