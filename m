@@ -1,45 +1,72 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 16 Mar 2017 23:45:22 +0100
-Subject: [Buildroot] [PATCH] package/cairo: improve license information
-In-Reply-To: <cef36323-ec6c-48eb-8332-9ea2c86b6097@imgtec.com>
-References: <20170306210218.28867-1-romain.naour@gmail.com>
- <a8c8c494-b69c-2d6b-b505-03f113097a38@imgtec.com>
- <20170307211711.348d28cb@free-electrons.com>
- <cef36323-ec6c-48eb-8332-9ea2c86b6097@imgtec.com>
-Message-ID: <79aa8a65-8330-cb9d-65b0-072dbb30a53d@gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Thu, 16 Mar 2017 18:54:25 -0400
+Subject: [Buildroot] [PATCH] qt5declarative: build and install examples
+Message-ID: <20170316225425.26277-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Rahul, Thomas,
+This patch builds and installs Qt examples for declarative module.
 
-Le 08/03/2017 ? 07:55, Rahul Bedarkar a ?crit :
-> Hello,
-> 
-> On Wednesday 08 March 2017 01:47 AM, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Tue, 7 Mar 2017 14:54:24 +0530, Rahul Bedarkar wrote:
->>
->>> License string for LGPL should be "LGPLv2.1" because license text
->>> doesn't have "or (at your option) any later version;" clause.
->>
->> The license file itself never says "or (at your option) any later
->> version". The license text of the GPL or LGPL is always the text of one
->> specific version of the license. To know whether "or later" applies or
->> not, you usually need to look at the comments in the code.
-> 
-> Yes, I was referring to license text from source file header. But I agree that
-> my comment didn't make it clear.
+It proceeds the same way as others Qt5 modules. Samples are installed
+under /usr/lib/qt/examples/qml directory (/usr/lib/qt/examples/quick for
+quick).
 
-Thanks for the review!
-I'll fix
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+ package/qt5/qt5declarative/qt5declarative.mk | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-Best regards,
-Romain
-
-> 
-> Thanks,
-> Rahul
+diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
+index fb546bd..d5b298c 100644
+--- a/package/qt5/qt5declarative/qt5declarative.mk
++++ b/package/qt5/qt5declarative/qt5declarative.mk
+@@ -28,14 +28,11 @@ define QT5DECLARATIVE_CONFIGURE_CMDS
+ endef
+ 
+ define QT5DECLARATIVE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		sub-src-all sub-tools-all
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
+ 
+ define QT5DECLARATIVE_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		sub-src-install_subtargets \
+-		sub-tools-install_subtargets
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ 	$(QT5_LA_PRL_FILES_FIXUP)
+ endef
+ 
+@@ -45,6 +42,9 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+ define QT5DECLARATIVE_INSTALL_TARGET_QUICK_LIBS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Quick*.so.* $(TARGET_DIR)/usr/lib
+ endef
++define QT5DECLARATIVE_INSTALL_TARGET_QUICK_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/quick/ $(TARGET_DIR)/usr/lib/qt/examples/
++endef
+ endif
+ 
+ define QT5DECLARATIVE_INSTALL_TARGET_LIBS
+@@ -55,9 +55,17 @@ endef
+ 
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5DECLARATIVE_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/qml* $(TARGET_DIR)/usr/lib/qt/examples/
++	$(QT5DECLARATIVE_INSTALL_TARGET_QUICK_EXAMPLES)
++endef
++endif
++
+ define QT5DECLARATIVE_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/bin/qml* $(TARGET_DIR)/usr/bin
+ 	cp -dpfr $(STAGING_DIR)/usr/qml $(TARGET_DIR)/usr
++	$(QT5DECLARATIVE_INSTALL_TARGET_EXAMPLES)
+ 	$(QT5DECLARATIVE_INSTALL_TARGET_LIBS)
+ endef
+ 
+-- 
+2.10.2
