@@ -1,74 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Mar 2017 22:10:55 +0100
-Subject: [Buildroot] [git commit] tcpreplay: patch security issue
-Message-ID: <20170316211402.1510A81E48@busybox.osuosl.org>
+Date: Thu, 16 Mar 2017 22:11:58 +0100
+Subject: [Buildroot] [git commit] libsamplerate: bump to version 0.1.9
+Message-ID: <20170316211402.3E1B181E48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62bf2bfd53885fbd62a8e9345c7f3d7a4d619342
+commit: https://git.buildroot.net/buildroot/commit/?id=bcdaf4ca8482f0ecb02ee828ce0d3b16f724e9eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream patch for CVE-2017-6429: Buffer overflow when reading crafted
-pcap file with large packets.
+libsamplerate is relicensed under the 2 clause BSD license.
 
-https://github.com/appneta/tcpreplay/issues/278
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-capture-has-a-packet-that-is-too-large-2.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ package/libsamplerate/libsamplerate.hash | 2 +-
+ package/libsamplerate/libsamplerate.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch b/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
-new file mode 100644
-index 0000000..233b6d9
---- /dev/null
-+++ b/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
-@@ -0,0 +1,44 @@
-+From d689d14dbcd768c028eab2fb378d849e543dcfe9 Mon Sep 17 00:00:00 2001
-+From: Fred Klassen <fklassen@appneta.com>
-+Date: Sun, 26 Feb 2017 20:45:59 -0800
-+Subject: [PATCH] #278 fail if capture has a packet that is too large (#286)
-+
-+* #278 fail if capture has a packet that is too large
-+
-+[baruch: remove the CHANGELOG update]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: upstream commit d689d14db
-+
-+diff --git a/src/tcpcapinfo.c b/src/tcpcapinfo.c
-+index 775f1625b00f..96928820fe94 100644
-+--- a/src/tcpcapinfo.c
-++++ b/src/tcpcapinfo.c
-+@@ -281,6 +281,15 @@ main(int argc, char *argv[])
-+                 caplen = pcap_ph.caplen;
-+             }
-+ 
-++            if (caplentoobig) {
-++                printf("\n\nCapture file appears to be damaged or corrupt.\n"
-++                        "Contains packet of size %u, bigger than snap length %u\n",
-++                        caplen, pcap_fh.snaplen);
-++
-++                close(fd);
-++                break;
-++            }
-++
-+             /* check to make sure timestamps don't go backwards */
-+             if (last_sec > 0 && last_usec > 0) {
-+                 if ((pcap_ph.ts.tv_sec == last_sec) ? 
-+@@ -306,7 +315,7 @@ main(int argc, char *argv[])
-+                 }
-+ 
-+                 close(fd);
-+-                continue;
-++                break;
-+             }
-+ 
-+             /* print the frame checksum */
-+-- 
-+2.11.0
-+
+diff --git a/package/libsamplerate/libsamplerate.hash b/package/libsamplerate/libsamplerate.hash
+index a495108..a303f0b 100644
+--- a/package/libsamplerate/libsamplerate.hash
++++ b/package/libsamplerate/libsamplerate.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	93b54bdf46d5e6d2354b7034395fe329c222a966790de34520702bb9642f1c06	libsamplerate-0.1.8.tar.gz
++sha256  0a7eb168e2f21353fb6d84da152e4512126f7dc48ccb0be80578c565413444c1  libsamplerate-0.1.9.tar.gz
+diff --git a/package/libsamplerate/libsamplerate.mk b/package/libsamplerate/libsamplerate.mk
+index 28fd644..802b5b1 100644
+--- a/package/libsamplerate/libsamplerate.mk
++++ b/package/libsamplerate/libsamplerate.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-LIBSAMPLERATE_VERSION = 0.1.8
++LIBSAMPLERATE_VERSION = 0.1.9
+ LIBSAMPLERATE_SITE = http://www.mega-nerd.com/SRC
+ LIBSAMPLERATE_INSTALL_STAGING = YES
+ LIBSAMPLERATE_DEPENDENCIES = host-pkgconf
+ LIBSAMPLERATE_CONF_OPTS = --disable-fftw --program-transform-name=''
+-LIBSAMPLERATE_LICENSE = Dual GPLv2+ / libsamplerate commercial use license
++LIBSAMPLERATE_LICENSE = BSD-2c
+ LIBSAMPLERATE_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
