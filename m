@@ -1,47 +1,48 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 16 Mar 2017 22:16:40 +0100
-Subject: [Buildroot] [Patch v3 9/9] s6-linux-init: new package
-In-Reply-To: <87shmgyeha.fsf@dell.be.48ers.dk>
-References: <1482182955-23916-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1482182955-23916-10-git-send-email-eric.le.bihan.dev@free.fr>
- <87shmgyeha.fsf@dell.be.48ers.dk>
-Message-ID: <20170316211640.GA4981@itchy>
+Date: Thu, 16 Mar 2017 22:37:58 +0100
+Subject: [Buildroot] [PATCH] s6-rc: expose the host variant in menuconfig
+Message-ID: <20170316213758.1362-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Some users may want to build the s6-rc service database offline using a
+post-build script. So make the host variant visible in menuconfig.
 
-On 17-03-13 23:54:41, Peter Korsgaard wrote:
-> >>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
->
->  > This new package provides s6-linux-init, a set of minimalistic tools to
->  > create a s6-based init system, including a /sbin/init program, on a
->  > machine running a Linux kernel.
->
-> Hmm, should this then be added as one of the available init options in
-> the system menu? Or if not, at least depend on BR2_INIT_NONE to ensure
-> no other init system overwrites /sbin/init?
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/Config.in.host       | 1 +
+ package/s6-rc/Config.in.host | 8 ++++++++
+ 2 files changed, 9 insertions(+)
+ create mode 100644 package/s6-rc/Config.in.host
 
-s6-linux-init [1] does not provide a replacement for /sbin/init, but
-a tool to generate one FROM the target. So when this package is selected,
-there is no risk of messing up target/sbin/init at build time. Hence no
-need to make it depend on on BR2_INIT_NONE.
-
-The s6* packages provide the tools to build an init system with service
-supervision (as the author states it: "mechanism over policy"). It is up
-to the user to glue everything via post-build scripts or a custom
-skeleton. A basic example of such a skeleton [2] is available in a
-personal Buildroot external customization [3].
-
-Should some comments be added in s6-linux-init/Config.in to clarify
-this?
-
-[1] http://skarnet.org/software/s6-linux-init/
-[2] https://github.com/elebihan/s6-br2-init-skeleton/
-[3] https://github.com/elebihan/br2-ext-skarnet/blob/master/system/Config.in
-
---
-ELB
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 8da79c3..bb91671 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -38,6 +38,7 @@ menu "Host utilities"
+ 	source "package/pwgen/Config.in.host"
+ 	source "package/qemu/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
++	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
+diff --git a/package/s6-rc/Config.in.host b/package/s6-rc/Config.in.host
+new file mode 100644
+index 0000000..f250b9f
+--- /dev/null
++++ b/package/s6-rc/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_S6_RC
++	bool "host s6-rc"
++	depends on BR2_PACKAGE_S6_RC
++	help
++	  This package provides the host variant of the s6-rc tools,
++	  required to build the s6-rc service database offline.
++
++	  http://skarnet.org/software/s6-rc/
+-- 
+2.9.3
