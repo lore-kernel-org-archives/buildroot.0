@@ -1,61 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Mar 2017 00:21:21 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] xlib_libXv: correct
-	license info
-Message-ID: <20170317234445.93DC2825C7@busybox.osuosl.org>
+Date: Sat, 18 Mar 2017 00:20:02 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] mbedtls: security bump to
+	verison 2.4.2
+Message-ID: <20170317234445.66B44825C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e386020722b85aaf89b9dccc0263905763c8d08
+commit: https://git.buildroot.net/buildroot/commit/?id=bae94a6e65449729a1c73dc38698e11379b645d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-The license is actually closer to ISC than MIT, E.G.:
+Fixes:
+CVE-2017-2784 - Freeing of memory allocated on stack when validating a
+public key with a secp224k1 curve.
 
-https://opensource.org/licenses/ISC
-vs
-https://opensource.org/licenses/MIT
-
-From COPYING:
-Permission to use, copy, modify, and distribute this software and its
-documentation for any purpose and without fee is hereby granted,
-provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in
-supporting documentation, and that the names of Digital or MIT not be
-used in advertising or publicity pertaining to distribution of the
-software without specific, written prior permission.
-
-E.G.  this is very similar to the normal ISC text which has been extended
-with a BSD-3c style advertisinc clause.  Both are permissive licenses, but
-it is more correct to call it ISC-like.
-
-Notice: As pointed out by Rahul Bedarkar, this may actually be more closely
-related to the OpenBSD template license:
-
-http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/share/misc/license.template?rev=HEAD
-
-But that is also based on the ISC license, so calling it ISC-like is still
-correct.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit aad15918520391ea0952d742db9c52c3ac2b1f7e)
+(cherry picked from commit 465ce2ea73cc1d98972cde45114f7b0e35e32ff2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXv/xlib_libXv.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXv/xlib_libXv.mk b/package/x11r7/xlib_libXv/xlib_libXv.mk
-index 26f8bad..0e02439 100644
---- a/package/x11r7/xlib_libXv/xlib_libXv.mk
-+++ b/package/x11r7/xlib_libXv/xlib_libXv.mk
-@@ -7,7 +7,7 @@
- XLIB_LIBXV_VERSION = 1.0.11
- XLIB_LIBXV_SOURCE = libXv-$(XLIB_LIBXV_VERSION).tar.bz2
- XLIB_LIBXV_SITE = http://xorg.freedesktop.org/releases/individual/lib
--XLIB_LIBXV_LICENSE = MIT
-+XLIB_LIBXV_LICENSE = ISC-like
- XLIB_LIBXV_LICENSE_FILES = COPYING
- XLIB_LIBXV_INSTALL_STAGING = YES
- XLIB_LIBXV_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_videoproto xproto_xproto
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 5f9786c..70a0dc5 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,2 +1,2 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.3.0-2.1.5-and-1.3.17-released
+-sha256	c1c3559ed39f7a1b1550c4cf4ccb918bf239301a3311d98dda92bed8a25b7f0d	mbedtls-2.4.0-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.4.2-2.1.7-and-1.3.19-released
++sha256	17dd98af7478aadacc480c7e4159e447353b5b2037c1b6d48ed4fd157fb1b018	mbedtls-2.4.2-apache.tgz
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 198879d..a571ed0 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.4.0
++MBEDTLS_VERSION = 2.4.2
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
