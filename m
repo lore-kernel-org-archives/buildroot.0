@@ -1,227 +1,141 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 17 Mar 2017 00:17:57 +0100
-Subject: [Buildroot] [PATCH 1/1] libgphoto2: Add libgphoto2 package
-In-Reply-To: <429d8afc-a8cd-e6b0-9dd0-db4749dd9e51@sensefly.com>
-References: <1488980286-19036-1-git-send-email-kevin.joly@sensefly.com>
- <e38526ae-2842-a64f-3ca9-1639ddb12cde@gmail.com>
- <429d8afc-a8cd-e6b0-9dd0-db4749dd9e51@sensefly.com>
-Message-ID: <1e348b8c-f40b-560f-73a5-b5ea5eb51a69@gmail.com>
+From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Date: Fri, 17 Mar 2017 07:10:03 +0100
+Subject: [Buildroot] [PATCH] libkcapi: new package
+In-Reply-To: <eb8ef5fc-3f14-9e49-0553-ae6d01882868@imgtec.com>
+References: <1489138282-28127-1-git-send-email-marcin.nowakowski@imgtec.com>
+ <eb8ef5fc-3f14-9e49-0553-ae6d01882868@imgtec.com>
+Message-ID: <02a9b349-afb8-afdc-21d6-ecbd4e01e4f5@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kevin,
+Hi Rahul,
 
-Le 09/03/2017 ? 07:52, Kevin JOLY a ?crit :
-> Hi Romain,
-> 
-> Thanks a lot for your comments!
+On 16.03.2017 14:05, Rahul Bedarkar wrote:
+> Hello,
+>
+> Some minor comments. See below.
+>
+> On Friday 10 March 2017 03:01 PM, Marcin Nowakowski wrote:
+>> This package provides a userspace library that allows easy use of crypto
+>> interfaces exposed by the kernel.
+>>
+>> A git tip is used instead of the last official release, as autotools
+>> support and cross-compilation fixes have been added only very recently.
+>>
+>> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+>> ---
+>>  DEVELOPERS                     |  3 +++
+>>  package/Config.in              |  1 +
+>>  package/libkcapi/Config.in     | 11 +++++++++++
+>>  package/libkcapi/libkcapi.hash |  2 ++
+>>  package/libkcapi/libkcapi.mk   | 19 +++++++++++++++++++
+>>  5 files changed, 36 insertions(+)
+>>  create mode 100644 package/libkcapi/Config.in
+>>  create mode 100644 package/libkcapi/libkcapi.hash
+>>  create mode 100644 package/libkcapi/libkcapi.mk
+>>
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index ff72ca1..cf24db8 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -991,6 +991,9 @@ F:    package/easydbus/
+>>  F:    package/rs485conf/
+>>  F:    package/turbolua/
+>>
+>> +N:    Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+>> +F:    package/libkcapi/
+>> +
+>>  N:    Marek Belisko <marek.belisko@open-nandra.com>
+>>  F:    package/libatasmart/
+>>  F:    package/polkit/
+>> diff --git a/package/Config.in b/package/Config.in
+>> index cfe7fc6..2e605f0 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -933,6 +933,7 @@ menu "Crypto"
+>>      source "package/libgcrypt/Config.in"
+>>      source "package/libgpg-error/Config.in"
+>>      source "package/libgpgme/Config.in"
+>> +    source "package/libkcapi/Config.in"
+>>      source "package/libksba/Config.in"
+>>      source "package/libmcrypt/Config.in"
+>>      source "package/libmhash/Config.in"
+>> diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
+>> new file mode 100644
+>> index 0000000..91402dd
+>> --- /dev/null
+>> +++ b/package/libkcapi/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_LIBKCAPI
+>> +    bool "libkcapi"
+>> +    help
+>> +      Linux Kernel Crypto API userspace interface library
+>> +
+>> +      http://www.chronox.de/libkcapi.html
+>> +
+>> +config BR2_PACKAGE_LIBKCAPI_APPS
+>> +    bool "libkcapi test applications"
+>> +    depends on BR2_PACKAGE_LIBKCAPI
+>> +
+>
+> Empty line at the end of Config.in file is not required.
+>
+> For consistency with other packages, add sub-option into if
+> BR2_PACKAGE_LIBKCAPI ... endif statement.
 
-You're welcome!
+Will do
 
-> 
-> 
-> Le 08. 03. 17 ? 21:10, Romain Naour a ?crit :
->> Hi Kevin,
+>> diff --git a/package/libkcapi/libkcapi.hash
+>> b/package/libkcapi/libkcapi.hash
+>> new file mode 100644
+>> index 0000000..3b08d3c
+>> --- /dev/null
+>> +++ b/package/libkcapi/libkcapi.hash
+>> @@ -0,0 +1,2 @@
+>> +# Locally calculated
+>> +sha256
+>> 77b53b5bd2b1f11a6b4be68d7b1129aac4efe476400cca6bcb94577d4d8850f3
+>> libkcapi-94f741aa1dc6af1b45945786c8cc378a86bc9538.tar.gz
+>> diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+>> new file mode 100644
+>> index 0000000..b656ebf
+>> --- /dev/null
+>> +++ b/package/libkcapi/libkcapi.mk
+>> @@ -0,0 +1,19 @@
+>> +################################################################################
 >>
->> Thanks for this contribution.
+>> +#
+>> +# libkcapi
+>> +#
+>> +################################################################################
 >>
->> I recently sent a patch adding libgphoto2 for Darktable [1].
->> There are small differences with your patch (mostly package dependencies), can
->> you comment on it ?
->>
->> Thanks!
->>
->> [1] http://patchwork.ozlabs.org/patch/735448/
->>
->> Le 08/03/2017 ? 14:38, Kevin JOLY a ?crit :
->>> Add support for libgphoto2 core library designed to allow access to digital camera.
->>>
->>> Signed-off-by: Kevin JOLY <kevin.joly@sensefly.com>
->>> ---
->> We recommend to add yourself as package maintainer in DEVELOPERS file, see:
->> http://nightly.buildroot.org/manual.html#DEVELOPERS
-> Ok
->>>  package/Config.in                  |  1 +
->>>  package/libgphoto2/Config.in       | 10 ++++++++++
->>>  package/libgphoto2/libgphoto2.hash |  3 +++
->>>  package/libgphoto2/libgphoto2.mk   | 14 ++++++++++++++
->>>  4 files changed, 28 insertions(+)
->>>  create mode 100644 package/libgphoto2/Config.in
->>>  create mode 100644 package/libgphoto2/libgphoto2.hash
->>>  create mode 100644 package/libgphoto2/libgphoto2.mk
->>>
->>> diff --git a/package/Config.in b/package/Config.in
->>> index 9eb6a22..69430c3 100644
->>> --- a/package/Config.in
->>> +++ b/package/Config.in
->>> @@ -1073,6 +1073,7 @@ menu "Hardware handling"
->>>  	source "package/libfreefare/Config.in"
->>>  	source "package/libftdi/Config.in"
->>>  	source "package/libftdi1/Config.in"
->>> +	source "package/libgphoto2/Config.in"
->>>  	source "package/libgpiod/Config.in"
->>>  	source "package/libgudev/Config.in"
->>>  	source "package/libhid/Config.in"
->>> diff --git a/package/libgphoto2/Config.in b/package/libgphoto2/Config.in
->>> new file mode 100644
->>> index 0000000..ba1d535
->>> --- /dev/null
->>> +++ b/package/libgphoto2/Config.in
->>> @@ -0,0 +1,10 @@
->>> +config BR2_PACKAGE_LIBGPHOTO2
->>> +	select BR2_PACKAGE_LIBTOOL
->>> +	select BR2_PACKAGE_LIBUSB
->>> +	select BR2_PACKAGE_LIBUSB_COMPAT
->>> +	select BR2_PACKAGE_LIBXML2
->> I added gd, jpeg, libexif and lockev package as mandatory dependencies, They may
->> be optional... can you check ?
->>
->> You can compare with archlinux packaging for exemple:
->>
->> depends=(libexif libjpeg gd libltdl libusb libxml2)
->>
->> https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/libgphoto2
-> According to the figure 5.1 of their online manual [1], libexif is optionnal. I
-> also noticed in the source code of libgphoto2 that there is several #ifdef
-> HAVE_LIBGD, #ifdef HAVE_LIBJPEG, #ifdef HAVE_LOCKDEV//so that I assumed them
-> optional. For libxml2 I was not able to compile the package without it. I got :
-> ERROR: unsafe header/library path used in cross-compilation:
-> '-I/usr/include/libxml2'
-> 
-> Do you would like me to add them by default in order to keep the full feature set ?
+>> +
+>> +LIBKCAPI_VERSION = 94f741aa1dc6af1b45945786c8cc378a86bc9538
+>> +LIBKCAPI_SITE = $(call github,smuellerDD,libkcapi,$(LIBKCAPI_VERSION))
+>> +LIBKCAPI_AUTORECONF = YES
+>> +LIBKCAPI_AUTORECONF_OPTS = -i
+>
+> I can build package without LIBKCAPI_AUTORECONF_OPTS. I think it is not
+> required because AUTORECONF variable in package/autoconf/autoconf.mk
+> already has -i option in it.
 
-No, we prefer to add only the mandatory dependencies when the package is added
-and add optional dependencies in followup patches.
-So you're probably right, just make sure that optional dependencies are
-explicitly disabled in libgphoto2.
+Indeed, I haven't noticed it.
 
-It should be a user decision to enable optional dependencies.
+>> +LIBKCAPI_INSTALL_STAGING = YES
+>> +LIBKCAPI_LICENSE = BSD-3c or GPLv2
+>> +LIBKCAPI_LICENSE_FILES = COPYING
+>
+> There are other two license files COPYING.bsd and COPYING.gplv2. I think
+> we should add these as well to LIBKCAPI_LICENSE_FILES variable. Because,
+> even though COPYING file contain BSD-3c license text, it doesn't have
+> full GPLv2 license text.
 
->>> +	bool "libgphoto2"
->>> +	help
->>> +	  libgphoto2 is the core library designed to allow access to digital camera by external programs.
->> The help text should be wrapped within 72 characters (8 characters for one tab)
-> Ok
->>> +
->>> +	  http://gphoto.org/
->>> diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
->>> new file mode 100644
->>> index 0000000..25de0bf
->>> --- /dev/null
->>> +++ b/package/libgphoto2/libgphoto2.hash
->>> @@ -0,0 +1,3 @@
->>> +# Hashes from: https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.12/
->>> +sha1	4e1208a8a66d679b8b619b05915dbb0e684c5518	libgphoto2-2.5.12.tar.gz
->>> +md5	b3b5d36e583fc96eed0594dc414d70c9		libgphoto2-2.5.12.tar.gz
->> I used tar.bz2 archive here since the archive is smaller and used the
->> corresponding hashes.
->>
->> I added a stronger hash calculated locally
->> sha256 b9bb28990fde45ac385e4851a07dbad2e1250404b535b0a3a3b898bb431e4e2e
->> libgphoto2-2.5.12.tar.bz2
->>
-> Ok
->>> diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
->>> new file mode 100644
->>> index 0000000..fc5be1b
->>> --- /dev/null
->>> +++ b/package/libgphoto2/libgphoto2.mk
->>> @@ -0,0 +1,14 @@
->>> +################################################################################
->>> +#
->>> +# libgphoto2
->>> +#
->>> +################################################################################
->>> +
->>> +LIBGPHOTO2_VERSION = 2.5.12
->>> +LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.gz
->> The tar.bz2 archive should be used here.
-> Ok
->>> +LIBGPHOTO2_SITE = https://sourceforge.net/projects/gphoto/files/libgphoto/$(LIBGPHOTO2_VERSION)
->> Missing license information:
->>
->> It's seems to be LGPLv2+ but...
->>
->>  * \par License
->>  * This library is free software; you can redistribute it and/or
->>  * modify it under the terms of the GNU Lesser General Public
->>  * License as published by the Free Software Foundation; either
->>  * version 2 of the License, or (at your option) any later version.
->>  *
->>  * \par
->>  * This library is distributed in the hope that it will be useful,
->>  * but WITHOUT ANY WARRANTY; without even the implied warranty of
->>  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
->>  * Lesser General Public License for more details.
->>  *
->>  * \par
->>  * You should have received a copy of the GNU Lesser General Public
->>  * License along with this library; if not, write to the
->>  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
->>  * Boston, MA  02110-1301  USA
->>
->> ... Fedora tagged this package as GPLV2+ and GPLv2... it seems there is a
->> licensing issue...
->>
->> # GPLV2+ for the main lib (due to exif.c) and most plugins, some plugins GPLv2
->> http://pkgs.fedoraproject.org/cgit/rpms/libgphoto2.git/tree/libgphoto2.spec
->>
->> exif.c:
->>   \par License
->>   This program is free software; you can redistribute it and/or modify
->>   it under the terms of the GNU General Public License as published by
->>   the Free Software Foundation; either version 2 of the License, or
->>   (at your option) any later version.
->>
->>   \par
->>   This program is distributed in the hope that it will be useful,
->>   but WITHOUT ANY WARRANTY; without even the implied warranty of
->>   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
->>   GNU General Public License for more details.
->>
->>   \par
->>   You should have received a copy of the GNU General Public License
->>   along with this program; if not, write to the
->>   Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
->>   Boston, MA  02110-1301  USA
+But the COPYING file already states that it can be licensed under GPLv2, 
+so I don't think it's necessary. On the other hand it won't do any harm 
+to copy the files so I can add all here ...
 
-> The library itself seems to be LGPL2.1. But it contains several plugins with
-> different licences (GPL-2, LGPL-2+, ...). Is LGPL2.1 suitable ?
-
-I'm not sure, can you contact upstream about this ?
-
-Best regards,
-Romain
-
->>> +LIBGPHOTO2_INSTALL_STAGING = YES
->> Ok
->>
->>> +LIBGPHOTO2_INSTALL_TARGET = YES
->> Not needed, this is the default behavior.
->>
->>> +LIBGPHOTO2_DEPENDENCIES = libxml2 libusb libusb-compat libtool host-pkgconf
->> Ok but maybe gd jpeg libexif and lockdev dependencies may be missing.
->>
->> Best regards,
->> Romain
->>
->>> +
->>> +$(eval $(autotools-package))
->>>
-> I'll submit my patch again with your recommendation.
-> 
-> Best regards,
-> 
-> [1] http://gphoto.org/doc/manual/compilation.html
-> -- 
-> 
-> *Kevin JOLY*
-> Embedded systems engineer
-> 
-> SenseFly <http://www.sensefly.com/>
-> 38, rte de Gen?ve
-> 1033 Cheseaux-Lausanne, Switzerland
-> 
+thanks
+Marcin
