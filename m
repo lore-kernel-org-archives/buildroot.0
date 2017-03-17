@@ -1,57 +1,62 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Fri, 17 Mar 2017 23:17:12 +0100
-Subject: [Buildroot] [PATCH v2 1/3] acl: make sure build picks up
- TARGET_CFLAGS
-In-Reply-To: <20170317160616.20570-1-arnout@mind.be>
-References: <20170317160616.20570-1-arnout@mind.be>
-Message-ID: <08d783f9-0117-8a3c-0e8d-c034f0238d78@andin.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 17 Mar 2017 23:17:25 +0100
+Subject: [Buildroot] [PATCH 14/25] lua-bit32: new package
+In-Reply-To: <20170317171427.03270127@free-electrons.com>
+References: <20170223170047.24417-1-arnout@mind.be>
+ <20170223170047.24417-15-arnout@mind.be>
+ <20170302225441.5adee9f6@free-electrons.com>
+ <55bf7d15-ebeb-6bbd-1eaf-c8657c5821fb@mind.be>
+ <20170317171427.03270127@free-electrons.com>
+Message-ID: <04a224aa-c599-d927-79ad-869dcd7d9f7c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-tested and works :-)
 
-thanks,
-Andreas
 
-Am 17.03.2017 um 17:06 schrieb Arnout Vandecappelle (Essensium/Mind):
-> The acl build system doesn't use automake, therefore it is broken. It
-> doesn't use the CFLAGS passed by configure. Work around this by passing
-> CFLAGS in the environment. The makefiles append to CFLAGS, so this
-> works.
->
-> This issue hasn't led to build failures, but it is visible e.g. when
-> stack protector is enabled: the stack protector options are not applied
-> to acl. Also debug and optimisation options aren't applied.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> v2: new patch
-> ---
->  package/acl/acl.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-> index cbe5e93961..9fd5de18a4 100644
-> --- a/package/acl/acl.mk
-> +++ b/package/acl/acl.mk
-> @@ -15,7 +15,13 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
->
->  # While the configuration system uses autoconf, the Makefiles are
->  # hand-written and do not use automake. Therefore, we have to hack
-> -# around their deficiencies by passing installation paths.
-> +# around their deficiencies by:
-> +# - explicitly passing CFLAGS (LDFLAGS are passed on from configure,
-> +#   CFLAGS are not).
-> +# - explicitly passing the installation prefix, not using DESTDIR.
-> +
-> +ACL_MAKE_ENV = CFLAGS="$(TARGET_CFLAGS)"
-> +
->  ACL_INSTALL_STAGING_OPTS = \
->  	prefix=$(STAGING_DIR)/usr \
->  	exec_prefix=$(STAGING_DIR)/usr \
->
+On 17-03-17 17:14, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 2 Mar 2017 23:24:31 +0100, Arnout Vandecappelle wrote:
+> 
+>>  Well, like most of my packages it's a one-shot rather than something I actively
+>> use, so I tend not to add myself to the DEVELOPERS file.
+> 
+> Hum, ok, but then who will take care of fixing this package when/if it
+> breaks?
+> 
+>> If you do that, you could instead just add me for all orphaned
+>> packages. Hm, would that be a useful feature? A last-resort developer?
+> 
+> Is this really useful? You're part of the core developers, so I'm sure
+> you regularly look at the autobuild results e-mail that is sent on the
+> mailing list.
+
+ I wouldn't say "regularly". I do look occasionally. I would pay a lot more
+attention if I got an occasional personal mail.
+
+ That is, of course, assuming that there are no longer daily failures of
+orphaned packages. Otherwise it doesn't make a lot of sense.
+
+ Regards,
+ Arnout
+
+> 
+> Or do you really want to implement a feature where build failures for
+> packages not affected to anyone are sent to you? It's not too difficult
+> to do.
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
