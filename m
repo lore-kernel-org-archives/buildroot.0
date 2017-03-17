@@ -1,63 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Mar 2017 00:19:35 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] jasper: add upstream
-	security fix
-Message-ID: <20170317234445.4EDB0825C7@busybox.osuosl.org>
+Date: Sat, 18 Mar 2017 00:21:21 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] xlib_libXv: correct
+	license info
+Message-ID: <20170317234445.93DC2825C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=604b463d534943701024d7878dd2017c45ed5088
+commit: https://git.buildroot.net/buildroot/commit/?id=3e386020722b85aaf89b9dccc0263905763c8d08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes a NULL Pointer Dereference jp2_encode:
+The license is actually closer to ISC than MIT, E.G.:
 
-https://github.com/mdadams/jasper/issues/120
+https://opensource.org/licenses/ISC
+vs
+https://opensource.org/licenses/MIT
 
-No CVE assigned yet.
+From COPYING:
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation, and that the names of Digital or MIT not be
+used in advertising or publicity pertaining to distribution of the
+software without specific, written prior permission.
+
+E.G.  this is very similar to the normal ISC text which has been extended
+with a BSD-3c style advertisinc clause.  Both are permissive licenses, but
+it is more correct to call it ISC-like.
+
+Notice: As pointed out by Rahul Bedarkar, this may actually be more closely
+related to the OpenBSD template license:
+
+http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/share/misc/license.template?rev=HEAD
+
+But that is also based on the ISC license, so calling it ISC-like is still
+correct.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 76da579431a78875afeaeda76e459aca69e85d36)
+(cherry picked from commit aad15918520391ea0952d742db9c52c3ac2b1f7e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ck-in-the-JP2-encoder-to-ensure-that-the-.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/x11r7/xlib_libXv/xlib_libXv.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/jasper/0003-Added-a-check-in-the-JP2-encoder-to-ensure-that-the-.patch b/package/jasper/0003-Added-a-check-in-the-JP2-encoder-to-ensure-that-the-.patch
-new file mode 100644
-index 0000000..16a3e75
---- /dev/null
-+++ b/package/jasper/0003-Added-a-check-in-the-JP2-encoder-to-ensure-that-the-.patch
-@@ -0,0 +1,30 @@
-+From 58ba0365d911b9f9dd68e9abf826682c0b4f2293 Mon Sep 17 00:00:00 2001
-+From: Michael Adams <mdadams@ece.uvic.ca>
-+Date: Mon, 6 Mar 2017 08:06:54 -0800
-+Subject: [PATCH] Added a check in the JP2 encoder to ensure that the image to
-+ be coded has at least one component.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/libjasper/jp2/jp2_enc.c | 5 +++++
-+ 1 files changed, 1 insertions(+), 0 deletions(-)
-+
-+diff --git a/src/libjasper/jp2/jp2_enc.c b/src/libjasper/jp2/jp2_enc.c
-+index 9a5e106..af4d9a4 100644
-+--- a/src/libjasper/jp2/jp2_enc.c
-++++ b/src/libjasper/jp2/jp2_enc.c
-+@@ -115,6 +115,11 @@ int jp2_encode(jas_image_t *image, jas_stream_t *out, const char *optstr)
-+ 	iccstream = 0;
-+ 	iccprof = 0;
-+ 
-++	if (jas_image_numcmpts(image) < 1) {
-++		jas_eprintf("image must have@least one component\n");
-++		goto error;
-++	}
-++
-+ 	allcmptssame = 1;
-+ 	sgnd = jas_image_cmptsgnd(image, 0);
-+ 	prec = jas_image_cmptprec(image, 0);
-+-- 
-+2.11.0
-+
+diff --git a/package/x11r7/xlib_libXv/xlib_libXv.mk b/package/x11r7/xlib_libXv/xlib_libXv.mk
+index 26f8bad..0e02439 100644
+--- a/package/x11r7/xlib_libXv/xlib_libXv.mk
++++ b/package/x11r7/xlib_libXv/xlib_libXv.mk
+@@ -7,7 +7,7 @@
+ XLIB_LIBXV_VERSION = 1.0.11
+ XLIB_LIBXV_SOURCE = libXv-$(XLIB_LIBXV_VERSION).tar.bz2
+ XLIB_LIBXV_SITE = http://xorg.freedesktop.org/releases/individual/lib
+-XLIB_LIBXV_LICENSE = MIT
++XLIB_LIBXV_LICENSE = ISC-like
+ XLIB_LIBXV_LICENSE_FILES = COPYING
+ XLIB_LIBXV_INSTALL_STAGING = YES
+ XLIB_LIBXV_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_videoproto xproto_xproto
