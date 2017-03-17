@@ -1,23 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Mar 2017 00:37:39 +0100
-Subject: [Buildroot] [PATCH] mbedtls: security bump to verison 2.4.2
-In-Reply-To: <20170315180836.29157-1-gustavo@zacarias.com.ar> (Gustavo
- Zacarias's message of "Wed, 15 Mar 2017 15:08:36 -0300")
-References: <20170315180836.29157-1-gustavo@zacarias.com.ar>
-Message-ID: <87lgs3mq4c.fsf@dell.be.48ers.dk>
+Date: Sat, 18 Mar 2017 00:37:58 +0100
+Subject: [Buildroot] [PATCH 1/2] jasper: add upstream security fix for
+	CVE-2017-6850
+In-Reply-To: <20170314225822.30891-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 14 Mar 2017 23:58:21 +0100")
+References: <20170314225822.30891-1-peter@korsgaard.com>
+Message-ID: <87h92rmq3t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes:
- > CVE-2017-2784 - Freeing of memory allocated on stack when validating a
- > public key with a secp224k1 curve.
+ > Fixes a NULL pointer dereference in jp2_cdef_destroy:
+ > https://blogs.gentoo.org/ago/2017/01/25/jasper-null-pointer-dereference-in-jp2_cdef_destroy-jp2_cod-c/
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > https://github.com/mdadams/jasper/issues/112
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2017.02.x, thanks.
 
