@@ -1,19 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Mar 2017 22:37:06 +0100
-Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.4.2
-In-Reply-To: <1489732069-82557-1-git-send-email-fontaine.fabrice@gmail.com>
- (Fabrice Fontaine's message of "Fri, 17 Mar 2017 07:27:49 +0100")
-References: <1489732069-82557-1-git-send-email-fontaine.fabrice@gmail.com>
-Message-ID: <87lgs3oa9p.fsf@dell.be.48ers.dk>
+Date: Fri, 17 Mar 2017 23:08:46 +0100
+Subject: [Buildroot] [PATCH v2] package/cairo: update license information
+In-Reply-To: <20170316230206.14685-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Fri, 17 Mar 2017 00:02:06 +0100")
+References: <20170316230206.14685-1-romain.naour@gmail.com>
+Message-ID: <87h92ro8sx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > As noticed by Rahul Bedarkar, the cairo library is LGPLv2.1 only
+ > (not LGPLv2.1+) or MPLv1.1.
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > ---
+ > v2: remove LGPLv2.1+
+ >     Specify MPL version
 
 Committed, thanks.
 
