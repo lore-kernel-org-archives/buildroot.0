@@ -1,49 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Mar 2017 00:20:02 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] mbedtls: security bump to
-	verison 2.4.2
-Message-ID: <20170317234445.66B44825C7@busybox.osuosl.org>
+Date: Sat, 18 Mar 2017 00:21:09 +0100
+Subject: [Buildroot] [git commit branch/2017.02.x] package/cairo: update
+	license information
+Message-ID: <20170317234445.87961825C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bae94a6e65449729a1c73dc38698e11379b645d6
+commit: https://git.buildroot.net/buildroot/commit/?id=2a778d53fa6bf7c232ad57eedbd0fd9bf7328c84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
 
-Fixes:
-CVE-2017-2784 - Freeing of memory allocated on stack when validating a
-public key with a secp224k1 curve.
+As noticed by Rahul Bedarkar, the cairo library is LGPLv2.1 only
+(not LGPLv2.1+) or MPLv1.1.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 465ce2ea73cc1d98972cde45114f7b0e35e32ff2)
+(cherry picked from commit 0768932a0229b2c201c292023f59a868ecdb1222)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cairo/cairo.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 5f9786c..70a0dc5 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,2 +1,2 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.3.0-2.1.5-and-1.3.17-released
--sha256	c1c3559ed39f7a1b1550c4cf4ccb918bf239301a3311d98dda92bed8a25b7f0d	mbedtls-2.4.0-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.4.2-2.1.7-and-1.3.19-released
-+sha256	17dd98af7478aadacc480c7e4159e447353b5b2037c1b6d48ed4fd157fb1b018	mbedtls-2.4.2-apache.tgz
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 198879d..a571ed0 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 761c6f4..ac91a56 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -6,8 +6,8 @@
  
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.4.0
-+MBEDTLS_VERSION = 2.4.2
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+ CAIRO_VERSION = 1.14.8
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+-CAIRO_LICENSE = LGPLv2.1+
+-CAIRO_LICENSE_FILES = COPYING
++CAIRO_LICENSE = LGPLv2.1 or MPLv1.1 (library)
++CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+ CAIRO_SITE = http://cairographics.org/releases
+ CAIRO_INSTALL_STAGING = YES
+ CAIRO_AUTORECONF = YES
