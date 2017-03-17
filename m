@@ -1,77 +1,87 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 17 Mar 2017 09:42:42 -0700
-Subject: [Buildroot] [PATCH] uboot-tools: pass empty CFLAGS on invocation of
-	libfdt/setup.py
-Message-ID: <1489768962-26768-1-git-send-email-jcmvbkbc@gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Fri, 17 Mar 2017 12:46:28 -0400
+Subject: [Buildroot] [PATCH] package: add qt5virtualkeyboard
+Message-ID: <20170317164628.5029-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building u-boot tools in cross-build environment CFLAGS environment
-variable set up for target is taken into an account when building code
-for host. Make it empty on invocation of python.
+This patch adds the Qt virtualkeyboard package.
 
-This fixes the following build errors when cross-compiling for xtensa:
-
-  cc1: error: unrecognized command line option "-mlongcalls"
-  cc1: error: unrecognized command line option "-mauto-litpools"
-
-Fixes:
-  http://autobuild.buildroot.net/results/439d6dacfaa7f9244bd15ca04990c12a25ff4777
-  http://autobuild.buildroot.net/results/e2fe36c20e75d01a01a6659ef11e888965a843b9
-  http://autobuild.buildroot.net/results/6f37ff347822a76571a9fe9cf3c491fe7e4164fa
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 ---
-Upstream status: fix is posted to the list.
+ package/qt5/Config.in                              |  1 +
+ package/qt5/qt5virtualkeyboard/Config.in           |  9 +++++++
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   | 31 ++++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
+ create mode 100644 package/qt5/qt5virtualkeyboard/Config.in
+ create mode 100644 package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
 
- ...y-CFLAGS-on-invocation-of-libfdt-setup.py.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/uboot-tools/0004-Pass-empty-CFLAGS-on-invocation-of-libfdt-setup.py.patch
-
-diff --git a/package/uboot-tools/0004-Pass-empty-CFLAGS-on-invocation-of-libfdt-setup.py.patch b/package/uboot-tools/0004-Pass-empty-CFLAGS-on-invocation-of-libfdt-setup.py.patch
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 4bcbc6e..a810503 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -76,6 +76,7 @@ source "package/qt5/qt5serialbus/Config.in"
+ source "package/qt5/qt5serialport/Config.in"
+ source "package/qt5/qt5svg/Config.in"
+ source "package/qt5/qt5tools/Config.in"
++source "package/qt5/qt5virtualkeyboard/Config.in"
+ source "package/qt5/qt5webchannel/Config.in"
+ source "package/qt5/qt5webkit/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
+diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
 new file mode 100644
-index 0000000..ae01b33
+index 0000000..df9e9d6
 --- /dev/null
-+++ b/package/uboot-tools/0004-Pass-empty-CFLAGS-on-invocation-of-libfdt-setup.py.patch
-@@ -0,0 +1,36 @@
-+From 7807af13118eff3ac291bbaaf2159c7a441c0902 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 16 Mar 2017 11:21:58 -0700
-+Subject: [PATCH] Pass empty CFLAGS on invocation of libfdt/setup.py
++++ b/package/qt5/qt5virtualkeyboard/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_QT5VIRTUALKEYBOARD
++	bool "qt5virtualkeyboard"
++	depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK
++	select BR2_PACKAGE_QT5SVG
++	help
++	  Qt Virtual Keyboard is a virtual keyboard framework that consists of a
++	  C++ backend supporting custom input methods as well as a UI frontend
++	  implemented in QML.
 +
-+When building u-boot tools in cross-build environment CFLAGS environment
-+variable set up for target is taken into an account when building code
-+for host. Make it empty on invocation of python.
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+new file mode 100644
+index 0000000..e73a154
+--- /dev/null
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# qt5virtualkeyboard
++#
++################################################################################
 +
-+This fixes the following build errors when cross-compiling for xtensa:
++QT5VIRTUALKEYBOARD_VERSION = $(QT5_VERSION)
++QT5VIRTUALKEYBOARD_SITE = $(QT5_SITE)
++QT5VIRTUALKEYBOARD_SOURCE = qtvirtualkeyboard-opensource-src-$(QT5VIRTUALKEYBOARD_VERSION).tar.xz
++QT5VIRTUALKEYBOARD_DEPENDENCIES = qt5base qt5declarative qt5svg
++QT5VIRTUALKEYBOARD_INSTALL_STAGING = YES
 +
-+  cc1: error: unrecognized command line option "-mlongcalls"
-+  cc1: error: unrecognized command line option "-mauto-litpools"
++QT5VIRTUALKEYBOARD_LICENSE = GPLv3
++QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
++define QT5VIRTUALKEYBOARD_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
++endef
 +
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Reviewed-by: Simon Glass <sjg@chromium.org>
-+---
-+ tools/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++define QT5VIRTUALKEYBOARD_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
 +
-+diff --git a/tools/Makefile b/tools/Makefile
-+index 1c840d7..f3de657 100644
-+--- a/tools/Makefile
-++++ b/tools/Makefile
-+@@ -120,7 +120,7 @@ _libfdt.so-sharedobjs += $(LIBFDT_OBJS)
-+ libfdt:
-+ 
-+ tools/_libfdt.so: $(patsubst %.o,%.c,$(LIBFDT_OBJS)) tools/libfdt_wrap.c
-+-	LDFLAGS="$(HOSTLDFLAGS)" python $(srctree)/lib/libfdt/setup.py \
-++	LDFLAGS="$(HOSTLDFLAGS)" CFLAGS= python $(srctree)/lib/libfdt/setup.py \
-+ 		"$(_hostc_flags)" $^
-+ 	mv _libfdt.so $@
-+ 
-+-- 
-+2.1.4
++define QT5VIRTUALKEYBOARD_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
 +
++define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
++endef
++
++$(eval $(generic-package))
 -- 
-2.1.4
+2.10.2
