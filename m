@@ -1,26 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Mar 2017 00:35:54 +0100
-Subject: [Buildroot] [PATCH] tcpreplay: patch security issue
-In-Reply-To: <ca98f5adf97d81a7ae436c03567ac62f733698fe.1489689683.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 16 Mar 2017 20:41:23 +0200")
-References: <ca98f5adf97d81a7ae436c03567ac62f733698fe.1489689683.git.baruch@tkos.co.il>
-Message-ID: <87y3w3mq79.fsf@dell.be.48ers.dk>
+Date: Sat, 18 Mar 2017 00:36:55 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9,
+	10}.x and 3.12.x series
+In-Reply-To: <20170313114145.33407-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Mon, 13 Mar 2017 11:41:44 +0000")
+References: <20170313114145.33407-1-Vincent.Riera@imgtec.com>
+Message-ID: <87tw6rmq5k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Add upstream patch for CVE-2017-6429: Buffer overflow when reading crafted
- > pcap file with large packets.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
- > https://github.com/appneta/tcpreplay/issues/278
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2017.02.x, thanks.
+Committed to 2017.02.x (except for 4.10.x), thanks.
 
 -- 
 Bye, Peter Korsgaard
