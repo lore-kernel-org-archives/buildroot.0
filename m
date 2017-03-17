@@ -1,86 +1,129 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 17 Mar 2017 17:50:03 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix permissions on /dev/pts/ptmx for
- PTY allocation with systemd
-In-Reply-To: <35a6c994-5279-4823-8864-be52f6f925ef@cesnet.cz>
-References: <35a6c994-5279-4823-8864-be52f6f925ef@cesnet.cz>
-Message-ID: <f6e8c322-c9cd-16cc-921d-e1985c314420@mind.be>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Fri, 17 Mar 2017 18:15:17 +0100
+Subject: [Buildroot] [RFC PATCH 5/9] support/scripts: add
+ create-relocation-script for toolchain relocation
+In-Reply-To: <b16c19af-1fb5-702f-01f8-ca9eb6ff13fb@mind.be>
+References: <1488550733-3956-1-git-send-email-wg@grandegger.com>
+ <1488550733-3956-6-git-send-email-wg@grandegger.com>
+ <d7bcc124-0706-8cdf-2398-2a1d3fa4b3a4@mind.be>
+ <dc66e761-80aa-22ff-0d22-4ace059f82fe@grandegger.com>
+ <b16c19af-1fb5-702f-01f8-ca9eb6ff13fb@mind.be>
+Message-ID: <f7838a0d-9975-7670-edf1-f6384020d2a7@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Jan,
-
-On 17-03-17 17:02, Jan Kundr?t wrote:
-> (This is my first patch to buildroot, please feel free to pester me if you
-> prefer a different coding style or if you have some commit message suggestions.)
-
- Thank you for your contribution! Here goes the flaming :-)
-
-It's pretty much perfect. Only:
-
-- Please don't send patches as attachments, rather send them in-line. This makes
-it easier to insert review comments inline in the patch. Using git send-email is
-the most appropriate approach.
-
-- If you want to include "personal comments" (like the "This is my first patch"
-bit), you can include them in the commit message, but below a line containing just
----
-Anything below that line will not be included in the git history.
-
-- The subject line should always start with the name of the "subsystem" (usually
-package) affected. It should also be pretty short. So in this case, something like:
-
-skeleton: fix permissions of /dev/pts/ptmx
-
-
-> Without this patch, it is not possible to allocate PTYs when a generated rootfs
-> image with a recent glibc and systemd is launched as a container  on an RHEL7
-> system via machinectl/systemd-nspawn. The container boots, but `machinectl login
-> mycontainer` fails. The culprit is /dev/pts/ptmx with 0000 perms.
+Am 17.03.2017 um 16:50 schrieb Arnout Vandecappelle:
 > 
-> On a typical system, there are two `ptmx` devices. One is provided by the devpts
-> at /dev/pts/ptmx and it is typically not directly accessed from userspace. The
-> other one which actually *is* opened by processes is /dev/ptmx. Kernel's
-> documentation says these days that /dev/ptmx should be either a symlink, or a
-> bind mount of the /dev/pts/ptmx from devpts.
 > 
-> When a container is launched via machinectl/machined/systemd-nspawn, the
-> container manager prepares a root filesystem so that the container can live in
-> an appropriate namespace (this is similar to what initramfs is doing on x86
-> desktops). During these preparations, systemd-nspawn mounts a devpts instance
-> using a correct ptmxmode=0666 within the container-to-be's /dev/pts, and it adds
-> a compatibility symlink at /dev/ptmx. However, once systemd takes over as an
-> init in the container, /lib/systemd/systemd-remount-fs applies mount options
-> from /etc/fstab to all fileystems. Because the buildroot's template used to not
-> include the ptmxmode=... option, a default value of 0000 was taking an effect
-> which in turn led to not being able to allocate any pseudo-terminals.
+> On 17-03-17 08:10, Wolfgang Grandegger wrote:
+>> Am 16.03.2017 um 18:51 schrieb Arnout Vandecappelle:
+>>> On 03-03-17 15:18, Wolfgang Grandegger wrote:
+> [snip]
+>>>> +# The toolchain is in buildroot's "host/usr"
+>>>> +TOOLCHAINDIR="$1/usr"
+>>>> +# We create the script in the top directory of the toolchain
+>>>> +SCRIPTFILE="${TOOLCHAINDIR}/relocate-toolchain.sh"
+>>>
+>>>  I think installing the script in host/usr/bin would be more appropriate.
+>>
+>> I thought it's more visible/present in the root directory.
+> 
+>  Well, the root directory would be host, not host/usr, right?
 
- What a great, extensive description, thank you for that!
+Of course!
+
+>>>> +# File holding the location of the buildroot toolchain
+>>>> +LOCATIONFILE="share/buildroot/toolchain-location"
+>>>> +
+>>>> +echo "Creating ${SCRIPTFILE} for toolchain relocation ..."
+>>>> +
+>>>> +cat << EOF > "${SCRIPTFILE}"
+>>>
+>>>  Instead of using cat to instantiate the template, it's easier to understand
+>>> what happens by creating a template file
+>>> (support/misc/relocate-toolchain.sh.in) and using sed to instantiate the
+>>> variables that need to be instantiated. Such a sed command can typically be
+>>> called directly from Makefile, without helper script.
+>>
+>> I just see that you are looking to v1 of my RFC patch series. I have sent v2
+>> yesterday.
+> 
+>  Yes, I wrote this mail while offline and didn't see your new series until later.
+
+No problem. At the very first moment, I thought I sent the old series.
+
+>> In v2 I use the name "SDK" instead of "toolchain".
+>> IIUC, the SDK is under "HOST_DIR" and the toolchain under "HOST_DIR/usr". And we
+>> want to relocate the SDK, right?
+> 
+>  There is no clear distinction between SDK or toolchain - SDK is a little bit
+> more, it can contain other host tools e.g. genimage. The usr part is just
+> historical accident that we are going to remove (when someone (i.e. me :-)
+> finally finds the time to do it).
+> 
+>  Anyway, for this series SDK is indeed a better term than toolchain.
+> 
+>>>  However, as far as I can see, the only thing that is instantiated in this
+>>> script is LOCATIONFILE. But that variable is actually constant, so it could be
+>>> coded directly in the script. So why not just $(INSTALL) the script itself, like
+>>> is done for e.g. support/misc/target-dir-warning.txt ?
+>>
+>> Will adapt that solution. I was just not sure about the locations.
+>>
+> [snip]
 
 
-> The relevant kernel option was introduced upstream in commit 1f8f1e29 back in
-> 2009. The oldest linux-headers referenced from buildroot's config is 3.0, and
-> that version definitely has that commit. I believe that adding this mount option
-> therefore does not constitute any backward incompatibility issues.
+  # Replace the old path with the new one in all text files
+  while read FILE ; do
+      if file -b --mime-type "${FILE}" | grep -q '^text/' && [ "${FILE}" != "./usr/share/buildroot/sdk-location" ]
+      then
+          sed -i s,"${OLDPATH}","${NEWPATH}",g "${FILE}"
+      fi;
+  done < <(grep -lr "${OLDPATH}" .)
 
- Anyway, unknown mount options are just ignored so it wouldn't be a regression.
+As grep -rl is very fast; I now use the following construct handling file with names
+with space corectly. BTW, is ',' is also a valid name character. Are all characters
+allowed for file names? Is there a known trick?
 
- It's possible that Peter or Thomas will fix up the subject line while
-committing, but if you do resend, you can add my
+>>>> +# Finally, we update the location file itself
+>>>> +sed -i s,"\${OLDPATH}",\${NEWPATH},g ./${LOCATIONFILE}
+>>>
+>>>  Why do this separately? It works within the loop above as well, doesn't it?
+>>
+>> If the script is interrupted with ^C, you can through away the tree. If I update
+>> the location file at the end, just re-running the script will work.
+> 
+>  That's a very good reason. Add a comment above it to explain.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+OK.
 
+>>
+>>>> +
+>>>> +# Check if the path substitution did work properly
+>>>> +if [ "\${NEWPATH}" != "\$(cat ./${LOCATIONFILE})" ]; then
+>>>> +    echo "Something went wrong with substituting the path!"
+>>>> +    echo "Please choose another location for your toolchain!"
+>>>> +fi
+>>>
+>>>  Is there any reason why this error handling is needed? The only thing I can
+>>> imagine is concurrently running two instances of the script, but otherwise I see
+>>> no way that the sed could fail...
+>>
+>> If the path /a/b/c/a/b/c is copied to /a/b/c, relocation (substitution) will not
+>> be correct. Maybe too much paranoia.
+> 
+>  No, a very good point actually! Maybe then a better approach is to first
+> generate the new location file (in a temporary new file), check that it looks
+> OK, and don't continue if it is not OK.
 
- Regards,
- Arnout
++1
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>  Do add a comment to to explain the risk. You found this one instance where it
+> goes wrong, but there may be others as well.
+
+OK.
+
+Wolfgang.
