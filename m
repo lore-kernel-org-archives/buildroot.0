@@ -1,63 +1,117 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Fri, 17 Mar 2017 09:59:24 +0100
-Subject: [Buildroot] [PATCH 1/2] acl: add host variant
-In-Reply-To: <20170316223840.23007-1-arnout@mind.be>
-References: <20170316223840.23007-1-arnout@mind.be>
-Message-ID: <402ef173-377c-e717-c882-bd31b91f2d87@andin.de>
+From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Date: Fri, 17 Mar 2017 10:11:19 +0100
+Subject: [Buildroot] [PATCH v2] libkcapi: new package
+Message-ID: <1489741879-13900-1-git-send-email-marcin.nowakowski@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-thanks for the patch.
+This package provides a userspace library that allows easy use of crypto
+interfaces exposed by the kernel.
 
-However, when I run it I get a
-acl_get_fd.c:26:24: fatal error: attr/xattr.h: No such file or directory
+A git tip is used instead of the last official release, as autotools
+support and cross-compilation fixes have been added only very recently.
 
-I find this file in
-output/host/usr/include/attr/xattr.h
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
 
-but that's outside the sysroot, so probably not included, right?
+---
+v2:
+	Remove unnecessary AUTORECONF_OPTS
+	Update to latest git hash
+	Config: depends on ... -> if ...
+	Add all license files
+---
+ DEVELOPERS                     |  3 +++
+ package/Config.in              |  1 +
+ package/libkcapi/Config.in     | 16 ++++++++++++++++
+ package/libkcapi/libkcapi.hash |  2 ++
+ package/libkcapi/libkcapi.mk   | 18 ++++++++++++++++++
+ 5 files changed, 40 insertions(+)
+ create mode 100644 package/libkcapi/Config.in
+ create mode 100644 package/libkcapi/libkcapi.hash
+ create mode 100644 package/libkcapi/libkcapi.mk
 
-When I install
-apt-get install libattr1-dev
-on the host it works.
-
-But we shouldnt depend on that, should we?
-
-
-regards, Andreas
-
-Am 16.03.2017 um 23:38 schrieb Arnout Vandecappelle (Essensium/Mind):
-> We need host-acl to fix issues with fakeroot.
->
-> Unfortunately, all the hacks have to be repeated again.
->
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Cc: Andreas Naumann <dev@andin.de>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/acl/acl.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-> index cbe5e93961..b38cc4c0c3 100644
-> --- a/package/acl/acl.mk
-> +++ b/package/acl/acl.mk
-> @@ -37,4 +37,13 @@ endef
->
->  ACL_POST_INSTALL_STAGING_HOOKS += ACL_FIX_LIBTOOL_LA_LIBDIR
->
-> +HOST_ACL_DEPENDENCIES = host-attr
-> +HOST_ACL_CONF_OPTS = --enable-gettext=no
-> +HOST_ACL_INSTALL_OPTS = \
-> +	prefix=$(HOST_DIR)/usr \
-> +	exec_prefix=$(HOST_DIR)/usr \
-> +	PKG_DEVLIB_DIR=$(HOST_DIR)/usr/lib \
-> +	install-dev install-lib
-> +
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
->
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ff72ca1..cf24db8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -991,6 +991,9 @@ F:	package/easydbus/
+ F:	package/rs485conf/
+ F:	package/turbolua/
+ 
++N:	Marcin Nowakowski <marcin.nowakowski@imgtec.com>
++F:	package/libkcapi/
++
+ N:	Marek Belisko <marek.belisko@open-nandra.com>
+ F:	package/libatasmart/
+ F:	package/polkit/
+diff --git a/package/Config.in b/package/Config.in
+index cfe7fc6..2e605f0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -933,6 +933,7 @@ menu "Crypto"
+ 	source "package/libgcrypt/Config.in"
+ 	source "package/libgpg-error/Config.in"
+ 	source "package/libgpgme/Config.in"
++	source "package/libkcapi/Config.in"
+ 	source "package/libksba/Config.in"
+ 	source "package/libmcrypt/Config.in"
+ 	source "package/libmhash/Config.in"
+diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
+new file mode 100644
+index 0000000..2968128
+--- /dev/null
++++ b/package/libkcapi/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LIBKCAPI
++	bool "libkcapi"
++	help
++	  Linux Kernel Crypto API userspace interface library
++
++	  http://www.chronox.de/libkcapi.html
++
++if BR2_PACKAGE_LIBKCAPI
++
++config BR2_PACKAGE_LIBKCAPI_APPS
++	bool "libkcapi test applications"
++	help
++	  Build additional test applications that can provide
++	  performance or algorithm tests.
++
++endif
+diff --git a/package/libkcapi/libkcapi.hash b/package/libkcapi/libkcapi.hash
+new file mode 100644
+index 0000000..e191970
+--- /dev/null
++++ b/package/libkcapi/libkcapi.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	1ed007a35d9fe31383d1131e9f8e14af4df8d55e6c48828b5075324b2876364a	libkcapi-a039f8a5adca57dc69a19d7361600c2f410e0c26.tar.gz
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+new file mode 100644
+index 0000000..6bbfbbe
+--- /dev/null
++++ b/package/libkcapi/libkcapi.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# libkcapi
++#
++################################################################################
++
++LIBKCAPI_VERSION = a039f8a5adca57dc69a19d7361600c2f410e0c26
++LIBKCAPI_SITE = $(call github,smuellerDD,libkcapi,$(LIBKCAPI_VERSION))
++LIBKCAPI_AUTORECONF = YES
++LIBKCAPI_INSTALL_STAGING = YES
++LIBKCAPI_LICENSE = BSD-3c or GPLv2
++LIBKCAPI_LICENSE_FILES = COPYING COPYING.gplv2 COPYING.bsd
++
++ifeq ($(BR2_PACKAGE_LIBKCAPI_APPS),y)
++LIBKCAPI_CONF_OPTS += --enable-kcapi-speed --enable-kcapi-test --enable-apps
++endif
++
++$(eval $(autotools-package))
+-- 
+2.7.4
