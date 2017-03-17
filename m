@@ -1,49 +1,54 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 17 Mar 2017 17:06:14 +0100
-Subject: [Buildroot] [PATCH v2 1/3] acl: make sure build picks up
-	TARGET_CFLAGS
-Message-ID: <20170317160616.20570-1-arnout@mind.be>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Fri, 17 Mar 2017 17:02:54 +0100
+Subject: [Buildroot] =?iso-8859-1?q?=5BPATCH_1/1=5D_Fix_permissions_on_/de?=
+	=?iso-8859-1?q?v/pts/ptmx_for_PTY_allocation_with_systemd?=
+Message-ID: <35a6c994-5279-4823-8864-be52f6f925ef@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The acl build system doesn't use automake, therefore it is broken. It
-doesn't use the CFLAGS passed by configure. Work around this by passing
-CFLAGS in the environment. The makefiles append to CFLAGS, so this
-works.
+(This is my first patch to buildroot, please feel free to pester me if you 
+prefer a different coding style or if you have some commit message 
+suggestions.)
 
-This issue hasn't led to build failures, but it is visible e.g. when
-stack protector is enabled: the stack protector options are not applied
-to acl. Also debug and optimisation options aren't applied.
+Without this patch, it is not possible to allocate PTYs when a generated 
+rootfs image with a recent glibc and systemd is launched as a container  on 
+an RHEL7 system via machinectl/systemd-nspawn. The container boots, but 
+`machinectl login mycontainer` fails. The culprit is /dev/pts/ptmx with 
+0000 perms.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
----
-v2: new patch
----
- package/acl/acl.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On a typical system, there are two `ptmx` devices. One is provided by the 
+devpts at /dev/pts/ptmx and it is typically not directly accessed from 
+userspace. The other one which actually *is* opened by processes is 
+/dev/ptmx. Kernel's documentation says these days that /dev/ptmx should be 
+either a symlink, or a bind mount of the /dev/pts/ptmx from devpts.
 
-diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-index cbe5e93961..9fd5de18a4 100644
---- a/package/acl/acl.mk
-+++ b/package/acl/acl.mk
-@@ -15,7 +15,13 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
- 
- # While the configuration system uses autoconf, the Makefiles are
- # hand-written and do not use automake. Therefore, we have to hack
--# around their deficiencies by passing installation paths.
-+# around their deficiencies by:
-+# - explicitly passing CFLAGS (LDFLAGS are passed on from configure,
-+#   CFLAGS are not).
-+# - explicitly passing the installation prefix, not using DESTDIR.
-+
-+ACL_MAKE_ENV = CFLAGS="$(TARGET_CFLAGS)"
-+
- ACL_INSTALL_STAGING_OPTS = \
- 	prefix=$(STAGING_DIR)/usr \
- 	exec_prefix=$(STAGING_DIR)/usr \
--- 
-2.11.0
+When a container is launched via machinectl/machined/systemd-nspawn, the 
+container manager prepares a root filesystem so that the container can live 
+in an appropriate namespace (this is similar to what initramfs is doing on 
+x86 desktops). During these preparations, systemd-nspawn mounts a devpts 
+instance using a correct ptmxmode=0666 within the container-to-be's 
+/dev/pts, and it adds a compatibility symlink at /dev/ptmx. However, once 
+systemd takes over as an init in the container, 
+/lib/systemd/systemd-remount-fs applies mount options from /etc/fstab to 
+all fileystems. Because the buildroot's template used to not include the 
+ptmxmode=... option, a default value of 0000 was taking an effect which in 
+turn led to not being able to allocate any pseudo-terminals.
+
+The relevant kernel option was introduced upstream in commit 1f8f1e29 back 
+in 2009. The oldest linux-headers referenced from buildroot's config is 
+3.0, and that version definitely has that commit. I believe that adding 
+this mount option therefore does not constitute any backward 
+incompatibility issues.
+
+Cheers,
+Jan
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Fix-permissions-on-dev-pts-ptmx-for-PTY-allocation-w.patch
+Type: text/x-patch
+Size: 2774 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170317/77d931d0/attachment.bin>
