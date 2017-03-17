@@ -1,33 +1,21 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 17 Mar 2017 20:23:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: disable display of
-	ClueCon banner in fs_cli
-Message-ID: <20170317192306.21956-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 17 Mar 2017 22:37:06 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.4.2
+In-Reply-To: <1489732069-82557-1-git-send-email-fontaine.fabrice@gmail.com>
+ (Fabrice Fontaine's message of "Fri, 17 Mar 2017 07:27:49 +0100")
+References: <1489732069-82557-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <87lgs3oa9p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/freeswitch/freeswitch.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 081b99fee..fe4db68fe 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -37,6 +37,10 @@ FREESWITCH_DEPENDENCIES = \
- 	util-linux \
- 	zlib
- 
-+# disable display of ClueCon banner in fs_cli
-+FREESWITCH_CONF_ENV += \
-+	disable_cc=yes
-+
- # we neither need host-perl nor host-php
- FREESWITCH_CONF_ENV += \
- 	ac_cv_prog_PERL=false \
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
