@@ -1,58 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Mar 2017 23:11:01 +0100
-Subject: [Buildroot] [git commit] xlib_libXv: correct license info
-Message-ID: <20170317223641.9D7E781F67@busybox.osuosl.org>
+Date: Fri, 17 Mar 2017 23:07:38 +0100
+Subject: [Buildroot] [git commit] package/cairo: update license information
+Message-ID: <20170317223641.88F5B7FB10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aad15918520391ea0952d742db9c52c3ac2b1f7e
+commit: https://git.buildroot.net/buildroot/commit/?id=0768932a0229b2c201c292023f59a868ecdb1222
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The license is actually closer to ISC than MIT, E.G.:
+As noticed by Rahul Bedarkar, the cairo library is LGPLv2.1 only
+(not LGPLv2.1+) or MPLv1.1.
 
-https://opensource.org/licenses/ISC
-vs
-https://opensource.org/licenses/MIT
-
-From COPYING:
-Permission to use, copy, modify, and distribute this software and its
-documentation for any purpose and without fee is hereby granted,
-provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in
-supporting documentation, and that the names of Digital or MIT not be
-used in advertising or publicity pertaining to distribution of the
-software without specific, written prior permission.
-
-E.G.  this is very similar to the normal ISC text which has been extended
-with a BSD-3c style advertisinc clause.  Both are permissive licenses, but
-it is more correct to call it ISC-like.
-
-Notice: As pointed out by Rahul Bedarkar, this may actually be more closely
-related to the OpenBSD template license:
-
-http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/share/misc/license.template?rev=HEAD
-
-But that is also based on the ISC license, so calling it ISC-like is still
-correct.
-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXv/xlib_libXv.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cairo/cairo.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXv/xlib_libXv.mk b/package/x11r7/xlib_libXv/xlib_libXv.mk
-index 26f8bad..0e02439 100644
---- a/package/x11r7/xlib_libXv/xlib_libXv.mk
-+++ b/package/x11r7/xlib_libXv/xlib_libXv.mk
-@@ -7,7 +7,7 @@
- XLIB_LIBXV_VERSION = 1.0.11
- XLIB_LIBXV_SOURCE = libXv-$(XLIB_LIBXV_VERSION).tar.bz2
- XLIB_LIBXV_SITE = http://xorg.freedesktop.org/releases/individual/lib
--XLIB_LIBXV_LICENSE = MIT
-+XLIB_LIBXV_LICENSE = ISC-like
- XLIB_LIBXV_LICENSE_FILES = COPYING
- XLIB_LIBXV_INSTALL_STAGING = YES
- XLIB_LIBXV_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_videoproto xproto_xproto
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 761c6f4..ac91a56 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -6,8 +6,8 @@
+ 
+ CAIRO_VERSION = 1.14.8
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+-CAIRO_LICENSE = LGPLv2.1+
+-CAIRO_LICENSE_FILES = COPYING
++CAIRO_LICENSE = LGPLv2.1 or MPLv1.1 (library)
++CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+ CAIRO_SITE = http://cairographics.org/releases
+ CAIRO_INSTALL_STAGING = YES
+ CAIRO_AUTORECONF = YES
