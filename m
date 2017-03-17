@@ -1,46 +1,49 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 17 Mar 2017 17:06:16 +0100
-Subject: [Buildroot] [PATCH v2 3/3] fakeroot: depend on acl
-In-Reply-To: <20170317160616.20570-1-arnout@mind.be>
-References: <20170317160616.20570-1-arnout@mind.be>
-Message-ID: <20170317160616.20570-3-arnout@mind.be>
+Date: Fri, 17 Mar 2017 17:06:14 +0100
+Subject: [Buildroot] [PATCH v2 1/3] acl: make sure build picks up
+	TARGET_CFLAGS
+Message-ID: <20170317160616.20570-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Recent versions of fakeroot have grown support for acl. We don't really
-need this since we don't use acls in Buildroot. However, it turns out
-that "cp -a" does something funky with acls, with the result that
-fakeroot without acl support looses the ownership and permissions on
-the copied file. "cp -a" may be (is even likely to be) used in a
-BR2_ROOTFS_POST_FAKEROOT_SCRIPT, so we need to support this.
+The acl build system doesn't use automake, therefore it is broken. It
+doesn't use the CFLAGS passed by configure. Work around this by passing
+CFLAGS in the environment. The makefiles append to CFLAGS, so this
+works.
 
-Note that host-acl itself depends on host-attr, so this pulls in two
-extra packages in each build. The impact on build time is about 10s.
+This issue hasn't led to build failures, but it is visible e.g. when
+stack protector is enabled: the stack protector options are not applied
+to acl. Also debug and optimisation options aren't applied.
 
-Cc: Andreas Naumann <dev@andin.de>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
-v2: no change
+v2: new patch
 ---
- package/fakeroot/fakeroot.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/acl/acl.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 168cd13a48..731b06a5f4 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -7,6 +7,8 @@
- FAKEROOT_VERSION = 1.20.2
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
- FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index cbe5e93961..9fd5de18a4 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -15,7 +15,13 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ 
+ # While the configuration system uses autoconf, the Makefiles are
+ # hand-written and do not use automake. Therefore, we have to hack
+-# around their deficiencies by passing installation paths.
++# around their deficiencies by:
++# - explicitly passing CFLAGS (LDFLAGS are passed on from configure,
++#   CFLAGS are not).
++# - explicitly passing the installation prefix, not using DESTDIR.
 +
-+HOST_FAKEROOT_DEPENDENCIES = host-acl
- # Force capabilities detection off
- # For now these are process capabilities (faked) rather than file
- # so they're of no real use
++ACL_MAKE_ENV = CFLAGS="$(TARGET_CFLAGS)"
++
+ ACL_INSTALL_STAGING_OPTS = \
+ 	prefix=$(STAGING_DIR)/usr \
+ 	exec_prefix=$(STAGING_DIR)/usr \
 -- 
 2.11.0
