@@ -1,72 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 17 Mar 2017 12:51:36 +0200
-Subject: [Buildroot] [PATCH 1/2] acl: add host variant
-In-Reply-To: <402ef173-377c-e717-c882-bd31b91f2d87@andin.de>
-References: <20170316223840.23007-1-arnout@mind.be>
- <402ef173-377c-e717-c882-bd31b91f2d87@andin.de>
-Message-ID: <20170317105136.ibrj6tg3bgmi5pcl@tarshish>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Fri, 17 Mar 2017 20:34:01 +0530
+Subject: [Buildroot] [PATCH v2] libkcapi: new package
+In-Reply-To: <1489741879-13900-1-git-send-email-marcin.nowakowski@imgtec.com>
+References: <1489741879-13900-1-git-send-email-marcin.nowakowski@imgtec.com>
+Message-ID: <c1e56596-82f0-ea20-98d1-4121bc3c58d3@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andreas,
+Hello,
 
-On Fri, Mar 17, 2017 at 09:59:24AM +0100, Andreas Naumann wrote:
-> However, when I run it I get a
-> acl_get_fd.c:26:24: fatal error: attr/xattr.h: No such file or directory
-> 
-> I find this file in
-> output/host/usr/include/attr/xattr.h
-> 
-> but that's outside the sysroot, so probably not included, right?
+On Friday 17 March 2017 02:41 PM, Marcin Nowakowski wrote:
+> This package provides a userspace library that allows easy use of crypto
+> interfaces exposed by the kernel.
+>
+> A git tip is used instead of the last official release, as autotools
+> support and cross-compilation fixes have been added only very recently.
+>
+> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+>
+> ---
+> v2:
+> 	Remove unnecessary AUTORECONF_OPTS
+> 	Update to latest git hash
+> 	Config: depends on ... -> if ...
+> 	Add all license files
 
-This is the host variant of acl, so don't expect it to be in the target 
-sysroot.
+It looks good to me.
 
-> When I install
-> apt-get install libattr1-dev
-> on the host it works.
-> 
-> But we shouldnt depend on that, should we?
+Reviewed-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 
-We should. Something went wrong with the host headers search path.
-
-baurch
-
-> Am 16.03.2017 um 23:38 schrieb Arnout Vandecappelle (Essensium/Mind):
-> > We need host-acl to fix issues with fakeroot.
-> > 
-> > Unfortunately, all the hacks have to be repeated again.
-> > 
-> > Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> > Cc: Andreas Naumann <dev@andin.de>
-> > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > ---
-> >  package/acl/acl.mk | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-> > index cbe5e93961..b38cc4c0c3 100644
-> > --- a/package/acl/acl.mk
-> > +++ b/package/acl/acl.mk
-> > @@ -37,4 +37,13 @@ endef
-> > 
-> >  ACL_POST_INSTALL_STAGING_HOOKS += ACL_FIX_LIBTOOL_LA_LIBDIR
-> > 
-> > +HOST_ACL_DEPENDENCIES = host-attr
-> > +HOST_ACL_CONF_OPTS = --enable-gettext=no
-> > +HOST_ACL_INSTALL_OPTS = \
-> > +	prefix=$(HOST_DIR)/usr \
-> > +	exec_prefix=$(HOST_DIR)/usr \
-> > +	PKG_DEVLIB_DIR=$(HOST_DIR)/usr/lib \
-> > +	install-dev install-lib
-> > +
-> >  $(eval $(autotools-package))
-> > +$(eval $(host-autotools-package))
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thanks,
+Rahul
