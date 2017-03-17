@@ -1,85 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 17 Mar 2017 23:20:54 +0100
-Subject: [Buildroot] [PATCH v2 1/3] acl: make sure build picks up
- TARGET_CFLAGS
-In-Reply-To: <08d783f9-0117-8a3c-0e8d-c034f0238d78@andin.de>
-References: <20170317160616.20570-1-arnout@mind.be>
- <08d783f9-0117-8a3c-0e8d-c034f0238d78@andin.de>
-Message-ID: <82f3ccde-64a0-ab90-a450-15a46e34f7f6@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 17 Mar 2017 23:36:18 +0100
+Subject: [Buildroot] [PATCH] xlib_libXv: correct license type
+In-Reply-To: <20170316153146.21715-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 16 Mar 2017 16:31:46 +0100")
+References: <20170316153146.21715-1-peter@korsgaard.com>
+Message-ID: <87d1dfo7j1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
+ > The license is actually closer to ICS than MIT, E.G.:
+ > https://opensource.org/licenses/ISC
+ > vs
+ > https://opensource.org/licenses/MIT
 
-On 17-03-17 23:17, Andreas Naumann wrote:
-> Hi Arnout,
-> tested and works :-)
+ > From COPYING:
+ > Permission to use, copy, modify, and distribute this software and its
+ > documentation for any purpose and without fee is hereby granted,
+ > provided that the above copyright notice appear in all copies and that
+ > both that copyright notice and this permission notice appear in
+ > supporting documentation, and that the names of Digital or MIT not be
+ > used in advertising or publicity pertaining to distribution of the
+ > software without specific, written prior permission.
 
- You can formalize this by replying with
+ > E.G.  this is the normal ICS text which has been extended with a BSD-3c
+ > style advertisinc clause.  Both are permissive licenses, but it is more
+ > correct to call it ICS-like.
 
- Tested-by: Andreas Naumann <dev@andin.de>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-(but then without a space in front). It gets picked up by Patchwork and it will
-be added to the git log.
-
- By the way, did you actually test *this patch*, or just that fakeroot works
-after the entire series is applied? In the latter case, you should only add your
-Tested-by to the last patch (and perhaps 2/3). This particular patch has no
-impact on fakeroot.
-
- Regards,
- Arnout
-
-> 
-> thanks,
-> Andreas
-> 
-> Am 17.03.2017 um 17:06 schrieb Arnout Vandecappelle (Essensium/Mind):
->> The acl build system doesn't use automake, therefore it is broken. It
->> doesn't use the CFLAGS passed by configure. Work around this by passing
->> CFLAGS in the environment. The makefiles append to CFLAGS, so this
->> works.
->>
->> This issue hasn't led to build failures, but it is visible e.g. when
->> stack protector is enabled: the stack protector options are not applied
->> to acl. Also debug and optimisation options aren't applied.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> Cc: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->> v2: new patch
->> ---
->>  package/acl/acl.mk | 8 +++++++-
->>  1 file changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/acl/acl.mk b/package/acl/acl.mk
->> index cbe5e93961..9fd5de18a4 100644
->> --- a/package/acl/acl.mk
->> +++ b/package/acl/acl.mk
->> @@ -15,7 +15,13 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
->>
->>  # While the configuration system uses autoconf, the Makefiles are
->>  # hand-written and do not use automake. Therefore, we have to hack
->> -# around their deficiencies by passing installation paths.
->> +# around their deficiencies by:
->> +# - explicitly passing CFLAGS (LDFLAGS are passed on from configure,
->> +#   CFLAGS are not).
->> +# - explicitly passing the installation prefix, not using DESTDIR.
->> +
->> +ACL_MAKE_ENV = CFLAGS="$(TARGET_CFLAGS)"
->> +
->>  ACL_INSTALL_STAGING_OPTS = \
->>      prefix=$(STAGING_DIR)/usr \
->>      exec_prefix=$(STAGING_DIR)/usr \
->>
+Committed after fixing up the s/ICS/ISC/ mixup and adding a note about
+the OpenBSD license template as pointed out by Rahul, thanks!
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
