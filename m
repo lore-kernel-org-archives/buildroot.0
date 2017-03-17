@@ -1,48 +1,46 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 17 Mar 2017 17:06:15 +0100
-Subject: [Buildroot] [PATCH v2 2/3] acl: add host variant
+Date: Fri, 17 Mar 2017 17:06:16 +0100
+Subject: [Buildroot] [PATCH v2 3/3] fakeroot: depend on acl
 In-Reply-To: <20170317160616.20570-1-arnout@mind.be>
 References: <20170317160616.20570-1-arnout@mind.be>
-Message-ID: <20170317160616.20570-2-arnout@mind.be>
+Message-ID: <20170317160616.20570-3-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need host-acl to fix issues with fakeroot.
+Recent versions of fakeroot have grown support for acl. We don't really
+need this since we don't use acls in Buildroot. However, it turns out
+that "cp -a" does something funky with acls, with the result that
+fakeroot without acl support looses the ownership and permissions on
+the copied file. "cp -a" may be (is even likely to be) used in a
+BR2_ROOTFS_POST_FAKEROOT_SCRIPT, so we need to support this.
 
-Unfortunately, all the hacks (except the .la fixup) have to be repeated.
+Note that host-acl itself depends on host-attr, so this pulls in two
+extra packages in each build. The impact on build time is about 10s.
 
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Cc: Andreas Naumann <dev@andin.de>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-v2: - propagate CFLAGS (Andreas Naumann)
-    - mention that .la hack isn't needed for host.
+v2: no change
 ---
- package/acl/acl.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/fakeroot/fakeroot.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-index 9fd5de18a4..e1462b60aa 100644
---- a/package/acl/acl.mk
-+++ b/package/acl/acl.mk
-@@ -43,4 +43,15 @@ endef
- 
- ACL_POST_INSTALL_STAGING_HOOKS += ACL_FIX_LIBTOOL_LA_LIBDIR
- 
-+HOST_ACL_DEPENDENCIES = host-attr
-+HOST_ACL_CONF_OPTS = --enable-gettext=no
-+HOST_ACL_MAKE_ENV = CFLAGS="$(HOST_CFLAGS)"
-+HOST_ACL_INSTALL_OPTS = \
-+	prefix=$(HOST_DIR)/usr \
-+	exec_prefix=$(HOST_DIR)/usr \
-+	PKG_DEVLIB_DIR=$(HOST_DIR)/usr/lib \
-+	install-dev install-lib
-+# For the host, libacl.la is correct, no fixup needed.
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 168cd13a48..731b06a5f4 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -7,6 +7,8 @@
+ FAKEROOT_VERSION = 1.20.2
+ FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
+ FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
 +
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++HOST_FAKEROOT_DEPENDENCIES = host-acl
+ # Force capabilities detection off
+ # For now these are process capabilities (faked) rather than file
+ # so they're of no real use
 -- 
 2.11.0
