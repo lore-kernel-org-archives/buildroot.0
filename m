@@ -1,77 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Mar 2017 00:20:49 +0100
-Subject: [Buildroot] [git commit branch/2017.02.x] tcpreplay: patch security
-	issue
-Message-ID: <20170317234445.7B545825C7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Mar 2017 08:28:41 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-03-17
+Message-ID: <20170318072841.AF04B20775@mail.free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd28c44ce87b7480a24e596f7a34e3d30e577333
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2017.02.x
+Hello,
 
-Add upstream patch for CVE-2017-6429: Buffer overflow when reading crafted
-pcap file with large packets.
+Build statistics for 2017-03-17
+================================
 
-https://github.com/appneta/tcpreplay/issues/278
+      successes : 98 
+       failures : 9  
+       timeouts : 0  
+          TOTAL : 107
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 62bf2bfd53885fbd62a8e9345c7f3d7a4d619342)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-capture-has-a-packet-that-is-too-large-2.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+Classification of failures by reason
+====================================
 
-diff --git a/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch b/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
-new file mode 100644
-index 0000000..233b6d9
---- /dev/null
-+++ b/package/tcpreplay/0001-278-fail-if-capture-has-a-packet-that-is-too-large-2.patch
-@@ -0,0 +1,44 @@
-+From d689d14dbcd768c028eab2fb378d849e543dcfe9 Mon Sep 17 00:00:00 2001
-+From: Fred Klassen <fklassen@appneta.com>
-+Date: Sun, 26 Feb 2017 20:45:59 -0800
-+Subject: [PATCH] #278 fail if capture has a packet that is too large (#286)
-+
-+* #278 fail if capture has a packet that is too large
-+
-+[baruch: remove the CHANGELOG update]
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: upstream commit d689d14db
-+
-+diff --git a/src/tcpcapinfo.c b/src/tcpcapinfo.c
-+index 775f1625b00f..96928820fe94 100644
-+--- a/src/tcpcapinfo.c
-++++ b/src/tcpcapinfo.c
-+@@ -281,6 +281,15 @@ main(int argc, char *argv[])
-+                 caplen = pcap_ph.caplen;
-+             }
-+ 
-++            if (caplentoobig) {
-++                printf("\n\nCapture file appears to be damaged or corrupt.\n"
-++                        "Contains packet of size %u, bigger than snap length %u\n",
-++                        caplen, pcap_fh.snaplen);
-++
-++                close(fd);
-++                break;
-++            }
-++
-+             /* check to make sure timestamps don't go backwards */
-+             if (last_sec > 0 && last_usec > 0) {
-+                 if ((pcap_ph.ts.tv_sec == last_sec) ? 
-+@@ -306,7 +315,7 @@ main(int argc, char *argv[])
-+                 }
-+ 
-+                 close(fd);
-+-                continue;
-++                break;
-+             }
-+ 
-+             /* print the frame checksum */
-+-- 
-+2.11.0
-+
+           uboot-tools-2017.03 | 4 
+                    gdb-7.11.1 | 1 
+                    git-2.12.0 | 1 
+               nfs-utils-1.3.3 | 1 
+               qt5webkit-5.8.0 | 1 
+                  trinity-v1.6 | 1 
+
+
+Detail of failures
+===================
+
+      x86_64 |                     gdb-7.11.1 | NOK | http://autobuild.buildroot.net/results/ed8726d4cd536b81a4bca4c3d9056ad4ff2658db
+         arm |                     git-2.12.0 | NOK | http://autobuild.buildroot.net/results/561d8bfd9a98e0fdbae0e4bdf21aeea297fbf876
+microblazeel |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/240cfb0497b1dd7b5b33b8f64635cca435d49f05
+         arm |                qt5webkit-5.8.0 | NOK | http://autobuild.buildroot.net/results/3792695078cf3fe7bac255a42c88d4540b5b275f
+         arm |                   trinity-v1.6 | NOK | http://autobuild.buildroot.net/results/94b4281bc10856d56a7d4abcf269cb5dd584e34e
+      xtensa |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/5828f903e4f6f548b1f537467603ce5194c95395
+ powerpc64le |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/58422d42f8b5543539526f967d0896e4d5371e7e
+    mips64el |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/42f7c13890c4f935834c16992a6fe00b9f0e15b9
+      xtensa |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/3a13ee820973d3cba436e7c35e1f08e90b344b12
+
+-- 
+http://autobuild.buildroot.net
