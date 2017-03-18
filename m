@@ -1,46 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 08:28:41 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2017-03-17
-Message-ID: <20170318072841.AF04B20775@mail.free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 18 Mar 2017 08:32:07 +0000
+Subject: [Buildroot] [Bug 9751] New: expat legal info - manifest.csv: GPLv2
+ Source site: MIT License (Buildroot 2017-02)
+Message-ID: <bug-9751-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9751
 
-Build statistics for 2017-03-17
-================================
+            Bug ID: 9751
+           Summary: expat legal info - manifest.csv: GPLv2 Source site:
+                    MIT License (Buildroot 2017-02)
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: timo.valimaki at sensoan.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-      successes : 98 
-       failures : 9  
-       timeouts : 0  
-          TOTAL : 107
+I started to make legal check to my Buildroot build - first time.
 
-Classification of failures by reason
-====================================
+NAME=Buildroot
+VERSION=2017.02
+ID=buildroot
+VERSION_ID=2017.02
+PRETTY_NAME="Buildroot 2017.02"
 
-           uboot-tools-2017.03 | 4 
-                    gdb-7.11.1 | 1 
-                    git-2.12.0 | 1 
-               nfs-utils-1.3.3 | 1 
-               qt5webkit-5.8.0 | 1 
-                  trinity-v1.6 | 1 
+When I checked Licenses listed in the manifest.csv file and then compared what
+is said on actual source site I found differences.
 
+E.g. package: expat - Manifest indicates GPLv2 but source site
+(https://sourceforge.net/projects/expat/?source=navbar) indicates MIT License.
 
-Detail of failures
-===================
-
-      x86_64 |                     gdb-7.11.1 | NOK | http://autobuild.buildroot.net/results/ed8726d4cd536b81a4bca4c3d9056ad4ff2658db
-         arm |                     git-2.12.0 | NOK | http://autobuild.buildroot.net/results/561d8bfd9a98e0fdbae0e4bdf21aeea297fbf876
-microblazeel |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/240cfb0497b1dd7b5b33b8f64635cca435d49f05
-         arm |                qt5webkit-5.8.0 | NOK | http://autobuild.buildroot.net/results/3792695078cf3fe7bac255a42c88d4540b5b275f
-         arm |                   trinity-v1.6 | NOK | http://autobuild.buildroot.net/results/94b4281bc10856d56a7d4abcf269cb5dd584e34e
-      xtensa |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/5828f903e4f6f548b1f537467603ce5194c95395
- powerpc64le |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/58422d42f8b5543539526f967d0896e4d5371e7e
-    mips64el |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/42f7c13890c4f935834c16992a6fe00b9f0e15b9
-      xtensa |            uboot-tools-2017.03 | NOK | http://autobuild.buildroot.net/results/3a13ee820973d3cba436e7c35e1f08e90b344b12
+Is this due to a bug in expat package license info or something else?
 
 -- 
-http://autobuild.buildroot.net
+You are receiving this mail because:
+You are on the CC list for the bug.
