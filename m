@@ -1,44 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 14:14:39 +0100
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 7.7.3
-Message-ID: <20170318131453.6A087821DB@busybox.osuosl.org>
+Date: Sat, 18 Mar 2017 14:14:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 7.7.3
+In-Reply-To: <1489660110-8914-1-git-send-email-martin@barkynet.com>
+References: <1489660110-8914-1-git-send-email-martin@barkynet.com>
+Message-ID: <20170318141458.62b31f37@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cae760c5e46e229690691f08c2358bea8c82216c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-See https://nodejs.org/en/blog/release/v7.7.3/
+On Thu, 16 Mar 2017 10:28:30 +0000, Martin Bark wrote:
+> See https://nodejs.org/en/blog/release/v7.7.3/
+> 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> ---
+>  package/nodejs/nodejs.hash | 4 ++--
+>  package/nodejs/nodejs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index f0a4968..e4f3815 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From upstream URL: http://nodejs.org/dist/v7.7.2/SHASUMS256.txt
--sha256  e7448d8e44d32c2c63347c822508cf5c87b9662c07db290056fec66d37c4f584  node-v7.7.2.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v7.7.3/SHASUMS256.txt
-+sha256  5441daf11f743b5508ddf31a16b4f268835fbceb59ef709b44e85b03fece0edf  node-v7.7.3.tar.xz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 0db97e8..ad0b26d 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 7.7.2
-+NODEJS_VERSION = 7.7.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
