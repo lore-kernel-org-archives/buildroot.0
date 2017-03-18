@@ -1,94 +1,96 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 18 Mar 2017 17:33:19 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2017-03-17
-In-Reply-To: <39f7b32b-2620-70a4-b9b0-d208a00628f4@mind.be>
-References: <20170318072841.AF04B20775@mail.free-electrons.com>
- <124f5fc5-6307-f72f-f1be-8f2139dffced@mind.be>
- <20170318160225.GL23128@waldemar-brodkorb.de>
- <39f7b32b-2620-70a4-b9b0-d208a00628f4@mind.be>
-Message-ID: <D78902DE-4A4B-47A9-8F74-6FB30E882AE3@openadk.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 18 Mar 2017 17:33:58 +0100
+Subject: [Buildroot] [PATCH v5 00/19] Reproducible builds
+In-Reply-To: <12851589.XERjbWNCZC@sagittae>
+References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
+ <12851589.XERjbWNCZC@sagittae>
+Message-ID: <f9e5897e-0548-2229-4171-4653012c2afb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-> Am 18.03.2017 um 17:19 schrieb Arnout Vandecappelle <arnout@mind.be>:
+
+On 21-02-17 09:17, J?r?me Pouiller wrote:
+> Hello, 
 > 
+> On Tuesday 20 December 2016 14:46:17 CET J?r?me Pouiller wrote:
+> [...]
+>> Patches 11 to 19 are nearly a series in the series. Until now, most of binaries
+>> installed by libtool was configured with RPATH pointingto their build
+>> directory. Indeed, libtool add this path during compilation in order to be able
+>> to execute them directly from build directory. This path should normally
+>> removed during install, but Buildroot disable this behavior (patch 15). Simply
+>> re-enabling this behavior does not work. Indeed, during relink, libtool try to
+>> use .la that are not yet patched and fail to find libraries. On another side,
+>> libtool support usage of a sysroot since v1.5. To enable this support, we have
+>> to keep original values from .la file (patch 12 and 13) and inform libtool we
+>> are using a sysroot (patch 11).
+>>
+>> Patch 14 fix a small incompatibility with unsafe path detection.
+>>
+>> Since libtool is now correctly used, it is not more necessary to disable
+>> install directory sanity check (patch 17).
+>>
+>> From libtool point of view, sysroot is not reachable from $(TARGET_DIR). So,
+>> during installation to $(TARGET_DIR), it add an entry in RPATH that point to
+>> $(STAGING_DIR). To fix this problem, we just have to inform libtool that
+>> $(STAGING_DIR) is reachable (patch 16).
+>>
+>> Finally, I also clean up libtool infra from modification that seems useless now
+>> (patches 18 and 19).
+>>
+>> I tested this series using internal toolchain and Linaro toolchain with these
+>> packages:
+>>
+>>     BR2_INIT_SYSTEMD=y       (install public libraries in /usr/lib/systemd)
+>>     BR2_PACKAGE_LIBCDAUDIO=y (libtool 1.5)
+>>     BR2_PACKAGE_LIBLO=y      (libtool 2.2)
+>>     BR2_PACKAGE_MADPLAY=y    (unpatched libtool)
+>>     BR2_PACKAGE_ALSA_LIB=y   (optional dependency to Madplay)
+>>     BR2_PACKAGE_PYTHON=y
+>>     BR2_PACKAGE_PYTHON_PY_PYC=y
+>>     BR2_PACKAGE_GNUPG2=y
+>>
+>> Except patches 12 and 13, I think whole series is bisectable.
+> [...]
 > 
+> As I said above, patches 11 to 19 of this series do a strong clean up
+> of libtool infrastructure. I think these patches are important for two
+> reasons:
 > 
->> On 18-03-17 17:02, Waldemar Brodkorb wrote:
->> Hi Arnout,
->> Arnout Vandecappelle wrote,
->> 
->>> 
->>> 
->>>> On 18-03-17 08:28, Thomas Petazzoni wrote:
->>>> microblazeel |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/240cfb0497b1dd7b5b33b8f64635cca435d49f05
->>> 
->>> I looked at this one and I'm a bit stumped. This is the error:
->>> .../sysroot/usr/lib/libc.a(clnt_simple.os): In function `callrpc':
->>> (.text+0x0): multiple definition of `callrpc'
->>> .../sysroot/usr/lib/libtirpc.a(libtirpc_la-rpc_soc.o):(.text+0x784): first
->>> defined here
->>> (and many more like that).
->>> 
->>> It's a bit weird that this object file from the C library even gets linked in.
->>> The Map file says:
->>> 
->>> .../sysroot/usr/lib/libc.a(rpc_thread.os)
->>>    .../sysroot/usr/lib/libc.a(cancel.os) (__rpc_thread_destroy)
->>> (skipping a few levels of indirection here).
->>> 
->>> So somehow the pthread library is pulling in the RPC support from uClibc, which
->>> obviously conflicts with tirpc.
->> 
->> But if BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y is active, isn't uClibc-ng
->> build with RPC support? If this is the case, you end up with two RPC
->> implememtations. That should be handled by Buildroot.
->> 
->> Do you have support for use either libtirpc or uClibc-ng internal
->> RPC support?
+>    1. It is the best way to support reproducible build from different
+>       build paths
+>    2. Currently BR usage of libtool is not standard. These patches use
+>       libtool in the right way. It drop unnecessary RPATH from binaries.
+>       It drop most of patches applied to libtool.
 > 
-> rpcbind need libtirpc for RPC support, it can't use the toolchain RPC for some
-> reason. That's why both implementations are there.
+> However, this series do very intrusive changes and it is difficult to
+> review. Consequently, I think it is necessary to apply them very early
+> in a development cycle. So, I suggest to apply them to 'next' now.
 
-What does rpcbind use? ipv6 stuff?
+ Yes, it's time to apply the libtool patches. I have a few spelling corrections
+for the commit messages lined up but nothing more, and I'm waiting for a test
+build to finish to give my Ack.
 
-> Normally it shouldn't be an issue to have two implementations. Since the one
-> from libtirpc is linked in before libc is linked in, the one from libc isn't
-> going to be used. This works for musl AFAICS.
+ However, I wonder, wouldn't it be a good idea to change our approach? Instead
+of patching the ltmain files, why don't we just overwrite them with our own
+host-libtool?
 
-Musl does not implement RPC. Gnu Libc deprecated it for a while.
+ Hm, host-libtool depends on host-m4, so that adds (on my machine) 50 seconds to
+the build whenever an autotools package is included... Possibly not acceptable.
+We could still take that approach for the case when AUTORECONF=YES, however. But
+then again, that would break the symmetry we have now...
 
-> The problem is that with uClibc-ng on microblaze, RPC from libc is linked in
-> unconditionally (from pthreads, AFAICS). Check e.g. busybox, it has
-> rpc_thread.os, rpc_commondata.os, rpc_prot.os and rpc_dtablesize.os. uClibc-ng
-> on ARC, for example, doesn't seem to have this.
-> 
-> So it's the __rpc_thread_destroy in cancel.os that seems to be the problem here.
+ Regards,
+ Arnout
 
-When Rpc is activated it will be included in libc.a since 1.0.18...
-
-Arc external toolchain uses the old uclibc, where the combined libc isn't made.
-
-Should uclibc-ng drop rpc support?
-
-best regards 
-Waldemar
-
-
-> Regards,
-> Arnout
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
