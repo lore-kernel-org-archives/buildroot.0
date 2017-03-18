@@ -1,56 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 15:20:40 +0100
-Subject: [Buildroot] [PATCH v2] libkcapi: new package
-In-Reply-To: <1489741879-13900-1-git-send-email-marcin.nowakowski@imgtec.com>
-References: <1489741879-13900-1-git-send-email-marcin.nowakowski@imgtec.com>
-Message-ID: <20170318152040.22fcb3cd@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 18 Mar 2017 11:21:41 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.10.4
+Message-ID: <1489846902-16339-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, 17 Mar 2017 10:11:19 +0100, Marcin Nowakowski wrote:
-> This package provides a userspace library that allows easy use of crypto
-> interfaces exposed by the kernel.
-> 
-> A git tip is used instead of the last official release, as autotools
-> support and cross-compilation fixes have been added only very recently.
-> 
-> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-> 
-> ---
-> v2:
-> 	Remove unnecessary AUTORECONF_OPTS
-> 	Update to latest git hash
-> 	Config: depends on ... -> if ...
-> 	Add all license files
-> ---
->  DEVELOPERS                     |  3 +++
->  package/Config.in              |  1 +
->  package/libkcapi/Config.in     | 16 ++++++++++++++++
->  package/libkcapi/libkcapi.hash |  2 ++
->  package/libkcapi/libkcapi.mk   | 18 ++++++++++++++++++
->  5 files changed, 40 insertions(+)
->  create mode 100644 package/libkcapi/Config.in
->  create mode 100644 package/libkcapi/libkcapi.hash
->  create mode 100644 package/libkcapi/libkcapi.mk
-
-Applied to master, after doing the following changes:
-
-    [Thomas:
-     - Change sub-option prompt to "build test applications"
-     - Be more specific about the license: the library is under BSD-3c only,
-       while the programs are under BSD-3c or GPLv2.
-     - Explicitly disable programs when BR2_PACKAGE_LIBKCAPI_APPS is not
-       enabled.]
-
-Thanks!
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index 6a45f06..3e2e6d5 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.10.3)"
++	bool "Latest version (4.10.4)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.10.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.10.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
