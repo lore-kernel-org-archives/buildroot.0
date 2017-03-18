@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Mar 2017 18:24:17 +0100
-Subject: [Buildroot] [PATCH v5 13/19] infra-libtool: correctly prefix
- $libdir with $STAGING_DIR
-In-Reply-To: <1482241596-31688-14-git-send-email-jezz@sysmic.org>
+Date: Sat, 18 Mar 2017 18:31:46 +0100
+Subject: [Buildroot] [PATCH v5 14/19] infra-libtool: drop original
+ $libdir (i.e. /usr/lib) from library paths
+In-Reply-To: <1482241596-31688-15-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-14-git-send-email-jezz@sysmic.org>
-Message-ID: <85115e4c-e95c-af08-492a-cc69a2ebae1b@mind.be>
+ <1482241596-31688-15-git-send-email-jezz@sysmic.org>
+Message-ID: <9e03f741-dd0a-97b1-1bd4-28501d84097e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,169 +15,144 @@ To: buildroot@busybox.net
 
 
 On 20-12-16 14:46, J?r?me Pouiller wrote:
-> Until now Builroot patched libtool in order to ignore `$libdir' provided by .la
-                                                                             ^the
-> file. It used the path where it found the .la instead of `$libdir'. However,
-> since v1.5 libtool correctly prepend sysroot to `$libdir' as we can see a few
-                                      ^s the
-> lines below patched lines:
-             ^the
+> When it compute list of directories to include in link, libtool has a
+                 ^s the                            ^the
+> conservative behavior. It add `$inst_prefix_dir$libdir' but also keep original
+                               ^s                                      ^s the
+> `$libdir'. Thus, it call:
+                          ^s
+>    -L/usr/lib -L/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
 > 
->   func_append newdependency_libs " ${lt_sysroot:+=}$libdir/$name"
+> It works since the last path has priority. However, toolchan-wrapper consider
+                                                                              ^s
+
+ However, I think the first path has priority, no? According to man gcc: "the
+directories are searched in the order specified". So I don't think this works.
+In other words, I think patch 11/19 without this patch might break the build if
+paranoid path is enabled. In that case, this patch should come first in the series.
+
+> `/usr/lib' an an unsafe path.
+             ^^as
 > 
-> (in fact, this line just prepend '=', and '=' is substituted later)
-                                  ^s
+> This patch remove original `$libdir'.
+                   ^s the
 > 
+> Since last versions of binutils provide `-Wpoison-system-directories' option, I
+> think it make sense to try to upstream this patch.
+
+ So, did you try to upstream it?
+
+> 
+> Note Yocto has a similar patch:
+>   http://git.yoctoproject.org/cgit.cgi/poky/tree/meta/recipes-devtools/libtool/libtool/use-sysroot-in-libpath.patch
+
+ Well, yocto has a non-upstreamable patch :-)
+
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 (tested on a static arm musl build with about 20 packages)
 
-
  Regards,
  Arnout
 
 > ---
->  support/libtool/buildroot-libtool-v1.5.patch   | 32 ++------------------------
->  support/libtool/buildroot-libtool-v2.2.patch   | 30 +-----------------------
->  support/libtool/buildroot-libtool-v2.4.4.patch | 11 ---------
->  support/libtool/buildroot-libtool-v2.4.patch   | 11 ---------
->  4 files changed, 3 insertions(+), 81 deletions(-)
+>  support/libtool/buildroot-libtool-v1.5.patch   | 18 ++++++++++++++++++
+>  support/libtool/buildroot-libtool-v2.2.patch   | 18 ++++++++++++++++++
+>  support/libtool/buildroot-libtool-v2.4.4.patch |  9 +++++++++
+>  support/libtool/buildroot-libtool-v2.4.patch   |  9 +++++++++
+>  4 files changed, 54 insertions(+)
 > 
 > diff --git a/support/libtool/buildroot-libtool-v1.5.patch b/support/libtool/buildroot-libtool-v1.5.patch
-> index cdd9c5a..609006a 100644
+> index 609006a..51d049f 100644
 > --- a/support/libtool/buildroot-libtool-v1.5.patch
 > +++ b/support/libtool/buildroot-libtool-v1.5.patch
-> @@ -34,24 +34,7 @@
->   	if test -n "$link_static_flag"; then
->   	  compile_command="$compile_command $link_static_flag"
->   	  finalize_command="$finalize_command $link_static_flag"
-> -@@ -2146,8 +2153,14 @@
-> - 	    absdir="$abs_ladir"
-> - 	    libdir="$abs_ladir"
-> - 	  else
-> --	    dir="$libdir"
-> --	    absdir="$libdir"
-> -+            # Adding 'libdir' from the .la file to our library search paths
-> -+            # breaks crosscompilation horribly.  We cheat here and don't add
-> -+            # it, instead adding the path where we found the .la.  -CL
-> -+	    dir="$abs_ladir"
-> -+	    absdir="$abs_ladir"
-> -+	    libdir="$abs_ladir"
-> -+	    #dir="$libdir"
-> -+	    #absdir="$libdir"
-> - 	  fi
-> - 	else
-> - 	  dir="$ladir/$objdir"
-> -@@ -2272,7 +2285,7 @@
-> +@@ -2272,7 +2279,7 @@
->   	   { test "$prefer_static_libs" = no || test -z "$old_library"; }; then
->   	  if test "$installed" = no; then
->   	    notinst_deplibs="$notinst_deplibs $lib"
-> @@ -60,18 +43,7 @@
+> @@ -43,6 +43,24 @@
 >   	  fi
 >   	  # This is a shared library
 >   
-> -@@ -5169,6 +5182,10 @@
-> - 	    # Replace all uninstalled libtool libraries with the installed ones
-> - 	    newdependency_libs=
-> - 	    for deplib in $dependency_libs; do
-> -+              # Replacing uninstalled with installed can easily break crosscompilation,
-> -+              # since the installed path is generally the wrong architecture.  -CL
-> -+              newdependency_libs="$newdependency_libs $deplib"
-> -+              continue
-> - 	      case $deplib in
-> - 	      *.la)
-> - 		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
-> -@@ -5487,10 +5504,13 @@
-> +@@ -5487,10 +5494,13 @@
+> +@@ -2412,7 +2419,7 @@
+> + 		if test -n "$inst_prefix_dir"; then
+> + 		  case "$libdir" in
+> + 		    [\\/]*)
+> +-		      add_dir="$add_dir -L$inst_prefix_dir$libdir"
+> ++		      add_dir="-L$inst_prefix_dir$libdir"
+> + 		      ;;
+> + 		  esac
+> + 		fi
+> +@@ -2492,7 +2499,7 @@
+> + 	      if test -n "$inst_prefix_dir"; then
+> + 		case "$libdir" in
+> + 		  [\\/]*)
+> +-		    add_dir="$add_dir -L$inst_prefix_dir$libdir"
+> ++		    add_dir="-L$inst_prefix_dir$libdir"
+> + 		    ;;
+> + 		esac
+> + 	      fi
+>  @@ -5487,10 +5494,13 @@
 >   	  # At present, this check doesn't affect windows .dll's that
 >   	  # are installed into $libdir/../bin (currently, that works fine)
->   	  # but it's something to keep an eye on.
 > diff --git a/support/libtool/buildroot-libtool-v2.2.patch b/support/libtool/buildroot-libtool-v2.2.patch
-> index 8bb7826..3af0604 100644
+> index 3af0604..be4e5e3 100644
 > --- a/support/libtool/buildroot-libtool-v2.2.patch
 > +++ b/support/libtool/buildroot-libtool-v2.2.patch
-> @@ -67,24 +67,7 @@
->   	# The effects of -static are defined in a previous loop.
->   	# We used to do the same as -all-static on platforms that
->   	# didn't have a PIC flag, but the assumption that the effects
-> -@@ -5739,8 +5738,14 @@
-> - 	    absdir="$abs_ladir"
-> - 	    libdir="$abs_ladir"
-> - 	  else
-> --	    dir="$libdir"
-> --	    absdir="$libdir"
-> -+            # Adding 'libdir' from the .la file to our library search paths
-> -+            # breaks crosscompilation horribly.  We cheat here and don't add
-> -+            # it, instead adding the path where we found the .la.  -CL
-> -+	    dir="$abs_ladir"
-> -+	    absdir="$abs_ladir"
-> -+	    libdir="$abs_ladir"
-> -+	    #dir="$libdir"
-> -+	    #absdir="$libdir"
-> - 	  fi
-> - 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
-> - 	else
-> -@@ -5891,7 +5896,7 @@
-> +@@ -5891,7 +5890,7 @@
->   	  *)
->   	    if test "$installed" = no; then
->   	      notinst_deplibs="$notinst_deplibs $lib"
-> @@ -93,14 +76,3 @@
+> @@ -76,3 +76,21 @@
 >   	    fi
 >   	    ;;
 >   	  esac
-> -@@ -8373,6 +8378,10 @@
-> - 	    # Replace all uninstalled libtool libraries with the installed ones
-> - 	    newdependency_libs=
-> - 	    for deplib in $dependency_libs; do
-> -+              # Replacing uninstalled with installed can easily break crosscompilation,
-> -+              # since the installed path is generally the wrong architecture.  -CL
-> -+              newdependency_libs="$newdependency_libs $deplib"
-> -+              continue
-> - 	      case $deplib in
-> - 	      *.la)
-> - 		func_basename "$deplib"
+> +@@ -6094,7 +6093,7 @@
+> + 		if test -n "$inst_prefix_dir"; then
+> + 		  case $libdir in
+> + 		    [\\/]*)
+> +-		      add_dir="$add_dir -L$inst_prefix_dir$libdir"
+> ++		      add_dir="-L$inst_prefix_dir$libdir"
+> + 		      ;;
+> + 		  esac
+> + 		fi
+> +@@ -6167,7 +6166,7 @@
+> + 	      if test -n "$inst_prefix_dir"; then
+> + 		case $libdir in
+> + 		  [\\/]*)
+> +-		    add_dir="$add_dir -L$inst_prefix_dir$libdir"
+> ++		    add_dir="-L$inst_prefix_dir$libdir"
+> + 		    ;;
+> + 		esac
+> + 	      fi
 > diff --git a/support/libtool/buildroot-libtool-v2.4.4.patch b/support/libtool/buildroot-libtool-v2.4.4.patch
-> index bcdf30c..d71669b 100644
+> index d71669b..1458b5e 100644
 > --- a/support/libtool/buildroot-libtool-v2.4.4.patch
 > +++ b/support/libtool/buildroot-libtool-v2.4.4.patch
-> @@ -82,14 +82,3 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> @@ -82,3 +82,12 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 >   	    fi
 >   	    ;;
 >   	  esac
-> -@@ -10710,6 +10710,10 @@
-> - 	    # Replace all uninstalled libtool libraries with the installed ones
-> - 	    newdependency_libs=
-> - 	    for deplib in $dependency_libs; do
-> -+	      # Replacing uninstalled with installed can easily break crosscompilation,
-> -+	      # since the installed path is generally the wrong architecture.  -CL
-> -+	      newdependency_libs="$newdependency_libs $deplib"
-> -+	      continue
-> - 	      case $deplib in
-> - 	      *.la)
-> - 		func_basename "$deplib"
+> +@@ -8854,7 +8854,7 @@
+> + 	      if test -n "$inst_prefix_dir"; then
+> + 		case $libdir in
+> + 		  [\\/]*)
+> +-		    func_append add_dir " -L$inst_prefix_dir$libdir"
+> ++		    add_dir="-L$inst_prefix_dir$libdir"
+> + 		    ;;
+> + 		esac
+> + 	      fi
 > diff --git a/support/libtool/buildroot-libtool-v2.4.patch b/support/libtool/buildroot-libtool-v2.4.patch
-> index f610b1b..bf40c94 100644
+> index bf40c94..c2edd99 100644
 > --- a/support/libtool/buildroot-libtool-v2.4.patch
 > +++ b/support/libtool/buildroot-libtool-v2.4.patch
-> @@ -76,14 +76,3 @@
+> @@ -76,3 +76,12 @@
 >   	    fi
 >   	    ;;
 >   	  esac
-> -@@ -9275,6 +9274,10 @@
-> - 	    # Replace all uninstalled libtool libraries with the installed ones
-> - 	    newdependency_libs=
-> - 	    for deplib in $dependency_libs; do
-> -+              # Replacing uninstalled with installed can easily break crosscompilation,
-> -+              # since the installed path is generally the wrong architecture.  -CL
-> -+              newdependency_libs="$newdependency_libs $deplib"
-> -+              continue
-> - 	      case $deplib in
-> - 	      *.la)
-> - 		func_basename "$deplib"
+> +@@ -8854,7 +8854,7 @@
+> + 	      if test -n "$inst_prefix_dir"; then
+> + 		case $libdir in
+> + 		  [\\/]*)
+> +-		    func_append add_dir " -L$inst_prefix_dir$libdir"
+> ++		    add_dir="-L$inst_prefix_dir$libdir"
+> + 		    ;;
+> + 		esac
+> + 	      fi
 > 
 
 -- 
