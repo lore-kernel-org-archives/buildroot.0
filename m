@@ -1,103 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 15:22:35 +0100
-Subject: [Buildroot] [PATCH] package: add qt5virtualkeyboard
-In-Reply-To: <20170317164628.5029-1-gael.portay@savoirfairelinux.com>
-References: <20170317164628.5029-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20170318152235.0be2d895@free-electrons.com>
+Date: Sat, 18 Mar 2017 15:24:56 +0100
+Subject: [Buildroot] [git commit] skeleton: fix permissions on /dev/pts/ptmx
+Message-ID: <20170318142631.73AA58254B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8196b299ba12bd6741bf7f4462cad180dab77fb0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter, could you help by reviewing this patch touching qt5 stuff?
+Without this patch, it is not possible to allocate PTYs when a generated
+rootfs image with a recent glibc and systemd is launched as a container  on
+an RHEL7 system via machinectl/systemd-nspawn. The container boots, but
+`machinectl login mycontainer` fails. The culprit is /dev/pts/ptmx with
+0000 perms.
 
-Thanks a lot!
+On a typical system, there are two `ptmx` devices. One is provided by the
+devpts at /dev/pts/ptmx and it is typically not directly accessed from
+userspace. The other one which actually *is* opened by processes is
+/dev/ptmx. Kernel's documentation says these days that /dev/ptmx should be
+either a symlink, or a bind mount of the /dev/pts/ptmx from devpts.
 
-Thomas
+When a container is launched via machinectl/machined/systemd-nspawn, the
+container manager prepares a root filesystem so that the container can live
+in an appropriate namespace (this is similar to what initramfs is doing on
+x86 desktops). During these preparations, systemd-nspawn mounts a devpts
+instance using a correct ptmxmode=0666 within the container-to-be's
+/dev/pts, and it adds a compatibility symlink at /dev/ptmx. However, once
+systemd takes over as an init in the container,
+/lib/systemd/systemd-remount-fs applies mount options from /etc/fstab to
+all fileystems. Because the buildroot's template used to not include the
+ptmxmode=... option, a default value of 0000 was taking an effect which in
+turn led to not being able to allocate any pseudo-terminals.
 
-On Fri, 17 Mar 2017 12:46:28 -0400, Ga?l PORTAY wrote:
-> This patch adds the Qt virtualkeyboard package.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  package/qt5/Config.in                              |  1 +
->  package/qt5/qt5virtualkeyboard/Config.in           |  9 +++++++
->  .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   | 31 ++++++++++++++++++++++
->  3 files changed, 41 insertions(+)
->  create mode 100644 package/qt5/qt5virtualkeyboard/Config.in
->  create mode 100644 package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> 
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index 4bcbc6e..a810503 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -76,6 +76,7 @@ source "package/qt5/qt5serialbus/Config.in"
->  source "package/qt5/qt5serialport/Config.in"
->  source "package/qt5/qt5svg/Config.in"
->  source "package/qt5/qt5tools/Config.in"
-> +source "package/qt5/qt5virtualkeyboard/Config.in"
->  source "package/qt5/qt5webchannel/Config.in"
->  source "package/qt5/qt5webkit/Config.in"
->  source "package/qt5/qt5websockets/Config.in"
-> diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
-> new file mode 100644
-> index 0000000..df9e9d6
-> --- /dev/null
-> +++ b/package/qt5/qt5virtualkeyboard/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_QT5VIRTUALKEYBOARD
-> +	bool "qt5virtualkeyboard"
-> +	depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK
-> +	select BR2_PACKAGE_QT5SVG
-> +	help
-> +	  Qt Virtual Keyboard is a virtual keyboard framework that consists of a
-> +	  C++ backend supporting custom input methods as well as a UI frontend
-> +	  implemented in QML.
-> +
-> diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> new file mode 100644
-> index 0000000..e73a154
-> --- /dev/null
-> +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# qt5virtualkeyboard
-> +#
-> +################################################################################
-> +
-> +QT5VIRTUALKEYBOARD_VERSION = $(QT5_VERSION)
-> +QT5VIRTUALKEYBOARD_SITE = $(QT5_SITE)
-> +QT5VIRTUALKEYBOARD_SOURCE = qtvirtualkeyboard-opensource-src-$(QT5VIRTUALKEYBOARD_VERSION).tar.xz
-> +QT5VIRTUALKEYBOARD_DEPENDENCIES = qt5base qt5declarative qt5svg
-> +QT5VIRTUALKEYBOARD_INSTALL_STAGING = YES
-> +
-> +QT5VIRTUALKEYBOARD_LICENSE = GPLv3
-> +QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
-> +define QT5VIRTUALKEYBOARD_CONFIGURE_CMDS
-> +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-> +endef
-> +
-> +define QT5VIRTUALKEYBOARD_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define QT5VIRTUALKEYBOARD_INSTALL_STAGING_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-> +endef
-> +
-> +define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
-> +endef
-> +
-> +$(eval $(generic-package))
+The relevant kernel option was introduced upstream in commit 1f8f1e29 back
+in 2009. The oldest linux-headers referenced from buildroot's config is
+3.0, and that version definitely has that commit. Mount options that are
+not understood by the system are anyway ignored, so backward
+compatibility is preserved.
 
+Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: fix commit title, adjust commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ system/skeleton/etc/fstab | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/system/skeleton/etc/fstab b/system/skeleton/etc/fstab
+index 2b418a0..169054b 100644
+--- a/system/skeleton/etc/fstab
++++ b/system/skeleton/etc/fstab
+@@ -1,7 +1,7 @@
+ # <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
+ /dev/root	/		ext2	rw,noauto	0	1
+ proc		/proc		proc	defaults	0	0
+-devpts		/dev/pts	devpts	defaults,gid=5,mode=620	0	0
++devpts		/dev/pts	devpts	defaults,gid=5,mode=620,ptmxmode=0666	0	0
+ tmpfs		/dev/shm	tmpfs	mode=0777	0	0
+ tmpfs		/tmp		tmpfs	mode=1777	0	0
+ tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
