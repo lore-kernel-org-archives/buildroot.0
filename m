@@ -1,14 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 15:31:36 +0100
-Subject: [Buildroot] [PATCH v4 2/3] Add LINUX_DIR to EXTRA_ENV for use
- in post-build scripts
-In-Reply-To: <78a51dc2-e493-4b74-bd65-0e3f579ebba7@mind.be>
-References: <1489664602-32596-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
- <1489664602-32596-2-git-send-email-abhimanyu.vishwakarma@imgtec.com>
- <b7ac0faf-3b85-2439-1386-e181257c2d29@mind.be>
- <20170318142331.061e2cda@free-electrons.com>
- <78a51dc2-e493-4b74-bd65-0e3f579ebba7@mind.be>
-Message-ID: <20170318153136.5f460040@free-electrons.com>
+Date: Sat, 18 Mar 2017 15:33:29 +0100
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.10.4
+In-Reply-To: <1489846902-16339-1-git-send-email-festevam@gmail.com>
+References: <1489846902-16339-1-git-send-email-festevam@gmail.com>
+Message-ID: <20170318153329.7c9c1c4a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,35 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 18 Mar 2017 14:59:35 +0100, Arnout Vandecappelle wrote:
-> > What about instead using BR2_LINUX_KERNEL_VMLINUX_BIN, to get
-> > vmlinux.bin copied to output/images, and then compress it in the
-> > post-build script ?  
-> 
->  I considered that in one of my reviews, but vmlinux.bin doesn't contain the
-> load and start address. The post-build script would have to retrieve those in
-> some other way.
+On Sat, 18 Mar 2017 11:21:41 -0300, Fabio Estevam wrote:
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  linux/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-vmlinux.bin.gz also does not contain the load/start address. Only
-uImage does, and they get them from uImage.
-
-So one possibility would be to make the Linux package behave like the
-U-Boot package: instead of having a choice...endchoice for the image
-format to install, you simply have a list of options so that you can
-select several of them.
-
->  However, Abhimanyu reported that there is upstream support for generating a
-> fitImage in the kernel build itself. That's of course preferable...
-
-Yes, it would be much better obviously.
-
-Otherwise, hardcoding the load/start address in the .its.in file is
-also good enough, this file is anyway board-specific.
-
-Best regards,
+Both applied to master, thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
