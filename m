@@ -1,53 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Mar 2017 14:17:55 +0100
-Subject: [Buildroot] [PATCH 14/25] lua-bit32: new package
-In-Reply-To: <20170318114209.123e1ea8@free-electrons.com>
-References: <20170223170047.24417-1-arnout@mind.be>
- <20170223170047.24417-15-arnout@mind.be>
- <20170302225441.5adee9f6@free-electrons.com>
- <55bf7d15-ebeb-6bbd-1eaf-c8657c5821fb@mind.be>
- <20170317171427.03270127@free-electrons.com>
- <04a224aa-c599-d927-79ad-869dcd7d9f7c@mind.be>
- <20170318114209.123e1ea8@free-electrons.com>
-Message-ID: <c221a49f-cbf8-afc0-7acc-96ef7cf242e0@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Mar 2017 14:23:31 +0100
+Subject: [Buildroot] [PATCH v4 2/3] Add LINUX_DIR to EXTRA_ENV for use
+ in post-build scripts
+In-Reply-To: <b7ac0faf-3b85-2439-1386-e181257c2d29@mind.be>
+References: <1489664602-32596-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
+ <1489664602-32596-2-git-send-email-abhimanyu.vishwakarma@imgtec.com>
+ <b7ac0faf-3b85-2439-1386-e181257c2d29@mind.be>
+Message-ID: <20170318142331.061e2cda@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Fri, 17 Mar 2017 23:39:46 +0100, Arnout Vandecappelle wrote:
+> On 16-03-17 12:43, Abhimanyu V wrote:
+> > From: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+> > 
+> > To build fitImage in post-build scripts, we need compressed
+> > kernel binary which is intermediate target, hence doesnt get
+> > copied to output/images folder.
+> > 
+> > Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+> > Reviewed-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>  
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-On 18-03-17 11:42, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 17 Mar 2017 23:17:25 +0100, Arnout Vandecappelle wrote:
-> 
->>  I wouldn't say "regularly". I do look occasionally. I would pay a lot more
->> attention if I got an occasional personal mail.
-> 
-> OK. But it probably wouldn't be "occasional". From a quick look, we
-> have currently ~500 packages not associated to a developer, so about
-> 1/4 of all packages we have.
-> 
-> But currently, we indeed don't notice when there is a build failure on
-> a package that is orphaned. Having at least you notified on orphaned
-> packages build failures would raise the attention on this or that
-> package being orphaned, and then we can see what needs to be done: find
-> if someone has been active on that package recently and is willing to
-> adopt it, remove the package if it's too broken and nobody cares, etc.
-> 
-> What do you think?
+I am not sure about this one. Why would we pass in the environment
+specifically LINUX_DIR, and not the <pkg>_DIR of the other ~2000
+packages we have in Buildroot ?
 
- Sounds good! Will you work on the getdeveloper script?
+What about instead using BR2_LINUX_KERNEL_VMLINUX_BIN, to get
+vmlinux.bin copied to output/images, and then compress it in the
+post-build script ?
 
- Regards,
- Arnout
+Or alternatively, if there is a vmlinux.bin.gz target, add support for
+it in our linux package?
 
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
