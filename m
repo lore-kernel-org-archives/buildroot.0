@@ -1,33 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Mar 2017 13:14:44 +0000
-Subject: [Buildroot] [Bug 9751] expat legal info - manifest.csv: GPLv2
- Source site: MIT License (Buildroot 2017-02)
-In-Reply-To: <bug-9751-163@https.bugs.busybox.net/>
-References: <bug-9751-163@https.bugs.busybox.net/>
-Message-ID: <bug-9751-163-EwKROlTHtJ@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Mar 2017 14:14:39 +0100
+Subject: [Buildroot] [git commit] package/nodejs: bump version to 7.7.3
+Message-ID: <20170318131453.6A087821DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9751
+commit: https://git.buildroot.net/buildroot/commit/?id=cae760c5e46e229690691f08c2358bea8c82216c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Timo V?lim?ki <timo.valimaki@sensoan.com> changed:
+See https://nodejs.org/en/blog/release/v7.7.3/
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |VERIFIED
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- Comment #2 from Timo V?lim?ki <timo.valimaki@sensoan.com> ---
-You are correct, my bad.
-
-I sorted the manifest.csv based on LICENSE column with Gnumeric Spreadsheet
-(using first time). I just re-run the sort I found out that I sorted only the
-LICENSE column and not the whole sheet as I assumed.
-
-Case closed.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index f0a4968..e4f3815 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v7.7.2/SHASUMS256.txt
+-sha256  e7448d8e44d32c2c63347c822508cf5c87b9662c07db290056fec66d37c4f584  node-v7.7.2.tar.xz
++# From upstream URL: http://nodejs.org/dist/v7.7.3/SHASUMS256.txt
++sha256  5441daf11f743b5508ddf31a16b4f268835fbceb59ef709b44e85b03fece0edf  node-v7.7.3.tar.xz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 0db97e8..ad0b26d 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 7.7.2
++NODEJS_VERSION = 7.7.3
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
