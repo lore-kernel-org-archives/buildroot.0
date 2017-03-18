@@ -1,37 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 15:27:05 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix permissions on /dev/pts/ptmx for
- PTY allocation with systemd
-In-Reply-To: <35a6c994-5279-4823-8864-be52f6f925ef@cesnet.cz>
-References: <35a6c994-5279-4823-8864-be52f6f925ef@cesnet.cz>
-Message-ID: <20170318152705.711b8bea@free-electrons.com>
+Date: Sat, 18 Mar 2017 15:27:20 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 4.10.4
+Message-ID: <20170318142731.48DED818D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=83b07f09273d87a58a9abb18fd478a33a9a567a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 17 Mar 2017 17:02:54 +0100, Jan Kundr?t wrote:
-> (This is my first patch to buildroot, please feel free to pester me if you 
-> prefer a different coding style or if you have some commit message 
-> suggestions.)
-> 
-> Without this patch, it is not possible to allocate PTYs when a generated 
-> rootfs image with a recent glibc and systemd is launched as a container  on 
-> an RHEL7 system via machinectl/systemd-nspawn. The container boots, but 
-> `machinectl login mycontainer` fails. The culprit is /dev/pts/ptmx with 
-> 0000 perms.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks a lot! I've applied your patch, after fixing the few issues
-noticed by Arnout: adjusted the commit title, removed "personal"
-comments from the commit log.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 6a45f06..3e2e6d5 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -26,7 +26,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.10.3)"
++	bool "Latest version (4.10.4)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -97,7 +97,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.10.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.10.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
