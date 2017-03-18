@@ -1,41 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 15:34:48 +0100
-Subject: [Buildroot] [PATCH v4 1/3] uccp420wlan: new package
-In-Reply-To: <1489664602-32596-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
-References: <1489664602-32596-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
-Message-ID: <20170318153448.13656871@free-electrons.com>
+Date: Sat, 18 Mar 2017 15:37:14 +0100
+Subject: [Buildroot] [git commit] mono: remove nonexistent configure options
+Message-ID: <20170318143733.1721782550@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2ba4fee836b9dec5f30a039fe2a03ad889b7cac1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 16 Mar 2017 17:13:20 +0530, Abhimanyu V wrote:
-> From: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-> 
-> Wifi kernel module and firmware for Imagination explorer RPU
-> 
-> Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-> Reviewed-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-> ---
->  Changes v1->v2
->   - add hash file
->  Changes v2->v3 (Suggested by Arnout)
->   - remove patch and bump version
->   - add proprietary license file to LICENSE_FILES
->   - Fix help text indentation to below 72 columns
->  Changes v3->v4 (Suggested by Arnout)
->   - use UCCP420WLAN_INSTALL_TARGET_CMDS instead of HOOKS
+The .mk file for the mono package contains out of date configuration
+options. The --disable-gtk-doc option is no longer available in
+configure. Moonlight is no longer supported in Mono and the
+--with-moonlight=no option is no longer required.
 
-Applied to master, after taking into account the comments made by
-Arnout.
+Signed-off-by: Dustin Johnson <dustin.r.johnson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mono/mono.mk | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 20b9205..866bff2 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -18,9 +18,7 @@ MONO_INSTALL_STAGING = YES
+ MONO_AUTORECONF = YES
+ 
+ # Disable managed code (mcs folder) from building
+-MONO_CONF_OPTS = --disable-gtk-doc \
+-	--with-mcs-docs=no \
+-	--with-moonlight=no \
++MONO_CONF_OPTS = --with-mcs-docs=no \
+ 	--with-ikvm-native=no \
+ 	--enable-minimal=profiler,debug \
+ 	--disable-mcs-build \
+@@ -44,9 +42,7 @@ MONO_DEPENDENCIES += host-mono
+ 
+ ## Mono managed
+ 
+-HOST_MONO_CONF_OPTS = --disable-gtk-doc \
+-	--with-mcs-docs=no \
+-	--with-moonlight=no \
++HOST_MONO_CONF_OPTS = --with-mcs-docs=no \
+ 	--disable-libraries \
+ 	--with-ikvm-native=no \
+ 	--enable-minimal=profiler,debug \
