@@ -1,48 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 14:23:31 +0100
-Subject: [Buildroot] [PATCH v4 2/3] Add LINUX_DIR to EXTRA_ENV for use
- in post-build scripts
-In-Reply-To: <b7ac0faf-3b85-2439-1386-e181257c2d29@mind.be>
-References: <1489664602-32596-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
- <1489664602-32596-2-git-send-email-abhimanyu.vishwakarma@imgtec.com>
- <b7ac0faf-3b85-2439-1386-e181257c2d29@mind.be>
-Message-ID: <20170318142331.061e2cda@free-electrons.com>
+Date: Sat, 18 Mar 2017 14:23:52 +0100
+Subject: [Buildroot] [git commit] classpath: xmlj requires threads.
+Message-ID: <20170318132408.CC3D281DC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e7bd485ad8f460356e545c39f38cd18b673c9a6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 17 Mar 2017 23:39:46 +0100, Arnout Vandecappelle wrote:
-> On 16-03-17 12:43, Abhimanyu V wrote:
-> > From: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-> > 
-> > To build fitImage in post-build scripts, we need compressed
-> > kernel binary which is intermediate target, hence doesnt get
-> > copied to output/images folder.
-> > 
-> > Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-> > Reviewed-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>  
-> 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes:
 
-I am not sure about this one. Why would we pass in the environment
-specifically LINUX_DIR, and not the <pkg>_DIR of the other ~2000
-packages we have in Buildroot ?
+  http://autobuild.buildroot.net/results/bb1f005948803fac9e753c2d3ba1e53bb78a0456
 
-What about instead using BR2_LINUX_KERNEL_VMLINUX_BIN, to get
-vmlinux.bin copied to output/images, and then compress it in the
-post-build script ?
+Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/classpath/classpath.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Or alternatively, if there is a vmlinux.bin.gz target, add support for
-it in our linux package?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
+index e4cd0f8..47658c2 100644
+--- a/package/classpath/classpath.mk
++++ b/package/classpath/classpath.mk
+@@ -52,7 +52,7 @@ else
+ CLASSPATH_CONF_OPTS += --disable-gtk-peer --disable-gstreamer-peer
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBXML2)$(BR2_PACKAGE_LIBXSLT),yy)
++ifeq ($(BR2_PACKAGE_LIBXML2)$(BR2_PACKAGE_LIBXSLT)$(BR2_TOOLCHAIN_HAS_THREADS),yyy)
+ CLASSPATH_CONF_OPTS += --enable-xmlj
+ CLASSPATH_DEPENDENCIES += libxml2 libxslt
+ else
