@@ -1,42 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 14:02:25 +0100
-Subject: [Buildroot] [PATCH] package/gdb: fix gnulib issue with musl and
- uClibc toolchains (finally)
-In-Reply-To: <20170316222718.11290-1-romain.naour@gmail.com>
-References: <20170316222718.11290-1-romain.naour@gmail.com>
-Message-ID: <20170318140225.254bba4c@free-electrons.com>
+From: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+Date: Sat, 18 Mar 2017 14:07:07 +0100
+Subject: [Buildroot] [PATCH 1/1] classpath: xmlj requires threads.
+Message-ID: <1489842427-12463-1-git-send-email-m.hoffmann@cartelsol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+http://autobuild.buildroot.net/results/bb1f005948803fac9e753c2d3ba1e53bb78a0456
+Signed-off-by: Marcus Hoffmann <m.hoffmann@cartelsol.com>
+---
+ package/classpath/classpath.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 16 Mar 2017 23:27:18 +0100, Romain Naour wrote:
-> The previous fix [1] reinroduced the issue fixed by [2].
-> So keep gl_cv_func_gettimeofday_clobber=no in GDB_CONF_ENV
-> and GDB_MAKE_ENV.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ec6/ec60d436bd34a4f37b664e4124d7f0c96e90a1be
-> 
-> [1] faf38b78aee613a732f96d5022a2894efd024a25
-> [2] 560334bb2a46a77081a3944d092df7732dfca432
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> I think I forgot to reenable gdbserver with full debugger while testing
-> patch [1], sorry for that :-(
-> ---
->  package/gdb/gdb.mk | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
+index e4cd0f8..47658c2 100644
+--- a/package/classpath/classpath.mk
++++ b/package/classpath/classpath.mk
+@@ -52,7 +52,7 @@ else
+ CLASSPATH_CONF_OPTS += --disable-gtk-peer --disable-gstreamer-peer
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBXML2)$(BR2_PACKAGE_LIBXSLT),yy)
++ifeq ($(BR2_PACKAGE_LIBXML2)$(BR2_PACKAGE_LIBXSLT)$(BR2_TOOLCHAIN_HAS_THREADS),yyy)
+ CLASSPATH_CONF_OPTS += --enable-xmlj
+ CLASSPATH_DEPENDENCIES += libxml2 libxslt
+ else
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
