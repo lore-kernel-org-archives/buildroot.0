@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Mar 2017 18:45:40 +0100
-Subject: [Buildroot] [PATCH v5 18/19] infra-libtool: remove workaround
- for calls without `--tag'
-In-Reply-To: <1482241596-31688-19-git-send-email-jezz@sysmic.org>
+Date: Sat, 18 Mar 2017 18:47:04 +0100
+Subject: [Buildroot] [PATCH v5 19/19] infra-libtool: no longer force
+ sys_lib_search_path
+In-Reply-To: <1482241596-31688-20-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-19-git-send-email-jezz@sysmic.org>
-Message-ID: <ab8ebb86-b0b0-b213-9c66-35d8a37d58ce@mind.be>
+ <1482241596-31688-20-git-send-email-jezz@sysmic.org>
+Message-ID: <e3a0c099-41e5-07b0-338b-74cfad1d2bfa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +15,16 @@ To: buildroot@busybox.net
 
 
 On 20-12-16 14:46, J?r?me Pouiller wrote:
-> Buildroot included a work around for the case libtool was called with a
-> non-existant `--tag'. We was not able create reproduce this problem anymore. So,
-> we drop this workaround.
+> Commit 6246704008 forced $sys_lib_search_path_spec to be empty. Commit log said
+> that it was filled with native paths. However, recent tests show that
+> $sys_lib_search_path_spec is correctly filled with result of
+> `$CC -print-search-dirs' as it should.
 
- It's better to refer to the commit adding it. Something like:
-
-Buildroot included a work around for the case libtool was called with a
-non-existent '--tag'. This was introduced as a series of hacks to make
-cross-compilation of fontconfig work in commit ee8f2133, ten years ago. The hack
-was carried over in various incarnations of the libtool patch, but is no longer
-relevant.
+ I guess that that's due to passing --with-sysroot, no?
 
 > 
-> Please send a bug report if you encounter this problem again.
-
- I don't think this sentence is necessary. The hack is just too far out - if the
-package build system calls libtool with an unknown --tag option, something is
-truly rotten.
+> So this patch remove this workaround.
+                      ^s
 
 > 
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
@@ -46,12 +38,22 @@ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  Arnout
 
 > ---
->  support/libtool/buildroot-libtool-v1.5.patch   | 12 ------------
->  support/libtool/buildroot-libtool-v2.2.patch   | 11 -----------
->  support/libtool/buildroot-libtool-v2.4.4.patch | 11 -----------
->  support/libtool/buildroot-libtool-v2.4.patch   | 11 -----------
->  4 files changed, 45 deletions(-)
-[snip]
+>  package/Makefile.in | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 6a341f2..ee43985 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -354,7 +354,6 @@ TARGET_CONFIGURE_ARGS = \
+>  	ac_cv_func_malloc_0_nonnull=yes \
+>  	ac_cv_func_calloc_0_nonnull=yes \
+>  	ac_cv_func_realloc_0_nonnull=yes \
+> -	lt_cv_sys_lib_search_path_spec="" \
+>  	lt_cv_sys_lib_dlsearch_path_spec="/lib /usr/lib $(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
+>  	$(BR2_AC_CV_C_BIGENDIAN) \
+>  	$(BR2_GT_CV_FUNC_GNUGETTEXT_LIBC)
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
