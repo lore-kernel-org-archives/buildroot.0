@@ -1,54 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Mar 2017 14:17:21 +0100
-Subject: [Buildroot] [PATCH] polarssl: remove unmaintained
-In-Reply-To: <20170316130434.26287-1-gustavo@zacarias.com.ar>
-References: <20170316130434.26287-1-gustavo@zacarias.com.ar>
-Message-ID: <20170318141721.4b6c5cc9@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 18 Mar 2017 14:17:55 +0100
+Subject: [Buildroot] [PATCH 14/25] lua-bit32: new package
+In-Reply-To: <20170318114209.123e1ea8@free-electrons.com>
+References: <20170223170047.24417-1-arnout@mind.be>
+ <20170223170047.24417-15-arnout@mind.be>
+ <20170302225441.5adee9f6@free-electrons.com>
+ <55bf7d15-ebeb-6bbd-1eaf-c8657c5821fb@mind.be>
+ <20170317171427.03270127@free-electrons.com>
+ <04a224aa-c599-d927-79ad-869dcd7d9f7c@mind.be>
+ <20170318114209.123e1ea8@free-electrons.com>
+Message-ID: <c221a49f-cbf8-afc0-7acc-96ef7cf242e0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Thu, 16 Mar 2017 10:04:34 -0300, Gustavo Zacarias wrote:
-> The 1.2.x branch is no longer maintained, so remove it since it's
-> likely security-vulnerable.
+
+On 18-03-17 11:42, Thomas Petazzoni wrote:
+> Hello,
 > 
-> mbedtls is the modern replacement which was renamed from polarssl when
-> ARM bought them up.
-> However major releases broke API so polarssl 1.2.x isn't always
-> interchangeable with polarssl/mbedtls 1.3.x (interim mixed naming
-> because of new ownership) or newer 2.x series.
+> On Fri, 17 Mar 2017 23:17:25 +0100, Arnout Vandecappelle wrote:
 > 
-> Fortunately we don't have any package in the tree that uses polarssl
-> exclusively.
+>>  I wouldn't say "regularly". I do look occasionally. I would pay a lot more
+>> attention if I got an occasional personal mail.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  Config.in.legacy                                   |  9 +++++
->  package/Config.in                                  |  1 -
->  package/bctoolbox/Config.in                        |  3 +-
->  package/bctoolbox/bctoolbox.mk                     |  8 +----
->  package/polarssl/0001-no-test-suite.patch          | 27 ---------------
->  ...he-standard-CMake-flag-to-drive-the-share.patch | 39 ----------------------
->  package/polarssl/Config.in                         | 32 ------------------
->  package/polarssl/polarssl.hash                     |  2 --
->  package/polarssl/polarssl.mk                       | 32 ------------------
->  9 files changed, 11 insertions(+), 142 deletions(-)
->  delete mode 100644 package/polarssl/0001-no-test-suite.patch
->  delete mode 100644 package/polarssl/0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
->  delete mode 100644 package/polarssl/Config.in
->  delete mode 100644 package/polarssl/polarssl.hash
->  delete mode 100644 package/polarssl/polarssl.mk
+> OK. But it probably wouldn't be "occasional". From a quick look, we
+> have currently ~500 packages not associated to a developer, so about
+> 1/4 of all packages we have.
+> 
+> But currently, we indeed don't notice when there is a build failure on
+> a package that is orphaned. Having at least you notified on orphaned
+> packages build failures would raise the attention on this or that
+> package being orphaned, and then we can see what needs to be done: find
+> if someone has been active on that package recently and is willing to
+> adopt it, remove the package if it's too broken and nobody cares, etc.
+> 
+> What do you think?
 
-Applied to master, after fixing the two issues noticed by Arnout.
+ Sounds good! Will you work on the getdeveloper script?
 
-Thanks!
+ Regards,
+ Arnout
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
