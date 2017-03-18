@@ -1,68 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Mar 2017 16:37:31 +0100
-Subject: [Buildroot] [PATCH v5 12/19] infra-libtool: no longer prepend
- STAGING_DIR to libdir
-In-Reply-To: <1482241596-31688-13-git-send-email-jezz@sysmic.org>
-References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-13-git-send-email-jezz@sysmic.org>
-Message-ID: <6be103f5-9589-53a9-eab9-2c3edd52cd38@mind.be>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 18 Mar 2017 17:02:25 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2017-03-17
+In-Reply-To: <124f5fc5-6307-f72f-f1be-8f2139dffced@mind.be>
+References: <20170318072841.AF04B20775@mail.free-electrons.com>
+ <124f5fc5-6307-f72f-f1be-8f2139dffced@mind.be>
+Message-ID: <20170318160225.GL23128@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Jerome,
-
-On 20-12-16 14:46, J?r?me Pouiller wrote:
-> Since `$lt_sysroot' is now correctly filled, it is no more necessary to patch
-> `.la' files. Indeed, if $libdir point to `/usr/lib', libtool will also search
-> in `$(lt_sysroot)/usr/lib'
-
- Unfortunately, not all packages that use libtool also use automake. So some
-packages may die because of this.
-
- That said, we should probably just fix these individual packages.
-
- (Not yet giving my reviewed-by, I'm first going to check the rest of the series.)
-
- Regards,
- Arnout
+Hi Arnout,
+Arnout Vandecappelle wrote,
 
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/pkg-generic.mk | 11 -----------
->  1 file changed, 11 deletions(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 827de62..5d12ac3 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -268,17 +268,6 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
->  				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
->  				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
->  	fi
-> -	@$(call MESSAGE,"Fixing libtool files")
-> -	$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
-> -		$(SED) "s:$(BASE_DIR):@BASE_DIR@:g" \
-> -			-e "s:$(STAGING_DIR):@STAGING_DIR@:g" \
-> -			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
-> -				-e "s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
-> -			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
-> -			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
-> -				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
-> -			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
-> -			-e "s:@BASE_DIR@:$(BASE_DIR):g"
->  	@$(call step_end,install-staging)
->  	$(Q)touch $@
->  
+> On 18-03-17 08:28, Thomas Petazzoni wrote:
+> > microblazeel |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/240cfb0497b1dd7b5b33b8f64635cca435d49f05
 > 
+>  I looked at this one and I'm a bit stumped. This is the error:
+> .../sysroot/usr/lib/libc.a(clnt_simple.os): In function `callrpc':
+> (.text+0x0): multiple definition of `callrpc'
+> .../sysroot/usr/lib/libtirpc.a(libtirpc_la-rpc_soc.o):(.text+0x784): first
+> defined here
+> (and many more like that).
+> 
+>  It's a bit weird that this object file from the C library even gets linked in.
+> The Map file says:
+> 
+> .../sysroot/usr/lib/libc.a(rpc_thread.os)
+> 	.../sysroot/usr/lib/libc.a(cancel.os) (__rpc_thread_destroy)
+> (skipping a few levels of indirection here).
+> 
+>  So somehow the pthread library is pulling in the RPC support from uClibc, which
+> obviously conflicts with tirpc.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+But if BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y is active, isn't uClibc-ng
+build with RPC support? If this is the case, you end up with two RPC
+implememtations. That should be handled by Buildroot.
+
+Do you have support for use either libtirpc or uClibc-ng internal
+RPC support?
+
+best regards
+ Waldemar
