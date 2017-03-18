@@ -1,38 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Mar 2017 12:59:42 +0000
-Subject: [Buildroot] [Bug 9751] expat legal info - manifest.csv: GPLv2
- Source site: MIT License (Buildroot 2017-02)
-In-Reply-To: <bug-9751-163@https.bugs.busybox.net/>
-References: <bug-9751-163@https.bugs.busybox.net/>
-Message-ID: <bug-9751-163-FdoHg8fYFC@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 18 Mar 2017 14:00:56 +0100
+Subject: [Buildroot] [git commit] package/freeswitch: disable display of
+	ClueCon banner in fs_cli
+Message-ID: <20170318130103.E1FE882269@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9751
+commit: https://git.buildroot.net/buildroot/commit/?id=848370091c8ab54b22b7b05c472ef5c5c02e3185
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freeswitch/freeswitch.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WORKSFORME
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-I just tried legal-info with the expat package enabled, and I get:
-
-"expat","2.2.0","MIT","COPYING","expat-2.2.0.tar.bz2","http://downloads.sourceforge.net/project/expat/expat/2.2.0"
-
-The expat package has the correct "MIT" license since we added license
-information to this package in commit
-https://git.buildroot.org/buildroot/commit/package/expat?id=180c091a83e569d23d1ab2525ac5ef7ea9b5ee90
-almost 5 years ago.
-
-So I'm sorry, but I don't see a bug here. Are you sure you didn't misread the
-manifest.csv ?
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 081b99f..fe4db68 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -37,6 +37,10 @@ FREESWITCH_DEPENDENCIES = \
+ 	util-linux \
+ 	zlib
+ 
++# disable display of ClueCon banner in fs_cli
++FREESWITCH_CONF_ENV += \
++	disable_cc=yes
++
+ # we neither need host-perl nor host-php
+ FREESWITCH_CONF_ENV += \
+ 	ac_cv_prog_PERL=false \
