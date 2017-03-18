@@ -1,49 +1,63 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Mar 2017 16:31:51 +0100
-Subject: [Buildroot] [PATCH] systemd: bump version to 233
-In-Reply-To: <856c991d-d060-9f75-ed33-dfcecfb4ca9c@cartelsol.com>
-References: <20170313132753.7178-1-Vincent.Riera@imgtec.com>
- <20170318155650.608756a0@free-electrons.com>
- <856c991d-d060-9f75-ed33-dfcecfb4ca9c@cartelsol.com>
-Message-ID: <e34ac379-8f9c-9488-682e-257e14adf679@mind.be>
+Date: Sat, 18 Mar 2017 16:37:31 +0100
+Subject: [Buildroot] [PATCH v5 12/19] infra-libtool: no longer prepend
+ STAGING_DIR to libdir
+In-Reply-To: <1482241596-31688-13-git-send-email-jezz@sysmic.org>
+References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
+ <1482241596-31688-13-git-send-email-jezz@sysmic.org>
+Message-ID: <6be103f5-9589-53a9-eab9-2c3edd52cd38@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Jerome,
 
+On 20-12-16 14:46, J?r?me Pouiller wrote:
+> Since `$lt_sysroot' is now correctly filled, it is no more necessary to patch
+> `.la' files. Indeed, if $libdir point to `/usr/lib', libtool will also search
+> in `$(lt_sysroot)/usr/lib'
 
-On 18-03-17 16:02, Marcus Hoffmann wrote:
-> Hello,
-> 
-> On 03/18/2017 03:56 PM, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Mon, 13 Mar 2017 13:27:53 +0000, Vicente Olivert Riera wrote:
->>
->>> -config BR2_PACKAGE_SYSTEMD_KDBUS
->>> -	bool "enable kdbus support"
->>> -	help
->>> -	  Enable kdbus support for Systemd.
->>
->> This removes a Config.in option, so there is a question:
->>
->>  * If kdbus support is now unconditionally compiled into systemd, then
->>    I believe we don't need a Config.in.legacy option, because people
->>    who had it enabled would still have kdbus support.
->>
->>  * If kdbus support has been dropped entirely from systemd, then
->>    perhaps a Config.in.legacy entry should be added to warn users.
-> 
-> 
-> I'm pretty sure kdbus has been dropped. It didn't get into the kernel.
-> The successor project seems to be https://github.com/bus1.
+ Unfortunately, not all packages that use libtool also use automake. So some
+packages may die because of this.
 
- Yes, it should get a Config.in.legacy entry.
+ That said, we should probably just fix these individual packages.
+
+ (Not yet giving my reviewed-by, I'm first going to check the rest of the series.)
 
  Regards,
  Arnout
+
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/pkg-generic.mk | 11 -----------
+>  1 file changed, 11 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 827de62..5d12ac3 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -268,17 +268,6 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+>  				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+>  				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+>  	fi
+> -	@$(call MESSAGE,"Fixing libtool files")
+> -	$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+> -		$(SED) "s:$(BASE_DIR):@BASE_DIR@:g" \
+> -			-e "s:$(STAGING_DIR):@STAGING_DIR@:g" \
+> -			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+> -				-e "s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
+> -			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+> -			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+> -				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+> -			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
+> -			-e "s:@BASE_DIR@:$(BASE_DIR):g"
+>  	@$(call step_end,install-staging)
+>  	$(Q)touch $@
+>  
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
