@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Mar 2017 18:41:43 +0100
-Subject: [Buildroot] [PATCH v5 17/19] infra-libtool: no longer disable
- install directory sanity check
-In-Reply-To: <1482241596-31688-18-git-send-email-jezz@sysmic.org>
+Date: Sat, 18 Mar 2017 18:45:40 +0100
+Subject: [Buildroot] [PATCH v5 18/19] infra-libtool: remove workaround
+ for calls without `--tag'
+In-Reply-To: <1482241596-31688-19-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-18-git-send-email-jezz@sysmic.org>
-Message-ID: <c9ce4486-d0c3-14a4-1ec7-a5a93d6e1bd7@mind.be>
+ <1482241596-31688-19-git-send-email-jezz@sysmic.org>
+Message-ID: <ab8ebb86-b0b0-b213-9c66-35d8a37d58ce@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +15,25 @@ To: buildroot@busybox.net
 
 
 On 20-12-16 14:46, J?r?me Pouiller wrote:
-> During install, libtool check if $libdir is a subdirectory of $DESTDIR. Until
-                               ^s
-> now $DESTDIR was $(TARGET_DIR) and $libdir was $(STAGING_DIR)/usr/lib.
-> Consequently, this test failed. Since $libdir is now /usr/lib, there is not more
-                                 ^Therefore, the Buildroot libtool patch
-disabled that test.
-                                                                          no
-> reason to skipped that test.
-            skip
+> Buildroot included a work around for the case libtool was called with a
+> non-existant `--tag'. We was not able create reproduce this problem anymore. So,
+> we drop this workaround.
+
+ It's better to refer to the commit adding it. Something like:
+
+Buildroot included a work around for the case libtool was called with a
+non-existent '--tag'. This was introduced as a series of hacks to make
+cross-compilation of fontconfig work in commit ee8f2133, ten years ago. The hack
+was carried over in various incarnations of the libtool patch, but is no longer
+relevant.
+
+> 
+> Please send a bug report if you encounter this problem again.
+
+ I don't think this sentence is necessary. The hack is just too far out - if the
+package build system calls libtool with an unknown --tag option, something is
+truly rotten.
+
 > 
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
@@ -35,14 +45,14 @@ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  Regards,
  Arnout
 
-
 > ---
->  support/libtool/buildroot-libtool-v1.5.patch   | 18 ------------------
->  support/libtool/buildroot-libtool-v2.2.patch   | 26 ++++++--------------------
->  support/libtool/buildroot-libtool-v2.4.4.patch | 25 +++++--------------------
->  support/libtool/buildroot-libtool-v2.4.patch   | 24 +++++-------------------
->  4 files changed, 16 insertions(+), 77 deletions(-)
+>  support/libtool/buildroot-libtool-v1.5.patch   | 12 ------------
+>  support/libtool/buildroot-libtool-v2.2.patch   | 11 -----------
+>  support/libtool/buildroot-libtool-v2.4.4.patch | 11 -----------
+>  support/libtool/buildroot-libtool-v2.4.patch   | 11 -----------
+>  4 files changed, 45 deletions(-)
 [snip]
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
