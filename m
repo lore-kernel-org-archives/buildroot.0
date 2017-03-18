@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Mar 2017 18:36:53 +0100
-Subject: [Buildroot] [PATCH v5 15/19] infra-libtool: relink binaries on
-	install
-In-Reply-To: <1482241596-31688-16-git-send-email-jezz@sysmic.org>
+Date: Sat, 18 Mar 2017 18:39:56 +0100
+Subject: [Buildroot] [PATCH v5 16/19] infra-libtool: inform libtool that
+ STAGING_DIR is reachable at runtime
+In-Reply-To: <1482241596-31688-17-git-send-email-jezz@sysmic.org>
 References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
- <1482241596-31688-16-git-send-email-jezz@sysmic.org>
-Message-ID: <06bf0ca2-5fb0-17da-f5c4-a5dab98107e7@mind.be>
+ <1482241596-31688-17-git-send-email-jezz@sysmic.org>
+Message-ID: <e62db7e1-373d-7c7e-1a94-48fc03df3cd6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +15,26 @@ To: buildroot@busybox.net
 
 
 On 20-12-16 14:46, J?r?me Pouiller wrote:
-> Until now, libtool was not configured for cross-compilation. It did works,
-                                                                      work
-> because Buildroot patched $libdir in .la files to include directories from
-> sysroot. However, this was done after package installation. Thus, a package was
-> not able to use its own (not yet patched) .la files. Because of that, libtool
-> was not able to relink binaries during installation. So, Buildroot disabled
-> relink on installation. Consequently, binaries that depends on internal
-                                                      depend
-> libraries contains their build path in their RPATH:
-            contain
+> When installing binaries to $TARGET_DIR, libtool add `$STAGING_DIR{,/usr}/lib'
+                                                      ^s
+> to RPATH. This is annoying to create reproducible binaries. This patch just
+> inform libtool that these paths are reachable on runtime and it is necessary to
+        ^s                                      at                  ^not
+> add then to RPATH.
+      them
 > 
->   $ readelf -d target/bin/mount | grep RPATH
->   0x0000000f (RPATH)  Library rpath: [/home/buildbot/output/build/util-linux-2.27.1/.libs]
-> 
-> This particularity was incompatible with creation of reproducible binaries.
+> Notice `$lt_cv_sys_lib_dlsearch_path_spec' was introduced in libtool v2.0.
+> Packages with libtool v1.5 continue to include `$STAGING_DIR{,/usr}/lib' in
+> their RPATH. The few packages that use libtool v1.5 have to be patched
+> individually in order to make them reproducible (adding AUTORECONF=YES should
+> be sufficient in most cases).
 
- Note that Wolfgang's RPATH mangling patches will also fix this. But of course,
-not having the problem to begin with is better :-)
+ Again, this is also solved by Wolfgang's rpath series.
 
 > 
-> However, with previous changes, libtool is now correctly configured and
-> binaries can be relinked on install. So we can re-enable this feature.
-> 
-> Note Yocto have a patch that remove extra paths during compilation and make
-> relink unnecessary:
->    http://git.yoctoproject.org/cgit.cgi/poky/tree/meta/recipes-devtools/libtool/libtool/fixinstall.patch
+> Note, instead of providing $lt_cv_sys_lib_dlsearch_path_spec, Yocto patch
+> libtool:
+>    http://git.yoctoproject.org/cgit.cgi/poky/tree/meta/recipes-devtools/libtool/libtool/fix-final-rpath.patch
 > 
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
@@ -48,18 +42,30 @@ not having the problem to begin with is better :-)
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 (tested on a static arm musl build with about 20 packages)
 
+ Since this is already handled by Wolgang's rpath series, this patch could be
+dropped. However, it is not invasive and it solves the problem earlier, so I vot
+to keep it.
 
  Regards,
  Arnout
 
 > ---
->  support/libtool/buildroot-libtool-v1.5.patch   | 9 ---------
->  support/libtool/buildroot-libtool-v2.2.patch   | 9 ---------
->  support/libtool/buildroot-libtool-v2.4.4.patch | 9 ---------
->  support/libtool/buildroot-libtool-v2.4.patch   | 9 ---------
->  4 files changed, 36 deletions(-)
+>  package/Makefile.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-[snip]
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 688d5b1..6a341f2 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -355,6 +355,7 @@ TARGET_CONFIGURE_ARGS = \
+>  	ac_cv_func_calloc_0_nonnull=yes \
+>  	ac_cv_func_realloc_0_nonnull=yes \
+>  	lt_cv_sys_lib_search_path_spec="" \
+> +	lt_cv_sys_lib_dlsearch_path_spec="/lib /usr/lib $(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
+>  	$(BR2_AC_CV_C_BIGENDIAN) \
+>  	$(BR2_GT_CV_FUNC_GNUGETTEXT_LIBC)
+>  
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
