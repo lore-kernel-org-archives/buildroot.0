@@ -1,81 +1,108 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 15:53:14 +0100
-Subject: [Buildroot] [PATCH v2 2/2] python3: Bump version to 3.6.0
-In-Reply-To: <20170314234228.3744-2-andrew.smirnov@gmail.com>
-References: <20170314234228.3744-1-andrew.smirnov@gmail.com>
- <20170314234228.3744-2-andrew.smirnov@gmail.com>
-Message-ID: <20170319155314.3ca86764@free-electrons.com>
+Date: Sun, 19 Mar 2017 15:04:32 +0100
+Subject: [Buildroot] [git commit] scripts/pycompile: Accomodate latest
+	Python 3 codebase
+Message-ID: <20170319145333.D045E8229C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=61fcd08247ddfd262123c3a4afad0cd376184811
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Mar 2017 16:42:28 -0700, Andrey Smirnov wrote:
-> python3: Bump version to 3.6.0
+As of the version 3.6.0 compile_dir() call will treat its 'quiet'
+argument as a full blown integer rather than a boolean value and perform
+integer comparison operations such as '<' or '>='.
 
-Thanks for this new version, with updated explanations. It's almost
-ready, but I still have a few comments.
+To account for that convert ReportProblem type to be a true derivative
+of built-in int() and override all of int's rich comparison operators in
+order to be able to "sniff" for PyCompileError in all possible use-cases
 
+The integer value ReportProblem pretends to be is teremined by class
+variable VALUE which is set to 1.
 
-> +define PKG_PYTHON_SYSCONFIGDATA_NAME
-> +$(shell basename $(shell find $(TARGET_DIR)/ -name "_sysconfigdata_m_linux_*.pyc" | head -n 1) .pyc)
-> +endef
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/pycompile.py | 59 ++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 46 insertions(+), 13 deletions(-)
 
-Could you replace this with:
-
-+PKG_PYTHON_SYSCONFIGDATA_NAME = \
-+       $(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata_*.py)))
-
-It does the same, but using make code.
-
-To be honest, I find it really annoying that we have to do this to find
-the name of the sysconfigdata package. I've thought about the following:
-
- - Have the Python build system output somewhere the name of the
-   sysconfigdata module that has been generated.
-
- - Compute the name of the sysconfigdata module: it's always going to be:
-
-    sysconfigdata_m_linux_<output of gcc -dumpmachine>
-
-But well, your solution is as simple, so let's go for it.
-
-> -Subject: [PATCH] setup.py: do not add invalid header locations
-> +Subject: [PATCH 01/31] setup.py: do not add invalid header locations
-
-Please generate patches with "git format-patch -N" to get rid of the
-numbering, i.e to have [PATCH] instead of [PATCH 01/31].
-
-
-> --- a/package/python3/0003-Make-the-build-of-pyc-files-conditional.patch
-> +++ b/package/python3/0002-Make-the-build-of-pyc-files-conditional.patch
-> @@ -1,22 +1,24 @@
-> -From 5df8e9556e8026dd19cf932fa8f2b726f56182d1 Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Date: Wed, 23 Dec 2015 11:29:35 +0100
-> -Subject: [PATCH] Make the build of pyc files conditional
-> +From a3aedafc04a81c5a6406c60e82d072377fee0cd1 Mon Sep 17 00:00:00 2001
-> +From: Andrey Smirnov <andrew.smirnov@gmail.com>
-
-Why are all patches you have changed now re-assigned with your From?
-You should preserve the authorship of the original author.
-
->  # Provided to other packages
-> -PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
-> +PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
-
-Why do we now need
-$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/ ?
-
-Could you fix the above issues and submit a new version?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+index fde711a..9f7eb9f 100644
+--- a/support/scripts/pycompile.py
++++ b/support/scripts/pycompile.py
+@@ -1,24 +1,57 @@
+ #!/usr/bin/env python
+ 
+-# Wrapper for python2 and python3 around compileall to raise exception
+-# when a python byte code generation failed.
+-#
+-# Inspired from:
+-#   http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
++'''Wrapper for python2 and python3 around compileall to raise exception
++when a python byte code generation failed.
+ 
++Inspired from:
++   http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
++'''
+ from __future__ import print_function
+ import sys
+ import py_compile
+ import compileall
+ 
+-class ReportProblem:
+-    def __nonzero__(self):
+-        type, value, traceback = sys.exc_info()
+-        if type is not None and issubclass(type, py_compile.PyCompileError):
+-            print("Cannot compile %s" %value.file)
++def check_for_errors(comparison):
++    '''Wrap comparison operator with code checking for PyCompileError.
++    If PyCompileError was raised, re-raise it again to abort execution,
++    otherwise perform comparison as expected.
++    '''
++    def operator(self, other):
++        exc_type, value, traceback = sys.exc_info()
++        if exc_type is not None and issubclass(exc_type,
++                                               py_compile.PyCompileError):
++            print("Cannot compile %s" % value.file)
+             raise value
+-        return 1
+ 
+-report_problem = ReportProblem()
++        return comparison(self, other)
+ 
+-compileall.compile_dir(sys.argv[1], quiet=report_problem)
++    return operator
++
++class ReportProblem(int):
++    '''Class that pretends to be an int() object but implements all of its
++    comparison operators such that it'd detect being called in
++    PyCompileError handling context and abort execution
++    '''
++    VALUE = 1
++
++    def __new__(cls, *args, **kwargs):
++        return int.__new__(cls, ReportProblem.VALUE, **kwargs)
++
++    @check_for_errors
++    def __lt__(self, other):
++        return ReportProblem.VALUE < other
++
++    @check_for_errors
++    def __eq__(self, other):
++        return ReportProblem.VALUE == other
++
++    def __ge__(self, other):
++        return not self < other
++
++    def __gt__(self, other):
++        return not self < other and not self == other
++
++    def __ne__(self, other):
++        return not self == other
++
++compileall.compile_dir(sys.argv[1], quiet=ReportProblem())
