@@ -1,147 +1,44 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 19 Mar 2017 09:07:52 +0100
-Subject: [Buildroot] [PATCH v2 1/2] leptonica: new package
-In-Reply-To: <1489910873-8450-1-git-send-email-gilles.talis@gmail.com>
-References: <1489910873-8450-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <1489910873-8450-2-git-send-email-gilles.talis@gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Sun, 19 Mar 2017 09:10:05 +0100
+Subject: [Buildroot] [PATCH 1/2] odroid-mali: fix broken headers.
+In-Reply-To: <20170315110141.332ee46b@free-electrons.com>
+References: <20170313090834.13715-1-daggs@gmx.com>
+ <20170313133345.36d712f4@free-electrons.com>
+ <trinity-929fc1a7-02df-4b8f-b623-1a623d2a9f58-1489414620167@3capp-mailcom-bs04>
+ <20170314225427.390c43ce@free-electrons.com>
+ <trinity-fe2675f8-6575-4221-b2c0-58c922f95d24-1489559834487@3capp-mailcom-bs10>
+ <20170315091241.40a1a396@free-electrons.com>
+ <trinity-01731c2c-041f-4f4a-9d1e-ab9463ddbd61-1489571560099@3capp-mailcom-bs08>,
+ <20170315110141.332ee46b@free-electrons.com>
+Message-ID: <trinity-31a9d6e0-5836-4ca5-b1c7-2ba16255609d-1489911005153@3capp-mailcom-bs11>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
-Changes v2 (following review by Thomas P.)
-- Fixed newline at end of hash file
-- Explicitly set autotools options using --with--XXX 
-- Added change in DEVELOPERS file
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/leptonica/Config.in      |  8 +++++
- package/leptonica/leptonica.hash |  2 ++
- package/leptonica/leptonica.mk   | 64 ++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 76 insertions(+)
- create mode 100644 package/leptonica/Config.in
- create mode 100644 package/leptonica/leptonica.hash
- create mode 100644 package/leptonica/leptonica.mk
+Greetings,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 746a547..8802fc7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -587,6 +587,7 @@ N:	Gilles Talis <gilles.talis@gmail.com>
- F:	package/fdk-aac/
- F:	package/httping/
- F:	package/iozone/
-+F:	package/leptonica/
- F:	package/ocrad/
- F:	package/webp/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 52b4f36..ed48058 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1010,6 +1010,7 @@ menu "Graphics"
- 	source "package/jpeg/Config.in"
- 	source "package/kmsxx/Config.in"
- 	source "package/lcms2/Config.in"
-+	source "package/leptonica/Config.in"
- 	source "package/lesstif/Config.in"
- 	source "package/libart/Config.in"
- 	source "package/libdmtx/Config.in"
-diff --git a/package/leptonica/Config.in b/package/leptonica/Config.in
-new file mode 100644
-index 0000000..a4053a3
---- /dev/null
-+++ b/package/leptonica/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LEPTONICA
-+	bool "leptonica"
-+	help
-+	  Leptonica is a pedagogically-oriented open source site containing
-+	  software that is broadly useful for image processing and image
-+	  analysis applications.
-+
-+	  http://www.leptonica.org/
-diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
-new file mode 100644
-index 0000000..48da06b
---- /dev/null
-+++ b/package/leptonica/leptonica.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 746a517a47a3bd2a90bc8d581ca6464c10f30e91a60209735efe45b3778bec62  leptonica-1.74.1.tar.gz
-diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
-new file mode 100644
-index 0000000..37e5219
---- /dev/null
-+++ b/package/leptonica/leptonica.mk
-@@ -0,0 +1,64 @@
-+################################################################################
-+#
-+# leptonica
-+#
-+################################################################################
-+
-+LEPTONICA_VERSION = 1.74.1
-+LEPTONICA_SITE = http://www.leptonica.org/source
-+LEPTONICA_LICENSE = BSD-2c
-+LEPTONICA_LICENSE_FILES = leptonica-license.txt
-+LEPTONICA_INSTALL_STAGING = YES
-+
-+LEPTONICA_CONF_OPTS += --disable-programs
-+
-+ifeq ($(BR2_PACKAGE_GIFLIB),y)
-+LEPTONICA_DEPENDENCIES += giflib
-+LEPTONICA_CONF_OPTS +=  --with-giflib
-+else
-+LEPTONICA_CONF_OPTS +=  --without-giflib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+LEPTONICA_DEPENDENCIES += jpeg
-+LEPTONICA_CONF_OPTS += --with-jpeg
-+else
-+LEPTONICA_CONF_OPTS += --without-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+LEPTONICA_DEPENDENCIES += libpng
-+LEPTONICA_CONF_OPTS += --with-libpng
-+else
-+LEPTONICA_CONF_OPTS += --without-libpng
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENJPEG),y)
-+LEPTONICA_DEPENDENCIES += openjpeg
-+LEPTONICA_CONF_OPTS += --with-libopenjpeg
-+else
-+LEPTONICA_CONF_OPTS += --without-libopenjpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+LEPTONICA_DEPENDENCIES += tiff
-+LEPTONICA_CONF_OPTS += --with-libtiff
-+else
-+LEPTONICA_CONF_OPTS += --without-libtiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WEBP),y)
-+LEPTONICA_DEPENDENCIES += webp
-+LEPTONICA_CONF_OPTS += --with-libwebp
-+else
-+LEPTONICA_CONF_OPTS += --without-libwebp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LEPTONICA_DEPENDENCIES += zlib
-+LEPTONICA_CONF_OPTS += --with-zlib
-+else
-+LEPTONICA_CONF_OPTS += --without-zlib
-+endif
-+
-+$(eval $(autotools-package))
--- 
-2.5.0
+> Hello,
+> 
+> On Wed, 15 Mar 2017 10:52:40 +0100, daggs wrote:
+> 
+> > I think I understand, if no xlib was selected, the pc files should MESA_EGL_NO_X11_HEADERS should be defined, correct?
+> 
+> Yes, that's one way to fix it, but:
+> 
+>  * It is strange for odroid-mali headers to look at a MESA_xyz
+>    definition. It smells like mesa headers were copy/pasted into
+>    odroid-mali.
+> 
+>  * This will only work for packages that look at the .pc files.
+>    Hopefully, this should be the majority, and we can fix the few
+>    packages that don't use .pc files to find the OpenGLES/EGL libraries.
+> 
+> Thomas
+
+a question, does the latest gl related patch to libepoxy is relevant for this issue? if so, can you comment on how?
+
+Thanks,
+
+Dagg.
