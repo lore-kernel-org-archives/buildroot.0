@@ -1,9 +1,7 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sun, 19 Mar 2017 10:59:49 +0100
-Subject: [Buildroot] [PATCH 2/5] package/openocd: indentation cleanup
-In-Reply-To: <1489917592-12454-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1489917592-12454-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1489917592-12454-2-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Sun, 19 Mar 2017 10:59:48 +0100
+Subject: [Buildroot] [PATCH 1/5] package/libscrypt: indentation cleanup
+Message-ID: <1489917592-12454-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +10,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/openocd/openocd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libscrypt/libscrypt.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 0d18365..8407bbc 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -108,7 +108,7 @@ HOST_OPENOCD_DEPENDENCIES = host-libftdi host-libusb host-libusb-compat
- # build system believe the documentation doesn't need to be
- # regenerated.
- define OPENOCD_FIX_VERSION_TEXI
--       touch -r $(@D)/doc/openocd.info $(@D)/doc/version.texi
-+	touch -r $(@D)/doc/openocd.info $(@D)/doc/version.texi
+diff --git a/package/libscrypt/libscrypt.mk b/package/libscrypt/libscrypt.mk
+index 5326b22..a0dcce0 100644
+--- a/package/libscrypt/libscrypt.mk
++++ b/package/libscrypt/libscrypt.mk
+@@ -15,12 +15,12 @@ define LIBSCRYPT_BUILD_CMDS
  endef
- OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
- HOST_OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
+ 
+ define LIBSCRYPT_INSTALL_STAGING_CMDS
+-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr \
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr \
+ 		DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define LIBSCRYPT_INSTALL_TARGET_CMDS
+-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr \
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr \
+ 		DESTDIR=$(TARGET_DIR) install
+ endef
+ 
 -- 
 1.9.1
