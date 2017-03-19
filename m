@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 22:00:43 +0100
-Subject: [Buildroot] [PATCH] rpi-bt-firmware: new package
-In-Reply-To: <094f74654295373c7cadd47044cbcfb9a80d8c87.1489093234.git.baruch@tkos.co.il>
-References: <094f74654295373c7cadd47044cbcfb9a80d8c87.1489093234.git.baruch@tkos.co.il>
-Message-ID: <20170319220043.6f819196@free-electrons.com>
+Date: Sun, 19 Mar 2017 22:08:57 +0100
+Subject: [Buildroot] [PATCH] package/keepalived: fix compilation with
+ musl
+In-Reply-To: <1488999383-18704-1-git-send-email-yann.morin.1998@free.fr>
+References: <1488999383-18704-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170319220857.2e4a986d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  9 Mar 2017 23:00:34 +0200, Baruch Siach wrote:
-> Add firmware file for the Raspberry Pi 3 Bluetooth module.
+On Wed,  8 Mar 2017 19:56:23 +0100, Yann E. MORIN wrote:
+> Backport one patch from upstream to fix build without netlink.
+> Add two patches to fix integer types.
 > 
-> Note that to successfully download the firmware bluez5_utils needs a patch[1].
+> Fixes:
+>     http://autobuild.buildroot.org/results/b61/b61c2cfa949c2a20f0702522857d78651207e6d2/
 > 
-> [1] http://www.spinics.net/lists/linux-bluetooth/msg69470.html
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ilias Apalodimas <apalos@gmail.com>
+> ---
+>  ...onal-compilation-for-LIBIPVS-without-netl.patch | 35 +++++++++
+>  .../0002-check-libipvs-add-missing-include.patch   | 36 +++++++++
+>  .../0003-keepalived-ip_vs-fix-integer-types.patch  | 87 ++++++++++++++++++++++
+>  3 files changed, 158 insertions(+)
+>  create mode 100644 package/keepalived/0001-Fix-conditional-compilation-for-LIBIPVS-without-netl.patch
+>  create mode 100644 package/keepalived/0002-check-libipvs-add-missing-include.patch
+>  create mode 100644 package/keepalived/0003-keepalived-ip_vs-fix-integer-types.patch
 
-Wonderful patch :)
+Another simpler patch from Baruch, using what you contributed upstream,
+has been applied. So I've marked this patch as Rejected.
 
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-I think the name of the package is wrong, it shouldn't be
-rpi-bt-firmware. Indeed, it has nothing to do with the RPi itself, but
-with the WiFi chip. And other boards, such as
-http://www.armadeus.org/wiki/index.php?title=OPOS6UL, use a WiFi chip
-that need the same firmware. See
-http://www.armadeus.org/wiki/index.php?title=Bluetooth#OPOS6UL where
-they tell to use exactly that BCM43430A1.hcd firmware.
-
-So perhaps the package should be bcrm-43430-firmware or something along
-those lines.
-
-
-> +RPI_BT_FIRMWARE_VERSION = a439f892bf549ddfefa9ba7ad1999cc515f233bf
-> +RPI_BT_FIRMWARE_SITE = https://aur.archlinux.org/pi-bluetooth.git
-
-Is there a better upstream than this? I found
-https://github.com/varigit/bcm_4343w_fw but I'm not sure it really
-qualifies as "better".
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
+Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
