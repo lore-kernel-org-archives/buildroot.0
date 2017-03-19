@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 14:09:24 +0100
-Subject: [Buildroot] [git commit] package/qt5multimedia: indentation cleanup
-Message-ID: <20170319131837.E7B9680AC7@busybox.osuosl.org>
+Date: Sun, 19 Mar 2017 14:09:18 +0100
+Subject: [Buildroot] [git commit] package/openocd: indentation cleanup
+Message-ID: <20170319131837.D76BB80584@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dff59eb5def008dddcbf957e2b0f0a550ef87d3c
+commit: https://git.buildroot.net/buildroot/commit/?id=ea7532047d5141c7ed0335247ef2fa3793f33118
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5multimedia/qt5multimedia.mk | 2 +-
+ package/openocd/openocd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index fccdd5d..0a95340 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -66,7 +66,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
--       cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/multimedia* $(TARGET_DIR)/usr/lib/qt/examples/
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/multimedia* $(TARGET_DIR)/usr/lib/qt/examples/
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index 0d18365..8407bbc 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -108,7 +108,7 @@ HOST_OPENOCD_DEPENDENCIES = host-libftdi host-libusb host-libusb-compat
+ # build system believe the documentation doesn't need to be
+ # regenerated.
+ define OPENOCD_FIX_VERSION_TEXI
+-       touch -r $(@D)/doc/openocd.info $(@D)/doc/version.texi
++	touch -r $(@D)/doc/openocd.info $(@D)/doc/version.texi
  endef
- endif
- 
+ OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
+ HOST_OPENOCD_POST_BUILD_HOOKS += OPENOCD_FIX_VERSION_TEXI
