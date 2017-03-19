@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Mar 2017 23:18:25 +0100
-Subject: [Buildroot] [PATCH] package/ifupdown-scripts: new package
-In-Reply-To: <1489916894-2692-1-git-send-email-yann.morin.1998@free.fr>
-References: <1489916894-2692-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <e46f59ca-cf2f-f2fe-accf-6586c17f78f4@mind.be>
+Date: Sun, 19 Mar 2017 23:28:32 +0100
+Subject: [Buildroot] [PATCH v1] wiringpi: bump to version 2.44
+In-Reply-To: <20170319222409.205633ad@gmx.net>
+References: <20170315210828.3784-1-ps.report@gmx.net>
+ <20170318141428.0c4b6d36@free-electrons.com>
+ <20170319222409.205633ad@gmx.net>
+Message-ID: <53182259-8ac8-de42-4ffb-ecd79e2597fe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,108 +14,44 @@ To: buildroot@busybox.net
 
 
 
-On 19-03-17 10:48, Yann E. MORIN wrote:
-> The ifupdown scripts can be used independently of the init system, be it
-> sysv, busybox or systemd; they could even be used when there is no init
-> system (i.e. the user is providing his own).
+On 19-03-17 22:24, Peter Seiderer wrote:
+> Hello Thomas,
 > 
-> Currently, those ifupdown scripts are bundled in the skeleton.
+> On Sat, 18 Mar 2017 14:14:28 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 > 
-> But we soon will have a skeleton specific to systemd, so we would be
-> missing those scripts (when systemd-networks is not enabled).
+>> Hello,
+>>
+>> On Wed, 15 Mar 2017 22:08:28 +0100, Peter Seiderer wrote:
+>>> - rebase 0001-Adjust-for-buildroot-build.patch
+>>> - delete 0002-include-asm-ioctl.h-directly-for-_IOC_SIZEBITS.patch
+>>>   (all changes are incorporated into wiringpi-2.44)
+>>> - remove useless hash file (git download)
+>> Git downloads now generate reproducible tarballs, so we in fact want to
+>> add hashes for them as well. However, it is true that the hash is not
+>> checked currently. This has been on the TODO-list for a while.
+> Mhhh, tried several times, every time I get a different checksum:
 > 
-> So, move those scripts to their own package.
+> 	$ sha256sum dl/wiringpi-2.44.tar.gz 
+> 5324ed452b7adfb77d049ea49dfe8878605c6198cb5c706ae2b285a70fb9d096  dl/wiringpi-2.44.tar.gz
 > 
-> This new package is selected by the various init systems that need it.
-
- I'd like to challenge this one.
-
- This package basically populates /etc/network with the ifupdown scripts. IMO
-the ifupdown scripts have nothing to do with the init system, they only have
-something to do with the network management system. We have (I think) 6
-different network management systems:
-
-- busybox ifupdown
-- ifupdown
-- systemd-networkd
-- s6-networking
-- network-manager
-- connman
-
- As far as I understand, only the first two use /etc/network (I'm not sure if
-/etc/network is still needed for the lo interface with network-manager and
-connman, and I know nothing about s6-networking). On the other hand, even if
-ifupdown is used, you may have custom scripts and not need this package. And
-when you use e.g. network-manager, it doesn't hurt to also have /etc/network
-scripts installed. (Ideally I should have checked this of course, to see if both
-lo and eth0 come up if no /etc/network is installed but network-manager is
-running...)
-
- Therefore, I would propose to make the package freely selectable, i.e. not
-selected by nor depend on anything. Perhaps the only exception is that we want
-to depend on !BR2_PACKAGE_SYSTEMD_NETWORKD because the two systemd services will
-slightly conflict with each other (actually I don't think they will...).
-
- Maybe I'm wrong and S40networking is still needed for the lo interface, or
-network-manager still uses the scripts in /etc/network/*.d. Even in that case, I
-think one may want to enable this package e.g. when BR2_INIT_NONE - when you use
-some custom init system, you still may want to call ifup to start the network.
-In that case the init script won't be installed, but /etc/network is still relevant.
+> 	$ sha256sum dl/wiringpi-2.44.tar.gz 
+> 65e6b3a916b940eec085222a28a5859b09e79e0020de2f2b07563d910426180c  dl/wiringpi-2.44.tar.gz
 
 
-> This means that, no longer being part of the skeleton but being selected
-> by the init systems, they are now available even when a custom skeleton
-> is used, like our initscripts are.
-> 
-> Previously, the systemd service was provided by systemd, while the syv
-> startup script was provided by initscripts. Both are moved to this new
-> ifupdown-scripts package for consistency with the other scripts. We
-> still intall the systemd service file because ifupdown-scripts cannot be
-> enabled when systemd-networkd is enabled.
-> 
-> Instead of being a target-finalize hook, the scripts are installed as
-> any other package are, with a package install-target command.
+ Really weird, both Yann and I tested and we got the same sha256sum as Thomas
+put in wiringpi.hash... So we are clearly still doing something wrong in the
+download helper.
 
-[snip]
-> diff --git a/package/ifupdown/Config.in b/package/ifupdown/Config.in
-> index e683201..74be59f 100644
-> --- a/package/ifupdown/Config.in
-> +++ b/package/ifupdown/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_IFUPDOWN
->  	# Default/our uclibc lacks wordexp()
->  	depends on !BR2_TOOLCHAIN_USES_UCLIBC
->  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> +	select BR2_PACKAGE_IFUPDOWN_SCRIPTS
+ To help us nail down the problem, could you do:
 
- Doesn't this lead to a circular dependency when BR2_PACKAGE_SYSTEMD_NETWORKD is
-selected?
+tar -xf dl/wiringpi-2.44.tar.gz
+tar -tf dl/wiringpi-2.44.tar.gz | xargs sha256sum
 
- Also, I wonder why you do this for the ifupdown package, but not for busybox
-ifupdown...
+and compare the output with https://gitlab.com/snippets/1655089/raw ?
 
->  	# runtime for ip binary
->  	select BR2_PACKAGE_IPROUTE2 if !BR2_PACKAGE_BUSYBOX
->  	# runtime for run-parts
-[snip]
-> diff --git a/system/Config.in b/system/Config.in
-> index 3ddf843..4fc037b 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -103,6 +103,7 @@ config BR2_INIT_BUSYBOX
->  	bool "BusyBox"
->  	select BR2_PACKAGE_BUSYBOX
->  	select BR2_PACKAGE_INITSCRIPTS
-> +	select BR2_PACKAGE_IFUPDOWN_SCRIPTS
->  
->  config BR2_INIT_SYSV
->  	bool "systemV"
-
- Even if you disagree with everything I wrote and keep things like you put them
-now, the package should definitely also be selected when BR2_INIT_SYSV.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
