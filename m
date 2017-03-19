@@ -1,25 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 19 Mar 2017 20:49:40 +0000
-Subject: [Buildroot] [Bug 9756] glibc fails to build on
- buildroot-sh4*-buildroot-linux-gnu
-In-Reply-To: <bug-9756-163@https.bugs.busybox.net/>
-References: <bug-9756-163@https.bugs.busybox.net/>
-Message-ID: <bug-9756-163-HK0gA5T8J8@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 19 Mar 2017 21:51:53 +0100
+Subject: [Buildroot] [PATCH 1/3] package/mesa3d: add lm-sensors optional
+	dependency
+Message-ID: <20170319205155.3333-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9756
+radeon-pci-0008
+Adapter: PCI adapter
+temp1:        +56.0 C  (crit = +120.0 C, hyst = +90.0 C)
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-I was able to reproduce Uwe's problem, and the patch proposed by Waldemar
-indeed fixes it.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Waldemar, will you send a patch adding this to our glibc package ? Is it also
-needed for glibc 2.23 ?
-
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index d29a043..61baa50 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -180,6 +180,13 @@ else
+ MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
++MESA3D_CONF_OPTS += --enable-lmsensors
++MESA3D_DEPENDENCIES += lm-sensors
++else
++MESA3D_CONF_OPTS += --disable-lmsensors
++endif
++
+ # Avoid automatic search of llvm-config
+ MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.9.3
