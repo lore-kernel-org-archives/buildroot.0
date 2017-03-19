@@ -1,174 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 16:00:34 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2017-03-18
-In-Reply-To: <20170319144411.GA9040@itchy>
-References: <20170319072840.949DB2077A@mail.free-electrons.com>
- <20170319144411.GA9040@itchy>
-Message-ID: <20170319160034.41567667@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 19 Mar 2017 15:45:44 +0000
+Subject: [Buildroot] [Bug 9756] glibc fails to build on
+ buildroot-sh4*-buildroot-linux-gnu
+In-Reply-To: <bug-9756-163@https.bugs.busybox.net/>
+References: <bug-9756-163@https.bugs.busybox.net/>
+Message-ID: <bug-9756-163-6T2BO9ml8y@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9756
 
-On Sun, 19 Mar 2017 15:44:11 +0100, Eric Le Bihan wrote:
+--- Comment #1 from wbx at openadk.org ---
+try this:
+https://sourceware.org/git/?p=glibc.git;a=commit;h=d40dbe722f004f999b589de776f7e57e564dda01
 
-> So the failure means that both programs failed to compile. Which
-> version of GCC is used on the autobuild machine?
-
-gcc 4.4.5 is used. It fails with:
-
-Checking system endianness...
-src/sysdeps/trybigendian.c:10:2: error: #error "not big endian"
-src/sysdeps/trylittleendian.c:10:2: error: #error "not little endian"
-./configure: unable to determine endianness
-
-The complete list of internal defines for this compiler version:
-
-#define __DBL_MIN_EXP__ (-1021)
-#define __FLT_MIN__ 1.17549435e-38F
-#define __CHAR_BIT__ 8
-#define __WCHAR_MAX__ 2147483647
-#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 1
-#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 1
-#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 1
-#define __DBL_DENORM_MIN__ 4.9406564584124654e-324
-#define __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 1
-#define __FLT_EVAL_METHOD__ 0
-#define __unix__ 1
-#define __x86_64 1
-#define __DBL_MIN_10_EXP__ (-307)
-#define __FINITE_MATH_ONLY__ 0
-#define __GNUC_PATCHLEVEL__ 5
-#define __DEC64_MAX_EXP__ 385
-#define __SHRT_MAX__ 32767
-#define __LDBL_MAX__ 1.18973149535723176502e+4932L
-#define __UINTMAX_TYPE__ long unsigned int
-#define __linux 1
-#define __DEC32_EPSILON__ 1E-6DF
-#define __unix 1
-#define __LDBL_MAX_EXP__ 16384
-#define __linux__ 1
-#define __SCHAR_MAX__ 127
-#define __DBL_DIG__ 15
-#define __SIZEOF_INT__ 4
-#define __SIZEOF_POINTER__ 8
-#define __USER_LABEL_PREFIX__ 
-#define __STDC_HOSTED__ 1
-#define __LDBL_HAS_INFINITY__ 1
-#define __FLT_EPSILON__ 1.19209290e-7F
-#define __LDBL_MIN__ 3.36210314311209350626e-4932L
-#define __DEC32_MAX__ 9.999999E96DF
-#define __SIZEOF_LONG__ 8
-#define __DECIMAL_DIG__ 21
-#define __gnu_linux__ 1
-#define __LDBL_HAS_QUIET_NAN__ 1
-#define __GNUC__ 4
-#define __MMX__ 1
-#define __FLT_HAS_DENORM__ 1
-#define __SIZEOF_LONG_DOUBLE__ 16
-#define __BIGGEST_ALIGNMENT__ 16
-#define __DBL_MAX__ 1.7976931348623157e+308
-#define __DBL_HAS_INFINITY__ 1
-#define __DEC32_MIN_EXP__ (-94)
-#define __LDBL_HAS_DENORM__ 1
-#define __DEC128_MAX__ 9.999999999999999999999999999999999E6144DL
-#define __DEC32_MIN__ 1E-95DF
-#define __DBL_MAX_EXP__ 1024
-#define __DEC128_EPSILON__ 1E-33DL
-#define __SSE2_MATH__ 1
-#define __amd64 1
-#define __LONG_LONG_MAX__ 9223372036854775807LL
-#define __SIZEOF_SIZE_T__ 8
-#define __SIZEOF_WINT_T__ 4
-#define __GCC_HAVE_DWARF2_CFI_ASM 1
-#define __GXX_ABI_VERSION 1002
-#define __FLT_MIN_EXP__ (-125)
-#define __DBL_MIN__ 2.2250738585072014e-308
-#define __LP64__ 1
-#define __DECIMAL_BID_FORMAT__ 1
-#define __DEC128_MIN__ 1E-6143DL
-#define __REGISTER_PREFIX__ 
-#define __DBL_HAS_DENORM__ 1
-#define __NO_INLINE__ 1
-#define __FLT_MANT_DIG__ 24
-#define __VERSION__ "4.4.5"
-#define __DEC64_EPSILON__ 1E-15DD
-#define __DEC128_MIN_EXP__ (-6142)
-#define unix 1
-#define __SIZE_TYPE__ long unsigned int
-#define __ELF__ 1
-#define __FLT_RADIX__ 2
-#define __LDBL_EPSILON__ 1.08420217248550443401e-19L
-#define __SSE_MATH__ 1
-#define __k8 1
-#define __SIZEOF_PTRDIFF_T__ 8
-#define __x86_64__ 1
-#define __DEC32_SUBNORMAL_MIN__ 0.000001E-95DF
-#define __FLT_HAS_QUIET_NAN__ 1
-#define __FLT_MAX_10_EXP__ 38
-#define __LONG_MAX__ 9223372036854775807L
-#define __DEC128_SUBNORMAL_MIN__ 0.000000000000000000000000000000001E-6143DL
-#define __FLT_HAS_INFINITY__ 1
-#define __DEC64_MAX__ 9.999999999999999E384DD
-#define __CHAR16_TYPE__ short unsigned int
-#define __DEC64_MANT_DIG__ 16
-#define __DEC32_MAX_EXP__ 97
-#define linux 1
-#define __SSE2__ 1
-#define __LDBL_MANT_DIG__ 64
-#define __DBL_HAS_QUIET_NAN__ 1
-#define __k8__ 1
-#define __WCHAR_TYPE__ int
-#define __SIZEOF_FLOAT__ 4
-#define __DEC64_MIN_EXP__ (-382)
-#define __FLT_DIG__ 6
-#define __INT_MAX__ 2147483647
-#define __amd64__ 1
-#define __FLT_MAX_EXP__ 128
-#define __DBL_MANT_DIG__ 53
-#define __DEC64_MIN__ 1E-383DD
-#define __WINT_TYPE__ unsigned int
-#define __SIZEOF_SHORT__ 2
-#define __SSE__ 1
-#define __LDBL_MIN_EXP__ (-16381)
-#define __LDBL_MAX_10_EXP__ 4932
-#define __DBL_EPSILON__ 2.2204460492503131e-16
-#define _LP64 1
-#define __SIZEOF_WCHAR_T__ 4
-#define __DEC_EVAL_METHOD__ 2
-#define __INTMAX_MAX__ 9223372036854775807L
-#define __FLT_DENORM_MIN__ 1.40129846e-45F
-#define __CHAR32_TYPE__ unsigned int
-#define __FLT_MAX__ 3.40282347e+38F
-#define __SIZEOF_DOUBLE__ 8
-#define __FLT_MIN_10_EXP__ (-37)
-#define __INTMAX_TYPE__ long int
-#define __DEC128_MAX_EXP__ 6145
-#define __GNUC_MINOR__ 4
-#define __DEC32_MANT_DIG__ 7
-#define __DBL_MAX_10_EXP__ 308
-#define __LDBL_DENORM_MIN__ 3.64519953188247460253e-4951L
-#define __STDC__ 1
-#define __PTRDIFF_TYPE__ long int
-#define __DEC64_SUBNORMAL_MIN__ 0.000000000000001E-383DD
-#define __DEC128_MANT_DIG__ 34
-#define __LDBL_MIN_10_EXP__ (-4931)
-#define __SIZEOF_LONG_LONG__ 8
-#define __LDBL_DIG__ 18
-#define __GNUC_GNU_INLINE__ 1
-
-From a quick look, I don't see anything to determine the endianness of
-the platform. Perhaps simply augment the test case with the assumption
-that x86 and x86-64 are little endian?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
