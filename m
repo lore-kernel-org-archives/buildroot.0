@@ -1,51 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Mar 2017 14:27:45 +0100
-Subject: [Buildroot] [PATCH] Enable UART on raspberry pi zero
-In-Reply-To: <DB5PR03MB13342317D9FB07E001D16231E7380@DB5PR03MB1334.eurprd03.prod.outlook.com>
-References: <DB5PR03MB13342317D9FB07E001D16231E7380@DB5PR03MB1334.eurprd03.prod.outlook.com>
-Message-ID: <20170319132745.GB3734@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Mar 2017 14:51:18 +0100
+Subject: [Buildroot] [PATCH v2 1/2] leptonica: new package
+In-Reply-To: <1489910873-8450-2-git-send-email-gilles.talis@gmail.com>
+References: <1489910873-8450-1-git-send-email-gilles.talis@gmail.com>
+ <1489910873-8450-2-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20170319145118.39287c13@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luke, All,
+Hello,
 
-On 2017-03-18 18:22 +0000, luke spake thusly:
-> From 9c77dfd825bebbf02e3b2837dacb9ae4873c9ec8 Mon Sep 17 00:00:00 2001
-> From: Luke <skywal_l@hotmail.com>
-> Date: Sat, 18 Mar 2017 18:17:24 +0000
-> Subject: [PATCH 1/1] Modify post-build.sh for raspberry pi zero so that it
->  activates the UART serial console in config.txt
-> 
-> Signed-off-by: Luke <skywal_l@hotmail.com>
+On Sun, 19 Mar 2017 09:07:52 +0100, Gilles Talis wrote:
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 > ---
->  board/raspberrypi/post-build.sh | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
-> index 5e5eb71..6d2f0d1 100755
-> --- a/board/raspberrypi/post-build.sh
-> +++ b/board/raspberrypi/post-build.sh
-> @@ -9,3 +9,6 @@ if [ -e ${TARGET_DIR}/etc/inittab ]; then
->  	sed -i '/GENERIC_SERIAL/a\
->  tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
->  fi
-> +
-> +# Activate the console
-> +echo "enable_uart=1" | cat >> config.txt
+> Changes v2 (following review by Thomas P.)
+> - Fixed newline at end of hash file
+> - Explicitly set autotools options using --with--XXX 
+> - Added change in DEVELOPERS file
+> ---
+>  DEVELOPERS                       |  1 +
+>  package/Config.in                |  1 +
+>  package/leptonica/Config.in      |  8 +++++
+>  package/leptonica/leptonica.hash |  2 ++
+>  package/leptonica/leptonica.mk   | 64 ++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 76 insertions(+)
+>  create mode 100644 package/leptonica/Config.in
+>  create mode 100644 package/leptonica/leptonica.hash
+>  create mode 100644 package/leptonica/leptonica.mk
 
-I have a rpi-0 here, and I do not need that config option to get the UART
-working.
+Applied to master, thanks.
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
