@@ -1,41 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 21:27:28 +0100
-Subject: [Buildroot] [git commit] package/libgpg-error: bump version to 1.27
-Message-ID: <20170319204703.ACC7381E95@busybox.osuosl.org>
+Date: Sun, 19 Mar 2017 21:46:46 +0100
+Subject: [Buildroot] [git commit] package/gnupg2: add optional support for
+	sqlite
+Message-ID: <20170319204703.D6F8E81E95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53a5810bb961c01e82a560ecf040b61000d5cf94
+commit: https://git.buildroot.net/buildroot/commit/?id=cde1d5d8b8c31cd153cbb5ceeec5c994fc1f4f2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add host-pkgconf to detect sqlite support, otherwise
+
+checking pkg-config is at least version 0.9.0...
+ ./configure: line 7981: /home/buildroot/br2/output/host/usr/bin/pkg-config: No such file or directory
+no
+[...]
+checking for SQLITE3... no
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgpg-error/libgpg-error.hash | 2 +-
- package/libgpg-error/libgpg-error.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnupg2/gnupg2.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index dac36db..0541d23 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  3df7432dc17ef66c764c3fc4a1d309a9b4a0485c914ecfdb61b71e9bf45fd930  libgpg-error-1.26.tar.gz
-+sha256 04bdc7fd12001c797cc689b007fe24909f55aa0ee1d6d6aef967d9eebf5b2461  libgpg-error-1.27.tar.gz
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 5126c0a..074ebb7 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 55190cc..d7f277c 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -10,7 +10,7 @@ GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG2_LICENSE = GPLv3+
+ GNUPG2_LICENSE_FILES = COPYING
+ GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libnpth \
+-	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
  
--LIBGPG_ERROR_VERSION = 1.26
-+LIBGPG_ERROR_VERSION = 1.27
- LIBGPG_ERROR_SITE = ftp://ftp.gnupg.org/gcrypt/libgpg-error
- LIBGPG_ERROR_LICENSE = GPLv2+, LGPLv2.1+
- LIBGPG_ERROR_LICENSE_FILES = COPYING COPYING.LIB
+ GNUPG2_CONF_OPTS = \
+ 	--disable-rpath --disable-regex --disable-doc \
+@@ -49,4 +49,11 @@ else
+ GNUPG2_CONF_OPTS += --without-readline
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SQLITE),y)
++GNUPG2_CONF_OPTS += --enable-sqlite
++GNUPG2_DEPENDENCIES += sqlite
++else
++GNUPG2_CONF_OPTS += --disable-sqlite
++endif
++
+ $(eval $(autotools-package))
