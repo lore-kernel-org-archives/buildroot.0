@@ -1,37 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 00:03:32 +0100
-Subject: [Buildroot] [PATCH v2 2/2] tesseract-ocr: new package
-In-Reply-To: <ecfe5b92-0800-cb5c-3f22-53448c1255f9@mind.be>
-References: <1489910873-8450-1-git-send-email-gilles.talis@gmail.com>
- <1489910873-8450-3-git-send-email-gilles.talis@gmail.com>
- <20170319145455.27ceaa84@free-electrons.com>
- <ecfe5b92-0800-cb5c-3f22-53448c1255f9@mind.be>
-Message-ID: <20170320000332.6e5e9983@free-electrons.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 19 Mar 2017 16:08:24 -0700
+Subject: [Buildroot] [PATCH] configs/qemu: update xtensa linux to 4.9.16
+Message-ID: <1489964904-28592-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This fixes the following nommu kernel build issue:
 
-On Mon, 20 Mar 2017 00:00:27 +0100, Arnout Vandecappelle wrote:
+  arch/xtensa/kernel/setup.c: In function 'cpu_reset':
+  arch/xtensa/kernel/setup.c:553:2: error: implicit declaration of function
+    'local_flush_tlb_all' [-Werror=implicit-function-declaration]
+    local_flush_tlb_all();
 
-> >  * Since the list of languages is quite long, having an explicit option
-> >    for each of them is a bit annoying. So I looked into turning your
-> >    one-option-per-language idea into a single option with a space
-> >    separated list of languages. Except that we anyway need to have the
-> >    hash file for each language in tesseract-ocr.hash.  
-> 
->  That's why we have BR_NO_CHECK_HASH_FOR, no?
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ configs/qemu_xtensa_lx60_defconfig       | 2 +-
+ configs/qemu_xtensa_lx60_nommu_defconfig | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-True. But then we don't check hashes for stuff downloaded through
-Github, which potentially could change (hence the reason why I'm also
-suggesting to have a package that downloads all of the tessdata
-package, but it's huge).
-
-Thomas
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index db06e90..915b6ff 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.16"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-4.9.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
+index 55714a1..8c66c3a 100644
+--- a/configs/qemu_xtensa_lx60_nommu_defconfig
++++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+@@ -26,7 +26,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.16"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-4.9-nommu.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.1.4
