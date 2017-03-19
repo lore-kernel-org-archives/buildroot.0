@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 15:02:12 +0100
-Subject: [Buildroot] [PATCH] package/ifupdown-scripts: new package
-In-Reply-To: <1489916894-2692-1-git-send-email-yann.morin.1998@free.fr>
-References: <1489916894-2692-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170319150212.11fa6742@free-electrons.com>
+Date: Sun, 19 Mar 2017 15:20:39 +0100
+Subject: [Buildroot] [PATCH 2/2] board: Add support for Engicam i.CoreM6
+ Quad
+In-Reply-To: <1489489266-23161-2-git-send-email-jagan@openedev.com>
+References: <1489489266-23161-1-git-send-email-jagan@openedev.com>
+ <1489489266-23161-2-git-send-email-jagan@openedev.com>
+Message-ID: <20170319152039.6d0770f4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +14,116 @@ To: buildroot@busybox.net
 
 Hello,
 
-Looks good to me overall. A couple of questions/comments below.
+On Tue, 14 Mar 2017 16:31:06 +0530, Jagan Teki wrote:
+> From: Jagan Teki <jagan@amarulasolutions.com>
+> 
+> Add initial support for Engicam i.CoreM6 Quad board with
+> below features:
+> - U-Boot 2017.03 with mmc boot
+> - Linux 4.10.1
+> - Default packages from buildroot
+> 
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Matteo Lisi <matteo.lisi@engicam.com>
+> Cc: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 
-On Sun, 19 Mar 2017 10:48:14 +0100, Yann E. MORIN wrote:
-> The ifupdown scripts can be used independently of the init system, be it
-> sysv, busybox or systemd; they could even be used when there is no init
-> system (i.e. the user is providing his own).
-> 
-> Currently, those ifupdown scripts are bundled in the skeleton.
-> 
-> But we soon will have a skeleton specific to systemd, so we would be
-> missing those scripts (when systemd-networks is not enabled).
-> 
-> So, move those scripts to their own package.
-> 
-> This new package is selected by the various init systems that need it.
-> This means that, no longer being part of the skeleton but being selected
-> by the init systems, they are now available even when a custom skeleton
-> is used, like our initscripts are.
-> 
-> Previously, the systemd service was provided by systemd, while the syv
-> startup script was provided by initscripts. Both are moved to this new
-> ifupdown-scripts package for consistency with the other scripts. We
-> still intall the systemd service file because ifupdown-scripts cannot be
-> enabled when systemd-networkd is enabled.
-> 
-> Instead of being a target-finalize hook, the scripts are installed as
-> any other package are, with a package install-target command.
+Thanks for this patch! I have a few comments, see below.
 
-Do we know why we were doing this in a target-finalize hook? After all,
-skeleton is also a package, so it could also have done this stuff in
-its install-target command. Is it simply a legacy of the time where
-this was done outside of the skeleton package? Or did we have a true
-reason to use a target finalize hook?
+> diff --git a/board/engicam/readme.txt b/board/engicam/readme.txt
+> new file mode 100644
+> index 0000000..55fdf53
+> --- /dev/null
+> +++ b/board/engicam/readme.txt
+> @@ -0,0 +1,38 @@
 
-> +# Package automatically enabled by the selected init-system,
-> +# either busybox, sysv-init or systemd (w/o networkd).
-> +# We use a little trick to hide the package when not available,
-> +# but still show it when needed (except it is forced in this case)
+Here, a few details about the board, like a link to the webpage, etc.
+would be nice.
+
+> +Buildroot build:
+
+Look at other readme.txt files to see how they are structured, and the
+section titles they are using. board/freescale/imx6sabre/readme.txt is
+a good example.
+
+> +----------------
 > +
-> +config BR2_PACKAGE_IFUPDOWN_SCRIPTS
-> +	bool
-> +	select BR2_PACKAGE_IFUPDOWN_SCRIPTS_DUMMY
+> +- Building for i.CoreM6 Quad/Dual Starter Kit
 > +
-> +config BR2_PACKAGE_IFUPDOWN_SCRIPTS_DUMMY
-> +	bool "ifupdown-scripts" if BR2_PACKAGE_IFUPDOWN_SCRIPTS
+> +$ make ARCH=arm imx6q_icore_defconfig
+> +$ make ARCH=arm menuconfig
+> +$ make ARCH=arm CROSS_COMPILE=arm-unknown-linux-gnueabi- -j 12
 
-I don't understand why we want this trick. Just make this package a
-hidden package, and that's it. The skeleton package is also hidden, and
-it works just fine.
+ARCH and CROSS_COMPILE are completely useless for Buildroot.
 
+Also, your defconfig should be named engicam_imx6q_icore_defconfig.
 
-> +config BR2_PACKAGE_SYSTEMD_IFUPDOWN_SCRIPTS
-> +	bool
-> +	default y
-> +	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
-> +	select BR2_PACKAGE_IFUPDOWN_SCRIPTS
+> +images copy:
+> +-----------
+> +
+> +$ cd output/images
+> +
+> +- Flash the SPL image into the micro SD card:
+> +
+> +$ sudo dd if=SPL of=/dev/mmcblk0 bs=1k seek=1; sync
+> +
+> +- Flash the u-boot-dtb.img image into the micro SD card:
+> +
+> +$ sudo dd if=u-boot-dtb.img of=/dev/mmcblk0 bs=1k seek=69; sync
+> +
+> +- Copy output/images/uImage to mmc card first partition
+> +
+> +- Copy output/images/imx6q-icore.dtb to mmc card first partition
+> +
+> +- Copy output/images/rootfs.tar.xz to mmc card second partition and untar there.
 
-What about replacing this with:
+Please replace all of this by using genimage so that Buildroot directly
+produces a ready-to-use SD card image. There are numerous examples in
+the Buildroot tree for i.MX6 platforms.
 
-	select BR2_PACKAGE_IFUPDOWN_SCRIPTS if !BR2_PACKAGE_SYSTEMD_NETWORKD
+> diff --git a/configs/imx6q_icore_defconfig b/configs/imx6q_icore_defconfig
+> new file mode 100644
+> index 0000000..9c3ff4b
+> --- /dev/null
+> +++ b/configs/imx6q_icore_defconfig
+> @@ -0,0 +1,33 @@
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_ARM_ENABLE_NEON=y
+> +BR2_ARM_ENABLE_VFP=y
+> +BR2_ARM_FPU_VFPV3=y
+> +
+> +# System
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+> +
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_TAR_XZ=y
 
-on the main BR2_PACKAGE_SYSTEMD option?
+No real point in having both an ext2 filesystem and a tar filesystem.
+
+> +# Bootloader
+> +BR2_TARGET_UBOOT=y
+
+Please use a fixed version of U-Boot.
+
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_LATEST_VERSION=y
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6q_icore_mmc"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+> +BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="SPL"
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_LATEST_VERSION=y
+
+Please used a fixed version of the kernel. Also, remember to set the
+kernel headers version properly. See
+configs/freescale_imx6qsabresd_defconfig for a good defconfig.
 
 Thanks!
 
