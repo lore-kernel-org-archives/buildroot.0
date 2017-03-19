@@ -1,133 +1,98 @@
-From: Dusty <dustin.r.johnson@gmail.com>
-Date: Sun, 19 Mar 2017 12:17:44 -0400
-Subject: [Buildroot] [PATCH 1/1] mono: remove copy of host etc files on
-	install
-In-Reply-To: <20170318153923.56903d45@free-electrons.com>
-References: <20170315022458.14160-1-dustin.r.johnson@gmail.com>
- <20170318153923.56903d45@free-electrons.com>
-Message-ID: <CABAk6Mp6C8v=JFiQAnRJPc+NYDoLaRrx7L5YrakC9wJfQbzMFQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Mar 2017 18:06:14 +0100
+Subject: [Buildroot] [PATCH] package/ifupdown-scripts: new package
+In-Reply-To: <20170319150212.11fa6742@free-electrons.com>
+References: <1489916894-2692-1-git-send-email-yann.morin.1998@free.fr>
+ <20170319150212.11fa6742@free-electrons.com>
+Message-ID: <20170319170614.GC3734@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo,
+Thomas, All,
 
-Below is the diff between staging and host. I am using a Ubuntu VM to
-compile for an ARM target with uCLibc.
-The appropriate .so files (libc.so.0) are referenced in the config file in
-the staging directory but not in the host.
-The patch I referenced in my commit is:
-  *
-package/mono/0002-Adjust-libc.so-path-depending-on-C-library-being-use.patch
-This patch addresses the proper generation of the /etc/mono/config file in
-the staging directory, I believe.
+On 2017-03-19 15:02 +0100, Thomas Petazzoni spake thusly:
+> Looks good to me overall. A couple of questions/comments below.
+> 
+> On Sun, 19 Mar 2017 10:48:14 +0100, Yann E. MORIN wrote:
+> > The ifupdown scripts can be used independently of the init system, be it
+> > sysv, busybox or systemd; they could even be used when there is no init
+> > system (i.e. the user is providing his own).
+> > 
+> > Currently, those ifupdown scripts are bundled in the skeleton.
+> > 
+> > But we soon will have a skeleton specific to systemd, so we would be
+> > missing those scripts (when systemd-networks is not enabled).
+> > 
+> > So, move those scripts to their own package.
+> > 
+> > This new package is selected by the various init systems that need it.
+> > This means that, no longer being part of the skeleton but being selected
+> > by the init systems, they are now available even when a custom skeleton
+> > is used, like our initscripts are.
+> > 
+> > Previously, the systemd service was provided by systemd, while the syv
+> > startup script was provided by initscripts. Both are moved to this new
+> > ifupdown-scripts package for consistency with the other scripts. We
+> > still intall the systemd service file because ifupdown-scripts cannot be
+> > enabled when systemd-networkd is enabled.
+> > 
+> > Instead of being a target-finalize hook, the scripts are installed as
+> > any other package are, with a package install-target command.
+> 
+> Do we know why we were doing this in a target-finalize hook? After all,
+> skeleton is also a package, so it could also have done this stuff in
+> its install-target command. Is it simply a legacy of the time where
+> this was done outside of the skeleton package? Or did we have a true
+> reason to use a target finalize hook?
 
-Thanks!
+In 7a6b83a2 (skeleton: New package), those settings were moved into the
+skeleton package, from system/system.mk where they were indeed defined
+as target-finalize hooks.
 
-Dusty
+So yes, historical reasons.
 
+> > +# Package automatically enabled by the selected init-system,
+> > +# either busybox, sysv-init or systemd (w/o networkd).
+> > +# We use a little trick to hide the package when not available,
+> > +# but still show it when needed (except it is forced in this case)
+> > +
+> > +config BR2_PACKAGE_IFUPDOWN_SCRIPTS
+> > +	bool
+> > +	select BR2_PACKAGE_IFUPDOWN_SCRIPTS_DUMMY
+> > +
+> > +config BR2_PACKAGE_IFUPDOWN_SCRIPTS_DUMMY
+> > +	bool "ifupdown-scripts" if BR2_PACKAGE_IFUPDOWN_SCRIPTS
+> 
+> I don't understand why we want this trick. Just make this package a
+> hidden package, and that's it. The skeleton package is also hidden, and
+> it works just fine.
 
-diff -u output/host/etc/mono/ output/staging/etc/mono/
-Common subdirectories: output/host/etc/mono/2.0 and
-output/staging/etc/mono/2.0
-Common subdirectories: output/host/etc/mono/4.0 and
-output/staging/etc/mono/4.0
-Common subdirectories: output/host/etc/mono/4.5 and
-output/staging/etc/mono/4.5
-diff -u output/host/etc/mono/config output/staging/etc/mono/config
---- output/host/etc/mono/config 2017-03-12 22:53:07.450555843 +0000
-+++ output/staging/etc/mono/config      2017-03-15 02:31:40.272008856 +0000
-@@ -1,9 +1,9 @@
- <configuration>
--       <dllmap dll="i:cygwin1.dll" target="libc.so.6" os="!windows" />
--       <dllmap dll="libc" target="libc.so.6" os="!windows"/>
-+       <dllmap dll="i:cygwin1.dll" target="libc.so.0" os="!windows" />
-+       <dllmap dll="libc" target="libc.so.0" os="!windows"/>
-        <dllmap dll="intl" target="libc.so.6" os="!windows"/>
--       <dllmap dll="intl" name="bind_textdomain_codeset"
-target="libc.so.6" os="solaris"/>
--       <dllmap dll="libintl" name="bind_textdomain_codeset"
-target="libc.so.6" os="solaris"/>
-+       <dllmap dll="intl" name="bind_textdomain_codeset"
-target="libc.so.0" os="solaris"/>
-+       <dllmap dll="libintl" name="bind_textdomain_codeset"
-target="libc.so.0" os="solaris"/>
-        <dllmap dll="libintl" target="libc.so.6" os="!windows"/>
-        <dllmap dll="i:libxslt.dll" target="libxslt.so" os="!windows"/>
-        <dllmap dll="i:odbc32.dll" target="libodbc.so" os="!windows"/>
-@@ -11,11 +11,11 @@
-        <dllmap dll="oci" target="libclntsh.so" os="!windows"/>
-        <dllmap dll="db2cli" target="libdb2_36.so" os="!windows"/>
-        <dllmap dll="MonoPosixHelper"
-target="$mono_libdir/libMonoPosixHelper.so" os="!windows" />
--       <dllmap dll="i:msvcrt" target="libc.so.6" os="!windows"/>
--       <dllmap dll="i:msvcrt.dll" target="libc.so.6" os="!windows"/>
-+       <dllmap dll="i:msvcrt" target="libc.so.0" os="!windows"/>
-+       <dllmap dll="i:msvcrt.dll" target="libc.so.0" os="!windows"/>
-        <dllmap dll="sqlite" target="libsqlite.so.0" os="!windows"/>
-        <dllmap dll="sqlite3" target="libsqlite3.so.0" os="!windows"/>
--       <dllmap dll="libX11" target="libX11.so.6" os="!windows" />
-+       <dllmap dll="libX11" target="libX11.so" os="!windows" />
-        <dllmap dll="libgdk-x11-2.0" target="libgdk-x11-2.0.so.0"
-os="!windows"/>
-        <dllmap dll="libgtk-x11-2.0" target="libgtk-x11-2.0.so.0"
-os="!windows"/>
-        <dllmap dll="libXinerama" target="libXinerama.so.1" os="!windows" />
-Only in output/host/etc/mono/: mconfig
+Hmm... Not sure why I did that (it was 9 months ago)... Fixed.
 
+> > +config BR2_PACKAGE_SYSTEMD_IFUPDOWN_SCRIPTS
+> > +	bool
+> > +	default y
+> > +	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
+> > +	select BR2_PACKAGE_IFUPDOWN_SCRIPTS
+> 
+> What about replacing this with:
+> 
+> 	select BR2_PACKAGE_IFUPDOWN_SCRIPTS if !BR2_PACKAGE_SYSTEMD_NETWORKD
+> 
+> on the main BR2_PACKAGE_SYSTEMD option?
 
-On Sat, Mar 18, 2017 at 10:39 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Yep, works too. Fixed.
 
-> Hello,
->
-> Angelo, could you comment on this patch touching the Mono package?
->
-> Copying $(HOST_DIR)/etc/mono to $(TARGET_DIR)/etc has been there since
-> you contributed the package, but apparently causes some issues. It
-> would be nice if you could have a look at the patch proposed by Dustin.
->
-> Thanks a lot!
->
-> Thomas
->
-> On Tue, 14 Mar 2017 22:24:58 -0400, Dustin Johnson wrote:
-> > When the mono package is installed, the autotools installer installs
-> > the /etc/mono files to the target. A post_install hook then copies
-> > over the mono libraries to the target as well as the host /etc/mono
-> > files which overrides the target files. The target specific mono
-> > configuration file (/etc/mono/config) is overridden with the host
-> > settings. This causes mono on the target to be unable to locate target
-> > specific .so files as it overrides the changes enacted by the patches
-> > for the package.
-> >
-> > Signed-off-by: Dustin Johnson <dustin.r.johnson@gmail.com>
-> > ---
-> >  package/mono/mono.mk | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-> > index 20b920568..4996b7c60 100644
-> > --- a/package/mono/mono.mk
-> > +++ b/package/mono/mono.mk
-> > @@ -31,7 +31,6 @@ MONO_CONF_OPTS = --disable-gtk-doc \
-> >  define MONO_INSTALL_LIBS
-> >       rsync -av --exclude=*.so --exclude=*.mdb \
-> >               $(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
-> > -     rsync -av $(HOST_DIR)/etc/mono $(TARGET_DIR)/etc
-> >  endef
-> >
-> >  MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
->
->
->
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux and Kernel engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170319/fe5a6ee2/attachment.html>
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
