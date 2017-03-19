@@ -1,139 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 14:57:50 +0100
-Subject: [Buildroot] [git commit] leptonica: new package
-Message-ID: <20170319135808.3BD4582194@busybox.osuosl.org>
+Date: Sun, 19 Mar 2017 15:02:12 +0100
+Subject: [Buildroot] [PATCH] package/ifupdown-scripts: new package
+In-Reply-To: <1489916894-2692-1-git-send-email-yann.morin.1998@free.fr>
+References: <1489916894-2692-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170319150212.11fa6742@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccab2d636fbee6eb8073ea2010442d7678a9ec54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/leptonica/Config.in      |  8 +++++
- package/leptonica/leptonica.hash |  2 ++
- package/leptonica/leptonica.mk   | 64 ++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 76 insertions(+)
+Looks good to me overall. A couple of questions/comments below.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 746a547..8802fc7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -587,6 +587,7 @@ N:	Gilles Talis <gilles.talis@gmail.com>
- F:	package/fdk-aac/
- F:	package/httping/
- F:	package/iozone/
-+F:	package/leptonica/
- F:	package/ocrad/
- F:	package/webp/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 52b4f36..ed48058 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1010,6 +1010,7 @@ menu "Graphics"
- 	source "package/jpeg/Config.in"
- 	source "package/kmsxx/Config.in"
- 	source "package/lcms2/Config.in"
-+	source "package/leptonica/Config.in"
- 	source "package/lesstif/Config.in"
- 	source "package/libart/Config.in"
- 	source "package/libdmtx/Config.in"
-diff --git a/package/leptonica/Config.in b/package/leptonica/Config.in
-new file mode 100644
-index 0000000..a4053a3
---- /dev/null
-+++ b/package/leptonica/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LEPTONICA
-+	bool "leptonica"
-+	help
-+	  Leptonica is a pedagogically-oriented open source site containing
-+	  software that is broadly useful for image processing and image
-+	  analysis applications.
-+
-+	  http://www.leptonica.org/
-diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
-new file mode 100644
-index 0000000..48da06b
---- /dev/null
-+++ b/package/leptonica/leptonica.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 746a517a47a3bd2a90bc8d581ca6464c10f30e91a60209735efe45b3778bec62  leptonica-1.74.1.tar.gz
-diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
-new file mode 100644
-index 0000000..37e5219
---- /dev/null
-+++ b/package/leptonica/leptonica.mk
-@@ -0,0 +1,64 @@
-+################################################################################
-+#
-+# leptonica
-+#
-+################################################################################
-+
-+LEPTONICA_VERSION = 1.74.1
-+LEPTONICA_SITE = http://www.leptonica.org/source
-+LEPTONICA_LICENSE = BSD-2c
-+LEPTONICA_LICENSE_FILES = leptonica-license.txt
-+LEPTONICA_INSTALL_STAGING = YES
-+
-+LEPTONICA_CONF_OPTS += --disable-programs
-+
-+ifeq ($(BR2_PACKAGE_GIFLIB),y)
-+LEPTONICA_DEPENDENCIES += giflib
-+LEPTONICA_CONF_OPTS +=  --with-giflib
-+else
-+LEPTONICA_CONF_OPTS +=  --without-giflib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+LEPTONICA_DEPENDENCIES += jpeg
-+LEPTONICA_CONF_OPTS += --with-jpeg
-+else
-+LEPTONICA_CONF_OPTS += --without-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+LEPTONICA_DEPENDENCIES += libpng
-+LEPTONICA_CONF_OPTS += --with-libpng
-+else
-+LEPTONICA_CONF_OPTS += --without-libpng
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENJPEG),y)
-+LEPTONICA_DEPENDENCIES += openjpeg
-+LEPTONICA_CONF_OPTS += --with-libopenjpeg
-+else
-+LEPTONICA_CONF_OPTS += --without-libopenjpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+LEPTONICA_DEPENDENCIES += tiff
-+LEPTONICA_CONF_OPTS += --with-libtiff
-+else
-+LEPTONICA_CONF_OPTS += --without-libtiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WEBP),y)
-+LEPTONICA_DEPENDENCIES += webp
-+LEPTONICA_CONF_OPTS += --with-libwebp
-+else
-+LEPTONICA_CONF_OPTS += --without-libwebp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LEPTONICA_DEPENDENCIES += zlib
-+LEPTONICA_CONF_OPTS += --with-zlib
-+else
-+LEPTONICA_CONF_OPTS += --without-zlib
-+endif
-+
-+$(eval $(autotools-package))
+On Sun, 19 Mar 2017 10:48:14 +0100, Yann E. MORIN wrote:
+> The ifupdown scripts can be used independently of the init system, be it
+> sysv, busybox or systemd; they could even be used when there is no init
+> system (i.e. the user is providing his own).
+> 
+> Currently, those ifupdown scripts are bundled in the skeleton.
+> 
+> But we soon will have a skeleton specific to systemd, so we would be
+> missing those scripts (when systemd-networks is not enabled).
+> 
+> So, move those scripts to their own package.
+> 
+> This new package is selected by the various init systems that need it.
+> This means that, no longer being part of the skeleton but being selected
+> by the init systems, they are now available even when a custom skeleton
+> is used, like our initscripts are.
+> 
+> Previously, the systemd service was provided by systemd, while the syv
+> startup script was provided by initscripts. Both are moved to this new
+> ifupdown-scripts package for consistency with the other scripts. We
+> still intall the systemd service file because ifupdown-scripts cannot be
+> enabled when systemd-networkd is enabled.
+> 
+> Instead of being a target-finalize hook, the scripts are installed as
+> any other package are, with a package install-target command.
+
+Do we know why we were doing this in a target-finalize hook? After all,
+skeleton is also a package, so it could also have done this stuff in
+its install-target command. Is it simply a legacy of the time where
+this was done outside of the skeleton package? Or did we have a true
+reason to use a target finalize hook?
+
+> +# Package automatically enabled by the selected init-system,
+> +# either busybox, sysv-init or systemd (w/o networkd).
+> +# We use a little trick to hide the package when not available,
+> +# but still show it when needed (except it is forced in this case)
+> +
+> +config BR2_PACKAGE_IFUPDOWN_SCRIPTS
+> +	bool
+> +	select BR2_PACKAGE_IFUPDOWN_SCRIPTS_DUMMY
+> +
+> +config BR2_PACKAGE_IFUPDOWN_SCRIPTS_DUMMY
+> +	bool "ifupdown-scripts" if BR2_PACKAGE_IFUPDOWN_SCRIPTS
+
+I don't understand why we want this trick. Just make this package a
+hidden package, and that's it. The skeleton package is also hidden, and
+it works just fine.
+
+
+> +config BR2_PACKAGE_SYSTEMD_IFUPDOWN_SCRIPTS
+> +	bool
+> +	default y
+> +	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
+> +	select BR2_PACKAGE_IFUPDOWN_SCRIPTS
+
+What about replacing this with:
+
+	select BR2_PACKAGE_IFUPDOWN_SCRIPTS if !BR2_PACKAGE_SYSTEMD_NETWORKD
+
+on the main BR2_PACKAGE_SYSTEMD option?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
