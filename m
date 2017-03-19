@@ -1,33 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 21:27:04 +0100
-Subject: [Buildroot] [PATCH v1] package/bluez5_utils: Allow user to
- enable disabled plugins
-In-Reply-To: <20170315225014.6427-1-andriy.shevchenko@linux.intel.com>
-References: <20170315225014.6427-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <20170319212704.2982ddc3@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 19 Mar 2017 21:45:26 +0100
+Subject: [Buildroot] [PATCH] libepoxy: EGL dependency is mandatory
+In-Reply-To: <09361e2f-d202-291b-bb56-41b59aca632b@imgtec.com>
+References: <20170310111150.9480-1-Vincent.Riera@imgtec.com>
+ <20170310160137.6b2c30ef@free-electrons.com>
+ <09361e2f-d202-291b-bb56-41b59aca632b@imgtec.com>
+Message-ID: <09db34de-d2dc-54ec-1e31-0e7b39e1b4d6@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Vicente, Thomas, All,
 
-On Thu, 16 Mar 2017 00:50:14 +0200, Andy Shevchenko wrote:
+Le 10/03/2017 ? 16:05, Vicente Olivert Riera a ?crit :
+> Hi Thomas,
+> 
+> On 10/03/17 15:01, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> Cc'ing Gustavo, who said he would have a look at this issue.
+> 
+> he already was on CC.
+> 
+>> On Fri, 10 Mar 2017 11:11:50 +0000, Vicente Olivert Riera wrote:
+>>> The --disable-egl configure option doesn't exist:
+>>>
+>>> configure: WARNING: unrecognized options: [snip] --disable-egl
+>>>
+>>> If you don't have EGL support the configure script will fail like this:
+>>>
+>>> checking for EGL... no
+>>> configure: error: Package requirements (egl) were not met:
+>>>
+>>> Fixes:
+>>>   http://autobuild.buildroot.net/results/3eca5ba26a521f6cc5a611309ba066472af7769c
+>>>   http://autobuild.buildroot.net/results/cf9ec7da196d70548ae1413e4a3730314f6434d6
+>>>   http://autobuild.buildroot.net/results/069b80101afc4719db6d6d41cf5fc923be21ddc0
+>>>
+>>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>>> ---
+>>>  package/libepoxy/Config.in   | 6 +++---
+>>>  package/libepoxy/libepoxy.mk | 9 +--------
+>>>  2 files changed, 4 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/package/libepoxy/Config.in b/package/libepoxy/Config.in
+>>> index c87366a..54b8272 100644
+>>> --- a/package/libepoxy/Config.in
+>>> +++ b/package/libepoxy/Config.in
+>>> @@ -1,12 +1,12 @@
+>>>  config BR2_PACKAGE_LIBEPOXY
+>>>  	bool "libepoxy"
+>>>  	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+>>> -	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
+>>> +	depends on BR2_PACKAGE_HAS_LIBEGL
+>>
+>> Really egl only is sufficient? This seems dubious. It doesn't need at
+>> least OpenGL ES ?
+> 
+> I have successfully build tested it without Xorg and without OpenGL ES
+> support (just OpenGL EGL).
 
-> +config BR2_PACKAGE_BLUEZ5_PLUGINS_MIDI
-> +	bool "build midi plugin"
-> +	select BR2_PACKAGE_ALSA_LIB
+I'm using a x86 PC with HD6310 graphic card and mesa3d as OpenGL provider.
+In order to enable glamor in the X server, I selected libepoxy and had the build
+issue since libegl wasn't selected.
+Indeed, there is no option --disable-egl in libepoxy, and libegl is mandatory
+for Linux target.
 
-Are you sure BR2_PACKAGE_ALSA_LIB is sufficient? Have you tried
-building with all alsa-lib sub-options disabled (they are enabled by
-default, so you may have missed it). Especially, I am wondering if
-BR2_PACKAGE_ALSA_LIB_RAWMIDI is not needed.
+Did you check the libepoxy reverse dependencies ?
+It seems we need to forward libegl dependency to libgtk3 package.
 
-Thanks!
+With that fixed:
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Best regards,
+Romain
+
+> 
+> Vincent
+> 
+>> Thomas
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
