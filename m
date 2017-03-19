@@ -1,70 +1,106 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 19 Mar 2017 23:31:36 +0100
-Subject: [Buildroot] [PATCH v1] wiringpi: bump to version 2.44
-In-Reply-To: <53182259-8ac8-de42-4ffb-ecd79e2597fe@mind.be>
-References: <20170315210828.3784-1-ps.report@gmx.net>
- <20170318141428.0c4b6d36@free-electrons.com>
- <20170319222409.205633ad@gmx.net>
- <53182259-8ac8-de42-4ffb-ecd79e2597fe@mind.be>
-Message-ID: <1cda02af-597a-5254-253e-5bcc84ac7ddd@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 19 Mar 2017 23:32:49 +0100
+Subject: [Buildroot] [PATCH] libepoxy: EGL dependency is mandatory
+In-Reply-To: <09db34de-d2dc-54ec-1e31-0e7b39e1b4d6@gmail.com>
+References: <20170310111150.9480-1-Vincent.Riera@imgtec.com>
+ <20170310160137.6b2c30ef@free-electrons.com>
+ <09361e2f-d202-291b-bb56-41b59aca632b@imgtec.com>
+ <09db34de-d2dc-54ec-1e31-0e7b39e1b4d6@gmail.com>
+Message-ID: <c9606b3e-b8a6-b307-953d-f555a57792ba@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 19-03-17 23:28, Arnout Vandecappelle wrote:
+Le 19/03/2017 ? 21:45, Romain Naour a ?crit :
+> Hi Vicente, Thomas, All,
 > 
-> 
-> On 19-03-17 22:24, Peter Seiderer wrote:
->> Hello Thomas,
+> Le 10/03/2017 ? 16:05, Vicente Olivert Riera a ?crit :
+>> Hi Thomas,
 >>
->> On Sat, 18 Mar 2017 14:14:28 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->>
+>> On 10/03/17 15:01, Thomas Petazzoni wrote:
 >>> Hello,
 >>>
->>> On Wed, 15 Mar 2017 22:08:28 +0100, Peter Seiderer wrote:
->>>> - rebase 0001-Adjust-for-buildroot-build.patch
->>>> - delete 0002-include-asm-ioctl.h-directly-for-_IOC_SIZEBITS.patch
->>>>   (all changes are incorporated into wiringpi-2.44)
->>>> - remove useless hash file (git download)
->>> Git downloads now generate reproducible tarballs, so we in fact want to
->>> add hashes for them as well. However, it is true that the hash is not
->>> checked currently. This has been on the TODO-list for a while.
->> Mhhh, tried several times, every time I get a different checksum:
+>>> Cc'ing Gustavo, who said he would have a look at this issue.
 >>
->> 	$ sha256sum dl/wiringpi-2.44.tar.gz 
->> 5324ed452b7adfb77d049ea49dfe8878605c6198cb5c706ae2b285a70fb9d096  dl/wiringpi-2.44.tar.gz
+>> he already was on CC.
 >>
->> 	$ sha256sum dl/wiringpi-2.44.tar.gz 
->> 65e6b3a916b940eec085222a28a5859b09e79e0020de2f2b07563d910426180c  dl/wiringpi-2.44.tar.gz
+>>> On Fri, 10 Mar 2017 11:11:50 +0000, Vicente Olivert Riera wrote:
+>>>> The --disable-egl configure option doesn't exist:
+>>>>
+>>>> configure: WARNING: unrecognized options: [snip] --disable-egl
+>>>>
+>>>> If you don't have EGL support the configure script will fail like this:
+>>>>
+>>>> checking for EGL... no
+>>>> configure: error: Package requirements (egl) were not met:
+>>>>
+>>>> Fixes:
+>>>>   http://autobuild.buildroot.net/results/3eca5ba26a521f6cc5a611309ba066472af7769c
+>>>>   http://autobuild.buildroot.net/results/cf9ec7da196d70548ae1413e4a3730314f6434d6
+>>>>   http://autobuild.buildroot.net/results/069b80101afc4719db6d6d41cf5fc923be21ddc0
+>>>>
+>>>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>>>> ---
+>>>>  package/libepoxy/Config.in   | 6 +++---
+>>>>  package/libepoxy/libepoxy.mk | 9 +--------
+>>>>  2 files changed, 4 insertions(+), 11 deletions(-)
+>>>>
+>>>> diff --git a/package/libepoxy/Config.in b/package/libepoxy/Config.in
+>>>> index c87366a..54b8272 100644
+>>>> --- a/package/libepoxy/Config.in
+>>>> +++ b/package/libepoxy/Config.in
+>>>> @@ -1,12 +1,12 @@
+>>>>  config BR2_PACKAGE_LIBEPOXY
+>>>>  	bool "libepoxy"
+>>>>  	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+>>>> -	depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
+>>>> +	depends on BR2_PACKAGE_HAS_LIBEGL
+>>>
+>>> Really egl only is sufficient? This seems dubious. It doesn't need at
+>>> least OpenGL ES ?
+>>
+>> I have successfully build tested it without Xorg and without OpenGL ES
+>> support (just OpenGL EGL).
 > 
-> 
->  Really weird, both Yann and I tested and we got the same sha256sum as Thomas
-> put in wiringpi.hash... So we are clearly still doing something wrong in the
-> download helper.
-> 
->  To help us nail down the problem, could you do:
-> 
-> tar -xf dl/wiringpi-2.44.tar.gz
-> tar -tf dl/wiringpi-2.44.tar.gz | xargs sha256sum
-> 
-> and compare the output with https://gitlab.com/snippets/1655089/raw ?
+> I'm using a x86 PC with HD6310 graphic card and mesa3d as OpenGL provider.
+> In order to enable glamor in the X server, I selected libepoxy and had the build
+> issue since libegl wasn't selected.
+> Indeed, there is no option --disable-egl in libepoxy, and libegl is mandatory
+> for Linux target.
 
- Oh, maybe it's in the timestamps, so also compare the output of
+Vincente, libepoxy use dlsym to load a GLES2 library when EGL support is
+enabled, see src/dispatch_common.c
 
-tar tvf ~/src/buildroot/dl/wiringpi-2.44.tar.gz
+#define EGL_LIB "libEGL.so.1"
+#define GLES1_LIB "libGLESv1_CM.so.1"
+#define GLES2_LIB "libGLESv2.so.2"
 
-with https://gitlab.com/snippets/1655090/raw
+So, OpenGL ES should be selected in the end.
 
- Regards,
- Arnout
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Best regards,
+Romain
+
+> 
+> Did you check the libepoxy reverse dependencies ?
+> It seems we need to forward libegl dependency to libgtk3 package.
+> 
+> With that fixed:
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+> Tested-by: Romain Naour <romain.naour@gmail.com>
+> 
+> Best regards,
+> Romain
+> 
+>>
+>> Vincent
+>>
+>>> Thomas
+>>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+> 
