@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 14:09:13 +0100
-Subject: [Buildroot] [git commit] package/libscrypt: indentation cleanup
-Message-ID: <20170319131837.C762980584@busybox.osuosl.org>
+Date: Sun, 19 Mar 2017 14:09:24 +0100
+Subject: [Buildroot] [git commit] package/qt5multimedia: indentation cleanup
+Message-ID: <20170319131837.E7B9680AC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c961a9b5220a2d0db562fe91634daa496f762ad0
+commit: https://git.buildroot.net/buildroot/commit/?id=dff59eb5def008dddcbf957e2b0f0a550ef87d3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libscrypt/libscrypt.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5multimedia/qt5multimedia.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libscrypt/libscrypt.mk b/package/libscrypt/libscrypt.mk
-index 5326b22..a0dcce0 100644
---- a/package/libscrypt/libscrypt.mk
-+++ b/package/libscrypt/libscrypt.mk
-@@ -15,12 +15,12 @@ define LIBSCRYPT_BUILD_CMDS
- endef
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index fccdd5d..0a95340 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -66,7 +66,7 @@ endif
  
- define LIBSCRYPT_INSTALL_STAGING_CMDS
--        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr \
- 		DESTDIR=$(STAGING_DIR) install
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ define QT5MULTIMEDIA_INSTALL_TARGET_EXAMPLES
+-       cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/multimedia* $(TARGET_DIR)/usr/lib/qt/examples/
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/multimedia* $(TARGET_DIR)/usr/lib/qt/examples/
  endef
- 
- define LIBSCRYPT_INSTALL_TARGET_CMDS
--        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=/usr \
- 		DESTDIR=$(TARGET_DIR) install
- endef
+ endif
  
