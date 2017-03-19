@@ -1,32 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 14:09:30 +0100
-Subject: [Buildroot] [git commit] package/uclibc-ng-test: indentation cleanup
-Message-ID: <20170319131838.0332080AC7@busybox.osuosl.org>
+Date: Sun, 19 Mar 2017 14:09:37 +0100
+Subject: [Buildroot] [git commit] package/pkg-toolchain-external:
+	indentation cleanup
+Message-ID: <20170319131838.1188180AC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af05f5c852a3a67593c8ca113911bd9772940429
+commit: https://git.buildroot.net/buildroot/commit/?id=2b2e216ee0cb6894b0012316c20da9291ce14458
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc-ng-test/uclibc-ng-test.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index 610ca01..0e2b584 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -48,7 +48,7 @@ define UCLIBC_NG_TEST_BUILD_CMDS
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 11a1bf5..77b7bbb 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -445,19 +445,19 @@ endef
+ #
+ # $1: destination directory (TARGET_DIR / STAGING_DIR)
+ create_lib_symlinks = \
+-       $(Q)DESTDIR="$(strip $1)" ; \
+-       ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+-       if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
+-               ln -snf lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
+-               ln -snf lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
+-       fi
++	$(Q)DESTDIR="$(strip $1)" ; \
++	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
++		ln -snf lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
++		ln -snf lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
++	fi
+ 
+ define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
+-       $(call create_lib_symlinks,$(STAGING_DIR))
++	$(call create_lib_symlinks,$(STAGING_DIR))
  endef
  
- define UCLIBC_NG_TEST_INSTALL_TARGET_CMDS
--        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+ define TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK
+-       $(call create_lib_symlinks,$(TARGET_DIR))
++	$(call create_lib_symlinks,$(TARGET_DIR))
  endef
  
- $(eval $(generic-package))
+ #
