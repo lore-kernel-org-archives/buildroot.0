@@ -1,165 +1,228 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Mar 2017 14:07:52 +0100
-Subject: [Buildroot] [PATCH v4 2/2] Makefile: add check of binaries
-	architecture
-In-Reply-To: <1489928872-3965-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1489928872-3965-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1489928872-3965-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 19 Mar 2017 14:07:51 +0100
+Subject: [Buildroot] [PATCH v4 1/2] arch: add BR2_READELF_ARCH_NAME hidden
+	config option
+Message-ID: <1489928872-3965-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As shown recently by the firejail example, it is easy to miss that a
-package builds and installs binaries without actually cross-compiling
-them: they are built for the host architecture instead of the target
+This config option corresponds to the string returned by readelf for
+the "Machine" field of the ELF header. It will be used to check if the
+architecture of binaries built by Buildroot match the target
 architecture.
-
-This commit adds a small helper script, check-bin-arch, called as a
-GLOBAL_INSTRUMENTATION_HOOKS at the end of the target installation of
-each package, to verify that the files installed by this package have
-been built for the correct architecture.
-
-Being called as a GLOBAL_INSTRUMENTATION_HOOKS allows the build to error
-out right after the installation of the faulty package, and therefore
-get autobuilder error detection properly assigned to this specific
-package.
-
-Example output with the firejail package enabled, when building for an
-ARM target:
-
-ERROR: architecture for ./usr/lib/firejail/libconnect.so is Advanced Micro Devices X86-64, should be ARM
-ERROR: architecture for ./usr/bin/firejail is Advanced Micro Devices X86-64, should be ARM
-ERROR: architecture for ./usr/lib/firejail/libtrace.so is Advanced Micro Devices X86-64, should be ARM
-ERROR: architecture for ./usr/lib/firejail/libtracelog.so is Advanced Micro Devices X86-64, should be ARM
-ERROR: architecture for ./usr/lib/firejail/ftee is Advanced Micro Devices X86-64, should be ARM
-ERROR: architecture for ./usr/lib/firejail/faudit is Advanced Micro Devices X86-64, should be ARM
-ERROR: architecture for ./usr/bin/firemon is Advanced Micro Devices X86-64, should be ARM
-ERROR: architecture for ./usr/bin/firecfg is Advanced Micro Devices X86-64, should be ARM
-
-Many thanks to Yann E. Morin and Arnout Vandecappelle for their reviews
-and suggestions.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes since v4:
- - Use arguments with flags in the script, as suggested by Arnout.
- - Pipe the readelf output to head -1, so that with static libs we only
-   take into account the architecture of the first object file (assuming
-   all object files in a static library will have the same
-   architecture). Suggested by Arnout.
- - Change error message to not mention the name of the package, since we
-   know abort the build during the package installation step. Suggested
-   by Arnout.
-
 Changes since v3:
- - Pass TARGET_READELF instead of TARGET_CROSS, suggested by Arnout
- - Pass BR2_READELF_ARCH_NAME to the script, instead of parsing the BR
-   config file. Suggested by Yann.
- - Use LC_ALL=C when calling readelf, to avoid surprises. Suggested by
-   Yann.
- - Reword the error message, according to Yann suggestion.
+ - None
 
 Changes since v2:
- - Moved as a per-package check, so that we detect the faulty package
-   earlier, and get correct autobuilder notifications.
- - Use TARGET_DIR from the environment and use BR2_CONFIG to retrieve
-   the value of BR2_READELF_ARCH_NAME.
- - Skip firmware files in /lib/firmware and /usr/lib/firmware.
- - Simply ignore files for which readelf returned an empty Machine
-   field, as a way to quickly detect non-ELF files.
+ - Improve comment above BR2_READELF_ARCH_NAME to explain that it is the
+   value of the "Machine:" field in readelf output, and point to the
+   readelf source code for the list of possible values.
 
 Changes since v1:
- - Following Yann E. Morin's comment, restrict the check to bin, lib,
-   sbin, usr/bin, usr/lib and usr/sbin, in order to avoid matching
-   firmware files that could use the ELF format but be targeted for
-   other architectures.
+ - None
 ---
- package/pkg-generic.mk         | 11 +++++++++
- support/scripts/check-bin-arch | 52 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 63 insertions(+)
- create mode 100755 support/scripts/check-bin-arch
+ arch/Config.in            | 6 ++++++
+ arch/Config.in.arc        | 3 +++
+ arch/Config.in.arm        | 4 ++++
+ arch/Config.in.bfin       | 3 +++
+ arch/Config.in.csky       | 2 ++
+ arch/Config.in.m68k       | 3 +++
+ arch/Config.in.microblaze | 3 +++
+ arch/Config.in.mips       | 3 +++
+ arch/Config.in.nios2      | 3 +++
+ arch/Config.in.or1k       | 3 +++
+ arch/Config.in.powerpc    | 4 ++++
+ arch/Config.in.sh         | 3 +++
+ arch/Config.in.sparc      | 4 ++++
+ arch/Config.in.x86        | 4 ++++
+ arch/Config.in.xtensa     | 3 +++
+ 15 files changed, 51 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e8a8021..dd8a1e2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -87,6 +87,17 @@ define step_pkg_size
- endef
- GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
+diff --git a/arch/Config.in b/arch/Config.in
+index 65a33fb..50377a9 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -292,6 +292,12 @@ config BR2_GCC_TARGET_MODE
+ config BR2_BINFMT_SUPPORTS_SHARED
+ 	bool
  
-+# Relies on step_pkg_size, so must be after
-+define check_bin_arch
-+	$(if $(filter end-install-target,$(1)-$(2)),\
-+		support/scripts/check-bin-arch -p $(3) \
-+			-l $(BUILD_DIR)/packages-file-list.txt \
-+			-r $(TARGET_READELF) \
-+			-a $(BR2_READELF_ARCH_NAME))
-+endef
++# Must match the name of the architecture from readelf point of view,
++# i.e the "Machine:" field of readelf output. See get_machine_name()
++# in binutils/readelf.c for the list of possible values.
++config BR2_READELF_ARCH_NAME
++	string
 +
-+GLOBAL_INSTRUMENTATION_HOOKS += check_bin_arch
+ # Set up target binary format
+ choice
+ 	prompt "Target Binary Format"
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 7d341f3..dcdba68 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -38,6 +38,9 @@ config BR2_GCC_TARGET_CPU
+ 	default "arc700" if BR2_arc770d
+ 	default "archs"	 if BR2_archs38
+ 
++config BR2_READELF_ARCH_NAME
++	default "ARCv2"
 +
- # This hook checks that host packages that need libraries that we build
- # have a proper DT_RPATH or DT_RUNPATH tag
- define check_host_rpath
-diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-new file mode 100755
-index 0000000..2c619ad
---- /dev/null
-+++ b/support/scripts/check-bin-arch
-@@ -0,0 +1,52 @@
-+#!/bin/bash
+ choice
+ 	prompt "MMU Page Size"
+ 	default BR2_ARC_PAGE_SIZE_8K
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 2617976..f910364 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -568,3 +568,7 @@ config BR2_GCC_TARGET_FLOAT_ABI
+ config BR2_GCC_TARGET_MODE
+ 	default "arm"		if BR2_ARM_INSTRUCTIONS_ARM
+ 	default "thumb"		if BR2_ARM_INSTRUCTIONS_THUMB || BR2_ARM_INSTRUCTIONS_THUMB2
 +
-+while getopts p:l:r:a: OPT ; do
-+	case "${OPT}" in
-+	p) package="${OPTARG}";;
-+	l) pkg_list="${OPTARG}";;
-+	r) readelf="${OPTARG}";;
-+	a) arch_name="${OPTARG}";;
-+	:) error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-+	\?) error "unknown option '%s'\n" "${OPTARG}";;
-+	esac
-+done
++config BR2_READELF_ARCH_NAME
++	default "ARM"		if BR2_arm || BR2_armeb
++	default "AArch64"	if BR2_aarch64 || BR2_aarch64_be
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index 9f7056a..90e4ab9 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -105,3 +105,6 @@ config BR2_GCC_TARGET_CPU_REVISION
+ 	  value of the -mcpu option. For example, if the selected CPU is
+ 	  bf609, and then selected CPU revision is "0.0", then gcc will
+ 	  receive the -mcpu=bf609-0.0 option.
 +
-+if test -z "${package}" -o -z "${pkg_list}" -o -z "${readelf}" -o -z "${arch_name}" ; then
-+	echo "Usage: $0 -p <pkg> -l <pkg-file-list> -r <readelf> -a <arch name>"
-+	exit 1
-+fi
++config BR2_READELF_ARCH_NAME
++	default "Analog Devices Blackfin"
+diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+index 7029c60..e88e4e2 100644
+--- a/arch/Config.in.csky
++++ b/arch/Config.in.csky
+@@ -44,3 +44,5 @@ config BR2_GCC_TARGET_CPU
+ 	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+ 	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+ 
++config BR2_READELF_ARCH_NAME
++	default "CSKY"
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index ced871f..c56031c 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -35,3 +35,6 @@ endchoice
+ config BR2_GCC_TARGET_CPU
+ 	default "68040"		if BR2_m68k_68040
+ 	default "5208"		if BR2_m68k_cf5208
 +
-+exitcode=0
++config BR2_READELF_ARCH_NAME
++	default "MC68000"
+diff --git a/arch/Config.in.microblaze b/arch/Config.in.microblaze
+index 2d4c1fe..042712a 100644
+--- a/arch/Config.in.microblaze
++++ b/arch/Config.in.microblaze
+@@ -6,6 +6,9 @@ config BR2_ENDIAN
+ 	default "LITTLE" if BR2_microblazeel
+ 	default "BIG"	 if BR2_microblazebe
+ 
++config BR2_READELF_ARCH_NAME
++	default "Xilinx MicroBlaze"
 +
-+pkg_files=$(sed -r -e "/^${package},(.+)$/!d; s//\1/;" ${pkg_list})
+ config BR2_microblaze
+ 	bool
+ 	default y if BR2_microblazeel || BR2_microblazebe
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index ce41e9e..22819d0 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -161,3 +161,6 @@ config BR2_GCC_TARGET_ABI
+ 	default "32"		if BR2_MIPS_OABI32
+ 	default "n32"		if BR2_MIPS_NABI32
+ 	default "64"		if BR2_MIPS_NABI64
 +
-+for f in ${pkg_files} ; do
-+	# Skip firmware files, they could be ELF files for other
-+	# architectures
-+	if [[ "${f}" =~ ^\./(usr/)?lib/firmware/.* ]]; then
-+		continue
-+	fi
++config BR2_READELF_ARCH_NAME
++	default "MIPS R3000"
+diff --git a/arch/Config.in.nios2 b/arch/Config.in.nios2
+index ed63898..7466331 100644
+--- a/arch/Config.in.nios2
++++ b/arch/Config.in.nios2
+@@ -3,3 +3,6 @@ config BR2_ARCH
+ 
+ config BR2_ENDIAN
+ 	default "LITTLE"
 +
-+	# Get architecture using readelf. We pipe through 'head -1' so
-+	# that when the file is a static library (.a), we only take
-+	# into account the architecture of the first object file.
-+	arch=$(LC_ALL=C ${readelf} -h "${TARGET_DIR}/${f}" 2>&1 | \
-+		       sed -r -e '/^  Machine: +(.+)/!d; s//\1/;' | head -1)
++config BR2_READELF_ARCH_NAME
++	default "Altera Nios II"
+diff --git a/arch/Config.in.or1k b/arch/Config.in.or1k
+index dba64a6..b31ab3e 100644
+--- a/arch/Config.in.or1k
++++ b/arch/Config.in.or1k
+@@ -3,3 +3,6 @@ config BR2_ARCH
+ 
+ config BR2_ENDIAN
+ 	default "BIG"
 +
-+	# If no architecture found, assume it was not an ELF file
-+	if test "${arch}" = "" ; then
-+		continue
-+	fi
++config BR2_READELF_ARCH_NAME
++	default "OpenRISC 1000"
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 09ac794..0968412 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -212,3 +212,7 @@ config BR2_GCC_TARGET_ABI
+ 	default "no-spe"		if BR2_PPC_ABI_no-spe
+ 	default "ibmlongdouble"		if BR2_PPC_ABI_ibmlongdouble
+ 	default "ieeelongdouble"	if BR2_PPC_ABI_ieeelongdouble
 +
-+	# Architecture is correct
-+	if test "${arch}" = "${arch_name}" ; then
-+		continue
-+	fi
++config BR2_READELF_ARCH_NAME
++	default "PowerPC"	if BR2_powerpc
++	default "PowerPC64"	if BR2_powerpc64 || BR2_powerpc64le
+diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+index 4705212..deb7244 100644
+--- a/arch/Config.in.sh
++++ b/arch/Config.in.sh
+@@ -27,3 +27,6 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_sh4 || BR2_sh4a
+ 	default "BIG"		if BR2_sh2a || BR2_sh4eb || BR2_sh4aeb
 +
-+	printf 'ERROR: architecture for %s is %s, should be %s\n' \
-+	       "${f}" "${arch}" "${arch_name}"
++config BR2_READELF_ARCH_NAME
++	default "Renesas / SuperH SH"
+diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+index 307540f..9b6a6aa 100644
+--- a/arch/Config.in.sparc
++++ b/arch/Config.in.sparc
+@@ -28,3 +28,7 @@ config BR2_GCC_TARGET_CPU
+ 	default "leon3"		if BR2_sparc_leon3
+ 	default "v8"		if BR2_sparc_v8
+ 	default "ultrasparc"	if BR2_sparc_v9
 +
-+	exitcode=1
-+done
++config BR2_READELF_ARCH_NAME
++	default "Sparc"		if BR2_sparc
++	default "Sparc v9"	if BR2_sparc64
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index efa9567..0d9e93b 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -275,3 +275,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "c3"		if BR2_x86_c3
+ 	default "c3-2"		if BR2_x86_c32
+ 	default "geode"		if BR2_x86_geode
 +
-+exit ${exitcode}
++config BR2_READELF_ARCH_NAME
++	default "Intel 80386"			if BR2_i386
++	default "Advanced Micro Devices X86-64" if BR2_x86_64
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index fcb3dc9..88dbe18 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -54,3 +54,6 @@ config BR2_ENDIAN
+ 
+ config BR2_ARCH
+ 	default "xtensa"	if BR2_xtensa
++
++config BR2_READELF_ARCH_NAME
++	default "Tensilica Xtensa Processor"
 -- 
 2.7.4
