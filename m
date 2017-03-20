@@ -1,120 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Mar 2017 21:39:39 +0100
-Subject: [Buildroot] [PATCH v1] wiringpi: bump to version 2.44
-In-Reply-To: <20170320202708.75f88379@gmx.net>
-References: <20170315210828.3784-1-ps.report@gmx.net>
- <20170318141428.0c4b6d36@free-electrons.com>
- <20170319222409.205633ad@gmx.net>
- <53182259-8ac8-de42-4ffb-ecd79e2597fe@mind.be>
- <1cda02af-597a-5254-253e-5bcc84ac7ddd@mind.be>
- <20170320202708.75f88379@gmx.net>
-Message-ID: <09ab824d-407e-e491-7e59-3521b8bd0ec7@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Mar 2017 21:42:29 +0100
+Subject: [Buildroot] [git commit] automake: fix unescaped left brace warning
+	patch
+Message-ID: <20170320204237.16E0982610@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=22dbe0035f309c2ea141344ed6a4e0e79881a1fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Automake currently has a unescaped left brace in it's automake.in folder
+that generates the warning:
+"Unescaped left brace in regex is deprecated, passed through in regex;"
+This patch, which is backported from upstream fixes this warning.
 
-On 20-03-17 20:27, Peter Seiderer wrote:
-> Hello Arnout, Yann, Thomas,
-> 
-> On Sun, 19 Mar 2017 23:31:36 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
-[snip]
->>  Oh, maybe it's in the timestamps, so also compare the output of
->>
->> tar tvf ~/src/buildroot/dl/wiringpi-2.44.tar.gz
->>
->> with https://gitlab.com/snippets/1655090/raw
->>
-> 
-> sha256sums and timestamps are all the same, the difference is in the atime and ctime,
-> comparing the output of two different downloads on my system
-> 
-> 	$ tar -xf t001/wiringpi-2.44.tar --to-command='echo $TAR_FILENAME $TAR_ATIME $TAR_MTIME $TAR_CTIME' > t001/files_atime_mtime_ctime.txt
-> 	$ tar -xf t002/wiringpi-2.44.tar --to-command='echo $TAR_FILENAME $TAR_ATIME $TAR_MTIME $TAR_CTIME' > t002/files_atime_mtime_ctime.txt
+Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+[Thomas: format patch using "git format-patch".]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0002-port-to-perl-5.22-and-later.patch         | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
- atime and ctime are (as far as I know) not encoded in the tar file. Run the
-command twice with the same tar file and you'll get different atime and ctime.
-
-> 
-> 	$ head t001/files_atime_mtime_ctime.txt
-> wiringpi-2.44/.gitignore 1489958464.60118197 1488369319 1489958464.464182585
-
- This is a little weird, however:
-
- - atime is normally the current time, but these timestamps are from yesterday.
- - ctime is normally equal to atime.
-
- So maybe your tar *does* encode the atime and ctime?
-
- Checking the source code... Looks like atime and ctime are preserved when either:
-
-1. gnu or oldgnu format is used, and the incremental (-G) option is used; or
-2. posix format is used (even then there are a few exceptions).
-
- Since we don't add -G, I guess you create archives in posix format. Quoting the
-info pages:
-
-
-   The default format for GNU 'tar' is defined at compilation time.  You
-may check it by running 'tar --help', and examining the last lines of
-its output.  Usually, GNU 'tar' is configured to create archives in
-'gnu' format, however, future version will switch to 'posix'.
-
-
- Since our hashes are currently based on GNU format, I guess we should add
---format=gnu to our tar commands.
-
- Patch follows.
-
- Regards,
- Arnout
-
-
-> wiringpi-2.44/COPYING.LESSER 1489958464.60118197 1488369319 1489958464.464182585
-> wiringpi-2.44/INSTALL 1489958464.602181965 1488369319 1489958464.464182585
-> wiringpi-2.44/People 1489958464.602181965 1488369319 1489958464.464182585
-> wiringpi-2.44/README.TXT 1489958464.602181965 1488369319 1489958464.464182585
-> wiringpi-2.44/VERSION 1489958464.602181965 1488369319 1489958464.464182585
-> wiringpi-2.44/build 1489958464.602181965 1488369319 1489958464.464182585
-> wiringpi-2.44/debian-template/wiringPi/DEBIAN/control 1489958464.602181965 1488369319 1489958464.465182581
-> wiringpi-2.44/debian-template/wiringPi/DEBIAN/postinst 1489958464.602181965 1488369319 1489958464.465182581
-> wiringpi-2.44/debian-template/wiringPi/DEBIAN/postrm 1489958464.602181965 1488369319 1489958464.465182581
-> 
-> 	$ head t002/files_atime_mtime_ctime.txt
-> wiringpi-2.44/.gitignore 1490036719.006803894 1488369319 1490036718.876804412
-> wiringpi-2.44/COPYING.LESSER 1490036719.006803894 1488369319 1490036718.876804412
-> wiringpi-2.44/INSTALL 1490036719.007803891 1488369319 1490036718.876804412
-> wiringpi-2.44/People 1490036719.007803891 1488369319 1490036718.877804408
-> wiringpi-2.44/README.TXT 1490036719.007803891 1488369319 1490036718.877804408
-> wiringpi-2.44/VERSION 1490036719.007803891 1488369319 1490036718.877804408
-> wiringpi-2.44/build 1490036719.007803891 1488369319 1490036718.877804408
-> wiringpi-2.44/debian-template/wiringPi/DEBIAN/control 1490036719.007803891 1488369319 1490036718.878804404
-> wiringpi-2.44/debian-template/wiringPi/DEBIAN/postinst 1490036719.007803891 1488369319 1490036718.878804404
-> wiringpi-2.44/debian-template/wiringPi/DEBIAN/postrm 1490036719.007803891 1488369319 1490036718.878804404
-> 
-> 	
-> 	$ git --version
-> git version 2.11.0
-> 
-> 	$ tar --version
-> tar (GNU tar) 1.28
-> 
-> Regards,
-> Peter
-> 
-> 
->>  Regards,
->>  Arnout
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/automake/0002-port-to-perl-5.22-and-later.patch b/package/automake/0002-port-to-perl-5.22-and-later.patch
+new file mode 100644
+index 0000000..207039b
+--- /dev/null
++++ b/package/automake/0002-port-to-perl-5.22-and-later.patch
+@@ -0,0 +1,34 @@
++From 13f00eb4493c217269b76614759e452d8302955e Mon Sep 17 00:00:00 2001
++From: Paul Eggert <eggert@cs.ucla.edu>
++Date: Thu, 31 Mar 2016 16:35:29 -0700
++Subject: [PATCH] automake: port to Perl 5.22 and later
++
++Without this change, Perl 5.22 complains "Unescaped left brace in
++regex is deprecated" and this is planned to become a hard error in
++Perl 5.26.  See:
++http://search.cpan.org/dist/perl-5.22.0/pod/perldelta.pod#A_literal_%22{%22_should_now_be_escaped_in_a_pattern
++* bin/automake.in (substitute_ac_subst_variables): Escape left brace.
++
++[Backported from:
++ http://git.savannah.gnu.org/cgit/automake.git/commit/?id=13f00eb4493c217269b76614759e452d8302955e]
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ bin/automake.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/bin/automake.in b/bin/automake.in
++index a3a0aa3..2c8f31e 100644
++--- a/bin/automake.in
+++++ b/bin/automake.in
++@@ -3878,7 +3878,7 @@ sub substitute_ac_subst_variables_worker
++ sub substitute_ac_subst_variables
++ {
++   my ($text) = @_;
++-  $text =~ s/\${([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
+++  $text =~ s/\$[{]([^ \t=:+{}]+)}/substitute_ac_subst_variables_worker ($1)/ge;
++   return $text;
++ }
++ 
++-- 
++2.7.4
++
