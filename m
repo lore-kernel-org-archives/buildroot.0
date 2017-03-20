@@ -1,51 +1,79 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 19 Mar 2017 16:08:24 -0700
-Subject: [Buildroot] [PATCH] configs/qemu: update xtensa linux to 4.9.16
-Message-ID: <1489964904-28592-1-git-send-email-jcmvbkbc@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 19 Mar 2017 23:27:16 -0300
+Subject: [Buildroot] [PATCH v2 1/4] support/download/git: do not use git
+ clone
+References: <a52a04a3-2290-ea7c-1194-c863f03926e8@mind.be>
+Message-ID: <58cf3e0413a93_50f13ff1769d7b30298e1@ultri3.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes the following nommu kernel build issue:
+Arnout,
 
-  arch/xtensa/kernel/setup.c: In function 'cpu_reset':
-  arch/xtensa/kernel/setup.c:553:2: error: implicit declaration of function
-    'local_flush_tlb_all' [-Werror=implicit-function-declaration]
-    local_flush_tlb_all();
+On Tue, Feb 07, 2017 at 02:48 PM, Arnout Vandecappelle wrote:
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- configs/qemu_xtensa_lx60_defconfig       | 2 +-
- configs/qemu_xtensa_lx60_nommu_defconfig | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> On 02-12-16 16:21, Ricardo Martincoski wrote:
+[snip]
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  I tested getting hashes from a few different hard-to-reach branches, and it
+> works very well (with the full series applied), using shallow clones wherever
+> possible and falling back on full mirror when necessary.
+> 
+> [snip]
+>> +if [ ${git_done} -eq 0 ]; then
+>> +    printf "Doing mirror fetch\n"
+>> +    # Fetch all refs, including special refs. The same as git clone --mirror.
+>> +    _git fetch -u ${verbose} "${@}" ${unshallow} "'${repo}'" "'+refs/*:refs/*'"
+>> +    _git checkout -q "'${cset}'"
+>>  fi
+> 
+>  This bit is the only one which is still a little bit controversial. It really
+> should never be needed for any sane situation. Still, it feels safer to have
+> such a fallback so I'd keep it. The only disadvantage is that in case that a ref
+> really can't be fetched, it will take a long time before we discover that.
 
-diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
-index db06e90..915b6ff 100644
---- a/configs/qemu_xtensa_lx60_defconfig
-+++ b/configs/qemu_xtensa_lx60_defconfig
-@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-4.9.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
-index 55714a1..8c66c3a 100644
---- a/configs/qemu_xtensa_lx60_nommu_defconfig
-+++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-@@ -26,7 +26,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-4.9-nommu.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--- 
-2.1.4
+The only cases (that I think of) that fallback to this code are corner cases
+with special refs: partial sha1, ref changed after ls-remote, ...
+So I will remove it and resend, and I will mark the series as Change Requested.
+
+While at it I will make 2 more changes:
+1) merge the DEVELOPERS entry into this patch;
+2) fix the support to submodules that use relative path;
+
+I am developing the automated tests for git download using the test infra.
+I noticed that downloading submodules from repos that do not use absolute url
+inside .gitmodules fails.
+The package sunxi-mali uses absolute url inside .gitmodules, so it downloads
+fine.
+
+Since a change in this patch is only needed when using submodules I want to use
+this diff:
+(a)
+ # There might be submodules, so fetch them.
+ if [ ${recurse} -eq 1 ]; then
++    # When .gitmodules contains relative paths, git submodule needs a remote
++    # named origin to generate the correct urls
++    _git remote add origin "'${repo}'"
+     _git submodule update --init --recursive
+ fi
+Yes, I tested and it seems to need to be named origin.
+
+But there are other solutions:
+
+(b) register the remote using the same command from (a) just after git init, as
+Brandon suggested in http://patchwork.ozlabs.org/patch/681841/ . All other
+"'${repo}'" can be changed to origin.
+
+(c) use something like 'git config' to manually set the url for the submodules.
+I did not yet researched enough about this option.
+
+What do you think about item 2?
+
+Also, since I am unsure, let me ask: should I carry or remove you acked-by on
+this patch?
+
+Thank you,
+Ricardo
