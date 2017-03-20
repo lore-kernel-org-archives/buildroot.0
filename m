@@ -1,8 +1,8 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Mar 2017 23:13:44 +0100
-Subject: [Buildroot] [PATCH v1] WIP: configs/raspberrypi0w_defconfig: new
+Date: Mon, 20 Mar 2017 23:22:20 +0100
+Subject: [Buildroot] [PATCH v2] WIP: configs/raspberrypi0w_defconfig: new
 	board
-Message-ID: <20170320221344.9747-1-ps.report@gmx.net>
+Message-ID: <20170320222220.10154-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,14 +20,57 @@ problem as the Pi 3. Try the same fix (load pi3-miniuart-bt overlay).
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
+Changes v1 -> v2:
+  - add missing board/raspberrypi/genimage-raspberrypi0w.cfg
+
 Untested (even not compile tested) because of lack of hardware...
 ---
- board/raspberrypi0w             |  1 +
- configs/raspberrypi0w_defconfig | 35 +++++++++++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
+ board/raspberrypi/genimage-raspberrypi0w.cfg | 32 +++++++++++++++++++++++++
+ board/raspberrypi0w                          |  1 +
+ configs/raspberrypi0w_defconfig              | 35 ++++++++++++++++++++++++++++
+ 3 files changed, 68 insertions(+)
+ create mode 100644 board/raspberrypi/genimage-raspberrypi0w.cfg
  create mode 120000 board/raspberrypi0w
  create mode 100644 configs/raspberrypi0w_defconfig
 
+diff --git a/board/raspberrypi/genimage-raspberrypi0w.cfg b/board/raspberrypi/genimage-raspberrypi0w.cfg
+new file mode 100644
+index 000000000..9fab44f6d
+--- /dev/null
++++ b/board/raspberrypi/genimage-raspberrypi0w.cfg
+@@ -0,0 +1,32 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "bcm2708-rpi-b-plus.dtb",
++      "bcm2708-rpi-0-w.dtb",
++      "rpi-firmware/bootcode.bin",
++      "rpi-firmware/cmdline.txt",
++      "rpi-firmware/config.txt",
++      "rpi-firmware/fixup.dat",
++      "rpi-firmware/start.elf",
++      "rpi-firmware/overlays",
++      "zImage"
++    }
++  }
++  size = 32M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
 diff --git a/board/raspberrypi0w b/board/raspberrypi0w
 new file mode 120000
 index 000000000..fcdafc81e
