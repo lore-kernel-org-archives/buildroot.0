@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:45:43 +0100
-Subject: [Buildroot] [PATCH v2 1/1] automake: fix unescaped left brace
- warning patch.
-In-Reply-To: <20170306132359.21768-1-aduskett@codeblue.com>
-References: <20170306132359.21768-1-aduskett@codeblue.com>
-Message-ID: <20170320214543.02c3461c@free-electrons.com>
+Date: Mon, 20 Mar 2017 21:50:44 +0100
+Subject: [Buildroot] [git commit] libv4l: drop -lrt workaround
+Message-ID: <20170320205048.D2414825E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1c5ade99fd2e34132c89c0fc6478a004fd959982
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  6 Mar 2017 08:23:59 -0500, Adam Duskett wrote:
-> Automake currently has a unescaped left brace in it's automake.in folder
-> that generates the warning:
-> "Unescaped left brace in regex is deprecated, passed through in regex;"
-> This patch, which is backported from upstream fixes this warning.
-> 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+libv4l adds the -lrt flag since upstream commit 3dcb945bfcab
+("v4l2-compliance: Explicitely link against rt library").
 
-I've applied. However, you should format the patches of projects
-managed with Git using "git format-patch". So the automake patch should
-have been Git formatted. I've fixed that before applying.
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libv4l/libv4l.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 4fec14f..c14bedb 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -53,8 +53,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
+ LIBV4L_CONF_OPTS += --enable-v4l-utils
+-# clock_gettime is used, which is provided by librt for glibc < 2.17
+-LIBV4L_LIBS += -lrt
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ LIBV4L_DEPENDENCIES += gettext
+ endif
