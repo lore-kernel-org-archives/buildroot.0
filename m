@@ -1,49 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 22:32:52 +0100
-Subject: [Buildroot] [PATCH v3] boot/uboot: fix build for sunxi targets
-In-Reply-To: <20170309115247.16981-1-joerg.krause@embedded.rocks>
-References: <20170309115247.16981-1-joerg.krause@embedded.rocks>
-Message-ID: <20170320223252.791ca511@free-electrons.com>
+Date: Mon, 20 Mar 2017 22:33:36 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-bad: waylandsink needs
+	wayland-protocols
+Message-ID: <20170320213342.1ED828227E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5a2d37ca125c1742864af0e9324234f8f3ecc071
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  9 Mar 2017 12:52:47 +0100, J?rg Krause wrote:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+Changes v1 -> v2:
+  - use select instead of depends for BR2_PACKAGE_WAYLAND_PROTOCOLS
+   (suggested by Thomas Petazzoni)
+  - add select BR2_PACKAGE_WAYLAND_PROTOCOLS to missing second
+    place (BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 2 ++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-> +# The binman tool was introduced in version 2017.01. The tool is a set
-> +# python scripts and requires a python2 interpreter. Force the shebang
-> +# python2 to ensure the correct interpreter is used on host systems
-> +# where python defaults to the python3 interpreter. 
-> +define UBOOT_TRY_SED_SHEBANG_BINMAN
-> +	if test -f $(@D)/tools/binman/binman; then \
-> +		sed -i '1s_^\(#!/usr/bin/env \).*_\1python2_' \
-> +			$(@D)/tools/binman/binman; \
-> +	fi
-> +endef
-> +UBOOT_POST_PATCH_HOOKS += UBOOT_TRY_SED_SHEBANG_BINMAN
-
-Thanks for this. However, now that the issue has been fixed upstream,
-I'm not sure I'm willing to make our uboot.mk more complicated to fix a
-problem that:
-
- 1. Only occurs with sunxi targets and a few x86 platforms
-
- 2. Only occurs with 2017.01 exactly. binman didn't exist before, and
-    2017.03 was fixed in time.
-
-So I'm tempted to put the burden on people using 2017.01 on those few
-platforms to carry the small patch (or upgrade to 2017.03).
-
-What do you think?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 6bec362..1db5187 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -112,6 +112,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
+ 	default y
+ 	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
+ 	depends on BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
+ 
+ comment "wayland needs the egl platform and the wayland package"
+@@ -686,6 +687,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
+ 	bool "wayland"
+ 	depends on BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 	default y
+ 	help
+ 	  Wayland Video Sink
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 00add02..c6a151a 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -121,7 +121,7 @@ endif
+ 
+ ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND)$(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-wayland
+-GST1_PLUGINS_BAD_DEPENDENCIES += wayland
++GST1_PLUGINS_BAD_DEPENDENCIES += wayland wayland-protocols
+ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-wayland
+ endif
