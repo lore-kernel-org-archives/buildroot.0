@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 23:03:15 +0100
-Subject: [Buildroot] [git commit] python2: generate reproducible .pyc
-Message-ID: <20170320222804.1F152825E3@busybox.osuosl.org>
+Date: Mon, 20 Mar 2017 23:03:18 +0100
+Subject: [Buildroot] [git commit] python3: generate reproducible .pyc
+Message-ID: <20170320222804.2B14781DD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edbe7e815ec55117ed58a70d8a8f7f5d9848b5eb
+commit: https://git.buildroot.net/buildroot/commit/?id=3adbdb63e29ed9a666e3c24a5533f6da3fe932a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 .pyc files contain the modification time of the corresponding .py
@@ -26,32 +26,32 @@ Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 [Thomas: do not register PYTHON_FIX_TIME as a
  PYTHON_TARGET_FINALIZE_HOOKS, instead call it inside
  PYTHON_CREATE_PYC_FILES before doing the byte compilation.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-elecrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python.mk | 10 +++++++++-
+ package/python3/python3.mk | 10 +++++++++-
  1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 8f4e298..1787576 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -244,10 +244,18 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index c8f8e1b..7bd6405 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -237,10 +237,18 @@ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdat
  $(eval $(autotools-package))
  $(eval $(host-autotools-package))
  
 +ifeq ($(BR2_REPRODUCIBLE),y)
-+define PYTHON_FIX_TIME
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
++define PYTHON3_FIX_TIME
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
 +		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
 +endef
 +endif
 +
- define PYTHON_CREATE_PYC_FILES
-+	$(PYTHON_FIX_TIME)
- 	PYTHONPATH="$(PYTHON_PATH)" \
- 	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+ define PYTHON3_CREATE_PYC_FILES
++	$(PYTHON3_FIX_TIME)
+ 	PYTHONPATH="$(PYTHON3_PATH)" \
+ 	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
 -		support/scripts/pycompile.py \
 +		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
- 		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
+ 		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
  endef
  
