@@ -1,43 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:59:48 +0100
-Subject: [Buildroot] [PATCH] package/libkcapi: bump version to latest
- git hash 79cb80714ebc
-In-Reply-To: <1490005509-9565-1-git-send-email-marcin.nowakowski@imgtec.com>
-References: <1490005509-9565-1-git-send-email-marcin.nowakowski@imgtec.com>
-Message-ID: <20170320215948.2494e40d@free-electrons.com>
+Date: Mon, 20 Mar 2017 22:00:06 +0100
+Subject: [Buildroot] [git commit] configs/qemu: update xtensa linux to 4.9.16
+Message-ID: <20170320210010.BEA8482229@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=865b1e92a247491d51296be40c1e49b1eff7f51b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Mar 2017 11:25:09 +0100, Marcin Nowakowski wrote:
-> Configure script is used to detect options supported by the target
-> compiler, but those options are then incorrectly used by the targets
-> compiled using a host compiler.
-> 
-> configure:
->   checking whether CC supports -fstack-protector-strong... yes
-> make:
->   /usr/bin/gcc (...)
->   cc1: error: unrecognized command line option "-fstack-protector-strong"
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/4c0/4c06dfa35ef52f6522619f797a9ae4e7a2e45d04/
->   http://autobuild.buildroot.net/results/788/78886670cff406a09bd08808d9a6e328ee75634b/
-> 
-> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-> ---
->  package/libkcapi/libkcapi.hash | 2 +-
->  package/libkcapi/libkcapi.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+This fixes the following nommu kernel build issue:
 
-Applied to master, thanks.
+  arch/xtensa/kernel/setup.c: In function 'cpu_reset':
+  arch/xtensa/kernel/setup.c:553:2: error: implicit declaration of function
+    'local_flush_tlb_all' [-Werror=implicit-function-declaration]
+    local_flush_tlb_all();
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/qemu_xtensa_lx60_defconfig       | 2 +-
+ configs/qemu_xtensa_lx60_nommu_defconfig | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index db06e90..915b6ff 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.16"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-4.9.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
+index 55714a1..8c66c3a 100644
+--- a/configs/qemu_xtensa_lx60_nommu_defconfig
++++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+@@ -26,7 +26,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.16"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-4.9-nommu.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
