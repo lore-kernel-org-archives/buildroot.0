@@ -1,61 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 22:42:06 +0100
-Subject: [Buildroot] [PATCH] rpi-bt-firmware: new package
-In-Reply-To: <20170320213039.wlpa2tdplbon6f2n@tarshish>
-References: <094f74654295373c7cadd47044cbcfb9a80d8c87.1489093234.git.baruch@tkos.co.il>
- <20170319220043.6f819196@free-electrons.com>
- <20170320213039.wlpa2tdplbon6f2n@tarshish>
-Message-ID: <20170320224206.33fa1dbb@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 20 Mar 2017 22:46:30 +0100
+Subject: [Buildroot] [PATCH 2/3] package/x11r7/xserver_xorg-server: bump
+ to version 1.19.3
+In-Reply-To: <20170320222140.7526eb03@free-electrons.com>
+References: <20170319205155.3333-1-romain.naour@gmail.com>
+ <20170319205155.3333-2-romain.naour@gmail.com>
+ <jak5qdxdon.ln2@ID-313208.user.individual.net>
+ <20170320222140.7526eb03@free-electrons.com>
+Message-ID: <47e868af-77d2-78e3-feb8-c4147331d646@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Bernd, Thomas,
 
-On Mon, 20 Mar 2017 23:30:39 +0200, Baruch Siach wrote:
-
-> Do you have any indication that this is indeed the same file that RPi uses? My 
-> impression was that this firmware is tailored specifically for the RPi board, 
-> but I don't know for sure. That fact that Broadcom licenses the file may 
-> indicate that this is the same one. But ...
+Le 20/03/2017 ? 22:21, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> > So perhaps the package should be bcrm-43430-firmware or something along
-> > those lines.
-> > 
-> >   
-> > > +RPI_BT_FIRMWARE_VERSION = a439f892bf549ddfefa9ba7ad1999cc515f233bf
-> > > +RPI_BT_FIRMWARE_SITE = https://aur.archlinux.org/pi-bluetooth.git  
-> > 
-> > Is there a better upstream than this? I found
-> > https://github.com/varigit/bcm_4343w_fw but I'm not sure it really
-> > qualifies as "better".  
+> On Mon, 20 Mar 2017 19:40:51 +0100, Bernd Kuhls wrote:
 > 
-> ... this is not the same file:
+>> ERROR: xorg-server-1.19.3.tar.bz2 has wrong sha256 hash:
+>> ERROR: expected: 8f93b98f1ac9fbd87515bfe329a069b48bbec98e5329584ab5fbf759a0953b8d
+>> ERROR: got     : 677a8166e03474719238dfe396ce673c4234735464d6dadf2959b600d20e5a98
+>> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 > 
-> ls -l bcm43430a1.hcd pi-bluetooth/BCM43430A1.hcd 
-> -rw-r--r-- 1 baruch baruch 14265 Mar 20 23:22 bcm43430a1.hcd
-> -rw-r--r-- 1 baruch baruch 35976 Jan 17 12:25 pi-bluetooth/BCM43430A1.hcd
+> Romain fixed it in the third patch, touching the ATI driver, but
+> indeed, it's a bit messed up. I fixed this when applying. Thanks for
+> noticing!
 
-Gaah, what a mess. Why don't they just post it for integration in the
-linux-firmware project? Why is it that RPi people always have to do
-things the weird way?
+Thanks for fixing this, Indeed I used the wrong hash initially and I tried to
+squash the fix in patch 2/3 while rebasing...
 
-> I have not tested the Variscite firmware on the RPi, though. There is a small 
-> chance it might damage the hardware.
+Sorry for the mess...
+
+Best regards,
+Romain
+
 > 
-> And since the git repo we use is named 'pi-bluetooth' maybe rpi-bt-firmware is 
-> not such a bad name after all.
-
-Yeah, indeed :-/
-
-Can you resend the patch with just an extended explanation as to why
-the package is named this way, and the fact that even though the
-WiFi chip isn't RPi specific, the firmware might be.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+> Thomas
+> 
