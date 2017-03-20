@@ -1,36 +1,58 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 20 Mar 2017 22:52:41 +0200
-Subject: [Buildroot] [PATCH 1/2] keepalived: fix libnl optional dependnecy
-Message-ID: <15be326b7457179e1789109c706479ec13e7c8ad.1490043162.git.baruch@tkos.co.il>
+Date: Mon, 20 Mar 2017 22:52:42 +0200
+Subject: [Buildroot] [PATCH 2/2] keepalived: bump to version 1.3.5
+In-Reply-To: <15be326b7457179e1789109c706479ec13e7c8ad.1490043162.git.baruch@tkos.co.il>
+References: <15be326b7457179e1789109c706479ec13e7c8ad.1490043162.git.baruch@tkos.co.il>
+Message-ID: <ceef2ab17b9b50cccd30d8cfd0270ec990c876dc.1490043162.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-List libnl as a dependency when it is enabled. Make sure that libnfnetlink is
-actually enabled when listing it as a dependency.
+The configure script now supports --{enable,disable}-libnl, use them.
 
 Cc: Ilias Apalodimas <apalos@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-v2: Drop the libnfnetlink select; update commit log (Thomas P)
----
- package/keepalived/keepalived.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/keepalived/keepalived.hash | 5 +----
+ package/keepalived/keepalived.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
+diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
+index 543e60ad5616..5d33c5be006b 100644
+--- a/package/keepalived/keepalived.hash
++++ b/package/keepalived/keepalived.hash
+@@ -1,5 +1,2 @@
+-# From http://www.keepalived.org/download.html
+-md5 744025d57c7f065c42fe925b0283897e	keepalived-1.3.2.tar.gz
+-sha1	449f06dfce07e05c1ebd516d0545182e1416f264  keepalived-1.3.2.tar.gz
+ # Locally calculated
+-sha256	0f261e6810b3eced68dc9858a1f28694e4a91116035fe76c4400ec4ac208feda	5d98b7b69fcbba84fa69e5b5e9a019bfbcb76e8b.patch
++sha256	c0114d86ea4c896557beb0d9367819a423ffba772bc5d7c548dc455e6b3bd048  keepalived-1.3.5.tar.gz
 diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
-index 97a4daa8b670..95757ff68130 100644
+index 95757ff68130..35e666af1cc9 100644
 --- a/package/keepalived/keepalived.mk
 +++ b/package/keepalived/keepalived.mk
-@@ -13,8 +13,8 @@ KEEPALIVED_CONF_OPTS += --disable-dbus
+@@ -4,17 +4,18 @@
+ #
+ ################################################################################
  
- KEEPALIVED_PATCH = https://github.com/acassen/keepalived/commit/5d98b7b69fcbba84fa69e5b5e9a019bfbcb76e8b.patch
+-KEEPALIVED_VERSION = 1.3.2
++KEEPALIVED_VERSION = 1.3.5
+ KEEPALIVED_SITE = http://www.keepalived.org/software
+ KEEPALIVED_DEPENDENCIES = host-pkgconf openssl popt
+ KEEPALIVED_LICENSE = GPLv2+
+ KEEPALIVED_LICENSE_FILES = COPYING
+ KEEPALIVED_CONF_OPTS += --disable-dbus
  
--ifeq ($(BR2_PACKAGE_LIBNL),y)
--KEEPALIVED_DEPENDENCIES += libnfnetlink
-+ifeq ($(BR2_PACKAGE_LIBNL)$(BR2_PACKAGE_LIBNFNETLINK),yy)
-+KEEPALIVED_DEPENDENCIES += libnl libnfnetlink
+-KEEPALIVED_PATCH = https://github.com/acassen/keepalived/commit/5d98b7b69fcbba84fa69e5b5e9a019bfbcb76e8b.patch
+-
+ ifeq ($(BR2_PACKAGE_LIBNL)$(BR2_PACKAGE_LIBNFNETLINK),yy)
+ KEEPALIVED_DEPENDENCIES += libnl libnfnetlink
++KEEPALIVED_CONF_OPTS += --enable-libnl
++else
++KEEPALIVED_CONF_OPTS += --disable-libnl
  endif
  
  ifeq ($(BR2_PACKAGE_IPSET),y)
