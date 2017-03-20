@@ -1,46 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Mar 2017 18:14:40 +0100
-Subject: [Buildroot] [PATCH] Enable UART on raspberry pi zero
-In-Reply-To: <DB5PR03MB13340AA1B7DB55B8854CF981E73A0@DB5PR03MB1334.eurprd03.prod.outlook.com>
-References: <DB5PR03MB13342317D9FB07E001D16231E7380@DB5PR03MB1334.eurprd03.prod.outlook.com>
- <20170319132745.GB3734@free.fr>
- <DB5PR03MB13340AA1B7DB55B8854CF981E73A0@DB5PR03MB1334.eurprd03.prod.outlook.com>
-Message-ID: <20170320171440.GB3619@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 20 Mar 2017 19:00:51 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.4.3
+Message-ID: <1490032851-84004-1-git-send-email-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luke, All,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2017-03-20 12:36 +0000, luke spake thusly:
-> Maybe my message wasn't clear.
-> This is for the raspberry PI Zero W.
-> 
-> The UART is taken over by the wifi chip, so the software UART is now
-> used for the TX/RX GPIO pin.
-
-Then please look at how we're already doing it for the rpi3:
-
-    https://git.buildroot.org/buildroot/tree/configs/raspberrypi3_defconfig
-
-See the following option:
-
-    BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-
-Since the thread you pointed to is about rpi3, not rpi0-w, I gues the
-workiaround we have will also work for rip0-w.
-
-Can you please check that?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 03d6d36..39ca2cb 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	6bb0cec66f877f694ffd0e6026b33da1df28a204a9d3a65fbe5055d038a3e8bf	cjson-v1.4.2.tar.gz
++sha256	3b362a6af73e10b0361119bc9fa9569578f9daa486cb487cad79322a34cd6965	cjson-v1.4.3.tar.gz
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 6403c18..6872b10 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.4.2
++CJSON_VERSION = v1.4.3
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.0
