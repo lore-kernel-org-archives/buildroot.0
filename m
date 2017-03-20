@@ -1,135 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:58:23 +0100
-Subject: [Buildroot] [git commit] gst1-vaapi: fix build when Gstreamer
-	debugging is disabled
-Message-ID: <20170320205835.76C1182601@busybox.osuosl.org>
+Date: Mon, 20 Mar 2017 21:58:48 +0100
+Subject: [Buildroot] [PATCH] gst1-vaapi: fix build when Gstreamer
+ debugging is disabled
+In-Reply-To: <1490035980-7927-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1490035980-7927-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20170320215848.6b699556@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a524e0a8e00765c8e0f55dbfbb60554c89c7ce8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-When Gstreamer debugging is disabled (BR2_PACKAGE_GSTREAMER1_GST_DEBUG)
-we get following build errors:
+On Tue, 21 Mar 2017 00:23:00 +0530, Rahul Bedarkar wrote:
+> When Gstreamer debugging is disabled (BR2_PACKAGE_GSTREAMER1_GST_DEBUG)
+> we get following build errors:
+> 
+>   gstvaapisink.c: In function 'gst_vaapisink_init':
+>   gstvaapisink.c:1902:39: error: 'gst_debug_vaapisink' undeclared (first use in this function)
+>   gstvaapisink.c:1902:39: note: each undeclared identifier is reported only once for each function it appears in
+>   gstvaapidecode.c: In function 'gst_vaapidecode_init':
+>   gstvaapidecode.c:1365:63: error: 'gst_debug_vaapidecode' undeclared (first use in this function)
+>   gstvaapidecode.c:1365:63: note: each undeclared identifier is reported only once for each function it appears in
+>   gstvaapipostproc.c: In function 'gst_vaapipostproc_init':
+>   gstvaapipostproc.c:1811:7: error: 'gst_debug_vaapipostproc' undeclared (first use in this function)
+>   gstvaapipostproc.c:1811:7: note: each undeclared identifier is reported only once for each function it appears in
+> 
+> Add upstream patch to fix these build issues.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/653/653d9b056b04e589b8f5c57111635b0b3d7c8949
+> 
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> ---
+>  ...n-debug-disabled-default-category-is-NULL.patch | 91 ++++++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>  create mode 100644 package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch
 
-  gstvaapisink.c: In function 'gst_vaapisink_init':
-  gstvaapisink.c:1902:39: error: 'gst_debug_vaapisink' undeclared (first use in this function)
-  gstvaapisink.c:1902:39: note: each undeclared identifier is reported only once for each function it appears in
-  gstvaapidecode.c: In function 'gst_vaapidecode_init':
-  gstvaapidecode.c:1365:63: error: 'gst_debug_vaapidecode' undeclared (first use in this function)
-  gstvaapidecode.c:1365:63: note: each undeclared identifier is reported only once for each function it appears in
-  gstvaapipostproc.c: In function 'gst_vaapipostproc_init':
-  gstvaapipostproc.c:1811:7: error: 'gst_debug_vaapipostproc' undeclared (first use in this function)
-  gstvaapipostproc.c:1811:7: note: each undeclared identifier is reported only once for each function it appears in
+Applied to master, thanks.
 
-Add upstream patch to fix these build issues.
-
-Fixes:
-  http://autobuild.buildroot.net/results/653/653d9b056b04e589b8f5c57111635b0b3d7c8949
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...n-debug-disabled-default-category-is-NULL.patch | 91 ++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
-
-diff --git a/package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch b/package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch
-new file mode 100644
-index 0000000..0d83c5a
---- /dev/null
-+++ b/package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch
-@@ -0,0 +1,91 @@
-+From 152217064f1192bb836620ad7eaadbc031624f4c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?V=C3=ADctor=20Manuel=20J=C3=A1quez=20Leal?=
-+ <vjaquez@igalia.com>
-+Date: Mon, 20 Mar 2017 16:45:01 +0100
-+Subject: [PATCH] plugins: when debug disabled, default category is NULL
-+
-+As in gstreamer-vaapi a common base class is used, the specific
-+default category is passed to the base-plugin initializator, thus
-+the log messages are categorized with the used plugin.
-+
-+Nonetheless, when the gst-debug is disabled in compilation time,
-+it is needed to pass NULL to the base-plugin initializator. This
-+patch does that.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=780302
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+---
-+ gst/vaapi/gstvaapidecode.c   | 4 ++++
-+ gst/vaapi/gstvaapiencode.c   | 4 ++++
-+ gst/vaapi/gstvaapipostproc.c | 4 ++++
-+ gst/vaapi/gstvaapisink.c     | 4 ++++
-+ 4 files changed, 16 insertions(+)
-+
-+diff --git a/gst/vaapi/gstvaapidecode.c b/gst/vaapi/gstvaapidecode.c
-+index 407e25b..c2bb42a 100644
-+--- a/gst/vaapi/gstvaapidecode.c
-++++ b/gst/vaapi/gstvaapidecode.c
-+@@ -49,7 +49,11 @@
-+ #define GST_VAAPI_DECODE_FLOW_PARSE_DATA        GST_FLOW_CUSTOM_SUCCESS_2
-+ 
-+ GST_DEBUG_CATEGORY_STATIC (gst_debug_vaapidecode);
-++#ifndef GST_DISABLE_GST_DEBUG
-+ #define GST_CAT_DEFAULT gst_debug_vaapidecode
-++#else
-++#define GST_CAT_DEFAULT NULL
-++#endif
-+ 
-+ #define GST_VAAPI_DECODE_PARAMS_QDATA \
-+   g_quark_from_static_string("vaapidec-params")
-+diff --git a/gst/vaapi/gstvaapiencode.c b/gst/vaapi/gstvaapiencode.c
-+index dd60901..b0f0a32 100644
-+--- a/gst/vaapi/gstvaapiencode.c
-++++ b/gst/vaapi/gstvaapiencode.c
-+@@ -38,7 +38,11 @@
-+ #define GST_VAAPI_ENCODE_FLOW_CONVERT_ERROR     GST_FLOW_CUSTOM_ERROR_1
-+ 
-+ GST_DEBUG_CATEGORY_STATIC (gst_vaapiencode_debug);
-++#ifndef GST_DISABLE_GST_DEBUG
-+ #define GST_CAT_DEFAULT gst_vaapiencode_debug
-++#else
-++#define GST_CAT_DEFAULT NULL
-++#endif
-+ 
-+ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GstVaapiEncode,
-+     gst_vaapiencode, GST_TYPE_VIDEO_ENCODER,
-+diff --git a/gst/vaapi/gstvaapipostproc.c b/gst/vaapi/gstvaapipostproc.c
-+index f4ddbb5..d45f7ee 100644
-+--- a/gst/vaapi/gstvaapipostproc.c
-++++ b/gst/vaapi/gstvaapipostproc.c
-+@@ -49,7 +49,11 @@
-+ #define GST_PLUGIN_DESC "A VA-API video postprocessing filter"
-+ 
-+ GST_DEBUG_CATEGORY_STATIC (gst_debug_vaapipostproc);
-++#ifndef GST_DISABLE_GST_DEBUG
-+ #define GST_CAT_DEFAULT gst_debug_vaapipostproc
-++#else
-++#define GST_CAT_DEFAULT NULL
-++#endif
-+ 
-+ /* Default templates */
-+ /* *INDENT-OFF* */
-+diff --git a/gst/vaapi/gstvaapisink.c b/gst/vaapi/gstvaapisink.c
-+index cca71d9..9cc5154 100644
-+--- a/gst/vaapi/gstvaapisink.c
-++++ b/gst/vaapi/gstvaapisink.c
-+@@ -59,7 +59,11 @@
-+ #define GST_PLUGIN_DESC "A VA-API based videosink"
-+ 
-+ GST_DEBUG_CATEGORY_STATIC (gst_debug_vaapisink);
-++#ifndef GST_DISABLE_GST_DEBUG
-+ #define GST_CAT_DEFAULT gst_debug_vaapisink
-++#else
-++#define GST_CAT_DEFAULT NULL
-++#endif
-+ 
-+ /* Default template */
-+ /* *INDENT-OFF* */
-+-- 
-+2.6.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
