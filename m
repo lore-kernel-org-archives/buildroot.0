@@ -1,51 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 23:00:25 +0100
-Subject: [Buildroot] [git commit] pycompile: allow to force compilation
-Message-ID: <20170320222804.144E981DD1@busybox.osuosl.org>
+Date: Mon, 20 Mar 2017 23:03:15 +0100
+Subject: [Buildroot] [git commit] python2: generate reproducible .pyc
+Message-ID: <20170320222804.1F152825E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e45c5500ba31890d7f91c1c4ad50d314715affc
+commit: https://git.buildroot.net/buildroot/commit/?id=edbe7e815ec55117ed58a70d8a8f7f5d9848b5eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, compile_dir() relies on the modification time to know if a
-python file has to be built again. However in some circumstances (when
-doing reproducible builds), modification times are not reliable. Thus,
-this patch adds a way to force the rebuild of all python sources.
+.pyc files contain the modification time of the corresponding .py
+source. In order to make the build reproducible, we fix the modification
+time of all .py before compiling .pyc files.
+
+In addition, since pycompile relies on the modification time to know if
+a file needs to be recompiled, it is safer to force recompilation of all
+source files.
+
+This work was sponsored by `BA Robotic Systems'.
 
 Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Thomas: do not register PYTHON_FIX_TIME as a
+ PYTHON_TARGET_FINALIZE_HOOKS, instead call it inside
+ PYTHON_CREATE_PYC_FILES before doing the byte compilation.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-elecrons.com>
 ---
- support/scripts/pycompile.py | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/python/python.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-index 9f7eb9f..8e164ab 100644
---- a/support/scripts/pycompile.py
-+++ b/support/scripts/pycompile.py
-@@ -10,6 +10,7 @@ from __future__ import print_function
- import sys
- import py_compile
- import compileall
-+import argparse
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 8f4e298..1787576 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -244,10 +244,18 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
  
- def check_for_errors(comparison):
-     '''Wrap comparison operator with code checking for PyCompileError.
-@@ -54,4 +55,12 @@ class ReportProblem(int):
-     def __ne__(self, other):
-         return not self == other
++ifeq ($(BR2_REPRODUCIBLE),y)
++define PYTHON_FIX_TIME
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
++		xargs -0 --no-run-if-empty touch -d @$(SOURCE_DATE_EPOCH)
++endef
++endif
++
+ define PYTHON_CREATE_PYC_FILES
++	$(PYTHON_FIX_TIME)
+ 	PYTHONPATH="$(PYTHON_PATH)" \
+ 	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+-		support/scripts/pycompile.py \
++		support/scripts/pycompile.py $(if $(BR2_REPRODUCIBLE),--force) \
+ 		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
+ endef
  
--compileall.compile_dir(sys.argv[1], quiet=ReportProblem())
-+parser = argparse.ArgumentParser(description='Compile Python source files in a directory tree.')
-+parser.add_argument("target", metavar='DIRECTORY',
-+                    help='Directory to scan')
-+parser.add_argument("--force", action='store_true',
-+                    help="Force compilation even if alread compiled")
-+
-+args = parser.parse_args()
-+
-+compileall.compile_dir(args.target, force=args.force, quiet=ReportProblem())
