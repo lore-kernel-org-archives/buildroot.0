@@ -1,60 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 22:33:36 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-bad: waylandsink needs
-	wayland-protocols
-Message-ID: <20170320213342.1ED828227E@busybox.osuosl.org>
+Date: Mon, 20 Mar 2017 22:33:45 +0100
+Subject: [Buildroot] [PATCH v2] gst1-plugins-bad: waylandsink needs
+ wayland-protocols
+In-Reply-To: <20170306204347.30354-1-ps.report@gmx.net>
+References: <20170306204347.30354-1-ps.report@gmx.net>
+Message-ID: <20170320223345.0e543bcf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a2d37ca125c1742864af0e9324234f8f3ecc071
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-Changes v1 -> v2:
-  - use select instead of depends for BR2_PACKAGE_WAYLAND_PROTOCOLS
-   (suggested by Thomas Petazzoni)
-  - add select BR2_PACKAGE_WAYLAND_PROTOCOLS to missing second
-    place (BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND)
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in           | 2 ++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+On Mon,  6 Mar 2017 21:43:47 +0100, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ----
+> Changes v1 -> v2:
+>   - use select instead of depends for BR2_PACKAGE_WAYLAND_PROTOCOLS
+>    (suggested by Thomas Petazzoni)
+>   - add select BR2_PACKAGE_WAYLAND_PROTOCOLS to missing second
+>     place (BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND)
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in           | 2 ++
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 6bec362..1db5187 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -112,6 +112,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
- 	default y
- 	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
- 	depends on BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
- 
- comment "wayland needs the egl platform and the wayland package"
-@@ -686,6 +687,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
- 	bool "wayland"
- 	depends on BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	default y
- 	help
- 	  Wayland Video Sink
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 00add02..c6a151a 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -121,7 +121,7 @@ endif
- 
- ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND)$(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-wayland
--GST1_PLUGINS_BAD_DEPENDENCIES += wayland
-+GST1_PLUGINS_BAD_DEPENDENCIES += wayland wayland-protocols
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-wayland
- endif
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
