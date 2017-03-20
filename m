@@ -1,32 +1,113 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:15:58 +0100
-Subject: [Buildroot] [PATCH 1/2] keepalived: fix libnl optional
- dependnecy
-In-Reply-To: <f81b2b2f55f9f4294cf46af025e4a6108e5f413e.1490039846.git.baruch@tkos.co.il>
-References: <f81b2b2f55f9f4294cf46af025e4a6108e5f413e.1490039846.git.baruch@tkos.co.il>
-Message-ID: <20170320211558.432299e0@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 20 Mar 2017 21:33:14 +0100
+Subject: [Buildroot] [PATCH] package: add qt5virtualkeyboard
+In-Reply-To: <20170317164628.5029-1-gael.portay@savoirfairelinux.com>
+References: <20170317164628.5029-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20170320213314.394bdb0e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Ga?l,
 
-On Mon, 20 Mar 2017 21:57:25 +0200, Baruch Siach wrote:
+some additions to your own findings...
 
-> +	select BR2_PACKAGE_LIBNFNETLINK if BR2_PACKAGE_LIBNL
+On Fri, 17 Mar 2017 12:46:28 -0400, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
 
-We generally don't do this, and only do the "double" condition that you
-have below.
+> This patch adds the Qt virtualkeyboard package.
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> ---
+>  package/qt5/Config.in                              |  1 +
+>  package/qt5/qt5virtualkeyboard/Config.in           |  9 +++++++
+>  .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   | 31 ++++++++++++++++++++++
+>  3 files changed, 41 insertions(+)
+>  create mode 100644 package/qt5/qt5virtualkeyboard/Config.in
+>  create mode 100644 package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+> 
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index 4bcbc6e..a810503 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -76,6 +76,7 @@ source "package/qt5/qt5serialbus/Config.in"
+>  source "package/qt5/qt5serialport/Config.in"
+>  source "package/qt5/qt5svg/Config.in"
+>  source "package/qt5/qt5tools/Config.in"
+> +source "package/qt5/qt5virtualkeyboard/Config.in"
+>  source "package/qt5/qt5webchannel/Config.in"
+>  source "package/qt5/qt5webkit/Config.in"
+>  source "package/qt5/qt5websockets/Config.in"
+> diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
+> new file mode 100644
+> index 0000000..df9e9d6
+> --- /dev/null
+> +++ b/package/qt5/qt5virtualkeyboard/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_QT5VIRTUALKEYBOARD
+> +	bool "qt5virtualkeyboard"
 
-But if you prefer this "select", then the double condition is no longer
-needed.
+Needs 
 
-Best regards,
+	depends on BR2_PACKAGE_QT5_VERSION_LATEST
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+or some non-standard download location in case qt5virtualkeyboard is although
+availabe for qt-5.6.2?
+
+> +	depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK
+> +	select BR2_PACKAGE_QT5SVG
+> +	help
+> +	  Qt Virtual Keyboard is a virtual keyboard framework that consists of a
+> +	  C++ backend supporting custom input methods as well as a UI frontend
+> +	  implemented in QML.
+> +
+
+Maybe mention the GPLv3 only license here?
+
+And some comment in case the dependencies are not given:
+
+	comment "qt5virtualkeyboard needs at least qt-5.8.0 and qt5declarative quick module"
+	       depends on !BR2_PACKAGE_QT5_VERSION_LATEST || !BR2_PACKAGE_QT5DECLARATIVE_QUICK
+
+
+Regards,
+Peter
+
+> diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+> new file mode 100644
+> index 0000000..e73a154
+> --- /dev/null
+> +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+> @@ -0,0 +1,31 @@
+> +################################################################################
+> +#
+> +# qt5virtualkeyboard
+> +#
+> +################################################################################
+> +
+> +QT5VIRTUALKEYBOARD_VERSION = $(QT5_VERSION)
+> +QT5VIRTUALKEYBOARD_SITE = $(QT5_SITE)
+> +QT5VIRTUALKEYBOARD_SOURCE = qtvirtualkeyboard-opensource-src-$(QT5VIRTUALKEYBOARD_VERSION).tar.xz
+> +QT5VIRTUALKEYBOARD_DEPENDENCIES = qt5base qt5declarative qt5svg
+> +QT5VIRTUALKEYBOARD_INSTALL_STAGING = YES
+> +
+> +QT5VIRTUALKEYBOARD_LICENSE = GPLv3
+> +QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
+> +define QT5VIRTUALKEYBOARD_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+> +endef
+> +
+> +define QT5VIRTUALKEYBOARD_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define QT5VIRTUALKEYBOARD_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+> +endef
+> +
+> +define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
+> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
+> +endef
+> +
+> +$(eval $(generic-package))
