@@ -1,35 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 22:33:45 +0100
-Subject: [Buildroot] [PATCH v2] gst1-plugins-bad: waylandsink needs
- wayland-protocols
-In-Reply-To: <20170306204347.30354-1-ps.report@gmx.net>
-References: <20170306204347.30354-1-ps.report@gmx.net>
-Message-ID: <20170320223345.0e543bcf@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 20 Mar 2017 22:41:07 +0100
+Subject: [Buildroot] [PATCH] download/git: create GNU format tar files
+In-Reply-To: <20170320205121.30926-1-arnout@mind.be>
+References: <20170320205121.30926-1-arnout@mind.be>
+Message-ID: <20170320224107.166de161@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Arnout,
 
-On Mon,  6 Mar 2017 21:43:47 +0100, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ----
-> Changes v1 -> v2:
->   - use select instead of depends for BR2_PACKAGE_WAYLAND_PROTOCOLS
->    (suggested by Thomas Petazzoni)
->   - add select BR2_PACKAGE_WAYLAND_PROTOCOLS to missing second
->     place (BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND)
+On Mon, 20 Mar 2017 21:51:21 +0100, "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+
+> On most distros, the tar format defaults to GNU. However, at build time
+> the default format may be changed to posix. Also, future versions of
+> tar will default to posix.
+> 
+> Since we want the tarballs created by the git download method to be
+> reproducible (so their hash can be checked), we should explicitly
+> specify the format. Since existing tarballs on sources.buildroot.org
+> use the GNU format, and also the existing hashes in the *.hash files
+> are based on GNU format tarballs, we use the GNU format.
+> 
+> In addition, the Posix format encodes atime and ctime as well as mtime,
+> but tar offers no option like --mtime to override them. In the GNU
+> format, atime and ctime are only encoded if the --incremental option is
+> given.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/gstreamer1/gst1-plugins-bad/Config.in           | 2 ++
->  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
+> Peter, can you test if this solves the issue for you?
 
-Applied to master, thanks.
+After removing the old dl/wiringpi-2.44.tar.gz file, applying your patch
+and done a fresh download:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+	$ cat package/wiringpi/wiringpi.hash 
+# Locally calculated
+sha256 464c98ed54f5c0ad6611e270be3491c4598a32b7e86b208255862a301c564955  wiringpi-2.44.tar.gz
+
+	$ sha256sum dl/wiringpi-2.44.tar.gz 
+464c98ed54f5c0ad6611e270be3491c4598a32b7e86b208255862a301c564955  dl/wiringpi-2.44.tar.gz
+
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
+
+> ---
+>  support/download/git | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/download/git b/support/download/git
+> index 7921411835..056057c700 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -94,6 +94,8 @@ popd >/dev/null
+>  # Generate the archive, sort with the C locale so that it is reproducible
+>  find "${basename}" -not -type d >"${basename}.list"
+>  LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
+> -tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
+> +# Create GNU-format tarballs, since that's the format of the tarballs on
+> +# sources.buildroot.org and used in the *.hash files
+> +tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+>           -T "${basename}.list.sorted" >"${output}.tar"
+>  gzip -n <"${output}.tar" >"${output}"
