@@ -1,59 +1,54 @@
 From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Date: Mon, 20 Mar 2017 09:25:34 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
-	2017-03-18
-In-Reply-To: <20170319205052.0730638d@free-electrons.com>
-References: <20170319072840.640CD207D9@mail.free-electrons.com>
- <6AAECB0035080A468CD3789966C9E874B280D849@WRMAIL01.wr.imgtec.org>
- <20170319205052.0730638d@free-electrons.com>
-Message-ID: <e96b7de5-b3bd-e407-1283-863fdb1fc496@imgtec.com>
+Date: Mon, 20 Mar 2017 11:25:09 +0100
+Subject: [Buildroot] [PATCH] package/libkcapi: bump version to latest git
+	hash 79cb80714ebc
+Message-ID: <1490005509-9565-1-git-send-email-marcin.nowakowski@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Configure script is used to detect options supported by the target
+compiler, but those options are then incorrectly used by the targets
+compiled using a host compiler.
 
-On 19.03.2017 20:50, Thomas Petazzoni wrote:
-> Hello,
->
-> On Sun, 19 Mar 2017 19:06:19 +0000, Marcin Nowakowski wrote:
->
->> These failures are actually failures while building a host app in a
->> target package ... but this isn't happening for any arch so I'm
->> wondering if there are different host compiler variations across
->> build machines?
->
-> I'm not sure what you mean by "this isn't happening for any arch". The
-> failure is while building something with the host compiler, so the
-> target architecture doesn't really matter.
+configure:
+  checking whether CC supports -fstack-protector-strong... yes
+make:
+  /usr/bin/gcc (...)
+  cc1: error: unrecognized command line option "-fstack-protector-strong"
 
-Yes, of course. What I meant is that it didn't fail for all builds but 
-only some, so does that mean that there are different build machines 
-with different host toolchains?
+Fixes:
+  http://autobuild.buildroot.net/results/4c0/4c06dfa35ef52f6522619f797a9ae4e7a2e45d04/
+  http://autobuild.buildroot.net/results/788/78886670cff406a09bd08808d9a6e328ee75634b/
 
->> Unfortunately the flag that is causing the failure is checked for the
->> target compiler only (and isn't really needed for the host anyway),
->> so I'll prepare a patch that removes it from the host build as
->> unnecessary, but the variations across build targets that don't
->> depend on the target itself have surprised me
->
-> Indeed, the problem comes from the configure.ac script that tests if
-> the target compiler supports -fstack-protector-strong and if it does,
-> uses it in AM_CFLAGS. Unfortunately, this AM_CFLAGS also gets used when
-> building the host tool for the documentation.
->
-> Since anyway Buildroot will already be passing -fstack-protector in
-> CFLAGS if enabled in the Buildroot configuration, I believe a patch to
-> configure.ac to add a --enable/--disable option to enable/disable the
-> addition of -fstack-protector-strong would be nice.
->
-> Or alternatively: fix the real problem, and make sure it doesn't use
-> AM_CFLAGS for the host build.
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+---
+ package/libkcapi/libkcapi.hash | 2 +-
+ package/libkcapi/libkcapi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-That's a patch (removal of AM_CFLAGS for host build) I will be sending 
-to the library maintainer. I'll send a patch for BR if/when it is 
-accepted upstream.
-
-Marcin
+diff --git a/package/libkcapi/libkcapi.hash b/package/libkcapi/libkcapi.hash
+index e191970..00ee094 100644
+--- a/package/libkcapi/libkcapi.hash
++++ b/package/libkcapi/libkcapi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	1ed007a35d9fe31383d1131e9f8e14af4df8d55e6c48828b5075324b2876364a	libkcapi-a039f8a5adca57dc69a19d7361600c2f410e0c26.tar.gz
++sha256	e2ebf660029a3565c17220530580d5579b8289bb41ea516a33bf86ef4941e05b	libkcapi-79cb80714ebcbae2b9de9bb5aca9a6a546f2f121.tar.gz
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index 9488098..74edf2c 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBKCAPI_VERSION = a039f8a5adca57dc69a19d7361600c2f410e0c26
++LIBKCAPI_VERSION = 79cb80714ebcbae2b9de9bb5aca9a6a546f2f121
+ LIBKCAPI_SITE = $(call github,smuellerDD,libkcapi,$(LIBKCAPI_VERSION))
+ LIBKCAPI_AUTORECONF = YES
+ LIBKCAPI_INSTALL_STAGING = YES
+-- 
+2.7.4
