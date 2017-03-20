@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 22:48:39 +0100
-Subject: [Buildroot] [PATCH 1/1] configs: add defconfig for Nationalchip
- gx6605s dev board.
-In-Reply-To: <1488801152-13368-1-git-send-email-ren_guo@c-sky.com>
-References: <1488801152-13368-1-git-send-email-ren_guo@c-sky.com>
-Message-ID: <20170320224839.6677ccd0@free-electrons.com>
+Date: Mon, 20 Mar 2017 22:52:50 +0100
+Subject: [Buildroot] [PATCH v5 11/19] infra-libtool: pass sysroot
+ information to libtool
+In-Reply-To: <1482241596-31688-12-git-send-email-jezz@sysmic.org>
+References: <1482241596-31688-1-git-send-email-jezz@sysmic.org>
+ <1482241596-31688-12-git-send-email-jezz@sysmic.org>
+Message-ID: <20170320225250.0a5bd659@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +14,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  6 Mar 2017 19:52:32 +0800, Guo Ren wrote:
-> gx6605s is a nice SOC for dvbs2 DVB product, and C-SKY inside.
-> 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> ---
->  DEVELOPERS                     |  2 +
->  board/csky/gx6605s/gdbinit     | 25 ++++++++++++
->  board/csky/post-image.sh       |  7 ++++
->  board/csky/readme.txt          | 92 ++++++++++++++++++++++++++++++++++++++++++
->  configs/csky_gx6605s_defconfig | 18 +++++++++
->  5 files changed, 144 insertions(+)
->  create mode 100644 board/csky/gx6605s/gdbinit
->  create mode 100755 board/csky/post-image.sh
->  create mode 100644 board/csky/readme.txt
->  create mode 100644 configs/csky_gx6605s_defconfig
+On Tue, 20 Dec 2016 14:46:28 +0100, J?r?me Pouiller wrote:
 
-I've applied the patch after doing one change, see below.
+> libtool include support for cross-compilation since v1.5.
 
-> diff --git a/board/csky/post-image.sh b/board/csky/post-image.sh
-> new file mode 100755
-> index 0000000..be71f51
-> --- /dev/null
-> +++ b/board/csky/post-image.sh
-> @@ -0,0 +1,7 @@
-> +#!/bin/sh
-> +# .gdbinit is the csky-linux-gdb default init script. eg:
-> +# $ csky-linux-gdb vmlinux
-> +# Gdb will read .gdbinit to load vmlinux by default.
-> +# So, we need copy the gdbinit to the .gdbinit.
-> +
-> +install -D -m 0644 board/csky/gx6605s/gdbinit ${BINARIES_DIR}/.gdbinit
+Are you sure this is true?
 
-I've removed this entirely, and just changed the readme.txt
-instructions to tell people to run:
+In the release notes of libtool v2.4
+(https://savannah.gnu.org/forum/forum.php?forum_id=6525), I see:
 
-  ./output/host/usr/bin/csky-linux-gdb -x board/csky/gx6605s/gdbinit output/images/vmlinux
+"""
 
-By referencing the gdbinit file using the -x option, we don't have to
-copy it around in an hidden file.
 
-Thanks!
+New in 2.4 2010-09-22:
+
+    New features:
+
+- Sysroot support. This allows you to build cross-compiled packages
+with the same prefix that will be used on the destination machine,
+and still find dependent libraries under the compiler's "sysroot".
+Without sysroot support, paths internal to the build system may leak
+into the product of the build.
+
+Sysroot support is disabled unless the --with-sysroot configure
+option is passed to configure, because .la files generated with
+sysroot support will not be usable in general with older Libtools. 
+
+"""
+
+So are you sure that this feature didn't appear in libtool 2.4 ?
+
+Best regards,
 
 Thomas
 -- 
