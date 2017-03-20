@@ -1,31 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:51:02 +0100
-Subject: [Buildroot] [PATCH] libv4l: drop -lrt workaround
-In-Reply-To: <0adbe5c3ad4320e08603e514825b1222416f1846.1490042201.git.baruch@tkos.co.il>
-References: <0adbe5c3ad4320e08603e514825b1222416f1846.1490042201.git.baruch@tkos.co.il>
-Message-ID: <20170320215102.288eab9f@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 20 Mar 2017 21:51:21 +0100
+Subject: [Buildroot] [PATCH] download/git: create GNU format tar files
+Message-ID: <20170320205121.30926-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On most distros, the tar format defaults to GNU. However, at build time
+the default format may be changed to posix. Also, future versions of
+tar will default to posix.
 
-On Mon, 20 Mar 2017 22:36:41 +0200, Baruch Siach wrote:
-> libv4l adds the -lrt flag since upstream commit 3dcb945bfcab
-> ("v4l2-compliance: Explicitely link against rt library").
-> 
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libv4l/libv4l.mk | 2 --
->  1 file changed, 2 deletions(-)
+Since we want the tarballs created by the git download method to be
+reproducible (so their hash can be checked), we should explicitly
+specify the format. Since existing tarballs on sources.buildroot.org
+use the GNU format, and also the existing hashes in the *.hash files
+are based on GNU format tarballs, we use the GNU format.
 
-Applied to master, thanks.
+In addition, the Posix format encodes atime and ctime as well as mtime,
+but tar offers no option like --mtime to override them. In the GNU
+format, atime and ctime are only encoded if the --incremental option is
+given.
 
-Thomas
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Peter Seiderer <ps.report@gmx.net>
+---
+Peter, can you test if this solves the issue for you?
+---
+ support/download/git | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/support/download/git b/support/download/git
+index 7921411835..056057c700 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -94,6 +94,8 @@ popd >/dev/null
+ # Generate the archive, sort with the C locale so that it is reproducible
+ find "${basename}" -not -type d >"${basename}.list"
+ LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
+-tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
++# Create GNU-format tarballs, since that's the format of the tarballs on
++# sources.buildroot.org and used in the *.hash files
++tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+          -T "${basename}.list.sorted" >"${output}.tar"
+ gzip -n <"${output}.tar" >"${output}"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.11.0
