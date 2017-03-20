@@ -1,101 +1,79 @@
-From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Mon, 20 Mar 2017 10:20:05 -0400
-Subject: [Buildroot] [PATCH] package: add qt5virtualkeyboard
-In-Reply-To: <20170318152235.0be2d895@free-electrons.com>
-References: <20170317164628.5029-1-gael.portay@savoirfairelinux.com>
- <20170318152235.0be2d895@free-electrons.com>
-Message-ID: <20170320142005.a6jb32nyfdiypdxd@gportay>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 20 Mar 2017 15:36:20 +0100
+Subject: [Buildroot] [PATCH] python-sortedcontainers: new package
+Message-ID: <20170320143620.8721-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Sat, Mar 18, 2017 at 03:22:35PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Peter, could you help by reviewing this patch touching qt5 stuff?
-> 
-> Thanks a lot!
-> 
-> Thomas
-> 
-> On Fri, 17 Mar 2017 12:46:28 -0400, Ga?l PORTAY wrote:
-> > This patch adds the Qt virtualkeyboard package.
-> > 
-> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> > ---
-> >  package/qt5/Config.in                              |  1 +
-> >  package/qt5/qt5virtualkeyboard/Config.in           |  9 +++++++
-> >  .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   | 31 ++++++++++++++++++++++
-> >  3 files changed, 41 insertions(+)
-> >  create mode 100644 package/qt5/qt5virtualkeyboard/Config.in
-> >  create mode 100644 package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                                          |  1 +
+ package/python-sortedcontainers/Config.in                  |  7 +++++++
+ .../python-sortedcontainers/python-sortedcontainers.hash   |  3 +++
+ package/python-sortedcontainers/python-sortedcontainers.mk | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-sortedcontainers/Config.in
+ create mode 100644 package/python-sortedcontainers/python-sortedcontainers.hash
+ create mode 100644 package/python-sortedcontainers/python-sortedcontainers.mk
 
-Oops, the hash file is missing here...
-
-> > 
-> > diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> > new file mode 100644
-> > index 0000000..e73a154
-> > --- /dev/null
-> > +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> > @@ -0,0 +1,31 @@
-> > +################################################################################
-> > +#
-> > +# qt5virtualkeyboard
-> > +#
-> > +################################################################################
-> > +
-> > +QT5VIRTUALKEYBOARD_VERSION = $(QT5_VERSION)
-> > +QT5VIRTUALKEYBOARD_SITE = $(QT5_SITE)
-> > +QT5VIRTUALKEYBOARD_SOURCE = qtvirtualkeyboard-opensource-src-$(QT5VIRTUALKEYBOARD_VERSION).tar.xz
-> > +QT5VIRTUALKEYBOARD_DEPENDENCIES = qt5base qt5declarative qt5svg
-> > +QT5VIRTUALKEYBOARD_INSTALL_STAGING = YES
-> > +
-
-Here, I think I should also add this if statement about license:
-
-ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-> > +QT5VIRTUALKEYBOARD_LICENSE = GPLv3
-> > +QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
-else
-QT5VIRTUALKEYBOARD_LICENSE = Commercial license
-QT5VIRTUALKEYBOARD_LICENSE_FILES = NO
-endif
-
-> > +define QT5VIRTUALKEYBOARD_CONFIGURE_CMDS
-> > +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-> > +endef
-> > +
-> > +define QT5VIRTUALKEYBOARD_BUILD_CMDS
-> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> > +endef
-> > +
-> > +define QT5VIRTUALKEYBOARD_INSTALL_STAGING_CMDS
-> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-> > +endef
-> > +
-> > +define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
-> > +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
-> > +endef
-> > +
-> > +$(eval $(generic-package))
-> 
-
-Also, I am working of installing language layouts.
-
-For now, Chinese, Korean and Japanese layouts do no work properly; others are
-fined.
-
-About the integration of a selection of layouts, I cannot make the decision
-between a select or a string kconfig entry. I think the string entry has the
-advantage to not to have to maintain a hardcoded list; this list would evoluate
-between Qt versions...
-
-Would you prefer a select or a string?
-
-Regards,
-Gael
+diff --git a/package/Config.in b/package/Config.in
+index 9f4b55020..cd9d06dc1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -825,6 +825,7 @@ menu "External python modules"
+ 	source "package/python-slob/Config.in"
+ 	source "package/python-smbus-cffi/Config.in"
+ 	source "package/python-socketio/Config.in"
++	source "package/python-sortedcontainers//Config.in"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
+diff --git a/package/python-sortedcontainers/Config.in b/package/python-sortedcontainers/Config.in
+new file mode 100644
+index 000000000..43bd1b1c0
+--- /dev/null
++++ b/package/python-sortedcontainers/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SORTEDCONTAINERS
++	bool "python-sortedcontainers"
++	help
++	  Python Sorted Container Types: SortedList, SortedDict, and
++	  SortedSet.
++
++	  http://www.grantjenks.com/docs/sortedcontainers/
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.hash b/package/python-sortedcontainers/python-sortedcontainers.hash
+new file mode 100644
+index 000000000..11fa07660
+--- /dev/null
++++ b/package/python-sortedcontainers/python-sortedcontainers.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/sortedcontainers/json, sha256 locally computed
++md5	ad4f00e377ad934954ac90fcac0b185f  sortedcontainers-1.5.7.tar.gz
++sha256	0ff0442865e492bc50476b18000fb8400cf2472d14d21a92b27cd7c5184550ea  sortedcontainers-1.5.7.tar.gz
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.mk b/package/python-sortedcontainers/python-sortedcontainers.mk
+new file mode 100644
+index 000000000..99606816a
+--- /dev/null
++++ b/package/python-sortedcontainers/python-sortedcontainers.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-sortedcontainers
++#
++################################################################################
++
++PYTHON_SORTEDCONTAINERS_VERSION = 1.5.7
++PYTHON_SORTEDCONTAINERS_SOURCE = sortedcontainers-$(PYTHON_SORTEDCONTAINERS_VERSION).tar.gz
++PYTHON_SORTEDCONTAINERS_SITE = https://pypi.python.org/packages/8d/aa/5369362d730728639ba434318df26b5c554804578d1c48381367ea5377c6
++PYTHON_SORTEDCONTAINERS_SETUP_TYPE = setuptools
++PYTHON_SORTEDCONTAINERS_LICENSE = Apache-2.0
++PYTHON_SORTEDCONTAINERS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+-- 
+2.11.0
