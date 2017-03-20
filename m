@@ -1,134 +1,110 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Tue, 21 Mar 2017 00:23:00 +0530
-Subject: [Buildroot] [PATCH] gst1-vaapi: fix build when Gstreamer debugging
-	is disabled
-Message-ID: <1490035980-7927-1-git-send-email-rahul.bedarkar@imgtec.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 20 Mar 2017 20:27:08 +0100
+Subject: [Buildroot] [PATCH v1] wiringpi: bump to version 2.44
+In-Reply-To: <1cda02af-597a-5254-253e-5bcc84ac7ddd@mind.be>
+References: <20170315210828.3784-1-ps.report@gmx.net>
+ <20170318141428.0c4b6d36@free-electrons.com>
+ <20170319222409.205633ad@gmx.net>
+ <53182259-8ac8-de42-4ffb-ecd79e2597fe@mind.be>
+ <1cda02af-597a-5254-253e-5bcc84ac7ddd@mind.be>
+Message-ID: <20170320202708.75f88379@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When Gstreamer debugging is disabled (BR2_PACKAGE_GSTREAMER1_GST_DEBUG)
-we get following build errors:
+Hello Arnout, Yann, Thomas,
 
-  gstvaapisink.c: In function 'gst_vaapisink_init':
-  gstvaapisink.c:1902:39: error: 'gst_debug_vaapisink' undeclared (first use in this function)
-  gstvaapisink.c:1902:39: note: each undeclared identifier is reported only once for each function it appears in
-  gstvaapidecode.c: In function 'gst_vaapidecode_init':
-  gstvaapidecode.c:1365:63: error: 'gst_debug_vaapidecode' undeclared (first use in this function)
-  gstvaapidecode.c:1365:63: note: each undeclared identifier is reported only once for each function it appears in
-  gstvaapipostproc.c: In function 'gst_vaapipostproc_init':
-  gstvaapipostproc.c:1811:7: error: 'gst_debug_vaapipostproc' undeclared (first use in this function)
-  gstvaapipostproc.c:1811:7: note: each undeclared identifier is reported only once for each function it appears in
+On Sun, 19 Mar 2017 23:31:36 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Add upstream patch to fix these build issues.
+> 
+> 
+> On 19-03-17 23:28, Arnout Vandecappelle wrote:
+> > 
+> > 
+> > On 19-03-17 22:24, Peter Seiderer wrote:
+> >> Hello Thomas,
+> >>
+> >> On Sat, 18 Mar 2017 14:14:28 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> >>
+> >>> Hello,
+> >>>
+> >>> On Wed, 15 Mar 2017 22:08:28 +0100, Peter Seiderer wrote:
+> >>>> - rebase 0001-Adjust-for-buildroot-build.patch
+> >>>> - delete 0002-include-asm-ioctl.h-directly-for-_IOC_SIZEBITS.patch
+> >>>>   (all changes are incorporated into wiringpi-2.44)
+> >>>> - remove useless hash file (git download)
+> >>> Git downloads now generate reproducible tarballs, so we in fact want to
+> >>> add hashes for them as well. However, it is true that the hash is not
+> >>> checked currently. This has been on the TODO-list for a while.
+> >> Mhhh, tried several times, every time I get a different checksum:
+> >>
+> >> 	$ sha256sum dl/wiringpi-2.44.tar.gz 
+> >> 5324ed452b7adfb77d049ea49dfe8878605c6198cb5c706ae2b285a70fb9d096  dl/wiringpi-2.44.tar.gz
+> >>
+> >> 	$ sha256sum dl/wiringpi-2.44.tar.gz 
+> >> 65e6b3a916b940eec085222a28a5859b09e79e0020de2f2b07563d910426180c  dl/wiringpi-2.44.tar.gz
+> > 
+> > 
+> >  Really weird, both Yann and I tested and we got the same sha256sum as Thomas
+> > put in wiringpi.hash... So we are clearly still doing something wrong in the
+> > download helper.
+> > 
+> >  To help us nail down the problem, could you do:
+> > 
+> > tar -xf dl/wiringpi-2.44.tar.gz
+> > tar -tf dl/wiringpi-2.44.tar.gz | xargs sha256sum
+> > 
+> > and compare the output with https://gitlab.com/snippets/1655089/raw ?
+> 
+>  Oh, maybe it's in the timestamps, so also compare the output of
+> 
+> tar tvf ~/src/buildroot/dl/wiringpi-2.44.tar.gz
+> 
+> with https://gitlab.com/snippets/1655090/raw
+> 
 
-Fixes:
-  http://autobuild.buildroot.net/results/653/653d9b056b04e589b8f5c57111635b0b3d7c8949
+sha256sums and timestamps are all the same, the difference is in the atime and ctime,
+comparing the output of two different downloads on my system
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
- ...n-debug-disabled-default-category-is-NULL.patch | 91 ++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch
+	$ tar -xf t001/wiringpi-2.44.tar --to-command='echo $TAR_FILENAME $TAR_ATIME $TAR_MTIME $TAR_CTIME' > t001/files_atime_mtime_ctime.txt
+	$ tar -xf t002/wiringpi-2.44.tar --to-command='echo $TAR_FILENAME $TAR_ATIME $TAR_MTIME $TAR_CTIME' > t002/files_atime_mtime_ctime.txt
 
-diff --git a/package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch b/package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch
-new file mode 100644
-index 0000000..0d83c5a
---- /dev/null
-+++ b/package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch
-@@ -0,0 +1,91 @@
-+From 152217064f1192bb836620ad7eaadbc031624f4c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?V=C3=ADctor=20Manuel=20J=C3=A1quez=20Leal?=
-+ <vjaquez@igalia.com>
-+Date: Mon, 20 Mar 2017 16:45:01 +0100
-+Subject: [PATCH] plugins: when debug disabled, default category is NULL
-+
-+As in gstreamer-vaapi a common base class is used, the specific
-+default category is passed to the base-plugin initializator, thus
-+the log messages are categorized with the used plugin.
-+
-+Nonetheless, when the gst-debug is disabled in compilation time,
-+it is needed to pass NULL to the base-plugin initializator. This
-+patch does that.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=780302
-+
-+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-+---
-+ gst/vaapi/gstvaapidecode.c   | 4 ++++
-+ gst/vaapi/gstvaapiencode.c   | 4 ++++
-+ gst/vaapi/gstvaapipostproc.c | 4 ++++
-+ gst/vaapi/gstvaapisink.c     | 4 ++++
-+ 4 files changed, 16 insertions(+)
-+
-+diff --git a/gst/vaapi/gstvaapidecode.c b/gst/vaapi/gstvaapidecode.c
-+index 407e25b..c2bb42a 100644
-+--- a/gst/vaapi/gstvaapidecode.c
-++++ b/gst/vaapi/gstvaapidecode.c
-+@@ -49,7 +49,11 @@
-+ #define GST_VAAPI_DECODE_FLOW_PARSE_DATA        GST_FLOW_CUSTOM_SUCCESS_2
-+ 
-+ GST_DEBUG_CATEGORY_STATIC (gst_debug_vaapidecode);
-++#ifndef GST_DISABLE_GST_DEBUG
-+ #define GST_CAT_DEFAULT gst_debug_vaapidecode
-++#else
-++#define GST_CAT_DEFAULT NULL
-++#endif
-+ 
-+ #define GST_VAAPI_DECODE_PARAMS_QDATA \
-+   g_quark_from_static_string("vaapidec-params")
-+diff --git a/gst/vaapi/gstvaapiencode.c b/gst/vaapi/gstvaapiencode.c
-+index dd60901..b0f0a32 100644
-+--- a/gst/vaapi/gstvaapiencode.c
-++++ b/gst/vaapi/gstvaapiencode.c
-+@@ -38,7 +38,11 @@
-+ #define GST_VAAPI_ENCODE_FLOW_CONVERT_ERROR     GST_FLOW_CUSTOM_ERROR_1
-+ 
-+ GST_DEBUG_CATEGORY_STATIC (gst_vaapiencode_debug);
-++#ifndef GST_DISABLE_GST_DEBUG
-+ #define GST_CAT_DEFAULT gst_vaapiencode_debug
-++#else
-++#define GST_CAT_DEFAULT NULL
-++#endif
-+ 
-+ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GstVaapiEncode,
-+     gst_vaapiencode, GST_TYPE_VIDEO_ENCODER,
-+diff --git a/gst/vaapi/gstvaapipostproc.c b/gst/vaapi/gstvaapipostproc.c
-+index f4ddbb5..d45f7ee 100644
-+--- a/gst/vaapi/gstvaapipostproc.c
-++++ b/gst/vaapi/gstvaapipostproc.c
-+@@ -49,7 +49,11 @@
-+ #define GST_PLUGIN_DESC "A VA-API video postprocessing filter"
-+ 
-+ GST_DEBUG_CATEGORY_STATIC (gst_debug_vaapipostproc);
-++#ifndef GST_DISABLE_GST_DEBUG
-+ #define GST_CAT_DEFAULT gst_debug_vaapipostproc
-++#else
-++#define GST_CAT_DEFAULT NULL
-++#endif
-+ 
-+ /* Default templates */
-+ /* *INDENT-OFF* */
-+diff --git a/gst/vaapi/gstvaapisink.c b/gst/vaapi/gstvaapisink.c
-+index cca71d9..9cc5154 100644
-+--- a/gst/vaapi/gstvaapisink.c
-++++ b/gst/vaapi/gstvaapisink.c
-+@@ -59,7 +59,11 @@
-+ #define GST_PLUGIN_DESC "A VA-API based videosink"
-+ 
-+ GST_DEBUG_CATEGORY_STATIC (gst_debug_vaapisink);
-++#ifndef GST_DISABLE_GST_DEBUG
-+ #define GST_CAT_DEFAULT gst_debug_vaapisink
-++#else
-++#define GST_CAT_DEFAULT NULL
-++#endif
-+ 
-+ /* Default template */
-+ /* *INDENT-OFF* */
-+-- 
-+2.6.2
-+
--- 
-2.6.2
+	$ head t001/files_atime_mtime_ctime.txt
+wiringpi-2.44/.gitignore 1489958464.60118197 1488369319 1489958464.464182585
+wiringpi-2.44/COPYING.LESSER 1489958464.60118197 1488369319 1489958464.464182585
+wiringpi-2.44/INSTALL 1489958464.602181965 1488369319 1489958464.464182585
+wiringpi-2.44/People 1489958464.602181965 1488369319 1489958464.464182585
+wiringpi-2.44/README.TXT 1489958464.602181965 1488369319 1489958464.464182585
+wiringpi-2.44/VERSION 1489958464.602181965 1488369319 1489958464.464182585
+wiringpi-2.44/build 1489958464.602181965 1488369319 1489958464.464182585
+wiringpi-2.44/debian-template/wiringPi/DEBIAN/control 1489958464.602181965 1488369319 1489958464.465182581
+wiringpi-2.44/debian-template/wiringPi/DEBIAN/postinst 1489958464.602181965 1488369319 1489958464.465182581
+wiringpi-2.44/debian-template/wiringPi/DEBIAN/postrm 1489958464.602181965 1488369319 1489958464.465182581
+
+	$ head t002/files_atime_mtime_ctime.txt
+wiringpi-2.44/.gitignore 1490036719.006803894 1488369319 1490036718.876804412
+wiringpi-2.44/COPYING.LESSER 1490036719.006803894 1488369319 1490036718.876804412
+wiringpi-2.44/INSTALL 1490036719.007803891 1488369319 1490036718.876804412
+wiringpi-2.44/People 1490036719.007803891 1488369319 1490036718.877804408
+wiringpi-2.44/README.TXT 1490036719.007803891 1488369319 1490036718.877804408
+wiringpi-2.44/VERSION 1490036719.007803891 1488369319 1490036718.877804408
+wiringpi-2.44/build 1490036719.007803891 1488369319 1490036718.877804408
+wiringpi-2.44/debian-template/wiringPi/DEBIAN/control 1490036719.007803891 1488369319 1490036718.878804404
+wiringpi-2.44/debian-template/wiringPi/DEBIAN/postinst 1490036719.007803891 1488369319 1490036718.878804404
+wiringpi-2.44/debian-template/wiringPi/DEBIAN/postrm 1490036719.007803891 1488369319 1490036718.878804404
+
+	
+	$ git --version
+git version 2.11.0
+
+	$ tar --version
+tar (GNU tar) 1.28
+
+Regards,
+Peter
+
+
+>  Regards,
+>  Arnout
