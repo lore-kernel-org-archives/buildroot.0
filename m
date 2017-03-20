@@ -1,54 +1,325 @@
-From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Date: Mon, 20 Mar 2017 11:25:09 +0100
-Subject: [Buildroot] [PATCH] package/libkcapi: bump version to latest git
-	hash 79cb80714ebc
-Message-ID: <1490005509-9565-1-git-send-email-marcin.nowakowski@imgtec.com>
+From: Abhimanyu Vishwakarma <abhimanyu.vishwakarma@imgtec.com>
+Date: Mon, 20 Mar 2017 16:36:23 +0530
+Subject: [Buildroot] [PATCH v5] Add defconfig for MIPS Creator ci40
+Message-ID: <1490007983-21916-1-git-send-email-abhimanyu.vishwakarma@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Configure script is used to detect options supported by the target
-compiler, but those options are then incorrectly used by the targets
-compiled using a host compiler.
+From: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
 
-configure:
-  checking whether CC supports -fstack-protector-strong... yes
-make:
-  /usr/bin/gcc (...)
-  cc1: error: unrecognized command line option "-fstack-protector-strong"
+Also add post-build script to create fitImage which is used
+by u-boot to boot the device. It also add post-image script
+to generate sdcard.img for preparing sdcard/usb device
 
-Fixes:
-  http://autobuild.buildroot.net/results/4c0/4c06dfa35ef52f6522619f797a9ae4e7a2e45d04/
-  http://autobuild.buildroot.net/results/788/78886670cff406a09bd08808d9a6e328ee75634b/
-
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+Reviewed-by: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
 ---
- package/libkcapi/libkcapi.hash | 2 +-
- package/libkcapi/libkcapi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Changes v1->v2
+  - No change
+ Changes v2->v3 (Suggested by Arnout)
+  - Remove uImage and add fitImage generation
+  - Tidy readme.txt
+  - Tidy ci40_defconfig, remove custom toolchain and add wifi helper packages
+  Some changes are not done:
+  - Using git-helper:
+    - Custom kernel doesnt provide tar file, so it didnt work for me
+ Changes v3->v4 (Suggested by Arnout)
+  - Use github helper for getting kernel/u-boot
+  - rename fitImage.its -> fitImage.its.in to reflect as template file,
+    remove hardcoded dtb filename
+  - Find dtb file in output/images directory and use first dtb in fitImage
+  - Remove image size from genimage.cfg
+  - Tidy readme.txt and add section to explain how to stop u-boot autoboot,
+    how to make it persistent, and other grammar
+ Changes v4->v5 (Suggested by Thomas)
+  - Use fixed kernel entry addr
+  - Generate vmlinux.bin.gz from generate vmlinux.bin
+  - Remove generating uImage (not required for anything now)
 
-diff --git a/package/libkcapi/libkcapi.hash b/package/libkcapi/libkcapi.hash
-index e191970..00ee094 100644
---- a/package/libkcapi/libkcapi.hash
-+++ b/package/libkcapi/libkcapi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	1ed007a35d9fe31383d1131e9f8e14af4df8d55e6c48828b5075324b2876364a	libkcapi-a039f8a5adca57dc69a19d7361600c2f410e0c26.tar.gz
-+sha256	e2ebf660029a3565c17220530580d5579b8289bb41ea516a33bf86ef4941e05b	libkcapi-79cb80714ebcbae2b9de9bb5aca9a6a546f2f121.tar.gz
-diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index 9488098..74edf2c 100644
---- a/package/libkcapi/libkcapi.mk
-+++ b/package/libkcapi/libkcapi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBKCAPI_VERSION = a039f8a5adca57dc69a19d7361600c2f410e0c26
-+LIBKCAPI_VERSION = 79cb80714ebcbae2b9de9bb5aca9a6a546f2f121
- LIBKCAPI_SITE = $(call github,smuellerDD,libkcapi,$(LIBKCAPI_VERSION))
- LIBKCAPI_AUTORECONF = YES
- LIBKCAPI_INSTALL_STAGING = YES
+ board/ci40/create_fitImage.sh | 36 ++++++++++++++++++++++
+ board/ci40/fitImage.its.in    | 52 ++++++++++++++++++++++++++++++++
+ board/ci40/genimage.cfg       | 12 ++++++++
+ board/ci40/post-image.sh      | 15 ++++++++++
+ board/ci40/readme.txt         | 70 +++++++++++++++++++++++++++++++++++++++++++
+ configs/ci40_defconfig        | 47 +++++++++++++++++++++++++++++
+ 6 files changed, 232 insertions(+)
+ create mode 100755 board/ci40/create_fitImage.sh
+ create mode 100644 board/ci40/fitImage.its.in
+ create mode 100644 board/ci40/genimage.cfg
+ create mode 100755 board/ci40/post-image.sh
+ create mode 100644 board/ci40/readme.txt
+ create mode 100644 configs/ci40_defconfig
+
+diff --git a/board/ci40/create_fitImage.sh b/board/ci40/create_fitImage.sh
+new file mode 100755
+index 0000000..dd956e8
+--- /dev/null
++++ b/board/ci40/create_fitImage.sh
+@@ -0,0 +1,36 @@
++#!/bin/bash
++
++# Inputs
++BOARD_DIR="$(dirname $0)"
++FIT_ITS_FILE=$BOARD_DIR/fitImage.its.in
++MKIMAGE=$HOST_DIR/usr/bin/mkimage
++# Keep load and entry addr same as vmlinux.bin doesnt have
++# the info, it works fine with below config.
++# This will be removed once we have fitImage support built
++# into kernel itself.
++KERNEL_LOAD_ADDR=0x80400000
++KERNEL_ENTRY_ADDR=0x80400000
++
++# Output
++MODIFIED_FIT_ITS=$BINARIES_DIR/fitImage.its
++FITIMAGE=$BINARIES_DIR/fitImage
++
++# For now use first dtb found, once we start suporting more than 1 dtb, we can
++# then generate multiple fitImage for different dtb found.
++dtbs=(`find $BINARIES_DIR -name "*.dtb" -printf "%f "`)
++dtb=${dtbs[0]}
++
++# Create a copy of fitImage.its file and replace these address in that file
++sed -e "s/@load@/$KERNEL_LOAD_ADDR/g"   \
++    -e "s/@entry@/$KERNEL_ENTRY_ADDR/g" \
++    -e "s/@dtb@/$dtb/g"     \
++    $FIT_ITS_FILE > $MODIFIED_FIT_ITS
++
++# Gzip vmlinux.bin
++gzip -f -k $BINARIES_DIR/vmlinux.bin
++
++# Create fitImage
++$MKIMAGE -f $MODIFIED_FIT_ITS $FITIMAGE
++
++# Copy to target
++cp -a $FITIMAGE $TARGET_DIR/fitImage
+diff --git a/board/ci40/fitImage.its.in b/board/ci40/fitImage.its.in
+new file mode 100644
+index 0000000..376f3bc
+--- /dev/null
++++ b/board/ci40/fitImage.its.in
+@@ -0,0 +1,52 @@
++/*
++ * Description file for fitImage
++ */
++
++/dts-v1/;
++
++/ {
++	description = "Buildroot CI40 FTD Image";
++	#address-cells = <1>;
++
++	images {
++		kernel at 1 {
++			description = "Linux kernel";
++			data = /incbin/("./vmlinux.bin.gz");
++			type = "kernel";
++			arch = "mips";
++			os = "linux";
++			compression = "gzip";
++			load = <@load@>;
++			entry = <@entry@>;
++			hash at 1 {
++				algo = "crc32";
++			};
++			hash at 2 {
++				algo = "sha1";
++			};
++		};
++		marduk-fdt at 1 {
++			description = "CI40 Flattened Device Tree blob";
++			data = /incbin/("@dtb@");
++			type = "flat_dt";
++			arch = "mips";
++			compression = "none";
++			hash at 1 {
++				algo = "crc32";
++			};
++			hash at 2 {
++				algo = "sha1";
++			};
++		};
++	};
++
++	configurations {
++		default = "config at 1";
++		config at 1 {
++			description = "CI40 dtb";
++			kernel = "kernel at 1";
++			fdt = "marduk-fdt at 1";
++		};
++	};
++};
++
+diff --git a/board/ci40/genimage.cfg b/board/ci40/genimage.cfg
+new file mode 100644
+index 0000000..0ffc91c
+--- /dev/null
++++ b/board/ci40/genimage.cfg
+@@ -0,0 +1,12 @@
++# Minimal SD card image
++#
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/ci40/post-image.sh b/board/ci40/post-image.sh
+new file mode 100755
+index 0000000..18e76aa
+--- /dev/null
++++ b/board/ci40/post-image.sh
+@@ -0,0 +1,15 @@
++#!/usr/bin/env bash
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
++
+diff --git a/board/ci40/readme.txt b/board/ci40/readme.txt
+new file mode 100644
+index 0000000..2fde2b8
+--- /dev/null
++++ b/board/ci40/readme.txt
+@@ -0,0 +1,70 @@
++*********************
++* MIPS Creator CI40 *
++*********************
++
++The 'ci40_defconfig' will create a root filesystem and a fitImage
++under the 'output/images/' directory. This document explains how
++to use them in order to run Buildroot in the MIPS Creator CI40 board.
++
++Prepare USB/MMC for boot
++------------------------
++It can be done 2 ways:
++
++1. Using "sdcard.img" file created in output/images folder
++
++Use following command to write image to bootable device
++
++# dd if=./output/images/sdcard.img of=/dev/<your-microsd-or-usb-device>
++
++2. Manually preparing USB/MMC device
++
++Extract the generated root filesystem "rootfs.tar" into a ext4 formatted
++USB drive or SD-Card.
++
++Booting from USB/MMC
++--------------------
++The boot loader is already present in NOR flash. To boot your newly generated
++Linux and root filesystem, you need to interrupt U-Boot autoboot. Current U-Boot
++is configured with 2 seconds of boot-delay, after expiry of this boot-delay
++timeout U-Boot start booting default image. To interrupt autoboot, press any
++key before the boot-delay time expires, U-Boot will stops the autoboot process
++and gives a U-Boot prompt. You can now boot to your preferred boot method as
++describe below:
++
++From USB
++  pistachio # run usbboot
++
++From SD-Card
++  pistachio # run mmcboot
++
++Booting from network (nfsboot)
++------------------------------
++Prepare nfs root (See Buildroot manual) and extract rootfs.tar file into it.
++
++  pistachio # setenv serverip <server-ip-address>
++  pistachio # setenv rootpath <nfs root path>
++  pistachio # run netboot
++
++Persistent boot command
++-----------------------
++To boot automatically to your preferred boot method, use following command to
++make it persistent, for example to automatically boot to usb:
++
++  pistachio # setenv bootcmd run usbboot
++  pistachio # saveenv
++
++Flash new bootloader
++--------------------
++After booting with above method. Copy file u-boot-pistachio_marduk-2015.10-v1.0.4.img
++to /tmp. Use following command to flash new bootloader:
++
++# flashcp -v /tmp/u-boot-pistachio_marduk-2015.10-v1.0.4.img /dev/mtd0
++
++Online docs
++-----------
++Mostly for OpenWRT but it is applicable to Buildroot
++https://docs.creatordev.io/ci40/guides/openwrt-platform/#overview
++
++Prebuilt uboot
++--------------
++http://downloads.creatordev.io/?q=u-boot/
+diff --git a/configs/ci40_defconfig b/configs/ci40_defconfig
+new file mode 100644
+index 0000000..e4fe704
+--- /dev/null
++++ b/configs/ci40_defconfig
+@@ -0,0 +1,47 @@
++# architecture
++BR2_mipsel=y
++BR2_mips_32r2=y
++
++# linux header same as custom kernel ie 4.4.x
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,CreatorDev,linux,openwrt-4.4.14/linux-openwrt-4.4.14.tar.gz)"
++BR2_LINUX_KERNEL_DEFCONFIG="pistachio"
++BR2_LINUX_KERNEL_VMLINUX_BIN=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="img/pistachio_marduk"
++
++# bootloader flash support
++BR2_PACKAGE_MTD=y
++
++# wireless firmware
++BR2_PACKAGE_UCCP420WLAN=y
++
++# wireless package
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="pistachio_marduk"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,CreatorDev,u-boot,v1.0.4/u-boot-CreatorDev-v1.0.4.tar.gz)"
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-pistachio_marduk-2015.10-v1.0.4.img"
++
++# fitimage / image generation
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/ci40/create_fitImage.sh"
++
++# image generation
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/ci40/post-image.sh"
++
 -- 
 2.7.4
