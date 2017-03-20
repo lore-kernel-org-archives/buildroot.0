@@ -1,102 +1,78 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Mar 2017 21:00:20 +0100
-Subject: [Buildroot] [PATCH v1] wiringpi: fix compile for missing baud
-	defines
-Message-ID: <20170320200020.11959-1-ps.report@gmx.net>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 20 Mar 2017 21:11:22 +0100
+Subject: [Buildroot] [PATCH] skalibs: fix endianness detection on x86
+Message-ID: <20170320201122.26539-1-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For sparc-buildroot-linux-uclibc/sysroot/usr/include/asm/termbits.h
-containing:
+Update the patch for compile time endianness detection so it works on
+x86 platforms using GCC <= 4.4.
 
-  /* These have totally bogus values and nobody uses them
-     so far. Later on we'd have to use say 0x10000x and
-     adjust CBAUD constant and drivers accordingly.
-  #define B2500000  0x00001010
-  #define B3000000  0x00001011
-  #define B3500000  0x00001012
-  #define B4000000  0x00001013  */
+Fixes:
 
-Fixes [1]:
+  http://autobuild.buildroot.net/results/c2e8e1180571976b412cbba729c45a3698aea0b2
+  http://autobuild.buildroot.net/results/2ee47107d8a67470f7bc3e10cf763202d5455d17
 
-  wiringSerial.c: In function 'serialOpen':
-  wiringSerial.c:78:28: error: 'B2500000' undeclared (first use in this function)
-       case 2500000: myBaud = B2500000 ; break ;
-                              ^
-  wiringSerial.c:78:28: note: each undeclared identifier is reported only once for each function it appears in
-  wiringSerial.c:79:28: error: 'B3000000' undeclared (first use in this function)
-       case 3000000: myBaud = B3000000 ; break ;
-                              ^
-  wiringSerial.c:80:28: error: 'B3500000' undeclared (first use in this function)
-       case 3500000: myBaud = B3500000 ; break ;
-                              ^
-  wiringSerial.c:81:28: error: 'B4000000' undeclared (first use in this function)
-       case 4000000: myBaud = B4000000 ; break ;
-                              ^
-
-[1] http://autobuild.buildroot.net/results/5be/5bea1e95d1c7b444a5f0a5770251f1af3efc9c18
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- ...ringSerial-fix-compile-for-missing-baud-d.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
+ .../skalibs/0001-No-runtime-tests-for-endianness.patch  | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch b/package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
-new file mode 100644
-index 000000000..c9c4385d4
---- /dev/null
-+++ b/package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
-@@ -0,0 +1,47 @@
-+From 1e7a7a625ca20633062406ce525b19d168c356af Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 20 Mar 2017 20:51:20 +0100
-+Subject: [PATCH] wiringPi/wiringSerial: fix compile for missing baud defines
-+
-+For sparc-buildroot-linux-uclibc/sysroot/usr/include/asm/termbits.h
-+containing:
-+
-+  /* These have totally bogus values and nobody uses them
-+     so far. Later on we'd have to use say 0x10000x and
-+     adjust CBAUD constant and drivers accordingly.
-+  #define B2500000  0x00001010
-+  #define B3000000  0x00001011
-+  #define B3500000  0x00001012
-+  #define B4000000  0x00001013  */
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ wiringPi/wiringSerial.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/wiringPi/wiringSerial.c b/wiringPi/wiringSerial.c
-+index e1587ad..4ac8d1e 100644
-+--- a/wiringPi/wiringSerial.c
-++++ b/wiringPi/wiringSerial.c
-+@@ -75,10 +75,18 @@ int serialOpen (const char *device, const int baud)
-+     case 1152000:	myBaud = B1152000 ; break ;
-+     case 1500000:	myBaud = B1500000 ; break ;
-+     case 2000000:	myBaud = B2000000 ; break ;
-++#if defined(B2500000)
-+     case 2500000:	myBaud = B2500000 ; break ;
-++#endif
-++#if defined(B3000000)
-+     case 3000000:	myBaud = B3000000 ; break ;
-++#endif
-++#if defined(B3500000)
-+     case 3500000:	myBaud = B3500000 ; break ;
-++#endif
-++#if defined(B4000000)
-+     case 4000000:	myBaud = B4000000 ; break ;
-++#endif
-+ 
-+     default:
-+       return -2 ;
-+-- 
-+2.11.0
-+
+diff --git a/package/skalibs/0001-No-runtime-tests-for-endianness.patch b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
+index 4390d44..5f763c4 100644
+--- a/package/skalibs/0001-No-runtime-tests-for-endianness.patch
++++ b/package/skalibs/0001-No-runtime-tests-for-endianness.patch
+@@ -1,6 +1,6 @@
+-From 1e6f0b094c6ce6454be572704b866d2ce0962e59 Mon Sep 17 00:00:00 2001
++From 6754b208e7ec3bd1d4265db18fa4c0e7961a77bf Mon Sep 17 00:00:00 2001
+ From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-Date: Sun, 4 Dec 2016 19:10:40 +0100
++Date: Mon, 20 Mar 2017 20:05:00 +0100
+ Subject: [PATCH] No runtime tests for endianness
+ 
+ Replace build and execution of runtime test programs for determining
+@@ -12,8 +12,8 @@ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ ---
+  configure                     | 15 +++++++++++----
+  src/sysdeps/trybigendian.c    | 16 ++++++++++++++++
+- src/sysdeps/trylittleendian.c | 16 ++++++++++++++++
+- 3 files changed, 43 insertions(+), 4 deletions(-)
++ src/sysdeps/trylittleendian.c | 19 +++++++++++++++++++
++ 3 files changed, 46 insertions(+), 4 deletions(-)
+  create mode 100644 src/sysdeps/trybigendian.c
+  create mode 100644 src/sysdeps/trylittleendian.c
+ 
+@@ -70,16 +70,19 @@ index 0000000..d857572
+ +}
+ diff --git a/src/sysdeps/trylittleendian.c b/src/sysdeps/trylittleendian.c
+ new file mode 100644
+-index 0000000..eba065a
++index 0000000..68b93c1
+ --- /dev/null
+ +++ b/src/sysdeps/trylittleendian.c
+-@@ -0,0 +1,16 @@
++@@ -0,0 +1,19 @@
+ +#if defined(__BYTE_ORDER) && (__BYTE_ORDER == __LITTLE_ENDIAN) ||	\
+ +	defined(__BYTE_ORDER__) && (__BYTE_ORDER__  == __ORDER_LITTLE_ENDIAN__) || \
+ +	defined(__LITTLE_ENDIAN) ||					\
+ +	defined(__ARMEL__) ||						\
+ +	defined(__THUMBEL__) ||					\
+ +	defined(__AARCH64EL__) ||					\
+++	defined(__i386) || defined(__i386__) ||			\
+++	defined(__amd64) || defined(__amd64__) ||			\
+++	defined(__x86_64) || defined(__x86_64__) ||			\
+ +	defined(_MIPSEL) || defined(__MIPSEL) || defined(__MIPSEL__)
+ +#define YEAH
+ +#else
+@@ -91,5 +94,5 @@ index 0000000..eba065a
+ +	return 0;
+ +}
+ -- 
+-2.5.5
++2.1.4
+ 
 -- 
-2.11.0
+2.9.3
