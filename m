@@ -1,69 +1,61 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Mar 2017 22:41:07 +0100
-Subject: [Buildroot] [PATCH] download/git: create GNU format tar files
-In-Reply-To: <20170320205121.30926-1-arnout@mind.be>
-References: <20170320205121.30926-1-arnout@mind.be>
-Message-ID: <20170320224107.166de161@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Mar 2017 22:42:06 +0100
+Subject: [Buildroot] [PATCH] rpi-bt-firmware: new package
+In-Reply-To: <20170320213039.wlpa2tdplbon6f2n@tarshish>
+References: <094f74654295373c7cadd47044cbcfb9a80d8c87.1489093234.git.baruch@tkos.co.il>
+ <20170319220043.6f819196@free-electrons.com>
+ <20170320213039.wlpa2tdplbon6f2n@tarshish>
+Message-ID: <20170320224206.33fa1dbb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Hello,
 
-On Mon, 20 Mar 2017 21:51:21 +0100, "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+On Mon, 20 Mar 2017 23:30:39 +0200, Baruch Siach wrote:
 
-> On most distros, the tar format defaults to GNU. However, at build time
-> the default format may be changed to posix. Also, future versions of
-> tar will default to posix.
+> Do you have any indication that this is indeed the same file that RPi uses? My 
+> impression was that this firmware is tailored specifically for the RPi board, 
+> but I don't know for sure. That fact that Broadcom licenses the file may 
+> indicate that this is the same one. But ...
 > 
-> Since we want the tarballs created by the git download method to be
-> reproducible (so their hash can be checked), we should explicitly
-> specify the format. Since existing tarballs on sources.buildroot.org
-> use the GNU format, and also the existing hashes in the *.hash files
-> are based on GNU format tarballs, we use the GNU format.
+> > So perhaps the package should be bcrm-43430-firmware or something along
+> > those lines.
+> > 
+> >   
+> > > +RPI_BT_FIRMWARE_VERSION = a439f892bf549ddfefa9ba7ad1999cc515f233bf
+> > > +RPI_BT_FIRMWARE_SITE = https://aur.archlinux.org/pi-bluetooth.git  
+> > 
+> > Is there a better upstream than this? I found
+> > https://github.com/varigit/bcm_4343w_fw but I'm not sure it really
+> > qualifies as "better".  
 > 
-> In addition, the Posix format encodes atime and ctime as well as mtime,
-> but tar offers no option like --mtime to override them. In the GNU
-> format, atime and ctime are only encoded if the --incremental option is
-> given.
+> ... this is not the same file:
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Peter, can you test if this solves the issue for you?
+> ls -l bcm43430a1.hcd pi-bluetooth/BCM43430A1.hcd 
+> -rw-r--r-- 1 baruch baruch 14265 Mar 20 23:22 bcm43430a1.hcd
+> -rw-r--r-- 1 baruch baruch 35976 Jan 17 12:25 pi-bluetooth/BCM43430A1.hcd
 
-After removing the old dl/wiringpi-2.44.tar.gz file, applying your patch
-and done a fresh download:
+Gaah, what a mess. Why don't they just post it for integration in the
+linux-firmware project? Why is it that RPi people always have to do
+things the weird way?
 
-	$ cat package/wiringpi/wiringpi.hash 
-# Locally calculated
-sha256 464c98ed54f5c0ad6611e270be3491c4598a32b7e86b208255862a301c564955  wiringpi-2.44.tar.gz
-
-	$ sha256sum dl/wiringpi-2.44.tar.gz 
-464c98ed54f5c0ad6611e270be3491c4598a32b7e86b208255862a301c564955  dl/wiringpi-2.44.tar.gz
-
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
-
-> ---
->  support/download/git | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> I have not tested the Variscite firmware on the RPi, though. There is a small 
+> chance it might damage the hardware.
 > 
-> diff --git a/support/download/git b/support/download/git
-> index 7921411835..056057c700 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -94,6 +94,8 @@ popd >/dev/null
->  # Generate the archive, sort with the C locale so that it is reproducible
->  find "${basename}" -not -type d >"${basename}.list"
->  LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
-> -tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
-> +# Create GNU-format tarballs, since that's the format of the tarballs on
-> +# sources.buildroot.org and used in the *.hash files
-> +tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
->           -T "${basename}.list.sorted" >"${output}.tar"
->  gzip -n <"${output}.tar" >"${output}"
+> And since the git repo we use is named 'pi-bluetooth' maybe rpi-bt-firmware is 
+> not such a bad name after all.
+
+Yeah, indeed :-/
+
+Can you resend the patch with just an extended explanation as to why
+the package is named this way, and the fact that even though the
+WiFi chip isn't RPi specific, the firmware might be.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
