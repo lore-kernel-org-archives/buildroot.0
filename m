@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:56:29 +0100
-Subject: [Buildroot] [git commit] cjson: bump to version 1.4.3
-Message-ID: <20170320205727.173798257D@busybox.osuosl.org>
+Date: Mon, 20 Mar 2017 21:57:33 +0100
+Subject: [Buildroot] [git commit] package/x265: bump version to 2.3
+Message-ID: <20170320205737.7474182189@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a521a33799c1ed706a4c0ef915fdd0eccf645937
+commit: https://git.buildroot.net/buildroot/commit/?id=60b4b2437649eb07516d52b76d80cd4bcc57e991
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
+ package/x265/x265.hash | 2 +-
+ package/x265/x265.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index 03d6d36..39ca2cb 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index 5672d79..d53295c 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256	6bb0cec66f877f694ffd0e6026b33da1df28a204a9d3a65fbe5055d038a3e8bf	cjson-v1.4.2.tar.gz
-+sha256	3b362a6af73e10b0361119bc9fa9569578f9daa486cb487cad79322a34cd6965	cjson-v1.4.3.tar.gz
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index 6403c18..6872b10 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
+ # Locally generated
+-sha256 b872552535e41fbffa03ba7cbcd3479c42c4053868309292e78e147b7773ac4b  x265_2.2.tar.gz
++sha256 47520ac3424790168ea5c2db4a3cf12ca4d55a1790720007916652f07af3e41f  x265_2.3.tar.gz
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 0fbdb01..498ceaa 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CJSON_VERSION = v1.4.2
-+CJSON_VERSION = v1.4.3
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+-X265_VERSION = 2.2
++X265_VERSION = 2.3
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPLv2+
