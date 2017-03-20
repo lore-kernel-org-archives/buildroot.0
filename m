@@ -1,124 +1,139 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Mar 2017 23:22:20 +0100
-Subject: [Buildroot] [PATCH v2] WIP: configs/raspberrypi0w_defconfig: new
-	board
-Message-ID: <20170320222220.10154-1-ps.report@gmx.net>
+Date: Mon, 20 Mar 2017 23:24:57 +0100
+Subject: [Buildroot] [PATCH] Enable UART on raspberry pi zero
+In-Reply-To: <20170320210241.GE3619@free.fr>
+References: <DB5PR03MB13342317D9FB07E001D16231E7380@DB5PR03MB1334.eurprd03.prod.outlook.com>
+ <20170319132745.GB3734@free.fr>
+ <DB5PR03MB1334B76DAB5DE40CCDE3F978E73A0@DB5PR03MB1334.eurprd03.prod.outlook.com>
+ <20170320210241.GE3619@free.fr>
+Message-ID: <20170320232457.21048bb0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for Raspberry Pi Zero W (same as Pi Zero with
-additional wireless and bluetooth support [1]).
+Hello Luke, Yann,
 
-According to [2] has the same serial console vs. bluetooth
-problem as the Pi 3. Try the same fix (load pi3-miniuart-bt overlay).
+On Mon, 20 Mar 2017 22:02:41 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-[1] https://www.raspberrypi.org/products/pi-zero-w
-[2] http://lists.busybox.net/pipermail/buildroot/2017-March/187295.html
+> Luke, All,
+> 
+> On 2017-03-20 12:41 +0000, luke spake thusly:
+> > Sorry, made a mistake in the original patch.
+> > 
+> > 
+> > >From 9c77dfd825bebbf02e3b2837dacb9ae4873c9ec8 Mon Sep 17 00:00:00 2001
+> > From: Luke <skywal_l@hotmail.com>
+> > Date: Sat, 18 Mar 2017 18:17:24 +0000
+> > Subject: [PATCH 1/1] Modify post-build.sh for raspberry pi zero so that it
+> >  activates the UART serial console in config.txt
+> 
+> Please send you patches using 'git send-email'. Your current submissions
+> are not appropriately formatted.
+> 
+> > Signed-off-by: Luke <skywal_l@hotmail.com>
+> > ---
+> >  board/raspberrypi/post-build.sh | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
+> > index 5e5eb71..6d2f0d1 100755
+> > --- a/board/raspberrypi/post-build.sh
+> > +++ b/board/raspberrypi/post-build.sh
+> > @@ -9,3 +9,6 @@ if [ -e ${TARGET_DIR}/etc/inittab ]; then
+> >  	sed -i '/GENERIC_SERIAL/a\
+> >  tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
+> >  fi
+> > +
+> > +# Activate the console
+> > +echo "enable_uart=1" | cat >> ${TARGET_DIR}/../images/rpi-firmware/config.txt
+> 
+> Two things about this one:
+> 
+>   - what you wanted to use was $(BINARIES_DIR)/rpi-firmware/config.txt,
+> 
+>   - as I already replied to you earlier, please look at how it is
+>     done for the rpi3, and try to see if the same trick applies to
+>     the rpi0-w.
+> 
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - add missing board/raspberrypi/genimage-raspberrypi0w.cfg
+In case the rpi3 fix works for rpi0-w take a look at this
+patch:
 
-Untested (even not compile tested) because of lack of hardware...
----
- board/raspberrypi/genimage-raspberrypi0w.cfg | 32 +++++++++++++++++++++++++
- board/raspberrypi0w                          |  1 +
- configs/raspberrypi0w_defconfig              | 35 ++++++++++++++++++++++++++++
- 3 files changed, 68 insertions(+)
- create mode 100644 board/raspberrypi/genimage-raspberrypi0w.cfg
- create mode 120000 board/raspberrypi0w
- create mode 100644 configs/raspberrypi0w_defconfig
+	https://patchwork.ozlabs.org/patch/741230/
 
-diff --git a/board/raspberrypi/genimage-raspberrypi0w.cfg b/board/raspberrypi/genimage-raspberrypi0w.cfg
-new file mode 100644
-index 000000000..9fab44f6d
---- /dev/null
-+++ b/board/raspberrypi/genimage-raspberrypi0w.cfg
-@@ -0,0 +1,32 @@
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "bcm2708-rpi-b-plus.dtb",
-+      "bcm2708-rpi-0-w.dtb",
-+      "rpi-firmware/bootcode.bin",
-+      "rpi-firmware/cmdline.txt",
-+      "rpi-firmware/config.txt",
-+      "rpi-firmware/fixup.dat",
-+      "rpi-firmware/start.elf",
-+      "rpi-firmware/overlays",
-+      "zImage"
-+    }
-+  }
-+  size = 32M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+  }
-+}
-diff --git a/board/raspberrypi0w b/board/raspberrypi0w
-new file mode 120000
-index 000000000..fcdafc81e
---- /dev/null
-+++ b/board/raspberrypi0w
-@@ -0,0 +1 @@
-+raspberrypi
-\ No newline at end of file
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-new file mode 100644
-index 000000000..bd2f7af9d
---- /dev/null
-+++ b/configs/raspberrypi0w_defconfig
-@@ -0,0 +1,35 @@
-+BR2_arm=y
-+BR2_arm1176jzf_s=y
-+BR2_ARM_EABIHF=y
-+
-+# Linux headers same as kernel, a 4.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="935c7ce84c982a26f567a03a58a1537424569938"
-+BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
-+
-+# Build the DTBs for A/B from the kernel sources: the zero is the same
-+# as the A+ model, just in a different form-factor
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b-plus bcm2708-rpi-0-w"
-+
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0w/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0w/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
--- 
-2.11.0
+adding a new config/raspberrypi0w_defconfig, same as for rpi0 adding
+additional 'dtoverlay=pi3-miniuart-bt' (and adding the overlay directory
+to the sdcard image)...
+
+Regards,
+Peter
+
+
+> Thanks!
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > -- 
+> > 2.7.4
+> > 
+> > 
+> > De : Yann E. MORIN <yann.morin.1998@gmail.com> de la part de Yann E. MORIN <yann.morin.1998@free.fr>
+> > Envoy? : dimanche 19 mars 2017 13:27
+> > ? : luke
+> > Cc?: buildroot at busybox.net
+> > Objet : Re: [Buildroot] [PATCH] Enable UART on raspberry pi zero
+> > ?   
+> > Luke, All,
+> > 
+> > On 2017-03-18 18:22 +0000, luke spake thusly:
+> > > From 9c77dfd825bebbf02e3b2837dacb9ae4873c9ec8 Mon Sep 17 00:00:00 2001
+> > > From: Luke <skywal_l@hotmail.com>
+> > > Date: Sat, 18 Mar 2017 18:17:24 +0000
+> > > Subject: [PATCH 1/1] Modify post-build.sh for raspberry pi zero so that it
+> > >? activates the UART serial console in config.txt
+> > > 
+> > > Signed-off-by: Luke <skywal_l@hotmail.com>
+> > > ---
+> > >? board/raspberrypi/post-build.sh | 3 +++
+> > >? 1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
+> > > index 5e5eb71..6d2f0d1 100755
+> > > --- a/board/raspberrypi/post-build.sh
+> > > +++ b/board/raspberrypi/post-build.sh
+> > > @@ -9,3 +9,6 @@ if [ -e ${TARGET_DIR}/etc/inittab ]; then
+> > >??????? sed -i '/GENERIC_SERIAL/a\
+> > >? tty1::respawn:/sbin/getty -L? tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
+> > >? fi
+> > > +
+> > > +# Activate the console
+> > > +echo "enable_uart=1" | cat >> config.txt
+> > 
+> > I have a rpi-0 here, and I do not need that config option to get the UART
+> > working.
+> > 
+> > Regards,
+> > Yann E. MORIN.
+> > 
+> > -- 
+> > .-----------------.--------------------.------------------.--------------------.
+> > |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software? Designer | \ / CAMPAIGN???? |? ___?????????????? |
+> > | +33 223 225 172 `------------.-------:? X? AGAINST????? |? \e/? There is no? |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL??? |?? v?? conspiracy.? |
+> > 
+> > 
+> > start [BZH_lan]
+> > ymorin.is-a-geek.org
+> > The guys from SimpleMachines have been kind enough to give me a Sim.One SBC. I'll be able to use that board to test Maverick Crunch, suport for which I will add to ...
+> > 
+> > '------------------------------^-------^------------------^--------------------'
+> >     
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
