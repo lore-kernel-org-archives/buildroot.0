@@ -1,191 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:36:54 +0100
-Subject: [Buildroot] [PATCH v3 5/5] support/testing: add toolchain tests
+Date: Mon, 20 Mar 2017 21:36:53 +0100
+Subject: [Buildroot] [PATCH v3 4/5] support/testing: add package tests
 In-Reply-To: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1490042214-6762-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1490042214-6762-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds an initial toolchain test case, testing the ARM
-CodeSourcery toolchain, just checking that the proper sysroot is used,
-and that a minimal Linux system boots fine under Qemu.
+This commit adds some basic tests for two Buildroot packages: python and
+dropbear. These tests are by no mean meant to be exhaustive, but mainly
+to serve as initial examples for other tests.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/testing/tests/toolchain/__init__.py      |   0
- support/testing/tests/toolchain/test_external.py | 156 +++++++++++++++++++++++
- 2 files changed, 156 insertions(+)
- create mode 100644 support/testing/tests/toolchain/__init__.py
- create mode 100644 support/testing/tests/toolchain/test_external.py
+ support/testing/tests/package/__init__.py      |  0
+ support/testing/tests/package/test_dropbear.py | 28 +++++++++++++++++++++
+ support/testing/tests/package/test_python.py   | 35 ++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
+ create mode 100644 support/testing/tests/package/__init__.py
+ create mode 100644 support/testing/tests/package/test_dropbear.py
+ create mode 100644 support/testing/tests/package/test_python.py
 
-diff --git a/support/testing/tests/toolchain/__init__.py b/support/testing/tests/toolchain/__init__.py
+diff --git a/support/testing/tests/package/__init__.py b/support/testing/tests/package/__init__.py
 new file mode 100644
 index 0000000..e69de29
-diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
+diff --git a/support/testing/tests/package/test_dropbear.py b/support/testing/tests/package/test_dropbear.py
 new file mode 100644
-index 0000000..1fbf81f
+index 0000000..a64b782
 --- /dev/null
-+++ b/support/testing/tests/toolchain/test_external.py
-@@ -0,0 +1,156 @@
++++ b/support/testing/tests/package/test_dropbear.py
+@@ -0,0 +1,28 @@
 +import os
-+import infra
 +
-+BASIC_CONFIG = \
++import infra.basetest
++
++class TestDropbear(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
 +"""
++BR2_TARGET_GENERIC_ROOT_PASSWD="testpwd"
++BR2_SYSTEM_DHCP="eth0"
++BR2_PACKAGE_DROPBEAR=y
 +BR2_TARGET_ROOTFS_CPIO=y
 +# BR2_TARGET_ROOTFS_TAR is not set
 +"""
 +
-+def check_broken_links(path):
-+    for root, dirs, files in os.walk(path):
-+        for f in files:
-+            fpath = os.path.join(root, f)
-+            if not os.path.exists(fpath):
-+                return True
-+    return False
-+
-+class TestExternalToolchain(infra.basetest.BRTest):
-+    def common_check(self):
-+        # Check for broken symlinks
-+        for d in ["lib", "usr/lib"]:
-+            path = os.path.join(self.builddir, "staging", d)
-+            self.assertFalse(check_broken_links(path))
-+            path = os.path.join(self.builddir, "target", d)
-+            self.assertFalse(check_broken_links(path))
-+
-+        interp = infra.get_elf_prog_interpreter(self.builddir,
-+                                                self.toolchain_prefix,
-+                                                "bin/busybox")
-+        interp_path = os.path.join(self.builddir, "target", interp[1:])
-+        self.assertTrue(os.path.exists(interp_path))
-+
-+class TestExternalToolchainSourceryArmv4(TestExternalToolchain):
-+    config = BASIC_CONFIG + \
-+"""
-+BR2_arm=y
-+BR2_arm920t=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-+"""
-+    toolchain_prefix = "arm-none-linux-gnueabi"
-+
 +    def test_run(self):
-+        TestExternalToolchain.common_check(self)
-+
-+        # Check the architecture variant
-+        arch = infra.get_file_arch(self.builddir,
-+                                   self.toolchain_prefix,
-+                                   "lib/libc.so.6")
-+        self.assertEqual(arch, "v4T")
-+
-+        # Check the sysroot symlink
-+        symlink = os.path.join(self.builddir, "staging", "armv4t")
-+        self.assertTrue(os.path.exists(symlink))
-+        self.assertEqual(os.readlink(symlink), "./")
-+
-+        # Boot the system
 +        img = os.path.join(self.builddir, "images", "rootfs.cpio")
 +        self.emulator.boot(arch="armv5",
 +                           kernel="builtin",
-+                           options=["-initrd", img])
-+        self.emulator.login()
++                           options=["-initrd", img,
++                                    "-net", "nic",
++                                    "-net", "user,hostfwd=tcp::2222-:22"])
++        self.emulator.login("testpwd")
++        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:22"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        # Would be useful to try to login through SSH here, through
++        # localhost:2222, though it is not easy to pass the ssh
++        # password on the command line.
+diff --git a/support/testing/tests/package/test_python.py b/support/testing/tests/package/test_python.py
+new file mode 100644
+index 0000000..5532fb5
+--- /dev/null
++++ b/support/testing/tests/package/test_python.py
+@@ -0,0 +1,35 @@
++import os
 +
-+class TestExternalToolchainSourceryArmv5(TestExternalToolchain):
-+    config = BASIC_CONFIG + \
++import infra.basetest
++
++class TestPythonBase(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
 +"""
-+BR2_arm=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
++BR2_PACKAGE_PYTHON=y
++BR2_TARGET_ROOTFS_CPIO=y
++# BR2_TARGET_ROOTFS_TAR is not set
 +"""
-+    toolchain_prefix = "arm-none-linux-gnueabi"
 +
 +    def test_run(self):
-+        TestExternalToolchain.common_check(self)
-+
-+        # Check the architecture variant
-+        arch = infra.get_file_arch(self.builddir,
-+                                   self.toolchain_prefix,
-+                                   "lib/libc.so.6")
-+        self.assertEqual(arch, "v5TE")
-+
-+        # Boot the system
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
 +        self.emulator.boot(arch="armv5",
 +                           kernel="builtin",
-+                           options=["-initrd", img])
++                           options=["-initrd", cpio_file])
 +        self.emulator.login()
++        cmd = "python --version 2>&1 | grep '^Python 2'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
 +
-+class TestExternalToolchainSourceryArmv7(TestExternalToolchain):
-+    config = BASIC_CONFIG + \
-+"""
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_ARM_EABI=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-+"""
-+    toolchain_prefix = "arm-none-linux-gnueabi"
++        cmd = "python -c 'import math; math.floor(12.3)'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
 +
-+    def test_run(self):
-+        TestExternalToolchain.common_check(self)
++        cmd = "python -c 'import ctypes;"
++        cmd += "libc = ctypes.cdll.LoadLibrary(\"libc.so.1\");"
++        cmd += "print libc.time(None)'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
 +
-+        # Check the architecture variant
-+        arch = infra.get_file_arch(self.builddir,
-+                                   self.toolchain_prefix,
-+                                   "lib/libc.so.6")
-+        self.assertEqual(arch, "v7")
-+        isa = infra.get_elf_arch_tag(self.builddir,
-+                                     self.toolchain_prefix,
-+                                     "lib/libc.so.6",
-+                                     "Tag_THUMB_ISA_use")
-+        self.assertEqual(isa, "Thumb-2")
-+
-+        # Check we have the sysroot symlink
-+        symlink = os.path.join(self.builddir, "staging", "thumb2")
-+        self.assertTrue(os.path.exists(symlink))
-+        self.assertEqual(os.readlink(symlink), "./")
-+
-+        # Boot the system
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", img])
-+        self.emulator.login()
-+
-+class TestExternalToolchainLinaroArm(TestExternalToolchain):
-+    config = BASIC_CONFIG + \
-+"""
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-+"""
-+    toolchain_prefix = "arm-linux-gnueabihf"
-+
-+    def test_run(self):
-+        TestExternalToolchain.common_check(self)
-+
-+        # Check the architecture variant
-+        arch = infra.get_file_arch(self.builddir,
-+                                   self.toolchain_prefix,
-+                                   "lib/libc.so.6")
-+        self.assertEqual(arch, "v7")
-+        isa = infra.get_elf_arch_tag(self.builddir,
-+                                     self.toolchain_prefix,
-+                                     "lib/libc.so.6",
-+                                     "Tag_THUMB_ISA_use")
-+        self.assertEqual(isa, "Thumb-2")
-+
-+        # Boot the system
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", img])
-+        self.emulator.login()
++        cmd = "python -c 'import zlib'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 1)
 -- 
 2.7.4
