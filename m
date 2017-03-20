@@ -1,57 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:57:04 +0100
-Subject: [Buildroot] [git commit] package/{mesa3d,
-	mesa3d-headers}: bump version to 17.0.2
-Message-ID: <20170320205727.236DB8257D@busybox.osuosl.org>
+Date: Mon, 20 Mar 2017 21:57:19 +0100
+Subject: [Buildroot] [git commit] package/libbluray: bump version to 1.0.0
+Message-ID: <20170320205727.315538257D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=002143cc521f607dcf279170d39bdfc6e140f335
+commit: https://git.buildroot.net/buildroot/commit/?id=e12181db4c7a8c8b83723ccd7aea29e60d8641bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/libbluray/libbluray.hash | 4 ++--
+ package/libbluray/libbluray.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index b555549..505ffba 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 17.0.1
-+MESA3D_HEADERS_VERSION = 17.0.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index e50b648..5766a15 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
+diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
+index ea0df50..f3e1210 100644
+--- a/package/libbluray/libbluray.hash
++++ b/package/libbluray/libbluray.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2017-March/000305.html
--sha256 96fd70ef5f31d276a17e424e7e1bb79447ccbbe822b56844213ef932e7ad1b0c  mesa-17.0.1.tar.xz
-+# From https://www.mesa3d.org/relnotes/17.0.2.html
-+sha256 f8f191f909e01e65de38d5bdea5fb057f21649a3aed20948be02348e77a689d4  mesa-17.0.2.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index d29a043..9774f05 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+-# From http://get.videolan.org/libbluray/0.9.3/libbluray-0.9.3.tar.bz2.sha512
+-sha512	1e308b85c51d43b23b186fdd2631f963d4c25de8aff29f335e131b32a175434ee21460a7aa470c508ad13662cf9052649bb4eb974dbd709eb9e6797fb84e0823	libbluray-0.9.3.tar.bz2
++# From http://get.videolan.org/libbluray/1.0.0/libbluray-1.0.0.tar.bz2.sha512
++sha512 fcf2193c3b76f3436bc88ce8853cac16f29c3bb6c66447109c14202a41ea938cb6814502a8f724fb1b31add6bd36b42d3aed3eb4a8010c123537e073bd7a0be1  libbluray-1.0.0.tar.bz2
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index dfe58f4..adce8c4 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 17.0.1
-+MESA3D_VERSION = 17.0.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-LIBBLURAY_VERSION = 0.9.3
++LIBBLURAY_VERSION = 1.0.0
+ LIBBLURAY_SITE = http://get.videolan.org/libbluray/$(LIBBLURAY_VERSION)
+ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
