@@ -1,532 +1,578 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:36:50 +0100
-Subject: [Buildroot] [PATCH v3 1/5] support/testing: core testing
-	infrastructure
+Date: Mon, 20 Mar 2017 21:36:52 +0100
+Subject: [Buildroot] [PATCH v3 3/5] support/testing: add fs tests
 In-Reply-To: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1490042214-6762-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1490042214-6762-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1490042214-6762-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds the core of a new testing infrastructure that allows to
-perform runtime testing of Buildroot generated systems. This
-infrastructure uses the Python unittest logic as its foundation.
-
-This core infrastructure commit includes the following aspects:
-
- - A base test class, called BRTest, defined in
-   support/testing/infra/basetest.py. This base test class inherited
-   from the Python provided unittest.TestCase, and must be subclassed by
-   all Buildroot test cases.
-
-   Its main purpose is to provide the Python unittest setUp() and
-   tearDown() methods. In our case, setUp() takes care of building the
-   Buildroot system described in the test case, and instantiate the
-   Emulator object in case runtime testing is needed. The tearDown()
-   method simply cleans things up (stop the emulator, remove the output
-   directory).
-
- - A Builder class, defined in support/testing/infra/builder.py, simply
-   responsible for building the Buildroot system in each test case.
-
- - An Emulator class, defined in support/testing/infra/emulator.py,
-   responsible for running the generated system under Qemu, allowing
-   each test case to run arbitrary commands inside the emulated system.
-
- - A run-tests script, which is the entry point to start the tests.
-
-Even though I wrote the original version of this small infrastructure, a
-huge amount of rework and improvement has been done by Maxime
-Hadjinlian, and squashed into this patch. So many thanks to Maxime for
-cleaning up and improving my Python code!
+This commit adds a number of test cases for various filesystem formats:
+ext2/3/4, iso9660, jffs2, squashfs, ubi/ubifs and yaffs2. All of them
+except yaffs2 are runtime tested. The iso9660 set of test cases is
+particularly rich, testing the proper operation of the iso9660 support
+with all of grub, grub2 and isolinux.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/testing/conf/unittest.cfg |   6 ++
- support/testing/infra/__init__.py |  89 +++++++++++++++++++++++++
- support/testing/infra/basetest.py |  66 +++++++++++++++++++
- support/testing/infra/builder.py  |  49 ++++++++++++++
- support/testing/infra/emulator.py | 135 ++++++++++++++++++++++++++++++++++++++
- support/testing/run-tests         |  83 +++++++++++++++++++++++
- support/testing/tests/__init__.py |   0
- 7 files changed, 428 insertions(+)
- create mode 100644 support/testing/conf/unittest.cfg
- create mode 100644 support/testing/infra/__init__.py
- create mode 100644 support/testing/infra/basetest.py
- create mode 100644 support/testing/infra/builder.py
- create mode 100644 support/testing/infra/emulator.py
- create mode 100755 support/testing/run-tests
- create mode 100644 support/testing/tests/__init__.py
+ support/testing/conf/grub-menu.lst                 |  20 +++
+ support/testing/conf/grub2.cfg                     |   7 +
+ support/testing/conf/isolinux.cfg                  |   5 +
+ .../testing/conf/minimal-x86-qemu-kernel.config    |  23 +++
+ support/testing/tests/fs/__init__.py               |   0
+ support/testing/tests/fs/test_ext.py               | 119 +++++++++++++++
+ support/testing/tests/fs/test_iso9660.py           | 162 +++++++++++++++++++++
+ support/testing/tests/fs/test_jffs2.py             |  45 ++++++
+ support/testing/tests/fs/test_squashfs.py          |  37 +++++
+ support/testing/tests/fs/test_ubi.py               |  39 +++++
+ support/testing/tests/fs/test_yaffs2.py            |  12 ++
+ 11 files changed, 469 insertions(+)
+ create mode 100644 support/testing/conf/grub-menu.lst
+ create mode 100644 support/testing/conf/grub2.cfg
+ create mode 100644 support/testing/conf/isolinux.cfg
+ create mode 100644 support/testing/conf/minimal-x86-qemu-kernel.config
+ create mode 100644 support/testing/tests/fs/__init__.py
+ create mode 100644 support/testing/tests/fs/test_ext.py
+ create mode 100644 support/testing/tests/fs/test_iso9660.py
+ create mode 100644 support/testing/tests/fs/test_jffs2.py
+ create mode 100644 support/testing/tests/fs/test_squashfs.py
+ create mode 100644 support/testing/tests/fs/test_ubi.py
+ create mode 100644 support/testing/tests/fs/test_yaffs2.py
 
-diff --git a/support/testing/conf/unittest.cfg b/support/testing/conf/unittest.cfg
+diff --git a/support/testing/conf/grub-menu.lst b/support/testing/conf/grub-menu.lst
 new file mode 100644
-index 0000000..6eaa234
+index 0000000..6143d80
 --- /dev/null
-+++ b/support/testing/conf/unittest.cfg
-@@ -0,0 +1,6 @@
-+[unittest]
-+plugins = nose2.plugins.mp
++++ b/support/testing/conf/grub-menu.lst
+@@ -0,0 +1,20 @@
++default		0
++timeout		1
 +
-+[multiprocess]
-+processes = 1
-+always-on = True
-diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
++# Used when no splashimage is used
++color 		cyan/blue white/blue
++
++# Gets enabled/disabled depending on Grub support for splashimage
++splashimage	/boot/grub/splash.xpm.gz
++
++# Used when a splashimage is enabled
++foreground 	000000
++background 	cccccc
++
++title		Buildroot ISO9660 image
++kernel		__KERNEL_PATH__ root=/dev/sr0 console=ttyS0,115200
++initrd		__INITRD_PATH__
++
++title		Hard Drive (first partition)
++rootnoverify	(hd0)
++chainloader	+1
+diff --git a/support/testing/conf/grub2.cfg b/support/testing/conf/grub2.cfg
 new file mode 100644
-index 0000000..c3f645c
+index 0000000..a982d0b
 --- /dev/null
-+++ b/support/testing/infra/__init__.py
-@@ -0,0 +1,89 @@
-+import contextlib
++++ b/support/testing/conf/grub2.cfg
+@@ -0,0 +1,7 @@
++set default="0"
++set timeout="1"
++
++menuentry "Buildroot" {
++	linux __KERNEL_PATH__ root=/dev/sr0 console=ttyS0,115200
++	initrd __INITRD_PATH__
++}
+diff --git a/support/testing/conf/isolinux.cfg b/support/testing/conf/isolinux.cfg
+new file mode 100644
+index 0000000..ba031a6
+--- /dev/null
++++ b/support/testing/conf/isolinux.cfg
+@@ -0,0 +1,5 @@
++default 1
++label 1
++      kernel __KERNEL_PATH__
++      initrd __INITRD_PATH__
++      append root=/dev/sr0 console=ttyS0,115200
+diff --git a/support/testing/conf/minimal-x86-qemu-kernel.config b/support/testing/conf/minimal-x86-qemu-kernel.config
+new file mode 100644
+index 0000000..8f6ceef
+--- /dev/null
++++ b/support/testing/conf/minimal-x86-qemu-kernel.config
+@@ -0,0 +1,23 @@
++# CONFIG_64BIT is not set
++CONFIG_SYSVIPC=y
++CONFIG_BLK_DEV_INITRD=y
++# CONFIG_SUSPEND is not set
++# CONFIG_ACPI is not set
++CONFIG_CPU_IDLE=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_BLK_DEV_SR=y
++CONFIG_ATA=y
++CONFIG_ATA_PIIX=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_POWER_SUPPLY=y
++CONFIG_THERMAL=y
++CONFIG_EXT4_FS=y
++CONFIG_ISO9660_FS=y
++CONFIG_JOLIET=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++# CONFIG_VIRTUALIZATION is not set
+diff --git a/support/testing/tests/fs/__init__.py b/support/testing/tests/fs/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/support/testing/tests/fs/test_ext.py b/support/testing/tests/fs/test_ext.py
+new file mode 100644
+index 0000000..f7e2e85
+--- /dev/null
++++ b/support/testing/tests/fs/test_ext.py
+@@ -0,0 +1,119 @@
 +import os
-+import re
-+import sys
-+import tempfile
 +import subprocess
-+from urllib2 import urlopen, HTTPError, URLError
 +
-+ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
++import infra.basetest
 +
-+ at contextlib.contextmanager
-+def smart_open(filename=None):
-+    """
-+    Return a file-like object that can be written to using the 'with'
-+    keyword, as in the example:
-+    with infra.smart_open("test.log") as outfile:
-+       outfile.write("Hello, world!\n")
-+    """
-+    if filename and filename != '-':
-+        fhandle = open(filename, 'a+')
-+    else:
-+        fhandle = sys.stdout
++VOLNAME_PROP = "Filesystem volume name"
++REVISION_PROP = "Filesystem revision #"
++FEATURES_PROP = "Filesystem features"
++BLOCKCNT_PROP = "Block count"
++INODECNT_PROP = "Inode count"
++RESBLKCNT_PROP = "Reserved block count"
 +
-+    try:
-+        yield fhandle
-+    finally:
-+        if fhandle is not sys.stdout:
-+            fhandle.close()
++CHECK_FS_TYPE_CMD = "mount | grep '/dev/root on / type {}'"
 +
-+def filepath(relpath):
-+    return os.path.join(os.getcwd(), "support/testing", relpath)
++def dumpe2fs_run(builddir, image):
++    cmd = ["host/usr/sbin/dumpe2fs", os.path.join("images", image)]
++    ret = subprocess.check_output(cmd,
++                                  stderr=open(os.devnull, "w"),
++                                  cwd=builddir,
++                                  env={"LANG": "C"})
++    return ret.strip().splitlines()
 +
-+def download(dldir, filename):
-+    finalpath = os.path.join(dldir, filename)
-+    if os.path.exists(finalpath):
-+        return finalpath
++def dumpe2fs_getprop(out, prop):
++    for lines in out:
++        lines = lines.split(": ")
++        if lines[0] == prop:
++            return lines[1].strip()
 +
-+    if not os.path.exists(dldir):
-+        os.makedirs(dldir)
++def boot_img_and_check_fs_type(emulator, builddir, fs_type):
++    img = os.path.join(builddir, "images", "rootfs.{}".format(fs_type))
++    emulator.boot(arch="armv7",
++                  kernel="builtin",
++                  kernel_cmdline=["root=/dev/mmcblk0",
++                                  "rootfstype={}".format(fs_type)],
++                  options=["-drive", "file={},if=sd".format(img)])
++    emulator.login()
++    _, exit_code = emulator.run(CHECK_FS_TYPE_CMD.format(fs_type))
++    return exit_code
 +
-+    tmpfile = tempfile.mktemp(dir=dldir)
-+    print "Downloading to {}".format(tmpfile)
-+
-+    try:
-+        url_fh = urlopen(os.path.join(ARTIFACTS_URL, filename))
-+        with open(tmpfile, "w+") as tmpfile_fh:
-+            tmpfile_fh.write(url_fh.read())
-+    except (HTTPError, URLError), err:
-+        os.unlink(tmpfile)
-+        raise err
-+
-+    print "Renaming from %s to %s" % (tmpfile, finalpath)
-+    os.rename(tmpfile, finalpath)
-+    return finalpath
-+
-+def get_elf_arch_tag(builddir, prefix, fpath, tag):
-+    """
-+    Runs the cross readelf on 'fpath', then extracts the value of tag 'tag'.
-+    Example:
-+    >>> get_elf_arch_tag('output', 'arm-none-linux-gnueabi-',
-+                         'bin/busybox', 'Tag_CPU_arch')
-+    v5TEJ
-+    >>>
-+    """
-+    cmd = ["host/usr/bin/{}-readelf".format(prefix),
-+           "-A", os.path.join("target", fpath)]
-+    out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
-+    regexp = re.compile("^  {}: (.*)$".format(tag))
-+    for line in out.splitlines():
-+        m = regexp.match(line)
-+        if not m:
-+            continue
-+        return m.group(1)
-+    return None
-+
-+def get_file_arch(builddir, prefix, fpath):
-+    return get_elf_arch_tag(builddir, prefix, fpath, "Tag_CPU_arch")
-+
-+def get_elf_prog_interpreter(builddir, prefix, fpath):
-+    cmd = ["host/usr/bin/{}-readelf".format(prefix),
-+           "-l", os.path.join("target", fpath)]
-+    out = subprocess.check_output(cmd, cwd=builddir, env={"LANG": "C"})
-+    regexp = re.compile("^ *\[Requesting program interpreter: (.*)\]$")
-+    for line in out.splitlines():
-+        m = regexp.match(line)
-+        if not m:
-+            continue
-+        return m.group(1)
-+    return None
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-new file mode 100644
-index 0000000..eb9da90
---- /dev/null
-+++ b/support/testing/infra/basetest.py
-@@ -0,0 +1,66 @@
-+import unittest
-+import os
-+import datetime
-+
-+from infra.builder import Builder
-+from infra.emulator import Emulator
-+
-+BASIC_TOOLCHAIN_CONFIG = \
++class TestExt2(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
 +"""
-+BR2_arm=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_2r0=y
++BR2_TARGET_ROOTFS_EXT2_LABEL="foobaz"
++# BR2_TARGET_ROOTFS_TAR is not set
++"""
++
++    def test_run(self):
++        out = dumpe2fs_run(self.builddir, "rootfs.ext2")
++        self.assertEqual(dumpe2fs_getprop(out, VOLNAME_PROP), "foobaz")
++        self.assertEqual(dumpe2fs_getprop(out, REVISION_PROP), "0 (original)")
++
++        exit_code = boot_img_and_check_fs_type(self.emulator,
++                                               self.builddir, "ext2")
++        self.assertEqual(exit_code, 0)
++
++class TestExt2r1(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_2r1=y
++BR2_TARGET_ROOTFS_EXT2_LABEL="foobar"
++# BR2_TARGET_ROOTFS_TAR is not set
++"""
++
++    def test_run(self):
++        out = dumpe2fs_run(self.builddir, "rootfs.ext2")
++        self.assertEqual(dumpe2fs_getprop(out, VOLNAME_PROP), "foobar")
++        self.assertEqual(dumpe2fs_getprop(out, REVISION_PROP), "1 (dynamic)")
++        self.assertNotIn("has_journal", dumpe2fs_getprop(out, FEATURES_PROP))
++
++        exit_code = boot_img_and_check_fs_type(self.emulator,
++                                               self.builddir, "ext2")
++        self.assertEqual(exit_code, 0)
++
++class TestExt3(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_3=y
++# BR2_TARGET_ROOTFS_TAR is not set
++"""
++
++    def test_run(self):
++        out = dumpe2fs_run(self.builddir, "rootfs.ext3")
++        self.assertEqual(dumpe2fs_getprop(out, REVISION_PROP), "1 (dynamic)")
++        self.assertIn("has_journal", dumpe2fs_getprop(out, FEATURES_PROP))
++
++        exit_code = boot_img_and_check_fs_type(self.emulator,
++                                               self.builddir, "ext3")
++        self.assertEqual(exit_code, 0)
++
++class TestExt4(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_BLOCKS=16384
++BR2_TARGET_ROOTFS_EXT2_INODES=3000
++BR2_TARGET_ROOTFS_EXT2_RESBLKS=10
++# BR2_TARGET_ROOTFS_TAR is not set
++"""
++
++    def test_run(self):
++        out = dumpe2fs_run(self.builddir, "rootfs.ext4")
++        self.assertEqual(dumpe2fs_getprop(out, REVISION_PROP), "1 (dynamic)")
++        self.assertEqual(dumpe2fs_getprop(out, BLOCKCNT_PROP), "16384")
++        # Yes there are 8 more inodes than requested
++        self.assertEqual(dumpe2fs_getprop(out, INODECNT_PROP), "3008")
++        self.assertEqual(dumpe2fs_getprop(out, RESBLKCNT_PROP), "1638")
++        self.assertIn("has_journal", dumpe2fs_getprop(out, FEATURES_PROP))
++        self.assertIn("extent", dumpe2fs_getprop(out, FEATURES_PROP))
++
++        exit_code = boot_img_and_check_fs_type(self.emulator,
++                                               self.builddir, "ext4")
++        self.assertEqual(exit_code, 0)
++
++
+diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
+new file mode 100644
+index 0000000..eec6e89
+--- /dev/null
++++ b/support/testing/tests/fs/test_iso9660.py
+@@ -0,0 +1,162 @@
++import os
++
++import infra.basetest
++
++BASIC_CONFIG = \
++"""
++BR2_x86_pentium4=y
 +BR2_TOOLCHAIN_EXTERNAL=y
 +BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
 +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-1190-g4a48479.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
++BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.05-496-g85945aa.tar.bz2"
++BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
++BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
 +BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
 +# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
 +BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
 +BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+"""
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
++# BR2_TARGET_ROOTFS_TAR is not set
++""".format(infra.filepath("conf/minimal-x86-qemu-kernel.config"))
 +
-+MINIMAL_CONFIG = \
++def test_mount_internal_external(emulator, builddir, internal=True):
++    img = os.path.join(builddir, "images", "rootfs.iso9660")
++    emulator.boot(arch="i386", options=["-cdrom", img])
++    emulator.login()
++
++    if internal:
++        cmd = "mount | grep 'rootfs on / type rootfs'"
++    else:
++        cmd = "mount | grep '/dev/root on / type iso9660'"
++
++    _, exit_code = emulator.run(cmd)
++    return exit_code
++
++def test_touch_file(emulator):
++    _, exit_code = emulator.run("touch test")
++    return exit_code
++
++#
++# Grub 2
++#
++
++class TestIso9660Grub2External(infra.basetest.BRTest):
++    config = BASIC_CONFIG + \
 +"""
-+BR2_INIT_NONE=y
-+BR2_SYSTEM_BIN_SH_NONE=y
-+# BR2_PACKAGE_BUSYBOX is not set
++BR2_TARGET_ROOTFS_ISO9660=y
++# BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
++BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
++BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
++""".format(infra.filepath("conf/grub2.cfg"))
++
++    def test_run(self):
++        exit_code = test_mount_internal_external(self.emulator,
++                                                 self.builddir, internal=False)
++        self.assertEqual(exit_code, 0)
++
++        exit_code = test_touch_file(self.emulator)
++        self.assertEqual(exit_code, 1)
++
++class TestIso9660Grub2Internal(infra.basetest.BRTest):
++    config = BASIC_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_ISO9660=y
++BR2_TARGET_ROOTFS_ISO9660_INITRD=y
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_BOOT_PARTITION="cd"
++BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat part_msdos part_gpt normal biosdisk iso9660"
++BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
++""".format(infra.filepath("conf/grub2.cfg"))
++
++    def test_run(self):
++        exit_code = test_mount_internal_external(self.emulator,
++                                                 self.builddir, internal=True)
++        self.assertEqual(exit_code, 0)
++
++        exit_code = test_touch_file(self.emulator)
++        self.assertEqual(exit_code, 0)
++
++#
++# Grub
++#
++
++class TestIso9660GrubExternal(infra.basetest.BRTest):
++    config = BASIC_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_ISO9660=y
++# BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
++BR2_TARGET_GRUB=y
++BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
++""".format(infra.filepath("conf/grub-menu.lst"))
++
++    def test_run(self):
++        exit_code = test_mount_internal_external(self.emulator,
++                                                 self.builddir, internal=False)
++        self.assertEqual(exit_code, 0)
++
++        exit_code = test_touch_file(self.emulator)
++        self.assertEqual(exit_code, 1)
++
++class TestIso9660GrubInternal(infra.basetest.BRTest):
++    config = BASIC_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_ISO9660=y
++BR2_TARGET_GRUB=y
++BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
++""".format(infra.filepath("conf/grub-menu.lst"))
++
++    def test_run(self):
++        exit_code = test_mount_internal_external(self.emulator,
++                                                 self.builddir, internal=True)
++        self.assertEqual(exit_code, 0)
++
++        exit_code = test_touch_file(self.emulator)
++        self.assertEqual(exit_code, 0)
++
++#
++# Syslinux
++#
++
++class TestIso9660SyslinuxExternal(infra.basetest.BRTest):
++    config = BASIC_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_ISO9660=y
++# BR2_TARGET_ROOTFS_ISO9660_INITRD is not set
++BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
++BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
++BR2_TARGET_SYSLINUX=y
++""".format(infra.filepath("conf/isolinux.cfg"))
++
++    def test_run(self):
++        exit_code = test_mount_internal_external(self.emulator,
++                                                 self.builddir, internal=False)
++        self.assertEqual(exit_code, 0)
++
++        exit_code = test_touch_file(self.emulator)
++        self.assertEqual(exit_code, 1)
++
++class TestIso9660SyslinuxInternal(infra.basetest.BRTest):
++    config = BASIC_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_ISO9660=y
++BR2_TARGET_ROOTFS_ISO9660_INITRD=y
++BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
++BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="{}"
++BR2_TARGET_SYSLINUX=y
++""".format(infra.filepath("conf/isolinux.cfg"))
++
++    def test_run(self):
++        exit_code = test_mount_internal_external(self.emulator,
++                                                 self.builddir, internal=True)
++        self.assertEqual(exit_code, 0)
++
++        exit_code = test_touch_file(self.emulator)
++        self.assertEqual(exit_code, 0)
+diff --git a/support/testing/tests/fs/test_jffs2.py b/support/testing/tests/fs/test_jffs2.py
+new file mode 100644
+index 0000000..0d45af2
+--- /dev/null
++++ b/support/testing/tests/fs/test_jffs2.py
+@@ -0,0 +1,45 @@
++import os
++import subprocess
++
++import infra.basetest
++
++def jffs2dump_find_file(files_list, fname):
++    for file_name in files_list:
++        file_name = file_name.strip()
++        if file_name.startswith("Dirent") and file_name.endswith(fname):
++            return True
++    return False
++
++class TestJffs2(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_JFFS2=y
++BR2_TARGET_ROOTFS_JFFS2_CUSTOM=y
++BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x80000
++BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
++BR2_TARGET_ROOTFS_JFFS2_PAD=y
++BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x4000000
 +# BR2_TARGET_ROOTFS_TAR is not set
 +"""
 +
-+class BRTest(unittest.TestCase):
-+    config = None
-+    downloaddir = None
-+    outputdir = None
-+    logtofile = True
-+    keepbuilds = False
++    # TODO: there are some scary JFFS2 messages when one starts to
++    # write files in the rootfs: "jffs2: Newly-erased block contained
++    # word 0x0 at offset 0x046c0000". To be investigated.
 +
-+    def show_msg(self, msg):
-+        print "[%s/%s/%s] %s" % (os.path.basename(self.__class__.outputdir),
-+                                 self.testname,
-+                                 datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-+                                 msg)
-+    def setUp(self):
-+        self.testname = self.__class__.__name__
-+        self.builddir = os.path.join(self.__class__.outputdir, self.testname)
-+        self.runlog = self.builddir + "-run.log"
-+        self.emulator = None
-+        self.show_msg("Starting")
-+        self.b = Builder(self.__class__.config, self.builddir, self.logtofile)
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.jffs2")
++        out = subprocess.check_output(["host/usr/sbin/jffs2dump", "-c", img],
++                                      cwd=self.builddir,
++                                      env={"LANG": "C"})
++        out = out.splitlines()
++        self.assertTrue(jffs2dump_find_file(out, "busybox"))
 +
-+        if not self.keepbuilds:
-+            self.b.delete()
-+
-+        if not self.b.is_finished():
-+            self.show_msg("Building")
-+            self.b.build()
-+            self.show_msg("Building done")
-+
-+        self.emulator = Emulator(self.builddir, self.downloaddir, self.logtofile)
-+
-+    def tearDown(self):
-+        self.show_msg("Cleaning up")
-+        if self.emulator:
-+            self.emulator.stop()
-+        if self.b and not self.keepbuilds:
-+            self.b.delete()
-diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           kernel_cmdline=["root=/dev/mtdblock0",
++                                           "rootfstype=jffs2"],
++                           options=["-drive", "file={},if=pflash".format(img)])
++        self.emulator.login()
++        cmd = "mount | grep '/dev/root on / type jffs2'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
+diff --git a/support/testing/tests/fs/test_squashfs.py b/support/testing/tests/fs/test_squashfs.py
 new file mode 100644
-index 0000000..105da01
+index 0000000..edaa087
 --- /dev/null
-+++ b/support/testing/infra/builder.py
-@@ -0,0 +1,49 @@
++++ b/support/testing/tests/fs/test_squashfs.py
+@@ -0,0 +1,37 @@
 +import os
-+import shutil
 +import subprocess
 +
-+import infra
-+
-+class Builder(object):
-+    def __init__(self, config, builddir, logtofile):
-+        self.config = config
-+        self.builddir = builddir
-+        self.logtofile = logtofile
-+
-+    def build(self):
-+        if not os.path.isdir(self.builddir):
-+            os.makedirs(self.builddir)
-+
-+        log = "{}-build.log".format(self.builddir)
-+        if not self.logtofile:
-+            log = None
-+
-+        config_file = os.path.join(self.builddir, ".config")
-+        with open(config_file, "w+") as cf:
-+            cf.write(self.config)
-+
-+        cmd = ["make",
-+               "O={}".format(self.builddir),
-+               "olddefconfig"]
-+        with infra.smart_open(log) as log_fh:
-+            ret = subprocess.call(cmd, stdout=log_fh, stderr=log_fh)
-+        if ret != 0:
-+            raise SystemError("Cannot olddefconfig")
-+
-+        cmd = ["make", "-C", self.builddir]
-+        with infra.smart_open(log) as log_fh:
-+            ret = subprocess.call(cmd, stdout=log_fh, stderr=log_fh)
-+        if ret != 0:
-+            raise SystemError("Build failed")
-+
-+        open(self.stamp_path(), 'a').close()
-+
-+    def stamp_path(self):
-+        return os.path.join(self.builddir, "build-done")
-+
-+    def is_finished(self):
-+        return os.path.exists(self.stamp_path())
-+
-+    def delete(self):
-+        if os.path.exists(self.builddir):
-+            shutil.rmtree(self.builddir)
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-new file mode 100644
-index 0000000..7c476cb
---- /dev/null
-+++ b/support/testing/infra/emulator.py
-@@ -0,0 +1,135 @@
-+import socket
-+import subprocess
-+import telnetlib
-+
-+import infra
 +import infra.basetest
 +
-+# TODO: Most of the telnet stuff need to be replaced by stdio/pexpect to discuss
-+# with the qemu machine.
-+class Emulator(object):
++class TestSquashfs(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_SQUASHFS=y
++# BR2_TARGET_ROOTFS_SQUASHFS4_GZIP is not set
++BR2_TARGET_ROOTFS_SQUASHFS4_LZ4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++"""
 +
-+    def __init__(self, builddir, downloaddir, logtofile):
-+        self.qemu = None
-+        self.__tn = None
-+        self.downloaddir = downloaddir
-+        self.log = ""
-+        self.log_file = "{}-run.log".format(builddir)
-+        if logtofile is None:
-+            self.log_file = None
++    def test_run(self):
++        unsquashfs_cmd = ["host/usr/bin/unsquashfs", "-s", "images/rootfs.squashfs"]
++        out = subprocess.check_output(unsquashfs_cmd,
++                                      cwd=self.builddir,
++                                      env={"LANG": "C"})
++        out = out.splitlines()
++        self.assertEqual(out[0],
++                         "Found a valid SQUASHFS 4:0 superblock on images/rootfs.squashfs.")
++        self.assertEqual(out[3], "Compression lz4")
 +
-+    # Start Qemu to boot the system
-+    #
-+    # arch: Qemu architecture to use
-+    #
-+    # kernel: path to the kernel image, or the special string
-+    # 'builtin'. 'builtin' means a pre-built kernel image will be
-+    # downloaded from ARTEFACTS_URL and suitable options are
-+    # automatically passed to qemu and added to the kernel cmdline. So
-+    # far only armv5, armv7 and i386 builtin kernels are available.
-+    # If None, then no kernel is used, and we assume a bootable device
-+    # will be specified.
-+    #
-+    # kernel_cmdline: array of kernel arguments to pass to Qemu -append option
-+    #
-+    # options: array of command line options to pass to Qemu
-+    #
-+    def boot(self, arch, kernel=None, kernel_cmdline=None, options=None):
-+        if arch in ["armv7", "armv5"]:
-+            qemu_arch = "arm"
-+        else:
-+            qemu_arch = arch
++        img = os.path.join(self.builddir, "images", "rootfs.squashfs")
++        subprocess.call(["truncate", "-s", "%1M", img])
 +
-+        qemu_cmd = ["qemu-system-{}".format(qemu_arch),
-+                    "-serial", "telnet::1234,server",
-+                    "-display", "none"]
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           kernel_cmdline=["root=/dev/mmcblk0",
++                                           "rootfstype=squashfs"],
++                           options=["-drive", "file={},if=sd,format=raw".format(img)])
++        self.emulator.login()
 +
-+        if options:
-+            qemu_cmd += options
-+
-+        if kernel_cmdline is None:
-+            kernel_cmdline = []
-+
-+        if kernel:
-+            if kernel == "builtin":
-+                if arch in ["armv7", "armv5"]:
-+                    kernel_cmdline.append("console=ttyAMA0")
-+
-+                if arch == "armv7":
-+                    kernel = infra.download(self.downloaddir,
-+                                            "kernel-vexpress")
-+                    dtb = infra.download(self.downloaddir,
-+                                         "vexpress-v2p-ca9.dtb")
-+                    qemu_cmd += ["-dtb", dtb]
-+                    qemu_cmd += ["-M", "vexpress-a9"]
-+                elif arch == "armv5":
-+                    kernel = infra.download(self.downloaddir,
-+                                            "kernel-versatile")
-+                    qemu_cmd += ["-M", "versatilepb"]
-+
-+            qemu_cmd += ["-kernel", kernel]
-+
-+        if kernel_cmdline:
-+            qemu_cmd += ["-append", " ".join(kernel_cmdline)]
-+
-+        with infra.smart_open(self.log_file) as lfh:
-+            lfh.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
-+            self.qemu = subprocess.Popen(qemu_cmd, stdout=lfh, stderr=lfh)
-+
-+        # Wait for the telnet port to appear and connect to it.
-+        while True:
-+            try:
-+                self.__tn = telnetlib.Telnet("localhost", 1234)
-+                if self.__tn:
-+                    break
-+            except socket.error:
-+                continue
-+
-+    def __read_until(self, waitstr, timeout=5):
-+        data = self.__tn.read_until(waitstr, timeout)
-+        self.log += data
-+        with infra.smart_open(self.log_file) as lfh:
-+            lfh.write(data)
-+        return data
-+
-+    def __write(self, wstr):
-+        self.__tn.write(wstr)
-+
-+    # Wait for the login prompt to appear, and then login as root with
-+    # the provided password, or no password if not specified.
-+    def login(self, password=None):
-+        self.__read_until("buildroot login:", 10)
-+        if "buildroot login:" not in self.log:
-+            with infra.smart_open(self.log_file) as lfh:
-+                lfh.write("==> System does not boot")
-+            raise SystemError("System does not boot")
-+
-+        self.__write("root\n")
-+        if password:
-+            self.__read_until("Password:")
-+            self.__write(password + "\n")
-+        self.__read_until("# ")
-+        if "# " not in self.log:
-+            raise SystemError("Cannot login")
-+        self.run("dmesg -n 1")
-+
-+    # Run the given 'cmd' on the target
-+    # return a tuple (output, exit_code)
-+    def run(self, cmd):
-+        self.__write(cmd + "\n")
-+        output = self.__read_until("# ")
-+        output = output.strip().splitlines()
-+        output = output[1:len(output)-1]
-+
-+        self.__write("echo $?\n")
-+        exit_code = self.__read_until("# ")
-+        exit_code = exit_code.strip().splitlines()[1]
-+        exit_code = int(exit_code)
-+
-+        return output, exit_code
-+
-+    def stop(self):
-+        if self.qemu is None:
-+            return
-+        self.qemu.terminate()
-+        self.qemu.kill()
-diff --git a/support/testing/run-tests b/support/testing/run-tests
-new file mode 100755
-index 0000000..339bb66
---- /dev/null
-+++ b/support/testing/run-tests
-@@ -0,0 +1,83 @@
-+#!/usr/bin/env python2
-+import argparse
-+import sys
-+import os
-+import nose2
-+
-+from infra.basetest import BRTest
-+
-+def main():
-+    parser = argparse.ArgumentParser(description='Run Buildroot tests')
-+    parser.add_argument('testname', nargs='*',
-+                        help='list of test cases to execute')
-+    parser.add_argument('--list', '-l', action='store_true',
-+                        help='list of available test cases')
-+    parser.add_argument('--all', '-a', action='store_true',
-+                        help='execute all test cases')
-+    parser.add_argument('--stdout', '-s', action='store_true',
-+                        help='log everything to stdout')
-+    parser.add_argument('--output', '-o',
-+                        help='output directory')
-+    parser.add_argument('--download', '-d',
-+                        help='download directory')
-+    parser.add_argument('--keep', '-k',
-+                        help='keep build directories',
-+                        action='store_true')
-+
-+    args = parser.parse_args()
-+
-+    script_path = os.path.realpath(__file__)
-+    test_dir = os.path.dirname(script_path)
-+
-+    if args.stdout:
-+        BRTest.logtofile = False
-+
-+    if args.list:
-+        print "List of tests"
-+        nose2.discover(argv=[script_path,
-+                             "-s", test_dir,
-+                             "-v",
-+                             "--collect-only"],
-+                       plugins=["nose2.plugins.collect"])
-+        return 0
-+
-+    if args.download is None:
-+        args.download = os.getenv("BR2_DL_DIR")
-+        if args.download is None:
-+            print "Missing download directory, please use -d/--download"
-+            print ""
-+            parser.print_help()
-+            return 1
-+
-+    BRTest.downloaddir = os.path.abspath(args.download)
-+
-+    if args.output is None:
-+        print "Missing output directory, please use -o/--output"
-+        print ""
-+        parser.print_help()
-+        return 1
-+
-+    if not os.path.exists(args.output):
-+        os.mkdir(args.output)
-+
-+    BRTest.outputdir = os.path.abspath(args.output)
-+
-+    if args.all is False and len(args.testname) == 0:
-+        print "No test selected"
-+        print ""
-+        parser.print_help()
-+        return 1
-+
-+    BRTest.keepbuilds = args.keep
-+
-+    nose2_args = ["-v",
-+                  "-s", "support/testing",
-+                  "-c", "support/testing/conf/unittest.cfg"]
-+
-+    if len(args.testname) != 0:
-+        nose2_args += args.testname
-+
-+    nose2.discover(argv=nose2_args)
-+
-+if __name__ == "__main__":
-+    sys.exit(main())
-diff --git a/support/testing/tests/__init__.py b/support/testing/tests/__init__.py
++        cmd = "mount | grep '/dev/root on / type squashfs'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
+diff --git a/support/testing/tests/fs/test_ubi.py b/support/testing/tests/fs/test_ubi.py
 new file mode 100644
-index 0000000..e69de29
+index 0000000..ede4999
+--- /dev/null
++++ b/support/testing/tests/fs/test_ubi.py
+@@ -0,0 +1,39 @@
++import subprocess
++import os
++
++import infra.basetest
++
++class TestUbi(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++"""
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x7ff80
++BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1
++BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x80000
++BR2_TARGET_ROOTFS_UBI_SUBSIZE=1
++"""
++
++    # TODO: if you boot Qemu twice on the same UBI image, it fails to
++    # attach the image the second time, with "ubi0 error:
++    # ubi_read_volume_table: the layout volume was not found".
++    # To be investigated.
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.ubi")
++        out = subprocess.check_output(["file", img],
++                                      cwd=self.builddir,
++                                      env={"LANG": "C"})
++        out = out.splitlines()
++
++        subprocess.call(["truncate", "-s 128M", img])
++
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           kernel_cmdline=["root=ubi0:rootfs",
++                                           "ubi.mtd=0",
++                                           "rootfstype=ubifs"],
++                           options=["-drive", "file={},if=pflash".format(img)])
++        self.emulator.login()
++        cmd = "mount | grep 'ubi0:rootfs on / type ubifs'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
+diff --git a/support/testing/tests/fs/test_yaffs2.py b/support/testing/tests/fs/test_yaffs2.py
+new file mode 100644
+index 0000000..0ffb758
+--- /dev/null
++++ b/support/testing/tests/fs/test_yaffs2.py
+@@ -0,0 +1,12 @@
++import os
++
++import infra.basetest
++
++class TestYaffs2(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++            infra.basetest.MINIMAL_CONFIG + \
++            "BR2_TARGET_ROOTFS_YAFFS2=y"
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.yaffs2")
++        self.assertTrue(os.path.exists(img))
 -- 
 2.7.4
