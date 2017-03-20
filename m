@@ -1,69 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Mar 2017 16:27:37 +0100
-Subject: [Buildroot] [git commit] wget: add upstream security fix
-Message-ID: <20170320152954.6E9EE821E8@busybox.osuosl.org>
+Date: Mon, 20 Mar 2017 17:00:06 +0100
+Subject: [Buildroot] [PATCH] jo: new package
+Message-ID: <20170320160006.9905-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7132fc9c11573a460243895c85e66b514b71c041
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes CVE-2017-6508: CRLF injection in the url_parse function in url.c
-
-http://lists.gnu.org/archive/html/bug-wget/2017-03/msg00018.html
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-Fix-CRLF-injection-in-Wget-host-part.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ DEVELOPERS           |  1 +
+ package/Config.in    |  1 +
+ package/jo/Config.in |  6 ++++++
+ package/jo/jo.hash   |  2 ++
+ package/jo/jo.mk     | 14 ++++++++++++++
+ 5 files changed, 24 insertions(+)
+ create mode 100644 package/jo/Config.in
+ create mode 100644 package/jo/jo.hash
+ create mode 100644 package/jo/jo.mk
 
-diff --git a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ad3089539..dd82db3a3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1199,6 +1199,7 @@ N:	Peter Korsgaard <peter@korsgaard.com>
+ F:	board/orangepi/
+ F:	configs/orangepi_pc_defconfig
+ F:	package/flickcurl/
++F:	package/jo/
+ F:	package/libfastjson/
+ F:	package/lzop/
+ F:	package/memtool/
+diff --git a/package/Config.in b/package/Config.in
+index 9f4b55020..1e902d3d9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -141,6 +141,7 @@ menu "Development tools"
+ 	source "package/git-crypt/Config.in"
+ 	source "package/gperf/Config.in"
+ 	source "package/grep/Config.in"
++	source "package/jo/Config.in"
+ 	source "package/jq/Config.in"
+ 	source "package/libtool/Config.in"
+ 	source "package/make/Config.in"
+diff --git a/package/jo/Config.in b/package/jo/Config.in
 new file mode 100644
-index 0000000..380b075
+index 000000000..c5532c210
 --- /dev/null
-+++ b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
-@@ -0,0 +1,40 @@
-+From 4d729e322fae359a1aefaafec1144764a54e8ad4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
-+Date: Mon, 6 Mar 2017 10:04:22 +0100
-+Subject: [PATCH] Fix CRLF injection in Wget host part
++++ b/package/jo/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_JO
++	bool "jo"
++	help
++	  Command-line processor to output JSON from a shell
 +
-+* src/url.c (url_parse): Reject control characters in host part of URL
++	  https://github.com/jpmens/jo
+diff --git a/package/jo/jo.hash b/package/jo/jo.hash
+new file mode 100644
+index 000000000..429f1e4a9
+--- /dev/null
++++ b/package/jo/jo.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	d66ec97258d1afad15643fb2d5b5e807153a732ba45c2417adc66669acbde52e  jo-1.0.tar.gz
+diff --git a/package/jo/jo.mk b/package/jo/jo.mk
+new file mode 100644
+index 000000000..5529f552c
+--- /dev/null
++++ b/package/jo/jo.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# jo
++#
++################################################################################
 +
-+Reported-by: Orange Tsai
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 4d729e322fae35
++JO_VERSION = 1.0
++JO_SITE = https://github.com/jpmens/jo/releases/download/v$(JO_VERSION)
++JO_LICENSE = MIT (json.[ch]), GPLv2+ (rest)
++JO_LICENSE_FILES = COPYING
++# don't build man pages
++JO_CONF_ENV = ac_cv_path_PANDOC=''
 +
-+ src/url.c | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
-+
-+diff --git a/src/url.c b/src/url.c
-+index 8f8ff0b881af..7d36b27d7b92 100644
-+--- a/src/url.c
-++++ b/src/url.c
-+@@ -925,6 +925,17 @@ url_parse (const char *url, int *error, struct iri *iri, bool percent_encode)
-+       url_unescape (u->host);
-+       host_modified = true;
-+ 
-++      /* check for invalid control characters in host name */
-++      for (p = u->host; *p; p++)
-++        {
-++          if (c_iscntrl(*p))
-++            {
-++              url_free(u);
-++              error_code = PE_INVALID_HOST_NAME;
-++              goto error;
-++            }
-++        }
-++
-+       /* Apply IDNA regardless of iri->utf8_encode status */
-+       if (opt.enable_iri && iri)
-+         {
-+-- 
-+2.11.0
-+
++$(eval $(autotools-package))
+-- 
+2.11.0
