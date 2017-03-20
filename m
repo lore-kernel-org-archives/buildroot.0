@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 22:16:23 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: add lm-sensors optional
-	dependency
-Message-ID: <20170320212053.80A5980E24@busybox.osuosl.org>
+Date: Mon, 20 Mar 2017 22:21:40 +0100
+Subject: [Buildroot] [PATCH 2/3] package/x11r7/xserver_xorg-server: bump
+ to	version 1.19.3
+In-Reply-To: <jak5qdxdon.ln2@ID-313208.user.individual.net>
+References: <20170319205155.3333-1-romain.naour@gmail.com>
+ <20170319205155.3333-2-romain.naour@gmail.com>
+ <jak5qdxdon.ln2@ID-313208.user.individual.net>
+Message-ID: <20170320222140.7526eb03@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73401587e5984397bedddab61ad6c89712041267
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-radeon-pci-0008
-Adapter: PCI adapter
-temp1:        +56.0 C  (crit = +120.0 C, hyst = +90.0 C)
+On Mon, 20 Mar 2017 19:40:51 +0100, Bernd Kuhls wrote:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mesa3d/mesa3d.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> ERROR: xorg-server-1.19.3.tar.bz2 has wrong sha256 hash:
+> ERROR: expected: 8f93b98f1ac9fbd87515bfe329a069b48bbec98e5329584ab5fbf759a0953b8d
+> ERROR: got     : 677a8166e03474719238dfe396ce673c4234735464d6dadf2959b600d20e5a98
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 9774f05..0ad8ded 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -180,6 +180,13 @@ else
- MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
-+MESA3D_CONF_OPTS += --enable-lmsensors
-+MESA3D_DEPENDENCIES += lm-sensors
-+else
-+MESA3D_CONF_OPTS += --disable-lmsensors
-+endif
-+
- # Avoid automatic search of llvm-config
- MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
- 
+Romain fixed it in the third patch, touching the ATI driver, but
+indeed, it's a bit messed up. I fixed this when applying. Thanks for
+noticing!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
