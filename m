@@ -1,86 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 20 Mar 2017 18:26:30 +0000
-Subject: [Buildroot] [Bug 9766] New: support/scripts/pkgutil.py conflicts
- with the pkgutil.py from setuptools => breaks scanpypi (2017.02)
-Message-ID: <bug-9766-163@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 20 Mar 2017 19:32:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x265: bump version to 2.3
+Message-ID: <20170320183201.8710-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9766
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x265/x265.hash | 2 +-
+ package/x265/x265.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-            Bug ID: 9766
-           Summary: support/scripts/pkgutil.py conflicts with the
-                    pkgutil.py from setuptools => breaks scanpypi
-                    (2017.02)
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: timo.valimaki at sensoan.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-Asked the following in Stackoverflow:
-
-"I'm trying to run the scanpypi script - support script of the Buildroot
-(2017.02) but I'm getting the ImportError: cannot import name get_importer.
-
-Traceback (most recent call last): File "./support/scripts/scanpypi", line 52,
-in import setuptools File
-"/usr/local/lib/python2.7/dist-packages/setuptools/init.py", line 12, in import
-setuptools.version File
-"/usr/local/lib/python2.7/dist-packages/setuptools/version.py", line 1, in
-import pkg_resources File
-"/usr/local/lib/python2.7/dist-packages/pkg_resources/init.py", line 40, in
-from pkgutil import get_importer ImportError: cannot import name get_importer
-
-I added the following lines into beginning of the scanpypi script to see
-sys.path
-
-    import sys
-    print(sys.path)
-
-output:
-
-['/home/timo/bldr_lab/buildroot/support/scripts', '/usr/lib/python2.7',
-'/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk',
-'/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload',
-'/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages']
-
-As the pkgutil is in the /usr/lib/python2.7 directory the problem is not path
-problem.
-
-I have also uninstalled and re-installed python2.7, pip and setuptools but no
-help.
-
-What could be reason for the ImportError?"
-
-
-Got the response:
-
-
-This is a bug in Buildroot. It is due to commit
-12683184b1969f65680cb7db55b547a620a9860f that introduced the pkgutil.py file in
-support/scripts. This conflicts with the pkgutil.py from setuptools.
-
-The solution is to rename the pkgutil.py file to something else, and update the
-imports in the other scripts accordingly. If you do this, please post a patch
-on the Buildroot mailing list, so everyone can benefit. See the manual for
-details how to post patches.
-
-
-http://stackoverflow.com/questions/42892298/import-error-cannot-import-name-get-importer.
-
-Need to practice script creating ...
-
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index 5672d79e0..d53295c3c 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256 b872552535e41fbffa03ba7cbcd3479c42c4053868309292e78e147b7773ac4b  x265_2.2.tar.gz
++sha256 47520ac3424790168ea5c2db4a3cf12ca4d55a1790720007916652f07af3e41f  x265_2.3.tar.gz
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 0fbdb0107..498ceaacd 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-X265_VERSION = 2.2
++X265_VERSION = 2.3
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPLv2+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.11.0
