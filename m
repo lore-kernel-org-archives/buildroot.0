@@ -1,49 +1,35 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 20 Mar 2017 21:51:21 +0100
-Subject: [Buildroot] [PATCH] download/git: create GNU format tar files
-Message-ID: <20170320205121.30926-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Mar 2017 21:52:09 +0100
+Subject: [Buildroot] [PATCH] skalibs: fix endianness detection on x86
+In-Reply-To: <20170320201122.26539-1-eric.le.bihan.dev@free.fr>
+References: <20170320201122.26539-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20170320215209.2e45c696@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On most distros, the tar format defaults to GNU. However, at build time
-the default format may be changed to posix. Also, future versions of
-tar will default to posix.
+Hello,
 
-Since we want the tarballs created by the git download method to be
-reproducible (so their hash can be checked), we should explicitly
-specify the format. Since existing tarballs on sources.buildroot.org
-use the GNU format, and also the existing hashes in the *.hash files
-are based on GNU format tarballs, we use the GNU format.
+On Mon, 20 Mar 2017 21:11:22 +0100, Eric Le Bihan wrote:
+> Update the patch for compile time endianness detection so it works on
+> x86 platforms using GCC <= 4.4.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/c2e8e1180571976b412cbba729c45a3698aea0b2
+>   http://autobuild.buildroot.net/results/2ee47107d8a67470f7bc3e10cf763202d5455d17
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  .../skalibs/0001-No-runtime-tests-for-endianness.patch  | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
 
-In addition, the Posix format encodes atime and ctime as well as mtime,
-but tar offers no option like --mtime to override them. In the GNU
-format, atime and ctime are only encoded if the --incremental option is
-given.
+Applied to master, thanks.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Peter Seiderer <ps.report@gmx.net>
----
-Peter, can you test if this solves the issue for you?
----
- support/download/git | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/support/download/git b/support/download/git
-index 7921411835..056057c700 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -94,6 +94,8 @@ popd >/dev/null
- # Generate the archive, sort with the C locale so that it is reproducible
- find "${basename}" -not -type d >"${basename}.list"
- LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
--tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
-+# Create GNU-format tarballs, since that's the format of the tarballs on
-+# sources.buildroot.org and used in the *.hash files
-+tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-          -T "${basename}.list.sorted" >"${output}.tar"
- gzip -n <"${output}.tar" >"${output}"
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
