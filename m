@@ -1,68 +1,64 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 20 Mar 2017 06:16:56 +0200
-Subject: [Buildroot] [PATCH] wget: add upstream security fix
-Message-ID: <f1cb9b28fe905f86a49974189ff906fc277e61c8.1489983416.git.baruch@tkos.co.il>
+From: Ilya Kuzmich <ilya.kuzmich@gmail.com>
+Date: Mon, 20 Mar 2017 08:56:10 +0300
+Subject: [Buildroot] [PATCH 1/1] toolchain-external: improve musl external
+	check
+Message-ID: <1489989370-22377-1-git-send-email-ilya.kuzmich@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2017-6508: CRLF injection in the url_parse function in url.c
+Test whether musl used or not: compile minimal C program and check if
+interpreter contains /lib/ld-musl.
 
-http://lists.gnu.org/archive/html/bug-wget/2017-03/msg00018.html
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Ilya Kuzmich <ilya.kuzmich@gmail.com>
 ---
- ...0001-Fix-CRLF-injection-in-Wget-host-part.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
+ toolchain/helpers.mk                                   | 13 +++++++++----
+ toolchain/toolchain-external/pkg-toolchain-external.mk |  4 +++-
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
-new file mode 100644
-index 000000000000..380b075244ac
---- /dev/null
-+++ b/package/wget/0001-Fix-CRLF-injection-in-Wget-host-part.patch
-@@ -0,0 +1,40 @@
-+From 4d729e322fae359a1aefaafec1144764a54e8ad4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Tim=20R=C3=BChsen?= <tim.ruehsen@gmx.de>
-+Date: Mon, 6 Mar 2017 10:04:22 +0100
-+Subject: [PATCH] Fix CRLF injection in Wget host part
-+
-+* src/url.c (url_parse): Reject control characters in host part of URL
-+
-+Reported-by: Orange Tsai
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 4d729e322fae35
-+
-+ src/url.c | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
-+
-+diff --git a/src/url.c b/src/url.c
-+index 8f8ff0b881af..7d36b27d7b92 100644
-+--- a/src/url.c
-++++ b/src/url.c
-+@@ -925,6 +925,17 @@ url_parse (const char *url, int *error, struct iri *iri, bool percent_encode)
-+       url_unescape (u->host);
-+       host_modified = true;
-+ 
-++      /* check for invalid control characters in host name */
-++      for (p = u->host; *p; p++)
-++        {
-++          if (c_iscntrl(*p))
-++            {
-++              url_free(u);
-++              error_code = PE_INVALID_HOST_NAME;
-++              goto error;
-++            }
-++        }
-++
-+       /* Apply IDNA regardless of iri->utf8_encode status */
-+       if (opt.enable_iri && iri)
-+         {
-+-- 
-+2.11.0
-+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 2f73ebb..77303a8 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -197,13 +197,18 @@ check_glibc = \
+ #
+ # Check that the selected C library really is musl
+ #
+-# $1: sysroot directory
++# $1: cross-gcc path
++# $2: cross-readelf path
+ check_musl = \
+-	SYSROOT_DIR="$(strip $1)"; \
+-	if test ! -f $${SYSROOT_DIR}/lib/libc.so -o -e $${SYSROOT_DIR}/lib/libm.so ; then \
++	__CROSS_CC=$(strip $1) ; \
++	__CROSS_READELF=$(strip $2) ; \
++	echo 'void main(void) {}' | $${__CROSS_CC} -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - >/dev/null 2>&1; \
++	if ! $${__CROSS_READELF} -l $(BUILD_DIR)/.br-toolchain-test.tmp 2> /dev/null | grep 'program interpreter: /lib/ld-musl' -q; then \
++		rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*; \
+ 		echo "Incorrect selection of the C library" ; \
+ 		exit -1; \
+-	fi
++	fi ; \
++	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
+ 
+ #
+ # Check the conformity of Buildroot configuration with regard to the
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 77b7bbb..8a774eb 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -565,7 +565,9 @@ define $(2)_CONFIGURE_CMDS
+ 	if test "$$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
+ 		$$(call check_uclibc,$$$${SYSROOT_DIR}) ; \
+ 	elif test "$$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
+-		$$(call check_musl,$$$${SYSROOT_DIR}) ; \
++		$$(call check_musl,\
++			"$$(TOOLCHAIN_EXTERNAL_CC) $$(TOOLCHAIN_EXTERNAL_CFLAGS)",\
++			$$(TOOLCHAIN_EXTERNAL_READELF)) ; \
+ 	else \
+ 		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
+ 	fi
 -- 
-2.11.0
+2.7.4
