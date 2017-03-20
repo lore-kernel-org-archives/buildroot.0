@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:57:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libbluray: bump version to 1.0.0
-In-Reply-To: <20170320181725.2085-1-bernd.kuhls@t-online.de>
-References: <20170320181725.2085-1-bernd.kuhls@t-online.de>
-Message-ID: <20170320215738.44e50712@free-electrons.com>
+Date: Mon, 20 Mar 2017 21:57:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x265: bump version to 2.3
+In-Reply-To: <20170320183201.8710-1-bernd.kuhls@t-online.de>
+References: <20170320183201.8710-1-bernd.kuhls@t-online.de>
+Message-ID: <20170320215743.17b08b72@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 20 Mar 2017 19:17:25 +0100, Bernd Kuhls wrote:
+On Mon, 20 Mar 2017 19:32:01 +0100, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libbluray/libbluray.hash | 4 ++--
->  package/libbluray/libbluray.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/x265/x265.hash | 2 +-
+>  package/x265/x265.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
