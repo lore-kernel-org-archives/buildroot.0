@@ -1,53 +1,102 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 20 Mar 2017 21:57:25 +0200
-Subject: [Buildroot] [PATCH 1/2] keepalived: fix libnl optional dependnecy
-Message-ID: <f81b2b2f55f9f4294cf46af025e4a6108e5f413e.1490039846.git.baruch@tkos.co.il>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 20 Mar 2017 21:00:20 +0100
+Subject: [Buildroot] [PATCH v1] wiringpi: fix compile for missing baud
+	defines
+Message-ID: <20170320200020.11959-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Correct two issues:
+For sparc-buildroot-linux-uclibc/sysroot/usr/include/asm/termbits.h
+containing:
 
-  * List libnl as dependency when it is enabled
+  /* These have totally bogus values and nobody uses them
+     so far. Later on we'd have to use say 0x10000x and
+     adjust CBAUD constant and drivers accordingly.
+  #define B2500000  0x00001010
+  #define B3000000  0x00001011
+  #define B3500000  0x00001012
+  #define B4000000  0x00001013  */
 
-  * Select libnfnetlink when libnl is selected since configure.ac requires
-    both
+Fixes [1]:
 
-Cc: Ilias Apalodimas <apalos@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  wiringSerial.c: In function 'serialOpen':
+  wiringSerial.c:78:28: error: 'B2500000' undeclared (first use in this function)
+       case 2500000: myBaud = B2500000 ; break ;
+                              ^
+  wiringSerial.c:78:28: note: each undeclared identifier is reported only once for each function it appears in
+  wiringSerial.c:79:28: error: 'B3000000' undeclared (first use in this function)
+       case 3000000: myBaud = B3000000 ; break ;
+                              ^
+  wiringSerial.c:80:28: error: 'B3500000' undeclared (first use in this function)
+       case 3500000: myBaud = B3500000 ; break ;
+                              ^
+  wiringSerial.c:81:28: error: 'B4000000' undeclared (first use in this function)
+       case 4000000: myBaud = B4000000 ; break ;
+                              ^
+
+[1] http://autobuild.buildroot.net/results/5be/5bea1e95d1c7b444a5f0a5770251f1af3efc9c18
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/keepalived/Config.in     | 1 +
- package/keepalived/keepalived.mk | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...ringSerial-fix-compile-for-missing-baud-d.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
 
-diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
-index efa745ad9ee6..4e97514290b7 100644
---- a/package/keepalived/Config.in
-+++ b/package/keepalived/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_KEEPALIVED
- 	depends on !BR2_STATIC_LIBS # uses libdl
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_POPT
-+	select BR2_PACKAGE_LIBNFNETLINK if BR2_PACKAGE_LIBNL
- 	help
- 	  The main goal of the keepalived project is to add a strong &
- 	  robust keepalive facility to the Linux Virtual Server
-diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
-index 97a4daa8b670..95757ff68130 100644
---- a/package/keepalived/keepalived.mk
-+++ b/package/keepalived/keepalived.mk
-@@ -13,8 +13,8 @@ KEEPALIVED_CONF_OPTS += --disable-dbus
- 
- KEEPALIVED_PATCH = https://github.com/acassen/keepalived/commit/5d98b7b69fcbba84fa69e5b5e9a019bfbcb76e8b.patch
- 
--ifeq ($(BR2_PACKAGE_LIBNL),y)
--KEEPALIVED_DEPENDENCIES += libnfnetlink
-+ifeq ($(BR2_PACKAGE_LIBNL)$(BR2_PACKAGE_LIBNFNETLINK),yy)
-+KEEPALIVED_DEPENDENCIES += libnl libnfnetlink
- endif
- 
- ifeq ($(BR2_PACKAGE_IPSET),y)
+diff --git a/package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch b/package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
+new file mode 100644
+index 000000000..c9c4385d4
+--- /dev/null
++++ b/package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
+@@ -0,0 +1,47 @@
++From 1e7a7a625ca20633062406ce525b19d168c356af Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 20 Mar 2017 20:51:20 +0100
++Subject: [PATCH] wiringPi/wiringSerial: fix compile for missing baud defines
++
++For sparc-buildroot-linux-uclibc/sysroot/usr/include/asm/termbits.h
++containing:
++
++  /* These have totally bogus values and nobody uses them
++     so far. Later on we'd have to use say 0x10000x and
++     adjust CBAUD constant and drivers accordingly.
++  #define B2500000  0x00001010
++  #define B3000000  0x00001011
++  #define B3500000  0x00001012
++  #define B4000000  0x00001013  */
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ wiringPi/wiringSerial.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/wiringPi/wiringSerial.c b/wiringPi/wiringSerial.c
++index e1587ad..4ac8d1e 100644
++--- a/wiringPi/wiringSerial.c
+++++ b/wiringPi/wiringSerial.c
++@@ -75,10 +75,18 @@ int serialOpen (const char *device, const int baud)
++     case 1152000:	myBaud = B1152000 ; break ;
++     case 1500000:	myBaud = B1500000 ; break ;
++     case 2000000:	myBaud = B2000000 ; break ;
+++#if defined(B2500000)
++     case 2500000:	myBaud = B2500000 ; break ;
+++#endif
+++#if defined(B3000000)
++     case 3000000:	myBaud = B3000000 ; break ;
+++#endif
+++#if defined(B3500000)
++     case 3500000:	myBaud = B3500000 ; break ;
+++#endif
+++#if defined(B4000000)
++     case 4000000:	myBaud = B4000000 ; break ;
+++#endif
++ 
++     default:
++       return -2 ;
++-- 
++2.11.0
++
 -- 
 2.11.0
