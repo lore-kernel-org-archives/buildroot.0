@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 22:27:29 +0100
-Subject: [Buildroot] [git commit] libxkbcommon: disable wayland support
-Message-ID: <20170320212733.C32367FC13@busybox.osuosl.org>
+Date: Mon, 20 Mar 2017 22:27:42 +0100
+Subject: [Buildroot] [PATCH v2 1/2] libxkbcommon: disable wayland support
+In-Reply-To: <20170310195455.16117-1-ps.report@gmx.net>
+References: <20170310195455.16117-1-ps.report@gmx.net>
+Message-ID: <20170320222742.0f126ac1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7665b5870995ef059d1654c35557b53c04a71d1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Disable wayland support (only needed for the interactive-wayland
-test program). This fixes a compile failure in case wayland
-support is autodetected:
+On Fri, 10 Mar 2017 20:54:54 +0100, Peter Seiderer wrote:
+> Disable wayland support (only needed for the interactive-wayland
+> test program). This fixes a compile failure in case wayland
+> support is autodetected:
+> 
+>     GEN      xdg-shell-unstable-v5-protocol.c
+>   /bin/sh: /usr/bin/wayland-scanner: No such file or directory
+>   Makefile:2426: recipe for target 'xdg-shell-unstable-v5-protocol.c' failed
+>   make[3]: *** [xdg-shell-unstable-v5-protocol.c] Error 127
+>   make[3]: *** Waiting for unfinished jobs....
+>     GEN      xdg-shell-unstable-v5-client-protocol.h
+>   /bin/sh: /usr/bin/wayland-scanner: No such file or directory
+>   Makefile:2428: recipe for target 'xdg-shell-unstable-v5-client-protocol.h' failed
+>   make[3]: *** [xdg-shell-unstable-v5-client-protocol.h] Error 127
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v2:
+>   - split out the disable-wayland fix
+> ---
+>  package/libxkbcommon/libxkbcommon.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-    GEN      xdg-shell-unstable-v5-protocol.c
-  /bin/sh: /usr/bin/wayland-scanner: No such file or directory
-  Makefile:2426: recipe for target 'xdg-shell-unstable-v5-protocol.c' failed
-  make[3]: *** [xdg-shell-unstable-v5-protocol.c] Error 127
-  make[3]: *** Waiting for unfinished jobs....
-    GEN      xdg-shell-unstable-v5-client-protocol.h
-  /bin/sh: /usr/bin/wayland-scanner: No such file or directory
-  Makefile:2428: recipe for target 'xdg-shell-unstable-v5-client-protocol.h' failed
-  make[3]: *** [xdg-shell-unstable-v5-client-protocol.h] Error 127
+Applied to master, thanks.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libxkbcommon/libxkbcommon.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index c39a7c0..6011814 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -11,6 +11,7 @@ LIBXKBCOMMON_LICENSE = MIT/X11
- LIBXKBCOMMON_LICENSE_FILES = LICENSE
- LIBXKBCOMMON_INSTALL_STAGING = YES
- LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
-+LIBXKBCOMMON_CONF_OPTS = --disable-wayland
- # uses C99 features
- LIBXKBCOMMON_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
