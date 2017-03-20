@@ -1,10 +1,9 @@
 From: sikor6 at gmail.com <sikor6@gmail.com>
-Date: Tue, 21 Mar 2017 00:33:48 +0100
-Subject: [Buildroot] [PATCH 2/3] remove:
-	0001-bfin-remove-inline-keyword.patch
+Date: Tue, 21 Mar 2017 00:33:49 +0100
+Subject: [Buildroot] [PATCH 3/3] xenomai: enable SMP in configuration options
 In-Reply-To: <20170320233349.14057-1-sikor6@gmail.com>
 References: <20170320233349.14057-1-sikor6@gmail.com>
-Message-ID: <20170320233349.14057-2-sikor6@gmail.com>
+Message-ID: <20170320233349.14057-3-sikor6@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,82 +12,26 @@ To: buildroot@busybox.net
 
 From: Pawel Sikora <sikor6@gmail.com>
 
-Remove 0001-bfin-remove-inline-keyword.patch due to bumping
-Xenomai to version 3.0.3
+Add --enable-smp to XENOMAI_CONF_OPTS, so kernel and xenomai
+userpace libs both support it.
 
 Signed-off-by: Pawel Sikora <sikor6@gmail.com>
 ---
- .../xenomai/0001-bfin-remove-inline-keyword.patch  | 62 ----------------------
- 1 file changed, 62 deletions(-)
- delete mode 100644 package/xenomai/0001-bfin-remove-inline-keyword.patch
+ package/xenomai/xenomai.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xenomai/0001-bfin-remove-inline-keyword.patch b/package/xenomai/0001-bfin-remove-inline-keyword.patch
-deleted file mode 100644
-index 376bd21c3..000000000
---- a/package/xenomai/0001-bfin-remove-inline-keyword.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 2a96c8bbe19a193d9ae6d0780fc274abc4df03e3 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sat, 5 Nov 2016 19:09:00 +0100
--Subject: [PATCH] bfin: remove inline keyword
--
--Xenomai user space tools fail to build for bfin target since it's
--provide it's own pthread_atfork(), shm_open() and shm_unlink()
--definition using the inline keyword and weak attribute.
--
--With gcc 5+ the weak attribute is discarded by the inline keyword,
--so each symbol are global and are redefined several time while
--linking.
--
--Fixes:
--http://autobuild.buildroot.net/results/0c2/0c2e5eb4edd4f9427f61d3c9b67a12a7a0e24140
--
--Patch status: upstream,
--https://git.xenomai.org/xenomai-2.6.git/commit/?id=917dcebb26ec492f276cdc3b55867aa90e01fa12
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- include/asm-blackfin/syscall.h | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/include/asm-blackfin/syscall.h b/include/asm-blackfin/syscall.h
--index 9eda8b9..b5728b5 100644
----- a/include/asm-blackfin/syscall.h
--+++ b/include/asm-blackfin/syscall.h
--@@ -132,9 +132,9 @@ static inline int __xn_interrupted_p(struct pt_regs *regs)
-- #define XENOMAI_SKINCALL5(id,op,a1,a2,a3,a4,a5) XENOMAI_DO_SYSCALL(5,id,op,a1,a2,a3,a4,a5)
-- 
-- /* uClibc does not provide pthread_atfork() for this arch; provide it
---   here. Note: let the compiler decides whether it wants to actually
---   inline this routine, i.e. do not force always_inline. */
---inline __attribute__((weak)) int pthread_atfork(void (*prepare)(void),
--+   here.
--+*/
--+__attribute__((weak)) int pthread_atfork(void (*prepare)(void),
-- 						void (*parent)(void),
-- 						void (*child)(void))
-- {
--@@ -143,7 +143,7 @@ inline __attribute__((weak)) int pthread_atfork(void (*prepare)(void),
-- 
-- #include <errno.h>
-- 
---inline __attribute__((weak)) int shm_open(const char *name,
--+__attribute__((weak)) int shm_open(const char *name,
-- 					  int oflag,
-- 					  mode_t mode)
-- {
--@@ -151,7 +151,7 @@ inline __attribute__((weak)) int shm_open(const char *name,
-- 	return -1;
-- }
-- 
---inline __attribute__((weak)) int shm_unlink(const char *name)
--+__attribute__((weak)) int shm_unlink(const char *name)
-- {
-- 	errno = ENOSYS;
-- 	return -1;
---- 
--2.5.5
--
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 28875b944..37ec68526 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -21,7 +21,7 @@ XENOMAI_INSTALL_STAGING = YES
+ XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
+ XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
+ 
+-XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install
++XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/ --disable-doc-install --enable-smp
+ 
+ define XENOMAI_REMOVE_DEVFILES
+ 	for i in xeno-config xeno-info wrap-link.sh ; do \
 -- 
 2.12.0
