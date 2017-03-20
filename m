@@ -1,111 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Mar 2017 22:53:07 +0100
-Subject: [Buildroot] [PATCH v2 1/3] acl: make sure build picks up
- TARGET_CFLAGS
-In-Reply-To: <eefb03f3-65b0-12bb-440e-38108b75a85d@andin.de>
-References: <20170317160616.20570-1-arnout@mind.be>
- <08d783f9-0117-8a3c-0e8d-c034f0238d78@andin.de>
- <82f3ccde-64a0-ab90-a450-15a46e34f7f6@mind.be>
- <eefb03f3-65b0-12bb-440e-38108b75a85d@andin.de>
-Message-ID: <8f5687f0-905b-c527-a18b-c18ad2a15bba@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Mar 2017 22:57:42 +0100
+Subject: [Buildroot] [PATCH] uboot-tools: pass empty CFLAGS on
+ invocation of libfdt/setup.py
+In-Reply-To: <1489768962-26768-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1489768962-26768-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20170320225742.054be334@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 20-03-17 08:54, Andreas Naumann wrote:
-> Hi,
+On Fri, 17 Mar 2017 09:42:42 -0700, Max Filippov wrote:
+> When building u-boot tools in cross-build environment CFLAGS environment
+> variable set up for target is taken into an account when building code
+> for host. Make it empty on invocation of python.
 > 
-> Am 17.03.2017 um 23:20 schrieb Arnout Vandecappelle:
->>
->>
->> On 17-03-17 23:17, Andreas Naumann wrote:
->>> Hi Arnout,
->>> tested and works :-)
->>
->>  You can formalize this by replying with
->>
->>  Tested-by: Andreas Naumann <dev@andin.de>
->>
->> (but then without a space in front). It gets picked up by Patchwork and it will
->> be added to the git log.
-> I guess too late now. Will do next time.
+> This fixes the following build errors when cross-compiling for xtensa:
 > 
->>
->>  By the way, did you actually test *this patch*, or just that fakeroot works
->> after the entire series is applied? In the latter case, you should only add your
->> Tested-by to the last patch (and perhaps 2/3). This particular patch has no
->> impact on fakeroot.
-> I did test this patch in in so far that host-acl successfully builds without the
-> attr/xattr.h header being picked up from the host machine. And of course
-> subsequently that fakeroot with acl works as expected.
-
- My point is: this patch is about target-acl, not host-acl, that's why I asked.
-So you didn't actually test this patch :-)
-
- Regards,
- Arnout
-
+>   cc1: error: unrecognized command line option "-mlongcalls"
+>   cc1: error: unrecognized command line option "-mauto-litpools"
 > 
-> regards,
-> Andreas
+> Fixes:
+>   http://autobuild.buildroot.net/results/439d6dacfaa7f9244bd15ca04990c12a25ff4777
+>   http://autobuild.buildroot.net/results/e2fe36c20e75d01a01a6659ef11e888965a843b9
+>   http://autobuild.buildroot.net/results/6f37ff347822a76571a9fe9cf3c491fe7e4164fa
 > 
->>
->>  Regards,
->>  Arnout
->>
->>>
->>> thanks,
->>> Andreas
->>>
->>> Am 17.03.2017 um 17:06 schrieb Arnout Vandecappelle (Essensium/Mind):
->>>> The acl build system doesn't use automake, therefore it is broken. It
->>>> doesn't use the CFLAGS passed by configure. Work around this by passing
->>>> CFLAGS in the environment. The makefiles append to CFLAGS, so this
->>>> works.
->>>>
->>>> This issue hasn't led to build failures, but it is visible e.g. when
->>>> stack protector is enabled: the stack protector options are not applied
->>>> to acl. Also debug and optimisation options aren't applied.
->>>>
->>>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->>>> Cc: Yegor Yefremov <yegorslists@googlemail.com>
->>>> ---
->>>> v2: new patch
->>>> ---
->>>>  package/acl/acl.mk | 8 +++++++-
->>>>  1 file changed, 7 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/package/acl/acl.mk b/package/acl/acl.mk
->>>> index cbe5e93961..9fd5de18a4 100644
->>>> --- a/package/acl/acl.mk
->>>> +++ b/package/acl/acl.mk
->>>> @@ -15,7 +15,13 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
->>>>
->>>>  # While the configuration system uses autoconf, the Makefiles are
->>>>  # hand-written and do not use automake. Therefore, we have to hack
->>>> -# around their deficiencies by passing installation paths.
->>>> +# around their deficiencies by:
->>>> +# - explicitly passing CFLAGS (LDFLAGS are passed on from configure,
->>>> +#   CFLAGS are not).
->>>> +# - explicitly passing the installation prefix, not using DESTDIR.
->>>> +
->>>> +ACL_MAKE_ENV = CFLAGS="$(TARGET_CFLAGS)"
->>>> +
->>>>  ACL_INSTALL_STAGING_OPTS = \
->>>>      prefix=$(STAGING_DIR)/usr \
->>>>      exec_prefix=$(STAGING_DIR)/usr \
->>>>
->>
-> 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
+There is still an issue with this:
+
+  http://autobuild.buildroot.net/results/eaf/eaf4e5ffc1b2dc3890c529f9d5a0d7e8b6813500/build-end.log
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
