@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:56:43 +0100
-Subject: [Buildroot] [PATCH 1/2] keepalived: fix libnl optional
- dependnecy
-In-Reply-To: <15be326b7457179e1789109c706479ec13e7c8ad.1490043162.git.baruch@tkos.co.il>
-References: <15be326b7457179e1789109c706479ec13e7c8ad.1490043162.git.baruch@tkos.co.il>
-Message-ID: <20170320215643.702f2016@free-electrons.com>
+Date: Mon, 20 Mar 2017 21:56:51 +0100
+Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.4.3
+In-Reply-To: <1490032851-84004-1-git-send-email-fontaine.fabrice@gmail.com>
+References: <1490032851-84004-1-git-send-email-fontaine.fabrice@gmail.com>
+Message-ID: <20170320215651.37644ec2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 20 Mar 2017 22:52:41 +0200, Baruch Siach wrote:
-> List libnl as a dependency when it is enabled. Make sure that libnfnetlink is
-> actually enabled when listing it as a dependency.
-> 
-> Cc: Ilias Apalodimas <apalos@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Mon, 20 Mar 2017 19:00:51 +0100, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> v2: Drop the libnfnetlink select; update commit log (Thomas P)
-> ---
->  package/keepalived/keepalived.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/cjson/cjson.hash | 2 +-
+>  package/cjson/cjson.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks, both patches applied.
+Applied to master, thanks.
 
 Thomas
 -- 
