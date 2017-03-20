@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:52:09 +0100
-Subject: [Buildroot] [PATCH] skalibs: fix endianness detection on x86
-In-Reply-To: <20170320201122.26539-1-eric.le.bihan.dev@free.fr>
-References: <20170320201122.26539-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20170320215209.2e45c696@free-electrons.com>
+Date: Mon, 20 Mar 2017 21:52:11 +0100
+Subject: [Buildroot] [PATCH v1] wiringpi: fix compile for missing baud
+ defines
+In-Reply-To: <20170320200020.11959-1-ps.report@gmx.net>
+References: <20170320200020.11959-1-ps.report@gmx.net>
+Message-ID: <20170320215211.3dec88b0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 20 Mar 2017 21:11:22 +0100, Eric Le Bihan wrote:
-> Update the patch for compile time endianness detection so it works on
-> x86 platforms using GCC <= 4.4.
+On Mon, 20 Mar 2017 21:00:20 +0100, Peter Seiderer wrote:
+> For sparc-buildroot-linux-uclibc/sysroot/usr/include/asm/termbits.h
+> containing:
 > 
-> Fixes:
+>   /* These have totally bogus values and nobody uses them
+>      so far. Later on we'd have to use say 0x10000x and
+>      adjust CBAUD constant and drivers accordingly.
+>   #define B2500000  0x00001010
+>   #define B3000000  0x00001011
+>   #define B3500000  0x00001012
+>   #define B4000000  0x00001013  */
 > 
->   http://autobuild.buildroot.net/results/c2e8e1180571976b412cbba729c45a3698aea0b2
->   http://autobuild.buildroot.net/results/2ee47107d8a67470f7bc3e10cf763202d5455d17
+> Fixes [1]:
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>   wiringSerial.c: In function 'serialOpen':
+>   wiringSerial.c:78:28: error: 'B2500000' undeclared (first use in this function)
+>        case 2500000: myBaud = B2500000 ; break ;
+>                               ^
+>   wiringSerial.c:78:28: note: each undeclared identifier is reported only once for each function it appears in
+>   wiringSerial.c:79:28: error: 'B3000000' undeclared (first use in this function)
+>        case 3000000: myBaud = B3000000 ; break ;
+>                               ^
+>   wiringSerial.c:80:28: error: 'B3500000' undeclared (first use in this function)
+>        case 3500000: myBaud = B3500000 ; break ;
+>                               ^
+>   wiringSerial.c:81:28: error: 'B4000000' undeclared (first use in this function)
+>        case 4000000: myBaud = B4000000 ; break ;
+>                               ^
+> 
+> [1] http://autobuild.buildroot.net/results/5be/5bea1e95d1c7b444a5f0a5770251f1af3efc9c18
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  .../skalibs/0001-No-runtime-tests-for-endianness.patch  | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
+>  ...ringSerial-fix-compile-for-missing-baud-d.patch | 47 ++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 package/wiringpi/0002-wiringPi-wiringSerial-fix-compile-for-missing-baud-d.patch
 
 Applied to master, thanks.
 
