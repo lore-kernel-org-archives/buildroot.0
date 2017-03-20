@@ -1,47 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Mar 2017 21:58:48 +0100
-Subject: [Buildroot] [PATCH] gst1-vaapi: fix build when Gstreamer
- debugging is disabled
-In-Reply-To: <1490035980-7927-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1490035980-7927-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20170320215848.6b699556@free-electrons.com>
+Date: Mon, 20 Mar 2017 21:59:12 +0100
+Subject: [Buildroot] [git commit] python-sortedcontainers: new package
+Message-ID: <20170320205917.756EF8225C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=12fcd887c90fc58a8600ddd3131a3c3a7918dd71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Mar 2017 00:23:00 +0530, Rahul Bedarkar wrote:
-> When Gstreamer debugging is disabled (BR2_PACKAGE_GSTREAMER1_GST_DEBUG)
-> we get following build errors:
-> 
->   gstvaapisink.c: In function 'gst_vaapisink_init':
->   gstvaapisink.c:1902:39: error: 'gst_debug_vaapisink' undeclared (first use in this function)
->   gstvaapisink.c:1902:39: note: each undeclared identifier is reported only once for each function it appears in
->   gstvaapidecode.c: In function 'gst_vaapidecode_init':
->   gstvaapidecode.c:1365:63: error: 'gst_debug_vaapidecode' undeclared (first use in this function)
->   gstvaapidecode.c:1365:63: note: each undeclared identifier is reported only once for each function it appears in
->   gstvaapipostproc.c: In function 'gst_vaapipostproc_init':
->   gstvaapipostproc.c:1811:7: error: 'gst_debug_vaapipostproc' undeclared (first use in this function)
->   gstvaapipostproc.c:1811:7: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> Add upstream patch to fix these build issues.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/653/653d9b056b04e589b8f5c57111635b0b3d7c8949
-> 
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  ...n-debug-disabled-default-category-is-NULL.patch | 91 ++++++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 package/gstreamer1/gst1-vaapi/0002-plugins-when-debug-disabled-default-category-is-NULL.patch
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                          |  1 +
+ package/python-sortedcontainers/Config.in                  |  7 +++++++
+ .../python-sortedcontainers/python-sortedcontainers.hash   |  3 +++
+ package/python-sortedcontainers/python-sortedcontainers.mk | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 9f4b550..cd9d06d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -825,6 +825,7 @@ menu "External python modules"
+ 	source "package/python-slob/Config.in"
+ 	source "package/python-smbus-cffi/Config.in"
+ 	source "package/python-socketio/Config.in"
++	source "package/python-sortedcontainers//Config.in"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tomako/Config.in"
+diff --git a/package/python-sortedcontainers/Config.in b/package/python-sortedcontainers/Config.in
+new file mode 100644
+index 0000000..43bd1b1
+--- /dev/null
++++ b/package/python-sortedcontainers/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SORTEDCONTAINERS
++	bool "python-sortedcontainers"
++	help
++	  Python Sorted Container Types: SortedList, SortedDict, and
++	  SortedSet.
++
++	  http://www.grantjenks.com/docs/sortedcontainers/
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.hash b/package/python-sortedcontainers/python-sortedcontainers.hash
+new file mode 100644
+index 0000000..11fa076
+--- /dev/null
++++ b/package/python-sortedcontainers/python-sortedcontainers.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/sortedcontainers/json, sha256 locally computed
++md5	ad4f00e377ad934954ac90fcac0b185f  sortedcontainers-1.5.7.tar.gz
++sha256	0ff0442865e492bc50476b18000fb8400cf2472d14d21a92b27cd7c5184550ea  sortedcontainers-1.5.7.tar.gz
+diff --git a/package/python-sortedcontainers/python-sortedcontainers.mk b/package/python-sortedcontainers/python-sortedcontainers.mk
+new file mode 100644
+index 0000000..9960681
+--- /dev/null
++++ b/package/python-sortedcontainers/python-sortedcontainers.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-sortedcontainers
++#
++################################################################################
++
++PYTHON_SORTEDCONTAINERS_VERSION = 1.5.7
++PYTHON_SORTEDCONTAINERS_SOURCE = sortedcontainers-$(PYTHON_SORTEDCONTAINERS_VERSION).tar.gz
++PYTHON_SORTEDCONTAINERS_SITE = https://pypi.python.org/packages/8d/aa/5369362d730728639ba434318df26b5c554804578d1c48381367ea5377c6
++PYTHON_SORTEDCONTAINERS_SETUP_TYPE = setuptools
++PYTHON_SORTEDCONTAINERS_LICENSE = Apache-2.0
++PYTHON_SORTEDCONTAINERS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
