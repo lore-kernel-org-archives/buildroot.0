@@ -1,60 +1,42 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Tue, 21 Mar 2017 13:48:22 -0300
-Subject: [Buildroot] [PATCH] kmscube: Bump to latest version to fix mips64el
-	errors
-Message-ID: <1490114902-4594-1-git-send-email-fabio.estevam@nxp.com>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Tue, 21 Mar 2017 12:50:06 -0400
+Subject: [Buildroot] [PATCHv2] package: add qt5virtualkeyboard
+In-Reply-To: <20170321173702.07dccf6c@free-electrons.com>
+References: <20170321163101.11704-1-gael.portay@savoirfairelinux.com>
+ <20170321173702.07dccf6c@free-electrons.com>
+Message-ID: <20170321165006.ukba2feuqaavulzd@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building kmscube for mips64el leads to the following build error:
+Hello,
 
-cube-tex.c: In function 'get_fd_rgba':
-cube-tex.c:230:2: error: 'for' loop initial declarations are only allowed in C99 mode
-  for (int i = 0; i < texh; i++) {
-  ^
-cube-tex.c:230:2: note: use option -std=c99 or -std=gnu99 to compile your code
-cube-tex.c: In function 'get_fd_y':
-cube-tex.c:261:2: error: 'for' loop initial declarations are only allowed in C99 mode
-  for (int i = 0; i < texh; i++) {
-  ^
-cube-tex.c: In function 'get_fd_uv':
-cube-tex.c:292:2: error: 'for' loop initial declarations are only allowed in C99 mode
-  for (int i = 0; i < texh/2; i++) {
+Oops, my bad (face-palm)
 
-I have sent a fix to mainline kmscube to address such issue, so bump to
-the latest version.
+On Tue, Mar 21, 2017 at 05:37:02PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 21 Mar 2017 12:31:01 -0400, Ga?l PORTAY wrote:
+> > This patch adds the Qt virtualkeyboard package.
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> 
+> What are the changes compared to v1? This patch lacks a changelog :-)
+> 
+> Thanks!
+> 
 
-Fixes: http://autobuild.buildroot.net/results/1f2/1f2ad0536254834582cf7fbce6a38dbb46a5e249/build-end.log
+Changes since v1:
+ - Add missing hash file
+ - Add license approval statement
+ - Add support for languages layouts
+   Note: Chinese, Japanese and Korean does not display properly (font?)
+ - Install sample if is compiled (BR2_PACKAGE_QT5BASE_EXAMPLES=y)
+ - Apply reviews from Peter:
+   Add version constraint: message and dependency (needs at least qt 5.8)
+   Update help to mention GPLv3 license
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- package/kmscube/kmscube.hash | 2 +-
- package/kmscube/kmscube.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/kmscube/kmscube.hash b/package/kmscube/kmscube.hash
-index e88bff9..e306d00 100644
---- a/package/kmscube/kmscube.hash
-+++ b/package/kmscube/kmscube.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 dbd3eedd7fa518e3fc8bbcd424e408846a67c2c57661db30b3f5adb25f7e1513  kmscube-db8c6fc0f625e3a3d36731363276c459661d4149.tar.gz
-+sha256 254d34209740731a557469030c960bbfd2299485a2ad0cbed2f7040b56a292a7  kmscube-6cbd03ab94066dddbba7bedfde87c7c4319c18d5.tar.gz
-diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
-index f04b882..37983b1 100644
---- a/package/kmscube/kmscube.mk
-+++ b/package/kmscube/kmscube.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KMSCUBE_VERSION = db8c6fc0f625e3a3d36731363276c459661d4149
-+KMSCUBE_VERSION = 6cbd03ab94066dddbba7bedfde87c7c4319c18d5
- KMSCUBE_SITE = https://cgit.freedesktop.org/mesa/kmscube/snapshot
- KMSCUBE_LICENSE = MIT
- KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
--- 
-2.7.4
+Regards,
+Gael
