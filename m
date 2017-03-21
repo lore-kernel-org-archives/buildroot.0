@@ -1,54 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 22:14:50 +0100
-Subject: [Buildroot] [git commit] support/script/check-bin-arch: ignore
-	/usr/share
-Message-ID: <20170321211619.A777580156@busybox.osuosl.org>
+Date: Tue, 21 Mar 2017 22:16:07 +0100
+Subject: [Buildroot] [git commit] vala: bump version to 0.34.7
+Message-ID: <20170321211619.AC7E382630@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba72d71d79f623ae2a7c62a6fa32a77b951666ac
+commit: https://git.buildroot.net/buildroot/commit/?id=1a2a87af107bce07a4dde9428920e4c62b6492b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-/usr/share normally should not contain binaries executable for the
-target platform. However, it might contain ELF binaries for other
-platforms, such as firmware files installed by Qemu or
-pru-software-support.
-
-Instead of special-casing each package, let's simply ignore /usr/share.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/6f3fea9f6adaef1573fbb0dd6903b5d99e470610/
-  (pru-software-support)
-
-  http://autobuild.buildroot.net/results/fe8892bc22a03299fc41e30bfea5e42166838f88/
-  (qemu)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/check-bin-arch | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-index b3e2024..e1c99e6 100755
---- a/support/scripts/check-bin-arch
-+++ b/support/scripts/check-bin-arch
-@@ -29,6 +29,13 @@ while read f; do
- 		continue
- 	fi
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 390eb44..48212b2 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,2 +1,2 @@
+-# From https://download.gnome.org/sources/vala/0.34/vala-0.34.6.sha256sum
+-sha256 d1e32d6c55c2d66964d30b7410b78f5f313f1231fc3502da9980c3c80a797bb1  vala-0.34.6.tar.xz
++# From https://download.gnome.org/sources/vala/0.34/vala-0.34.7.sha256sum
++sha256 1b2cb14f377d4c41fa3a86d3d01b93017015ce91b6714a85f27346073b4034fa  vala-0.34.7.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index c59ba25..70dc4b9 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+	# Skip files in /usr/share, several packages (qemu,
-+	# pru-software-support) legitimately install ELF binaries that
-+	# are not for the target architecture
-+	if [[ "${f}" =~ ^\./usr/share/.* ]]; then
-+		continue
-+	fi
-+
- 	# Get architecture using readelf. We pipe through 'head -1' so
- 	# that when the file is a static library (.a), we only take
- 	# into account the architecture of the first object file.
+ VALA_VERSION_MAJOR = 0.34
+-VALA_VERSION = $(VALA_VERSION_MAJOR).6
++VALA_VERSION = $(VALA_VERSION_MAJOR).7
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
