@@ -1,32 +1,32 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 21 Mar 2017 01:06:59 +0100
-Subject: [Buildroot] [PATCH 03/16] fmc: correct hash file
+Date: Tue, 21 Mar 2017 01:07:00 +0100
+Subject: [Buildroot] [PATCH 04/16] linux-firmware: correct hash
 In-Reply-To: <20170321000712.26500-1-arnout@mind.be>
 References: <20170321000712.26500-1-arnout@mind.be>
-Message-ID: <20170321000712.26500-4-arnout@mind.be>
+Message-ID: <20170321000712.26500-5-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It had sha256sum instead of sha256. This wasn't noticed before since
-hashes for git downloads are not checked.
+When linux-firmware was bumped to 6d3bc8886 in commit 3ff5896ff, a hash
+file was added but the hash was wrong. This wasn't noticed before since
+hashes are not checked for git downloads.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Cc: Adam Duskett <aduskett@codeblue.com>
 ---
- package/fmc/fmc.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/linux-firmware.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fmc/fmc.hash b/package/fmc/fmc.hash
-index 2402831855..13d9d77ee5 100644
---- a/package/fmc/fmc.hash
-+++ b/package/fmc/fmc.hash
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index e8ee2b72a1..164603947e 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
 @@ -1,2 +1,2 @@
--# Locally Computed
--sha256sum	a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4	fmc-fsl-sdk-v2.0.tar.gz
-+# Locally calculated
-+sha256	a91e0c9b7c7f238634c64a755c05671f33f2acdb6ae2d09cad4d683b364ee8e4	fmc-fsl-sdk-v2.0.tar.gz
+ # Locally calculated
+-sha256 256378564e36b8f222adb8fbe746529e73413c6cbe2b0e5574f41dfd62d92577 linux-firmware-6d3bc8886517d171068fd1263176b8b5c51df204.tar.gz
++sha256 1cd14477a392fe8c7c44e62623b85466df90ed72a55ae213b637e1c4335739fd linux-firmware-6d3bc8886517d171068fd1263176b8b5c51df204.tar.gz
 -- 
 2.11.0
