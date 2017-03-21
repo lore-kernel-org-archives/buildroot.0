@@ -1,28 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 17:37:02 +0100
-Subject: [Buildroot] [PATCHv2] package: add qt5virtualkeyboard
-In-Reply-To: <20170321163101.11704-1-gael.portay@savoirfairelinux.com>
-References: <20170321163101.11704-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20170321173702.07dccf6c@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Mar 2017 17:37:20 +0100
+Subject: [Buildroot] [PATCH] moarvm: bump version to 2017.03
+In-Reply-To: <20170321155015.54152-1-Vincent.Riera@imgtec.com> (Vicente
+ Olivert Riera's message of "Tue, 21 Mar 2017 15:50:15 +0000")
+References: <20170321155015.54152-1-Vincent.Riera@imgtec.com>
+Message-ID: <87d1dalh6n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On Tue, 21 Mar 2017 12:31:01 -0400, Ga?l PORTAY wrote:
-> This patch adds the Qt virtualkeyboard package.
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-What are the changes compared to v1? This patch lacks a changelog :-)
+Committed, thanks.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
