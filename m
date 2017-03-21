@@ -1,52 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 17:32:06 +0100
-Subject: [Buildroot] [git commit] memcached: bump version to 1.4.36
-Message-ID: <20170321164015.EACF58262B@busybox.osuosl.org>
+Date: Tue, 21 Mar 2017 17:37:17 +0100
+Subject: [Buildroot] [git commit] moarvm: bump version to 2017.03
+Message-ID: <20170321164016.04B6B82543@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adfe049d85b09a2ce780ce49f8e53d9cfaf90e2d
+commit: https://git.buildroot.net/buildroot/commit/?id=f4cfd17132e03d61850987dafddb2d509a2f87b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From the release notes
-(https://github.com/memcached/memcached/wiki/ReleaseNotes1436):
-
-Important bug fix that could lead to a hung slab mover.  Also improves
-memory efficiency of chunked items.
-
-[Peter: add release notes link / mention important bug fix]
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 3876a08..f9f68d5 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,4 +1,4 @@
--# From http://www.memcached.org/files/memcached-1.4.35.tar.gz.sha1
--sha1 787991c0df75defbb91518c9796f8244852a018a  memcached-1.4.35.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.36.tar.gz.sha1
-+sha1 519b417515206b0b95ff9bf14106a891f6a2252e  memcached-1.4.36.tar.gz
- # Calculated based on the hash above
--sha256 f4815ac95aa06c0f360052a0a12010533b2b78c3bfe475b171606c1b61469476  memcached-1.4.35.tar.gz
-+sha256 773b6bb20bf80223ca6a15d75f570fbab346ad11ec98595e5af5e33f54bd82d8  memcached-1.4.36.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 83d4d59..4de1bf6 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index c68f6f9..a27d81b 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 3a486ca5d19a8e6256e379655ec9ed09ff2f1c4f6a57a7969a278819b5bcb4eb  MoarVM-2017.02.tar.gz
++sha256 c562a91d462a15f3a964969ddea8b33eae4558e3b25d9e2105f81c259249dbee  MoarVM-2017.03.tar.gz
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 3f0eaff..f88c6f9 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MEMCACHED_VERSION = 1.4.35
-+MEMCACHED_VERSION = 1.4.36
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-MOARVM_VERSION = 2017.02
++MOARVM_VERSION = 2017.03
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
