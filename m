@@ -1,41 +1,92 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 21 Mar 2017 15:11:22 +0200
-Subject: [Buildroot] [PATCH] openssh: bump to version 7.5
-Message-ID: <b556127655ac7c6e9c308e091067cb8a4f38574f.1490101882.git.baruch@tkos.co.il>
+From: =?iso-8859-1?Q?Ga=EBl?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Tue, 21 Mar 2017 09:52:51 -0400
+Subject: [Buildroot] [PATCH] package: add qt5virtualkeyboard
+In-Reply-To: <20170320213314.394bdb0e@gmx.net>
+References: <20170317164628.5029-1-gael.portay@savoirfairelinux.com>
+ <20170320213314.394bdb0e@gmx.net>
+Message-ID: <20170321135251.bv6ujfdknmeywjdc@gportay>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/openssh/openssh.hash | 5 ++---
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+Hello Peter,
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 09010d3b29fc..3685bc0dbf69 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,3 +1,2 @@
--# Locally calculated after checking pgp signature
--# Also from http://www.openssh.com/txt/release-7.4
--sha256 1b1fc4a14e2024293181924ed24872e6f2e06293f3e8926a376b8aec481f19d1  openssh-7.4p1.tar.gz
-+# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
-+sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index ce37ee7ff2ba..ba48770afc6d 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSH_VERSION = 7.4p1
-+OPENSSH_VERSION = 7.5p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c, BSD-2c, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
--- 
-2.11.0
+Thanks for your review.
+
+On Mon, Mar 20, 2017 at 09:33:14PM +0100, Peter Seiderer wrote:
+> Hello Ga?l,
+> 
+> some additions to your own findings...
+> 
+> On Fri, 17 Mar 2017 12:46:28 -0400, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
+> 
+> > This patch adds the Qt virtualkeyboard package.
+> > 
+> > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> > ---
+> >  package/qt5/Config.in                              |  1 +
+> >  package/qt5/qt5virtualkeyboard/Config.in           |  9 +++++++
+> >  .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   | 31 ++++++++++++++++++++++
+> >  3 files changed, 41 insertions(+)
+> >  create mode 100644 package/qt5/qt5virtualkeyboard/Config.in
+> >  create mode 100644 package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+> > 
+> > diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
+> > new file mode 100644
+> > index 0000000..df9e9d6
+> > --- /dev/null
+> > +++ b/package/qt5/qt5virtualkeyboard/Config.in
+> > @@ -0,0 +1,9 @@
+> > +config BR2_PACKAGE_QT5VIRTUALKEYBOARD
+> > +	bool "qt5virtualkeyboard"
+> 
+> Needs 
+> 
+> 	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+
+Done.
+
+> 
+> or some non-standard download location in case qt5virtualkeyboard is although
+> availabe for qt-5.6.2?
+> 
+
+Indeed. VirtualKeyboard is available in Qt since 5.7.
+
+Before it was probably independant. We can find some tags like v2.0.0, v1.3.1
+and below in their GitHub repository.
+
+Do you want I make it available for 5.6 as well? Or maybe latter.
+
+> > +	depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK
+> > +	select BR2_PACKAGE_QT5SVG
+> > +	help
+> > +	  Qt Virtual Keyboard is a virtual keyboard framework that consists of a
+> > +	  C++ backend supporting custom input methods as well as a UI frontend
+> > +	  implemented in QML.
+
+	  This module is licensed under GPLv3.
+
+> > +
+> 
+> Maybe mention the GPLv3 only license here?
+
+Done.
+
+> 
+> And some comment in case the dependencies are not given:
+> 
+> 	comment "qt5virtualkeyboard needs at least qt-5.8.0 and qt5declarative quick module"
+> 	       depends on !BR2_PACKAGE_QT5_VERSION_LATEST || !BR2_PACKAGE_QT5DECLARATIVE_QUICK
+> 
+
+Done.
+
+> Regards,
+> Peter
+> 
+
+Regards,
+Gael
