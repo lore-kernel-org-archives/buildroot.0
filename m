@@ -1,49 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 23:16:34 +0100
-Subject: [Buildroot] [PATCH 01/16] download/git: create GNU format tar
- files
-In-Reply-To: <20170321000712.26500-2-arnout@mind.be>
-References: <20170321000712.26500-1-arnout@mind.be>
- <20170321000712.26500-2-arnout@mind.be>
-Message-ID: <20170321231634.5da7045e@free-electrons.com>
+Date: Tue, 21 Mar 2017 23:17:03 +0100
+Subject: [Buildroot] [git commit] squashfs: correct hash
+Message-ID: <20170321221730.395E7819D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=85c832247e40f00f48ac328970bb39ab7851f042
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Mar 2017 01:06:57 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> On most distros, the tar format defaults to GNU. However, at build time
-> the default format may be changed to posix. Also, future versions of
-> tar will default to posix.
-> 
-> Since we want the tarballs created by the git download method to be
-> reproducible (so their hash can be checked), we should explicitly
-> specify the format. Since existing tarballs on sources.buildroot.org
-> use the GNU format, and also the existing hashes in the *.hash files
-> are based on GNU format tarballs, we use the GNU format.
-> 
-> In addition, the Posix format encodes atime and ctime as well as mtime,
-> but tar offers no option like --mtime to override them. In the GNU
-> format, atime and ctime are only encoded if the --incremental option is
-> given.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Peter, can you test if this solves the issue for you?
-> ---
->  support/download/git | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+When squashfs was bumped to 3de1687d in commit ee90313c64, the hash
+file was not updated. This wasn't noticed before since hashes are not
+checked for git downloads.
 
-Applied to master, thanks. We require tar 1.17 at least, and I checked
-that tar 1.17 supports --format=gnu.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squashfs/squashfs.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+index eb456be..74fdb44 100644
+--- a/package/squashfs/squashfs.hash
++++ b/package/squashfs/squashfs.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	e807202ab4dcfeea214df49d3a728b9a85644a7e7262fc6fcd875a0def99d4ed	squashfs-9c1db6d13a51a2e009f0027ef336ce03624eac0d.tar.gz
++sha256	2c49392816615b73bf5d6cdce9776cb66a01f5a1494b1d9af580667e32bab001  squashfs-3de1687d7432ea9b302c2db9521996f506c140a3.tar.gz
