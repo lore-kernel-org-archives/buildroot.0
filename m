@@ -1,52 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 23:40:18 +0100
-Subject: [Buildroot] [PATCH v2] augeas: new package
-In-Reply-To: <20170311124744.22020-1-joerg.krause@embedded.rocks>
-References: <20170311124744.22020-1-joerg.krause@embedded.rocks>
-Message-ID: <20170321234018.76f14f4e@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 21 Mar 2017 23:42:17 +0100
+Subject: [Buildroot] [PATCH] vboot-utils: correct hash
+Message-ID: <20170321224217.28898-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I created the hash based on an old tarball in my dl dir which was
+generated without the sorting introduced in commit 4f87aa7db5ee. This
+time it is based on a properly created tarball.
 
-On Sat, 11 Mar 2017 13:47:44 +0100, J?rg Krause wrote:
-> Augeas is a configuration editing tool. It parses configuration files in
-> their native formats and transforms them into a tree. Configuration
-> changes are made by manipulating this tree and saving it back into
-> native config files.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> Cc: Romain Naour <romain.naour@gmail.com>
+Reported-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/vboot-utils/vboot-utils.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks, I've applied, after fixing one minor issue.
-
-> +	# ARC toolchain issue:
-> +	# https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/issues/108
-> +	depends on !BR2_arc
-> +	depends on BR2_USE_WCHAR
-> +	select BR2_PACKAGE_LIBXML2
-> +	select BR2_PACKAGE_READLINE
-> +	help
-> +	  Augeas is a configuration editing tool. It parses
-> +	  configuration files in their native formats and transforms
-> +	  them into a tree. Configuration changes are made by
-> +	  manipulating this tree and saving it back into native config
-> +	  files.
-> +
-> +	  http://augeas.net
-> +
-> +comment "augeas needs a toolchain w/ wchar"
-> +	depends on !BR2_USE_WCHAR
-
-A "depends on !BR2_arc" was missing here, so I've added it.
-
-Thanks!
-
-Thomas
+diff --git a/package/vboot-utils/vboot-utils.hash b/package/vboot-utils/vboot-utils.hash
+index 9a5b334324..4ff6c39807 100644
+--- a/package/vboot-utils/vboot-utils.hash
++++ b/package/vboot-utils/vboot-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  e119782a374655117e3d9a4e667b0056c76961c4593ba907f860d1310f6fbc2a  vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
++sha256  d95b64b1f1de4a3ffa5c2e446d7c8e92aa197aee10de24206b2ea2deb5a8b947  vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux and Kernel engineering
-http://free-electrons.com
+2.11.0
