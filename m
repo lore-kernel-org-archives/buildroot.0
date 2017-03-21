@@ -1,47 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 22:51:42 +0100
-Subject: [Buildroot] [PATCH] irssi: add patch to fix static linking
-In-Reply-To: <20170321034553.5357-1-rprebello@gmail.com>
-References: <20170321034553.5357-1-rprebello@gmail.com>
-Message-ID: <20170321225142.2558efe9@free-electrons.com>
+Date: Tue, 21 Mar 2017 22:55:28 +0100
+Subject: [Buildroot] [git commit] apr: fix size of pid_t
+Message-ID: <20170321215652.B800E825DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ee8cbc5fca779ff054a50ed8e6271952367147c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Mar 2017 00:45:53 -0300, Rodrigo Rebello wrote:
-> An upstream change which removed the option to build Irssi without SSL
-> support (v1.0.0 and later) also eliminated the use of PKG_CHECK_MODULES
-> to find the OpenSSL library, relying only on a test with AC_CHECK_LIB
-> for that purpose.
-> 
-> This unfortunately broke static linking since the flag to link with
-> zlib, used by OpenSSL, is missed completely.
-> 
-> The newly added patch therefore adds PKG_CHECK_MODULES back into the
-> configure script.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/e8b51f65525246d1205a26859d418393aaebf48c/
->   http://autobuild.buildroot.net/results/35d952b3b36e295723bf8ed1badb4c9439201822/
->   http://autobuild.buildroot.net/results/ea8af1458edf3ce0e2b1c444d2ae29ac1e5d2fbf/
->   [...]
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-> ---
->  ...-to-using-pkg-config-to-check-for-OpenSSL.patch | 77 ++++++++++++++++++++++
->  package/irssi/irssi.mk                             |  3 +
->  2 files changed, 80 insertions(+)
->  create mode 100644 package/irssi/0001-Get-back-to-using-pkg-config-to-check-for-OpenSSL.patch
+pid_t is a signed 32bits integer on both 32bits and 64bits
+architectures.
+This fixes an issue with apache server which causes bad pid
+to be written in PidFile
 
-Applied to master, thanks.
+Signed-off-by: Julien Beraud <julien.beraud@spectracom.orolia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/apr/apr.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 361a79f..f09f943 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -22,6 +22,7 @@ APR_CONF_ENV = \
+ 	apr_cv_mutex_robust_shared=no \
+ 	apr_cv_tcp_nodelay_with_cork=yes \
+ 	ac_cv_sizeof_struct_iovec=8 \
++	ac_cv_sizeof_pid_t=4 \
+ 	ac_cv_struct_rlimit=yes \
+ 	ac_cv_o_nonblock_inherited=no \
+ 	apr_cv_mutex_recursive=yes
