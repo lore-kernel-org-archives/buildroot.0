@@ -1,25 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 17:36:16 +0100
-Subject: [Buildroot] [PATCH] poppler: bump version to 0.53.0
-In-Reply-To: <20170321154109.1311-1-Vincent.Riera@imgtec.com> (Vicente Olivert
- Riera's message of "Tue, 21 Mar 2017 15:41:09 +0000")
-References: <20170321154109.1311-1-Vincent.Riera@imgtec.com>
-Message-ID: <87h92mlh8f.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Mar 2017 17:37:02 +0100
+Subject: [Buildroot] [PATCHv2] package: add qt5virtualkeyboard
+In-Reply-To: <20170321163101.11704-1-gael.portay@savoirfairelinux.com>
+References: <20170321163101.11704-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20170321173702.07dccf6c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Hello,
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Tue, 21 Mar 2017 12:31:01 -0400, Ga?l PORTAY wrote:
+> This patch adds the Qt virtualkeyboard package.
+> 
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 
-Committed, thanks.
+What are the changes compared to v1? This patch lacks a changelog :-)
 
-I see from the release notes that it now uses C++11 mode, so we might
-need to add a dependency on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7, but lets see
-what the autobuilders say.
+Thanks!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
