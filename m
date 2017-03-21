@@ -1,53 +1,36 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 21 Mar 2017 08:36:25 +0100
-Subject: [Buildroot] [PATCH v3] boot/uboot: fix build for sunxi targets
-In-Reply-To: <20170320223252.791ca511@free-electrons.com>
-References: <20170309115247.16981-1-joerg.krause@embedded.rocks>
- <20170320223252.791ca511@free-electrons.com>
-Message-ID: <1490081785.14952.1.camel@embedded.rocks>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Tue, 21 Mar 2017 08:37:08 +0100
+Subject: [Buildroot] [PATCH v2 1/2] leptonica: new package
+In-Reply-To: <87k27km1jl.fsf@dell.be.48ers.dk>
+References: <1489910873-8450-1-git-send-email-gilles.talis@gmail.com>
+ <1489910873-8450-2-git-send-email-gilles.talis@gmail.com>
+ <87k27km1jl.fsf@dell.be.48ers.dk>
+Message-ID: <CAKcgs2xMt-Ab0wWX5PqP3JJJJKA3JaS5ROR+ObpLvyhKrJaqOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Peter,
 
-On Mon, 2017-03-20 at 22:32 +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu,??9 Mar 2017 12:52:47 +0100, J?rg Krause wrote:
-> 
-> > +# The binman tool was introduced in version 2017.01. The tool is a
-> > set
-> > +# python scripts and requires a python2 interpreter. Force the
-> > shebang
-> > +# python2 to ensure the correct interpreter is used on host
-> > systems
-> > +# where python defaults to the python3 interpreter.?
-> > +define UBOOT_TRY_SED_SHEBANG_BINMAN
-> > +	if test -f $(@D)/tools/binman/binman; then \
-> > +		sed -i '1s_^\(#!/usr/bin/env \).*_\1python2_' \
-> > +			$(@D)/tools/binman/binman; \
-> > +	fi
-> > +endef
-> > +UBOOT_POST_PATCH_HOOKS += UBOOT_TRY_SED_SHEBANG_BINMAN
-> 
-> Thanks for this. However, now that the issue has been fixed upstream,
-> I'm not sure I'm willing to make our uboot.mk more complicated to fix
-> a
-> problem that:
-> 
-> ?1. Only occurs with sunxi targets and a few x86 platforms
-> 
-> ?2. Only occurs with 2017.01 exactly. binman didn't exist before, and
-> ????2017.03 was fixed in time.
-> 
-> So I'm tempted to put the burden on people using 2017.01 on those few
-> platforms to carry the small patch (or upgrade to 2017.03).
-> 
-> What do you think?
+2017-03-20 16:05 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+>
+>  > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+>
+>  > +config BR2_PACKAGE_LEPTONICA
+>  > +    bool "leptonica"
+>  > +    help
+>  > +      Leptonica is a pedagogically-oriented open source site containing
+>  > +      software that is broadly useful for image processing and image
+>  > +      analysis applications.
+>
+> I know this description is taken verbatim from the upstream site, but it
+> imho isn't very helpful. This is not a (web)site. What is is really? A
+> image processing library ans some applications?
+Yes, leptonica is essentially an image processing library. Do you want
+me to update the description?
 
-I'm fine with dumping this patch. I'll mark it as superseded.
-
-J?rg
+Thanks
+Gilles
