@@ -1,83 +1,169 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Mar 2017 22:41:52 +0100
-Subject: [Buildroot] [PATCH] graph-depends: rename pkgutil.py to
-	brpkgutil.py
-In-Reply-To: <20170321082233.14868-1-yegorslists@googlemail.com>
-References: <20170321082233.14868-1-yegorslists@googlemail.com>
-Message-ID: <4a06b76e-9a47-1637-0854-e108dca7e22f@mind.be>
+Date: Tue, 21 Mar 2017 22:39:55 +0100
+Subject: [Buildroot] [PATCH 00/16] Enable hash checking for git downloads
+In-Reply-To: <615428903.15419757.1490098743835.JavaMail.zimbra@datacom.ind.br>
+References: <20170321000712.26500-1-arnout@mind.be>
+ <615428903.15419757.1490098743835.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <1fbaee33-73a5-93ca-aa06-32378b10b6ec@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Ricardo,
+
+ Thanks for testing!
+
+On 21-03-17 13:19, Ricardo Martincoski wrote:
+[snip]
+> make host-vboot-utils-source
+> ----->8-----
+>>>> host-vboot-utils bbdd62f9b030db7ad8eef789aaf58a7ff9a25656 Downloading
+> Doing full clone
+> Cloning into 'vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656'...
+> remote: Sending approximately 38.99 MiB ...
+> remote: Total 21863 (delta 14206), reused 21863 (delta 14206)
+> Receiving objects: 100% (21863/21863), 38.99 MiB | 1.55 MiB/s, done.
+> Resolving deltas: 100% (14206/14206), done.
+> warning: refname 'bbdd62f9b030db7ad8eef789aaf58a7ff9a25656' is ambiguous.
+> [snip git warning]
+> ERROR: vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz has wrong sha256 hash:
+> ERROR: expected: e119782a374655117e3d9a4e667b0056c76961c4593ba907f860d1310f6fbc2a
+> ERROR: got     : d95b64b1f1de4a3ffa5c2e446d7c8e92aa197aee10de24206b2ea2deb5a8b947
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+> --2017-03-21 09:14:38--  http://sources.buildroot.net/vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
+> Resolving localhost (localhost)... 127.0.0.1
+> Connecting to localhost (localhost)|127.0.0.1|:3128... connected.
+> Proxy request sent, awaiting response... 200 OK
+> Length: 35645166 (34M) [application/x-gzip]
+> [snip long lines]
+> ERROR: vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz has wrong sha256 hash:
+> ERROR: expected: e119782a374655117e3d9a4e667b0056c76961c4593ba907f860d1310f6fbc2a
+> ERROR: got     : 2c71c3d04b9397ccb4b18202ca83d507f227e1e39c2bab6c9be2c3859155a52b
+
+ This is worrisome - both your tarball and the one from sources.buildroot.net
+differ from the one I have, and are also different between them. Well, the one
+on sources.buildroot.net can be explained: that tarball was created at a time
+that our git helper was not reproducible yet, so it will have the wrong hash.
+
+ Peter, could you do a refresh of all git-downloaded packages on
+sources.buildroot.net? You can get them with
+
+make printvars VARS="$(git grep -l 'git:\|METHOD = git' -- \*.mk | \
+		sed 's%.*/\([^/]*\).mk%\1_SOURCE%g' | \
+		tr 'a-z-\n' 'A-Z_ ')"
 
 
-On 21-03-17 09:22, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> pkgutil.py is also part of Python itself. Placing pkgutil.py as is
-> in a folder with other scripts that require original pkgutil will
-> break them. This is the case with scanpypi. So rename pkgutil.py
-> to brpkgutil.py to avoid naming collision.
-> 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=9766
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ And that probably also explains why my hash is wrong. I downloaded the
+vboot-utils tarball on Jan 7, 2016. However, the git archive creation was
+changed a couple of time and has only been stable since commit 4f87aa7db5ee of
+Oct 25. So I generated the hash based on the wrong tarball...
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ I'll have to recheck my patches that add hashes.
+
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+> ----->8-----
+> 
+> git clean -ffdx
+> make arm_juno_defconfig
+> make arm-trusted-firmware-source
+> ----->8-----
+> Doing shallow clone
+> Cloning into 'arm-trusted-firmware-v1.2'...
+> remote: Counting objects: 645, done.
+> remote: Compressing objects: 100% (550/550), done.
+> remote: Total 645 (delta 240), reused 288 (delta 46), pack-reused 0
+> Receiving objects: 100% (645/645), 1.96 MiB | 827.00 KiB/s, done.
+> Resolving deltas: 100% (240/240), done.
+> Note: checking out 'd0c104e1e1ad0102f0f4c70997b7ee6e6fbbe273'.
+> [snip git warning]
+> warning: refname 'v1.2' is ambiguous.
+> ERROR: arm-trusted-firmware-v1.2.tar.gz has wrong sha256 hash:
+> ERROR: expected: cbdd9b770ec1ab4933fc7f9f520daea5a364bb4dc964820fb017a0cf8c7df556
+> ERROR: got     : 0eeba7a89028392a97fd64fc9052a36391af388ff716bd7c884cd50098a2f50c
+
+ Hm, this one is a little bit annoying. arm-trusted-firmware-v1.2.tar.gz
+actually does get added to BR_NO_CHECK_HASH_FOR. However, version v1.2 is the
+default version and it *does* have a hash. check-hash has the following code:
+
+if [ ${nb_checks} -eq 0 ]; then
+    case " ${BR_NO_CHECK_HASH_FOR} " in
+    *" ${base} "*)
+        # File explicitly has no hash
+        exit 0
+        ;;
+    esac
+    printf "ERROR: No hash found for %s\n" "${base}" >&2
+    exit 3
+fi
+
+i.e. the hash check is only skipped when there is no hash in the hash file.
+
+ What happens here is that the tarball that is generated by github is slightly
+different from the tarball that we generate. So using the hash of the github
+tarball to check the hash of our tarball is going to fail.
+
+ Yann, I think the solution is to move the BR_NO_CHECK_HASH_FOR out of the
+${nb_checks}. Actually move it all the way to the beginning and skip the check
+entirely. Do you agree?  The commit log that introduced it (8d2f4e6246) offers
+no hint as to why the check isn't skipped completely.
+
+ Note that this could also happen for e.g. U-Boot when downloading from git and
+setting the version to 2017.03. It's not very likely, however; AFAICS
+arm-trusted-firmware is the only one which has a reasonable chance of ever
+hitting this issue.
+
+
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+> --2017-03-21 09:04:41--  http://sources.buildroot.net/arm-trusted-firmware-v1.2.tar.gz
+> Resolving localhost (localhost)... 127.0.0.1
+> Connecting to localhost (localhost)|127.0.0.1|:3128... connected.
+> Proxy request sent, awaiting response... 200 OK
+> Length: 1808700 (1,7M) [application/x-gzip]
+> Saving to: ?/tmp/git-hash/output/build/.arm-trusted-firmware-v1.2.tar.gz.clvxYW/output?
+> [snip long lines]
+> arm-trusted-firmware-v1.2.tar.gz: OK (sha256: cbdd9b770ec1ab4933fc7f9f520daea5a364bb4dc964820fb017a0cf8c7df556)
+> arm-trusted-firmware-v1.2.tar.gz: OK (md5: fac2c08bd74337fec2e14a98fc9f748f)
+
+ Here it works because the tarball on sources.buildroot.net is the one from the
+github helper.
 
  Regards,
  Arnout
 
-> ---
->  support/scripts/{pkgutil.py => brpkgutil.py} | 0
->  support/scripts/graph-depends                | 8 ++++----
->  2 files changed, 4 insertions(+), 4 deletions(-)
->  rename support/scripts/{pkgutil.py => brpkgutil.py} (100%)
+> ----->8-----
 > 
-> diff --git a/support/scripts/pkgutil.py b/support/scripts/brpkgutil.py
-> similarity index 100%
-> rename from support/scripts/pkgutil.py
-> rename to support/scripts/brpkgutil.py
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index fbd591705..b258c565b 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -26,7 +26,7 @@ import subprocess
->  import argparse
->  from fnmatch import fnmatch
->  
-> -import pkgutil
-> +import brpkgutil
->  
->  # Modes of operation:
->  MODE_FULL = 1   # draw full dependency graph for all selected packages
-> @@ -102,13 +102,13 @@ else:
->  transitive = args.transitive
->  
->  if args.direct:
-> -    get_depends_func = pkgutil.get_depends
-> +    get_depends_func = brpkgutil.get_depends
->      arrow_dir = "forward"
->  else:
->      if mode == MODE_FULL:
->          sys.stderr.write("--reverse needs a package\n")
->          sys.exit(1)
-> -    get_depends_func = pkgutil.get_rdepends
-> +    get_depends_func = brpkgutil.get_rdepends
->      arrow_dir = "back"
->  
->  # Get the colours: we need exactly three colours,
-> @@ -330,7 +330,7 @@ if check_only:
->      sys.exit(0)
->  
->  dict_deps = remove_extra_deps(dict_deps)
-> -dict_version = pkgutil.get_version([pkg for pkg in allpkgs
-> +dict_version = brpkgutil.get_version([pkg for pkg in allpkgs
->                                  if pkg != "all" and not pkg.startswith("root")])
->  
->  # Print the attributes of a node: label and fill-color
+> cat /etc/os-release | grep VERSION= ; git --version ; tar --version | grep tar
+> ----->8-----
+> VERSION="14.04.5 LTS, Trusty Tahr"
+> git version 2.11.0
+> tar (GNU tar) 1.27.1
+> ----->8-----
+> 
+> git log --oneline --decorate -17
+> ----->8-----
+> 4b9c7077a6 (HEAD) pkg-download: enable hash check for git downloads
+> 9183c9d31e arm-trusted-firmware: exclude from hash when downloading from git
+> 6db2b0ba07 mxs-bootlets: exclude from hash when downloading from git
+> 69f9d1b489 at91bootstrap3: exclude from hash when downloading from git
+> 804053ad18 barebox: exclude from hash check except for latest version
+> 989d9b77f5 uboot: exclude from hash check except for latest version
+> 95d5d580ea linux-headers: rework hash exclusion
+> 524a3f8aed linux: exclude from hash check except for latest version
+> 8c3f8dc348 vboot-utils: add hash
+> bfe808e92d uhttpd: add hash
+> 885bce3fec ubus: add hash
+> 331d44fae2 squashfs: correct hash
+> 7c4b32dfb7 linux-firmware: correct hash
+> d8e8a374e6 fmc: correct hash file
+> 1a6e356b9d aer-inject: remove redundant _SITE_METHOD
+> 0501fe2808 download/git: create GNU format tar files
+> 1a83dda003 (upstream/master) package/ghostscript: new package
+> ----->8-----
+> 
+> Best regards,
+> Ricardo
 > 
 
 -- 
