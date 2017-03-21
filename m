@@ -1,94 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 23:04:53 +0100
-Subject: [Buildroot] [PATCH 1/1] apr: fix size of pid_t
-In-Reply-To: <20170321132356.16093-1-julien.beraud@spectracom.orolia.com>
-References: <20170321132356.16093-1-julien.beraud@spectracom.orolia.com>
-Message-ID: <20170321230453.6165e76d@free-electrons.com>
+Date: Tue, 21 Mar 2017 23:06:48 +0100
+Subject: [Buildroot] [git commit] package/dbus-cpp: fix cross-compilation
+Message-ID: <20170321220703.C658382115@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f5dbd0dea159393e779f6a1f5fa53b9fa07ff34a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Mar 2017 14:23:56 +0100, Julien Beraud wrote:
-> pid_t is a signed 32bits integer on both 32bits and 64bits
-> architectures.
-> This fixes an issue with apache server which causes bad pid
-> to be written in PidFile
-> 
-> Signed-off-by: Julien Beraud <julien.beraud@spectracom.orolia.com>
-> ---
->  package/apr/apr.mk | 1 +
->  1 file changed, 1 insertion(+)
+dbus-cpp has an ugly hack to not cross-build the tools when it detects
+cross-compilation.
 
-I've applied to our master branch, thanks! Peter, I believe this is a
-good candidate for the LTS branch.
+However, we already have a host variant that builds those tools (and we
+anyway don't seem to need them to begin with).
 
-However, a few comments:
+Drop our patch that propagates the CXXFLAGS/LDFLAGS_FOR_BUILD. Replace
+with a patch to cross-compile the tools.
 
- * It is strange that their configure script does:
+Fixes:
+    http://autobuild.buildroot.org/results/110/1100539caae6ef62c61a3b96bc54f7c0a215cc62/
+    and many, many more.
 
-   APR_CHECK_SIZEOF_EXTENDED([#include <sys/types.h>], pid_t, 8)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dbus-cpp/0002-cross-compile-tools.patch    | 34 ++++++++++++++++++++++
+ .../dbus-cpp/0002-cxxflags-ldflags-for-build.patch | 32 --------------------
+ 2 files changed, 34 insertions(+), 32 deletions(-)
 
-   which means "assume size is 8 bytes" if cross-compiling when pid_t
-   is always 4 bytes.
-
- * There are other sizeof that are probably bogus:
-
-   APR_CHECK_SIZEOF_EXTENDED([#include <sys/types.h>], ssize_t, 8)
-   APR_CHECK_SIZEOF_EXTENDED([#include <stddef.h>], size_t, 8)
-   APR_CHECK_SIZEOF_EXTENDED([#include <sys/types.h>], off_t, 8)
-
-   Indeed on 32 bit systems, ssize_t, size_t are 4 bytes. off_t is an
-   even more complicated beast: it's 8 bytes on 64 bits platform, but
-   on 32 bits platform, it depends if large file support is enabled or
-   not.
-
-See (executed on x86-64) :
-
-$ cat toto.c 
-#include <unistd.h>
-#include <sys/types.h>
-#include <stdio.h>
-
-int main(void)
-{
-	printf("pid_t = %ld\n", sizeof(pid_t));
-	printf("size_t = %ld\n", sizeof(size_t));
-	printf("ssize_t = %ld\n", sizeof(ssize_t));
-	printf("off_t = %ld\n", sizeof(off_t));
-	return 0;
-}
-$ gcc -o toto toto.c
-$ ./toto
-pid_t = 4
-size_t = 8
-ssize_t = 8
-off_t = 8
-$ gcc -m32 -o toto toto.c
-$ ./toto 
-pid_t = 4
-size_t = 4
-ssize_t = 4
-off_t = 4
-$ gcc -m32 -D_FILE_OFFSET_BITS=64 -o toto toto.c
-$ ./toto 
-pid_t = 4
-size_t = 4
-ssize_t = 4
-off_t = 8
-
-I really wonder why they are not using the regular AC_CHECK_SIZEOF()
-for those types.
-
-So I believe there's more stuff to fix in there.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dbus-cpp/0002-cross-compile-tools.patch b/package/dbus-cpp/0002-cross-compile-tools.patch
+new file mode 100644
+index 0000000..39eff31
+--- /dev/null
++++ b/package/dbus-cpp/0002-cross-compile-tools.patch
+@@ -0,0 +1,34 @@
++tools: just do proper cross-compile
++
++Those tools are not used during the build; besides, they are installed.
++
++So they don't need to not be cross-compiled.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Upstream status: not submitted, upstream is dead.
++
++diff -durN dbus-cpp-0.9.0.orig/tools/Makefile.am dbus-cpp-0.9.0/tools/Makefile.am
++--- dbus-cpp-0.9.0.orig/tools/Makefile.am	2017-03-21 21:48:57.013409423 +0100
+++++ dbus-cpp-0.9.0/tools/Makefile.am	2017-03-21 21:49:35.329979798 +0100
++@@ -1,7 +1,3 @@
++-# hacky, but ...
++-
++-CXX = $(CXX_FOR_BUILD)
++-
++ AM_CPPFLAGS = \
++ 	$(dbus_CFLAGS) \
++ 	$(xml_CFLAGS) \
++@@ -9,11 +3,7 @@
++ 	-I$(top_builddir)/include \
++ 	-Wall
++ 
++-if CROSS_COMPILING
++-libdbus_cxx_la = $(BUILD_LIBDBUS_CXX_DIR)/src/libdbus-c++-1.la
++-else
++ libdbus_cxx_la = $(top_builddir)/src/libdbus-c++-1.la
++-endif
++ 
++ bin_PROGRAMS = dbusxx-xml2cpp dbusxx-introspect
++ 
+diff --git a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch b/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
+deleted file mode 100644
+index fefb969..0000000
+--- a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-Use CXXFLAGS_FOR_BUILD and LDFLAGS_FOR_BUILD for the tools since expat
+-may not be living in the default include & library path.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura libdbus-c++-0.9.0.orig/configure.ac libdbus-c++-0.9.0/configure.ac
+---- libdbus-c++-0.9.0.orig/configure.ac	2014-01-05 15:28:03.653886567 -0300
+-+++ libdbus-c++-0.9.0/configure.ac	2014-01-05 15:44:32.571172225 -0300
+-@@ -65,7 +65,11 @@
+- AC_PROG_CXX
+- 
+- CXX_FOR_BUILD=${CXX_FOR_BUILD-${CXX}}
+-+CXXFLAGS_FOR_BUILD=${CXXFLAGS_FOR_BUILD-${CXXFLAGS}}
+-+LDFLAGS_FOR_BUILD=${LDFLAGS_FOR_BUILD-${LDFLAGS}}
+- AC_SUBST(CXX_FOR_BUILD)
+-+AC_SUBST(CXXFLAGS_FOR_BUILD)
+-+AC_SUBST(LDFLAGS_FOR_BUILD)
+- 
+- AM_PROG_LIBTOOL
+- 
+-diff -Nura libdbus-c++-0.9.0.orig/tools/Makefile.am libdbus-c++-0.9.0/tools/Makefile.am
+---- libdbus-c++-0.9.0.orig/tools/Makefile.am	2014-01-05 15:28:03.652886535 -0300
+-+++ libdbus-c++-0.9.0/tools/Makefile.am	2014-01-05 15:44:42.071482390 -0300
+-@@ -1,6 +1,8 @@
+- # hacky, but ...
+- 
+- CXX = $(CXX_FOR_BUILD)
+-+CXXFLAGS = $(CXXFLAGS_FOR_BUILD)
+-+LDFLAGS = $(LDFLAGS_FOR_BUILD)
+- 
+- AM_CPPFLAGS = \
+- 	$(dbus_CFLAGS) \
