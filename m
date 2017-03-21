@@ -1,117 +1,125 @@
-From: Pawel Sikora <sikor6@gmail.com>
-Date: Tue, 21 Mar 2017 16:57:50 +0100
-Subject: [Buildroot] [PATCH 3/3] xenomai: enable SMP in configuration
-	options
-In-Reply-To: <228d4c07-8def-1653-8de5-26ac4b139fb6@mind.be>
-References: <20170320233349.14057-1-sikor6@gmail.com>
- <20170320233349.14057-3-sikor6@gmail.com>
- <228d4c07-8def-1653-8de5-26ac4b139fb6@mind.be>
-Message-ID: <CAKfV1CYz9nxSA54vu-VsshhAHwgomv=78JLA=b1+LN7B6RtcLQ@mail.gmail.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Tue, 21 Mar 2017 18:02:35 +0200
+Subject: [Buildroot] [PATCH v2] package/bluez5_utils: Allow user to enable
+	disabled plugins
+Message-ID: <20170321160237.31058-1-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Completely agree, corrected patch:
+Disregard to increase just minor version BlueZ 5.44 is drastically different in
+a way what tools and plugins are enabled and installed by default.
 
-http://lists.busybox.net/pipermail/buildroot/2017-March/187474.html
+Extend Buildroot package to cover these changes.
 
-including adding option in Config.in and checking it in xenomai.mk
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ package/bluez5_utils/Config.in       | 28 +++++++++++++++++++++++++++-
+ package/bluez5_utils/bluez5_utils.mk | 36 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+), 1 deletion(-)
 
-Tested in runtime on Zybo Zynq-7000 with/without config enabled.
-
-Behaves as expected on kernel with SMP:
-
-without smp enabled:
-# xeno-test
-Started child 95: /bin/sh /usr/bin/xeno-test-run-wrapper /usr/bin/xeno-test
-+ echo 0
-+ testdir=/usr/bin
-+ /usr/bin/smokey --run
-   0"000.000| BUG in xenomai_init(): [main] running non-SMP libraries on
-SMP kernel?
-              build with --enable-smp or disable check with --no-sanity
-
-with smp enabled:
-# xeno-test
-Started child 95: /bin/sh /usr/bin/xeno-test-run-wrapper /usr/bin/xeno-test
-+ echo 0
-+ testdir=/usr/bin
-+ /usr/bin/smokey --run
-arith OK
-bufp skipped (no kernel support)
-cpu_affinity skipped (no kernel support)
-iddp skipped (no kernel support)
-leaks OK
-net_packet_dgram skipped (no kernel support)
-net_packet_raw skipped (no kernel support)
-net_udp skipped (no kernel support)
-...
-
-Kind Regards,
-Pawel
-
-2017-03-21 10:08 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
-
->
->
-> On 21-03-17 00:33, sikor6 at gmail.com wrote:
-> > From: Pawel Sikora <sikor6@gmail.com>
-> >
-> > Add --enable-smp to XENOMAI_CONF_OPTS, so kernel and xenomai
-> > userpace libs both support it.
->
->  This is not good, because xenomai is still used a lot on uniprocessors as
-> well.
-> Ideally, we'd check linux .config if SMP is enabled or not - but
-> unfortunately
-> that's not an option since Xenomai userspace can be built without building
-> a kernel.
->
->  I think the only option here is to add a Config.in symbol to allow the
-> user to
-> select SMP.
->
->  Unless you can verify that enabling SMP unconditionally is not a problem,
-> i.e.
-> that it doesn't give overhead (extra latency) on a uniprocessor. But then I
-> wonder why it would be an option in Xenomai...
->
->  Regards,
->  Arnout
->
-> >
-> > Signed-off-by: Pawel Sikora <sikor6@gmail.com>
-> > ---
-> >  package/xenomai/xenomai.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-> > index 28875b944..37ec68526 100644
-> > --- a/package/xenomai/xenomai.mk
-> > +++ b/package/xenomai/xenomai.mk
-> > @@ -21,7 +21,7 @@ XENOMAI_INSTALL_STAGING = YES
-> >  XENOMAI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-user
-> >  XENOMAI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-user
-> >
-> > -XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/
-> --disable-doc-install
-> > +XENOMAI_CONF_OPTS += --includedir=/usr/include/xenomai/
-> --disable-doc-install --enable-smp
-> >
-> >  define XENOMAI_REMOVE_DEVFILES
-> >       for i in xeno-config xeno-info wrap-link.sh ; do \
-> >
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170321/8f89a51f/attachment.html>
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index a7c0ee4ba..e99f0f69f 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -48,6 +48,11 @@ config BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+ comment "bluez5-utils client needs a glibc or musl toolchain"
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
++	bool "build deprecated tools"
++	help
++	  Build BlueZ 5.x deprecated tools (hciattach, gatttool, ...).
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 	bool "install GATT tool"
+ 	depends on BR2_PACKAGE_BLUEZ5_UTILS_CLIENT
+@@ -62,7 +67,28 @@ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+ 	bool "build experimental plugins"
+ 	help
+-	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
++	  Build BlueZ 5.x experimental plugins (PCSuite, ...).
++
++config BR2_PACKAGE_BLUEZ5_PLUGINS_HEALTH
++	bool "build health plugin"
++	help
++	  Build BlueZ 5.x health plugin
++
++config BR2_PACKAGE_BLUEZ5_PLUGINS_MIDI
++	bool "build midi plugin"
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  Build BlueZ 5.x midi plugin
++
++config BR2_PACKAGE_BLUEZ5_PLUGINS_NFC
++	bool "build nfc plugin"
++	help
++	  Build BlueZ 5.x nfc plugin
++
++config BR2_PACKAGE_BLUEZ5_PLUGINS_SAP
++	bool "build sap plugin"
++	help
++	  Build BlueZ 5.x sap plugin
+ 
+ config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
+ 	bool "build sixaxis plugin"
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 4d31a187b..4eae3d01d 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -38,6 +38,35 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+ endif
+ 
++# enable health plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_HEALTH),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-health
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-health
++endif
++
++# enable midi plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_MIDI),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-midi
++BLUEZ5_UTILS_DEPENDENCIES += alsa-lib
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-midi
++endif
++
++# enable nfc plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_NFC),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-nfc
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-nfc
++endif
++
++# enable sap plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SAP),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-sap
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-sap
++endif
++
+ # enable sixaxis plugin
+ ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
+@@ -45,6 +74,13 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
+ endif
+ 
++# build deprecated tools
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-deprecated
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-deprecated
++endif
++
+ # install gatttool (For some reason upstream choose not to do it by default)
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
+ define BLUEZ5_UTILS_INSTALL_GATTTOOL
+-- 
+2.11.0
