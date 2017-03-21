@@ -1,70 +1,94 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Mar 2017 23:00:11 +0100
-Subject: [Buildroot] [PATCH] ghostscript: drop the ijs subfolder to fix
- build
-In-Reply-To: <1490132895-7625-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1490132895-7625-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170321220010.GF3735@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Mar 2017 23:04:53 +0100
+Subject: [Buildroot] [PATCH 1/1] apr: fix size of pid_t
+In-Reply-To: <20170321132356.16093-1-julien.beraud@spectracom.orolia.com>
+References: <20170321132356.16093-1-julien.beraud@spectracom.orolia.com>
+Message-ID: <20170321230453.6165e76d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2017-03-21 22:48 +0100, Thomas Petazzoni spake thusly:
-> The ijs/ subfolder contains a bogus ltmain.sh file, which is actually a
-> broken symbolic link. Due to this, our logic to patch ltmain.sh files
-> fail with some patch versions:
+On Tue, 21 Mar 2017 14:23:56 +0100, Julien Beraud wrote:
+> pid_t is a signed 32bits integer on both 32bits and 64bits
+> architectures.
+> This fixes an issue with apache server which causes bad pid
+> to be written in PidFile
 > 
->   >>> ghostscript 9.21 Patching libtool
->   File /home/buildroot/build/instance-0/output/build/ghostscript-9.21/ijs/ltmain.sh is not a regular file -- refusing to patch
-> 
-> Since we are anyway not using the ijs support (--without-ijs is passed),
-> do like we do for all other sub-components of ghostscript: get rid of
-> the ijs/ subfolder completely.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/ca683d69b7fb564788c8877c3bb6466390e976a8/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: Julien Beraud <julien.beraud@spectracom.orolia.com>
 > ---
->  package/ghostscript/ghostscript.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-> index d563e77..e568b20 100644
-> --- a/package/ghostscript/ghostscript.mk
-> +++ b/package/ghostscript/ghostscript.mk
-> @@ -26,7 +26,7 @@ GHOSTSCRIPT_DEPENDENCIES = \
->  # Inspired by linuxfromscratch:
->  # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
->  define GHOSTSCRIPT_REMOVE_LIBS
-> -	rm -rf $(@D)/freetype $(@D)/jpeg $(@D)/lcms2 $(@D)/libpng $(@D)/tiff $(@D)/zlib
-> +	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 $(@D)/libpng $(@D)/tiff $(@D)/zlib
->  endef
->  GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
->  
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  package/apr/apr.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
+I've applied to our master branch, thanks! Peter, I believe this is a
+good candidate for the LTS branch.
+
+However, a few comments:
+
+ * It is strange that their configure script does:
+
+   APR_CHECK_SIZEOF_EXTENDED([#include <sys/types.h>], pid_t, 8)
+
+   which means "assume size is 8 bytes" if cross-compiling when pid_t
+   is always 4 bytes.
+
+ * There are other sizeof that are probably bogus:
+
+   APR_CHECK_SIZEOF_EXTENDED([#include <sys/types.h>], ssize_t, 8)
+   APR_CHECK_SIZEOF_EXTENDED([#include <stddef.h>], size_t, 8)
+   APR_CHECK_SIZEOF_EXTENDED([#include <sys/types.h>], off_t, 8)
+
+   Indeed on 32 bit systems, ssize_t, size_t are 4 bytes. off_t is an
+   even more complicated beast: it's 8 bytes on 64 bits platform, but
+   on 32 bits platform, it depends if large file support is enabled or
+   not.
+
+See (executed on x86-64) :
+
+$ cat toto.c 
+#include <unistd.h>
+#include <sys/types.h>
+#include <stdio.h>
+
+int main(void)
+{
+	printf("pid_t = %ld\n", sizeof(pid_t));
+	printf("size_t = %ld\n", sizeof(size_t));
+	printf("ssize_t = %ld\n", sizeof(ssize_t));
+	printf("off_t = %ld\n", sizeof(off_t));
+	return 0;
+}
+$ gcc -o toto toto.c
+$ ./toto
+pid_t = 4
+size_t = 8
+ssize_t = 8
+off_t = 8
+$ gcc -m32 -o toto toto.c
+$ ./toto 
+pid_t = 4
+size_t = 4
+ssize_t = 4
+off_t = 4
+$ gcc -m32 -D_FILE_OFFSET_BITS=64 -o toto toto.c
+$ ./toto 
+pid_t = 4
+size_t = 4
+ssize_t = 4
+off_t = 8
+
+I really wonder why they are not using the regular AC_CHECK_SIZEOF()
+for those types.
+
+So I believe there's more stuff to fix in there.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
