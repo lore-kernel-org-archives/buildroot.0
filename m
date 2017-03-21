@@ -1,88 +1,56 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 21 Mar 2017 07:30:58 +0200
-Subject: [Buildroot] [PATCH v3] rpi-bt-firmware: new package
-Message-ID: <a8dbc814558874942a3b44a49a0a59eb858fa787.1490074258.git.baruch@tkos.co.il>
+Date: Tue, 21 Mar 2017 07:41:28 +0200
+Subject: [Buildroot] [PATCH] rpi-bt-firmware: new package
+In-Reply-To: <20170320224206.33fa1dbb@free-electrons.com>
+References: <094f74654295373c7cadd47044cbcfb9a80d8c87.1489093234.git.baruch@tkos.co.il>
+ <20170319220043.6f819196@free-electrons.com>
+ <20170320213039.wlpa2tdplbon6f2n@tarshish>
+ <20170320224206.33fa1dbb@free-electrons.com>
+Message-ID: <20170321054128.6xifaqzintwbkgab@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add firmware file for the Raspberry Pi 3 and Zero W Bluetooth module.
+Hi Thomas,
 
-Note that to successfully download the firmware bluez5_utils needs a patch[1].
+On Mon, Mar 20, 2017 at 10:42:06PM +0100, Thomas Petazzoni wrote:
+> On Mon, 20 Mar 2017 23:30:39 +0200, Baruch Siach wrote:
+> > Do you have any indication that this is indeed the same file that RPi 
+> > uses? My impression was that this firmware is tailored specifically for 
+> > the RPi board, but I don't know for sure. That fact that Broadcom licenses 
+> > the file may indicate that this is the same one. But ...
+> > 
+> > > So perhaps the package should be bcrm-43430-firmware or something along
+> > > those lines.
+> > >   
+> > > > +RPI_BT_FIRMWARE_VERSION = a439f892bf549ddfefa9ba7ad1999cc515f233bf
+> > > > +RPI_BT_FIRMWARE_SITE = https://aur.archlinux.org/pi-bluetooth.git  
+> > > 
+> > > Is there a better upstream than this? I found
+> > > https://github.com/varigit/bcm_4343w_fw but I'm not sure it really
+> > > qualifies as "better".  
+> > 
+> > ... this is not the same file:
+> > 
+> > ls -l bcm43430a1.hcd pi-bluetooth/BCM43430A1.hcd 
+> > -rw-r--r-- 1 baruch baruch 14265 Mar 20 23:22 bcm43430a1.hcd
+> > -rw-r--r-- 1 baruch baruch 35976 Jan 17 12:25 pi-bluetooth/BCM43430A1.hcd
+> 
+> Gaah, what a mess. Why don't they just post it for integration in the
+> linux-firmware project? Why is it that RPi people always have to do
+> things the weird way?
 
-Even though the firmware file name (BCM43430A1.hcd) only mentions the
-Bluetooth module, it is most likely tailored for the Raspberry Pi boards.
-Firmware for the same BT module on other boards look different. For this
-reason the name of the package is rpi-bt-firmware.
+I agree that the general attitude of the RPi community to the larger Open 
+Source community resembles an island attitude to mainland. But in this case 
+I'm not sure it is their fault. If indeed the firmware is board specific, 
+putting it in linux-firmware under a "generic" name won't do much good I 
+guess.
 
-[1] http://www.spinics.net/lists/linux-bluetooth/msg69470.html
+baruch
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v3: Justify the package name in the commit log (Thomas P)
-
-v2: mention RPi Zero W in the commit log (Martin Bark)
----
- package/Config.in                          |  1 +
- package/rpi-bt-firmware/Config.in          |  7 +++++++
- package/rpi-bt-firmware/rpi-bt-firmware.mk | 21 +++++++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/rpi-bt-firmware/Config.in
- create mode 100644 package/rpi-bt-firmware/rpi-bt-firmware.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 5ec3e8bd2318..93f85356c75d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -342,6 +342,7 @@ menu "Firmware"
- 	source "package/b43-firmware/Config.in"
- 	source "package/linux-firmware/Config.in"
- 	source "package/rpi-firmware/Config.in"
-+	source "package/rpi-bt-firmware/Config.in"
- 	source "package/sunxi-boards/Config.in"
- 	source "package/ts4900-fpga/Config.in"
- 	source "package/ux500-firmware/Config.in"
-diff --git a/package/rpi-bt-firmware/Config.in b/package/rpi-bt-firmware/Config.in
-new file mode 100644
-index 000000000000..5c6d608c232a
---- /dev/null
-+++ b/package/rpi-bt-firmware/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_RPI_BT_FIRMWARE
-+	bool "rpi-bt-firmware"
-+	depends on BR2_arm || BR2_aarch64
-+	help
-+	  Raspberry Pi 3 and Zero W Broadcom BCM43438 Bluetooth module firmware.
-+
-+	  https://aur.archlinux.org/packages/pi-bluetooth
-diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-new file mode 100644
-index 000000000000..255da1926211
---- /dev/null
-+++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# rpi-bt-firmware
-+#
-+################################################################################
-+
-+RPI_BT_FIRMWARE_VERSION = a439f892bf549ddfefa9ba7ad1999cc515f233bf
-+RPI_BT_FIRMWARE_SITE = https://aur.archlinux.org/pi-bluetooth.git
-+RPI_BT_FIRMWARE_SITE_METHOD = git
-+RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
-+RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
-+
-+# The BlueZ hciattach utility looks for firmware in /etc/firmware. Add a
-+# compatibility symlink.
-+define RPI_BT_FIRMWARE_INSTALL_TARGET_CMDS
-+	ln -sf ../lib/firmware $(TARGET_DIR)/etc/firmware
-+	$(INSTALL) -D -m 0644 $(@D)/BCM43430A1.hcd \
-+		$(TARGET_DIR)/lib/firmware/BCM43430A1.hcd
-+endef
-+
-+$(eval $(generic-package))
 -- 
-2.11.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
