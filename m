@@ -1,57 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Mar 2017 20:01:25 +0100
-Subject: [Buildroot] [PATCH] support/check-bin-arch: fix for filenames with
-	spaces
-Message-ID: <1490122885-12902-1-git-send-email-yann.morin.1998@free.fr>
+Date: Tue, 21 Mar 2017 20:08:10 +0100
+Subject: [Buildroot] [git commit] Makefile: add check of binaries
+	architecture
+In-Reply-To: <20170321172836.69a3026c@free-electrons.com>
+References: <20170320212621.499227FB10@busybox.osuosl.org>
+ <877f3imwcd.fsf@dell.be.48ers.dk>
+ <20170321172836.69a3026c@free-electrons.com>
+Message-ID: <20170321190810.GA3735@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Filenames with spaces will break the current for loop.
+Thomas, Peter, All,
 
-Fix that by using a while-read loop, fed with the list of files on
-stdin, using process substitution.
+On 2017-03-21 17:28 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 21 Mar 2017 17:24:34 +0100, Peter Korsgaard wrote:
+> > Sorry for the late response (nice feature!), but doesn't this get very
+> > confused if any package ever install any files with spaces or special
+> > characters?
+> 
+> Yes, this would mess up if files have spaces in their names. I'll have
+> to think about how to handle this. Suggestions from shell gurus are
+> welcome, of course :)
 
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/check-bin-arch | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Patch on the list:
+    https://patchwork.ozlabs.org/patch/741713/
 
-diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-index 2c619ad..b3e2024 100755
---- a/support/scripts/check-bin-arch
-+++ b/support/scripts/check-bin-arch
-@@ -18,9 +18,11 @@ fi
- 
- exitcode=0
- 
--pkg_files=$(sed -r -e "/^${package},(.+)$/!d; s//\1/;" ${pkg_list})
-+# Only split on new lines, for filenames-with-spaces
-+IFS="
-+"
- 
--for f in ${pkg_files} ; do
-+while read f; do
- 	# Skip firmware files, they could be ELF files for other
- 	# architectures
- 	if [[ "${f}" =~ ^\./(usr/)?lib/firmware/.* ]]; then
-@@ -43,10 +45,10 @@ for f in ${pkg_files} ; do
- 		continue
- 	fi
- 
--	printf 'ERROR: architecture for %s is %s, should be %s\n' \
-+	printf 'ERROR: architecture for "%s" is "%s", should be "%s"\n' \
- 	       "${f}" "${arch}" "${arch_name}"
- 
- 	exitcode=1
--done
-+done < <( sed -r -e "/^${package},\.(.+)$/!d; s//\1/;" ${pkg_list} )
- 
- exit ${exitcode}
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
