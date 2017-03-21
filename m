@@ -1,50 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 21:35:16 +0100
-Subject: [Buildroot] [PATCH] support/script/check-bin-arch: ignore /usr/share
-Message-ID: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Mar 2017 22:00:34 +0100
+Subject: [Buildroot] [PATCH] package/dbus-cpp: fix cross-compilation
+Message-ID: <1490130034-10602-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/usr/share normally should not contain binaries executable for the
-target platform. However, it might contain ELF binaries for other
-platforms, such as firmware files installed by Qemu or
-pru-software-support.
+dbus-cpp has an ugly hack to not cross-build the tools when it detects
+cross-compilation.
 
-Instead of special-casing each package, let's simply ignore /usr/share.
+However, we already have a host variant that builds those tools (and we
+anyway don't seem to need them to begin with).
+
+Drop our patch that propagates the CXXFLAGS/LDFLAGS_FOR_BUILD. Replace
+with a patch to cross-compile the tools.
 
 Fixes:
+    http://autobuild.buildroot.org/results/110/1100539caae6ef62c61a3b96bc54f7c0a215cc62/
+    and many, many more.
 
-  http://autobuild.buildroot.net/results/6f3fea9f6adaef1573fbb0dd6903b5d99e470610/
-  (pru-software-support)
-
-  http://autobuild.buildroot.net/results/fe8892bc22a03299fc41e30bfea5e42166838f88/
-  (qemu)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/check-bin-arch | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/dbus-cpp/0002-cross-compile-tools.patch    | 23 ++++++++++++++++
+ .../dbus-cpp/0002-cxxflags-ldflags-for-build.patch | 32 ----------------------
+ 2 files changed, 23 insertions(+), 32 deletions(-)
+ create mode 100644 package/dbus-cpp/0002-cross-compile-tools.patch
+ delete mode 100644 package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
 
-diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-index 2c619ad..be2f371 100755
---- a/support/scripts/check-bin-arch
-+++ b/support/scripts/check-bin-arch
-@@ -27,6 +27,13 @@ for f in ${pkg_files} ; do
- 		continue
- 	fi
- 
-+	# Skip files in /usr/share, several packages (qemu,
-+	# pru-software-support) legitimately install ELF binaries that
-+	# are not for the target architecture
-+	if [[ "${f}" =~ ^\./usr/share/.* ]]; then
-+		continue
-+	fi
-+
- 	# Get architecture using readelf. We pipe through 'head -1' so
- 	# that when the file is a static library (.a), we only take
- 	# into account the architecture of the first object file.
+diff --git a/package/dbus-cpp/0002-cross-compile-tools.patch b/package/dbus-cpp/0002-cross-compile-tools.patch
+new file mode 100644
+index 0000000..51a67e2
+--- /dev/null
++++ b/package/dbus-cpp/0002-cross-compile-tools.patch
+@@ -0,0 +1,23 @@
++diff -durN dbus-cpp-0.9.0.orig/tools/Makefile.am dbus-cpp-0.9.0/tools/Makefile.am
++--- dbus-cpp-0.9.0.orig/tools/Makefile.am	2017-03-21 21:48:57.013409423 +0100
+++++ dbus-cpp-0.9.0/tools/Makefile.am	2017-03-21 21:49:35.329979798 +0100
++@@ -1,7 +1,3 @@
++-# hacky, but ...
++-
++-CXX = $(CXX_FOR_BUILD)
++-
++ AM_CPPFLAGS = \
++ 	$(dbus_CFLAGS) \
++ 	$(xml_CFLAGS) \
++@@ -9,11 +3,7 @@
++ 	-I$(top_builddir)/include \
++ 	-Wall
++ 
++-if CROSS_COMPILING
++-libdbus_cxx_la = $(BUILD_LIBDBUS_CXX_DIR)/src/libdbus-c++-1.la
++-else
++ libdbus_cxx_la = $(top_builddir)/src/libdbus-c++-1.la
++-endif
++ 
++ bin_PROGRAMS = dbusxx-xml2cpp dbusxx-introspect
++ 
+diff --git a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch b/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
+deleted file mode 100644
+index fefb969..0000000
+--- a/package/dbus-cpp/0002-cxxflags-ldflags-for-build.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-Use CXXFLAGS_FOR_BUILD and LDFLAGS_FOR_BUILD for the tools since expat
+-may not be living in the default include & library path.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura libdbus-c++-0.9.0.orig/configure.ac libdbus-c++-0.9.0/configure.ac
+---- libdbus-c++-0.9.0.orig/configure.ac	2014-01-05 15:28:03.653886567 -0300
+-+++ libdbus-c++-0.9.0/configure.ac	2014-01-05 15:44:32.571172225 -0300
+-@@ -65,7 +65,11 @@
+- AC_PROG_CXX
+- 
+- CXX_FOR_BUILD=${CXX_FOR_BUILD-${CXX}}
+-+CXXFLAGS_FOR_BUILD=${CXXFLAGS_FOR_BUILD-${CXXFLAGS}}
+-+LDFLAGS_FOR_BUILD=${LDFLAGS_FOR_BUILD-${LDFLAGS}}
+- AC_SUBST(CXX_FOR_BUILD)
+-+AC_SUBST(CXXFLAGS_FOR_BUILD)
+-+AC_SUBST(LDFLAGS_FOR_BUILD)
+- 
+- AM_PROG_LIBTOOL
+- 
+-diff -Nura libdbus-c++-0.9.0.orig/tools/Makefile.am libdbus-c++-0.9.0/tools/Makefile.am
+---- libdbus-c++-0.9.0.orig/tools/Makefile.am	2014-01-05 15:28:03.652886535 -0300
+-+++ libdbus-c++-0.9.0/tools/Makefile.am	2014-01-05 15:44:42.071482390 -0300
+-@@ -1,6 +1,8 @@
+- # hacky, but ...
+- 
+- CXX = $(CXX_FOR_BUILD)
+-+CXXFLAGS = $(CXXFLAGS_FOR_BUILD)
+-+LDFLAGS = $(LDFLAGS_FOR_BUILD)
+- 
+- AM_CPPFLAGS = \
+- 	$(dbus_CFLAGS) \
 -- 
 2.7.4
