@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 23:17:00 +0100
-Subject: [Buildroot] [git commit] aer-inject: remove redundant _SITE_METHOD
-Message-ID: <20170321221729.997838032C@busybox.osuosl.org>
+Date: Tue, 21 Mar 2017 23:17:02 +0100
+Subject: [Buildroot] [git commit] linux-firmware: correct hash
+Message-ID: <20170321221730.208FF802E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c29e5ba2143272958dd9ef31aa1eedceb6145920
+commit: https://git.buildroot.net/buildroot/commit/?id=0409b136985ff582d561076f03685da9890fa325
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The _SITE has a git:// URL, so _SITE_METHOD is not needed.
+When linux-firmware was bumped to 6d3bc8886 in commit 3ff5896ff, a hash
+file was added but the hash was wrong. This wasn't noticed before since
+hashes are not checked for git downloads.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+Cc: Adam Duskett <aduskett@codeblue.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/aer-inject/aer-inject.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/linux-firmware/linux-firmware.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/aer-inject/aer-inject.mk b/package/aer-inject/aer-inject.mk
-index 69189b1..e00570e 100644
---- a/package/aer-inject/aer-inject.mk
-+++ b/package/aer-inject/aer-inject.mk
-@@ -6,7 +6,6 @@
- 
- AER_INJECT_VERSION = 9bd5e2c7886fca72f139cd8402488a2235957d41
- AER_INJECT_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
--AER_INJECT_SITE_METHOD = git
- AER_INJECT_LICENSE = GPLv2
- AER_INJECT_LICENSE_FILES = README
- AER_INJECT_DEPENDENCIES = host-flex host-bison
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index e8ee2b7..1646039 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 256378564e36b8f222adb8fbe746529e73413c6cbe2b0e5574f41dfd62d92577 linux-firmware-6d3bc8886517d171068fd1263176b8b5c51df204.tar.gz
++sha256 1cd14477a392fe8c7c44e62623b85466df90ed72a55ae213b637e1c4335739fd linux-firmware-6d3bc8886517d171068fd1263176b8b5c51df204.tar.gz
