@@ -1,35 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 22:15:17 +0100
-Subject: [Buildroot] [PATCH] support/script/check-bin-arch: ignore
-	/usr/share
-In-Reply-To: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 21 Mar 2017 21:35:16 +0100")
-References: <1490128516-31437-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87var2jpqy.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Mar 2017 22:15:35 +0100
+Subject: [Buildroot] [PATCH] support/check-bin-arch: fix for filenames
+	with spaces
+In-Reply-To: <1490122885-12902-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Tue, 21 Mar 2017 20:01:25 +0100")
+References: <1490122885-12902-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87r31qjpqg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > /usr/share normally should not contain binaries executable for the
- > target platform. However, it might contain ELF binaries for other
- > platforms, such as firmware files installed by Qemu or
- > pru-software-support.
+ > Filenames with spaces will break the current for loop.
+ > Fix that by using a while-read loop, fed with the list of files on
+ > stdin, using process substitution.
 
- > Instead of special-casing each package, let's simply ignore /usr/share.
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/6f3fea9f6adaef1573fbb0dd6903b5d99e470610/
- >   (pru-software-support)
-
- >   http://autobuild.buildroot.net/results/fe8892bc22a03299fc41e30bfea5e42166838f88/
- >   (qemu)
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Reported-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  support/scripts/check-bin-arch | 10 ++++++----
+ >  1 file changed, 6 insertions(+), 4 deletions(-)
 
 Committed, thanks.
 
