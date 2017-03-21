@@ -1,35 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 21:12:38 +0100
-Subject: [Buildroot] [PATCH] poppler: bump version to 0.53.0
-In-Reply-To: <20170321172243.asedlzsa4ypg3ix3@tarshish> (Baruch Siach's
- message of "Tue, 21 Mar 2017 19:22:43 +0200")
-References: <20170321154109.1311-1-Vincent.Riera@imgtec.com>
- <87h92mlh8f.fsf@dell.be.48ers.dk>
- <20170321172243.asedlzsa4ypg3ix3@tarshish>
-Message-ID: <87zigejsnd.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Mar 2017 21:12:30 +0100
+Subject: [Buildroot] [git commit] poppler: bump version to 0.53.0
+Message-ID: <20170321201252.D7D6C82623@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b60757d9dad3c3248ca0a6f55c6574054a949052
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Peter,
- > On Tue, Mar 21, 2017 at 05:36:16PM +0100, Peter Korsgaard wrote:
- >> >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
- >> 
- >> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- >> 
- >> Committed, thanks.
- >> 
- >> I see from the release notes that it now uses C++11 mode, so we might
- >> need to add a dependency on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7, but lets see
- >> what the autobuilders say.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/poppler/poppler.hash | 2 +-
+ package/poppler/poppler.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > This is not in master as of 1106771a414ede1.
-
-Ups, indeed - It is now.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index 1c57ef3..83856a3 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	528b661738839f9a25f6e580fcd2d5db007e0a1948580c6489f0062798ca1992	poppler-0.52.0.tar.xz
++sha256 592bf72960c6b5948b67657594b05e72d9a278daf7613c9f3cdff9a5b73096a8  poppler-0.53.0.tar.xz
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 5c2d096..d5f1378 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POPPLER_VERSION = 0.52.0
++POPPLER_VERSION = 0.53.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = http://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
