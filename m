@@ -1,63 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 17:26:45 +0100
-Subject: [Buildroot] [git commit] openssh: security bump to version 7.5
-Message-ID: <20170321164015.B0A7D7F87B@busybox.osuosl.org>
+Date: Tue, 21 Mar 2017 17:30:29 +0100
+Subject: [Buildroot] [git commit] git: bump version to 2.12.1
+Message-ID: <20170321164015.BE90282543@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2204f4deb1c6c6ff4accd84b5aa2d42f5930b730
+commit: https://git.buildroot.net/buildroot/commit/?id=cbb23d5d053710da7667d9b77fc4665b2194d2af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From the release notes (https://www.openssh.com/txt/release-7.5):
-
-Security
---------
-
- * ssh(1), sshd(8): Fix weakness in CBC padding oracle countermeasures
-   that allowed a variant of the attack fixed in OpenSSH 7.3 to proceed.
-   Note that the OpenSSH client disables CBC ciphers by default, sshd
-   offers them as lowest-preference options and will remove them by
-   default entriely in the next release. Reported by Jean Paul
-   Degabriele, Kenny Paterson, Martin Albrecht and Torben Hansen of
-   Royal Holloway, University of London.
-
- * sftp-client(1): [portable OpenSSH only] On Cygwin, a client making
-   a recursive file transfer could be maniuplated by a hostile server to
-   perform a path-traversal attack. creating or modifying files outside
-   of the intended target directory. Reported by Jann Horn of Google
-   Project Zero.
-
-[Peter: mention security fixes]
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 5 ++---
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 09010d3..3685bc0 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,3 +1,2 @@
--# Locally calculated after checking pgp signature
--# Also from http://www.openssh.com/txt/release-7.4
--sha256 1b1fc4a14e2024293181924ed24872e6f2e06293f3e8926a376b8aec481f19d1  openssh-7.4p1.tar.gz
-+# From http://www.openssh.com/txt/release-7.5 (base64 encoded)
-+sha256 9846e3c5fab9f0547400b4d2c017992f914222b3fd1f8eee6c7dc6bc5e59f9f0  openssh-7.5p1.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index ce37ee7..ba48770 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 71e340e..e79e8b1 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 1821766479062d052cc1897d0ded95212e81e5c7f1039786bc4aec2225a32027  git-2.12.0.tar.xz
++sha256 db11674364b764e101966d829a2e271c9b9d2a8bd4d8ecb4221a1dcdc9a3ada2  git-2.12.1.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 75d5140..e7ea98d 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 7.4p1
-+OPENSSH_VERSION = 7.5p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c, BSD-2c, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-GIT_VERSION = 2.12.0
++GIT_VERSION = 2.12.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2, LGPLv2.1+
