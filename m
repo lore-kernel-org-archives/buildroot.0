@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Mar 2017 09:36:23 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/cwiid: add optional
- dependency to bluez5_utils
-In-Reply-To: <20170321073124.5qynrhrg4cp5gndm@tarshish>
-References: <20170321072207.5396-1-bernd.kuhls@t-online.de>
- <20170321073124.5qynrhrg4cp5gndm@tarshish>
-Message-ID: <16e63a8d-e200-457d-bd74-01176c67d4fe@mind.be>
+Date: Tue, 21 Mar 2017 09:41:02 +0100
+Subject: [Buildroot] [PATCH] irssi: add patch to fix static linking
+In-Reply-To: <20170321034553.5357-1-rprebello@gmail.com>
+References: <20170321034553.5357-1-rprebello@gmail.com>
+Message-ID: <22310065-0e30-32bc-e1a3-9957ac59d791@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +12,78 @@ To: buildroot@busybox.net
 
 
 
-On 21-03-17 08:31, Baruch Siach wrote:
-> Hi Bernd,
+On 21-03-17 04:45, Rodrigo Rebello wrote:
+> An upstream change which removed the option to build Irssi without SSL
+> support (v1.0.0 and later) also eliminated the use of PKG_CHECK_MODULES
+> to find the OpenSSL library, relying only on a test with AC_CHECK_LIB
+> for that purpose.
 > 
-> On Tue, Mar 21, 2017 at 08:22:07AM +0100, Bernd Kuhls wrote:
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->> ---
->> v2: fix circular dependency (Arnout)
->>
->>  package/cwiid/Config.in | 2 +-
->>  package/cwiid/cwiid.mk  | 8 +++++++-
->>  2 files changed, 8 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
->> index 03b7dbbcd..ed56e1084 100644
->> --- a/package/cwiid/Config.in
->> +++ b/package/cwiid/Config.in
->> @@ -4,7 +4,7 @@ config BR2_PACKAGE_CWIID
->>  	depends on BR2_USE_WCHAR # bluez_utils -> libglib2
->>  	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> dbus, alsa-lib, libglib2
->>  	depends on BR2_USE_MMU # bluez_utils -> dbus, libglib2
->> -	select BR2_PACKAGE_BLUEZ_UTILS
->> +	select BR2_PACKAGE_BLUEZ5_UTILS if !BR2_PACKAGE_BLUEZ_UTILS
+> This unfortunately broke static linking since the flag to link with
+> zlib, used by OpenSSL, is missed completely.
 > 
-> You need to add missing bluez5_utils dependencies 
-> (BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4, BR2_TOOLCHAIN_HAS_SYNC_4). Changing 
-> bluez_utils to bluez5_utils in the comments above would also be nice.
+> The newly added patch therefore adds PKG_CHECK_MODULES back into the
+> configure script.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/e8b51f65525246d1205a26859d418393aaebf48c/
+>   http://autobuild.buildroot.net/results/35d952b3b36e295723bf8ed1badb4c9439201822/
+>   http://autobuild.buildroot.net/results/ea8af1458edf3ce0e2b1c444d2ae29ac1e5d2fbf/
+>   [...]
+> 
+> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 
- Darn, this is getting complicated... We would want to keep the dependencies as
-they are, and use bluez_utils in case bluez5_utils are not available. But that
-would mean something like:
+ Excellent patch!
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-	select BR2_PACKAGE_BLUEZ5_UTILS if !BR2_PACKAGE_BLUEZ_UTILS \
-		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 \
-		&& BR2_TOOLCHAIN_HAS_SYNC_4
-	select BR2_PACKAGE_BLUEZ_UTILS if !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 \
-		|| !BR2_TOOLCHAIN_HAS_SYNC_4
+ One question though...
 
- Yuk...
+> ---
+[snip]
+> ++dnl **
+> ++dnl ** OpenSSL checks
+> ++dnl **
+> ++PKG_CHECK_MODULES([OPENSSL], [openssl], [
+> ++	CFLAGS="$CFLAGS $OPENSSL_CFLAGS"
+> ++	LIBS="$LIBS $OPENSSL_LIBS"
+> ++], [
+> ++	AC_CHECK_LIB([ssl], [SSL_library_init], [
+> ++		LIBS="$LIBS -lssl -lcrypto"
 
- Perhaps a BR2_PACKAGE_BLUEZ5_UTILS_ARCH_SUPPORTS would help?
+ Is it useful to fall back to the non-pkg-config case? Due to glib2, pkg-config
+is a hard requirement now, so this would only be to support pre-pkg-config
+openssl versions, and I believe those are so ancient that they likely would
+break API. I didn't actually check that, however.
 
  Regards,
  Arnout
+
+> ++	], [
+> ++		AC_MSG_ERROR([The OpenSSL library was not found])
+> ++	])
+> ++])
+> + 
+> + dnl **
+> + dnl ** curses checks
+> +-- 
+> +2.11.0
+> +
+> diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+> index 7df7bbc44..dfb1e2878 100644
+> --- a/package/irssi/irssi.mk
+> +++ b/package/irssi/irssi.mk
+> @@ -13,6 +13,9 @@ IRSSI_LICENSE = GPLv2+
+>  IRSSI_LICENSE_FILES = COPYING
+>  IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses openssl
+>  
+> +# We're patching configure.ac, so we need to autoreconf
+> +IRSSI_AUTORECONF = YES
+> +
+>  IRSSI_CONF_OPTS = \
+>  	--disable-glibtest \
+>  	--with-ncurses=$(STAGING_DIR)/usr \
+> 
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
