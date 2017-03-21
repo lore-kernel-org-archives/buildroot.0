@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 Mar 2017 09:41:02 +0100
-Subject: [Buildroot] [PATCH] irssi: add patch to fix static linking
-In-Reply-To: <20170321034553.5357-1-rprebello@gmail.com>
-References: <20170321034553.5357-1-rprebello@gmail.com>
-Message-ID: <22310065-0e30-32bc-e1a3-9957ac59d791@mind.be>
+Date: Tue, 21 Mar 2017 09:57:35 +0100
+Subject: [Buildroot] [PATCH 1/3] xenomai: bump version to 3.0.3
+In-Reply-To: <20170320234014.6ad3182f@free-electrons.com>
+References: <20170320233349.14057-1-sikor6@gmail.com>
+ <20170320234014.6ad3182f@free-electrons.com>
+Message-ID: <7f8f513c-d847-5b70-c084-6538c3a6af43@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,77 +13,54 @@ To: buildroot@busybox.net
 
 
 
-On 21-03-17 04:45, Rodrigo Rebello wrote:
-> An upstream change which removed the option to build Irssi without SSL
-> support (v1.0.0 and later) also eliminated the use of PKG_CHECK_MODULES
-> to find the OpenSSL library, relying only on a test with AC_CHECK_LIB
-> for that purpose.
+On 20-03-17 23:40, Thomas Petazzoni wrote:
+> Hello,
 > 
-> This unfortunately broke static linking since the flag to link with
-> zlib, used by OpenSSL, is missed completely.
+> On Tue, 21 Mar 2017 00:33:47 +0100, sikor6 at gmail.com wrote:
+>> From: Pawel Sikora <sikor6@gmail.com>
+>>
+>> Signed-off-by: Pawel Sikora <sikor6@gmail.com>
 > 
-> The newly added patch therefore adds PKG_CHECK_MODULES back into the
-> configure script.
+> Thanks a lot for looking at the Xenomai package. It hasn't been updated
+> in a while.
 > 
-> Fixes:
+>> ---
+>>  package/xenomai/xenomai.hash | 2 +-
+>>  package/xenomai/xenomai.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+>> index 4d74472ee..e41859343 100644
+>> --- a/package/xenomai/xenomai.hash
+>> +++ b/package/xenomai/xenomai.hash
+>> @@ -1,2 +1,2 @@
+>>  # Locally computed;
+>> -sha256  b6ff723cb0f3b1c2c4e15bccfd114b248dea1b4164a0ac0e612815379ce7caf8  xenomai-2.6.4.tar.bz2
+>> +sha256  4c396b4d447efd414c4d7c0894f97ef52b4ec45c87f512c14adee981a45f0e3b  xenomai-3.0.3.tar.bz2
+>> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+>> index 6e0e44163..28875b944 100644
+>> --- a/package/xenomai/xenomai.mk
+>> +++ b/package/xenomai/xenomai.mk
+>> @@ -6,7 +6,7 @@
+>>  
+>>  XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+>>  ifeq ($(XENOMAI_VERSION),)
+>> -XENOMAI_VERSION = 2.6.4
+>> +XENOMAI_VERSION = 3.0.3
 > 
->   http://autobuild.buildroot.net/results/e8b51f65525246d1205a26859d418393aaebf48c/
->   http://autobuild.buildroot.net/results/35d952b3b36e295723bf8ed1badb4c9439201822/
->   http://autobuild.buildroot.net/results/ea8af1458edf3ce0e2b1c444d2ae29ac1e5d2fbf/
->   [...]
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+> My understanding was that Xenomai 3.x was significantly different from
+> Xenomai 2.x. Should we support both versions? Is Xenomai 3.x now old
+> enough that Xenomai 2.x is considered legacy? What problems will people
+> currently using Xenomai 2.x face if we ask them to move to Xenomai 3.x?
 
- Excellent patch!
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ There are some API differences, but (at least in dual-kernel mode), it is
+pretty easy to port over. I think we have lots of packages where version bumps
+introduce slight behavioural changes so I think this is OK.
 
- One question though...
-
-> ---
-[snip]
-> ++dnl **
-> ++dnl ** OpenSSL checks
-> ++dnl **
-> ++PKG_CHECK_MODULES([OPENSSL], [openssl], [
-> ++	CFLAGS="$CFLAGS $OPENSSL_CFLAGS"
-> ++	LIBS="$LIBS $OPENSSL_LIBS"
-> ++], [
-> ++	AC_CHECK_LIB([ssl], [SSL_library_init], [
-> ++		LIBS="$LIBS -lssl -lcrypto"
-
- Is it useful to fall back to the non-pkg-config case? Due to glib2, pkg-config
-is a hard requirement now, so this would only be to support pre-pkg-config
-openssl versions, and I believe those are so ancient that they likely would
-break API. I didn't actually check that, however.
 
  Regards,
  Arnout
 
-> ++	], [
-> ++		AC_MSG_ERROR([The OpenSSL library was not found])
-> ++	])
-> ++])
-> + 
-> + dnl **
-> + dnl ** curses checks
-> +-- 
-> +2.11.0
-> +
-> diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-> index 7df7bbc44..dfb1e2878 100644
-> --- a/package/irssi/irssi.mk
-> +++ b/package/irssi/irssi.mk
-> @@ -13,6 +13,9 @@ IRSSI_LICENSE = GPLv2+
->  IRSSI_LICENSE_FILES = COPYING
->  IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses openssl
->  
-> +# We're patching configure.ac, so we need to autoreconf
-> +IRSSI_AUTORECONF = YES
-> +
->  IRSSI_CONF_OPTS = \
->  	--disable-glibtest \
->  	--with-ncurses=$(STAGING_DIR)/usr \
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
