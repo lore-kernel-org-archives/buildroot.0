@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Mar 2017 17:30:55 +0100
-Subject: [Buildroot] [git commit] libgtk3: bump version to 3.22.11
-Message-ID: <20170321164015.DEA1A82543@busybox.osuosl.org>
+Date: Tue, 21 Mar 2017 17:30:42 +0100
+Subject: [Buildroot] [git commit] json-glib: bump version to 1.2.8
+Message-ID: <20170321164015.C9AAA7F87B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7529d600c16456436aad0a3eabb599dac11e0049
+commit: https://git.buildroot.net/buildroot/commit/?id=404a2bfb6b0e4ffded14d2f283bf72990d5c5f38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
+ package/json-glib/json-glib.hash | 4 ++--
+ package/json-glib/json-glib.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 2407307..5ea0405 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
+diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
+index bf85770..2f190ab 100644
+--- a/package/json-glib/json-glib.hash
++++ b/package/json-glib/json-glib.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.10.sha256sum
--sha256 352a90b3d09256d597cb2768ee5d685285ccc284ff22adf19df16753a829c554  gtk+-3.22.10.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.11.sha256sum
-+sha256 db440670cb6f3c098b076df3735fbc4e69359bd605385e87c90ee48344a804ca  gtk+-3.22.11.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index abd4c64..ca88e30 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
+-# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.6.sha256sum
+-sha256 958fa59909ef28399c811aff29a5340b330b20660ca3586b4c5aa3a53997776c  json-glib-1.2.6.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.8.sha256sum
++sha256 fd55a9037d39e7a10f0db64309f5f0265fa32ec962bf85066087b83a2807f40a  json-glib-1.2.8.tar.xz
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index 8b8a3cf2..c0db671 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.22
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).10
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).11
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
+ JSON_GLIB_VERSION_MAJOR = 1.2
+-JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
++JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).8
+ JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
+ JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
+ JSON_GLIB_LICENSE = LGPLv2.1+
