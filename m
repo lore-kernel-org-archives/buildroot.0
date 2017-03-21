@@ -1,36 +1,49 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 20 Mar 2017 16:30:53 -0700
-Subject: [Buildroot] [PATCH] uboot-tools: pass empty CFLAGS on
- invocation of libfdt/setup.py
-In-Reply-To: <20170320225742.054be334@free-electrons.com>
-References: <1489768962-26768-1-git-send-email-jcmvbkbc@gmail.com>
- <20170320225742.054be334@free-electrons.com>
-Message-ID: <CAMo8BfLZzoRF0Q4zMRPcmwT0UErD7pGH_boMKrWQ07h09fiykw@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 21 Mar 2017 01:06:56 +0100
+Subject: [Buildroot] [PATCH 00/16] Enable hash checking for git downloads
+Message-ID: <20170321000712.26500-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Since our git downloads are reproducible since a while now, we can
+actually check the hash of git downloads. This does however still
+require a number of fixes first.
 
-On Mon, Mar 20, 2017 at 2:57 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> There is still an issue with this:
->
->   http://autobuild.buildroot.net/results/eaf/eaf4e5ffc1b2dc3890c529f9d5a0d7e8b6813500/build-end.log
+Patch 1 fixes the case when tar is compiled to generated Posix format
+tarballs.
 
-I can't reproduce it.
-The python script makes the compilation super quiet, can we apply something
-like the attached patch to see what happens?
+Patch 2 is just a cleanup. This patch is optional.
 
--- 
-Thanks.
--- Max
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-uboot-tools-make-_libfdt.so-build-verbose.patch
-Type: text/x-patch
-Size: 1389 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20170320/03290926/attachment.bin>
+Patch 3-5 fix incorrect hash files, which weren't noticed before
+because hashes weren't checked.
+
+Patch 6-8 adds a hash for packages that actually have a hash file but
+set the hash type to 'none'. These patches are optional.
+
+Patches 9-15 add exclusions for the different packages with CUSTOM_GIT
+configuration.
+
+Patch 16, finally, enables the hash check.
+
+Regards,
+Arnout
+
+[PATCH 01/16] download/git: create GNU format tar files
+[PATCH 02/16] aer-inject: remove redundant _SITE_METHOD
+[PATCH 03/16] fmc: correct hash file
+[PATCH 04/16] linux-firmware: correct hash
+[PATCH 05/16] squashfs: correct hash
+[PATCH 06/16] ubus: add hash
+[PATCH 07/16] uhttpd: add hash
+[PATCH 08/16] vboot-utils: add hash
+[PATCH 09/16] linux: exclude from hash check except for latest
+[PATCH 10/16] linux-headers: rework hash exclusion
+[PATCH 11/16] uboot: exclude from hash check except for latest
+[PATCH 12/16] barebox: exclude from hash check except for latest
+[PATCH 13/16] at91bootstrap3: exclude from hash when downloading from
+[PATCH 14/16] mxs-bootlets: exclude from hash when downloading from
+[PATCH 15/16] arm-trusted-firmware: exclude from hash when
+[PATCH 16/16] pkg-download: enable hash check for git downloads
