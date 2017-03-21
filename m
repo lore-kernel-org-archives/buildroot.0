@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Mar 2017 22:57:07 +0100
-Subject: [Buildroot] [PATCH] ltp-testsuite: disable Open POSIX testsuite
-In-Reply-To: <1490131280-1379-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1490131280-1379-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170321215707.GE3735@free.fr>
+Date: Tue, 21 Mar 2017 23:00:11 +0100
+Subject: [Buildroot] [PATCH] ghostscript: drop the ijs subfolder to fix
+ build
+In-Reply-To: <1490132895-7625-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1490132895-7625-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20170321220010.GF3735@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +13,46 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2017-03-21 22:21 +0100, Thomas Petazzoni spake thusly:
-> The Open POSIX testsuite builds and installs to the target directory a
-> program called 't0' that isn't cross-compiled, which is bad.
+On 2017-03-21 22:48 +0100, Thomas Petazzoni spake thusly:
+> The ijs/ subfolder contains a bogus ltmain.sh file, which is actually a
+> broken symbolic link. Due to this, our logic to patch ltmain.sh files
+> fail with some patch versions:
 > 
-> Since the LTP build system is autoconf but not automake based, and the
-> Open POSIX testsuite is a sort of sub-project inside it, fixing the
-> issue is not trivial.
+>   >>> ghostscript 9.21 Patching libtool
+>   File /home/buildroot/build/instance-0/output/build/ghostscript-9.21/ijs/ltmain.sh is not a regular file -- refusing to patch
 > 
-> Therefore, we simply disable the Open POSIX testsuite entirely. Oddly
-> enough, --without-open-posix-testsuite doesn't work due to another bug,
-> so we simply have to remove --with-open-posix-testsuite.
-> 
-> Open POSIX testsuite cross-compilation issue reported at
-> https://github.com/linux-test-project/ltp/issues/144.
-> 
-> Configure script bug reported at
-> https://github.com/linux-test-project/ltp/issues/143.
+> Since we are anyway not using the ijs support (--without-ijs is passed),
+> do like we do for all other sub-components of ghostscript: get rid of
+> the ijs/ subfolder completely.
 > 
 > Fixes:
 > 
->   http://autobuild.buildroot.net/results/8326ba9eb257dfc92c1ad282ba6d3565e8250def/
+>   http://autobuild.buildroot.net/results/ca683d69b7fb564788c8877c3bb6466390e976a8/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/ltp-testsuite/ltp-testsuite.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+>  package/ghostscript/ghostscript.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-> index 9d82087..29f374b 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> @@ -9,8 +9,16 @@ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
->  LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
->  LTP_TESTSUITE_LICENSE = GPLv2, GPLv2+
->  LTP_TESTSUITE_LICENSE_FILES = COPYING
-> +
-> +# Do not enable Open POSIX testsuite as it doesn't cross-compile
-> +# properly: t0 program is built for the host machine. Notice that due
-> +# to a bug, --without-open-posix-testsuite actually enables the test
-> +# suite.
-> +# See https://github.com/linux-test-project/ltp/issues/143 (invalid
-> +# autoconf test) and
-> +# https://github.com/linux-test-project/ltp/issues/144 (Open POSIX
-> +# testsuite not cross-compiling).
->  LTP_TESTSUITE_CONF_OPTS += \
-> -	--with-open-posix-testsuite \
->  	--with-realtime-testsuite
+> diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+> index d563e77..e568b20 100644
+> --- a/package/ghostscript/ghostscript.mk
+> +++ b/package/ghostscript/ghostscript.mk
+> @@ -26,7 +26,7 @@ GHOSTSCRIPT_DEPENDENCIES = \
+>  # Inspired by linuxfromscratch:
+>  # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
+>  define GHOSTSCRIPT_REMOVE_LIBS
+> -	rm -rf $(@D)/freetype $(@D)/jpeg $(@D)/lcms2 $(@D)/libpng $(@D)/tiff $(@D)/zlib
+> +	rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jpeg $(@D)/lcms2 $(@D)/libpng $(@D)/tiff $(@D)/zlib
+>  endef
+>  GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
 >  
->  ifeq ($(BR2_LINUX_KERNEL),y)
 > -- 
 > 2.7.4
 > 
