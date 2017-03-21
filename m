@@ -1,60 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 22:21:20 +0100
-Subject: [Buildroot] [PATCH] ltp-testsuite: disable Open POSIX testsuite
-Message-ID: <1490131280-1379-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Mar 2017 22:23:52 +0100
+Subject: [Buildroot] [PATCH] package/dbus-cpp: fix cross-compilation
+In-Reply-To: <1490130034-10602-1-git-send-email-yann.morin.1998@free.fr>
+References: <1490130034-10602-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20170321222352.440d6a4b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Open POSIX testsuite builds and installs to the target directory a
-program called 't0' that isn't cross-compiled, which is bad.
+Hello,
 
-Since the LTP build system is autoconf but not automake based, and the
-Open POSIX testsuite is a sort of sub-project inside it, fixing the
-issue is not trivial.
+On Tue, 21 Mar 2017 22:00:34 +0100, Yann E. MORIN wrote:
 
-Therefore, we simply disable the Open POSIX testsuite entirely. Oddly
-enough, --without-open-posix-testsuite doesn't work due to another bug,
-so we simply have to remove --with-open-posix-testsuite.
+> diff --git a/package/dbus-cpp/0002-cross-compile-tools.patch b/package/dbus-cpp/0002-cross-compile-tools.patch
+> new file mode 100644
+> index 0000000..51a67e2
+> --- /dev/null
+> +++ b/package/dbus-cpp/0002-cross-compile-tools.patch
+> @@ -0,0 +1,23 @@
+> +diff -durN dbus-cpp-0.9.0.orig/tools/Makefile.am dbus-cpp-0.9.0/tools/Makefile.am
+> +--- dbus-cpp-0.9.0.orig/tools/Makefile.am	2017-03-21 21:48:57.013409423 +0100
+> ++++ dbus-cpp-0.9.0/tools/Makefile.am	2017-03-21 21:49:35.329979798 +0100
 
-Open POSIX testsuite cross-compilation issue reported at
-https://github.com/linux-test-project/ltp/issues/144.
+Missing description + SoB in the patch.
 
-Configure script bug reported at
-https://github.com/linux-test-project/ltp/issues/143.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/8326ba9eb257dfc92c1ad282ba6d3565e8250def/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ltp-testsuite/ltp-testsuite.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 9d82087..29f374b 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -9,8 +9,16 @@ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPLv2, GPLv2+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
-+
-+# Do not enable Open POSIX testsuite as it doesn't cross-compile
-+# properly: t0 program is built for the host machine. Notice that due
-+# to a bug, --without-open-posix-testsuite actually enables the test
-+# suite.
-+# See https://github.com/linux-test-project/ltp/issues/143 (invalid
-+# autoconf test) and
-+# https://github.com/linux-test-project/ltp/issues/144 (Open POSIX
-+# testsuite not cross-compiling).
- LTP_TESTSUITE_CONF_OPTS += \
--	--with-open-posix-testsuite \
- 	--with-realtime-testsuite
- 
- ifeq ($(BR2_LINUX_KERNEL),y)
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
