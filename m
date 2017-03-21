@@ -1,32 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 23:17:06 +0100
-Subject: [Buildroot] [git commit] vboot-utils: add hash
-Message-ID: <20170321221730.9FEB5819D9@busybox.osuosl.org>
+Date: Tue, 21 Mar 2017 23:18:21 +0100
+Subject: [Buildroot] [PATCH 00/16] Enable hash checking for git downloads
+In-Reply-To: <20170321000712.26500-1-arnout@mind.be>
+References: <20170321000712.26500-1-arnout@mind.be>
+Message-ID: <20170321231821.75afecd6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4044bb2113a2caeafff3223f47ee11cc32881dbd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-vboot-utils had a hash file, but is says "none" because it is a git
-download.  Since our git downloads are not reproducible, we can actually
-add a hash.
+On Tue, 21 Mar 2017 01:06:56 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vboot-utils/vboot-utils.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Patch 1 fixes the case when tar is compiled to generated Posix format
+> tarballs.
 
-diff --git a/package/vboot-utils/vboot-utils.hash b/package/vboot-utils/vboot-utils.hash
-index e161423..9a5b334 100644
---- a/package/vboot-utils/vboot-utils.hash
-+++ b/package/vboot-utils/vboot-utils.hash
-@@ -1,2 +1,2 @@
--# Git shapshot
--none	xxx	bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
-+# Locally computed
-+sha256  e119782a374655117e3d9a4e667b0056c76961c4593ba907f860d1310f6fbc2a  vboot-utils-bbdd62f9b030db7ad8eef789aaf58a7ff9a25656.tar.gz
+So I've applied this one.
+
+> Patch 2 is just a cleanup. This patch is optional.
+> 
+> Patch 3-5 fix incorrect hash files, which weren't noticed before
+> because hashes weren't checked.
+> 
+> Patch 6-8 adds a hash for packages that actually have a hash file but
+> set the hash type to 'none'. These patches are optional.
+
+And all those ones.
+
+> Patches 9-15 add exclusions for the different packages with CUSTOM_GIT
+> configuration.
+
+Still needs to review those one carefully.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux and Kernel engineering
+http://free-electrons.com
