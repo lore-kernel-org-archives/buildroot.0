@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 22:23:52 +0100
-Subject: [Buildroot] [PATCH] package/dbus-cpp: fix cross-compilation
-In-Reply-To: <1490130034-10602-1-git-send-email-yann.morin.1998@free.fr>
-References: <1490130034-10602-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20170321222352.440d6a4b@free-electrons.com>
+Date: Tue, 21 Mar 2017 22:24:49 +0100
+Subject: [Buildroot] [PATCH] autofs: use libtirpc instead of internal C
+ implementation
+In-Reply-To: <20170321193213.GA18747@waldemar-brodkorb.de>
+References: <20170321193213.GA18747@waldemar-brodkorb.de>
+Message-ID: <20170321222449.5ceb21f4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 21 Mar 2017 22:00:34 +0100, Yann E. MORIN wrote:
+On Tue, 21 Mar 2017 20:32:13 +0100, Waldemar Brodkorb wrote:
 
-> diff --git a/package/dbus-cpp/0002-cross-compile-tools.patch b/package/dbus-cpp/0002-cross-compile-tools.patch
-> new file mode 100644
-> index 0000000..51a67e2
-> --- /dev/null
-> +++ b/package/dbus-cpp/0002-cross-compile-tools.patch
-> @@ -0,0 +1,23 @@
-> +diff -durN dbus-cpp-0.9.0.orig/tools/Makefile.am dbus-cpp-0.9.0/tools/Makefile.am
-> +--- dbus-cpp-0.9.0.orig/tools/Makefile.am	2017-03-21 21:48:57.013409423 +0100
-> ++++ dbus-cpp-0.9.0/tools/Makefile.am	2017-03-21 21:49:35.329979798 +0100
+> @@ -2,8 +2,8 @@ config BR2_PACKAGE_AUTOFS
+>  	bool "autofs"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>  	depends on BR2_USE_MMU
+> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	depends on !BR2_STATIC_LIBS # dlfcn
+> +	select BR2_PACKAGE_LIBTIRPC
 
-Missing description + SoB in the patch.
+Why should we force people to use libtirpc ? What about instead:
+
+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+
+and adjust the .mk file accordingly.
+
+Thanks!
 
 Thomas
 -- 
