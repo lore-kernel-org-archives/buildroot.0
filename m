@@ -1,45 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 21 Mar 2017 09:31:24 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/cwiid: add optional
- dependency to bluez5_utils
-In-Reply-To: <20170321072207.5396-1-bernd.kuhls@t-online.de>
-References: <20170321072207.5396-1-bernd.kuhls@t-online.de>
-Message-ID: <20170321073124.5qynrhrg4cp5gndm@tarshish>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 21 Mar 2017 08:36:25 +0100
+Subject: [Buildroot] [PATCH v3] boot/uboot: fix build for sunxi targets
+In-Reply-To: <20170320223252.791ca511@free-electrons.com>
+References: <20170309115247.16981-1-joerg.krause@embedded.rocks>
+ <20170320223252.791ca511@free-electrons.com>
+Message-ID: <1490081785.14952.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hi Thomas,
 
-On Tue, Mar 21, 2017 at 08:22:07AM +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: fix circular dependency (Arnout)
+On Mon, 2017-03-20 at 22:32 +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
->  package/cwiid/Config.in | 2 +-
->  package/cwiid/cwiid.mk  | 8 +++++++-
->  2 files changed, 8 insertions(+), 2 deletions(-)
+> On Thu,??9 Mar 2017 12:52:47 +0100, J?rg Krause wrote:
 > 
-> diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
-> index 03b7dbbcd..ed56e1084 100644
-> --- a/package/cwiid/Config.in
-> +++ b/package/cwiid/Config.in
-> @@ -4,7 +4,7 @@ config BR2_PACKAGE_CWIID
->  	depends on BR2_USE_WCHAR # bluez_utils -> libglib2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> dbus, alsa-lib, libglib2
->  	depends on BR2_USE_MMU # bluez_utils -> dbus, libglib2
-> -	select BR2_PACKAGE_BLUEZ_UTILS
-> +	select BR2_PACKAGE_BLUEZ5_UTILS if !BR2_PACKAGE_BLUEZ_UTILS
+> > +# The binman tool was introduced in version 2017.01. The tool is a
+> > set
+> > +# python scripts and requires a python2 interpreter. Force the
+> > shebang
+> > +# python2 to ensure the correct interpreter is used on host
+> > systems
+> > +# where python defaults to the python3 interpreter.?
+> > +define UBOOT_TRY_SED_SHEBANG_BINMAN
+> > +	if test -f $(@D)/tools/binman/binman; then \
+> > +		sed -i '1s_^\(#!/usr/bin/env \).*_\1python2_' \
+> > +			$(@D)/tools/binman/binman; \
+> > +	fi
+> > +endef
+> > +UBOOT_POST_PATCH_HOOKS += UBOOT_TRY_SED_SHEBANG_BINMAN
+> 
+> Thanks for this. However, now that the issue has been fixed upstream,
+> I'm not sure I'm willing to make our uboot.mk more complicated to fix
+> a
+> problem that:
+> 
+> ?1. Only occurs with sunxi targets and a few x86 platforms
+> 
+> ?2. Only occurs with 2017.01 exactly. binman didn't exist before, and
+> ????2017.03 was fixed in time.
+> 
+> So I'm tempted to put the burden on people using 2017.01 on those few
+> platforms to carry the small patch (or upgrade to 2017.03).
+> 
+> What do you think?
 
-You need to add missing bluez5_utils dependencies 
-(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4, BR2_TOOLCHAIN_HAS_SYNC_4). Changing 
-bluez_utils to bluez5_utils in the comments above would also be nice.
+I'm fine with dumping this patch. I'll mark it as superseded.
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+J?rg
