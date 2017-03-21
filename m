@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 21 Mar 2017 14:18:21 +0000
-Subject: [Buildroot] [PATCH] git: bump version to 2.12.1
-Message-ID: <20170321141821.50479-1-Vincent.Riera@imgtec.com>
+Date: Tue, 21 Mar 2017 14:41:19 +0000
+Subject: [Buildroot] [PATCH] json-glib: bump version to 1.2.8
+Message-ID: <20170321144119.63571-1-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/json-glib/json-glib.hash | 4 ++--
+ package/json-glib/json-glib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 71e340e..e79e8b1 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
+diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
+index bf85770..2f190ab 100644
+--- a/package/json-glib/json-glib.hash
++++ b/package/json-glib/json-glib.hash
 @@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 1821766479062d052cc1897d0ded95212e81e5c7f1039786bc4aec2225a32027  git-2.12.0.tar.xz
-+sha256 db11674364b764e101966d829a2e271c9b9d2a8bd4d8ecb4221a1dcdc9a3ada2  git-2.12.1.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 75d5140..e7ea98d 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.6.sha256sum
+-sha256 958fa59909ef28399c811aff29a5340b330b20660ca3586b4c5aa3a53997776c  json-glib-1.2.6.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.8.sha256sum
++sha256 fd55a9037d39e7a10f0db64309f5f0265fa32ec962bf85066087b83a2807f40a  json-glib-1.2.8.tar.xz
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index 8b8a3cf2..c0db671 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GIT_VERSION = 2.12.0
-+GIT_VERSION = 2.12.1
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2, LGPLv2.1+
+ JSON_GLIB_VERSION_MAJOR = 1.2
+-JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
++JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).8
+ JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
+ JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
+ JSON_GLIB_LICENSE = LGPLv2.1+
 -- 
 2.10.2
