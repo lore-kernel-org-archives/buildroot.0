@@ -1,49 +1,51 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 21 Mar 2017 01:06:56 +0100
-Subject: [Buildroot] [PATCH 00/16] Enable hash checking for git downloads
-Message-ID: <20170321000712.26500-1-arnout@mind.be>
+Date: Tue, 21 Mar 2017 01:06:57 +0100
+Subject: [Buildroot] [PATCH 01/16] download/git: create GNU format tar files
+In-Reply-To: <20170321000712.26500-1-arnout@mind.be>
+References: <20170321000712.26500-1-arnout@mind.be>
+Message-ID: <20170321000712.26500-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since our git downloads are reproducible since a while now, we can
-actually check the hash of git downloads. This does however still
-require a number of fixes first.
+On most distros, the tar format defaults to GNU. However, at build time
+the default format may be changed to posix. Also, future versions of
+tar will default to posix.
 
-Patch 1 fixes the case when tar is compiled to generated Posix format
-tarballs.
+Since we want the tarballs created by the git download method to be
+reproducible (so their hash can be checked), we should explicitly
+specify the format. Since existing tarballs on sources.buildroot.org
+use the GNU format, and also the existing hashes in the *.hash files
+are based on GNU format tarballs, we use the GNU format.
 
-Patch 2 is just a cleanup. This patch is optional.
+In addition, the Posix format encodes atime and ctime as well as mtime,
+but tar offers no option like --mtime to override them. In the GNU
+format, atime and ctime are only encoded if the --incremental option is
+given.
 
-Patch 3-5 fix incorrect hash files, which weren't noticed before
-because hashes weren't checked.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Peter Seiderer <ps.report@gmx.net>
+---
+Peter, can you test if this solves the issue for you?
+---
+ support/download/git | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Patch 6-8 adds a hash for packages that actually have a hash file but
-set the hash type to 'none'. These patches are optional.
-
-Patches 9-15 add exclusions for the different packages with CUSTOM_GIT
-configuration.
-
-Patch 16, finally, enables the hash check.
-
-Regards,
-Arnout
-
-[PATCH 01/16] download/git: create GNU format tar files
-[PATCH 02/16] aer-inject: remove redundant _SITE_METHOD
-[PATCH 03/16] fmc: correct hash file
-[PATCH 04/16] linux-firmware: correct hash
-[PATCH 05/16] squashfs: correct hash
-[PATCH 06/16] ubus: add hash
-[PATCH 07/16] uhttpd: add hash
-[PATCH 08/16] vboot-utils: add hash
-[PATCH 09/16] linux: exclude from hash check except for latest
-[PATCH 10/16] linux-headers: rework hash exclusion
-[PATCH 11/16] uboot: exclude from hash check except for latest
-[PATCH 12/16] barebox: exclude from hash check except for latest
-[PATCH 13/16] at91bootstrap3: exclude from hash when downloading from
-[PATCH 14/16] mxs-bootlets: exclude from hash when downloading from
-[PATCH 15/16] arm-trusted-firmware: exclude from hash when
-[PATCH 16/16] pkg-download: enable hash check for git downloads
+diff --git a/support/download/git b/support/download/git
+index 7921411835..056057c700 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -94,6 +94,8 @@ popd >/dev/null
+ # Generate the archive, sort with the C locale so that it is reproducible
+ find "${basename}" -not -type d >"${basename}.list"
+ LC_ALL=C sort <"${basename}.list" >"${basename}.list.sorted"
+-tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
++# Create GNU-format tarballs, since that's the format of the tarballs on
++# sources.buildroot.org and used in the *.hash files
++tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+          -T "${basename}.list.sorted" >"${output}.tar"
+ gzip -n <"${output}.tar" >"${output}"
+-- 
+2.11.0
