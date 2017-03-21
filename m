@@ -1,48 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Mar 2017 23:07:45 +0100
-Subject: [Buildroot] [PATCH] ltp-testsuite: disable Open POSIX testsuite
-In-Reply-To: <1490131280-1379-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1490131280-1379-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20170321230745.0210c8af@free-electrons.com>
+Date: Tue, 21 Mar 2017 23:08:44 +0100
+Subject: [Buildroot] [git commit] tslib: use main project page in Config.in
+	help text
+Message-ID: <20170321220924.0342E821E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=06e97ae8f8812a4b3f8f430480752bcb79cc8065
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Mar 2017 22:21:20 +0100, Thomas Petazzoni wrote:
-> The Open POSIX testsuite builds and installs to the target directory a
-> program called 't0' that isn't cross-compiled, which is bad.
-> 
-> Since the LTP build system is autoconf but not automake based, and the
-> Open POSIX testsuite is a sort of sub-project inside it, fixing the
-> issue is not trivial.
-> 
-> Therefore, we simply disable the Open POSIX testsuite entirely. Oddly
-> enough, --without-open-posix-testsuite doesn't work due to another bug,
-> so we simply have to remove --with-open-posix-testsuite.
-> 
-> Open POSIX testsuite cross-compilation issue reported at
-> https://github.com/linux-test-project/ltp/issues/144.
-> 
-> Configure script bug reported at
-> https://github.com/linux-test-project/ltp/issues/143.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/8326ba9eb257dfc92c1ad282ba6d3565e8250def/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/ltp-testsuite/ltp-testsuite.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+[Thomas: instead of adding tslib.org, just replace the github address by
+the tslib.org one, which is the really upstream homepage.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tslib/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tslib/Config.in b/package/tslib/Config.in
+index bc5d790..f1de56c 100644
+--- a/package/tslib/Config.in
++++ b/package/tslib/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_TSLIB
+ 	help
+ 	  Tslib is a filtering layer for touchscreen panel events.
+ 
+-	  https://github.com/kergoth/tslib
++	  http://tslib.org
+ 
+ comment "tslib needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
